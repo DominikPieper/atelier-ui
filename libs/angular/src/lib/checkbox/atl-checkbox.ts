@@ -9,7 +9,10 @@ import {
   viewChild,
 } from '@angular/core';
 import type { FormCheckboxControl } from '@angular/forms/signals';
-import { type ValidationError, type WithOptionalFieldTree } from '@angular/forms/signals';
+import {
+  type ValidationError,
+  type WithOptionalFieldTree,
+} from '@angular/forms/signals';
 
 let nextId = 0;
 
@@ -79,7 +82,9 @@ export class AtlCheckbox implements FormCheckboxControl {
   readonly name = input('');
 
   /** Validation errors from the form system. Bound by [formField] directive. */
-  readonly errors = input<readonly WithOptionalFieldTree<ValidationError>[]>([]);
+  readonly errors = input<readonly WithOptionalFieldTree<ValidationError>[]>(
+    [],
+  );
 
   /** @internal */
   protected readonly inputId = `atl-checkbox-${nextId++}`;
@@ -88,7 +93,8 @@ export class AtlCheckbox implements FormCheckboxControl {
   protected readonly errorId = `atl-checkbox-errors-${nextId++}`;
 
   /** @internal */
-  private readonly nativeInput = viewChild<ElementRef<HTMLInputElement>>('nativeInput');
+  private readonly nativeInput =
+    viewChild<ElementRef<HTMLInputElement>>('nativeInput');
 
   /** @internal */
   /**
@@ -98,9 +104,7 @@ export class AtlCheckbox implements FormCheckboxControl {
    * moments depending on the framework. Deciding *when* to pass errors belongs to the
    * form layer, which is where `touched` lives (ADR-0055).
    */
-  protected readonly showErrors = computed(
-    () => this.errors().length > 0
-  );
+  protected readonly showErrors = computed(() => this.errors().length > 0);
 
   /** @internal */
   protected readonly hostClasses = computed(() => {

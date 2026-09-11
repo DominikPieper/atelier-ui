@@ -45,20 +45,68 @@ export class AtlTooltipContent {
 
 const POSITIONS: Record<string, ConnectedPosition[]> = {
   above: [
-    { originX: 'center', originY: 'top', overlayX: 'center', overlayY: 'bottom', offsetY: -8 },
-    { originX: 'center', originY: 'bottom', overlayX: 'center', overlayY: 'top', offsetY: 8 },
+    {
+      originX: 'center',
+      originY: 'top',
+      overlayX: 'center',
+      overlayY: 'bottom',
+      offsetY: -8,
+    },
+    {
+      originX: 'center',
+      originY: 'bottom',
+      overlayX: 'center',
+      overlayY: 'top',
+      offsetY: 8,
+    },
   ],
   below: [
-    { originX: 'center', originY: 'bottom', overlayX: 'center', overlayY: 'top', offsetY: 8 },
-    { originX: 'center', originY: 'top', overlayX: 'center', overlayY: 'bottom', offsetY: -8 },
+    {
+      originX: 'center',
+      originY: 'bottom',
+      overlayX: 'center',
+      overlayY: 'top',
+      offsetY: 8,
+    },
+    {
+      originX: 'center',
+      originY: 'top',
+      overlayX: 'center',
+      overlayY: 'bottom',
+      offsetY: -8,
+    },
   ],
   left: [
-    { originX: 'start', originY: 'center', overlayX: 'end', overlayY: 'center', offsetX: -8 },
-    { originX: 'end', originY: 'center', overlayX: 'start', overlayY: 'center', offsetX: 8 },
+    {
+      originX: 'start',
+      originY: 'center',
+      overlayX: 'end',
+      overlayY: 'center',
+      offsetX: -8,
+    },
+    {
+      originX: 'end',
+      originY: 'center',
+      overlayX: 'start',
+      overlayY: 'center',
+      offsetX: 8,
+    },
   ],
   right: [
-    { originX: 'end', originY: 'center', overlayX: 'start', overlayY: 'center', offsetX: 8 },
-    { originX: 'start', originY: 'center', overlayX: 'end', overlayY: 'center', offsetX: -8 },
+    {
+      originX: 'end',
+      originY: 'center',
+      overlayX: 'start',
+      overlayY: 'center',
+      offsetX: 8,
+    },
+    {
+      originX: 'start',
+      originY: 'center',
+      overlayX: 'end',
+      overlayY: 'center',
+      offsetX: -8,
+    },
   ],
 };
 
@@ -89,7 +137,9 @@ export class AtlTooltip implements OnDestroy {
   readonly atlTooltip = input.required<string>();
 
   /** Preferred tooltip placement. Falls back to the opposite side if clipped. */
-  readonly atlTooltipPosition = input<'above' | 'below' | 'left' | 'right'>('above');
+  readonly atlTooltipPosition = input<'above' | 'below' | 'left' | 'right'>(
+    'above',
+  );
 
   /** Disable the tooltip without removing the directive. */
   readonly atlTooltipDisabled = input(false);
@@ -158,7 +208,8 @@ export class AtlTooltip implements OnDestroy {
   }
 
   private createOverlay(): OverlayRef {
-    const positions = POSITIONS[this.atlTooltipPosition()] ?? POSITIONS['above'];
+    const positions =
+      POSITIONS[this.atlTooltipPosition()] ?? POSITIONS['above'];
 
     const positionStrategy = createFlexibleConnectedPositionStrategy(
       this.injector,

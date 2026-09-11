@@ -39,7 +39,9 @@ const HEADER = `// AUTO-GENERATED from libs/spec/src/behaviors.json — do not e
 function readManifest() {
   const manifest = JSON.parse(readFileSync(SOURCE, 'utf-8'));
   // Skip $comment etc.; preserve manifest insertion order for deterministic output.
-  return Object.entries(manifest).filter(([subject]) => !subject.startsWith('$'));
+  return Object.entries(manifest).filter(
+    ([subject]) => !subject.startsWith('$'),
+  );
 }
 
 function build() {
@@ -78,7 +80,7 @@ function main() {
     }
     if (current !== next) {
       console.error(
-        'behaviors.generated.ts is stale. Run `node tools/scripts/gen-behaviors.mjs`.'
+        'behaviors.generated.ts is stale. Run `node tools/scripts/gen-behaviors.mjs`.',
       );
       process.exit(1);
     }
@@ -87,7 +89,9 @@ function main() {
   }
 
   writeFileSync(OUT_FILE, next);
-  console.log(`wrote ${OUT_FILE} (${subjects} subjects, ${next.length} bytes).`);
+  console.log(
+    `wrote ${OUT_FILE} (${subjects} subjects, ${next.length} bytes).`,
+  );
 }
 
 main();

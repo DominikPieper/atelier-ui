@@ -6,7 +6,8 @@ import { metadata } from '@atelier-ui/spec/metadata/avatar.metadata';
 import { contract } from '@atelier-ui/spec/contracts/avatar.contract';
 const SAMPLE_SRC = 'https://i.pravatar.cc/150?img=1';
 
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
@@ -18,13 +19,18 @@ const meta: Meta<typeof AtlAvatar> = {
   tags: ['autodocs'],
   render: (args) => ({
     components: { AtlAvatar },
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: '<AtlAvatar v-bind="args" />',
   }),
   argTypes: {
     size: { control: 'select', options: ['xs', 'sm', 'md', 'lg', 'xl'] },
     shape: { control: 'select', options: ['circle', 'square'] },
-    status: { control: 'select', options: ['', 'online', 'offline', 'away', 'busy'] },
+    status: {
+      control: 'select',
+      options: ['', 'online', 'offline', 'away', 'busy'],
+    },
   },
   args: {
     src: SAMPLE_SRC,
@@ -68,7 +74,9 @@ export const WithIcon: Story = {
 export const Sizes: Story = {
   render: () => ({
     components: { AtlAvatar },
-    setup() { return { src: SAMPLE_SRC }; },
+    setup() {
+      return { src: SAMPLE_SRC };
+    },
     template: `
       <div style="display:flex;align-items:center;gap:1rem;flex-wrap:wrap">
         <AtlAvatar :src="src" size="xs" alt="xs" />
@@ -99,7 +107,9 @@ export const SizesWithInitials: Story = {
 export const Shapes: Story = {
   render: () => ({
     components: { AtlAvatar },
-    setup() { return { src: SAMPLE_SRC }; },
+    setup() {
+      return { src: SAMPLE_SRC };
+    },
     template: `
       <div style="display:flex;align-items:center;gap:1.5rem">
         <div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem">
@@ -126,7 +136,9 @@ export const Shapes: Story = {
 export const WithStatus: Story = {
   render: () => ({
     components: { AtlAvatar },
-    setup() { return { src: SAMPLE_SRC }; },
+    setup() {
+      return { src: SAMPLE_SRC };
+    },
     template: `
       <div style="display:flex;align-items:center;gap:1.5rem">
         <div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem">
@@ -153,7 +165,9 @@ export const WithStatus: Story = {
 export const FallbackChain: Story = {
   render: () => ({
     components: { AtlAvatar },
-    setup() { return { src: SAMPLE_SRC }; },
+    setup() {
+      return { src: SAMPLE_SRC };
+    },
     template: `
       <div style="display:flex;align-items:center;gap:1.5rem">
         <div style="display:flex;flex-direction:column;align-items:center;gap:0.5rem">

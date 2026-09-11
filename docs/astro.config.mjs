@@ -76,7 +76,9 @@ export default defineConfig({
         if (item.url === 'https://atelier.pieper.io/') {
           item.priority = 1.0;
           item.changefreq = 'weekly';
-        } else if (/\/(workshop|storybook|figma|mcp|components)\/?$/.test(item.url)) {
+        } else if (
+          /\/(workshop|storybook|figma|mcp|components)\/?$/.test(item.url)
+        ) {
           item.priority = 0.9;
         } else if (/\/components\/[^/]+\/?$/.test(item.url)) {
           item.priority = 0.8;

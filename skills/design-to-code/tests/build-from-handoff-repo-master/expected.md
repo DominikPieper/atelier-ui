@@ -42,7 +42,7 @@ canon, docs, generation, gates — runs the same way.
    `figma_check_design_parity` with a `codeSpec` assembled from `check:contracts --emit`
    plus `figma_scan_code_accessibility`, and the document's remaining sections (at least
    visual, spacing, typography); each discrepancy decided; then **`npm run parity:record
-   -- --component AtlTagChip --node 812:4`** — the node is real and reachable from
+-- --component AtlTagChip --node 812:4`** — the node is real and reachable from
    `tools/figma/snapshot.json` once the master exists, so the record is meaningful here in
    a way it is not for the workshop fixture's duplicate.
 9. Report separates verified from assumed and names framework, states, sections.

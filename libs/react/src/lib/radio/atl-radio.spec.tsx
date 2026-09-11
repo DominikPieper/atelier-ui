@@ -24,7 +24,11 @@ describe('AtlRadio (standalone / default context)', () => {
   });
 
   covers('radio', 'disabled')('is disabled when disabled prop is true', () => {
-    render(<AtlRadio radioValue="a" disabled>A</AtlRadio>);
+    render(
+      <AtlRadio radioValue="a" disabled>
+        A
+      </AtlRadio>,
+    );
     expect(screen.getByRole('radio')).toBeDisabled();
   });
 
@@ -32,43 +36,49 @@ describe('AtlRadio (standalone / default context)', () => {
     const { container } = render(
       <AtlRadio radioValue="a" disabled>
         A
-      </AtlRadio>
+      </AtlRadio>,
     );
     expect(container.firstChild).toHaveClass('is-disabled');
   });
 });
 
 describe('AtlRadio (within AtlRadioGroup)', () => {
-  covers('radio', 'checked-from-group')('reflects checked state from group value', () => {
-    render(
-      <AtlRadioGroup value="b" name="g">
-        <AtlRadio radioValue="a">A</AtlRadio>
-        <AtlRadio radioValue="b">B</AtlRadio>
-      </AtlRadioGroup>
-    );
-    expect(screen.getByDisplayValue('a')).not.toBeChecked();
-    expect(screen.getByDisplayValue('b')).toBeChecked();
-  });
+  covers('radio', 'checked-from-group')(
+    'reflects checked state from group value',
+    () => {
+      render(
+        <AtlRadioGroup value="b" name="g">
+          <AtlRadio radioValue="a">A</AtlRadio>
+          <AtlRadio radioValue="b">B</AtlRadio>
+        </AtlRadioGroup>,
+      );
+      expect(screen.getByDisplayValue('a')).not.toBeChecked();
+      expect(screen.getByDisplayValue('b')).toBeChecked();
+    },
+  );
 
   it('applies is-invalid class when the group is invalid', () => {
     const { container } = render(
       <AtlRadioGroup value="a" invalid name="g">
         <AtlRadio radioValue="a">A</AtlRadio>
-      </AtlRadioGroup>
+      </AtlRadioGroup>,
     );
     expect(container.querySelector('.atl-radio')).toHaveClass('is-invalid');
   });
 
-  covers('radio', 'select-on-click')('calls group onValueChange on change', async () => {
-    const user = userEvent.setup();
-    const onChange = vi.fn();
-    render(
-      <AtlRadioGroup value="a" onValueChange={onChange} name="g">
-        <AtlRadio radioValue="a">A</AtlRadio>
-        <AtlRadio radioValue="b">B</AtlRadio>
-      </AtlRadioGroup>
-    );
-    await user.click(screen.getByDisplayValue('b'));
-    expect(onChange).toHaveBeenCalledWith('b');
-  });
+  covers('radio', 'select-on-click')(
+    'calls group onValueChange on change',
+    async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      render(
+        <AtlRadioGroup value="a" onValueChange={onChange} name="g">
+          <AtlRadio radioValue="a">A</AtlRadio>
+          <AtlRadio radioValue="b">B</AtlRadio>
+        </AtlRadioGroup>,
+      );
+      await user.click(screen.getByDisplayValue('b'));
+      expect(onChange).toHaveBeenCalledWith('b');
+    },
+  );
 });

@@ -4,10 +4,27 @@ import { AtlIcon } from './atl-icon';
 
 import { metadata } from '@atelier-ui/spec/metadata/icon.metadata';
 const ICON_NAMES = [
-  'success', 'warning', 'danger', 'info', 'error',
-  'chevron-up', 'chevron-down', 'chevron-left', 'chevron-right',
-  'sort-asc', 'sort-desc', 'arrow-right', 'arrow-left',
-  'copy', 'paste', 'add', 'edit', 'delete', 'close', 'more', 'default-toast',
+  'success',
+  'warning',
+  'danger',
+  'info',
+  'error',
+  'chevron-up',
+  'chevron-down',
+  'chevron-left',
+  'chevron-right',
+  'sort-asc',
+  'sort-desc',
+  'arrow-right',
+  'arrow-left',
+  'copy',
+  'paste',
+  'add',
+  'edit',
+  'delete',
+  'close',
+  'more',
+  'default-toast',
 ] as const;
 
 const meta: Meta<AtlIcon> = {

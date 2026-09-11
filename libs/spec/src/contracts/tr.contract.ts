@@ -6,7 +6,8 @@ export const contract = {
   codeOnly: [
     {
       name: 'rowId',
-      reason: 'Is data, not state — a per-row identifier, not a Figma-settable property.',
+      reason:
+        'Is data, not state — a per-row identifier, not a Figma-settable property.',
     },
   ],
 } satisfies ComponentContract;

@@ -6,7 +6,8 @@ export const contract = {
   figmaOnly: [
     {
       name: 'error',
-      reason: 'UNEXPLAINED — surfaced by the S2 contract pass 2026-09-10; decide in tasks/todo.md',
+      reason:
+        'UNEXPLAINED — surfaced by the S2 contract pass 2026-09-10; decide in tasks/todo.md',
     },
   ],
 } satisfies ComponentContract;

@@ -12,8 +12,8 @@ const preview: Preview = {
       options: {
         light: { name: 'light', value: '#ffffff' },
         subtle: { name: 'subtle', value: '#f5f5f5' },
-        dark: { name: 'dark', value: '#1a1a2e' }
-      }
+        dark: { name: 'dark', value: '#1a1a2e' },
+      },
     },
 
     a11y: {
@@ -26,8 +26,10 @@ const preview: Preview = {
     options: {
       storySort: {
         order: [
-          'Showcase', '*',
-          'Components', ['Inputs', 'Display', 'Navigation', 'Overlay', 'Feedback'],
+          'Showcase',
+          '*',
+          'Components',
+          ['Inputs', 'Display', 'Navigation', 'Overlay', 'Feedback'],
           'Cookbook',
         ],
       },
@@ -47,9 +49,9 @@ const preview: Preview = {
 
   initialGlobals: {
     backgrounds: {
-      value: 'light'
-    }
-  }
+      value: 'light',
+    },
+  },
 };
 
 export default preview;

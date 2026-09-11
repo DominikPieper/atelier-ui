@@ -1,7 +1,11 @@
 <script setup lang="ts">
 import { computed } from 'vue';
 import type { AtlIconName, AtlIconSize } from '../spec';
-import { ATL_ICON_GEOMETRY, ATL_ICON_STROKE_WIDTH, ATL_ICON_VIEWBOX } from '../icons';
+import {
+  ATL_ICON_GEOMETRY,
+  ATL_ICON_STROKE_WIDTH,
+  ATL_ICON_VIEWBOX,
+} from '../icons';
 import './atl-icon.css';
 
 defineOptions({ name: 'AtlIcon' });
@@ -20,7 +24,6 @@ const props = withDefaults(defineProps<AtlIconProps>(), {
   size: 'md',
   label: undefined,
 });
-
 
 const classes = computed(() => ['atl-icon', `size-${props.size}`]);
 const geometry = computed(() => ATL_ICON_GEOMETRY[props.name]);

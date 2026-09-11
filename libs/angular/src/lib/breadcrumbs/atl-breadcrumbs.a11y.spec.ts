@@ -20,7 +20,9 @@ const SNAP = resolve(ROOT, `tools/parity/a11y/atl-breadcrumbs.${FW}.json`);
 
 async function captureOne(template: string): Promise<unknown> {
   TestBed.resetTestingModule();
-  const r = await render(template, { imports: [AtlBreadcrumbs, AtlBreadcrumbItem] });
+  const r = await render(template, {
+    imports: [AtlBreadcrumbs, AtlBreadcrumbItem],
+  });
   const tree = a11yTree(r.container);
   r.fixture.destroy();
   return tree;

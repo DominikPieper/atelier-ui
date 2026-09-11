@@ -13,11 +13,14 @@ export const metadata: ComponentMetadata = {
   antiPatterns: [
     {
       pattern: 'Displaying a decorative product image or thumbnail.',
-      useInstead: 'A plain `<img>` or a media component — avatars carry identity semantics and initial fallbacks.',
+      useInstead:
+        'A plain `<img>` or a media component — avatars carry identity semantics and initial fallbacks.',
     },
     {
-      pattern: 'Communicating standalone status without an identity (system online, build healthy).',
-      useInstead: 'AtlBadge — badges are the right primitive for status pills that do not belong to a person.',
+      pattern:
+        'Communicating standalone status without an identity (system online, build healthy).',
+      useInstead:
+        'AtlBadge — badges are the right primitive for status pills that do not belong to a person.',
     },
   ],
   relatedComponents: ['AtlBadgeSpec', 'AtlMenuSpec'],

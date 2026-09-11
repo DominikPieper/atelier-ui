@@ -39,31 +39,31 @@ the API tree and `marketplace.json`]
 
 ## 2. All skills
 
-| Skill | One-line description (frontmatter, trimmed) | Functional area (README's own grouping; * = not in README table) | Tools driven | Token? | SKILL.md lines |
-|---|---|---|---|---|---|
-| figma-export-tokens | Export Figma variables → DTCG/CSS/Tailwind/SCSS/TS/JSON/Style Dictionary/Tokens Studio | Tokens & Variables | `use_figma` (Plugin API) | No | 61 |
-| figma-import-tokens | Push tokens from code into Figma as variables, non-destructive | Tokens & Variables | `use_figma` | No | 46 |
-| figma-setup-design-tokens | Bootstrap a whole token system (collection+modes+variables) atomically | Tokens & Variables | `use_figma` | No | 37 |
-| figma-manage-variables | CRUD + batch create/update variables, scopes, code syntax, modes | Tokens & Variables | `use_figma` | No | 38 |
-| figma-library-variables | Discover/import variables from subscribed team libraries | Tokens & Variables | `use_figma` | No | 34 |
-| figma-analyze-component-set | Analyze a COMPONENT_SET as a state machine (variant axes → CSS pseudo-classes) | Components & Design System | `use_figma` | No | 64 |
-| figma-arrange-component-set | Organize variants into a labeled grid container | Components & Design System | `use_figma` | No | 49 |
-| figma-component-properties | Add/edit/delete component properties; instantiate + set instance props | Components & Design System | `use_figma` | No | 61 |
-| figma-design-system-inventory | One-call unified extraction: tokens+components+styles+visual specs | Components & Design System | `use_figma` | No | 49 |
-| figma-deep-component | Unlimited-depth component tree, resolved tokens, mainComponent refs, reactions | Components & Design System | `use_figma` | No | 58 |
-| figma-lint-design | WCAG 2.2 + design-system quality lint over a node tree | Quality & Accessibility | `use_figma` | No | 50 |
-| figma-audit-accessibility | Per-component a11y scorecard: state coverage, focus, target size, color-blind sim | Quality & Accessibility | `use_figma` | No | 46 |
-| figma-scan-code-accessibility | axe-core + JSDOM scan of generated HTML | Quality & Accessibility | standalone Node script (axe-core), **no Figma connection at all** | No | 70 |
-| figma-check-design-parity | Compare a Figma node vs a code spec; parity score + discrepancies | Quality & Accessibility | `use_figma` | No | 47 |
-| figma-version-history | List versions, snapshot a version, diff two versions | Versioning & Collaboration | Figma REST API | **Yes** | 102 |
-| figma-generate-changelog | Human-readable markdown changelog between versions | Versioning & Collaboration | Figma REST API | **Yes** | 73 |
-| figma-blame-node | Binary-search which version introduced a node/property change | Versioning & Collaboration | Figma REST API | **Yes** | 86 |
-| figma-comments | Read/post/reply/delete file comments, node-pinned | Versioning & Collaboration | Figma REST API | **Yes** | 97 |
-| figma-generate-component-doc | Generate complete component documentation markdown | Docs/Annotations/FigJam/Slides | `use_figma` | No | 60 |
-| figma-annotations | Read/write designer annotations (specs pinned to nodes) + categories | Docs/Annotations/FigJam/Slides | `use_figma` | No | 41 |
-| figjam-create-content | Author FigJam: stickies, connectors, shapes, sections, tables, code blocks, auto-arrange | Docs/Annotations/FigJam/Slides | `use_figma` (FigJam files only) | No | 42 |
-| figma-slides | Author Figma Slides: slides, text/shapes, backgrounds, transitions | Docs/Annotations/FigJam/Slides | `use_figma` (Slides files only) | No | 41 |
-| figma-extract-design-system | Extract a design system from vibe-coded apps: inventory→tokens→Storybook→(optionally) Figma | *not listed in README table* | **figma-console-mcp** `figma_ds_*` tools (Local Mode), with an agent-driven Read/Grep/Bash fallback | No | 158 |
+| Skill                         | One-line description (frontmatter, trimmed)                                                 | Functional area (README's own grouping; * = not in README table) | Tools driven                                                                                        | Token?  | SKILL.md lines |
+| ----------------------------- | ------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | ------- | -------------- |
+| figma-export-tokens           | Export Figma variables → DTCG/CSS/Tailwind/SCSS/TS/JSON/Style Dictionary/Tokens Studio      | Tokens & Variables                                               | `use_figma` (Plugin API)                                                                            | No      | 61             |
+| figma-import-tokens           | Push tokens from code into Figma as variables, non-destructive                              | Tokens & Variables                                               | `use_figma`                                                                                         | No      | 46             |
+| figma-setup-design-tokens     | Bootstrap a whole token system (collection+modes+variables) atomically                      | Tokens & Variables                                               | `use_figma`                                                                                         | No      | 37             |
+| figma-manage-variables        | CRUD + batch create/update variables, scopes, code syntax, modes                            | Tokens & Variables                                               | `use_figma`                                                                                         | No      | 38             |
+| figma-library-variables       | Discover/import variables from subscribed team libraries                                    | Tokens & Variables                                               | `use_figma`                                                                                         | No      | 34             |
+| figma-analyze-component-set   | Analyze a COMPONENT_SET as a state machine (variant axes → CSS pseudo-classes)              | Components & Design System                                       | `use_figma`                                                                                         | No      | 64             |
+| figma-arrange-component-set   | Organize variants into a labeled grid container                                             | Components & Design System                                       | `use_figma`                                                                                         | No      | 49             |
+| figma-component-properties    | Add/edit/delete component properties; instantiate + set instance props                      | Components & Design System                                       | `use_figma`                                                                                         | No      | 61             |
+| figma-design-system-inventory | One-call unified extraction: tokens+components+styles+visual specs                          | Components & Design System                                       | `use_figma`                                                                                         | No      | 49             |
+| figma-deep-component          | Unlimited-depth component tree, resolved tokens, mainComponent refs, reactions              | Components & Design System                                       | `use_figma`                                                                                         | No      | 58             |
+| figma-lint-design             | WCAG 2.2 + design-system quality lint over a node tree                                      | Quality & Accessibility                                          | `use_figma`                                                                                         | No      | 50             |
+| figma-audit-accessibility     | Per-component a11y scorecard: state coverage, focus, target size, color-blind sim           | Quality & Accessibility                                          | `use_figma`                                                                                         | No      | 46             |
+| figma-scan-code-accessibility | axe-core + JSDOM scan of generated HTML                                                     | Quality & Accessibility                                          | standalone Node script (axe-core), **no Figma connection at all**                                   | No      | 70             |
+| figma-check-design-parity     | Compare a Figma node vs a code spec; parity score + discrepancies                           | Quality & Accessibility                                          | `use_figma`                                                                                         | No      | 47             |
+| figma-version-history         | List versions, snapshot a version, diff two versions                                        | Versioning & Collaboration                                       | Figma REST API                                                                                      | **Yes** | 102            |
+| figma-generate-changelog      | Human-readable markdown changelog between versions                                          | Versioning & Collaboration                                       | Figma REST API                                                                                      | **Yes** | 73             |
+| figma-blame-node              | Binary-search which version introduced a node/property change                               | Versioning & Collaboration                                       | Figma REST API                                                                                      | **Yes** | 86             |
+| figma-comments                | Read/post/reply/delete file comments, node-pinned                                           | Versioning & Collaboration                                       | Figma REST API                                                                                      | **Yes** | 97             |
+| figma-generate-component-doc  | Generate complete component documentation markdown                                          | Docs/Annotations/FigJam/Slides                                   | `use_figma`                                                                                         | No      | 60             |
+| figma-annotations             | Read/write designer annotations (specs pinned to nodes) + categories                        | Docs/Annotations/FigJam/Slides                                   | `use_figma`                                                                                         | No      | 41             |
+| figjam-create-content         | Author FigJam: stickies, connectors, shapes, sections, tables, code blocks, auto-arrange    | Docs/Annotations/FigJam/Slides                                   | `use_figma` (FigJam files only)                                                                     | No      | 42             |
+| figma-slides                  | Author Figma Slides: slides, text/shapes, backgrounds, transitions                          | Docs/Annotations/FigJam/Slides                                   | `use_figma` (Slides files only)                                                                     | No      | 41             |
+| figma-extract-design-system   | Extract a design system from vibe-coded apps: inventory→tokens→Storybook→(optionally) Figma | _not listed in README table_                                     | **figma-console-mcp** `figma_ds_*` tools (Local Mode), with an agent-driven Read/Grep/Bash fallback | No      | 158            |
 
 Source for every row: `https://raw.githubusercontent.com/southleft/figma-console-mcp-skills/main/skills/<name>/SKILL.md` [verified, fetched directly].
 
@@ -100,7 +100,7 @@ Verify: fix, then **re-audit to confirm the score moved** — the audit itself i
 `skills/figma-audit-accessibility/SKILL.md`]
 
 **figma-analyze-component-set** (variant/state-machine analysis). Input: a `COMPONENT_SET_ID`
-(script validates it's a *set*, not one variant). Output: `variantAxes` (axis+options),
+(script validates it's a _set_, not one variant). Output: `variantAxes` (axis+options),
 `componentProps` (non-variant TEXT/BOOLEAN/INSTANCE_SWAP → code props), a `stateMachine` with
 `cssMapping` (a fixed table: `hover→:hover`, `focus(-visible)→:focus-visible`, `active/pressed→
 :active`, `disabled→:disabled,[aria-disabled="true"]`, `error/invalid→[aria-invalid="true"]`,
@@ -114,7 +114,7 @@ tokens." Stated failure mode: axis detection is heuristic (`state`/`status`/`int
 `skills/figma-analyze-component-set/SKILL.md`]
 
 **figma-generate-changelog** (changelog generation). Setup: terminal-only, requires `FIGMA_TOKEN`
-(PAT, *File content: read* + *File versions: read*; the Figma connector's OAuth session does not
+(PAT, _File content: read_ + _File versions: read_; the Figma connector's OAuth session does not
 cover REST). Workflow: (1) list versions (`../figma-version-history/scripts/list-versions.sh
 <fileKey>`) to pick `--from`/`--to` or `current`, (2) run `scripts/generate-changelog.mjs --file <key>
 --from <id> --to <id|current> [--components a:b,c:d] [--mode summary|standard|detailed] [--json]`.
@@ -151,7 +151,7 @@ only names which attributes the note is about, it doesn't set values; requires F
 - **"nodeIds are session-specific / search first" pattern**: narrower than figma-console-mcp's own
   guidance in this session (`figma_search_components` at session start). These skills instead say to
   source `NODE_ID` from "the user's selection, a search, or a node id they paste," and
-  `figma-analyze-component-set` validates the node is the right *type* before proceeding; no skill
+  `figma-analyze-component-set` validates the node is the right _type_ before proceeding; no skill
   states ids go stale across sessions. [verified/contrast, `skills/figma-analyze-component-set/SKILL.md` step 1]
 - **Verification loop is score-and-rerun, not screenshot-diff.** None of the 6 detailed skills uses a
   screenshot loop (that's the native `get_screenshot` tool, listed as "left out to avoid conflicts" in
@@ -163,10 +163,10 @@ only names which attributes the note is about, it doesn't set values; requires F
   cross-referencing, not tool restriction, is how they stay single-purpose (there's only ever one
   callable tool, `use_figma`, or a REST script). [verified, all `use_figma`-based `SKILL.md` files]
 - Shared execution-model rules live once in `references/use-figma-conventions.md` (11 numbered rules
-  + a `hexToRgb` helper + a "Plugin API gotchas" list from live testing, e.g. many property getters
-  throw `TypeError` rather than return `undefined` on the wrong node type; `figma.loadAllPagesAsync()`
-  is unsupported inside `use_figma`); each SKILL.md inlines only an "essentials" sentence — the full
-  file is optional. [verified, `references/use-figma-conventions.md`]
+  - a `hexToRgb` helper + a "Plugin API gotchas" list from live testing, e.g. many property getters
+    throw `TypeError` rather than return `undefined` on the wrong node type; `figma.loadAllPagesAsync()`
+    is unsupported inside `use_figma`); each SKILL.md inlines only an "essentials" sentence — the full
+    file is optional. [verified, `references/use-figma-conventions.md`]
 
 ## 5. Gaps: native-MCP-only skills vs. transport-agnostic
 
@@ -196,10 +196,10 @@ which MCP server is installed — they'd work unmodified alongside figma-console
 `references/rest-api-setup.md`, and each skill's own "Setup" section]
 
 **Explicitly figma-console-mcp-native**: `figma-extract-design-system` is the one skill in the
-collection built *against* figma-console-mcp's `figma_ds_*` tools (`figma_ds_analyze`,
+collection built _against_ figma-console-mcp's `figma_ds_*` tools (`figma_ds_analyze`,
 `figma_ds_extract_tokens`, `figma_ds_scaffold`, `figma_ds_setup_storybook`, `figma_ds_status`), with a
 stated Read/Grep/Bash fallback "if no console MCP" is connected — making it the repo's only skill that
-would run as designed in an figma-console-mcp environment, and the only one *not* listed in the
+would run as designed in an figma-console-mcp environment, and the only one _not_ listed in the
 README's own "22 skills" table. It is also the only skill whose Phase 6 mentions two more skill names
 (`figma-generate-library`, `prototype-to-figma`) that do **not** exist in this repo's tree — these are
 either from figma-console-mcp's own (unfetched) skill bundle or a forward reference to unshipped

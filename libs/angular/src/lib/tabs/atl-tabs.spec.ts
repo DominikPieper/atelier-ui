@@ -40,10 +40,13 @@ describe('AtlTabGroup', () => {
       expect(screen.getByRole('tab', { name: 'Third' })).toBeInTheDocument();
     });
 
-    covers('tabs', 'first-tab-default')('shows first tab panel by default', async () => {
-      await render(BASIC_TEMPLATE, { imports: IMPORTS });
-      expect(screen.getByRole('tabpanel')).toHaveTextContent('First content');
-    });
+    covers('tabs', 'first-tab-default')(
+      'shows first tab panel by default',
+      async () => {
+        await render(BASIC_TEMPLATE, { imports: IMPORTS });
+        expect(screen.getByRole('tabpanel')).toHaveTextContent('First content');
+      },
+    );
 
     it('does not render inactive tab panels', async () => {
       await render(BASIC_TEMPLATE, { imports: IMPORTS });
@@ -97,24 +100,35 @@ describe('AtlTabGroup', () => {
   });
 
   describe('click interaction', () => {
-    covers('tabs', 'switch-on-click')('clicking a tab selects it and shows its panel', async () => {
-      const user = userEvent.setup();
-      await render(BASIC_TEMPLATE, { imports: IMPORTS });
+    covers('tabs', 'switch-on-click')(
+      'clicking a tab selects it and shows its panel',
+      async () => {
+        const user = userEvent.setup();
+        await render(BASIC_TEMPLATE, { imports: IMPORTS });
 
-      await user.click(screen.getByRole('tab', { name: 'Second' }));
+        await user.click(screen.getByRole('tab', { name: 'Second' }));
 
-      expect(screen.getByRole('tabpanel')).toHaveTextContent('Second content');
-      expect(screen.getByRole('tab', { name: 'Second' })).toHaveAttribute('aria-selected', 'true');
-    });
+        expect(screen.getByRole('tabpanel')).toHaveTextContent(
+          'Second content',
+        );
+        expect(screen.getByRole('tab', { name: 'Second' })).toHaveAttribute(
+          'aria-selected',
+          'true',
+        );
+      },
+    );
 
-    covers('tabs', 'disabled-tab-noop')('clicking a disabled tab does nothing', async () => {
-      const user = userEvent.setup();
-      await render(WITH_DISABLED, { imports: IMPORTS });
+    covers('tabs', 'disabled-tab-noop')(
+      'clicking a disabled tab does nothing',
+      async () => {
+        const user = userEvent.setup();
+        await render(WITH_DISABLED, { imports: IMPORTS });
 
-      await user.click(screen.getByRole('tab', { name: 'Second' }));
+        await user.click(screen.getByRole('tab', { name: 'Second' }));
 
-      expect(screen.getByRole('tabpanel')).toHaveTextContent('First content');
-    });
+        expect(screen.getByRole('tabpanel')).toHaveTextContent('First content');
+      },
+    );
   });
 
   describe('keyboard navigation', () => {
@@ -186,17 +200,20 @@ describe('AtlTabGroup', () => {
       expect(screen.getByRole('tabpanel')).toHaveTextContent('Third content');
     });
 
-    covers('tabs', 'skip-disabled')('arrow keys skip disabled tabs', async () => {
-      const user = userEvent.setup();
-      await render(WITH_DISABLED, { imports: IMPORTS });
+    covers('tabs', 'skip-disabled')(
+      'arrow keys skip disabled tabs',
+      async () => {
+        const user = userEvent.setup();
+        await render(WITH_DISABLED, { imports: IMPORTS });
 
-      screen.getByRole('tab', { name: 'First' }).focus();
-      await user.keyboard('{ArrowRight}');
+        screen.getByRole('tab', { name: 'First' }).focus();
+        await user.keyboard('{ArrowRight}');
 
-      // Should skip Second (disabled) and go to Third
-      expect(screen.getByRole('tab', { name: 'Third' })).toHaveFocus();
-      expect(screen.getByRole('tabpanel')).toHaveTextContent('Third content');
-    });
+        // Should skip Second (disabled) and go to Third
+        expect(screen.getByRole('tab', { name: 'Third' })).toHaveFocus();
+        expect(screen.getByRole('tabpanel')).toHaveTextContent('Third content');
+      },
+    );
   });
 
   describe('two-way binding', () => {
@@ -221,7 +238,9 @@ describe('AtlTabGroup', () => {
   describe('variants', () => {
     it('applies variant-default class by default', async () => {
       const { container } = await render(BASIC_TEMPLATE, { imports: IMPORTS });
-      expect(container.querySelector('atl-tab-group')).toHaveClass('variant-default');
+      expect(container.querySelector('atl-tab-group')).toHaveClass(
+        'variant-default',
+      );
     });
 
     covers('tabs', 'variant-class')('applies variant-pills class', async () => {
@@ -232,7 +251,9 @@ describe('AtlTabGroup', () => {
         </atl-tab-group>`,
         { imports: IMPORTS },
       );
-      expect(container.querySelector('atl-tab-group')).toHaveClass('variant-pills');
+      expect(container.querySelector('atl-tab-group')).toHaveClass(
+        'variant-pills',
+      );
     });
   });
 });

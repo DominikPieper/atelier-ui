@@ -1,6 +1,6 @@
 # Code-side visual verification
 
-When a token, variant, or component change in Figma has a downstream visual effect in the consuming code repo, verify it actually renders the way the new spec promises — *before* declaring the change done.
+When a token, variant, or component change in Figma has a downstream visual effect in the consuming code repo, verify it actually renders the way the new spec promises — _before_ declaring the change done.
 
 This is a manual recipe, not an automated submode. It runs in ~5–15 minutes per change and catches the class of bug where Figma and code are individually correct but their handoff (CSS variable name, mode-aware override, theme-toggle wiring) is broken.
 
@@ -14,6 +14,7 @@ Trigger it after any of these changes touch a token / component that has a paire
 - **A11y fix** that depends on a computed contrast ratio (loading spinner color, focus ring) — eyeball is not enough; read computed values.
 
 Skip it for:
+
 - Pure-Figma changes with no code-side artifact (icon-set additions, page reorganization, Component descriptions).
 - Code changes whose effect is covered by an existing visual regression test.
 
@@ -61,11 +62,13 @@ The story ID matches the file's title hierarchy (e.g. `title: 'Components/Inputs
 Use the setup-appropriate mechanism. Two common patterns:
 
 **URL-based (cleanest, no JS hacking):**
+
 ```
 ?path=...&globals=backgrounds.value:dark
 ```
 
 **JS-direct (when the URL parameter doesn't bind to the right state):**
+
 ```js
 const iframe = document.querySelector('#storybook-preview-iframe');
 const doc = iframe.contentDocument;
@@ -91,7 +94,7 @@ In claude-in-chrome:
     color: cs.color,
     // Add any other property that the change is supposed to affect
   };
-})()
+})();
 ```
 
 The result tells you the real rendered values. Convert RGB → hex if you need to compare to Figma values:
@@ -105,10 +108,10 @@ rgb(15, 23, 42)   →  #0f172a
 
 Run the same query in light mode (`data-theme="light"`). Compare:
 
-| Property         | Light expected | Light actual | Dark expected | Dark actual |
-|------------------|----------------|--------------|---------------|-------------|
-| background       | `#007070`      | `#007070`    | `#00d0d0`     | `#00d0d0`   |
-| color            | `#ffffff`      | `#ffffff`    | `#0f172a`     | `#0f172a`   |
+| Property   | Light expected | Light actual | Dark expected | Dark actual |
+| ---------- | -------------- | ------------ | ------------- | ----------- |
+| background | `#007070`      | `#007070`    | `#00d0d0`     | `#00d0d0`   |
+| color      | `#ffffff`      | `#ffffff`    | `#0f172a`     | `#0f172a`   |
 
 **Pass:** all four cells match.
 **Fail:** any mismatch — the token consolidation, mode-override, or theme-toggle wiring is broken; investigate before declaring done.
@@ -142,7 +145,7 @@ Stop the dev-server background task. The recipe is complete.
 
 ## Common traps
 
-- **Storybook decorator's theme-value comparison is stale.** Compare against the option *key* (e.g. `'dark'`), not the hex value (`'#1a1a2e'`). Storybook 10 surfaces the key in `globals.backgrounds.value`. If the decorator was written before this convention, fix it as part of the verification step.
+- **Storybook decorator's theme-value comparison is stale.** Compare against the option _key_ (e.g. `'dark'`), not the hex value (`'#1a1a2e'`). Storybook 10 surfaces the key in `globals.backgrounds.value`. If the decorator was written before this convention, fix it as part of the verification step.
 - **Iframe access is blocked by sensitive-key protection** in some browser-automation setups. Read computed values via the iframe's own `contentWindow.getComputedStyle`, not by reading inline `style` attributes (which may not exist when values come from CSS variables).
 - **Component is a Web Component / custom element** (e.g. Angular's `<llm-button>`). The default `querySelector('button')` will miss it. Use the actual custom-element tag name from the framework.
 - **Caching of CSS variables across HMR.** If a token rename doesn't visually update after a hot reload, hard-reload the iframe (`location.reload()` inside the preview iframe). Vite's HMR sometimes preserves stale `:root` definitions.

@@ -26,11 +26,11 @@ library first changed what the decision was about.
 **190 of 887 values in the component stylesheets are literals** — 78% are already
 token-bound. Grouped by what they are:
 
-| | |
-|---|---|
-| 116 | component dimensions (an avatar size, a toggle track, a step circle) |
-| 17 | viewport units (`100dvh`, `min(24rem, 90vw)`) — no token can hold these |
-| 13 | positions, 11 z-index/opacity, 11 spacing, 8 typography, 6 shadows, 2 `color-mix` |
+|     |                                                                                   |
+| --- | --------------------------------------------------------------------------------- |
+| 116 | component dimensions (an avatar size, a toggle track, a step circle)              |
+| 17  | viewport units (`100dvh`, `min(24rem, 90vw)`) — no token can hold these           |
+| 13  | positions, 11 z-index/opacity, 11 spacing, 8 typography, 6 shadows, 2 `color-mix` |
 
 Tokenising all 116 dimensions would produce roughly a hundred tokens with exactly
 one user each — the rule of three violated in token form, and a token file three
@@ -42,7 +42,7 @@ A naive scan matching any token by value claims 94 hits and suggests binding
 
 Two of the 13 were live defects. **AtlTab and AtlCodeBlock's header both hardcoded
 `2.5rem`, exactly what `--ui-control-height-md` says** — and because
-`check:geometry` builds its roster from token *references*, a control that
+`check:geometry` builds its roster from token _references_, a control that
 hardcodes the value is invisible to it. Measured: the tab rendered **41px** and the
 header **43px** against a 40px token. ADR-0041's defect, still live, in the blind
 spot of the gate written to catch it.
@@ -72,7 +72,7 @@ binding it to `--ui-opacity-disabled` would tie a motion fallback to the disable
 scale on the strength of a coincidence. It is exempt by name, with the reason.
 
 **The 116 component dimensions stay literal, deliberately.** That is the part of
-Decision D this ADR does *not* close: a rebuilt Figma master still cannot bind a
+Decision D this ADR does _not_ close: a rebuilt Figma master still cannot bind a
 Variable to an avatar size or a toggle track, because no token holds them. The gap
 is now a recorded decision rather than an accident.
 
@@ -101,7 +101,7 @@ the guess somewhere else.
   and the fixture measured an unstyled box. And one fixture was missing a class
   Angular's host actually carries. Both were mine, both from yesterday.
 - **154 border declarations are longer to read.** `border: var(--ui-border-width)
-  solid var(--ui-color-border)` says more than `border: 1px solid …`; the trade is
+solid var(--ui-color-border)` says more than `border: 1px solid …`; the trade is
   a stroke weight that can change in one place and bind in Figma.
 - **The token file grew by two entries, not a hundred.** Both are annotated in
   `tokens.manifest.ts` with the constraint that keeps them honest.

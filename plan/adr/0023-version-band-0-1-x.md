@@ -2,10 +2,10 @@
 status: accepted
 date: 2026-06-17
 sources:
-  - "approach audit 2026-06-17 (finding `version-band`)"
-  - "plan/adr/0016-release-nx-release-not-for-production.md"
-  - "libs/{react,vue,angular}/package.json (version 0.1.9), libs/spec/package.json (0.0.13)"
-  - "this session"
+  - 'approach audit 2026-06-17 (finding `version-band`)'
+  - 'plan/adr/0016-release-nx-release-not-for-production.md'
+  - 'libs/{react,vue,angular}/package.json (version 0.1.9), libs/spec/package.json (0.0.13)'
+  - 'this session'
 ---
 
 # ADR-0023: Version band moves to 0.1.x (revises ADR-0016's 0.0.x signal)
@@ -40,7 +40,7 @@ Treat the current `0.1.x` band as intentional and keep it.
 - **Pre-1.0 remains the "not for production" signal.** The whole `0.y.z` range is
   pre-stable under semver: no API-stability promise, breaking changes allowed in
   any release. The not-for-production meaning ADR-0016 attached to `0.0.x` is
-  carried by *being pre-1.0*, not specifically by the second zero. Moving from
+  carried by _being pre-1.0_, not specifically by the second zero. Moving from
   `0.0.x` to `0.1.x` does not weaken that signal.
 - **Under `0.y.z`, a `feat:` bumps the minor and a `fix:` bumps the patch** — the
   standard Conventional-Commits behaviour `nx release` already applies. We do not

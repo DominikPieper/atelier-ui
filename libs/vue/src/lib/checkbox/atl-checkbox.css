@@ -47,9 +47,10 @@
   background-color: var(--ui-color-input-bg);
   cursor: pointer;
   position: relative;
-  transition: border-color var(--ui-transition-fast),
-              background-color var(--ui-transition-fast),
-              box-shadow var(--ui-transition-fast);
+  transition:
+    border-color var(--ui-transition-fast),
+    background-color var(--ui-transition-fast),
+    box-shadow var(--ui-transition-fast);
   outline: none;
 }
 
@@ -138,7 +139,13 @@
 
 /* Animation */
 @keyframes atl-check-pop {
-  0% { transform: rotate(45deg) translate(-1px, -1px) scale(0); }
-  60% { transform: rotate(45deg) translate(-1px, -1px) scale(1.15); }
-  100% { transform: rotate(45deg) translate(-1px, -1px) scale(1); }
+  0% {
+    transform: rotate(45deg) translate(-1px, -1px) scale(0);
+  }
+  60% {
+    transform: rotate(45deg) translate(-1px, -1px) scale(1.15);
+  }
+  100% {
+    transform: rotate(45deg) translate(-1px, -1px) scale(1);
+  }
 }

@@ -21,17 +21,17 @@ and supplies no reset of its own.
 
 The library ships its CSS (ADR-0026), and only 10 of 29 component stylesheets set
 `box-sizing`. So the sizes the library states were only true if the consuming app
-happened to supply a border-box reset. Twenty rules set a dimension *and*
+happened to supply a border-box reset. Twenty rules set a dimension _and_
 padding/border without declaring a box model; ten of them were rendered in a
 browser in both modes, and **eight drifted**:
 
-| Element | no reset | border-box | drift |
-|---|---|---|---|
-| Combobox option | 52px | 36px | 16px |
-| Menu item | 52px | 36px | 16px |
-| Code-block header | 65px | 43px | 22px |
-| Toggle track | 46×26 | 44×24 | 2px |
-| Button spinner | 22.5² | 20² | 2.5px |
+| Element           | no reset | border-box | drift |
+| ----------------- | -------- | ---------- | ----- |
+| Combobox option   | 52px     | 36px       | 16px  |
+| Menu item         | 52px     | 36px       | 16px  |
+| Code-block header | 65px     | 43px       | 22px  |
+| Toggle track      | 46×26    | 44×24      | 2px   |
+| Button spinner    | 22.5²    | 20²        | 2.5px |
 
 Two findings reframed this from a style question into a defect.
 

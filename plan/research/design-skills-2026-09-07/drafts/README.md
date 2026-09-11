@@ -15,15 +15,15 @@ fixtures), and a fixed `test-skill.mjs` mode list (it already omits the architec
 
 The skill-creator method was applied as far as an unattended session allows:
 
-| Step | Done | Not done, and why |
-|---|---|---|
-| Capture intent (enable / trigger / output / test cases) | For all five skills, below | — |
-| Interview | Answers taken from the research and the repo's ADRs | Open questions listed per skill; the owner confirms |
-| Draft SKILL.md | `skills/design-to-code/SKILL.md` (moved) — the exemplar, revised after the Codex cross-check (seven codeSpec sections, static-read ceiling, node-id provenance, disabled/loading as props, ADR-0096 narrowing made explicit) | The bridge skill waits for the catalog decision; 2, 3 and 5 fold into design-to-code or the architect (blueprint § 5 preamble) |
-| Test prompts (`evals/evals.json`, no assertions yet) | `skills/design-to-code/evals/evals.json`, 4 prompts incl. one out-of-scope; six repo fixtures under `tests/` | — |
-| Trigger eval set (20 queries, 10/10) | `skills/design-to-code/evals/trigger-eval.json` | Needs owner review before `run_loop.py` |
-| With-skill / baseline runs | — | They call figma-console against the live file and write into `libs/`; not run unattended |
-| Description optimisation loop | — | Depends on the reviewed trigger set; ~15 min of `claude -p` runs |
+| Step                                                    | Done                                                                                                                                                                                                                         | Not done, and why                                                                                                              |
+| ------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------ |
+| Capture intent (enable / trigger / output / test cases) | For all five skills, below                                                                                                                                                                                                   | —                                                                                                                              |
+| Interview                                               | Answers taken from the research and the repo's ADRs                                                                                                                                                                          | Open questions listed per skill; the owner confirms                                                                            |
+| Draft SKILL.md                                          | `skills/design-to-code/SKILL.md` (moved) — the exemplar, revised after the Codex cross-check (seven codeSpec sections, static-read ceiling, node-id provenance, disabled/loading as props, ADR-0096 narrowing made explicit) | The bridge skill waits for the catalog decision; 2, 3 and 5 fold into design-to-code or the architect (blueprint § 5 preamble) |
+| Test prompts (`evals/evals.json`, no assertions yet)    | `skills/design-to-code/evals/evals.json`, 4 prompts incl. one out-of-scope; six repo fixtures under `tests/`                                                                                                                 | —                                                                                                                              |
+| Trigger eval set (20 queries, 10/10)                    | `skills/design-to-code/evals/trigger-eval.json`                                                                                                                                                                              | Needs owner review before `run_loop.py`                                                                                        |
+| With-skill / baseline runs                              | —                                                                                                                                                                                                                            | They call figma-console against the live file and write into `libs/`; not run unattended                                       |
+| Description optimisation loop                           | —                                                                                                                                                                                                                            | Depends on the reviewed trigger set; ~15 min of `claude -p` runs                                                               |
 
 ## Intent capture per skill
 
@@ -37,7 +37,7 @@ The skill-creator method was applied as far as an unattended session allows:
   codes; parity discrepancies with a decision each; a verified/assumed report.
 - **Tests:** yes — fixed workflow, objectively checkable (autodocs tag present, gates run,
   parity recorded, handoff doc written before code when missing).
-- **Open questions for the owner:** should the skill *refuse* to generate without a
+- **Open questions for the owner:** should the skill _refuse_ to generate without a
   handoff document, or draft-and-continue when the user says "just build it"? Should
   verify-only re-record automatically or always ask?
 

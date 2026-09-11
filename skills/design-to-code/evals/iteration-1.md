@@ -6,17 +6,17 @@ by an independent Sonnet grader per eval against `eval_metadata.json` assertions
 full workspace (outputs, `grading.json`, viewer) lived in the session scratchpad; this
 file is the durable record.
 
-| Metric | With skill | Without skill | Delta |
-|---|---|---|---|
-| Pass rate | 86 % ± 13 % | 59 % ± 8 % | +27 pts |
-| Time | 466 s ± 141 s | 472 s ± 164 s | −7 s |
-| Tokens | 205,802 ± 62,502 | 162,087 ± 41,015 | +43,714 |
+| Metric    | With skill       | Without skill    | Delta   |
+| --------- | ---------------- | ---------------- | ------- |
+| Pass rate | 86 % ± 13 %      | 59 % ± 8 %       | +27 pts |
+| Time      | 466 s ± 141 s    | 472 s ± 164 s    | −7 s    |
+| Tokens    | 205,802 ± 62,502 | 162,087 ± 41,015 | +43,714 |
 
-| Eval | With | Without | What the skill changed |
-|---|---|---|---|
-| 0 URL-only, Vue (`node-id=55-141`, which no longer exists) | 5/5 | 3/5 | Wrote the handoff document's mechanical half with three blanks and stopped; baseline stopped one step earlier with "the node doesn't resolve" and no document. **But** the with-skill run asserted the dead id was "a content-sample instance beside the master" on the strength of a stale `figmaNode('55-141')` story link — false (live `getNodeByIdAsync` → `null`). |
-| 1 AtlCard verify after the token change | 5/6 | 4/6 | Pinned the snapshot (SHA + Figma lastModified) and took the node from `snapshot.json`; declared all seven `codeSpec` sections. **But** re-recorded parity over a known letter-spacing gap that lived only in a commit message (c88a543); the baseline refused to record and traced git history deeper. |
-| 2 File-wide token architecture (should route to the architect) | 3/4 | 2/4 | Loaded `figma-workspace-architect`, rejected `design-to-code` from its description. **Confound:** the baseline recognised the architect skill and withheld it because its output path was named `without_skill`. The architect run itself skipped its Migrate playbook and called a deletion "zero risk" — logged in `tasks/todo.md` as an architect finding. |
+| Eval                                                           | With | Without | What the skill changed                                                                                                                                                                                                                                                                                                                                                   |
+| -------------------------------------------------------------- | ---- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| 0 URL-only, Vue (`node-id=55-141`, which no longer exists)     | 5/5  | 3/5     | Wrote the handoff document's mechanical half with three blanks and stopped; baseline stopped one step earlier with "the node doesn't resolve" and no document. **But** the with-skill run asserted the dead id was "a content-sample instance beside the master" on the strength of a stale `figmaNode('55-141')` story link — false (live `getNodeByIdAsync` → `null`). |
+| 1 AtlCard verify after the token change                        | 5/6  | 4/6     | Pinned the snapshot (SHA + Figma lastModified) and took the node from `snapshot.json`; declared all seven `codeSpec` sections. **But** re-recorded parity over a known letter-spacing gap that lived only in a commit message (c88a543); the baseline refused to record and traced git history deeper.                                                                   |
+| 2 File-wide token architecture (should route to the architect) | 3/4  | 2/4     | Loaded `figma-workspace-architect`, rejected `design-to-code` from its description. **Confound:** the baseline recognised the architect skill and withheld it because its output path was named `without_skill`. The architect run itself skipped its Migrate playbook and called a deletion "zero risk" — logged in `tasks/todo.md` as an architect finding.            |
 
 ## Revisions made from this iteration (bde4432)
 
@@ -37,7 +37,7 @@ file is the durable record.
 - Name run directories neutrally in the prompts (`run-a`/`run-b`), never after the
   condition under test.
 - Eval 0's assertion 2 rewards any document mentioning the node id; add an assertion
-  that the stated identity of the node is *true* (live check).
+  that the stated identity of the node is _true_ (live check).
 - Eval 0's assertion 5 ("stopped instead of generating code") is near-floor when the id
   is dead; give the prompt a live id as well as a dead one.
 - Eval 2's assertion 4 conflates "used severities but skipped the migration protocol"

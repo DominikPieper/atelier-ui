@@ -41,10 +41,11 @@
   background-color: var(--ui-color-input-bg);
   cursor: pointer;
   position: relative;
-  transition: border-color var(--ui-transition-fast),
-              border-width var(--ui-transition-fast) var(--ui-ease-out),
-              background-color var(--ui-transition-fast),
-              box-shadow var(--ui-transition-fast);
+  transition:
+    border-color var(--ui-transition-fast),
+    border-width var(--ui-transition-fast) var(--ui-ease-out),
+    background-color var(--ui-transition-fast),
+    box-shadow var(--ui-transition-fast);
   outline: none;
   margin: 0;
 }

@@ -8,10 +8,13 @@ describe('AtlAvatar', () => {
     expect(screen.getByAltText('Jane Doe')).toBeInTheDocument();
   });
 
-  covers('avatar', 'icon-when-empty')('shows icon placeholder when no src or name', () => {
-    const { container } = render(<AtlAvatar />);
-    expect(container.querySelector('.atl-icon.icon svg')).toBeInTheDocument();
-  });
+  covers('avatar', 'icon-when-empty')(
+    'shows icon placeholder when no src or name',
+    () => {
+      const { container } = render(<AtlAvatar />);
+      expect(container.querySelector('.atl-icon.icon svg')).toBeInTheDocument();
+    },
+  );
 
   covers('avatar', 'initials-when-no-src')('shows initials when no src', () => {
     render(<AtlAvatar name="John Smith" />);
@@ -23,10 +26,13 @@ describe('AtlAvatar', () => {
     expect(screen.getByText('A')).toBeInTheDocument();
   });
 
-  it.each(['xs', 'sm', 'md', 'lg', 'xl'] as const)('applies size-%s class', (size) => {
-    const { container } = render(<AtlAvatar size={size} name="Test" />);
-    expect(container.firstChild).toHaveClass(`size-${size}`);
-  });
+  it.each(['xs', 'sm', 'md', 'lg', 'xl'] as const)(
+    'applies size-%s class',
+    (size) => {
+      const { container } = render(<AtlAvatar size={size} name="Test" />);
+      expect(container.firstChild).toHaveClass(`size-${size}`);
+    },
+  );
 
   it.each(['circle', 'square'] as const)('applies shape-%s class', (shape) => {
     const { container } = render(<AtlAvatar shape={shape} name="Test" />);
@@ -38,10 +44,13 @@ describe('AtlAvatar', () => {
     expect(screen.getByRole('img')).toBeInTheDocument();
   });
 
-  covers('avatar', 'aria-label-from-name')('uses name as aria-label when no alt provided', () => {
-    render(<AtlAvatar name="Jane Doe" />);
-    expect(screen.getByRole('img')).toHaveAttribute('aria-label', 'Jane Doe');
-  });
+  covers('avatar', 'aria-label-from-name')(
+    'uses name as aria-label when no alt provided',
+    () => {
+      render(<AtlAvatar name="Jane Doe" />);
+      expect(screen.getByRole('img')).toHaveAttribute('aria-label', 'Jane Doe');
+    },
+  );
 
   it('uses "Avatar" as aria-label fallback when no src, alt, or name', () => {
     render(<AtlAvatar />);
@@ -55,7 +64,7 @@ describe('AtlAvatarGroup', () => {
       <AtlAvatarGroup max={3}>
         <AtlAvatar name="Alice" />
         <AtlAvatar name="Bob" />
-      </AtlAvatarGroup>
+      </AtlAvatarGroup>,
     );
     expect(container.querySelectorAll('.atl-avatar')).toHaveLength(2);
   });
@@ -66,7 +75,7 @@ describe('AtlAvatarGroup', () => {
         <AtlAvatar name="Alice" />
         <AtlAvatar name="Bob" />
         <AtlAvatar name="Carol" />
-      </AtlAvatarGroup>
+      </AtlAvatarGroup>,
     );
     expect(screen.getByText('+1')).toBeInTheDocument();
   });
@@ -76,7 +85,7 @@ describe('AtlAvatarGroup', () => {
       <AtlAvatarGroup max={2}>
         <AtlAvatar name="Alice" />
         <AtlAvatar name="Bob" />
-      </AtlAvatarGroup>
+      </AtlAvatarGroup>,
     );
     expect(container.querySelector('.overflow-badge')).not.toBeInTheDocument();
   });

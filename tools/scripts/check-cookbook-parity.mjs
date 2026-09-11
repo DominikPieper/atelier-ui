@@ -41,9 +41,7 @@ const SUBCOMPONENT_MAP = maps().subcomponentParents;
 
 // Identifiers that look like Atl* but are not components. Strip these from
 // extracted sets before reporting.
-const IGNORE_TOKENS = new Set([
-  'AtlComponentName',
-]);
+const IGNORE_TOKENS = new Set(['AtlComponentName']);
 
 function normalize(component) {
   return SUBCOMPONENT_MAP[component] ?? component;
@@ -55,14 +53,13 @@ function readPatterns() {
   // Each pattern object has the shape:
   //   { id: '...', num: N, title: '...', description: '...',
   //     tags: ['AtlX', ...], angular: ..., react: ..., vue: ... }
-  const re = /\{\s*id:\s*'([^']+)',\s*num:\s*(\d+),\s*title:\s*'([^']+)',[\s\S]*?tags:\s*\[([^\]]+)\]/g;
+  const re =
+    /\{\s*id:\s*'([^']+)',\s*num:\s*(\d+),\s*title:\s*'([^']+)',[\s\S]*?tags:\s*\[([^\]]+)\]/g;
   const out = [];
   let m;
   while ((m = re.exec(src)) !== null) {
     const [, id, numStr, title, tagsRaw] = m;
-    const tags = [
-      ...tagsRaw.matchAll(/'([^']+)'/g),
-    ].map((tm) => tm[1]);
+    const tags = [...tagsRaw.matchAll(/'([^']+)'/g)].map((tm) => tm[1]);
     out.push({ id, num: Number(numStr), title, tags });
   }
   if (out.length !== 6) {
@@ -100,7 +97,10 @@ function splitStoryByNum(src) {
       markers.push({ num: Number(m[1]), title: m[2].trim(), line: i });
       continue;
     }
-    if (POST_PATTERN_HEADERS.some((re) => re.test(lines[i])) && endLine === lines.length) {
+    if (
+      POST_PATTERN_HEADERS.some((re) => re.test(lines[i])) &&
+      endLine === lines.length
+    ) {
       endLine = i;
     }
   }
@@ -246,7 +246,9 @@ function main() {
 
   console.log('');
   if (fails > 0) {
-    console.error(`Cookbook parity FAILED: ${fails} hard finding(s), ${warns} drift warning(s).`);
+    console.error(
+      `Cookbook parity FAILED: ${fails} hard finding(s), ${warns} drift warning(s).`,
+    );
     console.error(
       'Hard findings indicate a catalog ↔ story mismatch. Update docs/src/data/patterns.ts tags[],',
     );
@@ -256,7 +258,9 @@ function main() {
     process.exit(1);
   }
   if (warns > 0) {
-    console.log(`Cookbook parity OK with ${warns} drift warning(s) (per-framework variation).`);
+    console.log(
+      `Cookbook parity OK with ${warns} drift warning(s) (per-framework variation).`,
+    );
     return;
   }
   console.log('Cookbook parity OK (6 patterns × 3 frameworks).');

@@ -41,7 +41,7 @@ included) then had to be renumbered by hand for an edit that changed nothing
 about what was actually exempt.
 
 The underlying defect is structural, not a one-off: a `file:line` key encodes
-*where* a fact currently sits, not *what* the fact is. Every edit anywhere
+_where_ a fact currently sits, not _what_ the fact is. Every edit anywhere
 above the line is a silent invalidation of every allowlist entry keyed to a
 line below it, in the same file, regardless of whether that edit has
 anything to do with the exemption's subject. The failure message compounds
@@ -67,6 +67,7 @@ panel, in-use with a fix hint in the other), so that line is what
 disambiguates without inventing an artificial counter.
 
 Alternatives considered:
+
 - **An occurrence ordinal** (`file:trimmedLine#2`) instead of leading
   context. Rejected: it disambiguates the current duplicate correctly, but
   the ordinal is itself positional in miniature — it silently changes

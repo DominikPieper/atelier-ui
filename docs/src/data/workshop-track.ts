@@ -32,7 +32,12 @@ export interface TrackStep {
 /** The ordered path, without step numbers — those are derived below. */
 const TRACK_ORDER: readonly Omit<TrackStep, 'step'>[] = [
   { href: '/', label: 'Overview', icon: 'dashboard' },
-  { href: '/workshop', label: 'Setup', icon: 'build_circle', title: 'Workshop setup' },
+  {
+    href: '/workshop',
+    label: 'Setup',
+    icon: 'build_circle',
+    title: 'Workshop setup',
+  },
   { href: '/figma-token', label: 'Figma access', icon: 'cable' },
   { href: '/design-to-code', label: 'Design to code', icon: 'schema' },
   { href: '/tutorial', label: 'Tutorial', icon: 'school' },

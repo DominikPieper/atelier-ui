@@ -46,14 +46,18 @@ const VARIANT_ICON_NAMES: Partial<Record<AtlBadgeVariant, AtlIconName>> = {
 })
 export class AtlBadge {
   /** Semantic color variant of the badge. */
-  readonly variant = input<'default' | 'success' | 'warning' | 'danger' | 'info'>('default');
+  readonly variant = input<
+    'default' | 'success' | 'warning' | 'danger' | 'info'
+  >('default');
 
   /** Size of the badge. */
   readonly size = input<'sm' | 'md'>('md');
 
   protected readonly hostClasses = computed(
-    () => `variant-${this.variant()} size-${this.size()}`
+    () => `variant-${this.variant()} size-${this.size()}`,
   );
 
-  protected readonly variantIcon = computed(() => VARIANT_ICON_NAMES[this.variant()]);
+  protected readonly variantIcon = computed(
+    () => VARIANT_ICON_NAMES[this.variant()],
+  );
 }

@@ -3,13 +3,25 @@ import { signal } from '@angular/core';
 import { userEvent, expect } from 'storybook/test';
 import { AtlButton } from '../button/atl-button';
 import { AtlInput } from '../input/atl-input';
-import { AtlDrawer, AtlDrawerContent, AtlDrawerFooter, AtlDrawerHeader } from './atl-drawer';
+import {
+  AtlDrawer,
+  AtlDrawerContent,
+  AtlDrawerFooter,
+  AtlDrawerHeader,
+} from './atl-drawer';
 
 import { metadata } from '@atelier-ui/spec/metadata/drawer.metadata';
 import { contract } from '@atelier-ui/spec/contracts/drawer.contract';
-const ALL_IMPORTS = [AtlDrawer, AtlDrawerHeader, AtlDrawerContent, AtlDrawerFooter, AtlButton];
+const ALL_IMPORTS = [
+  AtlDrawer,
+  AtlDrawerHeader,
+  AtlDrawerContent,
+  AtlDrawerFooter,
+  AtlButton,
+];
 
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: 'figma'; url: string } {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
@@ -35,7 +47,11 @@ const meta: Meta<AtlDrawer> = {
     size: 'md',
     closeOnBackdrop: true,
   },
-  parameters: { design: figmaNode('421-398'), docs: { description: { component: metadata.purpose } }, contract },
+  parameters: {
+    design: figmaNode('421-398'),
+    docs: { description: { component: metadata.purpose } },
+    contract,
+  },
 };
 
 export default meta;
@@ -203,7 +219,12 @@ export const NoBackdropClose: Story = {
 
 export const WithForm: Story = {
   render: (args) => ({
-    props: { ...args, open: signal(false), name: signal(''), email: signal('') },
+    props: {
+      ...args,
+      open: signal(false),
+      name: signal(''),
+      email: signal(''),
+    },
     moduleMetadata: { imports: [...ALL_IMPORTS, AtlInput] },
     template: `
       <atl-button variant="primary" (click)="open.set(true)">Edit Profile</atl-button>

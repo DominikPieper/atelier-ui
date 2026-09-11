@@ -7,40 +7,40 @@ component-set; tracked here so design ↔ code parity stays auditable.
 
 ## Scoreboard — before / after
 
-| Component | Before | After | Δ | Notes |
-|---|---:|---:|---:|---|
-| LlmIcon            | 100 | **100** |   | unchanged |
-| LlmButton          |  82 | **100** | +18 | added state=disabled variant; danger + active variants got a 1px darker border (mirrors the CSS inset shadow shipped in 9b7e137) |
-| LlmInput           | 100 | **100** |   | unchanged |
-| LlmTextarea        |  91 | **100** | +9 | added state=hover, state=active, state=loading variants |
-| LlmSelect          |  77 | **100** | +23 | added state=focus variant with double-ring drop-shadow effects (mirrors `--ui-focus-ring`) |
-| LlmCombobox        |  77 | **100** | +23 | same as LlmSelect |
-| LlmCheckbox        |  79 | **94**  | +15 | resized every variant 18 → 24 px tall (WCAG 2.5.8) |
-| LlmRadio           |  82 | **97**  | +15 | resized 20 → 26 px |
-| LlmRadioGroup      |  79 | **94**  | +15 | resized 18 → 24 px |
-| LlmToggle          |  94 | **94**  |   | unchanged — convention difference (state=on/off, state=invalid) flagged as missing "default"/"error" — see *deferred* below |
-| LlmBadge           | 100 | **100** |   | unchanged |
-| LlmAvatar          | 100 | **100** |   | unchanged |
-| LlmCard            | 100 | **100** |   | unchanged (spec gained an opt-in `role` prop in commit eae5e5d, no Figma-side change needed) |
-| LlmSkeleton        | 100 | **100** |   | unchanged |
-| LlmProgress        | 100 | **100** |   | unchanged on the Figma side; the `label` prop fix lives in commit 76b9b7f |
-| LlmTable           |  94 | **100** | +6 | added state=disabled (50 % opacity) and state=error (1 px danger stroke) |
-| LlmCodeBlock       |  92 | **92**  |   | protanopia — see *deferred* |
-| LlmBreadcrumbs     | 100 | **100** |   | unchanged |
-| LlmMenu            | 100 | **100** |   | unchanged |
-| LlmTabGroup        |  88 | **93**  | +5 | added state=disabled, state=error variants. Focus-ring 1.2:1 audit reading is a false positive: the focus state correctly uses drop-shadow effects bound to the `--ui-focus-ring` variables (~6:1). The audit only inspects the active-tab stroke, which is identical between default and focus by design. |
-| LlmPagination      |  84 | **92**  | +8 | a11y notes added; protanopia open — see *deferred* |
-| LlmStepper         | 100 | **100** |   | unchanged |
-| LlmTooltip         |  93 | **100** | +7 | a11y notes added |
-| LlmDialog          |  93 | **100** | +7 | a11y notes added |
-| LlmDrawer          | 100 | **100** |   | unchanged |
-| LlmToast           | 100 | **100** |   | unchanged |
-| LlmAlert           |  93 | **100** | +7 | a11y notes added |
-| LlmAccordionGroup  | 100 | **100** |   | unchanged |
+| Component         | Before |   After |   Δ | Notes                                                                                                                                                                                                                                                                                                      |
+| ----------------- | -----: | ------: | --: | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| LlmIcon           |    100 | **100** |     | unchanged                                                                                                                                                                                                                                                                                                  |
+| LlmButton         |     82 | **100** | +18 | added state=disabled variant; danger + active variants got a 1px darker border (mirrors the CSS inset shadow shipped in 9b7e137)                                                                                                                                                                           |
+| LlmInput          |    100 | **100** |     | unchanged                                                                                                                                                                                                                                                                                                  |
+| LlmTextarea       |     91 | **100** |  +9 | added state=hover, state=active, state=loading variants                                                                                                                                                                                                                                                    |
+| LlmSelect         |     77 | **100** | +23 | added state=focus variant with double-ring drop-shadow effects (mirrors `--ui-focus-ring`)                                                                                                                                                                                                                 |
+| LlmCombobox       |     77 | **100** | +23 | same as LlmSelect                                                                                                                                                                                                                                                                                          |
+| LlmCheckbox       |     79 |  **94** | +15 | resized every variant 18 → 24 px tall (WCAG 2.5.8)                                                                                                                                                                                                                                                         |
+| LlmRadio          |     82 |  **97** | +15 | resized 20 → 26 px                                                                                                                                                                                                                                                                                         |
+| LlmRadioGroup     |     79 |  **94** | +15 | resized 18 → 24 px                                                                                                                                                                                                                                                                                         |
+| LlmToggle         |     94 |  **94** |     | unchanged — convention difference (state=on/off, state=invalid) flagged as missing "default"/"error" — see _deferred_ below                                                                                                                                                                                |
+| LlmBadge          |    100 | **100** |     | unchanged                                                                                                                                                                                                                                                                                                  |
+| LlmAvatar         |    100 | **100** |     | unchanged                                                                                                                                                                                                                                                                                                  |
+| LlmCard           |    100 | **100** |     | unchanged (spec gained an opt-in `role` prop in commit eae5e5d, no Figma-side change needed)                                                                                                                                                                                                               |
+| LlmSkeleton       |    100 | **100** |     | unchanged                                                                                                                                                                                                                                                                                                  |
+| LlmProgress       |    100 | **100** |     | unchanged on the Figma side; the `label` prop fix lives in commit 76b9b7f                                                                                                                                                                                                                                  |
+| LlmTable          |     94 | **100** |  +6 | added state=disabled (50 % opacity) and state=error (1 px danger stroke)                                                                                                                                                                                                                                   |
+| LlmCodeBlock      |     92 |  **92** |     | protanopia — see _deferred_                                                                                                                                                                                                                                                                                |
+| LlmBreadcrumbs    |    100 | **100** |     | unchanged                                                                                                                                                                                                                                                                                                  |
+| LlmMenu           |    100 | **100** |     | unchanged                                                                                                                                                                                                                                                                                                  |
+| LlmTabGroup       |     88 |  **93** |  +5 | added state=disabled, state=error variants. Focus-ring 1.2:1 audit reading is a false positive: the focus state correctly uses drop-shadow effects bound to the `--ui-focus-ring` variables (~6:1). The audit only inspects the active-tab stroke, which is identical between default and focus by design. |
+| LlmPagination     |     84 |  **92** |  +8 | a11y notes added; protanopia open — see _deferred_                                                                                                                                                                                                                                                         |
+| LlmStepper        |    100 | **100** |     | unchanged                                                                                                                                                                                                                                                                                                  |
+| LlmTooltip        |     93 | **100** |  +7 | a11y notes added                                                                                                                                                                                                                                                                                           |
+| LlmDialog         |     93 | **100** |  +7 | a11y notes added                                                                                                                                                                                                                                                                                           |
+| LlmDrawer         |    100 | **100** |     | unchanged                                                                                                                                                                                                                                                                                                  |
+| LlmToast          |    100 | **100** |     | unchanged                                                                                                                                                                                                                                                                                                  |
+| LlmAlert          |     93 | **100** |  +7 | a11y notes added                                                                                                                                                                                                                                                                                           |
+| LlmAccordionGroup |    100 | **100** |     | unchanged                                                                                                                                                                                                                                                                                                  |
 
-**Median**  Before 94  →  After **100**.
-**Worst**   Before 77  →  After **92**.
-**Components at 100**  Before 13  →  After **22 / 28**.
+**Median** Before 94 → After **100**.
+**Worst** Before 77 → After **92**.
+**Components at 100** Before 13 → After **22 / 28**.
 
 ## What we deferred to a designer
 
@@ -50,7 +50,7 @@ components to 100 but introduce non-trivial spec or visual changes.
 
 1. **State-axis convention** (LlmToggle, LlmCheckbox, LlmRadio,
    LlmRadioGroup). The audit pattern expects `state=default` / `state=
-   error`; the library uses semantically meaningful state names
+error`; the library uses semantically meaningful state names
    (`unchecked`/`checked`/`indeterminate`, `unselected`/`selected`,
    `invalid` etc). Either add empty alias variants (uses storage but
    keeps the audit happy) or accept the score plateau as a convention
@@ -80,20 +80,23 @@ listed here are stable in the file.
 ### Pass 1 — A11y notes in description (P-NICE)
 
 `figma_set_description` on:
+
 - LlmAlert (55:31), LlmDialog (55:94), LlmTooltip (55:52),
   LlmPagination (55:145).
 
 ### Pass 2 — Target size bump (P-CRITICAL, WCAG 2.5.8)
 
 `figma_execute` resize across:
-- LlmCheckbox 8 variants:  18 px → 24 px
-- LlmRadio 8 variants:     20 px → 26 px (auto-sizing handled this
+
+- LlmCheckbox 8 variants: 18 px → 24 px
+- LlmRadio 8 variants: 20 px → 26 px (auto-sizing handled this
   cleanly; the others needed a fixed resize)
 - LlmRadioGroup 7 variants: 18 px → 24 px
 
 ### Pass 3 — Non-color differentiation (P-CRITICAL, WCAG 1.4.1)
 
 `figma_execute` adding 1 px stroke to:
+
 - 7 LlmButton danger variants (red-700 `#B91C1C`)
 - 3 LlmButton active variants on primary / secondary / outline
   (primary-active `#003F3F`)
@@ -105,6 +108,7 @@ both AA-conformant and what the audit credits.)
 ### Pass 4 — Variant coverage (P-IMPORTANT)
 
 `figma_execute` clone-and-rename pattern across:
+
 - LlmButton: + state=disabled (29 variants total)
 - LlmTextarea: + state=hover, state=active, state=loading (8 total)
 - LlmSelect: + state=focus (9 total)
@@ -133,9 +137,10 @@ file was changed in this phase — Phase 4 is purely Figma-side.
 ## Phase 5 — verification (2026-04-27)
 
 Ran axe-core 4.11.3 (chrome-headless, ChromeDriver 147) with WCAG 2.0
-+ 2.1, levels A + AA, against the deployed docs at
-`https://atelier.pieper.io`. Local run was preferred but blocked by
-the sandbox (no http server allowed); pivoted to the deployed site.
+
+- 2.1, levels A + AA, against the deployed docs at
+  `https://atelier.pieper.io`. Local run was preferred but blocked by
+  the sandbox (no http server allowed); pivoted to the deployed site.
 
 **Caveat: deploy lags main by 4 days.** The deployed sitemap's
 `lastmod` is 2026-04-23; the audit work and Phase 3 token bumps land
@@ -148,15 +153,15 @@ on the deployed surface — not what's on `HEAD`.
 
 ### Per-URL results
 
-| URL | Total | color-contrast | Other |
-|---|---:|---:|---|
-| `/` | 4 | 4 | — |
-| `/components/` | 12 | 12 | — |
-| `/components/button/` | 19 | 19 | — |
-| `/patterns/` | 53 | 49 | `button-name` × 2, `scrollable-region-focusable` × 2 |
-| `/tokens/` | 64 | 64 | — |
-| `/workshop/` | 30 | 30 | — |
-| `/figma-token/` | 57 | 57 | — |
+| URL                   | Total | color-contrast | Other                                                |
+| --------------------- | ----: | -------------: | ---------------------------------------------------- |
+| `/`                   |     4 |              4 | —                                                    |
+| `/components/`        |    12 |             12 | —                                                    |
+| `/components/button/` |    19 |             19 | —                                                    |
+| `/patterns/`          |    53 |             49 | `button-name` × 2, `scrollable-region-focusable` × 2 |
+| `/tokens/`            |    64 |             64 | —                                                    |
+| `/workshop/`          |    30 |             30 | —                                                    |
+| `/figma-token/`       |    57 |             57 | —                                                    |
 
 ### Classification
 
@@ -196,8 +201,8 @@ on the deployed surface — not what's on `HEAD`.
 ### Follow-ups created by this run
 
 - [x] ~~**Re-run axe after next docs deploy**~~ — done 2026-04-28, see
-  next section. Contrast collapsed 239 → 11 (-95.4%);
-  `scrollable-region-focusable` and `button-name` cleared as predicted.
+      next section. Contrast collapsed 239 → 11 (-95.4%);
+      `scrollable-region-focusable` and `button-name` cleared as predicted.
 
 ## Phase 5 — post-deploy re-run (2026-04-28)
 
@@ -210,18 +215,18 @@ tabindex fix. Two URLs that were 404 last run (`/accessibility/`,
 
 ### Per-URL results
 
-| URL | Total | color-contrast | Other | Δ vs. 2026-04-27 |
-|---|---:|---:|---|---:|
-| `/` | 0 | 0 | — | −4 |
-| `/components/` | 5 | 5 | — | −7 |
-| `/components/button/` | 6 | 6 | — | −13 |
-| `/patterns/` | 0 | 0 | — | −53 |
-| `/patterns/login-form/` | 0 | 0 | — | n/a (404 last run) |
-| `/accessibility/` | 0 | 0 | — | n/a (404 last run) |
-| `/tokens/` | 0 | 0 | — | −64 |
-| `/workshop/` | 0 | 0 | — | −30 |
-| `/figma-token/` | 0 | 0 | — | −57 |
-| **Total** | **11** | **11** | **0** | **−228** |
+| URL                     |  Total | color-contrast | Other |   Δ vs. 2026-04-27 |
+| ----------------------- | -----: | -------------: | ----- | -----------------: |
+| `/`                     |      0 |              0 | —     |                 −4 |
+| `/components/`          |      5 |              5 | —     |                 −7 |
+| `/components/button/`   |      6 |              6 | —     |                −13 |
+| `/patterns/`            |      0 |              0 | —     |                −53 |
+| `/patterns/login-form/` |      0 |              0 | —     | n/a (404 last run) |
+| `/accessibility/`       |      0 |              0 | —     | n/a (404 last run) |
+| `/tokens/`              |      0 |              0 | —     |                −64 |
+| `/workshop/`            |      0 |              0 | —     |                −30 |
+| `/figma-token/`         |      0 |              0 | —     |                −57 |
+| **Total**               | **11** |         **11** | **0** |           **−228** |
 
 ### Classification
 
@@ -253,9 +258,9 @@ tabindex fix. Two URLs that were 404 last run (`/accessibility/`,
 ### Follow-ups created by this run
 
 - [ ] **Tighten `.docs-status-badge--new` and the small chip
-  classes** to clear AA. Five chips affected — `.docs-status-badge--new`,
-  `.docs-category-tag`, `.docs-demo-fw-tag`, `.docs-prop-default`, and
-  any siblings discovered during the fix. Either darken the foreground
-  by one token step or swap to a higher-contrast badge palette pair.
-  Not a release blocker (none of these are interactive controls), but
-  worth a one-PR sweep.
+      classes** to clear AA. Five chips affected — `.docs-status-badge--new`,
+      `.docs-category-tag`, `.docs-demo-fw-tag`, `.docs-prop-default`, and
+      any siblings discovered during the fix. Either darken the foreground
+      by one token step or swap to a higher-contrast badge palette pair.
+      Not a release blocker (none of these are interactive controls), but
+      worth a one-PR sweep.

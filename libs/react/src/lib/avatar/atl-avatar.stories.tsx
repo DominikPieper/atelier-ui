@@ -3,7 +3,8 @@ import { AtlAvatar, AtlAvatarGroup } from './atl-avatar';
 
 import { metadata } from '@atelier-ui/spec/metadata/avatar.metadata';
 import { contract } from '@atelier-ui/spec/contracts/avatar.contract';
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
@@ -16,7 +17,10 @@ const meta: Meta<typeof AtlAvatar> = {
   argTypes: {
     size: { control: 'select', options: ['xs', 'sm', 'md', 'lg', 'xl'] },
     shape: { control: 'select', options: ['circle', 'square'] },
-    status: { control: 'select', options: ['', 'online', 'offline', 'away', 'busy'] },
+    status: {
+      control: 'select',
+      options: ['', 'online', 'offline', 'away', 'busy'],
+    },
   },
   args: { size: 'md', shape: 'circle', status: '' },
   parameters: {
@@ -29,7 +33,10 @@ const meta: Meta<typeof AtlAvatar> = {
 export default meta;
 type Story = StoryObj<typeof AtlAvatar>;
 
-export const Default: Story = { args: { name: 'Jane Doe' }, parameters: { design: figmaNode('55-148') } };
+export const Default: Story = {
+  args: { name: 'Jane Doe' },
+  parameters: { design: figmaNode('55-148') },
+};
 export const WithImage: Story = {
   args: { src: 'https://i.pravatar.cc/150?img=1', alt: 'User', size: 'lg' },
   parameters: { design: figmaNode('55-149') },
@@ -46,7 +53,7 @@ export const Square: Story = {
 export const AllSizes: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-      {(['xs', 'sm', 'md', 'lg', 'xl'] as const).map(size => (
+      {(['xs', 'sm', 'md', 'lg', 'xl'] as const).map((size) => (
         <AtlAvatar key={size} size={size} name="AB" />
       ))}
     </div>
@@ -55,7 +62,7 @@ export const AllSizes: Story = {
 export const AllStatuses: Story = {
   render: () => (
     <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
-      {(['online', 'offline', 'away', 'busy'] as const).map(status => (
+      {(['online', 'offline', 'away', 'busy'] as const).map((status) => (
         <AtlAvatar key={status} name="AB" status={status} size="lg" />
       ))}
     </div>

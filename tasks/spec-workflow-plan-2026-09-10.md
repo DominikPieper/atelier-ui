@@ -19,35 +19,35 @@ decomposition and the open questions at the end are what the owner is asked to c
 Written as claims a customer would repeat, each with the check that would make it true.
 If a claim has no check, it is not a promise, it is a hope.
 
-| # | Promise | Held by | Today |
-|---|---|---|---|
-| P1 | The agent knows which props exist, with their defaults and descriptions, before it writes code | The framework's docgen manifest, derived from the component (`angular-component-meta`, `vue-component-meta`, `react-docgen`) | **held** (ADR-0097) |
-| P2 | The component's API matches the design: same axis names, same values, same booleans | A check that compares the docgen manifest with a snapshot of the Figma master | held only in the monorepo, and only via `libs/spec` (`check:figma`) |
-| P3 | Behaviour the picture cannot carry is written down before code and tested after | A contract document with behaviour ids, and a check that every id is bound to a test | half: the handoff document exists (ADR-0096); nothing reads it |
-| P4 | Every fact has one authored home; everything else is derived or gated | The component for shape, the contract document for intent, Figma for design | **not held** — a default is typed seven times |
-| P5 | The loop runs in the customer's repo, one framework, no monorepo | The scaffold ships the artefacts and one command | **not held** (review F12) |
-| P6 | Verification is a gate with an exit code, not a look | The check above plus the parity call with a *complete* `codeSpec` | half: parity call exists; `codeSpec` is hand-assembled and thin specs pass |
+| #   | Promise                                                                                        | Held by                                                                                                                      | Today                                                                      |
+| --- | ---------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------- |
+| P1  | The agent knows which props exist, with their defaults and descriptions, before it writes code | The framework's docgen manifest, derived from the component (`angular-component-meta`, `vue-component-meta`, `react-docgen`) | **held** (ADR-0097)                                                        |
+| P2  | The component's API matches the design: same axis names, same values, same booleans            | A check that compares the docgen manifest with a snapshot of the Figma master                                                | held only in the monorepo, and only via `libs/spec` (`check:figma`)        |
+| P3  | Behaviour the picture cannot carry is written down before code and tested after                | A contract document with behaviour ids, and a check that every id is bound to a test                                         | half: the handoff document exists (ADR-0096); nothing reads it             |
+| P4  | Every fact has one authored home; everything else is derived or gated                          | The component for shape, the contract document for intent, Figma for design                                                  | **not held** — a default is typed seven times                              |
+| P5  | The loop runs in the customer's repo, one framework, no monorepo                               | The scaffold ships the artefacts and one command                                                                             | **not held** (review F12)                                                  |
+| P6  | Verification is a gate with an exit code, not a look                                           | The check above plus the parity call with a _complete_ `codeSpec`                                                            | half: parity call exists; `codeSpec` is hand-assembled and thin specs pass |
 
 ## 2. The model: two authored sources, one external, everything else derived
 
-The review's sharpest finding was Codex's: *authority depends on the fact*. The fix is not
+The review's sharpest finding was Codex's: _authority depends on the fact_. The fix is not
 to pretend one source; it is to name the authority for each kind of fact and make the
 others derived or checked.
 
-| Fact | Authority | Form | Derived from it |
-|---|---|---|---|
-| Shape — prop names, types, unions, defaults, descriptions, events, slots | **the component** | its own input/prop types and JSDoc | docgen manifest → Storybook docs, MCP prop tables, the docs table |
-| Intent — purpose, behaviour, a11y obligations, exclusions, anatomy, tokens per part, decisions, provenance | **the contract document** | one markdown file beside the component, fixed headings, prose inside | behaviour-id coverage check, parity `codeSpec` (accessibility, tokens, metadata sections), story description |
-| Design — axes, values, bindings, geometry, paint | **the Figma master** | external; snapshotted as JSON beside the contract when the handoff is written | manifest ↔ snapshot check, parity call |
+| Fact                                                                                                       | Authority                 | Form                                                                          | Derived from it                                                                                              |
+| ---------------------------------------------------------------------------------------------------------- | ------------------------- | ----------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------ |
+| Shape — prop names, types, unions, defaults, descriptions, events, slots                                   | **the component**         | its own input/prop types and JSDoc                                            | docgen manifest → Storybook docs, MCP prop tables, the docs table                                            |
+| Intent — purpose, behaviour, a11y obligations, exclusions, anatomy, tokens per part, decisions, provenance | **the contract document** | one markdown file beside the component, fixed headings, prose inside          | behaviour-id coverage check, parity `codeSpec` (accessibility, tokens, metadata sections), story description |
+| Design — axes, values, bindings, geometry, paint                                                           | **the Figma master**      | external; snapshotted as JSON beside the contract when the handoff is written | manifest ↔ snapshot check, parity call                                                                       |
 
 Three consequences:
 
-- **No separate type file for a one-framework repo.** The component *is* the shape
+- **No separate type file for a one-framework repo.** The component _is_ the shape
   contract. Angular cannot bind a class to an interface anyway (review F1); docgen already
   reads the class. A `*.contract.ts` file, which the workshop case prescribes today, would
   be a fourth copy of the union with nothing reading it.
 - **The handoff document becomes durable and machine-findable, not machine-authored.**
-  ADR-0096's argument — the author must *decide* behaviour and exclusions in their own
+  ADR-0096's argument — the author must _decide_ behaviour and exclusions in their own
   words — stands. What changes: the file lives beside the component instead of under
   `tasks/`, its headings are fixed so a script can find the sections, and behaviour lines
   carry an id (`[b:timer-pauses-on-hover]`) so a test can claim them. Prose stays prose. This
@@ -123,7 +123,7 @@ with defaults and JSDoc for one component file, standalone, in under five second
 when a script prints `AtlButton`'s inputs with defaults and descriptions for Angular and Vue
 without `storybook build`. If no: fall back to the local `addon-mcp` `docs-show` (needs a
 running Storybook) or to `storybook build --test`, and the budget in § 4 is re-checked.
-*This is the feasibility question; everything in S3 depends on its answer.*
+_This is the feasibility question; everything in S3 depends on its answer._
 
 **S2 · Contract file format (0.5 d).** Promote `skills/design-to-code/references/handoff-document.md`
 to `<name>.contract.md`: fixed H2 headings (Source, Canonical record, Reuse or new, In

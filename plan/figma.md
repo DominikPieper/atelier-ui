@@ -14,7 +14,7 @@
 > table now states the `ty/<role>` ↔ `--ui-type-*` mapping rule instead of a role list
 > that has already grown three times (ADR-0059, ADR-0074, ADR-0085). The **Variable
 > Collections** table below is a separate, narrower staleness case — it carries its own
-> note (ADR-0030) and was not in scope for this pass. Token *value* ownership — which
+> note (ADR-0030) and was not in scope for this pass. Token _value_ ownership — which
 > file to edit, what propagates where — is mapped by axis in ADR-0115 and applied in the
 > Design Token Change workflow below.
 
@@ -22,14 +22,14 @@
 
 ### Pages
 
-| # | Page | Purpose |
-|---|------|---------|
-| 1 | `Colors` | Visual documentation of the color scale (Light/Dark). |
-| 2 | `Typography` | Visual documentation of the typography scale + text styles. |
-| 3 | `Spacing & Radius` | Visual documentation of spacing and radius tokens. |
-| 4 | `Cookbook` | Worked examples composing multiple components (forms, dashboards, dialogs). |
-| 5 | `Icons` | Catalogue of pictogram glyphs used in components (status, navigation, action). |
-| 6 | `Components` | One `COMPONENT_SET` per master, grouped into category Sections that mirror the Storybook sidebar (`Inputs`, `Display`, `Navigation`, `Overlay`, `Feedback`, `AI` — six as of the `AtlChat` addition). The count moves as components ship; read it from `tools/figma/snapshot.json` (`components.length`, 43 masters as of the last snapshot, including sub-components like `AtlTab` and `AtlMenuItem` that are not top-level Storybook entries) rather than from a number transcribed here. |
+| #   | Page               | Purpose                                                                                                                                                                                                                                                                                                                                                                                                                                                                                     |
+| --- | ------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 1   | `Colors`           | Visual documentation of the color scale (Light/Dark).                                                                                                                                                                                                                                                                                                                                                                                                                                       |
+| 2   | `Typography`       | Visual documentation of the typography scale + text styles.                                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| 3   | `Spacing & Radius` | Visual documentation of spacing and radius tokens.                                                                                                                                                                                                                                                                                                                                                                                                                                          |
+| 4   | `Cookbook`         | Worked examples composing multiple components (forms, dashboards, dialogs).                                                                                                                                                                                                                                                                                                                                                                                                                 |
+| 5   | `Icons`            | Catalogue of pictogram glyphs used in components (status, navigation, action).                                                                                                                                                                                                                                                                                                                                                                                                              |
+| 6   | `Components`       | One `COMPONENT_SET` per master, grouped into category Sections that mirror the Storybook sidebar (`Inputs`, `Display`, `Navigation`, `Overlay`, `Feedback`, `AI` — six as of the `AtlChat` addition). The count moves as components ship; read it from `tools/figma/snapshot.json` (`components.length`, 43 masters as of the last snapshot, including sub-components like `AtlTab` and `AtlMenuItem` that are not top-level Storybook entries) rather than from a number transcribed here. |
 
 > **Note:** When a single category grows past ~15 components, promote it to its own page (e.g. split `Inputs` off first). The current single-page-with-category-Sections layout preserves "all components at a glance" while matching Storybook structure 1:1.
 
@@ -57,7 +57,7 @@ still open as of the previous pass — was the mirror image of the case above: t
 masters filed `AtlButton` under its own `Action` Section and the other seven Inputs
 controls under `Form`, while `components.ts` and Storybook both said one flat `Inputs`,
 with Figma as the outlier. Unlike the Feedback/Layout case, the owner did not apply
-ADR-0118's tie-break here — moving the *code* side (splitting eight Storybook story
+ADR-0118's tie-break here — moving the _code_ side (splitting eight Storybook story
 titles) would have changed story IDs and broken saved links, `docs-show-story` calls and
 `figmaNode()` references, while merging Figma's two Sections renames and reparents frames
 without touching any `COMPONENT_SET` node id. So Figma was brought to match code instead:
@@ -84,17 +84,17 @@ The file uses a three-tier token architecture (primitives → semantic → compo
 > `tools/figma/snapshot.json` records no collection data. Treat `check-figma.js` and
 > `figma-snapshot.mjs` as authoritative on which collections count as semantic until then.
 > See the whole-document note above for what else here is stale, and ADR-0115 for the
-> token-*value* ownership map this table doesn't cover — it records the Figma-side
+> token-_value_ ownership map this table doesn't cover — it records the Figma-side
 > collection layout, not which file owns a token's value.
 
-| Collection | ID | Modes | Variables | Purpose |
-|---|---|---|---|---|
-| `UI Tokens` | `VariableCollectionId:3:120` | Light (`3:0`) · Dark (`3:1`) | 66 | Semantic tokens consumed by components (color/spacing/radius/typography). |
-| `Primitive Tokens` | `VariableCollectionId:73:405` | Default (`73:2`) | 39 | Low-level raw values (teal/500, slate/100, neutral/0 …) referenced by semantic tokens. |
-| `Component Tokens` | `VariableCollectionId:73:445` | Default (`73:3`) | 15 | Component-scoped aliases (`button/bg-primary`, `input/border-focus` …) for per-component overrides. |
-| `Motion Tokens` | `VariableCollectionId:73:399` | Default (`73:0`) | 4 | Durations and easing. |
-| `Effects Tokens` | `VariableCollectionId:73:402` | Default (`73:1`) | 2 | Shadow variants. |
-| **Total** | | | **126** | |
+| Collection         | ID                            | Modes                        | Variables | Purpose                                                                                             |
+| ------------------ | ----------------------------- | ---------------------------- | --------- | --------------------------------------------------------------------------------------------------- |
+| `UI Tokens`        | `VariableCollectionId:3:120`  | Light (`3:0`) · Dark (`3:1`) | 66        | Semantic tokens consumed by components (color/spacing/radius/typography).                           |
+| `Primitive Tokens` | `VariableCollectionId:73:405` | Default (`73:2`)             | 39        | Low-level raw values (teal/500, slate/100, neutral/0 …) referenced by semantic tokens.              |
+| `Component Tokens` | `VariableCollectionId:73:445` | Default (`73:3`)             | 15        | Component-scoped aliases (`button/bg-primary`, `input/border-focus` …) for per-component overrides. |
+| `Motion Tokens`    | `VariableCollectionId:73:399` | Default (`73:0`)             | 4         | Durations and easing.                                                                               |
+| `Effects Tokens`   | `VariableCollectionId:73:402` | Default (`73:1`)             | 2         | Shadow variants.                                                                                    |
+| **Total**          |                               |                              | **126**   |                                                                                                     |
 
 ### Text Styles
 
@@ -108,11 +108,11 @@ current list from `--ui-type-*` in
 `libs/create-workspace/src/generators/preset/files/styles/tokens.css`. What stays true
 regardless of how many roles exist is the architecture (ADR-0035):
 
-| Font stack | Roles that use it | Notes |
-|---|---|---|
-| `--ui-font-display` (Instrument Serif) | `display` only | The single largest line on a surface — wordmark, hero, section opener. Never bolded (Instrument Serif ships one weight). |
-| `--ui-font-family` (Instrument Sans) | Every other role — `headline`, `title`, `body-*`, `label`, `control`, `action`, `row`, `row-sm` | Everything interactive and everything read at body length. Weight varies by role; the face does not. |
-| `--ui-font-mono` (JetBrains Mono) | `code` only | Code blocks, inline code, tokens. |
+| Font stack                             | Roles that use it                                                                               | Notes                                                                                                                    |
+| -------------------------------------- | ----------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| `--ui-font-display` (Instrument Serif) | `display` only                                                                                  | The single largest line on a surface — wordmark, hero, section opener. Never bolded (Instrument Serif ships one weight). |
+| `--ui-font-family` (Instrument Sans)   | Every other role — `headline`, `title`, `body-*`, `label`, `control`, `action`, `row`, `row-sm` | Everything interactive and everything read at body length. Weight varies by role; the face does not.                     |
+| `--ui-font-mono` (JetBrains Mono)      | `code` only                                                                                     | Code blocks, inline code, tokens.                                                                                        |
 
 The `Inter` family previously named in this table predates ADR-0035 (Instrument
 pair) and ADR-0059 (the sweep that applied it to every Figma text node); no current
@@ -120,66 +120,66 @@ text style uses it.
 
 ### Color Tokens — UI Tokens (selected)
 
-| Figma Variable | CSS Token | Light | Dark |
-|---|---|---|---|
-| `color/primary` | `--ui-color-primary` | `#2563eb` | `#3b82f6` |
-| `color/primary-hover` | `--ui-color-primary-hover` | `#1d4ed8` | `#60a5fa` |
-| `color/primary-active` | `--ui-color-primary-active` | `#1e40af` | `#93c5fd` |
-| `color/primary-light` | `--ui-color-primary-light` | `#2563eb14` | `#3b82f626` |
-| `color/secondary` | `--ui-color-secondary` | `#64748b` | `#94a3b8` |
-| `color/danger` | `--ui-color-danger` | `#ef4444` | `#f87171` |
-| `color/success` | `--ui-color-success` | `#22c55e` | `#4ade80` |
-| `color/warning` | `--ui-color-warning` | `#f59e0b` | `#fbbf24` |
-| `color/info` | `--ui-color-info` | `#06b6d4` | `#22d3ee` |
-| `color/surface` | `--ui-color-surface` | `#ffffff` | `#1e1e2e` |
-| `color/border` | `--ui-color-border` | `#e5e7eb` | `#2e2e3e` |
-| `color/text` | `--ui-color-text` | `#0f172a` | `#f1f5f9` |
-| `color/text-muted` | `--ui-color-text-muted` | `#64748b` | `#94a3b8` |
-| `color/input-bg` | `--ui-color-input-bg` | `#f5f5f5` | `#18181f` |
-| `color/input-border-focus` | `--ui-color-input-border-focus` | `#2563eb` | `#3b82f6` |
-| `color/input-border-invalid` | `--ui-color-input-border-invalid` | `#ef4444` | `#f87171` |
+| Figma Variable               | CSS Token                         | Light       | Dark        |
+| ---------------------------- | --------------------------------- | ----------- | ----------- |
+| `color/primary`              | `--ui-color-primary`              | `#2563eb`   | `#3b82f6`   |
+| `color/primary-hover`        | `--ui-color-primary-hover`        | `#1d4ed8`   | `#60a5fa`   |
+| `color/primary-active`       | `--ui-color-primary-active`       | `#1e40af`   | `#93c5fd`   |
+| `color/primary-light`        | `--ui-color-primary-light`        | `#2563eb14` | `#3b82f626` |
+| `color/secondary`            | `--ui-color-secondary`            | `#64748b`   | `#94a3b8`   |
+| `color/danger`               | `--ui-color-danger`               | `#ef4444`   | `#f87171`   |
+| `color/success`              | `--ui-color-success`              | `#22c55e`   | `#4ade80`   |
+| `color/warning`              | `--ui-color-warning`              | `#f59e0b`   | `#fbbf24`   |
+| `color/info`                 | `--ui-color-info`                 | `#06b6d4`   | `#22d3ee`   |
+| `color/surface`              | `--ui-color-surface`              | `#ffffff`   | `#1e1e2e`   |
+| `color/border`               | `--ui-color-border`               | `#e5e7eb`   | `#2e2e3e`   |
+| `color/text`                 | `--ui-color-text`                 | `#0f172a`   | `#f1f5f9`   |
+| `color/text-muted`           | `--ui-color-text-muted`           | `#64748b`   | `#94a3b8`   |
+| `color/input-bg`             | `--ui-color-input-bg`             | `#f5f5f5`   | `#18181f`   |
+| `color/input-border-focus`   | `--ui-color-input-border-focus`   | `#2563eb`   | `#3b82f6`   |
+| `color/input-border-invalid` | `--ui-color-input-border-invalid` | `#ef4444`   | `#f87171`   |
 
 ### Spacing (FLOAT, px)
 
-| Figma Variable | CSS Token | Value |
-|---|---|---|
-| `spacing/1` | `--ui-spacing-1` | 4 |
-| `spacing/2` | `--ui-spacing-2` | 8 |
-| `spacing/3` | `--ui-spacing-3` | 12 |
-| `spacing/4` | `--ui-spacing-4` | 16 |
-| `spacing/5` | `--ui-spacing-5` | 20 |
-| `spacing/6` | `--ui-spacing-6` | 24 |
-| `spacing/8` | `--ui-spacing-8` | 32 |
-| `spacing/10` | `--ui-spacing-10` | 40 |
-| `spacing/12` | `--ui-spacing-12` | 48 |
-| `spacing/16` | `--ui-spacing-16` | 64 |
+| Figma Variable | CSS Token         | Value |
+| -------------- | ----------------- | ----- |
+| `spacing/1`    | `--ui-spacing-1`  | 4     |
+| `spacing/2`    | `--ui-spacing-2`  | 8     |
+| `spacing/3`    | `--ui-spacing-3`  | 12    |
+| `spacing/4`    | `--ui-spacing-4`  | 16    |
+| `spacing/5`    | `--ui-spacing-5`  | 20    |
+| `spacing/6`    | `--ui-spacing-6`  | 24    |
+| `spacing/8`    | `--ui-spacing-8`  | 32    |
+| `spacing/10`   | `--ui-spacing-10` | 40    |
+| `spacing/12`   | `--ui-spacing-12` | 48    |
+| `spacing/16`   | `--ui-spacing-16` | 64    |
 
 ### Radius
 
-| Figma Variable | CSS Token | Value |
-|---|---|---|
-| `radius/sm` | `--ui-radius-sm` | 6 |
-| `radius/md` | `--ui-radius-md` | 8 |
-| `radius/lg` | `--ui-radius-lg` | 12 |
-| `radius/xl` | `--ui-radius-xl` | 16 |
-| `radius/full` | `--ui-radius-full` | 9999 |
+| Figma Variable | CSS Token          | Value |
+| -------------- | ------------------ | ----- |
+| `radius/sm`    | `--ui-radius-sm`   | 6     |
+| `radius/md`    | `--ui-radius-md`   | 8     |
+| `radius/lg`    | `--ui-radius-lg`   | 12    |
+| `radius/xl`    | `--ui-radius-xl`   | 16    |
+| `radius/full`  | `--ui-radius-full` | 9999  |
 
 ### Typography (FLOAT)
 
-| Figma Variable | CSS Token | Value |
-|---|---|---|
-| `font-size/xs` | `--ui-font-size-xs` | 12 |
-| `font-size/sm` | `--ui-font-size-sm` | 14 |
-| `font-size/md` | `--ui-font-size-md` | 16 |
-| `font-size/lg` | `--ui-font-size-lg` | 18 |
-| `font-size/xl` | `--ui-font-size-xl` | 20 |
-| `font-size/2xl` | `--ui-font-size-2xl` | 24 |
-| `font-weight/normal` | `--ui-font-weight-normal` | 400 |
-| `font-weight/medium` | `--ui-font-weight-medium` | 500 |
-| `font-weight/semibold` | `--ui-font-weight-semibold` | 600 |
-| `line-height/tight` | `--ui-line-height-tight` | 1.25 |
-| `line-height/normal` | `--ui-line-height-normal` | 1.5 |
-| `opacity/disabled` | `--ui-opacity-disabled` | 0.5 |
+| Figma Variable         | CSS Token                   | Value |
+| ---------------------- | --------------------------- | ----- |
+| `font-size/xs`         | `--ui-font-size-xs`         | 12    |
+| `font-size/sm`         | `--ui-font-size-sm`         | 14    |
+| `font-size/md`         | `--ui-font-size-md`         | 16    |
+| `font-size/lg`         | `--ui-font-size-lg`         | 18    |
+| `font-size/xl`         | `--ui-font-size-xl`         | 20    |
+| `font-size/2xl`        | `--ui-font-size-2xl`        | 24    |
+| `font-weight/normal`   | `--ui-font-weight-normal`   | 400   |
+| `font-weight/medium`   | `--ui-font-weight-medium`   | 500   |
+| `font-weight/semibold` | `--ui-font-weight-semibold` | 600   |
+| `line-height/tight`    | `--ui-line-height-tight`    | 1.25  |
+| `line-height/normal`   | `--ui-line-height-normal`   | 1.5   |
+| `opacity/disabled`     | `--ui-opacity-disabled`     | 0.5   |
 
 > **Note:** Shadow and motion tokens (`--ui-shadow-*`, `--ui-transition-*`, `--ui-ease-*`) are bound to `Effects Tokens` / `Motion Tokens` collections in Figma. Some CSS-only easing functions have no Figma equivalent.
 
@@ -211,7 +211,7 @@ relying on it for anything that isn't a passing example.
 
 ### Design Token Change
 
-Token *values* are owned in code, not in Figma (ADR-0115). The canonical file is
+Token _values_ are owned in code, not in Figma (ADR-0115). The canonical file is
 `libs/create-workspace/src/generators/preset/files/styles/tokens.css`; every other
 `tokens.css`-shaped file in the repo is a generated projection of it.
 
@@ -233,16 +233,18 @@ Token *values* are owned in code, not in Figma (ADR-0115). The canonical file is
 6. Screenshot key Storybook stories to confirm no visual regression.
 
 ### New Component
+
 1. Create a new Section nested inside the matching category Section (`Inputs` / `Display` / `Navigation` / `Overlay` / `Feedback`) on the `Components` page. The category must match the Storybook `title:` prefix (`Components/<Category>/<Name>`).
 2. Build a `COMPONENT_SET` with variant properties that match the code spec (`libs/spec/src/index.ts`).
 3. Apply text styles (`text/*`) and variables — never raw hex/px.
 4. Write a component description (variants · sizes · states · a11y). It becomes the Assets-panel tooltip and the Dev Mode spec.
 5. **Run the [Figma component pre-release checklist](./figma-component-checklist.md)** before merging the matching PR. The PR template reproduces it as a required section.
-5. Run generator: `nx generate @atelier-ui/generators:atl-component --name=<name>` (scaffolds Angular + React + Vue together by default; `--framework=` to target one).
-6. Implement all three frameworks, referencing Figma values.
-7. Verify parity with Storybook screenshot.
+6. Run generator: `nx generate @atelier-ui/generators:atl-component --name=<name>` (scaffolds Angular + React + Vue together by default; `--framework=` to target one).
+7. Implement all three frameworks, referencing Figma values.
+8. Verify parity with Storybook screenshot.
 
 ### Changing a Component's Visual Design
+
 1. Update the Figma variant first.
 2. Screenshot and confirm it looks right.
 3. Update `.css` file in Angular lib (`:host` selector).
@@ -250,6 +252,7 @@ Token *values* are owned in code, not in Figma (ADR-0115). The canonical file is
 5. Final parity check.
 
 ### Accessibility hygiene
+
 - Any color-coded variant (success/warning/danger/info) **must** include a non-color differentiator: an icon, label prefix, pattern, or border. This is WCAG 1.4.1. `AtlBadge` renders an `AtlIcon` instance per variant (`libs/react/src/lib/badge/atl-badge.tsx`) — the earlier glyph-text-layer / CSS `::before` technique this line described was replaced by real Icon-component instances, on both the Figma side (ADR-0057) and the code side.
 - Run `figma_audit_component_accessibility` after each component change; target ≥ 85 overall.
 

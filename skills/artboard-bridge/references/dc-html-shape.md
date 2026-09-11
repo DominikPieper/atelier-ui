@@ -10,14 +10,18 @@ look for and how Atelier's sheets use the format.
 ```html
 <!doctype html>
 <html>
-  <head><script src="./support.js"></script></head>
+  <head>
+    <script src="./support.js"></script>
+  </head>
   <body>
     <x-dc>
       <helmet data-dc-atomics>
         <meta name="design_doc_mode" content="canvas" />
         <link rel="stylesheet" href="https://fonts.googleapis.com/…" />
         <link rel="stylesheet" href="./_sheet.css" />
-        <style>/* component-specific classes, palette names only */</style>
+        <style>
+          /* component-specific classes, palette names only */
+        </style>
       </helmet>
       <div data-screen-label="AtlBadge — variant × size">…markup…</div>
       <script type="text/x-dc" data-dc-script data-props="{}">
@@ -48,7 +52,7 @@ Read in this order; the pictures are specimens, the prose is the content.
    ADRs that shaped it.
 2. **Length / Anatomy / States** — tables of measured values (heights, paddings, type
    sizes, radii), each in palette names or px as measured in the browser. These are
-   *measurements of the code at sheet time*, not the spec: a sheet written 2026-08-27 does
+   _measurements of the code at sheet time_, not the spec: a sheet written 2026-08-27 does
    not know about a token change on 2026-09-05.
 3. **Findings** — the section that earns the file. Items marked `open` are unresolved
    decisions (e.g. "10px initials off the type scale", "status is code-only with the

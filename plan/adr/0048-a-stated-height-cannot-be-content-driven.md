@@ -33,7 +33,7 @@ face it lands at 40.7px and reports 41. The components were never deterministic 
 they were within a rounding step of correct on one machine.
 
 That is precisely what ADR-0041 was about, and neither component had been
-converted: they had simply *happened* to land on the token.
+converted: they had simply _happened_ to land on the token.
 
 ## Decision
 

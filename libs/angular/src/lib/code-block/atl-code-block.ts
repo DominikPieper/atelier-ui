@@ -78,7 +78,9 @@ export class AtlCodeBlock {
 
   protected readonly copied = signal(false);
 
-  protected readonly displayLabel = computed(() => this.filename() || this.language());
+  protected readonly displayLabel = computed(
+    () => this.filename() || this.language(),
+  );
 
   protected readonly lines = computed(() => this.code().split('\n'));
 

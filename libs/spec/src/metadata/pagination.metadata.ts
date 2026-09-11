@@ -12,11 +12,13 @@ export const metadata: ComponentMetadata = {
   antiPatterns: [
     {
       pattern: 'Loading more rows continuously as the user scrolls.',
-      useInstead: 'An infinite-scroll pattern with a sentinel — pagination implies discrete, addressable pages.',
+      useInstead:
+        'An infinite-scroll pattern with a sentinel — pagination implies discrete, addressable pages.',
     },
     {
       pattern: 'Stepping through a fixed multi-step flow.',
-      useInstead: 'A stepper — steps represent ordered stages, not interchangeable pages of data.',
+      useInstead:
+        'A stepper — steps represent ordered stages, not interchangeable pages of data.',
     },
   ],
   relatedComponents: ['AtlTableSpec', 'AtlButtonSpec'],

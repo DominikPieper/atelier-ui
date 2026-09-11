@@ -12,11 +12,13 @@ export const metadata: ComponentMetadata = {
   antiPatterns: [
     {
       pattern: 'Switching between sibling sections of a flat app.',
-      useInstead: 'AtlTabs — tabs communicate peer relationships, breadcrumbs communicate depth.',
+      useInstead:
+        'AtlTabs — tabs communicate peer relationships, breadcrumbs communicate depth.',
     },
     {
       pattern: 'Stepping through an ordered flow (wizard, checkout).',
-      useInstead: 'A dedicated stepper component — steps imply forward/backward progress, not nested location.',
+      useInstead:
+        'A dedicated stepper component — steps imply forward/backward progress, not nested location.',
     },
   ],
   relatedComponents: ['AtlTabsSpec', 'AtlMenuSpec'],

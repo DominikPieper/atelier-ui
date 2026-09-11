@@ -44,7 +44,7 @@ by no adapter. For a one-framework customer it is a fourth copy of the union wit
 reading it, and the scaffold ships none of its infrastructure.
 
 The rethink started from the other end — what the tools emit — and found the contract
-already exists twice as a *derived* artefact:
+already exists twice as a _derived_ artefact:
 
 - **Storybook 10.6's docgen manifest** carries, per framework and from the component's own
   source, every prop with its type, default and JSDoc description, plus the story list with
@@ -67,8 +67,8 @@ passes (ADR-0024).
 The rethink's testability matrix (26 properties) showed that nineteen need **no authored
 artefact** once three things are joined: the manifest, the rendered story in a real
 browser, and the snapshot. The three that need authoring are behaviour (keyboard, focus,
-the brief's timers and dismissal rules), which must be *tests*, and exclusions and
-decisions, which must be *recorded*. The instrument for behaviour — the addon-vitest
+the brief's timers and dismissal rules), which must be _tests_, and exclusions and
+decisions, which must be _recorded_. The instrument for behaviour — the addon-vitest
 browser-mode suite: every story rendered in Chromium, `play` assertions, axe — is
 configured in all three libraries, runs green locally in about eleven seconds per
 library, and is `# NOT WIRED` in CI because it fails under `CI=1` for a reason nobody has
@@ -93,7 +93,7 @@ Everything else is derived and checked, not written.**
    variant coordinates), a `parameters.design` Figma node link (via `figmaNode()`, which 85
    of 91 story files already use — it becomes required per story), a `play` function
    wherever behaviour exists (keyboard, focus, events, timers), and `parameters.a11y.test:
-   'error'`. The story list is the variant matrix; the `play` title is the behaviour id;
+'error'`. The story list is the variant matrix; the `play` title is the behaviour id;
    the render is the geometry and paint under test.
 3. **One micro-contract block per component.** Its only permitted fields: the master's
    node id; intentional Figma ↔ code mismatches, each with a side and a reason (an axis
@@ -172,7 +172,7 @@ Alternatives considered:
 - **The handoff document is demoted, not removed** (ADR-0096, corrected today): the
   thinking step whose lines have machine-checked destinations.
 - **Facts that still have no machine-readable home:** composition rules, motion
-  correctness, tokens per part below the root, and the *reason* behind a decision beyond
+  correctness, tokens per part below the root, and the _reason_ behind a decision beyond
   a reason string in the block. T would give them a paragraph; it would not give them a
   check.
 - **Verified vs. assumed, as of this record.** Verified: the manifests' fields per
@@ -181,7 +181,7 @@ Alternatives considered:
   count. Assumed, and what `S1` and `S3` exist to test: that standalone docgen runs in
   seconds; that a computed-style ↔ root-paint comparator at the parity tool's tolerance is
   a small script (precedent: `check-geometry.mjs`); that the block's schema stays small
-  under use. The claim that S is *thinner* rests on counting authored artefacts, not yet
+  under use. The claim that S is _thinner_ rests on counting authored artefacts, not yet
   on a timed cohort.
 
 **Verified 2026-09-10 (S1).** The first assumption held: docgen without a Storybook build
@@ -254,7 +254,7 @@ to the real snapshot's entry), a root `contracts.config.json`, and the scripts
 `check:contracts`, `check:stories`, `figma:snapshot`. Three facts fixed here:
 
 - **The check is portable**: flags → `contracts.config.json` → monorepo defaults, and the
-  docgen packages resolve from the *cwd's* `node_modules`, so a scaffold uses its own
+  docgen packages resolve from the _cwd's_ `node_modules`, so a scaffold uses its own
   Storybook. The monorepo run is unchanged (0 errors, 93 warnings).
 - **The snapshot generator's roster is the contracts.** `figma-snapshot-contracts.mjs`
   reads every contract's `figmaNodeId` and `--file <key>`, and writes exactly the fields
@@ -275,7 +275,7 @@ node id, then restored. Not proven: Angular and Vue through a real install (one 
 per e2e run, ADR-0123's precedent); the Bridge path of the generator.
 
 **What the proof does not say, recorded rather than smoothed over:** on the example story
-`check:contracts` is green *vacuously*. The example renders `AtlButton` from
+`check:contracts` is green _vacuously_. The example renders `AtlButton` from
 `@atelier-ui/<fw>` in `node_modules`, where local docgen cannot follow a bare specifier,
 so the check finds no component to compare and reports only `[NO-STORY-META]`. It proves
 the wiring, not the example. The check does its real work on components whose source is

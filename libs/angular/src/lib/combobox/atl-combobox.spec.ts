@@ -16,14 +16,20 @@ const TEMPLATE = `
 
 // Polyfill Popover API for jsdom
 function polyfillPopover(): void {
-  if (!Object.prototype.hasOwnProperty.call(HTMLElement.prototype, 'showPopover')) {
+  if (
+    !Object.prototype.hasOwnProperty.call(HTMLElement.prototype, 'showPopover')
+  ) {
     Object.defineProperty(HTMLElement.prototype, 'showPopover', {
       configurable: true,
-      value() { this.setAttribute('popover-open', ''); },
+      value() {
+        this.setAttribute('popover-open', '');
+      },
     });
     Object.defineProperty(HTMLElement.prototype, 'hidePopover', {
       configurable: true,
-      value() { this.removeAttribute('popover-open'); },
+      value() {
+        this.removeAttribute('popover-open');
+      },
     });
   }
 }
@@ -39,13 +45,18 @@ function getInput(container: Element): HTMLInputElement {
 }
 
 describe('AtlCombobox', () => {
-  covers('combobox', 'render-input')('renders an input with role="combobox"', async () => {
-    const { container } = await render(TEMPLATE, {
-      imports: [AtlCombobox],
-      componentProperties: { value: '', options: OPTIONS },
-    });
-    expect(container.querySelector('input[role="combobox"]')).toBeInTheDocument();
-  });
+  covers('combobox', 'render-input')(
+    'renders an input with role="combobox"',
+    async () => {
+      const { container } = await render(TEMPLATE, {
+        imports: [AtlCombobox],
+        componentProperties: { value: '', options: OPTIONS },
+      });
+      expect(
+        container.querySelector('input[role="combobox"]'),
+      ).toBeInTheDocument();
+    },
+  );
 
   it('shows placeholder on the input', async () => {
     const { container } = await render(TEMPLATE, {
@@ -76,18 +87,21 @@ describe('AtlCombobox', () => {
     expect(screen.getAllByRole('option').length).toBeGreaterThan(0);
   });
 
-  covers('combobox', 'filter-on-type')('filters options as user types', async () => {
-    const user = userEvent.setup();
-    const { container } = await render(TEMPLATE, {
-      imports: [AtlCombobox],
-      componentProperties: { value: '', options: OPTIONS },
-    });
-    await user.click(getInput(container));
-    await user.keyboard('an');
-    const options = screen.getAllByRole('option');
-    expect(options.some((o) => o.textContent.includes('Banana'))).toBe(true);
-    expect(options.every((o) => !o.textContent.includes('Apple'))).toBe(true);
-  });
+  covers('combobox', 'filter-on-type')(
+    'filters options as user types',
+    async () => {
+      const user = userEvent.setup();
+      const { container } = await render(TEMPLATE, {
+        imports: [AtlCombobox],
+        componentProperties: { value: '', options: OPTIONS },
+      });
+      await user.click(getInput(container));
+      await user.keyboard('an');
+      const options = screen.getAllByRole('option');
+      expect(options.some((o) => o.textContent.includes('Banana'))).toBe(true);
+      expect(options.every((o) => !o.textContent.includes('Apple'))).toBe(true);
+    },
+  );
 
   it('shows "No results found." when nothing matches', async () => {
     const user = userEvent.setup();
@@ -100,17 +114,20 @@ describe('AtlCombobox', () => {
     expect(screen.getByText('No results found.')).toBeInTheDocument();
   });
 
-  covers('combobox', 'select-on-click')('selects an option on click and shows its label in the input', async () => {
-    const user = userEvent.setup();
-    const { container } = await render(TEMPLATE, {
-      imports: [AtlCombobox],
-      componentProperties: { value: '', options: OPTIONS },
-    });
-    const input = getInput(container);
-    await user.click(input);
-    await user.click(screen.getByText('Banana'));
-    expect(input.value).toBe('Banana');
-  });
+  covers('combobox', 'select-on-click')(
+    'selects an option on click and shows its label in the input',
+    async () => {
+      const user = userEvent.setup();
+      const { container } = await render(TEMPLATE, {
+        imports: [AtlCombobox],
+        componentProperties: { value: '', options: OPTIONS },
+      });
+      const input = getInput(container);
+      await user.click(input);
+      await user.click(screen.getByText('Banana'));
+      expect(input.value).toBe('Banana');
+    },
+  );
 
   it('closes the panel (removes is-open class) after selection', async () => {
     const user = userEvent.setup();
@@ -123,40 +140,51 @@ describe('AtlCombobox', () => {
     expect(container.querySelector('atl-combobox')).not.toHaveClass('is-open');
   });
 
-  covers('combobox', 'keyboard-nav')('navigates options with ArrowDown and selects with Enter', async () => {
-    const user = userEvent.setup();
-    const { container } = await render(TEMPLATE, {
-      imports: [AtlCombobox],
-      componentProperties: { value: '', options: OPTIONS },
-    });
-    const input = getInput(container);
-    await user.click(input);
-    await user.keyboard('{ArrowDown}{Enter}');
-    expect(input.value).toBe('Apple');
-  });
+  covers('combobox', 'keyboard-nav')(
+    'navigates options with ArrowDown and selects with Enter',
+    async () => {
+      const user = userEvent.setup();
+      const { container } = await render(TEMPLATE, {
+        imports: [AtlCombobox],
+        componentProperties: { value: '', options: OPTIONS },
+      });
+      const input = getInput(container);
+      await user.click(input);
+      await user.keyboard('{ArrowDown}{Enter}');
+      expect(input.value).toBe('Apple');
+    },
+  );
 
-  covers('combobox', 'close-on-escape')('closes on Escape (removes is-open class)', async () => {
-    const user = userEvent.setup();
-    const { container } = await render(TEMPLATE, {
-      imports: [AtlCombobox],
-      componentProperties: { value: '', options: OPTIONS },
-    });
-    await user.click(getInput(container));
-    expect(container.querySelector('atl-combobox')).toHaveClass('is-open');
-    await user.keyboard('{Escape}');
-    expect(container.querySelector('atl-combobox')).not.toHaveClass('is-open');
-  });
+  covers('combobox', 'close-on-escape')(
+    'closes on Escape (removes is-open class)',
+    async () => {
+      const user = userEvent.setup();
+      const { container } = await render(TEMPLATE, {
+        imports: [AtlCombobox],
+        componentProperties: { value: '', options: OPTIONS },
+      });
+      await user.click(getInput(container));
+      expect(container.querySelector('atl-combobox')).toHaveClass('is-open');
+      await user.keyboard('{Escape}');
+      expect(container.querySelector('atl-combobox')).not.toHaveClass(
+        'is-open',
+      );
+    },
+  );
 
-  covers('combobox', 'aria-expanded')('sets aria-expanded=true when open', async () => {
-    const user = userEvent.setup();
-    const { container } = await render(TEMPLATE, {
-      imports: [AtlCombobox],
-      componentProperties: { value: '', options: OPTIONS },
-    });
-    const input = getInput(container);
-    await user.click(input);
-    expect(input).toHaveAttribute('aria-expanded', 'true');
-  });
+  covers('combobox', 'aria-expanded')(
+    'sets aria-expanded=true when open',
+    async () => {
+      const user = userEvent.setup();
+      const { container } = await render(TEMPLATE, {
+        imports: [AtlCombobox],
+        componentProperties: { value: '', options: OPTIONS },
+      });
+      const input = getInput(container);
+      await user.click(input);
+      expect(input).toHaveAttribute('aria-expanded', 'true');
+    },
+  );
 
   it('applies is-disabled class and disables input when disabled', async () => {
     const { container } = await render(
@@ -227,7 +255,9 @@ describe('AtlCombobox', () => {
         componentProperties: { value: 'apple', options: OPTIONS },
       });
       await user.click(getInput(container));
-      expect(container.querySelector('atl-combobox')).not.toHaveClass('is-open');
+      expect(container.querySelector('atl-combobox')).not.toHaveClass(
+        'is-open',
+      );
       // jsdom does not honour popover="manual", so the panel element is always
       // "visible" there — assert the polyfill's open marker instead.
       expect(screen.getByRole('listbox')).not.toHaveAttribute('popover-open');
@@ -246,7 +276,9 @@ describe('AtlCombobox', () => {
         imports: [AtlCombobox],
         componentProperties: { value: 'apple', options: OPTIONS },
       });
-      expect(container.querySelector('atl-combobox')).toHaveClass('is-readonly');
+      expect(container.querySelector('atl-combobox')).toHaveClass(
+        'is-readonly',
+      );
     });
   });
 });

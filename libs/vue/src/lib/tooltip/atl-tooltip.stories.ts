@@ -4,7 +4,8 @@ import AtlButton from '../button/atl-button.vue';
 
 import { metadata } from '@atelier-ui/spec/metadata/tooltip.metadata';
 import { contract } from '@atelier-ui/spec/contracts/tooltip.contract';
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
@@ -15,7 +16,10 @@ const meta: Meta<typeof AtlTooltip> = {
   component: AtlTooltip,
   tags: ['autodocs'],
   argTypes: {
-    atlTooltipPosition: { control: 'select', options: ['above', 'below', 'left', 'right'] },
+    atlTooltipPosition: {
+      control: 'select',
+      options: ['above', 'below', 'left', 'right'],
+    },
     atlTooltipDisabled: { control: 'boolean' },
     atlTooltipShowDelay: { control: 'number' },
     atlTooltipHideDelay: { control: 'number' },
@@ -40,7 +44,9 @@ type Story = StoryObj<typeof AtlTooltip>;
 export const Default: Story = {
   render: (args) => ({
     components: { AtlTooltip, AtlButton },
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: `
       <div style="padding:4rem;display:flex;justify-content:center">
         <AtlTooltip v-bind="args">
@@ -129,7 +135,9 @@ export const AllVariants: Story = {
 export const Playground: Story = {
   render: (args) => ({
     components: { AtlTooltip, AtlButton },
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: `
       <div style="padding:6rem;display:flex;justify-content:center">
         <AtlTooltip v-bind="args"><AtlButton>Hover me</AtlButton></AtlTooltip>

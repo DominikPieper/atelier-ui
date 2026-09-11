@@ -37,7 +37,10 @@ import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
-const TOKENS = resolve(ROOT, 'libs/create-workspace/src/generators/preset/files/styles/tokens.css');
+const TOKENS = resolve(
+  ROOT,
+  'libs/create-workspace/src/generators/preset/files/styles/tokens.css',
+);
 const OUT = resolve(ROOT, 'tools/design/artboard-palette.css');
 
 /**
@@ -149,7 +152,7 @@ export function buildPalette() {
   if (missing.length) {
     throw new Error(
       `tokens.css has no --ui-${missing.join(', no --ui-')} — the map in ` +
-        `gen-artboard-palette.mjs names a token that no longer exists.`
+        `gen-artboard-palette.mjs names a token that no longer exists.`,
     );
   }
 
@@ -174,7 +177,9 @@ export function buildPalette() {
   );
 }
 
-const isMain = process.argv[1] && resolve(process.argv[1]) === resolve(fileURLToPath(import.meta.url));
+const isMain =
+  process.argv[1] &&
+  resolve(process.argv[1]) === resolve(fileURLToPath(import.meta.url));
 if (isMain) {
   let text;
   try {
@@ -193,15 +198,19 @@ if (isMain) {
       console.error(
         `✗ tools/design/artboard-palette.css is out of sync with tokens.css.\n` +
           `  Run: npm run gen:artboard-palette — then push the block into _sheet.css in\n` +
-          `  the Claude Design "Atelier" project, or the 31 artboards keep the old palette.`
+          `  the Claude Design "Atelier" project, or the 31 artboards keep the old palette.`,
       );
       process.exit(1);
     }
     const count = text.split('\n').filter((l) => /^\s+--/.test(l)).length;
-    console.log(`✓ artboard palette in sync with tokens.css (${count} value(s)).`);
+    console.log(
+      `✓ artboard palette in sync with tokens.css (${count} value(s)).`,
+    );
   } else {
     writeFileSync(OUT, text);
     const count = text.split('\n').filter((l) => /^\s+--/.test(l)).length;
-    console.log(`✓ wrote tools/design/artboard-palette.css — ${count} value(s) from tokens.css.`);
+    console.log(
+      `✓ wrote tools/design/artboard-palette.css — ${count} value(s) from tokens.css.`,
+    );
   }
 }

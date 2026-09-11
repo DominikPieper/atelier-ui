@@ -88,12 +88,13 @@ export class AtlDrawer {
   readonly headerId = `atl-drawer-header-${nextId}`;
 
   protected readonly drawerId = `atl-drawer-${nextId++}`;
-  protected readonly dialogRef = viewChild<ElementRef<HTMLDialogElement>>('dialogEl');
+  protected readonly dialogRef =
+    viewChild<ElementRef<HTMLDialogElement>>('dialogEl');
   private readonly triggerEl = signal<HTMLElement | null>(null);
 
   protected readonly hostClasses = computed(
     () =>
-      `atl-drawer position-${this.position()} size-${this.size()}${this.open() ? ' is-open' : ''}`
+      `atl-drawer position-${this.position()} size-${this.size()}${this.open() ? ' is-open' : ''}`,
   );
 
   constructor() {
@@ -117,7 +118,10 @@ export class AtlDrawer {
   }
 
   protected onBackdropClick(event: MouseEvent): void {
-    if (this.closeOnBackdrop() && event.target === this.dialogRef()?.nativeElement) {
+    if (
+      this.closeOnBackdrop() &&
+      event.target === this.dialogRef()?.nativeElement
+    ) {
       this.open.set(false);
     }
   }

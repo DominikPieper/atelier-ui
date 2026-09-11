@@ -4,7 +4,7 @@ date: 2026-08-26
 sources:
   - tasks/atelier-design-system-plan.md (Phase 1, port item 2 — "contrast annotated in the token source")
   - tasks/design-rebrief-contrast-2026-04-26.md (the one-off report this replaces as a mechanism)
-  - "libs/create-workspace/src/generators/preset/files/styles/tokens.css header: \"All foreground/background pairs verified WCAG 2.2 AA … (52/52 pairs passing 2026-04-26)\""
+  - 'libs/create-workspace/src/generators/preset/files/styles/tokens.css header: "All foreground/background pairs verified WCAG 2.2 AA … (52/52 pairs passing 2026-04-26)"'
 ---
 
 # ADR-0037: The contrast gate reads the token source
@@ -18,8 +18,8 @@ Accepted. Adds `check:contrast` to `check:all`; no token values changed.
 `tools/scripts/wcag-contrast.mjs` existed since April and was wired to nothing.
 It had been run once, by hand, and its output committed as
 `tasks/design-rebrief-contrast-2026-04-26.md`. The token file's own header still
-claims *"All foreground/background pairs verified WCAG 2.2 AA … (52/52 pairs
-passing 2026-04-26)"* — a claim four months old that nothing re-checked.
+claims _"All foreground/background pairs verified WCAG 2.2 AA … (52/52 pairs
+passing 2026-04-26)"_ — a claim four months old that nothing re-checked.
 
 The reason it could only ever be a one-off is structural: **the script kept its
 own hardcoded copy of every hex value.** Two duplicated palettes, one in

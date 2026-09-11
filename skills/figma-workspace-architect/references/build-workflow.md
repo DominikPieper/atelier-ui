@@ -18,13 +18,13 @@ Confirm the bridge is connected and the right file is open.
 
 Then, depending on what you're building:
 
-| Building…                  | Run…                                                                 |
-|----------------------------|----------------------------------------------------------------------|
-| A token system from scratch| `figma_get_variables` to confirm there's nothing there yet           |
-| Adding tokens to existing  | `figma_get_variables` — read every existing collection and mode      |
-| A new component            | `figma_search_components` (does it already exist?), then `figma_get_file_data` and `figma_get_component` on related ones |
-| An icon set                | `figma_get_file_data` — find the existing Icons page if one exists   |
-| Restructuring a library    | `figma_get_design_system_kit` (one-call snapshot) or `figma_get_file_data` + `figma_get_variables` |
+| Building…                   | Run…                                                                                                                     |
+| --------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| A token system from scratch | `figma_get_variables` to confirm there's nothing there yet                                                               |
+| Adding tokens to existing   | `figma_get_variables` — read every existing collection and mode                                                          |
+| A new component             | `figma_search_components` (does it already exist?), then `figma_get_file_data` and `figma_get_component` on related ones |
+| An icon set                 | `figma_get_file_data` — find the existing Icons page if one exists                                                       |
+| Restructuring a library     | `figma_get_design_system_kit` (one-call snapshot) or `figma_get_file_data` + `figma_get_variables`                       |
 
 **Search-then-instantiate over rebuild.** When the user describes a component that probably exists somewhere, run `figma_search_components` first. If a match comes back, `figma_instantiate_component` it into the target page rather than rebuilding from scratch. Re-creation is the most common cause of duplicate-component drift.
 
@@ -103,6 +103,7 @@ This is destructive. Confirm with the user explicitly first.
 Run the writes. Two non-negotiable rules:
 
 1. **Every `figma_execute` payload that creates or mutates nodes must `return` all affected node IDs.** Subsequent calls reference those IDs. The agent only sees what's `return`ed; `console.log` output is invisible. Standard return shape:
+
    ```js
    return { createdNodeIds: [...], mutatedNodeIds: [...], summary: "..." };
    ```
@@ -152,6 +153,7 @@ Use markdown. Recommended template:
 **Purpose.** One-line description of what it's for.
 
 **Props.**
+
 - `Variant` — primary | secondary | ghost
 - `Size` — sm | md | lg
 - `Disabled` — boolean
@@ -180,9 +182,9 @@ figma_set_annotations
 
 Anchor each annotation to the specific node it describes — the focus ring on the focus variant, the loading spinner on the loading variant, the tap-target padding on the surface frame. Examples of annotation content:
 
-- *"Focus ring delivered via drop-shadow (4px primary outer + 2px surface gap), not stroke. Stroke contrast measures ~1.2:1 by design — see `code-verify.md`."*
-- *"Tap target extends 8 px past visible border on every side. The visible component is 32 × 32; hit-area is 48 × 48."*
-- *"Loading spinner uses `cubic-bezier(0.4, 0, 0.2, 1)` over 1.2 s. Reduce-motion users get a static dot — bound to `feature/reduce-motion`."*
+- _"Focus ring delivered via drop-shadow (4px primary outer + 2px surface gap), not stroke. Stroke contrast measures ~1.2:1 by design — see `code-verify.md`."_
+- _"Tap target extends 8 px past visible border on every side. The visible component is 32 × 32; hit-area is 48 × 48."_
+- _"Loading spinner uses `cubic-bezier(0.4, 0, 0.2, 1)` over 1.2 s. Reduce-motion users get a static dot — bound to `feature/reduce-motion`."_
 
 Use `figma_get_annotation_categories` first to learn the categories defined for the file (different teams set different category sets).
 
@@ -194,7 +196,7 @@ The final step. Without it, downstream agents and the Dev-Mode UI treat the new 
 
 ```js
 // figma_execute payload
-const node = await figma.getNodeByIdAsync('123:456');   // the Section/Frame/Component just built
+const node = await figma.getNodeByIdAsync('123:456'); // the Section/Frame/Component just built
 node.devStatus = { type: 'READY_FOR_DEV' };
 return { id: node.id, devStatus: node.devStatus };
 ```
@@ -209,11 +211,11 @@ Don't mark the whole page Ready-for-dev — too coarse. Mark the artifact at the
 
 ## Optional — Inventory generation (sub-mode)
 
-When the build's deliverable includes a visual catalog of the library — or the user explicitly asks to *generate inventory, build a gallery, library catalog, stickersheet, library overview* — run the Inventory sub-mode after Validate (so the gallery only shows shipped components) and before Document.
+When the build's deliverable includes a visual catalog of the library — or the user explicitly asks to _generate inventory, build a gallery, library catalog, stickersheet, library overview_ — run the Inventory sub-mode after Validate (so the gallery only shows shipped components) and before Document.
 
 The sub-mode is self-contained and lives in `references/inventory-generation.md`. Seven phases: Discover (one read-only call) → Group (pure JS) → Scaffold (one call) → Populate (one call **per top-level Section**, chunked in groups of 25 with `setTimeout(0)` yields) → Card builder (inside Populate) → Mark Ready + TOC (one call) → Validate (one screenshot per Section).
 
-Hard rules — do not bundle multiple Sections into one `figma_execute`. Do not load every component's metadata in Phase 1 (only `id`, `name`, `type`). For Sections with more than 150 components, split across multiple calls passing the same `innerId`. The full batching contract is in `references/inventory-generation.md` § *Batching contract*.
+Hard rules — do not bundle multiple Sections into one `figma_execute`. Do not load every component's metadata in Phase 1 (only `id`, `name`, `type`). For Sections with more than 150 components, split across multiple calls passing the same `innerId`. The full batching contract is in `references/inventory-generation.md` § _Batching contract_.
 
 ## Pre-publish checklist
 

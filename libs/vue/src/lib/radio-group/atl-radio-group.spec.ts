@@ -34,40 +34,59 @@ describe('AtlRadioGroup', () => {
     render(RadioGroupWithOptions, { props: { modelValue: '' } });
     expect(screen.getByRole('radio', { name: 'Free' })).toBeInTheDocument();
     expect(screen.getByRole('radio', { name: 'Pro' })).toBeInTheDocument();
-    expect(screen.getByRole('radio', { name: 'Enterprise' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('radio', { name: 'Enterprise' }),
+    ).toBeInTheDocument();
   });
 
-  covers('radio-group', 'checks-matching-value')('checks the radio matching the value', () => {
-    render(RadioGroupWithOptions, { props: { modelValue: 'pro' } });
-    expect(screen.getByRole('radio', { name: 'Pro' })).toBeChecked();
-    expect(screen.getByRole('radio', { name: 'Free' })).not.toBeChecked();
-  });
+  covers('radio-group', 'checks-matching-value')(
+    'checks the radio matching the value',
+    () => {
+      render(RadioGroupWithOptions, { props: { modelValue: 'pro' } });
+      expect(screen.getByRole('radio', { name: 'Pro' })).toBeChecked();
+      expect(screen.getByRole('radio', { name: 'Free' })).not.toBeChecked();
+    },
+  );
 
-  covers('radio-group', 'value-change')('emits update:value when a radio is selected', async () => {
-    const user = userEvent.setup();
-    const { emitted } = render(RadioGroupWithOptions, { props: { modelValue: '' } });
-    await user.click(screen.getByRole('radio', { name: 'Pro' }));
-    expect(emitted()['update:modelValue']).toEqual([['pro']]);
-  });
+  covers('radio-group', 'value-change')(
+    'emits update:value when a radio is selected',
+    async () => {
+      const user = userEvent.setup();
+      const { emitted } = render(RadioGroupWithOptions, {
+        props: { modelValue: '' },
+      });
+      await user.click(screen.getByRole('radio', { name: 'Pro' }));
+      expect(emitted()['update:modelValue']).toEqual([['pro']]);
+    },
+  );
 
-  covers('radio-group', 'keyboard-nav')('ArrowDown selects the next radio', async () => {
-    const user = userEvent.setup();
-    const { emitted } = render(RadioGroupWithOptions, { props: { modelValue: 'free' } });
-    (screen.getByRole('radio', { name: 'Free' }) as HTMLElement).focus();
-    await user.keyboard('{ArrowDown}');
-    expect(emitted()['update:modelValue']).toEqual([['pro']]);
-  });
+  covers('radio-group', 'keyboard-nav')(
+    'ArrowDown selects the next radio',
+    async () => {
+      const user = userEvent.setup();
+      const { emitted } = render(RadioGroupWithOptions, {
+        props: { modelValue: 'free' },
+      });
+      (screen.getByRole('radio', { name: 'Free' }) as HTMLElement).focus();
+      await user.keyboard('{ArrowDown}');
+      expect(emitted()['update:modelValue']).toEqual([['pro']]);
+    },
+  );
 
   it('ArrowUp wraps from the first radio to the last', async () => {
     const user = userEvent.setup();
-    const { emitted } = render(RadioGroupWithOptions, { props: { modelValue: 'free' } });
+    const { emitted } = render(RadioGroupWithOptions, {
+      props: { modelValue: 'free' },
+    });
     (screen.getByRole('radio', { name: 'Free' }) as HTMLElement).focus();
     await user.keyboard('{ArrowUp}');
     expect(emitted()['update:modelValue']).toEqual([['enterprise']]);
   });
 
   it('disables all radios when disabled', () => {
-    render(RadioGroupWithOptions, { props: { modelValue: '', disabled: true } });
+    render(RadioGroupWithOptions, {
+      props: { modelValue: '', disabled: true },
+    });
     for (const radio of screen.getAllByRole('radio')) {
       expect(radio).toBeDisabled();
     }
@@ -75,12 +94,19 @@ describe('AtlRadioGroup', () => {
 
   covers('radio-group', 'invalid')('sets aria-invalid when invalid', () => {
     render(RadioGroupWithOptions, { props: { modelValue: '', invalid: true } });
-    expect(screen.getByRole('radiogroup')).toHaveAttribute('aria-invalid', 'true');
+    expect(screen.getByRole('radiogroup')).toHaveAttribute(
+      'aria-invalid',
+      'true',
+    );
   });
 
   covers('radio-group', 'errors')('renders error messages', () => {
     render(RadioGroupWithOptions, {
-      props: { modelValue: '', errors: ['Please select a plan'], invalid: true },
+      props: {
+        modelValue: '',
+        errors: ['Please select a plan'],
+        invalid: true,
+      },
     });
     expect(screen.getByText('Please select a plan')).toBeInTheDocument();
     expect(screen.getByRole('alert')).toBeInTheDocument();

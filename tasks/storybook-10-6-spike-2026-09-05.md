@@ -30,12 +30,12 @@ children?: ReactNode;
 
 ### With 10.6.0
 
-| | Angular | Vue |
-|---|---|---|
-| `manifests/components.json` | 24 KB, 32 entries | 13 KB, 32 entries |
-| `meta.docgen` | `angular-component-meta` | `vue-component-meta` |
-| `AtlCheckbox` shape | `checked` input + `checkedChange` output | `update:checked` event + `slots` |
-| `children` / `onCheckedChange` anywhere | no / no | no / no |
+|                                         | Angular                                  | Vue                              |
+| --------------------------------------- | ---------------------------------------- | -------------------------------- |
+| `manifests/components.json`             | 24 KB, 32 entries                        | 13 KB, 32 entries                |
+| `meta.docgen`                           | `angular-component-meta`                 | `vue-component-meta`             |
+| `AtlCheckbox` shape                     | `checked` input + `checkedChange` output | `update:checked` event + `slots` |
+| `children` / `onCheckedChange` anywhere | no / no                                  | no / no                          |
 
 Then the question the build could not answer — does the **MCP surface** serve it? Spoke MCP directly to both dev servers (`initialize`, `notifications/initialized`, `tools/call`).
 
@@ -44,6 +44,7 @@ Angular, `docs-show` for `AtlToggle`:
 ```html
 <atl-toggle [(checked)]="enabled">Enable notifications</atl-toggle>
 ```
+
 ```
 AtlToggleInputs   checked?: boolean; // two-way: [(checked)]
 AtlToggleOutputs  checkedChange: (e: boolean) => void
@@ -57,27 +58,27 @@ Events   "update:checked": [value: boolean]
 Slots    default: {}
 ```
 
-Vue's reply even carries the instruction *"do not pass the prop and listen to its `update:` event separately"*, and its stories come back as real SFCs with `<script setup>`. Angular's carry the source JSDoc including the `[formField]` directive notes.
+Vue's reply even carries the instruction _"do not pass the prop and listen to its `update:` event separately"_, and its stories come back as real SFCs with `<script setup>`. Angular's carry the source JSDoc including the `[formField]` directive notes.
 
 This is the exact inverse of today's behaviour. The surface participants actually touch is fixed.
 
 ## What it costs
 
-**1. Angular needs a framework swap, and that is a gain.** Keeping `@analogjs/storybook-angular` does not work: with the flag set, the build still exits 0 but swallows `Invariant failed: experimental_manifests must supply components.meta.docgen` and writes a **decoy** — 32 entries carrying only `id` and `name`, no props. An empty manifest that looks full. Only `@storybook/angular-vite` produces real data. Swapping replaces a third-party wrapper with the first-party package and puts us on the path where upstream sets its defaults (`experimentalDocgenServer` is default *there*). Its peers — Angular ≥21 <23, vite ≥8, TS ≥5.9 — are already satisfied here.
+**1. Angular needs a framework swap, and that is a gain.** Keeping `@analogjs/storybook-angular` does not work: with the flag set, the build still exits 0 but swallows `Invariant failed: experimental_manifests must supply components.meta.docgen` and writes a **decoy** — 32 entries carrying only `id` and `name`, no props. An empty manifest that looks full. Only `@storybook/angular-vite` produces real data. Swapping replaces a third-party wrapper with the first-party package and puts us on the path where upstream sets its defaults (`experimentalDocgenServer` is default _there_). Its peers — Angular ≥21 <23, vite ≥8, TS ≥5.9 — are already satisfied here.
 
 **2. `@angular/animations` comes back.** It is a hard peer of `@storybook/angular-vite` and was pulled in transitively (22.0.7). This repo deliberately never installed it; the long comment in `libs/angular/.storybook/main.ts`'s `viteFinal` explains why the stub plugin exists instead. Under the new framework the stub becomes optional — but only because the deprecated package is genuinely present. **This reverses a deliberate decision and should be decided explicitly, not absorbed as a side effect.**
 
 **3. Every MCP tool was renamed.** Only `get-storybook-story-instructions` survives:
 
-| 10.5.10 | 10.6.0 |
-|---|---|
-| `list-all-documentation` | `docs-list` |
-| `get-documentation` | `docs-show` |
-| `get-documentation-for-story` | `docs-show-story` |
-| `preview-stories` | `stories-preview` |
-| `run-story-tests` | `test-run` |
-| `get-changed-stories` | `stories-changed` |
-| `get-stories-by-component` | `stories-find-by-component` |
+| 10.5.10                       | 10.6.0                      |
+| ----------------------------- | --------------------------- |
+| `list-all-documentation`      | `docs-list`                 |
+| `get-documentation`           | `docs-show`                 |
+| `get-documentation-for-story` | `docs-show-story`           |
+| `preview-stories`             | `stories-preview`           |
+| `run-story-tests`             | `test-run`                  |
+| `get-changed-stories`         | `stories-changed`           |
+| `get-stories-by-component`    | `stories-find-by-component` |
 
 **32 files** in this repo name the old ones — including `AGENTS.md`, `README.md`, three published `docs/public/.well-known/agent-skills/*/SKILL.md`, `talk/storybook-mcp-talk.md`, eight docs pages, and `libs/create-workspace/src/generators/preset/preset.ts`, which ships to npm and would scaffold workspaces with stale names.
 

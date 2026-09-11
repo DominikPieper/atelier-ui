@@ -1,4 +1,10 @@
-import { InputHTMLAttributes, ReactNode, useRef, useEffect, useId } from 'react';
+import {
+  InputHTMLAttributes,
+  ReactNode,
+  useRef,
+  useEffect,
+  useId,
+} from 'react';
 import type { AtlCheckboxSpec } from '../spec';
 import './atl-checkbox.css';
 
@@ -6,7 +12,8 @@ import './atl-checkbox.css';
  * Properties for the AtlCheckbox component.
  */
 export interface AtlCheckboxProps
-  extends Omit<
+  extends
+    Omit<
       InputHTMLAttributes<HTMLInputElement>,
       'type' | 'checked' | 'onChange' | 'readOnly' | 'value'
     >,

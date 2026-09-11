@@ -14,48 +14,52 @@ type AtlButtonAccessibleName =
 /**
  * Properties for the AtlButton component.
  */
-export type AtlButtonProps =
-  Omit<ButtonHTMLAttributes<HTMLButtonElement>, 'children' | 'aria-label'>
-  & AtlButtonSpec
-  & AtlButtonAccessibleName;
+export type AtlButtonProps = Omit<
+  ButtonHTMLAttributes<HTMLButtonElement>,
+  'children' | 'aria-label'
+> &
+  AtlButtonSpec &
+  AtlButtonAccessibleName;
 
 /**
  * A versatile button component that supports various styles, sizes, and states.
  */
-export const AtlButton = forwardRef<HTMLButtonElement, AtlButtonProps>(function AtlButton(
-  {
-    variant = 'primary',
-    size = 'md',
-    disabled = false,
-    loading = false,
-    children,
-    className,
-    ...rest
-  },
-  ref
-) {
-  const isDisabled = disabled || loading;
-  const classes = [
-    'atl-button',
-    `variant-${variant}`,
-    `size-${size}`,
-    isDisabled && 'is-disabled',
-    loading && 'is-loading',
-    className,
-  ]
-    .filter(Boolean)
-    .join(' ');
+export const AtlButton = forwardRef<HTMLButtonElement, AtlButtonProps>(
+  function AtlButton(
+    {
+      variant = 'primary',
+      size = 'md',
+      disabled = false,
+      loading = false,
+      children,
+      className,
+      ...rest
+    },
+    ref,
+  ) {
+    const isDisabled = disabled || loading;
+    const classes = [
+      'atl-button',
+      `variant-${variant}`,
+      `size-${size}`,
+      isDisabled && 'is-disabled',
+      loading && 'is-loading',
+      className,
+    ]
+      .filter(Boolean)
+      .join(' ');
 
-  return (
-    <button
-      ref={ref}
-      className={classes}
-      disabled={isDisabled}
-      aria-disabled={isDisabled || undefined}
-      {...rest}
-    >
-      {loading && <span className="spinner" aria-hidden="true" />}
-      {children}
-    </button>
-  );
-});
+    return (
+      <button
+        ref={ref}
+        className={classes}
+        disabled={isDisabled}
+        aria-disabled={isDisabled || undefined}
+        {...rest}
+      >
+        {loading && <span className="spinner" aria-hidden="true" />}
+        {children}
+      </button>
+    );
+  },
+);

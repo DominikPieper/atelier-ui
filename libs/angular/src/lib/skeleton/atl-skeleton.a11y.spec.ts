@@ -29,7 +29,9 @@ async function captureOne(template: string): Promise<unknown> {
 async function capture(): Promise<Record<string, unknown>> {
   return {
     text: await captureOne('<atl-skeleton variant="text"></atl-skeleton>'),
-    circular: await captureOne('<atl-skeleton variant="circular"></atl-skeleton>'),
+    circular: await captureOne(
+      '<atl-skeleton variant="circular"></atl-skeleton>',
+    ),
   };
 }
 

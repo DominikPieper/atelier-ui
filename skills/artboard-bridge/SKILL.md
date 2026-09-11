@@ -19,20 +19,20 @@ gates. Publish is a **trainer-machine capability**: the owner seat is proven to 
 
 **The governance half is not repo-bound.** `references/governance.md` applies to any
 Claude Design project in this account, whoever owns it and whatever library the work
-targets. A request to build a *client's* components from a *client's* artboards is
+targets. A request to build a _client's_ components from a _client's_ artboards is
 in scope precisely because it must stop — reading it as "not an Atelier task, so this
 skill does not apply" is the failure mode an eval run of this skill produced on
 2026-09-08.
 
 ## Mode routing
 
-| User says… | Mode | First action |
-|---|---|---|
-| "take this artboard / sheet into code", "what does the Claude Design sheet for X say", a claude.ai/design URL + a component | Intake | `list_projects` → identify the project → `list_files` |
-| "share X as an artboard", "publish the sheet for X", "update the Claude Design sheet", "step 5 for X" | Publish | Check the component is gate-verified before touching the project |
-| "build X from Figma", "implement the master" | Out-of-scope → `design-to-code` | Say so, point there |
-| "audit the Figma file", "create the master for X" | Out-of-scope → `figma-workspace-architect` | Say so, point there |
-| "sync the design system into Claude Design" | Out-of-scope → `/design-sync` (React-only, ADR-0032) | Say so |
+| User says…                                                                                                                  | Mode                                                 | First action                                                     |
+| --------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------- | ---------------------------------------------------------------- |
+| "take this artboard / sheet into code", "what does the Claude Design sheet for X say", a claude.ai/design URL + a component | Intake                                               | `list_projects` → identify the project → `list_files`            |
+| "share X as an artboard", "publish the sheet for X", "update the Claude Design sheet", "step 5 for X"                       | Publish                                              | Check the component is gate-verified before touching the project |
+| "build X from Figma", "implement the master"                                                                                | Out-of-scope → `design-to-code`                      | Say so, point there                                              |
+| "audit the Figma file", "create the master for X"                                                                           | Out-of-scope → `figma-workspace-architect`           | Say so, point there                                              |
+| "sync the design system into Claude Design"                                                                                 | Out-of-scope → `/design-sync` (React-only, ADR-0032) | Say so                                                           |
 
 Tool names below are the `claude-design` MCP server's; `figma-console:` and repo scripts
 are named where they appear.
@@ -68,7 +68,7 @@ Copy this checklist and tick it as you go:
 
 - **I1.** `list_files(depth: -1)`, then `read_file` on the `.dc.html`. An Atelier sheet is
   an annotated review document, not a mockup: a `data-screen-label` wrapper, sections
-  such as *Length / Anatomy / States / Findings*, tables of measured values, the Figma
+  such as _Length / Anatomy / States / Findings_, tables of measured values, the Figma
   node id and the `Atl*Spec` name cited in prose, ADR numbers, and findings marked `open`.
   Read the findings — they are the point; the pictures are specimens. Shape details in
   `references/dc-html-shape.md`.
@@ -95,7 +95,7 @@ Copy this checklist and tick it as you go:
   master status. Every value carries the stamp **"from Claude Design, unverified against
   Figma"**. Behaviour, explicit exclusions and reuse-vs-new stay **blank** for the author
   (ADR-0096 as corrected 2026-09-07) — blank means blank: behaviour the sheet describes
-  (ARIA pattern, Escape, focus handling) goes under *claims to verify*, not into the
+  (ARIA pattern, Escape, focus handling) goes under _claims to verify_, not into the
   behaviour field "for reference"; the first eval run of this skill did exactly that and
   the author's field was no longer theirs to write.
 - **I6.** Stop, show the document, name the skill that continues. Do not open Figma, do

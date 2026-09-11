@@ -31,7 +31,7 @@ function capture() {
   const r = render(
     <AtlDialog open aria-label="Confirm">
       Dialog body
-    </AtlDialog>
+    </AtlDialog>,
   );
   scenarios.open = a11yTree(r.container);
   r.unmount();

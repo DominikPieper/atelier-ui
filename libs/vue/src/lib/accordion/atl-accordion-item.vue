@@ -1,5 +1,13 @@
 <script setup lang="ts">
-import { computed, inject, onBeforeUnmount, onMounted, ref, useId, watch } from 'vue';
+import {
+  computed,
+  inject,
+  onBeforeUnmount,
+  onMounted,
+  ref,
+  useId,
+  watch,
+} from 'vue';
 import { AtlAccordionGroupKey } from './atl-accordion-group.vue';
 import AtlIcon from '../icon/atl-icon.vue';
 
@@ -21,7 +29,9 @@ const props = withDefaults(defineProps<AtlAccordionItemProps>(), {
   headingLevel: 3,
 });
 
-const headingTag = computed(() => `h${props.headingLevel}` as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6');
+const headingTag = computed(
+  () => `h${props.headingLevel}` as 'h1' | 'h2' | 'h3' | 'h4' | 'h5' | 'h6',
+);
 
 const emit = defineEmits<{
   'update:expanded': [expanded: boolean];
@@ -54,7 +64,9 @@ function toggle() {
 function onKeydown(event: KeyboardEvent) {
   if (!group) return;
   const buttons = Array.from(
-    document.querySelectorAll<HTMLButtonElement>('.atl-accordion-item:not(.is-disabled) .accordion-trigger')
+    document.querySelectorAll<HTMLButtonElement>(
+      '.atl-accordion-item:not(.is-disabled) .accordion-trigger',
+    ),
   );
   const index = buttons.indexOf(event.currentTarget as HTMLButtonElement);
   if (event.key === 'ArrowDown') {
@@ -91,7 +103,7 @@ watch(
     if (val && !isOpen) group.toggleItem(id);
     else if (!val && isOpen) group.toggleItem(id);
   },
-  { immediate: true }
+  { immediate: true },
 );
 
 onBeforeUnmount(() => {
@@ -106,7 +118,10 @@ const itemClasses = computed(() => [
   props.disabled && 'is-disabled',
 ]);
 
-const chevronClasses = computed(() => ['chevron', isExpanded.value && 'is-expanded']);
+const chevronClasses = computed(() => [
+  'chevron',
+  isExpanded.value && 'is-expanded',
+]);
 </script>
 
 <template>

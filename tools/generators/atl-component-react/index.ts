@@ -6,7 +6,10 @@ interface AtlComponentReactSchema {
   directory?: string;
 }
 
-export default async function generator(tree: Tree, options: AtlComponentReactSchema) {
+export default async function generator(
+  tree: Tree,
+  options: AtlComponentReactSchema,
+) {
   const componentNames = names(options.name);
   const dir = options.directory ?? options.name;
   const libRoot = 'libs/react/src/lib';

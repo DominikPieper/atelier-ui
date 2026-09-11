@@ -4,7 +4,6 @@ import AtlSelect from './atl-select.vue';
 import AtlOption from './atl-option.vue';
 import { covers } from '../../testing/behavior';
 
-
 describe('AtlSelect', () => {
   covers('select', 'render-element')('renders a select element', () => {
     render(AtlSelect);
@@ -27,8 +26,13 @@ describe('AtlSelect', () => {
   });
 
   it('sets aria-label on the native select, not the wrapper', () => {
-    const { container } = render(AtlSelect, { props: { 'aria-label': 'Country' } });
-    expect(screen.getByRole('combobox')).toHaveAttribute('aria-label', 'Country');
+    const { container } = render(AtlSelect, {
+      props: { 'aria-label': 'Country' },
+    });
+    expect(screen.getByRole('combobox')).toHaveAttribute(
+      'aria-label',
+      'Country',
+    );
     expect(container.firstElementChild).not.toHaveAttribute('aria-label');
   });
 
@@ -38,18 +42,26 @@ describe('AtlSelect', () => {
   });
 
   covers('select', 'error-messages')('renders error messages', () => {
-    render(AtlSelect, { props: { errors: ['This field is required'], invalid: true } });
+    render(AtlSelect, {
+      props: { errors: ['This field is required'], invalid: true },
+    });
     expect(screen.getByText('This field is required')).toBeInTheDocument();
     // A polite live region tied to the field, not an assertive alert (ADR-0055).
     const field = screen.getByRole('combobox');
     const describedBy = field.getAttribute('aria-describedby');
     expect(describedBy).toBeTruthy();
-    expect(document.getElementById(describedBy as string)).toHaveAttribute('aria-live', 'polite');
+    expect(document.getElementById(describedBy as string)).toHaveAttribute(
+      'aria-live',
+      'polite',
+    );
   });
 
   covers('select', 'invalid')('sets aria-invalid when invalid', () => {
     render(AtlSelect, { props: { invalid: true } });
-    expect(screen.getByRole('combobox')).toHaveAttribute('aria-invalid', 'true');
+    expect(screen.getByRole('combobox')).toHaveAttribute(
+      'aria-invalid',
+      'true',
+    );
   });
 
   covers('select', 'disabled')('disables the select when disabled', () => {

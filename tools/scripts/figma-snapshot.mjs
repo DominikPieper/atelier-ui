@@ -56,18 +56,39 @@ const FILE_KEY = 'QMnDD8uZQPldPrlCwZZ58T';
  * flag them unless allowlisted in lib/allowlists.js.
  */
 const MASTERS = [
-  { nodeId: '129:20' }, { nodeId: '129:33' }, { nodeId: '55:65' }, { nodeId: '55:22' },
-  { nodeId: '55:92' }, { nodeId: '55:94' }, { nodeId: '55:123' }, { nodeId: '55:127' },
-  { nodeId: '55:130' }, { nodeId: '55:52' }, { nodeId: '55:31' }, { nodeId: '55:36' },
-  { nodeId: '55:41' }, { nodeId: '55:87' }, { nodeId: '55:137' }, { nodeId: '420:185' },
-  { nodeId: '55:102' }, { nodeId: '420:153' }, { nodeId: '55:151' }, { nodeId: '55:47' },
+  { nodeId: '129:20' },
+  { nodeId: '129:33' },
+  { nodeId: '55:65' },
+  { nodeId: '55:22' },
+  { nodeId: '55:92' },
+  { nodeId: '55:94' },
+  { nodeId: '55:123' },
+  { nodeId: '55:127' },
+  { nodeId: '55:130' },
+  { nodeId: '55:52' },
+  { nodeId: '55:31' },
+  { nodeId: '55:36' },
+  { nodeId: '55:41' },
+  { nodeId: '55:87' },
+  { nodeId: '55:137' },
+  { nodeId: '420:185' },
+  { nodeId: '55:102' },
+  { nodeId: '420:153' },
+  { nodeId: '55:151' },
+  { nodeId: '55:47' },
   // 55:141 and 55:145 were COMPONENT_SETs whose only axis pictured an outcome of
   // content rather than a property — AtlBreadcrumbs `items` = 3|4|5 and AtlPagination
   // `position` = first|middle|last. ADR-0056 removed the axes, which collapsed each set
   // to the plain COMPONENT it always was; the other drawings live as content samples on
   // the Components page. The new ids are the surviving components.
-  { nodeId: '55:139' }, { nodeId: '55:143' }, { nodeId: '421:398' }, { nodeId: '421:1183' },
-  { nodeId: '420:286' }, { nodeId: '421:339' }, { nodeId: '421:505' }, { nodeId: '508:7221' },
+  { nodeId: '55:139' },
+  { nodeId: '55:143' },
+  { nodeId: '421:398' },
+  { nodeId: '421:1183' },
+  { nodeId: '420:286' },
+  { nodeId: '421:339' },
+  { nodeId: '421:505' },
+  { nodeId: '508:7221' },
   { nodeId: '507:2953' },
   // Child masters (ADR-0062). Ten parts that had no master of their own, which is
   // why their geometry was the one layer [ROOT-PAINT] could not reach: a part
@@ -107,14 +128,18 @@ function resolveFigmaConsolePackageSpec() {
   try {
     config = JSON.parse(readFileSync(MCP_CONFIG_PATH, 'utf8'));
   } catch (err) {
-    throw new Error(`could not read/parse ${MCP_CONFIG_PATH}: ${err?.message ?? err}`);
+    throw new Error(
+      `could not read/parse ${MCP_CONFIG_PATH}: ${err?.message ?? err}`,
+    );
   }
   const args = config?.mcpServers?.['figma-console']?.args;
-  const spec = Array.isArray(args) ? args.find((a) => /^figma-console-mcp@/.test(a)) : undefined;
+  const spec = Array.isArray(args)
+    ? args.find((a) => /^figma-console-mcp@/.test(a))
+    : undefined;
   if (!spec) {
     throw new Error(
       `${MCP_CONFIG_PATH} has no mcpServers['figma-console'].args entry matching ` +
-        `/^figma-console-mcp@/ — refusing to fall back to @latest (ADR-0110 pins this server).`
+        `/^figma-console-mcp@/ — refusing to fall back to @latest (ADR-0110 pins this server).`,
     );
   }
   return spec;
@@ -132,7 +157,10 @@ main().catch((err) => {
 });
 
 async function main() {
-  const client = new Client({ name: 'atelier-figma-snapshot', version: '1.0.0' }, { capabilities: {} });
+  const client = new Client(
+    { name: 'atelier-figma-snapshot', version: '1.0.0' },
+    { capabilities: {} },
+  );
   // The npx package spec is read from .mcp.json (ADR-0110: pin the server the
   // skills hardcode) rather than hardcoded here, so there is one source for the
   // pinned version; `@latest` is deliberately not a fallback (see the resolver
@@ -165,11 +193,13 @@ async function main() {
       console.error(
         '✗ Figma Desktop Bridge not connected. Open Figma Desktop with the file and the\n' +
           '  figma-console Desktop Bridge plugin running, and ensure no other MCP client holds\n' +
-          '  the bridge, then re-run npm run figma:snapshot.'
+          '  the bridge, then re-run npm run figma:snapshot.',
       );
       process.exit(2);
     }
-    const declaredServerVersion = versionFromPackageSpec(figmaConsolePackageSpec);
+    const declaredServerVersion = versionFromPackageSpec(
+      figmaConsolePackageSpec,
+    );
     const serverVersion =
       reportedServerVersion?.version ??
       status?.serverVersion ??
@@ -204,10 +234,15 @@ async function main() {
       });
       figmaLastModified = versions?.versions?.[0]?.created_at ?? null;
     } catch (err) {
-      console.warn(`⚠ figma_get_file_versions failed (${err?.message ?? err}); falling back.`);
+      console.warn(
+        `⚠ figma_get_file_versions failed (${err?.message ?? err}); falling back.`,
+      );
     }
     figmaLastModified =
-      figmaLastModified ?? status?.details?.lastModified ?? status?.lastModified ?? null;
+      figmaLastModified ??
+      status?.details?.lastModified ??
+      status?.lastModified ??
+      null;
 
     // 2. Library Tokens collection — the semantic tier mirroring tokens.css (--ui-*).
     //    figma_get_variables paginates at 50 by default and says nothing when it
@@ -568,7 +603,9 @@ async function main() {
       }
       return { masters: out, typography: { fontFamilies: fontTally, fontSamples, textStyles }, pageGlyphs, referencedNodes };
     `;
-    const probe = (await call(client, 'figma_execute', { code: probeCode, timeout: 25000 }))?.result ?? {};
+    const probe =
+      (await call(client, 'figma_execute', { code: probeCode, timeout: 25000 }))
+        ?.result ?? {};
 
     // 2c. Every TEXT node under every master, one record each. Until now the
     //     snapshot carried typography only as an aggregate: rootPaint and layers
@@ -705,14 +742,24 @@ async function main() {
       }
       return out;
     `;
-    const textProbe = (await call(client, 'figma_execute', { code: textProbeCode, timeout: 30000 }))?.result ?? {};
+    const textProbe =
+      (
+        await call(client, 'figma_execute', {
+          code: textProbeCode,
+          timeout: 30000,
+        })
+      )?.result ?? {};
 
     // 3. Each master: set-level metadata + a deep read of its default variant.
     const components = [];
     for (const { nodeId } of MASTERS) {
-      const comp = (await call(client, 'figma_get_component', { nodeId, enrich: true }))?.component;
+      const comp = (
+        await call(client, 'figma_get_component', { nodeId, enrich: true })
+      )?.component;
       if (!comp) {
-        console.warn(`⚠ skipped ${nodeId}: figma_get_component returned no component`);
+        console.warn(
+          `⚠ skipped ${nodeId}: figma_get_component returned no component`,
+        );
         continue;
       }
       // A master can be a plain COMPONENT rather than a COMPONENT_SET: ADR-0056 removed
@@ -720,13 +767,22 @@ async function main() {
       // no axis has none. Its children are its parts, not its variants, so do not read
       // them as variant names — `Home`, `/`, `Settings` would otherwise be parsed as one.
       const isSet = comp.type === 'COMPONENT_SET';
-      const variantAxes = isSet ? variantAxesOf(comp.componentPropertyDefinitions) : {};
+      const variantAxes = isSet
+        ? variantAxesOf(comp.componentPropertyDefinitions)
+        : {};
       const variants = isSet
-        ? (comp.children ?? []).map((c) => parseVariantName(c.name)).filter(Boolean)
+        ? (comp.children ?? [])
+            .map((c) => parseVariantName(c.name))
+            .filter(Boolean)
         : [];
       const defaultVariantId = pickDefaultVariant(comp, variantAxes);
       const deep = defaultVariantId
-        ? (await call(client, 'figma_get_component_for_development_deep', { nodeId: defaultVariantId, depth: 8 }))?.component
+        ? (
+            await call(client, 'figma_get_component_for_development_deep', {
+              nodeId: defaultVariantId,
+              depth: 8,
+            })
+          )?.component
         : null;
 
       components.push({
@@ -739,7 +795,8 @@ async function main() {
         // From the 2b probe: the declared property types, which of them anything
         // references, and the pictograms drawn as TEXT characters.
         properties: probe.masters?.[nodeId]?.properties ?? {},
-        referencedProperties: probe.masters?.[nodeId]?.referencedProperties ?? [],
+        referencedProperties:
+          probe.masters?.[nodeId]?.referencedProperties ?? [],
         iconInstanceNames: probe.masters?.[nodeId]?.iconInstanceNames ?? [],
         rootPaint: probe.masters?.[nodeId]?.rootPaint ?? {},
         overlays: probe.masters?.[nodeId]?.overlays ?? [],
@@ -755,7 +812,8 @@ async function main() {
     // A text probe that fails or times out yields `{}`, which would write a
     // structurally valid text-nodes.json saying every master has no text — the
     // silent empty write the bridge check exists to prevent, one round trip later.
-    if (Object.keys(textProbe).length === 0) throw new Error('no text nodes captured');
+    if (Object.keys(textProbe).length === 0)
+      throw new Error('no text nodes captured');
 
     // One stamp for both files. text-nodes.json is only trustworthy as a companion
     // to snapshot.json, so the gate blocks when the two disagree — which requires
@@ -790,7 +848,9 @@ async function main() {
     const textMasters = MASTERS.map(({ nodeId }) => ({
       nodeId,
       name: textProbe[nodeId]?.name ?? null,
-      selector: textProbe[nodeId]?.name ? leafName(textProbe[nodeId].name) : null,
+      selector: textProbe[nodeId]?.name
+        ? leafName(textProbe[nodeId].name)
+        : null,
       variantCount: textProbe[nodeId]?.variantCount ?? 0,
       text: textProbe[nodeId]?.text ?? [],
     }));
@@ -799,7 +859,10 @@ async function main() {
         fileKey: FILE_KEY,
         generatedAt,
         gitSha: sha,
-        totalTextNodes: textMasters.reduce((n, m) => n + m.text.reduce((k, r) => k + r.count, 0), 0),
+        totalTextNodes: textMasters.reduce(
+          (n, m) => n + m.text.reduce((k, r) => k + r.count, 0),
+          0,
+        ),
         records: textMasters.reduce((n, m) => n + m.text.length, 0),
         note:
           'Per-TEXT-node type facts for every master, companion to snapshot.json and written by the ' +
@@ -809,7 +872,7 @@ async function main() {
           '`path` nor master + path + chars is unique — `path` collides inside a variant, and 13 ' +
           'master + path + chars keys stand for 2-3 records each (AtlButton draws three different ' +
           '`Button “Button”`). Use master + path + chars + size + weight, which is unique across all ' +
-          'records today; check-figma.js builds exactly that address. Only the fontSize variable\'s ' +
+          "records today; check-figma.js builds exactly that address. Only the fontSize variable's " +
           'collection is captured — a lineHeight binding is invisible here (zero nodes carry one today). ' +
           'Facts only; rules live in check-figma.js and check-typeface.js.',
       },
@@ -817,7 +880,7 @@ async function main() {
     };
     writeFileSync(TEXT_OUT, JSON.stringify(textNodes, null, 2) + '\n');
     console.log(
-      `✓ wrote ${textNodes.meta.totalTextNodes} text node(s) in ${textNodes.meta.records} record(s) to ${TEXT_OUT}`
+      `✓ wrote ${textNodes.meta.totalTextNodes} text node(s) in ${textNodes.meta.records} record(s) to ${TEXT_OUT}`,
     );
   } finally {
     await client.close();
@@ -840,14 +903,14 @@ async function call(client, name, args) {
 function isConnected(status) {
   return Boolean(
     status?.connected ||
-      status?.plugin?.connected ||
-      status?.details?.plugin?.connected ||
-      status?.probeResult?.success ||
-      // figma-console-mcp >= 1.35 moved the probe result under `setup` and
-      // reports the live transport under `transport.websocket.available`.
-      status?.setup?.probeResult?.success ||
-      status?.setup?.valid ||
-      status?.transport?.websocket?.available
+    status?.plugin?.connected ||
+    status?.details?.plugin?.connected ||
+    status?.probeResult?.success ||
+    // figma-console-mcp >= 1.35 moved the probe result under `setup` and
+    // reports the live transport under `transport.websocket.available`.
+    status?.setup?.probeResult?.success ||
+    status?.setup?.valid ||
+    status?.transport?.websocket?.available,
   );
 }
 
@@ -857,7 +920,10 @@ function isConnected(status) {
 
 /** "Action/AtlButton" -> "AtlButton" (strip section path prefix). */
 function leafName(name) {
-  return String(name || '').split('/').pop().trim();
+  return String(name || '')
+    .split('/')
+    .pop()
+    .trim();
 }
 
 /** componentPropertyDefinitions -> { variant: [...], size: [...] } (VARIANT only). */
@@ -885,13 +951,21 @@ function parseVariantName(name) {
 /** Pick the variant child whose axes are all the default values (else first child). */
 function pickDefaultVariant(comp, variantAxes) {
   const defaults = {};
-  for (const [key, def] of Object.entries(comp.componentPropertyDefinitions || {})) {
-    if (def?.type === 'VARIANT' && def.defaultValue !== undefined) defaults[key] = def.defaultValue;
+  for (const [key, def] of Object.entries(
+    comp.componentPropertyDefinitions || {},
+  )) {
+    if (def?.type === 'VARIANT' && def.defaultValue !== undefined)
+      defaults[key] = def.defaultValue;
   }
   const children = comp.children ?? [];
   const match = children.find((c) => {
     const ax = parseVariantName(c.name);
-    return ax && Object.keys(variantAxes).every((k) => String(ax[k]) === String(defaults[k]));
+    return (
+      ax &&
+      Object.keys(variantAxes).every(
+        (k) => String(ax[k]) === String(defaults[k]),
+      )
+    );
   });
   return (match ?? children[0])?.id ?? null;
 }
@@ -899,7 +973,13 @@ function pickDefaultVariant(comp, variantAxes) {
 // ---------------------------------------------------------------------------
 // Node-fact extraction — walk the deep tree and record bound/unbound/raw facts.
 // ---------------------------------------------------------------------------
-const SPACING_KEYS = ['paddingLeft', 'paddingRight', 'paddingTop', 'paddingBottom', 'itemSpacing'];
+const SPACING_KEYS = [
+  'paddingLeft',
+  'paddingRight',
+  'paddingTop',
+  'paddingBottom',
+  'itemSpacing',
+];
 
 function collectNodeFacts(root) {
   const out = [];
@@ -921,18 +1001,33 @@ function walk(node, out) {
 
   const rawColors = [];
   for (const paint of [...(node.fills || []), ...(node.strokes || [])]) {
-    if (paint?.type === 'SOLID' && paint.visible !== false && !paint.boundVariables?.color) {
+    if (
+      paint?.type === 'SOLID' &&
+      paint.visible !== false &&
+      !paint.boundVariables?.color
+    ) {
       rawColors.push(toHex(paint.color));
     }
   }
 
-  const radiusBound = bound.cornerRadius || bound.topLeftRadius || bound.topRightRadius || bound.bottomLeftRadius || bound.bottomRightRadius;
-  const unboundRadius = typeof node.cornerRadius === 'number' && node.cornerRadius > 0 && !radiusBound ? node.cornerRadius : 0;
+  const radiusBound =
+    bound.cornerRadius ||
+    bound.topLeftRadius ||
+    bound.topRightRadius ||
+    bound.bottomLeftRadius ||
+    bound.bottomRightRadius;
+  const unboundRadius =
+    typeof node.cornerRadius === 'number' &&
+    node.cornerRadius > 0 &&
+    !radiusBound
+      ? node.cornerRadius
+      : 0;
 
   const unboundSpacing = [];
   if (node.layoutMode && node.layoutMode !== 'NONE') {
     for (const key of SPACING_KEYS) {
-      if (typeof node[key] === 'number' && node[key] > 0 && !bound[key]) unboundSpacing.push(key);
+      if (typeof node[key] === 'number' && node[key] > 0 && !bound[key])
+        unboundSpacing.push(key);
     }
   }
 
@@ -957,7 +1052,12 @@ function walk(node, out) {
   }
 
   const hasChildren = children.length > 0;
-  const relevant = rawColors.length || unboundRadius || unboundSpacing.length || nonSemanticTokens.length || hasChildren;
+  const relevant =
+    rawColors.length ||
+    unboundRadius ||
+    unboundSpacing.length ||
+    nonSemanticTokens.length ||
+    hasChildren;
   if (relevant) {
     out.push({
       name: node.name,
@@ -976,13 +1076,19 @@ function walk(node, out) {
 
 function toHex(c) {
   if (!c) return '#000000';
-  const h = (n) => Math.round((n ?? 0) * 255).toString(16).padStart(2, '0');
+  const h = (n) =>
+    Math.round((n ?? 0) * 255)
+      .toString(16)
+      .padStart(2, '0');
   return `#${h(c.r)}${h(c.g)}${h(c.b)}`;
 }
 
 function gitSha() {
   try {
-    return execSync('git rev-parse --short HEAD', { cwd: ROOT, encoding: 'utf8' }).trim();
+    return execSync('git rev-parse --short HEAD', {
+      cwd: ROOT,
+      encoding: 'utf8',
+    }).trim();
   } catch {
     return null;
   }

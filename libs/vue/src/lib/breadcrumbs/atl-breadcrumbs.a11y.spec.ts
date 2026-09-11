@@ -20,7 +20,10 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../../../..');
 const SNAP = resolve(ROOT, `tools/parity/a11y/atl-breadcrumbs.${FW}.json`);
 
 async function captureOne(template: string): Promise<unknown> {
-  const r = render({ components: { AtlBreadcrumbs, AtlBreadcrumbItem }, template });
+  const r = render({
+    components: { AtlBreadcrumbs, AtlBreadcrumbItem },
+    template,
+  });
   await nextTick();
   const tree = a11yTree(r.container);
   r.unmount();

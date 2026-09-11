@@ -4,7 +4,8 @@ import AtlInput from './atl-input.vue';
 
 import { metadata } from '@atelier-ui/spec/metadata/input.metadata';
 import { contract } from '@atelier-ui/spec/contracts/input.contract';
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
@@ -23,7 +24,10 @@ const meta: Meta<typeof AtlInput> = {
     template: '<AtlInput v-bind="args" v-model:value="value" />',
   }),
   argTypes: {
-    type: { control: 'select', options: ['text', 'email', 'password', 'number', 'tel', 'url'] },
+    type: {
+      control: 'select',
+      options: ['text', 'email', 'password', 'number', 'tel', 'url'],
+    },
     placeholder: { control: 'text' },
     invalid: { control: 'boolean' },
     disabled: { control: 'boolean' },
@@ -68,7 +72,9 @@ export const Readonly: Story = {
   args: { readonly: true },
   render: (args) => ({
     components: { AtlInput },
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: '<AtlInput v-bind="args" value="Read-only value" />',
   }),
 };
@@ -151,7 +157,9 @@ export const AllVariants: Story = {
 export const Playground: Story = {
   render: (args) => ({
     components: { AtlInput },
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: '<AtlInput v-bind="args" />',
   }),
 };

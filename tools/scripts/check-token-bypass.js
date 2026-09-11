@@ -42,7 +42,7 @@ const { TOKEN_BYPASS_EXEMPT } = require('./lib/allowlists');
 const ROOT = path.resolve(__dirname, '../..');
 const TOKEN_SOURCE = path.join(
   ROOT,
-  'libs/create-workspace/src/generators/preset/files/styles/tokens.css'
+  'libs/create-workspace/src/generators/preset/files/styles/tokens.css',
 );
 
 /** Which token family a property may draw from. */
@@ -86,14 +86,25 @@ const FAMILY = {
 const BORDER_PROP = /^border(-top|-right|-bottom|-left)?(-width)?$/;
 
 /** Values that mean "nothing", not "a measurement". */
-const STRUCTURAL = new Set(['0', 'none', 'auto', 'inherit', 'initial', 'unset', 'currentColor', 'transparent']);
+const STRUCTURAL = new Set([
+  '0',
+  'none',
+  'auto',
+  'inherit',
+  'initial',
+  'unset',
+  'currentColor',
+  'transparent',
+]);
 
 const errors = [];
 const warnings = [];
 const exemptSeen = new Set();
 
 // ── the token values, as declared in the light (`:root`) block ───────────────
-const tokensCss = fs.readFileSync(TOKEN_SOURCE, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+const tokensCss = fs
+  .readFileSync(TOKEN_SOURCE, 'utf8')
+  .replace(/\/\*[\s\S]*?\*\//g, '');
 const darkAt = tokensCss.indexOf('@media (prefers-color-scheme: dark)');
 const lightBlock = darkAt === -1 ? tokensCss : tokensCss.slice(0, darkAt);
 const tokenValue = {};
@@ -104,7 +115,9 @@ for (const m of lightBlock.matchAll(/(--ui-[a-z0-9-]+)\s*:\s*([^;]+);/g)) {
 }
 
 function tokensHolding(value, family) {
-  return Object.keys(tokenValue).filter((name) => family.test(name) && tokenValue[name] === value);
+  return Object.keys(tokenValue).filter(
+    (name) => family.test(name) && tokenValue[name] === value,
+  );
 }
 
 for (const fw of FRAMEWORKS) {
@@ -113,10 +126,14 @@ for (const fw of FRAMEWORKS) {
   for (const dir of fs.readdirSync(base)) {
     const dirPath = path.join(base, dir);
     if (!fs.statSync(dirPath).isDirectory()) continue;
-    for (const file of fs.readdirSync(dirPath).filter((f) => f.endsWith('.css'))) {
+    for (const file of fs
+      .readdirSync(dirPath)
+      .filter((f) => f.endsWith('.css'))) {
       const rel = `libs/${fw}/src/lib/${dir}/${file}`;
       // Comments are stripped: a rule's own explanation may quote the literal it replaced.
-      const css = fs.readFileSync(path.join(dirPath, file), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+      const css = fs
+        .readFileSync(path.join(dirPath, file), 'utf8')
+        .replace(/\/\*[\s\S]*?\*\//g, '');
 
       for (const m of css.matchAll(/(^|[;{])\s*([a-z-]+)\s*:\s*([^;{}]+)/g)) {
         const prop = m[2];
@@ -133,14 +150,16 @@ for (const fw of FRAMEWORKS) {
           if (exempt) {
             exemptSeen.add(key);
             if (exempt.kind === 'gap') {
-              warnings.push(`[GAP] ${rel} — ${prop}: ${width[0]} still unbound. ${exempt.why}`);
+              warnings.push(
+                `[GAP] ${rel} — ${prop}: ${width[0]} still unbound. ${exempt.why}`,
+              );
             }
             continue;
           }
           errors.push(
             `[BORDER] ${rel} sets ${prop}: ${value} with a literal width. Use var(--ui-border-width) ` +
               `or var(--ui-border-width-thick); if the value is a graphic device rather than a border ` +
-              `weight, exempt it in TOKEN_BYPASS_EXEMPT with a reason.`
+              `weight, exempt it in TOKEN_BYPASS_EXEMPT with a reason.`,
           );
           continue;
         }
@@ -155,14 +174,18 @@ for (const fw of FRAMEWORKS) {
         if (exempt) {
           exemptSeen.add(key);
           if (exempt.kind === 'gap') {
-            warnings.push(`[GAP] ${rel} — ${prop}: ${value} should bind to var(${holders[0]}). ${exempt.why}`);
+            warnings.push(
+              `[GAP] ${rel} — ${prop}: ${value} should bind to var(${holders[0]}). ${exempt.why}`,
+            );
           }
           continue;
         }
         errors.push(
           `[BYPASS] ${rel} sets ${prop}: ${value}, which is exactly what ${holders
             .map((h) => `var(${h})`)
-            .join(' / ')} holds. Bind it, or exempt it in TOKEN_BYPASS_EXEMPT with a reason.`
+            .join(
+              ' / ',
+            )} holds. Bind it, or exempt it in TOKEN_BYPASS_EXEMPT with a reason.`,
         );
       }
     }
@@ -173,7 +196,7 @@ for (const fw of FRAMEWORKS) {
 for (const key of Object.keys(TOKEN_BYPASS_EXEMPT)) {
   if (!exemptSeen.has(key)) {
     errors.push(
-      `[STALE-EXEMPT] TOKEN_BYPASS_EXEMPT lists '${key}', but no stylesheet has that literal any more. Remove the entry.`
+      `[STALE-EXEMPT] TOKEN_BYPASS_EXEMPT lists '${key}', but no stylesheet has that literal any more. Remove the entry.`,
     );
   }
 }
@@ -181,10 +204,12 @@ for (const key of Object.keys(TOKEN_BYPASS_EXEMPT)) {
 for (const w of warnings) console.warn(`⚠ ${w}`);
 if (errors.length > 0) {
   for (const e of errors) console.error(`✗ ${e}`);
-  console.error(`\n${errors.length} token-bypass issue(s), ${warnings.length} warning(s).`);
+  console.error(
+    `\n${errors.length} token-bypass issue(s), ${warnings.length} warning(s).`,
+  );
   process.exit(1);
 }
 console.log(
   `✓ no literal duplicates a token in its family (${Object.keys(TOKEN_BYPASS_EXEMPT).length} documented exception(s)` +
-    `${warnings.length ? `, ${warnings.length} warning(s)` : ''}).`
+    `${warnings.length ? `, ${warnings.length} warning(s)` : ''}).`,
 );

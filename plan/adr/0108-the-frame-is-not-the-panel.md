@@ -2,11 +2,11 @@
 status: accepted
 date: 2026-09-07
 sources:
-  - "tasks/figma-parity-sweep-2026-09-07.md (found and fixed both bugs this ADR gates against; states the gap this closes)"
-  - "tools/scripts/check-figma.js ([ROOT-BOX]/[SET-CLIPS]/[ROOT-TYPE], whose severities and table conventions this reuses)"
-  - "tools/scripts/figma-snapshot.mjs (the 2b probe this extends)"
+  - 'tasks/figma-parity-sweep-2026-09-07.md (found and fixed both bugs this ADR gates against; states the gap this closes)'
+  - 'tools/scripts/check-figma.js ([ROOT-BOX]/[SET-CLIPS]/[ROOT-TYPE], whose severities and table conventions this reuses)'
+  - 'tools/scripts/figma-snapshot.mjs (the 2b probe this extends)'
   - "plan/adr/0107-the-master-states-the-primitive.md (the sibling expressibility family — derived values, viewport units, cancelled padding — this ADR's [ROOT-SIZE]/[LAYER-SIZE] also has to skip)"
-  - "this session"
+  - 'this session'
 ---
 
 # ADR-0108: The frame is not the panel
@@ -29,7 +29,7 @@ a human reading a screenshot, not a gate:
 `tools/figma/snapshot.json` records `variantAxes`, `variants`, `properties`,
 `referencedProperties`, `iconInstanceNames`, `rootPaint`, `overlays` and
 `layers` — no frame dimensions at all. `SET-CLIPS` compares the SET's frame to
-the *extent* its variants reach, which catches clipping but says nothing about
+the _extent_ its variants reach, which catches clipping but says nothing about
 whether a variant's own size is the right number. Nothing else in the gate
 reads a `width` or `height` at all. Both bugs were therefore invisible to every
 `check:figma` run by construction, not by an oversight in one rule.
@@ -68,7 +68,7 @@ have caught AtlDialog and missed AtlDrawer outright — the frame was never
 wrong, the panel inside it was. Cost: two numbers added to an existing,
 already-captured object (`rootPaint`) per variant across ~43 masters (a few
 hundred numbers, immeasurable against the snapshot's existing size); the
-descendant layer needed *no* new capture at all, since `layers[]` already
+descendant layer needed _no_ new capture at all, since `layers[]` already
 recorded `width`/`height` per named part before this check existed.
 
 **What counts as comparable.** `min-height: var(--ui-control-height-md)` and

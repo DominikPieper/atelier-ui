@@ -34,19 +34,31 @@
 :host(.variant-success) {
   background-color: var(--ui-color-success-bg);
   color: var(--ui-color-success-text);
-  border-color: color-mix(in srgb, var(--ui-color-success-text) 20%, transparent);
+  border-color: color-mix(
+    in srgb,
+    var(--ui-color-success-text) 20%,
+    transparent
+  );
 }
 
 :host(.variant-warning) {
   background-color: var(--ui-color-warning-bg);
   color: var(--ui-color-warning-text);
-  border-color: color-mix(in srgb, var(--ui-color-warning-text) 20%, transparent);
+  border-color: color-mix(
+    in srgb,
+    var(--ui-color-warning-text) 20%,
+    transparent
+  );
 }
 
 :host(.variant-danger) {
   background-color: var(--ui-color-danger-bg);
   color: var(--ui-color-danger-text);
-  border-color: color-mix(in srgb, var(--ui-color-danger-text) 20%, transparent);
+  border-color: color-mix(
+    in srgb,
+    var(--ui-color-danger-text) 20%,
+    transparent
+  );
 }
 
 /* Dismiss button */
@@ -64,7 +76,9 @@
   cursor: pointer;
   color: inherit;
   opacity: 0.7;
-  transition: opacity var(--ui-transition-fast), background-color var(--ui-transition-fast);
+  transition:
+    opacity var(--ui-transition-fast),
+    background-color var(--ui-transition-fast);
   line-height: 1;
 }
 

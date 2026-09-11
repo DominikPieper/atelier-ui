@@ -6,18 +6,18 @@ Re-verify any finding if either pin moves before acting on it.
 
 ## Priority list
 
-| # | ID | Severity | Finding | Effort |
-|---|----|----------|---------|--------|
-| 1 | TA2/ES1 | **Blocker** | The component library has no themable semantic tier: Component Tokens (15) are single-mode, so the library's dark mode — which the code ships — cannot exist in Figma at all | L |
-| 2 | ES1 | **Critical** | Figma token names *and values* diverge from `tokens.css`: `tx/primary #333E48` vs `--ui-color-text #0f172a`; no Figma token carries `--ui-color-primary #006470` except `Component:button/bg-primary`; dark surfaces `#333E48/#3F4B56` vs code `#0a1116` | L |
-| 3 | TA1 | **Critical** | Two design systems share one semantic collection: "UI Tokens" is the docs-site brand system (area/\*, cbadge/\*, Conciso business-area tints) *and* the closest thing the library has to semantics (bg/\*, tx/\*, border/\*) — library masters bind across both plus primitives | M |
-| 4 | TA4 | **Critical** | 128 of 143 variables are `ALL_SCOPES` (only Component Tokens are scoped) — color tokens pollute number pickers and vice versa | M |
-| 5 | TA3 | **Critical** | All 39 UI-Tokens colors hold raw literals, zero alias Primitives (their own descriptions call this out); Component Tokens by contrast alias 15/15 correctly | M |
-| 6 | TA5/ES1 | **Warning** | No typography tokens at all — no Text Styles (0 styles in file), no font/\* variables — while the code has `--ui-font-size/weight/line-height-*`; the Typography page is static drawings | M–L |
-| 7 | CD8 | **Warning** | Residual unbound/mode-dead fills: Figma Toast drawn dark vs code light (allowlisted, open design decision); Chat AI-avatar bound directly to primitive `ki/500`; Chat app-mockup fills unbound by design | S–M |
-| 8 | CD7 | **Warning** | Interactive state vocabulary is mostly standard, but `error` state exists only as `invalid` Booleans on form fields and Button uses `active` — fine per the known audit-tool false-positive list, document rather than rename | S |
-| 9 | FS2 | **Suggestion** | No Cover page (name/version/last-updated); page structure otherwise exemplary (Colors, Typography, Spacing & Radius, Cookbook, Icons, Components, Inventory, Workshop-Templates) | S |
-| 10 | ES4 | **Suggestion** | Component descriptions are excellent (28/29 with spec mapping + use-when) but only surfaced in Figma; the docs site duplicates this content by hand in `components.ts` | — |
+| #   | ID      | Severity       | Finding                                                                                                                                                                                                                                                                         | Effort |
+| --- | ------- | -------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------ |
+| 1   | TA2/ES1 | **Blocker**    | The component library has no themable semantic tier: Component Tokens (15) are single-mode, so the library's dark mode — which the code ships — cannot exist in Figma at all                                                                                                    | L      |
+| 2   | ES1     | **Critical**   | Figma token names _and values_ diverge from `tokens.css`: `tx/primary #333E48` vs `--ui-color-text #0f172a`; no Figma token carries `--ui-color-primary #006470` except `Component:button/bg-primary`; dark surfaces `#333E48/#3F4B56` vs code `#0a1116`                        | L      |
+| 3   | TA1     | **Critical**   | Two design systems share one semantic collection: "UI Tokens" is the docs-site brand system (area/\*, cbadge/\*, Conciso business-area tints) _and_ the closest thing the library has to semantics (bg/\*, tx/\*, border/\*) — library masters bind across both plus primitives | M      |
+| 4   | TA4     | **Critical**   | 128 of 143 variables are `ALL_SCOPES` (only Component Tokens are scoped) — color tokens pollute number pickers and vice versa                                                                                                                                                   | M      |
+| 5   | TA3     | **Critical**   | All 39 UI-Tokens colors hold raw literals, zero alias Primitives (their own descriptions call this out); Component Tokens by contrast alias 15/15 correctly                                                                                                                     | M      |
+| 6   | TA5/ES1 | **Warning**    | No typography tokens at all — no Text Styles (0 styles in file), no font/\* variables — while the code has `--ui-font-size/weight/line-height-*`; the Typography page is static drawings                                                                                        | M–L    |
+| 7   | CD8     | **Warning**    | Residual unbound/mode-dead fills: Figma Toast drawn dark vs code light (allowlisted, open design decision); Chat AI-avatar bound directly to primitive `ki/500`; Chat app-mockup fills unbound by design                                                                        | S–M    |
+| 8   | CD7     | **Warning**    | Interactive state vocabulary is mostly standard, but `error` state exists only as `invalid` Booleans on form fields and Button uses `active` — fine per the known audit-tool false-positive list, document rather than rename                                                   | S      |
+| 9   | FS2     | **Suggestion** | No Cover page (name/version/last-updated); page structure otherwise exemplary (Colors, Typography, Spacing & Radius, Cookbook, Icons, Components, Inventory, Workshop-Templates)                                                                                                | S      |
+| 10  | ES4     | **Suggestion** | Component descriptions are excellent (28/29 with spec mapping + use-when) but only surfaced in Figma; the docs site duplicates this content by hand in `components.ts`                                                                                                          | —      |
 
 ## What is already good (don't touch)
 
@@ -32,7 +32,7 @@ Re-verify any finding if either pin moves before acting on it.
 
 ### 1 · TA2/ES1 — Library dark mode is structurally impossible (Blocker, L)
 
-The code ships a dark theme (`[data-theme="dark"]` in `libs/*/src/styles/tokens.css`). In Figma, the only mode-aware collection is the docs-brand "UI Tokens"; the Component Tokens the library chrome should bind to have a single `Default` mode. Masters bound to primitives or component tokens render identically in both modes; masters bound to UI Tokens flip to *docs-site* dark values (`bg/page` dark `#333E48`), which are not the library's dark values (`--ui-color-surface` dark `#0a1116`). Net: switching the file to Dark produces a mixture of no-change and wrong-change — there is no way to preview the library's real dark rendering.
+The code ships a dark theme (`[data-theme="dark"]` in `libs/*/src/styles/tokens.css`). In Figma, the only mode-aware collection is the docs-brand "UI Tokens"; the Component Tokens the library chrome should bind to have a single `Default` mode. Masters bound to primitives or component tokens render identically in both modes; masters bound to UI Tokens flip to _docs-site_ dark values (`bg/page` dark `#333E48`), which are not the library's dark values (`--ui-color-surface` dark `#0a1116`). Net: switching the file to Dark produces a mixture of no-change and wrong-change — there is no way to preview the library's real dark rendering.
 
 **Fix (the "Token-Value-Sync" project, now precise):** create a `Library Tokens` collection with Light/Dark modes whose variables mirror `tokens.css` names 1:1 under an agreed transformation (`--ui-color-text` → `color/text`, `--ui-spacing-4` → `spacing/4`, …) and whose per-mode values are byte-equal to the code. Re-point Component Tokens to alias it; migrate master bindings from UI-Tokens/primitives onto it. Then the Toast question (finding 7) becomes answerable by switching modes.
 
@@ -50,7 +50,7 @@ Only Component Tokens are scoped. One `figma_execute` pass can set scopes by nam
 
 ### 5 · TA3 — Semantic tier holds literals (Critical, M)
 
-39/39 UI-Tokens colors are raw values. Several *cannot* alias (mode-dependent alias-target switches, documented in their descriptions), but most single-hue tints (`area/*-50` = palette `*-50/100` values, `focus/ring-outer` = `co/700`/`co/500`) can. Alias what is aliasable; document the rest as deliberate literals. Applies equally to the future Library Tokens collection: alias primitives where an exact step exists.
+39/39 UI-Tokens colors are raw values. Several _cannot_ alias (mode-dependent alias-target switches, documented in their descriptions), but most single-hue tints (`area/*-50` = palette `*-50/100` values, `focus/ring-outer` = `co/700`/`co/500`) can. Alias what is aliasable; document the rest as deliberate literals. Applies equally to the future Library Tokens collection: alias primitives where an exact step exists.
 
 ### 6 · TA5/ES1 — Typography exists only as pixels (Warning, M–L)
 

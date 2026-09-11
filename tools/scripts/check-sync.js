@@ -22,7 +22,11 @@
 
 const fs = require('fs');
 const path = require('path');
-const { isComponentDir, getComponentDirs, hasStory } = require('./lib/component-discovery');
+const {
+  isComponentDir,
+  getComponentDirs,
+  hasStory,
+} = require('./lib/component-discovery');
 
 const ROOT = path.resolve(__dirname, '../..');
 const ANGULAR_LIB = path.join(ROOT, 'libs/angular/src/lib');
@@ -65,7 +69,9 @@ for (const [label, lib] of [
     if (!fs.statSync(dirPath).isDirectory()) continue;
     if (!isComponentDir(dirPath)) continue;
     if (!hasStory(dirPath)) {
-      console.error(`[NO-STORY] ${label}/${name} has a component source but no *.stories.* file`);
+      console.error(
+        `[NO-STORY] ${label}/${name} has a component source but no *.stories.* file`,
+      );
       errors++;
     }
   }
@@ -73,7 +79,7 @@ for (const [label, lib] of [
 
 if (errors > 0) {
   console.error(
-    `\n${errors} sync issue(s) found. Mirror missing components / add the missing story.`
+    `\n${errors} sync issue(s) found. Mirror missing components / add the missing story.`,
   );
   process.exit(1);
 } else {
@@ -84,12 +90,12 @@ if (errors > 0) {
   // wrong claim is what shipped in README.md's hand-typed "31" for a long time
   // (foundation + showcase are two of these directories, not components).
   const realComponents = [...allComponents].filter((name) =>
-    isComponentDir(path.join(ANGULAR_LIB, name))
+    isComponentDir(path.join(ANGULAR_LIB, name)),
   );
   const nonComponentCount = allComponents.size - realComponents.length;
   console.log(
     `✓ All libraries are in sync (${allComponents.size} directories each: ` +
       `${realComponents.length} components + ${nonComponentCount} non-component dirs ` +
-      `(foundation, showcase); stories present for every component)`
+      `(foundation, showcase); stories present for every component)`,
   );
 }

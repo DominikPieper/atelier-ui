@@ -16,7 +16,7 @@ sources:
 ## Status
 
 Accepted. Day 2 of the two-day training now ends its Figma block with a written
-handoff document, and the prompt block that follows is written *from* that
+handoff document, and the prompt block that follows is written _from_ that
 document rather than from the canvas.
 
 ## Context
@@ -47,7 +47,7 @@ either — `skills/figma-workspace-architect/references/code-sync.md` documents
 that a `codeSpec` compares only the fields it is given, so a thin handoff
 produces a thin comparison that comes back clean.
 
-This is the same shaped hole as the *other* handoff in this material. ADR-0032
+This is the same shaped hole as the _other_ handoff in this material. ADR-0032
 places Claude Design at step 0 and step 5, and step 5 — the shareable canvas
 that shows a finished component to someone with no Figma account — is specified
 and unbuilt, blocked on per-seat access. The training was asserting both
@@ -62,7 +62,7 @@ It is a checklist, not a template: draft URL and node id, chosen variants and
 states, token bindings, the reuse-vs-new decision, the behaviour taken from the
 brief, explicit exclusions, target files, acceptance checks.
 
-Deliberately *not* chosen:
+Deliberately _not_ chosen:
 
 - **A machine-readable format.** Tempting, and wrong here. The value is that the
   participant has to decide what is in scope and write the behaviour down in
@@ -73,7 +73,7 @@ Deliberately *not* chosen:
   precisely the part Figma does not hold. An extractor would produce a confident
   document missing the same things the canvas misses.
 - **Waiting for Claude Design's step 5 to become available.** That artefact
-  solves the *outbound* handoff — showing a finished component to a viewer. This
+  solves the _outbound_ handoff — showing a finished component to a viewer. This
   one is inbound, to the agent. They are different joints, and this one is
   unblocked today.
 
@@ -107,7 +107,7 @@ counterpart to step 0.
 automatically" because an extractor would produce a confident document missing what the
 canvas misses. That reasoning holds for the behaviour half and is kept. It was applied too
 broadly to the other half: the draft URL, node id, variant axes, token bindings and
-snapshot stamps are mechanical lookups the master *does* carry, and a participant typing
+snapshot stamps are mechanical lookups the master _does_ carry, and a participant typing
 them by hand gains nothing but transcription errors. Decided in
 `plan/design-skills-blueprint.md` § 8 (decision 6): the `design-to-code` skill may
 prefill **provenance and scope** from the master; **behaviour, explicit exclusions and
@@ -127,4 +127,4 @@ artefact: each behaviour line is meant to become a `play` or test title, each ex
 block entry, and the closing check reads those, not the document. "Nothing enforces it"
 in the Consequences therefore changes meaning: the document itself is still ungated, and
 that is fine, because what it produces is gated. The rejection of a machine-readable
-*format for the document* stands.
+_format for the document_ stands.

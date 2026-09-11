@@ -59,15 +59,24 @@ export class AtlOption implements OnInit, OnDestroy {
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
 
   /** @internal */
-  protected readonly isSelected = computed(() => this.context.value() === this.optionValue());
+  protected readonly isSelected = computed(
+    () => this.context.value() === this.optionValue(),
+  );
 
   /** @internal */
-  protected readonly isActive = computed(() => this.context.activeOptionId() === this.optionId);
+  protected readonly isActive = computed(
+    () => this.context.activeOptionId() === this.optionId,
+  );
 
   ngOnInit(): void {
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
     const labelText = (this.elementRef.nativeElement.textContent ?? '').trim();
-    this.context.registerOption(this.optionId, this.optionValue(), labelText, this.disabled());
+    this.context.registerOption(
+      this.optionId,
+      this.optionValue(),
+      labelText,
+      this.disabled(),
+    );
   }
 
   ngOnDestroy(): void {

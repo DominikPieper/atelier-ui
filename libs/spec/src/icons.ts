@@ -44,12 +44,31 @@ export const ATL_ICON_GEOMETRY: Record<string, AtlIconGeometry> = {
   // `success` is a status icon and sits beside the circled danger/error/info, so it
   // is a circled check. `check` is the bare mark used inside controls (combobox
   // option, stepper step, copy confirmation) — two names, two shapes, on purpose.
-  success: { kind: 'stroke', paths: ['M12 3A9 9 0 1 0 12 21A9 9 0 1 0 12 3', 'M8 12L11 15L16 9'] },
+  success: {
+    kind: 'stroke',
+    paths: ['M12 3A9 9 0 1 0 12 21A9 9 0 1 0 12 3', 'M8 12L11 15L16 9'],
+  },
   check: { kind: 'stroke', paths: ['M20 6L9 17L4 12'] },
-  warning: { kind: 'stroke', paths: ['M12 3L22 20H2L12 3Z', 'M12 9V14', 'M12 17.5V17.6'] },
-  danger: { kind: 'stroke', paths: ['M12 3A9 9 0 1 0 12 21A9 9 0 1 0 12 3', 'M15 9L9 15', 'M9 9L15 15'] },
-  error: { kind: 'stroke', paths: ['M12 3A9 9 0 1 0 12 21A9 9 0 1 0 12 3', 'M12 7V13', 'M12 16.5V16.6'] },
-  info: { kind: 'stroke', paths: ['M12 3A9 9 0 1 0 12 21A9 9 0 1 0 12 3', 'M12 11V17', 'M12 7.5V7.6'] },
+  warning: {
+    kind: 'stroke',
+    paths: ['M12 3L22 20H2L12 3Z', 'M12 9V14', 'M12 17.5V17.6'],
+  },
+  danger: {
+    kind: 'stroke',
+    paths: ['M12 3A9 9 0 1 0 12 21A9 9 0 1 0 12 3', 'M15 9L9 15', 'M9 9L15 15'],
+  },
+  error: {
+    kind: 'stroke',
+    paths: [
+      'M12 3A9 9 0 1 0 12 21A9 9 0 1 0 12 3',
+      'M12 7V13',
+      'M12 16.5V16.6',
+    ],
+  },
+  info: {
+    kind: 'stroke',
+    paths: ['M12 3A9 9 0 1 0 12 21A9 9 0 1 0 12 3', 'M12 11V17', 'M12 7.5V7.6'],
+  },
 
   // ── direction ─────────────────────────────────────────────────────────────
   'chevron-up': { kind: 'stroke', paths: ['M6 15L12 9L18 15'] },
@@ -59,8 +78,14 @@ export const ATL_ICON_GEOMETRY: Record<string, AtlIconGeometry> = {
   // Two chevrons, for "jump to the first / last page" as against "one step".
   // AtlPagination drew these as the guillemets « and », which are quotation marks
   // in typography and were arrows only by resemblance (ADR-0055).
-  'chevron-double-left': { kind: 'stroke', paths: ['M18 6L12 12L18 18', 'M11 6L5 12L11 18'] },
-  'chevron-double-right': { kind: 'stroke', paths: ['M6 6L12 12L6 18', 'M13 6L19 12L13 18'] },
+  'chevron-double-left': {
+    kind: 'stroke',
+    paths: ['M18 6L12 12L18 18', 'M11 6L5 12L11 18'],
+  },
+  'chevron-double-right': {
+    kind: 'stroke',
+    paths: ['M6 6L12 12L6 18', 'M13 6L19 12L13 18'],
+  },
   'arrow-left': { kind: 'stroke', paths: ['M19 12H5', 'M11 6L5 12L11 18'] },
   'arrow-right': { kind: 'stroke', paths: ['M5 12H19', 'M13 6L19 12L13 18'] },
 
@@ -71,11 +96,24 @@ export const ATL_ICON_GEOMETRY: Record<string, AtlIconGeometry> = {
   // ── actions ───────────────────────────────────────────────────────────────
   close: { kind: 'stroke', paths: ['M18 6L6 18', 'M6 6L18 18'] },
   add: { kind: 'stroke', paths: ['M12 5V19', 'M5 12H19'] },
-  more: { kind: 'fill', paths: ['M6 10A2 2 0 1 0 6 14A2 2 0 1 0 6 10', 'M12 10A2 2 0 1 0 12 14A2 2 0 1 0 12 10', 'M18 10A2 2 0 1 0 18 14A2 2 0 1 0 18 10'] },
+  more: {
+    kind: 'fill',
+    paths: [
+      'M6 10A2 2 0 1 0 6 14A2 2 0 1 0 6 10',
+      'M12 10A2 2 0 1 0 12 14A2 2 0 1 0 12 10',
+      'M18 10A2 2 0 1 0 18 14A2 2 0 1 0 18 10',
+    ],
+  },
   copy: { kind: 'stroke', paths: ['M9 9H20V20H9V9Z', 'M15 5H4V16H5'] },
   paste: { kind: 'stroke', paths: ['M8 4H16V7H8V4Z', 'M6 6H5V20H19V6H18'] },
-  edit: { kind: 'stroke', paths: ['M4 20H8L19 9L15 5L4 16V20Z', 'M14 6L18 10'] },
-  delete: { kind: 'stroke', paths: ['M4 7H20', 'M6 7V20H18V7', 'M10 4H14', 'M10 11V16', 'M14 11V16'] },
+  edit: {
+    kind: 'stroke',
+    paths: ['M4 20H8L19 9L15 5L4 16V20Z', 'M14 6L18 10'],
+  },
+  delete: {
+    kind: 'stroke',
+    paths: ['M4 7H20', 'M6 7V20H18V7', 'M10 4H14', 'M10 11V16', 'M14 11V16'],
+  },
 
   // ── content ───────────────────────────────────────────────────────────────
   person: {

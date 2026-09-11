@@ -75,7 +75,9 @@ import { AtlRadio } from './radio/atl-radio';
           <div class="preferences-list">
             <atl-checkbox>Enable email notifications</atl-checkbox>
             <atl-checkbox>Show profile publicly</atl-checkbox>
-            <atl-checkbox [checked]="true">Enable two-factor authentication</atl-checkbox>
+            <atl-checkbox [checked]="true"
+              >Enable two-factor authentication</atl-checkbox
+            >
           </div>
 
           <div class="form-field" style="margin-top: 1.5rem;">
@@ -109,7 +111,9 @@ import { AtlRadio } from './radio/atl-radio';
         <atl-button variant="primary" size="lg">Get Started</atl-button>
         <atl-button variant="secondary" size="md">Learn More</atl-button>
         <atl-button variant="outline" size="sm">View Docs</atl-button>
-        <atl-button variant="primary" [loading]="true" size="md">Saving</atl-button>
+        <atl-button variant="primary" [loading]="true" size="md"
+          >Saving</atl-button
+        >
       </div>
     </div>
   `,

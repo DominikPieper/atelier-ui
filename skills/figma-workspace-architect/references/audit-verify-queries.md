@@ -391,7 +391,7 @@ If the team has Branching, verify that recent migrations went through a branch.
 
 ## Live-session re-verify — `figma_get_design_changes`
 
-When re-verifying *during* an active Build/Migrate session (i.e. you just made a change and want to confirm a finding moved), `figma_get_design_changes` returns the WebSocket-buffered events since the last call. **Caveat:** this is not a historical git-style diff — only events from the current connection are buffered. For audits older than the current session, fall back to `figma_get_file_data` snapshot comparison against the prior `lastModified` pin.
+When re-verifying _during_ an active Build/Migrate session (i.e. you just made a change and want to confirm a finding moved), `figma_get_design_changes` returns the WebSocket-buffered events since the last call. **Caveat:** this is not a historical git-style diff — only events from the current connection are buffered. For audits older than the current session, fall back to `figma_get_file_data` snapshot comparison against the prior `lastModified` pin.
 
 ## Cross-source greps — quick reference
 

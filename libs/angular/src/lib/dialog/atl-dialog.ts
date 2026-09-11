@@ -41,9 +41,9 @@ let nextId = 0;
     {
       provide: ATL_DIALOG,
       useFactory: (dialog: AtlDialog) => ({
-      headerId: dialog.headerId,
-      close: () => dialog.open.set(false),
-    }),
+        headerId: dialog.headerId,
+        close: () => dialog.open.set(false),
+      }),
       deps: [AtlDialog],
     },
   ],
@@ -53,7 +53,7 @@ let nextId = 0;
       #dialogEl
       class="atl-dialog"
       [attr.aria-label]="ariaLabel() || null"
-      [attr.aria-labelledby]="ariaLabel() ? null : (ariaLabelledby() || headerId)"
+      [attr.aria-labelledby]="ariaLabel() ? null : ariaLabelledby() || headerId"
       aria-modal="true"
       [cdkTrapFocus]="open()"
       (cancel)="onCancel($event)"
@@ -99,11 +99,14 @@ export class AtlDialog {
   readonly headerId = `atl-dialog-header-${nextId}`;
 
   protected readonly dialogId = `atl-dialog-${nextId++}`;
-  protected readonly dialogRef = viewChild<ElementRef<HTMLDialogElement>>('dialogEl');
+  protected readonly dialogRef =
+    viewChild<ElementRef<HTMLDialogElement>>('dialogEl');
   private readonly triggerEl = signal<HTMLElement | null>(null);
 
   protected readonly panelClass = computed(() => `panel size-${this.size()}`);
-  protected readonly hostClasses = computed(() => (this.open() ? 'is-open' : ''));
+  protected readonly hostClasses = computed(() =>
+    this.open() ? 'is-open' : '',
+  );
 
   constructor() {
     effect(() => {
@@ -126,11 +129,13 @@ export class AtlDialog {
   }
 
   protected onBackdropClick(event: MouseEvent): void {
-    if (this.closeOnBackdrop() && event.target === this.dialogRef()?.nativeElement) {
+    if (
+      this.closeOnBackdrop() &&
+      event.target === this.dialogRef()?.nativeElement
+    ) {
       this.open.set(false);
     }
   }
-
 }
 
 /**

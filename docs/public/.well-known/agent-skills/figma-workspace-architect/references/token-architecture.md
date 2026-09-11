@@ -10,14 +10,14 @@ Use three Collections, one per tier. The tiers are named here as they typically 
 
 What it is: every raw value that exists in the design language. Color ramps, the spacing scale, the radius scale, the shadow values, the type scale.
 
-What it is **not**: anything semantic. Nothing in this collection should reference what it's *for*.
+What it is **not**: anything semantic. Nothing in this collection should reference what it's _for_.
 
-| Looks like                        | Don't do                              |
-|-----------------------------------|---------------------------------------|
-| `color/blue/500` = `#2563EB`      | `color/primary/default`               |
-| `space/4` = `16`                  | `space/card-padding`                  |
-| `radius/md` = `8`                 | `radius/button`                       |
-| `font-size/300` = `16`            | `font-size/body`                      |
+| Looks like                   | Don't do                |
+| ---------------------------- | ----------------------- |
+| `color/blue/500` = `#2563EB` | `color/primary/default` |
+| `space/4` = `16`             | `space/card-padding`    |
+| `radius/md` = `8`            | `radius/button`         |
+| `font-size/300` = `16`       | `font-size/body`        |
 
 Modes: usually **none**. Primitives are the same regardless of theme — that's why they're primitives.
 
@@ -25,14 +25,14 @@ Scope: each variable narrowly scoped to its data type's natural pickers (e.g. co
 
 ### Semantic (a.k.a. Tokens, Aliases)
 
-What it is: every choice the design language has made about *where* a primitive applies. These variables almost never hold raw values — they alias Primitives.
+What it is: every choice the design language has made about _where_ a primitive applies. These variables almost never hold raw values — they alias Primitives.
 
-| Looks like                                            | What it aliases (Light / Dark)              |
-|-------------------------------------------------------|---------------------------------------------|
-| `color/text/primary` → `color/neutral/900`            | Light / `color/neutral/100` Dark            |
-| `color/surface/raised` → `color/neutral/0`            | Light / `color/neutral/800` Dark            |
-| `color/border/subtle` → `color/neutral/200`           | Light / `color/neutral/700` Dark            |
-| `space/inline/md` → `space/4`                         | (no mode change)                            |
+| Looks like                                  | What it aliases (Light / Dark)   |
+| ------------------------------------------- | -------------------------------- |
+| `color/text/primary` → `color/neutral/900`  | Light / `color/neutral/100` Dark |
+| `color/surface/raised` → `color/neutral/0`  | Light / `color/neutral/800` Dark |
+| `color/border/subtle` → `color/neutral/200` | Light / `color/neutral/700` Dark |
+| `space/inline/md` → `space/4`               | (no mode change)                 |
 
 Modes: **this is where Light/Dark/Brand modes live.** The Primitive collection stays single-mode; the Semantic collection swaps which Primitive each token resolves to per mode.
 
@@ -50,12 +50,12 @@ Modes: rarely. State (hover, active) is usually a Variant property, not a mode.
 
 The architecture above generalizes across all four Variable types. Use the right type for each value — not everything is a color.
 
-| Type      | Use for                                                                                  | Scope examples                                       |
-|-----------|------------------------------------------------------------------------------------------|------------------------------------------------------|
-| **COLOR** | Fills, strokes, text colors, background surfaces.                                        | `FRAME_FILL`, `TEXT_FILL`, `STROKE_COLOR`            |
-| **FLOAT** (Number) | Spacing, radius, stroke width, font-size, line-height, opacity, fixed widths/heights. | `GAP`, `CORNER_RADIUS`, `STROKE_FLOAT`, `FONT_SIZE`, `LINE_HEIGHT`, `OPACITY`, `WIDTH_HEIGHT` |
-| **STRING** | Font family, font style, locale-specific labels, marketing copy that needs to vary per mode/brand. | `FONT_FAMILY`, `FONT_STYLE`                          |
-| **BOOLEAN** | System flags consumed by component visibility-toggles or by code (`feature/reduce-motion`, `density/compact`). Not bound into design properties via scopes. | (no scope — boolean variables are exempt from the picker model) |
+| Type               | Use for                                                                                                                                                     | Scope examples                                                                                |
+| ------------------ | ----------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------- |
+| **COLOR**          | Fills, strokes, text colors, background surfaces.                                                                                                           | `FRAME_FILL`, `TEXT_FILL`, `STROKE_COLOR`                                                     |
+| **FLOAT** (Number) | Spacing, radius, stroke width, font-size, line-height, opacity, fixed widths/heights.                                                                       | `GAP`, `CORNER_RADIUS`, `STROKE_FLOAT`, `FONT_SIZE`, `LINE_HEIGHT`, `OPACITY`, `WIDTH_HEIGHT` |
+| **STRING**         | Font family, font style, locale-specific labels, marketing copy that needs to vary per mode/brand.                                                          | `FONT_FAMILY`, `FONT_STYLE`                                                                   |
+| **BOOLEAN**        | System flags consumed by component visibility-toggles or by code (`feature/reduce-motion`, `density/compact`). Not bound into design properties via scopes. | (no scope — boolean variables are exempt from the picker model)                               |
 
 A workspace that only uses COLOR variables is incomplete. Spacing, radius, and typography belong on FLOAT and STRING variables; a hardcoded `16px` or `'Inter'` in a component is the same drift problem as a hardcoded `#007070`.
 
@@ -91,12 +91,12 @@ Adding a Mode duplicates every value in the collection for that mode, so adding 
 
 Figma caps the number of Modes per Collection by plan. Check the team's tier **before** proposing a multi-axis Mode topology — if Theme × Density × Brand crosses the ceiling, the design has to collapse modes (combine Density into the Brand axis) or split into separate library files.
 
-| Plan        | Modes / Collection |
-|-------------|--------------------|
-| Free        | 1 (no theming)     |
-| Pro         | 4                  |
-| Org         | 10                 |
-| Enterprise  | 40 (post-Schema 2025) |
+| Plan       | Modes / Collection    |
+| ---------- | --------------------- |
+| Free       | 1 (no theming)        |
+| Pro        | 4                     |
+| Org        | 10                    |
+| Enterprise | 40 (post-Schema 2025) |
 
 Audit signal:
 
@@ -104,7 +104,7 @@ Audit signal:
 - Mode count = ceiling − 1 → Warning. One more axis exhausts the budget.
 - Plan unknown but designs assume ≥4 modes → ask the user; default planning assumption is Pro (4).
 
-The cheapest fix when a design exceeds the budget is usually to lift one axis (e.g. Brand) into a *separate library file* — Brand A and Brand B each consume the shared Foundations library and override only the brand-specific Semantic values. Each library still has its own mode budget for Theme + Density.
+The cheapest fix when a design exceeds the budget is usually to lift one axis (e.g. Brand) into a _separate library file_ — Brand A and Brand B each consume the shared Foundations library and override only the brand-specific Semantic values. Each library still has its own mode budget for Theme + Density.
 
 ## Variable Scopes — the silent killer
 
@@ -112,25 +112,25 @@ Default scope is `ALL_SCOPES`. That means a `color/text/primary` variable shows 
 
 Set scopes deliberately for every Variable. Scopes are set via `figma_execute` calling `variable.scopes = [...]` on the Plugin API.
 
-| Variable purpose                    | Scopes                                             |
-|-------------------------------------|----------------------------------------------------|
-| Background / surface color          | `FRAME_FILL`, `SHAPE_FILL`                         |
-| Text color                          | `TEXT_FILL`                                        |
-| Border color                        | `STROKE_COLOR`                                     |
-| Icon color (if separate from text)  | `SHAPE_FILL` (or a custom Effect Style on icons)   |
-| Spacing inside a layout             | `GAP`                                              |
-| Padding                             | `GAP` (Auto Layout uses `GAP` for padding too)     |
-| Width / height fixed                | `WIDTH_HEIGHT`                                     |
-| Border radius                       | `CORNER_RADIUS`                                    |
-| Stroke width                        | `STROKE_FLOAT`                                     |
-| Opacity                             | `OPACITY`                                          |
-| Font size                           | `FONT_SIZE`                                        |
-| Font weight (numeric)               | `FONT_WEIGHT`                                      |
-| Line height                         | `LINE_HEIGHT`                                      |
-| Letter spacing                      | `LETTER_SPACING`                                   |
-| Font family (string)                | `FONT_FAMILY`                                      |
-| Font style (string)                 | `FONT_STYLE`                                       |
-| Visibility toggle (boolean)         | (booleans don't need scopes — they go on the layer)|
+| Variable purpose                   | Scopes                                              |
+| ---------------------------------- | --------------------------------------------------- |
+| Background / surface color         | `FRAME_FILL`, `SHAPE_FILL`                          |
+| Text color                         | `TEXT_FILL`                                         |
+| Border color                       | `STROKE_COLOR`                                      |
+| Icon color (if separate from text) | `SHAPE_FILL` (or a custom Effect Style on icons)    |
+| Spacing inside a layout            | `GAP`                                               |
+| Padding                            | `GAP` (Auto Layout uses `GAP` for padding too)      |
+| Width / height fixed               | `WIDTH_HEIGHT`                                      |
+| Border radius                      | `CORNER_RADIUS`                                     |
+| Stroke width                       | `STROKE_FLOAT`                                      |
+| Opacity                            | `OPACITY`                                           |
+| Font size                          | `FONT_SIZE`                                         |
+| Font weight (numeric)              | `FONT_WEIGHT`                                       |
+| Line height                        | `LINE_HEIGHT`                                       |
+| Letter spacing                     | `LETTER_SPACING`                                    |
+| Font family (string)               | `FONT_FAMILY`                                       |
+| Font style (string)                | `FONT_STYLE`                                        |
+| Visibility toggle (boolean)        | (booleans don't need scopes — they go on the layer) |
 
 Audit signal: a Primitive that's only ever consumed via a Semantic alias should still be scoped — because the alias inherits the Primitive's scope intersected with its own. A wide-scoped Primitive widens the alias unintentionally.
 
@@ -149,6 +149,7 @@ The naming convention should match the codebase as closely as possible. Variable
 ```
 
 Examples:
+
 - `color/text/primary` → `color.text.primary` in CSS-like
 - `color/text/primary/disabled` → state suffix when needed
 - `space/inline/md` → inline spacing, medium
@@ -160,7 +161,7 @@ Examples:
 - T-shirt sizes when the codebase uses numbers (`sm/md/lg` vs. `2/4/8`) — pick one, stay consistent
 - Color names at the Semantic tier (`color/blue/primary` — the whole point of Semantics is that the color name is hidden)
 - Plurals (`colors/text` rather than `color/text`) — keep singular, it reads better in the picker
-- Underscores in user-facing variable names (codebase compatibility) — the `_`/`.` prefix is reserved for *unpublished* component names, not variables
+- Underscores in user-facing variable names (codebase compatibility) — the `_`/`.` prefix is reserved for _unpublished_ component names, not variables
 
 ## Anti-patterns checklist
 

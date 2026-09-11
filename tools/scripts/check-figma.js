@@ -79,7 +79,7 @@ const UPDATE_BASELINE = process.argv.includes('--update-baseline');
  *  rather than a path (ADR-0066's actual complaint was permanence). Written once, on the
  *  first --update-baseline; never overwritten afterwards, so an edited note survives. */
 const BASELINE_NOTE =
-  'Per-check RATCHET findings for check:figma. The gate PASSES while a master\'s findings are exactly the ' +
+  "Per-check RATCHET findings for check:figma. The gate PASSES while a master's findings are exactly the " +
   'ones recorded here, FAILS when one APPEARS that is not recorded (naming it), and FAILS when a recorded ' +
   'one DISAPPEARS without this file being updated — an improvement nobody records can silently reverse, ' +
   'which is the rule [STALE-EXEMPTION] already applies to allowlist entries. FINDINGS AND NOT COUNTS: a ' +
@@ -91,7 +91,7 @@ const BASELINE_NOTE =
   '(tasks/type-role-resolution-2026-08-28.md). This is NOT an allowlist. tools/scripts/lib/allowlists.js ' +
   'answers "this one is exempt forever"; this file answers "this many are owed". Never record the same ' +
   'defect in both. WHEN A MASTER IS CLEAR: its key disappears on the next update. WHEN A ' +
-  'CHECK\'S ENTRY IS GONE: delete the ratchet and make that check a plain blocker. Update with ' +
+  "CHECK'S ENTRY IS GONE: delete the ratchet and make that check a plain blocker. Update with " +
   '`node tools/scripts/check-figma.js --update-baseline` — never by hand, except the `why` and `kind` ' +
   'fields, which the writer preserves. See plan/adr/0079-type-does-not-need-the-painted-box.md and ' +
   'plan/adr/0080-a-guard-that-skips-is-not-a-check.md.';
@@ -100,15 +100,21 @@ const METADATA_INDEX = path.join(ROOT, 'libs/spec/src/metadata/index.ts');
 const METADATA_DIR = path.join(ROOT, 'libs/spec/src/metadata');
 const TOKENS_FILE = path.join(
   ROOT,
-  'libs/create-workspace/src/generators/preset/files/styles/tokens.css'
+  'libs/create-workspace/src/generators/preset/files/styles/tokens.css',
 );
 
 // Severity → bucket. BLOCKER + CRITICAL fail the build; WARNING is advisory.
 const errors = []; // { sev, tag, msg }
 const warnings = [];
-function blocker(tag, msg) { errors.push({ sev: 'BLOCKER', tag, msg }); }
-function critical(tag, msg) { errors.push({ sev: 'CRITICAL', tag, msg }); }
-function warning(tag, msg) { warnings.push({ sev: 'WARNING', tag, msg }); }
+function blocker(tag, msg) {
+  errors.push({ sev: 'BLOCKER', tag, msg });
+}
+function critical(tag, msg) {
+  errors.push({ sev: 'CRITICAL', tag, msg });
+}
+function warning(tag, msg) {
+  warnings.push({ sev: 'WARNING', tag, msg });
+}
 
 /** RATCHETED findings: tag -> master -> { count, details }. Not a fourth severity —
  *  a finding routed here is a real defect that nobody can fix today, so it is judged
@@ -126,7 +132,10 @@ function ratchet(tag, label, count, details) {
   if (!ratcheted.has(tag)) ratcheted.set(tag, new Map());
   const per = ratcheted.get(tag);
   const prev = per.get(label) || { count: 0, details: [] };
-  per.set(label, { count: prev.count + count, details: [...prev.details, ...details] });
+  per.set(label, {
+    count: prev.count + count,
+    details: [...prev.details, ...details],
+  });
 }
 
 /** Allowlisted? Key is `selector:check:detail` — same exact-string idiom as the
@@ -158,10 +167,17 @@ const padWarnings = new Map();
  *  see BLOCK_HEIGHT_DERIVED below, which ADR-0107 carved out on its own terms.
  */
 const SPACING_PX = (() => {
-  const css = fs.readFileSync(TOKENS_FILE, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+  const css = fs
+    .readFileSync(TOKENS_FILE, 'utf8')
+    .replace(/\/\*[\s\S]*?\*\//g, '');
   const out = new Map();
-  for (const m of css.matchAll(/--ui-(spacing-[0-9]+)\s*:\s*([0-9.]+)rem\s*;/g)) {
-    out.set(Math.round(parseFloat(m[2]) * 16 * 100) / 100, m[1].replace('spacing-', 'spacing/'));
+  for (const m of css.matchAll(
+    /--ui-(spacing-[0-9]+)\s*:\s*([0-9.]+)rem\s*;/g,
+  )) {
+    out.set(
+      Math.round(parseFloat(m[2]) * 16 * 100) / 100,
+      m[1].replace('spacing-', 'spacing/'),
+    );
   }
   return out;
 })();
@@ -186,7 +202,14 @@ const SPACING_PX = (() => {
  *
  *  The INLINE axis is unaffected: ADR-0107 is explicit that inline padding stays
  *  a stated design value, bound to a Figma Variable like any other. */
-const BLOCK_HEIGHT_DERIVED = new Set(['AtlButton', 'AtlInput', 'AtlBadge', 'AtlTextarea', 'AtlSelect', 'AtlTab']);
+const BLOCK_HEIGHT_DERIVED = new Set([
+  'AtlButton',
+  'AtlInput',
+  'AtlBadge',
+  'AtlTextarea',
+  'AtlSelect',
+  'AtlTab',
+]);
 function allowed(selector, check, detail) {
   const key = `${selector}:${check}:${detail}`;
   if (FIGMA_CONFORMANCE_EXCEPTIONS.has(key)) {
@@ -201,11 +224,13 @@ function allowed(selector, check, detail) {
  *  subject, and nothing would have said so — an excuse for a defect that no longer
  *  exists reads, to the next person, as a defect still being excused (ADR-0068). */
 function checkStaleExemptions() {
-  const stale = [...FIGMA_CONFORMANCE_EXCEPTIONS].filter((k) => !exemptionsUsed.has(k));
+  const stale = [...FIGMA_CONFORMANCE_EXCEPTIONS].filter(
+    (k) => !exemptionsUsed.has(k),
+  );
   if (!stale.length) return;
   warning(
     'STALE-EXEMPTION',
-    `${stale.length} allowlist entr${stale.length > 1 ? 'ies' : 'y'} suppressed nothing this run: ${stale.join(', ')}. Either the defect was fixed — delete the entry — or the check that consulted it no longer runs, which is the more interesting case.`
+    `${stale.length} allowlist entr${stale.length > 1 ? 'ies' : 'y'} suppressed nothing this run: ${stale.join(', ')}. Either the defect was fixed — delete the entry — or the check that consulted it no longer runs, which is the more interesting case.`,
   );
 }
 
@@ -217,7 +242,7 @@ if (!fs.existsSync(SNAPSHOT_FILE)) {
   console.error(
     `✗ [SNAPSHOT] ${path.relative(ROOT, SNAPSHOT_FILE)} not found.\n` +
       `\nThe Figma gate runs offline against a committed snapshot. Generate it with a\n` +
-      `connected Figma Desktop Bridge:  npm run figma:snapshot`
+      `connected Figma Desktop Bridge:  npm run figma:snapshot`,
   );
   process.exit(1);
 }
@@ -226,12 +251,18 @@ let snapshot;
 try {
   snapshot = JSON.parse(fs.readFileSync(SNAPSHOT_FILE, 'utf8'));
 } catch (err) {
-  console.error(`✗ [SNAPSHOT] ${path.relative(ROOT, SNAPSHOT_FILE)} is not valid JSON: ${err.message}`);
+  console.error(
+    `✗ [SNAPSHOT] ${path.relative(ROOT, SNAPSHOT_FILE)} is not valid JSON: ${err.message}`,
+  );
   process.exit(1);
 }
-if (!snapshot || !Array.isArray(snapshot.components) || snapshot.components.length === 0) {
+if (
+  !snapshot ||
+  !Array.isArray(snapshot.components) ||
+  snapshot.components.length === 0
+) {
   console.error(
-    `✗ [SNAPSHOT] ${path.relative(ROOT, SNAPSHOT_FILE)} has no components. Re-run npm run figma:snapshot.`
+    `✗ [SNAPSHOT] ${path.relative(ROOT, SNAPSHOT_FILE)} has no components. Re-run npm run figma:snapshot.`,
   );
   process.exit(1);
 }
@@ -244,7 +275,7 @@ if (!snapshot || !Array.isArray(snapshot.components) || snapshot.components.leng
 if (!fs.existsSync(TEXT_NODES_FILE)) {
   console.error(
     `✗ [TEXT-SNAPSHOT] ${TEXT_NODES_REL} not found.\n` +
-      `\nIt is written by the same connected refresh as snapshot.json:  npm run figma:snapshot`
+      `\nIt is written by the same connected refresh as snapshot.json:  npm run figma:snapshot`,
   );
   process.exit(1);
 }
@@ -252,11 +283,19 @@ let textNodes;
 try {
   textNodes = JSON.parse(fs.readFileSync(TEXT_NODES_FILE, 'utf8'));
 } catch (err) {
-  console.error(`✗ [TEXT-SNAPSHOT] ${TEXT_NODES_REL} is not valid JSON: ${err.message}`);
+  console.error(
+    `✗ [TEXT-SNAPSHOT] ${TEXT_NODES_REL} is not valid JSON: ${err.message}`,
+  );
   process.exit(1);
 }
-if (!textNodes || !Array.isArray(textNodes.masters) || textNodes.masters.length === 0) {
-  console.error(`✗ [TEXT-SNAPSHOT] ${TEXT_NODES_REL} has no masters. Re-run npm run figma:snapshot.`);
+if (
+  !textNodes ||
+  !Array.isArray(textNodes.masters) ||
+  textNodes.masters.length === 0
+) {
+  console.error(
+    `✗ [TEXT-SNAPSHOT] ${TEXT_NODES_REL} has no masters. Re-run npm run figma:snapshot.`,
+  );
   process.exit(1);
 }
 // The two files are written by ONE run. A gate that reads one against the other's
@@ -266,7 +305,7 @@ if ((textNodes.meta || {}).generatedAt !== (snapshot.meta || {}).generatedAt) {
   console.error(
     `✗ [TEXT-SNAPSHOT] ${TEXT_NODES_REL} was generated at ${(textNodes.meta || {}).generatedAt} but ` +
       `snapshot.json at ${(snapshot.meta || {}).generatedAt}. The two are written by one run — ` +
-      `re-run npm run figma:snapshot so both describe the same document.`
+      `re-run npm run figma:snapshot so both describe the same document.`,
   );
   process.exit(1);
 }
@@ -301,7 +340,8 @@ function specBooleans(name, seen = new Set()) {
   seen.add(name);
   const entry = specShapes.get(name);
   const out = new Set(entry.booleans);
-  for (const parent of entry.parents) for (const f of specBooleans(parent, seen)) out.add(f);
+  for (const parent of entry.parents)
+    for (const f of specBooleans(parent, seen)) out.add(f);
   for (const o of entry.omitted) out.delete(o);
   return out;
 }
@@ -312,7 +352,8 @@ function specStrings(name, seen = new Set()) {
   seen.add(name);
   const entry = specShapes.get(name);
   const out = new Set(entry.strings);
-  for (const parent of entry.parents) for (const f of specStrings(parent, seen)) out.add(f);
+  for (const parent of entry.parents)
+    for (const f of specStrings(parent, seen)) out.add(f);
   for (const o of entry.omitted) out.delete(o);
   return out;
 }
@@ -323,19 +364,24 @@ function specFields(name, seen = new Set()) {
   seen.add(name);
   const entry = specShapes.get(name);
   const out = new Set(entry.fields);
-  for (const parent of entry.parents) for (const f of specFields(parent, seen)) out.add(f);
+  for (const parent of entry.parents)
+    for (const f of specFields(parent, seen)) out.add(f);
   for (const o of entry.omitted) out.delete(o);
   return out;
 }
 
-const registry = parseExportedVars(METADATA_INDEX).COMPONENT_METADATA_REGISTRY || {};
+const registry =
+  parseExportedVars(METADATA_INDEX).COMPONENT_METADATA_REGISTRY || {};
 const metadataCache = new Map();
 function metadataForSpec(specName) {
   const moduleName = registry[specName];
   if (!moduleName) return null;
   if (!metadataCache.has(moduleName)) {
     const file = path.join(METADATA_DIR, `${moduleName}.metadata.ts`);
-    metadataCache.set(moduleName, fs.existsSync(file) ? parseExportedVars(file).metadata : null);
+    metadataCache.set(
+      moduleName,
+      fs.existsSync(file) ? parseExportedVars(file).metadata : null,
+    );
   }
   return metadataCache.get(moduleName);
 }
@@ -358,7 +404,9 @@ for (const comp of snapshot.components) {
       .filter(([, t]) => t === 'BOOLEAN')
       .map(([k]) => k.split('#')[0]);
     const declared = new Set(realBooleans);
-    for (const m of (comp.description || '').matchAll(/^- Boolean `([^`]+)`:([^\n]*)$/gm)) {
+    for (const m of (comp.description || '').matchAll(
+      /^- Boolean `([^`]+)`:([^\n]*)$/gm,
+    )) {
       declared.add(m[1]);
       // `inherited from X.field` is the honest form for a state a component reads from
       // its parent rather than declaring: AtlRadio draws `invalid` because
@@ -369,9 +417,15 @@ for (const comp of snapshot.components) {
       if (inherited) {
         const [, iface, field] = inherited;
         if (!specShapes.has(iface)) {
-          warning('BOOL-CLAIM', `${comp.name}: Boolean \`${m[1]}\` says it is inherited from ${iface}.${field}, and no such interface is exported from libs/spec.`);
+          warning(
+            'BOOL-CLAIM',
+            `${comp.name}: Boolean \`${m[1]}\` says it is inherited from ${iface}.${field}, and no such interface is exported from libs/spec.`,
+          );
         } else if (!specFields(iface).has(field)) {
-          warning('BOOL-CLAIM', `${comp.name}: Boolean \`${m[1]}\` says it is inherited from ${iface}.${field}, and ${iface} has no field \`${field}\`.`);
+          warning(
+            'BOOL-CLAIM',
+            `${comp.name}: Boolean \`${m[1]}\` says it is inherited from ${iface}.${field}, and ${iface} has no field \`${field}\`.`,
+          );
         }
         continue;
       }
@@ -379,16 +433,25 @@ for (const comp of snapshot.components) {
       if (!mapping) continue; // free prose: a Figma-only toggle, not a spec claim
       const [, iface, field] = mapping;
       if (!specShapes.has(iface)) {
-        warning('BOOL-CLAIM', `${comp.name}: Boolean \`${m[1]}\` claims ${iface}.${field}, and no such interface is exported from libs/spec.`);
+        warning(
+          'BOOL-CLAIM',
+          `${comp.name}: Boolean \`${m[1]}\` claims ${iface}.${field}, and no such interface is exported from libs/spec.`,
+        );
         continue;
       }
       const chain = specChain(ownSpec);
       if (!chain.has(iface)) {
-        warning('BOOL-CLAIM', `${comp.name}: Boolean \`${m[1]}\` claims ${iface}.${field}, but ${ownSpec} does not resolve to ${iface} — it resolves to ${[...chain].join(', ') || 'nothing'}. The mapping names an interface this component does not implement.`);
+        warning(
+          'BOOL-CLAIM',
+          `${comp.name}: Boolean \`${m[1]}\` claims ${iface}.${field}, but ${ownSpec} does not resolve to ${iface} — it resolves to ${[...chain].join(', ') || 'nothing'}. The mapping names an interface this component does not implement.`,
+        );
         continue;
       }
       if (!specFields(iface).has(field)) {
-        warning('BOOL-CLAIM', `${comp.name}: Boolean \`${m[1]}\` claims ${iface}.${field}, and ${iface} has no field \`${field}\`. Point it at the interface that owns the field today.`);
+        warning(
+          'BOOL-CLAIM',
+          `${comp.name}: Boolean \`${m[1]}\` claims ${iface}.${field}, and ${iface} has no field \`${field}\`. Point it at the interface that owns the field today.`,
+        );
       }
     }
     // …and the other direction: a spec flag the master offers no way to set.
@@ -405,10 +468,14 @@ for (const comp of snapshot.components) {
       //                                              neither the axis name nor its values
       //                                              are the word "checked"
       const axisValues = new Set(
-        Object.values(comp.variantAxes || {}).flat().map((v) => String(v).toLowerCase())
+        Object.values(comp.variantAxes || {})
+          .flat()
+          .map((v) => String(v).toLowerCase()),
       );
       const mappedByAxis = new Set();
-      for (const m of (comp.description || '').matchAll(/^- Variant `([^`]+)`:([^\n]*)$/gm)) {
+      for (const m of (comp.description || '').matchAll(
+        /^- Variant `([^`]+)`:([^\n]*)$/gm,
+      )) {
         const map = /maps to `?(\w+)\.(\w+)`?/.exec(m[2]);
         if (map) mappedByAxis.add(map[2]);
       }
@@ -418,7 +485,11 @@ for (const comp of snapshot.components) {
       // nobody can read is where a rule goes to die.
       //   - Boolean `open`: not modelled — false renders nothing
       const optedOut = new Set(
-        [...(comp.description || '').matchAll(/^- Boolean `([^`]+)`:\s*not modelled\s*[\u2014-]\s*\S/gm)].map((m) => m[1])
+        [
+          ...(comp.description || '').matchAll(
+            /^- Boolean `([^`]+)`:\s*not modelled\s*[\u2014-]\s*\S/gm,
+          ),
+        ].map((m) => m[1]),
       );
       // An axis NAMED for the boolean field expresses it as surely as an axis value
       // does: AtlBreadcrumbItem's `current` = false|true and AtlAccordionItem's
@@ -426,10 +497,18 @@ for (const comp of snapshot.components) {
       // recolour AND add/remove an element, which a visibility Boolean cannot do.
       const axisNames = new Set(Object.keys(comp.variantAxes || {}));
       const gaps = [...specBooleans(ownSpec)].filter(
-        (f) => !declared.has(f) && !axisValues.has(f) && !axisNames.has(f) && !mappedByAxis.has(f) && !optedOut.has(f)
+        (f) =>
+          !declared.has(f) &&
+          !axisValues.has(f) &&
+          !axisNames.has(f) &&
+          !mappedByAxis.has(f) &&
+          !optedOut.has(f),
       );
       if (gaps.length > 0) {
-        warning('BOOL-MISSING', `${comp.name}: ${ownSpec} has ${gaps.join(', ')} and the master offers no way to set ${gaps.length > 1 ? 'them' : 'it'} — no Boolean property, no variant-axis value, and no stated opt-out. A state a component supports and a master cannot express is a state nobody can draw. A Boolean binds only to a layer's visibility, so use one where the state ADDS an element and a variant axis where it changes a colour; if the state has nothing to draw, say so in the description as \`- Boolean \\\`x\\\`: not modelled — <reason>\`.`);
+        warning(
+          'BOOL-MISSING',
+          `${comp.name}: ${ownSpec} has ${gaps.join(', ')} and the master offers no way to set ${gaps.length > 1 ? 'them' : 'it'} — no Boolean property, no variant-axis value, and no stated opt-out. A state a component supports and a master cannot express is a state nobody can draw. A Boolean binds only to a layer's visibility, so use one where the state ADDS an element and a variant axis where it changes a colour; if the state has nothing to draw, say so in the description as \`- Boolean \\\`x\\\`: not modelled — <reason>\`.`,
+        );
       }
     }
   }
@@ -451,22 +530,41 @@ for (const comp of snapshot.components) {
       .map(([k]) => k.split('#')[0]);
     const invented = [];
     for (const t of textProps) {
-      if (fields.has(t) || allowed(comp.selector, 'text', `unspeced:${t}`)) continue;
-      const line = [...(comp.description || '').matchAll(/^- Text `([^`]+)`:([^\n]*)$/gm)].find((m) => m[1] === t);
-      if (!line) { invented.push(`\`${t}\` (undocumented)`); continue; }
+      if (fields.has(t) || allowed(comp.selector, 'text', `unspeced:${t}`))
+        continue;
+      const line = [
+        ...(comp.description || '').matchAll(/^- Text `([^`]+)`:([^\n]*)$/gm),
+      ].find((m) => m[1] === t);
+      if (!line) {
+        invented.push(`\`${t}\` (undocumented)`);
+        continue;
+      }
       const rest = line[2];
       // A derived or service-argument value: stated, and deliberately not a field.
       if (/not a property\s*[\u2014-]\s*\S/.test(rest)) continue;
       const map = /(?:maps to|\u2192)\s*`?(\w+)\.(\w+)`?/.exec(rest);
-      if (!map) { invented.push(`\`${t}\` (its line states no mapping)`); continue; }
+      if (!map) {
+        invented.push(`\`${t}\` (its line states no mapping)`);
+        continue;
+      }
       const [, iface, field] = map;
-      if (!specInterfaces.has(iface)) { invented.push(`\`${t}\` (claims ${iface}, which libs/spec does not export)`); continue; }
-      if (!specFields(iface).has(field)) { invented.push(`\`${t}\` (claims ${iface}.${field}, which does not exist)`); continue; }
+      if (!specInterfaces.has(iface)) {
+        invented.push(
+          `\`${t}\` (claims ${iface}, which libs/spec does not export)`,
+        );
+        continue;
+      }
+      if (!specFields(iface).has(field)) {
+        invented.push(
+          `\`${t}\` (claims ${iface}.${field}, which does not exist)`,
+        );
+        continue;
+      }
     }
     if (invented.length && specInterfaces.has(ownSpec)) {
       blocker(
         'TEXT-UNSPECED',
-        `${comp.name}: text ${invented.length > 1 ? 'properties' : 'property'} ${invented.join(', ')}. A text property is API — it lets a designer set a value the component must accept. Name a field of ${ownSpec}, state \`maps to <Interface>.<field>\` for one that lives elsewhere, or \`not a property — <reason>\` where the value is derived. Figma appends a digit to a duplicate name rather than refusing, so an invented one arrives quietly.`
+        `${comp.name}: text ${invented.length > 1 ? 'properties' : 'property'} ${invented.join(', ')}. A text property is API — it lets a designer set a value the component must accept. Name a field of ${ownSpec}, state \`maps to <Interface>.<field>\` for one that lives elsewhere, or \`not a property — <reason>\` where the value is derived. Figma appends a digit to a duplicate name rather than refusing, so an invented one arrives quietly.`,
       );
     }
   }
@@ -486,15 +584,22 @@ for (const comp of snapshot.components) {
       .map(([k]) => k.split('#')[0]);
     // A mapping stated in prose is checked by [BOOL-CLAIM]; accept it here.
     const claimed = new Set(
-      [...(comp.description || '').matchAll(/^- Boolean `([^`]+)`:[^\n]*(?:maps to|inherited from)/gm)].map((m) => m[1])
+      [
+        ...(comp.description || '').matchAll(
+          /^- Boolean `([^`]+)`:[^\n]*(?:maps to|inherited from)/gm,
+        ),
+      ].map((m) => m[1]),
     );
     const invented = declared.filter(
-      (b) => !fields.has(b) && !claimed.has(b) && !allowed(comp.selector, 'bool', `unspeced:${b}`)
+      (b) =>
+        !fields.has(b) &&
+        !claimed.has(b) &&
+        !allowed(comp.selector, 'bool', `unspeced:${b}`),
     );
     if (invented.length && specInterfaces.has(ownSpec)) {
       blocker(
         'BOOL-UNSPECED',
-        `${comp.name}: Boolean ${invented.map((b) => `\`${b}\``).join(', ')} ${invented.length > 1 ? 'are' : 'is'} declared, and ${ownSpec} has no such field. A master can invent API as easily as it can omit it, and an invented property is a state a designer can draw that no component renders. Remove it, or state the mapping as \`- Boolean \\\`x\\\`: maps to <Interface>.<field>\` if the state lives on another interface.`
+        `${comp.name}: Boolean ${invented.map((b) => `\`${b}\``).join(', ')} ${invented.length > 1 ? 'are' : 'is'} declared, and ${ownSpec} has no such field. A master can invent API as easily as it can omit it, and an invented property is a state a designer can draw that no component renders. Remove it, or state the mapping as \`- Boolean \\\`x\\\`: maps to <Interface>.<field>\` if the state lives on another interface.`,
       );
     }
   }
@@ -514,14 +619,21 @@ for (const comp of snapshot.components) {
     // a designer opening the master reads it (ADR-0058).
     //   - Boolean `required`: declared but unbound — <reason>
     const statedUnbound = new Set(
-      [...(comp.description || '').matchAll(/^- Boolean `([^`]+)`:\s*declared but unbound\s*[\u2014-]\s*\S/gm)].map((m) => m[1])
+      [
+        ...(comp.description || '').matchAll(
+          /^- Boolean `([^`]+)`:\s*declared but unbound\s*[\u2014-]\s*\S/gm,
+        ),
+      ].map((m) => m[1]),
     );
     const dead = Object.entries(comp.properties || {})
       .filter(([k, t]) => t === 'BOOLEAN' && !referenced.has(k))
       .map(([k]) => k.split('#')[0])
       .filter((k) => !statedUnbound.has(k));
     if (dead.length > 0) {
-      warning('BOOL-INERT', `${comp.name}: Boolean ${dead.length > 1 ? 'properties' : 'property'} ${dead.map((d) => `\`${d}\``).join(', ')} ${dead.length > 1 ? 'are' : 'is'} declared and nothing references ${dead.length > 1 ? 'them' : 'it'} — the ${dead.length > 1 ? 'properties toggle' : 'property toggles'} no layer, so switching ${dead.length > 1 ? 'them' : 'it'} changes nothing. Bind it to the visibility of the layer that state adds. A colour-only state works too: add an overlay that paints the new colour and bind that, the way AtlSelect's \`_invalid-border\` does.`);
+      warning(
+        'BOOL-INERT',
+        `${comp.name}: Boolean ${dead.length > 1 ? 'properties' : 'property'} ${dead.map((d) => `\`${d}\``).join(', ')} ${dead.length > 1 ? 'are' : 'is'} declared and nothing references ${dead.length > 1 ? 'them' : 'it'} — the ${dead.length > 1 ? 'properties toggle' : 'property toggles'} no layer, so switching ${dead.length > 1 ? 'them' : 'it'} changes nothing. Bind it to the visibility of the layer that state adds. A colour-only state works too: add an overlay that paints the new colour and bind that, the way AtlSelect's \`_invalid-border\` does.`,
+      );
     }
   }
 
@@ -537,12 +649,23 @@ for (const comp of snapshot.components) {
     // inside this script is one nobody can read from the artefact.
     //   - Glyph `–` on `min-icon`: <reason>
     const statedGlyphs = new Set(
-      [...(comp.description || '').matchAll(/^- Glyph `([^`]+)` on `([^`]+)`:\s*\S/gm)].map((m) => `${m[1]}|${m[2]}`)
+      [
+        ...(comp.description || '').matchAll(
+          /^- Glyph `([^`]+)` on `([^`]+)`:\s*\S/gm,
+        ),
+      ].map((m) => `${m[1]}|${m[2]}`),
     );
-    const glyphs = (comp.glyphTextNodes || []).filter((g) => !statedGlyphs.has(`${g.chars}|${g.layer}`));
+    const glyphs = (comp.glyphTextNodes || []).filter(
+      (g) => !statedGlyphs.has(`${g.chars}|${g.layer}`),
+    );
     if (glyphs.length > 0) {
-      const shown = glyphs.slice(0, 6).map((g) => `${JSON.stringify(g.chars)} on \`${g.layer}\``);
-      warning('MASTER-GLYPH', `${comp.name}: ${glyphs.length} pictogram${glyphs.length > 1 ? 's' : ''} drawn as TEXT characters — ${shown.join(', ')}${glyphs.length > 6 ? `, and ${glyphs.length - 6} more` : ''}. Replace with an instance of the Icon library, which is generated from ATL_ICON_GEOMETRY (ADR-0057).`);
+      const shown = glyphs
+        .slice(0, 6)
+        .map((g) => `${JSON.stringify(g.chars)} on \`${g.layer}\``);
+      warning(
+        'MASTER-GLYPH',
+        `${comp.name}: ${glyphs.length} pictogram${glyphs.length > 1 ? 's' : ''} drawn as TEXT characters — ${shown.join(', ')}${glyphs.length > 6 ? `, and ${glyphs.length - 6} more` : ''}. Replace with an instance of the Icon library, which is generated from ATL_ICON_GEOMETRY (ADR-0057).`,
+      );
     }
   }
 
@@ -575,12 +698,20 @@ for (const comp of snapshot.components) {
       // not a fiction: AtlTooltip's axis is `position` and the prop is
       // `atlTooltipPosition`. Saying "not a property" there sends the reader looking
       // for the wrong repair.
-      const near = [...fields].find((f) => f.toLowerCase().includes(axis.toLowerCase()));
+      const near = [...fields].find((f) =>
+        f.toLowerCase().includes(axis.toLowerCase()),
+      );
       if (near) {
-        warning('AXIS-NAME', `${comp.name}: variant axis \`${axis}\` = ${values} names ${ownSpec}.${near} under a different name. Rename the axis to \`${near}\` so the master and the contract read the same${/index$/i.test(near) ? ` — and note that ${near} is a number, so an axis can only ever picture a sample of it` : ''}.`);
+        warning(
+          'AXIS-NAME',
+          `${comp.name}: variant axis \`${axis}\` = ${values} names ${ownSpec}.${near} under a different name. Rename the axis to \`${near}\` so the master and the contract read the same${/index$/i.test(near) ? ` — and note that ${near} is a number, so an axis can only ever picture a sample of it` : ''}.`,
+        );
         continue;
       }
-      warning('AXIS-NOT-A-PROP', `${comp.name}: variant axis \`${axis}\` = ${values} is not a property of ${ownSpec}. An axis is the master's API surface; picture this with instances on an example page instead.`);
+      warning(
+        'AXIS-NOT-A-PROP',
+        `${comp.name}: variant axis \`${axis}\` = ${values} is not a property of ${ownSpec}. An axis is the master's API surface; picture this with instances on an example page instead.`,
+      );
     }
   }
 
@@ -611,18 +742,74 @@ for (const comp of snapshot.components) {
 const TYPE_ROLES = typeRoles();
 
 const ROOT_PAINT = [
-  { label: 'AtlButton', file: 'button/atl-button.css', cascade: ['.atl-button', '.atl-button.variant-{variant}', '.atl-button.size-{size}'] },
-  { label: 'AtlInput', file: 'input/atl-input.css', cascade: ['.atl-input input'] },
-  { label: 'AtlTextarea', file: 'textarea/atl-textarea.css', cascade: ['.atl-textarea textarea'] },
-  { label: 'AtlSelect', file: 'select/atl-select.css', cascade: ['.atl-select select'] },
-  { label: 'AtlBadge', file: 'badge/atl-badge.css', cascade: ['.atl-badge', '.atl-badge.variant-{variant}', '.atl-badge.size-{size}'] },
-  { label: 'AtlAvatar', file: 'avatar/atl-avatar.css', cascade: ['.atl-avatar', '.atl-avatar.shape-{shape}', '.atl-avatar.size-{size}'] },
-  { label: 'AtlCard', file: 'card/atl-card.css', cascade: ['.atl-card', '.atl-card.variant-{variant}'] },
-  { label: 'AtlSkeleton', file: 'skeleton/atl-skeleton.css', cascade: ['.atl-skeleton', '.atl-skeleton.variant-{variant}'] },
-  { label: 'AtlCodeBlock', file: 'code-block/atl-code-block.css', cascade: ['.atl-code-block'] },
+  {
+    label: 'AtlButton',
+    file: 'button/atl-button.css',
+    cascade: [
+      '.atl-button',
+      '.atl-button.variant-{variant}',
+      '.atl-button.size-{size}',
+    ],
+  },
+  {
+    label: 'AtlInput',
+    file: 'input/atl-input.css',
+    cascade: ['.atl-input input'],
+  },
+  {
+    label: 'AtlTextarea',
+    file: 'textarea/atl-textarea.css',
+    cascade: ['.atl-textarea textarea'],
+  },
+  {
+    label: 'AtlSelect',
+    file: 'select/atl-select.css',
+    cascade: ['.atl-select select'],
+  },
+  {
+    label: 'AtlBadge',
+    file: 'badge/atl-badge.css',
+    cascade: [
+      '.atl-badge',
+      '.atl-badge.variant-{variant}',
+      '.atl-badge.size-{size}',
+    ],
+  },
+  {
+    label: 'AtlAvatar',
+    file: 'avatar/atl-avatar.css',
+    cascade: [
+      '.atl-avatar',
+      '.atl-avatar.shape-{shape}',
+      '.atl-avatar.size-{size}',
+    ],
+  },
+  {
+    label: 'AtlCard',
+    file: 'card/atl-card.css',
+    cascade: ['.atl-card', '.atl-card.variant-{variant}'],
+  },
+  {
+    label: 'AtlSkeleton',
+    file: 'skeleton/atl-skeleton.css',
+    cascade: ['.atl-skeleton', '.atl-skeleton.variant-{variant}'],
+  },
+  {
+    label: 'AtlCodeBlock',
+    file: 'code-block/atl-code-block.css',
+    cascade: ['.atl-code-block'],
+  },
   { label: 'AtlMenu', file: 'menu/atl-menu.css', cascade: ['.atl-menu'] },
-  { label: 'AtlTabGroup', file: 'tabs/atl-tabs.css', cascade: ['.atl-tab-group', '.atl-tab-group.variant-{variant}'] },
-  { label: 'AtlTooltip', file: 'tooltip/atl-tooltip.css', cascade: ['.atl-tooltip'] },
+  {
+    label: 'AtlTabGroup',
+    file: 'tabs/atl-tabs.css',
+    cascade: ['.atl-tab-group', '.atl-tab-group.variant-{variant}'],
+  },
+  {
+    label: 'AtlTooltip',
+    file: 'tooltip/atl-tooltip.css',
+    cascade: ['.atl-tooltip'],
+  },
   // The second cascade member exists ONLY for [ROOT-SIZE] — it states no fill/stroke/
   // radius of its own (size-full's `border-radius: 0` is the one exception, and a
   // literal '0' does not match cssToVariable's `var(--ui-radius-*)` pattern, so it
@@ -636,30 +823,103 @@ const ROOT_PAINT = [
   // appending `.atl-drawer-host.position-{position}.size-{size} dialog` to THIS table
   // would have compared a descendant's width against the constant-720 root and fired
   // on every variant — a false positive discovered before it shipped, not after.
-  { label: 'AtlDialog', file: 'dialog/atl-dialog.css', cascade: ['.atl-dialog', '.atl-dialog.size-{size}'] },
-  { label: 'AtlDrawer', file: 'drawer/atl-drawer.css', cascade: ['.atl-drawer-host dialog'] },
-  { label: 'AtlToast', file: 'toast/atl-toast.css', cascade: ['.atl-toast', '.atl-toast.variant-{variant}'] },
-  { label: 'AtlAlert', file: 'alert/atl-alert.css', cascade: ['.atl-alert', '.atl-alert.variant-{variant}'] },
-  { label: 'AtlAccordionGroup', file: 'accordion/atl-accordion.css', cascade: ['.atl-accordion-group', '.atl-accordion-group.variant-{variant}'] },
+  {
+    label: 'AtlDialog',
+    file: 'dialog/atl-dialog.css',
+    cascade: ['.atl-dialog', '.atl-dialog.size-{size}'],
+  },
+  {
+    label: 'AtlDrawer',
+    file: 'drawer/atl-drawer.css',
+    cascade: ['.atl-drawer-host dialog'],
+  },
+  {
+    label: 'AtlToast',
+    file: 'toast/atl-toast.css',
+    cascade: ['.atl-toast', '.atl-toast.variant-{variant}'],
+  },
+  {
+    label: 'AtlAlert',
+    file: 'alert/atl-alert.css',
+    cascade: ['.atl-alert', '.atl-alert.variant-{variant}'],
+  },
+  {
+    label: 'AtlAccordionGroup',
+    file: 'accordion/atl-accordion.css',
+    cascade: ['.atl-accordion-group', '.atl-accordion-group.variant-{variant}'],
+  },
   // Child masters (ADR-0062). Each one turns a layer nobody could check into a root.
-  { label: 'AtlMenuItem', file: 'menu/atl-menu.css', cascade: ['.atl-menu-item'] },
-  { label: 'AtlBreadcrumbItem', file: 'breadcrumbs/atl-breadcrumbs.css', cascade: ['.atl-breadcrumb-item'] },
-  { label: 'AtlTab', file: 'tabs/atl-tabs.css', cascade: ['.atl-tab-group .tablist button'] },
-  { label: 'AtlStep', file: 'stepper/atl-stepper.css', cascade: ['.step-item'] },
+  {
+    label: 'AtlMenuItem',
+    file: 'menu/atl-menu.css',
+    cascade: ['.atl-menu-item'],
+  },
+  {
+    label: 'AtlBreadcrumbItem',
+    file: 'breadcrumbs/atl-breadcrumbs.css',
+    cascade: ['.atl-breadcrumb-item'],
+  },
+  {
+    label: 'AtlTab',
+    file: 'tabs/atl-tabs.css',
+    cascade: ['.atl-tab-group .tablist button'],
+  },
+  {
+    label: 'AtlStep',
+    file: 'stepper/atl-stepper.css',
+    cascade: ['.step-item'],
+  },
   // Only Angular renders an option row at all: React and Vue emit a native
   // <select> the operating system draws (ADR-0028).
-  { label: 'AtlOption', file: 'select/atl-option.css', lib: 'angular', cascade: ["[role='option']"] },
-  { label: 'AtlAccordionItem', file: 'accordion/atl-accordion.css', cascade: ['.atl-accordion-item'] },
-  { label: 'AtlChatMessage', file: 'chat/atl-chat.css', cascade: ['.atl-chat-message', '.atl-chat-message.role-{role}'] },
-  { label: 'AtlChatSuggestion', file: 'chat/atl-chat.css', cascade: ['.atl-chat-suggestion .chip'] },
-  { label: 'AtlChatTyping', file: 'chat/atl-chat.css', cascade: ['.atl-chat-typing'] },
+  {
+    label: 'AtlOption',
+    file: 'select/atl-option.css',
+    lib: 'angular',
+    cascade: ["[role='option']"],
+  },
+  {
+    label: 'AtlAccordionItem',
+    file: 'accordion/atl-accordion.css',
+    cascade: ['.atl-accordion-item'],
+  },
+  {
+    label: 'AtlChatMessage',
+    file: 'chat/atl-chat.css',
+    cascade: ['.atl-chat-message', '.atl-chat-message.role-{role}'],
+  },
+  {
+    label: 'AtlChatSuggestion',
+    file: 'chat/atl-chat.css',
+    cascade: ['.atl-chat-suggestion .chip'],
+  },
+  {
+    label: 'AtlChatTyping',
+    file: 'chat/atl-chat.css',
+    cascade: ['.atl-chat-typing'],
+  },
   // The table's parts. Each child master draws the md step, because `size` belongs to
   // AtlTable and not to a cell — so the size-scoped rule is pinned rather than
   // substituted from an axis this master does not have.
-  { label: 'AtlTh', file: 'table/atl-table.css', cascade: ['.atl-table thead th', '.atl-table.size-md thead th'] },
-  { label: 'AtlTd', file: 'table/atl-table.css', cascade: ['.atl-table tbody td', '.atl-table.size-md tbody td'] },
-  { label: 'AtlTr', file: 'table/atl-table.css', cascade: ['.atl-table tbody tr'] },
-  { label: 'AtlTbody', file: 'table/atl-table.css', cascade: ['.atl-table tbody'] },
+  {
+    label: 'AtlTh',
+    file: 'table/atl-table.css',
+    cascade: ['.atl-table thead th', '.atl-table.size-md thead th'],
+  },
+  {
+    label: 'AtlTd',
+    file: 'table/atl-table.css',
+    cascade: ['.atl-table tbody td', '.atl-table.size-md tbody td'],
+  },
+  {
+    label: 'AtlTr',
+    file: 'table/atl-table.css',
+    cascade: ['.atl-table tbody tr'],
+  },
+  {
+    label: 'AtlTbody',
+    file: 'table/atl-table.css',
+    cascade: ['.atl-table tbody'],
+  },
   // AtlMenuSeparator is deliberately absent: the CSS root IS the 1px rule, while the
   // master's root is the margin box that carries var(--ui-spacing-2) above and below
   // so it stacks correctly. The rule is a child layer, which this table cannot address.
@@ -697,23 +957,75 @@ const ROOT_PAINT = [
 // ---------------------------------------------------------------------------
 const ROOT_TYPE = [
   // The three form fields say `font-size: inherit` and inherit from their own root.
-  { label: 'AtlInput', file: 'input/atl-input.css', cascade: ['.atl-input', '.atl-input input'] },
-  { label: 'AtlTextarea', file: 'textarea/atl-textarea.css', cascade: ['.atl-textarea', '.atl-textarea textarea'] },
-  { label: 'AtlSelect', file: 'select/atl-select.css', cascade: ['.atl-select', '.atl-select select'] },
+  {
+    label: 'AtlInput',
+    file: 'input/atl-input.css',
+    cascade: ['.atl-input', '.atl-input input'],
+  },
+  {
+    label: 'AtlTextarea',
+    file: 'textarea/atl-textarea.css',
+    cascade: ['.atl-textarea', '.atl-textarea textarea'],
+  },
+  {
+    label: 'AtlSelect',
+    file: 'select/atl-select.css',
+    cascade: ['.atl-select', '.atl-select select'],
+  },
   // `.atl-menu-item` says `font: inherit`, and the size it inherits lives on `.atl-menu`.
-  { label: 'AtlMenuItem', file: 'menu/atl-menu.css', cascade: ['.atl-menu', '.atl-menu-item'] },
+  {
+    label: 'AtlMenuItem',
+    file: 'menu/atl-menu.css',
+    cascade: ['.atl-menu', '.atl-menu-item'],
+  },
   // The masters ROOT_PAINT omits for a paint reason. Their roots do state the type.
-  { label: 'AtlCheckbox', file: 'checkbox/atl-checkbox.css', cascade: ['.atl-checkbox', '.atl-checkbox label'] },
-  { label: 'AtlToggle', file: 'toggle/atl-toggle.css', cascade: ['.atl-toggle', '.atl-toggle label'] },
+  {
+    label: 'AtlCheckbox',
+    file: 'checkbox/atl-checkbox.css',
+    cascade: ['.atl-checkbox', '.atl-checkbox label'],
+  },
+  {
+    label: 'AtlToggle',
+    file: 'toggle/atl-toggle.css',
+    cascade: ['.atl-toggle', '.atl-toggle label'],
+  },
   { label: 'AtlRadio', file: 'radio/atl-radio.css', cascade: ['.atl-radio'] },
-  { label: 'AtlRadioGroup', file: 'radio-group/atl-radio-group.css', cascade: ['.atl-radio-group'] },
-  { label: 'AtlCombobox', file: 'combobox/atl-combobox.css', cascade: ['.atl-combobox'] },
-  { label: 'AtlProgress', file: 'progress/atl-progress.css', cascade: ['.atl-progress'] },
+  {
+    label: 'AtlRadioGroup',
+    file: 'radio-group/atl-radio-group.css',
+    cascade: ['.atl-radio-group'],
+  },
+  {
+    label: 'AtlCombobox',
+    file: 'combobox/atl-combobox.css',
+    cascade: ['.atl-combobox'],
+  },
+  {
+    label: 'AtlProgress',
+    file: 'progress/atl-progress.css',
+    cascade: ['.atl-progress'],
+  },
   { label: 'AtlTable', file: 'table/atl-table.css', cascade: ['.atl-table'] },
-  { label: 'AtlBreadcrumbs', file: 'breadcrumbs/atl-breadcrumbs.css', cascade: ['.atl-breadcrumbs'] },
-  { label: 'AtlPagination', file: 'pagination/atl-pagination.css', cascade: ['.atl-pagination'] },
-  { label: 'AtlStepper', file: 'stepper/atl-stepper.css', cascade: ['.atl-stepper'] },
-  { label: 'AtlAvatarGroup', file: 'avatar/atl-avatar.css', cascade: ['.atl-avatar-group'] },
+  {
+    label: 'AtlBreadcrumbs',
+    file: 'breadcrumbs/atl-breadcrumbs.css',
+    cascade: ['.atl-breadcrumbs'],
+  },
+  {
+    label: 'AtlPagination',
+    file: 'pagination/atl-pagination.css',
+    cascade: ['.atl-pagination'],
+  },
+  {
+    label: 'AtlStepper',
+    file: 'stepper/atl-stepper.css',
+    cascade: ['.atl-stepper'],
+  },
+  {
+    label: 'AtlAvatarGroup',
+    file: 'avatar/atl-avatar.css',
+    cascade: ['.atl-avatar-group'],
+  },
   { label: 'AtlChat', file: 'chat/atl-chat.css', cascade: ['.atl-chat'] },
 ];
 
@@ -721,7 +1033,11 @@ const ROOT_TYPE = [
  *  that already names its root. Writing the loop over ROOT_TYPE alone would silently
  *  drop type checking for the twenty-six masters only ROOT_PAINT names. */
 function typeEntryFor(label) {
-  return ROOT_TYPE.find((e) => e.label === label) || ROOT_PAINT.find((e) => e.label === label) || null;
+  return (
+    ROOT_TYPE.find((e) => e.label === label) ||
+    ROOT_PAINT.find((e) => e.label === label) ||
+    null
+  );
 }
 
 // A value may be one selector or a CASCADE of them, base first. The second form is
@@ -730,12 +1046,23 @@ function typeEntryFor(label) {
 // `<td>` through `.atl-table tbody td`. Reading the class alone reported the cell's
 // legitimate fill as invented.
 const LAYER_ALIASES = {
-  AtlTabGroup: { tab: '.atl-tab-group .tablist button', tabpanel: '.atl-tab-group [role="tabpanel"]' },
-  AtlTable: { th: '.atl-table thead th', td: '.atl-table tbody td', thead: '.atl-table thead', tbody: '.atl-table tbody' },
+  AtlTabGroup: {
+    tab: '.atl-tab-group .tablist button',
+    tabpanel: '.atl-tab-group [role="tabpanel"]',
+  },
+  AtlTable: {
+    th: '.atl-table thead th',
+    td: '.atl-table tbody td',
+    thead: '.atl-table thead',
+    tbody: '.atl-table tbody',
+  },
   AtlInput: { field: '.atl-input input' },
   AtlTextarea: { field: '.atl-textarea textarea' },
   AtlSelect: { field: '.atl-select select' },
-  AtlTr: { 'atl-tr-select-cell': ['.atl-table tbody td', '.atl-tr-select-cell'], td: '.atl-table tbody td' },
+  AtlTr: {
+    'atl-tr-select-cell': ['.atl-table tbody td', '.atl-tr-select-cell'],
+    td: '.atl-table tbody td',
+  },
   AtlTbody: { tr: '.atl-table tbody tr' },
   // The drawer's surface is an element selector, which no mechanical shape reaches.
   // The layer was called `panel` and the CSS really does have a `.panel` — the inner
@@ -837,10 +1164,21 @@ const TEXT_UNSTYLED_PENDING = {
   // it is part of AtlChat's contract, so binding it to a ty/* role would document
   // scenery as library type. The master should stop shipping the mockup (tasks/todo.md).
   AtlChat: [
-    'nav-link-1', 'nav-link-2', 'nav-link-3', 'nav-link-4',
-    'breadcrumb', 'page-h1',
-    'side-1-title', 'side-1-i1', 'side-1-i2', 'side-1-i3', 'side-1-i4',
-    'side-2-title', 'side-2-l1', 'side-2-l2', 'side-2-l3',
+    'nav-link-1',
+    'nav-link-2',
+    'nav-link-3',
+    'nav-link-4',
+    'breadcrumb',
+    'page-h1',
+    'side-1-title',
+    'side-1-i1',
+    'side-1-i2',
+    'side-1-i3',
+    'side-1-i4',
+    'side-2-title',
+    'side-2-l1',
+    'side-2-l2',
+    'side-2-l3',
     // The minimise affordance, drawn as an en dash. A pictogram, not text.
     'min-icon',
   ],
@@ -900,7 +1238,10 @@ function checkNameAlignment(comp, selector, specName) {
     // ADR-0008, CodeBlock has no spec contract) — allowlist as
     // `selector:name:spec-interface` instead of inventing an interface.
     if (allowed(selector, 'name', 'spec-interface')) return;
-    blocker('NAME', `${selector}: Figma component "${comp.name}" has no matching spec interface ${specName} in libs/spec/src/index.ts. Rename the Figma component or fix the spec.`);
+    blocker(
+      'NAME',
+      `${selector}: Figma component "${comp.name}" has no matching spec interface ${specName} in libs/spec/src/index.ts. Rename the Figma component or fix the spec.`,
+    );
     return;
   }
   const axes = comp.variantAxes || {};
@@ -912,7 +1253,10 @@ function checkNameAlignment(comp, selector, specName) {
     // The remainder has to be an axis word, not merely whatever is left over.
     // `AtlTab` is a prefix of BOTH `AtlTabGroupVariant` and `AtlTableVariant`, which
     // a plain prefix test turned into axes named `groupVariant` and `leVariant`.
-    if (!/^(Variant|Size|Shape|Position|Orientation|Align|Role)$/.test(remainder)) continue;
+    if (
+      !/^(Variant|Size|Shape|Position|Orientation|Align|Role)$/.test(remainder)
+    )
+      continue;
     const axisProp = lowerFirst(remainder); // AtlButtonVariant -> 'variant'
     if (!axisProp) continue;
     const figmaValues = axes[axisProp];
@@ -920,18 +1264,31 @@ function checkNameAlignment(comp, selector, specName) {
       // Some spec unions are realised as code-only props (e.g. a landmark role),
       // never as a Figma variant axis — allowlist them as `selector:name:<axis>`.
       if (allowed(selector, 'name', axisProp)) continue;
-      blocker('NAME', `${selector}: spec axis "${axisProp}" (${unionName}) has no matching Figma variant property. Add a "${axisProp}" variant axis, or allowlist it if it is a code-only prop.`);
+      blocker(
+        'NAME',
+        `${selector}: spec axis "${axisProp}" (${unionName}) has no matching Figma variant property. Add a "${axisProp}" variant axis, or allowlist it if it is a code-only prop.`,
+      );
       continue;
     }
     const figmaSet = new Set(figmaValues);
     const specSet = new Set(members);
-    const missing = members.filter((m) => !figmaSet.has(m) && !allowed(selector, 'name', `${axisProp}=${m}`));
-    const extra = figmaValues.filter((v) => !specSet.has(v) && !allowed(selector, 'name', `${axisProp}=${v}`));
+    const missing = members.filter(
+      (m) => !figmaSet.has(m) && !allowed(selector, 'name', `${axisProp}=${m}`),
+    );
+    const extra = figmaValues.filter(
+      (v) => !specSet.has(v) && !allowed(selector, 'name', `${axisProp}=${v}`),
+    );
     if (missing.length) {
-      blocker('NAME', `${selector}.${axisProp}: Figma is missing value(s) [${missing.map(q).join(', ')}] present in spec ${unionName}. Add the variant value(s) (exact casing).`);
+      blocker(
+        'NAME',
+        `${selector}.${axisProp}: Figma is missing value(s) [${missing.map(q).join(', ')}] present in spec ${unionName}. Add the variant value(s) (exact casing).`,
+      );
     }
     if (extra.length) {
-      blocker('NAME', `${selector}.${axisProp}: Figma has value(s) [${extra.map(q).join(', ')}] not in spec ${unionName}. Rename to the spec literal or remove (casing must match exactly, e.g. "primary" not "Primary").`);
+      blocker(
+        'NAME',
+        `${selector}.${axisProp}: Figma has value(s) [${extra.map(q).join(', ')}] not in spec ${unionName}. Rename to the spec literal or remove (casing must match exactly, e.g. "primary" not "Primary").`,
+      );
     }
   }
 }
@@ -952,9 +1309,14 @@ function checkVariantMatrix(comp, selector, specName) {
     if (keys.length === 0) continue;
     const detail = keys.map((k) => `${k}=${row[k]}`).join(',');
     if (allowed(selector, 'variant', detail)) continue;
-    const hit = variants.some((v) => keys.every((k) => String(v[k]) === String(row[k])));
+    const hit = variants.some((v) =>
+      keys.every((k) => String(v[k]) === String(row[k])),
+    );
     if (!hit) {
-      blocker('VARIANT', `${selector}: metadata.variantMatrix entry {${detail}} has no matching Figma variant. Add it to the COMPONENT_SET.`);
+      blocker(
+        'VARIANT',
+        `${selector}: metadata.variantMatrix entry {${detail}} has no matching Figma variant. Add it to the COMPONENT_SET.`,
+      );
     }
   }
 }
@@ -968,30 +1330,51 @@ function checkTokenLinks(comp, selector) {
   const rawSpacingNodes = [];
   const nonSemantic = [];
   for (const n of comp.nodes || []) {
-    if ((n.rawColors || []).length && !allowed(selector, 'token', `color:${n.name}`)) {
-      rawColorNodes.push(`${n.name}${n.hidden ? ' [hidden]' : ''} (${n.rawColors.join(', ')})`);
+    if (
+      (n.rawColors || []).length &&
+      !allowed(selector, 'token', `color:${n.name}`)
+    ) {
+      rawColorNodes.push(
+        `${n.name}${n.hidden ? ' [hidden]' : ''} (${n.rawColors.join(', ')})`,
+      );
     }
     if (n.unboundRadius && !allowed(selector, 'token', `radius:${n.name}`)) {
       rawRadiusNodes.push(`${n.name} (${n.unboundRadius})`);
     }
-    if ((n.unboundSpacing || []).length && !allowed(selector, 'token', `spacing:${n.name}`)) {
+    if (
+      (n.unboundSpacing || []).length &&
+      !allowed(selector, 'token', `spacing:${n.name}`)
+    ) {
       rawSpacingNodes.push(n.name);
     }
     for (const t of n.nonSemanticTokens || []) {
-      if (!allowed(selector, 'token', `nonsemantic:${t}`)) nonSemantic.push(`${t} on ${n.name}`);
+      if (!allowed(selector, 'token', `nonsemantic:${t}`))
+        nonSemantic.push(`${t} on ${n.name}`);
     }
   }
   if (rawColorNodes.length) {
-    critical('TOKEN', `${selector}: raw color fill/stroke (no bound variable) on ${rawColorNodes.join('; ')}. Bind to a UI-Tokens color variable (--ui-color-*).`);
+    critical(
+      'TOKEN',
+      `${selector}: raw color fill/stroke (no bound variable) on ${rawColorNodes.join('; ')}. Bind to a UI-Tokens color variable (--ui-color-*).`,
+    );
   }
   if (rawRadiusNodes.length) {
-    critical('TOKEN', `${selector}: raw corner radius (not bound) on ${rawRadiusNodes.join('; ')}. Bind to a radius variable (--ui-radius-*).`);
+    critical(
+      'TOKEN',
+      `${selector}: raw corner radius (not bound) on ${rawRadiusNodes.join('; ')}. Bind to a radius variable (--ui-radius-*).`,
+    );
   }
   if (rawSpacingNodes.length) {
-    critical('TOKEN', `${selector}: raw padding/gap (not bound) on ${rawSpacingNodes.length} node(s) [${rawSpacingNodes.join(', ')}]. Bind to a spacing variable (--ui-spacing-*).`);
+    critical(
+      'TOKEN',
+      `${selector}: raw padding/gap (not bound) on ${rawSpacingNodes.length} node(s) [${rawSpacingNodes.join(', ')}]. Bind to a spacing variable (--ui-spacing-*).`,
+    );
   }
   if (nonSemantic.length) {
-    warning('TOKEN', `${selector}: bound to non-semantic collection — ${nonSemantic.join('; ')}. Components should bind to the Library Tokens (semantic) layer, not primitives.`);
+    warning(
+      'TOKEN',
+      `${selector}: bound to non-semantic collection — ${nonSemantic.join('; ')}. Components should bind to the Library Tokens (semantic) layer, not primitives.`,
+    );
   }
 }
 
@@ -999,7 +1382,13 @@ function checkTokenLinks(comp, selector) {
  *  container must use Auto Layout (layoutMode != NONE). Childless frames
  *  (dividers, spacers) are exempt. */
 function checkAutoLayout(comp, selector) {
-  const FRAME_LIKE = new Set(['FRAME', 'COMPONENT', 'COMPONENT_SET', 'INSTANCE', 'GROUP']);
+  const FRAME_LIKE = new Set([
+    'FRAME',
+    'COMPONENT',
+    'COMPONENT_SET',
+    'INSTANCE',
+    'GROUP',
+  ]);
   const offenders = [];
   for (const n of comp.nodes || []) {
     if (!n.hasChildren) continue;
@@ -1014,7 +1403,10 @@ function checkAutoLayout(comp, selector) {
     offenders.push(n.name);
   }
   if (offenders.length) {
-    critical('AUTOLAYOUT', `${selector}: frame(s) without Auto Layout — [${offenders.join(', ')}]. Enable Auto Layout so generators can infer responsive intent.`);
+    critical(
+      'AUTOLAYOUT',
+      `${selector}: frame(s) without Auto Layout — [${offenders.join(', ')}]. Enable Auto Layout so generators can infer responsive intent.`,
+    );
   }
 }
 
@@ -1026,11 +1418,17 @@ function checkAutoLayout(comp, selector) {
 function checkDescription(comp, selector, specName) {
   const desc = (comp.description || '').trim();
   if (!desc) {
-    warning('DESC', `${selector}: master component has no Figma description. Add one that maps it to ${specName}.`);
+    warning(
+      'DESC',
+      `${selector}: master component has no Figma description. Add one that maps it to ${specName}.`,
+    );
     return;
   }
   if (!desc.includes(specName) && !allowed(selector, 'desc', 'spec-ref')) {
-    warning('DESC', `${selector}: description does not reference its spec interface ${specName}. State the spec mapping so the description stays congruent with the contract.`);
+    warning(
+      'DESC',
+      `${selector}: description does not reference its spec interface ${specName}. State the spec mapping so the description stays congruent with the contract.`,
+    );
   }
 }
 
@@ -1050,7 +1448,7 @@ function checkTypography() {
   if (!t) {
     warning(
       'TYPEFACE',
-      'snapshot carries no typography facts. Re-run npm run figma:snapshot to capture them.'
+      'snapshot carries no typography facts. Re-run npm run figma:snapshot to capture them.',
     );
     return;
   }
@@ -1062,7 +1460,7 @@ function checkTypography() {
     if (family === 'MIXED') {
       warning(
         'FONT-FAMILY',
-        `${count} text node(s) mix fonts within one string, so their family cannot be verified. Split them or set one family.`
+        `${count} text node(s) mix fonts within one string, so their family cannot be verified. Split them or set one family.`,
       );
       continue;
     }
@@ -1072,7 +1470,7 @@ function checkTypography() {
       'FONT-FAMILY',
       `${count} text node(s) are set in ${family}, which tokens.css does not declare` +
         `${where ? ` (e.g. ${where})` : ''}. The file ships ${[...declared].join(', ')} — ` +
-        `re-set them, or add the family to tokens.css if it is genuinely part of the library.`
+        `re-set them, or add the family to tokens.css if it is genuinely part of the library.`,
     );
   }
 
@@ -1085,22 +1483,32 @@ function checkTypography() {
       blocker(
         'TEXT-STYLE',
         `${name} is missing. --ui-type-${role} exists in tokens.css, so the file needs the matching style ` +
-          `(${want.family} ${want.style} ${want.size}px / ${want.lineHeightPct}%).`
+          `(${want.family} ${want.style} ${want.size}px / ${want.lineHeightPct}%).`,
       );
       continue;
     }
     const diffs = [];
-    if (got.family !== want.family) diffs.push(`family ${got.family} ≠ ${want.family}`);
-    if (got.style !== want.style) diffs.push(`weight ${got.style} ≠ ${want.style}`);
-    if (Math.abs(got.size - want.size) > 0.01) diffs.push(`size ${got.size} ≠ ${want.size}`);
+    if (got.family !== want.family)
+      diffs.push(`family ${got.family} ≠ ${want.family}`);
+    if (got.style !== want.style)
+      diffs.push(`weight ${got.style} ≠ ${want.style}`);
+    if (Math.abs(got.size - want.size) > 0.01)
+      diffs.push(`size ${got.size} ≠ ${want.size}`);
     if (got.lineHeightUnit !== 'PERCENT') {
-      diffs.push(`leading is ${got.lineHeightUnit.toLowerCase()}, not a stated percentage`);
+      diffs.push(
+        `leading is ${got.lineHeightUnit.toLowerCase()}, not a stated percentage`,
+      );
     } else if (Math.abs(got.lineHeightValue - want.lineHeightPct) > 0.5) {
       // 0.5 not 0.01: Figma stores 165% as 164.9999976158142.
-      diffs.push(`leading ${Math.round(got.lineHeightValue * 100) / 100}% ≠ ${want.lineHeightPct}%`);
+      diffs.push(
+        `leading ${Math.round(got.lineHeightValue * 100) / 100}% ≠ ${want.lineHeightPct}%`,
+      );
     }
     if (diffs.length) {
-      blocker('TEXT-STYLE', `${name} diverges from --ui-type-${role}: ${diffs.join('; ')}.`);
+      blocker(
+        'TEXT-STYLE',
+        `${name} diverges from --ui-type-${role}: ${diffs.join('; ')}.`,
+      );
     }
   }
   for (const s of t.textStyles || []) {
@@ -1110,7 +1518,7 @@ function checkTypography() {
     blocker(
       'TEXT-STYLE',
       `${s.name} has no --ui-type-${role} in tokens.css. Delete it or add the role — a text style ` +
-        `for a scale the library does not have is one a designer will reach for.`
+        `for a scale the library does not have is one a designer will reach for.`,
     );
   }
 }
@@ -1119,7 +1527,9 @@ function checkTypography() {
  *  `[italic ]var(--ui-font-weight-W) var(--ui-font-size-S) / var(--ui-line-height-L) var(--ui-font-F)`,
  *  resolved through the primitive tokens in the same file. */
 function parseTypeTokens() {
-  const css = fs.readFileSync(TOKENS_FILE, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+  const css = fs
+    .readFileSync(TOKENS_FILE, 'utf8')
+    .replace(/\/\*[\s\S]*?\*\//g, '');
   const decl = (name) => {
     const m = new RegExp(`--ui-${name}\\s*:\\s*([^;]+);`).exec(css);
     return m ? m[1].replace(/\s+/g, ' ').trim() : null;
@@ -1135,7 +1545,12 @@ function parseTypeTokens() {
     'font-mono': firstFamily(decl('font-mono')),
   };
   // CSS numeric weight → the Figma style name for the families this file ships.
-  const WEIGHT_STYLE = { normal: 'Regular', medium: 'Medium', semibold: 'SemiBold', bold: 'Bold' };
+  const WEIGHT_STYLE = {
+    normal: 'Regular',
+    medium: 'Medium',
+    semibold: 'SemiBold',
+    bold: 'Bold',
+  };
   const roles = {};
   for (const m of css.matchAll(/--ui-type-([a-z-]+)\s*:\s*([^;]+);/g)) {
     const role = m[1];
@@ -1147,10 +1562,15 @@ function parseTypeTokens() {
     const lh = /line-height-(\w+)\)/.exec(body);
     const fam = /--ui-(font-family|font-display|font-mono)\)/.exec(body);
     if (!weight || !size || !lh || !fam) {
-      warning('TEXT-STYLE', `--ui-type-${role} is not the expected font shorthand; skipped.`);
+      warning(
+        'TEXT-STYLE',
+        `--ui-type-${role} is not the expected font shorthand; skipped.`,
+      );
       continue;
     }
-    const sizeRem = parseFloat(String(decl(`font-size-${size[1]}`)).replace('rem', ''));
+    const sizeRem = parseFloat(
+      String(decl(`font-size-${size[1]}`)).replace('rem', ''),
+    );
     const lhNum = parseFloat(decl(`line-height-${lh[1]}`));
     let style = WEIGHT_STYLE[weight[1]] || weight[1];
     if (italic) style = style === 'Regular' ? 'Italic' : `${style} Italic`;
@@ -1180,14 +1600,17 @@ function checkRootPaint() {
   for (const entry of ROOT_PAINT) {
     const comp = bySelector.get(entry.label);
     if (!comp) {
-      warning('ROOT-PAINT', `${entry.label}: listed in ROOT_PAINT but absent from the snapshot.`);
+      warning(
+        'ROOT-PAINT',
+        `${entry.label}: listed in ROOT_PAINT but absent from the snapshot.`,
+      );
       continue;
     }
     const variants = Object.keys(comp.rootPaint || {});
     if (!variants.length) {
       warning(
         'ROOT-PAINT',
-        `${entry.label}: snapshot carries no root paint facts. Re-run npm run figma:snapshot.`
+        `${entry.label}: snapshot carries no root paint facts. Re-run npm run figma:snapshot.`,
       );
       continue;
     }
@@ -1226,7 +1649,7 @@ function checkRootPaint() {
     if (skipped.length) {
       warning(
         'ROOT-PAINT',
-        `${entry.label}: ${skipped.length} of ${variants.length} variant(s) not checked — their paint comes from a pseudo-class or state class (${[...new Set(skipped.map((v) => parseAxisName(v).state))].join(', ')}), which this table cannot resolve.`
+        `${entry.label}: ${skipped.length} of ${variants.length} variant(s) not checked — their paint comes from a pseudo-class or state class (${[...new Set(skipped.map((v) => parseAxisName(v).state))].join(', ')}), which this table cannot resolve.`,
       );
     }
     for (const variant of checkable) {
@@ -1238,26 +1661,69 @@ function checkRootPaint() {
         const g = got[prop];
         if (w === undefined) continue; // not expressible as one token — skipped
         if (w === null && g === null) continue;
-        if (prop === 'stroke' && w === null && want.strokeSides && Object.values(want.strokeSides).some((x) => x > 0)) continue;
+        if (
+          prop === 'stroke' &&
+          w === null &&
+          want.strokeSides &&
+          Object.values(want.strokeSides).some((x) => x > 0)
+        )
+          continue;
         if (w === null) {
-          note(prop, `root ${prop} is ${g}, but ${want.from[prop] || 'the CSS root'} paints no ${prop}. Remove it, or state why the master needs it.`, variant);
+          note(
+            prop,
+            `root ${prop} is ${g}, but ${want.from[prop] || 'the CSS root'} paints no ${prop}. Remove it, or state why the master needs it.`,
+            variant,
+          );
         } else if (g === null) {
-          note(prop, `root ${prop} is unset; ${want.from[prop]} says ${w}. Bind it.`, variant);
+          note(
+            prop,
+            `root ${prop} is unset; ${want.from[prop]} says ${w}. Bind it.`,
+            variant,
+          );
         } else if (g === 'RAW') {
-          note(prop, `root ${prop} is a raw value; ${want.from[prop]} says ${w}. Bind the variable, not the resolved number.`, variant);
+          note(
+            prop,
+            `root ${prop} is a raw value; ${want.from[prop]} says ${w}. Bind the variable, not the resolved number.`,
+            variant,
+          );
         } else if (g !== w) {
-          note(prop, `root ${prop} is bound to ${g}, but ${want.from[prop]} says ${w}. Bound is not the same as bound correctly.`, variant);
+          note(
+            prop,
+            `root ${prop} is bound to ${g}, but ${want.from[prop]} says ${w}. Bound is not the same as bound correctly.`,
+            variant,
+          );
         }
       }
-      const paintsStroke = got.stroke !== null || (want.stroke !== null && want.stroke !== undefined);
+      const paintsStroke =
+        got.stroke !== null ||
+        (want.stroke !== null && want.stroke !== undefined);
       if (want.strokeSides && got.strokeSides && paintsStroke) {
-        const g = { top: got.strokeSides[0], right: got.strokeSides[1], bottom: got.strokeSides[2], left: got.strokeSides[3] };
-        const off = ['top', 'right', 'bottom', 'left'].filter((sd) => (want.strokeSides[sd] || 0) !== (g[sd] || 0));
+        const g = {
+          top: got.strokeSides[0],
+          right: got.strokeSides[1],
+          bottom: got.strokeSides[2],
+          left: got.strokeSides[3],
+        };
+        const off = ['top', 'right', 'bottom', 'left'].filter(
+          (sd) => (want.strokeSides[sd] || 0) !== (g[sd] || 0),
+        );
         if (off.length) {
-          note('strokeWeight', `root stroke is ${off.map((sd) => `${sd} ${g[sd] || 0}px`).join(', ')}, but ${want.from.stroke} says ${off.map((sd) => `${sd} ${want.strokeSides[sd] || 0}px`).join(', ')}.`, variant);
+          note(
+            'strokeWeight',
+            `root stroke is ${off.map((sd) => `${sd} ${g[sd] || 0}px`).join(', ')}, but ${want.from.stroke} says ${off.map((sd) => `${sd} ${want.strokeSides[sd] || 0}px`).join(', ')}.`,
+            variant,
+          );
         }
-      } else if (want.strokeWeight != null && got.stroke != null && got.strokeWeight !== want.strokeWeight) {
-        note('strokeWeight', `root stroke is ${got.strokeWeight}px, but ${want.from.stroke} says ${want.strokeWeight}px.`, variant);
+      } else if (
+        want.strokeWeight != null &&
+        got.stroke != null &&
+        got.strokeWeight !== want.strokeWeight
+      ) {
+        note(
+          'strokeWeight',
+          `root stroke is ${got.strokeWeight}px, but ${want.from.stroke} says ${want.strokeWeight}px.`,
+          variant,
+        );
       }
       // The root's TYPE used to be compared here and now lives in [ROOT-TYPE]: it does
       // not need the root box to be the painted box, and thirteen masters are absent
@@ -1279,7 +1745,8 @@ function checkRootPaint() {
       if (got.pad) {
         const SIDES = ['top', 'right', 'bottom', 'left'];
         const stated = SIDES.filter((sd) => {
-          if (isHeightDerivedBlock && (sd === 'top' || sd === 'bottom')) return false;
+          if (isHeightDerivedBlock && (sd === 'top' || sd === 'bottom'))
+            return false;
           return want.padding[sd] !== null && want.padding[sd] !== undefined;
         });
         if (stated.length === 0) {
@@ -1288,27 +1755,49 @@ function checkRootPaint() {
             padWarnings.set(
               entry.label,
               `${entry.label}: the master pads ${got.pad.join('/')} but ${entry.cascade[0]} states no padding. ` +
-                `Decide whether that is component chrome the code is missing, or artboard breathing room the master should drop.`
+                `Decide whether that is component chrome the code is missing, or artboard breathing room the master should drop.`,
             );
           }
         } else {
-          const off = stated.filter((sd) => Math.abs(got.pad[SIDES.indexOf(sd)] - want.padding[sd]) > 0.5);
+          const off = stated.filter(
+            (sd) =>
+              Math.abs(got.pad[SIDES.indexOf(sd)] - want.padding[sd]) > 0.5,
+          );
           // Split by whether a spacing token holds the value the CSS states.
-          const bindable = off.filter((sd) => SPACING_PX.has(Math.round(want.padding[sd] * 100) / 100));
-          const derived = off.filter((sd) => !SPACING_PX.has(Math.round(want.padding[sd] * 100) / 100));
+          const bindable = off.filter((sd) =>
+            SPACING_PX.has(Math.round(want.padding[sd] * 100) / 100),
+          );
+          const derived = off.filter(
+            (sd) => !SPACING_PX.has(Math.round(want.padding[sd] * 100) / 100),
+          );
           const fmt = (sd) =>
             `${sd} ${got.pad[SIDES.indexOf(sd)]}px ≠ ${Math.round(want.padding[sd] * 100) / 100}px`;
           if (bindable.length) {
-            const tokens = [...new Set(bindable.map((sd) => SPACING_PX.get(Math.round(want.padding[sd] * 100) / 100)))];
+            const tokens = [
+              ...new Set(
+                bindable.map((sd) =>
+                  SPACING_PX.get(Math.round(want.padding[sd] * 100) / 100),
+                ),
+              ),
+            ];
             const bound = got.padBound
-              ? bindable.map((sd) => got.padBound[SIDES.indexOf(sd)]).filter((b) => b && b !== 'RAW')
+              ? bindable
+                  .map((sd) => got.padBound[SIDES.indexOf(sd)])
+                  .filter((b) => b && b !== 'RAW')
               : [];
             const how = bound.length
               ? ` The master is bound to ${[...new Set(bound)].join(', ')} — bound, but to the wrong step; use ${tokens.join(', ')}.`
               : ` Bind ${tokens.join(', ')}.`;
-            note('padding', `root padding is ${bindable.map(fmt).join(', ')} (the CSS root).${how}`, variant);
+            note(
+              'padding',
+              `root padding is ${bindable.map(fmt).join(', ')} (the CSS root).${how}`,
+              variant,
+            );
           }
-          if (derived.length && !allowed(entry.label, 'root-paint', 'padding-off-scale')) {
+          if (
+            derived.length &&
+            !allowed(entry.label, 'root-paint', 'padding-off-scale')
+          ) {
             const msg =
               `root padding is ${derived.map(fmt).join(', ')}. That value sits off the 0.25rem spacing ` +
               `scale, so no spacing/* token holds it and no Figma Variable can bind it — the master is not ` +
@@ -1327,23 +1816,41 @@ function checkRootPaint() {
         // there is no expected value but 0.
         if (isHeightDerivedBlock) {
           const top = Math.round(got.pad[SIDES.indexOf('top')] * 100) / 100;
-          const bottom = Math.round(got.pad[SIDES.indexOf('bottom')] * 100) / 100;
+          const bottom =
+            Math.round(got.pad[SIDES.indexOf('bottom')] * 100) / 100;
           if (Math.abs(top) > 0.5 || Math.abs(bottom) > 0.5) {
             const key = top + '#' + bottom;
             if (!blockPad.has(key)) blockPad.set(key, []);
             blockPad.get(key).push(variant);
           }
         }
-        if (want.gap !== null && want.gap !== undefined && got.gap !== null && Math.abs(got.gap - want.gap) > 0.5) {
-          note('gap', `root gap is ${got.gap}px, but the CSS says ${Math.round(want.gap * 100) / 100}px.`, variant);
+        if (
+          want.gap !== null &&
+          want.gap !== undefined &&
+          got.gap !== null &&
+          Math.abs(got.gap - want.gap) > 0.5
+        ) {
+          note(
+            'gap',
+            `root gap is ${got.gap}px, but the CSS says ${Math.round(want.gap * 100) / 100}px.`,
+            variant,
+          );
         }
       }
       if (want.shadow !== undefined) {
         const hasFx = (got.effects || []).length > 0;
         if (want.shadow && !hasFx) {
-          note('shadow', `root has no effect; ${want.from.shadow} sets box-shadow ${want.shadow}. Bind the shadow/${want.shadow} effect style.`, variant);
+          note(
+            'shadow',
+            `root has no effect; ${want.from.shadow} sets box-shadow ${want.shadow}. Bind the shadow/${want.shadow} effect style.`,
+            variant,
+          );
         } else if (!want.shadow && hasFx) {
-          note('shadow', `root carries ${got.effects.join(', ')}, but ${want.from.shadow} sets no box-shadow.`, variant);
+          note(
+            'shadow',
+            `root carries ${got.effects.join(', ')}, but ${want.from.shadow} sets no box-shadow.`,
+            variant,
+          );
         }
       }
     }
@@ -1352,22 +1859,37 @@ function checkRootPaint() {
       if (pw) warning('ROOT-BOX', pw);
     }
     for (const [msg, vs] of offScale) {
-      const scope = vs.length === checkable.length ? 'every checked variant' : vs.length > 3 ? `${vs.length} variants (${vs.slice(0, 2).join('; ')}; …)` : vs.join('; ');
+      const scope =
+        vs.length === checkable.length
+          ? 'every checked variant'
+          : vs.length > 3
+            ? `${vs.length} variants (${vs.slice(0, 2).join('; ')}; …)`
+            : vs.join('; ');
       warning('ROOT-BOX', `${entry.label} [${scope}]: ${msg}`);
     }
     for (const [key, vs] of blockPad) {
       const [top, bottom] = key.split('#');
-      const scope = vs.length === checkable.length ? 'every checked variant' : vs.length > 3 ? `${vs.length} variants (${vs.slice(0, 2).join('; ')}; …)` : vs.join('; ');
+      const scope =
+        vs.length === checkable.length
+          ? 'every checked variant'
+          : vs.length > 3
+            ? `${vs.length} variants (${vs.slice(0, 2).join('; ')}; …)`
+            : vs.join('; ');
       warning(
         'ROOT-BOX',
         `${entry.label} [${scope}]: root block padding is top ${top}px, bottom ${bottom}px. ADR-0107 decided ` +
           `this master's height alone states the box — the CSS derives padding-block from it, so the master ` +
-          `carries none. Zero it, or record why this master needs to keep the block axis.`
+          `carries none. Zero it, or record why this master needs to keep the block axis.`,
       );
     }
     for (const [key, vs] of grouped) {
       const msg = key.split('\u0000')[1];
-      const scope = vs.length === checkable.length ? 'every checked variant' : vs.length > 3 ? `${vs.length} variants (${vs.slice(0, 2).join('; ')}; …)` : vs.join('; ');
+      const scope =
+        vs.length === checkable.length
+          ? 'every checked variant'
+          : vs.length > 3
+            ? `${vs.length} variants (${vs.slice(0, 2).join('; ')}; …)`
+            : vs.join('; ');
       critical('ROOT-PAINT', `${entry.label} [${scope}]: ${msg}`);
     }
   }
@@ -1390,7 +1912,12 @@ function checkRootPaint() {
  *  plain blocker would leave check:all red until that unblocks. */
 function checkRootType() {
   const bySelector = new Map(snapshot.components.map((c) => [c.selector, c]));
-  const labels = [...new Set([...ROOT_PAINT.map((e) => e.label), ...ROOT_TYPE.map((e) => e.label)])];
+  const labels = [
+    ...new Set([
+      ...ROOT_PAINT.map((e) => e.label),
+      ...ROOT_TYPE.map((e) => e.label),
+    ]),
+  ];
   for (const label of labels) {
     const comp = bySelector.get(label);
     const entry = typeEntryFor(label);
@@ -1417,23 +1944,47 @@ function checkRootType() {
       const got = comp.rootPaint[variant];
       const want = resolveRootType(entry, parseAxisName(variant));
       if (!want) break; // resolveRootType has already reported anything worth reporting
-      if (want.fontSize !== null && got.fontSize != null && Math.abs(got.fontSize - want.fontSize) > 0.5) {
-        note('fontSize', `root text is ${got.fontSize}px, but the CSS says ${Math.round(want.fontSize * 100) / 100}px.`, variant);
+      if (
+        want.fontSize !== null &&
+        got.fontSize != null &&
+        Math.abs(got.fontSize - want.fontSize) > 0.5
+      ) {
+        note(
+          'fontSize',
+          `root text is ${got.fontSize}px, but the CSS says ${Math.round(want.fontSize * 100) / 100}px.`,
+          variant,
+        );
       }
       if (want.lineHeight !== null) {
         if (got.fontSize != null && got.lineHeight == null) {
           // ADR-0048: a box whose leading is inherited grows with the consuming page's
           // prose. The CSS states it; the master has to state it too.
-          note('lineHeight', `root text leaves the leading on AUTO; the CSS states ${Math.round(want.lineHeight * 100)}%. An inherited leading makes the box grow with the text metrics.`, variant);
-        } else if (got.lineHeight != null && Math.abs(got.lineHeight - want.lineHeight * 100) > 0.5) {
-          note('lineHeight', `root text leading is ${Math.round(got.lineHeight * 100) / 100}%, but the CSS says ${Math.round(want.lineHeight * 100)}%.`, variant);
+          note(
+            'lineHeight',
+            `root text leaves the leading on AUTO; the CSS states ${Math.round(want.lineHeight * 100)}%. An inherited leading makes the box grow with the text metrics.`,
+            variant,
+          );
+        } else if (
+          got.lineHeight != null &&
+          Math.abs(got.lineHeight - want.lineHeight * 100) > 0.5
+        ) {
+          note(
+            'lineHeight',
+            `root text leading is ${Math.round(got.lineHeight * 100) / 100}%, but the CSS says ${Math.round(want.lineHeight * 100)}%.`,
+            variant,
+          );
         }
       }
     }
     const details = [];
     for (const [key, vs] of grouped) {
       const msg = key.split('\u0000')[1];
-      const scope = vs.length === checkable.length ? 'every checked variant' : vs.length > 3 ? `${vs.length} variants (${vs.slice(0, 2).join('; ')}; …)` : vs.join('; ');
+      const scope =
+        vs.length === checkable.length
+          ? 'every checked variant'
+          : vs.length > 3
+            ? `${vs.length} variants (${vs.slice(0, 2).join('; ')}; …)`
+            : vs.join('; ');
       details.push(`${label} [${scope}]: ${msg}`);
     }
     ratchet('ROOT-TYPE', label, details.length, details);
@@ -1508,18 +2059,24 @@ function checkRootSize() {
         note(
           dim,
           `root ${dim} is ${g}px, but ${want.from[dim] || entry.cascade[entry.cascade.length - 1]} states ${Math.round(w * 100) / 100}px. Resize the variant to match, or fix the CSS if the master is the one that is right.`,
-          variant
+          variant,
         );
       }
     }
     for (const [key, vs] of grouped) {
       const msg = key.split(' ')[1];
-      const scope = vs.length > 3 ? `${vs.length} variants (${vs.slice(0, 3).join('; ')}; …)` : vs.join('; ');
+      const scope =
+        vs.length > 3
+          ? `${vs.length} variants (${vs.slice(0, 3).join('; ')}; …)`
+          : vs.join('; ');
       blocker('ROOT-SIZE', `${entry.label} [${scope}]: ${msg}`);
     }
   }
   if (noFacts > 0) {
-    warning('ROOT-SIZE', `${noFacts} master(s) carry no root size facts. Re-run npm run figma:snapshot.`);
+    warning(
+      'ROOT-SIZE',
+      `${noFacts} master(s) carry no root size facts. Re-run npm run figma:snapshot.`,
+    );
   }
 }
 
@@ -1536,9 +2093,18 @@ function checkLayerSize() {
   for (const entry of SIZE_LAYER_CASCADES) {
     const comp = bySelector.get(entry.label);
     if (!comp) continue;
-    const file = path.join(ROOT, 'libs', entry.lib || 'react', 'src/lib', entry.file);
+    const file = path.join(
+      ROOT,
+      'libs',
+      entry.lib || 'react',
+      'src/lib',
+      entry.file,
+    );
     if (!fs.existsSync(file)) {
-      warning('LAYER-SIZE', `${entry.label}: ${entry.file} not found under libs/${entry.lib || 'react'}; cannot resolve the expected size.`);
+      warning(
+        'LAYER-SIZE',
+        `${entry.label}: ${entry.file} not found under libs/${entry.lib || 'react'}; cannot resolve the expected size.`,
+      );
       continue;
     }
     const rules = cssRules(file);
@@ -1553,7 +2119,7 @@ function checkLayerSize() {
     if (!byVariant.size) {
       warning(
         'LAYER-SIZE',
-        `${entry.label}: no \`${entry.layer}\` layer in the snapshot. Re-run npm run figma:snapshot, or the layer was renamed.`
+        `${entry.label}: no \`${entry.layer}\` layer in the snapshot. Re-run npm run figma:snapshot, or the layer was renamed.`,
       );
       continue;
     }
@@ -1575,7 +2141,10 @@ function checkLayerSize() {
       // `{position}`/`{size}` template.
       const from = { width: null, height: null };
       for (const template of entry.cascade) {
-        const selector = template.replace(/\{(\w+)\}/g, (_, axis) => axes[axis] ?? ' ');
+        const selector = template.replace(
+          /\{(\w+)\}/g,
+          (_, axis) => axes[axis] ?? ' ',
+        );
         if (selector.includes(' ')) continue; // this variant has no such axis
         const body = rules.get(selector);
         if (body === undefined) continue;
@@ -1594,13 +2163,16 @@ function checkLayerSize() {
         note(
           dim,
           `${entry.layer} ${dim} is ${g}px, but ${from[dim] || entry.cascade[entry.cascade.length - 1]} states ${Math.round(w * 100) / 100}px. Resize the layer to match, or fix the CSS if the master is the one that is right.`,
-          variant
+          variant,
         );
       }
     }
     for (const [key, vs] of grouped) {
       const msg = key.split(' ')[1];
-      const scope = vs.length > 3 ? `${vs.length} variants (${vs.slice(0, 3).join('; ')}; …)` : vs.join('; ');
+      const scope =
+        vs.length > 3
+          ? `${vs.length} variants (${vs.slice(0, 3).join('; ')}; …)`
+          : vs.join('; ');
       blocker('LAYER-SIZE', `${entry.label} [${scope}]: ${msg}`);
     }
   }
@@ -1645,22 +2217,36 @@ function cssRules(file) {
 }
 
 function resolveRootPaint(entry, axes) {
-  const file = path.join(ROOT, 'libs', entry.lib || 'react', 'src/lib', entry.file);
+  const file = path.join(
+    ROOT,
+    'libs',
+    entry.lib || 'react',
+    'src/lib',
+    entry.file,
+  );
   if (!fs.existsSync(file)) {
-    warning('ROOT-PAINT', `${entry.label}: ${entry.file} not found under libs/${entry.lib || 'react'}; cannot resolve the expected paint.`);
+    warning(
+      'ROOT-PAINT',
+      `${entry.label}: ${entry.file} not found under libs/${entry.lib || 'react'}; cannot resolve the expected paint.`,
+    );
     return null;
   }
   const rules = cssRules(file);
   const want = { from: {} };
   let joined = '';
   for (const template of entry.cascade) {
-    const selector = template.replace(/\{(\w+)\}/g, (_, axis) => axes[axis] ?? '\u0000');
+    const selector = template.replace(
+      /\{(\w+)\}/g,
+      (_, axis) => axes[axis] ?? '\u0000',
+    );
     if (selector.includes('\u0000')) continue; // the sampled variant has no such axis
     const body = rules.get(selector);
     if (body === undefined) continue;
     joined += ';' + body;
     const decl = (prop) => {
-      const m = new RegExp('(?:^|;)\\s*' + prop + '\\s*:\\s*([^;]+)').exec(body);
+      const m = new RegExp('(?:^|;)\\s*' + prop + '\\s*:\\s*([^;]+)').exec(
+        body,
+      );
       return m ? m[1].replace(/\s+/g, ' ').trim() : null;
     };
     const set = (prop, raw, expr) => {
@@ -1669,16 +2255,32 @@ function resolveRootPaint(entry, axes) {
       want.from[prop] = selector;
     };
     const bg = decl('background') || decl('background-color');
-    if (bg !== null) set('fill', bg, /transparent|none/.test(bg) ? null : cssToVariable(bg, 'color'));
+    if (bg !== null)
+      set(
+        'fill',
+        bg,
+        /transparent|none/.test(bg) ? null : cssToVariable(bg, 'color'),
+      );
     // Borders, four-side and per-side. `border-left: 4px solid transparent` plus a
     // per-variant `border-left-color` is one edge, not a box — reading only the
     // shorthand reported AtlToast's accent as an invented stroke.
     const SIDES = ['top', 'right', 'bottom', 'left'];
-    const weightOf = (v) => (/border-width-thick/.test(v) ? 2 : /border-width\)/.test(v) ? 1 : parseFloat(v) || null);
+    const weightOf = (v) =>
+      /border-width-thick/.test(v)
+        ? 2
+        : /border-width\)/.test(v)
+          ? 1
+          : parseFloat(v) || null;
     const border = decl('border');
     if (border !== null) {
       const parts = border.split(' ');
-      set('stroke', border, /transparent|none/.test(border) ? undefined : cssToVariable(parts[parts.length - 1], 'color'));
+      set(
+        'stroke',
+        border,
+        /transparent|none/.test(border)
+          ? undefined
+          : cssToVariable(parts[parts.length - 1], 'color'),
+      );
       const w = /^(0|none)$/.test(border) ? 0 : weightOf(border);
       want.strokeWeight = w;
       want.strokeSides = { top: w, right: w, bottom: w, left: w };
@@ -1687,14 +2289,25 @@ function resolveRootPaint(entry, axes) {
       const d = decl('border-' + side);
       if (d === null) continue;
       const parts = d.split(' ');
-      want.strokeSides = want.strokeSides || { top: 0, right: 0, bottom: 0, left: 0 };
+      want.strokeSides = want.strokeSides || {
+        top: 0,
+        right: 0,
+        bottom: 0,
+        left: 0,
+      };
       want.strokeSides[side] = /^(0|none)$/.test(d) ? 0 : weightOf(d);
-      const c = /transparent|none/.test(d) ? undefined : cssToVariable(parts[parts.length - 1], 'color');
+      const c = /transparent|none/.test(d)
+        ? undefined
+        : cssToVariable(parts[parts.length - 1], 'color');
       if (c !== undefined) set('stroke', d, c);
-      else if (!('stroke' in want)) { want.stroke = undefined; want.from.stroke = selector; }
+      else if (!('stroke' in want)) {
+        want.stroke = undefined;
+        want.from.stroke = selector;
+      }
     }
     const borderColor = decl('border-color');
-    if (borderColor !== null) set('stroke', borderColor, cssToVariable(borderColor, 'color'));
+    if (borderColor !== null)
+      set('stroke', borderColor, cssToVariable(borderColor, 'color'));
     for (const side of SIDES) {
       const d = decl('border-' + side + '-color');
       if (d !== null) set('stroke', d, cssToVariable(d, 'color'));
@@ -1702,7 +2315,13 @@ function resolveRootPaint(entry, axes) {
     const radius = decl('border-radius');
     if (radius !== null) {
       // A four-value radius is not one token; only single-value roots are checked.
-      set('radius', radius, radius.split(' ').length > 1 ? undefined : cssToVariable(radius, 'radius'));
+      set(
+        'radius',
+        radius,
+        radius.split(' ').length > 1
+          ? undefined
+          : cssToVariable(radius, 'radius'),
+      );
     }
     const shadow = decl('box-shadow');
     if (shadow !== null) {
@@ -1716,9 +2335,14 @@ function resolveRootPaint(entry, axes) {
     if (decl('height') !== null) want.from.height = selector;
   }
   // Nothing in the cascade paints -> the root must paint nothing.
-  for (const prop of ['fill', 'stroke', 'radius']) if (!(prop in want)) want[prop] = null;
-  if (want.shadow === undefined) { want.shadow = false; want.from.shadow = entry.cascade[0]; }
-  for (const prop of ['fill', 'stroke', 'radius']) if (!want.from[prop]) want.from[prop] = entry.cascade[0];
+  for (const prop of ['fill', 'stroke', 'radius'])
+    if (!(prop in want)) want[prop] = null;
+  if (want.shadow === undefined) {
+    want.shadow = false;
+    want.from.shadow = entry.cascade[0];
+  }
+  for (const prop of ['fill', 'stroke', 'radius'])
+    if (!want.from[prop]) want.from[prop] = entry.cascade[0];
   const box = boxFromDeclarations(joined);
   // The root's BOX. Computed here since the first version of this function and never
   // read — so AtlAlert drew 12/16 against a CSS that says 16/20 and AtlTooltip 8/12
@@ -1761,7 +2385,7 @@ function resolveRootPaint(entry, axes) {
  *  OBSERVED, so it can never claim "at the recorded baseline" two lines under a blocker
  *  saying it is not. */
 function settleRatchets() {
-  const observed = {};      // tag -> { label: [finding, …] }
+  const observed = {}; // tag -> { label: [finding, …] }
   const observedNodes = {}; // tag -> { label: node count }, for the summary line only
   for (const [tag, per] of ratcheted) {
     observed[tag] = {};
@@ -1771,15 +2395,21 @@ function settleRatchets() {
       observedNodes[tag][label] = v.count;
     }
   }
-  const sum = (counts) => Object.values(counts || {}).reduce((a, b) => a + b, 0);
-  const sorted = (o) => Object.fromEntries(Object.keys(o).sort().map((k) => [k, o[k]]));
+  const sum = (counts) =>
+    Object.values(counts || {}).reduce((a, b) => a + b, 0);
+  const sorted = (o) =>
+    Object.fromEntries(
+      Object.keys(o)
+        .sort()
+        .map((k) => [k, o[k]]),
+    );
   const list = (v) => (Array.isArray(v) ? v : []);
 
   if (!fs.existsSync(BASELINE_FILE) && !UPDATE_BASELINE) {
     console.error(
       `✗ [RATCHET] ${BASELINE_REL} is missing, so a regression against the recorded findings would pass ` +
         `unnoticed. Restore it from git, or record today's findings with ` +
-        `\`node tools/scripts/check-figma.js --update-baseline\` and write each entry's \`why\`.`
+        `\`node tools/scripts/check-figma.js --update-baseline\` and write each entry's \`why\`.`,
     );
     process.exit(1);
   }
@@ -1793,15 +2423,21 @@ function settleRatchets() {
     } catch (e) {
       console.error(
         `✗ [RATCHET] ${BASELINE_REL} is not valid JSON: ${e.message}. Restore it from git, or re-record ` +
-          `it with \`node tools/scripts/check-figma.js --update-baseline\`.`
+          `it with \`node tools/scripts/check-figma.js --update-baseline\`.`,
       );
       process.exit(1);
     }
   }
   if (!baseline.checks) baseline.checks = {};
-  const tags = [...new Set([...Object.keys(baseline.checks), ...Object.keys(observed)])].sort();
+  const tags = [
+    ...new Set([...Object.keys(baseline.checks), ...Object.keys(observed)]),
+  ].sort();
   for (const tag of tags) {
-    if (!baseline.checks[tag]) baseline.checks[tag] = { ...(RATCHET_SEED[tag] || { kind: 'gap', why: '' }), perMaster: {} };
+    if (!baseline.checks[tag])
+      baseline.checks[tag] = {
+        ...(RATCHET_SEED[tag] || { kind: 'gap', why: '' }),
+        perMaster: {},
+      };
   }
 
   if (UPDATE_BASELINE) {
@@ -1813,7 +2449,12 @@ function settleRatchets() {
       report();
       return; // report() exits non-zero; the baseline is left alone
     }
-    const before = tags.map((t) => Object.values(baseline.checks[t].perMaster || {}).reduce((a, b) => a + list(b).length, 0));
+    const before = tags.map((t) =>
+      Object.values(baseline.checks[t].perMaster || {}).reduce(
+        (a, b) => a + list(b).length,
+        0,
+      ),
+    );
     const next = {};
     for (const tag of tags) {
       const findings = sorted(observed[tag] || {});
@@ -1825,7 +2466,9 @@ function settleRatchets() {
     // Diff-stable: a no-op update must not rewrite `generatedAt` and leave a one-line
     // diff for someone to review — the rule check-typeface.js already applies.
     if (JSON.stringify(next) === JSON.stringify(baseline.checks)) {
-      console.log(`✓ baseline unchanged: ${BASELINE_REL} — the recorded findings are the observed ones; not rewritten.`);
+      console.log(
+        `✓ baseline unchanged: ${BASELINE_REL} — the recorded findings are the observed ones; not rewritten.`,
+      );
       process.exit(0);
     }
     baseline.checks = next;
@@ -1838,7 +2481,10 @@ function settleRatchets() {
     fs.writeFileSync(BASELINE_FILE, `${JSON.stringify(baseline, null, 2)}\n`);
     const moves = tags
       .map((t, i) => {
-        const after = Object.values(observed[t] || {}).reduce((a, b) => a + b.length, 0);
+        const after = Object.values(observed[t] || {}).reduce(
+          (a, b) => a + b.length,
+          0,
+        );
         const d = after - before[i];
         return `${t} ${before[i]} → ${after}${d === 0 ? '' : ` (${d > 0 ? '+' : '−'}${Math.abs(d)})`}`;
       })
@@ -1858,7 +2504,7 @@ function settleRatchets() {
     if (!entry.why || !['design', 'gap'].includes(entry.kind)) {
       blocker(
         tag,
-        `the \`${tag}\` entry in ${BASELINE_REL} records findings with no \`why\` or no valid \`kind\`, so a later reader cannot tell "decided against" from "forgotten" (ADR-0066). State why the debt stands, and set \`kind\` to \`design\` (a closed question) or \`gap\` (an unresolved defect).`
+        `the \`${tag}\` entry in ${BASELINE_REL} records findings with no \`why\` or no valid \`kind\`, so a later reader cannot tell "decided against" from "forgotten" (ADR-0066). State why the debt stands, and set \`kind\` to \`design\` (a closed question) or \`gap\` (an unresolved defect).`,
       );
     }
     // [STALE-REASON] — the ratchet gates drift in the FINDINGS and nothing gated
@@ -1876,21 +2522,26 @@ function settleRatchets() {
       if (typeof dep !== 'string') {
         blocker(
           tag,
-          `the \`${tag}\` entry's \`clearedWhen\` is not a shape this gate can resolve. The only supported form is \`{ "checkGone": "<TAG>" }\` — the debt is payable once that check's entry has left ${BASELINE_REL}. Write the condition that way, or drop the field and keep the reason in prose.`
+          `the \`${tag}\` entry's \`clearedWhen\` is not a shape this gate can resolve. The only supported form is \`{ "checkGone": "<TAG>" }\` — the debt is payable once that check's entry has left ${BASELINE_REL}. Write the condition that way, or drop the field and keep the reason in prose.`,
         );
       } else if (!baseline.checks[dep]) {
         blocker(
           tag,
-          `the \`${tag}\` entry says its debt is blocked until \`${dep}\` clears, and \`${dep}\` is gone from ${BASELINE_REL} — the condition it named is satisfied. Either pay this debt now (it is what the \`why\` promised), or restate the \`why\` with the reason it still stands and update or drop \`clearedWhen\`. A reason that outlives its blocker reads, to the next person, as a debt still being excused.`
+          `the \`${tag}\` entry says its debt is blocked until \`${dep}\` clears, and \`${dep}\` is gone from ${BASELINE_REL} — the condition it named is satisfied. Either pay this debt now (it is what the \`why\` promised), or restate the \`why\` with the reason it still stands and update or drop \`clearedWhen\`. A reason that outlives its blocker reads, to the next person, as a debt still being excused.`,
         );
       }
     }
     let moved = false;
-    for (const label of [...new Set([...Object.keys(recorded), ...Object.keys(observed[tag] || {})])].sort()) {
+    for (const label of [
+      ...new Set([
+        ...Object.keys(recorded),
+        ...Object.keys(observed[tag] || {}),
+      ]),
+    ].sort()) {
       if (!Array.isArray(recorded[label] || [])) {
         blocker(
           tag,
-          `${label} in ${BASELINE_REL} records a count rather than the findings it stands for, so a new defect hidden by a fixed one would pass. Re-record with \`node tools/scripts/check-figma.js --update-baseline\`.`
+          `${label} in ${BASELINE_REL} records a count rather than the findings it stands for, so a new defect hidden by a fixed one would pass. Re-record with \`node tools/scripts/check-figma.js --update-baseline\`.`,
         );
         moved = true;
         continue;
@@ -1908,14 +2559,14 @@ function settleRatchets() {
         const shown = added.slice(0, 6);
         blocker(
           tag,
-          `${label}: ${added.length} finding(s) ${BASELINE_REL} does not record. Now found: ${shown.join(' · ')}${added.length > shown.length ? ' · …' : ''}. Fix it in Figma (file ${(snapshot.meta || {}).fileKey || ''}) and re-run npm run figma:snapshot, or — if the new findings are legitimate — record them with \`node tools/scripts/check-figma.js --update-baseline\` and say why in the entry's \`why\`.`
+          `${label}: ${added.length} finding(s) ${BASELINE_REL} does not record. Now found: ${shown.join(' · ')}${added.length > shown.length ? ' · …' : ''}. Fix it in Figma (file ${(snapshot.meta || {}).fileKey || ''}) and re-run npm run figma:snapshot, or — if the new findings are legitimate — record them with \`node tools/scripts/check-figma.js --update-baseline\` and say why in the entry's \`why\`.`,
         );
       }
       if (gone.length) {
         const shown = gone.slice(0, 6);
         blocker(
           tag,
-          `${label}: ${gone.length} recorded finding(s) no longer occur — ${shown.join(' · ')}${gone.length > shown.length ? ' · …' : ''}. An improvement that is not recorded can silently reverse. Run \`node tools/scripts/check-figma.js --update-baseline\` to lock it in.`
+          `${label}: ${gone.length} recorded finding(s) no longer occur — ${shown.join(' · ')}${gone.length > shown.length ? ' · …' : ''}. An improvement that is not recorded can silently reverse. Run \`node tools/scripts/check-figma.js --update-baseline\` to lock it in.`,
         );
       }
     }
@@ -1932,7 +2583,7 @@ function settleRatchets() {
       .join(', ');
     ratchetLines.push(
       `  [${tag}] ${nodes} across ${labels.length} master(s), ${moved ? 'AGAINST' : 'at'} the recorded baseline ` +
-        `(${entry.kind}: ${top}${labels.length > 3 ? ', …' : ''} — ${BASELINE_REL}).`
+        `(${entry.kind}: ${top}${labels.length > 3 ? ', …' : ''} — ${BASELINE_REL}).`,
     );
   }
 }
@@ -1950,7 +2601,7 @@ function settleRatchets() {
  *  under-reports by half and goes green on a regression that lands inside a record
  *  that already exists. */
 function checkTextNodes() {
-  const auto = new Map();       // selector -> Map<finding, node count>
+  const auto = new Map(); // selector -> Map<finding, node count>
   const collection = new Map();
   const unstyled = new Map();
   const override = new Map();
@@ -1966,7 +2617,8 @@ function checkTextNodes() {
   const nodesIn = (per) => [...per.values()].reduce((a, b) => a + b, 0);
   // The node multiplicity travels WITH the finding, so a variant added to a set moves
   // the entry rather than hiding inside it.
-  const findingsIn = (per) => [...per.entries()].map(([d, n]) => (n > 1 ? `${d} ×${n}` : d)).sort();
+  const findingsIn = (per) =>
+    [...per.entries()].map(([d, n]) => (n > 1 ? `${d} ×${n}` : d)).sort();
 
   for (const master of textNodes.masters) {
     const sel = master.selector;
@@ -1996,8 +2648,17 @@ function checkTextNodes() {
       // is no help — `font-size/sm` exists in both collections — so only the
       // collection distinguishes a correct binding from a wrong one.
       const coll = rec.fontSizeVariableCollection;
-      if (coll !== null && coll !== 'MIXED-RANGE' && !SEMANTIC_COLLECTIONS.has(coll)) {
-        bump(collection, sel, rec.count, `${where} → ${rec.fontSizeVariable} in “${coll}”`);
+      if (
+        coll !== null &&
+        coll !== 'MIXED-RANGE' &&
+        !SEMANTIC_COLLECTIONS.has(coll)
+      ) {
+        bump(
+          collection,
+          sel,
+          rec.count,
+          `${where} → ${rec.fontSizeVariable} in “${coll}”`,
+        );
       }
 
       // ── [TEXT-UNSTYLED] ─────────────────────────────────────────────────────
@@ -2009,7 +2670,7 @@ function checkTextNodes() {
       if (rec.textStyleName === 'UNRESOLVED') {
         warning(
           'TEXT-UNSTYLED',
-          `${sel}: ${where} carries a text style this file cannot resolve — a remote or unloaded library style. Re-link it to one of the ty/* styles in ${(snapshot.meta || {}).fileKey || 'the library file'}, or clear it so the node reads as unstyled and is counted.`
+          `${sel}: ${where} carries a text style this file cannot resolve — a remote or unloaded library style. Re-link it to one of the ty/* styles in ${(snapshot.meta || {}).fileKey || 'the library file'}, or clear it so the node reads as unstyled and is counted.`,
         );
         continue;
       }
@@ -2027,8 +2688,14 @@ function checkTextNodes() {
         if (rec.visible === false) continue;
         // (iii) The short named list — scenery and glyphs, pending removal.
         const qualified = `${rec.path}|${rec.chars}`;
-        if (pending.has(qualified)) { pendingHit.add(qualified); continue; }
-        if (pending.has(rec.path)) { pendingHit.add(rec.path); continue; }
+        if (pending.has(qualified)) {
+          pendingHit.add(qualified);
+          continue;
+        }
+        if (pending.has(rec.path)) {
+          pendingHit.add(rec.path);
+          continue;
+        }
         bump(unstyled, sel, rec.count, where);
       }
     }
@@ -2039,7 +2706,7 @@ function checkTextNodes() {
     if (stale.length) {
       warning(
         'TEXT-UNSTYLED',
-        `${sel}: ${stale.length} pending-removal entr${stale.length > 1 ? 'ies' : 'y'} in TEXT_UNSTYLED_PENDING matched no TEXT node this run (${stale.join(', ')}). Either the node is gone — delete the entry — or it was renamed and is now being counted.`
+        `${sel}: ${stale.length} pending-removal entr${stale.length > 1 ? 'ies' : 'y'} in TEXT_UNSTYLED_PENDING matched no TEXT node this run (${stale.join(', ')}). Either the node is gone — delete the entry — or it was renamed and is now being counted.`,
       );
     }
   }
@@ -2051,14 +2718,18 @@ function checkTextNodes() {
     if (seen.has(sel)) continue;
     warning(
       'TEXT-UNSTYLED',
-      `${sel}: TEXT_UNSTYLED_PENDING excuses ${TEXT_UNSTYLED_PENDING[sel].length} node(s) on a master that is not in ${TEXT_NODES_REL} at all. Either the master was renamed — retitle the key — or it is gone and the entry should be deleted.`
+      `${sel}: TEXT_UNSTYLED_PENDING excuses ${TEXT_UNSTYLED_PENDING[sel].length} node(s) on a master that is not in ${TEXT_NODES_REL} at all. Either the master was renamed — retitle the key — or it is gone and the entry should be deleted.`,
     );
   }
 
-  for (const [sel, per] of auto) ratchet('FIGMA-AUTO-LEADING', sel, nodesIn(per), findingsIn(per));
-  for (const [sel, per] of collection) ratchet('FIGMA-VARIABLE-COLLECTION', sel, nodesIn(per), findingsIn(per));
-  for (const [sel, per] of unstyled) ratchet('TEXT-UNSTYLED', sel, nodesIn(per), findingsIn(per));
-  for (const [sel, per] of override) ratchet('TEXT-OVERRIDE', sel, nodesIn(per), findingsIn(per));
+  for (const [sel, per] of auto)
+    ratchet('FIGMA-AUTO-LEADING', sel, nodesIn(per), findingsIn(per));
+  for (const [sel, per] of collection)
+    ratchet('FIGMA-VARIABLE-COLLECTION', sel, nodesIn(per), findingsIn(per));
+  for (const [sel, per] of unstyled)
+    ratchet('TEXT-UNSTYLED', sel, nodesIn(per), findingsIn(per));
+  for (const [sel, per] of override)
+    ratchet('TEXT-OVERRIDE', sel, nodesIn(per), findingsIn(per));
 }
 
 /** The size and leading a master's root cascade resolves to, both in the units the
@@ -2070,9 +2741,18 @@ function checkTextNodes() {
  *  ROOT_TYPE entry falls back to its ROOT_PAINT cascade, and several of those state no
  *  type at all because they legitimately inherit it from the parent master. */
 function resolveRootType(entry, axes) {
-  const file = path.join(ROOT, 'libs', entry.lib || 'react', 'src/lib', entry.file);
+  const file = path.join(
+    ROOT,
+    'libs',
+    entry.lib || 'react',
+    'src/lib',
+    entry.file,
+  );
   if (!fs.existsSync(file)) {
-    warning('ROOT-TYPE', `${entry.label}: ${entry.file} not found under libs/${entry.lib || 'react'}; cannot resolve the expected type.`);
+    warning(
+      'ROOT-TYPE',
+      `${entry.label}: ${entry.file} not found under libs/${entry.lib || 'react'}; cannot resolve the expected type.`,
+    );
     return null;
   }
   const rules = cssRules(file);
@@ -2081,7 +2761,10 @@ function resolveRootType(entry, axes) {
   // Ancestor-first, and every matched body goes into ONE string: `font-size: inherit` on
   // the leaf resolves only when the ancestor that states the size is in the same body.
   for (const template of entry.cascade) {
-    const selector = template.replace(/\{(\w+)\}/g, (_, axis) => axes[axis] ?? '\u0000');
+    const selector = template.replace(
+      /\{(\w+)\}/g,
+      (_, axis) => axes[axis] ?? '\u0000',
+    );
     if (selector.includes('\u0000')) continue; // the sampled variant has no such axis
     const body = rules.get(selector);
     if (body === undefined) continue;
@@ -2135,28 +2818,49 @@ function checkOverlays() {
     for (const o of overlays) {
       const [x, y, w, h] = o.box;
       const [pw, ph] = o.parentBox;
-      for (const [paint, value] of [['fill', o.fill], ['stroke', o.stroke]]) {
+      for (const [paint, value] of [
+        ['fill', o.fill],
+        ['stroke', o.stroke],
+      ]) {
         if (value === 'RAW') {
-          note(`raw:${o.layer}:${paint}`, `${o.layer} paints a raw ${paint}. Bind it to a colour variable — an overlay is chrome like any other.`, o.variant);
+          note(
+            `raw:${o.layer}:${paint}`,
+            `${o.layer} paints a raw ${paint}. Bind it to a colour variable — an overlay is chrome like any other.`,
+            o.variant,
+          );
         }
       }
       // An overlay sized to the box it covers has to sit ON it.
       const covers = Math.abs(w - pw) < 1 && Math.abs(h - ph) < 1;
       if (covers && (Math.abs(x) > 1 || Math.abs(y) > 1)) {
-        note(`offset:${o.layer}`, `${o.layer} is the size of ${o.parentName} but sits at ${x},${y}. A cover overlay belongs at 0,0.`, o.variant);
+        note(
+          `offset:${o.layer}`,
+          `${o.layer} is the size of ${o.parentName} but sits at ${x},${y}. A cover overlay belongs at 0,0.`,
+          o.variant,
+        );
       }
       // Entirely outside its parent is never right, whatever the size.
-      const outside = x >= pw - 0.5 || y >= ph - 0.5 || x + w <= 0.5 || y + h <= 0.5;
+      const outside =
+        x >= pw - 0.5 || y >= ph - 0.5 || x + w <= 0.5 || y + h <= 0.5;
       if (outside) {
-        note(`outside:${o.layer}`, `${o.layer} (${w}x${h} at ${x},${y}) lies outside ${o.parentName} (${pw}x${ph}) entirely. It draws nothing where it is.`, o.variant);
+        note(
+          `outside:${o.layer}`,
+          `${o.layer} (${w}x${h} at ${x},${y}) lies outside ${o.parentName} (${pw}x${ph}) entirely. It draws nothing where it is.`,
+          o.variant,
+        );
       }
       if (!o.boundTo && o.visible === false) {
-        note(`orphan:${o.layer}`, `${o.layer} is hidden and bound to no property, so nothing can ever show it.`, o.variant);
+        note(
+          `orphan:${o.layer}`,
+          `${o.layer} is hidden and bound to no property, so nothing can ever show it.`,
+          o.variant,
+        );
       }
     }
     for (const [key, where] of grouped) {
       const msg = key.split('\u0000')[1];
-      const scope = where.length > 2 ? `${where.length} variants` : where.join('; ');
+      const scope =
+        where.length > 2 ? `${where.length} variants` : where.join('; ');
       critical('OVERLAY', `${comp.selector} [${scope}]: ${msg}`);
     }
   }
@@ -2207,13 +2911,17 @@ function checkLayerPaint() {
       const candidates = (name) => {
         const c = ['.' + name];
         if (rootForLayer) {
-          c.push(`${rootForLayer} .${name}`);   // .atl-toggle .track
-          c.push(`${rootForLayer}-${name}`);    // .atl-combobox-input
+          c.push(`${rootForLayer} .${name}`); // .atl-toggle .track
+          c.push(`${rootForLayer}-${name}`); // .atl-combobox-input
         }
         return c;
       };
-      const aliased = aliases[L.layer] ?? candidates(L.layer).find((sel) => cssRules(file).has(sel));
-      const bases = Array.isArray(aliased) ? aliased : [aliased || '.' + L.layer];
+      const aliased =
+        aliases[L.layer] ??
+        candidates(L.layer).find((sel) => cssRules(file).has(sel));
+      const bases = Array.isArray(aliased)
+        ? aliased
+        : [aliased || '.' + L.layer];
       const base = bases[bases.length - 1]; // the layer's OWN rule, for the messages
       // A variant can override a layer's rule: `.atl-progress.variant-success .fill`
       // repaints the bar. Resolve base first, then the variant-scoped form, the way
@@ -2225,7 +2933,8 @@ function checkLayerPaint() {
         base.startsWith(rootSel + ' ')
           ? `${rootSel}${cls} ${base.slice(rootSel.length + 1)}`
           : `${rootSel}${cls} ${base}`;
-      if (axes.variant && rootSel) cascade.push(scoped(`.variant-${axes.variant}`));
+      if (axes.variant && rootSel)
+        cascade.push(scoped(`.variant-${axes.variant}`));
       // Ten masters carry a STATE-LIKE axis that is not called `state`: selection,
       // expanded, current, selected, sortDirection. Their CSS lives in an `.is-*`
       // class, and this builder only knew `.variant-*` — so every one of those
@@ -2240,7 +2949,8 @@ function checkLayerPaint() {
       // state class falls through to the base rule, which is correct.
       if (rootSel) {
         for (const [axis, value] of Object.entries(axes)) {
-          if (axis === 'variant' || axis === 'state' || axis === 'size') continue;
+          if (axis === 'variant' || axis === 'state' || axis === 'size')
+            continue;
           const cls = value === 'true' ? `.is-${axis}` : `.is-${value}`;
           const sel = scoped(cls);
           if (rules.has(sel)) cascade.push(sel);
@@ -2270,7 +2980,9 @@ function checkLayerPaint() {
         if (/::?(before|after)\b/.test(sel)) continue; // a pseudo-element is a different box
         if (foreignVariant(sel)) continue; // another variant's rule says nothing about this one
         for (const prop of ['background', 'background-color']) {
-          const m = new RegExp('(?:^|;)\\s*' + prop + '\\s*:\\s*([^;]+)').exec(b);
+          const m = new RegExp('(?:^|;)\\s*' + prop + '\\s*:\\s*([^;]+)').exec(
+            b,
+          );
           if (!m) continue;
           const v = cssToVariable(m[1].trim(), 'color');
           if (v) statefulFills.add(v);
@@ -2278,40 +2990,84 @@ function checkLayerPaint() {
       }
       const decl = (prop) => {
         // Last wins: the bodies are concatenated in cascade order.
-        const all = [...body.matchAll(new RegExp('(?:^|;)\\s*' + prop + '\\s*:\\s*([^;]+)', 'g'))];
-        return all.length ? all[all.length - 1][1].replace(/\s+/g, ' ').trim() : null;
+        const all = [
+          ...body.matchAll(
+            new RegExp('(?:^|;)\\s*' + prop + '\\s*:\\s*([^;]+)', 'g'),
+          ),
+        ];
+        return all.length
+          ? all[all.length - 1][1].replace(/\s+/g, ' ').trim()
+          : null;
       };
       const where = L.variant + (L.count > 1 ? ' x' + L.count : '');
 
       // ── Paint ────────────────────────────────────────────────────────────
       const bg = decl('background') || decl('background-color');
       if (bg !== null) {
-        const wantFill = /transparent|none/.test(bg) ? null : cssToVariable(bg, 'color');
+        const wantFill = /transparent|none/.test(bg)
+          ? null
+          : cssToVariable(bg, 'color');
         if (wantFill !== undefined) {
-          if (L.fill !== null && L.fill !== 'RAW' && statefulFills.has(L.fill)) {
+          if (
+            L.fill !== null &&
+            L.fill !== 'RAW' &&
+            statefulFills.has(L.fill)
+          ) {
             // A colour the CSS gives this layer in some state.
           } else if (wantFill === null && L.fill !== null) {
-            note('fill:' + L.layer, `${L.layer} paints ${L.fill}, but ${selector} sets background ${bg} and no rule gives it that colour.`, where);
+            note(
+              'fill:' + L.layer,
+              `${L.layer} paints ${L.fill}, but ${selector} sets background ${bg} and no rule gives it that colour.`,
+              where,
+            );
           } else if (wantFill !== null && L.fill === null) {
-            note('fill:' + L.layer, `${L.layer} has no fill; ${selector} says ${wantFill}.`, where);
-          } else if (wantFill !== null && L.fill !== null && L.fill !== wantFill) {
-            note('fill:' + L.layer, `${L.layer} fill is ${L.fill}, but ${selector} says ${wantFill}.`, where);
+            note(
+              'fill:' + L.layer,
+              `${L.layer} has no fill; ${selector} says ${wantFill}.`,
+              where,
+            );
+          } else if (
+            wantFill !== null &&
+            L.fill !== null &&
+            L.fill !== wantFill
+          ) {
+            note(
+              'fill:' + L.layer,
+              `${L.layer} fill is ${L.fill}, but ${selector} says ${wantFill}.`,
+              where,
+            );
           }
         }
       }
       if (bg === null && L.fill !== null && !statefulFills.has(L.fill)) {
-        note('invented-fill:' + L.layer, `${L.layer} paints ${L.fill}, and no rule for ${selector} sets a background at all.`, where);
+        note(
+          'invented-fill:' + L.layer,
+          `${L.layer} paints ${L.fill}, and no rule for ${selector} sets a background at all.`,
+          where,
+        );
       }
       const radius = decl('border-radius');
       if (radius !== null && splitValues(radius).length === 1) {
         const wantRadius = cssToVariable(radius, 'radius');
         if (wantRadius !== undefined && L.radius !== wantRadius) {
-          note('radius:' + L.layer, `${L.layer} radius is ${L.radius ?? 'unset'}, but ${selector} says ${wantRadius}.`, where);
+          note(
+            'radius:' + L.layer,
+            `${L.layer} radius is ${L.radius ?? 'unset'}, but ${selector} says ${wantRadius}.`,
+            where,
+          );
         }
       }
       const shadow = decl('box-shadow');
-      if (shadow !== null && /var\(--ui-shadow-/.test(shadow) && (L.effects || []).length === 0) {
-        note('shadow:' + L.layer, `${L.layer} has no effect; ${selector} sets box-shadow ${shadow}.`, where);
+      if (
+        shadow !== null &&
+        /var\(--ui-shadow-/.test(shadow) &&
+        (L.effects || []).length === 0
+      ) {
+        note(
+          'shadow:' + L.layer,
+          `${L.layer} has no effect; ${selector} sets box-shadow ${shadow}.`,
+          where,
+        );
       }
 
       // Borders, four-side and per-side.
@@ -2322,15 +3078,20 @@ function checkLayerPaint() {
       const border = decl('border');
       if (border !== null) {
         sidesDeclared = true;
-        const w = /^(0|none)$/.test(border) ? 0 : lengthOf(splitValues(border)[0]);
+        const w = /^(0|none)$/.test(border)
+          ? 0
+          : lengthOf(splitValues(border)[0]);
         for (const sd of SIDES) wantSides[sd] = w ?? 0;
-        if (!/transparent|none/.test(border)) wantStroke = cssToVariable(splitValues(border).pop(), 'color');
+        if (!/transparent|none/.test(border))
+          wantStroke = cssToVariable(splitValues(border).pop(), 'color');
       }
       for (const sd of SIDES) {
         const d = decl('border-' + sd);
         if (d === null) continue;
         sidesDeclared = true;
-        wantSides[sd] = /^(0|none)$/.test(d) ? 0 : (lengthOf(splitValues(d)[0]) ?? 0);
+        wantSides[sd] = /^(0|none)$/.test(d)
+          ? 0
+          : (lengthOf(splitValues(d)[0]) ?? 0);
         if (!/transparent|none/.test(d)) {
           const c = cssToVariable(splitValues(d).pop(), 'color');
           if (c !== undefined) wantStroke = c;
@@ -2338,19 +3099,38 @@ function checkLayerPaint() {
       }
       const bc = decl('border-color');
       if (bc !== null) wantStroke = cssToVariable(bc, 'color');
-      if (sidesDeclared && L.strokeSides && (L.stroke !== null || wantStroke !== undefined)) {
-        const got = { top: L.strokeSides[0], right: L.strokeSides[1], bottom: L.strokeSides[2], left: L.strokeSides[3] };
-        const off = SIDES.filter((sd) => Math.abs((got[sd] || 0) - (wantSides[sd] || 0)) > 0.5);
+      if (
+        sidesDeclared &&
+        L.strokeSides &&
+        (L.stroke !== null || wantStroke !== undefined)
+      ) {
+        const got = {
+          top: L.strokeSides[0],
+          right: L.strokeSides[1],
+          bottom: L.strokeSides[2],
+          left: L.strokeSides[3],
+        };
+        const off = SIDES.filter(
+          (sd) => Math.abs((got[sd] || 0) - (wantSides[sd] || 0)) > 0.5,
+        );
         if (off.length) {
           note(
             'border:' + L.layer,
             `${L.layer} border is ${off.map((sd) => `${sd} ${got[sd] || 0}px`).join(', ')}, but ${selector} says ${off.map((sd) => `${sd} ${wantSides[sd] || 0}px`).join(', ')}.`,
-            where
+            where,
           );
         }
       }
-      if (wantStroke !== undefined && wantStroke !== null && L.stroke !== wantStroke) {
-        note('stroke:' + L.layer, `${L.layer} border colour is ${L.stroke ?? 'unset'}, but ${selector} says ${wantStroke}.`, where);
+      if (
+        wantStroke !== undefined &&
+        wantStroke !== null &&
+        L.stroke !== wantStroke
+      ) {
+        note(
+          'stroke:' + L.layer,
+          `${L.layer} border colour is ${L.stroke ?? 'unset'}, but ${selector} says ${wantStroke}.`,
+          where,
+        );
       }
       if (!sidesDeclared && L.stroke !== null) {
         const anyBorder = [...rules].some(
@@ -2358,32 +3138,50 @@ function checkLayerPaint() {
             mentionsPart(sel) &&
             !/::?(before|after)\b/.test(sel) &&
             !foreignVariant(sel) &&
-            /(?:^|;)\s*border(?!-radius)(-[a-z]+)*\s*:/.test(b)
+            /(?:^|;)\s*border(?!-radius)(-[a-z]+)*\s*:/.test(b),
         );
         if (!anyBorder) {
-          note('invented-border:' + L.layer, `${L.layer} paints a ${L.stroke} border, and no rule for ${selector} declares one at all.`, where);
+          note(
+            'invented-border:' + L.layer,
+            `${L.layer} paints a ${L.stroke} border, and no rule for ${selector} declares one at all.`,
+            where,
+          );
         }
       }
       if (radius !== null || L.radius === null) {
         // handled above
       } else if (L.radius !== null) {
         const anyRadius = [...rules].some(
-          ([sel, b]) => mentionsPart(sel) && !/::?(before|after)\b/.test(sel) && !foreignVariant(sel) && /(?:^|;)\s*border-radius\s*:/.test(b)
+          ([sel, b]) =>
+            mentionsPart(sel) &&
+            !/::?(before|after)\b/.test(sel) &&
+            !foreignVariant(sel) &&
+            /(?:^|;)\s*border-radius\s*:/.test(b),
         );
         if (!anyRadius) {
-          note('invented-radius:' + L.layer, `${L.layer} has radius ${L.radius}, and no rule for ${selector} declares one at all.`, where);
+          note(
+            'invented-radius:' + L.layer,
+            `${L.layer} has radius ${L.radius}, and no rule for ${selector} declares one at all.`,
+            where,
+          );
         }
       }
 
       // ── Box ──────────────────────────────────────────────────────────────
       const box = boxFromDeclarations(body);
       const cmp = (label, got, want) => {
-        if (want === null || want === undefined || got === null || got === undefined) return;
+        if (
+          want === null ||
+          want === undefined ||
+          got === null ||
+          got === undefined
+        )
+          return;
         if (Math.abs(got - want) > 0.5) {
           note(
             label + ':' + L.layer,
             `${L.layer} ${label} is ${Math.round(got * 100) / 100}px, but ${selector} says ${Math.round(want * 100) / 100}px.`,
-            where
+            where,
           );
         }
       };
@@ -2391,7 +3189,11 @@ function checkLayerPaint() {
         // A stated min-height Figma does not carry is the row-ladder defect: the box
         // then grows with its content instead of holding the token (ADR-0048).
         if (L.minHeight === null) {
-          note('min-height:' + L.layer, `${L.layer} has no min-height; ${selector} states ${box.minHeight}px. Without it the box grows with its content.`, where);
+          note(
+            'min-height:' + L.layer,
+            `${L.layer} has no min-height; ${selector} states ${box.minHeight}px. Without it the box grows with its content.`,
+            where,
+          );
         } else {
           cmp('min-height', L.minHeight, box.minHeight);
         }
@@ -2400,9 +3202,18 @@ function checkLayerPaint() {
       // ADR-0041 derives block padding from the control height; ADR-0048 states the
       // height instead. A min-height box that centres its line is the same
       // measurement without a raw 11.25px, which no token can bind — accept either.
-      const derivedBlock = /calc\(/.test(String(decl('padding') || '')) && box.minHeight !== null;
-      const centred = L.padding && L.padding[0] === 0 && L.padding[2] === 0 && L.minHeight !== null && Math.abs(L.minHeight - box.minHeight) <= 0.5;
-      if (derivedBlock && centred) { box.padding.top = null; box.padding.bottom = null; }
+      const derivedBlock =
+        /calc\(/.test(String(decl('padding') || '')) && box.minHeight !== null;
+      const centred =
+        L.padding &&
+        L.padding[0] === 0 &&
+        L.padding[2] === 0 &&
+        L.minHeight !== null &&
+        Math.abs(L.minHeight - box.minHeight) <= 0.5;
+      if (derivedBlock && centred) {
+        box.padding.top = null;
+        box.padding.bottom = null;
+      }
       // [ROOT-BOX]'s height-derived carve-out (BLOCK_HEIGHT_DERIVED, ADR-0107) has a
       // layer-level twin: one of the same six masters, encountered here as a `layer`
       // entry instead of a component root. `centred` above already reads a 0 block
@@ -2417,7 +3228,11 @@ function checkLayerPaint() {
       // CSS recipe (`min-height` + a `calc()` block padding) but are not masters
       // ADR-0107 named, and extending its decision to them is a separate call this
       // fix does not make.
-      if (derivedBlock && L.padding && BLOCK_HEIGHT_DERIVED.has(comp.selector)) {
+      if (
+        derivedBlock &&
+        L.padding &&
+        BLOCK_HEIGHT_DERIVED.has(comp.selector)
+      ) {
         const top = Math.round(L.padding[0] * 100) / 100;
         const bottom = Math.round(L.padding[2] * 100) / 100;
         if (Math.abs(top) > 0.5 || Math.abs(bottom) > 0.5) {
@@ -2426,7 +3241,7 @@ function checkLayerPaint() {
             `${L.layer} block padding is top ${top}px, bottom ${bottom}px. ADR-0107 decided a height-derived ` +
               `control's master carries no block padding — zero it, or record why this layer needs to keep ` +
               `the block axis.`,
-            where
+            where,
           );
         }
         // Handled above, on its own terms — the general comparison below must not
@@ -2441,13 +3256,16 @@ function checkLayerPaint() {
         cmp('padding-left', L.padding[3], box.padding.left);
       }
       if (box.gap !== null && L.gap !== null) cmp('gap', L.gap, box.gap);
-      if (box.fontSize !== null && L.fontSize !== null) cmp('font-size', L.fontSize, box.fontSize);
-      if (box.lineHeight !== null && L.lineHeight !== null) cmp('line-height %', L.lineHeight, box.lineHeight * 100);
+      if (box.fontSize !== null && L.fontSize !== null)
+        cmp('font-size', L.fontSize, box.fontSize);
+      if (box.lineHeight !== null && L.lineHeight !== null)
+        cmp('line-height %', L.lineHeight, box.lineHeight * 100);
     }
     for (const [key, whereSet] of grouped) {
       const msg = key.split('\u0000')[1];
       const where = [...whereSet];
-      const scope = where.length > 2 ? where.length + ' variants' : where.join('; ');
+      const scope =
+        where.length > 2 ? where.length + ' variants' : where.join('; ');
       critical('LAYER-PAINT', `${comp.selector} [${scope}]: ${msg}`);
     }
   }
@@ -2478,7 +3296,13 @@ function rootSelectorFor(selector) {
     const m = /^(\.[a-z0-9-]+)/.exec(first);
     if (m) return m[1];
   }
-  return '.' + selector.replace(/^Atl/, 'atl').replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
+  return (
+    '.' +
+    selector
+      .replace(/^Atl/, 'atl')
+      .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+      .toLowerCase()
+  );
 }
 
 /** The box properties a body states, resolved to px.
@@ -2504,16 +3328,24 @@ function boxFromDeclarations(body) {
     const prop = m[1];
     const value = m[2].trim();
     switch (prop) {
-      case 'min-height': out.minHeight = lengthOf(value); break;
+      case 'min-height':
+        out.minHeight = lengthOf(value);
+        break;
       // `resolveSizeValue` rather than `lengthOf`: a strict superset (identical result
       // for every value `lengthOf` already handled) that additionally resolves a
       // two-argument `min()`/`max()` whose one fixed operand is the design value behind
       // a viewport-relative clamp — `width: min(36rem, 90vw)`, [ROOT-SIZE]'s reason for
       // existing. Applied to `width` for the same reason, and to `height` for symmetry;
       // no `height: min()/max()` exists in the library today, so this is a no-op there.
-      case 'height': out.height = resolveSizeValue(value); break;
-      case 'width': out.width = resolveSizeValue(value); break;
-      case 'gap': out.gap = lengthOf(value); break;
+      case 'height':
+        out.height = resolveSizeValue(value);
+        break;
+      case 'width':
+        out.width = resolveSizeValue(value);
+        break;
+      case 'gap':
+        out.gap = lengthOf(value);
+        break;
       // `inherit` is not a length — it is "keep whatever the ancestor computed".
       // The cascade is joined ancestor-first, so the value already in `out` IS the
       // ancestor's; running it through lengthOf() returned null and DELETED it, and
@@ -2523,7 +3355,10 @@ function boxFromDeclarations(body) {
       // perturbation test caught for the `font:` shorthand. Not fixed in lengthOf():
       // `inherit` really is not a length, and lengthOf() also answers for min-height,
       // height, gap and the four padding sides, where "keep the earlier value" is wrong.
-      case 'font-size': if (value === 'inherit') break; out.fontSize = lengthOf(value); break;
+      case 'font-size':
+        if (value === 'inherit') break;
+        out.fontSize = lengthOf(value);
+        break;
       // The role shorthand carries the size AND the leading, so a rule using one
       // must still be measurable. It was not: migrating .atl-alert and .atl-toast
       // to `font: var(--ui-type-body-sm)` silently deleted the [ROOT-PAINT]
@@ -2539,14 +3374,20 @@ function boxFromDeclarations(body) {
       }
       case 'line-height':
         if (value === 'inherit') break; // same reason as font-size above
-        out.lineHeight = /^[\d.]+$/.test(value) ? parseFloat(value) : resolveUnitless(value);
+        out.lineHeight = /^[\d.]+$/.test(value)
+          ? parseFloat(value)
+          : resolveUnitless(value);
         break;
       case 'padding': {
         const p = splitValues(value).map(lengthOf);
-        if (p.length === 1) out.padding = { top: p[0], right: p[0], bottom: p[0], left: p[0] };
-        else if (p.length === 2) out.padding = { top: p[0], bottom: p[0], right: p[1], left: p[1] };
-        else if (p.length === 3) out.padding = { top: p[0], right: p[1], left: p[1], bottom: p[2] };
-        else if (p.length >= 4) out.padding = { top: p[0], right: p[1], bottom: p[2], left: p[3] };
+        if (p.length === 1)
+          out.padding = { top: p[0], right: p[0], bottom: p[0], left: p[0] };
+        else if (p.length === 2)
+          out.padding = { top: p[0], bottom: p[0], right: p[1], left: p[1] };
+        else if (p.length === 3)
+          out.padding = { top: p[0], right: p[1], left: p[1], bottom: p[2] };
+        else if (p.length >= 4)
+          out.padding = { top: p[0], right: p[1], bottom: p[2], left: p[3] };
         break;
       }
       case 'padding-block': {
@@ -2561,11 +3402,20 @@ function boxFromDeclarations(body) {
         out.padding.right = v.length > 1 ? v[1] : v[0];
         break;
       }
-      case 'padding-top': out.padding.top = lengthOf(value); break;
-      case 'padding-right': out.padding.right = lengthOf(value); break;
-      case 'padding-bottom': out.padding.bottom = lengthOf(value); break;
-      case 'padding-left': out.padding.left = lengthOf(value); break;
-      default: break;
+      case 'padding-top':
+        out.padding.top = lengthOf(value);
+        break;
+      case 'padding-right':
+        out.padding.right = lengthOf(value);
+        break;
+      case 'padding-bottom':
+        out.padding.bottom = lengthOf(value);
+        break;
+      case 'padding-left':
+        out.padding.left = lengthOf(value);
+        break;
+      default:
+        break;
     }
   }
   return out;
@@ -2626,7 +3476,8 @@ function resolveSizeValue(expr) {
     const [, fn, a, b] = m;
     const av = lengthOf(a);
     const bv = lengthOf(b);
-    if (av !== null && bv !== null) return fn.toLowerCase() === 'min' ? Math.min(av, bv) : Math.max(av, bv);
+    if (av !== null && bv !== null)
+      return fn.toLowerCase() === 'min' ? Math.min(av, bv) : Math.max(av, bv);
     if (av !== null) return av;
     if (bv !== null) return bv;
     return null;
@@ -2642,10 +3493,13 @@ function tokenDeclaration(name) {
     // and "first definition wins" then handed the resolver a paragraph instead of a
     // length. It silently returned null, so every min-height behind a calc() went
     // unchecked.
-    const css = fs.readFileSync(TOKENS_FILE, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+    const css = fs
+      .readFileSync(TOKENS_FILE, 'utf8')
+      .replace(/\/\*[\s\S]*?\*\//g, '');
     for (const m of css.matchAll(/(--ui-[a-z0-9-]+)\s*:\s*([^;]+);/g)) {
       // First definition wins: the later ones are the dark-mode overrides.
-      if (!tokenDeclaration.cache.has(m[1])) tokenDeclaration.cache.set(m[1], m[2].replace(/\s+/g, ' ').trim());
+      if (!tokenDeclaration.cache.has(m[1]))
+        tokenDeclaration.cache.set(m[1], m[2].replace(/\s+/g, ' ').trim());
     }
   }
   return tokenDeclaration.cache.get(name) ?? null;
@@ -2700,7 +3554,13 @@ function cssFileFor(selector) {
   let out = null;
   const entry = ROOT_PAINT.find((e) => e.label === selector);
   if (entry) {
-    const f = path.join(ROOT, 'libs', entry.lib || 'react', 'src/lib', entry.file);
+    const f = path.join(
+      ROOT,
+      'libs',
+      entry.lib || 'react',
+      'src/lib',
+      entry.file,
+    );
     if (fs.existsSync(f)) out = f;
   }
   if (!out) {
@@ -2708,7 +3568,10 @@ function cssFileFor(selector) {
     if (moduleName) {
       const dir = path.join(ROOT, 'libs/react/src/lib', moduleName);
       if (fs.existsSync(dir)) {
-        const kebab = selector.replace(/^Atl/, 'atl').replace(/([a-z0-9])([A-Z])/g, '$1-$2').toLowerCase();
+        const kebab = selector
+          .replace(/^Atl/, 'atl')
+          .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
+          .toLowerCase();
         const exact = path.join(dir, `${kebab}.css`);
         if (fs.existsSync(exact)) out = exact;
         else {
@@ -2752,27 +3615,34 @@ function checkSetClips() {
   let noFacts = 0;
   for (const comp of snapshot.components) {
     const box = comp.box;
-    if (!box) { noFacts++; continue; }
+    if (!box) {
+      noFacts++;
+      continue;
+    }
     if (box.type !== 'COMPONENT_SET' || !box.childrenExtent) continue;
     checked++;
     const overR = box.childrenExtent.right - box.width;
     const overB = box.childrenExtent.bottom - box.height;
     if (overR <= 1 && overB <= 1) continue;
     const parts = [];
-    if (overR > 1) parts.push(`${Math.round(overR * 100) / 100}px past the right edge`);
-    if (overB > 1) parts.push(`${Math.round(overB * 100) / 100}px past the bottom edge`);
-    const clipped = box.clipsContent ? 'and the set clips, so that much of them is invisible' : 'though the set does not clip';
+    if (overR > 1)
+      parts.push(`${Math.round(overR * 100) / 100}px past the right edge`);
+    if (overB > 1)
+      parts.push(`${Math.round(overB * 100) / 100}px past the bottom edge`);
+    const clipped = box.clipsContent
+      ? 'and the set clips, so that much of them is invisible'
+      : 'though the set does not clip';
     blocker(
       'SET-CLIPS',
       `${comp.selector}: the COMPONENT_SET is ${box.width}×${box.height} but its variants reach ` +
         `${box.childrenExtent.right}×${box.childrenExtent.bottom} — ${parts.join(' and ')}, ${clipped}. ` +
-        `Resize the set to its variants' extent.`
+        `Resize the set to its variants' extent.`,
     );
   }
   if (noFacts > 0) {
     warning(
       'SET-CLIPS',
-      `${noFacts} master(s) carry no box facts. Re-run npm run figma:snapshot to capture them.`
+      `${noFacts} master(s) carry no box facts. Re-run npm run figma:snapshot to capture them.`,
     );
   }
   return checked;
@@ -2781,7 +3651,10 @@ function checkSetClips() {
 function checkPageGlyphs() {
   const glyphs = snapshot.pageGlyphs;
   if (!Array.isArray(glyphs)) {
-    warning('PAGE-GLYPH', 'snapshot carries no page-level glyph facts. Re-run npm run figma:snapshot.');
+    warning(
+      'PAGE-GLYPH',
+      'snapshot carries no page-level glyph facts. Re-run npm run figma:snapshot.',
+    );
     return;
   }
   const unexcused = glyphs.filter((g) => !allowed('page', 'glyph', g.chars));
@@ -2789,7 +3662,7 @@ function checkPageGlyphs() {
   for (const g of unexcused) {
     warning(
       'PAGE-GLYPH',
-      `"${g.chars}" is drawn as a character at ${g.where} — outside any master, so [MASTER-GLYPH] cannot see it. Replace it with an instance from the Icon library, or allowlist \`page:glyph:${g.chars}\` with the reason it is not standing in for a drawing.`
+      `"${g.chars}" is drawn as a character at ${g.where} — outside any master, so [MASTER-GLYPH] cannot see it. Replace it with an instance from the Icon library, or allowlist \`page:glyph:${g.chars}\` with the reason it is not standing in for a drawing.`,
     );
   }
 }
@@ -2800,13 +3673,17 @@ function checkPageGlyphs() {
 
 function report() {
   const order = { BLOCKER: 0, CRITICAL: 1, WARNING: 2 };
-  const all = [...errors, ...warnings].sort((a, b) => order[a.sev] - order[b.sev]);
+  const all = [...errors, ...warnings].sort(
+    (a, b) => order[a.sev] - order[b.sev],
+  );
   const icon = (sev) => (sev === 'WARNING' ? '⚠' : '✗');
   const stamp = snapshot.meta || {};
   const head = `Snapshot: ${stamp.generatedAt || '?'}${stamp.figmaLastModified ? ` · Figma edited ${stamp.figmaLastModified}` : ''} · ${snapshot.components.length} master(s)`;
 
   if (all.length === 0) {
-    console.log(`✓ figma conformance in sync (${snapshot.components.length} masters checked). ${head}`);
+    console.log(
+      `✓ figma conformance in sync (${snapshot.components.length} masters checked). ${head}`,
+    );
     for (const line of ratchetLines) console.log(line);
     return;
   }
@@ -2823,7 +3700,7 @@ function report() {
   if (errors.length > 0) {
     console.error(
       `\n${errors.length} figma conformance issue(s): ${blockers} blocker, ${criticals} critical, ${warnings.length} warning. ${head}\n` +
-        `Fix in Figma (file ${stamp.fileKey || ''}) and re-run npm run figma:snapshot, or allowlist a known false-positive in tools/scripts/lib/allowlists.js.`
+        `Fix in Figma (file ${stamp.fileKey || ''}) and re-run npm run figma:snapshot, or allowlist a known false-positive in tools/scripts/lib/allowlists.js.`,
     );
     process.exit(1);
   }
@@ -2842,12 +3719,16 @@ function q(s) {
 function parseSpecShapes(file) {
   const src = fs.readFileSync(file, 'utf8');
   const out = new Map();
-  for (const m of src.matchAll(/export interface (\w+)(?:\s+extends\s+([^{]+))?\s*\{([\s\S]*?)\n\}/g)) {
+  for (const m of src.matchAll(
+    /export interface (\w+)(?:\s+extends\s+([^{]+))?\s*\{([\s\S]*?)\n\}/g,
+  )) {
     const [, name, ext, body] = m;
     const fields = new Set();
     const booleans = new Set();
     const strings = new Set();
-    for (const f of body.matchAll(/^\s{2}(?:readonly\s+)?([A-Za-z_$][\w$]*)\??\s*:\s*([^;\n]+)/gm)) {
+    for (const f of body.matchAll(
+      /^\s{2}(?:readonly\s+)?([A-Za-z_$][\w$]*)\??\s*:\s*([^;\n]+)/gm,
+    )) {
       fields.add(f[1]);
       // A flag is a flag because of its type, not its name. The first version of this
       // gate checked a hardcoded list — disabled, invalid, required, readonly, loading —
@@ -2864,9 +3745,9 @@ function parseSpecShapes(file) {
         const omit = x.match(/^Omit<\s*(\w+)/);
         return omit ? omit[1] : x.replace(/<.*$/, '');
       });
-    const omitted = [...(ext || '').matchAll(/Omit<\s*\w+\s*,\s*([^>]+)>/g)].flatMap((o) =>
-      [...o[1].matchAll(/'([^']+)'/g)].map((x) => x[1])
-    );
+    const omitted = [
+      ...(ext || '').matchAll(/Omit<\s*\w+\s*,\s*([^>]+)>/g),
+    ].flatMap((o) => [...o[1].matchAll(/'([^']+)'/g)].map((x) => x[1]));
     out.set(name, { parents, fields, booleans, strings, omitted });
   }
   return out;

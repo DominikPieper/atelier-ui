@@ -39,7 +39,8 @@ const snapshot: Snapshot = JSON.parse(
  * pages the variable read explicitly so the count is a census.
  */
 export const tokenCensus = (() => {
-  const startsWith = (p: string) => snapshot.uiTokens.filter((n) => n.startsWith(p)).length;
+  const startsWith = (p: string) =>
+    snapshot.uiTokens.filter((n) => n.startsWith(p)).length;
   const census = {
     total: snapshot.uiTokens.length,
     color: startsWith('color/'),
@@ -50,7 +51,9 @@ export const tokenCensus = (() => {
     // the Figma variable itself is a plain resolved number either way — the
     // primitive/derived relationship is a CSS `calc()` fact this collection
     // can't hold, so the census can't see it and shouldn't claim to.
-    sizing: snapshot.uiTokens.filter((n) => /^(control-height|row-height)\//.test(n)).length,
+    sizing: snapshot.uiTokens.filter((n) =>
+      /^(control-height|row-height)\//.test(n),
+    ).length,
     typography: snapshot.uiTokens.filter((n) =>
       /^(font|font-size|font-weight|line-height)\//.test(n),
     ).length,
@@ -120,7 +123,12 @@ function row(selector: string): MasterRow {
 }
 
 /** The four masters /figma shows in full; every other master is counted, not listed. */
-export const featuredRows: MasterRow[] = ['AtlButton', 'AtlInput', 'AtlCard', 'AtlBadge'].map(row);
+export const featuredRows: MasterRow[] = [
+  'AtlButton',
+  'AtlInput',
+  'AtlCard',
+  'AtlBadge',
+].map(row);
 
 export const remainingCount: number = masterCount - featuredRows.length;
 

@@ -13,7 +13,10 @@ import type { Subject, BehaviorId } from '@atelier-ui/spec/behaviors.generated';
  *
  * Test-only — intentionally NOT exported from the package barrel.
  */
-export function covers<S extends Subject>(subject: S, id: BehaviorId<S>): typeof it {
+export function covers<S extends Subject>(
+  subject: S,
+  id: BehaviorId<S>,
+): typeof it {
   void subject;
   void id;
   return it;

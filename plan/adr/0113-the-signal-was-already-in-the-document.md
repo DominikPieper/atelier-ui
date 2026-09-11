@@ -23,15 +23,15 @@ and the training curriculum points at it instead of working around it.
 ## Context
 
 `design-to-code`'s Build mode and the two-day training curriculum gave a participant
-opposite instructions for the same decision — where does *this* component's spec go —
+opposite instructions for the same decision — where does _this_ component's spec go —
 and each instruction was correct only in its own context:
 
 - `skills/design-to-code/references/handoff-document.md:36` (pre-fix): **"Target files.**
   `libs/<fw>/src/lib/<name>/…` ; spec block in `libs/spec/src/index.ts`."` — correct for a
   real Atelier component: the spec is the ground truth all three adapters are
   drift-gated against.
-- `docs/src/pages/schulung.astro:178` (pre-fix): *"Eigene Spec als eigene Datei neben der
-  Komponente, **nicht in den geteilten Master**"* — correct for a workshop participant's
+- `docs/src/pages/schulung.astro:178` (pre-fix): _"Eigene Spec als eigene Datei neben der
+  Komponente, **nicht in den geteilten Master**"_ — correct for a workshop participant's
   component, which has no place in `libs/spec/src/index.ts`'s roster.
 
 Neither sentence was wrong. The skill had no branch, so it stated only the repo answer;
@@ -78,7 +78,7 @@ Alternatives considered and rejected:
 - **A third top-level `### Workshop mode` heading.** Rejected: `tools/scripts/test-skill.mjs`
   derives every fixture's valid `mode` value from `### <Name> mode` headings in
   `SKILL.md`, and the mode-routing table already lists "a workshop brief" and "the kata"
-  as *Build* triggers. A separate mode would fork one nine-step loop that differs in two
+  as _Build_ triggers. A separate mode would fork one nine-step loop that differs in two
   places into two parallel checklists, and would force every workshop fixture to declare
   `mode: Workshop` for what is, apart from those two steps, the same procedure — the
   "bolt on a mechanism the file's structure fights" the assignment warned against.
@@ -95,7 +95,7 @@ Alternatives considered and rejected:
 - **Keying the branch on the component's name or brief** (e.g. "if it's one of the four
   workshop briefs, it's the workshop case"). Rejected: the whole point of the briefs
   (`workshop/briefs/README.md`) is that Toast and Avatar are canonical components a real
-  Atelier build might also target one day; the component's *name* says nothing about
+  Atelier build might also target one day; the component's _name_ says nothing about
   which file its node lives in. Only the Source line does.
 
 The curriculum was corrected in the direction of pointing at the mechanism instead of

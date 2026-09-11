@@ -21,7 +21,7 @@ whose only dedicated tier was 15 single-mode Component Tokens. Consequences:
 
 - The library's dark mode — which the code ships via `[data-theme="dark"]`
   — was structurally impossible to preview in Figma (audit Blocker).
-- Token names *and values* drifted from `tokens.css` (`tx/primary #333E48`
+- Token names _and values_ drifted from `tokens.css` (`tx/primary #333E48`
   vs `--ui-color-text #0f172a`; no token carried `--ui-color-primary`).
 - ~3500 master bindings pointed at **zombie variables**: the June-era
   `color/*` tokens had been deleted during the docs-brand rebuild but
@@ -53,6 +53,7 @@ whose only dedicated tier was 15 single-mode Component Tokens. Consequences:
    generic-sounding sits beside library semantics.
 
 Alternatives considered:
+
 - **Sync values into the existing "UI Tokens" collection** — rejected:
   that collection is the docs-site brand system with its own correct
   values and naming (`tx/*`, `area/*`); overwriting it breaks the docs
@@ -69,7 +70,7 @@ Alternatives considered:
 - Library dark mode previews correctly in Figma for the first time
   (verified against the code's dark values). The long-open "Toast is
   drawn dark, code renders light" question dissolved: the dark drawing
-  *was* the dark rendering — Toast (and Badge-default) are now bound to
+  _was_ the dark rendering — Toast (and Badge-default) are now bound to
   semantic tokens and correct in both modes; Toast's conformance
   allowlist entry is removed.
 - 4398 bindings migrated in one pass; the zombie variables are no longer

@@ -37,8 +37,8 @@ The core loop — Figma → spec → code → verify, in your chosen framework:
    Inputs/Outputs for Angular, `v-model`/`update:*` events and typed slots for Vue,
    JSX/`children`/`on*Change` for React. The stories are the claims (ADR-0121): one
    story per variant value and Boolean state, `args`-based where possible, a `play`
-   per behaviour line, so a prop *name* or *axis value* the docs leave ambiguous is
-   settled by the contract and the stories, not the adapter. Binding *shape* — two-way
+   per behaviour line, so a prop _name_ or _axis value_ the docs leave ambiguous is
+   settled by the contract and the stories, not the adapter. Binding _shape_ — two-way
    vs. one-way, slot vs. prop, an event's payload — is not expressible in either
    format; for shape the framework's own manifest is the answer, and `check:props`
    maps `on<X>Change` to Angular `model()` / Vue `update:*` for you.
@@ -70,22 +70,24 @@ their own MCP servers; nothing in this repo does it for them.
 
 **Two MCP surfaces (do not conflate):**
 
-| Surface | URL | Toolsets exposed | Frameworks |
-|---|---|---|---|
-| **Hosted** (`@storybook/mcp` via Cloudflare Worker, reads static manifests) | `atelier.pieper.io/storybook-{angular,react,vue}/mcp` | `docs` only: `docs-list`, `docs-show`, `docs-show-story` | All three, natively — Angular's `components.json` comes from `angular-component-meta`, Vue's from `vue-component-meta`, React's from `react-docgen` (ADR-0097). Each answers component lookups shaped for its own framework: two-way bindings and split Inputs/Outputs for Angular, `v-model`/`update:*` and typed slots for Vue, unchanged JSX/`children` for React. |
-| **Local dev** (`@storybook/addon-mcp` inside a running Storybook) | `http://localhost:<port>/mcp` (after `nx storybook <fw>` — this repo binds 4400 angular / 4401 react / 4402 vue; read the exact port from the terminal) | `docs` + `dev` (`stories-preview`, `get-storybook-story-instructions`, `stories-changed`, plus the conditionally registered `stories-find-by-component` and `display-review`) + `test` (`test-run`) | All three: under 10.6, `tools/list` against a locally-run Angular or Vue Storybook returns the same eight-tool surface as React — no longer React-only in preview. |
+| Surface                                                                     | URL                                                                                                                                                     | Toolsets exposed                                                                                                                                                                                    | Frameworks                                                                                                                                                                                                                                                                                                                                                            |
+| --------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Hosted** (`@storybook/mcp` via Cloudflare Worker, reads static manifests) | `atelier.pieper.io/storybook-{angular,react,vue}/mcp`                                                                                                   | `docs` only: `docs-list`, `docs-show`, `docs-show-story`                                                                                                                                            | All three, natively — Angular's `components.json` comes from `angular-component-meta`, Vue's from `vue-component-meta`, React's from `react-docgen` (ADR-0097). Each answers component lookups shaped for its own framework: two-way bindings and split Inputs/Outputs for Angular, `v-model`/`update:*` and typed slots for Vue, unchanged JSX/`children` for React. |
+| **Local dev** (`@storybook/addon-mcp` inside a running Storybook)           | `http://localhost:<port>/mcp` (after `nx storybook <fw>` — this repo binds 4400 angular / 4401 react / 4402 vue; read the exact port from the terminal) | `docs` + `dev` (`stories-preview`, `get-storybook-story-instructions`, `stories-changed`, plus the conditionally registered `stories-find-by-component` and `display-review`) + `test` (`test-run`) | All three: under 10.6, `tools/list` against a locally-run Angular or Vue Storybook returns the same eight-tool surface as React — no longer React-only in preview.                                                                                                                                                                                                    |
 
 **Toolset gating** (addon-mcp options, all default `true`): `docs` requires the `componentsManifest` feature flag — addon-mcp's own preset switches it on, and it is the flag core-server reads when writing the manifest — plus an actually emitted `components.json`. React gets this for free (`react-docgen` is its default docgen path); Angular and Vue need `experimentalDocgenServer` — the default under `@storybook/angular-vite`, opt-in until Storybook 11 for `@storybook/vue3-vite` — and this repo sets it explicitly for both rather than resting on the current default. Inside `dev`, `stories-preview` and `get-storybook-story-instructions` need nothing extra; `stories-changed` and `display-review` need `features.changeDetection` (10.4's Change Review sidebar), and `display-review` additionally needs `experimentalReview` not set to `false`; `stories-find-by-component` needs a builder that exposes the module-graph service. `test` requires `@storybook/addon-vitest`; a11y in `test-run` activates when `@storybook/addon-a11y` is installed.
 
 Add a local entry when you need the `dev` / `test` toolsets. **Angular/Vue prop tables come back from their own hosted endpoint, natively — ADR-0097 supersedes ADR-0083's React-manifest fallback, which is deleted, not shrunk; `libs/spec/src/index.ts` stays the naming contract inside this repo.**
 
 **When reading component docs (any framework, any surface):**
+
 1. Call `docs-list` once at session start to get valid IDs (set `withStoryIds: true` if you need story IDs for downstream tools; pass `storybookId` to scope multi-source setups)
 2. Use `docs-show` with those IDs — never guess IDs or invent props; subcomponent docs are included since `@storybook/mcp@0.7.0`
 3. Call `docs-show-story` only when `docs-show` lacks the story-level detail you need
 4. If a prop isn't documented, say so rather than inventing it
 
 **When creating or editing components/stories (local dev, any framework — the chosen framework's Storybook running):**
+
 1. Call `get-storybook-story-instructions` before writing any code (REQUIRED before touching `*.stories.*` files)
 2. After any change, call `stories-preview` and include the returned `previewUrl`s in your final response; in MCP-Apps-capable hosts the addon also exposes a `ui://stories-preview/preview.html` resource that embeds the previews directly
 3. Use `stories-changed` to enumerate new/modified/affected stories from the Change Review sidebar before bulk edits
@@ -98,6 +100,7 @@ For Angular/Vue, the test loop is `nx test <lib>` (Vitest) plus a manual browser
 The primary documentation for the component library lives in the `docs/` application and the `libs/spec` library (which defines the framework-agnostic API contract).
 
 **Do not add component API documentation to this file.** Use the following sources instead:
+
 - **Interactive Docs**: Run the `docs` app (`nx serve docs`) for framework-specific API tables and live demos.
 - **Spec Library**: `libs/spec/src/index.ts` is the cross-framework join key the legacy
   gates read (`check:props`, `check:variants`, `check:metadata`); the API reference is
@@ -131,7 +134,7 @@ File key: `QMnDD8uZQPldPrlCwZZ58T`. Page conventions:
   is stricter than a bare `npx eslint` run, so a clean raw run proves nothing.
 - **A gate's result is its exit code.** Run it as `cmd > /tmp/out 2>&1; echo $?`
   and read the file afterwards. Piping into `head`/`tail`/`grep` reports the
-  *pipe's* status, which is always `0` — that silently converts a failure into a
+  _pipe's_ status, which is always `0` — that silently converts a failure into a
   pass, and has already put a false "all gates green" claim into this repo's
   history.
 - `npm run check:all` runs the full gate chain. Every gate in it is offline
@@ -153,7 +156,7 @@ File key: `QMnDD8uZQPldPrlCwZZ58T`. Page conventions:
   statement about the checks that exist here, not about what reached npm — check
   CI and the registry separately (`gh run list`, `npm run check:release-drift`).
 - Never mark a task complete without proving it works. Separate what you
-  *verified* from what you *assumed* when you report.
+  _verified_ from what you _assumed_ when you report.
 
 ## Core Principles
 
@@ -164,7 +167,7 @@ File key: `QMnDD8uZQPldPrlCwZZ58T`. Page conventions:
 
 ## Decision Records (ADR)
 
-When a non-trivial decision is made, record it as an ADR so the *why* stays
+When a non-trivial decision is made, record it as an ADR so the _why_ stays
 traceable and reusable later (blog posts, talks, teaching). `plan/adr/` is the
 canonical decision log.
 
@@ -175,6 +178,7 @@ i.e. any tradeoff with a rationale worth keeping. **Skip it** for trivial or
 mechanical work (typos, renames, dependency bumps, routine bugfixes).
 
 How:
+
 1. Create `plan/adr/NNNN-kebab-title.md` with the next sequential number.
 2. Follow the MADR format already in `plan/adr/`: YAML frontmatter
    (`status: accepted`, `date: <YYYY-MM-DD>`, `sources`, optional
@@ -190,7 +194,7 @@ How:
 5. Write the ADR as part of finishing the decision-bearing task (same bar as
    "verifying that something works"), not retroactively.
 
-An ADR is a record of what was decided *and* of what the deciders believed:
+An ADR is a record of what was decided _and_ of what the deciders believed:
 Context/Decision/Consequences stay immutable, corrected only by a dated
 in-place "**Corrected YYYY-MM-DD**" paragraph, never by editing the error away.
 
@@ -200,7 +204,7 @@ feature-flag default — decays on its own schedule, independent of the decision
 that motivated it; point at its live source instead of restating it as prose,
 or it goes stale silently. And a newer ADR that claims to revise, correct or
 supersede §N of an older one has not actually revised it until that correction
-is written *into* the older ADR, **in the same commit** — `check:adr-refs`
+is written _into_ the older ADR, **in the same commit** — `check:adr-refs`
 enforces this, so a claim with nothing on the other end fails the build rather
 than sitting unread the way ADR-0019 §5 and ADR-0024 §4 did.
 

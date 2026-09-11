@@ -25,29 +25,39 @@ describe('AtlTextarea', () => {
     });
     expect(screen.getByLabelText('Description')).toHaveAttribute(
       'id',
-      'custom-description-id'
+      'custom-description-id',
     );
   });
 
   it('sets aria-label on the native textarea, not the wrapper', () => {
-    const { container } = render(AtlTextarea, { props: { 'aria-label': 'Notes' } });
+    const { container } = render(AtlTextarea, {
+      props: { 'aria-label': 'Notes' },
+    });
     expect(screen.getByRole('textbox')).toHaveAttribute('aria-label', 'Notes');
     expect(container.firstElementChild).not.toHaveAttribute('aria-label');
   });
 
-  covers('textarea', 'updates-value')('emits update:value on input', async () => {
-    const user = userEvent.setup();
-    const { emitted } = render(AtlTextarea, { props: { value: '' } });
-    const textarea = screen.getByRole('textbox');
-    await user.type(textarea, 'Hello world');
-    const updates = emitted()['update:value'] as string[][];
-    expect(updates[updates.length - 1][0]).toContain('Hello world');
-  });
+  covers('textarea', 'updates-value')(
+    'emits update:value on input',
+    async () => {
+      const user = userEvent.setup();
+      const { emitted } = render(AtlTextarea, { props: { value: '' } });
+      const textarea = screen.getByRole('textbox');
+      await user.type(textarea, 'Hello world');
+      const updates = emitted()['update:value'] as string[][];
+      expect(updates[updates.length - 1][0]).toContain('Hello world');
+    },
+  );
 
-  covers('textarea', 'disabled')('is disabled when disabled prop is true', () => {
-    render(AtlTextarea, { props: { disabled: true, placeholder: 'Disabled' } });
-    expect(screen.getByPlaceholderText('Disabled')).toBeDisabled();
-  });
+  covers('textarea', 'disabled')(
+    'is disabled when disabled prop is true',
+    () => {
+      render(AtlTextarea, {
+        props: { disabled: true, placeholder: 'Disabled' },
+      });
+      expect(screen.getByPlaceholderText('Disabled')).toBeDisabled();
+    },
+  );
 
   covers('textarea', 'errors')('displays error messages', () => {
     render(AtlTextarea, { props: { errors: ['Message is too short'] } });
@@ -86,6 +96,8 @@ describe('AtlTextarea', () => {
     const { container } = render(AtlTextarea, {
       props: { errors: ['Message is too short', 'Required'] },
     });
-    expect(container.querySelectorAll('.errors .error-message')).toHaveLength(2);
+    expect(container.querySelectorAll('.errors .error-message')).toHaveLength(
+      2,
+    );
   });
 });

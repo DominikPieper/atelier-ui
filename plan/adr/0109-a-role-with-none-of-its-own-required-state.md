@@ -64,19 +64,19 @@ explicit `role="combobox"`.
 grounds:**
 
 1. **The host's own `role="combobox"` is missing a required state.**
-   WAI-ARIA 1.2 lists `aria-expanded` as a *required* state for `combobox`
+   WAI-ARIA 1.2 lists `aria-expanded` as a _required_ state for `combobox`
    — the role's accessible object must itself carry the state that tells
    assistive tech whether the popup is open. The host had no `aria-expanded`
    binding anywhere; that state lived exclusively on the button, a
-   *different* accessible object. This is exactly axe-core's
+   _different_ accessible object. This is exactly axe-core's
    `aria-required-attr` check, and it would fail here.
 2. **The button's states include one its role does not support.**
    The `<button>` has no explicit `role`, so its implicit role is `button`.
    `aria-activedescendant`'s ARIA-1.2 supported-roles list is
    `application, combobox, grid, group, listbox, menu, menubar, radiogroup,
-   row, search, select, spinbutton, tab, table, textbox, toolbar, tree,
-   treegrid` — `button` is not on it. `aria-expanded` and `aria-haspopup`
-   *are* commonly valid on `button` (disclosure-button pattern), so those
+row, search, select, spinbutton, tab, table, textbox, toolbar, tree,
+treegrid` — `button` is not on it. `aria-expanded` and `aria-haspopup`
+   _are_ commonly valid on `button` (disclosure-button pattern), so those
    two alone would not have been a defect; `aria-activedescendant` is the
    one that turns this from "unconventional" into "invalid." This is
    axe-core's `aria-allowed-attr` check, and it would fail here too.
@@ -89,7 +89,7 @@ land on and interact with (the button) claims a state,
 "active option" announcement while arrowing through the listbox is not
 guaranteed to be exposed correctly by a real accessibility API mapping,
 independent of whichever normalized tree `check:a11y-parity`'s jsdom-based
-comparison (which does not model role/attribute *validity*, only presence)
+comparison (which does not model role/attribute _validity_, only presence)
 would show.
 
 **In-framework precedent — `AtlCombobox` already gets this right.**
@@ -134,7 +134,7 @@ placement.
   `AtlDialog` and `AtlTable`, both already-roleless hosts guarded against a
   role they might gain later. `AtlSelect`'s host is now in the identical
   position: the guard is a harmless no-op today and stays defended anyway.
-  Only the code comment's *reason* needed correcting — it previously said
+  Only the code comment's _reason_ needed correcting — it previously said
   the guard mattered because "the host already carries `role="combobox"`,"
   which is no longer true; the comment now says what Dialog/Table's already
   say.
@@ -162,7 +162,7 @@ tree the role sits. `ls tools/parity/a11y/` was checked directly: zero
 `atl-select.*.json` or `atl-combobox.*.json` files exist, so the gate's
 per-component comparison loop never engages for `select` today, and moving
 the role neither creates a snapshot that could now diverge nor risks the
-`[STALE]` hygiene check (which only fires when snapshots exist *and* an
+`[STALE]` hygiene check (which only fires when snapshots exist _and_ an
 exemption still names the component). Confirmed by running
 `check:a11y-parity` after the change (see Consequences) — it stayed green,
 unchanged.
@@ -182,7 +182,7 @@ unchanged.
   not have a `role` attribute at all).
 - Verified by running, not assumed: `nx test angular` (all Select specs
   pass, including the two rewritten and the one new assertion), `nx lint
-  angular` (clean), `check:host-guards` (green, unchanged reasoning), and
+angular` (clean), `check:host-guards` (green, unchanged reasoning), and
   `check:a11y-parity` (green, unchanged — `select` stays exempt, zero
   snapshots, roster/hygiene checks do not engage it). Exit codes and command
   output are recorded in the task report, not restated here.
@@ -192,17 +192,17 @@ unchanged.
   its Consequences described the host-vs-button split as "a pre-existing,
   separately tracked structural question," and that question is now closed.
 - **Alternatives rejected:**
-  - *Leave the split in place, allowlist it in `HOST_ATTR_GUARD_EXEMPT`.*
+  - _Leave the split in place, allowlist it in `HOST_ATTR_GUARD_EXEMPT`._
     Rejected — that allowlist governs the `aria-label`/`id` guard pattern
     specifically; the host-vs-button role split is a different defect
     (missing required state, disallowed attribute) with no exemption
     mechanism built for it, and none should be built for a genuine ARIA
     violation with a one-line fix.
-  - *Converge `AtlSelect` and `AtlCombobox` on a shared pattern by changing
-    `AtlCombobox`.* Rejected on the evidence: `AtlCombobox` (both Angular and
+  - _Converge `AtlSelect` and `AtlCombobox` on a shared pattern by changing
+    `AtlCombobox`._ Rejected on the evidence: `AtlCombobox` (both Angular and
     React) was already correct. There was nothing to converge — only
     `AtlSelect` needed to move.
-  - *Also move `aria-invalid`/`aria-describedby` as part of this change.*
+  - _Also move `aria-invalid`/`aria-describedby` as part of this change._
     Not applicable — both were already correctly on the button before this
     ADR; only `role` and `aria-required` were on the host.
 - **Out of scope, left as found:** the same audit that found zero other

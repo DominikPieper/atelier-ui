@@ -86,7 +86,7 @@ export const ATL_TABLE = new InjectionToken<AtlTableContext>('ATL_TABLE');
   },
   providers: [{ provide: ATL_TABLE, useExisting: AtlTable }],
   // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
-  encapsulation: ViewEncapsulation.None
+  encapsulation: ViewEncapsulation.None,
 })
 export class AtlTable implements AtlTableContext {
   /** Visual style of the table rows. */
@@ -104,11 +104,17 @@ export class AtlTable implements AtlTableContext {
    * scroll the wrapper know what they're scrolling. Defaults to
    * `"Table"` if unset.
    */
-  readonly ariaLabel = input<string | undefined>(undefined, { alias: 'aria-label' });
+  readonly ariaLabel = input<string | undefined>(undefined, {
+    alias: 'aria-label',
+  });
 
   /** @internal */
   protected readonly hostClasses = computed(() => {
-    const classes = ['atl-table', `variant-${this.variant()}`, `size-${this.size()}`];
+    const classes = [
+      'atl-table',
+      `variant-${this.variant()}`,
+      `size-${this.size()}`,
+    ];
     if (this.stickyHeader()) classes.push('is-sticky-header');
     return classes.join(' ');
   });
@@ -134,7 +140,9 @@ export class AtlTable implements AtlTableContext {
   selector: 'atl-thead',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `<thead><ng-content /></thead>`,
+  template: `<thead>
+    <ng-content />
+  </thead>`,
   styleUrl: './atl-table.css',
   host: { '[style.display]': '"contents"' },
 })
@@ -212,7 +220,10 @@ export class AtlTbody {
     >
       @if (selectable()) {
         <td class="atl-tr-select-cell">
-          <atl-checkbox [checked]="selected()" (checkedChange)="selectedChange.emit($event)" />
+          <atl-checkbox
+            [checked]="selected()"
+            (checkedChange)="selectedChange.emit($event)"
+          />
         </td>
       }
       <ng-content />
@@ -239,12 +250,12 @@ export class AtlTr {
 
   /** @internal */
   protected readonly hostClasses = computed(() =>
-    this.selectable() ? 'is-selectable' : ''
+    this.selectable() ? 'is-selectable' : '',
   );
 
   /** @internal — applied to inner <tr> for CSS selection styling */
   protected readonly innerClasses = computed(() =>
-    this.selected() ? 'is-selected' : ''
+    this.selected() ? 'is-selected' : '',
   );
 }
 
@@ -280,7 +291,11 @@ export type AtlSortDirection = 'asc' | 'desc' | null;
           <ng-content />
           <span class="atl-th-sort-icon" aria-hidden="true">
             <atl-icon name="sort-asc" size="sm" class="atl-th-sort-asc-arrow" />
-            <atl-icon name="sort-desc" size="sm" class="atl-th-sort-desc-arrow" />
+            <atl-icon
+              name="sort-desc"
+              size="sm"
+              class="atl-th-sort-desc-arrow"
+            />
           </span>
         </button>
       } @else {

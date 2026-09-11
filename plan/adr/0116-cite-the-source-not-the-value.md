@@ -32,7 +32,7 @@ because they had gone stale before.
 
 Fixing the names is mechanical. The harder question, raised by the node-id table
 specifically, is what to do about the facts underneath the names — counts, versions,
-node IDs, member lists — that are not renamed, they *decay*. The node-id table did not
+node IDs, member lists — that are not renamed, they _decay_. The node-id table did not
 go stale because someone forgot a rename; it went stale because a human transcribed a
 live, generated fact into static prose, twice, and the repo added no gate that would
 catch a third drift. The same failure mode was already visible elsewhere before this
@@ -48,7 +48,7 @@ pass touched it:
 - `big-picture.md`'s CSS token example hard-coded hex/px values (`#3b82f6`,
   `0.375rem` radius) that have since changed at least once (the "Direction A" teal
   rebrand; the radius scale moved 0.375/0.5/0.75rem → 0.5/0.625/0.875rem). The token
-  *names* (`--ui-color-primary`, `--ui-radius-md`) are still exactly right; the values
+  _names_ (`--ui-color-primary`, `--ui-radius-md`) are still exactly right; the values
   next to them were wrong the moment the brand changed, silently, because nothing reads
   this file back against `tokens.css`.
 - `big-picture.md` §10 described a hand-maintained "LLM context cheat sheet file" to
@@ -93,16 +93,16 @@ here three times over. Concretely, applied in this pass:
   styles mirror `--ui-type-*` roles 1:1, ADR-0059/0074/0085) and the one architectural
   fact that survives any future role being added — which roles use the display face
   vs. the UI face vs. the mono face — instead of enumerating the current role list.
-- `big-picture.md`'s CSS token block keeps every token *name* used in the original
+- `big-picture.md`'s CSS token block keeps every token _name_ used in the original
   (still accurate) and drops every literal value, pointing at the canonical
   `tokens.css` for current numbers.
 - `big-picture.md` §10 was rewritten around the real generated artifact
   (`gen-llms-txt.mjs` → `docs/public/llms-full.txt`, gated by `check:llms`) and quotes
   a trimmed, labeled excerpt of that file rather than an invented format. The version
   string and component count inside that excerpt (`0.2.41`, `28 components`) are left
-  untouched *inside the quoted excerpt* — changing them would misquote the file — but
+  untouched _inside the quoted excerpt_ — changing them would misquote the file — but
   the surrounding prose does not restate them as document-level facts.
-- Both files' component-category tables keep the category *names*, verified against
+- Both files' component-category tables keep the category _names_, verified against
   the live Storybook sidebar (`storySort.order` plus every story's `title:` prefix in
   `libs/{angular,react,vue}/.storybook`) rather than `docs/src/data/components.ts`'s
   parallel category list, which uses `Layout` for the same two components Storybook

@@ -49,10 +49,12 @@ export class AtlCard {
    * Most cards group content visually and shouldn't add a landmark.
    * Leave unset by default.
    */
-  readonly role = input<'article' | 'region' | 'section' | undefined>(undefined);
+  readonly role = input<'article' | 'region' | 'section' | undefined>(
+    undefined,
+  );
 
   protected readonly hostClasses = computed(
-    () => `atl-card variant-${this.variant()} padding-${this.padding()}`
+    () => `atl-card variant-${this.variant()} padding-${this.padding()}`,
   );
 }
 

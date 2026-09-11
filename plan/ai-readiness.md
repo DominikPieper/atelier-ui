@@ -51,7 +51,7 @@ export interface ComponentMetadata {
 
 ### Rationale
 
-The Cascade Effect principle: CSS cascades values, but a well-structured design system cascades *intent*. Tokens that only encode a value (`--ui-color-primary: #3b82f6`) give agents no signal about purpose, constraints, or when overrides are valid. Tokens that encode intent enable agents to make correct decisions downstream without asking.
+The Cascade Effect principle: CSS cascades values, but a well-structured design system cascades _intent_. Tokens that only encode a value (`--ui-color-primary: #3b82f6`) give agents no signal about purpose, constraints, or when overrides are valid. Tokens that encode intent enable agents to make correct decisions downstream without asking.
 
 Atelier already uses `--ui-*` CSS tokens with intent-leaning names (`--ui-color-primary`, `--ui-color-surface-raised`, `--ui-color-text-muted`). **Decision: annotate, don't rename.** A separate manifest carries the agent-readable metadata; the CSS tokens stay where they are.
 
@@ -134,18 +134,18 @@ The full checklist lives at `plan/figma-component-checklist.md` and is reproduce
 
 ### Enforcement
 
-Automated via **`check:figma`** (ADR-0019) plus the PR-template checklist for the items the gate cannot cover (per-variant descriptions, Inventory page). The gate is offline: it reads a committed snapshot (`tools/figma/snapshot.json`), refreshed by `npm run figma:snapshot` over the figma-console Desktop Bridge. **`check:figma` runs inside `check:all`** (ADR-0034, 2026-08-26), promoted alongside `check:parity`. The promotion was recorded *with its stated precondition still unmet*: a snapshot-freshness policy (failing or warning past a max age, populating `figmaLastModified`) was never built, so a green `check:figma` proves the committed snapshot is internally consistent, not that it is still fresh against the live Figma file — see ADR-0019 for the original trade-off and ADR-0034 for the promotion record and its open freshness gap.
+Automated via **`check:figma`** (ADR-0019) plus the PR-template checklist for the items the gate cannot cover (per-variant descriptions, Inventory page). The gate is offline: it reads a committed snapshot (`tools/figma/snapshot.json`), refreshed by `npm run figma:snapshot` over the figma-console Desktop Bridge. **`check:figma` runs inside `check:all`** (ADR-0034, 2026-08-26), promoted alongside `check:parity`. The promotion was recorded _with its stated precondition still unmet_: a snapshot-freshness policy (failing or warning past a max age, populating `figmaLastModified`) was never built, so a green `check:figma` proves the committed snapshot is internally consistent, not that it is still fresh against the live Figma file — see ADR-0019 for the original trade-off and ADR-0034 for the promotion record and its open freshness gap.
 
 ---
 
 ## Drift-Gate Summary
 
-| Gate | Status | Checks |
-|------|--------|--------|
-| `check:metadata` | **shipped** | `.metadata.ts` exists for every spec interface; all fields populated; `variantMatrix` covers axis unions |
-| `check:story-descriptions` | **shipped** | Every story sets `parameters.docs.description.component` and sources it from `metadata.purpose` |
-| `check:css-tokens` | **shipped** | (existing) no raw literals + (added) every `--ui-*` token has manifest entry with `intent` + `constraints` |
-| `check:llms` (via `gen-llms-txt --check`) | **shipped** | Generator now reads `metadata/` + `tokens.manifest.ts`; existing drift-check covers it |
+| Gate                                                 | Status                                                        | Checks                                                                                                                                                                                                                                                |
+| ---------------------------------------------------- | ------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `check:metadata`                                     | **shipped**                                                   | `.metadata.ts` exists for every spec interface; all fields populated; `variantMatrix` covers axis unions                                                                                                                                              |
+| `check:story-descriptions`                           | **shipped**                                                   | Every story sets `parameters.docs.description.component` and sources it from `metadata.purpose`                                                                                                                                                       |
+| `check:css-tokens`                                   | **shipped**                                                   | (existing) no raw literals + (added) every `--ui-*` token has manifest entry with `intent` + `constraints`                                                                                                                                            |
+| `check:llms` (via `gen-llms-txt --check`)            | **shipped**                                                   | Generator now reads `metadata/` + `tokens.manifest.ts`; existing drift-check covers it                                                                                                                                                                |
 | `check:figma` (via `figma-snapshot` + offline check) | **shipped** (ADR-0019; promoted into `check:all` by ADR-0034) | Per master: name alignment + variant-matrix (Blocker), token-link coverage + auto-layout (Critical), description congruence (Warning). Runs offline against a committed snapshot (now covering all 43 masters); snapshot-freshness policy still open. |
 
 Existing gates unchanged: `check:sync`, `check:variants`, `check:exports`, `check:defaults`, `check:docs`, `check:behavior`, `check:spec`, `check:tokens`, `check:cookbook`, `check:cookbook-manifest`.

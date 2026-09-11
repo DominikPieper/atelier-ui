@@ -51,7 +51,7 @@ Getting there cost more than a version bump:
 - **Angular could not reach it through the incumbent framework package.**
   `@analogjs/storybook-angular` with `experimentalDocgenServer: true` still
   exits 0, but swallows `Invariant failed: experimental_manifests must supply
-  components.meta.docgen` and writes a **decoy** manifest — 32 entries
+components.meta.docgen` and writes a **decoy** manifest — 32 entries
   carrying only `id`/`name`, no props, `meta.docgen` absent. An empty
   manifest that looks full, and nothing was checking for the difference. Only
   the first-party `@storybook/angular-vite@10.6.0` produces real docgen
@@ -73,7 +73,7 @@ Getting there cost more than a version bump:
 - **The hosted worker could not simply stop 404-ing into React.**
   `@storybook/mcp@10.6.0` resolves manifest `$ref`s (our Angular/Vue
   manifests carry `docgen.$ref: "../services/core/docgen/<id>.json#/..."`
-  for the docgen-server shards) through the *same* `manifestProvider` the
+  for the docgen-server shards) through the _same_ `manifestProvider` the
   top-level manifest uses (`fetchRefValue`, `dist/index.js:1299`, read
   directly from `node_modules/@storybook/mcp/dist/index.js`). The provider in
   `worker/mcp.ts` did `basename(path)` and always fetched
@@ -119,7 +119,7 @@ One decision, several consequences, landed as one migration in three waves
    Every path the provider receives — the two top-level manifest paths and
    every `$ref`-resolved shard path — arrives already rooted at that
    framework's Storybook output directory; the fix is `new URL(path,
-   base)`, not a rewrite of what gets requested.
+base)`, not a rewrite of what gets requested.
 5. **The React-manifest fallback is deleted, not shrunk.** Once Angular and
    Vue emit their own real `components.json`, a fallback that silently
    serves a different framework's shape is no longer a stopgap for a
@@ -143,7 +143,7 @@ because ADR-0083 no longer describes current behaviour):
 
 - **Keep `@analogjs/storybook-angular` and accept a docs-only Angular
   endpoint.** Rejected: the decoy manifest is not docs-only, it is a
-  components manifest that *looks* populated (32 entries) while carrying no
+  components manifest that _looks_ populated (32 entries) while carrying no
   usable data — worse than an honest absence, and indistinguishable from a
   real manifest without a gate reading inside it.
 - **Keep the React fallback as a safety net "just in case" a framework's

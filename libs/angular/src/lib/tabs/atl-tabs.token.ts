@@ -16,4 +16,6 @@ export interface AtlTabGroupContext {
   unregisterTab(id: string): void;
 }
 
-export const ATL_TAB_GROUP = new InjectionToken<AtlTabGroupContext>('ATL_TAB_GROUP');
+export const ATL_TAB_GROUP = new InjectionToken<AtlTabGroupContext>(
+  'ATL_TAB_GROUP',
+);

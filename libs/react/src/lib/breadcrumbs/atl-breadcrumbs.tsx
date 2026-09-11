@@ -1,4 +1,11 @@
-import { HTMLAttributes, ReactNode, AnchorHTMLAttributes, Children, isValidElement, cloneElement } from 'react';
+import {
+  HTMLAttributes,
+  ReactNode,
+  AnchorHTMLAttributes,
+  Children,
+  isValidElement,
+  cloneElement,
+} from 'react';
 import type { CSSProperties } from 'react';
 import type { AtlBreadcrumbsSpec, AtlBreadcrumbItemSpec } from '../spec';
 import './atl-breadcrumbs.css';
@@ -6,7 +13,8 @@ import './atl-breadcrumbs.css';
 /**
  * Properties for the AtlBreadcrumbs component.
  */
-export interface AtlBreadcrumbsProps extends HTMLAttributes<HTMLElement>, AtlBreadcrumbsSpec {
+export interface AtlBreadcrumbsProps
+  extends HTMLAttributes<HTMLElement>, AtlBreadcrumbsSpec {
   /**
    * The breadcrumb items to be rendered.
    */
@@ -16,7 +24,13 @@ export interface AtlBreadcrumbsProps extends HTMLAttributes<HTMLElement>, AtlBre
 /**
  * A breadcrumbs component for displaying a navigation trail.
  */
-export function AtlBreadcrumbs({ children, separator = '/', className, style, ...rest }: AtlBreadcrumbsProps) {
+export function AtlBreadcrumbs({
+  children,
+  separator = '/',
+  className,
+  style,
+  ...rest
+}: AtlBreadcrumbsProps) {
   const classes = ['atl-breadcrumbs', className].filter(Boolean).join(' ');
 
   // Automatically mark the last child as current
@@ -51,8 +65,7 @@ export function AtlBreadcrumbs({ children, separator = '/', className, style, ..
  * Properties for the AtlBreadcrumbItem component.
  */
 export interface AtlBreadcrumbItemProps
-  extends AnchorHTMLAttributes<HTMLAnchorElement>,
-    AtlBreadcrumbItemSpec {
+  extends AnchorHTMLAttributes<HTMLAnchorElement>, AtlBreadcrumbItemSpec {
   /**
    * The URL the breadcrumb points to.
    */

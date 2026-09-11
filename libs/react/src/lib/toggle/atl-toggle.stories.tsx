@@ -4,7 +4,8 @@ import { AtlToggle } from './atl-toggle';
 
 import { metadata } from '@atelier-ui/spec/metadata/toggle.metadata';
 import { contract } from '@atelier-ui/spec/contracts/toggle.contract';
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
@@ -79,7 +80,14 @@ export const SettingsPanel: Story = {
     const [sms, setSms] = useState(false);
 
     return (
-      <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxWidth: '300px' }}>
+      <div
+        style={{
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '1rem',
+          maxWidth: '300px',
+        }}
+      >
         <AtlToggle checked={email} onCheckedChange={setEmail}>
           Email notifications
         </AtlToggle>
@@ -100,7 +108,9 @@ export const AllStates: Story = {
       <AtlToggle>Default (off)</AtlToggle>
       <AtlToggle checked>Default (on)</AtlToggle>
       <AtlToggle disabled>Disabled (off)</AtlToggle>
-      <AtlToggle disabled checked>Disabled (on)</AtlToggle>
+      <AtlToggle disabled checked>
+        Disabled (on)
+      </AtlToggle>
       <AtlToggle invalid>Invalid</AtlToggle>
     </div>
   ),

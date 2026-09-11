@@ -14,7 +14,9 @@ const SELECT_TEMPLATE = `
 
 // Polyfill popover API for jsdom
 function polyfillPopover(): void {
-  if (!Object.prototype.hasOwnProperty.call(HTMLElement.prototype, 'showPopover')) {
+  if (
+    !Object.prototype.hasOwnProperty.call(HTMLElement.prototype, 'showPopover')
+  ) {
     Object.defineProperty(HTMLElement.prototype, 'showPopover', {
       configurable: true,
       value() {
@@ -35,13 +37,16 @@ beforeAll(() => {
 });
 
 describe('AtlSelect', () => {
-  covers('select', 'render-element')('renders with role="combobox"', async () => {
-    const { container } = await render(SELECT_TEMPLATE, {
-      imports: [AtlSelect, AtlOption],
-      componentProperties: { value: '' },
-    });
-    expect(container.querySelector('[role="combobox"]')).toBeInTheDocument();
-  });
+  covers('select', 'render-element')(
+    'renders with role="combobox"',
+    async () => {
+      const { container } = await render(SELECT_TEMPLATE, {
+        imports: [AtlSelect, AtlOption],
+        componentProperties: { value: '' },
+      });
+      expect(container.querySelector('[role="combobox"]')).toBeInTheDocument();
+    },
+  );
 
   // role="combobox" belongs on the trigger button — the actual focusable
   // widget that also carries aria-expanded/aria-activedescendant/etc — not
@@ -51,7 +56,10 @@ describe('AtlSelect', () => {
       imports: [AtlSelect, AtlOption],
       componentProperties: { value: '' },
     });
-    expect(container.querySelector('button.trigger')).toHaveAttribute('role', 'combobox');
+    expect(container.querySelector('button.trigger')).toHaveAttribute(
+      'role',
+      'combobox',
+    );
     expect(container.querySelector('atl-select')).not.toHaveAttribute('role');
   });
 
@@ -63,13 +71,16 @@ describe('AtlSelect', () => {
     expect(container.querySelector('button.trigger')).toBeInTheDocument();
   });
 
-  covers('select', 'placeholder')('shows placeholder when no value is selected', async () => {
-    await render(SELECT_TEMPLATE, {
-      imports: [AtlSelect, AtlOption],
-      componentProperties: { value: '' },
-    });
-    expect(screen.getByText('Choose one')).toBeInTheDocument();
-  });
+  covers('select', 'placeholder')(
+    'shows placeholder when no value is selected',
+    async () => {
+      await render(SELECT_TEMPLATE, {
+        imports: [AtlSelect, AtlOption],
+        componentProperties: { value: '' },
+      });
+      expect(screen.getByText('Choose one')).toBeInTheDocument();
+    },
+  );
 
   it('shows selected option label when value is set', async () => {
     const { container } = await render(SELECT_TEMPLATE, {
@@ -77,7 +88,9 @@ describe('AtlSelect', () => {
       componentProperties: { value: 'b' },
     });
     // eslint-disable-next-line @typescript-eslint/no-unnecessary-condition
-    expect(container.querySelector('.trigger-text')?.textContent?.trim()).toBe('Option B');
+    expect(container.querySelector('.trigger-text')?.textContent?.trim()).toBe(
+      'Option B',
+    );
   });
 
   it('renders a listbox panel', async () => {
@@ -85,7 +98,9 @@ describe('AtlSelect', () => {
       imports: [AtlSelect, AtlOption],
       componentProperties: { value: '' },
     });
-    expect(container.querySelector('.panel[role="listbox"]')).toBeInTheDocument();
+    expect(
+      container.querySelector('.panel[role="listbox"]'),
+    ).toBeInTheDocument();
   });
 
   it('renders options with role="option"', async () => {
@@ -117,22 +132,25 @@ describe('AtlSelect', () => {
   });
 
   describe('disabled state', () => {
-    covers('select', 'disabled')('disables the trigger button when disabled', async () => {
-      const { container } = await render(
-        `<atl-select [disabled]="true" placeholder="Choose">
+    covers('select', 'disabled')(
+      'disables the trigger button when disabled',
+      async () => {
+        const { container } = await render(
+          `<atl-select [disabled]="true" placeholder="Choose">
           <atl-option optionValue="a">A</atl-option>
         </atl-select>`,
-        { imports: [AtlSelect, AtlOption] }
-      );
-      expect(container.querySelector('button.trigger')).toBeDisabled();
-    });
+          { imports: [AtlSelect, AtlOption] },
+        );
+        expect(container.querySelector('button.trigger')).toBeDisabled();
+      },
+    );
 
     it('applies is-disabled class to host when disabled', async () => {
       const { container } = await render(
         `<atl-select [disabled]="true" placeholder="Choose">
           <atl-option optionValue="a">A</atl-option>
         </atl-select>`,
-        { imports: [AtlSelect, AtlOption] }
+        { imports: [AtlSelect, AtlOption] },
       );
       expect(container.querySelector('atl-select')).toHaveClass('is-disabled');
     });
@@ -145,7 +163,7 @@ describe('AtlSelect', () => {
           <atl-option optionValue="a" [disabled]="true">A</atl-option>
           <atl-option optionValue="b">B</atl-option>
         </atl-select>`,
-        { imports: [AtlSelect, AtlOption] }
+        { imports: [AtlSelect, AtlOption] },
       );
       const options = container.querySelectorAll('[role="option"]');
       expect(options[0]).toHaveAttribute('aria-disabled', 'true');
@@ -157,31 +175,41 @@ describe('AtlSelect', () => {
         `<atl-select placeholder="Choose">
           <atl-option optionValue="a" [disabled]="true">A</atl-option>
         </atl-select>`,
-        { imports: [AtlSelect, AtlOption] }
+        { imports: [AtlSelect, AtlOption] },
       );
-      expect(container.querySelector('[role="option"]')).toHaveClass('is-disabled');
+      expect(container.querySelector('[role="option"]')).toHaveClass(
+        'is-disabled',
+      );
     });
   });
 
   describe('invalid state', () => {
-    covers('select', 'invalid')('sets aria-invalid on the trigger when invalid', async () => {
-      const { container } = await render(
-        `<atl-select [invalid]="true" placeholder="Choose">
+    covers('select', 'invalid')(
+      'sets aria-invalid on the trigger when invalid',
+      async () => {
+        const { container } = await render(
+          `<atl-select [invalid]="true" placeholder="Choose">
           <atl-option optionValue="a">A</atl-option>
         </atl-select>`,
-        { imports: [AtlSelect, AtlOption] }
-      );
-      expect(container.querySelector('button.trigger')).toHaveAttribute('aria-invalid', 'true');
-    });
+          { imports: [AtlSelect, AtlOption] },
+        );
+        expect(container.querySelector('button.trigger')).toHaveAttribute(
+          'aria-invalid',
+          'true',
+        );
+      },
+    );
 
     it('does not set aria-invalid when valid', async () => {
       const { container } = await render(
         `<atl-select placeholder="Choose">
           <atl-option optionValue="a">A</atl-option>
         </atl-select>`,
-        { imports: [AtlSelect, AtlOption] }
+        { imports: [AtlSelect, AtlOption] },
       );
-      expect(container.querySelector('button.trigger')).not.toHaveAttribute('aria-invalid');
+      expect(container.querySelector('button.trigger')).not.toHaveAttribute(
+        'aria-invalid',
+      );
     });
 
     it('applies is-invalid class to host when invalid', async () => {
@@ -189,7 +217,7 @@ describe('AtlSelect', () => {
         `<atl-select [invalid]="true" placeholder="Choose">
           <atl-option optionValue="a">A</atl-option>
         </atl-select>`,
-        { imports: [AtlSelect, AtlOption] }
+        { imports: [AtlSelect, AtlOption] },
       );
       expect(container.querySelector('atl-select')).toHaveClass('is-invalid');
     });
@@ -209,25 +237,30 @@ describe('AtlSelect', () => {
           componentProperties: {
             errors: [{ kind: 'required', message: 'Please select an option' }],
           },
-        }
+        },
       );
       expect(container.querySelector('.errors')).toBeInTheDocument();
     });
 
-    covers('select', 'error-messages')('shows errors when touched and invalid', async () => {
-      await render(
-        `<atl-select [invalid]="true" [errors]="errors" [touched]="true" placeholder="Choose">
+    covers('select', 'error-messages')(
+      'shows errors when touched and invalid',
+      async () => {
+        await render(
+          `<atl-select [invalid]="true" [errors]="errors" [touched]="true" placeholder="Choose">
           <atl-option optionValue="a">A</atl-option>
         </atl-select>`,
-        {
-          imports: [AtlSelect, AtlOption],
-          componentProperties: {
-            errors: [{ kind: 'required', message: 'Please select an option' }],
+          {
+            imports: [AtlSelect, AtlOption],
+            componentProperties: {
+              errors: [
+                { kind: 'required', message: 'Please select an option' },
+              ],
+            },
           },
-        }
-      );
-      expect(screen.getByText('Please select an option')).toBeInTheDocument();
-    });
+        );
+        expect(screen.getByText('Please select an option')).toBeInTheDocument();
+      },
+    );
   });
 
   describe('touched state', () => {
@@ -236,7 +269,7 @@ describe('AtlSelect', () => {
         `<atl-select [touched]="true" placeholder="Choose">
           <atl-option optionValue="a">A</atl-option>
         </atl-select>`,
-        { imports: [AtlSelect, AtlOption] }
+        { imports: [AtlSelect, AtlOption] },
       );
       expect(container.querySelector('atl-select')).toHaveClass('is-touched');
     });
@@ -246,9 +279,11 @@ describe('AtlSelect', () => {
         `<atl-select placeholder="Choose">
           <atl-option optionValue="a">A</atl-option>
         </atl-select>`,
-        { imports: [AtlSelect, AtlOption] }
+        { imports: [AtlSelect, AtlOption] },
       );
-      expect(container.querySelector('atl-select')).not.toHaveClass('is-touched');
+      expect(container.querySelector('atl-select')).not.toHaveClass(
+        'is-touched',
+      );
     });
   });
 
@@ -259,7 +294,9 @@ describe('AtlSelect', () => {
         imports: [AtlSelect, AtlOption],
         componentProperties: { value: '' },
       });
-      const trigger = container.querySelector('button.trigger') as HTMLButtonElement;
+      const trigger = container.querySelector(
+        'button.trigger',
+      ) as HTMLButtonElement;
       await user.click(trigger);
       expect(container.querySelector('atl-select')).toHaveClass('is-open');
     });
@@ -270,24 +307,33 @@ describe('AtlSelect', () => {
         imports: [AtlSelect, AtlOption],
         componentProperties: { value: '' },
       });
-      const trigger = container.querySelector('button.trigger') as HTMLButtonElement;
+      const trigger = container.querySelector(
+        'button.trigger',
+      ) as HTMLButtonElement;
       await user.click(trigger);
       await user.click(trigger);
       expect(container.querySelector('atl-select')).not.toHaveClass('is-open');
     });
 
-    covers('select', 'value-change')('selects an option when clicked and closes the panel', async () => {
-      const user = userEvent.setup();
-      const { container } = await render(SELECT_TEMPLATE, {
-        imports: [AtlSelect, AtlOption],
-        componentProperties: { value: '' },
-      });
-      const trigger = container.querySelector('button.trigger') as HTMLButtonElement;
-      await user.click(trigger);
-      const options = container.querySelectorAll('[role="option"]');
-      await user.click(options[1]);
-      expect(container.querySelector('atl-select')).not.toHaveClass('is-open');
-    });
+    covers('select', 'value-change')(
+      'selects an option when clicked and closes the panel',
+      async () => {
+        const user = userEvent.setup();
+        const { container } = await render(SELECT_TEMPLATE, {
+          imports: [AtlSelect, AtlOption],
+          componentProperties: { value: '' },
+        });
+        const trigger = container.querySelector(
+          'button.trigger',
+        ) as HTMLButtonElement;
+        await user.click(trigger);
+        const options = container.querySelectorAll('[role="option"]');
+        await user.click(options[1]);
+        expect(container.querySelector('atl-select')).not.toHaveClass(
+          'is-open',
+        );
+      },
+    );
 
     it('closes panel on Escape key', async () => {
       const user = userEvent.setup();
@@ -295,7 +341,9 @@ describe('AtlSelect', () => {
         imports: [AtlSelect, AtlOption],
         componentProperties: { value: '' },
       });
-      const trigger = container.querySelector('button.trigger') as HTMLButtonElement;
+      const trigger = container.querySelector(
+        'button.trigger',
+      ) as HTMLButtonElement;
       await user.click(trigger);
       await user.keyboard('{Escape}');
       expect(container.querySelector('atl-select')).not.toHaveClass('is-open');
@@ -308,7 +356,7 @@ describe('AtlSelect', () => {
         `<atl-select label="Country" placeholder="Choose">
           <atl-option optionValue="a">A</atl-option>
         </atl-select>`,
-        { imports: [AtlSelect, AtlOption] }
+        { imports: [AtlSelect, AtlOption] },
       );
       expect(screen.getByLabelText('Country')).toBeInTheDocument();
     });
@@ -318,7 +366,7 @@ describe('AtlSelect', () => {
         `<atl-select placeholder="Choose">
           <atl-option optionValue="a">A</atl-option>
         </atl-select>`,
-        { imports: [AtlSelect, AtlOption] }
+        { imports: [AtlSelect, AtlOption] },
       );
       expect(container.querySelector('label')).not.toBeInTheDocument();
     });
@@ -333,9 +381,11 @@ describe('AtlSelect', () => {
         `<atl-select label="Country" placeholder="Choose">
           <atl-option optionValue="a">A</atl-option>
         </atl-select>`,
-        { imports: [AtlSelect, AtlOption] }
+        { imports: [AtlSelect, AtlOption] },
       );
-      expect(screen.getByRole('combobox', { name: 'Country' })).toBeInTheDocument();
+      expect(
+        screen.getByRole('combobox', { name: 'Country' }),
+      ).toBeInTheDocument();
     });
   });
 
@@ -345,14 +395,14 @@ describe('AtlSelect', () => {
         `<atl-select aria-label="Country" placeholder="Choose">
           <atl-option optionValue="a">A</atl-option>
         </atl-select>`,
-        { imports: [AtlSelect, AtlOption] }
+        { imports: [AtlSelect, AtlOption] },
       );
       expect(container.querySelector('button.trigger')).toHaveAttribute(
         'aria-label',
-        'Country'
+        'Country',
       );
       expect(container.querySelector('atl-select')).not.toHaveAttribute(
-        'aria-label'
+        'aria-label',
       );
     });
   });
@@ -365,7 +415,7 @@ describe('AtlSelect', () => {
       });
       expect(container.querySelector('button.trigger')).toHaveAttribute(
         'aria-haspopup',
-        'listbox'
+        'listbox',
       );
     });
 
@@ -376,7 +426,7 @@ describe('AtlSelect', () => {
       });
       expect(container.querySelector('button.trigger')).toHaveAttribute(
         'aria-expanded',
-        'false'
+        'false',
       );
     });
 
@@ -386,7 +436,9 @@ describe('AtlSelect', () => {
         imports: [AtlSelect, AtlOption],
         componentProperties: { value: '' },
       });
-      const trigger = container.querySelector('button.trigger') as HTMLButtonElement;
+      const trigger = container.querySelector(
+        'button.trigger',
+      ) as HTMLButtonElement;
       await user.click(trigger);
       expect(trigger).toHaveAttribute('aria-expanded', 'true');
     });
@@ -396,7 +448,9 @@ describe('AtlSelect', () => {
         imports: [AtlSelect, AtlOption],
         componentProperties: { value: '' },
       });
-      const trigger = container.querySelector('button.trigger') as HTMLButtonElement;
+      const trigger = container.querySelector(
+        'button.trigger',
+      ) as HTMLButtonElement;
       const panelId = trigger.getAttribute('aria-controls');
       expect(panelId).toBeTruthy();
       expect(container.querySelector(`#${panelId}`)).toBeInTheDocument();
@@ -407,9 +461,12 @@ describe('AtlSelect', () => {
         `<atl-select [required]="true" placeholder="Choose">
           <atl-option optionValue="a">A</atl-option>
         </atl-select>`,
-        { imports: [AtlSelect, AtlOption] }
+        { imports: [AtlSelect, AtlOption] },
       );
-      expect(container.querySelector('button.trigger')).toHaveAttribute('aria-required', 'true');
+      expect(container.querySelector('button.trigger')).toHaveAttribute(
+        'aria-required',
+        'true',
+      );
     });
 
     it('does not set aria-required when not required', async () => {
@@ -417,9 +474,11 @@ describe('AtlSelect', () => {
         `<atl-select placeholder="Choose">
           <atl-option optionValue="a">A</atl-option>
         </atl-select>`,
-        { imports: [AtlSelect, AtlOption] }
+        { imports: [AtlSelect, AtlOption] },
       );
-      expect(container.querySelector('button.trigger')).not.toHaveAttribute('aria-required');
+      expect(container.querySelector('button.trigger')).not.toHaveAttribute(
+        'aria-required',
+      );
     });
   });
 });

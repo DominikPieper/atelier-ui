@@ -26,8 +26,12 @@ async function captureOne(template: string): Promise<unknown> {
 async function capture(): Promise<Record<string, unknown>> {
   return {
     unchecked: await captureOne('<atl-checkbox>Accept terms</atl-checkbox>'),
-    checked: await captureOne('<atl-checkbox [checked]="true">Accept terms</atl-checkbox>'),
-    disabled: await captureOne('<atl-checkbox [disabled]="true">Accept terms</atl-checkbox>'),
+    checked: await captureOne(
+      '<atl-checkbox [checked]="true">Accept terms</atl-checkbox>',
+    ),
+    disabled: await captureOne(
+      '<atl-checkbox [disabled]="true">Accept terms</atl-checkbox>',
+    ),
   };
 }
 

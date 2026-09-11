@@ -21,4 +21,6 @@ export interface AtlRadioGroupContext {
   unregisterItem(item: RadioItem): void;
 }
 
-export const ATL_RADIO_GROUP = new InjectionToken<AtlRadioGroupContext>('ATL_RADIO_GROUP');
+export const ATL_RADIO_GROUP = new InjectionToken<AtlRadioGroupContext>(
+  'ATL_RADIO_GROUP',
+);

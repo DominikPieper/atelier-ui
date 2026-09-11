@@ -30,7 +30,11 @@
 
 const fs = require('fs');
 const path = require('path');
-const { FRAMEWORKS, isComponentDir, getComponentDirs } = require('./lib/component-discovery');
+const {
+  FRAMEWORKS,
+  isComponentDir,
+  getComponentDirs,
+} = require('./lib/component-discovery');
 const { PRIMITIVE_TOKENS, PRIMITIVE_EXEMPTIONS } = require('./lib/allowlists');
 
 const ROOT = path.resolve(__dirname, '../..');
@@ -59,7 +63,9 @@ for (const fw of FRAMEWORKS) {
   for (const dir of [...getComponentDirs(base)].sort()) {
     const dirPath = path.join(base, dir);
     if (!isComponentDir(dirPath)) continue;
-    for (const entry of fs.readdirSync(dirPath).filter((f) => f.endsWith('.css'))) {
+    for (const entry of fs
+      .readdirSync(dirPath)
+      .filter((f) => f.endsWith('.css'))) {
       const file = path.join(dirPath, entry);
       filesScanned++;
       for (const { token, line } of referencesIn(file)) {
@@ -73,7 +79,7 @@ for (const fw of FRAMEWORKS) {
 
         if (!exemption) {
           errors.push(
-            `[PRIMITIVE] ${where} references ${token} (${primitive.label}). Use ${primitive.useInstead}. ${primitive.why}`
+            `[PRIMITIVE] ${where} references ${token} (${primitive.label}). Use ${primitive.useInstead}. ${primitive.why}`,
           );
           continue;
         }
@@ -90,7 +96,7 @@ for (const fw of FRAMEWORKS) {
 for (const [key, entry] of PRIMITIVE_EXEMPTIONS) {
   if (!seenExemptions.has(key)) {
     errors.push(
-      `[STALE] PRIMITIVE_EXEMPTIONS carries '${key}' (${entry.kind}) but no component CSS references it any more. Remove the entry.`
+      `[STALE] PRIMITIVE_EXEMPTIONS carries '${key}' (${entry.kind}) but no component CSS references it any more. Remove the entry.`,
     );
   }
 }
@@ -113,4 +119,6 @@ if (errors.length > 0) {
   console.error(`\n${errors.length} primitive-tier issue(s). ${total}.`);
   process.exit(1);
 }
-console.warn(`\n${uniqueWarnings.length} primitive-tier warning(s) (non-blocking). ${total}.`);
+console.warn(
+  `\n${uniqueWarnings.length} primitive-tier warning(s) (non-blocking). ${total}.`,
+);

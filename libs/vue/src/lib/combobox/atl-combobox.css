@@ -16,17 +16,18 @@
   .atl-combobox-wrapper
 ),
 :is(
-  .atl-combobox,
-  .atl-combobox-check,
-  .atl-combobox-error-message,
-  .atl-combobox-errors,
-  .atl-combobox-icon,
-  .atl-combobox-input,
-  .atl-combobox-no-results,
-  .atl-combobox-option,
-  .atl-combobox-panel,
-  .atl-combobox-wrapper
-) * {
+    .atl-combobox,
+    .atl-combobox-check,
+    .atl-combobox-error-message,
+    .atl-combobox-errors,
+    .atl-combobox-icon,
+    .atl-combobox-input,
+    .atl-combobox-no-results,
+    .atl-combobox-option,
+    .atl-combobox-panel,
+    .atl-combobox-wrapper
+  )
+  * {
   box-sizing: border-box;
 }
 
@@ -64,12 +65,21 @@
    * defect only appeared in CI. See ADR-0048. */
   line-height: var(--ui-line-height-tight);
   padding: calc(
-      (var(--ui-control-height-md) - var(--ui-line-height-tight) * var(--ui-font-size-md)) / 2 -
-        var(--ui-border-width)
-    ) calc(var(--ui-spacing-4) + 1.25rem + var(--ui-spacing-5)) calc(
-      (var(--ui-control-height-md) - var(--ui-line-height-tight) * var(--ui-font-size-md)) / 2 -
-        var(--ui-border-width)
-    ) var(--ui-spacing-4);
+      (
+          var(--ui-control-height-md) - var(--ui-line-height-tight) *
+            var(--ui-font-size-md)
+        ) /
+        2 - var(--ui-border-width)
+    )
+    calc(var(--ui-spacing-4) + 1.25rem + var(--ui-spacing-5))
+    calc(
+      (
+          var(--ui-control-height-md) - var(--ui-line-height-tight) *
+            var(--ui-font-size-md)
+        ) /
+        2 - var(--ui-border-width)
+    )
+    var(--ui-spacing-4);
   font-family: inherit;
   font-size: inherit;
   color: var(--ui-color-text);

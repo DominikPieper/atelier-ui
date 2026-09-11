@@ -3,7 +3,7 @@ status: accepted
 confidence: documented
 date: reconstructed
 sources:
-  - "plan/ai-readiness.md, commit d7f6235"
+  - 'plan/ai-readiness.md, commit d7f6235'
 ---
 
 # ADR-0010: AI-readiness layer (metadata + token manifest + behavior manifest)

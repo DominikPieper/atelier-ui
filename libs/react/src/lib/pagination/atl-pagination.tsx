@@ -4,10 +4,13 @@ import './atl-pagination.css';
 import { AtlIcon } from '../icon/atl-icon';
 
 type PageItem =
-  | { type: 'page'; page: number }
-  | { type: 'ellipsis'; key: string };
+  { type: 'page'; page: number } | { type: 'ellipsis'; key: string };
 
-function buildPageItems(page: number, pageCount: number, siblingCount: number): PageItem[] {
+function buildPageItems(
+  page: number,
+  pageCount: number,
+  siblingCount: number,
+): PageItem[] {
   if (pageCount <= 1) return [{ type: 'page', page: 1 }];
 
   const items: PageItem[] = [];
@@ -43,8 +46,7 @@ function buildPageItems(page: number, pageCount: number, siblingCount: number): 
  * Properties for the AtlPagination component.
  */
 export interface AtlPaginationProps
-  extends Omit<HTMLAttributes<HTMLElement>, 'onChange'>,
-    AtlPaginationSpec {
+  extends Omit<HTMLAttributes<HTMLElement>, 'onChange'>, AtlPaginationSpec {
   /**
    * The currently active page.
    */
@@ -83,7 +85,7 @@ export function AtlPagination({
 
   const pageItems = useMemo(
     () => buildPageItems(page, pageCount, siblingCount),
-    [page, pageCount, siblingCount]
+    [page, pageCount, siblingCount],
   );
 
   const goTo = (p: number) => {
@@ -99,7 +101,9 @@ export function AtlPagination({
         {showFirstLast && (
           <li>
             <button
-              className={['page-btn', page <= 1 ? 'is-disabled' : ''].filter(Boolean).join(' ')}
+              className={['page-btn', page <= 1 ? 'is-disabled' : '']
+                .filter(Boolean)
+                .join(' ')}
               disabled={page <= 1}
               aria-label="First page"
               onClick={() => goTo(1)}
@@ -110,7 +114,9 @@ export function AtlPagination({
         )}
         <li>
           <button
-            className={['page-btn', page <= 1 ? 'is-disabled' : ''].filter(Boolean).join(' ')}
+            className={['page-btn', page <= 1 ? 'is-disabled' : '']
+              .filter(Boolean)
+              .join(' ')}
             disabled={page <= 1}
             aria-label="Previous page"
             onClick={() => goTo(page - 1)}
@@ -139,15 +145,12 @@ export function AtlPagination({
                 …
               </span>
             </li>
-          )
+          ),
         )}
 
         <li>
           <button
-            className={[
-              'page-btn',
-              page >= pageCount ? 'is-disabled' : '',
-            ]
+            className={['page-btn', page >= pageCount ? 'is-disabled' : '']
               .filter(Boolean)
               .join(' ')}
             disabled={page >= pageCount}
@@ -160,10 +163,7 @@ export function AtlPagination({
         {showFirstLast && (
           <li>
             <button
-              className={[
-                'page-btn',
-                page >= pageCount ? 'is-disabled' : '',
-              ]
+              className={['page-btn', page >= pageCount ? 'is-disabled' : '']
                 .filter(Boolean)
                 .join(' ')}
               disabled={page >= pageCount}

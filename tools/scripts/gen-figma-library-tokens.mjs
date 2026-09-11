@@ -35,10 +35,11 @@ import { fileURLToPath } from 'node:url';
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const SOURCE = resolve(
   ROOT,
-  'libs/create-workspace/src/generators/preset/files/styles/tokens.css'
+  'libs/create-workspace/src/generators/preset/files/styles/tokens.css',
 );
 
-const SKIP = /^--ui-(shadow|ease|duration|transition|z|focus-ring|letter-spacing)/;
+const SKIP =
+  /^--ui-(shadow|ease|duration|transition|z|focus-ring|letter-spacing)/;
 
 function parseBlock(css, selectorRe) {
   const m = selectorRe.exec(css);
@@ -66,13 +67,20 @@ function cssName(name) {
   const bare = name.replace(/^--ui-/, '');
   if (bare === 'font-family') return { token: 'font/family', type: 'STRING' };
   let m;
-  if ((m = /^font-size-(.+)$/.exec(bare))) return { token: `font-size/${m[1]}`, type: 'FLOAT' };
-  if ((m = /^font-weight-(.+)$/.exec(bare))) return { token: `font-weight/${m[1]}`, type: 'FLOAT' };
-  if ((m = /^line-height-(.+)$/.exec(bare))) return { token: `line-height/${m[1]}`, type: 'FLOAT' };
-  if ((m = /^spacing-(.+)$/.exec(bare))) return { token: `spacing/${m[1]}`, type: 'FLOAT' };
-  if ((m = /^radius-(.+)$/.exec(bare))) return { token: `radius/${m[1]}`, type: 'FLOAT' };
-  if ((m = /^opacity-(.+)$/.exec(bare))) return { token: `opacity/${m[1]}`, type: 'FLOAT' };
-  if ((m = /^color-(.+)$/.exec(bare))) return { token: `color/${m[1]}`, type: 'COLOR' };
+  if ((m = /^font-size-(.+)$/.exec(bare)))
+    return { token: `font-size/${m[1]}`, type: 'FLOAT' };
+  if ((m = /^font-weight-(.+)$/.exec(bare)))
+    return { token: `font-weight/${m[1]}`, type: 'FLOAT' };
+  if ((m = /^line-height-(.+)$/.exec(bare)))
+    return { token: `line-height/${m[1]}`, type: 'FLOAT' };
+  if ((m = /^spacing-(.+)$/.exec(bare)))
+    return { token: `spacing/${m[1]}`, type: 'FLOAT' };
+  if ((m = /^radius-(.+)$/.exec(bare)))
+    return { token: `radius/${m[1]}`, type: 'FLOAT' };
+  if ((m = /^opacity-(.+)$/.exec(bare)))
+    return { token: `opacity/${m[1]}`, type: 'FLOAT' };
+  if ((m = /^color-(.+)$/.exec(bare)))
+    return { token: `color/${m[1]}`, type: 'COLOR' };
   return null;
 }
 
@@ -93,9 +101,15 @@ function parseValue(raw, type) {
   const hex = /^#([0-9a-f]{6})$/i.exec(raw);
   if (hex) {
     const n = parseInt(hex[1], 16);
-    return { r: ((n >> 16) & 255) / 255, g: ((n >> 8) & 255) / 255, b: (n & 255) / 255, a: 1 };
+    return {
+      r: ((n >> 16) & 255) / 255,
+      g: ((n >> 8) & 255) / 255,
+      b: (n & 255) / 255,
+      a: 1,
+    };
   }
-  const rgba = /^rgba\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*([\d.]+)\s*\)$/.exec(raw);
+  const rgba =
+    /^rgba\(\s*(\d+)\s*,\s*(\d+)\s*,\s*(\d+)\s*,\s*([\d.]+)\s*\)$/.exec(raw);
   if (rgba) {
     return {
       r: parseInt(rgba[1]) / 255,
@@ -167,5 +181,7 @@ export function buildDefs() {
 if (process.argv[1] === fileURLToPath(import.meta.url)) {
   const defs = buildDefs();
   process.stdout.write(JSON.stringify(defs, null, 2) + '\n');
-  console.error(`${defs.length} token definitions (source: ${SOURCE.replace(ROOT + '/', '')})`);
+  console.error(
+    `${defs.length} token definitions (source: ${SOURCE.replace(ROOT + '/', '')})`,
+  );
 }

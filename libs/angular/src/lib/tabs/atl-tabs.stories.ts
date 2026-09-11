@@ -7,9 +7,10 @@ import { AtlCard, AtlCardContent } from '../card/atl-card';
 
 import { metadata } from '@atelier-ui/spec/metadata/tabs.metadata';
 import { contract } from '@atelier-ui/spec/contracts/tab-group.contract';
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
-function figmaNode(nodeId: string): { type: "figma"; url: string } {
+function figmaNode(nodeId: string): { type: 'figma'; url: string } {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
 }
 
@@ -125,7 +126,15 @@ export const WithRichContent: Story = {
   render: (args) => ({
     props: args,
     moduleMetadata: {
-      imports: [AtlTabGroup, AtlTab, AtlInput, AtlButton, AtlBadge, AtlCard, AtlCardContent],
+      imports: [
+        AtlTabGroup,
+        AtlTab,
+        AtlInput,
+        AtlButton,
+        AtlBadge,
+        AtlCard,
+        AtlCardContent,
+      ],
     },
     template: `
       <atl-tab-group [variant]="variant">

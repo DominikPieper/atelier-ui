@@ -8,8 +8,7 @@ import {
 import { AtlIcon } from '../icon/atl-icon';
 
 export type PageItem =
-  | { type: 'page'; page: number }
-  | { type: 'ellipsis'; key: string };
+  { type: 'page'; page: number } | { type: 'ellipsis'; key: string };
 
 /**
  * Pagination control for navigating multi-page content.
@@ -35,7 +34,9 @@ export type PageItem =
               [disabled]="page() <= 1"
               aria-label="First page"
               (click)="goFirst()"
-            ><atl-icon name="chevron-double-left" size="sm" /></button>
+            >
+              <atl-icon name="chevron-double-left" size="sm" />
+            </button>
           </li>
         }
         <li>
@@ -45,7 +46,9 @@ export type PageItem =
             [disabled]="page() <= 1"
             aria-label="Previous page"
             (click)="goPrev()"
-          ><atl-icon name="chevron-left" size="sm" /></button>
+          >
+            <atl-icon name="chevron-left" size="sm" />
+          </button>
         </li>
 
         @for (item of pageItems(); track $index) {
@@ -57,7 +60,9 @@ export type PageItem =
                 [attr.aria-current]="item.page === page() ? 'page' : null"
                 [attr.aria-label]="'Page ' + item.page"
                 (click)="goTo(item.page)"
-              >{{ item.page }}</button>
+              >
+                {{ item.page }}
+              </button>
             </li>
           } @else {
             <li>
@@ -73,7 +78,9 @@ export type PageItem =
             [disabled]="page() >= pageCount()"
             aria-label="Next page"
             (click)="goNext()"
-          ><atl-icon name="chevron-right" size="sm" /></button>
+          >
+            <atl-icon name="chevron-right" size="sm" />
+          </button>
         </li>
         @if (showFirstLast()) {
           <li>
@@ -83,7 +90,9 @@ export type PageItem =
               [disabled]="page() >= pageCount()"
               aria-label="Last page"
               (click)="goLast()"
-            ><atl-icon name="chevron-double-right" size="sm" /></button>
+            >
+              <atl-icon name="chevron-double-right" size="sm" />
+            </button>
           </li>
         }
       </ul>

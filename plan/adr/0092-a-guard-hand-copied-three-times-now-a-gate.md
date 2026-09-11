@@ -49,7 +49,7 @@ pattern staying in place, or being applied to the next component that aliases
 one of these attributes. Its own follow-up list said so directly: "a shared
 host-metadata constant or a gate would make it structural" — and named the
 constant as the tempting option. A constant is still something a fourth
-component's author has to remember to reach for; only a gate *detects* the
+component's author has to remember to reach for; only a gate _detects_ the
 omission when they don't.
 
 Auditing every Angular component for the pattern (`grep` across all
@@ -111,11 +111,11 @@ component.
 
 **Alternatives rejected:**
 
-- *A shared host-metadata constant* (the follow-up's other suggested fix).
+- _A shared host-metadata constant_ (the follow-up's other suggested fix).
   Rejected for the reason above: it reduces duplication but still requires
   the next author to remember to reach for it. Only a gate that fails CI
   without the guard removes the "remember" step.
-- *Allowlist Dialog/Table as `gap`* instead of fixing them. Rejected — both
+- _Allowlist Dialog/Table as `gap`_ instead of fixing them. Rejected — both
   fixes are one line each, the reasoning was already fully worked out by
   ADR-0091 for the identical pattern, and an allowlist is for a defect that
   is understood but not yet worth fixing, not a stand-in for a same-session
@@ -128,10 +128,10 @@ component.
   classes and triggering on 8 alias/id declarations (Input ×2, Textarea ×2,
   Select ×1, Dialog ×2, Table ×1), 0 exemptions, exit 0 on the current tree.
 - Negative-tested both branches: deleting Select's `'[attr.aria-label]':
-  'null'` line fails with `[HOST-GUARD] …atl-select.ts: AtlSelect aliases an
-  input to 'aria-label' …`, exit 1; deleting Input's `'[attr.id]': 'null'`
+'null'` line fails with `[HOST-GUARD] …atl-select.ts: AtlSelect aliases an
+input to 'aria-label' …`, exit 1; deleting Input's `'[attr.id]': 'null'`
   line fails with `[HOST-GUARD] …atl-input.ts: AtlInput declares an input
-  literally named \`id\` …`, exit 1. Restoring either returns the gate to
+literally named \`id\` …`, exit 1. Restoring either returns the gate to
   exit 0.
 - `AtlDialog` and `AtlTable`'s roleless hosts can no longer silently pick up
   a competing accessible name if either ever gains a `role` — the exact

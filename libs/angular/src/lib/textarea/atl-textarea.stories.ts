@@ -4,9 +4,10 @@ import { AtlTextarea } from './atl-textarea';
 
 import { metadata } from '@atelier-ui/spec/metadata/textarea.metadata';
 import { contract } from '@atelier-ui/spec/contracts/textarea.contract';
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
-function figmaNode(nodeId: string): { type: "figma"; url: string } {
+function figmaNode(nodeId: string): { type: 'figma'; url: string } {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
 }
 
@@ -90,7 +91,10 @@ export const WithErrors: Story = {
 };
 
 export const AutoResize: Story = {
-  args: { autoResize: true, placeholder: 'Start typing — this grows automatically...' },
+  args: {
+    autoResize: true,
+    placeholder: 'Start typing — this grows automatically...',
+  },
 };
 
 export const Playground: Story = {

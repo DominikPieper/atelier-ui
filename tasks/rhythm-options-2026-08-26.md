@@ -18,12 +18,12 @@ ten times per framework and four type values sit off the scale.
 
 **Shape.** No new height token. `--ui-control-height-*` becomes the library's only
 vertical step and its manifest intent widens from "a control" to "a control or a
-row". Rows get a recipe *different* from ADR-0041's: `min-height: var(--ui-control-
+row". Rows get a recipe _different_ from ADR-0041's: `min-height: var(--ui-control-
 height-*); padding-block: 0; line-height: var(--ui-line-height-tight)` — the height
 is stated and the content is centred, not padded.
 
 > Measured, and it corrects ADR-0041's formula for rows: a size-md table cell with
-> *derived* padding (11px) renders **62.5px** when it holds an md button, versus
+> _derived_ padding (11px) renders **62.5px** when it holds an md button, versus
 > **41.0px** with the block padding zeroed.
 
 `2.25rem` is deleted rather than named: the five box-size uses per framework
@@ -33,22 +33,22 @@ clearance and unrelated.
 
 **Consequences** (adopting min-height 40, block padding zeroed):
 
-| box | now | after |
-|---|---|---|
-| accordion trigger | 52 | 40 (−12) |
-| menu item | 36 | 40 (+4) |
-| combobox option | 36 | 40 (+4) |
-| table row, md | 42 | 40 (−2) |
-| table sortable header | 43 | 40 (−3) |
-| table row, lg | 51 | 48 (−3) |
-| table row, sm | 32 | 32 (0) |
-| radio row | 32 | 32 (0) |
-| toggle row | 27 | 32 (+5) |
-| checkbox row | 26 | 32 (+6) |
-| breadcrumb item | 17 | 32 (+15) |
-| pagination button, stepper circle | 36 | 32 (−4) or 40 (+4) |
+| box                               | now | after              |
+| --------------------------------- | --- | ------------------ |
+| accordion trigger                 | 52  | 40 (−12)           |
+| menu item                         | 36  | 40 (+4)            |
+| combobox option                   | 36  | 40 (+4)            |
+| table row, md                     | 42  | 40 (−2)            |
+| table sortable header             | 43  | 40 (−3)            |
+| table row, lg                     | 51  | 48 (−3)            |
+| table row, sm                     | 32  | 32 (0)             |
+| radio row                         | 32  | 32 (0)             |
+| toggle row                        | 27  | 32 (+5)            |
+| checkbox row                      | 26  | 32 (+6)            |
+| breadcrumb item                   | 17  | 32 (+15)           |
+| pagination button, stepper circle | 36  | 32 (−4) or 40 (+4) |
 
-**The one real gap.** A 40px control does *not* fit a 40px table row: measured
+**The one real gap.** A 40px control does _not_ fit a 40px table row: measured
 **41.0px** for a size-md cell holding an md button or an md avatar, the extra pixel
 being the two collapsed cell borders. Non-table rows are exact — a menu item at
 min-height 40 holding a 40px avatar measures 40.00px. So A ships a stated rule ("a
@@ -77,7 +77,7 @@ stylesheets must honour.
 
 **What it buys, measured.** This is the only option under which "any control goes in
 any row" is true: a size-md table cell at height 48 renders **48.00px** holding plain
-text, a badge, an sm button, an md button *or* an md avatar. The same cell at 40
+text, a badge, an sm button, an md button _or_ an md avatar. The same cell at 40
 renders 41.0px with the md button or avatar.
 
 **What it costs.** Density on the most repeated box in an application — table rows
@@ -103,8 +103,8 @@ nothing sits off the scale (`--ui-line-height-code: 1.65` for AtlCodeBlock's pre
 `--ui-line-height-none: 1` for nine literal uses per framework — though the census
 measured those as **inert**, since the boxes carry explicit dimensions). One rule:
 every element whose height is measured states its own line-height. Plus one reset per
-framework for the native checkbox's UA `margin: 3px 3px 3px 4px` — measured, *that
-margin*, not any line-height, is why the checkbox row is 26px against its own stated
+framework for the native checkbox's UA `margin: 3px 3px 3px 4px` — measured, _that
+margin_, not any line-height, is why the checkbox row is 26px against its own stated
 `min-height: 1.5rem`.
 
 **What it buys.** The ADR-0048 property library-wide: the **32 of 70** boxes the
@@ -171,12 +171,12 @@ before any delta is committed.
 **Resolved, and it was two bugs rather than one.** The first is the one the caveat
 names: `:host(...)` selectors match nothing in a plain document, so an un-hostified
 Angular fixture measures an unstyled box. The second only appeared when the fixture
-was hostified: the harness concatenated the component's stylesheet *and*
+was hostified: the harness concatenated the component's stylesheet _and_
 `atl-icon.css` and rewrote both with the component's tag, so
 `:host { display: inline-flex }` from the icon landed on `atl-checkbox`,
 `atl-radio` and `atl-toggle`. That made three Angular roots inline-flex and every
 Angular number in that run wrong in a way that looked plausible — 40 where React
-read 48, which reads like Angular being *more* correct.
+read 48, which reads like Angular being _more_ correct.
 
 `tools/scripts/check-geometry.mjs` had a latent version of the same bug: it
 hostified per directory, which was safe only while no directory held two components.
@@ -224,4 +224,3 @@ Two were mine to decide, and both exclude a box family from the ladder:
   Decision G2 is still open and separate.
 
 Both exclusions are one line in the row-recipe scope, if either turns out wrong.
-

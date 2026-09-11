@@ -5,7 +5,8 @@ import { AtlRadioGroup } from '../radio-group/atl-radio-group';
 
 import { metadata } from '@atelier-ui/spec/metadata/radio.metadata';
 import { contract } from '@atelier-ui/spec/contracts/radio.contract';
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
@@ -52,7 +53,11 @@ export const IndividualDisabled: Story = {
   render: function Render() {
     const [value, setValue] = useState('free');
     return (
-      <AtlRadioGroup value={value} onValueChange={setValue} name="plan-individual">
+      <AtlRadioGroup
+        value={value}
+        onValueChange={setValue}
+        name="plan-individual"
+      >
         <AtlRadio radioValue="free">Free</AtlRadio>
         <AtlRadio radioValue="pro">Pro</AtlRadio>
         <AtlRadio radioValue="enterprise" disabled>

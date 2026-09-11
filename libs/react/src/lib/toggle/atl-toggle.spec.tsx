@@ -4,10 +4,13 @@ import { AtlToggle } from './atl-toggle';
 import { covers } from '../../testing/behavior';
 
 describe('AtlToggle', () => {
-  covers('toggle', 'role-switch')('renders a checkbox input with role switch', () => {
-    render(<AtlToggle>Enable</AtlToggle>);
-    expect(screen.getByRole('switch')).toBeInTheDocument();
-  });
+  covers('toggle', 'role-switch')(
+    'renders a checkbox input with role switch',
+    () => {
+      render(<AtlToggle>Enable</AtlToggle>);
+      expect(screen.getByRole('switch')).toBeInTheDocument();
+    },
+  );
 
   it('applies atl-toggle class to wrapper', () => {
     const { container } = render(<AtlToggle />);
@@ -24,10 +27,13 @@ describe('AtlToggle', () => {
     expect(screen.getByRole('switch')).not.toBeChecked();
   });
 
-  covers('toggle', 'reflects-checked')('renders as checked when checked=true', () => {
-    render(<AtlToggle checked>Enable</AtlToggle>);
-    expect(screen.getByRole('switch')).toBeChecked();
-  });
+  covers('toggle', 'reflects-checked')(
+    'renders as checked when checked=true',
+    () => {
+      render(<AtlToggle checked>Enable</AtlToggle>);
+      expect(screen.getByRole('switch')).toBeChecked();
+    },
+  );
 
   it('applies is-checked class when checked', () => {
     const { container } = render(<AtlToggle checked />);
@@ -54,17 +60,24 @@ describe('AtlToggle', () => {
     expect(screen.getByRole('switch')).toHaveAttribute('aria-invalid', 'true');
   });
 
-  covers('toggle', 'toggle-emits')('calls onCheckedChange on click', async () => {
-    const user = userEvent.setup();
-    const onCheckedChange = vi.fn();
-    render(<AtlToggle onCheckedChange={onCheckedChange}>Enable</AtlToggle>);
-    await user.click(screen.getByRole('switch'));
-    expect(onCheckedChange).toHaveBeenCalledOnce();
-    expect(onCheckedChange).toHaveBeenCalledWith(true);
-  });
+  covers('toggle', 'toggle-emits')(
+    'calls onCheckedChange on click',
+    async () => {
+      const user = userEvent.setup();
+      const onCheckedChange = vi.fn();
+      render(<AtlToggle onCheckedChange={onCheckedChange}>Enable</AtlToggle>);
+      await user.click(screen.getByRole('switch'));
+      expect(onCheckedChange).toHaveBeenCalledOnce();
+      expect(onCheckedChange).toHaveBeenCalledWith(true);
+    },
+  );
 
   covers('toggle', 'errors')('shows error messages', () => {
-    render(<AtlToggle invalid errors={['Required']}>Enable</AtlToggle>);
+    render(
+      <AtlToggle invalid errors={['Required']}>
+        Enable
+      </AtlToggle>,
+    );
     expect(screen.getByText('Required')).toBeInTheDocument();
   });
 

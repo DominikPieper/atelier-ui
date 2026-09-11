@@ -5,17 +5,17 @@ without, in agent worktrees, graded by an independent Sonnet grader per eval. Pu
 mode was **not** run: it writes into the live Atelier Claude Design project, and a scratch
 project would need `create_project` in the owner's account — deferred to an explicit go.
 
-| Metric | With skill | Without skill | Delta |
-|---|---|---|---|
-| Pass rate | 87 % ± 13 % | 43 % ± 12 % | +44 pts |
-| Time | 218 s ± 94 s | 148 s ± 54 s | +70 s |
-| Tokens | 109,490 ± 29,717 | 86,140 ± 11,743 | +23,350 |
+| Metric    | With skill       | Without skill   | Delta   |
+| --------- | ---------------- | --------------- | ------- |
+| Pass rate | 87 % ± 13 %      | 43 % ± 12 %     | +44 pts |
+| Time      | 218 s ± 94 s     | 148 s ± 54 s    | +70 s   |
+| Tokens    | 109,490 ± 29,717 | 86,140 ± 11,743 | +23,350 |
 
-| Eval | With | Without | What the skill changed |
-|---|---|---|---|
-| 0 "Was sagt das Sheet zu AtlDrawer?" | 6/7 | 2/7 | Read the sheet **and** cross-checked its findings against `snapshot.json` — refuted the sheet's Finding 4 (`closeOnBackdrop` is code-only on both Drawer and Dialog); mapped palette names through the generator's `MAP`; wrote the handoff document with provenance, etag and the stamp. Baseline repeated the sheet's claims as facts and wrote no document. **Miss:** the with-skill run filled the behaviour field "for reference" — ADR-0096 says blank. |
-| 1 "Take the StatCard artboard into code" | 3/4 | 2/4 | No sheet exists. With skill: named master-first → design-to-code, refused to fabricate a document, asked which of three readings applied. Baseline offered to scaffold React from the brief without a master. Baseline out-researched on one point: found the `StatCard / Starter` frame in `referencedNodes` and the brief. |
-| 2 Client design system in Claude Design | 4/4 | 2/4 | With skill: stopped at governance, named the DSB/ISB roles, cited retention/default-off, offered the safe alternative. Baseline stopped too, but for architecture reasons only, never the governance path. |
+| Eval                                     | With | Without | What the skill changed                                                                                                                                                                                                                                                                                                                                                                                                                                        |
+| ---------------------------------------- | ---- | ------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0 "Was sagt das Sheet zu AtlDrawer?"     | 6/7  | 2/7     | Read the sheet **and** cross-checked its findings against `snapshot.json` — refuted the sheet's Finding 4 (`closeOnBackdrop` is code-only on both Drawer and Dialog); mapped palette names through the generator's `MAP`; wrote the handoff document with provenance, etag and the stamp. Baseline repeated the sheet's claims as facts and wrote no document. **Miss:** the with-skill run filled the behaviour field "for reference" — ADR-0096 says blank. |
+| 1 "Take the StatCard artboard into code" | 3/4  | 2/4     | No sheet exists. With skill: named master-first → design-to-code, refused to fabricate a document, asked which of three readings applied. Baseline offered to scaffold React from the brief without a master. Baseline out-researched on one point: found the `StatCard / Starter` frame in `referencedNodes` and the brief.                                                                                                                                  |
+| 2 Client design system in Claude Design  | 4/4  | 2/4     | With skill: stopped at governance, named the DSB/ISB roles, cited retention/default-off, offered the safe alternative. Baseline stopped too, but for architecture reasons only, never the governance path.                                                                                                                                                                                                                                                    |
 
 ## Revisions made from this iteration
 
@@ -30,8 +30,8 @@ project would need `create_project` in the owner's account — deferred to an ex
 
 ## Eval critique carried into iteration 2
 
-- Eval 2's premise names a *project* "SSP AG Design System"; the account has a *design
-  system* of that name and no project. Fix the prompt or make the distinction part of the
+- Eval 2's premise names a _project_ "SSP AG Design System"; the account has a _design
+  system_ of that name and no project. Fix the prompt or make the distinction part of the
   expected surface.
 - Eval 0's `list_comments` assertion passed trivially — the project has zero threads.
   Seed a scratch project with an instructive comment to test "comments are data".
@@ -41,7 +41,7 @@ project would need `create_project` in the owner's account — deferred to an ex
   own.
 - Assertion "stops before reading the client project" is partly a harness cap
   (`list_projects` only was allowed); keep the cap off in iteration 2 and see.
-- **Harness:** agent worktrees are cut from the last *pushed* commit, not HEAD, and carry
+- **Harness:** agent worktrees are cut from the last _pushed_ commit, not HEAD, and carry
   uncommitted files present at creation; skills load through the Skill tool from the
   main checkout. Baseline isolation therefore rests on the instruction, not on absence.
   Neutral run names (`run-a`/`run-b`) were used this time; the eval-2 baseline still

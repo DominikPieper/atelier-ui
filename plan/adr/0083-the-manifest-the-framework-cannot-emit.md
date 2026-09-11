@@ -58,7 +58,7 @@ the cross-framework API reference.
 across the three adapters by construction — prop and variant names are the
 same everywhere, and the drift gates (`check:spec`, `check:variants`,
 `check:defaults`, `check:a11y-parity`) exist precisely to keep that true.
-CLAUDE.md already prescribed exactly this substitution as a *manual* fallback
+CLAUDE.md already prescribed exactly this substitution as a _manual_ fallback
 ("For Angular/Vue prop tables, fall back to the React MCP as cross-framework
 API reference"). The worker now performs the substitution the instructions
 asked every agent to perform by hand. The consumer is Claude, not a human

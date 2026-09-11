@@ -23,7 +23,7 @@ way said the CSS is not always on its own scale, which means the gates would fai
 enforce a wrong value.
 
 `check:token-bypass` (ADR-0047) already catches the one objectively wrong case: a literal
-whose value a token in the same family already holds. It deliberately does *not* demand
+whose value a token in the same family already holds. It deliberately does _not_ demand
 that every value be a token — most of the ~190 literals in the stylesheets are one-off
 component dimensions, and tokenising them would be the rule of three violated in token
 form.
@@ -42,13 +42,13 @@ of them, every one is named, and a bare `600` carries none of the naming.
 was.** The census is the point — the answers were not uniform, and assuming they were
 would have produced nine wrong edits:
 
-| Value | What it turned out to be |
-|---|---|
-| `margin: -1px` in AtlChat, AtlToggle | the canonical `sr-only` recipe, where the `1px`/`-1px` are a pair. Not spacing. Left. |
-| `gap: 0.3rem`, `padding: 0.2rem 0.55rem` in AtlCodeBlock | genuinely off-scale on a control. **Bound** to `--ui-spacing-1` / `-2`. |
-| `margin-left: 17px` in AtlStepper | **(36 − 2) / 2** — the connector centred under the circle, written as a magic number. |
-| `2.25rem` ×3 in AtlInput, AtlTextarea, AtlPagination | a composed dimension, for two different reasons. Recorded. |
-| `margin-top: 2px` ×2 in AtlStepper | off-scale micro-spacing, half of `--ui-spacing-1`. Recorded. |
+| Value                                                    | What it turned out to be                                                              |
+| -------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| `margin: -1px` in AtlChat, AtlToggle                     | the canonical `sr-only` recipe, where the `1px`/`-1px` are a pair. Not spacing. Left. |
+| `gap: 0.3rem`, `padding: 0.2rem 0.55rem` in AtlCodeBlock | genuinely off-scale on a control. **Bound** to `--ui-spacing-1` / `-2`.               |
+| `margin-left: 17px` in AtlStepper                        | **(36 − 2) / 2** — the connector centred under the circle, written as a magic number. |
+| `2.25rem` ×3 in AtlInput, AtlTextarea, AtlPagination     | a composed dimension, for two different reasons. Recorded.                            |
+| `margin-top: 2px` ×2 in AtlStepper                       | off-scale micro-spacing, half of `--ui-spacing-1`. Recorded.                          |
 
 **3. The magic number was a derivation, so the derivation is now visible.** `17px` became
 `calc((var(--step-circle) - var(--step-connector-width)) / 2)`, with both values declared
@@ -84,7 +84,7 @@ it is, and it passes.
   pre-ramp palette.
 - **And the recorded remedy for that is the wrong one.** The reopened ADR-0032
   alternative 4 proposes gating raw hex in artboards. But an artboard renders standalone
-  in Claude Design, where `tokens.css` is not loaded — it *must* carry literals, and the
+  in Claude Design, where `tokens.css` is not loaded — it _must_ carry literals, and the
   file says so in its own header. The right rule is `check:tokens`' rule for the three
   framework copies: the copy is **generated**, not checked. `gen-foundations-sheet.mjs`
   already does exactly that for one artboard. Recorded with the measurement so the next

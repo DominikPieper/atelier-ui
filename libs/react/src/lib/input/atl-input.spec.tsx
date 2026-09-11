@@ -26,7 +26,10 @@ describe('AtlInput', () => {
 
   it('lets a caller-supplied id win over the auto-generated one', () => {
     render(<AtlInput label="Email" id="custom-email-id" />);
-    expect(screen.getByLabelText('Email')).toHaveAttribute('id', 'custom-email-id');
+    expect(screen.getByLabelText('Email')).toHaveAttribute(
+      'id',
+      'custom-email-id',
+    );
   });
 
   it('forwards aria-label to the native input', () => {

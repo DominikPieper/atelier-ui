@@ -62,6 +62,7 @@ If `check:llms` fails, that's expected post-component-add — `gen-llms-txt.mjs`
 # Output
 
 Report back to the parent with:
+
 - list of files created/edited grouped by lib
 - check command results (pass/fail per command, error excerpt on fail)
 - any spec ambiguity you had to resolve, and the choice you made

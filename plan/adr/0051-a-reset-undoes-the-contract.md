@@ -23,7 +23,7 @@ contradicted its own CSS anyway:
 ```css
 .page-btn {
   all: unset;
-  height: 2.25rem;   /* 36px */
+  height: 2.25rem; /* 36px */
 }
 ```
 

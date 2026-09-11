@@ -27,16 +27,16 @@ Looking at it turned the finding inside out. `AtlIcon` was a **Unicode glyph map
 the very same character the icon component would have. And **no component in the
 library used AtlIcon at all.** Instead:
 
-| | |
-|---|---|
-| AtlIcon | 21 names, Unicode glyphs, **zero internal consumers** |
-| 11 components | 14 hand-written inline `<svg>`s |
-| 2 stylesheets | a literal `✕` in `content:` |
+|               |                                                       |
+| ------------- | ----------------------------------------------------- |
+| AtlIcon       | 21 names, Unicode glyphs, **zero internal consumers** |
+| 11 components | 14 hand-written inline `<svg>`s                       |
+| 2 stylesheets | a literal `✕` in `content:`                           |
 
 Counting the shapes rather than the call sites is what makes the problem clear:
 
 - **`close` existed four ways**: one two-line X shared by alert, chat, dialog,
-  drawer and toast; a *differently drawn* X in AtlStepper (`M3 3L11 11M11 3L3 11`);
+  drawer and toast; a _differently drawn_ X in AtlStepper (`M3 3L11 11M11 3L3 11`);
   `'×'` in AtlIcon; `'✕'` in CSS.
 - **`check` existed three ways** — AtlCodeBlock's `polyline 20 6 9 17 4 12`,
   AtlCombobox's `M2 7l4 4 6-7`, AtlStepper's `M2 7L5.5 10.5L12 3.5`.

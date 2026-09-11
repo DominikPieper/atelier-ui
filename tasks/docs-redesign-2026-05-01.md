@@ -17,31 +17,31 @@ Site-wide audit of `docs/` against `skills/atelier-design/references/brand-guide
 
 ## Site map
 
-| Page (file) | Current shape | Dominant violations |
-|---|---|---|
-| `index.astro` (420 L) | Bespoke hero, orient-strip cards, workflow grid, stats-ribbon, MCP row, terminal mockup, quick-nav grid | voice, chrome, mockup, inline |
-| `workshop.astro` (477 L) | Eyebrow + h1, objective box, prerequisites tabs, 5 step rows, preflight terminal mockup, MCP step | mockup, inline, chrome (step-row) |
-| `figma-token.astro` (337 L) | Eyebrow + h1, page-pair, Desktop Bridge SVG mockup, env-var blocks, troubleshooting | mockup, inline, voice ("emoji" in BottomNav) |
-| `tutorial.astro` (645 L) | Eyebrow + h1, objective heading, big workflow SVG, prompt/output blocks, tools-used cards | mockup, voice ("The Workflow", "Example Prompt", "Generated Output", "Run it"), inline |
-| `first-component.astro` (452 L) | Eyebrow + h1, 7 kata steps, target-image and parity check | voice ("Optional —"), inline, chrome |
-| `patterns.astro` (213 L) | Eyebrow + h1, callout, 6 pattern sections, demo islands | emoji (🧩), voice (OK), inline |
-| `patterns/[id].astro` | Single pattern detail with code variants | not yet audited at line level — assumed similar inline drift |
-| `install.astro` (334 L) | Eyebrow + h1, framework switcher, 3-step SVG, install commands, BottomNav | mockup (3-step SVG), voice ("What's included" OK; "CSS Variables" capital OK; "✓ ready to build"), emoji in BottomNav |
-| `figma.astro` (510 L) | Eyebrow + h1, page-pair, file table, token-mapping SVG, frame inventory, BottomNav | mockup, voice ("Token → CSS mapping" OK), emoji in BottomNav |
-| `prompts.astro` (261 L) | Eyebrow + h1, framework tabs, prompt sections | inline, '✓ copied' string |
-| `a11y-workflow.astro` (687 L) | Eyebrow + h1, three-source diagram, audit-loop diagram, worked example, stats ribbon | mockup (3 large SVGs), voice ("Three sources, three layers", "The audit loop"), inline |
-| `accessibility.astro` (253 L) | Eyebrow + h1, stance, kbd map, recent improvements | voice ("Our stance"), emoji in BottomNav |
-| `agent-skills.astro` (207 L) | Eyebrow + h1, callout, discovery endpoints, HTTP agent features, MCP/workspace skills | voice ("Discovery Endpoints", "HTTP Agent Features", "Workspace Skills", "MCP Skills"), 💡 callout, emoji in BottomNav |
-| `claude-md.astro` (230 L) | Eyebrow + h1, sections | voice ("Workshop Setup" capital OK as label), emoji in BottomNav |
-| `design-principles.astro` (231 L) | Eyebrow + h1, 5 numbered principles with bad/good comparisons | voice (titles already use sentence-case — OK), inline |
-| `tokens.astro` (266 L) | Eyebrow + h1, color/spacing/radius/type/shadow/motion sections | voice (mostly OK), emoji in BottomNav |
-| `mcp.astro` (120 L) | Eyebrow + h1, MCP-flow SVG, McpExplorer island | mockup, voice (lede OK) |
-| `storybook.astro` (165 L) | Eyebrow + h1, framework cards, MCP step list | voice ("MCP Server", "Framework Parity", "Endpoints"), `Open →` strings (cosmetic) |
-| `troubleshooting.astro` (204 L) | Eyebrow + h1, 8 issue cards with code-fix | voice mostly OK |
-| `llms.astro` (200 L) | Eyebrow + h1, callout (💡), file list, why cards, preview | voice ("What is llms.txt?", "The Files", "How to Use It", "Why Plain Text?"), 💡 emoji, '✓ copied', inline |
-| `components/index.astro` → `ComponentGallery.tsx` | Title + count, search bar (🔍), category pills, grid | voice (sentence-case OK), 🔍 emoji, 🧩 fallback, no `aria-hidden` on icons |
-| `components/[name].astro` → `ComponentDetail.tsx` (609 L) | Per-component spec view | voice ("✨ Best Practices"), inline |
-| `skills/figma-workspace-architect.astro` | Skill detail | emoji in BottomNav, voice not yet audited at line level |
+| Page (file)                                               | Current shape                                                                                           | Dominant violations                                                                                                    |
+| --------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------- |
+| `index.astro` (420 L)                                     | Bespoke hero, orient-strip cards, workflow grid, stats-ribbon, MCP row, terminal mockup, quick-nav grid | voice, chrome, mockup, inline                                                                                          |
+| `workshop.astro` (477 L)                                  | Eyebrow + h1, objective box, prerequisites tabs, 5 step rows, preflight terminal mockup, MCP step       | mockup, inline, chrome (step-row)                                                                                      |
+| `figma-token.astro` (337 L)                               | Eyebrow + h1, page-pair, Desktop Bridge SVG mockup, env-var blocks, troubleshooting                     | mockup, inline, voice ("emoji" in BottomNav)                                                                           |
+| `tutorial.astro` (645 L)                                  | Eyebrow + h1, objective heading, big workflow SVG, prompt/output blocks, tools-used cards               | mockup, voice ("The Workflow", "Example Prompt", "Generated Output", "Run it"), inline                                 |
+| `first-component.astro` (452 L)                           | Eyebrow + h1, 7 kata steps, target-image and parity check                                               | voice ("Optional —"), inline, chrome                                                                                   |
+| `patterns.astro` (213 L)                                  | Eyebrow + h1, callout, 6 pattern sections, demo islands                                                 | emoji (🧩), voice (OK), inline                                                                                         |
+| `patterns/[id].astro`                                     | Single pattern detail with code variants                                                                | not yet audited at line level — assumed similar inline drift                                                           |
+| `install.astro` (334 L)                                   | Eyebrow + h1, framework switcher, 3-step SVG, install commands, BottomNav                               | mockup (3-step SVG), voice ("What's included" OK; "CSS Variables" capital OK; "✓ ready to build"), emoji in BottomNav  |
+| `figma.astro` (510 L)                                     | Eyebrow + h1, page-pair, file table, token-mapping SVG, frame inventory, BottomNav                      | mockup, voice ("Token → CSS mapping" OK), emoji in BottomNav                                                           |
+| `prompts.astro` (261 L)                                   | Eyebrow + h1, framework tabs, prompt sections                                                           | inline, '✓ copied' string                                                                                              |
+| `a11y-workflow.astro` (687 L)                             | Eyebrow + h1, three-source diagram, audit-loop diagram, worked example, stats ribbon                    | mockup (3 large SVGs), voice ("Three sources, three layers", "The audit loop"), inline                                 |
+| `accessibility.astro` (253 L)                             | Eyebrow + h1, stance, kbd map, recent improvements                                                      | voice ("Our stance"), emoji in BottomNav                                                                               |
+| `agent-skills.astro` (207 L)                              | Eyebrow + h1, callout, discovery endpoints, HTTP agent features, MCP/workspace skills                   | voice ("Discovery Endpoints", "HTTP Agent Features", "Workspace Skills", "MCP Skills"), 💡 callout, emoji in BottomNav |
+| `claude-md.astro` (230 L)                                 | Eyebrow + h1, sections                                                                                  | voice ("Workshop Setup" capital OK as label), emoji in BottomNav                                                       |
+| `design-principles.astro` (231 L)                         | Eyebrow + h1, 5 numbered principles with bad/good comparisons                                           | voice (titles already use sentence-case — OK), inline                                                                  |
+| `tokens.astro` (266 L)                                    | Eyebrow + h1, color/spacing/radius/type/shadow/motion sections                                          | voice (mostly OK), emoji in BottomNav                                                                                  |
+| `mcp.astro` (120 L)                                       | Eyebrow + h1, MCP-flow SVG, McpExplorer island                                                          | mockup, voice (lede OK)                                                                                                |
+| `storybook.astro` (165 L)                                 | Eyebrow + h1, framework cards, MCP step list                                                            | voice ("MCP Server", "Framework Parity", "Endpoints"), `Open →` strings (cosmetic)                                     |
+| `troubleshooting.astro` (204 L)                           | Eyebrow + h1, 8 issue cards with code-fix                                                               | voice mostly OK                                                                                                        |
+| `llms.astro` (200 L)                                      | Eyebrow + h1, callout (💡), file list, why cards, preview                                               | voice ("What is llms.txt?", "The Files", "How to Use It", "Why Plain Text?"), 💡 emoji, '✓ copied', inline             |
+| `components/index.astro` → `ComponentGallery.tsx`         | Title + count, search bar (🔍), category pills, grid                                                    | voice (sentence-case OK), 🔍 emoji, 🧩 fallback, no `aria-hidden` on icons                                             |
+| `components/[name].astro` → `ComponentDetail.tsx` (609 L) | Per-component spec view                                                                                 | voice ("✨ Best Practices"), inline                                                                                    |
+| `skills/figma-workspace-architect.astro`                  | Skill detail                                                                                            | emoji in BottomNav, voice not yet audited at line level                                                                |
 
 ---
 
@@ -130,6 +130,7 @@ Token cleanup tasks:
 ### Mockup-to-screenshot workstream
 
 13 inline-SVG mockups live in:
+
 - `index.astro` (terminal showcase, lines 188-228)
 - `install.astro` (3-step flow, lines 111-172)
 - `mcp.astro` (data-flow diagram, lines 33-117)
@@ -323,17 +324,17 @@ Land after the redesign is in place so we're auditing the final surface.
 
 The previous index-only plan (`tasks/claude-design-prompt.md`) defined batches around the home page surface. They map onto the site-wide plan as follows:
 
-| Old batch (index-only)          | Now folded into                                     |
-|---|---|
-| Voice / copy on `/`             | B3 (site-wide voice pass) + B5.1-B5.6 (home page rebuild) |
-| Token cleanup on `/`            | B4 (site-wide tokens) + B5.7 (delete inline `<style>`)    |
-| Hero rebuild on `/`             | B1.2 (focus token), B5.1 (PageHero on home), B4.3 (hero bg) |
-| Three pillars on `/`            | B2.5 (`Pillar.astro` extract) + B5.3 (use it on home)     |
-| MCP card on `/`                 | B2.2 (`CodeCard.astro` extract) + B5.4 (use it on home)   |
-| Components grid on `/`          | B2.5 (CompCard) + B6.1 (gallery) + B5 (no grid on home)   |
-| Scaffolder CTA on `/`           | B2 (`CtaCard.astro` extract) + B5.5 (use it on home)      |
-| A11y polish on `/`              | B1 (shell a11y) + B5.* (per-section) + B11 (final pass)   |
-| Final sweep on `/`              | B12 (site-wide final sweep)                              |
+| Old batch (index-only) | Now folded into                                             |
+| ---------------------- | ----------------------------------------------------------- |
+| Voice / copy on `/`    | B3 (site-wide voice pass) + B5.1-B5.6 (home page rebuild)   |
+| Token cleanup on `/`   | B4 (site-wide tokens) + B5.7 (delete inline `<style>`)      |
+| Hero rebuild on `/`    | B1.2 (focus token), B5.1 (PageHero on home), B4.3 (hero bg) |
+| Three pillars on `/`   | B2.5 (`Pillar.astro` extract) + B5.3 (use it on home)       |
+| MCP card on `/`        | B2.2 (`CodeCard.astro` extract) + B5.4 (use it on home)     |
+| Components grid on `/` | B2.5 (CompCard) + B6.1 (gallery) + B5 (no grid on home)     |
+| Scaffolder CTA on `/`  | B2 (`CtaCard.astro` extract) + B5.5 (use it on home)        |
+| A11y polish on `/`     | B1 (shell a11y) + B5.* (per-section) + B11 (final pass)     |
+| Final sweep on `/`     | B12 (site-wide final sweep)                                 |
 
 Net effect: every old home-page task survives, but folded into a shared primitive that is then re-applied across every other page. The home rebuild (B5) is now smaller because the primitives already exist (B2). Cost of going site-wide: B7-B11. Saved: every future page touch will reuse the primitives instead of duplicating them.
 

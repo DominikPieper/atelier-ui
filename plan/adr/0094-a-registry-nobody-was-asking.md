@@ -2,9 +2,9 @@
 status: accepted
 date: 2026-09-05
 sources:
-  - "measured 2026-09-05: npm view @atelier-ui/react version -> 0.2.27 vs
+  - 'measured 2026-09-05: npm view @atelier-ui/react version -> 0.2.27 vs
     libs/react/package.json -> 0.2.33 (all five libraries group packages
-    drifted the same way)"
+    drifted the same way)'
   - .github/workflows/publish.yml:111-127 (Release and Publish step; the PUT
     404 the drift traces back to)
   - tools/scripts/check-release-drift.mjs
@@ -33,7 +33,7 @@ Publishing broke on 2026-08-29, and the word for how it stayed broken is not
 "silently" — each run with a real bump went red. Six `chore(release): publish`
 commits since then each bumped `libs/*/package.json`, wrote a changelog,
 committed, and pushed — because `nx release --yes` versions, commits, tags
-and pushes *before* it publishes. The publish half then failed inside
+and pushes _before_ it publishes. The publish half then failed inside
 `nx release` with npm's 404-on-PUT mask for missing publish rights
 (`secrets.NPM_TOKEN` expired or under-scoped; rotating it is out of scope
 here — that's the token owner's job). The runs in between were green no-ops.
@@ -58,6 +58,7 @@ read its `package.json`, skip anything `"private": true`, and compare the
 local `version` against `npm view <name> version --json`.
 
 **Two failure modes, never blurred:**
+
 - Registry unreachable (DNS/timeout/connection refused) → exit **0** with an
   explicit `[SKIP]` message. Being offline is not evidence of sync; it means
   the question was never asked. Bounded by both npm's own `--fetch-timeout`
@@ -66,7 +67,7 @@ local `version` against `npm view <name> version --json`.
 - Registry answers and a version differs → exit **1**, naming every drifted
   package with both versions.
 
-If any single package's lookup comes back unreachable mid-run, the *whole*
+If any single package's lookup comes back unreachable mid-run, the _whole_
 gate skips rather than reporting the packages already checked — a registry
 that answered for package 1 and vanished for package 2 has proven it's
 unreliable right now, not that package 1 is the only thing worth reporting.
@@ -74,7 +75,7 @@ unreliable right now, not that package 1 is the only thing worth reporting.
 **Deliberately excluded from `check:all`.** Every gate in that chain is
 offline and deterministic (ADR-0024's framing for `check:figma` applies
 here too, even though — corrected in this ADR — `check:figma` is in fact
-*included* in `check:all` today, because its own live-Figma dependency was
+_included_ in `check:all` today, because its own live-Figma dependency was
 already pushed out to a committed-snapshot refresh step; this gate has no
 equivalent offline projection to fall back on, since "what does npm serve
 right now" cannot be answered from a committed artifact without reinventing
@@ -82,12 +83,13 @@ the registry). Folding a live network call into `check:all` would make all
 34 of its gates only as reliable as the network at the moment they run.
 
 **Wired in two places instead of one:**
+
 - `.github/workflows/publish.yml`, as a step immediately after Release and
   Publish. Turns a partial or silent non-publish into a named, specific CI
   failure instead of an npm 404 buried in Nx's own output — the exact
   visibility gap this gate exists to close.
 - `.github/workflows/ci.yml`, as its own job gated `if: github.event_name ==
-  'push' && github.ref == 'refs/heads/main'`. A PR's branch hasn't been
+'push' && github.ref == 'refs/heads/main'`. A PR's branch hasn't been
   published yet, so comparing its versions to npm proves nothing; on main,
   this is the check that would have caught the 2026-08-29 breakage a week
   earlier — main's status goes red the moment a publish fails and stays red
@@ -95,14 +97,15 @@ the registry). Folding a live network call into `check:all` would make all
   one commit that triggered the failure.
 
 **Alternatives rejected:**
-- *Fold it into `check:all`'s existing chain.* Rejected — see above; it
+
+- _Fold it into `check:all`'s existing chain._ Rejected — see above; it
   would make every offline, deterministic gate hostage to registry
   reachability.
-- *Only wire it into `publish.yml`.* Rejected — a step there only runs at
+- _Only wire it into `publish.yml`._ Rejected — a step there only runs at
   publish time. Between a failed publish and the next release attempt
   (which could be days), nothing signals the drift; the CI job makes it
   visible on every push to main in between.
-- *Fail hard (never skip) when the registry can't be reached.* Rejected —
+- _Fail hard (never skip) when the registry can't be reached._ Rejected —
   that would make the gate red on every runner with a flaky network path to
   npm, indistinguishable from a real drift. The two failure modes must stay
   distinguishable, or the gate teaches people to ignore it.
@@ -110,8 +113,8 @@ the registry). Folding a live network call into `check:all` would make all
 ## Consequences
 
 - Run today: exit 1, all five `libraries` group packages named — `@atelier-
-  ui/angular`, `@atelier-ui/react`, `@atelier-ui/vue`, `@atelier-ui/create-
-  workspace`, and `create-atelier-ui-workspace` — each local 0.2.33 vs
+ui/angular`, `@atelier-ui/react`, `@atelier-ui/vue`, `@atelier-ui/create-
+workspace`, and `create-atelier-ui-workspace` — each local 0.2.33 vs
   published 0.2.27. `create-atelier-ui-workspace` (unscoped, no `@atelier-ui/`
   prefix) resolves cleanly to `libs/create-atelier-ui-workspace/package.json`
   and is not private, so it is drifted along with the other four, not merely

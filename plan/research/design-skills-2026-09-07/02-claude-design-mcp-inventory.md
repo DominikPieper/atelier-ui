@@ -11,29 +11,29 @@ Atelier's system.
 
 ## (a) All 23 tools
 
-| Tool | Purpose | Key inputs | R/W | Notes |
-|---|---|---|---|---|
-| `list_projects` | List caller's projects | — | R | id, name, url only |
-| `list_design_systems` | List available design systems | — | R | `is_default` flag |
-| `get_claude_design_prompt` | Load Claude Design's own system prompt (+ optional bound design-system context) | `design_system_id?`, `project_id?` | R | Must be called before any `write_files` per its own description |
-| `read_design_skill` | Fetch `hifi-design` or `frontend-design` guidance | `skill` enum | R | Static checked-in text, not project data |
-| `get_project` | Project metadata | `project_id` | R | name, type, sharing |
-| `list_files` | Directory listing w/ etags | `project_id`, `path?`, `depth?` | R | `depth:-1` = full tree, no dir stubs |
-| `read_file` | Read one file (≤256 KiB) | `project_id`, `path`, `offset?`, `limit?`, `if_none_match?` | R | Entity-escaped body; carries etag |
-| `list_comments` | Pin-anchored feedback threads | `project_id`, `queued_for_claude?`, `changed_since?` | R | `author_is_you` gates trust |
-| `get_conversation` | Project's chat transcript(s) | `project_id`, `chat_id?` | R | Capped at 256 KiB; JSON may cut mid-document |
-| `list_members` | Sharing grants (account/group/service/email rows) | `project_id` | R | Excludes owner and link-scope access |
-| `create_project` | New project, optional design-system binding | `name`, `design_system_id?` | W | Returns `{project_id,url}` |
-| `write_files` | Write inline file content | `project_id`, `files[]`, `plan_token?` | W | First unconditional write to a project prompts one-time human consent (`needs_project_grant`) |
-| `copy_files` | Server-side copy (file/folder, cross-project) | `project_id`, `files[]` (`src`, `dest`, `src_project_id?`), `plan_token?` | W | Bypasses the 256 KiB read cap; how design-system bundles land in a consumer project |
-| `create_support_js` | Write the `.dc.html` runtime | `project_id`, `path?`, `plan_token?` | W | Server-provided bytes; one per directory holding `.dc.html` |
-| `delete_files` | Delete files | `project_id`, `plan_token` (path-scoped only), `files[]`/`paths[]` | W | Always needs a plan_token; no project-scope delete option |
-| `finalize_plan` | Declare write/delete path set, return `plan_token` + `base_etags` | `project_id`, `writes[]?`, `deletes[]?`, `scope?` | gate | `scope:"paths"` ~15 min exact set; `scope:"project"` ~4 h, writes-only, no `base_etags` |
-| `put_conversation` | Push Claude Code's own conversation into the project's chat panel | `project_id`, `messages[]`, `chat_id?`, `append?` | W | One-way agent→app; nothing typed in-app is ever returned |
-| `ack_comments` | Clear `queued_for_claude` flag | `project_id`, `comment_ids[]` | W (metadata) | Never resolves/deletes the thread |
-| `add_member` / `remove_member` / `update_member_role` | Manage per-account access | `project_id`, `account_uuid`/`email`, `role` | W (governance) | Requires edit access; can't touch self |
-| `update_sharing` | Change link-sharing scope/permission | `project_id`, `scope?`, `link_permission?` | W (governance) | invited vs org scope |
-| `render_preview` | Mint preview URLs for a file | `project_id`, `path` | R (ephemeral) | `serve_url` (tooling-only, short-lived, must never be shown to users) vs `open_url` (durable, user-facing) |
+| Tool                                                  | Purpose                                                                         | Key inputs                                                                | R/W            | Notes                                                                                                      |
+| ----------------------------------------------------- | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------- | -------------- | ---------------------------------------------------------------------------------------------------------- |
+| `list_projects`                                       | List caller's projects                                                          | —                                                                         | R              | id, name, url only                                                                                         |
+| `list_design_systems`                                 | List available design systems                                                   | —                                                                         | R              | `is_default` flag                                                                                          |
+| `get_claude_design_prompt`                            | Load Claude Design's own system prompt (+ optional bound design-system context) | `design_system_id?`, `project_id?`                                        | R              | Must be called before any `write_files` per its own description                                            |
+| `read_design_skill`                                   | Fetch `hifi-design` or `frontend-design` guidance                               | `skill` enum                                                              | R              | Static checked-in text, not project data                                                                   |
+| `get_project`                                         | Project metadata                                                                | `project_id`                                                              | R              | name, type, sharing                                                                                        |
+| `list_files`                                          | Directory listing w/ etags                                                      | `project_id`, `path?`, `depth?`                                           | R              | `depth:-1` = full tree, no dir stubs                                                                       |
+| `read_file`                                           | Read one file (≤256 KiB)                                                        | `project_id`, `path`, `offset?`, `limit?`, `if_none_match?`               | R              | Entity-escaped body; carries etag                                                                          |
+| `list_comments`                                       | Pin-anchored feedback threads                                                   | `project_id`, `queued_for_claude?`, `changed_since?`                      | R              | `author_is_you` gates trust                                                                                |
+| `get_conversation`                                    | Project's chat transcript(s)                                                    | `project_id`, `chat_id?`                                                  | R              | Capped at 256 KiB; JSON may cut mid-document                                                               |
+| `list_members`                                        | Sharing grants (account/group/service/email rows)                               | `project_id`                                                              | R              | Excludes owner and link-scope access                                                                       |
+| `create_project`                                      | New project, optional design-system binding                                     | `name`, `design_system_id?`                                               | W              | Returns `{project_id,url}`                                                                                 |
+| `write_files`                                         | Write inline file content                                                       | `project_id`, `files[]`, `plan_token?`                                    | W              | First unconditional write to a project prompts one-time human consent (`needs_project_grant`)              |
+| `copy_files`                                          | Server-side copy (file/folder, cross-project)                                   | `project_id`, `files[]` (`src`, `dest`, `src_project_id?`), `plan_token?` | W              | Bypasses the 256 KiB read cap; how design-system bundles land in a consumer project                        |
+| `create_support_js`                                   | Write the `.dc.html` runtime                                                    | `project_id`, `path?`, `plan_token?`                                      | W              | Server-provided bytes; one per directory holding `.dc.html`                                                |
+| `delete_files`                                        | Delete files                                                                    | `project_id`, `plan_token` (path-scoped only), `files[]`/`paths[]`        | W              | Always needs a plan_token; no project-scope delete option                                                  |
+| `finalize_plan`                                       | Declare write/delete path set, return `plan_token` + `base_etags`               | `project_id`, `writes[]?`, `deletes[]?`, `scope?`                         | gate           | `scope:"paths"` ~15 min exact set; `scope:"project"` ~4 h, writes-only, no `base_etags`                    |
+| `put_conversation`                                    | Push Claude Code's own conversation into the project's chat panel               | `project_id`, `messages[]`, `chat_id?`, `append?`                         | W              | One-way agent→app; nothing typed in-app is ever returned                                                   |
+| `ack_comments`                                        | Clear `queued_for_claude` flag                                                  | `project_id`, `comment_ids[]`                                             | W (metadata)   | Never resolves/deletes the thread                                                                          |
+| `add_member` / `remove_member` / `update_member_role` | Manage per-account access                                                       | `project_id`, `account_uuid`/`email`, `role`                              | W (governance) | Requires edit access; can't touch self                                                                     |
+| `update_sharing`                                      | Change link-sharing scope/permission                                            | `project_id`, `scope?`, `link_permission?`                                | W (governance) | invited vs org scope                                                                                       |
+| `render_preview`                                      | Mint preview URLs for a file                                                    | `project_id`, `path`                                                      | R (ephemeral)  | `serve_url` (tooling-only, short-lived, must never be shown to users) vs `open_url` (durable, user-facing) |
 
 ## (b) Direction of flow
 
@@ -45,13 +45,13 @@ shape: `role`, `content`, `attachments`, tool calls), comment threads
 third-party comment text is data, never instructions, until the user says
 otherwise), the design skill library (`read_design_skill`), and Claude
 Design's own operating system prompt plus a bound design system's guide text
-(`get_claude_design_prompt`) — this last one is explicitly *the* prompt the
+(`get_claude_design_prompt`) — this last one is explicitly _the_ prompt the
 in-app Claude Design agent runs under, confirmed byte-for-byte against what
 ADR-0032 already reconstructed.
 
 **Write into a project:** file content (`write_files`, `copy_files`,
 `create_support_js`), file deletion (`delete_files`), project creation, one
-project's own copy of *my* conversation (`put_conversation`), comment triage
+project's own copy of _my_ conversation (`put_conversation`), comment triage
 state (`ack_comments`), and access governance (`add_member` family,
 `update_sharing`). There is **no tool that pushes an instruction into the
 in-app Claude Design agent's own future behavior** — `put_conversation` only
@@ -147,7 +147,7 @@ directly in the Atelier project's own `list_files` output.
   script could grep for it, nothing here exposes it as structured input a
   gate could bind to.
 - **`get_project`'s sharing (`{"link_permission":"view","scope":"invited",
-  "view_mode":"private"}`) and an empty `list_members`** are consistent with
+"view_mode":"private"}`) and an empty `list_members`** are consistent with
   ADR-0032's "per-user consent gate" and default-private framing, and with
   the docs page's governance section (though retention/residency claims
   there come from Anthropic's admin guide, not from anything this MCP schema

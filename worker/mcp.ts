@@ -1,8 +1,8 @@
-import { createStorybookMcpHandler } from "@storybook/mcp";
+import { createStorybookMcpHandler } from '@storybook/mcp';
 
-const SITE = "https://atelier.pieper.io";
+const SITE = 'https://atelier.pieper.io';
 
-export type Storybook = "react" | "angular" | "vue";
+export type Storybook = 'react' | 'angular' | 'vue';
 
 /** Shape of the Workers static assets binding (wrangler.jsonc `assets.binding`). */
 export interface AssetsFetcher {
@@ -31,7 +31,10 @@ const make = (sb: Storybook, assets: AssetsFetcher): HandlerPromise =>
       // `<id>.json` and looks for it in `manifests/` — a directory that only
       // ever holds `components.html`, `components.json` and `docs.json`.
       // Every shard 404'd. Resolve against the Storybook root instead.
-      const url = new URL(path.replace(/^\.\//, ""), `${SITE}/storybook-${sb}/`);
+      const url = new URL(
+        path.replace(/^\.\//, ''),
+        `${SITE}/storybook-${sb}/`,
+      );
       // Fetch the manifest through the static assets binding, NEVER via a
       // plain fetch() of the public https://atelier.pieper.io URL: this worker
       // is deployed with `run_worker_first`, so a subrequest to its own zone
@@ -62,13 +65,18 @@ const make = (sb: Storybook, assets: AssetsFetcher): HandlerPromise =>
       if (response.ok) {
         return response.text();
       }
-      throw new Error(`Failed to fetch manifest ${path}: ${response.status} ${response.statusText}`);
+      throw new Error(
+        `Failed to fetch manifest ${path}: ${response.status} ${response.statusText}`,
+      );
     },
   });
 
 const cache: Partial<Record<Storybook, HandlerPromise>> = {};
 
-export function mcpHandler(sb: Storybook, assets: AssetsFetcher): HandlerPromise {
+export function mcpHandler(
+  sb: Storybook,
+  assets: AssetsFetcher,
+): HandlerPromise {
   // The assets binding is stable for the lifetime of the isolate, so caching
   // the handler created from the first request's binding is safe.
   return (cache[sb] ??= make(sb, assets));

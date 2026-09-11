@@ -2,9 +2,9 @@
 status: accepted
 date: 2026-09-06
 sources:
-  - "plan/adr/0024-design-parity-persistence-gate.md (§2 already states the principle this implements: the hash covers what figma_check_design_parity was measured against)"
-  - "plan/adr/0035-typography-instrument-pair.md (Consequences: named the token-sheet gap this closes, and deferred the fix here)"
-  - "this session"
+  - 'plan/adr/0024-design-parity-persistence-gate.md (§2 already states the principle this implements: the hash covers what figma_check_design_parity was measured against)'
+  - 'plan/adr/0035-typography-instrument-pair.md (Consequences: named the token-sheet gap this closes, and deferred the fix here)'
+  - 'this session'
 ---
 
 # ADR-0104: Two directions, one file-selection rule
@@ -54,7 +54,7 @@ correction that rule needed.
 
 **Which copy of `tokens.css` to hash** needed its own check, because there are four
 byte-identical copies today (`check:tokens` / `sync-tokens.mjs --check` enforces
-that): the create-workspace *seed* at
+that): the create-workspace _seed_ at
 `libs/create-workspace/src/generators/preset/files/styles/tokens.css`, and the three
 per-framework copies at `libs/{fw}/src/styles/tokens.css`. The seed is never loaded
 by Storybook — it exists to scaffold new workspaces. The file each framework's
@@ -74,13 +74,13 @@ were ever red.
   before hashing.
 
 One hash, no new field, no new gate logic — `check-parity.js` and the record shape
-in `tools/figma/parity.json` are unchanged; only the file *set* `computeInputsHash`
+in `tools/figma/parity.json` are unchanged; only the file _set_ `computeInputsHash`
 walks moved.
 
 ### The separate half: `figmaLastModified` (informational, not gated)
 
 A parity record stores `figmaNodeId`, `verifiedSha` and `inputsHash` — nothing about
-the Figma *master's* own state. No content hash over the *code* side can ever fix
+the Figma _master's_ own state. No content hash over the _code_ side can ever fix
 that: `check-parity.js` is deliberately fully offline (ADR-0024), and the only place
 that knows anything about Figma's timeline is `tools/figma/snapshot.json`'s
 `meta.figmaLastModified`, populated by a live bridge call in `figma-snapshot.mjs`
@@ -109,9 +109,9 @@ AtlRadio, AtlRadioGroup, AtlTextarea, AtlToggle) is **not an ancestor of `HEAD`*
 (`git merge-base --is-ancestor 25ac006 HEAD` fails; `git branch --all --contains`
 and `git log --all` find no ref reaching it). The object is still present locally
 and `git show` against it does not error, but `git rev-parse --short HEAD` only
-ever records the last *commit*, not the working tree at record time — and for at
+ever records the last _commit_, not the working tree at record time — and for at
 least 3 of the 10 (AtlCombobox, AtlRadio, AtlRadioGroup) the two provably disagree:
-their **originally recorded** `inputsHash` matches the *current* working tree under
+their **originally recorded** `inputsHash` matches the _current_ working tree under
 the old rule, while `25ac006`'s own committed tree does not contain the change
 (an added invalid-state icon in `atl-combobox.ts`/`atl-radio.ts`) that the current
 tree does. The only explanation is that the working tree had uncommitted changes
@@ -124,18 +124,18 @@ over, so these 10 records were **left with their original, unmigrated
 `inputsHash`/`inputs`** rather than a fabricated reconstruction — a real
 `figma_check_design_parity` + `parity:record` re-run is the honest fix for them,
 not a script. They now show DRIFT unconditionally, correctly, if for the blunter
-reason that their recorded file *set* no longer matches the rule at all.
+reason that their recorded file _set_ no longer matches the rule at all.
 
 **The other 27 records** (verified at `3c15080`, `4c57b74`, `51d2d9d`, `560bd9e` or
 `e4f61ca` — all confirmed ancestors of `HEAD`) were migrated with confidence.
 
 **Measured result — `npm run check:parity --report`, DRIFT count:**
 
-| | before | after |
-|---|---|---|
-| all 37 | 32 | 37 |
-| the 27 migrated (real `verifiedSha`) | 25 | 27 |
-| the 10 left alone (dangling `verifiedSha`) | 7 | 10 |
+|                                            | before | after |
+| ------------------------------------------ | ------ | ----- |
+| all 37                                     | 32     | 37    |
+| the 27 migrated (real `verifiedSha`)       | 25     | 27    |
+| the 10 left alone (dangling `verifiedSha`) | 7      | 10    |
 
 **The count did not drop. It rose.** Read literally against the task's own test —
 "if the number does not drop, something about the diagnosis is wrong" — this
@@ -145,9 +145,9 @@ adjustment to make the number look better:
 - Of the 27 migrated records, **17** have a real, non-spec, non-test code change
   since their `verifiedSha` (a real edit to the component's own implementation/
   CSS/story) — DRIFT before and after, correctly, on both rules.
-- **0** records' *only* divergence from their recorded state was a spec-file edit.
+- **0** records' _only_ divergence from their recorded state was a spec-file edit.
   If that were the whole story, narrowing alone would have cleared them.
-- **8** records have *both* a spec-file edit *and* a genuine `tokens.css` change
+- **8** records have _both_ a spec-file edit _and_ a genuine `tokens.css` change
   since their `verifiedSha` — narrowing correctly stops treating the spec edit as
   a cause, but widening independently keeps them in DRIFT for the real reason.
 - **2** records (`AtlAccordionGroup`, `AtlAccordionItem`, both verified at
@@ -159,7 +159,7 @@ adjustment to make the number look better:
 
 **Isolating the narrowing fix alone** (drop spec files from the hash, leave
 `tokens.css` out) drops the 27-migrated-record DRIFT count from 25 to **17** — the
-fix works exactly as intended. It is the *combination* with widening that pushes
+fix works exactly as intended. It is the _combination_ with widening that pushes
 the total to 37/37, and precisely two commits are responsible for all of it:
 `e4f61ca` ("two roles the eight did not span…", ADR-0074, 2026-08-27 21:39 — itself
 one of the six `verifiedSha` values) minted `--ui-type-control`/`--ui-type-action`,
@@ -168,7 +168,7 @@ ADR-0085, 2026-08-29) minted `--ui-type-row`/`--ui-type-row-sm`. `git log
 <sha>..HEAD -- libs/angular/src/styles/tokens.css` returns exactly these two
 commits for every one of `3c15080`/`4c57b74`/`51d2d9d`/`560bd9e`, and just the
 second one for `e4f61ca` itself — no other commit touched the file in that
-window. (An earlier draft of this section, working from `tokens.css`'s *entire*
+window. (An earlier draft of this section, working from `tokens.css`'s _entire_
 git history rather than the range actually relevant to these verifications,
 overstated this as "upwards of twenty commits" — wrong; caught rereading this ADR
 as a hostile reviewer, before publishing it.) Two real, deliberate, ADR-backed

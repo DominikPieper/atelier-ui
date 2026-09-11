@@ -25,19 +25,29 @@ let showTimer: ReturnType<typeof setTimeout> | null = null;
 let hideTimer: ReturnType<typeof setTimeout> | null = null;
 
 function clearTimers() {
-  if (showTimer) { clearTimeout(showTimer); showTimer = null; }
-  if (hideTimer) { clearTimeout(hideTimer); hideTimer = null; }
+  if (showTimer) {
+    clearTimeout(showTimer);
+    showTimer = null;
+  }
+  if (hideTimer) {
+    clearTimeout(hideTimer);
+    hideTimer = null;
+  }
 }
 
 function show() {
   if (props.atlTooltipDisabled || !props.atlTooltip) return;
   clearTimers();
-  showTimer = setTimeout(() => { visible.value = true; }, props.atlTooltipShowDelay);
+  showTimer = setTimeout(() => {
+    visible.value = true;
+  }, props.atlTooltipShowDelay);
 }
 
 function hide() {
   clearTimers();
-  hideTimer = setTimeout(() => { visible.value = false; }, props.atlTooltipHideDelay);
+  hideTimer = setTimeout(() => {
+    visible.value = false;
+  }, props.atlTooltipHideDelay);
 }
 
 function onKeydown(event: KeyboardEvent) {

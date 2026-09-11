@@ -19,10 +19,16 @@ function capture() {
   let r = render(AtlButton, { slots: { default: 'Click me' } });
   scenarios.default = a11yTree(r.container);
   r.unmount();
-  r = render(AtlButton, { props: { disabled: true }, slots: { default: 'Click me' } });
+  r = render(AtlButton, {
+    props: { disabled: true },
+    slots: { default: 'Click me' },
+  });
   scenarios.disabled = a11yTree(r.container);
   r.unmount();
-  r = render(AtlButton, { props: { loading: true }, slots: { default: 'Click me' } });
+  r = render(AtlButton, {
+    props: { loading: true },
+    slots: { default: 'Click me' },
+  });
   scenarios.loading = a11yTree(r.container);
   r.unmount();
   return scenarios;

@@ -8,7 +8,10 @@ interface AtlComponentSchema {
   framework?: 'angular' | 'react' | 'vue' | 'both' | 'all';
 }
 
-export default async function generator(tree: Tree, options: AtlComponentSchema) {
+export default async function generator(
+  tree: Tree,
+  options: AtlComponentSchema,
+) {
   const framework = options.framework ?? 'all';
   const componentNames = names(options.name);
   const dir = options.directory ?? options.name;

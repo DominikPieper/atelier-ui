@@ -4,7 +4,8 @@ import AtlTextarea from './atl-textarea.vue';
 
 import { metadata } from '@atelier-ui/spec/metadata/textarea.metadata';
 import { contract } from '@atelier-ui/spec/contracts/textarea.contract';
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
@@ -70,8 +71,11 @@ export const Readonly: Story = {
   args: { readonly: true },
   render: (args) => ({
     components: { AtlTextarea },
-    setup() { return { args }; },
-    template: '<AtlTextarea v-bind="args" value="This content cannot be edited." />',
+    setup() {
+      return { args };
+    },
+    template:
+      '<AtlTextarea v-bind="args" value="This content cannot be edited." />',
   }),
 };
 
@@ -101,7 +105,10 @@ export const WithErrors: Story = {
 };
 
 export const AutoResize: Story = {
-  args: { autoResize: true, placeholder: 'Start typing — this grows automatically...' },
+  args: {
+    autoResize: true,
+    placeholder: 'Start typing — this grows automatically...',
+  },
 };
 
 export const AllVariants: Story = {
@@ -137,7 +144,9 @@ export const AllVariants: Story = {
 export const Playground: Story = {
   render: (args) => ({
     components: { AtlTextarea },
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: '<AtlTextarea v-bind="args" />',
   }),
 };

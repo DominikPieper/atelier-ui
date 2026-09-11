@@ -24,7 +24,10 @@ function onClick() {
   triggerCtx?.close();
 }
 
-const classes = computed(() => ['atl-menu-item', props.disabled && 'is-disabled']);
+const classes = computed(() => [
+  'atl-menu-item',
+  props.disabled && 'is-disabled',
+]);
 </script>
 
 <template>

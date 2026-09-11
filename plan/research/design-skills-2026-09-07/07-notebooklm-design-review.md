@@ -5,18 +5,20 @@
 A high-quality Figma component library requires systematic quality checks [1]. Reviewing the library involves verifying layer and variable naming, layout behavior, design tokens, responsive states, accessibility compliance, and documentation [2, 3]. These reviews must be divided into **automated checks** (ideal for CI pipelines, scripts, or AI linter runs) and **human evaluation** (requiring designer or developer judgment) [4, 5].
 
 #### Automatable Checks
-*   **Token Binding Verification**: Auditing the node tree to find unbound fills, strokes, and effects that are visually correct but hardcoded instead of being linked to semantic variables [3, 6].
-*   **Layer Casing & Hierarchy Linting**: Validating that naming matches taxonomic rules, specifically that slashes (`/`) are used to nest components (e.g., `Button/Primary`) and that variant properties maintain consistent title casing (e.g., `Default` / `Hover` / `Disabled`) to prevent duplicate menu options [7-10].
-*   **Variable Scoping & Code Syntax**: Scanning Figma Variable collections to ensure color variables do not use default `ALL_SCOPES` (which pollutes property menus) and that they have `codeSyntax.WEB` set so that AI generation pulls correct CSS tokens instead of raw variable names [6].
-*   **Text Override Continuity**: Verifying that text layer names are 100% identical across variants so that user overrides do not break when swapping component instances [11, 12].
-*   **Visual Asset Scans**: Programmatically listing all variables, components, styles, and visual specifications into an inventory [13].
-*   **Automated Color Contrast Testing**: Programmatically calculating color contrast ratios of text layer nodes against background fills to flag WCAG Level AA violations [14-16].
+
+- **Token Binding Verification**: Auditing the node tree to find unbound fills, strokes, and effects that are visually correct but hardcoded instead of being linked to semantic variables [3, 6].
+- **Layer Casing & Hierarchy Linting**: Validating that naming matches taxonomic rules, specifically that slashes (`/`) are used to nest components (e.g., `Button/Primary`) and that variant properties maintain consistent title casing (e.g., `Default` / `Hover` / `Disabled`) to prevent duplicate menu options [7-10].
+- **Variable Scoping & Code Syntax**: Scanning Figma Variable collections to ensure color variables do not use default `ALL_SCOPES` (which pollutes property menus) and that they have `codeSyntax.WEB` set so that AI generation pulls correct CSS tokens instead of raw variable names [6].
+- **Text Override Continuity**: Verifying that text layer names are 100% identical across variants so that user overrides do not break when swapping component instances [11, 12].
+- **Visual Asset Scans**: Programmatically listing all variables, components, styles, and visual specifications into an inventory [13].
+- **Automated Color Contrast Testing**: Programmatically calculating color contrast ratios of text layer nodes against background fills to flag WCAG Level AA violations [14-16].
 
 #### Human-Only Evaluated Checks
-*   **The Detach Test**: Having a designer unfamiliar with the library attempt to build a page using it [17, 18]. If they have to detach any component or instance to make their screen layout work, the component property architecture has failed and must be rebuilt [17-20].
-*   **The 3-Minute Usability Test**: Testing if a newly onboarded designer can find, place, and fully configure a core component within three minutes [21, 22]. 
-*   **Design Intent & Rationale Evaluation**: Auditing the written "Why" behind choices [23-26]. For example, a human must evaluate whether a primary button uses a 44px minimum height to satisfy WCAG touch targets [23, 24], or if using a `Slot` is functionally superior to building combinatorial variants for cards or modal dialogs [7, 27-29].
-*   **Branch Review Approvals**: For major changes, routing updates through Figma's branch review workflow, requiring explicit manual sign-off from at least two squad members before merging changes into the master trunk file [30-33].
+
+- **The Detach Test**: Having a designer unfamiliar with the library attempt to build a page using it [17, 18]. If they have to detach any component or instance to make their screen layout work, the component property architecture has failed and must be rebuilt [17-20].
+- **The 3-Minute Usability Test**: Testing if a newly onboarded designer can find, place, and fully configure a core component within three minutes [21, 22].
+- **Design Intent & Rationale Evaluation**: Auditing the written "Why" behind choices [23-26]. For example, a human must evaluate whether a primary button uses a 44px minimum height to satisfy WCAG touch targets [23, 24], or if using a `Slot` is functionally superior to building combinatorial variants for cards or modal dialogs [7, 27-29].
+- **Branch Review Approvals**: For major changes, routing updates through Figma's branch review workflow, requiring explicit manual sign-off from at least two squad members before merging changes into the master trunk file [30-33].
 
 ---
 
@@ -43,14 +45,17 @@ Automated code generation through the Model Context Protocol (MCP) bridges the g
 ```
 
 #### Design Parity: Screenshots vs. DOM Measurements
-*   **Structured Context (`get_design_context`)**: AI agents should never generate code based purely on screenshots [39, 40]. Screenshots are static and do not contain nested structural metadata [35, 40]. The code generator must first pull structured JSON data from the Figma scenegraph—this contains the exact parent-child layout hierarchy, typography values, Auto Layout rules, and variant properties [40-42].
-*   **Visual Baseline (`get_screenshot`)**: The screenshot is captured to serve as the visual baseline [43]. While DOM measurements can verify flex alignment and font size, a screenshot overlay comparison is necessary to catch subtle shifts in rendering engines, layout weights, and empty/loading states [44, 45].
+
+- **Structured Context (`get_design_context`)**: AI agents should never generate code based purely on screenshots [39, 40]. Screenshots are static and do not contain nested structural metadata [35, 40]. The code generator must first pull structured JSON data from the Figma scenegraph—this contains the exact parent-child layout hierarchy, typography values, Auto Layout rules, and variant properties [40-42].
+- **Visual Baseline (`get_screenshot`)**: The screenshot is captured to serve as the visual baseline [43]. While DOM measurements can verify flex alignment and font size, a screenshot overlay comparison is necessary to catch subtle shifts in rendering engines, layout weights, and empty/loading states [44, 45].
 
 #### Token Usage & Variant Coverage
-*   **Mapping to Existing Themes**: Generated code must map color, typography, border-radius, and spacing tokens to the project's existing system (e.g., swapping Tailwind utility classes for CSS custom properties like `--color-brand-primary` rather than hardcoding hex codes) [37, 38, 46-49].
-*   **Code Connect Overrides**: Instead of reinventing custom button elements, the code should reuse existing design system components [37, 38, 46, 47, 49]. By utilizing **Code Connect** (either through the CLI or UI), Figma variants can map directly to React/Vue component props (e.g., Figma `Variant=Primary, Size=Medium` triggers `<Button variant="primary" size="md" />` automatically) [17, 18, 50-53].
+
+- **Mapping to Existing Themes**: Generated code must map color, typography, border-radius, and spacing tokens to the project's existing system (e.g., swapping Tailwind utility classes for CSS custom properties like `--color-brand-primary` rather than hardcoding hex codes) [37, 38, 46-49].
+- **Code Connect Overrides**: Instead of reinventing custom button elements, the code should reuse existing design system components [37, 38, 46, 47, 49]. By utilizing **Code Connect** (either through the CLI or UI), Figma variants can map directly to React/Vue component props (e.g., Figma `Variant=Primary, Size=Medium` triggers `<Button variant="primary" size="md" />` automatically) [17, 18, 50-53].
 
 #### Typical Failure Modes
+
 1.  **Implicit Responsive Gaps**: Figma MCP reads design files at a fixed layout width [54]. The AI does not inherently know how a design scales from a 1440px desktop to a 375px mobile breakpoint unless separate responsive frames are provided, resulting in broken flex wrap behaviors [54].
 2.  **Animation Spec Blindness**: Figma prototyping transitions (smart animate, springs, easing curves) are not fully exposed through MCP [55]. AI-generated components will render the correct end state but have "guessed" or missing micro-interactions [55].
 3.  **Combinatorial Nesting Collapse**: When a component is deeply nested (e.g., three levels of parent-child overrides), the context extraction can confuse parameter values, causing the AI to generate incorrect property states [55, 56].
@@ -62,14 +67,14 @@ Automated code generation through the Model Context Protocol (MCP) bridges the g
 
 Design system drift is a constant threat [60-62]. Teams preserve sync through structured developer-designer governance and automated pipeline tooling [48, 63, 64].
 
-*   **Design-Code Dual Governance (RACI)**: Establish a shared responsibility matrix [63, 64]. A single contribution process defines how new variants are proposed, who approves changes, and how breaking modifications are handled [63-66].
-*   **Changesets & Semantic Versioning**: Code system updates should be managed using Changesets in a monorepo setup, with automated CI tools (like GitHub Actions) publishing releases to npm registries [67, 68].
-*   **REST API Diffs & Automated Changelogs**: Utilizing automated terminal-capable skills (such as `figma-version-history` and `figma-generate-changelog`), teams can diff published design file versions and generate human-readable Markdown changelogs during merge requests [14, 69, 70].
-*   **Token Pipeline Automation (Style Dictionary)**: Never hand-edit tokens in code [71, 72]. Use Style Dictionary (v5.5+) to read a JSON-based token export directly from Tokens Studio or Token Variables and compile platform-specific CSS properties, Swift structs, and Tailwind configs [48, 73].
-*   **Documentation as a Definition of Done**: Enforce a strict merge block—a code component is not considered "shipped" until its corresponding Figma design and Markdown documentation pages are published and updated [74, 75].
-*   **Continuous Figma Auditing**:
-    *   *Check Designs*: Running Figma's native linting linter to flag hardcoded spacing, typography size, or color values and correct them to the published variable set [76-79].
-    *   *Detachment Rate Metrics*: Monitoring the Figma admin panel's analytics to track component detachment rates [80-85]. High detachment rates flag where code and designs have mismatched APIs or missing functional use cases [80, 81, 84, 85].
+- **Design-Code Dual Governance (RACI)**: Establish a shared responsibility matrix [63, 64]. A single contribution process defines how new variants are proposed, who approves changes, and how breaking modifications are handled [63-66].
+- **Changesets & Semantic Versioning**: Code system updates should be managed using Changesets in a monorepo setup, with automated CI tools (like GitHub Actions) publishing releases to npm registries [67, 68].
+- **REST API Diffs & Automated Changelogs**: Utilizing automated terminal-capable skills (such as `figma-version-history` and `figma-generate-changelog`), teams can diff published design file versions and generate human-readable Markdown changelogs during merge requests [14, 69, 70].
+- **Token Pipeline Automation (Style Dictionary)**: Never hand-edit tokens in code [71, 72]. Use Style Dictionary (v5.5+) to read a JSON-based token export directly from Tokens Studio or Token Variables and compile platform-specific CSS properties, Swift structs, and Tailwind configs [48, 73].
+- **Documentation as a Definition of Done**: Enforce a strict merge block—a code component is not considered "shipped" until its corresponding Figma design and Markdown documentation pages are published and updated [74, 75].
+- **Continuous Figma Auditing**:
+  - _Check Designs_: Running Figma's native linting linter to flag hardcoded spacing, typography size, or color values and correct them to the published variable set [76-79].
+  - _Detachment Rate Metrics_: Monitoring the Figma admin panel's analytics to track component detachment rates [80-85]. High detachment rates flag where code and designs have mismatched APIs or missing functional use cases [80, 81, 84, 85].
 
 ---
 
@@ -77,25 +82,24 @@ Design system drift is a constant threat [60-62]. Teams preserve sync through st
 
 Use this checklist during component creation, branch reviews, and PR merges [1].
 
-| Item ID | Check Category | Severity Level | Verification Criteria | Supported Sources |
-| :--- | :--- | :--- | :--- | :--- |
-| **CL-01** | **A11y Color Contrast** | **Critical** | Verify color contrast ratio is \\(\ge\\) 4.5:1 for normal text and \\(\ge\\) 3:1 for large text across light and dark modes [86, 87]. | [23], [24], [86], [15], [87] |
-| **CL-02** | **A11y Touch Target** | **Critical** | Interactive elements (buttons, inputs) must maintain a minimum touch target size of 44x44px or at least a 44px layout height [23, 24, 86]. | [88], [23], [89], [24], [86] |
-| **CL-03** | **Auto Layout Binding** | **Critical** | Component frames must utilize Auto Layout instead of fixed coordinates to communicate responsive constraints and sizing rules [53, 90, 91]. | [92], [93], [90], [53], [91] |
-| **CL-04** | **Unbound Styles** | **Critical** | Audit all fills, strokes, and border-radii nodes; absolutely zero raw/hardcoded values are permitted [94, 95]. Every property must bind to a published Variable [91]. | [94], [95], [91], [6] |
-| **CL-05** | **Token Architecture** | **High** | Maintain clear division of 3-tier variables: Primitives must map to Semantic tokens; raw primitives must be hidden from team publishing [96-98]. | [96], [99], [3], [97], [98] |
-| **CL-06** | **Layer & Node Naming** | **High** | All layers must be named semantically (e.g., `CardContainer`, not `Group 47`) and match component export names exactly [17, 18, 53, 90]. | [90], [53], [17], [18], [100], [99] |
-| **CL-07** | **Variable Code Syntax** | **High** | Color/spacing variables must have `codeSyntax.WEB` set so that `get_design_context` extracts clean tokens rather than raw values [6]. | [6] |
-| **CL-08** | **Document Completeness**| **High** | A component cannot be published to the main library without containing clear guidelines: purpose, when to use, when NOT to use, state previews, and accessibility notes [88, 89]. | [88], [74], [89], [75], [101] |
-| **CL-09** | **Variable menu scoping** | **Medium** | Ensure variable scoping is explicitly set (e.g., limiting colors to `fills` or `strokes` only) to keep UI pickers uncluttered [6]. | [6] |
-| **CL-10** | **Preserve Text Overrides**| **Medium** | Confirm that nested text layer names match identically across all variants to avoid breaking user edits during variant swaps [11, 12]. | [11], [12] |
-| **CL-11** | **Combinatorial Explosion**| **Medium** | Review components with multiple option layouts. Optional elements must use **Booleans** or **Slots** instead of creating separate variants [27, 28]. | [27], [102], [28], [103], [104] |
-| **CL-12** | **Component Descriptions** | **Low** | Provide descriptive comments/tooltips on components and variables to optimize local search and enhance AI prompt responses [11, 12]. | [11], [12], [101] |
+| Item ID   | Check Category              | Severity Level | Verification Criteria                                                                                                                                                             | Supported Sources                   |
+| :-------- | :-------------------------- | :------------- | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | :---------------------------------- |
+| **CL-01** | **A11y Color Contrast**     | **Critical**   | Verify color contrast ratio is \\(\ge\\) 4.5:1 for normal text and \\(\ge\\) 3:1 for large text across light and dark modes [86, 87].                                             | [23], [24], [86], [15], [87]        |
+| **CL-02** | **A11y Touch Target**       | **Critical**   | Interactive elements (buttons, inputs) must maintain a minimum touch target size of 44x44px or at least a 44px layout height [23, 24, 86].                                        | [88], [23], [89], [24], [86]        |
+| **CL-03** | **Auto Layout Binding**     | **Critical**   | Component frames must utilize Auto Layout instead of fixed coordinates to communicate responsive constraints and sizing rules [53, 90, 91].                                       | [92], [93], [90], [53], [91]        |
+| **CL-04** | **Unbound Styles**          | **Critical**   | Audit all fills, strokes, and border-radii nodes; absolutely zero raw/hardcoded values are permitted [94, 95]. Every property must bind to a published Variable [91].             | [94], [95], [91], [6]               |
+| **CL-05** | **Token Architecture**      | **High**       | Maintain clear division of 3-tier variables: Primitives must map to Semantic tokens; raw primitives must be hidden from team publishing [96-98].                                  | [96], [99], [3], [97], [98]         |
+| **CL-06** | **Layer & Node Naming**     | **High**       | All layers must be named semantically (e.g., `CardContainer`, not `Group 47`) and match component export names exactly [17, 18, 53, 90].                                          | [90], [53], [17], [18], [100], [99] |
+| **CL-07** | **Variable Code Syntax**    | **High**       | Color/spacing variables must have `codeSyntax.WEB` set so that `get_design_context` extracts clean tokens rather than raw values [6].                                             | [6]                                 |
+| **CL-08** | **Document Completeness**   | **High**       | A component cannot be published to the main library without containing clear guidelines: purpose, when to use, when NOT to use, state previews, and accessibility notes [88, 89]. | [88], [74], [89], [75], [101]       |
+| **CL-09** | **Variable menu scoping**   | **Medium**     | Ensure variable scoping is explicitly set (e.g., limiting colors to `fills` or `strokes` only) to keep UI pickers uncluttered [6].                                                | [6]                                 |
+| **CL-10** | **Preserve Text Overrides** | **Medium**     | Confirm that nested text layer names match identically across all variants to avoid breaking user edits during variant swaps [11, 12].                                            | [11], [12]                          |
+| **CL-11** | **Combinatorial Explosion** | **Medium**     | Review components with multiple option layouts. Optional elements must use **Booleans** or **Slots** instead of creating separate variants [27, 28].                              | [27], [102], [28], [103], [104]     |
+| **CL-12** | **Component Descriptions**  | **Low**        | Provide descriptive comments/tooltips on components and variables to optimize local search and enhance AI prompt responses [11, 12].                                              | [11], [12], [101]                   |
 
 ---
 
 🚲 **Next Step Suggestion**: Would you like me to generate a complete custom rules document (such as a `CLAUDE.md` or design-review instruction set) for your team, containing the exact JSON/YAML format to feed these verification checklists directly into Claude Code?
-
 
 ## Citation map
 

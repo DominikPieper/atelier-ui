@@ -12,7 +12,8 @@ export const metadata: ComponentMetadata = {
   antiPatterns: [
     {
       pattern: 'Accepting any freeform string the user types.',
-      useInstead: 'AtlInput — combobox commits to a value from the option list.',
+      useInstead:
+        'AtlInput — combobox commits to a value from the option list.',
     },
     {
       pattern: 'Picking from a list short enough to fit a native dropdown.',
@@ -20,7 +21,8 @@ export const metadata: ComponentMetadata = {
     },
     {
       pattern: 'Selecting many values at once.',
-      useInstead: 'A multi-select combobox (not in this spec) or a list of AtlCheckbox rows.',
+      useInstead:
+        'A multi-select combobox (not in this spec) or a list of AtlCheckbox rows.',
     },
   ],
   relatedComponents: ['AtlSelectSpec', 'AtlInputSpec'],

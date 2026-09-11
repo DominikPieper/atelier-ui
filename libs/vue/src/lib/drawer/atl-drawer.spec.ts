@@ -35,11 +35,14 @@ describe('AtlDrawer', () => {
     expect(container.querySelector('dialog')).toBeInTheDocument();
   });
 
-  covers('drawer', 'open-shows-modal')('calls showModal when open becomes true', async () => {
-    const { rerender } = render(DrawerFixture, { props: { open: false } });
-    await rerender({ open: true });
-    expect(document.querySelector('dialog')).toHaveAttribute('open');
-  });
+  covers('drawer', 'open-shows-modal')(
+    'calls showModal when open becomes true',
+    async () => {
+      const { rerender } = render(DrawerFixture, { props: { open: false } });
+      await rerender({ open: true });
+      expect(document.querySelector('dialog')).toHaveAttribute('open');
+    },
+  );
 
   it('renders header, content, and footer slots', () => {
     render(DrawerFixture, { props: { open: true } });
@@ -48,13 +51,16 @@ describe('AtlDrawer', () => {
     expect(screen.getByText('Drawer footer.')).toBeInTheDocument();
   });
 
-  covers('drawer', 'close-button')('close button emits update:open with false', async () => {
-    const user = userEvent.setup();
-    const { emitted } = render(DrawerFixture, { props: { open: true } });
-    const closeBtn = screen.getByRole('button', { name: 'Close drawer' });
-    await user.click(closeBtn);
-    expect(emitted()['update:open']).toEqual([[false]]);
-  });
+  covers('drawer', 'close-button')(
+    'close button emits update:open with false',
+    async () => {
+      const user = userEvent.setup();
+      const { emitted } = render(DrawerFixture, { props: { open: true } });
+      const closeBtn = screen.getByRole('button', { name: 'Close drawer' });
+      await user.click(closeBtn);
+      expect(emitted()['update:open']).toEqual([[false]]);
+    },
+  );
 
   it('applies position class', () => {
     const { container } = render(DrawerFixture, {
@@ -64,7 +70,9 @@ describe('AtlDrawer', () => {
   });
 
   it('applies size class', () => {
-    const { container } = render(AtlDrawer, { props: { open: false, size: 'lg' } });
+    const { container } = render(AtlDrawer, {
+      props: { open: false, size: 'lg' },
+    });
     expect(container.querySelector('dialog')).toHaveClass('size-lg');
   });
 
@@ -75,7 +83,10 @@ describe('AtlDrawer', () => {
 
   covers('drawer', 'aria-modal')('sets aria-modal', () => {
     const { container } = render(AtlDrawer, { props: { open: false } });
-    expect(container.querySelector('dialog')).toHaveAttribute('aria-modal', 'true');
+    expect(container.querySelector('dialog')).toHaveAttribute(
+      'aria-modal',
+      'true',
+    );
   });
 });
 

@@ -27,59 +27,95 @@ describe('AtlTabGroup', () => {
 
   // Vue tabs use automatic activation: ArrowRight selects the next tab
   // (React/Angular use manual activation — arrow moves focus, Enter selects).
-  covers('tabs', 'keyboard-nav')('ArrowRight activates the next tab', async () => {
-    const user = userEvent.setup();
-    render(TabsFixture);
-    await flushPromises();
-    screen.getByRole('tab', { name: 'Tab One' }).focus();
-    await user.keyboard('{ArrowRight}');
-    expect(screen.getByRole('tab', { name: 'Tab Two' })).toHaveAttribute('aria-selected', 'true');
-  });
+  covers('tabs', 'keyboard-nav')(
+    'ArrowRight activates the next tab',
+    async () => {
+      const user = userEvent.setup();
+      render(TabsFixture);
+      await flushPromises();
+      screen.getByRole('tab', { name: 'Tab One' }).focus();
+      await user.keyboard('{ArrowRight}');
+      expect(screen.getByRole('tab', { name: 'Tab Two' })).toHaveAttribute(
+        'aria-selected',
+        'true',
+      );
+    },
+  );
 
-  covers('tabs', 'home-end')('Home activates the first tab and End the last', async () => {
-    const user = userEvent.setup();
-    render(TabsFixture);
-    await flushPromises();
-    screen.getByRole('tab', { name: 'Tab One' }).focus();
-    await user.keyboard('{End}');
-    expect(screen.getByRole('tab', { name: 'Tab Three' })).toHaveAttribute('aria-selected', 'true');
-    await user.keyboard('{Home}');
-    expect(screen.getByRole('tab', { name: 'Tab One' })).toHaveAttribute('aria-selected', 'true');
-  });
+  covers('tabs', 'home-end')(
+    'Home activates the first tab and End the last',
+    async () => {
+      const user = userEvent.setup();
+      render(TabsFixture);
+      await flushPromises();
+      screen.getByRole('tab', { name: 'Tab One' }).focus();
+      await user.keyboard('{End}');
+      expect(screen.getByRole('tab', { name: 'Tab Three' })).toHaveAttribute(
+        'aria-selected',
+        'true',
+      );
+      await user.keyboard('{Home}');
+      expect(screen.getByRole('tab', { name: 'Tab One' })).toHaveAttribute(
+        'aria-selected',
+        'true',
+      );
+    },
+  );
 
-  covers('tabs', 'wrap')('ArrowRight wraps from the last tab to the first', async () => {
-    const user = userEvent.setup();
-    render(TabsFixture);
-    await flushPromises();
-    await user.click(screen.getByRole('tab', { name: 'Tab Three' }));
-    await user.keyboard('{ArrowRight}');
-    expect(screen.getByRole('tab', { name: 'Tab One' })).toHaveAttribute('aria-selected', 'true');
-  });
+  covers('tabs', 'wrap')(
+    'ArrowRight wraps from the last tab to the first',
+    async () => {
+      const user = userEvent.setup();
+      render(TabsFixture);
+      await flushPromises();
+      await user.click(screen.getByRole('tab', { name: 'Tab Three' }));
+      await user.keyboard('{ArrowRight}');
+      expect(screen.getByRole('tab', { name: 'Tab One' })).toHaveAttribute(
+        'aria-selected',
+        'true',
+      );
+    },
+  );
 
-  covers('tabs', 'skip-disabled')('arrow navigation skips disabled tabs', async () => {
-    const user = userEvent.setup();
-    render({
-      components: { AtlTabGroup, AtlTab },
-      template: `
+  covers('tabs', 'skip-disabled')(
+    'arrow navigation skips disabled tabs',
+    async () => {
+      const user = userEvent.setup();
+      render({
+        components: { AtlTabGroup, AtlTab },
+        template: `
         <AtlTabGroup>
           <AtlTab label="Active">Active</AtlTab>
           <AtlTab label="Disabled" :disabled="true">Disabled</AtlTab>
           <AtlTab label="Last">Last</AtlTab>
         </AtlTabGroup>
       `,
-    });
-    await flushPromises();
-    screen.getByRole('tab', { name: 'Active' }).focus();
-    await user.keyboard('{ArrowRight}');
-    expect(screen.getByRole('tab', { name: 'Last' })).toHaveAttribute('aria-selected', 'true');
-  });
+      });
+      await flushPromises();
+      screen.getByRole('tab', { name: 'Active' }).focus();
+      await user.keyboard('{ArrowRight}');
+      expect(screen.getByRole('tab', { name: 'Last' })).toHaveAttribute(
+        'aria-selected',
+        'true',
+      );
+    },
+  );
 
-  covers('tabs', 'first-tab-default')('first tab is selected by default', async () => {
-    render(TabsFixture);
-    await flushPromises();
-    expect(screen.getByRole('tab', { name: 'Tab One' })).toHaveAttribute('aria-selected', 'true');
-    expect(screen.getByRole('tab', { name: 'Tab Two' })).toHaveAttribute('aria-selected', 'false');
-  });
+  covers('tabs', 'first-tab-default')(
+    'first tab is selected by default',
+    async () => {
+      render(TabsFixture);
+      await flushPromises();
+      expect(screen.getByRole('tab', { name: 'Tab One' })).toHaveAttribute(
+        'aria-selected',
+        'true',
+      );
+      expect(screen.getByRole('tab', { name: 'Tab Two' })).toHaveAttribute(
+        'aria-selected',
+        'false',
+      );
+    },
+  );
 
   it('shows first tab content by default', async () => {
     render(TabsFixture);
@@ -89,14 +125,23 @@ describe('AtlTabGroup', () => {
     expect(panels[1]).toHaveAttribute('hidden');
   });
 
-  covers('tabs', 'switch-on-click')('switches active tab on click', async () => {
-    const user = userEvent.setup();
-    render(TabsFixture);
-    await flushPromises();
-    await user.click(screen.getByRole('tab', { name: 'Tab Two' }));
-    expect(screen.getByRole('tab', { name: 'Tab Two' })).toHaveAttribute('aria-selected', 'true');
-    expect(screen.getByRole('tab', { name: 'Tab One' })).toHaveAttribute('aria-selected', 'false');
-  });
+  covers('tabs', 'switch-on-click')(
+    'switches active tab on click',
+    async () => {
+      const user = userEvent.setup();
+      render(TabsFixture);
+      await flushPromises();
+      await user.click(screen.getByRole('tab', { name: 'Tab Two' }));
+      expect(screen.getByRole('tab', { name: 'Tab Two' })).toHaveAttribute(
+        'aria-selected',
+        'true',
+      );
+      expect(screen.getByRole('tab', { name: 'Tab One' })).toHaveAttribute(
+        'aria-selected',
+        'false',
+      );
+    },
+  );
 
   it('shows panel content for active tab', async () => {
     const user = userEvent.setup();
@@ -113,21 +158,26 @@ describe('AtlTabGroup', () => {
       components: { AtlTabGroup, AtlTab },
       template: `<AtlTabGroup variant="pills"><AtlTab label="A">A</AtlTab></AtlTabGroup>`,
     });
-    expect(container.querySelector('.atl-tab-group')).toHaveClass('variant-pills');
+    expect(container.querySelector('.atl-tab-group')).toHaveClass(
+      'variant-pills',
+    );
   });
 
-  covers('tabs', 'disabled-tab-noop')('disabled tab cannot be selected', async () => {
-    render({
-      components: { AtlTabGroup, AtlTab },
-      template: `
+  covers('tabs', 'disabled-tab-noop')(
+    'disabled tab cannot be selected',
+    async () => {
+      render({
+        components: { AtlTabGroup, AtlTab },
+        template: `
         <AtlTabGroup>
           <AtlTab label="Active">Active</AtlTab>
           <AtlTab label="Disabled" :disabled="true">Disabled</AtlTab>
         </AtlTabGroup>
       `,
-    });
-    await flushPromises();
-    const disabledTab = screen.getByRole('tab', { name: 'Disabled' });
-    expect(disabledTab).toBeDisabled();
-  });
+      });
+      await flushPromises();
+      const disabledTab = screen.getByRole('tab', { name: 'Disabled' });
+      expect(disabledTab).toBeDisabled();
+    },
+  );
 });

@@ -50,7 +50,7 @@ Two constraints shaped the gate:
   job and in the release gate, after `npm ci` with Chromium installed; neither
   starts Astro. The built `dist/docs` is a complete static site whose only
   obstacle is absolute `/_astro/` asset paths — a twenty-line `node:http`
-  static server, not a dev server, closes that. Neither job *builds* the docs,
+  static server, not a dev server, closes that. Neither job _builds_ the docs,
   though, and this ADR's first draft asserted they did: the gate's first push
   turned both red with `[NO-BUILD]`. So the npm script composes its own input
   (`nx build docs && node …check-docs-layout.mjs`), which also closes a
@@ -58,7 +58,7 @@ Two constraints shaped the gate:
   longer exists.
 - **Breakpoints cannot be tokens in CSS.** `@media (max-width: var(--bp))` is
   invalid, and `@custom-media` needs a PostCSS plugin the docs build does not
-  have. So the breakpoint rule is a *set*, enforced by a static scan, not a
+  have. So the breakpoint rule is a _set_, enforced by a static scan, not a
   variable.
 
 ## Decision
@@ -74,9 +74,9 @@ Two constraints shaped the gate:
    `landmark-unique`, `color-contrast`, `page-has-heading-one`, `region`) with
    every allow entry carrying a reason, and `[BREAKPOINT]` — any `@media`
    width in `docs/src` outside `{480, 640, 768, 1383}` (a `min-width: N`
-   counts as documented when `N - 1` is in the set). The *script* refuses to
-   run without a build (`[NO-BUILD]`) rather than building silently; the *npm
-   script* builds first, so `check:all` is self-contained wherever it runs.
+   counts as documented when `N - 1` is in the set). The _script_ refuses to
+   run without a build (`[NO-BUILD]`) rather than building silently; the _npm
+   script_ builds first, so `check:all` is self-contained wherever it runs.
    axe's `color-contrast` is measured after the page settles (fonts, two
    frames, 150 ms), and every violation is re-run once and intersected — a
    repaint mid-run produced phantom findings on pages a direct probe measured
@@ -111,7 +111,7 @@ Two constraints shaped the gate:
   non-optional part of the gate, and the docs are what participants read.
 - Component-library defects that surface through the docs demos (review
   L1–L4: `AtlSelect` accessible name, `AtlProgress` label, checkbox hit area,
-  `AtlTabs` pills at 375) are *allowlisted with a pointer*, not fixed here:
+  `AtlTabs` pills at 375) are _allowlisted with a pointer_, not fixed here:
   the docs gate reports docs defects; the library has its own gates and
   backlog.
 - Layout collapses that used to happen at 860 now happen at 768; three-column

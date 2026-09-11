@@ -115,19 +115,29 @@ export function AtlCombobox({
     switch (e.key) {
       case 'ArrowDown': {
         e.preventDefault();
-        if (!isOpen) { open(); return; }
+        if (!isOpen) {
+          open();
+          return;
+        }
         setActiveIndex((i) => (i + 1 >= filteredOptions.length ? 0 : i + 1));
         break;
       }
       case 'ArrowUp': {
         e.preventDefault();
-        if (!isOpen) { open(); return; }
+        if (!isOpen) {
+          open();
+          return;
+        }
         setActiveIndex((i) => (i - 1 < 0 ? filteredOptions.length - 1 : i - 1));
         break;
       }
       case 'Enter': {
         e.preventDefault();
-        if (isOpen && activeIndex >= 0 && activeIndex < filteredOptions.length) {
+        if (
+          isOpen &&
+          activeIndex >= 0 &&
+          activeIndex < filteredOptions.length
+        ) {
           selectOption(filteredOptions[activeIndex]);
         }
         break;
@@ -185,7 +195,9 @@ export function AtlCombobox({
           onBlur={handleBlur}
           onKeyDown={handleKeydown}
         />
-        {invalid && <AtlIcon name="danger" size="sm" className="invalid-icon" />}
+        {invalid && (
+          <AtlIcon name="danger" size="sm" className="invalid-icon" />
+        )}
         <span className="atl-combobox-icon" aria-hidden="true">
           <AtlIcon name="chevron-down" size="sm" />
         </span>
@@ -219,12 +231,21 @@ export function AtlCombobox({
               >
                 <span>{option.label}</span>
                 {option.value === value && (
-                  <AtlIcon name="check" size="sm" className="atl-combobox-check" />
+                  <AtlIcon
+                    name="check"
+                    size="sm"
+                    className="atl-combobox-check"
+                  />
                 )}
               </li>
             ))
           ) : (
-            <li className="atl-combobox-no-results" role="option" aria-selected={false} aria-disabled="true">
+            <li
+              className="atl-combobox-no-results"
+              role="option"
+              aria-selected={false}
+              aria-disabled="true"
+            >
               No results found.
             </li>
           )}
@@ -234,7 +255,9 @@ export function AtlCombobox({
       {errors.length > 0 && (
         <div className="atl-combobox-errors" id={errorsId} aria-live="polite">
           {errors.map((e, i) => (
-            <p key={i} className="atl-combobox-error-message">{e}</p>
+            <p key={i} className="atl-combobox-error-message">
+              {e}
+            </p>
           ))}
         </div>
       )}

@@ -68,7 +68,7 @@ While verifying the upgrade in a real browser, `LlmButton` rendered with no
 visible styling at all despite correct classes/ARIA. Root cause, found by
 inspecting the DOM inside the Storybook preview iframe: `llm-button.css`
 wrote plain class selectors (`.llm-button`, `.llm-button.variant-primary`,
-…) for rules meant to style the *host* element. Angular's emulated view
+…) for rules meant to style the _host_ element. Angular's emulated view
 encapsulation rewrites a bare `.foo` selector to `.foo[_ngcontent-xxx]` —
 which only matches a **content child** carrying that attribute, never the
 host itself (the host gets `_nghost-xxx`, a different attribute). Since
@@ -79,16 +79,16 @@ dead on arrival, pre-existing and unrelated to this upgrade (confirmed via
 Fixed by rewriting every host-targeting selector to `:host(...)` form
 (`.llm-button` → `:host`, `.llm-button.variant-primary` →
 `:host(.variant-primary)`, etc.), matching the working convention already
-used by `LlmBadge`. `.spinner` stayed a plain class selector — it *is* a
+used by `LlmBadge`. `.spinner` stayed a plain class selector — it _is_ a
 real template child, so `_ngcontent` scoping is correct there.
 
 Alternatives rejected:
 
-- *Bump Angular only, defer Nx*: the user explicitly asked for both latest;
+- _Bump Angular only, defer Nx_: the user explicitly asked for both latest;
   and Nx's own Angular-version compatibility matrix ties the two together
   closely enough that mismatching them invites exactly the peer-dependency
   conflicts seen mid-migration (see Consequences).
-- *Step through an intermediate Nx/Angular minor first*: unnecessary — both
+- _Step through an intermediate Nx/Angular minor first_: unnecessary — both
   moves are a single major version step, which `nx migrate` supports directly.
 
 ## Consequences

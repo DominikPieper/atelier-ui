@@ -3,7 +3,7 @@ status: accepted
 confidence: documented
 date: reconstructed
 sources:
-  - "plan/big-picture.md §5"
+  - 'plan/big-picture.md §5'
 ---
 
 # ADR-0004: CSS custom-property design tokens

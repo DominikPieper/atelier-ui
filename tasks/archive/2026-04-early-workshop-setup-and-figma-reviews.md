@@ -16,22 +16,26 @@
 ## Shipped ✅
 
 ### Component libraries
+
 - 25+ components across Angular, React, and Vue
 - Signal Forms integration (Angular), prop/callback pattern (React), v-model (Vue)
 - CSS design tokens, dark mode, accessible by default
 - Includes complex components like LlmTable, LlmCombobox, and LlmStepper
 
 ### Storybook
+
 - All three frameworks with interactive Controls
 - Foundation docs (colors, spacing, typography)
 - Welcome / Introduction page per framework
 - Showcase story (all components on one page)
 
 ### MCP server
+
 - 5 tools: list_components, get_component_docs, search_components, get_stories, get_theming_guide
 - Hosted at atelier-ui.netlify.app/storybook-{angular,react,vue}/mcp
 
 ### create-atelier-ui-workspace
+
 - CLI with interactive framework selection
 - Scaffolds Nx workspace with per-framework apps
 - Generates CLAUDE.md with MCP tool reference + framework import patterns
@@ -40,12 +44,14 @@
 - 19 automated tests for the preset generator
 
 ### Docs site (atelier-ui.netlify.app)
+
 - Workshop-first homepage with 3 pillar cards
 - Workshop Setup, MCP Playground, Storybook, Installation
 - LLM-Optimized APIs page (why the library is structured this way)
 - MCP Playground with protocol flow, color legend, workshop tips per tool
 
 ### Published packages (v0.0.4)
+
 - @atelier-ui/spec
 - @atelier-ui/angular
 - @atelier-ui/react
@@ -58,7 +64,6 @@
 - [x] ~~Storybook visual check — light + dark mode, manual pass on key components~~ — covered 2026-04-28 by cookbook P7 (36 light/dark Playwright captures × 6 patterns × 3 frameworks, embedded on per-pattern detail pages) and the docs a11y sweep (axe clean across 22 pages, both themes verified by token swap rules in `BaseLayout` + `:focus-visible` baseline).
 - [x] ~~CI pipeline for tests on PRs~~ — shipped (`.github/workflows/ci.yml`: parallel lint/test/build/checks on `nx affected`)
 - [x] ~~True CLI e2e test~~ — shipped as `nx run create-atelier-ui-workspace:e2e`, wired into CI as an affected-gated job
-
 
 ## Open — Figma/a11y review follow-ups (2026-04-23)
 
@@ -73,7 +78,7 @@ Snapshot of what's still open after the multi-round review + cleanup work (commi
 
 ### Moderate (1–3 h each)
 
-- [x] ~~**Create a type ramp**~~ — reconciled 2026-04-23. The "zero text styles" claim was stale: `figma_get_text_styles` returns **11 styles** (`text/heading-{lg,md,sm}` · `text/body-{md,sm}` · `text/label-{lg,md,sm}` · `text/code-sm` · `text/icon-sm` · `text/icon-display`). Re-running `figma_lint_design --rules=no-text-style` on the Components page now returns only **2 findings**, both the 9 px `"JS"` avatar initials on the `size=xs` variants (`3:935`, `73:387`). Those are already captured under *Marginal / likely won't-fix → sub-12 px text in icon roles* and are visually intentional, so no binding action is warranted.
+- [x] ~~**Create a type ramp**~~ — reconciled 2026-04-23. The "zero text styles" claim was stale: `figma_get_text_styles` returns **11 styles** (`text/heading-{lg,md,sm}` · `text/body-{md,sm}` · `text/label-{lg,md,sm}` · `text/code-sm` · `text/icon-sm` · `text/icon-display`). Re-running `figma_lint_design --rules=no-text-style` on the Components page now returns only **2 findings**, both the 9 px `"JS"` avatar initials on the `size=xs` variants (`3:935`, `73:387`). Those are already captured under _Marginal / likely won't-fix → sub-12 px text in icon roles_ and are visually intentional, so no binding action is warranted.
 - [x] ~~**LlmProgress variant explosion**~~ — shipped 2026-04-23. Dropped the `state` variant axis on ComponentSet `420:153`; deleted the 12 `state=indeterminate` nodes; added a BOOLEAN component property `indeterminate` (default `false`) that documents the API in Dev Mode. Remaining variants: 12 (variant × size). Story `design` links in `libs/{angular,react}/src/lib/progress/llm-progress.stories.*` redirected from `420-90` → `420-87`. Trade-off: the static indeterminate visual preview is gone — the animation is CSS-only at runtime anyway, so the Figma snapshot added no information. Description updated to call this out explicitly.
 - [x] ~~**LlmTable state property split**~~ — shipped 2026-04-23. Added BOOLEAN component properties `sortable#437:27`, `selectable#437:38`, `stickyHeader#437:49` (all default `false`) on ComponentSet `421:1183`. Deleted variants `421:1002`, `421:1051`, `421:1090` (the `state=sortable/selectable/sticky` entries). Remaining variants: 7 (3 variant × 3 size compacted to only the populated combos, plus `state=empty` at `421:1103` and `state=focus` at `434:1234`). `state` axis now cleanly `default | empty | focus`. Description rewritten to call out the boolean-prop composition. 9 Storybook `design` links redirected from `421-1002/1051/1090` → `421-884` across Angular/React/Vue.
 - [x] ~~**Add hover/active/loading variants** to interactive components~~ — shipped 2026-04-23. Extended the `state` axis on all 9 remaining interactive ComponentSets (Button was already done in `d3ee9ac`): Input `129:33`, Select `55:92`, Combobox `421:339`, Checkbox `55:36`, Radio `420:185`, RadioGroup `55:137`, Toggle `55:41`, TabGroup `55:123`, Table `421:1183`. Each now has three additional variants (hover, active, loading) added to a representative sub-variant — not full cross-product, mirroring the Button precedent. Visual treatment by family:
@@ -82,8 +87,9 @@ Snapshot of what's still open after the multi-round review + cleanup work (commi
   - **Switch** (Toggle): hover = track fill→`color/border-hover`; active = track→`color/input-border-focus` + knob slid to mid-position; loading = `⟳` overlayed on knob, label dimmed.
   - **Navigation** (TabGroup): hover/active = bg tint on the second (unselected) tab with darker text; loading = `⟳` glyph prepended to tab label with dimmed text.
   - **Table**: hover = tr-1 bg tinted `color/primary-light`; active = tr-1 bg tinted `color/surface-sunken`; loading = primary `⟳` glyph in thead with all tbody rows at opacity 0.6.
-  
+
   All fills/strokes bound to UI Tokens variables (Dark mode follows automatically). Placed new variants in empty Table slots (no set growth), and in second rows for single-row sets (Input, Select, Combobox, Checkbox, Toggle) — set widths unchanged, heights grown minimally. Parent sections resized to contain the grown sets (no overlaps between adjacent sections, verified in all 5 category sections). Also fixed a pre-existing overlap where the `LlmSelect` section's dropdown preview was in the space the new row needed — moved dropdown down 60 px.
+
 - [x] ~~**Replace the remaining ~40 hardcoded hex values**~~ — done implicitly by the 2026-04-27 restructure work. Re-ran `figma_lint_design --rules=hardcoded-colors` on 2026-04-28 across all 7 pages (`Components` 1900 nodes, `Cookbook` 25, `Colors` 105, `Typography` 39, `Spacing & Radius` 52, `Icons` ~40, `📋 Inventory` 993): **0 findings** total. The ~40 count was stale. No remaining hex values to sweep.
 - [x] ~~**Move icon indicators from CSS pseudo-elements to the component templates**~~ — shipped 2026-04-23. Badge + Alert across all 3 frameworks now emit `<span class="variant-icon" aria-hidden="true">{glyph}</span>` from the template with a `VARIANT_ICONS` lookup map. CSS retains the styling rules (font-weight / margin / line-height) but targets the `.variant-icon` class instead of `::before`. Consumers can now override the icon and themed mode-swapping becomes possible. Tests stay green (492/492, no test asserted on glyph content). `LlmInput` / `LlmTextarea` still use `::before` for their single invalid-state indicator — deferred as a separate follow-up (different role: validation vs. semantic variant).
 
@@ -94,7 +100,7 @@ Snapshot of what's still open after the multi-round review + cleanup work (commi
 
 ### Marginal / likely won't-fix
 
-- [x] ~~**14 `wcag-text-size` below-12px warnings**~~ — declined 2026-04-28. All flagged text is intentional UI chrome: pagination arrows `▲▼`, font-size labels `xs/sm`, badge `Default` placeholder, Alert `Backdrop (rgba(0,0,0,0.5))` documentation label. None of it is content text. WCAG 1.4.4 *Resize Text* requires supporting 200% zoom without loss of content/functionality, not a specific size floor; code uses `rem`/`em` units throughout so 200% zoom works. Bumping these to ≥12 px to silence the lint would change the visual rhythm of the chrome for no a11y benefit. Documented as accepted.
+- [x] ~~**14 `wcag-text-size` below-12px warnings**~~ — declined 2026-04-28. All flagged text is intentional UI chrome: pagination arrows `▲▼`, font-size labels `xs/sm`, badge `Default` placeholder, Alert `Backdrop (rgba(0,0,0,0.5))` documentation label. None of it is content text. WCAG 1.4.4 _Resize Text_ requires supporting 200% zoom without loss of content/functionality, not a specific size floor; code uses `rem`/`em` units throughout so 200% zoom works. Bumping these to ≥12 px to silence the lint would change the visual rhythm of the chrome for no a11y benefit. Documented as accepted.
 - [x] ~~**Docs site: resize `docs/src/assets/logo.png` + `docs/public/logo.png`**~~ — shipped 2026-04-23. Both PNGs resized via `sips -Z 224` to 224×214 intrinsic (≈ 4× retina over the 56×54 rendered size). File size dropped 585 KB → 37 KB per file (~15× smaller). `<img>` attributes in `docs/src/layouts/BaseLayout.astro:168` updated from `width={56} height={54}` to `width={224} height={214}` to match new intrinsics for correct CLS aspect-ratio. CSS `.docs-logo-img { height: 28px }` unchanged — rendered size stays the same. `nx build docs` still green (43 pages).
 - [x] ~~**Pre-existing lint errors in `docs/.astro/*.d.ts`**~~ — shipped 2026-04-23. Added `'docs/.astro/**'` to the root `eslint.config.mjs:14` ignores array. `nx lint docs` now 0 errors / 0 warnings (was 4 errors / 5 warnings from auto-generated `/// <reference>` directives and `{}` types in `content.d.ts` + `types.d.ts`).
 
@@ -104,28 +110,28 @@ Snapshot of what's still open after the multi-round review + cleanup work (commi
 - Figma file: `Atelier` (`QMnDD8uZQPldPrlCwZZ58T`) — `Components` page. Lint via `figma_lint_design`; component audit via `figma_audit_component_accessibility`.
 - Session lint deltas (before / after): `wcag-contrast` 25 → 0; `wcag-focus-indicator` 6 → 0; `wcag-disabled-no-context` 8 → 0; `wcag-color-only` 13 → 16* (*page-level heuristic; component-level is clean).
 
-
 ## Review — Figma designs for the last 7 components + parity pass (2026-04-22)
 
 Closed the Figma design gap for the 7 components that existed in code but had no design: `code-block`, `combobox`, `drawer`, `progress`, `radio` (standalone), `stepper`, `table`. All new component sets live on the Atelier `Components` page, bind every fill/stroke/text to UI Tokens so Light + Dark modes render automatically, and are linked back into Storybook via `parameters.design` on the meta and per-named story across Angular, React, and Vue.
 
 **Figma node-ids (captured this run):**
 
-| Component | Section | Component set | Key variants |
-|---|---|---|---|
-| LlmProgress | `3:875` | `420:153` | default-md-determinate `420:87`, default-md-indeterminate `420:90`, success-md `420:105`, warning-md `420:123`, danger-md `420:141`, size-sm `420:81`, size-lg `420:93` |
-| LlmRadio *(new)* | `420:182` | `420:185` | unchecked `420:165`, checked `420:169`, disabled `420:174`, invalid `420:178` |
-| LlmCodeBlock *(new)* | `420:283` | `420:286` | default `420:186`, with-filename `420:209`, with-line-numbers `420:232`, no-copy `420:263` |
-| LlmCombobox *(new)* | `421:336` | `421:339` | default `421:291`, open `421:295`, filtered `421:313`, selected `421:324`, disabled `421:328`, invalid `421:332` |
-| LlmDrawer | `3:1111` | `421:398` | right `421:342`, left `421:356`, top `421:370`, bottom `421:384` |
-| LlmStepper *(new)* | `421:404` | `421:505` | default `421:407`, completed `421:427`, error `421:446`, optional `421:465`, vertical `421:485` |
-| LlmTable | `158:39` | `421:1183` | default-md `421:884`, striped `421:923`, bordered `421:962`, sortable `421:1002`, selectable `421:1051`, sticky `421:1090`, empty `421:1103`, size-sm `421:1142`, size-lg `421:1181` |
+| Component            | Section   | Component set | Key variants                                                                                                                                                                         |
+| -------------------- | --------- | ------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| LlmProgress          | `3:875`   | `420:153`     | default-md-determinate `420:87`, default-md-indeterminate `420:90`, success-md `420:105`, warning-md `420:123`, danger-md `420:141`, size-sm `420:81`, size-lg `420:93`              |
+| LlmRadio _(new)_     | `420:182` | `420:185`     | unchecked `420:165`, checked `420:169`, disabled `420:174`, invalid `420:178`                                                                                                        |
+| LlmCodeBlock _(new)_ | `420:283` | `420:286`     | default `420:186`, with-filename `420:209`, with-line-numbers `420:232`, no-copy `420:263`                                                                                           |
+| LlmCombobox _(new)_  | `421:336` | `421:339`     | default `421:291`, open `421:295`, filtered `421:313`, selected `421:324`, disabled `421:328`, invalid `421:332`                                                                     |
+| LlmDrawer            | `3:1111`  | `421:398`     | right `421:342`, left `421:356`, top `421:370`, bottom `421:384`                                                                                                                     |
+| LlmStepper _(new)_   | `421:404` | `421:505`     | default `421:407`, completed `421:427`, error `421:446`, optional `421:465`, vertical `421:485`                                                                                      |
+| LlmTable             | `158:39`  | `421:1183`    | default-md `421:884`, striped `421:923`, bordered `421:962`, sortable `421:1002`, selectable `421:1051`, sticky `421:1090`, empty `421:1103`, size-sm `421:1142`, size-lg `421:1181` |
 
 **Files touched — stories (21):** `libs/{angular,react,vue}/src/lib/{progress,radio,code-block,combobox,drawer,stepper,table}/*.stories.{ts,tsx}` — meta + per-story `parameters.design`, `figmaNode()` helper added to files that lacked it (all 7 Vue stories, Combobox/CodeBlock/Table in Angular+React, Stepper+Drawer+Progress in React+Vue).
 
 **Files touched — code (3):** `libs/{angular,react,vue}/src/lib/stepper/llm-stepper.css` — replaced hard-coded `color: #fff` on `.step-item.is-completed .step-circle` with `var(--ui-color-on-primary)` (matches the Figma design-token binding) and on `.is-error` with `var(--ui-color-text-on-danger, #ffffff)` (semantic). All other Progress/Radio/CodeBlock/Combobox/Drawer/Table styles were already 100% token-bound and matched the new designs — no further code changes needed.
 
 **Parity notes (minor, non-blocking):**
+
 - Combobox input text: Figma 14px vs code `--ui-font-size-md` (16). Kept code at 16 to match Input/Select.
 - Drawer header font-size: Figma 18px vs code `--ui-font-size-xl` (20). Kept code at 20 for token consistency.
 - CodeBlock mono body: Figma 13px vs code `--ui-font-size-sm` (14). Kept code at 14.
@@ -135,6 +141,7 @@ Closed the Figma design gap for the 7 components that existed in code but had no
 **Verified:** `nx run-many -t lint,test -p angular,react,vue` all green (3/3 lint, 27/27 test files, 492/492 tests, drawer `play` functions intact).
 
 **Visual polish pass (same day, after user review):** screenshot-verified each of the 7 component sets via the Desktop-Bridge `figma_capture_screenshot` path (REST screenshots 403 without a token) and fixed five layout bugs:
+
 - Combobox `open` / `filtered` variants had invisible dropdown panels — outer component and inner `panel` frame were pinned at h=40 / h=1 because `.resize()` flipped their primary-axis sizing back to FIXED. Toggled both back to AUTO.
 - CodeBlock variants were all pinned at h=200 regardless of code length (same root cause). Freed the primary axis, now heights hug content.
 - Table inner `LlmTable / *` containers had the same pinning; freed.
@@ -148,7 +155,6 @@ All component sets re-stacked with 40px vertical gaps so sections no longer over
 
 **Page alignment**: 7 sections redistributed into the same 3-column grid the existing 20 sections use (col 0 x=0, col 1 x=1588, col 2 x=3200), starting at y=3050 (40px below the last existing section). Final layout — Row 0: Progress | Radio | CodeBlock · Row 1: Combobox | Drawer | Stepper · Row 2: Table. Zero collisions with the existing sections. Node-ids still unchanged.
 
-
 ## Review — CLI e2e + tokens.css packaging fix (2026-04-22)
 
 Shipped a real end-to-end test for `npx create-atelier-ui-workspace` and, in the process, caught a workshop-blocker that the previous unit tests couldn't see.
@@ -159,13 +165,13 @@ Shipped a real end-to-end test for `npx create-atelier-ui-workspace` and, in the
 - New CI job `cli-e2e` in `.github/workflows/ci.yml` — affected-only, 20-minute timeout. Skips on unrelated pushes because verdaccio startup + 3 npm-install-and-build cycles take ~5 min.
 
 **Bug caught and fixed:** the preset injected `@import '@atelier-ui/<fw>/styles/tokens.css';` but:
+
 - `tokens.css` is not in the published v0.0.4 tarballs — ng-packagr and the react/vue builds only bundle the entry point, not `src/styles/`.
 - Even if it were shipped, the dist-generated package.json has a strict `exports` field without a `./styles/*` entry.
 
 Fixed by making the preset own a canonical `tokens.css` at `libs/create-workspace/src/generators/preset/files/styles/tokens.css` and writing it into `<app>/src/styles/tokens.css` during scaffolding. Attendees can edit colors directly in their workspace (no CSS-variable override pattern required for a 90-minute session). `@atelier-ui/<fw>` npm packages are still used for components, just not for tokens.
 
 Verified: e2e green for all three frameworks (angular / react / vue — real `nx build` with styles bundle produced), `nx test create-workspace` 29/29, `nx test create-atelier-ui-workspace` 11/11, `nx affected -t lint` clean.
-
 
 ## Review — Figma Desktop Bridge pivot (2026-04-22)
 
@@ -179,7 +185,6 @@ Primary Figma channel switched from the REST API (`FIGMA_ACCESS_TOKEN`) to the F
 - `docs/src/layouts/BaseLayout.astro` — sidebar "Figma Token" → "Figma Setup" (icon `key` → `cable`).
 
 Verified: preflight exits 0 (14 ok, 1 warn for optional FIGMA token — expected), `nx test create-workspace` 28/28, `nx build docs` 43 pages, `nx affected -t lint` clean.
-
 
 ## Review — Zero-Friction Setup (2026-04-21)
 
@@ -197,4 +202,3 @@ Shipped for the 90-minute workshop onboarding:
 Verified: preflight exits 0 locally (12 ok, 1 warn for missing FIGMA token — expected), docs build succeeds (43 pages), create-workspace test suite passes (29/29).
 
 Out of scope this round (per plan): StackBlitz, challenges, wow-demos, CI pipeline, visual regression, CLI e2e.
-

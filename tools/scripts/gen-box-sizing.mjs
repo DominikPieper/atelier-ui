@@ -43,6 +43,7 @@ import { readFileSync, writeFileSync, readdirSync, statSync } from 'node:fs';
 import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
+import { format, resolveConfig } from 'prettier';
 
 const require = createRequire(import.meta.url);
 const { FRAMEWORKS } = require('./lib/component-discovery.js');
@@ -81,6 +82,26 @@ function blockFor(selector) {
   );
 }
 
+/**
+ * `blockFor`'s selector wrapping is a starting shape, not the final bytes: this
+ * repo's stylesheets are Prettier-formatted, and Prettier collapses or wraps a
+ * multi-root `:is(...)` selector by print width, disagreeing with a hardcoded
+ * wrap at any width other than the one it happened to pick. Rather than
+ * reimplementing that rule, format the block through Prettier's own API —
+ * `resolveConfig` against the real target path so the repo's `.prettierrc`
+ * (and any future one) governs, not options hardcoded here. Formatting the
+ * block alone — not the whole file — keeps this generator's authority scoped
+ * to the geometry contract, matching what `--check` verifies; Prettier trims a
+ * formatted string's trailing blank line to one newline regardless, so the
+ * block's own blank-line separator is reattached afterwards.
+ */
+async function formattedBlockFor(selector, target) {
+  const raw = blockFor(selector).replace(/\n+$/, '\n');
+  const options = (await resolveConfig(target)) ?? {};
+  const formatted = await format(raw, { ...options, filepath: target });
+  return formatted.replace(/\n$/, '') + '\n\n';
+}
+
 const problems = [];
 let written = 0;
 let verified = 0;
@@ -96,27 +117,38 @@ for (const fw of FRAMEWORKS) {
     // The component's primary stylesheet: atl-<dir>.css when it exists. Roots are
     // collected across all of the directory's stylesheets, so a class declared in
     // a split-out file (Angular's atl-toast-container.css) is still covered.
-    const primary = cssFiles.includes(`atl-${dir}.css`) ? `atl-${dir}.css` : [...cssFiles].sort()[0];
+    const primary = cssFiles.includes(`atl-${dir}.css`)
+      ? `atl-${dir}.css`
+      : [...cssFiles].sort()[0];
     const target = join(dirPath, primary);
     const rel = `libs/${fw}/src/lib/${dir}/${primary}`;
 
     const roots = [
-      ...new Set(cssFiles.flatMap((f) => [...leadingAtlClasses(readFileSync(join(dirPath, f), 'utf8'))])),
+      ...new Set(
+        cssFiles.flatMap((f) => [
+          ...leadingAtlClasses(readFileSync(join(dirPath, f), 'utf8')),
+        ]),
+      ),
     ].sort();
 
     if (fw !== 'angular' && roots.length === 0) {
-      problems.push(`[NO-ROOT] ${rel} declares no .atl-* root class, so the contract has nothing to attach to.`);
+      problems.push(
+        `[NO-ROOT] ${rel} declares no .atl-* root class, so the contract has nothing to attach to.`,
+      );
       continue;
     }
 
-    const want = blockFor(selectorFor(fw, roots));
+    const want = await formattedBlockFor(selectorFor(fw, roots), target);
     const css = readFileSync(target, 'utf8');
     const has = css.startsWith(want);
 
     // A reset in any of the directory's stylesheets undoes the contract for that
     // element, whatever the block at the top says.
     for (const file of cssFiles) {
-      const css = readFileSync(join(dirPath, file), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+      const css = readFileSync(join(dirPath, file), 'utf8').replace(
+        /\/\*[\s\S]*?\*\//g,
+        '',
+      );
       for (const rule of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
         const body = rule[2];
         if (!/(^|;)\s*all\s*:\s*(unset|initial|revert)/.test(body)) continue;
@@ -127,7 +159,7 @@ for (const fw of FRAMEWORKS) {
           `[RESET-WIPED] libs/${fw}/src/lib/${dir}/${file} — \`${selector}\` uses \`all: unset\`, which ` +
             `resets the box model. The contract has the same specificity and loses on source order, so this ` +
             `element is content-box and larger than its own CSS states. Restate \`box-sizing: border-box\` ` +
-            `below the reset.`
+            `below the reset.`,
         );
       }
     }
@@ -141,15 +173,17 @@ for (const fw of FRAMEWORKS) {
       problems.push(
         css.includes(MARKER)
           ? `[STALE] ${rel} has a geometry-contract block that no longer matches its root classes ` +
-            `(${roots.join(', ') || ':host'}). Run: npm run gen:box-sizing`
+              `(${roots.join(', ') || ':host'}). Run: npm run gen:box-sizing`
           : `[MISSING] ${rel} declares sizes but no geometry contract, so its boxes depend on the ` +
-            `consuming app's reset. Run: npm run gen:box-sizing`
+              `consuming app's reset. Run: npm run gen:box-sizing`,
       );
       continue;
     }
 
     // Replace an existing stale block, or prepend a new one.
-    const body = css.startsWith(MARKER) ? css.slice(css.indexOf('*/') + 2).replace(/^[\s\S]*?\n\n/, '') : css;
+    const body = css.startsWith(MARKER)
+      ? css.slice(css.indexOf('*/') + 2).replace(/^[\s\S]*?\n\n/, '')
+      : css;
     writeFileSync(target, want + body);
     written++;
   }
@@ -163,5 +197,5 @@ if (problems.length > 0) {
 console.log(
   CHECK
     ? `✓ every component declares its geometry contract (${verified} stylesheets).`
-    : `✓ geometry contract written (${written} updated, ${verified} already current).`
+    : `✓ geometry contract written (${written} updated, ${verified} already current).`,
 );

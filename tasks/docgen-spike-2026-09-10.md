@@ -11,11 +11,11 @@ manifest carries? Throwaway scripts in the session scratchpad; this document is 
 **Feasible, for all three frameworks, with exact fidelity.** The check can read both
 inputs in one process per framework in about 5–6 seconds for the whole roster.
 
-| Framework | Docgen, cold (one component) | Docgen, warm (second component, same process) | Fidelity vs. built shard |
-|---|---|---|---|
-| Angular | 3.7 s (3.1 s building the TS program) | 83 ms | identical — AtlButton and AtlDialog |
-| Vue | 3.5 s (2.6 s building the checker) | 93 ms | identical |
-| React | 0.56 s | 40 ms | identical |
+| Framework | Docgen, cold (one component)          | Docgen, warm (second component, same process) | Fidelity vs. built shard            |
+| --------- | ------------------------------------- | --------------------------------------------- | ----------------------------------- |
+| Angular   | 3.7 s (3.1 s building the TS program) | 83 ms                                         | identical — AtlButton and AtlDialog |
+| Vue       | 3.5 s (2.6 s building the checker)    | 93 ms                                         | identical                           |
+| React     | 0.56 s                                | 40 ms                                         | identical                           |
 
 Batch estimate per framework: one program build plus 28 warm extractions ≈ 3 s + 28 × 90 ms
 ≈ **5.5 s**, not 29 × 3 s. Story `args` for a whole file resolve in **≈ 85 ms**.
@@ -73,7 +73,7 @@ specifiers do not resolve from the scratchpad.
 const { loadCsf, createStoryArgsResolver } = await import('storybook/internal/csf-tools');
 const csf = loadCsf(source, { makeTitle: (t) => t, fileName }).parse();
 const resolver = createStoryArgsResolver(csf);
-resolver.resolve('Danger').args   // { variant: StringLiteral 'danger', size: 'md', … }
+resolver.resolve('Danger').args; // { variant: StringLiteral 'danger', size: 'md', … }
 ```
 
 `loadCsf(...).parse()` gives `_meta.title`, `_meta.component`, the story list, and per

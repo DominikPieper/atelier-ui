@@ -20,7 +20,7 @@ Two layers, in order. Output uses `assets/audit-report-template.md`.
    - Naming
    - File Structure
    - Engineering-Sync Readiness
-   Each finding tagged Blocker / Critical / Warning / Suggestion with a one-line fix.
+     Each finding tagged Blocker / Critical / Warning / Suggestion with a one-line fix.
 3. **Lead with the priority list** — Blockers and Criticals at the top with effort estimates ("~30 min", "~1 day", "multi-week"). The user explicitly asked for "what to fix first, not a 40-page report" — bury the category-by-category walk-through behind the priority list.
 4. **Discovery via `figma_get_file_data`** to load the structure into the audit context. For very large files prefer `figma_get_variables` + `figma_get_styles` separately.
 5. **Output template** = `assets/audit-report-template.md`. Frontmatter (file name, ISO date, mode availability) + Priority list + Findings by category.

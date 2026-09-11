@@ -93,7 +93,7 @@ Alternatives considered:
   (`tools/figma/snapshot.json` carries `figmaLastModified: null`). "Green
   `check:all`" asserts less than it looks like it does. Those are tracked
   separately in `tasks/review-state-2026-08-26.md`.
-  *Update, same day:* the a11y roster hole is closed (ADR-0034: the roster is
+  _Update, same day:_ the a11y roster hole is closed (ADR-0034: the roster is
   derived from the component dirs). `storybook-test` is **still not wired** —
   it fails whenever `CI` is set, for reasons unrelated to this repo's config;
   the repro is recorded against B4 in `tasks/todo.md`. Snapshot freshness

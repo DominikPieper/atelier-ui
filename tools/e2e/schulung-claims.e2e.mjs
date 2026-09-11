@@ -67,7 +67,13 @@
  * Run via:  node tools/e2e/schulung-claims.e2e.mjs
  *           (or  npx nx run @atelier-ui/source:schulung-claims-e2e)
  */
-import { existsSync, mkdirSync, readFileSync, rmSync, writeFileSync } from 'node:fs';
+import {
+  existsSync,
+  mkdirSync,
+  readFileSync,
+  rmSync,
+  writeFileSync,
+} from 'node:fs';
 import { spawn, spawnSync } from 'node:child_process';
 import { dirname, join, resolve } from 'node:path';
 import { fileURLToPath } from 'node:url';
@@ -112,7 +118,10 @@ function isNegated(text, matchIndex) {
 }
 
 function gitStatusPorcelain() {
-  const res = spawnSync('git', ['status', '--porcelain'], { cwd: ROOT, encoding: 'utf8' });
+  const res = spawnSync('git', ['status', '--porcelain'], {
+    cwd: ROOT,
+    encoding: 'utf8',
+  });
   if (res.status !== 0) throw new Error(`git status failed: ${res.stderr}`);
   return res.stdout;
 }
@@ -125,7 +134,10 @@ function assertCleanTree(label) {
 
 function runNpmScript(name) {
   const res = spawnSync('npm', ['run', name], { cwd: ROOT, encoding: 'utf8' });
-  return { status: res.status, output: `${res.stdout || ''}${res.stderr || ''}` };
+  return {
+    status: res.status,
+    output: `${res.stdout || ''}${res.stderr || ''}`,
+  };
 }
 
 // =============================================================================
@@ -135,7 +147,8 @@ function runNpmScript(name) {
 
 const BULLET_START = 'Drei Gates werden dabei erwartungsgemäß rot';
 const BULLET_MID = 'check:contracts bleibt in der Standardausführung';
-const BULLET_END = 'die drei also einzeln laufen lassen, um das volle Bild zu sehen';
+const BULLET_END =
+  'die drei also einzeln laufen lassen, um das volle Bild zu sehen';
 
 /**
  * Parse the gate-count claim straight out of the page: the three gates that
@@ -150,13 +163,13 @@ function extractGateClaim(astroText) {
   if (startIdx === -1) {
     throw new Error(
       `could not find the gate-count claim in ${SCHULUNG_REL} (anchor "${BULLET_START}" not found). ` +
-        `Either the claim was reworded (update this script's anchors) or removed (Part 1 no longer applies).`
+        `Either the claim was reworded (update this script's anchors) or removed (Part 1 no longer applies).`,
     );
   }
   const endIdx = astroText.indexOf(BULLET_END, startIdx);
   if (endIdx === -1) {
     throw new Error(
-      `found the start of the gate-count claim but not its end anchor ("${BULLET_END}") in ${SCHULUNG_REL}.`
+      `found the start of the gate-count claim but not its end anchor ("${BULLET_END}") in ${SCHULUNG_REL}.`,
     );
   }
   const bullet = astroText.slice(startIdx, endIdx + BULLET_END.length);
@@ -164,21 +177,25 @@ function extractGateClaim(astroText) {
   if (midIdx === -1) {
     throw new Error(
       `found the gate-count claim but not the middle anchor ("${BULLET_MID}") that separates the ` +
-        `expected-red gates from the check:contracts claim.`
+        `expected-red gates from the check:contracts claim.`,
     );
   }
   const partA = bullet.slice(0, midIdx);
   const partB = bullet.slice(midIdx);
-  const extract = (s) => [...new Set([...s.matchAll(/check:[a-zA-Z0-9-]+/g)].map((m) => m[0]))];
+  const extract = (s) => [
+    ...new Set([...s.matchAll(/check:[a-zA-Z0-9-]+/g)].map((m) => m[0])),
+  ];
   const redGates = extract(partA);
   const contractsGates = extract(partB);
   if (redGates.length === 0) {
-    throw new Error(`parsed the gate-count claim but found zero 'check:*' names before the split.`);
+    throw new Error(
+      `parsed the gate-count claim but found zero 'check:*' names before the split.`,
+    );
   }
   if (!contractsGates.includes('check:contracts')) {
     throw new Error(
       `parsed the gate-count claim but did not find 'check:contracts' named after the split — the claim no ` +
-        `longer names the gate this test asserts stays green.`
+        `longer names the gate this test asserts stays green.`,
     );
   }
   return { redGates, contractsGate: 'check:contracts' };
@@ -249,26 +266,31 @@ function writeWsdemoFixture() {
   writeFileSync(join(WSDEMO_DIR, 'atl-wsdemo.stories.ts'), WSDEMO_STORY);
 }
 function cleanupFixture() {
-  if (existsSync(WSDEMO_DIR)) rmSync(WSDEMO_DIR, { recursive: true, force: true });
+  if (existsSync(WSDEMO_DIR))
+    rmSync(WSDEMO_DIR, { recursive: true, force: true });
 }
 
 async function checkGateExpectations() {
   const failures = [];
   section('Part 1 — gate-count claim (Day 2, Block 02)');
 
-  assertCleanTree('before Part 1 — refusing to run against an already-dirty tree');
+  assertCleanTree(
+    'before Part 1 — refusing to run against an already-dirty tree',
+  );
 
   const astroText = readAstro();
   const { redGates, contractsGate } = extractGateClaim(astroText);
   ok(
     `extracted claim: {${redGates.join(', ')}} red; '${contractsGate}' green (default run) with a ` +
-      `[NO-MASTER] warning`
+      `[NO-MASTER] warning`,
   );
 
   const pkg = readPkg();
   for (const gate of [...redGates, contractsGate]) {
     if (!(gate in (pkg.scripts || {}))) {
-      failures.push(`curriculum names '${gate}' as a gate, but package.json has no such script`);
+      failures.push(
+        `curriculum names '${gate}' as a gate, but package.json has no such script`,
+      );
     }
   }
   if (failures.length > 0) return failures; // nothing meaningful left to run
@@ -277,13 +299,17 @@ async function checkGateExpectations() {
 
   try {
     writeWsdemoFixture();
-    ok('wrote throwaway libs/angular/src/lib/wsdemo/ (atl-wsdemo.ts, story, wsdemo.contract.ts) — libs/spec/src/index.ts untouched');
+    ok(
+      'wrote throwaway libs/angular/src/lib/wsdemo/ (atl-wsdemo.ts, story, wsdemo.contract.ts) — libs/spec/src/index.ts untouched',
+    );
 
     const res = Object.fromEntries(allGates.map((g) => [g, runNpmScript(g)]));
 
     for (const g of redGates) {
       if (res[g].status === 0) {
-        failures.push(`expected '${g}' to fail (single-framework workshop-case addition) but it exited 0`);
+        failures.push(
+          `expected '${g}' to fail (single-framework workshop-case addition) but it exited 0`,
+        );
       } else {
         ok(`${g} red as expected (exit ${res[g].status})`);
       }
@@ -293,18 +319,22 @@ async function checkGateExpectations() {
       failures.push(
         `expected '${contractsGate}' to PASS in its default run (curriculum: it only warns [NO-MASTER] for a ` +
           `component with no Atelier master, it does not fail) but it exited ${res[contractsGate].status}:\n` +
-          `${res[contractsGate].output.slice(-2000)}`
+          `${res[contractsGate].output.slice(-2000)}`,
       );
     } else {
-      const hasNoMasterLine = /\[NO-MASTER\][^\n]*AtlWsdemo/.test(res[contractsGate].output);
+      const hasNoMasterLine = /\[NO-MASTER\][^\n]*AtlWsdemo/.test(
+        res[contractsGate].output,
+      );
       if (!hasNoMasterLine) {
         failures.push(
           `'${contractsGate}' exited 0 as expected but printed no '[NO-MASTER] ... AtlWsdemo' line — the ` +
             `curriculum's claim that it warns (rather than silently ignoring the component) no longer holds:\n` +
-            `${res[contractsGate].output.slice(-2000)}`
+            `${res[contractsGate].output.slice(-2000)}`,
         );
       } else {
-        ok(`${contractsGate} green with a [NO-MASTER] line naming AtlWsdemo, exactly as the curriculum claims`);
+        ok(
+          `${contractsGate} green with a [NO-MASTER] line naming AtlWsdemo, exactly as the curriculum claims`,
+        );
       }
     }
 
@@ -312,10 +342,12 @@ async function checkGateExpectations() {
       failures.push(
         `check:storybook-manifests went RED on a single-framework workshop-case addition. The curriculum's ` +
           `red-gate list does not name check:storybook-manifests — if it belongs there now, that claim is stale ` +
-          `by one gate:\n${res['check:storybook-manifests'].output.slice(-2000)}`
+          `by one gate:\n${res['check:storybook-manifests'].output.slice(-2000)}`,
       );
     } else {
-      ok('check:storybook-manifests stays green (does not belong in the curriculum’s red list)');
+      ok(
+        'check:storybook-manifests stays green (does not belong in the curriculum’s red list)',
+      );
     }
   } finally {
     cleanupFixture();
@@ -342,17 +374,21 @@ function extractExpectedMcpTools(astroText) {
   if (idx === -1) {
     throw new Error(
       `could not find "${MCP_TOOLS_ANCHOR}..." in ${SCHULUNG_REL} — wording changed; update this ` +
-        `script's anchor.`
+        `script's anchor.`,
     );
   }
   const closeIdx = astroText.indexOf(')', idx);
-  if (closeIdx === -1) throw new Error('found the tool-list anchor but no closing paren after it');
+  if (closeIdx === -1)
+    throw new Error('found the tool-list anchor but no closing paren after it');
   const inner = astroText.slice(idx + MCP_TOOLS_ANCHOR.length, closeIdx);
   const tools = inner
     .split(',')
     .map((s) => s.trim())
     .filter(Boolean);
-  if (tools.length === 0) throw new Error('parsed the tool-list anchor but found zero tool names inside it');
+  if (tools.length === 0)
+    throw new Error(
+      'parsed the tool-list anchor but found zero tool names inside it',
+    );
   return tools;
 }
 
@@ -368,9 +404,16 @@ function parseSse(text) {
 }
 
 async function mcpCall(url, body, sessionId) {
-  const headers = { 'Content-Type': 'application/json', Accept: 'application/json, text/event-stream' };
+  const headers = {
+    'Content-Type': 'application/json',
+    Accept: 'application/json, text/event-stream',
+  };
   if (sessionId) headers['mcp-session-id'] = sessionId;
-  const res = await fetch(url, { method: 'POST', headers, body: JSON.stringify(body) });
+  const res = await fetch(url, {
+    method: 'POST',
+    headers,
+    body: JSON.stringify(body),
+  });
   const newSessionId = res.headers.get('mcp-session-id');
   const contentType = res.headers.get('content-type') || '';
   const raw = await res.text();
@@ -396,7 +439,9 @@ async function waitForHttp(url, timeoutMs) {
 
 async function portIsUp(port) {
   try {
-    const res = await fetch(`http://localhost:${port}`, { signal: AbortSignal.timeout(1000) });
+    const res = await fetch(`http://localhost:${port}`, {
+      signal: AbortSignal.timeout(1000),
+    });
     return res.status < 500;
   } catch {
     return false;
@@ -427,12 +472,22 @@ async function checkMcpSurfaceForFramework(fw, expectedTools) {
   try {
     const already = await portIsUp(port);
     if (already) {
-      warn(`${fw}: something is already listening on ${port} — reusing it read-only (not starting/stopping it)`);
+      warn(
+        `${fw}: something is already listening on ${port} — reusing it read-only (not starting/stopping it)`,
+      );
     } else {
       proc = spawn(
         'npx',
-        ['storybook', 'dev', '--config-dir', `libs/${fw}/.storybook`, '--port', String(port), '--ci'],
-        { cwd: ROOT, stdio: ['ignore', 'pipe', 'pipe'] }
+        [
+          'storybook',
+          'dev',
+          '--config-dir',
+          `libs/${fw}/.storybook`,
+          '--port',
+          String(port),
+          '--ci',
+        ],
+        { cwd: ROOT, stdio: ['ignore', 'pipe', 'pipe'] },
       );
       weStartedIt = true;
       let out = '';
@@ -440,7 +495,9 @@ async function checkMcpSurfaceForFramework(fw, expectedTools) {
       proc.stderr.on('data', (d) => (out += d));
       const up = await waitForHttp(`http://localhost:${port}`, 90_000);
       if (!up) {
-        failures.push(`${fw}: local Storybook dev server on ${port} did not come up within 90s\n${out.slice(-2000)}`);
+        failures.push(
+          `${fw}: local Storybook dev server on ${port} did not come up within 90s\n${out.slice(-2000)}`,
+        );
         return failures;
       }
       ok(`${fw}: local Storybook up on ${port}`);
@@ -461,8 +518,16 @@ async function checkMcpSurfaceForFramework(fw, expectedTools) {
       return failures;
     }
     const sessionId = init.sessionId;
-    await mcpCall(url, { jsonrpc: '2.0', method: 'notifications/initialized', params: {} }, sessionId);
-    const list = await mcpCall(url, { jsonrpc: '2.0', id: 2, method: 'tools/list', params: {} }, sessionId);
+    await mcpCall(
+      url,
+      { jsonrpc: '2.0', method: 'notifications/initialized', params: {} },
+      sessionId,
+    );
+    const list = await mcpCall(
+      url,
+      { jsonrpc: '2.0', id: 2, method: 'tools/list', params: {} },
+      sessionId,
+    );
     const toolsMsg = list.messages.find((m) => m.result && m.result.tools);
     const names = toolsMsg ? toolsMsg.result.tools.map((t) => t.name) : [];
     ok(`${fw}: tools/list → ${names.length} tools`);
@@ -471,7 +536,7 @@ async function checkMcpSurfaceForFramework(fw, expectedTools) {
       if (!names.includes(expected)) {
         failures.push(
           `${fw}: curriculum requires '${expected}' from the local MCP surface, but tools/list did not ` +
-            `return it. Present: ${JSON.stringify(names)}`
+            `return it. Present: ${JSON.stringify(names)}`,
         );
       }
     }
@@ -510,7 +575,9 @@ function extractNpmScripts(astroText) {
 function extractNxInvocations(astroText) {
   const decoded = decodeEntities(astroText);
   const out = [];
-  for (const m of decoded.matchAll(/\bnx ([a-zA-Z][\w-]*) (<[a-z]+>|[a-zA-Z][\w-]*)/g)) {
+  for (const m of decoded.matchAll(
+    /\bnx ([a-zA-Z][\w-]*) (<[a-z]+>|[a-zA-Z][\w-]*)/g,
+  )) {
     if (isNegated(decoded, m.index)) continue;
     out.push({ target: m[1], project: m[2] });
   }
@@ -530,10 +597,14 @@ async function checkCommandsExist() {
   const pkg = readPkg();
 
   const scripts = extractNpmScripts(astroText);
-  ok(`extracted ${scripts.length} distinct 'npm run' invocation(s): ${scripts.join(', ')}`);
+  ok(
+    `extracted ${scripts.length} distinct 'npm run' invocation(s): ${scripts.join(', ')}`,
+  );
   for (const s of scripts) {
     if (!(s in (pkg.scripts || {}))) {
-      failures.push(`npm script '${s}' named in the curriculum does not exist in package.json`);
+      failures.push(
+        `npm script '${s}' named in the curriculum does not exist in package.json`,
+      );
     }
   }
 
@@ -542,12 +613,17 @@ async function checkCommandsExist() {
   for (const { target, project } of nxInvocations) {
     for (const p of expandProjectToken(project)) pairs.add(`${target}::${p}`);
   }
-  ok(`extracted ${pairs.size} distinct (target, project) pair(s) from 'nx ...' invocations`);
+  ok(
+    `extracted ${pairs.size} distinct (target, project) pair(s) from 'nx ...' invocations`,
+  );
 
   const projectCache = new Map();
   function getProjectTargets(name) {
     if (projectCache.has(name)) return projectCache.get(name);
-    const res = spawnSync('npx', ['nx', 'show', 'project', name, '--json'], { cwd: ROOT, encoding: 'utf8' });
+    const res = spawnSync('npx', ['nx', 'show', 'project', name, '--json'], {
+      cwd: ROOT,
+      encoding: 'utf8',
+    });
     let targets = null;
     if (res.status === 0) {
       try {
@@ -566,13 +642,13 @@ async function checkCommandsExist() {
     const targets = getProjectTargets(project);
     if (targets === null) {
       failures.push(
-        `nx project '${project}' (named in the curriculum via 'nx ${target} ${project}') does not exist in this workspace`
+        `nx project '${project}' (named in the curriculum via 'nx ${target} ${project}') does not exist in this workspace`,
       );
       continue;
     }
     if (!targets.has(target)) {
       failures.push(
-        `nx target '${target}' (named in the curriculum via 'nx ${target} ${project}') is not defined on project '${project}'`
+        `nx target '${target}' (named in the curriculum via 'nx ${target} ${project}') is not defined on project '${project}'`,
       );
     }
   }
@@ -594,7 +670,9 @@ function extractNodeIds(astroText) {
 
 function extractFrameNames(astroText) {
   const out = [];
-  for (const m of astroText.matchAll(/[A-Z][A-Za-z]*(?: [A-Z][A-Za-z]*)? \/ (?:Starter|Scaffold)/g)) {
+  for (const m of astroText.matchAll(
+    /[A-Z][A-Za-z]*(?: [A-Z][A-Za-z]*)? \/ (?:Starter|Scaffold)/g,
+  )) {
     if (isNegated(astroText, m.index)) continue;
     out.push(m[0]);
   }
@@ -616,7 +694,7 @@ async function checkFigmaRefs() {
     const normalized = raw.replace('-', ':'); // schulung.astro prose uses "936-2954"; the snapshot uses "936:2954"
     if (!idsInSnapshot.has(normalized)) {
       failures.push(
-        `curriculum cites Figma node ${raw} (${normalized}), not present in tools/figma/snapshot.json's referencedNodes`
+        `curriculum cites Figma node ${raw} (${normalized}), not present in tools/figma/snapshot.json's referencedNodes`,
       );
     }
   }
@@ -625,7 +703,9 @@ async function checkFigmaRefs() {
   ok(`extracted frame name(s): ${frameNames.join(', ')}`);
   for (const name of frameNames) {
     if (!namesInSnapshot.has(name)) {
-      failures.push(`curriculum cites starter frame '${name}', not present in tools/figma/snapshot.json's referencedNodes`);
+      failures.push(
+        `curriculum cites starter frame '${name}', not present in tools/figma/snapshot.json's referencedNodes`,
+      );
     }
   }
   return failures;

@@ -20,7 +20,8 @@ const SAMPLE_JSON = `{
 const SAMPLE_SHELL = `npm install @atelier-ui/vue
 npx nx generate @atelier-ui/generators:atl-component-vue --name=my-widget`;
 
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: 'figma'; url: string } {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
@@ -63,7 +64,9 @@ export const Default: Story = {
   },
   render: (args) => ({
     components: { AtlCodeBlock },
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: `<div style="max-width:600px"><AtlCodeBlock v-bind="args" /></div>`,
   }),
   parameters: { design: figmaNode('420-186') },
@@ -79,7 +82,9 @@ export const WithFilename: Story = {
   },
   render: (args) => ({
     components: { AtlCodeBlock },
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: `<div style="max-width:600px"><AtlCodeBlock v-bind="args" /></div>`,
   }),
   parameters: { design: figmaNode('420-209') },
@@ -95,7 +100,9 @@ export const WithLineNumbers: Story = {
   },
   render: (args) => ({
     components: { AtlCodeBlock },
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: `<div style="max-width:600px"><AtlCodeBlock v-bind="args" /></div>`,
   }),
   parameters: { design: figmaNode('420-232') },
@@ -110,7 +117,9 @@ export const Json: Story = {
   },
   render: (args) => ({
     components: { AtlCodeBlock },
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: `<div style="max-width:600px"><AtlCodeBlock v-bind="args" /></div>`,
   }),
   parameters: { design: figmaNode('420-209') },
@@ -124,7 +133,9 @@ export const Shell: Story = {
   },
   render: (args) => ({
     components: { AtlCodeBlock },
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: `<div style="max-width:600px"><AtlCodeBlock v-bind="args" /></div>`,
   }),
   parameters: { design: figmaNode('420-186') },
@@ -138,7 +149,9 @@ export const NoCopyButton: Story = {
   },
   render: (args) => ({
     components: { AtlCodeBlock },
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: `<div style="max-width:600px"><AtlCodeBlock v-bind="args" /></div>`,
   }),
   parameters: { design: figmaNode('420-263') },

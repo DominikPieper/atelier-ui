@@ -8,17 +8,17 @@ Sync mode handles **value drift after one side has moved**. Code-as-truth (token
 
 Load it when the user says any of:
 
-- *"propagate to Figma"*, *"sync the lib tokens"*, *"keep Figma and code in lockstep"*
-- *"the code just changed X, update Figma"*
-- *"make Figma match the new spec"*
+- _"propagate to Figma"_, _"sync the lib tokens"_, _"keep Figma and code in lockstep"_
+- _"the code just changed X, update Figma"_
+- _"make Figma match the new spec"_
 
-If the user is planning a *structural* change (rename, split, deprecate), use `references/migration-playbook.md` instead.
+If the user is planning a _structural_ change (rename, split, deprecate), use `references/migration-playbook.md` instead.
 
 ## The four steps
 
 ### 1. Establish direction
 
-Which side is the source of truth for *this* change?
+Which side is the source of truth for _this_ change?
 
 - Token values from CSS / JSON / spec file → **code-as-truth** (most common — design-led shop has the values in Figma; engineering-led shop has them in code).
 - Figma frame dimensions → **design-as-truth** (rarer, but real for spec-defined widths/heights).
@@ -36,11 +36,11 @@ Read the target side and list the deltas. Useful tools:
 
 Classify each delta into one of three buckets:
 
-| Delta type                               | Approach in Sync                              |
-|------------------------------------------|-----------------------------------------------|
-| Variable value update (one or more modes) | Cheap, batch-able. Group into one call.       |
-| Frame dimension change (per-variant)     | Per-variant, scripted. One `figma_execute`.   |
-| Structural change (rename, add, remove)  | **Bail out** — switch to Migrate.             |
+| Delta type                                | Approach in Sync                            |
+| ----------------------------------------- | ------------------------------------------- |
+| Variable value update (one or more modes) | Cheap, batch-able. Group into one call.     |
+| Frame dimension change (per-variant)      | Per-variant, scripted. One `figma_execute`. |
+| Structural change (rename, add, remove)   | **Bail out** — switch to Migrate.           |
 
 If any delta is a structural change, stop here and run the migration playbook. Sync continues only if the diff is value-update + dimension-update only.
 
@@ -69,14 +69,14 @@ The audit + parity check is the closing-the-loop check. If scores drop after Syn
 Output a Sync summary (see SKILL.md "Output expectations"). One small table beats prose:
 
 ```markdown
-| Direction | Count | Detail |
-|-----------|-------|--------|
-| Variables updated | 47 | 23 in Light, 24 in Dark; 0 broken aliases |
-| Frames resized   | 18 | Button (6 variants) + Input (12 variants) |
-| Components touched | 4 | Button, IconButton, Input, Select |
-| Audit scores     |    | DS 76 → 82 (+6); A11y unchanged at 91 |
-| Parity score     |    | 94/100 — 1 typography discrepancy on Input/sm |
-| Left undone      |    | Code-side parity for Input/sm font-size — opens new ticket |
+| Direction          | Count | Detail                                                     |
+| ------------------ | ----- | ---------------------------------------------------------- |
+| Variables updated  | 47    | 23 in Light, 24 in Dark; 0 broken aliases                  |
+| Frames resized     | 18    | Button (6 variants) + Input (12 variants)                  |
+| Components touched | 4     | Button, IconButton, Input, Select                          |
+| Audit scores       |       | DS 76 → 82 (+6); A11y unchanged at 91                      |
+| Parity score       |       | 94/100 — 1 typography discrepancy on Input/sm              |
+| Left undone        |       | Code-side parity for Input/sm font-size — opens new ticket |
 ```
 
 ## When to escalate to Migrate

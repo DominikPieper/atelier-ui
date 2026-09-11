@@ -7,7 +7,8 @@ import { AtlIcon } from '../icon/atl-icon';
  * Properties for the AtlTextarea component.
  */
 export interface AtlTextareaProps
-  extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'readOnly'>,
+  extends
+    Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'readOnly'>,
     AtlTextareaSpec {
   /**
    * Current value of the textarea.
@@ -106,7 +107,9 @@ export function AtlTextarea({
           aria-describedby={errors.length > 0 ? errorId : undefined}
           {...rest}
         />
-        {invalid && <AtlIcon name="danger" size="sm" className="invalid-icon" />}
+        {invalid && (
+          <AtlIcon name="danger" size="sm" className="invalid-icon" />
+        )}
       </div>
       {errors.length > 0 && (
         <div className="errors" id={errorId} aria-live="polite">

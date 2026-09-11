@@ -10,7 +10,8 @@ import AtlCardContent from '../card/atl-card-content.vue';
 
 import { metadata } from '@atelier-ui/spec/metadata/tabs.metadata';
 import { contract } from '@atelier-ui/spec/contracts/tab-group.contract';
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
@@ -41,7 +42,9 @@ type Story = StoryObj<typeof AtlTabGroup>;
 export const Default: Story = {
   render: (args) => ({
     components: { AtlTabGroup, AtlTab },
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: `
       <AtlTabGroup v-bind="args">
         <AtlTab label="Account">
@@ -71,7 +74,9 @@ export const Default: Story = {
 export const WithDisabledTab: Story = {
   render: (args) => ({
     components: { AtlTabGroup, AtlTab },
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: `
       <AtlTabGroup v-bind="args">
         <AtlTab label="Active">This tab is active.</AtlTab>
@@ -99,7 +104,9 @@ export const PillsVariant: Story = {
 export const ManyTabs: Story = {
   render: (args) => ({
     components: { AtlTabGroup, AtlTab },
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: `
       <AtlTabGroup v-bind="args">
         <AtlTab label="Overview">Overview content</AtlTab>
@@ -119,7 +126,9 @@ export const PreSelectedTab: Story = {
   args: { selectedIndex: 2 },
   render: (args) => ({
     components: { AtlTabGroup, AtlTab },
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: `
       <AtlTabGroup v-bind="args">
         <AtlTab label="First">First panel</AtlTab>
@@ -132,8 +141,18 @@ export const PreSelectedTab: Story = {
 
 export const WithRichContent: Story = {
   render: (args) => ({
-    components: { AtlTabGroup, AtlTab, AtlInput, AtlButton, AtlBadge, AtlCard, AtlCardContent },
-    setup() { return { args }; },
+    components: {
+      AtlTabGroup,
+      AtlTab,
+      AtlInput,
+      AtlButton,
+      AtlBadge,
+      AtlCard,
+      AtlCardContent,
+    },
+    setup() {
+      return { args };
+    },
     template: `
       <AtlTabGroup v-bind="args">
         <AtlTab label="Profile">

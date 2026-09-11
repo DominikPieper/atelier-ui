@@ -11,7 +11,8 @@ export const contract = {
     },
     {
       name: 'closeOnBackdrop',
-      reason: 'Not modelled as a Boolean (ADR-0056): behaviour only, as on AtlDialog.',
+      reason:
+        'Not modelled as a Boolean (ADR-0056): behaviour only, as on AtlDialog.',
     },
   ],
 } satisfies ComponentContract;

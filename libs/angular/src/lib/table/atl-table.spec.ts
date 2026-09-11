@@ -45,50 +45,68 @@ describe('AtlTable', () => {
       expect(screen.getByText('Bob')).toBeInTheDocument();
     });
 
-    covers('table', 'variant-default')('applies variant-default class by default', async () => {
-      const { container } = await render(BASIC_TABLE, { imports: IMPORTS });
-      expect(container.querySelector('atl-table')).toHaveClass('variant-default');
-    });
+    covers('table', 'variant-default')(
+      'applies variant-default class by default',
+      async () => {
+        const { container } = await render(BASIC_TABLE, { imports: IMPORTS });
+        expect(container.querySelector('atl-table')).toHaveClass(
+          'variant-default',
+        );
+      },
+    );
 
     it('applies size-md class by default', async () => {
       const { container } = await render(BASIC_TABLE, { imports: IMPORTS });
       expect(container.querySelector('atl-table')).toHaveClass('size-md');
     });
 
-    covers('table', 'sticky-header')('applies is-sticky-header class when stickyHeader=true', async () => {
-      const { container } = await render(
-        `<atl-table [stickyHeader]="true">
+    covers('table', 'sticky-header')(
+      'applies is-sticky-header class when stickyHeader=true',
+      async () => {
+        const { container } = await render(
+          `<atl-table [stickyHeader]="true">
           <atl-thead><atl-tr><atl-th>Col</atl-th></atl-tr></atl-thead>
           <atl-tbody></atl-tbody>
         </atl-table>`,
-        { imports: IMPORTS },
-      );
-      expect(container.querySelector('atl-table')).toHaveClass('is-sticky-header');
-    });
+          { imports: IMPORTS },
+        );
+        expect(container.querySelector('atl-table')).toHaveClass(
+          'is-sticky-header',
+        );
+      },
+    );
   });
 
   describe('AtlTh — sorting', () => {
-    covers('table', 'sort-button')('renders a sort button when sortable=true', async () => {
-      const { container } = await render(
-        `<atl-table>
+    covers('table', 'sort-button')(
+      'renders a sort button when sortable=true',
+      async () => {
+        const { container } = await render(
+          `<atl-table>
           <atl-thead><atl-tr><atl-th [sortable]="true">Name</atl-th></atl-tr></atl-thead>
           <atl-tbody></atl-tbody>
         </atl-table>`,
-        { imports: IMPORTS },
-      );
-      expect(container.querySelector('.atl-th-sort-btn')).toBeInTheDocument();
-    });
+          { imports: IMPORTS },
+        );
+        expect(container.querySelector('.atl-th-sort-btn')).toBeInTheDocument();
+      },
+    );
 
-    covers('table', 'no-sort-button')('does not render a sort button when sortable=false', async () => {
-      const { container } = await render(
-        `<atl-table>
+    covers('table', 'no-sort-button')(
+      'does not render a sort button when sortable=false',
+      async () => {
+        const { container } = await render(
+          `<atl-table>
           <atl-thead><atl-tr><atl-th>Name</atl-th></atl-tr></atl-thead>
           <atl-tbody></atl-tbody>
         </atl-table>`,
-        { imports: IMPORTS },
-      );
-      expect(container.querySelector('.atl-th-sort-btn')).not.toBeInTheDocument();
-    });
+          { imports: IMPORTS },
+        );
+        expect(
+          container.querySelector('.atl-th-sort-btn'),
+        ).not.toBeInTheDocument();
+      },
+    );
 
     it('sets aria-sort="none" when sortable and sortDirection=null', async () => {
       const { container } = await render(
@@ -100,7 +118,10 @@ describe('AtlTable', () => {
         </atl-table>`,
         { imports: IMPORTS },
       );
-      expect(container.querySelector('th')).toHaveAttribute('aria-sort', 'none');
+      expect(container.querySelector('th')).toHaveAttribute(
+        'aria-sort',
+        'none',
+      );
     });
 
     it('sets aria-sort="ascending" when sortDirection="asc"', async () => {
@@ -113,7 +134,10 @@ describe('AtlTable', () => {
         </atl-table>`,
         { imports: IMPORTS },
       );
-      expect(container.querySelector('th')).toHaveAttribute('aria-sort', 'ascending');
+      expect(container.querySelector('th')).toHaveAttribute(
+        'aria-sort',
+        'ascending',
+      );
     });
 
     it('sets aria-sort="descending" when sortDirection="desc"', async () => {
@@ -126,7 +150,10 @@ describe('AtlTable', () => {
         </atl-table>`,
         { imports: IMPORTS },
       );
-      expect(container.querySelector('th')).toHaveAttribute('aria-sort', 'descending');
+      expect(container.querySelector('th')).toHaveAttribute(
+        'aria-sort',
+        'descending',
+      );
     });
 
     it('has no aria-sort attribute on non-sortable headers', async () => {
@@ -199,20 +226,27 @@ describe('AtlTable', () => {
         </atl-table>`,
         { imports: IMPORTS },
       );
-      expect(container.querySelector('input[type="checkbox"]')).not.toBeInTheDocument();
+      expect(
+        container.querySelector('input[type="checkbox"]'),
+      ).not.toBeInTheDocument();
     });
 
-    covers('table', 'checkbox-selectable')('renders a checkbox when selectable=true', async () => {
-      const { container } = await render(
-        `<atl-table>
+    covers('table', 'checkbox-selectable')(
+      'renders a checkbox when selectable=true',
+      async () => {
+        const { container } = await render(
+          `<atl-table>
           <atl-tbody>
             <atl-tr [selectable]="true"><atl-td>Row</atl-td></atl-tr>
           </atl-tbody>
         </atl-table>`,
-        { imports: IMPORTS },
-      );
-      expect(container.querySelector('input[type="checkbox"]')).toBeInTheDocument();
-    });
+          { imports: IMPORTS },
+        );
+        expect(
+          container.querySelector('input[type="checkbox"]'),
+        ).toBeInTheDocument();
+      },
+    );
 
     it('emits selectedChange=true when checkbox is checked', async () => {
       const user = userEvent.setup();
@@ -240,7 +274,10 @@ describe('AtlTable', () => {
         </atl-table>`,
         { imports: IMPORTS },
       );
-      expect(container.querySelector('tr')).toHaveAttribute('aria-selected', 'true');
+      expect(container.querySelector('tr')).toHaveAttribute(
+        'aria-selected',
+        'true',
+      );
     });
 
     it('does not set aria-selected when selectable=false', async () => {
@@ -252,7 +289,9 @@ describe('AtlTable', () => {
         </atl-table>`,
         { imports: IMPORTS },
       );
-      expect(container.querySelector('tr')).not.toHaveAttribute('aria-selected');
+      expect(container.querySelector('tr')).not.toHaveAttribute(
+        'aria-selected',
+      );
     });
 
     it('applies is-selected class to inner tr when selected=true', async () => {
@@ -281,19 +320,22 @@ describe('AtlTable', () => {
       expect(screen.getByText('Alice')).toBeInTheDocument();
     });
 
-    covers('table', 'empty-state')('hides rows and shows empty state when empty=true', async () => {
-      await render(
-        `<atl-table>
+    covers('table', 'empty-state')(
+      'hides rows and shows empty state when empty=true',
+      async () => {
+        await render(
+          `<atl-table>
           <atl-tbody [empty]="true" [colSpan]="2">
             <atl-tr><atl-td>Alice</atl-td></atl-tr>
             <div atlTableEmpty>No results found.</div>
           </atl-tbody>
         </atl-table>`,
-        { imports: IMPORTS },
-      );
-      expect(screen.queryByText('Alice')).not.toBeInTheDocument();
-      expect(screen.getByText('No results found.')).toBeInTheDocument();
-    });
+          { imports: IMPORTS },
+        );
+        expect(screen.queryByText('Alice')).not.toBeInTheDocument();
+        expect(screen.getByText('No results found.')).toBeInTheDocument();
+      },
+    );
 
     it('applies the colSpan value to the empty-state td', async () => {
       const { container } = await render(
@@ -304,7 +346,10 @@ describe('AtlTable', () => {
         </atl-table>`,
         { imports: IMPORTS },
       );
-      expect(container.querySelector('.atl-tbody-empty-cell')).toHaveAttribute('colspan', '3');
+      expect(container.querySelector('.atl-tbody-empty-cell')).toHaveAttribute(
+        'colspan',
+        '3',
+      );
     });
   });
 });

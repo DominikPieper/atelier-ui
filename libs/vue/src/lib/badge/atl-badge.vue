@@ -39,7 +39,12 @@ const variantIconName = computed(() => VARIANT_ICON_NAMES[props.variant]);
 
 <template>
   <span :class="classes" role="status">
-    <AtlIcon v-if="variantIconName" class="variant-icon" :name="variantIconName" size="sm" />
+    <AtlIcon
+      v-if="variantIconName"
+      class="variant-icon"
+      :name="variantIconName"
+      size="sm"
+    />
     <slot />
   </span>
 </template>

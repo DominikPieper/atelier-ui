@@ -18,13 +18,13 @@ workspace outside the monorepo, run the same steps and stop where a gate does no
 
 ## Mode routing
 
-| User says… | Mode | First action |
-|---|---|---|
-| "implement / build / generate / port X from Figma", a node URL + framework, a brief, the kata | Build | Find or write the handoff document |
-| "make the code match the master again" | Build (existing component) | Handoff document with the delta as scope |
-| "review the master before the PR", "design QA", "does X still match Figma", "explain these discrepancies", "why does check:figma fail on X" | Review | Pin the snapshot, then `figma_analyze_component_set` |
-| "audit the file", "fix the token architecture", "create the master for X" | Out-of-scope → `figma-workspace-architect` | Say so, point there |
-| "add a variant across all three frameworks" | Out-of-scope → `component-trinity` | Say so, point there |
+| User says…                                                                                                                                  | Mode                                       | First action                                         |
+| ------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------ | ---------------------------------------------------- |
+| "implement / build / generate / port X from Figma", a node URL + framework, a brief, the kata                                               | Build                                      | Find or write the handoff document                   |
+| "make the code match the master again"                                                                                                      | Build (existing component)                 | Handoff document with the delta as scope             |
+| "review the master before the PR", "design QA", "does X still match Figma", "explain these discrepancies", "why does check:figma fail on X" | Review                                     | Pin the snapshot, then `figma_analyze_component_set` |
+| "audit the file", "fix the token architecture", "create the master for X"                                                                   | Out-of-scope → `figma-workspace-architect` | Say so, point there                                  |
+| "add a variant across all three frameworks"                                                                                                 | Out-of-scope → `component-trinity`         | Say so, point there                                  |
 
 Pick **one** framework per session (ADR-0014). The other two adapters are drift-gated
 reference infrastructure; touching them is `component-trinity`'s job.
@@ -62,7 +62,7 @@ Copy this checklist into your working notes and tick it as you go:
 
 The document is the input, not a by-product. It is a checklist, deliberately not a schema
 (ADR-0096): filling it forces the decisions a picture cannot carry — which variants are
-*in*, what the timer/keyboard/live-region behaviour is, whether this is a new component
+_in_, what the timer/keyboard/live-region behaviour is, whether this is a new component
 or a composition of existing ones. When the user hands you only a URL or a brief, start
 the document from `references/handoff-document.md`: fill the **provenance and scope**
 sections from the master (file, node id, axes, bindings, snapshot stamps) and leave
@@ -116,7 +116,7 @@ the recorded one as provenance.
    pseudo-classes — not variants, not props. `disabled` and `loading` are boolean props in
    the manifest (`AtlButtonSpec` still declares both in `libs/spec/src/index.ts` today) and
    Figma Booleans on the master; what the
-   briefs forbid is putting any of these into the *variant matrix*
+   briefs forbid is putting any of these into the _variant matrix_
    (`variant-explosion-from-states`).
 
 If the Desktop Bridge is not connected, `figma_get_status` says so; REST-only reads are
@@ -126,12 +126,13 @@ fine for this step but may lag a recent edit.
 
 `uianatomy:get_component_view({ id, view: "bridge" })` for the canonical component. It
 lists Figma ↔ code mismatches and named mistakes for exactly this kind of component. If
-`search_components` finds nothing, the component *may* be a **composition** of canonical
+`search_components` finds nothing, the component _may_ be a **composition** of canonical
 ones — the briefs establish two (TagChip = tag-input's tag slots + badge; StatCard = card
-+ badge) — or it may simply be outside the roster. Decide which and record the decision
-in the handoff document; a search miss is not evidence of composition. Check the
-record's `lastReviewed`; the briefs treat anything past the server's 90-day threshold as
-a strong prior, not scripture.
+
+- badge) — or it may simply be outside the roster. Decide which and record the decision
+  in the handoff document; a search miss is not evidence of composition. Check the
+  record's `lastReviewed`; the briefs treat anything past the server's 90-day threshold as
+  a strong prior, not scripture.
 
 #### 3. Settle the contract
 
@@ -355,7 +356,7 @@ exposed one.
 ### Review mode
 
 One component, both surfaces, at PR time or after a change. The architect's Audit mode
-covers the *file*; this covers *this component* and its code. Output uses the shape of the
+covers the _file_; this covers _this component_ and its code. Output uses the shape of the
 architect skill's audit-report template (its `audit-report-template` asset): priority
 list first, every finding with a severity and a one-line fix, then the questions only a
 human can answer.
@@ -373,7 +374,7 @@ human can answer.
 
 - **R0.** A review of a moved master is a review of the wrong thing. Read
   `tools/figma/snapshot.json`'s `meta`, compare with `figma_get_file_versions
-  (max_versions: 1)` (ADR-0105), refresh if needed, and write both stamps into the
+(max_versions: 1)` (ADR-0105), refresh if needed, and write both stamps into the
   report header.
 - **R1.** `figma_analyze_component_set` gives axes and values — compare verbatim with the
   framework's manifest enum props and the micro-contract; `variantMatrix` is the legacy
@@ -388,7 +389,7 @@ human can answer.
   workshop case: Build step 7's flags against the component's own contract, stories and
   snapshot. Its `error`-level findings are review findings, not merely reported. Then as
   Build step 7 for the parity `codeSpec` and the call itself. Re-record (`parity:record`)
-  only when the user asked for it *and* every discrepancy is fixed or durably recorded —
+  only when the user asked for it _and_ every discrepancy is fixed or durably recorded —
   Review has no handoff document, so "intentional" here means an allowlist entry with a
   reason or an open `tasks/todo.md` decision item; a gap that is merely mentioned in an
   old commit message is open, not recorded. Say "clean" or "clean except <named, recorded
@@ -452,8 +453,8 @@ with the `wcag-color-only` false positive named up front.
   order in the handoff document and stop.
 - **The node in the URL does not exist.** A pasted link can predate a rebuild. Establish
   that with one read-only call — `figma_execute` running `await figma.loadAllPagesAsync();
-  return figma.getNodeByIdAsync('<id>')` — before saying anything about what the node
-  *is*. If it returns `null`, say "does not exist", name the master the snapshot records
+return figma.getNodeByIdAsync('<id>')` — before saying anything about what the node
+  _is_. If it returns `null`, say "does not exist", name the master the snapshot records
   for that component name, ask for a fresh link, and never pick a neighbouring id as a
   guess. A story's `figmaNode('…')` link or a plan table naming the id is a claim about the
   past, not evidence the node resolves today; the first eval run of this skill stated a
@@ -461,7 +462,7 @@ with the `wcag-color-only` false positive named up front.
   evidence, and it was false.
 - **The brief demands behaviour Storybook cannot show** (timer pause on hover, Escape to
   close). Test it in a `play` function or the component's test file; list it under
-  *verified* only when a test pins it.
+  _verified_ only when a test pins it.
 - **Bridge down.** Inspect via REST, but do not run parity or record — the parity call
   needs the live plugin, and a record without a real run is worse than none.
 - **Colour is the only signal for a status variant.** Stop; that is a WCAG 1.4.1 finding

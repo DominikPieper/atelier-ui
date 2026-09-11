@@ -49,8 +49,7 @@ export function useAtlStepper() {
 }
 
 export interface AtlStepperProps
-  extends HTMLAttributes<HTMLDivElement>,
-    AtlStepperSpec {
+  extends HTMLAttributes<HTMLDivElement>, AtlStepperSpec {
   /** Currently active step index. */
   activeStep?: number;
   /** Callback when the active step changes. */
@@ -87,7 +86,7 @@ export function AtlStepper({
         .filter(
           (c) =>
             isValidElement(c) &&
-            (c.type as { displayName?: string }).displayName === 'AtlStep'
+            (c.type as { displayName?: string }).displayName === 'AtlStep',
         )
         .map((c) => {
           const element = c as ReactElement<AtlStepProps>;
@@ -101,7 +100,7 @@ export function AtlStepper({
           };
         }),
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [children]
+    [children],
   );
 
   // Whether step `i` can be activated right now: not itself disabled, and — in
@@ -130,22 +129,28 @@ export function AtlStepper({
     if (p >= 0 && !steps[p]?.disabled) setStep(p);
   };
 
-  const classes = [
-    'atl-stepper',
-    `orientation-${orientation}`,
-    className,
-  ]
+  const classes = ['atl-stepper', `orientation-${orientation}`, className]
     .filter(Boolean)
     .join(' ');
 
   const stepPanels = childArray.filter(
     (c) =>
       isValidElement(c) &&
-      (c.type as { displayName?: string }).displayName === 'AtlStep'
+      (c.type as { displayName?: string }).displayName === 'AtlStep',
   );
 
   return (
-    <StepperContext.Provider value={{ activeStep, setActiveStep: setStep, steps, linear, next, prev, goTo }}>
+    <StepperContext.Provider
+      value={{
+        activeStep,
+        setActiveStep: setStep,
+        steps,
+        linear,
+        next,
+        prev,
+        goTo,
+      }}
+    >
       <div className={classes} {...rest}>
         <ol className="stepper-header" role="list" aria-label="Progress">
           {steps.map((step, i) => {
@@ -184,7 +189,9 @@ export function AtlStepper({
                   <div className="step-text">
                     <span className="step-label">{step.label}</span>
                     {step.description && (
-                      <span className="step-description">{step.description}</span>
+                      <span className="step-description">
+                        {step.description}
+                      </span>
                     )}
                     {step.optional && !step.completed && (
                       <span className="step-optional">Optional</span>
@@ -194,7 +201,10 @@ export function AtlStepper({
                 {i < steps.length - 1 && (
                   <li
                     aria-hidden="true"
-                    className={['step-connector', (activeStep > i || step.completed) && 'is-active']
+                    className={[
+                      'step-connector',
+                      (activeStep > i || step.completed) && 'is-active',
+                    ]
                       .filter(Boolean)
                       .join(' ')}
                   />

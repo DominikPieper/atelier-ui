@@ -2,8 +2,8 @@
 status: accepted
 date: 2026-05-31
 sources:
-  - "CLAUDE.md § Decision Records (ADR)"
-  - "this session"
+  - 'CLAUDE.md § Decision Records (ADR)'
+  - 'this session'
 ---
 
 # ADR-0017: Record an ADR for every non-trivial decision
@@ -14,7 +14,7 @@ Accepted. Recorded at decision time — the first contemporaneous ADR (0001–00
 
 ## Context
 
-Decisions had been scattered across commit messages, the `plan/` docs, `tasks/rationale.md`, and session memory. We reconstructed the backlog as ADR-0001–0016, but the *why* behind future decisions would keep dispersing the same way — and that rationale is exactly what we want to reuse later for content (blog posts, talks, teaching).
+Decisions had been scattered across commit messages, the `plan/` docs, `tasks/rationale.md`, and session memory. We reconstructed the backlog as ADR-0001–0016, but the _why_ behind future decisions would keep dispersing the same way — and that rationale is exactly what we want to reuse later for content (blog posts, talks, teaching).
 
 ## Decision
 

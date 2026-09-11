@@ -74,8 +74,8 @@ pattern the component's own semantics call for.
    ever carries `tabindex="0"` at a time. All three adapters set exactly that
    roving `tabindex` (`activeStep() === i ? 0 : -1`) and implemented no
    keydown handler anywhere. The practical consequence, verified below: a
-   keyboard user tabbing to the stepper could reach *only the currently active
-   step* — every other step, including ones perfectly legal to click with a
+   keyboard user tabbing to the stepper could reach _only the currently active
+   step_ — every other step, including ones perfectly legal to click with a
    mouse, was unreachable by keyboard at all. Declaring `tablist` made that gap
    a debt every adapter was carrying and none was paying down. A plain list of
    buttons carries no such obligation: ARIA's list role is not a composite
@@ -174,7 +174,7 @@ active step reachable), read with Playwright.
   (`CDPSession.send('Accessibility.getFullAXTree')`, direct evidence — the
   same tree the OS accessibility API and a real screen reader would read)
   confirms: `list "Progress"` → `listitem` (no name of its own) → `button
-  "Account"/"Profile"/"Review"`; the two decorative connector `<li>`s per
+"Account"/"Profile"/"Review"`; the two decorative connector `<li>`s per
   scenario contribute zero nodes; `region "Profile"` (scenario A, panel
   labelled by the active button)
   and `region "Account"` (scenario B). A whole-document Tab-order probe

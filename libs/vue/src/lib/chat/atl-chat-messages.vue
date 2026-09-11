@@ -9,7 +9,9 @@ let observer: MutationObserver | null = null;
 onMounted(() => {
   const el = root.value;
   if (!el) return;
-  const stickToBottom = () => { el.scrollTop = el.scrollHeight; };
+  const stickToBottom = () => {
+    el.scrollTop = el.scrollHeight;
+  };
   stickToBottom();
   observer = new MutationObserver(stickToBottom);
   observer.observe(el, { childList: true, subtree: true, characterData: true });
@@ -22,7 +24,13 @@ onBeforeUnmount(() => {
 </script>
 
 <template>
-  <div ref="root" class="atl-chat-messages" role="log" aria-live="polite" aria-label="Conversation">
+  <div
+    ref="root"
+    class="atl-chat-messages"
+    role="log"
+    aria-live="polite"
+    aria-label="Conversation"
+  >
     <div class="messages-list" role="list" aria-label="Messages">
       <slot />
     </div>

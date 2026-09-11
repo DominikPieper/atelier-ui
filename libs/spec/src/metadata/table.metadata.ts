@@ -1,7 +1,13 @@
 import type { ComponentMetadata } from './types';
 
 export const metadata: ComponentMetadata = {
-  specNames: ['AtlTableSpec', 'AtlTbodySpec', 'AtlTrSpec', 'AtlThSpec', 'AtlTdSpec'],
+  specNames: [
+    'AtlTableSpec',
+    'AtlTbodySpec',
+    'AtlTrSpec',
+    'AtlThSpec',
+    'AtlTdSpec',
+  ],
   purpose:
     'Tabular data grid. Renders rows of records with column headers, optional sorting, sticky headers, and per-cell alignment.',
   whenToUse: [
@@ -12,16 +18,20 @@ export const metadata: ComponentMetadata = {
   ],
   antiPatterns: [
     {
-      pattern: 'Laying out two-dimensional UI that is not actually tabular data (cards in a grid).',
-      useInstead: 'A CSS grid layout — `<table>` semantics confuse assistive tech when there is no row/column meaning.',
+      pattern:
+        'Laying out two-dimensional UI that is not actually tabular data (cards in a grid).',
+      useInstead:
+        'A CSS grid layout — `<table>` semantics confuse assistive tech when there is no row/column meaning.',
     },
     {
       pattern: 'Rendering a single record with field/value pairs.',
-      useInstead: 'A description list or a labelled key/value layout — tables imply multiple comparable rows.',
+      useInstead:
+        'A description list or a labelled key/value layout — tables imply multiple comparable rows.',
     },
     {
       pattern: 'Picking one option from a list.',
-      useInstead: 'AtlSelect, AtlCombobox, or AtlRadioGroup depending on cardinality.',
+      useInstead:
+        'AtlSelect, AtlCombobox, or AtlRadioGroup depending on cardinality.',
     },
   ],
   relatedComponents: ['AtlPaginationSpec', 'AtlCheckboxSpec', 'AtlBadgeSpec'],

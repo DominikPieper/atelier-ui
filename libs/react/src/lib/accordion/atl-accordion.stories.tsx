@@ -1,9 +1,14 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { AtlAccordionGroup, AtlAccordionItem, AtlAccordionHeader } from './atl-accordion';
+import {
+  AtlAccordionGroup,
+  AtlAccordionItem,
+  AtlAccordionHeader,
+} from './atl-accordion';
 
 import { metadata } from '@atelier-ui/spec/metadata/accordion.metadata';
 import { contract } from '@atelier-ui/spec/contracts/accordion-group.contract';
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
@@ -15,7 +20,10 @@ const meta: Meta<typeof AtlAccordionGroup> = {
   tags: ['autodocs'],
   argTypes: {
     multi: { control: 'boolean' },
-    variant: { control: 'select', options: ['default', 'bordered', 'separated'] },
+    variant: {
+      control: 'select',
+      options: ['default', 'bordered', 'separated'],
+    },
   },
   args: { multi: false, variant: 'default' },
   parameters: {
@@ -33,7 +41,8 @@ export const Default: Story = {
     <AtlAccordionGroup {...args}>
       <AtlAccordionItem>
         <AtlAccordionHeader>What is this component library?</AtlAccordionHeader>
-        A set of accessible, composable UI components designed for use with LLM-generated applications.
+        A set of accessible, composable UI components designed for use with
+        LLM-generated applications.
       </AtlAccordionItem>
       <AtlAccordionItem>
         <AtlAccordionHeader>How do I install it?</AtlAccordionHeader>
@@ -41,7 +50,8 @@ export const Default: Story = {
       </AtlAccordionItem>
       <AtlAccordionItem>
         <AtlAccordionHeader>Is it accessible?</AtlAccordionHeader>
-        Yes. All components follow WAI-ARIA patterns with keyboard navigation support.
+        Yes. All components follow WAI-ARIA patterns with keyboard navigation
+        support.
       </AtlAccordionItem>
     </AtlAccordionGroup>
   ),

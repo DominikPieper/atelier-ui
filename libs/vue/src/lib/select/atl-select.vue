@@ -74,14 +74,25 @@ function onChange(event: Event) {
         class="select-native"
         @change="onChange"
       >
-        <option v-if="placeholder" value="" disabled hidden>{{ placeholder }}</option>
+        <option v-if="placeholder" value="" disabled hidden>
+          {{ placeholder }}
+        </option>
         <slot />
       </select>
       <AtlIcon v-if="invalid" name="danger" size="sm" class="invalid-icon" />
-      <span class="select-arrow" aria-hidden="true"><AtlIcon name="chevron-down" size="sm" /></span>
+      <span class="select-arrow" aria-hidden="true"
+        ><AtlIcon name="chevron-down" size="sm"
+      /></span>
     </div>
-    <div v-if="errors.length > 0" :id="errorsId" class="errors" aria-live="polite">
-      <p v-for="(error, index) in errors" :key="index" class="error-message">{{ error }}</p>
+    <div
+      v-if="errors.length > 0"
+      :id="errorsId"
+      class="errors"
+      aria-live="polite"
+    >
+      <p v-for="(error, index) in errors" :key="index" class="error-message">
+        {{ error }}
+      </p>
     </div>
   </div>
 </template>

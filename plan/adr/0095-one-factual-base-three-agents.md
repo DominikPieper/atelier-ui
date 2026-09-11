@@ -72,19 +72,19 @@ matters most:
 would drift, and this repo's reflex is to build a gate that detects drift. Here
 prevention is available: `CLAUDE.md` imports rather than copies, so there is one
 copy and drift is structurally impossible. Prefer that over detecting it — the
-opposite conclusion from ADR-0092's host guards, where prevention was *not*
+opposite conclusion from ADR-0092's host guards, where prevention was _not_
 available and only a gate could close the hole. The question is always which of
 the two the situation actually permits.
 
 **Alternatives rejected:**
 
-- *Two files kept in sync by `check:agents-sync`.* Detects a problem that need
+- _Two files kept in sync by `check:agents-sync`._ Detects a problem that need
   not exist. A gate is the answer when duplication is unavoidable; here it is
   avoidable.
-- *`ln -s AGENTS.md CLAUDE.md`.* Simplest, and it forecloses category 2 — there
+- _`ln -s AGENTS.md CLAUDE.md`._ Simplest, and it forecloses category 2 — there
   would be nowhere to put Claude-specific content without leaking it to the
   other agents.
-- *Leave it and brief Codex per call.* What was already happening. It puts the
+- _Leave it and brief Codex per call._ What was already happening. It puts the
   repo's conventions into whatever the caller remembers to type, which is the
   same failure mode as conventions living in one agent's private memory.
 
@@ -100,7 +100,7 @@ the two the situation actually permits.
   convention text moved there, and an unscanned file is a gate that stopped
   looking at what it was written for.
 - The docs site is unaffected. `docs/src/pages/claude-md.astro` ships its own
-  `TEMPLATE` for participants to drop into *their* projects and never reads this
+  `TEMPLATE` for participants to drop into _their_ projects and never reads this
   repo's `CLAUDE.md`, so the workshop material does not change.
 - MCP server configuration stays per-tool and is deliberately not unified.
   `.mcp.json` is Claude Code's; Codex has its own config. For the role Codex

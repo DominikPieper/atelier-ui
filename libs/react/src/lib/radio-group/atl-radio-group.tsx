@@ -57,7 +57,8 @@ export const RadioGroupContext = createContext<RadioGroupContextValue>({
  * Properties for the AtlRadioGroup component.
  */
 export interface AtlRadioGroupProps
-  extends Omit<InputHTMLAttributes<HTMLDivElement>, 'onChange'>,
+  extends
+    Omit<InputHTMLAttributes<HTMLDivElement>, 'onChange'>,
     AtlRadioGroupSpec {
   /**
    * The current value of the radio group.
@@ -131,13 +132,16 @@ export function AtlRadioGroup({
     const backward = event.key === 'ArrowUp' || event.key === 'ArrowLeft';
     if (!forward && !backward) return;
     const radios = Array.from(
-      groupRef.current?.querySelectorAll<HTMLInputElement>('input[type="radio"]') ?? []
+      groupRef.current?.querySelectorAll<HTMLInputElement>(
+        'input[type="radio"]',
+      ) ?? [],
     ).filter((radio) => !radio.disabled);
     if (radios.length === 0) return;
     event.preventDefault();
     const currentIdx = radios.findIndex((radio) => radio.value === value);
     const start = currentIdx === -1 ? (forward ? -1 : 0) : currentIdx;
-    const nextIdx = (start + (forward ? 1 : -1) + radios.length) % radios.length;
+    const nextIdx =
+      (start + (forward ? 1 : -1) + radios.length) % radios.length;
     const target = radios[nextIdx];
     target.focus();
     onValueChange?.(target.value);

@@ -6,8 +6,7 @@ import './atl-skeleton.css';
  * Properties for the AtlSkeleton component.
  */
 export interface AtlSkeletonProps
-  extends HTMLAttributes<HTMLDivElement>,
-    AtlSkeletonSpec {
+  extends HTMLAttributes<HTMLDivElement>, AtlSkeletonSpec {
   /**
    * The visual style variant of the skeleton.
    */
@@ -26,7 +25,11 @@ export interface AtlSkeletonProps
   animated?: boolean;
 }
 
-function computeHeight(variant: string, width: string, height?: string): string {
+function computeHeight(
+  variant: string,
+  width: string,
+  height?: string,
+): string {
   if (height) return height;
   switch (variant) {
     case 'text':
@@ -52,9 +55,21 @@ export function AtlSkeleton({
   style,
   ...rest
 }: AtlSkeletonProps) {
-  const classes = ['atl-skeleton', `variant-${variant}`, animated && 'is-animated', className]
-    .filter(Boolean).join(' ');
+  const classes = [
+    'atl-skeleton',
+    `variant-${variant}`,
+    animated && 'is-animated',
+    className,
+  ]
+    .filter(Boolean)
+    .join(' ');
   const computedHeight = computeHeight(variant, width, height);
-  const inlineStyle: CSSProperties = { ...style, width, height: computedHeight };
-  return <div className={classes} style={inlineStyle} aria-hidden="true" {...rest} />;
+  const inlineStyle: CSSProperties = {
+    ...style,
+    width,
+    height: computedHeight,
+  };
+  return (
+    <div className={classes} style={inlineStyle} aria-hidden="true" {...rest} />
+  );
 }

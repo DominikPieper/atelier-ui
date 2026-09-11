@@ -47,56 +47,74 @@ describe('AtlTable', () => {
       expect(screen.getByText('Bob')).toBeInTheDocument();
     });
 
-    covers('table', 'variant-default')('applies variant-default class by default', () => {
-      const { container } = render(BasicTable);
-      expect(container.querySelector('.atl-table')).toHaveClass('variant-default');
-    });
+    covers('table', 'variant-default')(
+      'applies variant-default class by default',
+      () => {
+        const { container } = render(BasicTable);
+        expect(container.querySelector('.atl-table')).toHaveClass(
+          'variant-default',
+        );
+      },
+    );
 
     it('applies size-md class by default', () => {
       const { container } = render(BasicTable);
       expect(container.querySelector('.atl-table')).toHaveClass('size-md');
     });
 
-    covers('table', 'sticky-header')('applies is-sticky-header class when stickyHeader=true', () => {
-      const { container } = render({
-        components,
-        template: `
+    covers('table', 'sticky-header')(
+      'applies is-sticky-header class when stickyHeader=true',
+      () => {
+        const { container } = render({
+          components,
+          template: `
           <AtlTable :stickyHeader="true">
             <AtlThead><AtlTr><AtlTh>Col</AtlTh></AtlTr></AtlThead>
             <AtlTbody />
           </AtlTable>
         `,
-      });
-      expect(container.querySelector('.atl-table')).toHaveClass('is-sticky-header');
-    });
+        });
+        expect(container.querySelector('.atl-table')).toHaveClass(
+          'is-sticky-header',
+        );
+      },
+    );
   });
 
   describe('AtlTh — sorting', () => {
-    covers('table', 'sort-button')('renders a sort button when sortable=true', () => {
-      const { container } = render({
-        components,
-        template: `
+    covers('table', 'sort-button')(
+      'renders a sort button when sortable=true',
+      () => {
+        const { container } = render({
+          components,
+          template: `
           <AtlTable>
             <AtlThead><AtlTr><AtlTh :sortable="true">Name</AtlTh></AtlTr></AtlThead>
             <AtlTbody />
           </AtlTable>
         `,
-      });
-      expect(container.querySelector('.atl-th-sort-btn')).toBeInTheDocument();
-    });
+        });
+        expect(container.querySelector('.atl-th-sort-btn')).toBeInTheDocument();
+      },
+    );
 
-    covers('table', 'no-sort-button')('does not render a sort button when sortable=false', () => {
-      const { container } = render({
-        components,
-        template: `
+    covers('table', 'no-sort-button')(
+      'does not render a sort button when sortable=false',
+      () => {
+        const { container } = render({
+          components,
+          template: `
           <AtlTable>
             <AtlThead><AtlTr><AtlTh>Name</AtlTh></AtlTr></AtlThead>
             <AtlTbody />
           </AtlTable>
         `,
-      });
-      expect(container.querySelector('.atl-th-sort-btn')).not.toBeInTheDocument();
-    });
+        });
+        expect(
+          container.querySelector('.atl-th-sort-btn'),
+        ).not.toBeInTheDocument();
+      },
+    );
 
     it('sets aria-sort="none" when sortable and sortDirection=null', () => {
       const { container } = render({
@@ -108,7 +126,10 @@ describe('AtlTable', () => {
           </AtlTable>
         `,
       });
-      expect(container.querySelector('th')).toHaveAttribute('aria-sort', 'none');
+      expect(container.querySelector('th')).toHaveAttribute(
+        'aria-sort',
+        'none',
+      );
     });
 
     it('sets aria-sort="ascending" when sortDirection="asc"', () => {
@@ -121,7 +142,10 @@ describe('AtlTable', () => {
           </AtlTable>
         `,
       });
-      expect(container.querySelector('th')).toHaveAttribute('aria-sort', 'ascending');
+      expect(container.querySelector('th')).toHaveAttribute(
+        'aria-sort',
+        'ascending',
+      );
     });
 
     it('sets aria-sort="descending" when sortDirection="desc"', () => {
@@ -134,7 +158,10 @@ describe('AtlTable', () => {
           </AtlTable>
         `,
       });
-      expect(container.querySelector('th')).toHaveAttribute('aria-sort', 'descending');
+      expect(container.querySelector('th')).toHaveAttribute(
+        'aria-sort',
+        'descending',
+      );
     });
 
     it('has no aria-sort attribute on non-sortable headers', () => {
@@ -155,7 +182,9 @@ describe('AtlTable', () => {
       const onSort = vi.fn();
       render({
         components,
-        setup() { return { onSort }; },
+        setup() {
+          return { onSort };
+        },
         template: `
           <AtlTable>
             <AtlThead><AtlTr><AtlTh :sortable="true" :sortDirection="null" @sort="onSort">Name</AtlTh></AtlTr></AtlThead>
@@ -172,7 +201,9 @@ describe('AtlTable', () => {
       const onSort = vi.fn();
       render({
         components,
-        setup() { return { onSort }; },
+        setup() {
+          return { onSort };
+        },
         template: `
           <AtlTable>
             <AtlThead><AtlTr><AtlTh :sortable="true" sortDirection="asc" @sort="onSort">Name</AtlTh></AtlTr></AtlThead>
@@ -189,7 +220,9 @@ describe('AtlTable', () => {
       const onSort = vi.fn();
       render({
         components,
-        setup() { return { onSort }; },
+        setup() {
+          return { onSort };
+        },
         template: `
           <AtlTable>
             <AtlThead><AtlTr><AtlTh :sortable="true" sortDirection="desc" @sort="onSort">Name</AtlTh></AtlTr></AtlThead>
@@ -212,27 +245,36 @@ describe('AtlTable', () => {
           </AtlTable>
         `,
       });
-      expect(container.querySelector('input[type="checkbox"]')).not.toBeInTheDocument();
+      expect(
+        container.querySelector('input[type="checkbox"]'),
+      ).not.toBeInTheDocument();
     });
 
-    covers('table', 'checkbox-selectable')('renders a checkbox when selectable=true', () => {
-      const { container } = render({
-        components,
-        template: `
+    covers('table', 'checkbox-selectable')(
+      'renders a checkbox when selectable=true',
+      () => {
+        const { container } = render({
+          components,
+          template: `
           <AtlTable>
             <AtlTbody><AtlTr :selectable="true"><AtlTd>Row</AtlTd></AtlTr></AtlTbody>
           </AtlTable>
         `,
-      });
-      expect(container.querySelector('input[type="checkbox"]')).toBeInTheDocument();
-    });
+        });
+        expect(
+          container.querySelector('input[type="checkbox"]'),
+        ).toBeInTheDocument();
+      },
+    );
 
     it('emits update:selected=true when checkbox is checked', async () => {
       const user = userEvent.setup();
       const onChange = vi.fn();
       render({
         components,
-        setup() { return { onChange }; },
+        setup() {
+          return { onChange };
+        },
         template: `
           <AtlTable>
             <AtlTbody>
@@ -258,7 +300,10 @@ describe('AtlTable', () => {
           </AtlTable>
         `,
       });
-      expect(container.querySelector('tr')).toHaveAttribute('aria-selected', 'true');
+      expect(container.querySelector('tr')).toHaveAttribute(
+        'aria-selected',
+        'true',
+      );
     });
 
     it('does not set aria-selected when selectable=false', () => {
@@ -270,7 +315,9 @@ describe('AtlTable', () => {
           </AtlTable>
         `,
       });
-      expect(container.querySelector('tr')).not.toHaveAttribute('aria-selected');
+      expect(container.querySelector('tr')).not.toHaveAttribute(
+        'aria-selected',
+      );
     });
 
     it('applies is-selected class to tr when selected=true', () => {
@@ -303,10 +350,12 @@ describe('AtlTable', () => {
       expect(screen.getByText('Alice')).toBeInTheDocument();
     });
 
-    covers('table', 'empty-state')('hides rows and shows empty state when empty=true', () => {
-      render({
-        components,
-        template: `
+    covers('table', 'empty-state')(
+      'hides rows and shows empty state when empty=true',
+      () => {
+        render({
+          components,
+          template: `
           <AtlTable>
             <AtlTbody :empty="true" :colSpan="2">
               <template #empty>No results found.</template>
@@ -314,10 +363,11 @@ describe('AtlTable', () => {
             </AtlTbody>
           </AtlTable>
         `,
-      });
-      expect(screen.queryByText('Alice')).not.toBeInTheDocument();
-      expect(screen.getByText('No results found.')).toBeInTheDocument();
-    });
+        });
+        expect(screen.queryByText('Alice')).not.toBeInTheDocument();
+        expect(screen.getByText('No results found.')).toBeInTheDocument();
+      },
+    );
 
     it('applies the colSpan value to the empty-state td', () => {
       const { container } = render({
@@ -330,7 +380,10 @@ describe('AtlTable', () => {
           </AtlTable>
         `,
       });
-      expect(container.querySelector('.atl-tbody-empty-cell')).toHaveAttribute('colspan', '3');
+      expect(container.querySelector('.atl-tbody-empty-cell')).toHaveAttribute(
+        'colspan',
+        '3',
+      );
     });
   });
 });

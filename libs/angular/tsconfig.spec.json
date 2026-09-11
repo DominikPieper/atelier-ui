@@ -28,7 +28,5 @@
     "vitest.storybook.config.ts",
     ".storybook/vitest.setup.ts"
   ],
-  "files": [
-    "src/test-setup.ts"
-  ]
+  "files": ["src/test-setup.ts"]
 }

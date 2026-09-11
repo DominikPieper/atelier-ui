@@ -6,7 +6,8 @@ import AtlAccordionHeader from './atl-accordion-header.vue';
 
 import { metadata } from '@atelier-ui/spec/metadata/accordion.metadata';
 import { contract } from '@atelier-ui/spec/contracts/accordion-group.contract';
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
@@ -17,7 +18,10 @@ const meta: Meta<typeof AtlAccordionGroup> = {
   component: AtlAccordionGroup,
   tags: ['autodocs'],
   argTypes: {
-    variant: { control: 'select', options: ['default', 'bordered', 'separated'] },
+    variant: {
+      control: 'select',
+      options: ['default', 'bordered', 'separated'],
+    },
     multi: { control: 'boolean' },
   },
   args: {
@@ -37,7 +41,9 @@ type Story = StoryObj<typeof AtlAccordionGroup>;
 export const Default: Story = {
   render: (args) => ({
     components: { AtlAccordionGroup, AtlAccordionItem, AtlAccordionHeader },
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: `
       <AtlAccordionGroup v-bind="args">
         <AtlAccordionItem>
@@ -61,7 +67,9 @@ export const Default: Story = {
 export const MultiExpand: Story = {
   render: (args) => ({
     components: { AtlAccordionGroup, AtlAccordionItem, AtlAccordionHeader },
-    setup() { return { args: { ...args, multi: true } }; },
+    setup() {
+      return { args: { ...args, multi: true } };
+    },
     template: `
       <AtlAccordionGroup v-bind="args">
         <AtlAccordionItem>
@@ -84,7 +92,9 @@ export const MultiExpand: Story = {
 export const Disabled: Story = {
   render: (args) => ({
     components: { AtlAccordionGroup, AtlAccordionItem, AtlAccordionHeader },
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: `
       <AtlAccordionGroup v-bind="args">
         <AtlAccordionItem>
@@ -153,7 +163,9 @@ export const Separated: Story = {
 export const PreExpanded: Story = {
   render: (args) => ({
     components: { AtlAccordionGroup, AtlAccordionItem, AtlAccordionHeader },
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: `
       <AtlAccordionGroup v-bind="args">
         <AtlAccordionItem>

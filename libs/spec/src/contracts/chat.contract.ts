@@ -6,7 +6,8 @@ export const contract = {
   codeOnly: [
     {
       name: 'status',
-      reason: "Master's own description: \"(code-only: status: idle | streaming | error, message handling)\".",
+      reason:
+        'Master\'s own description: "(code-only: status: idle | streaming | error, message handling)".',
     },
   ],
 } satisfies ComponentContract;

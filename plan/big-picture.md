@@ -65,9 +65,9 @@ export class AtlToggle implements FormCheckboxControl {
 }
 ```
 
-*(The real `AtlToggle` has no `variant` input — `AtlToggleSpec` in `libs/spec/src/index.ts`
+_(The real `AtlToggle` has no `variant` input — `AtlToggleSpec` in `libs/spec/src/index.ts`
 carries only `checked`/`onCheckedChange` plus the shared form-field state. An earlier
-draft of this example invented one; cut rather than carried forward.)*
+draft of this example invented one; cut rather than carried forward.)_
 
 ---
 
@@ -128,7 +128,7 @@ Components consume a design token layer internally. Users (human or LLM) don't t
 - Theming is done by overriding token values, not by passing Tailwind classes.
 - Layout around components (page structure, spacing) is the consumer's responsibility.
 
-Token *names* are the stable part of this API and are safe to memorize; token *values*
+Token _names_ are the stable part of this API and are safe to memorize; token _values_
 are not — they have already changed once (the "Direction A" teal rebrand moved
 `--ui-color-primary` off blue, and the radius scale moved with it), so this example
 shows names and purpose only. Read current values from the one canonical file
@@ -136,17 +136,17 @@ shows names and purpose only. Read current values from the one canonical file
 every other `tokens.css` in the repo is a generated projection of it via
 `npm run sync:tokens`.
 
-| Token name | Purpose |
-|---|---|
-| `--ui-color-primary`, `--ui-color-primary-hover` | Brand accent, and its hover state |
-| `--ui-color-secondary`, `--ui-color-danger` | Secondary actions; destructive actions |
-| `--ui-color-surface`, `--ui-color-border` | Card/dialog background; decorative borders |
-| `--ui-color-text`, `--ui-color-text-muted` | Body text; secondary text |
-| `--ui-radius-sm` / `-md` / `-lg` | Small controls, chips / default control radius / cards, dialogs |
-| `--ui-spacing-1` … `-8` | 4px base-unit ladder; `-4` is the most common gap/padding |
-| `--ui-font-size-sm` / `-md` / `-lg` | Type scale; `-md` is body text |
-| `--ui-shadow-sm` / `-md` | Subtle elevation / raised surfaces (dialogs, popovers) |
-| `--ui-transition-fast` / `-normal` | Hover/focus feedback timing |
+| Token name                                       | Purpose                                                         |
+| ------------------------------------------------ | --------------------------------------------------------------- |
+| `--ui-color-primary`, `--ui-color-primary-hover` | Brand accent, and its hover state                               |
+| `--ui-color-secondary`, `--ui-color-danger`      | Secondary actions; destructive actions                          |
+| `--ui-color-surface`, `--ui-color-border`        | Card/dialog background; decorative borders                      |
+| `--ui-color-text`, `--ui-color-text-muted`       | Body text; secondary text                                       |
+| `--ui-radius-sm` / `-md` / `-lg`                 | Small controls, chips / default control radius / cards, dialogs |
+| `--ui-spacing-1` … `-8`                          | 4px base-unit ladder; `-4` is the most common gap/padding       |
+| `--ui-font-size-sm` / `-md` / `-lg`              | Type scale; `-md` is body text                                  |
+| `--ui-shadow-sm` / `-md`                         | Subtle elevation / raised surfaces (dialogs, popovers)          |
+| `--ui-transition-fast` / `-normal`               | Hover/focus feedback timing                                     |
 
 (Deliberately not shown as a `:root { }` block with literal values — a copy-pasted
 value here would be wrong the moment the brand changes again, and an agent generating
@@ -214,7 +214,7 @@ The example below is copied verbatim (rules only) from the real `AtlDialog`
 (`libs/angular/src/lib/dialog/atl-dialog.ts`) rather than invented — the same class,
 props and defaults it ships today.
 
-```typescript
+````typescript
 /**
  * Accessible modal dialog using the native `<dialog>` element.
  * Includes focus trap, Escape to close, backdrop click to close, and animation.
@@ -242,10 +242,10 @@ export class AtlDialog {
   /** Dialog size. */
   size = input<'sm' | 'md' | 'lg' | 'xl' | 'full'>('md');
 }
-```
+````
 
-*(There is no `closeOnEscape` input — Escape-to-close is unconditional native `<dialog>`
-behavior, not a configurable prop. An earlier draft of this example showed one; cut.)*
+_(There is no `closeOnEscape` input — Escape-to-close is unconditional native `<dialog>`
+behavior, not a configurable prop. An earlier draft of this example showed one; cut.)_
 
 ---
 
@@ -267,16 +267,7 @@ Form controls integrate with Angular 22's Signal Forms (`@angular/forms/signals`
 @Component({
   selector: 'atl-input',
   standalone: true,
-  template: `
-    <input
-      [type]="type()"
-      [value]="value()"
-      (input)="value.set($event.target.value)"
-      [disabled]="disabled()"
-      [attr.aria-invalid]="invalid()"
-      (blur)="touched.set(true)"
-    />
-  `,
+  template: ` <input [type]="type()" [value]="value()" (input)="value.set($event.target.value)" [disabled]="disabled()" [attr.aria-invalid]="invalid()" (blur)="touched.set(true)" /> `,
 })
 export class AtlInput implements FormValueControl<string> {
   value = model('');
@@ -342,18 +333,18 @@ The LLM has deep familiarity with ARIA roles, keyboard interactions, and accessi
 Every row below is verified against the real component template (`role="…"` attributes
 in `libs/angular/src/lib/**/*.ts`), not carried forward from description alone:
 
-| Component       | ARIA Pattern                | Key Behaviors                           |
-|-----------------|------------------------------|------------------------------------------|
-| `AtlDialog`     | Dialog (modal)               | Focus trap, Escape to close, backdrop   |
-| `AtlTabGroup`   | Tabs                         | Arrow keys to switch, roving tabindex   |
-| `AtlMenu`       | Menu / Menubar               | Arrow keys, Enter to select, Escape     |
-| `AtlTooltip`    | Tooltip                      | Focus/hover trigger, `role="tooltip"`   |
-| `AtlAccordionGroup` | Accordion                | Enter/Space to toggle, `aria-expanded`  |
-| `AtlSelect`     | Combobox (listbox popup)     | Arrow keys, type-ahead, `aria-selected`, `aria-expanded` on the trigger (`role="combobox"` + `role="listbox"`, ADR-0109) |
-| `AtlToggle`     | Switch                       | Space to toggle, `role="switch"`        |
-| `AtlInput`      | Textbox                      | Native `<input>`, `aria-invalid`        |
-| `AtlCheckbox`   | Checkbox                     | Space to toggle, native `<input type="checkbox">` |
-| `AtlRadioGroup` | Radio Group                  | Arrow keys within group, `role="radiogroup"` |
+| Component           | ARIA Pattern             | Key Behaviors                                                                                                            |
+| ------------------- | ------------------------ | ------------------------------------------------------------------------------------------------------------------------ |
+| `AtlDialog`         | Dialog (modal)           | Focus trap, Escape to close, backdrop                                                                                    |
+| `AtlTabGroup`       | Tabs                     | Arrow keys to switch, roving tabindex                                                                                    |
+| `AtlMenu`           | Menu / Menubar           | Arrow keys, Enter to select, Escape                                                                                      |
+| `AtlTooltip`        | Tooltip                  | Focus/hover trigger, `role="tooltip"`                                                                                    |
+| `AtlAccordionGroup` | Accordion                | Enter/Space to toggle, `aria-expanded`                                                                                   |
+| `AtlSelect`         | Combobox (listbox popup) | Arrow keys, type-ahead, `aria-selected`, `aria-expanded` on the trigger (`role="combobox"` + `role="listbox"`, ADR-0109) |
+| `AtlToggle`         | Switch                   | Space to toggle, `role="switch"`                                                                                         |
+| `AtlInput`          | Textbox                  | Native `<input>`, `aria-invalid`                                                                                         |
+| `AtlCheckbox`       | Checkbox                 | Space to toggle, native `<input type="checkbox">`                                                                        |
+| `AtlRadioGroup`     | Radio Group              | Arrow keys within group, `role="radiogroup"`                                                                             |
 
 ---
 
@@ -385,7 +376,7 @@ context file cannot make that promise; a generated, gated one can.
 component count and package version inside this quote are the file's own words as of
 this rewrite, not a fact this document is asserting on its own account):
 
-````markdown
+```markdown
 # Atelier UI — Full API Reference
 
 > Complete component API for LLM consumption. 28 accessible components for Angular,
@@ -394,26 +385,26 @@ this rewrite, not a fact this document is asserting on its own account):
 
 ### AtlButton
 
-  A versatile button component with multiple variants and sizes. Supports loading and disabled states.
+A versatile button component with multiple variants and sizes. Supports loading and disabled states.
 
-  Props:
-    variant     'primary' | 'secondary' | 'outline' | 'danger'  'primary'  Visual style variant
-    size        'sm' | 'md' | 'lg'                              'md'       Size of the button
-    disabled    boolean                                         false      Disables the button
-    loading     boolean                                         false      Shows a loading spinner, disables interaction
-    aria-label  string                                          —          Accessible name. Required for icon-only buttons (no children).
+Props:
+variant 'primary' | 'secondary' | 'outline' | 'danger' 'primary' Visual style variant
+size 'sm' | 'md' | 'lg' 'md' Size of the button
+disabled boolean false Disables the button
+loading boolean false Shows a loading spinner, disables interaction
+aria-label string — Accessible name. Required for icon-only buttons (no children).
 
-  Usage:
-    Angular:
-      <atl-button variant="primary">Primary</atl-button>
-      <atl-button [loading]="true">Loading</atl-button>
-    React:
-      <AtlButton variant="primary">Primary</AtlButton>
-      <AtlButton loading={true}>Loading</AtlButton>
-    Vue:
-      <AtlButton variant="primary">Primary</AtlButton>
-      <AtlButton :loading="true">Loading</AtlButton>
-````
+Usage:
+Angular:
+<atl-button variant="primary">Primary</atl-button>
+<atl-button [loading]="true">Loading</atl-button>
+React:
+<AtlButton variant="primary">Primary</AtlButton>
+<AtlButton loading={true}>Loading</AtlButton>
+Vue:
+<AtlButton variant="primary">Primary</AtlButton>
+<AtlButton :loading="true">Loading</AtlButton>
+```
 
 ---
 
@@ -436,19 +427,19 @@ Ordered by impact on LLM code generation quality:
 
 ## Anti-Patterns to Avoid
 
-| Anti-Pattern | Why It Hurts LLM Generation |
-|---|---|
-| Config objects as inputs | LLM must guess nested shape; high error rate |
-| `@Input()` / `@Output()` decorators mixed with signals | Two mental models; inconsistent generated code |
-| Enums for variants/sizes | LLMs produce string literals more reliably |
-| `NgModule`-based architecture | Import resolution errors; unnecessary indirection |
-| Arbitrary `class` / `style` inputs | Unbounded styling decisions the LLM shouldn't make |
-| Undocumented internal state | LLM can't infer correct behavior from types alone |
-| Custom keyboard interaction patterns | LLM defaults to ARIA patterns; custom ones get misgenerated |
-| Deep component hierarchies with implicit context | LLM loses track of injected dependencies and context |
-| Implicit A11y | If ARIA roles aren't explicitly used, the LLM may fail to generate accessible markup. |
-| Legacy `ControlValueAccessor` for form controls | Signal Forms (`FormValueControl`/`FormCheckboxControl`) is simpler and signal-native |
-| Validation logic inside controls | Validation belongs in the form schema; controls only display results |
+| Anti-Pattern                                           | Why It Hurts LLM Generation                                                           |
+| ------------------------------------------------------ | ------------------------------------------------------------------------------------- |
+| Config objects as inputs                               | LLM must guess nested shape; high error rate                                          |
+| `@Input()` / `@Output()` decorators mixed with signals | Two mental models; inconsistent generated code                                        |
+| Enums for variants/sizes                               | LLMs produce string literals more reliably                                            |
+| `NgModule`-based architecture                          | Import resolution errors; unnecessary indirection                                     |
+| Arbitrary `class` / `style` inputs                     | Unbounded styling decisions the LLM shouldn't make                                    |
+| Undocumented internal state                            | LLM can't infer correct behavior from types alone                                     |
+| Custom keyboard interaction patterns                   | LLM defaults to ARIA patterns; custom ones get misgenerated                           |
+| Deep component hierarchies with implicit context       | LLM loses track of injected dependencies and context                                  |
+| Implicit A11y                                          | If ARIA roles aren't explicitly used, the LLM may fail to generate accessible markup. |
+| Legacy `ControlValueAccessor` for form controls        | Signal Forms (`FormValueControl`/`FormCheckboxControl`) is simpler and signal-native  |
+| Validation logic inside controls                       | Validation belongs in the form schema; controls only display results                  |
 
 ---
 
@@ -476,17 +467,17 @@ Verified against `libs/angular/src/lib/toast/atl-toast.ts` (`AtlToastService`),
 (`useAtlToast`, `AtlToastProvider`, Vue `provide`/`inject`) as the representative case
 for dependency injection, plus the button, card and dialog components for the rest.
 
-| Angular pattern | React equivalent | Vue equivalent |
-|---|---|---|
-| `input()` / `model()` signals | Regular props with optional callback (`onValueChange`) | Typed `defineProps<...>()` + `v-model`-style prop/`update:*` emit pair |
-| Angular injection tokens (`ATL_DIALOG`, `ATL_TAB_GROUP`, …) | React Context (`createContext` / `useContext`) | Vue `provide`/`inject` with a typed `InjectionKey` (e.g. `AtlToastKey`) |
-| `Injectable` service (`AtlToastService`) | Custom hook (`useAtlToast()`) + `AtlToastProvider` | Composable (`useAtlToast()`) + `AtlToastProvider` component, same `provide`/`inject` pair |
-| `FormValueControl` / `FormCheckboxControl` | Controlled props (`value`/`onValueChange`, `checked`/`onCheckedChange`) | Controlled props + `v-model` emits (`value`/`update:value`, `checked`/`update:checked`) |
-| CDK `A11y` (focus trap in `AtlDialog`) | `useRef` + manual focus management | `ref` + `onMounted`/composable — no CDK equivalent; Vue has no CDK dependency |
-| CDK Menu keyboard nav | Custom keyboard handler in the component (`AtlMenuTrigger`) | Custom keyboard handler in the component (`AtlMenuTrigger`) |
-| `:host` CSS selector | `.atl-<component>` class on the root element | `.atl-<component>` class on the root element (same convention as React, not scoped `<style scoped>`) |
-| Content projection (`<ng-content>`) | `children: ReactNode` prop | Default `<slot />` |
-| Sub-components as Angular elements | Named function exports (`AtlCardHeader`, `AtlCardContent`, etc.) | Named SFC exports (`AtlCardHeader.vue`, etc.), same one-component-per-file split |
+| Angular pattern                                             | React equivalent                                                        | Vue equivalent                                                                                       |
+| ----------------------------------------------------------- | ----------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `input()` / `model()` signals                               | Regular props with optional callback (`onValueChange`)                  | Typed `defineProps<...>()` + `v-model`-style prop/`update:*` emit pair                               |
+| Angular injection tokens (`ATL_DIALOG`, `ATL_TAB_GROUP`, …) | React Context (`createContext` / `useContext`)                          | Vue `provide`/`inject` with a typed `InjectionKey` (e.g. `AtlToastKey`)                              |
+| `Injectable` service (`AtlToastService`)                    | Custom hook (`useAtlToast()`) + `AtlToastProvider`                      | Composable (`useAtlToast()`) + `AtlToastProvider` component, same `provide`/`inject` pair            |
+| `FormValueControl` / `FormCheckboxControl`                  | Controlled props (`value`/`onValueChange`, `checked`/`onCheckedChange`) | Controlled props + `v-model` emits (`value`/`update:value`, `checked`/`update:checked`)              |
+| CDK `A11y` (focus trap in `AtlDialog`)                      | `useRef` + manual focus management                                      | `ref` + `onMounted`/composable — no CDK equivalent; Vue has no CDK dependency                        |
+| CDK Menu keyboard nav                                       | Custom keyboard handler in the component (`AtlMenuTrigger`)             | Custom keyboard handler in the component (`AtlMenuTrigger`)                                          |
+| `:host` CSS selector                                        | `.atl-<component>` class on the root element                            | `.atl-<component>` class on the root element (same convention as React, not scoped `<style scoped>`) |
+| Content projection (`<ng-content>`)                         | `children: ReactNode` prop                                              | Default `<slot />`                                                                                   |
+| Sub-components as Angular elements                          | Named function exports (`AtlCardHeader`, `AtlCardContent`, etc.)        | Named SFC exports (`AtlCardHeader.vue`, etc.), same one-component-per-file split                     |
 
 ### CSS Sharing Strategy
 
@@ -514,22 +505,7 @@ directly is drift.
 ```typescript
 // React — libs/react/src/index.ts re-exports every component below.
 // Vue equivalents have the same names; import from '@atelier-ui/vue' instead.
-import {
-  AtlButton, AtlCard, AtlCardHeader, AtlCardContent, AtlCardFooter,
-  AtlBadge, AtlIcon, AtlInput, AtlTextarea, AtlCheckbox, AtlToggle,
-  AtlRadio, AtlRadioGroup, AtlAlert, AtlSelect, AtlOption, AtlCombobox,
-  AtlDialog, AtlDialogHeader, AtlDialogContent, AtlDialogFooter,
-  AtlTabGroup, AtlTab, AtlAccordionGroup, AtlAccordionItem, AtlAccordionHeader,
-  AtlMenu, AtlMenuItem, AtlMenuSeparator, AtlMenuTrigger,
-  AtlTooltip, AtlToastProvider, AtlToastContainer, useAtlToast,
-  AtlSkeleton, AtlAvatar, AtlAvatarGroup, AtlProgress,
-  AtlBreadcrumbs, AtlBreadcrumbItem, AtlPagination,
-  AtlDrawer, AtlDrawerHeader, AtlDrawerContent, AtlDrawerFooter,
-  AtlTable, AtlThead, AtlTbody, AtlTr, AtlTh, AtlTd,
-  AtlStepper, AtlStep, AtlCodeBlock,
-  AtlChat, AtlChatHeader, AtlChatMessages, AtlChatMessage,
-  AtlChatTyping, AtlChatSuggestion, AtlChatInput,
-} from '@atelier-ui/react';
+import { AtlButton, AtlCard, AtlCardHeader, AtlCardContent, AtlCardFooter, AtlBadge, AtlIcon, AtlInput, AtlTextarea, AtlCheckbox, AtlToggle, AtlRadio, AtlRadioGroup, AtlAlert, AtlSelect, AtlOption, AtlCombobox, AtlDialog, AtlDialogHeader, AtlDialogContent, AtlDialogFooter, AtlTabGroup, AtlTab, AtlAccordionGroup, AtlAccordionItem, AtlAccordionHeader, AtlMenu, AtlMenuItem, AtlMenuSeparator, AtlMenuTrigger, AtlTooltip, AtlToastProvider, AtlToastContainer, useAtlToast, AtlSkeleton, AtlAvatar, AtlAvatarGroup, AtlProgress, AtlBreadcrumbs, AtlBreadcrumbItem, AtlPagination, AtlDrawer, AtlDrawerHeader, AtlDrawerContent, AtlDrawerFooter, AtlTable, AtlThead, AtlTbody, AtlTr, AtlTh, AtlTd, AtlStepper, AtlStep, AtlCodeBlock, AtlChat, AtlChatHeader, AtlChatMessages, AtlChatMessage, AtlChatTyping, AtlChatSuggestion, AtlChatInput } from '@atelier-ui/react';
 ```
 
 ```css
@@ -548,7 +524,7 @@ either:
 <AtlToastProvider>
   <App />
   <AtlToastContainer position="bottom-right" />
-</AtlToastProvider>
+</AtlToastProvider>;
 
 // Anywhere inside the tree
 const { show, dismiss, clear } = useAtlToast();
@@ -562,6 +538,7 @@ show('Saved!', { variant: 'success' });
   <AtlToastContainer position="bottom-right" />
 </AtlToastProvider>
 ```
+
 ```typescript
 // Anywhere inside the tree
 import { useAtlToast } from '@atelier-ui/vue';
@@ -610,21 +587,21 @@ downstream adapter on top of the `(send)` / `(stop)` events.
 
 ### Variants and States
 
-| Variant | Description | States |
-|---|---|---|
+| Variant  | Description                                                                                                      | States                   |
+| -------- | ---------------------------------------------------------------------------------------------------------------- | ------------------------ |
 | `drawer` | Right-anchored slide-in panel, full viewport height. Built on native `<dialog>` + CDK A11y focus trap (Angular). | idle · streaming · error |
-| `popup` | Floating bubble (bottom-right) that opens a compact 380×560 chat window. | idle · streaming · error |
-| `inline` | Embedded as a regular page surface — uses `AtlCard` chrome, no overlay, no close button. | idle · streaming · error |
+| `popup`  | Floating bubble (bottom-right) that opens a compact 380×560 chat window.                                         | idle · streaming · error |
+| `inline` | Embedded as a regular page surface — uses `AtlCard` chrome, no overlay, no close button.                         | idle · streaming · error |
 
 All states use only existing design tokens — primary teal for the user bubble,
 `brand-ai` lime for the assistant accent, `surface-sunken` for assistant bubbles,
 `danger` for connection errors and the Stop button.
 
-*(`AtlChatSpec.status` is `'idle' | 'streaming' | 'error'` — three values. The fourth
+_(`AtlChatSpec.status` is `'idle' | 'streaming' | 'error'` — three values. The fourth
 frame per variant below, "Empty", is a content state — zero messages rendered — not a
 fourth `status` value; verified against `libs/spec/src/index.ts` and the real Storybook
 stories: `DrawerDefault` / `DrawerEmpty` / `DrawerStreaming` / `DrawerError`, same
-pattern × 3 variants.)*
+pattern × 3 variants.)_
 
 ### Sub-component composition
 
@@ -650,16 +627,16 @@ instances (not detached primitives) so design changes propagate automatically.
 
 ### Implementation status
 
-| Area | Status |
-|---|---|
-| Figma mockups (12 frames) | shipped |
-| `AtlButton` `danger` variant (used by Stop button) | shipped (`d46dc94`) |
-| Spec types in `libs/spec/src/index.ts` | shipped |
-| Angular implementation (`libs/angular/src/lib/chat/`) | shipped (`fc01c4b`) |
-| React implementation (`libs/react/src/lib/chat/`) | shipped (`02d7e94`) |
-| Vue implementation (`libs/vue/src/lib/chat/`) | shipped (`9cb1fdc`) |
-| Storybook stories (12 per framework, mirroring Figma) | shipped |
-| Tests (Angular, React, Vue) | shipped |
-| Docs entry in `docs/src/data/components.ts` + AI category | shipped (`104ff47`) |
-| CopilotKit adapter | deferred — visual surface only for now |
-| Vercel AI SDK adapter | not on the roadmap |
+| Area                                                      | Status                                 |
+| --------------------------------------------------------- | -------------------------------------- |
+| Figma mockups (12 frames)                                 | shipped                                |
+| `AtlButton` `danger` variant (used by Stop button)        | shipped (`d46dc94`)                    |
+| Spec types in `libs/spec/src/index.ts`                    | shipped                                |
+| Angular implementation (`libs/angular/src/lib/chat/`)     | shipped (`fc01c4b`)                    |
+| React implementation (`libs/react/src/lib/chat/`)         | shipped (`02d7e94`)                    |
+| Vue implementation (`libs/vue/src/lib/chat/`)             | shipped (`9cb1fdc`)                    |
+| Storybook stories (12 per framework, mirroring Figma)     | shipped                                |
+| Tests (Angular, React, Vue)                               | shipped                                |
+| Docs entry in `docs/src/data/components.ts` + AI category | shipped (`104ff47`)                    |
+| CopilotKit adapter                                        | deferred — visual surface only for now |
+| Vercel AI SDK adapter                                     | not on the roadmap                     |

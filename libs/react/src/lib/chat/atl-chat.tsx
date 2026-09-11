@@ -237,10 +237,16 @@ export function AtlChatMessages({
   useEffect(() => {
     const el = ref.current;
     if (!el) return;
-    const stickToBottom = () => { el.scrollTop = el.scrollHeight; };
+    const stickToBottom = () => {
+      el.scrollTop = el.scrollHeight;
+    };
     stickToBottom();
     const observer = new MutationObserver(stickToBottom);
-    observer.observe(el, { childList: true, subtree: true, characterData: true });
+    observer.observe(el, {
+      childList: true,
+      subtree: true,
+      characterData: true,
+    });
     return () => observer.disconnect();
   }, []);
   return (
@@ -311,11 +317,9 @@ export function AtlChatTyping({
   className,
   ...rest
 }: AtlChatTypingProps) {
-  const classes = [
-    'atl-chat-typing',
-    inline && 'is-inline',
-    className,
-  ].filter(Boolean).join(' ');
+  const classes = ['atl-chat-typing', inline && 'is-inline', className]
+    .filter(Boolean)
+    .join(' ');
   return (
     <div role="status" aria-live="polite" className={classes} {...rest}>
       <span className="dot" />
@@ -368,8 +372,10 @@ export function AtlChatSuggestion({
  * The action button automatically switches between primary "Send" and
  * danger "Stop" based on the parent chat's status.
  */
-export interface AtlChatInputProps
-  extends Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'onChange'> {
+export interface AtlChatInputProps extends Omit<
+  TextareaHTMLAttributes<HTMLTextAreaElement>,
+  'onChange'
+> {
   value?: string;
   onValueChange?: (value: string) => void;
   onSend?: (text: string) => void;

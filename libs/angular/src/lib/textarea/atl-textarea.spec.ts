@@ -4,12 +4,15 @@ import { AtlTextarea } from './atl-textarea';
 import { covers } from '../../testing/behavior';
 
 describe('AtlTextarea', () => {
-  covers('textarea', 'renders-textarea')('renders a native textarea element', async () => {
-    const { container } = await render('<atl-textarea />', {
-      imports: [AtlTextarea],
-    });
-    expect(container.querySelector('textarea')).toBeInTheDocument();
-  });
+  covers('textarea', 'renders-textarea')(
+    'renders a native textarea element',
+    async () => {
+      const { container } = await render('<atl-textarea />', {
+        imports: [AtlTextarea],
+      });
+      expect(container.querySelector('textarea')).toBeInTheDocument();
+    },
+  );
 
   it('defaults to 3 rows', async () => {
     const { container } = await render('<atl-textarea />', {
@@ -26,92 +29,103 @@ describe('AtlTextarea', () => {
   });
 
   describe('rows input', () => {
-    covers('textarea', 'rows')('sets rows attribute on the native textarea', async () => {
-      const { container } = await render('<atl-textarea [rows]="6" />', {
-        imports: [AtlTextarea],
-      });
-      expect(container.querySelector('textarea')).toHaveAttribute('rows', '6');
-    });
+    covers('textarea', 'rows')(
+      'sets rows attribute on the native textarea',
+      async () => {
+        const { container } = await render('<atl-textarea [rows]="6" />', {
+          imports: [AtlTextarea],
+        });
+        expect(container.querySelector('textarea')).toHaveAttribute(
+          'rows',
+          '6',
+        );
+      },
+    );
   });
 
   describe('placeholder', () => {
     it('sets placeholder on the native textarea', async () => {
       const { container } = await render(
         '<atl-textarea placeholder="Enter description" />',
-        { imports: [AtlTextarea] }
+        { imports: [AtlTextarea] },
       );
       expect(container.querySelector('textarea')).toHaveAttribute(
         'placeholder',
-        'Enter description'
+        'Enter description',
       );
     });
   });
 
   describe('value binding', () => {
-    covers('textarea', 'updates-value')('updates value when user types', async () => {
-      const user = userEvent.setup();
-      await render('<atl-textarea />', {
-        imports: [AtlTextarea],
-      });
-      const textarea = screen.getByRole('textbox');
-      await user.type(textarea, 'hello world');
-      expect(textarea).toHaveValue('hello world');
-    });
+    covers('textarea', 'updates-value')(
+      'updates value when user types',
+      async () => {
+        const user = userEvent.setup();
+        await render('<atl-textarea />', {
+          imports: [AtlTextarea],
+        });
+        const textarea = screen.getByRole('textbox');
+        await user.type(textarea, 'hello world');
+        expect(textarea).toHaveValue('hello world');
+      },
+    );
   });
 
   describe('disabled state', () => {
     it('applies is-disabled class to host', async () => {
-      const { container } = await render(
-        '<atl-textarea [disabled]="true" />',
-        { imports: [AtlTextarea] }
+      const { container } = await render('<atl-textarea [disabled]="true" />', {
+        imports: [AtlTextarea],
+      });
+      expect(container.querySelector('atl-textarea')).toHaveClass(
+        'is-disabled',
       );
-      expect(container.querySelector('atl-textarea')).toHaveClass('is-disabled');
     });
 
-    covers('textarea', 'disabled')('sets disabled attribute on native textarea', async () => {
-      const { container } = await render(
-        '<atl-textarea [disabled]="true" />',
-        { imports: [AtlTextarea] }
-      );
-      expect(container.querySelector('textarea')).toBeDisabled();
-    });
+    covers('textarea', 'disabled')(
+      'sets disabled attribute on native textarea',
+      async () => {
+        const { container } = await render(
+          '<atl-textarea [disabled]="true" />',
+          { imports: [AtlTextarea] },
+        );
+        expect(container.querySelector('textarea')).toBeDisabled();
+      },
+    );
   });
 
   describe('readonly state', () => {
     it('applies is-readonly class to host', async () => {
-      const { container } = await render(
-        '<atl-textarea [readonly]="true" />',
-        { imports: [AtlTextarea] }
+      const { container } = await render('<atl-textarea [readonly]="true" />', {
+        imports: [AtlTextarea],
+      });
+      expect(container.querySelector('atl-textarea')).toHaveClass(
+        'is-readonly',
       );
-      expect(container.querySelector('atl-textarea')).toHaveClass('is-readonly');
     });
 
     it('sets readOnly property on native textarea', async () => {
-      const { container } = await render(
-        '<atl-textarea [readonly]="true" />',
-        { imports: [AtlTextarea] }
-      );
+      const { container } = await render('<atl-textarea [readonly]="true" />', {
+        imports: [AtlTextarea],
+      });
       expect(container.querySelector('textarea')).toHaveAttribute('readonly');
     });
   });
 
   describe('invalid and error display', () => {
     it('applies is-invalid class when invalid', async () => {
-      const { container } = await render(
-        '<atl-textarea [invalid]="true" />',
-        { imports: [AtlTextarea] }
-      );
+      const { container } = await render('<atl-textarea [invalid]="true" />', {
+        imports: [AtlTextarea],
+      });
       expect(container.querySelector('atl-textarea')).toHaveClass('is-invalid');
     });
 
     it('sets aria-invalid on native textarea when invalid', async () => {
-      const { container } = await render(
-        '<atl-textarea [invalid]="true" />',
-        { imports: [AtlTextarea] }
-      );
+      const { container } = await render('<atl-textarea [invalid]="true" />', {
+        imports: [AtlTextarea],
+      });
       expect(container.querySelector('textarea')).toHaveAttribute(
         'aria-invalid',
-        'true'
+        'true',
       );
     });
 
@@ -126,28 +140,33 @@ describe('AtlTextarea', () => {
           componentProperties: {
             errors: [{ kind: 'required', message: 'Field is required' }],
           },
-        }
+        },
       );
       expect(container.querySelector('.errors')).toBeInTheDocument();
     });
 
-    covers('textarea', 'errors')('shows error messages when touched and invalid', async () => {
-      const user = userEvent.setup();
-      const { container } = await render(
-        `<atl-textarea [invalid]="true" [errors]="errors" />`,
-        {
-          imports: [AtlTextarea],
-          componentProperties: {
-            errors: [{ kind: 'required', message: 'Field is required' }],
+    covers('textarea', 'errors')(
+      'shows error messages when touched and invalid',
+      async () => {
+        const user = userEvent.setup();
+        const { container } = await render(
+          `<atl-textarea [invalid]="true" [errors]="errors" />`,
+          {
+            imports: [AtlTextarea],
+            componentProperties: {
+              errors: [{ kind: 'required', message: 'Field is required' }],
+            },
           },
-        }
-      );
-      const textarea = container.querySelector('textarea') as HTMLTextAreaElement;
-      await user.click(textarea);
-      await user.tab();
+        );
+        const textarea = container.querySelector(
+          'textarea',
+        ) as HTMLTextAreaElement;
+        await user.click(textarea);
+        await user.tab();
 
-      expect(screen.getByText('Field is required')).toBeInTheDocument();
-    });
+        expect(screen.getByText('Field is required')).toBeInTheDocument();
+      },
+    );
 
     it('renders each error as a paragraph with error-message class', async () => {
       const user = userEvent.setup();
@@ -161,9 +180,11 @@ describe('AtlTextarea', () => {
               { kind: 'minLength', message: 'Too short' },
             ],
           },
-        }
+        },
       );
-      const textarea = container.querySelector('textarea') as HTMLTextAreaElement;
+      const textarea = container.querySelector(
+        'textarea',
+      ) as HTMLTextAreaElement;
       await user.click(textarea);
       await user.tab();
 
@@ -180,15 +201,17 @@ describe('AtlTextarea', () => {
           componentProperties: {
             errors: [{ kind: 'required', message: 'Field is required' }],
           },
-        }
+        },
       );
-      const textarea = container.querySelector('textarea') as HTMLTextAreaElement;
+      const textarea = container.querySelector(
+        'textarea',
+      ) as HTMLTextAreaElement;
       await user.click(textarea);
       await user.tab();
 
       expect(container.querySelector('.errors')).toHaveAttribute(
         'aria-live',
-        'polite'
+        'polite',
       );
     });
   });
@@ -199,7 +222,9 @@ describe('AtlTextarea', () => {
       const { container } = await render('<atl-textarea />', {
         imports: [AtlTextarea],
       });
-      const textarea = container.querySelector('textarea') as HTMLTextAreaElement;
+      const textarea = container.querySelector(
+        'textarea',
+      ) as HTMLTextAreaElement;
       await user.click(textarea);
       await user.tab();
 
@@ -210,19 +235,20 @@ describe('AtlTextarea', () => {
       const { container } = await render('<atl-textarea />', {
         imports: [AtlTextarea],
       });
-      expect(container.querySelector('atl-textarea')).not.toHaveClass('is-touched');
+      expect(container.querySelector('atl-textarea')).not.toHaveClass(
+        'is-touched',
+      );
     });
   });
 
   describe('aria attributes', () => {
     it('sets aria-required when required', async () => {
-      const { container } = await render(
-        '<atl-textarea [required]="true" />',
-        { imports: [AtlTextarea] }
-      );
+      const { container } = await render('<atl-textarea [required]="true" />', {
+        imports: [AtlTextarea],
+      });
       expect(container.querySelector('textarea')).toHaveAttribute(
         'aria-required',
-        'true'
+        'true',
       );
     });
 
@@ -231,7 +257,7 @@ describe('AtlTextarea', () => {
         imports: [AtlTextarea],
       });
       expect(container.querySelector('textarea')).not.toHaveAttribute(
-        'aria-required'
+        'aria-required',
       );
     });
 
@@ -240,7 +266,7 @@ describe('AtlTextarea', () => {
         imports: [AtlTextarea],
       });
       expect(container.querySelector('textarea')).not.toHaveAttribute(
-        'aria-invalid'
+        'aria-invalid',
       );
     });
 
@@ -253,9 +279,11 @@ describe('AtlTextarea', () => {
           componentProperties: {
             errors: [{ kind: 'required', message: 'Required' }],
           },
-        }
+        },
       );
-      const textarea = container.querySelector('textarea') as HTMLTextAreaElement;
+      const textarea = container.querySelector(
+        'textarea',
+      ) as HTMLTextAreaElement;
       await user.click(textarea);
       await user.tab();
 
@@ -267,11 +295,13 @@ describe('AtlTextarea', () => {
 
   describe('name attribute', () => {
     it('sets name attribute on native textarea', async () => {
-      const { container } = await render(
-        '<atl-textarea name="bio" />',
-        { imports: [AtlTextarea] }
+      const { container } = await render('<atl-textarea name="bio" />', {
+        imports: [AtlTextarea],
+      });
+      expect(container.querySelector('textarea')).toHaveAttribute(
+        'name',
+        'bio',
       );
-      expect(container.querySelector('textarea')).toHaveAttribute('name', 'bio');
     });
 
     it('does not set name attribute when not provided', async () => {
@@ -296,10 +326,9 @@ describe('AtlTextarea', () => {
     });
 
     it('lets a caller-supplied id win over the auto-generated one', async () => {
-      await render(
-        '<atl-textarea label="Bio" id="custom-bio-id" />',
-        { imports: [AtlTextarea] }
-      );
+      await render('<atl-textarea label="Bio" id="custom-bio-id" />', {
+        imports: [AtlTextarea],
+      });
       const textarea = screen.getByLabelText('Bio');
       expect(textarea).toHaveAttribute('id', 'custom-bio-id');
     });
@@ -311,7 +340,7 @@ describe('AtlTextarea', () => {
     it('does not duplicate a static id attribute onto the host, which would break label association', async () => {
       const { container } = await render(
         '<atl-textarea label="Bio" id="custom-bio-id" />',
-        { imports: [AtlTextarea] }
+        { imports: [AtlTextarea] },
       );
       expect(container.querySelector('atl-textarea')).not.toHaveAttribute('id');
       expect(screen.getByLabelText('Bio')).toBeInTheDocument();
@@ -322,14 +351,14 @@ describe('AtlTextarea', () => {
     it('forwards aria-label to the native textarea, not the host', async () => {
       const { container } = await render(
         '<atl-textarea aria-label="Notes" />',
-        { imports: [AtlTextarea] }
+        { imports: [AtlTextarea] },
       );
       expect(container.querySelector('textarea')).toHaveAttribute(
         'aria-label',
-        'Notes'
+        'Notes',
       );
       expect(container.querySelector('atl-textarea')).not.toHaveAttribute(
-        'aria-label'
+        'aria-label',
       );
     });
   });
@@ -338,16 +367,20 @@ describe('AtlTextarea', () => {
     it('applies is-auto-resize class when autoResize is true', async () => {
       const { container } = await render(
         '<atl-textarea [autoResize]="true" />',
-        { imports: [AtlTextarea] }
+        { imports: [AtlTextarea] },
       );
-      expect(container.querySelector('atl-textarea')).toHaveClass('is-auto-resize');
+      expect(container.querySelector('atl-textarea')).toHaveClass(
+        'is-auto-resize',
+      );
     });
 
     it('does not apply is-auto-resize class by default', async () => {
       const { container } = await render('<atl-textarea />', {
         imports: [AtlTextarea],
       });
-      expect(container.querySelector('atl-textarea')).not.toHaveClass('is-auto-resize');
+      expect(container.querySelector('atl-textarea')).not.toHaveClass(
+        'is-auto-resize',
+      );
     });
   });
 });

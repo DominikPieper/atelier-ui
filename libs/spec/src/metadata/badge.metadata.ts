@@ -13,11 +13,13 @@ export const metadata: ComponentMetadata = {
   antiPatterns: [
     {
       pattern: 'Surfacing a dismissable system-level message.',
-      useInstead: 'AtlAlert — alerts carry a role and live region, badges do not.',
+      useInstead:
+        'AtlAlert — alerts carry a role and live region, badges do not.',
     },
     {
       pattern: 'Holding a removable user-entered chip (filter, recipient).',
-      useInstead: 'A dedicated chip/tag component with its own remove affordance; badges are display-only.',
+      useInstead:
+        'A dedicated chip/tag component with its own remove affordance; badges are display-only.',
     },
   ],
   relatedComponents: ['AtlAlertSpec', 'AtlAvatarSpec'],

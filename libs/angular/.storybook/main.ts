@@ -1,5 +1,5 @@
-import { fileURLToPath } from "node:url";
-import { dirname } from "node:path";
+import { fileURLToPath } from 'node:url';
+import { dirname } from 'node:path';
 import type { StorybookConfig } from '@storybook/angular-vite';
 import type { InlineConfig } from 'vite';
 
@@ -11,13 +11,13 @@ const config: StorybookConfig = {
     // dev-only tools (stories-preview, test-run,
     // get-storybook-story-instructions) when Storybook runs as a local dev server.
     '@storybook/addon-mcp',
-    getAbsolutePath("@storybook/addon-vitest"),
-    getAbsolutePath("@storybook/addon-a11y"),
-    getAbsolutePath("@storybook/addon-designs"),
-    getAbsolutePath("@storybook/addon-docs"),
+    getAbsolutePath('@storybook/addon-vitest'),
+    getAbsolutePath('@storybook/addon-a11y'),
+    getAbsolutePath('@storybook/addon-designs'),
+    getAbsolutePath('@storybook/addon-docs'),
   ],
   framework: {
-    name: getAbsolutePath("@storybook/angular-vite"),
+    name: getAbsolutePath('@storybook/angular-vite'),
     options: {},
   },
   staticDirs: ['../../../images'],

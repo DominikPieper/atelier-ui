@@ -10,7 +10,11 @@ import {
   OnInit,
   signal,
 } from '@angular/core';
-import { ATL_STEPPER, type AtlStepperContext, type StepInfo } from './atl-stepper.token';
+import {
+  ATL_STEPPER,
+  type AtlStepperContext,
+  type StepInfo,
+} from './atl-stepper.token';
 import { AtlIcon } from '../icon/atl-icon';
 
 let nextId = 0;
@@ -106,7 +110,7 @@ export class AtlStepper implements AtlStepperContext {
 
   /** @internal */
   protected readonly hostClasses = computed(
-    () => `orientation-${this.orientation()}`
+    () => `orientation-${this.orientation()}`,
   );
 
   /** @internal — called by AtlStep on init */
@@ -122,7 +126,7 @@ export class AtlStepper implements AtlStepperContext {
   /** @internal — called by AtlStep effect when inputs change */
   updateStep(id: string, info: Partial<StepInfo>): void {
     this.steps.update((list) =>
-      list.map((s) => (s.id === id ? { ...s, ...info } : s))
+      list.map((s) => (s.id === id ? { ...s, ...info } : s)),
     );
   }
 
@@ -222,12 +226,12 @@ export class AtlStep implements OnInit, OnDestroy {
 
   /** @internal */
   protected readonly myIndex = computed(() =>
-    this.context.steps().findIndex((s) => s.id === this.id)
+    this.context.steps().findIndex((s) => s.id === this.id),
   );
 
   /** @internal */
   protected readonly isActive = computed(
-    () => this.context.activeStep() === this.myIndex()
+    () => this.context.activeStep() === this.myIndex(),
   );
 
   constructor() {

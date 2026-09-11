@@ -38,31 +38,31 @@ a gate that reads it.
 
 ## 1. What the spec is (facts)
 
-| Layer | File | Shape | Size |
-|---|---|---|---|
-| Type contract | `libs/spec/src/index.ts` | flat `Atl*Spec` interfaces, string-literal unions, five `on*Change` callbacks, three `aria-label`/`label` props | 505 lines, 42 interfaces, 29 components, 21 commits since 2026-03-21, shape unchanged |
-| Intent sidecar | `libs/spec/src/metadata/*.metadata.ts` | `purpose`, `whenToUse[]`, `antiPatterns[]`, `relatedComponents[]`, `variantMatrix[]`, `accessibility { role, keyboardBehavior: prose }` | 26 modules + registry |
-| Token dictionary | `libs/spec/src/tokens.manifest.ts` | per token: `intent`, `constraints[]`, `darkMode?` — keyed by token, no per-component field | 1296 lines |
-| Behaviour test ids | `libs/spec/src/behaviors.json` → `behaviors.generated.ts` | per component: `{ id, describe }[]` bound via typed `covers()` | 30 subjects |
-| Icon geometry | `libs/spec/src/icons.ts` | runtime SVG path data | 25 icons |
+| Layer              | File                                                      | Shape                                                                                                                                   | Size                                                                                  |
+| ------------------ | --------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------- |
+| Type contract      | `libs/spec/src/index.ts`                                  | flat `Atl*Spec` interfaces, string-literal unions, five `on*Change` callbacks, three `aria-label`/`label` props                         | 505 lines, 42 interfaces, 29 components, 21 commits since 2026-03-21, shape unchanged |
+| Intent sidecar     | `libs/spec/src/metadata/*.metadata.ts`                    | `purpose`, `whenToUse[]`, `antiPatterns[]`, `relatedComponents[]`, `variantMatrix[]`, `accessibility { role, keyboardBehavior: prose }` | 26 modules + registry                                                                 |
+| Token dictionary   | `libs/spec/src/tokens.manifest.ts`                        | per token: `intent`, `constraints[]`, `darkMode?` — keyed by token, no per-component field                                              | 1296 lines                                                                            |
+| Behaviour test ids | `libs/spec/src/behaviors.json` → `behaviors.generated.ts` | per component: `{ id, describe }[]` bound via typed `covers()`                                                                          | 30 subjects                                                                           |
+| Icon geometry      | `libs/spec/src/icons.ts`                                  | runtime SVG path data                                                                                                                   | 25 icons                                                                              |
 
-Field vocabulary, complete: *name-typed prop, string-literal union, boolean flag, one
+Field vocabulary, complete: _name-typed prop, string-literal union, boolean flag, one
 `on<X>Change` callback signature, one purpose sentence, when-to-use list, anti-pattern
 pairs, related-component list, a variant-combination sample list, one ARIA role string, one
-keyboard prose string, a flat list of test-id/description pairs, a token→intent dictionary.*
+keyboard prose string, a flat list of test-id/description pairs, a token→intent dictionary._
 Nothing else.
 
 ## 2. What the spec actually does (consumption map)
 
 Thirty readers were found; the ones that matter, grouped by what they do with the spec:
 
-| Role | Readers | What they take |
-|---|---|---|
-| **Join key for gates** (spec ↔ something else) | `check:variants` (unions ↔ CSS classes), `check:props` (interfaces ↔ adapter prop surfaces), `check:docs` (interfaces ↔ docs table, one-way), `check:figma` (selectors + unions + `variantMatrix` ↔ Figma snapshot), `check:defaults` (axis names → adapters ↔ docs), `check:exports`, `check:metadata`, `check:icon-duplication`, `check:dead-selectors` (the only reader that runs a real type checker) | names, union literals, interface list |
-| **Projection source** (spec → generated artefact) | `sync-spec.mjs` (byte copy into three `spec.ts`), `gen-behaviors.mjs` (`behaviors.json` → typed ids), `gen-llms-txt.mjs` (**metadata + token manifest only** — the props come from `docs/src/data/components.ts`) | copies; metadata prose; token intents |
-| **Compile-time consumer** | 42 adapter files import from the local `spec.ts` copy — React 28, Angular 8, Vue 6 — plus 82 story files import `metadata.purpose` for the Storybook description, plus `covers()` in each `testing/behavior.ts` | React: whole interfaces; Angular/Vue: a few unions |
-| **Module lookup** | `component-map.js`, `parity-inputs.js` → `check:parity`, `check:design-status`, `parity:record`, `check:cookbook` | `COMPONENT_METADATA_REGISTRY` as a selector→directory map |
-| **Existence check** | `preflight.mjs` (`isDir('libs/spec')` = "this is the clone") | nothing of the content |
+| Role                                              | Readers                                                                                                                                                                                                                                                                                                                                                                                                   | What they take                                            |
+| ------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------- |
+| **Join key for gates** (spec ↔ something else)    | `check:variants` (unions ↔ CSS classes), `check:props` (interfaces ↔ adapter prop surfaces), `check:docs` (interfaces ↔ docs table, one-way), `check:figma` (selectors + unions + `variantMatrix` ↔ Figma snapshot), `check:defaults` (axis names → adapters ↔ docs), `check:exports`, `check:metadata`, `check:icon-duplication`, `check:dead-selectors` (the only reader that runs a real type checker) | names, union literals, interface list                     |
+| **Projection source** (spec → generated artefact) | `sync-spec.mjs` (byte copy into three `spec.ts`), `gen-behaviors.mjs` (`behaviors.json` → typed ids), `gen-llms-txt.mjs` (**metadata + token manifest only** — the props come from `docs/src/data/components.ts`)                                                                                                                                                                                         | copies; metadata prose; token intents                     |
+| **Compile-time consumer**                         | 42 adapter files import from the local `spec.ts` copy — React 28, Angular 8, Vue 6 — plus 82 story files import `metadata.purpose` for the Storybook description, plus `covers()` in each `testing/behavior.ts`                                                                                                                                                                                           | React: whole interfaces; Angular/Vue: a few unions        |
+| **Module lookup**                                 | `component-map.js`, `parity-inputs.js` → `check:parity`, `check:design-status`, `parity:record`, `check:cookbook`                                                                                                                                                                                                                                                                                         | `COMPONENT_METADATA_REGISTRY` as a selector→directory map |
+| **Existence check**                               | `preflight.mjs` (`isDir('libs/spec')` = "this is the clone")                                                                                                                                                                                                                                                                                                                                              | nothing of the content                                    |
 
 Twenty-five of the ~40 `check:*` gates never touch `libs/spec`. **27 of the spec's exported
 names are referenced by zero adapter files** — among them `AtlDialogSize`, `AtlCardVariant`,
@@ -176,7 +176,7 @@ Angular four flat props vs React/Vue one `data` object). `errors` implemented on
 form components in all three adapters, declared by no spec (type disagreement blocks it).
 
 **F11 · major · The "framework-agnostic" shape is React-shaped.** `AtlFormFieldSpec.onValueChange`
-is a React callback prop; Angular's `model()` and Vue's `update:*` emit are *mapped* to it
+is a React callback prop; Angular's `model()` and Vue's `update:*` emit are _mapped_ to it
 inside `check-prop-surface.js`. `readonly` vs React's `readOnly` is the same class in the
 other direction. The contract is React's prop bag plus a translation table in a gate.
 
@@ -235,7 +235,7 @@ exempted", not "the contract is honoured".
 **F18 · minor.** `metadata.relatedComponents` mixes naming conventions (`'AtlToggle'`,
 `'AtlMenuSpec'`, `button.metadata.ts:26`); nothing validates the keys.
 **F19 · minor.** `variantMatrix` hand-duplicates the union cross-product; the gate checks
-only that every member appears once, so it cannot say which combinations are *supported*.
+only that every member appears once, so it cannot say which combinations are _supported_.
 **F20 · minor.** `AtlComboboxOption`, `AtlToastContainerPosition`, `AtlChatMessageSpec`
 are exported as spec surface but keyed as non-components; their status as contract is
 undefined.
@@ -255,7 +255,7 @@ descriptions, a11y, examples ×3) → adapter → story with `argTypes` and `fig
 chain and the source of nothing that is generated.
 
 **Q3 — new project.** A customer receives tokens, MCP wiring and a `CLAUDE.md`, and can
-*read* Atelier's contract. They cannot author their own in any taught shape, and the loop
+_read_ Atelier's contract. They cannot author their own in any taught shape, and the loop
 they are shown stops at step 2 for them. What the training gives them that transfers is
 the handoff document and the parity call — both prose, both un-gated.
 
@@ -270,17 +270,17 @@ does not exist yet; the prose handoff document is its stand-in.**
 
 **Q5 — promises.**
 
-| Claim | Where | Status |
-|---|---|---|
-| Compiler enforces parity across all three adapters | README:127, big-picture:464, ADR-0006, claude-design-prompt:14 | **not held** (React only) |
-| Spec is the source of truth / ground truth | AGENTS.md:24, :70, :92; design-to-code.astro:175 | **partial** — source of names; defaults, descriptions, a11y, tokens live elsewhere |
-| Identical prop names and unions everywhere | AGENTS.md:25, first-component:207 | **partial** — 56 exemptions, 9 undeclared events, `readonly`/`readOnly`, 7 unkeyed components |
-| "Spec-aware — Claude knows which props exist" | index.astro:128 | **held**, but via docgen manifests derived from adapters, not from the spec |
-| Hosted manifests drift-gated against the spec | design-to-code.astro:183, SKILL.md:126 | **partial** — `check:props` gates adapters; `check:manifests` checks only that docgen ran |
-| In a scaffolded workspace, run the same steps | SKILL.md:15-17 | **not held** for steps 3, 6, 7 |
-| "Any binding the docs leave ambiguous is settled in the spec" | AGENTS.md:34 | **not held** — the format cannot encode slots, imperative APIs, events beyond `on*Change`, or two-way vs. one-way binding; the gate maps them |
-| Mirrored byte-identically into each lib | ADR-0006 | **held** (`sync-spec.mjs --check`) |
-| Angular/Vue read the spec as fallback | ADR-0013 | **stale**, uncorrected after ADR-0097 |
+| Claim                                                         | Where                                                          | Status                                                                                                                                        |
+| ------------------------------------------------------------- | -------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| Compiler enforces parity across all three adapters            | README:127, big-picture:464, ADR-0006, claude-design-prompt:14 | **not held** (React only)                                                                                                                     |
+| Spec is the source of truth / ground truth                    | AGENTS.md:24, :70, :92; design-to-code.astro:175               | **partial** — source of names; defaults, descriptions, a11y, tokens live elsewhere                                                            |
+| Identical prop names and unions everywhere                    | AGENTS.md:25, first-component:207                              | **partial** — 56 exemptions, 9 undeclared events, `readonly`/`readOnly`, 7 unkeyed components                                                 |
+| "Spec-aware — Claude knows which props exist"                 | index.astro:128                                                | **held**, but via docgen manifests derived from adapters, not from the spec                                                                   |
+| Hosted manifests drift-gated against the spec                 | design-to-code.astro:183, SKILL.md:126                         | **partial** — `check:props` gates adapters; `check:manifests` checks only that docgen ran                                                     |
+| In a scaffolded workspace, run the same steps                 | SKILL.md:15-17                                                 | **not held** for steps 3, 6, 7                                                                                                                |
+| "Any binding the docs leave ambiguous is settled in the spec" | AGENTS.md:34                                                   | **not held** — the format cannot encode slots, imperative APIs, events beyond `on*Change`, or two-way vs. one-way binding; the gate maps them |
+| Mirrored byte-identically into each lib                       | ADR-0006                                                       | **held** (`sync-spec.mjs --check`)                                                                                                            |
+| Angular/Vue read the spec as fallback                         | ADR-0013                                                       | **stale**, uncorrected after ADR-0097                                                                                                         |
 
 Codex's sharper framing of Q5, adopted here: **there is no single de-facto source; the
 authority depends on the fact.** Visual axes and token bindings → the Figma snapshot.
@@ -325,7 +325,7 @@ unacknowledged third and richest copy.
   idiom applied to the contract itself. The scaffold ships the record schema and one gate
   (record ↔ docgen manifest ↔ Figma snapshot), so a single-framework customer gets the
   same loop with one framework. Costly: touches about eight gates and reverses part of
-  ADR-0096 (a schema, but with *required prose fields* for behaviour and exclusions, which
+  ADR-0096 (a schema, but with _required prose fields_ for behaviour and exclusions, which
   keeps the "author decides" argument intact). Needs its own ADR and a dated correction on
   ADR-0096.
 - **C · Docgen-first for single framework.** Drop the separate type file for customers;
@@ -389,5 +389,5 @@ already report; Option B not costed beyond "about eight gates".
 **Weakest point of this review:** it counts copies and gaps; it does not show a customer
 failing because of them. The strongest counter-argument is that React's 26/29 binding
 and the gate chain have kept three adapters aligned for six months with no shipped
-divergence a user has reported — the spec works *for this repo*. The review's claim is
+divergence a user has reported — the spec works _for this repo_. The review's claim is
 narrower: it does not work as the thing the training tells customers to take home.

@@ -27,7 +27,11 @@ const Probe = defineComponent({
   setup() {
     const toast = useAtlToast();
     onMounted(() =>
-      toast.show('Saved successfully', { variant: 'success', dismissible: true, duration: 0 })
+      toast.show('Saved successfully', {
+        variant: 'success',
+        dismissible: true,
+        duration: 0,
+      }),
     );
     return () => null;
   },

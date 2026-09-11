@@ -86,13 +86,13 @@ Four details are each a decision:
 
 A `skills` schema option (default `true`) turns the install off for CI and offline runs.
 
-**Alternatives rejected.** *Vendoring pinned copies of the four `SKILL.md` files into the
-preset with a byte-drift gate* — the shape `sync-preflight.mjs` already uses — would have
+**Alternatives rejected.** _Vendoring pinned copies of the four `SKILL.md` files into the
+preset with a byte-drift gate_ — the shape `sync-preflight.mjs` already uses — would have
 been offline, deterministic and pinnable, and was rejected because it forks third-party
 text this repo does not own and buys an update ritual for content that changes on someone
-else's schedule. *Writing `skills-lock.json` and leaving the attendee to run
-`skills experimental_install`* keeps the network off the scaffold path but adds a step to
-the one part of the morning that must not have steps. *Documentation only* was rejected as
+else's schedule. _Writing `skills-lock.json` and leaving the attendee to run
+`skills experimental_install`_ keeps the network off the scaffold path but adds a step to
+the one part of the morning that must not have steps. _Documentation only_ was rejected as
 not answering the question that was asked.
 
 **The cost this accepts.** ADR-0110 pinned `figma-console-mcp` to an exact version
@@ -129,7 +129,7 @@ not.
    this repo could see it: the root has CDK, and the scaffolded app never imported the
    library until the example story did. `@angular/cdk` is now a declared peer.
 
-The second one is the more useful finding, because of *why* nothing caught it:
+The second one is the more useful finding, because of _why_ nothing caught it:
 `@nx/dependency-checks` — the rule whose entire job this is — **was never enabled for the
 three publishable UI libraries**, only for the two Nx-plugin packages. It is now wired for
 `libs/angular`, verified by removing the new peer entry and watching lint fail on exactly
@@ -146,8 +146,8 @@ is reasoned-about, not measured. `installSkills()`'s Windows path — `shell: tr
 `taskkill /T /F` process-tree kill on timeout — is unverified on Windows, and says so in
 the code: there is no Windows machine or runner in this project.
 
-Two things this record knowingly leaves standing. The example story is proven to *compile*,
-not to *render* — a static Storybook build does not execute it. And the generated CLAUDE.md
+Two things this record knowingly leaves standing. The example story is proven to _compile_,
+not to _render_ — a static Storybook build does not execute it. And the generated CLAUDE.md
 now explains, rather than papers over, that the skills' `dev`-toolset tools need a local
 `@storybook/addon-mcp` endpoint that `.mcp.json` deliberately does not pre-wire (a fixed
 `localhost` entry would fail on every session started without that Storybook running —

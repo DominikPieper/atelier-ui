@@ -1,13 +1,22 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { AtlTable, AtlThead, AtlTbody, AtlTr, AtlTh, AtlTd, type AtlSortDirection } from './atl-table';
+import {
+  AtlTable,
+  AtlThead,
+  AtlTbody,
+  AtlTr,
+  AtlTh,
+  AtlTd,
+  type AtlSortDirection,
+} from './atl-table';
 import { AtlBadge } from '../badge/atl-badge';
 import { AtlButton } from '../button/atl-button';
 import { AtlCheckbox } from '../checkbox/atl-checkbox';
 
 import { metadata } from '@atelier-ui/spec/metadata/table.metadata';
 import { contract } from '@atelier-ui/spec/contracts/table.contract';
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: 'figma'; url: string } {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
@@ -27,7 +36,11 @@ const meta: Meta<typeof AtlTable> = {
     size: 'md',
     stickyHeader: false,
   },
-  parameters: { design: figmaNode('421-1183'), docs: { description: { component: metadata.purpose } }, contract },
+  parameters: {
+    design: figmaNode('421-1183'),
+    docs: { description: { component: metadata.purpose } },
+    contract,
+  },
 };
 
 export default meta;
@@ -82,11 +95,31 @@ export const Striped: Story = {
         </AtlTr>
       </AtlThead>
       <AtlTbody>
-        <AtlTr><AtlTd>Alice</AtlTd><AtlTd>Engineering</AtlTd><AtlTd align="end">€85,000</AtlTd></AtlTr>
-        <AtlTr><AtlTd>Bob</AtlTd><AtlTd>Design</AtlTd><AtlTd align="end">€78,000</AtlTd></AtlTr>
-        <AtlTr><AtlTd>Carol</AtlTd><AtlTd>Management</AtlTd><AtlTd align="end">€95,000</AtlTd></AtlTr>
-        <AtlTr><AtlTd>David</AtlTd><AtlTd>Engineering</AtlTd><AtlTd align="end">€82,000</AtlTd></AtlTr>
-        <AtlTr><AtlTd>Eva</AtlTd><AtlTd>Marketing</AtlTd><AtlTd align="end">€71,000</AtlTd></AtlTr>
+        <AtlTr>
+          <AtlTd>Alice</AtlTd>
+          <AtlTd>Engineering</AtlTd>
+          <AtlTd align="end">€85,000</AtlTd>
+        </AtlTr>
+        <AtlTr>
+          <AtlTd>Bob</AtlTd>
+          <AtlTd>Design</AtlTd>
+          <AtlTd align="end">€78,000</AtlTd>
+        </AtlTr>
+        <AtlTr>
+          <AtlTd>Carol</AtlTd>
+          <AtlTd>Management</AtlTd>
+          <AtlTd align="end">€95,000</AtlTd>
+        </AtlTr>
+        <AtlTr>
+          <AtlTd>David</AtlTd>
+          <AtlTd>Engineering</AtlTd>
+          <AtlTd align="end">€82,000</AtlTd>
+        </AtlTr>
+        <AtlTr>
+          <AtlTd>Eva</AtlTd>
+          <AtlTd>Marketing</AtlTd>
+          <AtlTd align="end">€71,000</AtlTd>
+        </AtlTr>
       </AtlTbody>
     </AtlTable>
   ),
@@ -110,16 +143,22 @@ export const Bordered: Story = {
       </AtlThead>
       <AtlTbody>
         <AtlTr>
-          <AtlTd>Widget A</AtlTd><AtlTd>Hardware</AtlTd>
-          <AtlTd align="end">€12.99</AtlTd><AtlTd align="center">Yes</AtlTd>
+          <AtlTd>Widget A</AtlTd>
+          <AtlTd>Hardware</AtlTd>
+          <AtlTd align="end">€12.99</AtlTd>
+          <AtlTd align="center">Yes</AtlTd>
         </AtlTr>
         <AtlTr>
-          <AtlTd>Widget B</AtlTd><AtlTd>Software</AtlTd>
-          <AtlTd align="end">€29.99</AtlTd><AtlTd align="center">Yes</AtlTd>
+          <AtlTd>Widget B</AtlTd>
+          <AtlTd>Software</AtlTd>
+          <AtlTd align="end">€29.99</AtlTd>
+          <AtlTd align="center">Yes</AtlTd>
         </AtlTr>
         <AtlTr>
-          <AtlTd>Widget C</AtlTd><AtlTd>Hardware</AtlTd>
-          <AtlTd align="end">€5.49</AtlTd><AtlTd align="center">No</AtlTd>
+          <AtlTd>Widget C</AtlTd>
+          <AtlTd>Hardware</AtlTd>
+          <AtlTd align="end">€5.49</AtlTd>
+          <AtlTd align="center">No</AtlTd>
         </AtlTr>
       </AtlTbody>
     </AtlTable>
@@ -196,15 +235,45 @@ function SortableStory() {
       <AtlTable>
         <AtlThead>
           <AtlTr>
-            <AtlTh sortable sortDirection={nameSort} onSort={(d) => { setNameSort(d); setRoleSort(null); }}>Name</AtlTh>
-            <AtlTh sortable sortDirection={roleSort} onSort={(d) => { setRoleSort(d); setNameSort(null); }}>Role</AtlTh>
+            <AtlTh
+              sortable
+              sortDirection={nameSort}
+              onSort={(d) => {
+                setNameSort(d);
+                setRoleSort(null);
+              }}
+            >
+              Name
+            </AtlTh>
+            <AtlTh
+              sortable
+              sortDirection={roleSort}
+              onSort={(d) => {
+                setRoleSort(d);
+                setNameSort(null);
+              }}
+            >
+              Role
+            </AtlTh>
             <AtlTh>Email</AtlTh>
           </AtlTr>
         </AtlThead>
         <AtlTbody>
-          <AtlTr><AtlTd>Alice Müller</AtlTd><AtlTd>Engineer</AtlTd><AtlTd>alice@example.com</AtlTd></AtlTr>
-          <AtlTr><AtlTd>Bob Schmidt</AtlTd><AtlTd>Designer</AtlTd><AtlTd>bob@example.com</AtlTd></AtlTr>
-          <AtlTr><AtlTd>Carol Wagner</AtlTd><AtlTd>Manager</AtlTd><AtlTd>carol@example.com</AtlTd></AtlTr>
+          <AtlTr>
+            <AtlTd>Alice Müller</AtlTd>
+            <AtlTd>Engineer</AtlTd>
+            <AtlTd>alice@example.com</AtlTd>
+          </AtlTr>
+          <AtlTr>
+            <AtlTd>Bob Schmidt</AtlTd>
+            <AtlTd>Designer</AtlTd>
+            <AtlTd>bob@example.com</AtlTd>
+          </AtlTr>
+          <AtlTr>
+            <AtlTd>Carol Wagner</AtlTd>
+            <AtlTd>Manager</AtlTd>
+            <AtlTd>carol@example.com</AtlTd>
+          </AtlTr>
         </AtlTbody>
       </AtlTable>
       <p style={{ marginTop: '1rem', fontSize: '0.875rem', color: '#64748b' }}>
@@ -234,7 +303,9 @@ function SelectableStory() {
   const allSelected = SELECTABLE_ROWS.every((r) => selection.has(r.id));
 
   function toggleAll(checked: boolean) {
-    setSelection(checked ? new Set(SELECTABLE_ROWS.map((r) => r.id)) : new Set());
+    setSelection(
+      checked ? new Set(SELECTABLE_ROWS.map((r) => r.id)) : new Set(),
+    );
   }
 
   function toggle(id: string, checked: boolean) {
@@ -297,7 +368,14 @@ export const Selectable: Story = {
 export const StickyHeader: Story = {
   parameters: { design: figmaNode('421-884') },
   render: () => (
-    <div style={{ maxHeight: '220px', overflowY: 'auto', border: '1px solid #e5e7eb', borderRadius: '0.5rem' }}>
+    <div
+      style={{
+        maxHeight: '220px',
+        overflowY: 'auto',
+        border: '1px solid #e5e7eb',
+        borderRadius: '0.5rem',
+      }}
+    >
       <AtlTable stickyHeader>
         <AtlThead>
           <AtlTr>
@@ -337,10 +415,28 @@ export const EmptyState: Story = {
         empty
         colSpan={3}
         emptyContent={
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem' }}>
-            <svg width="40" height="40" viewBox="0 0 40 40" fill="none" aria-hidden="true">
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '0.5rem',
+            }}
+          >
+            <svg
+              width="40"
+              height="40"
+              viewBox="0 0 40 40"
+              fill="none"
+              aria-hidden="true"
+            >
               <circle cx="20" cy="20" r="18" stroke="#e5e7eb" strokeWidth="2" />
-              <path d="M13 20h14M20 13v14" stroke="#d1d5db" strokeWidth="2" strokeLinecap="round" />
+              <path
+                d="M13 20h14M20 13v14"
+                stroke="#d1d5db"
+                strokeWidth="2"
+                strokeLinecap="round"
+              />
             </svg>
             <span>No team members found.</span>
           </div>
@@ -367,7 +463,9 @@ function KitchenSinkStory() {
   const allSelected = KITCHEN_SINK_ROWS.every((r) => selection.has(r.id));
 
   function toggleAll(checked: boolean) {
-    setSelection(checked ? new Set(KITCHEN_SINK_ROWS.map((r) => r.id)) : new Set());
+    setSelection(
+      checked ? new Set(KITCHEN_SINK_ROWS.map((r) => r.id)) : new Set(),
+    );
   }
 
   function toggle(id: string, checked: boolean) {
@@ -380,14 +478,23 @@ function KitchenSinkStory() {
   }
 
   return (
-    <div style={{ maxHeight: '300px', overflowY: 'auto', border: '1px solid #e5e7eb', borderRadius: '0.75rem' }}>
+    <div
+      style={{
+        maxHeight: '300px',
+        overflowY: 'auto',
+        border: '1px solid #e5e7eb',
+        borderRadius: '0.75rem',
+      }}
+    >
       <AtlTable variant="striped" stickyHeader>
         <AtlThead>
           <AtlTr>
             <AtlTh>
               <AtlCheckbox checked={allSelected} onCheckedChange={toggleAll} />
             </AtlTh>
-            <AtlTh sortable sortDirection={nameSort} onSort={setNameSort}>Name</AtlTh>
+            <AtlTh sortable sortDirection={nameSort} onSort={setNameSort}>
+              Name
+            </AtlTh>
             <AtlTh>Role</AtlTh>
             <AtlTh align="center">Status</AtlTh>
             <AtlTh align="end">Actions</AtlTh>
@@ -408,10 +515,16 @@ function KitchenSinkStory() {
               <AtlTd>{row.name}</AtlTd>
               <AtlTd>{row.role}</AtlTd>
               <AtlTd align="center">
-                <AtlBadge variant={row.status === 'active' ? 'success' : 'default'}>{row.status}</AtlBadge>
+                <AtlBadge
+                  variant={row.status === 'active' ? 'success' : 'default'}
+                >
+                  {row.status}
+                </AtlBadge>
               </AtlTd>
               <AtlTd align="end">
-                <AtlButton size="sm" variant="secondary">Edit</AtlButton>
+                <AtlButton size="sm" variant="secondary">
+                  Edit
+                </AtlButton>
               </AtlTd>
             </AtlTr>
           ))}
@@ -453,9 +566,21 @@ export const Playground: Story = {
         </AtlTr>
       </AtlThead>
       <AtlTbody>
-        <AtlTr><AtlTd>Cell A1</AtlTd><AtlTd>Cell B1</AtlTd><AtlTd>Cell C1</AtlTd></AtlTr>
-        <AtlTr><AtlTd>Cell A2</AtlTd><AtlTd>Cell B2</AtlTd><AtlTd>Cell C2</AtlTd></AtlTr>
-        <AtlTr><AtlTd>Cell A3</AtlTd><AtlTd>Cell B3</AtlTd><AtlTd>Cell C3</AtlTd></AtlTr>
+        <AtlTr>
+          <AtlTd>Cell A1</AtlTd>
+          <AtlTd>Cell B1</AtlTd>
+          <AtlTd>Cell C1</AtlTd>
+        </AtlTr>
+        <AtlTr>
+          <AtlTd>Cell A2</AtlTd>
+          <AtlTd>Cell B2</AtlTd>
+          <AtlTd>Cell C2</AtlTd>
+        </AtlTr>
+        <AtlTr>
+          <AtlTd>Cell A3</AtlTd>
+          <AtlTd>Cell B3</AtlTd>
+          <AtlTd>Cell C3</AtlTd>
+        </AtlTr>
       </AtlTbody>
     </AtlTable>
   ),

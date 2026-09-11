@@ -26,18 +26,22 @@ const props = withDefaults(defineProps<AtlProgressProps>(), {
   label: undefined,
 });
 
-const clampedValue = computed(() => Math.min(Math.max(props.value, 0), props.max));
-
-const fillWidth = computed(() =>
-  props.indeterminate ? '100%' : `${(clampedValue.value / props.max) * 100}%`
+const clampedValue = computed(() =>
+  Math.min(Math.max(props.value, 0), props.max),
 );
 
-const classes = computed(() => [
-  'atl-progress',
-  `variant-${props.variant}`,
-  `size-${props.size}`,
-  props.indeterminate && 'is-indeterminate',
-].filter(Boolean));
+const fillWidth = computed(() =>
+  props.indeterminate ? '100%' : `${(clampedValue.value / props.max) * 100}%`,
+);
+
+const classes = computed(() =>
+  [
+    'atl-progress',
+    `variant-${props.variant}`,
+    `size-${props.size}`,
+    props.indeterminate && 'is-indeterminate',
+  ].filter(Boolean),
+);
 </script>
 
 <template>

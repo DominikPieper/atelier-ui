@@ -9,3 +9,20 @@
 
 # Generated from behaviors.json by tools/scripts/gen-behaviors.mjs
 libs/spec/src/behaviors.generated.ts
+# --- Generated artifacts: their generator is their formatter, not Prettier ---
+# Each of these is written by a tools/scripts/gen-*.mjs and then compared
+# byte-for-byte against a fresh regeneration by a `--check` gate (ADR-0009's
+# one source -> projection -> --check idiom). If Prettier reformatted them,
+# the gate would fail on every run, and re-running the generator would undo
+# Prettier — a fixpoint that does not exist. The generator owns the bytes.
+docs/public/llms.txt
+docs/public/llms-full.txt
+docs/public/.well-known/cookbook-patterns.json
+tools/design/artboard-palette.css
+plan/design-status.md
+libs/create-workspace/src/generators/preset/files/figma/snapshot.json
+
+# Captured data, not authored source: Figma snapshots and the ratchet
+# baselines the parity/paint/typeface gates read.
+tools/figma/*.json
+tools/parity/**/*.json

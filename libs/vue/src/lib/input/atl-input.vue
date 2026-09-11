@@ -58,7 +58,9 @@ const emit = defineEmits<{
   'update:value': [value: string];
 }>();
 
-const inputId = computed(() => props.id || (props.label ? `input-${generatedId}` : undefined));
+const inputId = computed(
+  () => props.id || (props.label ? `input-${generatedId}` : undefined),
+);
 
 function onInput(event: Event) {
   emit('update:value', (event.target as HTMLInputElement).value);
@@ -66,7 +68,14 @@ function onInput(event: Event) {
 </script>
 
 <template>
-  <div class="atl-input" :class="{ 'is-invalid': invalid, 'is-disabled': disabled, 'is-readonly': readonly }">
+  <div
+    class="atl-input"
+    :class="{
+      'is-invalid': invalid,
+      'is-disabled': disabled,
+      'is-readonly': readonly,
+    }"
+  >
     <label v-if="label" :for="inputId">{{ label }}</label>
     <div class="input-field">
       <input
@@ -87,7 +96,9 @@ function onInput(event: Event) {
       <AtlIcon v-if="invalid" name="danger" size="sm" class="invalid-icon" />
     </div>
     <div v-if="errors.length" :id="errorsId" class="errors" aria-live="polite">
-      <p v-for="(error, i) in errors" :key="i" class="error-message">{{ error }}</p>
+      <p v-for="(error, i) in errors" :key="i" class="error-message">
+        {{ error }}
+      </p>
     </div>
   </div>
 </template>

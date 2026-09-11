@@ -49,7 +49,11 @@ import { tmpdir } from 'node:os';
 import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
-const { FRAMEWORKS, isComponentDir, getComponentDirs } = require('./lib/component-discovery.js');
+const {
+  FRAMEWORKS,
+  isComponentDir,
+  getComponentDirs,
+} = require('./lib/component-discovery.js');
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const QUIET = process.argv.includes('--check');
@@ -97,8 +101,10 @@ const CONTROLS = [
     label: 'AtlButton',
     steps: ['sm', 'md', 'lg'],
     markup: {
-      default: (s) => `<button class="atl-button variant-primary size-${s}">Label</button>`,
-      angular: (s) => `<atl-button class="variant-primary size-${s}">Label</atl-button>`,
+      default: (s) =>
+        `<button class="atl-button variant-primary size-${s}">Label</button>`,
+      angular: (s) =>
+        `<atl-button class="variant-primary size-${s}">Label</atl-button>`,
     },
     measure: { default: '.atl-button', angular: 'atl-button' },
   },
@@ -107,8 +113,10 @@ const CONTROLS = [
     label: 'AtlInput',
     steps: ['md'],
     markup: {
-      default: () => `<div class="atl-input" style="width:240px"><div class="input-field"><input value="Value"></div></div>`,
-      angular: () => `<atl-input style="display:block;width:240px"><div class="input-field"><input value="Value"></div></atl-input>`,
+      default: () =>
+        `<div class="atl-input" style="width:240px"><div class="input-field"><input value="Value"></div></div>`,
+      angular: () =>
+        `<atl-input style="display:block;width:240px"><div class="input-field"><input value="Value"></div></atl-input>`,
     },
     measure: { default: '.atl-input input', angular: 'atl-input input' },
   },
@@ -120,8 +128,10 @@ const CONTROLS = [
     label: 'AtlSelect',
     steps: ['md'],
     markup: {
-      default: () => `<div class="atl-select" style="width:220px"><select><option>Option</option></select></div>`,
-      angular: () => `<atl-select style="display:block;width:220px"><button type="button" class="trigger">Option</button></atl-select>`,
+      default: () =>
+        `<div class="atl-select" style="width:220px"><select><option>Option</option></select></div>`,
+      angular: () =>
+        `<atl-select style="display:block;width:220px"><button type="button" class="trigger">Option</button></atl-select>`,
     },
     measure: { default: '.atl-select select', angular: 'atl-select .trigger' },
   },
@@ -154,8 +164,10 @@ const CONTROLS = [
     label: 'AtlMenuItem',
     steps: ['sm'],
     markup: {
-      default: () => `<div class="atl-menu variant-compact"><div class="atl-menu-item">Duplicate</div></div>`,
-      angular: () => `<atl-menu class="atl-menu variant-compact"><div class="atl-menu-item">Duplicate</div></atl-menu>`,
+      default: () =>
+        `<div class="atl-menu variant-compact"><div class="atl-menu-item">Duplicate</div></div>`,
+      angular: () =>
+        `<atl-menu class="atl-menu variant-compact"><div class="atl-menu-item">Duplicate</div></atl-menu>`,
     },
     measure: { default: '.atl-menu-item', angular: '.atl-menu-item' },
   },
@@ -166,8 +178,10 @@ const CONTROLS = [
     ladder: 'row',
     steps: ['sm'],
     markup: {
-      default: () => `<div class="atl-menu"><div class="atl-menu-item">Duplicate</div></div>`,
-      angular: () => `<atl-menu class="atl-menu"><div class="atl-menu-item">Duplicate</div></atl-menu>`,
+      default: () =>
+        `<div class="atl-menu"><div class="atl-menu-item">Duplicate</div></div>`,
+      angular: () =>
+        `<atl-menu class="atl-menu"><div class="atl-menu-item">Duplicate</div></atl-menu>`,
     },
     measure: { default: '.atl-menu-item', angular: '.atl-menu-item' },
   },
@@ -179,7 +193,8 @@ const CONTROLS = [
     markup: {
       default: () =>
         `<div class="atl-combobox"><div class="atl-combobox-panel" style="position:static"><div class="atl-combobox-option">Angular</div></div></div>`,
-      angular: () => `<atl-combobox><div class="panel"><div class="option">Angular</div></div></atl-combobox>`,
+      angular: () =>
+        `<atl-combobox><div class="panel"><div class="option">Angular</div></div></atl-combobox>`,
     },
     measure: { default: '.atl-combobox-option', angular: '.option' },
   },
@@ -188,8 +203,10 @@ const CONTROLS = [
     label: 'AtlCodeBlock',
     steps: ['md'],
     markup: {
-      default: () => `<div class="atl-code-block" style="width:260px"><div class="code-block-header">tokens.css</div></div>`,
-      angular: () => `<atl-code-block style="display:block;width:260px"><div class="code-block-header">tokens.css</div></atl-code-block>`,
+      default: () =>
+        `<div class="atl-code-block" style="width:260px"><div class="code-block-header">tokens.css</div></div>`,
+      angular: () =>
+        `<atl-code-block style="display:block;width:260px"><div class="code-block-header">tokens.css</div></atl-code-block>`,
     },
     measure: { default: '.code-block-header', angular: '.code-block-header' },
   },
@@ -198,8 +215,10 @@ const CONTROLS = [
     label: 'AtlDialogClose',
     steps: ['sm'],
     markup: {
-      default: () => `<div class="atl-dialog-header"><button class="close-btn">x</button></div>`,
-      angular: () => `<atl-dialog-header class="atl-dialog-header"><button class="close-btn">x</button></atl-dialog-header>`,
+      default: () =>
+        `<div class="atl-dialog-header"><button class="close-btn">x</button></div>`,
+      angular: () =>
+        `<atl-dialog-header class="atl-dialog-header"><button class="close-btn">x</button></atl-dialog-header>`,
     },
     measure: { default: '.close-btn', angular: '.close-btn' },
   },
@@ -208,8 +227,10 @@ const CONTROLS = [
     label: 'AtlDrawerClose',
     steps: ['sm'],
     markup: {
-      default: () => `<div class="atl-drawer-header"><button class="close-btn">x</button></div>`,
-      angular: () => `<atl-drawer-header class="atl-drawer-header"><button class="close-btn">x</button></atl-drawer-header>`,
+      default: () =>
+        `<div class="atl-drawer-header"><button class="close-btn">x</button></div>`,
+      angular: () =>
+        `<atl-drawer-header class="atl-drawer-header"><button class="close-btn">x</button></atl-drawer-header>`,
     },
     measure: { default: '.close-btn', angular: '.close-btn' },
   },
@@ -218,8 +239,10 @@ const CONTROLS = [
     label: 'AtlChatClose',
     steps: ['sm'],
     markup: {
-      default: () => `<div class="atl-chat-header"><button class="close-btn">x</button></div>`,
-      angular: () => `<atl-chat-header><button class="close-btn">x</button></atl-chat-header>`,
+      default: () =>
+        `<div class="atl-chat-header"><button class="close-btn">x</button></div>`,
+      angular: () =>
+        `<atl-chat-header><button class="close-btn">x</button></atl-chat-header>`,
     },
     measure: { default: '.close-btn', angular: '.close-btn' },
   },
@@ -273,7 +296,8 @@ const CONTROLS = [
     markup: {
       default: () =>
         `<label class="atl-radio"><input type="radio"><span class="radio-text">Small</span></label>`,
-      angular: () => `<atl-radio><input type="radio"><span class="radio-text">Small</span></atl-radio>`,
+      angular: () =>
+        `<atl-radio><input type="radio"><span class="radio-text">Small</span></atl-radio>`,
     },
     measure: { default: '.atl-radio', angular: 'atl-radio' },
   },
@@ -323,11 +347,16 @@ const rows = [];
 
 // ── the heights the tokens claim ──────────────────────────────────────────────
 const tokensCss = readFileSync(
-  resolve(ROOT, 'libs/create-workspace/src/generators/preset/files/styles/tokens.css'),
-  'utf8'
+  resolve(
+    ROOT,
+    'libs/create-workspace/src/generators/preset/files/styles/tokens.css',
+  ),
+  'utf8',
 );
 const claimed = { control: {}, row: {} };
-for (const m of tokensCss.matchAll(/--ui-control-height-([a-z]+)\s*:\s*([\d.]+)rem\s*;/g)) {
+for (const m of tokensCss.matchAll(
+  /--ui-control-height-([a-z]+)\s*:\s*([\d.]+)rem\s*;/g,
+)) {
   claimed.control[m[1]] = parseFloat(m[2]) * 16; // the token file is rem-based; 1rem = 16px at the default root
 }
 // Row heights are a calc over the control scale plus twice the inset (ADR-0052), so
@@ -335,10 +364,13 @@ for (const m of tokensCss.matchAll(/--ui-control-height-([a-z]+)\s*:\s*([\d.]+)r
 const insetMatch = tokensCss.match(/--ui-row-inset\s*:\s*([\d.]+)rem\s*;/);
 if (insetMatch) {
   const inset = parseFloat(insetMatch[1]) * 16;
-  for (const [step, px] of Object.entries(claimed.control)) claimed.row[step] = px + 2 * inset;
+  for (const [step, px] of Object.entries(claimed.control))
+    claimed.row[step] = px + 2 * inset;
 }
 if (Object.keys(claimed.control).length === 0) {
-  console.error('✗ the token source declares no --ui-control-height-* tokens; nothing to check.');
+  console.error(
+    '✗ the token source declares no --ui-control-height-* tokens; nothing to check.',
+  );
   process.exit(1);
 }
 
@@ -350,7 +382,11 @@ for (const fw of FRAMEWORKS) {
     const dirPath = join(base, dir);
     if (!isComponentDir(dirPath)) continue;
     for (const f of readdirSync(dirPath).filter((f) => f.endsWith('.css'))) {
-      if (/var\(\s*--ui-(control|row)-height-/.test(readFileSync(join(dirPath, f), 'utf8'))) {
+      if (
+        /var\(\s*--ui-(control|row)-height-/.test(
+          readFileSync(join(dirPath, f), 'utf8'),
+        )
+      ) {
         referencing.add(dir);
       }
     }
@@ -360,14 +396,14 @@ const registered = new Set(CONTROLS.map((c) => c.dir));
 for (const dir of referencing) {
   if (!registered.has(dir)) {
     errors.push(
-      `[ROSTER] ${dir} references a --ui-control-height-* token but is not in CONTROLS in this file, so its height is never measured. Add it.`
+      `[ROSTER] ${dir} references a --ui-control-height-* token but is not in CONTROLS in this file, so its height is never measured. Add it.`,
     );
   }
 }
 for (const dir of registered) {
   if (!referencing.has(dir)) {
     errors.push(
-      `[STALE] CONTROLS lists ${dir}, but no ${dir} stylesheet references a --ui-control-height-* token any more. Remove the entry.`
+      `[STALE] CONTROLS lists ${dir}, but no ${dir} stylesheet references a --ui-control-height-* token any more. Remove the entry.`,
     );
   }
 }
@@ -378,7 +414,7 @@ try {
   ({ chromium } = await import('@playwright/test'));
 } catch {
   console.error(
-    '✗ this gate needs a browser: @playwright/test is not resolvable. Run npm ci, then npx playwright install chromium.'
+    '✗ this gate needs a browser: @playwright/test is not resolvable. Run npm ci, then npx playwright install chromium.',
   );
   process.exit(1);
 }
@@ -409,14 +445,17 @@ try {
 } catch (err) {
   console.error(
     `✗ this gate needs a browser and could not launch one — ${String(err.message).split('\n')[0]}\n` +
-      '  Run: npx playwright install chromium'
+      '  Run: npx playwright install chromium',
   );
   process.exit(1);
 }
 const tab = await browser.newPage({ viewport: { width: 900, height: 600 } });
 
 for (const fw of FRAMEWORKS) {
-  const tokens = readFileSync(join(ROOT, 'libs', fw, 'src/styles/tokens.css'), 'utf8');
+  const tokens = readFileSync(
+    join(ROOT, 'libs', fw, 'src/styles/tokens.css'),
+    'utf8',
+  );
   for (const control of CONTROLS) {
     // A box that genuinely exists in only some frameworks. AtlSelect is the case:
     // React and Vue render a native <select>, where the OS draws the list and no
@@ -456,19 +495,25 @@ for (const fw of FRAMEWORKS) {
 
       // Same box, with inherited line-heights perturbed. Unchanged means the height
       // is stated; changed means it follows whatever text metrics it inherits.
-      await tab.addStyleTag({ content: INHERITED_METRIC_PROBE[control.ladder || 'control'] });
+      await tab.addStyleTag({
+        content: INHERITED_METRIC_PROBE[control.ladder || 'control'],
+      });
       const perturbed = await tab.evaluate((sel) => {
         const el = document.querySelector(sel);
         return el ? el.getBoundingClientRect().height : null;
       }, selector);
 
-      if (measured !== null && perturbed !== null && Math.abs(measured - perturbed) > TOL) {
+      if (
+        measured !== null &&
+        perturbed !== null &&
+        Math.abs(measured - perturbed) > TOL
+      ) {
         errors.push(
           `[CONTENT-DRIVEN] ${fw}/${control.label} size=${step} is ${measured}px normally but ${perturbed}px once ` +
             `inherited line-heights change, so its height is decided by text metrics rather than by its token. ` +
             `It measures right here only because the content happens to fit — on a machine with different fonts it ` +
             `does not (that is how AtlSelect passed locally and failed in CI). Declare the control line-height on ` +
-            `the rule and derive the block padding from the height (ADR-0041, ADR-0048).`
+            `the rule and derive the block padding from the height (ADR-0041, ADR-0048).`,
         );
       }
 
@@ -476,23 +521,32 @@ for (const fw of FRAMEWORKS) {
       const want = claimed[ladder][step];
       if (measured === null) {
         errors.push(
-          `[MARKUP] ${fw}/${control.label} ${step}: the fixture markup in CONTROLS produces no element matching \`${selector}\`. Fix the entry.`
+          `[MARKUP] ${fw}/${control.label} ${step}: the fixture markup in CONTROLS produces no element matching \`${selector}\`. Fix the entry.`,
         );
         continue;
       }
       if (want === undefined) {
-        errors.push(`[TOKEN] ${control.label} ${step}: the token source declares no --ui-${ladder}-height-${step}.`);
+        errors.push(
+          `[TOKEN] ${control.label} ${step}: the token source declares no --ui-${ladder}-height-${step}.`,
+        );
         continue;
       }
       const off = Math.abs(measured - want);
-      rows.push({ fw, label: control.label, step, height: measured, want, ok: off <= TOL });
+      rows.push({
+        fw,
+        label: control.label,
+        step,
+        height: measured,
+        want,
+        ok: off <= TOL,
+      });
       if (off > TOL) {
         errors.push(
           `[HEIGHT] ${fw}/${control.label} size=${step} renders ${measured}px but --ui-control-height-${step} claims ${want}px ` +
             `(off by ${off.toFixed(2)}px). A control derives its block padding from the height (ADR-0041); a row states the ` +
             `height, zeroes the block padding and centres its content (ADR-0052). Also check that no later ` +
             `shorthand — \`all: unset\`, \`font:\` — resets what an earlier declaration stated. And ` +
-            `check the component declares its geometry contract (ADR-0043).`
+            `check the component declares its geometry contract (ADR-0043).`,
         );
       }
     }
@@ -504,7 +558,7 @@ await browser.close();
 if (!QUIET) {
   for (const r of rows) {
     console.log(
-      `  ${r.ok ? 'PASS' : 'FAIL'}  ${r.fw.padEnd(8)} ${r.label.padEnd(11)} size=${r.step.padEnd(3)} ${String(r.height).padStart(6)}px  (token ${r.want}px)`
+      `  ${r.ok ? 'PASS' : 'FAIL'}  ${r.fw.padEnd(8)} ${r.label.padEnd(11)} size=${r.step.padEnd(3)} ${String(r.height).padStart(6)}px  (token ${r.want}px)`,
     );
   }
 }
@@ -518,4 +572,6 @@ if (errors.length > 0) {
   console.error(`\n${errors.length} geometry issue(s). ${summary}.`);
   process.exit(1);
 }
-console.log(`✓ every control renders the height its token claims (${summary}).`);
+console.log(
+  `✓ every control renders the height its token claims (${summary}).`,
+);

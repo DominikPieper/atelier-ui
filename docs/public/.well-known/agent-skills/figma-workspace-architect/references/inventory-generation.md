@@ -1,12 +1,12 @@
 # Inventory generation — Build sub-mode
 
-A Build sub-mode that scans the current file (or a specific page / section) and emits a **standardized visual gallery** — one card per published Component / Component Set, grouped by slash-namespace, on a dedicated page. The gallery is a *data card*, not just an asset dump: header + status badge + preview + meta row + property table + optional description footer.
+A Build sub-mode that scans the current file (or a specific page / section) and emits a **standardized visual gallery** — one card per published Component / Component Set, grouped by slash-namespace, on a dedicated page. The gallery is a _data card_, not just an asset dump: header + status badge + preview + meta row + property table + optional description footer.
 
 It is the visual artifact the Document phase produces when the user wants a library overview a designer or downstream agent can scan cold.
 
 ## When to run this sub-mode
 
-Triggered by *generate inventory, build gallery, library catalog, stickersheet, library overview, audit visual* (when paired with a request to *render* the audit).
+Triggered by _generate inventory, build gallery, library catalog, stickersheet, library overview, audit visual_ (when paired with a request to _render_ the audit).
 
 Run it:
 
@@ -17,7 +17,7 @@ Run it:
 Do **not** run it:
 
 - Before Validate in a build — half-shipped components pollute the gallery.
-- In place of `figma_audit_design_system` — the inventory shows what *is*, not what's wrong.
+- In place of `figma_audit_design_system` — the inventory shows what _is_, not what's wrong.
 
 ## Output target
 
@@ -27,39 +27,37 @@ A new page named `📋 Inventory` is created at the end of the page list. If one
 
 Seven phases. The skill agent orchestrates the call sequence; each phase below is one (or N) `figma_execute` calls. The function is **stateless across calls** — every call receives the IDs it needs and returns IDs the next call uses.
 
-| Phase | Calls | Purpose |
-|---|---|---|
-| 1. Discover | 1 | Enumerate Components / Component Sets, return light index |
-| 2. Group | 0 (pure JS) | Build nested map by slash segments → emit Section plan |
-| 3. Scaffold | 1 | Create the Inventory page + one Section per top-level category |
-| 4. Populate | **N** (one per Section) | Build cards in chunks of 25, yielding between chunks |
-| 5. Card builder | (inside Phase 4) | Atomic structure per card; metadata extraction |
-| 6. Mark Ready + index | 1 | `devStatus = READY_FOR_DEV` on each Section + write a TOC |
-| 7. Validate | 1 per Section | `figma_capture_screenshot` per Section + coverage report |
+| Phase                 | Calls                   | Purpose                                                        |
+| --------------------- | ----------------------- | -------------------------------------------------------------- |
+| 1. Discover           | 1                       | Enumerate Components / Component Sets, return light index      |
+| 2. Group              | 0 (pure JS)             | Build nested map by slash segments → emit Section plan         |
+| 3. Scaffold           | 1                       | Create the Inventory page + one Section per top-level category |
+| 4. Populate           | **N** (one per Section) | Build cards in chunks of 25, yielding between chunks           |
+| 5. Card builder       | (inside Phase 4)        | Atomic structure per card; metadata extraction                 |
+| 6. Mark Ready + index | 1                       | `devStatus = READY_FOR_DEV` on each Section + write a TOC      |
+| 7. Validate           | 1 per Section           | `figma_capture_screenshot` per Section + coverage report       |
 
 `inventory-payload.md` carries the ready-to-paste `figma_execute` snippets for each phase.
 
 ## Phase 1 — Discover (one read-only call)
 
-Returns a *light* index — `id`, `name`, `type` only — so the payload stays small even on 1000+ component files.
+Returns a _light_ index — `id`, `name`, `type` only — so the payload stays small even on 1000+ component files.
 
 ```js
 await figma.loadAllPagesAsync();
 figma.skipInvisibleInstanceChildren = true;
 
-const all = await figma.root.findAllAsync(
-  n => n.type === 'COMPONENT' || n.type === 'COMPONENT_SET'
-);
+const all = await figma.root.findAllAsync((n) => n.type === 'COMPONENT' || n.type === 'COMPONENT_SET');
 
 // Defaults — agents can override via skipNamespaces / skipPages.
 // Icons live on a dedicated `Icons` page in a properly-structured library
 // (see naming-and-file-structure.md). They typically number in the dozens
 // and would dominate the gallery — exclude by default.
-const SKIP_NS    = new Set(['Icon']);
+const SKIP_NS = new Set(['Icon']);
 const SKIP_PAGES = new Set(['Icons', '🔣 Icons']);
 
 const skipped = [];
-const sources = all.filter(n => {
+const sources = all.filter((n) => {
   // Skip variant children — the parent COMPONENT_SET is the unit of inventory
   if (n.type === 'COMPONENT' && n.parent?.type === 'COMPONENT_SET') return false;
   // Skip private prefix (matches naming-and-file-structure.md:49)
@@ -85,14 +83,14 @@ const sources = all.filter(n => {
 });
 
 return {
-  sources: sources.map(n => ({ id: n.id, name: n.name, type: n.type })),
+  sources: sources.map((n) => ({ id: n.id, name: n.name, type: n.type })),
   skipped,
 };
 ```
 
 `loadAllPagesAsync()` is required — without it `findAllAsync` does not see components on unloaded pages. The host plugin's manifest must declare `documentAccess: "dynamic-page"`; figma-console-mcp does this by default but new self-hosted plugins need it.
 
-**Why icons are excluded by default.** Icons live on a dedicated `Icons` page in a properly-structured library (per `naming-and-file-structure.md`). That page is *itself* the icon gallery — re-rendering every icon as an inventory card produces a wall of mostly-empty cells (one tiny glyph each, no Variant Properties to display, identical descriptions) that drowns the actual component cards. The agent should treat the dedicated Icons page as the canonical icon reference and keep the inventory focused on Components. Override the defaults when an icon library legitimately lives outside its own page (rare).
+**Why icons are excluded by default.** Icons live on a dedicated `Icons` page in a properly-structured library (per `naming-and-file-structure.md`). That page is _itself_ the icon gallery — re-rendering every icon as an inventory card produces a wall of mostly-empty cells (one tiny glyph each, no Variant Properties to display, identical descriptions) that drowns the actual component cards. The agent should treat the dedicated Icons page as the canonical icon reference and keep the inventory focused on Components. Override the defaults when an icon library legitimately lives outside its own page (rare).
 
 ## Phase 2 — Group (no `figma_execute`)
 
@@ -100,8 +98,8 @@ The skill walks `sources` in JS and builds a nested map keyed by slash segments.
 
 ```ts
 type GroupNode = {
-  components: LightRef[];                  // direct children at this level
-  children: Record<string, GroupNode>;     // sub-categories
+  components: LightRef[]; // direct children at this level
+  children: Record<string, GroupNode>; // sub-categories
 };
 ```
 
@@ -109,7 +107,7 @@ Then it emits the **Section plan** — one entry per top-level category, with su
 
 ```ts
 type SectionPlan = {
-  sectionName: string;                                      // first slash segment
+  sectionName: string; // first slash segment
   groups: Array<{ groupName: string; componentIds: string[] }>;
 };
 ```
@@ -124,7 +122,7 @@ Create the Inventory page + one Section per top-level category. Sections do not 
 const PAGE_NAME = '📋 Inventory';
 
 // Wipe existing if any (re-run idempotency)
-const existing = figma.root.children.find(p => p.name === PAGE_NAME);
+const existing = figma.root.children.find((p) => p.name === PAGE_NAME);
 if (existing) existing.remove();
 
 const page = figma.createPage();
@@ -143,14 +141,14 @@ for (const plan of sectionPlans) {
   inner.layoutMode = 'VERTICAL';
   inner.layoutSizingHorizontal = 'HUG';
   inner.layoutSizingVertical = 'HUG';
-  inner.itemSpacing = 48;          // GAP_GROUP
+  inner.itemSpacing = 48; // GAP_GROUP
   inner.paddingTop = inner.paddingBottom = 32;
   inner.paddingLeft = inner.paddingRight = 32;
-  inner.fills = [];                // Section provides background
+  inner.fills = []; // Section provides background
   section.appendChild(inner);
 
   sectionRefs[plan.sectionName] = { sectionId: section.id, innerId: inner.id };
-  cursorX += 1600;                  // rough placeholder; reflowed after Phase 4
+  cursorX += 1600; // rough placeholder; reflowed after Phase 4
 }
 
 return { sectionRefs };
@@ -173,10 +171,10 @@ async function buildSection({ innerId, groups, sectionName }) {
 
   const built = [];
   for (const group of groups) {
-    const groupFrame = makeGroupFrame(group.groupName);     // see inventory-payload.md
+    const groupFrame = makeGroupFrame(group.groupName); // see inventory-payload.md
     inner.appendChild(groupFrame);
 
-    const cardsRow = makeCardsRow();                        // HORIZONTAL · layoutWrap='WRAP'
+    const cardsRow = makeCardsRow(); // HORIZONTAL · layoutWrap='WRAP'
     groupFrame.appendChild(cardsRow);
 
     for (let i = 0; i < group.componentIds.length; i += 25) {
@@ -188,7 +186,7 @@ async function buildSection({ innerId, groups, sectionName }) {
         cardsRow.appendChild(card);
         built.push({ componentId: id, cardId: card.id });
       }
-      await new Promise(r => setTimeout(r, 0));             // YIELD
+      await new Promise((r) => setTimeout(r, 0)); // YIELD
     }
   }
   return { sectionName, built };
@@ -229,9 +227,9 @@ function extractMetadata(node) {
       const displayKey = key.split('#')[0];
       properties.push({
         key: displayKey,
-        type: def.type,                       // 'VARIANT' | 'BOOLEAN' | 'TEXT' | 'INSTANCE_SWAP'
+        type: def.type, // 'VARIANT' | 'BOOLEAN' | 'TEXT' | 'INSTANCE_SWAP'
         defaultValue: def.defaultValue,
-        variantOptions: def.variantOptions,   // VARIANT only
+        variantOptions: def.variantOptions, // VARIANT only
         preferredValues: def.preferredValues, // INSTANCE_SWAP only
       });
     }
@@ -239,7 +237,7 @@ function extractMetadata(node) {
 
   return {
     description: node.description || '',
-    documentationLinks: (node.documentationLinks || []).map(d => d.uri),
+    documentationLinks: (node.documentationLinks || []).map((d) => d.uri),
     properties,
     defaultVariantId: isSet ? node.defaultVariant.id : null,
     size: { width: previewNode.width, height: previewNode.height },
@@ -256,7 +254,7 @@ Plugin data wins over `devStatus` wins over a description tag. This lets a separ
 ```js
 function resolveStatus(node) {
   const pd = node.getSharedPluginData('inventory', 'status');
-  if (pd) return normalize(pd);                         // 'ready' | 'beta' | 'wip' | 'deprecated'
+  if (pd) return normalize(pd); // 'ready' | 'beta' | 'wip' | 'deprecated'
   if (node.devStatus?.type === 'READY_FOR_DEV') return 'ready';
   const tag = node.description?.match(/\[(stable|ready|beta|wip|deprecated)\]/i);
   if (tag) return tag[1].toLowerCase().replace('stable', 'ready');
@@ -278,14 +276,14 @@ Decides whether a card uses a light or dark surface so the preview reads correct
 3. **Ancestor fill luminance.** Walk **up** from the previewNode through its parent chain and sample the first ancestor with a visible SOLID fill. Compute relative luminance:
 
    ```js
-   const L = 0.2126 * r + 0.7152 * g + 0.0722 * b;   // 0..1
+   const L = 0.2126 * r + 0.7152 * g + 0.0722 * b; // 0..1
    const result = L < 0.5 ? 'dark' : 'light';
    node.setSharedPluginData('inventory', 'contextualBg', result);
    ```
 
 4. **Fallback:** `'light'` — the component sits on the page background, which is light by Figma default.
 
-**Why ancestor-up, not previewNode-root.** The previewNode's own root fill is usually the component itself — a Button frame is teal, a Tooltip is dark, a Toast is colored. That fill is not the component's *contextual* surface; it's the component's *own* paint. Sampling the root produces false-dark cards for every tinted action component, which is the most common shape in any library. The actual surface is the Section/Frame the component sits inside; the layer-name hint covers the rare "this component is intentionally dark" case.
+**Why ancestor-up, not previewNode-root.** The previewNode's own root fill is usually the component itself — a Button frame is teal, a Tooltip is dark, a Toast is colored. That fill is not the component's _contextual_ surface; it's the component's _own_ paint. Sampling the root produces false-dark cards for every tinted action component, which is the most common shape in any library. The actual surface is the Section/Frame the component sits inside; the layer-name hint covers the rare "this component is intentionally dark" case.
 
 The cached value lets re-runs skip the ancestor walk entirely.
 
@@ -296,14 +294,14 @@ Card-only constants — they describe a single artifact type, not a system rule,
 ```js
 const PALETTE = {
   light: { surface: '#FFFFFF', preview: '#F4F4F5', fg: '#0A0A0A', muted: '#6B7280' },
-  dark:  { surface: '#0A0A0A', preview: '#1F1F23', fg: '#FAFAFA', muted: '#9CA3AF' },
+  dark: { surface: '#0A0A0A', preview: '#1F1F23', fg: '#FAFAFA', muted: '#9CA3AF' },
 };
 const STATUS = {
-  ready:      { color: '#10B981', fg: '#FFFFFF', label: 'READY' },
-  beta:       { color: '#F59E0B', fg: '#000000', label: 'BETA' },
-  wip:        { color: '#6366F1', fg: '#FFFFFF', label: 'WIP' },
+  ready: { color: '#10B981', fg: '#FFFFFF', label: 'READY' },
+  beta: { color: '#F59E0B', fg: '#000000', label: 'BETA' },
+  wip: { color: '#6366F1', fg: '#FFFFFF', label: 'WIP' },
   deprecated: { color: '#EF4444', fg: '#FFFFFF', label: 'DEPRECATED' },
-  unmarked:   { color: '#9CA3AF', fg: '#FFFFFF', label: '—' },
+  unmarked: { color: '#9CA3AF', fg: '#FFFFFF', label: '—' },
 };
 ```
 
@@ -333,20 +331,20 @@ Mismatches render as a `_Skipped` frame on the Inventory page listing each missi
 
 ## Layout token contract
 
-| Token | Value | Where |
-|---|---|---|
-| `GAP_SECTION` | 80 | between top-level Sections (per spec) |
-| `GAP_GROUP` | 48 | between subgroups inside a Section |
-| `GAP_CARD` | 32 | between cards in the wrap row |
-| `CARD_WIDTH` | 320 | fixed; cards wrap to grid |
-| `MAX_COLS` | 4 | maximum cards per row before wrapping |
-| `CARD_PADDING` | 24 | inside each card (per spec) |
-| `CARD_ITEM_SPACING` | 12 | header → preview → table → footer |
-| `PREVIEW_PAD` | 16 | preview frame internal |
-| `PREVIEW_MIN_H` | 96 | floor — keeps tiny components (Badge, Avatar 24×24) from collapsing the card |
-| `PREVIEW_MAX_H` | 240 | ceiling — caps tall compositions (Chat 1080×720, Drawer 440×320) from dominating the card |
-| `PREVIEW_INNER_W` | 240 | derived: `CARD_WIDTH − 2·CARD_PADDING − 2·PREVIEW_PAD` (320 − 48 − 32) |
-| `BADGE_PAD` | [6, 4] | status badge padding [x, y] |
+| Token               | Value  | Where                                                                                     |
+| ------------------- | ------ | ----------------------------------------------------------------------------------------- |
+| `GAP_SECTION`       | 80     | between top-level Sections (per spec)                                                     |
+| `GAP_GROUP`         | 48     | between subgroups inside a Section                                                        |
+| `GAP_CARD`          | 32     | between cards in the wrap row                                                             |
+| `CARD_WIDTH`        | 320    | fixed; cards wrap to grid                                                                 |
+| `MAX_COLS`          | 4      | maximum cards per row before wrapping                                                     |
+| `CARD_PADDING`      | 24     | inside each card (per spec)                                                               |
+| `CARD_ITEM_SPACING` | 12     | header → preview → table → footer                                                         |
+| `PREVIEW_PAD`       | 16     | preview frame internal                                                                    |
+| `PREVIEW_MIN_H`     | 96     | floor — keeps tiny components (Badge, Avatar 24×24) from collapsing the card              |
+| `PREVIEW_MAX_H`     | 240    | ceiling — caps tall compositions (Chat 1080×720, Drawer 440×320) from dominating the card |
+| `PREVIEW_INNER_W`   | 240    | derived: `CARD_WIDTH − 2·CARD_PADDING − 2·PREVIEW_PAD` (320 − 48 − 32)                    |
+| `BADGE_PAD`         | [6, 4] | status badge padding [x, y]                                                               |
 
 All multiples of 4, matching the existing skill scale (`token-architecture.md:35`).
 
@@ -355,15 +353,15 @@ All multiples of 4, matching the existing skill scale (`token-architecture.md:35
 ```js
 const scale = Math.min(
   PREVIEW_INNER_W / instance.width,
-  PREVIEW_MAX_H   / instance.height,
-  1,                                  // never upscale
+  PREVIEW_MAX_H / instance.height,
+  1, // never upscale
 );
 if (scale < 0.99) instance.rescale(scale);
 ```
 
 A width-only clamp is the common bug — a 1080×720 chat composition scaled by width alone becomes 240×26 because the preview frame's `minHeight: 96` clips the rescaled height after the fact, leaving the instance as a thin strip in a mostly-empty card. Both-axes clamp keeps the aspect ratio and sizes the preview proportionally so even the largest compositions stay readable in their card.
 
-For the inverse case — components whose master is *smaller* than the preview inner box (e.g. a 24×24 Avatar) — the `Math.min(..., 1)` floor keeps them at native size; the `PREVIEW_MIN_H` floor pads the preview so the card doesn't collapse around the tiny instance.
+For the inverse case — components whose master is _smaller_ than the preview inner box (e.g. a 24×24 Avatar) — the `Math.min(..., 1)` floor keeps them at native size; the `PREVIEW_MIN_H` floor pads the preview so the card doesn't collapse around the tiny instance.
 
 **Cards-row sizing.** The wrapping row needs a FIXED width for `layoutWrap = 'WRAP'` to know where to break, but a hardcoded "max" width (e.g. 1480 for 4 cards across) leaves single-card sections sitting in 1160px of phantom whitespace that bubbles up through the parent group, the inner Frame, and the Section bounds. Size the row to the actual card count instead:
 
@@ -393,28 +391,26 @@ A 1-card section becomes 320 wide; a 2-card section 672; a 4+-card section 1376 
             "documentationLinks": ["https://docs.example.com/button"],
             "defaultVariantId": "1:24",
             "properties": [
-              { "key": "Size",    "type": "VARIANT", "defaultValue": "md",      "variantOptions": ["sm","md","lg"] },
-              { "key": "State",   "type": "VARIANT", "defaultValue": "default", "variantOptions": ["default","hover","focus","disabled"] },
+              { "key": "Size", "type": "VARIANT", "defaultValue": "md", "variantOptions": ["sm", "md", "lg"] },
+              { "key": "State", "type": "VARIANT", "defaultValue": "default", "variantOptions": ["default", "hover", "focus", "disabled"] },
               { "key": "HasIcon", "type": "BOOLEAN", "defaultValue": false },
-              { "key": "Label",   "type": "TEXT",    "defaultValue": "Button" }
+              { "key": "Label", "type": "TEXT", "defaultValue": "Button" },
             ],
             "status": "ready",
             "contextualBg": "light",
-            "size": { "width": 120, "height": 40 }
-          }
+            "size": { "width": 120, "height": 40 },
+          },
         ],
-        "children": {}
+        "children": {},
       },
-      "Inputs": { "components": [/* … */], "children": {} }
-    }
+      "Inputs": { "components": [/* … */], "children": {} },
+    },
   },
   "Molecules": {
     "components": [],
-    "children": { "Cards": { "components": [/* … */], "children": {} } }
+    "children": { "Cards": { "components": [/* … */], "children": {} } },
   },
-  "_skipped": [
-    { "id": "1:99", "name": "_internal/scratch", "reason": "private prefix" }
-  ]
+  "_skipped": [{ "id": "1:99", "name": "_internal/scratch", "reason": "private prefix" }],
 }
 ```
 

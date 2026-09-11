@@ -39,10 +39,13 @@ async function main() {
     console.error('usage: marker-coverage.mjs <config.mjs>');
     process.exit(2);
   }
-  const config = (await import(pathToFileURL(resolve(ROOT, configArg)).href)).default;
+  const config = (await import(pathToFileURL(resolve(ROOT, configArg)).href))
+    .default;
   const { manifestPath, marker, implementations, filePattern, label } = config;
 
-  const manifest = JSON.parse(readFileSync(resolve(ROOT, manifestPath), 'utf-8'));
+  const manifest = JSON.parse(
+    readFileSync(resolve(ROOT, manifestPath), 'utf-8'),
+  );
   const implNames = Object.keys(implementations);
   const errors = [];
   let checks = 0;
@@ -52,19 +55,28 @@ async function main() {
     if (subject.startsWith('$')) continue; // $comment etc.
     subjects++;
     for (const implName of implNames) {
-      const dir = resolve(ROOT, implementations[implName].replace('{subject}', subject));
+      const dir = resolve(
+        ROOT,
+        implementations[implName].replace('{subject}', subject),
+      );
       let files;
       try {
         files = readdirSync(dir).filter((f) => filePattern.test(f));
       } catch {
-        errors.push(`[NO-DIR] ${implName}/${subject}: ${dir.replace(ROOT + '/', '')} not found`);
+        errors.push(
+          `[NO-DIR] ${implName}/${subject}: ${dir.replace(ROOT + '/', '')} not found`,
+        );
         continue;
       }
-      const src = files.map((f) => readFileSync(join(dir, f), 'utf-8')).join('\n');
+      const src = files
+        .map((f) => readFileSync(join(dir, f), 'utf-8'))
+        .join('\n');
       for (const { id } of entries) {
         checks++;
         // Whole-token match so `open` cannot satisfy `open-on-trigger`.
-        const re = new RegExp(`${escapeRe(marker)}\\s+${escapeRe(id)}(?![\\w-])`);
+        const re = new RegExp(
+          `${escapeRe(marker)}\\s+${escapeRe(id)}(?![\\w-])`,
+        );
         if (!re.test(src)) {
           errors.push(`[UNCOVERED] ${subject}/${id} not tagged in ${implName}`);
         }
@@ -76,12 +88,12 @@ async function main() {
     errors.forEach((e) => console.error(`✗ ${e}`));
     console.error(
       `\n${errors.length} coverage gap(s). Add a \`${marker} <id>\` marker above the ` +
-        `covering test, or extend ${manifestPath}.`
+        `covering test, or extend ${manifestPath}.`,
     );
     process.exit(1);
   }
   console.log(
-    `✓ ${label || 'marker'} coverage in sync (${checks} checks across ${subjects} subjects × ${implNames.length} implementations)`
+    `✓ ${label || 'marker'} coverage in sync (${checks} checks across ${subjects} subjects × ${implNames.length} implementations)`,
   );
 }
 

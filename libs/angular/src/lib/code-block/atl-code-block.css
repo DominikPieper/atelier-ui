@@ -74,7 +74,10 @@
   font-size: var(--ui-font-size-xs);
   font-weight: var(--ui-font-weight-medium);
   cursor: pointer;
-  transition: color var(--ui-transition-fast), background var(--ui-transition-fast), border-color var(--ui-transition-fast);
+  transition:
+    color var(--ui-transition-fast),
+    background var(--ui-transition-fast),
+    border-color var(--ui-transition-fast);
   white-space: nowrap;
 }
 

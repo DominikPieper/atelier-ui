@@ -62,7 +62,7 @@ divergence is real and not worth designing away.
 
 **The weakest point.** The row/control split is now a judgement each new box has to
 make, and nothing enforces which one applies — the gate checks that a box matches
-the ladder it *claims*, not that it claims the right one. A row entered as a
+the ladder it _claims_, not that it claims the right one. A row entered as a
 control would pass at a wrong-but-consistent height. Breadcrumbs, the four headers,
 the pagination button and the stepper circle sit outside both ladders by decision,
 and that exclusion list lives in prose in ADR-0052, not in code.
@@ -72,7 +72,6 @@ before it produced right ones, and both times they looked plausible. `check:geom
 had a latent form of the same bug — hostifying per directory rather than per
 stylesheet — which was harmless only until `select/` held two components. Lessons in
 `tasks/lessons.md`.
-
 
 ## Review — the type nobody was measuring, 2026-08-28
 
@@ -125,7 +124,7 @@ byte-identical to the ones HEAD prints.
    collection debt. Now master + path + chars + size + weight, which is unique.
 
 **The unplanned find.** `--update-baseline` — the command every ratchet message tells you to
-run — called `process.exit(0)` before the report in *both* scripts, so it printed
+run — called `process.exit(0)` before the report in _both_ scripts, so it printed
 `✓ baseline updated` over an unrelated blocker and recorded the baseline from the broken
 tree. Neither builder noticed; it took a skeptic putting a real `[SET-CLIPS]` defect in the
 tree and running the documented remedy.
@@ -147,7 +146,6 @@ about all of them would be the unclearable warning ADR-0066 refuses. Two of the 
 (AtlMenu at 16px, AtlToast at 14px) state a size in CSS that nothing checks. Secondarily:
 571 lines of baseline is a large `--update-baseline` diff to approve without reading, and
 nothing forces anybody to read it.
-
 
 ## Open — the reverse direction of `check:dead-selectors` (2026-08-28)
 
@@ -197,7 +195,6 @@ private implementation?** If public, they belong in `libs/spec` and all three ad
 them unconditionally; if private, the gate is complete as it stands and the divergence is
 free. Nothing in the ADRs says, and `[UNSTYLED-CLASS]` cannot be designed until it does.
 
-
 ## Open — parity drift, after ADR-0082 (2026-08-28)
 
 - [x] ~~**Ten parity records are owed a bridge-backed re-verify**~~ — done 2026-08-28, in the
@@ -210,7 +207,7 @@ free. Nothing in the ADRs says, and `[UNSTYLED-CLASS]` cannot be designed until 
       changed" (ADR-0064), not "the two sides agree" — but recording without writing the
       divergences down would have buried fifteen findings.
 - [ ] **`inputsHash` cannot tell a rendered file from a test file.**
-      `lib/parity-inputs.js` `inputFiles()` walks *every* file under
+      `lib/parity-inputs.js` `inputFiles()` walks _every_ file under
       `libs/{angular,react,vue}/src/lib/<module>/`, so appending a comment to
       `atl-button.spec.tsx` turns AtlButton into a DRIFT finding — proven, then reverted.
       ADR-0024 §2 describes the set as "implementation, CSS, story, and the component-local
@@ -220,7 +217,6 @@ free. Nothing in the ADRs says, and `[UNSTYLED-CLASS]` cannot be designed until 
       definition matching there proves the record was valid; the new definition at that sha
       is then the equivalent) before the current value means anything. Worth doing when
       somebody is next in this file; it clears none of the ten above.
-
 
 ## Open — what the ten-master parity re-verify found (2026-08-28)
 
@@ -234,7 +230,7 @@ code is wrong, except where said.
 **Four gate blind spots, each of which is why one of the groups below went unseen.**
 
 - [ ] **`[ROOT-BOX]`'s gap comparison is unreachable for the four form-row masters.** It sits
-      at `check-figma.js:1230`, *inside* `for (const entry of ROOT_PAINT)`, and AtlCheckbox,
+      at `check-figma.js:1230`, _inside_ `for (const entry of ROOT_PAINT)`, and AtlCheckbox,
       AtlToggle, AtlRadio and AtlRadioGroup are all excluded from `ROOT_PAINT` for the paint
       reason ADR-0079 split type out of. All four bind `spacing/2` (8px) as the root
       itemSpacing while all three stylesheets state `gap: var(--ui-spacing-3)` = 12px. Same
@@ -243,11 +239,11 @@ code is wrong, except where said.
       The layer border block reads `if (!/transparent|none/.test(border)) wantStroke = …`, so
       for `.page-btn { border: var(--ui-border-width) solid transparent }` `wantStroke` stays
       `undefined` and the guard below skips. Six visible `color/border` strokes on
-      AtlPagination's page buttons pass because of it. A transparent border is a *declared*
+      AtlPagination's page buttons pass because of it. A transparent border is a _declared_
       value, not a missing one — the gate should compare it and expect no paint.
 - [ ] **AtlMenu's `ROOT_PAINT` entry has no `{variant}` template** (`check-figma.js:598`,
       `cascade: ['.atl-menu']`), though the mechanism exists and other entries use it. So
-      `variant=compact` is compared against the *base* rule's 8px block padding and passes,
+      `variant=compact` is compared against the _base_ rule's 8px block padding and passes,
       while the rule that actually applies, `.atl-menu.variant-compact`, says 4px.
 - [ ] **`AtlRadioGroup`'s parity record hashes the wrong directory — verified by hand.**
       `COMPONENT_METADATA_REGISTRY` maps `AtlRadioGroupSpec → 'radio'`
@@ -260,7 +256,7 @@ code is wrong, except where said.
 **The form-row masters never moved to the row ladder.**
 
 - [ ] **AtlToggle and AtlCheckbox hug at 24px and AtlRadio at 28px (4 + 20 + 4), against a
-      code row of `--ui-row-height-sm` = 40px.** ADR-0052's review records the *code* side of
+      code row of `--ui-row-height-sm` = 40px.** ADR-0052's review records the _code_ side of
       exactly this — "checkbox 26 → 40, radio 32 → 40, toggle 27 → 40" — and its final
       consequence records only that the row ladder has no Figma Variables yet. That the
       masters were never moved is recorded nowhere, and nothing measures it: `check:geometry`
@@ -311,14 +307,14 @@ code is wrong, except where said.
       `state=open`, which is the wholesale skip already recorded above for type — these are
       the paint deltas behind the same skip, recorded nowhere.
 - [ ] **AtlPagination: four divergences on the page buttons.** Six of seven draw a visible 1px
-      `color/border` stroke where `.page-btn` paints a *transparent* border (which exists to
+      `color/border` stroke where `.page-btn` paints a _transparent_ border (which exists to
       reserve the box so `.is-active`'s `border-color` does not shift layout). Number text is
       `color/text-muted` (#475569) against `--ui-color-text` (#0f172a) — invisible to
       `[LAYER-PAINT]`, which compares the named FRAME while the colour lives on the TEXT
       child. Inactive numbers are Regular 400 against `--ui-font-weight-medium` (500); the
       current page is Medium 500 against `--ui-font-weight-semibold` (600).
 - [ ] **ADR-0063's page-button fix was half-applied, and its record overstates it.** ADR-0063
-      §4 and `tasks/todo.md` both say the 33 divergences were found *and fixed*, naming "the
+      §4 and `tasks/todo.md` both say the 33 divergences were found _and fixed_, naming "the
       page buttons painted a fill and a border where `.page-btn` sets both `transparent`".
       The fill was removed from the six inactive buttons; the stroke was not. Nothing has
       contradicted the record since, because the gate cannot see it (blind spot above).
@@ -352,18 +348,16 @@ code is wrong, except where said.
       what the offset should be. Give the Angular trigger an explicit offset matching the
       other two, or record that the CDK default is the intended answer.
 
-
 ## Open — one semver-major type change, unreleased (2026-08-28)
 
 - [ ] **`AtlRadioGroupContext.invalid` became required.** `libs/angular/src/lib/radio-group/
-      atl-radio-group.token.ts` gains `invalid: Signal<boolean>` with no `?`, and the
+atl-radio-group.token.ts` gains `invalid: Signal<boolean>` with no `?`, and the
       interface is exported from the public barrel (`libs/angular/src/index.ts:19`). The only
       in-repo implementor is `AtlRadioGroup`, which already declared `invalid` and needed no
       change — but any outside implementor of the interface breaks. It is the right shape
       (React's and Vue's contexts both require it, and the Angular radio could not read its
       group's invalid state without it), and it is a **breaking change to a published type**
       that needs a semver-major note. Nothing in the diff or the ADRs said so until now.
-
 
 ## Review — the join nobody was checking, 2026-08-28 (second pass)
 
@@ -398,7 +392,7 @@ to `react/button/atl-button.spec.tsx` made AtlButton a DRIFT blocker, then did n
 **Four things measurement contradicted.**
 
 1. **The "only cross-directory rescue" was a tautology.** It asked whether a class is
-   another directory's root *and* whether that directory emits it — but a component always
+   another directory's root _and_ whether that directory emits it — but a component always
    emits its own root, so the second clause is never false, and every `.atl-*` root was live
    in every directory of its framework. ADR-0081 called it "exactly three cases": that is
    how many it fires on, not how many it can forgive, which is about forty per framework.
@@ -435,10 +429,9 @@ checked them — and the compensating control is weaker than what it replaces. T
 defence is that the teeth it removes could not bite: no CI runner can clear a DRIFT blocker,
 so what was lost was a red build, not an enforcement. The real fix is a parity check that
 runs without the bridge, and nothing here moves toward one. Secondarily: the render relation
-is read from tag names in source text, so a directory that merely *mentions* `<AtlIcon>` in
+is read from tag names in source text, so a directory that merely _mentions_ `<AtlIcon>` in
 a comment counts as rendering it — the forgiving direction, unmeasured beyond "the finding
 count did not move".
-
 
 ## Open — Schulung: after the B1–B4 repairs (2026-08-29)
 
@@ -446,7 +439,7 @@ The four blockers from tasks/schulung-review-2026-08-28.md §3 are fixed in the
 tree (struck through there, each with its fix note).
 
 - [x] ~~**The deploy was dead, and had been since 2026-08-26**~~ — found and fixed
-      2026-08-29. The worker fix could not ship because *every* Cloudflare build had
+      2026-08-29. The worker fix could not ship because _every_ Cloudflare build had
       been failing for three days: the Angular Storybook build died with seven
       `MISSING_EXPORT` errors after `cbef32b` pruned `@angular/animations`
       ("deprecated upstream, zero source imports, optional peer" — all true of this
@@ -481,11 +474,10 @@ tree (struck through there, each with its fix note).
       check and probably does not need one; recorded so the next prune's author reads
       this before trusting "zero source imports".
 
-
 ## Open — Schulung: after the M1–M15 pass (2026-08-29)
 
 All 4 blockers and all 15 majors from `tasks/schulung-review-2026-08-28.md` are closed
-(three of them *overtaken* rather than fixed — M3, M4, M7 — and recorded that way there,
+(three of them _overtaken_ rather than fixed — M3, M4, M7 — and recorded that way there,
 along with eight defects the repair pass itself introduced or uncovered). Flows 1–7 are
 repaired. `npm run check:all` exit 0, `npx nx build docs` 59 pages.
 
@@ -507,7 +499,7 @@ explicit branch on the pages that serve both). Nothing enforces it; see its Cons
 ### Gate gaps — known, cheap, deliberately not built mid-pass
 
 - [ ] **Nothing cross-checks `snapshot.json.uiTokens`.** Its only guard asserts the prefix
-      counts sum to the total, which a *truncated* list satisfies — the pre-fix snapshot
+      counts sum to the total, which a _truncated_ list satisfies — the pre-fix snapshot
       held 50 names summing cleanly to 50, and the /figma census read wrong-but-consistent
       for as long as nobody looked. `docs/src/lib/figma-snapshot.ts`'s comment ("neither
       number can rot again once it is derived from the snapshot") claims more than the code
@@ -547,7 +539,7 @@ explicit branch on the pages that serve both). Nothing enforces it; see its Cons
       n14's prerequisite for p2 is met (the two copies are byte-identical); the run is not.
 - [ ] **Claude Design participant katas** stay blocked on the widened per-seat test
       (§2.4 item 1 of the review). Unchanged and deliberately not shipped. **2026-08-29:**
-      the two *unblocked* halves shipped around them and did not weaken the blocker — the
+      the two _unblocked_ halves shipped around them and did not weaken the blocker — the
       trainer demo is trainer-machine-only precisely because the seat question is open, and
       the agenda says so in the demo's first sentence.
 - [x] ~~**Publish the Claude Design track — chapter + trainer demo**~~ (done 2026-08-29,
@@ -563,8 +555,6 @@ explicit branch on the pages that serve both). Nothing enforces it; see its Cons
       JetBrains Mono and is generated by `sync-tokens.mjs`; `tasks/claude-design-prompt.md`
       reads 29 in both places. Prerequisites 1, 4, 5, 6 and 7 all gate katas and are untouched.
 
-
-
 ## Open — Schulung: after the minors + presentation-debt pass (2026-08-29)
 
 With this pass `tasks/schulung-review-2026-08-28.md` is **fully closed except p1 and p2**:
@@ -573,7 +563,7 @@ majors surfaced during the pass and were fixed with it (r9–r11 in that file): 
 curriculum still taught 10.4 as the current release, /workshop's post-setup aside never
 linked /design-to-code after the track reorder, and install.astro's new intro over-claimed
 what the scaffold writes into `src/styles.css`. Two of the closed minors were closed
-*against* the audit rather than with it — n4's and n9's Fix columns were wrong as written,
+_against_ the audit rather than with it — n4's and n9's Fix columns were wrong as written,
 and following either would have shipped a false instruction; both rows now say so.
 
 Gates: `npm run check:all` exit 0, `npx nx build docs` exit 0 (60 pages),
@@ -590,7 +580,7 @@ unchanged, and the config edit is a correctness fix, not a decision. ADR-0084 is
 - [ ] **No gate typechecks the three `libs/*/.storybook/tsconfig.json` projects.** This is
       the surface that let n4's misspelled `experimentalComponentManifest` survive, and it
       still hides at least one real error: `npx tsc -p libs/react/.storybook/tsconfig.json
-      --noEmit` → `atl-stepper.stories.tsx(88,35): TS2322` ("vertical" not assignable to
+--noEmit` → `atl-stepper.stories.tsx(88,35): TS2322` ("vertical" not assignable to
       "horizontal"). Invisible to `npm run check:all` and to `nx run-many -t test,lint`,
       both green. Close it by adding a typecheck target over the three `.storybook`
       projects — and budget for the story-file errors it surfaces, which is why it was not

@@ -1,6 +1,10 @@
 import { render, screen } from '@testing-library/angular';
 import userEvent from '@testing-library/user-event';
-import { AtlAccordionGroup, AtlAccordionItem, AtlAccordionHeader } from './atl-accordion';
+import {
+  AtlAccordionGroup,
+  AtlAccordionItem,
+  AtlAccordionHeader,
+} from './atl-accordion';
 import { covers } from '../../testing/behavior';
 
 const IMPORTS = [AtlAccordionGroup, AtlAccordionItem, AtlAccordionHeader];
@@ -61,9 +65,15 @@ describe('AtlAccordionGroup', () => {
 
     it('renders header content in trigger buttons', async () => {
       await render(BASIC_TEMPLATE, { imports: IMPORTS });
-      expect(screen.getByRole('button', { name: 'Section 1' })).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: 'Section 2' })).toBeInTheDocument();
-      expect(screen.getByRole('button', { name: 'Section 3' })).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: 'Section 1' }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: 'Section 2' }),
+      ).toBeInTheDocument();
+      expect(
+        screen.getByRole('button', { name: 'Section 3' }),
+      ).toBeInTheDocument();
     });
 
     it('renders body content in region panels', async () => {
@@ -88,7 +98,10 @@ describe('AtlAccordionGroup', () => {
       await render(BASIC_TEMPLATE, { imports: IMPORTS });
 
       await user.click(screen.getByRole('button', { name: 'Section 1' }));
-      expect(screen.getByRole('button', { name: 'Section 1' })).toHaveAttribute('aria-expanded', 'true');
+      expect(screen.getByRole('button', { name: 'Section 1' })).toHaveAttribute(
+        'aria-expanded',
+        'true',
+      );
     });
 
     it('links trigger to panel via aria-controls', async () => {
@@ -108,72 +121,109 @@ describe('AtlAccordionGroup', () => {
 
     it('sets aria-disabled on disabled items', async () => {
       await render(WITH_DISABLED, { imports: IMPORTS });
-      expect(screen.getByRole('button', { name: 'Section 2' })).toHaveAttribute('aria-disabled', 'true');
+      expect(screen.getByRole('button', { name: 'Section 2' })).toHaveAttribute(
+        'aria-disabled',
+        'true',
+      );
     });
   });
 
   describe('click toggle — single mode', () => {
-    covers('accordion', 'expand-on-click')('expands an item on click', async () => {
-      const user = userEvent.setup();
-      await render(BASIC_TEMPLATE, { imports: IMPORTS });
+    covers('accordion', 'expand-on-click')(
+      'expands an item on click',
+      async () => {
+        const user = userEvent.setup();
+        await render(BASIC_TEMPLATE, { imports: IMPORTS });
 
-      await user.click(screen.getByRole('button', { name: 'Section 1' }));
-      expect(screen.getByRole('button', { name: 'Section 1' })).toHaveAttribute('aria-expanded', 'true');
-    });
+        await user.click(screen.getByRole('button', { name: 'Section 1' }));
+        expect(
+          screen.getByRole('button', { name: 'Section 1' }),
+        ).toHaveAttribute('aria-expanded', 'true');
+      },
+    );
 
-    covers('accordion', 'collapse-on-click')('collapses an expanded item on click', async () => {
-      const user = userEvent.setup();
-      await render(BASIC_TEMPLATE, { imports: IMPORTS });
+    covers('accordion', 'collapse-on-click')(
+      'collapses an expanded item on click',
+      async () => {
+        const user = userEvent.setup();
+        await render(BASIC_TEMPLATE, { imports: IMPORTS });
 
-      await user.click(screen.getByRole('button', { name: 'Section 1' }));
-      await user.click(screen.getByRole('button', { name: 'Section 1' }));
-      expect(screen.getByRole('button', { name: 'Section 1' })).toHaveAttribute('aria-expanded', 'false');
-    });
+        await user.click(screen.getByRole('button', { name: 'Section 1' }));
+        await user.click(screen.getByRole('button', { name: 'Section 1' }));
+        expect(
+          screen.getByRole('button', { name: 'Section 1' }),
+        ).toHaveAttribute('aria-expanded', 'false');
+      },
+    );
 
-    covers('accordion', 'single-collapse-other')('closes previously open item when opening another in single mode', async () => {
-      const user = userEvent.setup();
-      await render(BASIC_TEMPLATE, { imports: IMPORTS });
+    covers('accordion', 'single-collapse-other')(
+      'closes previously open item when opening another in single mode',
+      async () => {
+        const user = userEvent.setup();
+        await render(BASIC_TEMPLATE, { imports: IMPORTS });
 
-      await user.click(screen.getByRole('button', { name: 'Section 1' }));
-      expect(screen.getByRole('button', { name: 'Section 1' })).toHaveAttribute('aria-expanded', 'true');
+        await user.click(screen.getByRole('button', { name: 'Section 1' }));
+        expect(
+          screen.getByRole('button', { name: 'Section 1' }),
+        ).toHaveAttribute('aria-expanded', 'true');
 
-      await user.click(screen.getByRole('button', { name: 'Section 2' }));
-      expect(screen.getByRole('button', { name: 'Section 1' })).toHaveAttribute('aria-expanded', 'false');
-      expect(screen.getByRole('button', { name: 'Section 2' })).toHaveAttribute('aria-expanded', 'true');
-    });
+        await user.click(screen.getByRole('button', { name: 'Section 2' }));
+        expect(
+          screen.getByRole('button', { name: 'Section 1' }),
+        ).toHaveAttribute('aria-expanded', 'false');
+        expect(
+          screen.getByRole('button', { name: 'Section 2' }),
+        ).toHaveAttribute('aria-expanded', 'true');
+      },
+    );
 
-    covers('accordion', 'disabled-no-toggle')('does not toggle disabled items on click', async () => {
-      const user = userEvent.setup();
-      await render(WITH_DISABLED, { imports: IMPORTS });
+    covers('accordion', 'disabled-no-toggle')(
+      'does not toggle disabled items on click',
+      async () => {
+        const user = userEvent.setup();
+        await render(WITH_DISABLED, { imports: IMPORTS });
 
-      await user.click(screen.getByRole('button', { name: 'Section 2' }));
-      expect(screen.getByRole('button', { name: 'Section 2' })).toHaveAttribute('aria-expanded', 'false');
-    });
+        await user.click(screen.getByRole('button', { name: 'Section 2' }));
+        expect(
+          screen.getByRole('button', { name: 'Section 2' }),
+        ).toHaveAttribute('aria-expanded', 'false');
+      },
+    );
   });
 
   describe('click toggle — multi mode', () => {
-    covers('accordion', 'multi-expand')('allows multiple items to be expanded', async () => {
-      const user = userEvent.setup();
-      await render(MULTI_TEMPLATE, { imports: IMPORTS });
+    covers('accordion', 'multi-expand')(
+      'allows multiple items to be expanded',
+      async () => {
+        const user = userEvent.setup();
+        await render(MULTI_TEMPLATE, { imports: IMPORTS });
 
-      await user.click(screen.getByRole('button', { name: 'Section 1' }));
-      await user.click(screen.getByRole('button', { name: 'Section 2' }));
+        await user.click(screen.getByRole('button', { name: 'Section 1' }));
+        await user.click(screen.getByRole('button', { name: 'Section 2' }));
 
-      expect(screen.getByRole('button', { name: 'Section 1' })).toHaveAttribute('aria-expanded', 'true');
-      expect(screen.getByRole('button', { name: 'Section 2' })).toHaveAttribute('aria-expanded', 'true');
-    });
+        expect(
+          screen.getByRole('button', { name: 'Section 1' }),
+        ).toHaveAttribute('aria-expanded', 'true');
+        expect(
+          screen.getByRole('button', { name: 'Section 2' }),
+        ).toHaveAttribute('aria-expanded', 'true');
+      },
+    );
   });
 
   describe('keyboard navigation', () => {
-    covers('accordion', 'keyboard-nav')('ArrowDown moves focus to next item', async () => {
-      const user = userEvent.setup();
-      await render(BASIC_TEMPLATE, { imports: IMPORTS });
+    covers('accordion', 'keyboard-nav')(
+      'ArrowDown moves focus to next item',
+      async () => {
+        const user = userEvent.setup();
+        await render(BASIC_TEMPLATE, { imports: IMPORTS });
 
-      screen.getByRole('button', { name: 'Section 1' }).focus();
-      await user.keyboard('{ArrowDown}');
+        screen.getByRole('button', { name: 'Section 1' }).focus();
+        await user.keyboard('{ArrowDown}');
 
-      expect(screen.getByRole('button', { name: 'Section 2' })).toHaveFocus();
-    });
+        expect(screen.getByRole('button', { name: 'Section 2' })).toHaveFocus();
+      },
+    );
 
     it('ArrowUp moves focus to previous item', async () => {
       const user = userEvent.setup();
@@ -185,15 +235,18 @@ describe('AtlAccordionGroup', () => {
       expect(screen.getByRole('button', { name: 'Section 1' })).toHaveFocus();
     });
 
-    covers('accordion', 'wrap')('ArrowDown wraps from last to first', async () => {
-      const user = userEvent.setup();
-      await render(BASIC_TEMPLATE, { imports: IMPORTS });
+    covers('accordion', 'wrap')(
+      'ArrowDown wraps from last to first',
+      async () => {
+        const user = userEvent.setup();
+        await render(BASIC_TEMPLATE, { imports: IMPORTS });
 
-      screen.getByRole('button', { name: 'Section 3' }).focus();
-      await user.keyboard('{ArrowDown}');
+        screen.getByRole('button', { name: 'Section 3' }).focus();
+        await user.keyboard('{ArrowDown}');
 
-      expect(screen.getByRole('button', { name: 'Section 1' })).toHaveFocus();
-    });
+        expect(screen.getByRole('button', { name: 'Section 1' })).toHaveFocus();
+      },
+    );
 
     it('ArrowUp wraps from first to last', async () => {
       const user = userEvent.setup();
@@ -205,15 +258,18 @@ describe('AtlAccordionGroup', () => {
       expect(screen.getByRole('button', { name: 'Section 3' })).toHaveFocus();
     });
 
-    covers('accordion', 'home-end')('Home moves focus to first enabled item', async () => {
-      const user = userEvent.setup();
-      await render(BASIC_TEMPLATE, { imports: IMPORTS });
+    covers('accordion', 'home-end')(
+      'Home moves focus to first enabled item',
+      async () => {
+        const user = userEvent.setup();
+        await render(BASIC_TEMPLATE, { imports: IMPORTS });
 
-      screen.getByRole('button', { name: 'Section 3' }).focus();
-      await user.keyboard('{Home}');
+        screen.getByRole('button', { name: 'Section 3' }).focus();
+        await user.keyboard('{Home}');
 
-      expect(screen.getByRole('button', { name: 'Section 1' })).toHaveFocus();
-    });
+        expect(screen.getByRole('button', { name: 'Section 1' })).toHaveFocus();
+      },
+    );
 
     it('End moves focus to last enabled item', async () => {
       const user = userEvent.setup();
@@ -225,16 +281,19 @@ describe('AtlAccordionGroup', () => {
       expect(screen.getByRole('button', { name: 'Section 3' })).toHaveFocus();
     });
 
-    covers('accordion', 'skip-disabled')('arrow keys skip disabled items', async () => {
-      const user = userEvent.setup();
-      await render(WITH_DISABLED, { imports: IMPORTS });
+    covers('accordion', 'skip-disabled')(
+      'arrow keys skip disabled items',
+      async () => {
+        const user = userEvent.setup();
+        await render(WITH_DISABLED, { imports: IMPORTS });
 
-      screen.getByRole('button', { name: 'Section 1' }).focus();
-      await user.keyboard('{ArrowDown}');
+        screen.getByRole('button', { name: 'Section 1' }).focus();
+        await user.keyboard('{ArrowDown}');
 
-      // Should skip Section 2 (disabled) and go to Section 3
-      expect(screen.getByRole('button', { name: 'Section 3' })).toHaveFocus();
-    });
+        // Should skip Section 2 (disabled) and go to Section 3
+        expect(screen.getByRole('button', { name: 'Section 3' })).toHaveFocus();
+      },
+    );
   });
 
   describe('two-way expanded binding', () => {
@@ -254,7 +313,10 @@ describe('AtlAccordionGroup', () => {
       );
 
       await user.click(screen.getByRole('button', { name: 'Toggle' }));
-      expect(screen.getByRole('button', { name: 'Toggle' })).toHaveAttribute('aria-expanded', 'true');
+      expect(screen.getByRole('button', { name: 'Toggle' })).toHaveAttribute(
+        'aria-expanded',
+        'true',
+      );
     });
 
     it('pre-expands item when expanded is initially true', async () => {
@@ -268,14 +330,18 @@ describe('AtlAccordionGroup', () => {
         { imports: IMPORTS },
       );
 
-      expect(screen.getByRole('button', { name: 'Pre-expanded' })).toHaveAttribute('aria-expanded', 'true');
+      expect(
+        screen.getByRole('button', { name: 'Pre-expanded' }),
+      ).toHaveAttribute('aria-expanded', 'true');
     });
   });
 
   describe('variant classes', () => {
     it('applies variant-default class by default', async () => {
       const { container } = await render(BASIC_TEMPLATE, { imports: IMPORTS });
-      expect(container.querySelector('atl-accordion-group')).toHaveClass('variant-default');
+      expect(container.querySelector('atl-accordion-group')).toHaveClass(
+        'variant-default',
+      );
     });
 
     it('applies variant-bordered class', async () => {
@@ -287,7 +353,9 @@ describe('AtlAccordionGroup', () => {
         </atl-accordion-group>`,
         { imports: IMPORTS },
       );
-      expect(container.querySelector('atl-accordion-group')).toHaveClass('variant-bordered');
+      expect(container.querySelector('atl-accordion-group')).toHaveClass(
+        'variant-bordered',
+      );
     });
 
     it('applies variant-separated class', async () => {
@@ -299,7 +367,9 @@ describe('AtlAccordionGroup', () => {
         </atl-accordion-group>`,
         { imports: IMPORTS },
       );
-      expect(container.querySelector('atl-accordion-group')).toHaveClass('variant-separated');
+      expect(container.querySelector('atl-accordion-group')).toHaveClass(
+        'variant-separated',
+      );
     });
   });
 });

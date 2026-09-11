@@ -3,7 +3,7 @@ status: accepted
 confidence: documented
 date: reconstructed
 sources:
-  - "memory project_workshop_single_framework (this session, user correction)"
+  - 'memory project_workshop_single_framework (this session, user correction)'
 ---
 
 # ADR-0014: Workshop covers ONE framework; the 3-framework rig is prep infra

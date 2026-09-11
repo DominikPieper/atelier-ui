@@ -24,7 +24,10 @@ function captureOne(props: Record<string, unknown>): unknown {
 function capture() {
   return {
     default: captureOne({ value: 50, label: 'Upload progress' }),
-    indeterminate: captureOne({ indeterminate: true, label: 'Upload progress' }),
+    indeterminate: captureOne({
+      indeterminate: true,
+      label: 'Upload progress',
+    }),
   };
 }
 

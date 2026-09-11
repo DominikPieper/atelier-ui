@@ -422,22 +422,22 @@ This was a version bump only for angular to align it with other projects, there 
 
 ### 🚀 Features
 
-- ⚠️  **docs:** rename Llm prefix to Atl across docs, generated artifacts, and tooling docs ([965787d](https://github.com/DominikPieper/atelier-ui/commit/965787d))
-- ⚠️  **angular:** rename Llm prefix to Atl across the Angular library ([24eb25a](https://github.com/DominikPieper/atelier-ui/commit/24eb25a))
-- ⚠️  **spec:** rename Llm prefix to Atl in spec contract ([6860cc4](https://github.com/DominikPieper/atelier-ui/commit/6860cc4))
+- ⚠️ **docs:** rename Llm prefix to Atl across docs, generated artifacts, and tooling docs ([965787d](https://github.com/DominikPieper/atelier-ui/commit/965787d))
+- ⚠️ **angular:** rename Llm prefix to Atl across the Angular library ([24eb25a](https://github.com/DominikPieper/atelier-ui/commit/24eb25a))
+- ⚠️ **spec:** rename Llm prefix to Atl in spec contract ([6860cc4](https://github.com/DominikPieper/atelier-ui/commit/6860cc4))
 
-### ⚠️  Breaking Changes
+### ⚠️ Breaking Changes
 
-- **docs:** rename Llm prefix to Atl across docs, generated artifacts, and tooling docs  ([965787d](https://github.com/DominikPieper/atelier-ui/commit/965787d))
-- **angular:** rename Llm prefix to Atl across the Angular library  ([24eb25a](https://github.com/DominikPieper/atelier-ui/commit/24eb25a))
+- **docs:** rename Llm prefix to Atl across docs, generated artifacts, and tooling docs ([965787d](https://github.com/DominikPieper/atelier-ui/commit/965787d))
+- **angular:** rename Llm prefix to Atl across the Angular library ([24eb25a](https://github.com/DominikPieper/atelier-ui/commit/24eb25a))
   every Angular component selector, class, injection
   token, CSS class/custom-property, and file name renamed llm-/Llm/LLM_
   -> atl-/Atl/ATL_ (ADR-0029). Updates the eslint selector-prefix rule
   and the lib's Nx "prefix" to match. a11y-parity snapshot renamed too
-  (tools/parity/a11y/llm-button.*.json -> atl-button.*.json) since its
+  (tools/parity/a11y/llm-button._.json -> atl-button._.json) since its
   content has no cross-framework dependency — no need to wait for the
   other two frameworks. nx lint/test/build angular all green (528/528).
-- **spec:** rename Llm prefix to Atl in spec contract  ([6860cc4](https://github.com/DominikPieper/atelier-ui/commit/6860cc4))
+- **spec:** rename Llm prefix to Atl in spec contract ([6860cc4](https://github.com/DominikPieper/atelier-ui/commit/6860cc4))
   every exported spec type/interface renamed
   Llm* -> Atl* (ADR-0029). Framework libs will fail to typecheck
   until each is renamed in turn (next commits) — expected mid-migration.

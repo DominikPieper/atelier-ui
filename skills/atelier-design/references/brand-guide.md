@@ -17,12 +17,12 @@ The repo ships an Astro 5 docs site + three parallel component libraries (`@atel
 
 ## Sources
 
-| Source | Where | Notes |
-|---|---|---|
-| Codebase | `github.com/DominikPieper/atelier-ui` (branch `main`) | Pulled `tokens.css`, `docs-theme.css`, spec, README, CLAUDE.md |
-| Hosted site | [atelier.pieper.io](https://atelier.pieper.io) | Astro docs site — workshop content |
-| Figma | File key `QMnDD8uZQPldPrlCwZZ58T` | Components page = master `COMPONENT_SET`s; Inventory = condensed catalog |
-| Logo | `assets/logo.png` (user-supplied) | Pen + brush + capital A on transparent ground |
+| Source      | Where                                                 | Notes                                                                    |
+| ----------- | ----------------------------------------------------- | ------------------------------------------------------------------------ |
+| Codebase    | `github.com/DominikPieper/atelier-ui` (branch `main`) | Pulled `tokens.css`, `docs-theme.css`, spec, README, CLAUDE.md           |
+| Hosted site | [atelier.pieper.io](https://atelier.pieper.io)        | Astro docs site — workshop content                                       |
+| Figma       | File key `QMnDD8uZQPldPrlCwZZ58T`                     | Components page = master `COMPONENT_SET`s; Inventory = condensed catalog |
+| Logo        | `assets/logo.png` (user-supplied)                     | Pen + brush + capital A on transparent ground                            |
 
 > Reader does not necessarily have access to private Figma or org repos — links stored for traceability.
 
@@ -43,13 +43,14 @@ The repo ships an Astro 5 docs site + three parallel component libraries (`@atel
 
 ## Voice & Content Fundamentals
 
-**Honest about scope.** Every doorway repeats: not a production library, teaching artifact. When something is unfinished, the docs say so plainly: *"Angular MCP currently focuses on documentation and prop discovery; previews and testing are React/Vue only."* No marketing softeners.
+**Honest about scope.** Every doorway repeats: not a production library, teaching artifact. When something is unfinished, the docs say so plainly: _"Angular MCP currently focuses on documentation and prop discovery; previews and testing are React/Vue only."_ No marketing softeners.
 
-**Pronouns.** Imperative second person — *"Add these to your Claude Code MCP config."* Never "we believe" / "we built." The reader is the actor.
+**Pronouns.** Imperative second person — _"Add these to your Claude Code MCP config."_ Never "we believe" / "we built." The reader is the actor.
 
 **Tone.** Engineering handbook, not SaaS marketing. Sentences are short and load-bearing. Examples carry the explanation; adjectives don't.
 
 **Casing.**
+
 - `Atelier` — proper noun, always capitalised in prose
 - `atelier-ui` — package/repo, always lower-kebab
 - `@atelier-ui/{spec,angular,react,vue}` — scoped npm packages, lowercased
@@ -58,6 +59,7 @@ The repo ships an Astro 5 docs site + three parallel component libraries (`@atel
 - Headings: sentence case (`The three pillars`), never title case
 
 **Tagline.** Three sentences, em-dash separated:
+
 > Design in Figma. Explore in Storybook. Ship with AI.
 
 This is the rhythm to copy across the brand: three actions, three tools, one verb each.
@@ -69,27 +71,28 @@ This is the rhythm to copy across the brand: three actions, three tools, one ver
 **Code samples are first-class.** A snippet with no surrounding paragraph is a complete answer. The docs site has a "framework switcher" pattern (Angular / React / Vue tabs) so the same idea appears three ways.
 
 **Recurring phrases (use exactly):**
-- *"Tokens, not utilities."*
-- *"Composition over configuration."*
-- *"Predictable APIs across frameworks."*
-- *"ARIA-first."*
-- *"inspect → prompt → ship → iterate"* (the four-step loop)
-- *"single source of truth"*
-- *"teaching artifact"*
+
+- _"Tokens, not utilities."_
+- _"Composition over configuration."_
+- _"Predictable APIs across frameworks."_
+- _"ARIA-first."_
+- _"inspect → prompt → ship → iterate"_ (the four-step loop)
+- _"single source of truth"_
+- _"teaching artifact"_
 
 ---
 
 ## Visual Foundations
 
-**Anchor color: Conciso deep teal `#006470`.** This is the entire identity. Light mode = deep teal on white; dark mode = bright teal `#34d8d8` on a softer mid-slate `#141d26` (deliberately *not* near-black — it keeps the chrome readable next to white code blocks elsewhere on the page). No gradients sweeping across hero blocks (one subtle radial glow behind the wordmark, that's it). No purple-blue marketing gradient. The Conciso brand palette (`--ui-color-brand-*`) is opt-in for diagrams that need a third or fourth category — not for chrome.
+**Anchor color: Conciso deep teal `#006470`.** This is the entire identity. Light mode = deep teal on white; dark mode = bright teal `#34d8d8` on a softer mid-slate `#141d26` (deliberately _not_ near-black — it keeps the chrome readable next to white code blocks elsewhere on the page). No gradients sweeping across hero blocks (one subtle radial glow behind the wordmark, that's it). No purple-blue marketing gradient. The Conciso brand palette (`--ui-color-brand-*`) is opt-in for diagrams that need a third or fourth category — not for chrome.
 
-**Type.** Instrument Sans for everything UI. Instrument Serif, italic, weight 400, for display lines only — it is never bolded (that is what `--ui-type-display` encodes). JetBrains Mono for everything monospace (tokens, code samples, prop names, terminal mocks, kbd chips, the version pill). Instrument Sans is variable 400–700, so the hero wordmark tops out at `weight 700` — with `letter-spacing -0.04em`. Body sets at 16px / 1.6. The combination of *very tight letter-spacing on big type* + *generous line-height on body* is the type signature.
+**Type.** Instrument Sans for everything UI. Instrument Serif, italic, weight 400, for display lines only — it is never bolded (that is what `--ui-type-display` encodes). JetBrains Mono for everything monospace (tokens, code samples, prop names, terminal mocks, kbd chips, the version pill). Instrument Sans is variable 400–700, so the hero wordmark tops out at `weight 700` — with `letter-spacing -0.04em`. Body sets at 16px / 1.6. The combination of _very tight letter-spacing on big type_ + _generous line-height on body_ is the type signature.
 
 **Backgrounds.** Three tiers, all flat: `surface` (chrome — topbar, sidebar, cards), `surface-raised` (slightly off canvas in light, slightly lifted in dark — for code blocks and hovered tiles), `surface-sunken` (the page body in dark / a faintly-tinted sub-region in light). No images. No textures. No noise grain. The single decorative motif is a **crosshair grid** behind the hero — 40×40px, drawn with two `linear-gradient` 1px lines tinted at 8% of primary.
 
 **Spacing.** Generous. The docs shell has a 256px sidebar, 200px right-rail TOC, and a 800px max-width content column with 3rem column gap. Stat ribbon: `2rem` interior padding. Hero: `5rem` top, `4rem` bottom on desktop. Whitespace is the layout primitive.
 
-**Borders.** Always `1px solid var(--ui-color-border)`. Hover-emphasis comes from changing the *top border* to 2px in primary teal (component cards on the docs home), or from elevating the box-shadow — never from thickening the perimeter. Functional borders (input outlines that need to meet WCAG 1.4.11) use `--ui-color-border-strong` (`#64748b`).
+**Borders.** Always `1px solid var(--ui-color-border)`. Hover-emphasis comes from changing the _top border_ to 2px in primary teal (component cards on the docs home), or from elevating the box-shadow — never from thickening the perimeter. Functional borders (input outlines that need to meet WCAG 1.4.11) use `--ui-color-border-strong` (`#64748b`).
 
 **Shadows.** Slate-tinted (`rgba(15, 23, 42, …)`), dual-layer (ambient + key light) per Material 3 conventions. Five steps `xs / sm / md / lg / xl`. Cards default to no shadow; they earn one on hover.
 
@@ -97,21 +100,22 @@ This is the rhythm to copy across the brand: three actions, three tools, one ver
 
 **Animation.** Restrained. `cubic-bezier(0.16, 1, 0.3, 1)` for ease-out, `(0.45, 0, 0.55, 1)` for ease-in-out, `(0.34, 1.56, 0.64, 1)` for the rare spring. Durations: `fast 150ms`, `normal 200ms`, `slow 300ms`. The signature interaction is the **theme-toggle reveal** — the new colour scheme grows out of the click point as a clip-path circle via the View Transitions API. `prefers-reduced-motion` zeros all durations.
 
-**Hover states.** *Buttons:* darken background to `--primary-hover`, add a soft glow (`box-shadow: 0 0 20px <primary at 30%>`), and `translateY(-1px)`. *Cards:* `translateY(-2px)`, primary-tinted shadow, top border switches to primary. *Nav links:* `--primary-light` background fill + a 2px primary left-border accent. *Pills / chips:* border colour shifts to primary, text shifts to primary, fill goes to `--primary-light`.
+**Hover states.** _Buttons:_ darken background to `--primary-hover`, add a soft glow (`box-shadow: 0 0 20px <primary at 30%>`), and `translateY(-1px)`. _Cards:_ `translateY(-2px)`, primary-tinted shadow, top border switches to primary. _Nav links:_ `--primary-light` background fill + a 2px primary left-border accent. _Pills / chips:_ border colour shifts to primary, text shifts to primary, fill goes to `--primary-light`.
 
 **Press states.** Buttons return to baseline `transform`. Primary buttons go to `--primary-active` (a darker step, e.g. `#003a42` light / `#87efef` dark). No shrink, no inset shadow.
 
-**Transparency & blur.** Used sparingly. The mobile sidebar backdrop is `rgba(0,0,0,0.55)` + `backdrop-filter: blur(2px)`. The hero center glow is a radial gradient at 14% opacity. Sticky topbar/sidebar are *opaque* — no glassmorphism.
+**Transparency & blur.** Used sparingly. The mobile sidebar backdrop is `rgba(0,0,0,0.55)` + `backdrop-filter: blur(2px)`. The hero center glow is a radial gradient at 14% opacity. Sticky topbar/sidebar are _opaque_ — no glassmorphism.
 
 **Focus.** Double-ring (`0 0 0 2px surface, 0 0 0 4px primary`) so the same ring works on any background. `:focus-visible` only — pointer focus stays clean.
 
-**Imagery.** None, by default. The brand makes a deliberate choice not to lean on illustrations or stock photography. The hero shows a wordmark, a 1-line subtitle, a 1-line uppercase disclaimer (*"Workshop / teaching artifact / not a production library"*), and two buttons.
+**Imagery.** None, by default. The brand makes a deliberate choice not to lean on illustrations or stock photography. The hero shows a wordmark, a 1-line subtitle, a 1-line uppercase disclaimer (_"Workshop / teaching artifact / not a production library"_), and two buttons.
 
 **Color vibe of imagery (when used).** Cool. Conciso teal + slate. Never warm.
 
 **Layout.** Three-column docs shell on ≥768px (256px sidebar / fluid content / 200px TOC), single column below. Topbar is sticky at 68px. Sidebar is sticky to topbar bottom. Content column max-width 800px. Stat ribbons are 4-up, breaking to 2-up under 640px. Component grids use `repeat(auto-fill, minmax(210px, 1fr))`.
 
 **Cards.**
+
 - Background: `surface`
 - Border: `1px solid border` + 2px transparent top border
 - Radius: `lg` (14px)
@@ -124,7 +128,7 @@ This is the rhythm to copy across the brand: three actions, three tools, one ver
 
 ## Iconography
 
-The repo's component library defines a small, *strict* icon set as a string-literal union in `@atelier-ui/spec` — so the API is the icon catalog. `AtlIconName` in `libs/spec/src/index.ts` is the canonical, always-current list; this file is a static mirror with no build step to keep it in sync, so treat the snapshot below as a convenience, not the source of truth, and check the union type if a name you need is missing here:
+The repo's component library defines a small, _strict_ icon set as a string-literal union in `@atelier-ui/spec` — so the API is the icon catalog. `AtlIconName` in `libs/spec/src/index.ts` is the canonical, always-current list; this file is a static mirror with no build step to keep it in sync, so treat the snapshot below as a convenience, not the source of truth, and check the union type if a name you need is missing here:
 
 ```
 success · check · warning · danger · error · info

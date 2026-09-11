@@ -26,15 +26,20 @@ export const designSkillVersion: string = JSON.parse(
   readFileSync(join(skillDir, 'package.json'), 'utf-8'),
 ).version;
 
-export const designReferenceFiles: string[] = readdirSync(join(skillDir, 'references'))
+export const designReferenceFiles: string[] = readdirSync(
+  join(skillDir, 'references'),
+)
   .filter((file) => file.endsWith('.md'))
   .sort();
 
-export const designPreviewCount: number = readdirSync(join(skillDir, 'preview')).filter((f) =>
-  f.endsWith('.html'),
-).length;
+export const designPreviewCount: number = readdirSync(
+  join(skillDir, 'preview'),
+).filter((f) => f.endsWith('.html')).length;
 
-const tokenSheet = readFileSync(join(skillDir, 'assets/colors_and_type.css'), 'utf-8');
+const tokenSheet = readFileSync(
+  join(skillDir, 'assets/colors_and_type.css'),
+  'utf-8',
+);
 
 /** Distinct `--ui-*` custom properties the sheet declares. */
 export const designTokenCount: number = new Set(
@@ -48,7 +53,9 @@ export const designTypeRoleCount: number = new Set(
 
 /** First quoted family of a `--ui-font-*` stack, e.g. `--ui-font-mono` → `JetBrains Mono`. */
 function family(token: string): string {
-  const declaration = new RegExp(`--ui-font-${token}\\s*:\\s*'([^']+)'`).exec(tokenSheet);
+  const declaration = new RegExp(`--ui-font-${token}\\s*:\\s*'([^']+)'`).exec(
+    tokenSheet,
+  );
   if (!declaration) {
     throw new Error(
       `atelier-design-meta: the skill's colors_and_type.css declares no --ui-font-${token}. ` +

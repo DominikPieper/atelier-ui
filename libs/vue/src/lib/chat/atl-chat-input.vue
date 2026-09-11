@@ -44,9 +44,12 @@ const isStreaming = computed(() => ctx.status.value === 'streaming');
 const effectivePlaceholder = computed(() => {
   if (props.placeholder) return props.placeholder;
   switch (ctx.status.value) {
-    case 'streaming': return 'Waiting for response…';
-    case 'error': return 'Try again…';
-    default: return 'Message your AI assistant…';
+    case 'streaming':
+      return 'Waiting for response…';
+    case 'error':
+      return 'Try again…';
+    default:
+      return 'Message your AI assistant…';
   }
 });
 

@@ -34,8 +34,8 @@ library does when the children are not drawable.
 selected, disabled, filled. Layout-only slots and invisible infrastructure stay
 inside their container. Applied to the 33:
 
-| gets a master (11) | stays in the container (19) | no visual (3) |
-|---|---|---|
+| gets a master (11)                                                                                                                                        | stays in the container (19)                                                                                                                                                 | no visual (3)                                     |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- |
 | AtlIcon, AtlMenuItem, AtlMenuSeparator, AtlTab, AtlStep, AtlOption, AtlChatMessage, AtlChatSuggestion, AtlChatTyping, AtlAccordionItem, AtlBreadcrumbItem | Card / Dialog / Drawer × Header, Content, Footer; AtlChatHeader, AtlChatInput, AtlChatMessages, AtlAccordionHeader, AtlThead, AtlTbody, AtlTr, AtlTh, AtlTd, AtlMenuTrigger | AtlToastProvider, AtlToastContainer, AtlToastItem |
 
 Rejected: a master for all 33. "One concept, one drawing" is the right principle and
@@ -52,9 +52,9 @@ any gate noticing.
 **And the prose claims become checked.** `check:figma` gains four codes:
 
 - `[BOOL-CLAIM]` — a description says `Boolean \`x\`: maps to YSpec.field`; the gate
-  resolves `YSpec` through `extends` and requires both that the field exists **and
+resolves `YSpec`through`extends` and requires both that the field exists **and
   that the component's own spec resolves to that interface**.
-- `[BOOL-MISSING]` — a spec flag the master offers no way to set, as a Boolean *or*
+- `[BOOL-MISSING]` — a spec flag the master offers no way to set, as a Boolean _or_
   as a variant-axis value.
 - `[AXIS-NAME]` — an axis whose name is buried in a real prop's name.
 - `[AXIS-NOT-A-PROP]` — an axis that names nothing in the spec.

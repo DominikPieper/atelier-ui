@@ -23,19 +23,19 @@ not — and the failure mode was worth more than the four:
 
 - **One was fixed the day before** and nobody had gone back to the list.
 - **One was contradicted by a later entry in the same file.** "Figma Toast is designed
-  DARK" sat open for five weeks while an entry below it recorded *"Toast resolved: the dark
-  drawing WAS the dark rendering."* Verified against `allowlists.js`, which carries no Toast
+  DARK" sat open for five weeks while an entry below it recorded _"Toast resolved: the dark
+  drawing WAS the dark rendering."_ Verified against `allowlists.js`, which carries no Toast
   fill exemption.
 - **One described 42 tracked files** that a commit had already deleted.
 - **One said `push`** on a batch that shipped in June.
 
-Two more were closable by *building the thing they described*, and both turned out to hide
+Two more were closable by _building the thing they described_, and both turned out to hide
 something the note did not know.
 
 ## Decision
 
 **1. `[UNDECLARED]` — check the direction nothing checked.** `check:css-tokens` verified
-that *declared* tokens are annotated. Nothing verified that a token a component **reads**
+that _declared_ tokens are annotated. Nothing verified that a token a component **reads**
 is declared anywhere. The recorded instance was historical: all three code-block
 stylesheets read `var(--ui-font-mono, …)` while nothing declared it, so every code block
 rendered in the Menlo fallback until ADR-0035.
@@ -50,8 +50,8 @@ reason to report.** The component renders, plausibly, at a value nothing control
 
 **2. The tooltip takes `--ui-z-dropdown`, and the manifest decided it, not the number.**
 `--ui-z-overlay` is `200` — the same number the fallback used, so it was the tempting fix.
-Its manifest intent says *"the modal scrim / backdrop layer"*. `--ui-z-dropdown`'s says
-*"popovers, dropdowns, and menus that float above page content"*, and every other floating
+Its manifest intent says _"the modal scrim / backdrop layer"_. `--ui-z-dropdown`'s says
+_"popovers, dropdowns, and menus that float above page content"_, and every other floating
 layer in the library — the menu panel, the combobox panel, the select panel, the chat
 panel — already uses it. The tooltip was the only one that did not, and it is a popover.
 The value changes 200 → 100; the tooltip is not portaled, so it only ever competed inside

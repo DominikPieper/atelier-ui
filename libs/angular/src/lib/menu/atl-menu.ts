@@ -69,7 +69,9 @@ export class AtlMenu {
   readonly variant = input<'default' | 'compact'>('default');
 
   /** @internal */
-  protected readonly hostClasses = computed(() => `atl-menu variant-${this.variant()}`);
+  protected readonly hostClasses = computed(
+    () => `atl-menu variant-${this.variant()}`,
+  );
 }
 
 /**
@@ -109,7 +111,10 @@ export class AtlMenuItem {
   readonly disabled = input(false);
 
   /** @internal — detect if this item also triggers a submenu */
-  private readonly menuTrigger = inject(CdkMenuTrigger, { optional: true, self: true });
+  private readonly menuTrigger = inject(CdkMenuTrigger, {
+    optional: true,
+    self: true,
+  });
 
   /** @internal */
   protected readonly hasSubmenu = computed(() => !!this.menuTrigger);

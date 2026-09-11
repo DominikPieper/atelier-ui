@@ -35,6 +35,7 @@ for `Atl<Base>Spec`, exceptions only for spec-less masters. The three
 consumer scripts read from the reader; their public shapes are unchanged.
 
 Alternatives considered:
+
 - **Derive the docs slugs and sub-component parents too** — rejected:
   neither is mechanically derivable (which interface is "primary" is a
   documentation decision; `AtlTab`'s parent being `AtlTabGroup` is domain

@@ -21,7 +21,10 @@ const path = require('path');
 const fs = require('fs');
 const ts = require('typescript');
 const { UNION_TO_COMPONENT, AXIS_PREFIX } = require('./lib/component-axes');
-const { VARIANT_AXIS_EXCEPTIONS, DEFAULT_IS_BASE } = require('./lib/allowlists');
+const {
+  VARIANT_AXIS_EXCEPTIONS,
+  DEFAULT_IS_BASE,
+} = require('./lib/allowlists');
 
 const ROOT = path.resolve(__dirname, '../..');
 const SPEC_FILE = path.join(ROOT, 'libs/spec/src/index.ts');
@@ -53,9 +56,15 @@ function parseSpecUnions() {
   ts.forEachChild(sf, (node) => {
     if (!ts.isTypeAliasDeclaration(node)) return;
     const name = node.name.text;
-    const m = /^Atl.+(Variant|Size|Shape|Position|Orientation|Status)$/.exec(name);
+    const m = /^Atl.+(Variant|Size|Shape|Position|Orientation|Status)$/.exec(
+      name,
+    );
     if (!m) return;
-    found.push({ union: name, axis: m[1], members: literalsOfAlias(node, checker) });
+    found.push({
+      union: name,
+      axis: m[1],
+      members: literalsOfAlias(node, checker),
+    });
   });
   return found;
 }
@@ -86,7 +95,9 @@ const warnings = [];
 for (const { union, axis, members } of unions) {
   const component = UNION_TO_COMPONENT[union];
   if (!component) {
-    errors.push(`[UNMAPPED] ${union} (${axis}) is not in UNION_TO_COMPONENT — add it or confirm it is not CSS-backed`);
+    errors.push(
+      `[UNMAPPED] ${union} (${axis}) is not in UNION_TO_COMPONENT — add it or confirm it is not CSS-backed`,
+    );
     continue;
   }
   const prefix = AXIS_PREFIX[axis];
@@ -99,17 +110,21 @@ for (const { union, axis, members } of unions) {
     for (const member of members) {
       if (!member) continue; // skip '' members
       if (member === 'default' && DEFAULT_IS_BASE.has(union)) continue;
-      const exempt = VARIANT_AXIS_EXCEPTIONS.get(`${framework}:${union}:${member}`);
+      const exempt = VARIANT_AXIS_EXCEPTIONS.get(
+        `${framework}:${union}:${member}`,
+      );
       if (exempt) {
         if (exempt.kind === 'gap') {
-          warnings.push(`[GAP] ${framework}/${component}: ${union}:${member} — ${exempt.reason}`);
+          warnings.push(
+            `[GAP] ${framework}/${component}: ${union}:${member} — ${exempt.reason}`,
+          );
         }
         continue;
       }
       if (!classes.has(`${prefix}-${member}`)) {
         errors.push(
           `[VARIANT-DRIFT] ${framework}/${component}: spec ${union} allows '${member}' ` +
-            `but .${prefix}-${member} is not defined in the component CSS`
+            `but .${prefix}-${member} is not defined in the component CSS`,
         );
       }
     }
@@ -119,11 +134,17 @@ for (const { union, axis, members } of unions) {
 if (errors.length > 0) {
   warnings.forEach((w) => console.warn(`⚠ [WARNING] ${w}`));
   errors.forEach((e) => console.error(`✗ ${e}`));
-  console.error(`\n${errors.length} variant/size drift issue(s). Add the missing CSS class, or allowlist a non-class axis in tools/scripts/lib/allowlists.js.`);
+  console.error(
+    `\n${errors.length} variant/size drift issue(s). Add the missing CSS class, or allowlist a non-class axis in tools/scripts/lib/allowlists.js.`,
+  );
   process.exit(1);
 } else if (warnings.length > 0) {
   warnings.forEach((w) => console.warn(`⚠ [WARNING] ${w}`));
-  console.warn(`\n${warnings.length} variant/size warning(s) (non-blocking). variant/size CSS in sync (${unions.length} unions × ${FRAMEWORKS.length} frameworks)`);
+  console.warn(
+    `\n${warnings.length} variant/size warning(s) (non-blocking). variant/size CSS in sync (${unions.length} unions × ${FRAMEWORKS.length} frameworks)`,
+  );
 } else {
-  console.log(`✓ variant/size CSS in sync (${unions.length} unions × ${FRAMEWORKS.length} frameworks)`);
+  console.log(
+    `✓ variant/size CSS in sync (${unions.length} unions × ${FRAMEWORKS.length} frameworks)`,
+  );
 }

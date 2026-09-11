@@ -60,7 +60,7 @@ separator directly; the breadcrumb's meaning survives its removal.
 It read "chevron, CSS-generated, not read by screen readers" — plausible,
 since generated content is not a DOM node and jsdom (this repo's whole a11y-
 parity test harness, `libs/*/src/testing/a11y-tree.ts`) never sees it. But
-jsdom does not compute layout or paint, so it cannot settle what a *real*
+jsdom does not compute layout or paint, so it cannot settle what a _real_
 browser exposes. Measured instead, with a small Playwright script — and the
 three frameworks it targets give genuinely different-strength evidence, worth
 keeping apart rather than lumping under "the browsers' accessibility trees":
@@ -133,7 +133,7 @@ rule would literally demand:
   Paying a DOM node per separator, times three frameworks, to make an
   accessibility-invisible mark instanceable in Figma is cost with no
   corresponding benefit — the opposite problem from ADR-0046's original
-  finding, where the *visible* meaning (which icon is this?) genuinely needed
+  finding, where the _visible_ meaning (which icon is this?) genuinely needed
   one source of truth.
 - **Once actually hidden, the glyph poses no risk the icon set exists to
   prevent.** ADR-0046/0050's worry is drift (three checkmarks that don't

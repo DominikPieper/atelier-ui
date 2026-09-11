@@ -5,7 +5,7 @@ description: Designs, builds, audits, and improves Figma workspaces and componen
 
 # Figma Workspace Architect
 
-A skill for using **figma-console-mcp** ([southleft/figma-console-mcp](https://github.com/southleft/figma-console-mcp)) to build, audit, and evolve Figma workspaces that use the right Figma primitives — not just files that *look* right.
+A skill for using **figma-console-mcp** ([southleft/figma-console-mcp](https://github.com/southleft/figma-console-mcp)) to build, audit, and evolve Figma workspaces that use the right Figma primitives — not just files that _look_ right.
 
 The bar this skill sets: a workspace where a designer can find what they need without asking, where Variables have correct scopes, where Variants match the engineering prop API, where Modes carry theming instead of duplicate components, and where naming/page structure is predictable enough that any agent (or human) can navigate it cold.
 
@@ -35,7 +35,7 @@ To keep scope sharp, this skill **does not** cover:
 - **Code Connect or Figma's official Dev-Mode MCP server.** Explicit user constraint: the toolchain is figma-console-mcp only. The bridge to code in this skill is **naming alignment** alone — Component names, Variant Property names/values, and Variable names matching the codebase exactly. If the user asks about Code Connect / Dev-Mode MCP, say it's out of scope here and don't pretend either is being recommended.
 - **FigJam boards and Figma Slides decks.** The MCP exposes `figjam_*` and `figma_*_slide` tools; this skill targets Figma Design files only.
 - **Console / plugin debugging** (`figma_get_console_logs`, `figma_watch_console`, `figma_reload_plugin`, `figma_reconnect`). Unrelated workflows.
-- **Accessibility and visual-coverage auditing** — the figma-console-mcp built-in *Design System Dashboard* MCP App already scores Naming, Tokens, Components, Accessibility, Consistency, and Coverage. This skill defers A11y and Coverage to that dashboard and focuses on **architectural** depth the dashboard does not reach.
+- **Accessibility and visual-coverage auditing** — the figma-console-mcp built-in _Design System Dashboard_ MCP App already scores Naming, Tokens, Components, Accessibility, Consistency, and Coverage. This skill defers A11y and Coverage to that dashboard and focuses on **architectural** depth the dashboard does not reach.
 
 When the user asks something out-of-scope, say so briefly and either point them at the right tool (the dashboard, code-gen workflows) or proceed with general knowledge — do not pretend this skill covers it.
 
@@ -43,7 +43,7 @@ When the user asks something out-of-scope, say so briefly and either point them 
 
 ### Build mode
 
-Triggered by verbs like *create, set up, bootstrap, scaffold, build, generate, add, refactor*.
+Triggered by verbs like _create, set up, bootstrap, scaffold, build, generate, add, refactor_.
 
 Never start writing to Figma directly. Run this loop:
 
@@ -60,18 +60,19 @@ The detailed Build playbook is in `references/build-workflow.md`, including the 
 
 #### Scaffold sub-mode — one-shot starter file
 
-Triggered by *scaffold, template, starter, quickstart, bootstrap a new file* (when the user wants a working skeleton in one turn, not an iterative dialogue).
+Triggered by _scaffold, template, starter, quickstart, bootstrap a new file_ (when the user wants a working skeleton in one turn, not an iterative dialogue).
 
-Skip the full Discovery → Decide loop and run a fixed three-call recipe that produces Cover + Tokens + Components pages with placeholder content. The output is a *skeleton* the user is expected to replace, not a finished system. See `references/scaffold-payload.md` for the recipe and the after-scaffold checklist that the agent must hand back to the user.
+Skip the full Discovery → Decide loop and run a fixed three-call recipe that produces Cover + Tokens + Components pages with placeholder content. The output is a _skeleton_ the user is expected to replace, not a finished system. See `references/scaffold-payload.md` for the recipe and the after-scaffold checklist that the agent must hand back to the user.
 
 Use the regular Build loop (not Scaffold) when:
+
 - The user already has a file and wants additions — Discovery first.
 - The user has specific values to seed — use those, not the placeholder palette.
 - The user wants something polished — Scaffold ships placeholders intentionally.
 
 #### Inventory sub-mode — visual library catalog
 
-Triggered by *generate inventory, build gallery, library catalog, stickersheet, library overview* — when the user wants a one-page visual reference of every published Component / Component Set in the file.
+Triggered by _generate inventory, build gallery, library catalog, stickersheet, library overview_ — when the user wants a one-page visual reference of every published Component / Component Set in the file.
 
 The output is a dedicated `📋 Inventory` page: one Section per top-level slash category, one card per component, each card carrying a header + status badge + default-variant preview + meta row + property table + optional description footer. Cards adopt a light or dark surface based on contextual background detection so the preview reads correctly.
 
@@ -81,14 +82,14 @@ Build the gallery **section by section** — one `figma_execute` per top-level S
 
 ### Audit mode
 
-Triggered by *audit, review, check, assess, what's wrong with, how good is*.
+Triggered by _audit, review, check, assess, what's wrong with, how good is_.
 
 Two layers, run in this order:
 
 1. **Run the built-in Design System Dashboard MCP App** first if the client supports MCP Apps (Claude Desktop with `ENABLE_MCP_APPS=true`). Ask the user something like "audit the design system" — this gives an immediate Lighthouse-style score across Naming, Tokens, Components, A11y, Consistency, and Coverage. Without MCP Apps, `figma_audit_design_system_report` returns the same six-category scoring as plain JSON (weights: Naming 25 %, Tokens 20 %, Components 20 %, Consistency 15 %, A11y 10 %, Coverage 10 %; five-minute cache). Use either as the **breadth** layer; do not duplicate it.
 2. **Run the architectural deep-audit** in `references/audit-checklist.md`. This is the **depth** layer: five categories (Token Architecture, Component Design, Naming, File Structure, Engineering-Sync Readiness), each finding tagged with a severity (Blocker / Critical / Warning / Suggestion) and a concrete fix.
 
-The Component Design category enforces four hard requirements every library has to meet — see *Required principles* in `references/component-design.md`:
+The Component Design category enforces four hard requirements every library has to meet — see _Required principles_ in `references/component-design.md`:
 
 - **CD6** Component descriptions surface intent (use-when, don't-use-when, signals).
 - **CD7** Every interactive component covers all six states (default, hover, focus, disabled, error, loading).
@@ -97,9 +98,9 @@ The Component Design category enforces four hard requirements every library has 
 
 These are the drift-sources an agent-driven workflow notices first. Treat any Critical finding under them as a real fix, not a cosmetic one.
 
-Two rules for the *fix* column of every finding, learned from an audit that called a collection "dead, zero risk to delete" without having read the second file that consumed it: a fix that **deletes, renames or rebinds** a Variable, Collection, Mode or Variant is a Migrate operation and carries the playbook's safety class (Breaking → additive coordination protocol), never "just remove it"; and a Token Architecture finding may say **"unused" or "duplicate" only after enumerating every collection's consumers** — the docs-site collection, a second library file, `codeSyntax` bindings — with the tool call that proved it named in the finding.
+Two rules for the _fix_ column of every finding, learned from an audit that called a collection "dead, zero risk to delete" without having read the second file that consumed it: a fix that **deletes, renames or rebinds** a Variable, Collection, Mode or Variant is a Migrate operation and carries the playbook's safety class (Breaking → additive coordination protocol), never "just remove it"; and a Token Architecture finding may say **"unused" or "duplicate" only after enumerating every collection's consumers** — the docs-site collection, a second library file, `codeSyntax` bindings — with the tool call that proved it named in the finding.
 
-Before writing the report, do the two pre-flight passes called out in the checklist's *Inputs* section: **pin the snapshot** (git SHA + Figma `lastModified`) and **cross-source-grep** any Variable / Variant value you're about to flag. Both are cheap and prevent the most common audit failure mode — findings that were already true at audit time but stale by the time someone acts on them, or findings that look bad in Figma but are actually load-bearing in code with subtly different semantics.
+Before writing the report, do the two pre-flight passes called out in the checklist's _Inputs_ section: **pin the snapshot** (git SHA + Figma `lastModified`) and **cross-source-grep** any Variable / Variant value you're about to flag. Both are cheap and prevent the most common audit failure mode — findings that were already true at audit time but stale by the time someone acts on them, or findings that look bad in Figma but are actually load-bearing in code with subtly different semantics.
 
 Output the result using `assets/audit-report-template.md`. Always lead with the priority list — Blockers and Criticals at the top, with effort estimates. Do not bury the punchline in a category-by-category walk-through.
 
@@ -107,15 +108,15 @@ Output the result using `assets/audit-report-template.md`. Always lead with the 
 
 Triggered when an audit report already exists and the user asks "is X still relevant?", "what's actually left?", "re-check this audit", "re-verify before I act", or hands you an audit `.md` more than a few hours old.
 
-Don't redo the full deep-audit. Open `references/audit-verify-queries.md` and run *only* the verify query for each open finding. Emit a `still-open / auto-resolved / state-shifted` line per finding. Update the report's "Re-verify" table with the result (template field at the bottom of `assets/audit-report-template.md`) — drop `auto-resolved` rows from the priority list, and rewrite `state-shifted` rows before acting.
+Don't redo the full deep-audit. Open `references/audit-verify-queries.md` and run _only_ the verify query for each open finding. Emit a `still-open / auto-resolved / state-shifted` line per finding. Update the report's "Re-verify" table with the result (template field at the bottom of `assets/audit-report-template.md`) — drop `auto-resolved` rows from the priority list, and rewrite `state-shifted` rows before acting.
 
 This catches the most common audit failure mode: a stale `.md` directing fixes for findings that have already been resolved or have shifted in shape since audit time.
 
 **Auto-prompt re-verify when the audit looks old.** When the user references
 an audit `.md` more than ~1 hour stale (check the file `mtime` or the
 `Generated against` git SHA against current `HEAD`), don't wait for them to
-ask — say something like *"this audit is from N hours ago; let me re-verify
-open findings before we act on them"* and run the Re-verify sub-mode. One
+ask — say something like _"this audit is from N hours ago; let me re-verify
+open findings before we act on them"_ and run the Re-verify sub-mode. One
 read of `references/audit-verify-queries.md` plus one verify-pass per open
 finding is far cheaper than fixing items that already auto-resolved.
 
@@ -127,7 +128,7 @@ Go straight to `references/decision-heuristics.md`, find the matching decision, 
 
 ### Migrate mode
 
-Triggered by *rename, split, restructure, refactor, deprecate, retire, replace* — when the user wants to **change** an existing structure without breaking downstream consumers (designers, code, libraries that depend on this file).
+Triggered by _rename, split, restructure, refactor, deprecate, retire, replace_ — when the user wants to **change** an existing structure without breaking downstream consumers (designers, code, libraries that depend on this file).
 
 Never run a Breaking operation alone. Open `references/migration-playbook.md` and:
 
@@ -140,7 +141,7 @@ If the migration is large enough to span sessions, finish each session in a self
 
 ### Sync mode
 
-Triggered when one side moved and the other must catch up. Trigger phrases: *"propagate to Figma"*, *"sync the lib tokens"*, *"keep Figma and code in lockstep"*, *"make Figma match the new spec"*. Different from Migrate: Migrate plans a coordinated structural change; Sync handles value drift after one side has already moved.
+Triggered when one side moved and the other must catch up. Trigger phrases: _"propagate to Figma"_, _"sync the lib tokens"_, _"keep Figma and code in lockstep"_, _"make Figma match the new spec"_. Different from Migrate: Migrate plans a coordinated structural change; Sync handles value drift after one side has already moved.
 
 Open `references/sync-workflow.md` and run the four steps: direction → diff → batch-or-script → validate. Output a Sync summary (see "Output expectations" below).
 
@@ -148,19 +149,19 @@ If the diff turns out to include adds / removes / renames rather than only value
 
 ## Mode routing — quick reference
 
-| User says…                                                      | Mode    | First action                                            |
-|-----------------------------------------------------------------|---------|---------------------------------------------------------|
-| "create / build / set up / bootstrap…"                          | Build   | `figma_get_file_data` for discovery                     |
-| "scaffold / starter / template / quickstart a new file…"        | Build (Scaffold sub-mode) | Open `references/scaffold-payload.md`, run the three-call recipe |
-| "generate inventory / build gallery / library catalog / stickersheet…" | Build (Inventory sub-mode) | Open `references/inventory-generation.md`; run the seven-phase pipeline section-by-section |
-| "audit / review / check / assess / how good is…"                | Audit   | Try Design System Dashboard MCP App; then deep-audit    |
-| "is finding X still relevant?", "re-verify this audit…"         | Audit (Re-verify sub-mode) | Open `references/audit-verify-queries.md`; run only the verify queries for open findings |
-| "should I use a Variant or…?", "is it better to…?"              | Decide  | Open `references/decision-heuristics.md`                |
-| "rename / split / restructure / deprecate / migrate…"           | Migrate | Open `references/migration-playbook.md`; run pre-flight  |
-| "verify in code", "check the rendered result", "does dark mode look right…" | Migrate (post-flight) | Open `references/code-verify.md`; run the Storybook recipe |
-| "propagate to Figma / sync the tokens / make Figma match…"      | Sync    | `figma_get_variables` → diff → batch update; see `references/code-sync.md` |
-| "fix this issue…" (specific, after an audit)                    | Migrate | Use the playbook's recipe for the matching operation     |
-| "translate this Figma component into code…"                     | (none)  | This is out of scope — point at code-gen workflow       |
+| User says…                                                                  | Mode                       | First action                                                                               |
+| --------------------------------------------------------------------------- | -------------------------- | ------------------------------------------------------------------------------------------ |
+| "create / build / set up / bootstrap…"                                      | Build                      | `figma_get_file_data` for discovery                                                        |
+| "scaffold / starter / template / quickstart a new file…"                    | Build (Scaffold sub-mode)  | Open `references/scaffold-payload.md`, run the three-call recipe                           |
+| "generate inventory / build gallery / library catalog / stickersheet…"      | Build (Inventory sub-mode) | Open `references/inventory-generation.md`; run the seven-phase pipeline section-by-section |
+| "audit / review / check / assess / how good is…"                            | Audit                      | Try Design System Dashboard MCP App; then deep-audit                                       |
+| "is finding X still relevant?", "re-verify this audit…"                     | Audit (Re-verify sub-mode) | Open `references/audit-verify-queries.md`; run only the verify queries for open findings   |
+| "should I use a Variant or…?", "is it better to…?"                          | Decide                     | Open `references/decision-heuristics.md`                                                   |
+| "rename / split / restructure / deprecate / migrate…"                       | Migrate                    | Open `references/migration-playbook.md`; run pre-flight                                    |
+| "verify in code", "check the rendered result", "does dark mode look right…" | Migrate (post-flight)      | Open `references/code-verify.md`; run the Storybook recipe                                 |
+| "propagate to Figma / sync the tokens / make Figma match…"                  | Sync                       | `figma_get_variables` → diff → batch update; see `references/code-sync.md`                 |
+| "fix this issue…" (specific, after an audit)                                | Migrate                    | Use the playbook's recipe for the matching operation                                       |
+| "translate this Figma component into code…"                                 | (none)                     | This is out of scope — point at code-gen workflow                                          |
 
 ## References — load on demand
 

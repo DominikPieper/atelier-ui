@@ -3,7 +3,7 @@ status: accepted
 date: 2026-08-26
 sources:
   - tasks/design-findings-2026-08-26.md (Decision A — the size system states heights it does not deliver)
-  - "AtlButton.dc.html and AtlInput.dc.html in the Claude Design project *Atelier* — the artboards that surfaced it"
+  - 'AtlButton.dc.html and AtlInput.dc.html in the Claude Design project *Atelier* — the artboards that surfaced it'
 ---
 
 # ADR-0041: The control height is the primitive; padding is derived
@@ -44,9 +44,7 @@ paddings will only share a height by coincidence, and here they did not.
 Every control computes its own block padding:
 
 ```css
-padding-block: calc(
-  (var(--ui-control-height-md) - var(--ui-line-height-tight) * var(--ui-font-size-md)) / 2 - 1px
-);
+padding-block: calc((var(--ui-control-height-md) - var(--ui-line-height-tight) * var(--ui-font-size-md)) / 2 - 1px);
 min-height: var(--ui-control-height-md);
 ```
 
@@ -58,7 +56,7 @@ Two further consequences of the same decision:
   6px taller than a button. It now uses `--ui-line-height-tight` (1.25) like every
   other control.
 - **The derived padding is fractional** — 6.25px at sm, 11.75px at lg on the
-  current type scale. That is correct and deliberate: the *height* is the round
+  current type scale. That is correct and deliberate: the _height_ is the round
   number a designer reasons about, and the padding is whatever makes it true.
   Stating a round padding is what produced a non-round height.
 

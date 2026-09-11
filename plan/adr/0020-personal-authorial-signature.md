@@ -2,10 +2,10 @@
 status: accepted
 date: 2026-06-02
 sources:
-  - "docs/src/styles/docs-theme.css (Direction A: Conciso anchor only — the palette this extends)"
-  - "pieper.io (the author site whose Instrument Serif keyword accent + motion vocabulary this mirrors)"
-  - "personal-signature spec pasted into this session"
-  - "this session"
+  - 'docs/src/styles/docs-theme.css (Direction A: Conciso anchor only — the palette this extends)'
+  - 'pieper.io (the author site whose Instrument Serif keyword accent + motion vocabulary this mirrors)'
+  - 'personal-signature spec pasted into this session'
+  - 'this session'
 ---
 
 # ADR-0020: Personal authorial signature (serif-italic heading accent + shared motion grammar)
@@ -22,7 +22,7 @@ adds a signature on top, it does not reverse the rebrief.
 
 The Atelier docs needed to read as "the same author as pieper.io" without importing
 pieper.io's warm/organic palette — that contrast is intentional and must stay. The
-question was *which* layer carries cross-site identity. pieper.io emphasises one keyword
+question was _which_ layer carries cross-site identity. pieper.io emphasises one keyword
 per headline in `Instrument Serif` italic, and (going forward) will adopt Atelier's
 existing motion-token names and values. So the shared brand DNA is **typography + motion**,
 not color.
@@ -40,7 +40,7 @@ claim is hollow while the docs don't actually use the vocabulary.
 
 1. **Serif-italic heading accent.** Load `Instrument Serif` (400 italic) and expose it as
    `--docs-font-accent`. A new `.docs-accent` class renders one emphasised keyword per
-   heading in serif italic, colored `--ui-color-primary` (teal) — *not* pieper.io's
+   heading in serif italic, colored `--ui-color-primary` (teal) — _not_ pieper.io's
    terracotta. `PageHero` and `SectionHead` gain an optional `titleAccent?: string` prop
    that wraps the first exact substring match of `title` in `<em class="docs-accent">`;
    absent or unmatched, the heading renders as a plain string (backward-compatible — all
@@ -54,7 +54,7 @@ claim is hollow while the docs don't actually use the vocabulary.
    one-off animation, not part of the hover/press grammar, and has no matching token.
 
 **Font is loaded via the Astro Fonts API** (`fontProviders.google()` in `astro.config`),
-matching the existing Inter / JetBrains Mono setup — *not* `@fontsource` as the source
+matching the existing Inter / JetBrains Mono setup — _not_ `@fontsource` as the source
 spec literally suggested. Rationale: one font-loading mechanism, free subsetting +
 `display: swap`, and a metric-near `Georgia` fallback, which directly satisfies the
 no-layout-shift requirement.
@@ -63,7 +63,7 @@ no-layout-shift requirement.
 revised this section on typeface selection only: the UI face moved from Inter to
 Instrument Sans (paired with Instrument Serif and JetBrains Mono), because Anthropic's own
 system prompt names Inter among the "AI slop tropes … overused fonts" for a repo whose
-stated identity layer *is* typography. The palette/motion split this ADR decided stands
+stated identity layer _is_ typography. The palette/motion split this ADR decided stands
 unrevised; only the specific font named in this paragraph does not. This note is being
 added now, eleven days after ADR-0035, later than the change it records.
 

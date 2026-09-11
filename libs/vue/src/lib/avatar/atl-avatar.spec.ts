@@ -4,22 +4,31 @@ import AtlAvatarGroup from './atl-avatar-group.vue';
 import { covers } from '../../testing/behavior';
 
 describe('AtlAvatar', () => {
-  covers('avatar', 'initials-when-no-src')('renders with initials when name is provided and no src', () => {
-    render(AtlAvatar, { props: { name: 'Jane Doe' } });
-    expect(screen.getByText('JD')).toBeInTheDocument();
-  });
+  covers('avatar', 'initials-when-no-src')(
+    'renders with initials when name is provided and no src',
+    () => {
+      render(AtlAvatar, { props: { name: 'Jane Doe' } });
+      expect(screen.getByText('JD')).toBeInTheDocument();
+    },
+  );
 
-  covers('avatar', 'img-when-src')('renders an img when src is provided', () => {
-    const { container } = render(AtlAvatar, {
-      props: { src: 'https://example.com/photo.jpg', alt: 'Jane' },
-    });
-    expect(container.querySelector('img')).toBeInTheDocument();
-  });
+  covers('avatar', 'img-when-src')(
+    'renders an img when src is provided',
+    () => {
+      const { container } = render(AtlAvatar, {
+        props: { src: 'https://example.com/photo.jpg', alt: 'Jane' },
+      });
+      expect(container.querySelector('img')).toBeInTheDocument();
+    },
+  );
 
-  covers('avatar', 'icon-when-empty')('renders icon placeholder when no src or name', () => {
-    const { container } = render(AtlAvatar);
-    expect(container.querySelector('.icon')).toBeInTheDocument();
-  });
+  covers('avatar', 'icon-when-empty')(
+    'renders icon placeholder when no src or name',
+    () => {
+      const { container } = render(AtlAvatar);
+      expect(container.querySelector('.icon')).toBeInTheDocument();
+    },
+  );
 
   covers('avatar', 'aria-label-from-name')('uses name as aria-label', () => {
     render(AtlAvatar, { props: { name: 'Alice' } });
@@ -27,19 +36,29 @@ describe('AtlAvatar', () => {
   });
 
   it('uses alt as aria-label when both provided', () => {
-    render(AtlAvatar, { props: { name: 'Alice', alt: 'Alice profile picture' } });
-    expect(screen.getByRole('img', { name: 'Alice profile picture' })).toBeInTheDocument();
+    render(AtlAvatar, {
+      props: { name: 'Alice', alt: 'Alice profile picture' },
+    });
+    expect(
+      screen.getByRole('img', { name: 'Alice profile picture' }),
+    ).toBeInTheDocument();
   });
 
   it('applies size and shape classes', () => {
-    const { container } = render(AtlAvatar, { props: { size: 'lg', shape: 'square' } });
+    const { container } = render(AtlAvatar, {
+      props: { size: 'lg', shape: 'square' },
+    });
     const avatar = container.firstChild as HTMLElement;
     expect(avatar).toHaveClass('size-lg', 'shape-square');
   });
 
   it('renders status dot when status is provided', () => {
-    const { container } = render(AtlAvatar, { props: { name: 'Bob', status: 'online' } });
-    expect(container.querySelector('.status-dot.status-online')).toBeInTheDocument();
+    const { container } = render(AtlAvatar, {
+      props: { name: 'Bob', status: 'online' },
+    });
+    expect(
+      container.querySelector('.status-dot.status-online'),
+    ).toBeInTheDocument();
   });
 });
 
@@ -57,7 +76,9 @@ describe('AtlAvatarGroup', () => {
     });
     // The group should render the overflow badge
     expect(container.querySelector('.overflow-badge')).toBeInTheDocument();
-    expect(container.querySelector('.overflow-badge')?.textContent?.trim()).toBe('+1');
+    expect(
+      container.querySelector('.overflow-badge')?.textContent?.trim(),
+    ).toBe('+1');
   });
 
   it('does not render overflow badge when children count is within max', () => {

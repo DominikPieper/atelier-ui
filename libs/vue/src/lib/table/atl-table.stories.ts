@@ -9,7 +9,8 @@ import AtlTd from './atl-td.vue';
 
 import { metadata } from '@atelier-ui/spec/metadata/table.metadata';
 import { contract } from '@atelier-ui/spec/contracts/table.contract';
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: 'figma'; url: string } {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
@@ -24,7 +25,11 @@ const meta: Meta<typeof AtlTable> = {
     size: { control: 'select', options: ['sm', 'md', 'lg'] },
     stickyHeader: { control: 'boolean' },
   },
-  parameters: { design: figmaNode('421-1183'), docs: { description: { component: metadata.purpose } }, contract },
+  parameters: {
+    design: figmaNode('421-1183'),
+    docs: { description: { component: metadata.purpose } },
+    contract,
+  },
 };
 
 export default meta;
@@ -68,7 +73,9 @@ export const Striped: Story = {
   parameters: { design: figmaNode('421-923') },
   render: () => ({
     components: { AtlTable, AtlThead, AtlTbody, AtlTr, AtlTh, AtlTd },
-    setup() { return { data: sampleData }; },
+    setup() {
+      return { data: sampleData };
+    },
     template: `
       <AtlTable variant="striped">
         <AtlThead>
@@ -90,7 +97,9 @@ export const Bordered: Story = {
   parameters: { design: figmaNode('421-962') },
   render: () => ({
     components: { AtlTable, AtlThead, AtlTbody, AtlTr, AtlTh, AtlTd },
-    setup() { return { data: sampleData }; },
+    setup() {
+      return { data: sampleData };
+    },
     template: `
       <AtlTable variant="bordered">
         <AtlThead>
@@ -111,7 +120,9 @@ export const Bordered: Story = {
 export const SizeSm: Story = {
   render: () => ({
     components: { AtlTable, AtlThead, AtlTbody, AtlTr, AtlTh, AtlTd },
-    setup() { return { data: sampleData }; },
+    setup() {
+      return { data: sampleData };
+    },
     template: `
       <AtlTable size="sm">
         <AtlThead>
@@ -132,7 +143,9 @@ export const SizeSm: Story = {
 export const SizeLg: Story = {
   render: () => ({
     components: { AtlTable, AtlThead, AtlTbody, AtlTr, AtlTh, AtlTd },
-    setup() { return { data: sampleData }; },
+    setup() {
+      return { data: sampleData };
+    },
     template: `
       <AtlTable size="lg">
         <AtlThead>
@@ -204,7 +217,8 @@ export const Selectable: Story = {
       const selected = ref<Set<string>>(new Set());
       function toggle(name: string, val: boolean) {
         const s = new Set(selected.value);
-        if (val) s.add(name); else s.delete(name);
+        if (val) s.add(name);
+        else s.delete(name);
         selected.value = s;
       }
       return { data: sampleData, selected, toggle };
@@ -307,7 +321,8 @@ export const KitchenSink: Story = {
       const sortDir = ref<'asc' | 'desc' | null>(null);
       function toggle(id: string, val: boolean) {
         const s = new Set(selected.value);
-        if (val) s.add(id); else s.delete(id);
+        if (val) s.add(id);
+        else s.delete(id);
         selected.value = s;
       }
       function toggleAll(val: boolean) {
@@ -317,8 +332,18 @@ export const KitchenSink: Story = {
         sortCol.value = dir ? col : null;
         sortDir.value = dir;
       }
-      const allSelected = () => rows.value.every((r) => selected.value.has(r.id));
-      return { rows, selected, sortCol, sortDir, toggle, toggleAll, onSort, allSelected };
+      const allSelected = () =>
+        rows.value.every((r) => selected.value.has(r.id));
+      return {
+        rows,
+        selected,
+        sortCol,
+        sortDir,
+        toggle,
+        toggleAll,
+        onSort,
+        allSelected,
+      };
     },
     template: `
       <div style="max-height:300px;overflow-y:auto;border:1px solid #e5e7eb;border-radius:0.75rem">
@@ -358,7 +383,9 @@ export const Playground: Story = {
   parameters: { design: figmaNode('421-1183') },
   render: (args) => ({
     components: { AtlTable, AtlThead, AtlTbody, AtlTr, AtlTh, AtlTd },
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: `
       <AtlTable v-bind="args">
         <AtlThead>

@@ -30,7 +30,7 @@ watch(
     el.setAttribute('aria-haspopup', 'menu');
     el.setAttribute('aria-expanded', String(open.value));
   },
-  { immediate: true, flush: 'post' }
+  { immediate: true, flush: 'post' },
 );
 
 function toggle() {

@@ -6,7 +6,8 @@ export const contract = {
   codeOnly: [
     {
       name: 'colSpan',
-      reason: "Is data, not state — sets the empty-state placeholder cell's colspan, not a Figma-settable property.",
+      reason:
+        "Is data, not state — sets the empty-state placeholder cell's colspan, not a Figma-settable property.",
     },
   ],
 } satisfies ComponentContract;

@@ -8,8 +8,15 @@ import {
 } from '@angular/core';
 import { FocusKeyManager } from '@angular/cdk/a11y';
 import type { FormValueControl } from '@angular/forms/signals';
-import { type ValidationError, type WithOptionalFieldTree } from '@angular/forms/signals';
-import { ATL_RADIO_GROUP, type AtlRadioGroupContext, type RadioItem } from './atl-radio-group.token';
+import {
+  type ValidationError,
+  type WithOptionalFieldTree,
+} from '@angular/forms/signals';
+import {
+  ATL_RADIO_GROUP,
+  type AtlRadioGroupContext,
+  type RadioItem,
+} from './atl-radio-group.token';
 
 let nextId = 0;
 
@@ -56,7 +63,9 @@ let nextId = 0;
   },
   providers: [{ provide: ATL_RADIO_GROUP, useExisting: AtlRadioGroup }],
 })
-export class AtlRadioGroup implements FormValueControl<string>, AtlRadioGroupContext {
+export class AtlRadioGroup
+  implements FormValueControl<string>, AtlRadioGroupContext
+{
   /** The selected value. Bound by [formField] directive. Supports [(value)] two-way binding. */
   readonly value = model('');
 
@@ -83,7 +92,9 @@ export class AtlRadioGroup implements FormValueControl<string>, AtlRadioGroupCon
   readonly name = input('');
 
   /** Validation errors from the form system. Bound by [formField] directive. */
-  readonly errors = input<readonly WithOptionalFieldTree<ValidationError>[]>([]);
+  readonly errors = input<readonly WithOptionalFieldTree<ValidationError>[]>(
+    [],
+  );
 
   /** @internal */
   protected readonly errorId = `atl-radio-group-errors-${nextId++}`;
@@ -102,9 +113,7 @@ export class AtlRadioGroup implements FormValueControl<string>, AtlRadioGroupCon
    * moments depending on the framework. Deciding *when* to pass errors belongs to the
    * form layer, which is where `touched` lives (ADR-0055).
    */
-  protected readonly showErrors = computed(
-    () => this.errors().length > 0
-  );
+  protected readonly showErrors = computed(() => this.errors().length > 0);
 
   /** @internal */
   protected readonly hostClasses = computed(() => {
@@ -149,7 +158,9 @@ export class AtlRadioGroup implements FormValueControl<string>, AtlRadioGroupCon
         .withWrap();
     }
 
-    const currentIdx = this.items().findIndex((i) => i.radioValue() === this.value());
+    const currentIdx = this.items().findIndex(
+      (i) => i.radioValue() === this.value(),
+    );
     this.keyManager.setActiveItem(currentIdx);
     this.keyManager.onKeydown(event);
 

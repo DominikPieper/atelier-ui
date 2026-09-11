@@ -12,11 +12,14 @@ export const metadata: ComponentMetadata = {
   antiPatterns: [
     {
       pattern: 'Choosing among more than two states.',
-      useInstead: 'AtlRadioGroup or AtlSelect — switches only encode true/false.',
+      useInstead:
+        'AtlRadioGroup or AtlSelect — switches only encode true/false.',
     },
     {
-      pattern: 'Collecting a binary value that is only committed on form submit.',
-      useInstead: 'AtlCheckbox — checkboxes carry the "stage a change" semantics; switches imply immediate effect.',
+      pattern:
+        'Collecting a binary value that is only committed on form submit.',
+      useInstead:
+        'AtlCheckbox — checkboxes carry the "stage a change" semantics; switches imply immediate effect.',
     },
   ],
   relatedComponents: ['AtlCheckboxSpec'],

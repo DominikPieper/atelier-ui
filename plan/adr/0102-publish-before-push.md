@@ -85,7 +85,7 @@ changelog will be disabled.` This repo has had two release groups
 (`libraries`, `skills`) since commit `b1725d68`, landed 2026-04-25 — the same
 commit that added `createRelease: "github"` in the first place. `gh release
 list` shows the last GitHub Release was `v0.0.33`, created ~45 minutes
-*before* that commit landed. Not one GitHub Release has been created since,
+_before_ that commit landed. Not one GitHub Release has been created since,
 across roughly thirty subsequent version bumps. The config that was forcing
 every release to push before publishing has not delivered the feature it was
 turned on for since the day it was added.
@@ -99,7 +99,7 @@ replace the other (see the extended step comment). The `concurrency: publish`
 group is untouched.
 
 **The provenance question, checked against real code, not recollection.**
-The initial framing for this fix worried that publishing *before* any commit
+The initial framing for this fix worried that publishing _before_ any commit
 exists would attest a tree whose `package.json` still carries the previous
 version, and asked whether publishing from a locally-committed-but-unpushed SHA
 would break `NPM_CONFIG_PROVENANCE` attestation because that SHA isn't yet on
@@ -115,7 +115,7 @@ check whether the attested SHA is reachable anywhere. So commit/push ordering
 has **no effect on provenance validity either way**: publishing with an
 uncommitted bump, a locally-committed-but-unpushed bump, or an already-pushed
 bump all attest the identical `GITHUB_SHA`. (A side effect worth naming: this
-means provenance has always attested the pre-bump *triggering* commit, never
+means provenance has always attested the pre-bump _triggering_ commit, never
 the `chore(release): publish` commit itself — true before this ADR and after
 it, unrelated to the defect being fixed here.)
 
@@ -127,12 +127,12 @@ the drift check succeeding.**
 
 1. **`nx.json`**: `release.changelog.workspaceChangelog.createRelease` changes
    from `"github"` to `false`. Verified live with `nx release patch --dry-run
-   --yes -g libraries --verbose` before and after: before the change, the
+--yes -g libraries --verbose` before and after: before the change, the
    sequence is `Committing changes with git` → `Tagging commit with git` →
-   `Pushing to git remote "origin"` → *then* `Running target nx-release-publish`;
+   `Pushing to git remote "origin"` → _then_ `Running target nx-release-publish`;
    after the change, `Pushing to git remote "origin"` no longer appears at all —
    `Tagging commit with git` is followed directly by `Running target
-   nx-release-publish`. `npx nx release --printConfig` confirms the same before/
+nx-release-publish`. `npx nx release --printConfig` confirms the same before/
    after difference in the resolved config. No other line in either dry run
    changed — the five per-project `CHANGELOG.md` previews are byte-identical,
    confirming workspace-level changelog really was already inert either way.
@@ -151,7 +151,7 @@ the drift check succeeding.**
    `gitPush()` utility used to run (`utils/git.js`) — parity with the behavior
    being taken over, not a new push shape. It is gated to skip `publish-only`
    (which never versions, commits or tags anything, so it has nothing of its
-   own to push — its recovery-path behavior is unchanged). It runs *after* the
+   own to push — its recovery-path behavior is unchanged). It runs _after_ the
    drift-check step, not merely after "Release and Publish", so that origin
    only advances once an independent registry query — not just `nx release`'s
    own exit code — has confirmed npm has the version. GitHub Actions stops a
@@ -180,8 +180,8 @@ the drift check succeeding.**
   the initial framing's rejected alternative, on provenance grounds — grounds
   this ADR found do not actually hold (above). It is rejected anyway, on
   simplicity grounds: Nx's own version step never commits by itself (`nx
-  release version`'s git defaults are stage-only — confirmed with `nx release
-  version patch --dry-run -g libraries --verbose`, which shows `git add`, not
+release version`'s git defaults are stage-only — confirmed with `nx release
+version patch --dry-run -g libraries --verbose`, which shows `git add`, not
   `git commit`); getting a commit and matching tag(s) out of a publish-first
   order means either reimplementing Nx's per-group commit-message and tag-name
   choreography by hand (this workspace has two release groups with two
@@ -212,13 +212,13 @@ the drift check succeeding.**
 ## Consequences
 
 - `nx release --yes` (and any explicit-specifier variant) no longer touches the
-  remote on its own. The new workflow step is the *only* thing in the
+  remote on its own. The new workflow step is the _only_ thing in the
   `publish` job that pushes, and it runs only when the mode is not
   `publish-only` and only after both "Release and Publish" and "Verify the
   publish actually reached npm" have succeeded. A failed publish now leaves a
   local commit and tag that the runner discards; origin cannot run ahead of
   the registry by construction, mirroring the fix ADR-0094 made for
-  *detecting* this class of drift with a fix for *preventing* it.
+  _detecting_ this class of drift with a fix for _preventing_ it.
 - `workspaceChangelog.createRelease` is now `false`. Nothing user-visible is
   removed: no GitHub Release has been created since 2026-04-25 regardless of
   this config's value (see Context), so this switches off a forced side effect
@@ -229,7 +229,7 @@ the drift check succeeding.**
 - `publish-only` mode is unchanged: `nx release publish` alone never performed
   git operations, so the new step's `if:` guard means its execution graph is
   identical to before this ADR.
-- **Residual risk, named rather than glossed over:** if publish *and* the
+- **Residual risk, named rather than glossed over:** if publish _and_ the
   drift check both succeed but the new `git push` step itself then fails
   (network blip, a non-fast-forward because something else pushed to `main`
   meanwhile, branch protection), npm ends up with a version whose commit and

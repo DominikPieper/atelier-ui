@@ -5,7 +5,7 @@
 the node tree by hand, because the tool compares only the COMPONENT_SET's own
 root box. Every agent was told the tool's verdict is an input, not the answer,
 and asked to classify each discrepancy as real-or-artifact, which side is wrong,
-and whether the value is *derived* (a `calc()`, per ADR-0041) or *stated*.
+and whether the value is _derived_ (a `calc()`, per ADR-0041) or _stated_.
 Read-only: no agent wrote to Figma, `parity.json` or the repo.
 
 Claims marked **[verified]** below I re-measured myself. The rest is the agents'
@@ -15,23 +15,23 @@ work, and where they were wrong I say so.
 
 ## Two root causes worth more than the twenty findings they explain
 
-### 1. AtlDialog was built at 1rem = 10px  **[verified]**
+### 1. AtlDialog was built at 1rem = 10px **[verified]**
 
 Every Figma width is the code's px ÷ 1.6 — i.e. the master was authored against
 a 10px root font size, not the 16px `tokens.css` documents:
 
-| size | code | Figma | px per rem |
-|---|---|---|---|
-| sm | `min(24rem, 90vw)` = 384 | 240 | **10.0** |
-| md | `min(36rem, 90vw)` = 576 | 360 | **10.0** |
-| lg | `min(48rem, 90vw)` = 768 | 480 | **10.0** |
-| xl | `min(64rem, 90vw)` = 1024 | 640 | **10.0** |
+| size | code                      | Figma | px per rem |
+| ---- | ------------------------- | ----- | ---------- |
+| sm   | `min(24rem, 90vw)` = 384  | 240   | **10.0**   |
+| md   | `min(36rem, 90vw)` = 576  | 360   | **10.0**   |
+| lg   | `min(48rem, 90vw)` = 768  | 480   | **10.0**   |
+| xl   | `min(64rem, 90vw)` = 1024 | 640   | **10.0**   |
 
 Exact in all four, and no width is variable-bound. This is a single
 construction error, not four drifts. `size=full` is `100vw` in code against a
 literal 800 in Figma and is not comparable.
 
-### 2. The active-state weight question is answered by the role table, and answers differently per component  **[verified]**
+### 2. The active-state weight question is answered by the role table, and answers differently per component **[verified]**
 
 Three components appeared to show "code bolds the current state beyond the
 design". `tokens.css`'s own role documentation settles it, and splits it:
@@ -42,15 +42,15 @@ control  Medium 14 — 6 CSS rules (tab button, page button, step label,
 action   SemiBold 16 — 3 CSS rules (button, accordion trigger, chat header title)
 ```
 
-| element | governing role | Figma | code | wrong side |
-|---|---|---|---|---|
-| AtlButton label | `action` → SemiBold | Medium 500 | semibold | **Figma** |
-| Pagination page button | `control` → Medium | Medium | semibold on `.is-active` | **code** |
-| Stepper step label | `control` → Medium | Medium | semibold on `.is-active` | **code** |
-| Badge label | in neither list | Medium | semibold | **undecided** |
+| element                | governing role      | Figma      | code                     | wrong side    |
+| ---------------------- | ------------------- | ---------- | ------------------------ | ------------- |
+| AtlButton label        | `action` → SemiBold | Medium 500 | semibold                 | **Figma**     |
+| Pagination page button | `control` → Medium  | Medium     | semibold on `.is-active` | **code**      |
+| Stepper step label     | `control` → Medium  | Medium     | semibold on `.is-active` | **code**      |
+| Badge label            | in neither list     | Medium     | semibold                 | **undecided** |
 
 Two agents independently read this as one systemic pattern with code at fault.
-It is one systemic *question* whose answer flips depending on which role governs
+It is one systemic _question_ whose answer flips depending on which role governs
 the element — and for AtlButton, Figma is the stale side. Worth noting because
 "apply the obvious pattern" would have been wrong in a quarter of the cases.
 
@@ -61,24 +61,24 @@ the element — and for AtlButton, Figma is the stale side. Worth noting because
 Scores are the tool's, and are a poor severity signal — AtlStepper scored 27/100
 almost entirely on paradigm noise, AtlSkeleton 90/100 with zero real findings.
 
-| component | score | verdict |
-|---|---|---|
-| AtlSkeleton | 90 | **in sync** — all 4 tool findings artifacts |
-| AtlMenu | 92 | **in sync** — row height correctly on the `--ui-row-height-sm` ladder (40px), though unbound in the master |
-| AtlTooltip | 76 | **in sync** — every real value matches; score depressed purely by naming artifacts |
-| AtlToggle | 43 | **in sync** — geometry, colours, hover and focus all match. Proves the Checkbox/Radio staleness below is fixable in this file |
-| AtlCard | 97 | padding=none fixed (see below); asymmetric scale open |
-| AtlBreadcrumbs | 87 | separator glyph open; missing `.breadcrumb-current` padding |
-| AtlPagination | 80 | `showFirstLast` declared but unwired |
-| AtlTabGroup | 83 | row heights 44/36 vs 40/32 |
-| AtlAlert | 84 | `dismissible` default; border expressibility |
-| AtlBadge | 85 | weight; border expressibility |
-| AtlDialog | 77 | the 10px-per-rem bug |
-| AtlDrawer | 83 | **most severe** — three of four advertised sizes are non-functional |
-| AtlCheckbox | 29 | master stale on four axes |
-| AtlRadio | 29 | same, plus the checked "hole" colour |
-| AtlRadioGroup | 48 | master does not model the component at all |
-| AtlStepper | 27 | four real findings under heavy paradigm noise |
+| component      | score | verdict                                                                                                                       |
+| -------------- | ----- | ----------------------------------------------------------------------------------------------------------------------------- |
+| AtlSkeleton    | 90    | **in sync** — all 4 tool findings artifacts                                                                                   |
+| AtlMenu        | 92    | **in sync** — row height correctly on the `--ui-row-height-sm` ladder (40px), though unbound in the master                    |
+| AtlTooltip     | 76    | **in sync** — every real value matches; score depressed purely by naming artifacts                                            |
+| AtlToggle      | 43    | **in sync** — geometry, colours, hover and focus all match. Proves the Checkbox/Radio staleness below is fixable in this file |
+| AtlCard        | 97    | padding=none fixed (see below); asymmetric scale open                                                                         |
+| AtlBreadcrumbs | 87    | separator glyph open; missing `.breadcrumb-current` padding                                                                   |
+| AtlPagination  | 80    | `showFirstLast` declared but unwired                                                                                          |
+| AtlTabGroup    | 83    | row heights 44/36 vs 40/32                                                                                                    |
+| AtlAlert       | 84    | `dismissible` default; border expressibility                                                                                  |
+| AtlBadge       | 85    | weight; border expressibility                                                                                                 |
+| AtlDialog      | 77    | the 10px-per-rem bug                                                                                                          |
+| AtlDrawer      | 83    | **most severe** — three of four advertised sizes are non-functional                                                           |
+| AtlCheckbox    | 29    | master stale on four axes                                                                                                     |
+| AtlRadio       | 29    | same, plus the checked "hole" colour                                                                                          |
+| AtlRadioGroup  | 48    | master does not model the component at all                                                                                    |
+| AtlStepper     | 27    | four real findings under heavy paradigm noise                                                                                 |
 
 ### Fixed already
 
@@ -168,7 +168,7 @@ against the code would have caught both on the day they were introduced.
 ### Needs a decision
 
 - **The `color-mix` borders.** Alert and Badge colored variants bind stroke to
-  the *same* variable as fill, making a 1px border invisible; code uses
+  the _same_ variable as fill, making a 1px border invisible; code uses
   `color-mix(in srgb, var(--ui-color-X-text) 25%, transparent)`. **[verified]**
   — all four Alert variants (`877:403/397/399/401`), and Badge's `default`
   correctly differs (`877:407` vs `877:409`). One agent called the master stale;
@@ -223,8 +223,8 @@ Each was checked independently rather than taken from the tool's label:
 - **`#nodeId` suffixes.** Figma names boolean properties `disabled#507:154`,
   `dismissible#507:267`, `linear#507:308`, `showFirstLast#911:26`. The tool's
   matcher does not strip the suffix, so one property reads as two unmatched ones.
-- **`targetSize` criticals.** `416×136`, `444×88`, `478×80` are the *aggregate
-  bounding box of the whole variant grid*, compared against a single control.
+- **`targetSize` criticals.** `416×136`, `444×88`, `478×80` are the _aggregate
+  bounding box of the whole variant grid_, compared against a single control.
 - **The `errorState` "major".** Fires on any semantic-danger-coloured variant as
   if it were form validation. Alert and Badge are not form controls;
   `aria-invalid` does not apply.

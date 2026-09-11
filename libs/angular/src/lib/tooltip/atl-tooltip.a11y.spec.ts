@@ -27,7 +27,9 @@ const IMPORTS = [AtlTooltip, OverlayModule];
 
 afterEach(() => {
   // CDK leaves the overlay container attached to <body> between renders.
-  document.querySelectorAll('.cdk-overlay-container').forEach((el) => el.remove());
+  document
+    .querySelectorAll('.cdk-overlay-container')
+    .forEach((el) => el.remove());
 });
 
 async function capture(): Promise<Record<string, unknown>> {
@@ -39,7 +41,9 @@ async function capture(): Promise<Record<string, unknown>> {
   let r = await render(TEMPLATE, { imports: IMPORTS });
   scenarios['closed'] = a11yTree(document.body);
   r.fixture.destroy();
-  document.querySelectorAll('.cdk-overlay-container').forEach((el) => el.remove());
+  document
+    .querySelectorAll('.cdk-overlay-container')
+    .forEach((el) => el.remove());
 
   TestBed.resetTestingModule();
   r = await render(TEMPLATE, { imports: IMPORTS });

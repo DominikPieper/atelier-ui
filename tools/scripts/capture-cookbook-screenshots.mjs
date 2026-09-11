@@ -19,12 +19,12 @@ const OUT_DIR = join(REPO_ROOT, 'docs', 'public', 'patterns', 'screenshots');
 const SITE = 'https://atelier.pieper.io';
 
 const PATTERNS = [
-  { id: 'login-form',            storyId: 'login-form' },
-  { id: 'settings-page',         storyId: 'settings-page' },
-  { id: 'confirmation-dialog',   storyId: 'confirmation-dialog' },
-  { id: 'data-list',             storyId: 'data-list-with-actions' },
-  { id: 'notification-center',   storyId: 'notification-center' },
-  { id: 'management-dashboard',  storyId: 'management-dashboard' },
+  { id: 'login-form', storyId: 'login-form' },
+  { id: 'settings-page', storyId: 'settings-page' },
+  { id: 'confirmation-dialog', storyId: 'confirmation-dialog' },
+  { id: 'data-list', storyId: 'data-list-with-actions' },
+  { id: 'notification-center', storyId: 'notification-center' },
+  { id: 'management-dashboard', storyId: 'management-dashboard' },
 ];
 const FRAMEWORKS = ['angular', 'react', 'vue'];
 const THEMES = ['light', 'dark'];
@@ -42,7 +42,8 @@ const context = await browser.newContext({
 });
 const page = await context.newPage();
 
-let ok = 0, fail = 0;
+let ok = 0,
+  fail = 0;
 for (const fw of FRAMEWORKS) {
   for (const pattern of PATTERNS) {
     for (const theme of THEMES) {
@@ -65,7 +66,9 @@ for (const fw of FRAMEWORKS) {
           buf = await root.screenshot({ type: 'png' });
         }
         writeFileSync(out, buf);
-        console.log(`OK  ${pattern.id} / ${fw} / ${theme}  → ${out.replace(REPO_ROOT + '/', '')}`);
+        console.log(
+          `OK  ${pattern.id} / ${fw} / ${theme}  → ${out.replace(REPO_ROOT + '/', '')}`,
+        );
         ok++;
       } catch (e) {
         console.error(`ERR ${pattern.id} / ${fw} / ${theme}  ${e.message}`);

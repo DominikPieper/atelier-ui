@@ -4,9 +4,10 @@ import { AtlInput } from './atl-input';
 
 import { metadata } from '@atelier-ui/spec/metadata/input.metadata';
 import { contract } from '@atelier-ui/spec/contracts/input.contract';
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
-function figmaNode(nodeId: string): { type: "figma"; url: string } {
+function figmaNode(nodeId: string): { type: 'figma'; url: string } {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
 }
 
@@ -53,7 +54,11 @@ export const Default: Story = {
 };
 
 export const WithLabel: Story = {
-  args: { label: 'Email address', type: 'email', placeholder: 'you@example.com' },
+  args: {
+    label: 'Email address',
+    type: 'email',
+    placeholder: 'you@example.com',
+  },
 };
 
 export const Email: Story = {

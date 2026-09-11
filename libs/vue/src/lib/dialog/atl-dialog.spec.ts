@@ -36,12 +36,15 @@ describe('AtlDialog', () => {
     expect(container.querySelector('dialog')).toBeInTheDocument();
   });
 
-  covers('dialog', 'open-shows-modal')('calls showModal when open becomes true', async () => {
-    const { rerender } = render(DialogFixture, { props: { open: false } });
-    await rerender({ open: true });
-    const dialog = document.querySelector('dialog') as HTMLDialogElement;
-    expect(dialog).toHaveAttribute('open');
-  });
+  covers('dialog', 'open-shows-modal')(
+    'calls showModal when open becomes true',
+    async () => {
+      const { rerender } = render(DialogFixture, { props: { open: false } });
+      await rerender({ open: true });
+      const dialog = document.querySelector('dialog') as HTMLDialogElement;
+      expect(dialog).toHaveAttribute('open');
+    },
+  );
 
   it('renders header, content, and footer slots', () => {
     render(DialogFixture, { props: { open: true } });
@@ -50,22 +53,30 @@ describe('AtlDialog', () => {
     expect(screen.getByText('Footer actions')).toBeInTheDocument();
   });
 
-  covers('dialog', 'close-button')('close button emits update:open with false', async () => {
-    const user = userEvent.setup();
-    const { emitted } = render(DialogFixture, { props: { open: true } });
-    const closeBtn = screen.getByRole('button', { name: 'Close dialog' });
-    await user.click(closeBtn);
-    expect(emitted()['update:open']).toEqual([[false]]);
-  });
+  covers('dialog', 'close-button')(
+    'close button emits update:open with false',
+    async () => {
+      const user = userEvent.setup();
+      const { emitted } = render(DialogFixture, { props: { open: true } });
+      const closeBtn = screen.getByRole('button', { name: 'Close dialog' });
+      await user.click(closeBtn);
+      expect(emitted()['update:open']).toEqual([[false]]);
+    },
+  );
 
   covers('dialog', 'size-class')('applies size class to panel', () => {
-    const { container } = render(AtlDialog, { props: { open: true, size: 'lg' } });
+    const { container } = render(AtlDialog, {
+      props: { open: true, size: 'lg' },
+    });
     expect(container.querySelector('.panel')).toHaveClass('size-lg');
   });
 
   covers('dialog', 'aria-modal')('sets aria-modal', () => {
     const { container } = render(AtlDialog, { props: { open: false } });
-    expect(container.querySelector('dialog')).toHaveAttribute('aria-modal', 'true');
+    expect(container.querySelector('dialog')).toHaveAttribute(
+      'aria-modal',
+      'true',
+    );
   });
 });
 

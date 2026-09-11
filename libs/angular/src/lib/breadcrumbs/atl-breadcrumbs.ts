@@ -92,7 +92,8 @@ export class AtlBreadcrumbs {
       <a
         [attr.href]="href() && !isCurrent() ? href() : null"
         [attr.aria-current]="isCurrent() ? 'page' : null"
-      ><ng-content /></a>
+        ><ng-content
+      /></a>
     </li>
   `,
   styleUrl: './atl-breadcrumbs.css',
@@ -109,7 +110,7 @@ export class AtlBreadcrumbItem implements OnInit, OnDestroy {
   private readonly myIndex = signal(-1);
 
   protected readonly isCurrent = computed(
-    () => this.myIndex() >= 0 && this.myIndex() === this.context.lastItemId()
+    () => this.myIndex() >= 0 && this.myIndex() === this.context.lastItemId(),
   );
 
   ngOnInit(): void {

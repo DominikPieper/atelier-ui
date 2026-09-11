@@ -23,7 +23,7 @@ import { fileURLToPath } from 'node:url';
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const SOURCE = resolve(
   ROOT,
-  'libs/create-workspace/src/generators/preset/files/styles/tokens.css'
+  'libs/create-workspace/src/generators/preset/files/styles/tokens.css',
 );
 const TARGETS = [
   resolve(ROOT, 'libs/angular/src/styles/tokens.css'),
@@ -41,13 +41,15 @@ const TARGETS = [
 // months after the brand moved to Instrument Sans, because check:tokens only
 // ever looked at the CSS copies.
 const TYPEFACE_DOCS = ['angular', 'react', 'vue'].map((fw) =>
-  resolve(ROOT, `libs/${fw}/src/lib/foundation/typography.mdx`)
+  resolve(ROOT, `libs/${fw}/src/lib/foundation/typography.mdx`),
 );
 
 /** The first quoted family of each --ui-font-* declaration in the source sheet. */
 function declaredFamilies(css) {
   const names = [];
-  for (const m of css.matchAll(/--ui-font-(?:family|display|mono)\s*:\s*'([^']+)'/g)) {
+  for (const m of css.matchAll(
+    /--ui-font-(?:family|display|mono)\s*:\s*'([^']+)'/g,
+  )) {
     names.push(m[1]);
   }
   return names;
@@ -76,13 +78,23 @@ function typefaceDocDrift(css) {
     }
     for (const family of declared) {
       if (!mdx.includes(family)) {
-        problems.push(`  - ${file} never names ${family}, which tokens.css declares`);
+        problems.push(
+          `  - ${file} never names ${family}, which tokens.css declares`,
+        );
       }
     }
     for (const family of documentedFamilies(mdx)) {
       // A generic keyword or fallback stack entry is not a brand claim.
-      if (!declared.includes(family) && /[A-Z]/.test(family[0]) && !/^(Georgia|Times|Courier|Segoe|Roboto|Menlo|Monaco|Helvetica|Arial)/.test(family)) {
-        problems.push(`  - ${file} names ${family}, which tokens.css does not declare`);
+      if (
+        !declared.includes(family) &&
+        /[A-Z]/.test(family[0]) &&
+        !/^(Georgia|Times|Courier|Segoe|Roboto|Menlo|Monaco|Helvetica|Arial)/.test(
+          family,
+        )
+      ) {
+        problems.push(
+          `  - ${file} names ${family}, which tokens.css does not declare`,
+        );
       }
     }
   }
@@ -95,10 +107,12 @@ const expected = readFileSync(SOURCE, 'utf-8');
 if (mode === '--check') {
   const typefaceProblems = typefaceDocDrift(expected);
   if (typefaceProblems.length) {
-    console.error('Storybook Foundation/Typography pages disagree with tokens.css:');
+    console.error(
+      'Storybook Foundation/Typography pages disagree with tokens.css:',
+    );
     for (const p of typefaceProblems) console.error(p);
     console.error(
-      'Update libs/{angular,react,vue}/src/lib/foundation/typography.mdx to the shipped families.'
+      'Update libs/{angular,react,vue}/src/lib/foundation/typography.mdx to the shipped families.',
     );
     process.exit(1);
   }

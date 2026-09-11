@@ -18,7 +18,7 @@ Both files are markdown. `expected.md` carries YAML frontmatter:
 ```yaml
 ---
 mode: Build | Audit | Decide | Migrate | Out-of-scope
-references:                # which references/*.md should be consulted
+references: # which references/*.md should be consulted
   - tool-map.md
   - token-architecture.md
 first-tool: figma_get_file_data | figma_setup_design_tokens | (none)
@@ -43,13 +43,13 @@ This is a manual or LLM-judged process by design. We do not have a deterministic
 
 ## Scenarios
 
-| Directory                     | Mode          | What it covers                                                |
-|-------------------------------|---------------|---------------------------------------------------------------|
-| `build-bootstrap-tokens`      | Build         | Greenfield token-system creation                              |
-| `audit-existing-system`       | Audit         | Architectural deep-audit on an existing file                  |
-| `decide-variant-vs-property`  | Decide        | The recurring "Variant or Component Property?" fork           |
-| `migrate-rename-variable`     | Migrate       | Variable rename with code-side coordination                   |
-| `out-of-scope-code-gen`       | Out-of-scope  | "Convert this Figma component to React" — should bow out      |
+| Directory                    | Mode         | What it covers                                           |
+| ---------------------------- | ------------ | -------------------------------------------------------- |
+| `build-bootstrap-tokens`     | Build        | Greenfield token-system creation                         |
+| `audit-existing-system`      | Audit        | Architectural deep-audit on an existing file             |
+| `decide-variant-vs-property` | Decide       | The recurring "Variant or Component Property?" fork      |
+| `migrate-rename-variable`    | Migrate      | Variable rename with code-side coordination              |
+| `out-of-scope-code-gen`      | Out-of-scope | "Convert this Figma component to React" — should bow out |
 
 ## Add a scenario
 

@@ -23,9 +23,14 @@ const emit = defineEmits<{
   pageChange: [page: number];
 }>();
 
-type PageItem = { type: 'page'; page: number } | { type: 'ellipsis'; key: string };
+type PageItem =
+  { type: 'page'; page: number } | { type: 'ellipsis'; key: string };
 
-function buildPageItems(page: number, pageCount: number, siblingCount: number): PageItem[] {
+function buildPageItems(
+  page: number,
+  pageCount: number,
+  siblingCount: number,
+): PageItem[] {
   if (pageCount <= 1) return [{ type: 'page', page: 1 }];
   const items: PageItem[] = [];
   items.push({ type: 'page', page: 1 });
@@ -33,12 +38,15 @@ function buildPageItems(page: number, pageCount: number, siblingCount: number): 
   const right = Math.min(pageCount - 1, page + siblingCount);
   if (left > 2) items.push({ type: 'ellipsis', key: 'ellipsis-start' });
   for (let p = left; p <= right; p++) items.push({ type: 'page', page: p });
-  if (right < pageCount - 1) items.push({ type: 'ellipsis', key: 'ellipsis-end' });
+  if (right < pageCount - 1)
+    items.push({ type: 'ellipsis', key: 'ellipsis-end' });
   if (pageCount > 1) items.push({ type: 'page', page: pageCount });
   return items;
 }
 
-const pageItems = computed(() => buildPageItems(props.page, props.pageCount, props.siblingCount));
+const pageItems = computed(() =>
+  buildPageItems(props.page, props.pageCount, props.siblingCount),
+);
 
 function goTo(p: number) {
   const clamped = Math.min(Math.max(p, 1), props.pageCount);
@@ -74,7 +82,10 @@ function goTo(p: number) {
         </button>
       </li>
 
-      <template v-for="item in pageItems" :key="item.type === 'page' ? item.page : item.key">
+      <template
+        v-for="item in pageItems"
+        :key="item.type === 'page' ? item.page : item.key"
+      >
         <li v-if="item.type === 'ellipsis'">
           <span class="ellipsis" aria-hidden="true">…</span>
         </li>

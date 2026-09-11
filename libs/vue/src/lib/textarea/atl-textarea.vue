@@ -59,7 +59,9 @@ const emit = defineEmits<{
 
 const textareaRef = ref<HTMLTextAreaElement | null>(null);
 
-const textareaId = computed(() => props.id || (props.label ? `textarea-${generatedId}` : undefined));
+const textareaId = computed(
+  () => props.id || (props.label ? `textarea-${generatedId}` : undefined),
+);
 
 function adjustHeight() {
   if (props.autoResize && textareaRef.value) {
@@ -68,10 +70,13 @@ function adjustHeight() {
   }
 }
 
-watch(() => props.value, async () => {
-  await nextTick();
-  adjustHeight();
-});
+watch(
+  () => props.value,
+  async () => {
+    await nextTick();
+    adjustHeight();
+  },
+);
 
 onMounted(() => adjustHeight());
 
@@ -111,7 +116,9 @@ function onInput(event: Event) {
       <AtlIcon v-if="invalid" name="danger" size="sm" class="invalid-icon" />
     </div>
     <div v-if="errors.length" :id="errorsId" class="errors" aria-live="polite">
-      <p v-for="(error, i) in errors" :key="i" class="error-message">{{ error }}</p>
+      <p v-for="(error, i) in errors" :key="i" class="error-message">
+        {{ error }}
+      </p>
     </div>
   </div>
 </template>

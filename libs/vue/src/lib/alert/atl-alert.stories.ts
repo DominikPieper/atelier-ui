@@ -3,7 +3,8 @@ import AtlAlert from './atl-alert.vue';
 
 import { metadata } from '@atelier-ui/spec/metadata/alert.metadata';
 import { contract } from '@atelier-ui/spec/contracts/alert.contract';
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
@@ -15,11 +16,16 @@ const meta: Meta<typeof AtlAlert> = {
   tags: ['autodocs'],
   render: (args) => ({
     components: { AtlAlert },
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: '<AtlAlert v-bind="args">This is an alert message.</AtlAlert>',
   }),
   argTypes: {
-    variant: { control: 'select', options: ['info', 'success', 'warning', 'danger'] },
+    variant: {
+      control: 'select',
+      options: ['info', 'success', 'warning', 'danger'],
+    },
     dismissible: { control: 'boolean' },
   },
   args: {
@@ -43,8 +49,11 @@ export const Default: Story = {
 export const Success: Story = {
   render: (args) => ({
     components: { AtlAlert },
-    setup() { return { args }; },
-    template: '<AtlAlert v-bind="args">Your changes were saved successfully.</AtlAlert>',
+    setup() {
+      return { args };
+    },
+    template:
+      '<AtlAlert v-bind="args">Your changes were saved successfully.</AtlAlert>',
   }),
   args: { variant: 'success' },
   parameters: { design: figmaNode('55-25') },
@@ -53,8 +62,11 @@ export const Success: Story = {
 export const Warning: Story = {
   render: (args) => ({
     components: { AtlAlert },
-    setup() { return { args }; },
-    template: '<AtlAlert v-bind="args">Your session expires in 5 minutes.</AtlAlert>',
+    setup() {
+      return { args };
+    },
+    template:
+      '<AtlAlert v-bind="args">Your session expires in 5 minutes.</AtlAlert>',
   }),
   args: { variant: 'warning' },
   parameters: { design: figmaNode('55-27') },
@@ -63,8 +75,11 @@ export const Warning: Story = {
 export const Danger: Story = {
   render: (args) => ({
     components: { AtlAlert },
-    setup() { return { args }; },
-    template: '<AtlAlert v-bind="args">An error occurred. Please try again.</AtlAlert>',
+    setup() {
+      return { args };
+    },
+    template:
+      '<AtlAlert v-bind="args">An error occurred. Please try again.</AtlAlert>',
   }),
   args: { variant: 'danger' },
   parameters: { design: figmaNode('55-29') },
@@ -73,7 +88,9 @@ export const Danger: Story = {
 export const Dismissible: Story = {
   render: (args) => ({
     components: { AtlAlert },
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: '<AtlAlert v-bind="args">This alert can be dismissed.</AtlAlert>',
   }),
   args: { variant: 'warning', dismissible: true },
@@ -110,7 +127,9 @@ export const AllDismissible: Story = {
 export const Playground: Story = {
   render: (args) => ({
     components: { AtlAlert },
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: '<AtlAlert v-bind="args">Playground alert message.</AtlAlert>',
   }),
 };

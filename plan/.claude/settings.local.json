@@ -28,8 +28,5 @@
       "WebFetch(domain:angular.dev)"
     ]
   },
-  "enabledMcpjsonServers": [
-    "nx-mcp",
-    "angular-cli"
-  ]
+  "enabledMcpjsonServers": ["nx-mcp", "angular-cli"]
 }

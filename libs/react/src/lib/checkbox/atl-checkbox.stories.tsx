@@ -4,7 +4,8 @@ import { AtlCheckbox } from './atl-checkbox';
 
 import { metadata } from '@atelier-ui/spec/metadata/checkbox.metadata';
 import { contract } from '@atelier-ui/spec/contracts/checkbox.contract';
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
@@ -20,7 +21,12 @@ const meta: Meta<typeof AtlCheckbox> = {
     invalid: { control: 'boolean' },
     indeterminate: { control: 'boolean' },
   },
-  args: { checked: false, disabled: false, invalid: false, indeterminate: false },
+  args: {
+    checked: false,
+    disabled: false,
+    invalid: false,
+    indeterminate: false,
+  },
   parameters: {
     design: figmaNode('55-36'),
     docs: { description: { component: metadata.purpose } },
@@ -56,7 +62,11 @@ export const Disabled: Story = {
 };
 
 export const DisabledChecked: Story = {
-  args: { disabled: true, checked: true, children: 'Disabled checked checkbox' },
+  args: {
+    disabled: true,
+    checked: true,
+    children: 'Disabled checked checkbox',
+  },
 };
 
 export const Invalid: Story = {
@@ -104,7 +114,14 @@ const SelectAllComponent = () => {
       >
         Select all
       </AtlCheckbox>
-      <div style={{ marginLeft: '1.5rem', display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+      <div
+        style={{
+          marginLeft: '1.5rem',
+          display: 'flex',
+          flexDirection: 'column',
+          gap: '0.5rem',
+        }}
+      >
         {items.map((item) => (
           <AtlCheckbox
             key={item.id}

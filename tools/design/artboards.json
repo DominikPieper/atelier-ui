@@ -25,11 +25,7 @@
       "kind": "study",
       "subject": "typography",
       "covers": [],
-      "appearsAsFragment": [
-        "AtlButton",
-        "AtlInput",
-        "AtlCard"
-      ],
+      "appearsAsFragment": ["AtlButton", "AtlInput", "AtlCard"],
       "note": "Turn 1 compares three type directions, turn 2 three readings of \"bolder\" on the chosen pair. Decided ADR-0035 / ADR-0036. The button row, input field and mini card inside each option card are specimens sized to show type — not component designs, and deliberately not counted as coverage."
     },
     {
@@ -37,9 +33,7 @@
       "file": "AtlAccordionGroup.dc.html",
       "kind": "component",
       "subject": "AtlAccordionGroup",
-      "covers": [
-        "AtlAccordionGroup"
-      ],
+      "covers": ["AtlAccordionGroup"],
       "note": "Three variants with an open, a shut and a disabled item in each. Records that the 52px trigger is prose leading on a single line — the fourth instance of the pattern ADR-0041 fixed for controls — and that multi, the accordion's most visible behavioural choice, is code-only."
     },
     {
@@ -47,9 +41,7 @@
       "file": "AtlAlert.dc.html",
       "kind": "component",
       "subject": "AtlAlert",
-      "covers": [
-        "AtlAlert"
-      ],
+      "covers": ["AtlAlert"],
       "note": "Four variants with the dismissible Boolean on two of them, measured anatomy, and the cross-component finding this batch surfaced: four status components offer the same semantic colours in four different variant sets. Records that the variant colours are literals — the missing status ramps from ADR-0038."
     },
     {
@@ -57,9 +49,7 @@
       "file": "AtlAvatar.dc.html",
       "kind": "component",
       "subject": "AtlAvatar",
-      "covers": [
-        "AtlAvatar"
-      ],
+      "covers": ["AtlAvatar"],
       "note": "Size x shape (5 x 2), the image/initials/icon fallback chain, four status dots and the group with its overflow badge. Records three open items: 10px initials off the type scale, one radius across a 24-to-64px square axis, and status being code-only with the empty string as a union member."
     },
     {
@@ -67,9 +57,7 @@
       "file": "AtlBadge.dc.html",
       "kind": "component",
       "subject": "AtlBadge",
-      "covers": [
-        "AtlBadge"
-      ],
+      "covers": ["AtlBadge"],
       "note": "The complete 5 x 2 variant/size matrix plus a ruler specimen showing the real boxes: md is 29.5px tall, a half pixel, because nothing states the height. Records the letter-spacing bypass fixed by ADR-0047."
     },
     {
@@ -77,9 +65,7 @@
       "file": "AtlBreadcrumbs.dc.html",
       "kind": "component",
       "subject": "AtlBreadcrumbs",
-      "covers": [
-        "AtlBreadcrumbs"
-      ],
+      "covers": ["AtlBreadcrumbs"],
       "note": "Three trail lengths plus a chevron-separator proposal marked as not-the-code: separator is typed string, so it cannot hold an icon — the same glyph-as-icon shape ADR-0046 and ADR-0050 removed elsewhere. Records that nothing handles a long trail."
     },
     {
@@ -87,9 +73,7 @@
       "file": "AtlButton.dc.html",
       "kind": "component",
       "subject": "AtlButton",
-      "covers": [
-        "AtlButton"
-      ],
+      "covers": ["AtlButton"],
       "note": "Variant x size matrix (the default-state slice, 12 of the master's 24), all states at size=md with the four variant states separated from the disabled/loading Booleans, an anatomy table naming the token behind every value, and findings. Corrected 2026-08-26: disabled/loading are Figma Booleans not code-only props, the 24 variants are a deliberate two-slice cross rather than half a 4x3x4 matrix, and the anatomy reflects ADR-0041 (heights exact at 32/40/48, block padding derived)."
     },
     {
@@ -97,9 +81,7 @@
       "file": "AtlCard.dc.html",
       "kind": "component",
       "subject": "AtlCard",
-      "covers": [
-        "AtlCard"
-      ],
+      "covers": ["AtlCard"],
       "note": "Three variants and four padding steps. Records that the card header (18/600) is the only header in the library that lands exactly on a type role, while AtlDialog's and AtlDrawer's 20/600 land on none. Replaces the typography study's fragment, which was never coverage."
     },
     {
@@ -107,9 +89,7 @@
       "file": "AtlChat.dc.html",
       "kind": "component",
       "subject": "AtlChat",
-      "covers": [
-        "AtlChat"
-      ],
+      "covers": ["AtlChat"],
       "note": "The inline surface with all seven of its components and every message state, plus the drawer and popup placements. Records that six of the seven have no master, and that role=log is declared in the metadata and rendered nowhere — the second of the two unresolved ARIA questions."
     },
     {
@@ -117,9 +97,7 @@
       "file": "AtlCheckbox.dc.html",
       "kind": "component",
       "subject": "AtlCheckbox",
-      "covers": [
-        "AtlCheckbox"
-      ],
+      "covers": ["AtlCheckbox"],
       "note": "Selection x state (3 x 3 axes drawn as seven specimens) plus the invalid and disabled Booleans, a measured anatomy table, and a comparison specimen stacking the checkbox, radio and toggle rows with their real boxes outlined: 29 / 32 / 27px, none of them a token. Anchors the family's shared findings."
     },
     {
@@ -127,9 +105,7 @@
       "file": "AtlCodeBlock.dc.html",
       "kind": "component",
       "subject": "AtlCodeBlock",
-      "covers": [
-        "AtlCodeBlock"
-      ],
+      "covers": ["AtlCodeBlock"],
       "note": "All four variants drawn with real code. Records that there is no AtlCodeBlockSpec — the one component with a master and no contract, which is why check:parity reports it unmappable — and that the four variants are really three Booleans flattened into an enum, so 'line numbers without a filename' cannot be picked."
     },
     {
@@ -137,9 +113,7 @@
       "file": "AtlCombobox.dc.html",
       "kind": "component",
       "subject": "AtlCombobox",
-      "covers": [
-        "AtlCombobox"
-      ],
+      "covers": ["AtlCombobox"],
       "note": "Eight specimens: the six Figma variant states (open/filtered/selected each drawn with their panel), the no-results state that has no Figma variant, and the invalid and readonly cases. Draws both ladders in one component — the input is a control (40px, padding derived) and each option is a row (40px on --ui-row-height-sm, padding zero, centred), the same 40 reached two different ways. Anatomy re-measured 2026-08-27: the chevron row said 12×12 and measures 16×16. Six findings fixed, including invalid-by-colour-alone and the errors-gated-on-invalid that silently showed nothing in React and Vue. One open: readonly exists in the code and not on the master — check:figma now says so itself as a [BOOL-MISSING] warning (ADR-0056)."
     },
     {
@@ -147,9 +121,7 @@
       "file": "AtlDialog.dc.html",
       "kind": "component",
       "subject": "AtlDialog",
-      "covers": [
-        "AtlDialog"
-      ],
+      "covers": ["AtlDialog"],
       "note": "Five sizes drawn as panels on a backdrop stage, measured anatomy, and the finding that the header's 20px/600 treatment sits between two type roles — the same treatment AtlDrawer uses, so two occurrences with no role."
     },
     {
@@ -157,9 +129,7 @@
       "file": "AtlDrawer.dc.html",
       "kind": "component",
       "subject": "AtlDrawer",
-      "covers": [
-        "AtlDrawer"
-      ],
+      "covers": ["AtlDrawer"],
       "note": "Four positions and four sizes drawn as stages, making visible that size means a width for left/right and a height for top/bottom — one axis, two dimensions. Records that the master draws 7 of 16 combinations without saying it is a deliberate slice."
     },
     {
@@ -167,9 +137,7 @@
       "file": "AtlIcon.dc.html",
       "kind": "component",
       "subject": "AtlIcon",
-      "covers": [
-        "AtlIcon"
-      ],
+      "covers": ["AtlIcon"],
       "note": "All 23 icons at 16/24px with their kind, plus the three size steps. Records the finding that matters most for the transfer: there is no Figma master for AtlIcon at all — survivable while every component drew its own symbols, not now that all of them instance this one. Also that `error` is unused and near-identical to `danger`."
     },
     {
@@ -177,9 +145,7 @@
       "file": "AtlInput.dc.html",
       "kind": "component",
       "subject": "AtlInput",
-      "covers": [
-        "AtlInput"
-      ],
+      "covers": ["AtlInput"],
       "note": "Eight states (the five Figma variant states plus the disabled/readonly Booleans and invalid+focus), a measured anatomy table, and findings. Rewritten 2026-08-26 after ADRs 0043-0049 turned three of its open findings into fixed ones: readonly now has a visual treatment, the invalid indicator is an AtlIcon instance rather than a literal glyph, and the border width has a token. Now links the shared _sheet.css."
     },
     {
@@ -187,9 +153,7 @@
       "file": "AtlMenu.dc.html",
       "kind": "component",
       "subject": "AtlMenu",
-      "covers": [
-        "AtlMenu"
-      ],
+      "covers": ["AtlMenu"],
       "note": "Both variants with the item states the master does not model (active, disabled, shortcut, separator), plus a ruler specimen for the two row heights. Records that a menu item is 36px, an AtlSelect option 36px and an AtlCombobox option 40px — three dropdown rows, three heights, two of them literals."
     },
     {
@@ -197,9 +161,7 @@
       "file": "AtlPagination.dc.html",
       "kind": "component",
       "subject": "AtlPagination",
-      "covers": [
-        "AtlPagination"
-      ],
+      "covers": ["AtlPagination"],
       "note": "The three current-page positions with disabled edges and ellipsis slots, plus a ruler on the button: 36px now, 38px until ADR-0051. Records that every real prop is code-only and the master's one axis is an illustration of their outcome."
     },
     {
@@ -207,9 +169,7 @@
       "file": "AtlProgress.dc.html",
       "kind": "component",
       "subject": "AtlProgress",
-      "covers": [
-        "AtlProgress"
-      ],
+      "covers": ["AtlProgress"],
       "note": "The three sizes (6/10/14px, an undeclared scale) and four variants including the indeterminate Boolean. Records that label is documented as required by ARIA and typed optional, so a consumer can ship a bar that announces only 'progress bar 47%'."
     },
     {
@@ -217,9 +177,7 @@
       "file": "AtlRadio.dc.html",
       "kind": "component",
       "subject": "AtlRadio",
-      "covers": [
-        "AtlRadio"
-      ],
+      "covers": ["AtlRadio"],
       "note": "Selection x state plus disabled, and the invalid Boolean drawn as Figma-only: the master claims it maps to AtlFormFieldSpec.invalid but AtlRadioSpec does not extend that interface. Records that the checked mark is a 6px border rather than an inner element."
     },
     {
@@ -227,9 +185,7 @@
       "file": "AtlRadioGroup.dc.html",
       "kind": "component",
       "subject": "AtlRadioGroup",
-      "covers": [
-        "AtlRadioGroup"
-      ],
+      "covers": ["AtlRadioGroup"],
       "note": "Group-level states with the children drawn in place, plus the horizontal layout that has no Figma variant, and readonly/invalid which are in the spec but not on the master. Records that the master's axes describe a gallery rather than the API: selection and interaction belong to a child in code."
     },
     {
@@ -237,9 +193,7 @@
       "file": "AtlSelect.dc.html",
       "kind": "component",
       "subject": "AtlSelect",
-      "covers": [
-        "AtlSelect"
-      ],
+      "covers": ["AtlSelect"],
       "note": "Draws the native-vs-custom divergence rather than one framework's version of it: React and Vue render a native <select> whose list the OS draws (marked, not mocked), Angular renders a custom listbox whose option rows are 40px on --ui-row-height-sm. Six trigger specimens shared by all three frameworks, plus the open state twice. Measured anatomy, re-measured against the code 2026-08-27: the invalid indicator sits 36px from the field's inline end and the chevron 16px, and the sheet's own specimens now render at those numbers. Findings: six fixed (invalid was colour-only, ADR-0055; the chevron was the text character '▾'; the Angular option rows had no styles at all; the 36-vs-40 disagreement with AtlCombobox; the CI-vs-local 41px; readonly deliberately absent). One open: one master cannot describe two implementations."
     },
     {
@@ -247,9 +201,7 @@
       "file": "AtlSkeleton.dc.html",
       "kind": "component",
       "subject": "AtlSkeleton",
-      "covers": [
-        "AtlSkeleton"
-      ],
+      "covers": ["AtlSkeleton"],
       "note": "Three variants plus a composition specimen, which is the actual design work and the thing the master cannot hold. Records that the geometry is decided in JavaScript (computeHeight), so the sizes cannot be read from CSS, bound in Figma, or seen by any gate."
     },
     {
@@ -257,9 +209,7 @@
       "file": "AtlStepper.dc.html",
       "kind": "component",
       "subject": "AtlStepper",
-      "covers": [
-        "AtlStepper"
-      ],
+      "covers": ["AtlStepper"],
       "note": "Both orientations with every step state drawn in place — complete, active, errored, optional. Deliberately asserts no ARIA role: the metadata says progressbar, all three adapters render tablist/tab/tabpanel, and the master claims an ol with aria-current=step. Three sources, three answers, and the gate warns every run."
     },
     {
@@ -267,9 +217,7 @@
       "file": "AtlTabGroup.dc.html",
       "kind": "component",
       "subject": "AtlTabGroup",
-      "covers": [
-        "AtlTabGroup"
-      ],
+      "covers": ["AtlTabGroup"],
       "note": "Both variants with a disabled tab in each, measured anatomy. Records that two of the master's three axes are illustrations (selected = 0|1, state = default with one value) and that its description lists disabled and loading Booleans the group does not have."
     },
     {
@@ -277,9 +225,7 @@
       "file": "AtlTable.dc.html",
       "kind": "component",
       "subject": "AtlTable",
-      "covers": [
-        "AtlTable"
-      ],
+      "covers": ["AtlTable"],
       "note": "Three variants with a sortable column, three sizes measured at 32/42/51px rows. Records that none of the three row heights is stated, that sm uses an off-scale 13px font, and that the master keeps a one-value state axis its own description says was removed."
     },
     {
@@ -287,9 +233,7 @@
       "file": "AtlTextarea.dc.html",
       "kind": "component",
       "subject": "AtlTextarea",
-      "covers": [
-        "AtlTextarea"
-      ],
+      "covers": ["AtlTextarea"],
       "note": "Eight specimens: the five Figma variant states plus the readonly, disabled and autoResize Booleans. States explicitly that this is the one control that keeps the prose line-height (1.5) and whose height is content-driven by design, so the difference from every other control reads as a decision rather than as drift."
     },
     {
@@ -297,9 +241,7 @@
       "file": "AtlToast.dc.html",
       "kind": "component",
       "subject": "AtlToast",
-      "covers": [
-        "AtlToast"
-      ],
+      "covers": ["AtlToast"],
       "note": "Five variants, and the position axis drawn as four container stages rather than as four toasts — because position anchors the container, not the toast. Records that the master crosses two axes that do not belong together, and that there is no AtlToastSpec: a service creates a toast, so the Figma instance has no direct code counterpart."
     },
     {
@@ -307,9 +249,7 @@
       "file": "AtlToggle.dc.html",
       "kind": "component",
       "subject": "AtlToggle",
-      "covers": [
-        "AtlToggle"
-      ],
+      "covers": ["AtlToggle"],
       "note": "Selection x state plus disabled, and invalid drawn as code-only. Anatomy names the four literals that make up the switch shape (44x24 track, 18px thumb, 2px inset) and argues a small component-tier token set is defensible here where a hundred single-use tokens were not."
     },
     {
@@ -317,9 +257,7 @@
       "file": "AtlTooltip.dc.html",
       "kind": "component",
       "subject": "AtlTooltip",
-      "covers": [
-        "AtlTooltip"
-      ],
+      "covers": ["AtlTooltip"],
       "note": "Four positions relative to an anchor. Records two structural findings: the spec's prop names carry Angular's directive idiom (atlTooltip, atlTooltipPosition) into a framework-agnostic contract, and Angular places the bubble with CDK overlay transforms so the position axis has no CSS counterpart there."
     },
     {

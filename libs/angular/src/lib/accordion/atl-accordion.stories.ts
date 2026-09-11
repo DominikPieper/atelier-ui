@@ -1,11 +1,16 @@
 import type { Meta, StoryObj } from '@storybook/angular';
-import { AtlAccordionGroup, AtlAccordionItem, AtlAccordionHeader } from './atl-accordion';
+import {
+  AtlAccordionGroup,
+  AtlAccordionItem,
+  AtlAccordionHeader,
+} from './atl-accordion';
 
 import { metadata } from '@atelier-ui/spec/metadata/accordion.metadata';
 import { contract } from '@atelier-ui/spec/contracts/accordion-group.contract';
 const IMPORTS = [AtlAccordionGroup, AtlAccordionItem, AtlAccordionHeader];
 
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: 'figma'; url: string } {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };

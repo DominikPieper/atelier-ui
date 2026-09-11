@@ -25,13 +25,13 @@ so.
 Auditing the four fields across the three frameworks turned one objection into
 five, and only the first was the one that had been noticed:
 
-| divergence | before |
-|---|---|
-| the danger icon | input, textarea: yes. select, combobox: no |
-| `aria-describedby` | present in 5 of 12 field × framework combinations |
-| when the message renders | 3 different rules across the 12 |
-| the live region | `role="alert"` in React/Vue select and combobox, `aria-live="polite"` everywhere else |
-| the chevron | AtlIcon in combobox, the text character `▾` in select |
+| divergence               | before                                                                                |
+| ------------------------ | ------------------------------------------------------------------------------------- |
+| the danger icon          | input, textarea: yes. select, combobox: no                                            |
+| `aria-describedby`       | present in 5 of 12 field × framework combinations                                     |
+| when the message renders | 3 different rules across the 12                                                       |
+| the live region          | `role="alert"` in React/Vue select and combobox, `aria-live="polite"` everywhere else |
+| the chevron              | AtlIcon in combobox, the text character `▾` in select                                 |
 
 The last one is a different bug wearing the same clothes. ADR-0050 closed four ways
 of drawing an icon without AtlIcon and gated the fifth — a glyph quoted in a source
@@ -74,7 +74,7 @@ bordered button. The gap between the two icons is 4px in all three.
 Gating on `touched` as well was an Angular-only rule: `touched` is not in the spec
 contract and React and Vue have no equivalent, so seven Angular components withheld
 their errors until the field was touched while the other two frameworks showed them
-at once. Deciding *when* to pass errors belongs to the form layer, which is where
+at once. Deciding _when_ to pass errors belongs to the form layer, which is where
 `touched` lives. Angular's `touched` input stays for now and joins the breaking
 batch, because it is public API the spec never declared.
 

@@ -51,7 +51,7 @@ import { fileURLToPath } from 'node:url';
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const TOKENS_FILE = resolve(
   ROOT,
-  'libs/create-workspace/src/generators/preset/files/styles/tokens.css'
+  'libs/create-workspace/src/generators/preset/files/styles/tokens.css',
 );
 const css = readFileSync(TOKENS_FILE, 'utf-8');
 
@@ -64,11 +64,18 @@ const declarationsIn = (block) => {
   return out;
 };
 
-/** The block a selector opens, up to its matching close brace. */
+/** The block a selector opens, up to its matching close brace. Quote-agnostic
+ * (`"` vs `'`) and whitespace-agnostic around `=` in an attribute selector, so
+ * a formatter's string-quote normalisation (e.g. Prettier's `singleQuote`,
+ * which also applies inside CSS) can't desync this from the token source. */
 const blockFor = (selector) => {
-  const at = css.indexOf(selector);
-  if (at === -1) throw new Error(`token source has no \`${selector}\` block`);
-  let i = css.indexOf('{', at);
+  const pattern = selector
+    .replace(/[.*+?^${}()|[\]\\]/g, '\\$&') // escape regex metachars
+    .replace(/["']/g, `["']`) // either quote style
+    .replace(/\s*=\s*/g, '\\s*=\\s*'); // optional whitespace around `=`
+  const match = new RegExp(pattern).exec(css);
+  if (!match) throw new Error(`token source has no \`${selector}\` block`);
+  let i = css.indexOf('{', match.index);
   if (i === -1) throw new Error(`\`${selector}\` has no opening brace`);
   let depth = 0;
   const from = i;
@@ -89,10 +96,13 @@ const resolveAliases = (mode, map) => {
     const alias = /^var\(\s*--ui-color-([a-z0-9-]+)\s*\)$/.exec(raw);
     let value = raw;
     if (alias) {
-      if (trail.includes(key)) throw new Error(`circular alias: ${trail.join(' -> ')} -> ${key}`);
+      if (trail.includes(key))
+        throw new Error(`circular alias: ${trail.join(' -> ')} -> ${key}`);
       const target = resolve1(alias[1], [...trail, key]);
       if (target === undefined) {
-        throw new Error(`${mode}: --ui-color-${key} aliases --ui-color-${alias[1]}, which this mode does not define`);
+        throw new Error(
+          `${mode}: --ui-color-${key} aliases --ui-color-${alias[1]}, which this mode does not define`,
+        );
       }
       value = target;
     }
@@ -108,7 +118,9 @@ const resolveAliases = (mode, map) => {
 // [data-theme="dark"] is the explicit escape hatch — both are checked, because a
 // pair that passes under one and fails under the other is still a real failure.
 const lightRoot = declarationsIn(blockFor(':root'));
-const darkMedia = declarationsIn(blockFor('@media (prefers-color-scheme: dark)'));
+const darkMedia = declarationsIn(
+  blockFor('@media (prefers-color-scheme: dark)'),
+);
 const darkAttr = declarationsIn(blockFor('[data-theme="dark"]'));
 const lightAttr = declarationsIn(blockFor('[data-theme="light"]'));
 
@@ -118,12 +130,20 @@ let tokens;
 try {
   tokens = {
     light: resolveAliases('light', lightRoot),
-    'light (data-theme)': resolveAliases('light (data-theme)', { ...lightRoot, ...lightAttr }),
+    'light (data-theme)': resolveAliases('light (data-theme)', {
+      ...lightRoot,
+      ...lightAttr,
+    }),
     dark: resolveAliases('dark', { ...lightRoot, ...darkMedia }),
-    'dark (data-theme)': resolveAliases('dark (data-theme)', { ...lightRoot, ...darkAttr }),
+    'dark (data-theme)': resolveAliases('dark (data-theme)', {
+      ...lightRoot,
+      ...darkAttr,
+    }),
   };
 } catch (err) {
-  console.error(`\u2717 contrast gate cannot read the token source — ${err.message}`);
+  console.error(
+    `\u2717 contrast gate cannot read the token source — ${err.message}`,
+  );
   process.exit(1);
 }
 
@@ -141,8 +161,18 @@ const pairs = [
   ['primary', 'surface-raised', 'large', 'primary on raised'],
   ['primary', 'surface-sunken', 'large', 'primary on sunken'],
   ['text-on-primary', 'primary', 'normal', 'button label on primary fill'],
-  ['text-on-primary', 'primary-hover', 'normal', 'button label on primary hover'],
-  ['text-on-primary', 'primary-active', 'normal', 'button label on primary active'],
+  [
+    'text-on-primary',
+    'primary-hover',
+    'normal',
+    'button label on primary hover',
+  ],
+  [
+    'text-on-primary',
+    'primary-active',
+    'normal',
+    'button label on primary active',
+  ],
   // Semantic — text on tinted bg (Badge / Alert / Toast)
   ['danger-text', 'danger-bg', 'normal', 'danger text on danger callout'],
   ['success-text', 'success-bg', 'normal', 'success text on success callout'],
@@ -156,16 +186,37 @@ const pairs = [
   ['warning', 'surface', 'normal', 'warning heading on neutral'],
   ['info', 'surface', 'normal', 'info heading on neutral'],
   // Borders — split decorative from functional
-  ['border', 'surface', 'decorative', 'card border (card fill identifies, WCAG 1.4.11 exempt)'],
-  ['border', 'surface-raised', 'decorative', 'card border on raised (decorative)'],
-  ['border-strong', 'surface', 'ui', 'input / outline-button border (functional, must ≥3:1)'],
-  ['border-strong', 'surface-raised', 'ui', 'input border on raised (functional)'],
+  [
+    'border',
+    'surface',
+    'decorative',
+    'card border (card fill identifies, WCAG 1.4.11 exempt)',
+  ],
+  [
+    'border',
+    'surface-raised',
+    'decorative',
+    'card border on raised (decorative)',
+  ],
+  [
+    'border-strong',
+    'surface',
+    'ui',
+    'input / outline-button border (functional, must ≥3:1)',
+  ],
+  [
+    'border-strong',
+    'surface-raised',
+    'ui',
+    'input border on raised (functional)',
+  ],
 ];
 
 // A gate is quiet on success: --check prints only the verdict.
 const QUIET = process.argv.includes('--check');
 
-const colorize = (s, ok) => (ok ? `\x1b[32m${s}\x1b[0m` : `\x1b[31m${s}\x1b[0m`);
+const colorize = (s, ok) =>
+  ok ? `\x1b[32m${s}\x1b[0m` : `\x1b[31m${s}\x1b[0m`;
 
 const runMode = (mode) => {
   const t = tokens[mode];
@@ -176,9 +227,14 @@ const runMode = (mode) => {
   lines.push('| pair | role | ratio | target | result | note |');
   lines.push('|---|---|---|---|---|---|');
   for (const [fg, bg, role, note] of pairs) {
-    for (const [label, key] of [['foreground', fg], ['background', bg]]) {
+    for (const [label, key] of [
+      ['foreground', fg],
+      ['background', bg],
+    ]) {
       if (!t[key]) {
-        throw new Error(`${mode}: pair "${fg} on ${bg}" names ${label} --ui-color-${key}, which the token source does not define in this mode`);
+        throw new Error(
+          `${mode}: pair "${fg} on ${bg}" names ${label} --ui-color-${key}, which the token source does not define in this mode`,
+        );
       }
     }
     const r = ratio(t[fg], t[bg]);
@@ -188,16 +244,16 @@ const runMode = (mode) => {
     const rounded = r.toFixed(2);
     const targetCell = g.target === 0 ? 'n/a' : g.target;
     lines.push(
-      `| \`${fg}\` on \`${bg}\` | ${role} | **${rounded}** | ${targetCell} | ${g.mark} | ${note} |`
+      `| \`${fg}\` on \`${bg}\` | ${role} | **${rounded}** | ${targetCell} | ${g.mark} | ${note} |`,
     );
     if (!QUIET)
       console.log(
-      colorize(`  ${g.mark}`, g.pass),
-      `${rounded.padStart(5)}`,
-      `(target ${targetCell})`,
-      `— ${fg} on ${bg}`,
-      `(${note})`
-    );
+        colorize(`  ${g.mark}`, g.pass),
+        `${rounded.padStart(5)}`,
+        `(target ${targetCell})`,
+        `— ${fg} on ${bg}`,
+        `(${note})`,
+      );
   }
   lines.push(`\n**${mode}: ${pass} pass / ${fail} fail**`);
   return { lines: lines.join('\n'), pass, fail };
@@ -221,7 +277,8 @@ const canvases = {
 
 const anchorsByFamily = new Map();
 const rootBlock = blockFor(':root');
-const ANNOTATED = /--ui-color-([a-z]+)-(\d{2,3})\s*:\s*(#[0-9a-fA-F]{6})\s*;\s*\/\*([^*]*)\*\//g;
+const ANNOTATED =
+  /--ui-color-([a-z]+)-(\d{2,3})\s*:\s*(#[0-9a-fA-F]{6})\s*;\s*\/\*([^*]*)\*\//g;
 
 for (const m of rootBlock.matchAll(ANNOTATED)) {
   const [, family, step, hex, comment] = m;
@@ -230,17 +287,23 @@ for (const m of rootBlock.matchAll(ANNOTATED)) {
   if (comment.includes('\u2605')) {
     const seen = anchorsByFamily.get(family);
     if (seen) {
-      annotationIssues.push(`${token}: a second \u2605 anchor for the "${family}" ramp — ${seen} already claims it. One anchor per ramp.`);
+      annotationIssues.push(
+        `${token}: a second \u2605 anchor for the "${family}" ramp — ${seen} already claims it. One anchor per ramp.`,
+      );
     } else {
       anchorsByFamily.set(family, token);
     }
   }
 
-  for (const t of comment.matchAll(/T on surface\((light|dark)\)\s+([0-9.]+)/g)) {
+  for (const t of comment.matchAll(
+    /T on surface\((light|dark)\)\s+([0-9.]+)/g,
+  )) {
     const [, canvas, statedRaw] = t;
     const bg = canvases[canvas];
     if (!bg) {
-      annotationIssues.push(`${token}: claims text on surface(${canvas}), which the token source does not define`);
+      annotationIssues.push(
+        `${token}: claims text on surface(${canvas}), which the token source does not define`,
+      );
       continue;
     }
     const measured = ratio(hex, bg);
@@ -248,12 +311,12 @@ for (const m of rootBlock.matchAll(ANNOTATED)) {
     annotationChecks.push({ token, canvas, measured, stated });
     if (Math.abs(measured - stated) >= 0.005) {
       annotationIssues.push(
-        `${token}: comment claims ${stated.toFixed(2)} against surface(${canvas}), measured ${measured.toFixed(2)}. Fix the comment or the colour.`
+        `${token}: comment claims ${stated.toFixed(2)} against surface(${canvas}), measured ${measured.toFixed(2)}. Fix the comment or the colour.`,
       );
     }
     if (measured < 4.5) {
       annotationIssues.push(
-        `${token}: marked T (carries normal text) on surface(${canvas}) but measures ${measured.toFixed(2)}, below the 4.5 AA target.`
+        `${token}: marked T (carries normal text) on surface(${canvas}) but measures ${measured.toFixed(2)}, below the 4.5 AA target.`,
       );
     }
   }
@@ -262,7 +325,9 @@ for (const m of rootBlock.matchAll(ANNOTATED)) {
 const MODES = Object.keys(tokens);
 const args = process.argv.slice(2);
 const checkOnly = args.includes('--check');
-const reportAt = args.includes('--report') ? args[args.indexOf('--report') + 1] : null;
+const reportAt = args.includes('--report')
+  ? args[args.indexOf('--report') + 1]
+  : null;
 
 let results;
 try {
@@ -270,14 +335,18 @@ try {
 } catch (err) {
   // A malformed token source is a gate failure, not a crash: print the reason,
   // not a stack trace.
-  console.error(`\u2717 contrast gate cannot read the token source — ${err.message}`);
+  console.error(
+    `\u2717 contrast gate cannot read the token source — ${err.message}`,
+  );
   process.exit(1);
 }
 const total = results.reduce((n, r) => n + r.pass, 0);
 const failures = results.reduce((n, r) => n + r.fail, 0);
 
 if (!checkOnly) {
-  console.log(`\nTotal: ${total} pass / ${failures} fail across ${MODES.length} modes.`);
+  console.log(
+    `\nTotal: ${total} pass / ${failures} fail across ${MODES.length} modes.`,
+  );
 }
 
 if (reportAt) {
@@ -305,7 +374,9 @@ if (reportAt) {
 }
 
 if (!QUIET && annotationChecks.length) {
-  console.log(`\nAnnotated ramp steps: ${annotationChecks.length} claim(s) re-measured, ${anchorsByFamily.size} anchor(s).`);
+  console.log(
+    `\nAnnotated ramp steps: ${annotationChecks.length} claim(s) re-measured, ${anchorsByFamily.size} anchor(s).`,
+  );
 }
 for (const issue of annotationIssues) console.error(`\u2717 ${issue}`);
 
@@ -313,15 +384,17 @@ if (failures > 0 || annotationIssues.length > 0) {
   if (failures > 0) {
     console.error(
       `\n\u2717 ${failures} token pair(s) below their WCAG 2.2 AA target across ${MODES.length} modes. ` +
-        `Adjust the hex values in the token source — this gate reads them, so there is nothing else to update.`
+        `Adjust the hex values in the token source — this gate reads them, so there is nothing else to update.`,
     );
   }
   if (annotationIssues.length > 0) {
-    console.error(`\n\u2717 ${annotationIssues.length} ramp annotation(s) do not hold.`);
+    console.error(
+      `\n\u2717 ${annotationIssues.length} ramp annotation(s) do not hold.`,
+    );
   }
   process.exit(1);
 }
 console.log(
   `\u2713 contrast in sync (${total} pair(s) at or above WCAG 2.2 AA across ${MODES.length} modes; ` +
-    `${annotationChecks.length} annotated ramp step(s) re-measured).`
+    `${annotationChecks.length} annotated ramp step(s) re-measured).`,
 );

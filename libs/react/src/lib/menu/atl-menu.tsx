@@ -8,10 +8,7 @@ import {
   HTMLAttributes,
   RefObject,
 } from 'react';
-import type {
-  AtlMenuSpec,
-  AtlMenuItemSpec,
-} from '../spec';
+import type { AtlMenuSpec, AtlMenuItemSpec } from '../spec';
 import './atl-menu.css';
 
 interface MenuContextValue {
@@ -23,7 +20,8 @@ const MenuContext = createContext<MenuContextValue>({ close: () => undefined });
 /**
  * Properties for the AtlMenu component.
  */
-export interface AtlMenuProps extends HTMLAttributes<HTMLDivElement>, AtlMenuSpec {
+export interface AtlMenuProps
+  extends HTMLAttributes<HTMLDivElement>, AtlMenuSpec {
   /**
    * The visual style variant of the menu.
    */
@@ -37,8 +35,15 @@ export interface AtlMenuProps extends HTMLAttributes<HTMLDivElement>, AtlMenuSpe
 /**
  * A menu component for displaying a list of choices.
  */
-export function AtlMenu({ variant = 'default', children, className, ...rest }: AtlMenuProps) {
-  const classes = ['atl-menu', `variant-${variant}`, className].filter(Boolean).join(' ');
+export function AtlMenu({
+  variant = 'default',
+  children,
+  className,
+  ...rest
+}: AtlMenuProps) {
+  const classes = ['atl-menu', `variant-${variant}`, className]
+    .filter(Boolean)
+    .join(' ');
   return (
     <div className={classes} role="menu" {...rest}>
       {children}
@@ -50,8 +55,7 @@ export function AtlMenu({ variant = 'default', children, className, ...rest }: A
  * Properties for the AtlMenuItem component.
  */
 export interface AtlMenuItemProps
-  extends HTMLAttributes<HTMLButtonElement>,
-    AtlMenuItemSpec {
+  extends HTMLAttributes<HTMLButtonElement>, AtlMenuItemSpec {
   /**
    * Whether the menu item is disabled.
    */

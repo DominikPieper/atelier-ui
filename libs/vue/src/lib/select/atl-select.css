@@ -46,9 +46,13 @@
    * defect only appeared in CI. See ADR-0048. */
   line-height: var(--ui-line-height-tight);
   padding: calc(
-      (var(--ui-control-height-md) - var(--ui-line-height-tight) * var(--ui-font-size-md)) / 2 -
-        var(--ui-border-width)
-    ) var(--ui-spacing-4);
+      (
+          var(--ui-control-height-md) - var(--ui-line-height-tight) *
+            var(--ui-font-size-md)
+        ) /
+        2 - var(--ui-border-width)
+    )
+    var(--ui-spacing-4);
   padding-inline-end: calc(var(--ui-spacing-4) + 1.25rem + var(--ui-spacing-5));
   background: var(--ui-color-input-bg);
   border: var(--ui-border-width) solid var(--ui-color-input-border);

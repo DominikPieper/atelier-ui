@@ -13,7 +13,7 @@ describe('AtlBadge', () => {
     (variant) => {
       render(<AtlBadge variant={variant}>Label</AtlBadge>);
       expect(screen.getByText('Label')).toHaveClass(`variant-${variant}`);
-    }
+    },
   );
 
   it.each(['sm', 'md'] as const)('applies size-%s class', (size) => {

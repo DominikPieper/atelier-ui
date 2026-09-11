@@ -77,7 +77,7 @@ const ROOT = path.resolve(__dirname, '../..');
 const SNAPSHOT_FILE = path.join(ROOT, 'tools/figma/snapshot.json');
 const TOKEN_CSS = path.join(
   ROOT,
-  'libs/create-workspace/src/generators/preset/files/styles/tokens.css'
+  'libs/create-workspace/src/generators/preset/files/styles/tokens.css',
 );
 
 // Exactly the three prefixes the task named — see the header for why the
@@ -117,7 +117,7 @@ for (const name of uiTokens) {
         'Either the Figma variable was renamed or removed from code without regenerating the snapshot ' +
         '(npm run figma:sync-library-tokens, then npm run figma:snapshot), or tokens.css dropped the ' +
         'declaration and the Figma side is now stale — see plan/adr/0030-library-tokens-collection.md for ' +
-        'the intended --ui-<group>-<name> mapping.'
+        'the intended --ui-<group>-<name> mapping.',
     );
   }
 }
@@ -126,18 +126,20 @@ if (checked === 0) {
   console.error(
     "[TOKEN-FAMILY] snapshot.json's uiTokens carries zero color/*, spacing/*, or radius/* entries — either " +
       'the snapshot is stale/empty or the Library Tokens collection lost every entry in these three groups. ' +
-      'Run npm run figma:snapshot and re-check.'
+      'Run npm run figma:snapshot and re-check.',
   );
   process.exit(1);
 }
 
 if (errors.length > 0) {
   errors.forEach((e) => console.error(`✗ ${e}`));
-  console.error(`\n${errors.length} of ${checked} checked uiTokens name(s) have no matching --ui-* family.`);
+  console.error(
+    `\n${errors.length} of ${checked} checked uiTokens name(s) have no matching --ui-* family.`,
+  );
   process.exit(1);
 } else {
   console.log(
     `✓ All ${checked} color/*, spacing/*, and radius/* names in snapshot.json's uiTokens have a matching ` +
-      `--ui-* declaration in tokens.css (ADR-0030, ADR-0115).`
+      `--ui-* declaration in tokens.css (ADR-0030, ADR-0115).`,
   );
 }

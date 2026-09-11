@@ -35,7 +35,10 @@ function evalNode(node) {
   if (node.kind === ts.SyntaxKind.TrueKeyword) return true;
   if (node.kind === ts.SyntaxKind.FalseKeyword) return false;
   if (ts.isNumericLiteral(node)) return Number(node.text);
-  if (ts.isPrefixUnaryExpression(node) && node.operator === ts.SyntaxKind.MinusToken) {
+  if (
+    ts.isPrefixUnaryExpression(node) &&
+    node.operator === ts.SyntaxKind.MinusToken
+  ) {
     const v = evalNode(node.operand);
     return typeof v === 'number' ? -v : null;
   }
@@ -83,7 +86,8 @@ function parseExportedVars(filePath) {
       if (!ts.isIdentifier(decl.name) || !decl.initializer) continue;
       let init = decl.initializer;
       if (ts.isAsExpression(init)) init = init.expression;
-      if (ts.isSatisfiesExpression && ts.isSatisfiesExpression(init)) init = init.expression;
+      if (ts.isSatisfiesExpression && ts.isSatisfiesExpression(init))
+        init = init.expression;
       out[decl.name.text] = evalNode(init);
     }
   });
@@ -109,7 +113,7 @@ function findExportedInterfaces(filePath, suffix = 'Spec') {
   ts.forEachChild(sourceFile, (node) => {
     if (!ts.isInterfaceDeclaration(node)) return;
     const hasExport = (node.modifiers || []).some(
-      (m) => m.kind === ts.SyntaxKind.ExportKeyword
+      (m) => m.kind === ts.SyntaxKind.ExportKeyword,
     );
     if (!hasExport) return;
     const name = node.name.text;

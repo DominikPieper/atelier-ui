@@ -831,7 +831,7 @@ function scanLiteralAttrs(text, fw, into) {
  * variable is then forwarded verbatim into some prop in the same text. */
 function scanArrayMapCredit(text, fw, into) {
   const arrayMapRe =
-    /\[\s*((?:['"][\w-]+['"]\s*,?\s*)+)\]\s*(?:as const)?\s*\)?\s*\.map\(\s*(\w+)\s*=>/g;
+    /\[\s*((?:['"][\w-]+['"]\s*,?\s*)+)\]\s*(?:as const)?\s*\)?\s*\.map\(\s*\(?\s*(\w+)\s*\)?\s*=>/g;
   let m;
   while ((m = arrayMapRe.exec(text))) {
     const items = [...m[1].matchAll(/['"]([\w-]+)['"]/g)].map((x) => x[1]);
@@ -1316,8 +1316,12 @@ function processComponent(
 
 async function runFramework(fw) {
   const t0 = performance.now();
-  const storyFiles = findStoryFiles(fw, { root: ROOT, storiesDirs: STORIES_DIRS });
-  const workerDocgen = fw !== 'react' ? await makeWorkerDocgen(fw, cwdRequire, ROOT) : null;
+  const storyFiles = findStoryFiles(fw, {
+    root: ROOT,
+    storiesDirs: STORIES_DIRS,
+  });
+  const workerDocgen =
+    fw !== 'react' ? await makeWorkerDocgen(fw, cwdRequire, ROOT) : null;
 
   const byComponent = new Map(); // name -> { docgenResult, contextDir, files: [csf...] }
   const reachedMeta = new Set();

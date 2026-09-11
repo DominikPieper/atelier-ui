@@ -3,7 +3,7 @@ status: accepted
 confidence: reconstructed
 date: reconstructed
 sources:
-  - "feat(docs) series + this session"
+  - 'feat(docs) series + this session'
 ---
 
 # ADR-0015: Docs: Astro + Diátaxis + single Design-to-Code narrative

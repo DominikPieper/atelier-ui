@@ -169,7 +169,9 @@ const { PROP_SURFACE_EXEMPT } = require('./lib/allowlists');
 
 const ROOT = path.resolve(__dirname, '../..');
 const SPEC_FILE = path.join(ROOT, 'libs/spec/src/index.ts');
-const LIB_DIR = Object.fromEntries(FRAMEWORKS.map((fw) => [fw, path.join(ROOT, `libs/${fw}/src/lib`)]));
+const LIB_DIR = Object.fromEntries(
+  FRAMEWORKS.map((fw) => [fw, path.join(ROOT, `libs/${fw}/src/lib`)]),
+);
 
 // ---------------------------------------------------------------------------
 // 1. Keyed specs: SpecName -> component directory.
@@ -249,7 +251,9 @@ const GENERIC_EXTRA_IGNORE = {
  * PROP_SURFACE_EXEMPT's readOnly entries for the (unresolved) finding.
  */
 const NATIVE_PASSTHROUGH = new Set(
-  ['id', 'aria-label', 'aria-labelledby', 'aria-describedby', 'type'].map(camelize)
+  ['id', 'aria-label', 'aria-labelledby', 'aria-describedby', 'type'].map(
+    camelize,
+  ),
 );
 
 // ---------------------------------------------------------------------------
@@ -284,7 +288,9 @@ function flattenSpecProps(specNames) {
 
   for (const name of wanted) {
     if (!result[name]) {
-      throw new Error(`[SETUP] ${name} is keyed but has no interface declaration in ${SPEC_FILE}`);
+      throw new Error(
+        `[SETUP] ${name} is keyed but has no interface declaration in ${SPEC_FILE}`,
+      );
     }
   }
   return result;
@@ -304,7 +310,11 @@ function componentSourceFiles(dir, ext) {
   if (!fs.existsSync(dir)) return [];
   return fs
     .readdirSync(dir)
-    .filter((f) => new RegExp(`^atl-.*\\.${ext}$`).test(f) && !/\.(spec|stories)\./.test(f))
+    .filter(
+      (f) =>
+        new RegExp(`^atl-.*\\.${ext}$`).test(f) &&
+        !/\.(spec|stories)\./.test(f),
+    )
     .map((f) => path.join(dir, f))
     .sort();
 }
@@ -393,7 +403,8 @@ function signalIsCalled(strippedSrc, member) {
  */
 function angularMemberConsumed(angular, member, kind) {
   if (angular.contextMembers.has(member)) return true;
-  if (kind === 'signal') return signalIsCalled(stripComments(angular.src), member);
+  if (kind === 'signal')
+    return signalIsCalled(stripComments(angular.src), member);
   return occurrenceCount(angular.src, member) > 1;
 }
 
@@ -450,13 +461,22 @@ function findComponentFunctionNode(sf, componentName) {
   let result = null;
   ts.forEachChild(sf, (node) => {
     if (result) return;
-    if (ts.isFunctionDeclaration(node) && node.name && node.name.text === componentName) {
+    if (
+      ts.isFunctionDeclaration(node) &&
+      node.name &&
+      node.name.text === componentName
+    ) {
       result = node;
       return;
     }
     if (ts.isVariableStatement(node)) {
       for (const decl of node.declarationList.declarations) {
-        if (!ts.isIdentifier(decl.name) || decl.name.text !== componentName || !decl.initializer) continue;
+        if (
+          !ts.isIdentifier(decl.name) ||
+          decl.name.text !== componentName ||
+          !decl.initializer
+        )
+          continue;
         let found = null;
         (function inner(n) {
           if (found) return;
@@ -478,19 +498,29 @@ function extractReact(dir) {
   const out = new Map();
   for (const file of componentSourceFiles(dir, 'tsx')) {
     const src = fs.readFileSync(file, 'utf8');
-    const sf = ts.createSourceFile(file, src, ts.ScriptTarget.Latest, true, ts.ScriptKind.TSX);
+    const sf = ts.createSourceFile(
+      file,
+      src,
+      ts.ScriptTarget.Latest,
+      true,
+      ts.ScriptKind.TSX,
+    );
 
     ts.forEachChild(sf, (node) => {
       let componentName = null;
       let referencesSpec = false;
       const ownMembers = new Set();
 
-      if (ts.isInterfaceDeclaration(node) && /^Atl\w+Props$/.test(node.name.text)) {
+      if (
+        ts.isInterfaceDeclaration(node) &&
+        /^Atl\w+Props$/.test(node.name.text)
+      ) {
         componentName = node.name.text.replace(/Props$/, '');
         const specName = `${componentName}Spec`;
         for (const clause of node.heritageClauses ?? []) {
           for (const t of clause.types) {
-            if (ts.isIdentifier(t.expression) && t.expression.text === specName) referencesSpec = true;
+            if (ts.isIdentifier(t.expression) && t.expression.text === specName)
+              referencesSpec = true;
           }
         }
         for (const member of node.members) {
@@ -498,13 +528,20 @@ function extractReact(dir) {
             ownMembers.add(propertyNameText(member.name));
           }
         }
-      } else if (ts.isTypeAliasDeclaration(node) && /^Atl\w+Props$/.test(node.name.text)) {
+      } else if (
+        ts.isTypeAliasDeclaration(node) &&
+        /^Atl\w+Props$/.test(node.name.text)
+      ) {
         componentName = node.name.text.replace(/Props$/, '');
         const specName = `${componentName}Spec`;
         const type = node.type;
         if (ts.isIntersectionTypeNode(type)) {
           for (const t of type.types) {
-            if (ts.isTypeReferenceNode(t) && ts.isIdentifier(t.typeName) && t.typeName.text === specName) {
+            if (
+              ts.isTypeReferenceNode(t) &&
+              ts.isIdentifier(t.typeName) &&
+              t.typeName.text === specName
+            ) {
               referencesSpec = true;
             }
             if (ts.isTypeLiteralNode(t)) {
@@ -527,7 +564,13 @@ function extractReact(dir) {
       if (componentName) {
         const fnNode = findComponentFunctionNode(sf, componentName);
         const skipDead = fnNode ? reactHasForwardingRest(fnNode) : false;
-        out.set(componentName, { referencesSpec, ownMembers, file, src, skipDead });
+        out.set(componentName, {
+          referencesSpec,
+          ownMembers,
+          file,
+          src,
+          skipDead,
+        });
       }
     });
   }
@@ -540,7 +583,8 @@ function extractReact(dir) {
 
 function angularCalleeRoot(expr) {
   if (ts.isIdentifier(expr)) return expr.text;
-  if (ts.isPropertyAccessExpression(expr) && ts.isIdentifier(expr.expression)) return expr.expression.text;
+  if (ts.isPropertyAccessExpression(expr) && ts.isIdentifier(expr.expression))
+    return expr.expression.text;
   return null;
 }
 
@@ -551,7 +595,8 @@ function componentDecoratorCallExpr(node) {
     if (
       ts.isCallExpression(dec.expression) &&
       ts.isIdentifier(dec.expression.expression) &&
-      (dec.expression.expression.text === 'Component' || dec.expression.expression.text === 'Directive')
+      (dec.expression.expression.text === 'Component' ||
+        dec.expression.expression.text === 'Directive')
     ) {
       return dec.expression;
     }
@@ -584,7 +629,12 @@ function isSelfProvidedViaUseExisting(decoratorCall, className) {
   const arg = decoratorCall.arguments[0];
   if (!arg || !ts.isObjectLiteralExpression(arg)) return false;
   for (const prop of arg.properties) {
-    if (!ts.isPropertyAssignment(prop) || !ts.isIdentifier(prop.name) || prop.name.text !== 'providers') continue;
+    if (
+      !ts.isPropertyAssignment(prop) ||
+      !ts.isIdentifier(prop.name) ||
+      prop.name.text !== 'providers'
+    )
+      continue;
     if (!ts.isArrayLiteralExpression(prop.initializer)) continue;
     for (const el of prop.initializer.elements) {
       if (!ts.isObjectLiteralExpression(el)) continue;
@@ -611,7 +661,8 @@ function interfaceMembersIn(sf, names) {
   ts.forEachChild(sf, (node) => {
     if (!ts.isInterfaceDeclaration(node) || !wanted.has(node.name.text)) return;
     for (const member of node.members) {
-      if (ts.isPropertySignature(member) && member.name) result.add(propertyNameText(member.name));
+      if (ts.isPropertySignature(member) && member.name)
+        result.add(propertyNameText(member.name));
     }
   });
   return result;
@@ -634,8 +685,14 @@ function siblingTokenInterfaceMembers(classFile, implementsNames) {
     tokenFileCache.set(
       tokenFile,
       fs.existsSync(tokenFile)
-        ? ts.createSourceFile(tokenFile, fs.readFileSync(tokenFile, 'utf8'), ts.ScriptTarget.Latest, true, ts.ScriptKind.TS)
-        : null
+        ? ts.createSourceFile(
+            tokenFile,
+            fs.readFileSync(tokenFile, 'utf8'),
+            ts.ScriptTarget.Latest,
+            true,
+            ts.ScriptKind.TS,
+          )
+        : null,
     );
   }
   const sf = tokenFileCache.get(tokenFile);
@@ -648,7 +705,13 @@ function extractAngular(dir) {
   for (const file of componentSourceFiles(dir, 'ts')) {
     const src = fs.readFileSync(file, 'utf8');
     if (!src.includes('@Component(') && !src.includes('@Directive(')) continue;
-    const sf = ts.createSourceFile(file, src, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
+    const sf = ts.createSourceFile(
+      file,
+      src,
+      ts.ScriptTarget.Latest,
+      true,
+      ts.ScriptKind.TS,
+    );
 
     ts.forEachChild(sf, (node) => {
       if (!ts.isClassDeclaration(node) || !node.name) return;
@@ -697,14 +760,24 @@ function extractAngular(dir) {
       // AtlRadioGroup declare theirs there) — same interface, two possible locations.
       let contextMembers = new Set();
       const implementsNames = implementsInterfaceNames(node);
-      if (implementsNames.length > 0 && isSelfProvidedViaUseExisting(decoratorCall, node.name.text)) {
+      if (
+        implementsNames.length > 0 &&
+        isSelfProvidedViaUseExisting(decoratorCall, node.name.text)
+      ) {
         contextMembers = new Set([
           ...interfaceMembersIn(sf, implementsNames),
           ...siblingTokenInterfaceMembers(file, implementsNames),
         ]);
       }
 
-      out.set(node.name.text, { inputs, models, outputs, file, src, contextMembers });
+      out.set(node.name.text, {
+        inputs,
+        models,
+        outputs,
+        file,
+        src,
+        contextMembers,
+      });
     });
   }
   return out;
@@ -723,7 +796,11 @@ function extractScriptBlocks(src) {
 }
 
 function findCalls(node, name, found) {
-  if (ts.isCallExpression(node) && ts.isIdentifier(node.expression) && node.expression.text === name) {
+  if (
+    ts.isCallExpression(node) &&
+    ts.isIdentifier(node.expression) &&
+    node.expression.text === name
+  ) {
     found.push(node);
   }
   ts.forEachChild(node, (c) => findCalls(c, name, found));
@@ -737,7 +814,8 @@ function membersOfTypeNode(typeNode, sf) {
     const name = typeNode.typeName.text;
     let found = [];
     ts.forEachChild(sf, function walk(n) {
-      if (ts.isInterfaceDeclaration(n) && n.name.text === name) found = [...n.members];
+      if (ts.isInterfaceDeclaration(n) && n.name.text === name)
+        found = [...n.members];
       ts.forEachChild(n, walk);
     });
     return found;
@@ -772,7 +850,13 @@ function extractVue(dir) {
     const src = fs.readFileSync(file, 'utf8');
     const scriptSrc = extractScriptBlocks(src);
     if (!scriptSrc.trim()) continue;
-    const sf = ts.createSourceFile(`${file}.virtual.ts`, scriptSrc, ts.ScriptTarget.Latest, true, ts.ScriptKind.TS);
+    const sf = ts.createSourceFile(
+      `${file}.virtual.ts`,
+      scriptSrc,
+      ts.ScriptTarget.Latest,
+      true,
+      ts.ScriptKind.TS,
+    );
 
     const componentName = findComponentName(sf);
     if (!componentName) continue;
@@ -783,7 +867,8 @@ function extractVue(dir) {
     for (const call of definePropsCalls) {
       const members = membersOfTypeNode(call.typeArguments?.[0], sf);
       for (const member of members) {
-        if (ts.isPropertySignature(member) && member.name) propNames.add(propertyNameText(member.name));
+        if (ts.isPropertySignature(member) && member.name)
+          propNames.add(propertyNameText(member.name));
       }
     }
 
@@ -794,7 +879,9 @@ function extractVue(dir) {
       const members = membersOfTypeNode(call.typeArguments?.[0], sf);
       for (const member of members) {
         if (
-          (ts.isPropertySignature(member) || ts.isMethodSignature(member) || ts.isCallSignatureDeclaration(member)) &&
+          (ts.isPropertySignature(member) ||
+            ts.isMethodSignature(member) ||
+            ts.isCallSignatureDeclaration(member)) &&
           member.name
         ) {
           emitKeys.add(propertyNameText(member.name));
@@ -868,7 +955,7 @@ for (const specName of specNames) {
   // -- Angular --------------------------------------------------------------
   if (!angular) {
     errors.push(
-      `[MISSING] ${specName}: no Angular class '${componentName}' found under libs/angular/src/lib/${dir}`
+      `[MISSING] ${specName}: no Angular class '${componentName}' found under libs/angular/src/lib/${dir}`,
     );
   } else {
     const anglePresent = new Map(); // token -> { member, kind } — see angularMemberConsumed
@@ -913,11 +1000,15 @@ for (const specName of specNames) {
           'MISSING',
           `${specName}:${prop}:angular`,
           `${specName}:${prop} — Angular's ${componentName} (${path.relative(ROOT, angular.file)}) declares no ` +
-            `input()/model()${change ? `/output('${change[1][0].toLowerCase()}${change[1].slice(1)}Change')` : ''} for it.`
+            `input()/model()${change ? `/output('${change[1][0].toLowerCase()}${change[1].slice(1)}Change')` : ''} for it.`,
         );
       }
     }
-    const ownNames = [...angular.inputs.keys(), ...angular.models.keys(), ...angular.outputs.keys()];
+    const ownNames = [
+      ...angular.inputs.keys(),
+      ...angular.models.keys(),
+      ...angular.outputs.keys(),
+    ];
     for (const name of ownNames) {
       if (GENERIC_EXTRA_IGNORE.angular.has(name)) continue;
       if (NATIVE_PASSTHROUGH.has(camelize(name))) continue;
@@ -930,7 +1021,7 @@ for (const specName of specNames) {
       report(
         'EXTRA',
         `${specName}:${name}:angular`,
-        `${specName}:${name} — Angular's ${componentName} (${path.relative(ROOT, angular.file)}) declares '${name}', which ${specName} does not have.`
+        `${specName}:${name} — Angular's ${componentName} (${path.relative(ROOT, angular.file)}) declares '${name}', which ${specName} does not have.`,
       );
     }
     for (const [token, { member, kind }] of anglePresent) {
@@ -942,14 +1033,16 @@ for (const specName of specNames) {
       report(
         'DEAD',
         `${specName}:${token}:angular`,
-        `${specName}:${token} — Angular's ${componentName} declares '${token}' in ${path.relative(ROOT, angular.file)} ${detail}.`
+        `${specName}:${token} — Angular's ${componentName} declares '${token}' in ${path.relative(ROOT, angular.file)} ${detail}.`,
       );
     }
   }
 
   // -- React ------------------------------------------------------------------
   if (!react) {
-    errors.push(`[MISSING] ${specName}: no React '${componentName}Props' found under libs/react/src/lib/${dir}`);
+    errors.push(
+      `[MISSING] ${specName}: no React '${componentName}Props' found under libs/react/src/lib/${dir}`,
+    );
   } else {
     const reactPresent = new Set();
     if (react.referencesSpec) {
@@ -962,7 +1055,7 @@ for (const specName of specNames) {
           report(
             'MISSING',
             `${specName}:${prop}:react`,
-            `${specName}:${prop} — React's ${componentName}Props (${path.relative(ROOT, react.file)}) does not extend/intersect ${specName} and does not declare '${prop}' itself.`
+            `${specName}:${prop} — React's ${componentName}Props (${path.relative(ROOT, react.file)}) does not extend/intersect ${specName} and does not declare '${prop}' itself.`,
           );
         }
       }
@@ -974,7 +1067,7 @@ for (const specName of specNames) {
       report(
         'EXTRA',
         `${specName}:${name}:react`,
-        `${specName}:${name} — React's ${componentName}Props (${path.relative(ROOT, react.file)}) declares '${name}', which ${specName} does not have.`
+        `${specName}:${name} — React's ${componentName}Props (${path.relative(ROOT, react.file)}) declares '${name}', which ${specName} does not have.`,
       );
     }
     for (const token of react.skipDead ? [] : reactPresent) {
@@ -983,7 +1076,7 @@ for (const specName of specNames) {
         report(
           'DEAD',
           `${specName}:${token}:react`,
-          `${specName}:${token} — React's ${componentName} declares '${token}' (via ${componentName}Props) in ${path.relative(ROOT, react.file)} but it appears nowhere else in that file (${count} occurrence(s)).`
+          `${specName}:${token} — React's ${componentName} declares '${token}' (via ${componentName}Props) in ${path.relative(ROOT, react.file)} but it appears nowhere else in that file (${count} occurrence(s)).`,
         );
       }
     }
@@ -991,7 +1084,9 @@ for (const specName of specNames) {
 
   // -- Vue ----------------------------------------------------------------
   if (!vue) {
-    errors.push(`[MISSING] ${specName}: no Vue component '${componentName}' found under libs/vue/src/lib/${dir}`);
+    errors.push(
+      `[MISSING] ${specName}: no Vue component '${componentName}' found under libs/vue/src/lib/${dir}`,
+    );
   } else {
     const vuePresent = new Set();
     for (const prop of props) {
@@ -1020,7 +1115,7 @@ for (const specName of specNames) {
         report(
           'MISSING',
           `${specName}:${prop}:vue`,
-          `${specName}:${prop} — Vue's ${componentName} (${path.relative(ROOT, vue.file)}) declares no matching prop/emit for it.`
+          `${specName}:${prop} — Vue's ${componentName} (${path.relative(ROOT, vue.file)}) declares no matching prop/emit for it.`,
         );
       }
     }
@@ -1034,7 +1129,7 @@ for (const specName of specNames) {
       report(
         'EXTRA',
         `${specName}:${name}:vue`,
-        `${specName}:${name} — Vue's ${componentName} (${path.relative(ROOT, vue.file)}) declares '${name}', which ${specName} does not have.`
+        `${specName}:${name} — Vue's ${componentName} (${path.relative(ROOT, vue.file)}) declares '${name}', which ${specName} does not have.`,
       );
     }
     for (const token of vuePresent) {
@@ -1043,7 +1138,7 @@ for (const specName of specNames) {
         report(
           'DEAD',
           `${specName}:${token}:vue`,
-          `${specName}:${token} — Vue's ${componentName} declares '${token}' in ${path.relative(ROOT, vue.file)} but it appears nowhere else in that file (${count} occurrence(s)).`
+          `${specName}:${token} — Vue's ${componentName} declares '${token}' in ${path.relative(ROOT, vue.file)} but it appears nowhere else in that file (${count} occurrence(s)).`,
         );
       }
     }
@@ -1078,7 +1173,9 @@ for (const key of PROP_SURFACE_EXEMPT.keys()) {
   const [specName, prop] = key.split(':');
   const specDeclaresProp = specProps[specName] && specProps[specName].has(prop);
   if (specDeclaresProp) {
-    errors.push(`[STALE] PROP_SURFACE_EXEMPT carries '${key}' but this run found no such divergence. Remove the entry.`);
+    errors.push(
+      `[STALE] PROP_SURFACE_EXEMPT carries '${key}' but this run found no such divergence. Remove the entry.`,
+    );
   }
 }
 
@@ -1097,7 +1194,9 @@ for (const { key, reason } of warnings) {
   if (!warningsByReason.has(reason)) warningsByReason.set(reason, []);
   warningsByReason.get(reason).push(key);
 }
-for (const [reason, keys] of [...warningsByReason].sort((a, b) => (a[0] < b[0] ? -1 : 1))) {
+for (const [reason, keys] of [...warningsByReason].sort((a, b) =>
+  a[0] < b[0] ? -1 : 1,
+)) {
   keys.sort();
   console.warn(`⚠ [GAP] (${keys.length}) ${reason}`);
   for (const key of keys) console.warn(`    - ${key}`);
@@ -1113,5 +1212,7 @@ if (errors.length > 0) {
   console.error(`\n${errors.length} prop-surface issue(s). ${summary}`);
   process.exit(1);
 }
-console.log(`✓ every keyed spec's prop surface is accounted for in angular/react/vue (or exempted). ${summary}`);
+console.log(
+  `✓ every keyed spec's prop surface is accounted for in angular/react/vue (or exempted). ${summary}`,
+);
 process.exit(0);

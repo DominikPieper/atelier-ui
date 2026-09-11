@@ -91,7 +91,11 @@
 const fs = require('fs');
 const path = require('path');
 const ts = require('typescript');
-const { FRAMEWORKS, isComponentDir, getComponentDirs } = require('./lib/component-discovery');
+const {
+  FRAMEWORKS,
+  isComponentDir,
+  getComponentDirs,
+} = require('./lib/component-discovery');
 const { rootsFor } = require('./lib/component-roots');
 const { DEAD_SELECTOR_EXEMPT } = require('./lib/allowlists');
 
@@ -115,7 +119,9 @@ const NOT_A_TEMPLATE = /\.(spec|stories|a11y)\./;
  * @returns {Map<string, {line: number, selector: string, generated: boolean}[]>}
  */
 function classSelectors(cssText) {
-  const src = cssText.replace(/\/\*[\s\S]*?\*\//g, (m) => m.replace(/[^\n]/g, ' '));
+  const src = cssText.replace(/\/\*[\s\S]*?\*\//g, (m) =>
+    m.replace(/[^\n]/g, ' '),
+  );
 
   // The `:is(…)` list at the top of every React and Vue sheet is written by
   // gen-box-sizing.mjs from the sheet's own `.atl-*` rules, so it echoes any dead
@@ -127,7 +133,8 @@ function classSelectors(cssText) {
   }
 
   const lineStarts = [0];
-  for (let i = 0; i < src.length; i++) if (src[i] === '\n') lineStarts.push(i + 1);
+  for (let i = 0; i < src.length; i++)
+    if (src[i] === '\n') lineStarts.push(i + 1);
   const lineOf = (offset) => {
     let lo = 0;
     let hi = lineStarts.length - 1;
@@ -232,7 +239,10 @@ const VUE_MACRO_SHIM = [
  * @param {Map<string, string>} virtual synthesized sources, keyed by absolute path
  */
 function createProgram(rootFiles, virtual) {
-  const host = ts.createCompilerHost(COMPILER_OPTIONS, /* setParentNodes */ true);
+  const host = ts.createCompilerHost(
+    COMPILER_OPTIONS,
+    /* setParentNodes */ true,
+  );
   const readReal = host.readFile.bind(host);
   const existsReal = host.fileExists.bind(host);
   const getReal = host.getSourceFile.bind(host);
@@ -244,7 +254,11 @@ function createProgram(rootFiles, virtual) {
       ? ts.createSourceFile(f, virtual.get(f), COMPILER_OPTIONS.target, true)
       : getReal(f, lang, onError, shouldCreate);
 
-  return ts.createProgram([...rootFiles, ...virtual.keys()], COMPILER_OPTIONS, host);
+  return ts.createProgram(
+    [...rootFiles, ...virtual.keys()],
+    COMPILER_OPTIONS,
+    host,
+  );
 }
 
 /** What one directory's templates can put on an element. */
@@ -270,7 +284,8 @@ function makeCollector(checker, bag, where) {
       if (t.isStringLiteral()) lits.push(t.value);
       // `string | undefined` on an optional prop: undefined contributes nothing,
       // but a lone `undefined` must not read as a resolved empty union.
-      else if (!(t.flags & (ts.TypeFlags.Undefined | ts.TypeFlags.Null))) return null;
+      else if (!(t.flags & (ts.TypeFlags.Undefined | ts.TypeFlags.Null)))
+        return null;
     }
     return lits.length ? lits : null;
   }
@@ -280,7 +295,10 @@ function makeCollector(checker, bag, where) {
     const direct = literalsOfType(type);
     if (direct) return direct;
     if (!type) return null;
-    for (const sig of checker.getSignaturesOfType(type, ts.SignatureKind.Call)) {
+    for (const sig of checker.getSignaturesOfType(
+      type,
+      ts.SignatureKind.Call,
+    )) {
       const lits = literalsOfType(checker.getReturnTypeOfSignature(sig));
       if (lits) return lits;
     }
@@ -302,7 +320,9 @@ function makeCollector(checker, bag, where) {
       where,
       prefix,
       exprText: expr.getText().replace(/\s+/g, ' ').slice(0, 80),
-      typeText: checker.typeToString(checker.getTypeAtLocation(expr)).slice(0, 60),
+      typeText: checker
+        .typeToString(checker.getTypeAtLocation(expr))
+        .slice(0, 60),
     });
     return false;
   }
@@ -326,7 +346,10 @@ function makeCollector(checker, bag, where) {
         // A `className` prop is a BindingElement with no initializer: it yields
         // nothing, which is correct — a consumer's class never justifies a rule
         // in the library's own CSS.
-        if ((ts.isVariableDeclaration(d) || ts.isPropertyDeclaration(d)) && d.initializer) {
+        if (
+          (ts.isVariableDeclaration(d) || ts.isPropertyDeclaration(d)) &&
+          d.initializer
+        ) {
           collect(d.initializer);
         } else if (ts.isGetAccessor(d) && d.body) {
           collect(d.body);
@@ -345,7 +368,10 @@ function makeCollector(checker, bag, where) {
       // in four Vue directories where they are plainly emitted.
       for (const p of node.properties) {
         if (!p.name) continue;
-        if (ts.isStringLiteral(p.name) || ts.isNoSubstitutionTemplateLiteral(p.name)) {
+        if (
+          ts.isStringLiteral(p.name) ||
+          ts.isNoSubstitutionTemplateLiteral(p.name)
+        ) {
           addTokens(p.name.text);
         } else if (ts.isIdentifier(p.name)) {
           bag.statics.add(p.name.text);
@@ -356,9 +382,15 @@ function makeCollector(checker, bag, where) {
       return;
     }
 
-    if (ts.isBinaryExpression(node) && node.operatorToken.kind === ts.SyntaxKind.PlusToken) {
+    if (
+      ts.isBinaryExpression(node) &&
+      node.operatorToken.kind === ts.SyntaxKind.PlusToken
+    ) {
       const left = node.left;
-      if (ts.isStringLiteral(left) || ts.isNoSubstitutionTemplateLiteral(left)) {
+      if (
+        ts.isStringLiteral(left) ||
+        ts.isNoSubstitutionTemplateLiteral(left)
+      ) {
         const toks = left.text.split(/\s+/).filter(Boolean);
         const glued = toks.length > 0 && !/\s$/.test(left.text);
         toks.forEach((t, i) => {
@@ -373,9 +405,14 @@ function makeCollector(checker, bag, where) {
       }
     }
 
-    if (ts.isCallExpression(node) && ts.isPropertyAccessExpression(node.expression)) {
+    if (
+      ts.isCallExpression(node) &&
+      ts.isPropertyAccessExpression(node.expression)
+    ) {
       // Unwrap `[…].filter(Boolean).join(' ')` and `[…].map(…)`.
-      if (/^(join|filter|trim|map|concat|flat)$/.test(node.expression.name.text)) {
+      if (
+        /^(join|filter|trim|map|concat|flat)$/.test(node.expression.name.text)
+      ) {
         collect(node.expression.expression);
         for (const a of node.arguments) collect(a);
         return;
@@ -418,7 +455,8 @@ function collectReact(sourceFile, api) {
     if (ts.isJsxAttribute(node) && node.name.getText() === 'className') {
       const init = node.initializer;
       if (init && ts.isStringLiteral(init)) api.addTokens(init.text);
-      else if (init && ts.isJsxExpression(init) && init.expression) api.collect(init.expression);
+      else if (init && ts.isJsxExpression(init) && init.expression)
+        api.collect(init.expression);
     }
     ts.forEachChild(node, walk);
   };
@@ -430,29 +468,57 @@ function collectReact(sourceFile, api) {
 // ---------------------------------------------------------------------------
 
 const VUE_GLOBALS = new Set([
-  'true', 'false', 'null', 'undefined', 'this', 'Math', 'Object', 'Array',
-  'String', 'Number', 'Boolean', 'JSON', 'Date', 'typeof', 'void', 'in',
-  'new', 'instanceof', 'props', '$slots', '$attrs', '$props',
+  'true',
+  'false',
+  'null',
+  'undefined',
+  'this',
+  'Math',
+  'Object',
+  'Array',
+  'String',
+  'Number',
+  'Boolean',
+  'JSON',
+  'Date',
+  'typeof',
+  'void',
+  'in',
+  'new',
+  'instanceof',
+  'props',
+  '$slots',
+  '$attrs',
+  '$props',
 ]);
 
 /** Top-level names a `<script setup>` block declares. */
 function scriptBindingsOf(scriptText) {
-  const sf = ts.createSourceFile('__s.ts', scriptText, ts.ScriptTarget.Latest, true);
+  const sf = ts.createSourceFile(
+    '__s.ts',
+    scriptText,
+    ts.ScriptTarget.Latest,
+    true,
+  );
   const names = new Set();
   const addName = (n) => {
     if (!n) return;
     if (ts.isIdentifier(n)) names.add(n.text);
     else if (ts.isObjectBindingPattern(n) || ts.isArrayBindingPattern(n)) {
-      for (const el of n.elements) if (ts.isBindingElement(el)) addName(el.name);
+      for (const el of n.elements)
+        if (ts.isBindingElement(el)) addName(el.name);
     }
   };
   for (const st of sf.statements) {
-    if (ts.isVariableStatement(st)) st.declarationList.declarations.forEach((d) => addName(d.name));
-    else if (ts.isFunctionDeclaration(st) || ts.isClassDeclaration(st)) addName(st.name);
+    if (ts.isVariableStatement(st))
+      st.declarationList.declarations.forEach((d) => addName(d.name));
+    else if (ts.isFunctionDeclaration(st) || ts.isClassDeclaration(st))
+      addName(st.name);
     else if (ts.isImportDeclaration(st) && st.importClause) {
       addName(st.importClause.name);
       const b = st.importClause.namedBindings;
-      if (b && ts.isNamedImports(b)) for (const e of b.elements) names.add(e.name.text);
+      if (b && ts.isNamedImports(b))
+        for (const e of b.elements) names.add(e.name.text);
       if (b && ts.isNamespaceImport(b)) names.add(b.name.text);
     }
   }
@@ -469,7 +535,12 @@ function rewriteTemplateExpr(expr, bindings, propsVar) {
   if (!propsVar) return expr;
   const wrapper = `const __x = (${expr});`;
   const offset = 'const __x = ('.length;
-  const sf = ts.createSourceFile('__e.ts', wrapper, ts.ScriptTarget.Latest, true);
+  const sf = ts.createSourceFile(
+    '__e.ts',
+    wrapper,
+    ts.ScriptTarget.Latest,
+    true,
+  );
   const edits = [];
   const root = sf.statements[0].declarationList.declarations[0].initializer;
 
@@ -481,8 +552,16 @@ function rewriteTemplateExpr(expr, bindings, propsVar) {
         (ts.isPropertyAssignment(p) && p.name === node) ||
         ts.isShorthandPropertyAssignment(p) ||
         (ts.isBindingElement(p) && p.propertyName === node);
-      if (!isPropertyName && !bindings.has(node.text) && !VUE_GLOBALS.has(node.text)) {
-        edits.push({ start: node.getStart(sf) - offset, end: node.getEnd() - offset, text: node.text });
+      if (
+        !isPropertyName &&
+        !bindings.has(node.text) &&
+        !VUE_GLOBALS.has(node.text)
+      ) {
+        edits.push({
+          start: node.getStart(sf) - offset,
+          end: node.getEnd() - offset,
+          text: node.text,
+        });
       }
     }
     ts.forEachChild(node, walk);
@@ -504,22 +583,31 @@ function vueVirtualSource(text) {
   // plain `<script>` and consumes it from `<script setup>` is the common shape
   // here, and taking only one leaves every axis prop typed `any`.
   const script =
-    ((descriptor.script || {}).content || '') + '\n' + ((descriptor.scriptSetup || {}).content || '');
+    ((descriptor.script || {}).content || '') +
+    '\n' +
+    ((descriptor.scriptSetup || {}).content || '');
   const template = (descriptor.template || {}).content || '';
 
   const statics = [];
-  for (const m of template.matchAll(/(?:^|[\s'"])class\s*=\s*"([^"]*)"/g)) statics.push(m[1]);
+  for (const m of template.matchAll(/(?:^|[\s'"])class\s*=\s*"([^"]*)"/g))
+    statics.push(m[1]);
 
   const bindings = scriptBindingsOf(script);
   let propsVar = null;
   for (const line of script.split('\n')) {
-    const m = /^\s*(?:const|let)\s+([A-Za-z_$][\w$]*)\s*=[^=]*defineProps/.exec(line);
+    const m = /^\s*(?:const|let)\s+([A-Za-z_$][\w$]*)\s*=[^=]*defineProps/.exec(
+      line,
+    );
     if (m) propsVar = m[1];
   }
 
   const exprs = [];
-  for (const m of template.matchAll(/(?::class|v-bind:class)\s*=\s*"([\s\S]*?)"(?=[\s/>])/g)) {
-    exprs.push(rewriteTemplateExpr(m[1].replace(/\s+/g, ' ').trim(), bindings, propsVar));
+  for (const m of template.matchAll(
+    /(?::class|v-bind:class)\s*=\s*"([\s\S]*?)"(?=[\s/>])/g,
+  )) {
+    exprs.push(
+      rewriteTemplateExpr(m[1].replace(/\s+/g, ' ').trim(), bindings, propsVar),
+    );
   }
 
   const body =
@@ -534,7 +622,11 @@ function vueVirtualSource(text) {
 
 function collectVue(sourceFile, api) {
   const walk = (node) => {
-    if (ts.isVariableDeclaration(node) && node.name.getText() === '__atl_classes__' && node.initializer) {
+    if (
+      ts.isVariableDeclaration(node) &&
+      node.name.getText() === '__atl_classes__' &&
+      node.initializer
+    ) {
       return api.collect(node.initializer);
     }
     ts.forEachChild(node, walk);
@@ -563,10 +655,18 @@ function angularExpr(src, members, api, bag, where) {
       if (ch === quote) quote = null;
       continue;
     }
-    if (ch === '"' || ch === "'") { quote = ch; buf += ch; continue; }
+    if (ch === '"' || ch === "'") {
+      quote = ch;
+      buf += ch;
+      continue;
+    }
     if (ch === '(' || ch === '[') depth++;
     if (ch === ')' || ch === ']') depth--;
-    if (ch === '+' && depth === 0) { parts.push(buf); buf = ''; continue; }
+    if (ch === '+' && depth === 0) {
+      parts.push(buf);
+      buf = '';
+      continue;
+    }
     buf += ch;
   }
   parts.push(buf);
@@ -603,7 +703,9 @@ function angularExpr(src, members, api, bag, where) {
             where,
             prefix: pendingPrefix,
             exprText: part,
-            typeText: api.checker.typeToString(api.checker.getTypeAtLocation(decl)).slice(0, 60),
+            typeText: api.checker
+              .typeToString(api.checker.getTypeAtLocation(decl))
+              .slice(0, 60),
           });
       }
       pendingPrefix = null;
@@ -614,7 +716,9 @@ function angularExpr(src, members, api, bag, where) {
       where,
       prefix: pendingPrefix || '',
       exprText: part.slice(0, 80),
-      typeText: ref ? `no member '${ref[1]}' on the decorated class` : 'not a member reference',
+      typeText: ref
+        ? `no member '${ref[1]}' on the decorated class`
+        : 'not a member reference',
     });
     pendingPrefix = null;
   }
@@ -631,7 +735,11 @@ function collectAngular(sourceFile, api, bag, rel) {
     if (ts.isClassDeclaration(node)) {
       const members = new Map();
       for (const m of node.members) {
-        if ((ts.isPropertyDeclaration(m) || ts.isGetAccessor(m)) && m.name && ts.isIdentifier(m.name)) {
+        if (
+          (ts.isPropertyDeclaration(m) || ts.isGetAccessor(m)) &&
+          m.name &&
+          ts.isIdentifier(m.name)
+        ) {
           members.set(m.name.text, m);
         }
       }
@@ -641,31 +749,55 @@ function collectAngular(sourceFile, api, bag, rel) {
         if (!arg || !ts.isObjectLiteralExpression(arg)) continue;
         for (const prop of arg.properties) {
           if (!ts.isPropertyAssignment(prop) || !prop.name) continue;
-          const key = ts.isIdentifier(prop.name) || ts.isStringLiteral(prop.name) ? prop.name.text : '';
+          const key =
+            ts.isIdentifier(prop.name) || ts.isStringLiteral(prop.name)
+              ? prop.name.text
+              : '';
 
-          if (key === 'host' && ts.isObjectLiteralExpression(prop.initializer)) {
+          if (
+            key === 'host' &&
+            ts.isObjectLiteralExpression(prop.initializer)
+          ) {
             for (const h of prop.initializer.properties) {
               if (!ts.isPropertyAssignment(h) || !h.name) continue;
-              const hk = ts.isStringLiteral(h.name) || ts.isIdentifier(h.name) ? h.name.text : '';
+              const hk =
+                ts.isStringLiteral(h.name) || ts.isIdentifier(h.name)
+                  ? h.name.text
+                  : '';
               const value =
-                ts.isStringLiteral(h.initializer) || ts.isNoSubstitutionTemplateLiteral(h.initializer)
+                ts.isStringLiteral(h.initializer) ||
+                ts.isNoSubstitutionTemplateLiteral(h.initializer)
                   ? h.initializer.text
                   : null;
               if (hk === 'class' && value !== null) api.addTokens(value);
               else if (/^\[class\.([A-Za-z_][\w-]*)\]$/.test(hk)) {
                 bag.statics.add(/^\[class\.([A-Za-z_][\w-]*)\]$/.exec(hk)[1]);
-              } else if ((hk === '[class]' || hk === '[ngClass]') && value !== null) {
+              } else if (
+                (hk === '[class]' || hk === '[ngClass]') &&
+                value !== null
+              ) {
                 angularExpr(value, members, api, bag, `${rel} host ${hk}`);
               }
             }
           }
 
-          if (key === 'template' && (ts.isStringLiteral(prop.initializer) || ts.isNoSubstitutionTemplateLiteral(prop.initializer))) {
+          if (
+            key === 'template' &&
+            (ts.isStringLiteral(prop.initializer) ||
+              ts.isNoSubstitutionTemplateLiteral(prop.initializer))
+          ) {
             const tpl = prop.initializer.text;
             for (const m of tpl.matchAll(NG_TEMPLATE_CLASS)) {
               if (m[1]) bag.statics.add(m[1]);
               else if (m[2] !== undefined) api.addTokens(m[2]);
-              else angularExpr(m[3] ?? m[4] ?? m[5], members, api, bag, `${rel} template [class]`);
+              else
+                angularExpr(
+                  m[3] ?? m[4] ?? m[5],
+                  members,
+                  api,
+                  bag,
+                  `${rel} template [class]`,
+                );
             }
           }
         }
@@ -683,13 +815,16 @@ function collectAngular(sourceFile, api, bag, rel) {
 /** Component directories of one framework that hold at least one source. */
 function componentDirsOf(fw) {
   const base = path.join(ROOT, 'libs', fw, 'src/lib');
-  return [...getComponentDirs(base)].sort().filter((d) => isComponentDir(path.join(base, d)));
+  return [...getComponentDirs(base)]
+    .sort()
+    .filter((d) => isComponentDir(path.join(base, d)));
 }
 
 /** Root class name (no dot) -> the component directory that renders it. */
 function rootOwnersOf(dirs) {
   const owners = new Map();
-  for (const dir of dirs) for (const root of rootsFor(dir)) owners.set(root.slice(1), dir);
+  for (const dir of dirs)
+    for (const root of rootsFor(dir)) owners.set(root.slice(1), dir);
   return owners;
 }
 
@@ -738,7 +873,10 @@ function emissionFor(fw) {
       if (NOT_A_TEMPLATE.test(entry)) continue;
       const abs = path.join(dirPath, entry);
       if (/\.(ts|tsx|vue|html)$/.test(entry)) {
-        for (const rendered of renderedDirsIn(fs.readFileSync(abs, 'utf8'), owners)) {
+        for (const rendered of renderedDirsIn(
+          fs.readFileSync(abs, 'utf8'),
+          owners,
+        )) {
           if (rendered !== dir) renders.get(dir).add(rendered);
         }
       }
@@ -749,8 +887,11 @@ function emissionFor(fw) {
         rootFiles.push(abs);
         owner.set(abs, dir);
       } else if (fw === 'vue' && /^atl-.*\.vue$/.test(entry)) {
-        const { body, statics } = vueVirtualSource(fs.readFileSync(abs, 'utf8'));
-        for (const s of statics) for (const t of s.split(/\s+/)) if (t) bags.get(dir).statics.add(t);
+        const { body, statics } = vueVirtualSource(
+          fs.readFileSync(abs, 'utf8'),
+        );
+        for (const s of statics)
+          for (const t of s.split(/\s+/)) if (t) bags.get(dir).statics.add(t);
         const virt = `${abs}.__classes.ts`;
         virtual.set(virt, body);
         owner.set(virt, dir);
@@ -792,16 +933,23 @@ for (const fw of FRAMEWORKS) {
 
     /** @type {Map<string, {file: string, line: number, selector: string, generated: boolean}[]>} */
     const css = new Map();
-    for (const entry of fs.readdirSync(dirPath).filter((f) => f.endsWith('.css')).sort()) {
+    for (const entry of fs
+      .readdirSync(dirPath)
+      .filter((f) => f.endsWith('.css'))
+      .sort()) {
       const file = path.join(dirPath, entry);
       stylesheets++;
-      for (const [name, sites] of classSelectors(fs.readFileSync(file, 'utf8'))) {
+      for (const [name, sites] of classSelectors(
+        fs.readFileSync(file, 'utf8'),
+      )) {
         if (!css.has(name)) css.set(name, []);
         for (const s of sites) css.get(name).push({ file, ...s });
       }
     }
 
-    for (const [name, sites] of [...css].sort((a, b) => a[0].localeCompare(b[0]))) {
+    for (const [name, sites] of [...css].sort((a, b) =>
+      a[0].localeCompare(b[0]),
+    )) {
       selectorsScanned++;
       const key = `${fw}:${dir}:${name}`;
       if (bag.statics.has(name)) continue;
@@ -830,7 +978,10 @@ for (const fw of FRAMEWORKS) {
       const fromParent =
         !asChildRoot &&
         [...renders].some(
-          ([parent, kids]) => parent !== dir && kids.has(dir) && bags.get(parent).statics.has(name)
+          ([parent, kids]) =>
+            parent !== dir &&
+            kids.has(dir) &&
+            bags.get(parent).statics.has(name),
         );
       if (asChildRoot || fromParent) continue;
 
@@ -841,7 +992,9 @@ for (const fw of FRAMEWORKS) {
       if (exemption) {
         seenExemptions.add(key);
         if (exemption.kind === 'gap') {
-          warnings.push(`[GAP] ${key} (${rel}:${site.line}) — ${exemption.reason}.`);
+          warnings.push(
+            `[GAP] ${key} (${rel}:${site.line}) — ${exemption.reason}.`,
+          );
         }
         continue;
       }
@@ -853,7 +1006,7 @@ for (const fw of FRAMEWORKS) {
           `anything the library itself builds. Emit the class where the state is modelled, or delete ` +
           `the rule — and check the other two frameworks first, since most of these are one adapter ` +
           `forgetting a class the other two emit. If some further-out directory really is the right ` +
-          `place to emit it, record that as a \`design\` entry in DEAD_SELECTOR_EXEMPT.`
+          `place to emit it, record that as a \`design\` entry in DEAD_SELECTOR_EXEMPT.`,
       );
     }
   }
@@ -864,7 +1017,7 @@ for (const fw of FRAMEWORKS) {
         `[UNRESOLVED] ${u.where} builds a class name as \`${u.prefix}\` + \`${u.exprText}\`, whose ` +
           `type is \`${u.typeText}\` — not a string-literal union, so the gate cannot enumerate the ` +
           `classes it produces and every rule matching that family is unchecked. Narrow the type to a ` +
-          `union (the spec axes already are), or the check is blind here.`
+          `union (the spec axes already are), or the check is blind here.`,
       );
     }
   }
@@ -876,7 +1029,7 @@ for (const [key, entry] of DEAD_SELECTOR_EXEMPT) {
   if (!seenExemptions.has(key)) {
     errors.push(
       `[STALE-EXEMPTION] DEAD_SELECTOR_EXEMPT carries '${key}' (${entry.kind}), but that class is ` +
-        `emitted now — or the stylesheet no longer selects it. Remove the entry.`
+        `emitted now — or the stylesheet no longer selects it. Remove the entry.`,
     );
   }
 }
@@ -886,7 +1039,9 @@ const total =
   `${DEAD_SELECTOR_EXEMPT.size} documented exception(s)`;
 
 if (errors.length === 0 && warnings.length === 0) {
-  console.log(`✓ every class a component stylesheet selects can be emitted by its templates (${total}).`);
+  console.log(
+    `✓ every class a component stylesheet selects can be emitted by its templates (${total}).`,
+  );
   process.exit(0);
 }
 for (const w of warnings) console.warn(`⚠ [WARNING] ${w}`);
@@ -895,4 +1050,6 @@ if (errors.length > 0) {
   console.error(`\n${errors.length} dead-selector issue(s). ${total}.`);
   process.exit(1);
 }
-console.warn(`\n${warnings.length} dead-selector warning(s) (non-blocking). ${total}.`);
+console.warn(
+  `\n${warnings.length} dead-selector warning(s) (non-blocking). ${total}.`,
+);

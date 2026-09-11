@@ -53,11 +53,11 @@ a Folie-7 "Gefahren-Hinweise" bullet), that Git branches `solved-toast`,
 `solved-tagchip`, `solved-statcard`, `solved-avatar` exist as a trainer
 safety net ("Teilnehmer können per `git checkout solved-<name>` springen"). They
 do not — `git branch -a` lists none. That symptom raises the actual question
-this ADR settles: is the fix to *move* the sensitive 20% to a second repo, or
-to *correct the false claim in place*?
+this ADR settles: is the fix to _move_ the sensitive 20% to a second repo, or
+to _correct the false claim in place_?
 
 Re-verifying the two premises behind the original recommendation — scoped
-specifically to *sensitive* (personal-data / credential-shaped) content, the
+specifically to _sensitive_ (personal-data / credential-shaped) content, the
 kind a private repo would actually protect, not the separate editorial
 question of tone:
 
@@ -69,9 +69,9 @@ question of tone:
    internal data-protection officer (DSB)", "the internal information-security
    officer (ISB)"), matching ADR-0032's convention. A repo-wide grep for
    `@(conciso|gmail|outlook)\.[a-z]+`-shaped addresses returns zero hits. Nothing
-   *currently* in the tree needs hiding for personal-data or credential reasons.
+   _currently_ in the tree needs hiding for personal-data or credential reasons.
    **Named separately, not resolved by this check:** `tasks/schulung-review-
-   2026-09-02.md`'s broader M11 finding — trainer-internal *tone*, not personal
+2026-09-02.md`'s broader M11 finding — trainer-internal _tone_, not personal
    data, on the public page (`docs/src/pages/schulung.astro:96`'s credential-
    class remark and the fence-script/"Gegenmittel" lines around it;
    `schulung-2tage-agenda.md`'s own "kein Dry-Run" minute-arithmetic admission,
@@ -80,7 +80,7 @@ question of tone:
    it's named here rather than silently treated as closed, and left as a
    separate, still-open backlog item — see Consequences.
 2. **Would a second repo actually behave better?** `plan/ai-readiness.md` —
-   itself a gated, actively-drift-checked planning doc in *this* repo — has
+   itself a gated, actively-drift-checked planning doc in _this_ repo — has
    needed a dated correction and a full ADR supersession (ADR-0083 → ADR-0097)
    within five months of being written, and still carries an openly-admitted
    gap (the snapshot-freshness policy ADR-0019 deferred and ADR-0034 promoted
@@ -112,7 +112,7 @@ Concretely, applied today:
   was underneath the wording — the branches themselves still need building —
   now with the false claim no longer in the way of noticing that.
 
-This does not reopen I1 or re-litigate whether *some future* piece of trainer
+This does not reopen I1 or re-litigate whether _some future_ piece of trainer
 content could be sensitive enough to warrant a split; it settles only the
 recommendation as it stood, against the tree as it is today.
 

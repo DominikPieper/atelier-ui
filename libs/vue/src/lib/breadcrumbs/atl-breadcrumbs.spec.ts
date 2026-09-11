@@ -4,11 +4,14 @@ import AtlBreadcrumbItem from './atl-breadcrumb-item.vue';
 import { covers } from '../../testing/behavior';
 
 describe('AtlBreadcrumbs', () => {
-  covers('breadcrumbs', 'nav-aria-label')('renders a nav with aria-label', () => {
-    render(AtlBreadcrumbs);
-    const nav = screen.getByRole('navigation', { name: 'Breadcrumb' });
-    expect(nav).toBeInTheDocument();
-  });
+  covers('breadcrumbs', 'nav-aria-label')(
+    'renders a nav with aria-label',
+    () => {
+      render(AtlBreadcrumbs);
+      const nav = screen.getByRole('navigation', { name: 'Breadcrumb' });
+      expect(nav).toBeInTheDocument();
+    },
+  );
 
   it('renders slot content inside an ol', () => {
     const { container } = render(AtlBreadcrumbs, {
@@ -20,14 +23,17 @@ describe('AtlBreadcrumbs', () => {
 });
 
 describe('AtlBreadcrumbItem', () => {
-  covers('breadcrumbs', 'link-when-href')('renders a link when href is provided and current is false', () => {
-    render(AtlBreadcrumbItem, {
-      props: { href: '/home' },
-      slots: { default: 'Home' },
-    });
-    const link = screen.getByRole('link', { name: 'Home' });
-    expect(link).toHaveAttribute('href', '/home');
-  });
+  covers('breadcrumbs', 'link-when-href')(
+    'renders a link when href is provided and current is false',
+    () => {
+      render(AtlBreadcrumbItem, {
+        props: { href: '/home' },
+        slots: { default: 'Home' },
+      });
+      const link = screen.getByRole('link', { name: 'Home' });
+      expect(link).toHaveAttribute('href', '/home');
+    },
+  );
 
   it('renders a span when current is true', () => {
     render(AtlBreadcrumbItem, {
@@ -47,8 +53,13 @@ describe('AtlBreadcrumbItem', () => {
     expect(span).not.toHaveAttribute('aria-current');
   });
 
-  covers('breadcrumbs', 'current-class')('applies is-current class when current', () => {
-    const { container } = render(AtlBreadcrumbItem, { props: { current: true } });
-    expect(container.firstChild).toHaveClass('is-current');
-  });
+  covers('breadcrumbs', 'current-class')(
+    'applies is-current class when current',
+    () => {
+      const { container } = render(AtlBreadcrumbItem, {
+        props: { current: true },
+      });
+      expect(container.firstChild).toHaveClass('is-current');
+    },
+  );
 });

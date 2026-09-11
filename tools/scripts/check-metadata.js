@@ -57,7 +57,7 @@ const registryExports = parseExportedVars(METADATA_INDEX);
 const registry = registryExports.COMPONENT_METADATA_REGISTRY;
 if (!registry || typeof registry !== 'object') {
   errors.push(
-    `[REGISTRY] COMPONENT_METADATA_REGISTRY not found in ${path.relative(ROOT, METADATA_INDEX)}`
+    `[REGISTRY] COMPONENT_METADATA_REGISTRY not found in ${path.relative(ROOT, METADATA_INDEX)}`,
   );
 }
 
@@ -87,14 +87,16 @@ for (const spec of specInterfaces) {
 }
 for (const spec of orphanSpecs) {
   errors.push(
-    `[MISSING-REGISTRY] ${spec}: not in COMPONENT_METADATA_REGISTRY and not in NON_COMPONENT_SPECS. Either add a metadata file and register it, or allowlist it.`
+    `[MISSING-REGISTRY] ${spec}: not in COMPONENT_METADATA_REGISTRY and not in NON_COMPONENT_SPECS. Either add a metadata file and register it, or allowlist it.`,
   );
 }
 
-const orphanRegistry = knownComponent.filter((s) => !specInterfaces.includes(s));
+const orphanRegistry = knownComponent.filter(
+  (s) => !specInterfaces.includes(s),
+);
 for (const spec of orphanRegistry) {
   errors.push(
-    `[STALE-REGISTRY] ${spec}: in COMPONENT_METADATA_REGISTRY but no matching exported interface in libs/spec/src/index.ts.`
+    `[STALE-REGISTRY] ${spec}: in COMPONENT_METADATA_REGISTRY but no matching exported interface in libs/spec/src/index.ts.`,
   );
 }
 
@@ -120,13 +122,13 @@ for (const [specName, modulePath] of Object.entries(registry || {})) {
   const entry = loaded.get(file);
   if (entry.missing) {
     errors.push(
-      `[NO-FILE] ${specName}: registry points at ${path.relative(ROOT, file)} which does not exist.`
+      `[NO-FILE] ${specName}: registry points at ${path.relative(ROOT, file)} which does not exist.`,
     );
     continue;
   }
   if (!entry.meta || typeof entry.meta !== 'object') {
     errors.push(
-      `[NO-EXPORT] ${specName}: ${path.relative(ROOT, file)} must export a const named 'metadata'.`
+      `[NO-EXPORT] ${specName}: ${path.relative(ROOT, file)} must export a const named 'metadata'.`,
     );
     continue;
   }
@@ -134,9 +136,7 @@ for (const [specName, modulePath] of Object.entries(registry || {})) {
 }
 
 checkRoleExceptionHygiene(
-  new Set(
-    Object.values(registry || {}).map((m) => path.basename(String(m)))
-  )
+  new Set(Object.values(registry || {}).map((m) => path.basename(String(m)))),
 );
 
 // ---------------------------------------------------------------------------
@@ -146,13 +146,13 @@ if (errors.length > 0) {
   errors.forEach((e) => console.error(`✗ ${e}`));
   warnings.forEach((w) => console.warn(`⚠ ${w}`));
   console.error(
-    `\n${errors.length} metadata issue(s). Add or fix the metadata file, register it in libs/spec/src/metadata/index.ts, or extend NON_COMPONENT_SPECS.`
+    `\n${errors.length} metadata issue(s). Add or fix the metadata file, register it in libs/spec/src/metadata/index.ts, or extend NON_COMPONENT_SPECS.`,
   );
   process.exit(1);
 }
 warnings.forEach((w) => console.warn(`⚠ ${w}`));
 console.log(
-  `✓ metadata in sync (${validatedFiles} components validated; ${nonComponent.size} non-component specs allowlisted)`
+  `✓ metadata in sync (${validatedFiles} components validated; ${nonComponent.size} non-component specs allowlisted)`,
 );
 
 // ---------------------------------------------------------------------------
@@ -198,7 +198,7 @@ function checkRoleAgainstA11yBaselines(specName, role, file) {
     if (exception) {
       errors.push(
         `[STALE] ${specName}: METADATA_ROLE_EXCEPTIONS exempts '${moduleName}' (${exception.kind}) ` +
-          `but role '${role}' now appears in its a11y baselines. Remove the entry.`
+          `but role '${role}' now appears in its a11y baselines. Remove the entry.`,
       );
     }
     return;
@@ -209,10 +209,12 @@ function checkRoleAgainstA11yBaselines(specName, role, file) {
   if (!exception) {
     errors.push(
       `${tag}: ${detail}. Fix whichever side is wrong, or record why the divergence stands in ` +
-        `tools/scripts/lib/allowlists.js (METADATA_ROLE_EXCEPTIONS).`
+        `tools/scripts/lib/allowlists.js (METADATA_ROLE_EXCEPTIONS).`,
     );
   } else if (exception.kind === 'gap') {
-    warnings.push(`[ROLE-GAP] ${specName}: ${detail} \u2014 ${exception.reason}`);
+    warnings.push(
+      `[ROLE-GAP] ${specName}: ${detail} \u2014 ${exception.reason}`,
+    );
   }
 }
 
@@ -220,7 +222,9 @@ function checkRoleAgainstA11yBaselines(specName, role, file) {
 function readA11yScenarios(moduleName) {
   if (!fs.existsSync(A11Y_DIR)) return null;
   const prefix = `atl-${moduleName}.`;
-  const files = fs.readdirSync(A11Y_DIR).filter((f) => f.startsWith(prefix) && f.endsWith('.json'));
+  const files = fs
+    .readdirSync(A11Y_DIR)
+    .filter((f) => f.startsWith(prefix) && f.endsWith('.json'));
   if (files.length === 0) return null;
   const out = [];
   for (const f of files) {
@@ -252,12 +256,11 @@ function checkRoleExceptionHygiene(knownModules) {
     if (!knownModules.has(moduleName)) {
       errors.push(
         `[STALE] METADATA_ROLE_EXCEPTIONS names '${moduleName}' (${entry.kind}), which has no ` +
-          `metadata file. Remove the entry.`
+          `metadata file. Remove the entry.`,
       );
     }
   }
 }
-
 
 function validateMetadata(specName, meta, file) {
   const rel = path.relative(ROOT, file);
@@ -268,7 +271,7 @@ function validateMetadata(specName, meta, file) {
   } else {
     if (!meta.specNames.includes(specName)) {
       errors.push(
-        `${tag}: 'specNames' (${JSON.stringify(meta.specNames)}) does not include '${specName}'.`
+        `${tag}: 'specNames' (${JSON.stringify(meta.specNames)}) does not include '${specName}'.`,
       );
     }
     // Every listed spec must resolve to a real exported Atl*Spec interface, so
@@ -276,7 +279,7 @@ function validateMetadata(specName, meta, file) {
     for (const sn of meta.specNames) {
       if (!specInterfaces.includes(sn)) {
         errors.push(
-          `${tag}: 'specNames' references '${sn}' which is not an exported Atl*Spec interface in libs/spec/src/index.ts.`
+          `${tag}: 'specNames' references '${sn}' which is not an exported Atl*Spec interface in libs/spec/src/index.ts.`,
         );
       }
     }
@@ -298,10 +301,14 @@ function validateMetadata(specName, meta, file) {
         continue;
       }
       if (!ap.pattern || typeof ap.pattern !== 'string') {
-        errors.push(`${tag}: 'antiPatterns[${i}].pattern' must be a non-empty string.`);
+        errors.push(
+          `${tag}: 'antiPatterns[${i}].pattern' must be a non-empty string.`,
+        );
       }
       if (!ap.useInstead || typeof ap.useInstead !== 'string') {
-        errors.push(`${tag}: 'antiPatterns[${i}].useInstead' must be a non-empty string.`);
+        errors.push(
+          `${tag}: 'antiPatterns[${i}].useInstead' must be a non-empty string.`,
+        );
       }
     }
   }
@@ -310,20 +317,26 @@ function validateMetadata(specName, meta, file) {
   }
   if (!Array.isArray(meta.variantMatrix) || meta.variantMatrix.length === 0) {
     errors.push(
-      `${tag}: 'variantMatrix' must be a non-empty array of {axis: value} objects.`
+      `${tag}: 'variantMatrix' must be a non-empty array of {axis: value} objects.`,
     );
-  } else if (meta.variantMatrix.some((row) => !row || typeof row !== 'object')) {
+  } else if (
+    meta.variantMatrix.some((row) => !row || typeof row !== 'object')
+  ) {
     errors.push(`${tag}: 'variantMatrix' entries must be plain objects.`);
   }
   if (!meta.accessibility || typeof meta.accessibility !== 'object') {
-    errors.push(`${tag}: 'accessibility' must be an object with 'role' and 'keyboardBehavior'.`);
+    errors.push(
+      `${tag}: 'accessibility' must be an object with 'role' and 'keyboardBehavior'.`,
+    );
   } else {
     const a = meta.accessibility;
     if (typeof a.role !== 'string' || !a.role.trim()) {
       errors.push(`${tag}: 'accessibility.role' must be a non-empty string.`);
     }
     if (typeof a.keyboardBehavior !== 'string' || !a.keyboardBehavior.trim()) {
-      errors.push(`${tag}: 'accessibility.keyboardBehavior' must be a non-empty string.`);
+      errors.push(
+        `${tag}: 'accessibility.keyboardBehavior' must be a non-empty string.`,
+      );
     }
     checkRoleAgainstA11yBaselines(specName, a.role, file);
   }
@@ -351,7 +364,7 @@ function validateMetadata(specName, meta, file) {
         errors.push(
           `${tag}: variantMatrix mentions '${prop.name}' but is missing values [${uncovered
             .map((v) => `'${v}'`)
-            .join(', ')}].`
+            .join(', ')}].`,
         );
       }
     }
@@ -377,7 +390,7 @@ function validateMetadata(specName, meta, file) {
         errors.push(
           `${tag}: variantMatrix mentions '${prop.name}' (${alias}) but is missing values [${uncovered
             .map((v) => `'${v}'`)
-            .join(', ')}].`
+            .join(', ')}].`,
         );
       }
     }
@@ -394,7 +407,11 @@ function readNonComponentSet(file) {
   ts.forEachChild(sf, (node) => {
     if (!ts.isVariableStatement(node)) return;
     for (const decl of node.declarationList.declarations) {
-      if (!ts.isIdentifier(decl.name) || decl.name.text !== 'NON_COMPONENT_SPECS') continue;
+      if (
+        !ts.isIdentifier(decl.name) ||
+        decl.name.text !== 'NON_COMPONENT_SPECS'
+      )
+        continue;
       let init = decl.initializer;
       if (init && ts.isAsExpression(init)) init = init.expression;
       if (!init || !ts.isNewExpression(init)) return;
@@ -433,10 +450,16 @@ function parseSpec(file) {
       const props = [];
       for (const member of node.members) {
         if (!ts.isPropertySignature(member)) continue;
-        if (!member.name || !ts.isIdentifier(member.name) && !ts.isStringLiteralLike(member.name)) {
+        if (
+          !member.name ||
+          (!ts.isIdentifier(member.name) &&
+            !ts.isStringLiteralLike(member.name))
+        ) {
           continue;
         }
-        const name = ts.isIdentifier(member.name) ? member.name.text : member.name.text;
+        const name = ts.isIdentifier(member.name)
+          ? member.name.text
+          : member.name.text;
         const typeText = member.type ? member.type.getText(sf) : '';
         props.push({ name, typeText });
       }

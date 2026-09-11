@@ -6,7 +6,8 @@ export const contract = {
   figmaOnly: [
     {
       name: 'state=filled',
-      reason: 'UNEXPLAINED — grep-verified 2026-09-10: no CSS rule or component logic implements an .is-filled/:placeholder-shown visual state; decide in tasks/todo.md',
+      reason:
+        'UNEXPLAINED — grep-verified 2026-09-10: no CSS rule or component logic implements an .is-filled/:placeholder-shown visual state; decide in tasks/todo.md',
     },
   ],
   axisMap: [
@@ -14,7 +15,8 @@ export const contract = {
       figmaAxis: 'state',
       codeProp: 'invalid',
       values: { invalid: true },
-      reason: "AtlFormFieldSpec.invalid is a real boolean prop (libs/spec/src/index.ts) — the master's 'invalid' state value maps to it directly.",
+      reason:
+        "AtlFormFieldSpec.invalid is a real boolean prop (libs/spec/src/index.ts) — the master's 'invalid' state value maps to it directly.",
     },
   ],
   probes: [
@@ -22,7 +24,7 @@ export const contract = {
       part: 'control',
       selector: 'textarea',
       reason:
-        "the .atl-textarea root only sets display/font — background-color, border and " +
+        'the .atl-textarea root only sets display/font — background-color, border and ' +
         "border-radius are painted on the nested <textarea> ('.atl-textarea textarea' in " +
         "React/Vue's atl-textarea.css; Angular's :host-scoped stylesheet uses the bare " +
         "'textarea' selector — the same relative selector resolves in all three once queried " +

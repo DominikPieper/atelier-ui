@@ -22,10 +22,12 @@
 
 :root {
   /* Typography */
-  --ui-font-family: 'Instrument Sans', ui-sans-serif, system-ui, -apple-system,
+  --ui-font-family:
+    'Instrument Sans', ui-sans-serif, system-ui, -apple-system,
     BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --ui-font-display: 'Instrument Serif', Georgia, 'Times New Roman', serif;
-  --ui-font-mono: 'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco,
+  --ui-font-mono:
+    'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, Monaco,
     'Courier New', monospace;
   /* Below the smallest readable size, for text inside a box too small to hold it:
      the initials in a 24px avatar and the count in its overflow badge. Named rather
@@ -74,9 +76,15 @@
    * padding, not one line among many). See ADR-0052.
    */
   --ui-row-inset: 0.25rem;
-  --ui-row-height-sm: calc(var(--ui-control-height-sm) + 2 * var(--ui-row-inset));
-  --ui-row-height-md: calc(var(--ui-control-height-md) + 2 * var(--ui-row-inset));
-  --ui-row-height-lg: calc(var(--ui-control-height-lg) + 2 * var(--ui-row-inset));
+  --ui-row-height-sm: calc(
+    var(--ui-control-height-sm) + 2 * var(--ui-row-inset)
+  );
+  --ui-row-height-md: calc(
+    var(--ui-control-height-md) + 2 * var(--ui-row-inset)
+  );
+  --ui-row-height-lg: calc(
+    var(--ui-control-height-lg) + 2 * var(--ui-row-inset)
+  );
 
   --ui-control-height-sm: 2rem;
   --ui-control-height-md: 2.5rem;
@@ -104,8 +112,8 @@
    * role with --ui-letter-spacing-tight and an uppercased label role with
    * --ui-letter-spacing-uppercase yourself.
    */
-  --ui-type-display: italic var(--ui-font-weight-normal) var(--ui-font-size-3xl) /
-    var(--ui-line-height-tight) var(--ui-font-display);
+  --ui-type-display: italic var(--ui-font-weight-normal)
+    var(--ui-font-size-3xl) / var(--ui-line-height-tight) var(--ui-font-display);
   --ui-type-headline: var(--ui-font-weight-bold) var(--ui-font-size-2xl) /
     var(--ui-line-height-tight) var(--ui-font-family);
   --ui-type-title: var(--ui-font-weight-semibold) var(--ui-font-size-lg) /
@@ -292,9 +300,9 @@
   --ui-color-overlay: rgba(0, 0, 0, 0.5);
 
   /* Borders — split decorative from functional per WCAG 1.4.11 */
-  --ui-color-border: #e2e8f0;          /* decorative */
+  --ui-color-border: #e2e8f0; /* decorative */
   --ui-color-border-hover: #cbd5e1;
-  --ui-color-border-strong: #64748b;   /* functional ≥3:1 */
+  --ui-color-border-strong: #64748b; /* functional ≥3:1 */
 
   /* Text */
   --ui-color-text: #0f172a;
@@ -316,10 +324,10 @@
   --ui-opacity-disabled: 0.5;
 
   /* Border radius — bumped for modern feel */
-  --ui-radius-sm: 0.5rem;   /* was 0.375rem */
+  --ui-radius-sm: 0.5rem; /* was 0.375rem */
   --ui-radius-md: 0.625rem; /* was 0.5rem   */
   --ui-radius-lg: 0.875rem; /* was 0.75rem  */
-  --ui-radius-xl: 1.25rem;  /* was 1rem     */
+  --ui-radius-xl: 1.25rem; /* was 1rem     */
   --ui-radius-full: 9999px;
 
   /* ── Border widths ──────────────────────────────────────────────────────────
@@ -348,13 +356,15 @@
 
   /* Shadows — slate-tinted dual-layer (ambient + key light) */
   --ui-shadow-xs: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
-  --ui-shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.08),
-    0 1px 2px -1px rgba(15, 23, 42, 0.06);
-  --ui-shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.08),
-    0 2px 4px -2px rgba(15, 23, 42, 0.05);
-  --ui-shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08),
+  --ui-shadow-sm:
+    0 1px 3px 0 rgba(15, 23, 42, 0.08), 0 1px 2px -1px rgba(15, 23, 42, 0.06);
+  --ui-shadow-md:
+    0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+  --ui-shadow-lg:
+    0 10px 15px -3px rgba(15, 23, 42, 0.08),
     0 4px 6px -4px rgba(15, 23, 42, 0.04);
-  --ui-shadow-xl: 0 20px 25px -5px rgba(15, 23, 42, 0.10),
+  --ui-shadow-xl:
+    0 20px 25px -5px rgba(15, 23, 42, 0.1),
     0 8px 10px -6px rgba(15, 23, 42, 0.04);
 
   /* Motion */
@@ -375,10 +385,10 @@
    * both of which are mode-dependent, so the ring follows the mode for free.
    * The danger variant exists so an invalid control does not have to restate
    * the formula (it did, in atl-input.css, until 2026-08-26). */
-  --ui-focus-ring: 0 0 0 2px var(--ui-color-surface),
-    0 0 0 4px var(--ui-color-primary);
-  --ui-focus-ring-danger: 0 0 0 2px var(--ui-color-surface),
-    0 0 0 4px var(--ui-color-danger);
+  --ui-focus-ring:
+    0 0 0 2px var(--ui-color-surface), 0 0 0 4px var(--ui-color-primary);
+  --ui-focus-ring-danger:
+    0 0 0 2px var(--ui-color-surface), 0 0 0 4px var(--ui-color-danger);
 
   /* Form controls */
   --ui-color-input-bg: var(--ui-color-surface-sunken);
@@ -450,18 +460,18 @@
     --ui-color-placeholder: #94a3b8;
 
     --ui-shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-    --ui-shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.4),
-      0 1px 2px -1px rgba(0, 0, 0, 0.3);
-    --ui-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.45),
-      0 2px 4px -2px rgba(0, 0, 0, 0.3);
-    --ui-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5),
-      0 4px 6px -4px rgba(0, 0, 0, 0.25);
-    --ui-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5),
-      0 8px 10px -6px rgba(0, 0, 0, 0.25);
+    --ui-shadow-sm:
+      0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px -1px rgba(0, 0, 0, 0.3);
+    --ui-shadow-md:
+      0 4px 6px -1px rgba(0, 0, 0, 0.45), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+    --ui-shadow-lg:
+      0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.25);
+    --ui-shadow-xl:
+      0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.25);
   }
 }
 
-[data-theme="dark"] {
+[data-theme='dark'] {
   --ui-color-primary: var(--ui-color-teal-300);
   --ui-color-primary-hover: var(--ui-color-teal-200);
   --ui-color-primary-active: var(--ui-color-teal-100);
@@ -510,18 +520,18 @@
   --ui-color-placeholder: #94a3b8;
 
   --ui-shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
-  --ui-shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.4),
-    0 1px 2px -1px rgba(0, 0, 0, 0.3);
-  --ui-shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.45),
-    0 2px 4px -2px rgba(0, 0, 0, 0.3);
-  --ui-shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.5),
-    0 4px 6px -4px rgba(0, 0, 0, 0.25);
-  --ui-shadow-xl: 0 20px 25px -5px rgba(0, 0, 0, 0.5),
-    0 8px 10px -6px rgba(0, 0, 0, 0.25);
+  --ui-shadow-sm:
+    0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px -1px rgba(0, 0, 0, 0.3);
+  --ui-shadow-md:
+    0 4px 6px -1px rgba(0, 0, 0, 0.45), 0 2px 4px -2px rgba(0, 0, 0, 0.3);
+  --ui-shadow-lg:
+    0 10px 15px -3px rgba(0, 0, 0, 0.5), 0 4px 6px -4px rgba(0, 0, 0, 0.25);
+  --ui-shadow-xl:
+    0 20px 25px -5px rgba(0, 0, 0, 0.5), 0 8px 10px -6px rgba(0, 0, 0, 0.25);
 }
 
 /* Explicit light theme — declared last so it wins over prefers-color-scheme: dark */
-[data-theme="light"] {
+[data-theme='light'] {
   --ui-color-primary: var(--ui-color-teal-700);
   --ui-color-primary-hover: var(--ui-color-teal-800);
   --ui-color-primary-active: var(--ui-color-teal-900);
@@ -570,10 +580,16 @@
   --ui-color-placeholder: #64748b;
 
   --ui-shadow-xs: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
-  --ui-shadow-sm: 0 1px 3px 0 rgba(15, 23, 42, 0.08), 0 1px 2px -1px rgba(15, 23, 42, 0.06);
-  --ui-shadow-md: 0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
-  --ui-shadow-lg: 0 10px 15px -3px rgba(15, 23, 42, 0.08), 0 4px 6px -4px rgba(15, 23, 42, 0.04);
-  --ui-shadow-xl: 0 20px 25px -5px rgba(15, 23, 42, 0.10), 0 8px 10px -6px rgba(15, 23, 42, 0.04);
+  --ui-shadow-sm:
+    0 1px 3px 0 rgba(15, 23, 42, 0.08), 0 1px 2px -1px rgba(15, 23, 42, 0.06);
+  --ui-shadow-md:
+    0 4px 6px -1px rgba(15, 23, 42, 0.08), 0 2px 4px -2px rgba(15, 23, 42, 0.05);
+  --ui-shadow-lg:
+    0 10px 15px -3px rgba(15, 23, 42, 0.08),
+    0 4px 6px -4px rgba(15, 23, 42, 0.04);
+  --ui-shadow-xl:
+    0 20px 25px -5px rgba(15, 23, 42, 0.1),
+    0 8px 10px -6px rgba(15, 23, 42, 0.04);
 }
 
 @media (prefers-reduced-motion: reduce) {

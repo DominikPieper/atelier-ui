@@ -13,15 +13,13 @@ const VARIANT_ICON_NAMES: Partial<Record<AtlBadgeVariant, AtlIconName>> = {
   danger: 'danger',
 };
 
-
 type AtlBadgeVariant = 'default' | 'success' | 'warning' | 'danger' | 'info';
 
 /**
  * Properties for the AtlBadge component.
  */
 export interface AtlBadgeProps
-  extends HTMLAttributes<HTMLSpanElement>,
-    AtlBadgeSpec {
+  extends HTMLAttributes<HTMLSpanElement>, AtlBadgeSpec {
   /**
    * The visual style variant of the badge.
    */
@@ -47,11 +45,14 @@ export function AtlBadge({
   ...rest
 }: AtlBadgeProps) {
   const classes = ['atl-badge', `variant-${variant}`, `size-${size}`, className]
-    .filter(Boolean).join(' ');
+    .filter(Boolean)
+    .join(' ');
   const iconName = VARIANT_ICON_NAMES[variant];
   return (
     <span className={classes} role="status" {...rest}>
-      {iconName && <AtlIcon className="variant-icon" name={iconName} size="sm" />}
+      {iconName && (
+        <AtlIcon className="variant-icon" name={iconName} size="sm" />
+      )}
       {children}
     </span>
   );

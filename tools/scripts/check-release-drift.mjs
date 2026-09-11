@@ -64,7 +64,9 @@ function readLibraryProjectNames() {
   const nxJson = JSON.parse(readFileSync(join(ROOT, 'nx.json'), 'utf8'));
   const projects = nxJson?.release?.groups?.libraries?.projects;
   if (!Array.isArray(projects) || projects.length === 0) {
-    console.error('✗ [CONFIG] nx.json has no release.groups.libraries.projects array.');
+    console.error(
+      '✗ [CONFIG] nx.json has no release.groups.libraries.projects array.',
+    );
     process.exit(1);
   }
   return projects;
@@ -104,7 +106,11 @@ function summarizeStderr(stderr) {
     .split('\n')
     .map((l) => l.replace(/^npm error\s*/, '').trim())
     .filter((l) => l.length > 0 && !/^A complete log of this run/.test(l));
-  return lines.find((l) => /FetchError|E404/.test(l)) || lines[0] || stderr.slice(0, 200);
+  return (
+    lines.find((l) => /FetchError|E404/.test(l)) ||
+    lines[0] ||
+    stderr.slice(0, 200)
+  );
 }
 
 /**
@@ -119,30 +125,53 @@ function summarizeStderr(stderr) {
 function queryPublishedVersion(pkgName) {
   const result = spawnSync(
     'npm',
-    ['view', pkgName, 'version', '--json', '--fetch-timeout=8000', '--fetch-retries=0'],
-    { encoding: 'utf8', timeout: NPM_VIEW_TIMEOUT_MS }
+    [
+      'view',
+      pkgName,
+      'version',
+      '--json',
+      '--fetch-timeout=8000',
+      '--fetch-retries=0',
+    ],
+    { encoding: 'utf8', timeout: NPM_VIEW_TIMEOUT_MS },
   );
 
   if (result.error) {
     return { unreachable: true, detail: result.error.message };
   }
   if (result.signal) {
-    return { unreachable: true, detail: `npm view was killed (${result.signal}) after ${NPM_VIEW_TIMEOUT_MS}ms` };
+    return {
+      unreachable: true,
+      detail: `npm view was killed (${result.signal}) after ${NPM_VIEW_TIMEOUT_MS}ms`,
+    };
   }
 
   const stderr = (result.stderr || '').trim();
   if (result.status !== 0) {
     if (/\bE404\b/.test(stderr)) {
-      return { unreachable: false, notFound: true, detail: summarizeStderr(stderr) };
+      return {
+        unreachable: false,
+        notFound: true,
+        detail: summarizeStderr(stderr),
+      };
     }
-    if (/ENOTFOUND|ECONNREFUSED|ETIMEDOUT|EAI_AGAIN|ECONNRESET|ENETUNREACH|FetchError|network/i.test(stderr)) {
+    if (
+      /ENOTFOUND|ECONNREFUSED|ETIMEDOUT|EAI_AGAIN|ECONNRESET|ENETUNREACH|FetchError|network/i.test(
+        stderr,
+      )
+    ) {
       return { unreachable: true, detail: summarizeStderr(stderr) };
     }
     // An npm failure this gate doesn't recognize. Treated as unreachable —
     // never report drift from a registry response this code doesn't
     // understand — but the detail says exactly that, so it isn't mistaken
     // for a clean offline skip.
-    return { unreachable: true, detail: stderr ? summarizeStderr(stderr) : `npm view exited ${result.status} with no stderr` };
+    return {
+      unreachable: true,
+      detail: stderr
+        ? summarizeStderr(stderr)
+        : `npm view exited ${result.status} with no stderr`,
+    };
   }
 
   try {
@@ -153,7 +182,10 @@ function queryPublishedVersion(pkgName) {
     const version = Array.isArray(parsed) ? parsed[parsed.length - 1] : parsed;
     return { unreachable: false, version };
   } catch (err) {
-    return { unreachable: true, detail: `unparsable npm view output: ${err.message}` };
+    return {
+      unreachable: true,
+      detail: `unparsable npm view output: ${err.message}`,
+    };
   }
 }
 
@@ -161,7 +193,7 @@ const projectNames = readLibraryProjectNames();
 
 if (only && !projectNames.includes(only)) {
   console.error(
-    `✗ [CONFIG] '${only}' is not in nx.json's release.groups.libraries.projects (${projectNames.join(', ')}).`
+    `✗ [CONFIG] '${only}' is not in nx.json's release.groups.libraries.projects (${projectNames.join(', ')}).`,
   );
   process.exit(1);
 }
@@ -175,13 +207,17 @@ let privateCount = 0;
 for (const name of only ? [only] : projectNames) {
   const dir = dirsByName.get(name);
   if (!dir) {
-    warnings.push(`[UNRESOLVED] '${name}' (from nx.json release.groups.libraries) has no libs/*/project.json declaring that name — skipped.`);
+    warnings.push(
+      `[UNRESOLVED] '${name}' (from nx.json release.groups.libraries) has no libs/*/project.json declaring that name — skipped.`,
+    );
     continue;
   }
 
   const pkgJsonPath = join(LIBS_DIR, dir, 'package.json');
   if (!existsSync(pkgJsonPath)) {
-    warnings.push(`[UNRESOLVED] '${name}' resolves to libs/${dir}, which has no package.json — not publishable, skipped.`);
+    warnings.push(
+      `[UNRESOLVED] '${name}' resolves to libs/${dir}, which has no package.json — not publishable, skipped.`,
+    );
     continue;
   }
 
@@ -189,7 +225,9 @@ for (const name of only ? [only] : projectNames) {
   try {
     pkgJson = JSON.parse(readFileSync(pkgJsonPath, 'utf8'));
   } catch (err) {
-    warnings.push(`[UNRESOLVED] libs/${dir}/package.json failed to parse (${err.message}) — skipped.`);
+    warnings.push(
+      `[UNRESOLVED] libs/${dir}/package.json failed to parse (${err.message}) — skipped.`,
+    );
     continue;
   }
 
@@ -198,12 +236,19 @@ for (const name of only ? [only] : projectNames) {
     continue;
   }
 
-  resolved.push({ name, dir, pkgName: pkgJson.name, localVersion: pkgJson.version });
+  resolved.push({
+    name,
+    dir,
+    pkgName: pkgJson.name,
+    localVersion: pkgJson.version,
+  });
 }
 
 if (resolved.length === 0) {
   for (const w of warnings) console.warn(`⚠ [WARNING] ${w}`);
-  console.error('✗ [CONFIG] no publishable package resolved to check against npm.');
+  console.error(
+    '✗ [CONFIG] no publishable package resolved to check against npm.',
+  );
   process.exit(1);
 }
 
@@ -225,14 +270,16 @@ for (const pkg of resolved) {
     console.warn(
       `⚠ [SKIP] npm registry unreachable while checking '${pkg.pkgName}' (${result.detail}). ` +
         `release-drift check skipped — this is NOT evidence the release is in sync, only that ` +
-        `the registry could not be asked.`
+        `the registry could not be asked.`,
     );
     process.exit(0);
   }
 
   const published = result.notFound ? '(not published)' : result.version;
   if (published !== pkg.localVersion) {
-    drifted.push(`[DRIFT] ${pkg.pkgName}: local ${pkg.localVersion} vs published ${published}`);
+    drifted.push(
+      `[DRIFT] ${pkg.pkgName}: local ${pkg.localVersion} vs published ${published}`,
+    );
   } else {
     inSync++;
   }
@@ -255,6 +302,6 @@ console.error(
   `\n${drifted.length} release-drift issue(s). ${total}. ` +
     `A publish did not reach the registry — check the token/scope used by ` +
     `.github/workflows/publish.yml (secrets.NPM_TOKEN) and republish with ` +
-    `'workflow_dispatch: publish-only' once fixed.`
+    `'workflow_dispatch: publish-only' once fixed.`,
 );
 process.exit(1);

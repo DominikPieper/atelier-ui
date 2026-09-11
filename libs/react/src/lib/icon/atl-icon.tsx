@@ -1,15 +1,17 @@
 import { HTMLAttributes } from 'react';
 import type { AtlIconName, AtlIconSize, AtlIconSpec } from '../spec';
-import { ATL_ICON_GEOMETRY, ATL_ICON_STROKE_WIDTH, ATL_ICON_VIEWBOX } from '../icons';
+import {
+  ATL_ICON_GEOMETRY,
+  ATL_ICON_STROKE_WIDTH,
+  ATL_ICON_VIEWBOX,
+} from '../icons';
 import './atl-icon.css';
-
 
 /**
  * Properties for the AtlIcon component.
  */
 export interface AtlIconProps
-  extends Omit<HTMLAttributes<HTMLSpanElement>, 'aria-label'>,
-    AtlIconSpec {
+  extends Omit<HTMLAttributes<HTMLSpanElement>, 'aria-label'>, AtlIconSpec {
   /** The icon name. */
   name: AtlIconName;
   /** The icon size. */
@@ -34,7 +36,9 @@ export function AtlIcon({
   className,
   ...rest
 }: AtlIconProps) {
-  const classes = ['atl-icon', `size-${size}`, className].filter(Boolean).join(' ');
+  const classes = ['atl-icon', `size-${size}`, className]
+    .filter(Boolean)
+    .join(' ');
   const accessibilityProps = label
     ? { role: 'img', 'aria-label': label }
     : { 'aria-hidden': true as const };

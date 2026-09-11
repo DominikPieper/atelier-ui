@@ -44,7 +44,7 @@ a standing answer, not a one-off judgment call.
 
 The two rules disagree here because they are answering different questions.
 ADR-0118's tie-break counts votes among three record-keepers with no stated
-opinion on which one is *expensive* to change. AGENTS.md's structural-source-
+opinion on which one is _expensive_ to change. AGENTS.md's structural-source-
 of-truth claim is about where a designer looks to find the current shape of
 the library, not about which side is cheaper to edit. Neither rule, as
 written, accounts for cost — and cost is exactly where this case is
@@ -92,7 +92,7 @@ by itself.
   versus which side is purely organisational (a Figma Section, a folder
   grouping with no external reference). The organisational side moves.
 - This does not create a general license to always prefer moving Figma. A
-  future case where the *Figma* side carries the identity cost — e.g. a
+  future case where the _Figma_ side carries the identity cost — e.g. a
   published component-library key, or a Figma Variable name other files
   alias — would apply the same asymmetry rule and get the opposite answer:
   code moves.

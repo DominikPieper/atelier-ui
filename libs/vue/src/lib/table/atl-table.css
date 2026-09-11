@@ -14,15 +14,16 @@
   .atl-tr-select-cell
 ),
 :is(
-  .atl-table,
-  .atl-table-wrapper,
-  .atl-tbody-empty-cell,
-  .atl-th-sort-asc-arrow,
-  .atl-th-sort-btn,
-  .atl-th-sort-desc-arrow,
-  .atl-th-sort-icon,
-  .atl-tr-select-cell
-) * {
+    .atl-table,
+    .atl-table-wrapper,
+    .atl-tbody-empty-cell,
+    .atl-th-sort-asc-arrow,
+    .atl-th-sort-btn,
+    .atl-th-sort-desc-arrow,
+    .atl-th-sort-icon,
+    .atl-tr-select-cell
+  )
+  * {
   box-sizing: border-box;
 }
 

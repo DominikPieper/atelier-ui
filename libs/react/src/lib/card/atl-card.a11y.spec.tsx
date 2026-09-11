@@ -19,14 +19,14 @@ function capture() {
   let r = render(
     <AtlCard>
       <AtlCardContent>Card body</AtlCardContent>
-    </AtlCard>
+    </AtlCard>,
   );
   scenarios.plain = a11yTree(r.container);
   r.unmount();
   r = render(
     <AtlCard role="region" aria-label="Settings">
       <AtlCardContent>Card body</AtlCardContent>
-    </AtlCard>
+    </AtlCard>,
   );
   scenarios.region = a11yTree(r.container);
   r.unmount();

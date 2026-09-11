@@ -22,13 +22,13 @@ specific state-named stories (e.g. `LlmCombobox` `state=disabled`,
 Validated 132 unique node-IDs against the Atelier UI file via `figma_execute`
 (`getNodeByIdAsync`). 18 unique IDs returned `null`:
 
-| Old ID | Story usage | Replacement |
-|---|---|---|
-| `421-328` | combobox/Disabled (3 fws) | drop override → inherit meta `421-339` (disabled is now Boolean) |
-| `421-332` | combobox/Invalid (3 fws) | drop override → inherit meta `421-339` (invalid is now Boolean) |
-| `421-1103` | table/EmptyState (3 fws) | drop override → inherit meta `421-1183` (empty is now Boolean) |
-| `471-2730` | icon meta (3 fws) | drop meta-level design entirely — Icons live as individual COMPONENTs on the `Icons` page, no ComponentSet |
-| `453-1758` (chat meta), `453-1760/-1762/-1764/-1766/-1768/-1770/-1772/-1774/-1776/-1778/-1780/-1782` (12 chat sub-frames per fw) | chat meta + 12 stories (3 fws) | remap meta → `507-2953` (compSet); Drawer\* → `507-2950`, Popup\* → `507-2951`, Inline\* → `507-2952` |
+| Old ID                                                                                                                           | Story usage                    | Replacement                                                                                                |
+| -------------------------------------------------------------------------------------------------------------------------------- | ------------------------------ | ---------------------------------------------------------------------------------------------------------- |
+| `421-328`                                                                                                                        | combobox/Disabled (3 fws)      | drop override → inherit meta `421-339` (disabled is now Boolean)                                           |
+| `421-332`                                                                                                                        | combobox/Invalid (3 fws)       | drop override → inherit meta `421-339` (invalid is now Boolean)                                            |
+| `421-1103`                                                                                                                       | table/EmptyState (3 fws)       | drop override → inherit meta `421-1183` (empty is now Boolean)                                             |
+| `471-2730`                                                                                                                       | icon meta (3 fws)              | drop meta-level design entirely — Icons live as individual COMPONENTs on the `Icons` page, no ComponentSet |
+| `453-1758` (chat meta), `453-1760/-1762/-1764/-1766/-1768/-1770/-1772/-1774/-1776/-1778/-1780/-1782` (12 chat sub-frames per fw) | chat meta + 12 stories (3 fws) | remap meta → `507-2953` (compSet); Drawer\* → `507-2950`, Popup\* → `507-2951`, Inline\* → `507-2952`      |
 
 ## Story → variant remap (chat)
 
@@ -38,11 +38,11 @@ frames remain illustrated as sibling frames in the AI section pending
 follow-up Variant axis"). All 4 sub-states for a given variant share one
 nodeId.
 
-| Story | NodeId |
-|---|---|
-| `(meta)` | `507-2953` |
+| Story                                                            | NodeId     |
+| ---------------------------------------------------------------- | ---------- |
+| `(meta)`                                                         | `507-2953` |
 | `DrawerDefault`, `DrawerEmpty`, `DrawerStreaming`, `DrawerError` | `507-2950` |
-| `PopupDefault`, `PopupEmpty`, `PopupStreaming`, `PopupError` | `507-2951` |
+| `PopupDefault`, `PopupEmpty`, `PopupStreaming`, `PopupError`     | `507-2951` |
 | `InlineDefault`, `InlineEmpty`, `InlineStreaming`, `InlineError` | `507-2952` |
 
 ## Stories left inheriting meta (no Figma variant frame for the state)

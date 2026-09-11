@@ -4,7 +4,8 @@ import { AtlSelect, AtlOption } from './atl-select';
 
 import { metadata } from '@atelier-ui/spec/metadata/select.metadata';
 import { contract } from '@atelier-ui/spec/contracts/select.contract';
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
@@ -36,7 +37,11 @@ export const Default: Story = {
   render: function Render() {
     const [value, setValue] = useState('');
     return (
-      <AtlSelect value={value} onValueChange={setValue} placeholder="Select a country">
+      <AtlSelect
+        value={value}
+        onValueChange={setValue}
+        placeholder="Select a country"
+      >
         <AtlOption optionValue="us">United States</AtlOption>
         <AtlOption optionValue="ca">Canada</AtlOption>
         <AtlOption optionValue="uk">United Kingdom</AtlOption>
@@ -106,7 +111,11 @@ export const DisabledOption: Story = {
   render: function Render() {
     const [value, setValue] = useState('');
     return (
-      <AtlSelect value={value} onValueChange={setValue} placeholder="Select a country">
+      <AtlSelect
+        value={value}
+        onValueChange={setValue}
+        placeholder="Select a country"
+      >
         <AtlOption optionValue="us">United States</AtlOption>
         <AtlOption optionValue="ca">Canada</AtlOption>
         <AtlOption optionValue="uk" disabled>

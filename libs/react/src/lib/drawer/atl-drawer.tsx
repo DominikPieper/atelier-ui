@@ -113,7 +113,9 @@ export function AtlDrawer({
     .join(' ');
 
   return (
-    <DrawerContext.Provider value={{ headerId, close: () => onOpenChange?.(false) }}>
+    <DrawerContext.Provider
+      value={{ headerId, close: () => onOpenChange?.(false) }}
+    >
       <div className={hostClass}>
         <dialog
           ref={dialogRef}

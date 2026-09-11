@@ -25,9 +25,11 @@ async function captureOne(template: string): Promise<unknown> {
 
 async function capture(): Promise<Record<string, unknown>> {
   return {
-    default: await captureOne('<atl-progress [value]="50" label="Upload progress"></atl-progress>'),
+    default: await captureOne(
+      '<atl-progress [value]="50" label="Upload progress"></atl-progress>',
+    ),
     indeterminate: await captureOne(
-      '<atl-progress [indeterminate]="true" label="Upload progress"></atl-progress>'
+      '<atl-progress [indeterminate]="true" label="Upload progress"></atl-progress>',
     ),
   };
 }

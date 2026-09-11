@@ -25,7 +25,7 @@ function capture() {
   r = render(
     <AtlAlert variant="info" dismissible>
       Session expires soon
-    </AtlAlert>
+    </AtlAlert>,
   );
   scenarios.dismissible = a11yTree(r.container);
   r.unmount();

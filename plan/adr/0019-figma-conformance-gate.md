@@ -2,10 +2,10 @@
 status: accepted
 date: 2026-06-01
 sources:
-  - "plan/ai-readiness.md § 4 (drift-gate summary + Future work)"
-  - "plan/figma-component-checklist.md (the manual checklist this gate automates)"
-  - "Figma file QMnDD8uZQPldPrlCwZZ58T (live figma-console-mcp inspection: figma_get_component, figma_analyze_component_set, figma_get_component_for_development_deep, figma_get_variables)"
-  - "this session"
+  - 'plan/ai-readiness.md § 4 (drift-gate summary + Future work)'
+  - 'plan/figma-component-checklist.md (the manual checklist this gate automates)'
+  - 'Figma file QMnDD8uZQPldPrlCwZZ58T (live figma-console-mcp inspection: figma_get_component, figma_analyze_component_set, figma_get_component_for_development_deep, figma_get_variables)'
+  - 'this session'
 ---
 
 # ADR-0019: Figma conformance gate (`check:figma`) via committed snapshot + offline check
@@ -19,8 +19,8 @@ AI-readiness layer that had no automatic drift gate, and **complements ADR-0018*
 
 ## Context
 
-`plan/ai-readiness.md` § 4 states plainly that Figma is *"the only AI-readiness layer
-without an automatic drift gate"* — its conformance rested entirely on the manual
+`plan/ai-readiness.md` § 4 states plainly that Figma is _"the only AI-readiness layer
+without an automatic drift gate"_ — its conformance rested entirely on the manual
 `plan/figma-component-checklist.md`, enforced by the PR reviewer. Every other layer
 (spec, tokens, CSS variants, defaults, metadata, story descriptions, llms.txt, cookbook)
 has a `check:*` gate; Figma did not. The checklist's five items — name alignment,
@@ -36,14 +36,15 @@ dependency is why the gate was deferred as "Future work" rather than built.
 
 Live inspection of the file (`QMnDD8uZQPldPrlCwZZ58T`) also surfaced concrete realities the
 gate has to model:
+
 - Masters are section-prefixed: the Button COMPONENT_SET is named `Action/LlmButton`, not
   `LlmButton`. Name alignment must compare the **leaf** segment.
 - Figma carries an extra `state` interaction axis (default/hover/focus/active) with **no spec
   union**. The gate must check only axes that map to a spec union and ignore the rest.
 - Spec unions like `LlmCardRole` are **code-only** props deliberately not modelled as Figma
   variants — a real false-positive that the allowlist must absorb.
-- Token binding is uneven: in the captured masters all *colours* are bound to UI Tokens, but
-  *corner radii* and *padding/gap* are pervasively unbound raw values. The gate's first run is
+- Token binding is uneven: in the captured masters all _colours_ are bound to UI Tokens, but
+  _corner radii_ and _padding/gap_ are pervasively unbound raw values. The gate's first run is
   meant to surface that backlog, not hide it.
 
 ## Decision
@@ -52,18 +53,18 @@ Build **`check:figma`** as a committed-snapshot + offline-check gate, in the exi
 `gen-*/--check` idiom (ADR-0009).
 
 1. **Two scripts, one connected.** `tools/scripts/figma-snapshot.mjs` (`npm run figma:snapshot`)
-   is the *only* part that touches Figma: it spawns `figma-console-mcp` as a stdio MCP client
+   is the _only_ part that touches Figma: it spawns `figma-console-mcp` as a stdio MCP client
    (via `@modelcontextprotocol/sdk`), probes the bridge, reads each master with the named
    read-tools, and writes `tools/figma/snapshot.json`. `tools/scripts/check-figma.js`
    (`npm run check:figma`) runs **fully offline** against that committed snapshot plus
    `libs/spec`.
    - **Why:** isolating the live dependency into a manual refresh keeps the gate itself
-     deterministic and CI-safe. The snapshot stores Figma *facts* (names, variant axes,
+     deterministic and CI-safe. The snapshot stores Figma _facts_ (names, variant axes,
      descriptions, `layoutMode`, and bound/unbound/raw determinations per node); all rules and
      severities live in the gate, so the rule logic is testable and reviewable in-repo.
    - **Rejected — live at check time:** needs the bridge/Desktop on every run, cannot run in CI,
      and is non-deterministic. **Rejected — Figma REST API directly:** CI-friendly, but variable
-     *name* resolution (confirming a bound var is a `--ui-*` token) is Enterprise-gated, and it
+     _name_ resolution (confirming a bound var is a `--ui-*` token) is Enterprise-gated, and it
      diverges from the figma-console read-tools the rest of the workflow uses. The snapshot
      approach gets the CI-safety of REST without either drawback.
 
@@ -76,12 +77,12 @@ Build **`check:figma`** as a committed-snapshot + offline-check gate, in the exi
      variant) → **Blocker**.
    - **Token-link coverage** (no raw hex fills/strokes, no raw px radii, no raw spacing) →
      **Critical**; a binding to a non-semantic collection → Warning.
-   - **Auto-layout** (every frame *with children* uses Auto Layout; childless dividers exempt)
+   - **Auto-layout** (every frame _with children_ uses Auto Layout; childless dividers exempt)
      → **Critical**.
    - **Description congruence** → **Warning**.
-   - **Why these severities:** name and variant mismatches *silently break* the MCP→code mapping
+   - **Why these severities:** name and variant mismatches _silently break_ the MCP→code mapping
      — generated code references props/values that don't exist — so they must block. Raw values
-     and missing auto-layout *degrade* generation quality (the model loses the token vocabulary
+     and missing auto-layout _degrade_ generation quality (the model loses the token vocabulary
      and responsive intent) but don't break the mapping, so they fail the build as Critical
      without being mapping-breakers. Blocker + Critical go to `errors` → `exit 1`; Warning prints
      and exits 0 — the same bucketing the other gates use.
@@ -116,7 +117,7 @@ Build **`check:figma`** as a committed-snapshot + offline-check gate, in the exi
 ## Consequences
 
 - **The CI/bridge dependency is now confined to refresh, not the check.** This is the key
-  trade-off the gate was designed around. `check:figma` has *no* live dependency, so it *could*
+  trade-off the gate was designed around. `check:figma` has _no_ live dependency, so it _could_
   later join `check:all`/CI — the remaining blocker is a **snapshot-freshness policy**, not
   bridge availability. The snapshot carries `generatedAt`, `gitSha`, and (when refresh captures
   it) Figma's `lastModified`; a future `--verify-fresh` flag could do one cheap REST call to

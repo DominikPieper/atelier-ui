@@ -13,7 +13,12 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 import { a11yTree } from '../../testing/a11y-tree';
-import { AtlMenu, AtlMenuItem, AtlMenuSeparator, AtlMenuTrigger } from './atl-menu';
+import {
+  AtlMenu,
+  AtlMenuItem,
+  AtlMenuSeparator,
+  AtlMenuTrigger,
+} from './atl-menu';
 import { AtlButton } from '../button/atl-button';
 
 const FW = 'angular';
@@ -31,7 +36,13 @@ const TEMPLATE = `
     </atl-menu>
   </ng-template>
 `;
-const IMPORTS = [AtlMenu, AtlMenuItem, AtlMenuSeparator, AtlMenuTrigger, AtlButton];
+const IMPORTS = [
+  AtlMenu,
+  AtlMenuItem,
+  AtlMenuSeparator,
+  AtlMenuTrigger,
+  AtlButton,
+];
 
 async function capture(): Promise<Record<string, unknown>> {
   const scenarios: Record<string, unknown> = {};

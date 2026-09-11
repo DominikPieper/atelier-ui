@@ -129,7 +129,9 @@
 
 :host(.variant-popup) .fab-bubble:focus-visible {
   outline: none;
-  box-shadow: var(--ui-focus-ring), 0 6px 16px rgba(0, 0, 0, 0.18);
+  box-shadow:
+    var(--ui-focus-ring),
+    0 6px 16px rgba(0, 0, 0, 0.18);
 }
 
 /* ═══════════════════════════════════════════════════════════════════════════ */
@@ -306,8 +308,16 @@
 }
 
 @keyframes atl-chat-typing {
-  0%, 60%, 100% { opacity: 0.3; transform: translateY(0); }
-  30% { opacity: 1; transform: translateY(-2px); }
+  0%,
+  60%,
+  100% {
+    opacity: 0.3;
+    transform: translateY(0);
+  }
+  30% {
+    opacity: 1;
+    transform: translateY(-2px);
+  }
 }
 
 @media (prefers-reduced-motion: reduce) {
@@ -392,7 +402,8 @@
   flex: 1;
   min-width: 0;
   padding: var(--ui-spacing-2) var(--ui-spacing-3);
-  border: var(--ui-border-width) solid var(--ui-color-input-border, var(--ui-color-border));
+  border: var(--ui-border-width) solid
+    var(--ui-color-input-border, var(--ui-color-border));
   border-radius: var(--ui-radius-md);
   background: var(--ui-color-surface-sunken);
   color: var(--ui-color-text);
@@ -407,7 +418,10 @@
 }
 
 :host(atl-chat-input) .field:hover:not(:disabled) {
-  border-color: var(--ui-color-input-border-hover, var(--ui-color-border-hover));
+  border-color: var(
+    --ui-color-input-border-hover,
+    var(--ui-color-border-hover)
+  );
 }
 
 :host(atl-chat-input) .field:focus-visible {

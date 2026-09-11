@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import AtlAvatarGroup from './atl-avatar-group.vue';
 
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
@@ -35,7 +36,9 @@ type Story = StoryObj<typeof AtlAvatarGroup>;
 export const Default: Story = {
   render: (args) => ({
     components: { AtlAvatarGroup, AtlAvatar },
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: `
       <AtlAvatarGroup v-bind="args">
         <AtlAvatar name="Alice Smith" />

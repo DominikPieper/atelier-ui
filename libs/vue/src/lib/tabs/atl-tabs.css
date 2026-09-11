@@ -46,7 +46,13 @@
   line-height: var(--ui-line-height-tight);
   /* Derived from the height, not authored: 12+12 padding on a 20px line box
    * rendered 41px against a 40px token (ADR-0041's recipe, ADR-0047's finding). */
-  padding: calc((var(--ui-control-height-md) - var(--ui-line-height-tight) * var(--ui-font-size-sm)) / 2)
+  padding: calc(
+      (
+          var(--ui-control-height-md) - var(--ui-line-height-tight) *
+            var(--ui-font-size-sm)
+        ) /
+        2
+    )
     var(--ui-spacing-4);
   font-size: var(--ui-font-size-sm);
   font-weight: var(--ui-font-weight-medium);
@@ -100,11 +106,11 @@
 }
 
 /* ─── Tab panel ─── */
-.atl-tab-group [role="tabpanel"] {
+.atl-tab-group [role='tabpanel'] {
   padding: var(--ui-spacing-5) 0;
 }
 
-.atl-tab-group [role="tabpanel"]:focus-visible {
+.atl-tab-group [role='tabpanel']:focus-visible {
   outline: none;
   box-shadow: var(--ui-focus-ring);
   border-radius: var(--ui-radius-md);
@@ -126,7 +132,13 @@
    * text metrics, which is how three controls measured right on one machine and
    * wrong on another (ADR-0048). */
   line-height: var(--ui-line-height-tight);
-  padding: calc((var(--ui-control-height-sm) - var(--ui-line-height-tight) * var(--ui-font-size-sm)) / 2)
+  padding: calc(
+      (
+          var(--ui-control-height-sm) - var(--ui-line-height-tight) *
+            var(--ui-font-size-sm)
+        ) /
+        2
+    )
     var(--ui-spacing-4);
   font-size: var(--ui-font-size-sm);
 }
@@ -141,7 +153,9 @@
   box-shadow: var(--ui-shadow-sm);
 }
 
-.atl-tab-group.variant-pills .tablist button:hover:not(.is-disabled):not(.is-active) {
+.atl-tab-group.variant-pills
+  .tablist
+  button:hover:not(.is-disabled):not(.is-active) {
   background: transparent;
   color: var(--ui-color-text);
 }

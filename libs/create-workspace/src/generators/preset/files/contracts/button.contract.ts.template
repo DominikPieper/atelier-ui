@@ -14,7 +14,7 @@ export const contract = {
     {
       name: 'hasIcon',
       reason:
-        "Master description (2026-08-27, ADR-0058): a Figma-side slot toggle for placing an Icon instance (Instance Swap → Icon library), a legitimate authoring affordance but not part of the component contract — AtlButtonSpec has no hasIcon.",
+        'Master description (2026-08-27, ADR-0058): a Figma-side slot toggle for placing an Icon instance (Instance Swap → Icon library), a legitimate authoring affordance but not part of the component contract — AtlButtonSpec has no hasIcon.',
     },
   ],
 } satisfies ComponentContract;

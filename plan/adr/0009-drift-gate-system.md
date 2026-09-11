@@ -3,7 +3,7 @@ status: accepted
 confidence: reconstructed
 date: reconstructed
 sources:
-  - "feat(tooling) series + gate headers"
+  - 'feat(tooling) series + gate headers'
 ---
 
 # ADR-0009: Drift-gate system (one source → projection → --check)

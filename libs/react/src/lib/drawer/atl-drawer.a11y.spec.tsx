@@ -31,7 +31,7 @@ function capture() {
   const r = render(
     <AtlDrawer open position="right">
       <AtlDrawerHeader>Filters</AtlDrawerHeader>
-    </AtlDrawer>
+    </AtlDrawer>,
   );
   scenarios.open = a11yTree(r.container);
   r.unmount();

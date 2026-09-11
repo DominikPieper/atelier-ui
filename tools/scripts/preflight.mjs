@@ -23,7 +23,8 @@ const __dirname = dirname(__filename);
 const ROOT = resolve(__dirname, '../..');
 
 // ── Styling ──────────────────────────────────────────────────────────
-const supportsColor = process.stdout.isTTY && process.env.NO_COLOR === undefined;
+const supportsColor =
+  process.stdout.isTTY && process.env.NO_COLOR === undefined;
 const c = (code, s) => (supportsColor ? `\x1b[${code}m${s}\x1b[0m` : s);
 const red = (s) => c('31', s);
 const green = (s) => c('32', s);
@@ -54,7 +55,8 @@ const warn = (label, detail, fix) => record('warn', label, detail, fix);
 function which(cmd) {
   const finder = process.platform === 'win32' ? 'where' : 'which';
   const res = spawnSync(finder, [cmd], { encoding: 'utf8' });
-  if (res.status === 0 && res.stdout.trim()) return res.stdout.trim().split('\n')[0];
+  if (res.status === 0 && res.stdout.trim())
+    return res.stdout.trim().split('\n')[0];
   return null;
 }
 
@@ -101,7 +103,10 @@ async function mcpPost(url, body, sessionId, timeoutMs = 10000) {
       sessionId: res.headers.get('mcp-session-id') ?? undefined,
     };
   } catch (err) {
-    return { error: err?.name === 'AbortError' ? 'timeout' : String(err?.message ?? err) };
+    return {
+      error:
+        err?.name === 'AbortError' ? 'timeout' : String(err?.message ?? err),
+    };
   } finally {
     clearTimeout(timer);
   }
@@ -141,16 +146,28 @@ async function probeMcp(url) {
   if (init.error) return { level: 'unreachable', detail: init.error };
   const session = init.sessionId;
   if (session) {
-    await mcpPost(url, { jsonrpc: '2.0', method: 'notifications/initialized' }, session, 5000);
+    await mcpPost(
+      url,
+      { jsonrpc: '2.0', method: 'notifications/initialized' },
+      session,
+      5000,
+    );
   }
 
   // 2. tools/list — must be HTTP 200 with a parseable JSON-RPC tools array.
-  const list = await mcpPost(url, { jsonrpc: '2.0', id: 2, method: 'tools/list', params: {} }, session);
-  if (list.error) return { level: 'broken', detail: `tools/list failed (${list.error})` };
-  if (list.status !== 200) return { level: 'broken', detail: `tools/list → HTTP ${list.status}` };
+  const list = await mcpPost(
+    url,
+    { jsonrpc: '2.0', id: 2, method: 'tools/list', params: {} },
+    session,
+  );
+  if (list.error)
+    return { level: 'broken', detail: `tools/list failed (${list.error})` };
+  if (list.status !== 200)
+    return { level: 'broken', detail: `tools/list → HTTP ${list.status}` };
   const listMsg = parseJsonRpc(list.contentType, list.text, 2);
   const tools = listMsg?.result?.tools;
-  if (!Array.isArray(tools)) return { level: 'broken', detail: 'tools/list → no parseable result' };
+  if (!Array.isArray(tools))
+    return { level: 'broken', detail: 'tools/list → no parseable result' };
 
   // 3. On an Atelier Storybook MCP, exercise one real tool call: manifests
   //    are only fetched inside tool calls, and a broken manifest fetch comes
@@ -166,14 +183,21 @@ async function probeMcp(url) {
       },
       session,
     );
-    if (call.error) return { level: 'broken', detail: `docs-list failed (${call.error})` };
-    if (call.status !== 200) return { level: 'broken', detail: `docs-list → HTTP ${call.status}` };
+    if (call.error)
+      return { level: 'broken', detail: `docs-list failed (${call.error})` };
+    if (call.status !== 200)
+      return { level: 'broken', detail: `docs-list → HTTP ${call.status}` };
     const callMsg = parseJsonRpc(call.contentType, call.text, 3);
     if (!callMsg?.result || callMsg.result.isError) {
       const reason =
-        callMsg?.result?.content?.[0]?.text ?? callMsg?.error?.message ?? 'no parseable result';
+        callMsg?.result?.content?.[0]?.text ??
+        callMsg?.error?.message ??
+        'no parseable result';
       const oneLine = String(reason).replace(/\s+/g, ' ').trim();
-      return { level: 'broken', detail: `docs-list → ${oneLine.slice(0, 120)}` };
+      return {
+        level: 'broken',
+        detail: `docs-list → ${oneLine.slice(0, 120)}`,
+      };
     }
   }
 
@@ -249,7 +273,11 @@ function checkNpm() {
   const required = { major: 10, minor: 0, patch: 0 };
   const path = which('npm');
   if (!path) {
-    fail('npm', 'not found on PATH', 'npm ships with Node.js — reinstall Node if missing');
+    fail(
+      'npm',
+      'not found on PATH',
+      'npm ships with Node.js — reinstall Node if missing',
+    );
     return;
   }
   try {
@@ -258,7 +286,11 @@ function checkNpm() {
     if (isAtLeast(actual, required)) {
       ok('npm', `v${version}`);
     } else {
-      warn('npm', `found v${version}, recommend >= 10.0.0`, 'Run `npm install -g npm@latest`');
+      warn(
+        'npm',
+        `found v${version}, recommend >= 10.0.0`,
+        'Run `npm install -g npm@latest`',
+      );
     }
   } catch (err) {
     fail('npm', String(err?.message ?? err), 'Reinstall Node.js');
@@ -268,14 +300,22 @@ function checkNpm() {
 function checkGit() {
   const path = which('git');
   if (!path) {
-    fail('git', 'not found on PATH', 'Install from https://git-scm.com or `brew install git`');
+    fail(
+      'git',
+      'not found on PATH',
+      'Install from https://git-scm.com or `brew install git`',
+    );
     return;
   }
   try {
     const version = execSync('git --version', { encoding: 'utf8' }).trim();
     ok('git', version);
   } catch {
-    warn('git', 'installed but version check failed', 'Verify install with `git --version`');
+    warn(
+      'git',
+      'installed but version check failed',
+      'Verify install with `git --version`',
+    );
   }
 }
 
@@ -290,18 +330,32 @@ function checkClaudeCli() {
     return;
   }
   try {
-    const version = execSync('claude --version', { encoding: 'utf8', timeout: 5000 }).trim();
+    const version = execSync('claude --version', {
+      encoding: 'utf8',
+      timeout: 5000,
+    }).trim();
     ok('Claude Code CLI', version);
   } catch {
-    warn('Claude Code CLI', 'installed but `claude --version` failed', 'Try `claude doctor`');
+    warn(
+      'Claude Code CLI',
+      'installed but `claude --version` failed',
+      'Try `claude doctor`',
+    );
   }
 }
 
 async function checkFigmaSetup() {
   // 1. Desktop Bridge plugin manifest — the primary channel.
-  const manifestPath = join(homedir(), '.figma-console-mcp', 'plugin', 'manifest.json');
+  const manifestPath = join(
+    homedir(),
+    '.figma-console-mcp',
+    'plugin',
+    'manifest.json',
+  );
   const pinnedVersion = getPinnedFigmaConsoleVersion();
-  const pinnedSpec = pinnedVersion ? `figma-console-mcp@${pinnedVersion}` : 'figma-console-mcp@latest';
+  const pinnedSpec = pinnedVersion
+    ? `figma-console-mcp@${pinnedVersion}`
+    : 'figma-console-mcp@latest';
   if (existsSync(manifestPath)) {
     ok('Figma Desktop Bridge plugin', `manifest at ${manifestPath}`);
   } else {
@@ -322,7 +376,12 @@ async function checkFigmaSetup() {
   // — treating it as fatal would fail preflight over something that fixes
   // itself the moment Claude Code (re)starts the MCP.
   if (existsSync(manifestPath)) {
-    const versionPath = join(homedir(), '.figma-console-mcp', 'plugin', '.version');
+    const versionPath = join(
+      homedir(),
+      '.figma-console-mcp',
+      'plugin',
+      '.version',
+    );
     if (!existsSync(versionPath)) {
       warn(
         'Plugin files .version marker',
@@ -344,15 +403,23 @@ async function checkFigmaSetup() {
   }
 
   // 2. Bridge WebSocket port range — at least one port must be usable.
-  const bridgePorts = [9223, 9224, 9225, 9226, 9227, 9228, 9229, 9230, 9231, 9232];
+  const bridgePorts = [
+    9223, 9224, 9225, 9226, 9227, 9228, 9229, 9230, 9231, 9232,
+  ];
   let freeCount = 0;
   for (const p of bridgePorts) {
     if (await portFree(p)) freeCount += 1;
   }
   if (freeCount === bridgePorts.length) {
-    ok('Bridge port range 9223–9232', 'all free (MCP will bind on first launch)');
+    ok(
+      'Bridge port range 9223–9232',
+      'all free (MCP will bind on first launch)',
+    );
   } else if (freeCount > 0) {
-    ok('Bridge port range 9223–9232', `${freeCount}/10 free (bridge connection OK)`);
+    ok(
+      'Bridge port range 9223–9232',
+      `${freeCount}/10 free (bridge connection OK)`,
+    );
   } else {
     warn(
       'Bridge port range 9223–9232',
@@ -461,7 +528,8 @@ function isDir(path) {
 }
 
 function detectEnvironment() {
-  const isClone = isDir(resolve(ROOT, 'libs/spec')) && isDir(resolve(ROOT, 'plan/adr'));
+  const isClone =
+    isDir(resolve(ROOT, 'libs/spec')) && isDir(resolve(ROOT, 'plan/adr'));
   return isClone ? 'clone' : 'scaffold';
 }
 
@@ -498,10 +566,13 @@ const PORTS_BY_ENV = {
 // `PLAYWRIGHT_BROWSERS_PATH` the same way Playwright itself does. A warning,
 // not a hard failure: this only blocks `check:stories`, not the workshop.
 function playwrightBrowsersDir() {
-  if (process.env.PLAYWRIGHT_BROWSERS_PATH) return process.env.PLAYWRIGHT_BROWSERS_PATH;
+  if (process.env.PLAYWRIGHT_BROWSERS_PATH)
+    return process.env.PLAYWRIGHT_BROWSERS_PATH;
   const home = homedir();
-  if (process.platform === 'darwin') return join(home, 'Library', 'Caches', 'ms-playwright');
-  if (process.platform === 'win32') return join(home, 'AppData', 'Local', 'ms-playwright');
+  if (process.platform === 'darwin')
+    return join(home, 'Library', 'Caches', 'ms-playwright');
+  if (process.platform === 'win32')
+    return join(home, 'AppData', 'Local', 'ms-playwright');
   return join(home, '.cache', 'ms-playwright');
 }
 
@@ -509,7 +580,9 @@ function checkPlaywrightChromium() {
   const dir = playwrightBrowsersDir();
   let hasChromium = false;
   try {
-    hasChromium = existsSync(dir) && readdirSync(dir).some((name) => name.startsWith('chromium'));
+    hasChromium =
+      existsSync(dir) &&
+      readdirSync(dir).some((name) => name.startsWith('chromium'));
   } catch {
     hasChromium = false;
   }
@@ -534,7 +607,12 @@ async function checkPorts(env) {
   for (const { port, label } of PORTS_BY_ENV[env]) {
     const free = await portFree(port);
     if (free) ok(`Port ${port} (${label})`, 'free');
-    else warn(`Port ${port} (${label})`, 'in use', `Run \`lsof -ti :${port} | xargs kill\` (macOS/Linux)`);
+    else
+      warn(
+        `Port ${port} (${label})`,
+        'in use',
+        `Run \`lsof -ti :${port} | xargs kill\` (macOS/Linux)`,
+      );
   }
 }
 
@@ -581,19 +659,29 @@ async function main() {
   console.log('');
   if (failures === 0) {
     console.log(
-      green(`All hard checks passed`) + dim(` · ${passes} ok, ${warnings} warning(s)`),
+      green(`All hard checks passed`) +
+        dim(` · ${passes} ok, ${warnings} warning(s)`),
     );
     if (warnings > 0) {
-      console.log(dim('Warnings are non-blocking — see https://atelier.pieper.io/troubleshooting'));
+      console.log(
+        dim(
+          'Warnings are non-blocking — see https://atelier.pieper.io/troubleshooting',
+        ),
+      );
     }
     console.log('');
     process.exit(0);
   } else {
     console.log(
-      red(`${failures} check(s) failed`) + dim(` · ${passes} ok, ${warnings} warning(s)`),
+      red(`${failures} check(s) failed`) +
+        dim(` · ${passes} ok, ${warnings} warning(s)`),
     );
     console.log(dim('Fix the items above, then re-run `npm run preflight`.'));
-    console.log(dim('Full troubleshooting guide: https://atelier.pieper.io/troubleshooting'));
+    console.log(
+      dim(
+        'Full troubleshooting guide: https://atelier.pieper.io/troubleshooting',
+      ),
+    );
     console.log('');
     process.exit(1);
   }

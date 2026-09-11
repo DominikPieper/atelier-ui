@@ -34,7 +34,8 @@ const header = (source) => `// AUTO-GENERATED from ${source} — do not edit her
 function plan() {
   const out = [];
   for (const [source, name] of FILES) {
-    const content = header(source) + readFileSync(resolve(ROOT, source), 'utf-8');
+    const content =
+      header(source) + readFileSync(resolve(ROOT, source), 'utf-8');
     for (const fw of FRAMEWORKS) {
       out.push([resolve(ROOT, `libs/${fw}/src/lib/${name}`), content]);
     }

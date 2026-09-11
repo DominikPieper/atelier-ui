@@ -456,7 +456,8 @@ class SettingsPageComponent {
       <div class="demo-area">
         <h2 class="demo-title">Danger Zone</h2>
         <p class="demo-description">
-          Once you delete your account, there is no going back. Please be certain.
+          Once you delete your account, there is no going back. Please be
+          certain.
         </p>
         <atl-button variant="primary" (click)="isOpen.set(true)">
           Delete account
@@ -467,11 +468,12 @@ class SettingsPageComponent {
         <atl-dialog-header>Delete Account</atl-dialog-header>
         <atl-dialog-content>
           <atl-alert variant="warning">
-            This action cannot be undone. All your data will be permanently removed.
+            This action cannot be undone. All your data will be permanently
+            removed.
           </atl-alert>
           <p class="confirm-text">
-            Are you sure you want to delete your account? This will remove all of
-            your data including projects, settings, and team associations.
+            Are you sure you want to delete your account? This will remove all
+            of your data including projects, settings, and team associations.
           </p>
         </atl-dialog-content>
         <atl-dialog-footer>
@@ -486,7 +488,11 @@ class SettingsPageComponent {
 
       @if (confirmed()) {
         <div class="result">
-          <atl-alert variant="success" [dismissible]="true" (dismissed)="confirmed.set(false)">
+          <atl-alert
+            variant="success"
+            [dismissible]="true"
+            (dismissed)="confirmed.set(false)"
+          >
             Account deletion confirmed (demo only).
           </atl-alert>
         </div>
@@ -845,19 +851,38 @@ class DataListComponent {
 })
 class NotificationCenterComponent {
   readonly errors = signal([
-    { id: 1, message: 'Database connection failed on replica-3. Automatic failover engaged.' },
-    { id: 2, message: 'Payment processing service returned 503 for 12 transactions.' },
+    {
+      id: 1,
+      message:
+        'Database connection failed on replica-3. Automatic failover engaged.',
+    },
+    {
+      id: 2,
+      message: 'Payment processing service returned 503 for 12 transactions.',
+    },
   ]);
 
   readonly warnings = signal([
-    { id: 3, message: 'Disk usage on worker-7 is at 89%. Consider scaling storage.' },
-    { id: 4, message: 'SSL certificate for api.example.com expires in 14 days.' },
+    {
+      id: 3,
+      message: 'Disk usage on worker-7 is at 89%. Consider scaling storage.',
+    },
+    {
+      id: 4,
+      message: 'SSL certificate for api.example.com expires in 14 days.',
+    },
     { id: 5, message: 'Rate limiter triggered 230 times in the last hour.' },
   ]);
 
   readonly infos = signal([
-    { id: 6, message: 'Deployment v3.2.1 completed successfully across all regions.' },
-    { id: 7, message: 'Scheduled maintenance window begins Saturday at 02:00 UTC.' },
+    {
+      id: 6,
+      message: 'Deployment v3.2.1 completed successfully across all regions.',
+    },
+    {
+      id: 7,
+      message: 'Scheduled maintenance window begins Saturday at 02:00 UTC.',
+    },
   ]);
 
   dismissError(id: number): void {
@@ -1222,9 +1247,15 @@ export const LoginForm: StoryObj = {
     },
   }),
   play: async ({ canvas }) => {
-    await expect(await canvas.findByRole('heading', { name: 'Sign in' })).toBeVisible();
-    await expect(await canvas.findByRole('button', { name: 'Sign in' })).toBeVisible();
-    await expect(await canvas.findByLabelText('Remember me')).toBeInTheDocument();
+    await expect(
+      await canvas.findByRole('heading', { name: 'Sign in' }),
+    ).toBeVisible();
+    await expect(
+      await canvas.findByRole('button', { name: 'Sign in' }),
+    ).toBeVisible();
+    await expect(
+      await canvas.findByLabelText('Remember me'),
+    ).toBeInTheDocument();
   },
 };
 
@@ -1250,8 +1281,12 @@ export const SettingsPage: StoryObj = {
     },
   }),
   play: async ({ canvas }) => {
-    await expect(await canvas.findByRole('heading', { name: 'Settings' })).toBeVisible();
-    await expect(await canvas.findByRole('tab', { name: 'Account' })).toBeVisible();
+    await expect(
+      await canvas.findByRole('heading', { name: 'Settings' }),
+    ).toBeVisible();
+    await expect(
+      await canvas.findByRole('tab', { name: 'Account' }),
+    ).toBeVisible();
   },
 };
 
@@ -1266,7 +1301,9 @@ export const ConfirmationDialog: StoryObj = {
     },
   }),
   play: async ({ canvas }) => {
-    const trigger = await canvas.findByRole('button', { name: 'Delete account' });
+    const trigger = await canvas.findByRole('button', {
+      name: 'Delete account',
+    });
     await userEvent.click(trigger);
     // Native <dialog> renders to the top-layer outside the Storybook canvas root,
     // so query the whole document via `screen` instead of the scoped `canvas`.
@@ -1290,9 +1327,13 @@ export const DataListWithActions: StoryObj = {
     },
   }),
   play: async ({ canvas }) => {
-    await expect(await canvas.findByRole('heading', { name: 'Projects' })).toBeVisible();
+    await expect(
+      await canvas.findByRole('heading', { name: 'Projects' }),
+    ).toBeVisible();
     await expect(await canvas.findByText('Marketing Website')).toBeVisible();
-    await expect(await canvas.findByRole('button', { name: 'New project' })).toBeVisible();
+    await expect(
+      await canvas.findByRole('button', { name: 'New project' }),
+    ).toBeVisible();
   },
 };
 
@@ -1307,8 +1348,12 @@ export const NotificationCenter: StoryObj = {
     },
   }),
   play: async ({ canvas }) => {
-    await expect(await canvas.findByRole('heading', { name: 'Notifications' })).toBeVisible();
-    await expect(await canvas.findByRole('button', { name: 'Clear all' })).toBeVisible();
+    await expect(
+      await canvas.findByRole('heading', { name: 'Notifications' }),
+    ).toBeVisible();
+    await expect(
+      await canvas.findByRole('button', { name: 'Clear all' }),
+    ).toBeVisible();
     await expect(await canvas.findByText('Errors')).toBeVisible();
   },
 };
@@ -1324,8 +1369,14 @@ export const ManagementDashboard: StoryObj = {
     },
   }),
   play: async ({ canvas }) => {
-    await expect(await canvas.findByRole('heading', { name: 'Operations Overview' })).toBeVisible();
-    await expect(await canvas.findByRole('heading', { name: 'Recent Activity' })).toBeVisible();
-    await expect(await canvas.findByRole('heading', { name: 'Plan Usage' })).toBeVisible();
+    await expect(
+      await canvas.findByRole('heading', { name: 'Operations Overview' }),
+    ).toBeVisible();
+    await expect(
+      await canvas.findByRole('heading', { name: 'Recent Activity' }),
+    ).toBeVisible();
+    await expect(
+      await canvas.findByRole('heading', { name: 'Plan Usage' }),
+    ).toBeVisible();
   },
 };

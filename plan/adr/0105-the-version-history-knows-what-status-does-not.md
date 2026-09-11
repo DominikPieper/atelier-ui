@@ -2,11 +2,11 @@
 status: accepted
 date: 2026-09-07
 sources:
-  - "tools/scripts/figma-snapshot.mjs (the fixed read)"
-  - "plan/adr/0019-figma-conformance-gate.md (introduced meta.figmaLastModified, never populated it)"
+  - 'tools/scripts/figma-snapshot.mjs (the fixed read)'
+  - 'plan/adr/0019-figma-conformance-gate.md (introduced meta.figmaLastModified, never populated it)'
   - "plan/adr/0034-what-a-green-check-all-asserts.md (recorded the null as an open gap at check:figma's promotion into check:all)"
-  - "plan/adr/0104-two-directions-one-file-selection-rule.md (added figmaLastModified to parity records as a pass-through, explicitly inert until this closed)"
-  - "this session — verified live against the connected Figma Desktop Bridge (figma_get_status, figma_get_file_versions)"
+  - 'plan/adr/0104-two-directions-one-file-selection-rule.md (added figmaLastModified to parity records as a pass-through, explicitly inert until this closed)'
+  - 'this session — verified live against the connected Figma Desktop Bridge (figma_get_status, figma_get_file_versions)'
 ---
 
 # ADR-0105: The version history knows what status does not
@@ -42,15 +42,15 @@ not assumed, on three points before being adopted as the primary source:
    2026-08-27→2026-08-29, one (labelled-only) returning versions spanning
    2026-04→2026-07-12 — both came back strictly descending by `created_at`. The
    first element of an unpaged call is reliably the newest version.
-2. **Pagination direction.** `pagination.next_cursor` is the id of the *last* item
+2. **Pagination direction.** `pagination.next_cursor` is the id of the _last_ item
    on the current page, and paging with it walks further back in time (older
    versions), never forward toward newer ones. So the newest state is always the
-   first element of the *first* page — no cursor needed, no paging required for
+   first element of the _first_ page — no cursor needed, no paging required for
    this use.
 3. **`include_autosaves` matters, concretely.** The default (`include_autosaves:
-   false`) query's newest entry was a labelled `"Ready for dev"` version from
+false`) query's newest entry was a labelled `"Ready for dev"` version from
    `2026-07-12T05:54:55Z`. The true newest state of the file, at the same moment,
-   was an *unlabeled autosave* — by a synthetic `"Figma"` user, not a person — from
+   was an _unlabeled autosave_ — by a synthetic `"Figma"` user, not a person — from
    `2026-08-29T17:21:06Z`. A labelled-only query would have understated the file's
    last-modified time by 48 days. This is not a hypothetical edge case; it was the
    actual newest entry on the file this ADR was written against.
@@ -58,7 +58,7 @@ not assumed, on three points before being adopted as the primary source:
 ## Decision
 
 - **Primary source:** `figma_get_file_versions({ include_autosaves: true,
-  max_versions: 1 })`, reading `versions[0].created_at`. One round trip, one row.
+max_versions: 1 })`, reading `versions[0].created_at`. One round trip, one row.
 - **Fallback chain's shape is kept, its content is not trusted.** On a failed call
   (network hiccup, missing `file_versions:read` scope, rate limit), fall back to
   the old `status?.details?.lastModified ?? status?.lastModified` lookup — harmless
@@ -88,7 +88,7 @@ not assumed, on three points before being adopted as the primary source:
   already validating a state 1h44m stale at the moment it was committed, and
   nothing in `check:figma` or `check:all` could have detected that, because the one
   field that could carry the comparison was always `null`. Populating it makes the
-  comparison *possible*; it does not by itself make anything *compare* it — see the
+  comparison _possible_; it does not by itself make anything _compare_ it — see the
   open question below.
 - `check:figma`'s existing (unchanged) header line —
   `` `Snapshot: ${generatedAt}${figmaLastModified ? ` · Figma edited ${figmaLastModified}` : ''} · N master(s)` ``

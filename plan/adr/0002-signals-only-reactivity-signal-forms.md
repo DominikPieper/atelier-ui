@@ -3,7 +3,7 @@ status: accepted
 confidence: documented
 date: reconstructed
 sources:
-  - "plan/big-picture.md §2, §8"
+  - 'plan/big-picture.md §2, §8'
 ---
 
 # ADR-0002: Signals-only reactivity + Signal Forms

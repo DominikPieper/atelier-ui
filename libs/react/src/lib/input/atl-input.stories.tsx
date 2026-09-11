@@ -3,7 +3,8 @@ import { AtlInput } from './atl-input';
 
 import { metadata } from '@atelier-ui/spec/metadata/input.metadata';
 import { contract } from '@atelier-ui/spec/contracts/input.contract';
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
@@ -38,7 +39,11 @@ export const Default: Story = {
 };
 
 export const WithLabel: Story = {
-  args: { label: 'Email address', type: 'email', placeholder: 'you@example.com' },
+  args: {
+    label: 'Email address',
+    type: 'email',
+    placeholder: 'you@example.com',
+  },
 };
 
 export const Disabled: Story = {
@@ -94,7 +99,11 @@ export const Number: Story = {
 };
 
 export const Tel: Story = {
-  args: { type: 'tel', label: 'Phone number', placeholder: '+1 (555) 000-0000' },
+  args: {
+    type: 'tel',
+    label: 'Phone number',
+    placeholder: '+1 (555) 000-0000',
+  },
 };
 
 export const Url: Story = {
@@ -102,12 +111,23 @@ export const Url: Story = {
 };
 
 export const Required: Story = {
-  args: { required: true, label: 'Full name', placeholder: 'Enter your full name' },
+  args: {
+    required: true,
+    label: 'Full name',
+    placeholder: 'Enter your full name',
+  },
 };
 
 export const AllStates: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxWidth: '320px' }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '1rem',
+        maxWidth: '320px',
+      }}
+    >
       <AtlInput label="Default" placeholder="Enter text" />
       <AtlInput label="Disabled" disabled value="Disabled value" />
       <AtlInput label="Read-only" readOnly value="Read-only value" />

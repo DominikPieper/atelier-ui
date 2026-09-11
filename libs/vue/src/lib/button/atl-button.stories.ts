@@ -3,7 +3,8 @@ import AtlButton from './atl-button.vue';
 
 import { metadata } from '@atelier-ui/spec/metadata/button.metadata';
 import { contract } from '@atelier-ui/spec/contracts/button.contract';
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
@@ -15,11 +16,16 @@ const meta: Meta<typeof AtlButton> = {
   tags: ['autodocs'],
   render: (args) => ({
     components: { AtlButton },
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: '<AtlButton v-bind="args">Button</AtlButton>',
   }),
   argTypes: {
-    variant: { control: 'select', options: ['primary', 'secondary', 'outline', 'danger'] },
+    variant: {
+      control: 'select',
+      options: ['primary', 'secondary', 'outline', 'danger'],
+    },
     size: { control: 'select', options: ['sm', 'md', 'lg'] },
     disabled: { control: 'boolean' },
     loading: { control: 'boolean' },
@@ -115,7 +121,9 @@ export const AllSizes: Story = {
 export const Playground: Story = {
   render: (args) => ({
     components: { AtlButton },
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: '<AtlButton v-bind="args">Playground</AtlButton>',
   }),
 };

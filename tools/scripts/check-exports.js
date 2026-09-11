@@ -78,9 +78,13 @@ function resolvedExportNames(entryFile) {
   });
   const checker = program.getTypeChecker();
   const sourceFile = program.getSourceFile(entryFile);
-  const moduleSymbol = sourceFile && (checker.getSymbolAtLocation(sourceFile) || sourceFile.symbol);
+  const moduleSymbol =
+    sourceFile &&
+    (checker.getSymbolAtLocation(sourceFile) || sourceFile.symbol);
   if (!moduleSymbol) return new Set();
-  return new Set(checker.getExportsOfModule(moduleSymbol).map((s) => s.getName()));
+  return new Set(
+    checker.getExportsOfModule(moduleSymbol).map((s) => s.getName()),
+  );
 }
 
 const KEYED_SPECS = keyedSpecs();
@@ -98,7 +102,7 @@ for (const framework of FRAMEWORKS) {
     if (!exportNames.has(componentName)) {
       errors.push(
         `[NAMED] ${framework}/${dir}: '${componentName}' (${specName}) is not reachable ` +
-          `from src/index.ts — a consumer's \`import { ${componentName} } from '@atelier-ui/${framework}'\` would fail.`
+          `from src/index.ts — a consumer's \`import { ${componentName} } from '@atelier-ui/${framework}'\` would fail.`,
       );
     }
   }
@@ -127,7 +131,7 @@ for (const framework of FRAMEWORKS) {
     if (!isComponentDir(dirPath)) continue;
     if (!barrel.includes(`lib/${name}/`)) {
       errors.push(
-        `[NO-EXPORT] ${framework}/${name}: component directory is not referenced at all from src/index.ts`
+        `[NO-EXPORT] ${framework}/${name}: component directory is not referenced at all from src/index.ts`,
       );
     }
   }
@@ -137,11 +141,11 @@ if (errors.length > 0) {
   errors.sort();
   errors.forEach((e) => console.error(`✗ ${e}`));
   console.error(
-    `\n${errors.length} export issue(s). Add the missing re-export to the framework barrel (src/index.ts).`
+    `\n${errors.length} export issue(s). Add the missing re-export to the framework barrel (src/index.ts).`,
   );
   process.exit(1);
 } else {
   console.log(
-    `✓ every spec-keyed component is reachable by name, and every component directory is referenced, from each framework barrel (${Object.keys(KEYED_SPECS).length} keyed component(s) checked)`
+    `✓ every spec-keyed component is reachable by name, and every component directory is referenced, from each framework barrel (${Object.keys(KEYED_SPECS).length} keyed component(s) checked)`,
   );
 }

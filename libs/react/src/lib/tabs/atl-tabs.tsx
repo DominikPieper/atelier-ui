@@ -9,10 +9,7 @@ import {
   isValidElement,
   ReactElement,
 } from 'react';
-import type {
-  AtlTabGroupSpec,
-  AtlTabSpec,
-} from '../spec';
+import type { AtlTabGroupSpec, AtlTabSpec } from '../spec';
 import './atl-tabs.css';
 
 interface TabInfo {
@@ -38,8 +35,7 @@ const TabGroupContext = createContext<TabGroupContextValue>({
  * Properties for the AtlTabGroup component.
  */
 export interface AtlTabGroupProps
-  extends HTMLAttributes<HTMLDivElement>,
-    AtlTabGroupSpec {
+  extends HTMLAttributes<HTMLDivElement>, AtlTabGroupSpec {
   /**
    * The index of the currently selected tab.
    */
@@ -84,7 +80,7 @@ export function AtlTabGroup({
     .filter(
       (child) =>
         isValidElement(child) &&
-        (child.type as { displayName?: string }).displayName === 'AtlTab'
+        (child.type as { displayName?: string }).displayName === 'AtlTab',
     )
     .map((child) => {
       const element = child as ReactElement<AtlTabProps>;
@@ -127,11 +123,13 @@ export function AtlTabGroup({
   const panels = childArray.filter(
     (child) =>
       isValidElement(child) &&
-      (child.type as { displayName?: string }).displayName === 'AtlTab'
+      (child.type as { displayName?: string }).displayName === 'AtlTab',
   );
 
   return (
-    <TabGroupContext.Provider value={{ selectedIndex, setSelectedIndex: setIndex, variant, tabs }}>
+    <TabGroupContext.Provider
+      value={{ selectedIndex, setSelectedIndex: setIndex, variant, tabs }}
+    >
       <div className={classes} {...rest}>
         <div className="tablist" role="tablist" ref={tabListRef}>
           {tabs.map((tab, i) => (
@@ -144,12 +142,14 @@ export function AtlTabGroup({
               aria-controls={`atl-tab-panel-${i}`}
               aria-disabled={tab.disabled || undefined}
               tabIndex={i === selectedIndex ? 0 : -1}
-              className={[
-                i === selectedIndex && 'is-active',
-                tab.disabled && 'is-disabled',
-              ]
-                .filter(Boolean)
-                .join(' ') || undefined}
+              className={
+                [
+                  i === selectedIndex && 'is-active',
+                  tab.disabled && 'is-disabled',
+                ]
+                  .filter(Boolean)
+                  .join(' ') || undefined
+              }
               disabled={tab.disabled}
               onClick={() => !tab.disabled && setIndex(i)}
               onKeyDown={handleKeyDown}

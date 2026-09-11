@@ -2,9 +2,9 @@
 status: accepted
 date: 2026-06-13
 sources:
-  - "libs/spec/src/index.ts (LlmFormFieldSpec, LlmCheckboxSpec, LlmToggleSpec)"
-  - "libs/{angular,react,vue}/src/lib/{checkbox,toggle}/* (all use checked, none use value)"
-  - "docs-review finding: prop tables advertised a [(value)] alias no adapter implements"
+  - 'libs/spec/src/index.ts (LlmFormFieldSpec, LlmCheckboxSpec, LlmToggleSpec)'
+  - 'libs/{angular,react,vue}/src/lib/{checkbox,toggle}/* (all use checked, none use value)'
+  - 'docs-review finding: prop tables advertised a [(value)] alias no adapter implements'
 supersedes: []
 ---
 
@@ -25,7 +25,7 @@ value-based fields — Input, Textarea, RadioGroup, Select, Combobox.
 Checkbox and Toggle are **checked-based**: their state is `checked` /
 `onCheckedChange`, and `value` has no meaning for a boolean control. Yet both
 `LlmCheckboxSpec` and `LlmToggleSpec` plainly `extends LlmFormFieldSpec`, so they
-*inherited* `value`/`onValueChange`. No adapter ever implemented them: Angular
+_inherited_ `value`/`onValueChange`. No adapter ever implemented them: Angular
 uses a `checked` model (`FormCheckboxControl`), React explicitly
 `Omit<…, 'value'>`s it off the native input props, Vue exposes only `checked` +
 `update:checked`. The inherited pair was dead surface in the contract.
@@ -38,7 +38,7 @@ would bind a prop that is silently ignored.
 Two honest fixes were possible: (a) make the adapters implement `value` to match
 the spec, or (b) make the spec stop claiming `value` for these two. Option (a)
 adds redundant API to satisfy an inheritance artifact and contradicts ADR-0001
-(`checked` already *is* the state); option (b) makes the contract tell the truth.
+(`checked` already _is_ the state); option (b) makes the contract tell the truth.
 
 ## Decision
 
@@ -72,6 +72,6 @@ contract, still asserting props no implementation honours.
   metadata, llms, …) stays green after `sync:generated` regenerates the spec
   copies, `behaviors.generated.ts`, and `llms.txt`.
 - The form-field base stays prescriptively shared by the five value-based fields;
-  nothing depended on *uniform* `value` exposure, so the abstraction is unaffected.
+  nothing depended on _uniform_ `value` exposure, so the abstraction is unaffected.
 - An LLM reading the spec/docs/llms.txt is no longer told Checkbox/Toggle take a
   `value` — it generates `checked`-based code, the only thing that works.

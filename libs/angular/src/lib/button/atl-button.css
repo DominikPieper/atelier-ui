@@ -21,7 +21,8 @@
   line-height: var(--ui-line-height-tight);
   letter-spacing: var(--ui-letter-spacing-tight);
   cursor: pointer;
-  transition: background-color var(--ui-transition-fast),
+  transition:
+    background-color var(--ui-transition-fast),
     border-color var(--ui-transition-fast),
     color var(--ui-transition-fast),
     box-shadow var(--ui-transition-fast);
@@ -109,8 +110,11 @@
 /* Sizes — modern target heights (sm 32px / md 40px / lg 48px) */
 :host(.size-sm) {
   padding: calc(
-      (var(--ui-control-height-sm) - var(--ui-line-height-tight) * var(--ui-font-size-sm)) / 2 -
-        1px
+      (
+          var(--ui-control-height-sm) - var(--ui-line-height-tight) *
+            var(--ui-font-size-sm)
+        ) /
+        2 - 1px
     )
     0.875rem;
   font-size: var(--ui-font-size-sm);
@@ -119,8 +123,11 @@
 
 :host(.size-md) {
   padding: calc(
-      (var(--ui-control-height-md) - var(--ui-line-height-tight) * var(--ui-font-size-md)) / 2 -
-        1px
+      (
+          var(--ui-control-height-md) - var(--ui-line-height-tight) *
+            var(--ui-font-size-md)
+        ) /
+        2 - 1px
     )
     1.125rem;
   font-size: var(--ui-font-size-md);
@@ -129,8 +136,11 @@
 
 :host(.size-lg) {
   padding: calc(
-      (var(--ui-control-height-lg) - var(--ui-line-height-tight) * var(--ui-font-size-lg)) / 2 -
-        1px
+      (
+          var(--ui-control-height-lg) - var(--ui-line-height-tight) *
+            var(--ui-font-size-lg)
+        ) /
+        2 - 1px
     )
     1.5rem;
   font-size: var(--ui-font-size-lg);
@@ -157,5 +167,7 @@
 }
 
 @keyframes atl-spin {
-  to { transform: rotate(360deg); }
+  to {
+    transform: rotate(360deg);
+  }
 }

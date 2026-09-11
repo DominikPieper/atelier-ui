@@ -29,7 +29,9 @@ const c = {
 };
 
 function banner(): void {
-  console.log(`\n${c.bold(c.cyan('▲ Atelier UI'))}  ${c.dim('workshop scaffolder')}\n`);
+  console.log(
+    `\n${c.bold(c.cyan('▲ Atelier UI'))}  ${c.dim('workshop scaffolder')}\n`,
+  );
 }
 
 function parseFlag(args: string[], name: string): string | undefined {
@@ -54,7 +56,9 @@ function parseBooleanFlag(args: string[], name: string): boolean | undefined {
   }
   if (raw === 'true') return true;
   if (raw === 'false') return false;
-  throw new Error(`Invalid --${name} value: "${raw}". Must be "true" or "false".`);
+  throw new Error(
+    `Invalid --${name} value: "${raw}". Must be "true" or "false".`,
+  );
 }
 
 export async function main() {
@@ -94,9 +98,13 @@ export async function main() {
     const stat = statSync(targetDir);
     const nonEmpty = stat.isDirectory() && readdirSync(targetDir).length > 0;
     if (!stat.isDirectory() || nonEmpty) {
-      console.error(`\n${c.red('✖')} Cannot create workspace: "${c.bold(name)}" already exists.`);
+      console.error(
+        `\n${c.red('✖')} Cannot create workspace: "${c.bold(name)}" already exists.`,
+      );
       console.error(`  ${c.dim(targetDir)}`);
-      console.error(`  ${c.dim('Pick a different name or remove the existing directory.')}\n`);
+      console.error(
+        `  ${c.dim('Pick a different name or remove the existing directory.')}\n`,
+      );
       process.exit(1);
     }
   }
@@ -125,13 +133,16 @@ export async function main() {
     figmaMcp = (res as { figma: boolean }).figma;
   }
 
-  console.log(`\n${c.cyan('◇')} Setting up "${c.bold(name)}" with ${c.bold(framework)}…\n`);
+  console.log(
+    `\n${c.cyan('◇')} Setting up "${c.bold(name)}" with ${c.bold(framework)}…\n`,
+  );
 
   const presetVersion = require('../package.json').version;
   // ATELIER_PRESET_SPEC overrides the published preset — used by the e2e test
   // to install the locally-packed tarball instead of fetching from npm.
   const presetSpec =
-    process.env.ATELIER_PRESET_SPEC ?? `@atelier-ui/create-workspace@${presetVersion}`;
+    process.env.ATELIER_PRESET_SPEC ??
+    `@atelier-ui/create-workspace@${presetVersion}`;
 
   const { directory } = await createWorkspace(presetSpec, {
     name,
@@ -143,12 +154,16 @@ export async function main() {
   });
 
   const appName = `workshop-${framework}`;
-  console.log(`\n${c.green('✓')} ${c.bold('Workshop ready')} ${c.dim(`— ${directory}`)}`);
+  console.log(
+    `\n${c.green('✓')} ${c.bold('Workshop ready')} ${c.dim(`— ${directory}`)}`,
+  );
   console.log(`\n  ${c.dim('Next steps:')}`);
   console.log(`    ${c.cyan(`cd ${directory}`)}`);
   console.log(`    ${c.cyan(`npx nx serve ${appName}`)}`);
   if (figmaMcp) {
-    console.log(`\n  ${c.dim('figma-console-mcp — install the Desktop Bridge plugin:')}`);
+    console.log(
+      `\n  ${c.dim('figma-console-mcp — install the Desktop Bridge plugin:')}`,
+    );
     console.log(`    ${c.cyan(FIGMA_SETUP_URL)}\n`);
   } else {
     console.log('');

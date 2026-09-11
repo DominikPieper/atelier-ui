@@ -1,10 +1,16 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
-import { AtlDrawer, AtlDrawerHeader, AtlDrawerContent, AtlDrawerFooter } from './atl-drawer';
+import {
+  AtlDrawer,
+  AtlDrawerHeader,
+  AtlDrawerContent,
+  AtlDrawerFooter,
+} from './atl-drawer';
 
 import { metadata } from '@atelier-ui/spec/metadata/drawer.metadata';
 import { contract } from '@atelier-ui/spec/contracts/drawer.contract';
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: 'figma'; url: string } {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
@@ -16,12 +22,19 @@ const meta: Meta<typeof AtlDrawer> = {
   tags: ['autodocs'],
   argTypes: {
     open: { control: 'boolean' },
-    position: { control: 'select', options: ['left', 'right', 'top', 'bottom'] },
+    position: {
+      control: 'select',
+      options: ['left', 'right', 'top', 'bottom'],
+    },
     size: { control: 'select', options: ['sm', 'md', 'lg', 'full'] },
     closeOnBackdrop: { control: 'boolean' },
   },
   args: { position: 'right', size: 'md', closeOnBackdrop: true },
-  parameters: { design: figmaNode('421-398'), docs: { description: { component: metadata.purpose } }, contract },
+  parameters: {
+    design: figmaNode('421-398'),
+    docs: { description: { component: metadata.purpose } },
+    contract,
+  },
 };
 
 export default meta;
@@ -57,7 +70,9 @@ function DrawerDemo({
         <AtlDrawerHeader>Settings</AtlDrawerHeader>
         <AtlDrawerContent>
           <p>Drawer content goes here. This area scrolls if content is long.</p>
-          <p style={{ marginTop: '1rem' }}>You can put forms, lists, or any content here.</p>
+          <p style={{ marginTop: '1rem' }}>
+            You can put forms, lists, or any content here.
+          </p>
         </AtlDrawerContent>
         <AtlDrawerFooter>
           <button onClick={() => setOpen(false)}>Cancel</button>

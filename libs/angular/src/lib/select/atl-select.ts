@@ -20,7 +20,10 @@ import {
 } from '@angular/cdk/overlay';
 import { DomPortal } from '@angular/cdk/portal';
 import type { FormValueControl } from '@angular/forms/signals';
-import { type ValidationError, type WithOptionalFieldTree } from '@angular/forms/signals';
+import {
+  type ValidationError,
+  type WithOptionalFieldTree,
+} from '@angular/forms/signals';
 import { ATL_SELECT, type AtlSelectContext } from './atl-select.token';
 import { AtlIcon } from '../icon/atl-icon';
 
@@ -33,7 +36,9 @@ class SelectOptionItem implements Highlightable {
     readonly value: string,
     readonly labelText: string,
     disabled: boolean,
-    private readonly activeOptionId: import('@angular/core').WritableSignal<string | null>,
+    private readonly activeOptionId: import('@angular/core').WritableSignal<
+      string | null
+    >,
   ) {
     this.disabled = disabled;
   }
@@ -108,7 +113,9 @@ let nextId = 0;
           <atl-icon name="danger" size="sm" class="invalid-icon" />
         }
       </span>
-      <span class="trigger-icon" aria-hidden="true"><atl-icon name="chevron-down" size="sm" /></span>
+      <span class="trigger-icon" aria-hidden="true"
+        ><atl-icon name="chevron-down" size="sm"
+      /></span>
     </button>
 
     <div
@@ -149,7 +156,9 @@ let nextId = 0;
   },
   providers: [{ provide: ATL_SELECT, useExisting: AtlSelect }],
 })
-export class AtlSelect implements FormValueControl<string>, AtlSelectContext, OnDestroy {
+export class AtlSelect
+  implements FormValueControl<string>, AtlSelectContext, OnDestroy
+{
   /** The selected value. Bound by [formField] directive. Supports [(value)] two-way binding. */
   readonly value = model('');
 
@@ -188,7 +197,9 @@ export class AtlSelect implements FormValueControl<string>, AtlSelectContext, On
   readonly name = input('');
 
   /** Validation errors from the form system. Bound by [formField] directive. */
-  readonly errors = input<readonly WithOptionalFieldTree<ValidationError>[]>([]);
+  readonly errors = input<readonly WithOptionalFieldTree<ValidationError>[]>(
+    [],
+  );
 
   /** @internal */
   readonly activeOptionId = signal<string | null>(null);
@@ -215,7 +226,8 @@ export class AtlSelect implements FormValueControl<string>, AtlSelectContext, On
 
   /** @internal */
   protected readonly selectedLabel = computed(
-    () => this.optionsList().find((o) => o.value === this.value())?.labelText ?? ''
+    () =>
+      this.optionsList().find((o) => o.value === this.value())?.labelText ?? '',
   );
 
   /** @internal */
@@ -226,9 +238,7 @@ export class AtlSelect implements FormValueControl<string>, AtlSelectContext, On
    * moments depending on the framework. Deciding *when* to pass errors belongs to the
    * form layer, which is where `touched` lives (ADR-0055).
    */
-  protected readonly showErrors = computed(
-    () => this.errors().length > 0
-  );
+  protected readonly showErrors = computed(() => this.errors().length > 0);
 
   /** @internal */
   protected readonly hostClasses = computed(() => {
@@ -241,7 +251,8 @@ export class AtlSelect implements FormValueControl<string>, AtlSelectContext, On
   });
 
   /** @internal */
-  private keyManager: ActiveDescendantKeyManager<SelectOptionItem> | null = null;
+  private keyManager: ActiveDescendantKeyManager<SelectOptionItem> | null =
+    null;
 
   private overlayRef: OverlayRef | null = null;
   private outsideClickHandler: ((e: MouseEvent) => void) | null = null;
@@ -249,8 +260,16 @@ export class AtlSelect implements FormValueControl<string>, AtlSelectContext, On
   private readonly injector = inject(Injector);
 
   /** @internal — called by AtlOption on init */
-  registerOption(id: string, value: string, labelText: string, disabled: boolean): void {
-    this.optionsList.update((list) => [...list, { id, value, labelText, disabled }]);
+  registerOption(
+    id: string,
+    value: string,
+    labelText: string,
+    disabled: boolean,
+  ): void {
+    this.optionsList.update((list) => [
+      ...list,
+      { id, value, labelText, disabled },
+    ]);
   }
 
   /** @internal — called by AtlOption on destroy */
@@ -274,7 +293,11 @@ export class AtlSelect implements FormValueControl<string>, AtlSelectContext, On
   /** @internal */
   protected onTriggerClick(): void {
     if (this.disabled()) return;
-    if (this.isOpen()) { this.close(); } else { this.open(); }
+    if (this.isOpen()) {
+      this.close();
+    } else {
+      this.open();
+    }
   }
 
   /** @internal */
@@ -308,8 +331,19 @@ export class AtlSelect implements FormValueControl<string>, AtlSelectContext, On
         break;
       }
       default: {
-        const isNav = ['ArrowDown', 'ArrowUp', 'ArrowLeft', 'ArrowRight', 'Home', 'End'].includes(event.key);
-        const isTypeahead = event.key.length === 1 && !event.ctrlKey && !event.metaKey && !event.altKey;
+        const isNav = [
+          'ArrowDown',
+          'ArrowUp',
+          'ArrowLeft',
+          'ArrowRight',
+          'Home',
+          'End',
+        ].includes(event.key);
+        const isTypeahead =
+          event.key.length === 1 &&
+          !event.ctrlKey &&
+          !event.metaKey &&
+          !event.altKey;
         if ((isNav || isTypeahead) && !this.isOpen()) {
           this.open();
           if (isNav) return; // open() already sets active item
@@ -343,7 +377,14 @@ export class AtlSelect implements FormValueControl<string>, AtlSelectContext, On
 
     // (Re)create key manager with current options
     const items = this.optionsList().map(
-      (o) => new SelectOptionItem(o.id, o.value, o.labelText, o.disabled, this.activeOptionId),
+      (o) =>
+        new SelectOptionItem(
+          o.id,
+          o.value,
+          o.labelText,
+          o.disabled,
+          this.activeOptionId,
+        ),
     );
     this.keyManager = new ActiveDescendantKeyManager(items)
       .withWrap()
@@ -352,7 +393,9 @@ export class AtlSelect implements FormValueControl<string>, AtlSelectContext, On
       .withVerticalOrientation();
 
     // Set active option to currently selected or first enabled
-    const selectedIdx = items.findIndex((i) => i.value === this.value() && !i.disabled);
+    const selectedIdx = items.findIndex(
+      (i) => i.value === this.value() && !i.disabled,
+    );
     const firstEnabledIdx = items.findIndex((i) => !i.disabled);
     const activeIdx = selectedIdx >= 0 ? selectedIdx : firstEnabledIdx;
     if (activeIdx >= 0) {
@@ -389,7 +432,8 @@ export class AtlSelect implements FormValueControl<string>, AtlSelectContext, On
   }
 
   private createOverlay(): OverlayRef {
-    const triggerEl = this.elementRef.nativeElement.querySelector<HTMLElement>('.trigger');
+    const triggerEl =
+      this.elementRef.nativeElement.querySelector<HTMLElement>('.trigger');
     if (!triggerEl) throw new Error('AtlSelect: trigger element not found');
 
     const positionStrategy = createFlexibleConnectedPositionStrategy(
@@ -397,8 +441,20 @@ export class AtlSelect implements FormValueControl<string>, AtlSelectContext, On
       triggerEl,
     )
       .withPositions([
-        { originX: 'start', originY: 'bottom', overlayX: 'start', overlayY: 'top', offsetY: 4 },
-        { originX: 'start', originY: 'top', overlayX: 'start', overlayY: 'bottom', offsetY: -4 },
+        {
+          originX: 'start',
+          originY: 'bottom',
+          overlayX: 'start',
+          overlayY: 'top',
+          offsetY: 4,
+        },
+        {
+          originX: 'start',
+          originY: 'top',
+          overlayX: 'start',
+          overlayY: 'bottom',
+          offsetY: -4,
+        },
       ])
       .withFlexibleDimensions(false)
       .withPush(true);

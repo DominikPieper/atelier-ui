@@ -6,7 +6,8 @@ export const contract = {
   codeOnly: [
     {
       name: 'id',
-      reason: 'Is data, not state — a stable key for the suggestion chip, not a Figma-settable property.',
+      reason:
+        'Is data, not state — a stable key for the suggestion chip, not a Figma-settable property.',
     },
   ],
 } satisfies ComponentContract;

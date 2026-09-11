@@ -12,7 +12,10 @@ describe('AtlBadge', () => {
   });
 
   it('applies variant class', () => {
-    render(AtlBadge, { props: { variant: 'success' }, slots: { default: 'OK' } });
+    render(AtlBadge, {
+      props: { variant: 'success' },
+      slots: { default: 'OK' },
+    });
     expect(screen.getByRole('status')).toHaveClass('variant-success');
   });
 
@@ -22,9 +25,18 @@ describe('AtlBadge', () => {
   });
 
   it('renders all variants without error', () => {
-    const variants = ['default', 'success', 'warning', 'danger', 'info'] as const;
+    const variants = [
+      'default',
+      'success',
+      'warning',
+      'danger',
+      'info',
+    ] as const;
     for (const variant of variants) {
-      const { unmount } = render(AtlBadge, { props: { variant }, slots: { default: variant } });
+      const { unmount } = render(AtlBadge, {
+        props: { variant },
+        slots: { default: variant },
+      });
       expect(screen.getByRole('status')).toHaveClass(`variant-${variant}`);
       unmount();
     }

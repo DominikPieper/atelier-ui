@@ -11,7 +11,8 @@ export const contract = {
     },
     {
       name: 'width',
-      reason: 'Is content, not state — a per-column width hint, not a Figma-settable property.',
+      reason:
+        'Is content, not state — a per-column width hint, not a Figma-settable property.',
     },
   ],
   axisMap: [

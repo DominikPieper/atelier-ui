@@ -3,14 +3,8 @@
  * same file as the sizes it governs and no consuming app has to supply one.
  * Gated by check:box-sizing; the resulting boxes are measured by check:geometry.
  * See ADR-0043. */
-:is(
-  .atl-breadcrumb-item,
-  .atl-breadcrumbs
-),
-:is(
-  .atl-breadcrumb-item,
-  .atl-breadcrumbs
-) * {
+:is(.atl-breadcrumb-item, .atl-breadcrumbs),
+:is(.atl-breadcrumb-item, .atl-breadcrumbs) * {
   box-sizing: border-box;
 }
 
@@ -75,7 +69,9 @@
   border-radius: var(--ui-radius-sm);
   padding: var(--ui-spacing-1) var(--ui-spacing-2);
   margin: calc(var(--ui-spacing-1) * -1) calc(var(--ui-spacing-2) * -1);
-  transition: color var(--ui-transition-fast), background-color var(--ui-transition-fast);
+  transition:
+    color var(--ui-transition-fast),
+    background-color var(--ui-transition-fast);
 }
 
 .atl-breadcrumb-item .breadcrumb-link:hover {

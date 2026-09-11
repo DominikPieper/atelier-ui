@@ -10,11 +10,12 @@
   .atl-drawer-host
 ),
 :is(
-  .atl-drawer-content,
-  .atl-drawer-footer,
-  .atl-drawer-header,
-  .atl-drawer-host
-) * {
+    .atl-drawer-content,
+    .atl-drawer-footer,
+    .atl-drawer-header,
+    .atl-drawer-host
+  )
+  * {
   box-sizing: border-box;
 }
 

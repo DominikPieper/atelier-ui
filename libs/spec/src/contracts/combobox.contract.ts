@@ -7,11 +7,12 @@ export const contract = {
     {
       name: 'state=open',
       reason:
-        "atl-combobox.tsx tracks `isOpen` as internal component state (useState), not a settable/observable prop — the .atl-combobox.is-open CSS class is real (atl-combobox.css:96,132), but it is driven by user interaction, not the public API this stage checks.",
+        'atl-combobox.tsx tracks `isOpen` as internal component state (useState), not a settable/observable prop — the .atl-combobox.is-open CSS class is real (atl-combobox.css:96,132), but it is driven by user interaction, not the public API this stage checks.',
     },
     {
       name: 'state=filtered',
-      reason: 'UNEXPLAINED — grep-verified 2026-09-10: no root-level .is-filtered class or distinguishable state exists in atl-combobox.css; decide in tasks/todo.md',
+      reason:
+        'UNEXPLAINED — grep-verified 2026-09-10: no root-level .is-filtered class or distinguishable state exists in atl-combobox.css; decide in tasks/todo.md',
     },
     {
       name: 'state=selected',
@@ -24,7 +25,8 @@ export const contract = {
       figmaAxis: 'state',
       codeProp: 'invalid',
       values: { invalid: true },
-      reason: "AtlFormFieldSpec.invalid is a real boolean prop (libs/spec/src/index.ts) — the master's 'invalid' state value maps to it directly.",
+      reason:
+        "AtlFormFieldSpec.invalid is a real boolean prop (libs/spec/src/index.ts) — the master's 'invalid' state value maps to it directly.",
     },
   ],
   probes: [
@@ -33,7 +35,7 @@ export const contract = {
       selector: "input[role='combobox']",
       reason:
         'the .atl-combobox root only sets display/font/line-height — background-color, border ' +
-        "and border-radius are painted on the nested text input. Its class name is NOT shared " +
+        'and border-radius are painted on the nested text input. Its class name is NOT shared ' +
         "across frameworks ('atl-combobox-input' in React/Vue, 'combobox-input' in Angular, " +
         "whose :host-scoped stylesheet drops the 'atl-' prefix), so the selector uses the one " +
         "attribute all three set explicitly on that element instead: role='combobox' " +

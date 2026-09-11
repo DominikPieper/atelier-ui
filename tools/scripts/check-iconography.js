@@ -53,7 +53,8 @@ const SPEC_ICONS = path.join(ROOT, 'libs/spec/src/icons.ts');
 // AtlPagination's first/last-page arrows through, six live instances, in the same commit
 // that closed the rule. A character is exempt because of the job it does on the page,
 // not because of the job it can do somewhere else.
-const TEXT_PUNCTUATION = /^[\u2026\u2014\u2013\u00b7\u2019\u2018\u201c\u201d\u201e\u00a0]+$/;
+const TEXT_PUNCTUATION =
+  /^[\u2026\u2014\u2013\u00b7\u2019\u2018\u201c\u201d\u201e\u00a0]+$/;
 
 const errors = [];
 
@@ -71,15 +72,21 @@ for (const fw of FRAMEWORKS) {
     for (const file of fs.readdirSync(dirPath)) {
       const full = path.join(dirPath, file);
       const rel = `libs/${fw}/src/lib/${dir}/${file}`;
-      const isSource = /\.(ts|tsx|vue|html)$/.test(file) && !/\.spec\./.test(file);
+      const isSource =
+        /\.(ts|tsx|vue|html)$/.test(file) && !/\.spec\./.test(file);
       const isCss = file.endsWith('.css');
       if (!isSource && !isCss) continue;
       const text = fs.readFileSync(full, 'utf8');
 
-      if (isSource && !isStory(file) && !isIconComponent(dir) && /<svg[\s>]/.test(text)) {
+      if (
+        isSource &&
+        !isStory(file) &&
+        !isIconComponent(dir) &&
+        /<svg[\s>]/.test(text)
+      ) {
         errors.push(
           `[INLINE-SVG] ${rel} draws its own <svg>. Use AtlIcon so the shape has one definition; ` +
-            `add the geometry to libs/spec/src/icons.ts if the icon does not exist yet.`
+            `add the geometry to libs/spec/src/icons.ts if the icon does not exist yet.`,
         );
       }
 
@@ -87,13 +94,21 @@ for (const fw of FRAMEWORKS) {
       // Comments are stripped first: a rule's own explanation may quote the glyph it
       // replaced, exactly as this file's header does.
       if (isSource && !isStory(file) && !isIconComponent(dir)) {
-        const code = text.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
-        const glyphs = [...new Set([...code.matchAll(/['"`]([^\x00-\x7F]{1,2})['"`]/g)].map((m) => m[1]))];
+        const code = text
+          .replace(/\/\*[\s\S]*?\*\//g, '')
+          .replace(/^\s*\/\/.*$/gm, '');
+        const glyphs = [
+          ...new Set(
+            [...code.matchAll(/['"`]([^\x00-\x7F]{1,2})['"`]/g)].map(
+              (m) => m[1],
+            ),
+          ),
+        ];
         if (glyphs.length > 0) {
           errors.push(
             `[GLYPH-MAP] ${rel} quotes ${glyphs.map((g) => JSON.stringify(g)).join(', ')} as an icon. ` +
               `Render an AtlIcon by name instead — a glyph cannot follow the icon set, cannot be an icon ` +
-              `instance in Figma, and depends on whichever font happens to have the character.`
+              `instance in Figma, and depends on whichever font happens to have the character.`,
           );
         }
       }
@@ -110,7 +125,9 @@ for (const fw of FRAMEWORKS) {
       // pagination gap, a dash, a quotation mark. The test is whether the character
       // stands for a shape (an arrow, a check, a cross) or for punctuation.
       if (isSource && !isStory(file) && !isIconComponent(dir)) {
-        const code = text.replace(/\/\*[\s\S]*?\*\//g, '').replace(/^\s*\/\/.*$/gm, '');
+        const code = text
+          .replace(/\/\*[\s\S]*?\*\//g, '')
+          .replace(/^\s*\/\/.*$/gm, '');
         const found = new Set();
         for (const m of code.matchAll(/>\s*([^\x00-\x7F][^<]{0,3}?)\s*</g)) {
           const g = m[1].trim();
@@ -120,7 +137,7 @@ for (const fw of FRAMEWORKS) {
         }
         if (found.size > 0) {
           errors.push(
-            `[TEXT-GLYPH] ${rel} renders ${[...found].map((g) => JSON.stringify(g)).join(', ')} as element text. That is an icon drawn as a character: render an AtlIcon by name so the shape has one definition, can be an icon instance in Figma, and does not depend on whichever font has the character.`
+            `[TEXT-GLYPH] ${rel} renders ${[...found].map((g) => JSON.stringify(g)).join(', ')} as element text. That is an icon drawn as a character: render an AtlIcon by name so the shape has one definition, can be an icon instance in Figma, and does not depend on whichever font has the character.`,
           );
         }
       }
@@ -137,7 +154,7 @@ for (const fw of FRAMEWORKS) {
           errors.push(
             `[CSS-GLYPH] ${rel} puts the literal ${JSON.stringify(value)} in a CSS content:. ` +
               `Render an AtlIcon instead — a glyph cannot follow the icon set, and Figma cannot ` +
-              `put an icon instance behind a pseudo-element.`
+              `put an icon instance behind a pseudo-element.`,
           );
         }
       }
@@ -149,31 +166,35 @@ for (const fw of FRAMEWORKS) {
 const specText = fs.readFileSync(SPEC_INDEX, 'utf8');
 const unionMatch = specText.match(/export type AtlIconName =([\s\S]*?);/);
 if (!unionMatch) {
-  errors.push('[UNION] could not find `export type AtlIconName` in libs/spec/src/index.ts.');
+  errors.push(
+    '[UNION] could not find `export type AtlIconName` in libs/spec/src/index.ts.',
+  );
 } else {
   const names = [...unionMatch[1].matchAll(/'([^']+)'/g)].map((m) => m[1]);
   const iconsText = fs.readFileSync(SPEC_ICONS, 'utf8');
   const geometryBlock = iconsText.slice(iconsText.indexOf('ATL_ICON_GEOMETRY'));
-  const defined = new Set([...geometryBlock.matchAll(/^ {2}'?([a-z-]+)'?:\s*\{/gm)].map((m) => m[1]));
+  const defined = new Set(
+    [...geometryBlock.matchAll(/^ {2}'?([a-z-]+)'?:\s*\{/gm)].map((m) => m[1]),
+  );
 
   for (const name of names) {
     if (!defined.has(name)) {
       errors.push(
         `[NO-GEOMETRY] AtlIconName includes '${name}' but icons.ts defines no geometry for it, ` +
-          `so AtlIcon would render an empty svg. Add it or drop the name.`
+          `so AtlIcon would render an empty svg. Add it or drop the name.`,
       );
     }
   }
   for (const name of defined) {
     if (!names.includes(name)) {
       errors.push(
-        `[ORPHAN] icons.ts defines '${name}' but AtlIconName does not include it, so no consumer can ask for it.`
+        `[ORPHAN] icons.ts defines '${name}' but AtlIconName does not include it, so no consumer can ask for it.`,
       );
     }
   }
   if (errors.length === 0) {
     console.log(
-      `✓ iconography single-sourced (${names.length} names, all with geometry; no component draws its own svg, css glyph or glyph map).`
+      `✓ iconography single-sourced (${names.length} names, all with geometry; no component draws its own svg, css glyph or glyph map).`,
     );
     process.exit(0);
   }

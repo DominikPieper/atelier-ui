@@ -111,8 +111,9 @@ function parseFrontmatter(filePath) {
   return fields;
 }
 
-const scenarios = readdirSync(testsDir)
-  .filter((name) => statSync(join(testsDir, name)).isDirectory());
+const scenarios = readdirSync(testsDir).filter((name) =>
+  statSync(join(testsDir, name)).isDirectory(),
+);
 
 for (const scenario of scenarios) {
   scenarioCount++;
@@ -149,7 +150,9 @@ for (const scenario of scenarios) {
 
   for (const required of ['mode', 'references', 'first-tool', 'out-of-scope']) {
     if (expectedFm[required] === undefined) {
-      errors.push(`tests/${scenario}/expected.md is missing frontmatter field "${required}"`);
+      errors.push(
+        `tests/${scenario}/expected.md is missing frontmatter field "${required}"`,
+      );
     }
   }
 
@@ -160,7 +163,9 @@ for (const scenario of scenarios) {
     );
   }
 
-  const refs = Array.isArray(expectedFm.references) ? expectedFm.references : [];
+  const refs = Array.isArray(expectedFm.references)
+    ? expectedFm.references
+    : [];
   for (const ref of refs) {
     const refPath = join(referencesDir, ref);
     if (!existsSync(refPath)) {

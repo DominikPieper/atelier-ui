@@ -7,28 +7,28 @@ The shared constants below are inlined into every payload — there is no plugin
 ```js
 // Layout tokens
 const GAP_SECTION = 80;
-const GAP_GROUP   = 48;
-const GAP_CARD    = 32;
-const CARD_WIDTH  = 320;
+const GAP_GROUP = 48;
+const GAP_CARD = 32;
+const CARD_WIDTH = 320;
 const CARD_PADDING = 24;
 const CARD_ITEM_SPACING = 12;
 const PREVIEW_PAD = 16;
-const PREVIEW_MIN_H = 96;        // floor for tiny components (Badge, Avatar, Skeleton)
-const PREVIEW_MAX_H = 240;       // ceiling for large compositions (Chat, Drawer, Table)
-const PREVIEW_INNER_W = CARD_WIDTH - CARD_PADDING * 2 - PREVIEW_PAD * 2;  // 240 by default
+const PREVIEW_MIN_H = 96; // floor for tiny components (Badge, Avatar, Skeleton)
+const PREVIEW_MAX_H = 240; // ceiling for large compositions (Chat, Drawer, Table)
+const PREVIEW_INNER_W = CARD_WIDTH - CARD_PADDING * 2 - PREVIEW_PAD * 2; // 240 by default
 const BADGE_PAD = { x: 6, y: 4 };
 
 // Palettes
 const PALETTE = {
   light: { surface: '#FFFFFF', preview: '#F4F4F5', fg: '#0A0A0A', muted: '#6B7280' },
-  dark:  { surface: '#0A0A0A', preview: '#1F1F23', fg: '#FAFAFA', muted: '#9CA3AF' },
+  dark: { surface: '#0A0A0A', preview: '#1F1F23', fg: '#FAFAFA', muted: '#9CA3AF' },
 };
 const STATUS = {
-  ready:      { color: '#10B981', fg: '#FFFFFF', label: 'READY' },
-  beta:       { color: '#F59E0B', fg: '#000000', label: 'BETA' },
-  wip:        { color: '#6366F1', fg: '#FFFFFF', label: 'WIP' },
+  ready: { color: '#10B981', fg: '#FFFFFF', label: 'READY' },
+  beta: { color: '#F59E0B', fg: '#000000', label: 'BETA' },
+  wip: { color: '#6366F1', fg: '#FFFFFF', label: 'WIP' },
   deprecated: { color: '#EF4444', fg: '#FFFFFF', label: 'DEPRECATED' },
-  unmarked:   { color: '#9CA3AF', fg: '#FFFFFF', label: '—' },
+  unmarked: { color: '#9CA3AF', fg: '#FFFFFF', label: '—' },
 };
 
 // Hex → rgb in 0..1 (Figma colors are 0–1, not 0–255)
@@ -40,7 +40,9 @@ function hex(h) {
     b: parseInt(v.slice(4, 6), 16) / 255,
   };
 }
-function solid(h) { return [{ type: 'SOLID', color: hex(h) }]; }
+function solid(h) {
+  return [{ type: 'SOLID', color: hex(h) }];
+}
 ```
 
 ## Phase 1 — Discover
@@ -56,18 +58,16 @@ Read-only. Returns the light index. Heavy metadata is deferred to Phase 4.
 await figma.loadAllPagesAsync();
 figma.skipInvisibleInstanceChildren = true;
 
-const all = await figma.root.findAllAsync(
-  n => n.type === 'COMPONENT' || n.type === 'COMPONENT_SET'
-);
+const all = await figma.root.findAllAsync((n) => n.type === 'COMPONENT' || n.type === 'COMPONENT_SET');
 
 // Default skip lists — `Icon` namespace and common icon page names.
 // Icons live on a dedicated `Icons` page (see naming-and-file-structure.md);
 // dumping them into the component inventory drowns it in single-cell cards.
 const defaultSkipNamespaces = new Set(skipNamespaces || ['Icon']);
-const defaultSkipPages      = new Set(skipPages || ['Icons', '🔣 Icons']);
+const defaultSkipPages = new Set(skipPages || ['Icons', '🔣 Icons']);
 
 const skipped = [];
-const sources = all.filter(n => {
+const sources = all.filter((n) => {
   if (n.type === 'COMPONENT' && n.parent?.type === 'COMPONENT_SET') return false;
   const leaf = n.name.split('/').pop();
   if (/^[_.]/.test(leaf)) {
@@ -90,7 +90,7 @@ const sources = all.filter(n => {
 });
 
 return {
-  sources: sources.map(n => ({ id: n.id, name: n.name, type: n.type })),
+  sources: sources.map((n) => ({ id: n.id, name: n.name, type: n.type })),
   skipped,
 };
 ```
@@ -105,7 +105,7 @@ Wipes any existing `📋 Inventory` page, recreates it, drops a Section + inner 
 //   sectionPlans: Array<{ sectionName: string }>
 
 const PAGE_NAME = '📋 Inventory';
-const existing = figma.root.children.find(p => p.name === PAGE_NAME);
+const existing = figma.root.children.find((p) => p.name === PAGE_NAME);
 if (existing) existing.remove();
 
 const page = figma.createPage();
@@ -172,8 +172,8 @@ function autoFrame({ name, mode = 'VERTICAL', pad = 0, gap = 0, fill, radius = 0
   f.name = name;
   f.layoutMode = mode;
   f.itemSpacing = gap;
-  f.paddingTop = f.paddingBottom = (typeof pad === 'object' ? pad.y : pad);
-  f.paddingLeft = f.paddingRight = (typeof pad === 'object' ? pad.x : pad);
+  f.paddingTop = f.paddingBottom = typeof pad === 'object' ? pad.y : pad;
+  f.paddingLeft = f.paddingRight = typeof pad === 'object' ? pad.x : pad;
   f.layoutSizingHorizontal = sizing === 'FILL' ? 'FILL' : 'HUG';
   f.layoutSizingVertical = 'HUG';
   if (radius) f.cornerRadius = radius;
@@ -223,7 +223,7 @@ function resolveStatus(node) {
 
 function detectContextualBg(node) {
   // 1. Layer-name hint — explicit dark/inverse marker on any descendant flips to dark
-  const hint = node.findOne?.(n => /(^|[\s/])(dark|inverse|on[\s\-_]?dark)([\s/]|$)/i.test(n.name));
+  const hint = node.findOne?.((n) => /(^|[\s/])(dark|inverse|on[\s\-_]?dark)([\s/]|$)/i.test(n.name));
   if (hint) return 'dark';
   // 2. Cached
   const cached = node.getSharedPluginData('inventory', 'contextualBg');
@@ -235,7 +235,7 @@ function detectContextualBg(node) {
   //    component sits inside. Walk parents until one has a fill.
   let cursor = node.parent;
   while (cursor && cursor.type !== 'PAGE' && cursor.type !== 'DOCUMENT') {
-    const fill = (cursor.fills || []).find(f => f.type === 'SOLID' && f.visible !== false);
+    const fill = (cursor.fills || []).find((f) => f.type === 'SOLID' && f.visible !== false);
     if (fill) {
       const { r, g, b } = fill.color;
       const L = 0.2126 * r + 0.7152 * g + 0.0722 * b;
@@ -269,7 +269,7 @@ function extractMetadata(node) {
   }
   return {
     description: node.description || '',
-    documentationLinks: (node.documentationLinks || []).map(d => d.uri),
+    documentationLinks: (node.documentationLinks || []).map((d) => d.uri),
     properties,
     size: { width: previewNode.width, height: previewNode.height },
     status: resolveStatus(node),
@@ -303,7 +303,12 @@ async function buildCard(node) {
   header.counterAxisAlignItems = 'CENTER';
   header.appendChild(makeText(node.name.split('/').pop(), { size: 14, weight: 'Semi Bold', color: bg.fg }));
   const badge = autoFrame({
-    name: 'status', mode: 'HORIZONTAL', pad: BADGE_PAD, fill: status.color, radius: 12, sizing: 'HUG',
+    name: 'status',
+    mode: 'HORIZONTAL',
+    pad: BADGE_PAD,
+    fill: status.color,
+    radius: 12,
+    sizing: 'HUG',
   });
   badge.appendChild(makeText(status.label, { size: 10, weight: 'Medium', color: status.fg, uppercase: true }));
   header.appendChild(badge);
@@ -311,7 +316,12 @@ async function buildCard(node) {
 
   // — Preview ——————————————————————————————————
   const preview = autoFrame({
-    name: 'preview', mode: 'VERTICAL', pad: PREVIEW_PAD, fill: bg.preview, radius: 6, sizing: 'FILL',
+    name: 'preview',
+    mode: 'VERTICAL',
+    pad: PREVIEW_PAD,
+    fill: bg.preview,
+    radius: 6,
+    sizing: 'FILL',
   });
   preview.primaryAxisAlignItems = 'CENTER';
   preview.counterAxisAlignItems = 'CENTER';
@@ -322,11 +332,7 @@ async function buildCard(node) {
     // Scale-fit on BOTH axes — width-only clamp pancakes tall compositions
     // (a 1080×720 chat preview scaled by width alone becomes 240×26 because
     // the parent preview frame's minHeight clips the height after rescale).
-    const scale = Math.min(
-      PREVIEW_INNER_W / instance.width,
-      PREVIEW_MAX_H / instance.height,
-      1,
-    );
+    const scale = Math.min(PREVIEW_INNER_W / instance.width, PREVIEW_MAX_H / instance.height, 1);
     if (scale < 0.99) instance.rescale(scale);
   } catch (e) {
     preview.appendChild(makeText('(preview unavailable)', { size: 11, color: bg.muted }));
@@ -335,10 +341,7 @@ async function buildCard(node) {
 
   // — Meta row ——————————————————————————————————
   const metaRow = autoFrame({ name: 'meta', mode: 'HORIZONTAL', gap: 8, sizing: 'FILL' });
-  metaRow.appendChild(makeText(
-    `${meta.isSet ? 'COMPONENT_SET' : 'COMPONENT'} · ${Math.round(meta.size.width)}×${Math.round(meta.size.height)}px`,
-    { size: 11, color: bg.muted },
-  ));
+  metaRow.appendChild(makeText(`${meta.isSet ? 'COMPONENT_SET' : 'COMPONENT'} · ${Math.round(meta.size.width)}×${Math.round(meta.size.height)}px`, { size: 11, color: bg.muted }));
   card.appendChild(metaRow);
 
   // — Property table ——————————————————————————————————
@@ -381,7 +384,7 @@ for (const group of groups) {
       cardsRow.appendChild(card);
       built.push({ componentId: id, cardId: card.id });
     }
-    await new Promise(r => setTimeout(r, 0));      // YIELD between chunks
+    await new Promise((r) => setTimeout(r, 0)); // YIELD between chunks
   }
 }
 
@@ -393,7 +396,7 @@ return { sectionName, built };
 For the second + third + … call against the same Section, the same payload is reused with two changes:
 
 - `groups` is the **next contiguous slice** of the original group plan (the skill agent slices it up-front).
-- The first call may need to *reuse* a `groupFrame` instead of creating a new one. Pass an optional `appendIntoGroupId` and have the payload fetch and reuse it instead of calling `makeGroupFrame()`. Same logic; the payload conditionally creates vs. resolves.
+- The first call may need to _reuse_ a `groupFrame` instead of creating a new one. Pass an optional `appendIntoGroupId` and have the payload fetch and reuse it instead of calling `makeGroupFrame()`. Same logic; the payload conditionally creates vs. resolves.
 
 ## Phase 6 — Mark Ready + index
 
@@ -419,7 +422,7 @@ let cursorX = 0;
 for (const name of Object.keys(sectionRefs)) {
   const sec = await figma.getNodeByIdAsync(sectionRefs[name].sectionId);
   sec.x = cursorX;
-  sec.y = 200;                                  // leaves room above for the TOC
+  sec.y = 200; // leaves room above for the TOC
   cursorX += sec.width + 80;
 }
 
@@ -479,11 +482,9 @@ To force a fresh contextual-background recompute, the skill agent first runs:
 ```js
 // figma_execute payload — clear contextualBg cache
 await figma.loadAllPagesAsync();
-const all = await figma.root.findAllAsync(
-  n => n.type === 'COMPONENT' || n.type === 'COMPONENT_SET'
-);
+const all = await figma.root.findAllAsync((n) => n.type === 'COMPONENT' || n.type === 'COMPONENT_SET');
 for (const n of all) n.setSharedPluginData('inventory', 'contextualBg', '');
 return { cleared: all.length };
 ```
 
-This is opt-in only — the user must request it explicitly (trigger: *recompute backgrounds, refresh contextual backgrounds, full rebuild*).
+This is opt-in only — the user must request it explicitly (trigger: _recompute backgrounds, refresh contextual backgrounds, full rebuild_).

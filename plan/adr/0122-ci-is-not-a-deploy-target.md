@@ -28,8 +28,8 @@ and it was the largest cheap increase in machine-verified correctness available.
 The suite had been configured in all three libraries since the Storybook 10.6 migration
 and ran green locally in about eleven seconds per library — 216 React and 242 Vue checks —
 but `.github/workflows/ci.yml` carried it as a comment block headed "NOT WIRED": every run
-with `CI` set failed with *Failed to connect to the browser session … within the timeout*
-and *Tests no tests*. The comment recorded a careful diagnosis that had ruled out the
+with `CI` set failed with _Failed to connect to the browser session … within the timeout_
+and _Tests no tests_. The comment recorded a careful diagnosis that had ruled out the
 browser binary, sandbox flags, file parallelism, the connect timeout, and "any CI branch in
 this repo's `.storybook` config". The job was left out "rather than made non-blocking",
 which was the right call for a job that asserts nothing; it also meant that for weeks
@@ -37,12 +37,12 @@ nothing in CI rendered a story, ran a `play` function, or ran axe.
 
 The 2026-09-10 spec rethink (`tasks/spec-rethink-2026-09-10.md` § 1) named this the
 cheapest gain in the repo and put it first. Reproducing it took one afternoon and a
-different first question: not *why does the connection time out* but *what does the page
-fetch after it loads*. A twenty-line Playwright probe on the live orchestrator URL showed
+different first question: not _why does the connection time out_ but _what does the page
+fetch after it loads_. A twenty-line Playwright probe on the live orchestrator URL showed
 three 404s within eighty milliseconds — `/__vitest_browser__/orchestrator-*.js`,
 `/__vitest_browser__/utils-*.js`, `/@fs/…/error-catcher.js` — and a `curl` of one of them
-returned the cause as prose: *The server is configured with a public base URL of
-`/storybook-vue/` — did you mean to visit `/storybook-vue/__vitest_browser__/…`?*
+returned the cause as prose: _The server is configured with a public base URL of
+`/storybook-vue/` — did you mean to visit `/storybook-vue/__vitest_browser__/…`?_
 
 Each `libs/<fw>/.storybook/main.ts` ended with
 `if (process.env['CI'] || process.env['BUILD_STORYBOOK']) config.base = '/storybook-<fw>/'`.
@@ -52,7 +52,7 @@ That `viteFinal` hook shapes the production build **and** the Vite server
 served everything under `/storybook-<fw>/` while Vitest's orchestrator HTML — served by a
 middleware that ignores `base` — loaded its scripts from the root. Page loads, scripts 404,
 WebSocket never opens, session times out. The earlier diagnosis had dismissed this branch
-because it changes the *build*, and the question being asked was about the *test*.
+because it changes the _build_, and the question being asked was about the _test_.
 
 The `CI` half of the condition was redundant the whole time: `wrangler.jsonc`'s
 `build.command` sets `BUILD_STORYBOOK=1` explicitly for each of the three `storybook build`
@@ -90,8 +90,8 @@ never deployed.
    cross-framework finding for the backlog.
 5. **The Angular suite had never run.** Its `vitest.storybook.config.ts` lacked the
    `@analogjs/vite-plugin-angular` plugin the `nx test` config carries, so importing
-   `@storybook/angular` threw *The injectable 'PlatformLocation' needs to be compiled
-   using the JIT compiler* before any story loaded — all 32 files failed to import.
+   `@storybook/angular` threw _The injectable 'PlatformLocation' needs to be compiled
+   using the JIT compiler_ before any story loaded — all 32 files failed to import.
    Added; the suite then produced 226 passing and **three failing dialog stories**:
    `toBeVisible()` on the `<dialog open>` element. Cause: `atl-dialog.css` fades the
    dialog in from `@starting-style { opacity: 0 }` over `--ui-duration-slow`; `showModal()`

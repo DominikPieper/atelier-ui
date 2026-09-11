@@ -26,7 +26,7 @@ used across Atelier UI components. All bound to text/icon-sm (12 px)."
 So the glyph-as-icon defect had a fourth home. ADR-0046 took it out of the CSS,
 ADR-0050 out of the TypeScript, ADR-0055 out of the templates — and it was sitting
 in the design source the whole time, which is the file everything is supposed to be
-transferred *to*.
+transferred _to_.
 
 Four names were missing against the code's `AtlIconName`: `check`, `person`, and the
 two `chevron-double-*` that ADR-0055 had just added.

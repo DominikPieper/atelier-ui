@@ -27,10 +27,18 @@ async function captureOne(template: string): Promise<unknown> {
 
 async function capture(): Promise<Record<string, unknown>> {
   return {
-    default: await captureOne('<atl-input placeholder="Your name"></atl-input>'),
-    invalid: await captureOne('<atl-input placeholder="Your name" [invalid]="true"></atl-input>'),
-    disabled: await captureOne('<atl-input placeholder="Your name" [disabled]="true"></atl-input>'),
-    required: await captureOne('<atl-input placeholder="Your name" [required]="true"></atl-input>'),
+    default: await captureOne(
+      '<atl-input placeholder="Your name"></atl-input>',
+    ),
+    invalid: await captureOne(
+      '<atl-input placeholder="Your name" [invalid]="true"></atl-input>',
+    ),
+    disabled: await captureOne(
+      '<atl-input placeholder="Your name" [disabled]="true"></atl-input>',
+    ),
+    required: await captureOne(
+      '<atl-input placeholder="Your name" [required]="true"></atl-input>',
+    ),
     labelled: await captureOne('<atl-input label="Full name"></atl-input>'),
   };
 }

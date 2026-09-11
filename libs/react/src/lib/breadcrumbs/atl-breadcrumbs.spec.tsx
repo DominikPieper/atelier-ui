@@ -3,15 +3,20 @@ import { AtlBreadcrumbs, AtlBreadcrumbItem } from './atl-breadcrumbs';
 import { covers } from '../../testing/behavior';
 
 describe('AtlBreadcrumbs', () => {
-  covers('breadcrumbs', 'nav-aria-label')('renders a nav with aria-label="Breadcrumb"', () => {
-    render(
-      <AtlBreadcrumbs>
-        <AtlBreadcrumbItem href="/home">Home</AtlBreadcrumbItem>
-        <AtlBreadcrumbItem>Current</AtlBreadcrumbItem>
-      </AtlBreadcrumbs>
-    );
-    expect(screen.getByRole('navigation', { name: 'Breadcrumb' })).toBeInTheDocument();
-  });
+  covers('breadcrumbs', 'nav-aria-label')(
+    'renders a nav with aria-label="Breadcrumb"',
+    () => {
+      render(
+        <AtlBreadcrumbs>
+          <AtlBreadcrumbItem href="/home">Home</AtlBreadcrumbItem>
+          <AtlBreadcrumbItem>Current</AtlBreadcrumbItem>
+        </AtlBreadcrumbs>,
+      );
+      expect(
+        screen.getByRole('navigation', { name: 'Breadcrumb' }),
+      ).toBeInTheDocument();
+    },
+  );
 
   it('renders all breadcrumb items', () => {
     render(
@@ -19,7 +24,7 @@ describe('AtlBreadcrumbs', () => {
         <AtlBreadcrumbItem href="/home">Home</AtlBreadcrumbItem>
         <AtlBreadcrumbItem href="/products">Products</AtlBreadcrumbItem>
         <AtlBreadcrumbItem>Widget X</AtlBreadcrumbItem>
-      </AtlBreadcrumbs>
+      </AtlBreadcrumbs>,
     );
     expect(screen.getByText('Home')).toBeInTheDocument();
     expect(screen.getByText('Products')).toBeInTheDocument();
@@ -31,31 +36,38 @@ describe('AtlBreadcrumbs', () => {
       <AtlBreadcrumbs>
         <AtlBreadcrumbItem href="/home">Home</AtlBreadcrumbItem>
         <AtlBreadcrumbItem>Current Page</AtlBreadcrumbItem>
-      </AtlBreadcrumbs>
+      </AtlBreadcrumbs>,
     );
-    const currentItem = screen.getByText('Current Page').closest('.atl-breadcrumb-item');
+    const currentItem = screen
+      .getByText('Current Page')
+      .closest('.atl-breadcrumb-item');
     expect(currentItem).toHaveClass('is-current');
   });
 
-  covers('breadcrumbs', 'link-when-href')('renders non-current items as links when href is provided', () => {
-    render(
-      <AtlBreadcrumbs>
-        <AtlBreadcrumbItem href="/home">Home</AtlBreadcrumbItem>
-        <AtlBreadcrumbItem>Current</AtlBreadcrumbItem>
-      </AtlBreadcrumbs>
-    );
-    const homeLink = screen.getByRole('link', { name: 'Home' });
-    expect(homeLink).toHaveAttribute('href', '/home');
-  });
+  covers('breadcrumbs', 'link-when-href')(
+    'renders non-current items as links when href is provided',
+    () => {
+      render(
+        <AtlBreadcrumbs>
+          <AtlBreadcrumbItem href="/home">Home</AtlBreadcrumbItem>
+          <AtlBreadcrumbItem>Current</AtlBreadcrumbItem>
+        </AtlBreadcrumbs>,
+      );
+      const homeLink = screen.getByRole('link', { name: 'Home' });
+      expect(homeLink).toHaveAttribute('href', '/home');
+    },
+  );
 
   it('renders current item without link', () => {
     render(
       <AtlBreadcrumbs>
         <AtlBreadcrumbItem href="/home">Home</AtlBreadcrumbItem>
         <AtlBreadcrumbItem>Current Page</AtlBreadcrumbItem>
-      </AtlBreadcrumbs>
+      </AtlBreadcrumbs>,
     );
-    expect(screen.queryByRole('link', { name: 'Current Page' })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('link', { name: 'Current Page' }),
+    ).not.toBeInTheDocument();
   });
 
   it('sets aria-current="page" on the current item', () => {
@@ -63,7 +75,7 @@ describe('AtlBreadcrumbs', () => {
       <AtlBreadcrumbs>
         <AtlBreadcrumbItem href="/home">Home</AtlBreadcrumbItem>
         <AtlBreadcrumbItem>Current Page</AtlBreadcrumbItem>
-      </AtlBreadcrumbs>
+      </AtlBreadcrumbs>,
     );
     const currentSpan = screen.getByText('Current Page');
     expect(currentSpan).toHaveAttribute('aria-current', 'page');
@@ -80,14 +92,19 @@ describe('AtlBreadcrumbItem', () => {
     render(
       <AtlBreadcrumbItem href="/home" current>
         Current
-      </AtlBreadcrumbItem>
+      </AtlBreadcrumbItem>,
     );
     expect(screen.queryByRole('link')).not.toBeInTheDocument();
     expect(screen.getByText('Current')).toBeInTheDocument();
   });
 
-  covers('breadcrumbs', 'current-class')('applies is-current class when current is true', () => {
-    const { container } = render(<AtlBreadcrumbItem current>Current</AtlBreadcrumbItem>);
-    expect(container.firstChild).toHaveClass('is-current');
-  });
+  covers('breadcrumbs', 'current-class')(
+    'applies is-current class when current is true',
+    () => {
+      const { container } = render(
+        <AtlBreadcrumbItem current>Current</AtlBreadcrumbItem>,
+      );
+      expect(container.firstChild).toHaveClass('is-current');
+    },
+  );
 });

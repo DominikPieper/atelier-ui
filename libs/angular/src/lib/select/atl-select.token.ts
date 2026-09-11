@@ -7,7 +7,12 @@ export interface AtlSelectContext {
   readonly activeOptionId: WritableSignal<string | null>;
   select(v: string): void;
   markTouched(): void;
-  registerOption(id: string, value: string, labelText: string, disabled: boolean): void;
+  registerOption(
+    id: string,
+    value: string,
+    labelText: string,
+    disabled: boolean,
+  ): void;
   unregisterOption(id: string): void;
 }
 

@@ -63,7 +63,13 @@
  *   node tools/scripts/check-docs-layout.mjs            measure and report
  *   node tools/scripts/check-docs-layout.mjs --check    quiet unless something is wrong
  */
-import { readFileSync, readdirSync, existsSync, statSync, createReadStream } from 'node:fs';
+import {
+  readFileSync,
+  readdirSync,
+  existsSync,
+  statSync,
+  createReadStream,
+} from 'node:fs';
 import { join, dirname, relative, extname, sep } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createServer } from 'node:http';
@@ -108,7 +114,8 @@ const COLUMN_SCROLL_ALLOW = [
   {
     path: /^\/patterns(\/management-dashboard)?$/,
     contains: '.atl-tab-group',
-    reason: 'AtlTabs pills do not wrap or scroll at 375 — library component, review L4',
+    reason:
+      'AtlTabs pills do not wrap or scroll at 375 — library component, review L4',
   },
 ];
 
@@ -143,7 +150,7 @@ const AXE_ALLOW = [
     page: '/components/breadcrumbs',
     match: (target) => /breadcrumb/i.test(target),
     reason:
-      "the demo's own nav[aria-label=\"Breadcrumb\"] collides with the page's real breadcrumb landmark by design — the component is demonstrating itself (review n8: acceptable).",
+      'the demo\'s own nav[aria-label="Breadcrumb"] collides with the page\'s real breadcrumb landmark by design — the component is demonstrating itself (review n8: acceptable).',
   },
   {
     rule: 'target-size',
@@ -195,7 +202,9 @@ const started = Date.now();
 
 // ── input: the built site ─────────────────────────────────────────────────
 if (!existsSync(join(DIST, 'index.html'))) {
-  console.error('✗ [NO-BUILD] dist/docs/index.html not found. Run: npx nx build docs');
+  console.error(
+    '✗ [NO-BUILD] dist/docs/index.html not found. Run: npx nx build docs',
+  );
   process.exit(1);
 }
 
@@ -227,7 +236,8 @@ function resolveFilePath(requestUrl) {
   let rel = pathname === '/' ? '/index.html' : pathname;
   let filePath = join(DIST, rel);
   try {
-    if (statSync(filePath).isDirectory()) filePath = join(filePath, 'index.html');
+    if (statSync(filePath).isDirectory())
+      filePath = join(filePath, 'index.html');
   } catch {
     if (!extname(rel)) filePath = join(DIST, rel, 'index.html');
   }
@@ -245,7 +255,9 @@ function serveFile(filePath, res, status = 200) {
     if (!res.headersSent) res.writeHead(502, { 'Content-Type': MIME['.html'] });
     res.end('dist/docs changed underneath this server.');
   });
-  res.writeHead(status, { 'Content-Type': MIME[extname(filePath)] || 'application/octet-stream' });
+  res.writeHead(status, {
+    'Content-Type': MIME[extname(filePath)] || 'application/octet-stream',
+  });
   stream.pipe(res);
 }
 
@@ -274,7 +286,7 @@ try {
   ({ chromium } = await import('@playwright/test'));
 } catch {
   console.error(
-    '✗ this gate needs a browser: @playwright/test is not resolvable. Run npm ci, then npx playwright install chromium.'
+    '✗ this gate needs a browser: @playwright/test is not resolvable. Run npm ci, then npx playwright install chromium.',
   );
   server.close();
   process.exit(1);
@@ -286,7 +298,7 @@ try {
 } catch (err) {
   console.error(
     `✗ this gate needs a browser and could not launch one — ${String(err.message).split('\n')[0]}\n` +
-      '  Run: npx playwright install chromium'
+      '  Run: npx playwright install chromium',
   );
   server.close();
   process.exit(1);
@@ -302,15 +314,22 @@ const axeSource = readFileSync(require.resolve('axe-core/axe.min.js'), 'utf8');
  * clips — that content cannot be the cause of the scope's own overflow.
  */
 function findWidestOffender(scope) {
-  const root = scope === 'document' ? document.documentElement : document.querySelector(scope);
+  const root =
+    scope === 'document'
+      ? document.documentElement
+      : document.querySelector(scope);
   if (!root) return null;
   const overflow =
     scope === 'document'
-      ? document.documentElement.scrollWidth - document.documentElement.clientWidth
+      ? document.documentElement.scrollWidth -
+        document.documentElement.clientWidth
       : root.scrollWidth - root.clientWidth;
   if (overflow <= 1) return null;
 
-  const boundary = scope === 'document' ? document.documentElement.clientWidth : root.getBoundingClientRect().right;
+  const boundary =
+    scope === 'document'
+      ? document.documentElement.clientWidth
+      : root.getBoundingClientRect().right;
   const searchRoot = scope === 'document' ? document.body : root;
   const sel = (e) =>
     e.tagName.toLowerCase() +
@@ -321,7 +340,8 @@ function findWidestOffender(scope) {
   const clipped = (e) => {
     let p = e.parentElement;
     while (p && p !== searchRoot.parentElement) {
-      if (/(auto|scroll|hidden|clip)/.test(getComputedStyle(p).overflowX)) return true;
+      if (/(auto|scroll|hidden|clip)/.test(getComputedStyle(p).overflowX))
+        return true;
       p = p.parentElement;
     }
     return false;
@@ -333,7 +353,9 @@ function findWidestOffender(scope) {
       return r.width > 0 && r.right > boundary + 1;
     })
     .filter((e) => !clipped(e));
-  candidates.sort((a, b) => b.getBoundingClientRect().right - a.getBoundingClientRect().right);
+  candidates.sort(
+    (a, b) => b.getBoundingClientRect().right - a.getBoundingClientRect().right,
+  );
   const top = candidates[0];
   if (!top) return { overflow, chain: null, classes: [] };
 
@@ -342,7 +364,8 @@ function findWidestOffender(scope) {
   let e = top;
   while (e && e !== searchRoot.parentElement) {
     if (chain.length < 4) chain.unshift(sel(e));
-    if (typeof e.className === 'string') e.className.split(/\s+/).forEach((c) => c && classes.add(c));
+    if (typeof e.className === 'string')
+      e.className.split(/\s+/).forEach((c) => c && classes.add(c));
     e = e.parentElement;
   }
   return { overflow, chain: chain.join(' > '), classes: [...classes] };
@@ -366,8 +389,10 @@ async function settlePage(page) {
   await page.evaluate(
     () =>
       new Promise((resolve) => {
-        document.fonts.ready.then(() => requestAnimationFrame(() => requestAnimationFrame(resolve)));
-      })
+        document.fonts.ready.then(() =>
+          requestAnimationFrame(() => requestAnimationFrame(resolve)),
+        );
+      }),
   );
   await page.waitForTimeout(150);
 }
@@ -384,8 +409,11 @@ async function runAxeOnce(page, rules) {
   return page.evaluate(async (rules) => {
     const hasShell = !!document.getElementById('docs-shell');
     const results = await window.axe.run(
-      { include: [[hasShell ? '#docs-shell' : 'body']], exclude: [['astro-dev-toolbar']] },
-      { runOnly: { type: 'rule', values: rules }, resultTypes: ['violations'] }
+      {
+        include: [[hasShell ? '#docs-shell' : 'body']],
+        exclude: [['astro-dev-toolbar']],
+      },
+      { runOnly: { type: 'rule', values: rules }, resultTypes: ['violations'] },
     );
     return results.violations.map((v) => ({
       id: v.id,
@@ -397,7 +425,10 @@ async function runAxeOnce(page, rules) {
         // live hit-test at its bottom-centre so a sticky-bottom-nav
         // false positive can be told apart from a real one.
         let obscuredByBottomNav = false;
-        if (v.id === 'target-size' && /partially obscured/i.test(n.failureSummary || '')) {
+        if (
+          v.id === 'target-size' &&
+          /partially obscured/i.test(n.failureSummary || '')
+        ) {
           let el = null;
           try {
             el = document.querySelector(n.target[n.target.length - 1]);
@@ -419,7 +450,8 @@ async function runAxeOnce(page, rules) {
         // axe's own contrast-check payload (fgColor/bgColor/contrastRatio),
         // carried through so a real color-contrast finding can be judged
         // from the log instead of taken on faith.
-        const contrast = v.id === 'color-contrast' ? (n.any?.[0]?.data ?? null) : null;
+        const contrast =
+          v.id === 'color-contrast' ? (n.any?.[0]?.data ?? null) : null;
         return { target, obscuredByBottomNav, contrast };
       }),
     }));
@@ -434,13 +466,18 @@ for (const width of WIDTHS) {
   // every transition/animation duration when this is set. Without it, axe's
   // color-contrast sampled `.is-active` nav links mid-transition on some runs
   // and not others — same content, different reported violations run to run.
-  const context = await browser.newContext({ viewport: { width, height: 900 }, reducedMotion: 'reduce' });
+  const context = await browser.newContext({
+    viewport: { width, height: 900 },
+    reducedMotion: 'reduce',
+  });
   const page = await context.newPage();
 
   for (const { url } of PAGES) {
     try {
       await page.goto(BASE_URL + url, { waitUntil: 'load', timeout: 20000 });
-      await page.evaluate(() => document.documentElement.setAttribute('data-theme', 'dark'));
+      await page.evaluate(() =>
+        document.documentElement.setAttribute('data-theme', 'dark'),
+      );
       await settlePage(page);
 
       // [OVERFLOW] — any width
@@ -448,13 +485,16 @@ for (const width of WIDTHS) {
       if (overflow) {
         findings.push(
           `[OVERFLOW] ${url} @${width}: document is ${overflow.overflow}px wider than the viewport` +
-            (overflow.chain ? ` (widest: ${overflow.chain})` : '')
+            (overflow.chain ? ` (widest: ${overflow.chain})` : ''),
         );
       }
 
       // [COLUMN-SCROLL] — 375 only
       if (width === 375) {
-        const col = await page.evaluate(findWidestOffender, '.docs-main-content');
+        const col = await page.evaluate(
+          findWidestOffender,
+          '.docs-main-content',
+        );
         if (col) {
           const allow = COLUMN_SCROLL_ALLOW.find((a) => a.path.test(url));
           const allowed = allow
@@ -465,16 +505,20 @@ for (const width of WIDTHS) {
                 // A page can render more than one match (e.g. two AtlTabs
                 // groups on `/patterns`) — only one of them needs to actually
                 // sit at the boundary for the allow to apply.
-                return [...container.querySelectorAll(sel)].some((el) => el.getBoundingClientRect().right >= boundary - 1);
+                return [...container.querySelectorAll(sel)].some(
+                  (el) => el.getBoundingClientRect().right >= boundary - 1,
+                );
               }, allow.contains)
             : false;
           if (!allowed) {
             findings.push(
               `[COLUMN-SCROLL] ${url} @375: .docs-main-content is ${col.overflow}px wider than its own box` +
-                (col.chain ? ` (widest unclipped: ${col.chain})` : '')
+                (col.chain ? ` (widest unclipped: ${col.chain})` : ''),
             );
           } else if (!QUIET) {
-            progress.push(`  [375px] ${url}: [COLUMN-SCROLL allowed] ${allow.contains} sits at the column boundary — ${allow.reason}`);
+            progress.push(
+              `  [375px] ${url}: [COLUMN-SCROLL allowed] ${allow.contains} sits at the column boundary — ${allow.reason}`,
+            );
           }
         }
       }
@@ -489,14 +533,16 @@ for (const width of WIDTHS) {
         const violations = await runAxeOnce(page, AXE_RULES);
 
         for (const v of violations) {
-          const allow = AXE_ALLOW.filter((a) => a.rule === v.id && a.page === url);
+          const allow = AXE_ALLOW.filter(
+            (a) => a.rule === v.id && a.page === url,
+          );
           let remaining = [];
           for (const n of v.nodes) {
             if (allow.some((a) => a.match(n.target))) continue;
             if (v.id === 'target-size' && n.obscuredByBottomNav) {
               if (!QUIET) {
                 progress.push(
-                  `  [${width}px] ${url}: [AXE:target-size allowed] ${n.target} — partially obscured only by the sticky bottom nav; scroll-padding-bottom (review M9) lets the target scroll clear — WCAG 2.5.8 Understanding`
+                  `  [${width}px] ${url}: [AXE:target-size allowed] ${n.target} — partially obscured only by the sticky bottom nav; scroll-padding-bottom (review M9) lets the target scroll clear — WCAG 2.5.8 Understanding`,
                 );
               }
               continue;
@@ -513,34 +559,49 @@ for (const width of WIDTHS) {
           if (v.id === 'color-contrast') {
             const before = remaining.length;
             const retryViolations = await runAxeOnce(page, AXE_RULES);
-            const retryRule = retryViolations.find((rv) => rv.id === 'color-contrast');
+            const retryRule = retryViolations.find(
+              (rv) => rv.id === 'color-contrast',
+            );
             const retryTargets = new Set(
-              (retryRule?.nodes ?? []).filter((n) => !allow.some((a) => a.match(n.target))).map((n) => n.target)
+              (retryRule?.nodes ?? [])
+                .filter((n) => !allow.some((a) => a.match(n.target)))
+                .map((n) => n.target),
             );
             remaining = remaining.filter((n) => retryTargets.has(n.target));
             if (!QUIET) {
-              progress.push(`  [AXE:color-contrast retried] ${url} @${width}: ${before} → ${remaining.length}`);
+              progress.push(
+                `  [AXE:color-contrast retried] ${url} @${width}: ${before} → ${remaining.length}`,
+              );
             }
             if (remaining.length === 0) continue;
           }
 
-          const targets = remaining.slice(0, 3).map((n) =>
-            v.id === 'color-contrast' && n.contrast
-              ? `${n.target} (ratio=${n.contrast.contrastRatio} fg=${n.contrast.fgColor} bg=${n.contrast.bgColor})`
-              : n.target
+          const targets = remaining
+            .slice(0, 3)
+            .map((n) =>
+              v.id === 'color-contrast' && n.contrast
+                ? `${n.target} (ratio=${n.contrast.contrastRatio} fg=${n.contrast.fgColor} bg=${n.contrast.bgColor})`
+                : n.target,
+            );
+          findings.push(
+            `[AXE:${v.id}] ${url} @${width}: impact=${v.impact} targets=${targets.join(' | ')}`,
           );
-          findings.push(`[AXE:${v.id}] ${url} @${width}: impact=${v.impact} targets=${targets.join(' | ')}`);
         }
       }
 
       // [ANCHOR-COVERED] — 1440 only
       if (width === 1440) {
-        const hrefs = await page.$$eval('.docs-toc a[href^="#"]', (as) => as.map((a) => a.getAttribute('href')));
+        const hrefs = await page.$$eval('.docs-toc a[href^="#"]', (as) =>
+          as.map((a) => a.getAttribute('href')),
+        );
         let target = null;
         for (const href of hrefs) {
           const id = href.slice(1);
           // eslint-disable-next-line no-await-in-loop
-          const exists = await page.evaluate((id) => !!document.getElementById(id), id);
+          const exists = await page.evaluate(
+            (id) => !!document.getElementById(id),
+            id,
+          );
           if (exists) {
             target = href;
             break;
@@ -551,9 +612,9 @@ for (const width of WIDTHS) {
           // href is arbitrary page content (a heading id), and `CSS.escape` is
           // a browser global, not a Node one, so it cannot run out here.
           await page.evaluate((href) => {
-            const link = [...document.querySelectorAll('.docs-toc a[href^="#"]')].find(
-              (a) => a.getAttribute('href') === href
-            );
+            const link = [
+              ...document.querySelectorAll('.docs-toc a[href^="#"]'),
+            ].find((a) => a.getAttribute('href') === href);
             link?.click();
           }, target);
           await page.waitForTimeout(400);
@@ -563,15 +624,19 @@ for (const width of WIDTHS) {
             if (!header || !heading) return null;
             const headerBottom = header.getBoundingClientRect().bottom;
             const headingTop = heading.getBoundingClientRect().top;
-            return { headerBottom, headingTop, covered: headingTop < headerBottom - 1 };
+            return {
+              headerBottom,
+              headingTop,
+              covered: headingTop < headerBottom - 1,
+            };
           }, target);
           if (covered && covered.covered) {
             findings.push(
               `[ANCHOR-COVERED] ${url} @1440: ${target} lands ${Math.round(
-                covered.headerBottom - covered.headingTop
+                covered.headerBottom - covered.headingTop,
               )}px under header.docs-topbar (top ${Math.round(covered.headingTop)}, header bottom ${Math.round(
-                covered.headerBottom
-              )})`
+                covered.headerBottom,
+              )})`,
             );
           }
         }
@@ -579,7 +644,9 @@ for (const width of WIDTHS) {
 
       if (!QUIET) progress.push(`  [${width}px] ${url}`);
     } catch (err) {
-      findings.push(`[ERROR] ${url} @${width}: ${String(err.message).split('\n')[0]}`);
+      findings.push(
+        `[ERROR] ${url} @${width}: ${String(err.message).split('\n')[0]}`,
+      );
     }
   }
 
@@ -603,7 +670,9 @@ const styleFiles = walk(DOCS_SRC).filter((f) => /\.(css|astro)$/.test(f));
  */
 function isDocumentedBreakpoint(type, value) {
   if (type === 'max-width') return DOCS_BREAKPOINTS.includes(value);
-  return DOCS_BREAKPOINTS.includes(value - 1) || DOCS_BREAKPOINTS.includes(value);
+  return (
+    DOCS_BREAKPOINTS.includes(value - 1) || DOCS_BREAKPOINTS.includes(value)
+  );
 }
 
 for (const file of styleFiles) {
@@ -620,7 +689,7 @@ for (const file of styleFiles) {
       if (!isDocumentedBreakpoint(wm[1], value)) {
         const line = content.slice(0, condStart + wm.index).split('\n').length;
         findings.push(
-          `[BREAKPOINT] ${relative(ROOT, file)}:${line}: ${wm[1]}:${value}px is not one of DOCS_BREAKPOINTS (${DOCS_BREAKPOINTS.join(', ')})`
+          `[BREAKPOINT] ${relative(ROOT, file)}:${line}: ${wm[1]}:${value}px is not one of DOCS_BREAKPOINTS (${DOCS_BREAKPOINTS.join(', ')})`,
         );
       }
     }
@@ -633,6 +702,8 @@ if (!QUIET) {
 }
 for (const f of findings) console.error(`✗ ${f}`);
 const elapsed = ((Date.now() - started) / 1000).toFixed(1);
-console.log(`docs-layout: ${PAGES.length} page(s) × ${WIDTHS.length} widths, ${findings.length} finding(s)`);
+console.log(
+  `docs-layout: ${PAGES.length} page(s) × ${WIDTHS.length} widths, ${findings.length} finding(s)`,
+);
 console.log(`⏱ ${elapsed}s`);
 process.exit(findings.length > 0 ? 1 : 0);

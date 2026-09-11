@@ -13,10 +13,9 @@ const props = withDefaults(defineProps<AtlBreadcrumbItemProps>(), {
   current: false,
 });
 
-const classes = computed(() => [
-  'atl-breadcrumb-item',
-  props.current && 'is-current',
-].filter(Boolean));
+const classes = computed(() =>
+  ['atl-breadcrumb-item', props.current && 'is-current'].filter(Boolean),
+);
 </script>
 
 <template>

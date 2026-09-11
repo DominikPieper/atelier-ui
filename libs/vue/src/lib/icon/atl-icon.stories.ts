@@ -4,10 +4,27 @@ import type { AtlIconName } from '../spec';
 
 import { metadata } from '@atelier-ui/spec/metadata/icon.metadata';
 const ICON_NAMES: AtlIconName[] = [
-  'success', 'warning', 'danger', 'info', 'error',
-  'chevron-up', 'chevron-down', 'chevron-left', 'chevron-right',
-  'sort-asc', 'sort-desc', 'arrow-right', 'arrow-left',
-  'copy', 'paste', 'add', 'edit', 'delete', 'close', 'more', 'default-toast',
+  'success',
+  'warning',
+  'danger',
+  'info',
+  'error',
+  'chevron-up',
+  'chevron-down',
+  'chevron-left',
+  'chevron-right',
+  'sort-asc',
+  'sort-desc',
+  'arrow-right',
+  'arrow-left',
+  'copy',
+  'paste',
+  'add',
+  'edit',
+  'delete',
+  'close',
+  'more',
+  'default-toast',
 ];
 
 const meta: Meta<typeof AtlIcon> = {
@@ -16,7 +33,9 @@ const meta: Meta<typeof AtlIcon> = {
   tags: ['autodocs'],
   render: (args) => ({
     components: { AtlIcon },
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: '<AtlIcon v-bind="args" />',
   }),
   argTypes: {
@@ -99,7 +118,9 @@ export const ActionIcons: Story = {
 export const AllIcons: Story = {
   render: () => ({
     components: { AtlIcon },
-    setup() { return { iconNames: ICON_NAMES }; },
+    setup() {
+      return { iconNames: ICON_NAMES };
+    },
     template: `
       <div style="display:grid;grid-template-columns:repeat(7,1fr);gap:1.25rem;max-width:540px">
         <div v-for="n in iconNames" :key="n" style="display:flex;flex-direction:column;align-items:center;gap:0.375rem">

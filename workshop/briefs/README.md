@@ -5,12 +5,12 @@ training. Each one states **what a finished component owes** — its anatomy, it
 its states, and its accessibility obligations. None of them says how to draw it: that
 is the exercise.
 
-| Brief | Component | Derived from |
-|---|---|---|
-| [`toast.md`](toast.md) | Toast | uianatomy `toast` (canonical record) |
-| [`avatar.md`](avatar.md) | Avatar | uianatomy `avatar` (canonical record) |
-| [`tagchip.md`](tagchip.md) | TagChip | **composed** — uianatomy `tag-input`'s `tag` / `tag-remove` slots + `badge` |
-| [`statcard.md`](statcard.md) | StatCard | **composed** — uianatomy `card` + `badge` |
+| Brief                        | Component | Derived from                                                                |
+| ---------------------------- | --------- | --------------------------------------------------------------------------- |
+| [`toast.md`](toast.md)       | Toast     | uianatomy `toast` (canonical record)                                        |
+| [`avatar.md`](avatar.md)     | Avatar    | uianatomy `avatar` (canonical record)                                       |
+| [`tagchip.md`](tagchip.md)   | TagChip   | **composed** — uianatomy `tag-input`'s `tag` / `tag-remove` slots + `badge` |
+| [`statcard.md`](statcard.md) | StatCard  | **composed** — uianatomy `card` + `badge`                                   |
 
 The provenance column matters and is not bookkeeping. `toast` and `avatar` are canonical
 components in the uianatomy roster, so their briefs are transcriptions of an existing
@@ -18,7 +18,7 @@ record — anatomy slots, axes, state machine, Figma↔code mismatches and named
 come from `get_component_view(id, view: "designer")`. **There is no `tag-chip` and no
 `stat-card` in that roster** — `list_components` returns 41 ids, none of them a chip or a
 stat card, and `search_components("chip")` returns nothing. Those two are compositions of
-components that *are* canonical, and each brief says so on its first line. That is itself the lesson of the
+components that _are_ canonical, and each brief says so on its first line. That is itself the lesson of the
 block: a canonical vocabulary tells you when you are building a known thing and when you
 are assembling one, and the second case is where a component library earns or loses its
 consistency.
@@ -28,7 +28,7 @@ consistency.
 **Scope: 2 variants × 2 states.** The Figma block is 90 minutes with participants who
 are new to Figma. Each brief names which two variants and which two states are in scope
 and which are explicitly out. Building the full matrix is not the goal; building a
-*correct* slice of it is. The rest of the matrix is documented in the brief so the
+_correct_ slice of it is. The rest of the matrix is documented in the brief so the
 participant knows what they deferred rather than what they forgot.
 
 **Start from a starter frame, not a blank canvas.** Each brief names the frame on the
@@ -53,13 +53,13 @@ inventing a shadow variable.
 
 **States get a Figma axis; the code's `variant` union never does.** Figma has exactly one
 primitive for a mutually-exclusive option — a Component Property of type Variant — so a
-master that needs to *draw* hover, focus, active or disabled has no other way to do it
+master that needs to _draw_ hover, focus, active or disabled has no other way to do it
 than a dedicated `state` axis, and Atelier's own library uses one routinely: `AtlButton`,
 `AtlInput`, `AtlSelect`, `AtlCheckbox`, `AtlToggle` and ten more all carry a `state` axis
 today (`grep -o '"state=[a-z]*' tools/figma/snapshot.json | sort | uniq -c` — 45×
 `state=default`, 29× `hover`, 23× `focus`, 12× `active`, plus data-flavoured values like
 `open`, `filled`, `invalid`). **What must never happen is that axis reaching the code
-contract.** The boundary is the *component's own* `variant` union — for a repo component
+contract.** The boundary is the _component's own_ `variant` union — for a repo component
 that union is also declared as `Atl*Variant` in `libs/spec/src/index.ts`, for the
 monorepo's legacy gates; a workshop participant declares it directly on their own
 component, with no separate spec file. Either way it holds only structural

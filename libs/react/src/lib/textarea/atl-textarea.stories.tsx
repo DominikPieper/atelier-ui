@@ -3,7 +3,8 @@ import { AtlTextarea } from './atl-textarea';
 
 import { metadata } from '@atelier-ui/spec/metadata/textarea.metadata';
 import { contract } from '@atelier-ui/spec/contracts/textarea.contract';
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
@@ -64,17 +65,36 @@ export const AutoResize: Story = {
 };
 
 export const TallRows: Story = {
-  args: { rows: 8, label: 'Long description', placeholder: 'Enter a detailed description...' },
+  args: {
+    rows: 8,
+    label: 'Long description',
+    placeholder: 'Enter a detailed description...',
+  },
 };
 
 export const AllStates: Story = {
   render: () => (
-    <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', maxWidth: '400px' }}>
+    <div
+      style={{
+        display: 'flex',
+        flexDirection: 'column',
+        gap: '1rem',
+        maxWidth: '400px',
+      }}
+    >
       <AtlTextarea label="Default" placeholder="Enter text" />
       <AtlTextarea label="Disabled" disabled value="Disabled content" />
       <AtlTextarea label="Read-only" readOnly value="Read-only content" />
-      <AtlTextarea label="Invalid" invalid errors={['This field is required']} />
-      <AtlTextarea label="Auto-resize" autoResize placeholder="Type to auto-resize..." />
+      <AtlTextarea
+        label="Invalid"
+        invalid
+        errors={['This field is required']}
+      />
+      <AtlTextarea
+        label="Auto-resize"
+        autoResize
+        placeholder="Type to auto-resize..."
+      />
     </div>
   ),
 };

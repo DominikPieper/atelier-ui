@@ -3,14 +3,22 @@ import { AtlBadge } from './atl-badge';
 import { covers } from '../../testing/behavior';
 
 describe('AtlBadge', () => {
-  covers('badge', 'render-default')('renders without error with default inputs', async () => {
-    await render('<atl-badge>Active</atl-badge>', { imports: [AtlBadge] });
-    expect(screen.getByText('Active')).toBeInTheDocument();
-  });
+  covers('badge', 'render-default')(
+    'renders without error with default inputs',
+    async () => {
+      await render('<atl-badge>Active</atl-badge>', { imports: [AtlBadge] });
+      expect(screen.getByText('Active')).toBeInTheDocument();
+    },
+  );
 
   it('has role="status" for screen reader awareness', async () => {
-    const { container } = await render('<atl-badge>Info</atl-badge>', { imports: [AtlBadge] });
-    expect(container.querySelector('atl-badge')).toHaveAttribute('role', 'status');
+    const { container } = await render('<atl-badge>Info</atl-badge>', {
+      imports: [AtlBadge],
+    });
+    expect(container.querySelector('atl-badge')).toHaveAttribute(
+      'role',
+      'status',
+    );
   });
 
   describe('variant classes', () => {
@@ -19,10 +27,12 @@ describe('AtlBadge', () => {
       async (variant) => {
         const { container } = await render(
           `<atl-badge variant="${variant}">Label</atl-badge>`,
-          { imports: [AtlBadge] }
+          { imports: [AtlBadge] },
         );
-        expect(container.querySelector('atl-badge')).toHaveClass(`variant-${variant}`);
-      }
+        expect(container.querySelector('atl-badge')).toHaveClass(
+          `variant-${variant}`,
+        );
+      },
     );
   });
 
@@ -32,10 +42,12 @@ describe('AtlBadge', () => {
       async (size) => {
         const { container } = await render(
           `<atl-badge size="${size}">Label</atl-badge>`,
-          { imports: [AtlBadge] }
+          { imports: [AtlBadge] },
         );
-        expect(container.querySelector('atl-badge')).toHaveClass(`size-${size}`);
-      }
+        expect(container.querySelector('atl-badge')).toHaveClass(
+          `size-${size}`,
+        );
+      },
     );
   });
 

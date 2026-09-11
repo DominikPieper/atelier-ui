@@ -8,7 +8,10 @@ import {
   OnDestroy,
   OnInit,
 } from '@angular/core';
-import { ATL_RADIO_GROUP, type RadioItem } from '../radio-group/atl-radio-group.token';
+import {
+  ATL_RADIO_GROUP,
+  type RadioItem,
+} from '../radio-group/atl-radio-group.token';
 
 let nextId = 0;
 
@@ -66,10 +69,14 @@ export class AtlRadio implements RadioItem, OnInit, OnDestroy {
   protected readonly inputId = `atl-radio-${nextId++}`;
 
   /** @internal */
-  protected readonly isChecked = computed(() => this.group?.value() === this.radioValue());
+  protected readonly isChecked = computed(
+    () => this.group?.value() === this.radioValue(),
+  );
 
   /** @internal */
-  readonly isDisabled = computed(() => this.disabledInput() || (this.group?.disabled() ?? false));
+  readonly isDisabled = computed(
+    () => this.disabledInput() || (this.group?.disabled() ?? false),
+  );
 
   /** @internal */
   protected readonly effectiveName = computed(() => this.group?.name() ?? '');

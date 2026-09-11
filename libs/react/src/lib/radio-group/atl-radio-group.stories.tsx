@@ -5,7 +5,8 @@ import { AtlRadio } from '../radio/atl-radio';
 
 import { metadata } from '@atelier-ui/spec/metadata/radio.metadata';
 import { contract } from '@atelier-ui/spec/contracts/radio-group.contract';
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
@@ -52,7 +53,11 @@ export const IndividualDisabled: Story = {
   render: function Render() {
     const [value, setValue] = useState('free');
     return (
-      <AtlRadioGroup value={value} onValueChange={setValue} name="plan-individual">
+      <AtlRadioGroup
+        value={value}
+        onValueChange={setValue}
+        name="plan-individual"
+      >
         <AtlRadio radioValue="free">Free</AtlRadio>
         <AtlRadio radioValue="pro">Pro</AtlRadio>
         <AtlRadio radioValue="enterprise" disabled>
@@ -65,7 +70,12 @@ export const IndividualDisabled: Story = {
 
 export const Invalid: Story = {
   render: () => (
-    <AtlRadioGroup value="" name="plan-invalid" invalid errors={['Please select a plan']}>
+    <AtlRadioGroup
+      value=""
+      name="plan-invalid"
+      invalid
+      errors={['Please select a plan']}
+    >
       <AtlRadio radioValue="free">Free</AtlRadio>
       <AtlRadio radioValue="pro">Pro</AtlRadio>
     </AtlRadioGroup>
@@ -74,7 +84,12 @@ export const Invalid: Story = {
 
 export const WithErrors: Story = {
   render: () => (
-    <AtlRadioGroup value="" name="plan-errors" invalid errors={['Selection required', 'Please choose a plan to continue']}>
+    <AtlRadioGroup
+      value=""
+      name="plan-errors"
+      invalid
+      errors={['Selection required', 'Please choose a plan to continue']}
+    >
       <AtlRadio radioValue="free">Free</AtlRadio>
       <AtlRadio radioValue="pro">Pro</AtlRadio>
       <AtlRadio radioValue="enterprise">Enterprise</AtlRadio>
@@ -86,7 +101,12 @@ export const Required: Story = {
   render: function Render() {
     const [value, setValue] = useState('');
     return (
-      <AtlRadioGroup value={value} onValueChange={setValue} name="plan-required" required>
+      <AtlRadioGroup
+        value={value}
+        onValueChange={setValue}
+        name="plan-required"
+        required
+      >
         <AtlRadio radioValue="free">Free</AtlRadio>
         <AtlRadio radioValue="pro">Pro</AtlRadio>
         <AtlRadio radioValue="enterprise">Enterprise</AtlRadio>

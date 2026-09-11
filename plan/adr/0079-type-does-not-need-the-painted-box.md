@@ -46,8 +46,8 @@ baseline byte for byte, and only both together produce a comparison.
 
 **The paint table was excluding masters from a question about text.** `ROOT_PAINT` lists
 only masters whose Figma root and CSS root paint the same box, and its own comment says
-why thirteen are absent: *"the paint sits on an inner box while the Figma root is a
-transparent container"*. That is a true statement about paint and an irrelevant one about
+why thirteen are absent: _"the paint sits on an inner box while the Figma root is a
+transparent container"_. That is a true statement about paint and an irrelevant one about
 type — a transparent container still states the size and leading its text inherits. Type
 was being resolved from the paint table purely because that was where the cascade happened
 to live.
@@ -63,7 +63,7 @@ exactly one direct TEXT child.
 
 **1. `inherit` is a no-op in `boxFromDeclarations`, and type gets its own cascade table.**
 `ROOT_TYPE` sits beside `ROOT_PAINT` with sixteen entries and the same shape. Its cascades
-are ancestor-first and include the rule the leaf inherits *from*, which is what makes the
+are ancestor-first and include the rule the leaf inherits _from_, which is what makes the
 `inherit` repair bite. A label with no `ROOT_TYPE` entry falls back to its `ROOT_PAINT`
 cascade, so the thirty are not restated — and the fallback is load-bearing rather than
 tidy: writing the loop over `ROOT_TYPE` alone would silently drop type checking for the
@@ -77,18 +77,18 @@ comparisons about none of those.
 **2. The fix is smaller than the analysis claimed, and the ADR says so.** Eight findings
 across six masters: AtlInput and AtlSelect draw 14px against a 16px CSS, AtlCheckbox and
 AtlToggle the same plus AUTO leading against 125%, AtlRadio and AtlRadioGroup the leading
-alone. AtlTextarea, AtlMenuItem and AtlTable move from *unchecked* to *checked and passing*.
+alone. AtlTextarea, AtlMenuItem and AtlTable move from _unchecked_ to _checked and passing_.
 But **only five of the thirteen masters `ROOT_PAINT` omits gain anything**: AtlCombobox,
 AtlProgress, AtlBreadcrumbs, AtlPagination, AtlStepper, AtlAvatarGroup and AtlChat have no
 single direct TEXT child at their root, so the snapshot records no root type for them and
-nothing is compared. AtlCombobox's fifteen unstyled nodes are a *layer* problem, not a root
+nothing is compared. AtlCombobox's fifteen unstyled nodes are a _layer_ problem, not a root
 problem, and this change does not touch them. Claiming otherwise would repeat the
 overclaim the analysis makes.
 
 **3. Four per-TEXT-node checks, all recorded, none reported.** `[FIGMA-AUTO-LEADING]` (206
 nodes), `[FIGMA-VARIABLE-COLLECTION]` (212), `[TEXT-UNSTYLED]` (257 after exemptions) and
-`[TEXT-OVERRIDE]` (4). The collection rule is stated as *the library's own tiers are the
-only legal source* — the `Library Tokens` / `Component Tokens` pair ADR-0030 made semantic —
+`[TEXT-OVERRIDE]` (4). The collection rule is stated as _the library's own tiers are the
+only legal source_ — the `Library Tokens` / `Component Tokens` pair ADR-0030 made semantic —
 and not as a list of villains, so a fourth collection added tomorrow is caught by the same
 line. It has to be a collection test and not a name test: `font-size/sm` exists in both
 collections, so the name distinguishes nothing.
@@ -97,12 +97,12 @@ collections, so the name distinguishes nothing.
 INSTANCE between it and the variant root is skipped because the master owns the type; an
 invisible node is skipped because it is on no surface. The one exception is a short named
 list of scenery and glyphs, and it lives in `check-figma.js` rather than in
-`lib/allowlists.js` because none of it is exempt *forever* — every entry names something
+`lib/allowlists.js` because none of it is exempt _forever_ — every entry names something
 that should stop existing. An entry that excuses nothing warns, the same rule
 `[STALE-EXEMPTION]` applies one level up.
 
 The override case is counted apart rather than folded in: those four nodes read as unbound
-because a local override *detached* them from a style their master does state. That is the
+because a local override _detached_ them from a style their master does state. That is the
 opposite defect, it is unblocked today, and it should reach zero first.
 
 **4. All five ship as ratchets, reusing ADR-0078's convention unchanged.** Same file shape
@@ -119,18 +119,18 @@ master's size means rebinding a variable that comes from the wrong collection, w
 `[FIGMA-VARIABLE-COLLECTION]`'s own debt. Fixing the leading or the style first would only
 relabel the problem. ADR-0066 refuses a warning nobody can clear, and a plain blocker would
 leave `check:all` red until that is decided. What ADR-0066 actually prescribed for a
-population nobody can act on is *"reported as a count, with the reason inline"* — five
+population nobody can act on is _"reported as a count, with the reason inline"_ — five
 lines on a green run, no per-node detail.
 
 ## Consequences
 
 - A comparison that had been dead since it was written now measures three masters, and two
-  real divergences fall out of it immediately. Proven by making the CSS *agree* with Figma
+  real divergences fall out of it immediately. Proven by making the CSS _agree_ with Figma
   and watching the finding vanish — a test the old code could not have failed.
 - Six masters that `ROOT_PAINT` excluded for a paint reason are type-checked for the first
   time. Seven more are named as still unreachable rather than quietly counted as covered.
 - **Twenty-one of the 43 masters run no root-type comparison at all, and nothing is
-  printed for any of them.** For fourteen the CSS cascade *does* resolve an expectation and
+  printed for any of them.** For fourteen the CSS cascade _does_ resolve an expectation and
   the comparison is skipped only because the Figma root has no single direct TEXT child, so
   `got.fontSize` is null and both guards short-circuit — the same shape of silence this ADR
   was written to remove, one level down. Six are named above; the eight that were not are
@@ -140,9 +140,9 @@ lines on a green run, no per-node detail.
   warning about all of them would be the unclearable warning ADR-0066 threw out. The point
   of writing it down is that the coverage claim must not read wider than the measurement.
 - **A count could not see a substitution, and this record first claimed otherwise.** The
-  paragraph that stood here said `[ROOT-TYPE]` had the hole and that *"the three text
-  checks do not have this problem: they are presence tests, so a count is faithful."* A
-  count is faithful to *how many*, not to *which*, and a review broke all five in the
+  paragraph that stood here said `[ROOT-TYPE]` had the hole and that _"the three text
+  checks do not have this problem: they are presence tests, so a count is faithful."_ A
+  count is faithful to _how many_, not to _which_, and a review broke all five in the
   simplest way: on AtlTable, giving one unstyled node a `ty/*` style while removing one
   from a bound node left the number flat and the gate exited 0 with **no output at all**.
   The same held for AUTO leading and for the wrong collection. The rejected alternative —

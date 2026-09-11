@@ -13,12 +13,12 @@ Icons are the most-multiplied asset in any design system. A workspace with 200 i
 
 Pick **one** set of size stops and use it across the whole library. The standard set:
 
-| Stop  | Use for                                           | Stroke (outlined) | Pixel grid alignment           |
-|-------|---------------------------------------------------|-------------------|--------------------------------|
-| 12 px | Inline in dense UI (badges, breadcrumb separators)| 1 px              | Whole-pixel only; no half-px |
-| 16 px | Standard inline (buttons, menu items, form fields)| 1.5 px            | Whole-pixel for axes, half allowed for diagonals |
-| 20 px | Larger inline (tabs, prominent buttons)           | 1.5 px            | Whole-pixel preferred          |
-| 24 px | Standalone (icon buttons, list items, toolbars)   | 2 px              | Whole-pixel preferred          |
+| Stop  | Use for                                            | Stroke (outlined) | Pixel grid alignment                             |
+| ----- | -------------------------------------------------- | ----------------- | ------------------------------------------------ |
+| 12 px | Inline in dense UI (badges, breadcrumb separators) | 1 px              | Whole-pixel only; no half-px                     |
+| 16 px | Standard inline (buttons, menu items, form fields) | 1.5 px            | Whole-pixel for axes, half allowed for diagonals |
+| 20 px | Larger inline (tabs, prominent buttons)            | 1.5 px            | Whole-pixel preferred                            |
+| 24 px | Standalone (icon buttons, list items, toolbars)    | 2 px              | Whole-pixel preferred                            |
 
 `32` and `48` exist but they are usually **illustrations**, not icons — different aesthetic, different drawing rules, different naming. Keep them separate.
 
@@ -89,14 +89,14 @@ Don't make `icon/check-success`, `icon/check-warning`, `icon/check-danger`. The 
 
 Heuristic:
 
-| Condition                                        | Decision                              |
-|--------------------------------------------------|---------------------------------------|
-| Used 1× in the whole file                        | Vector layer, not a Component         |
-| Used 2× and unlikely to grow                     | Vector layer; revisit if it spreads   |
-| Used ≥3× **or** likely to spread                 | **Promote to Component**              |
-| Needs Variant Property (style / state / size)    | Component, regardless of usage count  |
-| Shared across files / libraries                  | Component, in the canonical library   |
-| Brand logo with its own color rules              | Component, but in a `Brand` collection — not the standard icon set |
+| Condition                                     | Decision                                                           |
+| --------------------------------------------- | ------------------------------------------------------------------ |
+| Used 1× in the whole file                     | Vector layer, not a Component                                      |
+| Used 2× and unlikely to grow                  | Vector layer; revisit if it spreads                                |
+| Used ≥3× **or** likely to spread              | **Promote to Component**                                           |
+| Needs Variant Property (style / state / size) | Component, regardless of usage count                               |
+| Shared across files / libraries               | Component, in the canonical library                                |
+| Brand logo with its own color rules           | Component, but in a `Brand` collection — not the standard icon set |
 
 The heuristic exists because **every Component shows up in the asset panel**. A library with 50 single-use icons-as-Components is unusable; designers can't find anything. Be conservative.
 
@@ -111,7 +111,7 @@ The heuristic exists because **every Component shows up in the asset panel**. A 
 `icon/<category>/<name>` is the long-term-maintainable form. Categories make the asset panel browsable when the set grows past ~30 icons.
 
 | Category     | What lives here                                                                       |
-|--------------|---------------------------------------------------------------------------------------|
+| ------------ | ------------------------------------------------------------------------------------- |
 | `navigation` | chevrons, arrows, carets, hamburger, close, back                                      |
 | `system`     | settings, search, filter, sort, copy, edit, delete, more / overflow, pin, eye         |
 | `status`     | check, error, warning, info, sync, loading-spinner                                    |

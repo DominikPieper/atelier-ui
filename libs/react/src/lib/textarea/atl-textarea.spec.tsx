@@ -28,7 +28,7 @@ describe('AtlTextarea', () => {
     render(<AtlTextarea label="Description" id="custom-description-id" />);
     expect(screen.getByLabelText('Description')).toHaveAttribute(
       'id',
-      'custom-description-id'
+      'custom-description-id',
     );
   });
 
@@ -37,10 +37,13 @@ describe('AtlTextarea', () => {
     expect(screen.getByRole('textbox')).toHaveAttribute('aria-label', 'Notes');
   });
 
-  covers('textarea', 'disabled')('is disabled when disabled prop is true', () => {
-    render(<AtlTextarea disabled />);
-    expect(screen.getByRole('textbox')).toBeDisabled();
-  });
+  covers('textarea', 'disabled')(
+    'is disabled when disabled prop is true',
+    () => {
+      render(<AtlTextarea disabled />);
+      expect(screen.getByRole('textbox')).toBeDisabled();
+    },
+  );
 
   it('applies is-disabled class when disabled', () => {
     const { container } = render(<AtlTextarea disabled />);
@@ -82,17 +85,22 @@ describe('AtlTextarea', () => {
     expect(screen.getByRole('textbox')).toHaveAttribute('rows', '3');
   });
 
-  covers('textarea', 'updates-value')('calls onValueChange on input', async () => {
-    const user = userEvent.setup();
-    const onValueChange = vi.fn();
-    render(<AtlTextarea onValueChange={onValueChange} />);
-    await user.type(screen.getByRole('textbox'), 'Hello');
-    expect(onValueChange).toHaveBeenCalled();
-    expect(onValueChange).toHaveBeenLastCalledWith('Hello');
-  });
+  covers('textarea', 'updates-value')(
+    'calls onValueChange on input',
+    async () => {
+      const user = userEvent.setup();
+      const onValueChange = vi.fn();
+      render(<AtlTextarea onValueChange={onValueChange} />);
+      await user.type(screen.getByRole('textbox'), 'Hello');
+      expect(onValueChange).toHaveBeenCalled();
+      expect(onValueChange).toHaveBeenLastCalledWith('Hello');
+    },
+  );
 
   it('forwards placeholder', () => {
     render(<AtlTextarea placeholder="Tell us about yourself" />);
-    expect(screen.getByPlaceholderText('Tell us about yourself')).toBeInTheDocument();
+    expect(
+      screen.getByPlaceholderText('Tell us about yourself'),
+    ).toBeInTheDocument();
   });
 });

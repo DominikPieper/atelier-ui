@@ -25,7 +25,9 @@ async function captureOne(template: string): Promise<unknown> {
 
 async function capture(): Promise<Record<string, unknown>> {
   return {
-    default: await captureOne('<atl-pagination [page]="2" [pageCount]="5"></atl-pagination>'),
+    default: await captureOne(
+      '<atl-pagination [page]="2" [pageCount]="5"></atl-pagination>',
+    ),
   };
 }
 

@@ -61,8 +61,13 @@ const fs = require('fs');
 const path = require('path');
 
 const ROOT = path.resolve(__dirname, '../..');
-const LIB_DIRS = ['angular', 'react', 'vue'].map((f) => path.join(ROOT, 'libs', f, 'src', 'lib'));
-const TOKEN_CSS = path.join(ROOT, 'libs/create-workspace/src/generators/preset/files/styles/tokens.css');
+const LIB_DIRS = ['angular', 'react', 'vue'].map((f) =>
+  path.join(ROOT, 'libs', f, 'src', 'lib'),
+);
+const TOKEN_CSS = path.join(
+  ROOT,
+  'libs/create-workspace/src/generators/preset/files/styles/tokens.css',
+);
 
 const COLOR_LITERAL = /#[0-9a-fA-F]{3,8}\b|rgba?\(|hsla?\(/;
 const SHADOW_PROP = /^-?(webkit-)?(box|text)-shadow$/;
@@ -135,7 +140,9 @@ for (const dir of LIB_DIRS) {
       const value = stripVarCalls(m[2]);
       if (COLOR_LITERAL.test(value)) {
         const literal = value.match(COLOR_LITERAL)[0];
-        errors.push(`[RAW-COLOR] ${rel}: ${prop} uses literal '${literal.replace('(', '(…')}' — use a --ui-* token (or var(--token, fallback))`);
+        errors.push(
+          `[RAW-COLOR] ${rel}: ${prop} uses literal '${literal.replace('(', '(…')}' — use a --ui-* token (or var(--token, fallback))`,
+        );
       }
     }
   }
@@ -164,7 +171,9 @@ const docsConsumedTokens = new Map();
 /** Strip /* … *\/ comments while preserving their embedded newlines, so a
  *  1-based line count taken from the result still matches the source. */
 function stripCommentsKeepLines(src) {
-  return src.replace(/\/\*[\s\S]*?\*\//g, (comment) => comment.replace(/[^\n]/g, ''));
+  return src.replace(/\/\*[\s\S]*?\*\//g, (comment) =>
+    comment.replace(/[^\n]/g, ''),
+  );
 }
 
 /** Extract <style>…</style> block contents from an .astro file, each paired
@@ -194,7 +203,8 @@ function astroStyleBlocks(fileContent) {
  *  legitimately declared outside docs-theme.css, so they are not tracked. */
 function scanDocsCss(src, rel, lineOffset) {
   for (const ref of src.matchAll(/var\(\s*(--ui-[a-z0-9-]+)/g)) {
-    if (!docsConsumedTokens.has(ref[1])) docsConsumedTokens.set(ref[1], new Set());
+    if (!docsConsumedTokens.has(ref[1]))
+      docsConsumedTokens.set(ref[1], new Set());
     docsConsumedTokens.get(ref[1]).add(rel);
   }
   const decl = /([\w-]+)\s*:\s*([^;{}]+)/g;
@@ -205,10 +215,11 @@ function scanDocsCss(src, rel, lineOffset) {
     const value = stripVarCalls(m[2]);
     if (!COLOR_LITERAL.test(value)) continue;
     const literal = value.match(COLOR_LITERAL)[0];
-    if (DOCS_ALLOW.some((a) => a.file === rel && a.literal === literal)) continue;
+    if (DOCS_ALLOW.some((a) => a.file === rel && a.literal === literal))
+      continue;
     const lineNo = lineOffset + src.slice(0, m.index).split('\n').length - 1;
     errors.push(
-      `[RAW-COLOR] ${rel}:${lineNo}: ${prop} uses literal '${literal.replace('(', '(…')}' — use a --ui-*/--docs-* token (or var(--token, fallback))`
+      `[RAW-COLOR] ${rel}:${lineNo}: ${prop} uses literal '${literal.replace('(', '(…')}' — use a --ui-*/--docs-* token (or var(--token, fallback))`,
     );
   }
 }
@@ -219,7 +230,9 @@ function scanDocsCss(src, rel, lineOffset) {
   scanDocsCss(src, rel, 1);
 }
 
-for (const entry of fs.readdirSync(DOCS_COMPONENTS_DIR, { withFileTypes: true })) {
+for (const entry of fs.readdirSync(DOCS_COMPONENTS_DIR, {
+  withFileTypes: true,
+})) {
   if (!entry.isFile() || !entry.name.endsWith('.astro')) continue;
   const file = path.join(DOCS_COMPONENTS_DIR, entry.name);
   const rel = file.replace(ROOT + '/', '');
@@ -268,11 +281,13 @@ const tokenDecl = /(--ui-[a-zA-Z0-9-]+)\s*:/g;
 for (const [name, files] of [...consumedTokens].sort()) {
   if (declaredTokens.has(name)) continue;
   const where = [...files].sort();
-  const shown = where.slice(0, 3).join(', ') + (where.length > 3 ? `, +${where.length - 3} more` : '');
+  const shown =
+    where.slice(0, 3).join(', ') +
+    (where.length > 3 ? `, +${where.length - 3} more` : '');
   errors.push(
     `[UNDECLARED] '${name}' is read by ${where.length} component stylesheet(s) (${shown}) but is ` +
       `declared in no token source. The component silently renders at its var() fallback, which the ` +
-      `design system does not control. Declare the token, or reference one that exists.`
+      `design system does not control. Declare the token, or reference one that exists.`,
   );
 }
 
@@ -287,17 +302,21 @@ for (const [name, files] of [...consumedTokens].sort()) {
 
 const docsThemeCssSrc = fs.readFileSync(DOCS_THEME_CSS, 'utf-8');
 const docsDeclaredTokens = new Set(declaredTokens);
-for (const m of docsThemeCssSrc.matchAll(/(--(?:ui|docs)-[a-zA-Z0-9-]+)\s*:/g)) {
+for (const m of docsThemeCssSrc.matchAll(
+  /(--(?:ui|docs)-[a-zA-Z0-9-]+)\s*:/g,
+)) {
   docsDeclaredTokens.add(m[1]);
 }
 
 for (const [name, files] of [...docsConsumedTokens].sort()) {
   if (docsDeclaredTokens.has(name)) continue;
   const where = [...files].sort();
-  const shown = where.slice(0, 3).join(', ') + (where.length > 3 ? `, +${where.length - 3} more` : '');
+  const shown =
+    where.slice(0, 3).join(', ') +
+    (where.length > 3 ? `, +${where.length - 3} more` : '');
   errors.push(
     `[UNDECLARED] '${name}' is read by ${where.length} docs stylesheet(s) (${shown}) but is declared ` +
-      `in neither libs/create-workspace/src/generators/preset/files/styles/tokens.css nor docs/src/styles/docs-theme.css.`
+      `in neither libs/create-workspace/src/generators/preset/files/styles/tokens.css nor docs/src/styles/docs-theme.css.`,
   );
 }
 
@@ -308,12 +327,12 @@ for (const [name, files] of [...docsConsumedTokens].sort()) {
 if (errors.length > 0) {
   errors.forEach((e) => console.error(`✗ ${e}`));
   console.error(
-    `\n${errors.length} token issue(s). Replace raw colours with --ui-* tokens, or declare the missing token.`
+    `\n${errors.length} token issue(s). Replace raw colours with --ui-* tokens, or declare the missing token.`,
   );
   process.exit(1);
 }
 
 console.log(
   `✓ component CSS uses tokens for colour (no raw literals outside var() fallbacks / shadows); ${consumedTokens.size} token(s) referenced, all declared; ` +
-    `docs CSS clean too — ${docsConsumedTokens.size} token(s) referenced, all declared${DOCS_ALLOW.length ? `, ${DOCS_ALLOW.length} literal(s) allow-listed` : ''}.`
+    `docs CSS clean too — ${docsConsumedTokens.size} token(s) referenced, all declared${DOCS_ALLOW.length ? `, ${DOCS_ALLOW.length} literal(s) allow-listed` : ''}.`,
 );

@@ -9,12 +9,15 @@
 KI-generierte Storybook Stories weisen immer wieder die gleichen Fehlermuster auf. Ein KI-Modell weiß nur, was in sein "Context-Window" (sein Kurzzeitgedächtnis) passt. Wenn es deine spezifische Codebase nicht sehen kann, rät es. Das führt zu Code, der zwar kompilierbar ist und läuft, dir aber nichts sagt.
 
 ### Die "Happy Path Only" Falle
+
 Bitte eine KI, eine Story für einen Button zu schreiben, und du erhältst genau eine Story. Es fehlen: `Disabled`, `Loading`, `Error` — also jeder State, der in der Produktion tatsächlich kaputtgeht.
 
 ### Die Version Tax
+
 Storybook 9 hat die Import-Pfade geändert (z. B. `storybook/test` vs. `@storybook/test`). KI-Modelle raten basierend auf alten Trainingsdaten und scheitern.
 
 ### Die Hallucination Tax
+
 "Hallucination" (Halluzination) ist, wenn die KI selbstbewusst Code oder APIs erfindet, die in deinem Projekt gar nicht existieren. Sie generiert generisches Tailwind oder Material UI, weil sie nicht weiß, dass deine interne Bibliothek existiert. Sie erstellt "neue" Components, anstatt deine etablierten zu verwenden.
 
 ---
@@ -24,9 +27,11 @@ Storybook 9 hat die Import-Pfade geändert (z. B. `storybook/test` vs. `@storybo
 Bevor wir uns ansehen, wie KI mit Storybook interagiert, klären wir, was es überhaupt ist. Storybook ist ein Frontend-Workshop, um UI Components und Seiten isoliert voneinander zu bauen.
 
 ### Was ist eine "Story"?
+
 Eine "Story" fängt einen einzelnen, spezifischen State einer UI Component ein. Anstatt dich durch eine komplexe Anwendung zu klicken, um zu sehen, wie ein Button aussieht, wenn er deaktiviert ist, schreibst du eine Story dafür.
 
 ### Beispiel: Der AtlButton
+
 So sieht eine Story im Code aus. Wir definieren die Standard-Component und exportieren dann verschiedene "Stories" (States) wie `Primary`, `Small` oder `Disabled`:
 
 ```tsx
@@ -42,20 +47,21 @@ export default meta;
 type Story = StoryObj<typeof AtlButton>;
 
 // Story: The primary variant of the button
-export const Primary: Story = { 
-  args: { variant: 'primary' } 
+export const Primary: Story = {
+  args: { variant: 'primary' },
 };
 
 // Story: The button in a disabled state
-export const Disabled: Story = { 
-  args: { disabled: true } 
+export const Disabled: Story = {
+  args: { disabled: true },
 };
 
 // Story: The button in a loading state
-export const Loading: Story = { 
-  args: { loading: true } 
+export const Loading: Story = {
+  args: { loading: true },
 };
 ```
+
 Durch das Isolieren von Components geben wir sowohl Menschen als auch KI eine klare Sandbox, um UIs zu bauen, zu testen und zu dokumentieren.
 
 ---
@@ -100,19 +106,25 @@ Die wahre Stärke entsteht durch die Kombination von **Design Intent** (Design-A
 Das Figma Console MCP gibt der KI eine direkte API zu deinen Design-Dateien.
 
 ### Design Discovery API (`figma_get_design_system_kit`)
+
 Die KI extrahiert das gesamte Design System in einem optimierten Call:
+
 - **Tokens:** Benannte Variablen für Designentscheidungen (z. B. `color-brand-blue = #0052cc`), die Design und Code für Farben, Spacing und Typografie synchron halten.
 - **Components:** Metadata, Properties und Variants.
 - **Styles:** Effect- und Grid-Definitionen.
 
 ### Implementation Support (`figma_get_component_for_development`)
+
 Gibt technische Specs zurück, die fürs Coding optimiert sind:
+
 - **Layout:** Exakte, CSS-ähnliche Werte für Padding, Gap und Size.
 - **Typography:** Font Weight, Family und Line Height.
 - **Image Preview:** Ein 2x PNG-Rendering als visuelle Referenz.
 
 ### Audit & Validation (`figma_check_design_parity`)
+
 Die KI vergleicht die Design System Truth mit deinem Code:
+
 - **Parity Score:** 0-100% Übereinstimmung.
 - **Discrepancy Report:** Fehlende Props, Farbabweichungen oder Layout-Drifts.
 - **Actionable Fixes:** Vorgeschlagene Code- oder Design-Änderungen, um die Parity wiederherzustellen.
@@ -126,7 +138,9 @@ Die KI vergleicht die Design System Truth mit deinem Code:
 Das Storybook MCP stellt sicher, dass die KI möglichst keine API halluziniert.
 
 ### Discovery API (`docs-list`)
+
 Die KI beginnt damit, das gesamte System zu scannen, um etablierte Components zu finden:
+
 ```text
 - AtlAlert (components-atlalert)
 - AtlAvatar (components-atlavatar)
@@ -136,18 +150,22 @@ Die KI beginnt damit, das gesamte System zu scannen, um etablierte Components zu
 ```
 
 ### Documentation API (`docs-show`)
+
 Sobald eine Component ausgewählt ist, liest die KI ihre **Living Specification**:
+
 ```markdown
 # AtlButton (components-atlbutton)
 
 ## Props
+
 - variant: 'primary' | 'secondary' | 'outline' (default: 'primary')
 - size: 'sm' | 'md' | 'lg' (default: 'md')
 - loading: boolean
-...
+  ...
 
 ## Real Usage Examples (from existing stories)
 ```
+
 ```typescript
 <AtlButton variant="primary" size="md">Button</AtlButton>
 ```
@@ -159,6 +177,7 @@ Sobald eine Component ausgewählt ist, liest die KI ihre **Living Specification*
 Dieses Tool liefert die **Rules of Engagement** (Einsatzregeln). Es verhindert die "Version Tax", indem es der KI genau mitteilt, was du installiert hast.
 
 ### Version-Specific Guidance
+
 ```diff
 // Storybook 9 forces package consolidation
 - import { fn } from '@storybook/test';
@@ -169,6 +188,7 @@ Dieses Tool liefert die **Rules of Engagement** (Einsatzregeln). Es verhindert d
 ```
 
 ### Critical Implementation Rules
+
 - **Mocking Strategy:** Wenn externe Daten oder Services simuliert werden, damit eine Component isoliert ausgeführt werden kann (Mocking), müssen relative Imports **File Extensions** (Dateiendungen) verwenden.
 - **Play Function Syntax:** Verwende NICHT `within(canvas)`; `canvas` verfügt bereits über Query-Methoden.
 - **Coverage Goals:** Happy Path, Error, Loading und Empty States sind **erforderlich**.
@@ -207,14 +227,18 @@ Wie stoppen wir den visuellen Drift?
 ## Abschnitt 11: Real Examples (Angular/React)
 
 ### Angular Wrapper Pattern
+
 Für komplexe DI (Dependency Injection) oder Services lernt die KI, das Wrapper `@Component` Pattern zu verwenden:
+
 ```typescript
 @Component({ template: `<toast-story-wrapper />` })
 class ToastStoryWrapper { ... }
 ```
 
 ### React Controlled State
+
 Die KI nutzt `useState` in Story-Rendern, um komplexe Interaktionen zu handhaben:
+
 ```tsx
 const [open, setOpen] = useState(false);
 return <AtlDialog open={open} onOpenChange={setOpen} />;
@@ -260,4 +284,5 @@ AI: "Verified. Preview: [Link]. No A11y issues found."
 - **Füge die `CLAUDE.md` Regel hinzu** — Mach es mandatory (verpflichtend), nicht optional.
 
 ### Fragen?
+
 Du findest den gesamten Source Code und diese MCP Tools im `atelier-ui` Repo.

@@ -24,8 +24,14 @@ function captureOne(props: Record<string, unknown>): unknown {
 function capture() {
   return {
     default: captureOne({ placeholder: 'Tell us about yourself' }),
-    invalid: captureOne({ placeholder: 'Tell us about yourself', invalid: true }),
-    disabled: captureOne({ placeholder: 'Tell us about yourself', disabled: true }),
+    invalid: captureOne({
+      placeholder: 'Tell us about yourself',
+      invalid: true,
+    }),
+    disabled: captureOne({
+      placeholder: 'Tell us about yourself',
+      disabled: true,
+    }),
     labelled: captureOne({ label: 'Bio' }),
   };
 }

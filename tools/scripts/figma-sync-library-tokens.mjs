@@ -104,7 +104,7 @@ main().catch((err) => {
 async function main() {
   const client = new Client(
     { name: 'atelier-figma-token-sync', version: '1.0.0' },
-    { capabilities: {} }
+    { capabilities: {} },
   );
   const transport = new StdioClientTransport({
     command: 'npx',
@@ -123,7 +123,7 @@ async function main() {
     if (!isConnected(status)) {
       console.error(
         '✗ Figma Desktop Bridge not connected. Open Figma Desktop with the file and the\n' +
-          '  Desktop Bridge plugin running, then re-run npm run figma:sync-tokens.'
+          '  Desktop Bridge plugin running, then re-run npm run figma:sync-tokens.',
       );
       process.exit(2);
     }
@@ -138,12 +138,12 @@ async function main() {
       `✓ Library Tokens synced — ${defs.length} definitions: ` +
         `${r.created} created, ${r.valueUpdates} value update(s), ${r.aliasUpdates} alias update(s), ` +
         `${r.scopeUpdates} scope update(s), ${r.unchanged} unchanged.` +
-        (r.createdCollection ? ' (collection created)' : '')
+        (r.createdCollection ? ' (collection created)' : ''),
     );
     if (r.orphans.length) {
       console.warn(
         `⚠ ${r.orphans.length} variable(s) exist in Figma but not in tokens.css: ${r.orphans.join(', ')}.\n` +
-          '  Not deleted automatically — removing bound variables is a Breaking op; clean up manually if intended.'
+          '  Not deleted automatically — removing bound variables is a Breaking op; clean up manually if intended.',
       );
     }
     console.log('Next: npm run figma:snapshot && npm run check:figma');
@@ -165,9 +165,9 @@ async function call(client, name, args) {
 function isConnected(status) {
   return Boolean(
     status?.connected ||
-      status?.plugin?.connected ||
-      status?.setup?.probeResult?.success ||
-      status?.setup?.valid ||
-      status?.transport?.websocket?.available
+    status?.plugin?.connected ||
+    status?.setup?.probeResult?.success ||
+    status?.setup?.valid ||
+    status?.transport?.websocket?.available,
   );
 }

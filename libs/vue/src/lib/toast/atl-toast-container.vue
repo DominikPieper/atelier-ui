@@ -22,7 +22,10 @@ function dismiss(id: string) {
   ctx.dismiss(id);
 }
 
-const classes = computed(() => ['atl-toast-container', `position-${props.position}`]);
+const classes = computed(() => [
+  'atl-toast-container',
+  `position-${props.position}`,
+]);
 </script>
 
 <template>

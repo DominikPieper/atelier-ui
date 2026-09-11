@@ -9,7 +9,8 @@ import AtlInput from '../input/atl-input.vue';
 
 import { metadata } from '@atelier-ui/spec/metadata/dialog.metadata';
 import { contract } from '@atelier-ui/spec/contracts/dialog.contract';
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
@@ -40,7 +41,13 @@ type Story = StoryObj<typeof AtlDialog>;
 
 export const Default: Story = {
   render: (args) => ({
-    components: { AtlDialog, AtlDialogHeader, AtlDialogContent, AtlDialogFooter, AtlButton },
+    components: {
+      AtlDialog,
+      AtlDialogHeader,
+      AtlDialogContent,
+      AtlDialogFooter,
+      AtlButton,
+    },
     setup() {
       const isOpen = ref(false);
       return { args, isOpen };
@@ -67,7 +74,13 @@ export const Default: Story = {
 export const PreOpened: Story = {
   name: 'Pre-opened (no trigger)',
   render: (args) => ({
-    components: { AtlDialog, AtlDialogHeader, AtlDialogContent, AtlDialogFooter, AtlButton },
+    components: {
+      AtlDialog,
+      AtlDialogHeader,
+      AtlDialogContent,
+      AtlDialogFooter,
+      AtlButton,
+    },
     setup() {
       const isOpen = ref(true);
       return { args, isOpen };
@@ -87,7 +100,13 @@ export const PreOpened: Story = {
 export const CloseButtonDismiss: Story = {
   name: 'Close via header X button',
   render: (args) => ({
-    components: { AtlDialog, AtlDialogHeader, AtlDialogContent, AtlDialogFooter, AtlButton },
+    components: {
+      AtlDialog,
+      AtlDialogHeader,
+      AtlDialogContent,
+      AtlDialogFooter,
+      AtlButton,
+    },
     setup() {
       const isOpen = ref(false);
       return { args, isOpen };
@@ -113,7 +132,13 @@ export const CloseButtonDismiss: Story = {
 export const EscapeToClose: Story = {
   name: 'Escape key closes dialog',
   render: (args) => ({
-    components: { AtlDialog, AtlDialogHeader, AtlDialogContent, AtlDialogFooter, AtlButton },
+    components: {
+      AtlDialog,
+      AtlDialogHeader,
+      AtlDialogContent,
+      AtlDialogFooter,
+      AtlButton,
+    },
     setup() {
       const isOpen = ref(false);
       return { args, isOpen };
@@ -138,7 +163,13 @@ export const EscapeToClose: Story = {
 
 export const SizeVariants: Story = {
   render: () => ({
-    components: { AtlDialog, AtlDialogHeader, AtlDialogContent, AtlDialogFooter, AtlButton },
+    components: {
+      AtlDialog,
+      AtlDialogHeader,
+      AtlDialogContent,
+      AtlDialogFooter,
+      AtlButton,
+    },
     setup() {
       const openSize = ref<string | null>(null);
       const sizes = ['sm', 'md', 'lg', 'xl', 'full'] as const;
@@ -170,7 +201,13 @@ export const SizeVariants: Story = {
 export const SizeLg: Story = {
   args: { size: 'lg' },
   render: (args) => ({
-    components: { AtlDialog, AtlDialogHeader, AtlDialogContent, AtlDialogFooter, AtlButton },
+    components: {
+      AtlDialog,
+      AtlDialogHeader,
+      AtlDialogContent,
+      AtlDialogFooter,
+      AtlButton,
+    },
     setup() {
       const isOpen = ref(false);
       return { args, isOpen };
@@ -194,7 +231,13 @@ export const SizeLg: Story = {
 export const SizeXl: Story = {
   args: { size: 'xl' },
   render: (args) => ({
-    components: { AtlDialog, AtlDialogHeader, AtlDialogContent, AtlDialogFooter, AtlButton },
+    components: {
+      AtlDialog,
+      AtlDialogHeader,
+      AtlDialogContent,
+      AtlDialogFooter,
+      AtlButton,
+    },
     setup() {
       const isOpen = ref(false);
       return { args, isOpen };
@@ -218,7 +261,13 @@ export const SizeXl: Story = {
 export const SizeFull: Story = {
   args: { size: 'full' },
   render: (args) => ({
-    components: { AtlDialog, AtlDialogHeader, AtlDialogContent, AtlDialogFooter, AtlButton },
+    components: {
+      AtlDialog,
+      AtlDialogHeader,
+      AtlDialogContent,
+      AtlDialogFooter,
+      AtlButton,
+    },
     setup() {
       const isOpen = ref(false);
       return { args, isOpen };
@@ -241,7 +290,14 @@ export const SizeFull: Story = {
 
 export const WithForm: Story = {
   render: (args) => ({
-    components: { AtlDialog, AtlDialogHeader, AtlDialogContent, AtlDialogFooter, AtlButton, AtlInput },
+    components: {
+      AtlDialog,
+      AtlDialogHeader,
+      AtlDialogContent,
+      AtlDialogFooter,
+      AtlButton,
+      AtlInput,
+    },
     setup() {
       const isOpen = ref(false);
       const name = ref('');
@@ -271,7 +327,13 @@ export const WithForm: Story = {
 
 export const LongContent: Story = {
   render: (args) => ({
-    components: { AtlDialog, AtlDialogHeader, AtlDialogContent, AtlDialogFooter, AtlButton },
+    components: {
+      AtlDialog,
+      AtlDialogHeader,
+      AtlDialogContent,
+      AtlDialogFooter,
+      AtlButton,
+    },
     setup() {
       const isOpen = ref(false);
       return { args, isOpen };
@@ -306,7 +368,13 @@ export const LongContent: Story = {
 export const NoBackdropClose: Story = {
   args: { closeOnBackdrop: false },
   render: (args) => ({
-    components: { AtlDialog, AtlDialogHeader, AtlDialogContent, AtlDialogFooter, AtlButton },
+    components: {
+      AtlDialog,
+      AtlDialogHeader,
+      AtlDialogContent,
+      AtlDialogFooter,
+      AtlButton,
+    },
     setup() {
       const isOpen = ref(false);
       return { args, isOpen };

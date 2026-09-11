@@ -35,7 +35,9 @@ const emit = defineEmits<{
 const classes = computed(() => ['atl-alert', `variant-${props.variant}`]);
 
 const ariaLive = computed(() =>
-  props.variant === 'danger' || props.variant === 'warning' ? 'assertive' : 'polite'
+  props.variant === 'danger' || props.variant === 'warning'
+    ? 'assertive'
+    : 'polite',
 );
 
 const variantIconName = computed(() => VARIANT_ICON_NAMES[props.variant]);
@@ -44,7 +46,12 @@ const variantIconName = computed(() => VARIANT_ICON_NAMES[props.variant]);
 <template>
   <div :class="classes" role="alert" :aria-live="ariaLive">
     <span class="content">
-      <AtlIcon v-if="variantIconName" class="variant-icon" :name="variantIconName" size="sm" />
+      <AtlIcon
+        v-if="variantIconName"
+        class="variant-icon"
+        :name="variantIconName"
+        size="sm"
+      />
       <slot />
     </span>
     <button

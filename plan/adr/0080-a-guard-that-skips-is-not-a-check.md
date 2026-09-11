@@ -37,7 +37,7 @@ referenced by **zero** — seven of the ten.
 ADR-0074 minted `ty/control` and `ty/action`, justified them with "6 CSS rules" and "3 CSS
 rules", bound 231 Figma nodes to them, and never wrote `font: var(--ui-type-control)` into
 a single rule. The roles are real: they name combinations the library genuinely renders.
-But they exist as *resolved longhand* a human counted, not as declarations any gate can
+But they exist as _resolved longhand_ a human counted, not as declarations any gate can
 read, which is why `check:typeface`'s `font:`-shorthand branch almost never fires and why
 "the CSS says ty/control" is, everywhere in the analysis, shorthand for "three longhands
 resolve to the four values that role happens to name". Every measurement below had to go
@@ -57,8 +57,8 @@ deliberately wrong token and watching the gate stay green at 14 warnings, exit 0
 
 **An exclusion justified by paint silently also excluded type.** `ROOT_PAINT` lists the
 masters whose Figma root and CSS root paint the same box, and its own comment explains why
-thirteen are missing: *"the paint sits on an inner box while the Figma root is a
-transparent container"*. True about paint, irrelevant about text — a transparent container
+thirteen are missing: _"the paint sits on an inner box while the Figma root is a
+transparent container"_. True about paint, irrelevant about text — a transparent container
 still states the size and leading its text inherits. Type was resolved from that table only
 because that is where the cascade happened to live, so AtlCombobox, AtlCheckbox, AtlRadio,
 AtlRadioGroup, AtlToggle, AtlTable and seven more were outside a question they belonged in.
@@ -78,16 +78,16 @@ These are the same defect twice, and it is the one worth carrying forward:
 A read-only census of all 43 masters on the `🧩 Components` page, run for this work and
 re-derived independently afterwards:
 
-| | |
-|---|---:|
-| TEXT nodes | 566 |
-| carrying no `ty/*` text style | 311, across 33 masters |
-| on Figma `lineHeight: AUTO` | 206 |
-| sourcing `fontSize` from `Docs Brand Tokens` | 212 |
-| sourcing it from `Library Tokens` | 23 |
-| no size binding at all | 331 |
-| invisible, or inside an invisible frame | 9 |
-| inside a nested INSTANCE | 57 |
+|                                              |                        |
+| -------------------------------------------- | ---------------------: |
+| TEXT nodes                                   |                    566 |
+| carrying no `ty/*` text style                | 311, across 33 masters |
+| on Figma `lineHeight: AUTO`                  |                    206 |
+| sourcing `fontSize` from `Docs Brand Tokens` |                    212 |
+| sourcing it from `Library Tokens`            |                     23 |
+| no size binding at all                       |                    331 |
+| invisible, or inside an invisible frame      |                      9 |
+| inside a nested INSTANCE                     |                     57 |
 
 None of it was capturable before: the snapshot recorded typography only as a per-variant
 root summary and as layer records — 106 root entries and 160 layer records covering 189
@@ -123,10 +123,10 @@ pending-removal list), `[TEXT-OVERRIDE]` 4, and `[ROOT-TYPE]` 8 over 6 in
 **Why a ratchet and not the two obvious alternatives.** A plain blocker would leave
 `check:all` red indefinitely: the remedy for almost every one of these findings is to
 retype a node whose size binds to the wrong collection, so the data fix is gated on a
-decision nobody has taken. A permanent warning is precisely what ADR-0066 threw out — *"a
-warning has to be clearable"* — and 480 unclearable lines in a channel that carries 14
+decision nobody has taken. A permanent warning is precisely what ADR-0066 threw out — _"a
+warning has to be clearable"_ — and 480 unclearable lines in a channel that carries 14
 today would empty that channel of meaning. What ADR-0066 actually prescribed for a
-population nobody can act on is *"reported as a count, with the reason inline"*, and the
+population nobody can act on is _"reported as a count, with the reason inline"_, and the
 ratchet's green line is exactly that: one line per check, the number, the `kind` and the
 top offenders, no per-node detail. **Promotion condition:** when a check's entry reaches
 zero its key is deleted; when the whole entry is gone, the ratchet goes with it and the
@@ -137,7 +137,7 @@ failure**, for the reason `[STALE-EXEMPTION]` already gives about allowlist entr
 improvement nobody records can silently reverse. And every entry carries a mandatory `why`
 and a `kind` of `design` or `gap` — a bare number with no reason is ADR-0066's unclearable
 exemption one abstraction up. A baseline is **not** an allowlist: `lib/allowlists.js`
-answers *"this one is exempt forever"*, a baseline answers *"these are owed"*, and the same
+answers _"this one is exempt forever"_, a baseline answers _"these are owed"_, and the same
 defect must never be recorded in both.
 
 ### 2. The baseline records findings, not counts
@@ -146,16 +146,16 @@ This is the correction that matters, and it was found by breaking it rather than
 reading it. Both baselines first recorded a number per directory or per master. A number
 cannot do either of the two things a ratchet exists to do.
 
-*It cannot see a substitution.* On `check:typeface`, sizing `.atl-accordion-group` (a fix,
+_It cannot see a substitution._ On `check:typeface`, sizing `.atl-accordion-group` (a fix,
 −1) while leading `.atl-accordion-item` prose without a size (a new defect, +1) in the same
 edit left `accordion: 3` untouched — **green, exit 0**, with the new defect and the
 unrecorded improvement both absorbed at once. On `check:figma`, the same trick on AtlTable
 defeated `[TEXT-UNSTYLED]`, `[FIGMA-AUTO-LEADING]` and `[FIGMA-VARIABLE-COLLECTION]`,
-each time with no output at all. ADR-0079 had stated the opposite — *"the three text checks
-do not have this problem: they are presence tests, so a count is faithful"*. A count is
-faithful to *how many*, not to *which*.
+each time with no output at all. ADR-0079 had stated the opposite — _"the three text checks
+do not have this problem: they are presence tests, so a count is faithful"_. A count is
+faithful to _how many_, not to _which_.
 
-*It cannot name what is new.* A rising count printed the whole directory or the first six
+_It cannot name what is new._ A rising count printed the whole directory or the first six
 findings on the master, one of which was the new one.
 
 So `perComponent` and `perMaster` hold sorted lists. A `[NO-SIZE]` entry is a file plus a
@@ -171,8 +171,8 @@ finding's text, so 14-vs-16 drifting to 14-vs-18 is now two blockers.
 
 ### 3. A finding has to name one node
 
-`text-nodes.json`'s own `meta.note` told every consumer to *"address a record by master +
-path + chars"*, and `check-figma.js` built exactly that address. It is not unique: 13 keys
+`text-nodes.json`'s own `meta.note` told every consumer to _"address a record by master +
+path + chars"_, and `check-figma.js` built exactly that address. It is not unique: 13 keys
 stand for two or three records each. `AtlButton`'s single string `Button “Button”` covers
 three — 14px bound to `ty/control` and clean, 16px ×16 and 18px ×4 both on the wrong
 collection — so two thirds of that finding is real debt and one third is already fixed, and
@@ -181,7 +181,7 @@ size + weight, which is unique across all 277 records, and the note says so.
 
 ### 4. The three adapters must be measured by one rule
 
-`check:typeface` decided a root by name in React and Vue and by *shape* in Angular, so
+`check:typeface` decided a root by name in React and Vue and by _shape_ in Angular, so
 `:host(.atl-card-content)` counted where the byte-identical `.atl-card-content` in the
 other two frameworks could not be seen. `card: 4` was `2 + 1 + 1`. A host narrowed by
 another component's `.atl-*` class now answers to the same name list, the slot is out of
@@ -205,7 +205,7 @@ every invocation, including the ones it itself called "no change".
 - **Three form fields are measured for the first time**, and two real divergences fell out
   immediately: AtlInput and AtlSelect draw 14px against a 16px CSS. Six masters
   `ROOT_PAINT` excluded for a paint reason are type-checked. Every one of these was
-  verified by making the CSS *agree* with Figma and watching the finding vanish — a test
+  verified by making the CSS _agree_ with Figma and watching the finding vanish — a test
   the old code could not have failed.
 - **Two committed baseline files are a new maintenance surface**, 571 and 40 lines, both
   untracked-but-not-ignored so they will commit. They are the honest cost of the ratchet:

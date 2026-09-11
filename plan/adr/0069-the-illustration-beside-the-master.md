@@ -19,7 +19,7 @@ lived where no check could reach them.
 The glyph rule has now been applied in six places: a string map (ADR-0050), component
 templates (ADR-0055), the Figma Icons page and fifteen masters (ADR-0057), embedded in
 prose inside a master (ADR-0058, `‹ Prev`), and the four content samples (ADR-0060). Each
-time the rule was the same and only the *hiding place* was new.
+time the rule was the same and only the _hiding place_ was new.
 
 The sixth hiding place is the illustration frame that sits **beside** a master. The
 Components page holds, next to the masters themselves, sketches that show a component in
@@ -28,8 +28,8 @@ trigger button next to AtlMenu. `[MASTER-GLYPH]`'s probe walks COMPONENT and
 COMPONENT_SET nodes, so none of it was ever read.
 
 Six glyphs were there. Five stood in for icons the library ships (`✓`, `ℹ`, `✕` twice
-over, and `▾`), and one — `→` inside the AtlAvatar caption *"fallback:
-image→initials→icon"* — is punctuation in prose.
+over, and `▾`), and one — `→` inside the AtlAvatar caption _"fallback:
+image→initials→icon"_ — is punctuation in prose.
 
 One of the five was `"Actions ▾"`: a label with an **embedded** pictogram, which is
 exactly the shape that hid `‹ Prev` for months, because a whole-string test cannot see it.

@@ -38,7 +38,7 @@ async function captureOne(template: string): Promise<unknown> {
 async function capture(): Promise<Record<string, unknown>> {
   return {
     open: await captureOne(
-      '<atl-dialog [open]="true" aria-label="Confirm">Dialog body</atl-dialog>'
+      '<atl-dialog [open]="true" aria-label="Confirm">Dialog body</atl-dialog>',
     ),
   };
 }

@@ -18,21 +18,31 @@ const props = withDefaults(defineProps<AtlSkeletonProps>(), {
   animated: true,
 });
 
-function computeHeight(variant: string, width: string, height?: string): string {
+function computeHeight(
+  variant: string,
+  width: string,
+  height?: string,
+): string {
   if (height) return height;
   switch (variant) {
-    case 'text': return '1em';
-    case 'circular': return width;
-    case 'rectangular': return '100px';
-    default: return '1em';
+    case 'text':
+      return '1em';
+    case 'circular':
+      return width;
+    case 'rectangular':
+      return '100px';
+    default:
+      return '1em';
   }
 }
 
-const classes = computed(() => [
-  'atl-skeleton',
-  `variant-${props.variant}`,
-  props.animated && 'is-animated',
-].filter(Boolean));
+const classes = computed(() =>
+  [
+    'atl-skeleton',
+    `variant-${props.variant}`,
+    props.animated && 'is-animated',
+  ].filter(Boolean),
+);
 
 const inlineStyle = computed(() => ({
   width: props.width,

@@ -43,7 +43,10 @@ import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 
 const require = createRequire(import.meta.url);
-const { moduleForSelector, computeInputsHash } = require('./lib/parity-inputs.js');
+const {
+  moduleForSelector,
+  computeInputsHash,
+} = require('./lib/parity-inputs.js');
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '../..');
@@ -68,18 +71,23 @@ function fail(msg) {
 
 const args = parseArgs(process.argv.slice(2));
 if (!args.component) {
-  fail('missing --component <Selector> (e.g. --component AtlButton). Usage:\n  npm run parity:record -- --component AtlButton [--node 129:20]');
+  fail(
+    'missing --component <Selector> (e.g. --component AtlButton). Usage:\n  npm run parity:record -- --component AtlButton [--node 129:20]',
+  );
 }
 const selector = args.component;
 
 const moduleName = moduleForSelector(selector);
-if (!moduleName) fail(`${selector} has no COMPONENT_METADATA_REGISTRY entry, so its parity inputs cannot be located.`);
+if (!moduleName)
+  fail(
+    `${selector} has no COMPONENT_METADATA_REGISTRY entry, so its parity inputs cannot be located.`,
+  );
 
 // Accepted, echoed, and deliberately NOT stored — see the header note.
 if (args.score !== undefined) {
   console.log(
     `note: --score ${args.score} is not stored. The score is not comparable across runs ` +
-      `(it tracks how much codeSpec was declared and which node was sampled). ADR-0024.`
+      `(it tracks how much codeSpec was declared and which node was sampled). ADR-0024.`,
   );
 }
 
@@ -91,7 +99,9 @@ if (existsSync(SNAPSHOT_FILE)) {
   try {
     const snap = JSON.parse(readFileSync(SNAPSHOT_FILE, 'utf8'));
     if (!figmaNodeId) {
-      figmaNodeId = (snap.components || []).find((c) => c.selector === selector)?.nodeId || null;
+      figmaNodeId =
+        (snap.components || []).find((c) => c.selector === selector)?.nodeId ||
+        null;
     }
     figmaLastModified = snap.meta?.figmaLastModified ?? null;
   } catch {
@@ -119,15 +129,21 @@ parity.meta.generatedAt = new Date().toISOString();
 
 // Stable key order so diffs stay readable.
 const ordered = {};
-for (const k of Object.keys(parity.components).sort()) ordered[k] = parity.components[k];
+for (const k of Object.keys(parity.components).sort())
+  ordered[k] = parity.components[k];
 parity.components = ordered;
 
 writeFileSync(PARITY_FILE, JSON.stringify(parity, null, 2) + '\n');
-console.log(`✓ recorded parity for ${selector} (node ${figmaNodeId || '?'}, ${inputs.length} input file(s)).`);
+console.log(
+  `✓ recorded parity for ${selector} (node ${figmaNodeId || '?'}, ${inputs.length} input file(s)).`,
+);
 
 function gitSha() {
   try {
-    return execSync('git rev-parse --short HEAD', { cwd: ROOT, encoding: 'utf8' }).trim();
+    return execSync('git rev-parse --short HEAD', {
+      cwd: ROOT,
+      encoding: 'utf8',
+    }).trim();
   } catch {
     return null;
   }

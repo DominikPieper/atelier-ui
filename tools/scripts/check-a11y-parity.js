@@ -81,7 +81,11 @@
 
 const fs = require('fs');
 const path = require('path');
-const { FRAMEWORKS, isComponentDir, getComponentDirs } = require('./lib/component-discovery');
+const {
+  FRAMEWORKS,
+  isComponentDir,
+  getComponentDirs,
+} = require('./lib/component-discovery');
 const { A11Y_PARITY_EXEMPT } = require('./lib/allowlists');
 
 const ROOT = path.resolve(__dirname, '../..');
@@ -91,7 +95,9 @@ const errors = [];
 const warnings = [];
 
 if (!fs.existsSync(A11Y_DIR)) {
-  console.error(`✗ [A11Y] ${path.relative(ROOT, A11Y_DIR)} not found. Run npm run gen:a11y.`);
+  console.error(
+    `✗ [A11Y] ${path.relative(ROOT, A11Y_DIR)} not found. Run npm run gen:a11y.`,
+  );
   process.exit(1);
 }
 
@@ -103,14 +109,18 @@ for (const file of fs.readdirSync(A11Y_DIR)) {
   const [, component, fw] = m;
   if (!byComponent.has(component)) byComponent.set(component, {});
   try {
-    byComponent.get(component)[fw] = JSON.parse(fs.readFileSync(path.join(A11Y_DIR, file), 'utf8'));
+    byComponent.get(component)[fw] = JSON.parse(
+      fs.readFileSync(path.join(A11Y_DIR, file), 'utf8'),
+    );
   } catch (err) {
     errors.push(`[PARSE] ${file}: ${err.message}`);
   }
 }
 
 if (byComponent.size === 0) {
-  console.error(`✗ [A11Y] no a11y snapshots in ${path.relative(ROOT, A11Y_DIR)}. Run npm run gen:a11y.`);
+  console.error(
+    `✗ [A11Y] no a11y snapshots in ${path.relative(ROOT, A11Y_DIR)}. Run npm run gen:a11y.`,
+  );
   process.exit(1);
 }
 
@@ -135,21 +145,25 @@ for (const dir of [...roster].sort()) {
     errors.push(
       `[ROSTER] ${dir}: no a11y snapshot and no A11Y_PARITY_EXEMPT entry. Either add ` +
         `${dir}/atl-${dir}.a11y.spec.* in all three libs and run npm run gen:a11y, or record ` +
-        `why it is out of the gate in tools/scripts/lib/allowlists.js.`
+        `why it is out of the gate in tools/scripts/lib/allowlists.js.`,
     );
   } else if (exempt.kind === 'gap') {
-    warnings.push(`[GAP] ${dir}: comparable but not gated \u2014 ${exempt.reason}`);
+    warnings.push(
+      `[GAP] ${dir}: comparable but not gated \u2014 ${exempt.reason}`,
+    );
   }
 }
 
 // Allowlist hygiene \u2014 this list is load-bearing, so it must not rot.
 for (const [dir, entry] of A11Y_PARITY_EXEMPT) {
   if (!roster.has(dir)) {
-    errors.push(`[STALE] A11Y_PARITY_EXEMPT names '${dir}', which is not a component dir. Remove it.`);
+    errors.push(
+      `[STALE] A11Y_PARITY_EXEMPT names '${dir}', which is not a component dir. Remove it.`,
+    );
   } else if (byComponent.has(`atl-${dir}`)) {
     errors.push(
       `[STALE] A11Y_PARITY_EXEMPT exempts '${dir}' (${entry.kind}) but snapshots exist. ` +
-        `Remove the entry so the component is compared.`
+        `Remove the entry so the component is compared.`,
     );
   }
 }
@@ -159,7 +173,9 @@ for (const [component, snaps] of [...byComponent].sort()) {
   const present = FRAMEWORKS.filter((fw) => snaps[fw]);
   const missing = FRAMEWORKS.filter((fw) => !snaps[fw]);
   if (missing.length) {
-    warnings.push(`[MISSING] ${component}: no snapshot for ${missing.join(', ')}. Run npm run gen:a11y.`);
+    warnings.push(
+      `[MISSING] ${component}: no snapshot for ${missing.join(', ')}. Run npm run gen:a11y.`,
+    );
   }
   if (present.length < 2) continue; // nothing to diff
 
@@ -172,7 +188,7 @@ for (const [component, snaps] of [...byComponent].sort()) {
         `[DIVERGE] ${component}: ${fw} accessibility tree differs from ${ref}.\n` +
           `    ${ref}:  ${refJson}\n` +
           `    ${fw}:  ${JSON.stringify(snaps[fw])}\n` +
-          `    The adapters must expose the same role/name/ARIA state. Fix the diverging adapter, then npm run gen:a11y.`
+          `    The adapters must expose the same role/name/ARIA state. Fix the diverging adapter, then npm run gen:a11y.`,
       );
     }
   }
@@ -189,7 +205,11 @@ if (errors.length === 0 && warnings.length === 0) {
 for (const w of warnings) console.warn(`⚠ [WARNING] ${w}`);
 for (const e of errors) console.error(`✗ [BLOCKER] ${e}`);
 if (errors.length > 0) {
-  console.error(`\n${errors.length} a11y-parity issue(s), ${warnings.length} warning(s). ${total}.`);
+  console.error(
+    `\n${errors.length} a11y-parity issue(s), ${warnings.length} warning(s). ${total}.`,
+  );
   process.exit(1);
 }
-console.warn(`\n${warnings.length} a11y-parity warning(s) (non-blocking). ${total}.`);
+console.warn(
+  `\n${warnings.length} a11y-parity warning(s) (non-blocking). ${total}.`,
+);

@@ -25,9 +25,12 @@ const props = withDefaults(defineProps<AtlAvatarProps>(), {
 
 const imgError = ref(false);
 
-watch(() => props.src, () => {
-  imgError.value = false;
-});
+watch(
+  () => props.src,
+  () => {
+    imgError.value = false;
+  },
+);
 
 function getInitials(name: string): string {
   return name
@@ -38,7 +41,7 @@ function getInitials(name: string): string {
     .join('');
 }
 
-const initials = computed(() => props.name ? getInitials(props.name) : '');
+const initials = computed(() => (props.name ? getInitials(props.name) : ''));
 const ariaLabel = computed(() => props.alt || props.name || 'Avatar');
 
 const classes = computed(() => [
@@ -58,6 +61,10 @@ const classes = computed(() => [
     />
     <span v-else-if="initials" class="initials">{{ initials }}</span>
     <AtlIcon name="person" size="sm" class="icon" />
-    <span v-if="status" :class="`status-dot status-${status}`" aria-hidden="true" />
+    <span
+      v-if="status"
+      :class="`status-dot status-${status}`"
+      aria-hidden="true"
+    />
   </div>
 </template>

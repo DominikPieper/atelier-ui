@@ -65,7 +65,7 @@ which holds 20 exemption maps, and **7** of them check their own entries for rot
 **Every gate asserts what it measured, not only what it found.** Three rules, applied now
 to the three gates above and required of every gate written after this record:
 
-1. **A floor.** A gate that could have measured *n* > 0 things and measured 0 fails. Every
+1. **A floor.** A gate that could have measured _n_ > 0 things and measured 0 fails. Every
    counter a gate prints in its summary is either asserted or removed — printing a number
    nobody reads is what let all three of these pass.
 2. **A tool failure is a finding, never an absence.** When the machinery a gate depends on
@@ -77,7 +77,7 @@ to the three gates above and required of every gate written after this record:
    the roster produces no measurement, it is an error unless named in an exemption map
    carrying ADR-0034's two kinds — `design` (closed question, silent) and `gap` (should be
    measured, warns on every run) — with a reason, and an entry that names a component
-   outside the roster or one that now *is* measured is a blocker. ADR-0034's idiom, not a
+   outside the roster or one that now _is_ measured is a blocker. ADR-0034's idiom, not a
    new one.
 
 And, as a corollary of rule 1: **a missing ratchet baseline is a failure, not a free
@@ -128,7 +128,7 @@ Alternatives considered:
   the "cross-framework half of `check:defaults`" its own header claims; `check:paint`'s
   two swallowed Playwright calls and its unverified `dist/storybook` freshness; and the
   ten separate re-implementations of ADR-0009's regenerate-and-diff boundary, two of which
-  fall through to *write* mode on a typo'd flag.
+  fall through to _write_ mode on a typo'd flag.
 - **Rule 1 is met only where it separates "measured nothing" from "found nothing".** The
   counters that decide that question are now asserted; `check:paint` still prints
   `skipped-demo`, `no-probe` and `not-rendered` per framework — between 73 and 106 stories
@@ -139,7 +139,7 @@ Alternatives considered:
 - **The floor is a floor, not coverage.** A component satisfies rule 3 with one successful
   default-state measurement, in one story, in one framework. Hover and focus states, the
   other two adapters and every other story can still be broken without the gate saying
-  anything. That is what this record asks for — measured *something*, not *everything* —
+  anything. That is what this record asks for — measured _something_, not _everything_ —
   and naming the limit is part of the decision.
 - **What rule 3 turned up on its first run:** 19 of the 43 roster components are measured
   today. The other 24 are recorded exemptions — 16 `design` (subcomponents no story
@@ -152,7 +152,7 @@ Alternatives considered:
   all of it was inside a green run.
 - **Verified as of this record:** the three failure paths above, by reading the code; the
   47 individual gate runs with their exit codes; that all 755 baseline findings reproduce
-  exactly; that 17 of the 43 roster components have no baseline *entry* — which is not the
+  exactly; that 17 of the 43 roster components have no baseline _entry_ — which is not the
   same as being unmeasured, and is why rule 3 counts measurements rather than findings, a
   distinction the instrumented run then proved by landing on 24 rather than 17; and each
   new assertion by a negative test that made it fire. **Assumed, and not settled here:**

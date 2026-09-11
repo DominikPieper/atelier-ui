@@ -5,7 +5,7 @@ sources:
   - tasks/atelier-design-system-plan.md (Phase 1, port items 1 and 2)
   - plan/adr/0037-contrast-gate-reads-the-token-source.md (the gate this extends)
   - plan/adr/0018-figma-token-tiering-and-css-projection.md (the primitive tier this finally has a CSS counterpart for)
-  - "Conciso Design System – Test (reference only): ramps 50-900 with a marked anchor and text-safe shade"
+  - 'Conciso Design System – Test (reference only): ramps 50-900 with a marked anchor and text-safe shade'
 ---
 
 # ADR-0038: Tonal ramps with checked annotations
@@ -22,7 +22,7 @@ ADR-0018 defined a three-tier token architecture — primitive, semantic,
 component — but only the semantic tier ever existed in CSS. `--ui-color-primary`
 held a hex value directly, with `-hover` and `-active` holding two more, and the
 dark theme holding three more again. Six literals, no stated relationship
-between them, and nothing recording *why* `#004e58` is the hover of `#006470`.
+between them, and nothing recording _why_ `#004e58` is the hover of `#006470`.
 
 The consequence is not aesthetic. Two things were impossible to answer from the
 token file:
@@ -82,7 +82,7 @@ Alternatives considered:
 - **Generate the whole ramp from the anchor** and accept that the existing hex
   values shift to the computed steps. Rejected: it would change what every
   component renders, in the same change that introduces the mechanism. The
-  additive constraint is what makes this reviewable — and the ramp is *more*
+  additive constraint is what makes this reviewable — and the ramp is _more_
   honest for containing the values that actually shipped.
 - **A separate primitive prefix** (`--ui-primitive-teal-700`, or Conciso's
   `--co-700`). Rejected: two namespaces for two gates to learn, in exchange for

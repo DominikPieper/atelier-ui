@@ -17,7 +17,7 @@ describe('AtlSkeleton', () => {
     });
     expect(container.querySelector('atl-skeleton')).toHaveAttribute(
       'aria-hidden',
-      'true'
+      'true',
     );
   });
 
@@ -27,24 +27,27 @@ describe('AtlSkeleton', () => {
       async (variant) => {
         const { container } = await render(
           `<atl-skeleton variant="${variant}" />`,
-          { imports: [AtlSkeleton] }
+          { imports: [AtlSkeleton] },
         );
         expect(container.querySelector('atl-skeleton')).toHaveClass(
-          `variant-${variant}`
+          `variant-${variant}`,
         );
-      }
+      },
     );
   });
 
-  covers('skeleton', 'custom-size')('sets width and height styles', async () => {
-    const { container } = await render(
-      '<atl-skeleton width="200px" height="50px" />',
-      { imports: [AtlSkeleton] }
-    );
-    const el = container.querySelector('atl-skeleton') as HTMLElement;
-    expect(el.style.width).toBe('200px');
-    expect(el.style.height).toBe('50px');
-  });
+  covers('skeleton', 'custom-size')(
+    'sets width and height styles',
+    async () => {
+      const { container } = await render(
+        '<atl-skeleton width="200px" height="50px" />',
+        { imports: [AtlSkeleton] },
+      );
+      const el = container.querySelector('atl-skeleton') as HTMLElement;
+      expect(el.style.width).toBe('200px');
+      expect(el.style.height).toBe('50px');
+    },
+  );
 
   describe('auto-computed height per variant', () => {
     it('defaults to 1em for text variant', async () => {
@@ -55,19 +58,22 @@ describe('AtlSkeleton', () => {
       expect(el.style.height).toBe('1em');
     });
 
-    covers('skeleton', 'circular-height')('defaults to width for circular variant', async () => {
-      const { container } = await render(
-        '<atl-skeleton variant="circular" width="40px" />',
-        { imports: [AtlSkeleton] }
-      );
-      const el = container.querySelector('atl-skeleton') as HTMLElement;
-      expect(el.style.height).toBe('40px');
-    });
+    covers('skeleton', 'circular-height')(
+      'defaults to width for circular variant',
+      async () => {
+        const { container } = await render(
+          '<atl-skeleton variant="circular" width="40px" />',
+          { imports: [AtlSkeleton] },
+        );
+        const el = container.querySelector('atl-skeleton') as HTMLElement;
+        expect(el.style.height).toBe('40px');
+      },
+    );
 
     it('defaults to 100px for rectangular variant', async () => {
       const { container } = await render(
         '<atl-skeleton variant="rectangular" />',
-        { imports: [AtlSkeleton] }
+        { imports: [AtlSkeleton] },
       );
       const el = container.querySelector('atl-skeleton') as HTMLElement;
       expect(el.style.height).toBe('100px');
@@ -81,13 +87,16 @@ describe('AtlSkeleton', () => {
     expect(container.querySelector('atl-skeleton')).toHaveClass('is-animated');
   });
 
-  covers('skeleton', 'not-animated')('does not apply is-animated class when animated is false', async () => {
-    const { container } = await render(
-      '<atl-skeleton [animated]="false" />',
-      { imports: [AtlSkeleton] }
-    );
-    expect(container.querySelector('atl-skeleton')).not.toHaveClass(
-      'is-animated'
-    );
-  });
+  covers('skeleton', 'not-animated')(
+    'does not apply is-animated class when animated is false',
+    async () => {
+      const { container } = await render(
+        '<atl-skeleton [animated]="false" />',
+        { imports: [AtlSkeleton] },
+      );
+      expect(container.querySelector('atl-skeleton')).not.toHaveClass(
+        'is-animated',
+      );
+    },
+  );
 });

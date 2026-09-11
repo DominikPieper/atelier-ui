@@ -78,7 +78,7 @@ still fails the check and is skipped). No other file changes.
 Alternatives considered:
 
 - **Rename `vitest.storybook.config.ts` → `vitest.config.ts` per library.**
-  This would satisfy the discovery check at the *library* directory (no
+  This would satisfy the discovery check at the _library_ directory (no
   walk-up needed) since that file already imports `storybookTest` for real.
   Rejected: it also matches `@nx/vitest`'s `vitestConfigGlob`, which would
   make Nx infer a second `test` target from the same directory that already
@@ -106,7 +106,7 @@ Alternatives considered:
   says this explicitly for that reason.
 - This is scoped to the addon's own `startVitest()` discovery path (the
   MCP/Storybook-UI "Testing" panel). The ordinary `nx test <lib>` / `npx
-  vitest run --config vitest.storybook.config.ts` paths were already
+vitest run --config vitest.storybook.config.ts` paths were already
   unaffected (verified: `nx test react/angular/vue` pass 450/601/338 tests
   respectively, before and after this change) since those invoke Vitest with
   an explicit config or root and never go through this walk-up at all.
@@ -121,7 +121,7 @@ to catch it". That was true when written and is no longer. `check:vitest-discove
 literals, and that every `libs/*/vitest.storybook.config.ts` found on disk is registered
 in the root `projects:` array — the framework list is read from the filesystem, so a
 fourth adapter cannot slip through. Both failure modes were exercised in both directions
-before the gate was accepted. What the Consequence says about the *upstream* risk still
+before the gate was accepted. What the Consequence says about the _upstream_ risk still
 stands exactly as written: the gate is a static text check, so it proves the literal is
 present, never that the addon still reads it. A heuristic change upstream would leave this
 gate green and `test-run` broken.

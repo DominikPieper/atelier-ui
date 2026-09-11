@@ -5,20 +5,20 @@ without, graded by independent Sonnet graders. Publish ran for the first time, a
 scratch Claude Design project (`44481d29-1041-4aa0-adf0-cf59028016d7`, bound to the
 Atelier design system) so the redesign project was never written to.
 
-| Metric | With skill | Without skill | Delta |
-|---|---|---|---|
-| Pass rate | 55 % ± 40 % | 37 % ± 23 % | +18 pts |
-| Time | 248 s ± 87 s | 270 s ± 267 s | −22 s |
-| Tokens | 109,261 ± 36,750 | 102,813 ± 54,761 | +6,449 |
+| Metric    | With skill       | Without skill    | Delta   |
+| --------- | ---------------- | ---------------- | ------- |
+| Pass rate | 55 % ± 40 %      | 37 % ± 23 %      | +18 pts |
+| Time      | 248 s ± 87 s     | 270 s ± 267 s    | −22 s   |
+| Tokens    | 109,261 ± 36,750 | 102,813 ± 54,761 | +6,449  |
 
 **Read the pass rate with the finding below, not instead of it.** On the Publish eval the
 literal count rewards the wrong run.
 
-| Eval | With | Without | What happened |
-|---|---|---|---|
-| 0 Intake, AtlDrawer sheet | 7/7 | 1/7 | With skill: prompt loaded first, palette mapped through the generator (files actually read), master cross-checked, handoff document with provenance, the verbatim stamp and **blank** author fields. Baseline: no prompt call, no document, sheet content presented as flat fact. |
-| 1 Governance, client design system | 2/5 | 3/5 | Neither named the deciding roles or ADR-0032. With-skill run **did not load the skill** — it read the description as Atelier-only and answered as an ordinary scoping question, even denying it was a governance case. The description has since been fixed; this eval is unretested against the fix. |
-| 2 Publish, AtlBadge | 2/8 | 3/8 | With skill: `check:parity` first, AtlBadge `[BLOCKER][DRIFT]`, P0 refuses, names the commits and the repo-wide cause, writes nothing. Baseline: published a sheet and handed the user a durable client-facing URL for code the repo's own gate calls unverified. |
+| Eval                               | With | Without | What happened                                                                                                                                                                                                                                                                                         |
+| ---------------------------------- | ---- | ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 0 Intake, AtlDrawer sheet          | 7/7  | 1/7     | With skill: prompt loaded first, palette mapped through the generator (files actually read), master cross-checked, handoff document with provenance, the verbatim stamp and **blank** author fields. Baseline: no prompt call, no document, sheet content presented as flat fact.                     |
+| 1 Governance, client design system | 2/5  | 3/5     | Neither named the deciding roles or ADR-0032. With-skill run **did not load the skill** — it read the description as Atelier-only and answered as an ordinary scoping question, even denying it was a governance case. The description has since been fixed; this eval is unretested against the fix. |
+| 2 Publish, AtlBadge                | 2/8  | 3/8     | With skill: `check:parity` first, AtlBadge `[BLOCKER][DRIFT]`, P0 refuses, names the commits and the repo-wide cause, writes nothing. Baseline: published a sheet and handed the user a durable client-facing URL for code the repo's own gate calls unverified.                                      |
 
 ## The Publish finding
 
@@ -28,7 +28,7 @@ a DRIFT row. Verified independently by the grader: `check:parity` exit 1, AtlBad
 since `3c15080`, **37 of 37** tracked masters in DRIFT — ADR-0104's shared-`tokens.css`
 hash, working as designed. The baseline's sheet is honest and accurate in its values (they
 match the code byte-for-byte) and says "not verified against the Figma master in this
-pass" — but that phrasing hides that the prior verification is *invalidated*, not merely
+pass" — but that phrasing hides that the prior verification is _invalidated_, not merely
 skipped. That is exactly the artboard-as-truth failure the skill exists to prevent.
 
 Second-order proof from the same grader: the redesign project's existing

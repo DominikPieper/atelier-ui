@@ -2,9 +2,12 @@ import { Meta, Typeset } from '@storybook/addon-docs/blocks';
 
 <Meta title="Foundation/Typography" />
 
-export const fontFamily = "'Instrument Sans', ui-sans-serif, system-ui, sans-serif";
-export const fontDisplay = "'Instrument Serif', Georgia, 'Times New Roman', serif";
-export const fontMono = "'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace";
+export const fontFamily =
+  "'Instrument Sans', ui-sans-serif, system-ui, sans-serif";
+export const fontDisplay =
+  "'Instrument Serif', Georgia, 'Times New Roman', serif";
+export const fontMono =
+  "'JetBrains Mono', ui-monospace, SFMono-Regular, Menlo, monospace";
 export const fontSizes = [12, 14, 16, 18, 20, 24];
 
 # Typography
@@ -13,21 +16,31 @@ The design system uses three typefaces, all loaded via Google Fonts: **Instrumen
 **Instrument Serif** for display headings, and **JetBrains Mono** for code, tokens, and prop names.
 
 ```css
-font-family: var(--ui-font-family);  /* Instrument Sans — UI */
+font-family: var(--ui-font-family); /* Instrument Sans — UI */
 font-family: var(--ui-font-display); /* Instrument Serif — display */
-font-family: var(--ui-font-mono);    /* JetBrains Mono — code */
+font-family: var(--ui-font-mono); /* JetBrains Mono — code */
 ```
 
 ## Family Tokens
 
-| Token | Family | Used for |
-|---|---|---|
-| `--ui-font-family` | Instrument Sans | body copy, labels, controls |
-| `--ui-font-display` | Instrument Serif | display headings |
-| `--ui-font-mono` | JetBrains Mono | code samples, token names, kbd chips |
+| Token               | Family           | Used for                             |
+| ------------------- | ---------------- | ------------------------------------ |
+| `--ui-font-family`  | Instrument Sans  | body copy, labels, controls          |
+| `--ui-font-display` | Instrument Serif | display headings                     |
+| `--ui-font-mono`    | JetBrains Mono   | code samples, token names, kbd chips |
 
-<Typeset fontSizes={[24]} fontWeight={400} sampleText="Instrument Serif — display" fontFamily={fontDisplay} />
-<Typeset fontSizes={[16]} fontWeight={400} sampleText="JetBrains Mono — --ui-color-surface-raised" fontFamily={fontMono} />
+<Typeset
+  fontSizes={[24]}
+  fontWeight={400}
+  sampleText="Instrument Serif — display"
+  fontFamily={fontDisplay}
+/>
+<Typeset
+  fontSizes={[16]}
+  fontWeight={400}
+  sampleText="JetBrains Mono — --ui-color-surface-raised"
+  fontFamily={fontMono}
+/>
 
 ## Type Scale
 
@@ -40,40 +53,55 @@ font-family: var(--ui-font-mono);    /* JetBrains Mono — code */
 
 ## Font Weights
 
-<Typeset fontSizes={[16]} fontWeight={400} sampleText="Normal (400) — The quick brown fox jumps over the lazy dog" fontFamily={fontFamily} />
-<Typeset fontSizes={[16]} fontWeight={500} sampleText="Medium (500) — The quick brown fox jumps over the lazy dog" fontFamily={fontFamily} />
-<Typeset fontSizes={[16]} fontWeight={600} sampleText="Semi Bold (600) — The quick brown fox jumps over the lazy dog" fontFamily={fontFamily} />
+<Typeset
+  fontSizes={[16]}
+  fontWeight={400}
+  sampleText="Normal (400) — The quick brown fox jumps over the lazy dog"
+  fontFamily={fontFamily}
+/>
+<Typeset
+  fontSizes={[16]}
+  fontWeight={500}
+  sampleText="Medium (500) — The quick brown fox jumps over the lazy dog"
+  fontFamily={fontFamily}
+/>
+<Typeset
+  fontSizes={[16]}
+  fontWeight={600}
+  sampleText="Semi Bold (600) — The quick brown fox jumps over the lazy dog"
+  fontFamily={fontFamily}
+/>
 
 ## Size Tokens
 
-| Token | Value | px |
-|---|---|---|
-| `--ui-font-size-xs` | `0.75rem` | 12px |
-| `--ui-font-size-sm` | `0.875rem` | 14px |
-| `--ui-font-size-md` | `1rem` | 16px |
-| `--ui-font-size-lg` | `1.125rem` | 18px |
-| `--ui-font-size-xl` | `1.25rem` | 20px |
-| `--ui-font-size-2xl` | `1.5rem` | 24px |
+| Token                | Value      | px   |
+| -------------------- | ---------- | ---- |
+| `--ui-font-size-xs`  | `0.75rem`  | 12px |
+| `--ui-font-size-sm`  | `0.875rem` | 14px |
+| `--ui-font-size-md`  | `1rem`     | 16px |
+| `--ui-font-size-lg`  | `1.125rem` | 18px |
+| `--ui-font-size-xl`  | `1.25rem`  | 20px |
+| `--ui-font-size-2xl` | `1.5rem`   | 24px |
 
 ## Weight Tokens
 
-| Token | Value |
-|---|---|
-| `--ui-font-weight-normal` | `400` |
-| `--ui-font-weight-medium` | `500` |
+| Token                       | Value |
+| --------------------------- | ----- |
+| `--ui-font-weight-normal`   | `400` |
+| `--ui-font-weight-medium`   | `500` |
 | `--ui-font-weight-semibold` | `600` |
 
 ## Line Height Tokens
 
-| Token | Value |
-|---|---|
-| `--ui-line-height-tight` | `1.25` |
-| `--ui-line-height-normal` | `1.5` |
+| Token                     | Value  |
+| ------------------------- | ------ |
+| `--ui-line-height-tight`  | `1.25` |
+| `--ui-line-height-normal` | `1.5`  |
 
 ## Letter Spacing Tokens
 
-| Token | Value |
-|---|---|
-| `--ui-letter-spacing-tight` | `-0.01em` |
-| `--ui-letter-spacing-normal` | `0` |
-| `--ui-letter-spacing-wide` | `0.01em` |
+| Token                        | Value     |
+| ---------------------------- | --------- |
+| `--ui-letter-spacing-tight`  | `-0.01em` |
+| `--ui-letter-spacing-normal` | `0`       |
+| `--ui-letter-spacing-wide`   | `0.01em`  |

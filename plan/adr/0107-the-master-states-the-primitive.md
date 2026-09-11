@@ -2,11 +2,11 @@
 status: accepted
 date: 2026-09-07
 sources:
-  - "plan/adr/0041-control-height-is-the-primitive.md (§Decision: block padding is DERIVED from the control height; this ADR carries that consequence into Figma)"
-  - "plan/adr/0052-the-row-is-the-second-ladder.md (the row-vs-control distinction that decides which masters this applies to)"
-  - "tools/scripts/check-figma.js (the ROOT-BOX rule that reported the drift, and whose expectation this decision invalidates)"
-  - "Claude Design project 7a6a2f19-9a3c-4dd9-9828-65c7cc67766c — AtlButton.dc.html (states the sync direction: code and sheet canonical, master rebuilt from them)"
-  - "this session"
+  - 'plan/adr/0041-control-height-is-the-primitive.md (§Decision: block padding is DERIVED from the control height; this ADR carries that consequence into Figma)'
+  - 'plan/adr/0052-the-row-is-the-second-ladder.md (the row-vs-control distinction that decides which masters this applies to)'
+  - 'tools/scripts/check-figma.js (the ROOT-BOX rule that reported the drift, and whose expectation this decision invalidates)'
+  - 'Claude Design project 7a6a2f19-9a3c-4dd9-9828-65c7cc67766c — AtlButton.dc.html (states the sync direction: code and sheet canonical, master rebuilt from them)'
+  - 'this session'
 ---
 
 # ADR-0107: The master states the primitive, not the value derived from it
@@ -20,19 +20,19 @@ Accepted.
 `check:figma`'s ROOT-BOX rule had been reporting the same class of drift on six
 masters for some time, and the six had been resolved in **opposite directions**:
 
-| master | Figma block padding | code derives |
-|---|---|---|
-| AtlButton | 8 (sm/md), 12 (lg) | 9, 9, 11 |
-| AtlInput | 12 | 9 |
-| AtlBadge | 4 | 3 |
-| AtlTextarea | **0** | 10 |
-| AtlSelect | **0** | 9 |
-| AtlTab | **0** | 11.25 |
+| master      | Figma block padding | code derives |
+| ----------- | ------------------- | ------------ |
+| AtlButton   | 8 (sm/md), 12 (lg)  | 9, 9, 11     |
+| AtlInput    | 12                  | 9            |
+| AtlBadge    | 4                   | 3            |
+| AtlTextarea | **0**               | 10           |
+| AtlSelect   | **0**               | 9            |
+| AtlTab      | **0**               | 11.25        |
 
 Three carried a resolved number; three carried nothing. Nobody had decided which
 was right, so the gate warned either way and the warnings had gone quiet.
 
-ADR-0041 made the control *height* the primitive and derives block padding from
+ADR-0041 made the control _height_ the primitive and derives block padding from
 it:
 
 ```
@@ -40,11 +40,11 @@ padding-block: calc((height − line-height × font-size) / 2 − border)
 ```
 
 A Figma master cannot express that. There is no Variable that holds arithmetic
-over three other tokens, so the master can only carry the *resolved* number —
+over three other tokens, so the master can only carry the _resolved_ number —
 which means it silently goes stale the moment the font size, the leading or the
 control height moves. The gate's own warning text had already framed the choice:
-*"Keep the number in step, or decide the master should not pad at all and let the
-stated height do the work."*
+_"Keep the number in step, or decide the master should not pad at all and let the
+stated height do the work."_
 
 The load-bearing observation is that **both sides already pin the height.** The
 CSS states `min-height: var(--ui-control-height-*)` and the master states an
@@ -112,6 +112,7 @@ for a gate to encode and re-opens the question for every new component.
   swallowing it every run; it is now `AtlButton:root-paint:padding-off-scale`
   in `FIGMA_CONFORMANCE_EXCEPTIONS`, not silently absorbed, and stays open
   until the "Left open" choice below is made.
+
 - Masters keep an explicit height, which is now the only thing they say about
   their own box. That is a real reduction in what a designer can adjust in
   Figma, and it is deliberate: the adjustable value lives in `tokens.css`.
@@ -121,7 +122,7 @@ for a gate to encode and re-opens the question for every new component.
 **The code's inline button padding is off the spacing scale.** `0.875rem` (14px)
 and `1.125rem` (18px) are not steps on the 0.25rem scale, so no `spacing/*`
 Variable can hold them. Figma carried 16/20/24 bound to `spacing/4`, `spacing/5`,
-`spacing/6` — the master was *not* stale here, the code is unexpressible. Left
+`spacing/6` — the master was _not_ stale here, the code is unexpressible. Left
 open: bring the code onto the scale (a visual change to a shipped component), or
 accept off-scale inline padding and say so.
 
@@ -144,7 +145,7 @@ canonical" — including the inline padding, raw. That broke two `spacing/*`
 variable aliases and turned a non-blocking warning into
 `✗ [CRITICAL] [TOKEN] AtlButton: raw padding/gap (not bound)`. The gate was
 right and I was wrong: **"code is canonical" does not outrank the token-binding
-rule.** It means the master follows the code *where the code is expressible in
-tokens*, and where it is not, that is a finding about the code — not a licence to
+rule.** It means the master follows the code _where the code is expressible in
+tokens_, and where it is not, that is a finding about the code — not a licence to
 denormalise the master. Re-bound `sm`/`md`/`lg` to `spacing/4`/`5`/`6`;
 `check:figma` returned to exit 0.

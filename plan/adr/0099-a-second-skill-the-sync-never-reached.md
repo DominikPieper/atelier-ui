@@ -50,7 +50,7 @@ skippable pre-push hook — without anyone acting on it. Separately, `nx.json`'s
 later content changes.
 
 Every other `check:all` gate stayed green throughout. Each of them compares
-one committed artifact against another; none compares the *roster* of skills
+one committed artifact against another; none compares the _roster_ of skills
 on disk against the roster the discovery index actually serves. A defect in
 "which skills exist" rather than "is this skill's content correct" had no
 gate shaped to catch it.
@@ -68,9 +68,9 @@ gate shaped to catch it.
    the two can never compute "what should be published" differently from
    "what must already be published."
 2. **New gate, `check:skill-discovery`** (`tools/scripts/check-skill-
-   discovery.mjs`), wired into `check:all` as gate 36: every `skills/<name>`
+discovery.mjs`), wired into `check:all` as gate 36: every `skills/<name>`
    with a `SKILL.md` must have a same-named entry in `docs/public/.well-known/
-   agent-skills/index.json` whose digest matches a fresh sha256 of the
+agent-skills/index.json` whose digest matches a fresh sha256 of the
    on-disk file, and the mirrored `SKILL.md` must actually exist on disk — or
    the name must be listed in a new `UNDISTRIBUTED_SKILLS` allowlist
    (`tools/scripts/lib/allowlists.js`) with a reason, matching this repo's
@@ -89,7 +89,7 @@ gate shaped to catch it.
    several later content changes. Its `project.json` already carries the same
    `nx-release-publish`-skip echo (`private: true`, distributed as a zip, not
    npm) as its sibling, so `conventionalCommits` + `fallbackCurrentVersionResolver:
-   "disk"` + the `skill-{projectName}-{version}` release tag apply unchanged.
+"disk"` + the `skill-{projectName}-{version}` release tag apply unchanged.
    `publish.yml`'s path filter (`skills/**`) already covers it — no change
    needed there.
 
@@ -119,15 +119,15 @@ what the sync script does.
   `AGENTS.md` and the `check:all` diagram on `docs/src/pages/claude-design.astro`
   (its visible label and its SVG `<desc>`) — are updated in the same change.
 - A third skill added later needs nothing beyond a `SKILL.md` + `package.json`
-  + `project.json` to be picked up by `sync:generated` and enforced by
-  `check:skill-discovery` — no name to remember to add anywhere for
-  discovery. It still needs an explicit `nx.json`
-  `release.groups.skills.projects` entry to be auto-versioned; that stays a
-  deliberate per-skill choice (a skill could reasonably want manual
-  versioning) and is not mechanized by this ADR.
+  - `project.json` to be picked up by `sync:generated` and enforced by
+    `check:skill-discovery` — no name to remember to add anywhere for
+    discovery. It still needs an explicit `nx.json`
+    `release.groups.skills.projects` entry to be auto-versioned; that stays a
+    deliberate per-skill choice (a skill could reasonably want manual
+    versioning) and is not mechanized by this ADR.
 - Not fixed here, left as recorded in `tasks/review-state-2026-08-26.md`: CI
   still does not run each skill's own per-project `sync-discovery` target
   directly. `check:skill-discovery` in `check:all` is the equivalent safety
-  net now — it verifies the *outcome* (index matches disk) rather than
+  net now — it verifies the _outcome_ (index matches disk) rather than
   re-running the per-project target, which is a cheaper and more general
   check than invoking every skill's target individually.

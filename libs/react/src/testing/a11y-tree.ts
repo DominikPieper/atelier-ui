@@ -104,7 +104,8 @@ function implicitRole(el: Element): string | null {
       if (type === 'checkbox') return 'checkbox';
       if (type === 'radio') return 'radio';
       if (type === 'range') return 'slider';
-      if (['button', 'submit', 'reset', 'image'].includes(type)) return 'button';
+      if (['button', 'submit', 'reset', 'image'].includes(type))
+        return 'button';
       return 'textbox';
     }
     default:
@@ -176,7 +177,9 @@ function accessibleName(el: Element): string {
   return visibleText(el).replace(/\s+/g, ' ').trim();
 }
 
-function normalizedStates(el: Element): Record<string, string | boolean> | undefined {
+function normalizedStates(
+  el: Element,
+): Record<string, string | boolean> | undefined {
   const states: Record<string, string | boolean> = {};
 
   // Unify native `disabled` and aria-disabled="true" so a native-button adapter
@@ -185,13 +188,16 @@ function normalizedStates(el: Element): Record<string, string | boolean> | undef
     'disabled' in el
       ? Boolean((el as unknown as { disabled?: boolean }).disabled)
       : el.hasAttribute('disabled');
-  if (nativeDisabled || el.getAttribute('aria-disabled') === 'true') states.disabled = true;
+  if (nativeDisabled || el.getAttribute('aria-disabled') === 'true')
+    states.disabled = true;
 
   // Same unification for the other native form states: a native
   // checkbox/radio/switch input and a role+aria host must compare equal.
   const asInput = el as unknown as { checked?: boolean; required?: boolean };
-  if (typeof asInput.checked === 'boolean' && asInput.checked) states.checked = true;
-  if (typeof asInput.required === 'boolean' && asInput.required) states.required = true;
+  if (typeof asInput.checked === 'boolean' && asInput.checked)
+    states.checked = true;
+  if (typeof asInput.required === 'boolean' && asInput.required)
+    states.required = true;
 
   for (const attr of STATE_ATTRS) {
     const v = el.getAttribute(attr);

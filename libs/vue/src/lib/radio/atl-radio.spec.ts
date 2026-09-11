@@ -38,18 +38,24 @@ describe('AtlRadio', () => {
     expect(screen.getByRole('radio', { name: 'Option A' })).not.toBeChecked();
   });
 
-  covers('radio', 'checked-from-group')('is checked when group value matches radioValue', () => {
-    render(RadioWithGroup, { props: { modelValue: 'a' } });
-    expect(screen.getByRole('radio', { name: 'Option A' })).toBeChecked();
-    expect(screen.getByRole('radio', { name: 'Option B' })).not.toBeChecked();
-  });
+  covers('radio', 'checked-from-group')(
+    'is checked when group value matches radioValue',
+    () => {
+      render(RadioWithGroup, { props: { modelValue: 'a' } });
+      expect(screen.getByRole('radio', { name: 'Option A' })).toBeChecked();
+      expect(screen.getByRole('radio', { name: 'Option B' })).not.toBeChecked();
+    },
+  );
 
-  covers('radio', 'select-on-click')('becomes checked when clicked', async () => {
-    const user = userEvent.setup();
-    const { emitted } = render(RadioWithGroup, { props: { modelValue: '' } });
-    await user.click(screen.getByRole('radio', { name: 'Option A' }));
-    expect(emitted()['update:modelValue']).toEqual([['a']]);
-  });
+  covers('radio', 'select-on-click')(
+    'becomes checked when clicked',
+    async () => {
+      const user = userEvent.setup();
+      const { emitted } = render(RadioWithGroup, { props: { modelValue: '' } });
+      await user.click(screen.getByRole('radio', { name: 'Option A' }));
+      expect(emitted()['update:modelValue']).toEqual([['a']]);
+    },
+  );
 
   covers('radio', 'disabled')('is disabled when individually disabled', () => {
     render(RadioWithGroup, { props: { modelValue: '', radioDisabled: true } });

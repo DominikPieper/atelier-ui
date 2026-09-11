@@ -13,15 +13,18 @@ export const metadata: ComponentMetadata = {
   antiPatterns: [
     {
       pattern: 'Switching between sibling views of the same parent context.',
-      useInstead: 'AtlTabs — tabs swap one panel at a time and are the right primitive for peer views.',
+      useInstead:
+        'AtlTabs — tabs swap one panel at a time and are the right primitive for peer views.',
     },
     {
       pattern: 'Presenting a linear ordered workflow as collapsible sections.',
-      useInstead: 'AtlStepper — steppers communicate progress and ordering, accordions do not.',
+      useInstead:
+        'AtlStepper — steppers communicate progress and ordering, accordions do not.',
     },
     {
       pattern: 'Building a tree of nested categories the user can drill into.',
-      useInstead: 'A dedicated tree component with `role="tree"` and proper expanded-state semantics.',
+      useInstead:
+        'A dedicated tree component with `role="tree"` and proper expanded-state semantics.',
     },
   ],
   relatedComponents: ['AtlTabGroupSpec', 'AtlStepperSpec'],

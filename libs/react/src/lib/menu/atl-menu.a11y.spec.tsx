@@ -13,7 +13,12 @@ import { readFileSync, writeFileSync } from 'node:fs';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 import { a11yTree } from '../../testing/a11y-tree';
-import { AtlMenu, AtlMenuItem, AtlMenuSeparator, AtlMenuTrigger } from './atl-menu';
+import {
+  AtlMenu,
+  AtlMenuItem,
+  AtlMenuSeparator,
+  AtlMenuTrigger,
+} from './atl-menu';
 
 const FW = 'react';
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../../../..');

@@ -27,7 +27,7 @@ Twenty-one gates, and none of them measures a box:
   with a live bridge and a hand-authored `codeSpec`. It never ran between April
   and today.
 - The unit tests render components and assert behaviour, never dimensions.
-- `check:figma` reads a committed snapshot of the *design*, not the code's output.
+- `check:figma` reads a committed snapshot of the _design_, not the code's output.
 
 So the library could state a control height in a token, render something else,
 and every signal stayed green. An input sat 6px taller than the button beside it
@@ -80,7 +80,7 @@ Alternatives considered:
 
 - **The original defect is reproducibly caught.** Restoring the input's authored
   padding makes the gate fail with `renders 46px but --ui-control-height-md claims
-  40px (off by 6.00px)` and names the remedy. Verified, along with the `[ROSTER]`
+40px (off by 6.00px)` and names the remedy. Verified, along with the `[ROSTER]`
   and `[MARKUP]` paths.
 - **`check:all` now needs a browser**, which is a real cost: a
   `playwright install --with-deps chromium` step in the `checks` job and in
@@ -97,6 +97,7 @@ Alternatives considered:
   version had slept through. This note is being added now, later than the change it
   records. See ADR-0043 for the coverage expansion; ADR-0047 grew the roster further, to
   36 measurements.
+
 - **The CI leg works** (verified 2026-08-26, run 32967483005, commit `0ce4fe9`):
   `Sync checks` installs chromium and the gate reports
   `every control renders the height its token claims` in 2.6s. Publish's `verify`

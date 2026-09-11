@@ -28,7 +28,7 @@ divergence is recorded and warns on every run; nothing was fixed inline.
 ## Correction (2026-09-05, same day)
 
 Two statements below were wrong when this record was written, and are corrected
-here rather than edited away — an ADR is a record of what was decided *and* of
+here rather than edited away — an ADR is a record of what was decided _and_ of
 what the deciders believed.
 
 **`readOnly` does not silence the spec's `readonly` in React.** The Decision
@@ -50,7 +50,7 @@ passing tests in both `atl-radio-group.spec.ts:43-51` and
 `atl-radio.spec.ts:139-159`. Only the file-local claim was true — which is
 exactly what the rule measured.
 
-**The inverse was hiding in the same rule.** `AtlSelect.name` *is* dead —
+**The inverse was hiding in the same rule.** `AtlSelect.name` _is_ dead —
 declared at `atl-select.ts:183`, never bound, absent from `AtlSelectContext`,
 untested — and the gate did not flag it, because `atl-select.ts` contains the
 string "name" in doc comments and in `<atl-icon name="chevron-down">`, which the
@@ -58,7 +58,7 @@ textual match accepted as a use. A false positive and a false negative from one
 root cause: the rule asked whether an identifier reappears in a file, when the
 question is whether anything consumes the input.
 
-The rule now matches the signal's *call* (`prop()`), strips comments before
+The rule now matches the signal's _call_ (`prop()`), strips comments before
 matching, and resolves the cross-file case by reading the injection token's
 context interface — which is precisely what distinguishes `AtlRadioGroupContext`,
 which declares `name`, from `AtlSelectContext`, which does not. The allowlist
@@ -83,7 +83,7 @@ Exploring for this gate turned up why the class keeps recurring:
 So for two of three adapters, "one spec, three frameworks" was a convention with
 nothing behind it. And no existing gate looked: `check:sync` compares
 directories, `check:spec` compares a verbatim file copy, `check:defaults`
-compares default *values* of axis props, `check:variants` compares CSS classes,
+compares default _values_ of axis props, `check:variants` compares CSS classes,
 `check:metadata` never reads the adapters at all. The nearest analog,
 `check-docs-sync.js`, compares the spec against the hand-written docs table
 rather than against adapter source.
@@ -119,7 +119,7 @@ React's props interfaces extend `InputHTMLAttributes` and friends and spread
 `aria-describedby` and `type` already work there without being declared. Angular
 and Vue have no equivalent: declaring the prop is the only way for them to offer
 the same surface, so declaring it is conformance with React's behaviour, not
-drift from the spec. `MISSING` is untouched by this — where the spec *does*
+drift from the spec. `MISSING` is untouched by this — where the spec _does_
 declare one of these names, an adapter lacking it is still an error, which is
 what keeps `AtlButtonSpec:aria-label` red for Angular and Vue.
 
@@ -142,7 +142,7 @@ inputs", referenced nowhere else in the file.
 
 **Ship the gate first; record every existing finding as `kind: 'gap'`.** The
 alternative — clean up all 14 components, then ship green — was rejected as the
-bigger and later option: it would leave the repo unguarded against *new* drift
+bigger and later option: it would leave the repo unguarded against _new_ drift
 for as long as the cleanup took, and the `errors` gap alone needs a shared type
 across `WithOptionalFieldTree<ValidationError>[]` and `string[]`, which is a
 contract change with its own ADR. `gap` entries warn on every run (ADR-0082's
@@ -159,12 +159,12 @@ would pretend it had been checked.
 
 **Alternatives rejected:**
 
-- *Make Vue and Angular extend the spec types instead of gating.* The real fix
+- _Make Vue and Angular extend the spec types instead of gating._ The real fix
   for the root cause, and out of reach for Angular: signal inputs are class
   fields, not a props object, so no interface can constrain them. Vue's
   `defineProps<AtlXSpec>` could work and is worth its own investigation — the
   gate does not preclude it, and would verify it.
-- *Exclude the change-callback pattern* the way Vue's `update:*` emits are
+- _Exclude the change-callback pattern_ the way Vue's `update:*` emits are
   excluded. Cheaper, and it would have stopped checking the one contract the
   spec actually models.
 
@@ -188,7 +188,7 @@ would pretend it had been checked.
   divergence this gate structurally cannot report, because `AtlDialogSpec`
   declares neither. Tracked in `tasks/todo.md`; closing it means completing the
   spec, not extending the gate.
-- `component-map.js`'s registry maps `AtlRadioGroupSpec` to the metadata *module*
+- `component-map.js`'s registry maps `AtlRadioGroupSpec` to the metadata _module_
   `radio` (shared with `AtlRadioSpec`), not to the `radio-group` component
   directory. The gate carries a local one-entry `DIR_OVERRIDES` with a comment
   rather than changing `component-map.js`, whose metadata-module semantics other

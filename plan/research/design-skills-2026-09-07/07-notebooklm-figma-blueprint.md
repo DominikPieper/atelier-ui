@@ -2,103 +2,102 @@
 
 ### 📂 Area 1: Page Taxonomy, Order, and Structural Organization
 
-*   [ ] **Establish a strict, standardized page taxonomy and order** to keep the component library clean for human designers and reliably traversable for MCP agents `[1]`:
-    1.  **Cover**: High-fidelity file introduction `[1]`.
-    2.  **Getting Started**: Onboarding notes, usage guidelines, and framework targets `[2, 3]`.
-    3.  **Changelog**: Human-readable markdown record of changes and releases `[4, 5]`.
-    4.  **Foundations/Tokens**: Rendered visual swatches of variables and styles `[1]`.
-    5.  **Icons**: Automated icon assets published as a dedicated library file to prevent bloat `[6, 7]`.
-    6.  **Components**: Individual, dedicated pages for each public composed component set `[6, 7]`.
-    7.  **Patterns**: Molecules and layout combinations `[8, 9]`.
-    8.  **Templates**: High-level page-level layouts built entirely from library components `[6, 7]`.
-    9.  **Playground**: Interactive sandboxes with code preview tools `[10, 11]`.
-    10. **Deprecated**: Retained older versions with clear warnings to prevent adoption `[12, 13]`.
-    11. **Private/WIP**: Drafts and sandboxes shielded from the main publishing pipeline `[14, 15]`.
-*   [ ] **Split large libraries into multiple files** (e.g., base, icons, components, templates) once the file size degrades canvas rendering performance `[6, 7]`. However, **keep all variable collections inside a single parent file** to prevent cross-file alias reference breakages `[6, 7]`.
-*   [ ] **Implement a strict governance and branching model** `[16, 17]`. Designers must edit on isolated branches and submit merge requests comparing differences, requiring peer reviews (e.g., a two-approval checklist) before publishing changes back to the main file `[16-19]`.
+- [ ] **Establish a strict, standardized page taxonomy and order** to keep the component library clean for human designers and reliably traversable for MCP agents `[1]`:
+  1.  **Cover**: High-fidelity file introduction `[1]`.
+  2.  **Getting Started**: Onboarding notes, usage guidelines, and framework targets `[2, 3]`.
+  3.  **Changelog**: Human-readable markdown record of changes and releases `[4, 5]`.
+  4.  **Foundations/Tokens**: Rendered visual swatches of variables and styles `[1]`.
+  5.  **Icons**: Automated icon assets published as a dedicated library file to prevent bloat `[6, 7]`.
+  6.  **Components**: Individual, dedicated pages for each public composed component set `[6, 7]`.
+  7.  **Patterns**: Molecules and layout combinations `[8, 9]`.
+  8.  **Templates**: High-level page-level layouts built entirely from library components `[6, 7]`.
+  9.  **Playground**: Interactive sandboxes with code preview tools `[10, 11]`.
+  10. **Deprecated**: Retained older versions with clear warnings to prevent adoption `[12, 13]`.
+  11. **Private/WIP**: Drafts and sandboxes shielded from the main publishing pipeline `[14, 15]`.
+- [ ] **Split large libraries into multiple files** (e.g., base, icons, components, templates) once the file size degrades canvas rendering performance `[6, 7]`. However, **keep all variable collections inside a single parent file** to prevent cross-file alias reference breakages `[6, 7]`.
+- [ ] **Implement a strict governance and branching model** `[16, 17]`. Designers must edit on isolated branches and submit merge requests comparing differences, requiring peer reviews (e.g., a two-approval checklist) before publishing changes back to the main file `[16-19]`.
 
 ---
 
 ### 🎨 Area 2: Key Landing & Documentation Pages
 
-*   [ ] **Design an immaculate Cover Page** that acts as the visual and metadata entry point, declaring the file as the single source of truth for the organization `[1, 20]`.
-*   [ ] **Create a dedicated Component Overview/Inventory Page** that contains rendered visual swatches, listed components, styles, and visual specs in a unified layout `[1, 21]`. This allows MCP agents to run discovery and audit file structures cleanly `[1]`.
+- [ ] **Design an immaculate Cover Page** that acts as the visual and metadata entry point, declaring the file as the single source of truth for the organization `[1, 20]`.
+- [ ] **Create a dedicated Component Overview/Inventory Page** that contains rendered visual swatches, listed components, styles, and visual specs in a unified layout `[1, 21]`. This allows MCP agents to run discovery and audit file structures cleanly `[1]`.
 
 ---
 
 ### 📝 Area 3: Figma Component Documentation Frame Structure
 
-*   [ ] **Embed documentation frames directly inside Figma component pages** to ensure that guidelines are visible at the immediate point-of-use `[22-25]`. Every component page or frame must cover `[24-28]`:
-    *   **Purpose**: A clear, one-sentence description of what the component does `[26, 27]`.
-    *   **Anatomy Pinned specs**: Visual callouts mapping out parent-child relationships and nested layers `[24, 25, 28]`.
-    *   **Properties Table**: A breakdown of editable props, variants, and expected types with default values `[24, 25, 29]`.
-    *   **Negative Guidance (Do/Don't)**: Usage rules and visual anti-patterns (e.g., when not to use a button variant or when to avoid disabled states) `[24-27]`.
-    *   **Accessibility (a11y) Requirements**: Explicit instructions for keyboard navigation, ARIA roles, minimum touch target sizes (≥44x44px), and color contrast ratios (≥4.5:1) `[26, 27, 30-32]`.
-    *   **Storybook & Code references**: Links to the Storybook documentation to maintain parallel structural documentation across both design and code environments `[24, 25, 33, 34]`.
+- [ ] **Embed documentation frames directly inside Figma component pages** to ensure that guidelines are visible at the immediate point-of-use `[22-25]`. Every component page or frame must cover `[24-28]`:
+  - **Purpose**: A clear, one-sentence description of what the component does `[26, 27]`.
+  - **Anatomy Pinned specs**: Visual callouts mapping out parent-child relationships and nested layers `[24, 25, 28]`.
+  - **Properties Table**: A breakdown of editable props, variants, and expected types with default values `[24, 25, 29]`.
+  - **Negative Guidance (Do/Don't)**: Usage rules and visual anti-patterns (e.g., when not to use a button variant or when to avoid disabled states) `[24-27]`.
+  - **Accessibility (a11y) Requirements**: Explicit instructions for keyboard navigation, ARIA roles, minimum touch target sizes (≥44x44px), and color contrast ratios (≥4.5:1) `[26, 27, 30-32]`.
+  - **Storybook & Code references**: Links to the Storybook documentation to maintain parallel structural documentation across both design and code environments `[24, 25, 33, 34]`.
 
 ---
 
 ### 🧱 Area 4: Component Architecture
 
-*   [ ] **Prefix private Base Components with a period `.` or underscore `_`** `[14, 15]`. These contain raw visual shells and structure (flex rules, spacing), keeping them hidden from consumer library panels while letting you build composed public components on top `[14, 15]`.
-*   [ ] **Build all components using Auto Layout** to automatically communicate responsive spacing intent and protect layouts when localized text scales `[35-38]`.
-*   [ ] **Adopt an atomic structure** by constructing primitive layers first (spacers, text blocks, icon containers) and nesting them into public composed component sets `[39-42]`.
-*   [ ] **Distribute customization across the 5 component property types** to prevent variant counts from multiplying combinatorially `[43, 44]`:
-    *   **Variant**: Use *only* for visibly distinct style axes (e.g., sizes, types like primary/secondary, and interactive states) `[14, 15, 45, 46]`.
-    *   **Boolean**: Use to toggle layer visibility on and off (e.g., optional left/right icons, badges, dividers) `[45-48]`. Moving on/off axes to booleans is the single most effective way to halve a variant set size `[49, 50]`.
-    *   **Instance Swap**: Use to swap nested elements (like icons) from a closed library of candidates `[45-48]`. Ensure stable instance-swap IDs are used to allow Code Connect and MCP tools to resolve nested definitions dynamically `[51-54]`.
-    *   **Text**: Use to edit the copy inside text layers from the sidebar without forcing designers to double-click into layers `[45, 46, 55, 56]`.
-    *   **Native Slots**: Use native slots to define open-ended body areas (e.g., inside cards, modals, or sheets) `[45, 46, 57, 58]`. This allows teams to add custom layers without detaching and avoids creating countless visual layout variants `[57, 58]`.
-*   [ ] **Maintain identical layer naming across variants** `[59, 60]`. This ensures that custom text overrides are preserved when designers switch states or variant styles `[59, 60]`.
-*   [ ] **Align naming exactly with production code props** `[14, 15]`. Casing and names must match your framework interfaces (e.g., PascalCase for files, camelCase or lowercase kebab-case for props) `[14, 15]`. A variant called `Type=Primary, Size=Medium, State=Default` in Figma must cleanly map to `<Button variant="primary" size="md" />` in code `[14, 15]`.
+- [ ] **Prefix private Base Components with a period `.` or underscore `_`** `[14, 15]`. These contain raw visual shells and structure (flex rules, spacing), keeping them hidden from consumer library panels while letting you build composed public components on top `[14, 15]`.
+- [ ] **Build all components using Auto Layout** to automatically communicate responsive spacing intent and protect layouts when localized text scales `[35-38]`.
+- [ ] **Adopt an atomic structure** by constructing primitive layers first (spacers, text blocks, icon containers) and nesting them into public composed component sets `[39-42]`.
+- [ ] **Distribute customization across the 5 component property types** to prevent variant counts from multiplying combinatorially `[43, 44]`:
+  - **Variant**: Use _only_ for visibly distinct style axes (e.g., sizes, types like primary/secondary, and interactive states) `[14, 15, 45, 46]`.
+  - **Boolean**: Use to toggle layer visibility on and off (e.g., optional left/right icons, badges, dividers) `[45-48]`. Moving on/off axes to booleans is the single most effective way to halve a variant set size `[49, 50]`.
+  - **Instance Swap**: Use to swap nested elements (like icons) from a closed library of candidates `[45-48]`. Ensure stable instance-swap IDs are used to allow Code Connect and MCP tools to resolve nested definitions dynamically `[51-54]`.
+  - **Text**: Use to edit the copy inside text layers from the sidebar without forcing designers to double-click into layers `[45, 46, 55, 56]`.
+  - **Native Slots**: Use native slots to define open-ended body areas (e.g., inside cards, modals, or sheets) `[45, 46, 57, 58]`. This allows teams to add custom layers without detaching and avoids creating countless visual layout variants `[57, 58]`.
+- [ ] **Maintain identical layer naming across variants** `[59, 60]`. This ensures that custom text overrides are preserved when designers switch states or variant styles `[59, 60]`.
+- [ ] **Align naming exactly with production code props** `[14, 15]`. Casing and names must match your framework interfaces (e.g., PascalCase for files, camelCase or lowercase kebab-case for props) `[14, 15]`. A variant called `Type=Primary, Size=Medium, State=Default` in Figma must cleanly map to `<Button variant="primary" size="md" />` in code `[14, 15]`.
 
 ---
 
 ### 🎨 Area 5: Variable Collections & Modes
 
-*   [ ] **Deploy a structured, three-tier token architecture** using Figma Variables to separate primitive variables from functional usage and components `[61-72]`:
-    *   **Tier 1: Primitives**: Absolute raw numbers and colors (e.g., `color-blue-500: #0835fb`, `spacing-4: 16px`, `radius-sm: 4px`) `[62, 65]`. Never map these directly to UI layers `[62, 65]`.
-    *   **Tier 2: Semantic**: Purpose-driven aliases referencing primitives to describe usage (e.g., `color-primary: color-blue-500`, `spacing-section: spacing-8`) `[62, 65]`. Map these to design layers by default `[63, 66]`.
-    *   **Tier 3: Component (Optional)**: Specific aliases tied to a component's visual variables (e.g., `button-primary-bg: color-primary`) `[63, 66, 69, 73]`. Use this tier primarily if building at enterprise scale `[63, 66]`.
-*   [ ] **Utilize Variable Modes for multi-theme, brand, or density options** `[74-77]`. Mirrors of semantic tokens should be mapped across modes (e.g., Light and Dark) so that swapping a frame's mode instantly transforms elements with correct contrast and visibility without breaking bindings `[76-79]`.
-*   [ ] **Enforce strict Variable Hygiene**:
-    *   **Explicit Scoping**: Turn off Figma's default `ALL_SCOPES` setting for color or spacing variables so they don't pollute unrelated property dropdowns `[80]`.
-    *   **WEB Code Syntax**: Assign `codeSyntax.WEB` with correct CSS custom property names (e.g., `--color-brand-primary`) to every semantic variable `[80]`. Without this, MCP tools like `get_design_context` will return raw internal Figma names instead of standard CSS tokens, breaking the design-to-code pipeline `[80]`.
+- [ ] **Deploy a structured, three-tier token architecture** using Figma Variables to separate primitive variables from functional usage and components `[61-72]`:
+  - **Tier 1: Primitives**: Absolute raw numbers and colors (e.g., `color-blue-500: #0835fb`, `spacing-4: 16px`, `radius-sm: 4px`) `[62, 65]`. Never map these directly to UI layers `[62, 65]`.
+  - **Tier 2: Semantic**: Purpose-driven aliases referencing primitives to describe usage (e.g., `color-primary: color-blue-500`, `spacing-section: spacing-8`) `[62, 65]`. Map these to design layers by default `[63, 66]`.
+  - **Tier 3: Component (Optional)**: Specific aliases tied to a component's visual variables (e.g., `button-primary-bg: color-primary`) `[63, 66, 69, 73]`. Use this tier primarily if building at enterprise scale `[63, 66]`.
+- [ ] **Utilize Variable Modes for multi-theme, brand, or density options** `[74-77]`. Mirrors of semantic tokens should be mapped across modes (e.g., Light and Dark) so that swapping a frame's mode instantly transforms elements with correct contrast and visibility without breaking bindings `[76-79]`.
+- [ ] **Enforce strict Variable Hygiene**:
+  - **Explicit Scoping**: Turn off Figma's default `ALL_SCOPES` setting for color or spacing variables so they don't pollute unrelated property dropdowns `[80]`.
+  - **WEB Code Syntax**: Assign `codeSyntax.WEB` with correct CSS custom property names (e.g., `--color-brand-primary`) to every semantic variable `[80]`. Without this, MCP tools like `get_design_context` will return raw internal Figma names instead of standard CSS tokens, breaking the design-to-code pipeline `[80]`.
 
 ---
 
 ### 🚀 Area 6: Handoff, Annotations & Code Connect
 
-*   [ ] **Mark locked frames as "Ready for Dev"** to isolate production-ready components in the Dev Mode focus view, ensuring agents do not crawl draft frames `[81, 82]`.
-*   [ ] **Add specs as pinned Annotations directly onto Figma nodes** to communicate interactive layout behavior (alignment, responsive resizing, motion ease) that raw visuals cannot fully capture `[28, 37, 83]`.
-*   [ ] **Implement Code Connect** to bind published library components directly to their codebase targets, preventing coding agents from writing boilerplate code when production components already exist `[84-87]`:
-    *   **Code Connect UI**: Connect the Figma file to your GitHub repository visually `[88-91]`. Use manual mapping paths and add custom instructions as notes to guide AI model output in Dev Mode `[10, 11, 88, 90, 92, 93]`.
-    *   **Code Connect CLI**: Write framework-agnostic template files (e.g., `Button.figma.ts` or `Button.figma.js`) to live alongside code components in your codebase `[88, 90, 94-97]`.
-*   [ ] **Write robust Code Connect Template Files** following the strict programmatic layout specification `[98-103]`:
-    *   Include the **metadata comment block** `// url=https://figma.com/design/...` targeting the component set `[99, 101, 104, 105]`.
-    *   Use methods on `figma.selectedInstance` (e.g., `getBoolean()`, `getEnum()`, `getString()`) to map variant states and pass variables dynamically to the template output `[99, 101, 106, 107]`.
-    *   Declare the codebase snippet using the `figma.code` tagged template literal `[98, 100, 102, 103]`.
-    *   Map complex structures with `getSlot()` and recursive iteration (`slot.connectedInstances.map(instance => instance.executeTemplate())`) so nested children write out code-connected scripts inside standard templates `[108-115]`.
+- [ ] **Mark locked frames as "Ready for Dev"** to isolate production-ready components in the Dev Mode focus view, ensuring agents do not crawl draft frames `[81, 82]`.
+- [ ] **Add specs as pinned Annotations directly onto Figma nodes** to communicate interactive layout behavior (alignment, responsive resizing, motion ease) that raw visuals cannot fully capture `[28, 37, 83]`.
+- [ ] **Implement Code Connect** to bind published library components directly to their codebase targets, preventing coding agents from writing boilerplate code when production components already exist `[84-87]`:
+  - **Code Connect UI**: Connect the Figma file to your GitHub repository visually `[88-91]`. Use manual mapping paths and add custom instructions as notes to guide AI model output in Dev Mode `[10, 11, 88, 90, 92, 93]`.
+  - **Code Connect CLI**: Write framework-agnostic template files (e.g., `Button.figma.ts` or `Button.figma.js`) to live alongside code components in your codebase `[88, 90, 94-97]`.
+- [ ] **Write robust Code Connect Template Files** following the strict programmatic layout specification `[98-103]`:
+  - Include the **metadata comment block** `// url=https://figma.com/design/...` targeting the component set `[99, 101, 104, 105]`.
+  - Use methods on `figma.selectedInstance` (e.g., `getBoolean()`, `getEnum()`, `getString()`) to map variant states and pass variables dynamically to the template output `[99, 101, 106, 107]`.
+  - Declare the codebase snippet using the `figma.code` tagged template literal `[98, 100, 102, 103]`.
+  - Map complex structures with `getSlot()` and recursive iteration (`slot.connectedInstances.map(instance => instance.executeTemplate())`) so nested children write out code-connected scripts inside standard templates `[108-115]`.
 
 ---
 
 ### ⚖️ Architectural Gaps and Disagreements in the Industry
 
 1.  **Custom Library vs. Popular Open Source Libraries**
-    *   **Custom / Shadcn/ui Kits**: Proponents of shadcn/ui and custom setups (such as the *shadcndesign* and *shadcncraft* authors) argue that copy-and-paste registries are ideal for Code Connect because you have total control over the file path mapping and variant configuration `[116-118]`.
-    *   **Open-Source Heavyweights**: On the other hand, design system engineers on Reddit (e.g., user `JustAirConditioners`) strongly warn that building and publishing your own custom component library is the "biggest design system footgun" and creates immense maintenance friction `[119, 120]`. They advocate starting with fully managed open-source component libraries like Mantine `[121, 122]`.
+    - **Custom / Shadcn/ui Kits**: Proponents of shadcn/ui and custom setups (such as the _shadcndesign_ and _shadcncraft_ authors) argue that copy-and-paste registries are ideal for Code Connect because you have total control over the file path mapping and variant configuration `[116-118]`.
+    - **Open-Source Heavyweights**: On the other hand, design system engineers on Reddit (e.g., user `JustAirConditioners`) strongly warn that building and publishing your own custom component library is the "biggest design system footgun" and creates immense maintenance friction `[119, 120]`. They advocate starting with fully managed open-source component libraries like Mantine `[121, 122]`.
 2.  **Variable Collection Setup (Three-Tier vs. Combined)**
-    *   **Split Collections**: The Muzli blog and general token standards recommend establishing three entirely separate, distinct collections in Figma: Primitives, Semantic, and Components `[63, 66]`.
-    *   **Single-Level Mapping**: The official Figma Learn Guide ("Introduction to Design Systems: Update 1") presents a simpler real-world implementation where teams set up semantic and component-specific tokens on the *same level* (meaning groups within a single collection), noting that component-specific tokens can be omitted or combined with semantic layers to save setup and restructuring time `[70, 123-125]`.
+    - **Split Collections**: The Muzli blog and general token standards recommend establishing three entirely separate, distinct collections in Figma: Primitives, Semantic, and Components `[63, 66]`.
+    - **Single-Level Mapping**: The official Figma Learn Guide ("Introduction to Design Systems: Update 1") presents a simpler real-world implementation where teams set up semantic and component-specific tokens on the _same level_ (meaning groups within a single collection), noting that component-specific tokens can be omitted or combined with semantic layers to save setup and restructuring time `[70, 123-125]`.
 3.  **Figma MCP: Desktop Server vs. Remote Hosted Server**
-    *   **Remote Server Priority**: Official Figma documentation heavily prefers the remote hosted server (`mcp.figma.com`) because a vast amount of editing capabilities (such as the `/design-sync` command, `write-to-canvas`, and HTML-to-Figma conversions) require the remote infrastructure and are completely absent from the desktop server `[126-130]`.
-    *   **Desktop Server Priority**: Software engineers iterating rapidly (e.g., user `Deep_Ad1959` on Reddit) argue that the remote server adds high latency on every tool call, ruining the interactive loop when coding in real-time `[131, 132]`. They recommend using the local desktop server (`127.0.0.1:3845`) for heavy reading and light writing to bypass latency completely `[131-133]`.
+    - **Remote Server Priority**: Official Figma documentation heavily prefers the remote hosted server (`mcp.figma.com`) because a vast amount of editing capabilities (such as the `/design-sync` command, `write-to-canvas`, and HTML-to-Figma conversions) require the remote infrastructure and are completely absent from the desktop server `[126-130]`.
+    - **Desktop Server Priority**: Software engineers iterating rapidly (e.g., user `Deep_Ad1959` on Reddit) argue that the remote server adds high latency on every tool call, ruining the interactive loop when coding in real-time `[131, 132]`. They recommend using the local desktop server (`127.0.0.1:3845`) for heavy reading and light writing to bypass latency completely `[131-133]`.
 4.  **Is Figma Necessary? Figma vs. Spatial Web Engines**
-    *   **Figma-to-Code Handoff**: Standard workflows assume Figma is the necessary design engine, with Code Connect acting as the ideal handoff contract `[134, 135]`.
-    *   **Spatial Web Engines**: Prominent product designers on Reddit (e.g., user `Complete-Scratch-899`) argue that forcing AI models to translate spatial Figma visual concepts into rigid HTML/CSS boxes is a broken handoff. They advocate for prototype-free workflows using spatial engines where the native vector design on the canvas runs directly in the browser as the actual web application, entirely bypassing the code translation layer `[136-138]`.
+    - **Figma-to-Code Handoff**: Standard workflows assume Figma is the necessary design engine, with Code Connect acting as the ideal handoff contract `[134, 135]`.
+    - **Spatial Web Engines**: Prominent product designers on Reddit (e.g., user `Complete-Scratch-899`) argue that forcing AI models to translate spatial Figma visual concepts into rigid HTML/CSS boxes is a broken handoff. They advocate for prototype-free workflows using spatial engines where the native vector design on the canvas runs directly in the browser as the actual web application, entirely bypassing the code translation layer `[136-138]`.
 
 💡 **Next Step**: Would you like me to draft a fully compliant Code Connect template file (e.g., `Button.figma.ts`) for your primary button set using this structural blueprint?
-
 
 ## Citation map
 

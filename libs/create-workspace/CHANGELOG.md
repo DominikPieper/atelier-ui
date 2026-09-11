@@ -286,11 +286,11 @@ This was a version bump only for create-workspace to align it with other project
 
 ### 🚀 Features
 
-- ⚠️  **docs:** rename Llm prefix to Atl across docs, generated artifacts, and tooling docs ([965787d](https://github.com/DominikPieper/atelier-ui/commit/965787d))
+- ⚠️ **docs:** rename Llm prefix to Atl across docs, generated artifacts, and tooling docs ([965787d](https://github.com/DominikPieper/atelier-ui/commit/965787d))
 
-### ⚠️  Breaking Changes
+### ⚠️ Breaking Changes
 
-- **docs:** rename Llm prefix to Atl across docs, generated artifacts, and tooling docs  ([965787d](https://github.com/DominikPieper/atelier-ui/commit/965787d))
+- **docs:** rename Llm prefix to Atl across docs, generated artifacts, and tooling docs ([965787d](https://github.com/DominikPieper/atelier-ui/commit/965787d))
 
 ### ❤️ Thank You
 

@@ -15,7 +15,8 @@ import { AtlCodeBlock } from '../code-block/atl-code-block';
 
 import { metadata } from '@atelier-ui/spec/metadata/chat.metadata';
 import { contract } from '@atelier-ui/spec/contracts/chat.contract';
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 const figmaNode = (nodeId: string) => ({
   type: 'figma' as const,
   url: `${FIGMA_FILE}?node-id=${nodeId}`,
@@ -65,14 +66,24 @@ export const DrawerDefault: Story = {
       <AtlChatHeader>
         <AtlAvatar size="sm" name="AI" />
         <span>AI Assistant</span>
-        <AtlBadge variant="success" size="sm">Online</AtlBadge>
+        <AtlBadge variant="success" size="sm">
+          Online
+        </AtlBadge>
       </AtlChatHeader>
       <AtlChatMessages>
-        <AtlChatMessage role="assistant">Hi! I&apos;m your AI assistant. How can I help you today?</AtlChatMessage>
-        <AtlChatMessage role="user">Show me a minimal Angular form using AtlInput.</AtlChatMessage>
+        <AtlChatMessage role="assistant">
+          Hi! I&apos;m your AI assistant. How can I help you today?
+        </AtlChatMessage>
+        <AtlChatMessage role="user">
+          Show me a minimal Angular form using AtlInput.
+        </AtlChatMessage>
         <AtlChatMessage role="assistant">
           Sure, here you go:
-          <AtlCodeBlock language="typescript" filename="form.html" code={codeSample} />
+          <AtlCodeBlock
+            language="typescript"
+            filename="form.html"
+            code={codeSample}
+          />
         </AtlChatMessage>
         <AtlChatMessage role="user">Thanks!</AtlChatMessage>
       </AtlChatMessages>
@@ -89,17 +100,51 @@ export const DrawerEmpty: Story = {
       <AtlChatHeader>
         <AtlAvatar size="sm" name="AI" />
         <span>AI Assistant</span>
-        <AtlBadge variant="success" size="sm">Online</AtlBadge>
+        <AtlBadge variant="success" size="sm">
+          Online
+        </AtlBadge>
       </AtlChatHeader>
       <AtlChatMessages>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', padding: '2rem 0' }}>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '0.5rem',
+            padding: '2rem 0',
+          }}
+        >
           <AtlAvatar size="xl" name="AI" />
-          <div style={{ fontWeight: 600, fontSize: '1.125rem', marginTop: '0.5rem' }}>How can I help today?</div>
-          <div style={{ color: 'var(--ui-color-text-muted)', fontSize: '0.875rem' }}>Pick a suggestion or ask anything.</div>
+          <div
+            style={{
+              fontWeight: 600,
+              fontSize: '1.125rem',
+              marginTop: '0.5rem',
+            }}
+          >
+            How can I help today?
+          </div>
+          <div
+            style={{
+              color: 'var(--ui-color-text-muted)',
+              fontSize: '0.875rem',
+            }}
+          >
+            Pick a suggestion or ask anything.
+          </div>
         </div>
-        <AtlChatSuggestion label="Explain a code snippet" hint="Tap to start →" />
-        <AtlChatSuggestion label="Generate an Angular form layout" hint="Tap to start →" />
-        <AtlChatSuggestion label="Suggest test cases for a component" hint="Tap to start →" />
+        <AtlChatSuggestion
+          label="Explain a code snippet"
+          hint="Tap to start →"
+        />
+        <AtlChatSuggestion
+          label="Generate an Angular form layout"
+          hint="Tap to start →"
+        />
+        <AtlChatSuggestion
+          label="Suggest test cases for a component"
+          hint="Tap to start →"
+        />
       </AtlChatMessages>
       <AtlChatInput />
     </AtlChat>
@@ -114,12 +159,19 @@ export const DrawerStreaming: Story = {
       <AtlChatHeader>
         <AtlAvatar size="sm" name="AI" />
         <span>AI Assistant</span>
-        <AtlBadge variant="warning" size="sm">Thinking…</AtlBadge>
+        <AtlBadge variant="warning" size="sm">
+          Thinking…
+        </AtlBadge>
       </AtlChatHeader>
       <AtlChatMessages>
         <AtlChatMessage role="assistant">Hi! How can I help?</AtlChatMessage>
-        <AtlChatMessage role="user">Write a small sorting function for my user list (by name, asc).</AtlChatMessage>
-        <AtlChatMessage role="assistant">Sure! Here&apos;s a one-liner using Array.prototype.sort with a<AtlChatTyping inline /></AtlChatMessage>
+        <AtlChatMessage role="user">
+          Write a small sorting function for my user list (by name, asc).
+        </AtlChatMessage>
+        <AtlChatMessage role="assistant">
+          Sure! Here&apos;s a one-liner using Array.prototype.sort with a
+          <AtlChatTyping inline />
+        </AtlChatMessage>
       </AtlChatMessages>
       <AtlChatInput />
     </AtlChat>
@@ -134,13 +186,21 @@ export const DrawerError: Story = {
       <AtlChatHeader>
         <AtlAvatar size="sm" name="AI" />
         <span>AI Assistant</span>
-        <AtlBadge variant="danger" size="sm">Disconnected</AtlBadge>
+        <AtlBadge variant="danger" size="sm">
+          Disconnected
+        </AtlBadge>
       </AtlChatHeader>
       <AtlChatMessages>
         <AtlChatMessage role="assistant">Hi! How can I help?</AtlChatMessage>
-        <AtlChatMessage role="user">Refactor my AtlCard usage in the dashboard.</AtlChatMessage>
-        <AtlChatMessage role="assistant" failed>Couldn&apos;t reach the assistant. No response received.</AtlChatMessage>
-        <AtlAlert variant="danger">Connection lost. Check your network and try again.</AtlAlert>
+        <AtlChatMessage role="user">
+          Refactor my AtlCard usage in the dashboard.
+        </AtlChatMessage>
+        <AtlChatMessage role="assistant" failed>
+          Couldn&apos;t reach the assistant. No response received.
+        </AtlChatMessage>
+        <AtlAlert variant="danger">
+          Connection lost. Check your network and try again.
+        </AtlAlert>
       </AtlChatMessages>
       <AtlChatInput />
     </AtlChat>
@@ -159,12 +219,21 @@ export const PopupDefault: Story = {
       <AtlChatHeader>
         <AtlAvatar size="sm" name="AI" />
         <span>AI Assistant</span>
-        <AtlBadge variant="success" size="sm">Online</AtlBadge>
+        <AtlBadge variant="success" size="sm">
+          Online
+        </AtlBadge>
       </AtlChatHeader>
       <AtlChatMessages>
-        <AtlChatMessage role="assistant">Hi! How can I help you today?</AtlChatMessage>
-        <AtlChatMessage role="user">Can you summarize this dashboard?</AtlChatMessage>
-        <AtlChatMessage role="assistant">You&apos;re tracking 12 KPIs. Three are below target: Conversion (-8%), CTR (-12%), and Sessions (-3%).</AtlChatMessage>
+        <AtlChatMessage role="assistant">
+          Hi! How can I help you today?
+        </AtlChatMessage>
+        <AtlChatMessage role="user">
+          Can you summarize this dashboard?
+        </AtlChatMessage>
+        <AtlChatMessage role="assistant">
+          You&apos;re tracking 12 KPIs. Three are below target: Conversion
+          (-8%), CTR (-12%), and Sessions (-3%).
+        </AtlChatMessage>
         <AtlChatMessage role="user">Show me CTR.</AtlChatMessage>
       </AtlChatMessages>
       <AtlChatInput />
@@ -180,13 +249,31 @@ export const PopupEmpty: Story = {
       <AtlChatHeader>
         <AtlAvatar size="sm" name="AI" />
         <span>AI Assistant</span>
-        <AtlBadge variant="success" size="sm">Online</AtlBadge>
+        <AtlBadge variant="success" size="sm">
+          Online
+        </AtlBadge>
       </AtlChatHeader>
       <AtlChatMessages>
-        <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.25rem', padding: '1.5rem 0' }}>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '0.25rem',
+            padding: '1.5rem 0',
+          }}
+        >
           <AtlAvatar size="lg" name="AI" />
-          <div style={{ fontWeight: 600, fontSize: '1rem', marginTop: '0.5rem' }}>Hi there</div>
-          <div style={{ color: 'var(--ui-color-text-muted)', fontSize: '0.75rem' }}>I can help with code, content, and Q&amp;A.</div>
+          <div
+            style={{ fontWeight: 600, fontSize: '1rem', marginTop: '0.5rem' }}
+          >
+            Hi there
+          </div>
+          <div
+            style={{ color: 'var(--ui-color-text-muted)', fontSize: '0.75rem' }}
+          >
+            I can help with code, content, and Q&amp;A.
+          </div>
         </div>
         <AtlChatSuggestion label="Summarize this page" />
         <AtlChatSuggestion label="Generate sample data" />
@@ -205,12 +292,20 @@ export const PopupStreaming: Story = {
       <AtlChatHeader>
         <AtlAvatar size="sm" name="AI" />
         <span>AI Assistant</span>
-        <AtlBadge variant="warning" size="sm">Thinking…</AtlBadge>
+        <AtlBadge variant="warning" size="sm">
+          Thinking…
+        </AtlBadge>
       </AtlChatHeader>
       <AtlChatMessages>
         <AtlChatMessage role="assistant">Hi! How can I help?</AtlChatMessage>
-        <AtlChatMessage role="user">Draft a release note for v3.</AtlChatMessage>
-        <AtlChatMessage role="assistant">Sure! Here&apos;s a draft: ## v3.0 — What&apos;s new * New AtlChat component for AI…<AtlChatTyping inline /></AtlChatMessage>
+        <AtlChatMessage role="user">
+          Draft a release note for v3.
+        </AtlChatMessage>
+        <AtlChatMessage role="assistant">
+          Sure! Here&apos;s a draft: ## v3.0 — What&apos;s new * New AtlChat
+          component for AI…
+          <AtlChatTyping inline />
+        </AtlChatMessage>
       </AtlChatMessages>
       <AtlChatInput />
     </AtlChat>
@@ -225,13 +320,19 @@ export const PopupError: Story = {
       <AtlChatHeader>
         <AtlAvatar size="sm" name="AI" />
         <span>AI Assistant</span>
-        <AtlBadge variant="danger" size="sm">Disconnected</AtlBadge>
+        <AtlBadge variant="danger" size="sm">
+          Disconnected
+        </AtlBadge>
       </AtlChatHeader>
       <AtlChatMessages>
         <AtlChatMessage role="assistant">Hi! How can I help?</AtlChatMessage>
         <AtlChatMessage role="user">Translate to French.</AtlChatMessage>
-        <AtlChatMessage role="assistant" failed>Couldn&apos;t reach the assistant.</AtlChatMessage>
-        <AtlAlert variant="danger">Connection lost. Check your network and try again.</AtlAlert>
+        <AtlChatMessage role="assistant" failed>
+          Couldn&apos;t reach the assistant.
+        </AtlChatMessage>
+        <AtlAlert variant="danger">
+          Connection lost. Check your network and try again.
+        </AtlAlert>
       </AtlChatMessages>
       <AtlChatInput />
     </AtlChat>
@@ -251,14 +352,26 @@ export const InlineDefault: Story = {
         <AtlChatHeader>
           <AtlAvatar size="sm" name="AI" />
           <span>Atelier Assistant</span>
-          <AtlBadge variant="success" size="sm">Online · GPT-4o</AtlBadge>
+          <AtlBadge variant="success" size="sm">
+            Online · GPT-4o
+          </AtlBadge>
         </AtlChatHeader>
         <AtlChatMessages>
-          <AtlChatMessage role="assistant">Welcome back, Dominik. I see you&apos;re working in the Atelier repo. How can I help today?</AtlChatMessage>
-          <AtlChatMessage role="user">Help me write a Storybook story for the new AtlChat component, with all 3 variants.</AtlChatMessage>
+          <AtlChatMessage role="assistant">
+            Welcome back, Dominik. I see you&apos;re working in the Atelier
+            repo. How can I help today?
+          </AtlChatMessage>
+          <AtlChatMessage role="user">
+            Help me write a Storybook story for the new AtlChat component, with
+            all 3 variants.
+          </AtlChatMessage>
           <AtlChatMessage role="assistant">
             Sure — here&apos;s a starting point:
-            <AtlCodeBlock language="typescript" filename="atl-chat.stories.ts" code={storiesCodeSample} />
+            <AtlCodeBlock
+              language="typescript"
+              filename="atl-chat.stories.ts"
+              code={storiesCodeSample}
+            />
           </AtlChatMessage>
         </AtlChatMessages>
         <AtlChatInput />
@@ -276,19 +389,62 @@ export const InlineEmpty: Story = {
         <AtlChatHeader>
           <AtlAvatar size="sm" name="AI" />
           <span>Atelier Assistant</span>
-          <AtlBadge variant="success" size="sm">Online · GPT-4o</AtlBadge>
+          <AtlBadge variant="success" size="sm">
+            Online · GPT-4o
+          </AtlBadge>
         </AtlChatHeader>
         <AtlChatMessages>
-          <div style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.5rem', padding: '2.5rem 0' }}>
+          <div
+            style={{
+              display: 'flex',
+              flexDirection: 'column',
+              alignItems: 'center',
+              gap: '0.5rem',
+              padding: '2.5rem 0',
+            }}
+          >
             <AtlAvatar size="xl" name="AI" />
-            <div style={{ fontWeight: 600, fontSize: '1.375rem', marginTop: '0.5rem' }}>How can I help today?</div>
-            <div style={{ color: 'var(--ui-color-text-muted)', fontSize: '0.875rem' }}>Ask a question, generate code, or pick a starter below.</div>
+            <div
+              style={{
+                fontWeight: 600,
+                fontSize: '1.375rem',
+                marginTop: '0.5rem',
+              }}
+            >
+              How can I help today?
+            </div>
+            <div
+              style={{
+                color: 'var(--ui-color-text-muted)',
+                fontSize: '0.875rem',
+              }}
+            >
+              Ask a question, generate code, or pick a starter below.
+            </div>
           </div>
-          <div style={{ display: 'grid', gridTemplateColumns: '1fr 1fr', gap: '0.75rem' }}>
-            <AtlChatSuggestion label="Write a Storybook story" hint="Generate stories for any component" />
-            <AtlChatSuggestion label="Explain a snippet" hint="Walk through a piece of code" />
-            <AtlChatSuggestion label="Suggest test cases" hint="Spec, edge cases, accessibility" />
-            <AtlChatSuggestion label="Refactor for signals" hint="Migrate from CVA to Signal Forms" />
+          <div
+            style={{
+              display: 'grid',
+              gridTemplateColumns: '1fr 1fr',
+              gap: '0.75rem',
+            }}
+          >
+            <AtlChatSuggestion
+              label="Write a Storybook story"
+              hint="Generate stories for any component"
+            />
+            <AtlChatSuggestion
+              label="Explain a snippet"
+              hint="Walk through a piece of code"
+            />
+            <AtlChatSuggestion
+              label="Suggest test cases"
+              hint="Spec, edge cases, accessibility"
+            />
+            <AtlChatSuggestion
+              label="Refactor for signals"
+              hint="Migrate from CVA to Signal Forms"
+            />
           </div>
         </AtlChatMessages>
         <AtlChatInput />
@@ -306,11 +462,18 @@ export const InlineStreaming: Story = {
         <AtlChatHeader>
           <AtlAvatar size="sm" name="AI" />
           <span>Atelier Assistant</span>
-          <AtlBadge variant="warning" size="sm">Thinking…</AtlBadge>
+          <AtlBadge variant="warning" size="sm">
+            Thinking…
+          </AtlBadge>
         </AtlChatHeader>
         <AtlChatMessages>
-          <AtlChatMessage role="assistant">Welcome back. What would you like to work on?</AtlChatMessage>
-          <AtlChatMessage role="user">Generate test cases for AtlChat — cover keyboard, screen reader, and streaming behavior.</AtlChatMessage>
+          <AtlChatMessage role="assistant">
+            Welcome back. What would you like to work on?
+          </AtlChatMessage>
+          <AtlChatMessage role="user">
+            Generate test cases for AtlChat — cover keyboard, screen reader, and
+            streaming behavior.
+          </AtlChatMessage>
           <AtlChatMessage role="assistant">
             {`Here are the test cases I'm drafting:
 1. Renders all three variants without runtime errors
@@ -335,13 +498,24 @@ export const InlineError: Story = {
         <AtlChatHeader>
           <AtlAvatar size="sm" name="AI" />
           <span>Atelier Assistant</span>
-          <AtlBadge variant="danger" size="sm">Disconnected</AtlBadge>
+          <AtlBadge variant="danger" size="sm">
+            Disconnected
+          </AtlBadge>
         </AtlChatHeader>
         <AtlChatMessages>
-          <AtlChatMessage role="assistant">Welcome back. What would you like to work on?</AtlChatMessage>
-          <AtlChatMessage role="user">Refactor my dashboard to use Signal Forms throughout.</AtlChatMessage>
-          <AtlChatMessage role="assistant" failed>Couldn&apos;t reach the assistant. The server returned no response.</AtlChatMessage>
-          <AtlAlert variant="danger">Connection lost — couldn&apos;t reach the assistant. Check your network or try again later.</AtlAlert>
+          <AtlChatMessage role="assistant">
+            Welcome back. What would you like to work on?
+          </AtlChatMessage>
+          <AtlChatMessage role="user">
+            Refactor my dashboard to use Signal Forms throughout.
+          </AtlChatMessage>
+          <AtlChatMessage role="assistant" failed>
+            Couldn&apos;t reach the assistant. The server returned no response.
+          </AtlChatMessage>
+          <AtlAlert variant="danger">
+            Connection lost — couldn&apos;t reach the assistant. Check your
+            network or try again later.
+          </AtlAlert>
         </AtlChatMessages>
         <AtlChatInput />
       </AtlChat>

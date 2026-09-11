@@ -1,4 +1,9 @@
-import { HTMLAttributes, ReactNode, TdHTMLAttributes, ThHTMLAttributes } from 'react';
+import {
+  HTMLAttributes,
+  ReactNode,
+  TdHTMLAttributes,
+  ThHTMLAttributes,
+} from 'react';
 import type {
   AtlTableSpec,
   AtlTbodySpec,
@@ -17,7 +22,8 @@ export type { AtlSortDirection };
 // AtlTable
 // ---------------------------------------------------------------------------
 
-export interface AtlTableProps extends HTMLAttributes<HTMLDivElement>, AtlTableSpec {
+export interface AtlTableProps
+  extends HTMLAttributes<HTMLDivElement>, AtlTableSpec {
   children?: ReactNode;
   /**
    * Accessible name for the scrollable table region. Surfaces to
@@ -87,7 +93,12 @@ export interface AtlTbodyProps extends AtlTbodySpec {
   emptyContent?: ReactNode;
 }
 
-export function AtlTbody({ empty = false, colSpan = 1, children, emptyContent }: AtlTbodyProps) {
+export function AtlTbody({
+  empty = false,
+  colSpan = 1,
+  children,
+  emptyContent,
+}: AtlTbodyProps) {
   return (
     <tbody>
       {!empty ? (
@@ -119,7 +130,10 @@ export function AtlTr({
   onSelectedChange,
 }: AtlTrProps) {
   return (
-    <tr aria-selected={selectable ? selected : undefined} className={selected ? 'is-selected' : undefined}>
+    <tr
+      aria-selected={selectable ? selected : undefined}
+      className={selected ? 'is-selected' : undefined}
+    >
       {selectable && (
         <td className="atl-tr-select-cell">
           <AtlCheckbox checked={selected} onCheckedChange={onSelectedChange} />
@@ -134,7 +148,8 @@ export function AtlTr({
 // AtlTh
 // ---------------------------------------------------------------------------
 
-export interface AtlThProps extends Omit<ThHTMLAttributes<HTMLTableCellElement>, 'align'>, AtlThSpec {
+export interface AtlThProps
+  extends Omit<ThHTMLAttributes<HTMLTableCellElement>, 'align'>, AtlThSpec {
   children?: ReactNode;
   onSort?: (direction: AtlSortDirection) => void;
 }
@@ -149,15 +164,16 @@ export function AtlTh({
   className,
   ...rest
 }: AtlThProps) {
-  const classes = [
-    `align-${align}`,
-    sortDirection && 'is-sorted',
-    sortDirection === 'asc' && 'sort-asc',
-    sortDirection === 'desc' && 'sort-desc',
-    className,
-  ]
-    .filter(Boolean)
-    .join(' ') || undefined;
+  const classes =
+    [
+      `align-${align}`,
+      sortDirection && 'is-sorted',
+      sortDirection === 'asc' && 'sort-asc',
+      sortDirection === 'desc' && 'sort-desc',
+      className,
+    ]
+      .filter(Boolean)
+      .join(' ') || undefined;
 
   const ariaSort = sortable
     ? sortDirection === 'asc'
@@ -184,8 +200,16 @@ export function AtlTh({
         <button type="button" className="atl-th-sort-btn" onClick={cycleSort}>
           {children}
           <span className="atl-th-sort-icon" aria-hidden="true">
-            <AtlIcon name="sort-asc" size="sm" className="atl-th-sort-asc-arrow" />
-            <AtlIcon name="sort-desc" size="sm" className="atl-th-sort-desc-arrow" />
+            <AtlIcon
+              name="sort-asc"
+              size="sm"
+              className="atl-th-sort-asc-arrow"
+            />
+            <AtlIcon
+              name="sort-desc"
+              size="sm"
+              className="atl-th-sort-desc-arrow"
+            />
           </span>
         </button>
       ) : (
@@ -199,11 +223,17 @@ export function AtlTh({
 // AtlTd
 // ---------------------------------------------------------------------------
 
-export interface AtlTdProps extends Omit<TdHTMLAttributes<HTMLTableCellElement>, 'align'>, AtlTdSpec {
+export interface AtlTdProps
+  extends Omit<TdHTMLAttributes<HTMLTableCellElement>, 'align'>, AtlTdSpec {
   children?: ReactNode;
 }
 
-export function AtlTd({ align = 'start', children, className, ...rest }: AtlTdProps) {
+export function AtlTd({
+  align = 'start',
+  children,
+  className,
+  ...rest
+}: AtlTdProps) {
   const classes = [`align-${align}`, className].filter(Boolean).join(' ');
   return (
     <td className={classes} {...rest}>

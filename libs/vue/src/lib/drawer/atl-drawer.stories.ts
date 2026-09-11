@@ -9,7 +9,8 @@ import AtlInput from '../input/atl-input.vue';
 
 import { metadata } from '@atelier-ui/spec/metadata/drawer.metadata';
 import { contract } from '@atelier-ui/spec/contracts/drawer.contract';
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: 'figma'; url: string } {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
@@ -20,7 +21,10 @@ const meta: Meta<typeof AtlDrawer> = {
   component: AtlDrawer,
   tags: ['autodocs'],
   argTypes: {
-    position: { control: 'select', options: ['left', 'right', 'top', 'bottom'] },
+    position: {
+      control: 'select',
+      options: ['left', 'right', 'top', 'bottom'],
+    },
     size: { control: 'select', options: ['sm', 'md', 'lg', 'full'] },
     closeOnBackdrop: { control: 'boolean' },
   },
@@ -30,7 +34,11 @@ const meta: Meta<typeof AtlDrawer> = {
     size: 'md',
     closeOnBackdrop: true,
   },
-  parameters: { design: figmaNode('421-398'), docs: { description: { component: metadata.purpose } }, contract },
+  parameters: {
+    design: figmaNode('421-398'),
+    docs: { description: { component: metadata.purpose } },
+    contract,
+  },
 };
 
 export default meta;
@@ -38,7 +46,13 @@ type Story = StoryObj<typeof AtlDrawer>;
 
 export const Default: Story = {
   render: (args) => ({
-    components: { AtlDrawer, AtlDrawerHeader, AtlDrawerContent, AtlDrawerFooter, AtlButton },
+    components: {
+      AtlDrawer,
+      AtlDrawerHeader,
+      AtlDrawerContent,
+      AtlDrawerFooter,
+      AtlButton,
+    },
     setup() {
       const isOpen = ref(false);
       return { args, isOpen };
@@ -65,7 +79,13 @@ export const Default: Story = {
 export const Left: Story = {
   args: { position: 'left' },
   render: (args) => ({
-    components: { AtlDrawer, AtlDrawerHeader, AtlDrawerContent, AtlDrawerFooter, AtlButton },
+    components: {
+      AtlDrawer,
+      AtlDrawerHeader,
+      AtlDrawerContent,
+      AtlDrawerFooter,
+      AtlButton,
+    },
     setup() {
       const isOpen = ref(false);
       return { args, isOpen };
@@ -89,7 +109,13 @@ export const Left: Story = {
 export const Top: Story = {
   args: { position: 'top' },
   render: (args) => ({
-    components: { AtlDrawer, AtlDrawerHeader, AtlDrawerContent, AtlDrawerFooter, AtlButton },
+    components: {
+      AtlDrawer,
+      AtlDrawerHeader,
+      AtlDrawerContent,
+      AtlDrawerFooter,
+      AtlButton,
+    },
     setup() {
       const isOpen = ref(false);
       return { args, isOpen };
@@ -113,7 +139,13 @@ export const Top: Story = {
 export const Bottom: Story = {
   args: { position: 'bottom' },
   render: (args) => ({
-    components: { AtlDrawer, AtlDrawerHeader, AtlDrawerContent, AtlDrawerFooter, AtlButton },
+    components: {
+      AtlDrawer,
+      AtlDrawerHeader,
+      AtlDrawerContent,
+      AtlDrawerFooter,
+      AtlButton,
+    },
     setup() {
       const isOpen = ref(false);
       return { args, isOpen };
@@ -137,7 +169,13 @@ export const Bottom: Story = {
 
 export const SizeVariants: Story = {
   render: () => ({
-    components: { AtlDrawer, AtlDrawerHeader, AtlDrawerContent, AtlDrawerFooter, AtlButton },
+    components: {
+      AtlDrawer,
+      AtlDrawerHeader,
+      AtlDrawerContent,
+      AtlDrawerFooter,
+      AtlButton,
+    },
     setup() {
       const openSize = ref<string | null>(null);
       const sizes = ['sm', 'md', 'lg', 'full'] as const;
@@ -170,7 +208,13 @@ export const SizeVariants: Story = {
 export const SizeLg: Story = {
   args: { size: 'lg' },
   render: (args) => ({
-    components: { AtlDrawer, AtlDrawerHeader, AtlDrawerContent, AtlDrawerFooter, AtlButton },
+    components: {
+      AtlDrawer,
+      AtlDrawerHeader,
+      AtlDrawerContent,
+      AtlDrawerFooter,
+      AtlButton,
+    },
     setup() {
       const isOpen = ref(false);
       return { args, isOpen };
@@ -194,7 +238,13 @@ export const SizeLg: Story = {
 export const SizeFull: Story = {
   args: { size: 'full' },
   render: (args) => ({
-    components: { AtlDrawer, AtlDrawerHeader, AtlDrawerContent, AtlDrawerFooter, AtlButton },
+    components: {
+      AtlDrawer,
+      AtlDrawerHeader,
+      AtlDrawerContent,
+      AtlDrawerFooter,
+      AtlButton,
+    },
     setup() {
       const isOpen = ref(false);
       return { args, isOpen };
@@ -217,7 +267,14 @@ export const SizeFull: Story = {
 
 export const WithForm: Story = {
   render: (args) => ({
-    components: { AtlDrawer, AtlDrawerHeader, AtlDrawerContent, AtlDrawerFooter, AtlButton, AtlInput },
+    components: {
+      AtlDrawer,
+      AtlDrawerHeader,
+      AtlDrawerContent,
+      AtlDrawerFooter,
+      AtlButton,
+      AtlInput,
+    },
     setup() {
       const isOpen = ref(false);
       const name = ref('');
@@ -248,7 +305,13 @@ export const WithForm: Story = {
 
 export const AllPositions: Story = {
   render: () => ({
-    components: { AtlDrawer, AtlDrawerHeader, AtlDrawerContent, AtlDrawerFooter, AtlButton },
+    components: {
+      AtlDrawer,
+      AtlDrawerHeader,
+      AtlDrawerContent,
+      AtlDrawerFooter,
+      AtlButton,
+    },
     setup() {
       const openPosition = ref<string | null>(null);
       const positions = ['left', 'right', 'top', 'bottom'] as const;
@@ -280,7 +343,13 @@ export const AllPositions: Story = {
 
 export const NoBackdropClose: Story = {
   render: () => ({
-    components: { AtlDrawer, AtlDrawerHeader, AtlDrawerContent, AtlDrawerFooter, AtlButton },
+    components: {
+      AtlDrawer,
+      AtlDrawerHeader,
+      AtlDrawerContent,
+      AtlDrawerFooter,
+      AtlButton,
+    },
     setup() {
       const isOpen = ref(false);
       return { isOpen };

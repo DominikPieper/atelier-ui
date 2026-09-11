@@ -5,9 +5,10 @@ import { AtlPagination } from './atl-pagination';
 
 import { metadata } from '@atelier-ui/spec/metadata/pagination.metadata';
 import { contract } from '@atelier-ui/spec/contracts/pagination.contract';
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
-function figmaNode(nodeId: string): { type: "figma"; url: string } {
+function figmaNode(nodeId: string): { type: 'figma'; url: string } {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
 }
 
@@ -55,10 +56,9 @@ export const Default: Story = {
   }),
   play: async ({ canvas }) => {
     await userEvent.click(canvas.getByRole('button', { name: 'Next page' }));
-    await expect(canvas.getByRole('button', { name: 'Page 2' })).toHaveAttribute(
-      'aria-current',
-      'page'
-    );
+    await expect(
+      canvas.getByRole('button', { name: 'Page 2' }),
+    ).toHaveAttribute('aria-current', 'page');
   },
   parameters: { design: figmaNode('55-142') },
 };

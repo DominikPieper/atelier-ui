@@ -22,7 +22,7 @@ function capture() {
         <AtlChatMessage role="user">Hello</AtlChatMessage>
         <AtlChatMessage role="assistant">Hi, how can I help?</AtlChatMessage>
       </AtlChatMessages>
-    </AtlChat>
+    </AtlChat>,
   );
   scenarios.inline = a11yTree(r.container);
   r.unmount();

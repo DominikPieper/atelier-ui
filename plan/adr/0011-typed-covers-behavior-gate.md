@@ -4,7 +4,7 @@ confidence: documented
 date: reconstructed
 supersedes: ADR-0009
 sources:
-  - "this session, tasks/lessons.md, commit ff36fe9"
+  - 'this session, tasks/lessons.md, commit ff36fe9'
 ---
 
 # ADR-0011: Typed covers() behavior gate replaces @behavior comment marker

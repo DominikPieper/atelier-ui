@@ -1,5 +1,5 @@
-import { mcpHandler, type AssetsFetcher, type Storybook } from "./mcp";
-import { negotiateMarkdown } from "./markdown-negotiation";
+import { mcpHandler, type AssetsFetcher, type Storybook } from './mcp';
+import { negotiateMarkdown } from './markdown-negotiation';
 
 interface Env {
   ASSETS: AssetsFetcher;

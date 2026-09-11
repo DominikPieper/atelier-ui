@@ -21,7 +21,7 @@ function capture() {
     <AtlRadioGroup value="sm">
       <AtlRadio radioValue="sm">Small</AtlRadio>
       <AtlRadio radioValue="lg">Large</AtlRadio>
-    </AtlRadioGroup>
+    </AtlRadioGroup>,
   );
   scenarios.default = a11yTree(r.container);
   r.unmount();
@@ -29,7 +29,7 @@ function capture() {
     <AtlRadioGroup value="sm" disabled>
       <AtlRadio radioValue="sm">Small</AtlRadio>
       <AtlRadio radioValue="lg">Large</AtlRadio>
-    </AtlRadioGroup>
+    </AtlRadioGroup>,
   );
   scenarios.disabled = a11yTree(r.container);
   r.unmount();

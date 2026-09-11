@@ -24,7 +24,8 @@
   pointer-events: none;
 
   /* Entry animation */
-  animation: atl-tooltip-enter var(--ui-duration-fast) var(--ui-ease-out) forwards;
+  animation: atl-tooltip-enter var(--ui-duration-fast) var(--ui-ease-out)
+    forwards;
 }
 
 @keyframes atl-tooltip-enter {

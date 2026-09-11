@@ -23,7 +23,11 @@
 
 const fs = require('fs');
 const path = require('path');
-const { UNION_TO_COMPONENT, AXIS_PREFIX, axisOf } = require('./lib/component-axes');
+const {
+  UNION_TO_COMPONENT,
+  AXIS_PREFIX,
+  axisOf,
+} = require('./lib/component-axes');
 const { DEFAULT_PROP_EXCEPTIONS } = require('./lib/allowlists');
 
 const ROOT = path.resolve(__dirname, '../..');
@@ -36,7 +40,8 @@ function componentSource(framework, component) {
   try {
     for (const f of fs.readdirSync(dir)) {
       if (/\.(spec|stories)\./.test(f) || f.endsWith('.css')) continue;
-      if (/\.(ts|tsx|vue)$/.test(f)) src += fs.readFileSync(path.join(dir, f), 'utf-8') + '\n';
+      if (/\.(ts|tsx|vue)$/.test(f))
+        src += fs.readFileSync(path.join(dir, f), 'utf-8') + '\n';
     }
   } catch {
     /* dir missing — surfaced elsewhere */
@@ -45,7 +50,9 @@ function componentSource(framework, component) {
 }
 
 function angularDefault(src, prop) {
-  const m = new RegExp(`\\b${prop}\\s*=\\s*input(?:<[^>]*>)?\\(\\s*'([^']*)'`).exec(src);
+  const m = new RegExp(
+    `\\b${prop}\\s*=\\s*input(?:<[^>]*>)?\\(\\s*'([^']*)'`,
+  ).exec(src);
   return m ? m[1] : undefined;
 }
 function reactDefault(src, prop) {
@@ -75,7 +82,8 @@ function parseDocsDefaults() {
   while ((cm = compRe.exec(t)) !== null) {
     const key = cm[1].replace(/['"]/g, '');
     const props = {};
-    const propRe = /\{[^}]*?name:\s*'([^']+)'[^}]*?default:\s*"([^"]*)"[^}]*?\}/g;
+    const propRe =
+      /\{[^}]*?name:\s*'([^']+)'[^}]*?default:\s*"([^"]*)"[^}]*?\}/g;
     let pm;
     while ((pm = propRe.exec(cm[2])) !== null) {
       props[pm[1]] = pm[2].replace(/^'|'$/g, '');
@@ -98,9 +106,11 @@ for (const [union, component] of Object.entries(UNION_TO_COMPONENT)) {
   for (const fw of FRAMEWORKS) {
     const src = componentSource(fw, component);
     const val =
-      fw === 'angular' ? angularDefault(src, prop)
-      : fw === 'react' ? reactDefault(src, prop)
-      : vueDefault(src, prop);
+      fw === 'angular'
+        ? angularDefault(src, prop)
+        : fw === 'react'
+          ? reactDefault(src, prop)
+          : vueDefault(src, prop);
     if (val !== undefined) found[fw] = val;
   }
 
@@ -113,7 +123,7 @@ for (const [union, component] of Object.entries(UNION_TO_COMPONENT)) {
   if (values.length > 1) {
     errors.push(
       `[DEFAULT-DRIFT] ${component}.${prop}: adapters disagree — ` +
-        present.map(([fw, v]) => `${fw}='${v}'`).join(', ')
+        present.map(([fw, v]) => `${fw}='${v}'`).join(', '),
     );
     continue;
   }
@@ -122,7 +132,7 @@ for (const [union, component] of Object.entries(UNION_TO_COMPONENT)) {
     errors.push(
       `[DEFAULT-MISSING] ${component}.${prop}: default '${values[0]}' found only in ${present
         .map(([fw]) => fw)
-        .join('+')} — confirm the others set the same default`
+        .join('+')} — confirm the others set the same default`,
     );
     continue;
   }
@@ -130,15 +140,19 @@ for (const [union, component] of Object.entries(UNION_TO_COMPONENT)) {
   const docsVal = docs[component] && docs[component][prop];
   if (docsVal !== undefined && docsVal !== values[0]) {
     errors.push(
-      `[DOCS-DEFAULT-DRIFT] ${component}.${prop}: adapters default '${values[0]}' but docs say '${docsVal}'`
+      `[DOCS-DEFAULT-DRIFT] ${component}.${prop}: adapters default '${values[0]}' but docs say '${docsVal}'`,
     );
   }
 }
 
 if (errors.length > 0) {
   errors.forEach((e) => console.error(`✗ ${e}`));
-  console.error(`\n${errors.length} default drift issue(s). Align the default across adapters + docs, or allowlist a documented divergence.`);
+  console.error(
+    `\n${errors.length} default drift issue(s). Align the default across adapters + docs, or allowlist a documented divergence.`,
+  );
   process.exit(1);
 } else {
-  console.log(`✓ axis-prop defaults agree across adapters + docs (${checked} props)`);
+  console.log(
+    `✓ axis-prop defaults agree across adapters + docs (${checked} props)`,
+  );
 }

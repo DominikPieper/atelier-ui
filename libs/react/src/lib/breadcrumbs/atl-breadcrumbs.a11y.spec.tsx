@@ -24,7 +24,7 @@ function capture() {
       <AtlBreadcrumbItem href="#">Home</AtlBreadcrumbItem>
       <AtlBreadcrumbItem href="#">Products</AtlBreadcrumbItem>
       <AtlBreadcrumbItem>Shoes</AtlBreadcrumbItem>
-    </AtlBreadcrumbs>
+    </AtlBreadcrumbs>,
   );
   scenarios.default = a11yTree(r.container);
   r.unmount();

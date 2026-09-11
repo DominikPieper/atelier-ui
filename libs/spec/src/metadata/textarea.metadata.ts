@@ -12,11 +12,13 @@ export const metadata: ComponentMetadata = {
   antiPatterns: [
     {
       pattern: 'Collecting a single short value such as a title or email.',
-      useInstead: 'AtlInput — sized for one-line entry with type-specific keyboard hints.',
+      useInstead:
+        'AtlInput — sized for one-line entry with type-specific keyboard hints.',
     },
     {
       pattern: 'Building a rich-text editor with formatting toolbars.',
-      useInstead: 'A dedicated editor (Tiptap, Lexical) — textarea is plain text only.',
+      useInstead:
+        'A dedicated editor (Tiptap, Lexical) — textarea is plain text only.',
     },
   ],
   relatedComponents: ['AtlInputSpec'],

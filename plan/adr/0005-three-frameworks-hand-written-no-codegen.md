@@ -3,7 +3,7 @@ status: accepted
 confidence: documented
 date: reconstructed
 sources:
-  - "plan/big-picture.md (React rationale)"
+  - 'plan/big-picture.md (React rationale)'
 ---
 
 # ADR-0005: Three frameworks, hand-written, no codegen

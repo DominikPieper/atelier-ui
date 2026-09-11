@@ -6,8 +6,7 @@ import './atl-card.css';
  * Properties for the AtlCard component.
  */
 export interface AtlCardProps
-  extends Omit<HTMLAttributes<HTMLDivElement>, 'role'>,
-    AtlCardSpec {
+  extends Omit<HTMLAttributes<HTMLDivElement>, 'role'>, AtlCardSpec {
   /**
    * The visual style variant of the card.
    */
@@ -39,7 +38,12 @@ export function AtlCard({
   className,
   ...rest
 }: AtlCardProps) {
-  const classes = ['atl-card', `variant-${variant}`, `padding-${padding}`, className]
+  const classes = [
+    'atl-card',
+    `variant-${variant}`,
+    `padding-${padding}`,
+    className,
+  ]
     .filter(Boolean)
     .join(' ');
   return (
@@ -63,7 +67,10 @@ export function AtlCardHeader({
   children?: ReactNode;
 }) {
   return (
-    <div className={['atl-card-header', className].filter(Boolean).join(' ')} {...rest}>
+    <div
+      className={['atl-card-header', className].filter(Boolean).join(' ')}
+      {...rest}
+    >
       {children}
     </div>
   );
@@ -83,7 +90,10 @@ export function AtlCardContent({
   children?: ReactNode;
 }) {
   return (
-    <div className={['atl-card-content', className].filter(Boolean).join(' ')} {...rest}>
+    <div
+      className={['atl-card-content', className].filter(Boolean).join(' ')}
+      {...rest}
+    >
       {children}
     </div>
   );
@@ -103,7 +113,10 @@ export function AtlCardFooter({
   children?: ReactNode;
 }) {
   return (
-    <div className={['atl-card-footer', className].filter(Boolean).join(' ')} {...rest}>
+    <div
+      className={['atl-card-footer', className].filter(Boolean).join(' ')}
+      {...rest}
+    >
       {children}
     </div>
   );

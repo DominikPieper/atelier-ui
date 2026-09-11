@@ -12,39 +12,39 @@ A purpose-organized view of the figma-console-mcp tool surface, with the rule of
 
 Use these for **discovery** (before any build) and as **inputs to audits**.
 
-| Tool                          | Use when…                                                                                  |
-|-------------------------------|--------------------------------------------------------------------------------------------|
-| `figma_get_status`            | Sanity check — is the bridge connected, which transport, which file?                       |
-| `figma_get_file_data`         | Top-level structure of the file: pages, frames, components, hierarchy. Big payload — use early. |
-| `figma_get_file_for_plugin`   | Same data, optimized for plugin-side processing. Prefer when feeding into `figma_execute`. |
-| `figma_get_design_system_kit` | One-call snapshot of tokens + components + styles + visualSpec. **Prefer this** over orchestrating `figma_get_variables` + `figma_get_styles` + several `figma_get_component` calls when the goal is a complete read of the design system. |
-| `figma_get_design_system_summary` | Counts only — components, collections, styles, pages. Cheap pre-flight before deciding which deeper read to run. |
-| `figma_get_variables`         | Extract all Variables and Collections, including Modes. Works without Enterprise via the Desktop Bridge — that's the main reason this MCP exists. |
-| `figma_get_styles`            | Color, text, and effect Styles (the legacy layer — most modern setups should be on Variables). |
-| `figma_get_text_styles`       | Local text styles with IDs, font, size, line-height. Use when audit needs typography coverage and `figma_get_styles` returns the legacy bundle. |
-| `figma_get_component`         | One component's data. Two output shapes: `metadata` (descriptive) or `reconstruction` (programmatic spec for re-creating it). |
-| `figma_get_component_for_development` | Component data + rendered image, for handoff or visual diff. |
-| `figma_get_component_for_development_deep` | Unlimited-depth tree, resolved Variable / token names per node, includes reactions. Use for compound components where the standard depth-limited read drops nested context. |
-| `figma_get_component_details` | Full metadata by `componentKey` — variant property definitions, descriptions, instance counts. The right read when you have a key from `figma_search_components` but no node ID. |
-| `figma_get_component_image`   | Just the image. Cheap. Useful for spot-checks during a build.                              |
-| `figma_get_library_components` | Browse another file's published library. Cross-file discovery — the Tokens-library + Component-library pattern needs this. |
-| `figma_get_library_component_by_key` | Resolve a library component's props, variants, and visual spec from just its `componentKey` — no source file URL needed. Auto-downgrades to a summary and strips specs over 500KB. (REST) |
-| `figma_get_library_variables` | Inventory Variables published by a subscribed team library, scoped by `libraryName` / `collectionName`. (Bridge) |
-| `figma_import_library_variable` | Import one library Variable into the current file by `variableKey`. Idempotent — safe to call again on the same key. (Bridge) |
-| `figma_search_components`     | Find components by name in current file or a linked library. Discovery before re-creating: search-then-instantiate beats build-from-scratch when the component already exists. |
-| `figma_take_screenshot`       | Full canvas screenshot. Standard post-write check — but note it goes through the REST API and **may be cache-stale immediately after a write**. Prefer `figma_capture_screenshot` (Validate section) for the first screenshot after a write. |
-| `figma_navigate`              | Move the canvas to a node / page. Use to disambiguate "this component" without asking the user. |
-| `figma_get_selection`         | What is currently selected in Figma. Lets the agent act on the user's literal pick instead of guessing. |
-| `figma_list_open_files`       | Multi-file workspaces — which Figma files are open in Desktop. Needed before `figma_navigate` across files. |
+| Tool                                       | Use when…                                                                                                                                                                                                                                    |
+| ------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `figma_get_status`                         | Sanity check — is the bridge connected, which transport, which file?                                                                                                                                                                         |
+| `figma_get_file_data`                      | Top-level structure of the file: pages, frames, components, hierarchy. Big payload — use early.                                                                                                                                              |
+| `figma_get_file_for_plugin`                | Same data, optimized for plugin-side processing. Prefer when feeding into `figma_execute`.                                                                                                                                                   |
+| `figma_get_design_system_kit`              | One-call snapshot of tokens + components + styles + visualSpec. **Prefer this** over orchestrating `figma_get_variables` + `figma_get_styles` + several `figma_get_component` calls when the goal is a complete read of the design system.   |
+| `figma_get_design_system_summary`          | Counts only — components, collections, styles, pages. Cheap pre-flight before deciding which deeper read to run.                                                                                                                             |
+| `figma_get_variables`                      | Extract all Variables and Collections, including Modes. Works without Enterprise via the Desktop Bridge — that's the main reason this MCP exists.                                                                                            |
+| `figma_get_styles`                         | Color, text, and effect Styles (the legacy layer — most modern setups should be on Variables).                                                                                                                                               |
+| `figma_get_text_styles`                    | Local text styles with IDs, font, size, line-height. Use when audit needs typography coverage and `figma_get_styles` returns the legacy bundle.                                                                                              |
+| `figma_get_component`                      | One component's data. Two output shapes: `metadata` (descriptive) or `reconstruction` (programmatic spec for re-creating it).                                                                                                                |
+| `figma_get_component_for_development`      | Component data + rendered image, for handoff or visual diff.                                                                                                                                                                                 |
+| `figma_get_component_for_development_deep` | Unlimited-depth tree, resolved Variable / token names per node, includes reactions. Use for compound components where the standard depth-limited read drops nested context.                                                                  |
+| `figma_get_component_details`              | Full metadata by `componentKey` — variant property definitions, descriptions, instance counts. The right read when you have a key from `figma_search_components` but no node ID.                                                             |
+| `figma_get_component_image`                | Just the image. Cheap. Useful for spot-checks during a build.                                                                                                                                                                                |
+| `figma_get_library_components`             | Browse another file's published library. Cross-file discovery — the Tokens-library + Component-library pattern needs this.                                                                                                                   |
+| `figma_get_library_component_by_key`       | Resolve a library component's props, variants, and visual spec from just its `componentKey` — no source file URL needed. Auto-downgrades to a summary and strips specs over 500KB. (REST)                                                    |
+| `figma_get_library_variables`              | Inventory Variables published by a subscribed team library, scoped by `libraryName` / `collectionName`. (Bridge)                                                                                                                             |
+| `figma_import_library_variable`            | Import one library Variable into the current file by `variableKey`. Idempotent — safe to call again on the same key. (Bridge)                                                                                                                |
+| `figma_search_components`                  | Find components by name in current file or a linked library. Discovery before re-creating: search-then-instantiate beats build-from-scratch when the component already exists.                                                               |
+| `figma_take_screenshot`                    | Full canvas screenshot. Standard post-write check — but note it goes through the REST API and **may be cache-stale immediately after a write**. Prefer `figma_capture_screenshot` (Validate section) for the first screenshot after a write. |
+| `figma_navigate`                           | Move the canvas to a node / page. Use to disambiguate "this component" without asking the user.                                                                                                                                              |
+| `figma_get_selection`                      | What is currently selected in Figma. Lets the agent act on the user's literal pick instead of guessing.                                                                                                                                      |
+| `figma_list_open_files`                    | Multi-file workspaces — which Figma files are open in Desktop. Needed before `figma_navigate` across files.                                                                                                                                  |
 
 **Discovery pattern.** Before a build, this is the typical order: `figma_get_status` → `figma_get_file_data` (or `figma_get_design_system_kit` for a one-call full snapshot) → (if Variables matter) `figma_get_variables` → (if components matter) `figma_search_components` then `figma_get_component` on the relevant ones.
 
 ### Session & multi-file
 
-| Tool                          | Use when…                                                                                  |
-|--------------------------------|------------------------------------------------------------------------------------------------|
-| `figma_diagnose`               | Plain-language health check when the Bridge misbehaves — also disambiguates this server from other Figma-related MCP servers the user may have installed (e.g. the official `figma-mcp`). |
-| `figma_execute_across_files`   | Run the same Plugin API JS across every connected file in parallel. Local Mode only — the multi-file counterpart to `figma_execute`. (Bridge) |
+| Tool                         | Use when…                                                                                                                                                                                 |
+| ---------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `figma_diagnose`             | Plain-language health check when the Bridge misbehaves — also disambiguates this server from other Figma-related MCP servers the user may have installed (e.g. the official `figma-mcp`). |
+| `figma_execute_across_files` | Run the same Plugin API JS across every connected file in parallel. Local Mode only — the multi-file counterpart to `figma_execute`. (Bridge)                                             |
 
 `figma_navigate` (above) also accepts `lock: true`, which pins the active file target so a Bridge reconnect or the human clicking elsewhere in Figma can't silently redirect subsequent calls.
 
@@ -52,19 +52,19 @@ Use these for **discovery** (before any build) and as **inputs to audits**.
 
 Variable management is the most common write workflow. Always check existing Collections via `figma_get_variables` before creating.
 
-| Tool                                  | Use when…                                                                |
-|---------------------------------------|--------------------------------------------------------------------------|
-| `figma_setup_design_tokens`           | **Bootstrapping a new token system from scratch** — creates collection + modes + variables in one atomic call. By far the fastest path for a green-field design system. |
-| `figma_create_variable_collection`    | Adding a single new Collection to an existing setup (e.g. introducing a `Layout` collection alongside `Color`). |
-| `figma_create_variable`               | One-off variable. Avoid in loops — use `figma_batch_create_variables` instead. |
-| `figma_batch_create_variables`        | Up to 100 variables in one call. **10–50× faster than looping.** Use whenever creating ≥3 variables. |
-| `figma_update_variable`               | Change a variable's value in a specific mode.                            |
-| `figma_batch_update_variables`        | Up to 100 value updates in one call. Use for theme migrations, semantic re-aliasing, etc. |
-| `figma_rename_variable`               | Rename while preserving aliases and usages. Safer than delete + recreate. |
-| `figma_delete_variable`               | Remove a single variable. Surfaces in the file as broken aliases — confirm with the user first. |
-| `figma_delete_variable_collection`    | Removes the collection AND all its variables. **Destructive — confirm explicitly.** |
-| `figma_add_mode`                      | Add a Mode to an existing collection (e.g. "Dark", "Mobile", "Brand-B"). |
-| `figma_rename_mode`                   | Renames preserve all variable values in that mode.                       |
+| Tool                               | Use when…                                                                                                                                                               |
+| ---------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `figma_setup_design_tokens`        | **Bootstrapping a new token system from scratch** — creates collection + modes + variables in one atomic call. By far the fastest path for a green-field design system. |
+| `figma_create_variable_collection` | Adding a single new Collection to an existing setup (e.g. introducing a `Layout` collection alongside `Color`).                                                         |
+| `figma_create_variable`            | One-off variable. Avoid in loops — use `figma_batch_create_variables` instead.                                                                                          |
+| `figma_batch_create_variables`     | Up to 100 variables in one call. **10–50× faster than looping.** Use whenever creating ≥3 variables.                                                                    |
+| `figma_update_variable`            | Change a variable's value in a specific mode.                                                                                                                           |
+| `figma_batch_update_variables`     | Up to 100 value updates in one call. Use for theme migrations, semantic re-aliasing, etc.                                                                               |
+| `figma_rename_variable`            | Rename while preserving aliases and usages. Safer than delete + recreate.                                                                                               |
+| `figma_delete_variable`            | Remove a single variable. Surfaces in the file as broken aliases — confirm with the user first.                                                                         |
+| `figma_delete_variable_collection` | Removes the collection AND all its variables. **Destructive — confirm explicitly.**                                                                                     |
+| `figma_add_mode`                   | Add a Mode to an existing collection (e.g. "Dark", "Mobile", "Brand-B").                                                                                                |
+| `figma_rename_mode`                | Renames preserve all variable values in that mode.                                                                                                                      |
 
 **Important — Variable Scopes.** None of these tools expose Scopes directly through their named API. Scopes (`FRAME_FILL`, `TEXT_FILL`, `GAP`, `STROKE_COLOR`, `WIDTH_HEIGHT`, etc.) are set via `figma_execute` running Plugin API code on the variable after creation. Default `ALL_SCOPES` makes Variables show up in every property picker, which destroys the user experience. See `token-architecture.md` for the scope-by-purpose table.
 
@@ -72,30 +72,30 @@ Variable management is the most common write workflow. Always check existing Col
 
 Round-trips Variables with external token tooling — the equivalent of Style Dictionary / Tokens Studio without leaving the MCP surface.
 
-| Tool                        | Use when…                                                                          |
-|-------------------------------|----------------------------------------------------------------------------------------|
-| `figma_export_tokens`       | Write Variables out to DTCG, CSS, Tailwind, SCSS, TS, or JSON files (10 formats total), with a merge-or-replace strategy. (Bridge) |
-| `figma_import_tokens`       | Diff-and-apply token files back into Variables, alias-aware. **Only DTCG is fully round-trip safe** — Tokens Studio JSON, raw CSS vars, Tailwind v4, SCSS, and Style Dictionary v3 as inputs are scaffolded but return `NotImplementedError`; convert to DTCG first. A `replace` strategy can delete existing variables. (Bridge) |
-| `figma_get_token_values`    | Resolved token values after a `figma_get_design_system_summary` call — cheaper than re-reading the full Variables set for a values-only need. |
-| `figma_browse_tokens`       | Interactive token browser for a human to explore Variables across modes. MCP App — needs `ENABLE_MCP_APPS=true` and client support for the MCP Apps protocol. |
-| `token_browser_refresh`     | Refresh the Token Browser app's data after the underlying Variables changed. MCP App — same `ENABLE_MCP_APPS` requirement as `figma_browse_tokens`. |
+| Tool                     | Use when…                                                                                                                                                                                                                                                                                                                         |
+| ------------------------ | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `figma_export_tokens`    | Write Variables out to DTCG, CSS, Tailwind, SCSS, TS, or JSON files (10 formats total), with a merge-or-replace strategy. (Bridge)                                                                                                                                                                                                |
+| `figma_import_tokens`    | Diff-and-apply token files back into Variables, alias-aware. **Only DTCG is fully round-trip safe** — Tokens Studio JSON, raw CSS vars, Tailwind v4, SCSS, and Style Dictionary v3 as inputs are scaffolded but return `NotImplementedError`; convert to DTCG first. A `replace` strategy can delete existing variables. (Bridge) |
+| `figma_get_token_values` | Resolved token values after a `figma_get_design_system_summary` call — cheaper than re-reading the full Variables set for a values-only need.                                                                                                                                                                                     |
+| `figma_browse_tokens`    | Interactive token browser for a human to explore Variables across modes. MCP App — needs `ENABLE_MCP_APPS=true` and client support for the MCP Apps protocol.                                                                                                                                                                     |
+| `token_browser_refresh`  | Refresh the Token Browser app's data after the underlying Variables changed. MCP App — same `ENABLE_MCP_APPS` requirement as `figma_browse_tokens`.                                                                                                                                                                               |
 
 ## Targeted node writes — Local Mode only
 
 These tools mutate one specific property on one node. They are **safer** than `figma_execute` (typed API, validated input) and **faster** to write because there is no Plugin API boilerplate. Reach for them first; reserve `figma_execute` for compound mutations.
 
-| Tool                     | Use when…                                                                  |
-|--------------------------|----------------------------------------------------------------------------|
-| `figma_clone_node`       | Duplicate a node with all its bindings preserved.                          |
-| `figma_create_child`     | Add a child of a known type (FRAME / TEXT / RECTANGLE / etc.) to a parent. |
-| `figma_delete_node`      | Remove one node. Confirm with the user if it might be referenced.          |
-| `figma_move_node`        | Reposition by `x`/`y` or reparent.                                         |
-| `figma_rename_node`      | Single-property rename without writing a Plugin API payload.               |
-| `figma_resize_node`      | Set width / height. For Auto-Layout containers this also sets `layoutSizing*`. |
-| `figma_set_fills`        | Bind a fill or set a raw paint. Validates the paint shape.                 |
-| `figma_set_strokes`      | Same, for strokes.                                                         |
-| `figma_set_image_fill`   | Image-fill specifically — wraps the imageHash + scaling-mode dance.        |
-| `figma_set_text`         | Replace the characters of a TEXT node. **Note:** for instances, use `figma_set_instance_properties` instead — bare-text edits on instance children fail silently. |
+| Tool                   | Use when…                                                                                                                                                         |
+| ---------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `figma_clone_node`     | Duplicate a node with all its bindings preserved.                                                                                                                 |
+| `figma_create_child`   | Add a child of a known type (FRAME / TEXT / RECTANGLE / etc.) to a parent.                                                                                        |
+| `figma_delete_node`    | Remove one node. Confirm with the user if it might be referenced.                                                                                                 |
+| `figma_move_node`      | Reposition by `x`/`y` or reparent.                                                                                                                                |
+| `figma_rename_node`    | Single-property rename without writing a Plugin API payload.                                                                                                      |
+| `figma_resize_node`    | Set width / height. For Auto-Layout containers this also sets `layoutSizing*`.                                                                                    |
+| `figma_set_fills`      | Bind a fill or set a raw paint. Validates the paint shape.                                                                                                        |
+| `figma_set_strokes`    | Same, for strokes.                                                                                                                                                |
+| `figma_set_image_fill` | Image-fill specifically — wraps the imageHash + scaling-mode dance.                                                                                               |
+| `figma_set_text`       | Replace the characters of a TEXT node. **Note:** for instances, use `figma_set_instance_properties` instead — bare-text edits on instance children fail silently. |
 
 **Rule of thumb.** Single-property mutation → targeted tool. Multiple mutations on the same node, or any composition / branching logic → one `figma_execute` payload. Don't loop targeted tools when the same script could do the work atomically.
 
@@ -103,17 +103,17 @@ These tools mutate one specific property on one node. They are **safer** than `f
 
 Components and frames are created via the general-purpose `figma_execute`. There are a few specialized helpers for common patterns.
 
-| Tool                          | Use when…                                                                          |
-|-------------------------------|------------------------------------------------------------------------------------|
-| `figma_execute`               | The power tool. Any Plugin API JS — create frames, components, set Auto Layout, bind variables, set Variant Properties. Most compound component work goes through this. |
-| `figma_create_component_set`  | Build a variant Component Set from a base component + property definitions, or from a set of existing components, in one call — the programmatic alternative to hand-arranging frames. Hard-capped at 100 variants (timeout auto-scales ~1.2s/variant, 30s floor/2min cap); split any matrix above ~40 variants into multiple calls. (Bridge) |
-| `figma_arrange_component_set` | Take a flat group of variant frames and arrange them into a proper Component Set with the native purple dashed border, row labels, and column headers. **Always use this instead of trying to draw the container manually in `figma_execute`.** Triggers on phrases like "arrange these variants" or "organize as component set". |
-| `figma_set_description`       | Set markdown-formatted descriptions on Components, Component Sets, and Styles. Surfaces in the asset panel tooltip and in Dev Mode. **Set this for every component you create** — undocumented components are invisible. |
-| `figma_instantiate_component` | Place an instance from a local or library component via `componentKey`. Pair with `figma_search_components` for the discovery → place flow. |
-| `figma_set_instance_properties` | Set TEXT / BOOL / INSTANCE_SWAP / VARIANT properties on an instance. Handles the `#nodeId`-suffix that property keys carry. **Use this for text edits on instances** — `figma_set_text` on an instance child fails silently. |
-| `figma_add_component_property` | Define a new Component Property (Boolean / Text / Instance Swap) on a Component or Component Set. Typed API; prefer over hand-rolling `componentPropertyDefinitions` in `figma_execute`. |
-| `figma_edit_component_property` | Rename or change the default of an existing Component Property. Atomic; preserves bindings. |
-| `figma_delete_component_property` | Remove a Component Property. Breaking — confirm with user, follow the migration coordination protocol if instances exist. |
+| Tool                              | Use when…                                                                                                                                                                                                                                                                                                                                     |
+| --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `figma_execute`                   | The power tool. Any Plugin API JS — create frames, components, set Auto Layout, bind variables, set Variant Properties. Most compound component work goes through this.                                                                                                                                                                       |
+| `figma_create_component_set`      | Build a variant Component Set from a base component + property definitions, or from a set of existing components, in one call — the programmatic alternative to hand-arranging frames. Hard-capped at 100 variants (timeout auto-scales ~1.2s/variant, 30s floor/2min cap); split any matrix above ~40 variants into multiple calls. (Bridge) |
+| `figma_arrange_component_set`     | Take a flat group of variant frames and arrange them into a proper Component Set with the native purple dashed border, row labels, and column headers. **Always use this instead of trying to draw the container manually in `figma_execute`.** Triggers on phrases like "arrange these variants" or "organize as component set".             |
+| `figma_set_description`           | Set markdown-formatted descriptions on Components, Component Sets, and Styles. Surfaces in the asset panel tooltip and in Dev Mode. **Set this for every component you create** — undocumented components are invisible.                                                                                                                      |
+| `figma_instantiate_component`     | Place an instance from a local or library component via `componentKey`. Pair with `figma_search_components` for the discovery → place flow.                                                                                                                                                                                                   |
+| `figma_set_instance_properties`   | Set TEXT / BOOL / INSTANCE_SWAP / VARIANT properties on an instance. Handles the `#nodeId`-suffix that property keys carry. **Use this for text edits on instances** — `figma_set_text` on an instance child fails silently.                                                                                                                  |
+| `figma_add_component_property`    | Define a new Component Property (Boolean / Text / Instance Swap) on a Component or Component Set. Typed API; prefer over hand-rolling `componentPropertyDefinitions` in `figma_execute`.                                                                                                                                                      |
+| `figma_edit_component_property`   | Rename or change the default of an existing Component Property. Atomic; preserves bindings.                                                                                                                                                                                                                                                   |
+| `figma_delete_component_property` | Remove a Component Property. Breaking — confirm with user, follow the migration coordination protocol if instances exist.                                                                                                                                                                                                                     |
 
 **Pattern: build → arrange → describe → annotate → mark-ready.** Build the variant frames with `figma_execute`, arrange them into a Component Set with `figma_arrange_component_set`, attach a description with `figma_set_description`, attach Dev-Mode annotations with `figma_set_annotations` for non-obvious behavior, then mark the containing Section/Frame Ready-for-dev. Skipping any step leaves the component half-finished. See `build-workflow.md` Phases 6–8.
 
@@ -135,15 +135,18 @@ Setting `layoutMode = 'HORIZONTAL'` first triggers Auto Layout to flow the child
 
 ```js
 // Snapshot original positions because flipping ABSOLUTE briefly clears them
-const positions = frame.children.map(c => ({ id: c.id, x: c.x, y: c.y }));
+const positions = frame.children.map((c) => ({ id: c.id, x: c.x, y: c.y }));
 frame.layoutMode = 'HORIZONTAL';
 for (const c of frame.children) c.layoutPositioning = 'ABSOLUTE';
 // Restore positions and explicitly resize the frame back
 for (const p of positions) {
   const child = await figma.getNodeByIdAsync(p.id);
-  if (child) { child.x = p.x; child.y = p.y; }
+  if (child) {
+    child.x = p.x;
+    child.y = p.y;
+  }
 }
-frame.resize(originalWidth, originalHeight);  // critical — Auto Layout still mutated bounds
+frame.resize(originalWidth, originalHeight); // critical — Auto Layout still mutated bounds
 ```
 
 The frame.resize() at the end is non-optional — even with ABSOLUTE children, the bounds set during the brief Auto-Layout pass persist. If you don't have the original size on hand, you can fall back to `Math.max(maxRight, maxBottom)` over the children, but that misses frames whose visible bounds come from their own fills (Avatar shape, Skeleton placeholder) and not from any child. For those, hardcode the canonical size from the variant name (`size=md` → 40, etc).
@@ -152,31 +155,31 @@ This is the most common single source of corrupted bounds when running a CD9 bat
 
 ## Slots (2025 feature, Desktop Bridge)
 
-Slots are open-ended content regions — the Figma-native answer to a `<slot>` / `children` prop. Reach for a Slot instead of a Variant matrix when the region's content is genuinely open-ended (a card's body, a dialog's footer actions, a menu's item list) rather than a fixed set of states — and note that Component Properties cannot be applied to layers *inside* a slot.
+Slots are open-ended content regions — the Figma-native answer to a `<slot>` / `children` prop. Reach for a Slot instead of a Variant matrix when the region's content is genuinely open-ended (a card's body, a dialog's footer actions, a menu's item list) rather than a fixed set of states — and note that Component Properties cannot be applied to layers _inside_ a slot.
 
-| Tool                        | Use when…                                                                          |
-|-------------------------------|----------------------------------------------------------------------------------------|
-| `figma_create_slot`         | Define a new SlotNode on a component/component set, with its linked SLOT property. (Bridge) |
-| `figma_get_slots`           | List the SlotNodes on a component, component set, or instance — read this before appending to or resetting one. (Bridge) |
-| `figma_append_to_slot`      | Clone or create content into an instance's slot — building a populated review/demo instance. (Bridge) |
-| `figma_reset_slot`          | Reset an instance's slot back to its default/empty state. (Bridge) |
-| `figma_add_slot_property`   | Manually bind an existing frame as a SLOT property — the alternative to `figma_create_slot` when the frame already exists. (Bridge) |
+| Tool                      | Use when…                                                                                                                           |
+| ------------------------- | ----------------------------------------------------------------------------------------------------------------------------------- |
+| `figma_create_slot`       | Define a new SlotNode on a component/component set, with its linked SLOT property. (Bridge)                                         |
+| `figma_get_slots`         | List the SlotNodes on a component, component set, or instance — read this before appending to or resetting one. (Bridge)            |
+| `figma_append_to_slot`    | Clone or create content into an instance's slot — building a populated review/demo instance. (Bridge)                               |
+| `figma_reset_slot`        | Reset an instance's slot back to its default/empty state. (Bridge)                                                                  |
+| `figma_add_slot_property` | Manually bind an existing frame as a SLOT property — the alternative to `figma_create_slot` when the frame already exists. (Bridge) |
 
 ## Validate — both modes
 
-| Tool                          | Use when…                                                                          |
-|-------------------------------|------------------------------------------------------------------------------------|
-| `figma_capture_screenshot`    | **Plugin-side `exportAsync`** — captures live runtime state. **Prefer this immediately after a write**, because `figma_take_screenshot` (REST) can be cache-stale for several seconds. |
-| `figma_take_screenshot`       | REST-API screenshot. Standard validation step at the end of a sequence, when REST cache has caught up. Look for: cropped text, overlapping elements, placeholder text ("Heading", "Button" still visible), wrong color due to a bad variable alias. |
-| `figma_audit_design_system`   | Whole-file scorecard across six categories (Naming / Tokens / Components / A11y / Consistency / Coverage). Backs the Design System Dashboard MCP App. |
-| `figma_audit_design_system_report` | JSON twin of the MCP-Apps Design System Dashboard — same six-category scorecard as scored, chunked JSON with per-finding fixability, cached ~5 min. Needs no `ENABLE_MCP_APPS`. |
-| `figma_audit_component_accessibility` | Per-component accessibility scorecard with color-blind simulation. Use when the dashboard surfaces a component as A11y-bad and a deeper read is needed. |
-| `figma_lint_design`           | Rule-based linter — 14 WCAG + design-system-hygiene + layout rules, AA-tagged. Complementary to the two audit tools above; a finer-grained pass catches things the scorecards roll up. |
-| `figma_analyze_component_set` | Variant state-machine + cross-variant diffs + CSS pseudo-class mapping. The right tool for CD7 (interactive-state coverage) audits — surfaces which states exist, which are missing, and where the variant diff is purely cosmetic vs. semantic. |
-| `figma_get_design_changes`    | Buffered change-events since the last call (live WebSocket, **not** a historical git-style diff). Useful inside an active Build/Migrate session for "what just moved", and as a Re-verify input within the same session. |
-| `figma_check_design_parity`   | Compare a Figma component's spec against a code implementation. Takes a `codeSpec` shaped as `{ visual, spacing, typography, tokens, componentAPI, accessibility, metadata }`; returns `{ score 0–100, discrepancies, actionItems }`. Most useful at the end of a Build or Sync run. |
-| `figma_scan_code_accessibility` | Run axe-core against rendered HTML (Figma not required). Pairs with `figma_check_design_parity` via `mapToCodeSpec`; see `code-verify.md` for the round-trip recipe. |
-| `figma_generate_component_doc`| Generate platform-agnostic Markdown documentation by merging Figma data with code-side info. Good handoff artifact after a build. |
+| Tool                                  | Use when…                                                                                                                                                                                                                                                                            |
+| ------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `figma_capture_screenshot`            | **Plugin-side `exportAsync`** — captures live runtime state. **Prefer this immediately after a write**, because `figma_take_screenshot` (REST) can be cache-stale for several seconds.                                                                                               |
+| `figma_take_screenshot`               | REST-API screenshot. Standard validation step at the end of a sequence, when REST cache has caught up. Look for: cropped text, overlapping elements, placeholder text ("Heading", "Button" still visible), wrong color due to a bad variable alias.                                  |
+| `figma_audit_design_system`           | Whole-file scorecard across six categories (Naming / Tokens / Components / A11y / Consistency / Coverage). Backs the Design System Dashboard MCP App.                                                                                                                                |
+| `figma_audit_design_system_report`    | JSON twin of the MCP-Apps Design System Dashboard — same six-category scorecard as scored, chunked JSON with per-finding fixability, cached ~5 min. Needs no `ENABLE_MCP_APPS`.                                                                                                      |
+| `figma_audit_component_accessibility` | Per-component accessibility scorecard with color-blind simulation. Use when the dashboard surfaces a component as A11y-bad and a deeper read is needed.                                                                                                                              |
+| `figma_lint_design`                   | Rule-based linter — 14 WCAG + design-system-hygiene + layout rules, AA-tagged. Complementary to the two audit tools above; a finer-grained pass catches things the scorecards roll up.                                                                                               |
+| `figma_analyze_component_set`         | Variant state-machine + cross-variant diffs + CSS pseudo-class mapping. The right tool for CD7 (interactive-state coverage) audits — surfaces which states exist, which are missing, and where the variant diff is purely cosmetic vs. semantic.                                     |
+| `figma_get_design_changes`            | Buffered change-events since the last call (live WebSocket, **not** a historical git-style diff). Useful inside an active Build/Migrate session for "what just moved", and as a Re-verify input within the same session.                                                             |
+| `figma_check_design_parity`           | Compare a Figma component's spec against a code implementation. Takes a `codeSpec` shaped as `{ visual, spacing, typography, tokens, componentAPI, accessibility, metadata }`; returns `{ score 0–100, discrepancies, actionItems }`. Most useful at the end of a Build or Sync run. |
+| `figma_scan_code_accessibility`       | Run axe-core against rendered HTML (Figma not required). Pairs with `figma_check_design_parity` via `mapToCodeSpec`; see `code-verify.md` for the round-trip recipe.                                                                                                                 |
+| `figma_generate_component_doc`        | Generate platform-agnostic Markdown documentation by merging Figma data with code-side info. Good handoff artifact after a build.                                                                                                                                                    |
 
 ### Three audit tiers — they don't overlap
 
@@ -190,31 +193,31 @@ In Audit mode, run all three. They surface different signals.
 
 Annotations are first-class **Dev-Mode handoff markers** — anchored to a node, surfaced in the Inspect panel, addressable via API. Comments are file-level discussion threads.
 
-| Tool                                | Use when…                                                                              |
-|-------------------------------------|----------------------------------------------------------------------------------------|
-| `figma_get_annotations`             | Read designer-authored specs (markdown body + pinned properties). Sync-mode reads these as code-handoff hints. |
-| `figma_set_annotations`             | Write annotations after a Build — non-obvious behaviour (focus-ring delivery, animation easing, A11y notes) belongs here, not in the Component description. |
-| `figma_get_annotation_categories`   | List the available annotation categories before writing. |
-| `figma_get_comments`                | File comment threads. Mostly out of scope, but useful for parity-drift notification. |
-| `figma_post_comment`                | Optionally drop a comment on a frame when Sync-mode finds drift the user should see in-Figma. |
-| `figma_delete_comment`              | Remove a comment posted earlier in the same workflow. |
+| Tool                              | Use when…                                                                                                                                                   |
+| --------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `figma_get_annotations`           | Read designer-authored specs (markdown body + pinned properties). Sync-mode reads these as code-handoff hints.                                              |
+| `figma_set_annotations`           | Write annotations after a Build — non-obvious behaviour (focus-ring delivery, animation easing, A11y notes) belongs here, not in the Component description. |
+| `figma_get_annotation_categories` | List the available annotation categories before writing.                                                                                                    |
+| `figma_get_comments`              | File comment threads. Mostly out of scope, but useful for parity-drift notification.                                                                        |
+| `figma_post_comment`              | Optionally drop a comment on a frame when Sync-mode finds drift the user should see in-Figma.                                                               |
+| `figma_delete_comment`            | Remove a comment posted earlier in the same workflow.                                                                                                       |
 
-**Where annotations belong vs. descriptions.** Component description (`figma_set_description`) explains *what the component is and when to use it*. Annotation explains *the spot-specific implementation note an engineer needs while building*: "focus ring delivered as drop-shadow, not stroke", "this transition uses cubic-bezier(0.4,0,0.2,1)", "tap target extends 8px past the visible edge". One is the big picture; the other is the surgical detail.
+**Where annotations belong vs. descriptions.** Component description (`figma_set_description`) explains _what the component is and when to use it_. Annotation explains _the spot-specific implementation note an engineer needs while building_: "focus ring delivered as drop-shadow, not stroke", "this transition uses cubic-bezier(0.4,0,0.2,1)", "tap target extends 8px past the visible edge". One is the big picture; the other is the surgical detail.
 
 ## History, changelog, blame, comments
 
-| Tool                              | Use when…                                                                              |
-|--------------------------------------|--------------------------------------------------------------------------------------------|
-| `figma_get_file_versions`          | List labeled version history, paginated (cap 200, default 50, autosaves excluded by default). (REST) |
-| `figma_get_file_at_version`        | Read a file/node snapshot as it existed at a past version. (REST) |
-| `figma_diff_versions`              | Page-level diff always; pass `component_ids` for a deeper node diff. Description/annotation deltas are only captured if the Bridge plugin was connected during the edit. (REST, Bridge improves coverage) |
-| `figma_get_changes_since_version`  | Convenience wrapper around `figma_diff_versions` — since a given version, to current. (REST) |
-| `figma_generate_changelog`         | Wraps `figma_diff_versions` into human-readable release notes (markdown + data). (REST) |
-| `figma_blame_node`                 | Binary-search who/when introduced a change to a node or its property, walking up to 500 versions. (REST) |
+| Tool                              | Use when…                                                                                                                                                                                                 |
+| --------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `figma_get_file_versions`         | List labeled version history, paginated (cap 200, default 50, autosaves excluded by default). (REST)                                                                                                      |
+| `figma_get_file_at_version`       | Read a file/node snapshot as it existed at a past version. (REST)                                                                                                                                         |
+| `figma_diff_versions`             | Page-level diff always; pass `component_ids` for a deeper node diff. Description/annotation deltas are only captured if the Bridge plugin was connected during the edit. (REST, Bridge improves coverage) |
+| `figma_get_changes_since_version` | Convenience wrapper around `figma_diff_versions` — since a given version, to current. (REST)                                                                                                              |
+| `figma_generate_changelog`        | Wraps `figma_diff_versions` into human-readable release notes (markdown + data). (REST)                                                                                                                   |
+| `figma_blame_node`                | Binary-search who/when introduced a change to a node or its property, walking up to 500 versions. (REST)                                                                                                  |
 
 Comment tools (`figma_get_comments`, `figma_post_comment`, `figma_delete_comment`) live in the Annotations & Comments section above.
 
-**Coverage gap, inherited by all four version/diff tools above:** REST snapshots never carry description or annotation changes made while the Bridge plugin was disconnected during the edit, and never track variable *value* changes, canvas instances, unbound raw layout/visual props, or style content — see each tool's `scope_coverage` / `notes[]` output.
+**Coverage gap, inherited by all four version/diff tools above:** REST snapshots never carry description or annotation changes made while the Bridge plugin was disconnected during the edit, and never track variable _value_ changes, canvas instances, unbound raw layout/visual props, or style content — see each tool's `scope_coverage` / `notes[]` output.
 
 ## Console & debugging — out of scope for this skill
 
@@ -228,15 +231,15 @@ The MCP also exposes ~10 `figjam_*` tools for FigJam boards and ~15 `figma_*_sli
 
 The reverse of this skill's usual Figma → spec → code flow: reverse-engineers an existing codebase into Figma-importable tokens plus a Storybook workshop. Local Mode only — reads and writes the local filesystem, not the live Figma document. Pipeline order:
 
-| Tool                          | Use when…                                                                          |
-|---------------------------------|------------------------------------------------------------------------------------------|
-| `figma_ds_analyze`            | Scan one or more app codebases: framework, styling approach, component inventory, and a porting-priority rank. Run first. |
-| `figma_ds_extract_tokens`     | Mine design tokens from the analyzed code into DTCG + CSS/Tailwind/SCSS/TS files. |
-| `figma_ds_extract_component`  | Deep single-component extraction — source, props, and a story scaffold. |
-| `figma_ds_scaffold`           | Generate the design-system package skeleton. |
-| `figma_ds_setup_storybook`    | Wire a freshly-initialized Storybook to the extracted tokens and fonts. |
-| `figma_ds_status`             | Read or update porting progress, persisted to disk. |
-| `figma_ds_verify`             | Fidelity-eval gate to run before handoff or before pushing tokens back into Figma. Run last. |
+| Tool                         | Use when…                                                                                                                 |
+| ---------------------------- | ------------------------------------------------------------------------------------------------------------------------- |
+| `figma_ds_analyze`           | Scan one or more app codebases: framework, styling approach, component inventory, and a porting-priority rank. Run first. |
+| `figma_ds_extract_tokens`    | Mine design tokens from the analyzed code into DTCG + CSS/Tailwind/SCSS/TS files.                                         |
+| `figma_ds_extract_component` | Deep single-component extraction — source, props, and a story scaffold.                                                   |
+| `figma_ds_scaffold`          | Generate the design-system package skeleton.                                                                              |
+| `figma_ds_setup_storybook`   | Wire a freshly-initialized Storybook to the extracted tokens and fonts.                                                   |
+| `figma_ds_status`            | Read or update porting progress, persisted to disk.                                                                       |
+| `figma_ds_verify`            | Fidelity-eval gate to run before handoff or before pushing tokens back into Figma. Run last.                              |
 
 `ds_dashboard_refresh` refreshes the Design System Dashboard MCP App's data after a pipeline run changes the file. MCP App — needs `ENABLE_MCP_APPS=true`, same as the other MCP Apps in this map.
 
@@ -257,7 +260,7 @@ When the client supports the MCP Apps protocol extension and `ENABLE_MCP_APPS=tr
 - **Defining a Component Property?** Reach for `figma_add_component_property` first; only escalate to `figma_execute` if other mutations must happen atomically alongside.
 - **First screenshot after a write?** `figma_capture_screenshot` (live), not `figma_take_screenshot` (REST cache).
 - **About to call a destructive tool (`figma_delete_*`)?** Confirm with the user in chat first, even if they previously implied permission.
-- **Generating a visual inventory / library catalog?** Don't load every component's metadata in one read. Phase 1 returns `{id, name, type}` only; Phase 4 builds cards **one Section per `figma_execute` call**, chunks of 25 with `setTimeout(0)` yields between chunks. Sections beyond ~150 components split across multiple calls. See `inventory-generation.md` § *Batching contract*.
+- **Generating a visual inventory / library catalog?** Don't load every component's metadata in one read. Phase 1 returns `{id, name, type}` only; Phase 4 builds cards **one Section per `figma_execute` call**, chunks of 25 with `setTimeout(0)` yields between chunks. Sections beyond ~150 components split across multiple calls. See `inventory-generation.md` § _Batching contract_.
 
 ## Example payloads
 
@@ -307,6 +310,7 @@ Working snippets for the most common build operations. Treat them as starting po
 ```
 
 Pattern notes:
+
 - **Primitives** (`primitive/*`) carry the actual hex / number; their scopes are the most permissive valid set.
 - **Semantic** tokens (`color/primary`, `color/primary-hover`) alias primitives via `{ "alias": "primitive/..." }`. Their scopes are tighter — semantic colors should not appear in spacing pickers.
 - **Modes** carry theming. Each Variable has a value (or alias) per mode.
@@ -376,7 +380,7 @@ const newModeId = collection.addMode('Compact');
 const spacing4 = await figma.variables.getVariableByIdAsync('VariableID:1234:7');
 spacing4.setValueForMode(newModeId, 12);
 
-return { newModeId, modes: collection.modes.map(m => m.name) };
+return { newModeId, modes: collection.modes.map((m) => m.name) };
 ```
 
 Modes scale linearly per Variable — adding a mode is cheap, but you now have **N × M** values to maintain. Audit for "hidden" Variables that fall back to default and check the user actually wants that.
@@ -385,10 +389,10 @@ Modes scale linearly per Variable — adding a mode is cheap, but you now have *
 
 ```js
 // Right after a build, screenshot the Components page bounding box
-const node = await figma.getNodeByIdAsync('123:456');           // the parent section / page
+const node = await figma.getNodeByIdAsync('123:456'); // the parent section / page
 const settings = { format: 'PNG', constraint: { type: 'SCALE', value: 1 } };
 const bytes = await node.exportAsync(settings);
-return { bytes: bytes.length };  // confirm it rendered before pulling the image via figma_take_screenshot
+return { bytes: bytes.length }; // confirm it rendered before pulling the image via figma_take_screenshot
 ```
 
 Use `figma_take_screenshot` directly when the goal is to look at the result; use the snippet above when the goal is purely to confirm the node is renderable (catches "0×0 frame" bugs cheaply).

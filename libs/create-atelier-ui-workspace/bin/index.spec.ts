@@ -6,12 +6,16 @@ import { createWorkspace } from 'create-nx-workspace';
 import { main } from './index';
 
 jest.mock('create-nx-workspace', () => ({
-  createWorkspace: jest.fn().mockResolvedValue({ directory: '/tmp/my-workspace' }),
+  createWorkspace: jest
+    .fn()
+    .mockResolvedValue({ directory: '/tmp/my-workspace' }),
 }));
 
 jest.mock('enquirer', () => ({ prompt: jest.fn() }), { virtual: true });
 
-const mockCreateWorkspace = createWorkspace as jest.MockedFunction<typeof createWorkspace>;
+const mockCreateWorkspace = createWorkspace as jest.MockedFunction<
+  typeof createWorkspace
+>;
 const enquirer = require('enquirer') as { prompt: jest.Mock };
 
 describe('create-atelier-ui-workspace CLI', () => {
@@ -20,8 +24,12 @@ describe('create-atelier-ui-workspace CLI', () => {
 
   beforeEach(() => {
     originalArgv = process.argv;
-    consoleLogSpy = jest.spyOn(console, 'log').mockImplementation(() => undefined);
-    mockCreateWorkspace.mockResolvedValue({ directory: '/tmp/my-workspace' } as Awaited<ReturnType<typeof createWorkspace>>);
+    consoleLogSpy = jest
+      .spyOn(console, 'log')
+      .mockImplementation(() => undefined);
+    mockCreateWorkspace.mockResolvedValue({
+      directory: '/tmp/my-workspace',
+    } as Awaited<ReturnType<typeof createWorkspace>>);
     enquirer.prompt.mockReset();
   });
 
@@ -64,7 +72,9 @@ describe('create-atelier-ui-workspace CLI', () => {
     process.argv = ['node', 'index.js'];
     enquirer.prompt.mockResolvedValueOnce({ name: '' });
 
-    await expect(main()).rejects.toThrow('Please provide a name for the workspace');
+    await expect(main()).rejects.toThrow(
+      'Please provide a name for the workspace',
+    );
   });
 
   it('calls createWorkspace with nxCloud skip and npm package manager', async () => {
@@ -105,7 +115,13 @@ describe('create-atelier-ui-workspace CLI', () => {
   });
 
   it('accepts --framework=<value> flag and skips the framework prompt', async () => {
-    process.argv = ['node', 'index.js', 'test-ws', '--framework=react', '--no-figma'];
+    process.argv = [
+      'node',
+      'index.js',
+      'test-ws',
+      '--framework=react',
+      '--no-figma',
+    ];
 
     await main();
 
@@ -120,7 +136,14 @@ describe('create-atelier-ui-workspace CLI', () => {
   });
 
   it('accepts --framework <value> with a space separator', async () => {
-    process.argv = ['node', 'index.js', 'test-ws', '--framework', 'vue', '--no-figma'];
+    process.argv = [
+      'node',
+      'index.js',
+      'test-ws',
+      '--framework',
+      'vue',
+      '--no-figma',
+    ];
 
     await main();
 
@@ -131,7 +154,13 @@ describe('create-atelier-ui-workspace CLI', () => {
   });
 
   it('throws on invalid --framework value', async () => {
-    process.argv = ['node', 'index.js', 'test-ws', '--framework=svelte', '--no-figma'];
+    process.argv = [
+      'node',
+      'index.js',
+      'test-ws',
+      '--framework=svelte',
+      '--no-figma',
+    ];
 
     await expect(main()).rejects.toThrow(/Invalid --framework value/);
   });
@@ -139,7 +168,13 @@ describe('create-atelier-ui-workspace CLI', () => {
   it('uses ATELIER_PRESET_SPEC env var as the preset spec when set', async () => {
     const original = process.env.ATELIER_PRESET_SPEC;
     process.env.ATELIER_PRESET_SPEC = 'file:/tmp/my-preset.tgz';
-    process.argv = ['node', 'index.js', 'test-ws', '--framework=angular', '--no-figma'];
+    process.argv = [
+      'node',
+      'index.js',
+      'test-ws',
+      '--framework=angular',
+      '--no-figma',
+    ];
 
     try {
       await main();
@@ -155,7 +190,13 @@ describe('create-atelier-ui-workspace CLI', () => {
 
   it('defaults preset spec to the published package name when env var unset', async () => {
     delete process.env.ATELIER_PRESET_SPEC;
-    process.argv = ['node', 'index.js', 'test-ws', '--framework=angular', '--no-figma'];
+    process.argv = [
+      'node',
+      'index.js',
+      'test-ws',
+      '--framework=angular',
+      '--no-figma',
+    ];
 
     await main();
 
@@ -168,11 +209,19 @@ describe('create-atelier-ui-workspace CLI', () => {
   // ─── figma-console MCP prompt / flags ──────────────────────────────────────
 
   it('accepts --figma flag and skips the figma prompt', async () => {
-    process.argv = ['node', 'index.js', 'test-ws', '--framework=angular', '--figma'];
+    process.argv = [
+      'node',
+      'index.js',
+      'test-ws',
+      '--framework=angular',
+      '--figma',
+    ];
 
     await main();
 
-    const promptNames = enquirer.prompt.mock.calls.map((c: [{ name: string }]) => c[0].name);
+    const promptNames = enquirer.prompt.mock.calls.map(
+      (c: [{ name: string }]) => c[0].name,
+    );
     expect(promptNames).not.toContain('figma');
     expect(mockCreateWorkspace).toHaveBeenCalledWith(
       expect.any(String),
@@ -181,11 +230,19 @@ describe('create-atelier-ui-workspace CLI', () => {
   });
 
   it('accepts --no-figma flag and passes figmaMcp=false', async () => {
-    process.argv = ['node', 'index.js', 'test-ws', '--framework=angular', '--no-figma'];
+    process.argv = [
+      'node',
+      'index.js',
+      'test-ws',
+      '--framework=angular',
+      '--no-figma',
+    ];
 
     await main();
 
-    const promptNames = enquirer.prompt.mock.calls.map((c: [{ name: string }]) => c[0].name);
+    const promptNames = enquirer.prompt.mock.calls.map(
+      (c: [{ name: string }]) => c[0].name,
+    );
     expect(promptNames).not.toContain('figma');
     expect(mockCreateWorkspace).toHaveBeenCalledWith(
       expect.any(String),
@@ -199,7 +256,12 @@ describe('create-atelier-ui-workspace CLI', () => {
 
     await main();
 
-    type FigmaPromptConfig = { name: string; message: string; type: string; initial: unknown };
+    type FigmaPromptConfig = {
+      name: string;
+      message: string;
+      type: string;
+      initial: unknown;
+    };
     const figmaPrompt = enquirer.prompt.mock.calls
       .map((c: [FigmaPromptConfig]) => c[0])
       .find((p: FigmaPromptConfig) => p.name === 'figma');
@@ -214,7 +276,13 @@ describe('create-atelier-ui-workspace CLI', () => {
   });
 
   it('logs the Figma setup URL in the success output when figma is enabled', async () => {
-    process.argv = ['node', 'index.js', 'test-ws', '--framework=angular', '--figma'];
+    process.argv = [
+      'node',
+      'index.js',
+      'test-ws',
+      '--framework=angular',
+      '--figma',
+    ];
 
     await main();
 
@@ -224,7 +292,13 @@ describe('create-atelier-ui-workspace CLI', () => {
   });
 
   it('does not log the Figma setup URL when figma is disabled', async () => {
-    process.argv = ['node', 'index.js', 'test-ws', '--framework=angular', '--no-figma'];
+    process.argv = [
+      'node',
+      'index.js',
+      'test-ws',
+      '--framework=angular',
+      '--no-figma',
+    ];
 
     await main();
 
@@ -235,7 +309,13 @@ describe('create-atelier-ui-workspace CLI', () => {
   // ─── storybookjs/mcp skills install flag ───────────────────────────────────
 
   it('defaults skills to true when no flag is passed', async () => {
-    process.argv = ['node', 'index.js', 'test-ws', '--framework=angular', '--no-figma'];
+    process.argv = [
+      'node',
+      'index.js',
+      'test-ws',
+      '--framework=angular',
+      '--no-figma',
+    ];
 
     await main();
 
@@ -246,7 +326,14 @@ describe('create-atelier-ui-workspace CLI', () => {
   });
 
   it('accepts --skills flag and passes skills=true explicitly', async () => {
-    process.argv = ['node', 'index.js', 'test-ws', '--framework=angular', '--no-figma', '--skills'];
+    process.argv = [
+      'node',
+      'index.js',
+      'test-ws',
+      '--framework=angular',
+      '--no-figma',
+      '--skills',
+    ];
 
     await main();
 
@@ -275,11 +362,19 @@ describe('create-atelier-ui-workspace CLI', () => {
   });
 
   it('does not prompt for skills — it is a flag-only, non-interactive option', async () => {
-    process.argv = ['node', 'index.js', 'test-ws', '--framework=angular', '--no-figma'];
+    process.argv = [
+      'node',
+      'index.js',
+      'test-ws',
+      '--framework=angular',
+      '--no-figma',
+    ];
 
     await main();
 
-    const promptNames = enquirer.prompt.mock.calls.map((c: [{ name: string }]) => c[0].name);
+    const promptNames = enquirer.prompt.mock.calls.map(
+      (c: [{ name: string }]) => c[0].name,
+    );
     expect(promptNames).not.toContain('skills');
   });
 
@@ -290,13 +385,23 @@ describe('create-atelier-ui-workspace CLI', () => {
     const origCwd = process.cwd();
     process.chdir(tmp);
 
-    const exitSpy = jest.spyOn(process, 'exit').mockImplementation(((code?: number) => {
+    const exitSpy = jest.spyOn(process, 'exit').mockImplementation(((
+      code?: number,
+    ) => {
       throw new Error(`__exit_${code}__`);
     }) as never);
-    const errSpy = jest.spyOn(console, 'error').mockImplementation(() => undefined);
+    const errSpy = jest
+      .spyOn(console, 'error')
+      .mockImplementation(() => undefined);
 
     try {
-      process.argv = ['node', 'index.js', 'taken', '--framework=angular', '--no-figma'];
+      process.argv = [
+        'node',
+        'index.js',
+        'taken',
+        '--framework=angular',
+        '--no-figma',
+      ];
       await expect(main()).rejects.toThrow('__exit_1__');
 
       const logged = errSpy.mock.calls.flat().join('\n');

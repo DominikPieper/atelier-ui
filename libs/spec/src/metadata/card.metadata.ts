@@ -13,15 +13,19 @@ export const metadata: ComponentMetadata = {
   antiPatterns: [
     {
       pattern: 'Showing a dismissable system message inside a card.',
-      useInstead: 'AtlAlert — alerts carry the right role and live-region semantics for transient messages.',
+      useInstead:
+        'AtlAlert — alerts carry the right role and live-region semantics for transient messages.',
     },
     {
       pattern: 'Using a card as a modal container layered over the page.',
-      useInstead: 'AtlDialog — dialogs handle focus trapping, scrim, and dismiss behaviour.',
+      useInstead:
+        'AtlDialog — dialogs handle focus trapping, scrim, and dismiss behaviour.',
     },
     {
-      pattern: 'Adding `role="article"` to every card by default to look more semantic.',
-      useInstead: 'Leave `role` unset for visual grouping; only set it when the card is a real landmark in the page outline.',
+      pattern:
+        'Adding `role="article"` to every card by default to look more semantic.',
+      useInstead:
+        'Leave `role` unset for visual grouping; only set it when the card is a real landmark in the page outline.',
     },
   ],
   relatedComponents: ['AtlDialogSpec', 'AtlAlertSpec'],

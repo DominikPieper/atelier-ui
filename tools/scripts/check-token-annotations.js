@@ -40,7 +40,10 @@ const path = require('path');
 const { parseExportedVars } = require('./lib/ts-eval');
 
 const ROOT = path.resolve(__dirname, '../..');
-const TOKEN_CSS = path.join(ROOT, 'libs/create-workspace/src/generators/preset/files/styles/tokens.css');
+const TOKEN_CSS = path.join(
+  ROOT,
+  'libs/create-workspace/src/generators/preset/files/styles/tokens.css',
+);
 const TOKEN_MANIFEST = path.join(ROOT, 'libs/spec/src/tokens.manifest.ts');
 
 const errors = [];
@@ -64,9 +67,10 @@ const tokenDecl = /(--ui-[a-zA-Z0-9-]+)\s*:/g;
 }
 
 const manifestExports = parseExportedVars(TOKEN_MANIFEST);
-const manifest = manifestExports.tokens && typeof manifestExports.tokens === 'object'
-  ? manifestExports.tokens
-  : {};
+const manifest =
+  manifestExports.tokens && typeof manifestExports.tokens === 'object'
+    ? manifestExports.tokens
+    : {};
 
 const annotatedTokens = new Set(Object.keys(manifest));
 
@@ -75,7 +79,7 @@ const annotatedTokens = new Set(Object.keys(manifest));
 for (const name of annotatedTokens) {
   if (!declaredTokens.has(name)) {
     errors.push(
-      `[STALE-MANIFEST] tokens.manifest.ts annotates '${name}' but it is not declared in libs/create-workspace/src/generators/preset/files/styles/tokens.css.`
+      `[STALE-MANIFEST] tokens.manifest.ts annotates '${name}' but it is not declared in libs/create-workspace/src/generators/preset/files/styles/tokens.css.`,
     );
   }
 }
@@ -83,23 +87,31 @@ for (const name of annotatedTokens) {
 // Validate the shape of every annotation that IS present.
 for (const [name, annot] of Object.entries(manifest)) {
   if (!annot || typeof annot !== 'object') {
-    errors.push(`[BAD-ANNOTATION] tokens.manifest.ts['${name}']: must be an object.`);
+    errors.push(
+      `[BAD-ANNOTATION] tokens.manifest.ts['${name}']: must be an object.`,
+    );
     continue;
   }
   if (typeof annot.intent !== 'string' || !annot.intent.trim()) {
-    errors.push(`[BAD-ANNOTATION] tokens.manifest.ts['${name}']: 'intent' must be a non-empty string.`);
+    errors.push(
+      `[BAD-ANNOTATION] tokens.manifest.ts['${name}']: 'intent' must be a non-empty string.`,
+    );
   }
   if (!Array.isArray(annot.constraints) || annot.constraints.length === 0) {
     errors.push(
-      `[BAD-ANNOTATION] tokens.manifest.ts['${name}']: 'constraints' must be a non-empty array of strings.`
+      `[BAD-ANNOTATION] tokens.manifest.ts['${name}']: 'constraints' must be a non-empty array of strings.`,
     );
-  } else if (annot.constraints.some((c) => typeof c !== 'string' || !c.trim())) {
+  } else if (
+    annot.constraints.some((c) => typeof c !== 'string' || !c.trim())
+  ) {
     errors.push(
-      `[BAD-ANNOTATION] tokens.manifest.ts['${name}']: every 'constraints' entry must be a non-empty string.`
+      `[BAD-ANNOTATION] tokens.manifest.ts['${name}']: every 'constraints' entry must be a non-empty string.`,
     );
   }
   if (annot.darkMode !== undefined && typeof annot.darkMode !== 'string') {
-    errors.push(`[BAD-ANNOTATION] tokens.manifest.ts['${name}']: 'darkMode' must be a string if set.`);
+    errors.push(
+      `[BAD-ANNOTATION] tokens.manifest.ts['${name}']: 'darkMode' must be a string if set.`,
+    );
   }
 }
 
@@ -111,13 +123,13 @@ if (COVERAGE_REQUIRED) {
   for (const name of declaredTokens) {
     if (!annotatedTokens.has(name)) {
       errors.push(
-        `[MISSING-ANNOTATION] '${name}' is declared in tokens.css but not annotated in libs/spec/src/tokens.manifest.ts.`
+        `[MISSING-ANNOTATION] '${name}' is declared in tokens.css but not annotated in libs/spec/src/tokens.manifest.ts.`,
       );
     }
   }
 } else {
   warnings.push(
-    `tokens.manifest.ts is empty — manifest-coverage check is opt-in until the first annotation lands. See plan/ai-readiness.md.`
+    `tokens.manifest.ts is empty — manifest-coverage check is opt-in until the first annotation lands. See plan/ai-readiness.md.`,
   );
 }
 
@@ -129,10 +141,12 @@ if (errors.length > 0) {
   errors.forEach((e) => console.error(`✗ ${e}`));
   warnings.forEach((w) => console.warn(`⚠ ${w}`));
   console.error(
-    `\n${errors.length} annotation issue(s). Fix the manifest in libs/spec/src/tokens.manifest.ts.`
+    `\n${errors.length} annotation issue(s). Fix the manifest in libs/spec/src/tokens.manifest.ts.`,
   );
   process.exit(1);
 }
 
 warnings.forEach((w) => console.warn(`⚠ ${w}`));
-console.log(`✓ ${annotatedTokens.size}/${declaredTokens.size} tokens annotated in tokens.manifest.ts`);
+console.log(
+  `✓ ${annotatedTokens.size}/${declaredTokens.size} tokens annotated in tokens.manifest.ts`,
+);

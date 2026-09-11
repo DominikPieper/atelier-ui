@@ -1,23 +1,23 @@
 # Composition Cookbook — Plan (2026-04-26)
 
-Roadmap item: *Phase 5 → Composition cookbook (6 pre-composed patterns as
-documentation + Storybook stories).* Most scaffolding is already shipped;
+Roadmap item: _Phase 5 → Composition cookbook (6 pre-composed patterns as
+documentation + Storybook stories)._ Most scaffolding is already shipped;
 this plan closes the remaining gaps and turns the cookbook from a static
 gallery into something both humans and agents can pull from.
 
 ## State of play
 
-| Surface | Status | Notes |
-|---|---|---|
-| Storybook stories per framework | ✅ Shipped | `libs/{angular,react,vue}/src/lib/cookbook.stories.{ts,tsx}` — all 6 patterns wired with live state. Angular file is 1295 lines, React 769, Vue 576 — Vue is the thinnest. |
-| Pattern data file | ✅ Shipped | `docs/src/data/patterns.ts` — `PatternMeta` shape (id, num, title, description, tags, angular/react/vue code). |
-| `/patterns` docs page | ✅ Shipped | `docs/src/pages/patterns.astro` + `docs/src/components/PatternsPage.tsx` (live React-island demos for each). |
-| MCP simulator entry | ✅ Shipped | Patterns mentioned in `docs/src/components/McpExplorer.tsx` *content* but not as a tool. |
-| MCP server tool | ❌ Missing | Real Storybook MCP at `atelier-ui.netlify.app/storybook-*/mcp` exposes 5 component-level tools — none surface cookbook patterns. |
-| CLAUDE.md template (preset) | ❌ Missing | Scaffolded workspaces don't tell the agent the cookbook exists. |
-| Variations / a11y / pitfalls per pattern | ❌ Missing | `description` is one sentence; no "when not to use", a11y notes, or alt compositions. |
-| Smoke tests on cookbook stories | ❌ Missing | No `play` functions; rendering regressions wouldn't be caught. |
-| Light + dark visual snapshot | ❌ Missing | Overlaps with the still-open *Storybook visual check* todo. |
+| Surface                                  | Status     | Notes                                                                                                                                                                      |
+| ---------------------------------------- | ---------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Storybook stories per framework          | ✅ Shipped | `libs/{angular,react,vue}/src/lib/cookbook.stories.{ts,tsx}` — all 6 patterns wired with live state. Angular file is 1295 lines, React 769, Vue 576 — Vue is the thinnest. |
+| Pattern data file                        | ✅ Shipped | `docs/src/data/patterns.ts` — `PatternMeta` shape (id, num, title, description, tags, angular/react/vue code).                                                             |
+| `/patterns` docs page                    | ✅ Shipped | `docs/src/pages/patterns.astro` + `docs/src/components/PatternsPage.tsx` (live React-island demos for each).                                                               |
+| MCP simulator entry                      | ✅ Shipped | Patterns mentioned in `docs/src/components/McpExplorer.tsx` _content_ but not as a tool.                                                                                   |
+| MCP server tool                          | ❌ Missing | Real Storybook MCP at `atelier-ui.netlify.app/storybook-*/mcp` exposes 5 component-level tools — none surface cookbook patterns.                                           |
+| CLAUDE.md template (preset)              | ❌ Missing | Scaffolded workspaces don't tell the agent the cookbook exists.                                                                                                            |
+| Variations / a11y / pitfalls per pattern | ❌ Missing | `description` is one sentence; no "when not to use", a11y notes, or alt compositions.                                                                                      |
+| Smoke tests on cookbook stories          | ❌ Missing | No `play` functions; rendering regressions wouldn't be caught.                                                                                                             |
+| Light + dark visual snapshot             | ❌ Missing | Overlaps with the still-open _Storybook visual check_ todo.                                                                                                                |
 
 ## Identified gaps (ordered by leverage)
 
@@ -65,16 +65,18 @@ Added `tools/scripts/check-cookbook-parity.mjs`:
 
 Initial run surfaced **18 raw drift findings → 3 hard fails** after the
 fail/warn split. Hard fails fixed by adding tags to `patterns.ts`:
+
 - `settings-page` → `+LlmAlert`.
 - `notification-center` → `+LlmButton`.
 - `management-dashboard` → `+LlmButton`.
 
 **Remaining 8 warnings** (logged for P2):
-- *Confirmation Dialog* — Angular story uses `LlmAlert` ("This action
+
+- _Confirmation Dialog_ — Angular story uses `LlmAlert` ("This action
   cannot be undone" warning); React + Vue stories don't.
-- *Data List* — Angular story includes `LlmMenu` + `LlmTooltip` for the
+- _Data List_ — Angular story includes `LlmMenu` + `LlmTooltip` for the
   per-row "..." action; other frameworks don't.
-- *Management Dashboard* — Vue story is significantly broader than
+- _Management Dashboard_ — Vue story is significantly broader than
   Angular/React (uses Input, Select, Toggle, Dialog, AccordionGroup),
   inverse of the line-count gap. Suggests Vue inlined extra examples in
   one section. Confirms P2 is real but in the opposite direction
@@ -100,8 +102,8 @@ dashboard pattern). The remaining drifts were:
    an `LlmMenu` (Edit / Duplicate / Delete + separator); React + Vue
    rendered an inert "..." button.
 
-Equalization direction was *enrich React + Vue* rather than *trim
-Angular*, because the Angular composition demonstrates more of the
+Equalization direction was _enrich React + Vue_ rather than _trim
+Angular_, because the Angular composition demonstrates more of the
 library and the cookbook is a teaching surface.
 
 Changes:
@@ -163,7 +165,7 @@ Authored content (`docs/src/data/patterns.ts`):
 
 - `PatternMeta` extended with `whenToUse[]`, `whenNotToUse[]`,
   `a11yNotes[]`, `pitfalls[]`, `variations[]`, `storybook { angular,
-  react, vue }`.
+react, vue }`.
 - Added `TAG_TO_SLUG: Record<string, string>` so each component tag
   in the catalog maps cleanly onto the existing `/components/<slug>`
   reference page.
@@ -209,8 +211,8 @@ Verification:
 
 - `nx build docs` — 49 → **55 pages**, no errors. The 6 new pages
   appear at `dist/docs/patterns/{login-form,settings-page,
-  confirmation-dialog,data-list,notification-center,
-  management-dashboard}/index.html`.
+confirmation-dialog,data-list,notification-center,
+management-dashboard}/index.html`.
 - `nx lint docs` clean.
 - All 6 sync checks pass: `check:cookbook`, `check:cookbook-manifest`,
   `check:llms`, `check:sync`, `check:docs`, `check:spec`.
@@ -242,7 +244,7 @@ Static JSON catalog generated from `patterns.ts` and served at
   identical to `gen-llms-txt.mjs --check` so CI can fail on stale
   output.
 - Output schema (committed at `docs/public/.well-known/
-  cookbook-patterns.json`, ~15 KB):
+cookbook-patterns.json`, ~15 KB):
 
   ```json
   {
@@ -284,7 +286,7 @@ Static JSON catalog generated from `patterns.ts` and served at
 The CLAUDE.md isn't a separate template file — it's an inline string
 literal in `libs/create-workspace/src/generators/preset/preset.ts`
 (starting at line 144). Added a `## Composition Patterns` section
-between *Component Libraries* and *Design Tokens*:
+between _Component Libraries_ and _Design Tokens_:
 
 > When composing multi-component flows (login form, settings page,
 > confirmation dialog, data list, notification center, management
@@ -321,14 +323,14 @@ patterns × three frameworks = 18 plays in total. Each play asserts:
 
 **Anchor texts (stable across all 3 frameworks unless noted):**
 
-| Pattern | Anchors |
-|---|---|
-| Login Form | `Sign in` heading, `Sign in` button, `Remember me` label |
-| Settings Page | `Settings` heading, `Account` tab |
-| Confirmation Dialog | `Delete account` trigger → `dialog[open]` + `Yes, delete my account` (Angular) / `Delete permanently` (React, Vue) |
-| Data List with Actions | `Projects` heading, `Marketing Website` row, `New project` button |
-| Notification Center | `Notifications` heading, `Clear all` button, `Errors` group |
-| Management Dashboard | `Operations Overview`, `Recent Activity`, `Plan Usage` headings |
+| Pattern                | Anchors                                                                                                            |
+| ---------------------- | ------------------------------------------------------------------------------------------------------------------ |
+| Login Form             | `Sign in` heading, `Sign in` button, `Remember me` label                                                           |
+| Settings Page          | `Settings` heading, `Account` tab                                                                                  |
+| Confirmation Dialog    | `Delete account` trigger → `dialog[open]` + `Yes, delete my account` (Angular) / `Delete permanently` (React, Vue) |
+| Data List with Actions | `Projects` heading, `Marketing Website` row, `New project` button                                                  |
+| Notification Center    | `Notifications` heading, `Clear all` button, `Errors` group                                                        |
+| Management Dashboard   | `Operations Overview`, `Recent Activity`, `Plan Usage` headings                                                    |
 
 **Verification:**
 
@@ -336,7 +338,7 @@ patterns × three frameworks = 18 plays in total. Each play asserts:
   passes 31 files / **216 / 216** tests in chromium browser mode
   (cookbook contributes 7 of those).
 - Vue: no `vitest.storybook.config.ts` is wired in `libs/vue/`, so
-  the plays only execute in the Storybook UI's *Interactions*
+  the plays only execute in the Storybook UI's _Interactions_
   panel. Documented as a follow-up below.
 - Angular: storybook-vitest is broken upstream — `_PlatformLocation`
   fails to JIT-compile under `@storybook/addon-vitest`'s
@@ -374,7 +376,7 @@ storybook-vitest path loads the file directly. Switched to
 ### P7 — Visual snapshot pass
 
 Run light + dark mode screenshots of all 6 patterns in each framework
-Storybook (already open as the *Storybook visual check* todo). Save
+Storybook (already open as the _Storybook visual check_ todo). Save
 screenshots to `docs/public/patterns/screenshots/{id}-{fw}-{theme}.png`
 and embed on the per-pattern detail pages from P3.
 
@@ -391,17 +393,18 @@ P6 smoke tests (parallel to anything; cheapest last)
 
 ## Effort
 
-| Step | Estimate |
-|---|---|
-| P1 parity script | 1–2 h |
-| P2 Vue gap | 2 h |
-| P3 detail pages (×6) | 6–8 h (content-heavy) |
-| P4 JSON manifest | 1 h |
-| P5 preset CLAUDE.md | 30 min + tests |
-| P6 smoke tests (×6 ×3) | 3 h |
-| P7 screenshots | 2 h |
+| Step                   | Estimate              |
+| ---------------------- | --------------------- |
+| P1 parity script       | 1–2 h                 |
+| P2 Vue gap             | 2 h                   |
+| P3 detail pages (×6)   | 6–8 h (content-heavy) |
+| P4 JSON manifest       | 1 h                   |
+| P5 preset CLAUDE.md    | 30 min + tests        |
+| P6 smoke tests (×6 ×3) | 3 h                   |
+| P7 screenshots         | 2 h                   |
 
 **Total: ~16–18 h.** Could split into two PRs:
+
 - PR 1 (small): P1 + P2 + P4 + P5 — parity, gap, MCP catalog, preset.
 - PR 2 (bigger): P3 + P6 + P7 — content + tests + visuals.
 

@@ -8,12 +8,21 @@ const meta: Meta<typeof AtlButton> = {
   component: AtlButton,
   tags: ['autodocs'],
   argTypes: {
-    variant: { control: 'select', options: ['primary', 'secondary', 'outline', 'danger'] },
+    variant: {
+      control: 'select',
+      options: ['primary', 'secondary', 'outline', 'danger'],
+    },
     size: { control: 'select', options: ['sm', 'md', 'lg'] },
     disabled: { control: 'boolean' },
     loading: { control: 'boolean' },
   },
-  args: { variant: 'primary', size: 'md', disabled: false, loading: false, children: 'Button' },
+  args: {
+    variant: 'primary',
+    size: 'md',
+    disabled: false,
+    loading: false,
+    children: 'Button',
+  },
 };
 
 export default meta;

@@ -25,10 +25,14 @@ async function captureOne(template: string): Promise<unknown> {
 
 async function capture(): Promise<Record<string, unknown>> {
   return {
-    info: await captureOne('<atl-alert variant="info">Session expires soon</atl-alert>'),
-    danger: await captureOne('<atl-alert variant="danger">Session expires soon</atl-alert>'),
+    info: await captureOne(
+      '<atl-alert variant="info">Session expires soon</atl-alert>',
+    ),
+    danger: await captureOne(
+      '<atl-alert variant="danger">Session expires soon</atl-alert>',
+    ),
     dismissible: await captureOne(
-      '<atl-alert variant="info" [dismissible]="true">Session expires soon</atl-alert>'
+      '<atl-alert variant="info" [dismissible]="true">Session expires soon</atl-alert>',
     ),
   };
 }

@@ -12,7 +12,11 @@ import {
   signal,
 } from '@angular/core';
 import { CdkAccordion, CdkAccordionItem } from '@angular/cdk/accordion';
-import { ATL_ACCORDION_GROUP, type AccordionItem, type AtlAccordionGroupContext } from './atl-accordion.token';
+import {
+  ATL_ACCORDION_GROUP,
+  type AccordionItem,
+  type AtlAccordionGroupContext,
+} from './atl-accordion.token';
 import { AtlIcon } from '../icon/atl-icon';
 
 let nextId = 0;
@@ -52,7 +56,9 @@ export class AtlAccordionGroup implements AtlAccordionGroupContext {
   readonly variant = input<'default' | 'bordered' | 'separated'>('default');
 
   /** @internal */
-  protected readonly hostClasses = computed(() => `atl-accordion-group variant-${this.variant()}`);
+  protected readonly hostClasses = computed(
+    () => `atl-accordion-group variant-${this.variant()}`,
+  );
 
   /** @internal */
   get hostClassesValue(): string {
@@ -128,7 +134,11 @@ export class AtlAccordionHeader {}
   changeDetection: ChangeDetectionStrategy.OnPush,
   hostDirectives: [CdkAccordionItem],
   template: `
-    <div role="heading" [attr.aria-level]="headingLevel()" class="accordion-heading">
+    <div
+      role="heading"
+      [attr.aria-level]="headingLevel()"
+      class="accordion-heading"
+    >
       <button
         type="button"
         class="accordion-trigger"
@@ -141,13 +151,15 @@ export class AtlAccordionHeader {}
         (keydown)="onKeydown($event)"
       >
         <ng-content select="[atlAccordionHeader]" />
-        <atl-icon name="chevron-down" size="sm" class="chevron" [class.is-expanded]="isExpandedValue" />
+        <atl-icon
+          name="chevron-down"
+          size="sm"
+          class="chevron"
+          [class.is-expanded]="isExpandedValue"
+        />
       </button>
     </div>
-    <div
-      class="accordion-panel-wrapper"
-      [class.is-expanded]="isExpandedValue"
-    >
+    <div class="accordion-panel-wrapper" [class.is-expanded]="isExpandedValue">
       <div
         role="region"
         [id]="panelId"
@@ -242,7 +254,9 @@ export class AtlAccordionItem implements AccordionItem, OnInit, OnDestroy {
 
   /** @internal — for FocusKeyManager */
   focus(): void {
-    this.el.nativeElement.querySelector<HTMLButtonElement>('.accordion-trigger')?.focus();
+    this.el.nativeElement
+      .querySelector<HTMLButtonElement>('.accordion-trigger')
+      ?.focus();
   }
 
   /** @internal */

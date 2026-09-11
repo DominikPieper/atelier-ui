@@ -4,7 +4,8 @@ import AtlToastProvider from './atl-toast-provider.vue';
 import AtlToastContainer from './atl-toast-container.vue';
 import { useAtlToast } from './atl-toast';
 
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };

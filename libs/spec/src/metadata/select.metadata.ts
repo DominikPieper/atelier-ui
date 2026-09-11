@@ -16,11 +16,13 @@ export const metadata: ComponentMetadata = {
     },
     {
       pattern: 'Showing every option inline so users can compare them.',
-      useInstead: 'AtlRadioGroup — keeps the choices visible without an open/close step.',
+      useInstead:
+        'AtlRadioGroup — keeps the choices visible without an open/close step.',
     },
     {
       pattern: 'Triggering navigation when an option is picked.',
-      useInstead: 'A menu of links — a select implies a form value, not a route change.',
+      useInstead:
+        'A menu of links — a select implies a form value, not a route change.',
     },
   ],
   relatedComponents: ['AtlRadioGroupSpec', 'AtlComboboxSpec'],

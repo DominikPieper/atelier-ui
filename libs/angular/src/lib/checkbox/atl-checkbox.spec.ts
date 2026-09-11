@@ -8,7 +8,9 @@ describe('AtlCheckbox', () => {
     const { container } = await render('<atl-checkbox>Label</atl-checkbox>', {
       imports: [AtlCheckbox],
     });
-    expect(container.querySelector('input[type="checkbox"]')).toBeInTheDocument();
+    expect(
+      container.querySelector('input[type="checkbox"]'),
+    ).toBeInTheDocument();
   });
 
   it('is unchecked by default', async () => {
@@ -26,40 +28,51 @@ describe('AtlCheckbox', () => {
   });
 
   describe('checked state', () => {
-    covers('checkbox', 'reflects-checked')('reflects checked=true via attribute', async () => {
-      const { container } = await render(
-        '<atl-checkbox [checked]="true">Label</atl-checkbox>',
-        { imports: [AtlCheckbox] }
-      );
-      expect(container.querySelector('input[type="checkbox"]')).toBeChecked();
-    });
+    covers('checkbox', 'reflects-checked')(
+      'reflects checked=true via attribute',
+      async () => {
+        const { container } = await render(
+          '<atl-checkbox [checked]="true">Label</atl-checkbox>',
+          { imports: [AtlCheckbox] },
+        );
+        expect(container.querySelector('input[type="checkbox"]')).toBeChecked();
+      },
+    );
 
     it('applies is-checked class when checked', async () => {
       const { container } = await render(
         '<atl-checkbox [checked]="true">Label</atl-checkbox>',
-        { imports: [AtlCheckbox] }
+        { imports: [AtlCheckbox] },
       );
       expect(container.querySelector('atl-checkbox')).toHaveClass('is-checked');
     });
 
-    covers('checkbox', 'toggle-emits')('toggles checked when clicked', async () => {
-      const user = userEvent.setup();
-      const { container } = await render('<atl-checkbox>Label</atl-checkbox>', {
-        imports: [AtlCheckbox],
-      });
-      const input = container.querySelector('input[type="checkbox"]') as HTMLInputElement;
-      await user.click(input);
-      expect(input).toBeChecked();
-      await user.click(input);
-      expect(input).not.toBeChecked();
-    });
+    covers('checkbox', 'toggle-emits')(
+      'toggles checked when clicked',
+      async () => {
+        const user = userEvent.setup();
+        const { container } = await render(
+          '<atl-checkbox>Label</atl-checkbox>',
+          {
+            imports: [AtlCheckbox],
+          },
+        );
+        const input = container.querySelector(
+          'input[type="checkbox"]',
+        ) as HTMLInputElement;
+        await user.click(input);
+        expect(input).toBeChecked();
+        await user.click(input);
+        expect(input).not.toBeChecked();
+      },
+    );
   });
 
   describe('disabled state', () => {
     covers('checkbox', 'disabled')('disables the native input', async () => {
       const { container } = await render(
         '<atl-checkbox [disabled]="true">Label</atl-checkbox>',
-        { imports: [AtlCheckbox] }
+        { imports: [AtlCheckbox] },
       );
       expect(container.querySelector('input[type="checkbox"]')).toBeDisabled();
     });
@@ -67,28 +80,32 @@ describe('AtlCheckbox', () => {
     it('applies is-disabled class to host', async () => {
       const { container } = await render(
         '<atl-checkbox [disabled]="true">Label</atl-checkbox>',
-        { imports: [AtlCheckbox] }
+        { imports: [AtlCheckbox] },
       );
-      expect(container.querySelector('atl-checkbox')).toHaveClass('is-disabled');
+      expect(container.querySelector('atl-checkbox')).toHaveClass(
+        'is-disabled',
+      );
     });
   });
 
   describe('invalid state', () => {
-    covers('checkbox', 'invalid')('sets aria-invalid on native input', async () => {
-      const { container } = await render(
-        '<atl-checkbox [invalid]="true">Label</atl-checkbox>',
-        { imports: [AtlCheckbox] }
-      );
-      expect(container.querySelector('input[type="checkbox"]')).toHaveAttribute(
-        'aria-invalid',
-        'true'
-      );
-    });
+    covers('checkbox', 'invalid')(
+      'sets aria-invalid on native input',
+      async () => {
+        const { container } = await render(
+          '<atl-checkbox [invalid]="true">Label</atl-checkbox>',
+          { imports: [AtlCheckbox] },
+        );
+        expect(
+          container.querySelector('input[type="checkbox"]'),
+        ).toHaveAttribute('aria-invalid', 'true');
+      },
+    );
 
     it('applies is-invalid class to host', async () => {
       const { container } = await render(
         '<atl-checkbox [invalid]="true">Label</atl-checkbox>',
-        { imports: [AtlCheckbox] }
+        { imports: [AtlCheckbox] },
       );
       expect(container.querySelector('atl-checkbox')).toHaveClass('is-invalid');
     });
@@ -97,9 +114,9 @@ describe('AtlCheckbox', () => {
       const { container } = await render('<atl-checkbox>Label</atl-checkbox>', {
         imports: [AtlCheckbox],
       });
-      expect(container.querySelector('input[type="checkbox"]')).not.toHaveAttribute(
-        'aria-invalid'
-      );
+      expect(
+        container.querySelector('input[type="checkbox"]'),
+      ).not.toHaveAttribute('aria-invalid');
     });
   });
 
@@ -107,11 +124,11 @@ describe('AtlCheckbox', () => {
     it('sets aria-required when required', async () => {
       const { container } = await render(
         '<atl-checkbox [required]="true">Label</atl-checkbox>',
-        { imports: [AtlCheckbox] }
+        { imports: [AtlCheckbox] },
       );
       expect(container.querySelector('input[type="checkbox"]')).toHaveAttribute(
         'aria-required',
-        'true'
+        'true',
       );
     });
 
@@ -119,9 +136,9 @@ describe('AtlCheckbox', () => {
       const { container } = await render('<atl-checkbox>Label</atl-checkbox>', {
         imports: [AtlCheckbox],
       });
-      expect(container.querySelector('input[type="checkbox"]')).not.toHaveAttribute(
-        'aria-required'
-      );
+      expect(
+        container.querySelector('input[type="checkbox"]'),
+      ).not.toHaveAttribute('aria-required');
     });
   });
 
@@ -131,7 +148,9 @@ describe('AtlCheckbox', () => {
       const { container } = await render('<atl-checkbox>Label</atl-checkbox>', {
         imports: [AtlCheckbox],
       });
-      const input = container.querySelector('input[type="checkbox"]') as HTMLInputElement;
+      const input = container.querySelector(
+        'input[type="checkbox"]',
+      ) as HTMLInputElement;
       await user.click(input);
       await user.tab();
       expect(container.querySelector('atl-checkbox')).toHaveClass('is-touched');
@@ -141,7 +160,9 @@ describe('AtlCheckbox', () => {
       const { container } = await render('<atl-checkbox>Label</atl-checkbox>', {
         imports: [AtlCheckbox],
       });
-      expect(container.querySelector('atl-checkbox')).not.toHaveClass('is-touched');
+      expect(container.querySelector('atl-checkbox')).not.toHaveClass(
+        'is-touched',
+      );
     });
   });
 
@@ -157,27 +178,32 @@ describe('AtlCheckbox', () => {
           componentProperties: {
             errors: [{ kind: 'required', message: 'This field is required' }],
           },
-        }
+        },
       );
       expect(container.querySelector('.errors')).toBeInTheDocument();
     });
 
-    covers('checkbox', 'errors')('shows errors when touched and invalid', async () => {
-      const user = userEvent.setup();
-      const { container } = await render(
-        '<atl-checkbox [invalid]="true" [errors]="errors">Label</atl-checkbox>',
-        {
-          imports: [AtlCheckbox],
-          componentProperties: {
-            errors: [{ kind: 'required', message: 'This field is required' }],
+    covers('checkbox', 'errors')(
+      'shows errors when touched and invalid',
+      async () => {
+        const user = userEvent.setup();
+        const { container } = await render(
+          '<atl-checkbox [invalid]="true" [errors]="errors">Label</atl-checkbox>',
+          {
+            imports: [AtlCheckbox],
+            componentProperties: {
+              errors: [{ kind: 'required', message: 'This field is required' }],
+            },
           },
-        }
-      );
-      const input = container.querySelector('input[type="checkbox"]') as HTMLInputElement;
-      await user.click(input);
-      await user.tab();
-      expect(screen.getByText('This field is required')).toBeInTheDocument();
-    });
+        );
+        const input = container.querySelector(
+          'input[type="checkbox"]',
+        ) as HTMLInputElement;
+        await user.click(input);
+        await user.tab();
+        expect(screen.getByText('This field is required')).toBeInTheDocument();
+      },
+    );
 
     it('links aria-describedby to error container when errors visible', async () => {
       const user = userEvent.setup();
@@ -188,9 +214,11 @@ describe('AtlCheckbox', () => {
           componentProperties: {
             errors: [{ kind: 'required', message: 'Required' }],
           },
-        }
+        },
       );
-      const input = container.querySelector('input[type="checkbox"]') as HTMLInputElement;
+      const input = container.querySelector(
+        'input[type="checkbox"]',
+      ) as HTMLInputElement;
       await user.click(input);
       await user.tab();
 
@@ -207,9 +235,11 @@ describe('AtlCheckbox', () => {
           componentProperties: {
             errors: [{ kind: 'required', message: 'Required' }],
           },
-        }
+        },
       );
-      expect(container.querySelector('input[type="checkbox"]')).toHaveAttribute('aria-describedby');
+      expect(container.querySelector('input[type="checkbox"]')).toHaveAttribute(
+        'aria-describedby',
+      );
     });
   });
 
@@ -217,11 +247,11 @@ describe('AtlCheckbox', () => {
     it('sets name on native input', async () => {
       const { container } = await render(
         '<atl-checkbox name="terms">Label</atl-checkbox>',
-        { imports: [AtlCheckbox] }
+        { imports: [AtlCheckbox] },
       );
       expect(container.querySelector('input[type="checkbox"]')).toHaveAttribute(
         'name',
-        'terms'
+        'terms',
       );
     });
 
@@ -230,26 +260,33 @@ describe('AtlCheckbox', () => {
         imports: [AtlCheckbox],
       });
       expect(
-        container.querySelector('input[type="checkbox"]')
+        container.querySelector('input[type="checkbox"]'),
       ).not.toHaveAttribute('name');
     });
   });
 
   describe('indeterminate state', () => {
-    covers('checkbox', 'indeterminate')('sets the indeterminate DOM property when true', async () => {
-      const { container } = await render(
-        '<atl-checkbox [indeterminate]="true">Label</atl-checkbox>',
-        { imports: [AtlCheckbox] }
-      );
-      const input = container.querySelector('input[type="checkbox"]') as HTMLInputElement;
-      expect(input.indeterminate).toBe(true);
-    });
+    covers('checkbox', 'indeterminate')(
+      'sets the indeterminate DOM property when true',
+      async () => {
+        const { container } = await render(
+          '<atl-checkbox [indeterminate]="true">Label</atl-checkbox>',
+          { imports: [AtlCheckbox] },
+        );
+        const input = container.querySelector(
+          'input[type="checkbox"]',
+        ) as HTMLInputElement;
+        expect(input.indeterminate).toBe(true);
+      },
+    );
 
     it('does not set indeterminate by default', async () => {
       const { container } = await render('<atl-checkbox>Label</atl-checkbox>', {
         imports: [AtlCheckbox],
       });
-      const input = container.querySelector('input[type="checkbox"]') as HTMLInputElement;
+      const input = container.querySelector(
+        'input[type="checkbox"]',
+      ) as HTMLInputElement;
       expect(input.indeterminate).toBe(false);
     });
   });

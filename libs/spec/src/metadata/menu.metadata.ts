@@ -13,22 +13,22 @@ export const metadata: ComponentMetadata = {
   antiPatterns: [
     {
       pattern: 'Letting the user pick a value to fill a form field.',
-      useInstead: 'AtlSelect or AtlCombobox — those carry the right form-control semantics and value state.',
+      useInstead:
+        'AtlSelect or AtlCombobox — those carry the right form-control semantics and value state.',
     },
     {
       pattern: 'Hosting site-level navigation links.',
-      useInstead: 'A real nav with `<a>` links — menus are for actions, navigation is for changing location.',
+      useInstead:
+        'A real nav with `<a>` links — menus are for actions, navigation is for changing location.',
     },
     {
       pattern: 'Anchoring a persistent side panel of filters or controls.',
-      useInstead: 'AtlDrawer — drawers stay open and anchor to a screen edge; menus are transient.',
+      useInstead:
+        'AtlDrawer — drawers stay open and anchor to a screen edge; menus are transient.',
     },
   ],
   relatedComponents: ['AtlButtonSpec', 'AtlSelectSpec', 'AtlDrawerSpec'],
-  variantMatrix: [
-    { variant: 'default' },
-    { variant: 'compact' },
-  ],
+  variantMatrix: [{ variant: 'default' }, { variant: 'compact' }],
   accessibility: {
     role: 'menu',
     keyboardBehavior:

@@ -32,10 +32,15 @@ const MenuFixture = {
 };
 
 describe('AtlMenu', () => {
-  covers('menu', 'variant-class')('applies the variant class to the menu', () => {
-    const { container } = render(AtlMenu, { props: { variant: 'compact' } });
-    expect(container.querySelector('[role="menu"]')).toHaveClass('variant-compact');
-  });
+  covers('menu', 'variant-class')(
+    'applies the variant class to the menu',
+    () => {
+      const { container } = render(AtlMenu, { props: { variant: 'compact' } });
+      expect(container.querySelector('[role="menu"]')).toHaveClass(
+        'variant-compact',
+      );
+    },
+  );
 });
 
 describe('AtlMenuTrigger', () => {
@@ -51,13 +56,16 @@ describe('AtlMenuTrigger', () => {
     expect(screen.getByRole('menu')).toBeInTheDocument();
   });
 
-  covers('menu', 'close-on-item-click')('hides menu after clicking a menu item', async () => {
-    const user = userEvent.setup();
-    render(MenuFixture);
-    await user.click(screen.getByRole('button', { name: 'Open Menu' }));
-    await user.click(screen.getByRole('menuitem', { name: 'Copy' }));
-    expect(screen.queryByRole('menu')).not.toBeInTheDocument();
-  });
+  covers('menu', 'close-on-item-click')(
+    'hides menu after clicking a menu item',
+    async () => {
+      const user = userEvent.setup();
+      render(MenuFixture);
+      await user.click(screen.getByRole('button', { name: 'Open Menu' }));
+      await user.click(screen.getByRole('menuitem', { name: 'Copy' }));
+      expect(screen.queryByRole('menu')).not.toBeInTheDocument();
+    },
+  );
 
   it('closes menu on Escape key', async () => {
     const user = userEvent.setup();
@@ -75,11 +83,14 @@ describe('AtlMenuTrigger', () => {
     expect(container.querySelector('.atl-menu-separator')).toBeInTheDocument();
   });
 
-  covers('menu', 'disabled-item')('disabled menu item cannot be triggered', async () => {
-    const user = userEvent.setup();
-    render(MenuFixture);
-    await user.click(screen.getByRole('button', { name: 'Open Menu' }));
-    const deleteBtn = screen.getByRole('menuitem', { name: 'Delete' });
-    expect(deleteBtn).toBeDisabled();
-  });
+  covers('menu', 'disabled-item')(
+    'disabled menu item cannot be triggered',
+    async () => {
+      const user = userEvent.setup();
+      render(MenuFixture);
+      await user.click(screen.getByRole('button', { name: 'Open Menu' }));
+      const deleteBtn = screen.getByRole('menuitem', { name: 'Delete' });
+      expect(deleteBtn).toBeDisabled();
+    },
+  );
 });

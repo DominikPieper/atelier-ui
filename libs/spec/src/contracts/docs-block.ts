@@ -56,10 +56,7 @@ type UseOfMetaResult = {
   preparedMeta: { parameters: Record<string, unknown> };
 };
 type Blocks = {
-  useOf: (
-    moduleExportOrType: 'meta',
-    validTypes?: ['meta'],
-  ) => UseOfMetaResult;
+  useOf: (moduleExportOrType: 'meta', validTypes?: ['meta']) => UseOfMetaResult;
   Title: ComponentType<Record<string, never>>;
   Subtitle: ComponentType<Record<string, never>>;
   Description: ComponentType<{ of?: string }>;
@@ -197,7 +194,11 @@ function renderProbes(
       listItem(e.part, [
         createElement('code', { style: styles.code, key: 'part' }, e.part),
         ' via ',
-        createElement('code', { style: styles.code, key: 'selector' }, e.selector),
+        createElement(
+          'code',
+          { style: styles.code, key: 'selector' },
+          e.selector,
+        ),
         ': ',
         e.reason,
         isUnexplained(e.reason) ? unexplainedMarker() : null,
@@ -277,13 +278,21 @@ export function ContractBlock(): ReactElement | null {
         { style: styles.subheading, key: 'axis-map-h' },
         'Axis map',
       ),
-      createElement(Fragment, { key: 'axis-map' }, renderAxisMap(contract.axisMap)),
+      createElement(
+        Fragment,
+        { key: 'axis-map' },
+        renderAxisMap(contract.axisMap),
+      ),
     );
   }
 
   if (contract.probes?.length) {
     parts.push(
-      createElement('h4', { style: styles.subheading, key: 'probes-h' }, 'Probes'),
+      createElement(
+        'h4',
+        { style: styles.subheading, key: 'probes-h' },
+        'Probes',
+      ),
       createElement(Fragment, { key: 'probes' }, renderProbes(contract.probes)),
     );
   }

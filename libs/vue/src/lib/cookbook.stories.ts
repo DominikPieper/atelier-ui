@@ -42,13 +42,17 @@ import AtlTooltip from './tooltip/atl-tooltip.vue';
 // ---------------------------------------------------------------------------
 
 const S = {
-  wrapper: (w: number) => `max-width:${w}px;margin:0 auto;padding:var(--ui-spacing-6);`,
+  wrapper: (w: number) =>
+    `max-width:${w}px;margin:0 auto;padding:var(--ui-spacing-6);`,
   stack: 'display:flex;flex-direction:column;',
-  title: 'margin:0;font-size:1.25rem;font-weight:600;color:var(--ui-color-text);',
-  subtitle: 'margin:var(--ui-spacing-1) 0 0;font-size:0.875rem;color:var(--ui-color-text-muted);',
+  title:
+    'margin:0;font-size:1.25rem;font-weight:600;color:var(--ui-color-text);',
+  subtitle:
+    'margin:var(--ui-spacing-1) 0 0;font-size:0.875rem;color:var(--ui-color-text-muted);',
   fieldLabel: 'font-size:0.875rem;font-weight:500;color:var(--ui-color-text);',
   formField: 'display:flex;flex-direction:column;gap:var(--ui-spacing-1);',
-  panelTitle: 'margin:0;font-size:1rem;font-weight:600;color:var(--ui-color-text);',
+  panelTitle:
+    'margin:0;font-size:1rem;font-weight:600;color:var(--ui-color-text);',
 };
 
 // ---------------------------------------------------------------------------
@@ -351,18 +355,77 @@ const notificationTemplate = `
 // ---------------------------------------------------------------------------
 
 const metrics = [
-  { label: 'Active users', value: '8,412', delta: '+12%', deltaVariant: 'success', foot: 'vs. previous period' },
-  { label: 'Sessions', value: '24,390', delta: '+4%', deltaVariant: 'success', foot: 'vs. previous period' },
-  { label: 'Revenue', value: '$42,108', delta: '-2%', deltaVariant: 'danger', foot: 'vs. previous period' },
-  { label: 'Avg. response', value: '184 ms', delta: '+18 ms', deltaVariant: 'warning', foot: 'P95 across edge nodes' },
+  {
+    label: 'Active users',
+    value: '8,412',
+    delta: '+12%',
+    deltaVariant: 'success',
+    foot: 'vs. previous period',
+  },
+  {
+    label: 'Sessions',
+    value: '24,390',
+    delta: '+4%',
+    deltaVariant: 'success',
+    foot: 'vs. previous period',
+  },
+  {
+    label: 'Revenue',
+    value: '$42,108',
+    delta: '-2%',
+    deltaVariant: 'danger',
+    foot: 'vs. previous period',
+  },
+  {
+    label: 'Avg. response',
+    value: '184 ms',
+    delta: '+18 ms',
+    deltaVariant: 'warning',
+    foot: 'P95 across edge nodes',
+  },
 ];
 
 const activity = [
-  { id: 1, user: 'alex@acme.dev', action: 'Rotated API key', status: 'Success', statusVariant: 'success', time: '2m ago' },
-  { id: 2, user: 'maria@acme.dev', action: 'Invited new member', status: 'Pending', statusVariant: 'warning', time: '14m ago' },
-  { id: 3, user: 'deploy-bot', action: 'Pushed build v3.2.1', status: 'Success', statusVariant: 'success', time: '1h ago' },
-  { id: 4, user: 'lee@acme.dev', action: 'Removed webhook', status: 'Failed', statusVariant: 'danger', time: '2h ago' },
-  { id: 5, user: 'system', action: 'Nightly backup complete', status: 'Success', statusVariant: 'success', time: '6h ago' },
+  {
+    id: 1,
+    user: 'alex@acme.dev',
+    action: 'Rotated API key',
+    status: 'Success',
+    statusVariant: 'success',
+    time: '2m ago',
+  },
+  {
+    id: 2,
+    user: 'maria@acme.dev',
+    action: 'Invited new member',
+    status: 'Pending',
+    statusVariant: 'warning',
+    time: '14m ago',
+  },
+  {
+    id: 3,
+    user: 'deploy-bot',
+    action: 'Pushed build v3.2.1',
+    status: 'Success',
+    statusVariant: 'success',
+    time: '1h ago',
+  },
+  {
+    id: 4,
+    user: 'lee@acme.dev',
+    action: 'Removed webhook',
+    status: 'Failed',
+    statusVariant: 'danger',
+    time: '2h ago',
+  },
+  {
+    id: 5,
+    user: 'system',
+    action: 'Nightly backup complete',
+    status: 'Success',
+    statusVariant: 'success',
+    time: '6h ago',
+  },
 ];
 
 const dashboardTemplate = `
@@ -475,9 +538,15 @@ type Story = StoryObj;
 export const LoginForm: Story = {
   ...LoginFormStory(false),
   play: async ({ canvas }) => {
-    await expect(await canvas.findByRole('heading', { name: 'Sign in' })).toBeVisible();
-    await expect(await canvas.findByRole('button', { name: 'Sign in' })).toBeVisible();
-    await expect(await canvas.findByLabelText('Remember me')).toBeInTheDocument();
+    await expect(
+      await canvas.findByRole('heading', { name: 'Sign in' }),
+    ).toBeVisible();
+    await expect(
+      await canvas.findByRole('button', { name: 'Sign in' }),
+    ).toBeVisible();
+    await expect(
+      await canvas.findByLabelText('Remember me'),
+    ).toBeInTheDocument();
   },
 };
 
@@ -505,8 +574,12 @@ export const SettingsPage: Story = {
     template: settingsTemplate,
   }),
   play: async ({ canvas }) => {
-    await expect(await canvas.findByRole('heading', { name: 'Settings' })).toBeVisible();
-    await expect(await canvas.findByRole('tab', { name: 'Account' })).toBeVisible();
+    await expect(
+      await canvas.findByRole('heading', { name: 'Settings' }),
+    ).toBeVisible();
+    await expect(
+      await canvas.findByRole('tab', { name: 'Account' }),
+    ).toBeVisible();
   },
   parameters: {
     a11y: {
@@ -537,7 +610,9 @@ export const ConfirmationDialog: Story = {
     template: confirmationTemplate,
   }),
   play: async ({ canvas }) => {
-    const trigger = await canvas.findByRole('button', { name: 'Delete account' });
+    const trigger = await canvas.findByRole('button', {
+      name: 'Delete account',
+    });
     await userEvent.click(trigger);
     // Native <dialog> renders to the top-layer outside the Storybook canvas root,
     // so query the whole document via `screen` instead of the scoped `canvas`.
@@ -569,9 +644,13 @@ export const DataListWithActions: Story = {
     template: dataListTemplate,
   }),
   play: async ({ canvas }) => {
-    await expect(await canvas.findByRole('heading', { name: 'Projects' })).toBeVisible();
+    await expect(
+      await canvas.findByRole('heading', { name: 'Projects' }),
+    ).toBeVisible();
     await expect(await canvas.findByText('Marketing Website')).toBeVisible();
-    await expect(await canvas.findByRole('button', { name: 'New project' })).toBeVisible();
+    await expect(
+      await canvas.findByRole('button', { name: 'New project' }),
+    ).toBeVisible();
   },
   parameters: {
     a11y: {
@@ -597,17 +676,42 @@ export const NotificationCenter: Story = {
     },
     setup() {
       const errors = ref([
-        { id: 1, message: 'Database connection failed on replica-3. Automatic failover engaged.' },
-        { id: 2, message: 'Payment processing service returned 503 for 12 transactions.' },
+        {
+          id: 1,
+          message:
+            'Database connection failed on replica-3. Automatic failover engaged.',
+        },
+        {
+          id: 2,
+          message:
+            'Payment processing service returned 503 for 12 transactions.',
+        },
       ]);
       const warnings = ref([
-        { id: 3, message: 'Disk usage on worker-7 is at 89%. Consider scaling storage.' },
-        { id: 4, message: 'SSL certificate for api.example.com expires in 14 days.' },
-        { id: 5, message: 'Rate limiter triggered 230 times in the last hour.' },
+        {
+          id: 3,
+          message:
+            'Disk usage on worker-7 is at 89%. Consider scaling storage.',
+        },
+        {
+          id: 4,
+          message: 'SSL certificate for api.example.com expires in 14 days.',
+        },
+        {
+          id: 5,
+          message: 'Rate limiter triggered 230 times in the last hour.',
+        },
       ]);
       const infos = ref([
-        { id: 6, message: 'Deployment v3.2.1 completed successfully across all regions.' },
-        { id: 7, message: 'Scheduled maintenance window begins Saturday at 02:00 UTC.' },
+        {
+          id: 6,
+          message:
+            'Deployment v3.2.1 completed successfully across all regions.',
+        },
+        {
+          id: 7,
+          message: 'Scheduled maintenance window begins Saturday at 02:00 UTC.',
+        },
       ]);
       const dismissError = (id: number) => {
         errors.value = errors.value.filter((x) => x.id !== id);
@@ -623,13 +727,25 @@ export const NotificationCenter: Story = {
         warnings.value = [];
         infos.value = [];
       };
-      return { errors, warnings, infos, dismissError, dismissWarning, dismissInfo, clearAll };
+      return {
+        errors,
+        warnings,
+        infos,
+        dismissError,
+        dismissWarning,
+        dismissInfo,
+        clearAll,
+      };
     },
     template: notificationTemplate,
   }),
   play: async ({ canvas }) => {
-    await expect(await canvas.findByRole('heading', { name: 'Notifications' })).toBeVisible();
-    await expect(await canvas.findByRole('button', { name: 'Clear all' })).toBeVisible();
+    await expect(
+      await canvas.findByRole('heading', { name: 'Notifications' }),
+    ).toBeVisible();
+    await expect(
+      await canvas.findByRole('button', { name: 'Clear all' }),
+    ).toBeVisible();
     await expect(await canvas.findByText('Errors')).toBeVisible();
   },
 };
@@ -671,8 +787,14 @@ export const ManagementDashboard: Story = {
     },
   },
   play: async ({ canvas }) => {
-    await expect(await canvas.findByRole('heading', { name: 'Operations Overview' })).toBeVisible();
-    await expect(await canvas.findByRole('heading', { name: 'Recent Activity' })).toBeVisible();
-    await expect(await canvas.findByRole('heading', { name: 'Plan Usage' })).toBeVisible();
+    await expect(
+      await canvas.findByRole('heading', { name: 'Operations Overview' }),
+    ).toBeVisible();
+    await expect(
+      await canvas.findByRole('heading', { name: 'Recent Activity' }),
+    ).toBeVisible();
+    await expect(
+      await canvas.findByRole('heading', { name: 'Plan Usage' }),
+    ).toBeVisible();
   },
 };

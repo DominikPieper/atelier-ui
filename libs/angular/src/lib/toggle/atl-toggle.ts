@@ -6,7 +6,10 @@ import {
   model,
 } from '@angular/core';
 import type { FormCheckboxControl } from '@angular/forms/signals';
-import { type ValidationError, type WithOptionalFieldTree } from '@angular/forms/signals';
+import {
+  type ValidationError,
+  type WithOptionalFieldTree,
+} from '@angular/forms/signals';
 
 let nextId = 0;
 
@@ -79,7 +82,9 @@ export class AtlToggle implements FormCheckboxControl {
   readonly name = input('');
 
   /** Validation errors from the form system. Bound by [formField] directive. */
-  readonly errors = input<readonly WithOptionalFieldTree<ValidationError>[]>([]);
+  readonly errors = input<readonly WithOptionalFieldTree<ValidationError>[]>(
+    [],
+  );
 
   /** @internal */
   protected readonly inputId = `atl-toggle-${nextId++}`;
@@ -95,9 +100,7 @@ export class AtlToggle implements FormCheckboxControl {
    * moments depending on the framework. Deciding *when* to pass errors belongs to the
    * form layer, which is where `touched` lives (ADR-0055).
    */
-  protected readonly showErrors = computed(
-    () => this.errors().length > 0
-  );
+  protected readonly showErrors = computed(() => this.errors().length > 0);
 
   /** @internal */
   protected readonly hostClasses = computed(() => {

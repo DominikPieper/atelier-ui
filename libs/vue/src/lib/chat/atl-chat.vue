@@ -19,7 +19,16 @@ export interface AtlChatProps {
 </script>
 
 <script setup lang="ts">
-import { computed, nextTick, provide, ref, toRef, useId, useTemplateRef, watch } from 'vue';
+import {
+  computed,
+  nextTick,
+  provide,
+  ref,
+  toRef,
+  useId,
+  useTemplateRef,
+  watch,
+} from 'vue';
 import './atl-chat.css';
 
 defineOptions({ name: 'AtlChat' });
@@ -39,8 +48,12 @@ const hostRef = useTemplateRef<HTMLDivElement>('hostRef');
 const headerId = useId();
 const statusRef = toRef(props, 'status');
 
-function close() { emit('update:open', false); }
-function toggle() { emit('update:open', !props.open); }
+function close() {
+  emit('update:open', false);
+}
+function toggle() {
+  emit('update:open', !props.open);
+}
 
 provide(AtlChatKey, {
   headerId,
@@ -78,7 +91,9 @@ watch(
   { flush: 'post', immediate: true },
 );
 
-function onDialogClose() { emit('update:open', false); }
+function onDialogClose() {
+  emit('update:open', false);
+}
 function onDialogCancel(event: Event) {
   event.preventDefault();
   emit('update:open', false);

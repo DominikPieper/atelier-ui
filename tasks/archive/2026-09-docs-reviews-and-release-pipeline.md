@@ -26,9 +26,9 @@ their `.docs-inline-page` inside an uncapped `.docs-main-content`. Same 800px
 column, two different anchors → 233px horizontal jump between page types.
 
 | @1600, offset inside `.docs-main` | left | right |
-|---|---|---|
-| no TOC (20 pages) | 265 | 265 |
-| with TOC (7 pages) | 32 | 497 |
+| --------------------------------- | ---- | ----- |
+| no TOC (20 pages)                 | 265  | 265   |
+| with TOC (7 pages)                | 32   | 497   |
 
 Secondary: TOC rail only hides at 768px, so the text column collapses to 617px
 @1200 and 441px @1024. Third: `/mcp` (1000px) and `/components` (1280px) use
@@ -65,16 +65,16 @@ inline styles instead of the shared class → h1 top at 73px / 89px vs 113px.
 
 #### What changed
 
-| File | Change |
-|---|---|
-| `docs/src/styles/global.css` | `.docs-main` is now a two-track grid (`[column][rail]`, `justify-content: center`) with the rail **reserved on every page**. Added `--wide` (1000px, no rail) and `--full` (uncapped, no rail). `.docs-inline-page` lost its `max-width` / auto margins and keeps only padding. `.docs-main--with-toc` is gone. New `@media (max-width: 1383px)` block collapses the rail and shows the in-flow disclosure. |
-| `docs/src/layouts/BaseLayout.astro` | New `width?: 'default' \| 'wide' \| 'full'` prop; `<main>` gets the variant class. |
-| `docs/src/pages/mcp.astro` | `width="wide"`, inline `max-width` div → `.docs-inline-page`, `<McpExplorer>` moved inside it. |
-| `docs/src/components/McpExplorer.tsx` | Island no longer renders `.docs-inline-page`; keeps a spacing-only root. |
-| `docs/src/pages/components/index.astro` | `width="full"`, inline `max-width` div removed. |
-| `docs/src/pages/components/[name].astro`, `docs/src/pages/index.astro` | `width="full"`. |
-| `plan/adr/0086-…md` + `plan/adr/README.md` | Decision recorded. |
-| `tasks/lessons.md` | Five entries, including the breakpoint I mis-derived. |
+| File                                                                   | Change                                                                                                                                                                                                                                                                                                                                                                                                      |
+| ---------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `docs/src/styles/global.css`                                           | `.docs-main` is now a two-track grid (`[column][rail]`, `justify-content: center`) with the rail **reserved on every page**. Added `--wide` (1000px, no rail) and `--full` (uncapped, no rail). `.docs-inline-page` lost its `max-width` / auto margins and keeps only padding. `.docs-main--with-toc` is gone. New `@media (max-width: 1383px)` block collapses the rail and shows the in-flow disclosure. |
+| `docs/src/layouts/BaseLayout.astro`                                    | New `width?: 'default' \| 'wide' \| 'full'` prop; `<main>` gets the variant class.                                                                                                                                                                                                                                                                                                                          |
+| `docs/src/pages/mcp.astro`                                             | `width="wide"`, inline `max-width` div → `.docs-inline-page`, `<McpExplorer>` moved inside it.                                                                                                                                                                                                                                                                                                              |
+| `docs/src/components/McpExplorer.tsx`                                  | Island no longer renders `.docs-inline-page`; keeps a spacing-only root.                                                                                                                                                                                                                                                                                                                                    |
+| `docs/src/pages/components/index.astro`                                | `width="full"`, inline `max-width` div removed.                                                                                                                                                                                                                                                                                                                                                             |
+| `docs/src/pages/components/[name].astro`, `docs/src/pages/index.astro` | `width="full"`.                                                                                                                                                                                                                                                                                                                                                                                             |
+| `plan/adr/0086-…md` + `plan/adr/README.md`                             | Decision recorded.                                                                                                                                                                                                                                                                                                                                                                                          |
+| `tasks/lessons.md`                                                     | Five entries, including the breakpoint I mis-derived.                                                                                                                                                                                                                                                                                                                                                       |
 
 #### Verified (measured, not assumed)
 
@@ -102,7 +102,7 @@ Content-box offset inside `.docs-main`, `/` and `*` = has TOC:
 
 1. **The 124px shift.** Reserving the rail unconditionally is what makes the
    axis single, and it moves the 20 previously centred pages 124px left. It is
-   the deliberate cost of the chosen option, but it *is* a visible change to
+   the deliberate cost of the chosen option, but it _is_ a visible change to
    pages that had no bug of their own.
 2. **A hard breakpoint still jumps on resize.** Crossing 1384px moves the
    column (rail appears, track set re-centres). Every page does it identically,
@@ -110,7 +110,7 @@ Content-box offset inside `.docs-main`, `/` and `*` = has TOC:
    query would have removed it, and one is not expressible here because the
    tracks live on `.docs-main` itself.
 3. **`wide` is 24px off the `default` axis.** `/mcp` centres 1000px with no
-   rail; `default` centres 800px *with* one. Any width variant costs some
+   rail; `default` centres 800px _with_ one. Any width variant costs some
    misalignment; giving `wide` a rail instead made it 100px.
 4. **Vertical rhythm is still not unified.** Horizontal is now exact, but `h1`
    top offsets differ: 113px on PageHero pages, 138px on `/skills/*` (a
@@ -139,16 +139,16 @@ and the window did. ADR-0087.
 
 ### Three dead features, one cause
 
-| | before (scrollY=1200 on `/tokens`) | after |
-|---|---|---|
-| `.docs-toc` sticky | `top: 227 → −973` (scrolls away) | `top: 135 → 92` = `68px + 1.5rem` |
-| scroll-progress bar | `0%` at any position | `20.49%` at y=1000 of 4880 |
-| scroll-to-top button | never visible | visible past 400px |
-| `.docs-sidebar` (sibling, outside the scrollport) | worked | unchanged |
+|                                                   | before (scrollY=1200 on `/tokens`) | after                             |
+| ------------------------------------------------- | ---------------------------------- | --------------------------------- |
+| `.docs-toc` sticky                                | `top: 227 → −973` (scrolls away)   | `top: 135 → 92` = `68px + 1.5rem` |
+| scroll-progress bar                               | `0%` at any position               | `20.49%` at y=1000 of 4880        |
+| scroll-to-top button                              | never visible                      | visible past 400px                |
+| `.docs-sidebar` (sibling, outside the scrollport) | worked                             | unchanged                         |
 
 - [x] `.docs-main` loses `overflow-y: auto` → `.docs-toc` sticks to the viewport
 - [x] `.docs-main-content` gains `overflow-x: auto` → wide content stays
-      contained; works because `.docs-toc` is main's grid *sibling*
+      contained; works because `.docs-toc` is main's grid _sibling_
 - [x] `BaseLayout` scroll handler binds `window`, resolves `#scroll-progress` /
       `#scroll-top` by id per call (one listener, `ClientRouter` swaps `<body>`)
 - [x] Breadcrumb `/skills` 404 → `SEGMENT_LANDING` maps it to `/agent-skills`
@@ -194,13 +194,12 @@ scrollbar sits at the table rather than at the bottom of the whole column.
 There is already a `@media (max-width: 480px)` card transform for these tables;
 the gap is everything between 481px and the reading column's width.
 
-
 ## Open — what the caption fix left unproven (2026-09-05, worked 2026-09-05 pm)
 
 ADR-0091 gave `label` to AtlInput, AtlTextarea and AtlSelect via a new
 `AtlCaptionSpec` mixin, and closed L1. Four follow-ups, all found by
 cross-checking rather than by a gate. Three are closed below; the one that
-remains is the expensive one, and the first item's *premise* turned out to be
+remains is the expensive one, and the first item's _premise_ turned out to be
 wrong in a way worth reading before trusting a "nothing measures this" claim
 again.
 
@@ -209,7 +208,7 @@ again.
       `A11Y_PARITY_EXEMPT` (`tools/scripts/lib/allowlists.js:221-233`) with
       `kind: 'design'`, citing ADR-0007 — React/Vue render a native `<select>`,
       Angular a CDK-overlay listbox, so the trees legitimately differ. The gate
-      enforces that in *both* directions: `check-a11y-parity.js:98-107` raises a
+      enforces that in _both_ directions: `check-a11y-parity.js:98-107` raises a
       `[STALE]` **error** if an exempt component has snapshots at all. Writing
       `atl-select.a11y.spec.*` would therefore break the gate, or force removing
       the exemption and then fail `[DIVERGE]` — normalized, React/Vue collapse to
@@ -231,7 +230,7 @@ again.
       above). Deciding whether Angular should be a native control is the
       expensive question behind it, and wants its own ADR.
 - [x] Follow-up the implementer flagged: the Angular `host: { '[attr.id]':
-      'null' }` / `'[attr.aria-label]': 'null'` defense was hand-copied in three
+'null' }` / `'[attr.aria-label]': 'null'` defense was hand-copied in three
       components with nothing enforcing it. Made structural as a gate, not as a
       shared constant — a constant still has to be remembered, and "someone has
       to remember" was the whole complaint. `check:host-guards` (ADR-0092)
@@ -253,7 +252,7 @@ exemption, and worth remembering the next time one looks like a free pass.
       `atl-select.ts:179` declared `readonly required = input(false)` and nothing
       in the template or host ever read it — `grep -n required` returned exactly
       the doc comment and the declaration. `AtlInput` renders
-      `[attr.aria-required]` from the *identical* doc comment
+      `[attr.aria-required]` from the _identical_ doc comment
       (`atl-input.ts:46`); React and Vue both set the native `required`
       attribute. Fixed on the **host**, not the trigger button:
       `aria-required` is not a global ARIA attribute (allowed on `combobox`,
@@ -261,7 +260,7 @@ exemption, and worth remembering the next time one looks like a free pass.
       on the button's implicit `role="button"` it would be an
       `aria-allowed-attr` violation. The host is the element carrying
       `role="combobox"`. (`aria-invalid` already sits on the button and is
-      fine — that one *is* global.)
+      fine — that one _is_ global.)
 - [ ] **Angular Select's `role="combobox"` is on the host while every combobox
       state and the focus are on the trigger button** — `aria-expanded`,
       `aria-haspopup`, `aria-controls`, `aria-activedescendant` all sit on the
@@ -270,7 +269,6 @@ exemption, and worth remembering the next time one looks like a free pass.
       1.2 combobox pattern. Bigger than a binding move: it changes the
       accessible tree and interacts with the open question above about whether
       Angular should be a native control. Same ADR.
-
 
 ## Nx 23 migration: closed and verified — 2026-09-05
 
@@ -294,12 +292,11 @@ agentic pass on 09-03.
       gates) · `nx run-many -t test` exit 0, 7 projects (Vitest 4) · `-t lint`
       exit 0, 10 projects (flat config) · `-t build` exit 0, 7 projects.
 - Lesson for the next `nx migrate`: delete `migrations.json` when the run ends.
-      A leftover file is indistinguishable from an interrupted run, and re-running
-      it is **not** idempotent across migrations that undo one another.
+  A leftover file is indistinguishable from an interrupted run, and re-running
+  it is **not** idempotent across migrations that undo one another.
 - [ ] Two net-zero commits (`98e8755`, `ac3c854`) stay in history — they cancel
       exactly, and rewriting unpushed history was blocked by the auto-mode
       classifier. Harmless; squash them if the branch is ever rebased anyway.
-
 
 ## Open — 30 parity records are stale again (2026-09-05)
 
@@ -318,7 +315,6 @@ them, which is the whole claim the stamp makes.
       `*.spec.tsx` edit should not invalidate a parity record. See the item under
       "Open — parity drift, after ADR-0082 (2026-08-28)". Decide the order before
       spending 30 bridge round-trips.
-
 
 ## Open — Schulung, second review (2026-09-02)
 
@@ -342,10 +338,9 @@ Full document: `tasks/schulung-review-2026-09-02.md` (4 blockers · 1 immediate 
       adapter the compiler held to the contract. The gate ships green with 55
       `gap` exemptions in 14 groups; each group is an item below.
 
-
 ## Docs site: UI/UX review with `ui-ux-pro-max` — 2026-09-02
 
-Scope: the docs app as a *product surface* (visual, interaction, a11y,
+Scope: the docs app as a _product surface_ (visual, interaction, a11y,
 responsive, motion, navigation) — not the training content, which
 `schulung-review-2026-09-02.md` already covers. Environment: local HEAD on
 `:4300`. Review only in this pass — fixes follow in the agreed order.
@@ -397,6 +392,7 @@ Committed so far: `a8e71b4` B1–B3 · `cd6e93f` review · `bfc4101` M1/M2 ·
 `8484ae5` M5–M7 · `ae70edb` M8–M10. Dev server on `:4300` (background task).
 
 In the working tree, uncommitted, gates not yet run:
+
 - **M12 + n8** done by agent (heading scale 20/18 px, `Live demo` h2 on
   pattern pages, landmark labels) — diff reviewed, OK.
 - **M11** (targets ≥ 24 px) agent was still running at 19:59 — review its
@@ -407,6 +403,7 @@ In the working tree, uncommitted, gates not yet run:
   running — its report drives M3/M4.
 
 Next steps, in order:
+
 1. `nx lint docs` · `nx build docs` · `check:docs` · `check:llms` → commit
    M11 + M12 + n8 as one `fix(docs)` commit.
 2. Batch E (M3 + M4): 4-step docs type scale (12/14/16/18 px), prose 16 px,
@@ -423,6 +420,7 @@ Next steps, in order:
 5. Push once at the end (SSH, direct to main).
 
 **Typography analysis digest (agent, 20:05) — input for Batch E:**
+
 - ~500 sub-1rem `font-size` declarations: ~150 in `global.css`, ~50 in
   `components/*.astro`, ~230 page-scoped (`<style>` + inline `style=`), ~55 in
   `.tsx` inline styles. `docs-theme.css` sets none.
@@ -465,7 +463,6 @@ judge whether that is a defect at all.
 
 **20:20 — the `:4300` dev server was stopped (background task killed). Restart at 23:00 first: `npx nx serve docs` in the background, wait for `ready`.**
 
-
 ## Open — component backlog surfaced by the docs review (L1–L4, 2026-09-03)
 
 Not docs CSS; the docs gate allowlists each with a reason pointing here.
@@ -475,7 +472,6 @@ Not docs CSS; the docs gate allowlists each with a reason pointing here.
 - [ ] **L3** Checkbox/toggle inputs measure 20×20 / 1×1; login-form demo `input[type=email]` under 24 px when the sticky nav overlaps — confirm the label extends the hit area (WCAG 2.5.8).
 - [ ] **L4** `AtlTabs` `variant="pills"` neither wraps nor scrolls at 375 (+19 px on `/patterns*`) — `chip-collection-reflow`.
 - [ ] `AtlCodeBlock`'s scroller has no focusable content (axe `scrollable-region-focusable` on `/components/code-block`).
-
 
 ## Open — what `check:props` found on its first run (2026-09-05)
 
@@ -491,7 +487,7 @@ editing the gate.
       `readonly` (`libs/spec/src/index.ts:121`), Angular (`atl-input.ts:120`) and
       Vue (`atl-input.vue:15`) agree; React `Omit`s the HTML attribute
       (`atl-input.tsx:10`) to redeclare `readOnly` at `:39`. **Correction to what
-      this file said first:** the lowercase prop is *not* inert — all three React
+      this file said first:** the lowercase prop is _not_ inert — all three React
       components destructure both and merge them (`:53-54`, then `:61`
       `reactReadOnly ?? specReadOnly ?? false`), so `readonly` works as a
       fallback that a passed `readOnly` shadows. The real defect is that only the
@@ -502,7 +498,7 @@ editing the gate.
       rename — its own ADR, and it wants a release note. Affects Input, Textarea,
       RadioGroup.
 - [x] **Withdrawn — `AtlRadioGroup.name` was a false positive of the gate's own
-      `[DEAD]` rule.** It *is* wired: `atl-radio-group.token.ts:14` declares
+      `[DEAD]` rule.** It _is_ wired: `atl-radio-group.token.ts:14` declares
       `name: Signal<string>` on the context, the component is provided as
       `useExisting: AtlRadioGroup`, and `atl-radio.ts:75,38` reads
       `group?.name()` into `[attr.name]` — asserted by passing tests in
@@ -587,7 +583,6 @@ editing the gate.
       the contract**, which is the root-cause fix the gate only detects around.
       Angular cannot — signal inputs are class fields, not a props object.
 
-
 ## Open — the release pipeline published nothing for a week (2026-09-05)
 
 Found by falling back to `gh` after the Nx MCP's CI tools turned out to need Nx
@@ -599,10 +594,10 @@ nothing in the repo would have shown it.
   published **2026-08-29**
   (`npm view @atelier-ui/react time`). The libs' `package.json` say **0.2.33**.
   Six releases bumped versions, wrote changelogs, committed `chore(release):
-  publish` and pushed without reaching the registry.
+publish` and pushed without reaching the registry.
 - Every publish run with a real bump fails the same way: `PUT
-  https://registry.npmjs.org/@atelier-ui%2fangular - Not found` … `could not be
-  found or you do not have permission to access it`. A 404 on PUT for a scoped
+https://registry.npmjs.org/@atelier-ui%2fangular - Not found` … `could not be
+found or you do not have permission to access it`. A 404 on PUT for a scoped
   package is npm's mask for missing publish rights. The green Publish runs in
   between are no-ops — without a bump `nx release --yes` skips publishing and
   exits 0.

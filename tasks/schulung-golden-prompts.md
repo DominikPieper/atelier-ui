@@ -1,11 +1,11 @@
 # Golden-Prompts — trainer cheat sheet
 
 **What this is.** Ready-to-paste prompts for the three blocks that need them —
-`schulung-2tage-agenda.md`'s Material-Lücken table names this exact gap: *"Trainer-
+`schulung-2tage-agenda.md`'s Material-Lücken table names this exact gap: _"Trainer-
 Spickzettel mit Golden-Prompts: typische Fehler / Prompts pro Block (Tag 1 Block 5, Tag
-2 Block 3 und 4)."* `docs/src/pages/schulung.astro` (Tag 2, Block 03) instructs
-participants to use it: *"Token-Treue erzwingen: Golden-Prompts verlangen `--ui-*`
-Custom Properties."* Neither page carried the actual prompts before this file existed.
+2 Block 3 und 4)."_ `docs/src/pages/schulung.astro` (Tag 2, Block 03) instructs
+participants to use it: _"Token-Treue erzwingen: Golden-Prompts verlangen `--ui-*`
+Custom Properties."_ Neither page carried the actual prompts before this file existed.
 
 **Not a substitute for this: `docs/src/pages/prompts.astro`.** Checked directly before
 writing this — its eight cards (`Chat interface`, `Login form`, `Stats dashboard`, …)
@@ -16,14 +16,14 @@ prop, or fixes a wrong slot — the granularity this sheet needs does not exist 
 else in the repo. It borrows one convention from that page (fetch the API reference /
 handoff document first, then generate) and stops there. The agenda's Material-Lücken
 row says this sheet is "abgeleitet aus `docs/src/pages/prompts.astro`" — read literally,
-that overstates it; what actually transfers is the *convention*, not the *content*, and
+that overstates it; what actually transfers is the _convention_, not the _content_, and
 that row now points here instead.
 
 **Where this lives, and why not `/schulung`.** This is trainer prep, read before or
 during a live session, not participant-facing curriculum — the same standing as
 `tasks/schulung-dry-run-kit.md` and the three `tasks/schulung-review-*.md` files it
 sits beside. `tasks/schulung-review-2026-09-02.md` §6.3 recommended eventually moving
-*all* trainer-only material to a separate private repo; that repo does not exist and
+_all_ trainer-only material to a separate private repo; that repo does not exist and
 building one is out of scope here. What that same review's §7 table actually gates on
 is personal data and credential/contingency admissions (I1: two colleagues' names and
 an internal mailbox) — explicitly **not** a blanket ban on trainer content in `tasks/`;
@@ -42,7 +42,7 @@ below was checked against `libs/spec/src/index.ts`, `libs/{angular,react,vue}/sr
 token file, ADR-0115/ADR-0116) and the four `workshop/briefs/*.md` files, on
 2026-09-10. §5 lists exactly what was checked and what got cut for being unverifiable.
 Per ADR-0116: names below are the stable part and are cited as fact; a couple of
-current *values* (e.g. a specific px number) are deliberately not repeated here for the
+current _values_ (e.g. a specific px number) are deliberately not repeated here for the
 same reason ADR-0116 gives — read them fresh from `tokens.css` at prompt time rather
 than trusting a number that was correct on 2026-09-10.
 
@@ -77,8 +77,8 @@ than trusting a number that was correct on 2026-09-10.
 
 The generation prompt for this block already exists and is live — `examplePrompt` in
 `docs/src/pages/tutorial.astro` (mirrored in `/first-component`), which composes
-`AtlCard`/`AtlInput`/`AtlToggle`/`AtlButton` and explicitly tells Claude to pull *"the
-exact token names from `boundVariables`… no conversion needed."* Do not re-type it here —
+`AtlCard`/`AtlInput`/`AtlToggle`/`AtlButton` and explicitly tells Claude to pull _"the
+exact token names from `boundVariables`… no conversion needed."_ Do not re-type it here —
 that is exactly the mistake ADR-0116 corrects elsewhere (a hand-copied restatement of a
 value that already has a live source). Point participants at the page.
 
@@ -123,15 +123,15 @@ already use exactly these four token names for exactly these four properties.)
 >    `shadow-*`) — this library has no Tailwind dependency anywhere in it.
 > 3. **Compose structurally, don't flatten.** If the component has more than one
 >    logical region (a header/body/footer, a viewport/container split, an icon + label
->    + action), give each region its own sub-component or the framework's own slot
->    mechanism — the same pattern `AtlCard`/`AtlCardHeader`/`AtlCardContent`/
->    `AtlCardFooter` and `AtlDialog`/`AtlDialogHeader`/`AtlDialogContent`/
->    `AtlDialogFooter` already use in this repo, identically in all three frameworks:
->    Angular content projection (`<ng-content>`) plus a named `atl-<name>-<region>`
->    element per region; React a named function export per region, content via
->    `children`; Vue a named SFC export per region, content via the default `<slot />`.
->    Do not dump every region into one flat prop bag or one undifferentiated block of
->    children.
+>    - action), give each region its own sub-component or the framework's own slot
+>      mechanism — the same pattern `AtlCard`/`AtlCardHeader`/`AtlCardContent`/
+>      `AtlCardFooter` and `AtlDialog`/`AtlDialogHeader`/`AtlDialogContent`/
+>      `AtlDialogFooter` already use in this repo, identically in all three frameworks:
+>      Angular content projection (`<ng-content>`) plus a named `atl-<name>-<region>`
+>      element per region; React a named function export per region, content via
+>      `children`; Vue a named SFC export per region, content via the default `<slot />`.
+>      Do not dump every region into one flat prop bag or one undifferentiated block of
+>      children.
 > 4. **Every icon-only control gets a real accessible name.** Follow `AtlIconSpec`'s own
 >    pattern (`libs/spec/src/index.ts`): a `label` prop that's absent by default — the
 >    icon is decorative unless a name is explicitly supplied — and `AtlButton`'s own
@@ -162,8 +162,8 @@ in this repo's own prompt-context document. An earlier draft of `plan/big-pictur
 gave `AtlToggle` a `variant` input in its worked example. The shipped `AtlToggleSpec`
 (`libs/spec/src/index.ts:172-175`) never carried one — only `checked`, `onCheckedChange`
 plus the shared form-field fields (`disabled`, `invalid`, `required`, `name`). The
-current file's own correction note reads: *"An earlier draft of this example invented
-one; cut rather than carried forward."* That is the exact shape of mistake this prompt
+current file's own correction note reads: _"An earlier draft of this example invented
+one; cut rather than carried forward."_ That is the exact shape of mistake this prompt
 corrects, verified against the file it happened in.
 
 ### 2.3 Correction — missing token
@@ -175,7 +175,7 @@ Use when Claude hardcodes a value instead of reaching for a `--ui-*` custom prop
 > `libs/create-workspace/src/generators/preset/files/styles/tokens.css` (the canonical
 > token file) for the matching name — don't guess one. If this is elevation/shadow:
 > there is no `shadow/*` Figma variable in `Library Tokens` at all — every brief in this
-> workshop says so explicitly — so elevation is *always* CSS-only: `var(--ui-shadow-lg)`
+> workshop says so explicitly — so elevation is _always_ CSS-only: `var(--ui-shadow-lg)`
 > for a floating surface (a toast), `var(--ui-shadow-md)` for a raised one (an elevated
 > card). Never a literal `box-shadow` value, never `none` where the design calls for
 > elevation.
@@ -201,12 +201,12 @@ owns it.
 **Per-brief grounding — each brief already names one real Figma↔code mismatch of
 exactly this shape (§5 of each), quoted directly rather than invented:**
 
-| Component | Drawn/typed as (wrong) | Belongs as (right) | Source |
-|---|---|---|---|
-| Toast | An inline link "Undo" inside the body text | A Button in the `action` slot | `workshop/briefs/toast.md` §5 |
-| Avatar | "Avatar (image)" and "Avatar (initials)" as two separate components | One component with a runtime fallback chain (`image` → `initials` → `icon`) | `workshop/briefs/avatar.md` §5 |
-| TagChip | Static text-with-border decoration, no real control | A live element with a real `<button>` remove control that's part of the form value | `workshop/briefs/tagchip.md` §5 |
-| StatCard | A card stacked on top of an invisible button component | One `<a>`/`<button>` wrapping the card, or the overlay pattern (`::before` on the activator) | `workshop/briefs/statcard.md` §5 |
+| Component | Drawn/typed as (wrong)                                              | Belongs as (right)                                                                           | Source                           |
+| --------- | ------------------------------------------------------------------- | -------------------------------------------------------------------------------------------- | -------------------------------- |
+| Toast     | An inline link "Undo" inside the body text                          | A Button in the `action` slot                                                                | `workshop/briefs/toast.md` §5    |
+| Avatar    | "Avatar (image)" and "Avatar (initials)" as two separate components | One component with a runtime fallback chain (`image` → `initials` → `icon`)                  | `workshop/briefs/avatar.md` §5   |
+| TagChip   | Static text-with-border decoration, no real control                 | A live element with a real `<button>` remove control that's part of the form value           | `workshop/briefs/tagchip.md` §5  |
+| StatCard  | A card stacked on top of an invisible button component              | One `<a>`/`<button>` wrapping the card, or the overlay pattern (`::before` on the activator) | `workshop/briefs/statcard.md` §5 |
 
 Hand the trainer the one row matching whichever component the participant picked — it's
 already phrased as a ready one-line correction:
@@ -222,6 +222,7 @@ already phrased as a ready one-line correction:
 
 > Run the three-step accessibility check on `<ComponentName>`, in order, and report each
 > step's result before moving to the next:
+>
 > 1. `figma_audit_component_accessibility` against the Figma node (needs the Desktop
 >    Bridge running — confirm `figma_get_status` reports `setup.valid: true` first).
 > 2. Open the story in Storybook and read the A11y panel (axe-core) — list every
@@ -238,6 +239,7 @@ already phrased as a ready one-line correction:
 
 > Toggle Storybook's backgrounds/theme addon to dark and look at `<ComponentName>` in
 > both variants/states you built. Confirm three things and report each:
+>
 > 1. **Every colour still resolves through a `--ui-*` custom property** — none
 >    hardcoded — so the dark override already declared in `tokens.css`'s
 >    `[data-theme="dark"]` block actually takes effect. A hardcoded colour is invisible
@@ -276,14 +278,14 @@ exactly these seven field names, no more, no fewer.)
 
 ## 4. Quick index — which prompt for which failure
 
-| Symptom in the room | Use |
-|---|---|
-| Inline `style`/hex/Tailwind class instead of a token, anywhere in Block 03 or the Block 05 walkthrough | §1 add-on, or §2.3 |
-| A prop appears that the handoff document / spec never named | §2.2 |
-| Structural content (header/action/remove-button/etc.) dumped as flat children instead of its own region | §2.4 |
-| A11y panel or keyboard walk turns something up in Block 04 | §3.1 |
-| Dark-mode toggle reveals a hardcoded colour or a stray hover animation | §3.2 |
-| Closing parity check, to actually exercise the "fields not passed aren't compared" claim | §3.3 |
+| Symptom in the room                                                                                     | Use                |
+| ------------------------------------------------------------------------------------------------------- | ------------------ |
+| Inline `style`/hex/Tailwind class instead of a token, anywhere in Block 03 or the Block 05 walkthrough  | §1 add-on, or §2.3 |
+| A prop appears that the handoff document / spec never named                                             | §2.2               |
+| Structural content (header/action/remove-button/etc.) dumped as flat children instead of its own region | §2.4               |
+| A11y panel or keyboard walk turns something up in Block 04                                              | §3.1               |
+| Dark-mode toggle reveals a hardcoded colour or a stray hover animation                                  | §3.2               |
+| Closing parity check, to actually exercise the "fields not passed aren't compared" claim                | §3.3               |
 
 ---
 
@@ -321,7 +323,7 @@ exactly these seven field names, no more, no fewer.)
 **Deliberately left out for being unverifiable, rather than guessed:**
 
 - A generation prompt with **concrete prop names for the participant's own new
-  component** (Toast/Avatar/TagChip/StatCard as the *workshop* build, not the existing
+  component** (Toast/Avatar/TagChip/StatCard as the _workshop_ build, not the existing
   library reference). Those specs don't exist yet — ADR-0113 puts them in the
   participant's own file, never the shared master — so any prop name here would be
   invented, exactly the failure mode this sheet exists to prevent. §2.1's generation

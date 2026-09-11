@@ -3,7 +3,7 @@ status: accepted
 confidence: reconstructed
 date: reconstructed
 sources:
-  - "feat(spec) commit, sync-spec.mjs"
+  - 'feat(spec) commit, sync-spec.mjs'
 ---
 
 # ADR-0006: Framework-agnostic spec as source of truth

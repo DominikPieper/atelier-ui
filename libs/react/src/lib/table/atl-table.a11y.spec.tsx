@@ -34,7 +34,7 @@ function capture() {
           <AtlTd>Editor</AtlTd>
         </AtlTr>
       </AtlTbody>
-    </AtlTable>
+    </AtlTable>,
   );
   scenarios.default = a11yTree(r.container);
   r.unmount();

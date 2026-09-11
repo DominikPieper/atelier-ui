@@ -35,14 +35,14 @@ Auditing surfaced three distinct defect shapes, not one:
    point to a CDK-Overlay trigger+panel (`.trigger`, `.trigger-text`,
    `.trigger-icon`, `.panel`) without updating its stylesheet at all.
 3. **Cross-component / structural selectors that never worked**: rules meant
-   to style content projected from a *different* component (e.g.
+   to style content projected from a _different_ component (e.g.
    `LlmAccordionGroup`'s CSS reaching into `<llm-accordion-item>`, or
    `LlmTabGroup`'s CSS reaching into `<llm-tab>`'s own `[role="tabpanel"]`)
    — Angular's emulated encapsulation never lets one component's stylesheet
    match another component's own host or template output, projection or not.
    `LlmTable`'s striping (`tr:nth-child(even)`) was structurally broken for a
    different reason: each `<tr>` is wrapped in its own `<llm-tr
-   style="display:contents">`, so every `<tr>` is an only-child — `nth-child`
+style="display:contents">`, so every `<tr>` is an only-child — `nth-child`
    must count the `<llm-tr>` wrappers, not the `<tr>`s.
 
 ## Decision
@@ -60,7 +60,7 @@ template everywhere:
   regardless of the host's own class list.
 - **Multi-component shared stylesheets** (`LlmCard`'s 4 components,
   `LlmDialog`'s 4, `LlmDrawer`'s 4, `LlmAccordion`'s 2, `LlmBreadcrumbs`'s 2 —
-  each declares the same `styleUrl`, so Angular compiles the *same* CSS text
+  each declares the same `styleUrl`, so Angular compiles the _same_ CSS text
   once per consumer, independently scoped): a bare `:host {}` in a shared file
   is unsafe — every consumer's copy sees every rule, so an unqualified
   `:host{}` clobbers across components via source order, not scoping. Gave
@@ -79,7 +79,7 @@ template everywhere:
   `LlmTab`'s own template): relocated the rule into `LlmTab`'s own inline
   `styles` block, the only place it can ever match.
 - **`LlmDialog`**: its CSS (`position:fixed`, `::backdrop`, `[open]`) was
-  always meant to target the *inner* native `<dialog>` element directly —
+  always meant to target the _inner_ native `<dialog>` element directly —
   `::backdrop` and native `[open]` reflection only exist on the real
   top-layer element — not the `<llm-dialog>` custom-element host. Added
   `class="llm-dialog"` to the template's `<dialog>` tag. Kept the host's
@@ -106,7 +106,7 @@ here. Reported to the user; not done in this pass.
 - Verified with `nx run angular:build/lint/test` (528/528 passing throughout,
   including the two `LlmDialog` tests that regressed once when the host
   class was removed and were fixed by restoring it) and `nx affected -t lint
-  test build` for the full workspace gate.
+test build` for the full workspace gate.
 - Verified visually in a real Storybook run for every fixed component
   (Alert, Card, Toggle, Progress, Skeleton, Tabs in both variants, Accordion,
   Breadcrumbs, Pagination, Dialog, Drawer, Table in all variants, Stepper in

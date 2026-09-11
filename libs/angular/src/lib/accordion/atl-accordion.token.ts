@@ -14,4 +14,6 @@ export interface AtlAccordionGroupContext {
   handleKeydown(event: KeyboardEvent, item: AccordionItem): void;
 }
 
-export const ATL_ACCORDION_GROUP = new InjectionToken<AtlAccordionGroupContext>('ATL_ACCORDION_GROUP');
+export const ATL_ACCORDION_GROUP = new InjectionToken<AtlAccordionGroupContext>(
+  'ATL_ACCORDION_GROUP',
+);

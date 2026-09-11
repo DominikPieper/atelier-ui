@@ -6,10 +6,7 @@ import {
   useRef,
   ReactNode,
 } from 'react';
-import type {
-  AtlToastOptions,
-  AtlToastContainerPosition,
-} from '../spec';
+import type { AtlToastOptions, AtlToastContainerPosition } from '../spec';
 import './atl-toast.css';
 import { AtlIcon } from '../icon/atl-icon';
 
@@ -40,7 +37,9 @@ const ToastContext = createContext<ToastContextValue>({
  */
 export function AtlToastProvider({ children }: { children: ReactNode }) {
   const [toasts, setToasts] = useState<ToastData[]>([]);
-  const timersRef = useRef<Map<string, ReturnType<typeof setTimeout>>>(new Map());
+  const timersRef = useRef<Map<string, ReturnType<typeof setTimeout>>>(
+    new Map(),
+  );
   const toastId = useRef(0);
 
   const dismiss = useCallback((id: string) => {
@@ -69,7 +68,7 @@ export function AtlToastProvider({ children }: { children: ReactNode }) {
       }
       return id;
     },
-    [dismiss]
+    [dismiss],
   );
 
   const clear = useCallback(() => {
@@ -105,7 +104,9 @@ export interface AtlToastContainerProps {
  * Renders the toast stack at a fixed viewport position.
  * Must be placed inside AtlToastProvider.
  */
-export function AtlToastContainer({ position = 'bottom-right' }: AtlToastContainerProps) {
+export function AtlToastContainer({
+  position = 'bottom-right',
+}: AtlToastContainerProps) {
   const { toasts, dismiss } = useContext(ToastContext);
   const classes = `atl-toast-container position-${position}`;
 

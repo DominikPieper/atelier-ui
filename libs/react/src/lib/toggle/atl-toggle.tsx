@@ -6,7 +6,11 @@ import './atl-toggle.css';
  * Properties for the AtlToggle component.
  */
 export interface AtlToggleProps
-  extends Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'checked' | 'onChange' | 'readOnly' | 'value'>,
+  extends
+    Omit<
+      InputHTMLAttributes<HTMLInputElement>,
+      'type' | 'checked' | 'onChange' | 'readOnly' | 'value'
+    >,
     AtlToggleSpec {
   /**
    * Callback fired when the checked state changes.

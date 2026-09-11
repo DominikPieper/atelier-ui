@@ -5,30 +5,31 @@ through R5. Plan reference: `~/.claude/plans/atelier-design-rebrief.md`.
 
 ## Direction confirmed (from §15)
 
-| # | Decision |
-|---|---|
-| Q1 | Direction A — Conciso anchor only (deep teal `#006470` light / bright teal `#34d8d8` dark) |
-| Q2 | Light-mode-first; dark mode is a switch |
-| Q3 | No specific Conciso/Pieper hex pinned; approximated palette |
-| Q4 | No leaf glyph / botanical motif |
-| Q5 | Phased migration over multiple commits, site stays green |
+| #   | Decision                                                                                   |
+| --- | ------------------------------------------------------------------------------------------ |
+| Q1  | Direction A — Conciso anchor only (deep teal `#006470` light / bright teal `#34d8d8` dark) |
+| Q2  | Light-mode-first; dark mode is a switch                                                    |
+| Q3  | No specific Conciso/Pieper hex pinned; approximated palette                                |
+| Q4  | No leaf glyph / botanical motif                                                            |
+| Q5  | Phased migration over multiple commits, site stays green                                   |
 
 ## Phases shipped
 
-| Phase | Commit | Scope |
-|---|---|---|
-| R1 token swap (Direction C) | `f294b1a` | Navy + moss + bone (later superseded) |
-| R1-revised | `752de2d` | Pivot to Direction A — Conciso teal |
-| R2 + R4 batch 1 | `da12046` | Inter type swap + Button/Card/Input/Textarea/Dialog |
-| R4 batch 2 | `3693eae` | Alert/Tabs/Select/Combobox |
-| R4 batch 3 | `b369983` | Toggle/Checkbox/Radio/RadioGroup |
-| R4 batch 4 | `f01c259` | Pagination/Breadcrumbs/Menu/Stepper |
-| R4 batch 5 | `70d8837` | Progress/Table/Accordion/Skeleton (Avatar untouched) |
-| R4 batch 6 | `7051d1b` | Toast/Drawer/Code-block (Chat untouched) |
-| R3 | `c6e328f` | Topbar refresh + sidebar Material icons |
-| R5 partial | `7a34a6a` | Hero atmospherics + btn-primary cleanup |
+| Phase                       | Commit    | Scope                                                |
+| --------------------------- | --------- | ---------------------------------------------------- |
+| R1 token swap (Direction C) | `f294b1a` | Navy + moss + bone (later superseded)                |
+| R1-revised                  | `752de2d` | Pivot to Direction A — Conciso teal                  |
+| R2 + R4 batch 1             | `da12046` | Inter type swap + Button/Card/Input/Textarea/Dialog  |
+| R4 batch 2                  | `3693eae` | Alert/Tabs/Select/Combobox                           |
+| R4 batch 3                  | `b369983` | Toggle/Checkbox/Radio/RadioGroup                     |
+| R4 batch 4                  | `f01c259` | Pagination/Breadcrumbs/Menu/Stepper                  |
+| R4 batch 5                  | `70d8837` | Progress/Table/Accordion/Skeleton (Avatar untouched) |
+| R4 batch 6                  | `7051d1b` | Toast/Drawer/Code-block (Chat untouched)             |
+| R3                          | `c6e328f` | Topbar refresh + sidebar Material icons              |
+| R5 partial                  | `7a34a6a` | Hero atmospherics + btn-primary cleanup              |
 
 Phases deferred / not applicable:
+
 - R6 (workshop affordances) — Direction A dropped completion markers /
   leaf glyph; only the linear-track sidebar progress remains as a future
   enhancement.
@@ -40,10 +41,10 @@ Phases deferred / not applicable:
 All 14 key pages compile to HTTP 200 (verified via curl). axe-core sweep
 on `/patterns` (most component-dense page) in both modes:
 
-| Page | Theme | Violations | Notes |
-|---|---|---|---|
+| Page        | Theme | Violations    | Notes                                         |
+| ----------- | ----- | ------------- | --------------------------------------------- |
 | `/patterns` | light | 1 (image-alt) | pre-existing icon_32.png; not from this cycle |
-| `/patterns` | dark | 1 (image-alt) | same |
+| `/patterns` | dark  | 1 (image-alt) | same                                          |
 
 (Spot-check sweeps during each phase confirmed `/`, `/workshop`, `/tutorial`,
 `/first-component`, `/accessibility`, `/a11y-workflow`, `/mcp`, `/tokens`,
@@ -57,13 +58,13 @@ return clean except the same pre-existing item.)
 Figma file: `QMnDD8uZQPldPrlCwZZ58T` (Atelier UI). Sampled the 5 most-
 modified component-sets:
 
-| Component | Variants | Score | Notes |
-|---|---|---|---|
-| LlmButton | 29 | 100 | sm 32 / md 40 / lg 48 height pinned |
-| LlmCard | 12 | 100 | — |
-| LlmAlert | 8 | 100 | border-color CSS bug fix shipped |
-| LlmTable | 12 | 100 | sort-button focus-visible CSS bug fix shipped |
-| LlmSelect | 9 | 100 | Figma sm height 38→40 fix shipped |
+| Component | Variants | Score | Notes                                         |
+| --------- | -------- | ----- | --------------------------------------------- |
+| LlmButton | 29       | 100   | sm 32 / md 40 / lg 48 height pinned           |
+| LlmCard   | 12       | 100   | —                                             |
+| LlmAlert  | 8        | 100   | border-color CSS bug fix shipped              |
+| LlmTable  | 12       | 100   | sort-button focus-visible CSS bug fix shipped |
+| LlmSelect | 9        | 100   | Figma sm height 38→40 fix shipped             |
 
 Design System Dashboard score: **80/100** (same as baseline). Token
 Architecture inched up to 83 from 81 (added `color/border-strong`,
@@ -120,7 +121,7 @@ territory, deferred):
   solid teal, so visual change is zero. Worth doing as a tidy commit
   but not blocking.
 - Workshop linear-track sidebar progress (§7.1) — IntersectionObserver
-  + localStorage wiring; new feature, not a refresh.
+  - localStorage wiring; new feature, not a refresh.
 - LlmButton / LlmSelect focus-tool false-positives — audit tool reads
   stroke contrast only, misses drop-shadow. Designer-action.
 - LlmToggle / LlmCheckbox / LlmRadioGroup `state=default|error` naming
@@ -139,5 +140,6 @@ with zero net new axe violations. Visual identity now reads as
 consistent with the Direction A pivot.
 
 The site is green. The next phases (R6 workshop affordances, R7 motion
-+ voice, full R5 inner-page h1 consolidation) are not blockers; they
-are polish that can be picked up incrementally.
+
+- voice, full R5 inner-page h1 consolidation) are not blockers; they
+  are polish that can be picked up incrementally.

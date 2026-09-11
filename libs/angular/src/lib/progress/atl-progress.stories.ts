@@ -4,7 +4,8 @@ import { AtlProgress } from './atl-progress';
 
 import { metadata } from '@atelier-ui/spec/metadata/progress.metadata';
 import { contract } from '@atelier-ui/spec/contracts/progress.contract';
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: 'figma'; url: string } {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };

@@ -20,15 +20,15 @@ Fixing AtlCodeBlock's typeface (ADR-0059) meant reading AtlMenu next, to build t
 child masters against it. Its root came back **bound** on every paint property and
 **wrong on three of them**:
 
-| | Figma bound to | `.atl-menu` says |
-|---|---|---|
-| background | `color/surface` | `--ui-color-surface-raised` |
-| radius | `radius/sm` (8px) | `--ui-radius-lg` (14px) |
-| box-shadow | *nothing* | `--ui-shadow-lg` |
-| hovered item | `color/info-bg` | `--ui-color-surface-sunken` |
+|              | Figma bound to    | `.atl-menu` says            |
+| ------------ | ----------------- | --------------------------- |
+| background   | `color/surface`   | `--ui-color-surface-raised` |
+| radius       | `radius/sm` (8px) | `--ui-radius-lg` (14px)     |
+| box-shadow   | _nothing_         | `--ui-shadow-lg`            |
+| hovered item | `color/info-bg`   | `--ui-color-surface-sunken` |
 
-`[TOKEN]` (ADR-0047) was green, and correctly so: it asks *whether* a value is bound
-to a variable, never *which* variable. A wrong binding is indistinguishable from a
+`[TOKEN]` (ADR-0047) was green, and correctly so: it asks _whether_ a value is bound
+to a variable, never _which_ variable. A wrong binding is indistinguishable from a
 right one at that resolution — and it is the more dangerous failure, because it looks
 deliberate and survives every review that checks for raw hex.
 
@@ -45,7 +45,7 @@ A census of all 29 master roots against their CSS found this everywhere:
   variables, which cannot paint anything.
 - **Aliases hid three of them.** `--ui-color-input-bg` is
   `var(--ui-color-surface-sunken)`, so Input/Textarea/Select bound to the alias
-  *target*. Identical pixels today, and wrong the moment the alias moves — which is
+  _target_. Identical pixels today, and wrong the moment the alias moves — which is
   the entire reason the semantic layer exists.
 
 Two page-level defects surfaced while verifying the fixes, both purely visual and both
@@ -59,7 +59,7 @@ only because the frame around them was wide enough to look plausible.
 
 **1. `[ROOT-PAINT]`: compare the bound variable's NAME to the token the CSS names.**
 An explicit table maps each master to the CSS rule whose paint its root carries, as a
-*cascade* — `['.atl-button', '.atl-button.variant-{variant}']` — with `{axis}`
+_cascade_ — `['.atl-button', '.atl-button.variant-{variant}']` — with `{axis}`
 substituted from the variant being checked. Every variant is checked, not just a
 sampled one: AtlCard's fill comes from the base rule and `.variant-flat` overrides it,
 so a per-master verdict is wrong for one variant in three. Findings are grouped by
@@ -71,7 +71,7 @@ AccordionGroup.
 
 **2. Five effect styles, generated from `tokens.css`.** `shadow/xs…xl`, each carrying
 the token's real layers (offset, blur, spread, colour), each describing itself as
-generated. Figma has no effect *variable* type, so a style is the closest thing to a
+generated. Figma has no effect _variable_ type, so a style is the closest thing to a
 token — and it is checkable by name. Light mode only, stated in the description: styles
 have no modes, so the dark-mode shadow cannot ride along.
 
@@ -86,7 +86,7 @@ values.
 `focus`, `active`, `invalid`, `open` take their paint from `:hover`,
 `:focus-visible`, `:active`, `.is-invalid`, `.is-open` — rules a static selector
 table cannot resolve. Comparing them against the base rule reported the master as
-wrong where it was right (AtlButton's hover fill *is* `color/primary-hover`). Those
+wrong where it was right (AtlButton's hover fill _is_ `color/primary-hover`). Those
 variants are excluded and the exclusion is a WARNING naming the count and the states,
 so the hole is visible in every run rather than silent.
 

@@ -24,9 +24,11 @@ function captureOne(template: string): unknown {
 
 function capture() {
   return {
-    plain: captureOne('<AtlCard><AtlCardContent>Card body</AtlCardContent></AtlCard>'),
+    plain: captureOne(
+      '<AtlCard><AtlCardContent>Card body</AtlCardContent></AtlCard>',
+    ),
     region: captureOne(
-      '<AtlCard role="region" aria-label="Settings"><AtlCardContent>Card body</AtlCardContent></AtlCard>'
+      '<AtlCard role="region" aria-label="Settings"><AtlCardContent>Card body</AtlCardContent></AtlCard>',
     ),
   };
 }

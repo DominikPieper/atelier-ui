@@ -26,7 +26,9 @@ async function captureOne(template: string): Promise<unknown> {
 async function capture(): Promise<Record<string, unknown>> {
   return {
     initials: await captureOne('<atl-avatar name="Jane Smith"></atl-avatar>'),
-    image: await captureOne('<atl-avatar src="avatar.png" alt="Jane Smith"></atl-avatar>'),
+    image: await captureOne(
+      '<atl-avatar src="avatar.png" alt="Jane Smith"></atl-avatar>',
+    ),
   };
 }
 

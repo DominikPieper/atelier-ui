@@ -54,7 +54,6 @@ packaging, Node baseline) + repo cleanup. ADR-0026.
   regressions stay invisible — make the scaffolded app or an e2e step import a
   component (see ADR-0026 consequences).
 
-
 ## H1 acute fixes (full review follow-up) — 2026-07-06
 
 Source: full-material review (4-agent fan-out: gate impl, ADR rationale, workflow, alternatives research).
@@ -71,6 +70,7 @@ visual regression, contract projections, deploy consolidation) reviewed but not 
 - Review verification: `check:all` green incl. a11y-parity; full `nx test` green in all 3 libs.
 
 Decision-bearing quick wins (deferred — not this session's scope):
+
 - [x] Dark-mode contrast: `--ui-color-text-on-success` in both dark blocks + light-block symmetry → done 2026-07-10 (see top section)
 - [x] Version band: re-pin 0.0.x **or** ADR for the 0.1.x move → resolved by ADR-0023 (accept 0.1.x)
 - [x] Node baseline: engines → >=22.12.0; rest already coherent → done 2026-07-10
@@ -78,24 +78,24 @@ Decision-bearing quick wins (deferred — not this session's scope):
       dep-batch A (2026-08-26, Docker daemon down). The publish job's `nx release` then
       rewrote it on Linux (7cca39c), pruning 27 macOS-only transitive entries
       (@module-federation/*, @napi-rs/wasm-runtime, …), so main is Linux-written again.
-      What that commit did *not* visibly touch is the ~47 `dev` ↔ `devOptional` marker
+      What that commit did _not_ visibly touch is the ~47 `dev` ↔ `devOptional` marker
       flips from the same install. Run `tools/scripts/relock.sh` with Docker up once and
       check whether it produces an empty diff; if it does, close this.
 - [ ] **No target type-checks the stories** — this is the mechanism behind the
-      "fabricated props" class of defect. Stories *are* in `tsconfig.spec.json`, but
+      "fabricated props" class of defect. Stories _are_ in `tsconfig.spec.json`, but
       nothing runs `tsc` over it: `nx test` (vitest) transpiles only, and `nx build` uses
       `tsconfig.lib.json`, which excludes `*.stories.tsx`. Found 2026-08-26 after a story
       passed `totalPages` to `AtlPagination` (the prop is `pageCount`) — it fell into
       `...rest`, spread onto `<nav>`, and rendered a 1-page pagination while the Vue
       showcase rendered 10. `cd libs/react && npx tsc -p tsconfig.spec.json --noEmit`
       currently reports 7 errors, so the gate cannot just be switched on:
-        · 5 × `toHaveBeenCalledOnce does not exist on JestMatchers` — `@types/jest`
-          (needed by the two jest-based CLI libs) shadows Vitest's matcher types in the
-          vitest libs. Fix by scoping `types` in each `tsconfig.spec.json`.
-        · `atl-stepper.stories.tsx:88` and `atl-toast.spec.tsx:78` — local helpers whose
-          prop type narrows to a single literal from its default (`"horizontal"`,
-          `"bottom-right"`). Story/spec typing slips, not product bugs; the specs allow
-          both members.
+      · 5 × `toHaveBeenCalledOnce does not exist on JestMatchers` — `@types/jest`
+      (needed by the two jest-based CLI libs) shadows Vitest's matcher types in the
+      vitest libs. Fix by scoping `types` in each `tsconfig.spec.json`.
+      · `atl-stepper.stories.tsx:88` and `atl-toast.spec.tsx:78` — local helpers whose
+      prop type narrows to a single literal from its default (`"horizontal"`,
+      `"bottom-right"`). Story/spec typing slips, not product bugs; the specs allow
+      both members.
       Then add a `typecheck` target per lib and wire it into CI.
 - [ ] **Three a11y-pattern divergences surfaced by the new role cross-check** (2026-08-26).
       Each is a decision about which side is right, not a typo — all three are recorded in
@@ -103,18 +103,18 @@ Decision-bearing quick wins (deferred — not this session's scope):
       until they are resolved. Resolve, then delete the exception (the gate errors if an
       exempt component starts matching).
       · **AtlStepper** — metadata says `progressbar`; all three adapters render
-        `tablist`/`tab`(+`tabpanel`, and Vue is missing `tabpanel` while React/Angular have
-        it); the Figma master description claims a third pattern (`ol` with
-        `aria-current="step"`). Three sources, three answers. Pick one and write the ADR —
-        a stepper is arguably neither a progressbar nor a tab set. Note the Vue/React
-        `tabpanel` asymmetry is a cross-framework divergence the a11y gate did not catch,
-        which is more evidence for the deepen-scenarios item.
+      `tablist`/`tab`(+`tabpanel`, and Vue is missing `tabpanel` while React/Angular have
+      it); the Figma master description claims a third pattern (`ol` with
+      `aria-current="step"`). Three sources, three answers. Pick one and write the ADR —
+      a stepper is arguably neither a progressbar nor a tab set. Note the Vue/React
+      `tabpanel` asymmetry is a cross-framework divergence the a11y gate did not catch,
+      which is more evidence for the deepen-scenarios item.
       · **AtlChat** — metadata says `log`; no adapter renders it (`dialog`, `listitem`,
-        `status` only) and the `listitem`s have no list container, so they are orphaned.
-        Either add the `log`/`list` container in code (fixes both) or drop the claim.
+      `status` only) and the `listitem`s have no list container, so they are orphaned.
+      Either add the `log`/`list` container in code (fixes both) or drop the claim.
       · **AtlSkeleton** — metadata says `status`; the component renders `aria-hidden="true"`
-        and both baseline scenarios are empty. Either the claim is wrong (→ `none`) or a
-        loading skeleton should actually be announced. Decide which.
+      and both baseline scenarios are empty. Either the claim is wrong (→ `none`) or a
+      loading skeleton should actually be announced. Decide which.
 - [x] **Reopened: a token-discipline gate for Claude Design artboards** (answered
       2026-08-27, ADR-0072) — answered by measurement rather than by a second opinion. The
       proposal was to gate raw hex in participant `.dc.html`; measuring `_sheet.css` showed
@@ -134,7 +134,7 @@ Decision-bearing quick wins (deferred — not this session's scope):
       **2026-08-29:** still open as engineering, but no longer silent — the asymmetry is now
       published as content (`/claude-design`, "What it demonstrably does not do") and
       demonstrated live in Tag 1 Block 04. Teaching the gap is not closing it.
-- [ ] **Verify Figma *export* from claude.ai/design** — import via Figma links is
+- [ ] **Verify Figma _export_ from claude.ai/design** — import via Figma links is
       confirmed first-party (`hifi-design` skill); export is still unverified, and
       ADR-0032's "the canvas dead-ends" tradeoff rests partly on it. **2026-08-29:** still
       unverified; `/claude-design` now names the direction explicitly in its limits list
@@ -171,18 +171,18 @@ Decision-bearing quick wins (deferred — not this session's scope):
       text-safe shade, annotated contrast, role-based type scale, tonal overlays, the
       `[data-area]` scope mechanism, `_adherence.oxlintrc.json`); Conciso becomes a
       `[data-brand="conciso"]` theme demo, which proves the token thesis instead of just
-      swapping values. Work project: Claude Design *Atelier*
+      swapping values. Work project: Claude Design _Atelier_
       (`7a6a2f19-9a3c-4dd9-9828-65c7cc67766c`); both DS projects are read-only. The plan
       is additive, so the 29 parity records stay valid until component CSS migrates onto
       role tokens — at which point the ADR-0024 change (Phase 0) becomes blocking.
-- [ ] **`/design-sync`'s manifest is unreliable — verified** (2026-08-26, *corrected
-      2026-08-29*). The synced Atelier design system's `_adherence.oxlintrc.json` lists
+- [ ] **`/design-sync`'s manifest is unreliable — verified** (2026-08-26, _corrected
+      2026-08-29_). The synced Atelier design system's `_adherence.oxlintrc.json` lists
       `--ui-font-size-3xl`, `-4xl`, `-5xl` — **`-4xl` and `-5xl` exist nowhere in the repo;
       `-3xl` does exist**, added by ADR-0036 for the display role on the same date this item
       was written. The item was stale within hours of being recorded, which is the joke on
       itself: a hand-typed claim about a generated thing rots, including this one. It is
       also why the `/claude-design` chapter tells the reader to grep the tree rather than
-      trust the manifest *or* their memory of it. Two phantoms, not three; the rest stands.
+      trust the manifest _or_ their memory of it. Two phantoms, not three; the rest stands.
       It types `--ui-transition-*` as
       `"color"`; mixes 20 `--docs-*` private docs-theme tokens into what reads as the
       library's public token API; and ships `react/forbid-elements` with an empty forbid
@@ -198,7 +198,7 @@ Decision-bearing quick wins (deferred — not this session's scope):
       them rather than authoring new ones.
 - [x] **Decide the Inter question** (closed 2026-08-27, ADR-0059) — stale as written:
       `--ui-font-family` has been Instrument Sans since ADR-0035, and the role-based
-      scale it wanted coupled is `--ui-type-*`. What was still open was the *other*
+      scale it wanted coupled is `--ui-type-*`. What was still open was the _other_
       side: the Figma file was still drawn in Inter (Components/Inventory/Icons) and
       Montserrat + Libre Baskerville (foundations pages + all 19 `ty/*` styles). All
       1621 text nodes swept onto the declared families, the 19 styles replaced by 8
@@ -224,8 +224,8 @@ Decision-bearing quick wins (deferred — not this session's scope):
       in `check:all` would need the card facts in the snapshot, and a card is
       documentation rather than the transfer target. **Correction (2026-08-28, ADR-0074):
       the idempotency claim above was wrong.** It rested on re-deriving the card data
-      because the actual second run had stalled — and re-derivation checked the *data*,
-      which was right, while the bug was in the *test*: a preview set to
+      because the actual second run had stalled — and re-derivation checked the _data_,
+      which was right, while the bug was in the _test_: a preview set to
       `layoutSizingHorizontal = 'FILL'` can never again match its master's width, so the
       staleness check was permanently true and every run rewrote the same 15 cards. Fixed;
       two consecutive runs now report 0 updated.
@@ -244,7 +244,7 @@ Decision-bearing quick wins (deferred — not this session's scope):
       because a cell carries only text, so no content slot is needed.
 - [ ] **`.atl-tr-select-cell` is 44px wide with 32px of inherited padding.** It declares
       `width: 2.75rem` and `text-align: center` and inherits `padding-inline:
-      var(--ui-spacing-4)` as a `<td>`, leaving a 12px content box for an 18px checkbox.
+var(--ui-spacing-4)` as a `<td>`, leaving a 12px content box for an 18px checkbox.
       The master draws what the CSS computes, so the squeeze is now visible in Figma
       (ADR-0065). Either the cell resets its padding or it gets wider — a code change in
       three frameworks, so it wants its own step.
@@ -330,13 +330,13 @@ Decision-bearing quick wins (deferred — not this session's scope):
       so this is gate work against a class, not a repair. Figma keeps a removed
       `COMPONENT` alive while an instance still references it, and `findAll` cannot
       reach it — so it is invisible to every tree walk, including the snapshot probe.
-      Two Inventory tiles (AtlPagination, AtlBreadcrumbs) had drawn *pre-fix* geometry
+      Two Inventory tiles (AtlPagination, AtlBreadcrumbs) had drawn _pre-fix_ geometry
       for months that way (ADR-0059); a text sweep found them only by failing on nine
       nodes it could not change. The check must run from the instance side: walk
       instances, resolve `getMainComponentAsync()`, assert the result is reachable from
       the document. Capture it in the snapshot probe and gate it.
 - [ ] **Two variable collections carry the same ten spacing values.** `Primitive
-      Tokens` has `spacing/s1…s16`, `Library Tokens` has `spacing/1…16` — identical
+Tokens` has `spacing/s1…s16`, `Library Tokens` has `spacing/1…16` — identical
       values (4, 8, 12, 16, 20, 24, 32, 40, 48, 64), and only the latter is generated
       from `tokens.css`. A designer picking from the wrong family binds to a collection
       the CSS does not feed. Decide whether `Primitive Tokens` (76 variables — radii and
@@ -387,10 +387,10 @@ Decision-bearing quick wins (deferred — not this session's scope):
       was wrong on both the number and the framing. A read-only census of all 43 masters
       (2026-08-28, `tools/figma/text-nodes.json`, and `tasks/type-role-resolution-2026-08-28.md`)
       counts **566** TEXT nodes, **311** unbound, over **33** masters — not 201 over 23. And
-      the framing was inverted: the blocker is not that a body role would *create* a leading
+      the framing was inverted: the blocker is not that a body role would _create_ a leading
       divergence, it is that **206 of the 311 sit on `lineHeight: AUTO`**, the font's own
       metric, which is not 125% or 150% and matches no role at all. Zero nodes match a
-      `ty/*` style exactly today, so *every* binding moves at least the leading. Worse,
+      `ty/*` style exactly today, so _every_ binding moves at least the leading. Worse,
       **212 of them source `fontSize` from the wrong variable collection** (below), so the
       size corrections most of them need are not plain edits. What is now true and was not:
       all three counts are gated. `[TEXT-UNSTYLED]` records 257 (after the structural
@@ -449,7 +449,7 @@ Decision-bearing quick wins (deferred — not this session's scope):
 
 - [x] ~~**A component root may state a family and a leading but no font-size**~~ — gated
       2026-08-28, ADR-0078 + ADR-0080. `[NO-SIZE]` is in `check:typeface`, keyed off the
-      prose leading (`--ui-line-height-normal` means *this one carries prose*), and it was
+      prose leading (`--ui-line-height-normal` means _this one carries prose_), and it was
       not one root but **15** — accordion, card, chat, dialog and drawer, three each, one
       per framework. `font-size: inherit` does not satisfy it. Recorded as roots and not as
       a count in `tools/parity/typeface-baseline.json`, so a new one hidden by a fixed one
@@ -458,7 +458,7 @@ Decision-bearing quick wins (deferred — not this session's scope):
 
 - [x] ~~**Add `[TEXT-UNSTYLED]` so unbound text cannot come back**~~ — landed 2026-08-28,
       ADR-0079 + ADR-0080, as a ratchet rather than the warning this item imagined (ADR-0066
-      forbids a warning nobody can clear). 257 nodes over 29 masters, after two *structural*
+      forbids a warning nobody can clear). 257 nodes over 29 masters, after two _structural_
       exemptions — a node under an INSTANCE, whose master owns the type, and an invisible
       node — plus a short pending-removal list of scenery and glyphs. The snapshot did not
       in fact "already carry per-node facts": family, weight, the text-style binding and the
@@ -488,7 +488,7 @@ Decision-bearing quick wins (deferred — not this session's scope):
       the `[ROOT-PAINT]` warnings already count every run.
 
 - [ ] **AtlDrawer's master paints the dialog twice.** The variant root carries
-      `color/surface` + a drop shadow *and* so does the `dialog` layer inside it (ADR-0077,
+      `color/surface` + a drop shadow _and_ so does the `dialog` layer inside it (ADR-0077,
       where the layer was renamed from `panel`). `ROOT_PAINT` maps the root to
       `.atl-drawer-host dialog`, so both pass against the same rule — but the root is the
       overlay area holding the backdrop rectangle, and painting it surface is wrong for what
@@ -502,7 +502,7 @@ Decision-bearing quick wins (deferred — not this session's scope):
       AtlAvatarGroup — legitimately inherit from the parent master that places them, which
       is why the gate stays silent about all seven rather than warning six-sevenths
       unclearably (ADR-0066). Fix is one declaration in `drawer/atl-drawer.css`; deciding
-      *which* size waits on the same question everything else in this cluster waits on.
+      _which_ size waits on the same question everything else in this cluster waits on.
 
 - [ ] **AtlCombobox's fifteen unstyled TEXT nodes are a layer problem, not a root one.**
       `[ROOT-TYPE]` cannot reach them: the master has no single direct TEXT child, so the
@@ -517,38 +517,33 @@ Decision-bearing quick wins (deferred — not this session's scope):
 - [ ] **Five CSS defects found in passing while resolving the type roles** (2026-08-28,
       `tasks/type-role-resolution-2026-08-28.md` §4). Each is independent of typography.
       **Two are now closed and gated** by `check:dead-selectors` (ADR-0081); the other three
-      are declaration-level defects that gate reads nothing about, and stay open:
-      - `.atl-tbody-empty-cell`'s `font-size` is **dead**. Specificity (0,1,0) against
-        `.atl-table.size-md tbody td` at (0,2,2), so the empty message renders 14px and
-        never the 16px written. The same rule's `padding` and `background-color` already
-        carry `!important` for exactly this reason; `font-size` was missed. Identical in
-        Angular and Vue — a shared defect, not drift.
-      - ~~**Angular's combobox readonly rule is dead.**~~ **Closed 2026-08-28** (ADR-0081).
-        `atl-combobox.css:206` targeted `.atl-combobox-input` while the template emits
-        `class="combobox-input"` — one selector missed in a rename. The selector is
-        corrected and `check:dead-selectors` reports it by name if the rename ever
-        half-lands again. The ADR-0045 readonly contract now holds in all three frameworks.
-        **Correction, 2026-08-28:** an earlier version of this entry said
-        `atl-combobox.spec.ts` pins the corrected selector. It does not — the string
-        `combobox-input` appears nowhere in that file. The spec asserts `is-readonly` on the
-        host, `input.readOnly`, and that the listbox stays closed, which is exactly the
-        shape of test that stayed green while the rule was dead. The gate is what pins it.
-      - **`.atl-tooltip` contradicts itself.** `max-width: 20rem` + `word-wrap: break-word`
-        **and** `white-space: nowrap`. React and Vue have the nowrap, Angular does not — so
-        the same tooltip wraps in one framework and cannot in the other two. Fix the
-        divergence before deciding the tooltip's type.
-      - **Five chat controls render in the UA font.** `.action-btn`, `.fab-bubble`,
-        `.close-btn`, `.chip` and `.field` are `<button>`/`<textarea>` elements stating no
-        `font-family`, so the UA shorthand wins. Every other component in the repo that
-        puts text in a form control writes `font: inherit` explicitly; `atl-chat.css` omits
-        it, and the chat root's own comment says it exists to prevent this (ADR-0035/0049).
-      - **`.radio-text` is styled nowhere**, and Angular does not emit it at all.
-        **Examined 2026-08-28 and deliberately not changed** (ADR-0081 §4): it is the
-        *reverse* direction, which the new gate does not check. Making Angular emit it means
-        wrapping `<ng-content/>` in a span — new markup in a published package, and a
-        re-verify against Figma — for a class no stylesheet selects. It belongs to the
-        "is a class with no rule a public hook or a leftover" decision below, not to a sweep;
-        the risk it names (a future rule silently skipping Angular) is real and unchanged.
+      are declaration-level defects that gate reads nothing about, and stay open: - `.atl-tbody-empty-cell`'s `font-size` is **dead**. Specificity (0,1,0) against
+      `.atl-table.size-md tbody td` at (0,2,2), so the empty message renders 14px and
+      never the 16px written. The same rule's `padding` and `background-color` already
+      carry `!important` for exactly this reason; `font-size` was missed. Identical in
+      Angular and Vue — a shared defect, not drift. - ~~**Angular's combobox readonly rule is dead.**~~ **Closed 2026-08-28** (ADR-0081).
+      `atl-combobox.css:206` targeted `.atl-combobox-input` while the template emits
+      `class="combobox-input"` — one selector missed in a rename. The selector is
+      corrected and `check:dead-selectors` reports it by name if the rename ever
+      half-lands again. The ADR-0045 readonly contract now holds in all three frameworks.
+      **Correction, 2026-08-28:** an earlier version of this entry said
+      `atl-combobox.spec.ts` pins the corrected selector. It does not — the string
+      `combobox-input` appears nowhere in that file. The spec asserts `is-readonly` on the
+      host, `input.readOnly`, and that the listbox stays closed, which is exactly the
+      shape of test that stayed green while the rule was dead. The gate is what pins it. - **`.atl-tooltip` contradicts itself.** `max-width: 20rem` + `word-wrap: break-word`
+      **and** `white-space: nowrap`. React and Vue have the nowrap, Angular does not — so
+      the same tooltip wraps in one framework and cannot in the other two. Fix the
+      divergence before deciding the tooltip's type. - **Five chat controls render in the UA font.** `.action-btn`, `.fab-bubble`,
+      `.close-btn`, `.chip` and `.field` are `<button>`/`<textarea>` elements stating no
+      `font-family`, so the UA shorthand wins. Every other component in the repo that
+      puts text in a form control writes `font: inherit` explicitly; `atl-chat.css` omits
+      it, and the chat root's own comment says it exists to prevent this (ADR-0035/0049). - **`.radio-text` is styled nowhere**, and Angular does not emit it at all.
+      **Examined 2026-08-28 and deliberately not changed** (ADR-0081 §4): it is the
+      _reverse_ direction, which the new gate does not check. Making Angular emit it means
+      wrapping `<ng-content/>` in a span — new markup in a published package, and a
+      re-verify against Figma — for a class no stylesheet selects. It belongs to the
+      "is a class with no rule a public hook or a leftover" decision below, not to a sweep;
+      the risk it names (a future rule silently skipping Angular) is real and unchanged.
 
 - [ ] **AtlChat ships an illustrative app mockup inside the master.** Sixteen TEXT nodes —
       a nav rail, a breadcrumb, a page heading, two sidebar lists, a minimise glyph — are
@@ -624,7 +619,7 @@ Decision-bearing quick wins (deferred — not this session's scope):
 - [x] ~~**25 of 29 components respecify `font-family`, against their own manifest
       constraint**~~ — resolved 2026-08-26, ADR-0049, and the constraint was the thing that was
       wrong. Rendering the two states side by side inside an app whose own font was Georgia
-      inverted the finding: the components that *did* respecify were correct and the four that
+      inverted the finding: the components that _did_ respecify were correct and the four that
       inherited rendered Georgia beside them. "Apply it on the app shell" is a constraint a
       component cannot keep. `check:typeface` now requires the declaration on every root, and
       `[NO-LEADING]` (ADR-0052) requires the leading beside it.
@@ -632,7 +627,7 @@ Decision-bearing quick wins (deferred — not this session's scope):
       ramps, 100–950, red / green / amber / sky. The shipping values already sat on the step
       numbers when ordered by OKLab lightness, so only the gaps were generated; the 950 is the
       dark theme's tinted background; a missing tail step is placed where red — the only family
-      shipping an 800, a 900 *and* a 950 — puts it, 24.8% from 800 to 950 rather than the
+      shipping an 800, a 900 _and_ a 950 — puts it, 24.8% from 800 to 950 rather than the
       midpoint. `check:contrast` re-measures 47 annotated steps now, up from 7. **The neutrals
       are still not an explicit ramp** — surface / border / text form an implicit one and that
       half of this item stands.
@@ -787,7 +782,7 @@ Decision-bearing quick wins (deferred — not this session's scope):
       criterion in the process: a part earns a master by being independently PLACEABLE or by
       having its own state (AtlMenuSeparator and AtlChatTyping have no spec interface at all).
 - [x] **Capture Boolean properties as data** (closed 2026-08-27, ADR-0058) — done with the
-      item above; the description is still read, but only for the *mappings*, which exist
+      item above; the description is still read, but only for the _mappings_, which exist
       nowhere else.
 - [ ] **Angular's `touched` is public API the spec never declared** (ADR-0055). Seven
       components expose it as a `model(false)`; React and Vue have no equivalent, and it no
@@ -797,7 +792,7 @@ Decision-bearing quick wins (deferred — not this session's scope):
       nx.** ADR-0053 closed the peer-dependency route by which a plugin outran nx core, but
       `NX_VERSION` is read from whichever devkit the preset itself carries. If
       `create-nx-workspace` ever scaffolds on a newer nx than this pin, the skew returns
-      inverted — the generator would install plugins one version *behind* the workspace.
+      inverted — the generator would install plugins one version _behind_ the workspace.
       It has not bitten because the pin moves with the monorepo, but that is discipline, not
       a mechanism.
 - [x] ~~**Only the typeface half of the shorthand trap is gated**~~ — closed 2026-08-28,
@@ -825,12 +820,13 @@ Decision-bearing quick wins (deferred — not this session's scope):
       the gate never checks snapshot age and `figmaLastModified` is `null` (see C8).
 
 Larger workstreams (ranked, see plan file A–D):
+
 - [ ] A1 generation eval (thesis unmeasured) · A2 persist+gate parity result · A3 cross-fw a11y-tree conformance
 - [ ] B4 storybook-test+axe in CI — **blocked 2026-08-26, with a repro**: the suite passes
       locally (216 React + 242 Vue, ~11s/lib) but fails identically whenever `CI` is set —
       `Failed to connect to the browser session … within the timeout` → "Tests no tests".
       Repro without Nx or GitHub: `cd libs/vue && CI=1 npx vitest run --config
-      vitest.storybook.config.ts` (passes with CI unset). Playwright launches the headless
+vitest.storybook.config.ts` (passes with CI unset). Playwright launches the headless
       shell and exits 0, so the browser is fine — the page never connects back to the Vitest
       server. Ruled out: missing browser binary, `--no-sandbox`,
       `--disable-dev-shm-usage`, `--no-file-parallelism`,
@@ -840,14 +836,13 @@ Larger workstreams (ranked, see plan file A–D):
       not the problem and neither is headless chromium — the fault is specific to how
       vitest's browser provider gets the served page to connect back. Next: capture the
       served page's console in CI, or bisect `@storybook/addon-vitest` / `@vitest/browser`.
-      · ~~B5 contrast gate~~ (done 2026-08-26, ADR-0037: `check:contrast` in `check:all`, palette read from the token source, 104 pairs / 4 modes) · B6 meta-test for the gates — *partial*: ADR-0034
+      · ~~B5 contrast gate~~ (done 2026-08-26, ADR-0037: `check:contrast` in `check:all`, palette read from the token source, 104 pairs / 4 modes) · B6 meta-test for the gates — _partial_: ADR-0034
       derives the a11y-parity roster from the component dirs with recorded exemptions; the
       cross-gate roster reconciliation is still open
 - [ ] C7 capture bound-token name/value in snapshot · C8 check:figma+freshness · C9 full 27-master snapshot
 - [ ] ~~D10 React CSS/tokens packaging defect~~ (done 2026-07-10, ADR-0026; incl. Vue entry-point fix) · ~~D11 gate publish on CI~~ (done 2026-08-26, ADR-0033: `verify` job + `needs:`) · D12 de-personalize host+deploy wf · ~~D13 metadata a11y cross-check~~ (done 2026-08-26: check:metadata now cross-checks `accessibility.role` against the a11y baselines; 3 real divergences found, see below) · D14 invert check-docs-sync · D15 secret/RCE defaults
 
 Blind spots (decisions): SSR stance (Vue Math.random IDs) · reduced-motion gate · 3-fw maintenance/generator · toolchain version-drift · CONTRIBUTING.md · API-stability contract · fw-agnostic contrast gate
-
 
 ## Follow-ups from post-rename full review — 2026-07-21
 
@@ -886,7 +881,7 @@ items deliberately NOT fixed in that pass:
       Angular+React expose (its .page-list CSS was dead until then).
 - [x] **a11y-parity final batch** (2026-07-23) — Tooltip, Drawer, Toast,
       Chat added: 25 of 29 components gated, zero divergences on first pass
-      *in the scenarios the specs render*. Out by design: Select/Combobox
+      _in the scenarios the specs render_. Out by design: Select/Combobox
       (native vs CDK-overlay adapters, documented above), Radio (covered via
       radio-group scenarios); AvatarGroup and the Menu-/Table-family
       sub-components are not separate component dirs and are covered via
@@ -906,8 +901,7 @@ items deliberately NOT fixed in that pass:
       Angular/Vue gate it behind variant !== 'inline'. Align React when
       touching Chat next.
 - [x] **4 hand-maintained spec→component maps consolidated** (2026-07-22,
-      ADR-0031) — metadata/index.ts is the single source; DOCS_PRIMARY_SPECS
-      + SUBCOMPONENT_PARENTS moved there declaratively, union→component is
+      ADR-0031) — metadata/index.ts is the single source; DOCS_PRIMARY_SPECS + SUBCOMPONENT_PARENTS moved there declaratively, union→component is
       DERIVED from the registry (verified 24/24 identical) via the new
       tools/scripts/lib/component-map.js reader; the three consumer scripts
       read centrally, adding a component now touches one file.
@@ -958,8 +952,8 @@ items deliberately NOT fixed in that pass:
       0 blocker / 0 critical / 3 non-blocking warnings.
 - [x] ~~**Figma Toast is designed DARK, code renders LIGHT**~~ — closed 2026-08-28, and
       the answer was already in this file: the 2026-07-22 token-sync entry below records
-      *"Toast resolved: the dark drawing WAS the dark rendering — now bound to
-      surface-raised/text and correct in both modes."* Verified: `allowlists.js` carries no
+      _"Toast resolved: the dark drawing WAS the dark rendering — now bound to
+      surface-raised/text and correct in both modes."_ Verified: `allowlists.js` carries no
       Toast fill exemption, only `toast:variant` (about the imperative default). Two entries
       in the same file disagreed for five weeks because nobody re-read the older one.
 - [x] **Figma↔Code token sync landed** (2026-07-22) — new "Library
@@ -979,7 +973,6 @@ items deliberately NOT fixed in that pass:
       not yet bound (audit finding 6); docs-brand collection still holds
       raw literals (finding 5); UI-Tokens zombie cleanup happened
       implicitly (nothing references them anymore).
-
 
 ## Figma workspace — remaining audit items after the Library-Tokens landing (2026-07-22)
 
@@ -1008,4 +1001,3 @@ items deliberately NOT fixed in that pass:
       comparison, orphan REPORTING without deletion (removing bound
       variables is a Breaking op). Verified idempotent: second run reports
       78 unchanged.
-

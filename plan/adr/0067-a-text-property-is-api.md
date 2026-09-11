@@ -17,8 +17,8 @@ four and removes eleven.
 ## Context
 
 The recorded next step was to compose the remaining parent masters from their children,
-blocked — so the note said — because *"an instance cannot gain children, so a part that
-takes free content needs the master to expose a slot"*. Checking what each child actually
+blocked — so the note said — because _"an instance cannot gain children, so a part that
+takes free content needs the master to expose a slot"_. Checking what each child actually
 needs showed the blocker was narrower than that: a tab needs a **label**, a step a label,
 a chat bubble its **content**. Those are string fields on the spec, and Figma has a
 property type for exactly that. No slot required.
@@ -32,15 +32,15 @@ hand-authored, all capitalised, and **each one already carried a `- Text \`X\`: 
 its master's description** — which is why the first version of this check passed them: it
 accepted a sentence as an exemption. Resolving those sentences against the spec:
 
-| Property | Reality |
-|---|---|
-| `AtlSelect.Placeholder`, `AtlTextarea.Placeholder` | the field is `placeholder` — right field, wrong case |
-| `AtlTooltip.Content` | the field is `atlTooltip` |
-| `AtlAvatarGroup.max` | exact, and a number rather than a string |
-| `AtlBadge.Label`, `AtlCheckbox.Label`, `AtlToggle.Label`, `AtlAlert.Message` | no such field: the text is content projection |
-| `AtlAvatar.Initials` | no such field, and not settable at all — `atl-avatar.tsx` computes `getInitials(name)` |
-| `AtlCard.Title`/`Body`, `AtlDialog.Title`/`Message`/`ConfirmLabel`/`CancelLabel` | no such fields; `atl-dialog.tsx` has no `title` or `confirmLabel` prop of any kind |
-| `AtlToast.Message` | AtlToast has no spec interface; the message is the service call's first argument |
+| Property                                                                         | Reality                                                                                |
+| -------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------- |
+| `AtlSelect.Placeholder`, `AtlTextarea.Placeholder`                               | the field is `placeholder` — right field, wrong case                                   |
+| `AtlTooltip.Content`                                                             | the field is `atlTooltip`                                                              |
+| `AtlAvatarGroup.max`                                                             | exact, and a number rather than a string                                               |
+| `AtlBadge.Label`, `AtlCheckbox.Label`, `AtlToggle.Label`, `AtlAlert.Message`     | no such field: the text is content projection                                          |
+| `AtlAvatar.Initials`                                                             | no such field, and not settable at all — `atl-avatar.tsx` computes `getInitials(name)` |
+| `AtlCard.Title`/`Body`, `AtlDialog.Title`/`Message`/`ConfirmLabel`/`CancelLabel` | no such fields; `atl-dialog.tsx` has no `title` or `confirmLabel` prop of any kind     |
+| `AtlToast.Message`                                                               | AtlToast has no spec interface; the message is the service call's first argument       |
 
 ## Decision
 

@@ -85,7 +85,8 @@ function readVersion() {
 // ---------------------------------------------------------------------------
 
 function loadMetadata() {
-  const { COMPONENT_METADATA_REGISTRY: registry = {} } = parseExportedVars(METADATA_INDEX);
+  const { COMPONENT_METADATA_REGISTRY: registry = {} } =
+    parseExportedVars(METADATA_INDEX);
   const bySpec = {};
   const seenFiles = new Map();
   for (const [specName, modulePath] of Object.entries(registry)) {
@@ -169,7 +170,9 @@ function compactPropSummary(comp) {
     .map((p) => {
       const m = p.type.match(/^'([^']+)'(?:\s*\|\s*'([^']+)')+/);
       if (m) {
-        const variants = Array.from(p.type.matchAll(/'([^']+)'/g)).map((x) => x[1]);
+        const variants = Array.from(p.type.matchAll(/'([^']+)'/g)).map(
+          (x) => x[1],
+        );
         return `${p.name} (${variants.join('|')})`;
       }
       return p.name;
@@ -189,29 +192,41 @@ function buildShortIndex({ categories, docs }, version) {
   lines.push('# Atelier UI');
   lines.push('');
   lines.push(
-    `> LLM-optimized component library for Angular, React, and Vue. ${total} accessible components with flat prop APIs, data-driven patterns, and consistent naming across all three frameworks.`
+    `> LLM-optimized component library for Angular, React, and Vue. ${total} accessible components with flat prop APIs, data-driven patterns, and consistent naming across all three frameworks.`,
   );
   lines.push('');
-  lines.push('Packages: @atelier-ui/angular | @atelier-ui/react | @atelier-ui/vue');
+  lines.push(
+    'Packages: @atelier-ui/angular | @atelier-ui/react | @atelier-ui/vue',
+  );
   lines.push(`Version: ${version}`);
   lines.push(`Docs: ${SITE_URL}`);
   lines.push('');
   lines.push('## Full API Reference');
   lines.push('');
   lines.push(
-    `- [llms-full.txt](${SITE_URL}/llms-full.txt): Complete props, types, defaults, and usage examples for every component. Paste this into your LLM context window.`
+    `- [llms-full.txt](${SITE_URL}/llms-full.txt): Complete props, types, defaults, and usage examples for every component. Paste this into your LLM context window.`,
   );
   lines.push('');
   lines.push('## Documentation');
   lines.push('');
-  lines.push(`- [Installation](${SITE_URL}/install): Setup guide for Angular, React, and Vue`);
   lines.push(
-    `- [LLM-Optimized APIs](${SITE_URL}/design-principles): Why the APIs are designed for LLM consumption`
+    `- [Installation](${SITE_URL}/install): Setup guide for Angular, React, and Vue`,
   );
-  lines.push(`- [Components](${SITE_URL}/components): Interactive component catalog with live examples`);
-  lines.push(`- [Storybook (Angular)](${SITE_URL}/storybook-angular): Angular component stories`);
-  lines.push(`- [Storybook (React)](${SITE_URL}/storybook-react): React component stories`);
-  lines.push(`- [Storybook (Vue)](${SITE_URL}/storybook-vue): Vue component stories`);
+  lines.push(
+    `- [LLM-Optimized APIs](${SITE_URL}/design-principles): Why the APIs are designed for LLM consumption`,
+  );
+  lines.push(
+    `- [Components](${SITE_URL}/components): Interactive component catalog with live examples`,
+  );
+  lines.push(
+    `- [Storybook (Angular)](${SITE_URL}/storybook-angular): Angular component stories`,
+  );
+  lines.push(
+    `- [Storybook (React)](${SITE_URL}/storybook-react): React component stories`,
+  );
+  lines.push(
+    `- [Storybook (Vue)](${SITE_URL}/storybook-vue): Vue component stories`,
+  );
   lines.push('');
   lines.push('## Components');
   lines.push('');
@@ -356,7 +371,7 @@ function buildTokenAnnotationsBlock(manifest) {
   lines.push('## Token Annotations');
   lines.push('');
   lines.push(
-    'Each `--ui-*` token carries an intent and a list of constraints. Reach for the token whose intent matches what you are building; respect its constraints.'
+    'Each `--ui-*` token carries an intent and a list of constraints. Reach for the token whose intent matches what you are building; respect its constraints.',
   );
   lines.push('');
   for (const name of names) {
@@ -373,14 +388,18 @@ function buildTokenAnnotationsBlock(manifest) {
   return lines.join('\n').replace(/\n+$/, '');
 }
 
-function buildFullReference({ categories, docs }, version, { metadataBySpec, tokenManifest }) {
+function buildFullReference(
+  { categories, docs },
+  version,
+  { metadataBySpec, tokenManifest },
+) {
   const total = orderedKeys(categories).length;
   const lines = [];
 
   lines.push('# Atelier UI — Full API Reference');
   lines.push('');
   lines.push(
-    `> Complete component API for LLM consumption. ${total} accessible components for Angular, React, and Vue with consistent prop naming across all frameworks.`
+    `> Complete component API for LLM consumption. ${total} accessible components for Angular, React, and Vue with consistent prop naming across all frameworks.`,
   );
   lines.push(`> Version ${version} | ${SITE_URL}`);
   lines.push('');
@@ -398,7 +417,9 @@ function buildFullReference({ categories, docs }, version, { metadataBySpec, tok
   lines.push('');
   lines.push('Each entry lists:');
   lines.push('  Props: name | type | default | description');
-  lines.push('  Then framework-specific Usage examples for Angular, React, and Vue.');
+  lines.push(
+    '  Then framework-specific Usage examples for Angular, React, and Vue.',
+  );
   lines.push('');
   lines.push('---');
   lines.push('');
@@ -465,7 +486,10 @@ const version = readVersion();
 const metadataBySpec = loadMetadata();
 const tokenManifest = loadTokenManifest();
 const shortOut = buildShortIndex(parsed, version);
-const fullOut = buildFullReference(parsed, version, { metadataBySpec, tokenManifest });
+const fullOut = buildFullReference(parsed, version, {
+  metadataBySpec,
+  tokenManifest,
+});
 
 if (mode === '--check') {
   const drift = [];
@@ -481,7 +505,9 @@ if (mode === '--check') {
     }
   }
   if (drift.length) {
-    console.error('llms.txt / llms-full.txt are out of sync with docs/src/data/components.ts:');
+    console.error(
+      'llms.txt / llms-full.txt are out of sync with docs/src/data/components.ts:',
+    );
     for (const f of drift) console.error(`  - ${f}`);
     console.error('Run: node tools/scripts/gen-llms-txt.mjs');
     process.exit(1);

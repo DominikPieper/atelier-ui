@@ -30,10 +30,10 @@ runner.
 It was not the runner. `nx@23.1.2` was published at 23:31; the run started at
 23:48. Measured at the API boundary rather than inferred:
 
-| package | `require('@nx/devkit/internal').combineGlobPatterns` |
-|---|---|
-| `@nx/devkit@23.1.1` | `undefined` |
-| `@nx/devkit@23.1.2` | `function` |
+| package             | `require('@nx/devkit/internal').combineGlobPatterns` |
+| ------------------- | ---------------------------------------------------- |
+| `@nx/devkit@23.1.1` | `undefined`                                          |
+| `@nx/devkit@23.1.2` | `function`                                           |
 
 and `@nx/eslint@23.1.2`'s plugin calls it at module load. Nx ships its core and
 its plugins as one release and they reach across the package boundary, so a
@@ -72,10 +72,10 @@ Measured, because the whole fix rests on this behaviour — a package with the p
 required and the same package with it optional, each installed into a clean
 directory:
 
-| peer | what npm installed |
-|---|---|
+| peer     | what npm installed   |
+| -------- | -------------------- |
 | required | `@nx/angular@23.1.2` |
-| optional | nothing |
+| optional | nothing              |
 
 The declaration stays, because the relationship is real and worth stating; the
 auto-install stops. `NX_VERSION` is the version of the nx running the generator,
@@ -101,7 +101,7 @@ Alternatives considered:
   own nx — the version it needs to match is not known when this package is
   published.
 - **Rewrite every `@nx/*` entry in the generated `package.json` to `NX_VERSION`
-  after generation.** Too late by construction: the throw happens *during*
+  after generation.** Too late by construction: the throw happens _during_
   generation, when the plugin is `require`d, and the install task that would
   honour the rewrite runs afterwards. This was the first fix drafted, and
   reading the CI log's ordering is what disqualified it.

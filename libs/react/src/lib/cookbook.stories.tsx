@@ -153,7 +153,9 @@ function SettingsPagePattern() {
             <div style={toggleRowStyle}>
               <div>
                 <div style={toggleLabelStyle}>Security alerts</div>
-                <div style={toggleHintStyle}>Critical account notifications</div>
+                <div style={toggleHintStyle}>
+                  Critical account notifications
+                </div>
               </div>
               <AtlToggle checked={true} />
             </div>
@@ -189,7 +191,13 @@ function ConfirmationDialogPattern() {
         <AtlDialogHeader>Delete this account?</AtlDialogHeader>
         <AtlDialogContent>
           <AtlAlert variant="warning">This action cannot be undone.</AtlAlert>
-          <p style={{ margin: 'var(--ui-spacing-3) 0 0', color: 'var(--ui-color-text-muted)', fontSize: '0.875rem' }}>
+          <p
+            style={{
+              margin: 'var(--ui-spacing-3) 0 0',
+              color: 'var(--ui-color-text-muted)',
+              fontSize: '0.875rem',
+            }}
+          >
             All your data, workspaces, and API keys will be removed immediately.
           </p>
         </AtlDialogContent>
@@ -250,7 +258,14 @@ const dataListItems: Array<{
 
 function DataListPattern() {
   return (
-    <div style={{ ...wrapper(640), gap: 'var(--ui-spacing-3)', display: 'flex', flexDirection: 'column' }}>
+    <div
+      style={{
+        ...wrapper(640),
+        gap: 'var(--ui-spacing-3)',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
       <div style={listHeaderStyle}>
         <h2 style={titleStyle}>Projects</h2>
         <AtlButton variant="primary" size="sm">
@@ -271,7 +286,10 @@ function DataListPattern() {
                 <p style={rowDescStyle}>{item.description}</p>
               </div>
               <div style={rowActionsStyle}>
-                <AtlTooltip atlTooltip="View details" atlTooltipPosition="above">
+                <AtlTooltip
+                  atlTooltip="View details"
+                  atlTooltipPosition="above"
+                >
                   <AtlButton variant="outline" size="sm">
                     View
                   </AtlButton>
@@ -287,7 +305,10 @@ function DataListPattern() {
                   }
                 >
                   {({ onClick, ref }) => (
-                    <AtlTooltip atlTooltip="More actions" atlTooltipPosition="above">
+                    <AtlTooltip
+                      atlTooltip="More actions"
+                      atlTooltipPosition="above"
+                    >
                       <AtlButton
                         ref={ref as React.RefObject<HTMLButtonElement>}
                         onClick={onClick}
@@ -314,17 +335,36 @@ function DataListPattern() {
 
 function NotificationCenterPattern() {
   const [errors, setErrors] = useState([
-    { id: 1, message: 'Database connection failed on replica-3. Automatic failover engaged.' },
-    { id: 2, message: 'Payment processing service returned 503 for 12 transactions.' },
+    {
+      id: 1,
+      message:
+        'Database connection failed on replica-3. Automatic failover engaged.',
+    },
+    {
+      id: 2,
+      message: 'Payment processing service returned 503 for 12 transactions.',
+    },
   ]);
   const [warnings, setWarnings] = useState([
-    { id: 3, message: 'Disk usage on worker-7 is at 89%. Consider scaling storage.' },
-    { id: 4, message: 'SSL certificate for api.example.com expires in 14 days.' },
+    {
+      id: 3,
+      message: 'Disk usage on worker-7 is at 89%. Consider scaling storage.',
+    },
+    {
+      id: 4,
+      message: 'SSL certificate for api.example.com expires in 14 days.',
+    },
     { id: 5, message: 'Rate limiter triggered 230 times in the last hour.' },
   ]);
   const [infos, setInfos] = useState([
-    { id: 6, message: 'Deployment v3.2.1 completed successfully across all regions.' },
-    { id: 7, message: 'Scheduled maintenance window begins Saturday at 02:00 UTC.' },
+    {
+      id: 6,
+      message: 'Deployment v3.2.1 completed successfully across all regions.',
+    },
+    {
+      id: 7,
+      message: 'Scheduled maintenance window begins Saturday at 02:00 UTC.',
+    },
   ]);
 
   return (
@@ -439,10 +479,34 @@ const metrics: Array<{
   deltaVariant: MetricDeltaVariant;
   foot: string;
 }> = [
-  { label: 'Active users', value: '8,412', delta: '+12%', deltaVariant: 'success', foot: 'vs. previous period' },
-  { label: 'Sessions', value: '24,390', delta: '+4%', deltaVariant: 'success', foot: 'vs. previous period' },
-  { label: 'Revenue', value: '$42,108', delta: '-2%', deltaVariant: 'danger', foot: 'vs. previous period' },
-  { label: 'Avg. response', value: '184 ms', delta: '+18 ms', deltaVariant: 'warning', foot: 'P95 across edge nodes' },
+  {
+    label: 'Active users',
+    value: '8,412',
+    delta: '+12%',
+    deltaVariant: 'success',
+    foot: 'vs. previous period',
+  },
+  {
+    label: 'Sessions',
+    value: '24,390',
+    delta: '+4%',
+    deltaVariant: 'success',
+    foot: 'vs. previous period',
+  },
+  {
+    label: 'Revenue',
+    value: '$42,108',
+    delta: '-2%',
+    deltaVariant: 'danger',
+    foot: 'vs. previous period',
+  },
+  {
+    label: 'Avg. response',
+    value: '184 ms',
+    delta: '+18 ms',
+    deltaVariant: 'warning',
+    foot: 'P95 across edge nodes',
+  },
 ];
 
 const activity: Array<{
@@ -453,11 +517,46 @@ const activity: Array<{
   statusVariant: StatusVariant;
   time: string;
 }> = [
-  { id: 1, user: 'alex@acme.dev', action: 'Rotated API key', status: 'Success', statusVariant: 'success', time: '2m ago' },
-  { id: 2, user: 'maria@acme.dev', action: 'Invited new member', status: 'Pending', statusVariant: 'warning', time: '14m ago' },
-  { id: 3, user: 'deploy-bot', action: 'Pushed build v3.2.1', status: 'Success', statusVariant: 'success', time: '1h ago' },
-  { id: 4, user: 'lee@acme.dev', action: 'Removed webhook', status: 'Failed', statusVariant: 'danger', time: '2h ago' },
-  { id: 5, user: 'system', action: 'Nightly backup complete', status: 'Success', statusVariant: 'success', time: '6h ago' },
+  {
+    id: 1,
+    user: 'alex@acme.dev',
+    action: 'Rotated API key',
+    status: 'Success',
+    statusVariant: 'success',
+    time: '2m ago',
+  },
+  {
+    id: 2,
+    user: 'maria@acme.dev',
+    action: 'Invited new member',
+    status: 'Pending',
+    statusVariant: 'warning',
+    time: '14m ago',
+  },
+  {
+    id: 3,
+    user: 'deploy-bot',
+    action: 'Pushed build v3.2.1',
+    status: 'Success',
+    statusVariant: 'success',
+    time: '1h ago',
+  },
+  {
+    id: 4,
+    user: 'lee@acme.dev',
+    action: 'Removed webhook',
+    status: 'Failed',
+    statusVariant: 'danger',
+    time: '2h ago',
+  },
+  {
+    id: 5,
+    user: 'system',
+    action: 'Nightly backup complete',
+    status: 'Success',
+    statusVariant: 'success',
+    time: '6h ago',
+  },
 ];
 
 function ManagementDashboardPattern() {
@@ -465,7 +564,14 @@ function ManagementDashboardPattern() {
   const quotaPercent = 87;
 
   return (
-    <div style={{ ...wrapper(1040), gap: 'var(--ui-spacing-4)', display: 'flex', flexDirection: 'column' }}>
+    <div
+      style={{
+        ...wrapper(1040),
+        gap: 'var(--ui-spacing-4)',
+        display: 'flex',
+        flexDirection: 'column',
+      }}
+    >
       <div style={dashHeaderStyle}>
         <div>
           <h2 style={titleStyle}>Operations Overview</h2>
@@ -476,16 +582,16 @@ function ManagementDashboardPattern() {
           selectedIndex={rangeIndex}
           onSelectedIndexChange={setRangeIndex}
         >
-          <AtlTab label="7D">{' '}</AtlTab>
-          <AtlTab label="30D">{' '}</AtlTab>
-          <AtlTab label="90D">{' '}</AtlTab>
+          <AtlTab label="7D"> </AtlTab>
+          <AtlTab label="30D"> </AtlTab>
+          <AtlTab label="90D"> </AtlTab>
         </AtlTabGroup>
       </div>
 
       {quotaPercent >= 85 && (
         <AtlAlert variant="warning" dismissible={true}>
-          API request quota is at {quotaPercent}%. Upgrade your plan before
-          the monthly reset to avoid throttling.
+          API request quota is at {quotaPercent}%. Upgrade your plan before the
+          monthly reset to avoid throttling.
         </AtlAlert>
       )}
 
@@ -550,9 +656,24 @@ function ManagementDashboardPattern() {
           </AtlCardHeader>
           <AtlCardContent>
             <div style={quotaStackStyle}>
-              <QuotaRow label="API requests" value={quotaPercent} display={`${quotaPercent}%`} variant="warning" />
-              <QuotaRow label="Storage" value={42} display="42%" variant="success" />
-              <QuotaRow label="Seats" value={75} display="9 / 12" variant="default" />
+              <QuotaRow
+                label="API requests"
+                value={quotaPercent}
+                display={`${quotaPercent}%`}
+                variant="warning"
+              />
+              <QuotaRow
+                label="Storage"
+                value={42}
+                display="42%"
+                variant="success"
+              />
+              <QuotaRow
+                label="Seats"
+                value={75}
+                display="9 / 12"
+                variant="default"
+              />
             </div>
           </AtlCardContent>
         </AtlCard>
@@ -772,9 +893,15 @@ type Story = StoryObj;
 export const LoginForm: Story = {
   render: () => <LoginFormPattern />,
   play: async ({ canvas }) => {
-    await expect(await canvas.findByRole('heading', { name: 'Sign in' })).toBeVisible();
-    await expect(await canvas.findByRole('button', { name: 'Sign in' })).toBeVisible();
-    await expect(await canvas.findByLabelText('Remember me')).toBeInTheDocument();
+    await expect(
+      await canvas.findByRole('heading', { name: 'Sign in' }),
+    ).toBeVisible();
+    await expect(
+      await canvas.findByRole('button', { name: 'Sign in' }),
+    ).toBeVisible();
+    await expect(
+      await canvas.findByLabelText('Remember me'),
+    ).toBeInTheDocument();
   },
 };
 
@@ -786,8 +913,12 @@ export const LoginFormWithValidationErrors: Story = {
 export const SettingsPage: Story = {
   render: () => <SettingsPagePattern />,
   play: async ({ canvas }) => {
-    await expect(await canvas.findByRole('heading', { name: 'Settings' })).toBeVisible();
-    await expect(await canvas.findByRole('tab', { name: 'Account' })).toBeVisible();
+    await expect(
+      await canvas.findByRole('heading', { name: 'Settings' }),
+    ).toBeVisible();
+    await expect(
+      await canvas.findByRole('tab', { name: 'Account' }),
+    ).toBeVisible();
   },
   parameters: {
     a11y: {
@@ -804,7 +935,9 @@ export const SettingsPage: Story = {
 export const ConfirmationDialog: Story = {
   render: () => <ConfirmationDialogPattern />,
   play: async ({ canvas }) => {
-    const trigger = await canvas.findByRole('button', { name: 'Delete account' });
+    const trigger = await canvas.findByRole('button', {
+      name: 'Delete account',
+    });
     await userEvent.click(trigger);
     // Native <dialog> renders to the top-layer outside the Storybook canvas root,
     // so query the whole document via `screen` instead of the scoped `canvas`.
@@ -820,17 +953,25 @@ export const DataListWithActions: Story = {
   name: 'Data List with Actions',
   render: () => <DataListPattern />,
   play: async ({ canvas }) => {
-    await expect(await canvas.findByRole('heading', { name: 'Projects' })).toBeVisible();
+    await expect(
+      await canvas.findByRole('heading', { name: 'Projects' }),
+    ).toBeVisible();
     await expect(await canvas.findByText('Marketing Website')).toBeVisible();
-    await expect(await canvas.findByRole('button', { name: 'New project' })).toBeVisible();
+    await expect(
+      await canvas.findByRole('button', { name: 'New project' }),
+    ).toBeVisible();
   },
 };
 
 export const NotificationCenter: Story = {
   render: () => <NotificationCenterPattern />,
   play: async ({ canvas }) => {
-    await expect(await canvas.findByRole('heading', { name: 'Notifications' })).toBeVisible();
-    await expect(await canvas.findByRole('button', { name: 'Clear all' })).toBeVisible();
+    await expect(
+      await canvas.findByRole('heading', { name: 'Notifications' }),
+    ).toBeVisible();
+    await expect(
+      await canvas.findByRole('button', { name: 'Clear all' }),
+    ).toBeVisible();
     await expect(await canvas.findByText('Errors')).toBeVisible();
   },
 };
@@ -838,9 +979,15 @@ export const NotificationCenter: Story = {
 export const ManagementDashboard: Story = {
   render: () => <ManagementDashboardPattern />,
   play: async ({ canvas }) => {
-    await expect(await canvas.findByRole('heading', { name: 'Operations Overview' })).toBeVisible();
-    await expect(await canvas.findByRole('heading', { name: 'Recent Activity' })).toBeVisible();
-    await expect(await canvas.findByRole('heading', { name: 'Plan Usage' })).toBeVisible();
+    await expect(
+      await canvas.findByRole('heading', { name: 'Operations Overview' }),
+    ).toBeVisible();
+    await expect(
+      await canvas.findByRole('heading', { name: 'Recent Activity' }),
+    ).toBeVisible();
+    await expect(
+      await canvas.findByRole('heading', { name: 'Plan Usage' }),
+    ).toBeVisible();
   },
   parameters: {
     a11y: {

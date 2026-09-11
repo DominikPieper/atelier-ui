@@ -12,23 +12,25 @@ export const metadata: ComponentMetadata = {
   ],
   antiPatterns: [
     {
-      pattern: 'Wiring tabs as top-level site navigation across distinct pages.',
-      useInstead: 'A real nav with `<a>` links and URLs — tabs swap panels in place, navigation changes location.',
+      pattern:
+        'Wiring tabs as top-level site navigation across distinct pages.',
+      useInstead:
+        'A real nav with `<a>` links and URLs — tabs swap panels in place, navigation changes location.',
     },
     {
-      pattern: 'Hiding optional, rarely-read content behind a tab to reduce page length.',
-      useInstead: 'AtlAccordion — accordions are the right primitive for collapsing supplementary sections.',
+      pattern:
+        'Hiding optional, rarely-read content behind a tab to reduce page length.',
+      useInstead:
+        'AtlAccordion — accordions are the right primitive for collapsing supplementary sections.',
     },
     {
       pattern: 'Presenting a linear, ordered workflow as tabs.',
-      useInstead: 'AtlStepper — steppers communicate progress and ordering, tabs do not.',
+      useInstead:
+        'AtlStepper — steppers communicate progress and ordering, tabs do not.',
     },
   ],
   relatedComponents: ['AtlAccordionGroupSpec', 'AtlStepperSpec'],
-  variantMatrix: [
-    { variant: 'default' },
-    { variant: 'pills' },
-  ],
+  variantMatrix: [{ variant: 'default' }, { variant: 'pills' }],
   accessibility: {
     role: 'tablist',
     keyboardBehavior:

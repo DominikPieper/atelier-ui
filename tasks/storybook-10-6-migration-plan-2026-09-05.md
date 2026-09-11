@@ -31,15 +31,15 @@ The goal. Everything else follows from it.
 
 Only `get-storybook-story-instructions` survives 10.6.
 
-| 10.5.10 | 10.6.0 |
-|---|---|
-| `list-all-documentation` | `docs-list` |
-| `get-documentation` | `docs-show` |
-| `get-documentation-for-story` | `docs-show-story` |
-| `preview-stories` | `stories-preview` |
-| `run-story-tests` | `test-run` |
-| `get-changed-stories` | `stories-changed` |
-| `get-stories-by-component` | `stories-find-by-component` |
+| 10.5.10                       | 10.6.0                      |
+| ----------------------------- | --------------------------- |
+| `list-all-documentation`      | `docs-list`                 |
+| `get-documentation`           | `docs-show`                 |
+| `get-documentation-for-story` | `docs-show-story`           |
+| `preview-stories`             | `stories-preview`           |
+| `run-story-tests`             | `test-run`                  |
+| `get-changed-stories`         | `stories-changed`           |
+| `get-stories-by-component`    | `stories-find-by-component` |
 
 - [x] Sweep the 32 files that name the old tools. Not a blind find-and-replace: several are historical records (`tasks/review-*`, `tasks/schulung-review-*`, `tasks/angular-storybook-vitest-triage-*`) where the old name is what was true at the time and must stay. Change instructions, leave records.
 - [x] `libs/create-workspace/src/generators/preset/preset.ts` — **ships to npm**. Stale names here would scaffold broken workspaces. `preset.spec.ts` asserts on them, so both move together.
@@ -52,7 +52,7 @@ Only `get-storybook-story-instructions` survives 10.6.
 
 **Raised from cleanup to prerequisite on 2026-09-05, after reading `worker/mcp.ts` and `@storybook/mcp@10.6.0`.**
 
-The substitution is a **404 fallback**, not an active rewrite: `if (response.status === 404 && sb !== "react") response = await fetchAsset("react")`. It fired only *because* Angular and Vue had no `components.json`. Wave 1 gives them one, so the fallback stops firing — and what the worker then serves, it cannot resolve.
+The substitution is a **404 fallback**, not an active rewrite: `if (response.status === 404 && sb !== "react") response = await fetchAsset("react")`. It fired only _because_ Angular and Vue had no `components.json`. Wave 1 gives them one, so the fallback stops firing — and what the worker then serves, it cannot resolve.
 
 `@storybook/mcp@10.6.0` resolves `$ref`s **through the `manifestProvider`** (`fetchRefValue(docgenRef, request, provider, source, …)`, `dist/index.js:1338`). Our manifests carry `docgen.$ref: ../services/core/docgen/<id>.json#/components/<id>`. The provider does `basename(path)` (`worker/mcp.ts:18`) and always fetches `storybook-<fw>/manifests/<basename>`. That directory holds only `components.html`, `components.json`, `docs.json` — so every shard 404s, the React fallback 404s on the same name, and the provider throws.
 
@@ -98,14 +98,14 @@ Subtraction, mostly.
 
 Each needs its own spike and its own call:
 
-| Package | now | latest | note |
-|---|---|---|---|
-| `typescript` | 6.0.3 | 7.0.2 | **blocked** — `@angular/compiler-cli` peer is `>=6.0 <6.1` |
-| `eslint` + `@eslint/js` | 9.39.5 | 10.x | flat-config churn; `typescript-eslint` and `angular-eslint` must support it |
-| `vitest` + `@vitest/*` | 4.1.11 | 5.0.0 | test runner for all three libs; `@analogjs/vitest-angular` compatibility unknown |
-| `astro` | 6.4.8 | 7.3.1 | docs app; drags `@astrojs/mdx` 8, `@astrojs/react` 6, `astro-llms-md` 3, `astro-pagefind` 2 |
-| `jsdom` | 27.4.0 | 30.0.1 | three majors; a11y snapshots render in it, so `check:a11y-parity` is exposed |
-| `@types/node` | 22.20.1 | 26.4.1 | should follow the runtime floor (Node ≥ 22.12), not run ahead of it |
-| `@testing-library/jest-dom` | 6.9.1 | 7.0.1 | matcher behaviour changes reach every test |
-| `vite-plugin-dts` | 4.5.4 | 5.1.0 | library build output |
-| `jsonc-eslint-parser` | 2.4.2 | 3.3.0 | small, but rides with the eslint 10 decision |
+| Package                     | now     | latest | note                                                                                        |
+| --------------------------- | ------- | ------ | ------------------------------------------------------------------------------------------- |
+| `typescript`                | 6.0.3   | 7.0.2  | **blocked** — `@angular/compiler-cli` peer is `>=6.0 <6.1`                                  |
+| `eslint` + `@eslint/js`     | 9.39.5  | 10.x   | flat-config churn; `typescript-eslint` and `angular-eslint` must support it                 |
+| `vitest` + `@vitest/*`      | 4.1.11  | 5.0.0  | test runner for all three libs; `@analogjs/vitest-angular` compatibility unknown            |
+| `astro`                     | 6.4.8   | 7.3.1  | docs app; drags `@astrojs/mdx` 8, `@astrojs/react` 6, `astro-llms-md` 3, `astro-pagefind` 2 |
+| `jsdom`                     | 27.4.0  | 30.0.1 | three majors; a11y snapshots render in it, so `check:a11y-parity` is exposed                |
+| `@types/node`               | 22.20.1 | 26.4.1 | should follow the runtime floor (Node ≥ 22.12), not run ahead of it                         |
+| `@testing-library/jest-dom` | 6.9.1   | 7.0.1  | matcher behaviour changes reach every test                                                  |
+| `vite-plugin-dts`           | 4.5.4   | 5.1.0  | library build output                                                                        |
+| `jsonc-eslint-parser`       | 2.4.2   | 3.3.0  | small, but rides with the eslint 10 decision                                                |

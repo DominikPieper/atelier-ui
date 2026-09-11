@@ -23,7 +23,11 @@ input {
   width: 100%;
   min-height: var(--ui-control-height-md);
   padding: calc(
-      (var(--ui-control-height-md) - var(--ui-line-height-tight) * var(--ui-font-size-md)) / 2 - var(--ui-border-width)
+      (
+          var(--ui-control-height-md) - var(--ui-line-height-tight) *
+            var(--ui-font-size-md)
+        ) /
+        2 - var(--ui-border-width)
     )
     var(--ui-spacing-4);
   font-size: inherit;
@@ -35,9 +39,10 @@ input {
   background-color: var(--ui-color-input-bg);
   border: var(--ui-border-width) solid var(--ui-color-input-border);
   border-radius: var(--ui-radius-md);
-  transition: border-color var(--ui-transition-fast),
-              box-shadow var(--ui-transition-fast),
-              background-color var(--ui-transition-fast);
+  transition:
+    border-color var(--ui-transition-fast),
+    box-shadow var(--ui-transition-fast),
+    background-color var(--ui-transition-fast);
   outline: none;
   box-sizing: border-box;
 }
@@ -82,7 +87,6 @@ input:focus {
   color: var(--ui-color-danger);
   pointer-events: none;
 }
-
 
 /* Disabled state */
 :host(.is-disabled) {

@@ -190,7 +190,8 @@ export async function makeWorkerDocgen(fw, cwdRequire, root) {
       return { ok: false, reason: errorMessage(e) };
     }
     if (!payload) return { ok: false, reason: 'empty payload' };
-    if (payload.error) return { ok: false, reason: errorMessage(payload.error) };
+    if (payload.error)
+      return { ok: false, reason: errorMessage(payload.error) };
     return { ok: true, payload };
   };
 }
@@ -375,9 +376,12 @@ const _formFieldStringPropsCache = new Map(); // specFile -> string[]
 function formFieldStringProps(componentFilePath) {
   const specFile = findSpecIndexFile(path.dirname(componentFilePath));
   if (!specFile) return [];
-  if (_formFieldStringPropsCache.has(specFile)) return _formFieldStringPropsCache.get(specFile);
+  if (_formFieldStringPropsCache.has(specFile))
+    return _formFieldStringPropsCache.get(specFile);
   const src = fs.readFileSync(specFile, 'utf-8');
-  const ifaceMatch = /interface\s+AtlFormFieldSpec\s*\{([\s\S]*?)\n\}/.exec(src);
+  const ifaceMatch = /interface\s+AtlFormFieldSpec\s*\{([\s\S]*?)\n\}/.exec(
+    src,
+  );
   const out = [];
   if (ifaceMatch) {
     const fieldRe = /^\s*(\w+)\??:\s*(.+?);\s*$/gm;
@@ -441,7 +445,8 @@ function scanDestructuredReactProps(source, componentName) {
   if (cur.trim()) items.push(cur);
 
   const out = [];
-  const itemRe = /^([A-Za-z_$][\w$]*)\s*(?::\s*[A-Za-z_$][\w$]*)?\s*(?:=\s*([\s\S]+))?$/;
+  const itemRe =
+    /^([A-Za-z_$][\w$]*)\s*(?::\s*[A-Za-z_$][\w$]*)?\s*(?:=\s*([\s\S]+))?$/;
   for (const raw of items) {
     const item = raw.trim();
     if (!item || item.startsWith('...')) continue;
@@ -455,7 +460,8 @@ function scanDestructuredReactProps(source, componentName) {
       if (quoted) literalDefault = quoted[2];
       else if (defaultExpr === 'true') literalDefault = true;
       else if (defaultExpr === 'false') literalDefault = false;
-      else if (/^-?\d+(\.\d+)?$/.test(defaultExpr)) literalDefault = Number(defaultExpr);
+      else if (/^-?\d+(\.\d+)?$/.test(defaultExpr))
+        literalDefault = Number(defaultExpr);
       // anything else (array/object/call expression) — left undefined
     }
     out.push({ name, default: literalDefault });
@@ -545,10 +551,10 @@ export function normalizeReactDocgen(d) {
   if (d.__source && d.displayName && d.__file) {
     const candidates = new Set(formFieldStringProps(d.__file));
     if (candidates.size > 0) {
-      for (const { name, default: literalDefault } of scanDestructuredReactProps(
-        d.__source,
-        d.displayName,
-      )) {
+      for (const {
+        name,
+        default: literalDefault,
+      } of scanDestructuredReactProps(d.__source, d.displayName)) {
         if (known.has(name) || !candidates.has(name)) continue;
         out.push({
           name,

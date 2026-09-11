@@ -19,12 +19,12 @@ states what the stamp does and does not assert.
 
 `parity:record` writes one thing per component: the Figma node, the verifying git sha and
 timestamp, and an `inputsHash` over that component's files across all three frameworks.
-Its own header calls it *"the ONE part of the parity loop that depends on a human/agent
-having run the (bridge-connected) verify"*. `check:parity` later compares the hash and
+Its own header calls it _"the ONE part of the parity loop that depends on a human/agent
+having run the (bridge-connected) verify"_. `check:parity` later compares the hash and
 asks for a re-verify when the files have moved.
 
-So the record is a **claim**: *someone verified this component against Figma at this
-commit.* What it does not say is what verifying meant. And the obvious candidate is weak
+So the record is a **claim**: _someone verified this component against Figma at this
+commit._ What it does not say is what verifying meant. And the obvious candidate is weak
 evidence: `figma_check_design_parity` needs a hand-authored `codeSpec` per run, and ADR-0024's
 2026-08-26 amendment already established that its score is not comparable across runs —
 three runs on one commit for AtlStepper returned 70, 52 and 83 — which is why the score is
@@ -34,8 +34,8 @@ Meanwhile ADR-0059 through ADR-0063 built something the manual check cannot be: 
 systematic, offline, per-variant comparison of the committed Figma snapshot against the
 CSS, which runs in CI on every push.
 
-ADR-0044 opened the redesign phase with a written exit criterion: *"rebuild the Figma
-masters from the redesign, then re-verify + parity:record every component."* The first
+ADR-0044 opened the redesign phase with a written exit criterion: _"rebuild the Figma
+masters from the redesign, then re-verify + parity:record every component."_ The first
 half is done and gated. This ADR decides what the second half means.
 
 ## Decision
@@ -44,15 +44,15 @@ half is done and gated. This ADR decides what the second half means.
 `check:figma` is green for that master. What that asserts, precisely — the committed
 snapshot of the master agrees with the component's CSS on:
 
-| Gate | What it compares |
-|---|---|
-| `[FONT-FAMILY]`, `[TEXT-STYLE]` | every text node's family against the three `tokens.css` declares; the local text styles against the eight `--ui-type-*` roles |
-| `[ROOT-PAINT]` | the root's fill, stroke (four-side and per-side), radius and shadow — the bound variable's NAME, in both directions, for every variant |
-| `[LAYER-PAINT]` | the same for every layer named after a CSS class, plus `min-height`, `height`, padding per edge, `gap`, `font-size` and `line-height`, resolved through the cascade |
-| `[OVERLAY]` | the layers a Boolean switches on: raw paints, cover overlays off 0,0, layers outside their parent, hidden layers bound to nothing |
-| `[NAME]`, `[AXIS-NAME]`, `[AXIS-NOT-A-PROP]`, `[VARIANT]` | axis names and values against the spec unions and the metadata matrix |
-| `[BOOL-MISSING]`, `[BOOL-INERT]`, `[BOOL-UNSPECED]`, `[BOOL-CLAIM]` | Booleans in all three directions, and the truth of each stated mapping |
-| `[MASTER-GLYPH]`, `[TOKEN]`, `[AUTOLAYOUT]`, `[DESC]` | pictograms drawn as characters, unbound values, reflow, the spec reference |
+| Gate                                                                | What it compares                                                                                                                                                    |
+| ------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `[FONT-FAMILY]`, `[TEXT-STYLE]`                                     | every text node's family against the three `tokens.css` declares; the local text styles against the eight `--ui-type-*` roles                                       |
+| `[ROOT-PAINT]`                                                      | the root's fill, stroke (four-side and per-side), radius and shadow — the bound variable's NAME, in both directions, for every variant                              |
+| `[LAYER-PAINT]`                                                     | the same for every layer named after a CSS class, plus `min-height`, `height`, padding per edge, `gap`, `font-size` and `line-height`, resolved through the cascade |
+| `[OVERLAY]`                                                         | the layers a Boolean switches on: raw paints, cover overlays off 0,0, layers outside their parent, hidden layers bound to nothing                                   |
+| `[NAME]`, `[AXIS-NAME]`, `[AXIS-NOT-A-PROP]`, `[VARIANT]`           | axis names and values against the spec unions and the metadata matrix                                                                                               |
+| `[BOOL-MISSING]`, `[BOOL-INERT]`, `[BOOL-UNSPECED]`, `[BOOL-CLAIM]` | Booleans in all three directions, and the truth of each stated mapping                                                                                              |
+| `[MASTER-GLYPH]`, `[TOKEN]`, `[AUTOLAYOUT]`, `[DESC]`               | pictograms drawn as characters, unbound values, reflow, the spec reference                                                                                          |
 
 That is repeatable, offline, and fails in CI. A hand-filled `codeSpec` is none of those.
 
@@ -161,4 +161,3 @@ What this does NOT reach, and is therefore still outside the stamp: a root whose
 inherited rather than its own single child (the count of roots carrying their own text is
 100 of ~120 variants), and `font-size` declared on a descendant rule the root happens to
 show through.
-

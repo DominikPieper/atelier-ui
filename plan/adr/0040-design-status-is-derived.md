@@ -2,7 +2,7 @@
 status: accepted
 date: 2026-08-26
 sources:
-  - "the question that prompted it: how much of the library has actually been re-designed in Claude Design"
+  - 'the question that prompted it: how much of the library has actually been re-designed in Claude Design'
   - tasks/atelier-design-system-plan.md (Phase 3 — the Figma transfer this table gates)
 ---
 
@@ -33,14 +33,14 @@ specimens sized to show type; they say nothing about how a button should look.
 
 **`plan/design-status.md` is generated, and every column but one is derived.**
 
-| Column | Source |
-|---|---|
-| Figma axes, variants | `tools/figma/snapshot.json` |
-| Parity verified | `tools/figma/parity.json` |
-| a11y baseline | `tools/parity/a11y/` |
-| Type roles adopted | `var(--ui-type-*)` in the component's own CSS |
-| Respecifies font | `var(--ui-font-family)` in the component's own CSS |
-| **Artboard** | `tools/design/artboards.json` — hand-maintained |
+| Column               | Source                                             |
+| -------------------- | -------------------------------------------------- |
+| Figma axes, variants | `tools/figma/snapshot.json`                        |
+| Parity verified      | `tools/figma/parity.json`                          |
+| a11y baseline        | `tools/parity/a11y/`                               |
+| Type roles adopted   | `var(--ui-type-*)` in the component's own CSS      |
+| Respecifies font     | `var(--ui-font-family)` in the component's own CSS |
+| **Artboard**         | `tools/design/artboards.json` — hand-maintained    |
 
 The artboard column is hand-maintained because Claude Design is outside the
 repo and cannot be read at build time. That is also the column that matters

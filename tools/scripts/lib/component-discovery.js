@@ -15,14 +15,18 @@ const FRAMEWORKS = ['angular', 'react', 'vue'];
 function isComponentDir(dirPath) {
   return fs
     .readdirSync(dirPath)
-    .some((f) => /^atl-.*\.(ts|tsx|vue)$/.test(f) && !/\.(spec|stories)\./.test(f));
+    .some(
+      (f) => /^atl-.*\.(ts|tsx|vue)$/.test(f) && !/\.(spec|stories)\./.test(f),
+    );
 }
 
 /** Immediate subdirectory names of `dir` (the component dirs of a lib). */
 function getComponentDirs(dir) {
   if (!fs.existsSync(dir)) return new Set();
   return new Set(
-    fs.readdirSync(dir).filter((entry) => fs.statSync(path.join(dir, entry)).isDirectory())
+    fs
+      .readdirSync(dir)
+      .filter((entry) => fs.statSync(path.join(dir, entry)).isDirectory()),
   );
 }
 

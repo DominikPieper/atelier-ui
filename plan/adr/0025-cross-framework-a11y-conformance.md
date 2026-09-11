@@ -2,10 +2,10 @@
 status: accepted
 date: 2026-06-17
 sources:
-  - "approach audit 2026-06-17 (findings `no-render-equivalence-gate`, `no-shared-conformance-suite`, `id-binding-not-behavioral-equivalence`, `keyboard-activation-model-diverges`)"
-  - "plan/adr/0011-typed-covers-behavior-gate.md (covers() is binding parity, not behavioral)"
-  - "plan/adr/0009-drift-gate-system.md, plan/adr/0019 (committed-artifact + offline --check idiom)"
-  - "this session"
+  - 'approach audit 2026-06-17 (findings `no-render-equivalence-gate`, `no-shared-conformance-suite`, `id-binding-not-behavioral-equivalence`, `keyboard-activation-model-diverges`)'
+  - 'plan/adr/0011-typed-covers-behavior-gate.md (covers() is binding parity, not behavioral)'
+  - 'plan/adr/0009-drift-gate-system.md, plan/adr/0019 (committed-artifact + offline --check idiom)'
+  - 'this session'
 ---
 
 # ADR-0025: Cross-framework accessibility conformance gate (`check:a11y-parity`)
@@ -13,8 +13,8 @@ sources:
 ## Status
 
 Accepted. Recorded at decision time. **Complements ADR-0011** (typed `covers()`):
-where `covers()` proves the same behaviour *id* is bound in each framework, this
-proves the three adapters actually *expose the same accessibility tree* at runtime.
+where `covers()` proves the same behaviour _id_ is bound in each framework, this
+proves the three adapters actually _expose the same accessibility tree_ at runtime.
 
 ## Context
 
@@ -26,7 +26,7 @@ found every existing parity gate compares **strings**: `check-sync` (dirs),
 they expose to assistive technology. So "faithful adapters" was asserted at the
 type/string level and unverified at runtime — and the adapters already diverge:
 `covers()` counts the same id while the Vue accordion test only asserts the
-disabled *attribute* where React/Angular click and assert no-toggle; Vue tabs use
+disabled _attribute_ where React/Angular click and assert no-toggle; Vue tabs use
 automatic activation where React/Angular use manual.
 
 The structural difficulty: the three render genuinely different DOM. React/Vue
@@ -38,7 +38,7 @@ DOM does not.
 ## Decision
 
 Add **`check:a11y-parity`**: a committed-artifact + offline-`--check` gate
-(ADR-0009 idiom) over a *normalized accessibility tree* captured from real renders.
+(ADR-0009 idiom) over a _normalized accessibility tree_ captured from real renders.
 
 1. **A shared normalizer, captured per framework, diffed offline.**
    - `libs/<fw>/src/testing/a11y-tree.ts` — a framework-agnostic
@@ -48,7 +48,7 @@ Add **`check:a11y-parity`**: a committed-artifact + offline-`--check` gate
      native-button adapter equals a role+aria-host adapter); `aria-X="false"`/absent
      are dropped; `aria-hidden` subtrees (e.g. the loading spinner) are excluded
      from both the tree and the accessible name; role-less wrapper elements are
-     skipped. Without this normalization React and Angular would *never* compare
+     skipped. Without this normalization React and Angular would _never_ compare
      equal despite being equivalent to a screen reader.
    - Each adapter's `llm-button.a11y.spec.*` renders the canonical scenarios
      (default / disabled / loading) in its existing jsdom + Testing-Library setup
@@ -67,13 +67,13 @@ Add **`check:a11y-parity`**: a committed-artifact + offline-`--check` gate
      cross-framework signal today without that blocker.
    - **Why diff actual renders rather than assert against one authored contract:**
      a hand-authored expected tree could itself be wrong; diffing three real renders
-     means the adapters must agree with *each other*, with no privileged reference.
+     means the adapters must agree with _each other_, with no privileged reference.
 
 3. **In `check:all`/CI — unlike `check:figma`.** This gate is fully offline and
    deterministic (reads committed JSON), and the snapshots only change via the
    explicit `gen:a11y` step, so it is safe to enforce on every run. The per-fw drift
    guard rides the existing `nx test` job. (`check:figma`/`check:parity` stay out of
-   CI because *their* refresh needs the Figma bridge; this one does not.)
+   CI because _their_ refresh needs the Figma bridge; this one does not.)
 
 4. **Proof scope: LlmButton.** Button is the adapter whose DOM diverges most
    (native button vs role-host), so it exercises the normalizer's hardest case.
@@ -98,7 +98,7 @@ Add **`check:a11y-parity`**: a committed-artifact + offline-`--check` gate
   `libs/<fw>/src/lib/button/llm-button.a11y.spec.*` (×3),
   `tools/parity/a11y/llm-button.<fw>.json` (×3), `tools/scripts/check-a11y-parity.js`;
   `package.json` gains `check:a11y-parity` (in `check:all`) + `gen:a11y`.
-- **Not behavioural parity in full.** This covers the *static* a11y surface of
+- **Not behavioural parity in full.** This covers the _static_ a11y surface of
   canonical renders. Interaction-model divergence (Vue automatic vs React/Angular
   manual tab activation) and dynamic ARIA need play-function/browser coverage —
   the next step beyond this gate, tracked from the audit's cross-fw findings.

@@ -163,7 +163,8 @@ function reportWarning(tag, msg) {
 
 async function discoverFramework(fw) {
   const storyFiles = findStoryFiles(fw, { root: ROOT });
-  const workerDocgen = fw !== 'react' ? await makeWorkerDocgen(fw, cwdRequire, ROOT) : null;
+  const workerDocgen =
+    fw !== 'react' ? await makeWorkerDocgen(fw, cwdRequire, ROOT) : null;
   const byComponent = new Map(); // name -> { props: NormalizedProp[] }
   let measurableCount = 0;
   let docgenFailedCount = 0;
@@ -172,11 +173,15 @@ async function discoverFramework(fw) {
     const source = fs.readFileSync(storyFile, 'utf-8');
     let csf;
     try {
-      csf = loadCsf(source, { makeTitle: (t) => t, fileName: storyFile }).parse();
+      csf = loadCsf(source, {
+        makeTitle: (t) => t,
+        fileName: storyFile,
+      }).parse();
     } catch {
       continue; // a story csf-tools can't parse is surfaced by check-contracts.mjs already
     }
-    const metaComponent = typeof csf._meta.component === 'string' ? csf._meta.component : null;
+    const metaComponent =
+      typeof csf._meta.component === 'string' ? csf._meta.component : null;
     if (!metaComponent) continue;
     measurableCount++;
 
@@ -188,14 +193,20 @@ async function discoverFramework(fw) {
       const spec = csf._componentImportSpecifier;
       const localName = spec && spec.local && spec.local.name;
       if (rawPath && localName) {
-        const componentFile = resolveWithExtensions(path.resolve(contextDir, rawPath));
+        const componentFile = resolveWithExtensions(
+          path.resolve(contextDir, rawPath),
+        );
         if (componentFile) {
           try {
             const docgens = reactParseFile(componentFile);
             const match =
               docgens.find((d) => d.displayName === localName) ||
               docgens.find((d) => d.displayName === metaComponent);
-            if (match) docgenResult = { name: match.displayName, props: normalizeReactDocgen(match) };
+            if (match)
+              docgenResult = {
+                name: match.displayName,
+                props: normalizeReactDocgen(match),
+              };
           } catch (e) {
             docgenFailedCount++;
             reportError(
@@ -209,7 +220,8 @@ async function discoverFramework(fw) {
       const result = await workerDocgen(storyFile, csf);
       if (result.ok) {
         const payload = result.payload;
-        const normalized = fw === 'angular' ? normalizeAngular(payload) : normalizeVue(payload);
+        const normalized =
+          fw === 'angular' ? normalizeAngular(payload) : normalizeVue(payload);
         docgenResult = { name: payload.name, props: normalized.props };
       } else {
         docgenFailedCount++;
@@ -221,9 +233,15 @@ async function discoverFramework(fw) {
     }
 
     if (!docgenResult) continue;
-    if (!byComponent.has(docgenResult.name)) byComponent.set(docgenResult.name, docgenResult);
+    if (!byComponent.has(docgenResult.name))
+      byComponent.set(docgenResult.name, docgenResult);
   }
-  return { byComponent, measurableCount, docgenFailedCount, storyFileCount: storyFiles.length };
+  return {
+    byComponent,
+    measurableCount,
+    docgenFailedCount,
+    storyFileCount: storyFiles.length,
+  };
 }
 
 // ─── Naming equivalences (ADR-0093, reproduced — not widened) ──────────────
@@ -245,7 +263,9 @@ const TRAILING_CHANGE_RE = /^(.+)Change$/;
  * passthrough, invisible to react-docgen. EXTRA direction only, exactly like
  * check-prop-surface.js's NATIVE_PASSTHROUGH. */
 const NATIVE_PASSTHROUGH = new Set(
-  ['id', 'aria-label', 'aria-labelledby', 'aria-describedby', 'type'].map(camelize),
+  ['id', 'aria-label', 'aria-labelledby', 'aria-describedby', 'type'].map(
+    camelize,
+  ),
 );
 /** Framework-wide, component-independent EXTRA ignores — check-prop-surface.js's
  * GENERIC_EXTRA_IGNORE, copied verbatim (Vue has none: its emits are exactly
@@ -289,7 +309,10 @@ function buildSurface(fw, props) {
     const canon = canonicalName(fw, p.name, !!p.isOutput);
     surface.set(canon, {
       kind: p.kind,
-      members: p.kind === 'enum' && Array.isArray(p.members) ? new Set(p.members) : undefined,
+      members:
+        p.kind === 'enum' && Array.isArray(p.members)
+          ? new Set(p.members)
+          : undefined,
       default: p.default,
       isOutput: !!p.isOutput,
       rawName: p.name,
@@ -324,7 +347,8 @@ for (const fw of FRAMEWORKS) {
 }
 
 const allComponentNames = new Set();
-for (const fw of FRAMEWORKS) for (const name of perFw[fw].keys()) allComponentNames.add(name);
+for (const fw of FRAMEWORKS)
+  for (const name of perFw[fw].keys()) allComponentNames.add(name);
 
 // ─── Comparison ─────────────────────────────────────────────────────────────
 
@@ -345,7 +369,9 @@ function recordGap(key, reason) {
 function emptyPairStats() {
   return { compared: 0, name: 0, members: 0, default: 0, kind: 0, gap: 0 };
 }
-const pairStats = Object.fromEntries(PAIRS.map(([a, b]) => [`${a}-${b}`, emptyPairStats()]));
+const pairStats = Object.fromEntries(
+  PAIRS.map(([a, b]) => [`${a}-${b}`, emptyPairStats()]),
+);
 const overall = { ...emptyPairStats(), unkeyed: 0 };
 
 // Evidence for the retirement decision (S6(b)) — --compare-props mode only,
@@ -363,14 +389,18 @@ for (const name of [...allComponentNames].sort()) {
   const presentFws = FRAMEWORKS.filter((fw) => perFw[fw].has(name));
 
   if (presentFws.length === 1) {
-    reportWarning('UNKEYED', `${name}: present only in ${presentFws[0]}'s manifest`);
+    reportWarning(
+      'UNKEYED',
+      `${name}: present only in ${presentFws[0]}'s manifest`,
+    );
     overall.unkeyed++;
     continue;
   }
 
   const specName = SPEC_NAME_BY_COMPONENT.get(name) || null;
   const surfaceByFw = {};
-  for (const fw of presentFws) surfaceByFw[fw] = buildSurface(fw, perFw[fw].get(name).props);
+  for (const fw of presentFws)
+    surfaceByFw[fw] = buildSurface(fw, perFw[fw].get(name).props);
 
   const componentIssues = [];
 
@@ -399,7 +429,8 @@ for (const name of [...allComponentNames].sort()) {
         if (ea.kind === 'enum') {
           const ma = ea.members || new Set();
           const mb = eb.members || new Set();
-          const differs = ma.size !== mb.size || [...ma].some((v) => !mb.has(v));
+          const differs =
+            ma.size !== mb.size || [...ma].some((v) => !mb.has(v));
           if (differs) {
             const msg = `${name} (${a} vs ${b}): '${canon}' enum members differ — ${a}={${[...ma].sort().join(', ')}}, ${b}={${[...mb].sort().join(', ')}}`;
             reportError('MEMBERS', msg);
@@ -410,7 +441,11 @@ for (const name of [...allComponentNames].sort()) {
           }
         }
         if (!ea.isOutput && (ea.kind === 'enum' || ea.kind === 'boolean')) {
-          if (ea.default !== undefined && eb.default !== undefined && ea.default !== eb.default) {
+          if (
+            ea.default !== undefined &&
+            eb.default !== undefined &&
+            ea.default !== eb.default
+          ) {
             const msg = `${name} (${a} vs ${b}): '${canon}' default differs — ${a}='${ea.default}', ${b}='${eb.default}'`;
             reportError('DEFAULT', msg);
             overall.default++;
@@ -428,7 +463,12 @@ for (const name of [...allComponentNames].sort()) {
       const presentEntry = ea || eb;
 
       if (GENERIC_EXTRA_IGNORE[presentFw]?.has(presentEntry.rawName)) continue;
-      if (absentFw === 'react' && !presentEntry.isOutput && NATIVE_PASSTHROUGH.has(canon)) continue;
+      if (
+        absentFw === 'react' &&
+        !presentEntry.isOutput &&
+        NATIVE_PASSTHROUGH.has(canon)
+      )
+        continue;
 
       if (!specName) {
         const msg = `${name} (${a} vs ${b}): '${presentEntry.rawName}' present in ${presentFw}, absent from ${absentFw} — no keyed spec to exempt against`;
@@ -463,7 +503,9 @@ for (const name of [...allComponentNames].sort()) {
   }
 
   if (args.report) {
-    const propCounts = presentFws.map((fw) => `${fw}:${surfaceByFw[fw].size}`).join(' ');
+    const propCounts = presentFws
+      .map((fw) => `${fw}:${surfaceByFw[fw].size}`)
+      .join(' ');
     reportLines.push(
       `  ${componentIssues.length === 0 ? 'ok  ' : 'diff'} ${name} (${presentFws.join(',')}) [${propCounts}]${
         componentIssues.length ? ` — ${componentIssues.join(', ')}` : ''
@@ -501,13 +543,24 @@ for (const reason of sortedReasons) {
   for (const key of keys) console.warn(`    - ${key}`);
 }
 
-const errorOrder = { 'DOCGEN-FAILED': -2, ROSTER: -1, NAME: 0, MEMBERS: 1, DEFAULT: 2, KIND: 3 };
+const errorOrder = {
+  'DOCGEN-FAILED': -2,
+  ROSTER: -1,
+  NAME: 0,
+  MEMBERS: 1,
+  DEFAULT: 2,
+  KIND: 3,
+};
 const errors = findings
   .filter((f) => f.level === 'error')
-  .sort((x, y) => errorOrder[x.tag] - errorOrder[y.tag] || (x.msg < y.msg ? -1 : 1));
+  .sort(
+    (x, y) => errorOrder[x.tag] - errorOrder[y.tag] || (x.msg < y.msg ? -1 : 1),
+  );
 for (const e of errors) console.error(`✗ [${e.tag}] ${e.msg}`);
 
-const unkeyed = findings.filter((f) => f.tag === 'UNKEYED').sort((x, y) => (x.msg < y.msg ? -1 : 1));
+const unkeyed = findings
+  .filter((f) => f.tag === 'UNKEYED')
+  .sort((x, y) => (x.msg < y.msg ? -1 : 1));
 for (const w of unkeyed) console.warn(`⚠ [UNKEYED] ${w.msg}`);
 
 console.log('\n--- summary per pair ---');
@@ -538,10 +591,14 @@ function runCheckPropsKeys() {
   // execFileSync's return value on a clean exit is stdout ONLY, silently
   // dropping every warning. spawnSync hands back stdout/stderr separately
   // regardless of exit code, so both streams are captured either way.
-  const result = spawnSync('node', [path.join(__dirname, 'check-prop-surface.js')], {
-    cwd: ROOT,
-    encoding: 'utf-8',
-  });
+  const result = spawnSync(
+    'node',
+    [path.join(__dirname, 'check-prop-surface.js')],
+    {
+      cwd: ROOT,
+      encoding: 'utf-8',
+    },
+  );
   const output = `${result.stdout || ''}${result.stderr || ''}`;
   const keys = new Set();
   const lines = output.split('\n');
@@ -554,7 +611,10 @@ function runCheckPropsKeys() {
       }
       continue;
     }
-    const m = /^✗ \[(MISSING|EXTRA|DEAD)\] (Atl\w+):(\S+) — .*?\b(Angular|React|Vue)\b/.exec(lines[i]);
+    const m =
+      /^✗ \[(MISSING|EXTRA|DEAD)\] (Atl\w+):(\S+) — .*?\b(Angular|React|Vue)\b/.exec(
+        lines[i],
+      );
     if (m) keys.add(`${m[2]}:${m[3]}:${m[4].toLowerCase()}`);
   }
   return keys;
@@ -564,14 +624,18 @@ if (args.compareProps) {
   const propsKeys = runCheckPropsKeys();
   const both = [...manifestKeys].filter((k) => propsKeys.has(k)).sort();
   const onlyProps = [...propsKeys].filter((k) => !manifestKeys.has(k)).sort();
-  const onlyManifestNamed = [...manifestKeys].filter((k) => !propsKeys.has(k)).sort();
+  const onlyManifestNamed = [...manifestKeys]
+    .filter((k) => !propsKeys.has(k))
+    .sort();
 
   console.log('\n--- --compare-props (S6(b) evidence; informational only) ---');
   console.log(`(a) both gates know about (${both.length}):`);
   for (const k of both) console.log(`    - ${k}`);
   console.log(`(b) only check:props reports (${onlyProps.length}):`);
   for (const k of onlyProps) console.log(`    - ${k}`);
-  console.log(`(c) only check:manifest-parity reports — name/presence-keyed (${onlyManifestNamed.length}):`);
+  console.log(
+    `(c) only check:manifest-parity reports — name/presence-keyed (${onlyManifestNamed.length}):`,
+  );
   for (const k of onlyManifestNamed) console.log(`    - ${k}`);
   console.log(
     `(c) only check:manifest-parity reports — structural, no (spec,prop,fw) key exists (${structuralFindings.length}):`,

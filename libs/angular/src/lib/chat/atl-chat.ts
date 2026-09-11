@@ -81,21 +81,30 @@ let nextId = 0;
           (click)="onBackdropClick($event)"
         >
           <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -->
-          <div class="surface drawer-surface" (click)="$event.stopPropagation()">
+          <div
+            class="surface drawer-surface"
+            (click)="$event.stopPropagation()"
+          >
             <ng-container [ngTemplateOutlet]="content" />
           </div>
         </dialog>
       }
       @case ('popup') {
         @if (open()) {
-          <div class="surface popup-surface" [attr.aria-labelledby]="headerId" role="dialog">
+          <div
+            class="surface popup-surface"
+            [attr.aria-labelledby]="headerId"
+            role="dialog"
+          >
             <ng-container [ngTemplateOutlet]="content" />
           </div>
         }
         <button
           type="button"
           class="fab-bubble"
-          [attr.aria-label]="open() ? 'Close AI assistant' : 'Open AI assistant'"
+          [attr.aria-label]="
+            open() ? 'Close AI assistant' : 'Open AI assistant'
+          "
           [attr.aria-expanded]="open()"
           (click)="open.set(!open())"
         >
@@ -103,7 +112,10 @@ let nextId = 0;
         </button>
       }
       @default {
-        <section class="surface inline-surface" [attr.aria-labelledby]="headerId">
+        <section
+          class="surface inline-surface"
+          [attr.aria-labelledby]="headerId"
+        >
           <ng-container [ngTemplateOutlet]="content" />
         </section>
       }
@@ -127,13 +139,14 @@ export class AtlChat {
   /** @internal — referenced by AtlChatHeader via ATL_CHAT token for aria-labelledby. */
   readonly headerId = `atl-chat-header-${nextId++}`;
 
-  protected readonly dialogRef = viewChild<ElementRef<HTMLDialogElement>>('dialogEl');
+  protected readonly dialogRef =
+    viewChild<ElementRef<HTMLDialogElement>>('dialogEl');
   private readonly host: ElementRef<HTMLElement> = inject(ElementRef);
   private readonly triggerEl = signal<HTMLElement | null>(null);
 
   protected readonly hostClasses = computed(
     () =>
-      `variant-${this.variant()} status-${this.status()}${this.open() ? ' is-open' : ''}`
+      `variant-${this.variant()} status-${this.status()}${this.open() ? ' is-open' : ''}`,
   );
 
   constructor() {
@@ -159,7 +172,9 @@ export class AtlChat {
       if (this.variant() === 'inline') return;
       // Wait for the surface to be in the DOM (showModal / @if (open) render).
       requestAnimationFrame(() => {
-        this.host.nativeElement.querySelector<HTMLTextAreaElement>('textarea')?.focus();
+        this.host.nativeElement
+          .querySelector<HTMLTextAreaElement>('textarea')
+          ?.focus();
       });
     });
   }
@@ -230,7 +245,9 @@ export class AtlChatHeader {
   selector: 'atl-chat-messages',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  template: `<div class="messages-list" role="list" aria-label="Messages"><ng-content /></div>`,
+  template: `<div class="messages-list" role="list" aria-label="Messages">
+    <ng-content />
+  </div>`,
   styleUrl: './atl-chat.css',
   host: {
     '[attr.role]': '"log"',
@@ -245,10 +262,16 @@ export class AtlChatMessages {
   constructor() {
     afterNextRender(() => {
       const el = this.host.nativeElement;
-      const stickToBottom = (): void => { el.scrollTop = el.scrollHeight; };
+      const stickToBottom = (): void => {
+        el.scrollTop = el.scrollHeight;
+      };
       stickToBottom();
       const observer = new MutationObserver(stickToBottom);
-      observer.observe(el, { childList: true, subtree: true, characterData: true });
+      observer.observe(el, {
+        childList: true,
+        subtree: true,
+        characterData: true,
+      });
       this.destroyRef.onDestroy(() => observer.disconnect());
     });
   }
@@ -283,7 +306,7 @@ export class AtlChatMessage {
   readonly failed = input(false);
 
   protected readonly hostClasses = computed(
-    () => `role-${this.role()}${this.failed() ? ' is-failed' : ''}`
+    () => `role-${this.role()}${this.failed() ? ' is-failed' : ''}`,
   );
 }
 
@@ -321,7 +344,7 @@ export class AtlChatTyping {
   readonly inline = input(false);
 
   protected readonly hostClasses = computed(() =>
-    this.inline() ? 'is-inline' : ''
+    this.inline() ? 'is-inline' : '',
   );
 }
 
@@ -424,7 +447,9 @@ export class AtlChatInput {
 
   protected readonly context = inject(ATL_CHAT);
 
-  protected readonly isStreaming = computed(() => this.context.status() === 'streaming');
+  protected readonly isStreaming = computed(
+    () => this.context.status() === 'streaming',
+  );
 
   protected readonly effectivePlaceholder = computed(() => {
     const explicit = this.placeholder();

@@ -36,7 +36,7 @@ treating an absent value as a compatible one.**
 layer name IS the selector", and `[LAYER-PAINT]` resolved a layer named `track` to `.track`.
 But the CSS writes `.atl-toggle .track`, and the combobox writes `.atl-combobox-input` for a
 layer named `input`. When no rule matched, the check did `continue` — so those layers were
-not *partly* checked, they were **not checked at all**: fill, radius, stroke, box, nothing.
+not _partly_ checked, they were **not checked at all**: fill, radius, stroke, box, nothing.
 
 ## Decision
 
@@ -90,7 +90,7 @@ the resolver needs no table.
   angular/react/vue/spec exits 0.
 - **Fail-tested where it matters.** Setting the checked track's stroke to
   `color/border-strong` is now reported as wrong because `.is-checked` says
-  `color/primary` — the exact value that would have been *accepted* before, since it is the
+  `color/primary` — the exact value that would have been _accepted_ before, since it is the
   base rule's.
 - **The states the gate skips are the states I nearly got wrong.** `[LAYER-PAINT]` skips
   variants whose `state` axis is not `default`, so nothing would have told me that setting
@@ -106,5 +106,5 @@ the resolver needs no table.
   missing map — it was two selector shapes and a state class. The remaining genuinely
   unreachable cases are AtlProgress's track and fill, AtlRadio's circle and dot and
   AtlMenuSeparator's rule, which are `layoutMode: NONE` rectangles with no padding to
-  compare (their paint *is* checked), and AtlChat, whose layers are an illustrative app
+  compare (their paint _is_ checked), and AtlChat, whose layers are an illustrative app
   mockup rather than the component.

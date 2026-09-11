@@ -4,7 +4,8 @@ import { AtlPagination } from './atl-pagination';
 
 import { metadata } from '@atelier-ui/spec/metadata/pagination.metadata';
 import { contract } from '@atelier-ui/spec/contracts/pagination.contract';
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
@@ -59,7 +60,12 @@ export const WithoutFirstLast: Story = {
   render: function Render() {
     const [page, setPage] = useState(3);
     return (
-      <AtlPagination page={page} pageCount={10} showFirstLast={false} onPageChange={setPage} />
+      <AtlPagination
+        page={page}
+        pageCount={10}
+        showFirstLast={false}
+        onPageChange={setPage}
+      />
     );
   },
 };
@@ -67,6 +73,13 @@ export const WithoutFirstLast: Story = {
 export const WideSiblingCount: Story = {
   render: function Render() {
     const [page, setPage] = useState(5);
-    return <AtlPagination page={page} pageCount={20} siblingCount={2} onPageChange={setPage} />;
+    return (
+      <AtlPagination
+        page={page}
+        pageCount={20}
+        siblingCount={2}
+        onPageChange={setPage}
+      />
+    );
   },
 };

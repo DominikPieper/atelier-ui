@@ -25,9 +25,15 @@ async function captureOne(template: string): Promise<unknown> {
 
 async function capture(): Promise<Record<string, unknown>> {
   return {
-    default: await captureOne('<atl-textarea placeholder="Tell us about yourself"></atl-textarea>'),
-    invalid: await captureOne('<atl-textarea placeholder="Tell us about yourself" [invalid]="true"></atl-textarea>'),
-    disabled: await captureOne('<atl-textarea placeholder="Tell us about yourself" [disabled]="true"></atl-textarea>'),
+    default: await captureOne(
+      '<atl-textarea placeholder="Tell us about yourself"></atl-textarea>',
+    ),
+    invalid: await captureOne(
+      '<atl-textarea placeholder="Tell us about yourself" [invalid]="true"></atl-textarea>',
+    ),
+    disabled: await captureOne(
+      '<atl-textarea placeholder="Tell us about yourself" [disabled]="true"></atl-textarea>',
+    ),
     labelled: await captureOne('<atl-textarea label="Bio"></atl-textarea>'),
   };
 }

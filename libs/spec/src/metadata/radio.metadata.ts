@@ -11,7 +11,8 @@ export const metadata: ComponentMetadata = {
   ],
   antiPatterns: [
     {
-      pattern: 'Picking one option from a long list that would dominate the layout.',
+      pattern:
+        'Picking one option from a long list that would dominate the layout.',
       useInstead: 'AtlSelect, or AtlCombobox once the list needs search.',
     },
     {
@@ -20,7 +21,8 @@ export const metadata: ComponentMetadata = {
     },
     {
       pattern: 'Flipping a single boolean.',
-      useInstead: 'AtlCheckbox or AtlToggle — a one-option radio group is never the right shape.',
+      useInstead:
+        'AtlCheckbox or AtlToggle — a one-option radio group is never the right shape.',
     },
   ],
   relatedComponents: ['AtlCheckboxSpec', 'AtlSelectSpec', 'AtlComboboxSpec'],

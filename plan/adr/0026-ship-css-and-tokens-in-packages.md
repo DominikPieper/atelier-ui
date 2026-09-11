@@ -53,7 +53,7 @@ READMEs promise.
 - **Angular**: component CSS was never affected (ng-packagr inlines it).
   Ship tokens via `ng-package.json` `assets` (lands at `src/styles/tokens.css`
   in dist) and a custom `exports` entry `"./styles/tokens.css"` (with `style`
-  + `default` conditions) that ng-packagr merges into its generated map.
+  - `default` conditions) that ng-packagr merges into its generated map.
 - **The preset keeps its own canonical `tokens.css`** and keeps writing it into
   scaffolded workspaces. This ADR does not reverse the 2026-04-22 decision —
   attendees still get an editable local copy; the package export serves
@@ -61,13 +61,13 @@ READMEs promise.
 
 Alternatives rejected:
 
-- *Fix the READMEs instead of the packages* (document the copy-the-file
+- _Fix the READMEs instead of the packages_ (document the copy-the-file
   approach): cheapest, but leaves the packages broken for any consumer outside
   the workshop preset, and React would still ship unresolvable CSS imports.
-- *`vite-plugin-lib-inject-css` for Vue*: does per-chunk CSS injection
+- _`vite-plugin-lib-inject-css` for Vue_: does per-chunk CSS injection
   properly, but adds a dependency where a one-line rollup `banner` suffices
   for a single-entry bundle.
-- *Angular assets at package root*: ng-packagr copies assets preserving their
+- _Angular assets at package root_: ng-packagr copies assets preserving their
   source-relative path, so the file necessarily lands under `src/`; the
   `exports` mapping gives consumers the clean specifier instead.
 

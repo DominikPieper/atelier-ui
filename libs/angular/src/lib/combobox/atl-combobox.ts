@@ -10,7 +10,10 @@ import {
   viewChild,
 } from '@angular/core';
 import type { FormValueControl } from '@angular/forms/signals';
-import { type ValidationError, type WithOptionalFieldTree } from '@angular/forms/signals';
+import {
+  type ValidationError,
+  type WithOptionalFieldTree,
+} from '@angular/forms/signals';
 import type { AtlComboboxOption } from '../spec';
 import { AtlIcon } from '../icon/atl-icon';
 
@@ -52,7 +55,7 @@ let nextId = 0;
         aria-autocomplete="list"
         [attr.aria-activedescendant]="activeOptionId()"
         [attr.aria-invalid]="invalid() || null"
-[attr.aria-describedby]="showErrors() ? errorId : null"
+        [attr.aria-describedby]="showErrors() ? errorId : null"
         [attr.disabled]="disabled() || null"
         [attr.required]="required() || null"
         [attr.name]="name() || null"
@@ -100,7 +103,14 @@ let nextId = 0;
         </li>
       }
       @if (filteredOptions().length === 0) {
-        <li class="no-results" role="option" aria-selected="false" aria-disabled="true">No results found.</li>
+        <li
+          class="no-results"
+          role="option"
+          aria-selected="false"
+          aria-disabled="true"
+        >
+          No results found.
+        </li>
       }
     </ul>
 
@@ -150,7 +160,9 @@ export class AtlCombobox implements FormValueControl<string> {
   readonly name = input('');
 
   /** Validation errors from the form system. */
-  readonly errors = input<readonly WithOptionalFieldTree<ValidationError>[]>([]);
+  readonly errors = input<readonly WithOptionalFieldTree<ValidationError>[]>(
+    [],
+  );
 
   /** @internal */
   protected readonly query = signal('');
@@ -165,7 +177,8 @@ export class AtlCombobox implements FormValueControl<string> {
   protected readonly panelRef = viewChild<ElementRef<HTMLElement>>('panel');
 
   /** @internal */
-  protected readonly inputEl = viewChild<ElementRef<HTMLInputElement>>('inputEl');
+  protected readonly inputEl =
+    viewChild<ElementRef<HTMLInputElement>>('inputEl');
 
   /** @internal */
   protected readonly inputId = `atl-combobox-input-${nextId}`;
@@ -197,9 +210,7 @@ export class AtlCombobox implements FormValueControl<string> {
    * moments depending on the framework. Deciding *when* to pass errors belongs to the
    * form layer, which is where `touched` lives (ADR-0055).
    */
-  protected readonly showErrors = computed(
-    () => this.errors().length > 0,
-  );
+  protected readonly showErrors = computed(() => this.errors().length > 0);
 
   /** @internal */
   protected readonly hostClasses = computed(() => {
@@ -269,7 +280,9 @@ export class AtlCombobox implements FormValueControl<string> {
       }
       case 'Escape': {
         event.preventDefault();
-        const selectedOption = this.options().find((o) => o.value === this.value());
+        const selectedOption = this.options().find(
+          (o) => o.value === this.value(),
+        );
         this.query.set(selectedOption?.label ?? '');
         this.close();
         break;
@@ -286,7 +299,9 @@ export class AtlCombobox implements FormValueControl<string> {
         }
         event.preventDefault();
         const opts = this.filteredOptions();
-        const enabledIndices = opts.map((_, i) => i).filter((i) => !opts[i].disabled);
+        const enabledIndices = opts
+          .map((_, i) => i)
+          .filter((i) => !opts[i].disabled);
         if (enabledIndices.length === 0) break;
         const currentPos = enabledIndices.indexOf(this.activeIndex());
         const len = enabledIndices.length;
@@ -303,7 +318,9 @@ export class AtlCombobox implements FormValueControl<string> {
   private open(): void {
     const panel = this.panelRef();
     if (!panel || this.isOpen() || this.readonly()) return;
-    (panel.nativeElement as HTMLElement & { showPopover(): void }).showPopover();
+    (
+      panel.nativeElement as HTMLElement & { showPopover(): void }
+    ).showPopover();
     this.isOpen.set(true);
     this.activeIndex.set(-1);
 
@@ -319,7 +336,9 @@ export class AtlCombobox implements FormValueControl<string> {
     const panel = this.panelRef();
     if (!panel || !this.isOpen()) return;
     try {
-      (panel.nativeElement as HTMLElement & { hidePopover(): void }).hidePopover();
+      (
+        panel.nativeElement as HTMLElement & { hidePopover(): void }
+      ).hidePopover();
     } catch {
       // Panel may already be hidden
     }

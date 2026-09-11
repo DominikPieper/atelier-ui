@@ -79,7 +79,7 @@ live repo — never hard-code yesterday's reading of the page.** Concretely:
 - A 15-character lookback for the German word "nicht" immediately before a
   matched command/node/frame excludes the page's own counter-examples from
   being asserted as claims (`nx storybook <fw>, nicht über nx serve
-  workshop-<fw>` — a command that only exists in a different repo, the
+workshop-<fw>` — a command that only exists in a different repo, the
   CLI-scaffolded standalone workspace, and is being named specifically to say
   "not this"). The window is tuned tight enough to exclude that case and
   `nicht ... check:parity` without also excluding "... Toolset nicht, ihr

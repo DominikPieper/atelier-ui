@@ -1,17 +1,29 @@
 import { readFileSync, writeFileSync } from 'node:fs';
 
-const LIGHT_CANVAS = '#ffffff', DARK_CANVAS = '#0a1116';
+const LIGHT_CANVAS = '#ffffff',
+  DARK_CANVAS = '#0a1116';
 const chan = (h, i) => parseInt(h.slice(1 + i * 2, 3 + i * 2), 16);
-const lin = (c) => { c /= 255; return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4); };
-const lum = (h) => 0.2126 * lin(chan(h,0)) + 0.7152 * lin(chan(h,1)) + 0.0722 * lin(chan(h,2));
-const contrast = (a, b) => { const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p); return (x + 0.05) / (y + 0.05); };
+const lin = (c) => {
+  c /= 255;
+  return c <= 0.04045 ? c / 12.92 : Math.pow((c + 0.055) / 1.055, 2.4);
+};
+const lum = (h) =>
+  0.2126 * lin(chan(h, 0)) +
+  0.7152 * lin(chan(h, 1)) +
+  0.0722 * lin(chan(h, 2));
+const contrast = (a, b) => {
+  const [x, y] = [lum(a), lum(b)].sort((p, q) => q - p);
+  return (x + 0.05) / (y + 0.05);
+};
 
 const T = 'libs/create-workspace/src/generators/preset/files/styles/tokens.css';
 const css = readFileSync(T, 'utf8');
 
 // ── ramps, read back out of the shipped token source ────────────────────────
 const ramps = {};
-for (const m of css.matchAll(/--ui-color-(teal|red|green|amber|sky)-(\d+):\s*(#[0-9a-f]{6});(?:\s*\/\*([^*]*)\*\/)?/gi)) {
+for (const m of css.matchAll(
+  /--ui-color-(teal|red|green|amber|sky)-(\d+):\s*(#[0-9a-f]{6});(?:\s*\/\*([^*]*)\*\/)?/gi,
+)) {
   const [, fam, step, hex, note] = m;
   (ramps[fam] ||= []).push({ step: +step, hex, note: (note || '').trim() });
 }
@@ -24,7 +36,9 @@ const blockOf = (name) => {
 };
 const aliases = (block) => {
   const out = {};
-  for (const m of block.matchAll(/--ui-color-([a-z-]+):\s*var\(--ui-color-(teal|red|green|amber|sky)-(\d+)\)/g))
+  for (const m of block.matchAll(
+    /--ui-color-([a-z-]+):\s*var\(--ui-color-(teal|red|green|amber|sky)-(\d+)\)/g,
+  ))
     out[m[1]] = `${m[2]}-${m[3]}`;
   return out;
 };
@@ -32,39 +46,62 @@ const lightAliases = aliases(blockOf(':root'));
 const darkAliases = aliases(blockOf('[data-theme="dark"]'));
 
 // ── the type scale, likewise ─────────────────────────────────────────────────
-const type = [...css.matchAll(/--ui-font-size-([a-z0-9]+):\s*([0-9.]+rem);/g)]
-  .map((m) => ({ name: m[1], rem: m[2], px: (parseFloat(m[2]) * 16).toFixed(2).replace(/\.00$/, '') }));
+const type = [
+  ...css.matchAll(/--ui-font-size-([a-z0-9]+):\s*([0-9.]+rem);/g),
+].map((m) => ({
+  name: m[1],
+  rem: m[2],
+  px: (parseFloat(m[2]) * 16).toFixed(2).replace(/\.00$/, ''),
+}));
 
 const FAMILY_ROLE = {
   teal: 'brand · --ui-color-primary',
-  red: 'danger', green: 'success', amber: 'warning', sky: 'info',
+  red: 'danger',
+  green: 'success',
+  amber: 'warning',
+  sky: 'info',
 };
-const esc = (s) => s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+const esc = (s) =>
+  s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 
-const rampSection = Object.entries(ramps).map(([fam, steps]) => {
-  const cells = steps.map(({ step, hex, note }) => {
-    const anchor = note.includes('★');
-    const t = /T on surface\((light|dark)\)\s+([0-9.]+)/.exec(note);
-    const marks = [anchor ? '<b class="anchor">★ anchor</b>' : '', t ? `<b class="safe">T ${t[1]} ${t[2]}</b>` : ''].filter(Boolean).join(' ');
-    // The specimen letter takes whichever canvas colour reads better on this step,
-    // and an unmarked step states its best case rather than showing a blank chip:
-    // white on teal-50 is 1.26:1, which looks like a rendering fault rather than a
-    // statement that the step cannot carry text.
-    const onWhite = contrast(hex, LIGHT_CANVAS), onDark = contrast(hex, DARK_CANVAS);
-    const fg = onWhite >= onDark ? LIGHT_CANVAS : DARK_CANVAS;
-    const best = Math.max(onWhite, onDark).toFixed(2);
-    return `        <div class="sw">
+const rampSection = Object.entries(ramps)
+  .map(([fam, steps]) => {
+    const cells = steps
+      .map(({ step, hex, note }) => {
+        const anchor = note.includes('★');
+        const t = /T on surface\((light|dark)\)\s+([0-9.]+)/.exec(note);
+        const marks = [
+          anchor ? '<b class="anchor">★ anchor</b>' : '',
+          t ? `<b class="safe">T ${t[1]} ${t[2]}</b>` : '',
+        ]
+          .filter(Boolean)
+          .join(' ');
+        // The specimen letter takes whichever canvas colour reads better on this step,
+        // and an unmarked step states its best case rather than showing a blank chip:
+        // white on teal-50 is 1.26:1, which looks like a rendering fault rather than a
+        // statement that the step cannot carry text.
+        const onWhite = contrast(hex, LIGHT_CANVAS),
+          onDark = contrast(hex, DARK_CANVAS);
+        const fg = onWhite >= onDark ? LIGHT_CANVAS : DARK_CANVAS;
+        const best = Math.max(onWhite, onDark).toFixed(2);
+        return `        <div class="sw">
           <div class="chip" style="background:${hex}"><span style="color:${fg}">Aa</span></div>
           <div class="swm"><b>${step}</b> <code>${hex}</code></div>
           <div class="swn">${marks || `<span class="none">no text · best ${best}:1</span>`}</div>
         </div>`;
-  }).join('\n');
-  const al = Object.entries(lightAliases).filter(([, v]) => v.startsWith(fam + '-'));
-  const ad = Object.entries(darkAliases).filter(([, v]) => v.startsWith(fam + '-'));
-  const row = (label, list) => list.length
-    ? `<tr><td>${label}</td><td>${list.map(([k, v]) => `<code>--ui-color-${k}</code> → <b>${v.split('-')[1]}</b>`).join('<br>')}</td></tr>`
-    : '';
-  return `      <div class="sec">
+      })
+      .join('\n');
+    const al = Object.entries(lightAliases).filter(([, v]) =>
+      v.startsWith(fam + '-'),
+    );
+    const ad = Object.entries(darkAliases).filter(([, v]) =>
+      v.startsWith(fam + '-'),
+    );
+    const row = (label, list) =>
+      list.length
+        ? `<tr><td>${label}</td><td>${list.map(([k, v]) => `<code>--ui-color-${k}</code> → <b>${v.split('-')[1]}</b>`).join('<br>')}</td></tr>`
+        : '';
+    return `      <div class="sec">
         <div class="sec-h"><h2 class="sec-t">${fam}</h2><span class="sec-n">${FAMILY_ROLE[fam]}</span></div>
         <div class="card">
           <div class="ramp">
@@ -76,9 +113,15 @@ ${cells}
           </table>
         </div>
       </div>`;
-}).join('\n');
+  })
+  .join('\n');
 
-const typeRows = type.map((t) => `            <tr><td><code>--ui-font-size-${t.name}</code></td><td class="num">${t.px}px</td><td class="num">${t.rem}</td><td style="font-size:${t.rem}">Sphinx of black quartz</td></tr>`).join('\n');
+const typeRows = type
+  .map(
+    (t) =>
+      `            <tr><td><code>--ui-font-size-${t.name}</code></td><td class="num">${t.px}px</td><td class="num">${t.rem}</td><td style="font-size:${t.rem}">Sphinx of black quartz</td></tr>`,
+  )
+  .join('\n');
 
 const html = `<!DOCTYPE html>
 <html>
@@ -169,4 +212,6 @@ ${typeRows}
 `;
 writeFileSync(process.argv[2], html);
 const total = Object.values(ramps).reduce((n, s) => n + s.length, 0);
-console.log(`generated: ${Object.keys(ramps).length} ramps, ${total} steps, ${type.length} type sizes`);
+console.log(
+  `generated: ${Object.keys(ramps).length} ramps, ${total} steps, ${type.length} type sizes`,
+);

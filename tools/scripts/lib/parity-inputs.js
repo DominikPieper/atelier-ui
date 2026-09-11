@@ -49,7 +49,8 @@ const METADATA_INDEX = path.join(ROOT, 'libs/spec/src/metadata/index.ts');
 let _registry = null;
 function registry() {
   if (!_registry) {
-    _registry = parseExportedVars(METADATA_INDEX).COMPONENT_METADATA_REGISTRY || {};
+    _registry =
+      parseExportedVars(METADATA_INDEX).COMPONENT_METADATA_REGISTRY || {};
   }
   return _registry;
 }
@@ -93,7 +94,9 @@ function inputFiles(moduleName) {
       if (fs.existsSync(tokens)) found.push(tokens);
     }
   }
-  return found.map((abs) => path.relative(ROOT, abs).split(path.sep).join('/')).sort();
+  return found
+    .map((abs) => path.relative(ROOT, abs).split(path.sep).join('/'))
+    .sort();
 }
 
 /**

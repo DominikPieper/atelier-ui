@@ -6,7 +6,8 @@ export const contract = {
   codeOnly: [
     {
       name: 'optionValue',
-      reason: "Is data, not state — the option's value carried at render time, not a Figma-settable property.",
+      reason:
+        "Is data, not state — the option's value carried at render time, not a Figma-settable property.",
     },
   ],
 } satisfies ComponentContract;

@@ -5,12 +5,12 @@ turned up. Grouped by what it takes to resolve, because most of these are one
 decision each rather than a list of edits.
 
 Sources: `AtlButton.dc.html` and `AtlInput.dc.html` in the Claude Design project
-*Atelier*, plus `figma_check_design_parity` on `129:2` (AtlButton, sm/default)
+_Atelier_, plus `figma_check_design_parity` on `129:2` (AtlButton, sm/default)
 and `129:23` (AtlInput, default).
 
 ## Read this first: which direction is canonical
 
-This is a **redesign**, and Figma is the *target* of the transfer, not the
+This is a **redesign**, and Figma is the _target_ of the transfer, not the
 reference for it. The design system is being reshaped deliberately; the Figma
 library is then rebuilt from the result (`tasks/atelier-design-system-plan.md`,
 Phase 3). So during this phase:
@@ -19,7 +19,7 @@ Phase 3). So during this phase:
   and will stay stale until the transfer.
 - The parity runs below were taken with `canonicalSource: "design"`, which is the
   wrong framing for a redesign and makes Figma's values read as authority. They
-  are not. Where Figma and the code disagree on a *value*, that is the transfer's
+  are not. Where Figma and the code disagree on a _value_, that is the transfer's
   backlog, not a defect.
 - What still counts as a defect is anything **wrong on its own terms** —
   internally inconsistent, invisible to users, or unbindable regardless of what
@@ -43,7 +43,7 @@ under "wrong on its own terms" has to be decided.
   gate green. Worth closing then, not now: record the font per master in the
   snapshot so an offline gate can compare it.
 - **AtlInput's master is 14px text at 44px tall with 12px padding**; the code is
-  16px at 46px with 10/16. Values to reconcile *during* the transfer, in whichever
+  16px at 46px with 10/16. Values to reconcile _during_ the transfer, in whichever
   direction the redesign decides.
 - **AtlButton's master has no focus variant** for three of four variants, and
   neither master carries a11y annotations in its description. Transfer work.
@@ -133,7 +133,7 @@ identically to `default`, which was true but the least of it: the prop was
 declared once on `AtlFormFieldSpec`, inherited by seven specs, and did something
 different in each framework. Measured in chromium: `readonly` on a checkbox or
 radio is ignored by HTML, and `HTMLSelectElement` has no `readOnly` property —
-so React's checkbox and toggle passed the attribute *and* still fired
+so React's checkbox and toggle passed the attribute _and_ still fired
 `onCheckedChange`. Angular never implemented the prop anywhere except input and
 textarea. It now lives in an `AtlReadonlySpec` mixin on the four components that
 enforce it, with a visual treatment (border transparent, filled surface stays,
@@ -155,7 +155,7 @@ svgs, literal `content:` glyphs, and any name/geometry mismatch.
 <details><summary>The original finding</summary>
 
 - **`readonly` renders identically to `default`.** `--ui-color-input-bg` already
-  *is* `var(--ui-color-surface-sunken)`, and `.is-readonly input` sets the same
+  _is_ `var(--ui-color-surface-sunken)`, and `.is-readonly input` sets the same
   value. Only the cursor differs, in light and dark alike. A state a user cannot
   see is not a state — so either it gets a visual treatment or it stops
   pretending to be one.
@@ -175,7 +175,7 @@ already exists**. Tokenising all 116 would mean ~100 single-use tokens.
 
 Two of the 13 were live defects: **AtlTab and AtlCodeBlock's header hardcoded
 `2.5rem`, exactly `--ui-control-height-md`** — and `check:geometry` builds its
-roster from token *references*, so a control that hardcodes the value is invisible
+roster from token _references_, so a control that hardcodes the value is invisible
 to it. Measured: 41px and 43px against a 40px token. ADR-0041's defect, still live,
 in the blind spot of the gate written to catch it.
 
@@ -196,7 +196,7 @@ border width, the invalid indicator's reserved space. Of AtlButton's padding
 values only `24px` lands on the spacing scale.
 
 This one survives the reframe: it is not about what Figma currently holds but
-about what the transfer *can* bind.
+about what the transfer _can_ bind.
 
 </details>
 
@@ -251,13 +251,13 @@ row **32px**, toggle row **27px**. Every one is content-driven — the label's 2
 prose line box plus whatever the control overhangs, and the radio adds 4px of block
 padding nothing else has. So the numbers are accidents of three compositions, not
 three decisions, and a form mixing them has vertical rhythm no stylesheet states.
-A single `--ui-control-row-height` would make them agree *and* make the value
+A single `--ui-control-row-height` would make them agree _and_ make the value
 checkable by `check:geometry`. Drawn side by side, with the boxes outlined, on
 AtlCheckbox's sheet.
 
 **E2 — the checkbox is nearly a circle.** `--ui-radius-sm` is 8px and the box is
 20px, so at a glance it reads as the radio's circle. These are the two controls
-whose *shapes* carry the semantics — one-of-many versus any-of-many — and a reader
+whose _shapes_ carry the semantics — one-of-many versus any-of-many — and a reader
 scanning a form has only the shape to go on. Either the checkbox gets a tighter
 radius or the difference stops being load-bearing.
 
@@ -321,8 +321,7 @@ option 36px, an AtlCombobox option 40px. All three are list rows a user reads th
 same way; two of the three numbers are literals, and only AtlMenu's compact row sits
 on a token. One height for all list rows, or a stated reason per component.
 
-**G2 — the dialog and drawer headers sit between two type roles.** Both are 20px at
-600. `--ui-type-title` is 18/600, `--ui-type-headline` is 24/700. Two occurrences of
+**G2 — the dialog and drawer headers sit between two type roles.** Both are 20px at 600. `--ui-type-title` is 18/600, `--ui-type-headline` is 24/700. Two occurrences of
 the same off-role treatment; a third would settle whether the role set needs a step
 or the headers need to move onto one. Related: the roles still have no consumers
 (ADR-0049).
@@ -338,7 +337,7 @@ that the slice is deliberate — AtlButton's master does state it.
 
 **G5 — AtlTooltip's API carries one framework's idiom.** The props are `atlTooltip`,
 `atlTooltipPosition`, `atlTooltipDisabled`, `atlTooltipShowDelay` — because Angular
-implements it as an attribute directive, where the selector *is* the prop. React and
+implements it as an attribute directive, where the selector _is_ the prop. React and
 Vue inherit a prefix they have no reason for, in a spec whose whole point is being
 framework-agnostic. Angular also positions the bubble with CDK overlay transforms
 rather than `.position-*` classes, which is why it holds all four entries in the
@@ -374,8 +373,8 @@ problem: the master varies the container to show a child.
 
 **H4 — AtlBreadcrumbs' separator is typed `string`.** So the default `/` is a text
 glyph and an icon is impossible — the same glyph-as-icon shape ADR-0046 removed from
-the CSS and ADR-0050 from the TypeScript, surviving here because it is a *public
-prop* rather than an internal detail.
+the CSS and ADR-0050 from the TypeScript, surviving here because it is a _public
+prop_ rather than an internal detail.
 
 **H5 — AtlStepper's ARIA is still unresolved**, and it is the one open item that
 warns on every gate run: metadata says `progressbar`, all three adapters render
@@ -394,16 +393,16 @@ AtlPagination's button rendering 38px against its own `height: 2.25rem` (ADR-005
 **Both halves were wrong**, and I arrived at them by arithmetic on an assumption
 rather than by measuring. Measured, four ways:
 
-| accordion trigger | height | line-height | min-height |
-|---|---|---|---|
-| as shipped | **52px** | `normal` (≈18.4px) | 52px |
-| tight forced | 52px | 20px | 52px |
-| min-height removed | **50px** | `normal` | 0 |
-| tight, min-height removed | **52px** | 20px | 0 |
+| accordion trigger         | height   | line-height        | min-height |
+| ------------------------- | -------- | ------------------ | ---------- |
+| as shipped                | **52px** | `normal` (≈18.4px) | 52px       |
+| tight forced              | 52px     | 20px               | 52px       |
+| min-height removed        | **50px** | `normal`           | 0          |
+| tight, min-height removed | **52px** | 20px               | 0          |
 
 So the trigger never used prose leading — its line-height resolves to `normal` — and
 the 52px comes from a `min-height: 3.25rem` literal. Stating the tight line-height
-would make the content 52px, i.e. *taller* than the 50px it is now, not shorter. The
+would make the content 52px, i.e. _taller_ than the 50px it is now, not shorter. The
 direction of my claim was inverted.
 
 What survives: the pattern is real for AtlCheckbox, AtlRadio, AtlToggle and AtlTable
@@ -513,7 +512,7 @@ recorded as the Phase 3 work order. Nothing on this list blocks the transfer any
 6. ~~**AtlIcon has no master**~~ — **done 2026-08-27, ADR-0057, and the premise was wrong.**
    Twenty-one `Icon/*` components existed already, each holding a single Unicode TEXT glyph on a
    32×19 frame — the glyph-as-icon defect in a fourth home, in the file everything is transferred
-   *to*. The set is now 25 vector components generated from `ATL_ICON_GEOMETRY`, verified
+   _to_. The set is now 25 vector components generated from `ATL_ICON_GEOMETRY`, verified
    identical to `AtlIconName` in both directions (J1).
 7. ~~**The masters keep claiming their children's states**~~ — **convention set and gated
    2026-08-27, ADR-0056; execution is Phase 3.** Counting made it concrete: 61 exported
@@ -580,15 +579,15 @@ the library draws it in the third — options can be styled in Angular and canno
 anywhere else. No gate sees this: `check:sync` compares directory and story presence,
 `check:variants` compares axis classes, and both are satisfied.
 
-*Consequence for my own work:* **AtlSelect.dc.html is wrong.** It draws a panel with
+_Consequence for my own work:_ **AtlSelect.dc.html is wrong.** It draws a panel with
 option rows and an anatomy row "option height 36px", which is Angular's implementation
 presented as the component's. For React and Vue those rows do not exist. The sheet
 needs the divergence drawn, not one framework's version of it.
 
 **K3 — AtlCombobox.dc.html states a token binding that does not exist.** Its anatomy
 says "option height 40px — `--ui-control-height-md` — an option is a control-sized
-target". What I bound to the control height today was the combobox *input*; the option
-was `min-height: 2.25rem` (36px) until the row recipe made it 40 on the *row* ladder.
+target". What I bound to the control height today was the combobox _input_; the option
+was `min-height: 2.25rem` (36px) until the row recipe made it 40 on the _row_ ladder.
 Right number now, for a different reason, and the sheet says the wrong one.
 
 Also corrected in passing: I reported that Angular's combobox option had no height
@@ -600,4 +599,3 @@ selector.
 circle (36px). Both are controls or graphics rather than rows — they hold no content
 that needs to nest with an inset — and both already hold their height under the probe.
 Which ladder they take is a separate decision.
-

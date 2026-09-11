@@ -150,10 +150,10 @@ omitted" behavior:
 
 **Alternatives rejected** (unchanged from the first pass, still correct):
 
-- *Remove `label` from React and Vue.* Would be a breaking change at 0.2.31
+- _Remove `label` from React and Vue._ Would be a breaking change at 0.2.31
   across three components instead of one, and `/tutorial` already teaches
   it for Input.
-- *Leave it as a documented divergence.* Contradicts "any given workshop
+- _Leave it as a documented divergence._ Contradicts "any given workshop
   uses exactly one framework" and each is a first-class, interchangeable
   target (`CLAUDE.md`).
 
@@ -238,7 +238,7 @@ each framework's default (and differing) attribute-forwarding behavior:
   defect calls for, and Vue's default behavior for genuinely-undeclared
   attributes (fallthrough to the single root element) is not itself wrong
   anywhere else in these three components. The explicit `ariaLabel?:
-  string` prop was declared **camelCase**, matching every other prop and
+string` prop was declared **camelCase**, matching every other prop and
   the existing `AtlTable` precedent — an early version of this fix declared
   it as `'aria-label'?: string` (matching the DOM attribute name) and bound
   `props['aria-label']` in the template, and it silently did nothing: Vue's

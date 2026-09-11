@@ -33,7 +33,8 @@ export interface AtlButtonSpec {
 // ---------------------------------------------------------------------------
 // Badge
 // ---------------------------------------------------------------------------
-export type AtlBadgeVariant = 'default' | 'success' | 'warning' | 'danger' | 'info';
+export type AtlBadgeVariant =
+  'default' | 'success' | 'warning' | 'danger' | 'info';
 export type AtlBadgeSize = 'sm' | 'md';
 export interface AtlBadgeSpec {
   variant?: AtlBadgeVariant;
@@ -145,13 +146,16 @@ export interface AtlCaptionSpec {
 }
 /* eslint-enable @typescript-eslint/no-explicit-any */
 
-export type AtlInputType = 'text' | 'email' | 'password' | 'number' | 'tel' | 'url';
-export interface AtlInputSpec extends AtlFormFieldSpec, AtlReadonlySpec, AtlCaptionSpec {
+export type AtlInputType =
+  'text' | 'email' | 'password' | 'number' | 'tel' | 'url';
+export interface AtlInputSpec
+  extends AtlFormFieldSpec, AtlReadonlySpec, AtlCaptionSpec {
   type?: AtlInputType;
   placeholder?: string;
 }
 
-export interface AtlTextareaSpec extends AtlFormFieldSpec, AtlReadonlySpec, AtlCaptionSpec {
+export interface AtlTextareaSpec
+  extends AtlFormFieldSpec, AtlReadonlySpec, AtlCaptionSpec {
   rows?: number;
   placeholder?: string;
   autoResize?: boolean;
@@ -163,13 +167,19 @@ export interface AtlTextareaSpec extends AtlFormFieldSpec, AtlReadonlySpec, AtlC
 // Checkbox/Toggle are checked-based, not value-based, so they omit the
 // inherited `value`/`onValueChange` — their state is `checked`/`onCheckedChange`.
 // (Input/Textarea/RadioGroup/Select/Combobox keep the value-based pair.)
-export interface AtlCheckboxSpec extends Omit<AtlFormFieldSpec, 'value' | 'onValueChange'> {
+export interface AtlCheckboxSpec extends Omit<
+  AtlFormFieldSpec,
+  'value' | 'onValueChange'
+> {
   checked?: boolean;
   onCheckedChange?: (checked: boolean) => void;
   indeterminate?: boolean;
 }
 
-export interface AtlToggleSpec extends Omit<AtlFormFieldSpec, 'value' | 'onValueChange'> {
+export interface AtlToggleSpec extends Omit<
+  AtlFormFieldSpec,
+  'value' | 'onValueChange'
+> {
   checked?: boolean;
   onCheckedChange?: (checked: boolean) => void;
 }
@@ -317,12 +327,10 @@ export interface AtlTooltipSpec {
 // ---------------------------------------------------------------------------
 // Toast
 // ---------------------------------------------------------------------------
-export type AtlToastVariant = 'default' | 'success' | 'warning' | 'danger' | 'info';
+export type AtlToastVariant =
+  'default' | 'success' | 'warning' | 'danger' | 'info';
 export type AtlToastContainerPosition =
-  | 'top-right'
-  | 'top-center'
-  | 'bottom-right'
-  | 'bottom-center';
+  'top-right' | 'top-center' | 'bottom-right' | 'bottom-center';
 export interface AtlToastOptions {
   variant?: AtlToastVariant;
   duration?: number;

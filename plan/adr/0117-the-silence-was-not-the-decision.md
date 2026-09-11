@@ -36,9 +36,9 @@ organisation-specific governance — and `check:skill-discovery` exits 0 confirm
 the allowlist is current. That non-distribution is a recorded, correct decision.
 Nothing in this ADR revisits it.
 
-What was never decided is what the *participant-facing* material does with that
+What was never decided is what the _participant-facing_ material does with that
 fact. `tasks/review-plausibility-2026-09-08.md`'s finding C10 named the gap without
-closing it: *"the human-facing silence [...] is not a recorded decision."* Two
+closing it: _"the human-facing silence [...] is not a recorded decision."_ Two
 things had already happened by the time that finding was written, and both are
 worse than silence:
 
@@ -47,7 +47,7 @@ worse than silence:
   the two new skills, and the third-party `uianatomy-mcp` skill this repo's own
   training demos on Day 2, appeared nowhere.
 - `claude-design.astro:249` and `schulung.astro:101` went further than silence:
-  each told the reader outright that step 5's tooling *does not exist*, at the
+  each told the reader outright that step 5's tooling _does not exist_, at the
   same time `artboard-bridge` Publish existed, had run once, and had correctly
   refused to publish a `DRIFT` component (`tasks/schulung-content-review-2026-09-08.md`
   § B1). A reader trusting either page left with a false belief about the current
@@ -83,7 +83,7 @@ Concretely:
   acceptable interim state named above — it is honest about what it links to,
   which is what this ADR requires, not that everything be clickable.
 - The false absolutes this silence produced (`claude-design.astro:106-113,
-  188, 194, 249, 431`; `schulung.astro:101`) are corrected in the same pass, to
+188, 194, 249, 431`; `schulung.astro:101`) are corrected in the same pass, to
   what the skills' own eval record supports: `artboard-bridge` Publish has run
   once, against a scratch project, and correctly refused a `DRIFT` component;
   its write path is unexercised because every parity record in the repo is
@@ -102,7 +102,7 @@ Concretely:
   undistributed and cites the reason, the same way `UNDISTRIBUTED_SKILLS`
   requires a reason rather than a bare name.
 - **Nothing here changes distribution.** `check:skill-discovery` still passes
-  by *excluding* these two skills from the endpoint comparison; a reader who
+  by _excluding_ these two skills from the endpoint comparison; a reader who
   follows a repo-bound card's `skills/<name>/SKILL.md` pointer needs the repo
   checked out, not a public URL. If that changes, this ADR's "no detail page
   yet" clause goes stale and needs a dated correction here, not a silent edit.

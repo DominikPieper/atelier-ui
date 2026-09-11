@@ -30,10 +30,10 @@ const isActive = computed(() => myIndex.value === group.selectedIndex.value);
 // Derive the ids the group renders on its tab buttons/aria-controls, so the
 // panel carries the id the button points at and is labelled by its tab.
 const panelId = computed(() =>
-  myIndex.value >= 0 ? `${group.groupId}-panel-${myIndex.value}` : undefined
+  myIndex.value >= 0 ? `${group.groupId}-panel-${myIndex.value}` : undefined,
 );
 const tabId = computed(() =>
-  myIndex.value >= 0 ? `${group.groupId}-tab-${myIndex.value}` : undefined
+  myIndex.value >= 0 ? `${group.groupId}-tab-${myIndex.value}` : undefined,
 );
 </script>
 

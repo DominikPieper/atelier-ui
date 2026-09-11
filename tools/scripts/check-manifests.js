@@ -77,7 +77,8 @@ function resolvePointer(obj, pointer) {
     .map((p) => p.replace(/~1/g, '/').replace(/~0/g, '~'));
   let cur = obj;
   for (const part of parts) {
-    if (cur == null || typeof cur !== 'object' || !(part in cur)) return undefined;
+    if (cur == null || typeof cur !== 'object' || !(part in cur))
+      return undefined;
     cur = cur[part];
   }
   return cur;
@@ -92,7 +93,7 @@ for (const fw of FRAMEWORKS) {
   if (!fs.existsSync(manifestPath)) {
     fail(
       'NO-BUILD',
-      `${path.relative(ROOT, manifestPath)} not found. Run: npx nx build-storybook ${fw}`
+      `${path.relative(ROOT, manifestPath)} not found. Run: npx nx build-storybook ${fw}`,
     );
     continue;
   }
@@ -105,13 +106,16 @@ for (const fw of FRAMEWORKS) {
     continue;
   }
 
-  const components = manifest.components && typeof manifest.components === 'object' ? manifest.components : null;
+  const components =
+    manifest.components && typeof manifest.components === 'object'
+      ? manifest.components
+      : null;
   const ids = components ? Object.keys(components) : [];
   if (!components || ids.length === 0) {
     fail(
       'EMPTY',
       `${fw}: manifests/components.json has zero components. @storybook/mcp throws on this ` +
-        `shape for every tool call, not just component lookups.`
+        `shape for every tool call, not just component lookups.`,
     );
     continue;
   }
@@ -121,7 +125,7 @@ for (const fw of FRAMEWORKS) {
       'NO-DOCGEN-META',
       `${fw}: manifests/components.json has no meta.docgen. A real docgen pass records its ` +
         `generator name there (e.g. 'angular-component-meta'); its absence is the same signal ` +
-        `as the decoy manifest below, one level up.`
+        `as the decoy manifest below, one level up.`,
     );
   }
 
@@ -145,12 +149,14 @@ for (const fw of FRAMEWORKS) {
     // Invariant on missing `components.meta.docgen` was swallowed and every
     // entry came out empty. Checked independently of the meta.docgen check
     // above so a manifest that lies about its own meta is still caught here.
-    const extraKeys = Object.keys(entry).filter((k) => k !== 'id' && k !== 'name');
+    const extraKeys = Object.keys(entry).filter(
+      (k) => k !== 'id' && k !== 'name',
+    );
     if (extraKeys.length === 0) {
       fail(
         'DECOY',
         `${fw}/${id}: carries only id/name, nothing else. This is the decoy shape a ` +
-          `docgen-less build writes.`
+          `docgen-less build writes.`,
       );
       continue;
     }
@@ -165,7 +171,7 @@ for (const fw of FRAMEWORKS) {
     if (!fs.existsSync(shardPath)) {
       fail(
         'UNRESOLVED-REF',
-        `${fw}/${id}: docgen.$ref '${ref}' points at ${path.relative(ROOT, shardPath)}, which does not exist.`
+        `${fw}/${id}: docgen.$ref '${ref}' points at ${path.relative(ROOT, shardPath)}, which does not exist.`,
       );
       continue;
     }
@@ -174,15 +180,22 @@ for (const fw of FRAMEWORKS) {
     try {
       shard = JSON.parse(fs.readFileSync(shardPath, 'utf8'));
     } catch (err) {
-      fail('UNRESOLVED-REF', `${fw}/${id}: docgen.$ref shard ${path.relative(ROOT, shardPath)} is not valid JSON: ${err.message}`);
+      fail(
+        'UNRESOLVED-REF',
+        `${fw}/${id}: docgen.$ref shard ${path.relative(ROOT, shardPath)} is not valid JSON: ${err.message}`,
+      );
       continue;
     }
 
     const resolved = resolvePointer(shard, pointer);
-    if (resolved === undefined || resolved === null || typeof resolved !== 'object') {
+    if (
+      resolved === undefined ||
+      resolved === null ||
+      typeof resolved !== 'object'
+    ) {
       fail(
         'UNRESOLVED-REF',
-        `${fw}/${id}: docgen.$ref '${ref}' — pointer '#${pointer}' does not resolve inside ${path.relative(ROOT, shardPath)}.`
+        `${fw}/${id}: docgen.$ref '${ref}' — pointer '#${pointer}' does not resolve inside ${path.relative(ROOT, shardPath)}.`,
       );
     }
   }
@@ -194,6 +207,6 @@ if (errors.length > 0) {
   process.exit(1);
 } else {
   console.log(
-    `✓ Storybook component manifests present, docgen-backed, and resolvable for all ${FRAMEWORKS.length} frameworks (${componentsChecked} components checked).`
+    `✓ Storybook component manifests present, docgen-backed, and resolvable for all ${FRAMEWORKS.length} frameworks (${componentsChecked} components checked).`,
   );
 }

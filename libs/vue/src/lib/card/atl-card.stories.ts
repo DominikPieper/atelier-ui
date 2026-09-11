@@ -7,7 +7,8 @@ import AtlButton from '../button/atl-button.vue';
 
 import { metadata } from '@atelier-ui/spec/metadata/card.metadata';
 import { contract } from '@atelier-ui/spec/contracts/card.contract';
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
@@ -18,8 +19,16 @@ const meta: Meta<typeof AtlCard> = {
   component: AtlCard,
   tags: ['autodocs'],
   render: (args) => ({
-    components: { AtlCard, AtlCardHeader, AtlCardContent, AtlCardFooter, AtlButton },
-    setup() { return { args }; },
+    components: {
+      AtlCard,
+      AtlCardHeader,
+      AtlCardContent,
+      AtlCardFooter,
+      AtlButton,
+    },
+    setup() {
+      return { args };
+    },
     template: `
       <AtlCard v-bind="args">
         <AtlCardHeader>Card Header</AtlCardHeader>
@@ -128,8 +137,16 @@ export const AllPadding: Story = {
 
 export const Playground: Story = {
   render: (args) => ({
-    components: { AtlCard, AtlCardHeader, AtlCardContent, AtlCardFooter, AtlButton },
-    setup() { return { args }; },
+    components: {
+      AtlCard,
+      AtlCardHeader,
+      AtlCardContent,
+      AtlCardFooter,
+      AtlButton,
+    },
+    setup() {
+      return { args };
+    },
     template: `
       <AtlCard v-bind="args" style="max-width:360px">
         <AtlCardHeader>Playground Card</AtlCardHeader>

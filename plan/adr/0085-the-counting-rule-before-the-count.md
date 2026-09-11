@@ -40,7 +40,7 @@ So the rule is decided here, first, and the count follows from it.
 **1. The counting rule.** A combination earns a role when it clears three on both
 sides, counted as follows.
 
-*CSS side* — count distinct rendered elements whose fully resolved cascade IS the
+_CSS side_ — count distinct rendered elements whose fully resolved cascade IS the
 combination, once per logical rule rather than once per framework. Exclude:
 
 - a **pass-through** element that declares `font: inherit; font-weight: inherit`
@@ -51,9 +51,9 @@ combination, once per logical rule rather than once per framework. Exclude:
 - a **defect already scheduled for correction**.
 
 Report ADR-0073 carve-outs separately but do not exclude them: that ADR governs
-what a CSS *rule* may write, not whether the combination exists.
+what a CSS _rule_ may write, not whether the combination exists.
 
-*Figma side* — count nodes drawn at the combination **whose own resolved CSS
+_Figma side_ — count nodes drawn at the combination **whose own resolved CSS
 cascade is that combination**. "Drawn at X" and "faithful to X" are different
 measures and ADR-0074 used them interchangeably. Exclude:
 
@@ -66,7 +66,7 @@ measures and ADR-0074 used them interchangeably. Exclude:
 Report both the raw and the strict number every time.
 
 **Why tighten rather than keep the precedent.** Each exclusion removes a node that
-*cannot* be bound to the role being counted — an instance descendant would fight
+_cannot_ be bound to the role being counted — an instance descendant would fight
 its master, an invisible node renders nothing, and a node with `UPPER` casing
 loses its casing the moment a role is applied. Counting them inflates the evidence
 for a decision they cannot participate in. The precedent's looser rule was not
@@ -76,10 +76,10 @@ fails its predecessor would be a reason to reject the successor.
 
 **2. Two roles, under that rule.**
 
-| role | value | CSS sites | faithful Figma nodes / masters |
-|---|---|---:|---|
-| `--ui-type-row` | regular `md` / tight | 7 | 11 / 3 |
-| `--ui-type-row-sm` | regular `sm` / tight | 3 | 10 / 3 |
+| role               | value                | CSS sites | faithful Figma nodes / masters |
+| ------------------ | -------------------- | --------: | ------------------------------ |
+| `--ui-type-row`    | regular `md` / tight |         7 | 11 / 3                         |
+| `--ui-type-row-sm` | regular `sm` / tight |         3 | 10 / 3                         |
 
 `row` is the text **in** a row — a menu item, an option, a checkbox or radio
 label, a table cell — where `control` is the label **on** a control and `action`

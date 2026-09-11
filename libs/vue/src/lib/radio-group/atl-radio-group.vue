@@ -10,7 +10,8 @@ export interface AtlRadioGroupContext {
   onSelect: (value: string) => void;
 }
 
-export const AtlRadioGroupKey: InjectionKey<AtlRadioGroupContext> = Symbol('AtlRadioGroup');
+export const AtlRadioGroupKey: InjectionKey<AtlRadioGroupContext> =
+  Symbol('AtlRadioGroup');
 
 export interface AtlRadioGroupProps {
   value?: string;
@@ -44,11 +45,21 @@ const emit = defineEmits<{
 }>();
 
 provide(AtlRadioGroupKey, {
-  get value() { return props.value ?? ''; },
-  get name() { return props.name ?? ''; },
-  get disabled() { return props.disabled ?? false; },
-  get readonly() { return props.readonly ?? false; },
-  get invalid() { return props.invalid ?? false; },
+  get value() {
+    return props.value ?? '';
+  },
+  get name() {
+    return props.name ?? '';
+  },
+  get disabled() {
+    return props.disabled ?? false;
+  },
+  get readonly() {
+    return props.readonly ?? false;
+  },
+  get invalid() {
+    return props.invalid ?? false;
+  },
   onSelect(v: string) {
     if (!props.disabled && !props.readonly) {
       emit('update:value', v);
@@ -74,7 +85,8 @@ function onKeydown(event: KeyboardEvent): void {
   const backward = event.key === 'ArrowUp' || event.key === 'ArrowLeft';
   if (!forward && !backward) return;
   const radios = Array.from(
-    groupRef.value?.querySelectorAll<HTMLInputElement>('input[type="radio"]') ?? []
+    groupRef.value?.querySelectorAll<HTMLInputElement>('input[type="radio"]') ??
+      [],
   ).filter((radio) => !radio.disabled);
   if (radios.length === 0) return;
   event.preventDefault();
@@ -98,7 +110,9 @@ function onKeydown(event: KeyboardEvent): void {
   >
     <slot />
     <div v-if="errors.length > 0" class="errors" role="alert">
-      <p v-for="(error, index) in errors" :key="index" class="error-message">{{ error }}</p>
+      <p v-for="(error, index) in errors" :key="index" class="error-message">
+        {{ error }}
+      </p>
     </div>
   </div>
 </template>

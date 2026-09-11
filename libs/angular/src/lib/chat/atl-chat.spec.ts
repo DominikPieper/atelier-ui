@@ -37,16 +37,19 @@ beforeAll(() => {
 
 describe('AtlChat', () => {
   describe('variant classes', () => {
-    covers('chat', 'variant-class').each(['drawer', 'popup', 'inline'] as const)(
-      'applies variant-%s class to host',
-      async (variant) => {
-        const { container } = await render(
-          `<atl-chat variant="${variant}" [open]="true">Body</atl-chat>`,
-          { imports: ALL_CHAT },
-        );
-        expect(container.querySelector('atl-chat')).toHaveClass(`variant-${variant}`);
-      },
-    );
+    covers('chat', 'variant-class').each([
+      'drawer',
+      'popup',
+      'inline',
+    ] as const)('applies variant-%s class to host', async (variant) => {
+      const { container } = await render(
+        `<atl-chat variant="${variant}" [open]="true">Body</atl-chat>`,
+        { imports: ALL_CHAT },
+      );
+      expect(container.querySelector('atl-chat')).toHaveClass(
+        `variant-${variant}`,
+      );
+    });
   });
 
   describe('status classes', () => {
@@ -57,30 +60,40 @@ describe('AtlChat', () => {
           `<atl-chat variant="inline" status="${status}" [open]="true">Body</atl-chat>`,
           { imports: ALL_CHAT },
         );
-        expect(container.querySelector('atl-chat')).toHaveClass(`status-${status}`);
+        expect(container.querySelector('atl-chat')).toHaveClass(
+          `status-${status}`,
+        );
       },
     );
   });
 
-  covers('chat', 'inline-variant')('inline variant renders content without overlay chrome', async () => {
-    const { container } = await render(
-      `<atl-chat variant="inline" [open]="true">Hello</atl-chat>`,
-      { imports: ALL_CHAT },
-    );
-    expect(container.querySelector('section.inline-surface')).toBeInTheDocument();
-    expect(container.querySelector('dialog')).not.toBeInTheDocument();
-    expect(container.querySelector('.fab-bubble')).not.toBeInTheDocument();
-    expect(screen.getByText('Hello')).toBeInTheDocument();
-  });
+  covers('chat', 'inline-variant')(
+    'inline variant renders content without overlay chrome',
+    async () => {
+      const { container } = await render(
+        `<atl-chat variant="inline" [open]="true">Hello</atl-chat>`,
+        { imports: ALL_CHAT },
+      );
+      expect(
+        container.querySelector('section.inline-surface'),
+      ).toBeInTheDocument();
+      expect(container.querySelector('dialog')).not.toBeInTheDocument();
+      expect(container.querySelector('.fab-bubble')).not.toBeInTheDocument();
+      expect(screen.getByText('Hello')).toBeInTheDocument();
+    },
+  );
 
-  covers('chat', 'popup-variant')('popup variant renders the floating bubble', async () => {
-    const { container } = await render(
-      `<atl-chat variant="popup" [open]="true">Body</atl-chat>`,
-      { imports: ALL_CHAT },
-    );
-    expect(container.querySelector('button.fab-bubble')).toBeInTheDocument();
-    expect(container.querySelector('.popup-surface')).toBeInTheDocument();
-  });
+  covers('chat', 'popup-variant')(
+    'popup variant renders the floating bubble',
+    async () => {
+      const { container } = await render(
+        `<atl-chat variant="popup" [open]="true">Body</atl-chat>`,
+        { imports: ALL_CHAT },
+      );
+      expect(container.querySelector('button.fab-bubble')).toBeInTheDocument();
+      expect(container.querySelector('.popup-surface')).toBeInTheDocument();
+    },
+  );
 
   it('drawer variant renders a native dialog', async () => {
     const { container } = await render(
@@ -98,17 +111,24 @@ describe('AtlChat', () => {
           `<atl-chat-message role="${role}">Hi</atl-chat-message>`,
           { imports: ALL_CHAT },
         );
-        expect(container.querySelector('atl-chat-message')).toHaveClass(`role-${role}`);
+        expect(container.querySelector('atl-chat-message')).toHaveClass(
+          `role-${role}`,
+        );
       },
     );
 
-    covers('chat', 'is-failed')('applies is-failed class when failed=true', async () => {
-      const { container } = await render(
-        `<atl-chat-message role="assistant" [failed]="true">err</atl-chat-message>`,
-        { imports: ALL_CHAT },
-      );
-      expect(container.querySelector('atl-chat-message')).toHaveClass('is-failed');
-    });
+    covers('chat', 'is-failed')(
+      'applies is-failed class when failed=true',
+      async () => {
+        const { container } = await render(
+          `<atl-chat-message role="assistant" [failed]="true">err</atl-chat-message>`,
+          { imports: ALL_CHAT },
+        );
+        expect(container.querySelector('atl-chat-message')).toHaveClass(
+          'is-failed',
+        );
+      },
+    );
   });
 
   describe('AtlChatSuggestion', () => {
@@ -125,52 +145,68 @@ describe('AtlChat', () => {
   });
 
   describe('AtlChatInput', () => {
-    covers('chat', 'send-button-idle')('renders a Send button when status is idle', async () => {
-      const { container } = await render(
-        `<atl-chat variant="inline" status="idle" [open]="true">
+    covers('chat', 'send-button-idle')(
+      'renders a Send button when status is idle',
+      async () => {
+        const { container } = await render(
+          `<atl-chat variant="inline" status="idle" [open]="true">
           <atl-chat-input />
         </atl-chat>`,
-        { imports: ALL_CHAT },
-      );
-      expect(container.querySelector('button.variant-primary')).toHaveTextContent('Send');
-    });
+          { imports: ALL_CHAT },
+        );
+        expect(
+          container.querySelector('button.variant-primary'),
+        ).toHaveTextContent('Send');
+      },
+    );
 
-    covers('chat', 'stop-button-streaming')('renders a Stop button when status is streaming', async () => {
-      const { container } = await render(
-        `<atl-chat variant="inline" status="streaming" [open]="true">
+    covers('chat', 'stop-button-streaming')(
+      'renders a Stop button when status is streaming',
+      async () => {
+        const { container } = await render(
+          `<atl-chat variant="inline" status="streaming" [open]="true">
           <atl-chat-input />
         </atl-chat>`,
-        { imports: ALL_CHAT },
-      );
-      expect(container.querySelector('button.variant-danger')).toHaveTextContent('Stop');
-      expect(container.querySelector('textarea')).toBeDisabled();
-    });
+          { imports: ALL_CHAT },
+        );
+        expect(
+          container.querySelector('button.variant-danger'),
+        ).toHaveTextContent('Stop');
+        expect(container.querySelector('textarea')).toBeDisabled();
+      },
+    );
 
-    covers('chat', 'emits-send')('emits send with the typed text on Enter', async () => {
-      const user = userEvent.setup();
-      const onSend = vi.fn();
-      const { container } = await render(
-        `<atl-chat variant="inline" [open]="true">
+    covers('chat', 'emits-send')(
+      'emits send with the typed text on Enter',
+      async () => {
+        const user = userEvent.setup();
+        const onSend = vi.fn();
+        const { container } = await render(
+          `<atl-chat variant="inline" [open]="true">
           <atl-chat-input (send)="onSend($event)" />
         </atl-chat>`,
-        { imports: ALL_CHAT, componentProperties: { onSend } },
-      );
-      const ta = container.querySelector('textarea')!;
-      await user.type(ta, 'hello{Enter}');
-      expect(onSend).toHaveBeenCalledWith('hello');
-    });
+          { imports: ALL_CHAT, componentProperties: { onSend } },
+        );
+        const ta = container.querySelector('textarea')!;
+        await user.type(ta, 'hello{Enter}');
+        expect(onSend).toHaveBeenCalledWith('hello');
+      },
+    );
 
-    covers('chat', 'emits-stop')('emits stop when Stop button is clicked while streaming', async () => {
-      const user = userEvent.setup();
-      const onStop = vi.fn();
-      const { container } = await render(
-        `<atl-chat variant="inline" status="streaming" [open]="true">
+    covers('chat', 'emits-stop')(
+      'emits stop when Stop button is clicked while streaming',
+      async () => {
+        const user = userEvent.setup();
+        const onStop = vi.fn();
+        const { container } = await render(
+          `<atl-chat variant="inline" status="streaming" [open]="true">
           <atl-chat-input (stop)="onStop()" />
         </atl-chat>`,
-        { imports: ALL_CHAT, componentProperties: { onStop } },
-      );
-      await user.click(container.querySelector('button.variant-danger')!);
-      expect(onStop).toHaveBeenCalledOnce();
-    });
+          { imports: ALL_CHAT, componentProperties: { onStop } },
+        );
+        await user.click(container.querySelector('button.variant-danger')!);
+        expect(onStop).toHaveBeenCalledOnce();
+      },
+    );
   });
 });

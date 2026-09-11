@@ -199,7 +199,10 @@ main().catch((err) => {
 });
 
 async function main() {
-  const client = new Client({ name: 'atelier-figma-sync-inventory', version: '1.0.0' }, { capabilities: {} });
+  const client = new Client(
+    { name: 'atelier-figma-sync-inventory', version: '1.0.0' },
+    { capabilities: {} },
+  );
   // Same invocation as figma:snapshot — pinning `@latest` and passing the environment
   // through is what makes the Desktop Bridge visible to a spawned client.
   const transport = new StdioClientTransport({
@@ -218,24 +221,34 @@ async function main() {
       console.error(
         '✗ figma:sync-inventory — the Desktop Bridge plugin is not connected.\n' +
           '  Open the file in Figma Desktop, run the figma-console plugin, and make sure no\n' +
-          '  other figma-console client (an active Claude Code session) holds the bridge.'
+          '  other figma-console client (an active Claude Code session) holds the bridge.',
       );
       process.exit(2);
     }
-    const res = await call(client, 'figma_execute', { code: PAYLOAD, timeout: 60000 });
+    const res = await call(client, 'figma_execute', {
+      code: PAYLOAD,
+      timeout: 60000,
+    });
     const report = res?.result;
     if (!report) {
       console.error(`✗ figma_execute failed: ${res?.error ?? 'unknown error'}`);
       process.exit(2);
     }
     for (const line of report.updated ?? []) console.log(`  ~ ${line}`);
-    for (const name of report.noCard ?? []) console.warn(`  ⚠ ${name}: no Inventory card — add one (CLAUDE.md: every master gets an INSTANCE on Inventory)`);
-    for (const name of report.orphanCards ?? []) console.warn(`  ⚠ card · ${name}: no such master any more — remove the card or restore the master`);
+    for (const name of report.noCard ?? [])
+      console.warn(
+        `  ⚠ ${name}: no Inventory card — add one (CLAUDE.md: every master gets an INSTANCE on Inventory)`,
+      );
+    for (const name of report.orphanCards ?? [])
+      console.warn(
+        `  ⚠ card · ${name}: no such master any more — remove the card or restore the master`,
+      );
     console.log(
       `✓ inventory in sync — ${report.updated?.length ?? 0} card(s) updated, ${report.unchanged?.length ?? 0} unchanged, ` +
-        `${report.total} across ${Object.keys(report.counts ?? {}).length} section(s).`
+        `${report.total} across ${Object.keys(report.counts ?? {}).length} section(s).`,
     );
-    if ((report.noCard?.length ?? 0) || (report.orphanCards?.length ?? 0)) process.exitCode = 1;
+    if ((report.noCard?.length ?? 0) || (report.orphanCards?.length ?? 0))
+      process.exitCode = 1;
   } finally {
     await client.close();
   }
@@ -257,11 +270,11 @@ function isConnected(status) {
   // reports.
   return Boolean(
     status?.connected ||
-      status?.plugin?.connected ||
-      status?.details?.plugin?.connected ||
-      status?.probeResult?.success ||
-      status?.setup?.probeResult?.success ||
-      status?.setup?.valid ||
-      status?.transport?.websocket?.available
+    status?.plugin?.connected ||
+    status?.details?.plugin?.connected ||
+    status?.probeResult?.success ||
+    status?.setup?.probeResult?.success ||
+    status?.setup?.valid ||
+    status?.transport?.websocket?.available,
   );
 }

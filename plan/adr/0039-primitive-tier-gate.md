@@ -47,11 +47,11 @@ The primitive patterns and their exemptions live in
 `tools/scripts/lib/allowlists.js`, next to the other gates' exceptions, each
 carrying what to use instead and why:
 
-| Primitive | Use instead |
-|---|---|
+| Primitive                  | Use instead                                              |
+| -------------------------- | -------------------------------------------------------- |
 | `--ui-color-teal-{50…900}` | the semantic that aliases it, so the mode picks the step |
-| `--ui-font-display` | `--ui-type-display` |
-| `--ui-font-mono` | `--ui-type-code` |
+| `--ui-font-display`        | `--ui-type-display`                                      |
+| `--ui-font-mono`           | `--ui-type-code`                                         |
 
 Exemptions use the two-kind convention the other gates already use: `design` is
 a closed question and stays silent, `gap` is an unfinished migration and warns on

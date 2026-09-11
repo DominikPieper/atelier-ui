@@ -3,7 +3,7 @@ status: accepted
 confidence: reconstructed
 date: reconstructed
 sources:
-  - "feat(cookbook) / feat(docs) commits + .mcp.json"
+  - 'feat(cookbook) / feat(docs) commits + .mcp.json'
 ---
 
 # ADR-0013: AI-discovery surfaces (llms.txt + hosted Storybook MCP + manifests)

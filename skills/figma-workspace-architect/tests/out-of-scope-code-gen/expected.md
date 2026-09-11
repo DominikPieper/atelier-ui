@@ -18,7 +18,7 @@ The user is asking for code generation. SKILL.md explicitly excludes this:
    - The repo's existing component-generator workflow (e.g. `nx generate <generator> --name=button`) if the user is in this repo.
    - General Claude code-generation knowledge (read the Variant Properties from the Figma component, write idiomatic React with corresponding props).
 3. **Offer the architectural complement** if relevant — e.g., "if you'd like, I can audit your Figma button to confirm the Variant Property surface matches what you'd want as React props before you generate."
-4. **Do not load any references/*.md** — none of them apply. Do not invent a new mode to handle this. Do not start writing the React component anyway.
+4. **Do not load any references/\*.md** — none of them apply. Do not invent a new mode to handle this. Do not start writing the React component anyway.
 
 ## Regressions to flag
 

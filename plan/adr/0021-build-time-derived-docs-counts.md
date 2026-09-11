@@ -2,11 +2,11 @@
 status: accepted
 date: 2026-06-12
 sources:
-  - "docs/src/lib/skill-meta.ts"
-  - "docs/src/pages/llms.astro"
-  - "docs/src/pages/skills/figma-workspace-architect.astro"
-  - "docs/src/pages/agent-skills.astro"
-  - "docs-review findings on hardcoded counts (this session)"
+  - 'docs/src/lib/skill-meta.ts'
+  - 'docs/src/pages/llms.astro'
+  - 'docs/src/pages/skills/figma-workspace-architect.astro'
+  - 'docs/src/pages/agent-skills.astro'
+  - 'docs-review findings on hardcoded counts (this session)'
 ---
 
 # ADR-0021: Docs counts and sizes derived at build time where the source is local
@@ -15,7 +15,7 @@ sources:
 
 Accepted. Recorded at decision time. Complements **ADR-0009** (drift-gate system:
 one source → projection → `--check`) by applying the same instinct to docs prose:
-where a number has a local source of truth, the docs *derive* it instead of
+where a number has a local source of truth, the docs _derive_ it instead of
 restating it.
 
 ## Context
@@ -33,7 +33,7 @@ their sources:
   `SKILL.md` had grown a Sync mode and Build's Inventory sub-mode.
 - `/agent-skills` repeated the same stale mode / sub-mode / reference counts.
 
-Every one of these numbers has a machine-readable source *inside the repo*. The
+Every one of these numbers has a machine-readable source _inside the repo_. The
 prose was a second, unguarded copy — exactly the drift class the ADR-0009 gates
 exist to eliminate, just surfacing in `.astro` pages instead of generated files.
 
@@ -69,7 +69,7 @@ keep them hardcoded only where it is not.**
 
 **Rejected alternative — a CI drift-check script** that greps docs pages for
 known numbers and compares them to sources. More moving parts (a script, a number
-registry, fuzzy matching against prose), and it only *detects* drift after the
+registry, fuzzy matching against prose), and it only _detects_ drift after the
 fact. Derivation removes the drift class instead of detecting it: there is no
 second copy left to diverge. The one place where a curated copy must remain (the
 references table) gets the cheap inline assertion instead of a separate script.
@@ -85,8 +85,8 @@ references table) gets the cheap inline assertion instead of a separate script.
   from `.astro` frontmatter (build-time), never from client-side code.
 - The llms size badges are only as fresh as the last `gen:llms` run — acceptable,
   because `check:llms` (in `check:all`) already gates staleness of the underlying
-  files; the badges can't be *more* stale than the files themselves.
-- Reference *summaries* in the skill-page table are still hand-written; the gate
+  files; the badges can't be _more_ stale than the files themselves.
+- Reference _summaries_ in the skill-page table are still hand-written; the gate
   catches missing/extra rows but not a stale description. That residual risk is
   accepted — summaries are editorial content, not data.
 - Mode and sub-mode counts on the skill pages are derived from the page's own

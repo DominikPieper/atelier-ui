@@ -24,7 +24,11 @@ export interface AtlRadioProps extends AtlRadioSpec {
 /**
  * An individual radio button component, meant to be used within AtlRadioGroup.
  */
-export function AtlRadio({ radioValue, disabled = false, children }: AtlRadioProps) {
+export function AtlRadio({
+  radioValue,
+  disabled = false,
+  children,
+}: AtlRadioProps) {
   const ctx = useRadioGroup();
   const isDisabled = disabled || ctx.disabled;
   const isChecked = ctx.value === radioValue;
@@ -50,7 +54,9 @@ export function AtlRadio({ radioValue, disabled = false, children }: AtlRadioPro
         // but not the input's own DOM state. Cancelling the click makes the browser
         // restore the previous selection (verified in chromium). See ADR-0045.
         onClick={(e) => ctx.readOnly && e.preventDefault()}
-        onChange={() => !isDisabled && !ctx.readOnly && ctx.onSelect(radioValue)}
+        onChange={() =>
+          !isDisabled && !ctx.readOnly && ctx.onSelect(radioValue)
+        }
         onBlur={() => ctx.onBlur()}
       />
       {children && <span className="radio-text">{children}</span>}

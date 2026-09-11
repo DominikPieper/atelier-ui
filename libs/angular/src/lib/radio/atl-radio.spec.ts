@@ -12,7 +12,7 @@ describe('AtlRadio', () => {
       `<atl-radio-group name="test">
         <atl-radio radioValue="a">Option A</atl-radio>
       </atl-radio-group>`,
-      { imports: GROUP_IMPORTS }
+      { imports: GROUP_IMPORTS },
     );
     expect(container.querySelector('input[type="radio"]')).toBeInTheDocument();
   });
@@ -22,7 +22,7 @@ describe('AtlRadio', () => {
       `<atl-radio-group name="test">
         <atl-radio radioValue="a">Option A</atl-radio>
       </atl-radio-group>`,
-      { imports: GROUP_IMPORTS }
+      { imports: GROUP_IMPORTS },
     );
     expect(screen.getByText('Option A')).toBeInTheDocument();
   });
@@ -32,47 +32,57 @@ describe('AtlRadio', () => {
       `<atl-radio-group name="test">
         <atl-radio radioValue="a">Option A</atl-radio>
       </atl-radio-group>`,
-      { imports: GROUP_IMPORTS }
+      { imports: GROUP_IMPORTS },
     );
     expect(container.querySelector('input[type="radio"]')).not.toBeChecked();
   });
 
   describe('checked state', () => {
-    covers('radio', 'checked-from-group')('is checked when group value matches radioValue', async () => {
-      const { container } = await render(
-        `<atl-radio-group [(value)]="value" name="test">
+    covers('radio', 'checked-from-group')(
+      'is checked when group value matches radioValue',
+      async () => {
+        const { container } = await render(
+          `<atl-radio-group [(value)]="value" name="test">
           <atl-radio radioValue="a">Option A</atl-radio>
           <atl-radio radioValue="b">Option B</atl-radio>
         </atl-radio-group>`,
-        { imports: GROUP_IMPORTS, componentProperties: { value: 'a' } }
-      );
-      const inputs = container.querySelectorAll<HTMLInputElement>('input[type="radio"]');
-      expect(inputs[0]).toBeChecked();
-      expect(inputs[1]).not.toBeChecked();
-    });
+          { imports: GROUP_IMPORTS, componentProperties: { value: 'a' } },
+        );
+        const inputs = container.querySelectorAll<HTMLInputElement>(
+          'input[type="radio"]',
+        );
+        expect(inputs[0]).toBeChecked();
+        expect(inputs[1]).not.toBeChecked();
+      },
+    );
 
     it('applies is-checked class to host when checked', async () => {
       const { container } = await render(
         `<atl-radio-group [(value)]="value" name="test">
           <atl-radio radioValue="a">Option A</atl-radio>
         </atl-radio-group>`,
-        { imports: GROUP_IMPORTS, componentProperties: { value: 'a' } }
+        { imports: GROUP_IMPORTS, componentProperties: { value: 'a' } },
       );
       expect(container.querySelector('atl-radio')).toHaveClass('is-checked');
     });
 
-    covers('radio', 'select-on-click')('becomes checked when clicked', async () => {
-      const user = userEvent.setup();
-      const { container } = await render(
-        `<atl-radio-group [(value)]="value" name="test">
+    covers('radio', 'select-on-click')(
+      'becomes checked when clicked',
+      async () => {
+        const user = userEvent.setup();
+        const { container } = await render(
+          `<atl-radio-group [(value)]="value" name="test">
           <atl-radio radioValue="a">Option A</atl-radio>
         </atl-radio-group>`,
-        { imports: GROUP_IMPORTS, componentProperties: { value: '' } }
-      );
-      const input = container.querySelector('input[type="radio"]') as HTMLInputElement;
-      await user.click(input);
-      expect(input).toBeChecked();
-    });
+          { imports: GROUP_IMPORTS, componentProperties: { value: '' } },
+        );
+        const input = container.querySelector(
+          'input[type="radio"]',
+        ) as HTMLInputElement;
+        await user.click(input);
+        expect(input).toBeChecked();
+      },
+    );
   });
 
   describe('invalid state', () => {
@@ -86,7 +96,7 @@ describe('AtlRadio', () => {
           <atl-radio radioValue="a">Option A</atl-radio>
           <atl-radio radioValue="b">Option B</atl-radio>
         </atl-radio-group>`,
-        { imports: GROUP_IMPORTS }
+        { imports: GROUP_IMPORTS },
       );
       for (const radio of container.querySelectorAll('atl-radio')) {
         expect(radio).toHaveClass('is-invalid');
@@ -98,29 +108,34 @@ describe('AtlRadio', () => {
         `<atl-radio-group name="test">
           <atl-radio radioValue="a">Option A</atl-radio>
         </atl-radio-group>`,
-        { imports: GROUP_IMPORTS }
+        { imports: GROUP_IMPORTS },
       );
-      expect(container.querySelector('atl-radio')).not.toHaveClass('is-invalid');
+      expect(container.querySelector('atl-radio')).not.toHaveClass(
+        'is-invalid',
+      );
     });
   });
 
   describe('disabled state', () => {
-    covers('radio', 'disabled')('is disabled when individually disabled', async () => {
-      const { container } = await render(
-        `<atl-radio-group name="test">
+    covers('radio', 'disabled')(
+      'is disabled when individually disabled',
+      async () => {
+        const { container } = await render(
+          `<atl-radio-group name="test">
           <atl-radio radioValue="a" [disabled]="true">Option A</atl-radio>
         </atl-radio-group>`,
-        { imports: GROUP_IMPORTS }
-      );
-      expect(container.querySelector('input[type="radio"]')).toBeDisabled();
-    });
+          { imports: GROUP_IMPORTS },
+        );
+        expect(container.querySelector('input[type="radio"]')).toBeDisabled();
+      },
+    );
 
     it('is disabled when group is disabled', async () => {
       const { container } = await render(
         `<atl-radio-group [disabled]="true" name="test">
           <atl-radio radioValue="a">Option A</atl-radio>
         </atl-radio-group>`,
-        { imports: GROUP_IMPORTS }
+        { imports: GROUP_IMPORTS },
       );
       expect(container.querySelector('input[type="radio"]')).toBeDisabled();
     });
@@ -130,7 +145,7 @@ describe('AtlRadio', () => {
         `<atl-radio-group name="test">
           <atl-radio radioValue="a" [disabled]="true">Option A</atl-radio>
         </atl-radio-group>`,
-        { imports: GROUP_IMPORTS }
+        { imports: GROUP_IMPORTS },
       );
       expect(container.querySelector('atl-radio')).toHaveClass('is-disabled');
     });
@@ -142,9 +157,12 @@ describe('AtlRadio', () => {
         `<atl-radio-group name="mygroup">
           <atl-radio radioValue="a">Option A</atl-radio>
         </atl-radio-group>`,
-        { imports: GROUP_IMPORTS }
+        { imports: GROUP_IMPORTS },
       );
-      expect(container.querySelector('input[type="radio"]')).toHaveAttribute('name', 'mygroup');
+      expect(container.querySelector('input[type="radio"]')).toHaveAttribute(
+        'name',
+        'mygroup',
+      );
     });
 
     it('does not set name attribute when group name is empty', async () => {
@@ -152,9 +170,11 @@ describe('AtlRadio', () => {
         `<atl-radio-group>
           <atl-radio radioValue="a">Option A</atl-radio>
         </atl-radio-group>`,
-        { imports: GROUP_IMPORTS }
+        { imports: GROUP_IMPORTS },
       );
-      expect(container.querySelector('input[type="radio"]')).not.toHaveAttribute('name');
+      expect(
+        container.querySelector('input[type="radio"]'),
+      ).not.toHaveAttribute('name');
     });
   });
 
@@ -164,9 +184,11 @@ describe('AtlRadio', () => {
         `<atl-radio-group name="test">
           <atl-radio radioValue="a">Option A</atl-radio>
         </atl-radio-group>`,
-        { imports: GROUP_IMPORTS }
+        { imports: GROUP_IMPORTS },
       );
-      const input = container.querySelector('input[type="radio"]') as HTMLInputElement;
+      const input = container.querySelector(
+        'input[type="radio"]',
+      ) as HTMLInputElement;
       const label = container.querySelector('label') as HTMLLabelElement;
       expect(label.htmlFor).toBe(input.id);
     });

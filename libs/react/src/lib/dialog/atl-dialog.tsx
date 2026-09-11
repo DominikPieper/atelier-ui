@@ -108,10 +108,14 @@ export function AtlDialog({
     }
   };
 
-  const effectiveAriaLabelledby = ariaLabel ? undefined : (ariaLabelledby ?? headerId);
+  const effectiveAriaLabelledby = ariaLabel
+    ? undefined
+    : (ariaLabelledby ?? headerId);
 
   return (
-    <DialogContext.Provider value={{ headerId, close: () => onOpenChange?.(false) }}>
+    <DialogContext.Provider
+      value={{ headerId, close: () => onOpenChange?.(false) }}
+    >
       <dialog
         ref={dialogRef}
         className={`atl-dialog size-${size}${open ? ' is-open' : ''}`}

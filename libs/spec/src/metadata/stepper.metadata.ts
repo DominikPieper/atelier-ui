@@ -11,16 +11,20 @@ export const metadata: ComponentMetadata = {
   ],
   antiPatterns: [
     {
-      pattern: 'Navigating between sibling sections that have no inherent order.',
-      useInstead: 'AtlTabGroup — tabs imply parallel views, steppers imply progression.',
+      pattern:
+        'Navigating between sibling sections that have no inherent order.',
+      useInstead:
+        'AtlTabGroup — tabs imply parallel views, steppers imply progression.',
     },
     {
       pattern: 'Reporting a single percentage or determinate loading state.',
-      useInstead: 'A progress bar — steppers communicate discrete stages, not continuous progress.',
+      useInstead:
+        'A progress bar — steppers communicate discrete stages, not continuous progress.',
     },
     {
       pattern: 'Collapsing and expanding sections of a form on one page.',
-      useInstead: 'AtlAccordionGroup — accordions are spatial, steppers are sequential.',
+      useInstead:
+        'AtlAccordionGroup — accordions are spatial, steppers are sequential.',
     },
   ],
   relatedComponents: ['AtlTabGroupSpec', 'AtlAccordionGroupSpec'],

@@ -22,7 +22,7 @@ a master" edge case. Build cannot start without a node.
    or a look-alike master (AtlInput) as a stand-in.
 2. Says plainly: the master is missing; creating it is `figma-workspace-architect` Build
    work; this skill resumes once a node exists.
-3. Starts the handoff document anyway with what *is* known (the existing spec block, that
+3. Starts the handoff document anyway with what _is_ known (the existing spec block, that
    it composes AtlInput/AtlCaption-style parts, target files) and records the order
    "master first, then this" — the micro-contract cannot be written either, for the same
    reason.

@@ -49,7 +49,7 @@ for (const fw of FRAMEWORKS) {
     // exists to end.
     errors.push(
       `[NO-PROJECT] ${rel} does not exist, so ${fw}'s specs and stories are typechecked by nothing. ` +
-        `Add the project, or state here why ${fw} is exempt.`
+        `Add the project, or state here why ${fw} is exempt.`,
     );
     continue;
   }
@@ -70,7 +70,7 @@ for (const fw of FRAMEWORKS) {
     // that is really a broken one.
     errors.push(
       `[TSC-FAILED] tsc exited ${res.status} for ${rel} without reporting a single diagnostic, so this ` +
-        `is a broken invocation rather than a clean project. Output:\n${out.trim().split('\n').slice(0, 6).join('\n')}`
+        `is a broken invocation rather than a clean project. Output:\n${out.trim().split('\n').slice(0, 6).join('\n')}`,
     );
     continue;
   }
@@ -84,11 +84,11 @@ if (errors.length > 0) {
     `\n${errors.length} type issue(s) across ${checked} spec project(s). A *.stories.* file is API ` +
       `documentation that runs: a type error in one is a claim about the component that does not hold. ` +
       `Fix them, or — if a story deliberately renders a wrapper rather than the component — type that ` +
-      `story against what it actually renders instead of casting the mismatch away.`
+      `story against what it actually renders instead of casting the mismatch away.`,
   );
   process.exit(1);
 }
 
 console.log(
-  `✓ specs and stories typecheck (${checked} project(s): ${FRAMEWORKS.join(', ')} — *.spec.*, *.stories.*, testing helpers).`
+  `✓ specs and stories typecheck (${checked} project(s): ${FRAMEWORKS.join(', ')} — *.spec.*, *.stories.*, testing helpers).`,
 );

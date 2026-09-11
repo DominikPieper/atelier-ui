@@ -14,7 +14,7 @@ No generation. One component, both surfaces, with the record update explicitly r
 ## Required surface
 
 1. **Pins first (R0):** git SHA plus the snapshot's Figma stamp; if `figma_get_file_versions
-   (max_versions: 1)` shows the master moved since the snapshot, says so before comparing.
+(max_versions: 1)` shows the master moved since the snapshot, says so before comparing.
 2. **Node from `tools/figma/snapshot.json`** (AtlCard `55:65`), not from a fresh search.
 3. **Declares the sections a typeface change touches** — at least `typography`, `visual`,
    `tokens` — and says which were declared; a one-section run is called out as thin.

@@ -1,6 +1,16 @@
 import type { Meta, StoryObj } from '@storybook/angular';
-import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
-import { AtlToast, AtlToastContainer, AtlToastService, ToastVariant } from './atl-toast';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  inject,
+  input,
+} from '@angular/core';
+import {
+  AtlToast,
+  AtlToastContainer,
+  AtlToastService,
+  ToastVariant,
+} from './atl-toast';
 import { AtlButton } from '../button/atl-button';
 import { contract } from '@atelier-ui/spec/contracts/toast.contract';
 
@@ -13,7 +23,9 @@ import { contract } from '@atelier-ui/spec/contracts/toast.contract';
   imports: [AtlToastContainer, AtlButton],
   template: `
     <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-      <atl-button variant="primary" (click)="showToast()">Show Toast</atl-button>
+      <atl-button variant="primary" (click)="showToast()"
+        >Show Toast</atl-button
+      >
       <atl-button variant="outline" (click)="clearAll()">Clear All</atl-button>
     </div>
     <atl-toast-container [position]="position()" />
@@ -22,7 +34,9 @@ import { contract } from '@atelier-ui/spec/contracts/toast.contract';
 class ToastStoryWrapper {
   private readonly toastService = inject(AtlToastService);
 
-  readonly position = input<'top-right' | 'top-center' | 'bottom-right' | 'bottom-center'>('bottom-right');
+  readonly position = input<
+    'top-right' | 'top-center' | 'bottom-right' | 'bottom-center'
+  >('bottom-right');
   readonly variant = input<ToastVariant>('default');
   readonly duration = input(5000);
   readonly dismissible = input(true);
@@ -49,7 +63,9 @@ class ToastStoryWrapper {
   imports: [AtlToastContainer, AtlButton],
   template: `
     <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-      <atl-button variant="outline" (click)="showAll()">Show All Variants</atl-button>
+      <atl-button variant="outline" (click)="showAll()"
+        >Show All Variants</atl-button
+      >
       <atl-button variant="outline" (click)="clearAll()">Clear All</atl-button>
     </div>
     <atl-toast-container position="bottom-right" />
@@ -59,11 +75,21 @@ class ToastAllVariantsWrapper {
   private readonly toastService = inject(AtlToastService);
 
   showAll(): void {
-    this.toastService.show('This is a default notification.', { variant: 'default' });
-    this.toastService.show('Operation completed successfully!', { variant: 'success' });
-    this.toastService.show('Please review before continuing.', { variant: 'warning' });
-    this.toastService.show('An error occurred. Please try again.', { variant: 'danger' });
-    this.toastService.show('Here is some useful information.', { variant: 'info' });
+    this.toastService.show('This is a default notification.', {
+      variant: 'default',
+    });
+    this.toastService.show('Operation completed successfully!', {
+      variant: 'success',
+    });
+    this.toastService.show('Please review before continuing.', {
+      variant: 'warning',
+    });
+    this.toastService.show('An error occurred. Please try again.', {
+      variant: 'danger',
+    });
+    this.toastService.show('Here is some useful information.', {
+      variant: 'info',
+    });
   }
 
   clearAll(): void {
@@ -78,7 +104,9 @@ class ToastAllVariantsWrapper {
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [AtlToastContainer, AtlButton],
   template: `
-    <atl-button variant="primary" (click)="showQuick()">Show Toast (2s auto-dismiss)</atl-button>
+    <atl-button variant="primary" (click)="showQuick()"
+      >Show Toast (2s auto-dismiss)</atl-button
+    >
     <atl-toast-container position="bottom-right" />
   `,
 })
@@ -100,7 +128,9 @@ class ToastAutoDismissWrapper {
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [AtlToastContainer, AtlButton],
   template: `
-    <atl-button variant="primary" (click)="showPersistent()">Show Persistent Toast</atl-button>
+    <atl-button variant="primary" (click)="showPersistent()"
+      >Show Persistent Toast</atl-button
+    >
     <atl-toast-container position="bottom-right" />
   `,
 })
@@ -108,17 +138,21 @@ class ToastPersistentWrapper {
   private readonly toastService = inject(AtlToastService);
 
   showPersistent(): void {
-    this.toastService.show('This toast will not auto-dismiss. Click X to close.', {
-      variant: 'warning',
-      duration: 0,
-      dismissible: true,
-    });
+    this.toastService.show(
+      'This toast will not auto-dismiss. Click X to close.',
+      {
+        variant: 'warning',
+        duration: 0,
+        dismissible: true,
+      },
+    );
   }
 }
 
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
-function figmaNode(nodeId: string): { type: "figma"; url: string } {
+function figmaNode(nodeId: string): { type: 'figma'; url: string } {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
 }
 

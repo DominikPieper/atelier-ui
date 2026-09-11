@@ -11,16 +11,20 @@ export const metadata: ComponentMetadata = {
   ],
   antiPatterns: [
     {
-      pattern: 'Navigating to a new URL where the destination is the meaning of the interaction.',
-      useInstead: 'A plain `<a>` link — links say "go somewhere", buttons say "do something".',
+      pattern:
+        'Navigating to a new URL where the destination is the meaning of the interaction.',
+      useInstead:
+        'A plain `<a>` link — links say "go somewhere", buttons say "do something".',
     },
     {
       pattern: 'Toggling a binary on/off state.',
-      useInstead: 'AtlToggle — communicates the persistent state to assistive tech.',
+      useInstead:
+        'AtlToggle — communicates the persistent state to assistive tech.',
     },
     {
       pattern: 'Selecting an option from a list.',
-      useInstead: 'AtlSelect, AtlCombobox, or AtlRadioGroup, depending on cardinality and search needs.',
+      useInstead:
+        'AtlSelect, AtlCombobox, or AtlRadioGroup, depending on cardinality and search needs.',
     },
   ],
   relatedComponents: ['AtlToggle', 'AtlMenuSpec', 'AtlDialogSpec'],

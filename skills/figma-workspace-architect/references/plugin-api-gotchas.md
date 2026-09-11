@@ -11,10 +11,10 @@ this file is only the part that knowledge gets wrong.
 
 - **`node.resize(w, h)` flips auto-layout axis sizing to FIXED on both axes.** To keep a
   frame auto-sizing its height (`primaryAxisSizingMode = 'AUTO'`) after setting a width,
-  set the mode *after* `.resize()`, not before; otherwise the frame collapses to the
+  set the mode _after_ `.resize()`, not before; otherwise the frame collapses to the
   resized height regardless of children. Hit in Progress body, Combobox panel/wrapper,
   CodeBlock wrapper/body and Table inner container — all clipped or collapsed silently.
-- **Setting `layoutMode` *after* `.resize()` reverts both axes to AUTO.** The frame
+- **Setting `layoutMode` _after_ `.resize()` reverts both axes to AUTO.** The frame
   shrink-wraps its children — a 32×32 circle with a "1" inside becomes a narrow pill.
   Either set `layoutMode` first and size last, or re-assert `primaryAxisSizingMode` and
   `counterAxisSizingMode` to `FIXED` and call `.resize()` once more.
@@ -51,7 +51,7 @@ this file is only the part that knowledge gets wrong.
 - **Ids are stable within a file and differ across duplicates.** A participant's
   duplicate of the Atelier file has its own ids; resolve with `figma_search_components`
   in the file you are actually editing, and remember the search also matches
-  *description* text, so an unrelated component can surface.
+  _description_ text, so an unrelated component can surface.
 
 ## Connection modes and REST
 

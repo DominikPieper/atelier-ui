@@ -6,8 +6,7 @@ import './atl-progress.css';
  * Properties for the AtlProgress component.
  */
 export interface AtlProgressProps
-  extends HTMLAttributes<HTMLDivElement>,
-    AtlProgressSpec {
+  extends HTMLAttributes<HTMLDivElement>, AtlProgressSpec {
   /**
    * The current progress value.
    */
@@ -57,7 +56,9 @@ export function AtlProgress({
     `size-${size}`,
     indeterminate && 'is-indeterminate',
     className,
-  ].filter(Boolean).join(' ');
+  ]
+    .filter(Boolean)
+    .join(' ');
 
   return (
     <div

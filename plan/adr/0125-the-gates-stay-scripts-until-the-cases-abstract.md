@@ -39,7 +39,7 @@ What is true today, measured rather than assumed:
   was killed — the chain has no per-gate timeout to hit and no task boundary to report.
 - **Runtime, warm, all 47 runnable gates measured individually: 471 s.** `check:paint`
   is 230 s of that (49 %), `check:docs-layout` 91 s, `check:stories` 47 s; roughly forty
-  gates are between 0 and 8 s each. The suite is not slow. It is *unstructured*.
+  gates are between 0 and 8 s each. The suite is not slow. It is _unstructured_.
 - **Coupling, counted:** three gates are genuinely generic (`gen-behaviors`,
   `behavior-coverage.mjs`, `check:release-drift`); about twenty-eight are a generic idea
   wearing Atelier literals (the `Atl` prefix, the `--ui-` token prefix, the
@@ -115,7 +115,7 @@ Alternatives considered:
   CI split) are available without publishing, and the reuse win is one 13-second gate.
   If generated workspaces are meant to receive checker fixes after the workshop, that
   calculation changes — which is exactly what the revisit condition tracks.
-- **Keep copying files forever, with no revisit.** Rejected as a *permanent* answer, but
+- **Keep copying files forever, with no revisit.** Rejected as a _permanent_ answer, but
   it is what happens until the condition is met, so its cost is named: the participant's
   checker is frozen at scaffold time and receives no fix. Its benefit is named too, and
   it is real for a teaching repo — the participant can open, read and patch the gate,

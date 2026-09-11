@@ -29,7 +29,9 @@ async function captureOne(template: string): Promise<unknown> {
 async function capture(): Promise<Record<string, unknown>> {
   return {
     decorative: await captureOne('<atl-icon name="info"></atl-icon>'),
-    labeled: await captureOne('<atl-icon name="warning" label="Warning"></atl-icon>'),
+    labeled: await captureOne(
+      '<atl-icon name="warning" label="Warning"></atl-icon>',
+    ),
   };
 }
 

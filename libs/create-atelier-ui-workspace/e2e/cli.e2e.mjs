@@ -114,7 +114,12 @@ function findStoryFiles(dir) {
 // `--no-skills` and never attempt the install, so checking them here would
 // just report a predetermined "NOT installed" for something never asked for.
 function checkSkillsInstalled(wsPath) {
-  const skillNames = ['stories', 'storybook-init', 'storybook-setup', 'storybook-upgrade'];
+  const skillNames = [
+    'stories',
+    'storybook-init',
+    'storybook-setup',
+    'storybook-upgrade',
+  ];
   // The CLI's `--copy` mode is observed (in this repo's own root, added ahead
   // of this preset change) to land skills under both `.claude/skills/` and
   // `.agents/skills/` — check both rather than assuming one.
@@ -126,7 +131,9 @@ function checkSkillsInstalled(wsPath) {
     if (hit) {
       ok(`skill installed: ${name} (${hit.slice(wsPath.length + 1)})`);
     } else {
-      warn(`skill NOT installed: ${name} — non-fatal (network/CLI dependent), continuing`);
+      warn(
+        `skill NOT installed: ${name} — non-fatal (network/CLI dependent), continuing`,
+      );
     }
   }
 }
@@ -144,9 +151,11 @@ function runCapture(cmd, opts = {}) {
 function pack(distDir) {
   const out = runCapture('npm pack --json', { cwd: distDir });
   const entry = JSON.parse(out)[0];
-  if (!entry?.filename) throw new Error(`npm pack produced no tarball in ${distDir}`);
+  if (!entry?.filename)
+    throw new Error(`npm pack produced no tarball in ${distDir}`);
   const tarballPath = join(distDir, entry.filename);
-  if (!existsSync(tarballPath)) throw new Error(`tarball missing: ${tarballPath}`);
+  if (!existsSync(tarballPath))
+    throw new Error(`tarball missing: ${tarballPath}`);
   return tarballPath;
 }
 
@@ -195,7 +204,9 @@ async function waitForRegistry(url, timeoutMs = 45000) {
     }
     await new Promise((r) => setTimeout(r, 500));
   }
-  throw new Error(`verdaccio did not come up within ${timeoutMs}ms: ${lastErr?.message ?? ''}`);
+  throw new Error(
+    `verdaccio did not come up within ${timeoutMs}ms: ${lastErr?.message ?? ''}`,
+  );
 }
 
 async function startVerdaccio() {
@@ -301,22 +312,39 @@ async function stopVerdaccio(registry) {
   try {
     process.kill(-proc.pid, 'SIGTERM');
   } catch {
-    try { proc.kill('SIGTERM'); } catch { /* already gone */ }
+    try {
+      proc.kill('SIGTERM');
+    } catch {
+      /* already gone */
+    }
   }
 
-  const timeout = new Promise((resolvePromise) => setTimeout(resolvePromise, 5000));
+  const timeout = new Promise((resolvePromise) =>
+    setTimeout(resolvePromise, 5000),
+  );
   await Promise.race([exited, timeout]);
 
   if (proc.exitCode === null && proc.signalCode === null) {
-    try { process.kill(-proc.pid, 'SIGKILL'); } catch { /* noop */ }
-    try { proc.kill('SIGKILL'); } catch { /* noop */ }
+    try {
+      process.kill(-proc.pid, 'SIGKILL');
+    } catch {
+      /* noop */
+    }
+    try {
+      proc.kill('SIGKILL');
+    } catch {
+      /* noop */
+    }
   }
 }
 
 function publishToRegistry(tarballPath, registryUrl, npmrcPath) {
-  run(`npm publish "${tarballPath}" --registry=${registryUrl} --userconfig="${npmrcPath}"`, {
-    stdio: 'pipe',
-  });
+  run(
+    `npm publish "${tarballPath}" --registry=${registryUrl} --userconfig="${npmrcPath}"`,
+    {
+      stdio: 'pipe',
+    },
+  );
 }
 
 function testFramework(framework, registryUrl, npmrcPath) {
@@ -331,7 +359,12 @@ function testFramework(framework, registryUrl, npmrcPath) {
       `npm install --no-audit --no-fund --ignore-scripts --registry=${registryUrl} --userconfig="${npmrcPath}" create-atelier-ui-workspace`,
       { cwd: scratch, stdio: 'pipe' },
     );
-    const cliBin = join(scratch, 'node_modules', '.bin', 'create-atelier-ui-workspace');
+    const cliBin = join(
+      scratch,
+      'node_modules',
+      '.bin',
+      'create-atelier-ui-workspace',
+    );
     if (!existsSync(cliBin)) throw new Error(`CLI bin not found at ${cliBin}`);
     ok('CLI installed from verdaccio');
 
@@ -343,24 +376,30 @@ function testFramework(framework, registryUrl, npmrcPath) {
     // storybookjs/mcp network install here — see the constant's definition
     // for why exactly one framework carries it.
     const skillsFlag = exerciseSkills ? '--skills' : '--no-skills';
-    const res = spawnSync(cliBin, [wsName, `--framework=${framework}`, '--no-figma', skillsFlag], {
-      cwd: scratch,
-      stdio: 'inherit',
-      env: {
-        ...process.env,
-        NPM_CONFIG_REGISTRY: registryUrl,
-        NPM_CONFIG_USERCONFIG: npmrcPath,
-        NX_NO_CLOUD: 'true',
-        // If an ensurePackage ever fails again, surface npm's actual error
-        // instead of a bare `Command failed: npm install` swallowed by Nx.
-        NX_VERBOSE_LOGGING: 'true',
+    const res = spawnSync(
+      cliBin,
+      [wsName, `--framework=${framework}`, '--no-figma', skillsFlag],
+      {
+        cwd: scratch,
+        stdio: 'inherit',
+        env: {
+          ...process.env,
+          NPM_CONFIG_REGISTRY: registryUrl,
+          NPM_CONFIG_USERCONFIG: npmrcPath,
+          NX_NO_CLOUD: 'true',
+          // If an ensurePackage ever fails again, surface npm's actual error
+          // instead of a bare `Command failed: npm install` swallowed by Nx.
+          NX_VERBOSE_LOGGING: 'true',
+        },
       },
-    });
-    if (res.status !== 0) throw new Error(`CLI exited with status ${res.status}`);
+    );
+    if (res.status !== 0)
+      throw new Error(`CLI exited with status ${res.status}`);
     ok('CLI completed');
 
     const wsPath = join(scratch, wsName);
-    if (!statSync(wsPath).isDirectory()) throw new Error(`workspace dir missing: ${wsPath}`);
+    if (!statSync(wsPath).isDirectory())
+      throw new Error(`workspace dir missing: ${wsPath}`);
     ok(`workspace at ${wsPath}`);
 
     // preview.ts for Angular/Vue, preview.tsx for React — this is the
@@ -385,11 +424,17 @@ function testFramework(framework, registryUrl, npmrcPath) {
     for (const rel of mustExist) {
       if (!existsSync(join(wsPath, rel))) throw new Error(`missing: ${rel}`);
     }
-    ok('scaffolded files present (including local tokens.css and .storybook config)');
+    ok(
+      'scaffolded files present (including local tokens.css and .storybook config)',
+    );
 
-    const storyFiles = findStoryFiles(join(wsPath, `workshop-${framework}/src`));
+    const storyFiles = findStoryFiles(
+      join(wsPath, `workshop-${framework}/src`),
+    );
     if (storyFiles.length === 0) {
-      throw new Error(`no example story (*.stories.*) found under workshop-${framework}/src`);
+      throw new Error(
+        `no example story (*.stories.*) found under workshop-${framework}/src`,
+      );
     }
     ok(`example story present: ${storyFiles[0].slice(wsPath.length + 1)}`);
 
@@ -398,7 +443,10 @@ function testFramework(framework, registryUrl, npmrcPath) {
     if (!styles.includes(`@import './styles/tokens.css';`)) {
       throw new Error(`relative tokens import missing in ${stylesPath}`);
     }
-    const tokensPath = join(wsPath, `workshop-${framework}/src/styles/tokens.css`);
+    const tokensPath = join(
+      wsPath,
+      `workshop-${framework}/src/styles/tokens.css`,
+    );
     const tokens = readFileSync(tokensPath, 'utf-8');
     if (!tokens.includes('--ui-color-')) {
       throw new Error(`tokens.css looks empty or corrupt at ${tokensPath}`);
@@ -447,7 +495,9 @@ function testFramework(framework, registryUrl, npmrcPath) {
     // Costs a couple of minutes per framework — worth it, since a broken
     // `.storybook/main.ts` would otherwise only surface when an attendee
     // runs it live at a workshop.
-    run(`npx nx build-storybook workshop-${framework} --skip-nx-cache`, { cwd: wsPath });
+    run(`npx nx build-storybook workshop-${framework} --skip-nx-cache`, {
+      cwd: wsPath,
+    });
     ok(`build-storybook workshop-${framework} green`);
 
     // The contract loop (ADR-0121 S4): this proves the SHIPPED check-contracts.mjs
@@ -485,7 +535,9 @@ function testFramework(framework, registryUrl, npmrcPath) {
     assertContains('(no-component: 0, external: 1)');
     assertContains('[NO-STORY-META]');
     assertContains('total: 0 error(s)');
-    ok('check:contracts exits 0 on the example — vacuous by design: the library AtlButton is skipped as external (external: 1), only [NO-STORY-META] remains');
+    ok(
+      'check:contracts exits 0 on the example — vacuous by design: the library AtlButton is skipped as external (external: 1), only [NO-STORY-META] remains',
+    );
 
     // Browser-mode Storybook tests (owner correction 2026-09-10 to ADR-0123 —
     // @storybook/addon-vitest ships with the scaffold after all). Chromium is
@@ -496,12 +548,16 @@ function testFramework(framework, registryUrl, npmrcPath) {
     run(`npx playwright install chromium`, { cwd: wsPath });
     ok('playwright chromium installed');
     run(`npm run check:stories`, { cwd: wsPath });
-    ok('check:stories green (every story rendered headless in Chromium, with axe)');
+    ok(
+      'check:stories green (every story rendered headless in Chromium, with axe)',
+    );
 
     if (exerciseSkills) {
       checkSkillsInstalled(wsPath);
     } else {
-      ok('skills install skipped (--no-skills) — real install exercised by another framework in this run');
+      ok(
+        'skills install skipped (--no-skills) — real install exercised by another framework in this run',
+      );
     }
 
     passed = true;
@@ -572,7 +628,9 @@ async function main() {
   }
 
   if (failed.length) {
-    console.error(`\n${failed.length}/${FRAMEWORKS.length} framework(s) failed:`);
+    console.error(
+      `\n${failed.length}/${FRAMEWORKS.length} framework(s) failed:`,
+    );
     for (const { fw, err } of failed) {
       console.error(`  - ${fw}: ${err.message}`);
     }

@@ -4,7 +4,8 @@ import AtlCheckbox from './atl-checkbox.vue';
 
 import { metadata } from '@atelier-ui/spec/metadata/checkbox.metadata';
 import { contract } from '@atelier-ui/spec/contracts/checkbox.contract';
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
@@ -16,7 +17,9 @@ const meta: Meta<typeof AtlCheckbox> = {
   tags: ['autodocs'],
   render: (args) => ({
     components: { AtlCheckbox },
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: '<AtlCheckbox v-bind="args">Accept terms</AtlCheckbox>',
   }),
   argTypes: {
@@ -72,7 +75,8 @@ export const WithErrors: Story = {
       const errors = ['You must accept the terms'];
       return { args, errors };
     },
-    template: '<AtlCheckbox v-bind="args" :errors="errors">Accept terms</AtlCheckbox>',
+    template:
+      '<AtlCheckbox v-bind="args" :errors="errors">Accept terms</AtlCheckbox>',
   }),
 };
 
@@ -84,7 +88,9 @@ export const Indeterminate: Story = {
   args: { indeterminate: true },
   render: (args) => ({
     components: { AtlCheckbox },
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: '<AtlCheckbox v-bind="args">Select all</AtlCheckbox>',
   }),
   parameters: { design: figmaNode('55-34') },
@@ -114,7 +120,9 @@ export const AllVariants: Story = {
 export const Playground: Story = {
   render: (args) => ({
     components: { AtlCheckbox },
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: '<AtlCheckbox v-bind="args">Playground label</AtlCheckbox>',
   }),
 };

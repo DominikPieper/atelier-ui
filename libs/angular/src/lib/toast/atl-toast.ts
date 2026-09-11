@@ -12,7 +12,8 @@ import {
 import { AtlIcon } from '../icon/atl-icon';
 
 /** Variant types for toast notifications. */
-export type ToastVariant = 'default' | 'success' | 'warning' | 'danger' | 'info';
+export type ToastVariant =
+  'default' | 'success' | 'warning' | 'danger' | 'info';
 
 /** Options for creating a toast notification. */
 export interface ToastOptions {
@@ -106,7 +107,12 @@ export class AtlToastService {
   template: `
     <span class="message">{{ message() }}</span>
     @if (dismissible()) {
-      <button class="dismiss" type="button" aria-label="Dismiss" (click)="onDismiss()">
+      <button
+        class="dismiss"
+        type="button"
+        aria-label="Dismiss"
+        (click)="onDismiss()"
+      >
         <atl-icon name="close" size="sm" />
       </button>
     }
@@ -177,9 +183,13 @@ export class AtlToastContainer {
   private readonly destroyRef = inject(DestroyRef);
 
   /** Position of the toast stack on the viewport. */
-  readonly position = input<'top-right' | 'top-center' | 'bottom-right' | 'bottom-center'>('bottom-right');
+  readonly position = input<
+    'top-right' | 'top-center' | 'bottom-right' | 'bottom-center'
+  >('bottom-right');
 
-  protected readonly hostClasses = computed(() => `position-${this.position()}`);
+  protected readonly hostClasses = computed(
+    () => `position-${this.position()}`,
+  );
 
   constructor() {
     this.destroyRef.onDestroy(() => this.toastService.clear());

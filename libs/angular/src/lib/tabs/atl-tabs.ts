@@ -11,7 +11,11 @@ import {
   signal,
   viewChildren,
 } from '@angular/core';
-import { ATL_TAB_GROUP, type AtlTabGroupContext, type TabInfo } from './atl-tabs.token';
+import {
+  ATL_TAB_GROUP,
+  type AtlTabGroupContext,
+  type TabInfo,
+} from './atl-tabs.token';
 
 let nextId = 0;
 
@@ -72,10 +76,13 @@ export class AtlTabGroup implements AtlTabGroupContext {
   readonly tabs = signal<TabInfo[]>([]);
 
   /** @internal */
-  protected readonly tabBtns = viewChildren<ElementRef<HTMLButtonElement>>('tabBtn');
+  protected readonly tabBtns =
+    viewChildren<ElementRef<HTMLButtonElement>>('tabBtn');
 
   /** @internal */
-  protected readonly hostClasses = computed(() => `atl-tab-group variant-${this.variant()}`);
+  protected readonly hostClasses = computed(
+    () => `atl-tab-group variant-${this.variant()}`,
+  );
 
   /** @internal — called by AtlTab on init */
   registerTab(info: TabInfo): void {
@@ -99,7 +106,9 @@ export class AtlTabGroup implements AtlTabGroupContext {
   /** @internal */
   protected onTabKeydown(event: KeyboardEvent): void {
     const allTabs = this.tabs();
-    const enabledIndices = allTabs.map((_, i) => i).filter((i) => !allTabs[i].disabled);
+    const enabledIndices = allTabs
+      .map((_, i) => i)
+      .filter((i) => !allTabs[i].disabled);
     const len = enabledIndices.length;
     if (len === 0) return;
 

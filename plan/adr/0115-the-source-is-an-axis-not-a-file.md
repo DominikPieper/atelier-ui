@@ -44,7 +44,7 @@ four independent axes of ownership, each with its own owner and its own gate:
 1. **Visual decision authority** — Figma's `Components` page master `COMPONENT_SET`s
    (`AGENTS.md`). A designer's decision about what a component looks like and its variant
    matrix. Not code-generated, not gated by any token script.
-2. **Token *value* authority** — `libs/create-workspace/src/generators/preset/files/styles/tokens.css`.
+2. **Token _value_ authority** — `libs/create-workspace/src/generators/preset/files/styles/tokens.css`.
    Hand-edited; every other `tokens.css`-shaped file in the repo is a generated,
    byte-identical projection of this one (both `sync-tokens.mjs` and
    `gen-figma-library-tokens.mjs` call it "the canonical tokens.css" in their own
@@ -73,7 +73,7 @@ four independent axes of ownership, each with its own owner and its own gate:
    `check:css-tokens` (no raw color literal in component CSS; no `--ui-*` read that axis 2
    doesn't declare) and `check:token-tiers` (component CSS may only reference the
    semantic tier, never a primitive, per ADR-0018). These gates constrain how component
-   CSS may *use* the values axis 2 declares; they own no value themselves.
+   CSS may _use_ the values axis 2 declares; they own no value themselves.
 
 ## Decision
 

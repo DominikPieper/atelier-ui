@@ -141,9 +141,7 @@ if (!requestedName) {
 }
 
 if (names.length === 0) {
-  console.error(
-    `no skills found under ${SKILLS_ROOT} (each needs a SKILL.md)`,
-  );
+  console.error(`no skills found under ${SKILLS_ROOT} (each needs a SKILL.md)`);
   process.exit(1);
 }
 

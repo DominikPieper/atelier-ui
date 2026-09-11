@@ -11,12 +11,15 @@ export const metadata: ComponentMetadata = {
   ],
   antiPatterns: [
     {
-      pattern: 'Switching a setting on/off where the change applies immediately.',
-      useInstead: 'AtlToggle — communicates the "switch" affordance and instant effect to assistive tech.',
+      pattern:
+        'Switching a setting on/off where the change applies immediately.',
+      useInstead:
+        'AtlToggle — communicates the "switch" affordance and instant effect to assistive tech.',
     },
     {
       pattern: 'Picking exactly one option from a small set.',
-      useInstead: 'AtlRadioGroup — radios enforce single-select and announce the group.',
+      useInstead:
+        'AtlRadioGroup — radios enforce single-select and announce the group.',
     },
   ],
   relatedComponents: ['AtlToggleSpec', 'AtlRadioSpec', 'AtlRadioGroupSpec'],

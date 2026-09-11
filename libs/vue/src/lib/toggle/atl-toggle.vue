@@ -28,7 +28,9 @@ const emit = defineEmits<{
   'update:checked': [value: boolean];
 }>();
 
-const inputId = computed(() => props.id || `toggle-${Math.random().toString(36).slice(2)}`);
+const inputId = computed(
+  () => props.id || `toggle-${Math.random().toString(36).slice(2)}`,
+);
 const errorsId = useId();
 
 function onChange(event: Event) {
@@ -37,7 +39,14 @@ function onChange(event: Event) {
 </script>
 
 <template>
-  <div class="atl-toggle" :class="{ 'is-checked': checked, 'is-invalid': invalid, 'is-disabled': disabled }">
+  <div
+    class="atl-toggle"
+    :class="{
+      'is-checked': checked,
+      'is-invalid': invalid,
+      'is-disabled': disabled,
+    }"
+  >
     <label :for="inputId" class="toggle-label">
       <input
         :id="inputId"
@@ -58,7 +67,9 @@ function onChange(event: Event) {
       <slot />
     </label>
     <div v-if="errors.length" :id="errorsId" class="errors" aria-live="polite">
-      <p v-for="(error, i) in errors" :key="i" class="error-message">{{ error }}</p>
+      <p v-for="(error, i) in errors" :key="i" class="error-message">
+        {{ error }}
+      </p>
     </div>
   </div>
 </template>

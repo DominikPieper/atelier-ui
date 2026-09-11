@@ -1,8 +1,10 @@
-import { ReactNode, SelectHTMLAttributes, OptionHTMLAttributes, useId } from 'react';
-import type {
-  AtlSelectSpec,
-  AtlOptionSpec,
-} from '../spec';
+import {
+  ReactNode,
+  SelectHTMLAttributes,
+  OptionHTMLAttributes,
+  useId,
+} from 'react';
+import type { AtlSelectSpec, AtlOptionSpec } from '../spec';
 import './atl-select.css';
 import { AtlIcon } from '../icon/atl-icon';
 
@@ -10,7 +12,8 @@ import { AtlIcon } from '../icon/atl-icon';
  * Properties for the AtlSelect component.
  */
 export interface AtlSelectProps
-  extends Omit<SelectHTMLAttributes<HTMLSelectElement>, 'value' | 'onChange'>,
+  extends
+    Omit<SelectHTMLAttributes<HTMLSelectElement>, 'value' | 'onChange'>,
     AtlSelectSpec {
   /**
    * The current value of the select.
@@ -93,7 +96,9 @@ export function AtlSelect({
           )}
           {children}
         </select>
-        {invalid && <AtlIcon name="danger" size="sm" className="invalid-icon" />}
+        {invalid && (
+          <AtlIcon name="danger" size="sm" className="invalid-icon" />
+        )}
         <span className="select-arrow" aria-hidden="true">
           <AtlIcon name="chevron-down" size="sm" />
         </span>
@@ -115,8 +120,7 @@ export function AtlSelect({
  * Properties for the AtlOption component.
  */
 export interface AtlOptionProps
-  extends OptionHTMLAttributes<HTMLOptionElement>,
-    AtlOptionSpec {
+  extends OptionHTMLAttributes<HTMLOptionElement>, AtlOptionSpec {
   /**
    * The value of the option.
    */

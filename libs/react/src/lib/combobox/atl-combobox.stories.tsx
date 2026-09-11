@@ -26,7 +26,8 @@ const COUNTRIES = [
   { value: 'jp', label: 'Japan' },
 ];
 
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: 'figma'; url: string } {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
@@ -36,7 +37,11 @@ const meta: Meta<typeof AtlCombobox> = {
   title: 'Components/Inputs/AtlCombobox',
   component: AtlCombobox,
   tags: ['autodocs'],
-  parameters: { design: figmaNode('421-339'), docs: { description: { component: metadata.purpose } }, contract },
+  parameters: {
+    design: figmaNode('421-339'),
+    docs: { description: { component: metadata.purpose } },
+    contract,
+  },
 };
 
 export default meta;

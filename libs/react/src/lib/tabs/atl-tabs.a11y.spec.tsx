@@ -20,7 +20,7 @@ function capture() {
     <AtlTabGroup>
       <AtlTab label="Tab One">Content One</AtlTab>
       <AtlTab label="Tab Two">Content Two</AtlTab>
-    </AtlTabGroup>
+    </AtlTabGroup>,
   );
   scenarios.default = a11yTree(r.container);
   r.unmount();
@@ -30,7 +30,7 @@ function capture() {
       <AtlTab label="Tab Two" disabled>
         Content Two
       </AtlTab>
-    </AtlTabGroup>
+    </AtlTabGroup>,
   );
   scenarios.withDisabled = a11yTree(r.container);
   r.unmount();

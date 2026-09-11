@@ -1,6 +1,6 @@
 # Migration playbook
 
-Between greenfield Build and a one-off Audit lies the case where the file already exists, the Audit produced a punch list, and now things need to *change* without breaking the people downstream. This file is that path.
+Between greenfield Build and a one-off Audit lies the case where the file already exists, the Audit produced a punch list, and now things need to _change_ without breaking the people downstream. This file is that path.
 
 > The single biggest mistake in Figma migrations is making them all at once. Almost every operation in this file has a "do additively, then remove later" form. Use it.
 
@@ -29,39 +29,39 @@ Run all five before touching anything:
 
 ## Safety classes
 
-The figma-console-mcp tool surface and the Figma Variables API are designed so that *most* renames preserve aliases — the breakage shows up in code that references by name. Categorize before you act.
+The figma-console-mcp tool surface and the Figma Variables API are designed so that _most_ renames preserve aliases — the breakage shows up in code that references by name. Categorize before you act.
 
 ### Safe — references are preserved automatically
 
-| Operation                                  | What carries through                                          |
-|--------------------------------------------|---------------------------------------------------------------|
-| `figma_rename_variable`                    | Aliases pointing at the renamed Variable are auto-updated.    |
-| `figma_rename_mode`                        | Values per mode are preserved; the Mode keeps its `modeId`.   |
-| Renaming a Component Set                   | Instances follow.                                             |
-| Reordering Variants in a Component Set     | No effect on instances or the Variant Property values.        |
+| Operation                              | What carries through                                        |
+| -------------------------------------- | ----------------------------------------------------------- |
+| `figma_rename_variable`                | Aliases pointing at the renamed Variable are auto-updated.  |
+| `figma_rename_mode`                    | Values per mode are preserved; the Mode keeps its `modeId`. |
+| Renaming a Component Set               | Instances follow.                                           |
+| Reordering Variants in a Component Set | No effect on instances or the Variant Property values.      |
 
-These still need a code-side update because most exporters key by *name* — but the Figma file itself stays internally consistent.
+These still need a code-side update because most exporters key by _name_ — but the Figma file itself stays internally consistent.
 
 ### Mostly safe — additive, but verify after
 
-| Operation                                       | Verify                                                                                   |
-|-------------------------------------------------|------------------------------------------------------------------------------------------|
-| `figma_add_mode`                                | Existing Variables get the new mode seeded with their current value. Re-confirm scopes.  |
-| `figma_create_variable` / `figma_batch_create_variables` | New Variable doesn't collide with an existing name (case-sensitive).                |
-| Adding a Variant to an existing Component Set   | The new Variant Property combination renders correctly; existing instances keep their mapping. |
-| Adding a Component Property                     | Instances pick up the default value. Inspect a few.                                      |
+| Operation                                                | Verify                                                                                         |
+| -------------------------------------------------------- | ---------------------------------------------------------------------------------------------- |
+| `figma_add_mode`                                         | Existing Variables get the new mode seeded with their current value. Re-confirm scopes.        |
+| `figma_create_variable` / `figma_batch_create_variables` | New Variable doesn't collide with an existing name (case-sensitive).                           |
+| Adding a Variant to an existing Component Set            | The new Variant Property combination renders correctly; existing instances keep their mapping. |
+| Adding a Component Property                              | Instances pick up the default value. Inspect a few.                                            |
 
 ### Breaking — needs the coordination protocol
 
-| Operation                                  | What breaks                                                                                                |
-|--------------------------------------------|------------------------------------------------------------------------------------------------------------|
-| `figma_delete_variable`                    | Every aliased Variable showing the old name as a broken reference; every component fill bound to it.       |
-| `figma_delete_variable_collection`         | Same as above, multiplied by the number of Variables in the collection.                                    |
-| Removing a Mode                            | All values for that mode are gone; bindings fall back to default.                                          |
-| Removing a Variant from a Component Set    | Instances using that combination "stick" but no longer track upstream changes.                             |
-| Renaming a Variant Property or its values  | Existing instances reset to the property's default — every consumer rebuilds.                              |
-| Splitting one Component into two           | Old instances continue pointing at the original; downstream rebuild required.                              |
-| Splitting a Library                        | Every consumer file's import breaks; needs a manual swap-instances pass.                                   |
+| Operation                                 | What breaks                                                                                          |
+| ----------------------------------------- | ---------------------------------------------------------------------------------------------------- |
+| `figma_delete_variable`                   | Every aliased Variable showing the old name as a broken reference; every component fill bound to it. |
+| `figma_delete_variable_collection`        | Same as above, multiplied by the number of Variables in the collection.                              |
+| Removing a Mode                           | All values for that mode are gone; bindings fall back to default.                                    |
+| Removing a Variant from a Component Set   | Instances using that combination "stick" but no longer track upstream changes.                       |
+| Renaming a Variant Property or its values | Existing instances reset to the property's default — every consumer rebuilds.                        |
+| Splitting one Component into two          | Old instances continue pointing at the original; downstream rebuild required.                        |
+| Splitting a Library                       | Every consumer file's import breaks; needs a manual swap-instances pass.                             |
 
 ## Coordination protocol — for every Breaking change
 
@@ -161,7 +161,7 @@ The largest possible migration. Treat it like a code monorepo split: every consu
 7. Remove the moved-out content from the original Library.
 ```
 
-A Library split is rarely the right answer compared to *organizing* the existing Library better. Confirm with the user that they have actually outgrown the file (>100 components OR multiple distinct product surfaces) before recommending this.
+A Library split is rarely the right answer compared to _organizing_ the existing Library better. Confirm with the user that they have actually outgrown the file (>100 components OR multiple distinct product surfaces) before recommending this.
 
 ## Post-flight — always
 

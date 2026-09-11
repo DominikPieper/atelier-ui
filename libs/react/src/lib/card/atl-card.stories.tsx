@@ -1,9 +1,15 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { AtlCard, AtlCardHeader, AtlCardContent, AtlCardFooter } from './atl-card';
+import {
+  AtlCard,
+  AtlCardHeader,
+  AtlCardContent,
+  AtlCardFooter,
+} from './atl-card';
 
 import { metadata } from '@atelier-ui/spec/metadata/card.metadata';
 import { contract } from '@atelier-ui/spec/contracts/card.contract';
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
@@ -114,7 +120,9 @@ export const AllVariants: Story = {
 export const ContentOnly: Story = {
   render: () => (
     <AtlCard>
-      <AtlCardContent>A card with only content, no header or footer.</AtlCardContent>
+      <AtlCardContent>
+        A card with only content, no header or footer.
+      </AtlCardContent>
     </AtlCard>
   ),
 };

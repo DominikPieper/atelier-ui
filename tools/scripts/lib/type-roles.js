@@ -19,7 +19,7 @@ const path = require('path');
 
 const TOKENS_FILE = path.resolve(
   __dirname,
-  '../../../libs/create-workspace/src/generators/preset/files/styles/tokens.css'
+  '../../../libs/create-workspace/src/generators/preset/files/styles/tokens.css',
 );
 
 /** `font:` values that are exactly one role reference, e.g. `var(--ui-type-body-sm)`. */

@@ -44,7 +44,7 @@ watch(
   () => props.indeterminate,
   (val) => {
     if (inputRef.value) inputRef.value.indeterminate = val;
-  }
+  },
 );
 
 onMounted(() => {
@@ -58,7 +58,10 @@ function onChange(event: Event) {
 </script>
 
 <template>
-  <div class="atl-checkbox" :class="{ 'is-invalid': invalid, 'is-disabled': disabled }">
+  <div
+    class="atl-checkbox"
+    :class="{ 'is-invalid': invalid, 'is-disabled': disabled }"
+  >
     <label :for="inputId" class="checkbox-label">
       <input
         :id="inputId"
@@ -75,7 +78,9 @@ function onChange(event: Event) {
       <slot />
     </label>
     <div v-if="errors.length" :id="errorsId" class="errors" aria-live="polite">
-      <p v-for="(error, i) in errors" :key="i" class="error-message">{{ error }}</p>
+      <p v-for="(error, i) in errors" :key="i" class="error-message">
+        {{ error }}
+      </p>
     </div>
   </div>
 </template>

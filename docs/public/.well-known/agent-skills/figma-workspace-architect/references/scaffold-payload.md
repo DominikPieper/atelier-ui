@@ -1,19 +1,21 @@
 # Scaffold sub-mode — one-shot starter file
 
-A sub-mode of Build for the case where the user wants a **lauffähiges Anfangsfile** in one turn, not a guided iterative build. Triggers on phrases like *scaffold, template, starter, quickstart, bootstrap a new file*.
+A sub-mode of Build for the case where the user wants a **lauffähiges Anfangsfile** in one turn, not a guided iterative build. Triggers on phrases like _scaffold, template, starter, quickstart, bootstrap a new file_.
 
 The scaffold produces a **skeleton** — Cover + Tokens + Components pages with placeholder content that the user is expected to replace. It is not a finished design system; it is the structural decision-set, materialized.
 
 ## When to use the scaffold sub-mode
 
 ✅ Use it when the user says:
+
 - "Set up a new Figma file from scratch"
 - "Bootstrap our token system + a starter component"
 - "I want a starter / template / scaffold for a new design system"
 
 ❌ Don't use it when:
+
 - The user already has a file and wants additions — that's the regular Build loop, with discovery first.
-- The user wants a *finished* design system — the scaffold is intentionally placeholder-quality.
+- The user wants a _finished_ design system — the scaffold is intentionally placeholder-quality.
 - The user has specific brand values to seed — run the regular Build loop and use the user's values; don't paste over them with placeholders.
 
 The trade-off is speed vs. specificity. The scaffold gets to a working file in one turn but bakes generic placeholder values; the regular Build loop produces specific values but takes 4–6 turns of dialogue.
@@ -63,19 +65,19 @@ Bootstraps the tokens in one atomic operation. Payload:
   "collectionName": "UI Tokens",
   "modes": ["Light", "Dark"],
   "variables": [
-    { "name": "primitive/teal/600",  "type": "COLOR", "scopes": ["FRAME_FILL", "SHAPE_FILL", "TEXT_FILL", "STROKE_COLOR"], "valuesByMode": { "Light": "#007070", "Dark": "#0a8080" } },
-    { "name": "primitive/teal/700",  "type": "COLOR", "scopes": ["FRAME_FILL", "SHAPE_FILL", "TEXT_FILL", "STROKE_COLOR"], "valuesByMode": { "Light": "#005858", "Dark": "#0a6868" } },
+    { "name": "primitive/teal/600", "type": "COLOR", "scopes": ["FRAME_FILL", "SHAPE_FILL", "TEXT_FILL", "STROKE_COLOR"], "valuesByMode": { "Light": "#007070", "Dark": "#0a8080" } },
+    { "name": "primitive/teal/700", "type": "COLOR", "scopes": ["FRAME_FILL", "SHAPE_FILL", "TEXT_FILL", "STROKE_COLOR"], "valuesByMode": { "Light": "#005858", "Dark": "#0a6868" } },
     { "name": "primitive/slate/100", "type": "COLOR", "scopes": ["FRAME_FILL", "SHAPE_FILL", "TEXT_FILL", "STROKE_COLOR"], "valuesByMode": { "Light": "#f1f5f9", "Dark": "#334155" } },
     { "name": "primitive/slate/700", "type": "COLOR", "scopes": ["FRAME_FILL", "SHAPE_FILL", "TEXT_FILL", "STROKE_COLOR"], "valuesByMode": { "Light": "#334155", "Dark": "#cbd5e1" } },
-    { "name": "color/primary",       "type": "COLOR", "scopes": ["FRAME_FILL", "SHAPE_FILL", "STROKE_COLOR"], "valuesByMode": { "Light": { "alias": "primitive/teal/600" }, "Dark": { "alias": "primitive/teal/600" } } },
+    { "name": "color/primary", "type": "COLOR", "scopes": ["FRAME_FILL", "SHAPE_FILL", "STROKE_COLOR"], "valuesByMode": { "Light": { "alias": "primitive/teal/600" }, "Dark": { "alias": "primitive/teal/600" } } },
     { "name": "color/primary-hover", "type": "COLOR", "scopes": ["FRAME_FILL", "SHAPE_FILL", "STROKE_COLOR"], "valuesByMode": { "Light": { "alias": "primitive/teal/700" }, "Dark": { "alias": "primitive/teal/700" } } },
-    { "name": "color/text",          "type": "COLOR", "scopes": ["TEXT_FILL"],                              "valuesByMode": { "Light": { "alias": "primitive/slate/700" }, "Dark": { "alias": "primitive/slate/100" } } },
-    { "name": "color/surface",       "type": "COLOR", "scopes": ["FRAME_FILL", "SHAPE_FILL"],               "valuesByMode": { "Light": "#ffffff", "Dark": { "alias": "primitive/slate/700" } } },
-    { "name": "color/border",        "type": "COLOR", "scopes": ["STROKE_COLOR"],                          "valuesByMode": { "Light": { "alias": "primitive/slate/100" }, "Dark": { "alias": "primitive/slate/700" } } },
-    { "name": "spacing/2",           "type": "FLOAT", "scopes": ["GAP", "WIDTH_HEIGHT"],                    "valuesByMode": { "Light": 8,  "Dark": 8 } },
-    { "name": "spacing/4",           "type": "FLOAT", "scopes": ["GAP", "WIDTH_HEIGHT"],                    "valuesByMode": { "Light": 16, "Dark": 16 } },
-    { "name": "spacing/6",           "type": "FLOAT", "scopes": ["GAP", "WIDTH_HEIGHT"],                    "valuesByMode": { "Light": 24, "Dark": 24 } },
-    { "name": "radius/md",           "type": "FLOAT", "scopes": ["CORNER_RADIUS"],                          "valuesByMode": { "Light": 8, "Dark": 8 } }
+    { "name": "color/text", "type": "COLOR", "scopes": ["TEXT_FILL"], "valuesByMode": { "Light": { "alias": "primitive/slate/700" }, "Dark": { "alias": "primitive/slate/100" } } },
+    { "name": "color/surface", "type": "COLOR", "scopes": ["FRAME_FILL", "SHAPE_FILL"], "valuesByMode": { "Light": "#ffffff", "Dark": { "alias": "primitive/slate/700" } } },
+    { "name": "color/border", "type": "COLOR", "scopes": ["STROKE_COLOR"], "valuesByMode": { "Light": { "alias": "primitive/slate/100" }, "Dark": { "alias": "primitive/slate/700" } } },
+    { "name": "spacing/2", "type": "FLOAT", "scopes": ["GAP", "WIDTH_HEIGHT"], "valuesByMode": { "Light": 8, "Dark": 8 } },
+    { "name": "spacing/4", "type": "FLOAT", "scopes": ["GAP", "WIDTH_HEIGHT"], "valuesByMode": { "Light": 16, "Dark": 16 } },
+    { "name": "spacing/6", "type": "FLOAT", "scopes": ["GAP", "WIDTH_HEIGHT"], "valuesByMode": { "Light": 24, "Dark": 24 } },
+    { "name": "radius/md", "type": "FLOAT", "scopes": ["CORNER_RADIUS"], "valuesByMode": { "Light": 8, "Dark": 8 } }
   ]
 }
 ```
@@ -99,7 +101,7 @@ await figma.loadFontAsync({ family: 'Inter', style: 'Semi Bold' });
 
 // 1. Pages — create if not present
 function ensurePage(name) {
-  let page = figma.root.children.find(p => p.name === name);
+  let page = figma.root.children.find((p) => p.name === name);
   if (!page) {
     page = figma.createPage();
     page.name = name;
@@ -116,36 +118,33 @@ const title = figma.createText();
 title.fontName = { family: 'Inter', style: 'Semi Bold' };
 title.fontSize = 64;
 title.characters = 'Design system — replace this title';
-title.x = 80; title.y = 80;
+title.x = 80;
+title.y = 80;
 cover.appendChild(title);
 
 const note = figma.createText();
 note.fontName = { family: 'Inter', style: 'Medium' };
 note.fontSize = 16;
-note.characters =
-  'This file is a scaffold. Replace the placeholder primary colour, ' +
-  'the example Button component, and this title with your real values.';
-note.x = 80; note.y = 200;
+note.characters = 'This file is a scaffold. Replace the placeholder primary colour, ' + 'the example Button component, and this title with your real values.';
+note.x = 80;
+note.y = 200;
 note.resize(640, note.height);
 cover.appendChild(note);
 
 // 3. Components page — build a 3×2 ExampleButton variant grid
 figma.currentPage = components;
 
-const primaryVar = figma.variables.getLocalVariables('COLOR')
-  .find(v => v.name === 'color/primary');
-const primaryHoverVar = figma.variables.getLocalVariables('COLOR')
-  .find(v => v.name === 'color/primary-hover');
-const radiusVar = figma.variables.getLocalVariables('FLOAT')
-  .find(v => v.name === 'radius/md');
+const primaryVar = figma.variables.getLocalVariables('COLOR').find((v) => v.name === 'color/primary');
+const primaryHoverVar = figma.variables.getLocalVariables('COLOR').find((v) => v.name === 'color/primary-hover');
+const radiusVar = figma.variables.getLocalVariables('FLOAT').find((v) => v.name === 'radius/md');
 
 const variantConfigs = [
-  { variant: 'primary',   size: 'sm', fillVar: primaryVar, padX: 12, padY: 6,  fontSize: 13 },
-  { variant: 'primary',   size: 'md', fillVar: primaryVar, padX: 16, padY: 8,  fontSize: 14 },
-  { variant: 'secondary', size: 'sm', fillVar: null,       padX: 12, padY: 6,  fontSize: 13 },
-  { variant: 'secondary', size: 'md', fillVar: null,       padX: 16, padY: 8,  fontSize: 14 },
-  { variant: 'outline',   size: 'sm', fillVar: null,       padX: 12, padY: 6,  fontSize: 13 },
-  { variant: 'outline',   size: 'md', fillVar: null,       padX: 16, padY: 8,  fontSize: 14 },
+  { variant: 'primary', size: 'sm', fillVar: primaryVar, padX: 12, padY: 6, fontSize: 13 },
+  { variant: 'primary', size: 'md', fillVar: primaryVar, padX: 16, padY: 8, fontSize: 14 },
+  { variant: 'secondary', size: 'sm', fillVar: null, padX: 12, padY: 6, fontSize: 13 },
+  { variant: 'secondary', size: 'md', fillVar: null, padX: 16, padY: 8, fontSize: 14 },
+  { variant: 'outline', size: 'sm', fillVar: null, padX: 12, padY: 6, fontSize: 13 },
+  { variant: 'outline', size: 'md', fillVar: null, padX: 16, padY: 8, fontSize: 14 },
 ];
 
 const variantNodes = [];
@@ -158,7 +157,7 @@ for (const cfg of variantConfigs) {
   frame.primaryAxisAlignItems = 'CENTER';
   frame.counterAxisAlignItems = 'CENTER';
   frame.paddingLeft = frame.paddingRight = cfg.padX;
-  frame.paddingTop  = frame.paddingBottom = cfg.padY;
+  frame.paddingTop = frame.paddingBottom = cfg.padY;
   frame.itemSpacing = 8;
   frame.cornerRadius = 8;
 
@@ -182,12 +181,12 @@ for (const cfg of variantConfigs) {
   label.fontName = { family: 'Inter', style: 'Medium' };
   label.characters = 'Button';
   label.fontSize = cfg.fontSize;
-  label.fills = [{
-    type: 'SOLID',
-    color: cfg.variant === 'outline'
-      ? { r: 0, g: 0.44, b: 0.44 }
-      : { r: 1, g: 1, b: 1 },
-  }];
+  label.fills = [
+    {
+      type: 'SOLID',
+      color: cfg.variant === 'outline' ? { r: 0, g: 0.44, b: 0.44 } : { r: 1, g: 1, b: 1 },
+    },
+  ];
   frame.appendChild(label);
 
   // Promote to Component
@@ -241,8 +240,8 @@ Then mark the Components Section Ready-for-dev so the skeleton announces itself 
 
 ```js
 // figma_execute payload — small, atomic
-const componentsPage = figma.root.children.find(p => p.name === 'Components');
-const section = componentsPage?.children?.find(n => n.type === 'SECTION');
+const componentsPage = figma.root.children.find((p) => p.name === 'Components');
+const section = componentsPage?.children?.find((n) => n.type === 'SECTION');
 if (section) section.devStatus = { type: 'READY_FOR_DEV' };
 return { sectionId: section?.id, devStatus: section?.devStatus };
 ```

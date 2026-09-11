@@ -4,10 +4,10 @@
 
 A component library that an agent can use without improvising has to satisfy four properties. Every Build, Migrate, and Audit pass should treat these as hard requirements, not nice-to-haves. The audit checklist (`references/audit-checklist.md`) maps each one to a check ID so findings are mechanical to record.
 
-1. **Complete variant states** *(audit ID: CD7)* — every interactive component covers all states an agent will need: `default`, `hover`, `focus`, `disabled`, `error`, `loading`. Gaps force the agent to improvise the missing variant, and improvisation is where drift starts. The agent fills the gap with something plausible-looking and the library quietly stops being the source of truth.
-2. **Annotated component descriptions** *(audit ID: CD6)* — every component carries a usage note: when to use it, when not to, and what it signals to the user. Without intent, an agent picks by shape — a button that looks secondary gets used as a secondary button even when it was designed for a destructive action. The description is what tells the agent *why the component exists*.
-3. **Token-linked styles** *(audit ID: CD8)* — colour, typography, spacing, and effects all bound to Variables (or Text/Effect Styles where Variables don't yet apply). No raw hex, no literal `16px`, no inline font sizes. The agent applies decisions through the token system; hardcoded values break propagation, and propagation is how the library stays consistent at scale.
-4. **Auto Layout throughout** *(audit ID: CD9)* — components are built with Auto Layout so an agent can resize and reflow without breaking structure. Fixed frames produce fixed output: if the agent cannot stretch a Card to a column or grow a Button to a translated label, it either breaks the component or skips it.
+1. **Complete variant states** _(audit ID: CD7)_ — every interactive component covers all states an agent will need: `default`, `hover`, `focus`, `disabled`, `error`, `loading`. Gaps force the agent to improvise the missing variant, and improvisation is where drift starts. The agent fills the gap with something plausible-looking and the library quietly stops being the source of truth.
+2. **Annotated component descriptions** _(audit ID: CD6)_ — every component carries a usage note: when to use it, when not to, and what it signals to the user. Without intent, an agent picks by shape — a button that looks secondary gets used as a secondary button even when it was designed for a destructive action. The description is what tells the agent _why the component exists_.
+3. **Token-linked styles** _(audit ID: CD8)_ — colour, typography, spacing, and effects all bound to Variables (or Text/Effect Styles where Variables don't yet apply). No raw hex, no literal `16px`, no inline font sizes. The agent applies decisions through the token system; hardcoded values break propagation, and propagation is how the library stays consistent at scale.
+4. **Auto Layout throughout** _(audit ID: CD9)_ — components are built with Auto Layout so an agent can resize and reflow without breaking structure. Fixed frames produce fixed output: if the agent cannot stretch a Card to a column or grow a Button to a translated label, it either breaks the component or skips it.
 
 These four are also the difference between a library a designer-only team can live with and one a code-gen agent can actually consume — the first three principles especially. Treat any Critical finding under CD6 / CD7 / CD8 / CD9 as a drift-source that will compound until it's fixed.
 
@@ -38,11 +38,13 @@ The four mechanisms:
 ### Variant — for visually distinct states/types
 
 Use when:
+
 - The visual difference is large enough that a designer benefits from seeing each option.
 - The combinations are bounded and meaningful (e.g. `Type × State` where both axes have ≤4 values).
 - The variations correspond to **enum-typed props** in the codebase (`type: 'primary' | 'secondary' | 'ghost'`).
 
 Don't use for:
+
 - Showing/hiding sub-elements (use a Boolean Property instead).
 - Swapping an icon for a different icon (use Instance Swap).
 - Hundreds of options like an icon set (use separate Components).
@@ -54,6 +56,7 @@ The bound to watch: **Variants × Variants × Variants explodes.** A component w
 Use when an element appears or doesn't appear without otherwise changing the component.
 
 Examples:
+
 - `Has Icon` — toggles whether an icon slot is rendered.
 - `Has Helper Text` — input field with optional helper.
 - `Loading` — toggles a spinner overlay.
@@ -77,6 +80,7 @@ Bind to a Variable when the string should come from a translation file or a toke
 Use when one component nests another and the inner component needs to vary per instance.
 
 Examples:
+
 - A Button has an Icon Property (Instance Swap pointing at the Icon library) so designers pick which icon.
 - A Card has a Header Property that can be swapped between `CardHeader/Default` and `CardHeader/WithAvatar`.
 
@@ -89,6 +93,7 @@ Use when the inner component is fixed for that variant and shouldn't be designer
 ### Separate Components — when they're different things
 
 Use when:
+
 - There are too many options for a Variant to be browsable (icons — there's no visual preview in a Variant dropdown, so an "icon" Variant set with `Name` as a property is unusable).
 - The components have different prop APIs in code. Don't force-fit a Variant if the code-side `<TextInput>` and `<Select>` have different props.
 
@@ -98,14 +103,15 @@ For a related family of separate components, use **slash naming** to group them 
 
 Variant property names and values are a contract with engineering. Make them match the code component's prop API exactly.
 
-| Code prop                          | Figma Variant property              |
-|------------------------------------|-------------------------------------|
-| `<Button size="sm" />`             | `Size: sm` (not `Size: Small`)      |
-| `<Button variant="primary" />`     | `Variant: primary`                  |
-| `<Button isLoading />`             | `Loading: true` (boolean)           |
-| `<Input state="error" />`          | `State: error`                      |
+| Code prop                      | Figma Variant property         |
+| ------------------------------ | ------------------------------ |
+| `<Button size="sm" />`         | `Size: sm` (not `Size: Small`) |
+| `<Button variant="primary" />` | `Variant: primary`             |
+| `<Button isLoading />`         | `Loading: true` (boolean)      |
+| `<Input state="error" />`      | `State: error`                 |
 
 Rules of thumb:
+
 - Property names are **PascalCase or Title Case** in Figma (Figma's own UI uses Title Case) — unless the paired codebase's gate compares names as strings, in which case they match the code exactly (`variant`, `size`).
 - Property values match the code value casing exactly (`sm`, not `Sm` or `Small`) — this is what gets read out by code-generation tools.
 - Boolean properties end in a positive (`HasIcon`, `Disabled`, `Loading`) — never negative (`NoIcon`).
@@ -114,30 +120,30 @@ Rules of thumb:
 
 A `State` axis is where variant sets explode (CD1) and where the picture stops matching the code. Hover, focus, active and friends are pseudo-classes in every framework; `disabled`, `loading`, `selected` are attributes or Boolean props. When a master carries a `State` axis, this is what each value becomes in code — and it is the table `figma_analyze_component_set` uses to emit its `cssMapping`:
 
-| Figma state value          | Code                                               |
-|----------------------------|----------------------------------------------------|
-| `hover`                    | `:hover`                                           |
-| `focus`, `focus-visible`   | `:focus-visible`                                   |
-| `active`, `pressed`        | `:active`                                          |
-| `disabled`                 | `:disabled`, `[aria-disabled="true"]` — a Boolean prop, not a variant |
-| `error`, `invalid`         | `[aria-invalid="true"]`                            |
-| `selected`                 | `[aria-selected="true"]`                           |
-| `checked`                  | `:checked`                                         |
-| `loading`                  | `[aria-busy="true"]` — a Boolean prop               |
-| `open` / `closed`          | `[aria-expanded="true|false"]`                     |
-| `filled`                   | `.has-value` (or the codebase's equivalent)        |
+| Figma state value        | Code                                                                  |
+| ------------------------ | --------------------------------------------------------------------- |
+| `hover`                  | `:hover`                                                              |
+| `focus`, `focus-visible` | `:focus-visible`                                                      |
+| `active`, `pressed`      | `:active`                                                             |
+| `disabled`               | `:disabled`, `[aria-disabled="true"]` — a Boolean prop, not a variant |
+| `error`, `invalid`       | `[aria-invalid="true"]`                                               |
+| `selected`               | `[aria-selected="true"]`                                              |
+| `checked`                | `:checked`                                                            |
+| `loading`                | `[aria-busy="true"]` — a Boolean prop                                 |
+| `open` / `closed`        | `[aria-expanded="true                                                 | false"]` |
+| `filled`                 | `.has-value` (or the codebase's equivalent)                           |
 
-Draw the states designers need to *see* (a hover frame is a legitimate documentation artefact), but keep them off the axis the code gate compares — or the gate will look for a `hover` prop that never existed. `figma_analyze_component_set` detects the axis heuristically by name (`state`, `status`, `interaction`); an axis called anything else yields an empty mapping, which is itself a finding.
+Draw the states designers need to _see_ (a hover frame is a legitimate documentation artefact), but keep them off the axis the code gate compares — or the gate will look for a `hover` prop that never existed. `figma_analyze_component_set` detects the axis heuristically by name (`state`, `status`, `interaction`); an axis called anything else yields an empty mapping, which is itself a finding.
 
 ## Component Properties via high-level CRUD
 
 The figma-console-mcp exposes typed CRUD tools for Component Properties — prefer them over hand-rolling `componentPropertyDefinitions` inside a `figma_execute` payload.
 
-| Tool                              | Use when…                                                        |
-|-----------------------------------|------------------------------------------------------------------|
-| `figma_add_component_property`    | Defining a new Boolean / Text / Instance Swap property.          |
-| `figma_edit_component_property`   | Renaming, changing default value, or retyping a property.        |
-| `figma_delete_component_property` | Removing a property. Breaking — coordination protocol applies.   |
+| Tool                              | Use when…                                                      |
+| --------------------------------- | -------------------------------------------------------------- |
+| `figma_add_component_property`    | Defining a new Boolean / Text / Instance Swap property.        |
+| `figma_edit_component_property`   | Renaming, changing default value, or retyping a property.      |
+| `figma_delete_component_property` | Removing a property. Breaking — coordination protocol applies. |
 
 Why prefer them: typed inputs (you can't smuggle a malformed property shape past the API), atomic per-property updates, and far less Plugin-API boilerplate to read in chat. Reach for `figma_execute` only when defining a property must happen alongside other mutations in one atomic step (e.g. "add `HasIcon` AND set every variant's icon-slot Instance Swap default in one go").
 
@@ -160,6 +166,7 @@ Apply this all the way down: a Button contains an Icon and a Text node, a Card c
 A "slot" is a property on a component that accepts an arbitrary instance — the equivalent of `children` in React.
 
 Implementation:
+
 1. Inside the parent component, place an instance of a placeholder component (e.g. `_Slot/Default` — note the `_` prefix marks it as unpublished).
 2. Expose that nested instance as an Instance Swap Property.
 3. Designers using the parent can swap the slot's instance to anything they need.
@@ -174,16 +181,16 @@ Limit to design around: **component properties cannot be applied to layers insid
 
 ## Don't-do list
 
-| Anti-pattern                                                               | Fix                                                                  |
-|----------------------------------------------------------------------------|----------------------------------------------------------------------|
-| One Variant set per icon, with `Name` as the Variant property              | Make every icon a separate Component, group with slash naming.        |
-| State (hover/disabled) modeled with separate Components                    | Combine into a Variant set with `State` property.                     |
-| `IconLeft`, `IconRight`, `IconBoth` as separate Variants                   | One Boolean `HasIcon` plus a Variant `IconPosition: left | right`.    |
-| Detached instance to "fix" a one-off — committed to the file               | Surface the missing variant as a real Variant or Property.            |
-| Variant Property names that differ from the code prop names                | Rename Figma to match code. The code is the source of truth here.    |
-| Component without a description                                            | `figma_set_description` after creation. Always.                      |
-| All-caps Component names (`BUTTON`)                                        | Match the engineering naming exactly (typically PascalCase).         |
-| 100+ frames in a single Variant set                                        | Decompose: one or more axes should become Properties or sub-components. |
+| Anti-pattern                                                  | Fix                                                                     |
+| ------------------------------------------------------------- | ----------------------------------------------------------------------- |
+| One Variant set per icon, with `Name` as the Variant property | Make every icon a separate Component, group with slash naming.          |
+| State (hover/disabled) modeled with separate Components       | Combine into a Variant set with `State` property.                       |
+| `IconLeft`, `IconRight`, `IconBoth` as separate Variants      | One Boolean `HasIcon` plus a Variant `IconPosition: left                | right`. |
+| Detached instance to "fix" a one-off — committed to the file  | Surface the missing variant as a real Variant or Property.              |
+| Variant Property names that differ from the code prop names   | Rename Figma to match code. The code is the source of truth here.       |
+| Component without a description                               | `figma_set_description` after creation. Always.                         |
+| All-caps Component names (`BUTTON`)                           | Match the engineering naming exactly (typically PascalCase).            |
+| 100+ frames in a single Variant set                           | Decompose: one or more axes should become Properties or sub-components. |
 
 ## Atomic-design vocabulary — optional
 

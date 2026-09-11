@@ -33,7 +33,9 @@ const lines = computed(() => props.code.split('\n'));
 function copy() {
   void navigator.clipboard.writeText(props.code).then(() => {
     copied.value = true;
-    setTimeout(() => { copied.value = false; }, 1800);
+    setTimeout(() => {
+      copied.value = false;
+    }, 1800);
   });
 }
 </script>
@@ -60,7 +62,9 @@ function copy() {
       </button>
     </div>
     <div class="code-block-body">
-      <pre class="code-block-pre"><code><template v-if="showLineNumbers"><span v-for="(line, i) in lines" :key="i" class="code-line"><span class="code-line-number">{{ i + 1 }}</span><span class="code-line-text">{{ line }}</span></span></template><template v-else>{{ code }}</template></code></pre>
+      <pre
+        class="code-block-pre"
+      ><code><template v-if="showLineNumbers"><span v-for="(line, i) in lines" :key="i" class="code-line"><span class="code-line-number">{{ i + 1 }}</span><span class="code-line-text">{{ line }}</span></span></template><template v-else>{{ code }}</template></code></pre>
     </div>
   </div>
 </template>

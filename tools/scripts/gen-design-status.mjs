@@ -24,13 +24,23 @@
  *   node tools/scripts/gen-design-status.mjs            write plan/design-status.md
  *   node tools/scripts/gen-design-status.mjs --check    fail on drift
  */
-import { readFileSync, writeFileSync, readdirSync, existsSync, statSync } from 'node:fs';
+import {
+  readFileSync,
+  writeFileSync,
+  readdirSync,
+  existsSync,
+  statSync,
+} from 'node:fs';
 import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 
 const require = createRequire(import.meta.url);
-const { FRAMEWORKS, isComponentDir, getComponentDirs } = require('./lib/component-discovery.js');
+const {
+  FRAMEWORKS,
+  isComponentDir,
+  getComponentDirs,
+} = require('./lib/component-discovery.js');
 const { moduleForSelector } = require('./lib/parity-inputs.js');
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
@@ -144,13 +154,13 @@ const rows = [...dirs].sort().map((dir) => {
 
 const tick = (b) => (b ? 'yes' : '—');
 const a11yCell = (fw) =>
-  fw.length === 0 ? '—' : fw.length === FRAMEWORKS.length ? 'all 3' : fw.join(', ');
+  fw.length === 0
+    ? '—'
+    : fw.length === FRAMEWORKS.length
+      ? 'all 3'
+      : fw.join(', ');
 const artboardCell = (r) =>
-  r.artboard
-    ? `**${r.artboard.file}**`
-    : r.fragment
-      ? `fragment only`
-      : '—';
+  r.artboard ? `**${r.artboard.file}**` : r.fragment ? `fragment only` : '—';
 
 const designed = rows.filter((r) => r.artboard).length;
 const fragmentOnly = rows.filter((r) => !r.artboard && r.fragment).length;
@@ -185,18 +195,24 @@ const lines = [
   '',
   '| Component | Artboard | Figma axes | Variants | Parity verified | a11y baseline | Type roles | Respecifies font |',
   '|---|---|---|---|---|---|---|---|',
-  ...rows.map((r) =>
-    [
-      `\`${r.dir}\``,
-      artboardCell(r),
-      r.axes ? (r.axes.length ? r.axes.join(' · ') : 'none') : '— *(no master)*',
-      r.variants ?? '—',
-      r.verifiedAt ? `${r.verifiedAt} (\`${r.verifiedSha}\`)` : '— *(never)*',
-      a11yCell(r.a11y),
-      tick(r.roles),
-      r.respecifiesFont ? 'yes' : '—',
-    ].join(' | ')
-  ).map((l) => `| ${l} |`),
+  ...rows
+    .map((r) =>
+      [
+        `\`${r.dir}\``,
+        artboardCell(r),
+        r.axes
+          ? r.axes.length
+            ? r.axes.join(' · ')
+            : 'none'
+          : '— *(no master)*',
+        r.variants ?? '—',
+        r.verifiedAt ? `${r.verifiedAt} (\`${r.verifiedSha}\`)` : '— *(never)*',
+        a11yCell(r.a11y),
+        tick(r.roles),
+        r.respecifiesFont ? 'yes' : '—',
+      ].join(' | '),
+    )
+    .map((l) => `| ${l} |`),
   '',
   '## How to read the last two columns',
   '',
@@ -231,17 +247,17 @@ if (process.argv.includes('--check')) {
   const current = existsSync(OUT) ? readFileSync(OUT, 'utf8') : '';
   if (current !== out) {
     console.error(
-      '✗ plan/design-status.md is out of sync with its sources.\n  Run: node tools/scripts/gen-design-status.mjs'
+      '✗ plan/design-status.md is out of sync with its sources.\n  Run: node tools/scripts/gen-design-status.mjs',
     );
     process.exit(1);
   }
   console.log(
-    `✓ design status in sync (${rows.length} components; ${designed} with an artboard, ${fragmentOnly} fragment-only).`
+    `✓ design status in sync (${rows.length} components; ${designed} with an artboard, ${fragmentOnly} fragment-only).`,
   );
   process.exit(0);
 }
 
 writeFileSync(OUT, out);
 console.log(
-  `wrote ${OUT.replace(ROOT + '/', '')} — ${rows.length} components, ${designed} designed, ${fragmentOnly} fragment-only`
+  `wrote ${OUT.replace(ROOT + '/', '')} — ${rows.length} components, ${designed} designed, ${fragmentOnly} fragment-only`,
 );

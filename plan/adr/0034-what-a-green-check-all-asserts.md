@@ -3,9 +3,9 @@ status: accepted
 date: 2026-08-26
 sources:
   - tasks/review-state-2026-08-26.md (state review — a11y roster hole, ADR/gate-policy drift)
-  - "plan/adr/0019-figma-conformance-gate.md (§5 revised: no longer standalone)"
-  - "plan/adr/0024-design-parity-persistence-gate.md (§4 revised: no longer standalone)"
-  - "plan/adr/0025-cross-framework-a11y-conformance.md (roster derivation)"
+  - 'plan/adr/0019-figma-conformance-gate.md (§5 revised: no longer standalone)'
+  - 'plan/adr/0024-design-parity-persistence-gate.md (§4 revised: no longer standalone)'
+  - 'plan/adr/0025-cross-framework-a11y-conformance.md (roster derivation)'
 ---
 
 # ADR-0034: What a green `check:all` asserts — promoted gates, derived rosters (revises ADR-0019 §5 and ADR-0024 §4)
@@ -33,7 +33,7 @@ non-emptiness but never age.
 the component list by globbing `tools/parity/a11y/` (`fs.readdirSync(A11Y_DIR)`),
 so a component with zero snapshots was not "missing" — it was not a question
 the gate asked. No comparison, no `[MISSING]` warning (that path only fires for
-*partial* coverage), exit 0. Four components were uncovered: select, combobox
+_partial_ coverage), exit 0. Four components were uncovered: select, combobox
 and radio for recorded reasons, and **accordion for no reason at all** — the
 exact component ADR-0025 cites as its motivating cross-framework divergence.
 `tasks/todo.md` accordingly claimed the gate was "COMPLETE for all comparable
@@ -62,13 +62,13 @@ carries two kinds of entry:
   the roster.
 
 The allowlist is itself checked: an entry naming a dir that does not exist, or
-one that now *has* snapshots, is a blocker. Load-bearing allowlists rot.
+one that now _has_ snapshots, is a blocker. Load-bearing allowlists rot.
 
 **And the promotion is recorded as fact:** `check:parity` and `check:figma` run
 inside `check:all`, revising ADR-0019 §5 and ADR-0024 §4. `check:parity` is
 deterministic and offline, so it was always safe there. `check:figma` reads a
-committed snapshot, so it is offline too — but it is promoted *with its stated
-precondition still unmet*, which is recorded here rather than left implicit.
+committed snapshot, so it is offline too — but it is promoted _with its stated
+precondition still unmet_, which is recorded here rather than left implicit.
 
 Alternatives considered:
 
@@ -103,7 +103,7 @@ Alternatives considered:
   tracked in `tasks/todo.md`; it is the most likely place for a real
   cross-framework finding, so expect the gate to go red before it goes green
   there. That is the gate working.
-- `check:figma`'s promotion is now recorded *together with* its unmet
+- `check:figma`'s promotion is now recorded _together with_ its unmet
   precondition, so the next reader does not have to rediscover that a green
   `check:figma` says nothing about whether the Figma file has moved. The
   freshness policy (fail or warn past a max age; populate

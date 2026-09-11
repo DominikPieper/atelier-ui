@@ -4,11 +4,11 @@ date: 2026-09-09
 sources:
   - "tasks/schulung-content-review-2026-09-08.md (Gegenprobe — Codex, 2026-09-09, finding G2: 'interaction states are not variants' contradicted by Atelier's own masters, by the briefs' own acceptance bar, and by the architect skill)"
   - "tools/figma/snapshot.json (the live `state=` variant-axis census on 15 masters, and `Action/AtlButton`'s curated 24-of-48 drawn combinations)"
-  - "libs/spec/src/index.ts (every `Atl*Variant` union — none carries a state value)"
+  - 'libs/spec/src/index.ts (every `Atl*Variant` union — none carries a state value)'
   - "uianatomy MCP `get_component_view('card', 'designer')` (the canonical `variant-explosion-from-states` mistake record, severity minor)"
   - "skills/figma-workspace-architect/references/decision-heuristics.md, component-design.md (the Figma-side rule this ADR's decision agrees with, now cross-referenced back to this ADR)"
   - "workshop/briefs/README.md, tagchip.md, statcard.md (the paragraph and acceptance item this ADR's decision rewrites)"
-  - "this session"
+  - 'this session'
 ---
 
 # ADR-0114: The state axis Figma draws is not the union the code exposes
@@ -19,9 +19,9 @@ Accepted.
 
 ## Context
 
-`workshop/briefs/README.md` told participants, flatly: *"Interaction states are not
+`workshop/briefs/README.md` told participants, flatly: _"Interaction states are not
 variants. hover / focus / active / disabled are CSS pseudo-classes and attributes, not
-entries in the variant matrix."* Measured against the repo, this is false on its own
+entries in the variant matrix."_ Measured against the repo, this is false on its own
 terms, three times over:
 
 - **Atelier's own masters contradict it.** `tools/figma/snapshot.json` shows a dedicated
@@ -31,18 +31,18 @@ terms, three times over:
   `AtlTab`, `AtlStep`, `AtlOption` — 45× `state=default`, 29× `hover`, 23× `focus`, 12×
   `active`, plus data-flavoured values (`open`, `filled`, `invalid`, `completed`,
   `optional`). This is not legacy debt to clean up: `AtlButton`'s master description
-  records a deliberate 2026-04-27 restructure that *slimmed* the `state` enum to
+  records a deliberate 2026-04-27 restructure that _slimmed_ the `state` enum to
   `default`/`hover`/`focus`/`active` and moved `loading`/`disabled` out to Booleans — the
   axis was tightened, not phased out.
 - **The briefs' own acceptance bar contradicts it.** `README.md`'s "Done when" item 1
-  requires *"≥ 2 variants × 2 states"* on the Figma component set — an axis the same
+  requires _"≥ 2 variants × 2 states"_ on the Figma component set — an axis the same
   document had just forbidden.
 - **The architect skill accompanying the same block contradicts it.**
   `decision-heuristics.md` ("Don't use a Mode for: States like hover/disabled — those are
   Variant Properties.") and `component-design.md` ("Don't use Boolean Properties to
   encode mutually exclusive states … That's a Variant.") both say the opposite, and both
   are correct: Figma has exactly one primitive for a mutually-exclusive option — a
-  Component Property of type Variant — so a master that needs to *draw* a state has no
+  Component Property of type Variant — so a master that needs to _draw_ a state has no
   other way to do it.
 
 A participant holding the brief and the architect skill in the same 90-minute block
@@ -50,10 +50,10 @@ receives two documents disagreeing about the same fact, and the brief's fix-wort
 argument — the `variant-explosion-from-states` warning it correctly cites from the
 canonical `card` record — survives independently of the false absolute wrapped around it.
 That record's actual claim (verified via `get_component_view('card', 'designer')`) is
-narrower than what the paragraph said: *"Adding hover / focus / active / disabled as
+narrower than what the paragraph said: _"Adding hover / focus / active / disabled as
 variants in Figma causes the variant matrix to explode … Document interaction states once
 in a separate 'states' sheet … Reserve Figma variants for structurally different
-versions."* Severity **minor**, and about **crossing** an axis against every other axis
+versions."_ Severity **minor**, and about **crossing** an axis against every other axis
 (3 variants × 4 states × 2 orientations = 24+), not about the axis's existence.
 
 The second half of the confusion is that the paragraph never distinguished two different
@@ -61,8 +61,8 @@ surfaces answering to one word. Checking `libs/spec/src/index.ts` settles which 
 belongs where: every `Atl*Variant` union — `AtlButtonVariant`, `AtlBadgeVariant`,
 `AtlToastVariant`, nine more, twelve unions total — holds only structural values (severity, style, shape).
 None holds a state. `AtlButton`'s own master marks the boundary explicitly in its
-description: every other property line reads *"→ maps to AtlButtonSpec.X"*; the `state`
-line reads only *"interaction state"*, with no arrow. Nothing on the code side consumes
+description: every other property line reads _"→ maps to AtlButtonSpec.X"_; the `state`
+line reads only _"interaction state"_, with no arrow. Nothing on the code side consumes
 it — hover/focus/active/disabled stay CSS pseudo-classes and `disabled`/`aria-*`
 attributes there, as they always have.
 
@@ -79,7 +79,7 @@ component itself never draws them.
 
 **Figma and the code contract get different rules about state, stated separately:**
 
-1. **In Figma**, a master that must *draw* an interaction state has no primitive for it
+1. **In Figma**, a master that must _draw_ an interaction state has no primitive for it
    other than a Variant axis. Put it on its own `state` axis — never cross it against
    every other axis (that is the actual anti-pattern the canonical `card` record names:
    3 variants × 4 states × 2 orientations = 24+ frames). Draw a curated subset, not the
@@ -124,7 +124,7 @@ legitimate and why, has no way to tell "this component skips the axis by design"
 - The paragraph's warning against variant-explosion-from-states survives, correctly
   scoped to what it actually warns against (crossing every axis), not misapplied as a
   ban on the axis's existence.
-- Acceptance item 1 (*"≥ 2 variants × 2 states"*) no longer contradicts the paragraph
+- Acceptance item 1 (_"≥ 2 variants × 2 states"_) no longer contradicts the paragraph
   immediately above it in the same document.
 - The architect skill's existing, correct Figma-side guidance is now explicitly linked to
   the code-side rule it was always implicitly compatible with, closing the gap a
@@ -143,10 +143,11 @@ brief is read straight: a static StatCard "has none of" the interactive states, 
 TagChip's only focusable element is its remove button, not the chip. The two briefs'
 scope lines are rewritten, and the two decisions differ because the underlying fact
 differs:
+
 - `statcard.md` keeps a `state` axis, but not `idle`/`hover` — it now reads `delta-up` /
   `delta-down`, a composition-specific **data** pair for the `delta` slot's direction
   (`card` itself still has none). It earns the axis for the same reason Decision §1 gives
-  a state axis to any master that must *draw* a state it genuinely has: the direction is
+  a state axis to any master that must _draw_ a state it genuinely has: the direction is
   real, visibly distinguishable, and is what makes the brief's own colour-alone blocker
   (§4 item 3, "the delta is never colour alone") checkable directly on a frame — a claim
   that is only fully checkable once both directions exist to compare, not asserted of a
@@ -161,7 +162,7 @@ differs:
   onto a chip-level variant matrix.
 
 Both outcomes were already reachable from Decision §1 as written — a master that must
-*draw* a state it genuinely has gets an axis; a master whose interactivity sits entirely
+_draw_ a state it genuinely has gets an axis; a master whose interactivity sits entirely
 on a nested control does not — the wrinkle was that both briefs' scope lines had picked
 states (`idle`/`hover`) belonging to neither category before this correction. No further
 edit to `workshop/briefs/README.md` was needed: its "Done when" item 1, rewritten by this

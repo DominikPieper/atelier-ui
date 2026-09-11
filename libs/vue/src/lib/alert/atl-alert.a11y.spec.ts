@@ -15,7 +15,10 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../../../..');
 const SNAP = resolve(ROOT, `tools/parity/a11y/atl-alert.${FW}.json`);
 
 function captureOne(props: Record<string, unknown>): unknown {
-  const r = render(AtlAlert, { props, slots: { default: 'Session expires soon' } });
+  const r = render(AtlAlert, {
+    props,
+    slots: { default: 'Session expires soon' },
+  });
   const tree = a11yTree(r.container);
   r.unmount();
   return tree;

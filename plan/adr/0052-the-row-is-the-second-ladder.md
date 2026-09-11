@@ -18,19 +18,19 @@ headers are deliberately excluded — see Decision.
 ## Context
 
 ADR-0041 made the control height the primitive and derived the block padding from
-it. That fixed controls. It did nothing for the boxes controls sit *in*, and a
+it. That fixed controls. It did nothing for the boxes controls sit _in_, and a
 census of all 29 components measured what was left:
 
-| box | measured |
-|---|---|
-| checkbox row | 26px |
-| toggle row | 27px |
-| radio row | 32px |
-| menu item | 36px |
-| combobox option | 36px |
-| table cell, md | 42px |
-| table sortable header | 43px |
-| accordion trigger | 52px |
+| box                   | measured |
+| --------------------- | -------- |
+| checkbox row          | 26px     |
+| toggle row            | 27px     |
+| radio row             | 32px     |
+| menu item             | 36px     |
+| combobox option       | 36px     |
+| table cell, md        | 42px     |
+| table sortable header | 43px     |
+| accordion trigger     | 52px     |
 
 Three sibling rows, three heights. Worse, **32 of the 70 boxes measured moved under
 an inherited line-height**: their height was decided by text metrics, so it was
@@ -38,8 +38,8 @@ decided by whichever typeface happened to be installed. That is the ADR-0048 def
 which had already shipped a CI failure once — AtlSelect measured 40.4px locally and
 40.7px on the runner.
 
-Two things were entangled here and had to be separated. A box can be *deterministic*
-(same height everywhere) and still be *arbitrary* (36px because that is what the
+Two things were entangled here and had to be separated. A box can be _deterministic_
+(same height everywhere) and still be _arbitrary_ (36px because that is what the
 content came to). Fixing determinism alone leaves the rows reading 26 / 27 / 32 / 36
 / 42 / 52. Fixing rhythm alone leaves each row a different height on a different
 machine.
@@ -57,13 +57,13 @@ machine.
 
 The relation "a row is taller than the control it holds" lives in the token, not in
 a convention thirty stylesheets have to honour. Measured: a size-md cell at 48px
-renders exactly 48.00px holding plain text, a badge, an sm button, an md button *or*
+renders exactly 48.00px holding plain text, a badge, an sm button, an md button _or_
 an md avatar. The same cell at 40 renders 41.0px with the md button — the extra
 pixel being two collapsed cell borders. Under the derived ladder, any control fits
 any row of the same step; that is the property `--ui-row-inset` buys.
 
 **A row centres; a control pads.** This is the part that is not a restatement of
-ADR-0041, and it deliberately does *not* use its formula:
+ADR-0041, and it deliberately does _not_ use its formula:
 
 ```css
 min-height: var(--ui-row-height-md);
@@ -82,7 +82,7 @@ cell, `vertical-align: middle`) place the content.
 **Every root states its own leading.** A stated line-height on the row itself is not
 enough on its own — measured: `.atl-table { line-height: tight }` still leaves the
 row at 67px under the probe, while stating it on the `td` holds. So the rule runs
-both ways: each measured box states its line-height, *and* each component root
+both ways: each measured box states its line-height, _and_ each component root
 states the leading its descendants inherit — `--ui-line-height-normal` where the
 component carries prose, `--ui-line-height-tight` for single-line chrome. Twenty
 components stated a typeface and no leading, which is half a metric.

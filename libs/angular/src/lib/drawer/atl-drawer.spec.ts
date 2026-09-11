@@ -8,7 +8,12 @@ import {
 } from './atl-drawer';
 import { covers } from '../../testing/behavior';
 
-const ALL_IMPORTS = [AtlDrawer, AtlDrawerHeader, AtlDrawerContent, AtlDrawerFooter];
+const ALL_IMPORTS = [
+  AtlDrawer,
+  AtlDrawerHeader,
+  AtlDrawerContent,
+  AtlDrawerFooter,
+];
 
 // Polyfill HTMLDialogElement for jsdom
 beforeAll(() => {
@@ -24,49 +29,73 @@ beforeAll(() => {
 });
 
 describe('AtlDrawer', () => {
-  covers('drawer', 'aria-modal')('sets aria-modal="true" on the dialog element', async () => {
-    const { container } = await render('<atl-drawer>Content</atl-drawer>', {
-      imports: [AtlDrawer],
-    });
-    expect(container.querySelector('dialog')).toHaveAttribute('aria-modal', 'true');
-  });
+  covers('drawer', 'aria-modal')(
+    'sets aria-modal="true" on the dialog element',
+    async () => {
+      const { container } = await render('<atl-drawer>Content</atl-drawer>', {
+        imports: [AtlDrawer],
+      });
+      expect(container.querySelector('dialog')).toHaveAttribute(
+        'aria-modal',
+        'true',
+      );
+    },
+  );
 
-  covers('drawer', 'render-dialog-element')('renders a <dialog> element with aria-modal="true"', async () => {
-    const { container } = await render('<atl-drawer>Content</atl-drawer>', {
-      imports: [AtlDrawer],
-    });
-    const dialog = container.querySelector('dialog');
-    expect(dialog).toBeInTheDocument();
-    expect(dialog).toHaveAttribute('aria-modal', 'true');
-  });
+  covers('drawer', 'render-dialog-element')(
+    'renders a <dialog> element with aria-modal="true"',
+    async () => {
+      const { container } = await render('<atl-drawer>Content</atl-drawer>', {
+        imports: [AtlDrawer],
+      });
+      const dialog = container.querySelector('dialog');
+      expect(dialog).toBeInTheDocument();
+      expect(dialog).toHaveAttribute('aria-modal', 'true');
+    },
+  );
 
   it('does not have open attribute when open=false', async () => {
-    const { container } = await render('<atl-drawer [open]="false">Content</atl-drawer>', {
-      imports: [AtlDrawer],
-    });
+    const { container } = await render(
+      '<atl-drawer [open]="false">Content</atl-drawer>',
+      {
+        imports: [AtlDrawer],
+      },
+    );
     expect(container.querySelector('dialog')).not.toHaveAttribute('open');
   });
 
-  covers('drawer', 'open-shows-modal')('opens the drawer when open=true', async () => {
-    const { container, fixture } = await render(
-      '<atl-drawer [open]="true">Content</atl-drawer>',
-      { imports: [AtlDrawer] }
-    );
-    fixture.detectChanges();
-    expect(container.querySelector('dialog')).toHaveAttribute('open');
-  });
+  covers('drawer', 'open-shows-modal')(
+    'opens the drawer when open=true',
+    async () => {
+      const { container, fixture } = await render(
+        '<atl-drawer [open]="true">Content</atl-drawer>',
+        { imports: [AtlDrawer] },
+      );
+      fixture.detectChanges();
+      expect(container.querySelector('dialog')).toHaveAttribute('open');
+    },
+  );
 
-  covers('drawer', 'is-open-class')('applies is-open class to host when open=true', async () => {
-    const { container } = await render('<atl-drawer [open]="true">Content</atl-drawer>', {
-      imports: [AtlDrawer],
-    });
-    expect(container.querySelector('atl-drawer')).toHaveClass('is-open');
-  });
+  covers('drawer', 'is-open-class')(
+    'applies is-open class to host when open=true',
+    async () => {
+      const { container } = await render(
+        '<atl-drawer [open]="true">Content</atl-drawer>',
+        {
+          imports: [AtlDrawer],
+        },
+      );
+      expect(container.querySelector('atl-drawer')).toHaveClass('is-open');
+    },
+  );
 
   it('does not have is-open class when open=false', async () => {
-    const { container } = await render('<atl-drawer [open]="false">Content</atl-drawer>', {
-      imports: [AtlDrawer],
-    });
+    const { container } = await render(
+      '<atl-drawer [open]="false">Content</atl-drawer>',
+      {
+        imports: [AtlDrawer],
+      },
+    );
     expect(container.querySelector('atl-drawer')).not.toHaveClass('is-open');
   });
 
@@ -75,9 +104,11 @@ describe('AtlDrawer', () => {
       it(`applies position-${position} class to host`, async () => {
         const { container } = await render(
           `<atl-drawer position="${position}">Content</atl-drawer>`,
-          { imports: [AtlDrawer] }
+          { imports: [AtlDrawer] },
         );
-        expect(container.querySelector('atl-drawer')).toHaveClass(`position-${position}`);
+        expect(container.querySelector('atl-drawer')).toHaveClass(
+          `position-${position}`,
+        );
       });
     }
   });
@@ -87,9 +118,11 @@ describe('AtlDrawer', () => {
       it(`applies size-${size} class to host`, async () => {
         const { container } = await render(
           `<atl-drawer size="${size}">Content</atl-drawer>`,
-          { imports: [AtlDrawer] }
+          { imports: [AtlDrawer] },
         );
-        expect(container.querySelector('atl-drawer')).toHaveClass(`size-${size}`);
+        expect(container.querySelector('atl-drawer')).toHaveClass(
+          `size-${size}`,
+        );
       });
     }
   });
@@ -99,7 +132,7 @@ describe('AtlDrawer', () => {
       const user = userEvent.setup();
       const { container } = await render(
         '<atl-drawer [(open)]="open" [closeOnBackdrop]="true"><span>Content</span></atl-drawer>',
-        { imports: [AtlDrawer], componentProperties: { open: true } }
+        { imports: [AtlDrawer], componentProperties: { open: true } },
       );
       const dialogEl = container.querySelector('dialog') as HTMLDialogElement;
       await user.click(dialogEl);
@@ -110,7 +143,7 @@ describe('AtlDrawer', () => {
       const user = userEvent.setup();
       const { container } = await render(
         '<atl-drawer [(open)]="open" [closeOnBackdrop]="false"><span>Content</span></atl-drawer>',
-        { imports: [AtlDrawer], componentProperties: { open: true } }
+        { imports: [AtlDrawer], componentProperties: { open: true } },
       );
       const dialogEl = container.querySelector('dialog') as HTMLDialogElement;
       await user.click(dialogEl);
@@ -122,10 +155,12 @@ describe('AtlDrawer', () => {
     it('sets open to false when a cancel event fires', async () => {
       const { container } = await render(
         '<atl-drawer [(open)]="open">Content</atl-drawer>',
-        { imports: [AtlDrawer], componentProperties: { open: true } }
+        { imports: [AtlDrawer], componentProperties: { open: true } },
       );
       const dialogEl = container.querySelector('dialog') as HTMLDialogElement;
-      dialogEl.dispatchEvent(new Event('cancel', { bubbles: true, cancelable: true }));
+      dialogEl.dispatchEvent(
+        new Event('cancel', { bubbles: true, cancelable: true }),
+      );
       expect(container.querySelector('atl-drawer')).not.toHaveClass('is-open');
     });
   });
@@ -137,12 +172,16 @@ describe('AtlDrawer', () => {
           <atl-drawer-header>My Title</atl-drawer-header>
           <atl-drawer-content>Body</atl-drawer-content>
         </atl-drawer>`,
-        { imports: ALL_IMPORTS }
+        { imports: ALL_IMPORTS },
       );
       const dialog = container.querySelector('dialog') as HTMLDialogElement;
-      const header = container.querySelector('atl-drawer-header') as HTMLElement;
+      const header = container.querySelector(
+        'atl-drawer-header',
+      ) as HTMLElement;
       expect(dialog.getAttribute('aria-labelledby')).toBeTruthy();
-      expect(dialog.getAttribute('aria-labelledby')).toBe(header.getAttribute('id'));
+      expect(dialog.getAttribute('aria-labelledby')).toBe(
+        header.getAttribute('id'),
+      );
     });
   });
 
@@ -152,25 +191,32 @@ describe('AtlDrawer', () => {
         `<atl-drawer [open]="true">
           <atl-drawer-header>Title</atl-drawer-header>
         </atl-drawer>`,
-        { imports: ALL_IMPORTS }
+        { imports: ALL_IMPORTS },
       );
       const closeBtn = container.querySelector('.close-btn');
       expect(closeBtn).toBeInTheDocument();
       expect(closeBtn).toHaveAttribute('aria-label', 'Close drawer');
     });
 
-    covers('drawer', 'close-button')('closes the drawer when close button is clicked', async () => {
-      const user = userEvent.setup();
-      const { container } = await render(
-        `<atl-drawer [(open)]="open">
+    covers('drawer', 'close-button')(
+      'closes the drawer when close button is clicked',
+      async () => {
+        const user = userEvent.setup();
+        const { container } = await render(
+          `<atl-drawer [(open)]="open">
           <atl-drawer-header>Title</atl-drawer-header>
         </atl-drawer>`,
-        { imports: ALL_IMPORTS, componentProperties: { open: true } }
-      );
-      const closeBtn = container.querySelector('.close-btn') as HTMLButtonElement;
-      await user.click(closeBtn);
-      expect(container.querySelector('atl-drawer')).not.toHaveClass('is-open');
-    });
+          { imports: ALL_IMPORTS, componentProperties: { open: true } },
+        );
+        const closeBtn = container.querySelector(
+          '.close-btn',
+        ) as HTMLButtonElement;
+        await user.click(closeBtn);
+        expect(container.querySelector('atl-drawer')).not.toHaveClass(
+          'is-open',
+        );
+      },
+    );
   });
 
   describe('content projection', () => {
@@ -179,7 +225,7 @@ describe('AtlDrawer', () => {
         `<atl-drawer>
           <atl-drawer-header>Drawer Header Text</atl-drawer-header>
         </atl-drawer>`,
-        { imports: ALL_IMPORTS }
+        { imports: ALL_IMPORTS },
       );
       expect(screen.getByText('Drawer Header Text')).toBeInTheDocument();
     });
@@ -189,7 +235,7 @@ describe('AtlDrawer', () => {
         `<atl-drawer>
           <atl-drawer-content>Drawer Body Text</atl-drawer-content>
         </atl-drawer>`,
-        { imports: ALL_IMPORTS }
+        { imports: ALL_IMPORTS },
       );
       expect(screen.getByText('Drawer Body Text')).toBeInTheDocument();
     });
@@ -199,7 +245,7 @@ describe('AtlDrawer', () => {
         `<atl-drawer>
           <atl-drawer-footer>Footer Text</atl-drawer-footer>
         </atl-drawer>`,
-        { imports: ALL_IMPORTS }
+        { imports: ALL_IMPORTS },
       );
       expect(screen.getByText('Footer Text')).toBeInTheDocument();
     });

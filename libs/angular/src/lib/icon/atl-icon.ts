@@ -5,8 +5,11 @@ import {
   input,
 } from '@angular/core';
 import type { AtlIconName, AtlIconSize } from '../spec';
-import { ATL_ICON_GEOMETRY, ATL_ICON_STROKE_WIDTH, ATL_ICON_VIEWBOX } from '../icons';
-
+import {
+  ATL_ICON_GEOMETRY,
+  ATL_ICON_STROKE_WIDTH,
+  ATL_ICON_VIEWBOX,
+} from '../icons';
 
 /**
  * Vector icon. Renders whichever `AtlIconName` variant is passed, drawn from
@@ -56,6 +59,8 @@ export class AtlIcon {
   protected readonly viewBox = ATL_ICON_VIEWBOX;
   protected readonly strokeWidth = ATL_ICON_STROKE_WIDTH;
   protected readonly geometry = computed(() => ATL_ICON_GEOMETRY[this.name()]);
-  protected readonly isStroke = computed(() => this.geometry().kind === 'stroke');
+  protected readonly isStroke = computed(
+    () => this.geometry().kind === 'stroke',
+  );
   protected readonly hostClasses = computed(() => `size-${this.size()}`);
 }

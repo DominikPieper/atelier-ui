@@ -57,9 +57,10 @@ input[type='checkbox'] {
   border-radius: var(--ui-radius-full);
   border: var(--ui-border-width) solid var(--ui-color-border-strong);
   background-color: var(--ui-color-input-bg);
-  transition: background-color var(--ui-transition-fast),
-              border-color var(--ui-transition-fast),
-              box-shadow var(--ui-transition-fast);
+  transition:
+    background-color var(--ui-transition-fast),
+    border-color var(--ui-transition-fast),
+    box-shadow var(--ui-transition-fast);
   cursor: pointer;
 }
 
@@ -72,8 +73,9 @@ input[type='checkbox'] {
   border-radius: var(--ui-radius-full);
   background-color: var(--ui-color-border-strong);
   box-shadow: var(--ui-shadow-xs);
-  transition: transform var(--ui-transition-normal) var(--ui-ease-out),
-              background-color var(--ui-transition-fast);
+  transition:
+    transform var(--ui-transition-normal) var(--ui-ease-out),
+    background-color var(--ui-transition-fast);
 }
 
 /* Hover state */

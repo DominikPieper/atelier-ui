@@ -29,12 +29,12 @@ sitting there:
   Switched on, they do not dim the control — they **erase** it. `--ui-opacity-disabled`
   is 0.5, which a surface overlay expresses at 50%, not 100%. (The sibling idiom is
   right for the right reason: `.atl-input.is-readonly input` sets
-  `background-color: surface-sunken`, so `_readonly-surface` *should* be opaque.)
+  `background-color: surface-sunken`, so `_readonly-surface` _should_ be opaque.)
 - **78 of 90 sat in the wrong place**, and 34 of those lay **entirely outside** the box
   they were meant to cover — AtlCheckbox's was 115×24 at x=123 in a 113×24 control, i.e.
   parked to the right of it. They had been created as flow children and flipped to
   `ABSOLUTE` without resetting x/y.
-- **34 `_invalid-border` rectangles carried a raw stroke colour.** The snapshot *does*
+- **34 `_invalid-border` rectangles carried a raw stroke colour.** The snapshot _does_
   collect stroke paints — it never reached these nodes to look.
 - **14 `_invalid-border` rectangles were the size of the label row** rather than the box
   that carries the border. `.atl-checkbox.is-invalid input[type='checkbox']` colours the
@@ -43,7 +43,7 @@ sitting there:
   AtlTabGroup each declared a `loading` Boolean bound to one. `AtlTableSpec` is
   `{ variant, size, stickyHeader }`; `AtlTabGroupSpec` is
   `{ selectedIndex, onSelectedIndexChange, variant }`; the word `loading` does not occur
-  in the table or tabs component of *any* of the three frameworks. Only AtlButton has a
+  in the table or tabs component of _any_ of the three frameworks. Only AtlButton has a
   spinner, and only `AtlButtonSpec` has the flag.
 
 The last one exposed a gap in the Boolean checks themselves. `[BOOL-MISSING]` goes
@@ -106,6 +106,6 @@ them.
   master, master → layer, master → spec. Two of them had been asked for weeks, and the
   third was where the invented API was.
 - The Boolean overlays now say what the CSS says at the property level. What remains
-  unchecked is the *geometry* of what they cover — an overlay can be at 0,0 at the right
+  unchecked is the _geometry_ of what they cover — an overlay can be at 0,0 at the right
   size around a box whose own padding is wrong. That is the `[LAYER-PAINT]` work
   recorded in `tasks/todo.md`.

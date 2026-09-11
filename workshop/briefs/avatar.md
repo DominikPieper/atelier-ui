@@ -19,17 +19,17 @@ An avatar that renders correctly but announces "image, AB" has failed.
 
 Five slots. One required; four conditional, and the conditions are the component.
 
-| Slot | Required | Figma | What it is |
-|---|---|---|---|
-| `container` | yes | frame, fixed size, aspect 1:1 | The bounded surface. Carries the shape, the size step, and the status anchor. Radius is bound to the shape variant. |
-| `image` | no | image fill on the container | The primary representation. Loads async; `object-fit: cover`, cropped to the container shape. |
-| `initials` | no | text, centred | Fallback when no image. One or two letters, size scaled to the avatar step. |
-| `fallback-icon` | no | instance | Last rung. A generic person glyph when neither image nor name exists. |
-| `status-indicator` | no | frame, small circle | Presence dot anchored to the container's **inline-end / block-end** corner, with a border matching the page background so it separates from the avatar surface. |
+| Slot               | Required | Figma                         | What it is                                                                                                                                                      |
+| ------------------ | -------- | ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `container`        | yes      | frame, fixed size, aspect 1:1 | The bounded surface. Carries the shape, the size step, and the status anchor. Radius is bound to the shape variant.                                             |
+| `image`            | no       | image fill on the container   | The primary representation. Loads async; `object-fit: cover`, cropped to the container shape.                                                                   |
+| `initials`         | no       | text, centred                 | Fallback when no image. One or two letters, size scaled to the avatar step.                                                                                     |
+| `fallback-icon`    | no       | instance                      | Last rung. A generic person glyph when neither image nor name exists.                                                                                           |
+| `status-indicator` | no       | frame, small circle           | Presence dot anchored to the container's **inline-end / block-end** corner, with a border matching the page background so it separates from the avatar surface. |
 
 **The fallback chain is ordered and the order is a contract:**
-`image` → `initials` → `icon`. The image rung activates when `src` is present *and*
-the load succeeds; the initials rung when a name is present *and* the image rung failed;
+`image` → `initials` → `icon`. The image rung activates when `src` is present _and_
+the load succeeds; the initials rung when a name is present _and_ the image rung failed;
 the icon rung when both failed.
 
 **Token budget.** `container`: background `color/surface-sunken`, border `color/border`,
@@ -49,13 +49,13 @@ first time the type scale is rebalanced.
 
 **Properties (not variants):**
 
-| Property | Kind | Values |
-|---|---|---|
-| `size` | enum | `xs`, `sm`, `md`, `lg`, `xl` |
-| `status` | enum | `online`, `offline`, `away`, `busy` |
-| `hasStatusIndicator` | boolean | — |
+| Property             | Kind    | Values                              |
+| -------------------- | ------- | ----------------------------------- |
+| `size`               | enum    | `xs`, `sm`, `md`, `lg`, `xl`        |
+| `status`             | enum    | `online`, `offline`, `away`, `busy` |
+| `hasStatusIndicator` | boolean | —                                   |
 
-Note what is *not* here: there is no "image avatar" and no "initials avatar". Those are
+Note what is _not_ here: there is no "image avatar" and no "initials avatar". Those are
 **states of one component**, not variants of two (see §5).
 
 ### Scope for the 90-minute block
@@ -98,31 +98,31 @@ frames you draw and the description you write — or **(full component)** — re
 dependent on the `status` axis, which §2 puts out of scope (see [`README.md` item
 7](README.md#done-when)).
 
-1. **Every rung has an accessible name.** *(blocker · this block)* The initials and icon
+1. **Every rung has an accessible name.** _(blocker · this block)_ The initials and icon
    rungs set `role="img"` plus `aria-label` on the container. The image rung uses
    `<img alt="…">`. An avatar that renders "AB" with no label is meaningless to
    assistive tech. Both in-scope frames exist for the same entity — write the shared
    accessible name into the description (§6 requires this).
-2. **The fallback order is fixed.** *(blocker · this block)* image → initials → icon,
+2. **The fallback order is fixed.** _(blocker · this block)_ image → initials → icon,
    always. An implementation that falls back differently depending on environment or
    library version gives the same person a different identity on different screens. The
    two frames you draw are two points on this order — checkable directly.
-3. **The name is the full name, never the initials.** *(major · this block)*
+3. **The name is the full name, never the initials.** _(major · this block)_
    `aria-label="Alex Black"`, not `aria-label="AB"`. The initials are visual shorthand;
    the accessible name is the source of truth. Same description requirement as item 1.
-4. **`alt` is always present on the image rung.** *(major · this block)* `alt=""` for a
+4. **`alt` is always present on the image rung.** _(major · this block)_ `alt=""` for a
    decorative avatar whose host already carries the name; `alt="<entity name>"`
-   otherwise. Never *undefined* — some screen readers then announce the file path. The
+   otherwise. Never _undefined_ — some screen readers then announce the file path. The
    `image-loaded` frame is in scope — state the `alt` value in its description.
-5. **The status dot carries a label.** *(major · full component)* `aria-label="online"` /
+5. **The status dot carries a label.** _(major · full component)_ `aria-label="online"` /
    `"offline"` / `"away"` / `"busy"`. A coloured dot alone is sighted-only information.
    The `status` axis and `hasStatusIndicator` are both out of scope (§2) — nothing built
    here has a status dot to label.
-6. **Decorative avatars opt out entirely.** *(this block)* When a visible name sits
+6. **Decorative avatars opt out entirely.** _(this block)_ When a visible name sits
    beside the avatar, set `aria-hidden="true"` and let the host's name carry it —
    announcing the name twice is worse than not announcing it here at all. A content
    decision, independent of which fallback rung is showing — state it in the description.
-7. **The status dot anchors with logical properties.** *(full component)* `inset-inline-end`
+7. **The status dot anchors with logical properties.** _(full component)_ `inset-inline-end`
    / `inset-block-end`, so it mirrors under RTL instead of stranding itself on the wrong
    edge. Depends on the status indicator, which is out of scope (§2).
 
@@ -130,12 +130,12 @@ dependent on the `status` axis, which §2 puts out of scope (see [`README.md` it
 
 ## 5. Figma ↔ code gotchas
 
-| Drawn as | Implemented as | Why it hurts |
-|---|---|---|
-| "Avatar (image)" and "Avatar (initials)" as two components | One component with a runtime fallback chain | The two drift. Designers stop drawing the initials frame for new avatars, and developers have no reference for the fallback the user will actually see. |
-| A coloured dot placed near the avatar at absolute coordinates | A slot anchored via logical properties | Identical in LTR, wrong in RTL. Model the dot as a **child** of the container, not a sibling. |
-| Static text "AB" baked into the frame | Initials computed from a `name` prop | The file never documents the algorithm — first letter? first two? first of each word? — so every implementation reinvents it. Canon: **first letter of each word, max two**. |
-| `width: 24px` on the frame | A size token (`xs`…`xl`) | The Figma file lags the next scale rebalance and the shipped avatar disagrees with the text beside it. |
+| Drawn as                                                      | Implemented as                              | Why it hurts                                                                                                                                                                 |
+| ------------------------------------------------------------- | ------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| "Avatar (image)" and "Avatar (initials)" as two components    | One component with a runtime fallback chain | The two drift. Designers stop drawing the initials frame for new avatars, and developers have no reference for the fallback the user will actually see.                      |
+| A coloured dot placed near the avatar at absolute coordinates | A slot anchored via logical properties      | Identical in LTR, wrong in RTL. Model the dot as a **child** of the container, not a sibling.                                                                                |
+| Static text "AB" baked into the frame                         | Initials computed from a `name` prop        | The file never documents the algorithm — first letter? first two? first of each word? — so every implementation reinvents it. Canon: **first letter of each word, max two**. |
+| `width: 24px` on the frame                                    | A size token (`xs`…`xl`)                    | The Figma file lags the next scale rebalance and the shipped avatar disagrees with the text beside it.                                                                       |
 
 ---
 

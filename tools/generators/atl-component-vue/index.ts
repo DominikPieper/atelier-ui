@@ -6,7 +6,10 @@ interface AtlComponentVueSchema {
   directory?: string;
 }
 
-export default async function generator(tree: Tree, options: AtlComponentVueSchema) {
+export default async function generator(
+  tree: Tree,
+  options: AtlComponentVueSchema,
+) {
   const componentNames = names(options.name);
   const dir = options.directory ?? options.name;
   const libRoot = 'libs/vue/src/lib';

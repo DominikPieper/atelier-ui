@@ -6,65 +6,119 @@ import AtlPagination from './atl-pagination.vue';
 describe('AtlPagination', () => {
   it('renders navigation buttons', () => {
     render(AtlPagination, { props: { page: 1, pageCount: 5 } });
-    expect(screen.getByRole('button', { name: 'First page' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Previous page' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Next page' })).toBeInTheDocument();
-    expect(screen.getByRole('button', { name: 'Last page' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'First page' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Previous page' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Next page' }),
+    ).toBeInTheDocument();
+    expect(
+      screen.getByRole('button', { name: 'Last page' }),
+    ).toBeInTheDocument();
   });
 
-  covers('pagination', 'disables-prev-first')('disables prev/first when on first page', () => {
-    render(AtlPagination, { props: { page: 1, pageCount: 5 } });
-    expect(screen.getByRole('button', { name: 'First page' })).toBeDisabled();
-    expect(screen.getByRole('button', { name: 'Previous page' })).toBeDisabled();
-  });
+  covers('pagination', 'disables-prev-first')(
+    'disables prev/first when on first page',
+    () => {
+      render(AtlPagination, { props: { page: 1, pageCount: 5 } });
+      expect(screen.getByRole('button', { name: 'First page' })).toBeDisabled();
+      expect(
+        screen.getByRole('button', { name: 'Previous page' }),
+      ).toBeDisabled();
+    },
+  );
 
-  covers('pagination', 'disables-next-last')('disables next/last when on last page', () => {
-    render(AtlPagination, { props: { page: 5, pageCount: 5 } });
-    expect(screen.getByRole('button', { name: 'Next page' })).toBeDisabled();
-    expect(screen.getByRole('button', { name: 'Last page' })).toBeDisabled();
-  });
+  covers('pagination', 'disables-next-last')(
+    'disables next/last when on last page',
+    () => {
+      render(AtlPagination, { props: { page: 5, pageCount: 5 } });
+      expect(screen.getByRole('button', { name: 'Next page' })).toBeDisabled();
+      expect(screen.getByRole('button', { name: 'Last page' })).toBeDisabled();
+    },
+  );
 
-  covers('pagination', 'page-change-on-click')('emits pageChange with correct value when a page button is clicked', async () => {
-    const user = userEvent.setup();
-    const { emitted } = render(AtlPagination, { props: { page: 1, pageCount: 5 } });
-    await user.click(screen.getByRole('button', { name: 'Next page' }));
-    expect(emitted()['pageChange']).toEqual([[2]]);
-  });
+  covers('pagination', 'page-change-on-click')(
+    'emits pageChange with correct value when a page button is clicked',
+    async () => {
+      const user = userEvent.setup();
+      const { emitted } = render(AtlPagination, {
+        props: { page: 1, pageCount: 5 },
+      });
+      await user.click(screen.getByRole('button', { name: 'Next page' }));
+      expect(emitted()['pageChange']).toEqual([[2]]);
+    },
+  );
 
-  covers('pagination', 'aria-current')('marks the current page button with aria-current', () => {
-    render(AtlPagination, { props: { page: 3, pageCount: 5 } });
-    expect(screen.getByRole('button', { name: 'Page 3' })).toHaveAttribute('aria-current', 'page');
-  });
+  covers('pagination', 'aria-current')(
+    'marks the current page button with aria-current',
+    () => {
+      render(AtlPagination, { props: { page: 3, pageCount: 5 } });
+      expect(screen.getByRole('button', { name: 'Page 3' })).toHaveAttribute(
+        'aria-current',
+        'page',
+      );
+    },
+  );
 
   // `.page-btn.is-active` is the only rule that fills the current page. aria-current
   // above covers assistive tech; without the class nothing marks it for sighted users.
   it('applies is-active class to the current page button', () => {
-    const { container } = render(AtlPagination, { props: { page: 3, pageCount: 5 } });
-    expect(container.querySelector('.page-btn.is-active')).toHaveTextContent('3');
+    const { container } = render(AtlPagination, {
+      props: { page: 3, pageCount: 5 },
+    });
+    expect(container.querySelector('.page-btn.is-active')).toHaveTextContent(
+      '3',
+    );
   });
 
   it('does not apply is-active class to the other page buttons', () => {
-    const { container } = render(AtlPagination, { props: { page: 3, pageCount: 5 } });
+    const { container } = render(AtlPagination, {
+      props: { page: 3, pageCount: 5 },
+    });
     expect(container.querySelectorAll('.page-btn.is-active')).toHaveLength(1);
   });
 
   it('applies is-disabled class to the nav buttons at the first page', () => {
     render(AtlPagination, { props: { page: 1, pageCount: 5 } });
-    expect(screen.getByRole('button', { name: 'First page' })).toHaveClass('is-disabled');
-    expect(screen.getByRole('button', { name: 'Previous page' })).toHaveClass('is-disabled');
-    expect(screen.getByRole('button', { name: 'Next page' })).not.toHaveClass('is-disabled');
+    expect(screen.getByRole('button', { name: 'First page' })).toHaveClass(
+      'is-disabled',
+    );
+    expect(screen.getByRole('button', { name: 'Previous page' })).toHaveClass(
+      'is-disabled',
+    );
+    expect(screen.getByRole('button', { name: 'Next page' })).not.toHaveClass(
+      'is-disabled',
+    );
   });
 
   it('applies is-disabled class to the nav buttons at the last page', () => {
     render(AtlPagination, { props: { page: 5, pageCount: 5 } });
-    expect(screen.getByRole('button', { name: 'Next page' })).toHaveClass('is-disabled');
-    expect(screen.getByRole('button', { name: 'Last page' })).toHaveClass('is-disabled');
-    expect(screen.getByRole('button', { name: 'Previous page' })).not.toHaveClass('is-disabled');
+    expect(screen.getByRole('button', { name: 'Next page' })).toHaveClass(
+      'is-disabled',
+    );
+    expect(screen.getByRole('button', { name: 'Last page' })).toHaveClass(
+      'is-disabled',
+    );
+    expect(
+      screen.getByRole('button', { name: 'Previous page' }),
+    ).not.toHaveClass('is-disabled');
   });
 
-  covers('pagination', 'hide-first-last')('hides first/last buttons when showFirstLast is false', () => {
-    render(AtlPagination, { props: { page: 2, pageCount: 5, showFirstLast: false } });
-    expect(screen.queryByRole('button', { name: 'First page' })).not.toBeInTheDocument();
-    expect(screen.queryByRole('button', { name: 'Last page' })).not.toBeInTheDocument();
-  });
+  covers('pagination', 'hide-first-last')(
+    'hides first/last buttons when showFirstLast is false',
+    () => {
+      render(AtlPagination, {
+        props: { page: 2, pageCount: 5, showFirstLast: false },
+      });
+      expect(
+        screen.queryByRole('button', { name: 'First page' }),
+      ).not.toBeInTheDocument();
+      expect(
+        screen.queryByRole('button', { name: 'Last page' }),
+      ).not.toBeInTheDocument();
+    },
+  );
 });

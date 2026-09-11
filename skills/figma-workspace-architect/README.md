@@ -74,6 +74,7 @@ Re-launch Claude Code; the skill auto-discovers via the `name` in `SKILL.md`.
 ## Scope reminder
 
 This skill is **architectural** — it makes decisions about how a Figma file is built. It does **not** cover:
+
 - Plugin API mechanics for `figma_execute` payloads
 - Figma → code translation (that is downstream code-generation)
 - Console / plugin debugging

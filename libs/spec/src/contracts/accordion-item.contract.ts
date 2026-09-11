@@ -6,7 +6,8 @@ export const contract = {
   codeOnly: [
     {
       name: 'headingLevel',
-      reason: "Not visual: it chooses h2..h6 for the trigger's wrapper and changes nothing drawn.",
+      reason:
+        "Not visual: it chooses h2..h6 for the trigger's wrapper and changes nothing drawn.",
     },
   ],
 } satisfies ComponentContract;

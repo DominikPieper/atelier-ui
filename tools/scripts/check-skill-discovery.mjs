@@ -68,7 +68,9 @@ const errors = [];
 const fail = (tag, msg) => errors.push(`✗ [${tag}] ${msg}`);
 
 const index = JSON.parse(readFileSync(INDEX_PATH, 'utf8'));
-const byName = new Map((index.skills ?? []).map((entry) => [entry.name, entry]));
+const byName = new Map(
+  (index.skills ?? []).map((entry) => [entry.name, entry]),
+);
 
 const skillNames = discoverSkillNames(SKILLS_ROOT);
 let checked = 0;

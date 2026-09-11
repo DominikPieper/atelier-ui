@@ -8,7 +8,7 @@ describe('AtlSelect', () => {
     render(
       <AtlSelect>
         <AtlOption optionValue="a">Option A</AtlOption>
-      </AtlSelect>
+      </AtlSelect>,
     );
     expect(screen.getByRole('combobox')).toBeInTheDocument();
   });
@@ -18,41 +18,51 @@ describe('AtlSelect', () => {
       <AtlSelect>
         <AtlOption optionValue="us">United States</AtlOption>
         <AtlOption optionValue="ca">Canada</AtlOption>
-      </AtlSelect>
+      </AtlSelect>,
     );
-    expect(screen.getByRole('option', { name: 'United States' })).toBeInTheDocument();
+    expect(
+      screen.getByRole('option', { name: 'United States' }),
+    ).toBeInTheDocument();
     expect(screen.getByRole('option', { name: 'Canada' })).toBeInTheDocument();
   });
 
-  covers('select', 'placeholder')('shows placeholder when value is empty', () => {
-    const { container } = render(
-      <AtlSelect value="" placeholder="Select a country">
-        <AtlOption optionValue="us">United States</AtlOption>
-      </AtlSelect>
-    );
-    expect(container.querySelector('option[value=""]')).toBeInTheDocument();
-    expect(container.querySelector('option[value=""]')?.textContent).toBe('Select a country');
-  });
+  covers('select', 'placeholder')(
+    'shows placeholder when value is empty',
+    () => {
+      const { container } = render(
+        <AtlSelect value="" placeholder="Select a country">
+          <AtlOption optionValue="us">United States</AtlOption>
+        </AtlSelect>,
+      );
+      expect(container.querySelector('option[value=""]')).toBeInTheDocument();
+      expect(container.querySelector('option[value=""]')?.textContent).toBe(
+        'Select a country',
+      );
+    },
+  );
 
-  covers('select', 'value-change')('calls onValueChange when selection changes', async () => {
-    const user = userEvent.setup();
-    const onChange = vi.fn();
-    render(
-      <AtlSelect value="" onValueChange={onChange}>
-        <AtlOption optionValue="us">United States</AtlOption>
-        <AtlOption optionValue="ca">Canada</AtlOption>
-      </AtlSelect>
-    );
-    await user.selectOptions(screen.getByRole('combobox'), 'ca');
-    expect(onChange).toHaveBeenCalledWith('ca');
-  });
+  covers('select', 'value-change')(
+    'calls onValueChange when selection changes',
+    async () => {
+      const user = userEvent.setup();
+      const onChange = vi.fn();
+      render(
+        <AtlSelect value="" onValueChange={onChange}>
+          <AtlOption optionValue="us">United States</AtlOption>
+          <AtlOption optionValue="ca">Canada</AtlOption>
+        </AtlSelect>,
+      );
+      await user.selectOptions(screen.getByRole('combobox'), 'ca');
+      expect(onChange).toHaveBeenCalledWith('ca');
+    },
+  );
 
   it('reflects controlled value', () => {
     render(
       <AtlSelect value="ca">
         <AtlOption optionValue="us">United States</AtlOption>
         <AtlOption optionValue="ca">Canada</AtlOption>
-      </AtlSelect>
+      </AtlSelect>,
     );
     const select = screen.getByRole('combobox') as HTMLSelectElement;
     expect(select.value).toBe('ca');
@@ -62,7 +72,7 @@ describe('AtlSelect', () => {
     render(
       <AtlSelect disabled>
         <AtlOption optionValue="a">A</AtlOption>
-      </AtlSelect>
+      </AtlSelect>,
     );
     expect(screen.getByRole('combobox')).toBeDisabled();
   });
@@ -71,7 +81,7 @@ describe('AtlSelect', () => {
     const { container } = render(
       <AtlSelect disabled>
         <AtlOption optionValue="a">A</AtlOption>
-      </AtlSelect>
+      </AtlSelect>,
     );
     expect(container.firstChild).toHaveClass('is-disabled');
   });
@@ -80,25 +90,28 @@ describe('AtlSelect', () => {
     const { container } = render(
       <AtlSelect invalid>
         <AtlOption optionValue="a">A</AtlOption>
-      </AtlSelect>
+      </AtlSelect>,
     );
     expect(container.firstChild).toHaveClass('is-invalid');
   });
 
-  covers('select', 'error-messages')('shows error messages when invalid and errors provided', () => {
-    render(
-      <AtlSelect invalid errors={['Please select an option']}>
-        <AtlOption optionValue="a">A</AtlOption>
-      </AtlSelect>
-    );
-    expect(screen.getByText('Please select an option')).toBeInTheDocument();
-  });
+  covers('select', 'error-messages')(
+    'shows error messages when invalid and errors provided',
+    () => {
+      render(
+        <AtlSelect invalid errors={['Please select an option']}>
+          <AtlOption optionValue="a">A</AtlOption>
+        </AtlSelect>,
+      );
+      expect(screen.getByText('Please select an option')).toBeInTheDocument();
+    },
+  );
 
   it('renders label when label prop is provided', () => {
     render(
       <AtlSelect label="Country">
         <AtlOption optionValue="us">United States</AtlOption>
-      </AtlSelect>
+      </AtlSelect>,
     );
     expect(screen.getByText('Country')).toBeInTheDocument();
   });
@@ -107,7 +120,7 @@ describe('AtlSelect', () => {
     render(
       <AtlSelect label="Country">
         <AtlOption optionValue="us">United States</AtlOption>
-      </AtlSelect>
+      </AtlSelect>,
     );
     expect(screen.getByLabelText('Country')).toBeInTheDocument();
   });
@@ -116,7 +129,7 @@ describe('AtlSelect', () => {
     const { container } = render(
       <AtlSelect>
         <AtlOption optionValue="us">United States</AtlOption>
-      </AtlSelect>
+      </AtlSelect>,
     );
     expect(container.querySelector('label')).not.toBeInTheDocument();
   });
@@ -125,17 +138,23 @@ describe('AtlSelect', () => {
     render(
       <AtlSelect label="Country" id="custom-country-id">
         <AtlOption optionValue="us">United States</AtlOption>
-      </AtlSelect>
+      </AtlSelect>,
     );
-    expect(screen.getByLabelText('Country')).toHaveAttribute('id', 'custom-country-id');
+    expect(screen.getByLabelText('Country')).toHaveAttribute(
+      'id',
+      'custom-country-id',
+    );
   });
 
   it('forwards aria-label to the native select', () => {
     render(
       <AtlSelect aria-label="Country">
         <AtlOption optionValue="us">United States</AtlOption>
-      </AtlSelect>
+      </AtlSelect>,
     );
-    expect(screen.getByRole('combobox')).toHaveAttribute('aria-label', 'Country');
+    expect(screen.getByRole('combobox')).toHaveAttribute(
+      'aria-label',
+      'Country',
+    );
   });
 });

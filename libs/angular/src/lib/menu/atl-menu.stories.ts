@@ -1,12 +1,18 @@
 import type { Meta, StoryObj } from '@storybook/angular';
-import { AtlMenu, AtlMenuItem, AtlMenuSeparator, AtlMenuTrigger } from './atl-menu';
+import {
+  AtlMenu,
+  AtlMenuItem,
+  AtlMenuSeparator,
+  AtlMenuTrigger,
+} from './atl-menu';
 import { AtlButton } from '../button/atl-button';
 
 import { metadata } from '@atelier-ui/spec/metadata/menu.metadata';
 import { contract } from '@atelier-ui/spec/contracts/menu.contract';
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
-function figmaNode(nodeId: string): { type: "figma"; url: string } {
+function figmaNode(nodeId: string): { type: 'figma'; url: string } {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
 }
 
@@ -36,7 +42,9 @@ type Story = StoryObj<AtlMenu>;
 export const Default: Story = {
   render: (args) => ({
     props: args,
-    moduleMetadata: { imports: [AtlMenuItem, AtlMenuSeparator, AtlMenuTrigger, AtlButton] },
+    moduleMetadata: {
+      imports: [AtlMenuItem, AtlMenuSeparator, AtlMenuTrigger, AtlButton],
+    },
     template: `
       <atl-button [atlMenuTriggerFor]="menu">Actions</atl-button>
       <ng-template #menu>
@@ -54,7 +62,9 @@ export const Default: Story = {
 
 export const WithDisabledItems: Story = {
   render: () => ({
-    moduleMetadata: { imports: [AtlMenuItem, AtlMenuSeparator, AtlMenuTrigger, AtlButton] },
+    moduleMetadata: {
+      imports: [AtlMenuItem, AtlMenuSeparator, AtlMenuTrigger, AtlButton],
+    },
     template: `
       <atl-button [atlMenuTriggerFor]="menu">Edit</atl-button>
       <ng-template #menu>
@@ -73,7 +83,9 @@ export const WithDisabledItems: Story = {
 
 export const Compact: Story = {
   render: () => ({
-    moduleMetadata: { imports: [AtlMenuItem, AtlMenuSeparator, AtlMenuTrigger, AtlButton] },
+    moduleMetadata: {
+      imports: [AtlMenuItem, AtlMenuSeparator, AtlMenuTrigger, AtlButton],
+    },
     template: `
       <atl-button variant="outline" size="sm" [atlMenuTriggerFor]="menu">Options</atl-button>
       <ng-template #menu>
@@ -92,7 +104,9 @@ export const Compact: Story = {
 
 export const NestedSubmenus: Story = {
   render: () => ({
-    moduleMetadata: { imports: [AtlMenuItem, AtlMenuSeparator, AtlMenuTrigger, AtlButton] },
+    moduleMetadata: {
+      imports: [AtlMenuItem, AtlMenuSeparator, AtlMenuTrigger, AtlButton],
+    },
     template: `
       <atl-button [atlMenuTriggerFor]="mainMenu">File</atl-button>
       <ng-template #mainMenu>
@@ -118,7 +132,9 @@ export const NestedSubmenus: Story = {
 export const Playground: Story = {
   render: (args) => ({
     props: args,
-    moduleMetadata: { imports: [AtlMenuItem, AtlMenuSeparator, AtlMenuTrigger, AtlButton] },
+    moduleMetadata: {
+      imports: [AtlMenuItem, AtlMenuSeparator, AtlMenuTrigger, AtlButton],
+    },
     template: `
       <atl-button [atlMenuTriggerFor]="menu">Open Menu</atl-button>
       <ng-template #menu>

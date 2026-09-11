@@ -19,16 +19,16 @@ component owed and the command that clears it. Amends ADR-0024 §4.
 
 ## Context
 
-`check:parity` asserts one thing: *this component was design-parity-verified after its
-files last changed*. The signal is an `inputsHash` over
+`check:parity` asserts one thing: _this component was design-parity-verified after its
+files last changed_. The signal is an `inputsHash` over
 `libs/{angular,react,vue}/src/lib/<module>/`, and the only way to clear a DRIFT finding is
 to re-run `figma_check_design_parity` and `npm run parity:record` — which needs the Figma
 Desktop Bridge and a running Storybook.
 
 ADR-0024 §4 shipped the gate deliberately outside `check:all`, "for now", with a written
 promotion path. It was promoted in `b8935c8` (2026-07-22) and **the script's own header
-was never updated**: it has said *"Not in `check:all`/CI/pre-push for the same reason as
-check:figma"* for five weeks while `package.json` put it there. Worse, the two gates that
+was never updated**: it has said _"Not in `check:all`/CI/pre-push for the same reason as
+check:figma"_ for five weeks while `package.json` put it there. Worse, the two gates that
 sentence equates are not treated alike in the chain — `check:figma` reports 14 warnings and
 exits 0; `check:parity` blocks.
 
@@ -47,7 +47,7 @@ a component directory. Three re-recorded parity in the same commit; the fourth, 
 this session is the first one that could not have it.
 
 **The hash cannot tell a rendered file from a test file.** `lib/parity-inputs.js`
-`inputFiles()` walks *every* file under the module directory in all three frameworks and
+`inputFiles()` walks _every_ file under the module directory in all three frameworks and
 binds path + bytes of each. Proven directly rather than argued: appending `// probe` to
 `libs/react/src/lib/button/atl-button.spec.tsx` turns AtlButton into a DRIFT blocker, and
 removing it turns it back. ADR-0024 §2 describes the input set as "implementation, CSS,
@@ -64,7 +64,7 @@ them produced **10 DRIFT blockers** and an unclearable `check:all`.
 
 `npm run check:parity` is unchanged — DRIFT is a BLOCKER, exit 1. That is the invocation a
 human runs with the bridge open, and it is the one the PR checklist now names explicitly:
-*touched a component directory? `npm run check:parity` passes.* The enforcement point is
+_touched a component directory? `npm run check:parity` passes._ The enforcement point is
 the machine that has the tool.
 
 ### 2. `check:all` reports the same finding and exits 0
@@ -78,7 +78,7 @@ WARNING per component carrying the recorded sha, the date and the exact
 comparison that ran and agreed are indistinguishable from the outside — silence is what
 both look like. Nothing here is silenced: the comparison runs, every finding is printed in
 full, and the count is in the summary line. What changes is the exit code, and only in the
-chain that cannot act on it. A finding whose severity is lowered *and named* is the thing
+chain that cannot act on it. A finding whose severity is lowered _and named_ is the thing
 ADR-0066 asked for when it prescribed "reported as a count, with the reason inline" for a
 population nobody in that context can act on — with the difference, which matters, that
 this warning **is** clearable: open the bridge.
@@ -88,7 +88,7 @@ this warning **is** clearable: open the bridge.
 `check:figma` and `check:parity` share one constraint — their remedies live behind the
 bridge — and now share one standing in `check:all`: both report, neither blocks. The
 script header said that was the arrangement; `package.json` said otherwise; this record
-picks the header's *reason* and `package.json`'s *placement*, and the header now describes
+picks the header's _reason_ and `package.json`'s _placement_, and the header now describes
 what the file actually does.
 
 ### Alternatives rejected
@@ -105,7 +105,7 @@ what the file actually does.
   fact in two places, and ADR-0080 is explicit that a defect must never be recorded in both
   an allowlist and a baseline.
 - **Narrow `inputsHash` to render-affecting files** (drop `*.spec.*`, `*.a11y.*`). Right,
-  and deliberately *not* done here. Changing the hash function invalidates all 37 existing
+  and deliberately _not_ done here. Changing the hash function invalidates all 37 existing
   records at once, so it needs a migration that recomputes each record's hash at its own
   `verifiedSha` — proving the record was valid there — before it can claim the new hash
   means the same thing. And it clears **none** of today's ten: every one of them has a real
@@ -126,8 +126,8 @@ what the file actually does.
   before a Figma-touching release is the ritual ADR-0024 always described, and it is now
   the only place the teeth are.
 - **Two mechanisms now downgrade DRIFT** — `meta.redesignPhase` and `--report` — and they
-  say different things. The phase says *the reference is stale*; report mode says *the
-  remedy is not available in this chain*. They are deliberately separate switches: the
+  say different things. The phase says _the reference is stale_; report mode says _the
+  remedy is not available in this chain_. They are deliberately separate switches: the
   phase is a fact about the design work and turns itself off, report mode is a fact about
   where the command is running and never does.
 - **The `*.spec.*` over-breadth is now written down** rather than rediscovered. Its cost

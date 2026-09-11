@@ -3,7 +3,7 @@ status: accepted
 confidence: documented
 date: reconstructed
 sources:
-  - "tasks/rationale.md"
+  - 'tasks/rationale.md'
 ---
 
 # ADR-0012: Composition cookbook (6 canonical patterns)

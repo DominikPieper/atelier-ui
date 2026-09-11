@@ -3,14 +3,8 @@
  * same file as the sizes it governs and no consuming app has to supply one.
  * Gated by check:box-sizing; the resulting boxes are measured by check:geometry.
  * See ADR-0043. */
-:is(
-  .atl-toast,
-  .atl-toast-container
-),
-:is(
-  .atl-toast,
-  .atl-toast-container
-) * {
+:is(.atl-toast, .atl-toast-container),
+:is(.atl-toast, .atl-toast-container) * {
   box-sizing: border-box;
 }
 
@@ -83,22 +77,38 @@
 
 .atl-toast.variant-success {
   border-left-color: var(--ui-color-success);
-  background-color: color-mix(in srgb, var(--ui-color-success) 8%, var(--ui-color-surface-raised, var(--ui-color-surface)));
+  background-color: color-mix(
+    in srgb,
+    var(--ui-color-success) 8%,
+    var(--ui-color-surface-raised, var(--ui-color-surface))
+  );
 }
 
 .atl-toast.variant-warning {
   border-left-color: var(--ui-color-warning);
-  background-color: color-mix(in srgb, var(--ui-color-warning) 8%, var(--ui-color-surface-raised, var(--ui-color-surface)));
+  background-color: color-mix(
+    in srgb,
+    var(--ui-color-warning) 8%,
+    var(--ui-color-surface-raised, var(--ui-color-surface))
+  );
 }
 
 .atl-toast.variant-danger {
   border-left-color: var(--ui-color-danger);
-  background-color: color-mix(in srgb, var(--ui-color-danger) 8%, var(--ui-color-surface-raised, var(--ui-color-surface)));
+  background-color: color-mix(
+    in srgb,
+    var(--ui-color-danger) 8%,
+    var(--ui-color-surface-raised, var(--ui-color-surface))
+  );
 }
 
 .atl-toast.variant-info {
   border-left-color: var(--ui-color-info);
-  background-color: color-mix(in srgb, var(--ui-color-info) 8%, var(--ui-color-surface-raised, var(--ui-color-surface)));
+  background-color: color-mix(
+    in srgb,
+    var(--ui-color-info) 8%,
+    var(--ui-color-surface-raised, var(--ui-color-surface))
+  );
 }
 
 /* ── Message ── */
@@ -121,7 +131,9 @@
   cursor: pointer;
   color: var(--ui-color-text-muted, currentColor);
   opacity: 0.7;
-  transition: opacity var(--ui-transition-fast, 150ms), background-color var(--ui-transition-fast, 150ms);
+  transition:
+    opacity var(--ui-transition-fast, 150ms),
+    background-color var(--ui-transition-fast, 150ms);
   line-height: 1;
 }
 

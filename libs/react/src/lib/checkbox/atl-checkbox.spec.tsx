@@ -24,20 +24,26 @@ describe('AtlCheckbox', () => {
     expect(screen.getByRole('checkbox')).not.toBeChecked();
   });
 
-  covers('checkbox', 'reflects-checked')('renders as checked when checked=true', () => {
-    render(<AtlCheckbox checked>Accept</AtlCheckbox>);
-    expect(screen.getByRole('checkbox')).toBeChecked();
-  });
+  covers('checkbox', 'reflects-checked')(
+    'renders as checked when checked=true',
+    () => {
+      render(<AtlCheckbox checked>Accept</AtlCheckbox>);
+      expect(screen.getByRole('checkbox')).toBeChecked();
+    },
+  );
 
   it('applies is-checked class when checked', () => {
     const { container } = render(<AtlCheckbox checked />);
     expect(container.firstChild).toHaveClass('is-checked');
   });
 
-  covers('checkbox', 'disabled')('is disabled when disabled prop is true', () => {
-    render(<AtlCheckbox disabled />);
-    expect(screen.getByRole('checkbox')).toBeDisabled();
-  });
+  covers('checkbox', 'disabled')(
+    'is disabled when disabled prop is true',
+    () => {
+      render(<AtlCheckbox disabled />);
+      expect(screen.getByRole('checkbox')).toBeDisabled();
+    },
+  );
 
   it('applies is-disabled class when disabled', () => {
     const { container } = render(<AtlCheckbox disabled />);
@@ -51,26 +57,41 @@ describe('AtlCheckbox', () => {
 
   covers('checkbox', 'invalid')('sets aria-invalid when invalid', () => {
     render(<AtlCheckbox invalid />);
-    expect(screen.getByRole('checkbox')).toHaveAttribute('aria-invalid', 'true');
+    expect(screen.getByRole('checkbox')).toHaveAttribute(
+      'aria-invalid',
+      'true',
+    );
   });
 
-  covers('checkbox', 'toggle-emits')('calls onCheckedChange on click', async () => {
-    const user = userEvent.setup();
-    const onCheckedChange = vi.fn();
-    render(<AtlCheckbox onCheckedChange={onCheckedChange}>Accept</AtlCheckbox>);
-    await user.click(screen.getByRole('checkbox'));
-    expect(onCheckedChange).toHaveBeenCalledOnce();
-    expect(onCheckedChange).toHaveBeenCalledWith(true);
-  });
+  covers('checkbox', 'toggle-emits')(
+    'calls onCheckedChange on click',
+    async () => {
+      const user = userEvent.setup();
+      const onCheckedChange = vi.fn();
+      render(
+        <AtlCheckbox onCheckedChange={onCheckedChange}>Accept</AtlCheckbox>,
+      );
+      await user.click(screen.getByRole('checkbox'));
+      expect(onCheckedChange).toHaveBeenCalledOnce();
+      expect(onCheckedChange).toHaveBeenCalledWith(true);
+    },
+  );
 
-  covers('checkbox', 'indeterminate')('sets indeterminate state on checkbox element', () => {
-    render(<AtlCheckbox indeterminate />);
-    const checkbox = screen.getByRole('checkbox') as HTMLInputElement;
-    expect(checkbox.indeterminate).toBe(true);
-  });
+  covers('checkbox', 'indeterminate')(
+    'sets indeterminate state on checkbox element',
+    () => {
+      render(<AtlCheckbox indeterminate />);
+      const checkbox = screen.getByRole('checkbox') as HTMLInputElement;
+      expect(checkbox.indeterminate).toBe(true);
+    },
+  );
 
   covers('checkbox', 'errors')('shows error messages', () => {
-    render(<AtlCheckbox invalid errors={['Required']}>Accept</AtlCheckbox>);
+    render(
+      <AtlCheckbox invalid errors={['Required']}>
+        Accept
+      </AtlCheckbox>,
+    );
     expect(screen.getByText('Required')).toBeInTheDocument();
   });
 });

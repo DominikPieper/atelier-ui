@@ -13,15 +13,19 @@ export const metadata: ComponentMetadata = {
   antiPatterns: [
     {
       pattern: 'Showing a transient, non-blocking system message.',
-      useInstead: 'AtlToast or AtlAlert — neither demands focus or blocks interaction.',
+      useInstead:
+        'AtlToast or AtlAlert — neither demands focus or blocks interaction.',
     },
     {
       pattern: 'Sliding in a side panel for secondary navigation or filters.',
-      useInstead: 'AtlDrawer — drawers anchor to an edge and are the right primitive for persistent side surfaces.',
+      useInstead:
+        'AtlDrawer — drawers anchor to an edge and are the right primitive for persistent side surfaces.',
     },
     {
-      pattern: 'Hosting a long, multi-step workflow that needs its own URL and history.',
-      useInstead: 'A dedicated route or wizard page — dialogs should not own deep flows the user might want to share or refresh.',
+      pattern:
+        'Hosting a long, multi-step workflow that needs its own URL and history.',
+      useInstead:
+        'A dedicated route or wizard page — dialogs should not own deep flows the user might want to share or refresh.',
     },
   ],
   relatedComponents: ['AtlDrawerSpec', 'AtlAlertSpec', 'AtlButtonSpec'],

@@ -21,7 +21,7 @@ function capture() {
       <AtlStep label="Account">Account content</AtlStep>
       <AtlStep label="Profile">Profile content</AtlStep>
       <AtlStep label="Review">Review content</AtlStep>
-    </AtlStepper>
+    </AtlStepper>,
   );
   scenarios.default = a11yTree(r.container);
   r.unmount();

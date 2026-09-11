@@ -39,16 +39,17 @@ though no fetched page spells out those exact three role names.
 **Plans / gating**: available on **Pro, Max, Team, and Enterprise**, with **no Free-tier access**, as a
 research preview / beta, sharing usage limits with chat/Claude Code rather than a separate allowance
 [verified: multiple pages agree — anthropic.com, support.claude.com, claude.com/product/design, all fetched].
-On **Enterprise it is default-off** and must be turned on by an admin under *Organization settings →
-Capabilities → Anthropic Labs*; Team admins likewise must explicitly enable it
+On **Enterprise it is default-off** and must be turned on by an admin under _Organization settings →
+Capabilities → Anthropic Labs_; Team admins likewise must explicitly enable it
 [verified: support.claude.com admin guide, fetched](https://support.claude.com/en/articles/14604406-claude-design-admin-guide-for-team-and-enterprise-plans).
-Data handling: Claude Design stores a design-system *representation*, not raw source files; local code is
+Data handling: Claude Design stores a design-system _representation_, not raw source files; local code is
 not uploaded wholesale, and no training occurs on user data; Enterprise data-residency is **not**
 supported yet [unverified / secondary — this line came from a WebFetch summary of the VentureBeat article, not independently cross-checked against an Anthropic privacy page](https://venturebeat.com/technology/anthropic-just-launched-claude-design-an-ai-tool-that-turns-prompts-into-prototypes-and-challenges-figma).
 
 ## 2. Inputs
 
 The **Import** surface accepts, per the official get-started and design-system articles (both fetched):
+
 - **Codebases**: "If your design system lives in code (for example, a React component library), you can
   link or upload the repository. Claude will read the components and styles"
   [verified: support.claude.com](https://support.claude.com/en/articles/14604397-set-up-your-design-system-in-claude-design).
@@ -76,15 +77,16 @@ own output against your design system, and makes corrections before you see them
 `claude-design` MCP exposes a tool called `read_design_skill` (see §4), which strongly implies a Claude
 Design project carries a portable skill-like artifact analogous to a `SKILL.md` — but no fetched Anthropic
 page names this object or documents its schema, so its exact shape is **not verified from the web**.
-Web search separately surfaces an *ecosystem* of unrelated, community-authored "Claude Design skills"
+Web search separately surfaces an _ecosystem_ of unrelated, community-authored "Claude Design skills"
 (reusable `SKILL.md`/`DESIGN.md` prompt packs for Claude in general, e.g. a GitHub project literally named
 `claude-design-skill`) — these are **not** part of the claude.ai/design product and should not be
 conflated with it [unverified / secondary, search-snippet only](https://github.com/jiji262/claude-design-skill).
 
 ## 3. Outputs
 
-Fetched pages disagree somewhat on the *breadth* of the export list, which is worth flagging rather than
+Fetched pages disagree somewhat on the _breadth_ of the export list, which is worth flagging rather than
 flattening:
+
 - The launch blog post lists: internal (org-scoped) URL, **Canva** integration, PDF, PPTX, standalone
   HTML, folder exports [verified: anthropic.com, fetched](https://www.anthropic.com/news/claude-design-anthropic-labs).
 - The get-started help article and the product page both list a longer roster: ZIP download, PDF, PPTX,
@@ -96,7 +98,7 @@ Read together, the safest statement is: HTML/PDF/PPTX/ZIP export plus Canva are 
 the wider partner-app list (Adobe, Base44, Gamma, Lovable, Miro, Replit, Vercel, Wix) is confirmed on two
 of three fetched pages but may reflect a later rollout than the original announcement.
 
-**Figma export**: **not** listed as an output/connected-app on *any* fetched primary page — Figma appears
+**Figma export**: **not** listed as an output/connected-app on _any_ fetched primary page — Figma appears
 only under inputs. A WebSearch AI-summary (not a fetched page) states flatly "Claude Design cannot export
 to Figma. Exports are limited to Canva, PDF, PPTX, HTML, and internal URL," and describes the only
 official bridge as one-directional: a **read-only Figma plugin reachable through Claude Code** that pulls
@@ -140,9 +142,11 @@ for their org even though the config itself is always injected
 [verified, fetched: GitHub issue #69325](https://github.com/anthropics/claude-code/issues/69325).
 Separately, the support help center documents the manual connect command for users who want it from a
 plain Claude Code/terminal context:
+
 ```
 claude mcp add --scope user --transport http claude-design https://api.anthropic.com/v1/design/mcp
 ```
+
 [verified: support.claude.com get-started article, per WebFetch summary, fetched](https://support.claude.com/en/articles/14604416-get-started-with-claude-design).
 These two independent findings triangulate: same host, same path, same server name family — good
 confirmation this is a real, officially-owned endpoint gated by per-org entitlement rather than a rumor.
@@ -156,9 +160,10 @@ session has a connected MCP server literally named `claude-design` whose tool su
 any of these (out of scope for a "web only" research task), so their exact behavior below is inference
 plus secondary corroboration, not first-hand verification.
 
-Web corroboration for a subset of the *same* tool names comes only from **unofficial, third-party**
+Web corroboration for a subset of the _same_ tool names comes only from **unofficial, third-party**
 reimplementations that reverse-engineer or proxy Claude Design (e.g. `Evilander/claude-design-mcp`,
 `pro-vi/designer`), surfaced via WebSearch summaries, not individually fetched in full:
+
 - `finalize_plan` — "locks the exact set of paths you will write and delete, and the local directory
   uploads may be read from, returning a `planId`"
 - `write_files` — "write files to the project where every path must be in the finalized plan's writes,
@@ -168,7 +173,7 @@ reimplementations that reverse-engineer or proxy Claude Design (e.g. `Evilander/
   and uses a fresh browser context"
 - `list_projects` — "lists chats with chatId, title, turns, and active status" (note: "turns" here matches
   the conversational/turn-based model in §1)
-[all four bullets: unverified / secondary, WebSearch-summary only, not independently fetched](https://github.com/e-brokenc0de/claude-design-mcp).
+  [all four bullets: unverified / secondary, WebSearch-summary only, not independently fetched](https://github.com/e-brokenc0de/claude-design-mcp).
 
 I explicitly checked and could **not** find any fetched or search-indexed page describing
 `get_claude_design_prompt`, `read_design_skill`, or `create_support_js` — three of the eight tool names the
@@ -180,7 +185,7 @@ bundled with an exported artboard (form validation, tab/accordion behavior, etc.
 export) — **flagging all three as unverified conjecture, not research findings**.
 
 One fully unofficial repo (`e-brokenc0de/claude-design-mcp`) is explicit that it is **not** an API wrapper
-at all: it drives a real logged-in Chrome via CDP and calls claude.ai's *internal* `OmeletteService`
+at all: it drives a real logged-in Chrome via CDP and calls claude.ai's _internal_ `OmeletteService`
 Connect-RPC endpoints, returning `NOT_AUTHED` if the browser session isn't logged in
 [verified (of the repo's own claim), fetched](https://github.com/e-brokenc0de/claude-design-mcp) — this is
 a different, browser-automation approach, not evidence about the official HTTP MCP server's internals.
@@ -216,7 +221,7 @@ pages on the concrete building blocks:
 [unverified / secondary]; design-system import quality depends on how clean/tokenized the source codebase
 already is [verified: implied on claude.com/product/design; made explicit as a limitation in secondary
 coverage]; a documented **semantic gap** — Claude Design reads literal token values (hex codes, spacing
-numbers) but reportedly does not reliably infer *when* a token applies (e.g. CTAs vs. success states),
+numbers) but reportedly does not reliably infer _when_ a token applies (e.g. CTAs vs. success states),
 producing detached hex values, off-scale spacing, and literal paddings even against a supplied token set
 in one practitioner's test [unverified / secondary, search-snippet only](https://www.designsystemscollective.com/tested-claude-design-it-failed-to-use-tokens-heres-why-3ec611b59ce5);
 large codebases can lag the editor, and the tool is reported as token-hungry against Pro-tier weekly caps
@@ -229,13 +234,13 @@ secondary-source characterization, not an admitted limitation.
 Positioning that recurs across sources (all comparison claims below are `[unverified / secondary]` unless
 marked otherwise, since these are competitor products outside the fetch set's primary-source scope):
 
-| Tool | Reported niche | Source note |
-|---|---|---|
+| Tool              | Reported niche                                                                                                         | Source note                     |
+| ----------------- | ---------------------------------------------------------------------------------------------------------------------- | ------------------------------- |
 | **Claude Design** | Exploration → early production; strongest at "thinking in design systems," asks clarifying questions before generating | fetched practitioner comparison |
-| **Google Stitch** | Free, fast, nascent exploration tool; DESIGN.md as a portable output other tools can read | search-snippet only |
-| **Figma Make** | Production-grade but template-dependent, inside core Figma files | fetched practitioner comparison |
-| **v0 (Vercel)** | Best once you already know you want a working React/Next.js UI | search-snippet only |
-| **Lovable** | Shortest path from description to a deployed full-stack app for beginners | search-snippet only |
+| **Google Stitch** | Free, fast, nascent exploration tool; DESIGN.md as a portable output other tools can read                              | search-snippet only             |
+| **Figma Make**    | Production-grade but template-dependent, inside core Figma files                                                       | fetched practitioner comparison |
+| **v0 (Vercel)**   | Best once you already know you want a working React/Next.js UI                                                         | search-snippet only             |
+| **Lovable**       | Shortest path from description to a deployed full-stack app for beginners                                              | search-snippet only             |
 
 Source: [createwith.com comparison, fetched in full](https://www.createwith.com/blog/we-tested-claude-design-vs-figma-make-google-stitch-and-claude-code) —
 stages Claude Design at "exploration → early production," Claude Code at "production," Figma Make at
@@ -249,7 +254,7 @@ Code), not toward Figma interoperability.
 
 On **combining Claude Design with Figma** specifically, the only material found is the one-directional,
 read-only Figma-plugin-via-Claude-Code bridge described in §3 (search-snippet only, not independently
-fetched) — i.e., pull tokens/components *out of* Figma once, then let Claude Design's own onboarding
+fetched) — i.e., pull tokens/components _out of_ Figma once, then let Claude Design's own onboarding
 absorb them; no fetched or found source describes push-to-Figma or two-way sync.
 
 ## What I could NOT verify
@@ -271,6 +276,7 @@ absorb them; no fetched or found source describes push-to-Figma or two-way sync.
 ## Bibliography (all URLs touched)
 
 Fetched in full:
+
 - https://www.anthropic.com/news/claude-design-anthropic-labs
 - https://support.claude.com/en/articles/14604416-get-started-with-claude-design
 - https://claude.com/product/design

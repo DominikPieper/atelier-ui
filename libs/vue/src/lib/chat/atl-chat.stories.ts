@@ -13,13 +13,25 @@ import AtlCodeBlock from '../code-block/atl-code-block.vue';
 
 import { metadata } from '@atelier-ui/spec/metadata/chat.metadata';
 import { contract } from '@atelier-ui/spec/contracts/chat.contract';
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
-const figmaNode = (nodeId: string) => ({ type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` });
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const figmaNode = (nodeId: string) => ({
+  type: 'figma' as const,
+  url: `${FIGMA_FILE}?node-id=${nodeId}`,
+});
 
 const COMPONENTS = {
-  AtlChat, AtlChatHeader, AtlChatMessages, AtlChatMessage,
-  AtlChatTyping, AtlChatSuggestion, AtlChatInput,
-  AtlAvatar, AtlBadge, AtlAlert, AtlCodeBlock,
+  AtlChat,
+  AtlChatHeader,
+  AtlChatMessages,
+  AtlChatMessage,
+  AtlChatTyping,
+  AtlChatSuggestion,
+  AtlChatInput,
+  AtlAvatar,
+  AtlBadge,
+  AtlAlert,
+  AtlCodeBlock,
 };
 
 const codeSample = `<atl-input\n  formField={f.email}\n  type="email"\n  placeholder="Email" />`;
@@ -62,7 +74,9 @@ export const DrawerDefault: Story = {
   args: { variant: 'drawer', status: 'idle', open: true },
   render: (args) => ({
     components: COMPONENTS,
-    setup() { return { args, codeSample }; },
+    setup() {
+      return { args, codeSample };
+    },
     template: `
       <AtlChat v-bind="args">
         <AtlChatHeader>
@@ -90,7 +104,9 @@ export const DrawerEmpty: Story = {
   args: { variant: 'drawer', status: 'idle', open: true },
   render: (args) => ({
     components: COMPONENTS,
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: `
       <AtlChat v-bind="args">
         <AtlChatHeader>
@@ -119,7 +135,9 @@ export const DrawerStreaming: Story = {
   args: { variant: 'drawer', status: 'streaming', open: true },
   render: (args) => ({
     components: COMPONENTS,
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: `
       <AtlChat v-bind="args">
         <AtlChatHeader>
@@ -143,7 +161,9 @@ export const DrawerError: Story = {
   args: { variant: 'drawer', status: 'error', open: true },
   render: (args) => ({
     components: COMPONENTS,
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: `
       <AtlChat v-bind="args">
         <AtlChatHeader>
@@ -172,7 +192,9 @@ export const PopupDefault: Story = {
   args: { variant: 'popup', status: 'idle', open: true },
   render: (args) => ({
     components: COMPONENTS,
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: `
       <AtlChat v-bind="args">
         <AtlChatHeader>
@@ -197,7 +219,9 @@ export const PopupEmpty: Story = {
   args: { variant: 'popup', status: 'idle', open: true },
   render: (args) => ({
     components: COMPONENTS,
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: `
       <AtlChat v-bind="args">
         <AtlChatHeader>
@@ -226,7 +250,9 @@ export const PopupStreaming: Story = {
   args: { variant: 'popup', status: 'streaming', open: true },
   render: (args) => ({
     components: COMPONENTS,
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: `
       <AtlChat v-bind="args">
         <AtlChatHeader>
@@ -250,7 +276,9 @@ export const PopupError: Story = {
   args: { variant: 'popup', status: 'error', open: true },
   render: (args) => ({
     components: COMPONENTS,
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: `
       <AtlChat v-bind="args">
         <AtlChatHeader>
@@ -279,7 +307,9 @@ export const InlineDefault: Story = {
   args: { variant: 'inline', status: 'idle', open: true },
   render: (args) => ({
     components: COMPONENTS,
-    setup() { return { args, storiesCodeSample }; },
+    setup() {
+      return { args, storiesCodeSample };
+    },
     template: `
       <div style="height:540px;width:720px;">
         <AtlChat v-bind="args">
@@ -308,7 +338,9 @@ export const InlineEmpty: Story = {
   args: { variant: 'inline', status: 'idle', open: true },
   render: (args) => ({
     components: COMPONENTS,
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: `
       <div style="height:540px;width:720px;">
         <AtlChat v-bind="args">
@@ -342,7 +374,9 @@ export const InlineStreaming: Story = {
   args: { variant: 'inline', status: 'streaming', open: true },
   render: (args) => ({
     components: COMPONENTS,
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: `
       <div style="height:540px;width:720px;">
         <AtlChat v-bind="args">
@@ -368,7 +402,9 @@ export const InlineError: Story = {
   args: { variant: 'inline', status: 'error', open: true },
   render: (args) => ({
     components: COMPONENTS,
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: `
       <div style="height:540px;width:720px;">
         <AtlChat v-bind="args">

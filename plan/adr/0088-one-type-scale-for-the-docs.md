@@ -52,15 +52,15 @@ already renders in every component the docs embed.
 
 1. **Reuse, don't mint.** Every `font-size` in `docs/src` that is not code,
    an icon glyph, a button, or a card/tile title maps to one of four library
-   tokens by *role*, decided by what the class styles (read in the template),
+   tokens by _role_, decided by what the class styles (read in the template),
    not by its current value:
 
-   | role | token | px |
-   |---|---|---|
-   | running prose — paragraphs, list items, step and card body copy, ledes, checkpoint text, fix steps | `--ui-font-size-md` | 16 |
-   | secondary — descriptions under a title, captions, meta lines, nav and TOC items, breadcrumbs, table cells | `--ui-font-size-sm` | 14 |
-   | labels — eyebrows, chips, badges, code-language tags, bottom-nav labels, uppercase section headings inside nav | `--ui-font-size-xs` | 12 |
-   | emphasized body / h3 tier | `--ui-font-size-lg` | 18 |
+   | role                                                                                                           | token               | px  |
+   | -------------------------------------------------------------------------------------------------------------- | ------------------- | --- |
+   | running prose — paragraphs, list items, step and card body copy, ledes, checkpoint text, fix steps             | `--ui-font-size-md` | 16  |
+   | secondary — descriptions under a title, captions, meta lines, nav and TOC items, breadcrumbs, table cells      | `--ui-font-size-sm` | 14  |
+   | labels — eyebrows, chips, badges, code-language tags, bottom-nav labels, uppercase section headings inside nav | `--ui-font-size-xs` | 12  |
+   | emphasized body / h3 tier                                                                                      | `--ui-font-size-lg` | 18  |
 
    Code (`.docs-prop-*`, terminals, `pre`), buttons, icon glyphs and the short
    card/tile titles at 0.86–0.95rem keep their sizes: they are neither prose

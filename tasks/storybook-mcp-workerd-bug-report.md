@@ -20,15 +20,15 @@ This matters because Storybook documents the Cloudflare Worker as a way to host 
 
 ## Environment
 
-| | |
-|---|---|
-| `@storybook/mcp` | `10.6.0` |
-| `storybook` and framework packages | `10.6.0` |
-| `wrangler` | `4.129.0` |
-| `compatibility_date` | `2026-04-30` |
-| `compatibility_flags` | `["nodejs_compat"]` |
-| Node (local) | `v26.3.0` |
-| Bundler | wrangler's own esbuild pass over `worker/index.ts` |
+|                                    |                                                    |
+| ---------------------------------- | -------------------------------------------------- |
+| `@storybook/mcp`                   | `10.6.0`                                           |
+| `storybook` and framework packages | `10.6.0`                                           |
+| `wrangler`                         | `4.129.0`                                          |
+| `compatibility_date`               | `2026-04-30`                                       |
+| `compatibility_flags`              | `["nodejs_compat"]`                                |
+| Node (local)                       | `v26.3.0`                                          |
+| Bundler                            | wrangler's own esbuild pass over `worker/index.ts` |
 
 ---
 
@@ -51,11 +51,11 @@ This matters because Storybook documents the Cloudflare Worker as a way to host 
 ```js
 import CJS_COMPAT_NODE_URL_jzv0nukkq2 from 'node:url';
 import CJS_COMPAT_NODE_PATH_jzv0nukkq2 from 'node:path';
-import CJS_COMPAT_NODE_MODULE_jzv0nukkq2 from "node:module";
+import CJS_COMPAT_NODE_MODULE_jzv0nukkq2 from 'node:module';
 
 var __filename = CJS_COMPAT_NODE_URL_jzv0nukkq2.fileURLToPath(import.meta.url);
-var __dirname  = CJS_COMPAT_NODE_PATH_jzv0nukkq2.dirname(__filename);
-var require    = CJS_COMPAT_NODE_MODULE_jzv0nukkq2.createRequire(import.meta.url);
+var __dirname = CJS_COMPAT_NODE_PATH_jzv0nukkq2.dirname(__filename);
+var require = CJS_COMPAT_NODE_MODULE_jzv0nukkq2.createRequire(import.meta.url);
 ```
 
 Workers modules have no script URL, so `import.meta.url` is `undefined` there. I confirmed that directly with a minimal worker that does nothing but report it: it prints `{"url":"undefined"}`. `fileURLToPath(undefined)` then throws exactly the error above.

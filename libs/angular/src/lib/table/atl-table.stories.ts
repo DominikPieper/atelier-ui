@@ -1,5 +1,13 @@
 import type { Meta, StoryObj } from '@storybook/angular';
-import { AtlTable, AtlThead, AtlTbody, AtlTr, AtlTh, AtlTd, type AtlSortDirection } from './atl-table';
+import {
+  AtlTable,
+  AtlThead,
+  AtlTbody,
+  AtlTr,
+  AtlTh,
+  AtlTd,
+  type AtlSortDirection,
+} from './atl-table';
 import { AtlBadge } from '../badge/atl-badge';
 import { AtlButton } from '../button/atl-button';
 import { AtlCheckbox } from '../checkbox/atl-checkbox';
@@ -8,7 +16,8 @@ import { metadata } from '@atelier-ui/spec/metadata/table.metadata';
 import { contract } from '@atelier-ui/spec/contracts/table.contract';
 const TABLE_IMPORTS = [AtlTable, AtlThead, AtlTbody, AtlTr, AtlTh, AtlTd];
 
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: 'figma'; url: string } {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
@@ -28,7 +37,11 @@ const meta: Meta<AtlTable> = {
     size: 'md',
     stickyHeader: false,
   },
-  parameters: { design: figmaNode('421-1183'), docs: { description: { component: metadata.purpose } }, contract },
+  parameters: {
+    design: figmaNode('421-1183'),
+    docs: { description: { component: metadata.purpose } },
+    contract,
+  },
 };
 
 export default meta;
@@ -177,8 +190,14 @@ export const Sortable: Story = {
     props: {
       nameSort: null as AtlSortDirection,
       roleSort: null as AtlSortDirection,
-      setNameSort(dir: AtlSortDirection) { this['nameSort'] = dir; this['roleSort'] = null; },
-      setRoleSort(dir: AtlSortDirection) { this['roleSort'] = dir; this['nameSort'] = null; },
+      setNameSort(dir: AtlSortDirection) {
+        this['nameSort'] = dir;
+        this['roleSort'] = null;
+      },
+      setRoleSort(dir: AtlSortDirection) {
+        this['roleSort'] = dir;
+        this['nameSort'] = null;
+      },
     },
     moduleMetadata: { imports: TABLE_IMPORTS },
     template: `
@@ -225,14 +244,25 @@ export const Selectable: Story = {
       props: {
         rows,
         selection,
-        allSelected() { return rows.every((r) => selection.has(r.id)); },
-        isSelected(id: string) { return selection.has(id); },
+        allSelected() {
+          return rows.every((r) => selection.has(r.id));
+        },
+        isSelected(id: string) {
+          return selection.has(id);
+        },
         toggleAll(checked: boolean) {
-          if (checked) { rows.forEach((r) => selection.add(r.id)); }
-          else { selection.clear(); }
+          if (checked) {
+            rows.forEach((r) => selection.add(r.id));
+          } else {
+            selection.clear();
+          }
         },
         toggle(id: string, checked: boolean) {
-          if (checked) { selection.add(id); } else { selection.delete(id); }
+          if (checked) {
+            selection.add(id);
+          } else {
+            selection.delete(id);
+          }
         },
       },
       moduleMetadata: { imports: [...TABLE_IMPORTS, AtlCheckbox] },
@@ -341,18 +371,33 @@ export const KitchenSink: Story = {
         rows,
         selection,
         nameSort: null as AtlSortDirection,
-        allSelected() { return rows.every((r) => selection.has(r.id)); },
-        isSelected(id: string) { return selection.has(id); },
+        allSelected() {
+          return rows.every((r) => selection.has(r.id));
+        },
+        isSelected(id: string) {
+          return selection.has(id);
+        },
         toggleAll(checked: boolean) {
-          if (checked) { rows.forEach((r) => selection.add(r.id)); }
-          else { selection.clear(); }
+          if (checked) {
+            rows.forEach((r) => selection.add(r.id));
+          } else {
+            selection.clear();
+          }
         },
         toggle(id: string, checked: boolean) {
-          if (checked) { selection.add(id); } else { selection.delete(id); }
+          if (checked) {
+            selection.add(id);
+          } else {
+            selection.delete(id);
+          }
         },
-        setNameSort(dir: AtlSortDirection) { this['nameSort'] = dir; },
+        setNameSort(dir: AtlSortDirection) {
+          this['nameSort'] = dir;
+        },
       },
-      moduleMetadata: { imports: [...TABLE_IMPORTS, AtlBadge, AtlButton, AtlCheckbox] },
+      moduleMetadata: {
+        imports: [...TABLE_IMPORTS, AtlBadge, AtlButton, AtlCheckbox],
+      },
       template: `
         <div style="max-height: 300px; overflow-y: auto; border: 1px solid #e5e7eb; border-radius: 0.75rem;">
           <atl-table variant="striped" [stickyHeader]="true">

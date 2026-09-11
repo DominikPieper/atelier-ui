@@ -6,14 +6,14 @@
       "type": "skill-md",
       "description": "Claude Code skill for generating well-branded Atelier interfaces, slides, and assets — voice rules, design tokens, and the Astro docs UI kit.",
       "url": "https://atelier.pieper.io/.well-known/agent-skills/atelier-design/SKILL.md",
-      "digest": "sha256:979e91a567f6c6ecef976924d4409e25c801eb815012a3b9af29ad458f8e6585"
+      "digest": "sha256:f97f77862206e73d1414e46ace2c7d7d244b27b3e9c64849bcadc5a19e10e296"
     },
     {
       "name": "figma-workspace-architect",
       "type": "skill-md",
       "description": "Claude Code skill for designing, building, and auditing Figma workspaces via figma-console-mcp.",
       "url": "https://atelier.pieper.io/.well-known/agent-skills/figma-workspace-architect/SKILL.md",
-      "digest": "sha256:329f32231de2c93938cad0ceb2d109411bae9515fdb4036df0b62286909a535d"
+      "digest": "sha256:12fb09aa562f90e1483e226f63502487ce94b212518d45c2968168c35effa9e7"
     },
     {
       "name": "storybook-angular",

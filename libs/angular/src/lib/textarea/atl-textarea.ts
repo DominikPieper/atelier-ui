@@ -7,7 +7,10 @@ import {
 } from '@angular/core';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import type { FormValueControl } from '@angular/forms/signals';
-import { type ValidationError, type WithOptionalFieldTree } from '@angular/forms/signals';
+import {
+  type ValidationError,
+  type WithOptionalFieldTree,
+} from '@angular/forms/signals';
 import { AtlIcon } from '../icon/atl-icon';
 
 let nextId = 0;
@@ -118,7 +121,9 @@ export class AtlTextarea implements FormValueControl<string> {
   readonly invalid = input(false);
 
   /** Validation errors from the form system. Bound by [formField] directive. */
-  readonly errors = input<readonly WithOptionalFieldTree<ValidationError>[]>([]);
+  readonly errors = input<readonly WithOptionalFieldTree<ValidationError>[]>(
+    [],
+  );
 
   /** Whether the user has interacted with the textarea. Bound by [formField] directive. */
   readonly touched = model(false);
@@ -147,7 +152,7 @@ export class AtlTextarea implements FormValueControl<string> {
 
   /** @internal */
   protected readonly inputId = computed(
-    () => this.id() || (this.label() ? this.generatedId : '')
+    () => this.id() || (this.label() ? this.generatedId : ''),
   );
 
   /** @internal */
@@ -158,9 +163,7 @@ export class AtlTextarea implements FormValueControl<string> {
    * moments depending on the framework. Deciding *when* to pass errors belongs to the
    * form layer, which is where `touched` lives (ADR-0055).
    */
-  protected readonly showErrors = computed(
-    () => this.errors().length > 0
-  );
+  protected readonly showErrors = computed(() => this.errors().length > 0);
 
   /** @internal */
   protected readonly hostClasses = computed(() => {

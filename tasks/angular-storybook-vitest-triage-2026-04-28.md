@@ -37,11 +37,11 @@ framework-annotation lookup.
    plan note flagged a JIT compile bug. Did not help; reverted because
    the JIT error no longer surfaces.
 3. **Clear the storybook bundle cache** (`rm -rf
-   node_modules/.cache/storybook`). No effect.
+node_modules/.cache/storybook`). No effect.
 
 ## What we know
 
-- `@analogjs/storybook-angular`'s `setProjectAnnotations()` *does* return
+- `@analogjs/storybook-angular`'s `setProjectAnnotations()` _does_ return
   an object with `renderToCanvas` defined (verified by
   `node -e "import('@analogjs/storybook-angular').then(m => m.setProjectAnnotations([{}]))"`).
 - `@storybook/addon-vitest` 10.3+ logs "Found a setup file with
@@ -53,7 +53,7 @@ framework-annotation lookup.
   call returns a value the addon-vitest browser harness never reads.
 
 The most likely root cause: addon-vitest's browser-side test harness
-expects a *specific transport* for the project annotations (probably a
+expects a _specific transport_ for the project annotations (probably a
 window-global or a side-effect import path) that
 `@analogjs/storybook-angular` doesn't implement. The official
 `@storybook/react`, `@storybook/vue3` etc. packages do.
@@ -62,16 +62,16 @@ window-global or a side-effect import path) that
 
 1. **File an upstream issue at `analogjs/analog`** with the
    reproduction (this repo + `nx run angular:storybook-test`). Title:
-   *"setProjectAnnotations from @analogjs/storybook-angular doesn't
+   _"setProjectAnnotations from @analogjs/storybook-angular doesn't
    wire `renderToCanvas` for `@storybook/addon-vitest`'s browser
-   runner."*
+   runner."_
 2. **Check whether analogjs has a parallel
    `@analogjs/storybook-angular/test-utils` or
    `setProjectAnnotations.test` export** — Storybook's official
    frameworks ship a separate compose entrypoint for vitest mode. If
    analogjs doesn't, that's the gap.
 3. **Pin React+Vue today** — both work via `nx run-many -t
-   storybook-test -p react,vue` (216 + 242 = 458 plays). Add a CI job
+storybook-test -p react,vue` (216 + 242 = 458 plays). Add a CI job
    that runs that two-project subset; leave Angular off the
    `storybook-test` matrix until upstream fix.
 4. **Don't add a `storybook-test` target to `libs/angular/project.json`**
@@ -82,6 +82,6 @@ window-global or a side-effect import path) that
 
 - `cd libs/angular && npx vitest run --config vitest.storybook.config.ts`
   → 32 fail / 36 play() failures, all with `context.renderToCanvas is
-  not a function`. Reproduces consistently.
+not a function`. Reproduces consistently.
 - React (216 / 216) and Vue (242 / 242) green on the same harness via
   `npx nx run-many -t storybook-test -p react,vue`.

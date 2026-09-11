@@ -46,7 +46,8 @@ if (!fm) {
   const nameMatch = block.match(/^name:\s*(\S.*)$/m);
   const descMatch = block.match(/^description:\s*(\S.*)$/m);
   if (!nameMatch) errors.push('frontmatter is missing required field `name`.');
-  if (!descMatch) errors.push('frontmatter is missing required field `description`.');
+  if (!descMatch)
+    errors.push('frontmatter is missing required field `description`.');
   if (nameMatch && nameMatch[1].trim() !== skillName) {
     errors.push(
       `frontmatter name "${nameMatch[1].trim()}" does not match directory "${skillName}".`,
@@ -78,4 +79,6 @@ if (errors.length) {
   process.exit(1);
 }
 
-console.log(`✓ ${skillName}: SKILL.md valid, ${bodyRefs.size} references resolved`);
+console.log(
+  `✓ ${skillName}: SKILL.md valid, ${bodyRefs.size} references resolved`,
+);

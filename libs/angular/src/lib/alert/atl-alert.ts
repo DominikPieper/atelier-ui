@@ -42,7 +42,12 @@ const VARIANT_ICON_NAMES: Partial<Record<AtlAlertVariant, AtlIconName>> = {
       <ng-content />
     </span>
     @if (isDismissible) {
-      <button class="dismiss" type="button" aria-label="Dismiss" (click)="dismiss()">
+      <button
+        class="dismiss"
+        type="button"
+        aria-label="Dismiss"
+        (click)="dismiss()"
+      >
         <atl-icon name="close" size="sm" />
       </button>
     }
@@ -66,7 +71,9 @@ export class AtlAlert {
 
   protected readonly hostClasses = computed(() => `variant-${this.variant()}`);
 
-  protected readonly variantIcon = computed(() => VARIANT_ICON_NAMES[this.variant()]);
+  protected readonly variantIcon = computed(
+    () => VARIANT_ICON_NAMES[this.variant()],
+  );
 
   /** @internal */
   get isDismissible(): boolean {

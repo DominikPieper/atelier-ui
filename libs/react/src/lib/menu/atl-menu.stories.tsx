@@ -1,10 +1,16 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
-import { AtlMenu, AtlMenuItem, AtlMenuSeparator, AtlMenuTrigger } from './atl-menu';
+import {
+  AtlMenu,
+  AtlMenuItem,
+  AtlMenuSeparator,
+  AtlMenuTrigger,
+} from './atl-menu';
 import { AtlButton } from '../button/atl-button';
 
 import { metadata } from '@atelier-ui/spec/metadata/menu.metadata';
 import { contract } from '@atelier-ui/spec/contracts/menu.contract';
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
@@ -37,7 +43,10 @@ export const Default: Story = {
       }
     >
       {({ onClick, ref }) => (
-        <AtlButton ref={ref as React.RefObject<HTMLButtonElement>} onClick={onClick}>
+        <AtlButton
+          ref={ref as React.RefObject<HTMLButtonElement>}
+          onClick={onClick}
+        >
           Actions
         </AtlButton>
       )}
@@ -59,7 +68,10 @@ export const VariantDefault: Story = {
       }
     >
       {({ onClick, ref }) => (
-        <AtlButton ref={ref as React.RefObject<HTMLButtonElement>} onClick={onClick}>
+        <AtlButton
+          ref={ref as React.RefObject<HTMLButtonElement>}
+          onClick={onClick}
+        >
           Actions
         </AtlButton>
       )}
@@ -73,7 +85,9 @@ export const Compact: Story = {
       menu={
         <AtlMenu variant="compact">
           <AtlMenuItem onTriggered={() => alert('Edit')}>Edit</AtlMenuItem>
-          <AtlMenuItem onTriggered={() => alert('Duplicate')}>Duplicate</AtlMenuItem>
+          <AtlMenuItem onTriggered={() => alert('Duplicate')}>
+            Duplicate
+          </AtlMenuItem>
           <AtlMenuSeparator />
           <AtlMenuItem onTriggered={() => alert('Delete')}>Delete</AtlMenuItem>
         </AtlMenu>
@@ -107,7 +121,11 @@ export const WithDisabledItems: Story = {
       }
     >
       {({ onClick, ref }) => (
-        <AtlButton ref={ref as React.RefObject<HTMLButtonElement>} onClick={onClick} variant="secondary">
+        <AtlButton
+          ref={ref as React.RefObject<HTMLButtonElement>}
+          onClick={onClick}
+          variant="secondary"
+        >
           Options
         </AtlButton>
       )}
@@ -128,7 +146,11 @@ export const WithSeparator: Story = {
       }
     >
       {({ onClick, ref }) => (
-        <AtlButton ref={ref as React.RefObject<HTMLButtonElement>} onClick={onClick} variant="secondary">
+        <AtlButton
+          ref={ref as React.RefObject<HTMLButtonElement>}
+          onClick={onClick}
+          variant="secondary"
+        >
           Account
         </AtlButton>
       )}

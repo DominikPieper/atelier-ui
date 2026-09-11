@@ -26,8 +26,12 @@ async function captureOne(template: string): Promise<unknown> {
 async function capture(): Promise<Record<string, unknown>> {
   return {
     off: await captureOne('<atl-toggle>Notifications</atl-toggle>'),
-    on: await captureOne('<atl-toggle [checked]="true">Notifications</atl-toggle>'),
-    disabled: await captureOne('<atl-toggle [disabled]="true">Notifications</atl-toggle>'),
+    on: await captureOne(
+      '<atl-toggle [checked]="true">Notifications</atl-toggle>',
+    ),
+    disabled: await captureOne(
+      '<atl-toggle [disabled]="true">Notifications</atl-toggle>',
+    ),
   };
 }
 

@@ -74,11 +74,11 @@ swaps.
 
 - **Make `.docs-main` actually scroll** (`height: 100vh` on the shell,
   `overflow: hidden`, main as the scrollport). It would have vindicated the
-  original code, but `Footer` sits in an implicit shell row *below* main, so
+  original code, but `Footer` sits in an implicit shell row _below_ main, so
   constraining the shell to the viewport puts the footer permanently
   off-screen.
 - **Detect the scroller at runtime** (`mainEl.scrollHeight > mainEl.clientHeight
-  ? mainEl : window`). Honest about both cases, but there is no viewport where
+? mainEl : window`). Honest about both cases, but there is no viewport where
   main scrolls — no rule gives it a definite height — so the branch would be
   dead code with a maintenance cost and a false implication.
 - **Fix the 16 overflowing pages instead of re-containing them.** They are real
@@ -87,7 +87,7 @@ swaps.
   sticky-positioning fix into a twelve-page responsive audit would have buried
   it. They are recorded in `tasks/todo.md` with their measurements.
 - **`overflow-x: clip` on `.docs-main-content`.** `clip` does not create a
-  scroll container, so it would leave sticky alone *and* need no sibling
+  scroll container, so it would leave sticky alone _and_ need no sibling
   argument — but it also cuts the wide content off with no way to reach it.
 
 ## Consequences

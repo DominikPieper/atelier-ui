@@ -23,7 +23,7 @@ them is the first mistake to avoid:
 - **The bundled `design` canvas skill in Claude Code.** Not a native canvas: a
   precompiled React editor (`payload.template.html`, ~2.4 MB) that Claude
   copies, seeds with `.dc.html` artboards plus a `canvas.json` manifest, and
-  publishes as an ordinary Artifact. In Claude Code the page *is* the
+  publishes as an ordinary Artifact. In Claude Code the page _is_ the
   document — one state block holds every artboard, the manifest, and every
   image; Save is a whole-document compare-and-set publish. Editing requires
   the skill enabled, the artifact-publish capability in that user's roster,
@@ -42,7 +42,7 @@ Claude Design artboard has **none of the four**.
 The public record is also thin, and that matters for a teaching repo. Verified
 present: one announcement (2026-04-17), a product page, three Help Center
 articles, one designer blog post, and exactly one Claude Code page — the Week
-34 digest, tagged *research preview*. Verified absent: no `/design` entry in
+34 digest, tagged _research preview_. Verified absent: no `/design` entry in
 any Claude Code CHANGELOG (5,894 lines searched), no row in the commands
 reference (which documents `/design-sync` and `/design-login` but not
 `/design`), and **no first-party spec for the `.dc.html` format anywhere**.
@@ -57,7 +57,7 @@ without knowing Figma at all.
 ## Decision
 
 Claude Design enters the workshop as a **parallel track occupying step 0 and
-step 5** — divergence before *Inspect*, and handoff after *Verify* — plus one
+step 5** — divergence before _Inspect_, and handoff after _Verify_ — plus one
 trainer-led `/design-sync` demo showing the reverse direction. It never
 touches steps 1–4. Figma remains the single source of truth, because it is
 the only surface the gates can address.
@@ -88,7 +88,7 @@ Alternatives considered:
   at the far end (one shareable link that needs no Figma account and no
   running Storybook) and leaves `/design-sync`, which genuinely belongs after
   the code exists, unplaced.
-- **A full second track with its own gate** — rejected *for now*: there is
+- **A full second track with its own gate** — rejected _for now_: there is
   nothing legitimate to gate. The design skill's own contract instructs
   literal inline style values, and prefers inline `style="…"` over classes
   because that is what the properties panel edits. A `check:artboards` that
@@ -102,7 +102,7 @@ Alternatives considered:
 
 - **Two design surfaces across two days is real cognitive load**, and the
   canvas dead-ends: no Figma import, no Figma export, `/design import|export|
-  status` refused in the Claude Code preview, the editor frozen at publish
+status` refused in the Claude Code preview, the editor frozen at publish
   time, and saving conditional on a capability in the viewer's roster. We
   accept that to buy a Figma-free on-ramp and one honest lesson about gated
   truth.
@@ -128,6 +128,7 @@ Alternatives considered:
   which a participant pushes their **employer's** design system is a
   data-processing decision that goes to the DSB first, and org enablement to
   the ISB, before it appears on an agenda a client sees.
+
 ### Verified against the first-party source (2026-08-26, same day)
 
 A `claude-design` MCP server became available in-session, exposing
@@ -148,10 +149,10 @@ template, `<helmet>` head-injection, and the `data-dc-script` /
    remains separately true. Figma **export** is still unverified.
 3. **The stated reason for rejecting alternative 4 does not hold.** This ADR
    claimed the skill "instructs literal inline style values … prefers inline
-   `style="…"` over classes". The prompt says the opposite: *"Define
+   `style="…"` over classes". The prompt says the opposite: _"Define
    design-specific values as short single-class utilities in
    `<helmet><style>` … inline `style="…"` only for genuine one-offs — anything
-   landing on 2+ elements becomes a class."* So a token-discipline gate on
+   landing on 2+ elements becomes a class."_ So a token-discipline gate on
    participant artboards would **not** be gating against documented
    behaviour, and `<helmet><style>` is the intended home for a
    `:root{--ui-*}` block. **Alternative 4 is reopened** as an open question,

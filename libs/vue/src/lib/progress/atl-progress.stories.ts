@@ -3,7 +3,8 @@ import AtlProgress from './atl-progress.vue';
 
 import { metadata } from '@atelier-ui/spec/metadata/progress.metadata';
 import { contract } from '@atelier-ui/spec/contracts/progress.contract';
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string): { type: 'figma'; url: string } {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
@@ -15,11 +16,16 @@ const meta: Meta<typeof AtlProgress> = {
   tags: ['autodocs'],
   render: (args) => ({
     components: { AtlProgress },
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: '<AtlProgress v-bind="args" />',
   }),
   argTypes: {
-    variant: { control: 'select', options: ['default', 'success', 'warning', 'danger'] },
+    variant: {
+      control: 'select',
+      options: ['default', 'success', 'warning', 'danger'],
+    },
     size: { control: 'select', options: ['sm', 'md', 'lg'] },
     value: { control: { type: 'range', min: 0, max: 100 } },
     max: { control: 'number' },
@@ -121,7 +127,8 @@ export const Indeterminate: Story = {
 export const ZeroValue: Story = {
   render: () => ({
     components: { AtlProgress },
-    template: '<AtlProgress :value="0" style="max-width:32rem;display:block" />',
+    template:
+      '<AtlProgress :value="0" style="max-width:32rem;display:block" />',
   }),
   parameters: { design: figmaNode('420-87') },
 };
@@ -129,7 +136,8 @@ export const ZeroValue: Story = {
 export const FullValue: Story = {
   render: () => ({
     components: { AtlProgress },
-    template: '<AtlProgress :value="100" variant="success" style="max-width:32rem;display:block" />',
+    template:
+      '<AtlProgress :value="100" variant="success" style="max-width:32rem;display:block" />',
   }),
   parameters: { design: figmaNode('420-105') },
 };

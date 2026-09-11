@@ -3,7 +3,7 @@ status: accepted
 confidence: documented
 date: reconstructed
 sources:
-  - "plan/big-picture.md §1, §3"
+  - 'plan/big-picture.md §1, §3'
 ---
 
 # ADR-0001: LLM-optimized API surface

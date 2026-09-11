@@ -11,12 +11,15 @@ export const metadata: ComponentMetadata = {
   ],
   antiPatterns: [
     {
-      pattern: 'Communicating an indeterminate background operation with no associated content slot.',
-      useInstead: 'AtlProgress with `indeterminate` — has the right role and announces progress.',
+      pattern:
+        'Communicating an indeterminate background operation with no associated content slot.',
+      useInstead:
+        'AtlProgress with `indeterminate` — has the right role and announces progress.',
     },
     {
       pattern: 'Holding empty space when there is genuinely nothing to render.',
-      useInstead: 'An empty state with explanation; skeletons promise content that is coming.',
+      useInstead:
+        'An empty state with explanation; skeletons promise content that is coming.',
     },
   ],
   relatedComponents: ['AtlProgressSpec', 'AtlAvatarSpec'],

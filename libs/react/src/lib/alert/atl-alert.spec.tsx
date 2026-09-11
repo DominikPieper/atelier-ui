@@ -14,7 +14,7 @@ describe('AtlAlert', () => {
     (variant) => {
       const { container } = render(<AtlAlert variant={variant}>Msg</AtlAlert>);
       expect(container.firstChild).toHaveClass(`variant-${variant}`);
-    }
+    },
   );
 
   it('applies atl-alert class', () => {
@@ -27,27 +27,40 @@ describe('AtlAlert', () => {
     expect(container.firstChild).toHaveClass('variant-info');
   });
 
-  covers('alert', 'dismiss-hidden')('does not show dismiss button by default', () => {
-    render(<AtlAlert>Msg</AtlAlert>);
-    expect(screen.queryByRole('button', { name: 'Dismiss' })).not.toBeInTheDocument();
-  });
+  covers('alert', 'dismiss-hidden')(
+    'does not show dismiss button by default',
+    () => {
+      render(<AtlAlert>Msg</AtlAlert>);
+      expect(
+        screen.queryByRole('button', { name: 'Dismiss' }),
+      ).not.toBeInTheDocument();
+    },
+  );
 
-  covers('alert', 'dismiss-shown')('shows dismiss button when dismissible', () => {
-    render(<AtlAlert dismissible>Msg</AtlAlert>);
-    expect(screen.getByRole('button', { name: 'Dismiss' })).toBeInTheDocument();
-  });
+  covers('alert', 'dismiss-shown')(
+    'shows dismiss button when dismissible',
+    () => {
+      render(<AtlAlert dismissible>Msg</AtlAlert>);
+      expect(
+        screen.getByRole('button', { name: 'Dismiss' }),
+      ).toBeInTheDocument();
+    },
+  );
 
-  covers('alert', 'emits-dismiss')('calls onDismissed when dismiss clicked', async () => {
-    const user = userEvent.setup();
-    const onDismissed = vi.fn();
-    render(
-      <AtlAlert dismissible onDismissed={onDismissed}>
-        Msg
-      </AtlAlert>
-    );
-    await user.click(screen.getByRole('button', { name: 'Dismiss' }));
-    expect(onDismissed).toHaveBeenCalledOnce();
-  });
+  covers('alert', 'emits-dismiss')(
+    'calls onDismissed when dismiss clicked',
+    async () => {
+      const user = userEvent.setup();
+      const onDismissed = vi.fn();
+      render(
+        <AtlAlert dismissible onDismissed={onDismissed}>
+          Msg
+        </AtlAlert>,
+      );
+      await user.click(screen.getByRole('button', { name: 'Dismiss' }));
+      expect(onDismissed).toHaveBeenCalledOnce();
+    },
+  );
 
   it('has role=alert', () => {
     const { container } = render(<AtlAlert>Msg</AtlAlert>);
@@ -75,7 +88,9 @@ describe('AtlAlert', () => {
   });
 
   it('forwards additional className', () => {
-    const { container } = render(<AtlAlert className="custom-class">Msg</AtlAlert>);
+    const { container } = render(
+      <AtlAlert className="custom-class">Msg</AtlAlert>,
+    );
     expect(container.firstChild).toHaveClass('custom-class');
   });
 });

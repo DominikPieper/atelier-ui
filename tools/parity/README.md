@@ -19,17 +19,17 @@ Every gate is the same shape:
 
 Pick the gate type per kind of drift:
 
-| Rule type | "These must agree" | Atelier example |
-|---|---|---|
-| **mirror** | file A is byte-identical to copies B, C | spec types & tokens.css copied into each framework lib |
-| **dir-parity** | the same entries exist under several roots | every component dir exists in angular/react/vue |
-| **file-present** | each entry ships a required sibling file | every component dir has a `*.stories.*` |
-| **barrel-export** | each entry is re-exported from the public entry point | every component is in `src/index.ts` |
-| **union-in-css** | each member of a typed union has a matching CSS class | spec `variant`/`size` members ↔ `.variant-*` classes |
-| **value-parity** | a value extracted from N sources is equal | default of each axis prop matches across adapters + docs |
-| **marker-coverage** | each manifest id is tagged in every implementation | (generic, language-agnostic) a `<marker> <id>` string tag per impl |
-| **typed-coverage** | each manifest id is *bound to a test* by a typed call | `covers('<subject>','<id>')(…)` in each adapter's spec — Atelier's actual behavior gate |
-| **generated** | a generated artifact equals a fresh regeneration | `llms.txt`, cookbook manifest, `behaviors.generated.ts` (`gen … --check`) |
+| Rule type           | "These must agree"                                    | Atelier example                                                                         |
+| ------------------- | ----------------------------------------------------- | --------------------------------------------------------------------------------------- |
+| **mirror**          | file A is byte-identical to copies B, C               | spec types & tokens.css copied into each framework lib                                  |
+| **dir-parity**      | the same entries exist under several roots            | every component dir exists in angular/react/vue                                         |
+| **file-present**    | each entry ships a required sibling file              | every component dir has a `*.stories.*`                                                 |
+| **barrel-export**   | each entry is re-exported from the public entry point | every component is in `src/index.ts`                                                    |
+| **union-in-css**    | each member of a typed union has a matching CSS class | spec `variant`/`size` members ↔ `.variant-*` classes                                    |
+| **value-parity**    | a value extracted from N sources is equal             | default of each axis prop matches across adapters + docs                                |
+| **marker-coverage** | each manifest id is tagged in every implementation    | (generic, language-agnostic) a `<marker> <id>` string tag per impl                      |
+| **typed-coverage**  | each manifest id is _bound to a test_ by a typed call | `covers('<subject>','<id>')(…)` in each adapter's spec — Atelier's actual behavior gate |
+| **generated**       | a generated artifact equals a fresh regeneration      | `llms.txt`, cookbook manifest, `behaviors.generated.ts` (`gen … --check`)               |
 
 `mirror`, `dir-parity`, `file-present`, `barrel-export`, `generated` are a few
 lines each — write them inline. `union-in-css` and `value-parity` need light
@@ -41,7 +41,7 @@ worked examples). `marker-coverage` is the one worth a shared tool — below.
 A manifest maps each **subject** to behaviour **ids** every **implementation**
 must cover; an implementation declares coverage by tagging a file with
 `<marker> <id>`. The gate fails on any untagged (subject, id, implementation).
-It enforces coverage *parity*, not correctness — the tagged tests do that. The
+It enforces coverage _parity_, not correctness — the tagged tests do that. The
 idea generalises past UI: API handlers, DB migrations, plugin adapters — any
 "N implementations must each cover the same behaviours."
 
@@ -54,13 +54,14 @@ Config (see `behavior.config.mjs`):
 ```js
 export default {
   manifestPath: 'libs/spec/src/behaviors.json', // { subject: [{ id }, …], $comment? }
-  marker: '@behavior',                           // tag token
-  implementations: {                             // dir template, {subject} substituted
+  marker: '@behavior', // tag token
+  implementations: {
+    // dir template, {subject} substituted
     angular: 'libs/angular/src/lib/{subject}',
     react: 'libs/react/src/lib/{subject}',
     vue: 'libs/vue/src/lib/{subject}',
   },
-  filePattern: /\.spec\.(ts|tsx)$/,              // files scanned per dir
+  filePattern: /\.spec\.(ts|tsx)$/, // files scanned per dir
   label: 'behavior',
 };
 ```
@@ -71,7 +72,7 @@ allowances, etc. are kept in the manifest / a small allowlist — see how
 
 ## behavior-coverage (the typed gate Atelier actually runs)
 
-`marker-coverage` proves a *string* exists somewhere in the joined files — it
+`marker-coverage` proves a _string_ exists somewhere in the joined files — it
 can sit above the wrong test, in dead code, or be mistyped silently. When the
 implementations are TypeScript, `behavior-coverage.mjs` is strictly better: the
 manifest is also code-generated into `libs/spec/src/behaviors.generated.ts`
@@ -80,7 +81,9 @@ typed call instead of a comment:
 
 ```ts
 import { covers } from '../../testing/behavior';
-covers('button', 'click-emits')('emits a click', async () => { /* … */ });
+covers('button', 'click-emits')('emits a click', async () => {
+  /* … */
+});
 ```
 
 `covers<S>(subject, id)` types `id` as `BehaviorId<S>`, so a wrong id is a

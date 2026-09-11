@@ -25,9 +25,11 @@ async function captureOne(template: string): Promise<unknown> {
 
 async function capture(): Promise<Record<string, unknown>> {
   return {
-    plain: await captureOne('<atl-card><atl-card-content>Card body</atl-card-content></atl-card>'),
+    plain: await captureOne(
+      '<atl-card><atl-card-content>Card body</atl-card-content></atl-card>',
+    ),
     region: await captureOne(
-      '<atl-card role="region" aria-label="Settings"><atl-card-content>Card body</atl-card-content></atl-card>'
+      '<atl-card role="region" aria-label="Settings"><atl-card-content>Card body</atl-card-content></atl-card>',
     ),
   };
 }

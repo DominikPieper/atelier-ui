@@ -35,14 +35,14 @@ backwards.
 **1. A parent may instantiate a child only where no parent axis reshapes it.** Measured
 against the CSS rather than assumed:
 
-| Parent | Reshapes the child? | Composed |
-|---|---|---|
-| AtlBreadcrumbs | no variants at all | **yes** — four AtlBreadcrumbItem instances |
-| AtlChat | no variant-scoped `.atl-chat-message` rule | **yes**, three of four bubbles |
-| AtlTabGroup | `.variant-pills .tablist button` | no |
-| AtlMenu | `.variant-compact .atl-menu-item` | no |
-| AtlTable | `.size-sm/md/lg tbody td` | no |
-| AtlStepper | `.orientation-vertical .step-item` | no |
+| Parent         | Reshapes the child?                        | Composed                                   |
+| -------------- | ------------------------------------------ | ------------------------------------------ |
+| AtlBreadcrumbs | no variants at all                         | **yes** — four AtlBreadcrumbItem instances |
+| AtlChat        | no variant-scoped `.atl-chat-message` rule | **yes**, three of four bubbles             |
+| AtlTabGroup    | `.variant-pills .tablist button`           | no                                         |
+| AtlMenu        | `.variant-compact .atl-menu-item`          | no                                         |
+| AtlTable       | `.size-sm/md/lg tbody td`                  | no                                         |
+| AtlStepper     | `.orientation-vertical .step-item`         | no                                         |
 
 Composing AtlBreadcrumbs fixed two divergences on the way in: the master drew `/` where
 the CSS's `content` is `›`, and its row had `gap: 8` where `.breadcrumbs-list` has
@@ -64,13 +64,13 @@ see what fires — showed **none of them was load-bearing**. Four were `name:` e
 whose check no longer asks: ADR-0062 narrowed `[NAME]`'s axis derivation to unions ending
 in Variant | Size | Shape | Position | Orientation | Align | Role, so a union ending in
 `Status` is never a candidate. The behaviour is unchanged — the exemption already excused
-the demand — but the *record* changed, because two of those comments held an open design
+the demand — but the _record_ changed, because two of those comments held an open design
 question: an axis is owed for `AtlAvatarStatus` and `AtlChatStatus`. Those moved to
 `tasks/todo.md`. **An allowlist is a poor place to keep a follow-up: it is read only when
 something fails.** A note in place of the seven says they were removed rather than lost.
 
 **4. A glyph inside an instance belongs to the child master.** Composing AtlBreadcrumbs
-made it inherit AtlBreadcrumbItem's `›` finding *without* the exemption, which lives on
+made it inherit AtlBreadcrumbItem's `›` finding _without_ the exemption, which lives on
 the child's description. The glyph probe now skips text inside instances, the same rule
 the layer walk already followed. The cost is stated rather than swallowed: a glyph typed
 as an instance **override** is now unseen, recorded beside the probe's other blind spot.

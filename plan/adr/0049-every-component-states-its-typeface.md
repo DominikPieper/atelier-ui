@@ -23,15 +23,15 @@ do not respecify per component". Twenty-five component roots respecified it anyw
 and the rest did not, which looked like 25 violations to clean up. Measuring it
 inside an app whose own typeface was Georgia showed the opposite:
 
-| renders Instrument Sans | renders the app's Georgia |
-|---|---|
+| renders Instrument Sans     | renders the app's Georgia                     |
+| --------------------------- | --------------------------------------------- |
 | Button, Input, Toast, Table | **Card, Dialog, Chat, Skeleton, AvatarGroup** |
 
 A card next to a button, in one app, in two typefaces. Angular had five more
 (accordion, card, chat, drawer, skeleton). The 25 declarations were not the defect —
 the missing ones were.
 
-Read strictly, the constraint asks the *consumer* to apply the typeface. This repo
+Read strictly, the constraint asks the _consumer_ to apply the typeface. This repo
 has now measured that failure mode twice in one day: Storybook supplied neither a
 box-sizing reset nor a font application, so components rendered with the wrong
 geometry (ADR-0043) and the system font. Anything a consumer must remember can be
@@ -51,7 +51,7 @@ Three failure modes, all found by measuring and now all gated:
 - **`[NO-TYPEFACE]`** — a component that declares it nowhere. Eight roots across
   React/Vue and five Angular hosts were in this state.
 - **`[DESCENDANT]`** — declared on something inside the root instead. AtlChat had
-  four such declarations *and no root one*, so it was only correct while those
+  four such declarations _and no root one_, so it was only correct while those
   particular children were on screen. `--ui-font-mono` and `--ui-font-display` are
   exempt: a code element and a display line carry a different face by design.
 - **`[RESET-WIPED]`** — declared and then wiped by `all: unset` further down the

@@ -2,8 +2,8 @@
 status: accepted
 date: 2026-08-26
 sources:
-  - "Claude Design project *Atelier* — `Typography Directions.dc.html`, turns 1 and 2 (three directions, then three readings of \"bolder\")"
-  - "plan/adr/0020-personal-authorial-signature.md (§Decision revised: the palette/motion split stands, the Inter choice does not)"
+  - 'Claude Design project *Atelier* — `Typography Directions.dc.html`, turns 1 and 2 (three directions, then three readings of "bolder")'
+  - 'plan/adr/0020-personal-authorial-signature.md (§Decision revised: the palette/motion split stands, the Inter choice does not)'
   - tasks/atelier-design-system-plan.md (Phase 1)
 ---
 
@@ -12,8 +12,8 @@ sources:
 ## Status
 
 Accepted. Revises **ADR-0020** on typeface selection only. ADR-0020's central
-decision — *"Separate brand DNA (typography + motion) from palette
-(purpose-specific)"* — is not just preserved but is the reason for this change.
+decision — _"Separate brand DNA (typography + motion) from palette
+(purpose-specific)"_ — is not just preserved but is the reason for this change.
 The palette, the motion vocabulary, and the serif-italic heading accent are
 untouched.
 
@@ -23,7 +23,7 @@ ADR-0020 designated typography as the layer that carries cross-surface
 identity, and then left two things unresolved that only became visible when the
 type layer was examined directly:
 
-1. **The UI face was Inter.** For a repo whose stated identity layer *is*
+1. **The UI face was Inter.** For a repo whose stated identity layer _is_
    typography, the most widely deployed interface font in the ecosystem is a
    weak carrier — it is the default that reads as no decision. Claude Design's
    own system prompt lists Inter among the "AI slop tropes … overused fonts".
@@ -51,11 +51,11 @@ single `@font-face`, no bold cut. Three readings were drawn:
 
 Three stacks, declared in the token layer:
 
-| Token | Face | Role |
-|---|---|---|
-| `--ui-font-family` | Instrument Sans | everything interactive and everything read at body length |
-| `--ui-font-display` *(new)* | Instrument Serif | the single largest line on a surface — wordmark, hero, section opener |
-| `--ui-font-mono` *(new)* | JetBrains Mono | code, tokens, prop names, keyboard chips, terminal output |
+| Token                       | Face             | Role                                                                  |
+| --------------------------- | ---------------- | --------------------------------------------------------------------- |
+| `--ui-font-family`          | Instrument Sans  | everything interactive and everything read at body length             |
+| `--ui-font-display` _(new)_ | Instrument Serif | the single largest line on a surface — wordmark, hero, section opener |
+| `--ui-font-mono` _(new)_    | JetBrains Mono   | code, tokens, prop names, keyboard chips, terminal output             |
 
 **Weight comes from the sans, never from the serif.** Instrument Serif has no
 bold cut, so emphasis in the display role is expressed through size and case.
@@ -93,7 +93,7 @@ Alternatives considered:
 
 ## Consequences
 
-- **A latent bug is fixed as a side effect.** `--ui-font-mono` was *consumed* by
+- **A latent bug is fixed as a side effect.** `--ui-font-mono` was _consumed_ by
   the code-block CSS in all three frameworks
   (`var(--ui-font-mono, 'Menlo', …)`) but **never declared anywhere**, so every
   code block silently fell back to Menlo. Declaring it is what makes the
@@ -124,7 +124,7 @@ Alternatives considered:
   upright display use would need `styles: ['normal', 'italic']` added to the
   Astro config — otherwise the browser synthesises a roman and it looks wrong.
 - **The synced Claude Design artifacts still say Inter and Fira Code.** The
-  `_ds_manifest.json` and design-system guide in the *Atelier Design System*
+  `_ds_manifest.json` and design-system guide in the _Atelier Design System_
   project are `/design-sync` output and were already known to be unreliable
   (three phantom `--ui-font-size-*` tokens, `--ui-transition-*` typed as colour,
   `--docs-*` tokens mixed into the public API — and now a fourth phantom,

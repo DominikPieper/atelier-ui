@@ -4,11 +4,11 @@ One framework per session (ADR-0014). Component docs come from that framework's 
 Storybook MCP, whose manifest is emitted natively (ADR-0097) — do not translate from
 another framework's prop table.
 
-| Framework | Hosted MCP | Manifest source | Binding shape you will read and write |
-|---|---|---|---|
-| Angular | `storybook-angular` (`atelier.pieper.io/storybook-angular/mcp`) | `angular-component-meta` | signal inputs, `model()` two-way `[(checked)]`, split Inputs/Outputs, `ng-content` instead of children |
-| React | `storybook-react` | `react-docgen` | props `& AtlFooSpec`, `children`, `on*Change`, `forwardRef` |
-| Vue | `storybook-vue` | `vue-component-meta` | `defineProps` mirroring the spec interface, `v-model` / `update:*` emits, typed slots |
+| Framework | Hosted MCP                                                      | Manifest source          | Binding shape you will read and write                                                                  |
+| --------- | --------------------------------------------------------------- | ------------------------ | ------------------------------------------------------------------------------------------------------ |
+| Angular   | `storybook-angular` (`atelier.pieper.io/storybook-angular/mcp`) | `angular-component-meta` | signal inputs, `model()` two-way `[(checked)]`, split Inputs/Outputs, `ng-content` instead of children |
+| React     | `storybook-react`                                               | `react-docgen`           | props `& AtlFooSpec`, `children`, `on*Change`, `forwardRef`                                            |
+| Vue       | `storybook-vue`                                                 | `vue-component-meta`     | `defineProps` mirroring the spec interface, `v-model` / `update:*` emits, typed slots                  |
 
 ## Hosted vs local, and what `AGENTS.md` requires
 

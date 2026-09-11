@@ -12,16 +12,21 @@ export const metadata: ComponentMetadata = {
   ],
   antiPatterns: [
     {
-      pattern: 'Holding rich content, links, or interactive controls inside the tip.',
-      useInstead: 'A popover or dialog — tooltips are non-interactive label text only.',
+      pattern:
+        'Holding rich content, links, or interactive controls inside the tip.',
+      useInstead:
+        'A popover or dialog — tooltips are non-interactive label text only.',
     },
     {
-      pattern: 'Communicating critical information that the user must read to complete a task.',
-      useInstead: 'AtlAlert, inline help text, or visible labels — tooltips disappear on blur and are skipped on touch.',
+      pattern:
+        'Communicating critical information that the user must read to complete a task.',
+      useInstead:
+        'AtlAlert, inline help text, or visible labels — tooltips disappear on blur and are skipped on touch.',
     },
     {
       pattern: 'Acting as the only accessible name for an interactive element.',
-      useInstead: 'A proper `aria-label` or visible label — pair the tooltip with that label rather than relying on it alone.',
+      useInstead:
+        'A proper `aria-label` or visible label — pair the tooltip with that label rather than relying on it alone.',
     },
   ],
   relatedComponents: ['AtlButtonSpec', 'AtlMenuSpec'],

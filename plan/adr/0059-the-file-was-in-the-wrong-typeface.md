@@ -22,19 +22,19 @@ font. It came back **Inter** — a typeface `tokens.css` has not named since ADR
 chose Instrument Sans and Instrument Serif. A census of the whole Figma file found
 three typefaces, none of them the library's:
 
-| Where | Was | `tokens.css` says |
-|---|---|---|
-| Components (705), Inventory (539), Icons (73), Workshop templates (24) | Inter | Instrument Sans |
-| Colors, Typography, Spacing & Radius, and all 19 `ty/*` text styles | Montserrat, Libre Baskerville | Instrument Sans / Instrument Serif |
+| Where                                                                  | Was                           | `tokens.css` says                  |
+| ---------------------------------------------------------------------- | ----------------------------- | ---------------------------------- |
+| Components (705), Inventory (539), Icons (73), Workshop templates (24) | Inter                         | Instrument Sans                    |
+| Colors, Typography, Spacing & Radius, and all 19 `ty/*` text styles    | Montserrat, Libre Baskerville | Instrument Sans / Instrument Serif |
 
 Two things made this survivable for months, and both are the finding rather than the
 excuse:
 
 1. **No gate could see a typeface in Figma.** `check:typeface` (ADR-0049) reads the
-   CSS — it proves the *library* carries `--ui-font-family` on a root and never
+   CSS — it proves the _library_ carries `--ui-font-family` on a root and never
    inherits a leading, and it had been green throughout. The
    Figma snapshot recorded names, axes, descriptions, bindings and glyphs, but not one
-   font. So the transfer *target* was unchecked on the one property every text node in
+   font. So the transfer _target_ was unchecked on the one property every text node in
    it has.
 2. **The text styles documented a scale the library never had.** Nineteen `ty/*`
    styles — `caption`, `body-xs`, `label-xs-strong`, `name`, `serif-sm`, `headline-xs`,
@@ -49,7 +49,7 @@ Two smaller facts fell out of the same census:
   **orphaned** main components (`…/first`, `…/3`, `mainParent: null`) — nodes Figma
   keeps alive only because an instance references them, left behind by the botched
   `COMPONENT_SET` removal in ADR-0056's cleanup. They still drew `‹ Prev` / `Next ›`
-  and a three-level breadcrumb, i.e. the *pre-fix* geometry, months after the master
+  and a three-level breadcrumb, i.e. the _pre-fix_ geometry, months after the master
   was fixed. `findAll` cannot reach them, so every sweep since had silently skipped
   them.
 - `--ui-type-code` resolved its leading through `--ui-line-height-normal` (1.5) while
@@ -103,7 +103,7 @@ between two 12px gaps that reproduce its `padding-right` and `margin-right` exac
 Total: 36 + 204 → 40 + 216 = 256, which is what the CSS computes.
 
 **6. The two orphaned Inventory instances were swapped onto their live masters** and
-their overrides reset. This is why they mattered: the *only* thing that revealed them
+their overrides reset. This is why they mattered: the _only_ thing that revealed them
 was a sweep that touched every text node in the file and found nine it could not
 change.
 
@@ -119,10 +119,10 @@ change.
 - **A generated page can lie the moment its subject changes.** The Typography page's
   captions were true when written and false within one script run. Deriving each
   caption from the style it documents is the cheap fix; the general rule is that a
-  hand-written fact *about* a generated thing is a fact with no gate.
+  hand-written fact _about_ a generated thing is a fact with no gate.
 - **`findAll` is not "everything in the file."** Figma keeps a removed main component
   alive while an instance references it, invisible to any tree walk. Two Inventory
-  tiles had drawn stale geometry for months. Detecting them needs the *instance* side:
+  tiles had drawn stale geometry for months. Detecting them needs the _instance_ side:
   walk instances, resolve `getMainComponentAsync()`, and assert the result is reachable
   from the document. That check is not yet a gate — recorded as open.
 - Left open deliberately, and recorded in `tasks/todo.md`: two variable collections

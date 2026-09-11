@@ -3,7 +3,7 @@ status: accepted
 confidence: reconstructed
 date: reconstructed
 sources:
-  - "this session, publish.yml"
+  - 'this session, publish.yml'
 ---
 
 # ADR-0016: Release: nx release, 0.0.x not-for-production, automation-token publish + publish-only recovery
@@ -22,7 +22,7 @@ nx release for versioning/publish; packages are 0.0.x ("not for production"); CI
 
 ## Consequences
 
-- Versions stay at 0.0.x to signal "not for production". *(Revised by [ADR-0023](0023-version-band-0-1-x.md): the band moved to `0.1.x`; the not-for-production signal is now carried by being pre-1.0, not by the second zero.)*
+- Versions stay at 0.0.x to signal "not for production". _(Revised by [ADR-0023](0023-version-band-0-1-x.md): the band moved to `0.1.x`; the not-for-production signal is now carried by being pre-1.0, not by the second zero.)_
 - CI uses an npm Automation token because classic Publish tokens require OTP in CI.
 - A workflow_dispatch publish-only mode recovers a tagged-but-unpublished version after a failed run.
-- **Corrected 2026-09-06** — "nx release for versioning/publish" understated what that single invocation did: `nx release --yes` also pushed the version-bump commit and tag to `origin`, *before* publishing, because Nx's own git-push step is gated on `changelog.workspaceChangelog.createRelease`, not on any git-push setting a workflow could turn off — a publish failure therefore left git ahead of npm by construction. **ADR-0102** turns `createRelease` off (it had been dead since 2026-04-25 regardless) and moves the push into `publish.yml` itself, as an explicit step that runs only after publish and its post-publish registry check both succeed.
+- **Corrected 2026-09-06** — "nx release for versioning/publish" understated what that single invocation did: `nx release --yes` also pushed the version-bump commit and tag to `origin`, _before_ publishing, because Nx's own git-push step is gated on `changelog.workspaceChangelog.createRelease`, not on any git-push setting a workflow could turn off — a publish failure therefore left git ahead of npm by construction. **ADR-0102** turns `createRelease` off (it had been dead since 2026-04-25 regardless) and moves the push into `publish.yml` itself, as an explicit step that runs only after publish and its post-publish registry check both succeed.

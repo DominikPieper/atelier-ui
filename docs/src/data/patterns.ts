@@ -422,7 +422,8 @@ export const PATTERNS: PatternMeta[] = [
     id: 'login-form',
     num: 1,
     title: 'Login Form',
-    description: 'The most frequent AI-generated page. Shows Card composition, validation error display, and loading states.',
+    description:
+      'The most frequent AI-generated page. Shows Card composition, validation error display, and loading states.',
     tags: ['AtlCard', 'AtlInput', 'AtlButton', 'AtlAlert', 'AtlCheckbox'],
     angular: loginAngular,
     react: loginReact,
@@ -463,8 +464,16 @@ export const PATTERNS: PatternMeta[] = [
     id: 'settings-page',
     num: 2,
     title: 'Settings Page',
-    description: 'Exercises tabs, form controls, and layout composition. The bread and butter of SaaS applications.',
-    tags: ['AtlTabGroup', 'AtlToggle', 'AtlSelect', 'AtlInput', 'AtlButton', 'AtlAlert'],
+    description:
+      'Exercises tabs, form controls, and layout composition. The bread and butter of SaaS applications.',
+    tags: [
+      'AtlTabGroup',
+      'AtlToggle',
+      'AtlSelect',
+      'AtlInput',
+      'AtlButton',
+      'AtlAlert',
+    ],
     angular: settingsAngular,
     react: settingsReact,
     vue: settingsVue,
@@ -479,14 +488,14 @@ export const PATTERNS: PatternMeta[] = [
       'Nested settings that need their own sub-tabs — collapse to an accordion or a list-detail layout instead of nesting tab groups.',
     ],
     a11yNotes: [
-      'AtlTabGroup uses a roving-tabindex keyboard handler: arrow keys move focus between tabs, Home/End jump to ends, Tab moves into the active panel. Don\'t override these.',
+      "AtlTabGroup uses a roving-tabindex keyboard handler: arrow keys move focus between tabs, Home/End jump to ends, Tab moves into the active panel. Don't override these.",
       'Each AtlToggle is a `role="switch"` — its label must describe the on-state ("Email notifications") not the action ("Toggle email").',
       'Autosaving silently is a screen-reader trap. Either keep an explicit Save button (current pattern) or surface autosave with an `aria-live="polite"` region after the fact.',
     ],
     pitfalls: [
-      'LLMs frequently hoist tab content into a giant switch in the parent. Each AtlTab\'s body is the projected child — keep state co-located with the inputs, not the parent.',
-      'Saving a partial form across tab switches breaks the user\'s mental model. Either persist optimistically per change or block the save button until the user returns to a complete state.',
-      'Don\'t bind `AtlSelect` to a tuple `{value, label}` — bind the primitive value and let the option element project the label.',
+      "LLMs frequently hoist tab content into a giant switch in the parent. Each AtlTab's body is the projected child — keep state co-located with the inputs, not the parent.",
+      "Saving a partial form across tab switches breaks the user's mental model. Either persist optimistically per change or block the save button until the user returns to a complete state.",
+      "Don't bind `AtlSelect` to a tuple `{value, label}` — bind the primitive value and let the option element project the label.",
     ],
     variations: [
       {
@@ -504,7 +513,8 @@ export const PATTERNS: PatternMeta[] = [
     id: 'confirmation-dialog',
     num: 3,
     title: 'Confirmation Dialog',
-    description: 'Accessible modal flow for destructive actions. Shows trigger → dialog → action logic.',
+    description:
+      'Accessible modal flow for destructive actions. Shows trigger → dialog → action logic.',
     tags: ['AtlDialog', 'AtlAlert', 'AtlButton'],
     angular: confirmAngular,
     react: confirmReact,
@@ -520,13 +530,13 @@ export const PATTERNS: PatternMeta[] = [
       'As an "are you sure?" wrapper around every save button. Confirmation fatigue trains users to click through.',
     ],
     a11yNotes: [
-      'AtlDialog uses the native `<dialog>` element with `cdkTrapFocus` — focus moves to the first focusable inside, restores on close. Don\'t reimplement.',
-      'Escape-to-close comes from the native `<dialog>` element\'s cancel event — the component intercepts it and routes it through the `open` binding as a close request. If an in-flight operation must not be interrupted, ignore that request (keep `open` true) until the mutation settles.',
+      "AtlDialog uses the native `<dialog>` element with `cdkTrapFocus` — focus moves to the first focusable inside, restores on close. Don't reimplement.",
+      "Escape-to-close comes from the native `<dialog>` element's cancel event — the component intercepts it and routes it through the `open` binding as a close request. If an in-flight operation must not be interrupted, ignore that request (keep `open` true) until the mutation settles.",
       'The destructive button must remain the *secondary* visual call to action — Cancel as `outline`, "Yes, delete" as `primary`. Reversing colour just to make red prominent is a contrast trap.',
     ],
     pitfalls: [
       'LLMs frequently add `autoFocus` to the destructive button — this nudges users into an accidental confirm. The first Tab stop should be Cancel.',
-      'Forgetting to gate the trigger when the action is already in flight produces double-deletes; flip the dialog\'s `open` to false only after the mutation resolves.',
+      "Forgetting to gate the trigger when the action is already in flight produces double-deletes; flip the dialog's `open` to false only after the mutation resolves.",
       'Putting body content as a raw string inside `AtlDialogContent` skips the AtlAlert composition the cookbook recommends — the Alert is what carries the warning role for assistive tech.',
     ],
     variations: [
@@ -536,7 +546,7 @@ export const PATTERNS: PatternMeta[] = [
       },
       {
         title: 'Loading state',
-        note: 'Bind `loading={pending}` on the destructive AtlButton; keep the dialog open so a slow network failure doesn\'t lose context.',
+        note: "Bind `loading={pending}` on the destructive AtlButton; keep the dialog open so a slow network failure doesn't lose context.",
       },
     ],
     storybook: storybookLinks('confirmation-dialog'),
@@ -545,14 +555,15 @@ export const PATTERNS: PatternMeta[] = [
     id: 'data-list',
     num: 4,
     title: 'Data List with Actions',
-    description: 'Inline actions on a list of items. The core pattern for dashboards and admin panels — Card + Badge + Button composition.',
+    description:
+      'Inline actions on a list of items. The core pattern for dashboards and admin panels — Card + Badge + Button composition.',
     tags: ['AtlCard', 'AtlBadge', 'AtlButton', 'AtlMenu', 'AtlTooltip'],
     angular: dataListAngular,
     react: dataListReact,
     vue: dataListVue,
     whenToUse: [
       'Lists of 5–50 items where each item has 1 primary action and 2–4 secondary actions.',
-      'Items have a status indicator that benefits from a Badge\'s colour semantics (Active, Pending, Failed).',
+      "Items have a status indicator that benefits from a Badge's colour semantics (Active, Pending, Failed).",
       'You want each row independently focusable so keyboard users can act on it without tab-trapping in a Table.',
     ],
     whenNotToUse: [
@@ -561,13 +572,13 @@ export const PATTERNS: PatternMeta[] = [
       'Lists that need column alignment across rows — Cards collapse content; Tables align it.',
     ],
     a11yNotes: [
-      'AtlMenuTrigger from CDK Menu manages roving focus inside the popped menu — don\'t hand-roll arrow-key handlers, you\'ll fight the focus manager.',
+      "AtlMenuTrigger from CDK Menu manages roving focus inside the popped menu — don't hand-roll arrow-key handlers, you'll fight the focus manager.",
       'Each "..." button needs an `aria-label` ("More actions for Marketing Website"). Tooltips improve hover but don\'t replace the accessible name.',
       'When status changes async, surface the Badge update via an `aria-live="polite"` region on the list, not a per-row live region — fewer announcements.',
     ],
     pitfalls: [
       'LLMs render `<a>` and `<button>` interchangeably for row actions — use `<button>` for "Edit", `<a>` only for navigation. Mixing breaks Cmd-click behaviour.',
-      'Putting the entire row inside a `<button>` swallows the inner buttons\' click handlers. Use a clickable region pattern (cursor + keydown) rather than a wrapping button.',
+      "Putting the entire row inside a `<button>` swallows the inner buttons' click handlers. Use a clickable region pattern (cursor + keydown) rather than a wrapping button.",
       'The cookbook story uses AtlMenu for Edit / Duplicate / Delete because each is a separate operation. If you only have one secondary action, drop the menu and inline the button.',
     ],
     variations: [
@@ -586,7 +597,8 @@ export const PATTERNS: PatternMeta[] = [
     id: 'notification-center',
     num: 5,
     title: 'Notification Center',
-    description: 'Structural feedback grouping using Accordion and Alert. Useful for monitoring and admin tools.',
+    description:
+      'Structural feedback grouping using Accordion and Alert. Useful for monitoring and admin tools.',
     tags: ['AtlAccordionGroup', 'AtlAlert', 'AtlBadge', 'AtlButton'],
     angular: notificationsAngular,
     react: notificationsReact,
@@ -602,8 +614,8 @@ export const PATTERNS: PatternMeta[] = [
       'Real-time logs / streaming output — the accordion expansion animation fights the auto-scroll. Use a virtual-scrolled list instead.',
     ],
     a11yNotes: [
-      'AtlAccordionGroup with `multi={true}` lets users keep severity sections open simultaneously — match the user\'s mental model of triage.',
-      'Each AtlAlert\'s `role` is bound to its variant (`alert` for danger/warning, `status` for info/success). Don\'t override.',
+      "AtlAccordionGroup with `multi={true}` lets users keep severity sections open simultaneously — match the user's mental model of triage.",
+      "Each AtlAlert's `role` is bound to its variant (`alert` for danger/warning, `status` for info/success). Don't override.",
       'The badge counts beside each accordion header must update when items are dismissed — assistive tech reads the header text on focus, not the changing count below.',
     ],
     pitfalls: [
@@ -627,8 +639,17 @@ export const PATTERNS: PatternMeta[] = [
     id: 'management-dashboard',
     num: 6,
     title: 'Management Dashboard',
-    description: 'The densest cookbook pattern — metric cards, activity table, and quota indicators combined. Shows how Card, Table, TabGroup, Badge, Alert, and Progress fit together.',
-    tags: ['AtlCard', 'AtlTable', 'AtlTabGroup', 'AtlBadge', 'AtlAlert', 'AtlProgress', 'AtlButton'],
+    description:
+      'The densest cookbook pattern — metric cards, activity table, and quota indicators combined. Shows how Card, Table, TabGroup, Badge, Alert, and Progress fit together.',
+    tags: [
+      'AtlCard',
+      'AtlTable',
+      'AtlTabGroup',
+      'AtlBadge',
+      'AtlAlert',
+      'AtlProgress',
+      'AtlButton',
+    ],
     angular: dashboardAngular,
     react: dashboardReact,
     vue: dashboardVue,
@@ -650,12 +671,12 @@ export const PATTERNS: PatternMeta[] = [
     pitfalls: [
       'LLMs love to project tab content into a giant `ngSwitch` / ternary that re-renders the entire grid on each tab change. Bind only the data-fetch scope to the tab; let the layout stay static.',
       'Using `variant="warning"` Alerts for every quota above 50 % numbs the signal. Reserve for crossings of the actual SLA / billing threshold.',
-      'Putting the table and the side panel into a single AtlCard collapses their independent scroll regions. They\'re siblings, not parent/child.',
+      "Putting the table and the side panel into a single AtlCard collapses their independent scroll regions. They're siblings, not parent/child.",
     ],
     variations: [
       {
         title: 'With drill-down per metric',
-        note: 'Add an `onClick` that opens an AtlDrawer with the metric\'s history — Drawer keeps the dashboard context, Dialog would dim it.',
+        note: "Add an `onClick` that opens an AtlDrawer with the metric's history — Drawer keeps the dashboard context, Dialog would dim it.",
       },
       {
         title: 'Empty state',

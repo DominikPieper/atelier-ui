@@ -104,7 +104,9 @@ function isRootSelector(selector, dir) {
   if (/^:host\b/.test(sel)) {
     if (/[ >+~]/.test(sel.replace(/:host\([^)]*\)/, ':host'))) return false;
     const sibling = /^:host\(\s*(\.atl-[a-z0-9-]+)/.exec(sel);
-    return sibling && sibling[1] !== `.atl-${dir}` ? rootsFor(dir).has(sibling[1]) : true;
+    return sibling && sibling[1] !== `.atl-${dir}`
+      ? rootsFor(dir).has(sibling[1])
+      : true;
   }
   if (/[ >+~]/.test(sel)) return false;
   const leading = /^(\.[a-z0-9-]+)/.exec(sel);
@@ -146,7 +148,9 @@ for (const fw of FRAMEWORKS) {
     let rootFamilyRulesWithLeading = 0;
     for (const file of files) {
       const rel = `libs/${fw}/src/lib/${dir}/${file}`;
-      const css = fs.readFileSync(path.join(dirPath, file), 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+      const css = fs
+        .readFileSync(path.join(dirPath, file), 'utf8')
+        .replace(/\/\*[\s\S]*?\*\//g, '');
       // [NO-SIZE] asks about a root, not a rule, so a root's rules are gathered
       // before they are judged. Per FILE and not per directory, because Angular's
       // shared stylesheets hold several roots and each answers for itself.
@@ -175,12 +179,24 @@ for (const fw of FRAMEWORKS) {
         // sizes that element, never the prose the root leads.
         if (isRootSelector(selector, dir)) {
           const key = rootKey(selector, dir);
-          const seen = rootsInFile.get(key) || { selector, prose: false, size: false };
+          const seen = rootsInFile.get(key) || {
+            selector,
+            prose: false,
+            size: false,
+          };
           const role = shortRole ? ROLES.get(shortRole) : null;
-          const leadsProse = /(^|;)\s*line-height\s*:\s*var\(\s*--ui-line-height-normal\s*\)/.test(body);
-          seen.prose = seen.prose || leadsProse || (role ? role.lineHeight === '--ui-line-height-normal' : false);
+          const leadsProse =
+            /(^|;)\s*line-height\s*:\s*var\(\s*--ui-line-height-normal\s*\)/.test(
+              body,
+            );
+          seen.prose =
+            seen.prose ||
+            leadsProse ||
+            (role ? role.lineHeight === '--ui-line-height-normal' : false);
           const sizeDecl = /(^|;)\s*font-size\s*:\s*([^;]+)/.exec(body);
-          const statesSize = sizeDecl ? !SIZE_DEFERS.test(sizeDecl[2].trim()) : false;
+          const statesSize = sizeDecl
+            ? !SIZE_DEFERS.test(sizeDecl[2].trim())
+            : false;
           seen.size = seen.size || statesSize || Boolean(role);
           rootsInFile.set(key, seen);
         }
@@ -195,24 +211,31 @@ for (const fw of FRAMEWORKS) {
         // not the shorthand) and leaves [ROOT-PAINT]'s typography comparison null.
         // True of all 18 shorthands in the library when this was written: 12 roles
         // and 6 `inherit` (the native-element reset).
-        if (short && !shortRole && short[2].trim().replace(/;$/, '') !== 'inherit') {
+        if (
+          short &&
+          !shortRole &&
+          short[2].trim().replace(/;$/, '') !== 'inherit'
+        ) {
           errors.push(
             `[FONT-RAW] ${rel} sets \`font: ${short[2].trim()}\` on \`${selector}\`. A \`font:\` ` +
               `shorthand must be one --ui-type-* role or \`inherit\`: any other value hides a size ` +
               `from check:token-bypass and a comparison from check:figma, both of which read the ` +
-              `\`font-size\` longhand.`
+              `\`font-size\` longhand.`,
           );
         }
 
         if (short) {
           const before = body.slice(0, short.index + short[1].length);
-          const wiped = [...before.matchAll(/(^|;)\s*(font-(?:style|variant|stretch|size|weight|family)|line-height)\s*:/g)]
-            .map((m) => m[2]);
+          const wiped = [
+            ...before.matchAll(
+              /(^|;)\s*(font-(?:style|variant|stretch|size|weight|family)|line-height)\s*:/g,
+            ),
+          ].map((m) => m[2]);
           if (wiped.length) {
             errors.push(
               `[FONT-AFTER] ${rel} declares \`${[...new Set(wiped)].join('\`, \`')}\` above \`font:\` on ` +
                 `\`${selector}\`. The shorthand resets font-style, font-variant, font-stretch and ` +
-                `line-height, so those declarations do nothing. Put \`font:\` first, then the overrides.`
+                `line-height, so those declarations do nothing. Put \`font:\` first, then the overrides.`,
             );
           }
         }
@@ -220,24 +243,28 @@ for (const fw of FRAMEWORKS) {
         const decl = /(^|;)\s*font-family\s*:\s*([^;]+)/.exec(body);
         if (!decl && !shortRole) continue;
         // A role reference stands in for the longhand it contains.
-        const value = decl ? decl[2].trim() : `var(${ROLES.get(shortRole).family})`;
+        const value = decl
+          ? decl[2].trim()
+          : `var(${ROLES.get(shortRole).family})`;
         if (value === 'inherit') continue; // a control refusing the UA font
         if (!FAMILY_TOKENS.test(value)) continue; // a literal stack is check:css-tokens' business
 
         declaresSomewhere = true;
-
 
         // --ui-font-mono and --ui-font-display are content typefaces: the code
         // element and the one display line carry them, not the component root.
         const isContentFace = /var\(--ui-font-(mono|display)\)/.test(value);
         // An element that resets everything with `all: unset` has to restate the
         // typeface itself — inheritance cannot reach it.
-        const resetsItself = /(^|;)\s*all\s*:\s*(unset|initial|revert)/.test(body);
+        const resetsItself = /(^|;)\s*all\s*:\s*(unset|initial|revert)/.test(
+          body,
+        );
 
         if (isRootSelector(selector, dir) && !isContentFace) {
           rootFamilyRules++;
           // The role supplies the leading; so does the longhand.
-          if (shortRole || /(^|;)\s*line-height\s*:/.test(body)) rootFamilyRulesWithLeading++;
+          if (shortRole || /(^|;)\s*line-height\s*:/.test(body))
+            rootFamilyRulesWithLeading++;
         }
 
         if (!isRootSelector(selector, dir) && !isContentFace && !resetsItself) {
@@ -245,30 +272,33 @@ for (const fw of FRAMEWORKS) {
             `[DESCENDANT] ${rel} declares the typeface on \`${selector}\`, which is not the component root. ` +
               `Declare it once on the root so the component is right wherever it renders. If \`${selector}\` ` +
               `really is a second root inside this directory, name it in EXTRA_ROOTS in ` +
-              `tools/scripts/lib/component-roots.js — that list is where a shared directory's other roots live.`
+              `tools/scripts/lib/component-roots.js — that list is where a shared directory's other roots live.`,
           );
         }
 
         // A reset AFTER the declaration wipes it. (The dialog's declaration was
         // silently wiped exactly this way — and the first version of this check had
         // the comparison the wrong way round, flagging the correct order instead.)
-        const afterDecl = body.slice(decl ? decl.index + decl[0].length : short.index + short[0].length);
+        const afterDecl = body.slice(
+          decl ? decl.index + decl[0].length : short.index + short[0].length,
+        );
         if (/(^|;)\s*all\s*:\s*(unset|initial|revert)/.test(afterDecl)) {
           errors.push(
             `[RESET-WIPED] ${rel} declares the typeface on \`${selector}\` and then resets it with \`all: unset\` ` +
-              `further down the same rule, so the declaration does nothing. Move it below the reset.`
+              `further down the same rule, so the declaration does nothing. Move it below the reset.`,
           );
         }
       }
 
       for (const root of rootsInFile.values()) {
-        if (root.prose && !root.size) noSize.push({ dir, rel, selector: root.selector });
+        if (root.prose && !root.size)
+          noSize.push({ dir, rel, selector: root.selector });
       }
     }
 
     if (rootFamilyRules > 0 && rootFamilyRulesWithLeading === 0) {
       errors.push(
-        `[NO-LEADING] libs/${fw}/src/lib/${dir}/ states its typeface but no line-height on the root, so every line inside it is led by whatever the consuming app sets. State the leading on the same root: --ui-line-height-tight for single-line chrome, --ui-line-height-normal where the component carries prose.`
+        `[NO-LEADING] libs/${fw}/src/lib/${dir}/ states its typeface but no line-height on the root, so every line inside it is led by whatever the consuming app sets. State the leading on the same root: --ui-line-height-tight for single-line chrome, --ui-line-height-normal where the component carries prose.`,
       );
     }
 
@@ -276,7 +306,7 @@ for (const fw of FRAMEWORKS) {
       errors.push(
         `[NO-TYPEFACE] libs/${fw}/src/lib/${dir}/ never declares var(--ui-font-family) (or -display / -mono), ` +
           `so the component renders in whatever font the consuming app uses while its neighbours render the ` +
-          `library's. Declare it on the component root.`
+          `library's. Declare it on the component root.`,
       );
     }
   }
@@ -302,20 +332,30 @@ for (const fw of FRAMEWORKS) {
 // A root's identity is its file plus its selector, with no line numbers, so it survives
 // the churn the per-directory count was chosen to survive.
 const observed = {};
-for (const hit of noSize) (observed[hit.dir] = observed[hit.dir] || []).push(`${hit.rel} \`${hit.selector}\``);
+for (const hit of noSize)
+  (observed[hit.dir] = observed[hit.dir] || []).push(
+    `${hit.rel} \`${hit.selector}\``,
+  );
 for (const dir of Object.keys(observed)) observed[dir].sort();
 // Both tolerate a value that is not a list, so a hand-edited or pre-identity file is
 // reported by the shape guard below rather than crashing the run before it gets there.
 const len = (v) => (Array.isArray(v) ? v.length : Number(v) || 0);
 const sum = (roots) => Object.values(roots).reduce((a, b) => a + len(b), 0);
 const sorted = (roots) =>
-  Object.fromEntries(Object.keys(roots).sort().map((k) => [k, Array.isArray(roots[k]) ? [...roots[k]].sort() : roots[k]]));
+  Object.fromEntries(
+    Object.keys(roots)
+      .sort()
+      .map((k) => [
+        k,
+        Array.isArray(roots[k]) ? [...roots[k]].sort() : roots[k],
+      ]),
+  );
 
 if (!fs.existsSync(BASELINE_FILE) && !UPDATE_BASELINE) {
   console.error(
     `✗ [NO-SIZE] ${BASELINE_REL} is missing, so a regression against the recorded count would pass ` +
       `unnoticed. Restore it from git, or record today's counts with ` +
-      `\`node tools/scripts/check-typeface.js --update-baseline\` and write the entry's \`why\`.`
+      `\`node tools/scripts/check-typeface.js --update-baseline\` and write the entry's \`why\`.`,
   );
   process.exit(1);
 }
@@ -324,7 +364,8 @@ const baseline = fs.existsSync(BASELINE_FILE)
   ? JSON.parse(fs.readFileSync(BASELINE_FILE, 'utf8'))
   : { meta: {}, checks: {} };
 if (!baseline.checks) baseline.checks = {};
-if (!baseline.checks['NO-SIZE']) baseline.checks['NO-SIZE'] = { kind: 'gap', why: '', perComponent: {} };
+if (!baseline.checks['NO-SIZE'])
+  baseline.checks['NO-SIZE'] = { kind: 'gap', why: '', perComponent: {} };
 const entry = baseline.checks['NO-SIZE'];
 const recorded = entry.perComponent || {};
 
@@ -338,7 +379,7 @@ if (UPDATE_BASELINE) {
     console.error(
       `\n${errors.length} typeface issue(s) stand, so ${BASELINE_REL} was NOT written — a baseline ` +
         `recorded from a broken tree records the breakage. Fix these first, then re-run with ` +
-        `--update-baseline.`
+        `--update-baseline.`,
     );
     process.exit(1);
   }
@@ -346,7 +387,9 @@ if (UPDATE_BASELINE) {
   // Diff-stable: a no-op update must not rewrite `generatedAt` and leave a one-line
   // diff for someone to review.
   if (JSON.stringify(next) === JSON.stringify(sorted(recorded))) {
-    console.log(`✓ baseline unchanged: ${BASELINE_REL} (NO-SIZE ${sum(recorded)} root(s)); not rewritten.`);
+    console.log(
+      `✓ baseline unchanged: ${BASELINE_REL} (NO-SIZE ${sum(recorded)} root(s)); not rewritten.`,
+    );
     process.exit(0);
   }
   const delta = sum(observed) - sum(recorded);
@@ -359,7 +402,7 @@ if (UPDATE_BASELINE) {
   fs.writeFileSync(BASELINE_FILE, `${JSON.stringify(baseline, null, 2)}\n`);
   console.log(
     `✓ baseline updated: ${BASELINE_REL} (NO-SIZE ${sum(recorded)} → ${sum(observed)}, ` +
-      `${delta === 0 ? 'same total, different roots' : `${delta > 0 ? '+' : '−'}${Math.abs(delta)}`}).`
+      `${delta === 0 ? 'same total, different roots' : `${delta > 0 ? '+' : '−'}${Math.abs(delta)}`}).`,
   );
   process.exit(0);
 }
@@ -372,18 +415,20 @@ if (!entry.why || !['design', 'gap'].includes(entry.kind)) {
   errors.push(
     `[NO-SIZE] the \`NO-SIZE\` entry in ${BASELINE_REL} records roots with no \`why\` or no valid \`kind\`, ` +
       `so a later reader cannot tell "decided against" from "forgotten" (ADR-0066). State why the debt ` +
-      `stands, and set \`kind\` to \`design\` (a closed question) or \`gap\` (an unresolved defect).`
+      `stands, and set \`kind\` to \`design\` (a closed question) or \`gap\` (an unresolved defect).`,
   );
 }
 
-for (const dir of [...new Set([...Object.keys(recorded), ...Object.keys(observed)])].sort()) {
+for (const dir of [
+  ...new Set([...Object.keys(recorded), ...Object.keys(observed)]),
+].sort()) {
   const want = recorded[dir] || [];
   const have = observed[dir] || [];
   if (!Array.isArray(want)) {
     errors.push(
       `[NO-SIZE] ${dir} in ${BASELINE_REL} records a count rather than the list of roots it stands for, so a ` +
         `new root hidden by a fixed one would pass. Re-record with ` +
-        `\`node tools/scripts/check-typeface.js --update-baseline\`.`
+        `\`node tools/scripts/check-typeface.js --update-baseline\`.`,
     );
     continue;
   }
@@ -399,24 +444,28 @@ for (const dir of [...new Set([...Object.keys(recorded), ...Object.keys(observed
         `(16px in a default browser, whatever the app sets elsewhere). State the size on the same root, next ` +
         `to the leading: --ui-font-size-md for prose. \`font-size: inherit\` is not a size — it is this same ` +
         `defect spelled out. If the root must not size itself, record it with ` +
-        `\`node tools/scripts/check-typeface.js --update-baseline\` and say why in the entry's \`why\`.`
+        `\`node tools/scripts/check-typeface.js --update-baseline\` and say why in the entry's \`why\`.`,
     );
   }
   if (gone.length) {
     errors.push(
       `[NO-SIZE] ${dir}: ${gone.length} recorded root(s) no longer state --ui-line-height-normal without a ` +
         `font-size — ${gone.join(', ')}. An improvement that is not recorded can silently reverse. Run ` +
-        `\`node tools/scripts/check-typeface.js --update-baseline\` to lock it in.`
+        `\`node tools/scripts/check-typeface.js --update-baseline\` to lock it in.`,
     );
   }
 }
 
 if (errors.length > 0) {
   for (const e of errors) console.error(`✗ ${e}`);
-  console.error(`\n${errors.length} typeface issue(s) across ${checked} component stylesheet set(s).`);
+  console.error(
+    `\n${errors.length} typeface issue(s) across ${checked} component stylesheet set(s).`,
+  );
   process.exit(1);
 }
-console.log(`✓ every component states its own typeface and leading on its root (${checked} component(s) × framework).`);
+console.log(
+  `✓ every component states its own typeface and leading on its root (${checked} component(s) × framework).`,
+);
 // A count with the reason inline, not one warning per occurrence — the shape
 // ADR-0066 prescribed for a population nobody can act on today.
 const debt = Object.keys(recorded)
@@ -425,5 +474,5 @@ const debt = Object.keys(recorded)
   .join(', ');
 console.log(
   `  [NO-SIZE] ${sum(observed)} prose root(s) state --ui-line-height-normal and no font-size, at the recorded ` +
-    `baseline (${entry.kind}: ${debt || 'none'} — ${BASELINE_REL}).`
+    `baseline (${entry.kind}: ${debt || 'none'} — ${BASELINE_REL}).`,
 );

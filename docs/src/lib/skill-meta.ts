@@ -21,7 +21,9 @@ function findRepoRoot(start: string): string {
   while (!existsSync(join(dir, 'nx.json'))) {
     const parent = dirname(dir);
     if (parent === dir) {
-      throw new Error(`skill-meta: repo root (nx.json) not found walking up from ${start}`);
+      throw new Error(
+        `skill-meta: repo root (nx.json) not found walking up from ${start}`,
+      );
     }
     dir = parent;
   }
@@ -39,7 +41,9 @@ export const skillVersion: string = JSON.parse(
 ).version;
 
 /** Markdown reference files shipped in the skill's references/ directory. */
-export const referenceFiles: string[] = readdirSync(join(skillDir, 'references'))
+export const referenceFiles: string[] = readdirSync(
+  join(skillDir, 'references'),
+)
   .filter((file) => file.endsWith('.md'))
   .sort();
 

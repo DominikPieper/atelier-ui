@@ -69,11 +69,16 @@ const errors = [];
 const fail = (tag, msg) => errors.push(`✗ [${tag}] ${msg}`);
 
 if (!fs.existsSync(ROOT_CONFIG)) {
-  fail('NO-SNIFF-LITERAL', `${ROOT_CONFIG_REL} not found. See plan/adr/0112-a-comment-the-test-runner-reads.md.`);
+  fail(
+    'NO-SNIFF-LITERAL',
+    `${ROOT_CONFIG_REL} not found. See plan/adr/0112-a-comment-the-test-runner-reads.md.`,
+  );
 } else {
   const rootConfigText = fs.readFileSync(ROOT_CONFIG, 'utf8');
 
-  const hasSniffLiteral = SNIFF_LITERALS.some((lit) => rootConfigText.includes(lit));
+  const hasSniffLiteral = SNIFF_LITERALS.some((lit) =>
+    rootConfigText.includes(lit),
+  );
   if (!hasSniffLiteral) {
     fail(
       'NO-SNIFF-LITERAL',
@@ -84,7 +89,7 @@ if (!fs.existsSync(ROOT_CONFIG)) {
         `libs/<fw>/vite.config.mts (a single unnamed project with no ` +
         `projects: list), and every framework's test-run MCP call fails with ` +
         `"No projects matched the filter". See ` +
-        `plan/adr/0112-a-comment-the-test-runner-reads.md.`
+        `plan/adr/0112-a-comment-the-test-runner-reads.md.`,
     );
   }
 
@@ -95,13 +100,15 @@ if (!fs.existsSync(ROOT_CONFIG)) {
     .readdirSync(LIBS_DIR, { withFileTypes: true })
     .filter((d) => d.isDirectory())
     .map((d) => d.name)
-    .filter((name) => fs.existsSync(path.join(LIBS_DIR, name, STORYBOOK_CONFIG_NAME)))
+    .filter((name) =>
+      fs.existsSync(path.join(LIBS_DIR, name, STORYBOOK_CONFIG_NAME)),
+    )
     .sort();
 
   if (frameworks.length === 0) {
     fail(
       'UNREGISTERED-PROJECT',
-      `no libs/<fw>/${STORYBOOK_CONFIG_NAME} found anywhere under libs/ — expected at least one framework's Storybook Vitest config.`
+      `no libs/<fw>/${STORYBOOK_CONFIG_NAME} found anywhere under libs/ — expected at least one framework's Storybook Vitest config.`,
     );
   }
 
@@ -113,7 +120,7 @@ if (!fs.existsSync(ROOT_CONFIG)) {
         `${relPath} exists but is not listed in ${ROOT_CONFIG_REL}'s projects: array. ` +
           `The addon's walk-up would land on this file (once the sniff literal above ` +
           `is present) but Vitest's project filter would still find no project for ` +
-          `${fw}'s test-run calls. See plan/adr/0112-a-comment-the-test-runner-reads.md.`
+          `${fw}'s test-run calls. See plan/adr/0112-a-comment-the-test-runner-reads.md.`,
       );
     }
   }
@@ -125,6 +132,6 @@ if (errors.length > 0) {
   process.exit(1);
 } else {
   console.log(
-    `✓ vitest.config.mjs still carries the addon's sniff literal and registers every libs/*/${STORYBOOK_CONFIG_NAME} found on disk (static text check only — see file header for what this cannot prove).`
+    `✓ vitest.config.mjs still carries the addon's sniff literal and registers every libs/*/${STORYBOOK_CONFIG_NAME} found on disk (static text check only — see file header for what this cannot prove).`,
   );
 }

@@ -136,7 +136,9 @@ function parseSpec() {
     const lits = {};
     for (const p of props) {
       const decl = p.valueDeclaration ?? p.declarations?.[0] ?? node.name;
-      const literals = stringLiteralsOf(checker.getTypeOfSymbolAtLocation(p, decl));
+      const literals = stringLiteralsOf(
+        checker.getTypeOfSymbolAtLocation(p, decl),
+      );
       if (literals) lits[p.name] = literals;
     }
     litMap[docsKey] = lits;
@@ -189,8 +191,8 @@ function parseDocs() {
       const key = ts.isStringLiteral(prop.name)
         ? prop.name.text
         : ts.isIdentifier(prop.name)
-        ? prop.name.text
-        : null;
+          ? prop.name.text
+          : null;
       if (!key) continue;
 
       const compObj = prop.initializer;
@@ -198,10 +200,7 @@ function parseDocs() {
 
       for (const compField of compObj.properties) {
         if (!ts.isPropertyAssignment(compField)) continue;
-        if (
-          !ts.isIdentifier(compField.name) ||
-          compField.name.text !== 'props'
-        )
+        if (!ts.isIdentifier(compField.name) || compField.name.text !== 'props')
           continue;
 
         const propsArr = compField.initializer;
@@ -222,8 +221,10 @@ function parseDocs() {
               ts.isNoSubstitutionTemplateLiteral(field.initializer)
                 ? field.initializer.text
                 : null;
-            if (field.name.text === 'name' && literal != null) propName = literal;
-            if (field.name.text === 'type' && literal != null) propType = literal;
+            if (field.name.text === 'name' && literal != null)
+              propName = literal;
+            if (field.name.text === 'type' && literal != null)
+              propType = literal;
           }
           if (propName != null) {
             propNames.add(propName);
@@ -237,7 +238,11 @@ function parseDocs() {
   }
 
   function visit(node) {
-    if (ts.isVariableDeclaration(node) && ts.isIdentifier(node.name) && node.initializer) {
+    if (
+      ts.isVariableDeclaration(node) &&
+      ts.isIdentifier(node.name) &&
+      node.initializer
+    ) {
       const varName = node.name.text;
       const init = ts.isAsExpression(node.initializer)
         ? node.initializer.expression
@@ -339,7 +344,9 @@ function docsSourceFiles(dir = DOCS_SRC) {
  */
 function checkNodeIdCitations(errors) {
   const known = knownFigmaNodeIds();
-  const scanned = NODE_ID_ROOTS.filter((d) => fs.existsSync(d)).flatMap((d) => docsSourceFiles(d));
+  const scanned = NODE_ID_ROOTS.filter((d) => fs.existsSync(d)).flatMap((d) =>
+    docsSourceFiles(d),
+  );
   for (const file of scanned) {
     const rel = path.relative(ROOT, file);
     const lines = fs.readFileSync(file, 'utf8').split('\n');
@@ -348,7 +355,7 @@ function checkNodeIdCitations(errors) {
         if (!known.has(id)) {
           errors.push(
             `[NODE-ID] ${rel}:${i + 1} cites Figma node ${id}, which tools/figma/snapshot.json does not know — ` +
-              `fix the citation, or refresh the snapshot (npm run figma:snapshot) if the node was just created`
+              `fix the citation, or refresh the snapshot (npm run figma:snapshot) if the node was just created`,
           );
         }
       }
@@ -397,7 +404,7 @@ function checkScaffoldPortCitations(errors) {
           "This key is content-addressed (this line's text plus the non-blank line above it), not a line " +
           'number, so a purely additive edit elsewhere in the file cannot have caused this: either the ' +
           'citation is genuinely new, or the citing line (or the one immediately above it) was itself just ' +
-          "edited and the exemption needs a matching update. The clone (this repo) serves Storybook on " +
+          'edited and the exemption needs a matching update. The clone (this repo) serves Storybook on ' +
           '4400 (angular) / 4401 (react) / 4402 (vue) and the docs app on 4300 — 6006 is ' +
           "create-atelier-ui-workspace's port (ADR-0084). If this line genuinely documents the scaffold, " +
           'add an entry to SCAFFOLD_PORT_EXEMPT in tools/scripts/lib/allowlists.js with a reason, keyed like ' +
@@ -407,7 +414,7 @@ function checkScaffoldPortCitations(errors) {
           `        ${JSON.stringify(prevLine.trim())},\n` +
           `        ${JSON.stringify(line.trim())},\n` +
           `      )\n` +
-          "    Otherwise, fix the citation to reference the clone's ports (4300/4400/4401/4402)."
+          "    Otherwise, fix the citation to reference the clone's ports (4300/4400/4401/4402).",
       );
     });
   }
@@ -426,7 +433,7 @@ const errors = [];
 for (const [specInterface, docsKey] of Object.entries(SPEC_TO_DOCS)) {
   if (!docsMap[docsKey]) {
     errors.push(
-      `[MISSING] '${docsKey}' has no entry in component-data.ts (spec: ${specInterface})`
+      `[MISSING] '${docsKey}' has no entry in component-data.ts (spec: ${specInterface})`,
     );
     continue;
   }
@@ -438,7 +445,7 @@ for (const [specInterface, docsKey] of Object.entries(SPEC_TO_DOCS)) {
   for (const prop of specProps) {
     if (!docProps.has(prop)) {
       errors.push(
-        `[DRIFT] ${docsKey}.props: '${prop}' exists in spec (${specInterface}) but is missing from docs`
+        `[DRIFT] ${docsKey}.props: '${prop}' exists in spec (${specInterface}) but is missing from docs`,
       );
     }
   }
@@ -456,7 +463,7 @@ for (const [specInterface, docsKey] of Object.entries(SPEC_TO_DOCS)) {
     if (missing.length) {
       errors.push(
         `[TYPE-DRIFT] ${docsKey}.${prop}: spec (${specInterface}) allows ` +
-          `${missing.map((v) => `'${v}'`).join(', ')} not present in docs type "${typeStr}"`
+          `${missing.map((v) => `'${v}'`).join(', ')} not present in docs type "${typeStr}"`,
       );
     }
   }
@@ -466,14 +473,14 @@ for (const [specInterface, docsKey] of Object.entries(SPEC_TO_DOCS)) {
 for (const key of categoryKeys) {
   if (!docsMap[key]) {
     errors.push(
-      `[MISSING] '${key}' is listed in COMPONENT_CATEGORIES but has no entry in componentDocs`
+      `[MISSING] '${key}' is listed in COMPONENT_CATEGORIES but has no entry in componentDocs`,
     );
   }
 }
 for (const key of Object.keys(docsMap)) {
   if (!categoryKeys.has(key)) {
     errors.push(
-      `[MISSING] '${key}' is in componentDocs but not listed in COMPONENT_CATEGORIES`
+      `[MISSING] '${key}' is in componentDocs but not listed in COMPONENT_CATEGORIES`,
     );
   }
 }
@@ -491,14 +498,26 @@ if (errors.length > 0) {
   const docIssues = errors.length - nodeIdIssues - portIssues;
   console.error(
     `\n${errors.length} issue(s) found.` +
-      (docIssues ? ' Update docs/src/data/components.ts to fix the spec/docs drift.' : '') +
-      (nodeIdIssues ? ' Fix the dead node-id citation(s) in the named docs pages.' : '') +
-      (portIssues ? ' Fix the stray port 6006 citation(s), or allowlist genuine scaffold mentions.' : '')
+      (docIssues
+        ? ' Update docs/src/data/components.ts to fix the spec/docs drift.'
+        : '') +
+      (nodeIdIssues
+        ? ' Fix the dead node-id citation(s) in the named docs pages.'
+        : '') +
+      (portIssues
+        ? ' Fix the stray port 6006 citation(s), or allowlist genuine scaffold mentions.'
+        : ''),
   );
   process.exit(1);
 } else {
   const count = Object.keys(SPEC_TO_DOCS).length;
-  console.log(`✓ All ${count} spec interfaces, props, and categories match component-data.ts`);
-  console.log('✓ Every Figma node-id cited under docs/src and workshop/ resolves against tools/figma/snapshot.json');
-  console.log('✓ No stray port-6006 citation under docs/src/pages (create-atelier-ui-workspace scaffold only, ADR-0084)');
+  console.log(
+    `✓ All ${count} spec interfaces, props, and categories match component-data.ts`,
+  );
+  console.log(
+    '✓ Every Figma node-id cited under docs/src and workshop/ resolves against tools/figma/snapshot.json',
+  );
+  console.log(
+    '✓ No stray port-6006 citation under docs/src/pages (create-atelier-ui-workspace scaffold only, ADR-0084)',
+  );
 }

@@ -61,20 +61,21 @@ export default function Search() {
   const dropdownRef = useRef<HTMLDivElement>(null);
 
   const trimmed = query.trim().toLowerCase();
-  const componentResults = trimmed === ''
-    ? []
-    : ALL_COMPONENTS
-        .filter(name => {
+  const componentResults =
+    trimmed === ''
+      ? []
+      : ALL_COMPONENTS.filter((name) => {
           const doc = componentDocs[name];
-          return name.includes(trimmed) || doc?.name.toLowerCase().includes(trimmed);
-        })
-        .slice(0, 6);
+          return (
+            name.includes(trimmed) || doc?.name.toLowerCase().includes(trimmed)
+          );
+        }).slice(0, 6);
 
   // Flattened navigation order: components first, then pages — matching
   // the rendered order of the two groups.
   const flatUrls = [
-    ...componentResults.map(name => `/components/${name}`),
-    ...pageResults.map(p => p.url),
+    ...componentResults.map((name) => `/components/${name}`),
+    ...pageResults.map((p) => p.url),
   ];
 
   useEffect(() => {
@@ -87,20 +88,28 @@ export default function Search() {
       const pagefind = await loadPagefind();
       if (!pagefind || cancelled) return;
       const { results } = await pagefind.search(trimmed);
-      const top = await Promise.all(results.slice(0, 6).map(r => r.data()));
+      const top = await Promise.all(results.slice(0, 6).map((r) => r.data()));
       if (cancelled) return;
-      setPageResults(top.map(d => ({
-        url: d.url,
-        title: d.meta.title ?? d.url,
-        excerpt: d.excerpt,
-      })));
+      setPageResults(
+        top.map((d) => ({
+          url: d.url,
+          title: d.meta.title ?? d.url,
+          excerpt: d.excerpt,
+        })),
+      );
     })();
-    return () => { cancelled = true; };
+    return () => {
+      cancelled = true;
+    };
   }, [trimmed]);
 
   // Reset keyboard selection whenever the query changes or the dropdown closes.
-  useEffect(() => { setActiveIndex(-1); }, [trimmed]);
-  useEffect(() => { if (!open) setActiveIndex(-1); }, [open]);
+  useEffect(() => {
+    setActiveIndex(-1);
+  }, [trimmed]);
+  useEffect(() => {
+    if (!open) setActiveIndex(-1);
+  }, [open]);
 
   // Clamp if async page results shrink the list under the active index.
   useEffect(() => {
@@ -112,7 +121,8 @@ export default function Search() {
   // Keep the keyboard-active option visible.
   useEffect(() => {
     if (activeIndex < 0) return;
-    document.getElementById(optionId(activeIndex))
+    document
+      .getElementById(optionId(activeIndex))
       ?.scrollIntoView({ block: 'nearest' });
   }, [activeIndex]);
 
@@ -125,7 +135,9 @@ export default function Search() {
     }
     const count = componentResults.length + pageResults.length;
     const timer = setTimeout(() => {
-      setAnnouncement(count === 0 ? 'No results' : `${count} result${count === 1 ? '' : 's'}`);
+      setAnnouncement(
+        count === 0 ? 'No results' : `${count} result${count === 1 ? '' : 's'}`,
+      );
     }, 300);
     return () => clearTimeout(timer);
   }, [trimmed, componentResults.length, pageResults.length]);
@@ -146,7 +158,8 @@ export default function Search() {
   useEffect(() => {
     const handleClickOutside = (e: MouseEvent) => {
       if (
-        dropdownRef.current && !dropdownRef.current.contains(e.target as Node) &&
+        dropdownRef.current &&
+        !dropdownRef.current.contains(e.target as Node) &&
         !inputRef.current?.contains(e.target as Node)
       ) {
         setOpen(false);
@@ -167,11 +180,11 @@ export default function Search() {
     switch (e.key) {
       case 'ArrowDown':
         e.preventDefault();
-        setActiveIndex(i => (i + 1) % flatUrls.length);
+        setActiveIndex((i) => (i + 1) % flatUrls.length);
         break;
       case 'ArrowUp':
         e.preventDefault();
-        setActiveIndex(i => (i <= 0 ? flatUrls.length - 1 : i - 1));
+        setActiveIndex((i) => (i <= 0 ? flatUrls.length - 1 : i - 1));
         break;
       case 'Enter': {
         e.preventDefault();
@@ -237,7 +250,10 @@ export default function Search() {
           className="docs-search-input"
           placeholder="Search docs and components..."
           value={query}
-          onChange={e => { setQuery(e.target.value); setOpen(true); }}
+          onChange={(e) => {
+            setQuery(e.target.value);
+            setOpen(true);
+          }}
           onFocus={() => setOpen(true)}
           onKeyDown={handleInputKeyDown}
           aria-label="Search docs and components"
@@ -246,7 +262,9 @@ export default function Search() {
           aria-controls={LISTBOX_ID}
           aria-autocomplete="list"
           aria-activedescendant={
-            listboxVisible && activeIndex >= 0 ? optionId(activeIndex) : undefined
+            listboxVisible && activeIndex >= 0
+              ? optionId(activeIndex)
+              : undefined
           }
         />
         <kbd className="docs-search-kbd">⌘K</kbd>
@@ -257,7 +275,10 @@ export default function Search() {
           {hasResults && (
             <div role="listbox" id={LISTBOX_ID} aria-label="Search results">
               {componentResults.length > 0 && (
-                <div role="group" aria-labelledby="docs-search-group-components">
+                <div
+                  role="group"
+                  aria-labelledby="docs-search-group-components"
+                >
                   <div
                     className="docs-search-group-heading"
                     role="presentation"
@@ -266,17 +287,27 @@ export default function Search() {
                     Components
                   </div>
                   {componentResults.map((name, i) =>
-                    renderOption(i, `/components/${name}`, `c-${name}`, (
+                    renderOption(
+                      i,
+                      `/components/${name}`,
+                      `c-${name}`,
                       <>
-                        <span className="docs-search-result-icon" aria-hidden="true">
+                        <span
+                          className="docs-search-result-icon"
+                          aria-hidden="true"
+                        >
                           {(componentDocs[name]?.name ?? name).charAt(0)}
                         </span>
                         <div className="docs-search-result-content">
-                          <div className="docs-search-result-name">{componentDocs[name]?.name ?? name}</div>
-                          <div className="docs-search-result-category">{componentDocs[name]?.category}</div>
+                          <div className="docs-search-result-name">
+                            {componentDocs[name]?.name ?? name}
+                          </div>
+                          <div className="docs-search-result-category">
+                            {componentDocs[name]?.category}
+                          </div>
                         </div>
-                      </>
-                    ))
+                      </>,
+                    ),
                   )}
                 </div>
               )}
@@ -291,7 +322,10 @@ export default function Search() {
                     Pages
                   </div>
                   {pageResults.map((p, i) =>
-                    renderOption(componentResults.length + i, p.url, `p-${p.url}`, (
+                    renderOption(
+                      componentResults.length + i,
+                      p.url,
+                      `p-${p.url}`,
                       <>
                         <svg
                           className="docs-search-result-icon"
@@ -310,14 +344,16 @@ export default function Search() {
                           <polyline points="14 2 14 8 20 8" />
                         </svg>
                         <div className="docs-search-result-content">
-                          <div className="docs-search-result-name">{p.title}</div>
+                          <div className="docs-search-result-name">
+                            {p.title}
+                          </div>
                           <div
                             className="docs-search-result-category docs-search-result-excerpt"
                             dangerouslySetInnerHTML={{ __html: p.excerpt }}
                           />
                         </div>
-                      </>
-                    ))
+                      </>,
+                    ),
                   )}
                 </div>
               )}
@@ -330,8 +366,9 @@ export default function Search() {
                 No matches for "{query.trim()}".
               </div>
               <div style={{ marginTop: '4px' }}>
-                Try a component name (<strong>button</strong>, <strong>dialog</strong>)
-                {' '}or a page (<strong>install</strong>, <strong>tokens</strong>).
+                Try a component name (<strong>button</strong>,{' '}
+                <strong>dialog</strong>) or a page (<strong>install</strong>,{' '}
+                <strong>tokens</strong>).
               </div>
             </div>
           )}

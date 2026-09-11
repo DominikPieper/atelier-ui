@@ -4,7 +4,8 @@ import { AtlButton } from '../button/atl-button';
 
 import { metadata } from '@atelier-ui/spec/metadata/tooltip.metadata';
 import { contract } from '@atelier-ui/spec/contracts/tooltip.contract';
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
@@ -75,7 +76,10 @@ export const Disabled: Story = {
 export const CustomDelay: Story = {
   render: () => (
     <div style={{ padding: '4rem', display: 'flex', justifyContent: 'center' }}>
-      <AtlTooltip atlTooltip="Slow tooltip (1s delay)" atlTooltipShowDelay={1000}>
+      <AtlTooltip
+        atlTooltip="Slow tooltip (1s delay)"
+        atlTooltipShowDelay={1000}
+      >
         <AtlButton variant="outline">Slow tooltip</AtlButton>
       </AtlTooltip>
     </div>

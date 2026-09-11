@@ -63,7 +63,10 @@ provide(AtlAccordionGroupKey, {
   unregisterItem,
 });
 
-const classes = computed(() => ['atl-accordion-group', `variant-${props.variant}`]);
+const classes = computed(() => [
+  'atl-accordion-group',
+  `variant-${props.variant}`,
+]);
 </script>
 
 <template>

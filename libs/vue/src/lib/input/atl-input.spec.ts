@@ -21,7 +21,10 @@ describe('AtlInput', () => {
 
   it('lets a caller-supplied id win over the auto-generated one', () => {
     render(AtlInput, { props: { label: 'Email', id: 'custom-email-id' } });
-    expect(screen.getByLabelText('Email')).toHaveAttribute('id', 'custom-email-id');
+    expect(screen.getByLabelText('Email')).toHaveAttribute(
+      'id',
+      'custom-email-id',
+    );
   });
 
   // Regression test: aria-label used to be an undeclared attribute, which
@@ -29,7 +32,9 @@ describe('AtlInput', () => {
   // (single-root component) rather than to the native `<input>` that
   // actually needs the accessible name.
   it('sets aria-label on the native input, not the wrapper', () => {
-    const { container } = render(AtlInput, { props: { 'aria-label': 'Search' } });
+    const { container } = render(AtlInput, {
+      props: { 'aria-label': 'Search' },
+    });
     expect(screen.getByRole('textbox')).toHaveAttribute('aria-label', 'Search');
     expect(container.firstElementChild).not.toHaveAttribute('aria-label');
   });
@@ -54,8 +59,13 @@ describe('AtlInput', () => {
   });
 
   covers('input', 'invalid')('marks input as invalid', () => {
-    render(AtlInput, { props: { invalid: true, placeholder: 'Invalid field' } });
-    expect(screen.getByPlaceholderText('Invalid field')).toHaveAttribute('aria-invalid', 'true');
+    render(AtlInput, {
+      props: { invalid: true, placeholder: 'Invalid field' },
+    });
+    expect(screen.getByPlaceholderText('Invalid field')).toHaveAttribute(
+      'aria-invalid',
+      'true',
+    );
   });
 
   // `.atl-input.is-readonly input` drops the interactive border and the text cursor
@@ -74,6 +84,8 @@ describe('AtlInput', () => {
     const { container } = render(AtlInput, {
       props: { errors: ['Email is invalid', 'Too short'] },
     });
-    expect(container.querySelectorAll('.errors .error-message')).toHaveLength(2);
+    expect(container.querySelectorAll('.errors .error-message')).toHaveLength(
+      2,
+    );
   });
 });

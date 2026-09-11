@@ -42,12 +42,12 @@ already on the scale.**
 Ordering each family's shipping values by OKLab lightness reproduces the step
 numbers, in all four families, with no re-assignment:
 
-| family | shipping steps | generated |
-|---|---|---|
-| red | 100, 200, 300, 400, 700, 800, 900, 950 | 500, 600 |
-| green | 100, 300, 400, 700, 800, 950 | 200, 500, 600, 900 |
-| amber | 100, 200, 400, 700, 800, 950 | 300, 500, 600, 900 |
-| sky | 100, 200, 400, 700, 900, 950 | 300, 500, 600, 800 |
+| family | shipping steps                         | generated          |
+| ------ | -------------------------------------- | ------------------ |
+| red    | 100, 200, 300, 400, 700, 800, 900, 950 | 500, 600           |
+| green  | 100, 300, 400, 700, 800, 950           | 200, 500, 600, 900 |
+| amber  | 100, 200, 400, 700, 800, 950           | 300, 500, 600, 900 |
+| sky    | 100, 200, 400, 700, 900, 950           | 300, 500, 600, 800 |
 
 So this is a re-description of what already shipped, not a redesign. **Measured, to
 make sure**: the 28 semantic tokens resolve to byte-identical colours before and
@@ -61,13 +61,13 @@ washes, unlike teal's vivid cyan. A 50 would be a name for the surface, and
 `--ui-color-surface` is that name.
 
 **The 950 is the dark theme's tinted background.** `#3a1414`, `#0f3320`,
-`#3a2510`, `#102338` sit below each family's 900 in lightness *and* chroma, so they
+`#3a2510`, `#102338` sit below each family's 900 in lightness _and_ chroma, so they
 continue the ramp's direction rather than sitting beside it. The chroma step from
 900 to 950 is larger than 800 to 900 — a visible kink, and the right one: a surface
 tint should be less chromatic than a text colour.
 
 **A missing tail step is placed where the family that has one puts it, not at the
-midpoint.** Red is the only family shipping an 800, a 900 *and* a 950, so it is the
+midpoint.** Red is the only family shipping an 800, a 900 _and_ a 950, so it is the
 only in-system evidence for where a 900 sits: **24.8% of the way from 800 to 950**,
 not 50%. Interpolating green's and amber's 900 to the midpoint made them a visible
 step too dark. The same reading gives sky's 800 at 56.3% between 700 and 900.
@@ -83,7 +83,7 @@ Alternatives considered:
   by measurement rather than taste: at 12px, `+99` overflows the 24px badge. At
   10px and at the old 9px it does not.
 - **Two type steps, `2xs` and `3xs`,** keeping 9px exact. Rejected: two new rungs
-  for two declarations each, and a 9px step in a scale whose smallest *readable*
+  for two declarations each, and a 9px step in a scale whose smallest _readable_
   role is 12px. One pixel of movement is cheaper than a step nobody can justify.
 - **Leave the dark backgrounds off the ramp,** as standalone surface tints. Keeps
   the ramp smooth in chroma as well as lightness, at the price of four colours a

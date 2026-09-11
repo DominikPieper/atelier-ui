@@ -5,7 +5,12 @@ import { AtlButton } from '../button/atl-button';
 import { AtlInput } from '../input/atl-input';
 import { AtlOption } from '../select/atl-option';
 import { AtlSelect } from '../select/atl-select';
-import { AtlDialog, AtlDialogContent, AtlDialogFooter, AtlDialogHeader } from './atl-dialog';
+import {
+  AtlDialog,
+  AtlDialogContent,
+  AtlDialogFooter,
+  AtlDialogHeader,
+} from './atl-dialog';
 
 import { metadata } from '@atelier-ui/spec/metadata/dialog.metadata';
 import { contract } from '@atelier-ui/spec/contracts/dialog.contract';
@@ -17,9 +22,10 @@ const ALL_IMPORTS = [
   AtlButton,
 ];
 
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
-function figmaNode(nodeId: string): { type: "figma"; url: string } {
+function figmaNode(nodeId: string): { type: 'figma'; url: string } {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
 }
 
@@ -229,7 +235,9 @@ export const WithForm: Story = {
       name: signal(''),
       country: signal(''),
     },
-    moduleMetadata: { imports: [...ALL_IMPORTS, AtlInput, AtlSelect, AtlOption] },
+    moduleMetadata: {
+      imports: [...ALL_IMPORTS, AtlInput, AtlSelect, AtlOption],
+    },
     template: `
       <atl-button variant="primary" (click)="open.set(true)">Open Form Dialog</atl-button>
       <atl-dialog [(open)]="open" [size]="size">

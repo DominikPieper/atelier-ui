@@ -5,7 +5,8 @@ import AtlOption from './atl-option.vue';
 
 import { metadata } from '@atelier-ui/spec/metadata/select.metadata';
 import { contract } from '@atelier-ui/spec/contracts/select.contract';
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };

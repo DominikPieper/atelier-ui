@@ -28,10 +28,15 @@ const Controlled = {
 };
 
 describe('AtlCombobox', () => {
-  covers('combobox', 'render-input')('renders an input with role="combobox"', () => {
-    const { container } = render(Controlled);
-    expect(container.querySelector('input[role="combobox"]')).toBeInTheDocument();
-  });
+  covers('combobox', 'render-input')(
+    'renders an input with role="combobox"',
+    () => {
+      const { container } = render(Controlled);
+      expect(
+        container.querySelector('input[role="combobox"]'),
+      ).toBeInTheDocument();
+    },
+  );
 
   it('shows placeholder when no value selected', () => {
     render(Controlled);
@@ -45,15 +50,20 @@ describe('AtlCombobox', () => {
     expect(screen.getByRole('listbox')).toBeInTheDocument();
   });
 
-  covers('combobox', 'filter-on-type')('filters options as user types', async () => {
-    const user = userEvent.setup();
-    render(Controlled);
-    await user.click(screen.getByRole('combobox'));
-    await user.keyboard('an');
-    const options = screen.getAllByRole('option');
-    expect(options.some((o) => o.textContent?.includes('Banana'))).toBe(true);
-    expect(options.every((o) => !o.textContent?.includes('Apple'))).toBe(true);
-  });
+  covers('combobox', 'filter-on-type')(
+    'filters options as user types',
+    async () => {
+      const user = userEvent.setup();
+      render(Controlled);
+      await user.click(screen.getByRole('combobox'));
+      await user.keyboard('an');
+      const options = screen.getAllByRole('option');
+      expect(options.some((o) => o.textContent?.includes('Banana'))).toBe(true);
+      expect(options.every((o) => !o.textContent?.includes('Apple'))).toBe(
+        true,
+      );
+    },
+  );
 
   it('shows "No results found." when nothing matches', async () => {
     const user = userEvent.setup();
@@ -63,15 +73,18 @@ describe('AtlCombobox', () => {
     expect(screen.getByText('No results found.')).toBeInTheDocument();
   });
 
-  covers('combobox', 'select-on-click')('selects an option on click and emits update:value', async () => {
-    const user = userEvent.setup();
-    const { emitted } = render(AtlCombobox, {
-      props: { value: '', options: OPTIONS, placeholder: 'Search fruit…' },
-    });
-    await user.click(screen.getByRole('combobox'));
-    await user.click(screen.getByText('Banana'));
-    expect(emitted()['update:value']).toEqual([['banana']]);
-  });
+  covers('combobox', 'select-on-click')(
+    'selects an option on click and emits update:value',
+    async () => {
+      const user = userEvent.setup();
+      const { emitted } = render(AtlCombobox, {
+        props: { value: '', options: OPTIONS, placeholder: 'Search fruit…' },
+      });
+      await user.click(screen.getByRole('combobox'));
+      await user.click(screen.getByText('Banana'));
+      expect(emitted()['update:value']).toEqual([['banana']]);
+    },
+  );
 
   it('shows selected label in input after selection', async () => {
     const user = userEvent.setup();
@@ -89,15 +102,18 @@ describe('AtlCombobox', () => {
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
   });
 
-  covers('combobox', 'keyboard-nav')('navigates with ArrowDown and selects with Enter', async () => {
-    const user = userEvent.setup();
-    const { emitted } = render(AtlCombobox, {
-      props: { value: '', options: OPTIONS, placeholder: 'Search fruit…' },
-    });
-    await user.click(screen.getByRole('combobox'));
-    await user.keyboard('{ArrowDown}{Enter}');
-    expect(emitted()['update:value']).toEqual([['apple']]);
-  });
+  covers('combobox', 'keyboard-nav')(
+    'navigates with ArrowDown and selects with Enter',
+    async () => {
+      const user = userEvent.setup();
+      const { emitted } = render(AtlCombobox, {
+        props: { value: '', options: OPTIONS, placeholder: 'Search fruit…' },
+      });
+      await user.click(screen.getByRole('combobox'));
+      await user.keyboard('{ArrowDown}{Enter}');
+      expect(emitted()['update:value']).toEqual([['apple']]);
+    },
+  );
 
   covers('combobox', 'close-on-escape')('closes on Escape', async () => {
     const user = userEvent.setup();
@@ -108,12 +124,18 @@ describe('AtlCombobox', () => {
     expect(screen.queryByRole('listbox')).not.toBeInTheDocument();
   });
 
-  covers('combobox', 'aria-expanded')('sets aria-expanded=true when open', async () => {
-    const user = userEvent.setup();
-    render(Controlled);
-    await user.click(screen.getByRole('combobox'));
-    expect(screen.getByRole('combobox')).toHaveAttribute('aria-expanded', 'true');
-  });
+  covers('combobox', 'aria-expanded')(
+    'sets aria-expanded=true when open',
+    async () => {
+      const user = userEvent.setup();
+      render(Controlled);
+      await user.click(screen.getByRole('combobox'));
+      expect(screen.getByRole('combobox')).toHaveAttribute(
+        'aria-expanded',
+        'true',
+      );
+    },
+  );
 
   it('shows preselected label on initial render', () => {
     render(Controlled, { props: { initialValue: 'banana' } });
@@ -123,7 +145,9 @@ describe('AtlCombobox', () => {
   it('disables input and applies is-disabled class', () => {
     const { container } = render({
       components: { AtlCombobox },
-      setup() { return { options: OPTIONS }; },
+      setup() {
+        return { options: OPTIONS };
+      },
       template: `<AtlCombobox :options="options" :disabled="true" />`,
     });
     expect(container.querySelector('.atl-combobox')).toHaveClass('is-disabled');
@@ -133,7 +157,9 @@ describe('AtlCombobox', () => {
   it('applies is-invalid class when invalid', () => {
     const { container } = render({
       components: { AtlCombobox },
-      setup() { return { options: OPTIONS }; },
+      setup() {
+        return { options: OPTIONS };
+      },
       template: `<AtlCombobox :options="options" :invalid="true" />`,
     });
     expect(container.querySelector('.atl-combobox')).toHaveClass('is-invalid');
@@ -142,7 +168,9 @@ describe('AtlCombobox', () => {
   it('shows error messages when invalid and errors provided', () => {
     render({
       components: { AtlCombobox },
-      setup() { return { options: OPTIONS }; },
+      setup() {
+        return { options: OPTIONS };
+      },
       template: `<AtlCombobox :options="options" :invalid="true" :errors="['Please select a fruit']" />`,
     });
     expect(screen.getByText('Please select a fruit')).toBeInTheDocument();
@@ -158,7 +186,9 @@ describe('AtlCombobox', () => {
     const user = userEvent.setup();
     const { emitted } = render(Controlled);
     await user.click(screen.getByRole('combobox'));
-    const grapeOption = screen.getAllByRole('option').find((o) => o.textContent?.includes('Grape')) as HTMLElement;
+    const grapeOption = screen
+      .getAllByRole('option')
+      .find((o) => o.textContent?.includes('Grape')) as HTMLElement;
     await user.click(grapeOption);
     // Grape is disabled — no update:value should be emitted for 'grape'
     const updates = (emitted()['update:value'] ?? []) as string[][];

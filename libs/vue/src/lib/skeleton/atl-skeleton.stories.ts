@@ -3,7 +3,8 @@ import AtlSkeleton from './atl-skeleton.vue';
 
 import { metadata } from '@atelier-ui/spec/metadata/skeleton.metadata';
 import { contract } from '@atelier-ui/spec/contracts/skeleton.contract';
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
@@ -15,11 +16,16 @@ const meta: Meta<typeof AtlSkeleton> = {
   tags: ['autodocs'],
   render: (args) => ({
     components: { AtlSkeleton },
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: '<AtlSkeleton v-bind="args" />',
   }),
   argTypes: {
-    variant: { control: 'select', options: ['text', 'circular', 'rectangular'] },
+    variant: {
+      control: 'select',
+      options: ['text', 'circular', 'rectangular'],
+    },
     width: { control: 'text' },
     height: { control: 'text' },
     animated: { control: 'boolean' },
@@ -101,7 +107,9 @@ export const NoAnimation: Story = {
   args: { animated: false },
   render: (args) => ({
     components: { AtlSkeleton },
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: `
       <div style="display:flex;flex-direction:column;gap:0.5rem;max-width:400px">
         <AtlSkeleton v-bind="args" width="100%" />
@@ -137,7 +145,9 @@ export const AllVariants: Story = {
 export const Playground: Story = {
   render: (args) => ({
     components: { AtlSkeleton },
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: '<AtlSkeleton v-bind="args" />',
   }),
 };

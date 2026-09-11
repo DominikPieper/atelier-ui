@@ -10,10 +10,7 @@ import {
   HTMLAttributes,
   KeyboardEvent,
 } from 'react';
-import type {
-  AtlAccordionGroupSpec,
-  AtlAccordionItemSpec,
-} from '../spec';
+import type { AtlAccordionGroupSpec, AtlAccordionItemSpec } from '../spec';
 import './atl-accordion.css';
 import { AtlIcon } from '../icon/atl-icon';
 
@@ -21,7 +18,11 @@ interface AccordionGroupContextValue {
   multi: boolean;
   openItems: Set<string>;
   toggleItem: (id: string) => void;
-  registerItem: (id: string, ref: React.RefObject<HTMLButtonElement | null>, disabled: boolean) => void;
+  registerItem: (
+    id: string,
+    ref: React.RefObject<HTMLButtonElement | null>,
+    disabled: boolean,
+  ) => void;
   unregisterItem: (id: string) => void;
   handleKeydown: (e: KeyboardEvent, id: string) => void;
 }
@@ -29,18 +30,25 @@ interface AccordionGroupContextValue {
 const AccordionGroupContext = createContext<AccordionGroupContextValue>({
   multi: false,
   openItems: new Set(),
-  toggleItem: () => { /* noop */ },
-  registerItem: () => { /* noop */ },
-  unregisterItem: () => { /* noop */ },
-  handleKeydown: () => { /* noop */ },
+  toggleItem: () => {
+    /* noop */
+  },
+  registerItem: () => {
+    /* noop */
+  },
+  unregisterItem: () => {
+    /* noop */
+  },
+  handleKeydown: () => {
+    /* noop */
+  },
 });
 
 /**
  * Properties for the AtlAccordionGroup component.
  */
 export interface AtlAccordionGroupProps
-  extends HTMLAttributes<HTMLDivElement>,
-    AtlAccordionGroupSpec {
+  extends HTMLAttributes<HTMLDivElement>, AtlAccordionGroupSpec {
   /**
    * Whether multiple items can be expanded simultaneously.
    */
@@ -66,28 +74,47 @@ export function AtlAccordionGroup({
   ...rest
 }: AtlAccordionGroupProps) {
   const [openItems, setOpenItems] = useState<Set<string>>(new Set());
-  const itemsRef = useRef<{ id: string; triggerRef: React.RefObject<HTMLButtonElement | null>; disabled: boolean }[]>([]);
+  const itemsRef = useRef<
+    {
+      id: string;
+      triggerRef: React.RefObject<HTMLButtonElement | null>;
+      disabled: boolean;
+    }[]
+  >([]);
 
   const classes = ['atl-accordion-group', `variant-${variant}`, className]
     .filter(Boolean)
     .join(' ');
 
-  const toggleItem = useCallback((id: string) => {
-    setOpenItems((prev) => {
-      const next = new Set(prev);
-      if (next.has(id)) {
-        next.delete(id);
-      } else {
-        if (!multi) next.clear();
-        next.add(id);
-      }
-      return next;
-    });
-  }, [multi]);
+  const toggleItem = useCallback(
+    (id: string) => {
+      setOpenItems((prev) => {
+        const next = new Set(prev);
+        if (next.has(id)) {
+          next.delete(id);
+        } else {
+          if (!multi) next.clear();
+          next.add(id);
+        }
+        return next;
+      });
+    },
+    [multi],
+  );
 
-  const registerItem = useCallback((id: string, ref: React.RefObject<HTMLButtonElement | null>, disabled: boolean) => {
-    itemsRef.current = [...itemsRef.current.filter((i) => i.id !== id), { id, triggerRef: ref, disabled }];
-  }, []);
+  const registerItem = useCallback(
+    (
+      id: string,
+      ref: React.RefObject<HTMLButtonElement | null>,
+      disabled: boolean,
+    ) => {
+      itemsRef.current = [
+        ...itemsRef.current.filter((i) => i.id !== id),
+        { id, triggerRef: ref, disabled },
+      ];
+    },
+    [],
+  );
 
   const unregisterItem = useCallback((id: string) => {
     itemsRef.current = itemsRef.current.filter((i) => i.id !== id);
@@ -120,7 +147,14 @@ export function AtlAccordionGroup({
 
   return (
     <AccordionGroupContext.Provider
-      value={{ multi, openItems, toggleItem, registerItem, unregisterItem, handleKeydown }}
+      value={{
+        multi,
+        openItems,
+        toggleItem,
+        registerItem,
+        unregisterItem,
+        handleKeydown,
+      }}
     >
       <div className={classes} role="presentation" {...rest}>
         {children}
@@ -133,8 +167,7 @@ export function AtlAccordionGroup({
  * Properties for the AtlAccordionItem component.
  */
 export interface AtlAccordionItemProps
-  extends HTMLAttributes<HTMLDivElement>,
-    AtlAccordionItemSpec {
+  extends HTMLAttributes<HTMLDivElement>, AtlAccordionItemSpec {
   /**
    * Whether the item is currently expanded.
    */
@@ -210,7 +243,7 @@ export function AtlAccordionItem({
       typeof c === 'object' &&
       c !== null &&
       'type' in (c as object) &&
-      (c as React.ReactElement).type === AtlAccordionHeader
+      (c as React.ReactElement).type === AtlAccordionHeader,
   );
   const bodyNodes = childArray.filter((c) => c !== headerNode);
 
@@ -236,7 +269,13 @@ export function AtlAccordionItem({
           onKeyDown={(e) => ctx.handleKeydown(e, id)}
         >
           {headerNode}
-          <AtlIcon name="chevron-down" size="sm" className={['chevron', isExpanded && 'is-expanded'].filter(Boolean).join(' ')} />
+          <AtlIcon
+            name="chevron-down"
+            size="sm"
+            className={['chevron', isExpanded && 'is-expanded']
+              .filter(Boolean)
+              .join(' ')}
+          />
         </button>
       </Heading>
       <div
@@ -272,7 +311,9 @@ export function AtlAccordionHeader({
 }) {
   return (
     <span
-      className={['accordion-header-content', className].filter(Boolean).join(' ')}
+      className={['accordion-header-content', className]
+        .filter(Boolean)
+        .join(' ')}
       {...rest}
     >
       {children}

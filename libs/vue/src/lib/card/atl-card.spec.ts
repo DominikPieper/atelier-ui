@@ -23,7 +23,11 @@ describe('AtlCard', () => {
 
   it('defaults to elevated variant and md padding', () => {
     const { container } = render(AtlCard);
-    expect(container.firstChild).toHaveClass('atl-card', 'variant-elevated', 'padding-md');
+    expect(container.firstChild).toHaveClass(
+      'atl-card',
+      'variant-elevated',
+      'padding-md',
+    );
   });
 });
 

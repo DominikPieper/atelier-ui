@@ -7,7 +7,7 @@ export const contract = {
     {
       name: 'selection',
       reason:
-        "Group-level selection state \"for the gallery\" per the master's own API-surface notes — an illustrative sample, not a settable prop. AtlRadioGroupSpec has no selected/checked field of its own, and unlike every property that does map, this axis's line carries no \"-> maps to\" arrow.",
+        'Group-level selection state "for the gallery" per the master\'s own API-surface notes — an illustrative sample, not a settable prop. AtlRadioGroupSpec has no selected/checked field of its own, and unlike every property that does map, this axis\'s line carries no "-> maps to" arrow.',
     },
   ],
   codeOnly: [

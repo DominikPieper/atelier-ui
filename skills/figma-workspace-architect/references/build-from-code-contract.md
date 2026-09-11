@@ -3,7 +3,7 @@
 A Build-mode recipe for the case where the **code side already states the component**:
 a typed prop contract (a TypeScript interface with string-literal unions, a Vue
 `defineProps`, a web-component attribute table) exists, and Figma needs a master that
-the codebase's own gates will accept as *the same thing*. The direction is the reverse
+the codebase's own gates will accept as _the same thing_. The direction is the reverse
 of design-to-code; the discipline is the same — names, values and bindings match
 verbatim, and the run ends in whatever gate the repo has, not in a screenshot.
 
@@ -13,15 +13,15 @@ existing master (rename, split) are Migrate, not this.
 
 ## Inputs — collect before the first write
 
-| Input | Where it comes from | Why it is needed |
-|---|---|---|
-| Prop contract | the spec/interface file the repo treats as ground truth | axis names and values are copied from it, never paraphrased |
-| Which props are variant axes vs. Booleans vs. code-only | the repo's own metadata (a `variantMatrix`, a props table) or the rule "visibly distinct → Variant; on/off → Boolean; interaction states → neither" | decides the matrix size before a frame exists |
-| Semantic variable collection | `figma_get_variables`, filtered to the collection code binds to | fills, strokes, radii, spacing bind here; primitives never directly |
-| Naming rule | the repo's gate (e.g. "leaf of a section-prefixed name equals the selector; axis values equal the union literals") | the gate compares strings |
-| Category / page placement | the repo's story taxonomy or the library's page layout | the section a master lives in is part of its name |
-| Description convention | what the gate or the docs expect the description to name (a spec interface, a Storybook link) | descriptions are the discoverability layer |
-| The closing gate | `npm run …`, a snapshot refresh, a parity check — whatever proves the master to the repo | a build without it is a drawing |
+| Input                                                   | Where it comes from                                                                                                                                 | Why it is needed                                                    |
+| ------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------- |
+| Prop contract                                           | the spec/interface file the repo treats as ground truth                                                                                             | axis names and values are copied from it, never paraphrased         |
+| Which props are variant axes vs. Booleans vs. code-only | the repo's own metadata (a `variantMatrix`, a props table) or the rule "visibly distinct → Variant; on/off → Boolean; interaction states → neither" | decides the matrix size before a frame exists                       |
+| Semantic variable collection                            | `figma_get_variables`, filtered to the collection code binds to                                                                                     | fills, strokes, radii, spacing bind here; primitives never directly |
+| Naming rule                                             | the repo's gate (e.g. "leaf of a section-prefixed name equals the selector; axis values equal the union literals")                                  | the gate compares strings                                           |
+| Category / page placement                               | the repo's story taxonomy or the library's page layout                                                                                              | the section a master lives in is part of its name                   |
+| Description convention                                  | what the gate or the docs expect the description to name (a spec interface, a Storybook link)                                                       | descriptions are the discoverability layer                          |
+| The closing gate                                        | `npm run …`, a snapshot refresh, a parity check — whatever proves the master to the repo                                                            | a build without it is a drawing                                     |
 
 ## Recipe
 
@@ -78,7 +78,7 @@ The `design-to-code` skill picks up from here (its Build mode needs a node id).
 
 ## What this recipe does not decide
 
-Whether a prop *should* be a variant axis is a Decide-mode question
+Whether a prop _should_ be a variant axis is a Decide-mode question
 (`decision-heuristics.md`); whether an existing master should be renamed or split is
 Migrate (`migration-playbook.md`); whether the values themselves are right is the code
 side's business — this recipe copies the contract, it does not review it.

@@ -24,7 +24,10 @@ const emit = defineEmits<{
     :class="{ 'is-selected': selected }"
   >
     <td v-if="selectable" class="atl-tr-select-cell">
-      <AtlCheckbox :checked="selected" @update:checked="emit('update:selected', $event)" />
+      <AtlCheckbox
+        :checked="selected"
+        @update:checked="emit('update:selected', $event)"
+      />
     </td>
     <slot />
   </tr>

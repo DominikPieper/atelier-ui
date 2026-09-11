@@ -3,7 +3,8 @@ import AtlBadge from './atl-badge.vue';
 
 import { metadata } from '@atelier-ui/spec/metadata/badge.metadata';
 import { contract } from '@atelier-ui/spec/contracts/badge.contract';
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
@@ -15,11 +16,16 @@ const meta: Meta<typeof AtlBadge> = {
   tags: ['autodocs'],
   render: (args) => ({
     components: { AtlBadge },
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: '<AtlBadge v-bind="args">Badge</AtlBadge>',
   }),
   argTypes: {
-    variant: { control: 'select', options: ['default', 'success', 'warning', 'danger', 'info'] },
+    variant: {
+      control: 'select',
+      options: ['default', 'success', 'warning', 'danger', 'info'],
+    },
     size: { control: 'select', options: ['sm', 'md'] },
   },
   args: {
@@ -43,7 +49,9 @@ export const Default: Story = {
 export const Success: Story = {
   render: (args) => ({
     components: { AtlBadge },
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: '<AtlBadge v-bind="args">Active</AtlBadge>',
   }),
   args: { variant: 'success' },
@@ -53,7 +61,9 @@ export const Success: Story = {
 export const Warning: Story = {
   render: (args) => ({
     components: { AtlBadge },
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: '<AtlBadge v-bind="args">Pending</AtlBadge>',
   }),
   args: { variant: 'warning' },
@@ -63,7 +73,9 @@ export const Warning: Story = {
 export const Danger: Story = {
   render: (args) => ({
     components: { AtlBadge },
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: '<AtlBadge v-bind="args">Error</AtlBadge>',
   }),
   args: { variant: 'danger' },
@@ -73,7 +85,9 @@ export const Danger: Story = {
 export const Info: Story = {
   render: (args) => ({
     components: { AtlBadge },
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: '<AtlBadge v-bind="args">Info</AtlBadge>',
   }),
   args: { variant: 'info' },
@@ -120,7 +134,9 @@ export const AllSizes: Story = {
 export const Playground: Story = {
   render: (args) => ({
     components: { AtlBadge },
-    setup() { return { args }; },
+    setup() {
+      return { args };
+    },
     template: '<AtlBadge v-bind="args">Playground</AtlBadge>',
   }),
 };

@@ -31,13 +31,13 @@ prefix.
 Rename the naming-convention prefix `Llm` → `Atl` (Atelier) across every
 identifier kind, same casing rules as before:
 
-| Identifier kind | Before | After |
-|---|---|---|
+| Identifier kind                              | Before                          | After                           |
+| -------------------------------------------- | ------------------------------- | ------------------------------- |
 | kebab-case tag/CSS class/CSS custom property | `llm-button`, `--llm-separator` | `atl-button`, `--atl-separator` |
-| PascalCase class/component/type | `LlmButton`, `LlmButtonSpec` | `AtlButton`, `AtlButtonSpec` |
-| mid-word PascalCase | `useLlmToast` | `useAtlToast` |
-| camelCase prop | `llmTooltipPosition` | `atlTooltipPosition` |
-| SCREAMING_SNAKE token | `LLM_DIALOG` | `ATL_DIALOG` |
+| PascalCase class/component/type              | `LlmButton`, `LlmButtonSpec`    | `AtlButton`, `AtlButtonSpec`    |
+| mid-word PascalCase                          | `useLlmToast`                   | `useAtlToast`                   |
+| camelCase prop                               | `llmTooltipPosition`            | `atlTooltipPosition`            |
+| SCREAMING_SNAKE token                        | `LLM_DIALOG`                    | `ATL_DIALOG`                    |
 
 Scope is deliberately bounded to naming-convention identifiers, not every
 occurrence of the string "llm" in the repo:
@@ -57,7 +57,7 @@ occurrence of the string "llm" in the repo:
   legitimate prose use of "LLM" as the AI-technology term (the `llms.txt`
   feature name, the `astro-llms-md` dependency, npm `keywords`/`description`
   fields describing LLM-inferability — unaffected by this rename since they
-  describe the *value proposition*, not the identifier prefix).
+  describe the _value proposition_, not the identifier prefix).
 
 ## Consequences
 

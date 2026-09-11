@@ -41,25 +41,29 @@
 .atl-badge.variant-success {
   background-color: var(--ui-color-success-bg);
   color: var(--ui-color-success-text);
-  border: var(--ui-border-width) solid color-mix(in srgb, var(--ui-color-success-text) 25%, transparent);
+  border: var(--ui-border-width) solid
+    color-mix(in srgb, var(--ui-color-success-text) 25%, transparent);
 }
 
 .atl-badge.variant-warning {
   background-color: var(--ui-color-warning-bg);
   color: var(--ui-color-warning-text);
-  border: var(--ui-border-width) solid color-mix(in srgb, var(--ui-color-warning-text) 25%, transparent);
+  border: var(--ui-border-width) solid
+    color-mix(in srgb, var(--ui-color-warning-text) 25%, transparent);
 }
 
 .atl-badge.variant-danger {
   background-color: var(--ui-color-danger-bg);
   color: var(--ui-color-danger-text);
-  border: var(--ui-border-width) solid color-mix(in srgb, var(--ui-color-danger-text) 25%, transparent);
+  border: var(--ui-border-width) solid
+    color-mix(in srgb, var(--ui-color-danger-text) 25%, transparent);
 }
 
 .atl-badge.variant-info {
   background-color: var(--ui-color-info-bg);
   color: var(--ui-color-info-text);
-  border: var(--ui-border-width) solid color-mix(in srgb, var(--ui-color-info-text) 25%, transparent);
+  border: var(--ui-border-width) solid
+    color-mix(in srgb, var(--ui-color-info-text) 25%, transparent);
 }
 
 /* Semantic indicator glyph — non-color differentiation (WCAG 1.4.1). */

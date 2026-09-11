@@ -13,6 +13,7 @@ Figma turns every `/` in a name into a hierarchy level — in the asset panel pi
 ```
 
 Examples:
+
 - `Button/Primary/Default`
 - `Button/Primary/Hover`
 - `Input/Text/Error`
@@ -39,6 +40,7 @@ Icon/{size}/{name}
 ```
 
 Examples:
+
 - `Icon/16/Home`
 - `Icon/16/Settings`
 - `Icon/24/Home`
@@ -86,7 +88,7 @@ Notes:
 - **One page per category** scales well for libraries with 30+ components. A small library can collapse all components onto one `Components` page.
 - **The Cover page** is what shows up as the file thumbnail. Figma's own minimum is name and a one-line description; a cover that earns its place adds version, status (draft / stable / deprecated tiers), owners, last-updated date, and links to the Storybook and docs site. Designers see it in the file browser; agents read it as the file's README.
 - **Pages are a workflow, not a taxonomy.** Figma's guidance keeps signed-off work physically separate from work in flux — a "ready for dev" section or page, so nobody ships the wrong asset — and imposes the hierarchy once the direction has settled, not while exploring.
-- **Documentation frames beside each component** — purpose, anatomy callouts, a properties table with defaults, do/don't, accessibility requirements, the Storybook link. Where the *canonical* doc lives is contested (large orgs run an external site; Figma's Storybook plugin treats the two as co-equal); what every source agrees on is that a doc bound to live objects (descriptions, annotations that reference Variables) decays slower than prose, and that documentation is gated by a linter, not by trust.
+- **Documentation frames beside each component** — purpose, anatomy callouts, a properties table with defaults, do/don't, accessibility requirements, the Storybook link. Where the _canonical_ doc lives is contested (large orgs run an external site; Figma's Storybook plugin treats the two as co-equal); what every source agrees on is that a doc bound to live objects (descriptions, annotations that reference Variables) decays slower than prose, and that documentation is gated by a linter, not by trust.
 - **Patterns** are not components. They're reference designs (e.g. "how to compose an empty state"). Don't publish them.
 - **Deprecated** keeps the old master where designers will still find it, wearing its warning, until library analytics show zero insertions — deleting on a schedule breaks files; deleting on evidence doesn't.
 - The page emoji is there for human navigability, not Figma's structure. It's optional but appreciated.
@@ -95,15 +97,15 @@ Notes:
 
 Both group children, but they serve different roles. Mixing them up is a recurring audit finding (FS4).
 
-| Aspect                | Section                                   | Frame                                          |
-|-----------------------|-------------------------------------------|------------------------------------------------|
-| Auto Layout           | ❌                                         | ✅                                              |
-| Constraints           | ❌                                         | ✅                                              |
-| Clip content          | ❌                                         | ✅                                              |
-| Fills / strokes       | ❌                                         | ✅                                              |
-| Can nest in a Frame   | ❌                                         | ✅                                              |
-| `Ready for dev` marker| ✅                                         | ✅                                              |
-| Asset-panel grouping  | Page-level region                         | n/a                                             |
+| Aspect                 | Section           | Frame |
+| ---------------------- | ----------------- | ----- |
+| Auto Layout            | ❌                | ✅    |
+| Constraints            | ❌                | ✅    |
+| Clip content           | ❌                | ✅    |
+| Fills / strokes        | ❌                | ✅    |
+| Can nest in a Frame    | ❌                | ✅    |
+| `Ready for dev` marker | ✅                | ✅    |
+| Asset-panel grouping   | Page-level region | n/a   |
 
 **Rule:**
 
@@ -136,6 +138,7 @@ A single Figma file can hold a lot, but at some point splitting helps. Common sp
 - **Brand library separate from product library.** Logo, brand colors, marketing illustrations live in Brand. Product UI components live in the product library. Brand is consumed by both product files and marketing files.
 
 Don't split prematurely. The cost is real: more files to publish, more libraries to enable per project, more drift opportunities — designers "annoyed by having to enable too many libraries" is the practitioner phrase for it. Split when a concrete symptom appears, never on a schedule:
+
 - The file has crossed the 2GB Figma limit or canvas rendering has visibly degraded, or
 - Different teams own different parts and need independent publishing cadences, or
 - A clear consumer/dependency boundary exists (foundations consumed by everything, components consumed by product files only).
@@ -144,15 +147,15 @@ Whatever you split, **keep every Variable collection in one parent file**: an al
 
 ## Audit signals for naming / structure
 
-| Signal                                                                       | Severity   |
-|------------------------------------------------------------------------------|------------|
-| Component name doesn't match the engineering component name                  | Critical   |
-| `BTN`, `TXT`, abbreviated names                                              | Warning    |
-| Variant Property values use casing that differs from code (`Small` vs `sm`)  | Critical   |
-| Working designs found inside a published library file                        | Warning    |
-| Atomic sub-components are publishable (no `_` prefix) and clutter the asset panel | Warning |
-| Icons modeled as a Variant set instead of separate Components                | Critical   |
-| File has a single page named "Page 1" with everything on it                  | Critical   |
-| Cover page is empty or generic                                               | Suggestion |
-| No Patterns page or any reference for composition examples                   | Suggestion |
-| Inconsistent slash depth across components (some `Button/Primary`, some `Button-Primary`) | Warning |
+| Signal                                                                                    | Severity   |
+| ----------------------------------------------------------------------------------------- | ---------- |
+| Component name doesn't match the engineering component name                               | Critical   |
+| `BTN`, `TXT`, abbreviated names                                                           | Warning    |
+| Variant Property values use casing that differs from code (`Small` vs `sm`)               | Critical   |
+| Working designs found inside a published library file                                     | Warning    |
+| Atomic sub-components are publishable (no `_` prefix) and clutter the asset panel         | Warning    |
+| Icons modeled as a Variant set instead of separate Components                             | Critical   |
+| File has a single page named "Page 1" with everything on it                               | Critical   |
+| Cover page is empty or generic                                                            | Suggestion |
+| No Patterns page or any reference for composition examples                                | Suggestion |
+| Inconsistent slash depth across components (some `Button/Primary`, some `Button-Primary`) | Warning    |

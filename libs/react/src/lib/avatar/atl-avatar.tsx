@@ -1,8 +1,5 @@
 import { HTMLAttributes, ReactNode, Children, useState } from 'react';
-import type {
-  AtlAvatarSpec,
-  AtlAvatarGroupSpec,
-} from '../spec';
+import type { AtlAvatarSpec, AtlAvatarGroupSpec } from '../spec';
 import './atl-avatar.css';
 import { AtlIcon } from '../icon/atl-icon';
 
@@ -10,8 +7,7 @@ import { AtlIcon } from '../icon/atl-icon';
  * Properties for the AtlAvatar component.
  */
 export interface AtlAvatarProps
-  extends HTMLAttributes<HTMLDivElement>,
-    AtlAvatarSpec {
+  extends HTMLAttributes<HTMLDivElement>, AtlAvatarSpec {
   /**
    * The URL of the image to display.
    */
@@ -70,7 +66,8 @@ export function AtlAvatar({
   }
 
   const classes = ['atl-avatar', `size-${size}`, `shape-${shape}`, className]
-    .filter(Boolean).join(' ');
+    .filter(Boolean)
+    .join(' ');
 
   const initials = name ? getInitials(name) : '';
   const ariaLabel = alt || name || 'Avatar';
@@ -80,11 +77,15 @@ export function AtlAvatar({
       {src && !imgError ? (
         <img src={src} alt={alt || name} onError={() => setImgError(true)} />
       ) : initials ? (
-        <span className="initials" aria-hidden="true">{initials}</span>
+        <span className="initials" aria-hidden="true">
+          {initials}
+        </span>
       ) : (
         <AtlIcon name="person" size="sm" className="icon" />
       )}
-      {status && <span className={`status-dot status-${status}`} aria-hidden="true" />}
+      {status && (
+        <span className={`status-dot status-${status}`} aria-hidden="true" />
+      )}
     </div>
   );
 }
@@ -93,8 +94,7 @@ export function AtlAvatar({
  * Properties for the AtlAvatarGroup component.
  */
 export interface AtlAvatarGroupProps
-  extends HTMLAttributes<HTMLDivElement>,
-    AtlAvatarGroupSpec {
+  extends HTMLAttributes<HTMLDivElement>, AtlAvatarGroupSpec {
   /**
    * The maximum number of avatars to show before displaying an overflow badge.
    */
@@ -123,7 +123,9 @@ export function AtlAvatarGroup({
   const visible = childArray.slice(0, max);
   const overflow = childArray.length - max;
 
-  const classes = ['atl-avatar-group', `size-${size}`, className].filter(Boolean).join(' ');
+  const classes = ['atl-avatar-group', `size-${size}`, className]
+    .filter(Boolean)
+    .join(' ');
 
   return (
     <div className={classes} {...rest}>

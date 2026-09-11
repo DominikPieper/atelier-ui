@@ -6,9 +6,10 @@ import { metadata } from '@atelier-ui/spec/metadata/breadcrumbs.metadata';
 import { contract } from '@atelier-ui/spec/contracts/breadcrumbs.contract';
 const ALL_IMPORTS = [AtlBreadcrumbs, AtlBreadcrumbItem];
 
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
-function figmaNode(nodeId: string): { type: "figma"; url: string } {
+function figmaNode(nodeId: string): { type: 'figma'; url: string } {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
 }
 
@@ -92,12 +93,15 @@ export const Dynamic: Story = {
       addItem() {
         this['items'].update((items: { href: string; label: string }[]) => [
           ...items,
-          { href: `/level-${items.length + 1}`, label: `Level ${items.length + 1}` },
+          {
+            href: `/level-${items.length + 1}`,
+            label: `Level ${items.length + 1}`,
+          },
         ]);
       },
       removeItem() {
         this['items'].update((items: { href: string; label: string }[]) =>
-          items.length > 1 ? items.slice(0, -1) : items
+          items.length > 1 ? items.slice(0, -1) : items,
         );
       },
     },

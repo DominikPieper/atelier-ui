@@ -44,7 +44,7 @@ frameworks and eight components, including a rename that missed one selector
 stylesheets that style `.error-message`.
 
 **Every gate here was blind to it, and structurally so.** `check:variants` walks the spec
-unions and asserts the matching class *exists* in the CSS; `check:primitives`,
+unions and asserts the matching class _exists_ in the CSS; `check:primitives`,
 `check:token-bypass` and `check:css-tokens` read declarations, not selectors;
 `check:typeface` splits rules but only to read `font-*`. Not one of them asks whether a
 class the CSS selects can ever be emitted. The direction was simply missing.
@@ -58,7 +58,7 @@ or `'align-' + align()`, so no literal exists to find. A naive scan reports ~340
 dead. (A tenth axis family, `sort-`, is written out as literals in all three adapters —
 `atl-table.ts:317`, `atl-table.tsx:155`, `atl-th.vue:30` — so it needs no resolution and
 is checked by the plain string path. Nine is the number of prefixes that have to be
-*resolved*; ten is the number of axis families this gate ends up owning.)
+_resolved_; ten is the number of axis families this gate ends up owning.)
 
 **The stylesheet↔template edge is not the filename.** Four Angular components ship no
 `styleUrl` at all (`atl-menu-item`, `atl-menu-separator`, `atl-step`, `atl-tab`) and are
@@ -92,14 +92,14 @@ instead of hardcoding it.
 
 **Where a substitution cannot be resolved the gate fails** with `[UNRESOLVED]`, naming the
 file, the prefix and the type. It does not skip. Verified by widening one substitution to
-`string`: the gate reports `[UNRESOLVED]` *and* turns the three `.variant-*` rules it can
+`string`: the gate reports `[UNRESOLVED]` _and_ turns the three `.variant-*` rules it can
 no longer vouch for into blockers, rather than passing them in silence.
 
 ### 2. Scope is the component directory, per framework
 
 Per-stylesheet is unavailable (the four Angular components with no `styleUrl`);
 per-importer is wrong for Vue. The directory is the only unit that is correct in all
-three adapters, and it is the *safe* direction of wrong: it can forgive, never invent.
+three adapters, and it is the _safe_ direction of wrong: it can forgive, never invent.
 This is the check:geometry trap from `tasks/lessons.md` — which hostified per directory,
 correct only until `select/` held two components — and it does not recur here, because
 this gate only asks "is this name emitted" and never has to rewrite a selector.
@@ -109,9 +109,9 @@ class is live in two shapes, both requiring that the two directories actually be
 child — read from the tag names in the source text (`<atl-checkbox`, `<AtlCheckbox`), a
 name that has to match a real root in `lib/component-roots.js` before it counts:
 
-- *a child's root used as a descendant selector* — `.atl-avatar .atl-icon`, where this
+- _a child's root used as a descendant selector_ — `.atl-avatar .atl-icon`, where this
   directory renders the icon and the icon emits its own root. Three cases exist today.
-- *a class the parent puts on the child's element* — `<AtlIcon className="invalid-icon"/>`
+- _a class the parent puts on the child's element_ — `<AtlIcon className="invalid-icon"/>`
   lands in the input's bag while the rule for it may live in the icon's own sheet.
 
 A blanket framework-wide fallback with no relation at all was measured and rejected: it
@@ -137,7 +137,7 @@ like that is true here: every finding is a line of CSS or a line of template in 
 working tree. Shipping a ratchet and satisfying its own promotion condition in the same
 run is strictly worse than shipping the blocker.
 
-The five findings that *are* decision-gated go in `DEAD_SELECTOR_EXEMPT` in
+The five findings that _are_ decision-gated go in `DEAD_SELECTOR_EXEMPT` in
 `lib/allowlists.js`, keyed `framework:dir:class`, all `kind: 'gap'` so they warn on every
 run rather than settling in. Three parts and not four: the gate compares per directory,
 and pairing a class to one stylesheet would be precision the check does not have. A
@@ -147,7 +147,7 @@ allowlists give — an improvement nobody records can silently reverse.
 The five: `orientation-vertical` and `orientation-horizontal` in Angular's and Vue's
 radio-group (the axis exists only in React, and settling it is a spec change either way),
 and `atl-checkbox` in Angular's table, where `.atl-tr-select-cell .atl-checkbox label`
-centres a child Angular renders as the *element* `<atl-checkbox>` while React and Vue emit
+centres a child Angular renders as the _element_ `<atl-checkbox>` while React and Vue emit
 the class. That last one was missed by the word-boundary sweep that found the other
 fourteen, because `<atl-checkbox` matches the word `atl-checkbox`; comparing
 class-position CSS against class-position emission is what separates them.
@@ -184,7 +184,7 @@ under its own heading rather than folded into the 49.
   restoring. Two of the fourteen are worth naming individually, because their remedies were
   not interchangeable with the rest:
   - **The deletion is Angular's `.atl-menu-panel`.** React and Vue keep the identical rule
-    *and* emit it (`atl-menu.tsx:180`, `atl-menu-trigger.vue:78`), so on the face of the
+    _and_ emit it (`atl-menu.tsx:180`, `atl-menu-trigger.vue:78`), so on the face of the
     diff this looks like the divergence the `.orientation-*` decision refused to erase. It
     is not: Angular's `AtlMenuTrigger` is a bare `@Directive` host-directive over
     `CdkMenuTrigger` (`atl-menu.ts:26-36`), the CDK overlay positions the panel, and no
@@ -209,7 +209,7 @@ under its own heading rather than folded into the 49.
   delete the rule") that was wrong in both directions for that shape. It fired on nothing in
   the repo, because every one of the 33 such sites happens to style the hook in the emitting
   component's sheet, so no amount of running the gate would have surfaced it. §2 records the
-  repair; the lesson is that the false-*positive* direction of a new blocker needs a
+  repair; the lesson is that the false-_positive_ direction of a new blocker needs a
   constructed probe exactly as much as the false-negative direction does.
 - **Symbol resolution is the load-bearing part, and it was proven so rather than assumed.**
   Neutering `getSymbolAtLocation` takes the gate from 5 findings to 288 (149 React, 131

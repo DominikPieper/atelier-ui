@@ -5,7 +5,8 @@ import AtlBreadcrumbItem from './atl-breadcrumb-item.vue';
 
 import { metadata } from '@atelier-ui/spec/metadata/breadcrumbs.metadata';
 import { contract } from '@atelier-ui/spec/contracts/breadcrumbs.contract';
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
@@ -108,7 +109,10 @@ export const Dynamic: Story = {
       function addItem() {
         items.value = [
           ...items.value,
-          { href: `/level-${items.value.length + 1}`, label: `Level ${items.value.length + 1}` },
+          {
+            href: `/level-${items.value.length + 1}`,
+            label: `Level ${items.value.length + 1}`,
+          },
         ];
       }
       function removeItem() {

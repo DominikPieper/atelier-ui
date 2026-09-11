@@ -11,11 +11,11 @@ Conciso design system. The repo had already answered it:
 
 - ADR-0020 names its palette source as
   `docs/src/styles/docs-theme.css (Direction A: Conciso anchor only — the palette this extends)`,
-  and the file's own header reads *"Direction A: Conciso anchor only … deep
-  Conciso teal on a clean white canvas"*. `--ui-color-primary: #006470` **is**
+  and the file's own header reads _"Direction A: Conciso anchor only … deep
+  Conciso teal on a clean white canvas"_. `--ui-color-primary: #006470` **is**
   a Conciso-derived anchor — deliberately the anchor and nothing else.
-- ADR-0020's decision sentence: *"Separate brand DNA (typography + motion) from
-  palette (purpose-specific)."* Shared identity lives in type and motion, not
+- ADR-0020's decision sentence: _"Separate brand DNA (typography + motion) from
+  palette (purpose-specific)."_ Shared identity lives in type and motion, not
   colour.
 
 Adopting the full Conciso system would reverse that standing decision. So:
@@ -23,7 +23,7 @@ Adopting the full Conciso system would reverse that standing decision. So:
 use Conciso as a theme demo instead of a foundation.**
 
 The demo is the better artifact anyway. If Atelier's token architecture is sound
-enough that Conciso can be applied as a *theme* through one scope attribute,
+enough that Conciso can be applied as a _theme_ through one scope attribute,
 that proves the token thesis the whole repo rests on. A rebrand proves nothing —
 it swaps values. It also keeps the OSS library from carrying an employer's brand,
 which would raise licensing and governance questions a public repo should not
@@ -31,38 +31,38 @@ have to answer.
 
 ## Existing assets (verified 2026-08-26)
 
-| Thing | Where | State |
-|---|---|---|
-| *Atelier Design System* | Claude Design `019de217-489c-7441-8275-2efe020086b5` | Real and current: holds `libs/react/src/styles/tokens.css`, `docs/src/styles/docs-theme.css`, `colors_and_type.css`, the logo, 21 preview cards, `ui_kits/docs-site/` (landing.jsx + css), and a 9.8 KB `_adherence.oxlintrc.json` — more adherence rules than Conciso's. Clearly `/design-sync`-produced, recent manifest timestamp. |
-| *Conciso Design System – Test* | Claude Design `d7f30939-ad36-45c6-8651-ab4a64e3bb90` | Reference only. 5 brand ramps ×10, neutrals, semantics, 15-token role type scale, spacing/radius/elevation/motion, Montserrat + Libre Baskerville, 24 preview cards, `_adherence.oxlintrc.json`. |
-| Work project *Atelier* | Claude Design `7a6a2f19-9a3c-4dd9-9828-65c7cc67766c` | Empty, created 2026-08-26. `get_project` reports no design-system binding, and `get_claude_design_prompt` takes `design_system_id` per call — so the binding is soft. Use this project and pass the **Atelier** design system explicitly. |
+| Thing                          | Where                                                | State                                                                                                                                                                                                                                                                                                                                 |
+| ------------------------------ | ---------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| _Atelier Design System_        | Claude Design `019de217-489c-7441-8275-2efe020086b5` | Real and current: holds `libs/react/src/styles/tokens.css`, `docs/src/styles/docs-theme.css`, `colors_and_type.css`, the logo, 21 preview cards, `ui_kits/docs-site/` (landing.jsx + css), and a 9.8 KB `_adherence.oxlintrc.json` — more adherence rules than Conciso's. Clearly `/design-sync`-produced, recent manifest timestamp. |
+| _Conciso Design System – Test_ | Claude Design `d7f30939-ad36-45c6-8651-ab4a64e3bb90` | Reference only. 5 brand ramps ×10, neutrals, semantics, 15-token role type scale, spacing/radius/elevation/motion, Montserrat + Libre Baskerville, 24 preview cards, `_adherence.oxlintrc.json`.                                                                                                                                      |
+| Work project _Atelier_         | Claude Design `7a6a2f19-9a3c-4dd9-9828-65c7cc67766c` | Empty, created 2026-08-26. `get_project` reports no design-system binding, and `get_claude_design_prompt` takes `design_system_id` per call — so the binding is soft. Use this project and pass the **Atelier** design system explicitly.                                                                                             |
 
 ## Guardrails
 
 1. **Both design-system projects are READ-ONLY.** No `write_files`,
-   `delete_files`, or `copy_files` *into* `d7f30939-…` or `019de217-…`. Work
-   happens in project *Atelier* (`7a6a2f19-…`); assets arrive via `copy_files`
+   `delete_files`, or `copy_files` _into_ `d7f30939-…` or `019de217-…`. Work
+   happens in project _Atelier_ (`7a6a2f19-…`); assets arrive via `copy_files`
    with `src_project_id`.
 2. **Pass `design_system_id: 019de217-…` explicitly** on every
    `get_claude_design_prompt` call, since the project carries no hard binding.
 3. **Port structure, never brand.** No Conciso hex value, font, logo or area
    name enters `libs/` or `docs/` outside the Phase-4 theme demo, where it is
    explicitly namespaced.
-4. **Additive first.** Phases 1–3 *add* tokens and leave existing `--ui-*`
+4. **Additive first.** Phases 1–3 _add_ tokens and leave existing `--ui-*`
    values alone, so component CSS is untouched and the 29 parity records stay
    valid. The moment component CSS starts referencing new role tokens, that
    changes — see Phase 0.
 
 ## What gets ported from Conciso — and what each one buys
 
-| # | Pattern | Atelier today | Why it is worth porting |
-|---|---|---|---|
-| 1 | **Tonal ramps 50–900 with an explicit ★ anchor and a marked `T` text-safe shade** | flat semantics: `--ui-color-primary` / `-hover` / `-active`, no ramp, no documented text-safe shade | The largest structural gain. Gives every colour a defined text use instead of leaving it to judgement |
-| 2 | **Contrast annotated in the token source** (`"T — text AA 5.5:1"`, `"accent only, 500 never for text"`) | `tools/scripts/wcag-contrast.mjs` exists and is wired to nothing (open item B5) | Turns "we picked accessible colours" into a checked claim, and gives the dormant gate its expected values |
-| 3 | **Role-based type scale** (display / headline / title / body / label × lg / md / sm) | `--ui-font-size-{xs…2xl}` — a size ladder, not roles | Components should reference a role ("this is body-md"), not a size. Sizes are an implementation detail of a role |
-| 4 | **Elevation paired with tonal overlays** | `--ui-shadow-{xs…xl}`, no overlay concept | Surfaces that read as layered without relying on shadow alone — matters in dark mode |
-| 5 | **`[data-area]` scope mechanism** (`[data-area="co"] { --c500: … }`) | `data-theme="dark"` is the only scope | The mechanism that makes Phase 4's theme demo possible with no fork. Structurally identical to what already exists |
-| 6 | **`_adherence.oxlintrc.json`** — machine-checkable adherence rules | nothing equivalent; ADR-0032 rejected an artboard gate on a premise since disproven | A ready-made answer to ADR-0032's reopened alternative 4. Both DS projects ship one; read them before designing our own |
+| #   | Pattern                                                                                                 | Atelier today                                                                                       | Why it is worth porting                                                                                                 |
+| --- | ------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| 1   | **Tonal ramps 50–900 with an explicit ★ anchor and a marked `T` text-safe shade**                       | flat semantics: `--ui-color-primary` / `-hover` / `-active`, no ramp, no documented text-safe shade | The largest structural gain. Gives every colour a defined text use instead of leaving it to judgement                   |
+| 2   | **Contrast annotated in the token source** (`"T — text AA 5.5:1"`, `"accent only, 500 never for text"`) | `tools/scripts/wcag-contrast.mjs` exists and is wired to nothing (open item B5)                     | Turns "we picked accessible colours" into a checked claim, and gives the dormant gate its expected values               |
+| 3   | **Role-based type scale** (display / headline / title / body / label × lg / md / sm)                    | `--ui-font-size-{xs…2xl}` — a size ladder, not roles                                                | Components should reference a role ("this is body-md"), not a size. Sizes are an implementation detail of a role        |
+| 4   | **Elevation paired with tonal overlays**                                                                | `--ui-shadow-{xs…xl}`, no overlay concept                                                           | Surfaces that read as layered without relying on shadow alone — matters in dark mode                                    |
+| 5   | **`[data-area]` scope mechanism** (`[data-area="co"] { --c500: … }`)                                    | `data-theme="dark"` is the only scope                                                               | The mechanism that makes Phase 4's theme demo possible with no fork. Structurally identical to what already exists      |
+| 6   | **`_adherence.oxlintrc.json`** — machine-checkable adherence rules                                      | nothing equivalent; ADR-0032 rejected an artboard gate on a premise since disproven                 | A ready-made answer to ADR-0032's reopened alternative 4. Both DS projects ship one; read them before designing our own |
 
 Explicitly **not** ported: the five brand ramps' values, Montserrat, Libre
 Baskerville, the four area names, the logo, the voice guidance.
@@ -76,8 +76,8 @@ Baskerville, the four area names, the logo, the voice guidance.
 - A role-based type scale exists, is covered by the token manifest, and
   `check:css-tokens` is at full coverage.
 - The five pilot components render unchanged in all three frameworks (this is
-  additive — a visual diff should show *nothing* until Phase 4).
-- Project *Atelier* holds artboards for the five pilot components, driven by
+  additive — a visual diff should show _nothing_ until Phase 4).
+- Project _Atelier_ holds artboards for the five pilot components, driven by
   Atelier's own tokens.
 - The Figma library carries Atelier's Variables and the five masters, generated
   from the token layer via figma-console-mcp — not traced from artboards.
@@ -126,7 +126,7 @@ at zero.
       Reason: three runs on one commit returned 70, 52 and 83 — the number tracks
       how much `codeSpec` was declared and which node was sampled, not the
       component. Amendment appended to ADR-0024.
-- Why it is no longer *blocking*: this plan is additive, so component CSS stays
+- Why it is no longer _blocking_: this plan is additive, so component CSS stays
   untouched and the 29 records stay valid. It becomes blocking the moment
   component CSS migrates onto role tokens (late Phase 1 or Phase 4).
 
@@ -136,15 +136,15 @@ Read the Atelier DS's `_adherence.oxlintrc.json` and checked every claim against
 the repo. Four results, all verified:
 
 1. **Atelier already has brand-area colours.** `--ui-color-brand-{agile, ai,
-   architecture, corporate, development, light-blue, light-green, petrol}` — all
+architecture, corporate, development, light-blue, light-green, petrol}` — all
    eight exist in `libs/react/src/styles/tokens.css`. So port item 5 is half
-   done: the *values* are there, the *scope mechanism* is not. That is a much
+   done: the _values_ are there, the _scope mechanism_ is not. That is a much
    smaller job than the plan assumed, and it gives Phase 4 a natural pairing
    (Atelier's areas beside Conciso's).
 2. **The `/design-sync` manifest is NOT a trustworthy source.** Verified defects
    in the synced metadata: it lists `--ui-font-size-3xl`, `-4xl` and `-5xl`,
    which exist **nowhere** in the repo; it types `--ui-transition-fast|normal|
-   slow` as `"color"`; it mixes 20 `--docs-*` private docs-theme tokens into
+slow` as `"color"`; it mixes 20 `--docs-*` private docs-theme tokens into
    what reads as the library's public token API; and `react/forbid-elements`
    ships with an empty forbid list, i.e. a no-op rule. **Phase 1 derives from
    `tokens.css` only.** The manifest is reference, never input. (This is also
@@ -170,7 +170,7 @@ the repo. Four results, all verified:
       the question.
 - [ ] Decide the Inter question (finding 4) before touching the type scale — the
       role scale and the font choice are one decision, not two. **Three directions
-      are drawn and verified** (2026-08-26) in project *Atelier*:
+      are drawn and verified** (2026-08-26) in project _Atelier_:
       `Typography Directions.dc.html` —
       <https://claude.ai/design/p/7a6a2f19-9a3c-4dd9-9828-65c7cc67766c?file=Typography+Directions.dc.html>.
       Same role scale, sizes and colours in all three so only the typeface varies:
@@ -186,7 +186,7 @@ the repo. Four results, all verified:
       constraint: **Instrument Serif ships exactly one weight (400)** — one
       `@font-face` in the Google Fonts CSS, no bold cut — so the boldness cannot
       come from that typeface. `2a` bigger + upright (kept as the honest **null
-      result**: high-contrast serif with thin stems reads *bigger*, not bolder),
+      result**: high-contrast serif with thin stems reads _bigger_, not bolder),
       `2b` **recommended** — headline moves to Instrument Sans 700 while the serif
       keeps the display line, no new font, keeps 1b's character, and it is where
       the weight a UI actually feels lives; `2c` swaps to Source Serif 4 (real
@@ -211,7 +211,7 @@ the repo. Four results, all verified:
       updated. A before/after screenshot diff should show **no change** — if it
       does, a value moved that should not have.
 
-### Phase 2 — artboards in project *Atelier*
+### Phase 2 — artboards in project _Atelier_
 
 - [ ] `copy_files` from the Atelier DS only what the artboards need (tokens,
       logo, the docs-site UI kit if useful). Never write into the DS.
@@ -248,12 +248,12 @@ the repo. Four results, all verified:
 
 ## Pilot set — and why these five
 
-| Component | Covers |
-|---|---|
-| `AtlButton` | Variant × size × state matrix, focus ring, the accent-vs-text colour rule |
-| `AtlInput` | Form control, error surface, border vs elevation, label typography |
-| `AtlCard` | Composition, surface hierarchy, tonal overlays |
-| `AtlDialog` | Overlay, darkest elevation step, backdrop, dark mode |
+| Component    | Covers                                                                                                   |
+| ------------ | -------------------------------------------------------------------------------------------------------- |
+| `AtlButton`  | Variant × size × state matrix, focus ring, the accent-vs-text colour rule                                |
+| `AtlInput`   | Form control, error surface, border vs elevation, label typography                                       |
+| `AtlCard`    | Composition, surface hierarchy, tonal overlays                                                           |
+| `AtlDialog`  | Overlay, darkest elevation step, backdrop, dark mode                                                     |
 | `AtlStepper` | Complex layout, connector geometry, and it already carries open questions worth closing in the same pass |
 
 ## Risks, named

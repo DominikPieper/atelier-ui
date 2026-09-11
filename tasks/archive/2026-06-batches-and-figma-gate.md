@@ -20,16 +20,17 @@ Full roadmap: `~/.claude/plans/validated-sniffing-lamport.md`. Core finding: gat
 string/binding EXISTS, not that it is TRUE; verify-loop + LLM-thesis eval are unenforced/unmeasured.
 
 Safe mechanical fixes (no decision needed) — landing now:
+
 - [x] `.gitignore`: fix malformed line 53 (`settings.local.json.netlify/state.json` was one jammed line); add `.env`/`.env.*`/`.dev.vars`/`*.log`
 - [x] Untrack `debug-storybook.log` (`git rm --cached`)
 - [x] `plan/figma.md:142` LlmButton variant → add `danger` (spec has it; doc was stale)
 
 DONE this session (Close-the-loop, group A):
+
 - [x] Version band: accept 0.1.x → ADR-0023 (+ ADR-0016 note, README row). User decision.
 - [x] **A2 — parity persistence gate**: `tools/scripts/check-parity.js` + `parity-record.mjs` + `lib/parity-inputs.js` + `tools/figma/parity.json`; `check:parity`/`parity:record` scripts; ADR-0024; docs verify-step wired (loop page only — kata builds composed SettingsCard, not a master). Verified: baseline 3-unverified/exit0, record→OK, input drift→BLOCKER/exit1, revert clean; check:all green.
 - [~] A1 — generation eval: DEFERRED by user (kept on roadmap; needs a model + API key to run).
 - [x] **A3 — cross-framework a11y-tree conformance**: jsdom a11y-snapshot per fw + offline diff gate. New: `libs/<fw>/src/testing/a11y-tree.ts` (normalizer, ×3 like behavior.ts), `llm-button.a11y.spec.*` (×3), `tools/parity/a11y/llm-button.<fw>.json` (×3), `tools/scripts/check-a11y-parity.js`; `check:a11y-parity` (in check:all) + `gen:a11y`; ADR-0025. Proof: LlmButton — all 3 produce byte-identical a11y tree despite native-button (React/Vue) vs role-host (Angular). Verified: gate green, synthetic divergence→BLOCKER, per-fw drift guard passes in `nx test`, lint clean all 3, check:all green.
-
 
 ## Spec hygiene: checkbox/toggle value (ADR-0022) — 2026-06-13
 
@@ -41,14 +42,12 @@ DONE this session (Close-the-loop, group A):
 - [x] ~~push~~ — done long since; the batch shipped 2026-06-13.
 - Remaining open: .panel/.close-btn dialog scoping (component-trinity); McpExplorer tool rename (lossy, disclaimer'd); ideas 11-29
 
-
 ## Quick-win ideas batch — 2026-06-13
 
 - [x] Edit-this-page link (BaseLayout + source-path helper; dynamic routes link template, 404 excluded)
 - [x] Teaching empty states (gallery: specific msg + Clear filters + category chips; search: type-hint)
 - [x] Verify (lint/build/58 pages) + screenshots + commit + push
 - Skipped: copy "inked" polish (multiple impls, low value); content follow-ups [(value)] alias still a docs-vs-library decision
-
 
 ## P3 polish batch — 2026-06-13
 
@@ -60,8 +59,8 @@ DONE this session (Close-the-loop, group A):
 - [x] Verify nx lint/build/check:docs clean (58 pages); screenshots (single breadcrumb, progress bar, MCP single-col, home jargon) + commits
 
 ### Review
-P3 polish batch done, 4 commits. Moot (already fixed earlier): skill version + ref count (derived), kata {framework} (substituted). Skipped: og:image (accepted placeholder). Agent B correctly rejected an inverted premise — FW_DEFAULT is 'angular', so first-component (Angular-first) was already right; tutorial+d2c were the divergent ones (fixed inline). Remaining open: deferred ideas 9-29, content follow-ups (checkbox/toggle [(value)] alias, .panel/.close-btn scoping, McpExplorer tool rename), content-review-1 P3 (figma-console-mcp suffix now done; rest minor).
 
+P3 polish batch done, 4 commits. Moot (already fixed earlier): skill version + ref count (derived), kata {framework} (substituted). Skipped: og:image (accepted placeholder). Agent B correctly rejected an inverted premise — FW_DEFAULT is 'angular', so first-component (Angular-first) was already right; tutorial+d2c were the divergent ones (fixed inline). Remaining open: deferred ideas 9-29, content follow-ups (checkbox/toggle [(value)] alias, .panel/.close-btn scoping, McpExplorer tool rename), content-review-1 P3 (figma-console-mcp suffix now done; rest minor).
 
 ## UX P2 batch — 2026-06-13
 
@@ -70,8 +69,8 @@ P3 polish batch done, 4 commits. Moot (already fixed earlier): skill version + r
 - [x] Verify: nx lint clean + build 58 pages + screenshots; commits + push
 
 ### Review
-6 open P2 closed. Verified live (local): tokens/schulung desktop TOC (7/6 sections), mobile "On this page" disclosure visible+expandable, drawer shows For-instructors group and scrolls with 80px bottom clearance, first-component "Step 6 of 7", topbar "MCP playground". One icon note: the instructor-group heading uses `school` (Icon.astro only registers a fixed set; unregistered names crash the build — same constraint hit twice). Still open: UX P3 list (~14), deferred ideas 9-29, content follow-ups (checkbox/toggle [(value)] alias, .panel/.close-btn scoping, McpExplorer tool rename).
 
+6 open P2 closed. Verified live (local): tokens/schulung desktop TOC (7/6 sections), mobile "On this page" disclosure visible+expandable, drawer shows For-instructors group and scrolls with 80px bottom clearance, first-component "Step 6 of 7", topbar "MCP playground". One icon note: the instructor-group heading uses `school` (Icon.astro only registers a fixed set; unregistered names crash the build — same constraint hit twice). Still open: UX P3 list (~14), deferred ideas 9-29, content follow-ups (checkbox/toggle [(value)] alias, .panel/.close-btn scoping, McpExplorer tool rename).
 
 ## UX Top-5 implementation — 2026-06-12 (eve)
 
@@ -90,6 +89,7 @@ Report: tasks/review-docs-ux-2026-06-12.md · Top-5: track infra, 404, framework
 Wave-2 page agents hit the session limit mid-run (reset 00:20). State on resume: workshop + figma-token complete; design-to-code build-broken (left a BottomNav ref + renamed PROMPT→prompt(fw) without updating the body); tutorial/patterns/first-component/schulung partial or untouched. Finished all 7 by hand (mechanical, API was clear from the two completed pages).
 
 **Two real bugs the agents introduced, caught at build:**
+
 1. `design-to-code` referenced removed `BottomNav` and an undefined `PROMPT` — fixed by completing the TrackNav swap and per-framework prompt rendering.
 2. **TrackNav used `arrow_forward`, which isn't in the Icon registry** (only arrow_back/left/right exist) — it never surfaced in wave 1 because TrackNav renders nothing until placed on a track page, so the bad icon name was only exercised once wave 2 wired it in. Switched to arrow_left/arrow_right.
 
@@ -98,7 +98,6 @@ Verified live (local): first-component shows "Step 7 of 8", prompt contains conc
 **Open (user decision):** Schulung placement — it's now flagged in-page as instructor material, but still sits as numbered step 2 of the participant path. Moving it out of the numbered sequence is a content/IA call.
 
 **Not done (deferred ideas, report ranks 9–29):** framework-aware home routing, interactive token playground, "Edit this page", persisted progress checkmarks, embedded Storybook previews, changelog-from-ADRs, etc.
-
 
 ## Fix docs review findings (P1+P2) — 2026-06-12
 
@@ -118,6 +117,7 @@ Plan: ~/.claude/plans/mach-ein-review-von-delightful-axolotl.md · Report: tasks
 ### Review
 
 All 38 P1/P2 findings fixed across 7 batched commits (247a58a..8525cae). Key outcomes:
+
 - **Root cause of the demo-stretch/data-list P1 was a library bug**, not docs CSS: unscoped
   `.size-*` width rules in `llm-dialog.css` leaked globally in the React/Vue builds and hit
   every `size-*`-classed element. Scoped to `.llm-dialog.size-*` / `dialog > .panel.size-*`
@@ -131,6 +131,7 @@ All 38 P1/P2 findings fixed across 7 batched commits (247a58a..8525cae). Key out
   positives (Storybook deployed separately on same domain; IDs verified in live index.json).
 
 **Open follow-ups (out of scope, flagged by agents):**
+
 - checkbox/toggle prop tables advertise an Angular `[(value)]` alias that the Angular
   adapter never implemented — spec-vs-impl drift, needs a component-trinity/ADR decision.
 - `.panel`/`.close-btn` in llm-dialog.css are still generic global classes (no proven
@@ -139,7 +140,6 @@ All 38 P1/P2 findings fixed across 7 batched commits (247a58a..8525cae). Key out
 - McpExplorer playground still simulates the 5 conceptual tools (now labeled as such);
   renaming them to the real toolset would be the deeper fix.
 - P3 findings (15) from the review remain unfixed by decision.
-
 
 ## Review — Personal authorial signature (2026-06-02)
 
@@ -161,19 +161,20 @@ Typography + motion signature on top of Direction A (palette untouched). See ADR
   derive from `--ui-duration-*`, zeroed under the media query).
 - **Remaining manual step:** eyeball serif accent teal in light/dark in a browser.
 
-
 ## Active — `check:figma` Figma-Konformitäts-Gate (2026-06-01)
 
 Plan: `~/.claude/plans/wir-schlie-en-die-einzige-eager-sun.md` (approved). Closes the
 last AI-readiness layer without a drift gate (`plan/ai-readiness.md` §4).
 
 **Decisions (locked via clarification):**
+
 - Committed snapshot (`tools/figma/snapshot.json`) + offline `check:figma`.
 - Refresh via figma-console MCP read-tools (spawn stdio client; devDep `@modelcontextprotocol/sdk`).
 - Standalone npm script only — NOT in `check:all`, NOT pre-push.
 - 5 core checks only; no `figma_lint_design` pass.
 
 **Items:**
+
 - [x] Capture real figma-console MCP output shapes to ground the snapshot schema
 - [x] Add `@modelcontextprotocol/sdk` devDependency (`^1.29.0`)
 - [x] `tools/scripts/figma-snapshot.mjs` — spawn MCP, probe (fail-loud if no plugin), write snapshot
@@ -192,8 +193,8 @@ Shipped `check:figma`, the drift gate for the last AI-readiness layer that had n
 **Architecture:** committed-snapshot + offline-check, in the repo's `gen-*/--check` idiom.
 The only Figma-connected part is the refresh (`figma:snapshot`), which spawns
 `figma-console-mcp` as a stdio MCP client; the gate itself reads `tools/figma/snapshot.json`
-and is fully offline/deterministic. The snapshot holds Figma *facts* (names, variant axes,
-descriptions, `layoutMode`, bound/unbound/raw per node); the gate holds the *rules*.
+and is fully offline/deterministic. The snapshot holds Figma _facts_ (names, variant axes,
+descriptions, `layoutMode`, bound/unbound/raw per node); the gate holds the _rules_.
 
 **Five checks:** name alignment (Blocker), variant-matrix completeness (Blocker), token-link
 coverage (Critical), auto-layout (Critical), description congruence (Warning). Blocker+Critical
@@ -205,15 +206,17 @@ coverage (Critical), auto-layout (Critical), description congruence (Warning). B
 `plan/adr/README.md`, `plan/figma-component-checklist.md`, `plan/ai-readiness.md`.
 
 **Verification (all passed):**
+
 - `npm run check:figma` → 5 real Critical token findings (unbound radii on Badge `9999`/Card
   `12`,`6`; unbound padding across Button/Badge/Card), exit 1. Not an empty pass.
 - Allowlist proven: `LlmCardRole` (code-only landmark prop) raised a name Blocker; one
   `LlmCard:name:role` entry suppressed it correctly.
 - Synthetic drift: added `'xl'` to `LlmButtonSize` → gate flagged `[BLOCKER] [NAME] LlmButton.size:
-  Figma is missing value(s) ['xl']`; reverted clean.
+Figma is missing value(s) ['xl']`; reverted clean.
 - `npm run check:all` → exit 0 (no regressions). `eslint` on touched scripts → exit 0.
 
 **Decisions worth remembering** (see ADR-0019 for full why):
+
 - Description check is presence + spec-reference, not verbatim `== purpose` (Figma descriptions
   are intentionally richer; verbatim would warn on all 27 — pure noise).
 - Component-set names are section-prefixed (`Action/LlmButton`) → compare the leaf.
@@ -228,4 +231,3 @@ snapshot; a snapshot-freshness check is the prerequisite to ever putting `check:
 **Note on in-session refresh:** `figma:snapshot` could not be executed live because this Claude
 Code session already held the figma-console bridge (single-plugin-attachment); the committed
 snapshot was built from the same MCP read-tools the generator uses, in the identical schema.
-

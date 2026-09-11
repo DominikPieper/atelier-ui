@@ -67,8 +67,16 @@ function isInvokedBinding(node) {
  */
 function findBinderCalls(filePath, binder) {
   const text = readFileSync(filePath, 'utf-8');
-  const scriptKind = filePath.endsWith('.tsx') ? ts.ScriptKind.TSX : ts.ScriptKind.TS;
-  const sf = ts.createSourceFile(filePath, text, ts.ScriptTarget.Latest, true, scriptKind);
+  const scriptKind = filePath.endsWith('.tsx')
+    ? ts.ScriptKind.TSX
+    : ts.ScriptKind.TS;
+  const sf = ts.createSourceFile(
+    filePath,
+    text,
+    ts.ScriptTarget.Latest,
+    true,
+    scriptKind,
+  );
   const pairs = [];
   const visit = (node) => {
     if (
@@ -94,11 +102,14 @@ async function main() {
     console.error('usage: behavior-coverage.mjs <config.mjs>');
     process.exit(2);
   }
-  const config = (await import(pathToFileURL(resolve(ROOT, configArg)).href)).default;
+  const config = (await import(pathToFileURL(resolve(ROOT, configArg)).href))
+    .default;
   const { manifestPath, implementations, filePattern, label } = config;
   const binder = config.binder || 'covers';
 
-  const manifest = JSON.parse(readFileSync(resolve(ROOT, manifestPath), 'utf-8'));
+  const manifest = JSON.parse(
+    readFileSync(resolve(ROOT, manifestPath), 'utf-8'),
+  );
   const implNames = Object.keys(implementations);
   const errors = [];
   let checks = 0;
@@ -110,12 +121,17 @@ async function main() {
     const validIds = new Set(entries.map((e) => e.id));
 
     for (const implName of implNames) {
-      const dir = resolve(ROOT, implementations[implName].replace('{subject}', subject));
+      const dir = resolve(
+        ROOT,
+        implementations[implName].replace('{subject}', subject),
+      );
       let files;
       try {
         files = readdirSync(dir).filter((f) => filePattern.test(f));
       } catch {
-        errors.push(`[NO-DIR] ${implName}/${subject}: ${dir.replace(ROOT + '/', '')} not found`);
+        errors.push(
+          `[NO-DIR] ${implName}/${subject}: ${dir.replace(ROOT + '/', '')} not found`,
+        );
         continue;
       }
 
@@ -125,13 +141,13 @@ async function main() {
         for (const [s, id] of findBinderCalls(join(dir, f), binder)) {
           if (s !== subject) {
             errors.push(
-              `[WRONG-SUBJECT] ${implName}/${subject}/${f}: ${binder}('${s}', …) bound under the ${subject} directory`
+              `[WRONG-SUBJECT] ${implName}/${subject}/${f}: ${binder}('${s}', …) bound under the ${subject} directory`,
             );
             continue;
           }
           if (!validIds.has(id)) {
             errors.push(
-              `[UNKNOWN-ID] ${implName}/${subject}/${f}: ${binder}('${s}', '${id}') is not an id in ${manifestPath}`
+              `[UNKNOWN-ID] ${implName}/${subject}/${f}: ${binder}('${s}', '${id}') is not an id in ${manifestPath}`,
             );
             continue;
           }
@@ -152,12 +168,12 @@ async function main() {
     errors.forEach((e) => console.error(`✗ ${e}`));
     console.error(
       `\n${errors.length} coverage gap(s). Bind the covering test with ` +
-        `\`${binder}('<subject>', '<id>')('<title>', fn)\`, or extend ${manifestPath}.`
+        `\`${binder}('<subject>', '<id>')('<title>', fn)\`, or extend ${manifestPath}.`,
     );
     process.exit(1);
   }
   console.log(
-    `✓ ${label || 'behavior'} coverage in sync (${checks} checks across ${subjects} subjects × ${implNames.length} implementations)`
+    `✓ ${label || 'behavior'} coverage in sync (${checks} checks across ${subjects} subjects × ${implNames.length} implementations)`,
   );
 }
 

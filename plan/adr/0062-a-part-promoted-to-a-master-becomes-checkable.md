@@ -18,7 +18,7 @@ the gates that reported the new masters wrongly.
 
 Ten parts of the library had no master of their own: the menu item and separator, the
 tab, the step, the select option, the accordion item, the breadcrumb item, and the
-chat message, suggestion and typing indicator. They existed only as layers *inside*
+chat message, suggestion and typing indicator. They existed only as layers _inside_
 their parent masters.
 
 That is the same set of layers `[ROOT-PAINT]` (ADR-0060) could not reach, and the
@@ -43,18 +43,18 @@ can only ever be drawn inside a parent's fixed composition is still a layer.
 that states the spec mapping, why each axis is an axis, and every exemption in the form
 the gates read:
 
-| Master | Axis | Booleans |
-|---|---|---|
-| AtlMenuItem | `state` default \| hover | `disabled` |
-| AtlMenuSeparator | — | — |
-| AtlBreadcrumbItem | `current` false \| true | — |
-| AtlTab | `state` default \| active | `disabled` |
-| AtlStep | `state` default \| active \| completed \| error | `description`, `optional`, `disabled` |
-| AtlOption | `state` default \| hover \| active \| selected | `disabled` |
-| AtlAccordionItem | `expanded` false \| true | `disabled` |
-| AtlChatMessage | `role` assistant \| user \| system | `failed` |
-| AtlChatSuggestion | — | `hint` |
-| AtlChatTyping | — | — |
+| Master            | Axis                                            | Booleans                              |
+| ----------------- | ----------------------------------------------- | ------------------------------------- |
+| AtlMenuItem       | `state` default \| hover                        | `disabled`                            |
+| AtlMenuSeparator  | —                                               | —                                     |
+| AtlBreadcrumbItem | `current` false \| true                         | —                                     |
+| AtlTab            | `state` default \| active                       | `disabled`                            |
+| AtlStep           | `state` default \| active \| completed \| error | `description`, `optional`, `disabled` |
+| AtlOption         | `state` default \| hover \| active \| selected  | `disabled`                            |
+| AtlAccordionItem  | `expanded` false \| true                        | `disabled`                            |
+| AtlChatMessage    | `role` assistant \| user \| system              | `failed`                              |
+| AtlChatSuggestion | —                                               | `hint`                                |
+| AtlChatTyping     | —                                               | —                                     |
 
 Three decisions inside that table are worth their own line:
 
@@ -79,8 +79,8 @@ AtlTab now carries it.
   `AtlTabGroupVariant` and `AtlTableVariant`, so the gate demanded axes named
   `groupVariant`, `leVariant`, `leSize` and `leAlign`. The remainder must be an axis
   word, not merely what is left over.
-- **`[BOOL-MISSING]` accepted an axis *value* named for a boolean field but not an axis
-  *name*.** `current` = false | true is the property, drawn.
+- **`[BOOL-MISSING]` accepted an axis _value_ named for a boolean field but not an axis
+  _name_.** `current` = false | true is the property, drawn.
 - **`[ROOT-PAINT]` compared stroke widths where nothing paints a stroke.** Figma keeps a
   default weight of 1 on a node with no stroke paint at all, so `border: none` read as a
   1px box.

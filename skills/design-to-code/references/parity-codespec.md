@@ -10,15 +10,15 @@ for AtlStepper returned 70, 52 and 83).
 
 Schema as the architect's `references/code-sync.md` records it:
 
-| Section | Fields | Where the code value comes from |
-|---|---|---|
-| `visual` | fills, strokes, opacity, radius | component CSS, resolved through `tokens.css` for the mode you sample |
-| `spacing` | padding, gap, margins | CSS plus the rendered story — measure; do not trust the stylesheet alone for heights |
-| `typography` | font family, size, weight, line-height, letter-spacing | CSS; ADR-0048 (leading stated explicitly), ADR-0035 (Instrument Sans / Serif, JetBrains Mono) |
-| `tokens` | expected Variable bindings | the `--ui-*` names the CSS uses, mapped to `Library Tokens` variable names |
-| `componentAPI` | prop names and values | `check:contracts --emit` (the docgen manifest) — axis names and values verbatim |
-| `accessibility` | roles, labels, contrast minimums | `figma_scan_code_accessibility({ mapToCodeSpec: true })` on the story HTML — copy the story root's `outerHTML` from DevTools in the running Storybook and pass it as `html` |
-| `metadata` | description text, slash-name shape | the component's own JSDoc / the manifest's description field (the master's description should still name the `Atl*Spec` interface for a repo master — `check:figma` Warning otherwise) |
+| Section         | Fields                                                 | Where the code value comes from                                                                                                                                                        |
+| --------------- | ------------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `visual`        | fills, strokes, opacity, radius                        | component CSS, resolved through `tokens.css` for the mode you sample                                                                                                                   |
+| `spacing`       | padding, gap, margins                                  | CSS plus the rendered story — measure; do not trust the stylesheet alone for heights                                                                                                   |
+| `typography`    | font family, size, weight, line-height, letter-spacing | CSS; ADR-0048 (leading stated explicitly), ADR-0035 (Instrument Sans / Serif, JetBrains Mono)                                                                                          |
+| `tokens`        | expected Variable bindings                             | the `--ui-*` names the CSS uses, mapped to `Library Tokens` variable names                                                                                                             |
+| `componentAPI`  | prop names and values                                  | `check:contracts --emit` (the docgen manifest) — axis names and values verbatim                                                                                                        |
+| `accessibility` | roles, labels, contrast minimums                       | `figma_scan_code_accessibility({ mapToCodeSpec: true })` on the story HTML — copy the story root's `outerHTML` from DevTools in the running Storybook and pass it as `html`            |
+| `metadata`      | description text, slash-name shape                     | the component's own JSDoc / the manifest's description field (the master's description should still name the `Atl*Spec` interface for a repo master — `check:figma` Warning otherwise) |
 
 `check:contracts --emit` fills `componentAPI`, `metadata` and `tokens.usedTokens` only —
 the parity call is complete for those three sections without further assembly.
@@ -46,7 +46,7 @@ state, Light and Dark — and say in the report which states you drove.
   anything larger is a real discrepancy.
 - Each discrepancy carries `category`, `property`, `severity`, `designValue`, `codeValue`,
   `suggestion`. Decide per item: fix code, fix master (architect Build/Migrate), or record
-  as intentional. "Understood" is the bar for the *report*; for the *record* the bar is
+  as intentional. "Understood" is the bar for the _report_; for the _record_ the bar is
   "fixed or durably recorded" — durable means the handoff document (Build), a
   `FIGMA_CONFORMANCE_EXCEPTIONS` entry with a reason, or an open `tasks/todo.md` decision
   item. A commit message that mentions the gap is not a record; the first eval of this

@@ -6,7 +6,8 @@ export const contract = {
   figmaOnly: [
     {
       name: 'state=filled',
-      reason: 'UNEXPLAINED — grep-verified 2026-09-10: no CSS rule or component logic implements an .is-filled/:placeholder-shown visual state; decide in tasks/todo.md',
+      reason:
+        'UNEXPLAINED — grep-verified 2026-09-10: no CSS rule or component logic implements an .is-filled/:placeholder-shown visual state; decide in tasks/todo.md',
     },
     {
       name: 'state=open',

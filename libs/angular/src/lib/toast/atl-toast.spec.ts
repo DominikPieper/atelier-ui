@@ -1,11 +1,7 @@
 import { render, screen } from '@testing-library/angular';
 import { userEvent } from '@testing-library/user-event';
 import { TestBed } from '@angular/core/testing';
-import {
-  AtlToast,
-  AtlToastContainer,
-  AtlToastService,
-} from './atl-toast';
+import { AtlToast, AtlToastContainer, AtlToastService } from './atl-toast';
 import { covers } from '../../testing/behavior';
 
 describe('AtlToastService', () => {
@@ -39,7 +35,11 @@ describe('AtlToastService', () => {
   });
 
   it('show() applies custom options', () => {
-    service.show('Warning!', { variant: 'warning', duration: 3000, dismissible: false });
+    service.show('Warning!', {
+      variant: 'warning',
+      duration: 3000,
+      dismissible: false,
+    });
     const toast = service.toasts()[0];
     expect(toast.variant).toBe('warning');
     expect(toast.duration).toBe(3000);
@@ -107,22 +107,30 @@ describe('AtlToast', () => {
     expect(screen.getByText('Hello world')).toBeInTheDocument();
   });
 
-  covers('toast', 'variant-class').each(['default', 'success', 'warning', 'danger', 'info'] as const)(
-    'applies variant-%s class to host',
-    async (variant) => {
-      const { container } = await render(
-        `<atl-toast variant="${variant}" message="Test" />`,
-        { imports: [AtlToast] }
-      );
-      expect(container.querySelector('atl-toast')).toHaveClass(`variant-${variant}`);
-    }
-  );
+  covers('toast', 'variant-class').each([
+    'default',
+    'success',
+    'warning',
+    'danger',
+    'info',
+  ] as const)('applies variant-%s class to host', async (variant) => {
+    const { container } = await render(
+      `<atl-toast variant="${variant}" message="Test" />`,
+      { imports: [AtlToast] },
+    );
+    expect(container.querySelector('atl-toast')).toHaveClass(
+      `variant-${variant}`,
+    );
+  });
 
   it('has role="status" on host', async () => {
     const { container } = await render('<atl-toast message="Test" />', {
       imports: [AtlToast],
     });
-    expect(container.querySelector('atl-toast')).toHaveAttribute('role', 'status');
+    expect(container.querySelector('atl-toast')).toHaveAttribute(
+      'role',
+      'status',
+    );
   });
 
   it('renders dismiss button when dismissible=true (default)', async () => {
@@ -136,22 +144,27 @@ describe('AtlToast', () => {
     await render('<atl-toast [dismissible]="false" message="Test" />', {
       imports: [AtlToast],
     });
-    expect(screen.queryByRole('button', { name: 'Dismiss' })).not.toBeInTheDocument();
+    expect(
+      screen.queryByRole('button', { name: 'Dismiss' }),
+    ).not.toBeInTheDocument();
   });
 
-  covers('toast', 'dismiss-button-click')('emits dismissed with toastId when dismiss button is clicked', async () => {
-    const user = userEvent.setup();
-    const dismissed = vi.fn();
-    await render(
-      '<atl-toast message="Test" toastId="abc-123" (dismissed)="dismissed($event)" />',
-      {
-        imports: [AtlToast],
-        componentProperties: { dismissed },
-      }
-    );
-    await user.click(screen.getByRole('button', { name: 'Dismiss' }));
-    expect(dismissed).toHaveBeenCalledWith('abc-123');
-  });
+  covers('toast', 'dismiss-button-click')(
+    'emits dismissed with toastId when dismiss button is clicked',
+    async () => {
+      const user = userEvent.setup();
+      const dismissed = vi.fn();
+      await render(
+        '<atl-toast message="Test" toastId="abc-123" (dismissed)="dismissed($event)" />',
+        {
+          imports: [AtlToast],
+          componentProperties: { dismissed },
+        },
+      );
+      await user.click(screen.getByRole('button', { name: 'Dismiss' }));
+      expect(dismissed).toHaveBeenCalledWith('abc-123');
+    },
+  );
 });
 
 describe('AtlToastContainer', () => {
@@ -161,7 +174,7 @@ describe('AtlToastContainer', () => {
     });
     expect(container.querySelector('atl-toast-container')).toHaveAttribute(
       'aria-live',
-      'polite'
+      'polite',
     );
   });
 
@@ -169,7 +182,10 @@ describe('AtlToastContainer', () => {
     const { container } = await render('<atl-toast-container />', {
       imports: [AtlToastContainer],
     });
-    expect(container.querySelector('atl-toast-container')).toHaveAttribute('role', 'status');
+    expect(container.querySelector('atl-toast-container')).toHaveAttribute(
+      'role',
+      'status',
+    );
   });
 
   it('renders toasts from the service', async () => {
@@ -186,18 +202,25 @@ describe('AtlToastContainer', () => {
     expect(screen.getByText('Second toast')).toBeInTheDocument();
   });
 
-  covers('toast', 'position-class')('applies position class to host', async () => {
-    const { container } = await render(
-      '<atl-toast-container position="top-center" />',
-      { imports: [AtlToastContainer] }
-    );
-    expect(container.querySelector('atl-toast-container')).toHaveClass('position-top-center');
-  });
+  covers('toast', 'position-class')(
+    'applies position class to host',
+    async () => {
+      const { container } = await render(
+        '<atl-toast-container position="top-center" />',
+        { imports: [AtlToastContainer] },
+      );
+      expect(container.querySelector('atl-toast-container')).toHaveClass(
+        'position-top-center',
+      );
+    },
+  );
 
   it('defaults to position-bottom-right', async () => {
     const { container } = await render('<atl-toast-container />', {
       imports: [AtlToastContainer],
     });
-    expect(container.querySelector('atl-toast-container')).toHaveClass('position-bottom-right');
+    expect(container.querySelector('atl-toast-container')).toHaveClass(
+      'position-bottom-right',
+    );
   });
 });

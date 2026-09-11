@@ -4,7 +4,8 @@ import { AtlTabGroup, AtlTab } from './atl-tabs';
 
 import { metadata } from '@atelier-ui/spec/metadata/tabs.metadata';
 import { contract } from '@atelier-ui/spec/contracts/tab-group.contract';
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
@@ -105,13 +106,19 @@ export const Controlled: Story = {
 export const ManyTabs: Story = {
   render: () => (
     <AtlTabGroup>
-      {['Overview', 'Analytics', 'Reports', 'Integrations', 'Activity', 'Security', 'Settings'].map(
-        (label) => (
-          <AtlTab key={label} label={label}>
-            <p>{label} content here.</p>
-          </AtlTab>
-        )
-      )}
+      {[
+        'Overview',
+        'Analytics',
+        'Reports',
+        'Integrations',
+        'Activity',
+        'Security',
+        'Settings',
+      ].map((label) => (
+        <AtlTab key={label} label={label}>
+          <p>{label} content here.</p>
+        </AtlTab>
+      ))}
     </AtlTabGroup>
   ),
 };

@@ -84,12 +84,12 @@ export class AtlAvatar {
 
   /** @internal */
   protected readonly ariaLabel = computed(
-    () => this.alt() || this.name() || 'Avatar'
+    () => this.alt() || this.name() || 'Avatar',
   );
 
   /** @internal */
   protected readonly hostClasses = computed(
-    () => `size-${this.size()} shape-${this.shape()}`
+    () => `size-${this.size()} shape-${this.shape()}`,
   );
 
   constructor() {
@@ -120,7 +120,9 @@ export class AtlAvatar {
   template: `
     <ng-content />
     @if (overflowCount() > 0) {
-      <span [class]="'overflow-badge size-' + size()">+{{ overflowCount() }}</span>
+      <span [class]="'overflow-badge size-' + size()"
+        >+{{ overflowCount() }}</span
+      >
     }
   `,
   styleUrl: './atl-avatar.css',
@@ -139,14 +141,15 @@ export class AtlAvatarGroup {
   private readonly avatarEls = contentChildren(AtlAvatar, { read: ElementRef });
 
   protected readonly overflowCount = computed(() =>
-    Math.max(0, this.avatarEls().length - this.max())
+    Math.max(0, this.avatarEls().length - this.max()),
   );
 
   constructor() {
     effect(() => {
       const max = this.max();
       this.avatarEls().forEach((el, i) => {
-        (el.nativeElement as HTMLElement).style.display = i >= max ? 'none' : '';
+        (el.nativeElement as HTMLElement).style.display =
+          i >= max ? 'none' : '';
       });
     });
   }

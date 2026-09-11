@@ -22,7 +22,7 @@ Accepted.
 Figma's Code Connect maps a Figma component to its production implementation so Dev Mode
 and the official Dev Mode MCP server show true-to-production snippets instead of
 generated approximations. Current practice guides treat it, together with the official
-MCP server, as *the* design-to-code contract. It requires Organization or Enterprise
+MCP server, as _the_ design-to-code contract. It requires Organization or Enterprise
 seats, a mapping file per component (`Button.figma.ts` or the framework-agnostic config),
 and the official Figma toolchain.
 
@@ -66,6 +66,6 @@ Alternatives considered:
   compensation is the Storybook link on each master and the description naming the spec
   interface.
 - Skills may state the exclusion by pointing here instead of restating it.
-- Revisit trigger: an Organization plan for the workshop *and* a Code Connect config that
+- Revisit trigger: an Organization plan for the workshop _and_ a Code Connect config that
   could be generated from `libs/spec` (so it is a projection, not a second source) would
   reopen this. Until then, a request for Code Connect gets this ADR as the answer.

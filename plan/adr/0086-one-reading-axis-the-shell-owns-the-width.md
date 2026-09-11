@@ -40,7 +40,7 @@ Two further symptoms shared the same root cause — nothing owned page width:
 - `/mcp` (1000px) and `/components` (1280px) opted out with inline styles on
   their own wrapper `<div>`, which also skipped `.docs-inline-page`'s padding —
   their `h1` sat at 73px and 89px from the top of `.docs-main` where every
-  other page put it at 113px. `/mcp` went further and nested a *second*
+  other page put it at 113px. `/mcp` went further and nested a _second_
   `.docs-inline-page` (800px, from the `McpExplorer` island) inside its own
   1000px wrapper, so one page carried two widths.
 
@@ -54,15 +54,15 @@ Two further symptoms shared the same root cause — nothing owned page width:
    their column at the same x.
 2. Width is a `width` prop on `BaseLayout` — `default` (800px), `wide`
    (1000px), `full` (uncapped, rail-less). `.docs-inline-page` keeps only its
-   padding; its `max-width` and auto margins are gone, so a page *cannot*
+   padding; its `max-width` and auto margins are gone, so a page _cannot_
    silently cap itself any more.
 3. The rail collapses at **1384px**, derived from the geometry rather than
    picked: 256 (sidebar) + 64 (`.docs-main` padding) + 800 (column) + 48 (gap)
-   + 200 (rail) = 1368, plus 16px for a classic scrollbar. Below it the rail
-   becomes a zero-width track and the existing in-flow `.docs-toc-mobile`
-   disclosure takes over. The collapse zeroes `--docs-toc-rail` and
-   `--docs-toc-gap` rather than restating `grid-template-columns`, so it cannot
-   clobber the `--wide` / `--full` variants regardless of rule order.
+   - 200 (rail) = 1368, plus 16px for a classic scrollbar. Below it the rail
+     becomes a zero-width track and the existing in-flow `.docs-toc-mobile`
+     disclosure takes over. The collapse zeroes `--docs-toc-rail` and
+     `--docs-toc-gap` rather than restating `grid-template-columns`, so it cannot
+     clobber the `--wide` / `--full` variants regardless of rule order.
 4. `wide` and `full` carry no rail and therefore no desktop TOC.
 
 ### Alternatives rejected
@@ -89,8 +89,7 @@ Two further symptoms shared the same root cause — nothing owned page width:
 
 - Every `default` page — TOC or not — measures identically: column 800px,
   L=141, `h1` at x=173 (1600px viewport). Verified across 22 pages and at
-  viewport widths 420 / 768 / 900 / 1024 / 1200 / 1380 / 1384 / 1440 / 1600 /
-  1920.
+  viewport widths 420 / 768 / 900 / 1024 / 1200 / 1380 / 1384 / 1440 / 1600 / 1920.
 - The twenty previously centred pages shift ~124px left, because the reserved
   rail is part of the centred track set. That is the price of a single axis and
   it is paid once, consistently.

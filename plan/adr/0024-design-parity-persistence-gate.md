@@ -2,11 +2,11 @@
 status: accepted
 date: 2026-06-17
 sources:
-  - "approach audit 2026-06-17 (findings `verify-not-gated`, `parity-tool-never-gated`)"
-  - "plan/adr/0019-figma-conformance-gate.md (committed-snapshot + offline-check idiom)"
-  - "plan/adr/0009-drift-gate-system.md (one source → projection → --check)"
+  - 'approach audit 2026-06-17 (findings `verify-not-gated`, `parity-tool-never-gated`)'
+  - 'plan/adr/0019-figma-conformance-gate.md (committed-snapshot + offline-check idiom)'
+  - 'plan/adr/0009-drift-gate-system.md (one source → projection → --check)'
   - "CLAUDE.md § Design-to-Code Workflow (step 4: verify, 'Required, not optional')"
-  - "this session"
+  - 'this session'
 ---
 
 # ADR-0024: Design-parity persistence gate (`check:parity`)
@@ -14,8 +14,8 @@ sources:
 ## Status
 
 Accepted. Recorded at decision time. **Complements ADR-0019** (the Figma
-*conformance* gate, structural name/variant/token checks) by closing the loop on
-the *visual* verify step ADR-0019 explicitly left out of scope, and follows the
+_conformance_ gate, structural name/variant/token checks) by closing the loop on
+the _visual_ verify step ADR-0019 explicitly left out of scope, and follows the
 same committed-artifact + offline-`--check` pattern (ADR-0009).
 
 §4's promotion path was taken in `b8935c8` (2026-07-22) and **amended by ADR-0082**
@@ -37,8 +37,8 @@ this step is, in practice, enforced nowhere:
   verify — a story tweak, a CSS change, or a spec edit can move the component away
   from the Figma design and no gate notices, because the only "proof" was a
   transient console reading.
-- `check:figma` (ADR-0019) checks *structural* conformance (names, variants, token
-  bindings) but deliberately not *visual* parity (padding/colour/layout), which is
+- `check:figma` (ADR-0019) checks _structural_ conformance (names, variants, token
+  bindings) but deliberately not _visual_ parity (padding/colour/layout), which is
   exactly what `figma_check_design_parity` measures.
 
 So the closing half of the headline workflow had no machine backstop. The
@@ -53,7 +53,7 @@ manual record step exactly as ADR-0019 isolated it into `figma:snapshot`.
 
 1. **A record writer and an offline gate.**
    - `tools/scripts/parity-record.mjs` (`npm run parity:record -- --component
-     LlmButton --score 0.98`) is run after `figma_check_design_parity`. It writes
+LlmButton --score 0.98`) is run after `figma_check_design_parity`. It writes
      a per-component record to `tools/figma/parity.json`: the Figma node id (looked
      up from the snapshot), the score, the verifying git sha + timestamp, and an
      **`inputsHash`**.
@@ -63,9 +63,9 @@ manual record step exactly as ADR-0019 isolated it into `figma:snapshot`.
 2. **`inputsHash` is the drift signal, and it spans all three frameworks.** The
    hash (lib/parity-inputs.js) covers every file under
    `libs/{angular,react,vue}/src/lib/<module>/` — implementation, CSS, story, and
-   component-local spec. **Why all three:** parity is a claim about *the design*,
+   component-local spec. **Why all three:** parity is a claim about _the design_,
    and the repo's premise is "one spec, three faithful adapters", so a change in
-   *any* adapter can break parity with Figma and should force a re-verify.
+   _any_ adapter can break parity with Figma and should force a re-verify.
    **Why the whole component dir, not the spec interface slice:**
    `figma_check_design_parity` renders the component (impl + css + story), so those
    files — not an abstract type — are what the score was measured against; spec
@@ -130,8 +130,8 @@ manual record step exactly as ADR-0019 isolated it into `figma:snapshot`.
 working) but echoes it and drops it. `check-parity`'s `ATELIER_PARITY_MIN` floor
 and its `SCORE` critical are removed. What remains is what is reproducible:
 `figmaNodeId`, `verifiedAt`, `verifiedSha`, `inputsHash`. The gate now asserts
-exactly one thing — *this component was design-parity-verified after its files
-last changed* — which is what it was always able to prove.
+exactly one thing — _this component was design-parity-verified after its files
+last changed_ — which is what it was always able to prove.
 
 **Why.** The score is not a property of the component. Three
 `figma_check_design_parity` runs on one commit for AtlStepper returned **70, 52
@@ -146,7 +146,7 @@ and 83**, and both sources of variance are in the caller's hands, not the code's
 2. **How much `codeSpec` you declare.** Omitting a field means it is not
    compared. Declaring `padding: 0` honestly turned four previously-unexamined
    properties into four `major` mismatches. A sparser, lazier `codeSpec` scores
-   *higher*.
+   _higher_.
 
 So the July 0.92 and the August 0.83 were never the same measurement, and
 storing them in one series invited a trend reading that the numbers cannot
@@ -157,7 +157,7 @@ component had changed.
 **Alternatives considered.**
 
 - **Keep the score, derive `codeSpec` mechanically, and pin the sampled node to
-  the default variant.** Rejected *for now*, not on principle — this is the
+  the default variant.** Rejected _for now_, not on principle — this is the
   version of the idea that would actually work, and `figma_scan_code_accessibility`
   with `mapToCodeSpec: true` already exists for the a11y part. But deriving the
   visual/spacing/typography sections mechanically from CSS is its own project,

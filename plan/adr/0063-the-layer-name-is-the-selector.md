@@ -18,13 +18,13 @@ and fixes six bugs in the gates found while building it.
 
 `[ROOT-PAINT]` (ADR-0060) compares a master's root to the CSS rule that paints it, and
 every master it fixed exposed a defect one level down. ADR-0062 answered half of that by
-promoting ten parts to masters of their own. The other half is the layers that are *not*
+promoting ten parts to masters of their own. The other half is the layers that are _not_
 separate components — a tab list, an accordion trigger, a toggle track, a page button —
 and they were unchecked for a plain reason: nothing said which CSS rule a given layer
 draws.
 
 The obvious answer is a table mapping master + layer to selector. The better one is a
-**convention**: a layer named for a CSS class draws that rule, so the layer name *is*
+**convention**: a layer named for a CSS class draws that rule, so the layer name _is_
 the selector. Nothing to maintain, self-documenting in the Figma layer panel, and opt-in
 — a layer called `Frame` is a wrapper and simply not checked.
 
@@ -44,7 +44,7 @@ construction: everything else is a class.
 radius, shadow, `min-height`, `height`, padding on each edge, `gap`, and the layer's own
 `font-size` and `line-height`. Resolution follows the cascade: the base rule, then the
 variant-scoped form, with later declarations winning. Colour is deliberately more
-permissive than geometry — a layer inside a parent is often drawn *in a state*
+permissive than geometry — a layer inside a parent is often drawn _in a state_
 (the current page button, one hovered item) whose rule the variant name cannot reach, so
 a fill is wrong only when no compatible rule gives the layer that colour. Geometry does
 not vary by state, so it is compared strictly.
@@ -76,7 +76,7 @@ declares.
   the output through `grep -c` and reported "zero findings" without checking the exit
   code. The same hoisting mistake happened twice in one session.
 - **The cascade was inverted.** Bodies were concatenated base-first and read with
-  `.exec()`, which returns the *first* match — so `.atl-menu-item`'s padding beat
+  `.exec()`, which returns the _first_ match — so `.atl-menu-item`'s padding beat
   `.atl-menu.variant-compact`'s.
 - **Box properties were applied in a fixed property order**, not declaration order, so
   an earlier `padding-inline` survived a later `padding` shorthand that CSS would have
@@ -89,7 +89,7 @@ declares.
   worst possible failure for a gate.
 - **Pseudo-element rules were accepted as the element's own paint**, so
   `.tablist button::after`'s primary excused a solid primary tab; a fill, border or
-  radius that *no* rule declares was not reported at all; and a rule scoped to another
+  radius that _no_ rule declares was not reported at all; and a rule scoped to another
   variant excused this one.
 
 A raw NUL byte had also found its way into the source as a grouping separator, which
@@ -109,12 +109,12 @@ three attempts to locate.
   readable as a side effect.
 - **The permissive half is where a gate like this decays.** Colour has to tolerate states
   a variant name cannot express, and every tolerance is a place a real defect can hide:
-  three of the six bugs were tolerances that were too wide. Narrow them by *what the rule
-  is about* — a pseudo-element is a different box, another variant is another drawing —
+  three of the six bugs were tolerances that were too wide. Narrow them by _what the rule
+  is about_ — a pseudo-element is a different box, another variant is another drawing —
   rather than by adding exceptions.
 - Recorded as the next step: **compose parents from child instances.** AtlMenu's
   separators are now instances of `AtlMenuSeparator`, and its items could be instances of
   `AtlMenuItem`. Where a parent instantiates its child master, the geometry cannot drift
-  at all — the gate makes drift *detectable*, composition makes it *impossible*. The
+  at all — the gate makes drift _detectable_, composition makes it _impossible_. The
   blocker is that an instance cannot gain children, so a part taking free content (a menu
   item's icon plus label) needs the master to offer a slot.

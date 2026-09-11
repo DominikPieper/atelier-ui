@@ -34,10 +34,10 @@ The gate found **thirteen** masters.
 **1. The findings split in two, and treating them alike would have produced thirteen
 blockers, most of them unfixable.**
 
-| kind | what it is | how it reports |
-|---|---|---|
-| **bindable** | The CSS states a value a `--ui-spacing-*` token holds. Figma can bind that token. | **blocker**, naming the token to use |
-| **derived** | The CSS computes the value from ADR-0041's control recipe — `(control-height − line-height × font-size) / 2` gives 6.25, 9, 11.25px. No spacing token holds it and no Figma Variable can express the arithmetic. | **warning** about a structural limit |
+| kind         | what it is                                                                                                                                                                                                       | how it reports                       |
+| ------------ | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------ |
+| **bindable** | The CSS states a value a `--ui-spacing-*` token holds. Figma can bind that token.                                                                                                                                | **blocker**, naming the token to use |
+| **derived**  | The CSS computes the value from ADR-0041's control recipe — `(control-height − line-height × font-size) / 2` gives 6.25, 9, 11.25px. No spacing token holds it and no Figma Variable can express the arithmetic. | **warning** about a structural limit |
 
 The test is simply whether a spacing token's value equals the number the CSS states, read
 from the token source rather than hardcoded. A derived value that happens to equal a token
@@ -71,7 +71,7 @@ first day it took a hand-run parity check to notice.
   angular/react/vue/spec exits 0. Both `[ROOT-BOX]` classes fail-tested — a bindable drift
   blocks and names the token, a derived drift warns and does not block.
 - **The first fail-test was wrong, not the gate.** Perturbing every AtlButton side to check
-  the derived path still blocked, because `size=lg`'s 24px inline padding *is* `spacing/6`
+  the derived path still blocked, because `size=lg`'s 24px inline padding _is_ `spacing/6`
   — bindable, and correctly reported. The test had to target only the derived sides.
 - **A `const` below its call site cost a run for the third time in this file.** Function
   declarations hoist; `const` does not, and `checkRootPaint()` is called hundreds of lines
@@ -84,5 +84,5 @@ first day it took a hand-run parity check to notice.
   `verifiedSha` and an `inputsHash` over component files — nothing about the Figma side. So
   eight masters changed today and no stamp noticed. By ADR-0064's own definition ("verified
   after the files last changed") the stamps remain valid, and the changes moved Figma
-  *toward* the code — but the blindness is real and is now recorded beside its mirror image
+  _toward_ the code — but the blindness is real and is now recorded beside its mirror image
   (the `inputsHash` that cannot see the shared token layer).

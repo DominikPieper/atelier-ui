@@ -22,7 +22,7 @@ architected.
 
 - **Live probes (verified today).** All 23 `claude-design` MCP tool schemas loaded and the
   read-only ones called against the Atelier project; `read_design_skill(hifi-design)` read
-  in full; `list_design_systems` (10 systems, Atelier's is *not* the account default).
+  in full; `list_design_systems` (10 systems, Atelier's is _not_ the account default).
   All ~120 `figma-console` tool schemas loaded and every `figma_*` name grepped across
   `skills/`, `plan/`, `tasks/`, `tools/`, `docs/`.
 - **Web research (five Sonnet agents; digests kept verbatim in
@@ -41,14 +41,14 @@ architected.
 
 ## 3. What already exists (do not rebuild)
 
-| Asset | Covers | Gap it leaves |
-|---|---|---|
-| `skills/figma-workspace-architect` (5 modes: Build, Audit, Decide, Migrate, Sync, plus Scaffold/Inventory/Re-verify sub-modes; 17 references incl. the new plugin-api-gotchas.md; 8 fixtures) | File-level architecture, token tiers, audits of the *file* incl. Component Design CD6–CD9, token sync ending in a parity check, migrations; Build already creates component sets. Explicitly out of scope: Figma → code, Plugin API mechanics, Code Connect (toolchain constraint). | No repo-bound recipe for "spec block → conformant master → snapshot → `check:figma`"; Plugin API gotchas live in `tasks/lessons.md`, not in the skill; file-structure reference (which already has Changelog and `_Internal` pages) predates Slots and the doc-frame practice. |
-| `skills/atelier-design` | Brand, tokens, type scale, docs-site UI kit — for generating on-brand surfaces. | Nothing about workflow. |
-| `.claude/skills/uianatomy-mcp` (canonical copy from uianatomy.dev) | Anatomy, axes, mismatches, `validate_implementation`. | Referenced by the briefs, not by any workflow skill. |
-| `AGENTS.md` § Design-to-Code Workflow + docs `/design-to-code`, `/first-component` | The four-step loop as prose and prompts. | Prose is re-read every session; the handoff document (ADR-0096) is a curriculum convention with no skill behind it. |
-| Gates: `check:figma` (snapshot vs spec), `check:parity` (ADR-0024/0104), `check:skill*`, `parity:record`, `figma:snapshot`, `figma-sync-*`, `gen-figma-library-tokens`, `gen-artboard-palette` | The offline proof. | Skills must *end* in these; today only the architect's Sync mode and `code-verify.md` do, and a static parity read reaches about a fifth of what Figma paints (`tasks/todo.md`, AtlSelect measurement). |
-| ADR-0032 / docs `/claude-design` | Claude Design at step 0 and step 5, Figma the only gated truth. | Step 5 is "specified and unbuilt". ADR-0106 proved the **owner seat** writes; ADR-0032's blocker is per-seat access across a room (two non-author accounts), and `tasks/todo.md` § Blocked keeps it open, narrowed. |
+| Asset                                                                                                                                                                                          | Covers                                                                                                                                                                                                                                                                              | Gap it leaves                                                                                                                                                                                                                                                                  |
+| ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `skills/figma-workspace-architect` (5 modes: Build, Audit, Decide, Migrate, Sync, plus Scaffold/Inventory/Re-verify sub-modes; 17 references incl. the new plugin-api-gotchas.md; 8 fixtures)  | File-level architecture, token tiers, audits of the _file_ incl. Component Design CD6–CD9, token sync ending in a parity check, migrations; Build already creates component sets. Explicitly out of scope: Figma → code, Plugin API mechanics, Code Connect (toolchain constraint). | No repo-bound recipe for "spec block → conformant master → snapshot → `check:figma`"; Plugin API gotchas live in `tasks/lessons.md`, not in the skill; file-structure reference (which already has Changelog and `_Internal` pages) predates Slots and the doc-frame practice. |
+| `skills/atelier-design`                                                                                                                                                                        | Brand, tokens, type scale, docs-site UI kit — for generating on-brand surfaces.                                                                                                                                                                                                     | Nothing about workflow.                                                                                                                                                                                                                                                        |
+| `.claude/skills/uianatomy-mcp` (canonical copy from uianatomy.dev)                                                                                                                             | Anatomy, axes, mismatches, `validate_implementation`.                                                                                                                                                                                                                               | Referenced by the briefs, not by any workflow skill.                                                                                                                                                                                                                           |
+| `AGENTS.md` § Design-to-Code Workflow + docs `/design-to-code`, `/first-component`                                                                                                             | The four-step loop as prose and prompts.                                                                                                                                                                                                                                            | Prose is re-read every session; the handoff document (ADR-0096) is a curriculum convention with no skill behind it.                                                                                                                                                            |
+| Gates: `check:figma` (snapshot vs spec), `check:parity` (ADR-0024/0104), `check:skill*`, `parity:record`, `figma:snapshot`, `figma-sync-*`, `gen-figma-library-tokens`, `gen-artboard-palette` | The offline proof.                                                                                                                                                                                                                                                                  | Skills must _end_ in these; today only the architect's Sync mode and `code-verify.md` do, and a static parity read reaches about a fifth of what Figma paints (`tasks/todo.md`, AtlSelect measurement).                                                                        |
+| ADR-0032 / docs `/claude-design`                                                                                                                                                               | Claude Design at step 0 and step 5, Figma the only gated truth.                                                                                                                                                                                                                     | Step 5 is "specified and unbuilt". ADR-0106 proved the **owner seat** writes; ADR-0032's blocker is per-seat access across a room (two non-author accounts), and `tasks/todo.md` § Blocked keeps it open, narrowed.                                                            |
 
 ## 4. Findings
 
@@ -90,12 +90,12 @@ Facts a skill author needs (from the docs, verified):
   `figma_set_instance_properties`; `figma_import_tokens` is round-trip safe for DTCG
   only, the other input formats return `NotImplementedError`; `figma_diff_versions` never
   sees description/annotation changes made while the Bridge was disconnected, nor
-  variable *value* changes; `figma_search_components` matches description text too, so an
+  variable _value_ changes; `figma_search_components` matches description text too, so an
   unrelated component can surface on a description hit.
-- The maintainers ship **23 skills in a separate repo**, but 17 of them drive the *native*
+- The maintainers ship **23 skills in a separate repo**, but 17 of them drive the _native_
   Figma MCP's `use_figma` executor and do not run against figma-console-mcp. What ports is
   their **rubrics**: the parity score formula (`100 − critical×15 − major×8 − minor×3 −
-  info×1`), the variant-axis → CSS pseudo-class table, the 14+6 lint rule catalog, the
+info×1`), the variant-axis → CSS pseudo-class table, the 14+6 lint rule catalog, the
   six-category a11y weights. Their SKILL.md convention — one dense description ending in a
   `Triggers:` list of quoted phrasings plus "NOT X, use Y instead" — is worth copying.
 
@@ -108,7 +108,7 @@ Verified against the live server today (full table in the session digest):
   the two design skills (`hifi-design`, `frontend-design`), and Claude Design's own system
   prompt plus a bound design system's guide (`get_claude_design_prompt`).
 - **Write into a project:** files (`write_files`, `copy_files`, `create_support_js`),
-  deletions, new projects, a one-way mirror of *our* conversation into the project's chat
+  deletions, new projects, a one-way mirror of _our_ conversation into the project's chat
   panel, comment acknowledgement, membership and sharing. There is **no tool that steers
   the in-app designer agent**; `put_conversation` is documented as write-only.
 - `finalize_plan` → `plan_token` gates only the mutating quartet; it is a concurrency/consent
@@ -153,7 +153,7 @@ blueprint agrees on every item below):
   of a master, never a copy (this repo already does this, `plan/figma.md`).
 - **Documentation frames beside each component** (purpose, anatomy callouts, properties
   table with defaults, do/don't, a11y requirements, Storybook link). Where the canonical
-  doc *lives* is genuinely contested: Figma's mature-org guidance points to an external
+  doc _lives_ is genuinely contested: Figma's mature-org guidance points to an external
   site; Figma's Storybook plugin treats the two as co-equal and bidirectional. The
   anti-drift mechanism every source agrees on is **binding docs to live objects**
   (descriptions, annotations that reference variables) and **linting the docs** (eBay).
@@ -164,7 +164,7 @@ blueprint agrees on every item below):
   swap for closed sets like icons, Text for copy, **Slot** (open beta since 2026-03) for
   open-ended regions in cards/dialogs/menus. Slots are Figma's stated fix for variant
   explosion and for detaching; their limit is that properties cannot be applied to layers
-  *inside* a slot. Identical layer names across variants preserve overrides. Variant
+  _inside_ a slot. Identical layer names across variants preserve overrides. Variant
   property names and values match code props verbatim (`variant=primary`, not
   `Type=Primary`) — Figma's own guide ties this to React/Vue prop format.
 - **Interaction states are not variants.** This repo's briefs already say it; uianatomy
@@ -177,7 +177,7 @@ blueprint agrees on every item below):
 - **Handoff.** Dev Mode annotations as a curated post-design layer referencing live
   variables; Code Connect as the component → production-code contract (needs
   Organization/Enterprise seats per Figma's repo; this repo excludes it by an explicit
-  *toolchain* constraint — figma-console-mcp only — recorded nowhere but the architect's
+  _toolchain_ constraint — figma-console-mcp only — recorded nowhere but the architect's
   SKILL.md, which is worth an ADR).
 - **Review practice.** Automatable: unbound fills/strokes/radii/padding, missing auto
   layout, naming casing, scope/codeSyntax, text-layer name continuity, contrast. Human
@@ -191,11 +191,11 @@ From Anthropic's skills docs, the skill-creator, and Figma's own "Create skills 
 Figma MCP server" page (all verified):
 
 - Frontmatter: `name` (≤ 64 chars, lowercase-hyphen, may not contain "claude" or
-  "anthropic") and `description` (≤ 1024 chars, third person, states *what* and *when*,
+  "anthropic") and `description` (≤ 1024 chars, third person, states _what_ and _when_,
   deliberately "pushy" against under-triggering). Body under ~500 lines / 5k tokens;
   `references/`, `scripts/`, `assets/` one level deep; TOC on references > 100 lines.
 - Reference MCP tools **server-qualified** (`figma-console:figma_check_design_parity`) —
-  this session has *two* Figma servers connected (`figma-console` and the official
+  this session has _two_ Figma servers connected (`figma-console` and the official
   `claude_ai_Figma` connector), so bare names are an actual collision risk here, not a
   theoretical one.
 - Workflows as copy-pasteable checklists with explicit stop conditions; plan → validate →
@@ -237,7 +237,7 @@ document rather than from the canvas.
   "design to code", a pasted Figma node URL plus a framework, the kata.
 - **Inputs.** Handoff document (draft URL + node id, chosen variants/states, token
   bindings, reuse-vs-new decision, behaviour from the brief, exclusions, target files,
-  acceptance checks). If absent, the skill fills the *provenance and scope* half from the
+  acceptance checks). If absent, the skill fills the _provenance and scope_ half from the
   master and leaves behaviour, exclusions and the reuse decision as blanks, then stops.
   ADR-0096 rejected deriving the document automatically; this is a proposed narrowing of
   that stance (mechanical half by the agent, decisions by the author), to be recorded as
@@ -245,7 +245,7 @@ document rather than from the canvas.
 - **Steps.** (1) `figma-console:figma_search_components` (ids are session-specific) →
   `figma_get_component_for_development` on the node; `figma_analyze_component_set` for the
   state machine. (2) `uianatomy:get_component_view(id, "bridge")` for mismatches and
-  named mistakes; note when the component is a *composition* (briefs README). (3) Read
+  named mistakes; note when the component is a _composition_ (briefs README). (3) Read
   the spec block in `libs/spec/src/index.ts`; decide new vs. extend; for a new component
   run the generator. (4) Storybook MCP `docs-list` → `docs-show` for the chosen framework
   — never invent props. (5) Generate in **one** framework (ADR-0014); story declares
@@ -259,7 +259,7 @@ document rather than from the canvas.
   `npm run parity:record`, with the report naming framework, states and sections, since
   the record stores none of them. (8)
   `uianatomy:validate_implementation` as a checklist, not a verdict. (9) Report
-  verified vs assumed, and the parity discrepancies *understood*, not merely absent
+  verified vs assumed, and the parity discrepancies _understood_, not merely absent
   (briefs "Done when" § 8).
 - **References.** `handoff-document.md` (the checklist as a template), `parity-codespec.md`
   (which fields, the tolerance, why the score is not stored — ADR-0024),
@@ -270,7 +270,7 @@ document rather than from the canvas.
 
 ### 5.2 `component-design-review` — repo-bound → **folds into `design-to-code` as its review/verify mode**
 
-A PR-time review of *one component across both surfaces*, distinct from the architect's
+A PR-time review of _one component across both surfaces_, distinct from the architect's
 file-level Audit mode.
 
 - **Trigger.** "review AtlFoo's design", "design review", "design QA", "is the Figma
@@ -285,7 +285,7 @@ file-level Audit mode.
   for every status colour, root typography leading (the ungated `[ROOT-PAINT]` hole in
   `plan/figma.md`), behaviour the picture cannot carry. (4) Code side:
   `figma_scan_code_accessibility` on the story HTML, `check:parity` state. (5) Output the
-  architect's report template with severities and *one-line fixes*; Blockers first.
+  architect's report template with severities and _one-line fixes_; Blockers first.
 - **References.** `review-checklist.md` (CL-01…CL-12 from the research with severities,
   each mapped to the tool or gate that checks it), `false-positives.md` (the
   `wcag-color-only` page-lint noise on Badge/Alert/Toast, the `card-section-2` frames —
@@ -349,7 +349,7 @@ two non-author accounts confirm it.
   404/blank → update `tools/design/artboards.json` and run `gen-design-status` →
   `open_url` in the report, never `serve_url`.
 - **Guardrails in the skill text.** Governance from ADR-0032: Atelier's own OSS library is
-  the safe case; a participant's *employer* design system goes to the DSB/ISB first.
+  the safe case; a participant's _employer_ design system goes to the DSB/ISB first.
   Atelier's design system is not the account default — `create_project` without
   `design_system_id` inherits someone else's.
 - **References.** `dc-html-shape.md` (helmet, `_sheet.css`, `data-dc-script`),
@@ -414,7 +414,7 @@ once § 8.1 is decided.
 
 Two reference documents the research supports, worth writing regardless of the catalog:
 
-- **`plan/figma-architecture.md`** — how *this* file should be laid out going forward
+- **`plan/figma-architecture.md`** — how _this_ file should be laid out going forward
   (the § 4.3 checklist applied to `plan/figma.md`'s current six pages: Cover exists,
   no Changelog/Deprecated/`_WIP` pages, docs frames absent, Slots unused, `codeSyntax`
   unverified). Supersedes the stale table in `plan/figma.md` § Variable Collections

@@ -13,15 +13,13 @@ const VARIANT_ICON_NAMES: Partial<Record<AtlAlertVariant, AtlIconName>> = {
   danger: 'danger',
 };
 
-
 type AtlAlertVariant = 'info' | 'success' | 'warning' | 'danger';
 
 /**
  * Properties for the AtlAlert component.
  */
 export interface AtlAlertProps
-  extends HTMLAttributes<HTMLDivElement>,
-    AtlAlertSpec {
+  extends HTMLAttributes<HTMLDivElement>, AtlAlertSpec {
   /**
    * The visual style variant of the alert.
    */
@@ -51,14 +49,21 @@ export function AtlAlert({
   className,
   ...rest
 }: AtlAlertProps) {
-  const classes = ['atl-alert', `variant-${variant}`, className].filter(Boolean).join(' ');
-  const ariaLive = variant === 'danger' || variant === 'warning' ? 'assertive' : 'polite';
+  const classes = ['atl-alert', `variant-${variant}`, className]
+    .filter(Boolean)
+    .join(' ');
+  const ariaLive =
+    variant === 'danger' || variant === 'warning' ? 'assertive' : 'polite';
 
   return (
     <div className={classes} role="alert" aria-live={ariaLive} {...rest}>
       <span className="content">
         {VARIANT_ICON_NAMES[variant] && (
-          <AtlIcon className="variant-icon" name={VARIANT_ICON_NAMES[variant]} size="sm" />
+          <AtlIcon
+            className="variant-icon"
+            name={VARIANT_ICON_NAMES[variant]}
+            size="sm"
+          />
         )}
         {children}
       </span>

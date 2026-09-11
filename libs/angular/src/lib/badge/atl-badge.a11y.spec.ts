@@ -26,7 +26,9 @@ async function captureOne(template: string): Promise<unknown> {
 async function capture(): Promise<Record<string, unknown>> {
   return {
     default: await captureOne('<atl-badge>New</atl-badge>'),
-    success: await captureOne('<atl-badge variant="success">Active</atl-badge>'),
+    success: await captureOne(
+      '<atl-badge variant="success">Active</atl-badge>',
+    ),
   };
 }
 

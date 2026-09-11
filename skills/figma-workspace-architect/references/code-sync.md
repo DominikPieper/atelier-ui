@@ -8,11 +8,11 @@ A workspace where Figma is in sync with the codebase is rarer than it should be.
 
 Bidirectional sync is the trap. Two systems both trying to be authoritative produce constant conflicts and force a manual reconciliation step that nobody wants to own.
 
-| Direction         | Choose when…                                                                                         | Cost                                                  |
-|-------------------|------------------------------------------------------------------------------------------------------|-------------------------------------------------------|
-| **Figma → code**  | Design-led shop. Designers iterate in Figma; engineering consumes. Default for most product teams.   | Need an export pipeline. Engineers can't tweak tokens directly. |
-| **Code → Figma**  | Engineering-led shop or token system originated in code (e.g. a tokens.json shipped with the lib).   | Designers can't iterate freely. Updates require a PR. |
-| **Bidirectional** | Almost never the right answer. Two sources fight every change.                                       | Constant conflicts; reconciliation overhead.          |
+| Direction         | Choose when…                                                                                       | Cost                                                            |
+| ----------------- | -------------------------------------------------------------------------------------------------- | --------------------------------------------------------------- |
+| **Figma → code**  | Design-led shop. Designers iterate in Figma; engineering consumes. Default for most product teams. | Need an export pipeline. Engineers can't tweak tokens directly. |
+| **Code → Figma**  | Engineering-led shop or token system originated in code (e.g. a tokens.json shipped with the lib). | Designers can't iterate freely. Updates require a PR.           |
+| **Bidirectional** | Almost never the right answer. Two sources fight every change.                                     | Constant conflicts; reconciliation overhead.                    |
 
 Pick one and **enforce** it: the non-canonical side is read-only. If both sides need write access, you have a process problem disguised as a tooling problem.
 
@@ -37,18 +37,20 @@ Reasonable choice for greenfield. Workflow:
 
 Fits Figma → code. Modes map to Style Dictionary's "themes" or to nested keys per mode.
 
-Trade-off: Style Dictionary doesn't read Figma directly — you still need an exporter (the `figma-console-mcp` `figma_get_variables` is one option; Token Studio exports another). Style Dictionary handles the *transformation* layer, not the *extraction* layer.
+Trade-off: Style Dictionary doesn't read Figma directly — you still need an exporter (the `figma-console-mcp` `figma_get_variables` is one option; Token Studio exports another). Style Dictionary handles the _transformation_ layer, not the _extraction_ layer.
 
 ### 3. Token Studio — most popular for design-led teams
 
 Figma plugin that stores Variables as JSON in a Git repo. Designers edit in Figma; the plugin commits the JSON. CI runs Style Dictionary (or similar) on the committed JSON to produce code outputs.
 
 Strengths:
+
 - Designers stay in their tool.
 - Git history is the audit log.
 - Free Studio version covers most needs.
 
 Trade-offs:
+
 - The Figma plugin has its own model; you trade the native Figma Variables editor for the plugin's UI in some workflows.
 - Aliases inside Figma may export differently than expected; verify after first sync.
 
@@ -61,7 +63,7 @@ Sketch:
 ```js
 // figma-tokens-export.mjs
 import fs from 'node:fs/promises';
-const data = await getVariablesFromMcp();   // figma_get_variables
+const data = await getVariablesFromMcp(); // figma_get_variables
 const cssLines = [];
 for (const collection of data.meta.variableCollections) {
   for (const mode of collection.modes) {
@@ -79,6 +81,7 @@ await fs.writeFile('tokens.css', cssLines.join('\n'));
 ```
 
 Use this when:
+
 - The token shape is unusual (e.g. multi-tier with aliases that flatten in Token Studio).
 - You only target one platform (CSS) and the full Style Dictionary pipeline is overkill.
 - You want CI to fail on drift and have full control over the diff.
@@ -89,22 +92,22 @@ Trade-off: you own the exporter forever. Plan for ~50 LOC to start, ~200 LOC aft
 
 Most drift is silent because Modes are handled wrong. The mapping must be explicit.
 
-| Figma Mode example | CSS pattern                                                                                              | JSON pattern                                                |
-|--------------------|----------------------------------------------------------------------------------------------------------|-------------------------------------------------------------|
-| `Light` / `Dark`   | `:root { … }` for Light; `[data-theme="dark"] { … }` and `@media (prefers-color-scheme: dark) { … }` for Dark | `{ "color": { "primary": { "light": "#…", "dark": "#…" } } }` |
-| Density (`Comfortable` / `Compact`) | `[data-density="compact"] { … }`                                                          | Per-mode key, same shape as themes                          |
-| Brand (`Brand A` / `Brand B`)       | Per-brand selector or per-app build                                                       | Per-brand key                                               |
+| Figma Mode example                  | CSS pattern                                                                                                   | JSON pattern                                                  |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------- |
+| `Light` / `Dark`                    | `:root { … }` for Light; `[data-theme="dark"] { … }` and `@media (prefers-color-scheme: dark) { … }` for Dark | `{ "color": { "primary": { "light": "#…", "dark": "#…" } } }` |
+| Density (`Comfortable` / `Compact`) | `[data-density="compact"] { … }`                                                                              | Per-mode key, same shape as themes                            |
+| Brand (`Brand A` / `Brand B`)       | Per-brand selector or per-app build                                                                           | Per-brand key                                                 |
 
 Test: change a Variable's value in only one Mode in Figma; re-export; verify only one selector / key changed in code. If both changed, the exporter is collapsing modes.
 
 ## Annotations as a code-handoff layer
 
-Variables carry the *static value* contract; **annotations** carry the *implementation-detail* contract — animation easings, focus-ring delivery mechanism, tap-target extensions, A11y notes. Treat them as a first-class part of code-sync, not as designer marginalia.
+Variables carry the _static value_ contract; **annotations** carry the _implementation-detail_ contract — animation easings, focus-ring delivery mechanism, tap-target extensions, A11y notes. Treat them as a first-class part of code-sync, not as designer marginalia.
 
-| Direction         | What to do with annotations                                                                                       |
-|-------------------|-------------------------------------------------------------------------------------------------------------------|
-| **Figma → code**  | Pull annotations via `figma_get_annotations` after each export. Surface them in the same place as token diffs (PR description, Style Dictionary metadata, story `parameters.design`). |
-| **Code → Figma**  | When code-side specs change (e.g. animation tokens migrate to a new easing curve), write the new spec back into the relevant component's annotations via `figma_set_annotations`. The Figma file should never lag the code on implementation details a designer cares about. |
+| Direction        | What to do with annotations                                                                                                                                                                                                                                                  |
+| ---------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Figma → code** | Pull annotations via `figma_get_annotations` after each export. Surface them in the same place as token diffs (PR description, Style Dictionary metadata, story `parameters.design`).                                                                                        |
+| **Code → Figma** | When code-side specs change (e.g. animation tokens migrate to a new easing curve), write the new spec back into the relevant component's annotations via `figma_set_annotations`. The Figma file should never lag the code on implementation details a designer cares about. |
 
 Annotation content that should round-trip:
 
@@ -129,11 +132,11 @@ A common architecture is **one Tokens file** (Primitive + Semantic Variables) co
 
 ### Cross-file discovery tools
 
-| Tool                              | Use when…                                                                       |
-|-----------------------------------|---------------------------------------------------------------------------------|
-| `figma_get_library_components`    | List a linked library's published components — what's available to instantiate. |
-| `figma_get_design_system_kit`     | Fetch tokens + components + styles from any file in one call. Useful when the agent needs to compare a Component file against the Tokens file. |
-| `figma_search_components`         | Find a component by name across the file or a linked library.                   |
+| Tool                           | Use when…                                                                                                                                      |
+| ------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| `figma_get_library_components` | List a linked library's published components — what's available to instantiate.                                                                |
+| `figma_get_design_system_kit`  | Fetch tokens + components + styles from any file in one call. Useful when the agent needs to compare a Component file against the Tokens file. |
+| `figma_search_components`      | Find a component by name across the file or a linked library.                                                                                  |
 
 ### Audit signal — local Variables that should consume
 
@@ -146,13 +149,13 @@ End every Sync run with a parity check. Schema:
 ```jsonc
 // Input — codeSpec (one block per axis you want compared)
 {
-  "visual":          { /* fills, strokes, opacity, radius */ },
-  "spacing":         { /* padding, gap, margins */ },
-  "typography":      { /* font family, size, weight, line-height, letter-spacing */ },
-  "tokens":          { /* expected Variable bindings */ },
-  "componentAPI":    { /* prop names + values */ },
-  "accessibility":   { /* roles, labels, contrast minimums */ },
-  "metadata":        { /* description text, slash-name shape */ }
+  "visual": {/* fills, strokes, opacity, radius */},
+  "spacing": {/* padding, gap, margins */},
+  "typography": {/* font family, size, weight, line-height, letter-spacing */},
+  "tokens": {/* expected Variable bindings */},
+  "componentAPI": {/* prop names + values */},
+  "accessibility": {/* roles, labels, contrast minimums */},
+  "metadata": {/* description text, slash-name shape */},
 }
 ```
 
@@ -175,15 +178,15 @@ Optional: when parity fails on a component the team needs to see in-Figma, drop 
 Add these to the Audit checklist's "Engineering-Sync Readiness" category — they are the failure modes to expect.
 
 - **Variable scope mismatch.** A Variable with `ALL_SCOPES` (the default) shows up in property pickers it doesn't belong in. The export pipeline doesn't know the difference; designers will use the wrong token. Fix: set Scopes explicitly via `figma_execute` after creation. See `token-architecture.md`.
-- **Renamed Variable not picked up.** Most exporters key by *name*, not ID. A rename = a delete + recreate from the exporter's view. Mitigation: enforce a `rename → run export → review diff` ritual.
+- **Renamed Variable not picked up.** Most exporters key by _name_, not ID. A rename = a delete + recreate from the exporter's view. Mitigation: enforce a `rename → run export → review diff` ritual.
 - **Mode added in Figma, not propagated.** The exporter only knows about modes it has seen before. New mode = new branch in the output structure. Often forgotten.
-- **Hardcoded fallbacks in CSS.** `color: var(--ui-color-primary, #007070);` — the fallback hex *was* the Figma value six months ago. Now the Figma value is `#0a8080` but the fallback is still `#007070` and silently wins when the Variable is undefined. Fix: drop fallbacks, or enforce a CI check that fallbacks match the resolved Variable value.
+- **Hardcoded fallbacks in CSS.** `color: var(--ui-color-primary, #007070);` — the fallback hex _was_ the Figma value six months ago. Now the Figma value is `#0a8080` but the fallback is still `#007070` and silently wins when the Variable is undefined. Fix: drop fallbacks, or enforce a CI check that fallbacks match the resolved Variable value.
 - **Aliases flattened in export.** Figma supports `--ui-color-primary → primitive/teal/600`. Some exporters resolve the alias and emit only the leaf value, losing the semantic layer. Fix: emit both or document the choice explicitly.
 - **Manual edits to the generated file.** Someone tweaks `tokens.css` directly. Next export overwrites it. Fix: top-of-file banner saying `/* AUTO-GENERATED — do not edit. Source: Figma Variables. */` and a CI check that the file is committed unchanged after a fresh export.
 
 ## Project-level notes for this Atelier UI repo
 
-Token *value* ownership across Figma, the framework libs, and the artboard/skill copies is
+Token _value_ ownership across Figma, the framework libs, and the artboard/skill copies is
 mapped by axis in ADR-0115 — read that first for the full picture. This section is that
 map's instance of the "pick a direction" question above, for this repo specifically. (An
 earlier version of this section named the pre-ADR-0030 state — the superseded `UI Tokens`
@@ -204,7 +207,7 @@ collection, a bidirectional/manual model — and has been corrected below.)
   code → Figma. Editing the Variable directly in Figma is drift by definition (ADR-0030's
   Decision §1), not a legitimate entry point.
 - What genuinely stays a manual, PR-reconciled step — the "very small scale" case from §1
-  above — is *triggering* that push: `figma:sync-tokens` needs Figma Desktop with the
+  above — is _triggering_ that push: `figma:sync-tokens` needs Figma Desktop with the
   Bridge plugin open, so it is not part of `check:all`, and nothing pulls a Figma-side edit
   back into code at all. Approach #4's export half already shipped this way; its CI-checked
   half (`check:tokens`) only watches the code-side copies, not the Figma side.

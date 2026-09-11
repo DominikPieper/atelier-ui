@@ -31,8 +31,12 @@ async function captureOne(template: string): Promise<unknown> {
 async function capture(): Promise<Record<string, unknown>> {
   return {
     default: await captureOne('<atl-button>Click me</atl-button>'),
-    disabled: await captureOne('<atl-button [disabled]="true">Click me</atl-button>'),
-    loading: await captureOne('<atl-button [loading]="true">Click me</atl-button>'),
+    disabled: await captureOne(
+      '<atl-button [disabled]="true">Click me</atl-button>',
+    ),
+    loading: await captureOne(
+      '<atl-button [loading]="true">Click me</atl-button>',
+    ),
   };
 }
 

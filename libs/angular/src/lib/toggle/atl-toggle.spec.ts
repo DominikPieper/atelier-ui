@@ -4,12 +4,17 @@ import { covers } from '../../testing/behavior';
 import { AtlToggle } from './atl-toggle';
 
 describe('AtlToggle', () => {
-  covers('toggle', 'role-switch')('renders a native checkbox input with role=switch', async () => {
-    const { container } = await render('<atl-toggle>Label</atl-toggle>', {
-      imports: [AtlToggle],
-    });
-    expect(container.querySelector('input[type="checkbox"][role="switch"]')).toBeInTheDocument();
-  });
+  covers('toggle', 'role-switch')(
+    'renders a native checkbox input with role=switch',
+    async () => {
+      const { container } = await render('<atl-toggle>Label</atl-toggle>', {
+        imports: [AtlToggle],
+      });
+      expect(
+        container.querySelector('input[type="checkbox"][role="switch"]'),
+      ).toBeInTheDocument();
+    },
+  );
 
   it('is unchecked by default', async () => {
     const { container } = await render('<atl-toggle>Label</atl-toggle>', {
@@ -26,51 +31,61 @@ describe('AtlToggle', () => {
   });
 
   describe('checked state', () => {
-    covers('toggle', 'reflects-checked')('reflects checked=true via attribute', async () => {
-      const { container } = await render(
-        '<atl-toggle [checked]="true">Label</atl-toggle>',
-        { imports: [AtlToggle] }
-      );
-      expect(container.querySelector('input[type="checkbox"]')).toBeChecked();
-    });
+    covers('toggle', 'reflects-checked')(
+      'reflects checked=true via attribute',
+      async () => {
+        const { container } = await render(
+          '<atl-toggle [checked]="true">Label</atl-toggle>',
+          { imports: [AtlToggle] },
+        );
+        expect(container.querySelector('input[type="checkbox"]')).toBeChecked();
+      },
+    );
 
     it('applies is-checked class when checked', async () => {
       const { container } = await render(
         '<atl-toggle [checked]="true">Label</atl-toggle>',
-        { imports: [AtlToggle] }
+        { imports: [AtlToggle] },
       );
       expect(container.querySelector('atl-toggle')).toHaveClass('is-checked');
     });
 
-    covers('toggle', 'toggle-emits')('toggles checked when clicked', async () => {
-      const user = userEvent.setup();
-      const { container } = await render('<atl-toggle>Label</atl-toggle>', {
-        imports: [AtlToggle],
-      });
-      const input = container.querySelector('input[type="checkbox"]') as HTMLInputElement;
-      await user.click(input);
-      expect(input).toBeChecked();
-      await user.click(input);
-      expect(input).not.toBeChecked();
-    });
+    covers('toggle', 'toggle-emits')(
+      'toggles checked when clicked',
+      async () => {
+        const user = userEvent.setup();
+        const { container } = await render('<atl-toggle>Label</atl-toggle>', {
+          imports: [AtlToggle],
+        });
+        const input = container.querySelector(
+          'input[type="checkbox"]',
+        ) as HTMLInputElement;
+        await user.click(input);
+        expect(input).toBeChecked();
+        await user.click(input);
+        expect(input).not.toBeChecked();
+      },
+    );
 
-    covers('toggle', 'aria-checked')('sets aria-checked attribute', async () => {
-      const { container } = await render(
-        '<atl-toggle [checked]="true">Label</atl-toggle>',
-        { imports: [AtlToggle] }
-      );
-      expect(container.querySelector('input[type="checkbox"]')).toHaveAttribute(
-        'aria-checked',
-        'true'
-      );
-    });
+    covers('toggle', 'aria-checked')(
+      'sets aria-checked attribute',
+      async () => {
+        const { container } = await render(
+          '<atl-toggle [checked]="true">Label</atl-toggle>',
+          { imports: [AtlToggle] },
+        );
+        expect(
+          container.querySelector('input[type="checkbox"]'),
+        ).toHaveAttribute('aria-checked', 'true');
+      },
+    );
   });
 
   describe('disabled state', () => {
     covers('toggle', 'disabled')('disables the native input', async () => {
       const { container } = await render(
         '<atl-toggle [disabled]="true">Label</atl-toggle>',
-        { imports: [AtlToggle] }
+        { imports: [AtlToggle] },
       );
       expect(container.querySelector('input[type="checkbox"]')).toBeDisabled();
     });
@@ -78,7 +93,7 @@ describe('AtlToggle', () => {
     it('applies is-disabled class to host', async () => {
       const { container } = await render(
         '<atl-toggle [disabled]="true">Label</atl-toggle>',
-        { imports: [AtlToggle] }
+        { imports: [AtlToggle] },
       );
       expect(container.querySelector('atl-toggle')).toHaveClass('is-disabled');
     });
@@ -87,9 +102,11 @@ describe('AtlToggle', () => {
       const user = userEvent.setup();
       const { container } = await render(
         '<atl-toggle [disabled]="true">Label</atl-toggle>',
-        { imports: [AtlToggle] }
+        { imports: [AtlToggle] },
       );
-      const input = container.querySelector('input[type="checkbox"]') as HTMLInputElement;
+      const input = container.querySelector(
+        'input[type="checkbox"]',
+      ) as HTMLInputElement;
       await user.click(input);
       expect(input).not.toBeChecked();
     });
@@ -99,18 +116,18 @@ describe('AtlToggle', () => {
     it('sets aria-invalid on native input', async () => {
       const { container } = await render(
         '<atl-toggle [invalid]="true">Label</atl-toggle>',
-        { imports: [AtlToggle] }
+        { imports: [AtlToggle] },
       );
       expect(container.querySelector('input[type="checkbox"]')).toHaveAttribute(
         'aria-invalid',
-        'true'
+        'true',
       );
     });
 
     it('applies is-invalid class to host', async () => {
       const { container } = await render(
         '<atl-toggle [invalid]="true">Label</atl-toggle>',
-        { imports: [AtlToggle] }
+        { imports: [AtlToggle] },
       );
       expect(container.querySelector('atl-toggle')).toHaveClass('is-invalid');
     });
@@ -119,9 +136,9 @@ describe('AtlToggle', () => {
       const { container } = await render('<atl-toggle>Label</atl-toggle>', {
         imports: [AtlToggle],
       });
-      expect(container.querySelector('input[type="checkbox"]')).not.toHaveAttribute(
-        'aria-invalid'
-      );
+      expect(
+        container.querySelector('input[type="checkbox"]'),
+      ).not.toHaveAttribute('aria-invalid');
     });
   });
 
@@ -129,11 +146,11 @@ describe('AtlToggle', () => {
     it('sets aria-required when required', async () => {
       const { container } = await render(
         '<atl-toggle [required]="true">Label</atl-toggle>',
-        { imports: [AtlToggle] }
+        { imports: [AtlToggle] },
       );
       expect(container.querySelector('input[type="checkbox"]')).toHaveAttribute(
         'aria-required',
-        'true'
+        'true',
       );
     });
 
@@ -141,9 +158,9 @@ describe('AtlToggle', () => {
       const { container } = await render('<atl-toggle>Label</atl-toggle>', {
         imports: [AtlToggle],
       });
-      expect(container.querySelector('input[type="checkbox"]')).not.toHaveAttribute(
-        'aria-required'
-      );
+      expect(
+        container.querySelector('input[type="checkbox"]'),
+      ).not.toHaveAttribute('aria-required');
     });
   });
 
@@ -153,7 +170,9 @@ describe('AtlToggle', () => {
       const { container } = await render('<atl-toggle>Label</atl-toggle>', {
         imports: [AtlToggle],
       });
-      const input = container.querySelector('input[type="checkbox"]') as HTMLInputElement;
+      const input = container.querySelector(
+        'input[type="checkbox"]',
+      ) as HTMLInputElement;
       await user.click(input);
       await user.tab();
       expect(container.querySelector('atl-toggle')).toHaveClass('is-touched');
@@ -163,7 +182,9 @@ describe('AtlToggle', () => {
       const { container } = await render('<atl-toggle>Label</atl-toggle>', {
         imports: [AtlToggle],
       });
-      expect(container.querySelector('atl-toggle')).not.toHaveClass('is-touched');
+      expect(container.querySelector('atl-toggle')).not.toHaveClass(
+        'is-touched',
+      );
     });
   });
 
@@ -179,27 +200,32 @@ describe('AtlToggle', () => {
           componentProperties: {
             errors: [{ kind: 'required', message: 'This field is required' }],
           },
-        }
+        },
       );
       expect(container.querySelector('.errors')).toBeInTheDocument();
     });
 
-    covers('toggle', 'errors')('shows errors when touched and invalid', async () => {
-      const user = userEvent.setup();
-      const { container } = await render(
-        '<atl-toggle [invalid]="true" [errors]="errors">Label</atl-toggle>',
-        {
-          imports: [AtlToggle],
-          componentProperties: {
-            errors: [{ kind: 'required', message: 'This field is required' }],
+    covers('toggle', 'errors')(
+      'shows errors when touched and invalid',
+      async () => {
+        const user = userEvent.setup();
+        const { container } = await render(
+          '<atl-toggle [invalid]="true" [errors]="errors">Label</atl-toggle>',
+          {
+            imports: [AtlToggle],
+            componentProperties: {
+              errors: [{ kind: 'required', message: 'This field is required' }],
+            },
           },
-        }
-      );
-      const input = container.querySelector('input[type="checkbox"]') as HTMLInputElement;
-      await user.click(input);
-      await user.tab();
-      expect(screen.getByText('This field is required')).toBeInTheDocument();
-    });
+        );
+        const input = container.querySelector(
+          'input[type="checkbox"]',
+        ) as HTMLInputElement;
+        await user.click(input);
+        await user.tab();
+        expect(screen.getByText('This field is required')).toBeInTheDocument();
+      },
+    );
 
     it('links aria-describedby to error container when errors visible', async () => {
       const user = userEvent.setup();
@@ -210,9 +236,11 @@ describe('AtlToggle', () => {
           componentProperties: {
             errors: [{ kind: 'required', message: 'Required' }],
           },
-        }
+        },
       );
-      const input = container.querySelector('input[type="checkbox"]') as HTMLInputElement;
+      const input = container.querySelector(
+        'input[type="checkbox"]',
+      ) as HTMLInputElement;
       await user.click(input);
       await user.tab();
 
@@ -229,9 +257,11 @@ describe('AtlToggle', () => {
           componentProperties: {
             errors: [{ kind: 'required', message: 'Required' }],
           },
-        }
+        },
       );
-      expect(container.querySelector('input[type="checkbox"]')).toHaveAttribute('aria-describedby');
+      expect(container.querySelector('input[type="checkbox"]')).toHaveAttribute(
+        'aria-describedby',
+      );
     });
   });
 
@@ -239,11 +269,11 @@ describe('AtlToggle', () => {
     it('sets name on native input', async () => {
       const { container } = await render(
         '<atl-toggle name="notifications">Label</atl-toggle>',
-        { imports: [AtlToggle] }
+        { imports: [AtlToggle] },
       );
       expect(container.querySelector('input[type="checkbox"]')).toHaveAttribute(
         'name',
-        'notifications'
+        'notifications',
       );
     });
 
@@ -252,7 +282,7 @@ describe('AtlToggle', () => {
         imports: [AtlToggle],
       });
       expect(
-        container.querySelector('input[type="checkbox"]')
+        container.querySelector('input[type="checkbox"]'),
       ).not.toHaveAttribute('name');
     });
   });

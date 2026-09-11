@@ -13,11 +13,13 @@ export const metadata: ComponentMetadata = {
   antiPatterns: [
     {
       pattern: 'Confirming or asking the user for a single decision.',
-      useInstead: 'AtlDialog — short-lived, focused, with explicit confirm/cancel actions.',
+      useInstead:
+        'AtlDialog — short-lived, focused, with explicit confirm/cancel actions.',
     },
     {
       pattern: 'Showing transient system notifications.',
-      useInstead: 'AtlToast — notifications are unidirectional and ephemeral, chat is a two-way log.',
+      useInstead:
+        'AtlToast — notifications are unidirectional and ephemeral, chat is a two-way log.',
     },
   ],
   relatedComponents: ['AtlDrawerSpec', 'AtlDialogSpec', 'AtlTextareaSpec'],

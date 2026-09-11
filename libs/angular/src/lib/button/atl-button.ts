@@ -51,11 +51,13 @@ export class AtlButton {
   /** Shows a loading spinner and disables interaction. */
   readonly loading = input(false);
 
-  protected readonly isDisabled = computed(() => this.disabled() || this.loading());
+  protected readonly isDisabled = computed(
+    () => this.disabled() || this.loading(),
+  );
 
   protected readonly hostClasses = computed(
     () =>
-      `variant-${this.variant()} size-${this.size()}${this.isDisabled() ? ' is-disabled' : ''}${this.loading() ? ' is-loading' : ''}`
+      `variant-${this.variant()} size-${this.size()}${this.isDisabled() ? ' is-disabled' : ''}${this.loading() ? ' is-loading' : ''}`,
   );
 
   /** @internal — host element ref for the dev-mode a11y check. */
@@ -80,7 +82,9 @@ export class AtlButton {
       }
     };
     host.addEventListener('click', guard, true);
-    this.destroyRef.onDestroy(() => host.removeEventListener('click', guard, true));
+    this.destroyRef.onDestroy(() =>
+      host.removeEventListener('click', guard, true),
+    );
 
     // Dev-mode warning when a button has no accessible name. Angular's
     // <ng-content> projection means we can't enforce this at the type
@@ -89,12 +93,13 @@ export class AtlButton {
       afterNextRender(() => {
         const host = this.el.nativeElement;
         const hasText = host.textContent.trim().length > 0;
-        const hasAriaLabel = host.hasAttribute('aria-label')
-          || host.hasAttribute('aria-labelledby');
+        const hasAriaLabel =
+          host.hasAttribute('aria-label') ||
+          host.hasAttribute('aria-labelledby');
         if (!hasText && !hasAriaLabel) {
           console.warn(
-            '[AtlButton] icon-only button is missing an accessible name — '
-              + 'add an aria-label attribute so screen readers announce its purpose.',
+            '[AtlButton] icon-only button is missing an accessible name — ' +
+              'add an aria-label attribute so screen readers announce its purpose.',
             host,
           );
         }

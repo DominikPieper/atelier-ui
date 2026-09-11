@@ -1,7 +1,8 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { AtlToastProvider, AtlToastContainer, useAtlToast } from './atl-toast';
 
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
 function figmaNode(nodeId: string) {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
@@ -18,18 +19,30 @@ const meta: Meta = {
 export default meta;
 type Story = StoryObj;
 
-function ToastDemo({ position = 'bottom-right' }: { position?: 'top-right' | 'top-center' | 'bottom-right' | 'bottom-center' }) {
+function ToastDemo({
+  position = 'bottom-right',
+}: {
+  position?: 'top-right' | 'top-center' | 'bottom-right' | 'bottom-center';
+}) {
   const { show, clear } = useAtlToast();
   return (
     <div style={{ display: 'flex', gap: '0.5rem', flexWrap: 'wrap' }}>
       <button onClick={() => show('Default notification')}>Default</button>
-      <button onClick={() => show('Saved successfully!', { variant: 'success' })}>
+      <button
+        onClick={() => show('Saved successfully!', { variant: 'success' })}
+      >
         Success
       </button>
-      <button onClick={() => show('Warning: check your settings', { variant: 'warning' })}>
+      <button
+        onClick={() =>
+          show('Warning: check your settings', { variant: 'warning' })
+        }
+      >
         Warning
       </button>
-      <button onClick={() => show('Something went wrong', { variant: 'danger' })}>
+      <button
+        onClick={() => show('Something went wrong', { variant: 'danger' })}
+      >
         Danger
       </button>
       <button onClick={() => show('New message received', { variant: 'info' })}>
@@ -37,14 +50,20 @@ function ToastDemo({ position = 'bottom-right' }: { position?: 'top-right' | 'to
       </button>
       <button
         onClick={() =>
-          show('This toast stays until dismissed', { duration: 0, variant: 'info' })
+          show('This toast stays until dismissed', {
+            duration: 0,
+            variant: 'info',
+          })
         }
       >
         Persistent
       </button>
       <button
         onClick={() =>
-          show('Cannot dismiss this', { dismissible: false, variant: 'warning' })
+          show('Cannot dismiss this', {
+            dismissible: false,
+            variant: 'warning',
+          })
         }
       >
         Non-dismissible
@@ -97,7 +116,14 @@ export const AutoDismiss: Story = {
       const { show } = useAtlToast();
       return (
         <div style={{ display: 'flex', gap: '0.5rem' }}>
-          <button onClick={() => show('Auto-dismissed in 2 seconds', { variant: 'info', duration: 2000 })}>
+          <button
+            onClick={() =>
+              show('Auto-dismissed in 2 seconds', {
+                variant: 'info',
+                duration: 2000,
+              })
+            }
+          >
             Show (2s)
           </button>
           <AtlToastContainer position="bottom-right" />
@@ -118,7 +144,14 @@ export const Persistent: Story = {
       const { show, clear } = useAtlToast();
       return (
         <div style={{ display: 'flex', gap: '0.5rem' }}>
-          <button onClick={() => show('This stays until dismissed', { variant: 'warning', duration: 0 })}>
+          <button
+            onClick={() =>
+              show('This stays until dismissed', {
+                variant: 'warning',
+                duration: 0,
+              })
+            }
+          >
             Show persistent
           </button>
           <button onClick={clear}>Clear all</button>

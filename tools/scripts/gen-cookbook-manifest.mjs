@@ -80,7 +80,10 @@ function makeEval(symbols) {
     if (node.kind === ts.SyntaxKind.TrueKeyword) return true;
     if (node.kind === ts.SyntaxKind.FalseKeyword) return false;
     if (ts.isNumericLiteral(node)) return Number(node.text);
-    if (ts.isPrefixUnaryExpression(node) && node.operator === ts.SyntaxKind.MinusToken) {
+    if (
+      ts.isPrefixUnaryExpression(node) &&
+      node.operator === ts.SyntaxKind.MinusToken
+    ) {
       const v = evalNode(node.operand);
       return typeof v === 'number' ? -v : null;
     }

@@ -4,10 +4,27 @@ import type { AtlIconName } from '../spec';
 
 import { metadata } from '@atelier-ui/spec/metadata/icon.metadata';
 const ICON_NAMES: AtlIconName[] = [
-  'success', 'warning', 'danger', 'info', 'error',
-  'chevron-up', 'chevron-down', 'chevron-left', 'chevron-right',
-  'sort-asc', 'sort-desc', 'arrow-right', 'arrow-left',
-  'copy', 'paste', 'add', 'edit', 'delete', 'close', 'more', 'default-toast',
+  'success',
+  'warning',
+  'danger',
+  'info',
+  'error',
+  'chevron-up',
+  'chevron-down',
+  'chevron-left',
+  'chevron-right',
+  'sort-asc',
+  'sort-desc',
+  'arrow-right',
+  'arrow-left',
+  'copy',
+  'paste',
+  'add',
+  'edit',
+  'delete',
+  'close',
+  'more',
+  'default-toast',
 ];
 
 const meta: Meta<typeof AtlIcon> = {
@@ -81,16 +98,34 @@ export const ActionIcons: Story = {
 
 export const AllIcons: Story = {
   render: () => (
-    <div style={{
-      display: 'grid',
-      gridTemplateColumns: 'repeat(7, 1fr)',
-      gap: '1.25rem',
-      maxWidth: '540px',
-    }}>
+    <div
+      style={{
+        display: 'grid',
+        gridTemplateColumns: 'repeat(7, 1fr)',
+        gap: '1.25rem',
+        maxWidth: '540px',
+      }}
+    >
       {ICON_NAMES.map((n) => (
-        <div key={n} style={{ display: 'flex', flexDirection: 'column', alignItems: 'center', gap: '0.375rem' }}>
+        <div
+          key={n}
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            alignItems: 'center',
+            gap: '0.375rem',
+          }}
+        >
           <AtlIcon name={n} size="lg" />
-          <span style={{ fontSize: '0.6875rem', color: 'var(--ui-color-text-muted)', textAlign: 'center' }}>{n}</span>
+          <span
+            style={{
+              fontSize: '0.6875rem',
+              color: 'var(--ui-color-text-muted)',
+              textAlign: 'center',
+            }}
+          >
+            {n}
+          </span>
         </div>
       ))}
     </div>

@@ -13,22 +13,21 @@ export const metadata: ComponentMetadata = {
   antiPatterns: [
     {
       pattern: 'Rendering a user avatar or product image.',
-      useInstead: 'AtlAvatar or a plain `<img>` — icons are abstract glyphs, not raster content.',
+      useInstead:
+        'AtlAvatar or a plain `<img>` — icons are abstract glyphs, not raster content.',
     },
     {
-      pattern: 'Conveying status without an adjacent label and without setting `label`.',
-      useInstead: 'Pair the icon with visible text or pass `label` — decorative icons are hidden from screen readers.',
+      pattern:
+        'Conveying status without an adjacent label and without setting `label`.',
+      useInstead:
+        'Pair the icon with visible text or pass `label` — decorative icons are hidden from screen readers.',
     },
   ],
   relatedComponents: ['AtlButtonSpec', 'AtlBadgeSpec', 'AtlAlertSpec'],
   // The `name` prop is a content choice (which glyph to show), not a
   // design-system axis — every icon ships in every size. Cover only `size`
   // here so the variant-coverage gate does not demand a row per icon name.
-  variantMatrix: [
-    { size: 'sm' },
-    { size: 'md' },
-    { size: 'lg' },
-  ],
+  variantMatrix: [{ size: 'sm' }, { size: 'md' }, { size: 'lg' }],
   accessibility: {
     role: 'img',
     keyboardBehavior: 'Not focusable; no key handling.',

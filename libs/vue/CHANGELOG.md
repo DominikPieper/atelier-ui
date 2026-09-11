@@ -395,18 +395,18 @@ This was a version bump only for vue to align it with other projects, there were
 
 ### 🚀 Features
 
-- ⚠️  **docs:** rename Llm prefix to Atl across docs, generated artifacts, and tooling docs ([965787d](https://github.com/DominikPieper/atelier-ui/commit/965787d))
-- ⚠️  **vue:** rename Llm prefix to Atl across the Vue library ([ac331ea](https://github.com/DominikPieper/atelier-ui/commit/ac331ea))
-- ⚠️  **spec:** rename Llm prefix to Atl in spec contract ([6860cc4](https://github.com/DominikPieper/atelier-ui/commit/6860cc4))
+- ⚠️ **docs:** rename Llm prefix to Atl across docs, generated artifacts, and tooling docs ([965787d](https://github.com/DominikPieper/atelier-ui/commit/965787d))
+- ⚠️ **vue:** rename Llm prefix to Atl across the Vue library ([ac331ea](https://github.com/DominikPieper/atelier-ui/commit/ac331ea))
+- ⚠️ **spec:** rename Llm prefix to Atl in spec contract ([6860cc4](https://github.com/DominikPieper/atelier-ui/commit/6860cc4))
 
-### ⚠️  Breaking Changes
+### ⚠️ Breaking Changes
 
-- **docs:** rename Llm prefix to Atl across docs, generated artifacts, and tooling docs  ([965787d](https://github.com/DominikPieper/atelier-ui/commit/965787d))
-- **vue:** rename Llm prefix to Atl across the Vue library  ([ac331ea](https://github.com/DominikPieper/atelier-ui/commit/ac331ea))
+- **docs:** rename Llm prefix to Atl across docs, generated artifacts, and tooling docs ([965787d](https://github.com/DominikPieper/atelier-ui/commit/965787d))
+- **vue:** rename Llm prefix to Atl across the Vue library ([ac331ea](https://github.com/DominikPieper/atelier-ui/commit/ac331ea))
   every Vue component, camelCase prop (llmTooltip ->
   atlTooltip etc.), and CSS class renamed Llm/llm- -> Atl/atl-
   (ADR-0029). nx lint/test/build vue all green (262/262 tests).
-- **spec:** rename Llm prefix to Atl in spec contract  ([6860cc4](https://github.com/DominikPieper/atelier-ui/commit/6860cc4))
+- **spec:** rename Llm prefix to Atl in spec contract ([6860cc4](https://github.com/DominikPieper/atelier-ui/commit/6860cc4))
   every exported spec type/interface renamed
   Llm* -> Atl* (ADR-0029). Framework libs will fail to typecheck
   until each is renamed in turn (next commits) — expected mid-migration.

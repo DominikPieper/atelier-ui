@@ -12,16 +12,21 @@ export const metadata: ComponentMetadata = {
   ],
   antiPatterns: [
     {
-      pattern: 'Blocking the page for a short confirmation or single-decision prompt.',
-      useInstead: 'AtlDialog — dialogs are centred, scoped, and the right primitive for one focused decision.',
+      pattern:
+        'Blocking the page for a short confirmation or single-decision prompt.',
+      useInstead:
+        'AtlDialog — dialogs are centred, scoped, and the right primitive for one focused decision.',
     },
     {
-      pattern: 'Showing a transient notification that should not require dismissal.',
-      useInstead: 'AtlToast — toasts auto-dismiss and do not anchor to a screen edge.',
+      pattern:
+        'Showing a transient notification that should not require dismissal.',
+      useInstead:
+        'AtlToast — toasts auto-dismiss and do not anchor to a screen edge.',
     },
     {
       pattern: 'Building a dropdown menu attached to a trigger button.',
-      useInstead: 'AtlMenu — menus position relative to the trigger and use roving focus, not focus trapping.',
+      useInstead:
+        'AtlMenu — menus position relative to the trigger and use roving focus, not focus trapping.',
     },
   ],
   relatedComponents: ['AtlDialogSpec', 'AtlMenuSpec'],

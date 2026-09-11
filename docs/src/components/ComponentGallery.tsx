@@ -1,5 +1,9 @@
 import { useState, useMemo } from 'react';
-import { ALL_COMPONENTS, COMPONENT_CATEGORIES, componentDocs } from '../data/components';
+import {
+  ALL_COMPONENTS,
+  COMPONENT_CATEGORIES,
+  componentDocs,
+} from '../data/components';
 
 export default function ComponentGallery() {
   const [query, setQuery] = useState('');
@@ -13,11 +17,13 @@ export default function ComponentGallery() {
 
     Object.entries(COMPONENT_CATEGORIES).forEach(([category, components]) => {
       if (activeCategory && category !== activeCategory) return;
-      const filtered = (components as string[]).filter(name => {
+      const filtered = (components as string[]).filter((name) => {
         const doc = componentDocs[name];
-        return name.toLowerCase().includes(q) ||
+        return (
+          name.toLowerCase().includes(q) ||
           doc?.name.toLowerCase().includes(q) ||
-          doc?.description.toLowerCase().includes(q);
+          doc?.description.toLowerCase().includes(q)
+        );
       });
       if (filtered.length > 0) result[category] = filtered;
     });
@@ -25,20 +31,39 @@ export default function ComponentGallery() {
     return result;
   }, [query, activeCategory]);
 
-  const visibleCount = Object.values(filteredCategories).reduce((sum, arr) => sum + arr.length, 0);
+  const visibleCount = Object.values(filteredCategories).reduce(
+    (sum, arr) => sum + arr.length,
+    0,
+  );
 
   return (
     <>
       <div className="docs-page-header">
-        <div style={{ display: 'flex', alignItems: 'baseline', justifyContent: 'space-between', flexWrap: 'wrap', gap: '0.5rem' }}>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'baseline',
+            justifyContent: 'space-between',
+            flexWrap: 'wrap',
+            gap: '0.5rem',
+          }}
+        >
           <h1 className="docs-page-h1">Components</h1>
-          <span className="docs-count-badge" aria-hidden="true">{visibleCount} of {ALL_COMPONENTS.length}</span>
-          <span className="sr-only" role="status" aria-live="polite" aria-atomic="true">
+          <span className="docs-count-badge" aria-hidden="true">
+            {visibleCount} of {ALL_COMPONENTS.length}
+          </span>
+          <span
+            className="sr-only"
+            role="status"
+            aria-live="polite"
+            aria-atomic="true"
+          >
             Showing {visibleCount} of {ALL_COMPONENTS.length} components
           </span>
         </div>
         <p className="docs-page-description">
-          Identical APIs across Angular, React, and Vue. Designed for AI-assisted development.
+          Identical APIs across Angular, React, and Vue. Designed for
+          AI-assisted development.
         </p>
       </div>
 
@@ -69,7 +94,11 @@ export default function ComponentGallery() {
             aria-label="Search components"
           />
         </div>
-        <div className="docs-category-pills" role="group" aria-label="Filter components by category">
+        <div
+          className="docs-category-pills"
+          role="group"
+          aria-label="Filter components by category"
+        >
           <button
             type="button"
             className={`docs-category-pill${!activeCategory ? ' active' : ''}`}
@@ -78,13 +107,15 @@ export default function ComponentGallery() {
           >
             All
           </button>
-          {categories.map(cat => (
+          {categories.map((cat) => (
             <button
               key={cat}
               type="button"
               className={`docs-category-pill${activeCategory === cat ? ' active' : ''}`}
               aria-pressed={activeCategory === cat}
-              onClick={() => setActiveCategory(cat === activeCategory ? null : cat)}
+              onClick={() =>
+                setActiveCategory(cat === activeCategory ? null : cat)
+              }
             >
               {cat}
             </button>
@@ -94,9 +125,7 @@ export default function ComponentGallery() {
 
       {Object.entries(filteredCategories).map(([category, components]) => (
         <div key={category} className="docs-section">
-          <h2 className="docs-section-title">
-            {category}
-          </h2>
+          <h2 className="docs-section-title">{category}</h2>
           <div className="docs-component-grid">
             {components.map((name) => {
               const doc = componentDocs[name];
@@ -114,7 +143,9 @@ export default function ComponentGallery() {
                       {doc?.name ?? formatComponentName(name)}
                     </div>
                     {doc?.status && (
-                      <span className={`docs-status-badge docs-status-badge--${doc.status}`}>
+                      <span
+                        className={`docs-status-badge docs-status-badge--${doc.status}`}
+                      >
                         {doc.status}
                       </span>
                     )}
@@ -124,13 +155,20 @@ export default function ComponentGallery() {
                     {(doc?.description.length ?? 0) > 85 ? '…' : ''}
                   </div>
                   <div className="docs-component-card-footer">
-                    <span className="docs-component-card-cta" aria-hidden="true">View docs</span>
+                    <span
+                      className="docs-component-card-cta"
+                      aria-hidden="true"
+                    >
+                      View docs
+                    </span>
                     <span className="docs-fw-dots" aria-hidden="true">
                       <span className="docs-fw-dot docs-fw-dot--angular"></span>
                       <span className="docs-fw-dot docs-fw-dot--react"></span>
                       <span className="docs-fw-dot docs-fw-dot--vue"></span>
                     </span>
-                    <span className="docs-visually-hidden">View docs. Available for Angular, React, and Vue.</span>
+                    <span className="docs-visually-hidden">
+                      View docs. Available for Angular, React, and Vue.
+                    </span>
                   </div>
                 </a>
               );
@@ -142,11 +180,18 @@ export default function ComponentGallery() {
       {Object.keys(filteredCategories).length === 0 && (
         <div className="docs-not-found">
           <p style={{ fontWeight: 600, color: 'var(--ui-color-text)' }}>
-            {query.trim() && activeCategory
-              ? <>No components in <strong>{activeCategory}</strong> match "{query.trim()}".</>
-              : query.trim()
-                ? <>No components match "{query.trim()}".</>
-                : <>No components in <strong>{activeCategory}</strong> yet.</>}
+            {query.trim() && activeCategory ? (
+              <>
+                No components in <strong>{activeCategory}</strong> match "
+                {query.trim()}".
+              </>
+            ) : query.trim() ? (
+              <>No components match "{query.trim()}".</>
+            ) : (
+              <>
+                No components in <strong>{activeCategory}</strong> yet.
+              </>
+            )}
           </p>
           <p style={{ margin: '0.25rem 0 0' }}>
             {activeCategory
@@ -167,17 +212,26 @@ export default function ComponentGallery() {
             <button
               type="button"
               className="docs-category-pill active"
-              onClick={() => { setQuery(''); setActiveCategory(null); }}
+              onClick={() => {
+                setQuery('');
+                setActiveCategory(null);
+              }}
             >
               Clear filters
             </button>
-            {(query.trim() || !activeCategory ? categories : categories.filter(c => c !== activeCategory)).map(cat => (
+            {(query.trim() || !activeCategory
+              ? categories
+              : categories.filter((c) => c !== activeCategory)
+            ).map((cat) => (
               <button
                 key={cat}
                 type="button"
                 className={`docs-category-pill${activeCategory === cat ? ' active' : ''}`}
                 aria-pressed={activeCategory === cat}
-                onClick={() => { setQuery(''); setActiveCategory(cat); }}
+                onClick={() => {
+                  setQuery('');
+                  setActiveCategory(cat);
+                }}
               >
                 {cat}
               </button>
@@ -190,5 +244,8 @@ export default function ComponentGallery() {
 }
 
 function formatComponentName(name: string): string {
-  return name.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ');
+  return name
+    .split('-')
+    .map((w) => w.charAt(0).toUpperCase() + w.slice(1))
+    .join(' ');
 }

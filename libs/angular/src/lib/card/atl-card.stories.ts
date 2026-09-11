@@ -1,13 +1,19 @@
 import type { Meta, StoryObj } from '@storybook/angular';
 import { argsToTemplate } from '@storybook/angular';
-import { AtlCard, AtlCardContent, AtlCardFooter, AtlCardHeader } from './atl-card';
+import {
+  AtlCard,
+  AtlCardContent,
+  AtlCardFooter,
+  AtlCardHeader,
+} from './atl-card';
 import { AtlButton } from '../button/atl-button';
 
 import { metadata } from '@atelier-ui/spec/metadata/card.metadata';
 import { contract } from '@atelier-ui/spec/contracts/card.contract';
-const FIGMA_FILE = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 
-function figmaNode(nodeId: string): { type: "figma"; url: string } {
+function figmaNode(nodeId: string): { type: 'figma'; url: string } {
   return { type: 'figma' as const, url: `${FIGMA_FILE}?node-id=${nodeId}` };
 }
 
@@ -101,7 +107,15 @@ export const PaddingNone: Story = {
 
 export const AllVariants: Story = {
   render: () => ({
-    moduleMetadata: { imports: [AtlCard, AtlCardHeader, AtlCardContent, AtlCardFooter, AtlButton] },
+    moduleMetadata: {
+      imports: [
+        AtlCard,
+        AtlCardHeader,
+        AtlCardContent,
+        AtlCardFooter,
+        AtlButton,
+      ],
+    },
     template: `
       <div style="display: flex; gap: 1.5rem; flex-wrap: wrap; align-items: flex-start;">
         <atl-card variant="elevated" style="width: 240px;">

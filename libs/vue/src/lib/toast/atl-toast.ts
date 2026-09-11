@@ -24,11 +24,14 @@ export interface AtlToastContext {
 
 export const AtlToastKey: InjectionKey<AtlToastContext> = Symbol('AtlToast');
 
-export function useAtlToast(): Pick<AtlToastContext, 'show' | 'dismiss' | 'clear'> {
+export function useAtlToast(): Pick<
+  AtlToastContext,
+  'show' | 'dismiss' | 'clear'
+> {
   const ctx = inject(AtlToastKey);
   if (!ctx) {
     throw new Error(
-      'useAtlToast() must be called inside a component that is a descendant of AtlToastProvider.'
+      'useAtlToast() must be called inside a component that is a descendant of AtlToastProvider.',
     );
   }
   return { show: ctx.show, dismiss: ctx.dismiss, clear: ctx.clear };

@@ -25,7 +25,9 @@ async function captureOne(template: string): Promise<unknown> {
 
 async function capture(): Promise<Record<string, unknown>> {
   return {
-    default: await captureOne('<atl-code-block code="const x = 1;" language="ts"></atl-code-block>'),
+    default: await captureOne(
+      '<atl-code-block code="const x = 1;" language="ts"></atl-code-block>',
+    ),
   };
 }
 

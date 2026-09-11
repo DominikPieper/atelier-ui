@@ -20,9 +20,9 @@ ADR-0056 established that a container must not declare its children's states, an
 ADR-0061's `[BOOL-UNSPECED]` proved AtlTable was doing exactly that: `sortable`,
 `selectable` and `empty` are fields of `AtlThSpec`, `AtlTrSpec` and `AtlTbodySpec`, none
 of which `AtlTableSpec` resolves to. A `maps to` claim would have failed `[BOOL-CLAIM]`
-for the right reason, so the three were allowlisted with a stated debt: *"they stay
+for the right reason, so the three were allowlisted with a stated debt: _"they stay
 declared only until the AtlTh / AtlTr / AtlTbody child masters exist to carry them —
-building them removes the allowlist entries, not just the warning."*
+building them removes the allowlist entries, not just the warning."_
 
 Reading the specs to build them turned up a fourth: `AtlTdSpec` exists too, with `align`.
 
@@ -32,12 +32,12 @@ Reading the specs to build them turned up a fourth: `AtlTdSpec` exists too, with
 — `sortDirection` and `align` — as a 3×3 matrix for nine drawings, eight of which differ
 in one text property. Instead each master is complete on the axis that is its own:
 
-| Master | Axis | Booleans | Not modelled |
-|---|---|---|---|
-| AtlTh | `sortDirection` none \| asc \| desc | `sortable` | `align` — see below |
-| AtlTd | `align` start \| center \| end | — | — |
-| AtlTr | `selected` false \| true | `selectable` | — |
-| AtlTbody | — | `empty` | — |
+| Master   | Axis                                | Booleans     | Not modelled        |
+| -------- | ----------------------------------- | ------------ | ------------------- |
+| AtlTh    | `sortDirection` none \| asc \| desc | `sortable`   | `align` — see below |
+| AtlTd    | `align` start \| center \| end      | —            | —                   |
+| AtlTr    | `selected` false \| true            | `selectable` | —                   |
+| AtlTbody | —                                   | `empty`      | —                   |
 
 - **`align` lives on AtlTd**, where it is the cell's only state, and is a stated
   non-modelling on AtlTh with that reason. `AtlTableAlign` is a per-cell union with a

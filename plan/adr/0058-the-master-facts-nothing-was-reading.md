@@ -34,7 +34,7 @@ Boolean**, and wrote it into this ADR. It is wrong, and the file had already sol
 it: AtlSelect, AtlCombobox and AtlCheckbox each carry an `_invalid-border` rectangle
 whose `visible` is bound to their `invalid` Boolean. An overlay layer that paints the
 new colour turns any colour state into a visibility state. The constraint is narrower
-than it looked — a Boolean needs *a layer to toggle*, and one can always be added.
+than it looked — a Boolean needs _a layer to toggle_, and one can always be added.
 
 Then: AtlInput declares three Booleans and only `disabled` is bound. `readonly` and
 `required` reference nothing. Extending the read across the file:
@@ -67,7 +67,7 @@ Two new codes:
 And two corrections to what ADR-0056 shipped:
 
 - **`[BOOL-MISSING]` reads the real property definitions**, with the prose kept only
-  for the *mappings*, which exist nowhere else. That alone moved four masters out of
+  for the _mappings_, which exist nowhere else. That alone moved four masters out of
   it: AtlAlert, AtlProgress, AtlTable and AtlChat do declare their Booleans — the
   properties are inert, not absent, which is a different repair.
 - **Its message now says what a Boolean can express.** "Declare a Boolean" is wrong
@@ -98,7 +98,7 @@ And two corrections to what ADR-0056 shipped:
   state: `atl-radio.tsx` computes `ctx.invalid && 'is-invalid'` from the group's
   context and `atl-radio.css` has three rules for it. The property is restored, the
   four overlays rebound, and the description now states the honest mapping —
-  *inherited from* `AtlRadioGroupSpec.invalid`, not owned here. A false claim about a
+  _inherited from_ `AtlRadioGroupSpec.invalid`, not owned here. A false claim about a
   property is a reason to correct the claim, not to remove the property.
 - **A gate built on prose reported the wrong half of a problem.** ADR-0056 chose the
   description because that was the only place the data existed; the fix was to make

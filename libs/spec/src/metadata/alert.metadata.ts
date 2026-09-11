@@ -12,16 +12,20 @@ export const metadata: ComponentMetadata = {
   ],
   antiPatterns: [
     {
-      pattern: 'Tagging an item with a short status word next to other content.',
-      useInstead: 'AtlBadge — badges are inline labels, alerts are block-level messages with a role.',
+      pattern:
+        'Tagging an item with a short status word next to other content.',
+      useInstead:
+        'AtlBadge — badges are inline labels, alerts are block-level messages with a role.',
     },
     {
       pattern: 'Showing a transient confirmation that disappears on its own.',
-      useInstead: 'A toast/snackbar component — alerts stay in the layout until dismissed or unmounted.',
+      useInstead:
+        'A toast/snackbar component — alerts stay in the layout until dismissed or unmounted.',
     },
     {
       pattern: 'Blocking the page to demand a decision.',
-      useInstead: 'AtlDialog — modal dialogs interrupt; alerts coexist with the surrounding content.',
+      useInstead:
+        'AtlDialog — modal dialogs interrupt; alerts coexist with the surrounding content.',
     },
   ],
   relatedComponents: ['AtlBadgeSpec', 'AtlDialogSpec'],

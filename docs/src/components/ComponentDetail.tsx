@@ -1,15 +1,50 @@
 import { useEffect, useState } from 'react';
 import {
-  AtlButton, AtlBadge, AtlCard, AtlCardHeader, AtlCardContent, AtlCardFooter,
-  AtlInput, AtlTextarea, AtlCheckbox, AtlToggle, AtlRadioGroup, AtlRadio,
-  AtlSelect, AtlOption, AtlAlert, AtlAvatar, AtlAvatarGroup, AtlSkeleton,
-  AtlTabGroup, AtlTab, AtlAccordionGroup, AtlAccordionItem, AtlTooltip,
-  AtlProgress, AtlAccordionHeader, AtlBreadcrumbs, AtlBreadcrumbItem,
-  AtlPagination, AtlDialog, AtlDialogHeader, AtlDialogContent, AtlDialogFooter,
-  AtlDrawer, AtlDrawerHeader, AtlDrawerContent, AtlDrawerFooter, AtlCodeBlock,
+  AtlButton,
+  AtlBadge,
+  AtlCard,
+  AtlCardHeader,
+  AtlCardContent,
+  AtlCardFooter,
+  AtlInput,
+  AtlTextarea,
+  AtlCheckbox,
+  AtlToggle,
+  AtlRadioGroup,
+  AtlRadio,
+  AtlSelect,
+  AtlOption,
+  AtlAlert,
+  AtlAvatar,
+  AtlAvatarGroup,
+  AtlSkeleton,
+  AtlTabGroup,
+  AtlTab,
+  AtlAccordionGroup,
+  AtlAccordionItem,
+  AtlTooltip,
+  AtlProgress,
+  AtlAccordionHeader,
+  AtlBreadcrumbs,
+  AtlBreadcrumbItem,
+  AtlPagination,
+  AtlDialog,
+  AtlDialogHeader,
+  AtlDialogContent,
+  AtlDialogFooter,
+  AtlDrawer,
+  AtlDrawerHeader,
+  AtlDrawerContent,
+  AtlDrawerFooter,
+  AtlCodeBlock,
 } from '@atelier-ui/react';
 import { componentDocs, COMPONENT_CATEGORIES } from '../data/components';
-import { getFramework, setFramework, subscribeFramework, type Framework } from '../lib/framework-pref';
+import {
+  getFramework,
+  setFramework,
+  subscribeFramework,
+  type Framework,
+} from '../lib/framework-pref';
 
 const CATEGORY_TONE: Record<string, string> = {
   Inputs: 'primary',
@@ -36,8 +71,18 @@ const IMPORT_MAP: Record<string, string[]> = {
   tabs: ['AtlTabGroup', 'AtlTab'],
   pagination: ['AtlPagination'],
   menu: ['AtlMenu', 'AtlMenuItem', 'AtlMenuSeparator', 'AtlMenuTrigger'],
-  dialog: ['AtlDialog', 'AtlDialogHeader', 'AtlDialogContent', 'AtlDialogFooter'],
-  drawer: ['AtlDrawer', 'AtlDrawerHeader', 'AtlDrawerContent', 'AtlDrawerFooter'],
+  dialog: [
+    'AtlDialog',
+    'AtlDialogHeader',
+    'AtlDialogContent',
+    'AtlDialogFooter',
+  ],
+  drawer: [
+    'AtlDrawer',
+    'AtlDrawerHeader',
+    'AtlDrawerContent',
+    'AtlDrawerFooter',
+  ],
   tooltip: ['AtlTooltip'],
   toast: ['AtlToastProvider', 'AtlToastContainer', 'useAtlToast'],
   accordion: ['AtlAccordionGroup', 'AtlAccordionItem'],
@@ -74,13 +119,22 @@ const STORYBOOK_CATEGORY: Record<string, string> = {
 
 // Storybook docs IDs follow `components-<category>-<component>--docs`, where
 // <component> is the primary selector lowercased (e.g. AtlTabGroup → atltabgroup).
-function storybookDocsUrl(framework: Framework, name: string, category: string, selector: string): string {
+function storybookDocsUrl(
+  framework: Framework,
+  name: string,
+  category: string,
+  selector: string,
+): string {
   const base = `https://atelier.pieper.io/storybook-${framework}/`;
   const cat = STORYBOOK_CATEGORY[category];
   // Toast's docs selector is "AtlToastProvider + useAtlToast" but its Storybook id is atltoast.
-  const segment = name === 'toast'
-    ? 'atltoast'
-    : selector.split(' + ')[0].replace(/[^a-zA-Z0-9]/g, '').toLowerCase();
+  const segment =
+    name === 'toast'
+      ? 'atltoast'
+      : selector
+          .split(' + ')[0]
+          .replace(/[^a-zA-Z0-9]/g, '')
+          .toLowerCase();
   if (!cat || !segment) return base;
   return `${base}?path=/docs/components-${cat}-${segment}--docs`;
 }
@@ -91,7 +145,9 @@ function storybookDocsUrl(framework: Framework, name: string, category: string, 
 // wrap after each `|` while leaving the copy/paste text unchanged.
 function renderType(type: string) {
   const parts = type.split(' | ');
-  return parts.flatMap((part, i) => (i === 0 ? [part] : [' | ', <wbr key={i} />, part]));
+  return parts.flatMap((part, i) =>
+    i === 0 ? [part] : [' | ', <wbr key={i} />, part],
+  );
 }
 
 function CodeBlock({ code, lang }: { code: string; lang: string }) {
@@ -106,9 +162,16 @@ function CodeBlock({ code, lang }: { code: string; lang: string }) {
     <div className="docs-code-block">
       <div className="docs-code-block-header">
         <span className="docs-code-block-lang">{lang}</span>
-        <button className={`docs-code-block-copy${copied ? ' copied' : ''}`} onClick={copy}>{copied ? 'Copied' : 'Copy'}</button>
+        <button
+          className={`docs-code-block-copy${copied ? ' copied' : ''}`}
+          onClick={copy}
+        >
+          {copied ? 'Copied' : 'Copy'}
+        </button>
       </div>
-      <pre tabIndex={0}><code>{code}</code></pre>
+      <pre tabIndex={0}>
+        <code>{code}</code>
+      </pre>
     </div>
   );
 }
@@ -117,7 +180,13 @@ function CodeBlock({ code, lang }: { code: string; lang: string }) {
 // onto the shared `Framework` preference rather than tracking a separate index.
 const MULTI_CODE_FRAMEWORKS: Framework[] = ['angular', 'react', 'vue'];
 
-function MultiCodeBlock({ symbols, framework }: { symbols: string[]; framework: Framework }) {
+function MultiCodeBlock({
+  symbols,
+  framework,
+}: {
+  symbols: string[];
+  framework: Framework;
+}) {
   const pkgs: Record<Framework, string> = {
     angular: '@atelier-ui/angular',
     react: '@atelier-ui/react',
@@ -130,8 +199,11 @@ function MultiCodeBlock({ symbols, framework }: { symbols: string[]; framework: 
           framework preference, which drives several scattered surfaces on the
           page (demo, props, import) rather than a single tabpanel — so the
           honest pattern is a group of toggle buttons, not a tablist. */}
-      <div className="docs-multi-code-tabs" style={{ borderRadius: '8px 8px 0 0', marginBottom: 0 }}>
-        {MULTI_CODE_FRAMEWORKS.map(fw => {
+      <div
+        className="docs-multi-code-tabs"
+        style={{ borderRadius: '8px 8px 0 0', marginBottom: 0 }}
+      >
+        {MULTI_CODE_FRAMEWORKS.map((fw) => {
           const active = framework === fw;
           return (
             <button
@@ -167,20 +239,48 @@ function ComponentDemo({ name }: { name: string }) {
   switch (name) {
     case 'button':
       return (
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.75rem', alignItems: 'center' }}>
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '0.75rem',
+            alignItems: 'center',
+          }}
+        >
           <AtlButton variant="primary">Primary</AtlButton>
           <AtlButton variant="secondary">Secondary</AtlButton>
           <AtlButton variant="outline">Outline</AtlButton>
-          <AtlButton variant="primary" size="sm">Small</AtlButton>
-          <AtlButton variant="primary" size="lg">Large</AtlButton>
-          <AtlButton variant="primary" loading={true}>Loading</AtlButton>
-          <AtlButton variant="primary" disabled={true}>Disabled</AtlButton>
+          <AtlButton variant="primary" size="sm">
+            Small
+          </AtlButton>
+          <AtlButton variant="primary" size="lg">
+            Large
+          </AtlButton>
+          <AtlButton variant="primary" loading={true}>
+            Loading
+          </AtlButton>
+          <AtlButton variant="primary" disabled={true}>
+            Disabled
+          </AtlButton>
         </div>
       );
     case 'input':
       return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', width: '100%', maxWidth: '400px' }}>
-          <AtlInput type="text" placeholder="Default input" value={inputValue} onValueChange={setInputValue} />
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '0.75rem',
+            width: '100%',
+            maxWidth: '400px',
+          }}
+        >
+          <AtlInput
+            type="text"
+            placeholder="Default input"
+            value={inputValue}
+            onValueChange={setInputValue}
+          />
           <AtlInput type="email" placeholder="Email address" />
           <AtlInput type="password" placeholder="Password" />
           <AtlInput invalid={true} placeholder="Invalid state" />
@@ -189,39 +289,73 @@ function ComponentDemo({ name }: { name: string }) {
       );
     case 'textarea':
       return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', width: '100%', maxWidth: '400px' }}>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '0.75rem',
+            width: '100%',
+            maxWidth: '400px',
+          }}
+        >
           <AtlTextarea placeholder="Tell us about yourself..." rows={3} />
           <AtlTextarea placeholder="Disabled" disabled={true} />
         </div>
       );
     case 'checkbox':
       return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-          <AtlCheckbox checked={checkboxChecked} onCheckedChange={setCheckboxChecked}>I agree to the terms</AtlCheckbox>
+        <div
+          style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}
+        >
+          <AtlCheckbox
+            checked={checkboxChecked}
+            onCheckedChange={setCheckboxChecked}
+          >
+            I agree to the terms
+          </AtlCheckbox>
           <AtlCheckbox indeterminate={true}>Indeterminate state</AtlCheckbox>
-          <AtlCheckbox checked={true} disabled={true}>Disabled checked</AtlCheckbox>
+          <AtlCheckbox checked={true} disabled={true}>
+            Disabled checked
+          </AtlCheckbox>
         </div>
       );
     case 'toggle':
       return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
-          <AtlToggle checked={toggleChecked} onCheckedChange={setToggleChecked}>Email notifications</AtlToggle>
+        <div
+          style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}
+        >
+          <AtlToggle checked={toggleChecked} onCheckedChange={setToggleChecked}>
+            Email notifications
+          </AtlToggle>
           <AtlToggle>Push notifications</AtlToggle>
-          <AtlToggle checked={true} disabled={true}>Always enabled</AtlToggle>
+          <AtlToggle checked={true} disabled={true}>
+            Always enabled
+          </AtlToggle>
         </div>
       );
     case 'radio-group':
       return (
-        <AtlRadioGroup name="plan" value={radioValue} onValueChange={setRadioValue}>
+        <AtlRadioGroup
+          name="plan"
+          value={radioValue}
+          onValueChange={setRadioValue}
+        >
           <AtlRadio radioValue="free">Free — Basic features</AtlRadio>
           <AtlRadio radioValue="pro">Pro — $9/month</AtlRadio>
-          <AtlRadio radioValue="enterprise">Enterprise — Custom pricing</AtlRadio>
+          <AtlRadio radioValue="enterprise">
+            Enterprise — Custom pricing
+          </AtlRadio>
         </AtlRadioGroup>
       );
     case 'select':
       return (
         <div style={{ width: '100%', maxWidth: '300px' }}>
-          <AtlSelect label="Country" placeholder="Select a country" value={selectValue} onValueChange={setSelectValue}>
+          <AtlSelect
+            label="Country"
+            placeholder="Select a country"
+            value={selectValue}
+            onValueChange={setSelectValue}
+          >
             <AtlOption optionValue="us">United States</AtlOption>
             <AtlOption optionValue="ca">Canada</AtlOption>
             <AtlOption optionValue="uk">United Kingdom</AtlOption>
@@ -231,34 +365,70 @@ function ComponentDemo({ name }: { name: string }) {
       );
     case 'badge':
       return (
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '0.5rem', alignItems: 'center' }}>
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '0.5rem',
+            alignItems: 'center',
+          }}
+        >
           <AtlBadge>Default</AtlBadge>
           <AtlBadge variant="success">Active</AtlBadge>
           <AtlBadge variant="warning">Pending</AtlBadge>
           <AtlBadge variant="danger">Error</AtlBadge>
           <AtlBadge variant="info">Info</AtlBadge>
-          <AtlBadge size="sm" variant="success">Small</AtlBadge>
+          <AtlBadge size="sm" variant="success">
+            Small
+          </AtlBadge>
         </div>
       );
     case 'card':
       return (
-        <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem', width: '100%' }}>
-          <AtlCard variant="elevated" padding="md" style={{ flex: '1 1 220px', minWidth: 0 }}>
+        <div
+          style={{
+            display: 'flex',
+            flexWrap: 'wrap',
+            gap: '1rem',
+            width: '100%',
+          }}
+        >
+          <AtlCard
+            variant="elevated"
+            padding="md"
+            style={{ flex: '1 1 220px', minWidth: 0 }}
+          >
             <AtlCardHeader>Elevated Card</AtlCardHeader>
             <AtlCardContent>Default card with box shadow.</AtlCardContent>
-            <AtlCardFooter><AtlButton variant="primary" size="sm">Action</AtlButton></AtlCardFooter>
+            <AtlCardFooter>
+              <AtlButton variant="primary" size="sm">
+                Action
+              </AtlButton>
+            </AtlCardFooter>
           </AtlCard>
-          <AtlCard variant="outlined" padding="md" style={{ flex: '1 1 220px', minWidth: 0 }}>
+          <AtlCard
+            variant="outlined"
+            padding="md"
+            style={{ flex: '1 1 220px', minWidth: 0 }}
+          >
             <AtlCardHeader>Outlined Card</AtlCardHeader>
             <AtlCardContent>Card with a visible border.</AtlCardContent>
-            <AtlCardFooter><AtlButton variant="outline" size="sm">Action</AtlButton></AtlCardFooter>
+            <AtlCardFooter>
+              <AtlButton variant="outline" size="sm">
+                Action
+              </AtlButton>
+            </AtlCardFooter>
           </AtlCard>
         </div>
       );
     case 'avatar':
       return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}>
-          <div style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}>
+        <div
+          style={{ display: 'flex', flexDirection: 'column', gap: '1.5rem' }}
+        >
+          <div
+            style={{ display: 'flex', gap: '0.75rem', alignItems: 'center' }}
+          >
             <AtlAvatar name="Jane Doe" size="xs" />
             <AtlAvatar name="John Smith" size="sm" />
             <AtlAvatar name="Alice Johnson" size="md" status="online" />
@@ -266,7 +436,15 @@ function ComponentDemo({ name }: { name: string }) {
             <AtlAvatar name="Carol White" size="xl" shape="square" />
           </div>
           <div>
-            <p style={{ margin: '0 0 0.5rem', fontSize: '0.85rem', opacity: 0.7 }}>Group with overflow</p>
+            <p
+              style={{
+                margin: '0 0 0.5rem',
+                fontSize: '0.85rem',
+                opacity: 0.7,
+              }}
+            >
+              Group with overflow
+            </p>
             <AtlAvatarGroup max={3} size="md">
               <AtlAvatar name="Alice" />
               <AtlAvatar name="Bob" />
@@ -279,10 +457,25 @@ function ComponentDemo({ name }: { name: string }) {
       );
     case 'skeleton':
       return (
-        <div style={{ width: '100%', maxWidth: '400px', display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+        <div
+          style={{
+            width: '100%',
+            maxWidth: '400px',
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '1rem',
+          }}
+        >
           <div style={{ display: 'flex', gap: '1rem', alignItems: 'center' }}>
             <AtlSkeleton variant="circular" width="48px" />
-            <div style={{ flex: 1, display: 'flex', flexDirection: 'column', gap: '0.5rem' }}>
+            <div
+              style={{
+                flex: 1,
+                display: 'flex',
+                flexDirection: 'column',
+                gap: '0.5rem',
+              }}
+            >
               <AtlSkeleton variant="text" width="40%" />
               <AtlSkeleton variant="text" />
               <AtlSkeleton variant="text" width="80%" />
@@ -293,16 +486,54 @@ function ComponentDemo({ name }: { name: string }) {
       );
     case 'progress':
       return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%', maxWidth: '400px' }}>
-          <div><p style={{ margin: '0 0 0.5rem', fontSize: '0.8rem', opacity: 0.7 }}>25%</p><AtlProgress value={25} /></div>
-          <div><p style={{ margin: '0 0 0.5rem', fontSize: '0.8rem', opacity: 0.7 }}>60% — Success</p><AtlProgress value={60} variant="success" /></div>
-          <div><p style={{ margin: '0 0 0.5rem', fontSize: '0.8rem', opacity: 0.7 }}>85% — Warning</p><AtlProgress value={85} variant="warning" /></div>
-          <div><p style={{ margin: '0 0 0.5rem', fontSize: '0.8rem', opacity: 0.7 }}>Indeterminate</p><AtlProgress indeterminate={true} /></div>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '1rem',
+            width: '100%',
+            maxWidth: '400px',
+          }}
+        >
+          <div>
+            <p
+              style={{ margin: '0 0 0.5rem', fontSize: '0.8rem', opacity: 0.7 }}
+            >
+              25%
+            </p>
+            <AtlProgress value={25} />
+          </div>
+          <div>
+            <p
+              style={{ margin: '0 0 0.5rem', fontSize: '0.8rem', opacity: 0.7 }}
+            >
+              60% — Success
+            </p>
+            <AtlProgress value={60} variant="success" />
+          </div>
+          <div>
+            <p
+              style={{ margin: '0 0 0.5rem', fontSize: '0.8rem', opacity: 0.7 }}
+            >
+              85% — Warning
+            </p>
+            <AtlProgress value={85} variant="warning" />
+          </div>
+          <div>
+            <p
+              style={{ margin: '0 0 0.5rem', fontSize: '0.8rem', opacity: 0.7 }}
+            >
+              Indeterminate
+            </p>
+            <AtlProgress indeterminate={true} />
+          </div>
         </div>
       );
     case 'breadcrumbs':
       return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+        <div
+          style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem' }}
+        >
           <AtlBreadcrumbs>
             <AtlBreadcrumbItem href="/">Home</AtlBreadcrumbItem>
             <AtlBreadcrumbItem href="/components">Components</AtlBreadcrumbItem>
@@ -313,37 +544,65 @@ function ComponentDemo({ name }: { name: string }) {
     case 'tabs':
       return (
         <div style={{ width: '100%' }}>
-          <AtlTabGroup selectedIndex={tabIndex} onSelectedIndexChange={setTabIndex}>
+          <AtlTabGroup
+            selectedIndex={tabIndex}
+            onSelectedIndexChange={setTabIndex}
+          >
             <AtlTab label="Account">
-              <div style={{ padding: '1rem 0' }}><AtlInput type="text" placeholder="Display name" /></div>
+              <div style={{ padding: '1rem 0' }}>
+                <AtlInput type="text" placeholder="Display name" />
+              </div>
             </AtlTab>
             <AtlTab label="Notifications">
-              <div style={{ padding: '1rem 0', display: 'flex', flexDirection: 'column', gap: '0.75rem' }}>
+              <div
+                style={{
+                  padding: '1rem 0',
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '0.75rem',
+                }}
+              >
                 <AtlToggle>Email notifications</AtlToggle>
                 <AtlToggle checked={true}>Push notifications</AtlToggle>
               </div>
             </AtlTab>
-            <AtlTab label="Billing" disabled={true}>Billing (disabled)</AtlTab>
+            <AtlTab label="Billing" disabled={true}>
+              Billing (disabled)
+            </AtlTab>
           </AtlTabGroup>
         </div>
       );
     case 'pagination':
-      return <AtlPagination page={currentPage} pageCount={10} onPageChange={setCurrentPage} siblingCount={1} />;
+      return (
+        <AtlPagination
+          page={currentPage}
+          pageCount={10}
+          onPageChange={setCurrentPage}
+          siblingCount={1}
+        />
+      );
     case 'dialog':
       return (
         <div style={{ display: 'flex', gap: '1rem' }}>
-          <AtlButton variant="primary" onClick={() => setDialogOpen(true)}>Open Dialog</AtlButton>
+          <AtlButton variant="primary" onClick={() => setDialogOpen(true)}>
+            Open Dialog
+          </AtlButton>
           <AtlDialog open={dialogOpen} onOpenChange={setDialogOpen} size="md">
             <AtlDialogHeader>Component Specification</AtlDialogHeader>
             <AtlDialogContent>
               <p style={{ margin: 0, fontSize: '0.9375rem' }}>
-                The <code>AtlDialog</code> uses the native <code>&lt;dialog&gt;</code> element with
-                built-in focus trapping and Escape key handling.
+                The <code>AtlDialog</code> uses the native{' '}
+                <code>&lt;dialog&gt;</code> element with built-in focus trapping
+                and Escape key handling.
               </p>
             </AtlDialogContent>
             <AtlDialogFooter>
-              <AtlButton variant="outline" onClick={() => setDialogOpen(false)}>Cancel</AtlButton>
-              <AtlButton variant="primary" onClick={() => setDialogOpen(false)}>Got it</AtlButton>
+              <AtlButton variant="outline" onClick={() => setDialogOpen(false)}>
+                Cancel
+              </AtlButton>
+              <AtlButton variant="primary" onClick={() => setDialogOpen(false)}>
+                Got it
+              </AtlButton>
             </AtlDialogFooter>
           </AtlDialog>
         </div>
@@ -351,18 +610,35 @@ function ComponentDemo({ name }: { name: string }) {
     case 'drawer':
       return (
         <div>
-          <AtlButton variant="outline" onClick={() => setDrawerOpen(true)}>Open Drawer</AtlButton>
-          <AtlDrawer open={drawerOpen} onOpenChange={setDrawerOpen} position="right" size="sm">
+          <AtlButton variant="outline" onClick={() => setDrawerOpen(true)}>
+            Open Drawer
+          </AtlButton>
+          <AtlDrawer
+            open={drawerOpen}
+            onOpenChange={setDrawerOpen}
+            position="right"
+            size="sm"
+          >
             <AtlDrawerHeader>Settings</AtlDrawerHeader>
             <AtlDrawerContent>
-              <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem' }}>
+              <div
+                style={{
+                  display: 'flex',
+                  flexDirection: 'column',
+                  gap: '1rem',
+                }}
+              >
                 <AtlInput type="text" placeholder="Search..." />
                 <AtlToggle checked={true}>Dark mode</AtlToggle>
               </div>
             </AtlDrawerContent>
             <AtlDrawerFooter>
-              <AtlButton variant="outline" onClick={() => setDrawerOpen(false)}>Close</AtlButton>
-              <AtlButton variant="primary" onClick={() => setDrawerOpen(false)}>Save</AtlButton>
+              <AtlButton variant="outline" onClick={() => setDrawerOpen(false)}>
+                Close
+              </AtlButton>
+              <AtlButton variant="primary" onClick={() => setDrawerOpen(false)}>
+                Save
+              </AtlButton>
             </AtlDrawerFooter>
           </AtlDrawer>
         </div>
@@ -370,38 +646,69 @@ function ComponentDemo({ name }: { name: string }) {
     case 'tooltip':
       return (
         <div style={{ display: 'flex', flexWrap: 'wrap', gap: '1rem' }}>
-          <AtlTooltip atlTooltip="Save your changes"><AtlButton variant="primary">Above</AtlButton></AtlTooltip>
-          <AtlTooltip atlTooltip="Copy to clipboard" atlTooltipPosition="right"><AtlButton variant="outline">Right</AtlButton></AtlTooltip>
-          <AtlTooltip atlTooltip="Delete item" atlTooltipPosition="below"><AtlButton variant="outline">Below</AtlButton></AtlTooltip>
+          <AtlTooltip atlTooltip="Save your changes">
+            <AtlButton variant="primary">Above</AtlButton>
+          </AtlTooltip>
+          <AtlTooltip atlTooltip="Copy to clipboard" atlTooltipPosition="right">
+            <AtlButton variant="outline">Right</AtlButton>
+          </AtlTooltip>
+          <AtlTooltip atlTooltip="Delete item" atlTooltipPosition="below">
+            <AtlButton variant="outline">Below</AtlButton>
+          </AtlTooltip>
         </div>
       );
     case 'accordion':
       return (
         <div style={{ width: '100%' }}>
           <AtlAccordionGroup variant="bordered">
-            <AtlAccordionItem expanded={accordionExpanded} onExpandedChange={setAccordionExpanded}>
-              <AtlAccordionHeader>What is Atelier UI?</AtlAccordionHeader>
-              A component library designed for AI-generated applications with consistent APIs.
+            <AtlAccordionItem
+              expanded={accordionExpanded}
+              onExpandedChange={setAccordionExpanded}
+            >
+              <AtlAccordionHeader>What is Atelier UI?</AtlAccordionHeader>A
+              component library designed for AI-generated applications with
+              consistent APIs.
             </AtlAccordionItem>
             <AtlAccordionItem>
               <AtlAccordionHeader>How do I install it?</AtlAccordionHeader>
-              Run <code>npm install @atelier-ui/react</code> and import the styles.
+              Run <code>npm install @atelier-ui/react</code> and import the
+              styles.
             </AtlAccordionItem>
           </AtlAccordionGroup>
         </div>
       );
     case 'alert':
       return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.75rem', width: '100%' }}>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '0.75rem',
+            width: '100%',
+          }}
+        >
           <AtlAlert variant="info">This is an informational message.</AtlAlert>
-          <AtlAlert variant="success">Your changes were saved successfully.</AtlAlert>
-          <AtlAlert variant="warning" dismissible={true}>Your session expires in 5 minutes.</AtlAlert>
-          <AtlAlert variant="danger">Something went wrong. Please try again.</AtlAlert>
+          <AtlAlert variant="success">
+            Your changes were saved successfully.
+          </AtlAlert>
+          <AtlAlert variant="warning" dismissible={true}>
+            Your session expires in 5 minutes.
+          </AtlAlert>
+          <AtlAlert variant="danger">
+            Something went wrong. Please try again.
+          </AtlAlert>
         </div>
       );
     case 'code-block':
       return (
-        <div style={{ display: 'flex', flexDirection: 'column', gap: '1rem', width: '100%' }}>
+        <div
+          style={{
+            display: 'flex',
+            flexDirection: 'column',
+            gap: '1rem',
+            width: '100%',
+          }}
+        >
           <AtlCodeBlock
             language="typescript"
             filename="greeting.ts"
@@ -412,7 +719,9 @@ function ComponentDemo({ name }: { name: string }) {
     case 'menu':
       return (
         <AtlAlert variant="info">
-          Menu is built on @angular/cdk/menu. See the <strong>Data List with Actions</strong> cookbook pattern for a live interactive demo.
+          Menu is built on @angular/cdk/menu. See the{' '}
+          <strong>Data List with Actions</strong> cookbook pattern for a live
+          interactive demo.
         </AtlAlert>
       );
     case 'toast':
@@ -423,7 +732,11 @@ function ComponentDemo({ name }: { name: string }) {
         </AtlAlert>
       );
     default:
-      return <p style={{ opacity: 0.6, fontSize: '0.875rem' }}>Interactive demo coming soon. See the code example above.</p>;
+      return (
+        <p style={{ opacity: 0.6, fontSize: '0.875rem' }}>
+          Interactive demo coming soon. See the code example above.
+        </p>
+      );
   }
 }
 
@@ -433,7 +746,9 @@ interface ComponentDetailProps {
 
 export default function ComponentDetail({ name }: ComponentDetailProps) {
   const doc = componentDocs[name];
-  const [framework, setFrameworkState] = useState<Framework>(() => getFramework());
+  const [framework, setFrameworkState] = useState<Framework>(() =>
+    getFramework(),
+  );
 
   useEffect(() => subscribeFramework(setFrameworkState), []);
 
@@ -441,8 +756,12 @@ export default function ComponentDetail({ name }: ComponentDetailProps) {
     return (
       <div className="docs-not-found">
         <h2>Component not found</h2>
-        <p>The component <code>{name}</code> does not exist in this library.</p>
-        <a href="/components" className="docs-btn docs-btn-primary">Back to components</a>
+        <p>
+          The component <code>{name}</code> does not exist in this library.
+        </p>
+        <a href="/components" className="docs-btn docs-btn-primary">
+          Back to components
+        </a>
       </div>
     );
   }
@@ -459,15 +778,36 @@ export default function ComponentDetail({ name }: ComponentDetailProps) {
 
       {/* Page header */}
       <div className="docs-page-header">
-        <div style={{ display: 'flex', alignItems: 'center', gap: '0.75rem', marginBottom: '0.5rem' }}>
-          <span className={`docs-category-tag docs-category-tag--${categoryTone}`}>
+        <div
+          style={{
+            display: 'flex',
+            alignItems: 'center',
+            gap: '0.75rem',
+            marginBottom: '0.5rem',
+          }}
+        >
+          <span
+            className={`docs-category-tag docs-category-tag--${categoryTone}`}
+          >
             {category}
           </span>
           {doc.status && (
-            <span className={`docs-status-badge docs-status-badge--${doc.status}`}>{doc.status}</span>
+            <span
+              className={`docs-status-badge docs-status-badge--${doc.status}`}
+            >
+              {doc.status}
+            </span>
           )}
         </div>
-        <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'flex-start', flexWrap: 'wrap', gap: '1rem' }}>
+        <div
+          style={{
+            display: 'flex',
+            justifyContent: 'space-between',
+            alignItems: 'flex-start',
+            flexWrap: 'wrap',
+            gap: '1rem',
+          }}
+        >
           <div>
             <h1 className="docs-page-h1">{doc.name}</h1>
             <p className="docs-page-description">{doc.description}</p>
@@ -478,7 +818,7 @@ export default function ComponentDetail({ name }: ComponentDetailProps) {
             </div>
           </div>
           <div className="docs-framework-switcher">
-            {(['angular', 'react', 'vue'] as const).map(fw => (
+            {(['angular', 'react', 'vue'] as const).map((fw) => (
               <button
                 key={fw}
                 type="button"
@@ -499,32 +839,66 @@ export default function ComponentDetail({ name }: ComponentDetailProps) {
         <div className="docs-demo">
           <div className="docs-demo-header">
             <span className="docs-demo-label">Live Preview</span>
-            <span className="docs-demo-fw-tag" title="The live preview renders the React build. Angular and Vue use the same props and produce equivalent output.">React</span>
+            <span
+              className="docs-demo-fw-tag"
+              title="The live preview renders the React build. Angular and Vue use the same props and produce equivalent output."
+            >
+              React
+            </span>
           </div>
           <div className="docs-demo-canvas docs-demo-canvas--column">
             <ComponentDemo name={name} />
           </div>
-          <CodeBlock lang={EXAMPLE_LANG[framework]} code={doc.examples[framework]} />
+          <CodeBlock
+            lang={EXAMPLE_LANG[framework]}
+            code={doc.examples[framework]}
+          />
         </div>
       </div>
 
       {/* Props table */}
       {doc.props.length > 0 && (
         <div className="docs-section">
-          <h2 className="docs-section-title">API ({framework.charAt(0).toUpperCase() + framework.slice(1)})</h2>
+          <h2 className="docs-section-title">
+            API ({framework.charAt(0).toUpperCase() + framework.slice(1)})
+          </h2>
           <div className="docs-table-scroll">
             <table className="docs-props-table">
               <thead>
-                <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+                <tr>
+                  <th>Prop</th>
+                  <th>Type</th>
+                  <th>Default</th>
+                  <th>Description</th>
+                </tr>
               </thead>
               <tbody>
                 {doc.props.map((prop) => {
-                  const override = prop[framework as keyof typeof prop] as { name?: string; type?: string; default?: string } | undefined;
+                  const override = prop[framework as keyof typeof prop] as
+                    | { name?: string; type?: string; default?: string }
+                    | undefined;
                   return (
                     <tr key={prop.name}>
-                      <td><code className="docs-prop-name">{(override as { name?: string } | undefined)?.name ?? prop.name}</code></td>
-                      <td><code className="docs-prop-type">{renderType((override as { type?: string } | undefined)?.type ?? prop.type)}</code></td>
-                      <td><code className="docs-prop-default">{(override as { default?: string } | undefined)?.default ?? prop.default}</code></td>
+                      <td>
+                        <code className="docs-prop-name">
+                          {(override as { name?: string } | undefined)?.name ??
+                            prop.name}
+                        </code>
+                      </td>
+                      <td>
+                        <code className="docs-prop-type">
+                          {renderType(
+                            (override as { type?: string } | undefined)?.type ??
+                              prop.type,
+                          )}
+                        </code>
+                      </td>
+                      <td>
+                        <code className="docs-prop-default">
+                          {(override as { default?: string } | undefined)
+                            ?.default ?? prop.default}
+                        </code>
+                      </td>
                       <td>{prop.description}</td>
                     </tr>
                   );
@@ -540,11 +914,14 @@ export default function ComponentDetail({ name }: ComponentDetailProps) {
         <div className="docs-section">
           <h2 className="docs-section-title">Composition parts</h2>
           <p className="docs-composition-intro">
-            {doc.name} is composed from the parts below. Each part is its own component — drop the ones you don't need.
+            {doc.name} is composed from the parts below. Each part is its own
+            component — drop the ones you don't need.
           </p>
-          {doc.composition.map(part => (
+          {doc.composition.map((part) => (
             <div key={part.name} className="docs-composition-part">
-              <h3 className="docs-composition-part-name"><code>{part.name}</code></h3>
+              <h3 className="docs-composition-part-name">
+                <code>{part.name}</code>
+              </h3>
               {part.description && (
                 <p className="docs-composition-part-desc">{part.description}</p>
               )}
@@ -552,14 +929,29 @@ export default function ComponentDetail({ name }: ComponentDetailProps) {
                 <div className="docs-table-scroll">
                   <table className="docs-props-table">
                     <thead>
-                      <tr><th>Prop</th><th>Type</th><th>Default</th><th>Description</th></tr>
+                      <tr>
+                        <th>Prop</th>
+                        <th>Type</th>
+                        <th>Default</th>
+                        <th>Description</th>
+                      </tr>
                     </thead>
                     <tbody>
-                      {part.props.map(prop => (
+                      {part.props.map((prop) => (
                         <tr key={prop.name}>
-                          <td><code className="docs-prop-name">{prop.name}</code></td>
-                          <td><code className="docs-prop-type">{renderType(prop.type)}</code></td>
-                          <td><code className="docs-prop-default">{prop.default}</code></td>
+                          <td>
+                            <code className="docs-prop-name">{prop.name}</code>
+                          </td>
+                          <td>
+                            <code className="docs-prop-type">
+                              {renderType(prop.type)}
+                            </code>
+                          </td>
+                          <td>
+                            <code className="docs-prop-default">
+                              {prop.default}
+                            </code>
+                          </td>
                           <td>{prop.description}</td>
                         </tr>
                       ))}
@@ -590,7 +982,10 @@ export default function ComponentDetail({ name }: ComponentDetailProps) {
               <code>{doc.a11y.role}</code>
             </p>
           )}
-          <div className="docs-table-scroll" style={{ marginBottom: doc.a11y.notes ? '1rem' : 0 }}>
+          <div
+            className="docs-table-scroll"
+            style={{ marginBottom: doc.a11y.notes ? '1rem' : 0 }}
+          >
             <table className="docs-props-table">
               <thead>
                 <tr>
@@ -601,7 +996,9 @@ export default function ComponentDetail({ name }: ComponentDetailProps) {
               <tbody>
                 {doc.a11y.keyboard.map((row, i) => (
                   <tr key={i}>
-                    <td><kbd className="docs-a11y-kbd">{row.key}</kbd></td>
+                    <td>
+                      <kbd className="docs-a11y-kbd">{row.key}</kbd>
+                    </td>
                     <td>{row.action}</td>
                   </tr>
                 ))}
@@ -610,11 +1007,14 @@ export default function ComponentDetail({ name }: ComponentDetailProps) {
           </div>
           {doc.a11y.notes && doc.a11y.notes.length > 0 && (
             <ul className="docs-a11y-notes">
-              {doc.a11y.notes.map((note, i) => <li key={i}>{note}</li>)}
+              {doc.a11y.notes.map((note, i) => (
+                <li key={i}>{note}</li>
+              ))}
             </ul>
           )}
           <p className="docs-a11y-link">
-            See the <a href="/accessibility">accessibility overview</a> for the site-wide WCAG stance.
+            See the <a href="/accessibility">accessibility overview</a> for the
+            site-wide WCAG stance.
           </p>
         </div>
       )}
@@ -639,21 +1039,40 @@ export default function ComponentDetail({ name }: ComponentDetailProps) {
             <div className="docs-ai-card docs-ai-best-practices">
               <h3 className="docs-ai-card-title">Best practices</h3>
               <ul className="docs-ai-list">
-                {doc.aiUsage.bestPractices.map((bp, i) => <li key={i}>{bp}</li>)}
+                {doc.aiUsage.bestPractices.map((bp, i) => (
+                  <li key={i}>{bp}</li>
+                ))}
               </ul>
             </div>
             <div className="docs-ai-card docs-ai-hallucinations">
               <h3 className="docs-ai-card-title">Common hallucinations</h3>
               <ul className="docs-ai-list">
-                {doc.aiUsage.commonHallucinations.map((ch, i) => <li key={i}>{ch}</li>)}
+                {doc.aiUsage.commonHallucinations.map((ch, i) => (
+                  <li key={i}>{ch}</li>
+                ))}
               </ul>
             </div>
-            <div className="docs-ai-card docs-ai-prompt" style={{ gridColumn: '1 / -1' }}>
-              <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '0.75rem' }}>
-                <h3 className="docs-ai-card-title" style={{ marginBottom: 0 }}>Example prompt</h3>
+            <div
+              className="docs-ai-card docs-ai-prompt"
+              style={{ gridColumn: '1 / -1' }}
+            >
+              <div
+                style={{
+                  display: 'flex',
+                  justifyContent: 'space-between',
+                  alignItems: 'center',
+                  marginBottom: '0.75rem',
+                }}
+              >
+                <h3 className="docs-ai-card-title" style={{ marginBottom: 0 }}>
+                  Example prompt
+                </h3>
                 <button
                   className="docs-btn docs-btn-outline docs-btn-sm"
-                  onClick={() => doc.aiUsage && navigator.clipboard.writeText(doc.aiUsage.promptSnippet)}
+                  onClick={() =>
+                    doc.aiUsage &&
+                    navigator.clipboard.writeText(doc.aiUsage.promptSnippet)
+                  }
                   style={{ padding: '4px 10px', fontSize: '0.75rem' }}
                 >
                   Copy prompt

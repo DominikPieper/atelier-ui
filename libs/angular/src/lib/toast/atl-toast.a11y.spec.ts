@@ -22,9 +22,15 @@ const SNAP = resolve(ROOT, `tools/parity/a11y/atl-toast.${FW}.json`);
 
 async function capture(): Promise<Record<string, unknown>> {
   TestBed.resetTestingModule();
-  const r = await render('<atl-toast-container />', { imports: [AtlToastContainer] });
+  const r = await render('<atl-toast-container />', {
+    imports: [AtlToastContainer],
+  });
   const service = TestBed.inject(AtlToastService);
-  service.show('Saved successfully', { variant: 'success', dismissible: true, duration: 0 });
+  service.show('Saved successfully', {
+    variant: 'success',
+    dismissible: true,
+    duration: 0,
+  });
   r.fixture.detectChanges();
   const tree = a11yTree(document.body);
   r.fixture.destroy();

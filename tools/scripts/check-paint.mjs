@@ -197,7 +197,9 @@ if (args.theme !== 'light' && args.theme !== 'dark') {
 const targetFrameworks = args.fw ? [args.fw] : FRAMEWORKS;
 for (const fw of targetFrameworks) {
   if (!FRAMEWORKS.includes(fw)) {
-    console.error(`Unknown framework '${fw}' — expected one of ${FRAMEWORKS.join(', ')}`);
+    console.error(
+      `Unknown framework '${fw}' — expected one of ${FRAMEWORKS.join(', ')}`,
+    );
     process.exit(2);
   }
 }
@@ -219,9 +221,9 @@ const BASELINE_NOTE =
   'Per-finding RATCHET for check:paint (ADR-0121 Decision 4 stage 2; convention reused from ' +
   'ADR-0079/ADR-0066). An entry recorded here means: this story, in this state, paints or sizes ' +
   "one field DIFFERENTLY from the master's rootPaint row — background-color or border-color " +
-  "against the resolved value of the Figma-bound token ([PAINT]); height, padding, gap, radius " +
+  'against the resolved value of the Figma-bound token ([PAINT]); height, padding, gap, radius ' +
   "or border-width against the row's own numbers ([GEOMETRY]); font-size or line-height against " +
-  "the same row ([TYPE]); or a story whose resolved args produced no matching rootPaint row at " +
+  'the same row ([TYPE]); or a story whose resolved args produced no matching rootPaint row at ' +
   'all ([NO-VARIANT]). Fix the code or the master and re-record — never delete the entry by ' +
   'hand — because a recorded defect that just disappears from the file is indistinguishable from ' +
   "one that was fixed; the gate needs to see it happen. The gate PASSES while a story's findings " +
@@ -233,10 +235,10 @@ const BASELINE_NOTE =
   'not excuse a defect, it dates it.\n\n' +
   '[NOT-RENDERED] and [NO-PROBE] are NOT recorded here, on purpose — neither is a paint/geometry/' +
   'type comparison a fix could even target. [NOT-RENDERED] means the probe element exists but is ' +
-  "not drawn in this lifecycle state (display:none, zero width/height, or a <dialog> without " +
+  'not drawn in this lifecycle state (display:none, zero width/height, or a <dialog> without ' +
   '[open] — a closed AtlDialog/AtlDrawer/AtlChat popover, most often): there is nothing painted ' +
   'to compare yet, so measuring it would compare Figma to a box that is not there. [NO-PROBE] ' +
-  "means this gate does not know which descendant is the painted layer for this component: " +
+  'means this gate does not know which descendant is the painted layer for this component: ' +
   "either no contract probe is declared and neither the '.atl-<kebab>' class nor the bare custom " +
   'element tag was found under #storybook-root, or a probe IS declared and its selector did not ' +
   "resolve for this framework (see AtlSelect's contract for a worked example — Angular's button " +
@@ -244,7 +246,7 @@ const BASELINE_NOTE =
   'every run rather than failing the gate, because recording either would either freeze a bug ' +
   'that just needs a probe, or a story lifecycle state that changes on its own — see the header ' +
   'comment in tools/scripts/check-paint.mjs ("NOT RENDERED" / "THE PROBE ELEMENT") for the full ' +
-  'reasoning. To add a probe: add `probes: [{ part, selector, reason }]` to the component\'s ' +
+  "reasoning. To add a probe: add `probes: [{ part, selector, reason }]` to the component's " +
   '`.contract.ts` (libs/spec/src/contracts/); `selector` is relative to the resolved component ' +
   "root (the '.atl-<kebab>' element, or the bare custom-element tag on Angular's :host-only " +
   'components) — verify it with `--component <Selector> --report`, which prints the matched ' +
@@ -259,12 +261,14 @@ const BASELINE_NOTE =
 if (!fs.existsSync(SNAPSHOT_FILE)) {
   console.error(
     `✗ [SNAPSHOT] ${path.relative(ROOT, SNAPSHOT_FILE)} not found. Generate it with a connected ` +
-      'Figma Desktop Bridge: npm run figma:snapshot'
+      'Figma Desktop Bridge: npm run figma:snapshot',
   );
   process.exit(1);
 }
 const snapshot = JSON.parse(fs.readFileSync(SNAPSHOT_FILE, 'utf-8'));
-const snapshotBySelector = new Map((snapshot.components || []).map((c) => [c.selector, c]));
+const snapshotBySelector = new Map(
+  (snapshot.components || []).map((c) => [c.selector, c]),
+);
 
 // ─── Contracts ───────────────────────────────────────────────────────────────
 
@@ -282,7 +286,9 @@ for (const file of contractFiles) {
     // Same message check-contracts.mjs:253-258 already prints for this exact case —
     // a bare `continue` here silently dropped the component from the roster with no
     // trace of why.
-    console.error(`  ! ${file}: 'contract' did not evaluate to a static object literal — skipped.`);
+    console.error(
+      `  ! ${file}: 'contract' did not evaluate to a static object literal — skipped.`,
+    );
     continue;
   }
   const existingFile = contractFileBySelector.get(contract.component);
@@ -293,7 +299,7 @@ for (const file of contractFiles) {
     // blocker rather than picking a winner.
     contractLoadErrors.push(
       `[CONTRACT-DUPLICATE] '${contract.component}' is declared by both ${existingFile} and ${file} — ` +
-        "only one contract file may export a 'contract' for a given component. Rename or merge one of them."
+        "only one contract file may export a 'contract' for a given component. Rename or merge one of them.",
     );
     continue;
   }
@@ -308,11 +314,13 @@ if (contractLoadErrors.length) {
 // The roster: components with BOTH a contract and a snapshot master — the same
 // intersection stage 1 requires before it will compare anything.
 const roster = new Set(
-  [...contractsBySelector.keys()].filter((name) => snapshotBySelector.has(name))
+  [...contractsBySelector.keys()].filter((name) =>
+    snapshotBySelector.has(name),
+  ),
 );
 if (args.component && !roster.has(args.component)) {
   console.error(
-    `✗ '${args.component}' has no contract+snapshot pair. Roster: ${[...roster].sort().join(', ')}`
+    `✗ '${args.component}' has no contract+snapshot pair. Roster: ${[...roster].sort().join(', ')}`,
   );
   process.exit(2);
 }
@@ -368,17 +376,23 @@ function getMetaRenderText(csf, source) {
   const metaRenderProp =
     metaNode && Array.isArray(metaNode.properties)
       ? metaNode.properties.find(
-          (p) => !p.computed && p.key && (p.key.name === 'render' || p.key.value === 'render')
+          (p) =>
+            !p.computed &&
+            p.key &&
+            (p.key.name === 'render' || p.key.value === 'render'),
         )
       : null;
-  return metaRenderProp ? source.slice(metaRenderProp.start, metaRenderProp.end) : '';
+  return metaRenderProp
+    ? source.slice(metaRenderProp.start, metaRenderProp.end)
+    : '';
 }
 
 function getStoryEvidenceBlob(csf, source, key, metaRenderText) {
   const stmt = csf._storyStatements && csf._storyStatements[key];
   if (!stmt) return '';
   let blob = source.slice(stmt.start, stmt.end);
-  if (!getOwnStoryKeys(csf, key).includes('render') && metaRenderText) blob += `\n${metaRenderText}`;
+  if (!getOwnStoryKeys(csf, key).includes('render') && metaRenderText)
+    blob += `\n${metaRenderText}`;
   return blob;
 }
 
@@ -466,14 +480,17 @@ function collectStoryFilesUnder(dir) {
       if (entry.name === 'node_modules') continue;
       const full = path.join(d, entry.name);
       if (entry.isDirectory()) walk(full);
-      else if (entry.isFile() && /\.stories\.(ts|tsx)$/.test(entry.name)) out.push(full);
+      else if (entry.isFile() && /\.stories\.(ts|tsx)$/.test(entry.name))
+        out.push(full);
     }
   })(dir);
   return out;
 }
 
 function findStoryFiles(fw) {
-  return collectStoryFilesUnder(path.join(ROOT, 'libs', fw, 'src', 'lib')).sort();
+  return collectStoryFilesUnder(
+    path.join(ROOT, 'libs', fw, 'src', 'lib'),
+  ).sort();
 }
 
 // ─── docgenDefault() — check-defaults.js's regex extraction, copied minimal ────
@@ -483,12 +500,14 @@ function findStoryFiles(fw) {
 
 const componentSourceCache = new Map();
 function componentSource(contextDir) {
-  if (componentSourceCache.has(contextDir)) return componentSourceCache.get(contextDir);
+  if (componentSourceCache.has(contextDir))
+    return componentSourceCache.get(contextDir);
   let src = '';
   try {
     for (const f of fs.readdirSync(contextDir)) {
       if (/\.(spec|stories)\./.test(f) || f.endsWith('.css')) continue;
-      if (/\.(ts|tsx|vue)$/.test(f)) src += fs.readFileSync(path.join(contextDir, f), 'utf-8') + '\n';
+      if (/\.(ts|tsx|vue)$/.test(f))
+        src += fs.readFileSync(path.join(contextDir, f), 'utf-8') + '\n';
     }
   } catch {
     /* dir missing */
@@ -497,7 +516,9 @@ function componentSource(contextDir) {
   return src;
 }
 function angularDefault(src, prop) {
-  const m = new RegExp(`\\b${prop}\\s*=\\s*input(?:<[^>]*>)?\\(\\s*'([^']*)'`).exec(src);
+  const m = new RegExp(
+    `\\b${prop}\\s*=\\s*input(?:<[^>]*>)?\\(\\s*'([^']*)'`,
+  ).exec(src);
   return m ? m[1] : undefined;
 }
 function reactDefault(src, prop) {
@@ -550,7 +571,14 @@ function round2(n) {
  * gate against AtlButton (see the header comment): every size showed a top/bottom [GEOMETRY]
  * finding before this exemption existed.
  */
-const BLOCK_HEIGHT_DERIVED = new Set(['AtlButton', 'AtlInput', 'AtlBadge', 'AtlTextarea', 'AtlSelect', 'AtlTab']);
+const BLOCK_HEIGHT_DERIVED = new Set([
+  'AtlButton',
+  'AtlInput',
+  'AtlBadge',
+  'AtlTextarea',
+  'AtlSelect',
+  'AtlTab',
+]);
 
 // ─── Variant-key construction ───────────────────────────────────────────────
 // Mirrors check-contracts.mjs's AXIS check closely enough to resolve the SAME key
@@ -558,10 +586,18 @@ const BLOCK_HEIGHT_DERIVED = new Set(['AtlButton', 'AtlInput', 'AtlBadge', 'AtlT
 // (not full coverage bookkeeping), and 'state' is always excluded (rebuilt to the
 // interaction state being checked afterwards).
 
-function buildVariantKey(master, contract, resolvedArgs, literalOverrides, fw, contextDir) {
+function buildVariantKey(
+  master,
+  contract,
+  resolvedArgs,
+  literalOverrides,
+  fw,
+  contextDir,
+) {
   const axisMapByFigmaAxis = new Map();
   for (const e of (contract && contract.axisMap) || []) {
-    if (!axisMapByFigmaAxis.has(e.figmaAxis)) axisMapByFigmaAxis.set(e.figmaAxis, []);
+    if (!axisMapByFigmaAxis.has(e.figmaAxis))
+      axisMapByFigmaAxis.set(e.figmaAxis, []);
     axisMapByFigmaAxis.get(e.figmaAxis).push(e);
   }
   // A literal JSX/template override (see scanLiteralAttrs above) beats resolved args —
@@ -584,7 +620,9 @@ function buildVariantKey(master, contract, resolvedArgs, literalOverrides, fw, c
         const codeVal = codeValueOf(entry.codeProp);
         if (codeVal === undefined) continue;
         if (entry.values) {
-          const found = Object.entries(entry.values).find(([, v]) => v === codeVal);
+          const found = Object.entries(entry.values).find(
+            ([, v]) => v === codeVal,
+          );
           if (found) {
             figValue = found[0];
             break;
@@ -629,7 +667,9 @@ function pushFinding(fw, component, story, state, field, detail, tag) {
 const measuredByComponent = new Map();
 
 function near(a, b, tol) {
-  return typeof a === 'number' && typeof b === 'number' && Math.abs(a - b) <= tol;
+  return (
+    typeof a === 'number' && typeof b === 'number' && Math.abs(a - b) <= tol
+  );
 }
 
 const unresolvedTokenWarned = new Set();
@@ -638,7 +678,7 @@ function warnUnresolvedToken(cssVar) {
   unresolvedTokenWarned.add(cssVar);
   console.error(
     `  ! ${cssVar} resolved to an empty custom property — the token the snapshot binds is not ` +
-      'declared on :root (or the theme in effect). Comparisons against it are skipped, not failed.'
+      'declared on :root (or the theme in effect). Comparisons against it are skipped, not failed.',
   );
 }
 
@@ -651,7 +691,15 @@ function addColorComparison(ctx, field, rendered, tokenName, resolvedRgb) {
     return;
   }
   const ok = rendered === resolvedRgb;
-  if (args.report) reportRows.push({ ...ctx, field, rendered, figma: resolvedRgb, tokenVar, ok });
+  if (args.report)
+    reportRows.push({
+      ...ctx,
+      field,
+      rendered,
+      figma: resolvedRgb,
+      tokenVar,
+      ok,
+    });
   if (!ok) {
     pushFinding(
       ctx.fw,
@@ -660,14 +708,16 @@ function addColorComparison(ctx, field, rendered, tokenName, resolvedRgb) {
       ctx.state,
       field,
       `rendered ${rendered}, figma ${resolvedRgb} (token ${tokenVar})`,
-      'PAINT'
+      'PAINT',
     );
   }
 }
 function addLengthComparison(ctx, tag, field, rendered, want, tokenVar) {
-  if (want == null || !Number.isFinite(want) || !Number.isFinite(rendered)) return;
+  if (want == null || !Number.isFinite(want) || !Number.isFinite(rendered))
+    return;
   const ok = near(rendered, want, TOLERANCE_PX);
-  if (args.report) reportRows.push({ ...ctx, field, rendered, figma: want, tokenVar, ok });
+  if (args.report)
+    reportRows.push({ ...ctx, field, rendered, figma: want, tokenVar, ok });
   if (!ok) {
     pushFinding(
       ctx.fw,
@@ -675,8 +725,9 @@ function addLengthComparison(ctx, tag, field, rendered, want, tokenVar) {
       ctx.story,
       ctx.state,
       field,
-      `rendered ${round2(rendered)}px, figma ${round2(want)}px` + (tokenVar ? ` (token ${tokenVar})` : ''),
-      tag
+      `rendered ${round2(rendered)}px, figma ${round2(want)}px` +
+        (tokenVar ? ` (token ${tokenVar})` : ''),
+      tag,
     );
   }
 }
@@ -720,7 +771,9 @@ function serveStatic(rootDir) {
           return;
         }
         const ext = path.extname(filePath);
-        res.writeHead(200, { 'Content-Type': MIME[ext] || 'application/octet-stream' });
+        res.writeHead(200, {
+          'Content-Type': MIME[ext] || 'application/octet-stream',
+        });
         fs.createReadStream(filePath).pipe(res);
       } catch (e) {
         res.writeHead(500);
@@ -747,15 +800,18 @@ async function elementExists(page, selector) {
  * bare custom-element tag exists in this render. */
 async function resolveRootSelector(page, kebab) {
   const classSel = `#storybook-root .${kebab}`;
-  if (await elementExists(page, classSel)) return { selector: classSel, source: 'root-class' };
+  if (await elementExists(page, classSel))
+    return { selector: classSel, source: 'root-class' };
   const tagSel = `#storybook-root ${kebab}`;
-  if (await elementExists(page, tagSel)) return { selector: tagSel, source: 'bare-tag' };
+  if (await elementExists(page, tagSel))
+    return { selector: tagSel, source: 'bare-tag' };
   return null;
 }
 
 async function resolveProbe(page, selector, contract) {
   const kebab = kebabCase(selector);
-  const declared = contract && Array.isArray(contract.probes) ? contract.probes[0] : null;
+  const declared =
+    contract && Array.isArray(contract.probes) ? contract.probes[0] : null;
 
   if (declared && declared.selector) {
     // A declared probe means the contract already knows the root itself is not
@@ -773,7 +829,12 @@ async function resolveProbe(page, selector, contract) {
       // when Tab genuinely reached it. The root — which does contain both — is the right
       // scope for "did focus land somewhere in this component"; `combined` stays the scope
       // for what gets PAINTED-compared once it has.
-      if (await elementExists(page, combined)) return { selector: combined, source: 'contract', focusScope: root.selector };
+      if (await elementExists(page, combined))
+        return {
+          selector: combined,
+          source: 'contract',
+          focusScope: root.selector,
+        };
     }
     // The declared selector did not resolve under this framework's root (or no
     // root was found at all). Falling through to tiers 2/3 below would measure
@@ -785,7 +846,9 @@ async function resolveProbe(page, selector, contract) {
       warn: true,
       reason:
         `contract probe '${declared.selector}' (part: ${declared.part}) did not resolve` +
-        (root ? ` under its root ('${root.selector}')` : ' — no component root found either') +
+        (root
+          ? ` under its root ('${root.selector}')`
+          : ' — no component root found either') +
         (declared.reason ? `. Declared reason: ${declared.reason}` : ''),
     };
   }
@@ -847,9 +910,11 @@ async function measureFull(page, selector, row) {
         return Number.isFinite(v) ? v : null;
       };
       const colors = {};
-      for (const v of colorVars) colors[v] = normColor(rootCs.getPropertyValue(v).trim());
+      for (const v of colorVars)
+        colors[v] = normColor(rootCs.getPropertyValue(v).trim());
       const lengths = {};
-      for (const v of lengthVars) lengths[v] = normLength(rootCs.getPropertyValue(v).trim());
+      for (const v of lengthVars)
+        lengths[v] = normLength(rootCs.getPropertyValue(v).trim());
       const gapRaw = layoutMode === 'VERTICAL' ? cs.rowGap : cs.columnGap;
       return {
         height: rect.height,
@@ -868,7 +933,12 @@ async function measureFull(page, selector, row) {
         lengths,
       };
     },
-    { sel: selector, colorVars: [...colorVars], lengthVars: [...lengthVars], layoutMode: row.layoutMode }
+    {
+      sel: selector,
+      colorVars: [...colorVars],
+      lengthVars: [...lengthVars],
+      layoutMode: row.layoutMode,
+    },
   );
 }
 
@@ -895,10 +965,15 @@ async function measurePaintOnly(page, selector, row) {
         return v;
       };
       const colors = {};
-      for (const v of colorVars) colors[v] = normColor(rootCs.getPropertyValue(v).trim());
-      return { backgroundColor: cs.backgroundColor, borderTopColor: cs.borderTopColor, colors };
+      for (const v of colorVars)
+        colors[v] = normColor(rootCs.getPropertyValue(v).trim());
+      return {
+        backgroundColor: cs.backgroundColor,
+        borderTopColor: cs.borderTopColor,
+        colors,
+      };
     },
-    { sel: selector, colorVars: [...colorVars] }
+    { sel: selector, colorVars: [...colorVars] },
   );
 }
 
@@ -908,7 +983,9 @@ function comparePaint(ctx, snap, row) {
     // (resolveProbe ran before this call) but is gone by the time measurement actually reads
     // it — most likely a hover/focus interaction changed the DOM. Nothing to compare, and
     // nothing to hold a fix to, so it warns rather than joining the baseline.
-    console.warn(`  ⚠ [NO-PROBE] (${ctx.fw}) ${ctx.component} · ${ctx.story} · ${ctx.state}: probe element vanished while measuring`);
+    console.warn(
+      `  ⚠ [NO-PROBE] (${ctx.fw}) ${ctx.component} · ${ctx.story} · ${ctx.state}: probe element vanished while measuring`,
+    );
     return;
   }
   addColorComparison(
@@ -916,7 +993,7 @@ function comparePaint(ctx, snap, row) {
     'background-color',
     snap.backgroundColor,
     row.fill,
-    row.fill ? snap.colors[tokenCssVar(row.fill)] : null
+    row.fill ? snap.colors[tokenCssVar(row.fill)] : null,
   );
   const hasStroke =
     typeof row.strokeWeight === 'number' && row.strokeWeight > 0; // typeof already excludes the 'mixed' sentinel
@@ -926,7 +1003,7 @@ function comparePaint(ctx, snap, row) {
       'border-color',
       snap.borderTopColor,
       row.stroke,
-      row.stroke ? snap.colors[tokenCssVar(row.stroke)] : null
+      row.stroke ? snap.colors[tokenCssVar(row.stroke)] : null,
     );
   }
 }
@@ -937,18 +1014,37 @@ function compareFull(ctx, snap, row) {
     // (resolveProbe ran before this call) but is gone by the time measurement actually reads
     // it — most likely a hover/focus interaction changed the DOM. Nothing to compare, and
     // nothing to hold a fix to, so it warns rather than joining the baseline.
-    console.warn(`  ⚠ [NO-PROBE] (${ctx.fw}) ${ctx.component} · ${ctx.story} · ${ctx.state}: probe element vanished while measuring`);
+    console.warn(
+      `  ⚠ [NO-PROBE] (${ctx.fw}) ${ctx.component} · ${ctx.story} · ${ctx.state}: probe element vanished while measuring`,
+    );
     return;
   }
   comparePaint(ctx, snap, row);
 
   // GEOMETRY
   if (typeof row.height === 'number') {
-    addLengthComparison(ctx, 'GEOMETRY', 'height', snap.height, row.height, null);
+    addLengthComparison(
+      ctx,
+      'GEOMETRY',
+      'height',
+      snap.height,
+      row.height,
+      null,
+    );
   }
   if (Array.isArray(row.pad)) {
-    const sideKeys = ['paddingTop', 'paddingRight', 'paddingBottom', 'paddingLeft'];
-    const sideFields = ['padding-top', 'padding-right', 'padding-bottom', 'padding-left'];
+    const sideKeys = [
+      'paddingTop',
+      'paddingRight',
+      'paddingBottom',
+      'paddingLeft',
+    ];
+    const sideFields = [
+      'padding-top',
+      'padding-right',
+      'padding-bottom',
+      'padding-left',
+    ];
     const isBlockDerived = BLOCK_HEIGHT_DERIVED.has(ctx.component);
     for (let i = 0; i < 4; i++) {
       const bound = row.padBound ? row.padBound[i] : null;
@@ -959,7 +1055,14 @@ function compareFull(ctx, snap, row) {
         warnUnresolvedToken(boundVar);
         continue;
       }
-      addLengthComparison(ctx, 'GEOMETRY', sideFields[i], snap[sideKeys[i]], want, boundVar);
+      addLengthComparison(
+        ctx,
+        'GEOMETRY',
+        sideFields[i],
+        snap[sideKeys[i]],
+        want,
+        boundVar,
+      );
     }
   }
   if (typeof row.gap === 'number') {
@@ -975,7 +1078,14 @@ function compareFull(ctx, snap, row) {
     const radiusVar = tokenCssVar(row.radius);
     const want = radiusVar ? snap.lengths[radiusVar] : row.radiusPx;
     if (!(radiusVar && snap.lengths[radiusVar] == null)) {
-      addLengthComparison(ctx, 'GEOMETRY', 'border-radius', snap.borderTopLeftRadius, want, radiusVar);
+      addLengthComparison(
+        ctx,
+        'GEOMETRY',
+        'border-radius',
+        snap.borderTopLeftRadius,
+        want,
+        radiusVar,
+      );
     } else {
       warnUnresolvedToken(radiusVar);
     }
@@ -983,17 +1093,40 @@ function compareFull(ctx, snap, row) {
   const hasStroke =
     typeof row.strokeWeight === 'number' && row.strokeWeight > 0; // typeof already excludes the 'mixed' sentinel
   if (hasStroke) {
-    addLengthComparison(ctx, 'GEOMETRY', 'border-width', snap.borderTopWidth, row.strokeWeight, null);
+    addLengthComparison(
+      ctx,
+      'GEOMETRY',
+      'border-width',
+      snap.borderTopWidth,
+      row.strokeWeight,
+      null,
+    );
   }
 
   // TYPE
   if (typeof row.fontSize === 'number') {
-    addLengthComparison(ctx, 'TYPE', 'font-size', snap.fontSize, row.fontSize, null);
+    addLengthComparison(
+      ctx,
+      'TYPE',
+      'font-size',
+      snap.fontSize,
+      row.fontSize,
+      null,
+    );
     if (typeof row.lineHeight === 'number') {
       const wantPx = (row.fontSize * row.lineHeight) / 100; // rootPaint.lineHeight is a PERCENT (figma-snapshot.mjs)
-      const renderedPx = /px$/.test(snap.lineHeightRaw || '') ? parseFloat(snap.lineHeightRaw) : null;
+      const renderedPx = /px$/.test(snap.lineHeightRaw || '')
+        ? parseFloat(snap.lineHeightRaw)
+        : null;
       if (renderedPx != null) {
-        addLengthComparison(ctx, 'TYPE', 'line-height', renderedPx, wantPx, null);
+        addLengthComparison(
+          ctx,
+          'TYPE',
+          'line-height',
+          renderedPx,
+          wantPx,
+          null,
+        );
       }
     }
   }
@@ -1002,14 +1135,20 @@ function compareFull(ctx, snap, row) {
 // ─── Focus helper ────────────────────────────────────────────────────────────
 
 async function focusProbe(page, selector) {
-  await page.evaluate(() => document.body && document.body.focus && document.body.focus());
+  await page.evaluate(
+    () => document.body && document.body.focus && document.body.focus(),
+  );
   for (let i = 0; i < 25; i++) {
     await page.keyboard.press('Tab');
     const focused = await page.evaluate((sel) => {
       const el = document.querySelector(sel);
       if (!el) return false;
       const active = document.activeElement;
-      return !!active && active !== document.body && (active === el || el.contains(active));
+      return (
+        !!active &&
+        active !== document.body &&
+        (active === el || el.contains(active))
+      );
     }, selector);
     if (focused) return true;
   }
@@ -1025,7 +1164,9 @@ async function runFramework(fw, browser) {
     console.error(
       `✗ [BUILD-MISSING] ${path.relative(ROOT, distDir)} has no index.json. Build it with:\n` +
         `    nx run-many -t build-storybook -p angular,react,vue\n` +
-        '  (or, for one framework, `nx run ' + fw + ':build-storybook`).'
+        '  (or, for one framework, `nx run ' +
+        fw +
+        ':build-storybook`).',
     );
     process.exit(1);
   }
@@ -1033,12 +1174,15 @@ async function runFramework(fw, browser) {
   const entries = Object.values(indexData.entries || indexData.stories || {});
   const idByImportExport = new Map();
   for (const e of entries) {
-    if (e.type === 'story') idByImportExport.set(`${e.importPath}::${e.exportName}`, e.id);
+    if (e.type === 'story')
+      idByImportExport.set(`${e.importPath}::${e.exportName}`, e.id);
   }
 
   const server = await serveStatic(distDir);
   const port = server.address().port;
-  const page = await browser.newPage({ viewport: { width: 1000, height: 700 } });
+  const page = await browser.newPage({
+    viewport: { width: 1000, height: 700 },
+  });
 
   const storyFiles = findStoryFiles(fw);
   let measured = 0;
@@ -1053,12 +1197,18 @@ async function runFramework(fw, browser) {
     const source = fs.readFileSync(storyFile, 'utf-8');
     let csf;
     try {
-      csf = loadCsf(source, { makeTitle: (t) => t, fileName: storyFile }).parse();
+      csf = loadCsf(source, {
+        makeTitle: (t) => t,
+        fileName: storyFile,
+      }).parse();
     } catch (e) {
-      console.error(`  ! ${path.relative(ROOT, storyFile)}: csf-tools failed to parse (${e.message})`);
+      console.error(
+        `  ! ${path.relative(ROOT, storyFile)}: csf-tools failed to parse (${e.message})`,
+      );
       continue;
     }
-    const metaComponent = typeof csf._meta.component === 'string' ? csf._meta.component : null;
+    const metaComponent =
+      typeof csf._meta.component === 'string' ? csf._meta.component : null;
     if (!metaComponent) {
       noComponent++;
       continue;
@@ -1119,16 +1269,31 @@ async function runFramework(fw, browser) {
       }
 
       const ctx = { fw, component: metaComponent, story: key };
-      const variantParts = buildVariantKey(master, contract, values, literalOverrides, fw, contextDir);
+      const variantParts = buildVariantKey(
+        master,
+        contract,
+        values,
+        literalOverrides,
+        fw,
+        contextDir,
+      );
       // Not every master has a 'state' axis at all (AtlDialog: only 'size' — one instance
       // per size, no drawn interaction states) — rootPaint's own keys have no ', state=…'
       // suffix in that case, so appending one unconditionally never matches anything. And
       // a master whose ONLY axis IS 'state' (AtlInput, AtlTextarea, AtlSelect) produces an
       // EMPTY variantParts array — rowKeyFor handles both without a spurious leading ', '.
-      const hasStateAxis = !!(master.variantAxes && 'state' in master.variantAxes);
+      const hasStateAxis = !!(
+        master.variantAxes && 'state' in master.variantAxes
+      );
       const defaultRowKey =
-        variantParts === null ? null : hasStateAxis ? rowKeyFor(variantParts, 'default') : variantParts.join(', ');
-      const row = defaultRowKey ? (master.rootPaint || {})[defaultRowKey] : null;
+        variantParts === null
+          ? null
+          : hasStateAxis
+            ? rowKeyFor(variantParts, 'default')
+            : variantParts.join(', ');
+      const row = defaultRowKey
+        ? (master.rootPaint || {})[defaultRowKey]
+        : null;
       if (!row) {
         pushFinding(
           fw,
@@ -1137,25 +1302,29 @@ async function runFramework(fw, browser) {
           'default',
           'variant-lookup',
           variantParts === null
-            ? "resolved args could not build a variant key (an axisMap-mapped axis resolved to no value)"
+            ? 'resolved args could not build a variant key (an axisMap-mapped axis resolved to no value)'
             : `no rootPaint row '${defaultRowKey}'`,
-          'NO-VARIANT'
+          'NO-VARIANT',
         );
         continue;
       }
 
-      await page.goto(`http://127.0.0.1:${port}/iframe.html?id=${storyId}&viewMode=story`);
+      await page.goto(
+        `http://127.0.0.1:${port}/iframe.html?id=${storyId}&viewMode=story`,
+      );
       await page
         .waitForFunction(
           () => {
             const r = document.querySelector('#storybook-root');
             return !!r && r.children.length > 0;
           },
-          { timeout: 15000 }
+          { timeout: 15000 },
         )
         .catch(() => undefined);
       if (args.theme === 'dark') {
-        await page.evaluate(() => document.documentElement.setAttribute('data-theme', 'dark'));
+        await page.evaluate(() =>
+          document.documentElement.setAttribute('data-theme', 'dark'),
+        );
       }
       // Every component transitions background-color/border-color (ADR at the CSS layer, not
       // this gate's concern). Hover and focus are measured on the SAME page as the default
@@ -1163,7 +1332,8 @@ async function runFramework(fw, browser) {
       // land mid-transition and report a colour that never appears in a screenshot, real user
       // interaction, or Figma. Killing transitions/animations makes every state change instant.
       await page.addStyleTag({
-        content: '*, *::before, *::after { transition: none !important; animation: none !important; }',
+        content:
+          '*, *::before, *::after { transition: none !important; animation: none !important; }',
       });
 
       const probe = await resolveProbe(page, metaComponent, contract);
@@ -1173,7 +1343,9 @@ async function runFramework(fw, browser) {
         // disagrees with Figma. Printed every run until a probe is added; never baselined,
         // so it can neither be silently "fixed" by an unrelated code change nor frozen as a
         // permanent allowance.
-        console.warn(`  ⚠ [NO-PROBE] (${fw}) ${metaComponent} · ${key}: ${probe.reason}`);
+        console.warn(
+          `  ⚠ [NO-PROBE] (${fw}) ${metaComponent} · ${key}: ${probe.reason}`,
+        );
         noProbe++;
         continue;
       }
@@ -1191,12 +1363,13 @@ async function runFramework(fw, browser) {
         const rect = el.getBoundingClientRect();
         if (rect.width === 0) return 'zero width';
         if (rect.height === 0) return 'zero height';
-        if (el.tagName === 'DIALOG' && !el.hasAttribute('open')) return '<dialog> without [open]';
+        if (el.tagName === 'DIALOG' && !el.hasAttribute('open'))
+          return '<dialog> without [open]';
         return null;
       }, probe.selector);
       if (notRenderedReason) {
         console.warn(
-          `  ⚠ [NOT-RENDERED] (${fw}) ${metaComponent} · ${key}: ${notRenderedReason} — skipping paint/geometry/type comparisons`
+          `  ⚠ [NOT-RENDERED] (${fw}) ${metaComponent} · ${key}: ${notRenderedReason} — skipping paint/geometry/type comparisons`,
         );
         notRendered++;
         continue;
@@ -1207,28 +1380,42 @@ async function runFramework(fw, browser) {
           const els = document.querySelectorAll(sel);
           const el = els[0];
           return el
-            ? { count: els.length, tag: el.tagName.toLowerCase(), className: String(el.className || '') }
+            ? {
+                count: els.length,
+                tag: el.tagName.toLowerCase(),
+                className: String(el.className || ''),
+              }
             : null;
         }, probe.selector);
         if (matched) {
           console.log(
             `  probe  ${fw.padEnd(7)} ${metaComponent.padEnd(14)} '${probe.selector}' → ` +
               `${matched.count} match(es): <${matched.tag}${matched.className ? ` class="${matched.className}"` : ''}>` +
-              (matched.count !== 1 ? '  ⚠ expected exactly 1' : '')
+              (matched.count !== 1 ? '  ⚠ expected exactly 1' : ''),
           );
         }
       }
 
       measured++;
-      measuredByComponent.set(metaComponent, (measuredByComponent.get(metaComponent) || 0) + 1);
+      measuredByComponent.set(
+        metaComponent,
+        (measuredByComponent.get(metaComponent) || 0) + 1,
+      );
       const snap = await measureFull(page, probe.selector, row);
       compareFull({ ...ctx, state: 'default' }, snap, row);
 
       const hoverKey = hasStateAxis ? rowKeyFor(variantParts, 'hover') : null;
       const hoverRow = hoverKey ? (master.rootPaint || {})[hoverKey] : null;
       if (hoverRow) {
-        await page.locator(probe.selector).hover().catch(() => undefined);
-        const hoverSnap = await measurePaintOnly(page, probe.selector, hoverRow);
+        await page
+          .locator(probe.selector)
+          .hover()
+          .catch(() => undefined);
+        const hoverSnap = await measurePaintOnly(
+          page,
+          probe.selector,
+          hoverRow,
+        );
         comparePaint({ ...ctx, state: 'hover' }, hoverSnap, hoverRow);
         await page.mouse.move(0, 0);
       }
@@ -1236,14 +1423,21 @@ async function runFramework(fw, browser) {
       const focusKey = hasStateAxis ? rowKeyFor(variantParts, 'focus') : null;
       const focusRow = focusKey ? (master.rootPaint || {})[focusKey] : null;
       if (focusRow) {
-        const focused = await focusProbe(page, probe.focusScope || probe.selector);
+        const focused = await focusProbe(
+          page,
+          probe.focusScope || probe.selector,
+        );
         if (focused) {
-          const focusSnap = await measurePaintOnly(page, probe.selector, focusRow);
+          const focusSnap = await measurePaintOnly(
+            page,
+            probe.selector,
+            focusRow,
+          );
           comparePaint({ ...ctx, state: 'focus' }, focusSnap, focusRow);
         } else {
           console.warn(
             `  ⚠ [NO-PROBE] (${fw}) ${metaComponent} · ${key} · focus: could not focus the probe element ` +
-              '(or a focusable descendant) via Tab from the document body'
+              '(or a focusable descendant) via Tab from the document body',
           );
           noProbe++;
         }
@@ -1253,7 +1447,15 @@ async function runFramework(fw, browser) {
 
   await page.close();
   await new Promise((resolve) => server.close(resolve));
-  return { measured, skippedDemo, noComponent, noRoster, noIndexEntry, noProbe, notRendered };
+  return {
+    measured,
+    skippedDemo,
+    noComponent,
+    noRoster,
+    noIndexEntry,
+    noProbe,
+    notRendered,
+  };
 }
 
 // ─── Ratchet ─────────────────────────────────────────────────────────────────
@@ -1286,16 +1488,23 @@ function writeBaseline() {
   // meta.note again after the first write. The note documents the SCRIPT's
   // current behaviour, so it has to regenerate whenever the script does.
   const out = {
-    meta: { note: BASELINE_NOTE, generatedAt: new Date().toISOString(), gitSha: gitShaOrUnknown() },
+    meta: {
+      note: BASELINE_NOTE,
+      generatedAt: new Date().toISOString(),
+      gitSha: gitShaOrUnknown(),
+    },
     findings: findings.map((f) => ({ key: keyOf(f), ...f })),
   };
   fs.writeFileSync(BASELINE_FILE, JSON.stringify(out, null, 2) + '\n');
-  console.log(`✓ baseline updated: ${out.findings.length} finding(s) recorded in tools/figma/paint-baseline.json`);
+  console.log(
+    `✓ baseline updated: ${out.findings.length} finding(s) recorded in tools/figma/paint-baseline.json`,
+  );
 }
 
 function settleAgainstBaseline() {
   const baseline = loadBaseline();
-  const allBaselineFindings = baseline && baseline.findings ? baseline.findings : [];
+  const allBaselineFindings =
+    baseline && baseline.findings ? baseline.findings : [];
   // Scoped staleness (round 2): a `--component`/`--fw` run only MEASURES the stories in
   // scope, so a baseline entry for a component or framework this invocation never touched
   // must not be judged "stale" — it simply was not re-checked. Restrict the comparison set
@@ -1305,7 +1514,9 @@ function settleAgainstBaseline() {
   // (declared next to the CLI parsing) — main()'s roster floor reuses the exact same flag
   // rather than each deriving its own notion of "scoped".
   const scopedBaselineFindings = allBaselineFindings.filter(
-    (f) => targetFrameworks.includes(f.fw) && (!args.component || f.component === args.component)
+    (f) =>
+      targetFrameworks.includes(f.fw) &&
+      (!args.component || f.component === args.component),
   );
   const baselineByKey = new Map(scopedBaselineFindings.map((f) => [f.key, f]));
   const currentByKey = new Map(findings.map((f) => [keyOf(f), f]));
@@ -1353,7 +1564,7 @@ async function main() {
   } catch {
     console.error(
       '✗ this gate needs a browser: @playwright/test is not resolvable. Run npm ci, then ' +
-        'npx playwright install chromium.'
+        'npx playwright install chromium.',
     );
     process.exit(1);
   }
@@ -1363,7 +1574,7 @@ async function main() {
   } catch (err) {
     console.error(
       `✗ this gate needs a browser and could not launch one — ${String(err.message).split('\n')[0]}\n` +
-        '  Run: npx playwright install chromium'
+        '  Run: npx playwright install chromium',
     );
     process.exit(1);
   }
@@ -1384,8 +1595,8 @@ async function main() {
       console.log(
         `  ${r.ok ? 'PASS' : 'FAIL'}  ${r.fw.padEnd(7)} ${r.component.padEnd(14)} ${String(r.story).padEnd(14)} ` +
           `${r.state.padEnd(7)} ${r.field.padEnd(16)} rendered=${JSON.stringify(r.rendered)} figma=${JSON.stringify(
-            r.figma
-          )}${r.tokenVar ? ` (${r.tokenVar})` : ''}`
+            r.figma,
+          )}${r.tokenVar ? ` (${r.tokenVar})` : ''}`,
       );
     }
   }
@@ -1397,7 +1608,7 @@ async function main() {
       `[${fw}] measured ${s.measured} stor${s.measured === 1 ? 'y' : 'ies'} ` +
         `(skipped-demo: ${s.skippedDemo}, no-component: ${s.noComponent}, off-roster: ${s.noRoster}, ` +
         `no-index-entry: ${s.noIndexEntry}, not-rendered: ${s.notRendered}, no-probe: ${s.noProbe}), ` +
-        `${s.ms.toFixed(0)} ms`
+        `${s.ms.toFixed(0)} ms`,
     );
   }
 
@@ -1413,7 +1624,9 @@ async function main() {
   for (const fw of targetFrameworks) {
     const tags = ['PAINT', 'GEOMETRY', 'TYPE', 'NO-VARIANT'];
     const parts = tags.map((t) => `${t} ${byFwTag.get(`${fw}|${t}`) || 0}`);
-    parts.push(`NOT-RENDERED ${perFw[fw].notRendered} (warning, not ratcheted)`);
+    parts.push(
+      `NOT-RENDERED ${perFw[fw].notRendered} (warning, not ratcheted)`,
+    );
     parts.push(`NO-PROBE ${perFw[fw].noProbe} (warning, not ratcheted)`);
     console.log(`[${fw}] ${parts.join(', ')}`);
   }
@@ -1421,7 +1634,8 @@ async function main() {
   const top = topFindingShapes(findings, 10);
   if (top.length) {
     console.log('\n--- ten most frequent finding shapes ---');
-    for (const [shape, count] of top) console.log(`  ${count.toString().padStart(4)}  ${shape}`);
+    for (const [shape, count] of top)
+      console.log(`  ${count.toString().padStart(4)}  ${shape}`);
   }
 
   // ─── B: per-framework measurement floor (ADR-0034) ───────────────────────
@@ -1434,7 +1648,7 @@ async function main() {
       hardErrors.push(
         `[NO-MEASUREMENTS] (${fw}) 0 stories measured this run. Check dist/storybook/${fw} is a current ` +
           'build (npm run check:storybook-manifests) and that --component/--fw actually selects stories ' +
-          'in this framework.'
+          'in this framework.',
       );
     }
   }
@@ -1461,7 +1675,7 @@ async function main() {
         hardErrors.push(
           `[ROSTER] ${component}: 0 measurements in every framework and no PAINT_ROSTER_EXEMPT entry. ` +
             'Either give it a measurable story (a probe that resolves and renders), or record why in ' +
-            "tools/scripts/lib/allowlists.js (kind: 'design' | 'gap')."
+            "tools/scripts/lib/allowlists.js (kind: 'design' | 'gap').",
         );
       } else if (exempt.kind === 'gap') {
         rosterWarnings.push(`[GAP] ${component}: ${exempt.why}`);
@@ -1475,19 +1689,19 @@ async function main() {
       if (!roster.has(component)) {
         hardErrors.push(
           `[STALE] PAINT_ROSTER_EXEMPT names '${component}', which is not in the contract+snapshot roster. ` +
-            'Remove it.'
+            'Remove it.',
         );
       } else if ((measuredByComponent.get(component) || 0) > 0) {
         hardErrors.push(
           `[STALE] PAINT_ROSTER_EXEMPT exempts '${component}' (${entry.kind}) but it now has measurements. ` +
-            'Remove the entry so the component is held to the gate.'
+            'Remove the entry so the component is held to the gate.',
         );
       }
     }
     for (const w of rosterWarnings) console.warn(`  ⚠ ${w}`);
     console.log(
       `\n${rosterMeasuredCount} of ${roster.size} roster component(s) measured at least once ` +
-        `(${PAINT_ROSTER_EXEMPT.size} exempt).`
+        `(${PAINT_ROSTER_EXEMPT.size} exempt).`,
     );
   }
 
@@ -1497,7 +1711,7 @@ async function main() {
     if (hardErrors.length) {
       console.error(
         `\n${hardErrors.length} error(s) above — refusing to write tools/figma/paint-baseline.json from an ` +
-          'incomplete run.'
+          'incomplete run.',
       );
       process.exit(1);
     }
@@ -1506,8 +1720,14 @@ async function main() {
     process.exit(0);
   }
 
-  const { newErrors, staleErrors, recordedByTag, baselineExists, scopedCount, totalBaselineCount } =
-    settleAgainstBaseline();
+  const {
+    newErrors,
+    staleErrors,
+    recordedByTag,
+    baselineExists,
+    scopedCount,
+    totalBaselineCount,
+  } = settleAgainstBaseline();
 
   // ─── A: a missing baseline is an error, not a free pass ──────────────────
   // (the one exemption — a run invoked with --update-baseline — already exited above,
@@ -1516,38 +1736,48 @@ async function main() {
     console.error(
       '\n✗ [BASELINE-MISSING] tools/figma/paint-baseline.json not found. Every finding printed above was ' +
         'measured but never compared to anything — that is not a passing run, it is an unrun one. Review ' +
-        'them, then run `node tools/scripts/check-paint.mjs --update-baseline` and commit the file.'
+        'them, then run `node tools/scripts/check-paint.mjs --update-baseline` and commit the file.',
     );
   } else {
     if (isScoped) {
       console.log(
         `\n(scoped run — staleness evaluated over ${scopedCount} of ${totalBaselineCount} baseline ` +
-          `entr(y/ies): component=${args.component || 'all'}, fw=${targetFrameworks.join(',')})`
+          `entr(y/ies): component=${args.component || 'all'}, fw=${targetFrameworks.join(',')})`,
       );
     }
     console.log('\n--- findings ---');
     for (const f of newErrors) {
-      console.error(`✗ [${f.tag}] (${f.fw}) ${f.component} · ${f.story} · ${f.state} · ${f.field}: ${f.detail}`);
+      console.error(
+        `✗ [${f.tag}] (${f.fw}) ${f.component} · ${f.story} · ${f.state} · ${f.field}: ${f.detail}`,
+      );
     }
     for (const f of staleErrors) {
       console.error(
         `✗ [STALE-BASELINE] (${f.fw}) ${f.component} · ${f.story} · ${f.state} · ${f.field} — recorded ` +
           `finding no longer reproduces: ${f.detail}. Either it was fixed (re-run --update-baseline) or ` +
-          'the measurement no longer runs (which is the more interesting case).'
+          'the measurement no longer runs (which is the more interesting case).',
       );
     }
     if (recordedByTag.size) {
       console.log('\n--- recorded (in the baseline) ---');
-      for (const [tag, count] of recordedByTag) console.log(`  ${tag} ×${count}`);
+      for (const [tag, count] of recordedByTag)
+        console.log(`  ${tag} ×${count}`);
     }
   }
 
   console.log(`\ntotal runtime: ${totalMs.toFixed(0)} ms`);
 
   if (baselineExists && (newErrors.length || staleErrors.length)) {
-    console.error(`\n${newErrors.length} new finding(s), ${staleErrors.length} stale baseline entr(y/ies).`);
+    console.error(
+      `\n${newErrors.length} new finding(s), ${staleErrors.length} stale baseline entr(y/ies).`,
+    );
   }
-  if (hardErrors.length || !baselineExists || newErrors.length || staleErrors.length) {
+  if (
+    hardErrors.length ||
+    !baselineExists ||
+    newErrors.length ||
+    staleErrors.length
+  ) {
     process.exit(1);
   }
   console.log('\n✓ check:paint — no drift beyond the recorded baseline.');

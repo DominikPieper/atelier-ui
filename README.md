@@ -24,11 +24,11 @@ The repo ships everything needed to run the workshop end-to-end: an Astro-based 
 
 ## The three pillars
 
-| Pillar | Role | Where it lives |
-|---|---|---|
-| **Figma** | Design tokens, component frames, spacing — defined before code. | Figma workspace + token sync (`docs/src/pages/figma.astro`, `figma-token.astro`) |
-| **Storybook** | Per-framework component explorer. Each Storybook exposes a hosted MCP endpoint. | `libs/{angular,react,vue}/.storybook/` → deployed to `/storybook-{angular,react,vue}` |
-| **AI + MCP** | Claude reads both sources, writes design-accurate code. | `@storybook/mcp` + `@storybook/addon-mcp`, hosted via a Cloudflare Worker (`worker/mcp.ts`) |
+| Pillar        | Role                                                                            | Where it lives                                                                              |
+| ------------- | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| **Figma**     | Design tokens, component frames, spacing — defined before code.                 | Figma workspace + token sync (`docs/src/pages/figma.astro`, `figma-token.astro`)            |
+| **Storybook** | Per-framework component explorer. Each Storybook exposes a hosted MCP endpoint. | `libs/{angular,react,vue}/.storybook/` → deployed to `/storybook-{angular,react,vue}`       |
+| **AI + MCP**  | Claude reads both sources, writes design-accurate code.                         | `@storybook/mcp` + `@storybook/addon-mcp`, hosted via a Cloudflare Worker (`worker/mcp.ts`) |
 
 The workshop walks through the full loop: **inspect → prompt → ship → iterate.**
 
@@ -61,17 +61,17 @@ Add these to your Claude Code MCP config to let the model read Storybook directl
 {
   "mcpServers": {
     "storybook-angular": { "type": "http", "url": "https://atelier.pieper.io/storybook-angular/mcp" },
-    "storybook-react":   { "type": "http", "url": "https://atelier.pieper.io/storybook-react/mcp"   },
-    "storybook-vue":     { "type": "http", "url": "https://atelier.pieper.io/storybook-vue/mcp"     }
+    "storybook-react": { "type": "http", "url": "https://atelier.pieper.io/storybook-react/mcp" },
+    "storybook-vue": { "type": "http", "url": "https://atelier.pieper.io/storybook-vue/mcp" }
   }
 }
 ```
 
-| Tool | Returns | Availability |
-|---|---|---|
-| `docs-list` | Every documented component, grouped by category | All frameworks |
-| `docs-show` | Prop table, types, defaults, usage examples | All frameworks |
-| `docs-show-story` | Story-level detail beyond `docs-show` | All frameworks |
+| Tool              | Returns                                         | Availability   |
+| ----------------- | ----------------------------------------------- | -------------- |
+| `docs-list`       | Every documented component, grouped by category | All frameworks |
+| `docs-show`       | Prop table, types, defaults, usage examples     | All frameworks |
+| `docs-show-story` | Story-level detail beyond `docs-show`           | All frameworks |
 
 The hosted endpoints answer natively per framework: Angular's manifest comes from `angular-component-meta`, Vue's from `vue-component-meta`, React's from `react-docgen`. Props, defaults and usage examples already come back shaped for the framework you asked about — two-way `[(checked)]` bindings and split Inputs/Outputs for Angular, `v-model`/`update:*` events and typed slots for Vue, JSX/`children` for React.
 
@@ -79,16 +79,16 @@ The hosted endpoints answer natively per framework: Angular's manifest comes fro
 
 Run `nx storybook <angular|react|vue>` and point Claude Code at the printed port (`http://localhost:<port>/mcp` — Angular `4400`, React `4401`, Vue `4402`) to get the full local toolset. A local endpoint serves the same three `docs-*` tools listed above, plus `dev`/`test`; measured via `tools/list`, it is eight tools, identical across frameworks:
 
-| Tool | Returns | Availability |
-|---|---|---|
-| `docs-list` | Every documented component, grouped by category | All frameworks |
-| `docs-show` | Prop table, types, defaults, usage examples | All frameworks |
-| `docs-show-story` | Story-level detail beyond `docs-show` | All frameworks |
-| `stories-preview` | Live preview URLs for component variants | All frameworks |
-| `get-storybook-story-instructions` | Prompt patterns for generating new stories | All frameworks |
-| `stories-changed` | New/modified/affected stories from the Change Review sidebar | All frameworks |
-| `stories-find-by-component` | Locate the story/stories backing a given component | All frameworks |
-| `test-run` | Vitest/Storybook interaction results | All frameworks |
+| Tool                               | Returns                                                      | Availability   |
+| ---------------------------------- | ------------------------------------------------------------ | -------------- |
+| `docs-list`                        | Every documented component, grouped by category              | All frameworks |
+| `docs-show`                        | Prop table, types, defaults, usage examples                  | All frameworks |
+| `docs-show-story`                  | Story-level detail beyond `docs-show`                        | All frameworks |
+| `stories-preview`                  | Live preview URLs for component variants                     | All frameworks |
+| `get-storybook-story-instructions` | Prompt patterns for generating new stories                   | All frameworks |
+| `stories-changed`                  | New/modified/affected stories from the Change Review sidebar | All frameworks |
+| `stories-find-by-component`        | Locate the story/stories backing a given component           | All frameworks |
+| `test-run`                         | Vitest/Storybook interaction results                         | All frameworks |
 
 Hosted vs. local dev is a surface split, not a per-framework one: a hosted endpoint serves only the three `docs-*` tools; a local endpoint serves those same three plus the `dev`/`test` toolset above — for any of the three frameworks.
 
@@ -96,14 +96,14 @@ Hosted vs. local dev is a surface split, not a per-framework one: a hosted endpo
 
 ## Packages
 
-| Package | Purpose |
-|---|---|
-| `create-atelier-ui-workspace` | `npx` scaffolder — bootstraps a workshop workspace with framework choice |
-| `@atelier-ui/create-workspace` | Nx preset used by the scaffolder |
-| `@atelier-ui/angular` | Angular 22 component library (teaching artifact) |
-| `@atelier-ui/react` | React 19 component library (teaching artifact) |
-| `@atelier-ui/vue` | Vue 3 component library (teaching artifact) |
-| `@atelier-ui/spec` | Framework-agnostic TypeScript interfaces — the naming contract the three libraries are drift-gated against (internal, not published) |
+| Package                        | Purpose                                                                                                                              |
+| ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `create-atelier-ui-workspace`  | `npx` scaffolder — bootstraps a workshop workspace with framework choice                                                             |
+| `@atelier-ui/create-workspace` | Nx preset used by the scaffolder                                                                                                     |
+| `@atelier-ui/angular`          | Angular 22 component library (teaching artifact)                                                                                     |
+| `@atelier-ui/react`            | React 19 component library (teaching artifact)                                                                                       |
+| `@atelier-ui/vue`              | Vue 3 component library (teaching artifact)                                                                                          |
+| `@atelier-ui/spec`             | Framework-agnostic TypeScript interfaces — the naming contract the three libraries are drift-gated against (internal, not published) |
 
 ---
 

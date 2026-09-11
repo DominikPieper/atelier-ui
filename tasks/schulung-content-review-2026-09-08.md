@@ -8,7 +8,7 @@ gaps, what is not well formulated, and — especially — does the joint between
 Claude Design and the code** hold together.
 
 Distinct from `tasks/review-plausibility-2026-09-08.md`, which audited what the repo
-*claims* about itself. This one asks whether the material *teaches*. Findings that
+_claims_ about itself. This one asks whether the material _teaches_. Findings that
 duplicate that review are not repeated; where a finding touches the same file it is a
 new instance and says so.
 
@@ -44,11 +44,11 @@ Three things are wrong at a level that costs workshop time:
 3. **The two skills that implement the Figma ↔ Claude Design ↔ code seam shipped
    yesterday and the teaching material does not know they exist** (§ B1). One page
    actively tells the room the tooling is absent, and the written handoff document that
-   is *gating step 0* of the `design-to-code` skill appears nowhere on the English
+   is _gating step 0_ of the `design-to-code` skill appears nowhere on the English
    learner path (§ B5).
 
 On the owner's specific suspicion — the Figma/Claude-Design/code joint — the answer is
-split. The *reasoning* is taught better than expected: `claude-design.astro`'s "fence"
+split. The _reasoning_ is taught better than expected: `claude-design.astro`'s "fence"
 section argues the source-of-truth position mechanically, not by assertion, and is the
 strongest single passage on the site. What is missing is everything that shipped after it
 was written.
@@ -65,8 +65,8 @@ disease. These are the two files the course points at as ground truth for prompt
 ### A1 — `test-run` is broken in all three frameworks, React included · measured
 
 Day 2 Block 03 puts the React test loop on the local addon MCP
-(`schulung.astro:193`: *"Test-Loop React: dev + test Toolset über localhost:4401/mcp
-(stories-preview, test-run mit a11y)"*), and Day 1 Block 04 teaches `test-run` as part
+(`schulung.astro:193`: _"Test-Loop React: dev + test Toolset über localhost:4401/mcp
+(stories-preview, test-run mit a11y)"_), and Day 1 Block 04 teaches `test-run` as part
 of the toolset model. The call fails:
 
 ```
@@ -113,11 +113,11 @@ All three `.storybook/main.ts` files carry an identical addon set (`addon-mcp`,
 
 The teaching material states the opposite in two places:
 
-- `docs/src/pages/schulung.astro:175` — *"Angular/Vue bekommen dieses Toolset nicht, ihr
-  Loop bleibt `nx test <lib>` + Browser"*, and `:194` repeats the split.
+- `docs/src/pages/schulung.astro:175` — _"Angular/Vue bekommen dieses Toolset nicht, ihr
+  Loop bleibt `nx test <lib>` + Browser"_, and `:194` repeats the split.
 - `schulung-2tage-agenda.md:31` and `:58` — the whole Day-1 Block-04 blackboard model and
-  the Day-2 Block-03 test-loop mapping, written against *"installiert ist 10.5.10"* and
-  *"preview/test offiziell React, Vue/Angular experimentell"*. Installed is **10.6.0**
+  the Day-2 Block-03 test-loop mapping, written against _"installiert ist 10.5.10"_ and
+  _"preview/test offiziell React, Vue/Angular experimentell"_. Installed is **10.6.0**
   (`package.json:178`).
 
 Effect: two thirds of the cohort is routed away from a loop they can have, and the
@@ -133,7 +133,7 @@ for all three frameworks; stop restating the Storybook version in the agenda and
 
 ## B — The Figma ↔ Claude Design ↔ code seam
 
-### B1 — The two skills that *are* this seam are invisible to the teaching material · verified
+### B1 — The two skills that _are_ this seam are invisible to the teaching material · verified
 
 `skills/design-to-code` and `skills/artboard-bridge` landed 2026-09-07/08. Between them
 they implement exactly the joint the owner suspected was thin:
@@ -142,8 +142,8 @@ they implement exactly the joint the owner suspected was thin:
   document**, and ships `references/handoff-document.md` — the checklist template with a
   worked example.
 - `artboard-bridge` has **Intake** (read a `.dc.html` sheet, its findings and comments,
-  write the ADR-0096 handoff document stamped *"from Claude Design, unverified against
-  Figma"*) and **Publish** (a gate-verified component → a `.dc.html` sheet).
+  write the ADR-0096 handoff document stamped _"from Claude Design, unverified against
+  Figma"_) and **Publish** (a gate-verified component → a `.dc.html` sheet).
 
 `grep` for `artboard-bridge` across `docs/src`, `schulung-2tage-agenda.md`, `workshop/`
 and `talk/` → **zero hits**. `docs/src/pages/agent-skills.astro` names
@@ -152,9 +152,9 @@ curriculum demos on Day 2 — see C4).
 
 Three consequences, in descending severity:
 
-1. **`schulung.astro:101` tells the room a false thing.** *"Schritt 5 (Handoff) bleibt an
+1. **`schulung.astro:101` tells the room a false thing.** _"Schritt 5 (Handoff) bleibt an
    diesem Punkt Idee, nicht Vorführung: … die ausgearbeitete Fassung ist spezifiziert,
-   aber ihr Tooling existiert nicht."* The tooling exists — `artboard-bridge` Publish is
+   aber ihr Tooling existiert nicht."_ The tooling exists — `artboard-bridge` Publish is
    the outbound handoff ADR-0032 specified. What is true today is narrower and better
    teaching: Publish has run once (iteration 2, against scratch project
    `44481d29…`) and **correctly refused** — AtlBadge was DRIFT — while the
@@ -162,7 +162,7 @@ Three consequences, in descending severity:
    unexercised, it is blocked repo-wide while all 37 parity records are DRIFT, and
    per-seat access is a separate open question (ADR-0106). "Ran, refused, and here is
    why it cannot be demonstrated for a room today" is a far better lesson than "does not
-   exist" — the refusal *is* the fence the page spends two sections arguing for.
+   exist" — the refusal _is_ the fence the page spends two sections arguing for.
 2. **The curriculum's Block-01 → Block-02 handoff has no artefact, and one now exists.**
    `schulung.astro:166` prescribes the handoff checklist in a single bullet with no
    medium, no location and no example; `skills/design-to-code/references/handoff-document.md`
@@ -185,9 +185,9 @@ and loop" diagram, the import-confirmed/export-unverified honesty at `:106-108`,
 derived `{gateCount}` (the fix from the 09-05 pass held). Three absolutes in it are now
 false, all for the same reason as B1:
 
-- `:194` — *"no machine-readable handoff exists in either direction"* (already
+- `:194` — _"no machine-readable handoff exists in either direction"_ (already
   `plausibility A8`; repeated here because it is the seam's load-bearing sentence).
-- `:431` — *"No script in this repo opens one"* (a `.dc.html`). Literally still true —
+- `:431` — _"No script in this repo opens one"_ (a `.dc.html`). Literally still true —
   it is a skill over MCP, not a script — but the point the sentence makes is no longer
   the state of the world.
 - `:188` — the same class of absolute.
@@ -198,8 +198,8 @@ absolutes with what changed.
 
 ### B3 — `figma_check_design_parity` has no "report mode", and the briefs' closing check cannot be run where they put it · verified
 
-`workshop/briefs/README.md:63-84`, "Done when" item 8, says the parity check *"runs in
-report mode"*. The live tool schema has no report or mode parameter (`nodeId`,
+`workshop/briefs/README.md:63-84`, "Done when" item 8, says the parity check _"runs in
+report mode"_. The live tool schema has no report or mode parameter (`nodeId`,
 `codeSpec`, `canonicalSource`, `enrich`, `fileUrl`), and **`codeSpec` is required**.
 "Report mode" is this repo's unrelated `check:parity:report` npm script (ADR-0082) — a
 code-vs-snapshot diff, not an MCP call.
@@ -216,17 +216,17 @@ bar (5, 6, 8), and say where the second half is reached. Fix the "report mode" s
 
 Transitions a real project needs, and their coverage:
 
-| Transition | State |
-|---|---|
-| Figma master → spec | taught (`/design-to-code`, `/tutorial`, Day 2 B01→B02) |
-| spec → framework code | taught (Day 2 B03, `plan/big-picture.md` — but see C1) |
-| code → Storybook | taught (`/storybook`, Day 1 B03) |
-| code → Figma parity check | best-taught joint on the site; practised three times |
-| Figma → Claude Design | **mentioned only** — `claude-design.astro:106-108` records the Import direction as first-party and confirmed, and stops. No worked path. |
-| Claude Design artboard → code | **skill exists, never taught** (`artboard-bridge` Intake, B1) |
-| code → Claude Design artboard | **skill exists, taught as nonexistent** (`artboard-bridge` Publish, B1) |
-| canvas → Figma → code | correctly taught as **forbidden**, with the reason (`:111-113`) |
-| designer-in-Figma ↔ designer-in-Claude-Design | **absent** — no material addresses two designers on two surfaces |
+| Transition                                    | State                                                                                                                                    |
+| --------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
+| Figma master → spec                           | taught (`/design-to-code`, `/tutorial`, Day 2 B01→B02)                                                                                   |
+| spec → framework code                         | taught (Day 2 B03, `plan/big-picture.md` — but see C1)                                                                                   |
+| code → Storybook                              | taught (`/storybook`, Day 1 B03)                                                                                                         |
+| code → Figma parity check                     | best-taught joint on the site; practised three times                                                                                     |
+| Figma → Claude Design                         | **mentioned only** — `claude-design.astro:106-108` records the Import direction as first-party and confirmed, and stops. No worked path. |
+| Claude Design artboard → code                 | **skill exists, never taught** (`artboard-bridge` Intake, B1)                                                                            |
+| code → Claude Design artboard                 | **skill exists, taught as nonexistent** (`artboard-bridge` Publish, B1)                                                                  |
+| canvas → Figma → code                         | correctly taught as **forbidden**, with the reason (`:111-113`)                                                                          |
+| designer-in-Figma ↔ designer-in-Claude-Design | **absent** — no material addresses two designers on two surfaces                                                                         |
 
 The last row is the honest remaining hole: nothing in the repo says what a team does when
 one designer works in Figma and another explores in Claude Design. That is a real
@@ -235,7 +235,7 @@ question a participant will ask on Day 1 Block 04, and there is no answer to giv
 ### B5 — The handoff document is gating step 0 of the skill and appears nowhere on the English learner path · verified
 
 `skills/design-to-code/SKILL.md:40,52` makes the written handoff document the gating step
-0 of Build mode — *"The document is the input, not a by-product"*. `grep -rln -i handoff`
+0 of Build mode — _"The document is the input, not a by-product"_. `grep -rln -i handoff`
 across `docs/src/` returns six files, and **none of them is `design-to-code.astro`,
 `tutorial.astro` or `first-component.astro`**. The English learner path goes from Inspect
 straight to Spec; its four-box "loop at a glance" has no equivalent checkpoint. The only
@@ -252,14 +252,14 @@ point 2, from the English side.
 ### B6 — The two skills share one handoff artefact, and the artefact does not support one of the two shapes · verified
 
 `skills/design-to-code/references/handoff-document.md:11-13` — the template's `Source.`
-field is Figma-only: *"Figma file `<key…>`, node `<id>`, page Components, section
-`<category>`. Snapshot: Figma lastModified `<stamp>`, repo `<sha>`."*
+field is Figma-only: _"Figma file `<key…>`, node `<id>`, page Components, section
+`<category>`. Snapshot: Figma lastModified `<stamp>`, repo `<sha>`."_
 
 `artboard-bridge`'s Intake procedure fills **that same template** with Claude Design
 provenance, and its own passing fixture requires it:
-`skills/artboard-bridge/tests/intake-sheet-with-master/expected.md:22-25` — *"Handoff
+`skills/artboard-bridge/tests/intake-sheet-with-master/expected.md:22-25` — _"Handoff
 document written: provenance (project id, file, etag, `open_url`) … stamped 'from Claude
-Design, unverified against Figma'"*. The template has no field for any of those five
+Design, unverified against Figma'"_. The template has no field for any of those five
 values.
 
 Two skills share one artefact by reference; the artefact has no slot for what one of them
@@ -272,10 +272,10 @@ goes.
 
 ### B7 — "Handoff" names three different things; "artboard" and "sheet" name one · verified
 
-**Handoff** is used for ADR-0096's *inbound, agent-facing written checklist*, for
-`claude-design.astro`'s *outbound, human-facing Step-5 canvas link* (`:181`), and
-generically at `tokens.astro:149` (*"the Component tier exists … as a handoff and teaching
-aid"*). Given B5, a reader who meets the word on `/claude-design` gets no signal that a
+**Handoff** is used for ADR-0096's _inbound, agent-facing written checklist_, for
+`claude-design.astro`'s _outbound, human-facing Step-5 canvas link_ (`:181`), and
+generically at `tokens.astro:149` (_"the Component tier exists … as a handoff and teaching
+aid"_). Given B5, a reader who meets the word on `/claude-design` gets no signal that a
 second, code-facing meaning exists.
 
 **Artboard / sheet** are the same `.dc.html` file, with inverted emphasis across the two
@@ -286,13 +286,13 @@ one equivalence sentence would close it.
 
 ### B8 — Two seam absolutes that are true only on a narrow reading · verified
 
-- `claude-design.astro:106-109` — *"Importing Figma links into the canvas is confirmed;
-  exporting out of the canvas is not."* Reads as "nothing can be extracted from a Claude
+- `claude-design.astro:106-109` — _"Importing Figma links into the canvas is confirmed;
+  exporting out of the canvas is not."_ Reads as "nothing can be extracted from a Claude
   Design project". `artboard-bridge` Intake routinely reads files, comments and text out of
   one (`list_files`, `read_file`, `list_comments`). Defensible on a "Figma-format export"
   reading; the sentence does not say so. Qualify it.
-- `claude-design.astro:111-113` — *"The chain canvas → Figma → code is forbidden in this
-  repo … No diagram on this page draws that arrow, deliberately."* True for direct frame
+- `claude-design.astro:111-113` — _"The chain canvas → Figma → code is forbidden in this
+  repo … No diagram on this page draws that arrow, deliberately."_ True for direct frame
   import. But `figma-workspace-architect/references/build-from-code-contract.md` — the
   fallback `artboard-bridge`'s own routing table names when no master exists — describes a
   canvas-informed → properly built master → code path. One clause separating "importing the
@@ -305,18 +305,18 @@ one equivalence sentence would close it.
 
 ### C1 — The two files the curriculum injects into prompts are written in a vocabulary the code abandoned · verified
 
-`schulung.astro:192`: *"`plan/big-picture.md` (API-Regeln) + `plan/design-principles.md`
-(Surface/Motion/Dark Mode) im Prompt-Kontext"*.
+`schulung.astro:192`: _"`plan/big-picture.md` (API-Regeln) + `plan/design-principles.md`
+(Surface/Motion/Dark Mode) im Prompt-Kontext"_.
 
 `plan/big-picture.md` contains **50** occurrences of `Llm*` (`LlmButton`, `LlmToggle`,
 `LlmCard`, …) and the path `libs/llm-components-react`, which does not exist.
 `libs/spec/src/index.ts` contains **zero**. Same disease in `plan/figma.md` — **33**
-`Llm*` hits and *"27 component sets"* (`:20,30-33`), cited by the agenda at `:27` and
+`Llm*` hits and _"27 component sets"_ (`:20,30-33`), cited by the agenda at `:27` and
 `:125` as the Day-1 Block-02 prep document. `plan/figma.md`'s staleness banner
 (`:42-48`) covers only the Variable Collections table, not the component tables — and not
 the node-id table, which `skills/design-to-code/SKILL.md` calls out by name in its own
-edge cases (*"the node table in `plan/figma.md` has been stale before … `55:141` … the
-master is `55:139`"*). A skill warning its agent about a document the curriculum hands to
+edge cases (_"the node table in `plan/figma.md` has been stale before … `55:141` … the
+master is `55:139`"_). A skill warning its agent about a document the curriculum hands to
 participants unwarned is the whole problem in one line.
 
 This is worse than ordinary doc rot: the curriculum instructs participants to hand
@@ -331,7 +331,7 @@ is the cheap stopgap, and it is not enough for a file that goes into a prompt.
 ### C2 — "Draft rights" is a stated prerequisite that nothing verifies until 90 minutes into Day 2 · verified
 
 `schulung-2tage-agenda.md:25,79` and `schulung.astro:57` make a Figma account with draft
-rights a Day-1 prerequisite, confirmed by *"`npm run preflight` grün"*. Preflight checks
+rights a Day-1 prerequisite, confirmed by _"`npm run preflight` grün"_. Preflight checks
 runtime, the Claude CLI, the Bridge plugin/ports/token and MCP reachability — `grep` for
 "Draft" across the preflight mock on `/workshop` and across `/troubleshooting` returns
 zero. The first real test is `File → Duplicate to your drafts` at the start of Day 2
@@ -345,16 +345,16 @@ duplicate the file, confirm it worked") plus a `/troubleshooting` entry for the 
 
 The agenda's own Material-Lücken table lists these as trainer prep. None exist today:
 
-| Promised | State |
-|---|---|
-| `solved-toast` / `solved-tagchip` / `solved-statcard` / `solved-avatar` branches | `git branch -a` → none |
-| Trainer cheat sheet with Golden-Prompts | no file anywhere in the repo |
-| Pre-workshop mail / setup PDF | none |
-| Slide deck for the lecture blocks | none |
-| Brief as a printable 2-page PDF | none |
+| Promised                                                                         | State                        |
+| -------------------------------------------------------------------------------- | ---------------------------- |
+| `solved-toast` / `solved-tagchip` / `solved-statcard` / `solved-avatar` branches | `git branch -a` → none       |
+| Trainer cheat sheet with Golden-Prompts                                          | no file anywhere in the repo |
+| Pre-workshop mail / setup PDF                                                    | none                         |
+| Slide deck for the lecture blocks                                                | none                         |
+| Brief as a printable 2-page PDF                                                  | none                         |
 
 Two of these are load-bearing rather than nice-to-have: `schulung.astro:191` instructs
-*"Golden-Prompts verlangen `--ui-*` Custom Properties"* as a Day-2 Block-03 step, and the
+_"Golden-Prompts verlangen `--ui-*` Custom Properties"_ as a Day-2 Block-03 step, and the
 `solved-*` branches are the recovery path when a participant prompts their component into
 the ground. `prompts.astro`'s existing prompts are whole-page-generation templates, not
 token-fidelity micro-prompts, so they do not substitute.
@@ -366,7 +366,7 @@ they are the two that a live room notices missing. The deck and the PDFs can wai
 
 - **`agent-skills.astro` does not mention `uianatomy-mcp`**, which the agenda cites at
   `:53,131` as the page backing the Day-2 Block-00 "what is a skill" moment demonstrated
-  *with* that skill. (verified by grep)
+  _with_ that skill. (verified by grep)
 - **Day 2 Block 02's `claude mcp add` step has no troubleshooting entry and no
   `/troubleshooting` link**, although both 🔴 blocks do link it and
   `tasks/schulung-dry-run-kit.md:190-193` names this exact failure mode — in the
@@ -376,8 +376,8 @@ they are the two that a live room notices missing. The deck and the PDFs can wai
   diagnostic gates hinge on placing it right. Both are one sentence each. (verified)
 - **The dry-run kit has never been run** — `tasks/schulung-dry-run-kit.md` §3 and §5 are
   empty. Two 🔴 blocks, ~820 scheduled minutes, effectively no slack, and the timing is
-  the authors' own estimate: Block 04's cell says so outright (*"kein Dry-Run … die erste
-  Kohorte mitstoppen"*). (verified)
+  the authors' own estimate: Block 04's cell says so outright (_"kein Dry-Run … die erste
+  Kohorte mitstoppen"_). (verified)
 - **`index.astro` never mentions `/schulung`** — a cohort participant exploring before the
   pre-workshop mail lands on the self-serve scaffold funnel. `workshop.astro:108-128`
   catches it one click later, so it is a detour, not a dead end. (verified)
@@ -399,14 +399,14 @@ chain is the clearest single idea in the set) > `statcard.md` (two cleanly divid
 sources) > `tagchip.md` (three interleaved sources — the richest lesson about
 composition, the heaviest parse for a 90-minute novice).
 
-| # | Sev | Where | Finding |
-|---|---|---|---|
-| D1 | high | `workshop/briefs/README.md:63-84` | See B3 — "report mode" does not exist; three of eight acceptance criteria are unreachable inside the block the briefs scope themselves to. |
-| D2 | med | `workshop/briefs/README.md:47-48` | *"`Library Tokens` carries 78 variables — 50 colour, 10 spacing, 5 radius, 12 typography, 1 opacity"*. **Measured** against `tools/figma/snapshot.json#uiTokens`: **84**. colour 50, spacing 10, radius 5, opacity 1 all match; the brief silently drops the `sizing` bucket (`control-height/*` + `row-height/*` = 6). Harmless for these four components, but the file's own stance is "trust the derived number". Derive it at build time the way `docs/src/lib/figma-snapshot.ts` already does. |
-| D3 | med | `docs/src/pages/prompts.astro:36` (all 8 cards) | Every prompt opens *"Fetch the Atelier UI API reference first: https://atelier.pieper.io/llms-full.txt"*, while the page's own "How to use" copy (`:127,:135`) invites pasting into "your LLM of choice (Claude, ChatGPT, Gemini, …)" — a plain chat UI without browsing silently ignores the instruction. State the prerequisite, give a manual-paste fallback. |
-| D4 | low-med | `first-component.astro:280-291`, `tutorial.astro` close | The kata and tutorial are fully scripted; the briefs are the opposite. That jump is intentional, but neither page's "Done" block links to `workshop/briefs/` — a docs-site reader cannot discover the next rung exists. One link. |
-| D5 | low | `prompts.astro:41` | Asks for `AtlCodeBlock` with both `language="typescript"` and `filename="component.ts"`; `libs/react/src/lib/code-block/atl-code-block.tsx:8-11,27` documents `language` as ignored when `filename` is set. Half the instruction is inert. |
-| D6 | low | `tutorial.astro:544` | *"These paths are a scaffolded workspace's."* — elliptical possessive with no following noun; reads as truncated. |
+| #   | Sev     | Where                                                   | Finding                                                                                                                                                                                                                                                                                                                                                                                                                                                                                             |
+| --- | ------- | ------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| D1  | high    | `workshop/briefs/README.md:63-84`                       | See B3 — "report mode" does not exist; three of eight acceptance criteria are unreachable inside the block the briefs scope themselves to.                                                                                                                                                                                                                                                                                                                                                          |
+| D2  | med     | `workshop/briefs/README.md:47-48`                       | _"`Library Tokens` carries 78 variables — 50 colour, 10 spacing, 5 radius, 12 typography, 1 opacity"_. **Measured** against `tools/figma/snapshot.json#uiTokens`: **84**. colour 50, spacing 10, radius 5, opacity 1 all match; the brief silently drops the `sizing` bucket (`control-height/*` + `row-height/*` = 6). Harmless for these four components, but the file's own stance is "trust the derived number". Derive it at build time the way `docs/src/lib/figma-snapshot.ts` already does. |
+| D3  | med     | `docs/src/pages/prompts.astro:36` (all 8 cards)         | Every prompt opens _"Fetch the Atelier UI API reference first: https://atelier.pieper.io/llms-full.txt"_, while the page's own "How to use" copy (`:127,:135`) invites pasting into "your LLM of choice (Claude, ChatGPT, Gemini, …)" — a plain chat UI without browsing silently ignores the instruction. State the prerequisite, give a manual-paste fallback.                                                                                                                                    |
+| D4  | low-med | `first-component.astro:280-291`, `tutorial.astro` close | The kata and tutorial are fully scripted; the briefs are the opposite. That jump is intentional, but neither page's "Done" block links to `workshop/briefs/` — a docs-site reader cannot discover the next rung exists. One link.                                                                                                                                                                                                                                                                   |
+| D5  | low     | `prompts.astro:41`                                      | Asks for `AtlCodeBlock` with both `language="typescript"` and `filename="component.ts"`; `libs/react/src/lib/code-block/atl-code-block.tsx:8-11,27` documents `language` as ignored when `filename` is set. Half the instruction is inert.                                                                                                                                                                                                                                                          |
+| D6  | low     | `tutorial.astro:544`                                    | _"These paths are a scaffolded workspace's."_ — elliptical possessive with no following noun; reads as truncated.                                                                                                                                                                                                                                                                                                                                                                                   |
 
 ---
 
@@ -429,8 +429,8 @@ the name collision.
 
 - `README.md:70-78` lists `stories-preview` / `test-run` /
   `get-storybook-story-instructions` in the **hosted** endpoint table, availability
-  *"React, Vue"*, and closes *"Angular MCP currently focuses on documentation and prop
-  discovery; previews and testing are React/Vue only."* Wrong on both axes: the hosted
+  _"React, Vue"_, and closes _"Angular MCP currently focuses on documentation and prop
+  discovery; previews and testing are React/Vue only."_ Wrong on both axes: the hosted
   surface serves `docs-*` only, and locally all three frameworks get all eight tools
   (measured, § A2).
 - `README.md:97-103` says **31 components** and lists a category `Feedback` that does not
@@ -476,14 +476,14 @@ their own company hits it in week one.
   through `ComponentDetail.tsx:635-662` and populated for **3 of 28** components. This is
   exactly the "what does the agent get wrong" content E4 says is missing, 89 % unbuilt.
   Finish it or remove it; half-built reads as coverage that is not there. (verified)
-- `docs/src/pages/design-principles.astro:39-41` — *"the inference cost is near zero and
-  hallucination risk drops to near zero"*: unfalsifiable and unsourced, three lines away
+- `docs/src/pages/design-principles.astro:39-41` — _"the inference cost is near zero and
+  hallucination risk drops to near zero"_: unfalsifiable and unsourced, three lines away
   from `plan/ai-readiness.md:16`, which makes an analogous claim and cites a benchmark.
   (verified)
-- `design-principles.astro:92` — *"enums … compile away and disappear from type
-  information"*. Only `const enum` erases; a plain `enum` is a runtime object and appears
+- `design-principles.astro:92` — _"enums … compile away and disappear from type
+  information"_. Only `const enum` erases; a plain `enum` is a runtime object and appears
   in the emitted `.d.ts`. A TS-literate participant catches this instantly. (verified)
-- `patterns.astro:56` — *"Composition wins three things an LLM cannot"*: nothing stops an
+- `patterns.astro:56` — _"Composition wins three things an LLM cannot"_: nothing stops an
   LLM emitting flat props; the real argument is about consumer ergonomics. (reported)
 - `claude-md.astro:54-58, 98-102, 137-141` — token names and values hand-typed as string
   literals in a template meant to be copied verbatim into a user's own project, where the
@@ -523,9 +523,9 @@ their own company hits it in week one.
 - No hallucinated component props found anywhere in `prompts.astro`, `install.astro` or
   the briefs.
 - `claude-design.astro`'s "fence" section (§2): the four gate identities, the five
-  `check:figma` severities, and a parity-record walkthrough that explains *mechanically*
-  why an imported frame cannot be checked (*"It would not fail — it would compare
-  nothing"*). Argument, not assertion.
+  `check:figma` severities, and a parity-record walkthrough that explains _mechanically_
+  why an imported frame cannot be checked (_"It would not fail — it would compare
+  nothing"_). Argument, not assertion.
 - The token-mapping story is consistent between `figma.astro` and `tokens.astro`, both
   pointing at ADR-0018, with the one Component-tier exception documented.
 - The artboard-palette generation and gating story agrees across three independent
@@ -599,7 +599,7 @@ phrases them.
 
 Run at 00:25 once the quota reset, with the artefact and the question and **no** framing
 from the pass above — no findings, no vocabulary, no joints named. Codex read the
-*corrected* tree (§ A1 and § A2 already fixed), so this is also a fresh-eyes check on
+_corrected_ tree (§ A1 and § A2 already fixed), so this is also a fresh-eyes check on
 yesterday's edits: it flagged nothing in them.
 
 Fourteen findings. Split below; every item marked **new** that would change what someone
@@ -611,13 +611,13 @@ does next was re-verified here against the files before being written down.
   handoff exists in either direction" and `:249` "its tooling does not exist in this repo"
   against `artboard-bridge` Intake (`:31`) and Publish (`:104-160`). Reached from the
   opposite direction (it read the skill first) and landed on § B1/B2 exactly. Codex adds a
-  distinction worth keeping in the rewrite: the chapter conflates *no unattended repo
-  gate*, *no data transfer* and *no cohort-wide access* — three different limitations.
+  distinction worth keeping in the rewrite: the chapter conflates _no unattended repo
+  gate_, _no data transfer_ and _no cohort-wide access_ — three different limitations.
 - **Parity overstates what it proves**, § D1/B3 and `plausibility A9`, with two new
   locations: `tutorial.astro:242` "Single source of truth · no drift" and `:497`. Codex's
   framing is the useful part — the qualification exists and is good
-  (`parity-codespec.md:3`), it is just absent from *the first place a participant is asked
-  to trust the result*.
+  (`parity-codespec.md:3`), it is just absent from _the first place a participant is asked
+  to trust the result_.
 - `mcp.astro:87,107` (= `plausibility A1`), the 6006 scaffold-Storybook contradiction
   (= `A7`), the `figma.astro:304` token-name and `claude-design.astro:272,351` overclaims
   (= `A9`, `A3`).
@@ -627,20 +627,20 @@ does next was re-verified here against the files before being written down.
 **G1 (critical) — the curriculum and the `design-to-code` skill disagree about where the
 participant's spec goes, and § B1/B5 recommends wiring them together without noticing.**
 
-`docs/src/pages/schulung.astro:178` — *"Eigene Spec als eigene Datei neben der Komponente,
-**nicht in den geteilten Master**"*. The skill's own handoff template
-(`skills/design-to-code/references/handoff-document.md:36`) — *"**Target files.**
-`libs/<fw>/src/lib/<name>/…` ; **spec block in `libs/spec/src/index.ts`**"* — and
+`docs/src/pages/schulung.astro:178` — _"Eigene Spec als eigene Datei neben der Komponente,
+**nicht in den geteilten Master**"_. The skill's own handoff template
+(`skills/design-to-code/references/handoff-document.md:36`) — _"**Target files.**
+`libs/<fw>/src/lib/<name>/…` ; **spec block in `libs/spec/src/index.ts`**"_ — and
 `SKILL.md:106` reads the block there as ground truth. The agenda documents exactly what
-that costs: three *additional* red gates (`check:spec`, `check:variants` `[UNMAPPED]`,
+that costs: three _additional_ red gates (`check:spec`, `check:variants` `[UNMAPPED]`,
 `check:metadata` `[MISSING-REGISTRY]`), measured in the 09-05 pass.
 
 Second half, same shape: the skill's completion path runs `npm run parity:record`
 unconditionally (`SKILL.md:167`), while `schulung.astro:351` explains the participant's
 component is not in `tools/figma/snapshot.json` at all.
 
-This is the most valuable thing the unframed seat produced, because it is a defect *in the
-fix § B1 and § B5 propose*. Wiring the curriculum to `references/handoff-document.md` as
+This is the most valuable thing the unframed seat produced, because it is a defect _in the
+fix § B1 and § B5 propose_. Wiring the curriculum to `references/handoff-document.md` as
 written would hand every participant the instruction the curriculum spends a bullet
 warning them off. The skill needs a workshop branch — own spec file, no `parity:record`
 against a node the snapshot does not hold — before that wiring is safe.
@@ -648,14 +648,14 @@ against a node the snapshot does not hold — before that wiring is safe.
 **G2 (high) — "interaction states are not variants" is contradicted by the acceptance bar,
 by a brief, and by the architect skill that accompanies the same block.**
 
-`workshop/briefs/README.md` — *"**Interaction states are not variants.** hover / focus /
+`workshop/briefs/README.md` — _"**Interaction states are not variants.** hover / focus /
 active / disabled are CSS pseudo-classes and attributes, not entries in the variant
-matrix."* Acceptance item 1, same file: *"The Figma component set carries ≥ 2 variants ×
-**2 states**"*. `workshop/briefs/tagchip.md:71` puts `idle` and `hover` in scope as states.
-And `figma-workspace-architect/references/decision-heuristics.md:86` — under *"Don't use a
-Mode for:"* — *"States like hover/disabled — those are **Variant Properties**"*, with
-`component-design.md:61` agreeing: *"Don't use Boolean Properties to encode mutually
-exclusive states (Default / Hover / Disabled). That's a Variant."*
+matrix."_ Acceptance item 1, same file: _"The Figma component set carries ≥ 2 variants ×
+**2 states**"_. `workshop/briefs/tagchip.md:71` puts `idle` and `hover` in scope as states.
+And `figma-workspace-architect/references/decision-heuristics.md:86` — under _"Don't use a
+Mode for:"_ — _"States like hover/disabled — those are **Variant Properties**"_, with
+`component-design.md:61` agreeing: _"Don't use Boolean Properties to encode mutually
+exclusive states (Default / Hover / Disabled). That's a Variant."_
 
 A participant building a `state=idle|hover` axis is following the architect skill and
 violating the brief; avoiding it leaves them without a way to satisfy the "2 states"
@@ -664,27 +664,27 @@ acceptance item. Both documents are in the room during Day 2 Block 01.
 **G3 (high) — a brief's blocker-severity a11y obligation depends on behaviour the same
 brief declares out of scope.**
 
-`tagchip.md:92` — *"one transition worth drawing even though it is **out of scope to
-build**: removal"* — against `:110`, *"**Chips are removable by keyboard**, not only by
-pointer. *(blocker)*"*, and `README.md:80`, which makes the acceptance bar *"the
-blocker-severity mistakes it names are not present"*.
+`tagchip.md:92` — _"one transition worth drawing even though it is **out of scope to
+build**: removal"_ — against `:110`, _"**Chips are removable by keyboard**, not only by
+pointer. *(blocker)*"_, and `README.md:80`, which makes the acceptance bar _"the
+blocker-severity mistakes it names are not present"_.
 
 **Correction to Codex on its second example:** it pairs this with Toast's stacking
 (`toast.md:73` out of scope vs `:126` "Three visible toasts; queue the rest"). Verified —
-but that one is tagged *(major)*, not *(blocker)*, so it does not collide with the
+but that one is tagged _(major)_, not _(blocker)_, so it does not collide with the
 acceptance bar the way TagChip's does. The pattern is real; the Toast half is weaker than
 stated.
 
 **G4 (high) — four documents name a different token-editing authority, and the homepage
 claims a sync that is manual.**
 
-`index.astro:81` *"Single source of truth for tokens and component frames. Variables sync
-to `tokens.css`."* — `plan/figma.md:190-193` prescribes the sync by hand (*"Copy the new
-value to `libs/angular/…`; Mirror to `libs/react/…`"* — and **omits Vue**) —
-`code-sync.md:191` says *"currently kept in sync manually … changes happen on whichever
-side the contributor is in"* — `artboard-bridge/references/palette-mapping.md:11` names a
-*fourth* file, `libs/create-workspace/…/files/styles/tokens.css`, as *"the token source of
-truth"*.
+`index.astro:81` _"Single source of truth for tokens and component frames. Variables sync
+to `tokens.css`."_ — `plan/figma.md:190-193` prescribes the sync by hand (_"Copy the new
+value to `libs/angular/…`; Mirror to `libs/react/…`"_ — and **omits Vue**) —
+`code-sync.md:191` says _"currently kept in sync manually … changes happen on whichever
+side the contributor is in"_ — `artboard-bridge/references/palette-mapping.md:11` names a
+_fourth_ file, `libs/create-workspace/…/files/styles/tokens.css`, as _"the token source of
+truth"_.
 
 A participant changing one colour cannot tell which file to edit or what propagates. This
 needs an ownership map — visual authority, token-value authority, API authority, generated
@@ -693,7 +693,7 @@ projections — not four documents each calling their own surface the source of 
 **G5 (high) — the kata's copy-paste prompt targets an app the whole cohort does not have.**
 
 `first-component.astro:26,32,38` set the target file to `workshop-{angular,react,vue}/…`;
-`:160` says *"Copy it verbatim"*. The clone caveat exists and is adjacent (`:195-198`), so
+`:160` says _"Copy it verbatim"_. The clone caveat exists and is adjacent (`:195-198`), so
 this is not an undocumented trap — but the cohort is 100 % clone
 (`schulung-2tage-agenda.md:14`), so the **default** prompt is wrong for every participant
 in the room, and the corrective prose does not supply the story file the replacement path
@@ -702,39 +702,39 @@ needs. Weaker than Codex's "critical"; still a default that is wrong for everyon
 **G6 (high) — `plan/design-principles.md` and `plan/figma.md` contradict the
 `atelier-design` skill, and § C1 only caught the naming half.**
 
-`plan/design-principles.md:5` — *"Use `scale(0.97)` for active states"* — against
-`atelier-design/references/brand-guide.md:102` — *"**No shrink**, no inset shadow."*
-`plan/figma.md:61` locks *"concrete `Inter` weights"*; `atelier-design/SKILL.md:18`
+`plan/design-principles.md:5` — _"Use `scale(0.97)` for active states"_ — against
+`atelier-design/references/brand-guide.md:102` — _"**No shrink**, no inset shadow."_
+`plan/figma.md:61` locks _"concrete `Inter` weights"_; `atelier-design/SKILL.md:18`
 specifies Instrument Sans / Instrument Serif / JetBrains Mono.
 
-§ C1 found these two files stale in *naming*. They are also stale in *motion* and
-*typeface*, and the curriculum puts `design-principles.md` into the agent's prompt context
+§ C1 found these two files stale in _naming_. They are also stale in _motion_ and
+_typeface_, and the curriculum puts `design-principles.md` into the agent's prompt context
 (`schulung.astro:192`) while the `atelier-design` skill accompanies the same block — so the
 agent receives both instructions at once.
 
 **G7 (medium) — a privacy claim in the talk that is false as stated.**
 
-`talk/storybook-mcp-talk.md:77` — *"**Local-First:** Dein Source Code verlässt niemals
-deinen Rechner."* — in a bullet list about stdio transport, in a talk about coding with an
+`talk/storybook-mcp-talk.md:77` — _"**Local-First:** Dein Source Code verlässt niemals
+deinen Rechner."_ — in a bullet list about stdio transport, in a talk about coding with an
 LLM. The transport is local; the code still goes to the model. Nobody caught this, this
 pass included. It is the one finding here that is a claim about privacy rather than about
 teaching, and it is made to an audience.
 
 **G8 (medium) — `schulung.astro` states two different Day-1 deliverables.**
 
-`:29` still gives the day's goal as *"eine existierende Atelier-Komponente per Prompt
-verändert"*, while `:112` now says the block composes a Settings Card, *"keine Änderung an
-einer bestehenden Komponenten-API"*. The 09-05 pass's M2 fix landed on the block and not on
+`:29` still gives the day's goal as _"eine existierende Atelier-Komponente per Prompt
+verändert"_, while `:112` now says the block composes a Settings Card, _"keine Änderung an
+einer bestehenden Komponenten-API"_. The 09-05 pass's M2 fix landed on the block and not on
 the day goal, in the same file.
 
 **G9 (medium) — the agenda's success check conflates generator idempotence with a clean
-tree.** `schulung-2tage-agenda.md:94` still equates *"`npm run sync:generated` läuft ohne
-Diff durch"* with *"`git status --short` danach leer"* — a participant's newly authored,
+tree.** `schulung-2tage-agenda.md:94` still equates _"`npm run sync:generated` läuft ohne
+Diff durch"_ with _"`git status --short` danach leer"_ — a participant's newly authored,
 uncommitted files also appear there. The 09-05 pass fixed exactly this in
 `schulung.astro` (its B3) and left the agenda copy. Same one-file-fixed pattern as G8.
 
 **G10 (medium) — the CLI credential is a stated prerequisite with no participant-facing
-path.** `schulung.astro:56` requires *"Claude Code CLI eingeloggt mit eigenem API-Key"*;
+path.** `schulung.astro:56` requires _"Claude Code CLI eingeloggt mit eigenem API-Key"_;
 `workshop.astro:28` installs the CLI, runs `claude --version` and moves on to the Figma
 token. Same class as § C2 (draft rights), different credential: stated, unverified until it
 fails.
@@ -749,8 +749,8 @@ fails.
   rather than a fix.
 - **No participant-facing manual Figma authoring exercise** (Codex #4): the walkthrough
   teaches inspection (`figma.astro:302`), the architect teaches automated construction
-  (`build-workflow.md:81`), and Day 2 Block 01 budgets *"~45m manuelles Design im
-  Figma-UI"* for an audience declared to have *"wenig Erfahrung mit Figma"*. Sharpens § C's
+  (`build-workflow.md:81`), and Day 2 Block 01 budgets _"~45m manuelles Design im
+  Figma-UI"_ for an audience declared to have _"wenig Erfahrung mit Figma"_. Sharpens § C's
   timing risk rather than adding a new defect.
 - **"Every gate is keyed on one of exactly four identities"** vs `check:box-sizing`: the
   line Codex cites is a findings record, not a gate-identity list. `plausibility A9`
@@ -760,11 +760,11 @@ fails.
 
 Desktop Bridge setup and diagnosis (`figma-token.astro:182`, `troubleshooting.astro:63`);
 the token tiers and the deliberate absence of a component-tier CSS twin
-(`tokens.astro:149`); the behaviour sections of the briefs (Toast's *"resumes — it does not
-restart"*, Avatar's fallback algorithm); the handoff document's split between mechanical
+(`tokens.astro:149`); the behaviour sections of the briefs (Toast's _"resumes — it does not
+restart"_, Avatar's fallback algorithm); the handoff document's split between mechanical
 provenance and author-written decisions; `parity-codespec.md`'s honesty about what a parity
 record does not store; the palette-gate demonstration; and the three-source a11y example
-(*"Figma said it was perfect; axe said it was broken; the spec told us why"*).
+(_"Figma said it was perfect; axe said it was broken; the spec told us why"_).
 
 ## Fixed in the Gegenprobe pass (2026-09-09)
 
@@ -783,12 +783,12 @@ and a repo-case twin added so `parity:record` stays covered (7 fixtures, `test-s
 exit 0, re-verified independently). `schulung.astro:178` and `agenda:115` now describe
 skill behaviour instead of warning the room about the skill.
 
-**G2 + G3 → ADR-0114.** The briefs' absolute *"interaction states are not variants"* is
+**G2 + G3 → ADR-0114.** The briefs' absolute _"interaction states are not variants"_ is
 replaced by the two-surface rule: Figma has exactly one primitive for a mutually exclusive
-option, so a master that must *draw* a state has no choice but an axis — and Atelier's own
+option, so a master that must _draw_ a state has no choice but an axis — and Atelier's own
 masters use one routinely — while no `Atl*Variant` union in `libs/spec/src/index.ts` ever
 holds a state. The `variant-explosion-from-states` warning survives as what it actually is:
-against *crossing* the axis, not against having one. `AtlButton`'s master marks the
+against _crossing_ the axis, not against having one. `AtlButton`'s master marks the
 boundary itself — every property line reads "→ maps to AtlButtonSpec.X" except `state`,
 which has no arrow. a11y items in all four briefs now carry **(this block)** /
 **(full component)**, so a blocker can no longer depend on behaviour the same brief puts
@@ -805,7 +805,7 @@ description. Recorded as a dated correction inside ADR-0114.
 
 **G4 → ADR-0115.** "Source of truth" for tokens is five axes, not one file, established
 from the scripts rather than from the prose: visual decisions in the Figma masters, token
-*values* in `libs/create-workspace/…/files/styles/tokens.css`, API in `libs/spec`,
+_values_ in `libs/create-workspace/…/files/styles/tokens.css`, API in `libs/spec`,
 generated projections gated by `check:tokens` / `check:artboard-palette`, CSS usage
 discipline by `check:css-tokens` / `check:token-tiers`. The homepage claimed a
 Figma → `tokens.css` sync that runs the other way; corrected. `plan/figma.md`'s workflow
@@ -816,8 +816,8 @@ skill asset included), not hand-copied.
 One instruction of mine turned out to be wrong and the agent overrode it, correctly and
 visibly: `code-sync.md` was briefed as "already correct, cross-reference only", but its
 repo notes predate ADR-0030 — they named the superseded `UI Tokens` collection and called
-the sync bidirectional by convention, where ADR-0030 § 1 says *"Code is the source of
-truth … Editing the collection by hand is drift by definition."* Corrected rather than
+the sync bidirectional by convention, where ADR-0030 § 1 says _"Code is the source of
+truth … Editing the collection by hand is drift by definition."_ Corrected rather than
 cross-referenced, and called out inside ADR-0115's Decision.
 
 **G6.** `plan/design-principles.md`'s press rule was not merely citing a stale value —
@@ -830,8 +830,8 @@ staleness banner naming its stale component names, node-id tables, counts and fo
 families, and pointing at the live sources for each; the full `Llm*` → `Atl*` rewrite
 stays a separate tracked job.
 
-**G7.** `talk/storybook-mcp-talk.md:77` no longer claims *"Dein Source Code verlässt
-niemals deinen Rechner."* It now separates transport from context: MCP runs locally, the
+**G7.** `talk/storybook-mcp-talk.md:77` no longer claims _"Dein Source Code verlässt
+niemals deinen Rechner."_ It now separates transport from context: MCP runs locally, the
 code still goes to the model.
 
 ## Second fix round (2026-09-09)
@@ -850,7 +850,7 @@ replaced.** `AtlToggle`'s `variant` prop and `AtlDialog`'s `closeOnEscape` were 
 — re-verified here against `AtlToggleSpec` (`checked` / `onCheckedChange` only) and
 `AtlDialogSpec` (`open` / `onOpenChange` / `closeOnBackdrop` / `size`). Literal token
 values went too, since the brand moved blue → teal and the radius scale changed; the token
-*names* stayed. In a file that becomes generated code, a plausible-looking wrong example is
+_names_ stayed. In a file that becomes generated code, a plausible-looking wrong example is
 the whole risk, and the brief made cutting the correct answer.
 
 The ADR's rule is per-sentence, not per-document: architecture, conventions, behaviour and
@@ -871,17 +871,17 @@ The handoff document is named on the English learner path for the first time
 `claude-design.astro`'s absolutes were **narrowed, not dropped** — the page's fence
 argument survives intact, which was the constraint:
 
-- `:188` *"**nothing** downstream can read it, name it, or diff against it"* → *"**no
-  gate** downstream…"*. One word; the claim becomes true and the argument is unchanged.
+- `:188` _"**nothing** downstream can read it, name it, or diff against it"_ → _"**no
+  gate** downstream…"_. One word; the claim becomes true and the argument is unchanged.
 - The diagram caption drops "no machine-readable handoff exists in either direction" for
-  *"no gate compares an artboard against anything. What crosses now is skill-mediated, not
-  machine-readable."*
+  _"no gate compares an artboard against anything. What crosses now is skill-mediated, not
+  machine-readable."_
 - Step 5 no longer says the tooling does not exist. It says Publish ran once and
   **correctly refused** — the parity record was DRIFT, so it named the commits and wrote
-  nothing, *"the same behaviour this page's fence argues for"*, where the skill-less
+  nothing, _"the same behaviour this page's fence argues for"_, where the skill-less
   baseline published unverified code. The negation became the page's best illustration of
   its own thesis.
-- `:106-109` narrowed to Figma-*native* export; `:111-113` gained the clause separating a
+- `:106-109` narrowed to Figma-_native_ export; `:111-113` gained the clause separating a
   forbidden direct artboard import from the supported canvas-informs-a-built-master path;
   the artboard/sheet equivalence and the two senses of "handoff" (§ B7) are stated.
 
@@ -922,7 +922,7 @@ myself, since that file was owned by another agent at the time.
 - **Part of B1 is a decision, not an oversight, and this review must not blur that.**
   Both new skills sitting outside `/.well-known/agent-skills/` is deliberate and recorded
   (`UNDISTRIBUTED_SKILLS` in `tools/scripts/lib/allowlists.js`, `check:skill-discovery`
-  exits 0 saying so; `plausibility C10`). What B1 argues is the separate, *human-facing*
+  exits 0 saying so; `plausibility C10`). What B1 argues is the separate, _human-facing_
   question C10 named and left open: the curriculum and `/agent-skills` are silent about
   work that changes what the curriculum teaches. That is an editorial call for the owner,
   not drift for an agent to fix unasked.

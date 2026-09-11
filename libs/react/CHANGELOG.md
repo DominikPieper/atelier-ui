@@ -396,20 +396,20 @@ This was a version bump only for react to align it with other projects, there we
 
 ### 🚀 Features
 
-- ⚠️  **docs:** rename Llm prefix to Atl across docs, generated artifacts, and tooling docs ([965787d](https://github.com/DominikPieper/atelier-ui/commit/965787d))
-- ⚠️  **react:** rename Llm prefix to Atl across the React library ([ae4ea31](https://github.com/DominikPieper/atelier-ui/commit/ae4ea31))
-- ⚠️  **spec:** rename Llm prefix to Atl in spec contract ([6860cc4](https://github.com/DominikPieper/atelier-ui/commit/6860cc4))
+- ⚠️ **docs:** rename Llm prefix to Atl across docs, generated artifacts, and tooling docs ([965787d](https://github.com/DominikPieper/atelier-ui/commit/965787d))
+- ⚠️ **react:** rename Llm prefix to Atl across the React library ([ae4ea31](https://github.com/DominikPieper/atelier-ui/commit/ae4ea31))
+- ⚠️ **spec:** rename Llm prefix to Atl in spec contract ([6860cc4](https://github.com/DominikPieper/atelier-ui/commit/6860cc4))
 
-### ⚠️  Breaking Changes
+### ⚠️ Breaking Changes
 
-- **docs:** rename Llm prefix to Atl across docs, generated artifacts, and tooling docs  ([965787d](https://github.com/DominikPieper/atelier-ui/commit/965787d))
-- **react:** rename Llm prefix to Atl across the React library  ([ae4ea31](https://github.com/DominikPieper/atelier-ui/commit/ae4ea31))
+- **docs:** rename Llm prefix to Atl across docs, generated artifacts, and tooling docs ([965787d](https://github.com/DominikPieper/atelier-ui/commit/965787d))
+- **react:** rename Llm prefix to Atl across the React library ([ae4ea31](https://github.com/DominikPieper/atelier-ui/commit/ae4ea31))
   every React component, prop type, and CSS class
   renamed Llm/llm- -> Atl/atl- (ADR-0029), including the mid-word
   Toast case (useLlmToast -> useAtlToast, LlmToastProvider ->
   AtlToastProvider, LlmToastContainer -> AtlToastContainer).
   nx lint/test/build react all green (392/392 tests).
-- **spec:** rename Llm prefix to Atl in spec contract  ([6860cc4](https://github.com/DominikPieper/atelier-ui/commit/6860cc4))
+- **spec:** rename Llm prefix to Atl in spec contract ([6860cc4](https://github.com/DominikPieper/atelier-ui/commit/6860cc4))
   every exported spec type/interface renamed
   Llm* -> Atl* (ADR-0029). Framework libs will fail to typecheck
   until each is renamed in turn (next commits) — expected mid-migration.

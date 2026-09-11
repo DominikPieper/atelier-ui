@@ -13,11 +13,13 @@ export const metadata: ComponentMetadata = {
   antiPatterns: [
     {
       pattern: 'Reserving the layout slot for content that has not loaded yet.',
-      useInstead: 'AtlSkeleton — sized to the missing content, not a generic bar.',
+      useInstead:
+        'AtlSkeleton — sized to the missing content, not a generic bar.',
     },
     {
       pattern: 'Acknowledging a momentary action (saved, copied).',
-      useInstead: 'AtlToast — transient confirmation belongs in a live region, not a progress bar.',
+      useInstead:
+        'AtlToast — transient confirmation belongs in a live region, not a progress bar.',
     },
   ],
   relatedComponents: ['AtlSkeletonSpec', 'AtlToastSpec'],

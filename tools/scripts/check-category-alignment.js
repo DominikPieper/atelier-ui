@@ -83,11 +83,19 @@ let componentDocs;
 try {
   componentDocs = parseExportedVars(DOCS_FILE).componentDocs;
 } catch (err) {
-  console.error(`✗ [DOCS-PARSE] ${path.relative(ROOT, DOCS_FILE)}: ${err.message}`);
+  console.error(
+    `✗ [DOCS-PARSE] ${path.relative(ROOT, DOCS_FILE)}: ${err.message}`,
+  );
   process.exit(1);
 }
-if (!componentDocs || typeof componentDocs !== 'object' || Object.keys(componentDocs).length === 0) {
-  console.error(`✗ [DOCS-PARSE] ${path.relative(ROOT, DOCS_FILE)} produced no componentDocs entries (static evaluator returned nothing).`);
+if (
+  !componentDocs ||
+  typeof componentDocs !== 'object' ||
+  Object.keys(componentDocs).length === 0
+) {
+  console.error(
+    `✗ [DOCS-PARSE] ${path.relative(ROOT, DOCS_FILE)} produced no componentDocs entries (static evaluator returned nothing).`,
+  );
   process.exit(1);
 }
 
@@ -99,7 +107,7 @@ if (!fs.existsSync(SNAPSHOT_FILE)) {
   console.error(
     `✗ [SNAPSHOT] ${path.relative(ROOT, SNAPSHOT_FILE)} not found.\n` +
       `This gate runs offline against a committed snapshot. Generate it with a connected ` +
-      `Figma Desktop Bridge:  npm run figma:snapshot`
+      `Figma Desktop Bridge:  npm run figma:snapshot`,
   );
   process.exit(1);
 }
@@ -107,11 +115,19 @@ let snapshot;
 try {
   snapshot = JSON.parse(fs.readFileSync(SNAPSHOT_FILE, 'utf8'));
 } catch (err) {
-  console.error(`✗ [SNAPSHOT] ${path.relative(ROOT, SNAPSHOT_FILE)} is not valid JSON: ${err.message}`);
+  console.error(
+    `✗ [SNAPSHOT] ${path.relative(ROOT, SNAPSHOT_FILE)} is not valid JSON: ${err.message}`,
+  );
   process.exit(1);
 }
-if (!snapshot || !Array.isArray(snapshot.components) || snapshot.components.length === 0) {
-  console.error(`✗ [SNAPSHOT] ${path.relative(ROOT, SNAPSHOT_FILE)} has no components. Re-run npm run figma:snapshot.`);
+if (
+  !snapshot ||
+  !Array.isArray(snapshot.components) ||
+  snapshot.components.length === 0
+) {
+  console.error(
+    `✗ [SNAPSHOT] ${path.relative(ROOT, SNAPSHOT_FILE)} has no components. Re-run npm run figma:snapshot.`,
+  );
   process.exit(1);
 }
 
@@ -167,7 +183,10 @@ for (const id of ids) {
   const doc = componentDocs[id];
   const docsCat = doc && doc.category;
   if (!docsCat) {
-    fail('DOCS-CATEGORY', `${id}: componentDocs entry has no 'category' field.`);
+    fail(
+      'DOCS-CATEGORY',
+      `${id}: componentDocs entry has no 'category' field.`,
+    );
     continue;
   }
 
@@ -178,11 +197,13 @@ for (const id of ids) {
       'SELECTOR-UNRESOLVED',
       `${id}: selector "${doc.selector}" carries no Atl* token this gate can resolve to a Figma master ` +
         `name. Add it to SELECTOR_OVERRIDES in check-category-alignment.js if it is a legitimate ` +
-        `non-Atl* selector (an attribute selector, an imperative-API description, ...).`
+        `non-Atl* selector (an attribute selector, an imperative-API description, ...).`,
     );
   } else if (!figmaCategoryBySelector.has(primary)) {
     figmaSkipped++;
-    console.log(`  [skip:figma] ${id}: no Figma master named "${primary}" in the snapshot — nothing to compare.`);
+    console.log(
+      `  [skip:figma] ${id}: no Figma master named "${primary}" in the snapshot — nothing to compare.`,
+    );
   } else {
     figmaChecked++;
     const figmaCat = figmaCategoryBySelector.get(primary);
@@ -190,7 +211,9 @@ for (const id of ids) {
       const exemption = allowed(id, 'figma');
       if (exemption) {
         if (exemption.kind === 'gap') {
-          console.warn(`  ⚠ [exempt:figma:gap] ${id}: components.ts says '${docsCat}', Figma's ${primary} master says '${figmaCat}' — ${exemption.reason}`);
+          console.warn(
+            `  ⚠ [exempt:figma:gap] ${id}: components.ts says '${docsCat}', Figma's ${primary} master says '${figmaCat}' — ${exemption.reason}`,
+          );
         }
         // kind 'design' is a closed question: silent.
       } else {
@@ -199,7 +222,7 @@ for (const id of ids) {
           `${id}: components.ts says category '${docsCat}', but its Figma master "${figmaCat}/${primary}" ` +
             `sits in the '${figmaCat}' section. Rename the category in docs/src/data/components.ts, fix the ` +
             `Figma master's section, or — if the split is intentional and unresolved — add ` +
-            `'${id}:figma' to CATEGORY_ALIGNMENT_EXEMPT in tools/scripts/lib/allowlists.js with a reason.`
+            `'${id}:figma' to CATEGORY_ALIGNMENT_EXEMPT in tools/scripts/lib/allowlists.js with a reason.`,
         );
       }
     }
@@ -219,22 +242,28 @@ for (const id of ids) {
   }
   if (storyCats.size === 0) {
     storySkipped++;
-    console.log(`  [skip:story] ${id}: no Storybook story title found in any framework — nothing to compare.`);
+    console.log(
+      `  [skip:story] ${id}: no Storybook story title found in any framework — nothing to compare.`,
+    );
   } else {
     storyChecked++;
-    const mismatches = [...storyCats].filter((entry) => !entry.endsWith(`:${docsCat}`));
+    const mismatches = [...storyCats].filter(
+      (entry) => !entry.endsWith(`:${docsCat}`),
+    );
     if (mismatches.length > 0) {
       const exemption = allowed(id, 'story');
       if (exemption) {
         if (exemption.kind === 'gap') {
-          console.warn(`  ⚠ [exempt:story:gap] ${id}: components.ts says '${docsCat}', story title(s) disagree (${mismatches.join(', ')}) — ${exemption.reason}`);
+          console.warn(
+            `  ⚠ [exempt:story:gap] ${id}: components.ts says '${docsCat}', story title(s) disagree (${mismatches.join(', ')}) — ${exemption.reason}`,
+          );
         }
       } else {
         fail(
           'STORY-CATEGORY',
           `${id}: components.ts says category '${docsCat}', but its Storybook story title says otherwise: ` +
             `${mismatches.join(', ')}. Rename the category in docs/src/data/components.ts, or fix the story's ` +
-            `\`title:\`.`
+            `\`title:\`.`,
         );
       }
     }
@@ -246,12 +275,14 @@ for (const id of ids) {
 // uses for its own allowlist (ADR-0068's point: an excuse for a defect that no
 // longer exists reads as one still being excused). Non-blocking, like there.
 // ---------------------------------------------------------------------------
-const staleExemptions = [...CATEGORY_ALIGNMENT_EXEMPT.keys()].filter((k) => !exemptionsUsed.has(k));
+const staleExemptions = [...CATEGORY_ALIGNMENT_EXEMPT.keys()].filter(
+  (k) => !exemptionsUsed.has(k),
+);
 if (staleExemptions.length > 0) {
   console.warn(
     `⚠ [STALE-EXEMPTION] ${staleExemptions.length} allowlist entr${staleExemptions.length > 1 ? 'ies' : 'y'} ` +
       `suppressed nothing this run: ${staleExemptions.join(', ')}. Either the mismatch was fixed — delete the ` +
-      `entry — or the category it names changed shape and the key no longer matches anything.`
+      `entry — or the category it names changed shape and the key no longer matches anything.`,
   );
 }
 
@@ -267,7 +298,7 @@ if (figmaChecked === 0 && storyChecked === 0) {
     'ALL-SKIPPED',
     `Every comparison was skipped (${figmaSkipped} Figma, ${storySkipped} story, 0 actually checked) across ` +
       `${ids.length} component(s). That means this gate checked nothing real this run — investigate rather ` +
-      `than trust the "0 issues" a naive read of the output would suggest.`
+      `than trust the "0 issues" a naive read of the output would suggest.`,
   );
 }
 
@@ -280,13 +311,13 @@ if (errors.length > 0) {
   console.error(
     `\n${errors.length} category-alignment issue(s) found (${figmaChecked} Figma comparison(s), ` +
       `${storyChecked} Storybook comparison(s), ${figmaSkipped + storySkipped} skipped: ${figmaSkipped} Figma, ` +
-      `${storySkipped} story).`
+      `${storySkipped} story).`,
   );
   process.exit(1);
 } else {
   console.log(
     `\n✓ ${ids.length} component(s)' categories agree with their Figma master and Storybook story title ` +
       `(${figmaChecked} Figma comparison(s), ${storyChecked} Storybook comparison(s), ` +
-      `${figmaSkipped + storySkipped} skipped: ${figmaSkipped} Figma, ${storySkipped} story).`
+      `${figmaSkipped + storySkipped} skipped: ${figmaSkipped} Figma, ${storySkipped} story).`,
   );
 }

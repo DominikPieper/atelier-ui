@@ -68,7 +68,10 @@
 
 const fs = require('fs');
 const path = require('path');
-const { COMPONENT_COUNT_EXEMPT, componentCountKey } = require('./lib/allowlists');
+const {
+  COMPONENT_COUNT_EXEMPT,
+  componentCountKey,
+} = require('./lib/allowlists');
 
 const ROOT = path.resolve(__dirname, '../..');
 
@@ -81,7 +84,8 @@ const ROOT = path.resolve(__dirname, '../..');
  * directly followed by the word "component" ("Angular 22 component library",
  * "React 19 component library", "Vue 3 component library").
  */
-const COUNT_RE = /(?<!Angular )(?<!React )(?<!Vue )\b\d{1,4}\s+(?:[a-zA-Z-]+\s+){0,2}components?\b/gi;
+const COUNT_RE =
+  /(?<!Angular )(?<!React )(?<!Vue )\b\d{1,4}\s+(?:[a-zA-Z-]+\s+){0,2}components?\b/gi;
 
 /** Participant-facing surfaces this gate scans. See the header comment above
  *  for what is deliberately excluded and why. */
@@ -168,7 +172,7 @@ for (const file of scanFiles()) {
         `        ${JSON.stringify(rel)},\n` +
         `        ${JSON.stringify(prevLine.trim())},\n` +
         `        ${JSON.stringify(line.trim())},\n` +
-        '      )'
+        '      )',
     );
   });
 }
@@ -181,7 +185,7 @@ for (const key of COMPONENT_COUNT_EXEMPT.keys()) {
     errors.push(
       `[DEAD-ALLOWLIST] COMPONENT_COUNT_EXEMPT has an entry that matched nothing this run:\n${key}\n` +
         'The citation this entry named no longer exists at that exact text — fix the (now stale) key, or ' +
-        'remove the entry, in tools/scripts/lib/allowlists.js.'
+        'remove the entry, in tools/scripts/lib/allowlists.js.',
     );
   }
 }
@@ -193,6 +197,6 @@ if (errors.length > 0) {
 } else {
   console.log(
     `✓ No bare hand-typed component counts outside COMPONENT_COUNT_EXEMPT ` +
-      `(${COMPONENT_COUNT_EXEMPT.size} allowlisted, all in use)`
+      `(${COMPONENT_COUNT_EXEMPT.size} allowlisted, all in use)`,
   );
 }

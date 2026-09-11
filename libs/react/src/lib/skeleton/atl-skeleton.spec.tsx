@@ -13,7 +13,7 @@ describe('AtlSkeleton', () => {
     (variant) => {
       const { container } = render(<AtlSkeleton variant={variant} />);
       expect(container.firstChild).toHaveClass(`variant-${variant}`);
-    }
+    },
   );
 
   covers('skeleton', 'custom-size')('applies custom width', () => {
@@ -22,7 +22,9 @@ describe('AtlSkeleton', () => {
   });
 
   it('applies custom height', () => {
-    const { container } = render(<AtlSkeleton variant="rectangular" height="200px" />);
+    const { container } = render(
+      <AtlSkeleton variant="rectangular" height="200px" />,
+    );
     expect((container.firstChild as HTMLElement).style.height).toBe('200px');
   });
 
@@ -36,13 +38,21 @@ describe('AtlSkeleton', () => {
     expect(container.firstChild).toHaveClass('is-animated');
   });
 
-  covers('skeleton', 'not-animated')('does not apply is-animated class when animated is false', () => {
-    const { container } = render(<AtlSkeleton animated={false} />);
-    expect(container.firstChild).not.toHaveClass('is-animated');
-  });
+  covers('skeleton', 'not-animated')(
+    'does not apply is-animated class when animated is false',
+    () => {
+      const { container } = render(<AtlSkeleton animated={false} />);
+      expect(container.firstChild).not.toHaveClass('is-animated');
+    },
+  );
 
-  covers('skeleton', 'circular-height')('sets circular height equal to width when no height provided', () => {
-    const { container } = render(<AtlSkeleton variant="circular" width="48px" />);
-    expect((container.firstChild as HTMLElement).style.height).toBe('48px');
-  });
+  covers('skeleton', 'circular-height')(
+    'sets circular height equal to width when no height provided',
+    () => {
+      const { container } = render(
+        <AtlSkeleton variant="circular" width="48px" />,
+      );
+      expect((container.firstChild as HTMLElement).style.height).toBe('48px');
+    },
+  );
 });

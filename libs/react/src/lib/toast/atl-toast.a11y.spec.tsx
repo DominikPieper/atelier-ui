@@ -23,7 +23,11 @@ const SNAP = resolve(ROOT, `tools/parity/a11y/atl-toast.${FW}.json`);
 function Probe() {
   const { show } = useAtlToast();
   useEffect(() => {
-    show('Saved successfully', { variant: 'success', dismissible: true, duration: 0 });
+    show('Saved successfully', {
+      variant: 'success',
+      dismissible: true,
+      duration: 0,
+    });
   }, [show]);
   return null;
 }
@@ -33,7 +37,7 @@ async function capture() {
     <AtlToastProvider>
       <Probe />
       <AtlToastContainer />
-    </AtlToastProvider>
+    </AtlToastProvider>,
   );
   await screen.findByText('Saved successfully');
   const tree = a11yTree(document.body);

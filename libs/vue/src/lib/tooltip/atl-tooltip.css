@@ -3,14 +3,8 @@
  * same file as the sizes it governs and no consuming app has to supply one.
  * Gated by check:box-sizing; the resulting boxes are measured by check:geometry.
  * See ADR-0043. */
-:is(
-  .atl-tooltip,
-  .atl-tooltip-wrapper
-),
-:is(
-  .atl-tooltip,
-  .atl-tooltip-wrapper
-) * {
+:is(.atl-tooltip, .atl-tooltip-wrapper),
+:is(.atl-tooltip, .atl-tooltip-wrapper) * {
   box-sizing: border-box;
 }
 
@@ -44,7 +38,8 @@
   white-space: nowrap;
 
   /* Entry animation */
-  animation: atl-tooltip-enter var(--ui-duration-fast) var(--ui-ease-out) forwards;
+  animation: atl-tooltip-enter var(--ui-duration-fast) var(--ui-ease-out)
+    forwards;
 }
 
 /* Positioning */
@@ -86,7 +81,8 @@
 /* Left/right don't need translateX in animation */
 .atl-tooltip.position-left,
 .atl-tooltip.position-right {
-  animation: atl-tooltip-enter-side var(--ui-duration-fast) var(--ui-ease-out) forwards;
+  animation: atl-tooltip-enter-side var(--ui-duration-fast) var(--ui-ease-out)
+    forwards;
 }
 
 @keyframes atl-tooltip-enter-side {

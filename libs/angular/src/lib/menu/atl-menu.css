@@ -29,7 +29,8 @@
   overflow: hidden;
 
   /* Entry animation */
-  animation: atl-menu-enter var(--ui-duration-normal) var(--ui-ease-out) forwards;
+  animation: atl-menu-enter var(--ui-duration-normal) var(--ui-ease-out)
+    forwards;
 }
 
 .atl-menu.variant-compact {
@@ -43,7 +44,13 @@
    * text metrics, which is how three controls measured right on one machine and
    * wrong on another (ADR-0048). */
   line-height: var(--ui-line-height-tight);
-  padding: calc((var(--ui-control-height-sm) - var(--ui-line-height-tight) * var(--ui-font-size-sm)) / 2)
+  padding: calc(
+      (
+          var(--ui-control-height-sm) - var(--ui-line-height-tight) *
+            var(--ui-font-size-sm)
+        ) /
+        2
+    )
     var(--ui-spacing-3);
 }
 

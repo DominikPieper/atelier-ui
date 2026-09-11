@@ -112,7 +112,7 @@ exemption in use. The Decision's closing note pointing at `tasks/todo.md` for a 
 item is likewise spent.
 
 More importantly, resolving it exposed a limit in this record's own rule. The tie-break
-counts record-keepers and is silent on which side is *expensive* to move; `AGENTS.md`
+counts record-keepers and is silent on which side is _expensive_ to move; `AGENTS.md`
 independently names the Figma Components page the structural source of truth and points
 the other way. Both rules applied to the same case for the first time and disagreed. The
 resolution, recorded in ADR-0120: **when they disagree, the side carrying no downstream

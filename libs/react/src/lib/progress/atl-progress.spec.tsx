@@ -5,7 +5,11 @@ import { covers } from '../../testing/behavior';
 describe('AtlProgress', () => {
   it('renders with default props', () => {
     const { container } = render(<AtlProgress />);
-    expect(container.firstChild).toHaveClass('atl-progress', 'variant-default', 'size-md');
+    expect(container.firstChild).toHaveClass(
+      'atl-progress',
+      'variant-default',
+      'size-md',
+    );
   });
 
   it('has role="progressbar"', () => {
@@ -13,10 +17,13 @@ describe('AtlProgress', () => {
     expect(container.firstChild).toHaveAttribute('role', 'progressbar');
   });
 
-  covers('progress', 'aria-value')('sets aria-valuenow to the clamped value', () => {
-    const { container } = render(<AtlProgress value={75} />);
-    expect(container.firstChild).toHaveAttribute('aria-valuenow', '75');
-  });
+  covers('progress', 'aria-value')(
+    'sets aria-valuenow to the clamped value',
+    () => {
+      const { container } = render(<AtlProgress value={75} />);
+      expect(container.firstChild).toHaveAttribute('aria-valuenow', '75');
+    },
+  );
 
   covers('progress', 'clamp')('clamps value to max', () => {
     const { container } = render(<AtlProgress value={200} max={100} />);
@@ -33,7 +40,7 @@ describe('AtlProgress', () => {
     (variant) => {
       const { container } = render(<AtlProgress variant={variant} />);
       expect(container.firstChild).toHaveClass(`variant-${variant}`);
-    }
+    },
   );
 
   it.each(['sm', 'md', 'lg'] as const)('applies size-%s class', (size) => {
@@ -46,10 +53,13 @@ describe('AtlProgress', () => {
     expect(container.firstChild).toHaveClass('is-indeterminate');
   });
 
-  covers('progress', 'indeterminate-omits-valuenow')('omits aria-valuenow when indeterminate', () => {
-    const { container } = render(<AtlProgress indeterminate value={50} />);
-    expect(container.firstChild).not.toHaveAttribute('aria-valuenow');
-  });
+  covers('progress', 'indeterminate-omits-valuenow')(
+    'omits aria-valuenow when indeterminate',
+    () => {
+      const { container } = render(<AtlProgress indeterminate value={50} />);
+      expect(container.firstChild).not.toHaveAttribute('aria-valuenow');
+    },
+  );
 
   it('renders the fill element', () => {
     const { container } = render(<AtlProgress value={60} />);
