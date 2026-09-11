@@ -42,6 +42,7 @@ import {
   makeReactDocgenTools,
   normalizeReactDocgen,
   findExternalPackageDir,
+  errorMessage,
 } from './lib/docgen.mjs';
 
 // ts-eval.js is always required relative to THIS script's own directory
@@ -87,6 +88,7 @@ const UNRESOLVABLE = Symbol('unresolvable');
 
 const TAG_LEVEL = {
   'CONTRACT-MISSING': 'error',
+  'CONTRACT-DUPLICATE': 'error',
   'CONTRACT-ORPHAN': 'warning',
   'CONTRACT-NODE': 'error',
   AXIS: 'error',
@@ -99,9 +101,11 @@ const TAG_LEVEL = {
   COVERAGE: 'error',
   'COVERAGE-BOOL': 'warning',
   'DOCGEN-EMPTY': 'error',
+  'DOCGEN-FAILED': 'error',
   'UNRESOLVED-ARGS': 'warning',
   UNMIRRORED: 'warning',
   'NO-STORY-META': 'warning',
+  ROSTER: 'error',
   // 'CONTRACT-IMPORT' is set below, once CONTRACTS_DIR is resolved — its
   // severity (error vs. warning) depends on whether this tree ships
   // `docs-block.ts` beside its contracts (see the assignment near CONTRACTS_DIR).
@@ -244,7 +248,14 @@ const contractFiles = fs
   .filter((f) => f.endsWith('.contract.ts'))
   .sort();
 
-/** selector -> contract object (plain literal, per ts-eval's static read) */
+/** selector -> contract object (plain literal, per ts-eval's static read).
+ * `.set(contract.component, …)` below silently keeps only the LAST of two
+ * contract files declaring the same `component:` — the same class of bug
+ * allowlists.js's own SCAFFOLD_PORT_EXEMPT collision guard exists to stop
+ * (see that file's comment), just against a hand-maintained Map instead of a
+ * generated one. Detected here, before the overwrite, and reported as
+ * [CONTRACT-DUPLICATE] naming both files — a silently dropped contract is
+ * exactly the kind of measurement gap this whole change exists to close. */
 const contractsBySelector = new Map();
 for (const file of contractFiles) {
   const full = path.join(CONTRACTS_DIR, file);
@@ -255,6 +266,14 @@ for (const file of contractFiles) {
       `${file}: 'contract' did not evaluate to a static object literal — skipped.`,
     );
     continue;
+  }
+  const existing = contractsBySelector.get(contract.component);
+  if (existing) {
+    report(
+      'CONTRACT-DUPLICATE',
+      null,
+      `${contract.component}: declared by both ${existing.__file} and ${file} — only ${file} is kept, ${existing.__file}'s contract is silently dropped`,
+    );
   }
   contractsBySelector.set(contract.component, { ...contract, __file: file });
 }
@@ -1304,6 +1323,18 @@ async function runFramework(fw) {
   const reachedMeta = new Set();
   let noComponentCount = 0;
   let externalCount = 0;
+  let docgenFailedCount = 0;
+
+  // Snapshotted BEFORE the story loop (rather than after it, where this used
+  // to sit) so the per-framework `warnings:`/`errors:` delta printed below
+  // covers EVERYTHING this framework's run reports — the story loop's own
+  // CONTRACT-IMPORT and [DOCGEN-FAILED] findings, and the [ROSTER] check
+  // right after it, not just the later per-component / NO-STORY-META passes.
+  // A snapshot taken after the loop silently excluded exactly the findings
+  // this change exists to surface — the summary line would print `errors: 0`
+  // for a framework mid docgen-blackout while the run total said otherwise.
+  const errorsBefore = findings.filter((f) => f.level === 'error').length;
+  const warningsBefore = findings.filter((f) => f.level === 'warning').length;
 
   for (const storyFile of storyFiles) {
     const source = fs.readFileSync(storyFile, 'utf-8');
@@ -1348,6 +1379,7 @@ async function runFramework(fw) {
     }
 
     let docgenResult = null;
+    let docgenFailed = false;
     const contextDir = path.dirname(storyFile);
 
     if (fw === 'react') {
@@ -1375,15 +1407,20 @@ async function runFramework(fw) {
               };
             }
           } catch (e) {
-            console.error(
-              `  ! ${path.relative(ROOT, storyFile)}: react-docgen failed (${e.message})`,
+            docgenFailed = true;
+            docgenFailedCount++;
+            report(
+              'DOCGEN-FAILED',
+              fw,
+              `${path.relative(ROOT, storyFile)}: react-docgen failed — ${errorMessage(e)}`,
             );
           }
         }
       }
     } else {
-      const payload = await workerDocgen(storyFile, csf);
-      if (payload) {
+      const result = await workerDocgen(storyFile, csf);
+      if (result.ok) {
+        const payload = result.payload;
         const normalized =
           fw === 'angular' ? normalizeAngular(payload) : normalizeVue(payload);
         docgenResult = {
@@ -1393,11 +1430,26 @@ async function runFramework(fw) {
           slots: normalized.slots,
         };
         registerSibling(fw, payload.name, normalized.props);
+      } else {
+        docgenFailed = true;
+        docgenFailedCount++;
+        report(
+          'DOCGEN-FAILED',
+          fw,
+          `${path.relative(ROOT, storyFile)}: ${fw} docgen failed — ${result.reason}`,
+        );
       }
     }
 
     if (!docgenResult) {
-      noComponentCount++;
+      // A docgen FAILURE (provider threw / empty payload / payload.error, or
+      // react-docgen threw — reported as [DOCGEN-FAILED] just above) is kept
+      // OUT of noComponentCount on purpose: this story file DID have a
+      // resolvable meta.component, so it is still "measurable" for the
+      // [ROSTER] check below. Folding it into noComponentCount is exactly
+      // the ADR-0124 bug — it let a broken docgen worker shrink the roster
+      // instead of showing up as a hole in it.
+      if (!docgenFailed) noComponentCount++;
       continue;
     }
 
@@ -1417,8 +1469,25 @@ async function runFramework(fw) {
     entry.files.push({ storyFile, csf, source });
   }
 
-  const errorsBefore = findings.filter((f) => f.level === 'error').length;
-  const warningsBefore = findings.filter((f) => f.level === 'warning').length;
+  // [ROSTER]: `measurable` is every story file that COULD have contributed a
+  // component — everything except a story with no meta.component at all
+  // (noComponentCount) and a deliberately-skipped external-package import
+  // (externalCount, see the comment above the findExternalPackageDir() call).
+  // Subtracting externalCount before the floor is what keeps a scaffolded
+  // one-framework workspace — whose only story imports from
+  // `@atelier-ui/<fw>` — at measurable === 0 and therefore silent here,
+  // exactly as that comment promises ("the check has nothing to compare and
+  // reports only [NO-STORY-META]"). If there WAS something measurable and
+  // byComponent still ended up empty, docgen measured nothing this run.
+  const measurable = storyFiles.length - noComponentCount - externalCount;
+  if (measurable > 0 && byComponent.size === 0) {
+    report(
+      'ROSTER',
+      fw,
+      `${fw}: ${measurable} of ${storyFiles.length} story file(s) were measurable ` +
+        `(${noComponentCount} no-component, ${externalCount} external) but docgen produced 0 component(s) — the gate measured nothing`,
+    );
+  }
 
   for (const [name, entry] of byComponent) {
     const contract = contractsBySelector.get(name);
@@ -1490,7 +1559,7 @@ async function runFramework(fw) {
   const warningsAfter = findings.filter((f) => f.level === 'warning').length;
   console.log(
     `[${fw}] components: ${byComponent.size}, contracts: ${contractsBySelector.size}, stories: ${storyFiles.length} ` +
-      `(no-component: ${noComponentCount}, external: ${externalCount}), warnings: ${warningsAfter - warningsBefore}, errors: ${errorsAfter - errorsBefore}, ${(t1 - t0).toFixed(0)} ms`,
+      `(no-component: ${noComponentCount}, external: ${externalCount}, docgen-failed: ${docgenFailedCount}), warnings: ${warningsAfter - warningsBefore}, errors: ${errorsAfter - errorsBefore}, ${(t1 - t0).toFixed(0)} ms`,
   );
 }
 

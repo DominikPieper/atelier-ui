@@ -363,6 +363,249 @@ const A11Y_PARITY_EXEMPT = new Map([
 ]);
 
 /**
+ * Contract `component` selectors (check-paint's roster — the intersection of
+ * libs/spec/src/contracts and tools/figma/snapshot.json, the same two sources of
+ * truth the gate already joins) that produced zero MEASUREMENTS in every framework
+ * on an unscoped run, and why (check-paint's roster floor, ADR-0034). The baseline
+ * file (tools/figma/paint-baseline.json) records only FINDINGS — differences from
+ * Figma — so a component with zero baseline entries is indistinguishable from one
+ * that was cleanly measured and one that was never measured at all; this map is
+ * seeded from the real, instrumented measurement count, not from the baseline.
+ *
+ * Same two kinds as the other allowlists here:
+ *   - `kind: 'design'` — legitimately not measurable this way (no probe can exist,
+ *     or the story shape this gate needs does not apply). Silent.
+ *   - `kind: 'gap'`    — should be measurable, isn't yet. Printed as a warning on
+ *     every run so it keeps nagging instead of dissolving back into the roster.
+ *
+ * An entry naming a component that is not in the roster, or one that now HAS
+ * measurements, is itself an error — allowlists rot, and this one is load-bearing.
+ */
+const PAINT_ROSTER_EXEMPT = new Map([
+  [
+    'AtlAccordionItem',
+    {
+      kind: 'design',
+      why:
+        'no story renders AtlAccordionItem standalone — every story mounts AtlAccordionGroup, whose own ' +
+        "contract measures the group's root. AtlAccordionItem has a snapshot master and a contract (so it " +
+        'is in the roster) but no story ever declares it as `meta.component`, so no story is ever a ' +
+        'candidate to measure it.',
+    },
+  ],
+  [
+    'AtlBreadcrumbItem',
+    {
+      kind: 'design',
+      why: 'only reachable through AtlBreadcrumbs stories; no story sets `meta.component` to AtlBreadcrumbItem itself.',
+    },
+  ],
+  [
+    'AtlChatMessage',
+    {
+      kind: 'design',
+      why:
+        'only reachable through AtlChat / AtlChatMessages stories (no story sets `meta.component` to ' +
+        'AtlChatMessage itself), same shape as AtlAccordionItem/AtlOption/AtlTab/AtlTd/AtlTh/AtlTr below.',
+    },
+  ],
+  [
+    'AtlChatSuggestion',
+    {
+      kind: 'design',
+      why: 'only reachable through AtlChat stories; no story sets `meta.component` to AtlChatSuggestion itself.',
+    },
+  ],
+  [
+    'AtlChatTyping',
+    {
+      kind: 'design',
+      why: 'only reachable through AtlChat stories; no story sets `meta.component` to AtlChatTyping itself.',
+    },
+  ],
+  [
+    'AtlMenuItem',
+    {
+      kind: 'design',
+      why: 'only reachable through AtlMenu stories; no story sets `meta.component` to AtlMenuItem itself.',
+    },
+  ],
+  [
+    'AtlMenuSeparator',
+    {
+      kind: 'design',
+      why: 'only reachable through AtlMenu stories; no story sets `meta.component` to AtlMenuSeparator itself.',
+    },
+  ],
+  [
+    'AtlOption',
+    {
+      kind: 'design',
+      why: 'only reachable through AtlSelect/AtlCombobox stories; no story sets `meta.component` to AtlOption itself.',
+    },
+  ],
+  [
+    'AtlRadio',
+    {
+      kind: 'design',
+      why:
+        'every AtlRadio story (all three frameworks) renders 2-3 `<AtlRadio>` siblings inside one ' +
+        'AtlRadioGroup — a radio only makes sense as part of a group (same call A11Y_PARITY_EXEMPT already ' +
+        "makes for this exact component: \"only reachable through its group\") — so there is no single-" +
+        'instance render to measure, not a probe or contract gap.',
+    },
+  ],
+  [
+    'AtlStep',
+    {
+      kind: 'design',
+      why: 'only reachable through AtlStepper stories; no story sets `meta.component` to AtlStep itself.',
+    },
+  ],
+  [
+    'AtlTab',
+    {
+      kind: 'design',
+      why: 'only reachable through AtlTabGroup stories; no story sets `meta.component` to AtlTab itself.',
+    },
+  ],
+  [
+    'AtlTbody',
+    {
+      kind: 'design',
+      why: 'only reachable through AtlTable stories; no story sets `meta.component` to AtlTbody itself.',
+    },
+  ],
+  [
+    'AtlTd',
+    {
+      kind: 'design',
+      why: 'only reachable through AtlTable stories; no story sets `meta.component` to AtlTd itself.',
+    },
+  ],
+  [
+    'AtlTh',
+    {
+      kind: 'design',
+      why: 'only reachable through AtlTable stories; no story sets `meta.component` to AtlTh itself.',
+    },
+  ],
+  [
+    'AtlToast',
+    {
+      kind: 'design',
+      why:
+        "React's and Vue's toast stories are purely imperative (`meta` declares no `component` at all — a " +
+        'service + a container, shown via `useAtlToast().show()`/`$atlToast.show()`, matching the imperative ' +
+        "reasoning already recorded for toast in PROP_SURFACE_EXEMPT's `toast:variant` entry and " +
+        "STORY_DESCRIPTION_SKIP_DIRS). Angular's meta DOES declare `component: AtlToast` with `args`, but " +
+        'every Angular story still only renders a template wrapper that calls the same imperative service — ' +
+        "verified by running the gate scoped (`--component AtlToast --fw angular --report`): all 9 stories " +
+        'resolve a variant key that matches no rootPaint row (NO-VARIANT, already in the baseline), never a ' +
+        'real measurement. Not fixable by adding a probe — the component is not rendered as a tree with a root ' +
+        'to probe in any of the three frameworks.',
+    },
+  ],
+  [
+    'AtlTr',
+    {
+      kind: 'design',
+      why: 'only reachable through AtlTable stories; no story sets `meta.component` to AtlTr itself.',
+    },
+  ],
+  [
+    'AtlBreadcrumbs',
+    {
+      kind: 'gap',
+      why:
+        'has its own single-instance stories in all three frameworks, but every story\'s resolved args ' +
+        "produce a variant key with no matching `rootPaint` row in the snapshot master (NO-VARIANT ×3, " +
+        "verified via `--component AtlBreadcrumbs --fw react --report` — already recorded in the baseline). " +
+        'A contract/snapshot axis mismatch, not a probe gap; not diagnosed further here.',
+    },
+  ],
+  [
+    'AtlChat',
+    {
+      kind: 'gap',
+      why:
+        'every Drawer/Popup/Inline story (all three frameworks) renders the chat surface CLOSED by default — ' +
+        "`[NOT-RENDERED]` fires for all 12 react/vue stories and all 12 angular ones (zero width) — so the " +
+        'probe element exists but is never drawn. Needs either an open-by-default story variant or a ' +
+        "different measurement approach for a closed-by-default overlay; not a fix this gate's contract alone " +
+        'can make.',
+    },
+  ],
+  [
+    'AtlCodeBlock',
+    {
+      kind: 'gap',
+      why:
+        "has its own single-instance stories, but every story's resolved args produce a variant key with no " +
+        "matching `rootPaint` row (NO-VARIANT ×6, verified via `--component AtlCodeBlock --fw react --report` " +
+        '— already recorded in the baseline). Same shape as AtlBreadcrumbs above.',
+    },
+  ],
+  [
+    'AtlDrawer',
+    {
+      kind: 'gap',
+      why:
+        "every story (all three frameworks) reports `[NO-PROBE]`: \"no contract probe, no .atl-drawer " +
+        'element and no bare atl-drawer tag under #storybook-root" — the drawer.contract.ts declares no ' +
+        '`probes` entry, so nothing under #storybook-root is ever identified as the painted layer. Needs a ' +
+        'declared probe (same fix AtlSelect already has), which is a contract change outside this file\'s scope.',
+    },
+  ],
+  [
+    'AtlMenu',
+    {
+      kind: 'gap',
+      why:
+        "every story (all three frameworks) reports `[NO-PROBE]` (\"no contract probe, no .atl-menu element " +
+        'and no bare atl-menu tag under #storybook-root") or `[NO-VARIANT]` (resolved args match no ' +
+        "rootPaint row, verified via `--component AtlMenu --fw react --report`) — the menu.contract.ts " +
+        'declares no `probes` entry and at least one story\'s args do not resolve to a row either. Two ' +
+        'compounding gaps, neither fixable inside this file.',
+    },
+  ],
+  [
+    'AtlPagination',
+    {
+      kind: 'gap',
+      why:
+        "has its own single-instance stories, but every story's resolved args produce a variant key with no " +
+        "matching `rootPaint` row (NO-VARIANT ×6, verified via `--component AtlPagination --fw react --report` " +
+        '— already recorded in the baseline). Same shape as AtlBreadcrumbs/AtlCodeBlock above.',
+    },
+  ],
+  [
+    'AtlRadioGroup',
+    {
+      kind: 'gap',
+      why:
+        "every story renders exactly ONE `<AtlRadioGroup>` root (unlike AtlRadio above), but this gate's " +
+        'ambiguous-demo heuristic (`scanLiteralAttrs`/`scanObjectLiteralProps`) scans the WHOLE story source ' +
+        "text, not just the measured component's own tag — so the differing `radioValue` literals on the " +
+        "group's `<AtlRadio>` CHILDREN (\"free\"/\"pro\"/\"enterprise\") are read as ambiguity on the group " +
+        'itself and every story is skipped as a demo (verified: `skipped-demo: 6` for react, 0 real ' +
+        'measurements). A false positive in the heuristic, not a missing story — fixing the scan to scope by ' +
+        'tag is a change to this file beyond this task\'s scope.',
+    },
+  ],
+  [
+    'AtlTooltip',
+    {
+      kind: 'gap',
+      why:
+        "every story (all three frameworks) reports `[NO-PROBE]`: \"no contract probe, no .atl-tooltip " +
+        'element and no bare atl-tooltip tag under #storybook-root" — tooltip.contract.ts declares no ' +
+        '`probes` entry. Same shape as AtlDrawer above.',
+    },
+  ],
+]);
+
+/**
  * Components whose `metadata.accessibility.role` does not appear in their
  * committed a11y baselines (check-metadata). Same two-kind convention as
  * A11Y_PARITY_EXEMPT: `design` is a closed question and stays silent, `gap`
@@ -1078,6 +1321,7 @@ module.exports = {
   scaffoldPortKey,
   FIGMA_CONFORMANCE_EXCEPTIONS,
   A11Y_PARITY_EXEMPT,
+  PAINT_ROSTER_EXEMPT,
   METADATA_ROLE_EXCEPTIONS,
   PRIMITIVE_TOKENS,
   PRIMITIVE_EXEMPTIONS,

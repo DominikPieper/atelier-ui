@@ -60,6 +60,16 @@ export function toRepoImportPath(absPath, root) {
   return './' + path.relative(root, absPath).split(path.sep).join('/');
 }
 
+/** Best-effort human-readable message for a caught value that might not be an
+ * `Error` (a thrown string, a plain object, ...). Shared so a [DOCGEN-FAILED]
+ * reason reads consistently across every catch site that reports one: this
+ * file's own `makeWorkerDocgen()`, and check-contracts.mjs's / check-
+ * manifest-parity.mjs's own try/catch around `reactParseFile()` (react-docgen
+ * isn't guaranteed to throw an `Error` instance either). */
+export function errorMessage(e) {
+  return e && e.message ? e.message : String(e);
+}
+
 /**
  * Whether `rawSpecifier` — a story meta's `component:` import path, csf-tools'
  * `_rawComponentPath` (set for ANY framework whose meta resolves `component` to
@@ -141,6 +151,16 @@ export function resolveWithExtensions(base) {
  * node_modules (the caller's cwd), not this file's own directory, so a copy
  * dropped into a scaffold picks up the scaffold's own installed Storybook —
  * same portability rule check-contracts.mjs already followed.
+ *
+ * The returned function resolves to a DISCRIMINATED result rather than a bare
+ * payload-or-null: `{ ok: true, payload }` on success, `{ ok: false, reason }`
+ * for every failure mode — the provider throwing, an empty/falsy payload, or
+ * `payload.error` being set. Collapsing all three into `null` (the shape this
+ * function had until ADR-0124) is exactly what let a broken docgen worker
+ * read as "no component here": both call sites treated `null` as "skip,
+ * nothing to see" with no residual signal at all (ADR-0034's
+ * roster-derivation convention, applied to this gate by ADR-0124). `reason`
+ * is always a string, ready to drop straight into a finding message.
  */
 export async function makeWorkerDocgen(fw, cwdRequire, root) {
   const spec =
@@ -166,11 +186,12 @@ export async function makeWorkerDocgen(fw, cwdRequire, root) {
     let payload;
     try {
       payload = await provider({ entry });
-    } catch {
-      return null;
+    } catch (e) {
+      return { ok: false, reason: errorMessage(e) };
     }
-    if (!payload || payload.error) return null;
-    return payload;
+    if (!payload) return { ok: false, reason: 'empty payload' };
+    if (payload.error) return { ok: false, reason: errorMessage(payload.error) };
+    return { ok: true, payload };
   };
 }
 

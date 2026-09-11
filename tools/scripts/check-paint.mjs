@@ -157,6 +157,7 @@ import { loadCsf, createStoryArgsResolver } from 'storybook/internal/csf-tools';
 
 const require = createRequire(import.meta.url);
 const { parseExportedVars } = require('./lib/ts-eval.js');
+const { PAINT_ROSTER_EXEMPT } = require('./lib/allowlists.js');
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '../..');
@@ -200,6 +201,12 @@ for (const fw of targetFrameworks) {
     process.exit(2);
   }
 }
+// A --component or --fw run only ever measures part of the roster, so neither the
+// baseline-staleness check (settleAgainstBaseline, below) nor the roster floor
+// (ADR-0034, main()) can judge anything outside what this invocation actually
+// touched. One flag, reused by both rather than each re-deriving its own notion
+// of "scoped".
+const isScoped = !!args.component || !!args.fw;
 
 const SNAPSHOT_FILE = args.snapshot
   ? path.resolve(process.cwd(), args.snapshot)
@@ -266,11 +273,36 @@ const contractFiles = fs
   .filter((f) => f.endsWith('.contract.ts'))
   .sort();
 const contractsBySelector = new Map();
+const contractFileBySelector = new Map(); // for the [CONTRACT-DUPLICATE] message below
+const contractLoadErrors = [];
 for (const file of contractFiles) {
   const vars = parseExportedVars(path.join(CONTRACTS_DIR, file));
   const contract = vars.contract;
-  if (!contract || typeof contract !== 'object') continue;
+  if (!contract || typeof contract !== 'object') {
+    // Same message check-contracts.mjs:253-258 already prints for this exact case —
+    // a bare `continue` here silently dropped the component from the roster with no
+    // trace of why.
+    console.error(`  ! ${file}: 'contract' did not evaluate to a static object literal — skipped.`);
+    continue;
+  }
+  const existingFile = contractFileBySelector.get(contract.component);
+  if (existingFile) {
+    // A `Map.set()` on a duplicate key silently keeps only the later file — the
+    // first contract, and everything it declares, would vanish with no message.
+    // Keep the first (already-loaded) contract and report both files as a
+    // blocker rather than picking a winner.
+    contractLoadErrors.push(
+      `[CONTRACT-DUPLICATE] '${contract.component}' is declared by both ${existingFile} and ${file} — ` +
+        "only one contract file may export a 'contract' for a given component. Rename or merge one of them."
+    );
+    continue;
+  }
+  contractFileBySelector.set(contract.component, file);
   contractsBySelector.set(contract.component, contract);
+}
+if (contractLoadErrors.length) {
+  for (const e of contractLoadErrors) console.error(`✗ ${e}`);
+  process.exit(1);
 }
 
 // The roster: components with BOTH a contract and a snapshot master — the same
@@ -588,6 +620,13 @@ const findings = [];
 function pushFinding(fw, component, story, state, field, detail, tag) {
   findings.push({ tag, fw, component, story, state, field, detail });
 }
+
+// Per-component measurement counter (ADR-0034's roster floor, main()). This is
+// deliberately NOT derived from `findings` or from the baseline file — both record
+// only DIFFERENCES, so a component with zero findings is indistinguishable from one
+// that was never measured at all. Incremented in runFramework() at the exact point a
+// real comparison runs (probe resolved, not [NO-PROBE]/[NOT-RENDERED]/[NO-VARIANT]).
+const measuredByComponent = new Map();
 
 function near(a, b, tol) {
   return typeof a === 'number' && typeof b === 'number' && Math.abs(a - b) <= tol;
@@ -1181,6 +1220,7 @@ async function runFramework(fw, browser) {
       }
 
       measured++;
+      measuredByComponent.set(metaComponent, (measuredByComponent.get(metaComponent) || 0) + 1);
       const snap = await measureFull(page, probe.selector, row);
       compareFull({ ...ctx, state: 'default' }, snap, row);
 
@@ -1261,8 +1301,9 @@ function settleAgainstBaseline() {
   // must not be judged "stale" — it simply was not re-checked. Restrict the comparison set
   // to baseline entries whose (fw, component) was actually run, and say so in the summary
   // (see the `scoped` flag this returns). An unscoped run (no --component, no --fw) evaluates
-  // the whole baseline, exactly as before.
-  const isScoped = !!args.component || !!args.fw;
+  // the whole baseline, exactly as before. `isScoped` itself is the module-level flag
+  // (declared next to the CLI parsing) — main()'s roster floor reuses the exact same flag
+  // rather than each deriving its own notion of "scoped".
   const scopedBaselineFindings = allBaselineFindings.filter(
     (f) => targetFrameworks.includes(f.fw) && (!args.component || f.component === args.component)
   );
@@ -1287,7 +1328,6 @@ function settleAgainstBaseline() {
     staleErrors,
     recordedByTag,
     baselineExists: !!baseline,
-    isScoped,
     scopedCount: scopedBaselineFindings.length,
     totalBaselineCount: allBaselineFindings.length,
   };
@@ -1384,19 +1424,99 @@ async function main() {
     for (const [shape, count] of top) console.log(`  ${count.toString().padStart(4)}  ${shape}`);
   }
 
+  // ─── B: per-framework measurement floor (ADR-0034) ───────────────────────
+  // A framework that measured zero stories produced zero findings by construction,
+  // not because it agrees with Figma. The baseline can't see this at all (it records
+  // only findings), so it has to be asserted here, unconditionally, every run.
+  const hardErrors = [];
+  for (const fw of targetFrameworks) {
+    if (perFw[fw].measured === 0) {
+      hardErrors.push(
+        `[NO-MEASUREMENTS] (${fw}) 0 stories measured this run. Check dist/storybook/${fw} is a current ` +
+          'build (npm run check:storybook-manifests) and that --component/--fw actually selects stories ' +
+          'in this framework.'
+      );
+    }
+  }
+
+  // ─── C: roster floor (ADR-0034) ───────────────────────────────────────────
+  // `roster` (contract ∩ snapshot, built above from the two sources of truth — never
+  // from the baseline, which records only findings and so cannot tell "clean" apart
+  // from "never measured") must have at least one measurement, in some framework, for
+  // every member: a blocker unless recorded in PAINT_ROSTER_EXEMPT. Scoped runs
+  // (--component/--fw) measure a deliberate subset of the roster by design, so the
+  // floor only applies unscoped — same `isScoped` flag settleAgainstBaseline() uses
+  // for baseline staleness above.
+  let rosterMeasuredCount = 0;
+  if (!isScoped) {
+    const rosterWarnings = [];
+    for (const component of [...roster].sort()) {
+      const count = measuredByComponent.get(component) || 0;
+      if (count > 0) {
+        rosterMeasuredCount++;
+        continue;
+      }
+      const exempt = PAINT_ROSTER_EXEMPT.get(component);
+      if (!exempt) {
+        hardErrors.push(
+          `[ROSTER] ${component}: 0 measurements in every framework and no PAINT_ROSTER_EXEMPT entry. ` +
+            'Either give it a measurable story (a probe that resolves and renders), or record why in ' +
+            "tools/scripts/lib/allowlists.js (kind: 'design' | 'gap')."
+        );
+      } else if (exempt.kind === 'gap') {
+        rosterWarnings.push(`[GAP] ${component}: ${exempt.why}`);
+      }
+      // kind: 'design' — closed question, stays silent (same convention as the other
+      // *_EXEMPT maps in tools/scripts/lib/allowlists.js).
+    }
+    // Allowlist hygiene: load-bearing, so it must not rot (same rule ADR-0034 already
+    // applies to A11Y_PARITY_EXEMPT).
+    for (const [component, entry] of PAINT_ROSTER_EXEMPT) {
+      if (!roster.has(component)) {
+        hardErrors.push(
+          `[STALE] PAINT_ROSTER_EXEMPT names '${component}', which is not in the contract+snapshot roster. ` +
+            'Remove it.'
+        );
+      } else if ((measuredByComponent.get(component) || 0) > 0) {
+        hardErrors.push(
+          `[STALE] PAINT_ROSTER_EXEMPT exempts '${component}' (${entry.kind}) but it now has measurements. ` +
+            'Remove the entry so the component is held to the gate.'
+        );
+      }
+    }
+    for (const w of rosterWarnings) console.warn(`  ⚠ ${w}`);
+    console.log(
+      `\n${rosterMeasuredCount} of ${roster.size} roster component(s) measured at least once ` +
+        `(${PAINT_ROSTER_EXEMPT.size} exempt).`
+    );
+  }
+
+  for (const e of hardErrors) console.error(`✗ ${e}`);
+
   if (args.updateBaseline) {
+    if (hardErrors.length) {
+      console.error(
+        `\n${hardErrors.length} error(s) above — refusing to write tools/figma/paint-baseline.json from an ` +
+          'incomplete run.'
+      );
+      process.exit(1);
+    }
     writeBaseline();
     console.log(`\ntotal runtime: ${totalMs.toFixed(0)} ms`);
     process.exit(0);
   }
 
-  const { newErrors, staleErrors, recordedByTag, baselineExists, isScoped, scopedCount, totalBaselineCount } =
+  const { newErrors, staleErrors, recordedByTag, baselineExists, scopedCount, totalBaselineCount } =
     settleAgainstBaseline();
 
+  // ─── A: a missing baseline is an error, not a free pass ──────────────────
+  // (the one exemption — a run invoked with --update-baseline — already exited above,
+  // before this point is ever reached).
   if (!baselineExists) {
-    console.log(
-      "\nNo tools/figma/paint-baseline.json yet — every finding above is reported but none of them " +
-        'fail the gate. Run with --update-baseline once you have reviewed them.'
+    console.error(
+      '\n✗ [BASELINE-MISSING] tools/figma/paint-baseline.json not found. Every finding printed above was ' +
+        'measured but never compared to anything — that is not a passing run, it is an unrun one. Review ' +
+        'them, then run `node tools/scripts/check-paint.mjs --update-baseline` and commit the file.'
     );
   } else {
     if (isScoped) {
@@ -1426,9 +1546,11 @@ async function main() {
 
   if (baselineExists && (newErrors.length || staleErrors.length)) {
     console.error(`\n${newErrors.length} new finding(s), ${staleErrors.length} stale baseline entr(y/ies).`);
+  }
+  if (hardErrors.length || !baselineExists || newErrors.length || staleErrors.length) {
     process.exit(1);
   }
-  console.log(baselineExists ? '\n✓ check:paint — no drift beyond the recorded baseline.' : '');
+  console.log('\n✓ check:paint — no drift beyond the recorded baseline.');
   process.exit(0);
 }
 

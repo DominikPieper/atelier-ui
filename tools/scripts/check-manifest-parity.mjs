@@ -21,7 +21,7 @@
  * finding — reported and left red, not swept into a new exemption (the brief
  * for this gate is explicit: do not grow the allowlist here).
  *
- * Five report tags:
+ * Seven report tags:
  *   [NAME]    error   — a prop/event present in one framework, absent in
  *                        another (after the on<X>Change equivalence below).
  *   [MEMBERS] error   — an enum prop whose literal members differ (set
@@ -33,6 +33,20 @@
  *                        there.
  *   [KIND]    error   — the same name typed differently per framework (enum
  *                        vs string, say).
+ *   [DOCGEN-FAILED] error — one story file's docgen call failed outright (the
+ *                        worker threw / returned an empty payload / set
+ *                        `payload.error`, or react-docgen threw). Distinct
+ *                        from "no component here": a failure used to collapse
+ *                        into the same silent skip as a story with no
+ *                        resolvable component (ADR-0124).
+ *   [ROSTER]  error   — a framework's manifest measured nothing it should
+ *                        have (at least one story had a resolvable
+ *                        `meta.component` but `byComponent` stayed empty), or
+ *                        a framework pair compared zero components. The
+ *                        assertion this gate's roster never carried: an empty
+ *                        map used to read as "nothing to report", not "the
+ *                        gate is blind" (ADR-0034's roster-derivation
+ *                        convention, applied to this gate by ADR-0124).
  *   [UNKEYED] warning — a component present in only ONE framework's manifest
  *                        (e.g. a Toast whose stories carry no dedicated
  *                        `meta.component` in two of three frameworks) — never
@@ -73,6 +87,7 @@ import {
   normalizeVue,
   makeReactDocgenTools,
   normalizeReactDocgen,
+  errorMessage,
 } from './lib/docgen.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
@@ -113,15 +128,45 @@ for (const specName of Object.keys(keyedSpecs())) {
   SPEC_NAME_BY_COMPONENT.set(componentNameOf(specName), specName);
 }
 
+// ─── Findings ───────────────────────────────────────────────────────────────
+// Declared here (before discoverFramework() is ever CALLED, in module
+// execution order) rather than beside the comparison loop below, because
+// discoverFramework() itself now reports [DOCGEN-FAILED] findings as it
+// discovers each framework's manifest — moved up so those calls don't hit a
+// `findings` still in its temporal dead zone.
+
+const findings = []; // {level, tag, msg}
+function reportError(tag, msg) {
+  findings.push({ level: 'error', tag, msg });
+}
+function reportWarning(tag, msg) {
+  findings.push({ level: 'warning', tag, msg });
+}
+
 // ─── Per-framework discovery: story file -> component -> docgen props ──────
 // Mirrors check-contracts.mjs's runFramework() discovery loop (same
 // meta.component / react import-specifier resolution), stripped of the
 // snapshot/contract machinery this gate does not need.
+//
+// [DOCGEN-FAILED] / [ROSTER] (ADR-0034's "a gate's roster is derived from the
+// source of truth, never from the gate's own artifacts" convention, applied
+// to this gate by ADR-0124): a docgen call that throws, returns nothing, or
+// is explicitly flagged (`{ ok: false, reason }` — see lib/docgen.mjs) used
+// to collapse into the same silent `continue` as "this story has no
+// resolvable component", so a broken docgen worker read as an empty,
+// comparable roster instead of a failure. `measurableCount` — story files
+// whose `meta.component` resolved to SOME name, independent of whether
+// docgen then succeeded — is what
+// distinguishes the two: a framework with `measurableCount > 0` but an empty
+// `byComponent` map measured nothing and must fail loud, not print
+// `0 component(s) compared` and exit 0.
 
 async function discoverFramework(fw) {
   const storyFiles = findStoryFiles(fw, { root: ROOT });
   const workerDocgen = fw !== 'react' ? await makeWorkerDocgen(fw, cwdRequire, ROOT) : null;
   const byComponent = new Map(); // name -> { props: NormalizedProp[] }
+  let measurableCount = 0;
+  let docgenFailedCount = 0;
 
   for (const storyFile of storyFiles) {
     const source = fs.readFileSync(storyFile, 'utf-8');
@@ -133,6 +178,7 @@ async function discoverFramework(fw) {
     }
     const metaComponent = typeof csf._meta.component === 'string' ? csf._meta.component : null;
     if (!metaComponent) continue;
+    measurableCount++;
 
     let docgenResult = null;
     const contextDir = path.dirname(storyFile);
@@ -150,23 +196,34 @@ async function discoverFramework(fw) {
               docgens.find((d) => d.displayName === localName) ||
               docgens.find((d) => d.displayName === metaComponent);
             if (match) docgenResult = { name: match.displayName, props: normalizeReactDocgen(match) };
-          } catch {
-            /* one bad file does not stop the roster — same tolerance as check-contracts.mjs */
+          } catch (e) {
+            docgenFailedCount++;
+            reportError(
+              'DOCGEN-FAILED',
+              `${fw}: ${path.relative(ROOT, storyFile)} — react-docgen failed: ${errorMessage(e)}`,
+            );
           }
         }
       }
     } else {
-      const payload = await workerDocgen(storyFile, csf);
-      if (payload) {
+      const result = await workerDocgen(storyFile, csf);
+      if (result.ok) {
+        const payload = result.payload;
         const normalized = fw === 'angular' ? normalizeAngular(payload) : normalizeVue(payload);
         docgenResult = { name: payload.name, props: normalized.props };
+      } else {
+        docgenFailedCount++;
+        reportError(
+          'DOCGEN-FAILED',
+          `${fw}: ${path.relative(ROOT, storyFile)} — docgen failed: ${result.reason}`,
+        );
       }
     }
 
     if (!docgenResult) continue;
     if (!byComponent.has(docgenResult.name)) byComponent.set(docgenResult.name, docgenResult);
   }
-  return byComponent;
+  return { byComponent, measurableCount, docgenFailedCount, storyFileCount: storyFiles.length };
 }
 
 // ─── Naming equivalences (ADR-0093, reproduced — not widened) ──────────────
@@ -245,20 +302,31 @@ function buildSurface(fw, props) {
 
 const t0 = performance.now();
 const perFw = {};
-for (const fw of FRAMEWORKS) perFw[fw] = await discoverFramework(fw);
+for (const fw of FRAMEWORKS) {
+  const { byComponent, measurableCount, docgenFailedCount, storyFileCount } =
+    await discoverFramework(fw);
+  perFw[fw] = byComponent;
+  console.log(
+    `[${fw}] discovery: stories: ${storyFileCount}, measurable: ${measurableCount}, ` +
+      `components: ${byComponent.size}, docgen-failed: ${docgenFailedCount}`,
+  );
+  // [ROSTER]: a framework whose docgen ran (at least one story file's
+  // meta.component resolved to a name) but ended up with an EMPTY manifest
+  // measured nothing — this is the assertion `check:manifest-parity` never
+  // carried until ADR-0124 (the original defect: Angular's map going empty
+  // produced "0 component(s) compared" and a clean exit, not a blocker).
+  if (measurableCount > 0 && byComponent.size === 0) {
+    reportError(
+      'ROSTER',
+      `${fw}: ${measurableCount} story file(s) had a resolvable meta.component but the ${fw} manifest is empty — docgen measured nothing for ${fw}`,
+    );
+  }
+}
 
 const allComponentNames = new Set();
 for (const fw of FRAMEWORKS) for (const name of perFw[fw].keys()) allComponentNames.add(name);
 
 // ─── Comparison ─────────────────────────────────────────────────────────────
-
-const findings = []; // {level, tag, msg}
-function reportError(tag, msg) {
-  findings.push({ level: 'error', tag, msg });
-}
-function reportWarning(tag, msg) {
-  findings.push({ level: 'warning', tag, msg });
-}
 
 /** exempted 'gap' entry for `key`, or undefined. STALE-EXEMPTION hygiene over
  * PROP_SURFACE_EXEMPT stays check:props' job — this gate reads the list, it
@@ -404,6 +472,21 @@ for (const name of [...allComponentNames].sort()) {
   }
 }
 
+// [ROSTER]: a pair that never had a single component present in BOTH
+// frameworks' manifests compared nothing — printed today as a bare
+// "0 component(s) compared" line with no assertion on it at all (the second
+// half of the original defect: a framework's map going empty leaves every
+// pair it's in silently at 0, never [UNKEYED] because there's nothing there
+// to be unkeyed against). This does not replace the per-framework empty-map
+// check above — a pair can also read 0 for a framework whose OWN manifest is
+// non-empty but shares no component with its partner, which the per-framework
+// check alone would miss.
+for (const [a, b] of PAIRS) {
+  if (pairStats[`${a}-${b}`].compared === 0) {
+    reportError('ROSTER', `[${a} vs ${b}] 0 component(s) compared`);
+  }
+}
+
 // ─── Output ─────────────────────────────────────────────────────────────────
 
 if (args.report) {
@@ -418,7 +501,7 @@ for (const reason of sortedReasons) {
   for (const key of keys) console.warn(`    - ${key}`);
 }
 
-const errorOrder = { NAME: 0, MEMBERS: 1, DEFAULT: 2, KIND: 3 };
+const errorOrder = { 'DOCGEN-FAILED': -2, ROSTER: -1, NAME: 0, MEMBERS: 1, DEFAULT: 2, KIND: 3 };
 const errors = findings
   .filter((f) => f.level === 'error')
   .sort((x, y) => errorOrder[x.tag] - errorOrder[y.tag] || (x.msg < y.msg ? -1 : 1));

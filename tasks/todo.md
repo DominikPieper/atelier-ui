@@ -63,6 +63,128 @@ Ranked; each carries why it's worth doing next rather than later.
 > there: **A** honesty pass
 > now regardless; **B** one authored contract record with everything else projected as
 > the direction, its own ADR naming ADR-0006/0010/0096 as revised.
+- [ ] **Gate review of 2026-09-11 — the findings not fixed in the same session.**
+  All 47 runnable gates were run individually (exit code + duration, warm: 471 s total,
+  `check:paint` 230 s of it, tree clean afterwards). 46 green; the only red is
+  `check:parity`, whose 37 DRIFT blockers are the known debt below and whose `:report`
+  twin is what `check:all` actually runs. Three gates that could read green while
+  measuring nothing were fixed the same day (ADR-0124); these are the rest, each
+  verified by reading the code.
+  - [ ] **Nobody polices `PROP_SURFACE_EXEMPT`.** `check-prop-surface.js:1076` skips
+    `[STALE]` for any key whose prop the spec does not declare, saying
+    "check-manifest-parity.mjs is what actually keeps such an entry live";
+    `check-manifest-parity.mjs:263` says "STALE-EXEMPTION hygiene over
+    PROP_SURFACE_EXEMPT stays check:props' job — this gate reads the list, it does not
+    police it." Both in writing, in the files. 61 entries, of which **21 key on the prop
+    `errors`, a name that appears zero times in `libs/spec/src/index.ts`**. Decide which
+    gate owns it and make the other stop claiming it does.
+  - [ ] **`check:manifest-parity`'s `[DEFAULT]` is guarded on both sides**
+    (`:345`, `ea.default !== undefined && eb.default !== undefined && …`), so a real
+    default divergence where one framework's docgen reports no default is invisible.
+    The file header calls this tag "check:defaults' cross-framework half" —
+    **do not retire `check:defaults` on that claim** until the guard is answered. The
+    three normalizers also disagree on quoting (`lib/docgen.mjs:492` strips, `:234`
+    `JSON.parse`s, `:197` passes through raw), which any surviving asymmetry is
+    currently masked by.
+  - [ ] **Exemption staleness is per-gate and mostly absent.** 19 gates import
+    `lib/allowlists.js`, which holds 20 exemption maps; **7 gates check their own
+    entries for rot.** ADR-0034 requires the check ("load-bearing allowlists rot") and
+    ADR-0119 sharpened what an entry is. Belongs in the shared harness, not in each
+    gate — see ADR-0125's `gate-kit` boundary.
+  - [ ] **ADR-0009's regenerate-and-diff idiom is reimplemented ~10 times**, each with
+    its own `--check`/write boundary: `check:spec`, `check:tokens`,
+    `check:preflight-clone-sync`, `check:scaffold-snapshot`, `check:artboard-palette`,
+    `check:box-sizing`, `check:behaviors-gen`, `check:llms`, `check:cookbook-manifest`,
+    `check:design-status`. Two of them decide write-vs-check with
+    `mode = process.argv[2]` and a bare `=== '--check'`
+    (`sync-preflight.mjs:96`, `gen-scaffold-snapshot.mjs:67`), so a typo'd flag
+    **mutates the repo instead of checking it**. One helper, one boundary.
+  - [ ] **`check:paint`'s two swallowed Playwright calls.** `:1190`
+    `.hover().catch(() => undefined)` with no `page.setDefaultTimeout` anywhere: a
+    non-actionable probe burns Playwright's 30 s default silently, and the element is
+    then measured **un-hovered** and compared against the `state=hover` row — a pass on
+    an interaction that never happened. Same shape at `:1109-1117` (15 s
+    `waitForFunction`). These are the mechanism behind the "prime suspect check:paint"
+    note already in this file, and they are also most of why the gate costs 230 s.
+  - [ ] **`check:paint` does not check that `dist/storybook/<fw>` is fresh** (`:983`,
+    it only requires `index.json` to exist), so a stale build measures old code and
+    passes. The ordering dependency on `check:storybook-manifests` lives only in
+    `check:all`'s `&&` chain, nowhere in the gate. Also `:1249` stamps
+    `generatedAt: new Date().toISOString()`, so every `--update-baseline` is a diff even
+    when the findings are identical.
+  - [ ] **`check:paint`'s story-evidence scan reads prose.** `:1043-1060` builds the
+    evidence blob from the story's whole node range and feeds it to `scanLiteralAttrs`
+    (`:387`) and `scanObjectLiteralProps` (`:402`), so a
+    `parameters.docs.description.story` containing `size="lg"` is indistinguishable from
+    markup. Confined to render-only stories without `args` (verified — `literalOverrides`
+    is only populated inside `isRenderOnlyDemo && !isForwardingDemo`), but inside that
+    branch a literal ranks **above** the resolved args in `buildVariantKey:538`, so the
+    story can be compared green against the wrong master variant.
+  - [ ] **`check-docs-sync.js` holes.** `:377` populates `used` for
+    `SCAFFOLD_PORT_EXEMPT` and never reads it, so there is no `[DEAD-ALLOWLIST]` check —
+    unlike `check-component-count.js:179`, which uses the identical content-keyed idiom.
+    `:104-146` `parseSpec()` builds a one-file `ts.createProgram` and never checks
+    diagnostics, so degraded module resolution empties `specProps` and the
+    `[DRIFT]`/`[TYPE-DRIFT]` halves pass vacuously while `[MISSING]` still fires.
+    `:316` requires `[1-9]\d+` on both halves of a Figma node id, so `1:23` is never
+    validated.
+  - [ ] **`check-category-alignment.js:265`'s ALL-SKIPPED guard is `&&`, not
+    per-check.** Renaming the `libs/<fw>/src/lib/<id>` convention kills the whole
+    `[STORY-CATEGORY]` half while `figmaChecked` stays 43, so the guard never fires and
+    half the gate goes dark quietly.
+  - [ ] **Smaller, same family:** `check-component-count.js:111` treats any
+    `/generated by/i` in the first 1000 chars as "generated, skip the file";
+    `check-vitest-discovery.js:110` is satisfied by the path appearing in a *comment*
+    (its header is honest about being a text check); `check-skill-discovery.mjs:74`
+    can report ✓ with `checked === 0`; `check-figma-token-names.js:95` matches a
+    `--ui-*` declaration in any selector block, not just `:root` (but its
+    `checked === 0` guard at `:125` is the model the others should copy);
+    `check-sync.js:65` throws on a broken symlink.
+  - [ ] **`check:stories` runs twice in CI.** `.github/workflows/ci.yml` has a
+    dedicated "Storybook tests" job (`nx affected -t storybook-test`), and the "Sync
+    checks" job's `check:all` ends with `check:stories`
+    (`nx run-many -t storybook-test`) — on a PR the first is affected-scoped and the
+    second is not, so the unscoped run happens anyway. The same 60-minute job also
+    carries `check:storybook-manifests` (three Storybook builds), `check:paint` (230 s)
+    and `check:docs-layout` (a docs build plus a browser). Splitting those out with
+    their own timeouts is the operational half of ADR-0125 and is what would have
+    bounded the 110-minute hang.
+  - [ ] **`check:paint`'s three other counters are still printed and unasserted.**
+    ADR-0124 rule 1 ("every counter a gate prints is asserted or removed") is met only
+    for the counters that separate "measured nothing" from "found nothing". A green run
+    still reports, per framework, `skipped-demo` 37/43/62, `not-rendered` 25/20/21 and
+    `no-probe` 30/21/22 — between 73 and 106 stories each — with nothing asserting any of
+    them. Three different questions: a story the ambiguous-demo heuristic could not
+    disambiguate, a story that did not render at all, and a probe that would not focus.
+    Each wants its own floor or its own exemption map, the same way the roster got one.
+  - [ ] **Are the fourteen subcomponent `PAINT_ROSTER_EXEMPT` entries really closed?**
+    `check:paint`'s new roster floor (ADR-0124) records 24 of 43 roster components as
+    never measured: 8 `gap` (real defects, warn every run) and 16 `design`. Two of the
+    `design` calls are settled — `AtlRadio` matches the call `A11Y_PARITY_EXEMPT`
+    already makes, `AtlToast` is an imperative service. The other fourteen are
+    subcomponents exempted because **no story sets `meta.component` to them**, and that
+    is a property of the story set, not of the component: each has its own Figma master
+    and its own contract file, which is what put it in the roster at all, and ADR-0121
+    decision 2 asks for a story per variant and per interaction state. Either a
+    subcomponent gets a story and is measured, or the reason it never will be belongs in
+    the entry. Left as `design` for now because authoring fourteen stories is its own
+    decision, not a gate fix.
+  - [ ] **Is `[DOCGEN-FAILED]` load-flaky?** Promoting a docgen failure from a silent
+    `null` to an error (ADR-0124) is right, but it makes the gate's verdict depend on a
+    Storybook worker completing. One unexplained observation on 2026-09-11: a
+    `check:contracts` run exited 1 with 4 errors while a `check:paint` browser run was in
+    flight on the same machine; three immediately following runs were exit 0 / 0 errors
+    and the log had already been overwritten, so the 4 errors were never identified. CI
+    runs the gates sequentially, so the contention is lower there, but this needs one
+    deliberate test — run `check:contracts` under load and see whether the Angular/Vue
+    docgen workers fail — before a red build on that tag is trusted as a real finding.
+  - [ ] **Not reproduced, left recorded:** the concern that `process.exit()` immediately
+    after a large finding burst truncates output on a pipe. Measured on
+    `check:manifest-parity` — 34 lines identical with and without a pipe. Plausible only
+    above the pipe buffer, i.e. exactly on a red run of `check:paint` or
+    `check:contracts`. Worth one deliberate test before trusting a red build's output.
+
+
 - [ ] **Spec-format review follow-ups** (owner decided 2026-09-10: A first, then plan
   the workflow — `tasks/spec-workflow-plan-2026-09-10.md`):
   - [x] **Option A, honesty pass — done 2026-09-10.** Dated "Corrected" paragraphs on
