@@ -131,14 +131,20 @@ function onKeydown(event: KeyboardEvent) {
   switch (event.key) {
     case 'ArrowDown': {
       event.preventDefault();
-      if (!isOpen.value) { open(); return; }
+      if (!isOpen.value) {
+        open();
+        return;
+      }
       const next = activeIndex.value + 1;
       activeIndex.value = next >= filtered.length ? 0 : next;
       break;
     }
     case 'ArrowUp': {
       event.preventDefault();
-      if (!isOpen.value) { open(); return; }
+      if (!isOpen.value) {
+        open();
+        return;
+      }
       const prev = activeIndex.value - 1;
       activeIndex.value = prev < 0 ? filtered.length - 1 : prev;
       break;
@@ -169,12 +175,12 @@ function onKeydown(event: KeyboardEvent) {
   <div ref="containerRef" :class="wrapperClasses">
     <div class="atl-combobox-wrapper">
       <input
+        :id="inputId"
         ref="inputRef"
         class="atl-combobox-input"
         type="text"
         autocomplete="off"
         role="combobox"
-        :id="inputId"
         :aria-expanded="isOpen"
         :aria-controls="panelId"
         aria-autocomplete="list"
@@ -208,8 +214,8 @@ function onKeydown(event: KeyboardEvent) {
       <template v-if="filteredOptions.length > 0">
         <li
           v-for="(option, i) in filteredOptions"
-          :key="option.value"
           :id="`${panelId}-option-${i}`"
+          :key="option.value"
           role="option"
           :class="[
             'atl-combobox-option',
@@ -226,7 +232,12 @@ function onKeydown(event: KeyboardEvent) {
           <AtlIcon name="check" size="sm" class="atl-combobox-check" />
         </li>
       </template>
-      <li v-else class="atl-combobox-no-results" role="option" aria-disabled="true">
+      <li
+        v-else
+        class="atl-combobox-no-results"
+        role="option"
+        aria-disabled="true"
+      >
         No results found.
       </li>
     </ul>
@@ -237,7 +248,13 @@ function onKeydown(event: KeyboardEvent) {
       class="atl-combobox-errors"
       aria-live="polite"
     >
-      <p v-for="(error, i) in errors" :key="i" class="atl-combobox-error-message">{{ error }}</p>
+      <p
+        v-for="(error, i) in errors"
+        :key="i"
+        class="atl-combobox-error-message"
+      >
+        {{ error }}
+      </p>
     </div>
   </div>
 </template>

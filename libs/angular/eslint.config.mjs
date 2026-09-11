@@ -4,10 +4,25 @@ import storybook from 'eslint-plugin-storybook';
 import nx from '@nx/eslint-plugin';
 import tseslint from 'typescript-eslint';
 import baseConfig from '../../eslint.config.mjs';
+import atelier from '../../tools/eslint-rules/index.js';
 
 export default tseslint.config(
   ...baseConfig,
   ...nx.configs['flat/angular'],
+  // `flat/angular-template` (@nx/eslint-plugin/dist/src/flat-configs/angular-template.js)
+  // extends angular-eslint's own `templateAccessibility` preset
+  // (angular-eslint/dist/configs/template-accessibility.js) on top of
+  // `templateRecommended` — all 11 rules its README tags `:accessibility:`
+  // (alt-text, click-events-have-key-events, elements-content,
+  // interactive-supports-focus, label-has-associated-control,
+  // mouse-events-have-key-events, no-autofocus, no-distracting-elements,
+  // role-has-required-aria, table-scope, valid-aria) are already `error`
+  // here, on `**/*.html` and on inline templates alike (the
+  // `extract-inline-html` processor runs them through the same `**/*.html`
+  // rule blocks). `eslint --print-config` on a `.ts` path won't show this:
+  // it only evaluates blocks whose `files` glob matches `*.ts` literally and
+  // never simulates the processor's virtual `*.html` sub-file, so checking
+  // accessibility coverage that way looks like zero when it isn't.
   ...nx.configs['flat/angular-template'],
   {
     files: ['**/*.ts'],
@@ -87,6 +102,40 @@ export default tseslint.config(
     },
   },
   {
+    // Component source only — same scope as the gate this replaces
+    // (check-host-attr-guards.js, ADR-0091): `atl-*.ts` files, not their
+    // `.spec.ts`/`.stories.ts` siblings. A no-op on any class without an
+    // `@Component` decorator, so it costs nothing to leave enabled beyond
+    // that.
+    files: ['**/atl-*.ts'],
+    ignores: ['**/*.spec.ts', '**/*.stories.ts'],
+    plugins: { atelier },
+    rules: {
+      'atelier/host-attr-guard': 'error',
+    },
+  },
+  {
+    // Every `atl-*.stories.ts` default export must declare
+    // parameters.docs.description.component, derived from
+    // `<name>.purpose` (formerly check-story-descriptions.js). Scoped to
+    // one-level-deep component dirs (`src/lib/<component>/*.stories.ts`) —
+    // same scope the old script's directory-only scan had — so top-level
+    // `src/lib/*.stories.ts` siblings (`cookbook.stories.ts`,
+    // `kitchen-sink.stories.ts`: docs-site sandboxes, not a single
+    // component's story) are out of scope, same as before. `toast`,
+    // `code-block`, and `showcase` are excluded — same three dirs
+    // `STORY_DESCRIPTION_SKIP_DIRS` carried: components with no metadata
+    // file (toast: service + container, documented manually; code-block:
+    // docs-site widget; showcase: composite docs sandbox), so no
+    // `metadata.purpose` exists for them to derive from.
+    files: ['src/lib/*/*.stories.ts'],
+    ignores: ['**/toast/**', '**/code-block/**', '**/showcase/**'],
+    plugins: { atelier },
+    rules: {
+      'atelier/story-description-source': 'error',
+    },
+  },
+  {
     files: ['**/*.html'],
     rules: {
       '@angular-eslint/template/no-negated-async': 'error',
@@ -106,6 +155,12 @@ export default tseslint.config(
       '@angular-eslint/template/no-non-null-assertion': 'error',
       '@angular-eslint/template/prefer-control-flow': 'error',
       '@angular-eslint/template/prefer-ngsrc': 'error',
+
+      // Not part of angular-eslint's `templateAccessibility` preset (not
+      // `:accessibility:`-tagged in its README), so the pointer comment above
+      // doesn't cover it — genuinely new coverage: WCAG 2.4.3 (positive
+      // tabindex fights natural DOM tab order). 0 violations here.
+      '@angular-eslint/template/no-positive-tabindex': 'error',
     },
   },
   {

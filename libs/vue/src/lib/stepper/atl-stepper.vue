@@ -24,7 +24,8 @@ export interface AtlStepperContext {
   prev(): void;
 }
 
-export const AtlStepperKey: InjectionKey<AtlStepperContext> = Symbol('AtlStepper');
+export const AtlStepperKey: InjectionKey<AtlStepperContext> =
+  Symbol('AtlStepper');
 </script>
 
 <script setup lang="ts">
@@ -33,15 +34,18 @@ import './atl-stepper.css';
 
 defineOptions({ name: 'AtlStepper' });
 
-const props = withDefaults(defineProps<{
-  activeStep?: number;
-  orientation?: 'horizontal' | 'vertical';
-  linear?: boolean;
-}>(), {
-  activeStep: 0,
-  orientation: 'horizontal',
-  linear: false,
-});
+const props = withDefaults(
+  defineProps<{
+    activeStep?: number;
+    orientation?: 'horizontal' | 'vertical';
+    linear?: boolean;
+  }>(),
+  {
+    activeStep: 0,
+    orientation: 'horizontal',
+    linear: false,
+  },
+);
 
 const emit = defineEmits<{
   'update:activeStep': [index: number];
@@ -53,7 +57,9 @@ const linearRef = computed(() => props.linear);
 
 watch(
   () => props.activeStep,
-  (val) => { internalStep.value = val; }
+  (val) => {
+    internalStep.value = val;
+  },
 );
 
 function registerStep(step: StepInfo) {
@@ -116,7 +122,10 @@ provide(AtlStepperKey, {
   prev,
 });
 
-const classes = computed(() => ['atl-stepper', `orientation-${props.orientation}`]);
+const classes = computed(() => [
+  'atl-stepper',
+  `orientation-${props.orientation}`,
+]);
 
 function isConnectorActive(i: number) {
   return internalStep.value > i || steps.value[i]?.completed;
@@ -137,9 +146,9 @@ function isConnectorActive(i: number) {
           }"
         >
           <button
+            :id="`atl-step-${i}`"
             type="button"
             class="step-circle"
-            :id="`atl-step-${i}`"
             :aria-label="step.label"
             :aria-current="internalStep === i ? 'step' : undefined"
             :disabled="!isReachable(i)"
@@ -155,8 +164,12 @@ function isConnectorActive(i: number) {
           </button>
           <div class="step-text">
             <span class="step-label">{{ step.label }}</span>
-            <span v-if="step.description" class="step-description">{{ step.description }}</span>
-            <span v-if="step.optional && !step.completed" class="step-optional">Optional</span>
+            <span v-if="step.description" class="step-description">{{
+              step.description
+            }}</span>
+            <span v-if="step.optional && !step.completed" class="step-optional"
+              >Optional</span
+            >
           </div>
         </li>
         <li

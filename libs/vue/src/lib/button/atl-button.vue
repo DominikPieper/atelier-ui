@@ -22,13 +22,15 @@ const props = withDefaults(defineProps<AtlButtonProps>(), {
 
 const isDisabled = computed(() => props.disabled || props.loading);
 
-const classes = computed(() => [
-  'atl-button',
-  `variant-${props.variant}`,
-  `size-${props.size}`,
-  isDisabled.value && 'is-disabled',
-  props.loading && 'is-loading',
-].filter(Boolean));
+const classes = computed(() =>
+  [
+    'atl-button',
+    `variant-${props.variant}`,
+    `size-${props.size}`,
+    isDisabled.value && 'is-disabled',
+    props.loading && 'is-loading',
+  ].filter(Boolean),
+);
 
 // Dev-mode warning when a button has no accessible name. Vue's <slot>
 // projection means we can't enforce this at the type level (unlike the
@@ -39,13 +41,12 @@ onMounted(() => {
   const el = buttonRef.value;
   if (!el) return;
   const hasText = (el.textContent ?? '').trim().length > 0;
-  const hasAriaLabel = el.hasAttribute('aria-label')
-    || el.hasAttribute('aria-labelledby');
+  const hasAriaLabel =
+    el.hasAttribute('aria-label') || el.hasAttribute('aria-labelledby');
   if (!hasText && !hasAriaLabel) {
-    // eslint-disable-next-line no-console
     console.warn(
-      '[AtlButton] icon-only button is missing an accessible name — '
-        + 'add an aria-label attribute so screen readers announce its purpose.',
+      '[AtlButton] icon-only button is missing an accessible name — ' +
+        'add an aria-label attribute so screen readers announce its purpose.',
       el,
     );
   }

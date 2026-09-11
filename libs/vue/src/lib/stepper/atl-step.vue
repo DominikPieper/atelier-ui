@@ -1,5 +1,12 @@
 <script setup lang="ts">
-import { computed, inject, onBeforeUnmount, onMounted, useId, watch } from 'vue';
+import {
+  computed,
+  inject,
+  onBeforeUnmount,
+  onMounted,
+  useId,
+  watch,
+} from 'vue';
 import { AtlStepperKey } from './atl-stepper.vue';
 
 defineOptions({ name: 'AtlStep' });
@@ -14,6 +21,7 @@ interface AtlStepProps {
 }
 
 const props = withDefaults(defineProps<AtlStepProps>(), {
+  description: undefined,
   completed: false,
   error: false,
   optional: false,
@@ -51,10 +59,12 @@ watch(
   }),
   (val) => {
     stepper.updateStep(id, val);
-  }
+  },
 );
 
-const myIndex = computed(() => stepper.steps.value.findIndex((s) => s.id === id));
+const myIndex = computed(() =>
+  stepper.steps.value.findIndex((s) => s.id === id),
+);
 const isActive = computed(() => myIndex.value === stepper.activeStep.value);
 </script>
 

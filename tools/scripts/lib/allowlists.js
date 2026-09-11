@@ -27,11 +27,20 @@ const TOKEN_BYPASS_EXEMPT = {
   },
   // Graphic devices drawn with border-width, not border weights: the accent bar
   // down a toast's leading edge, and the radio's inner dot.
-  'toast:border-left:4px': { kind: 'design', why: 'accent bar, not a border weight' },
-  'radio:border-width:6px': { kind: 'design', why: 'draws the inner dot, not a border weight' },
+  'toast:border-left:4px': {
+    kind: 'design',
+    why: 'accent bar, not a border weight',
+  },
+  'radio:border-width:6px': {
+    kind: 'design',
+    why: 'draws the inner dot, not a border weight',
+  },
   // A gutter wide enough for three digits. It equals the sm control height by
   // coincidence; line numbers are not a control.
-  'code-block:min-width:2rem': { kind: 'design', why: 'line-number gutter, not a control width' },
+  'code-block:min-width:2rem': {
+    kind: 'design',
+    why: 'line-number gutter, not a control width',
+  },
 };
 
 /**
@@ -48,7 +57,11 @@ const VARIANT_AXIS_EXCEPTIONS = new Map([
   // React/Vue use CSS classes, so they stay enforced.
   ...['above', 'below', 'left', 'right'].map((member) => [
     `angular:AtlTooltipPosition:${member}`,
-    { kind: 'design', reason: "realised via the CDK overlay's inline transforms, not a .position-* class" },
+    {
+      kind: 'design',
+      reason:
+        "realised via the CDK overlay's inline transforms, not a .position-* class",
+    },
   ]),
   // AtlChatStatus.idle/.error carry no paint of their own — status-driven
   // behaviour swaps the input footer's Send button for a Stop button
@@ -69,7 +82,7 @@ const VARIANT_AXIS_EXCEPTIONS = new Map([
           "CSS rule (.status-streaming) in any framework; 'idle' and 'error' are resting states with no class " +
           'to match.',
       },
-    ])
+    ]),
   ),
 ]);
 
@@ -98,14 +111,6 @@ const DEFAULT_PROP_EXCEPTIONS = new Set([
   // All three adapters default to 'default'.
   'toast:variant',
 ]);
-
-/**
- * Component dirs that intentionally have no metadata file, so the story
- * description gate skips them: toast (service + container, documented manually),
- * code-block (docs-site widget), showcase (composite docs sandbox).
- * (check-story-descriptions)
- */
-const STORY_DESCRIPTION_SKIP_DIRS = new Set(['toast', 'code-block', 'showcase']);
 
 /**
  * Builds a content-addressed key for SCAFFOLD_PORT_EXEMPT (ADR-0119): the
@@ -201,7 +206,7 @@ const SCAFFOLD_PORT_EXEMPT_ENTRIES = [
         'SCAFFOLD_PORT_EXEMPT: two entries computed the same scaffoldPortKey() — same file, same ' +
           'two lines of context. The Map literal would silently keep only the later one. Add more ' +
           "distinguishing context, or merge the two entries if they're genuinely the same citation.\n" +
-          `Colliding key:\n${key}`
+          `Colliding key:\n${key}`,
       );
     }
     seen.add(key);
@@ -451,7 +456,7 @@ const PAINT_ROSTER_EXEMPT = new Map([
       why:
         'every AtlRadio story (all three frameworks) renders 2-3 `<AtlRadio>` siblings inside one ' +
         'AtlRadioGroup — a radio only makes sense as part of a group (same call A11Y_PARITY_EXEMPT already ' +
-        "makes for this exact component: \"only reachable through its group\") — so there is no single-" +
+        'makes for this exact component: "only reachable through its group") — so there is no single-' +
         'instance render to measure, not a probe or contract gap.',
     },
   ],
@@ -497,10 +502,11 @@ const PAINT_ROSTER_EXEMPT = new Map([
       why:
         "React's and Vue's toast stories are purely imperative (`meta` declares no `component` at all — a " +
         'service + a container, shown via `useAtlToast().show()`/`$atlToast.show()`, matching the imperative ' +
-        "reasoning already recorded for toast in PROP_SURFACE_EXEMPT's `toast:variant` entry and " +
-        "STORY_DESCRIPTION_SKIP_DIRS). Angular's meta DOES declare `component: AtlToast` with `args`, but " +
+        "reasoning already recorded for toast in PROP_SURFACE_EXEMPT's `toast:variant` entry and in the " +
+        "'atelier/story-description-source' ignores glob each lib's eslint.config.mjs carries for " +
+        "toast/code-block/showcase). Angular's meta DOES declare `component: AtlToast` with `args`, but " +
         'every Angular story still only renders a template wrapper that calls the same imperative service — ' +
-        "verified by running the gate scoped (`--component AtlToast --fw angular --report`): all 9 stories " +
+        'verified by running the gate scoped (`--component AtlToast --fw angular --report`): all 9 stories ' +
         'resolve a variant key that matches no rootPaint row (NO-VARIANT, already in the baseline), never a ' +
         'real measurement. Not fixable by adding a probe — the component is not rendered as a tree with a root ' +
         'to probe in any of the three frameworks.',
@@ -518,9 +524,9 @@ const PAINT_ROSTER_EXEMPT = new Map([
     {
       kind: 'gap',
       why:
-        'has its own single-instance stories in all three frameworks, but every story\'s resolved args ' +
-        "produce a variant key with no matching `rootPaint` row in the snapshot master (NO-VARIANT ×3, " +
-        "verified via `--component AtlBreadcrumbs --fw react --report` — already recorded in the baseline). " +
+        "has its own single-instance stories in all three frameworks, but every story's resolved args " +
+        'produce a variant key with no matching `rootPaint` row in the snapshot master (NO-VARIANT ×3, ' +
+        'verified via `--component AtlBreadcrumbs --fw react --report` — already recorded in the baseline). ' +
         'A contract/snapshot axis mismatch, not a probe gap; not diagnosed further here.',
     },
   ],
@@ -530,7 +536,7 @@ const PAINT_ROSTER_EXEMPT = new Map([
       kind: 'gap',
       why:
         'every Drawer/Popup/Inline story (all three frameworks) renders the chat surface CLOSED by default — ' +
-        "`[NOT-RENDERED]` fires for all 12 react/vue stories and all 12 angular ones (zero width) — so the " +
+        '`[NOT-RENDERED]` fires for all 12 react/vue stories and all 12 angular ones (zero width) — so the ' +
         'probe element exists but is never drawn. Needs either an open-by-default story variant or a ' +
         "different measurement approach for a closed-by-default overlay; not a fix this gate's contract alone " +
         'can make.',
@@ -542,7 +548,7 @@ const PAINT_ROSTER_EXEMPT = new Map([
       kind: 'gap',
       why:
         "has its own single-instance stories, but every story's resolved args produce a variant key with no " +
-        "matching `rootPaint` row (NO-VARIANT ×6, verified via `--component AtlCodeBlock --fw react --report` " +
+        'matching `rootPaint` row (NO-VARIANT ×6, verified via `--component AtlCodeBlock --fw react --report` ' +
         '— already recorded in the baseline). Same shape as AtlBreadcrumbs above.',
     },
   ],
@@ -551,10 +557,10 @@ const PAINT_ROSTER_EXEMPT = new Map([
     {
       kind: 'gap',
       why:
-        "every story (all three frameworks) reports `[NO-PROBE]`: \"no contract probe, no .atl-drawer " +
+        'every story (all three frameworks) reports `[NO-PROBE]`: "no contract probe, no .atl-drawer ' +
         'element and no bare atl-drawer tag under #storybook-root" — the drawer.contract.ts declares no ' +
         '`probes` entry, so nothing under #storybook-root is ever identified as the painted layer. Needs a ' +
-        'declared probe (same fix AtlSelect already has), which is a contract change outside this file\'s scope.',
+        "declared probe (same fix AtlSelect already has), which is a contract change outside this file's scope.",
     },
   ],
   [
@@ -562,10 +568,10 @@ const PAINT_ROSTER_EXEMPT = new Map([
     {
       kind: 'gap',
       why:
-        "every story (all three frameworks) reports `[NO-PROBE]` (\"no contract probe, no .atl-menu element " +
+        'every story (all three frameworks) reports `[NO-PROBE]` ("no contract probe, no .atl-menu element ' +
         'and no bare atl-menu tag under #storybook-root") or `[NO-VARIANT]` (resolved args match no ' +
-        "rootPaint row, verified via `--component AtlMenu --fw react --report`) — the menu.contract.ts " +
-        'declares no `probes` entry and at least one story\'s args do not resolve to a row either. Two ' +
+        'rootPaint row, verified via `--component AtlMenu --fw react --report`) — the menu.contract.ts ' +
+        "declares no `probes` entry and at least one story's args do not resolve to a row either. Two " +
         'compounding gaps, neither fixable inside this file.',
     },
   ],
@@ -575,7 +581,7 @@ const PAINT_ROSTER_EXEMPT = new Map([
       kind: 'gap',
       why:
         "has its own single-instance stories, but every story's resolved args produce a variant key with no " +
-        "matching `rootPaint` row (NO-VARIANT ×6, verified via `--component AtlPagination --fw react --report` " +
+        'matching `rootPaint` row (NO-VARIANT ×6, verified via `--component AtlPagination --fw react --report` ' +
         '— already recorded in the baseline). Same shape as AtlBreadcrumbs/AtlCodeBlock above.',
     },
   ],
@@ -587,10 +593,10 @@ const PAINT_ROSTER_EXEMPT = new Map([
         "every story renders exactly ONE `<AtlRadioGroup>` root (unlike AtlRadio above), but this gate's " +
         'ambiguous-demo heuristic (`scanLiteralAttrs`/`scanObjectLiteralProps`) scans the WHOLE story source ' +
         "text, not just the measured component's own tag — so the differing `radioValue` literals on the " +
-        "group's `<AtlRadio>` CHILDREN (\"free\"/\"pro\"/\"enterprise\") are read as ambiguity on the group " +
+        'group\'s `<AtlRadio>` CHILDREN ("free"/"pro"/"enterprise") are read as ambiguity on the group ' +
         'itself and every story is skipped as a demo (verified: `skipped-demo: 6` for react, 0 real ' +
         'measurements). A false positive in the heuristic, not a missing story — fixing the scan to scope by ' +
-        'tag is a change to this file beyond this task\'s scope.',
+        "tag is a change to this file beyond this task's scope.",
     },
   ],
   [
@@ -598,7 +604,7 @@ const PAINT_ROSTER_EXEMPT = new Map([
     {
       kind: 'gap',
       why:
-        "every story (all three frameworks) reports `[NO-PROBE]`: \"no contract probe, no .atl-tooltip " +
+        'every story (all three frameworks) reports `[NO-PROBE]`: "no contract probe, no .atl-tooltip ' +
         'element and no bare atl-tooltip tag under #storybook-root" — tooltip.contract.ts declares no ' +
         '`probes` entry. Same shape as AtlDrawer above.',
     },
@@ -710,7 +716,7 @@ const DEAD_SELECTOR_EXEMPT = new Map([
           'it in all three, or drop it from React and delete the rules from all three sheets. ' +
           'Unresolved: see tasks/todo.md',
       },
-    ])
+    ]),
   ),
   [
     'angular:table:atl-checkbox',
@@ -726,25 +732,6 @@ const DEAD_SELECTOR_EXEMPT = new Map([
     },
   ],
 ]);
-
-/**
- * `<ClassName>:<attr>` pairs that intentionally skip the host-attribute guard
- * (check-host-attr-guards, ADR-0091). Keyed by Angular class, not component
- * dir — several files declare more than one `@Component` (e.g. `atl-dialog.ts`
- * holds four), and the gate grades per class, so an exemption must too.
- *
- * Same two kinds as the other allowlists here: `design` is a closed question
- * and stays silent, `gap` is an unresolved instance of the defect and warns
- * on every run. Empty by design — every alias/id found when this gate was
- * built (Input, Textarea, Select, Dialog, Table) got the real guard added
- * instead of an exemption; this Map exists for the next component that earns
- * one, not as a parking lot for today's backlog.
- *
- * An entry naming a class/attr pair that doesn't exist, or one the host now
- * DOES guard, is itself an error — same [STALE] hygiene rule as the other
- * allowlists.
- */
-const HOST_ATTR_GUARD_EXEMPT = new Map();
 
 /**
  * `<SpecName>:<prop>:<framework>` triples that intentionally diverge between
@@ -773,18 +760,25 @@ const PROP_SURFACE_EXEMPT = new Map([
   // `WithOptionalFieldTree<ValidationError>[]` (Signal Forms' own error shape),
   // React and Vue take `string[]`. Agreeing a shared type is a contract
   // change with its own ADR, not a one-line fix.
-  ...['AtlCheckboxSpec', 'AtlToggleSpec', 'AtlInputSpec', 'AtlTextareaSpec', 'AtlRadioGroupSpec', 'AtlSelectSpec', 'AtlComboboxSpec'].flatMap(
-    (spec) =>
-      ['angular', 'react', 'vue'].map((fw) => [
-        `${spec}:errors:${fw}`,
-        {
-          kind: 'gap',
-          reason:
-            "'errors' is declared by all three adapters but AtlFormFieldSpec has no matching prop — Angular's " +
-            "WithOptionalFieldTree<ValidationError>[] vs React/Vue's string[] means a shared type is a contract " +
-            'change with its own ADR, not this gate. Unresolved: see tasks/todo.md.',
-        },
-      ])
+  ...[
+    'AtlCheckboxSpec',
+    'AtlToggleSpec',
+    'AtlInputSpec',
+    'AtlTextareaSpec',
+    'AtlRadioGroupSpec',
+    'AtlSelectSpec',
+    'AtlComboboxSpec',
+  ].flatMap((spec) =>
+    ['angular', 'react', 'vue'].map((fw) => [
+      `${spec}:errors:${fw}`,
+      {
+        kind: 'gap',
+        reason:
+          "'errors' is declared by all three adapters but AtlFormFieldSpec has no matching prop — Angular's " +
+          "WithOptionalFieldTree<ValidationError>[] vs React/Vue's string[] means a shared type is a contract " +
+          'change with its own ADR, not this gate. Unresolved: see tasks/todo.md.',
+      },
+    ]),
   ),
   // AtlDialogSpec never grew aria-label/aria-labelledby, but this is no
   // longer an allowlist entry: `id`/`aria-label`/`aria-labelledby`/
@@ -854,14 +848,14 @@ const PROP_SURFACE_EXEMPT = new Map([
           "' as a prop. A spec bug (the shape doesn't match how any adapter renders), not framework drift. " +
           'Unresolved: see tasks/todo.md.',
       },
-    ])
+    ]),
   ),
   ...['angular', 'react', 'vue'].map((fw) => [
     `AtlChatSuggestionSpec:id:${fw}`,
     {
       kind: 'gap',
       reason:
-        "AtlChatSuggestionSpec.id is spec-only — all three adapters key suggestions by label/hint alone and " +
+        'AtlChatSuggestionSpec.id is spec-only — all three adapters key suggestions by label/hint alone and ' +
         "never take 'id' as a prop. A spec bug, not framework drift. Unresolved: see tasks/todo.md.",
     },
   ]),
@@ -1042,7 +1036,7 @@ const PROP_SURFACE_EXEMPT = new Map([
       kind: 'gap',
       reason:
         "AtlDialogSpec declares no 'aria-labelledby' at all. Vue's AtlDialog hardcodes its own headerId " +
-        "(useId()) as the aria-labelledby target and exposes no prop to override it, while Angular " +
+        '(useId()) as the aria-labelledby target and exposes no prop to override it, while Angular ' +
         "('aria-labelledby' input alias, atl-dialog.ts:96) and React ('aria-labelledby' prop, atl-dialog.tsx:52, " +
         'falling back to headerId) both accept one. ADR-0093 Consequences named exactly this blind spot when the ' +
         "gate shipped. Unresolved: see tasks/todo.md, 'Cross-framework gaps found by check:manifest-parity (S6a, " +
@@ -1057,7 +1051,7 @@ const PROP_SURFACE_EXEMPT = new Map([
         "AtlButtonSpec declares no 'type' at all. Angular's <atl-button> (atl-button.ts) renders a custom " +
         'role="button" element with no `type` input and no native-attribute passthrough to receive one, while ' +
         "React ('type' reaches the underlying <button> via {...rest}) and Vue (its own 'type' prop, " +
-        "atl-button.vue) both let a caller ask for a submit button — impossible in Angular today. Unresolved: " +
+        'atl-button.vue) both let a caller ask for a submit button — impossible in Angular today. Unresolved: ' +
         "see tasks/todo.md, 'Cross-framework gaps found by check:manifest-parity (S6a, 2026-09-10)'.",
     },
   ],
@@ -1088,7 +1082,7 @@ const PROP_SURFACE_EXEMPT = new Map([
     {
       kind: 'gap',
       reason:
-        "the react-vs-vue side of the same fact AtlAlertSpec:dismissed:angular and :onDismissed:react (above) " +
+        'the react-vs-vue side of the same fact AtlAlertSpec:dismissed:angular and :onDismissed:react (above) ' +
         "already record: AtlAlertSpec models no dismiss event at all, so Vue's own 'dismissed' emit " +
         "(atl-alert.vue) is exactly as unkeyed as Angular's 'dismissed' output — it was simply never flagged " +
         'here, because check:props never compares Vue emits for EXTRA at all (GENERIC_EXTRA_IGNORE above has no ' +
@@ -1303,7 +1297,7 @@ const COMPONENT_COUNT_EXEMPT_ENTRIES = [
         'COMPONENT_COUNT_EXEMPT: two entries computed the same componentCountKey() — same file, same ' +
           'two lines of context. The Map literal would silently keep only the later one. Add more ' +
           "distinguishing context, or merge the two entries if they're genuinely the same citation.\n" +
-          `Colliding key:\n${key}`
+          `Colliding key:\n${key}`,
       );
     }
     seen.add(key);
@@ -1316,7 +1310,6 @@ module.exports = {
   VARIANT_AXIS_EXCEPTIONS,
   DEFAULT_IS_BASE,
   DEFAULT_PROP_EXCEPTIONS,
-  STORY_DESCRIPTION_SKIP_DIRS,
   SCAFFOLD_PORT_EXEMPT,
   scaffoldPortKey,
   FIGMA_CONFORMANCE_EXCEPTIONS,
@@ -1326,7 +1319,6 @@ module.exports = {
   PRIMITIVE_TOKENS,
   PRIMITIVE_EXEMPTIONS,
   TOKEN_BYPASS_EXEMPT,
-  HOST_ATTR_GUARD_EXEMPT,
   PROP_SURFACE_EXEMPT,
   UNDISTRIBUTED_SKILLS,
   ADR_CORRECTION_EXEMPT,

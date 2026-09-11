@@ -17,7 +17,8 @@ export interface AtlTabGroupContext {
   groupId: string;
 }
 
-export const AtlTabGroupKey: InjectionKey<AtlTabGroupContext> = Symbol('AtlTabGroup');
+export const AtlTabGroupKey: InjectionKey<AtlTabGroupContext> =
+  Symbol('AtlTabGroup');
 
 export interface AtlTabGroupProps {
   selectedIndex?: number;
@@ -47,7 +48,7 @@ watch(
   () => props.selectedIndex,
   (val) => {
     internalIndex.value = val;
-  }
+  },
 );
 
 function registerTab(tab: AtlTabInfo) {
@@ -88,7 +89,10 @@ function onKeydown(event: KeyboardEvent) {
     if (next !== undefined) selectTab(next);
   } else if (event.key === 'ArrowLeft') {
     event.preventDefault();
-    const prev = enabledIndices[(currentPos - 1 + enabledIndices.length) % enabledIndices.length];
+    const prev =
+      enabledIndices[
+        (currentPos - 1 + enabledIndices.length) % enabledIndices.length
+      ];
     if (prev !== undefined) selectTab(prev);
   } else if (event.key === 'Home') {
     event.preventDefault();
@@ -108,14 +112,18 @@ const classes = computed(() => ['atl-tab-group', `variant-${props.variant}`]);
     <div class="tablist" role="tablist" @keydown="onKeydown">
       <button
         v-for="(tab, index) in tabs"
+        :id="`${groupId}-tab-${index}`"
         :key="tab.id"
         role="tab"
-        :id="`${groupId}-tab-${index}`"
         :aria-selected="index === internalIndex"
         :aria-controls="`${groupId}-panel-${index}`"
         :tabindex="index === internalIndex ? 0 : -1"
         :disabled="tab.disabled"
-        :class="['tab-button', index === internalIndex && 'is-active', tab.disabled && 'is-disabled']"
+        :class="[
+          'tab-button',
+          index === internalIndex && 'is-active',
+          tab.disabled && 'is-disabled',
+        ]"
         type="button"
         @click="!tab.disabled && selectTab(index)"
       >

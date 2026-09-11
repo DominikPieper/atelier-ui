@@ -17,6 +17,7 @@ const props = withDefaults(defineProps<Props>(), {
   sortable: false,
   sortDirection: null,
   align: 'start',
+  width: undefined,
 });
 
 const emit = defineEmits<{
@@ -41,14 +42,27 @@ const ariaSort = computed(() => {
 
 function cycleSort() {
   const next: SortDirection =
-    props.sortDirection === null ? 'asc' : props.sortDirection === 'asc' ? 'desc' : null;
+    props.sortDirection === null
+      ? 'asc'
+      : props.sortDirection === 'asc'
+        ? 'desc'
+        : null;
   emit('sort', next);
 }
 </script>
 
 <template>
-  <th :class="classes" :aria-sort="ariaSort" :style="width ? { width } : undefined">
-    <button v-if="sortable" type="button" class="atl-th-sort-btn" @click="cycleSort">
+  <th
+    :class="classes"
+    :aria-sort="ariaSort"
+    :style="width ? { width } : undefined"
+  >
+    <button
+      v-if="sortable"
+      type="button"
+      class="atl-th-sort-btn"
+      @click="cycleSort"
+    >
       <slot />
       <span class="atl-th-sort-icon" aria-hidden="true">
         <AtlIcon name="sort-asc" size="sm" class="atl-th-sort-asc-arrow" />

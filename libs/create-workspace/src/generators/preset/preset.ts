@@ -50,14 +50,20 @@ const STORYBOOK_FRAMEWORK_PACKAGE: Record<Framework, string> = {
 // see sync-preflight.mjs's comment on those two entries.
 function storybookTemplateName(
   framework: Framework,
-  base: 'main.ts' | 'preview' | 'atl-button.stories' | 'vitest.config' | 'vitest.setup',
+  base:
+    | 'main.ts'
+    | 'preview'
+    | 'atl-button.stories'
+    | 'vitest.config'
+    | 'vitest.setup',
 ) {
   if (base === 'main.ts') return `storybook/${framework}/main.ts.template`;
   // vitest.config.ts and .storybook/vitest.setup.ts are always written out
   // as plain `.ts` regardless of framework — unlike main.ts/preview/the
   // example story, react does NOT get a `.tsx` variant for these (neither
   // file contains JSX), so both need the `.template` dodge on every framework.
-  if (base === 'vitest.config' || base === 'vitest.setup') return `storybook/${framework}/${base}.ts.template`;
+  if (base === 'vitest.config' || base === 'vitest.setup')
+    return `storybook/${framework}/${base}.ts.template`;
   const ext = framework === 'react' ? 'tsx' : 'ts.template';
   return `storybook/${framework}/${base}.${ext}`;
 }
@@ -66,6 +72,56 @@ function storybookTemplateName(
 // correct `.ts`/`.tsx` extension regardless of the source template's name.
 function storybookOutputExt(framework: Framework) {
   return framework === 'react' ? 'tsx' : 'ts';
+}
+
+// Splices `block` (one or more object literals, as raw source text, starting
+// with a leading comma) into the flat ESLint config a framework's own
+// application generator (@nx/angular, @nx/react, @nx/vue — all invoked with
+// `linter: 'eslint'` below) already wrote at `path`, immediately before the
+// file's closing `];`, and prepends any `imports` the block needs.
+//
+// This is text surgery, not an AST rewrite, and that is deliberate: the
+// generated file is Nx's, not ours, and a future Nx version reshaping it
+// should not silently swallow this addition the way editing its AST in place
+// might. `@nx/eslint`'s own flat-config codegen (confirmed by actually
+// running the three application generators against an in-memory Tree —
+// verified for this Nx version, not assumed) always emits a single
+// `export default [ ... ];` as the file's last statement, so anchoring on the
+// final `];` is stable across the Nx versions this generator supports.
+// `formatFiles(tree)` at the end of presetGenerator reformats whatever this
+// produces, so exact indentation here doesn't matter.
+//
+// Throws loudly if the file is missing or doesn't have that shape, rather
+// than silently skipping the addition — same reasoning as the storybook
+// targets' `updateJson` calls below: a workshop app whose ESLint config
+// silently didn't get the framework's accessibility rule is worse than a
+// generator that stops.
+function appendToFlatEslintConfig(
+  tree: Tree,
+  path: string,
+  block: string,
+  imports: string[] = [],
+): void {
+  const content = tree.read(path, 'utf-8');
+  if (content === null) {
+    throw new Error(
+      `Cannot find ${path} — expected the framework application generator to have already written a flat ESLint config there (this generator always passes linter: 'eslint').`,
+    );
+  }
+  const closeIndex = content.lastIndexOf('];');
+  if (closeIndex === -1) {
+    throw new Error(
+      `${path} does not end with a flat-config array ("];") — the framework application generator's ESLint output may have changed shape; appendToFlatEslintConfig needs updating.`,
+    );
+  }
+  const importPrefix = imports.length ? `${imports.join('\n')}\n` : '';
+  tree.write(
+    path,
+    importPrefix +
+      content.slice(0, closeIndex) +
+      block +
+      content.slice(closeIndex),
+  );
 }
 
 // The four storybookjs/mcp skills this generator installs post-scaffold (S2).
@@ -137,6 +193,15 @@ const ANALOGJS_VITE_PLUGIN_ANGULAR_VERSION = '2.7.1';
 // matchers), mirroring libs/vue/.storybook/vitest.setup.ts exactly — React
 // and Angular's setup files don't use it.
 const TESTING_LIBRARY_JEST_DOM_VERSION = '^6.9.1';
+// The Vue eslint.config.mjs addition above (see the appendToFlatEslintConfig
+// call in the vue branch) imports this directly. @nx/eslint's own root config
+// setup already adds it unconditionally regardless of framework or of
+// whether `prettier` itself is installed (confirmed by running all three
+// application generators against an empty Tree), so the conditional add near
+// the end of presetGenerator below is a safety net, not the primary source —
+// same reasoning as TYPESCRIPT_VERSION above. Version matches what that run
+// installed.
+const ESLINT_CONFIG_PRETTIER_VERSION = '^10.0.0';
 // Hard kill for the whole child process — a backstop above the CLI's own
 // clone timeout, covering the install/copy phase after the clone too.
 const SKILLS_INSTALL_TIMEOUT_MS = 120_000;
@@ -172,7 +237,9 @@ const SKILLS_INSTALL_TIMEOUT_MS = 120_000;
 // literal one-character string on both platforms by construction, not by
 // relying on cmd.exe's particular behaviour.
 function quoteForCmdExe(token: string): string {
-  return /[\s"^&|<>()*?]/.test(token) ? `"${token.replace(/"/g, '\\"')}"` : token;
+  return /[\s"^&|<>()*?]/.test(token)
+    ? `"${token.replace(/"/g, '\\"')}"`
+    : token;
 }
 
 // Runs `npx <SKILLS_ADD_ARGV...>` with the child's stdio wired to this
@@ -180,7 +247,10 @@ function quoteForCmdExe(token: string): string {
 // error otherwise (non-zero exit, the install timeout killing the child, or
 // the child never starting at all) — installSkills' catch block below turns
 // any of those into the same non-fatal warning.
-function runSkillsAddCommand(cwd: string, env: NodeJS.ProcessEnv): Promise<void> {
+function runSkillsAddCommand(
+  cwd: string,
+  env: NodeJS.ProcessEnv,
+): Promise<void> {
   return new Promise((resolve, reject) => {
     const isWindows = process.platform === 'win32';
     let settled = false;
@@ -204,7 +274,9 @@ function runSkillsAddCommand(cwd: string, env: NodeJS.ProcessEnv): Promise<void>
       // `child` refers to below IS `npx` itself (no shell in between), so the
       // signal reaches the right process. Deliberately not set on Windows —
       // see the `windowsTimeoutHandle` backstop after the child is spawned.
-      ...(isWindows ? {} : { timeout: SKILLS_INSTALL_TIMEOUT_MS, killSignal: 'SIGTERM' }),
+      ...(isWindows
+        ? {}
+        : { timeout: SKILLS_INSTALL_TIMEOUT_MS, killSignal: 'SIGTERM' }),
     };
 
     const child = isWindows
@@ -255,10 +327,9 @@ function runSkillsAddCommand(cwd: string, env: NodeJS.ProcessEnv): Promise<void>
           // throws, and there is nothing more useful to do here than swallow
           // it: the `exit` handler above has already been told (`timedOut`)
           // and will reject with the real, readable timeout message either way.
-          spawn('taskkill', ['/pid', String(child.pid), '/T', '/F'], { stdio: 'ignore' }).on(
-            'error',
-            () => undefined,
-          );
+          spawn('taskkill', ['/pid', String(child.pid), '/T', '/F'], {
+            stdio: 'ignore',
+          }).on('error', () => undefined);
         }
       }, SKILLS_INSTALL_TIMEOUT_MS);
     }
@@ -294,7 +365,10 @@ function runSkillsAddCommand(cwd: string, env: NodeJS.ProcessEnv): Promise<void>
 // Exported (rather than inlined into the returned post-generator task) so it
 // can be exercised directly in tests without also invoking the real
 // `npm install` that `installTask`/`removePresetTask` run when called.
-export async function installSkills(tree: Tree, skillsEnabled: boolean): Promise<void> {
+export async function installSkills(
+  tree: Tree,
+  skillsEnabled: boolean,
+): Promise<void> {
   if (!skillsEnabled) return;
 
   console.log(
@@ -329,7 +403,10 @@ export async function installSkills(tree: Tree, skillsEnabled: boolean): Promise
   }
 }
 
-export async function presetGenerator(tree: Tree, options: PresetGeneratorSchema) {
+export async function presetGenerator(
+  tree: Tree,
+  options: PresetGeneratorSchema,
+) {
   const frameworks = (options.frameworks ?? 'angular')
     .split(',')
     .map((f) => f.trim())
@@ -381,7 +458,9 @@ export async function presetGenerator(tree: Tree, options: PresetGeneratorSchema
       // ever ran. Optional peers are not auto-installed, so the first thing that
       // installs it is the line below, at the version that matches.
       await ensurePackage('@nx/angular', NX_VERSION);
-      const { applicationGenerator: angularAppGenerator } = require('@nx/angular/generators');
+      const {
+        applicationGenerator: angularAppGenerator,
+      } = require('@nx/angular/generators');
       await angularAppGenerator(tree, {
         name: appName,
         directory: appName,
@@ -392,17 +471,51 @@ export async function presetGenerator(tree: Tree, options: PresetGeneratorSchema
         skipTests: true,
         e2eTestRunner: 'none',
         skipFormat: true,
+        // Without this, the generator's own linter choice defaults to
+        // `normalizeLinterOption`'s non-interactive fallback: follow an
+        // eslint setup already detected in the tree, or `'none'` if there is
+        // none yet. A single-framework Angular scaffold (the common,
+        // documented case — ADR-0084) starts from a genuinely empty tree, so
+        // that fallback silently produced ZERO eslint.config.mjs and no
+        // eslint devDependency at all — verified by running the real
+        // generator against an empty workspace with this line omitted.
+        // React and Vue below already pass this explicitly; Angular didn't,
+        // which was the actual defect, not merely a posture gap.
+        linter: 'eslint',
       });
       deps['@atelier-ui/angular'] = 'latest';
+
+      // `flat/angular-template` above (written into workshop-angular's own
+      // eslint.config.mjs by the application generator, confirmed by a real
+      // run) already carries angular-eslint's `templateAccessibility` preset
+      // — see libs/angular/eslint.config.mjs's comment for the 11 rules that
+      // covers. This one isn't part of that preset (not `:accessibility:`
+      // tagged in angular-eslint's README): WCAG 2.4.3, positive tabindex
+      // fights natural DOM tab order. Same addition libs/angular's own config
+      // makes on top of the identical preset.
+      appendToFlatEslintConfig(
+        tree,
+        `${appName}/eslint.config.mjs`,
+        `,
+  {
+    // Not covered by \`flat/angular-template\` above (angular-eslint's own
+    // \`templateAccessibility\` preset only) — WCAG 2.4.3, positive tabindex
+    // fights natural DOM tab order. Mirrors libs/angular/eslint.config.mjs's
+    // identical addition on top of the same preset.
+    files: ['**/*.html'],
+    rules: {
+      '@angular-eslint/template/no-positive-tabindex': 'error',
+    },
+  },
+`,
+      );
     }
 
     if (framework === 'react') {
       console.log(`\n◇ Generating React workshop app…`);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { applicationGenerator: reactAppGenerator } = await ensurePackage<any>(
-        '@nx/react',
-        NX_VERSION,
-      );
+      const { applicationGenerator: reactAppGenerator } =
+        await ensurePackage<any>('@nx/react', NX_VERSION);
       await reactAppGenerator(tree, {
         name: appName,
         directory: appName,
@@ -415,15 +528,19 @@ export async function presetGenerator(tree: Tree, options: PresetGeneratorSchema
         skipFormat: true,
       } as Parameters<typeof reactAppGenerator>[1]);
       deps['@atelier-ui/react'] = 'latest';
+
+      // Deliberately nothing added here. `flat/react` above (written into
+      // workshop-react's own eslint.config.mjs by the application generator,
+      // confirmed by a real run) already carries jsx-a11y's full 18-rule
+      // active set — the same rule set libs/react/eslint.config.mjs relies on
+      // without adding anything of its own either.
     }
 
     if (framework === 'vue') {
       console.log(`\n◇ Generating Vue workshop app…`);
       // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { applicationGenerator: vueAppGenerator } = await ensurePackage<any>(
-        '@nx/vue',
-        NX_VERSION,
-      );
+      const { applicationGenerator: vueAppGenerator } =
+        await ensurePackage<any>('@nx/vue', NX_VERSION);
       await vueAppGenerator(tree, {
         name: appName,
         directory: appName,
@@ -435,17 +552,81 @@ export async function presetGenerator(tree: Tree, options: PresetGeneratorSchema
         skipFormat: true,
       } as Parameters<typeof vueAppGenerator>[1]);
       deps['@atelier-ui/vue'] = 'latest';
+
+      // @nx/vue's own application generator (confirmed by a real run against
+      // an in-memory Tree, packed from the exact pinned version — @nx/vue is
+      // an optional peer, not installed in this workspace) DOES match `.vue`
+      // files and wire vue-eslint-parser + typescript-eslint's parser for
+      // them via `parserOptions.parser` — the gap this generator's own
+      // libs/vue/eslint.config.mjs once had (`.vue` files matched by no
+      // config at all) does not exist in the scaffold. What IS missing,
+      // mirrored below from libs/vue/eslint.config.mjs:
+      //
+      // 1. `eslint-config-prettier` after eslint-plugin-vue's rules, scoped
+      //    to `.vue` — without it, eslint-plugin-vue's layout/whitespace
+      //    rules (max-attributes-per-line, html-self-closing, …) fight
+      //    Prettier. eslint-config-prettier is already an unconditional
+      //    devDependency here (added by @nx/eslint's own root config setup,
+      //    confirmed by the same run), independent of whether `prettier`
+      //    itself is installed — the defensive add near the end of
+      //    presetGenerator below is a safety net for that, not the primary
+      //    source.
+      // 2. `vue/no-unused-properties` — not part of any eslint-plugin-vue
+      //    preset, opted in explicitly.
+      //
+      // Deliberately NOT mirrored: libs/vue/eslint.config.mjs also re-scopes
+      // eslint-plugin-vue's `flat/recommended` essential/strongly-recommended
+      // /recommended blocks to `**/*.vue` (verified here too: those blocks
+      // carry no `files` restriction in the installed eslint-plugin-vue, so
+      // @nx/vue's own `...vue.configs['flat/recommended']` spread — which
+      // this generator does not rewrite, only append to — applies Vue-only
+      // rules to every .ts/.js file in the app as well). Doing the same here
+      // would mean rewriting a block the application generator wrote, not
+      // appending to it, which is the one thing this helper is built to
+      // avoid; the practical exposure in a fresh single-app scaffold is low
+      // (no .spec.ts/.stories.ts test-double files exist yet at this point in
+      // the generator, and @nx/vue already turns off the rule most likely to
+      // misfire on plain .ts — vue/multi-word-component-names — project-wide
+      // on its own). Recorded here rather than silently left unmentioned.
+      appendToFlatEslintConfig(
+        tree,
+        `${appName}/eslint.config.mjs`,
+        `,
+  {
+    // eslint-plugin-vue's flat/recommended (spread above by @nx/vue's own
+    // application generator) ships layout/whitespace rules that fight
+    // Prettier — same gap libs/vue/eslint.config.mjs closes.
+    files: ['**/*.vue'],
+    rules: eslintConfigPrettier.rules,
+  },
+  {
+    // Not part of any eslint-plugin-vue preset — opted in explicitly, same as
+    // libs/vue/eslint.config.mjs: catches a declared prop nothing in the
+    // component reads.
+    files: ['**/*.vue'],
+    rules: {
+      'vue/no-unused-properties': ['error', { groups: ['props'] }],
+    },
+  },
+`,
+        [`import eslintConfigPrettier from 'eslint-config-prettier';`],
+      );
     }
 
     // Copy design tokens into the scaffolded app so attendees can edit them
     // directly. They're not imported from the @atelier-ui/<fw> npm package
     // because (a) those published packages don't ship tokens.css, and (b) a
     // workshop attendee editing colors in node_modules is a bad experience.
-    tree.write(`${appName}/src/styles/tokens.css`, readTemplate('styles/tokens.css'));
+    tree.write(
+      `${appName}/src/styles/tokens.css`,
+      readTemplate('styles/tokens.css'),
+    );
 
     // Prepend the tokens import to the app's global stylesheet
     const stylesPath = `${appName}/src/styles.css`;
-    const existing = tree.exists(stylesPath) ? (tree.read(stylesPath, 'utf-8') ?? '') : '';
+    const existing = tree.exists(stylesPath)
+      ? (tree.read(stylesPath, 'utf-8') ?? '')
+      : '';
     tree.write(stylesPath, `@import './styles/tokens.css';\n\n${existing}`);
 
     // Storybook config: mirrors libs/{angular,react,vue}/.storybook/main.ts
@@ -453,7 +634,10 @@ export async function presetGenerator(tree: Tree, options: PresetGeneratorSchema
     // and @storybook/addon-designs (no Figma handoff doc to link from here).
     // @storybook/addon-vitest DOES ship (owner correction 2026-09-10 to
     // ADR-0123's original "no test runner" call).
-    tree.write(`${appName}/.storybook/main.ts`, readTemplate(storybookTemplateName(framework, 'main.ts')));
+    tree.write(
+      `${appName}/.storybook/main.ts`,
+      readTemplate(storybookTemplateName(framework, 'main.ts')),
+    );
     tree.write(
       `${appName}/.storybook/preview.${storybookOutputExt(framework)}`,
       readTemplate(storybookTemplateName(framework, 'preview')),
@@ -484,7 +668,10 @@ export async function presetGenerator(tree: Tree, options: PresetGeneratorSchema
     // @storybook/addon-vitest's `test-run` tool walks up from a story's
     // .storybook directory looking for the nearest vitest/vite config by
     // this standard name.
-    tree.write(`${appName}/vitest.config.ts`, readTemplate(storybookTemplateName(framework, 'vitest.config')));
+    tree.write(
+      `${appName}/vitest.config.ts`,
+      readTemplate(storybookTemplateName(framework, 'vitest.config')),
+    );
     tree.write(
       `${appName}/.storybook/vitest.setup.ts`,
       readTemplate(storybookTemplateName(framework, 'vitest.setup')),
@@ -525,7 +712,8 @@ export async function presetGenerator(tree: Tree, options: PresetGeneratorSchema
       return config;
     });
 
-    storybookDevDeps[STORYBOOK_FRAMEWORK_PACKAGE[framework]] = STORYBOOK_VERSION;
+    storybookDevDeps[STORYBOOK_FRAMEWORK_PACKAGE[framework]] =
+      STORYBOOK_VERSION;
     // @storybook/react-vite and @storybook/vue3-vite each carry their
     // non-vite renderer counterpart as a plain (non-peer) `dependency`, not
     // something npm/pnpm is told the app needs directly — but the story and
@@ -555,23 +743,40 @@ export async function presetGenerator(tree: Tree, options: PresetGeneratorSchema
   const primaryFramework = frameworks[0];
   const primaryApp = `workshop-${primaryFramework}`;
 
-  console.log(`\n◇ Writing the contract loop (check:contracts, the example AtlButton contract, the Figma snapshot projection)…`);
+  console.log(
+    `\n◇ Writing the contract loop (check:contracts, the example AtlButton contract, the Figma snapshot projection)…`,
+  );
 
   // .ts.template, not .ts — see the comment on storybookTemplateName() above:
   // a literal `.ts` file under files/ is compiled away by this package's own
   // tsconfig.lib.json (`include: ["src/**/*.ts"]`) and never reaches dist/
   // under a name readTemplate() can find at runtime. The OUTPUT filenames
   // below stay plain `.ts` — only the template source needs the suffix.
-  tree.write(`${primaryApp}/src/contracts/types.ts`, readTemplate('contracts/types.ts.template'));
-  tree.write(`${primaryApp}/src/contracts/README.md`, readTemplate('contracts/README.md'));
+  tree.write(
+    `${primaryApp}/src/contracts/types.ts`,
+    readTemplate('contracts/types.ts.template'),
+  );
+  tree.write(
+    `${primaryApp}/src/contracts/README.md`,
+    readTemplate('contracts/README.md'),
+  );
   tree.write(
     `${primaryApp}/src/contracts/button.contract.ts`,
     readTemplate('contracts/button.contract.ts.template'),
   );
 
-  tree.write('tools/scripts/check-contracts.mjs', readTemplate('tools/scripts/check-contracts.mjs'));
-  tree.write('tools/scripts/lib/ts-eval.js', readTemplate('tools/scripts/lib/ts-eval.js'));
-  tree.write('tools/scripts/lib/docgen.mjs', readTemplate('tools/scripts/lib/docgen.mjs'));
+  tree.write(
+    'tools/scripts/check-contracts.mjs',
+    readTemplate('tools/scripts/check-contracts.mjs'),
+  );
+  tree.write(
+    'tools/scripts/lib/ts-eval.js',
+    readTemplate('tools/scripts/lib/ts-eval.js'),
+  );
+  tree.write(
+    'tools/scripts/lib/docgen.mjs',
+    readTemplate('tools/scripts/lib/docgen.mjs'),
+  );
   tree.write(
     'tools/scripts/figma-snapshot-contracts.mjs',
     readTemplate('tools/scripts/figma-snapshot-contracts.mjs'),
@@ -852,11 +1057,23 @@ file exports). The Desktop Bridge covers creation and inspection without a token
   if (frameworks.includes('vue') && !existingDeps['@vitejs/plugin-vue']) {
     viteFrameworkDevDeps['@vitejs/plugin-vue'] = VITE_PLUGIN_VUE_VERSION;
   }
-  if (frameworks.includes('angular') && !existingDeps['@analogjs/vite-plugin-angular']) {
-    viteFrameworkDevDeps['@analogjs/vite-plugin-angular'] = ANALOGJS_VITE_PLUGIN_ANGULAR_VERSION;
+  if (
+    frameworks.includes('angular') &&
+    !existingDeps['@analogjs/vite-plugin-angular']
+  ) {
+    viteFrameworkDevDeps['@analogjs/vite-plugin-angular'] =
+      ANALOGJS_VITE_PLUGIN_ANGULAR_VERSION;
   }
-  if (frameworks.includes('vue') && !existingDeps['@testing-library/jest-dom']) {
-    viteFrameworkDevDeps['@testing-library/jest-dom'] = TESTING_LIBRARY_JEST_DOM_VERSION;
+  if (
+    frameworks.includes('vue') &&
+    !existingDeps['@testing-library/jest-dom']
+  ) {
+    viteFrameworkDevDeps['@testing-library/jest-dom'] =
+      TESTING_LIBRARY_JEST_DOM_VERSION;
+  }
+  if (frameworks.includes('vue') && !existingDeps['eslint-config-prettier']) {
+    viteFrameworkDevDeps['eslint-config-prettier'] =
+      ESLINT_CONFIG_PRETTIER_VERSION;
   }
 
   // Install selected @atelier-ui/* packages (dependencies) and Storybook +
@@ -877,7 +1094,10 @@ file exports). The Desktop Bridge covers creation and inspection without a token
   );
 
   // Write preflight script into the scaffolded workspace
-  tree.write('tools/scripts/preflight.mjs', readTemplate('tools/scripts/preflight.mjs'));
+  tree.write(
+    'tools/scripts/preflight.mjs',
+    readTemplate('tools/scripts/preflight.mjs'),
+  );
 
   // Add `preflight` npm script to the generated workspace's package.json.
   // create-nx-workspace guarantees package.json exists before the preset runs,

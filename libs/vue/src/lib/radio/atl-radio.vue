@@ -26,12 +26,14 @@ const ctx = inject(AtlRadioGroupKey, {
 const isDisabled = computed(() => props.disabled || ctx.disabled);
 const isChecked = computed(() => ctx.value === props.radioValue);
 
-const classes = computed(() => [
-  'atl-radio',
-  isDisabled.value && 'is-disabled',
-  isChecked.value && 'is-checked',
-  ctx.invalid && 'is-invalid',
-].filter(Boolean));
+const classes = computed(() =>
+  [
+    'atl-radio',
+    isDisabled.value && 'is-disabled',
+    isChecked.value && 'is-checked',
+    ctx.invalid && 'is-invalid',
+  ].filter(Boolean),
+);
 
 function onChange() {
   if (!isDisabled.value && !ctx.readonly) {
@@ -56,8 +58,8 @@ function onClick(event: MouseEvent) {
       :value="radioValue"
       :checked="isChecked"
       :disabled="isDisabled"
-      @click="onClick"
       class="radio-input"
+      @click="onClick"
       @change="onChange"
     />
     <span class="radio-indicator" aria-hidden="true" />
