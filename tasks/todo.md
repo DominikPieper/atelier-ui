@@ -107,6 +107,23 @@ Ranked; each carries why it's worth doing next rather than later.
         around it. Clearing it by hand-editing the baseline was done once today, under review, for
         five entries known to be this noise; the file's own header forbids hand edits and that was
         a deliberate exception, not a precedent.
+  - [ ] **`paint-baseline.json` keys a finding without its measured value, so drift inside a
+        recorded finding is invisible.** `check-paint.mjs:1803` keys on
+        `fw|component|story|state|field`; the `detail` string (`"rendered 172px, figma 222px"`) is
+        not part of it. A height drifting 172px → 400px against the same Figma 222px keeps its key
+        and the gate stays green. ADR-0080 §2 closed exactly this hole for `type-baseline.json` —
+        "the measured value is part of the finding's text, so 14-vs-16 drifting to 14-vs-18 is now
+        two blockers" — and `paint-baseline.json`, written later under ADR-0121, did not inherit
+        it. Not a mechanical port: putting the value in the key makes every wobble inside the 2px
+        tolerance a blocker, which is what the AtlAlert case shows can happen. Decide the pairing
+        (value in the identity **and** a tolerance-aware comparison) rather than porting one half.
+  - [ ] **The `play` wait costs about 50% runtime**, measured 2026-09-11: `check:paint`
+        unscoped went from ~230 s to ~345 s, because every story now pays Storybook's own
+        `waitForAnimations` (~100 ms flat, since this Chromium session does not match its
+        `isTestEnvironment()` check) plus the settle poll — even though no story has a `play` yet.
+        A known mitigation was deliberately not taken: spoofing the page's user agent to contain
+        `"StorybookTestRunner"`, the string `@storybook/test-runner` itself relies on, short-circuits
+        that wait. Left out to avoid a second dependency on a Storybook internal in the same change.
   - [ ] **The ADR-0124 `[ROSTER]` floor is cross-framework.** It fires when a component has
         zero measurements in _every_ framework, so one framework silently losing all coverage of
         a component — someone breaks `meta.component` in just the Vue story — is caught by

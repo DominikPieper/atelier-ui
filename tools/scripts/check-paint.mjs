@@ -106,6 +106,58 @@
  * story's paint/geometry/type comparisons are skipped entirely — a closed box has
  * no color or size to be wrong about.
  *
+ * PLAY COMPLETION (round 3, ADR-0121's "Corrected 2026-09-11 (the `play` count)"
+ * paragraph / ADR-0128). Before round 3 this gate measured at MOUNT — the instant
+ * `#storybook-root` gained children — and never waited for a story's `play`.
+ * Harmless while none of the measured stories carried one; load-bearing the
+ * moment they do, since a `play` is part of a story's claim (ADR-0121 Decision 2:
+ * "these `args` render like this Figma node... and behave as this `play`
+ * asserts") — the rendered state that claim describes is what `play` leaves
+ * behind, not what mount alone produces. Fixed by waiting for the ONE core event
+ * Storybook's preview runtime emits exactly once per render, on every path —
+ * no `play` at all, a `play` that resolves, or a `play` that throws — read from
+ * this repo's own installed `storybook@10.6.0` rather than assumed:
+ * `node_modules/storybook/dist/_browser-chunks/chunk-M6YZR3ZW.js`, the
+ * `PreviewRender.render()` method. It runs `loading` → `beforeEach` → mount →
+ * (if a `play` exists) `playing` → `completing` (`waitForAnimations`, so a real
+ * CSS transition/animation already has a chance to settle here) → `completed` →
+ * `afterEach` → `finished`, and the `finished` phase always ends by emitting
+ * `STORY_FINISHED` (`storybook/internal/core-events`, value `'storyFinished'`)
+ * with `{ storyId, status: 'error' | 'success', reporters }`. A thrown `play` is
+ * caught, re-emits `PLAY_FUNCTION_THREW_EXCEPTION`, then — since
+ * `throwPlayFunctionExceptions` defaults to `true` — re-throws into `render()`'s
+ * own OUTERMOST catch, which emits `STORY_FINISHED` with `status: 'error'` from
+ * there instead; either way the event fires. The one path that never reaches it:
+ * a `play` whose own `await` never settles (an unresolved promise, a real hang).
+ * That is `[PLAY-TIMEOUT]`, below.
+ *
+ * Nothing in a static Storybook build exposes this event to an outside
+ * `page.evaluate()` call made AFTER the fact — by the time such a call runs (a
+ * separate CDP round trip from `page.goto()`), a fast, `play`-less story may
+ * already have finished. So the bridge is installed via `page.addInitScript()`
+ * (runs before any page script, on every navigation this page makes) as an
+ * accessor property on `globalThis.__STORYBOOK_ADDONS_CHANNEL__` — verified
+ * against `channel-slot.ts`'s compiled output (`preview/runtime.js`): the
+ * channel is installed with a plain `globalThis.__STORYBOOK_ADDONS_CHANNEL__ =
+ * next` assignment, so an accessor `set()` sees it the instant it happens, with
+ * no window for the event to fire unobserved.
+ *
+ * SETTLE (round 3, ADR-0121 Decision 4 / ADR-0128's Consequences: Vue's
+ * `AtlAlert` height measured `55px` vs `56px` across `--update-baseline` runs,
+ * on a changing subset of stories, always inside tolerance but never explained).
+ * `storyFinished` answers "did the story's own lifecycle finish," not "has the
+ * browser stopped moving this box" — a `play`-triggered entrance transition can
+ * still be animating after `completing`'s `waitForAnimations` gives up (it is
+ * itself bounded, and only sees animations the Web Animations API tracks; a
+ * layout shift from a late `ResizeObserver` callback or a web-font swap is
+ * invisible to it either way). So after `storyFinished` (and again after the
+ * hover/focus interactions below), this gate polls the probe element's
+ * `getBoundingClientRect()` once per animation frame and waits for it to read
+ * IDENTICAL on `SETTLE_STABLE_FRAMES` consecutive frames, bounded by
+ * `SETTLE_TIMEOUT_MS` — best-effort: if it never stabilises, measurement
+ * proceeds anyway rather than hanging or skipping, since GEOMETRY already has a
+ * tolerance and this is a mitigation, not a new gate.
+ *
  * RATCHET (ADR-0079's convention, reused unchanged) — for the three comparison
  * tags and `[NO-VARIANT]` only. `[NO-PROBE]` and `[NOT-RENDERED]` are printed as
  * warnings on every run but are NOT part of the ratchet: neither means "the code
@@ -124,6 +176,14 @@
  * line each. `--update-baseline` writes the current set (never edits `why`/`kind`
  * by hand — there are none here; this baseline is flat findings, not
  * `check-figma.js`'s per-master counts).
+ *
+ * `[PLAY-TIMEOUT]` is neither ratcheted nor a printed-but-silent warning like
+ * `[NO-PROBE]`/`[NOT-RENDERED]`: ADR-0124 rule 2 ("a tool failure is an
+ * error-level finding naming the file and the reason, never an absence") and
+ * ADR-0128 both require a `play` that never settles to be named, every run,
+ * unconditionally — so it joins `[NO-MEASUREMENTS]`/`[NO-INDEX-ENTRY]`/`[ROSTER]`
+ * as a hard error in `main()` (blocks even `--update-baseline`) rather than
+ * either skip bucket below, which are ratcheted and would silently absorb it.
  *
  * Flags:
  *   --fw <angular|react|vue>   one framework only (default: all three)
@@ -165,6 +225,15 @@ const FRAMEWORKS = ['angular', 'react', 'vue'];
 
 const TOLERANCE_PX = 2; // documented alongside the exact-string colour rule below
 const UNRESOLVABLE = Symbol('unresolvable');
+
+// See the header comment's "PLAY COMPLETION" / "SETTLE" sections for what these
+// bound and why. STORY_FINISHED_TIMEOUT_MS is generous relative to the browser
+// suite's own per-story cost (ADR-0121: ~11s for an entire library, hundreds of
+// stories) precisely because a real hang should read as [PLAY-TIMEOUT], not as
+// a gate that is merely slow.
+const STORY_FINISHED_TIMEOUT_MS = 10000;
+const SETTLE_TIMEOUT_MS = 1000;
+const SETTLE_STABLE_FRAMES = 3;
 
 // ─── CLI ─────────────────────────────────────────────────────────────────────
 
@@ -351,6 +420,10 @@ const SKIP_BASELINE_NOTE =
   'already carrying a PAINT_ROSTER_EXEMPT("design") entry for the identical reason across frameworks ' +
   "(AtlToast). None of that is a story this gate skipped — it never entered the roster's definition " +
   "(contract ∩ snapshot) to begin with, so it is not this ratchet's question to ask twice.\n\n" +
+  '`play-timeout` (also printed per-framework) is likewise NOT in this file, for the opposite reason ' +
+  'from the other two: it is not debt to track, it is a hard, always-blocking error (ADR-0124 rule 2 / ' +
+  'ADR-0128) — a play function that never settles is a finding, not a skip, so recording it here would ' +
+  'be exactly the silent-skip failure this file exists to prevent. See [PLAY-TIMEOUT] in check-paint.mjs.\n\n' +
   'Update with `node tools/scripts/check-paint.mjs --update-baseline` — never by hand.';
 
 // ─── Snapshot ────────────────────────────────────────────────────────────────
@@ -1252,6 +1325,118 @@ async function focusProbe(page, selector) {
   return false;
 }
 
+// ─── Play completion + settle (see header comment) ────────────────────────────
+
+/** Installed once per `page` (survives every subsequent `page.goto()`, since
+ * `addInitScript` re-runs on every new document): intercepts the exact moment
+ * Storybook's preview assigns `globalThis.__STORYBOOK_ADDONS_CHANNEL__` (a plain
+ * assignment — verified in `preview/runtime.js`'s compiled `channel-slot.ts`,
+ * see the header comment) and subscribes to `storyFinished` right then, so
+ * there is no round trip during which a fast, `play`-less story could finish
+ * unobserved. */
+async function installStoryFinishedBridge(page) {
+  await page.addInitScript(() => {
+    window.__paintGateFinished = null;
+    let realChannel;
+    try {
+      Object.defineProperty(window, '__STORYBOOK_ADDONS_CHANNEL__', {
+        configurable: true,
+        get() {
+          return realChannel;
+        },
+        set(next) {
+          realChannel = next;
+          if (next && typeof next.on === 'function') {
+            next.on('storyFinished', (payload) => {
+              window.__paintGateFinished = payload || {};
+            });
+          }
+        },
+      });
+    } catch {
+      // If a future Storybook version ever stops using a plain assignment for
+      // the channel slot, this accessor install would throw here rather than
+      // silently missing events. Swallow so the story still renders — the
+      // bounded wait below then times out and reports [PLAY-TIMEOUT] instead
+      // of crashing the whole run, which is the correct failure mode for "this
+      // gate's assumption about the channel no longer holds".
+    }
+  });
+}
+
+/** Waits for the CURRENT story (the one the last `page.goto()` navigated to) to
+ * report `storyFinished` — see the header comment's "PLAY COMPLETION" section
+ * for why this, and not the mount check above, is what "measure after play"
+ * means. Polls via `requestAnimationFrame` inside the page rather than Node-side
+ * polling, so one `page.evaluate()` round trip covers the whole wait. Returns
+ * `{ finished: true, payload }` or `{ finished: false }` on timeout — the
+ * caller turns the latter into `[PLAY-TIMEOUT]`, never a skip. */
+async function waitForStoryFinished(page, timeoutMs) {
+  return page.evaluate(async (timeout) => {
+    const start = performance.now();
+    return await new Promise((resolve) => {
+      const check = () => {
+        if (window.__paintGateFinished) {
+          resolve({ finished: true, payload: window.__paintGateFinished });
+          return;
+        }
+        if (performance.now() - start >= timeout) {
+          resolve({ finished: false });
+          return;
+        }
+        requestAnimationFrame(check);
+      };
+      check();
+    });
+  }, timeoutMs);
+}
+
+/** Best-effort settle: waits until `selector`'s `getBoundingClientRect()` reads
+ * identically on `stableFrames` consecutive animation frames, bounded by
+ * `timeoutMs`. Returns `true`/`false` for `--report` diagnostics only — a
+ * timeout here is NOT a finding (unlike `waitForStoryFinished`'s), it just means
+ * measurement proceeds against whatever the box last read, same as before this
+ * function existed. */
+async function waitForStableBox(page, selector, { timeoutMs, stableFrames }) {
+  return page
+    .evaluate(
+      async ({ selector, timeoutMs, stableFrames }) => {
+        const start = performance.now();
+        let last = null;
+        let stableCount = 0;
+        return await new Promise((resolve) => {
+          const check = () => {
+            const el = document.querySelector(selector);
+            if (!el) {
+              resolve(false);
+              return;
+            }
+            const r = el.getBoundingClientRect();
+            const box = `${r.x.toFixed(2)},${r.y.toFixed(2)},${r.width.toFixed(2)},${r.height.toFixed(2)}`;
+            if (box === last) {
+              stableCount++;
+              if (stableCount >= stableFrames) {
+                resolve(true);
+                return;
+              }
+            } else {
+              stableCount = 0;
+              last = box;
+            }
+            if (performance.now() - start >= timeoutMs) {
+              resolve(false);
+              return;
+            }
+            requestAnimationFrame(check);
+          };
+          check();
+        });
+      },
+      { selector, timeoutMs, stableFrames },
+    )
+    .catch(() => false);
+}
+
 // ─── Per-framework run ───────────────────────────────────────────────────────
 
 async function runFramework(fw, browser) {
@@ -1280,6 +1465,7 @@ async function runFramework(fw, browser) {
   const page = await browser.newPage({
     viewport: { width: 1000, height: 700 },
   });
+  await installStoryFinishedBridge(page);
 
   const storyFiles = findStoryFiles(fw);
   let measured = 0;
@@ -1296,6 +1482,11 @@ async function runFramework(fw, browser) {
   const skippedDemoIds = [];
   const notRenderedIds = [];
   const noProbeIds = [];
+  // NOT a skip bucket (see the header comment's "PLAY COMPLETION" section and
+  // ADR-0128): a play that never settles is a hard error, reported through
+  // main()'s unconditional hardErrors list, never through SKIP_REASONS/the
+  // ratchet in paint-skip-baseline.json.
+  const playTimeoutIds = [];
 
   for (const storyFile of storyFiles) {
     const source = fs.readFileSync(storyFile, 'utf-8');
@@ -1432,6 +1623,24 @@ async function runFramework(fw, browser) {
           { timeout: 15000 },
         )
         .catch(() => undefined);
+
+      // Measure after the story's lifecycle — including its `play`, if any — has
+      // actually finished, never at mount. See the header comment's "PLAY
+      // COMPLETION" section for the event and where it was read from.
+      const finishResult = await waitForStoryFinished(
+        page,
+        STORY_FINISHED_TIMEOUT_MS,
+      );
+      if (!finishResult.finished) {
+        // ADR-0124 rule 2 / ADR-0128: a tool failure is an error-level finding
+        // naming the file and the reason, never an absence — this must not fall
+        // into [NO-PROBE] or [NOT-RENDERED] (both ratcheted skip buckets; see
+        // the header comment's "RATCHET" section). Collected here, turned into
+        // an unconditional hardError in main().
+        playTimeoutIds.push(`${metaComponent} · ${key}`);
+        continue;
+      }
+
       if (args.theme === 'dark') {
         await page.evaluate(() =>
           document.documentElement.setAttribute('data-theme', 'dark'),
@@ -1512,6 +1721,12 @@ async function runFramework(fw, browser) {
         metaComponent,
         (measuredByComponent.get(metaComponent) || 0) + 1,
       );
+      // See the header comment's "SETTLE" section: storyFinished says the
+      // lifecycle ended, not that the browser has stopped moving the box.
+      await waitForStableBox(page, probe.selector, {
+        timeoutMs: SETTLE_TIMEOUT_MS,
+        stableFrames: SETTLE_STABLE_FRAMES,
+      });
       const snap = await measureFull(page, probe.selector, row);
       compareFull({ ...ctx, state: 'default' }, snap, row);
 
@@ -1522,6 +1737,10 @@ async function runFramework(fw, browser) {
           .locator(probe.selector)
           .hover()
           .catch(() => undefined);
+        await waitForStableBox(page, probe.selector, {
+          timeoutMs: SETTLE_TIMEOUT_MS,
+          stableFrames: SETTLE_STABLE_FRAMES,
+        });
         const hoverSnap = await measurePaintOnly(
           page,
           probe.selector,
@@ -1539,6 +1758,10 @@ async function runFramework(fw, browser) {
           probe.focusScope || probe.selector,
         );
         if (focused) {
+          await waitForStableBox(page, probe.selector, {
+            timeoutMs: SETTLE_TIMEOUT_MS,
+            stableFrames: SETTLE_STABLE_FRAMES,
+          });
           const focusSnap = await measurePaintOnly(
             page,
             probe.selector,
@@ -1566,9 +1789,11 @@ async function runFramework(fw, browser) {
     noIndexEntry,
     noProbe: noProbeIds.length,
     notRendered: notRenderedIds.length,
+    playTimeout: playTimeoutIds.length,
     skippedDemoIds,
     notRenderedIds,
     noProbeIds,
+    playTimeoutIds,
   };
 }
 
@@ -1835,8 +2060,8 @@ async function main() {
     console.log(
       `[${fw}] measured ${s.measured} stor${s.measured === 1 ? 'y' : 'ies'} ` +
         `(skipped-demo: ${s.skippedDemo}, no-component: ${s.noComponent}, off-roster: ${s.noRoster}, ` +
-        `no-index-entry: ${s.noIndexEntry}, not-rendered: ${s.notRendered}, no-probe: ${s.noProbe}), ` +
-        `${s.ms.toFixed(0)} ms`,
+        `no-index-entry: ${s.noIndexEntry}, not-rendered: ${s.notRendered}, no-probe: ${s.noProbe}, ` +
+        `play-timeout: ${s.playTimeout}), ${s.ms.toFixed(0)} ms`,
     );
   }
 
@@ -1888,6 +2113,17 @@ async function main() {
         `[NO-INDEX-ENTRY] (${fw}) ${perFw[fw].noIndexEntry} stor${perFw[fw].noIndexEntry === 1 ? 'y' : 'ies'} ` +
           `exist in source CSF but have no entry in dist/storybook/${fw}/index.json — the build is stale, ` +
           'or a story was excluded from it. Rebuild with npm run check:storybook-manifests.',
+      );
+    }
+    // [PLAY-TIMEOUT]: a play that never settles is a finding, not a skip (ADR-0124
+    // rule 2 / ADR-0128) — it must not fall into [NO-PROBE]/[NOT-RENDERED], both
+    // ratcheted, so it is an unconditional hard error here instead, same tier as
+    // [NO-MEASUREMENTS]/[NO-INDEX-ENTRY]/[ROSTER]. Blocks even --update-baseline.
+    for (const id of perFw[fw].playTimeoutIds) {
+      hardErrors.push(
+        `[PLAY-TIMEOUT] (${fw}) ${id}: the story's render lifecycle never reported 'storyFinished' within ` +
+          `${STORY_FINISHED_TIMEOUT_MS}ms — a play function that never settles, or a story whose render never ` +
+          "completes. check:paint measures a story's fully rendered state, never a mid-play snapshot.",
       );
     }
   }

@@ -148,6 +148,30 @@ for whoever picks it up: clearing it by hand-editing the baseline is what was do
 under review, for five entries known to be this noise — and the file's own header forbids hand
 edits for good reason. That was a deliberate exception, not a precedent.
 
+**Corrected 2026-09-11 (the refinement above is wrong, and the real hole is worse).** The
+paragraph before this one claims a finding's measured text is part of its identity, so a 56px
+run against a 55px baseline would be two blockers. It is not. `check-paint.mjs:1803` keys a
+finding as `fw|component|story|state|field`; `detail` — `"rendered 172px, figma 222px"` — is
+excluded. Verified by reading the line and by re-recording: five AtlAlert `detail` strings
+changed 55px → 56px with no key added, none removed, and `check:paint` green throughout.
+
+So there is no nondeterministically red gate. There is the opposite, and it is the more
+serious of the two: **a measured value can drift arbitrarily inside a recorded finding and the
+ratchet cannot see it.** A height going 172px → 400px against the same Figma 222px keeps its
+key and stays green. ADR-0080 §2 closed precisely this for `type-baseline.json` — "the measured
+value is part of the finding's text, so 14-vs-16 drifting to 14-vs-18 is now two blockers" —
+and `paint-baseline.json`, written later under ADR-0121, did not inherit the lesson. Recorded
+in `tasks/todo.md`; it is a decision of its own, because putting the value into the key makes
+every tolerance-internal wobble a blocker and that is exactly what the AtlAlert case shows is
+possible.
+
+On that case: with the settle condition added alongside the `play` wait (measure only once the
+probe's box is identical across three consecutive frames), two consecutive `--update-baseline`
+runs are byte-identical at 56px, where the old script had produced 55px on a changing subset.
+The best-supported reading is therefore that the 55px readings were mid-layout and the drift
+was a measurement race rather than nondeterminism in the value — n=2, so that is a reading,
+not a proof.
+
 - **Verified as of this record:** the counts and their per-component breakdown, from a real
   run; the ratchet blocking on a rise, on a drop, and on a substitution that leaves the count
   unchanged; `check:paint` exit 0 with the baseline seeded. **Assumed:** that the story-level
