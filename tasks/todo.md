@@ -87,6 +87,44 @@ Ranked; each carries why it's worth doing next rather than later.
       exercises gets zero axe coverage but still gets the eslint pass. Neither subsumes
       the other. No action needed here — recorded so the next "is X accessibility check
       already covered by Y" question doesn't have to re-derive this from scratch.
+- [ ] **Three gaps ADR-0128 named and did not close** (2026-09-11).
+  - [ ] **`check:paint`'s measurements are not run-to-run deterministic — check this
+        before trusting any tighter tolerance.** Two `--update-baseline` runs each drifted
+        Vue's `AtlAlert` height from 55px to 56px, on a _different subset of its stories each
+        time_ (three, then five of six). Always the same component, field and direction, always
+        inside the 2px tolerance, so it has never flipped a finding and nothing noticed. Find
+        out whether it is layout timing, font loading or a measurement race before anyone
+        narrows the tolerances or reads a 1px paint finding as real.
+  - [ ] **The ADR-0124 `[ROSTER]` floor is cross-framework.** It fires when a component has
+        zero measurements in _every_ framework, so one framework silently losing all coverage of
+        a component — someone breaks `meta.component` in just the Vue story — is caught by
+        nothing. A per-framework floor needs its own exemption axis, because several components
+        legitimately measure in one framework and not another (Angular's `AtlDrawer` resolves a
+        probe where React and Vue do not).
+  - [ ] **`no-probe` never counted the "probe element vanished while measuring" case.**
+        That warning fires from `comparePaint`/`compareFull`, which have no access to
+        `runFramework`'s counter, so the sub-case is warned and never ratcheted. Pre-existing,
+        preserved deliberately by ADR-0128 rather than widened alongside it.
+- [ ] **Pay down the `check:paint` skip debt, now that ADR-0128 makes it immovable.**
+      Ordered by what the breakdown says it costs, cheapest first:
+  - [ ] **`not-rendered` is three components.** `AtlChat` contributes 12 in every framework
+        (its Drawer, Popup and Inline stories render closed), `AtlDialog` 6-9, Angular adds
+        `AtlDrawer`. Give them stories that open, or probes that measure the open state.
+  - [ ] **The resolution half of `no-probe` is four contracts.** `AtlDrawer`, `AtlMenu` and
+        `AtlTooltip` declare no `probes` at all; Angular's `AtlSelect` is the documented
+        button-trigger case. Adding a probe to three contracts is the single highest-yield edit
+        in this list.
+  - [ ] **Angular's `AtlButton` fails every one of its nine focus probes**, where React's
+        equivalent fails two of nine. That asymmetry is its own bug and is not explained by the
+        contract.
+  - [ ] **`skipped-demo` is the expensive half and partly not a defect.** 16/18/24 distinct
+        components. Vue's 62 against Angular's 37 is broader reach plus a real difference in
+        story granularity — Vue's `AtlAvatarGroup` is its own roster member with four stories
+        where Angular folds the same demo into one story inside `atl-avatar.stories.ts`. React's
+        `AtlRadioGroup` contributes six known false positives of the ambiguous-demo heuristic
+        itself. Decide per component whether the story or the heuristic is wrong before touching
+        either.
+
 - [ ] **Introduce stylelint and let it replace the hand-written CSS gates** (owner
       decision 2026-09-11, no date set). The CSS-scanning gates are the largest remaining
       family that a standard tool models better than a script, and ADR-0126 drew the line

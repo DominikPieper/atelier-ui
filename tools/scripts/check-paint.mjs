@@ -215,6 +215,10 @@ const SNAPSHOT_FILE = args.snapshot
   : path.join(ROOT, 'tools/figma/snapshot.json');
 const CONTRACTS_DIR = path.join(ROOT, 'libs/spec/src/contracts');
 const BASELINE_FILE = path.join(ROOT, 'tools/figma/paint-baseline.json');
+const SKIP_BASELINE_FILE = path.join(
+  ROOT,
+  'tools/figma/paint-skip-baseline.json',
+);
 const DIST_DIR = path.join(ROOT, 'dist/storybook');
 
 const BASELINE_NOTE =
@@ -255,6 +259,99 @@ const BASELINE_NOTE =
   'plan/adr/0121-the-stories-are-the-spec.md (Decision 4), ' +
   'plan/adr/0079-type-does-not-need-the-painted-box.md and ' +
   'plan/adr/0066-a-warning-nobody-can-clear.md.';
+
+// ─── Skip ratchet (skipped-demo / not-rendered / no-probe) ───────────────────
+// ADR-0124 rule 1: "every counter a gate prints in its summary is either asserted or
+// removed." [NOT-RENDERED] and [NO-PROBE] are printed every run (see above) and
+// deliberately NOT part of the per-finding ratchet above — neither means "the code
+// disagrees with Figma", so neither belongs beside [PAINT]/[GEOMETRY]/[TYPE]. But
+// printing them was never the same as asserting them, and on a clean run in
+// 2026-09 they (plus [SKIPPED-DEMO], which was not printed anywhere at all) covered
+// roughly half of every framework's stories. This is the rest of rule 1: a ratchet of
+// sorted IDENTITY LISTS, per framework and per reason — ADR-0080's shape, not a count.
+// A count shape was tried first and rejected in review: ADR-0080 records the exact
+// failure mode by hand on this repo's own sibling gates (check:typeface, check:figma —
+// "each time with no output at all" on a substitution), and a repeat of it here was
+// caught the same way, before this file was committed. See
+// tools/figma/paint-skip-baseline.json's own meta.note for the full rule.
+
+const SKIP_REASONS = [
+  {
+    idsKey: 'skippedDemoIds',
+    tag: 'skipped-demo',
+    why:
+      'the ambiguous-demo heuristic (scanLiteralAttrs/scanObjectLiteralProps below) found more than ' +
+      'one distinct literal value under some prop within a story that renders without forwarding ' +
+      '`args` — most often a real multi-instance showcase (AllVariants, AllSizes, …) with no single ' +
+      'root to measure, but the same code path is what a genuinely single-variant demo the heuristic ' +
+      "misjudges would also hit. See 'scanLiteralAttrs' above. Identity: 'Component · Story'.",
+  },
+  {
+    idsKey: 'notRenderedIds',
+    tag: 'not-rendered',
+    why:
+      'the resolved probe element exists in the DOM but is not drawn in this lifecycle state — ' +
+      'display:none, zero width/height, or a <dialog> without [open] — most often a closed ' +
+      'AtlDialog/AtlDrawer/AtlChat popover whose story does not open it by default. See the "NOT ' +
+      "RENDERED\" section of this file's header comment. Identity: 'Component · Story'.",
+  },
+  {
+    idsKey: 'noProbeIds',
+    tag: 'no-probe',
+    why:
+      "no descendant answering to '.atl-<kebab>', the bare custom-element tag, or a declared contract " +
+      'probe was found under #storybook-root for this story/framework, or Tab focus never reached the ' +
+      'resolved probe — nothing trustworthy to compare to Figma\'s rootPaint row. See "THE PROBE ' +
+      "ELEMENT\" section of this file's header comment. Identity: 'Component · Story · state', " +
+      "state ∈ {'default', 'focus'} — 'default' when the root/contract probe never resolved at all " +
+      "(the failure that happens before any state-specific check runs), 'focus' when the probe DID " +
+      'resolve but Tab focus never reached it. The state segment exists because a story can flip from ' +
+      'one shape to the other (a probe gets declared, so resolution now succeeds, but the newly-' +
+      'reachable element still cannot be focused) without its Component/Story pair changing at all — ' +
+      'a substitution a 2-part identity would silently absorb.',
+  },
+];
+
+const SKIP_BASELINE_NOTE =
+  "Per-(framework, reason) IDENTITY ratchet for check:paint's three currently-unmeasurable-by-design " +
+  'skip reasons (ADR-0124 rule 1: "every counter a gate prints in its summary is either asserted or ' +
+  'removed"; shape matches ADR-0080\'s per-finding baselines exactly — sorted lists of WHAT, never a ' +
+  'count of HOW MANY, and never a line number). skipped-demo / not-rendered / no-probe are NOT part ' +
+  'of the [PAINT]/[GEOMETRY]/[TYPE]/[NO-VARIANT] per-finding ratchet in paint-baseline.json: none of ' +
+  'the three means "the code disagrees with Figma" — each means "nothing trustworthy could be ' +
+  'measured", for a different reason apiece (see check-paint.mjs\'s header comment, sections "RATCHET", ' +
+  '"NOT RENDERED" and "THE PROBE ELEMENT"). This file exists so that debt stays visible instead of ' +
+  "dissolving into a counter nothing reads, which is how roughly half of every framework's stories went " +
+  'unmeasured under a green check:paint before this file existed.\n\n' +
+  "WHY IDENTITIES AND NOT COUNTS: a count is faithful to HOW MANY, not to WHICH (ADR-0080's own " +
+  'words). A count-shaped version of this file was drafted first and rejected before being committed: ' +
+  'ADR-0080 already records this exact failure happening BY HAND on two sibling gates in this repo — ' +
+  'check:typeface (sizing one selector while un-sizing another left a per-directory count unchanged, ' +
+  'green, exit 0) and check:figma (the same shape, on three separate checks, "each time with no output ' +
+  'at all") — and ADR-0079 had rejected the identity-list shape first, for being unreadable "for a ' +
+  'case nobody has hit"; ADR-0080 records that "the case was hit within the hour". A count here would ' +
+  'have reproduced that history a third time: one story leaving a bucket while a different one enters ' +
+  'it, for the same (framework, reason), leaves the total unchanged and the gate green, silently.\n\n' +
+  'The gate PASSES while a (framework, reason) set of identities is EXACTLY the set recorded here, ' +
+  'FAILS when an identity APPEARS that is not recorded ([SKIP-RISE], naming it), and FAILS when a ' +
+  'recorded identity DISAPPEARS without this file being updated ([SKIP-STALE], naming it — an ' +
+  'improvement nobody records can silently reverse, the same rule ADR-0066/ADR-0079/ADR-0080 apply). ' +
+  'A SUBSTITUTION — one identity leaving a (framework, reason) set while a different one enters it — ' +
+  'therefore produces BOTH an [SKIP-RISE] (naming the new one) and an [SKIP-STALE] (naming the old ' +
+  'one), never a silent net-zero. On a matching run this prints exactly one summary line per framework ' +
+  'naming the three set sizes, never the individual identities — those are read from this file, not ' +
+  'reprinted on every green run.\n\n' +
+  '`no-component`, `off-roster` and `no-index-entry` (also printed per-framework by check-paint.mjs) ' +
+  'are deliberately NOT in this file. `no-index-entry` is asserted directly as a hard floor (a story in ' +
+  'source CSF missing from the built index has no legitimate reason to exist, so it blocks outright — ' +
+  'see [NO-INDEX-ENTRY] in check-paint.mjs). `no-component` and `off-roster` are counted per STORY FILE, ' +
+  "not per story, and every file behind them today sits entirely outside check:paint's own roster — a " +
+  'multi-component demo page with no single root to measure (cookbook/showcase/kitchen-sink), a ' +
+  'component with neither a contract nor a Figma snapshot master at all (AtlIcon), or a component ' +
+  'already carrying a PAINT_ROSTER_EXEMPT("design") entry for the identical reason across frameworks ' +
+  "(AtlToast). None of that is a story this gate skipped — it never entered the roster's definition " +
+  "(contract ∩ snapshot) to begin with, so it is not this ratchet's question to ask twice.\n\n" +
+  'Update with `node tools/scripts/check-paint.mjs --update-baseline` — never by hand.';
 
 // ─── Snapshot ────────────────────────────────────────────────────────────────
 
@@ -1186,12 +1283,19 @@ async function runFramework(fw, browser) {
 
   const storyFiles = findStoryFiles(fw);
   let measured = 0;
-  let skippedDemo = 0;
   let noComponent = 0;
   let noRoster = 0;
   let noIndexEntry = 0;
-  let noProbe = 0;
-  let notRendered = 0;
+  // Identity lists, not counts — see SKIP_BASELINE_NOTE. 'component · story' is
+  // enough to identify a skipped-demo/not-rendered occurrence (each fires at most
+  // once per story); no-probe additionally carries the interaction state ('default'
+  // for a probe that never resolved at all, 'focus' for one that resolved but Tab
+  // never reached) because a story can flip from one no-probe shape to the other
+  // without its (component, story) pair changing — a substitution a 2-part key
+  // would silently absorb.
+  const skippedDemoIds = [];
+  const notRenderedIds = [];
+  const noProbeIds = [];
 
   for (const storyFile of storyFiles) {
     const source = fs.readFileSync(storyFile, 'utf-8');
@@ -1244,7 +1348,14 @@ async function runFramework(fw, browser) {
         scanObjectLiteralProps(blob, literalMap);
         const ambiguous = [...literalMap.values()].some((set) => set.size > 1);
         if (ambiguous) {
-          skippedDemo++;
+          // Printed every run, same as [NOT-RENDERED]/[NO-PROBE] below — this was the one
+          // skip reason with a summary counter and zero per-occurrence trace anywhere.
+          console.warn(
+            `  ⚠ [SKIPPED-DEMO] (${fw}) ${metaComponent} · ${key}: story renders more than one ` +
+              'literal value for at least one prop — a multi-instance demo with no single root to ' +
+              'measure (or a single-variant demo this heuristic could not tell apart from one)',
+          );
+          skippedDemoIds.push(`${metaComponent} · ${key}`);
           continue;
         }
         for (const [k, set] of literalMap) literalOverrides.set(k, [...set][0]);
@@ -1338,15 +1449,15 @@ async function runFramework(fw, browser) {
 
       const probe = await resolveProbe(page, metaComponent, contract);
       if (probe.warn) {
-        // [NO-PROBE] is NOT ratcheted (see BASELINE_NOTE / the header comment's "RATCHET"
-        // section): it means nothing trustworthy was measured, not that something measured
-        // disagrees with Figma. Printed every run until a probe is added; never baselined,
-        // so it can neither be silently "fixed" by an unrelated code change nor frozen as a
-        // permanent allowance.
+        // [NO-PROBE] is NOT part of the per-finding ratchet in paint-baseline.json (see
+        // BASELINE_NOTE / the header comment's "RATCHET" section): it means nothing
+        // trustworthy was measured, not that something measured disagrees with Figma. It
+        // IS tracked, as an identity, by the separate skip ratchet below (SKIP_BASELINE_NOTE)
+        // — 'default' state, since this failure happens before any state-specific check.
         console.warn(
           `  ⚠ [NO-PROBE] (${fw}) ${metaComponent} · ${key}: ${probe.reason}`,
         );
-        noProbe++;
+        noProbeIds.push(`${metaComponent} · ${key} · default`);
         continue;
       }
 
@@ -1371,7 +1482,7 @@ async function runFramework(fw, browser) {
         console.warn(
           `  ⚠ [NOT-RENDERED] (${fw}) ${metaComponent} · ${key}: ${notRenderedReason} — skipping paint/geometry/type comparisons`,
         );
-        notRendered++;
+        notRenderedIds.push(`${metaComponent} · ${key}`);
         continue;
       }
 
@@ -1439,7 +1550,7 @@ async function runFramework(fw, browser) {
             `  ⚠ [NO-PROBE] (${fw}) ${metaComponent} · ${key} · focus: could not focus the probe element ` +
               '(or a focusable descendant) via Tab from the document body',
           );
-          noProbe++;
+          noProbeIds.push(`${metaComponent} · ${key} · focus`);
         }
       }
     }
@@ -1449,12 +1560,15 @@ async function runFramework(fw, browser) {
   await new Promise((resolve) => server.close(resolve));
   return {
     measured,
-    skippedDemo,
+    skippedDemo: skippedDemoIds.length,
     noComponent,
     noRoster,
     noIndexEntry,
-    noProbe,
-    notRendered,
+    noProbe: noProbeIds.length,
+    notRendered: notRenderedIds.length,
+    skippedDemoIds,
+    notRenderedIds,
+    noProbeIds,
   };
 }
 
@@ -1542,6 +1656,120 @@ function settleAgainstBaseline() {
     scopedCount: scopedBaselineFindings.length,
     totalBaselineCount: allBaselineFindings.length,
   };
+}
+
+// ─── Skip ratchet (skipped-demo / not-rendered / no-probe) ────────────────────
+// Identity-shaped, matching ADR-0080's own baselines — see SKIP_BASELINE_NOTE above
+// for the full rule and why a count-shaped version of this was rejected before being
+// committed. Evaluated per (framework, reason), scoped the same way the roster floor
+// is: a --component run measures a deliberate ONE-component subset, and the full-
+// roster sets this ratchet compares are meaningless for that — so it is not evaluated
+// at all when args.component is set. A --fw run still measures every component in the
+// frameworks it targets, so it IS evaluated, restricted to targetFrameworks — the
+// same asymmetry settleAgainstBaseline() already has.
+
+function loadSkipBaseline() {
+  if (!fs.existsSync(SKIP_BASELINE_FILE)) return null;
+  return JSON.parse(fs.readFileSync(SKIP_BASELINE_FILE, 'utf-8'));
+}
+
+function recordedSkipIds(baseline, tag, fw) {
+  const entry = baseline && baseline.reasons ? baseline.reasons[tag] : null;
+  const arr = entry && entry.perFramework ? entry.perFramework[fw] : null;
+  return new Set(Array.isArray(arr) ? arr : []);
+}
+
+/** Writes/merges the skip baseline. A --fw-scoped run only measured SOME frameworks,
+ * so it merges into whatever is already on disk rather than overwriting the whole
+ * file — otherwise `--fw react --update-baseline` would silently drop angular's and
+ * vue's recorded identities. A --component-scoped run does not touch this file at all
+ * (see the header comment): the sets it would compute are not the whole roster's
+ * sets, and writing them would record a false (and much smaller) debt. */
+function writeSkipBaseline(perFw) {
+  if (args.component) {
+    console.log(
+      '\n(--component run — tools/figma/paint-skip-baseline.json left untouched: the recorded sets ' +
+        'are whole-roster sets, not meaningful for a single-component run)',
+    );
+    return;
+  }
+  const existing = loadSkipBaseline();
+  const reasons = {};
+  for (const r of SKIP_REASONS) {
+    const priorPerFw =
+      (existing &&
+        existing.reasons &&
+        existing.reasons[r.tag] &&
+        existing.reasons[r.tag].perFramework) ||
+      {};
+    const perFramework = { ...priorPerFw };
+    for (const fw of targetFrameworks) {
+      perFramework[fw] = [...new Set(perFw[fw][r.idsKey])].sort();
+    }
+    const ordered = {};
+    for (const fw of FRAMEWORKS) {
+      if (Array.isArray(perFramework[fw])) ordered[fw] = perFramework[fw];
+    }
+    reasons[r.tag] = { why: r.why, perFramework: ordered };
+  }
+  const out = {
+    meta: {
+      note: SKIP_BASELINE_NOTE,
+      generatedAt: new Date().toISOString(),
+      gitSha: gitShaOrUnknown(),
+    },
+    reasons,
+  };
+  fs.writeFileSync(SKIP_BASELINE_FILE, JSON.stringify(out, null, 2) + '\n');
+  console.log(
+    `✓ skip ratchet updated: tools/figma/paint-skip-baseline.json (${targetFrameworks.join(', ')})`,
+  );
+}
+
+/** Compares this run's skipped-demo/not-rendered/no-probe identities to the recorded
+ * baseline. Returns `{ evaluated: false }` for a --component run (see above); otherwise
+ * one row per (framework in targetFrameworks × reason) carrying the set sizes plus the
+ * [SKIP-RISE]/[SKIP-STALE] blocker strings, each naming the one identity it concerns —
+ * a substitution (one identity leaving the set, a different one entering it for the
+ * same framework+reason) produces BOTH, never a silent net-zero. */
+function settleSkipRatchet(perFw) {
+  if (args.component) return { evaluated: false };
+  const baseline = loadSkipBaseline();
+  const rows = [];
+  const errors = [];
+  for (const fw of targetFrameworks) {
+    for (const r of SKIP_REASONS) {
+      const currentSet = new Set(perFw[fw][r.idsKey]);
+      const recordedSet = recordedSkipIds(baseline, r.tag, fw);
+      const newIds = [...currentSet]
+        .filter((id) => !recordedSet.has(id))
+        .sort();
+      const staleIds = [...recordedSet]
+        .filter((id) => !currentSet.has(id))
+        .sort();
+      rows.push({
+        fw,
+        tag: r.tag,
+        current: currentSet.size,
+        recorded: recordedSet.size,
+        matches: newIds.length === 0 && staleIds.length === 0,
+      });
+      for (const id of newIds) {
+        errors.push(
+          `[SKIP-RISE] (${fw}) ${r.tag}: '${id}' is not recorded in ` +
+            `tools/figma/paint-skip-baseline.json. ${r.why} If this is expected debt, run ` +
+            '--update-baseline to record it; otherwise this change introduced new debt.',
+        );
+      }
+      for (const id of staleIds) {
+        errors.push(
+          `[SKIP-STALE] (${fw}) ${r.tag}: '${id}' was recorded but no longer occurs — an ` +
+            'improvement nobody recorded. Run --update-baseline to re-record it.',
+        );
+      }
+    }
+  }
+  return { evaluated: true, baselineExists: !!baseline, rows, errors };
 }
 
 // ─── Report helpers ──────────────────────────────────────────────────────────
@@ -1651,6 +1879,17 @@ async function main() {
           'in this framework.',
       );
     }
+    // A story present in the source CSF has no legitimate reason to be absent from the
+    // built index — that is a stale/partial build or an excluded story, never a design
+    // decision, so this is a plain floor (0 is the only correct value) rather than a
+    // ratchet like the three skip reasons below (ADR-0124 rule 1).
+    if (perFw[fw].noIndexEntry > 0) {
+      hardErrors.push(
+        `[NO-INDEX-ENTRY] (${fw}) ${perFw[fw].noIndexEntry} stor${perFw[fw].noIndexEntry === 1 ? 'y' : 'ies'} ` +
+          `exist in source CSF but have no entry in dist/storybook/${fw}/index.json — the build is stale, ` +
+          'or a story was excluded from it. Rebuild with npm run check:storybook-manifests.',
+      );
+    }
   }
 
   // ─── C: roster floor (ADR-0034) ───────────────────────────────────────────
@@ -1716,6 +1955,7 @@ async function main() {
       process.exit(1);
     }
     writeBaseline();
+    writeSkipBaseline(perFw);
     console.log(`\ntotal runtime: ${totalMs.toFixed(0)} ms`);
     process.exit(0);
   }
@@ -1765,6 +2005,33 @@ async function main() {
     }
   }
 
+  // ─── D: skip ratchet (skipped-demo / not-rendered / no-probe) ─────────────
+  const skipResult = settleSkipRatchet(perFw);
+  if (!skipResult.evaluated) {
+    console.log(
+      '\n(--component run — skip ratchet not evaluated: the aggregate counts are not meaningful for ' +
+        'a single component)',
+    );
+  } else if (!skipResult.baselineExists) {
+    console.error(
+      '\n✗ [SKIP-BASELINE-MISSING] tools/figma/paint-skip-baseline.json not found. Every skipped-demo / ' +
+        'not-rendered / no-probe count above was measured but never compared to anything. Review them, ' +
+        'then run `node tools/scripts/check-paint.mjs --update-baseline` and commit the file.',
+    );
+  } else {
+    console.log(
+      '\n--- skip ratchet (tools/figma/paint-skip-baseline.json) ---',
+    );
+    for (const fw of targetFrameworks) {
+      const parts = SKIP_REASONS.map((r) => {
+        const row = skipResult.rows.find((x) => x.fw === fw && x.tag === r.tag);
+        return `${r.tag} ${row.current}${row.matches ? ' (recorded)' : ` (recorded ${row.recorded})`}`;
+      });
+      console.log(`  [${fw}] ${parts.join(', ')}`);
+    }
+    for (const e of skipResult.errors) console.error(`✗ ${e}`);
+  }
+
   console.log(`\ntotal runtime: ${totalMs.toFixed(0)} ms`);
 
   if (baselineExists && (newErrors.length || staleErrors.length)) {
@@ -1772,11 +2039,24 @@ async function main() {
       `\n${newErrors.length} new finding(s), ${staleErrors.length} stale baseline entr(y/ies).`,
     );
   }
+  const skipBlocking =
+    skipResult.evaluated &&
+    (!skipResult.baselineExists || skipResult.errors.length > 0);
+  if (
+    skipResult.evaluated &&
+    skipResult.baselineExists &&
+    skipResult.errors.length
+  ) {
+    console.error(
+      `\n${skipResult.errors.length} skip-ratchet issue(s) above (tools/figma/paint-skip-baseline.json).`,
+    );
+  }
   if (
     hardErrors.length ||
     !baselineExists ||
     newErrors.length ||
-    staleErrors.length
+    staleErrors.length ||
+    skipBlocking
   ) {
     process.exit(1);
   }
