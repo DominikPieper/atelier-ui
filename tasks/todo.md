@@ -692,6 +692,104 @@ Ranked; each carries why it's worth doing next rather than later.
     "17/13 ADRs" (should read 16/12) — same derive-don't-hand-type pattern as
     `gate-count.ts` (below), now cheap to copy.
 
+### Storybook + the storybookjs/mcp skills in the scaffolded workspace (2026-09-10)
+
+Owner asked: install the `storybookjs/mcp` agent skills automatically when a new
+workspace is created. Two decisions taken at the start (owner, 2026-09-10):
+**Storybook always ships in the scaffolded workspace** (not behind a flag), and
+**the skills are installed by the preset itself** (network call during scaffold),
+not vendored and not left to the attendee.
+
+Why Storybook has to come first: all four skills (`stories`, `storybook-init`,
+`storybook-setup`, `storybook-upgrade`) require a local Storybook ≥ 10.5 plus
+`@storybook/addon-mcp` and the `storybook ai` CLI. The scaffold has none today, and
+`stories` declares itself as "invoke FIRST, before creating, editing or deleting
+components, stories, styles, CSS, themes, colors or design tokens — no exceptions",
+so shipping it into a Storybook-less workspace would route every UI task an attendee
+starts into a skill whose first move is to propose installing Storybook.
+
+`preflight.mjs` already assumes the outcome: its `scaffold` branch checks "dev server
+(4200) + Storybook (6006)" and its comment calls 6006 "its single local Storybook",
+while `preset.ts` never wrote one. This closes that gap rather than opening it.
+
+- [x] **S1 — Storybook in every scaffolded app.** Per `workshop-<fw>`: `.storybook/`
+  (`main.ts` + `preview.(ts|tsx)`), framework `@storybook/{angular-vite,react-vite,
+  vue3-vite}`, addons `addon-mcp` + `addon-docs` + `addon-a11y`, `features.componentsManifest`
+  and (Angular/Vue) `features.experimentalDocgenServer`, tokens.css imported in preview,
+  one example story per app. `storybook` / `build-storybook` targets as `nx:run-commands`
+  mirroring the monorepo's shape (`npx storybook dev --config-dir … --port`), port 6006
+  for the first framework (+1 per extra framework). Storybook deps pinned to 10.6.0, the
+  same versions the monorepo runs. No `addon-vitest`: the scaffold has no test runner, so
+  the skills' `test-run` tool stays unavailable — deliberate, recorded in the ADR.
+- [x] **S2 — Skill install as a post-generator task.** `npx -y skills@<pinned> add
+  storybookjs/mcp -s '*' -a claude-code -y --copy` at the workspace root, `DO_NOT_TRACK=1`
+  and a bounded `SKILLS_CLONE_TIMEOUT_MS` so a conference network cannot hang the scaffold.
+  `--copy` rather than the CLI's default symlink farm (Windows attendees without developer
+  mode). Non-fatal: a failed install prints the exact command to re-run and the scaffold
+  still completes. New `skills` schema option (default `true`) so CI and offline runs can
+  opt out.
+- [x] **S3 — Say it where attendees read it.** Generated `CLAUDE.md` and `README.md` gain
+  the Storybook commands and a short "these skills are installed, here is what they do and
+  how to update them" section.
+- [x] **S4 — Prove it.** `nx test create-workspace` (spec extended for both S1 and S2,
+  including the failure path), `nx lint create-workspace`, `npm run check:preflight-clone-sync`,
+  and the real gate: `nx run create-atelier-ui-workspace:e2e` — it scaffolds through local
+  verdaccio and runs `nx build workshop-<fw>`; extend its file assertions to `.storybook/main.ts`
+  and the installed skill directory.
+- [x] **S5 — ADR-0123.** Records both decisions and, honestly, the cost of the second one:
+  `skills-lock.json` carries only `source` + `computedHash`, the CLI clones the default
+  branch (bundled simple-git) and `--help` exposes no ref/commit pin, so the scaffold pulls
+  **unpinned third-party skill text at workshop time**. That is the same risk class ADR-0110
+  decided the other way for `figma-console-mcp@latest`; the divergence is deliberate here and
+  needs to be written down as such, together with what would let us pin later (an upstream
+  `owner/repo@ref` form, or vendoring with a byte-drift gate like `sync-preflight.mjs`).
+
+**Review (2026-09-10).** Done, with two defects found by the work rather than by the
+plan — both recorded in [ADR-0123](../plan/adr/0123-the-prerequisite-ships-with-the-skill.md).
+
+- `@storybook/angular`'s non-optional `@angular-devkit/build-angular` peer broke the
+  scaffold's `npm install` (ERESOLVE against Angular 22). The scaffold now uses
+  `@storybook/angular-vite` alone; React and Vue declare their renderer packages
+  explicitly instead of leaning on npm hoisting, which pnpm would not provide.
+- `@atelier-ui/angular` imports six `@angular/cdk/*` subpaths and declared none of them.
+  Invisible here (the root has CDK) until the example story became the first real
+  consumer. Now a declared peer.
+
+Gates run by me, exit codes: `nx test create-workspace` 0, `nx lint create-workspace` 0,
+`nx build create-workspace` 0 (all ten templates confirmed present in `dist/`),
+`nx test create-atelier-ui-workspace` 0, `nx lint create-atelier-ui-workspace` 0,
+`nx lint angular` 0, `nx build angular` 0, `nx test angular` 0,
+`check:preflight-clone-sync` 0, `check:adr-refs` 0. Full CLI e2e: **React green end to
+end** (install, `nx build`, `nx build-storybook`). The skills install was proven directly
+— the preset's exact argv in a scratch directory, exit 0, four real `SKILL.md` files under
+`.claude/skills/`.
+
+A second-model review (Codex) of the finished diff produced eight findings; six were
+acted on (the `.mcp.json`-vs-CLAUDE.md toolset promise, the "installed" claim over a
+swallowed failure, the unreachable `--skills` flag, the e2e's three uncontrolled clones,
+the `@storybook/angular` import, and a `test-run` claim in three template comments). One
+was rejected with a reason (`ensureBuilt()` staleness — the `e2e` target's `dependsOn`
+rebuilds; the gap only exists on the direct-`node` debug path the file's own header
+documents).
+
+Open, from this work:
+
+- [ ] Angular's `nx build-storybook` in a scaffolded workspace has not been re-run since
+  the `@angular/cdk` peer landed — the run died on `ENOSPC` (the machine's disk was at
+  100%), not on the fix. Re-run `E2E_FRAMEWORKS=angular npx nx run create-atelier-ui-workspace:e2e`
+  once there is disk.
+- [ ] `@nx/dependency-checks` is still not enabled for `libs/react` and `libs/vue` — the
+  same structural gap that hid the `@angular/cdk` defect, currently with no defect behind
+  it. Wire it the same way `libs/angular` now is, deliberately rather than as a drive-by.
+- [ ] The example story is proven to compile, not to render — a static Storybook build
+  never executes it. Nothing currently renders a scaffolded story.
+- [ ] `installSkills()`'s Windows path (`shell: true` + `taskkill /T /F` on timeout) is
+  unverified on Windows; there is no Windows machine or runner in this project.
+- [ ] `SKILLS_TEST_FRAMEWORK = FRAMEWORKS[0]` in the e2e keeps the network install to one
+  clone per run only while CI invokes the job unmatrixed. A per-framework matrix would
+  silently restore three.
+
+
 ## Needs an owner decision
 
 The ones the owner and I will walk through together.
