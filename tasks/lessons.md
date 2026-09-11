@@ -671,3 +671,32 @@ Two rules:
   artefact ships to attendees, run it before the push or gate it in CI — do not record it
   and move on. Same shape as the 2026-09-10 "fixture proves the wiring" lesson, one step
   earlier: there the green was read too generously; here the missing run was.
+
+## A gate that finished is not a gate that exited (2026-09-11)
+
+`check:all` hung for 110 minutes on two runners. The suspicion was the slowest new gate, the
+one that drives a browser — wrong. The log, readable only once the job was cancelled, showed
+`check:manifest-parity` printing its complete output eleven seconds after it started and then
+sitting there until the cancellation, with the runner's orphan reaper naming the process tree
+at the end. The gate had done all of its work. It simply never exited: it was the only one of
+the three consumers of the shared docgen helper that ended on `process.exitCode` alone, while
+the two siblings call `process.exit()` — an asymmetry that had been sitting in the tree,
+invisible, because the same script exits cleanly on macOS.
+
+Three rules:
+
+- **Ask "did it finish?" before "is it slow?"** A hang and a slow gate look identical from the
+  outside, and the difference is one timestamp in the log: the last line it printed. Here the
+  last line was the gate's own summary, which rules out slowness entirely.
+- **A long-running step needs `timeout-minutes` the day it is added.** Both jobs inherited
+  GitHub's 360-minute default, so a hang costs six hours of wall clock and blocks a
+  `cancel-in-progress: false` release group behind it. A bound that is generous but finite
+  turns an unexplained hang into a red build.
+- **When sibling scripts disagree about how they end, the odd one out is a bug waiting for a
+  different platform.** `check-contracts.mjs` already carried the forced exit; nobody asked why
+  it needed one, so the next script built on the same helper did not get it.
+
+And one on honesty: the first fix's comment named the watch handles as the cause while also
+recording that they are `unref()`'d, which contradicts itself. The mechanism that makes this
+Linux-only is still not established, and the comment now says so. A root cause you cannot yet
+explain is worth writing down as an open question, not as a confident sentence.

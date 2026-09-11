@@ -500,3 +500,21 @@ const totalErrors = findings.filter((f) => f.level === 'error').length;
 const totalWarnings = findings.filter((f) => f.level === 'warning').length;
 console.log(`\ntotal: ${totalErrors} error(s), ${totalWarnings} warning(s)`);
 process.exitCode = totalErrors > 0 ? 1 : 0;
+
+// Established: CI run 34562307047's "Sync checks" job and Publish's "Verify (release gate)" both
+// hung ~110 min on this gate — it printed the full output above 11 s in, then never exited, and
+// GitHub's orphan reaper killed the tree at cancellation.
+// Established: the only long-lived resource here is makeWorkerDocgen()'s Angular/Vue docgen workers,
+// which lazily start a storybook/internal ComponentMetaManager whose startWatching() opens recursive
+// fs.watch() handles, with no way to shut it down from here: both @storybook/angular-vite's and
+// @storybook/vue3's internal/docgen-worker export only createDocgenProvider(), the manager lives in
+// a private closure, and the base class's dispose()/stopWatching() is unreachable.
+// Not established: why it holds on Linux and not macOS. The handles are unref()'d, so they should
+// not block exit at all, and a local process.getActiveResourcesInfo() snapshot showed only a
+// transient FSReqCallback. One candidate is Node's non-macOS recursive-watch implementation creating
+// inner per-directory watchers that need not inherit the outer unref.
+// The decision: the gate's product is its findings and exit code, both already printed, so force
+// the exit rather than leave a green run hanging on an unexplained handle — check-contracts.mjs,
+// which uses the same workers, has always done this. Switch back to a real disposer if Storybook
+// ever exports one.
+process.exit(process.exitCode);

@@ -57,6 +57,10 @@ jobs:
   verify:
     name: Verify (release gate)
     runs-on: ubuntu-latest
+    # check:all is ~5 min of static gates plus three Storybook builds, the rendered-paint gate and
+    # the browser story suite, none of which has ever completed on a runner yet — bounded generously
+    # (ci.yml's cli-e2e job already sets 45 as the precedent) so a hang fails in an hour, not six.
+    timeout-minutes: 60
     permissions:
       contents: read
     steps:

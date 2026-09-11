@@ -243,22 +243,26 @@ Ranked; each carries why it's worth doing next rather than later.
     - [ ] The scaffold's `figma:snapshot` script carries a `<YOUR_FIGMA_FILE_KEY>`
       placeholder because the preset has only a boolean `figmaMcp` option. Consider a
       `figmaFile` option so the workshop duplicate's key lands at scaffold time.
-  - [ ] **CI after the 2026-09-11 push (`bd28fe0`, run 34562307047 / publish 34562307018).**
-    Storybook tests, Build, Test, Lint, Release drift green on the runner; CLI e2e red
-    (Angular `check:contracts`, fixed above). **Open:** `npm run check:all` on both the
-    Sync checks job and the Publish "Verify (release gate)" job ran > 60 min (started
-    04:30 UTC) against 5 min for the previous green run (34439209706); no per-gate log is
-    readable while the step runs. Gates new to the runner since that run: `check:contracts`,
-    `check:manifest-parity` (exits cleanly locally, watchdog-tested), `check:scaffold-snapshot`,
-    `check:paint`, `check:stories`. Prime suspect `check:paint`: per story a 15 s
-    `waitForFunction` and a 30 s `hover()` actionability wait, both swallowed — hundreds
-    of stories × either = hours, red only at the end. Neither job has `timeout-minutes`.
-    Read the log when the step ends; then either add explicit short action timeouts +
-    a per-gate duration line, or gate the browser gates on a `timeout-minutes`.
-    Local note from the same day: `cli.e2e.mjs` preserves its scratch (`$TMPDIR/atelier-e2e-*`,
-    ~0.5–1 GB each incl. the verdaccio storage) on failure or kill; two memory-killed runs
-    plus one kept run filled the disk (`ENOSPC` in the Vue e2e) — clean with
-    `rm -rf "$TMPDIR"atelier-e2e-*` before re-running, one framework per invocation.
+  - [x] **CI after the 2026-09-11 push (`bd28fe0`, run 34562307047 / publish 34562307018) —
+    diagnosed 2026-09-11.** Storybook tests, Build, Test, Lint, Release drift green on the
+    runner; CLI e2e red (Angular `check:contracts`, fixed above). `check:all` then hung ~110
+    min on **both** runners, in `check:manifest-parity`: the log shows its complete output at
+    04:30:52, 11 s after it started, and nothing afterwards until the cancellation at 06:21:30,
+    with the runner's orphan reaper killing `npm run check:all` → `sh` → `npm run
+    check:manifest-parity` → `sh` → `MainThread`. The gate finished its work and the process
+    never exited — it was the only one of the three `lib/docgen.mjs` consumers ending on
+    `process.exitCode` alone, while `check-contracts.mjs` and `check-paint.mjs` both call
+    `process.exit()`. Fixed by matching them, plus `timeout-minutes: 60` on the `Sync checks`
+    and `Verify (release gate)` jobs (neither had one; GitHub's default is 360). Exact
+    Linux-only mechanism NOT established — the docgen workers' recursive `fs.watch` handles
+    are `unref()`'d and no disposer is reachable; the code comment separates fact from
+    hypothesis. Consequence worth keeping: **`check:paint`, `check:contracts` and
+    `check:stories` inside `check:all` have still never run on a runner** — the chain never
+    reached them. Watch the next run's duration; `check:paint` is ~220 s locally.
+  - [ ] **`publish.yml` uses `concurrency: { group: publish, cancel-in-progress: false }`**, so
+    the hung "Verify (release gate)" job blocks every later release run until GitHub's 6 h
+    timeout retires it. Cancel a hung publish run by hand; the new `timeout-minutes: 60` caps
+    the next one at an hour. Consider whether the release gate should cancel in progress.
   - [x] **S5a — skill and curriculum — done 2026-09-10** (ADR-0121 "S5a done"; ADR-0113
     corrected). `design-to-code` steps 3/5/6/7 on contract + stories + `check:contracts`;
     handoff template and three fixtures; `schulung.astro` Tag 2 (new gate claim, Block 02

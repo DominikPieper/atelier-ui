@@ -54,6 +54,10 @@ jobs:
   checks:
     name: Sync checks
     runs-on: ubuntu-latest
+    # check:all is ~5 min of static gates plus three Storybook builds, the rendered-paint gate and
+    # the browser story suite, none of which has ever completed on a runner yet — bounded generously
+    # (cli-e2e below already sets 45 as the precedent) so a hang fails in an hour, not six.
+    timeout-minutes: 60
     steps:
       - uses: actions/checkout@v5
         with:
