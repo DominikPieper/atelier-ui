@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { userEvent, expect, waitFor } from 'storybook/test';
 import {
   AtlAccordionGroup,
   AtlAccordionItem,
@@ -148,4 +149,88 @@ export const PreExpanded: Story = {
       </AtlAccordionItem>
     </AtlAccordionGroup>
   ),
+};
+
+// ── Behaviour stories (ADR-0121 Decision 2 pilot, 2026-09-12 rework) ───────
+// Of the 9 `libs/spec/src/behaviors.json` "accordion" ids, only these two
+// earn a dedicated story: both assert real rendered layout
+// (grid-template-rows 0fr → 1fr, atl-accordion.css) that atl-accordion.spec.tsx
+// cannot — its jsdom environment never computes real layout, so
+// getBoundingClientRect() is always 0 there regardless of expanded state. The
+// other 7 (disabled-no-toggle, multi-expand, single-collapse-other,
+// keyboard-nav, home-end, wrap, skip-disabled) would fire the same click/key
+// and assert the same ARIA attribute or focus target the spec's
+// `covers('accordion', '<id>')` test already asserts — a second, more
+// expensive execution of an identical assertion, not new coverage. Deleted
+// 2026-09-12 rather than kept as decoration.
+//
+// `parameters.behaviour: '<subject>/<id>'` is the declaration (ADR-0121
+// Decision 2's "the play title is the behaviour id", made checkable): a
+// plain string, not `{ subject, id }`, because it is one scalar to grep and
+// to read off the Storybook parameters panel, with no second key to
+// mis-name. `check-paint.mjs` treats a story carrying this parameter as
+// "demonstrates a behaviour, not a Figma variant sample" — it runs no paint,
+// geometry or type comparison against it at all, and validates the id
+// against `libs/spec/src/behaviors.json` itself: an id the manifest does not
+// recognise is a hard, always-blocking `[UNKNOWN-BEHAVIOUR]` error naming the
+// story (same tier as `[NO-INDEX-ENTRY]`/`[PLAY-TIMEOUT]` — there is no
+// legitimate reason for the id to be wrong, so it is not ratcheted debt like
+// skipped-demo/not-rendered/no-probe). That is what makes the exemption a
+// claim rather than a mute button: inventing a behaviour to silence a real
+// measurement fails the same way inventing a manifest id already does
+// elsewhere in this repo. See check-paint.mjs's BEHAVIOUR_NOTE.
+
+export const ExpandOnClick: Story = {
+  name: 'expand-on-click',
+  parameters: { behaviour: 'accordion/expand-on-click' },
+  render: () => (
+    <AtlAccordionGroup>
+      <AtlAccordionItem>
+        <AtlAccordionHeader>Section 1</AtlAccordionHeader>
+        Content 1
+      </AtlAccordionItem>
+      <AtlAccordionItem>
+        <AtlAccordionHeader>Section 2</AtlAccordionHeader>
+        Content 2
+      </AtlAccordionItem>
+    </AtlAccordionGroup>
+  ),
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByRole('button', { name: 'Section 1' });
+    await expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    await userEvent.click(trigger);
+    await expect(trigger).toHaveAttribute('aria-expanded', 'true');
+    const wrapper = canvas.getAllByRole('region')[0]
+      .parentElement as HTMLElement;
+    await waitFor(() =>
+      expect(wrapper.getBoundingClientRect().height).toBeGreaterThan(0),
+    );
+  },
+};
+
+export const CollapseOnClick: Story = {
+  name: 'collapse-on-click',
+  parameters: { behaviour: 'accordion/collapse-on-click' },
+  render: () => (
+    <AtlAccordionGroup>
+      <AtlAccordionItem>
+        <AtlAccordionHeader>Section 1</AtlAccordionHeader>
+        Content 1
+      </AtlAccordionItem>
+      <AtlAccordionItem>
+        <AtlAccordionHeader>Section 2</AtlAccordionHeader>
+        Content 2
+      </AtlAccordionItem>
+    </AtlAccordionGroup>
+  ),
+  play: async ({ canvas }) => {
+    const trigger = canvas.getByRole('button', { name: 'Section 1' });
+    await userEvent.click(trigger);
+    await expect(trigger).toHaveAttribute('aria-expanded', 'true');
+    await userEvent.click(trigger);
+    await expect(trigger).toHaveAttribute('aria-expanded', 'false');
+    const wrapper = canvas.getAllByRole('region')[0]
+      .parentElement as HTMLElement;
+    await waitFor(() => expect(wrapper.getBoundingClientRect().height).toBe(0));
+  },
 };

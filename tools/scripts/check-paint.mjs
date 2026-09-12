@@ -210,6 +210,7 @@
 import fs from 'node:fs';
 import path from 'node:path';
 import http from 'node:http';
+import assert from 'node:assert';
 import { execSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
@@ -440,6 +441,39 @@ const snapshotBySelector = new Map(
   (snapshot.components || []).map((c) => [c.selector, c]),
 );
 
+// ─── Behaviour declarations (ADR-0121 Decision 2) ────────────────────────────
+
+const BEHAVIOUR_NOTE =
+  "A story's `parameters.behaviour: '<subject>/<id>'` (ADR-0121 Decision 2) is a " +
+  'CLAIM, not an opt-out: "this story demonstrates one libs/spec/src/behaviors.json ' +
+  'id, not a Figma variant sample" — so this gate runs no [PAINT]/[GEOMETRY]/[TYPE] ' +
+  'comparison against it at all, the same exclusion `parameters.paint: false` would ' +
+  'have bought for free. The difference is that the id is checked: it must name a ' +
+  'real (subject, id) pair in behaviors.json, or the story is `[UNKNOWN-BEHAVIOUR]` — ' +
+  'a hard, always-blocking error naming the story, same tier as [NO-INDEX-ENTRY] and ' +
+  '[PLAY-TIMEOUT] below, because there is no legitimate reason for the id to be wrong ' +
+  '(unlike skipped-demo/not-rendered/no-probe, which are real, recurring debt and so ' +
+  'are ratcheted in tools/figma/paint-skip-baseline.json instead — see SKIP_BASELINE_NOTE). ' +
+  "A behaviour declaration is read ONLY from the story's own object literal (never the " +
+  "meta's), by getStoryBehaviourParam() below, mirroring getOwnStoryKeys()'s static AST " +
+  'read — nothing here executes the story file.\n\n' +
+  'The per-framework `behaviour: N` count this gate prints is asserted, not merely ' +
+  'printed (ADR-0124 rule 1): N is the exact length of the identity list built by the ' +
+  'one code path that recognises the parameter and unconditionally `continue`s before ' +
+  'any measured/skipped-demo/not-rendered/no-probe classification runs, so a behaviour ' +
+  'story cannot double as any of those three — and a duplicate identity within that list ' +
+  '(the same story counted twice) is a hard `assert`, not a silent no-op.';
+
+const behaviorManifest = JSON.parse(
+  fs.readFileSync(path.join(ROOT, 'libs/spec/src/behaviors.json'), 'utf-8'),
+);
+const VALID_BEHAVIOUR_IDS = new Set();
+for (const [subject, entries] of Object.entries(behaviorManifest)) {
+  if (subject.startsWith('$')) continue;
+  for (const entry of entries)
+    VALID_BEHAVIOUR_IDS.add(`${subject}/${entry.id}`);
+}
+
 // ─── Contracts ───────────────────────────────────────────────────────────────
 
 const contractFiles = fs
@@ -535,6 +569,41 @@ function getOwnStoryKeys(csf, key) {
   return init.properties
     .map((p) => (p.key && (p.key.name || p.key.value)) || null)
     .filter(Boolean);
+}
+
+/** ADR-0121 Decision 2 / BEHAVIOUR_NOTE above: statically reads a story's own
+ * `parameters.behaviour` — a string literal, e.g. `'accordion/expand-on-click'`
+ * — without executing anything. Reads only the story's OWN object literal
+ * (never the meta's, which getStoryOwnObjectNode already restricts to), so a
+ * component-wide `parameters.behaviour` on the meta would not exempt every
+ * story in the file — this is a per-story claim. Returns null when the story
+ * declares no such parameter, or when it is not a plain string literal. */
+function getStoryBehaviourParam(csf, key) {
+  const init = getStoryOwnObjectNode(csf, key);
+  if (!init) return null;
+  const paramsProp = init.properties.find(
+    (p) =>
+      !p.computed &&
+      p.key &&
+      (p.key.name === 'parameters' || p.key.value === 'parameters'),
+  );
+  if (
+    !paramsProp ||
+    !paramsProp.value ||
+    paramsProp.value.type !== 'ObjectExpression'
+  ) {
+    return null;
+  }
+  const behaviourProp = paramsProp.value.properties.find(
+    (p) =>
+      !p.computed &&
+      p.key &&
+      (p.key.name === 'behaviour' || p.key.value === 'behaviour'),
+  );
+  if (!behaviourProp || !behaviourProp.value) return null;
+  return behaviourProp.value.type === 'StringLiteral'
+    ? behaviourProp.value.value
+    : null;
 }
 
 function escapeRegExp(s) {
@@ -1487,6 +1556,14 @@ async function runFramework(fw, browser) {
   // main()'s unconditional hardErrors list, never through SKIP_REASONS/the
   // ratchet in paint-skip-baseline.json.
   const playTimeoutIds = [];
+  // Also NOT a skip bucket — see BEHAVIOUR_NOTE above. A story declaring
+  // `parameters.behaviour` is excluded from measurement by a claim this gate
+  // checks (the id must be real), not by an unratcheted, unaccountable opt-out.
+  // `behaviourIds` are valid declarations (excluded, counted); an id the
+  // manifest does not recognise goes to `invalidBehaviourIds` instead (also
+  // excluded, but surfaced as a hard error in main() — never silently absorbed).
+  const behaviourIds = [];
+  const invalidBehaviourIds = [];
 
   for (const storyFile of storyFiles) {
     const source = fs.readFileSync(storyFile, 'utf-8');
@@ -1521,6 +1598,25 @@ async function runFramework(fw, browser) {
     const importPath = toRepoImportPath(storyFile);
 
     for (const key of Object.keys(csf._stories || {})) {
+      // ADR-0121 Decision 2 / BEHAVIOUR_NOTE: checked first, before any other
+      // classification, so a behaviour story is structurally unreachable from
+      // measured/skipped-demo/not-rendered/no-probe — not merely excluded by
+      // convention. `continue` here is unconditional either way (valid or
+      // not): an invalid id still isn't a variant sample, it is additionally
+      // a hard error, reported in main().
+      const behaviourParam = getStoryBehaviourParam(csf, key);
+      if (behaviourParam !== null) {
+        if (VALID_BEHAVIOUR_IDS.has(behaviourParam)) {
+          behaviourIds.push(`${metaComponent} · ${key} · ${behaviourParam}`);
+        } else {
+          invalidBehaviourIds.push(
+            `${metaComponent} · ${key}: parameters.behaviour '${behaviourParam}' is not a ` +
+              "'<subject>/<id>' pair in libs/spec/src/behaviors.json",
+          );
+        }
+        continue;
+      }
+
       const stats = csf._stories[key].__stats || {};
       const ownKeys = getOwnStoryKeys(csf, key);
       const isRenderOnlyDemo = !!stats.render && !ownKeys.includes('args');
@@ -1781,6 +1877,19 @@ async function runFramework(fw, browser) {
 
   await page.close();
   await new Promise((resolve) => server.close(resolve));
+
+  // ADR-0124 rule 1 / BEHAVIOUR_NOTE: the printed `behaviour: N` count must be
+  // asserted, not merely printed — a hard failure here (rather than a silently
+  // wrong number) if the same story identity were ever pushed twice, which
+  // would mean the `continue` above stopped being the only path that can add
+  // to this list.
+  assert.strictEqual(
+    new Set(behaviourIds).size,
+    behaviourIds.length,
+    `[${fw}] duplicate behaviour-story identity — the same story was counted twice: ` +
+      JSON.stringify(behaviourIds),
+  );
+
   return {
     measured,
     skippedDemo: skippedDemoIds.length,
@@ -1790,10 +1899,13 @@ async function runFramework(fw, browser) {
     noProbe: noProbeIds.length,
     notRendered: notRenderedIds.length,
     playTimeout: playTimeoutIds.length,
+    behaviour: behaviourIds.length,
     skippedDemoIds,
     notRenderedIds,
     noProbeIds,
     playTimeoutIds,
+    behaviourIds,
+    invalidBehaviourIds,
   };
 }
 
@@ -2061,7 +2173,7 @@ async function main() {
       `[${fw}] measured ${s.measured} stor${s.measured === 1 ? 'y' : 'ies'} ` +
         `(skipped-demo: ${s.skippedDemo}, no-component: ${s.noComponent}, off-roster: ${s.noRoster}, ` +
         `no-index-entry: ${s.noIndexEntry}, not-rendered: ${s.notRendered}, no-probe: ${s.noProbe}, ` +
-        `play-timeout: ${s.playTimeout}), ${s.ms.toFixed(0)} ms`,
+        `play-timeout: ${s.playTimeout}, behaviour: ${s.behaviour}), ${s.ms.toFixed(0)} ms`,
     );
   }
 
@@ -2125,6 +2237,15 @@ async function main() {
           `${STORY_FINISHED_TIMEOUT_MS}ms — a play function that never settles, or a story whose render never ` +
           "completes. check:paint measures a story's fully rendered state, never a mid-play snapshot.",
       );
+    }
+    // [UNKNOWN-BEHAVIOUR] (ADR-0121 Decision 2 / BEHAVIOUR_NOTE): a story
+    // exempted itself from paint/geometry/type measurement by declaring
+    // `parameters.behaviour`, and the id it named is not in
+    // libs/spec/src/behaviors.json. Same tier as [NO-INDEX-ENTRY]/
+    // [PLAY-TIMEOUT] — there is no legitimate reason for this, so it always
+    // blocks rather than being ratcheted debt.
+    for (const msg of perFw[fw].invalidBehaviourIds) {
+      hardErrors.push(`[UNKNOWN-BEHAVIOUR] (${fw}) ${msg}`);
     }
   }
 

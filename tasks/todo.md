@@ -154,6 +154,37 @@ Ranked; each carries why it's worth doing next rather than later.
         itself. Decide per component whether the story or the heuristic is wrong before touching
         either.
 
+- [ ] **Five real interactions have no behaviour id at all** (found 2026-09-11 by sweeping
+      for interactive affordances; ADR-0129 records why the manifest could not surface them
+      itself — it locks what is already covered). Each needs a spec in all three frameworks
+      before an id can be added, which is the manifest's own admission rule:
+  - [ ] **Tooltip**: focus/blur show and hide, and Escape to dismiss. The four existing ids
+        are hover-only. React wires `onFocus`/`onBlur` beside the hover handlers plus a
+        document-level Escape listener; Angular and Vue do the same in their own idiom.
+  - [ ] **Menu**: Escape-to-close, outside-click-to-close, and arrow-key navigation between
+        items. React and Vue implement all three by hand; Angular delegates the entire
+        interaction surface to `@angular/cdk/menu`. The five existing ids cover only
+        trigger-click, item-click, variant class and disabled item.
+  - [ ] **Dialog and Drawer**: the native `<dialog>` `cancel` event synced to `open` —
+        exactly what Angular's `EscapeToClose` story play already demonstrates without an id.
+  - [ ] **Chat**: the `drawer` variant is the **default** and appears nowhere in the
+        manifest, which names only `inline-variant` and `popup-variant`. It is the variant
+        backed by a real `<dialog>` with `showModal`, `cancel` handling and backdrop dismissal.
+  - [ ] **Table**: `AtlTh.onSort` (cycles asc→desc→none, reflected in `aria-sort`) and
+        `AtlTr.onSelectedChange` (reflected in `aria-selected`). The ids `sort-button` and
+        `checkbox-selectable` only assert the controls render.
+- [ ] **Apply ADR-0129's criterion to the remaining 47 story-classified behaviours.** The
+      accordion pilot found 2 of 9 — a play earns its place only where the assertion depends on
+      computed layout, real focus order or real browser event sequencing, because every
+      behaviour is already covered three times in jsdom and jsdom implements
+      `activeElement`/`focus()`/`blur()` fully. Cheap now that the criterion is sharp, and it
+      produces the actual work item; 49 is only the upper bound.
+- [ ] **A fixed Figma height for a content-driven component.** `AtlAccordionGroup` is
+      `display: block` with auto height, and every story renders a different pixel height
+      against the master's single 222px row — which is why its eighteen existing height findings
+      are recorded rather than fixed. Same class of question as the AtlChat master's one row for
+      three structurally different panels. Answer it at the master, not in the gate.
+
 - [ ] **Introduce stylelint and let it replace the hand-written CSS gates** (owner
       decision 2026-09-11, no date set). The CSS-scanning gates are the largest remaining
       family that a standard tool models better than a script, and ADR-0126 drew the line
