@@ -1001,6 +1001,47 @@ export async function presetGenerator(
 - Toast: use \`useAtlToast()\` composable`;
   }
 
+  // Idioms for the ONE framework this workspace scaffolds (tasks/todo.md's
+  // "S3 — the workspace is set up for Claude Code" — a later plan than, and
+  // unrelated to, the S1-S4 labels elsewhere in this file, which are this
+  // package's own now-shipped Storybook/skills slices) — three to
+  // four bullets, not an essay; each names the thing an attendee coming from
+  // a different framework (or an agent trained on generic examples) is most
+  // likely to get wrong on day one.
+  let frameworkIdiomsSection = '';
+  if (framework === 'angular') {
+    frameworkIdiomsSection = `- Prefer signals (\`signal\`, \`computed\`, \`linkedSignal\`) over manual state
+  bookkeeping — this workspace runs **zoneless** (no Zone.js), so change
+  detection reacts to signal writes, not to arbitrary async callbacks.
+- Use the built-in control-flow syntax (\`@if\`, \`@for\`, \`@switch\`) in
+  templates, not the legacy \`*ngIf\`/\`*ngFor\` structural directives.
+- Use \`inject()\` for dependency injection in fields and functions instead of
+  constructor-parameter injection.
+- Form controls implement Signal Forms (\`FormValueControl\` /
+  \`FormCheckboxControl\`, not \`ReactiveFormsModule\`) — see Component Libraries
+  above.`;
+  } else if (framework === 'react') {
+    frameworkIdiomsSection = `- Follow the Rules of Hooks: only call hooks at the top level of a component
+  or custom hook, never inside a condition, loop, or nested function.
+- This is a **Vite SPA, not an RSC app** — there are no Server Components, no
+  \`"use client"\` directives, and no server actions; everything renders
+  client-side.
+- Keep \`useEffect\` dependency arrays honest — a missing dependency is a bug
+  to fix, not a lint rule to silence.
+- Event handlers on Atelier components follow the \`onXxx\` / \`onXxxChange\`
+  convention (see Component Libraries above) — match it in your own composed
+  components too.`;
+  } else if (framework === 'vue') {
+    frameworkIdiomsSection = `- Use \`<script setup>\` with the Composition API — no Options API (\`data()\`,
+  \`methods\`, …) in new components.
+- Use \`defineModel()\` for two-way-bound props instead of hand-rolling a
+  \`modelValue\` prop plus \`emit('update:modelValue')\`.
+- Prefer \`ref\`/\`reactive\` + \`computed\` over ad-hoc mutable state.
+- Two-way binding on Atelier components follows \`v-model\` / \`v-model:value\`
+  (see Component Libraries above) — mirror that convention in your own
+  composed components.`;
+  }
+
   const mcpSection = `### \`storybook-${framework}\` MCP
 Before using any component:
 1. Call \`docs-list\` to get valid component IDs
@@ -1052,6 +1093,10 @@ ${mcpSection}${angularCliMcpSection}
 ${frameworkSection}
 
 ${versionsSection}
+
+## Framework Idioms
+
+${frameworkIdiomsSection}
 
 ## Composition Patterns
 
@@ -1199,6 +1244,21 @@ reports only \`[NO-STORY-META]\`; their prop tables come from the hosted
 Storybook MCP (\`docs-show\`) instead. A green \`check:contracts\` on the example story
 therefore proves the wiring, not the example. Run \`npx playwright install chromium\`
 once after \`npm install\` — see Storybook below.
+
+## Definition of Done
+
+A change here is done when all four of these pass:
+
+- \`npm run check:format\` — Prettier
+- \`npm run check:stylelint\` — the ported CSS-discipline rules
+- \`npm run check:contracts\` — contract ↔ docgen ↔ Figma-snapshot parity
+- \`npm run check:stories\` — every story, rendered in Chromium, axe-checked
+
+**A gate's result is its exit code.** Run it as
+\`<command> > /tmp/x.log 2>&1; echo $?\` and read the log afterwards — never pipe
+a gate into \`head\` or \`grep\`. The pipe's own exit status is always \`0\`, which
+silently turns a failing gate into a passing one. \`/verify\` runs all four and
+reports each exit code (\`.claude/commands/verify.md\`).
 
 ## Troubleshooting
 
@@ -1481,6 +1541,139 @@ ${SKILLS_ADD_COMMAND_FOR_HUMANS}
 Claude Code MCP servers are pre-configured in \`.mcp.json\`.
 Browse components at ${SITE_URL}
 `,
+  );
+
+  // ─── Claude Code project setup ────────────────────────────────────────────
+  // tasks/todo.md's "S3 — the workspace is set up for Claude Code" — a later,
+  // unrelated plan from the S1-S4 labels elsewhere in this file (those mark
+  // this package's own now-shipped Storybook/skills slices, a different
+  // roadmap that reused the same S-numbers first).
+  //
+  // Everything above this point already writes CLAUDE.md, .mcp.json, and
+  // (installSkills, further below) four storybookjs/mcp skills under
+  // .claude/skills/ — but nothing else under .claude/, so every session in a
+  // generated workspace re-asked permission for `npx nx …` / `npm run …` and
+  // had to approve each MCP server by hand. This section closes that gap:
+  // a checked-in settings.json (nothing personal in it — see below), a
+  // formatting hook, a /verify entry point, a read-only review subagent, and
+  // the .gitignore line the personal settings.local.json overlay needs.
+  console.log(
+    `\n◇ Wiring Claude Code project setup (settings, hooks, /verify, component-review)…`,
+  );
+
+  // settings.json is CHECKED IN (unlike settings.local.json below), so it
+  // carries only shared, non-personal defaults — the same bar CLAUDE.md and
+  // .mcp.json already meet.
+  writeJson(tree, '.claude/settings.json', {
+    $schema: 'https://json.schemastore.org/claude-code-settings.json',
+    // Every server the preset just wrote into .mcp.json (nx-mcp,
+    // storybook-${framework}, uianatomy, angular-cli when Angular,
+    // figma-console when requested) connects on session start instead of
+    // needing individual first-use approval.
+    enableAllProjectMcpServers: true,
+    permissions: {
+      allow: [
+        // The Nx CLI — `npx nx serve/storybook/build-storybook <app>`, all
+        // named in the CLAUDE.md this preset writes above.
+        'Bash(npx nx *)',
+        // The seven npm scripts this preset writes to package.json
+        // (preflight, check:contracts, figma:snapshot, check:stories,
+        // check:stylelint, format, check:format) — one wildcard entry
+        // rather than seven separate ones, since this workspace's
+        // package.json carries exactly this fixed, generator-written script
+        // set (a workshop attendee adding a script of their own opts into
+        // this same allowance by definition, having already edited
+        // package.json by hand).
+        'Bash(npm run *)',
+        // The Storybook CLI itself — `dev`/`build` only, the two
+        // subcommands CLAUDE.md/README actually tell an attendee to run.
+        // Deliberately NOT a bare `Bash(npx storybook *)`: this repo's own
+        // AGENTS.md warns against running `storybook automigrate`/`upgrade`
+        // against the pinned 10.6.0 setup (it silently proposes bumping
+        // addon-mcp to `latest` and rewriting every main.ts) — a blanket
+        // wildcard here would auto-approve exactly that.
+        'Bash(npx storybook dev *)',
+        'Bash(npx storybook build *)',
+        // The one-time browser install `check:stories` needs (CLAUDE.md's
+        // "Storybook" section).
+        'Bash(npx playwright install *)',
+        // Read-only inspection — never something that writes to the repo or
+        // reaches the network.
+        'Bash(git status)',
+        'Bash(git diff *)',
+        'Bash(git log *)',
+      ],
+    },
+    hooks: {
+      // Formats whatever Edit/Write just touched. `matcher` is a regex over
+      // the tool name, not a glob — `Edit|Write` is the alternation, not two
+      // separate matchers.
+      PostToolUse: [
+        {
+          matcher: 'Edit|Write',
+          hooks: [
+            {
+              type: 'command',
+              // `bash "$CLAUDE_PROJECT_DIR/…"`, not a direct executable
+              // invocation: the Tree API that wrote this script (below)
+              // cannot set an executable bit.
+              command:
+                'bash "$CLAUDE_PROJECT_DIR/.claude/hooks/format-edited.sh"',
+            },
+          ],
+        },
+      ],
+    },
+  });
+
+  // Static — the hook's formatting logic doesn't depend on which framework
+  // was selected, so (unlike CLAUDE.md/README above) this is a files/
+  // template rather than an assembled string.
+  tree.write(
+    '.claude/hooks/format-edited.sh',
+    readTemplate('claude/hooks/format-edited.sh'),
+  );
+
+  // `.claude/commands/verify.md`, not a `.claude/skills/verify/SKILL.md`:
+  // both are invocable as `/verify` (the installed 2.1.269 CLI treats a
+  // commands/*.md file as a "slash-command skill" internally, and `--bare`'s
+  // own help text says "Skills still resolve via /skill-name" — so either
+  // mechanism reaches the same entry point). A command file is the
+  // narrower, more honest fit for what this actually is: a fixed action a
+  // person explicitly triggers, with nothing for the model to decide about
+  // *whether* to invoke it — the thing SKILL.md's richer description-driven
+  // auto-triggering and multi-file bundling exist for. Four fixed npm
+  // scripts and "read the exit code" is exactly the shape commands/*.md is
+  // for.
+  tree.write(
+    '.claude/commands/verify.md',
+    readTemplate('claude/commands/verify.md'),
+  );
+
+  // Read-only review subagent (Read/Grep/Glob/Bash only — no Edit/Write), so
+  // it can inspect and even run a gate for corroboration but never fix what
+  // it finds. Static, like the hook and the command above: the checklist
+  // (contract / stories / a11y) is the same shape regardless of framework,
+  // and the agent discovers the one scaffolded app itself via Glob.
+  tree.write(
+    '.claude/agents/component-review.md',
+    readTemplate('claude/agents/component-review.md'),
+  );
+
+  // .gitignore: create-nx-workspace already writes this file (before any
+  // preset runs) with its own standard ignores (node_modules, dist, .nx, …)
+  // — appended to, never overwritten, so a future create-nx-workspace
+  // version's own ignores survive. `.claude/settings.local.json` is where
+  // Claude Code records an attendee's own permission approvals; it must
+  // never be committed, unlike the shared `.claude/settings.json` written
+  // above.
+  const existingGitignore = tree.exists('.gitignore')
+    ? (tree.read('.gitignore', 'utf-8') ?? '')
+    : '';
+  const gitignoreBase = existingGitignore.replace(/\n+$/, '');
+  tree.write(
+    '.gitignore',
+    `${gitignoreBase}${gitignoreBase ? '\n\n' : ''}# Claude Code — personal overrides, never shared\n.claude/settings.local.json\n`,
   );
 
   console.log(`\n◇ Formatting files…`);

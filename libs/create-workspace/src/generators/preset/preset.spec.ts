@@ -1868,4 +1868,139 @@ describe('preset generator', () => {
     expect(warnings).toContain('npx -y skills@1.5.25 add storybookjs/mcp');
     warnSpy.mockRestore();
   });
+
+  // ─── Claude Code project setup (settings.json, hooks, /verify, agent) ──────
+
+  it('writes .claude/settings.json as valid JSON with the expected keys', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
+
+    const settings = readJson(tree, '.claude/settings.json');
+    expect(settings.enableAllProjectMcpServers).toBe(true);
+    expect(Array.isArray(settings.permissions.allow)).toBe(true);
+    expect(settings.hooks.PostToolUse[0].matcher).toBe('Edit|Write');
+  });
+
+  it('.claude/settings.json permissions cover the Nx CLI, the npm scripts, the Storybook CLI, and playwright install', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
+
+    const settings = readJson(tree, '.claude/settings.json');
+    const allow: string[] = settings.permissions.allow;
+    expect(allow).toContain('Bash(npx nx *)');
+    expect(allow).toContain('Bash(npm run *)');
+    expect(allow).toContain('Bash(npx storybook dev *)');
+    expect(allow).toContain('Bash(npx storybook build *)');
+    expect(allow).toContain('Bash(npx playwright install *)');
+  });
+
+  it('.claude/settings.json wires the PostToolUse hook to format-edited.sh via $CLAUDE_PROJECT_DIR', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
+
+    const settings = readJson(tree, '.claude/settings.json');
+    const command = settings.hooks.PostToolUse[0].hooks[0].command;
+    expect(command).toBe(
+      'bash "$CLAUDE_PROJECT_DIR/.claude/hooks/format-edited.sh"',
+    );
+  });
+
+  it('writes .claude/hooks/format-edited.sh reading tool_input.file_path off stdin, without depending on jq', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
+
+    const hook = tree.read('.claude/hooks/format-edited.sh', 'utf-8') ?? '';
+    expect(hook).toContain('#!/usr/bin/env bash');
+    expect(hook).toContain('tool_input');
+    expect(hook).toContain('file_path');
+    // Parses JSON with node, never by invoking a `jq` binary — this
+    // workspace declares no jq dependency and it isn't guaranteed to be on
+    // an attendee's machine.
+    expect(hook).not.toMatch(/^\s*jq\b/m);
+    expect(hook).toContain('node -e');
+    // Prefers the locally installed binaries over npx (npx's per-edit
+    // resolution cost is exactly why a hook gets turned off).
+    expect(hook).toContain('node_modules/.bin/prettier');
+    expect(hook).toContain('node_modules/.bin/stylelint');
+    expect(hook).toContain('exit 0');
+  });
+
+  it('writes a /verify command naming all four checks', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
+
+    expect(tree.exists('.claude/commands/verify.md')).toBe(true);
+    const verify = tree.read('.claude/commands/verify.md', 'utf-8') ?? '';
+    expect(verify).toContain('check:format');
+    expect(verify).toContain('check:stylelint');
+    expect(verify).toContain('check:contracts');
+    expect(verify).toContain('check:stories');
+    // The exit-code rule, not a piped pass/fail summary.
+    expect(verify).toContain('exit code');
+  });
+
+  it('writes a read-only component-review subagent scoped to one component', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
+
+    expect(tree.exists('.claude/agents/component-review.md')).toBe(true);
+    const agent =
+      tree.read('.claude/agents/component-review.md', 'utf-8') ?? '';
+    expect(agent).toContain('name: component-review');
+    expect(agent).toContain('tools: Read, Grep, Glob, Bash');
+    expect(agent).toContain('model: sonnet');
+    expect(agent.toLowerCase()).toContain('contract');
+    expect(agent.toLowerCase()).toContain('accessibility');
+    // No Edit/Write in the tools line — the frontmatter is the enforcement,
+    // not just the prose telling it not to edit.
+    expect(agent).not.toMatch(/tools:.*\b(Edit|Write)\b/);
+  });
+
+  it('appends .claude/settings.local.json to .gitignore without disturbing existing entries', async () => {
+    tree.write('.gitignore', 'node_modules\ndist\n');
+
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
+
+    const gitignore = tree.read('.gitignore', 'utf-8') ?? '';
+    expect(gitignore).toContain('node_modules');
+    expect(gitignore).toContain('dist');
+    expect(gitignore).toContain('.claude/settings.local.json');
+  });
+
+  it('writes .claude/settings.local.json to .gitignore even when no .gitignore existed yet', async () => {
+    expect(tree.exists('.gitignore')).toBe(false);
+
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
+
+    const gitignore = tree.read('.gitignore', 'utf-8') ?? '';
+    expect(gitignore).toContain('.claude/settings.local.json');
+  });
+
+  it('CLAUDE.md has a Definition of Done section naming all four checks and the exit-code rule', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
+
+    const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
+    expect(md).toContain('## Definition of Done');
+    expect(md).toContain('check:format');
+    expect(md).toContain('check:stylelint');
+    expect(md).toContain('check:contracts');
+    expect(md).toContain('check:stories');
+    expect(md).toContain("gate's result is its exit code");
+  });
+
+  it.each(['angular', 'react', 'vue'] as const)(
+    'CLAUDE.md has a Framework Idioms section for %s',
+    async (framework) => {
+      await presetGenerator(tree, { name: 'my-workspace', framework });
+
+      const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
+      expect(md).toContain('## Framework Idioms');
+      if (framework === 'angular') {
+        expect(md).toContain('zoneless');
+        expect(md).toContain('inject()');
+      }
+      if (framework === 'react') {
+        expect(md).toContain('Rules of Hooks');
+        expect(md).toContain('Vite SPA');
+      }
+      if (framework === 'vue') {
+        expect(md).toContain('<script setup>');
+        expect(md).toContain('defineModel()');
+      }
+    },
+  );
 });
