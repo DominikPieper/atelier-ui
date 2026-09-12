@@ -292,6 +292,39 @@ Ranked; each carries why it's worth doing next rather than later.
         actually wanted; the alternative — each target scanning all three trees — makes every
         framework's lint cache invalidate on any framework's CSS change.
 
+- [x] **The scaffold gets the CSS-discipline rules (2026-09-12, ADR-0131).** Three of the four
+      stylelint rules ship wired into a generated workspace — `no-raw-color-literal`,
+      `no-undeclared-token`, `no-token-bypass` — on the criterion of what an attendee hits by
+      writing ordinary CSS in their first hour. `no-primitive-token` ships inert (index.js
+      requires all four) and is deliberately not turned on. Six files as byte-identical clones,
+      `sync-preflight` 8 pairs → 14; the generated `nx.json` declares them as `stylelint`
+      inputs, so the cache trap's fix ships with the trap. Proven against a real generated
+      workspace via a locally published CLI, not an in-memory Tree.
+  - [ ] **Should stylelint be a permanent assertion in `libs/create-atelier-ui-workspace/e2e/cli.e2e.mjs`?**
+        The end-to-end proof was real — verdaccio, the published CLI, a bad stylesheet failing
+        the scaffold's own target by name — but it lives in a session scratchpad, so nothing
+        re-runs it. Adding it to the e2e means adding to a file that also builds Storybook and
+        runs Playwright; decide whether the coverage is worth the minutes.
+  - [ ] **An implicit coupling nothing enforces.** The scaffold's config passes neither
+        `componentRoot` nor `allowlistsFile`, correct while it has no exemption file. Someone
+        hand-adding exemptions later without adding `componentRoot` gets a staleness scan that
+        silently does not run.
+  - [ ] **Still to decide for the scaffold: `format` / `format:check` and a `types` script.**
+        ADR-0127 left enforcement as the obvious way for the formatting pass to rot, and the
+        generated workspace has neither. Measure what `create-nx-workspace` already provides
+        (`nx format:check`, a `.prettierrc`, the prettier devDependency) before adding a
+        script that duplicates it, and check whether the generated app has an inferred
+        `typecheck` target at all before promising a `types` script that would have nothing to
+        run.
+
+- [ ] **The staleness half of the stylelint rules has no home for its finding**, which is the
+      attribution test of ADR-0130 failing against a rule this repo kept. A `[STALE]` report
+      anchors at `1:1` of whichever file stylelint happens to process first, and that file
+      varies run to run (reproduced on the unmodified code, so it predates the port). It
+      survives as a _secondary_ signal on rules whose primary verdict is local — but if a
+      third such signal ever wants adding, this is the wrinkle to weigh, not a precedent to
+      copy.
+
 - [ ] **Gate review of 2026-09-11 — the findings not fixed in the same session.**
       All 47 runnable gates were run individually (exit code + duration, warm: 471 s total,
       `check:paint` 230 s of it, tree clean afterwards). 46 green; the only red is
