@@ -1,0 +1,50 @@
+import { defineConfig } from 'vitest/config';
+import vue from '@vitejs/plugin-vue';
+
+// A second Vitest config, named something other than vitest.config.ts /
+// vite.config.ts on purpose — see the Angular version of this file, or
+// vitest.config.ts one directory up, for why (ADR-0112: the Storybook
+// test-run tool's own config-discovery walk keys on a file's BASENAME, and
+// this one deliberately isn't a candidate).
+//
+// Runs in jsdom, not a real browser: a composable, a helper, or a
+// form-validation rule needs a fast feedback loop, not Playwright +
+// Chromium.
+export default defineConfig({
+  plugins: [vue()],
+  test: {
+    name: 'workshop-vue',
+    globals: true,
+    environment: 'jsdom',
+    include: ['src/**/*.spec.*'],
+    setupFiles: ['src/test-setup.ts'],
+    server: {
+      deps: {
+        // @atelier-ui/vue's built entry (index.mjs) carries an unconditional
+        // `import "./index.css"` banner — vite build's lib mode extracts all
+        // component <style> blocks into one index.css but emits no import for
+        // it, so the library's own vite.config.mts injects one via a rollup
+        // banner. That is correct for a browser or another Vite build, both
+        // of which have a CSS loader. Vitest's default dependency handling
+        // does not: because @atelier-ui/vue is unambiguous, self-consistent
+        // ESM (an .mjs main, an `exports` map pointing at it, no conflicting
+        // "type" field), Vitest hands it to Node's own module loader instead
+        // of running it through Vite's transform pipeline — and Node's
+        // loader has no idea what to do with a bare `.css` specifier
+        // ("Unknown file extension \".css\""), unlike Vite's, which is what
+        // resolves component-level CSS imports for every OTHER package here.
+        // `inline` forces this one package back through Vite's own pipeline,
+        // where the `.css` import is handled like any other test asset.
+        // (Confirmed by direct repro: @atelier-ui/react's built entry has the
+        // identical per-component `import './x.css'` pattern and does NOT
+        // need this — its package.json inconsistently declares
+        // `"type": "commonjs"` while shipping raw ESM syntax, which trips
+        // Vitest's own dual-package guard and forces it through the same
+        // inlined path automatically. That is not a design guarantee: if
+        // @atelier-ui/react's build is ever made internally consistent, it
+        // will need this exact same `inline` entry.)
+        inline: ['@atelier-ui/vue'],
+      },
+    },
+  },
+});

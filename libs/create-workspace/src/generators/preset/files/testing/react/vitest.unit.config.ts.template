@@ -1,0 +1,21 @@
+import { defineConfig } from 'vitest/config';
+import react from '@vitejs/plugin-react';
+
+// A second Vitest config, named something other than vitest.config.ts /
+// vite.config.ts on purpose — see the Angular version of this file, or
+// vitest.config.ts one directory up, for why (ADR-0112: the Storybook
+// test-run tool's own config-discovery walk keys on a file's BASENAME, and
+// this one deliberately isn't a candidate).
+//
+// Runs in jsdom, not a real browser: a hook, a helper, or a piece of app
+// logic needs a fast feedback loop, not Playwright + Chromium.
+export default defineConfig({
+  plugins: [react()],
+  test: {
+    name: 'workshop-react',
+    globals: true,
+    environment: 'jsdom',
+    include: ['src/**/*.spec.*'],
+    setupFiles: ['src/test-setup.ts'],
+  },
+});

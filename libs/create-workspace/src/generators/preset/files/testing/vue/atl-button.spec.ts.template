@@ -1,0 +1,25 @@
+import { fireEvent, render, screen } from '@testing-library/vue';
+import { AtlButton } from '@atelier-ui/vue';
+
+// A working pattern to copy: same purpose as atl-button.stories.ts, but for
+// a plain jsdom unit test (`npx nx test workshop-vue`) rather than a
+// browser-rendered story — the loop for anything that is not itself a
+// story: a composable, a helper, a form-validation rule.
+describe('AtlButton', () => {
+  it('renders with its accessible name', () => {
+    render(AtlButton, { slots: { default: 'Click me' } });
+    expect(
+      screen.getByRole('button', { name: 'Click me' }),
+    ).toBeInTheDocument();
+  });
+
+  it('emits a click event when clicked', async () => {
+    const onClick = vi.fn();
+    render(AtlButton, {
+      slots: { default: 'Click me' },
+      attrs: { onClick },
+    });
+    await fireEvent.click(screen.getByRole('button', { name: 'Click me' }));
+    expect(onClick).toHaveBeenCalledOnce();
+  });
+});

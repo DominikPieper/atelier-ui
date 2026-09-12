@@ -71,32 +71,32 @@ Ranked; each carries why it's worth doing next rather than later.
       workflow of its own. Everything below is scoped by that.
 
       Findings the decisions rest on, each verified by reading the code:
-                      - The CLI already enforces one framework (`bin/index.ts:15-16, :76-80, :113-123`);
-                        only the preset schema still takes a comma list, and that path is reachable from
-                        `preset.spec.ts` alone — never from the CLI, the docs, `workshop/`, or the e2e
-                        (which loops frameworks and passes them one at a time).
-                      - `@atelier-ui/<fw>` is installed as `latest` (`preset.ts`, the three
-                        `deps[...] = 'latest'` lines). All five packages release in lockstep from the
-                        `libraries` group (all 0.2.43 today), so two attendees scaffolding on either side
-                        of a publish get different component code in the same room.
-                      - The example story is a single `Default` with no `play` and no per-variant story —
-                        against ADR-0121's "the stories are the claims", which is the doctrine the
-                        workshop teaches. `check:stories` therefore renders exactly one story, and an
-                        agent copying the local pattern copies the wrong one.
-                      - The generated `.mcp.json` is a strict subset of this repo's own: no `uianatomy`,
-                        and no `angular-cli` when Angular is the chosen framework.
-                      - Nothing under `.claude/` is generated except the four third-party
-                        `storybookjs/mcp` skills the post-generator installs. No settings file, so every
-                        session re-asks permission for `npx nx …` and `npm run check:*`, and each MCP
-                        server needs approving by hand. Keys verified against the installed CLI
-                        (2.1.269): `enableAllProjectMcpServers`, `enabledMcpjsonServers`,
-                        `disabledMcpjsonServers`, `includeCoAuthoredBy`, `extraKnownMarketplaces`,
-                        `enabledPlugins` all exist; hooks receive the edited path as stdin JSON at
-                        `.tool_input.file_path`.
-                      - The plugin route was measured as an alternative to vendoring and rejected for the
-                        room: a plugin from an external source that only the project's
-                        `.claude/settings.json` enables does not load until each user installs it
-                        (documented behaviour since 2.1.195). Vendored files have no such step.
+                          - The CLI already enforces one framework (`bin/index.ts:15-16, :76-80, :113-123`);
+                            only the preset schema still takes a comma list, and that path is reachable from
+                            `preset.spec.ts` alone — never from the CLI, the docs, `workshop/`, or the e2e
+                            (which loops frameworks and passes them one at a time).
+                          - `@atelier-ui/<fw>` is installed as `latest` (`preset.ts`, the three
+                            `deps[...] = 'latest'` lines). All five packages release in lockstep from the
+                            `libraries` group (all 0.2.43 today), so two attendees scaffolding on either side
+                            of a publish get different component code in the same room.
+                          - The example story is a single `Default` with no `play` and no per-variant story —
+                            against ADR-0121's "the stories are the claims", which is the doctrine the
+                            workshop teaches. `check:stories` therefore renders exactly one story, and an
+                            agent copying the local pattern copies the wrong one.
+                          - The generated `.mcp.json` is a strict subset of this repo's own: no `uianatomy`,
+                            and no `angular-cli` when Angular is the chosen framework.
+                          - Nothing under `.claude/` is generated except the four third-party
+                            `storybookjs/mcp` skills the post-generator installs. No settings file, so every
+                            session re-asks permission for `npx nx …` and `npm run check:*`, and each MCP
+                            server needs approving by hand. Keys verified against the installed CLI
+                            (2.1.269): `enableAllProjectMcpServers`, `enabledMcpjsonServers`,
+                            `disabledMcpjsonServers`, `includeCoAuthoredBy`, `extraKnownMarketplaces`,
+                            `enabledPlugins` all exist; hooks receive the edited path as stdin JSON at
+                            `.tool_input.file_path`.
+                          - The plugin route was measured as an alternative to vendoring and rejected for the
+                            room: a plugin from an external source that only the project's
+                            `.claude/settings.json` enables does not load until each user installs it
+                            (documented behaviour since 2.1.195). Vendored files have no such step.
 
   - [x] **S1 — one framework in the schema, not a list — done 2026-09-12** (`d4b1cfb`,
         ADR-0134; nx test 122, lint, build with all 32 templates in `dist/`, CLI test 21).
@@ -155,6 +155,35 @@ Ranked; each carries why it's worth doing next rather than later.
         name — which is why `unitTestRunner: 'none'` was passed in the first place. The
         Angular half is the risky one (`@analogjs/vitest-angular`) and gets its own real
         scaffold run, not an in-memory Tree.
+
+- [ ] **`@atelier-ui/react` is published as a self-contradictory package, and something
+      depends on that.** `dist/libs/react/package.json` declares `"type": "commonjs"` while
+      the files it ships are raw ESM. Found 2026-09-13 while diagnosing why only Vue's
+      generated unit tests died on `Unknown file extension ".css"`: Vue's package is
+      _correctly_ formed ESM, so Vitest externalises it and hands it to Node, which cannot
+      load the `import "./index.css"` that `libs/vue/vite.config.mts` injects as a rollup
+      banner. React ships the same per-component `import './atl-button.css'` and survives
+      only because Vite's dual-package guard refuses to externalise a package whose
+      declared type contradicts its contents, and inlines it instead — which is where the
+      CSS-stubbing lives. Proven in both directions in an isolated repro built from the
+      real tarballs: forcing `@atelier-ui/react` external reproduces the crash with Vite's
+      own "seems to be an ES Module but shipped in a CommonJS package" diagnostic; forcing
+      `@atelier-ui/vue` inline fixes it. So the fix that shipped (`server.deps.inline` in
+      the generated Vue unit config) is correct for Vue and React is a latent version of
+      the same bug, held off by a build defect rather than by design. Angular has no
+      version of it — ng-packagr inlines styles as literal strings, so no `.css` import
+      exists to load. Decide whether to correct the React package's `type` (and then also
+      give React's generated config the same `inline` entry), or to leave the accident in
+      place with this note as its record.
+
+- [ ] **`@nx/vue`'s application generator writes a spec file despite `unitTestRunner: 'none'`.**
+      A generated Vue workspace carries `src/app/App.spec.ts` (Nx's own default, using
+      `@vue/test-utils`' `mount`), which neither the preset writes nor documents, and which
+      the unit project's deliberately recursive `src/**/*.spec.*` glob then runs. React and
+      Angular honour the option. Harmless today — the file passes — but it means "the tests
+      in this workspace" is one file larger than the preset knows about for one framework.
+      Either narrow nothing and document it, or delete the file post-generation.
+
   - [ ] **S5a — the Figma file key the attendee actually owns.** Owed from the same
         owner decision as S1 and not delivered with it: `figma:snapshot` ships with a
         literal `<YOUR_FIGMA_FILE_KEY>` placeholder because the preset has only a boolean

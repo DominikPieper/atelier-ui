@@ -1,0 +1,36 @@
+import { defineConfig } from 'vitest/config';
+import angular from '@analogjs/vite-plugin-angular';
+
+// A second Vitest config, deliberately separate from `vitest.config.ts` one
+// directory up (the browser-mode Storybook test config) and deliberately
+// named something OTHER than `vitest.config.*` / `vite.config.*` /
+// `vitest.workspace.*` — see that file's own comment, and this monorepo's
+// ADR-0112, for why: the Storybook test-run tool's own config-discovery walk
+// only ever considers a file whose BASENAME is one of those three; content
+// is checked only once a candidate with a matching name is found. This file
+// isn't a candidate at all, by name, so it is only ever invoked explicitly —
+// via the `test` target in project.json (`vitest run --config
+// vitest.unit.config.ts`).
+//
+// Runs in jsdom, not a real browser: a service, a directive, or a
+// form-validation rule needs a fast feedback loop, not Playwright +
+// Chromium. Same `@analogjs/vite-plugin-angular` plugin as vitest.config.ts,
+// and for the same reason documented there — it links
+// `@atelier-ui/angular`'s partially-Ivy-compiled npm package, not just this
+// app's own components.
+export default defineConfig({
+  plugins: [angular()],
+  test: {
+    name: 'workshop-angular',
+    globals: true,
+    environment: 'jsdom',
+    include: ['src/**/*.spec.*'],
+    setupFiles: ['src/test-setup.ts'],
+    // Vitest defaults to 5000ms. libs/angular/vite.config.mts (this
+    // monorepo's own equivalent) measured an Angular Testing Library
+    // render() at 220-1270ms with the machine to itself, and higher under
+    // contention — 20s means a timeout here is a real hang, not a busy
+    // laptop.
+    testTimeout: 20_000,
+  },
+});

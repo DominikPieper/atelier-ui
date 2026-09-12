@@ -99,6 +99,22 @@ function storybookOutputExt(framework: Framework) {
   return framework === 'react' ? 'tsx' : 'ts';
 }
 
+// S5's own template lookup, mirroring storybookTemplateName()'s `.template`
+// dodge above: `vitest.unit.config.ts` and `test-setup.ts` contain no JSX on
+// any framework, so both always need the suffix; `atl-button.spec` follows
+// the same per-framework extension as the example story (`.tsx` on react,
+// `.ts.template` elsewhere).
+function testingTemplateName(
+  framework: Framework,
+  base: 'vitest.unit.config' | 'test-setup' | 'atl-button.spec',
+): string {
+  if (base === 'atl-button.spec') {
+    const ext = framework === 'react' ? 'tsx' : 'ts.template';
+    return `testing/${framework}/atl-button.spec.${ext}`;
+  }
+  return `testing/${framework}/${base}.ts.template`;
+}
+
 // The workspace's own component skill (`.claude/skills/atelier-component/`)
 // ships as a static `files/` template — its instructions don't vary by
 // framework except for two names: the app directory (`workshop-<fw>`) and
@@ -337,10 +353,26 @@ const PLAYWRIGHT_VERSION = '^1.36.0';
 const VITE_PLUGIN_REACT_VERSION = '6.1.1';
 const VITE_PLUGIN_VUE_VERSION = '^6.0.5';
 const ANALOGJS_VITE_PLUGIN_ANGULAR_VERSION = '2.7.1';
-// Only Vue's vitest.setup.ts.template imports this (custom jest-dom
-// matchers), mirroring libs/vue/.storybook/vitest.setup.ts exactly — React
-// and Angular's setup files don't use it.
+// Imported by Vue's browser-mode vitest.setup.ts.template (custom jest-dom
+// matchers, mirroring libs/vue/.storybook/vitest.setup.ts exactly) AND, since
+// S5, by every framework's own src/test-setup.ts (the jsdom unit-test
+// runner's setup file) — the same custom matchers there too.
 const TESTING_LIBRARY_JEST_DOM_VERSION = '^6.9.1';
+
+// S5 — the unit test runner (`nx test`, jsdom, separate from the browser-mode
+// story tests above): each framework's own Testing Library, `jsdom` itself
+// (Vitest doesn't bundle a DOM implementation — `environment: 'jsdom'` needs
+// the package installed), and Angular's `@analogjs/vitest-angular` (the
+// TestBed setup helpers `libs/angular/src/test-setup.ts` uses, mirrored here
+// per the same file). Versions copied verbatim from this monorepo's own root
+// package.json, like the vitest/browser-mode constants above.
+const TESTING_LIBRARY_ANGULAR_VERSION = '^19.2.1';
+const TESTING_LIBRARY_REACT_VERSION = '^16.3.2';
+const TESTING_LIBRARY_VUE_VERSION = '^8.1.0';
+const JSDOM_VERSION = '^27.1.0';
+// Same pin as ANALOGJS_VITE_PLUGIN_ANGULAR_VERSION above — both packages are
+// released in lockstep by @analogjs.
+const ANALOGJS_VITEST_ANGULAR_VERSION = '2.7.1';
 // The Vue eslint.config.mjs addition above (see the appendToFlatEslintConfig
 // call in the vue branch) imports this directly. @nx/eslint's own root config
 // setup already adds it unconditionally regardless of framework or of
@@ -825,6 +857,25 @@ export async function presetGenerator(
     readTemplate(storybookTemplateName(framework, 'vitest.setup')),
   );
 
+  // S5 — the unit test runner: a second, unmarked Vitest config
+  // (`vitest.unit.config.ts`, never `vitest.config.ts` — see that file's own
+  // comment above and testingTemplateName()'s) so a composable, a service, a
+  // helper, or a form-validation rule gets a fast, jsdom-based `nx test` —
+  // not just the browser-mode story tests above. One example unit test per
+  // app, same purpose as atl-button.stories.*: the pattern that gets copied.
+  tree.write(
+    `${appName}/vitest.unit.config.ts`,
+    readTemplate(testingTemplateName(framework, 'vitest.unit.config')),
+  );
+  tree.write(
+    `${appName}/src/test-setup.ts`,
+    readTemplate(testingTemplateName(framework, 'test-setup')),
+  );
+  tree.write(
+    `${appName}/src/atl-button.spec.${storybookOutputExt(framework)}`,
+    readTemplate(testingTemplateName(framework, 'atl-button.spec')),
+  );
+
   // The application generator (@nx/{angular,react,vue}:application, above)
   // guarantees `${appName}/project.json` exists at this point — updateJson
   // reads it first and throws `Cannot find ${path}` if it doesn't, which is
@@ -870,6 +921,24 @@ export async function presetGenerator(
       executor: 'nx:run-commands',
       options: {
         command: `stylelint '${appName}/src/**/*.css' --ignore-pattern '${appName}/src/styles/tokens.css' --config stylelint.config.mjs`,
+      },
+    };
+    // S5 — the unit test runner. Mirrors "storybook-test" above exactly
+    // (nx:run-commands + cwd), just pointed at vitest.unit.config.ts instead.
+    // This REPLACES whatever "test" target the framework's own application
+    // generator wrote: React/Vue write none (unitTestRunner: 'none'); Angular
+    // writes its own native `@angular/build:unit-test` wiring regardless of
+    // skipTests (confirmed against the real generator — skipTests only skips
+    // generating example spec files, not the target). This workspace instead
+    // mirrors libs/angular's own proven setup — @analogjs/vitest-angular +
+    // a vite.config-style file — the same way on all three frameworks, so
+    // `nx test` behaves identically across the workshop regardless of which
+    // one was chosen.
+    config.targets['test'] = {
+      executor: 'nx:run-commands',
+      options: {
+        command: 'npx vitest run --config vitest.unit.config.ts',
+        cwd: appName,
       },
     };
     return config;
@@ -1288,17 +1357,18 @@ once after \`npm install\` — see Storybook below.
 
 ## Definition of Done
 
-A change here is done when all four of these pass:
+A change here is done when all five of these pass:
 
 - \`npm run check:format\` — Prettier
 - \`npm run check:stylelint\` — the ported CSS-discipline rules
 - \`npm run check:contracts\` — contract ↔ docgen ↔ Figma-snapshot parity
+- \`npm run check:unit\` — jsdom unit tests (components, composables, helpers)
 - \`npm run check:stories\` — every story, rendered in Chromium, axe-checked
 
 **A gate's result is its exit code.** Run it as
 \`<command> > /tmp/x.log 2>&1; echo $?\` and read the log afterwards — never pipe
 a gate into \`head\` or \`grep\`. The pipe's own exit status is always \`0\`, which
-silently turns a failing gate into a passing one. \`/verify\` runs all four and
+silently turns a failing gate into a passing one. \`/verify\` runs all five and
 reports each exit code (\`.claude/commands/verify.md\`).
 
 ## Troubleshooting
@@ -1372,13 +1442,41 @@ file exports). The Desktop Bridge covers creation and inspection without a token
     viteFrameworkDevDeps['@analogjs/vite-plugin-angular'] =
       ANALOGJS_VITE_PLUGIN_ANGULAR_VERSION;
   }
-  if (framework === 'vue' && !existingDeps['@testing-library/jest-dom']) {
+  // Generalized for S5 (was Vue-only, for its browser-mode vitest.setup.ts):
+  // every framework's own src/test-setup.ts now imports this too.
+  if (!existingDeps['@testing-library/jest-dom']) {
     viteFrameworkDevDeps['@testing-library/jest-dom'] =
       TESTING_LIBRARY_JEST_DOM_VERSION;
   }
   if (framework === 'vue' && !existingDeps['eslint-config-prettier']) {
     viteFrameworkDevDeps['eslint-config-prettier'] =
       ESLINT_CONFIG_PRETTIER_VERSION;
+  }
+
+  // S5 — the unit test runner: each framework's own Testing Library, plus
+  // `jsdom` itself (Vitest's `environment: 'jsdom'` needs the package
+  // installed — it isn't bundled), added only when not already present.
+  // Measured against the real application generators: Angular's own
+  // (`addVitestAngular`, its native @angular/build:unit-test wiring, present
+  // regardless of `skipTests`) already adds both `jsdom` and `vitest`; none
+  // of the three adds a Testing Library package or `@analogjs/vitest-angular`.
+  const unitTestDevDeps: Record<string, string> = {};
+  if (!existingDeps.jsdom) {
+    unitTestDevDeps.jsdom = JSDOM_VERSION;
+  }
+  if (framework === 'angular' && !existingDeps['@testing-library/angular']) {
+    unitTestDevDeps['@testing-library/angular'] =
+      TESTING_LIBRARY_ANGULAR_VERSION;
+  }
+  if (framework === 'react' && !existingDeps['@testing-library/react']) {
+    unitTestDevDeps['@testing-library/react'] = TESTING_LIBRARY_REACT_VERSION;
+  }
+  if (framework === 'vue' && !existingDeps['@testing-library/vue']) {
+    unitTestDevDeps['@testing-library/vue'] = TESTING_LIBRARY_VUE_VERSION;
+  }
+  if (framework === 'angular' && !existingDeps['@analogjs/vitest-angular']) {
+    unitTestDevDeps['@analogjs/vitest-angular'] =
+      ANALOGJS_VITEST_ANGULAR_VERSION;
   }
 
   // Ported CSS-discipline rules (ADR-0130). No postcss-html: that's only
@@ -1394,13 +1492,14 @@ file exports). The Desktop Bridge covers creation and inspection without a token
   };
 
   // Install selected @atelier-ui/* packages (dependencies) and Storybook +
-  // the contract loop's own tools + the vitest browser-mode tooling +
-  // stylelint + prettier (devDependencies, exact pins — see the *_VERSION
-  // constants above)
+  // the contract loop's own tools + the vitest browser-mode tooling + the
+  // unit test runner's own tooling (S5) + stylelint + prettier
+  // (devDependencies, exact pins — see the *_VERSION constants above)
   const installTask = addDependenciesToPackageJson(tree, deps, {
     ...storybookDevDeps,
     ...contractLoopDevDeps,
     ...viteFrameworkDevDeps,
+    ...unitTestDevDeps,
     ...stylelintDevDeps,
     ...prettierDevDeps,
   });
@@ -1441,6 +1540,13 @@ file exports). The Desktop Bridge covers creation and inspection without a token
     // Ported CSS-discipline rules (ADR-0130). Identical to the monorepo's own
     // root package.json script.
     pkg.scripts['check:stylelint'] = 'nx run-many -t stylelint';
+    // S5 — the unit test runner: jsdom-based tests for anything that is not
+    // itself a story (a component's own logic, a service, a helper, a
+    // form-validation rule). A sibling check, not folded into check:stories
+    // (which proves rendering + a11y in a real browser) — this scaffold
+    // deliberately has no check:all umbrella, so this is one more named
+    // check, not a chain.
+    pkg.scripts['check:unit'] = 'nx run-many -t test';
     // Formatting enforcement. Deliberately this monorepo's own
     // `prettier --write .` / `prettier --check .` shape, not `nx format:*` —
     // measured 2026-09-12 against a real generated workspace, two distinct
@@ -1617,14 +1723,14 @@ Browse components at ${SITE_URL}
         // The Nx CLI — `npx nx serve/storybook/build-storybook <app>`, all
         // named in the CLAUDE.md this preset writes above.
         'Bash(npx nx *)',
-        // The seven npm scripts this preset writes to package.json
-        // (preflight, check:contracts, figma:snapshot, check:stories,
-        // check:stylelint, format, check:format) — one wildcard entry
-        // rather than seven separate ones, since this workspace's
-        // package.json carries exactly this fixed, generator-written script
-        // set (a workshop attendee adding a script of their own opts into
-        // this same allowance by definition, having already edited
-        // package.json by hand).
+        // The eight npm scripts this preset writes to package.json
+        // (preflight, check:contracts, figma:snapshot, check:unit,
+        // check:stories, check:stylelint, format, check:format) — one
+        // wildcard entry rather than eight separate ones, since this
+        // workspace's package.json carries exactly this fixed,
+        // generator-written script set (a workshop attendee adding a script
+        // of their own opts into this same allowance by definition, having
+        // already edited package.json by hand).
         'Bash(npm run *)',
         // The Storybook CLI itself — `dev`/`build` only, the two
         // subcommands CLAUDE.md/README actually tell an attendee to run.

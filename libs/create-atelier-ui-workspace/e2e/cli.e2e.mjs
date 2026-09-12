@@ -6,8 +6,9 @@
  * preset and CLI to it, installs the CLI into a scratch directory like a
  * real user would, then runs it with --framework=<fw>. Verifies the
  * scaffolded workspace contains expected files (including the per-app
- * Storybook config and an example story) and that `nx build` and
- * `nx build-storybook` both actually compile the generated app. Also
+ * Storybook config and an example story) and that `nx build`,
+ * `nx build-storybook`, and `nx test` (the jsdom unit-test runner, S5) all
+ * actually run against the generated app. Also
  * reports, non-fatally, whether the storybookjs/mcp skills got installed —
  * for exactly one framework (see SKILLS_TEST_FRAMEWORK below), the only one
  * for which the CLI is run with the network install actually enabled; the
@@ -417,6 +418,10 @@ function testFramework(framework, registryUrl, npmrcPath) {
       `workshop-${framework}/.storybook/${previewFile}`,
       `workshop-${framework}/vitest.config.ts`,
       `workshop-${framework}/.storybook/vitest.setup.ts`,
+      // S5 — the unit test runner: a second, unmarked Vitest config plus its
+      // own setup file, distinct from the browser-mode pair just above.
+      `workshop-${framework}/vitest.unit.config.ts`,
+      `workshop-${framework}/src/test-setup.ts`,
       'tools/scripts/check-contracts.mjs',
       'tools/figma/snapshot.json',
       'contracts.config.json',
@@ -547,6 +552,15 @@ function testFramework(framework, registryUrl, npmrcPath) {
     assertContains('total: 0 error(s)');
     ok(
       'check:contracts exits 0 on the example — vacuous by design: the library AtlButton is skipped as external (external: 1, docgen-failed: 0), only [NO-STORY-META] remains',
+    );
+
+    // S5 — the unit test runner. preset.spec.ts proves the files land in an
+    // in-memory Tree; only a real scaffolded workspace can prove the runner
+    // actually runs — the example atl-button.spec.* against the framework's
+    // own Testing Library, in jsdom, via `nx test`'s vitest.unit.config.ts.
+    run(`npx nx test workshop-${framework}`, { cwd: wsPath });
+    ok(
+      `nx test workshop-${framework} green (jsdom unit tests via vitest.unit.config.ts)`,
     );
 
     // Browser-mode Storybook tests (owner correction 2026-09-10 to ADR-0123 —

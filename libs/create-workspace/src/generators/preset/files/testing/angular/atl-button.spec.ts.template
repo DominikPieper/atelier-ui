@@ -1,0 +1,27 @@
+import { fireEvent, render, screen } from '@testing-library/angular';
+import { AtlButton } from '@atelier-ui/angular';
+
+// A working pattern to copy: same purpose as atl-button.stories.ts, but for
+// a plain jsdom unit test (`npx nx test workshop-angular`) rather than a
+// browser-rendered story — the loop for anything that is not itself a
+// story: a service, a directive, a form-validation rule.
+describe('AtlButton', () => {
+  it('renders with its accessible name', async () => {
+    await render('<atl-button>Click me</atl-button>', {
+      imports: [AtlButton],
+    });
+    expect(
+      screen.getByRole('button', { name: 'Click me' }),
+    ).toBeInTheDocument();
+  });
+
+  it('emits a click event when clicked', async () => {
+    const onClick = vi.fn();
+    await render('<atl-button (click)="onClick()">Click me</atl-button>', {
+      imports: [AtlButton],
+      componentProperties: { onClick },
+    });
+    await fireEvent.click(screen.getByRole('button', { name: 'Click me' }));
+    expect(onClick).toHaveBeenCalledOnce();
+  });
+});

@@ -1211,6 +1211,239 @@ describe('preset generator', () => {
     );
   });
 
+  // ─── S5: the unit test runner (nx test, jsdom) ───────────────────────────
+  // A workshop workspace's whole point is agent-assisted development, and
+  // until now it had a feedback loop for stories only — no `nx test`, no
+  // Testing Library, nothing for a composable, a service, or a plain helper.
+  // These tests mirror the browser-mode ones just above, for the OTHER
+  // Vitest config: unmarked on purpose, so @storybook/addon-vitest's own
+  // config-discovery walk (ADR-0112) never picks it up.
+
+  it.each(['angular', 'react', 'vue'] as const)(
+    'writes vitest.unit.config.ts and src/test-setup.ts for %s, in jsdom, distinct from the browser-mode pair',
+    async (fw) => {
+      await presetGenerator(tree, { name: 'my-workspace', framework: fw });
+
+      const config =
+        tree.read(`workshop-${fw}/vitest.unit.config.ts`, 'utf-8') ?? '';
+      expect(config).toContain(`'workshop-${fw}'`);
+      expect(config).toContain("environment: 'jsdom'");
+      expect(config).toContain("include: ['src/**/*.spec.*']");
+      expect(config).toContain("setupFiles: ['src/test-setup.ts']");
+      // Never a candidate for the Storybook test-run tool's own
+      // config-discovery walk (ADR-0112): that walk matches a file's
+      // BASENAME first ("vitest.config.*" / "vite.config.*" /
+      // "vitest.workspace.*"), and "vitest.unit.config.ts" is none of
+      // those — so it never imports or calls the plugin that would make it
+      // one, regardless of what its own comments say about why.
+      expect(config).not.toMatch(/from ['"]@storybook\/addon-vitest/);
+      expect(config).not.toMatch(/\bstorybookTest\s*\(/);
+
+      const setup =
+        tree.read(`workshop-${fw}/src/test-setup.ts`, 'utf-8') ?? '';
+      expect(setup).toContain('@testing-library/jest-dom/vitest');
+    },
+  );
+
+  it("angular's vitest.unit.config.ts uses @analogjs/vite-plugin-angular, the same plugin vitest.config.ts uses", async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
+
+    const config =
+      tree.read('workshop-angular/vitest.unit.config.ts', 'utf-8') ?? '';
+    expect(config).toContain("from '@analogjs/vite-plugin-angular'");
+  });
+
+  it("vue's vitest.unit.config.ts inlines @atelier-ui/vue so its built index.css import resolves under Vitest's default (Node-loader) externalization, unlike angular/react", async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'vue' });
+
+    const vueConfig =
+      tree.read('workshop-vue/vitest.unit.config.ts', 'utf-8') ?? '';
+    expect(vueConfig).toContain("inline: ['@atelier-ui/vue']");
+
+    // angular and react don't need this: react's build (@nx/js:tsc) ships
+    // raw ESM import syntax in a package.json declared "type": "commonjs",
+    // which trips Vitest's own dual-package guard and forces it through the
+    // inlined path automatically; angular's build (ng-packagr) never emits a
+    // bare `.css` import at all — component styles are inlined as strings.
+    // Neither is a guarantee this generator can rely on going forward (see
+    // the template's own comment), but today, neither needs the workaround.
+    const reactTree = createTreeWithEmptyWorkspace();
+    await presetGenerator(reactTree, {
+      name: 'my-workspace',
+      framework: 'react',
+    });
+    const reactConfig =
+      reactTree.read('workshop-react/vitest.unit.config.ts', 'utf-8') ?? '';
+    expect(reactConfig).not.toContain('deps');
+
+    const angularTree = createTreeWithEmptyWorkspace();
+    await presetGenerator(angularTree, {
+      name: 'my-workspace',
+      framework: 'angular',
+    });
+    const angularConfig =
+      angularTree.read('workshop-angular/vitest.unit.config.ts', 'utf-8') ?? '';
+    expect(angularConfig).not.toContain('deps');
+  });
+
+  it("angular's test-setup.ts mirrors libs/angular/src/test-setup.ts: TestBed setup via @analogjs/vitest-angular", async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
+
+    const setup =
+      tree.read('workshop-angular/src/test-setup.ts', 'utf-8') ?? '';
+    expect(setup).toContain("import '@angular/compiler'");
+    expect(setup).toContain('@analogjs/vitest-angular/setup-snapshots');
+    expect(setup).toContain(
+      "import { setupTestBed } from '@analogjs/vitest-angular/setup-testbed'",
+    );
+    expect(setup).toContain('setupTestBed();');
+  });
+
+  it('adds a "test" target per app (mirroring storybook-test\'s shape) and a root check:unit script', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'react' });
+
+    const project = readJson(tree, 'workshop-react/project.json');
+    expect(project.targets.test.executor).toBe('nx:run-commands');
+    expect(project.targets.test.options.command).toBe(
+      'npx vitest run --config vitest.unit.config.ts',
+    );
+    expect(project.targets.test.options.cwd).toBe('workshop-react');
+
+    const pkg = readJson(tree, 'package.json');
+    expect(pkg.scripts['check:unit']).toBe('nx run-many -t test');
+  });
+
+  it("replaces whatever \"test\" target the application generator already wrote (e.g. '@angular/build:unit-test', written regardless of skipTests) with vitest.unit.config.ts's own", async () => {
+    angularAppMock.mockImplementationOnce(
+      (tree: Tree, options: { name: string }) => {
+        tree.write(
+          `${options.name}/project.json`,
+          JSON.stringify({
+            name: options.name,
+            targets: {
+              build: { executor: 'fake:build' },
+              test: {
+                executor: '@angular/build:unit-test',
+                options: { watch: false },
+              },
+            },
+          }),
+        );
+        tree.write(
+          `${options.name}/eslint.config.mjs`,
+          ESLINT_CONFIG_BASELINE.angular,
+        );
+        return Promise.resolve(undefined);
+      },
+    );
+
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
+
+    const project = readJson(tree, 'workshop-angular/project.json');
+    expect(project.targets.test.executor).toBe('nx:run-commands');
+    expect(project.targets.test.options.command).toBe(
+      'npx vitest run --config vitest.unit.config.ts',
+    );
+    // The unrelated target the mock also seeded survives — only "test" gets
+    // replaced.
+    expect(project.targets.build).toEqual({ executor: 'fake:build' });
+  });
+
+  it.each([
+    ['angular', 'ts'],
+    ['react', 'tsx'],
+    ['vue', 'ts'],
+  ] as const)(
+    'writes an example atl-button.spec importing AtlButton from @atelier-ui/%s, asserting its accessible name and a click reaching the handler',
+    async (fw, ext) => {
+      await presetGenerator(tree, { name: 'my-workspace', framework: fw });
+
+      const spec =
+        tree.read(`workshop-${fw}/src/atl-button.spec.${ext}`, 'utf-8') ?? '';
+      expect(spec).toContain(`from '@atelier-ui/${fw}'`);
+      expect(spec).toContain("name: 'Click me'");
+      expect(spec).toContain('onClick');
+      // Exactly one @atelier-ui import — the same external-package-import
+      // discipline the example story keeps (see the CLI e2e's
+      // 'external: 1' assertion on check:contracts' output).
+      expect(spec.match(/from '@atelier-ui\//g) ?? []).toHaveLength(1);
+    },
+  );
+
+  it('adds jsdom as a devDependency', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'react' });
+
+    const pkg = readJson(tree, 'package.json');
+    expect(pkg.devDependencies['jsdom']).toBe('^27.1.0');
+  });
+
+  it("does not override an existing jsdom devDependency (angular's own application generator already adds one via its native unit-test wiring)", async () => {
+    tree.write(
+      'package.json',
+      JSON.stringify({
+        name: 'my-workspace',
+        devDependencies: { jsdom: '30.0.0' },
+      }),
+    );
+
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
+
+    const pkg = readJson(tree, 'package.json');
+    expect(pkg.devDependencies.jsdom).toBe('30.0.0');
+  });
+
+  it("adds @testing-library/angular for the unit test runner when angular is selected, not the other frameworks' packages", async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
+
+    const pkg = readJson(tree, 'package.json');
+    expect(pkg.devDependencies['@testing-library/angular']).toBe('^19.2.1');
+    expect(pkg.devDependencies['@testing-library/react']).toBeUndefined();
+    expect(pkg.devDependencies['@testing-library/vue']).toBeUndefined();
+  });
+
+  it("adds @testing-library/react for the unit test runner when react is selected, not the other frameworks' packages", async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'react' });
+
+    const pkg = readJson(tree, 'package.json');
+    expect(pkg.devDependencies['@testing-library/react']).toBe('^16.3.2');
+    expect(pkg.devDependencies['@testing-library/angular']).toBeUndefined();
+    expect(pkg.devDependencies['@testing-library/vue']).toBeUndefined();
+  });
+
+  it("adds @testing-library/vue for the unit test runner when vue is selected, not the other frameworks' packages", async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'vue' });
+
+    const pkg = readJson(tree, 'package.json');
+    expect(pkg.devDependencies['@testing-library/vue']).toBe('^8.1.0');
+    expect(pkg.devDependencies['@testing-library/angular']).toBeUndefined();
+    expect(pkg.devDependencies['@testing-library/react']).toBeUndefined();
+  });
+
+  it.each(['angular', 'react', 'vue'] as const)(
+    'adds @testing-library/jest-dom for the unit test runner regardless of framework (%s), generalized from the vue-only browser-mode add',
+    async (fw) => {
+      await presetGenerator(tree, { name: 'my-workspace', framework: fw });
+
+      const pkg = readJson(tree, 'package.json');
+      expect(pkg.devDependencies['@testing-library/jest-dom']).toBe('^6.9.1');
+    },
+  );
+
+  it('adds @analogjs/vitest-angular only when angular is selected', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
+    const angularPkg = readJson(tree, 'package.json');
+    expect(angularPkg.devDependencies['@analogjs/vitest-angular']).toBe(
+      '2.7.1',
+    );
+
+    tree = createTreeWithEmptyWorkspace();
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'react' });
+    const reactPkg = readJson(tree, 'package.json');
+    expect(
+      reactPkg.devDependencies['@analogjs/vitest-angular'],
+    ).toBeUndefined();
+  });
+
   it.each([
     ['angular', 'ts'],
     ['react', 'tsx'],
@@ -1937,7 +2170,7 @@ describe('preset generator', () => {
     expect(hook).toContain('exit 0');
   });
 
-  it('writes a /verify command naming all four checks', async () => {
+  it('writes a /verify command naming all five checks', async () => {
     await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
 
     expect(tree.exists('.claude/commands/verify.md')).toBe(true);
@@ -1945,6 +2178,7 @@ describe('preset generator', () => {
     expect(verify).toContain('check:format');
     expect(verify).toContain('check:stylelint');
     expect(verify).toContain('check:contracts');
+    expect(verify).toContain('check:unit');
     expect(verify).toContain('check:stories');
     // The exit-code rule, not a piped pass/fail summary.
     expect(verify).toContain('exit code');
@@ -1973,6 +2207,19 @@ describe('preset generator', () => {
     const skill =
       tree.read('.claude/skills/atelier-component/SKILL.md', 'utf-8') ?? '';
     expect(skill).toContain('name: atelier-component');
+  });
+
+  it('atelier-component skill names all five checks in "Definition of done" and check:unit in the check-capability table', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
+
+    const skill =
+      tree.read('.claude/skills/atelier-component/SKILL.md', 'utf-8') ?? '';
+    expect(skill).toContain('## Definition of done');
+    expect(skill).toContain('check:format');
+    expect(skill).toContain('check:stylelint');
+    expect(skill).toContain('check:contracts');
+    expect(skill).toContain('check:unit');
+    expect(skill).toContain('check:stories');
   });
 
   it.each(['angular', 'react', 'vue'] as const)(
@@ -2016,7 +2263,7 @@ describe('preset generator', () => {
     expect(gitignore).toContain('.claude/settings.local.json');
   });
 
-  it('CLAUDE.md has a Definition of Done section naming all four checks and the exit-code rule', async () => {
+  it('CLAUDE.md has a Definition of Done section naming all five checks and the exit-code rule', async () => {
     await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
 
     const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
@@ -2024,6 +2271,7 @@ describe('preset generator', () => {
     expect(md).toContain('check:format');
     expect(md).toContain('check:stylelint');
     expect(md).toContain('check:contracts');
+    expect(md).toContain('check:unit');
     expect(md).toContain('check:stories');
     expect(md).toContain("gate's result is its exit code");
   });
