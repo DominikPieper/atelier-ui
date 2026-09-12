@@ -24,8 +24,17 @@ import PageHero from '../components/PageHero.astro';
       each Atelier UI MCP returns structured data, no screenshots or copy-paste.
     </p>
 
-    <aside style="margin: -0.5rem 0 2.25rem; padding: 0.95rem 1.15rem; border: 1px solid var(--ui-color-border); border-radius: var(--ui-radius-md); background: var(--ui-color-surface-raised); font-size: 0.82rem; line-height: 1.65; max-width: 720px">
-      <strong>Storybook MCP at a glance.</strong> Three toolsets — <code>docs</code> (<code>docs-list</code>, <code>docs-show</code>, <code>docs-show-story</code>), <code>dev</code> (<code>get-storybook-story-instructions</code>, <code>stories-preview</code>, <code>stories-changed</code>, <code>stories-find-by-component</code>, <code>display-review</code>), <code>test</code> (<code>test-run</code>). Hosted MCPs ship the <code>docs</code> toolset only; <code>dev</code> + <code>test</code> live in <code>@storybook/addon-mcp</code> behind a running Storybook. Those tool names are the ones Atelier's pinned versions ship — Storybook 10.6.0, <code>@storybook/mcp</code> 10.6.0, <code>@storybook/addon-mcp</code> 10.6.0. See <a href="/storybook/#toolset-configuration" class="docs-link-primary">Storybook → Toolset configuration</a> for the full matrix, what 10.4 added (<code>experimentalReactComponentMeta</code> for React's docgen, now joined by Angular's and Vue's own <code>experimentalDocgenServer</code>; Change Review, MCP Apps preview, multi-source composition, self-host API), and gating rules.
+    <aside aria-label="Storybook MCP tool surface at a glance" style="margin: -0.5rem 0 1.25rem; padding: 0.95rem 1.15rem; border: 1px solid var(--ui-color-border); border-radius: var(--ui-radius-md); background: var(--ui-color-surface-raised); font-size: 0.82rem; line-height: 1.65; max-width: 720px">
+      <strong>Storybook MCP at a glance.</strong> Three toolsets — <code>docs</code> (<code>docs-list</code>, <code>docs-show</code>, <code>docs-show-story</code>), <code>dev</code> (<code>get-storybook-story-instructions</code>, <code>stories-preview</code>, <code>stories-changed</code>, <code>stories-find-by-component</code>, <code>review-create</code>), <code>test</code> (<code>test-run</code>). Hosted MCPs ship the <code>docs</code> toolset only; <code>dev</code> + <code>test</code> live in <code>@storybook/addon-mcp</code> behind a running Storybook. Those tool names are the ones Atelier's pinned versions ship — Storybook 10.6.0, <code>@storybook/mcp</code> 10.6.0, <code>@storybook/addon-mcp</code> 10.6.0 — read from the installed <code>dist/preset.js</code>, not the changelog prose, which still narrates <code>review-create</code> as "the display-review tool". See <a href="/storybook/#toolset-configuration" class="docs-link-primary">Storybook → Toolset configuration</a> for the full matrix, what 10.4 added (<code>experimentalReactComponentMeta</code> for React's docgen, now joined by Angular's and Vue's own <code>experimentalDocgenServer</code>; Change Review, MCP Apps preview, multi-source composition, self-host API), and gating rules.
+    </aside>
+
+    <aside aria-label="Wired vs. not wired, and the cost to close the gap" style="margin: 0 0 2.25rem; padding: 0.95rem 1.15rem; border: 1px solid var(--ui-color-border); border-radius: var(--ui-radius-md); background: var(--ui-color-surface-raised); font-size: 0.82rem; line-height: 1.65; max-width: 720px">
+      <strong>Wired vs. not, and what closing the gap costs.</strong> <code>.mcp.json</code> wires only the three hosted endpoints above — none of the three <code>dev</code>-toolset tools that need a running Storybook (<code>stories-changed</code>, <code>stories-find-by-component</code>, <code>review-create</code>) are reachable through them; only a local entry pointed at <code>http://localhost:&lt;port&gt;/mcp</code> does, and that stays a per-developer choice on purpose, not something this repo wires for everyone.
+      <ul style="margin: 0.6rem 0 0; padding-left: 1.2rem">
+        <li><code>stories-changed</code> and <code>stories-find-by-component</code> already cost nothing beyond that local entry: <code>features.changeDetection</code> defaults to <code>true</code> in 10.6 core and none of the three <code>main.ts</code> files override it, and all three frameworks build on <code>builder-vite</code>, which implements the module-graph adapter <code>stories-find-by-component</code> needs.</li>
+        <li><code>review-create</code> needs one more step: for a direct MCP client (a local entry, not the <code>storybook ai</code> CLI channel) it registers only once <code>features.experimentalReview: true</code> is set explicitly — unset today in all three <code>main.ts</code> files. Three one-line config additions, no new dependency; "not set to <code>false</code>" is enough only on the CLI channel below, not here.</li>
+        <li><code>storybook ai</code> — the CLI channel whose requests get <code>review-create</code> without the flag — still ships in 10.6.0, but its own <code>--help</code> now prints a deprecation notice pointing at <code>storybook skills</code>. This repo already moved: the <code>stories</code>, <code>storybook-init</code>, <code>storybook-setup</code> and <code>storybook-upgrade</code> Claude Code Skills came from <code>storybook skills setup</code> (ADR-0123) — a one-time file install, unrelated to the MCP servers on this page.</li>
+      </ul>
     </aside>
 
     <DiagramFigure caption="One AI client talks to three parallel Storybook MCP servers — one per framework. The request format (JSON-RPC) is identical. Each hosted endpoint emits and serves its own components.json — Angular via angular-component-meta, Vue via vue-component-meta, React via react-docgen — so each answers in its own framework's shape (ADR-0097).">
@@ -84,7 +93,7 @@ import PageHero from '../components/PageHero.astro';
           <text x="624" y="82" text-anchor="middle" font-size="13" font-weight="800" style="fill: #e23237">A</text>
           <text x="660" y="70" font-size="12" font-weight="700">storybook-angular</text>
           <text x="660" y="88" font-size="10" class="diagram-mono diagram-muted">/storybook-angular/mcp</text>
-          <text x="660" y="105" font-size="10" class="diagram-muted">docs · props (via React) · stories</text>
+          <text x="660" y="105" font-size="10" class="diagram-muted">docs · props · stories</text>
         </g>
 
         <!-- Node: Storybook React -->
@@ -104,7 +113,7 @@ import PageHero from '../components/PageHero.astro';
           <text x="624" y="266" text-anchor="middle" font-size="13" font-weight="800" style="fill: #42b883">V</text>
           <text x="660" y="254" font-size="12" font-weight="700">storybook-vue</text>
           <text x="660" y="272" font-size="10" class="diagram-mono diagram-muted">/storybook-vue/mcp</text>
-          <text x="660" y="289" font-size="10" class="diagram-muted">docs · props (via React) · stories</text>
+          <text x="660" y="289" font-size="10" class="diagram-muted">docs · props · stories</text>
         </g>
 
         <!-- Label: Identical protocol -->
