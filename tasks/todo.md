@@ -309,13 +309,19 @@ Ranked; each carries why it's worth doing next rather than later.
         `componentRoot` nor `allowlistsFile`, correct while it has no exemption file. Someone
         hand-adding exemptions later without adding `componentRoot` gets a staleness scan that
         silently does not run.
-  - [ ] **Still to decide for the scaffold: `format` / `format:check` and a `types` script.**
-        ADR-0127 left enforcement as the obvious way for the formatting pass to rot, and the
-        generated workspace has neither. Measure what `create-nx-workspace` already provides
-        (`nx format:check`, a `.prettierrc`, the prettier devDependency) before adding a
-        script that duplicates it, and check whether the generated app has an inferred
-        `typecheck` target at all before promising a `types` script that would have nothing to
-        run.
+  - [x] **Formatting ships, a `types` script does not (2026-09-12, ADR-0131's dated
+        extension).** A fresh Nx tree has no `prettier` devDependency and no `.prettierrc`, so
+        the preset writes both plus `format` / `check:format`, in this repo's
+        `prettier --check .` shape — `nx format:check` exits 0 printing "No formatter
+        configured" when none is resolvable, which is a silent pass on an untouched tree.
+        `types` ships nothing: no generated framework exposes a `typecheck` target, and
+        `nx build` already type-checks the example story (proven by injecting a `TS2322`).
+  - [ ] **Nothing type-checks `.storybook/*` in a generated workspace**, for any framework —
+        `main.ts`, `preview.ts`, `vitest.setup.ts`. Angular's scaffold writes a
+        `.storybook/tsconfig.json` that nothing runs `tsc` against; React and Vue get no such
+        file. Closing it means writing a tsconfig for two of three frameworks, which is why it
+        was left open rather than guessed at. The same gap in this repo is covered by
+        `check:types`.
 
 - [ ] **The staleness half of the stylelint rules has no home for its finding**, which is the
       attribution test of ADR-0130 failing against a rule this repo kept. A `[STALE]` report
