@@ -700,3 +700,29 @@ And one on honesty: the first fix's comment named the watch handles as the cause
 recording that they are `unref()`'d, which contradicts itself. The mechanism that makes this
 Linux-only is still not established, and the comment now says so. A root cause you cannot yet
 explain is worth writing down as an open question, not as a confident sentence.
+
+## 2026-09-12 — A wrapper's exit code is not the command's, and backgrounding is a wrapper
+
+`AGENTS.md` has said for months that a gate's result is its exit code, and that piping into
+`head`/`grep` reports the _pipe's_ status, which is always 0 — the rule exists because a false
+"all gates green" already reached this repo's history that way. Twice in one session the same
+failure arrived through a door that rule does not name.
+
+**Backgrounding a compound command.** `npm run check:all > out 2>&1; echo $? >> out` was run
+with `&` inside it. The shell forked, echoed `started`, and exited 0 — and that 0 was reported
+as the command's result while `check:all` was still running. The evidence that something was
+wrong was not in the exit code at all: the output file had nine lines in it.
+
+**A push that "succeeded".** The same shape, one tool away: a backgrounded `git push` was
+reported as exit 0 while git had died with 141 (SIGPIPE, the remote closing an idle
+connection). `origin/main` was still at the old commit, and the real exit code was sitting in
+the output file that had been redirected to.
+
+Two rules:
+
+- **Read the artefact, not the wrapper.** Whatever reports a result — a pipe, a subshell, a
+  background runner, a tool harness — is not the thing that ran. If the exit code did not come
+  from the command itself, it is a claim about the wrapper. Open the output file.
+- **The cheapest tell is size.** A chain that takes six minutes does not produce nine lines.
+  Before believing a green result, ask whether the output is as long as a real run's would be;
+  that one glance has now caught this twice.
