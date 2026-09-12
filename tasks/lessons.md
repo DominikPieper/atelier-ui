@@ -726,3 +726,22 @@ Two rules:
 - **The cheapest tell is size.** A chain that takes six minutes does not produce nine lines.
   Before believing a green result, ask whether the output is as long as a real run's would be;
   that one glance has now caught this twice.
+
+## 2026-09-12 — Run the gates the change can break, not every gate there is
+
+Handing a subagent an eight-gate proof list for a change that touches four files, owner's
+correction: "Mach sinnvolle Gates nicht alle." Two of the listed gates —
+`check:preflight-clone-sync` and `check:scaffold-snapshot` — read files the change provably
+does not touch, so their green says nothing about the diff while costing time on every
+iteration.
+
+The rule `AGENTS.md` states is about _believing_ a gate's result (the exit code, not the
+pipe). This is the step before it: **choosing** which gates the diff can actually move. The
+coupling map is usually already known by the time a spec is written — which files the change
+edits, and which gates read those files — so the proof list should be derived from it rather
+than copied from `check:all`.
+
+Practically: name the gates whose inputs the diff intersects, plus the project's own
+`test`/`lint`/`build`. Run the full chain once before the push, not once per step. And when a
+gate is skipped, say so in the report — a skipped gate that goes unmentioned reads as a green
+one.

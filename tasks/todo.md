@@ -64,6 +64,114 @@ Ranked; each carries why it's worth doing next rather than later.
 > now regardless; **B** one authored contract record with everything else projected as
 > the direction, its own ADR naming ADR-0006/0010/0096 as revised.
 
+- [ ] **The scaffold becomes the AI-development workspace, and the cohort's environment**
+      (owner decisions, 2026-09-12). Four blocks chosen out of five; **"Gates + CI" was
+      deliberately not chosen** — the generated workspace keeps its five separate
+      `check:*` scripts, gets no `check:all` umbrella, no `lint` script and no CI
+      workflow of its own. Everything below is scoped by that.
+
+      Findings the decisions rest on, each verified by reading the code:
+          - The CLI already enforces one framework (`bin/index.ts:15-16, :76-80, :113-123`);
+            only the preset schema still takes a comma list, and that path is reachable from
+            `preset.spec.ts` alone — never from the CLI, the docs, `workshop/`, or the e2e
+            (which loops frameworks and passes them one at a time).
+          - `@atelier-ui/<fw>` is installed as `latest` (`preset.ts`, the three
+            `deps[...] = 'latest'` lines). All five packages release in lockstep from the
+            `libraries` group (all 0.2.43 today), so two attendees scaffolding on either side
+            of a publish get different component code in the same room.
+          - The example story is a single `Default` with no `play` and no per-variant story —
+            against ADR-0121's "the stories are the claims", which is the doctrine the
+            workshop teaches. `check:stories` therefore renders exactly one story, and an
+            agent copying the local pattern copies the wrong one.
+          - The generated `.mcp.json` is a strict subset of this repo's own: no `uianatomy`,
+            and no `angular-cli` when Angular is the chosen framework.
+          - Nothing under `.claude/` is generated except the four third-party
+            `storybookjs/mcp` skills the post-generator installs. No settings file, so every
+            session re-asks permission for `npx nx …` and `npm run check:*`, and each MCP
+            server needs approving by hand. Keys verified against the installed CLI
+            (2.1.269): `enableAllProjectMcpServers`, `enabledMcpjsonServers`,
+            `disabledMcpjsonServers`, `includeCoAuthoredBy`, `extraKnownMarketplaces`,
+            `enabledPlugins` all exist; hooks receive the edited path as stdin JSON at
+            `.tool_input.file_path`.
+          - The plugin route was measured as an alternative to vendoring and rejected for the
+            room: a plugin from an external source that only the project's
+            `.claude/settings.json` enables does not load until each user installs it
+            (documented behaviour since 2.1.195). Vendored files have no such step.
+
+  - [ ] **S1 — one framework in the schema, not a list.** `framework` as an enum
+        (`angular|react|vue`) with an `x-prompt`, `frameworks` dropped; `preset.ts` loses
+        `frameworks.indexOf(...)` port arithmetic (Storybook is always 6006), the
+        `primaryFramework = frameworks[0]` narrowing, the multi-entry `.mcp.json` loop and
+        the per-framework fan-out in `buildStylelintConfig` and the generated `nx.json`
+        inputs. `bin/index.ts` passes `framework`. `preset.spec.ts`'s 14 multi-framework
+        call sites collapse. Ports 6007/6008 disappear with the code that produced them.
+        Proof: `nx test create-workspace`, `nx lint create-workspace`,
+        `nx build create-workspace` (all ten templates in `dist/`).
+  - [ ] **S2 — reproducibility.** (a) `@atelier-ui/<fw>` pinned to the preset's own
+        version, read from its `package.json` at generate time — the e2e's verdaccio
+        publishes the matching local tarballs, so the pin resolves there too. (b)
+        `uianatomy` always in the generated `.mcp.json`; `angular-cli` when the framework
+        is Angular. (c) The example stories rewritten per framework to the doctrine they
+        teach: one story per variant value and Boolean state, `args`-based, one `play`
+        with an assertion. The e2e pins five substrings of `check:contracts`' summary
+        (`no-component: 0`, `external: 1`, `docgen-failed: 0`, `[NO-STORY-META]`,
+        `total: 0 error(s)`) — they must stay true, and `AtlButton` staying
+        package-imported is what keeps them so. (d) `docs/src/pages/workshop.astro:44-73`
+        swept in the same change: its hand-maintained `.mcp.json` copy is already drifted
+        (`figma-console-mcp@latest` there, `1.40.0` in the preset).
+  - [ ] **S3 — the workspace is set up for Claude Code.** Generated `.claude/settings.json`
+        with a `permissions.allow` list covering `npx nx …`, `npm run …`, `npx storybook …`
+        and `npx playwright …`, plus `enableAllProjectMcpServers: true`; a `PostToolUse`
+        hook on `Edit|Write` that formats the edited file (path from stdin JSON) and runs
+        stylelint on `.css`; `.claude/settings.local.json` added to `.gitignore`; a
+        `/verify` command that runs the four checks and reports each exit code; a
+        `component-review` subagent (Read/Grep/Glob/Bash, `model: sonnet`) that reads a
+        component against its contract, its stories and the a11y rules. The generated
+        `CLAUDE.md` gains a "Definition of done" section, this repo's "a gate's result is
+        its exit code — never pipe it" rule, and framework idioms (Angular signals /
+        zoneless / built-in control flow; Vue `<script setup>` + `defineModel`; React
+        hook rules).
+  - [ ] **S4 — one Atelier skill in the generated workspace.** Authored as
+        `skills/atelier-component/` in this repo (so it gets discovery, `check:skill-discovery`
+        and an eval home) and shipped into `.claude/skills/atelier-component/` by the
+        preset as a byte-identical clone — new pairs in `sync-preflight.mjs`'s `FILES`,
+        which is the only thing that enforces a copy. It is **not** a fork of
+        `design-to-code`: that skill names `libs/spec` and the monorepo gates 16 times in
+        its `SKILL.md` alone. This one names the scaffold's real surfaces —
+        `workshop-<fw>/src/contracts/`, `contracts.config.json`, `check:contracts`,
+        `check:stories`, the hosted `docs-show`.
+  - [ ] **S5 — a unit-test runner, without losing the browser one.** One
+        `vitest.config.ts` per app declaring two `projects`: the existing Storybook
+        browser project and a jsdom unit project (`src/**/*.spec.*`, Testing Library for
+        the chosen framework, `@testing-library/jest-dom`). A `test` target so
+        `nx test workshop-<fw>` works, one example unit test as the pattern to copy, and
+        `check:stories` kept on the browser project. Why the file is shaped this way
+        rather than letting the app generator write its own: the preset already owns
+        `<app>/vitest.config.ts` — addon-vitest resolves the nearest config by that exact
+        name — which is why `unitTestRunner: 'none'` was passed in the first place. The
+        Angular half is the risky one (`@analogjs/vitest-angular`) and gets its own real
+        scaffold run, not an in-memory Tree.
+  - [ ] **S6 — the scaffold becomes the cohort environment (revises ADR-0084).** Today's
+        split is clone-for-the-cohort, scaffold-for-the-self-serve-reader, and the
+        curriculum names three things the scaffold does not have: `plan/big-picture.md`'s
+        API rules (Day 2 Block 2), `libs/spec/src/index.ts` as the spec template (same
+        block), and `nx storybook <fw>` on 4400-4402. `design-principles` is already a
+        hosted page; `big-picture` is not. Closing it means: the API rules reach the
+        scaffold (a hosted page the generated `CLAUDE.md` links, plus a vendored short
+        form), a spec-style example ships beside the contracts, and the doc pages that
+        branch clone-vs-scaffold get rewritten — `tutorial.astro:622` ("the scaffold has
+        no Storybook of its own") is **already false** against `preset.ts`'s per-app
+        Storybook targets, `first-component.astro` mounts the kata under `libs/<fw>/…`,
+        and `schulung.astro:299-301` plus `schulung-2tage-agenda.md:14` state the
+        excluded-scaffold rule in prose. Every new docs line that cites 6006 needs a
+        content-keyed `SCAFFOLD_PORT_EXEMPT` entry (`tools/scripts/lib/allowlists.js`),
+        and the ADR needs its row in `plan/adr/README.md` plus a dated `Corrected`
+        paragraph written **into** ADR-0084 in the same commit, or `check:adr-refs` fails.
+
+    Order: S1 → S2 → S3 + S4 → S5 → S6, each its own commit. The expensive gate is
+    `cli-e2e` (~7 min per framework, ~20-45 min total, and `nx affected` reaches it from
+    any preset edit); run it single-framework per step and full before the last push.
+
 - [ ] **Where Angular's a11y coverage actually comes from — eslint (static) and axe
       (rendered) cover different ground, not the same ground twice.** Found 2026-09-11
       investigating a false "zero `@angular-eslint/template/accessibility-*` rules
