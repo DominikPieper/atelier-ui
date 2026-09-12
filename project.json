@@ -2,6 +2,20 @@
   "name": "@atelier-ui/source",
   "$schema": "node_modules/nx/schemas/project-schema.json",
   "targets": {
+    "lint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "cwd": "{workspaceRoot}",
+        "command": "eslint package.json"
+      },
+      "cache": true,
+      "inputs": [
+        "{workspaceRoot}/package.json",
+        "{workspaceRoot}/eslint.config.mjs",
+        "{workspaceRoot}/tools/eslint-rules/**/*",
+        { "externalDependencies": ["eslint"] }
+      ]
+    },
     "local-registry": {
       "executor": "@nx/js:verdaccio",
       "options": {

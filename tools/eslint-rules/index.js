@@ -18,5 +18,6 @@ module.exports = {
   rules: {
     'host-attr-guard': require('./host-attr-guard'),
     'story-description-source': require('./story-description-source'),
+    'storybook-version-lockstep': require('./storybook-version-lockstep'),
   },
 };

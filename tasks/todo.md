@@ -185,6 +185,24 @@ Ranked; each carries why it's worth doing next rather than later.
       sound only because Escape is guaranteed, which leaves touch-only users without a first-class
       close control.
 
+- [ ] **The repo root is lint-uninhabited apart from `package.json`.** The root
+      `eslint.config.mjs` has carried a `**/*.json` block with `jsonc-eslint-parser` since the
+      workspace was created, pointing at nothing: `@nx/eslint/plugin` only infers a lint target
+      for a project root of `.` when that root has a `src/` or `lib/` directory (read from
+      `@nx/eslint/dist/src/plugins/plugin.js`), and the repo root has neither. As of 2026-09-12 an
+      explicit root `lint` target covers `package.json` and nothing else. `nx.json`, `.prettierrc`,
+      `wrangler.jsonc` and the rest of the root configuration are still unlinted — decide
+      deliberately whether that is fine or whether the target should widen, rather than leaving it
+      to whoever next wonders why a root file has no rules.
+- [ ] **`atelier/storybook-version-lockstep`'s outlier is a majority vote.** It names the
+      package that disagrees with the majority-pinned version, lexicographic tie-break. Correct and
+      unambiguous at 11-vs-1; in an even split — mid-migration, say 5 vs 5 after a deliberate
+      partial bump — it still flags a disagreement but which half it calls the outlier is
+      arbitrary. Anchoring on `storybook`'s own version instead would be semantically meaningful
+      (the family follows core). Small change, worth doing the next time that file is open.
+      The rule also accepts prerelease and build suffixes (`10.6.0-beta.1`) as exact — defensible,
+      but it was a judgement call, not a stated requirement.
+
 - [ ] **`storybook doctor` as a gate — blocked on an offline requirement, not on value.**
       Measured 2026-09-12: it is a cheap static health check (missing dependency, incompatible
       packages, mismatched versions, duplicated dependencies, config-load errors), needs no build
