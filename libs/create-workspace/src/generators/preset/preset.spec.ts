@@ -249,30 +249,21 @@ describe('preset generator', () => {
   it('writes .mcp.json with angular MCP only', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
 
     const settings = readJson(tree, '.mcp.json');
     expect(settings.mcpServers['nx-mcp']).toBeDefined();
     expect(settings.mcpServers['storybook-angular']).toBeDefined();
+    expect(settings.mcpServers['storybook-angular'].url).toContain(
+      'storybook-angular/mcp',
+    );
     expect(settings.mcpServers['storybook-react']).toBeUndefined();
     expect(settings.mcpServers['storybook-vue']).toBeUndefined();
   });
 
-  it('writes .mcp.json with all three MCPs for multi-framework', async () => {
-    await presetGenerator(tree, {
-      name: 'my-workspace',
-      frameworks: 'angular,react,vue',
-    });
-
-    const settings = readJson(tree, '.mcp.json');
-    expect(settings.mcpServers['storybook-angular']).toBeDefined();
-    expect(settings.mcpServers['storybook-react']).toBeDefined();
-    expect(settings.mcpServers['storybook-vue']).toBeDefined();
-  });
-
   it('each MCP entry has type http and correct url', async () => {
-    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'react' });
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'react' });
 
     const settings = readJson(tree, '.mcp.json');
     expect(settings.mcpServers['storybook-react'].type).toBe('http');
@@ -284,7 +275,7 @@ describe('preset generator', () => {
   it('nx-mcp uses stdio command', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
 
     const settings = readJson(tree, '.mcp.json');
@@ -295,7 +286,7 @@ describe('preset generator', () => {
   it('nx-mcp args invoke nx mcp', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
 
     const settings = readJson(tree, '.mcp.json');
@@ -303,7 +294,7 @@ describe('preset generator', () => {
   });
 
   it('writes .mcp.json with react MCP only for react framework', async () => {
-    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'react' });
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'react' });
 
     const settings = readJson(tree, '.mcp.json');
     expect(settings.mcpServers['storybook-react']).toBeDefined();
@@ -312,40 +303,15 @@ describe('preset generator', () => {
   });
 
   it('writes .mcp.json with vue MCP only for vue framework', async () => {
-    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'vue' });
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'vue' });
 
     const settings = readJson(tree, '.mcp.json');
     expect(settings.mcpServers['storybook-vue']).toBeDefined();
-    expect(settings.mcpServers['storybook-angular']).toBeUndefined();
-    expect(settings.mcpServers['storybook-react']).toBeUndefined();
-  });
-
-  it('storybook MCP URLs reference the correct framework path', async () => {
-    await presetGenerator(tree, {
-      name: 'my-workspace',
-      frameworks: 'angular,react,vue',
-    });
-
-    const settings = readJson(tree, '.mcp.json');
-    expect(settings.mcpServers['storybook-angular'].url).toContain(
-      'storybook-angular/mcp',
-    );
-    expect(settings.mcpServers['storybook-react'].url).toContain(
-      'storybook-react/mcp',
-    );
     expect(settings.mcpServers['storybook-vue'].url).toContain(
       'storybook-vue/mcp',
     );
-  });
-
-  it('multi-framework .mcp.json always includes nx-mcp', async () => {
-    await presetGenerator(tree, {
-      name: 'my-workspace',
-      frameworks: 'react,vue',
-    });
-
-    const settings = readJson(tree, '.mcp.json');
-    expect(settings.mcpServers['nx-mcp']).toBeDefined();
+    expect(settings.mcpServers['storybook-angular']).toBeUndefined();
+    expect(settings.mcpServers['storybook-react']).toBeUndefined();
   });
 
   // ─── figma-console MCP (opt-in) ────────────────────────────────────────────
@@ -353,7 +319,7 @@ describe('preset generator', () => {
   it('omits figma-console by default', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
 
     const settings = readJson(tree, '.mcp.json');
@@ -363,7 +329,7 @@ describe('preset generator', () => {
   it('omits figma-console when figmaMcp=false', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
       figmaMcp: false,
     });
 
@@ -374,7 +340,7 @@ describe('preset generator', () => {
   it('includes figma-console when figmaMcp=true', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
       figmaMcp: true,
     });
 
@@ -393,7 +359,7 @@ describe('preset generator', () => {
   it('CLAUDE.md includes Figma setup link when figmaMcp=true', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
       figmaMcp: true,
     });
 
@@ -406,7 +372,7 @@ describe('preset generator', () => {
   it('CLAUDE.md omits the Figma setup section when figmaMcp is not set', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
 
     const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
@@ -417,7 +383,7 @@ describe('preset generator', () => {
   it('CLAUDE.md points at the composition cookbook', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
 
     const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
@@ -431,7 +397,7 @@ describe('preset generator', () => {
   it('writes README.md', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
     expect(tree.exists('README.md')).toBe(true);
   });
@@ -443,7 +409,7 @@ describe('preset generator', () => {
   it('writes tokens.css into the scaffolded angular app', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
 
     const tokens =
@@ -453,7 +419,7 @@ describe('preset generator', () => {
   });
 
   it('writes tokens.css into the scaffolded react app', async () => {
-    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'react' });
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'react' });
 
     const tokens =
       tree.read('workshop-react/src/styles/tokens.css', 'utf-8') ?? '';
@@ -462,7 +428,7 @@ describe('preset generator', () => {
   });
 
   it('writes tokens.css into the scaffolded vue app', async () => {
-    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'vue' });
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'vue' });
 
     const tokens =
       tree.read('workshop-vue/src/styles/tokens.css', 'utf-8') ?? '';
@@ -470,34 +436,30 @@ describe('preset generator', () => {
     expect(tokens).toContain('--ui-color-');
   });
 
-  it('injects a relative tokens import into styles.css for each framework', async () => {
-    await presetGenerator(tree, {
-      name: 'my-workspace',
-      frameworks: 'angular,react,vue',
-    });
+  it.each(['angular', 'react', 'vue'] as const)(
+    'injects a relative tokens import into styles.css (%s)',
+    async (fw) => {
+      await presetGenerator(tree, { name: 'my-workspace', framework: fw });
 
-    for (const fw of ['angular', 'react', 'vue']) {
       const css = tree.read(`workshop-${fw}/src/styles.css`, 'utf-8') ?? '';
       expect(css).toContain(EXPECTED_IMPORT);
-    }
-  });
+    },
+  );
 
-  it('does not reference @atelier-ui/<fw>/styles (tokens are local)', async () => {
-    await presetGenerator(tree, {
-      name: 'my-workspace',
-      frameworks: 'angular,react,vue',
-    });
+  it.each(['angular', 'react', 'vue'] as const)(
+    'does not reference @atelier-ui/%s/styles (tokens are local)',
+    async (fw) => {
+      await presetGenerator(tree, { name: 'my-workspace', framework: fw });
 
-    for (const fw of ['angular', 'react', 'vue']) {
       const css = tree.read(`workshop-${fw}/src/styles.css`, 'utf-8') ?? '';
       expect(css).not.toContain(`@atelier-ui/${fw}/styles`);
-    }
-  });
+    },
+  );
 
   it('tokens import is the first line of styles.css', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
 
     const css = tree.read('workshop-angular/src/styles.css', 'utf-8') ?? '';
@@ -509,7 +471,7 @@ describe('preset generator', () => {
 
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
 
     const css = tree.read('workshop-angular/src/styles.css', 'utf-8') ?? '';
@@ -525,7 +487,7 @@ describe('preset generator', () => {
   it('writes CLAUDE.md', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
     expect(tree.exists('CLAUDE.md')).toBe(true);
   });
@@ -533,7 +495,7 @@ describe('preset generator', () => {
   it('CLAUDE.md includes the three Storybook MCP tools', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
 
     const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
@@ -545,7 +507,7 @@ describe('preset generator', () => {
   it('CLAUDE.md references the correct MCP server name for the framework', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
 
     const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
@@ -555,7 +517,7 @@ describe('preset generator', () => {
   it('CLAUDE.md includes Angular-specific import pattern', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
 
     const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
@@ -565,7 +527,7 @@ describe('preset generator', () => {
   });
 
   it('CLAUDE.md includes React-specific import pattern', async () => {
-    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'react' });
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'react' });
 
     const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
     expect(md).toContain('@atelier-ui/react');
@@ -574,7 +536,7 @@ describe('preset generator', () => {
   });
 
   it('CLAUDE.md includes Vue-specific import pattern', async () => {
-    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'vue' });
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'vue' });
 
     const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
     expect(md).toContain('@atelier-ui/vue');
@@ -582,34 +544,22 @@ describe('preset generator', () => {
     expect(md).toContain('useAtlToast');
   });
 
-  it('CLAUDE.md includes all three frameworks when all selected', async () => {
+  it('CLAUDE.md includes the app run command for the selected framework only', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular,react,vue',
-    });
-
-    const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
-    expect(md).toContain('@atelier-ui/angular');
-    expect(md).toContain('@atelier-ui/react');
-    expect(md).toContain('@atelier-ui/vue');
-  });
-
-  it('CLAUDE.md includes app run commands for selected frameworks only', async () => {
-    await presetGenerator(tree, {
-      name: 'my-workspace',
-      frameworks: 'angular,react',
+      framework: 'angular',
     });
 
     const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
     expect(md).toContain('npx nx serve workshop-angular');
-    expect(md).toContain('npx nx serve workshop-react');
+    expect(md).not.toContain('npx nx serve workshop-react');
     expect(md).not.toContain('npx nx serve workshop-vue');
   });
 
   it('CLAUDE.md links to the docs site', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
 
     const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
@@ -621,7 +571,7 @@ describe('preset generator', () => {
   it('writes tools/scripts/preflight.mjs', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
     expect(tree.exists('tools/scripts/preflight.mjs')).toBe(true);
     const content = tree.read('tools/scripts/preflight.mjs', 'utf-8') ?? '';
@@ -635,7 +585,7 @@ describe('preset generator', () => {
     // assertion fails loudly.
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
     const pkg = readJson(tree, 'package.json');
     expect(pkg.scripts.preflight).toBe('node tools/scripts/preflight.mjs');
@@ -653,7 +603,7 @@ describe('preset generator', () => {
     );
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
     const pkg = readJson(tree, 'package.json');
     expect(pkg.scripts.preflight).toBe('node tools/scripts/preflight.mjs');
@@ -664,7 +614,7 @@ describe('preset generator', () => {
   it('CLAUDE.md references preflight in troubleshooting', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
     const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
     expect(md).toContain('npm run preflight');
@@ -679,25 +629,21 @@ describe('preset generator', () => {
   // scaffold with `Failed to apply preset: @atelier-ui/create-workspace`.
   // The workshop never runs e2e tests, so we explicitly opt out — this test
   // guards against anyone silently dropping that flag in the future.
-  it('passes e2eTestRunner: none to every framework application generator', async () => {
-    await presetGenerator(tree, {
-      name: 'my-workspace',
-      frameworks: 'angular,react,vue',
-    });
+  it.each([
+    ['angular', angularAppMock],
+    ['react', reactAppMock],
+    ['vue', vueAppMock],
+  ] as const)(
+    'passes e2eTestRunner: none to the %s application generator',
+    async (fw, mock) => {
+      await presetGenerator(tree, { name: 'my-workspace', framework: fw });
 
-    expect(angularAppMock).toHaveBeenCalledWith(
-      expect.anything(),
-      expect.objectContaining({ e2eTestRunner: 'none' }),
-    );
-    expect(reactAppMock).toHaveBeenCalledWith(
-      expect.anything(),
-      expect.objectContaining({ e2eTestRunner: 'none' }),
-    );
-    expect(vueAppMock).toHaveBeenCalledWith(
-      expect.anything(),
-      expect.objectContaining({ e2eTestRunner: 'none' }),
-    );
-  });
+      expect(mock).toHaveBeenCalledWith(
+        expect.anything(),
+        expect.objectContaining({ e2eTestRunner: 'none' }),
+      );
+    },
+  );
 
   // Regression: the Angular application generator call omitted `linter:
   // 'eslint'` entirely. Without it, `normalizeLinterOption`'s non-interactive
@@ -707,25 +653,21 @@ describe('preset generator', () => {
   // devDependency at all (verified by running the real generator against an
   // empty workspace). React and Vue already passed this; this guards against
   // Angular's call losing it again.
-  it("passes linter: 'eslint' to every framework application generator", async () => {
-    await presetGenerator(tree, {
-      name: 'my-workspace',
-      frameworks: 'angular,react,vue',
-    });
+  it.each([
+    ['angular', angularAppMock],
+    ['react', reactAppMock],
+    ['vue', vueAppMock],
+  ] as const)(
+    "passes linter: 'eslint' to the %s application generator",
+    async (fw, mock) => {
+      await presetGenerator(tree, { name: 'my-workspace', framework: fw });
 
-    expect(angularAppMock).toHaveBeenCalledWith(
-      expect.anything(),
-      expect.objectContaining({ linter: 'eslint' }),
-    );
-    expect(reactAppMock).toHaveBeenCalledWith(
-      expect.anything(),
-      expect.objectContaining({ linter: 'eslint' }),
-    );
-    expect(vueAppMock).toHaveBeenCalledWith(
-      expect.anything(),
-      expect.objectContaining({ linter: 'eslint' }),
-    );
-  });
+      expect(mock).toHaveBeenCalledWith(
+        expect.anything(),
+        expect.objectContaining({ linter: 'eslint' }),
+      );
+    },
+  );
 
   // ─── Per-framework ESLint posture (S4) ─────────────────────────────────────
   //
@@ -741,7 +683,7 @@ describe('preset generator', () => {
   it('Angular: appends @angular-eslint/template/no-positive-tabindex, scoped to *.html', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
 
     const config =
@@ -756,7 +698,7 @@ describe('preset generator', () => {
   it('Angular: the appended block sits inside the array, after the baseline content', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
 
     const config =
@@ -768,14 +710,14 @@ describe('preset generator', () => {
   });
 
   it('React: does not modify workshop-react/eslint.config.mjs beyond the baseline', async () => {
-    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'react' });
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'react' });
 
     const config = tree.read('workshop-react/eslint.config.mjs', 'utf-8') ?? '';
     expect(config).toBe(ESLINT_CONFIG_BASELINE.react);
   });
 
   it('Vue: appends eslint-config-prettier applied to *.vue, with its import', async () => {
-    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'vue' });
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'vue' });
 
     const config = tree.read('workshop-vue/eslint.config.mjs', 'utf-8') ?? '';
     expect(config).toContain(
@@ -786,7 +728,7 @@ describe('preset generator', () => {
   });
 
   it('Vue: appends vue/no-unused-properties opted in for props', async () => {
-    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'vue' });
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'vue' });
 
     const config = tree.read('workshop-vue/eslint.config.mjs', 'utf-8') ?? '';
     expect(config).toContain(
@@ -795,7 +737,7 @@ describe('preset generator', () => {
   });
 
   it('Vue: the appended blocks keep the file a valid single flat-config array', async () => {
-    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'vue' });
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'vue' });
 
     const config = tree.read('workshop-vue/eslint.config.mjs', 'utf-8') ?? '';
     expect((config.match(/export default \[/g) ?? []).length).toBe(1);
@@ -803,7 +745,7 @@ describe('preset generator', () => {
   });
 
   it('adds eslint-config-prettier as a devDependency when vue is selected and it is not already present', async () => {
-    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'vue' });
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'vue' });
 
     // The mocked app generator doesn't write package.json devDependencies the
     // way the real one does, so the "already present" branch never fires here
@@ -821,7 +763,7 @@ describe('preset generator', () => {
       }),
     );
 
-    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'vue' });
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'vue' });
 
     const pkg = readJson(tree, 'package.json');
     expect(pkg.devDependencies['eslint-config-prettier']).toBe('^9.0.0');
@@ -843,33 +785,31 @@ describe('preset generator', () => {
     );
 
     await expect(
-      presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular' }),
+      presetGenerator(tree, { name: 'my-workspace', framework: 'angular' }),
     ).rejects.toThrow('workshop-angular/eslint.config.mjs');
   });
 
   // ─── Storybook (S1) ────────────────────────────────────────────────────────
 
-  it('writes .storybook/main.ts per selected framework, naming the right framework package', async () => {
-    await presetGenerator(tree, {
-      name: 'my-workspace',
-      frameworks: 'angular,react,vue',
-    });
+  it.each([
+    ['angular', '@storybook/angular-vite'],
+    ['react', '@storybook/react-vite'],
+    ['vue', '@storybook/vue3-vite'],
+  ] as const)(
+    'writes .storybook/main.ts for %s, naming its framework package',
+    async (fw, expectedPackage) => {
+      await presetGenerator(tree, { name: 'my-workspace', framework: fw });
 
-    const angularMain =
-      tree.read('workshop-angular/.storybook/main.ts', 'utf-8') ?? '';
-    const reactMain =
-      tree.read('workshop-react/.storybook/main.ts', 'utf-8') ?? '';
-    const vueMain = tree.read('workshop-vue/.storybook/main.ts', 'utf-8') ?? '';
-
-    expect(angularMain).toContain('@storybook/angular-vite');
-    expect(reactMain).toContain('@storybook/react-vite');
-    expect(vueMain).toContain('@storybook/vue3-vite');
-  });
+      const main =
+        tree.read(`workshop-${fw}/.storybook/main.ts`, 'utf-8') ?? '';
+      expect(main).toContain(expectedPackage);
+    },
+  );
 
   it('main.ts keeps addon-mcp/vitest/a11y/docs but drops addon-designs', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
 
     const main =
@@ -885,25 +825,31 @@ describe('preset generator', () => {
     expect(main).not.toContain('BUILD_STORYBOOK');
   });
 
-  it('writes a preview file per framework, .tsx for react and .ts otherwise', async () => {
-    await presetGenerator(tree, {
-      name: 'my-workspace',
-      frameworks: 'angular,react,vue',
-    });
+  it('writes preview.ts for angular', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
 
     expect(tree.exists('workshop-angular/.storybook/preview.ts')).toBe(true);
-    expect(tree.exists('workshop-react/.storybook/preview.tsx')).toBe(true);
-    expect(tree.exists('workshop-vue/.storybook/preview.ts')).toBe(true);
+  });
 
+  it('writes preview.tsx for react, importing tokens.css', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'react' });
+
+    expect(tree.exists('workshop-react/.storybook/preview.tsx')).toBe(true);
     const reactPreview =
       tree.read('workshop-react/.storybook/preview.tsx', 'utf-8') ?? '';
     expect(reactPreview).toContain('../src/styles/tokens.css');
   });
 
+  it('writes preview.ts for vue', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'vue' });
+
+    expect(tree.exists('workshop-vue/.storybook/preview.ts')).toBe(true);
+  });
+
   it('does not import @angular/cdk/overlay-prebuilt.css in the angular preview', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
 
     const preview =
@@ -911,62 +857,47 @@ describe('preset generator', () => {
     expect(preview).not.toContain('overlay-prebuilt.css');
   });
 
-  it('writes a Storybook-scoped tsconfig.json only for the angular app', async () => {
-    await presetGenerator(tree, {
-      name: 'my-workspace',
-      frameworks: 'angular,react,vue',
-    });
+  it('writes a Storybook-scoped tsconfig.json for the angular app', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
 
     expect(tree.exists('workshop-angular/.storybook/tsconfig.json')).toBe(true);
-    expect(tree.exists('workshop-react/.storybook/tsconfig.json')).toBe(false);
-    expect(tree.exists('workshop-vue/.storybook/tsconfig.json')).toBe(false);
   });
 
-  it('writes one example AtlButton story per app, importing from @atelier-ui/<fw>', async () => {
-    await presetGenerator(tree, {
-      name: 'my-workspace',
-      frameworks: 'angular,react,vue',
-    });
+  it.each(['react', 'vue'] as const)(
+    'does not write a Storybook-scoped tsconfig.json for the %s app',
+    async (fw) => {
+      await presetGenerator(tree, { name: 'my-workspace', framework: fw });
 
-    const angularStory =
-      tree.read('workshop-angular/src/atl-button.stories.ts', 'utf-8') ?? '';
-    const reactStory =
-      tree.read('workshop-react/src/atl-button.stories.tsx', 'utf-8') ?? '';
-    const vueStory =
-      tree.read('workshop-vue/src/atl-button.stories.ts', 'utf-8') ?? '';
+      expect(tree.exists(`workshop-${fw}/.storybook/tsconfig.json`)).toBe(
+        false,
+      );
+    },
+  );
 
-    expect(angularStory).toContain("from '@atelier-ui/angular'");
-    expect(reactStory).toContain("from '@atelier-ui/react'");
-    expect(vueStory).toContain("from '@atelier-ui/vue'");
-  });
+  it.each([
+    ['angular', 'ts'],
+    ['react', 'tsx'],
+    ['vue', 'ts'],
+  ] as const)(
+    'writes an example AtlButton story for %s, importing from @atelier-ui/%s',
+    async (fw, ext) => {
+      await presetGenerator(tree, { name: 'my-workspace', framework: fw });
 
-  it('adds the pinned Storybook devDependencies, common and per-framework', async () => {
-    await presetGenerator(tree, {
-      name: 'my-workspace',
-      frameworks: 'angular,react,vue',
-    });
+      const story =
+        tree.read(`workshop-${fw}/src/atl-button.stories.${ext}`, 'utf-8') ??
+        '';
+      expect(story).toContain(`from '@atelier-ui/${fw}'`);
+    },
+  );
+
+  it('adds the pinned common Storybook devDependencies regardless of framework', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
 
     const pkg = readJson(tree, 'package.json');
     expect(pkg.devDependencies['storybook']).toBe('10.6.0');
     expect(pkg.devDependencies['@storybook/addon-mcp']).toBe('10.6.0');
     expect(pkg.devDependencies['@storybook/addon-a11y']).toBe('10.6.0');
     expect(pkg.devDependencies['@storybook/addon-docs']).toBe('10.6.0');
-    expect(pkg.devDependencies['@storybook/angular-vite']).toBe('10.6.0');
-    expect(pkg.devDependencies['@storybook/react-vite']).toBe('10.6.0');
-    expect(pkg.devDependencies['@storybook/vue3-vite']).toBe('10.6.0');
-    // @storybook/react-vite and @storybook/vue3-vite carry their non-vite
-    // renderer as a plain `dependency`, not a peer — but the React/Vue story
-    // and preview templates import types straight from '@storybook/react' /
-    // '@storybook/vue3'. That only resolves via npm's hoisting today; a
-    // pnpm-managed scaffold needs it declared directly.
-    expect(pkg.devDependencies['@storybook/react']).toBe('10.6.0');
-    expect(pkg.devDependencies['@storybook/vue3']).toBe('10.6.0');
-    // '@storybook/angular' is deliberately NOT installed: its peer on
-    // @angular-devkit/build-angular is not optional, and a freshly scaffolded
-    // Angular 22 app's own build-angular peer (^21) collides with it — the
-    // angular templates use '@storybook/angular-vite' for their types instead
-    // (it has no such peer).
-    expect(pkg.devDependencies['@storybook/angular']).toBeUndefined();
     // Owner correction 2026-09-10 to ADR-0123's original "no test runner"
     // call: the browser-mode test runner ships after all.
     expect(pkg.devDependencies['@storybook/addon-vitest']).toBe('10.6.0');
@@ -976,18 +907,77 @@ describe('preset generator', () => {
     expect(pkg.devDependencies['@storybook/addon-designs']).toBeUndefined();
   });
 
-  it('adds each selected framework its own Vite plugin for vitest browser mode', async () => {
-    await presetGenerator(tree, {
-      name: 'my-workspace',
-      frameworks: 'angular,react,vue',
-    });
+  it('adds @storybook/angular-vite when angular is selected, not the other frameworks packages', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
+
+    const pkg = readJson(tree, 'package.json');
+    expect(pkg.devDependencies['@storybook/angular-vite']).toBe('10.6.0');
+    // '@storybook/angular' is deliberately NOT installed: its peer on
+    // @angular-devkit/build-angular is not optional, and a freshly scaffolded
+    // Angular 22 app's own build-angular peer (^21) collides with it — the
+    // angular templates use '@storybook/angular-vite' for their types instead
+    // (it has no such peer).
+    expect(pkg.devDependencies['@storybook/angular']).toBeUndefined();
+    expect(pkg.devDependencies['@storybook/react-vite']).toBeUndefined();
+    expect(pkg.devDependencies['@storybook/vue3-vite']).toBeUndefined();
+  });
+
+  it('adds @storybook/react-vite and its non-vite counterpart when react is selected, not the other frameworks packages', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'react' });
+
+    const pkg = readJson(tree, 'package.json');
+    expect(pkg.devDependencies['@storybook/react-vite']).toBe('10.6.0');
+    // @storybook/react-vite carries its non-vite renderer as a plain
+    // `dependency`, not a peer — but the story and preview templates import
+    // types straight from '@storybook/react'. That only resolves via npm's
+    // hoisting today; a pnpm-managed scaffold needs it declared directly.
+    expect(pkg.devDependencies['@storybook/react']).toBe('10.6.0');
+    expect(pkg.devDependencies['@storybook/angular-vite']).toBeUndefined();
+    expect(pkg.devDependencies['@storybook/vue3-vite']).toBeUndefined();
+  });
+
+  it('adds @storybook/vue3-vite and its non-vite counterpart when vue is selected, not the other frameworks packages', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'vue' });
+
+    const pkg = readJson(tree, 'package.json');
+    expect(pkg.devDependencies['@storybook/vue3-vite']).toBe('10.6.0');
+    // Same non-vite-counterpart reasoning as react's own test above.
+    expect(pkg.devDependencies['@storybook/vue3']).toBe('10.6.0');
+    expect(pkg.devDependencies['@storybook/angular-vite']).toBeUndefined();
+    expect(pkg.devDependencies['@storybook/react-vite']).toBeUndefined();
+  });
+
+  it('adds @analogjs/vite-plugin-angular for vitest browser mode when angular is selected', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
+
+    const pkg = readJson(tree, 'package.json');
+    expect(pkg.devDependencies['@analogjs/vite-plugin-angular']).toBe('2.7.1');
+    expect(pkg.devDependencies['@vitejs/plugin-react']).toBeUndefined();
+    expect(pkg.devDependencies['@vitejs/plugin-vue']).toBeUndefined();
+  });
+
+  it('adds @vitejs/plugin-react for vitest browser mode when react is selected', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'react' });
 
     const pkg = readJson(tree, 'package.json');
     expect(pkg.devDependencies['@vitejs/plugin-react']).toBe('6.1.1');
+    expect(
+      pkg.devDependencies['@analogjs/vite-plugin-angular'],
+    ).toBeUndefined();
+    expect(pkg.devDependencies['@vitejs/plugin-vue']).toBeUndefined();
+  });
+
+  it('adds @vitejs/plugin-vue and jest-dom for vitest browser mode when vue is selected', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'vue' });
+
+    const pkg = readJson(tree, 'package.json');
     expect(pkg.devDependencies['@vitejs/plugin-vue']).toBe('^6.0.5');
-    expect(pkg.devDependencies['@analogjs/vite-plugin-angular']).toBe('2.7.1');
     // Only Vue's vitest.setup.ts.template imports jest-dom's custom matchers.
     expect(pkg.devDependencies['@testing-library/jest-dom']).toBe('^6.9.1');
+    expect(
+      pkg.devDependencies['@analogjs/vite-plugin-angular'],
+    ).toBeUndefined();
+    expect(pkg.devDependencies['@vitejs/plugin-react']).toBeUndefined();
   });
 
   it('does not add a framework Vite plugin already present in package.json', async () => {
@@ -999,19 +989,17 @@ describe('preset generator', () => {
       }),
     );
 
-    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'react' });
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'react' });
 
     const pkg = readJson(tree, 'package.json');
     expect(pkg.devDependencies['@vitejs/plugin-react']).toBe('5.0.0');
   });
 
-  it('writes vitest.config.ts and .storybook/vitest.setup.ts per app', async () => {
-    await presetGenerator(tree, {
-      name: 'my-workspace',
-      frameworks: 'angular,react,vue',
-    });
+  it.each(['angular', 'react', 'vue'] as const)(
+    'writes vitest.config.ts and .storybook/vitest.setup.ts for %s',
+    async (fw) => {
+      await presetGenerator(tree, { name: 'my-workspace', framework: fw });
 
-    for (const fw of ['angular', 'react', 'vue']) {
       const config =
         tree.read(`workshop-${fw}/vitest.config.ts`, 'utf-8') ?? '';
       expect(config).toContain('storybookTest');
@@ -1019,9 +1007,12 @@ describe('preset generator', () => {
       const setup =
         tree.read(`workshop-${fw}/.storybook/vitest.setup.ts`, 'utf-8') ?? '';
       expect(setup).toContain('setProjectAnnotations');
-    }
-    // Angular's setup imports from '@storybook/angular-vite', never the
-    // peer-incompatible '@storybook/angular' the monorepo itself uses.
+    },
+  );
+
+  it('angular vitest.setup.ts imports from @storybook/angular-vite, never the peer-incompatible @storybook/angular', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
+
     const angularSetup =
       tree.read('workshop-angular/.storybook/vitest.setup.ts', 'utf-8') ?? '';
     expect(angularSetup).toContain("from '@storybook/angular-vite'");
@@ -1029,7 +1020,7 @@ describe('preset generator', () => {
   });
 
   it('adds a storybook-test target per app and a root check:stories script', async () => {
-    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'react' });
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'react' });
 
     const project = readJson(tree, 'workshop-react/project.json');
     expect(project.targets['storybook-test'].executor).toBe('nx:run-commands');
@@ -1046,27 +1037,25 @@ describe('preset generator', () => {
     );
   });
 
-  it('preview templates set parameters.a11y.test to error', async () => {
-    await presetGenerator(tree, {
-      name: 'my-workspace',
-      frameworks: 'angular,react,vue',
-    });
+  it.each([
+    ['angular', 'ts'],
+    ['react', 'tsx'],
+    ['vue', 'ts'],
+  ] as const)(
+    "%s preview template sets parameters.a11y.test to 'error'",
+    async (fw, ext) => {
+      await presetGenerator(tree, { name: 'my-workspace', framework: fw });
 
-    expect(
-      tree.read('workshop-angular/.storybook/preview.ts', 'utf-8'),
-    ).toContain("test: 'error'");
-    expect(
-      tree.read('workshop-react/.storybook/preview.tsx', 'utf-8'),
-    ).toContain("test: 'error'");
-    expect(tree.read('workshop-vue/.storybook/preview.ts', 'utf-8')).toContain(
-      "test: 'error'",
-    );
-  });
+      expect(
+        tree.read(`workshop-${fw}/.storybook/preview.${ext}`, 'utf-8'),
+      ).toContain("test: 'error'");
+    },
+  );
 
   it('adds storybook/build-storybook targets on port 6006 for a single framework', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
 
     const project = readJson(tree, 'workshop-angular/project.json');
@@ -1082,26 +1071,10 @@ describe('preset generator', () => {
     );
   });
 
-  it('assigns sequential ports (6006, 6007) to two frameworks in selection order', async () => {
-    await presetGenerator(tree, {
-      name: 'my-workspace',
-      frameworks: 'react,vue',
-    });
-
-    const reactProject = readJson(tree, 'workshop-react/project.json');
-    const vueProject = readJson(tree, 'workshop-vue/project.json');
-    expect(reactProject.targets.storybook.options.command).toContain(
-      '--port 6006',
-    );
-    expect(vueProject.targets.storybook.options.command).toContain(
-      '--port 6007',
-    );
-  });
-
   it("preserves the application generator's own targets (e.g. build) alongside storybook", async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
 
     // mockAppGenerator seeds a placeholder `build` target standing in for the
@@ -1132,7 +1105,7 @@ describe('preset generator', () => {
     );
 
     await expect(
-      presetGenerator(tree, { name: 'my-workspace', frameworks: 'angular' }),
+      presetGenerator(tree, { name: 'my-workspace', framework: 'angular' }),
     ).rejects.toThrow('workshop-angular/project.json');
   });
 
@@ -1159,7 +1132,7 @@ describe('preset generator', () => {
   it("writes .prettierrc with singleQuote: true, matching this monorepo's own", async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
 
     const prettierrc = readJson(tree, '.prettierrc');
@@ -1169,7 +1142,7 @@ describe('preset generator', () => {
   it('adds prettier as a devDependency at the version this monorepo declares', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
 
     const pkg = readJson(tree, 'package.json');
@@ -1179,7 +1152,7 @@ describe('preset generator', () => {
   it('adds format and check:format scripts in the prettier --write/--check shape, not nx format:*', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
 
     const pkg = readJson(tree, 'package.json');
@@ -1190,7 +1163,7 @@ describe('preset generator', () => {
   it('CLAUDE.md and README document the Formatting scripts', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
 
     const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
@@ -1208,7 +1181,7 @@ describe('preset generator', () => {
   it('writes the ported stylelint rule files, byte-identical clones', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
 
     for (const file of [
@@ -1226,7 +1199,7 @@ describe('preset generator', () => {
   it('stylelint.config.mjs wires exactly the three attendee-facing rules, not no-primitive-token', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
 
     const config = tree.read('stylelint.config.mjs', 'utf-8') ?? '';
@@ -1244,25 +1217,22 @@ describe('preset generator', () => {
     );
   });
 
-  it('stylelint.config.mjs names the exact tokens.css path the generator writes for each selected framework', async () => {
-    await presetGenerator(tree, {
-      name: 'my-workspace',
-      frameworks: 'angular,react',
-    });
+  it('stylelint.config.mjs names the exact tokens.css path the generator writes for the selected framework, and no other', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
 
     const config = tree.read('stylelint.config.mjs', 'utf-8') ?? '';
     // Same path this suite's own "writes tokens.css into the scaffolded ***
     // app" tests assert tree.write puts the file at — not re-derived, the
     // literal string both sides must agree on.
     expect(config).toContain('workshop-angular/src/styles/tokens.css');
-    expect(config).toContain('workshop-react/src/styles/tokens.css');
+    expect(config).not.toContain('workshop-react/src/styles/tokens.css');
     expect(config).not.toContain('workshop-vue/src/styles/tokens.css');
   });
 
   it("adds a stylelint target per app, ignoring that app's own tokens.css", async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'react',
+      framework: 'react',
     });
 
     const project = readJson(tree, 'workshop-react/project.json');
@@ -1302,7 +1272,7 @@ describe('preset generator', () => {
       },
     );
 
-    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'react' });
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'react' });
 
     const project = readJson(tree, 'workshop-react/project.json');
     expect(project.targets.lint).toEqual({
@@ -1313,10 +1283,7 @@ describe('preset generator', () => {
   });
 
   it('adds nx.json targetDefaults.stylelint with cache + the declared inputs, minus allowlists.js', async () => {
-    await presetGenerator(tree, {
-      name: 'my-workspace',
-      frameworks: 'angular,vue',
-    });
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
 
     const nxJson = readJson(tree, 'nx.json');
     const stylelintDefaults = nxJson.targetDefaults.stylelint;
@@ -1328,9 +1295,13 @@ describe('preset generator', () => {
         '{workspaceRoot}/stylelint.config.mjs',
         '{workspaceRoot}/tools/stylelint-rules/**/*',
         '{workspaceRoot}/workshop-angular/src/styles/tokens.css',
-        '{workspaceRoot}/workshop-vue/src/styles/tokens.css',
         { externalDependencies: ['stylelint'] },
       ]),
+    );
+    // Only the selected framework's own app is named — no second app's
+    // tokens.css to also list.
+    expect(stylelintDefaults.inputs).not.toContain(
+      '{workspaceRoot}/workshop-vue/src/styles/tokens.css',
     );
     // Unlike this repo's own nx.json: the scaffold ships no allowlists.js.
     expect(
@@ -1347,7 +1318,7 @@ describe('preset generator', () => {
     // own entry in rather than replacing targetDefaults wholesale.
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
 
     const nxJson = readJson(tree, 'nx.json');
@@ -1359,7 +1330,7 @@ describe('preset generator', () => {
   it('adds stylelint as a devDependency at the exact version this monorepo runs', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
 
     const pkg = readJson(tree, 'package.json');
@@ -1371,7 +1342,7 @@ describe('preset generator', () => {
   it('adds check:stylelint to package.json scripts', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
 
     const pkg = readJson(tree, 'package.json');
@@ -1380,25 +1351,18 @@ describe('preset generator', () => {
 
   // ─── The contract loop (ADR-0121 S4) ───────────────────────────────────────
 
-  it('writes the example contract files under the first selected framework app', async () => {
-    await presetGenerator(tree, {
-      name: 'my-workspace',
-      frameworks: 'angular,react,vue',
-    });
+  it('writes the example contract files under the app', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'react' });
 
-    expect(tree.exists('workshop-angular/src/contracts/types.ts')).toBe(true);
-    expect(tree.exists('workshop-angular/src/contracts/README.md')).toBe(true);
-    expect(
-      tree.exists('workshop-angular/src/contracts/button.contract.ts'),
-    ).toBe(true);
-    // Not duplicated into the other selected frameworks' apps — the contract
-    // loop is scoped to the first ("primary") framework only.
-    expect(tree.exists('workshop-react/src/contracts/types.ts')).toBe(false);
-    expect(tree.exists('workshop-vue/src/contracts/types.ts')).toBe(false);
+    expect(tree.exists('workshop-react/src/contracts/types.ts')).toBe(true);
+    expect(tree.exists('workshop-react/src/contracts/README.md')).toBe(true);
+    expect(tree.exists('workshop-react/src/contracts/button.contract.ts')).toBe(
+      true,
+    );
   });
 
   it('example contract file references AtlButton and its Figma node id', async () => {
-    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'react' });
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'react' });
 
     const contract =
       tree.read('workshop-react/src/contracts/button.contract.ts', 'utf-8') ??
@@ -1410,7 +1374,7 @@ describe('preset generator', () => {
   it('writes the shared contract-loop scripts under tools/scripts', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
 
     expect(tree.exists('tools/scripts/check-contracts.mjs')).toBe(true);
@@ -1424,7 +1388,7 @@ describe('preset generator', () => {
   it('writes the AtlButton-only Figma snapshot projection', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
 
     const snapshot = readJson(tree, 'tools/figma/snapshot.json');
@@ -1433,11 +1397,8 @@ describe('preset generator', () => {
     expect(snapshot.components[0].nodeId).toBe('129:20');
   });
 
-  it('writes contracts.config.json naming the first selected framework', async () => {
-    await presetGenerator(tree, {
-      name: 'my-workspace',
-      frameworks: 'vue,react',
-    });
+  it('writes contracts.config.json naming the selected framework', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'vue' });
 
     const config = readJson(tree, 'contracts.config.json');
     expect(config.framework).toBe('vue');
@@ -1449,7 +1410,7 @@ describe('preset generator', () => {
   it('adds check:contracts and a placeholder figma:snapshot script to package.json', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
 
     const pkg = readJson(tree, 'package.json');
@@ -1464,7 +1425,7 @@ describe('preset generator', () => {
   it('adds @modelcontextprotocol/sdk as a devDependency', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
 
     const pkg = readJson(tree, 'package.json');
@@ -1474,7 +1435,7 @@ describe('preset generator', () => {
   it('adds typescript as a devDependency when the workspace does not already have it', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
 
     const pkg = readJson(tree, 'package.json');
@@ -1492,7 +1453,7 @@ describe('preset generator', () => {
 
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
 
     const pkg = readJson(tree, 'package.json');
@@ -1502,7 +1463,7 @@ describe('preset generator', () => {
   it('CLAUDE.md contains "The Contract Loop" section', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
 
     const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
@@ -1517,7 +1478,7 @@ describe('preset generator', () => {
   it('CLAUDE.md documents the storybook dev command and port', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
 
     const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
@@ -1528,7 +1489,7 @@ describe('preset generator', () => {
   it('CLAUDE.md mentions all four storybookjs/mcp skills by name', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
 
     const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
@@ -1542,7 +1503,7 @@ describe('preset generator', () => {
   it('CLAUDE.md documents that test-run and check:stories both work', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
 
     const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
@@ -1555,7 +1516,7 @@ describe('preset generator', () => {
   it('CLAUDE.md prints the re-run command when skills are enabled', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
 
     const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
@@ -1565,7 +1526,7 @@ describe('preset generator', () => {
   it('README mentions the skills and the storybook command', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
     });
 
     const readme = tree.read('README.md', 'utf-8') ?? '';
@@ -1659,7 +1620,7 @@ describe('preset generator', () => {
   it('skips the skills install entirely when skills: false is passed to the generator', async () => {
     const task = await presetGenerator(tree, {
       name: 'my-workspace',
-      frameworks: 'angular',
+      framework: 'angular',
       skills: false,
     });
     await task();

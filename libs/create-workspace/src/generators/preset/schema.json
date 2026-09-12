@@ -12,10 +12,20 @@
         "index": 0
       }
     },
-    "frameworks": {
+    "framework": {
       "type": "string",
-      "description": "Comma-separated list of frameworks to scaffold: angular,react,vue",
-      "default": "angular"
+      "enum": ["angular", "react", "vue"],
+      "description": "The single framework to scaffold the workshop app in",
+      "default": "angular",
+      "x-prompt": {
+        "message": "Which framework should this workshop use?",
+        "type": "list",
+        "items": [
+          { "value": "angular", "label": "Angular" },
+          { "value": "react", "label": "React" },
+          { "value": "vue", "label": "Vue" }
+        ]
+      }
     },
     "figmaMcp": {
       "type": "boolean",

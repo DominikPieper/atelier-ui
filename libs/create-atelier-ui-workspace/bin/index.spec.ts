@@ -89,7 +89,7 @@ describe('create-atelier-ui-workspace CLI', () => {
     );
   });
 
-  it('passes selected framework as frameworks option', async () => {
+  it('passes selected framework as framework option', async () => {
     process.argv = ['node', 'index.js', 'test-ws', '--no-figma'];
     enquirer.prompt.mockResolvedValueOnce({ framework: 'react' });
 
@@ -97,7 +97,7 @@ describe('create-atelier-ui-workspace CLI', () => {
 
     expect(mockCreateWorkspace).toHaveBeenCalledWith(
       expect.any(String),
-      expect.objectContaining({ frameworks: 'react' }),
+      expect.objectContaining({ framework: 'react' }),
     );
   });
 
@@ -131,7 +131,7 @@ describe('create-atelier-ui-workspace CLI', () => {
     expect(promptCalls.every((p) => p.name !== 'framework')).toBe(true);
     expect(mockCreateWorkspace).toHaveBeenCalledWith(
       expect.any(String),
-      expect.objectContaining({ frameworks: 'react' }),
+      expect.objectContaining({ framework: 'react' }),
     );
   });
 
@@ -149,7 +149,7 @@ describe('create-atelier-ui-workspace CLI', () => {
 
     expect(mockCreateWorkspace).toHaveBeenCalledWith(
       expect.any(String),
-      expect.objectContaining({ frameworks: 'vue' }),
+      expect.objectContaining({ framework: 'vue' }),
     );
   });
 

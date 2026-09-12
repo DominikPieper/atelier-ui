@@ -1,6 +1,6 @@
 export interface PresetGeneratorSchema {
   name: string;
-  frameworks?: string;
+  framework?: string;
   figmaMcp?: boolean;
   skills?: boolean;
 }

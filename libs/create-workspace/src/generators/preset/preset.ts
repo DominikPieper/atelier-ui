@@ -125,13 +125,13 @@ function appendToFlatEslintConfig(
 }
 
 // Ported CSS-discipline stylelint rules (ADR-0130): assembles the scaffold's
-// own stylelint.config.mjs — one override block per selected framework's own
+// own stylelint.config.mjs — the one override block for the scaffold's single
 // `workshop-<fw>/src` tree, mirroring this repo's own stylelint.config.mjs
 // (which does the same per libs/{angular,react,vue}). Built as a template
-// string here rather than a static files/ template, because both the block
-// count and the app-relative paths it names depend on which frameworks were
-// selected — the same reason CLAUDE.md/README.md below are assembled from
-// `frameworks`, not copied verbatim.
+// string here rather than a static files/ template, because the app-relative
+// paths it names depend on which framework was selected — the same reason
+// CLAUDE.md/README.md below are assembled from `framework`, not copied
+// verbatim.
 //
 // Only three of the four shipped rules are wired: `atelier/no-primitive-token`
 // polices reaching past the semantic token tier into a primitive ramp (e.g.
@@ -148,12 +148,10 @@ function appendToFlatEslintConfig(
 // and the staleness scan those two options drive never runs (documented in
 // each rule's own header in tools/stylelint-rules/) — passing them here would
 // configure a scan that can never find anything.
-function buildStylelintConfig(frameworks: Framework[]): string {
-  const overrides = frameworks
-    .map((framework) => {
-      const appName = `workshop-${framework}`;
-      const tokensCss = `${appName}/src/styles/tokens.css`;
-      return `    {
+function buildStylelintConfig(framework: Framework): string {
+  const appName = `workshop-${framework}`;
+  const tokensCss = `${appName}/src/styles/tokens.css`;
+  const overrides = `    {
       files: ['${appName}/src/**/*.css'],
       rules: {
         'atelier/no-raw-color-literal': true,
@@ -161,8 +159,6 @@ function buildStylelintConfig(frameworks: Framework[]): string {
         'atelier/no-token-bypass': [true, { tokenFile: '${tokensCss}' }],
       },
     },`;
-    })
-    .join('\n');
 
   return `// This workspace's own CSS-discipline rules only ('tools/stylelint-rules/')
 // — ported from the parent Atelier monorepo (ADR-0130). No
@@ -179,7 +175,7 @@ function buildStylelintConfig(frameworks: Framework[]): string {
 // typo'd or undeclared --ui-* token, and a literal that duplicates a token's
 // value instead of binding to it.
 //
-// tokens.css itself is EXCLUDED from every framework's stylelint target (via
+// tokens.css itself is EXCLUDED from the app's stylelint target (via
 // --ignore-pattern in the app's project.json, not an exemption here): it is
 // the one file that legitimately spells out raw color/dimension literals as
 // token DEFINITIONS — the opposite of what these rules police in a file that
@@ -500,10 +496,7 @@ export async function presetGenerator(
   tree: Tree,
   options: PresetGeneratorSchema,
 ) {
-  const frameworks = (options.frameworks ?? 'angular')
-    .split(',')
-    .map((f) => f.trim())
-    .filter(Boolean) as Framework[];
+  const framework: Framework = (options.framework as Framework) ?? 'angular';
 
   const skillsEnabled = options.skills ?? true;
 
@@ -521,324 +514,324 @@ export async function presetGenerator(
     '@storybook/addon-a11y': STORYBOOK_VERSION,
     '@storybook/addon-docs': STORYBOOK_VERSION,
     // Browser-mode Storybook tests (owner correction 2026-09-10 to ADR-0123) —
-    // shared regardless of how many frameworks are selected; the
-    // framework-specific Vite plugin is added conditionally, after the
-    // frameworks loop below, once every app generator has had a chance to
-    // bring its own in.
+    // written unconditionally, independent of which framework is selected; the
+    // framework-specific Vite plugin is added conditionally, further below,
+    // once the app generator has had a chance to bring its own in.
     '@storybook/addon-vitest': STORYBOOK_VERSION,
     vitest: VITEST_VERSION,
     '@vitest/browser-playwright': VITEST_BROWSER_PLAYWRIGHT_VERSION,
     playwright: PLAYWRIGHT_VERSION,
   };
 
-  for (const framework of frameworks) {
-    const appName = `workshop-${framework}`;
+  const appName = `workshop-${framework}`;
 
-    if (framework === 'angular') {
-      console.log(`\n◇ Generating Angular workshop app…`);
-      // NX_VERSION is the version of the nx running this generator, which is the
-      // one create-nx-workspace installed into the workspace. Pinning to it is not
-      // tidiness: nx ships core and plugins as one release and they reach across
-      // the package boundary, so a plugin one patch ahead of core throws at load.
-      // `@nx/eslint@23.1.2` calls `combineGlobPatterns` from `@nx/devkit/internal`,
-      // which `@nx/devkit@23.1.1` does not export — measured, and it broke CI the
-      // day 23.1.2 was published.
-      //
-      // This is also why `@nx/angular` is an OPTIONAL peer of this package. npm
-      // auto-installs a required peer, and `>=22.0.0` resolves to whatever is
-      // latest — measured: it installed @nx/angular 23.1.2 into a workspace whose
-      // nx was 23.1.1, dragging @nx/eslint 23.1.2 with it, before this generator
-      // ever ran. Optional peers are not auto-installed, so the first thing that
-      // installs it is the line below, at the version that matches.
-      await ensurePackage('@nx/angular', NX_VERSION);
-      const {
-        applicationGenerator: angularAppGenerator,
-      } = require('@nx/angular/generators');
-      await angularAppGenerator(tree, {
-        name: appName,
-        directory: appName,
-        style: 'css',
-        routing: true,
-        standalone: true,
-        ssr: false,
-        skipTests: true,
-        e2eTestRunner: 'none',
-        skipFormat: true,
-        // Without this, the generator's own linter choice defaults to
-        // `normalizeLinterOption`'s non-interactive fallback: follow an
-        // eslint setup already detected in the tree, or `'none'` if there is
-        // none yet. A single-framework Angular scaffold (the common,
-        // documented case — ADR-0084) starts from a genuinely empty tree, so
-        // that fallback silently produced ZERO eslint.config.mjs and no
-        // eslint devDependency at all — verified by running the real
-        // generator against an empty workspace with this line omitted.
-        // React and Vue below already pass this explicitly; Angular didn't,
-        // which was the actual defect, not merely a posture gap.
-        linter: 'eslint',
-      });
-      deps['@atelier-ui/angular'] = 'latest';
-
-      // `flat/angular-template` above (written into workshop-angular's own
-      // eslint.config.mjs by the application generator, confirmed by a real
-      // run) already carries angular-eslint's `templateAccessibility` preset
-      // — see libs/angular/eslint.config.mjs's comment for the 11 rules that
-      // covers. This one isn't part of that preset (not `:accessibility:`
-      // tagged in angular-eslint's README): WCAG 2.4.3, positive tabindex
-      // fights natural DOM tab order. Same addition libs/angular's own config
-      // makes on top of the identical preset.
-      appendToFlatEslintConfig(
-        tree,
-        `${appName}/eslint.config.mjs`,
-        `,
-  {
-    // Not covered by \`flat/angular-template\` above (angular-eslint's own
-    // \`templateAccessibility\` preset only) — WCAG 2.4.3, positive tabindex
-    // fights natural DOM tab order. Mirrors libs/angular/eslint.config.mjs's
-    // identical addition on top of the same preset.
-    files: ['**/*.html'],
-    rules: {
-      '@angular-eslint/template/no-positive-tabindex': 'error',
-    },
-  },
-`,
-      );
-    }
-
-    if (framework === 'react') {
-      console.log(`\n◇ Generating React workshop app…`);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { applicationGenerator: reactAppGenerator } =
-        await ensurePackage<any>('@nx/react', NX_VERSION);
-      await reactAppGenerator(tree, {
-        name: appName,
-        directory: appName,
-        style: 'css',
-        routing: true,
-        bundler: 'vite',
-        linter: 'eslint',
-        unitTestRunner: 'none',
-        e2eTestRunner: 'none',
-        skipFormat: true,
-      } as Parameters<typeof reactAppGenerator>[1]);
-      deps['@atelier-ui/react'] = 'latest';
-
-      // Deliberately nothing added here. `flat/react` above (written into
-      // workshop-react's own eslint.config.mjs by the application generator,
-      // confirmed by a real run) already carries jsx-a11y's full 18-rule
-      // active set — the same rule set libs/react/eslint.config.mjs relies on
-      // without adding anything of its own either.
-    }
-
-    if (framework === 'vue') {
-      console.log(`\n◇ Generating Vue workshop app…`);
-      // eslint-disable-next-line @typescript-eslint/no-explicit-any
-      const { applicationGenerator: vueAppGenerator } =
-        await ensurePackage<any>('@nx/vue', NX_VERSION);
-      await vueAppGenerator(tree, {
-        name: appName,
-        directory: appName,
-        style: 'css',
-        routing: true,
-        linter: 'eslint',
-        unitTestRunner: 'none',
-        e2eTestRunner: 'none',
-        skipFormat: true,
-      } as Parameters<typeof vueAppGenerator>[1]);
-      deps['@atelier-ui/vue'] = 'latest';
-
-      // @nx/vue's own application generator (confirmed by a real run against
-      // an in-memory Tree, packed from the exact pinned version — @nx/vue is
-      // an optional peer, not installed in this workspace) DOES match `.vue`
-      // files and wire vue-eslint-parser + typescript-eslint's parser for
-      // them via `parserOptions.parser` — the gap this generator's own
-      // libs/vue/eslint.config.mjs once had (`.vue` files matched by no
-      // config at all) does not exist in the scaffold. What IS missing,
-      // mirrored below from libs/vue/eslint.config.mjs:
-      //
-      // 1. `eslint-config-prettier` after eslint-plugin-vue's rules, scoped
-      //    to `.vue` — without it, eslint-plugin-vue's layout/whitespace
-      //    rules (max-attributes-per-line, html-self-closing, …) fight
-      //    Prettier. eslint-config-prettier is already an unconditional
-      //    devDependency here (added by @nx/eslint's own root config setup,
-      //    confirmed by the same run), independent of whether `prettier`
-      //    itself is installed — the defensive add near the end of
-      //    presetGenerator below is a safety net for that, not the primary
-      //    source.
-      // 2. `vue/no-unused-properties` — not part of any eslint-plugin-vue
-      //    preset, opted in explicitly.
-      //
-      // Deliberately NOT mirrored: libs/vue/eslint.config.mjs also re-scopes
-      // eslint-plugin-vue's `flat/recommended` essential/strongly-recommended
-      // /recommended blocks to `**/*.vue` (verified here too: those blocks
-      // carry no `files` restriction in the installed eslint-plugin-vue, so
-      // @nx/vue's own `...vue.configs['flat/recommended']` spread — which
-      // this generator does not rewrite, only append to — applies Vue-only
-      // rules to every .ts/.js file in the app as well). Doing the same here
-      // would mean rewriting a block the application generator wrote, not
-      // appending to it, which is the one thing this helper is built to
-      // avoid; the practical exposure in a fresh single-app scaffold is low
-      // (no .spec.ts/.stories.ts test-double files exist yet at this point in
-      // the generator, and @nx/vue already turns off the rule most likely to
-      // misfire on plain .ts — vue/multi-word-component-names — project-wide
-      // on its own). Recorded here rather than silently left unmentioned.
-      appendToFlatEslintConfig(
-        tree,
-        `${appName}/eslint.config.mjs`,
-        `,
-  {
-    // eslint-plugin-vue's flat/recommended (spread above by @nx/vue's own
-    // application generator) ships layout/whitespace rules that fight
-    // Prettier — same gap libs/vue/eslint.config.mjs closes.
-    files: ['**/*.vue'],
-    rules: eslintConfigPrettier.rules,
-  },
-  {
-    // Not part of any eslint-plugin-vue preset — opted in explicitly, same as
-    // libs/vue/eslint.config.mjs: catches a declared prop nothing in the
-    // component reads.
-    files: ['**/*.vue'],
-    rules: {
-      'vue/no-unused-properties': ['error', { groups: ['props'] }],
-    },
-  },
-`,
-        [`import eslintConfigPrettier from 'eslint-config-prettier';`],
-      );
-    }
-
-    // Copy design tokens into the scaffolded app so attendees can edit them
-    // directly. They're not imported from the @atelier-ui/<fw> npm package
-    // because (a) those published packages don't ship tokens.css, and (b) a
-    // workshop attendee editing colors in node_modules is a bad experience.
-    tree.write(
-      `${appName}/src/styles/tokens.css`,
-      readTemplate('styles/tokens.css'),
-    );
-
-    // Prepend the tokens import to the app's global stylesheet
-    const stylesPath = `${appName}/src/styles.css`;
-    const existing = tree.exists(stylesPath)
-      ? (tree.read(stylesPath, 'utf-8') ?? '')
-      : '';
-    tree.write(stylesPath, `@import './styles/tokens.css';\n\n${existing}`);
-
-    // Storybook config: mirrors libs/{angular,react,vue}/.storybook/main.ts
-    // minus staticDirs, the BUILD_STORYBOOK viteFinal block (hosted-path-only),
-    // and @storybook/addon-designs (no Figma handoff doc to link from here).
-    // @storybook/addon-vitest DOES ship (owner correction 2026-09-10 to
-    // ADR-0123's original "no test runner" call).
-    tree.write(
-      `${appName}/.storybook/main.ts`,
-      readTemplate(storybookTemplateName(framework, 'main.ts')),
-    );
-    tree.write(
-      `${appName}/.storybook/preview.${storybookOutputExt(framework)}`,
-      readTemplate(storybookTemplateName(framework, 'preview')),
-    );
-    if (framework === 'angular') {
-      // The only framework that needs its own Storybook-scoped tsconfig — see
-      // libs/angular/.storybook/tsconfig.json, which this mirrors against the
-      // tsconfig.json the Angular application generator actually writes (both
-      // shapes verified: `files: []`, `include: []`, `references` to app/spec).
-      tree.write(
-        `${appName}/.storybook/tsconfig.json`,
-        readTemplate('storybook/angular/tsconfig.json'),
-      );
-    }
-
-    // One example story per app: small on purpose — it exists so Storybook
-    // isn't empty and the attendee has a working pattern to copy, not as a
-    // second component showcase.
-    tree.write(
-      `${appName}/src/atl-button.stories.${storybookOutputExt(framework)}`,
-      readTemplate(storybookTemplateName(framework, 'atl-button.stories')),
-    );
-
-    // Browser-mode Storybook tests (owner correction 2026-09-10 to ADR-0123 —
-    // storybook-test / check:stories ship with the scaffold after all).
-    // `vitest.config.ts` is always plain `.ts`, never `.tsx` — see
-    // storybookTemplateName()'s comment. The literal filename matters:
-    // @storybook/addon-vitest's `test-run` tool walks up from a story's
-    // .storybook directory looking for the nearest vitest/vite config by
-    // this standard name.
-    tree.write(
-      `${appName}/vitest.config.ts`,
-      readTemplate(storybookTemplateName(framework, 'vitest.config')),
-    );
-    tree.write(
-      `${appName}/.storybook/vitest.setup.ts`,
-      readTemplate(storybookTemplateName(framework, 'vitest.setup')),
-    );
-
-    // The application generator (@nx/{angular,react,vue}:application, above)
-    // guarantees `${appName}/project.json` exists at this point — updateJson
-    // reads it first and throws `Cannot find ${path}` if it doesn't, which is
-    // exactly the loud failure we want: a workshop app with a Storybook config
-    // directory but no way to start it is worse than a generator that stops.
-    const storybookPort = 6006 + frameworks.indexOf(framework);
-    updateJson(tree, `${appName}/project.json`, (config) => {
-      config.targets ??= {};
-      config.targets['storybook'] = {
-        executor: 'nx:run-commands',
-        options: {
-          command: `npx storybook dev --config-dir ${appName}/.storybook --port ${storybookPort}`,
-        },
-      };
-      config.targets['build-storybook'] = {
-        executor: 'nx:run-commands',
-        outputs: [`{workspaceRoot}/dist/storybook/${appName}`],
-        options: {
-          command: `npx storybook build --config-dir ${appName}/.storybook --output-dir dist/storybook/${appName}`,
-        },
-      };
-      // Mirrors libs/{angular,react,vue}/project.json's own "storybook-test"
-      // target exactly, modulo the config filename (vitest.config.ts here,
-      // vitest.storybook.config.ts there — see storybookTemplateName()'s
-      // comment on why the scaffold uses the standard name instead).
-      config.targets['storybook-test'] = {
-        executor: 'nx:run-commands',
-        options: {
-          command: 'npx vitest run --config vitest.config.ts',
-          cwd: appName,
-        },
-      };
-      // Ported CSS-discipline rules (ADR-0130): a sibling target, not folded
-      // into `lint` — same reasoning as this repo's own libs/{fw}/project.json
-      // (lint is inferred by @nx/eslint/plugin per project; overriding it to
-      // also shell out would re-implement what inference gives for free).
-      // --ignore-pattern excludes this app's own tokens.css from the run: it
-      // is a token DEFINITION file, the one place these rules' raw literals
-      // are supposed to live, not a file that reads/consumes tokens.
-      config.targets['stylelint'] = {
-        executor: 'nx:run-commands',
-        options: {
-          command: `stylelint '${appName}/src/**/*.css' --ignore-pattern '${appName}/src/styles/tokens.css' --config stylelint.config.mjs`,
-        },
-      };
-      return config;
+  if (framework === 'angular') {
+    console.log(`\n◇ Generating Angular workshop app…`);
+    // NX_VERSION is the version of the nx running this generator, which is the
+    // one create-nx-workspace installed into the workspace. Pinning to it is not
+    // tidiness: nx ships core and plugins as one release and they reach across
+    // the package boundary, so a plugin one patch ahead of core throws at load.
+    // `@nx/eslint@23.1.2` calls `combineGlobPatterns` from `@nx/devkit/internal`,
+    // which `@nx/devkit@23.1.1` does not export — measured, and it broke CI the
+    // day 23.1.2 was published.
+    //
+    // This is also why `@nx/angular` is an OPTIONAL peer of this package. npm
+    // auto-installs a required peer, and `>=22.0.0` resolves to whatever is
+    // latest — measured: it installed @nx/angular 23.1.2 into a workspace whose
+    // nx was 23.1.1, dragging @nx/eslint 23.1.2 with it, before this generator
+    // ever ran. Optional peers are not auto-installed, so the first thing that
+    // installs it is the line below, at the version that matches.
+    await ensurePackage('@nx/angular', NX_VERSION);
+    const {
+      applicationGenerator: angularAppGenerator,
+    } = require('@nx/angular/generators');
+    await angularAppGenerator(tree, {
+      name: appName,
+      directory: appName,
+      style: 'css',
+      routing: true,
+      standalone: true,
+      ssr: false,
+      skipTests: true,
+      e2eTestRunner: 'none',
+      skipFormat: true,
+      // Without this, the generator's own linter choice defaults to
+      // `normalizeLinterOption`'s non-interactive fallback: follow an
+      // eslint setup already detected in the tree, or `'none'` if there is
+      // none yet. A single-framework Angular scaffold (the common,
+      // documented case — ADR-0084) starts from a genuinely empty tree, so
+      // that fallback silently produced ZERO eslint.config.mjs and no
+      // eslint devDependency at all — verified by running the real
+      // generator against an empty workspace with this line omitted.
+      // React and Vue below already pass this explicitly; Angular didn't,
+      // which was the actual defect, not merely a posture gap.
+      linter: 'eslint',
     });
+    deps['@atelier-ui/angular'] = 'latest';
 
-    storybookDevDeps[STORYBOOK_FRAMEWORK_PACKAGE[framework]] =
-      STORYBOOK_VERSION;
-    // @storybook/react-vite and @storybook/vue3-vite each carry their
-    // non-vite renderer counterpart as a plain (non-peer) `dependency`, not
-    // something npm/pnpm is told the app needs directly — but the story and
-    // preview templates import straight from '@storybook/react' /
-    // '@storybook/vue3' for the `Meta`/`StoryObj`/`Preview` types. That
-    // resolves today only because npm hoists it; pnpm's stricter, non-hoisted
-    // layout would leave the import unresolved. Angular has no matching case:
-    // '@storybook/angular-vite' has no such counterpart to hoist, and the
-    // angular templates import their types from '@storybook/angular-vite'
-    // itself (see files/storybook/angular/*.template) — adding
-    // '@storybook/angular' back here would reintroduce exactly the ERESOLVE
-    // this generator now avoids (its peer on @angular-devkit/build-angular is
-    // not satisfiable by a freshly scaffolded Angular 22 app).
-    if (framework === 'react') {
-      storybookDevDeps['@storybook/react'] = STORYBOOK_VERSION;
-    }
-    if (framework === 'vue') {
-      storybookDevDeps['@storybook/vue3'] = STORYBOOK_VERSION;
-    }
+    // `flat/angular-template` above (written into workshop-angular's own
+    // eslint.config.mjs by the application generator, confirmed by a real
+    // run) already carries angular-eslint's `templateAccessibility` preset
+    // — see libs/angular/eslint.config.mjs's comment for the 11 rules that
+    // covers. This one isn't part of that preset (not `:accessibility:`
+    // tagged in angular-eslint's README): WCAG 2.4.3, positive tabindex
+    // fights natural DOM tab order. Same addition libs/angular's own config
+    // makes on top of the identical preset.
+    appendToFlatEslintConfig(
+      tree,
+      `${appName}/eslint.config.mjs`,
+      `,
+{
+  // Not covered by \`flat/angular-template\` above (angular-eslint's own
+  // \`templateAccessibility\` preset only) — WCAG 2.4.3, positive tabindex
+  // fights natural DOM tab order. Mirrors libs/angular/eslint.config.mjs's
+  // identical addition on top of the same preset.
+  files: ['**/*.html'],
+  rules: {
+    '@angular-eslint/template/no-positive-tabindex': 'error',
+  },
+},
+`,
+    );
+  }
+
+  if (framework === 'react') {
+    console.log(`\n◇ Generating React workshop app…`);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { applicationGenerator: reactAppGenerator } =
+      await ensurePackage<any>('@nx/react', NX_VERSION);
+    await reactAppGenerator(tree, {
+      name: appName,
+      directory: appName,
+      style: 'css',
+      routing: true,
+      bundler: 'vite',
+      linter: 'eslint',
+      unitTestRunner: 'none',
+      e2eTestRunner: 'none',
+      skipFormat: true,
+    } as Parameters<typeof reactAppGenerator>[1]);
+    deps['@atelier-ui/react'] = 'latest';
+
+    // Deliberately nothing added here. `flat/react` above (written into
+    // workshop-react's own eslint.config.mjs by the application generator,
+    // confirmed by a real run) already carries jsx-a11y's full 18-rule
+    // active set — the same rule set libs/react/eslint.config.mjs relies on
+    // without adding anything of its own either.
+  }
+
+  if (framework === 'vue') {
+    console.log(`\n◇ Generating Vue workshop app…`);
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const { applicationGenerator: vueAppGenerator } = await ensurePackage<any>(
+      '@nx/vue',
+      NX_VERSION,
+    );
+    await vueAppGenerator(tree, {
+      name: appName,
+      directory: appName,
+      style: 'css',
+      routing: true,
+      linter: 'eslint',
+      unitTestRunner: 'none',
+      e2eTestRunner: 'none',
+      skipFormat: true,
+    } as Parameters<typeof vueAppGenerator>[1]);
+    deps['@atelier-ui/vue'] = 'latest';
+
+    // @nx/vue's own application generator (confirmed by a real run against
+    // an in-memory Tree, packed from the exact pinned version — @nx/vue is
+    // an optional peer, not installed in this workspace) DOES match `.vue`
+    // files and wire vue-eslint-parser + typescript-eslint's parser for
+    // them via `parserOptions.parser` — the gap this generator's own
+    // libs/vue/eslint.config.mjs once had (`.vue` files matched by no
+    // config at all) does not exist in the scaffold. What IS missing,
+    // mirrored below from libs/vue/eslint.config.mjs:
+    //
+    // 1. `eslint-config-prettier` after eslint-plugin-vue's rules, scoped
+    //    to `.vue` — without it, eslint-plugin-vue's layout/whitespace
+    //    rules (max-attributes-per-line, html-self-closing, …) fight
+    //    Prettier. eslint-config-prettier is already an unconditional
+    //    devDependency here (added by @nx/eslint's own root config setup,
+    //    confirmed by the same run), independent of whether `prettier`
+    //    itself is installed — the defensive add near the end of
+    //    presetGenerator below is a safety net for that, not the primary
+    //    source.
+    // 2. `vue/no-unused-properties` — not part of any eslint-plugin-vue
+    //    preset, opted in explicitly.
+    //
+    // Deliberately NOT mirrored: libs/vue/eslint.config.mjs also re-scopes
+    // eslint-plugin-vue's `flat/recommended` essential/strongly-recommended
+    // /recommended blocks to `**/*.vue` (verified here too: those blocks
+    // carry no `files` restriction in the installed eslint-plugin-vue, so
+    // @nx/vue's own `...vue.configs['flat/recommended']` spread — which
+    // this generator does not rewrite, only append to — applies Vue-only
+    // rules to every .ts/.js file in the app as well). Doing the same here
+    // would mean rewriting a block the application generator wrote, not
+    // appending to it, which is the one thing this helper is built to
+    // avoid; the practical exposure in a fresh single-app scaffold is low
+    // (no .spec.ts/.stories.ts test-double files exist yet at this point in
+    // the generator, and @nx/vue already turns off the rule most likely to
+    // misfire on plain .ts — vue/multi-word-component-names — project-wide
+    // on its own). Recorded here rather than silently left unmentioned.
+    appendToFlatEslintConfig(
+      tree,
+      `${appName}/eslint.config.mjs`,
+      `,
+{
+  // eslint-plugin-vue's flat/recommended (spread above by @nx/vue's own
+  // application generator) ships layout/whitespace rules that fight
+  // Prettier — same gap libs/vue/eslint.config.mjs closes.
+  files: ['**/*.vue'],
+  rules: eslintConfigPrettier.rules,
+},
+{
+  // Not part of any eslint-plugin-vue preset — opted in explicitly, same as
+  // libs/vue/eslint.config.mjs: catches a declared prop nothing in the
+  // component reads.
+  files: ['**/*.vue'],
+  rules: {
+    'vue/no-unused-properties': ['error', { groups: ['props'] }],
+  },
+},
+`,
+      [`import eslintConfigPrettier from 'eslint-config-prettier';`],
+    );
+  }
+
+  // Copy design tokens into the scaffolded app so attendees can edit them
+  // directly. They're not imported from the @atelier-ui/<fw> npm package
+  // because (a) those published packages don't ship tokens.css, and (b) a
+  // workshop attendee editing colors in node_modules is a bad experience.
+  tree.write(
+    `${appName}/src/styles/tokens.css`,
+    readTemplate('styles/tokens.css'),
+  );
+
+  // Prepend the tokens import to the app's global stylesheet
+  const stylesPath = `${appName}/src/styles.css`;
+  const existing = tree.exists(stylesPath)
+    ? (tree.read(stylesPath, 'utf-8') ?? '')
+    : '';
+  tree.write(stylesPath, `@import './styles/tokens.css';\n\n${existing}`);
+
+  // Storybook config: mirrors libs/{angular,react,vue}/.storybook/main.ts
+  // minus staticDirs, the BUILD_STORYBOOK viteFinal block (hosted-path-only),
+  // and @storybook/addon-designs (no Figma handoff doc to link from here).
+  // @storybook/addon-vitest DOES ship (owner correction 2026-09-10 to
+  // ADR-0123's original "no test runner" call).
+  tree.write(
+    `${appName}/.storybook/main.ts`,
+    readTemplate(storybookTemplateName(framework, 'main.ts')),
+  );
+  tree.write(
+    `${appName}/.storybook/preview.${storybookOutputExt(framework)}`,
+    readTemplate(storybookTemplateName(framework, 'preview')),
+  );
+  if (framework === 'angular') {
+    // The only framework that needs its own Storybook-scoped tsconfig — see
+    // libs/angular/.storybook/tsconfig.json, which this mirrors against the
+    // tsconfig.json the Angular application generator actually writes (both
+    // shapes verified: `files: []`, `include: []`, `references` to app/spec).
+    tree.write(
+      `${appName}/.storybook/tsconfig.json`,
+      readTemplate('storybook/angular/tsconfig.json'),
+    );
+  }
+
+  // One example story per app: small on purpose — it exists so Storybook
+  // isn't empty and the attendee has a working pattern to copy, not as a
+  // second component showcase.
+  tree.write(
+    `${appName}/src/atl-button.stories.${storybookOutputExt(framework)}`,
+    readTemplate(storybookTemplateName(framework, 'atl-button.stories')),
+  );
+
+  // Browser-mode Storybook tests (owner correction 2026-09-10 to ADR-0123 —
+  // storybook-test / check:stories ship with the scaffold after all).
+  // `vitest.config.ts` is always plain `.ts`, never `.tsx` — see
+  // storybookTemplateName()'s comment. The literal filename matters:
+  // @storybook/addon-vitest's `test-run` tool walks up from a story's
+  // .storybook directory looking for the nearest vitest/vite config by
+  // this standard name.
+  tree.write(
+    `${appName}/vitest.config.ts`,
+    readTemplate(storybookTemplateName(framework, 'vitest.config')),
+  );
+  tree.write(
+    `${appName}/.storybook/vitest.setup.ts`,
+    readTemplate(storybookTemplateName(framework, 'vitest.setup')),
+  );
+
+  // The application generator (@nx/{angular,react,vue}:application, above)
+  // guarantees `${appName}/project.json` exists at this point — updateJson
+  // reads it first and throws `Cannot find ${path}` if it doesn't, which is
+  // exactly the loud failure we want: a workshop app with a Storybook config
+  // directory but no way to start it is worse than a generator that stops.
+  // Always 6006 — the workshop scaffolds exactly one app, so there is no
+  // second framework's Storybook to offset a port against.
+  const storybookPort = 6006;
+  updateJson(tree, `${appName}/project.json`, (config) => {
+    config.targets ??= {};
+    config.targets['storybook'] = {
+      executor: 'nx:run-commands',
+      options: {
+        command: `npx storybook dev --config-dir ${appName}/.storybook --port ${storybookPort}`,
+      },
+    };
+    config.targets['build-storybook'] = {
+      executor: 'nx:run-commands',
+      outputs: [`{workspaceRoot}/dist/storybook/${appName}`],
+      options: {
+        command: `npx storybook build --config-dir ${appName}/.storybook --output-dir dist/storybook/${appName}`,
+      },
+    };
+    // Mirrors libs/{angular,react,vue}/project.json's own "storybook-test"
+    // target exactly, modulo the config filename (vitest.config.ts here,
+    // vitest.storybook.config.ts there — see storybookTemplateName()'s
+    // comment on why the scaffold uses the standard name instead).
+    config.targets['storybook-test'] = {
+      executor: 'nx:run-commands',
+      options: {
+        command: 'npx vitest run --config vitest.config.ts',
+        cwd: appName,
+      },
+    };
+    // Ported CSS-discipline rules (ADR-0130): a sibling target, not folded
+    // into `lint` — same reasoning as this repo's own libs/{fw}/project.json
+    // (lint is inferred by @nx/eslint/plugin per project; overriding it to
+    // also shell out would re-implement what inference gives for free).
+    // --ignore-pattern excludes this app's own tokens.css from the run: it
+    // is a token DEFINITION file, the one place these rules' raw literals
+    // are supposed to live, not a file that reads/consumes tokens.
+    config.targets['stylelint'] = {
+      executor: 'nx:run-commands',
+      options: {
+        command: `stylelint '${appName}/src/**/*.css' --ignore-pattern '${appName}/src/styles/tokens.css' --config stylelint.config.mjs`,
+      },
+    };
+    return config;
+  });
+
+  storybookDevDeps[STORYBOOK_FRAMEWORK_PACKAGE[framework]] = STORYBOOK_VERSION;
+  // @storybook/react-vite and @storybook/vue3-vite each carry their
+  // non-vite renderer counterpart as a plain (non-peer) `dependency`, not
+  // something npm/pnpm is told the app needs directly — but the story and
+  // preview templates import straight from '@storybook/react' /
+  // '@storybook/vue3' for the `Meta`/`StoryObj`/`Preview` types. That
+  // resolves today only because npm hoists it; pnpm's stricter, non-hoisted
+  // layout would leave the import unresolved. Angular has no matching case:
+  // '@storybook/angular-vite' has no such counterpart to hoist, and the
+  // angular templates import their types from '@storybook/angular-vite'
+  // itself (see files/storybook/angular/*.template) — adding
+  // '@storybook/angular' back here would reintroduce exactly the ERESOLVE
+  // this generator now avoids (its peer on @angular-devkit/build-angular is
+  // not satisfiable by a freshly scaffolded Angular 22 app).
+  if (framework === 'react') {
+    storybookDevDeps['@storybook/react'] = STORYBOOK_VERSION;
+  }
+  if (framework === 'vue') {
+    storybookDevDeps['@storybook/vue3'] = STORYBOOK_VERSION;
   }
 
   // ─── Prettier (formatting enforcement) ───────────────────────────────────
@@ -856,7 +849,7 @@ export async function presetGenerator(
   // ─── Stylelint (ported CSS-discipline rules, ADR-0130) ───────────────────
   console.log(`\n◇ Wiring stylelint (ported CSS-discipline rules)…`);
 
-  tree.write('stylelint.config.mjs', buildStylelintConfig(frameworks));
+  tree.write('stylelint.config.mjs', buildStylelintConfig(framework));
 
   // Six files, byte-identical to the canonical copies in tools/stylelint-rules/
   // (kept that way by this repo's own sync-preflight.mjs) — see
@@ -876,13 +869,13 @@ export async function presetGenerator(
     );
   }
 
-  // The config and the rule files above both live outside every project that
-  // reads them (the per-app `stylelint` targets added in the loop above) —
-  // exactly the cache trap ADR-0130 proved twice in this repo's own
-  // nx.json. Mirrors this repo's own targetDefaults.stylelint, minus
+  // The config and the rule files above both live outside the project that
+  // reads them (the app's own `stylelint` target added above) — exactly the
+  // cache trap ADR-0130 proved twice in this repo's own nx.json. Mirrors this
+  // repo's own targetDefaults.stylelint, minus
   // `tools/scripts/lib/allowlists.js` (the scaffold ships no such file — see
   // buildStylelintConfig's comment on why neither wired rule is given
-  // `allowlistsFile`). The application generators above are guaranteed to
+  // `allowlistsFile`). The application generator above is guaranteed to
   // have already written nx.json (create-nx-workspace writes it before any
   // preset runs), so `updateJson` here is safe the same way the package.json
   // update below is.
@@ -895,10 +888,7 @@ export async function presetGenerator(
         '^default',
         '{workspaceRoot}/stylelint.config.mjs',
         '{workspaceRoot}/tools/stylelint-rules/**/*',
-        ...frameworks.map(
-          (framework) =>
-            `{workspaceRoot}/workshop-${framework}/src/styles/tokens.css`,
-        ),
+        `{workspaceRoot}/${appName}/src/styles/tokens.css`,
         { externalDependencies: ['stylelint'] },
       ],
     };
@@ -906,13 +896,8 @@ export async function presetGenerator(
   });
 
   // ─── The contract loop (ADR-0121 S4) ─────────────────────────────────────
-  // Ships once, scoped to the FIRST selected framework — a contracts.config.json
-  // names exactly one framework, the same "the workshop uses one framework"
-  // precedent frameworks[0] already sets elsewhere in this generator (the
-  // README's "Getting started" nx serve command).
-  const primaryFramework = frameworks[0];
-  const primaryApp = `workshop-${primaryFramework}`;
-
+  // contracts.config.json names the workshop's one framework and app —
+  // `framework`/`appName`, already established above.
   console.log(
     `\n◇ Writing the contract loop (check:contracts, the example AtlButton contract, the Figma snapshot projection)…`,
   );
@@ -923,15 +908,15 @@ export async function presetGenerator(
   // under a name readTemplate() can find at runtime. The OUTPUT filenames
   // below stay plain `.ts` — only the template source needs the suffix.
   tree.write(
-    `${primaryApp}/src/contracts/types.ts`,
+    `${appName}/src/contracts/types.ts`,
     readTemplate('contracts/types.ts.template'),
   );
   tree.write(
-    `${primaryApp}/src/contracts/README.md`,
+    `${appName}/src/contracts/README.md`,
     readTemplate('contracts/README.md'),
   );
   tree.write(
-    `${primaryApp}/src/contracts/button.contract.ts`,
+    `${appName}/src/contracts/button.contract.ts`,
     readTemplate('contracts/button.contract.ts.template'),
   );
 
@@ -958,53 +943,42 @@ export async function presetGenerator(
   tree.write('tools/figma/snapshot.json', readTemplate('figma/snapshot.json'));
 
   writeJson(tree, 'contracts.config.json', {
-    framework: primaryFramework,
-    contracts: `${primaryApp}/src/contracts`,
-    stories: [`${primaryApp}/src`],
+    framework,
+    contracts: `${appName}/src/contracts`,
+    stories: [`${appName}/src`],
     snapshot: 'tools/figma/snapshot.json',
   });
 
   console.log(`\n◇ Writing project files (CLAUDE.md, README, .mcp.json)…`);
 
   // Write CLAUDE.md with framework-specific guidance
-  const frameworkSections = frameworks
-    .map((f) => {
-      if (f === 'angular') {
-        return `### Angular (\`@atelier-ui/angular\`)
+  let frameworkSection = '';
+  if (framework === 'angular') {
+    frameworkSection = `### Angular (\`@atelier-ui/angular\`)
 - Selectors: \`atl-button\`, \`atl-input\`, \`atl-dialog\`, …
 - Import: \`import { AtlButton } from '@atelier-ui/angular';\`
 - Add to \`@Component({ imports: [AtlButton] })\`
 - Form controls implement Signal Forms (\`FormValueControl\` / \`FormCheckboxControl\`)`;
-      }
-      if (f === 'react') {
-        return `### React (\`@atelier-ui/react\`)
+  } else if (framework === 'react') {
+    frameworkSection = `### React (\`@atelier-ui/react\`)
 - Elements: \`<AtlButton>\`, \`<AtlInput>\`, \`<AtlDialog>\`, …
 - Import: \`import { AtlButton } from '@atelier-ui/react';\`
 - Event handlers follow \`onXxx\` / \`onXxxChange\` convention
 - Toast: use \`useAtlToast()\` hook inside \`<AtlToastProvider>\``;
-      }
-      if (f === 'vue') {
-        return `### Vue (\`@atelier-ui/vue\`)
+  } else if (framework === 'vue') {
+    frameworkSection = `### Vue (\`@atelier-ui/vue\`)
 - Elements: \`<AtlButton>\`, \`<AtlInput>\`, \`<AtlDialog>\`, …
 - Import: \`import { AtlButton } from '@atelier-ui/vue';\`
 - Two-way binding: \`v-model\` and \`v-model:value\` where applicable
 - Toast: use \`useAtlToast()\` composable`;
-      }
-      return '';
-    })
-    .join('\n\n');
+  }
 
-  const mcpSection = frameworks
-    .map(
-      (f) =>
-        `### \`storybook-${f}\` MCP
+  const mcpSection = `### \`storybook-${framework}\` MCP
 Before using any component:
 1. Call \`docs-list\` to get valid component IDs
 2. Call \`docs-show\` with the ID — never invent props
 3. Call \`docs-show-story\` for a specific variant
-4. Do not use a component that is not in the docs`,
-    )
-    .join('\n\n');
+4. Do not use a component that is not in the docs`;
 
   tree.write(
     'CLAUDE.md',
@@ -1021,7 +995,7 @@ ${mcpSection}
 
 ## Component Libraries
 
-${frameworkSections}
+${frameworkSection}
 
 ## Composition Patterns
 
@@ -1057,15 +1031,15 @@ scaffold itself is already Prettier-clean — \`check:format\` passes right afte
 
 ## Apps
 
-${frameworks.map((f) => `- \`workshop-${f}\` — run with \`npx nx serve workshop-${f}\``).join('\n')}
+- \`${appName}\` — run with \`npx nx serve ${appName}\`
 
 ## Storybook
 
-Every app has its own local Storybook, started per framework:
+The app has its own local Storybook:
 
-${frameworks.map((f, i) => `- \`workshop-${f}\` — \`npx nx storybook workshop-${f}\` — http://localhost:${6006 + i}`).join('\n')}
+- \`${appName}\` — \`npx nx storybook ${appName}\` — http://localhost:6006
 
-Build a static Storybook (CI, hosting) with \`npx nx build-storybook workshop-<fw>\`.
+Build a static Storybook (CI, hosting) with \`npx nx build-storybook ${appName}\`.
 
 Every story is also a browser-mode test (\`@storybook/addon-vitest\`). One-time setup
 after \`npm install\`:
@@ -1136,7 +1110,7 @@ ${SKILLS_ADD_COMMAND_FOR_HUMANS}
 
 ## The Contract Loop
 
-A contract (\`${primaryApp}/src/contracts/<name>.contract.ts\`) is the one hand-authored
+A contract (\`${appName}/src/contracts/<name>.contract.ts\`) is the one hand-authored
 spec file per component: the Figma master's node id, plus intentional Figma ↔ code
 mismatches (\`figmaOnly\`, \`codeOnly\`, \`axisMap\`) — never props, defaults, or
 descriptions; those live in the component's own types/JSDoc and its stories.
@@ -1162,7 +1136,7 @@ your own Figma file key, then run \`npm run figma:snapshot\`.
 \`check:contracts\` proves shape and story coverage; \`npm run check:stories\` (every story,
 rendered headless in Chromium via \`@storybook/addon-vitest\`, with axe) proves rendering
 and accessibility. It does so for components whose source lives in this workspace. For
-components imported from \`@atelier-ui/${primaryFramework}\` — the example \`AtlButton\`
+components imported from \`@atelier-ui/${framework}\` — the example \`AtlButton\`
 included — the check recognises that the import resolves into \`node_modules\` and skips
 docgen for it — the same rule in every framework — so it has nothing to compare and
 reports only \`[NO-STORY-META]\`; their prop tables come from the hosted
@@ -1206,7 +1180,7 @@ file exports). The Desktop Bridge covers creation and inspection without a token
   // The contract loop's own devDependencies (ADR-0121 S4): the MCP SDK
   // figma-snapshot-contracts.mjs imports directly, always; `typescript` only
   // when the framework application generator (above) didn't already add it —
-  // read from the tree's package.json as it stands right now, after every
+  // read from the tree's package.json as it stands right now, after the
   // framework's generator has run and before this generator's own writes
   // below it.
   const pkgSoFar = readJson(tree, 'package.json');
@@ -1223,32 +1197,29 @@ file exports). The Desktop Bridge covers creation and inspection without a token
   }
 
   // Browser-mode Storybook tests (owner correction 2026-09-10 to ADR-0123):
-  // each selected framework needs its own Vite plugin for the vitest browser
+  // the selected framework needs its own Vite plugin for the vitest browser
   // pipeline, added only when the framework's own application generator
   // (above) didn't already bring it in. React and Vue's vite-based app
   // generators typically already do; Angular's esbuild-based one never does.
   const viteFrameworkDevDeps: Record<string, string> = {};
-  if (frameworks.includes('react') && !existingDeps['@vitejs/plugin-react']) {
+  if (framework === 'react' && !existingDeps['@vitejs/plugin-react']) {
     viteFrameworkDevDeps['@vitejs/plugin-react'] = VITE_PLUGIN_REACT_VERSION;
   }
-  if (frameworks.includes('vue') && !existingDeps['@vitejs/plugin-vue']) {
+  if (framework === 'vue' && !existingDeps['@vitejs/plugin-vue']) {
     viteFrameworkDevDeps['@vitejs/plugin-vue'] = VITE_PLUGIN_VUE_VERSION;
   }
   if (
-    frameworks.includes('angular') &&
+    framework === 'angular' &&
     !existingDeps['@analogjs/vite-plugin-angular']
   ) {
     viteFrameworkDevDeps['@analogjs/vite-plugin-angular'] =
       ANALOGJS_VITE_PLUGIN_ANGULAR_VERSION;
   }
-  if (
-    frameworks.includes('vue') &&
-    !existingDeps['@testing-library/jest-dom']
-  ) {
+  if (framework === 'vue' && !existingDeps['@testing-library/jest-dom']) {
     viteFrameworkDevDeps['@testing-library/jest-dom'] =
       TESTING_LIBRARY_JEST_DOM_VERSION;
   }
-  if (frameworks.includes('vue') && !existingDeps['eslint-config-prettier']) {
+  if (framework === 'vue' && !existingDeps['eslint-config-prettier']) {
     viteFrameworkDevDeps['eslint-config-prettier'] =
       ESLINT_CONFIG_PRETTIER_VERSION;
   }
@@ -1345,20 +1316,18 @@ file exports). The Desktop Bridge covers creation and inspection without a token
     return pkg;
   });
 
-  // Write .mcp.json with MCP servers for selected frameworks
+  // Write .mcp.json with MCP servers for the selected framework
   const mcpServers: Record<string, unknown> = {
     'nx-mcp': {
       type: 'stdio',
       command: 'npx',
       args: ['nx', 'mcp'],
     },
-  };
-  for (const framework of frameworks) {
-    mcpServers[`storybook-${framework}`] = {
+    [`storybook-${framework}`]: {
       type: 'http',
       url: `${SITE_URL}/storybook-${framework}/mcp`,
-    };
-  }
+    },
+  };
   if (options.figmaMcp) {
     // Desktop Bridge plugin (installed separately). FIGMA_ACCESS_TOKEN is
     // optional — only needed for REST-backed reads. See ${SITE_URL}/figma-token.
@@ -1380,14 +1349,14 @@ file exports). The Desktop Bridge covers creation and inspection without a token
 
 ## Apps
 
-${frameworks.map((f) => `- \`workshop-${f}\` — \`@atelier-ui/${f}\``).join('\n')}
+- \`${appName}\` — \`@atelier-ui/${framework}\`
 
 ## Getting started
 
 \`\`\`bash
 npm install
 npx playwright install chromium   # one-time — needed by npm run check:stories
-npx nx serve workshop-${frameworks[0]}
+npx nx serve ${appName}
 \`\`\`
 
 ## Formatting
@@ -1398,7 +1367,7 @@ Prettier-clean out of the box — \`check:format\` passes right after \`npm inst
 
 ## Storybook
 
-${frameworks.map((f, i) => `- \`workshop-${f}\` — \`npx nx storybook workshop-${f}\` — http://localhost:${6006 + i}`).join('\n')}
+- \`${appName}\` — \`npx nx storybook ${appName}\` — http://localhost:6006
 
 Every story is also a browser-mode test — run them all headless in Chromium with
 \`npm run check:stories\`.

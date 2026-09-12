@@ -148,7 +148,7 @@ export async function main() {
     name,
     nxCloud: 'skip',
     packageManager: 'npm',
-    frameworks: framework,
+    framework,
     figmaMcp,
     skills: skillsEnabled,
   });
