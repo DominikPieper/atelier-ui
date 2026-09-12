@@ -58,8 +58,9 @@ specific file and location that is the place the finding belongs.**
 1. **Ported.** `check:css-tokens` splits into `atelier/no-raw-color-literal` and
    `atelier/no-undeclared-token`; `check:token-tiers` becomes `atelier/no-primitive-token`;
    `check:token-bypass` becomes `atelier/no-token-bypass`. `tools/stylelint-rules/` mirrors
-   `tools/eslint-rules/` rather than inventing a second plugin shape. `check:all` goes 46 →
-   45 → 43 steps as each script is deleted.
+   `tools/eslint-rules/` rather than inventing a second plugin shape. `check:all` goes 45 →
+   43 steps: stage 1 is a swap (`check:css-tokens` out, `check:stylelint` in), stage 2 deletes
+   two scripts outright. Read the chain in `package.json` for today's number — it moves.
 2. **The exemption maps stay in `tools/scripts/lib/allowlists.js` and the rules `require()`
    it** — both sides are already CommonJS. That file's header calls itself the single source
    of truth for hand-maintained exceptions; a stylelint rule enforcing a CSS invariant is the
