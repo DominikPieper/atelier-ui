@@ -17,11 +17,12 @@ on:
   workflow_dispatch:
     inputs:
       mode:
-        description: 'release = version + changelog + publish (normal). publish-only = publish the current tagged versions without a bump (recovery, e.g. after a failed publish left a tag unpublished).'
+        description: 'release = version + changelog + publish (normal). publish-only = publish the current tagged versions without a bump (recovery, e.g. after a failed publish left a tag unpublished). recover-git = version + changelog + commit + tag + push WITHOUT publishing (recovery for the mirror case: npm already has a version that origin does not, e.g. publish succeeded but the push step failed or was blocked). Confirm with `npm view <pkg> version` that npm already has the version this would produce before using it — see the "Release and Publish" step comment for why.'
         type: choice
         options:
           - release
           - publish-only
+          - recover-git
         default: release
 
 permissions:
@@ -133,9 +134,31 @@ jobs:
         # separate, later step that only runs once npm is confirmed to have the
         # version. `publish-only` never versions/commits/tags at all, so none of
         # this touches its recovery-path behaviour.
+        #
+        # `recover-git` is the third, newest mode: the mirror-case recovery for
+        # when npm already has a version that origin does not (publish
+        # succeeded, but the push step below never ran or failed) — see the
+        # "Verify the publish actually reached npm" step's comment for the
+        # incident this is the button for. `nx release --skip-publish` runs
+        # the exact same version/changelog/commit/tag choreography as
+        # `--yes`, deterministically recomputed from conventional commits
+        # since the last tag, but auto-answers "no" to the publish prompt
+        # instead of "yes" — confirmed in the installed Nx 23.2.0 source
+        # (release.js: `shouldPublish = !!args.yes && !args.skipPublish &&
+        # hasNewVersion`; `shouldPromptPublishing` is likewise forced false),
+        # so it needs no `--yes` alongside it and runs unattended exactly like
+        # the other two modes. `--yes` and `--skip-publish` are mutually
+        # exclusive CLI flags (command-object.js hard-errors if both are
+        # set), which is why this is an `elif`, not a flag added to the
+        # `--yes` branch. Because this mode never calls the publish
+        # executor, this step's own exit code says nothing about npm's
+        # state for this run — see the step below for why that keeps this
+        # mode's push gated on an actual registry read, unlike the other two.
         run: |
           if [ "${{ github.event.inputs.mode }}" = "publish-only" ]; then
             npx nx release publish
+          elif [ "${{ github.event.inputs.mode }}" = "recover-git" ]; then
+            npx nx release --skip-publish
           else
             npx nx release --yes
           fi
@@ -159,35 +182,89 @@ jobs:
         #
         # ADR-0102 (2026-09-06) removed the push described above — see the
         # Release and Publish step's comment — and moved it to a step below
-        # this one, gated on this one passing. Keep both: this step is
-        # detection (an independent query against the actual registry, not
-        # just trusting `nx release`'s exit code, and tolerant of the read-
-        # after-write lag handled by the retry loop below); the push step is
-        # prevention (origin cannot advance past what this step confirmed npm
-        # has). Detection alone does not undo a push that already happened —
-        # that is the six-releases failure this step was added for in the
-        # first place — so removing the push step as "redundant" with this
-        # one would silently reopen that exact gap. Removing this step would
-        # leave the push step trusting `nx release`'s own exit code alone,
-        # which the read-after-write-lag incident below already showed is not
-        # always sufficient.
+        # this one, gated on this one passing.
         #
-        # Retry added 2026-09-06 after run 34023488530: a `publish-only` run
-        # published all five packages successfully, then this step queried npm
-        # seconds later and got the pre-publish version back — npm's read path
-        # is eventually consistent, and the write hadn't propagated to the
-        # replica this check happened to hit yet. The identical script, run
-        # moments later, saw the correct version. That is read-after-write
-        # lag, not the failure this step exists to catch, so a single query is
-        # too impatient to trust. check-release-drift.mjs already tells the
-        # two failure modes apart — an unreachable registry exits 0 (skipped,
-        # not evidence of sync), so only a real [DRIFT] report (exit 1) drives
-        # a retry here; this loop cannot turn "unreachable" into a failure.
-        # Three attempts, 15s apart (~30s total, plus each script's own
-        # runtime), is comfortably above the lag observed above without
-        # sitting on a genuinely broken publish for long. The last attempt's
-        # exit code is the step's result — if it's still drift after three
-        # tries, this fails, exactly as before.
+        # Does the push still need gating on this independent read, now that
+        # `nx release`'s own exit code separately covers a failed publish?
+        # Investigated 2026-09-12 after run 34702586156 (a genuinely
+        # successful `publish-only` run that this step nonetheless failed,
+        # because npm's read replica hadn't caught up within the old 30s
+        # budget — see the retry-budget paragraph below). Read from the
+        # installed Nx 23.2.0 source: `publish.js`'s
+        # `releasePublishCLIHandler` sets its exit code from
+        # `taskResults[project].code`, the literal exit code of the
+        # `nx-release-publish` executor's own `npm publish` process for that
+        # project — the client's read of npm's response to the PUT on the
+        # registry's primary write path, not a guess or a cached value. A GET
+        # a moment later (`npm view`, what check-release-drift.mjs runs) can
+        # legitimately hit a stale read replica; the PUT's own response
+        # cannot, because it *is* the write. So for the two modes that
+        # actually publish in this run (`release`, `publish-only`), the exit
+        # code above is already the stronger signal, and gating push on a
+        # second, independently-lagging query adds a false-failure mode
+        # (proven twice — run 34023488530 and run 34702586156) without
+        # closing a gap the exit code leaves open.
+        #
+        # That argument does NOT extend to `recover-git`. Its whole point is
+        # to run without publishing (see its step's comment), so its exit
+        # code reflects only local version/commit/tag bookkeeping — it says
+        # nothing about npm's state this run. If its recomputed version
+        # doesn't match what npm already has (e.g. new conventional commits
+        # landed on main between the original failure and the recovery run,
+        # so `--skip-publish` resolves a *different* next version than the
+        # one npm actually has), pushing on the exit code alone would push a
+        # tag for a version npm was never confirmed to have — silently
+        # recreating the exact defect ADR-0102 exists to prevent, this time
+        # self-inflicted by the recovery tool. For that mode this read-back is
+        # the only confirmation available, not a redundant second one.
+        #
+        # The push step below is shared across all three modes
+        # (`publish-only` skips it entirely; `release` and `recover-git` both
+        # reach it). Splitting the gate per mode — ungated for `release`,
+        # still gated for `recover-git` — would need either two push steps or
+        # mode-conditional step ordering, to save skipping a read-back that,
+        # once its retry budget actually matches observed npm lag (below),
+        # rarely blocks a real success anyway. That complexity buys little,
+        # so the gate stays uniform across all three modes and only its retry
+        # budget changes below; `recover-git` is the cheap escape hatch for
+        # the cases this step still legitimately catches (real, persistent
+        # drift surviving the widened budget), replacing the by-hand
+        # `nx release --skip-publish` + manual push used to resolve today's
+        # incident.
+        #
+        # Keep both steps: this one is detection (an independent query
+        # against the actual registry — the only signal at all for
+        # `recover-git`, and tolerant of read-after-write lag via the retry
+        # loop below); the push step is prevention (origin cannot advance
+        # past what this step confirmed npm has). Detection alone does not
+        # undo a push that already happened — that is the six-releases
+        # failure this step was added for in the first place — so removing
+        # the push step as "redundant" with this one would silently reopen
+        # that exact gap.
+        #
+        # Retry budget widened 2026-09-12 — the old one was demonstrably too
+        # impatient. Added 2026-09-06 after run 34023488530: a `publish-only`
+        # run published all five packages successfully, then this step
+        # queried npm seconds later and got the pre-publish version back; the
+        # identical script, run moments later, saw the correct version. That
+        # incident set the original budget at three attempts 15s apart (~30s
+        # total). Run 34702586156 (2026-09-12) blew straight through it:
+        # three attempts 15s apart all still saw the pre-publish version, and
+        # npm only served the real one "a few minutes" later — an order of
+        # magnitude past what the first incident's "seconds... moments"
+        # implied, so a budget sized to the first incident could not survive
+        # the second. New budget: 6 attempts, exponential backoff from 20s,
+        # doubling, capped at 300s (20/40/80/160/300s between the 6
+        # attempts) — 600s (10 minutes) of sleep alone, ~20x the old total,
+        # comfortably past "a few minutes" with room to spare, while this job
+        # sets no `timeout-minutes` of its own (GitHub's default is 360).
+        # check-release-drift.mjs already tells the two failure modes apart —
+        # an unreachable registry exits 0 (skipped, not evidence of sync), so
+        # only a real [DRIFT] report (exit 1) drives a retry here; this loop
+        # cannot turn "unreachable" into a failure. The last attempt's exit
+        # code is the step's result — if it's still drift after all attempts,
+        # this fails, exactly as before, now with far more room to rule out
+        # lag first.
         #
         # Exit 0 is not, by itself, success: check-release-drift.mjs uses it
         # for two different outcomes — genuinely in sync, or "[SKIP] registry
@@ -204,14 +281,15 @@ jobs:
         # ADR-0094) and the step passes.
         run: |
           set +e  # manual exit-code handling below; do not let errexit race ahead of the SKIP/DRIFT inspection
-          attempts=3
-          delay=15
+          attempts=6
+          delay=20
+          max_delay=300
           drift_seen=false
           drift_attempt=""
           status=1
 
           for attempt in $(seq 1 "$attempts"); do
-            echo "::group::check:release-drift — attempt $attempt of $attempts"
+            echo "::group::check:release-drift — attempt $attempt of $attempts (next delay if drift: ${delay}s)"
             output="$(npm run check:release-drift 2>&1)"
             status=$?
             echo "$output"
@@ -235,6 +313,10 @@ jobs:
             if [ "$attempt" -lt "$attempts" ]; then
               echo "check:release-drift reported drift on attempt $attempt of $attempts (likely npm read-after-write lag) — retrying in ${delay}s."
               sleep "$delay"
+              delay=$(( delay * 2 ))
+              if [ "$delay" -gt "$max_delay" ]; then
+                delay=$max_delay
+              fi
             fi
           done
 
@@ -244,15 +326,17 @@ jobs:
       - name: Push the release commit and tag(s)
         if: github.event.inputs.mode != 'publish-only'
         # The only step in this job that touches the remote. Everything above is
-        # local: `nx release --yes` versions, writes changelogs, commits and tags
-        # on this runner's disposable checkout, and the drift check above queries
-        # npm, not git. If either step failed, this step never runs (GitHub
-        # Actions stops the job at the first failing step, and neither step above
-        # is marked `if: always()`), so the commit and tag(s) this run made are
+        # local: `nx release --yes` (or `--skip-publish` for `recover-git`)
+        # versions, writes changelogs, commits and tags on this runner's
+        # disposable checkout, and the drift check above queries npm, not git.
+        # If either step failed, this step never runs (GitHub Actions stops
+        # the job at the first failing step, and neither step above is marked
+        # `if: always()`), so the commit and tag(s) this run made are
         # discarded with the runner — origin never sees them, and can therefore
         # never run ahead of what npm actually serves. That is the prevention half
         # of ADR-0102; the step above is the detection half — see its comment for
-        # why both stay.
+        # why both stay, and for why the gate stays uniform across `release` and
+        # `recover-git` rather than being reordered per mode.
         #
         # `--follow-tags` is exactly the command `nx release`'s own git push used
         # to run (before ADR-0102 removed it from that step): only the current
@@ -265,4 +349,9 @@ jobs:
         # publish` alone does no git operations at all — see its own step's
         # comment), so it has nothing of its own to push; the `if:` above keeps
         # its recovery-path behaviour byte-for-byte what it was before ADR-0102.
+        # `recover-git` does version/commit/tag (via `--skip-publish`, see the
+        # Release and Publish step's comment) and is not `publish-only`, so the
+        # same `if:` already reaches this step for it without any change here —
+        # gated, like `release`, on the drift check above having confirmed npm
+        # already has the version this step is about to push.
         run: git push --follow-tags --no-verify --atomic
