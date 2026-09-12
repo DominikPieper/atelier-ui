@@ -727,6 +727,15 @@ Two rules:
   Before believing a green result, ask whether the output is as long as a real run's would be;
   that one glance has now caught this twice.
 
+**Third instance, same day, from the other direction.** `cmd > log 2>&1; echo "exit: $?"` run
+in the background: the harness reported _the background command_ as exit 0, because the last
+thing the compound line does is a successful `echo`. The nx e2e it wrapped had exited 1. The
+shape is now familiar enough to state as a rule: **the moment a command is wrapped — in a
+pipe, a subshell, a `; echo $?`, a background runner — the number the wrapper reports is about
+the wrapper.** The `; echo $?` idiom is still the right one, because it _writes the real code
+down_; just remember that the number to read is the one in the output, never the one the
+harness prints beside the task.
+
 ## 2026-09-12 — Run the gates the change can break, not every gate there is
 
 Handing a subagent an eight-gate proof list for a change that touches four files, owner's
