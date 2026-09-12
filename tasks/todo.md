@@ -71,43 +71,45 @@ Ranked; each carries why it's worth doing next rather than later.
       workflow of its own. Everything below is scoped by that.
 
       Findings the decisions rest on, each verified by reading the code:
-          - The CLI already enforces one framework (`bin/index.ts:15-16, :76-80, :113-123`);
-            only the preset schema still takes a comma list, and that path is reachable from
-            `preset.spec.ts` alone — never from the CLI, the docs, `workshop/`, or the e2e
-            (which loops frameworks and passes them one at a time).
-          - `@atelier-ui/<fw>` is installed as `latest` (`preset.ts`, the three
-            `deps[...] = 'latest'` lines). All five packages release in lockstep from the
-            `libraries` group (all 0.2.43 today), so two attendees scaffolding on either side
-            of a publish get different component code in the same room.
-          - The example story is a single `Default` with no `play` and no per-variant story —
-            against ADR-0121's "the stories are the claims", which is the doctrine the
-            workshop teaches. `check:stories` therefore renders exactly one story, and an
-            agent copying the local pattern copies the wrong one.
-          - The generated `.mcp.json` is a strict subset of this repo's own: no `uianatomy`,
-            and no `angular-cli` when Angular is the chosen framework.
-          - Nothing under `.claude/` is generated except the four third-party
-            `storybookjs/mcp` skills the post-generator installs. No settings file, so every
-            session re-asks permission for `npx nx …` and `npm run check:*`, and each MCP
-            server needs approving by hand. Keys verified against the installed CLI
-            (2.1.269): `enableAllProjectMcpServers`, `enabledMcpjsonServers`,
-            `disabledMcpjsonServers`, `includeCoAuthoredBy`, `extraKnownMarketplaces`,
-            `enabledPlugins` all exist; hooks receive the edited path as stdin JSON at
-            `.tool_input.file_path`.
-          - The plugin route was measured as an alternative to vendoring and rejected for the
-            room: a plugin from an external source that only the project's
-            `.claude/settings.json` enables does not load until each user installs it
-            (documented behaviour since 2.1.195). Vendored files have no such step.
+                      - The CLI already enforces one framework (`bin/index.ts:15-16, :76-80, :113-123`);
+                        only the preset schema still takes a comma list, and that path is reachable from
+                        `preset.spec.ts` alone — never from the CLI, the docs, `workshop/`, or the e2e
+                        (which loops frameworks and passes them one at a time).
+                      - `@atelier-ui/<fw>` is installed as `latest` (`preset.ts`, the three
+                        `deps[...] = 'latest'` lines). All five packages release in lockstep from the
+                        `libraries` group (all 0.2.43 today), so two attendees scaffolding on either side
+                        of a publish get different component code in the same room.
+                      - The example story is a single `Default` with no `play` and no per-variant story —
+                        against ADR-0121's "the stories are the claims", which is the doctrine the
+                        workshop teaches. `check:stories` therefore renders exactly one story, and an
+                        agent copying the local pattern copies the wrong one.
+                      - The generated `.mcp.json` is a strict subset of this repo's own: no `uianatomy`,
+                        and no `angular-cli` when Angular is the chosen framework.
+                      - Nothing under `.claude/` is generated except the four third-party
+                        `storybookjs/mcp` skills the post-generator installs. No settings file, so every
+                        session re-asks permission for `npx nx …` and `npm run check:*`, and each MCP
+                        server needs approving by hand. Keys verified against the installed CLI
+                        (2.1.269): `enableAllProjectMcpServers`, `enabledMcpjsonServers`,
+                        `disabledMcpjsonServers`, `includeCoAuthoredBy`, `extraKnownMarketplaces`,
+                        `enabledPlugins` all exist; hooks receive the edited path as stdin JSON at
+                        `.tool_input.file_path`.
+                      - The plugin route was measured as an alternative to vendoring and rejected for the
+                        room: a plugin from an external source that only the project's
+                        `.claude/settings.json` enables does not load until each user installs it
+                        (documented behaviour since 2.1.195). Vendored files have no such step.
 
-  - [ ] **S1 — one framework in the schema, not a list.** `framework` as an enum
+  - [x] **S1 — one framework in the schema, not a list — done 2026-09-12** (`d4b1cfb`,
+        ADR-0134; nx test 122, lint, build with all 32 templates in `dist/`, CLI test 21).
+        `framework` as an enum
         (`angular|react|vue`) with an `x-prompt`, `frameworks` dropped; `preset.ts` loses
         `frameworks.indexOf(...)` port arithmetic (Storybook is always 6006), the
         `primaryFramework = frameworks[0]` narrowing, the multi-entry `.mcp.json` loop and
         the per-framework fan-out in `buildStylelintConfig` and the generated `nx.json`
         inputs. `bin/index.ts` passes `framework`. `preset.spec.ts`'s 14 multi-framework
         call sites collapse. Ports 6007/6008 disappear with the code that produced them.
-        Proof: `nx test create-workspace`, `nx lint create-workspace`,
-        `nx build create-workspace` (all ten templates in `dist/`).
-  - [ ] **S2 — reproducibility.** (a) `@atelier-ui/<fw>` pinned to the preset's own
+  - [x] **S2 — reproducibility — done 2026-09-13** (`de06988`, ADR-0135 + ADR-0136; the
+        first `play` failed for real in a generated workspace on `pointer-events: none` and
+        moved to an enabled story; e2e green per framework: angular, react, vue). (a) `@atelier-ui/<fw>` pinned to the preset's own
         version, read from its `package.json` at generate time — the e2e's verdaccio
         publishes the matching local tarballs, so the pin resolves there too. (b)
         `uianatomy` always in the generated `.mcp.json`; `angular-cli` when the framework
@@ -119,7 +121,9 @@ Ranked; each carries why it's worth doing next rather than later.
         package-imported is what keeps them so. (d) `docs/src/pages/workshop.astro:44-73`
         swept in the same change: its hand-maintained `.mcp.json` copy is already drifted
         (`figma-console-mcp@latest` there, `1.40.0` in the preset).
-  - [ ] **S3 — the workspace is set up for Claude Code.** Generated `.claude/settings.json`
+  - [x] **S3 — the workspace is set up for Claude Code — done 2026-09-13** (`e277204`;
+        nx test 154, build with the three new templates in `dist/`, and the hook run for
+        real against eight stdin payloads — exit 0 in every case). Generated `.claude/settings.json`
         with a `permissions.allow` list covering `npx nx …`, `npm run …`, `npx storybook …`
         and `npx playwright …`, plus `enableAllProjectMcpServers: true`; a `PostToolUse`
         hook on `Edit|Write` that formats the edited file (path from stdin JSON) and runs
@@ -151,6 +155,17 @@ Ranked; each carries why it's worth doing next rather than later.
         name — which is why `unitTestRunner: 'none'` was passed in the first place. The
         Angular half is the risky one (`@analogjs/vitest-angular`) and gets its own real
         scaffold run, not an in-memory Tree.
+  - [ ] **S5a — the Figma file key the attendee actually owns.** Owed from the same
+        owner decision as S1 and not delivered with it: `figma:snapshot` ships with a
+        literal `<YOUR_FIGMA_FILE_KEY>` placeholder because the preset has only a boolean
+        `figmaMcp` option, and `QMnDD8uZQPldPrlCwZZ58T` is _this_ repo's file, not the
+        attendee's. A `figmaFile` option on the preset and a `--figma-file` flag plus
+        prompt on the CLI (asked only when the Figma MCP was accepted) put the right key
+        into the generated script at scaffold time. This matters more now than when it was
+        first noted: the cohort duplicates the Atelier file into their own drafts on Day 2,
+        so every attendee has a different key, and the placeholder is the first thing that
+        breaks.
+
   - [ ] **S6 — the scaffold becomes the cohort environment (revises ADR-0084).** Today's
         split is clone-for-the-cohort, scaffold-for-the-self-serve-reader, and the
         curriculum names three things the scaffold does not have: `plan/big-picture.md`'s
