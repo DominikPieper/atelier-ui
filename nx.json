@@ -31,6 +31,17 @@
         "{workspaceRoot}/tools/eslint-rules/**/*"
       ]
     },
+    "stylelint": {
+      "cache": true,
+      "inputs": [
+        "default",
+        "^default",
+        "{workspaceRoot}/stylelint.config.mjs",
+        "{workspaceRoot}/tools/stylelint-rules/**/*",
+        "{workspaceRoot}/libs/create-workspace/src/generators/preset/files/styles/tokens.css",
+        { "externalDependencies": ["stylelint"] }
+      ]
+    },
     "@angular/build:unit-test": {
       "cache": true,
       "inputs": ["default", "^production"]

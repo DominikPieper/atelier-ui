@@ -29,6 +29,12 @@
         "command": "astro preview --port 4300",
         "cwd": "docs"
       }
+    },
+    "stylelint": {
+      "executor": "nx:run-commands",
+      "options": {
+        "command": "stylelint 'docs/src/styles/global.css' 'docs/src/components/*.astro' --config stylelint.config.mjs"
+      }
     }
   }
 }
