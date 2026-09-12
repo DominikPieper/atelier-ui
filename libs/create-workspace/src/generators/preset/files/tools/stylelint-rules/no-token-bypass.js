@@ -144,7 +144,7 @@ const messages = stylelint.utils.ruleMessages(ruleName, {
   stale: (key) =>
     `[STALE-EXEMPT] TOKEN_BYPASS_EXEMPT lists '${key}', but no stylesheet under the configured componentRoot has that literal any more. Remove the entry.`,
   invalidAllowlists: (allowlistsFile, reason) =>
-    `[INVALID-ALLOWLISTS] '${allowlistsFile}' ${reason} A supplied allowlistsFile must actually export it — a missing or misspelled export is a broken configuration, not the documented empty default (which only applies when allowlistsFile is omitted entirely).`,
+    `[INVALID-ALLOWLISTS] '${allowlistsFile}' ${reason}. A supplied allowlistsFile must actually export it — a missing or misspelled export is a broken configuration, not the documented empty default (which only applies when allowlistsFile is omitted entirely).`,
 });
 
 const meta = {

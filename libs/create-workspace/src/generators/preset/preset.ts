@@ -248,6 +248,18 @@ const TYPESCRIPT_VERSION = '6.0.3';
 // scaffold has none.
 const STYLELINT_VERSION = '17.15.0';
 
+// Formatting enforcement (measured 2026-09-12 against a real workspace
+// generated through this preset via a local verdaccio, per
+// tasks/todo.md — not assumed from Nx's docs): a freshly `create-nx-workspace`'d
+// tree declares no `prettier` devDependency and writes no `.prettierrc` — this
+// monorepo's own ADR-0127 baseline ("configured and never enforced") does not
+// even get as far as "configured" here, it has to be added from scratch. Root
+// package.json's own declaration (`~3.9.6`) is already a tight tilde, not the
+// wide caret range some of this file's other *_VERSION constants have to
+// narrow — package-lock.json resolves it to the same 3.9.6, so there's no
+// "declared vs. actually resolved" gap to reconcile.
+const PRETTIER_VERSION = '~3.9.6';
+
 // Browser-mode Storybook tests (owner correction, 2026-09-10, to ADR-0123's
 // "no test runner" decision — see the dated correction on that record).
 // Every scaffolded app gets its own vitest.config.ts + storybook-test target,
@@ -829,6 +841,18 @@ export async function presetGenerator(
     }
   }
 
+  // ─── Prettier (formatting enforcement) ───────────────────────────────────
+  // Measured 2026-09-12 (tasks/todo.md, "A. Formatting enforcement"): a
+  // fresh `create-nx-workspace` tree ships neither a `prettier`
+  // devDependency nor a `.prettierrc` — this is the ADR-0127 problem before
+  // even the "configured" half exists, so both are written here rather than
+  // assumed present. Content is byte-identical to this monorepo's own
+  // `.prettierrc` — no reason for a workshop attendee to start from a
+  // different formatting convention than the repo whose components they're
+  // consuming.
+  console.log(`\n◇ Wiring Prettier…`);
+  writeJson(tree, '.prettierrc', { singleQuote: true });
+
   // ─── Stylelint (ported CSS-discipline rules, ADR-0130) ───────────────────
   console.log(`\n◇ Wiring stylelint (ported CSS-discipline rules)…`);
 
@@ -1023,6 +1047,13 @@ Key tokens:
 - When custom styling is needed, use --ui-color-* and --ui-spacing-* tokens
 - Do not install other UI component libraries alongside Atelier
 - Do not add inline hex colors or hardcoded spacing values
+
+## Formatting
+
+Prettier is configured (\`.prettierrc\`, \`{ singleQuote: true }\`): \`npm run format\`
+(\`prettier --write .\`) and \`npm run check:format\` (\`prettier --check .\`). The
+scaffold itself is already Prettier-clean — \`check:format\` passes right after
+\`npm install\`, before you've written a line of your own.
 
 ## Apps
 
@@ -1228,15 +1259,22 @@ file exports). The Desktop Bridge covers creation and inspection without a token
     stylelint: STYLELINT_VERSION,
   };
 
+  // Formatting enforcement — see the "Prettier" section above for why this
+  // is written at all.
+  const prettierDevDeps: Record<string, string> = {
+    prettier: PRETTIER_VERSION,
+  };
+
   // Install selected @atelier-ui/* packages (dependencies) and Storybook +
   // the contract loop's own tools + the vitest browser-mode tooling +
-  // stylelint (devDependencies, exact pins — see the *_VERSION constants
-  // above)
+  // stylelint + prettier (devDependencies, exact pins — see the *_VERSION
+  // constants above)
   const installTask = addDependenciesToPackageJson(tree, deps, {
     ...storybookDevDeps,
     ...contractLoopDevDeps,
     ...viteFrameworkDevDeps,
     ...stylelintDevDeps,
+    ...prettierDevDeps,
   });
 
   // Remove the preset package itself — create-nx-workspace adds it automatically
@@ -1275,6 +1313,35 @@ file exports). The Desktop Bridge covers creation and inspection without a token
     // Ported CSS-discipline rules (ADR-0130). Identical to the monorepo's own
     // root package.json script.
     pkg.scripts['check:stylelint'] = 'nx run-many -t stylelint';
+    // Formatting enforcement. Deliberately this monorepo's own
+    // `prettier --write .` / `prettier --check .` shape, not `nx format:*` —
+    // measured 2026-09-12 against a real generated workspace, two distinct
+    // failure modes:
+    //   1. Unconditional, on the pristine, untouched scaffold: with no
+    //      formatter resolvable in node_modules, `nx format:check` exits 0
+    //      printing "No formatter configured" — a silent pass before any git
+    //      logic even runs. Worth keeping in mind even though this preset
+    //      now installs prettier: the tool's own failure mode is "nothing is
+    //      configured, so nothing is wrong", not a loud error.
+    //   2. Conditional: once prettier is installed, `nx format:check`
+    //      un-flagged does NOT silently pass immediately after scaffolding —
+    //      `git init` stages files without committing, so the `main` ref
+    //      doesn't resolve yet, Nx catches that specific git failure and
+    //      falls back to an all-files scan, correctly reporting every
+    //      unformatted file with exit 1 (after an alarming
+    //      `Command failed: ... fatal: ambiguous argument 'main'` on
+    //      stderr). The silent zero-file pass only appears once the
+    //      attendee makes their own first commit, putting `main` and `HEAD`
+    //      at the same revision — the steady state a workspace reaches
+    //      within minutes of scaffolding, and the one `nx format:check`
+    //      un-flagged reads as "nothing changed, nothing to check".
+    // `prettier --check .` has neither failure mode: it always scans the
+    // whole tree (honouring .gitignore's node_modules/dist/.nx exclusions
+    // already, so no .prettierignore is needed), and if prettier were ever
+    // missing it fails loudly rather than reporting a silent pass. A script
+    // an attendee runs unmodified should not depend on remembering `--all`.
+    pkg.scripts.format = 'prettier --write .';
+    pkg.scripts['check:format'] = 'prettier --check .';
     return pkg;
   });
 
@@ -1322,6 +1389,12 @@ npm install
 npx playwright install chromium   # one-time — needed by npm run check:stories
 npx nx serve workshop-${frameworks[0]}
 \`\`\`
+
+## Formatting
+
+Prettier is configured (\`.prettierrc\`): \`npm run format\` (\`prettier --write .\`) and
+\`npm run check:format\` (\`prettier --check .\`). The scaffold is already
+Prettier-clean out of the box — \`check:format\` passes right after \`npm install\`.
 
 ## Storybook
 

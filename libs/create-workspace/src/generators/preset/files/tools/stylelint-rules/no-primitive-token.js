@@ -129,7 +129,7 @@ const messages = stylelint.utils.ruleMessages(ruleName, {
   stale: (key, kind) =>
     `[STALE] PRIMITIVE_EXEMPTIONS carries '${key}' (${kind}) but no component CSS under the configured componentRoot references it any more. Remove the entry.`,
   invalidAllowlists: (allowlistsFile, reason) =>
-    `[INVALID-ALLOWLISTS] '${allowlistsFile}' ${reason} A supplied allowlistsFile must actually export both — a missing or misspelled export is a broken configuration, not the documented empty default (which only applies when allowlistsFile is omitted entirely).`,
+    `[INVALID-ALLOWLISTS] '${allowlistsFile}' ${reason}. A supplied allowlistsFile must actually export both — a missing or misspelled export is a broken configuration, not the documented empty default (which only applies when allowlistsFile is omitted entirely).`,
 });
 
 const meta = {

@@ -116,6 +116,37 @@ Alternatives considered:
   `libs/create-atelier-ui-workspace/e2e/cli.e2e.mjs` is where it would live permanently;
   whether stylelint belongs in that e2e is an open item in `tasks/todo.md`, deliberately
   not decided by the change that made it provable.
+- **Extended 2026-09-12, same question asked of formatting and of types.** Two candidates
+  remained after the rules, and measuring them against a really generated workspace — not
+  against Nx's documentation — settled both differently.
+
+  **Formatting ships.** A fresh `create-nx-workspace` tree declares no `prettier`
+  devDependency and writes no `.prettierrc`: this is ADR-0127's problem one stage earlier,
+  where that record found Prettier _configured and never enforced_, a scaffold does not reach
+  "configured" at all. So the preset writes both, plus `format` and `check:format`. It uses
+  this repo's own `prettier --write .` / `prettier --check .` shape rather than `nx format:*`,
+  and the reason is a measured false-green: with no formatter resolvable, `nx format:check`
+  **exits 0** printing "No formatter configured", which is a silent pass on an untouched tree.
+  Once prettier is installed a second mode appears, and it is narrower than it first looked —
+  the silent zero-file pass needs the attendee's own first commit, with `main` and `HEAD` at
+  one revision; immediately after scaffolding the `main` ref does not resolve, Nx falls back
+  to an all-files scan and correctly fails. That narrowing came from a reviewer reproducing
+  the opposite result and asking for the commands, which is the only reason this paragraph
+  states a condition instead of a broader claim that does not hold. `prettier --check .` has
+  neither mode, and needs no `.prettierignore` — Prettier 3 reads `.gitignore` by default,
+  verified in a fixture rather than from release notes.
+
+  **A `types` script does not ship, and the measurement is why.** Neither generated framework
+  declares a `plugins` array or exposes a `typecheck` target, so `nx run-many -t typecheck`
+  would have had nothing to run. But `nx build` already type-checks the example story —
+  proven by injecting a real type error into the generated story file and watching the build
+  fail with `TS2322` on Angular and React. That is the defect class `check:types` exists for —
+  its own header records the story file that declared `props:` twice, where the later key won
+  and the earlier one had been dead since it was written — and it is already covered. What remains uncovered is
+  `.storybook/*` itself, for every framework, and closing it means inventing a tsconfig the
+  preset does not write for two of the three. Left open in `tasks/todo.md` rather than filled
+  with a guess.
+
 - **Verified as of this record:** a scaffold-shaped fixture with no `allowlists.js` and no
   `allowlistsFile` option, where the plugin loads and the three rules each fire once and
   return exit 0 once the declarations are rewritten to tokens; the real generated workspace

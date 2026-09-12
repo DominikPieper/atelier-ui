@@ -1136,6 +1136,73 @@ describe('preset generator', () => {
     ).rejects.toThrow('workshop-angular/project.json');
   });
 
+  // ─── Prettier (formatting enforcement) ─────────────────────────────────────
+  //
+  // Measured 2026-09-12 against a real workspace generated through this
+  // preset via a local verdaccio (tasks/todo.md, "A. Formatting
+  // enforcement"): a fresh `create-nx-workspace` tree has neither a
+  // `prettier` devDependency nor a `.prettierrc`. These tests assert the
+  // preset writes both, plus the two scripts, in this monorepo's own
+  // `prettier --write .` / `prettier --check .` shape rather than
+  // `nx format:*` — chosen on two distinct, separately measured failure
+  // modes of the latter: (1) with no formatter installed at all,
+  // `nx format:check` exits 0 printing "No formatter configured" — a
+  // silent pass on the untouched scaffold, before any git logic runs; (2)
+  // once prettier is installed, `nx format:check` un-flagged does NOT
+  // silently pass right after scaffolding (`git init` stages without
+  // committing, so it falls back to an all-files scan and correctly
+  // reports every unformatted file, exit 1) — the silent zero-file pass
+  // only appears once the attendee's own first commit puts `main` and
+  // `HEAD` at the same revision, which is the state a workspace reaches
+  // within minutes either way.
+
+  it("writes .prettierrc with singleQuote: true, matching this monorepo's own", async () => {
+    await presetGenerator(tree, {
+      name: 'my-workspace',
+      frameworks: 'angular',
+    });
+
+    const prettierrc = readJson(tree, '.prettierrc');
+    expect(prettierrc).toEqual({ singleQuote: true });
+  });
+
+  it('adds prettier as a devDependency at the version this monorepo declares', async () => {
+    await presetGenerator(tree, {
+      name: 'my-workspace',
+      frameworks: 'angular',
+    });
+
+    const pkg = readJson(tree, 'package.json');
+    expect(pkg.devDependencies['prettier']).toBe('~3.9.6');
+  });
+
+  it('adds format and check:format scripts in the prettier --write/--check shape, not nx format:*', async () => {
+    await presetGenerator(tree, {
+      name: 'my-workspace',
+      frameworks: 'angular',
+    });
+
+    const pkg = readJson(tree, 'package.json');
+    expect(pkg.scripts.format).toBe('prettier --write .');
+    expect(pkg.scripts['check:format']).toBe('prettier --check .');
+  });
+
+  it('CLAUDE.md and README document the Formatting scripts', async () => {
+    await presetGenerator(tree, {
+      name: 'my-workspace',
+      frameworks: 'angular',
+    });
+
+    const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
+    expect(md).toContain('## Formatting');
+    expect(md).toContain('check:format');
+    expect(md).toContain('.prettierrc');
+
+    const readme = tree.read('README.md', 'utf-8') ?? '';
+    expect(readme).toContain('## Formatting');
+    expect(readme).toContain('check:format');
+  });
+
   // ─── Stylelint (ported CSS-discipline rules, ADR-0130) ─────────────────────
 
   it('writes the ported stylelint rule files, byte-identical clones', async () => {
