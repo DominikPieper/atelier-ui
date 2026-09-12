@@ -1892,6 +1892,22 @@ describe('preset generator', () => {
     expect(allow).toContain('Bash(npx playwright install *)');
   });
 
+  it('.claude/settings.json asks before `npx nx migrate` despite the broad `npx nx *` allow wildcard', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
+
+    const settings = readJson(tree, '.claude/settings.json');
+    // The broad allow wildcard stays untouched — narrowing happens via ask,
+    // not by editing the allow entry itself.
+    expect(settings.permissions.allow).toContain('Bash(npx nx *)');
+    const ask: string[] = settings.permissions.ask;
+    expect(Array.isArray(ask)).toBe(true);
+    // Both the bare form (no version argument) and the with-args form, so a
+    // trailing-space gap in the wildcard form can't let a bare invocation
+    // through.
+    expect(ask).toContain('Bash(npx nx migrate)');
+    expect(ask).toContain('Bash(npx nx migrate *)');
+  });
+
   it('.claude/settings.json wires the PostToolUse hook to format-edited.sh via $CLAUDE_PROJECT_DIR', async () => {
     await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
 
@@ -1950,6 +1966,36 @@ describe('preset generator', () => {
     expect(agent).not.toMatch(/tools:.*\b(Edit|Write)\b/);
   });
 
+  it('writes the atelier-component skill into the workspace', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
+
+    expect(tree.exists('.claude/skills/atelier-component/SKILL.md')).toBe(true);
+    const skill =
+      tree.read('.claude/skills/atelier-component/SKILL.md', 'utf-8') ?? '';
+    expect(skill).toContain('name: atelier-component');
+  });
+
+  it.each(['angular', 'react', 'vue'] as const)(
+    'atelier-component skill has both placeholders fully substituted for %s, with no `<app>`/`<framework>` token left',
+    async (framework) => {
+      await presetGenerator(tree, { name: 'my-workspace', framework });
+
+      const skill =
+        tree.read('.claude/skills/atelier-component/SKILL.md', 'utf-8') ?? '';
+      // Neither placeholder token survives anywhere in the rendered file —
+      // `<name>` (the unrelated, per-component placeholder) is untouched and
+      // deliberately excluded from this assertion.
+      expect(skill).not.toContain('<app>');
+      expect(skill).not.toContain('<framework>');
+      expect(skill).toContain(`workshop-${framework}`);
+      expect(skill).toContain(`@atelier-ui/${framework}`);
+      expect(skill).toContain(`workshop-${framework}/src/contracts/README.md`);
+      // The per-component placeholder is untouched, not collateral damage
+      // from the `<app>`/`<framework>` substitution.
+      expect(skill).toContain('<name>.contract.ts');
+    },
+  );
+
   it('appends .claude/settings.local.json to .gitignore without disturbing existing entries', async () => {
     tree.write('.gitignore', 'node_modules\ndist\n');
 
@@ -1981,6 +2027,25 @@ describe('preset generator', () => {
     expect(md).toContain('check:stories');
     expect(md).toContain("gate's result is its exit code");
   });
+
+  it.each(['true', 'false'] as const)(
+    'CLAUDE.md distinguishes the unconditional atelier-component skill from the fetched storybookjs/mcp skills (skills: %s)',
+    async (skillsFlag) => {
+      await presetGenerator(tree, {
+        name: 'my-workspace',
+        framework: 'angular',
+        skills: skillsFlag === 'true',
+      });
+
+      const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
+      expect(md).toContain('## Agent Skills');
+      expect(md).toContain('atelier-component');
+      expect(md).toContain('.claude/skills/atelier-component/SKILL.md');
+      expect(md).toContain('network fetch');
+      expect(md).toContain('no `skills: false` opt-out');
+      expect(md).toContain('unlike the four skills below');
+    },
+  );
 
   it.each(['angular', 'react', 'vue'] as const)(
     'CLAUDE.md has a Framework Idioms section for %s',

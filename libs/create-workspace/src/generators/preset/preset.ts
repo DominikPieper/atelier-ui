@@ -99,6 +99,40 @@ function storybookOutputExt(framework: Framework) {
   return framework === 'react' ? 'tsx' : 'ts';
 }
 
+// The workspace's own component skill (`.claude/skills/atelier-component/`)
+// ships as a static `files/` template — its instructions don't vary by
+// framework except for two names: the app directory (`workshop-<fw>`) and
+// the `@atelier-ui/<fw>` package/framework name. Rather than rewrite it as a
+// JS template string (like CLAUDE.md/README.md below, which vary in far more
+// places), it stays a template file with those two spots marked
+// `<app>`/`<framework>`, substituted here at generate time.
+//
+// `<app>` and `<framework>` (angle-bracket-wrapped) were chosen as the
+// substitution tokens deliberately, over inventing a new one: the skill's own
+// prose already uses the BARE words "app" and "framework" as ordinary
+// English (e.g. "one app (`workshop-<framework>`), one framework, ..." and "
+// ... two-way bindings ... for this framework"), so a substitution key of the
+// bare word would have corrupted those sentences. The angle-bracket form is
+// the one substring that appears ONLY at the seven spots meant to be filled
+// in (four `<app>`, three `<framework>`) — verified against the shipped
+// file, not assumed — and is
+// distinct from the file's other bracketed placeholder, `<name>` (a
+// component name, e.g. in `<name>.contract.ts`), which stays generic prose
+// for the reader and must NOT be substituted.
+function renderAtelierComponentSkill(
+  appName: string,
+  framework: Framework,
+): string {
+  // `.split(token).join(value)` rather than `String.prototype.replaceAll`:
+  // this package's tsconfig targets a lib below ES2021, where `replaceAll`
+  // doesn't type-check.
+  return readTemplate('claude/skills/atelier-component/SKILL.md')
+    .split('<app>')
+    .join(appName)
+    .split('<framework>')
+    .join(framework);
+}
+
 // Splices `block` (one or more object literals, as raw source text, starting
 // with a leading comma) into the flat ESLint config a framework's own
 // application generator (@nx/angular, @nx/react, @nx/vue — all invoked with
@@ -1157,6 +1191,13 @@ npm run check:stories
 
 ## Agent Skills
 
+This workspace also ships \`atelier-component\` (\`.claude/skills/atelier-component/SKILL.md\`)
+unconditionally — this generator writes it straight to disk as part of scaffolding, with no
+network fetch and no \`skills: false\` opt-out, unlike the four skills below. It runs the
+Figma → contract → stories → checks loop scoped to what this workspace can actually check —
+see the skill itself, or ask Claude Code to use it, for the loop and \`check:contracts\`'s
+finding codes.
+
 ${
   skillsEnabled
     ? `The scaffold attempted to install four \`storybookjs/mcp\` skills for Claude
@@ -1603,6 +1644,29 @@ Browse components at ${SITE_URL}
         'Bash(git diff *)',
         'Bash(git log *)',
       ],
+      ask: [
+        // `Bash(npx nx *)` above pre-approves every `nx` subcommand, `migrate`
+        // included — the wildcard sits right after the subcommand position,
+        // the exact placement the CLI's own settings validator warns matches
+        // "any options inserted at that position" without a prompt. `nx
+        // migrate` is the same hazard class as the Storybook
+        // `automigrate`/`upgrade` commands excluded two entries above: it
+        // rewrites package.json, fetches migration scripts from the npm
+        // registry, and then runs them. Two entries (bare and with args)
+        // rather than one wildcard, so a bare `npx nx migrate` (no version
+        // argument) can't slip through a trailing-space gap in the wildcard
+        // form. A narrower `ask` rule wins over a broader matching `allow`
+        // entry — verified empirically against the installed 2.1.269 CLI, not
+        // assumed: the same command matching both a `Bash(echo *)` allow rule
+        // and an exact-match `ask` rule was routed to a permission prompt
+        // (denied when prompts are disabled); with the `ask` rule removed the
+        // identical command ran under the `allow` rule alone. So this narrows
+        // just `migrate` back to asking for confirmation every time, without
+        // blocking it outright and without touching the `npx nx *` wildcard
+        // itself.
+        'Bash(npx nx migrate)',
+        'Bash(npx nx migrate *)',
+      ],
     },
     hooks: {
       // Formats whatever Edit/Write just touched. `matcher` is a regex over
@@ -1658,6 +1722,17 @@ Browse components at ${SITE_URL}
   tree.write(
     '.claude/agents/component-review.md',
     readTemplate('claude/agents/component-review.md'),
+  );
+
+  // The workspace's own component skill — written unconditionally (no
+  // network, no `skills` opt-out), unlike the four storybookjs/mcp skills
+  // installSkills fetches further below. See renderAtelierComponentSkill's
+  // comment above for the `<app>`/`<framework>` substitution it performs, and
+  // CLAUDE.md's "Agent Skills" section (built above) for why this one is
+  // called out separately from those four.
+  tree.write(
+    '.claude/skills/atelier-component/SKILL.md',
+    renderAtelierComponentSkill(appName, framework),
   );
 
   // .gitignore: create-nx-workspace already writes this file (before any
