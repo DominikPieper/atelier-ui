@@ -134,6 +134,11 @@ function isConnectorActive(i: number) {
 
 <template>
   <div :class="classes">
+    <!-- Explicit role="list" is a deliberate Safari/VoiceOver workaround, not
+    a defect: .stepper-header also sets `list-style: none`, and Safari strips
+    <ol>/<ul>'s implicit `list` role once list-style is removed. The static
+    rule can't see the paired CSS. -->
+    <!-- eslint-disable-next-line vuejs-accessibility/no-redundant-roles -->
     <ol class="stepper-header" role="list" aria-label="Progress">
       <template v-for="(step, i) in steps" :key="step.id">
         <li

@@ -61,12 +61,20 @@ onUnmounted(() => clearTimers());
 </script>
 
 <template>
+  <!-- This span is a non-visual wrapper, not the interactive control: the
+  consumer slots in the real focusable/hoverable element. @focusin/@focusout
+  (not @focus/@blur — those don't bubble, so a listener on this wrapper
+  would never fire for a focus change on a *descendant* like the slotted
+  button, silently breaking the WCAG 1.4.13 keyboard/focus path) are the
+  keyboard-equivalent pair for @mouseenter/@mouseleave, and @keydown handles
+  Escape — the wrapper itself is never a tab stop and doesn't need to be. -->
+  <!-- eslint-disable-next-line vuejs-accessibility/no-static-element-interactions -->
   <span
     class="atl-tooltip-wrapper"
     @mouseenter="show"
     @mouseleave="hide"
-    @focus="show"
-    @blur="hide"
+    @focusin="show"
+    @focusout="hide"
     @keydown="onKeydown"
   >
     <slot />

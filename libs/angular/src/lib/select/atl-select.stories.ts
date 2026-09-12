@@ -43,6 +43,14 @@ const meta: Meta<AtlSelect> = {
   parameters: {
     design: figmaNode('55-92'),
     docs: { description: { component: metadata.purpose } },
+    a11y: {
+      config: {
+        rules: [
+          // a11y debt (S0, 2026-09-12): button-name — AtlSelect's CDK-overlay trigger <button> has no accessible name when `label` is omitted. Angular's Select is a custom listbox, not React/Vue's native <select> — same defect class as their `select-name` entry, different rule id because the underlying element is different — tasks/todo.md "a11y backlog"; fix, then remove.
+          { id: 'button-name', enabled: false },
+        ],
+      },
+    },
     contract,
   },
 };

@@ -212,6 +212,14 @@ function onKeydown(event: KeyboardEvent) {
       :aria-labelledby="inputId"
     >
       <template v-if="filteredOptions.length > 0">
+        <!-- This is the ARIA 1.2 "editable combobox with list autocomplete"
+        pattern: DOM focus deliberately stays on the <input> the whole time
+        (see :aria-activedescendant="activeOptionId" above), and
+        @mouseenter mirrors the same activeIndex the ArrowUp/ArrowDown
+        keydown handler already sets — so mouse and keyboard already produce
+        the same effect. The option itself is never meant to receive focus
+        or its own key handler. -->
+        <!-- eslint-disable-next-line vuejs-accessibility/interactive-supports-focus, vuejs-accessibility/mouse-events-have-key-events -->
         <li
           v-for="(option, i) in filteredOptions"
           :id="`${panelId}-option-${i}`"
@@ -237,6 +245,7 @@ function onKeydown(event: KeyboardEvent) {
         class="atl-combobox-no-results"
         role="option"
         aria-disabled="true"
+        aria-selected="false"
       >
         No results found.
       </li>

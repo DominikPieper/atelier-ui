@@ -109,6 +109,12 @@ const classes = computed(() => ['atl-tab-group', `variant-${props.variant}`]);
 
 <template>
   <div :class="classes">
+    <!-- role="tablist" is a composite-widget container, not itself a tab
+    stop: this is the ARIA APG roving-tabindex pattern — @keydown here is
+    event-delegation to move focus among the child role="tab" buttons, which
+    already carry their own roving `:tabindex="index === internalIndex ? 0
+    : -1"` below. The container deliberately stays out of the tab sequence. -->
+    <!-- eslint-disable-next-line vuejs-accessibility/interactive-supports-focus -->
     <div class="tablist" role="tablist" @keydown="onKeydown">
       <button
         v-for="(tab, index) in tabs"

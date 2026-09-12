@@ -72,6 +72,13 @@ onBeforeUnmount(() => {
 
 <template>
   <div class="atl-menu-trigger-wrapper">
+    <!-- This span is a non-visual wrapper, not the interactive control: the
+    consumer slots in a real <button> (see the stories), and its native
+    click — including the synthetic click a browser fires for Enter/Space on
+    a focused button — bubbles up to this handler. Keyboard activation
+    already works via that bubbled click; the wrapper itself needs no
+    tabindex/keydown of its own. -->
+    <!-- eslint-disable-next-line vuejs-accessibility/click-events-have-key-events, vuejs-accessibility/no-static-element-interactions -->
     <span ref="triggerRef" @click="toggle">
       <slot name="trigger" />
     </span>

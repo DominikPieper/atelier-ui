@@ -154,6 +154,37 @@ Ranked; each carries why it's worth doing next rather than later.
         itself. Decide per component whether the story or the heuristic is wrong before touching
         either.
 
+- [ ] **`AtlRadioGroup` has no accessible-name mechanism.** No `aria-label` or
+      `aria-labelledby` prop, and no story wraps it in `<fieldset><legend>`. Found 2026-09-12 by
+      the Codex cross-check during the Vue a11y work — **not** by any of the 20
+      `vuejs-accessibility` rules and not by axe's default ruleset either, so nothing in this
+      repo would have surfaced it. Likely a small API addition, and it needs Angular/React parity
+      consideration before it lands in one framework only.
+- [ ] **Where Vue's a11y coverage comes from — eslint (static) and axe (rendered).** Mirrors
+      the Angular entry above, measured 2026-09-12 against the installed axe-core's 105 rules.
+      Twelve of `eslint-plugin-vuejs-accessibility`'s twenty rules overlap axe
+      (`alt-text` ↔ `image-alt` and friends, `form-control-has-label`/`label-has-for` ↔ `label`,
+      `aria-props` ↔ `aria-valid-attr*`, `tabindex-no-positive` ↔ `tabindex`, …). **Seven have no
+      axe equivalent at all:** `aria-unsupported-elements`, `click-events-have-key-events`,
+      `interactive-supports-focus`, `mouse-events-have-key-events`, `no-autofocus`,
+      `no-redundant-roles`, `no-static-element-interactions` — four of which are the same family
+      Angular's analysis independently identified. `no-access-key` is a nominal overlap only: axe's
+      `accesskeys` checks uniqueness, the lint rule checks presence.
+      The branch-coverage argument is not theoretical here: **5 of those 7 axe-blind rules are
+      exactly the ones that fired**, and the one overlapping rule that caught a real defect
+      (`role-has-required-aria-props`, the combobox's `filteredOptions.length === 0` branch) sits
+      on a branch **no story renders**, so axe never had a chance to see it.
+- [ ] **Two suppressions that rest on platform guarantees and no repo test** (Vue, 2026-09-12).
+      The `<dialog>` Escape-close path behind the backdrop-click suppressions in `atl-chat.vue`,
+      `atl-dialog.vue` and `atl-drawer.vue`, and the native-button Enter/Space→click path behind
+      `atl-menu-trigger.vue`'s wrapper suppression. Both are standard platform behaviour and both
+      are architecturally sound — but the tooltip defect found the same day proves that a
+      confident comment is not evidence. Pin them with tests or accept them knowingly.
+- [ ] **Optional, lower priority:** `atl-dialog`, `atl-chat` and `atl-drawer` have no built-in
+      close-button affordance. Raised by the Codex cross-check: the backdrop-click suppression is
+      sound only because Escape is guaranteed, which leaves touch-only users without a first-class
+      close control.
+
 - [ ] **Five real interactions have no behaviour id at all** (found 2026-09-11 by sweeping
       for interactive affordances; ADR-0129 records why the manifest could not surface them
       itself — it locks what is already covered). Each needs a spec in all three frameworks
@@ -370,34 +401,75 @@ Ranked; each carries why it's worth doing next rather than later.
         all three previews. Negative test: a broken `play` assertion named the story and
         turned `check:stories` red; restored from a copy. Verified: Vue 242, React 216,
         Angular 229 under `CI=1`. Real CI proof lands with the next push.
-  - [ ] **a11y backlog from S0** (measured 2026-09-10 with `a11y.test: 'error'`, before
-        exemptions: **Angular 0 · React 28 · Vue 36 failing stories**). Recorded as
+  - [ ] **a11y backlog from S0** (React/Vue measured 2026-09-10 with `a11y.test: 'error'`:
+        **React 28 · Vue 36 failing stories**. Angular's own measurement did not land until
+        2026-09-12: the "Angular 0" first recorded here was zero _checks_, not zero failures —
+        `vitest.setup.ts` called `setProjectAnnotations([projectAnnotations])` without
+        `a11yAddonAnnotations`, so `a11y.test: 'error'` had no consumer and axe never ran in
+        the browser suite (found by injection: a bare `<img>` with no `alt` passed clean;
+        ADR-0122 "Corrected 2026-09-12"). Fixed — `import '@angular/compiler'` (the same
+        partial-Ivy idiom `src/test-setup.ts` already carries) plus the addon's project
+        annotations — Angular surfaced **32 failing stories** of its own, across 9 story files
+        and 10 components. Totals: **Angular 32 · React 28 · Vue 36**.) Recorded as
         `parameters.a11y.config.rules` exemptions at file or story scope, each rule id and
         reason in a comment pointing here; remove the exemption when the component or story
-        is fixed. That Angular is clean where React and Vue are not is a cross-framework
-        finding in its own right. Per rule (impact) → where; the per-story list is in the
-        exemption comments themselves:
+        is fixed. Per rule (impact) → where; the per-story list is in the exemption comments
+        themselves:
     - [ ] `select-name` (critical) — React ×6, Vue ×9: native `<select>` without an
           accessible name (Select stories, Settings Page, Showcase). Same defect as L1 above.
-    - [ ] `aria-progressbar-name` (serious) — React ×11, Vue ×9: `role=progressbar`
-          without `aria-label` when `label` is omitted. Same as L2 above; the spec leaves
-          `label` optional — decide whether the component requires it (React's Button-style
-          discriminated union) or every story passes one.
-    - [ ] `aria-required-children` (critical) — React ×6, Vue ×4: AtlChat's
-          `.messages-list[role="list"]` carries the empty-state icon/button or the
-          error-state `[role=alert]` as children. Component defect; Angular renders it
-          differently — compare before fixing.
-    - [ ] `label` (critical) — React ×4, Vue ×2: Table Kitchen Sink / Selectable
-          checkbox cells, React Input Disabled / Read Only.
+          Angular's `AtlSelect` has no native `<select>` at all — a CDK-overlay custom listbox
+          — so it never trips this rule; its own unlabeled-trigger defect is `button-name`
+          below, a different rule id for the same missing-name shape.
+    - [ ] `aria-progressbar-name` (serious) — React ×11, Vue ×9, **Angular ×21**:
+          `role=progressbar` without `aria-label` when `label` is omitted. Same as L2 above;
+          the spec leaves `label` optional — decide whether the component requires it (React's
+          Button-style discriminated union) or every story passes one. Angular: all 6
+          `AtlProgress` stories (meta-scoped), the `ManagementDashboard` cookbook demo
+          (story-scoped — same story name and cause as React's and Vue's own
+          `ManagementDashboard`), and Showcase `AllComponents`.
+    - [ ] `aria-required-children` (critical) — React ×6, Vue ×4, **Angular ×2** (6 stories,
+          2 distinct printed violations — Vitest collapses the identical Empty-group and
+          Error-group renders into one message each): AtlChat's `.messages-list[role="list"]`
+          carries the empty-state icon/button or the error-state `[role=alert]` as children.
+          Component defect — and, corrected from the assumption this line carried before
+          Angular's suite ran at all: Angular hits the **identical shape**, not a different
+          one (all 6 Drawer/Popup/Inline × Empty/Error stories, meta-scoped). Compare all
+          three frameworks together before fixing.
+    - [ ] `label` (critical) — React ×4, Vue ×2, **Angular ×9**: Table Kitchen Sink /
+          Selectable checkbox cells, React Input Disabled / Read Only. Angular: the same
+          Table Kitchen Sink / Selectable row-select checkboxes (story-scoped). Angular's
+          Table select-all header cell already carries accessible text, so — unlike React and
+          Vue — it does not also hit `empty-table-header` below.
     - [ ] `scrollable-region-focusable` (serious) — React ×1, Vue ×5: AtlCodeBlock's
           `.code-block-body` scroll container is not focusable. Already open above
-          (docs review); now measured in stories too.
-    - [ ] `label-title-only` (serious) — React ×1, Vue ×6: Combobox / Input / Select /
-          Textarea error-state inputs named by `title` only.
+          (docs review); now measured in stories too. Angular's `AtlCodeBlock` stories render
+          clean under this rule — not (yet) a cross-framework match.
+    - [ ] `label-title-only` (serious) — React ×1, Vue ×6, **Angular ×2**: Combobox / Input /
+          Select / Textarea error-state inputs named by `title` only. Angular's Input and
+          Textarea `WithErrors` stories (story-scoped) hit the same rule by a different path —
+          there is no `title` attribute anywhere in either component: axe's `title-only` check
+          (`!labelText && !!(title || ariaDescribedBy)`) treats a present `aria-describedby`
+          (here, pointing at the rendered error list) the same as a `title`, so it fires anyway.
     - [ ] `empty-table-header` (minor) — React ×2, Vue ×2: the select-all checkbox
           header cell has no text.
     - [ ] `landmark-unique` (moderate) — Vue ×2: Accordion panel, Pagination.
     - [ ] `aria-allowed-attr` (critical) — Vue ×1: tooltip-wrapped menu trigger.
+    - [ ] `button-name` (critical) — **Angular ×12, new bucket, no React/Vue counterpart**.
+          AtlSelect's CDK-overlay trigger `<button>` has no accessible name when `label` is
+          omitted (meta-scoped, ×8 stories — the architectural sibling of `select-name` above:
+          same missing-name defect, different rule id because Angular's Select isn't a native
+          `<select>`). AtlTh's sort-direction button renders only an icon glyph, no accessible
+          name (Table `Sortable` + `Kitchen Sink`, story-scoped, ×3 combined). Showcase
+          `AllComponents` (×1, both causes together).
+    - [ ] `listitem` (serious) — **Angular ×20, new bucket, no React/Vue counterpart, and
+          missing from ADR-0122's "Corrected 2026-09-12" tally** — a real gap in that
+          paragraph's count, found while writing this entry: every `<atl-breadcrumb-item>`
+          wraps its own host element around the `<li>`, so the `<li>`'s immediate DOM parent
+          is `<atl-breadcrumb-item>`, not the `<ol>` — axe's `listitem` check (distinct from
+          `aria-required-children`) fires because Angular components, unlike React's and
+          Vue's plain-DOM children, always interpose a real host element between a projected
+          child and its logical parent. All 5 `AtlBreadcrumbs` stories (meta-scoped, ×16) and
+          Showcase `AllComponents` (×4).
   - [x] **S1 — standalone docgen spike — feasible, done 2026-09-10**
         (`tasks/docgen-spike-2026-09-10.md`). Call the docgen workers Storybook itself uses
         (`@storybook/angular-vite/internal/docgen-worker`, `@storybook/vue3/internal/docgen-worker`;

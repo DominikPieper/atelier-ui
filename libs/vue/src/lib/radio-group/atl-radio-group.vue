@@ -100,6 +100,12 @@ function onKeydown(event: KeyboardEvent): void {
 </script>
 
 <template>
+  <!-- role="radiogroup" is a composite-widget container, not itself a tab
+  stop: this is the ARIA APG roving-tabindex pattern — @keydown here is
+  event-delegation to move focus among the native <input type="radio">
+  children, which are natively focusable/operable on their own. The
+  container deliberately stays out of the tab sequence. -->
+  <!-- eslint-disable-next-line vuejs-accessibility/interactive-supports-focus -->
   <div
     ref="groupRef"
     :class="classes"

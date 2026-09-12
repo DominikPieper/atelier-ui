@@ -71,6 +71,25 @@ describe('AtlTooltip', () => {
     },
   );
 
+  // WCAG 1.4.13 (Content on Hover or Focus): content shown on hover must also
+  // be reachable by keyboard. Pins down @focusin/@focusout on the wrapper —
+  // @focus/@blur don't bubble, so a listener on the wrapper span would never
+  // fire when the *slotted* button (a descendant, not the span itself)
+  // receives focus, silently breaking this for keyboard/screen-reader users
+  // while every hover-only test above kept passing.
+  it('shows tooltip when the slotted trigger receives keyboard focus', async () => {
+    const user = userEvent.setup();
+    render(AtlTooltip, {
+      props: { atlTooltip: 'Helpful hint', atlTooltipShowDelay: 0 },
+      slots: { default: '<button>Focus me</button>' },
+    });
+    await user.tab();
+    expect(document.activeElement).toBe(screen.getByText('Focus me'));
+    await waitFor(() => {
+      expect(screen.getByRole('tooltip')).toBeInTheDocument();
+    });
+  });
+
   it('applies position class', async () => {
     const user = userEvent.setup();
     render(AtlTooltip, {

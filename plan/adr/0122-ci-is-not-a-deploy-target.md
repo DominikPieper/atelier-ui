@@ -118,6 +118,41 @@ Alternatives considered:
   gate nobody can reason about; per-story exemptions with reasons keep one rule and make the
   debt visible.
 
+**Corrected 2026-09-12 (Angular's zero was zero checks, not zero failures).** Decision 4
+records "Measured before flipping, sequentially under `CI=1`: **Angular 0 failing stories**,
+React 28, Vue 36", and draws a conclusion from it — "That Angular is clean where React and Vue
+are not is itself a cross-framework finding for the backlog." Angular was not clean. axe never
+ran there.
+
+Decision 5 found and fixed one Angular gap: `vitest.storybook.config.ts` lacked
+`@analogjs/vite-plugin-angular`, so no story imported at all. There was a second, in a
+different file: `libs/angular/.storybook/vitest.setup.ts` calls
+`setProjectAnnotations([projectAnnotations])` where React's and Vue's pass
+`[a11yAddonAnnotations, projectAnnotations]`. Without the addon's project annotations,
+`parameters.a11y.test: 'error'` has no consumer in the browser-mode run. The 226 passing tests
+this record celebrates were render and `play` only.
+
+Proven 2026-09-12 by injection rather than by reading, because a suite where axe passes and a
+suite where axe never runs are indistinguishable from outside: a bare `<img>` with no `alt`
+added to one Angular story and one React story. Angular exited 0 with 238/238 passing and no
+finding; React exited 1, naming `image-alt`. Wiring the annotations then required a second
+line, `import '@angular/compiler'` — the same idiom `libs/angular/src/test-setup.ts` already
+carries for the identical partial-Ivy error — and surfaced **32 failing stories across 9 story
+files and 10 components**, on six rules: `aria-progressbar-name`, `button-name`, `label`,
+`label-title-only`, `aria-required-children` and `listitem`. Two of those are Angular-only and
+not shared with React or Vue — `listitem`, because `<li>` is wrapped by its own
+`<atl-breadcrumb-item>` host and so is never a direct child of the `<ol>`, and `button-name`,
+because Angular's `AtlSelect` is a CDK-overlay listbox with a `<button>` trigger where the
+others use a native `<select>` and trip `select-name` instead. Counted as this record counts
+elsewhere — distinct printed violation blocks, not failing stories, which are more numerous.
+
+They track the same classes this record
+recorded for React and Vue, which is the opposite of the cross-framework finding it drew.
+
+The lesson is the one this repo keeps relearning: a counter nobody asserts reads the same at
+zero-because-clean and zero-because-unchecked, and a conclusion drawn from the second is worse
+than no conclusion, because it goes into the backlog as a fact.
+
 ## Consequences
 
 - Every story in all three libraries is now a render test, an interaction test where it

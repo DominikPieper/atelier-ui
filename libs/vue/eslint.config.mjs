@@ -1,6 +1,7 @@
 // For more info, see https://github.com/storybookjs/eslint-plugin-storybook#configuration-flat-config-format
 import storybook from 'eslint-plugin-storybook';
 import pluginVue from 'eslint-plugin-vue';
+import pluginVueA11y from 'eslint-plugin-vuejs-accessibility';
 import eslintConfigPrettier from 'eslint-config-prettier';
 
 import tseslint from 'typescript-eslint';
@@ -24,9 +25,22 @@ const vueRecommended = pluginVue.configs['flat/recommended'].map((cfg) =>
   cfg.files ? cfg : { ...cfg, files: ['**/*.vue'] },
 );
 
+// eslint-plugin-vuejs-accessibility's flat/recommended has the same
+// over-reach: its first block (`vuejs-accessibility:setup:base`) registers
+// the plugin and sets languageOptions.sourceType/globals with no `files`
+// restriction at all, so left as-is it would apply those languageOptions to
+// every file in the project, not just .vue SFCs. Its second block already
+// carries `files: ['*.vue', '**/*.vue']` (redundant with itself, but already
+// scoped), so only the first needs the same treatment as vueRecommended
+// above.
+const vueA11yRecommended = pluginVueA11y.configs['flat/recommended'].map(
+  (cfg) => (cfg.files ? cfg : { ...cfg, files: ['**/*.vue'] }),
+);
+
 export default [
   ...baseConfig,
   ...vueRecommended,
+  ...vueA11yRecommended,
   {
     // vue-eslint-parser (wired by flat/recommended above) parses the
     // <template>/<script>/<style> structure of a .vue file; parserOptions.parser
@@ -71,6 +85,27 @@ export default [
     files: ['**/*.vue'],
     rules: {
       'vue/no-unused-properties': ['error', { groups: ['props'] }],
+    },
+  },
+  {
+    // vuejs-accessibility/label-has-for defaults to
+    // `required: { every: ['nesting', 'id'] }` — it demands a label satisfy
+    // *both* HTML's label-association strategies at once. Only one is ever
+    // required (WHATWG HTML: an implicit/nested control OR an explicit
+    // for/id pair, either alone is a valid accessible label), so the
+    // default over-fires on every label in this lib that legitimately uses
+    // just one strategy: atl-radio nests its <input> with no `for` (nesting
+    // only), atl-input/atl-select/atl-textarea bind `:for` to an `<input>`
+    // that lives in a sibling wrapper div, not a child of <label> (id only).
+    // atl-checkbox/atl-toggle already satisfy both and are unaffected either
+    // way. `some` matches the real HTML requirement without weakening it: a
+    // label satisfying neither strategy still fails.
+    files: ['**/*.vue'],
+    rules: {
+      'vuejs-accessibility/label-has-for': [
+        'error',
+        { required: { some: ['nesting', 'id'] } },
+      ],
     },
   },
   {

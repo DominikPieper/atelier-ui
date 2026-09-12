@@ -84,6 +84,11 @@ const panelClasses = computed(() => ['panel', `size-${props.size}`]);
 </script>
 
 <template>
+  <!-- Backdrop-click-to-close on a native <dialog>: keyboard users already
+  have a keyboard-equivalent close path via the native Escape key, wired
+  through @cancel/@close below — the click handler is a pointer-only
+  convenience on top of that, not the only way to dismiss the dialog. -->
+  <!-- eslint-disable-next-line vuejs-accessibility/click-events-have-key-events, vuejs-accessibility/no-static-element-interactions -->
   <dialog
     ref="dialogRef"
     class="atl-dialog"
