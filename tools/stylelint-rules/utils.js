@@ -38,4 +38,34 @@ function isNonEmptyString(value) {
   return typeof value === 'string' && value.length > 0;
 }
 
-module.exports = { REPO_ROOT, toRepoRelative, isNonEmptyString };
+/**
+ * A `componentRoot`-shaped option, normalized exactly the way a linted
+ * file's own path already is by `toRepoRelative` above: resolved to an
+ * absolute path, then re-expressed relative to `REPO_ROOT` with POSIX
+ * separators. Without this, a rule comparing an option value directly
+ * against `toRepoRelative(inputFile)` (a plain `===`/`startsWith` string
+ * compare) silently disagrees on a leading `./`, a trailing slash, or an
+ * absolute path — all three name the same directory as the plain
+ * `libs/<fw>/src/lib` form every config in this repo happens to use today,
+ * but nothing enforced that shape until this normalization existed
+ * (2026-09-12 stylelint review, claim 4: reproduced — `componentRoot:
+ * 'scratch-claim4/'` (trailing slash), `'./scratch-claim4'` (leading dot),
+ * and the equivalent absolute path each turned a genuinely stale
+ * `PRIMITIVE_EXEMPTIONS` entry from a blocking `[STALE]` into total silence,
+ * exit 0 — the staleness scan never ran because `inScope` never matched).
+ * Both `no-primitive-token.js` and `no-token-bypass.js` normalize
+ * `componentRoot` through this before using it either in the `inScope`
+ * check or as (part of) a cache key.
+ *
+ * @param {string} relOrAbsPath
+ */
+function normalizeRepoRelative(relOrAbsPath) {
+  return toRepoRelative(path.resolve(REPO_ROOT, relOrAbsPath));
+}
+
+module.exports = {
+  REPO_ROOT,
+  toRepoRelative,
+  isNonEmptyString,
+  normalizeRepoRelative,
+};

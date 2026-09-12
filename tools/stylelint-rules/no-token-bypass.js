@@ -92,13 +92,41 @@
  *     plugin — before any config decision about whether to enable this rule
  *     even applies.
  *
+ *     **The empty default applies only when `allowlistsFile` is absent.**
+ *     When it IS supplied, the loaded module's exports are validated:
+ *     `TOKEN_BYPASS_EXEMPT` must be a plain object. A module that fails to
+ *     load resolution still throws `MODULE_NOT_FOUND` as before (unchanged,
+ *     already loud); a module that DOES load but doesn't actually export
+ *     that name — a typo, a rename on one side only — used to be silently
+ *     treated as the same "zero exemptions" default, which is exactly
+ *     ADR-0124's failure class: the staleness scan skips outright (nothing
+ *     to report), unconditionally, regardless of whether any exempted
+ *     literal elsewhere in the tree also loses its exemption and starts
+ *     reporting on its own — the rule never signals that its configured
+ *     allowlist never actually loaded, only that SOME check silently didn't
+ *     run (2026-09-12 stylelint review, claim 2, reproduced with a fixture
+ *     that has no exempted literal in scope at all: a genuinely stale entry
+ *     went from a blocking `[STALE-EXEMPT]` to total silence, exit 0, the
+ *     moment the export name was misspelled). Now a mis-shaped supplied
+ *     module reports `[INVALID-ALLOWLISTS]` at `error` severity on every
+ *     file this override touches, via `stylelint.utils.report()` rather
+ *     than a thrown exception — see `no-primitive-token.js`'s header for
+ *     the full reasoning (verified there that a thrown error aborts the
+ *     entire stylelint run rather than reporting per file); this rule makes
+ *     the same call for the same reason.
+ *
  * Formerly tools/scripts/check-token-bypass.js (check:token-bypass).
  */
 
 const fs = require('fs');
 const path = require('path');
 const stylelint = require('stylelint');
-const { REPO_ROOT, toRepoRelative, isNonEmptyString } = require('./utils');
+const {
+  REPO_ROOT,
+  toRepoRelative,
+  isNonEmptyString,
+  normalizeRepoRelative,
+} = require('./utils');
 
 const ruleName = 'atelier/no-token-bypass';
 
@@ -115,6 +143,8 @@ const messages = stylelint.utils.ruleMessages(ruleName, {
     'weight, exempt it in TOKEN_BYPASS_EXEMPT with a reason.',
   stale: (key) =>
     `[STALE-EXEMPT] TOKEN_BYPASS_EXEMPT lists '${key}', but no stylesheet under the configured componentRoot has that literal any more. Remove the entry.`,
+  invalidAllowlists: (allowlistsFile, reason) =>
+    `[INVALID-ALLOWLISTS] '${allowlistsFile}' ${reason} A supplied allowlistsFile must actually export it — a missing or misspelled export is a broken configuration, not the documented empty default (which only applies when allowlistsFile is omitted entirely).`,
 });
 
 const meta = {
@@ -201,15 +231,47 @@ function getTokenValues(tokenFile) {
   return tokenValueCache.get(absPath);
 }
 
-const allowlistsCache = new Map(); // absolute allowlistsFile path -> its exports
+/** Human-readable description of what `require()` actually returned, for the
+ *  `[INVALID-ALLOWLISTS]` message. */
+function describeExport(value) {
+  if (value === undefined) return 'is undefined (no such export)';
+  if (Array.isArray(value)) return 'is an array';
+  if (value === null) return 'is null';
+  return `is a ${typeof value}`;
+}
 
-/** `null` when `allowlistsFile` is absent — the documented default for a
- *  scaffold, which starts with ZERO exemptions (see header). */
+const allowlistsCache = new Map(); // absolute allowlistsFile path -> result below
+
+/**
+ * `{ module: null, invalidReason: null }` when `allowlistsFile` is absent —
+ * the documented default for a scaffold, which starts with ZERO exemptions
+ * (see header).
+ *
+ * When `allowlistsFile` IS supplied, the loaded module's shape is validated:
+ * `TOKEN_BYPASS_EXEMPT` must be a plain object (not an array, not `null`,
+ * not missing). Missing or wrongly-shaped yields `{ module: null,
+ * invalidReason: <string> }` instead of silently falling back to the same
+ * empty default the absent-option case uses — see header for why (claim 2).
+ * A module that itself fails to `require()` (a typo'd PATH, not a typo'd
+ * EXPORT) still throws `MODULE_NOT_FOUND` here, unchanged and already loud.
+ */
 function getAllowlists(allowlistsFile) {
-  if (!allowlistsFile) return null;
+  if (!allowlistsFile) return { module: null, invalidReason: null };
   const absPath = path.resolve(REPO_ROOT, allowlistsFile);
   if (!allowlistsCache.has(absPath)) {
-    allowlistsCache.set(absPath, require(absPath));
+    const required = require(absPath);
+    const value = required.TOKEN_BYPASS_EXEMPT;
+    const isValidShape =
+      value !== null && typeof value === 'object' && !Array.isArray(value);
+    allowlistsCache.set(
+      absPath,
+      isValidShape
+        ? { module: required, invalidReason: null }
+        : {
+            module: null,
+            invalidReason: `'TOKEN_BYPASS_EXEMPT' ${describeExport(value)}, expected an object`,
+          },
+    );
   }
   return allowlistsCache.get(absPath);
 }
@@ -261,6 +323,23 @@ function scanComponentRootForSeenKeys(absBase, tokenValue) {
   return seen;
 }
 
+// Keyed on (componentRoot, tokenFile, allowlistsFile), not on componentRoot
+// alone — the scan result depends on `tokenValue` (which comes from
+// `tokenFile`), and whether the once-per-root stale-report loop below even
+// RUNS depends on `TOKEN_BYPASS_EXEMPT` (which comes from `allowlistsFile`).
+// Two overrides sharing a `componentRoot` but differing in either used to
+// serve the first one's scan (and its `staleReportedForRoot` flag) to the
+// second, silently suppressing the second's own staleness check — see
+// `no-primitive-token.js` for the full reasoning and its own reproduction
+// of the same shape of bug (2026-09-12 stylelint review, claim 3).
+function cacheKey(componentRoot, tokenFile, allowlistsFile) {
+  // JSON-encode the tuple rather than joining with a separator character:
+  // that's unambiguous no matter what any of the three strings contain,
+  // unlike a literal join (space, NUL, or any other single character) which
+  // two different (componentRoot, tokenFile, allowlistsFile) triples could
+  // in principle both produce.
+  return JSON.stringify([componentRoot, tokenFile || '', allowlistsFile || '']);
+}
 const seenByRoot = new Map();
 const staleReportedForRoot = new Set();
 
@@ -282,13 +361,28 @@ const rule = (primary, secondaryOptions) => {
     );
     if (!validOptions) return;
 
-    const componentRoot = secondaryOptions && secondaryOptions.componentRoot;
-    const tokenValue = getTokenValues(
-      secondaryOptions && secondaryOptions.tokenFile,
-    );
-    const allowlists = getAllowlists(
-      secondaryOptions && secondaryOptions.allowlistsFile,
-    );
+    // Normalized BEFORE the `inScope` compare below and before it's used in
+    // any cache key — see `no-primitive-token.js` / `normalizeRepoRelative`'s
+    // header for why a raw `componentRoot: './libs/react/src/lib'`, a
+    // trailing slash, or an absolute path would otherwise disagree with
+    // `toRepoRelative(inputFile)` and silently disable every staleness check
+    // for this override (claim 4).
+    const rawComponentRoot = secondaryOptions && secondaryOptions.componentRoot;
+    const componentRoot = rawComponentRoot
+      ? normalizeRepoRelative(rawComponentRoot)
+      : undefined;
+    const tokenFile = secondaryOptions && secondaryOptions.tokenFile;
+    const tokenValue = getTokenValues(tokenFile);
+    const allowlistsFile = secondaryOptions && secondaryOptions.allowlistsFile;
+    const { module: allowlists, invalidReason } = getAllowlists(allowlistsFile);
+    if (invalidReason) {
+      stylelint.utils.report({
+        message: messages.invalidAllowlists(allowlistsFile, invalidReason),
+        node: root,
+        result,
+        ruleName,
+      });
+    }
     const TOKEN_BYPASS_EXEMPT =
       (allowlists && allowlists.TOKEN_BYPASS_EXEMPT) || {};
 
@@ -303,10 +397,11 @@ const rule = (primary, secondaryOptions) => {
     // could ever produce — skip the scan (and the staleness report loop)
     // outright rather than run it and find nothing, every file, forever.
     const hasExemptions = Object.keys(TOKEN_BYPASS_EXEMPT).length > 0;
+    const rootKey = cacheKey(componentRoot, tokenFile, allowlistsFile);
 
-    if (inScope && hasExemptions && !seenByRoot.has(componentRoot)) {
+    if (inScope && hasExemptions && !seenByRoot.has(rootKey)) {
       seenByRoot.set(
-        componentRoot,
+        rootKey,
         scanComponentRootForSeenKeys(
           path.resolve(REPO_ROOT, componentRoot),
           tokenValue,
@@ -314,12 +409,13 @@ const rule = (primary, secondaryOptions) => {
       );
     }
     const seenKeys =
-      inScope && hasExemptions ? seenByRoot.get(componentRoot) : new Set();
+      inScope && hasExemptions ? seenByRoot.get(rootKey) : new Set();
 
-    // Allowlist hygiene, reported once per componentRoot's run — see
-    // no-primitive-token.js for why this is the anchor and its limitation.
-    if (inScope && hasExemptions && !staleReportedForRoot.has(componentRoot)) {
-      staleReportedForRoot.add(componentRoot);
+    // Allowlist hygiene, reported once per (componentRoot, tokenFile,
+    // allowlistsFile) per run — see no-primitive-token.js for why this is
+    // the anchor and its limitation.
+    if (inScope && hasExemptions && !staleReportedForRoot.has(rootKey)) {
+      staleReportedForRoot.add(rootKey);
       for (const key of Object.keys(TOKEN_BYPASS_EXEMPT)) {
         if (!seenKeys.has(key)) {
           stylelint.utils.report({

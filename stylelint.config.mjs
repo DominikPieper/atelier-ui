@@ -19,7 +19,36 @@
 // bypass check (ADR-0047) are both about component stylesheets; the docs
 // app is a token *consumer* like any other product surface, same scoping
 // the retired check-primitives.js/check-token-bypass.js scripts used.
+import { readdirSync, existsSync } from 'node:fs';
+import { fileURLToPath } from 'node:url';
+import { dirname, join } from 'node:path';
 import atelier from './tools/stylelint-rules/index.js';
+
+// Frameworks are discovered from the filesystem, not enumerated by hand: any
+// `libs/<name>/src/lib` directory is a component library and gets its own
+// override block below. A hand-typed list of three (angular/react/vue) would
+// silently drop a fourth such library from every one of the four rules below
+// the day it's added — its CSS would match none of the per-framework
+// overrides, fall through to the empty top-level `rules: {}`, and lint clean
+// with nothing checked (2026-09-12 stylelint review, claim 1, reproduced:
+// a fixture `libs/probeframework/src/lib/**/*.css` with a raw color literal,
+// an undeclared token AND a token bypass in it — three violations any real
+// framework library would be flagged for — lints 0 problems, exit 0, under
+// the old three-name array). Reading `libs/` costs one `readdirSync` plus one
+// `existsSync` per entry at config-load time (under a millisecond, measured
+// — negligible next to the seconds a stylelint run itself takes), and this file
+// is already a declared `stylelint` target input (see `nx.json`), so a change
+// in which libraries exist re-evaluates on the next run the same way any
+// other edit to this file does. Today this resolves to exactly
+// `['angular', 'react', 'vue']`, sorted — the same three blocks the old
+// hardcoded array produced, in the same order.
+const CONFIG_DIR = dirname(fileURLToPath(import.meta.url));
+const LIBS_DIR = join(CONFIG_DIR, 'libs');
+const FRAMEWORKS = readdirSync(LIBS_DIR, { withFileTypes: true })
+  .filter((entry) => entry.isDirectory())
+  .map((entry) => entry.name)
+  .filter((name) => existsSync(join(LIBS_DIR, name, 'src', 'lib')))
+  .sort();
 
 // This file lives outside every project that reads it here (the four
 // `stylelint` Nx targets, in libs/{angular,react,vue}/project.json and
@@ -45,17 +74,17 @@ export default {
   // erroring.
   rules: {},
   overrides: [
-    // One block per framework, not one shared `libs/*/src/lib/**/*.css`
-    // glob, because `no-primitive-token`/`no-token-bypass` need an explicit
-    // `componentRoot` to know which tree to scan for staleness — the config
-    // declares that (the way `tokenFiles` already declares which token
-    // source(s) apply) instead of the rule pattern-matching the input
-    // file's own path to guess which of three hardcoded frameworks it
-    // belongs to. Each Nx `stylelint` target already only ever hands
+    // One block per discovered framework (see `FRAMEWORKS` above), not one
+    // shared `libs/*/src/lib/**/*.css` glob, because `no-primitive-token`/
+    // `no-token-bypass` need an explicit `componentRoot` to know which tree
+    // to scan for staleness — the config declares that (the way `tokenFiles`
+    // already declares which token source(s) apply) instead of the rule
+    // pattern-matching the input file's own path to guess which framework
+    // tree it belongs to. Each Nx `stylelint` target already only ever hands
     // stylelint that one framework's files (see project.json), so this
     // split changes nothing about which files get linted — only makes the
     // topology each block already implied explicit.
-    ...['angular', 'react', 'vue'].map((fw) => {
+    ...FRAMEWORKS.map((fw) => {
       const componentRoot = `libs/${fw}/src/lib`;
       return {
         files: [`${componentRoot}/**/*.css`],

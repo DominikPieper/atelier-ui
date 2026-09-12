@@ -84,13 +84,42 @@
  *     `MODULE_NOT_FOUND` merely from loading the plugin — before any config
  *     decision about whether to enable this rule even applies.
  *
+ *     **The empty default applies only when `allowlistsFile` is absent.**
+ *     When it IS supplied, the loaded module's exports are validated:
+ *     `PRIMITIVE_TOKENS` must be an array and `PRIMITIVE_EXEMPTIONS` must be
+ *     a `Map`. A module that fails to load resolution still throws
+ *     `MODULE_NOT_FOUND` as before (unchanged, already loud); a module that
+ *     DOES load but doesn't actually export those two names — a typo, a
+ *     rename on one side only — used to be silently treated as the same
+ *     "zero exemptions" default, which is exactly ADR-0124's failure class:
+ *     the staleness scan skips (nothing to report) AND every real
+ *     `PRIMITIVE_TOKENS` match goes undetected (nothing to forbid), and the
+ *     rule reports a clean pass over a config that never actually loaded
+ *     (2026-09-12 stylelint review, claim 2). Now a mis-shaped supplied
+ *     module reports `[INVALID-ALLOWLISTS]` at `error` severity on every
+ *     file this override touches, via `stylelint.utils.report()` rather than
+ *     a thrown exception — a thrown error aborts the ENTIRE stylelint run
+ *     (verified: one throwing rule turns the whole CLI invocation into a
+ *     bare Node stack trace, exit 1, with no per-file breakdown and no
+ *     structured formatter output for any other file), where `report()`
+ *     keeps every other file's real findings intact, keeps `--formatter
+ *     json` usable, and reuses the exact channel `[STALE]`/`[GAP]`/etc.
+ *     already report through — the same tradeoff `validateOptions` above
+ *     already makes for a malformed *option*; this is the same call for a
+ *     malformed *file the option points at*.
+ *
  * Formerly tools/scripts/check-primitives.js (check:token-tiers).
  */
 
 const fs = require('fs');
 const path = require('path');
 const stylelint = require('stylelint');
-const { REPO_ROOT, toRepoRelative, isNonEmptyString } = require('./utils');
+const {
+  REPO_ROOT,
+  toRepoRelative,
+  isNonEmptyString,
+  normalizeRepoRelative,
+} = require('./utils');
 
 const ruleName = 'atelier/no-primitive-token';
 
@@ -99,6 +128,8 @@ const messages = stylelint.utils.ruleMessages(ruleName, {
     `[PRIMITIVE] references ${token} (${primitive.label}). Use ${primitive.useInstead}. ${primitive.why}`,
   stale: (key, kind) =>
     `[STALE] PRIMITIVE_EXEMPTIONS carries '${key}' (${kind}) but no component CSS under the configured componentRoot references it any more. Remove the entry.`,
+  invalidAllowlists: (allowlistsFile, reason) =>
+    `[INVALID-ALLOWLISTS] '${allowlistsFile}' ${reason} A supplied allowlistsFile must actually export both — a missing or misspelled export is a broken configuration, not the documented empty default (which only applies when allowlistsFile is omitted entirely).`,
 });
 
 const meta = {
@@ -108,15 +139,52 @@ const meta = {
 // Matches a `var(--ui-…)` READ inside a declaration's value.
 const TOKEN_READ = /var\(\s*(--ui-[a-z0-9-]+)/g;
 
-const allowlistsCache = new Map(); // absolute allowlistsFile path -> its exports
+/** Human-readable description of what `require()` actually returned, for the
+ *  `[INVALID-ALLOWLISTS]` message. */
+function describeExport(value) {
+  if (value === undefined) return 'is undefined (no such export)';
+  if (Array.isArray(value)) return 'is an array';
+  if (value instanceof Map) return 'is a Map';
+  return `is a ${typeof value}`;
+}
 
-/** `null` when `allowlistsFile` is absent — the documented default for a
- *  scaffold, which starts with ZERO exemptions (see header). */
+const allowlistsCache = new Map(); // absolute allowlistsFile path -> result below
+
+/**
+ * `{ module: null, invalidReason: null }` when `allowlistsFile` is absent —
+ * the documented default for a scaffold, which starts with ZERO exemptions
+ * (see header).
+ *
+ * When `allowlistsFile` IS supplied, the loaded module's shape is validated:
+ * `PRIMITIVE_TOKENS` must be an array, `PRIMITIVE_EXEMPTIONS` must be a
+ * `Map`. Either missing or wrongly-shaped yields `{ module: null,
+ * invalidReason: <string> }` instead of silently falling back to the same
+ * empty defaults the absent-option case uses — see header for why (claim 2).
+ * A module that itself fails to `require()` (a typo'd PATH, not a typo'd
+ * EXPORT) still throws `MODULE_NOT_FOUND` here, unchanged and already loud.
+ */
 function getAllowlists(allowlistsFile) {
-  if (!allowlistsFile) return null;
+  if (!allowlistsFile) return { module: null, invalidReason: null };
   const absPath = path.resolve(REPO_ROOT, allowlistsFile);
   if (!allowlistsCache.has(absPath)) {
-    allowlistsCache.set(absPath, require(absPath));
+    const required = require(absPath);
+    const problems = [];
+    if (!Array.isArray(required.PRIMITIVE_TOKENS)) {
+      problems.push(
+        `'PRIMITIVE_TOKENS' ${describeExport(required.PRIMITIVE_TOKENS)}, expected an array`,
+      );
+    }
+    if (!(required.PRIMITIVE_EXEMPTIONS instanceof Map)) {
+      problems.push(
+        `'PRIMITIVE_EXEMPTIONS' ${describeExport(required.PRIMITIVE_EXEMPTIONS)}, expected a Map`,
+      );
+    }
+    allowlistsCache.set(
+      absPath,
+      problems.length === 0
+        ? { module: required, invalidReason: null }
+        : { module: null, invalidReason: problems.join('; ') },
+    );
   }
   return allowlistsCache.get(absPath);
 }
@@ -149,9 +217,26 @@ function scanComponentRootForSeenKeys(absBase, primitiveTokens) {
   return seen;
 }
 
-// Computed at most once per componentRoot per process — one project's
-// stylelint run only ever lints one project's files, but the module stays
-// loaded (and its module-scope state with it) for every file in that run.
+// Computed at most once per (componentRoot, allowlistsFile) pair per process
+// — one project's stylelint run only ever lints one project's files, but the
+// module stays loaded (and its module-scope state with it) for every file in
+// that run. Keyed on the PAIR, not on `componentRoot` alone: the scan result
+// depends on which `PRIMITIVE_TOKENS` patterns it matched against, and that
+// comes from `allowlistsFile` — two overrides sharing a `componentRoot` but
+// pointing at different allowlists modules used to serve the first one's
+// scan (and its `staleReportedForRoot` flag) to the second, silently
+// suppressing the second's own staleness check (2026-09-12 stylelint review,
+// claim 3, reproduced: a componentRoot processed second had its own
+// genuinely-stale exemption go unreported once a differently-configured
+// override sharing that root ran first in the same process).
+function cacheKey(componentRoot, allowlistsFile) {
+  // JSON-encode the tuple rather than joining with a separator character:
+  // that's unambiguous no matter what either string contains, unlike a
+  // literal join (space, NUL, or any other single character) which two
+  // different (componentRoot, allowlistsFile) pairs could in principle
+  // both produce.
+  return JSON.stringify([componentRoot, allowlistsFile || '']);
+}
 const seenByRoot = new Map();
 const staleReportedForRoot = new Set();
 
@@ -172,10 +257,25 @@ const rule = (primary, secondaryOptions) => {
     );
     if (!validOptions) return;
 
-    const componentRoot = secondaryOptions && secondaryOptions.componentRoot;
-    const allowlists = getAllowlists(
-      secondaryOptions && secondaryOptions.allowlistsFile,
-    );
+    // Normalized BEFORE the `inScope` compare below and before it's used in
+    // any cache key — see `normalizeRepoRelative`'s header for why a raw
+    // `componentRoot: './libs/react/src/lib'`, a trailing slash, or an
+    // absolute path would otherwise disagree with `toRepoRelative(inputFile)`
+    // and silently disable every staleness check for this override (claim 4).
+    const rawComponentRoot = secondaryOptions && secondaryOptions.componentRoot;
+    const componentRoot = rawComponentRoot
+      ? normalizeRepoRelative(rawComponentRoot)
+      : undefined;
+    const allowlistsFile = secondaryOptions && secondaryOptions.allowlistsFile;
+    const { module: allowlists, invalidReason } = getAllowlists(allowlistsFile);
+    if (invalidReason) {
+      stylelint.utils.report({
+        message: messages.invalidAllowlists(allowlistsFile, invalidReason),
+        node: root,
+        result,
+        ruleName,
+      });
+    }
     const PRIMITIVE_TOKENS = (allowlists && allowlists.PRIMITIVE_TOKENS) || [];
     const PRIMITIVE_EXEMPTIONS =
       (allowlists && allowlists.PRIMITIVE_EXEMPTIONS) || new Map();
@@ -191,10 +291,11 @@ const rule = (primary, secondaryOptions) => {
     // could ever produce — skip the scan (and the staleness report loop)
     // outright rather than run it and find nothing, every file, forever.
     const hasExemptions = PRIMITIVE_EXEMPTIONS.size > 0;
+    const rootKey = cacheKey(componentRoot, allowlistsFile);
 
-    if (inScope && hasExemptions && !seenByRoot.has(componentRoot)) {
+    if (inScope && hasExemptions && !seenByRoot.has(rootKey)) {
       seenByRoot.set(
-        componentRoot,
+        rootKey,
         scanComponentRootForSeenKeys(
           path.resolve(REPO_ROOT, componentRoot),
           PRIMITIVE_TOKENS,
@@ -202,17 +303,18 @@ const rule = (primary, secondaryOptions) => {
       );
     }
     const seenKeys =
-      inScope && hasExemptions ? seenByRoot.get(componentRoot) : new Set();
+      inScope && hasExemptions ? seenByRoot.get(rootKey) : new Set();
 
-    // Allowlist hygiene, reported once per componentRoot's run (anchored to
-    // whichever file happens to be first) — ADR-0034 requires this check to
-    // actually run, not just the per-occurrence [GAP] warning below.
-    if (inScope && hasExemptions && !staleReportedForRoot.has(componentRoot)) {
-      staleReportedForRoot.add(componentRoot);
-      for (const [key, entry] of PRIMITIVE_EXEMPTIONS) {
-        if (!seenKeys.has(key)) {
+    // Allowlist hygiene, reported once per (componentRoot, allowlistsFile)
+    // per run (anchored to whichever file happens to be first) — ADR-0034
+    // requires this check to actually run, not just the per-occurrence
+    // [GAP] warning below.
+    if (inScope && hasExemptions && !staleReportedForRoot.has(rootKey)) {
+      staleReportedForRoot.add(rootKey);
+      for (const [exemptKey, entry] of PRIMITIVE_EXEMPTIONS) {
+        if (!seenKeys.has(exemptKey)) {
           stylelint.utils.report({
-            message: messages.stale(key, entry.kind),
+            message: messages.stale(exemptKey, entry.kind),
             node: root,
             result,
             ruleName,
