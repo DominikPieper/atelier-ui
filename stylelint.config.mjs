@@ -8,12 +8,13 @@
 // dependency that disables rules this config never enables in the first
 // place.
 //
-// Two override blocks below, one per scope, because the two rules' declared
-// -token source differs by scope (see `no-undeclared-token.js`'s header):
-// component CSS is checked only against the shared `tokens.css`; the docs
-// site's CSS is checked against that file UNION `docs/src/styles/docs-theme.css`.
+// Two override *scopes* below — component CSS (split three ways, one per
+// framework) and docs — because the two rules' declared-token source
+// differs by scope (see `no-undeclared-token.js`'s header): component CSS
+// is checked only against the shared `tokens.css`; the docs site's CSS is
+// checked against that file UNION `docs/src/styles/docs-theme.css`.
 // `no-primitive-token` and `no-token-bypass` (stage 2 of the CSS-discipline
-// port) are wired ONLY on the component-CSS block, never the docs ones —
+// port) are wired ONLY on the component-CSS blocks, never the docs ones —
 // the token tiers they enforce (ADR-0018/0036/0038) and the token-family
 // bypass check (ADR-0047) are both about component stylesheets; the docs
 // app is a token *consumer* like any other product surface, same scoping
@@ -29,6 +30,11 @@ import atelier from './tools/stylelint-rules/index.js';
 const TOKENS_CSS =
   'libs/create-workspace/src/generators/preset/files/styles/tokens.css';
 const DOCS_THEME_CSS = 'docs/src/styles/docs-theme.css';
+// Read by `no-primitive-token`/`no-token-bypass` via their `allowlistsFile`
+// secondary option (a scaffolded workspace passes neither rule this option
+// at all — it has no allowlists.js and starts with zero exemptions; see
+// those rules' own headers for the documented empty-map default).
+const ALLOWLISTS = 'tools/scripts/lib/allowlists.js';
 
 export default {
   plugins: [atelier],
@@ -39,15 +45,38 @@ export default {
   // erroring.
   rules: {},
   overrides: [
-    {
-      files: ['libs/*/src/lib/**/*.css'],
-      rules: {
-        'atelier/no-raw-color-literal': true,
-        'atelier/no-undeclared-token': [true, { tokenFiles: [TOKENS_CSS] }],
-        'atelier/no-primitive-token': true,
-        'atelier/no-token-bypass': true,
-      },
-    },
+    // One block per framework, not one shared `libs/*/src/lib/**/*.css`
+    // glob, because `no-primitive-token`/`no-token-bypass` need an explicit
+    // `componentRoot` to know which tree to scan for staleness — the config
+    // declares that (the way `tokenFiles` already declares which token
+    // source(s) apply) instead of the rule pattern-matching the input
+    // file's own path to guess which of three hardcoded frameworks it
+    // belongs to. Each Nx `stylelint` target already only ever hands
+    // stylelint that one framework's files (see project.json), so this
+    // split changes nothing about which files get linted — only makes the
+    // topology each block already implied explicit.
+    ...['angular', 'react', 'vue'].map((fw) => {
+      const componentRoot = `libs/${fw}/src/lib`;
+      return {
+        files: [`${componentRoot}/**/*.css`],
+        rules: {
+          'atelier/no-raw-color-literal': true,
+          'atelier/no-undeclared-token': [true, { tokenFiles: [TOKENS_CSS] }],
+          'atelier/no-primitive-token': [
+            true,
+            { componentRoot, allowlistsFile: ALLOWLISTS },
+          ],
+          'atelier/no-token-bypass': [
+            true,
+            {
+              componentRoot,
+              tokenFile: TOKENS_CSS,
+              allowlistsFile: ALLOWLISTS,
+            },
+          ],
+        },
+      };
+    }),
     {
       files: ['docs/src/styles/global.css'],
       rules: {

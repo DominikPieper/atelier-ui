@@ -15,6 +15,11 @@
  * scripts were retired, on the reasoning that a rule enforcing a
  * CSS-discipline invariant is the same kind of consumer a script gate was,
  * and an auditor of this repo's exceptions still has one file to read.
+ * Those two rules reach this file through their own `allowlistsFile`
+ * secondary option (stylelint.config.mjs passes this file's own path) rather
+ * than a hardcoded `require()`, so a topology with no file at this path —
+ * a scaffolded workshop workspace, which starts with zero exemptions — gets
+ * a documented empty-map default instead of a load-time crash.
  */
 
 /**
