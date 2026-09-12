@@ -6,11 +6,21 @@
  * every entry short and justified; each is re-verified when its component
  * changes. (NON_COMPONENT_SPECS is intentionally NOT here — it is spec data,
  * co-located with the metadata registry in libs/spec/src/metadata/index.ts.)
+ *
+ * Not every consumer here is a script gate any more: TOKEN_BYPASS_EXEMPT and
+ * PRIMITIVE_TOKENS/PRIMITIVE_EXEMPTIONS below are read by the
+ * `atelier/no-token-bypass` / `atelier/no-primitive-token` stylelint rules
+ * (tools/stylelint-rules/) rather than by a standalone check-*.js script —
+ * they stayed here rather than moving to stylelint.config.mjs when their
+ * scripts were retired, on the reasoning that a rule enforcing a
+ * CSS-discipline invariant is the same kind of consumer a script gate was,
+ * and an auditor of this repo's exceptions still has one file to read.
  */
 
 /**
  * Literals that deliberately do NOT bind to the token whose value they equal, or
- * to the family their property would normally draw from. (check-token-bypass)
+ * to the family their property would normally draw from.
+ * (the `atelier/no-token-bypass` stylelint rule, tools/stylelint-rules/no-token-bypass.js)
  *
  * Keyed `component:property:value`. Two kinds, same as the other allowlists here:
  *   kind 'design' — the value means something other than the token that shares it,
@@ -639,9 +649,11 @@ const METADATA_ROLE_EXCEPTIONS = new Map([]);
 
 /**
  * Tokens component CSS must NOT reference directly, and what to use instead
- * (check-primitives). ADR-0018 tiers tokens primitive -> semantic -> component;
- * a component reaching past the semantic tier into a primitive re-decides, in
- * one stylesheet, something the token layer already decided for everyone.
+ * (the `atelier/no-primitive-token` stylelint rule,
+ * tools/stylelint-rules/no-primitive-token.js). ADR-0018 tiers tokens
+ * primitive -> semantic -> component; a component reaching past the
+ * semantic tier into a primitive re-decides, in one stylesheet, something
+ * the token layer already decided for everyone.
  *
  * `match` is tested against the full custom-property name.
  */

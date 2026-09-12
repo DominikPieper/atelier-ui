@@ -39,6 +39,7 @@
         "{workspaceRoot}/stylelint.config.mjs",
         "{workspaceRoot}/tools/stylelint-rules/**/*",
         "{workspaceRoot}/libs/create-workspace/src/generators/preset/files/styles/tokens.css",
+        "{workspaceRoot}/tools/scripts/lib/allowlists.js",
         { "externalDependencies": ["stylelint"] }
       ]
     },

@@ -12,6 +12,12 @@
 // -token source differs by scope (see `no-undeclared-token.js`'s header):
 // component CSS is checked only against the shared `tokens.css`; the docs
 // site's CSS is checked against that file UNION `docs/src/styles/docs-theme.css`.
+// `no-primitive-token` and `no-token-bypass` (stage 2 of the CSS-discipline
+// port) are wired ONLY on the component-CSS block, never the docs ones —
+// the token tiers they enforce (ADR-0018/0036/0038) and the token-family
+// bypass check (ADR-0047) are both about component stylesheets; the docs
+// app is a token *consumer* like any other product surface, same scoping
+// the retired check-primitives.js/check-token-bypass.js scripts used.
 import atelier from './tools/stylelint-rules/index.js';
 
 // This file lives outside every project that reads it here (the four
@@ -38,6 +44,8 @@ export default {
       rules: {
         'atelier/no-raw-color-literal': true,
         'atelier/no-undeclared-token': [true, { tokenFiles: [TOKENS_CSS] }],
+        'atelier/no-primitive-token': true,
+        'atelier/no-token-bypass': true,
       },
     },
     {

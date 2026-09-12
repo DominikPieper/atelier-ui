@@ -16,4 +16,6 @@
 module.exports = [
   require('./no-raw-color-literal'),
   require('./no-undeclared-token'),
+  require('./no-primitive-token'),
+  require('./no-token-bypass'),
 ];
