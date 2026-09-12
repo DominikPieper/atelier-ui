@@ -2043,7 +2043,7 @@ function checkRootSize() {
     const grouped = new Map(); // prop+message -> variants
     const note = (prop, msg, variant) => {
       if (allowed(entry.label, 'root-size', prop)) return;
-      const key = `${prop} ${msg}`;
+      const key = `${prop}\x1f${msg}`;
       if (!grouped.has(key)) grouped.set(key, []);
       grouped.get(key).push(variant);
     };
@@ -2064,7 +2064,7 @@ function checkRootSize() {
       }
     }
     for (const [key, vs] of grouped) {
-      const msg = key.split(' ')[1];
+      const msg = key.split('\x1f')[1];
       const scope =
         vs.length > 3
           ? `${vs.length} variants (${vs.slice(0, 3).join('; ')}; …)`
@@ -2126,7 +2126,7 @@ function checkLayerSize() {
     const grouped = new Map();
     const note = (dim, msg, variant) => {
       if (allowed(entry.label, 'layer-size', dim)) return;
-      const key = `${dim} ${msg}`;
+      const key = `${dim}\x1f${msg}`;
       if (!grouped.has(key)) grouped.set(key, []);
       grouped.get(key).push(variant);
     };
@@ -2143,9 +2143,9 @@ function checkLayerSize() {
       for (const template of entry.cascade) {
         const selector = template.replace(
           /\{(\w+)\}/g,
-          (_, axis) => axes[axis] ?? ' ',
+          (_, axis) => axes[axis] ?? '\x1f',
         );
-        if (selector.includes(' ')) continue; // this variant has no such axis
+        if (selector.includes('\x1f')) continue; // this variant has no such axis
         const body = rules.get(selector);
         if (body === undefined) continue;
         joined += ';' + body;
@@ -2168,7 +2168,7 @@ function checkLayerSize() {
       }
     }
     for (const [key, vs] of grouped) {
-      const msg = key.split(' ')[1];
+      const msg = key.split('\x1f')[1];
       const scope =
         vs.length > 3
           ? `${vs.length} variants (${vs.slice(0, 3).join('; ')}; …)`

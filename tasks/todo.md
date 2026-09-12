@@ -185,6 +185,15 @@ Ranked; each carries why it's worth doing next rather than later.
       sound only because Escape is guaranteed, which leaves touch-only users without a first-class
       close control.
 
+- [ ] **A NUL byte in `check-figma.js` makes `grep` go blind on it, tool- and
+      locale-dependently.** Byte 93981 is a literal U+0000, used deliberately as a key separator
+      that cannot collide with content. The side effect is that some `grep` builds classify the
+      whole 3,778-line file as binary and report zero matches without saying why — it silently
+      produced a wrong measurement twice this week, once in a gate-wide audit and once in a scope
+      classification. Either swap the delimiter for something printable that still cannot collide,
+      or record the hazard where measurement passes will meet it. Until then: `grep -a` or
+      ripgrep when sweeping the gate suite.
+
 - [ ] **The repo root is lint-uninhabited apart from `package.json`.** The root
       `eslint.config.mjs` has carried a `**/*.json` block with `jsonc-eslint-parser` since the
       workspace was created, pointing at nothing: `@nx/eslint/plugin` only infers a lint target

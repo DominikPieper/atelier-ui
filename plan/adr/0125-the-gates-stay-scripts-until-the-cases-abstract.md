@@ -124,6 +124,36 @@ Alternatives considered:
   readability grounds above; reasonable later if the plugin ever has to adopt arbitrary
   existing workspaces rather than ones this preset generated.
 
+**Refined 2026-09-12 (what the suite actually is).** This record's Context measures coupling
+to Atelier's literals — the `Atl` prefix, `--ui-`, the Figma file key. A second pass measured a
+different and more decision-relevant axis: **what each gate needs in order to exist at all.**
+Of 47 gates: **29 are rig-bound** (they read the committed Figma snapshot, the docs app, the
+`plan/adr` tree, the preset, or a parity baseline), carrying **15,256 of the suite's 20,228
+lines — 75% of the weight**; **16 are single-library**, 4,204 lines; and **only 2 are genuinely
+cross-framework** (`check:sync`, `check:manifest-parity`), 768 lines.
+
+That reframes what this record defers. The suite's shape is not "three frameworks compared
+against each other" — that is two gates. It is **one library plus a large body of
+Atelier-specific side-artefacts**: `check-figma.js` (3,778 lines), `check-paint.mjs` (2,427)
+and `check-contracts.mjs` (1,644) alone are 39% of everything, and none of the three runs
+without a committed Figma snapshot.
+
+The single-library bucket is also not one kit but three or four: CSS-and-variant discipline
+(`variants`, `dead-selectors`, `token-tiers`, `box-sizing`, `icon-duplication`), contract
+completeness (`exports`, `props`), ordinary engineering hygiene with nothing Atelier-flavoured
+in it (`types`, `format`, `stories`, `storybook-manifests`, `release-drift`), and
+manifest-to-generated-artefact (`spec`, `behaviors-gen`, `behavior`). A package would split
+along those seams rather than ship sixteen things as one.
+
+Two caveats that matter more than the counts. `check:spec` and `check:vitest-discovery` are
+single only in that the mechanism tolerates one target — `check:spec` exists to keep a
+deliberately-separate `libs/spec` byte-identical inside each framework lib, and a one-library
+repo has no reason to split its types into a package it then copies back, so that problem
+disappears rather than shrinks. And "single, modulo configuration" understates the port for
+the two largest: `check-prop-surface.js` (1,218 lines) and `check-dead-selectors.js` (1,055)
+are internally split into Angular, React and Vue extraction branches, so porting either to a
+one-framework repo means deleting two thirds of the file, not setting a flag.
+
 ## Consequences
 
 - The operational work is unblocked and independent: one target per gate, declared
