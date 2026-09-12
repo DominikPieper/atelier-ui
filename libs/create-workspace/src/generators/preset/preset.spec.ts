@@ -2,7 +2,17 @@ import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing';
 import { Tree, readJson } from '@nx/devkit';
 import { EventEmitter } from 'node:events';
 import { spawn } from 'node:child_process';
+import { readFileSync } from 'node:fs';
+import { join } from 'node:path';
 import { installSkills, presetGenerator } from './preset';
+
+// This package's own version, read the same way preset.ts's readOwnVersion()
+// does (../../../package.json relative to this directory) — the value the
+// preset is expected to pin @atelier-ui/<framework> to, not re-derived from
+// the preset's own implementation.
+const OWN_VERSION: string = JSON.parse(
+  readFileSync(join(__dirname, '../../../package.json'), 'utf-8'),
+).version;
 
 // A realistic-shaped baseline flat ESLint config per framework — the same
 // structure `@nx/{angular,react,vue}:application` actually writes when
@@ -314,6 +324,47 @@ describe('preset generator', () => {
     expect(settings.mcpServers['storybook-react']).toBeUndefined();
   });
 
+  // ─── uianatomy MCP (always) ────────────────────────────────────────────────
+
+  it.each(['angular', 'react', 'vue'] as const)(
+    'writes .mcp.json with the uianatomy server regardless of framework (%s)',
+    async (fw) => {
+      await presetGenerator(tree, { name: 'my-workspace', framework: fw });
+
+      const settings = readJson(tree, '.mcp.json');
+      expect(settings.mcpServers['uianatomy']).toEqual({
+        type: 'http',
+        url: 'https://uianatomy.dev/mcp',
+      });
+    },
+  );
+
+  // ─── angular-cli MCP (Angular only) ────────────────────────────────────────
+
+  it('writes .mcp.json with the angular-cli server when angular is selected', async () => {
+    await presetGenerator(tree, {
+      name: 'my-workspace',
+      framework: 'angular',
+    });
+
+    const settings = readJson(tree, '.mcp.json');
+    expect(settings.mcpServers['angular-cli']).toEqual({
+      type: 'stdio',
+      command: 'npx',
+      args: ['-y', '@angular/cli', 'mcp'],
+    });
+  });
+
+  it.each(['react', 'vue'] as const)(
+    'omits the angular-cli server for %s',
+    async (fw) => {
+      await presetGenerator(tree, { name: 'my-workspace', framework: fw });
+
+      const settings = readJson(tree, '.mcp.json');
+      expect(settings.mcpServers['angular-cli']).toBeUndefined();
+    },
+  );
+
   // ─── figma-console MCP (opt-in) ────────────────────────────────────────────
 
   it('omits figma-console by default', async () => {
@@ -400,6 +451,48 @@ describe('preset generator', () => {
       framework: 'angular',
     });
     expect(tree.exists('README.md')).toBe(true);
+  });
+
+  // ─── Component package version pin (S2a) ───────────────────────────────────
+  //
+  // All five packages in this monorepo (angular, react, vue, create-workspace,
+  // create-atelier-ui-workspace) release in lockstep from nx.json's
+  // `libraries` release group — create-workspace's own package.json version
+  // is always the version @atelier-ui/<framework> was just published at, so
+  // pinning to it (rather than `latest`) makes a scaffolded workspace
+  // reproducible without a separate schema option to keep in sync.
+
+  it.each([
+    ['angular', '@atelier-ui/angular'],
+    ['react', '@atelier-ui/react'],
+    ['vue', '@atelier-ui/vue'],
+  ] as const)(
+    `pins %s to this package's own version, not "latest"`,
+    async (fw, depName) => {
+      await presetGenerator(tree, { name: 'my-workspace', framework: fw });
+
+      const pkg = readJson(tree, 'package.json');
+      expect(pkg.dependencies[depName]).toBe(OWN_VERSION);
+      expect(pkg.dependencies[depName]).not.toBe('latest');
+    },
+  );
+
+  it('CLAUDE.md documents the version pin and how to move it deliberately', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'react' });
+
+    const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
+    expect(md).toContain('## Versions');
+    expect(md).toContain(`@atelier-ui/react\` is pinned to \`${OWN_VERSION}\``);
+    expect(md).toContain('npm install @atelier-ui/react@latest');
+  });
+
+  it('README documents the version pin and how to move it deliberately', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'vue' });
+
+    const readme = tree.read('README.md', 'utf-8') ?? '';
+    expect(readme).toContain('## Versions');
+    expect(readme).toContain(OWN_VERSION);
+    expect(readme).toContain('npm install @atelier-ui/vue@latest');
   });
 
   // ─── CSS tokens ────────────────────────────────────────────────────────────
@@ -887,6 +980,87 @@ describe('preset generator', () => {
         tree.read(`workshop-${fw}/src/atl-button.stories.${ext}`, 'utf-8') ??
         '';
       expect(story).toContain(`from '@atelier-ui/${fw}'`);
+    },
+  );
+
+  // ─── The example story teaches the ADR-0121 pattern (S2c) ──────────────────
+  //
+  // The scaffold's own example is what an attendee copies for their next
+  // component, so it must model "the stories are the claims": one story per
+  // `variant` value and per Boolean state, args-based, and exactly one `play`
+  // function carrying a real assertion.
+
+  it.each([
+    ['angular', 'ts'],
+    ['react', 'tsx'],
+    ['vue', 'ts'],
+  ] as const)(
+    'ships one story per variant value and per Boolean state for %s',
+    async (fw, ext) => {
+      await presetGenerator(tree, { name: 'my-workspace', framework: fw });
+
+      const story =
+        tree.read(`workshop-${fw}/src/atl-button.stories.${ext}`, 'utf-8') ??
+        '';
+      expect(story).toContain('export const Primary: Story');
+      expect(story).toContain('export const Secondary: Story');
+      expect(story).toContain('export const Outline: Story');
+      expect(story).toContain('export const Danger: Story');
+      expect(story).toContain('export const Loading: Story');
+      expect(story).toContain('export const Disabled: Story');
+    },
+  );
+
+  it.each([
+    ['angular', 'ts'],
+    ['react', 'tsx'],
+    ['vue', 'ts'],
+  ] as const)(
+    'ships exactly one `play` function, on an enabled story, importing test utilities from storybook/test, for %s',
+    async (fw, ext) => {
+      await presetGenerator(tree, { name: 'my-workspace', framework: fw });
+
+      const story =
+        tree.read(`workshop-${fw}/src/atl-button.stories.${ext}`, 'utf-8') ??
+        '';
+      expect(story).toContain("from 'storybook/test'");
+      // Anchored to the start of a line (not just `/play:/`, which also
+      // matches inside `display:`) so it counts the CSF `play` key itself.
+      expect((story.match(/^\s*play:\s*async/gm) ?? []).length).toBe(1);
+      // A real assertion, not a decorative one: clicking an enabled button
+      // actually fires its click handler. It must live on an enabled story —
+      // `.is-disabled` sets `pointer-events: none`, and Storybook's default
+      // `pointerEventsCheck` throws before any assertion runs if
+      // `userEvent.click` targets such an element.
+      expect(story).toContain('userEvent.click(button)');
+      expect(story).toContain("'clicked'");
+      // `Disabled` is plain `args`-only: no per-story `render`/`play` left on
+      // it (it's the last story in the file, so this also proves the `play`
+      // asserted above is not the one pinned here).
+      const disabledStory = story.slice(story.indexOf('export const Disabled'));
+      expect(disabledStory).not.toContain('render:');
+      expect(disabledStory).not.toContain('play:');
+    },
+  );
+
+  it.each([
+    ['angular', 'ts'],
+    ['react', 'tsx'],
+    ['vue', 'ts'],
+  ] as const)(
+    'still names exactly one component (AtlButton) for %s — the check:contracts external:1 gate',
+    async (fw, ext) => {
+      await presetGenerator(tree, { name: 'my-workspace', framework: fw });
+
+      const story =
+        tree.read(`workshop-${fw}/src/atl-button.stories.${ext}`, 'utf-8') ??
+        '';
+      expect(story).toContain('component: AtlButton');
+      // No second Atelier component imported alongside AtlButton — the click
+      // test uses only the framework's own state primitive (useState/ref/a
+      // plain click binding), never a second @atelier-ui/<fw> import, which
+      // would turn check:contracts' `external: 1` into `external: 2`.
+      expect(story.match(/from '@atelier-ui\//g) ?? []).toHaveLength(1);
     },
   );
 

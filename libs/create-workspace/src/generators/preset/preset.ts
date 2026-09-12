@@ -18,6 +18,31 @@ function readTemplate(relativePath: string): string {
   return readFileSync(join(__dirname, 'files', relativePath), 'utf-8');
 }
 
+// All five packages this monorepo publishes (angular, react, vue,
+// create-workspace, create-atelier-ui-workspace) release in lockstep from
+// nx.json's `libraries` release group — they always carry the same version.
+// So rather than pinning @atelier-ui/<framework> to `latest` (which drifts
+// out from under a workshop the moment a newer version ships, and can't be
+// reproduced later), the preset pins it to ITS OWN version: this package's
+// package.json, one level above `src/generators/preset` from this file.
+// Verified to resolve identically from both places this file runs as:
+// `libs/create-workspace/src/generators/preset/preset.ts` under jest
+// (ts-jest preserves the real on-disk __dirname), and the published
+// `dist/libs/create-workspace/src/generators/preset/preset.js` (the
+// `@nx/js:tsc` build mirrors the same src-relative depth under dist/, and
+// its default `generatePackageJson` behaviour writes a package.json at
+// dist/libs/create-workspace — confirmed against this repo's own dist/ output).
+function readOwnVersion(): string {
+  const pkgPath = join(__dirname, '../../../package.json');
+  const pkg = JSON.parse(readFileSync(pkgPath, 'utf-8')) as {
+    version?: string;
+  };
+  if (!pkg.version) {
+    throw new Error(`Cannot read a "version" field from ${pkgPath}`);
+  }
+  return pkg.version;
+}
+
 const SITE_URL = 'https://atelier.pieper.io';
 
 type Framework = 'angular' | 'react' | 'vue';
@@ -500,6 +525,9 @@ export async function presetGenerator(
 
   const skillsEnabled = options.skills ?? true;
 
+  // Pinned, not `latest` — see readOwnVersion()'s comment.
+  const componentPackageVersion = readOwnVersion();
+
   const deps: Record<string, string> = {};
 
   // Every scaffolded workspace gets a local Storybook — not behind a flag
@@ -567,7 +595,7 @@ export async function presetGenerator(
       // which was the actual defect, not merely a posture gap.
       linter: 'eslint',
     });
-    deps['@atelier-ui/angular'] = 'latest';
+    deps['@atelier-ui/angular'] = componentPackageVersion;
 
     // `flat/angular-template` above (written into workshop-angular's own
     // eslint.config.mjs by the application generator, confirmed by a real
@@ -611,7 +639,7 @@ export async function presetGenerator(
       e2eTestRunner: 'none',
       skipFormat: true,
     } as Parameters<typeof reactAppGenerator>[1]);
-    deps['@atelier-ui/react'] = 'latest';
+    deps['@atelier-ui/react'] = componentPackageVersion;
 
     // Deliberately nothing added here. `flat/react` above (written into
     // workshop-react's own eslint.config.mjs by the application generator,
@@ -637,7 +665,7 @@ export async function presetGenerator(
       e2eTestRunner: 'none',
       skipFormat: true,
     } as Parameters<typeof vueAppGenerator>[1]);
-    deps['@atelier-ui/vue'] = 'latest';
+    deps['@atelier-ui/vue'] = componentPackageVersion;
 
     // @nx/vue's own application generator (confirmed by a real run against
     // an in-memory Tree, packed from the exact pinned version — @nx/vue is
@@ -978,7 +1006,33 @@ Before using any component:
 1. Call \`docs-list\` to get valid component IDs
 2. Call \`docs-show\` with the ID — never invent props
 3. Call \`docs-show-story\` for a specific variant
-4. Do not use a component that is not in the docs`;
+4. Do not use a component that is not in the docs
+
+### \`uianatomy\` MCP
+Canonical component anatomy, axes, slots, transitions, motion, tokens, events, and
+cross-framework/library divergences. Reach for it when a Storybook doc leaves a
+prop's shape, an interaction, or a cross-library convention ambiguous.`;
+
+  const angularCliMcpSection =
+    framework === 'angular'
+      ? `
+
+### \`angular-cli\` MCP
+Angular CLI best practices, API search, and docs lookups — prefer it over guessing
+at \`ng\` flags or Angular API shape from memory.`
+      : '';
+
+  const versionsSection = `## Versions
+
+\`@atelier-ui/${framework}\` is pinned to \`${componentPackageVersion}\` — the version
+this workspace was scaffolded with — so the workshop is reproducible: every attendee
+gets the same component behavior, not whatever \`latest\` happens to resolve to that
+morning. Move it deliberately when you want a newer release:
+
+\`\`\`bash
+npm install @atelier-ui/${framework}@latest
+\`\`\`
+`;
 
   tree.write(
     'CLAUDE.md',
@@ -991,11 +1045,13 @@ Full API reference: ${SITE_URL}/llms-full.txt
 
 The servers are pre-configured in \`.mcp.json\` and connect automatically.
 
-${mcpSection}
+${mcpSection}${angularCliMcpSection}
 
 ## Component Libraries
 
 ${frameworkSection}
+
+${versionsSection}
 
 ## Composition Patterns
 
@@ -1327,7 +1383,26 @@ file exports). The Desktop Bridge covers creation and inspection without a token
       type: 'http',
       url: `${SITE_URL}/storybook-${framework}/mcp`,
     },
+    // Canonical component anatomy, axes, slots, transitions, motion, tokens,
+    // events, and cross-library divergences — copied verbatim from this
+    // monorepo's own root .mcp.json, where it is wired unconditionally.
+    uianatomy: {
+      type: 'http',
+      url: 'https://uianatomy.dev/mcp',
+    },
   };
+  if (framework === 'angular') {
+    // Angular CLI best practices, API search, and examples — copied verbatim
+    // from this monorepo's own root .mcp.json. That file wires it
+    // unconditionally because the monorepo itself always has an Angular app;
+    // a single-framework workshop only needs it when Angular is the one
+    // chosen.
+    mcpServers['angular-cli'] = {
+      type: 'stdio',
+      command: 'npx',
+      args: ['-y', '@angular/cli', 'mcp'],
+    };
+  }
   if (options.figmaMcp) {
     // Desktop Bridge plugin (installed separately). FIGMA_ACCESS_TOKEN is
     // optional — only needed for REST-backed reads. See ${SITE_URL}/figma-token.
@@ -1350,6 +1425,12 @@ file exports). The Desktop Bridge covers creation and inspection without a token
 ## Apps
 
 - \`${appName}\` — \`@atelier-ui/${framework}\`
+
+## Versions
+
+\`@atelier-ui/${framework}\` is pinned to \`${componentPackageVersion}\` for reproducibility —
+not \`latest\`, so the workshop behaves the same for everyone. Upgrade deliberately:
+\`npm install @atelier-ui/${framework}@latest\`.
 
 ## Getting started
 
