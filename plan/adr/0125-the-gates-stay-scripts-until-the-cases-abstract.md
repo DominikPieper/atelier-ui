@@ -50,6 +50,13 @@ What is true today, measured rather than assumed:
   one-framework workspace as **byte-identical copies** (ADR-0090's idiom), guarded by
   `check:preflight-clone-sync`, which diffs nine source/copy pairs. That is two gates,
   one of which (`check:stories`) is an ordinary Nx target needing no packaging at all.
+
+  **Corrected 2026-09-12:** eight pairs, not nine — `sync-preflight.mjs`'s `FILES`
+  table has eight entries. The number was never counted when this record was written; it
+  changes nothing about the argument, and it is exactly the kind of operational fact this
+  repo's ADR convention says to point at rather than restate, so treat the table as the
+  source and this sentence as prose that will go stale again.
+
 - The publishing machinery exists (`@atelier-ui/*`, `nx release`, the preset and CLI
   already ship from here), and `@nx/plugin` is installed and referenced nowhere.
 
