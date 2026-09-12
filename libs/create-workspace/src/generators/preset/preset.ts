@@ -124,6 +124,78 @@ function appendToFlatEslintConfig(
   );
 }
 
+// Ported CSS-discipline stylelint rules (ADR-0130): assembles the scaffold's
+// own stylelint.config.mjs — one override block per selected framework's own
+// `workshop-<fw>/src` tree, mirroring this repo's own stylelint.config.mjs
+// (which does the same per libs/{angular,react,vue}). Built as a template
+// string here rather than a static files/ template, because both the block
+// count and the app-relative paths it names depend on which frameworks were
+// selected — the same reason CLAUDE.md/README.md below are assembled from
+// `frameworks`, not copied verbatim.
+//
+// Only three of the four shipped rules are wired: `atelier/no-primitive-token`
+// polices reaching past the semantic token tier into a primitive ramp (e.g.
+// `--ui-color-teal-500`), which presupposes knowing that ramp exists — this
+// workspace's own tokens.css has no such tiering to police. The file still
+// ships (see the loop that writes tools/stylelint-rules/* below) because
+// index.js requires all four rule files unconditionally, and a
+// byte-identical index.js (kept in sync with the canonical copy by
+// sync-preflight.mjs) is worth more than a scaffold-specific fork that drops
+// one require().
+//
+// Neither wired rule is given `componentRoot` or `allowlistsFile`: this
+// workspace ships no allowlists.js, so every exemption map defaults to empty
+// and the staleness scan those two options drive never runs (documented in
+// each rule's own header in tools/stylelint-rules/) — passing them here would
+// configure a scan that can never find anything.
+function buildStylelintConfig(frameworks: Framework[]): string {
+  const overrides = frameworks
+    .map((framework) => {
+      const appName = `workshop-${framework}`;
+      const tokensCss = `${appName}/src/styles/tokens.css`;
+      return `    {
+      files: ['${appName}/src/**/*.css'],
+      rules: {
+        'atelier/no-raw-color-literal': true,
+        'atelier/no-undeclared-token': [true, { tokenFiles: ['${tokensCss}'] }],
+        'atelier/no-token-bypass': [true, { tokenFile: '${tokensCss}' }],
+      },
+    },`;
+    })
+    .join('\n');
+
+  return `// This workspace's own CSS-discipline rules only ('tools/stylelint-rules/')
+// — ported from the parent Atelier monorepo (ADR-0130). No
+// stylelint-config-standard or any other base config: stylelint 16+ ships no
+// built-in formatting/stylistic rules at all (split out to the separate,
+// opt-in @stylistic plugin, which this workspace does not install), so there
+// is nothing here that could fight Prettier.
+//
+// Three of the four shipped rules are wired below. atelier/no-primitive-token
+// is NOT — it polices reaching past the semantic token tier into a primitive
+// ramp, which presupposes knowing that ramp exists, and this workspace's own
+// tokens.css has no such tiering. The three below catch what an attendee does
+// by writing ordinary component CSS on day one: a raw color literal, a
+// typo'd or undeclared --ui-* token, and a literal that duplicates a token's
+// value instead of binding to it.
+//
+// tokens.css itself is EXCLUDED from every framework's stylelint target (via
+// --ignore-pattern in the app's project.json, not an exemption here): it is
+// the one file that legitimately spells out raw color/dimension literals as
+// token DEFINITIONS — the opposite of what these rules police in a file that
+// CONSUMES tokens.
+import atelier from './tools/stylelint-rules/index.js';
+
+export default {
+  plugins: [atelier],
+  rules: {},
+  overrides: [
+${overrides}
+  ],
+};
+`;
+}
+
 // The four storybookjs/mcp skills this generator installs post-scaffold (S2).
 // Pinned the same way ADR-0110 pins figma-console-mcp: a skill install is a
 // remote pull of skill *text*, and an un-pinned CLI could silently change what
@@ -166,6 +238,15 @@ const MCP_SDK_VERSION = '^1.29.0';
 // constant in the devDependencies write when `typescript` isn't already
 // present.
 const TYPESCRIPT_VERSION = '6.0.3';
+
+// Ported CSS-discipline stylelint rules (ADR-0130): pinned the same way
+// STORYBOOK_VERSION above is — the exact version this monorepo actually
+// runs, not the caret range root package.json declares (`^17.15.0`); the
+// resolved, installed version (package-lock.json) is 17.15.0, and that's
+// the one every attendee's neighbour should get too. No `postcss-html`
+// devDependency: that's only needed to lint `.astro` files, and the
+// scaffold has none.
+const STYLELINT_VERSION = '17.15.0';
 
 // Browser-mode Storybook tests (owner correction, 2026-09-10, to ADR-0123's
 // "no test runner" decision — see the dated correction on that record).
@@ -709,6 +790,19 @@ export async function presetGenerator(
           cwd: appName,
         },
       };
+      // Ported CSS-discipline rules (ADR-0130): a sibling target, not folded
+      // into `lint` — same reasoning as this repo's own libs/{fw}/project.json
+      // (lint is inferred by @nx/eslint/plugin per project; overriding it to
+      // also shell out would re-implement what inference gives for free).
+      // --ignore-pattern excludes this app's own tokens.css from the run: it
+      // is a token DEFINITION file, the one place these rules' raw literals
+      // are supposed to live, not a file that reads/consumes tokens.
+      config.targets['stylelint'] = {
+        executor: 'nx:run-commands',
+        options: {
+          command: `stylelint '${appName}/src/**/*.css' --ignore-pattern '${appName}/src/styles/tokens.css' --config stylelint.config.mjs`,
+        },
+      };
       return config;
     });
 
@@ -734,6 +828,58 @@ export async function presetGenerator(
       storybookDevDeps['@storybook/vue3'] = STORYBOOK_VERSION;
     }
   }
+
+  // ─── Stylelint (ported CSS-discipline rules, ADR-0130) ───────────────────
+  console.log(`\n◇ Wiring stylelint (ported CSS-discipline rules)…`);
+
+  tree.write('stylelint.config.mjs', buildStylelintConfig(frameworks));
+
+  // Six files, byte-identical to the canonical copies in tools/stylelint-rules/
+  // (kept that way by this repo's own sync-preflight.mjs) — see
+  // buildStylelintConfig's comment above for why no-primitive-token.js ships
+  // even though it's never wired into the config just written.
+  for (const ruleFile of [
+    'index.js',
+    'utils.js',
+    'no-raw-color-literal.js',
+    'no-undeclared-token.js',
+    'no-primitive-token.js',
+    'no-token-bypass.js',
+  ]) {
+    tree.write(
+      `tools/stylelint-rules/${ruleFile}`,
+      readTemplate(`tools/stylelint-rules/${ruleFile}`),
+    );
+  }
+
+  // The config and the rule files above both live outside every project that
+  // reads them (the per-app `stylelint` targets added in the loop above) —
+  // exactly the cache trap ADR-0130 proved twice in this repo's own
+  // nx.json. Mirrors this repo's own targetDefaults.stylelint, minus
+  // `tools/scripts/lib/allowlists.js` (the scaffold ships no such file — see
+  // buildStylelintConfig's comment on why neither wired rule is given
+  // `allowlistsFile`). The application generators above are guaranteed to
+  // have already written nx.json (create-nx-workspace writes it before any
+  // preset runs), so `updateJson` here is safe the same way the package.json
+  // update below is.
+  updateJson(tree, 'nx.json', (config) => {
+    config.targetDefaults ??= {};
+    config.targetDefaults['stylelint'] = {
+      cache: true,
+      inputs: [
+        'default',
+        '^default',
+        '{workspaceRoot}/stylelint.config.mjs',
+        '{workspaceRoot}/tools/stylelint-rules/**/*',
+        ...frameworks.map(
+          (framework) =>
+            `{workspaceRoot}/workshop-${framework}/src/styles/tokens.css`,
+        ),
+        { externalDependencies: ['stylelint'] },
+      ],
+    };
+    return config;
+  });
 
   // ─── The contract loop (ADR-0121 S4) ─────────────────────────────────────
   // Ships once, scoped to the FIRST selected framework — a contracts.config.json
@@ -1076,13 +1222,21 @@ file exports). The Desktop Bridge covers creation and inspection without a token
       ESLINT_CONFIG_PRETTIER_VERSION;
   }
 
+  // Ported CSS-discipline rules (ADR-0130). No postcss-html: that's only
+  // needed to lint .astro files, and the scaffold has none.
+  const stylelintDevDeps: Record<string, string> = {
+    stylelint: STYLELINT_VERSION,
+  };
+
   // Install selected @atelier-ui/* packages (dependencies) and Storybook +
-  // the contract loop's own tools + the vitest browser-mode tooling
-  // (devDependencies, exact pins — see the *_VERSION constants above)
+  // the contract loop's own tools + the vitest browser-mode tooling +
+  // stylelint (devDependencies, exact pins — see the *_VERSION constants
+  // above)
   const installTask = addDependenciesToPackageJson(tree, deps, {
     ...storybookDevDeps,
     ...contractLoopDevDeps,
     ...viteFrameworkDevDeps,
+    ...stylelintDevDeps,
   });
 
   // Remove the preset package itself — create-nx-workspace adds it automatically
@@ -1118,6 +1272,9 @@ file exports). The Desktop Bridge covers creation and inspection without a token
     // Browser-mode Storybook tests (owner correction 2026-09-10 to ADR-0123).
     // Identical to the monorepo's own root package.json script.
     pkg.scripts['check:stories'] = 'nx run-many -t storybook-test --parallel=1';
+    // Ported CSS-discipline rules (ADR-0130). Identical to the monorepo's own
+    // root package.json script.
+    pkg.scripts['check:stylelint'] = 'nx run-many -t stylelint';
     return pkg;
   });
 

@@ -1136,6 +1136,181 @@ describe('preset generator', () => {
     ).rejects.toThrow('workshop-angular/project.json');
   });
 
+  // ─── Stylelint (ported CSS-discipline rules, ADR-0130) ─────────────────────
+
+  it('writes the ported stylelint rule files, byte-identical clones', async () => {
+    await presetGenerator(tree, {
+      name: 'my-workspace',
+      frameworks: 'angular',
+    });
+
+    for (const file of [
+      'index.js',
+      'utils.js',
+      'no-raw-color-literal.js',
+      'no-undeclared-token.js',
+      'no-primitive-token.js',
+      'no-token-bypass.js',
+    ]) {
+      expect(tree.exists(`tools/stylelint-rules/${file}`)).toBe(true);
+    }
+  });
+
+  it('stylelint.config.mjs wires exactly the three attendee-facing rules, not no-primitive-token', async () => {
+    await presetGenerator(tree, {
+      name: 'my-workspace',
+      frameworks: 'angular',
+    });
+
+    const config = tree.read('stylelint.config.mjs', 'utf-8') ?? '';
+    expect(config).toContain("'atelier/no-raw-color-literal': true");
+    expect(config).toContain("'atelier/no-undeclared-token'");
+    expect(config).toContain("'atelier/no-token-bypass'");
+    // no-primitive-token.js ships (previous test) but is never turned on as
+    // a rule here — see buildStylelintConfig's comment on why. The comment
+    // itself names the rule to explain the omission, so assert on the
+    // rule-key form (quoted, as it would appear if actually wired) rather
+    // than banning the bare word.
+    expect(config).not.toContain("'atelier/no-primitive-token'");
+    expect(config).toContain(
+      "import atelier from './tools/stylelint-rules/index.js';",
+    );
+  });
+
+  it('stylelint.config.mjs names the exact tokens.css path the generator writes for each selected framework', async () => {
+    await presetGenerator(tree, {
+      name: 'my-workspace',
+      frameworks: 'angular,react',
+    });
+
+    const config = tree.read('stylelint.config.mjs', 'utf-8') ?? '';
+    // Same path this suite's own "writes tokens.css into the scaffolded ***
+    // app" tests assert tree.write puts the file at — not re-derived, the
+    // literal string both sides must agree on.
+    expect(config).toContain('workshop-angular/src/styles/tokens.css');
+    expect(config).toContain('workshop-react/src/styles/tokens.css');
+    expect(config).not.toContain('workshop-vue/src/styles/tokens.css');
+  });
+
+  it("adds a stylelint target per app, ignoring that app's own tokens.css", async () => {
+    await presetGenerator(tree, {
+      name: 'my-workspace',
+      frameworks: 'react',
+    });
+
+    const project = readJson(tree, 'workshop-react/project.json');
+    expect(project.targets.stylelint.executor).toBe('nx:run-commands');
+    const command = project.targets.stylelint.options.command as string;
+    expect(command).toContain("stylelint 'workshop-react/src/**/*.css'");
+    expect(command).toContain(
+      "--ignore-pattern 'workshop-react/src/styles/tokens.css'",
+    );
+    expect(command).toContain('--config stylelint.config.mjs');
+  });
+
+  it('leaves an existing lint target untouched and adds stylelint as a separate sibling', async () => {
+    // The real @nx/{angular,react,vue}:application generator DOES write its
+    // own `lint` target (an explicit `@nx/eslint:lint` executor entry,
+    // confirmed by running it for real) — the plain mock above doesn't, so
+    // this test seeds one itself, the same way the "preserves the
+    // application generator's own targets" test above seeds a placeholder
+    // `build` target, to actually exercise the "don't touch it" claim rather
+    // than trivially finding no `lint` key at all.
+    reactAppMock.mockImplementationOnce(
+      (t: Tree, options: { name: string }) => {
+        t.write(
+          `${options.name}/project.json`,
+          JSON.stringify({
+            name: options.name,
+            targets: {
+              lint: { executor: '@nx/eslint:lint', options: {} },
+            },
+          }),
+        );
+        t.write(
+          `${options.name}/eslint.config.mjs`,
+          ESLINT_CONFIG_BASELINE.react,
+        );
+        return Promise.resolve(undefined);
+      },
+    );
+
+    await presetGenerator(tree, { name: 'my-workspace', frameworks: 'react' });
+
+    const project = readJson(tree, 'workshop-react/project.json');
+    expect(project.targets.lint).toEqual({
+      executor: '@nx/eslint:lint',
+      options: {},
+    });
+    expect(project.targets.stylelint.executor).toBe('nx:run-commands');
+  });
+
+  it('adds nx.json targetDefaults.stylelint with cache + the declared inputs, minus allowlists.js', async () => {
+    await presetGenerator(tree, {
+      name: 'my-workspace',
+      frameworks: 'angular,vue',
+    });
+
+    const nxJson = readJson(tree, 'nx.json');
+    const stylelintDefaults = nxJson.targetDefaults.stylelint;
+    expect(stylelintDefaults.cache).toBe(true);
+    expect(stylelintDefaults.inputs).toEqual(
+      expect.arrayContaining([
+        'default',
+        '^default',
+        '{workspaceRoot}/stylelint.config.mjs',
+        '{workspaceRoot}/tools/stylelint-rules/**/*',
+        '{workspaceRoot}/workshop-angular/src/styles/tokens.css',
+        '{workspaceRoot}/workshop-vue/src/styles/tokens.css',
+        { externalDependencies: ['stylelint'] },
+      ]),
+    );
+    // Unlike this repo's own nx.json: the scaffold ships no allowlists.js.
+    expect(
+      stylelintDefaults.inputs.some(
+        (input: unknown) =>
+          typeof input === 'string' && input.includes('allowlists.js'),
+      ),
+    ).toBe(false);
+  });
+
+  it('preserves nx.json targetDefaults already present in the tree', async () => {
+    // createTreeWithEmptyWorkspace seeds nx.json with targetDefaults.build and
+    // .lint already set — asserting they survive proves the preset merges its
+    // own entry in rather than replacing targetDefaults wholesale.
+    await presetGenerator(tree, {
+      name: 'my-workspace',
+      frameworks: 'angular',
+    });
+
+    const nxJson = readJson(tree, 'nx.json');
+    expect(nxJson.targetDefaults.build).toBeDefined();
+    expect(nxJson.targetDefaults.lint).toBeDefined();
+    expect(nxJson.targetDefaults.stylelint).toBeDefined();
+  });
+
+  it('adds stylelint as a devDependency at the exact version this monorepo runs', async () => {
+    await presetGenerator(tree, {
+      name: 'my-workspace',
+      frameworks: 'angular',
+    });
+
+    const pkg = readJson(tree, 'package.json');
+    expect(pkg.devDependencies['stylelint']).toBe('17.15.0');
+    // Only needed to lint .astro files — the scaffold has none.
+    expect(pkg.devDependencies['postcss-html']).toBeUndefined();
+  });
+
+  it('adds check:stylelint to package.json scripts', async () => {
+    await presetGenerator(tree, {
+      name: 'my-workspace',
+      frameworks: 'angular',
+    });
+
+    const pkg = readJson(tree, 'package.json');
+    expect(pkg.scripts['check:stylelint']).toBe('nx run-many -t stylelint');
+  });
+
   // ─── The contract loop (ADR-0121 S4) ───────────────────────────────────────
 
   it('writes the example contract files under the first selected framework app', async () => {

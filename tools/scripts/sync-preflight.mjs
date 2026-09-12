@@ -14,6 +14,15 @@
  *     `tools/scripts/figma-snapshot-contracts.mjs` are the contract-loop
  *     scripts the scaffold ships (ADR-0121 S4) — the same "one canonical
  *     source, one generated copy" problem, just three more files.
+ *   - `tools/stylelint-rules/{index,utils,no-raw-color-literal,
+ *     no-undeclared-token,no-primitive-token,no-token-bypass}.js` are the
+ *     ported CSS-discipline stylelint rules the scaffold ships (ADR-0130) —
+ *     six more files, same shape again. `no-primitive-token.js` ships even
+ *     though the scaffold's own stylelint.config.mjs (written by preset.ts,
+ *     not cloned) never wires it: `index.js` requires all four rule files
+ *     unconditionally, and a byte-identical `index.js` is worth more than a
+ *     scaffold-specific fork that drops one `require()` — see preset.ts's
+ *     comment on that decision.
  *
  * Originally a single-file check (preflight.mjs only); generalised to a FILES
  * list here without renaming the script or changing its `--check` semantics,
@@ -90,6 +99,36 @@ const FILES = [
   {
     source: 'libs/spec/src/contracts/button.contract.ts',
     target: `${PRESET_FILES_DIR}/contracts/button.contract.ts.template`,
+  },
+  // Ported CSS-discipline stylelint rules (ADR-0130). Six files, same
+  // "one canonical source, one generated copy" shape as everything above —
+  // no `.template` suffix needed, since these are `.js`, not `.ts` (the
+  // extension the scaffold package's own tsconfig.lib.json would otherwise
+  // try to compile away — see the comment on the two `.template` entries
+  // above).
+  {
+    source: 'tools/stylelint-rules/index.js',
+    target: `${PRESET_FILES_DIR}/tools/stylelint-rules/index.js`,
+  },
+  {
+    source: 'tools/stylelint-rules/utils.js',
+    target: `${PRESET_FILES_DIR}/tools/stylelint-rules/utils.js`,
+  },
+  {
+    source: 'tools/stylelint-rules/no-raw-color-literal.js',
+    target: `${PRESET_FILES_DIR}/tools/stylelint-rules/no-raw-color-literal.js`,
+  },
+  {
+    source: 'tools/stylelint-rules/no-undeclared-token.js',
+    target: `${PRESET_FILES_DIR}/tools/stylelint-rules/no-undeclared-token.js`,
+  },
+  {
+    source: 'tools/stylelint-rules/no-primitive-token.js',
+    target: `${PRESET_FILES_DIR}/tools/stylelint-rules/no-primitive-token.js`,
+  },
+  {
+    source: 'tools/stylelint-rules/no-token-bypass.js',
+    target: `${PRESET_FILES_DIR}/tools/stylelint-rules/no-token-bypass.js`,
   },
 ];
 
