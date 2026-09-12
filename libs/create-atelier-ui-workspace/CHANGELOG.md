@@ -1,3 +1,21 @@
+## 0.2.43 (2026-09-12)
+
+### 🚀 Features
+
+- **create-workspace:** the scaffold ships the contract loop — ADR-0121 S4 ([74aa640](https://github.com/DominikPieper/atelier-ui/commit/74aa640))
+- **create-workspace:** Storybook and the skills ship together — ADR-0123 ([79b60e9](https://github.com/DominikPieper/atelier-ui/commit/79b60e9))
+
+### 🩹 Fixes
+
+- **e2e:** the CLI e2e pinned a summary line's shape, not the facts it meant ([4a31702](https://github.com/DominikPieper/atelier-ui/commit/4a31702))
+- **gates:** check:contracts skips package-imported components before docgen ([caa7633](https://github.com/DominikPieper/atelier-ui/commit/caa7633))
+
+### ❤️ Thank You
+
+- Claude Fable 5.1
+- Claude Opus 5 (1M context)
+- Dominik Pieper @DominikPieper
+
 ## 0.2.42 (2026-09-10)
 
 This was a version bump only for create-atelier-ui-workspace to align it with other projects, there were no code changes.

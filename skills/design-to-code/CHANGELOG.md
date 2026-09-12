@@ -1,3 +1,14 @@
+## 0.1.3 (2026-09-12)
+
+### 🩹 Fixes
+
+- **skill:** the Day-2 loop, walked as a participant — twenty findings, five blockers ([e1fe140](https://github.com/DominikPieper/atelier-ui/commit/e1fe140))
+
+### ❤️ Thank You
+
+- Claude Fable 5.1
+- Dominik Pieper @DominikPieper
+
 ## 0.1.2 (2026-09-10)
 
 ### 🚀 Features

@@ -1,3 +1,26 @@
+## 0.2.43 (2026-09-12)
+
+### 🚀 Features
+
+- **lint:** check:css-tokens becomes two stylelint rules ([50fea90](https://github.com/DominikPieper/atelier-ui/commit/50fea90))
+- **stories:** a play earns its place only where jsdom cannot reach ([fc54417](https://github.com/DominikPieper/atelier-ui/commit/fc54417))
+- **lint:** the linter is a gate, where the invariant fits in one file ([e4e6a02](https://github.com/DominikPieper/atelier-ui/commit/e4e6a02))
+- **spec:** the contract on every Docs tab, imported by every story meta — ADR-0121 S5b ([30dd54c](https://github.com/DominikPieper/atelier-ui/commit/30dd54c))
+- **gates:** check:contracts — the stories are the spec, stage 1 ([527a957](https://github.com/DominikPieper/atelier-ui/commit/527a957))
+- **gates:** every story is a test — ADR-0122, S0 of ADR-0121 ([f272e1f](https://github.com/DominikPieper/atelier-ui/commit/f272e1f))
+
+### 🩹 Fixes
+
+- **a11y:** axe never ran for Angular, Vue had no a11y lint, and the tooltip was broken for keyboard users ([7bf0d50](https://github.com/DominikPieper/atelier-ui/commit/7bf0d50))
+- **vue:** AtlChat never opened when `open` started true, and three gate findings ([0da9e30](https://github.com/DominikPieper/atelier-ui/commit/0da9e30))
+- **storybook:** the base path was keyed on CI, and the test server is CI too ([3486385](https://github.com/DominikPieper/atelier-ui/commit/3486385))
+
+### ❤️ Thank You
+
+- Claude Fable 5.1
+- Claude Opus 5 (1M context)
+- Dominik Pieper @DominikPieper
+
 ## 0.2.42 (2026-09-10)
 
 This was a version bump only for vue to align it with other projects, there were no code changes.

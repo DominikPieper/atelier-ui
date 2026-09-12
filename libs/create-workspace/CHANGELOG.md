@@ -1,3 +1,28 @@
+## 0.2.43 (2026-09-12)
+
+### 🚀 Features
+
+- **scaffold:** Prettier ships enforced, and a types script does not ship at all ([543dc71](https://github.com/DominikPieper/atelier-ui/commit/543dc71))
+- **scaffold:** a generated workspace gets the CSS-discipline rules on day one ([68b097c](https://github.com/DominikPieper/atelier-ui/commit/68b097c))
+- **lint:** the linter is a gate, where the invariant fits in one file ([e4e6a02](https://github.com/DominikPieper/atelier-ui/commit/e4e6a02))
+- **gates:** a gate that measured nothing is not a gate that found nothing ([a45a685](https://github.com/DominikPieper/atelier-ui/commit/a45a685))
+- **gates:** check:manifest-parity — the three manifests, diffed — ADR-0121 S6a ([fbd5fd3](https://github.com/DominikPieper/atelier-ui/commit/fbd5fd3))
+- **spec:** the contract on every Docs tab, imported by every story meta — ADR-0121 S5b ([30dd54c](https://github.com/DominikPieper/atelier-ui/commit/30dd54c))
+- **create-workspace:** the scaffold ships the contract loop — ADR-0121 S4 ([74aa640](https://github.com/DominikPieper/atelier-ui/commit/74aa640))
+- **create-workspace:** Storybook and the skills ship together — ADR-0123 ([79b60e9](https://github.com/DominikPieper/atelier-ui/commit/79b60e9))
+
+### 🩹 Fixes
+
+- **lint:** a broken allowlists module made the staleness check silent ([a41ff02](https://github.com/DominikPieper/atelier-ui/commit/a41ff02))
+- **gates:** check:contracts skips package-imported components before docgen ([caa7633](https://github.com/DominikPieper/atelier-ui/commit/caa7633))
+- **skill:** the Day-2 loop, walked as a participant — twenty findings, five blockers ([e1fe140](https://github.com/DominikPieper/atelier-ui/commit/e1fe140))
+
+### ❤️ Thank You
+
+- Claude Fable 5.1
+- Claude Opus 5 (1M context)
+- Dominik Pieper @DominikPieper
+
 ## 0.2.42 (2026-09-10)
 
 This was a version bump only for create-workspace to align it with other projects, there were no code changes.
