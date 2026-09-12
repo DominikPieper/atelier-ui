@@ -237,6 +237,169 @@ export default config;`} lang="ts" />
         </div>
       </div>
     </div>
+
+    <!-- CLI section -->
+    <div>
+      <h2 id="cli" class="docs-section-title">CLI</h2>
+      <p style="margin: 0 0 1.75rem; font-size: 0.85rem; color: var(--ui-color-text-muted); line-height: 1.65">
+        Everything above is MCP. The <code>storybook</code> binary itself is bigger than that, and almost none of the rest is what this repo actually runs — Nx wraps <code>dev</code> and <code>build</code>, and Vitest replaces the test command entirely. What follows was read from the installed <code>storybook@10.6.0</code> package's own dispatcher and command registration (<code>node_modules/storybook/dist/bin/</code>, plus <code>@storybook/cli@10.6.0</code> fetched on demand), not from release notes, and exercised directly against this repo everywhere marked <strong>verified</strong>.
+      </p>
+
+      <div class="docs-step-list">
+        <!-- Step 01 -->
+        <div class="docs-step-row">
+          <span class="docs-step-badge">01</span>
+          <div class="docs-step-body">
+            <h3 class="docs-h3">One command, two packages</h3>
+            <p class="docs-step-desc">
+              <code>storybook</code>'s own <code>bin/dispatcher.js</code> inspects <code>argv[0]</code> before anything else: <code>dev</code>, <code>build</code>, <code>index</code>, <code>ai</code>, <code>tools</code> and <code>skills</code> import <code>storybook/dist/bin/core.js</code> directly — the exact 10.6.0 already sitting in this repo's <code>node_modules</code>, nothing to fetch. Every other subcommand is handed to a <em>separate</em> package, <code>@storybook/cli</code>, pinned to the identical version but <strong>not a dependency of this repo</strong> — dispatcher.js tries to resolve it, fails, and falls back to running it through the package manager's remote-package path. Verified: <code>npx storybook doctor</code> here fetches <code>@storybook/cli@10.6.0</code> from the registry on first use, the same way <code>npx storybook@10.6.0 doctor</code> would in a project that had never installed Storybook at all. One footgun this split creates: plain <code>storybook --help</code> only ever shows the <code>@storybook/cli</code> command list (<code>init</code>, <code>add</code>, …) — <code>dev</code>, <code>build</code>, <code>index</code>, <code>ai</code>, <code>tools</code> and <code>skills</code> never appear there, because dispatcher.js only checks <code>argv[0]</code> against that fixed list and <code>--help</code> doesn't match it, so it falls through to the other package. Each of the six has its own working <code>--help</code>; the top-level one just doesn't list them.
+            </p>
+            <table class="docs-props-table">
+              <thead>
+                <tr><th>Command</th><th>Package</th><th>Needs</th><th>What it does</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><code>dev</code></td><td><code>storybook</code> (local)</td><td>nothing beyond <code>node_modules</code></td><td>Dev server. This repo's <code>nx storybook &lt;fw&gt;</code> target.</td></tr>
+                <tr><td><code>build</code></td><td><code>storybook</code> (local)</td><td>nothing beyond <code>node_modules</code></td><td>Static build; with <code>componentsManifest</code> on, also writes <code>manifests/components.json</code>. This repo's <code>nx build-storybook &lt;fw&gt;</code> target.</td></tr>
+                <tr><td><code>index</code></td><td><code>storybook</code> (local)</td><td>nothing beyond <code>node_modules</code></td><td>Writes a lightweight story index (titles, story IDs, tags, import paths) via <code>StoryIndexGenerator</code> — no docgen, no manager, no preview bundle, and no relation to <code>manifests/components.json</code> despite the similar name (Step 06).</td></tr>
+                <tr><td><code>ai</code></td><td><code>storybook</code> (local)</td><td>nothing beyond <code>node_modules</code></td><td>Deprecated — its own <code>--help</code> says "AI agent helpers for Storybook (deprecated — see <code>storybook skills</code>)".</td></tr>
+                <tr><td><code>tools</code></td><td><code>storybook</code> (local)</td><td>nothing beyond <code>node_modules</code>; some tools need a running Storybook</td><td>CLI door into the same toolset <code>@storybook/addon-mcp</code> serves over HTTP (Step 03).</td></tr>
+                <tr><td><code>skills</code></td><td><code>storybook</code> (local)</td><td>nothing beyond <code>node_modules</code></td><td>Prints agent instructions generated from the target Storybook's own config. Not the tool ADR-0123 uses (Step 04).</td></tr>
+                <tr><td><code>init</code></td><td><code>@storybook/cli</code> (network)</td><td>registry fetch, then a package install</td><td>Scaffold Storybook into a project without it. Long-standing, not used here.</td></tr>
+                <tr><td><code>add &lt;addon&gt;</code> / <code>remove &lt;addon&gt;</code></td><td><code>@storybook/cli</code> (network)</td><td>registry fetch + install</td><td>Install or uninstall one addon and wire <code>main.ts</code>. Long-standing, not used here.</td></tr>
+                <tr><td><code>upgrade</code></td><td><code>@storybook/cli</code> (network)</td><td>registry fetch + install — <strong>even with <code>--dry-run</code></strong> (Step 05)</td><td>Bump every Storybook package to the CLI's own version, then run automigrations and <code>doctor</code>. Long-standing, not used here.</td></tr>
+                <tr><td><code>automigrate [fixId]</code></td><td><code>@storybook/cli</code> (network)</td><td>registry fetch; no install unless a fix actually succeeds</td><td>Detect and optionally apply known upgrade fixups. Long-standing, not used here.</td></tr>
+                <tr><td><code>doctor</code></td><td><code>@storybook/cli</code> (network)</td><td>registry fetch only — read-only otherwise (Step 05)</td><td>Static dependency/config health check. Long-standing, not used here.</td></tr>
+                <tr><td><code>info</code> / <code>migrate</code> / <code>sandbox</code>|<code>repro</code> / <code>link</code></td><td><code>@storybook/cli</code> (network)</td><td>registry fetch; varies</td><td>Environment report; standalone codemods; template sandboxes; contributor repro linking. Long-standing, not used here.</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Step 02 -->
+        <div class="docs-step-row">
+          <span class="docs-step-badge">02</span>
+          <div class="docs-step-body">
+            <h3 class="docs-h3">What's new for the CLI at 10.5 → 10.6</h3>
+            <p class="docs-step-desc">
+              Three changes, all confirmed against the installed dist rather than the changelog:
+            </p>
+            <table class="docs-props-table">
+              <thead>
+                <tr><th>Change</th><th>Evidence</th></tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>storybook ai</code> deprecated in favour of <code>storybook skills</code></td>
+                  <td>Verified: the <code>ai</code> command's own <code>--help</code> prints the deprecation notice; <code>ai setup</code>'s says "deprecated: use <code>storybook skills setup</code>".</td>
+                </tr>
+                <tr>
+                  <td><code>storybook tools</code> made public</td>
+                  <td>Storybook's own 10.6.0 release material describes it as newly public (announced, not independently re-verified beyond the command existing and working in this dist). Structurally it is real: <code>bin/dispatcher.js</code> routes <code>tools</code> the same way it routes <code>dev</code>/<code>build</code>, and it answers with a full tool surface (Step 03).</td>
+                </tr>
+                <tr>
+                  <td>A new <code>automigrate</code> fix, <code>addon-mcp</code>, fires whenever any AI coding agent is detected</td>
+                  <td>Verified by reading the fix (<code>src/automigrate/fixes/addon-mcp.ts</code>) and by running it (Step 05): its <code>check()</code> calls <code>detectAgent()</code> and returns non-null — meaning "applicable" — whenever an agent is detected, <em>regardless of whether <code>@storybook/addon-mcp</code> is already installed at the correct pinned version</em>.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Step 03 -->
+        <div class="docs-step-row">
+          <span class="docs-step-badge">03</span>
+          <div class="docs-step-body">
+            <h3 class="docs-h3"><code>storybook tools</code> — the CLI door into the MCP toolset</h3>
+            <p class="docs-step-desc">
+              <code>storybook tools</code> exposes almost the same functions as <code>@storybook/addon-mcp</code>, callable from a plain shell — useful for Codex or the Antigravity CLI, which have no MCP client wired to this repo's Storybooks (<code>.mcp.json</code> only speaks Claude Code's MCP protocol). Verified command and output, run against this repo without a dev server:
+            </p>
+            <Code code={`$ npx storybook tools --config-dir libs/react/.storybook --json docs list
+{ "manifests": { "componentManifest": { "components": {
+  "components-inputs-atlbutton": { "id": "…", "name": "AtlButton", "reactDocgen": { … }, … }
+  # … one entry per component, real props inline
+} } } }`} lang="text" />
+            <p class="docs-step-desc" style="margin-top: 0.5rem">
+              Note the option order: global flags (<code>--config-dir</code>, <code>--json</code>, <code>-o</code>) go <em>before</em> the toolset and tool name — <code>tools --config-dir … docs list</code>, not <code>tools docs list --config-dir …</code> (verified the hard way: the latter silently falls back to <code>./.storybook</code> and fails).
+            </p>
+            <table class="docs-props-table" style="margin-top: 0.75rem">
+              <thead>
+                <tr><th>CLI subcommand</th><th>MCP tool it matches</th><th>Needs</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><code>docs list</code> / <code>docs show</code> / <code>docs show-story</code></td><td><code>docs-list</code> / <code>docs-show</code> / <code>docs-show-story</code></td><td>local — config dir only (real docgen for React; not for Angular/Vue without a running server, Step 06)</td></tr>
+                <tr><td><code>stories changed</code> / <code>stories find-by-component</code></td><td><code>stories-changed</code> / <code>stories-find-by-component</code></td><td>local</td></tr>
+                <tr><td><code>stories preview</code></td><td><code>stories-preview</code></td><td>requires a running Storybook</td></tr>
+                <tr><td><code>review create</code></td><td><code>review-create</code> (hyphenated MCP id; two words as a CLI subcommand)</td><td>requires a running Storybook</td></tr>
+                <tr><td><code>test run</code></td><td><code>test-run</code></td><td>local, needs <code>@storybook/addon-vitest</code></td></tr>
+                <tr><td><em>(none)</em></td><td><code>get-storybook-story-instructions</code></td><td>MCP-only — the CLI's equivalent is <code>storybook skills stories</code>/<code>write-story</code> instead (Step 04), a different mechanism, not a <code>tools</code> subcommand</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Step 04 -->
+        <div class="docs-step-row">
+          <span class="docs-step-badge">04</span>
+          <div class="docs-step-body">
+            <h3 class="docs-h3">Two tools, same word: <code>storybook skills</code> vs. <code>skills add</code></h3>
+            <p class="docs-step-desc">
+              Easy to conflate, verified as genuinely different:
+            </p>
+            <table class="docs-props-table">
+              <thead>
+                <tr><th></th><th><code>npx storybook skills [id]</code></th><th><code>npx skills add storybookjs/mcp</code></th></tr>
+              </thead>
+              <tbody>
+                <tr><td>Package</td><td><code>storybook</code> itself (10.6.0, already installed)</td><td>a third, unrelated npm package literally named <code>skills</code> (pinned <code>1.5.25</code> per ADR-0123)</td></tr>
+                <tr><td>What it does</td><td>Prints markdown instructions — <code>stories</code>, <code>write-story</code>, <code>setup</code> — assembled live from <em>this</em> target Storybook's own config (framework, feature flags)</td><td>Clones the <code>storybookjs/mcp</code> GitHub repo and installs its <code>SKILL.md</code> files into <code>.claude/skills/</code> (or another agent's skill directory)</td></tr>
+                <tr><td>Writes files?</td><td>No — stdout, or <code>-o &lt;path&gt;</code> if asked</td><td>Yes — that is its entire job</td></tr>
+                <tr><td>Used in this repo?</td><td>No</td><td>Yes — <code>libs/create-workspace</code>'s preset shells out to exactly this command post-scaffold (ADR-0123)</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- Step 05 -->
+        <div class="docs-step-row">
+          <span class="docs-step-badge">05</span>
+          <div class="docs-step-body">
+            <h3 class="docs-h3">Candidates weighed for this repo</h3>
+            <p class="docs-step-desc">
+              <strong><code>doctor</code> — worth adding, cheap.</strong> Verified by running it (<code>npx storybook doctor --config-dir libs/react/.storybook</code>: "Your Storybook project looks good!"). It statically checks five things — missing Storybook dependency, incompatible packages, mismatched Storybook versions, duplicated dependencies, and config-load errors — reading <code>package.json</code>/<code>node_modules</code>/<code>main.ts</code>. No build, no dev server. The only cost is the same one every <code>@storybook/cli</code> command pays here: a registry fetch, since the package isn't vendored (Step 01) — a real cost for an offline gate chain, and the reason it isn't proposed as a <code>check:all</code> step without first vendoring <code>@storybook/cli</code> as a dependency.
+            </p>
+            <p class="docs-step-desc" style="margin-top: 0.75rem">
+              <strong><code>automigrate</code> / <code>upgrade</code> — not for this repo, and riskier than the flags suggest.</strong> Verified by running <code>automigrate --dry-run</code> against this repo (safe: every fix's <code>run()</code> gates its writes on <code>dryRun</code>, confirmed by reading every fix in <code>@storybook/cli</code>'s bundle). Even on an already-current, exact-pinned 10.6.0 setup it found two applicable fixes: <code>addon-mcp</code> — which would re-install <code>@storybook/addon-mcp</code> to "latest" purely because it detects an AI coding agent running, not because the pin is wrong — and <code>wrap-getAbsolutePath</code>, which would rewrite all three <code>.storybook/main.ts</code> files' addon/framework references into <code>getAbsolutePath(...)</code> call expressions because it detects an Nx monorepo. Neither is something this repo wants applied unattended. <code>upgrade</code> is worse: reading its source (not executed, by design) shows <code>--dry-run</code> only gates the package.json version bump and the automigration writes — <code>packageManager.installDependencies()</code> runs unconditionally in its control flow regardless of <code>--dry-run</code>, so even the "check-only" flag can touch <code>package-lock.json</code> and <code>node_modules</code>.
+            </p>
+          </div>
+        </div>
+
+        <!-- Step 06 -->
+        <div class="docs-step-row">
+          <span class="docs-step-badge">06</span>
+          <div class="docs-step-body">
+            <h3 class="docs-h3" id="manifest-shortcut">The question that matters most: is there a cheaper path to <code>components.json</code>?</h3>
+            <p class="docs-step-desc">
+              <code>check:storybook-manifests</code> runs a full <code>nx build-storybook</code> for all three frameworks before it checks anything, which is why it's one of the slower gates. Four candidate shortcuts, each tried directly against this repo — the answer is <strong>no</strong>, with evidence:
+            </p>
+            <table class="docs-props-table">
+              <thead>
+                <tr><th>Candidate</th><th>Result</th></tr>
+              </thead>
+              <tbody>
+                <tr><td><code>storybook index</code></td><td>Reads its implementation (<code>build-index.ts</code>): calls <code>presets.apply('stories'/'docs'/'features'/'experimental_indexers')</code> and nothing that touches manifests. Produces <code>index.json</code> — a story index, not component docgen. Structurally cannot produce <code>components.json</code>.</td></tr>
+                <tr><td><code>storybook build --preview-only</code> (skips the manager UI shell)</td><td>Produces a <code>manifests/components.json</code> of identical size (255,350 bytes, both runs, same component count) at a measured <strong>~11.8s vs ~11.6s for Angular</strong> and ~6.9s vs ~6.0s for React — noise-level, not a real win, because the manager UI was never the expensive part; the docgen-heavy preview compile still runs in full. (The flag's actual documented purpose is an iframe-only preview for unsupported browsers, not build speed — repurposing it bought nothing here anyway.)</td></tr>
+                <tr><td><code>storybook tools --config-dir … docs list</code> (no build, no server)</td><td>For <strong>React</strong>: real inline <code>reactDocgen</code> props per component, in ~seconds. For <strong>Angular</strong>: all 32 components come back as <code>id</code>/<code>name</code> only — no docgen, no <code>$ref</code> — the exact "decoy" shape <code>check-manifests.js</code>'s own <code>[DECOY]</code> check exists to catch. <code>experimentalDocgenServer</code> (Angular, Vue) needs the real build or a running dev server; the static CLI path can't produce it.</td></tr>
+                <tr><td>Local dev server (<code>nx storybook &lt;fw&gt;</code>) instead of a build</td><td>Doesn't write a static file either way: <code>registerManifests()</code> explicitly 404s the <code>components</code>/<code>docs</code> routes in dev when docgen-server mode is on (Angular, Vue) — by design, per the installed source. React's dev route would serve it live, but not to a file <code>check-manifests.js</code> could read, and the gate needs all three frameworks.</td></tr>
+              </tbody>
+            </table>
+            <p class="docs-step-desc" style="margin-top: 0.75rem">
+              Since the gate is uniform across all three frameworks and the two that matter most (Angular, Vue) have no shortcut, the existing mitigation — Nx caching <code>build-storybook</code>'s declared outputs, so a rerun with no source change is fast — stays the right answer. Fragmenting the gate to fast-path React alone would trade a real, if partial, speedup for a gate that no longer checks all three the same way.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
   </div>
 </BaseLayout>
 

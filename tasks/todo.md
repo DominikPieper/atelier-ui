@@ -185,6 +185,24 @@ Ranked; each carries why it's worth doing next rather than later.
       sound only because Escape is guaranteed, which leaves touch-only users without a first-class
       close control.
 
+- [ ] **`storybook doctor` as a gate — blocked on an offline requirement, not on value.**
+      Measured 2026-09-12: it is a cheap static health check (missing dependency, incompatible
+      packages, mismatched versions, duplicated dependencies, config-load errors), needs no build
+      and no server, and reports clean here today. But `@storybook/cli` is **not a dependency of
+      this repo** — `storybook`'s dispatcher delegates `doctor` to it and npm fetches it on first
+      use. `check:all` is offline by design, so adding it means vendoring `@storybook/cli` as a
+      devDependency first, and that is its own decision about carrying a package we otherwise
+      never install.
+- [ ] **`check:storybook-manifests` cannot be made cheaper — answered, so nobody re-tries it.**
+      The gate builds three Storybooks to check the emitted `components.json`, and four cheaper
+      paths were tested 2026-09-12 and all fail: `storybook index` produces a different artefact
+      with no docgen; `build --preview-only` emits a byte-identical manifest but saves nothing
+      measurable (~11.8s vs ~11.6s for Angular — the manager UI was never the expensive part);
+      `storybook tools docs list` without a running server returns **decoy-shaped** `id`/`name`-only
+      entries for all 32 Angular components, exactly what `check-manifests.js`'s own `[DECOY]`
+      check exists to catch; and a running dev server 404s the manifest routes by design under
+      `experimentalDocgenServer`. Nx's caching of `build-storybook` stays the mitigation.
+
 - [ ] **Five real interactions have no behaviour id at all** (found 2026-09-11 by sweeping
       for interactive affordances; ADR-0129 records why the manifest could not surface them
       itself — it locks what is already covered). Each needs a spec in all three frameworks

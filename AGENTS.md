@@ -66,6 +66,43 @@ Always use the appropriate server for the task:
 `.mcp.json` at the repo root wires these for Claude Code. Other agents configure
 their own MCP servers; nothing in this repo does it for them.
 
+**Without an MCP client, use the CLI passthrough.** `storybook tools` became public in 10.6
+and exposes almost the same toolset `@storybook/addon-mcp` serves over HTTP — `docs list`,
+`docs show`, `docs show-story`, `stories changed`, `stories find-by-component`, `stories
+preview`, `review create`, `test run`:
+
+```
+npx storybook tools --config-dir libs/react/.storybook --json docs list
+npx storybook tools --config-dir libs/react/.storybook --json docs show <id>
+```
+
+That is the route for Codex and the Antigravity CLI, which have no `.mcp.json` here. One
+gap: `get-storybook-story-instructions` has no `tools` equivalent — its CLI counterpart is
+`storybook skills`.
+
+**Two different things are called "skills", and they are unrelated.** `npx storybook skills
+<id>` ships inside `storybook` itself and prints config-aware instructions. `npx skills add
+storybookjs/mcp` is a third-party npm package (`skills@1.5.25`) that installs
+`.claude/skills/*` files — that is the one the `create-workspace` preset shells out to
+(ADR-0123). Reaching for the wrong one gets a confusing error, not a useful result.
+
+**A CLI footgun:** `storybook`'s dispatcher serves `dev`, `build`, `index`, `tools` and
+`skills` from the already-installed `storybook` package, and delegates everything else —
+`init`, `add`, `upgrade`, `doctor`, `automigrate`, `info`, `migrate` — to `@storybook/cli`,
+which is **not a dependency here** and is fetched from the registry on first use. So plain
+`storybook --help` lists only the delegated half: `dev`, `build`, `tools` and `skills` never
+appear there even though they work. That fetch is also why `storybook doctor`, which is
+otherwise a cheap static health check, cannot join `check:all` as it stands — every gate in
+that chain is offline by design.
+
+**Do not run `storybook automigrate` or `storybook upgrade` here.** Verified 2026-09-12
+against the pinned 10.6.0: `automigrate --dry-run` on an already-current, exact-pinned setup
+still proposes two fixes — `addon-mcp`, which would bump the addon to `latest` purely because
+it detected an AI agent, and `wrap-getAbsolutePath`, which would rewrite all three
+`main.ts`. And `upgrade`'s own source runs `installDependencies()` unconditionally in its
+control flow: `--dry-run` gates the version bump and the automigration writes, not the
+install.
+
 ### Storybook MCP Workflows
 
 **Two MCP surfaces (do not conflate):**
