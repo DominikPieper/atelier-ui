@@ -532,11 +532,21 @@ function testFramework(framework, registryUrl, npmrcPath) {
         );
       }
     };
-    assertContains('(no-component: 0, external: 1)');
+    // Assert the individual facts the summary line carries, not the line's
+    // shape — the parenthesised counter group gained `docgen-failed` on
+    // 2026-09-12 (makeWorkerDocgen stopped collapsing three distinct
+    // failures into a bare `null`), which moved external's trailing `)` and
+    // broke a previous version of this check that pinned
+    // '(no-component: 0, external: 1)' as one substring. Asserting each
+    // counter on its own means the next counter added to that group can't
+    // break this again.
+    assertContains('no-component: 0'); // no story resolved to a missing component
+    assertContains('external: 1'); // AtlButton classed as external — the package-import skip actually holding in a real install (see the comment above)
+    assertContains('docgen-failed: 0'); // the worker docgen did not silently fail
     assertContains('[NO-STORY-META]');
     assertContains('total: 0 error(s)');
     ok(
-      'check:contracts exits 0 on the example — vacuous by design: the library AtlButton is skipped as external (external: 1), only [NO-STORY-META] remains',
+      'check:contracts exits 0 on the example — vacuous by design: the library AtlButton is skipped as external (external: 1, docgen-failed: 0), only [NO-STORY-META] remains',
     );
 
     // Browser-mode Storybook tests (owner correction 2026-09-10 to ADR-0123 —
