@@ -261,32 +261,36 @@ Ranked; each carries why it's worth doing next rather than later.
       are recorded rather than fixed. Same class of question as the AtlChat master's one row for
       three structurally different panels. Answer it at the master, not in the gate.
 
-- [ ] **Introduce stylelint and let it replace the hand-written CSS gates** (owner
-      decision 2026-09-11, no date set). The CSS-scanning gates are the largest remaining
-      family that a standard tool models better than a script, and ADR-0126 drew the line
-      they sit on: an invariant one file can decide is a lint rule, an invariant joining two
-      sources is a gate. stylelint is **not installed** today.
-  - [ ] **Ports — these three are single-file and map almost verbatim:**
-        `check:css-tokens` (319 lines; "no raw hex/rgb/hsl outside `var()`" is `color-no-hex`
-        plus `declaration-property-value-disallowed-list`), `check:token-tiers`
-        (`check-primitives.js`, 116 lines; "no component CSS reaches past the semantic tier to
-        a primitive token" is a small custom plugin), `check:token-bypass` (190 lines; "no
-        literal duplicates a `--ui-*` value in its property family").
-  - [ ] **Judgement calls, not automatic ports:** `check:typeface` (429 lines) checks the
-        _ordering_ of declarations and a ratchet baseline; `check:box-sizing` asserts a
-        stylesheet _begins with_ an exact generated block, so the generator owns those bytes
-        (see `.prettierignore`'s rule); both need a decision before a port, not during one.
-  - [ ] **Stay gates, and the reason is the same one ADR-0126 records:** `check:variants`
-        (CSS half) joins classes against the spec's string-literal unions, and
-        `check:dead-selectors` (898 lines) joins a CSS class against what that component's
-        template can actually emit, across three framework dialects. Neither is decidable from
-        the CSS file alone.
-  - [ ] Decide at the same time whether the three ports keep their exemption maps
-        (`TOKEN_BYPASS_EXEMPT`, `PRIMITIVE_EXEMPTIONS`) as stylelint rule options or move to
-        inline `/* stylelint-disable-next-line -- reason */` comments. ADR-0034 wants
-        exemptions policed for staleness; an inline disable is not, which is the tradeoff
-        ADR-0126 already weighed for the two ESLint ports (both of whose maps were small or
-        empty — these are not).
+- [x] **Introduce stylelint and let it replace the hand-written CSS gates** (owner
+      decision 2026-09-11; ported 2026-09-11/12, ADR-0130). Three gates became four rules in
+      `tools/stylelint-rules/`: `check:css-tokens` split into `atelier/no-raw-color-literal`
+      and `atelier/no-undeclared-token`, `check:token-tiers` into `atelier/no-primitive-token`,
+      `check:token-bypass` into `atelier/no-token-bypass`. `check:all` 46 → 43 steps; the four
+      scripts are deleted, parity proven by ten mutations against the old scripts first.
+      No `stylelint-config-prettier`: stylelint 17 ships zero formatting rules (removed in 16,
+      split into an opt-in `@stylistic` plugin), verified by listing the installed rules
+      directory. Exemption maps stayed in `tools/scripts/lib/allowlists.js` and the rules
+      `require()` it — `kind: design|gap`, the `why` and the staleness check are the content,
+      and a rule option taking a list of strings loses all three.
+  - [x] **The three that stay gates, decided 2026-09-12 and recorded in ADR-0130 §4–5 with the
+        sharpened test written back into ADR-0126.** The line is not "how many files does it
+        read" — `no-undeclared-token` reads `tokens.css` and `no-primitive-token` walks all
+        three trees, and both are rules. It is **attribution**: a rule earns the line only when
+        every occurrence it could flag has one specific file and location where the finding
+        belongs. `check:variants` fails it twice over (its primary verdict is "does
+        `.variant-danger` exist anywhere in this _directory_", load-bearing because Angular's
+        toast splits `.variant-*` and `.position-*` across two stylesheets under one component
+        key; and the defect is an _absence_, with no line to anchor). `check:typeface` fails it
+        for the same directory-scoped reason plus a ratchet baseline stylelint cannot model.
+        `check:dead-selectors` joins CSS against what a template can emit. `check:box-sizing`
+        was never a candidate — a generator in `--check` mode that calls Prettier's async API.
+  - [ ] **Staleness narrowed cross-framework → per-framework, as the price of cache
+        independence.** Nx wires one `stylelint` target per project, so an exemption that is
+        legitimately asymmetric across frameworks would be reported stale by the two that do
+        not reference it. Every current entry is referenced identically in all three (verified
+        by grep), so behaviour is unchanged today. Revisit only if an asymmetric exemption is
+        actually wanted; the alternative — each target scanning all three trees — makes every
+        framework's lint cache invalidate on any framework's CSS change.
 
 - [ ] **Gate review of 2026-09-11 — the findings not fixed in the same session.**
       All 47 runnable gates were run individually (exit code + duration, warm: 471 s total,

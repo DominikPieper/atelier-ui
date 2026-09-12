@@ -131,6 +131,37 @@ for (const { union, axis, members } of unions) {
   }
 }
 
+// ---------------------------------------------------------------------------
+// Allowlist hygiene (ADR-0034): VARIANT_AXIS_EXCEPTIONS is load-bearing, so an
+// entry that no longer names something real, or no longer suppresses a real
+// violation, must not rot silently. Two ways an entry goes stale: the union
+// or member it names has left the spec, or the member has since grown the
+// exact CSS class it was exempted for. Both are blockers regardless of
+// `kind` — a stale `design` entry misdescribes the code exactly as much as a
+// stale `gap` one.
+// ---------------------------------------------------------------------------
+const unionByName = new Map(unions.map((u) => [u.union, u]));
+for (const [key, entry] of VARIANT_AXIS_EXCEPTIONS) {
+  const [framework, union, member] = key.split(':');
+  const spec = unionByName.get(union);
+  if (!spec || !spec.members.has(member)) {
+    errors.push(
+      `[STALE] VARIANT_AXIS_EXCEPTIONS names '${key}' (${entry.kind}), but ${union}:${member} ` +
+        'is no longer in the spec. Remove the entry.',
+    );
+    continue;
+  }
+  const component = UNION_TO_COMPONENT[union];
+  const prefix = AXIS_PREFIX[spec.axis];
+  const classes = component ? cssClasses(framework, component) : null;
+  if (classes && classes.has(`${prefix}-${member}`)) {
+    errors.push(
+      `[STALE] VARIANT_AXIS_EXCEPTIONS exempts '${key}' (${entry.kind}), but .${prefix}-${member} ` +
+        `is now defined in ${framework}/${component}. Remove the entry so drift is enforced again.`,
+    );
+  }
+}
+
 if (errors.length > 0) {
   warnings.forEach((w) => console.warn(`⚠ [WARNING] ${w}`));
   errors.forEach((e) => console.error(`✗ ${e}`));

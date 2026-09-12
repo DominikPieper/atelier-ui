@@ -105,6 +105,22 @@ sources of truth is a gate.**
    file is Nx's, and it throws loudly if its shape ever changes rather than silently dropping
    the addition.
 
+**Refined 2026-09-12 (the line is about attribution, not about how many files get read).**
+The sentence above reads as "one file in, one file out", and the CSS-discipline port of
+ADR-0130 broke that reading immediately: `atelier/no-undeclared-token` reads `tokens.css`,
+a file outside every stylesheet it lints, and `atelier/no-primitive-token` walks all three
+framework trees on every run. Both are rules, correctly. What makes them rules is not how
+little they read but **where the finding lands**: the outside file supplies a lookup table
+or feeds a secondary staleness signal, while the verdict on each occurrence is decided at
+the occurrence. The test that separates them from a gate is therefore attribution — _a rule
+earns this line only when, for every occurrence it could flag, there is one specific file
+and location that is the place the finding belongs._ `check:variants` fails that test in
+both halves: its primary verdict is "does `.variant-danger` exist anywhere in this
+component's directory", which is a property of a directory and not of a file, and its defect
+is an **absence**, which has no line to anchor to. The point of a linter — the finding
+appears where you are typing — is exactly what such a rule cannot deliver, so `check:variants`,
+`check:typeface` and `check:dead-selectors` stay gates. ADR-0130 carries the evidence.
+
 Alternatives considered:
 
 - **Leave both as scripts.** Rejected for these two: a third of one script is scoping the AST
