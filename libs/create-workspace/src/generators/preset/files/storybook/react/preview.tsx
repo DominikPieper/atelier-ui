@@ -2,6 +2,8 @@ import type { Preview } from '@storybook/react-vite';
 
 import '../src/styles/tokens.css';
 
+import { withThemeByDataAttribute } from '@storybook/addon-themes';
+
 const preview: Preview = {
   parameters: {
     a11y: {
@@ -23,6 +25,21 @@ const preview: Preview = {
         dark: { name: 'dark', value: '#1a1a2e' },
       },
     },
+  },
+
+  decorators: [
+    // tokens.css keys dark mode off `[data-theme='dark']` / `[data-theme='light']`
+    // on the root element (with a `prefers-color-scheme` media-query fallback),
+    // so the data-attribute strategy is the one that matches — a class-name
+    // strategy would not touch the selector tokens.css actually uses.
+    withThemeByDataAttribute({
+      themes: { light: 'light', dark: 'dark' },
+      defaultTheme: 'light',
+    }),
+  ],
+
+  initialGlobals: {
+    theme: 'light',
   },
 };
 

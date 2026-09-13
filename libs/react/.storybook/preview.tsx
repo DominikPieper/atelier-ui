@@ -1,6 +1,8 @@
 import type { Preview } from '@storybook/react';
 import '../src/styles/tokens.css';
 
+import { withThemeByDataAttribute } from '@storybook/addon-themes';
+
 import { contractDocsPage } from '@atelier-ui/spec/contracts/docs-block';
 
 const preview: Preview = {
@@ -37,20 +39,29 @@ const preview: Preview = {
   },
 
   decorators: [
-    (Story, context) => {
-      const isDark = context.globals['backgrounds']?.value === 'dark';
-      document.documentElement.setAttribute(
-        'data-theme',
-        isDark ? 'dark' : 'light',
-      );
-      return <Story />;
-    },
+    // Drives the actual dark-mode switch: tokens.css keys dark mode off
+    // `[data-theme='dark']` / `[data-theme='light']` on the root element (with
+    // a `prefers-color-scheme` media-query fallback for "no explicit choice"),
+    // so the data-attribute strategy is the one that matches — a class-name
+    // strategy would not touch the selector tokens.css actually uses. This
+    // replaces the hand-rolled decorator that used to piggyback on the
+    // `backgrounds` toolbar's swatch value (`backgrounds.value === 'dark'`) to
+    // flip `data-theme`, which conflated "canvas colour" with "component
+    // theme" — `backgrounds` keeps its own swatches below, now decoupled from
+    // theming. Defaults match every existing story's rendering
+    // (`defaultTheme: 'light'`), so this is additive: it does not change what
+    // any story renders by default (plan/adr/0142).
+    withThemeByDataAttribute({
+      themes: { light: 'light', dark: 'dark' },
+      defaultTheme: 'light',
+    }),
   ],
 
   initialGlobals: {
     backgrounds: {
       value: 'light',
     },
+    theme: 'light',
   },
 };
 

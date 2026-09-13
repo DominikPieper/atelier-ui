@@ -623,6 +623,13 @@ export async function presetGenerator(
     '@storybook/addon-mcp': STORYBOOK_VERSION,
     '@storybook/addon-a11y': STORYBOOK_VERSION,
     '@storybook/addon-docs': STORYBOOK_VERSION,
+    // Manual dark-mode toolbar: tokens.css ships dark mode but nothing let a
+    // scaffolded workspace preview it before (only the OS-level
+    // prefers-color-scheme fallback). Previewing is all this adds — the a11y
+    // axe check still only runs against each story's default (light) render,
+    // same as before (see plan/adr/0142 in the monorepo this is scaffolded
+    // from).
+    '@storybook/addon-themes': STORYBOOK_VERSION,
     // Browser-mode Storybook tests (owner correction 2026-09-10 to ADR-0123) —
     // written unconditionally, independent of which framework is selected; the
     // framework-specific Vite plugin is added conditionally, further below,

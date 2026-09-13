@@ -15,6 +15,7 @@ const config: StorybookConfig = {
     getAbsolutePath('@storybook/addon-a11y'),
     getAbsolutePath('@storybook/addon-designs'),
     getAbsolutePath('@storybook/addon-docs'),
+    getAbsolutePath('@storybook/addon-themes'),
   ],
   framework: {
     name: getAbsolutePath('@storybook/vue3-vite'),
@@ -37,6 +38,15 @@ const config: StorybookConfig = {
     // Storybook 11, where it becomes the default; without this flag the build
     // still exits 0 but writes a components.json with only `id`/`name`, no props.
     experimentalDocgenServer: true,
+    // `review-create` (wire name for the addon-mcp `review.create` method)
+    // registers for the deprecated `storybook ai` CLI proxy channel by default
+    // (unset ≠ false), but a direct MCP client — exactly what
+    // `claude mcp add --transport http storybook-local http://localhost:<port>/mcp`
+    // configures — only gets the tool when `experimentalReview` is explicitly
+    // `true` (verified against the installed 10.6.0 `storybook` dist,
+    // `common-preset.js`'s `isReviewExplicitlyEnabled`, 2026-09-13). See
+    // plan/adr/0143.
+    experimentalReview: true,
   },
   viteFinal: async (config: InlineConfig) => {
     // The hosted path (atelier.pieper.io/storybook-vue/) is opted into by the
