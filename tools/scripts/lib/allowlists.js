@@ -191,6 +191,22 @@ const SCAFFOLD_PORT_EXEMPT_ENTRIES = [
   ],
   [
     scaffoldPortKey(
+      'docs/src/pages/schulung.astro',
+      'bullets: [',
+      "'Alle Teilnehmer, unabhängig vom Framework: nx storybook workshop-<fw> parallel starten (Port 6006), dann per claude mcp add --transport http storybook-local http://localhost:<port>/mcp verbinden — bewusst lokaler Scope (Default von --scope, nicht project): das gemeinsame .mcp.json bleibt unangetastet, der Working Tree sauber. Client neu verbinden und prüfen, dass die dev/test-Tools (get-storybook-story-instructions, stories-preview, test-run) jetzt gelistet sind — seit 10.6.0 identisch für alle drei Frameworks. Ohne diesen Schritt ist das gleich folgende Pflicht-Tool schlicht nicht vorhanden: „nicht verfügbar\" heißt hier „nicht konfiguriert\", nicht „Server down\". get-storybook-story-instructions ist Pflicht vor jedem *.stories.* Edit',",
+    ),
+    "Day 2 Block 2's local-MCP step. The cohort works in a generated workspace since ADR-0137, so the Storybook it starts is the scaffold's single one on 6006 — this line used to name the clone's 4400/4401/4402.",
+  ],
+  [
+    scaffoldPortKey(
+      'docs/src/pages/schulung.astro',
+      "'plan/big-picture.md (API-Regeln) + plan/design-principles.md (Surface/Motion/Dark Mode) im Prompt-Kontext',",
+      "'Test-Loop, alle Frameworks: dev + test Toolset über die lokale addon-MCP (localhost:6006/mcp), stories-preview + test-run mit a11y — seit 10.6.0 identisch für Angular, React und Vue',",
+    ),
+    "Day 2 Block 4's test loop, same reason as the entry above: one framework, one Storybook, 6006 (ADR-0137).",
+  ],
+  [
+    scaffoldPortKey(
       'docs/src/pages/storybook.astro',
       'terminal that started it. A scaffolded workspace ships only one framework, and its Storybook',
       'binds the single port <code>6006</code>.',
