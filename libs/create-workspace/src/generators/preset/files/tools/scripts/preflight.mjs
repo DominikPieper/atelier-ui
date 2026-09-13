@@ -344,6 +344,84 @@ function checkClaudeCli() {
   }
 }
 
+// A checked-in `.claude/settings.json` — the scaffold's permissions.allow
+// list and `enableAllProjectMcpServers`, this repo's own pre-push hook — does
+// nothing until a human has opened THIS folder in Claude Code once and
+// accepted its one-time "do you trust this folder?" dialog. That acceptance
+// lives in `~/.claude.json`, keyed by the workspace's own absolute path:
+// `projects[<path>].hasTrustDialogAccepted`. Confirmed by reading a real
+// `~/.claude.json` on this machine, not guessed at.
+//
+// A freshly scaffolded workspace is untrusted by construction — nobody has
+// opened it in Claude Code yet — so this is a warning, never a hard failure:
+// the remedy is one ordinary first session, not a defect. What it closes is
+// the confusing gap a dry run surfaced: every other check green, and the
+// first `claude` session in the room still printing "Ignoring 8
+// permissions.allow entries … this workspace has not been trusted" — which
+// reads as broken tooling to someone who was just told setup is finished.
+//
+// Runs unconditionally, in both the clone and the scaffold (no
+// `detectEnvironment()` branch, unlike the ports/Playwright checks below):
+// the trust dialog gates a checked-in `.claude/settings.json` the same way
+// in either tree — this repo's own hook is just as inert pre-trust as the
+// scaffold's permissions/MCP wiring — and `checkClaudeCli()` immediately
+// above already runs unconditionally for the same reason, so this needs no
+// new branch to match that existing shape.
+//
+// Factored as a pure function taking an explicit `claudeJsonPath` (rather
+// than reading `~/.claude.json` inline) so the missing/unreadable/malformed
+// branches can be exercised by pointing it at a path that doesn't exist,
+// without ever touching the real file.
+function readTrustStatus(claudeJsonPath, workspaceRoot) {
+  let raw;
+  try {
+    raw = readFileSync(claudeJsonPath, 'utf8');
+  } catch (err) {
+    return {
+      status: 'unknown',
+      reason:
+        err?.code === 'ENOENT'
+          ? `no ${claudeJsonPath} yet`
+          : `could not read ${claudeJsonPath} (${err?.message ?? err})`,
+    };
+  }
+  let data;
+  try {
+    data = JSON.parse(raw);
+  } catch (err) {
+    return {
+      status: 'unknown',
+      reason: `${claudeJsonPath} is not valid JSON (${err?.message ?? err})`,
+    };
+  }
+  const accepted = data?.projects?.[workspaceRoot]?.hasTrustDialogAccepted;
+  return { status: accepted === true ? 'trusted' : 'untrusted' };
+}
+
+function checkClaudeTrust() {
+  const claudeJsonPath = join(homedir(), '.claude.json');
+  const { status, reason } = readTrustStatus(claudeJsonPath, ROOT);
+  const fix =
+    'Run `claude` here once and accept the trust dialog, or set ' +
+    `projects[${JSON.stringify(ROOT)}].hasTrustDialogAccepted: true in ${claudeJsonPath}`;
+  if (status === 'trusted') {
+    ok('Claude Code workspace trust', `accepted for ${ROOT}`);
+    return;
+  }
+  // 'untrusted' (recorded as declined/absent) and 'unknown' (the file is
+  // missing, unreadable, or unparseable — most commonly a machine that has
+  // never run Claude Code) get the same warning: neither has recorded
+  // acceptance, so the practical consequence — .mcp.json and
+  // .claude/settings.json being ignored — is identical either way.
+  warn(
+    'Claude Code workspace trust',
+    status === 'untrusted'
+      ? 'not accepted yet — .mcp.json and .claude/settings.json (permissions, MCP auto-connect, hooks) stay inert until you do'
+      : `${reason} — treating this workspace as not yet trusted`,
+    fix,
+  );
+}
+
 async function checkFigmaSetup() {
   // 1. Desktop Bridge plugin manifest — the primary channel.
   const manifestPath = join(
@@ -636,6 +714,7 @@ async function main() {
 
   header('Claude Code');
   checkClaudeCli();
+  checkClaudeTrust();
 
   header('Figma');
   await checkFigmaSetup();

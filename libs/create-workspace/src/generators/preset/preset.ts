@@ -1199,7 +1199,14 @@ Full API reference: ${SITE_URL}/llms-full.txt
 
 ## MCP Servers
 
-The servers are pre-configured in \`.mcp.json\` and connect automatically.
+The servers are pre-configured in \`.mcp.json\` and connect automatically —
+**but only once you've trusted this folder.** The first time you open this
+workspace in Claude Code, accept the "do you trust the files in this folder?"
+prompt; until then, \`.mcp.json\` and everything in \`.claude/settings.json\`
+(the permissions allowlist, \`enableAllProjectMcpServers\`, the format-on-save
+hook) are silently ignored, and every server below has to be approved by hand
+instead. \`npm run preflight\` (see Troubleshooting) flags this if it's still
+outstanding.
 
 ${mcpSection}${angularCliMcpSection}
 
@@ -1708,7 +1715,10 @@ ${SKILLS_ADD_COMMAND_FOR_HUMANS}
 
 ## MCP
 
-Claude Code MCP servers are pre-configured in \`.mcp.json\`.
+Claude Code MCP servers are pre-configured in \`.mcp.json\`. They — and the
+permissions/hooks in \`.claude/settings.json\` — only take effect once you've
+accepted Claude Code's folder-trust prompt in your first session here; run
+\`npm run preflight\` if you're not sure whether that's happened yet.
 Browse components at ${SITE_URL}
 `,
   );

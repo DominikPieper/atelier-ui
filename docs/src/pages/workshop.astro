@@ -205,10 +205,13 @@ const mcpConfig = (fw: string) => `{
           <p class="docs-step-desc" style="margin-top: 0.75rem">
             <code>preflight</code> checks Node, npm, git, that the Claude Code CLI is installed and on
             <code>PATH</code> (presence only — it never sends a request, so it cannot tell whether you
-            are authenticated), the Figma token, MCP reachability, and port availability. If anything
-            fails, each line prints a one-step fix. A green "Claude Code CLI" row here is not proof of
-            model access — that's what the <code>claude -p "…"</code> command in Prerequisites above is
-            for.
+            are authenticated), whether you've trusted this folder in Claude Code yet, the Figma token,
+            MCP reachability, and port availability. If anything fails, each line prints a one-step fix.
+            A green "Claude Code CLI" row here is not proof of model access — that's what the
+            <code>claude -p "…"</code> command in Prerequisites above is for. A yellow "Claude Code
+            workspace trust" row is expected on a workspace you haven't opened in Claude Code yet — the
+            permissions and MCP servers this scaffold pre-configures do nothing until you accept the
+            trust prompt in your first session here.
           </p>
 
           <div class="docs-multi-code-tabs" style="border-radius: 8px 8px 0 0; margin: 0.85rem 0 0">
@@ -236,6 +239,8 @@ const mcpConfig = (fw: string) => `{
 
 <span class="pre-section">Claude Code</span>
   <span class="pre-ok">✓</span> Claude Code CLI<span class="pre-muted"> — 2.1.121 (Claude Code)</span>
+  <span class="pre-warn">⚠</span> Claude Code workspace trust<span class="pre-muted"> — not accepted yet — .mcp.json and .claude/settings.json (permissions, MCP auto-connect, hooks) stay inert until you do</span>
+      <span class="pre-muted">→</span> Run <span class="pre-cmd">`claude`</span> here once and accept the trust dialog, or set <span class="pre-cmd">projects["&lt;path&gt;"].hasTrustDialogAccepted: true</span> in <span class="pre-cmd">~/.claude.json</span>
 
 <span class="pre-section">Figma</span>
   <span class="pre-ok">✓</span> Figma Desktop Bridge plugin<span class="pre-muted"> — manifest at ~/.figma-console-mcp/plugin/manifest.json</span>
@@ -249,7 +254,8 @@ const mcpConfig = (fw: string) => `{
   <span class="pre-ok">✓</span> Port 4200<span class="pre-muted"> — free</span>
   <span class="pre-ok">✓</span> Port 6006<span class="pre-muted"> — free</span>
 
-<span class="pre-ok-strong">All hard checks passed</span><span class="pre-muted"> · 10 ok, 0 warning(s)</span></pre>
+<span class="pre-ok-strong">All hard checks passed</span><span class="pre-muted"> · 10 ok, 1 warning(s)</span>
+<span class="pre-muted">Warnings are non-blocking — see </span><a href="/troubleshooting" class="pre-link">https://atelier.pieper.io/troubleshooting</a></pre>
           </figure>
 
           <figure class="preflight-mock" data-pre-panel="failed" hidden>
@@ -273,6 +279,8 @@ const mcpConfig = (fw: string) => `{
 <span class="pre-section">Claude Code</span>
   <span class="pre-fail">✗</span> <span class="pre-fail">Claude Code CLI</span><span class="pre-muted"> — not found on PATH</span>
       <span class="pre-muted">→</span> Install: <span class="pre-cmd">https://docs.claude.com/en/docs/claude-code/setup</span>
+  <span class="pre-warn">⚠</span> Claude Code workspace trust<span class="pre-muted"> — not accepted yet — .mcp.json and .claude/settings.json (permissions, MCP auto-connect, hooks) stay inert until you do</span>
+      <span class="pre-muted">→</span> Run <span class="pre-cmd">`claude`</span> here once and accept the trust dialog, or set <span class="pre-cmd">projects["&lt;path&gt;"].hasTrustDialogAccepted: true</span> in <span class="pre-cmd">~/.claude.json</span>
 
 <span class="pre-section">Figma</span>
   <span class="pre-ok">✓</span> Figma Desktop Bridge plugin<span class="pre-muted"> — manifest at ~/.figma-console-mcp/plugin/manifest.json</span>
@@ -289,7 +297,7 @@ const mcpConfig = (fw: string) => `{
       <span class="pre-muted">→</span> Run <span class="pre-cmd">`lsof -ti :4200 | xargs kill`</span> (macOS/Linux)
   <span class="pre-ok">✓</span> Port 6006<span class="pre-muted"> — free</span>
 
-<span class="pre-issue">2 check(s) failed</span><span class="pre-muted"> · 6 ok, 2 warning(s)</span>
+<span class="pre-issue">2 check(s) failed</span><span class="pre-muted"> · 6 ok, 3 warning(s)</span>
 <span class="pre-muted">Fix the items above, then re-run </span><span class="pre-cmd">`npm run preflight`</span><span class="pre-muted">.</span>
 <span class="pre-muted">Full troubleshooting guide: </span><a href="/troubleshooting" class="pre-link">https://atelier.pieper.io/troubleshooting</a></pre>
           </figure>
