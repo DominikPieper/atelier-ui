@@ -142,6 +142,15 @@ Ranked; each carries why it's worth doing next rather than later.
         Angular half is the risky one (`@analogjs/vitest-angular`) and gets its own real
         scaffold run, not an in-memory Tree.
 
+- [ ] **A dormant rootDir violation in the generated workspace's story-test setup.**
+      `src/test-setup-stories.ts` imports `'../.storybook/preview'`, which reaches outside
+      `tsconfig.app.json`'s `src`-scoped `rootDir`. Harmless today because nothing invokes a
+      `typecheck` target in a generated workspace — `nx build` does not compile that file since
+      the explicit `import { beforeAll } from 'vitest'` fix — but it would fail TS6059/TS6307
+      the moment such a target is wired. Found 2026-09-13 while fixing the `beforeAll`
+      regression. Identical in React and Vue. Decide: relax the rootDir, move the annotations
+      import, or leave it and note that a `typecheck` target cannot simply be switched on.
+
 - [ ] **Every release leaves two files for a human to clean up.** `nx release`'s own
       `chore(release): publish` commit bumps versions without running the generators, so
       `docs/public/llms.txt` goes stale (known, one line, happens every time), and it embeds
