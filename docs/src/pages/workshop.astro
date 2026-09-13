@@ -80,7 +80,7 @@ const mcpConfig = (fw: string) => `{
 
 <BaseLayout
   title="Workshop setup"
-  description="Set up the Atelier workshop end-to-end — clone the monorepo, install dependencies, run Storybook, and connect the AI tooling."
+  description="Set up the Atelier workshop end-to-end — scaffold a workspace, install dependencies, run Storybook, and connect the AI tooling."
   currentPath="/workshop"
 >
   <div class="docs-inline-page">
@@ -121,11 +121,11 @@ const mcpConfig = (fw: string) => `{
     <!-- Shortcut for users arriving from a repo clone -->
     <Callout tone="tip" title="Already cloned the repo">
       <p>
-        This page's default path is the <strong>scaffold</strong> — the self-serve route.
-        The <a href="/schulung" class="docs-link-primary">two-day training</a> (German) runs on the
-        <strong>cloned monorepo</strong> instead, because its Day 2 works directly with
-        <code>plan/</code>, <code>libs/spec</code> and <code>nx storybook &lt;fw&gt;</code>, which
-        only exist in the clone. If you are attending, follow this callout, not Step 01.
+        This page's default path is the <strong>scaffold</strong> — the self-serve route, and now
+        also the <a href="/schulung" class="docs-link-primary">two-day training</a> (German), which
+        works in a generated workspace too. This callout is for a different case: you cloned the
+        <strong>atelier monorepo itself</strong> to contribute to Atelier — the rig, the adapters, the
+        gates — not to attend the workshop. If that's you, follow this callout instead of Step 01.
       </p>
       <p>
         <strong>Step 01</strong> (workspace generator) is for a fresh-scaffolded workspace — a clone of

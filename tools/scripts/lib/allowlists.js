@@ -205,6 +205,30 @@ const SCAFFOLD_PORT_EXEMPT_ENTRIES = [
     ),
     "Entry title enumerating every port a participant in EITHER environment might find stuck; 6006 is the scaffold's, named beside the clone's 4200/4300/4400–4402 (ADR-0084).",
   ],
+  [
+    scaffoldPortKey(
+      'docs/src/pages/troubleshooting.astro',
+      "'Windows: `netstat -ano | findstr :<port>` → then `taskkill /PID <pid> /F`.',",
+      "'Scaffolded workspace: run the app on a different port with `nx serve workshop-angular --port 4300`. Its own Storybook is fixed to port 6006 in the generated `project.json` — kill the stuck process rather than reassign, the same as the clone entry below.',",
+    ),
+    'Same [port-in-use] entry, the fix list: the scaffold’s own Storybook (6006) is fixed in a literal `nx:run-commands` string in the generated project.json, not a parameterised port — unlike the app’s serve target, it has nothing to reassign against (ADR-0137).',
+  ],
+  [
+    scaffoldPortKey(
+      'docs/src/pages/tutorial.astro',
+      '<li><Icon name="check_circle" /> Claude read the Figma spec and matched the Atelier UI components through the Storybook MCP</li>',
+      '<li><Icon name="check_circle" /> The generated component renders in your app at <code>http://localhost:4200</code> — your workspace also ships its own Storybook (<code>npx nx storybook workshop-&lt;fw&gt;</code>, port <code>6006</code>) once you add a story for it</li>',
+    ),
+    'Corrects the "the scaffold has no Storybook of its own" claim ADR-0137 names directly — a generated workspace now ships a Storybook per app, bound to 6006.',
+  ],
+  [
+    scaffoldPortKey(
+      'docs/src/pages/design-to-code.astro',
+      'See the component rendered, then run <code>figma_check_design_parity</code> to catch padding, colour, and variant drift against the Figma spec.',
+      "In the atelier monorepo that means the story in Storybook (<code>nx storybook &lt;fw&gt;</code>); in a scaffolded workspace it means the app (<code>npx nx serve workshop-&lt;fw&gt;</code>) — or, once you've written a story for it, the workspace's own Storybook (<code>npx nx storybook workshop-&lt;fw&gt;</code>, port <code>6006</code>).",
+    ),
+    'Same stale "no Storybook of its own" claim as tutorial.astro, in the Verify step of the four-step loop — corrected per ADR-0137.',
+  ],
 ];
 
 // A `new Map([...])` literal silently keeps the LAST entry on a duplicate

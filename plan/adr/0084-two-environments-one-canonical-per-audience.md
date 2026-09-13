@@ -115,3 +115,23 @@ on its own port — angular 4400, react 4401, vue 4402 (`libs/{angular,react,vue
 (`tutorial.astro`, `first-component.astro`, `storybook.astro`,
 `troubleshooting.astro`, `schulung.astro`, `schulung-2tage-agenda.md`,
 `CLAUDE.md`); this decision text is left as recorded.
+
+## Corrected 2026-09-13: the cohort's canonical environment is now the scaffold
+
+The Status above assigns the cloned monorepo to the two-day cohort and the
+scaffold to the self-serve reader. [ADR-0137](0137-the-scaffold-becomes-the-environment-the-cohort-works-in.md)
+reverses that half: the generated workspace is canonical for both audiences, and
+the clone is canonical for work on Atelier itself.
+
+The reasoning in the Context below is left exactly as recorded, because it was
+true when written and is the reason the split was right at the time — the
+scaffold then had "no `libs/spec`, no `plan/`, no Storybook project, and no
+parity tooling". Three of those four no longer hold: it ships a Storybook per
+app, the contract loop with `check:contracts` and a projected Figma snapshot, a
+jsdom unit runner, the CSS-discipline rules, and a full `.claude/` setup. What
+this ADR got right is that the decision followed the capability; the capability
+moved.
+
+What survives unchanged: both environments still exist, every page still has to
+say which one it is describing, and `preflight.mjs` still branches between them
+(ADR-0090).

@@ -161,7 +161,7 @@ const ISSUES: Issue[] = [
     fix: [
       'macOS/Linux: `lsof -ti :<port> | xargs kill` — swap in the port that is stuck.',
       'Windows: `netstat -ano | findstr :<port>` → then `taskkill /PID <pid> /F`.',
-      'Scaffolded workspace: run the app on a different port with `nx serve workshop-angular --port 4300`.',
+      'Scaffolded workspace: run the app on a different port with `nx serve workshop-angular --port 4300`. Its own Storybook is fixed to port 6006 in the generated `project.json` — kill the stuck process rather than reassign, the same as the clone entry below.',
       'Clone: each Storybook already has its own port (angular 4400, react 4401, vue 4402) and docs is 4300 — kill the stuck process rather than reassign, since `.mcp.json` and this documentation both assume those exact numbers.',
     ],
   },

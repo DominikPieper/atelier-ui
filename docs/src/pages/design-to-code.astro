@@ -178,8 +178,10 @@ the component I just generated. Fix every discrepancy it reports.`;
             <strong style="color: var(--ui-color-text)">The stories are the claims.</strong> One story per variant value and per Boolean state, with a <code>play</code> for every behaviour line from the handoff document you wrote in step 1 — that is where behaviour, not just appearance, gets checked. <code>check:contracts</code> joins the contract, the manifest and the stories' <code>args</code> against the Figma snapshot and reports drift; <code>storybook-test</code> renders every story in a real browser with axe. Together they replace what a hand-typed spec used to promise but never checked.
           </p>
           <p class="docs-step-desc">
-            Those files are in the <strong style="color: var(--ui-color-text)">atelier monorepo</strong>. In a scaffolded
-            workshop workspace you read the equivalent framework docs without them — through the hosted
+            A scaffolded workspace writes the same contract, at <code>workshop-&lt;fw&gt;/src/contracts/&lt;name&gt;.contract.ts</code>,
+            checked by the same <code>check:contracts</code> (ADR-0121 S4 — see "Building for one framework?"
+            below). What it does not carry is this library's own <code>Atl*</code> component set — for those,
+            read the equivalent framework docs through the hosted
             <code>storybook-*</code> MCP (<code>docs-list</code> → <code>docs-show</code>),
             or from <a href="/llms-full.txt" class="docs-link-primary">llms-full.txt</a>. The prop tables the
             MCP returns are exact, and so are the code snippets alongside them — each endpoint answers
@@ -224,7 +226,7 @@ the component I just generated. Fix every discrepancy it reports.`;
           <h2 class="docs-h3">Verify — prove design parity</h2>
           <p class="docs-step-desc">
             See the component rendered, then run <code>figma_check_design_parity</code> to catch padding, colour, and variant drift against the Figma spec.
-            In the atelier monorepo that means the story in Storybook (<code>nx storybook &lt;fw&gt;</code>); in a scaffolded workspace it means the app (<code>npx nx serve workshop-&lt;fw&gt;</code>), which has no Storybook of its own.
+            In the atelier monorepo that means the story in Storybook (<code>nx storybook &lt;fw&gt;</code>); in a scaffolded workspace it means the app (<code>npx nx serve workshop-&lt;fw&gt;</code>) — or, once you've written a story for it, the workspace's own Storybook (<code>npx nx storybook workshop-&lt;fw&gt;</code>, port <code>6006</code>).
             <strong style="color: var(--ui-color-text)">This step is required</strong> — it's what turns "looks about right" into a verified component.
           </p>
           <Code code={PARITY_PROMPT} lang="text" title="parity check prompt" />

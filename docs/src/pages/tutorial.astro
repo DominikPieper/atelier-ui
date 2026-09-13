@@ -619,7 +619,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
     <Checkpoint variant="done" title="You ran the loop end to end">
       <ul class="checkpoint-checks">
         <li><Icon name="check_circle" /> Claude read the Figma spec and matched the Atelier UI components through the Storybook MCP</li>
-        <li><Icon name="check_circle" /> The generated component renders in your app at <code>http://localhost:4200</code> — the scaffold has no Storybook of its own; <code>nx storybook &lt;fw&gt;</code> is the atelier repo's path</li>
+        <li><Icon name="check_circle" /> The generated component renders in your app at <code>http://localhost:4200</code> — your workspace also ships its own Storybook (<code>npx nx storybook workshop-&lt;fw&gt;</code>, port <code>6006</code>) once you add a story for it</li>
         <li><Icon name="check_circle" /> <code>figma_check_design_parity</code> reports the node and code in sync</li>
       </ul>
     </Checkpoint>
