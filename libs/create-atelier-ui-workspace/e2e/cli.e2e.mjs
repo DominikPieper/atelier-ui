@@ -7,10 +7,12 @@
  * real user would, then runs it with --framework=<fw>. Verifies the
  * scaffolded workspace contains expected files (including the per-app
  * Storybook config and an example story) and that `npm run build`,
- * `npm run build:storybook`, and `nx test` (the jsdom unit-test runner, S5)
- * all actually run against the generated app — the first two through the
- * npm scripts the generated CLAUDE.md/README actually tell an attendee to
- * run, not the `nx` invocation directly. Also
+ * `npm run build:storybook`, `npm test` (the jsdom unit-test runner, S5), and
+ * `npm run lint` (ADR-0140 — the generated workspace is strict: promoted
+ * correctness/security rules, eslint-plugin-storybook, type-aware linting)
+ * all actually run against the generated app, through the npm scripts the
+ * generated CLAUDE.md/README actually tell an attendee to run, not the `nx`
+ * invocation directly. Also
  * reports, non-fatally, whether the storybookjs/mcp skills got installed —
  * for exactly one framework (see SKILLS_TEST_FRAMEWORK below), the only one
  * for which the CLI is run with the network install actually enabled; the
@@ -565,10 +567,25 @@ function testFramework(framework, registryUrl, npmrcPath) {
     // in-memory Tree; only a real scaffolded workspace can prove the runner
     // actually runs — the example atl-button.spec.* against the framework's
     // own Testing Library, in jsdom, via `nx test`'s vitest.unit.config.ts.
-    run(`npx nx test workshop-${framework}`, { cwd: wsPath });
+    // `npm test` (not `npx nx test workshop-${framework}` directly) — its
+    // neighbours above already exercise the npm script CLAUDE.md/README
+    // actually tell an attendee to run, not the `nx` invocation; this one
+    // used to be the odd one out.
+    run(`npm test`, { cwd: wsPath });
     ok(
-      `nx test workshop-${framework} green (jsdom unit tests via vitest.unit.config.ts)`,
+      `npm test (workshop-${framework}) green (jsdom unit tests via vitest.unit.config.ts)`,
     );
+
+    // ADR-0140: the generated workspace is strict — `npm run lint` promotes
+    // the correctness/security family of each framework's warning-only rules
+    // to error, wires eslint-plugin-storybook, and adds type-aware linting
+    // (recommendedTypeChecked via projectService). Nothing else in the repo
+    // proves that combination actually passes on the scaffold's own example
+    // files in a real install (preset.spec.ts only proves the config TEXT is
+    // correct, not that ESLint accepts it) — strictness that fires on the
+    // scaffold's own example is exactly the trap ADR-0140 verifies against.
+    run(`npm run lint -- --skip-nx-cache`, { cwd: wsPath });
+    ok(`npm run lint (workshop-${framework}) green`);
 
     // Browser-mode Storybook tests (owner correction 2026-09-10 to ADR-0123 —
     // @storybook/addon-vitest ships with the scaffold after all). Chromium is

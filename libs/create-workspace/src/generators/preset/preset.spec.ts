@@ -80,18 +80,94 @@ export default [
 `,
 };
 
+// The real @nx/angular:application generator writes `<appName>/tsconfig.json`
+// with `compilerOptions.strict: true` and these three `angularCompilerOptions`
+// flags already `true` — its own schema defaults `strict` to `true`
+// (`normalize-options.js`), which `enable-strict-type-checking.js` turns into
+// exactly this shape. Verified against a real generated tree, not assumed —
+// see preset.ts's own comment on the `strict: true` passed to
+// `angularAppGenerator` below. The preset's own lever-2 backstop
+// (`updateJson` on this same file) makes the three flags certain regardless
+// of whether this mock — or some future @nx/angular default — already
+// supplies them; a dedicated test below simulates the mock NOT supplying
+// them, to prove that backstop rather than this baseline's fidelity.
+const ANGULAR_TSCONFIG_BASELINE = {
+  extends: '../tsconfig.base.json',
+  compilerOptions: { strict: true },
+  angularCompilerOptions: {
+    enableI18nLegacyMessageIdFormat: false,
+    strictInjectionParameters: true,
+    strictInputAccessModifiers: true,
+    strictTemplates: true,
+  },
+  files: [],
+  include: [],
+  references: [
+    { path: './tsconfig.app.json' },
+    { path: './tsconfig.spec.json' },
+  ],
+};
+
+// The real `@nx/{angular,react,vue}:application` generator writes
+// `tsconfig.base.json` itself — via `@nx/js`'s own `extractTsConfigBase` —
+// the FIRST time any of them runs against a tree that doesn't already have
+// one; `create-nx-workspace` does not pre-write it before invoking this
+// preset (confirmed against a real generated tree with the file
+// deliberately absent beforehand, for all three frameworks — this was the
+// bug a real CLI e2e run against a fresh workspace caught: this preset's own
+// lever-1 write used to run BEFORE any application generator, so it read a
+// file none of them had created yet, and threw `Cannot find
+// tsconfig.base.json` at scaffold time). `createTreeWithEmptyWorkspace()`
+// (used by this suite's own `beforeEach`) pre-seeds a stub regardless of
+// generator order, which is exactly why that in-memory setup could not have
+// caught the ordering bug on its own — `beforeEach` below deletes that stub
+// immediately, and this mock writes the SAME shape the real generator does,
+// so every test in this file exercises the real "file appears only after
+// the app generator runs" ordering, not the tree helper's own shortcut.
+const TSCONFIG_BASE_BASELINE = {
+  compileOnSave: false,
+  compilerOptions: {
+    rootDir: '.',
+    sourceMap: true,
+    declaration: false,
+    moduleResolution: 'bundler',
+    emitDecoratorMetadata: true,
+    experimentalDecorators: true,
+    importHelpers: true,
+    target: 'es2015',
+    module: 'esnext',
+    lib: ['es2020', 'dom'],
+    skipLibCheck: true,
+    skipDefaultLibCheck: true,
+    strict: false,
+    paths: {},
+  },
+  exclude: ['node_modules', 'tmp'],
+};
+
 // The real @nx/{angular,react,vue}:application generators write
 // `<appName>/project.json` — the preset's Storybook step (S1) reads and
 // updates it via `updateJson`, which throws if the file is missing — and,
 // when invoked with `linter: 'eslint'` (which this preset always does — see
 // the "passes linter: 'eslint'" tests below), `<appName>/eslint.config.mjs`,
-// which the preset's per-framework ESLint-posture step (S4) appends to. The
-// mocks below stand in for the real generator, so they need to do both
-// things the real one does, or every test hits one of those throws.
+// which the preset's per-framework ESLint-posture step (S4) appends to.
+// Angular's own generator additionally writes `<appName>/tsconfig.json`
+// (lever 2's backstop reads and updates it via `updateJson` too). Every
+// framework's generator also writes `tsconfig.base.json` when it isn't
+// already there (lever 1's backstop reads and updates that one too — see
+// TSCONFIG_BASE_BASELINE's own comment above). The mocks below stand in for
+// the real generator, so they need to do all of that, or every test hits one
+// of those throws.
 function mockAppGenerator(framework: 'angular' | 'react' | 'vue') {
   return jest
     .fn()
     .mockImplementation((tree: Tree, options: { name: string }) => {
+      if (!tree.exists('tsconfig.base.json')) {
+        tree.write(
+          'tsconfig.base.json',
+          JSON.stringify(TSCONFIG_BASE_BASELINE),
+        );
+      }
       // A non-empty `targets` (a placeholder `build`, standing in for the real
       // generator's build/serve/test/etc.) so the "storybook targets get merged
       // in, not swapped in wholesale" test below actually exercises the merge —
@@ -108,6 +184,12 @@ function mockAppGenerator(framework: 'angular' | 'react' | 'vue') {
         `${options.name}/eslint.config.mjs`,
         ESLINT_CONFIG_BASELINE[framework],
       );
+      if (framework === 'angular') {
+        tree.write(
+          `${options.name}/tsconfig.json`,
+          JSON.stringify(ANGULAR_TSCONFIG_BASELINE),
+        );
+      }
       return Promise.resolve(undefined);
     });
 }
@@ -247,6 +329,13 @@ describe('preset generator', () => {
 
   beforeEach(() => {
     tree = createTreeWithEmptyWorkspace();
+    // `createTreeWithEmptyWorkspace()` pre-seeds a stub `tsconfig.base.json`
+    // that no real `create-nx-workspace` run provides before invoking this
+    // preset — deleting it here makes every test in this file exercise the
+    // real ordering (the file appears only once the framework's own
+    // application generator has run, per TSCONFIG_BASE_BASELINE's comment
+    // above), not the tree helper's own shortcut.
+    tree.delete('tsconfig.base.json');
     angularAppMock.mockClear();
     reactAppMock.mockClear();
     vueAppMock.mockClear();
@@ -835,11 +924,26 @@ describe('preset generator', () => {
     expect(additionIndex).toBeGreaterThan(baselineIndex);
   });
 
-  it('React: does not modify workshop-react/eslint.config.mjs beyond the baseline', async () => {
+  it('React: the baseline content survives verbatim, with the strictness additions (levers 3/4/5, ADR-0140) spliced in before the closing `];`', async () => {
+    // Superseded by ADR-0140: React used to get nothing appended here at all
+    // ("flat/react" already carried jsx-a11y's active set) — it now also gets
+    // the correctness/security rule promotions, eslint-plugin-storybook, and
+    // type-aware linting (see the "strictness (ADR-0140)" describe block
+    // below for the dedicated tests on that content). This test only pins
+    // that the ORIGINAL baseline text still appears, unmodified — as a
+    // substring, not necessarily a prefix, since `appendToFlatEslintConfig`
+    // prepends its own `imports` before the whole existing file content,
+    // including the baseline's own leading `import` lines.
     await presetGenerator(tree, { name: 'my-workspace', framework: 'react' });
 
     const config = tree.read('workshop-react/eslint.config.mjs', 'utf-8') ?? '';
-    expect(config).toBe(ESLINT_CONFIG_BASELINE.react);
+    const baselinePrefix = ESLINT_CONFIG_BASELINE.react.slice(
+      0,
+      ESLINT_CONFIG_BASELINE.react.lastIndexOf('];'),
+    );
+    expect(config).toContain(baselinePrefix);
+    expect(config.length).toBeGreaterThan(ESLINT_CONFIG_BASELINE.react.length);
+    expect(config.trim().endsWith('];')).toBe(true);
   });
 
   it('Vue: appends eslint-config-prettier applied to *.vue, with its import', async () => {
@@ -898,13 +1002,19 @@ describe('preset generator', () => {
   it('fails loudly if the app generator did not write an eslint.config.mjs for Angular', async () => {
     angularAppMock.mockImplementationOnce(
       (tree: Tree, options: { name: string }) => {
-        // Realistic partial failure: writes project.json (like the real
-        // generator always does) but not eslint.config.mjs — simulates a
+        // Realistic partial failure: writes project.json and tsconfig.json
+        // (like the real generator always does — the latter needed so lever
+        // 2's own `updateJson` doesn't throw first and mask the thing this
+        // test actually targets) but not eslint.config.mjs — simulates a
         // future Nx version, or a linter option other than 'eslint', producing
         // no ESLint output for the preset's own step to append to.
         tree.write(
           `${options.name}/project.json`,
           JSON.stringify({ name: options.name, targets: {} }),
+        );
+        tree.write(
+          `${options.name}/tsconfig.json`,
+          JSON.stringify(ANGULAR_TSCONFIG_BASELINE),
         );
         return Promise.resolve(undefined);
       },
@@ -1418,6 +1528,12 @@ describe('preset generator', () => {
   it("replaces whatever \"test\" target the application generator already wrote (e.g. '@angular/build:unit-test', written regardless of skipTests) with vitest.unit.config.ts's own", async () => {
     angularAppMock.mockImplementationOnce(
       (tree: Tree, options: { name: string }) => {
+        if (!tree.exists('tsconfig.base.json')) {
+          tree.write(
+            'tsconfig.base.json',
+            JSON.stringify(TSCONFIG_BASE_BASELINE),
+          );
+        }
         tree.write(
           `${options.name}/project.json`,
           JSON.stringify({
@@ -1434,6 +1550,10 @@ describe('preset generator', () => {
         tree.write(
           `${options.name}/eslint.config.mjs`,
           ESLINT_CONFIG_BASELINE.angular,
+        );
+        tree.write(
+          `${options.name}/tsconfig.json`,
+          JSON.stringify(ANGULAR_TSCONFIG_BASELINE),
         );
         return Promise.resolve(undefined);
       },
@@ -1602,12 +1722,22 @@ describe('preset generator', () => {
     // the storybook targets. Still writes eslint.config.mjs (like the real
     // generator does), so the ESLint-posture step (S4, earlier in the
     // pipeline) doesn't pre-empt this with its own loud failure instead —
-    // that path has its own dedicated test below.
+    // that path has its own dedicated test below. Also still writes
+    // tsconfig.json and tsconfig.base.json, so levers 1/2's own backstops
+    // (also earlier in the pipeline) don't pre-empt this one either.
     angularAppMock.mockImplementationOnce(
       (tree: Tree, options: { name: string }) => {
         tree.write(
+          'tsconfig.base.json',
+          JSON.stringify(TSCONFIG_BASE_BASELINE),
+        );
+        tree.write(
           `${options.name}/eslint.config.mjs`,
           ESLINT_CONFIG_BASELINE.angular,
+        );
+        tree.write(
+          `${options.name}/tsconfig.json`,
+          JSON.stringify(ANGULAR_TSCONFIG_BASELINE),
         );
         return Promise.resolve(undefined);
       },
@@ -1764,6 +1894,9 @@ describe('preset generator', () => {
     // than trivially finding no `lint` key at all.
     reactAppMock.mockImplementationOnce(
       (t: Tree, options: { name: string }) => {
+        if (!t.exists('tsconfig.base.json')) {
+          t.write('tsconfig.base.json', JSON.stringify(TSCONFIG_BASE_BASELINE));
+        }
         t.write(
           `${options.name}/project.json`,
           JSON.stringify({
@@ -2616,6 +2749,319 @@ describe('preset generator', () => {
           expect(canonical[name]).toBe(value);
         }
       }
+    });
+  });
+
+  // ─── Strictness (levers 1-5, ADR-0140) ────────────────────────────────────
+
+  describe('strictness (ADR-0140)', () => {
+    // Lever 1: tsconfig.base.json
+
+    it.each(['angular', 'react', 'vue'] as const)(
+      'sets tsconfig.base.json compilerOptions.strict to true (%s)',
+      async (fw) => {
+        await presetGenerator(tree, { name: 'my-workspace', framework: fw });
+        const tsconfigBase = readJson(tree, 'tsconfig.base.json');
+        expect(tsconfigBase.compilerOptions.strict).toBe(true);
+      },
+    );
+
+    it('preserves the rest of tsconfig.base.json (e.g. paths, target) untouched', async () => {
+      await presetGenerator(tree, {
+        name: 'my-workspace',
+        framework: 'angular',
+      });
+      const tsconfigBase = readJson(tree, 'tsconfig.base.json');
+      // TSCONFIG_BASE_BASELINE (what the mocked app generator writes,
+      // matching the real one) declares both of these.
+      expect(tsconfigBase.compilerOptions.paths).toEqual({});
+      expect(tsconfigBase.compilerOptions.target).toBe('es2015');
+    });
+
+    it('does not throw when tsconfig.base.json does not exist before the framework application generator runs — the exact ordering a real create-nx-workspace run hits', async () => {
+      // Belt and suspenders on top of this describe block's own `beforeEach`
+      // (which already deletes the tree helper's pre-seeded stub for every
+      // test here): assert explicitly, once, that the file is genuinely
+      // absent going in, so this test cannot pass by accident if some other
+      // change quietly re-introduces a pre-seeded tsconfig.base.json.
+      expect(tree.exists('tsconfig.base.json')).toBe(false);
+
+      await expect(
+        presetGenerator(tree, { name: 'my-workspace', framework: 'angular' }),
+      ).resolves.not.toThrow();
+
+      const tsconfigBase = readJson(tree, 'tsconfig.base.json');
+      expect(tsconfigBase.compilerOptions.strict).toBe(true);
+    });
+
+    // Lever 2: Angular angularCompilerOptions
+
+    it('writes angularCompilerOptions with strictTemplates/strictInjectionParameters/strictInputAccessModifiers all true', async () => {
+      await presetGenerator(tree, {
+        name: 'my-workspace',
+        framework: 'angular',
+      });
+      const tsconfig = readJson(tree, 'workshop-angular/tsconfig.json');
+      expect(tsconfig.angularCompilerOptions.strictTemplates).toBe(true);
+      expect(tsconfig.angularCompilerOptions.strictInjectionParameters).toBe(
+        true,
+      );
+      expect(tsconfig.angularCompilerOptions.strictInputAccessModifiers).toBe(
+        true,
+      );
+    });
+
+    it('passes strict: true to the Angular application generator explicitly, not relying on its own default', async () => {
+      await presetGenerator(tree, {
+        name: 'my-workspace',
+        framework: 'angular',
+      });
+      expect(angularAppMock).toHaveBeenCalledWith(
+        expect.anything(),
+        expect.objectContaining({ strict: true }),
+      );
+    });
+
+    it('forces the three Angular strict compiler flags to true even if the application generator wrote them false', async () => {
+      angularAppMock.mockImplementationOnce(
+        (tree: Tree, options: { name: string }) => {
+          if (!tree.exists('tsconfig.base.json')) {
+            tree.write(
+              'tsconfig.base.json',
+              JSON.stringify(TSCONFIG_BASE_BASELINE),
+            );
+          }
+          tree.write(
+            `${options.name}/project.json`,
+            JSON.stringify({
+              name: options.name,
+              targets: { build: { executor: 'fake:build' } },
+            }),
+          );
+          tree.write(
+            `${options.name}/eslint.config.mjs`,
+            ESLINT_CONFIG_BASELINE.angular,
+          );
+          tree.write(
+            `${options.name}/tsconfig.json`,
+            JSON.stringify({
+              ...ANGULAR_TSCONFIG_BASELINE,
+              angularCompilerOptions: {
+                enableI18nLegacyMessageIdFormat: false,
+                strictInjectionParameters: false,
+                strictInputAccessModifiers: false,
+                strictTemplates: false,
+              },
+            }),
+          );
+          return Promise.resolve(undefined);
+        },
+      );
+
+      await presetGenerator(tree, {
+        name: 'my-workspace',
+        framework: 'angular',
+      });
+
+      const tsconfig = readJson(tree, 'workshop-angular/tsconfig.json');
+      expect(tsconfig.angularCompilerOptions.strictTemplates).toBe(true);
+      expect(tsconfig.angularCompilerOptions.strictInjectionParameters).toBe(
+        true,
+      );
+      expect(tsconfig.angularCompilerOptions.strictInputAccessModifiers).toBe(
+        true,
+      );
+    });
+
+    // Lever 3: promoted rule severities
+
+    it('Angular: promotes the four warning-only rules to error', async () => {
+      await presetGenerator(tree, {
+        name: 'my-workspace',
+        framework: 'angular',
+      });
+      const config =
+        tree.read('workshop-angular/eslint.config.mjs', 'utf-8') ?? '';
+      for (const rule of [
+        "'@angular-eslint/use-lifecycle-interface': 'error'",
+        "'@typescript-eslint/no-explicit-any': 'error'",
+        "'@typescript-eslint/no-non-null-assertion': 'error'",
+        "'@typescript-eslint/no-unused-vars': 'error'",
+      ]) {
+        expect(config).toContain(rule);
+      }
+    });
+
+    it('React: promotes the correctness/security family of warning-only rules to error, and deliberately leaves react-hooks/exhaustive-deps untouched', async () => {
+      await presetGenerator(tree, { name: 'my-workspace', framework: 'react' });
+      const config =
+        tree.read('workshop-react/eslint.config.mjs', 'utf-8') ?? '';
+      for (const rule of [
+        'eqeqeq',
+        "'no-eval'",
+        "'no-implied-eval'",
+        "'array-callback-return'",
+        "'no-new-func'",
+        "'no-script-url'",
+        "'no-caller'",
+        "'no-extend-native'",
+        "'no-iterator'",
+        "'no-label-var'",
+        "'no-loop-func'",
+        "'no-native-reassign'",
+        "'no-negated-in-lhs'",
+        "'no-new-wrappers'",
+        "'no-octal-escape'",
+        "'no-self-compare'",
+        "'no-sequences'",
+        "'no-template-curly-in-string'",
+        "'no-throw-literal'",
+        "'react/jsx-no-target-blank'",
+        "'react/jsx-no-duplicate-props'",
+        "'react/jsx-no-comment-textnodes'",
+        "'react/no-direct-mutation-state'",
+        "'react/no-is-mounted'",
+        "'react/no-danger-with-children'",
+        "'react/style-prop-object'",
+      ]) {
+        expect(config).toContain(rule);
+      }
+      expect(config).not.toContain('react-hooks/exhaustive-deps');
+    });
+
+    it('Vue: promotes the four correctness/security rules to error (no-v-html, no-required-prop-with-default, no-template-shadow, require-explicit-emits)', async () => {
+      await presetGenerator(tree, { name: 'my-workspace', framework: 'vue' });
+      const config = tree.read('workshop-vue/eslint.config.mjs', 'utf-8') ?? '';
+      expect(config).toContain("'vue/no-v-html': 'error'");
+      expect(config).toContain("'vue/no-required-prop-with-default': 'error'");
+      expect(config).toContain("'vue/no-template-shadow': 'error'");
+      expect(config).toContain("'vue/require-explicit-emits': 'error'");
+    });
+
+    // Lever 4: eslint-plugin-storybook
+
+    it.each(['angular', 'react', 'vue'] as const)(
+      'wires eslint-plugin-storybook (import, flat/recommended, no-uninstalled-addons) for %s',
+      async (fw) => {
+        await presetGenerator(tree, { name: 'my-workspace', framework: fw });
+        const config =
+          tree.read(`workshop-${fw}/eslint.config.mjs`, 'utf-8') ?? '';
+        expect(config).toContain(
+          "import storybook from 'eslint-plugin-storybook';",
+        );
+        expect(config).toContain("...storybook.configs['flat/recommended']");
+        expect(config).toContain("'storybook/no-uninstalled-addons'");
+        expect(config).toContain("packageJsonLocation: '../package.json'");
+      },
+    );
+
+    it('adds eslint-plugin-storybook as a devDependency, pinned to the Storybook version', async () => {
+      await presetGenerator(tree, { name: 'my-workspace', framework: 'react' });
+      const pkg = readJson(tree, 'package.json');
+      expect(pkg.devDependencies['eslint-plugin-storybook']).toBe('10.6.0');
+    });
+
+    // Lever 5: type-aware linting
+
+    it.each(['angular', 'react', 'vue'] as const)(
+      'wires type-aware linting (recommendedTypeChecked + projectService) for %s',
+      async (fw) => {
+        await presetGenerator(tree, { name: 'my-workspace', framework: fw });
+        const config =
+          tree.read(`workshop-${fw}/eslint.config.mjs`, 'utf-8') ?? '';
+        expect(config).toContain("import tseslint from 'typescript-eslint';");
+        expect(config).toContain('tseslint.configs.recommendedTypeChecked');
+        expect(config).toContain('projectService: true');
+        expect(config).toContain('tsconfigRootDir: import.meta.dirname');
+      },
+    );
+
+    it.each(['angular', 'react', 'vue'] as const)(
+      "gives .js/.jsx/.cjs/.mjs files their own explicit tsconfigRootDir, matching the workspace root nx.configs['flat/typescript'] already uses (%s)",
+      async (fw) => {
+        await presetGenerator(tree, { name: 'my-workspace', framework: fw });
+        const config =
+          tree.read(`workshop-${fw}/eslint.config.mjs`, 'utf-8') ?? '';
+        expect(config).toContain("import { dirname } from 'node:path';");
+        expect(config).toContain(
+          "files: ['**/*.js', '**/*.jsx', '**/*.cjs', '**/*.mjs']",
+        );
+        expect(config).toContain(
+          'tsconfigRootDir: dirname(import.meta.dirname)',
+        );
+      },
+    );
+
+    it('Vue: scopes type-aware linting to .vue files too, re-specifying the parser alongside projectService in the same block', async () => {
+      await presetGenerator(tree, { name: 'my-workspace', framework: 'vue' });
+      const config = tree.read('workshop-vue/eslint.config.mjs', 'utf-8') ?? '';
+      expect(config).toContain("extraFileExtensions: ['.vue']");
+      expect(config).toContain(
+        "parser: await import('@typescript-eslint/parser'),\n      projectService: true,",
+      );
+    });
+
+    it('adds typescript-eslint as a devDependency when not already present', async () => {
+      await presetGenerator(tree, { name: 'my-workspace', framework: 'react' });
+      const pkg = readJson(tree, 'package.json');
+      expect(pkg.devDependencies['typescript-eslint']).toBe('^8.40.0');
+    });
+
+    it('does not override an existing typescript-eslint devDependency', async () => {
+      tree.write(
+        'package.json',
+        JSON.stringify({
+          name: 'my-workspace',
+          devDependencies: { 'typescript-eslint': '^9.0.0' },
+        }),
+      );
+      await presetGenerator(tree, { name: 'my-workspace', framework: 'react' });
+      const pkg = readJson(tree, 'package.json');
+      expect(pkg.devDependencies['typescript-eslint']).toBe('^9.0.0');
+    });
+
+    // Storybook example templates: prerequisite for lever 4's own gate to
+    // pass on the scaffold's own example (eslint-plugin-storybook's
+    // no-renderer-packages rule flags importing the renderer package
+    // directly — @storybook/react / @storybook/vue3 — instead of the
+    // framework package).
+
+    it('React and Vue example templates import Storybook types from the -vite framework package, not the renderer package', async () => {
+      await presetGenerator(tree, { name: 'my-workspace', framework: 'react' });
+      const story =
+        tree.read('workshop-react/src/atl-button.stories.tsx', 'utf-8') ?? '';
+      const preview =
+        tree.read('workshop-react/.storybook/preview.tsx', 'utf-8') ?? '';
+      expect(story).toContain("from '@storybook/react-vite'");
+      expect(preview).toContain("from '@storybook/react-vite'");
+      expect(story).not.toContain("from '@storybook/react'");
+      expect(preview).not.toContain("from '@storybook/react'");
+
+      const vueTree = createTreeWithEmptyWorkspace();
+      await presetGenerator(vueTree, {
+        name: 'my-workspace',
+        framework: 'vue',
+      });
+      const vueStory =
+        vueTree.read('workshop-vue/src/atl-button.stories.ts', 'utf-8') ?? '';
+      const vuePreview =
+        vueTree.read('workshop-vue/.storybook/preview.ts', 'utf-8') ?? '';
+      expect(vueStory).toContain("from '@storybook/vue3-vite'");
+      expect(vuePreview).toContain("from '@storybook/vue3-vite'");
+      expect(vueStory).not.toContain("from '@storybook/vue3'");
+      expect(vuePreview).not.toContain("from '@storybook/vue3'");
+    });
+
+    // CLAUDE.md documents strictness
+
+    it('CLAUDE.md documents that this workspace is strict and what that means for prompting', async () => {
+      await presetGenerator(tree, {
+        name: 'my-workspace',
+        framework: 'angular',
+      });
+      const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
+      expect(md.toLowerCase()).toContain('strict');
+      expect(md).toContain('npm run lint');
     });
   });
 });

@@ -803,3 +803,37 @@ Two things worth keeping:
   each failed; deleting the nested block and pointing at where the content actually lives —
   in this case the ADRs that already carried it — fixed it in one move and left the file
   smaller.
+
+## 2026-09-13 — Three things were green because their environment was too kind
+
+In one session, three separate layers turned out to be passing for a reason unrelated to
+whether they worked.
+
+**The package.** `@atelier-ui/react`'s generated unit tests passed because the published
+package declared `"type": "commonjs"` over ESM files, so Vite's dual-package guard refused to
+externalise it and inlined it instead — which is where CSS-stubbing lives. Vue, whose package
+was correctly formed, was externalised and died. The correct build lost; the malformed one was
+carried by its own defect.
+
+**The gate.** `check:exports` resolved with `moduleResolution: NodeNext` against libraries that
+use `bundler`. It had only ever passed because no `package.json` declared a `type`, so
+TypeScript silently assumed CJS and extensionless specifiers resolved. Declaring the type
+honestly took it to **zero** resolved exports — and it reported that absence as forty findings
+about missing re-exports.
+
+**The test harness.** A new write to `tsconfig.base.json` ran before the framework generator
+creates that file. 232 unit tests never saw it, because `createTreeWithEmptyWorkspace()`
+pre-seeds a stub `tsconfig.base.json` unconditionally. The mocks were kinder than the real
+generators, so the suite proved the code worked in a world that does not exist.
+
+The through-line, and the rule:
+
+- **Green proves something only if the environment it went green in is as unkind as the real
+  one.** Ask what the passing environment provides that production does not — a pre-seeded
+  file, a lenient default, a guard that compensates for a defect.
+- **Each was found by the layer below it**, never by the layer that contained it: the package
+  by a scaffolded workspace's own test run, the gate by an honest package declaration, the
+  harness by the e2e scaffolding from nothing. Cheap tests have a ceiling, and it is not
+  higher than their fixtures.
+- **When a fix reveals a failure elsewhere, suspect the revealer is right.** All three looked
+  at first like the fix had broken something. In all three the fix had removed a crutch.

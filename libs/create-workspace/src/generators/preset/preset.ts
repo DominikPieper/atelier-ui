@@ -310,6 +310,18 @@ const MCP_SDK_VERSION = '^1.29.0';
 // present.
 const TYPESCRIPT_VERSION = '6.0.3';
 
+// Strictness (ADR-0140): typescript-eslint's own meta-package, for
+// `tseslint.configs.recommendedTypeChecked` (lever 5) — a defensive add, not
+// the primary source, like TYPESCRIPT_VERSION above: a real generated tree
+// for all three frameworks already carries it in devDependencies (each
+// framework's own `@nx/{angular,react,vue}:application` generator adds it
+// independently, confirmed against a real run), so the conditional add near
+// the end of presetGenerator only fires if some future generator version
+// stops doing that. Matches root package.json's own declared range
+// (`^8.40.0`) — a caret range mirrored verbatim, like VITEST_VERSION above,
+// not the exact version those generators happened to resolve on their own.
+const TYPESCRIPT_ESLINT_VERSION = '^8.40.0';
+
 // Ported CSS-discipline stylelint rules (ADR-0130): pinned the same way
 // STORYBOOK_VERSION above is — the exact version this monorepo actually
 // runs, not the caret range root package.json declares (`^17.15.0`); the
@@ -615,6 +627,12 @@ export async function presetGenerator(
     vitest: VITEST_VERSION,
     '@vitest/browser-playwright': VITEST_BROWSER_PLAYWRIGHT_VERSION,
     playwright: PLAYWRIGHT_VERSION,
+    // Lever 4 (ADR-0140): "the stories are the claims" (ADR-0121) and nothing
+    // lints them today — wired into each app's eslint.config.mjs below, the
+    // same `flat/recommended` this monorepo's own libs/{angular,react,vue}
+    // already use. Pinned to STORYBOOK_VERSION like every other Storybook
+    // devDependency above, not a separate range.
+    'eslint-plugin-storybook': STORYBOOK_VERSION,
   };
 
   const appName = `workshop-${framework}`;
@@ -660,8 +678,36 @@ export async function presetGenerator(
       // React and Vue below already pass this explicitly; Angular didn't,
       // which was the actual defect, not merely a posture gap.
       linter: 'eslint',
+      // Lever 2 (ADR-0140): explicit, not relied-upon-as-default.
+      // `@nx/angular:application`'s own schema already defaults `strict` to
+      // `true` (`normalize-options.js`), and that default is what already
+      // writes `compilerOptions.strict: true` plus the three
+      // `angularCompilerOptions` flags below into `${appName}/tsconfig.json`
+      // today — verified against the real generator's source
+      // (`enable-strict-type-checking.js`) and a real generated tree, not
+      // assumed. Passing it explicitly stops that outcome from depending on
+      // an upstream default this repo does not control; the `updateJson`
+      // backstop below makes it certain either way.
+      strict: true,
     });
     deps['@atelier-ui/angular'] = componentPackageVersion;
+
+    // Lever 2 (ADR-0140) backstop: `angularAppGenerator`'s own `strict: true`
+    // above already writes these three flags (see its comment), but this
+    // preset's OWN generation of the outcome shouldn't depend on an nx
+    // default it does not control — same posture as
+    // `appendToFlatEslintConfig`'s throw-if-missing below. `updateJson`
+    // throws if `${appName}/tsconfig.json` is missing, which the application
+    // generator above always writes.
+    updateJson(tree, `${appName}/tsconfig.json`, (json) => {
+      json.angularCompilerOptions = {
+        ...json.angularCompilerOptions,
+        strictTemplates: true,
+        strictInjectionParameters: true,
+        strictInputAccessModifiers: true,
+      };
+      return json;
+    });
 
     // `flat/angular-template` above (written into workshop-angular's own
     // eslint.config.mjs by the application generator, confirmed by a real
@@ -671,6 +717,39 @@ export async function presetGenerator(
     // tagged in angular-eslint's README): WCAG 2.4.3, positive tabindex
     // fights natural DOM tab order. Same addition libs/angular's own config
     // makes on top of the identical preset.
+    //
+    // Levers 3/4/5 (ADR-0140) follow, all appended to the same file:
+    // - lever 3: promotes this framework's four warning-only rules that are
+    //   genuine correctness bugs — matching this repo's OWN
+    //   libs/angular/eslint.config.mjs, which already sets exactly these
+    //   four to 'error' (verified: a real generated Angular app's eslint
+    //   config leaves exactly these four, and no others, at 'warn').
+    // - lever 4: wires eslint-plugin-storybook's `flat/recommended` plus the
+    //   `no-uninstalled-addons` rule, mirroring libs/angular/eslint.config.mjs
+    //   (packageJsonLocation is one level up here — Storybook addons install
+    //   at the scaffold's own root, not two levels up the way this
+    //   monorepo's own libs/ nests).
+    // - lever 5: type-aware linting (`recommendedTypeChecked`), scoped to
+    //   `src/**/*.ts` — exactly what `tsconfig.app.json`/`tsconfig.spec.json`
+    //   both include, verified against a real generated tree so every file
+    //   this matches already resolves inside one of the two referenced
+    //   projects. The `**/*.js`/`.jsx`/`.cjs`/`.mjs` block below is a
+    //   necessary companion, not an extra feature: `nx.configs['flat/typescript']`
+    //   (in baseConfig) already assigns typescript-eslint's parser to
+    //   `.ts`/`.tsx`/`.cts`/`.mts` files WITH an explicit `tsconfigRootDir`
+    //   (the workspace root, where `nx lint` actually runs from) but its
+    //   `.js`/`.jsx`/`.cjs`/`.mjs` sibling block assigns the same parser with
+    //   none at all — harmless on its own, but once ANY block anywhere in
+    //   this config enables `projectService` (as lever 5 does), typescript-
+    //   eslint's parser service scans the whole run for tsconfig roots and
+    //   refuses to guess a default for a file with none of its own, once more
+    //   than one distinct root exists anywhere in the run. `eslint.config.mjs`
+    //   itself (an `.mjs` file, linted like any other file in this project)
+    //   hits this immediately. Verified against a real generated workspace:
+    //   without this block, `eslint.config.mjs` fails to lint with "No
+    //   tsconfigRootDir was set, and multiple candidate TSConfigRootDirs are
+    //   present". Giving these files the same root nx's own block already
+    //   uses closes the gap.
     appendToFlatEslintConfig(
       tree,
       `${appName}/eslint.config.mjs`,
@@ -685,7 +764,51 @@ export async function presetGenerator(
     '@angular-eslint/template/no-positive-tabindex': 'error',
   },
 },
+...tseslint.configs.recommendedTypeChecked.map((cfg) =>
+  cfg.files ? cfg : { ...cfg, files: ['src/**/*.ts'] },
+),
+{
+  files: ['src/**/*.ts'],
+  languageOptions: {
+    parserOptions: {
+      projectService: true,
+      tsconfigRootDir: import.meta.dirname,
+    },
+  },
+},
+{
+  files: ['**/*.js', '**/*.jsx', '**/*.cjs', '**/*.mjs'],
+  languageOptions: {
+    parserOptions: {
+      tsconfigRootDir: dirname(import.meta.dirname),
+    },
+  },
+},
+{
+  files: ['**/*.ts'],
+  rules: {
+    '@angular-eslint/use-lifecycle-interface': 'error',
+    '@typescript-eslint/no-explicit-any': 'error',
+    '@typescript-eslint/no-non-null-assertion': 'error',
+    '@typescript-eslint/no-unused-vars': 'error',
+  },
+},
+...storybook.configs['flat/recommended'],
+{
+  files: ['.storybook/main.ts'],
+  rules: {
+    'storybook/no-uninstalled-addons': [
+      'error',
+      { packageJsonLocation: '../package.json' },
+    ],
+  },
+},
 `,
+      [
+        `import { dirname } from 'node:path';`,
+        `import tseslint from 'typescript-eslint';`,
+        `import storybook from 'eslint-plugin-storybook';`,
+      ],
     );
   }
 
@@ -707,11 +830,115 @@ export async function presetGenerator(
     } as Parameters<typeof reactAppGenerator>[1]);
     deps['@atelier-ui/react'] = componentPackageVersion;
 
-    // Deliberately nothing added here. `flat/react` above (written into
-    // workshop-react's own eslint.config.mjs by the application generator,
-    // confirmed by a real run) already carries jsx-a11y's full 18-rule
-    // active set — the same rule set libs/react/eslint.config.mjs relies on
-    // without adding anything of its own either.
+    // `flat/react` above (written into workshop-react's own eslint.config.mjs
+    // by the application generator, confirmed by a real run) already carries
+    // jsx-a11y's full 18-rule active set — the same rule set
+    // libs/react/eslint.config.mjs relies on without adding anything of its
+    // own either. None of jsx-a11y's own warning-only rules are touched
+    // below: a11y stays enforced by axe in check:stories (storybook-test), a
+    // stronger runtime check than these static heuristics.
+    //
+    // Levers 3/4/5 (ADR-0140), all appended below — see the identical
+    // structure's comment in the Angular branch above for lever 5's
+    // `.js`/`.jsx`/`.cjs`/`.mjs` companion block; the reasoning is the same
+    // for every framework, not repeated here.
+    //
+    // Lever 3: the correctness/security family of React's own warning-only
+    // rules. Verified against a real generated tree's own
+    // `eslint --print-config` for a `.tsx` file: 68 rules sit at 'warn'; the
+    // 26 below are the ones that flag a behavioural bug or a real security
+    // footgun (e.g. `react/jsx-no-target-blank`'s reverse-tabnabbing), not a
+    // style preference — the rest (unicode-bom, no-extra-bind,
+    // react/jsx-pascal-case, …) stay warnings. `react-hooks/exhaustive-deps`
+    // is deliberately NOT promoted: this repo's own
+    // libs/react/eslint.config.mjs makes the identical call (leaves it
+    // untouched at 'warn', the only rule this whole file doesn't already
+    // decide on) — a missing dependency is a real bug worth flagging, but the
+    // rule has a well-known false-positive rate around intentionally-omitted
+    // stable references (a `dispatch`, a `setState` function, a ref) and
+    // "run once" effects — a strict rule that fires on legitimate code
+    // teaches the wrong fix (suppress the warning) to a beginner audience of
+    // attendees and LLM agents, the one failure mode this whole change is
+    // built to avoid (ADR-0140).
+    appendToFlatEslintConfig(
+      tree,
+      `${appName}/eslint.config.mjs`,
+      `,
+...tseslint.configs.recommendedTypeChecked.map((cfg) =>
+  cfg.files
+    ? cfg
+    : {
+        ...cfg,
+        files: ['src/**/*.ts', 'src/**/*.tsx'],
+        ignores: ['src/**/*.spec.ts', 'src/**/*.spec.tsx'],
+      },
+),
+{
+  files: ['src/**/*.ts', 'src/**/*.tsx'],
+  ignores: ['src/**/*.spec.ts', 'src/**/*.spec.tsx'],
+  languageOptions: {
+    parserOptions: {
+      projectService: true,
+      tsconfigRootDir: import.meta.dirname,
+    },
+  },
+},
+{
+  files: ['**/*.js', '**/*.jsx', '**/*.cjs', '**/*.mjs'],
+  languageOptions: {
+    parserOptions: {
+      tsconfigRootDir: dirname(import.meta.dirname),
+    },
+  },
+},
+{
+  files: ['**/*.ts', '**/*.tsx', '**/*.js', '**/*.jsx'],
+  rules: {
+    eqeqeq: 'error',
+    'no-eval': 'error',
+    'no-implied-eval': 'error',
+    'array-callback-return': 'error',
+    'no-new-func': 'error',
+    'no-script-url': 'error',
+    'no-caller': 'error',
+    'no-extend-native': 'error',
+    'no-iterator': 'error',
+    'no-label-var': 'error',
+    'no-loop-func': 'error',
+    'no-native-reassign': 'error',
+    'no-negated-in-lhs': 'error',
+    'no-new-wrappers': 'error',
+    'no-octal-escape': 'error',
+    'no-self-compare': 'error',
+    'no-sequences': 'error',
+    'no-template-curly-in-string': 'error',
+    'no-throw-literal': 'error',
+    'react/jsx-no-target-blank': 'error',
+    'react/jsx-no-duplicate-props': 'error',
+    'react/jsx-no-comment-textnodes': 'error',
+    'react/no-direct-mutation-state': 'error',
+    'react/no-is-mounted': 'error',
+    'react/no-danger-with-children': 'error',
+    'react/style-prop-object': 'error',
+  },
+},
+...storybook.configs['flat/recommended'],
+{
+  files: ['.storybook/main.ts'],
+  rules: {
+    'storybook/no-uninstalled-addons': [
+      'error',
+      { packageJsonLocation: '../package.json' },
+    ],
+  },
+},
+`,
+      [
+        `import { dirname } from 'node:path';`,
+        `import tseslint from 'typescript-eslint';`,
+        `import storybook from 'eslint-plugin-storybook';`,
+      ],
+    );
   }
 
   if (framework === 'vue') {
@@ -768,6 +995,40 @@ export async function presetGenerator(
     // the generator, and @nx/vue already turns off the rule most likely to
     // misfire on plain .ts — vue/multi-word-component-names — project-wide
     // on its own). Recorded here rather than silently left unmentioned.
+    // Levers 3/4/5 (ADR-0140), appended below alongside the two blocks above.
+    //
+    // Lever 3: four of the ~30 `vue/*` rules Vue's own warning tier carries
+    // are genuine correctness/security bugs, not the layout/whitespace style
+    // rules the eslintConfigPrettier block above already neutralises —
+    // `no-v-html` is this framework's `dangerouslySetInnerHTML` (an XSS
+    // vector, the same security family as `no-eval`), `no-required-prop-with-default`
+    // and `no-template-shadow` catch real logic bugs, and
+    // `require-explicit-emits` is the emitted-event counterpart to the
+    // already-promoted `no-unused-properties` (declare what you actually
+    // emit, the same way you declare what you actually read). The rest —
+    // attribute ordering, html-indent, component-name casing, and every
+    // other rule eslintConfigPrettier.rules doesn't already turn off — stay
+    // warnings: this repo's own libs/vue/eslint.config.mjs makes the
+    // identical call (it doesn't touch a single one of them either).
+    //
+    // Lever 4: eslint-plugin-storybook's `flat/recommended`, mirroring
+    // libs/vue/eslint.config.mjs (packageJsonLocation is one level up here).
+    //
+    // Lever 5: type-aware linting, including `.vue` SFCs — most Vue
+    // component code lives in `.vue` files, not `.ts`, so a `.ts`-only scope
+    // would miss the majority of what an attendee actually writes. The
+    // `.vue`-scoped block below re-specifies `parser` alongside
+    // `projectService`/`tsconfigRootDir`/`extraFileExtensions` in ONE
+    // object, not split across two — verified against a real generated
+    // workspace that splitting them (a second, later block adding only
+    // `projectService`+`tsconfigRootDir` next to the app generator's own
+    // parser-only block above) reproduces the exact "No tsconfigRootDir was
+    // set, and multiple candidate TSConfigRootDirs are present" failure
+    // lever 5's own `.js`/`.jsx`/`.cjs`/`.mjs` companion block (see the
+    // identical block's comment in the Angular branch above) exists to avoid
+    // for plain files — vue-eslint-parser's delegate-parsing does not pick
+    // up a later block's parserOptions the same way ESLint's own
+    // language-options merge does for every other file type in this preset.
     appendToFlatEslintConfig(
       tree,
       `${appName}/eslint.config.mjs`,
@@ -788,10 +1049,108 @@ export async function presetGenerator(
     'vue/no-unused-properties': ['error', { groups: ['props'] }],
   },
 },
+...tseslint.configs.recommendedTypeChecked.map((cfg) =>
+  cfg.files
+    ? cfg
+    : {
+        ...cfg,
+        files: ['src/**/*.ts', 'src/**/*.vue'],
+        ignores: ['src/**/*.spec.ts'],
+      },
+),
+{
+  // Re-specifies \`parser\` alongside the type-aware options in one block —
+  // see this branch's comment above for why splitting them fails.
+  files: ['**/*.vue'],
+  languageOptions: {
+    parserOptions: {
+      parser: await import('@typescript-eslint/parser'),
+      projectService: true,
+      tsconfigRootDir: import.meta.dirname,
+      extraFileExtensions: ['.vue'],
+    },
+  },
+},
+{
+  files: ['src/**/*.ts'],
+  ignores: ['src/**/*.spec.ts'],
+  languageOptions: {
+    parserOptions: {
+      projectService: true,
+      tsconfigRootDir: import.meta.dirname,
+    },
+  },
+},
+{
+  files: ['**/*.js', '**/*.jsx', '**/*.cjs', '**/*.mjs'],
+  languageOptions: {
+    parserOptions: {
+      tsconfigRootDir: dirname(import.meta.dirname),
+    },
+  },
+},
+{
+  files: ['**/*.vue'],
+  rules: {
+    'vue/no-v-html': 'error',
+    'vue/no-required-prop-with-default': 'error',
+    'vue/no-template-shadow': 'error',
+    'vue/require-explicit-emits': 'error',
+  },
+},
+...storybook.configs['flat/recommended'],
+{
+  files: ['.storybook/main.ts'],
+  rules: {
+    'storybook/no-uninstalled-addons': [
+      'error',
+      { packageJsonLocation: '../package.json' },
+    ],
+  },
+},
 `,
-      [`import eslintConfigPrettier from 'eslint-config-prettier';`],
+      [
+        `import eslintConfigPrettier from 'eslint-config-prettier';`,
+        `import { dirname } from 'node:path';`,
+        `import tseslint from 'typescript-eslint';`,
+        `import storybook from 'eslint-plugin-storybook';`,
+      ],
     );
   }
+
+  // ─── Strictness (lever 1, ADR-0140) ──────────────────────────────────────
+  // `tsconfig.base.json` does NOT exist yet at the top of this function —
+  // measured directly against a real `create-nx-workspace` run (not assumed
+  // from reading `@nx/js`'s source): `create-nx-workspace` writes only
+  // package.json/nx.json/.gitignore before invoking this preset, and
+  // `tsconfig.base.json` is written for the first time by whichever
+  // framework's own `@nx/{angular,react,vue}:application` generator just ran
+  // above — confirmed for all three by running each real (unmocked)
+  // generator against a tree with the file deliberately absent beforehand.
+  // Placing this write any earlier reproduced exactly the failure this
+  // comment now guards against: `updateJson` throwing `Cannot find
+  // tsconfig.base.json` at scaffold time, before a single check could run.
+  // `createTreeWithEmptyWorkspace()` (used by this file's own tests)
+  // pre-seeds a bare `{ compilerOptions: { paths: {} } }` tsconfig.base.json
+  // regardless of generator order, which is exactly why that in-memory-tree
+  // testing setup could not have caught the ordering bug on its own — see
+  // this preset's mocked app generators, which now also write
+  // tsconfig.base.json themselves (dedicated tests below cover the ordering
+  // directly instead).
+  //
+  // `tsConfigBaseOptions` (`@nx/js`'s own default, written by the framework
+  // generator above) pins `strict: false` deliberately — "TS 6.0 flips the
+  // `strict` default to true; pin false to keep this base config's behavior
+  // identical on TS 5.8 and 6.0" (that package's own comment). Measured
+  // against a real generated tree, all three frameworks: `strict: false`
+  // there, and the app itself already builds clean with `strict: true` —
+  // nobody has fixed code for this, so flipping it costs no migration.
+  console.log(`\n◇ Wiring strict TypeScript…`);
+  updateJson(tree, 'tsconfig.base.json', (json) => {
+    json.compilerOptions = json.compilerOptions ?? {};
+    json.compilerOptions.strict = true;
+    return json;
+  });
 
   // Copy design tokens into the scaffolded app so attendees can edit them
   // directly. They're not imported from the @atelier-ui/<fw> npm package
@@ -945,19 +1304,30 @@ export async function presetGenerator(
   });
 
   storybookDevDeps[STORYBOOK_FRAMEWORK_PACKAGE[framework]] = STORYBOOK_VERSION;
-  // @storybook/react-vite and @storybook/vue3-vite each carry their
-  // non-vite renderer counterpart as a plain (non-peer) `dependency`, not
-  // something npm/pnpm is told the app needs directly — but the story and
-  // preview templates import straight from '@storybook/react' /
-  // '@storybook/vue3' for the `Meta`/`StoryObj`/`Preview` types. That
-  // resolves today only because npm hoists it; pnpm's stricter, non-hoisted
-  // layout would leave the import unresolved. Angular has no matching case:
+  // @storybook/react-vite and @storybook/vue3-vite each carry their non-vite
+  // renderer counterpart as a plain (non-peer) `dependency` regardless of
+  // whether it's declared explicitly here. It used to also be load-bearing
+  // for a type import: the story and preview templates imported
+  // `Meta`/`StoryObj`/`Preview` straight from '@storybook/react' /
+  // '@storybook/vue3', which resolved only because npm hoists it (pnpm's
+  // stricter, non-hoisted layout would have left it unresolved). ADR-0140
+  // (lever 4, eslint-plugin-storybook) moved both templates to import those
+  // same types from '@storybook/react-vite' / '@storybook/vue3-vite' instead
+  // — the same types are re-exported there (confirmed: this monorepo's own
+  // libs/react and libs/vue stories already import them from the `-vite`
+  // packages) — because eslint-plugin-storybook's `no-renderer-packages` rule
+  // flags importing the renderer package directly, and the scaffold's own
+  // example must pass its own new linter. The explicit devDependency below
+  // stays anyway: harmless (the vite package already pulls it in
+  // transitively), and it remains available for anyone who wants the
+  // renderer package's own types directly. Angular has no matching case:
   // '@storybook/angular-vite' has no such counterpart to hoist, and the
-  // angular templates import their types from '@storybook/angular-vite'
-  // itself (see files/storybook/angular/*.template) — adding
-  // '@storybook/angular' back here would reintroduce exactly the ERESOLVE
-  // this generator now avoids (its peer on @angular-devkit/build-angular is
-  // not satisfiable by a freshly scaffolded Angular 22 app).
+  // angular templates already imported their types from
+  // '@storybook/angular-vite' itself (see files/storybook/angular/*.template)
+  // — adding '@storybook/angular' back here would reintroduce exactly the
+  // ERESOLVE this generator now avoids (its peer on
+  // @angular-devkit/build-angular is not satisfiable by a freshly scaffolded
+  // Angular 22 app).
   if (framework === 'react') {
     storybookDevDeps['@storybook/react'] = STORYBOOK_VERSION;
   }
@@ -1385,6 +1755,14 @@ once after \`npm install\` — see Storybook below.
 
 ## Definition of Done
 
+This workspace is strict, not lenient-by-default: \`tsconfig.base.json\` has
+\`strict: true\`, and \`npm run lint\` promotes the correctness/security family of rules
+(\`eqeqeq\`, \`no-eval\`, and their kin — see \`eslint.config.mjs\` for the exact set) plus
+type-aware checks (\`no-floating-promises\`, \`no-misused-promises\`, \`await-thenable\`)
+to errors. That is the feedback loop this workspace hands an LLM, not friction to prompt
+around: code Claude Code (or you) writes has to satisfy \`npm run lint\` and \`npm run
+build\` before it is done, the same way it has to satisfy the five checks below.
+
 A change here is done when all five of these pass:
 
 - \`npm run check:format\` — Prettier
@@ -1449,6 +1827,17 @@ file exports). The Desktop Bridge covers creation and inspection without a token
   };
   if (!hasTypescript) {
     contractLoopDevDeps.typescript = TYPESCRIPT_VERSION;
+  }
+
+  // Lever 5 (ADR-0140): `typescript-eslint`, imported by each framework's own
+  // eslint.config.mjs addition above (`tseslint.configs.recommendedTypeChecked`).
+  // Defensive add, not the primary source — see TYPESCRIPT_ESLINT_VERSION's own
+  // comment: a real generated tree for all three frameworks already carries
+  // this in devDependencies, added independently by each framework's own
+  // application generator.
+  const typeAwareLintDevDeps: Record<string, string> = {};
+  if (!existingDeps['typescript-eslint']) {
+    typeAwareLintDevDeps['typescript-eslint'] = TYPESCRIPT_ESLINT_VERSION;
   }
 
   // Browser-mode Storybook tests (owner correction 2026-09-10 to ADR-0123):
@@ -1530,6 +1919,7 @@ file exports). The Desktop Bridge covers creation and inspection without a token
     ...unitTestDevDeps,
     ...stylelintDevDeps,
     ...prettierDevDeps,
+    ...typeAwareLintDevDeps,
   });
 
   // Remove the preset package itself — create-nx-workspace adds it automatically
