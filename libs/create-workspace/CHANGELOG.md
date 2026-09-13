@@ -1,3 +1,24 @@
+## 0.2.44 (2026-09-13)
+
+### 🚀 Features
+
+- **create-workspace:** the workspace knows which Figma file is the attendee's ([40a2eff2](https://github.com/DominikPieper/atelier-ui/commit/40a2eff2))
+- **create-workspace:** a unit-test runner, without disturbing the browser one ([fa60042d](https://github.com/DominikPieper/atelier-ui/commit/fa60042d))
+- **create-workspace:** the workspace ships the skill for the loop it runs ([50169e2e](https://github.com/DominikPieper/atelier-ui/commit/50169e2e))
+- **create-workspace:** the generated workspace is set up for the agent that works in it ([e2772040](https://github.com/DominikPieper/atelier-ui/commit/e2772040))
+- **create-workspace:** a pinned workspace whose example teaches the doctrine ([de06988e](https://github.com/DominikPieper/atelier-ui/commit/de06988e))
+- **create-workspace:** the preset takes one framework, not a list ([d4b1cfb1](https://github.com/DominikPieper/atelier-ui/commit/d4b1cfb1))
+
+### 🩹 Fixes
+
+- **create-workspace:** the CLAUDE.md it writes quoted the wrong radius values ([35ccffa7](https://github.com/DominikPieper/atelier-ui/commit/35ccffa7))
+- **create-workspace:** the generator validates the Figma key it interpolates ([e6eb441d](https://github.com/DominikPieper/atelier-ui/commit/e6eb441d))
+
+### ❤️ Thank You
+
+- Claude Opus 5 (1M context)
+- Dominik Pieper @DominikPieper
+
 ## 0.2.43 (2026-09-12)
 
 ### 🚀 Features

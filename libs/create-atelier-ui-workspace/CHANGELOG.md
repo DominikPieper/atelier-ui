@@ -1,3 +1,16 @@
+## 0.2.44 (2026-09-13)
+
+### 🚀 Features
+
+- **create-workspace:** the workspace knows which Figma file is the attendee's ([40a2eff2](https://github.com/DominikPieper/atelier-ui/commit/40a2eff2))
+- **create-workspace:** a unit-test runner, without disturbing the browser one ([fa60042d](https://github.com/DominikPieper/atelier-ui/commit/fa60042d))
+- **create-workspace:** the preset takes one framework, not a list ([d4b1cfb1](https://github.com/DominikPieper/atelier-ui/commit/d4b1cfb1))
+
+### ❤️ Thank You
+
+- Claude Opus 5 (1M context)
+- Dominik Pieper @DominikPieper
+
 ## 0.2.43 (2026-09-12)
 
 ### 🚀 Features
