@@ -1230,7 +1230,7 @@ hardcoded hex values or pixel sizes — always reference a token.
 Key tokens:
 - Colors:   --ui-color-primary, --ui-color-text, --ui-color-surface-raised, --ui-color-border
 - Spacing:  --ui-spacing-4 (1rem), --ui-spacing-6 (1.5rem), --ui-spacing-8 (2rem)
-- Radius:   --ui-radius-sm (0.375rem), --ui-radius-md (0.5rem), --ui-radius-lg (0.75rem)
+- Radius:   --ui-radius-sm (0.5rem), --ui-radius-md (0.625rem), --ui-radius-lg (0.875rem)
 
 ## Rules
 - Prefer component props over custom CSS

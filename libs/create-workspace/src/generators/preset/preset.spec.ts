@@ -2441,4 +2441,79 @@ describe('preset generator', () => {
       }
     },
   );
+
+  // ─── CLAUDE.md Design Tokens section stays pinned to tokens.css ───────────
+  //
+  // preset.ts's CLAUDE.md template names specific --ui-* tokens in prose, and
+  // for Spacing/Radius quotes their rem values by hand — nothing derives them
+  // from tokens.css at generation time. That is exactly how the Radius line
+  // went stale after tokens.css's radius bump. Rather than pin a second
+  // hardcoded copy of the values here (the same bug with one more copy), this
+  // reads the actual shipped tokens.css and re-derives what the template
+  // SHOULD say, so the test fails if either file's numbers move without the
+  // other, and fails if a named token doesn't exist in tokens.css at all.
+  describe('CLAUDE.md Design Tokens section vs. tokens.css', () => {
+    const TOKENS_CSS_PATH = join(__dirname, 'files/styles/tokens.css');
+
+    function parseCanonicalTokens(css: string): Record<string, string> {
+      const root = css.match(/:root\s*\{([\s\S]*?)\n\}/);
+      if (!root) {
+        throw new Error(
+          'tokens.css has no top-level :root block to read canonical values from',
+        );
+      }
+      const values: Record<string, string> = {};
+      const declaration = /(--[\w-]+):\s*([^;]+);/g;
+      let match: RegExpExecArray | null;
+      while ((match = declaration.exec(root[1])) !== null) {
+        values[match[1]] = match[2].trim();
+      }
+      return values;
+    }
+
+    function parseNamedTokens(
+      md: string,
+    ): Array<{ name: string; value?: string }> {
+      const start = md.indexOf('Key tokens:');
+      const end = md.indexOf('## Rules', start);
+      if (start === -1 || end === -1) {
+        throw new Error(
+          'CLAUDE.md is missing the "Key tokens:" / "## Rules" Design Tokens section',
+        );
+      }
+      const section = md.slice(start, end);
+      const named: Array<{ name: string; value?: string }> = [];
+      const entry = /(--[\w-]+)(?:\s*\(([^)]+)\))?/g;
+      let match: RegExpExecArray | null;
+      while ((match = entry.exec(section)) !== null) {
+        named.push({ name: match[1], value: match[2]?.trim() });
+      }
+      return named;
+    }
+
+    it('names only tokens that exist in tokens.css, quoting exactly the values tokens.css declares', async () => {
+      await presetGenerator(tree, {
+        name: 'my-workspace',
+        framework: 'react',
+      });
+      const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
+
+      const canonical = parseCanonicalTokens(
+        readFileSync(TOKENS_CSS_PATH, 'utf-8'),
+      );
+      const named = parseNamedTokens(md);
+
+      // Guards against either parser above silently matching nothing, which
+      // would make every assertion below vacuously true.
+      expect(named.length).toBeGreaterThanOrEqual(10);
+      expect(Object.keys(canonical).length).toBeGreaterThan(50);
+
+      for (const { name, value } of named) {
+        expect(canonical).toHaveProperty(name);
+        if (value !== undefined) {
+          expect(canonical[name]).toBe(value);
+        }
+      }
+    });
+  });
 });
