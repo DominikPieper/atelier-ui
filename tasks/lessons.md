@@ -781,3 +781,25 @@ Two things to keep:
   to follow. Name the two files and ask which agrees with the canonical one.
 - **The copy that drifts is not the one further from the source.** It is whichever one nothing
   checks. Distance is intuition; a gate is evidence.
+
+## 2026-09-13 — `prettier --write` does not mean `prettier --check` will pass
+
+`check:format` is the first link in `check:all`, and it failed on `tasks/todo.md` after I had
+run `prettier --write` on that exact file several times. Prettier was **not idempotent** on it:
+each `--write` pushed one block's indentation four to eight columns deeper, so `--check`
+immediately disagreed with the output `--write` had just produced. Four restructurings later —
+nested list, flatter list, bullet-free paragraphs — it still crept, and it stopped only when the
+offending text became a single line short enough to need no continuation.
+
+The trigger is a hand-indented continuation line inside a checkbox list item whose own content
+column prettier computes differently than the author did. Deep prose indentation under
+`- [ ] **Item**` is the shape to distrust.
+
+Two things worth keeping:
+
+- **A formatter run is not a formatter pass.** After `--write`, run `--check`; if it disagrees,
+  the file is oscillating and no number of further `--write`s will settle it.
+- **The cheapest escape is less structure, not more.** Three attempts at the "right" nesting
+  each failed; deleting the nested block and pointing at where the content actually lives —
+  in this case the ADRs that already carried it — fixed it in one move and left the file
+  smaller.
