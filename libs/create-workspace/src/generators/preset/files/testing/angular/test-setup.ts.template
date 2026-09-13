@@ -1,3 +1,9 @@
+// No test-setup-stories.ts sibling here (unlike react/vue): verified against
+// the installed @storybook/angular@10.6.0 dist (and its -vite counterpart)
+// that neither exports composeStories/composeStory, only
+// setProjectAnnotations — tracked upstream as storybookjs/storybook#28897.
+// Wiring setProjectAnnotations alone would register project-level config
+// that nothing in this workspace could yet consume. See ADR-0141.
 import '@angular/compiler';
 import '@analogjs/vitest-angular/setup-snapshots';
 import '@testing-library/jest-dom/vitest';

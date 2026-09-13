@@ -1,25 +1,21 @@
-import { fireEvent, render, screen } from '@testing-library/vue';
-import { AtlButton } from '@atelier-ui/vue';
+import { screen } from '@testing-library/vue';
+import { composeStories } from '@storybook/vue3';
+import * as stories from './atl-button.stories';
 
-// A working pattern to copy: same purpose as atl-button.stories.ts, but for
-// a plain jsdom unit test (`npx nx test workshop-vue`) rather than a
-// browser-rendered story — the loop for anything that is not itself a
-// story: a composable, a helper, a form-validation rule.
+// A working pattern to copy: this composes atl-button.stories.ts's own
+// exports instead of restating their claims by hand (ADR-0121: the stories
+// are the claims; ADR-0141: composing them here, in Vitest/jsdom, not just
+// in Chromium via check:stories). Primary's own `play` (see that file) does
+// the click + assertion; composeStories(...).Primary.run() renders the
+// story exactly like Storybook does — decorators, parameters and globals
+// included, via src/test-setup-stories.ts's setProjectAnnotations call —
+// then executes that play. A story composed WITHOUT that setup would
+// silently test a different component than the one Storybook renders.
+const { Primary } = composeStories(stories);
+
 describe('AtlButton', () => {
-  it('renders with its accessible name', () => {
-    render(AtlButton, { slots: { default: 'Click me' } });
-    expect(
-      screen.getByRole('button', { name: 'Click me' }),
-    ).toBeInTheDocument();
-  });
-
-  it('emits a click event when clicked', async () => {
-    const onClick = vi.fn();
-    render(AtlButton, {
-      slots: { default: 'Click me' },
-      attrs: { onClick },
-    });
-    await fireEvent.click(screen.getByRole('button', { name: 'Click me' }));
-    expect(onClick).toHaveBeenCalledOnce();
+  it('renders with its accessible name and fires its click handler when clicked', async () => {
+    await Primary.run();
+    expect(screen.getByRole('button', { name: 'Button' })).toBeInTheDocument();
   });
 });

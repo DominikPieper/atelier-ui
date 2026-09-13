@@ -42,7 +42,7 @@ export default defineConfig(() => ({
     globals: true,
     environment: 'jsdom',
     include: ['{src,tests}/**/*.{test,spec}.{js,mjs,cjs,ts,mts,cts}'],
-    setupFiles: ['src/test-setup.ts'],
+    setupFiles: ['src/test-setup.ts', 'src/test-setup-stories.ts'],
     reporters: ['default'],
     coverage: {
       reportsDirectory: '../../coverage/vue',

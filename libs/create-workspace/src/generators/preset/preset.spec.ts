@@ -1372,7 +1372,17 @@ describe('preset generator', () => {
       expect(config).toContain(`'workshop-${fw}'`);
       expect(config).toContain("environment: 'jsdom'");
       expect(config).toContain("include: ['src/**/*.spec.*']");
-      expect(config).toContain("setupFiles: ['src/test-setup.ts']");
+      // react/vue gained a second setup file for portable stories
+      // (composeStories — ADR-0141); angular stays at one, since
+      // @storybook/angular(-vite)@10.6.0 exports setProjectAnnotations but
+      // not composeStories/composeStory (storybookjs/storybook#28897).
+      if (fw === 'angular') {
+        expect(config).toContain("setupFiles: ['src/test-setup.ts']");
+      } else {
+        expect(config).toContain(
+          "setupFiles: ['src/test-setup.ts', 'src/test-setup-stories.ts']",
+        );
+      }
       // Never a candidate for the Storybook test-run tool's own
       // config-discovery walk (ADR-0112): that walk matches a file's
       // BASENAME first ("vitest.config.*" / "vite.config.*" /
@@ -1387,6 +1397,32 @@ describe('preset generator', () => {
       expect(setup).toContain('@testing-library/jest-dom/vitest');
     },
   );
+
+  it.each([
+    ['react', '@storybook/react'],
+    ['vue', '@storybook/vue3'],
+  ] as const)(
+    'writes src/test-setup-stories.ts for %s, wiring setProjectAnnotations from .storybook/preview for composeStories (ADR-0141)',
+    async (fw, storybookPkg) => {
+      await presetGenerator(tree, { name: 'my-workspace', framework: fw });
+
+      const setup =
+        tree.read(`workshop-${fw}/src/test-setup-stories.ts`, 'utf-8') ?? '';
+      expect(setup).toContain('setProjectAnnotations');
+      expect(setup).toContain(`from '${storybookPkg}'`);
+    },
+  );
+
+  it('does not write src/test-setup-stories.ts for angular, and records why in test-setup.ts (ADR-0141: @storybook/angular has no composeStories)', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
+
+    expect(tree.exists('workshop-angular/src/test-setup-stories.ts')).toBe(
+      false,
+    );
+    const setup =
+      tree.read('workshop-angular/src/test-setup.ts', 'utf-8') ?? '';
+    expect(setup).toContain('ADR-0141');
+  });
 
   it("angular's vitest.unit.config.ts uses @analogjs/vite-plugin-angular, the same plugin vitest.config.ts uses", async () => {
     await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
@@ -1571,24 +1607,37 @@ describe('preset generator', () => {
     expect(project.targets.build).toEqual({ executor: 'fake:build' });
   });
 
+  it('writes an example atl-button.spec importing AtlButton from @atelier-ui/angular, asserting its accessible name and a click reaching the handler', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
+
+    const spec =
+      tree.read('workshop-angular/src/atl-button.spec.ts', 'utf-8') ?? '';
+    expect(spec).toContain("from '@atelier-ui/angular'");
+    expect(spec).toContain("name: 'Click me'");
+    expect(spec).toContain('onClick');
+    // Exactly one @atelier-ui import — the same external-package-import
+    // discipline the example story keeps (see the CLI e2e's
+    // 'external: 1' assertion on check:contracts' output).
+    expect(spec.match(/from '@atelier-ui\//g) ?? []).toHaveLength(1);
+  });
+
   it.each([
-    ['angular', 'ts'],
     ['react', 'tsx'],
     ['vue', 'ts'],
   ] as const)(
-    'writes an example atl-button.spec importing AtlButton from @atelier-ui/%s, asserting its accessible name and a click reaching the handler',
+    'writes an example atl-button.spec for %s composing atl-button.stories (composeStories, ADR-0141) instead of importing AtlButton directly',
     async (fw, ext) => {
       await presetGenerator(tree, { name: 'my-workspace', framework: fw });
 
       const spec =
         tree.read(`workshop-${fw}/src/atl-button.spec.${ext}`, 'utf-8') ?? '';
-      expect(spec).toContain(`from '@atelier-ui/${fw}'`);
-      expect(spec).toContain("name: 'Click me'");
-      expect(spec).toContain('onClick');
-      // Exactly one @atelier-ui import — the same external-package-import
-      // discipline the example story keeps (see the CLI e2e's
-      // 'external: 1' assertion on check:contracts' output).
-      expect(spec.match(/from '@atelier-ui\//g) ?? []).toHaveLength(1);
+      expect(spec).toContain('composeStories');
+      expect(spec).toContain("from './atl-button.stories'");
+      expect(spec).toContain("name: 'Button'");
+      // The component itself is no longer imported directly in this
+      // example — composeStories gets it from the story file instead.
+      expect(spec).not.toContain(`from '@atelier-ui/${fw}'`);
+      expect(spec.match(/from '@atelier-ui\//g) ?? []).toHaveLength(0);
     },
   );
 

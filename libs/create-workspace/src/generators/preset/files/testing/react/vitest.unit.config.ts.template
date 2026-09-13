@@ -16,7 +16,7 @@ export default defineConfig({
     globals: true,
     environment: 'jsdom',
     include: ['src/**/*.spec.*'],
-    setupFiles: ['src/test-setup.ts'],
+    setupFiles: ['src/test-setup.ts', 'src/test-setup-stories.ts'],
     server: {
       deps: {
         // @atelier-ui/react's built entry ships one `import './x.css'` per

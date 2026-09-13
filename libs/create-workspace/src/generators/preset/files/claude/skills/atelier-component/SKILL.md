@@ -12,13 +12,13 @@ reach one, rather than pretending the step happened.
 
 ## What this workspace can check, and what it cannot
 
-| Can                                                                     | How                                                           |
-| ----------------------------------------------------------------------- | ------------------------------------------------------------- |
-| That a contract matches its Figma master's shape                        | `npm run check:contracts` against `tools/figma/snapshot.json` |
-| That every variant value and Boolean state has a story                  | the same check's `[COVERAGE]` findings                        |
-| That a component, composable, service, or helper behaves as unit-tested | `npm run check:unit` (jsdom, `@testing-library/*`)            |
-| That every story renders, behaves, and passes axe                       | `npm run check:stories` (Chromium, headless)                  |
-| That CSS uses tokens rather than literals                               | `npm run check:stylelint`                                     |
+| Can                                                                     | How                                                                                                                                                                                                              |
+| ----------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| That a contract matches its Figma master's shape                        | `npm run check:contracts` against `tools/figma/snapshot.json`                                                                                                                                                    |
+| That every variant value and Boolean state has a story                  | the same check's `[COVERAGE]` findings                                                                                                                                                                           |
+| That a component, composable, service, or helper behaves as unit-tested | `npm run check:unit` (jsdom, `@testing-library/*`) — for React/Vue, composing the component's own stories (`composeStories`) is preferred over restating their claims by hand; see `<app>/src/atl-button.spec.*` |
+| That every story renders, behaves, and passes axe                       | `npm run check:stories` (Chromium, headless)                                                                                                                                                                     |
+| That CSS uses tokens rather than literals                               | `npm run check:stylelint`                                                                                                                                                                                        |
 
 It cannot check design parity against the live Figma file unless the `figma-console` MCP is
 wired in `.mcp.json` and the Desktop Bridge plugin is running. If it is not, the loop ends at

@@ -106,7 +106,11 @@ function storybookOutputExt(framework: Framework) {
 // `.ts.template` elsewhere).
 function testingTemplateName(
   framework: Framework,
-  base: 'vitest.unit.config' | 'test-setup' | 'atl-button.spec',
+  base:
+    | 'vitest.unit.config'
+    | 'test-setup'
+    | 'test-setup-stories'
+    | 'atl-button.spec',
 ): string {
   if (base === 'atl-button.spec') {
     const ext = framework === 'react' ? 'tsx' : 'ts.template';
@@ -1230,6 +1234,20 @@ export async function presetGenerator(
     `${appName}/src/test-setup.ts`,
     readTemplate(testingTemplateName(framework, 'test-setup')),
   );
+  // Portable stories (composeStories) let a jsdom unit test import a
+  // *.stories.* file directly instead of hand-duplicating what its stories
+  // already claim (ADR-0121, ADR-0141). React and Vue only:
+  // @storybook/angular(-vite)@10.6.0 exports setProjectAnnotations but not
+  // composeStories/composeStory (verified against the installed dist;
+  // tracked upstream as storybookjs/storybook#28897) — wiring
+  // setProjectAnnotations alone would register project config nothing in
+  // this workspace could yet consume. See ADR-0141.
+  if (framework !== 'angular') {
+    tree.write(
+      `${appName}/src/test-setup-stories.ts`,
+      readTemplate(testingTemplateName(framework, 'test-setup-stories')),
+    );
+  }
   tree.write(
     `${appName}/src/atl-button.spec.${storybookOutputExt(framework)}`,
     readTemplate(testingTemplateName(framework, 'atl-button.spec')),
