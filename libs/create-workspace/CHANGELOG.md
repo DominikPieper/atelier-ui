@@ -1,3 +1,20 @@
+## 0.3.1 (2026-09-13)
+
+### 🚀 Features
+
+- **storybook:** stories run as tests in Vitest too, where the renderer allows it ([e3fecf5c](https://github.com/DominikPieper/atelier-ui/commit/e3fecf5c))
+- **create-workspace:** the generated workspace is strict ([1cbe4517](https://github.com/DominikPieper/atelier-ui/commit/1cbe4517))
+- **create-workspace:** the workspace is driven by npm, not by Nx knowledge ([e0824459](https://github.com/DominikPieper/atelier-ui/commit/e0824459))
+
+### 🩹 Fixes
+
+- **storybook:** the story-test setup imports its hooks instead of assuming globals ([09421473](https://github.com/DominikPieper/atelier-ui/commit/09421473))
+
+### ❤️ Thank You
+
+- Claude Opus 5 (1M context)
+- Dominik Pieper @DominikPieper
+
 ## 0.3.0 (2026-09-13)
 
 ### 🚀 Features

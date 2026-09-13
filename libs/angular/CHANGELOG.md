@@ -1,3 +1,14 @@
+## 0.3.1 (2026-09-13)
+
+### 🚀 Features
+
+- **storybook:** stories run as tests in Vitest too, where the renderer allows it ([e3fecf5c](https://github.com/DominikPieper/atelier-ui/commit/e3fecf5c))
+
+### ❤️ Thank You
+
+- Claude Opus 5 (1M context)
+- Dominik Pieper @DominikPieper
+
 ## 0.3.0 (2026-09-13)
 
 This was a version bump only for angular to align it with other projects, there were no code changes.

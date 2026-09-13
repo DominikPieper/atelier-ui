@@ -1,3 +1,15 @@
+## 0.3.1 (2026-09-13)
+
+### 🚀 Features
+
+- **create-workspace:** the generated workspace is strict ([1cbe4517](https://github.com/DominikPieper/atelier-ui/commit/1cbe4517))
+- **create-workspace:** the workspace is driven by npm, not by Nx knowledge ([e0824459](https://github.com/DominikPieper/atelier-ui/commit/e0824459))
+
+### ❤️ Thank You
+
+- Claude Opus 5 (1M context)
+- Dominik Pieper @DominikPieper
+
 ## 0.3.0 (2026-09-13)
 
 This was a version bump only for create-atelier-ui-workspace to align it with other projects, there were no code changes.
