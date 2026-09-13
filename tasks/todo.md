@@ -150,7 +150,11 @@ Ranked; each carries why it's worth doing next rather than later.
       reformat every page in one commit, which is the reason to decide it deliberately rather
       than discover it mid-review.
 
-- [ ] **`@atelier-ui/react` is published as a self-contradictory package, and something
+- [x] **`@atelier-ui/react` is published as a self-contradictory package — fixed 2026-09-13**
+      (`68a3b52`, ADR-0138; the `"type": "module"` declaration then exposed `check:exports`
+      resolving with NodeNext against libraries that use bundler resolution, measuring zero
+      React exports and reporting that as 40 findings — `ae33c45`, ADR-0139). Original entry:
+      something
       depends on that.** `dist/libs/react/package.json` declares `"type": "commonjs"` while
       the files it ships are raw ESM. Found 2026-09-13 while diagnosing why only Vue's
       generated unit tests died on `Unknown file extension ".css"`: Vue's package is
