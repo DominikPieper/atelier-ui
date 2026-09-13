@@ -1,3 +1,30 @@
+## 0.3.0 (2026-09-13)
+
+### 🩹 Fixes
+
+- ⚠️  **react:** the published package declares what it actually ships ([68a3b528](https://github.com/DominikPieper/atelier-ui/commit/68a3b528))
+
+### ⚠️  Breaking Changes
+
+- **react:** the published package declares what it actually ships  ([68a3b528](https://github.com/DominikPieper/atelier-ui/commit/68a3b528))
+  ` footer, and that is a judgement to review
+  rather than a claim that nothing changed. An external consumer who imports this
+  package in their own Vitest suite was silently protected by the guard and now
+  needs the same `inline` entry themselves — semver-honest grounds for a major.
+  The footer is left off because on this setup it would likely cut 1.0.0
+  automatically on push, and that is the owner's call to make deliberately, not a
+  side effect of a bug fix.
+  Gates: nx test react 0 (450), nx build react 0, nx lint react 0,
+  nx storybook-test react 0 (228, run alone), nx test create-workspace 0 (200),
+  nx build create-workspace 0, check-adr-refs 0, prettier --check 0. The CLI e2e
+  for react — scaffold, build, Storybook build, check:contracts, nx test,
+  check:stories in Chromium — green against the fixed package.
+
+### ❤️ Thank You
+
+- Claude Opus 5 (1M context)
+- Dominik Pieper @DominikPieper
+
 ## 0.2.44 (2026-09-13)
 
 This was a version bump only for react to align it with other projects, there were no code changes.
