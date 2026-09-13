@@ -6,9 +6,11 @@
  * preset and CLI to it, installs the CLI into a scratch directory like a
  * real user would, then runs it with --framework=<fw>. Verifies the
  * scaffolded workspace contains expected files (including the per-app
- * Storybook config and an example story) and that `nx build`,
- * `nx build-storybook`, and `nx test` (the jsdom unit-test runner, S5) all
- * actually run against the generated app. Also
+ * Storybook config and an example story) and that `npm run build`,
+ * `npm run build:storybook`, and `nx test` (the jsdom unit-test runner, S5)
+ * all actually run against the generated app — the first two through the
+ * npm scripts the generated CLAUDE.md/README actually tell an attendee to
+ * run, not the `nx` invocation directly. Also
  * reports, non-fatally, whether the storybookjs/mcp skills got installed —
  * for exactly one framework (see SKILLS_TEST_FRAMEWORK below), the only one
  * for which the CLI is run with the network install actually enabled; the
@@ -490,8 +492,12 @@ function testFramework(framework, registryUrl, npmrcPath) {
     }
     ok('npm run preflight entrypoint resolves');
 
-    run(`npx nx build workshop-${framework} --skip-nx-cache`, { cwd: wsPath });
-    ok(`nx build workshop-${framework} green`);
+    // `npm run build` (not `npx nx build workshop-${framework}` directly) —
+    // this exercises the exact command the generated CLAUDE.md/README now
+    // tell an attendee to run. `-- --skip-nx-cache` forwards the flag through
+    // npm to the underlying `nx build workshop-${framework}` unchanged.
+    run(`npm run build -- --skip-nx-cache`, { cwd: wsPath });
+    ok(`npm run build (workshop-${framework}) green`);
 
     // This is the point of the whole exercise: nothing else in the repo
     // proves that the Storybook config the preset writes actually compiles
@@ -500,10 +506,11 @@ function testFramework(framework, registryUrl, npmrcPath) {
     // Costs a couple of minutes per framework — worth it, since a broken
     // `.storybook/main.ts` would otherwise only surface when an attendee
     // runs it live at a workshop.
-    run(`npx nx build-storybook workshop-${framework} --skip-nx-cache`, {
+    // `npm run build:storybook`, same reasoning as `npm run build` above.
+    run(`npm run build:storybook -- --skip-nx-cache`, {
       cwd: wsPath,
     });
-    ok(`build-storybook workshop-${framework} green`);
+    ok(`npm run build:storybook (workshop-${framework}) green`);
 
     // The contract loop (ADR-0121 S4): this proves the SHIPPED check-contracts.mjs
     // + lib/docgen.mjs run against a REAL scaffolded workspace, through the

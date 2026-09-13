@@ -1254,15 +1254,15 @@ scaffold itself is already Prettier-clean — \`check:format\` passes right afte
 
 ## Apps
 
-- \`${appName}\` — run with \`npx nx serve ${appName}\`
+- \`${appName}\` — run with \`npm start\`
 
 ## Storybook
 
 The app has its own local Storybook:
 
-- \`${appName}\` — \`npx nx storybook ${appName}\` — http://localhost:6006
+- \`${appName}\` — \`npm run storybook\` — http://localhost:6006
 
-Build a static Storybook (CI, hosting) with \`npx nx build-storybook ${appName}\`.
+Build a static Storybook (CI, hosting) with \`npm run build:storybook\`.
 
 Every story is also a browser-mode test (\`@storybook/addon-vitest\`). One-time setup
 after \`npm install\`:
@@ -1315,7 +1315,7 @@ instead come from \`@storybook/addon-mcp\` inside a *running local* Storybook
 deliberately not wired into \`.mcp.json\` by default, the same as this repo's own
 root \`.mcp.json\`, because a fixed \`localhost\` entry would fail to connect on
 every Claude Code session started without that Storybook already running. To use
-the \`dev\` toolset: start \`npx nx storybook workshop-<fw>\` (see Storybook below),
+the \`dev\` toolset: start \`npm run storybook\` (see Storybook below),
 then add this to \`.mcp.json\`'s \`mcpServers\` (only while that Storybook is up):
 
 \`\`\`json
@@ -1606,6 +1606,31 @@ file exports). The Desktop Bridge covers creation and inspection without a token
     // an attendee runs unmodified should not depend on remembering `--all`.
     pkg.scripts.format = 'prettier --write .';
     pkg.scripts['check:format'] = 'prettier --check .';
+    // The names a JS developer already expects — no Nx knowledge required to
+    // serve, build, lint, or run Storybook (owner requirement: everything
+    // startable through `npm run`). The preset scaffolds exactly one app
+    // (`${appName}`, ADR-0134), so these can name it literally — there is no
+    // second app to disambiguate against and no placeholder for anyone to
+    // fill in. `start` and `test` (below) are npm's own bare-word aliases
+    // for the `start`/`test` script keys, so `npm start`/`npm test` work
+    // without `run`.
+    pkg.scripts.start = `nx serve ${appName}`;
+    pkg.scripts.build = `nx build ${appName}`;
+    pkg.scripts.lint = `nx lint ${appName}`;
+    pkg.scripts.storybook = `nx storybook ${appName}`;
+    pkg.scripts['build:storybook'] = `nx build-storybook ${appName}`;
+    // `npm test` runs the jsdom unit tests ONLY — never the browser suite
+    // (`check:stories` stays the separate, slower gate; a `test` script that
+    // boots Chromium on every run is a script people stop running). This
+    // delegates to `check:unit` rather than respelling `nx run-many -t test`
+    // a second time: `check:unit` is already the one CLAUDE.md's Definition
+    // of Done, `/verify`, and the atelier-component skill name, so it stays
+    // the single source of truth for what "run the unit tests" actually
+    // does, and `test` (the name `npm test` needs) just calls it. Keeping
+    // `check:unit` on `run-many` rather than narrowing it to `nx test
+    // ${appName}` also means it keeps working unchanged if this
+    // single-app workspace ever grows a second test-bearing project.
+    pkg.scripts.test = 'npm run check:unit';
     return pkg;
   });
 
@@ -1674,7 +1699,7 @@ not \`latest\`, so the workshop behaves the same for everyone. Upgrade deliberat
 \`\`\`bash
 npm install
 npx playwright install chromium   # one-time — needed by npm run check:stories
-npx nx serve ${appName}
+npm start
 \`\`\`
 
 ## Formatting
@@ -1685,7 +1710,7 @@ Prettier-clean out of the box — \`check:format\` passes right after \`npm inst
 
 ## Storybook
 
-- \`${appName}\` — \`npx nx storybook ${appName}\` — http://localhost:6006
+- \`${appName}\` — \`npm run storybook\` — http://localhost:6006
 
 Every story is also a browser-mode test — run them all headless in Chromium with
 \`npm run check:stories\`.
@@ -1753,20 +1778,41 @@ Browse components at ${SITE_URL}
     enableAllProjectMcpServers: true,
     permissions: {
       allow: [
-        // The Nx CLI — `npx nx serve/storybook/build-storybook <app>`, all
-        // named in the CLAUDE.md this preset writes above.
+        // The Nx CLI directly. CLAUDE.md no longer tells an attendee to type
+        // `npx nx serve/storybook/build-storybook <app>` by hand — those are
+        // now the `start`/`storybook`/`build:storybook` npm scripts below —
+        // but the wildcard stays for the exploratory/diagnostic `nx`
+        // subcommands the docs still do use directly (e.g. `nx show
+        // projects`, troubleshooting.astro's "which environment am I in"
+        // check) and anything an attendee or agent reaches for beyond the
+        // fixed script set.
         'Bash(npx nx *)',
-        // The eight npm scripts this preset writes to package.json
+        // The fourteen npm scripts this preset writes to package.json
         // (preflight, check:contracts, figma:snapshot, check:unit,
-        // check:stories, check:stylelint, format, check:format) — one
-        // wildcard entry rather than eight separate ones, since this
-        // workspace's package.json carries exactly this fixed,
-        // generator-written script set (a workshop attendee adding a script
-        // of their own opts into this same allowance by definition, having
-        // already edited package.json by hand).
+        // check:stories, check:stylelint, format, check:format, start,
+        // build, lint, storybook, build:storybook, test) — one wildcard
+        // entry rather than fourteen separate ones, since this workspace's
+        // package.json carries exactly this fixed, generator-written script
+        // set (a workshop attendee adding a script of their own opts into
+        // this same allowance by definition, having already edited
+        // package.json by hand).
         'Bash(npm run *)',
+        // `npm run *` above does not match npm's own bare-word aliases —
+        // `npm start` and `npm test` are literally different argv than `npm
+        // run start` / `npm run test`, even though they resolve to the same
+        // script. CLAUDE.md and README tell an attendee to type the bare
+        // form for exactly these two (the names a JS developer already
+        // reaches for without `run`), so both need their own entry or every
+        // first `npm start`/`npm test` would stop for approval regardless of
+        // the wildcard above.
+        'Bash(npm start)',
+        'Bash(npm test)',
         // The Storybook CLI itself — `dev`/`build` only, the two
-        // subcommands CLAUDE.md/README actually tell an attendee to run.
+        // subcommands the `storybook`/`build:storybook` npm scripts above
+        // shell out to under the hood (each app's own project.json target
+        // is a literal `npx storybook dev|build ...` `nx:run-commands`
+        // string) — kept allowed directly too, for anyone who bypasses the
+        // npm script to pass an extra flag by hand.
         // Deliberately NOT a bare `Bash(npx storybook *)`: this repo's own
         // AGENTS.md warns against running `storybook automigrate`/`upgrade`
         // against the pinned 10.6.0 setup (it silently proposes bumping

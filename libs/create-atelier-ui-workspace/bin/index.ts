@@ -217,13 +217,14 @@ export async function main() {
     skills: skillsEnabled,
   });
 
-  const appName = `workshop-${framework}`;
+  // No `workshop-<fw>` app name to splice in here any more — `npm start`
+  // is the same literal command regardless of which framework was picked.
   console.log(
     `\n${c.green('✓')} ${c.bold('Workshop ready')} ${c.dim(`— ${directory}`)}`,
   );
   console.log(`\n  ${c.dim('Next steps:')}`);
   console.log(`    ${c.cyan(`cd ${directory}`)}`);
-  console.log(`    ${c.cyan(`npx nx serve ${appName}`)}`);
+  console.log(`    ${c.cyan('npm start')}`);
   if (figmaMcp) {
     console.log(
       `\n  ${c.dim('figma-console-mcp — install the Desktop Bridge plugin:')}`,

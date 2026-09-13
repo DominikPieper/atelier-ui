@@ -225,17 +225,17 @@ const SCAFFOLD_PORT_EXEMPT_ENTRIES = [
     scaffoldPortKey(
       'docs/src/pages/troubleshooting.astro',
       "'Windows: `netstat -ano | findstr :<port>` → then `taskkill /PID <pid> /F`.',",
-      "'Scaffolded workspace: run the app on a different port with `nx serve workshop-angular --port 4300`. Its own Storybook is fixed to port 6006 in the generated `project.json` — kill the stuck process rather than reassign, the same as the clone entry below.',",
+      "'Scaffolded workspace: run the app on a different port with `npm start -- --port 4300` (the `--` forwards the flag through the npm script to the underlying `nx serve`). Its own Storybook is fixed to port 6006 in the generated `project.json` — kill the stuck process rather than reassign, the same as the clone entry below.',",
     ),
-    'Same [port-in-use] entry, the fix list: the scaffold’s own Storybook (6006) is fixed in a literal `nx:run-commands` string in the generated project.json, not a parameterised port — unlike the app’s serve target, it has nothing to reassign against (ADR-0137).',
+    'Same [port-in-use] entry, the fix list: the scaffold’s own Storybook (6006) is fixed in a literal `nx:run-commands` string in the generated project.json, not a parameterised port — unlike the app’s serve target, it has nothing to reassign against (ADR-0137). Re-keyed when the fix text moved from a raw `nx serve` call to the `npm start` script (owner requirement: no Nx knowledge needed).',
   ],
   [
     scaffoldPortKey(
       'docs/src/pages/tutorial.astro',
       '<li><Icon name="check_circle" /> Claude read the Figma spec and matched the Atelier UI components through the Storybook MCP</li>',
-      '<li><Icon name="check_circle" /> The generated component renders in your app at <code>http://localhost:4200</code> — your workspace also ships its own Storybook (<code>npx nx storybook workshop-&lt;fw&gt;</code>, port <code>6006</code>) once you add a story for it</li>',
+      '<li><Icon name="check_circle" /> The generated component renders in your app at <code>http://localhost:4200</code> — your workspace also ships its own Storybook (<code>npm run storybook</code>, port <code>6006</code>) once you add a story for it</li>',
     ),
-    'Corrects the "the scaffold has no Storybook of its own" claim ADR-0137 names directly — a generated workspace now ships a Storybook per app, bound to 6006.',
+    'Corrects the "the scaffold has no Storybook of its own" claim ADR-0137 names directly — a generated workspace now ships a Storybook per app, bound to 6006. Re-keyed when the citation moved from `npx nx storybook workshop-<fw>` to the `npm run storybook` script (owner requirement: no Nx knowledge needed).',
   ],
   [
     scaffoldPortKey(

@@ -648,16 +648,18 @@ describe('preset generator', () => {
     expect(md).toContain('useAtlToast');
   });
 
-  it('CLAUDE.md includes the app run command for the selected framework only', async () => {
+  it('CLAUDE.md documents `npm start` as the app run command, naming the selected app', async () => {
+    // `npm start` is identical regardless of framework (it's the one npm
+    // script this preset ever writes for "run the app") — unlike the old
+    // `npx nx serve workshop-<fw>` text, there is no other-framework variant
+    // to assert the absence of.
     await presetGenerator(tree, {
       name: 'my-workspace',
       framework: 'angular',
     });
 
     const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
-    expect(md).toContain('npx nx serve workshop-angular');
-    expect(md).not.toContain('npx nx serve workshop-react');
-    expect(md).not.toContain('npx nx serve workshop-vue');
+    expect(md).toContain('workshop-angular` — run with `npm start`');
   });
 
   it('CLAUDE.md links to the docs site', async () => {
@@ -695,9 +697,30 @@ describe('preset generator', () => {
     expect(pkg.scripts.preflight).toBe('node tools/scripts/preflight.mjs');
   });
 
-  it('preserves existing scripts when adding preflight', async () => {
-    // Simulate an Nx-scaffolded package.json that already has build/test scripts
-    // — the preflight entry must be added without clobbering siblings.
+  it('preserves an existing unrelated script when adding preflight', async () => {
+    // Simulate a package.json that already has a script this preset does
+    // not manage — its own additions must not clobber siblings it doesn't
+    // own. `build` and `test` are deliberately NOT used as the "sibling"
+    // here (unlike before S6): this preset itself now writes both — see
+    // the "overwrites" test below — the same way it has always
+    // unconditionally written preflight/check:contracts/etc.
+    tree.write(
+      'package.json',
+      JSON.stringify({
+        name: 'my-workspace',
+        scripts: { deploy: 'my-custom-deploy-script.sh' },
+      }),
+    );
+    await presetGenerator(tree, {
+      name: 'my-workspace',
+      framework: 'angular',
+    });
+    const pkg = readJson(tree, 'package.json');
+    expect(pkg.scripts.preflight).toBe('node tools/scripts/preflight.mjs');
+    expect(pkg.scripts.deploy).toBe('my-custom-deploy-script.sh');
+  });
+
+  it('overwrites a pre-existing build/test script — those keys are generator-owned, like every other npm script this preset writes', async () => {
     tree.write(
       'package.json',
       JSON.stringify({
@@ -710,9 +733,8 @@ describe('preset generator', () => {
       framework: 'angular',
     });
     const pkg = readJson(tree, 'package.json');
-    expect(pkg.scripts.preflight).toBe('node tools/scripts/preflight.mjs');
-    expect(pkg.scripts.build).toBe('nx build');
-    expect(pkg.scripts.test).toBe('nx test');
+    expect(pkg.scripts.build).toBe('nx build workshop-angular');
+    expect(pkg.scripts.test).toBe('npm run check:unit');
   });
 
   it('CLAUDE.md references preflight in troubleshooting', async () => {
@@ -1322,6 +1344,75 @@ describe('preset generator', () => {
 
     const pkg = readJson(tree, 'package.json');
     expect(pkg.scripts['check:unit']).toBe('nx run-many -t test');
+  });
+
+  // ─── npm-idiomatic scripts (owner requirement: no Nx knowledge needed) ────
+  //
+  // The generated workspace scaffolds exactly one app (`workshop-<fw>`,
+  // ADR-0134), so `start`/`build`/`lint`/`storybook`/`build:storybook` can
+  // each name it literally — no placeholder, no ambiguity about which app a
+  // bare `npm run build` means.
+
+  it.each(['angular', 'react', 'vue'] as const)(
+    'adds start/build/lint/storybook/build:storybook npm scripts naming the one scaffolded app (%s)',
+    async (fw) => {
+      await presetGenerator(tree, { name: 'my-workspace', framework: fw });
+
+      const pkg = readJson(tree, 'package.json');
+      expect(pkg.scripts.start).toBe(`nx serve workshop-${fw}`);
+      expect(pkg.scripts.build).toBe(`nx build workshop-${fw}`);
+      expect(pkg.scripts.lint).toBe(`nx lint workshop-${fw}`);
+      expect(pkg.scripts.storybook).toBe(`nx storybook workshop-${fw}`);
+      expect(pkg.scripts['build:storybook']).toBe(
+        `nx build-storybook workshop-${fw}`,
+      );
+    },
+  );
+
+  it('`test` delegates to `check:unit` rather than respelling its command a second time', async () => {
+    // Two decisions pinned here: (1) `npm test` runs the jsdom unit tests
+    // ONLY, never the browser suite (`check:stories` stays separate); (2)
+    // `check:unit` — already named in CLAUDE.md's Definition of Done,
+    // `/verify`, and the atelier-component skill — stays the one place that
+    // spells the actual `nx` invocation, and `test` (the name `npm test`
+    // needs) just calls it. Asserting both together pins the delegation
+    // direction, not just that both scripts happen to exist.
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'react' });
+
+    const pkg = readJson(tree, 'package.json');
+    expect(pkg.scripts.test).toBe('npm run check:unit');
+    expect(pkg.scripts['check:unit']).toBe('nx run-many -t test');
+  });
+
+  it('CLAUDE.md and README document all six npm-idiomatic scripts', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'vue' });
+
+    const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
+    expect(md).toContain('npm start');
+    expect(md).toContain('npm run storybook');
+    expect(md).toContain('npm run build:storybook');
+    expect(md).not.toContain('npx nx serve');
+    expect(md).not.toContain('npx nx storybook');
+    expect(md).not.toContain('npx nx build-storybook');
+
+    const readme = tree.read('README.md', 'utf-8') ?? '';
+    expect(readme).toContain('npm start');
+    expect(readme).toContain('npm run storybook');
+    expect(readme).not.toContain('npx nx serve');
+    expect(readme).not.toContain('npx nx storybook');
+  });
+
+  it('.claude/settings.json allows the bare `npm start`/`npm test` aliases, not just `npm run *`', async () => {
+    // `Bash(npm run *)` does not match npm's own bare-word aliases — `npm
+    // start`/`npm test` are literally different argv than `npm run
+    // start`/`npm run test` — and CLAUDE.md/README now tell an attendee to
+    // type exactly the bare form for these two.
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
+
+    const settings = readJson(tree, '.claude/settings.json');
+    const allow: string[] = settings.permissions.allow;
+    expect(allow).toContain('Bash(npm start)');
+    expect(allow).toContain('Bash(npm test)');
   });
 
   it("replaces whatever \"test\" target the application generator already wrote (e.g. '@angular/build:unit-test', written regardless of skipTests) with vitest.unit.config.ts's own", async () => {
@@ -2025,7 +2116,7 @@ describe('preset generator', () => {
     });
 
     const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
-    expect(md).toContain('npx nx storybook workshop-angular');
+    expect(md).toContain('npm run storybook');
     expect(md).toContain('6006');
   });
 
@@ -2074,7 +2165,7 @@ describe('preset generator', () => {
 
     const readme = tree.read('README.md', 'utf-8') ?? '';
     expect(readme).toContain('storybookjs/mcp');
-    expect(readme).toContain('npx nx storybook workshop-angular');
+    expect(readme).toContain('npm run storybook');
   });
 
   // ─── Skills install as a post-generator task (S2) ──────────────────────────

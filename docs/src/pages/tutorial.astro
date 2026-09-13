@@ -113,21 +113,21 @@ const RUN_IT: Record<string, { path: string; mount: string; cmd: string; port: n
   React: {
     path: 'workshop-react/src/components/SettingsCard.tsx',
     mount: 'Import SettingsCard in workshop-react/src/app/app.tsx and replace the <NxWelcome /> placeholder with it.',
-    cmd: 'npx nx serve workshop-react',
+    cmd: 'npm start',
     port: 4200,
     expected: 'A card with two text inputs (Name, Email), a checked Notifications toggle, and a primary "Save" button — surface-raised background, padding from the Figma spacing token.',
   },
   Angular: {
     path: 'workshop-angular/src/app/components/settings-card.component.ts',
     mount: 'Add SettingsCardComponent to the imports array in workshop-angular/src/app/app.ts and replace <app-nx-welcome> with <app-settings-card> in app.html.',
-    cmd: 'npx nx serve workshop-angular',
+    cmd: 'npm start',
     port: 4200,
     expected: 'A card with two text inputs (Name, Email), a checked Notifications toggle, and a primary "Save" button — same surface, padding, and radius as the Figma frame.',
   },
   Vue: {
     path: 'workshop-vue/src/components/SettingsCard.vue',
     mount: 'Import SettingsCard in workshop-vue/src/views/HomeView.vue and replace the <NxWelcome /> placeholder with it.',
-    cmd: 'npx nx serve workshop-vue',
+    cmd: 'npm start',
     port: 4200,
     expected: 'A card with two text inputs (Name, Email), a checked Notifications toggle, and a primary "Save" button — surface-raised background, identical token-driven spacing.',
   },
@@ -619,7 +619,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
     <Checkpoint variant="done" title="You ran the loop end to end">
       <ul class="checkpoint-checks">
         <li><Icon name="check_circle" /> Claude read the Figma spec and matched the Atelier UI components through the Storybook MCP</li>
-        <li><Icon name="check_circle" /> The generated component renders in your app at <code>http://localhost:4200</code> — your workspace also ships its own Storybook (<code>npx nx storybook workshop-&lt;fw&gt;</code>, port <code>6006</code>) once you add a story for it</li>
+        <li><Icon name="check_circle" /> The generated component renders in your app at <code>http://localhost:4200</code> — your workspace also ships its own Storybook (<code>npm run storybook</code>, port <code>6006</code>) once you add a story for it</li>
         <li><Icon name="check_circle" /> <code>figma_check_design_parity</code> reports the node and code in sync</li>
       </ul>
     </Checkpoint>

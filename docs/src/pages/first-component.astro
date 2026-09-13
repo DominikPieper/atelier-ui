@@ -26,19 +26,19 @@ const stepTag = step ? `Step ${step.step} of ${TRACK_LENGTH}` : undefined;
 const SCAFFOLD: Record<Framework, { file: string; cmd: string; port: number; mountHint: string }> = {
   Angular: {
     file: 'workshop-angular/src/app/components/settings-card.component.ts',
-    cmd:  'npx nx serve workshop-angular',
+    cmd:  'npm start',
     port: 4200,
     mountHint: 'add SettingsCardComponent to the imports array in workshop-angular/src/app/app.ts and replace <app-nx-welcome> with <app-settings-card> in app.html',
   },
   React: {
     file: 'workshop-react/src/components/SettingsCard.tsx',
-    cmd:  'npx nx serve workshop-react',
+    cmd:  'npm start',
     port: 4200,
     mountHint: 'import SettingsCard in workshop-react/src/app/app.tsx and replace the <NxWelcome /> placeholder with it',
   },
   Vue: {
     file: 'workshop-vue/src/components/SettingsCard.vue',
-    cmd:  'npx nx serve workshop-vue',
+    cmd:  'npm start',
     port: 4200,
     mountHint: 'import SettingsCard in workshop-vue/src/views/HomeView.vue and replace the <NxWelcome /> placeholder with it',
   },

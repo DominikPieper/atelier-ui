@@ -101,7 +101,7 @@ describe('create-atelier-ui-workspace CLI', () => {
     );
   });
 
-  it('logs success messages with directory and serve command', async () => {
+  it('logs success messages with directory and the npm start command', async () => {
     process.argv = ['node', 'index.js', 'test-ws', '--no-figma'];
     enquirer.prompt.mockResolvedValueOnce({ framework: 'angular' });
 
@@ -111,7 +111,11 @@ describe('create-atelier-ui-workspace CLI', () => {
     expect(logged).toContain('Workshop ready');
     expect(logged).toContain('/tmp/my-workspace');
     expect(logged).toContain('cd /tmp/my-workspace');
-    expect(logged).toContain('npx nx serve workshop-angular');
+    // `npm start` regardless of framework — no `workshop-<fw>` app name to
+    // splice in any more (the generated package.json's own `start` script
+    // names the app; this CLI output no longer needs to).
+    expect(logged).toContain('npm start');
+    expect(logged).not.toContain('nx serve');
   });
 
   it('accepts --framework=<value> flag and skips the framework prompt', async () => {

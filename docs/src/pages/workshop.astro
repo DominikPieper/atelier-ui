@@ -18,12 +18,6 @@ const SITE_URL = 'https://atelier.pieper.io';
 const trackStep = getTrackStep('/workshop');
 const stepTag = trackStep ? `Step ${trackStep.step} of ${TRACK_LENGTH}` : undefined;
 
-const SERVE_CMD = {
-  Angular: 'npx nx serve workshop-angular',
-  React: 'npx nx serve workshop-react',
-  Vue: 'npx nx serve workshop-vue',
-};
-
 const PREREQ_CMD = {
   macOS: `# 1. Node 22+ (use Homebrew or nvm)\nnode --version   # need v22.12 or newer\n\n# 2. Claude Code CLI\nnpm install -g @anthropic-ai/claude-code\nclaude --version   # only proves it's installed, not logged in\n\n# 3. Authenticate with your own API key (console.anthropic.com)\nexport ANTHROPIC_API_KEY=sk-ant-...\nclaude -p "Reply with exactly: PREFLIGHT-OK"   # proves model access\n\n# 4. Figma access token (or use the demo token)\nexport FIGMA_ACCESS_TOKEN=figd_...`,
   Linux: `# 1. Node 22+ (nvm recommended)\nnode --version   # need v22.12 or newer\n\n# 2. Claude Code CLI\nnpm install -g @anthropic-ai/claude-code\nclaude --version   # only proves it's installed, not logged in\n\n# 3. Authenticate with your own API key (console.anthropic.com)\nexport ANTHROPIC_API_KEY=sk-ant-...\nclaude -p "Reply with exactly: PREFLIGHT-OK"   # proves model access\n\n# 4. Figma access token (or use the demo token)\nexport FIGMA_ACCESS_TOKEN=figd_...`,
@@ -314,17 +308,14 @@ const mcpConfig = (fw: string) => `{
         <div>
           <h3 class="docs-h3">Serve your app</h3>
           <p class="docs-step-desc">
-            Start the dev server for your chosen framework. You should see the
+            Start the dev server — the same command regardless of which framework you
+            picked (the generated <code>package.json</code> names the one app it
+            scaffolded for you). You should see the
             <strong style="color: var(--ui-color-text)">Nx welcome page</strong> at
             <code>localhost:4200</code> — that is the correct result until you mount a
             component of your own.
           </p>
-          <FwSwitcher variant="tabs" label="Choose a framework to serve" />
-          {Object.entries(SERVE_CMD).map(([fw, cmd], i) => (
-            <div data-fw-panel={fw} hidden={i !== 0}>
-              <Code code={cmd} lang="shell" />
-            </div>
-          ))}
+          <Code code="npm start" lang="shell" />
         </div>
       </li>
 

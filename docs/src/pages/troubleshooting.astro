@@ -134,7 +134,7 @@ const ISSUES: Issue[] = [
     title: "Cannot find project 'workshop-angular'",
     symptom: '`npx nx serve workshop-angular` (or -react / -vue) fails with "Cannot find project" — the target does not exist.',
     cause: 'You are in a clone of the atelier monorepo, not in a scaffolded workspace. The `workshop-*` apps are written by `create-atelier-ui-workspace`; the monorepo ships the library, the docs site, and the Storybooks instead.',
-    codeFix: `# in a clone of the atelier monorepo\nnpx nx serve docs                # the docs site you are reading\nnpx nx storybook angular         # or: react | vue\n\n# in a scaffolded workspace\nnpx nx serve workshop-angular`,
+    codeFix: `# in a clone of the atelier monorepo\nnpx nx serve docs                # the docs site you are reading\nnpx nx storybook angular         # or: react | vue\n\n# in a scaffolded workspace\nnpm start`,
     codeLang: 'shell',
     fix: [
       'Check which environment you are in: `npx nx show projects`. A `workshop-*` entry means scaffold; `angular / react / vue / docs` means clone.',
@@ -161,7 +161,7 @@ const ISSUES: Issue[] = [
     fix: [
       'macOS/Linux: `lsof -ti :<port> | xargs kill` — swap in the port that is stuck.',
       'Windows: `netstat -ano | findstr :<port>` → then `taskkill /PID <pid> /F`.',
-      'Scaffolded workspace: run the app on a different port with `nx serve workshop-angular --port 4300`. Its own Storybook is fixed to port 6006 in the generated `project.json` — kill the stuck process rather than reassign, the same as the clone entry below.',
+      'Scaffolded workspace: run the app on a different port with `npm start -- --port 4300` (the `--` forwards the flag through the npm script to the underlying `nx serve`). Its own Storybook is fixed to port 6006 in the generated `project.json` — kill the stuck process rather than reassign, the same as the clone entry below.',
       'Clone: each Storybook already has its own port (angular 4400, react 4401, vue 4402) and docs is 4300 — kill the stuck process rather than reassign, since `.mcp.json` and this documentation both assume those exact numbers.',
     ],
   },
