@@ -12,8 +12,9 @@ import PageHero from '../components/PageHero.astro';
     { id: 'principle-1', label: 'One name for one concept' },
     { id: 'principle-2', label: 'Narrow literal types' },
     { id: 'principle-3', label: 'Sensible defaults' },
-    { id: 'principle-4', label: 'Single reactivity model' },
-    { id: 'principle-5', label: 'MCP server closes the loop' },
+    { id: 'principle-4', label: 'Composition over configuration' },
+    { id: 'principle-5', label: 'Single reactivity model' },
+    { id: 'principle-6', label: 'MCP server closes the loop' },
   ]}
 >
   <div class="docs-inline-page">
@@ -22,7 +23,7 @@ import PageHero from '../components/PageHero.astro';
       Traditional component libraries are designed for humans who browse docs,
       copy examples, and tweak. An LLM-optimized library flips the priority:
       the model has to infer correct usage from minimal context and produce
-      working code on the first try. The five principles below are what make
+      working code on the first try. The six principles below are what make
       that possible — and what shaped every API decision in Atelier UI.
     </PageHero>
 
@@ -126,7 +127,47 @@ import PageHero from '../components/PageHero.astro';
 
     <!-- Principle 4 -->
     <div class="docs-section">
-      <h2 id="principle-4" class="docs-section-title">4. A single reactivity model per framework</h2>
+      <h2 id="principle-4" class="docs-section-title">4. Composition over configuration</h2>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin-bottom: 0.75rem">
+        A config object hides its shape from the model — it has to guess which keys exist,
+        whether they're required, and how they nest. Composing elements doesn't: it's the
+        same HTML-like nesting the model has already seen a billion times in training data.
+      </p>
+      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin-bottom: 1rem">
+        Shown here in Angular's own template syntax — the shape is the same in every framework,
+        only the composition primitive changes.
+      </p>
+      <div class="docs-comparison">
+        <div class="docs-comparison-bad">
+          <div class="docs-comparison-label">Unpredictable</div>
+          <div class="docs-code-block">
+            <div class="docs-code-block-header"><span class="docs-code-block-lang">jsx</span></div>
+            <pre><code>{"<!-- Opaque config object — the model must guess the nested shape -->\n<atl-card [config]=\"{ header: { title: '...' }, footer: { actions: [...] } }\" />"}</code></pre>
+          </div>
+        </div>
+        <div class="docs-comparison-good">
+          <div class="docs-comparison-label">LLM-optimized</div>
+          <div class="docs-code-block">
+            <div class="docs-code-block-header"><span class="docs-code-block-lang">jsx</span></div>
+            <pre><code>{"<!-- Composition — nesting the model already knows -->\n<atl-card>\n  <atl-card-header>Title</atl-card-header>\n  <atl-card-content>Body text here.</atl-card-content>\n  <atl-card-footer>\n    <atl-button variant=\"primary\">Save</atl-button>\n  </atl-card-footer>\n</atl-card>"}</code></pre>
+          </div>
+        </div>
+      </div>
+      <ul style="color: var(--ui-color-text-muted); padding-left: 1.5rem; display: flex; flex-direction: column; gap: 0.35rem; margin: 0.5rem 0 1rem">
+        <li><strong>Angular:</strong> content projection via <code>&lt;ng-content&gt;</code>, named slots via <code>select</code>.</li>
+        <li><strong>React:</strong> a <code>children</code> prop.</li>
+        <li><strong>Vue:</strong> the default <code>&lt;slot /&gt;</code>.</li>
+      </ul>
+      <div class="docs-rule">
+        <span class="docs-rule-label">Rule</span>
+        Never accept a complex config/option object as a component input. Compose it from
+        smaller elements instead — structural composition, not configuration.
+      </div>
+    </div>
+
+    <!-- Principle 5 -->
+    <div class="docs-section">
+      <h2 id="principle-5" class="docs-section-title">5. A single reactivity model per framework</h2>
       <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin-bottom: 0.75rem">
         Mixing patterns forces the model to decide which approach to use — and it will sometimes
         guess wrong. Atelier UI picks one and uses it everywhere.
@@ -142,9 +183,9 @@ import PageHero from '../components/PageHero.astro';
       </div>
     </div>
 
-    <!-- Principle 5 -->
+    <!-- Principle 6 -->
     <div class="docs-section">
-      <h2 id="principle-5" class="docs-section-title">5. The MCP server closes the loop</h2>
+      <h2 id="principle-6" class="docs-section-title">6. The MCP server closes the loop</h2>
       <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin-bottom: 0.75rem">
         Even a perfectly designed API has details the model can't infer: exact default values,
         which props interact, what the output event payload looks like. The MCP server provides

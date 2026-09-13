@@ -109,3 +109,20 @@ people to ignore red output goes away, which is worth more than the time it free
 The cost lands on the trainer, not the attendee: Day 2's blocks that read `libs/spec` and
 `plan/big-picture.md` in the room need rewriting against the hosted page and the contract, and
 that rewrite is curriculum work, not a docs sweep.
+
+## Corrected 2026-09-13: the hosted page already existed
+
+Gap 1 of the Decision says `plan/big-picture.md`'s API rules "become a hosted page the generated
+`CLAUDE.md` links". They already were one. `docs/src/pages/design-principles.astro` — whose name
+suggests it mirrors `plan/design-principles.md` — is in fact sourced from `big-picture.md`, and
+both `schulung.astro` and `gen-llms-txt.mjs` label it that way independently of each other.
+
+What was actually missing was smaller and in two places: the page carried three of the four
+rules this ADR names and not the fourth (composition over configuration), and nothing in a
+generated workspace linked to it. Both closed; no second page was created, which would have
+duplicated an existing one on the same site to satisfy a sentence in this record.
+
+The Decision text stands as written because the shape of the gap did not change, only its size.
+Noted here because "we need a hosted page" and "we need to link the hosted page we have" are
+different amounts of work, and the difference was found by someone checking rather than
+building.

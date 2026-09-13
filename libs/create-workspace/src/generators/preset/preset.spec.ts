@@ -443,6 +443,17 @@ describe('preset generator', () => {
     expect(md).toContain('cookbook-patterns.json');
   });
 
+  it('CLAUDE.md links to the hosted API design principles page', async () => {
+    await presetGenerator(tree, {
+      name: 'my-workspace',
+      framework: 'angular',
+    });
+
+    const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
+    expect(md).toContain('## API Design Principles');
+    expect(md).toContain('atelier.pieper.io/design-principles');
+  });
+
   // ─── README ────────────────────────────────────────────────────────────────
 
   it('writes README.md', async () => {

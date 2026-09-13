@@ -1331,6 +1331,16 @@ ${SKILLS_ADD_COMMAND_FOR_HUMANS}
 `
 }
 
+## API Design Principles
+
+Every component in \`@atelier-ui/${framework}\` follows one set of API-design rules —
+predictable naming across components, narrow literal-union types instead of \`string\`,
+composition over configuration, and a sensible default for every prop — so a model that
+has generated code for one component can infer the shape of the next. When you design
+the API of your own component, these are the rules the library itself follows:
+
+- Guide: ${SITE_URL}/design-principles
+
 ## The Contract Loop
 
 A contract (\`${appName}/src/contracts/<name>.contract.ts\`) is the one hand-authored
