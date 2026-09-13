@@ -34,7 +34,8 @@
     },
     "figmaFile": {
       "type": "string",
-      "description": "The attendee's own Figma file key (the segment in a Figma URL after /design/). When given, the generated figma:snapshot script and CLAUDE.md name it instead of the <YOUR_FIGMA_FILE_KEY> placeholder. No default and no x-prompt: most direct-preset callers do not have a key to hand, and the CLI (create-atelier-ui-workspace) owns the conversation that collects one."
+      "description": "The attendee's own Figma file key (the segment in a Figma URL after /design/). When given, the generated figma:snapshot script and CLAUDE.md name it instead of the <YOUR_FIGMA_FILE_KEY> placeholder. No default and no x-prompt: most direct-preset callers do not have a key to hand, and the CLI (create-atelier-ui-workspace) owns the conversation that collects one. The pattern below is deliberately narrower than what the CLI accepts at its own prompt: the CLI's bin/index.ts also takes a full Figma URL (figma.com/design/<key>/...) and extracts the bare key from it via extractFigmaFileKey() before ever reaching this generator, so a raw URL is never a valid value here — only the bare key it resolves to. Keep this pattern identical to the CLI's own FIGMA_FILE_KEY_PATTERN (bin/index.ts) so the two layers agree on what a key looks like.",
+      "pattern": "^[A-Za-z0-9]{10,40}$"
     },
     "skills": {
       "type": "boolean",

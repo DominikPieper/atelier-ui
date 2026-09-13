@@ -1883,6 +1883,77 @@ describe('preset generator', () => {
     expect(md).not.toContain('already pointed at');
   });
 
+  // ─── S5a — figmaFile schema pattern ────────────────────────────────────────
+  //
+  // options.figmaFile is interpolated verbatim into a shell command line
+  // (package.json's `figma:snapshot` script — see the `--file
+  // ${options.figmaFile}` assignment in preset.ts). The CLI
+  // (create-atelier-ui-workspace/bin/index.ts) validates the raw value up
+  // front via its own FIGMA_FILE_KEY_PATTERN
+  // (`/^[A-Za-z0-9]{10,40}$/`) before ever calling this generator, but that
+  // is a courtesy the CLI provides — it is not enforced by the generator
+  // itself. A direct `nx g @atelier-ui/create-workspace:preset
+  // --figmaFile=...` bypasses the CLI entirely, so the schema's own
+  // `pattern` (validated by Nx's `validateProperty`,
+  // node_modules/nx/dist/src/utils/params.js) is the only thing that can
+  // still catch a malicious or malformed value on that path. These tests
+  // pin the schema pattern down directly — not through presetGenerator,
+  // which never runs Nx's schema validation itself (see the report for what
+  // that implies about the create-nx-workspace path).
+  describe('figmaFile schema pattern', () => {
+    const schema: {
+      properties: { figmaFile: { pattern?: string } };
+    } = JSON.parse(readFileSync(join(__dirname, './schema.json'), 'utf-8'));
+
+    // Mirrors bin/index.ts's FIGMA_FILE_KEY_PATTERN verbatim (source of
+    // truth per the task: "do not invent a second, different rule"). Kept
+    // as a literal here, not a cross-package import, since
+    // create-atelier-ui-workspace does not depend on @atelier-ui/create-workspace
+    // (or vice versa) at runtime — only the CLI's own validation happens to
+    // live in the same monorepo checkout.
+    const CLI_FIGMA_FILE_KEY_PATTERN = /^[A-Za-z0-9]{10,40}$/;
+
+    it('is present on figmaFile', () => {
+      expect(schema.properties.figmaFile.pattern).toBeDefined();
+    });
+
+    it('matches the CLI’s own bare-key pattern exactly, not a different rule', () => {
+      expect(schema.properties.figmaFile.pattern).toBe(
+        CLI_FIGMA_FILE_KEY_PATTERN.source,
+      );
+    });
+
+    function schemaPattern(): RegExp {
+      return new RegExp(schema.properties.figmaFile.pattern as string);
+    }
+
+    it.each([
+      ['this repo’s own 22-char mixed-case key', 'QMnDD8uZQPldPrlCwZZ58T'],
+      ['the 10-char minimum boundary', 'a'.repeat(10)],
+      ['the 40-char maximum boundary', 'a'.repeat(40)],
+    ])('accepts %s', (_label, value) => {
+      expect(schemaPattern().test(value)).toBe(true);
+    });
+
+    it.each([
+      ['9 characters (one under the minimum)', 'a'.repeat(9)],
+      ['41 characters (one over the maximum)', 'a'.repeat(41)],
+      ['a hyphenated URL slug, not a bare key', 'some-file-name'],
+      [
+        'a full Figma URL (the CLI extracts the key before this generator ever sees it)',
+        'https://figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Some-File',
+      ],
+      [
+        'a shell-metacharacter payload (the exact injection this pattern closes)',
+        'abc; rm -rf /',
+      ],
+      ['a value containing whitespace', 'abcdefghij klmnop'],
+      ['an empty string', ''],
+    ])('rejects %s', (_label, value) => {
+      expect(schemaPattern().test(value)).toBe(false);
+    });
+  });
+
   it('adds @modelcontextprotocol/sdk as a devDependency', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
