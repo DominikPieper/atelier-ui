@@ -65,17 +65,38 @@ const errors = [];
 // [NAMED]: resolve each barrel's real export names via the TypeScript checker.
 // ---------------------------------------------------------------------------
 
+/**
+ * Compiler options mirror how these libraries are actually resolved, not an
+ * arbitrary default. Every framework's `tsconfig.json` (libs/angular,
+ * libs/react, libs/vue) declares `"module": "preserve"` /
+ * `"moduleResolution": "bundler"` — every real
+ * consumer (Vite, webpack, Vitest's transform pipeline) resolves this way,
+ * and `check-dead-selectors.js` already parses these same barrels under the
+ * same `ESNext`/`Bundler` pairing.
+ *
+ * `NodeNext` was tried here first and reverted: it decides CJS-vs-ESM (and
+ * therefore whether a relative specifier needs an explicit extension) from
+ * the nearest `package.json`'s `"type"` field, which is incidental to what
+ * this gate wants to prove and produced a false negative the moment
+ * `libs/react/package.json` gained `"type": "module"` (ADR-0138) — the
+ * barrel's extensionless `export * from './lib/button/atl-button'` stopped
+ * resolving under NodeNext's ESM rules, and the gate saw an empty export set
+ * for a framework whose barrel had not changed. `Bundler` resolution does not
+ * key off `"type"` at all, matching every actual consumption path.
+ */
+const COMPILER_OPTIONS = {
+  target: ts.ScriptTarget.Latest,
+  module: ts.ModuleKind.ESNext,
+  moduleResolution: ts.ModuleResolutionKind.Bundler,
+  jsx: ts.JsxEmit.ReactJSX,
+  experimentalDecorators: true,
+  noEmit: true,
+  allowJs: false,
+};
+
 /** @returns {Set<string>} the names actually reachable via `import { X } from` on this module. */
 function resolvedExportNames(entryFile) {
-  const program = ts.createProgram([entryFile], {
-    target: ts.ScriptTarget.Latest,
-    module: ts.ModuleKind.NodeNext,
-    moduleResolution: ts.ModuleResolutionKind.NodeNext,
-    jsx: ts.JsxEmit.ReactJSX,
-    experimentalDecorators: true,
-    noEmit: true,
-    allowJs: false,
-  });
+  const program = ts.createProgram([entryFile], COMPILER_OPTIONS);
   const checker = program.getTypeChecker();
   const sourceFile = program.getSourceFile(entryFile);
   const moduleSymbol =
