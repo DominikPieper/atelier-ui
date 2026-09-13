@@ -2043,7 +2043,11 @@ describe('preset generator', () => {
   // ─── The contract loop (ADR-0121 S4) ───────────────────────────────────────
 
   it('writes the example contract files under the app', async () => {
-    await presetGenerator(tree, { name: 'my-workspace', framework: 'react' });
+    await presetGenerator(tree, {
+      name: 'my-workspace',
+      framework: 'react',
+      figmaMcp: true,
+    });
 
     expect(tree.exists('workshop-react/src/contracts/types.ts')).toBe(true);
     expect(tree.exists('workshop-react/src/contracts/README.md')).toBe(true);
@@ -2053,7 +2057,11 @@ describe('preset generator', () => {
   });
 
   it('example contract file references AtlButton and its Figma node id', async () => {
-    await presetGenerator(tree, { name: 'my-workspace', framework: 'react' });
+    await presetGenerator(tree, {
+      name: 'my-workspace',
+      framework: 'react',
+      figmaMcp: true,
+    });
 
     const contract =
       tree.read('workshop-react/src/contracts/button.contract.ts', 'utf-8') ??
@@ -2066,6 +2074,7 @@ describe('preset generator', () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
       framework: 'angular',
+      figmaMcp: true,
     });
 
     expect(tree.exists('tools/scripts/check-contracts.mjs')).toBe(true);
@@ -2080,6 +2089,7 @@ describe('preset generator', () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
       framework: 'angular',
+      figmaMcp: true,
     });
 
     const snapshot = readJson(tree, 'tools/figma/snapshot.json');
@@ -2089,7 +2099,11 @@ describe('preset generator', () => {
   });
 
   it('writes contracts.config.json naming the selected framework', async () => {
-    await presetGenerator(tree, { name: 'my-workspace', framework: 'vue' });
+    await presetGenerator(tree, {
+      name: 'my-workspace',
+      framework: 'vue',
+      figmaMcp: true,
+    });
 
     const config = readJson(tree, 'contracts.config.json');
     expect(config.framework).toBe('vue');
@@ -2102,6 +2116,7 @@ describe('preset generator', () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
       framework: 'angular',
+      figmaMcp: true,
     });
 
     const pkg = readJson(tree, 'package.json');
@@ -2119,6 +2134,7 @@ describe('preset generator', () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
       framework: 'angular',
+      figmaMcp: true,
       figmaFile: 'QMnDD8uZQPldPrlCwZZ58T',
     });
 
@@ -2132,6 +2148,7 @@ describe('preset generator', () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
       framework: 'angular',
+      figmaMcp: true,
     });
 
     const pkg = readJson(tree, 'package.json');
@@ -2144,6 +2161,7 @@ describe('preset generator', () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
       framework: 'angular',
+      figmaMcp: true,
       figmaFile: 'QMnDD8uZQPldPrlCwZZ58T',
     });
 
@@ -2158,6 +2176,7 @@ describe('preset generator', () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
       framework: 'angular',
+      figmaMcp: true,
     });
 
     const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
@@ -2242,6 +2261,7 @@ describe('preset generator', () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
       framework: 'angular',
+      figmaMcp: true,
     });
 
     const pkg = readJson(tree, 'package.json');
@@ -2252,6 +2272,7 @@ describe('preset generator', () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
       framework: 'angular',
+      figmaMcp: true,
     });
 
     const pkg = readJson(tree, 'package.json');
@@ -2270,6 +2291,7 @@ describe('preset generator', () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
       framework: 'angular',
+      figmaMcp: true,
     });
 
     const pkg = readJson(tree, 'package.json');
@@ -2280,6 +2302,7 @@ describe('preset generator', () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
       framework: 'angular',
+      figmaMcp: true,
     });
 
     const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
@@ -2287,6 +2310,187 @@ describe('preset generator', () => {
     expect(md).toContain('check:contracts');
     expect(md).toContain('figma:snapshot');
     expect(md).toContain('addon-vitest');
+  });
+
+  // ─── Figma disabled (--no-figma, ADR-0144) ─────────────────────────────────
+  // ADR-0121 defines a contract AS the deliberate Figma ↔ code mismatch set —
+  // with no Figma there is nothing for a contract to disagree with, so the
+  // whole contract loop (files, scripts, npm scripts, devDependencies, and
+  // every doc surface naming it) is absent under `--no-figma`, not merely
+  // undocumented. `figmaMcp` defaults to `undefined`/falsy when omitted (the
+  // schema's own default is `false`), so most tests here pass `figmaMcp:
+  // false` explicitly for clarity even though omitting it would behave
+  // identically.
+  describe('figma disabled (--no-figma, ADR-0144)', () => {
+    it('writes none of the contract-loop files', async () => {
+      await presetGenerator(tree, {
+        name: 'my-workspace',
+        framework: 'react',
+        figmaMcp: false,
+      });
+
+      expect(tree.exists('workshop-react/src/contracts/types.ts')).toBe(false);
+      expect(tree.exists('workshop-react/src/contracts/README.md')).toBe(false);
+      expect(
+        tree.exists('workshop-react/src/contracts/button.contract.ts'),
+      ).toBe(false);
+      expect(tree.exists('tools/scripts/check-contracts.mjs')).toBe(false);
+      expect(tree.exists('tools/scripts/lib/ts-eval.js')).toBe(false);
+      expect(tree.exists('tools/scripts/lib/docgen.mjs')).toBe(false);
+      expect(tree.exists('tools/scripts/figma-snapshot-contracts.mjs')).toBe(
+        false,
+      );
+      expect(tree.exists('tools/figma/snapshot.json')).toBe(false);
+      expect(tree.exists('contracts.config.json')).toBe(false);
+    });
+
+    it('writes none of the contract-loop npm scripts or devDependencies, but keeps every other script and devDependency', async () => {
+      await presetGenerator(tree, {
+        name: 'my-workspace',
+        framework: 'angular',
+        figmaMcp: false,
+      });
+
+      const pkg = readJson(tree, 'package.json');
+      expect(pkg.scripts['check:contracts']).toBeUndefined();
+      expect(pkg.scripts['figma:snapshot']).toBeUndefined();
+      expect(pkg.devDependencies['@modelcontextprotocol/sdk']).toBeUndefined();
+      // --no-figma removes exactly the contract-loop pair, nothing else —
+      // every other generator-owned script survives.
+      expect(pkg.scripts.preflight).toBe('node tools/scripts/preflight.mjs');
+      expect(pkg.scripts['check:stylelint']).toBe('nx run-many -t stylelint');
+      expect(pkg.scripts['check:unit']).toBe('nx run-many -t test');
+      expect(pkg.scripts['check:stories']).toBe(
+        'nx run-many -t storybook-test --parallel=1',
+      );
+      expect(pkg.scripts['check:format']).toBe('prettier --check .');
+    });
+
+    it('does not add the defensive typescript devDependency (only ts-eval.js needed it, and ts-eval.js does not ship)', async () => {
+      await presetGenerator(tree, {
+        name: 'my-workspace',
+        framework: 'angular',
+        figmaMcp: false,
+      });
+
+      // The mocked application generator (unlike the real one) never adds a
+      // `typescript` devDependency itself, so this proves this preset's OWN
+      // contract-loop-only add is gone, not merely masked by another source
+      // adding the same key.
+      const pkg = readJson(tree, 'package.json');
+      expect(pkg.devDependencies).not.toHaveProperty('typescript');
+    });
+
+    it('.mcp.json has no figma-console entry', async () => {
+      await presetGenerator(tree, {
+        name: 'my-workspace',
+        framework: 'vue',
+        figmaMcp: false,
+      });
+
+      const mcp = readJson(tree, '.mcp.json');
+      expect(mcp.mcpServers['figma-console']).toBeUndefined();
+    });
+
+    it('CLAUDE.md omits "The Contract Loop" section entirely and names four checks, not five, in Definition of Done', async () => {
+      await presetGenerator(tree, {
+        name: 'my-workspace',
+        framework: 'angular',
+        figmaMcp: false,
+      });
+
+      const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
+      expect(md).not.toContain('## The Contract Loop');
+      expect(md).not.toContain('check:contracts');
+      expect(md).not.toContain('figma:snapshot');
+      expect(md).toContain('## Definition of Done');
+      expect(md).toContain('all four of these pass');
+      expect(md).toContain('runs all four');
+      expect(md).toContain('check:format');
+      expect(md).toContain('check:stylelint');
+      expect(md).toContain('check:unit');
+      expect(md).toContain('check:stories');
+    });
+
+    it("CLAUDE.md's Agent Skills paragraph names the component → stories → checks loop, not the Figma → contract one", async () => {
+      await presetGenerator(tree, {
+        name: 'my-workspace',
+        framework: 'angular',
+        figmaMcp: false,
+      });
+
+      const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
+      expect(md).not.toContain('Figma → contract → stories → checks loop');
+      expect(md).toContain('component → stories → checks loop');
+    });
+
+    it('writes the four-check /verify command, not the five-check one', async () => {
+      await presetGenerator(tree, {
+        name: 'my-workspace',
+        framework: 'angular',
+        figmaMcp: false,
+      });
+
+      const verify = tree.read('.claude/commands/verify.md', 'utf-8') ?? '';
+      // Explains the absence in prose (ADR-0144) without offering the
+      // command itself — assert the command form is gone, not the bare tag.
+      expect(verify).not.toContain('npm run check:contracts');
+      expect(verify).toContain('check:format');
+      expect(verify).toContain('check:stylelint');
+      expect(verify).toContain('check:unit');
+      expect(verify).toContain('check:stories');
+      expect(verify).toContain('four checks');
+    });
+
+    it('writes the no-figma atelier-component skill, with no dangling mention of check:contracts and both placeholders substituted', async () => {
+      await presetGenerator(tree, {
+        name: 'my-workspace',
+        framework: 'react',
+        figmaMcp: false,
+      });
+
+      const skill =
+        tree.read('.claude/skills/atelier-component/SKILL.md', 'utf-8') ?? '';
+      expect(skill).toContain('name: atelier-component');
+      expect(skill).not.toContain('check:contracts');
+      expect(skill).not.toContain('figma:snapshot');
+      expect(skill).not.toContain('<app>');
+      expect(skill).not.toContain('<framework>');
+      expect(skill).toContain('workshop-react');
+      expect(skill).toContain('@atelier-ui/react');
+      expect(skill).toContain('## Definition of done');
+      expect(skill).toContain('check:unit');
+      expect(skill).toContain('check:stories');
+    });
+
+    it('writes the no-figma component-review agent, with no reference to check:contracts or a contract file', async () => {
+      await presetGenerator(tree, {
+        name: 'my-workspace',
+        framework: 'angular',
+        figmaMcp: false,
+      });
+
+      const agent =
+        tree.read('.claude/agents/component-review.md', 'utf-8') ?? '';
+      expect(agent).toContain('name: component-review');
+      expect(agent).toContain('tools: Read, Grep, Glob, Bash');
+      expect(agent.toLowerCase()).toContain('accessibility');
+      expect(agent).not.toContain('check:contracts');
+      expect(agent).not.toContain('<name>.contract.ts');
+      expect(agent).not.toMatch(/tools:.*\b(Edit|Write)\b/);
+    });
+
+    it('still ships preflight.mjs unmodified — its Figma checks are runtime-gated on .mcp.json, not on this generator-time flag', async () => {
+      await presetGenerator(tree, {
+        name: 'my-workspace',
+        framework: 'angular',
+        figmaMcp: false,
+      });
+
+      expect(tree.exists('tools/scripts/preflight.mjs')).toBe(true);
+      const content = tree.read('tools/scripts/preflight.mjs', 'utf-8') ?? '';
+      expect(content).toContain('Atelier UI Preflight');
+    });
   });
 
   // ─── CLAUDE.md / README mention Storybook + skills (S3) ────────────────────
@@ -2580,7 +2784,11 @@ describe('preset generator', () => {
   });
 
   it('writes a /verify command naming all five checks', async () => {
-    await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
+    await presetGenerator(tree, {
+      name: 'my-workspace',
+      framework: 'angular',
+      figmaMcp: true,
+    });
 
     expect(tree.exists('.claude/commands/verify.md')).toBe(true);
     const verify = tree.read('.claude/commands/verify.md', 'utf-8') ?? '';
@@ -2619,7 +2827,11 @@ describe('preset generator', () => {
   });
 
   it('atelier-component skill names all five checks in "Definition of done" and check:unit in the check-capability table', async () => {
-    await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
+    await presetGenerator(tree, {
+      name: 'my-workspace',
+      framework: 'angular',
+      figmaMcp: true,
+    });
 
     const skill =
       tree.read('.claude/skills/atelier-component/SKILL.md', 'utf-8') ?? '';
@@ -2634,7 +2846,11 @@ describe('preset generator', () => {
   it.each(['angular', 'react', 'vue'] as const)(
     'atelier-component skill has both placeholders fully substituted for %s, with no `<app>`/`<framework>` token left',
     async (framework) => {
-      await presetGenerator(tree, { name: 'my-workspace', framework });
+      await presetGenerator(tree, {
+        name: 'my-workspace',
+        framework,
+        figmaMcp: true,
+      });
 
       const skill =
         tree.read('.claude/skills/atelier-component/SKILL.md', 'utf-8') ?? '';
@@ -2673,7 +2889,11 @@ describe('preset generator', () => {
   });
 
   it('CLAUDE.md has a Definition of Done section naming all five checks and the exit-code rule', async () => {
-    await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
+    await presetGenerator(tree, {
+      name: 'my-workspace',
+      framework: 'angular',
+      figmaMcp: true,
+    });
 
     const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
     expect(md).toContain('## Definition of Done');

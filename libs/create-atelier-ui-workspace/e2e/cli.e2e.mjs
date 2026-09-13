@@ -19,6 +19,25 @@
  * others pass `--no-skills` so they don't each pay for an uncontrolled
  * GitHub clone that nothing here would check anyway.
  *
+ * Figma (ADR-0144): exactly one framework runs with `--figma
+ * --figma-file <key>` (see FIGMA_TEST_FRAMEWORK below) — this repo's own
+ * Figma file key (AGENTS.md), which needs no network access since `--figma`
+ * only writes an `.mcp.json` entry and never contacts Figma itself during
+ * scaffolding. That framework's run proves the whole contract loop
+ * (check-contracts.mjs, the example contract, the Figma snapshot
+ * projection, the `figma-console` MCP entry) actually exists and
+ * `check:contracts` actually passes on a real install — the ONLY place this
+ * repo tests the `--figma` path end to end (preset.spec.ts only proves it
+ * against an in-memory Tree). Every other framework runs with `--no-figma`
+ * and asserts the opposite: none of those files exist, neither npm script is
+ * registered, and `.mcp.json` has no `figma-console` entry. Picking exactly
+ * one framework for `--figma` (rather than all three, or a fourth run) keeps
+ * the total at one CLI invocation per framework — the same budget as before
+ * this change — instead of tripling it; the cost is that a framework-specific
+ * bug in the `--figma` scaffold path for the other two frameworks would not
+ * be caught here (preset.spec.ts's in-memory assertions, which run against
+ * all three frameworks, are what still covers them).
+ *
  * verdaccio is fetched on-demand via `npx -y verdaccio`; the first run
  * downloads it (~50 MB, cached afterwards). Uplinks to npmjs.org so any
  * published @atelier-ui/* v0.0.x packages and @nx/* deps resolve normally.
@@ -76,6 +95,23 @@ const KEEP_SCRATCH = process.env.E2E_KEEP_SCRATCH === 'true';
 // data point regardless of which subset is under test, rather than hardcoding
 // a name that might not even be in a restricted run.
 const SKILLS_TEST_FRAMEWORK = FRAMEWORKS[0];
+
+// Exactly one framework runs with `--figma` (ADR-0144) — see the file header
+// comment for the reasoning. The LAST entry rather than the first: keeping it
+// apart from SKILLS_TEST_FRAMEWORK (the first entry) means, whenever the
+// (possibly `E2E_FRAMEWORKS`-filtered) list has more than one framework, the
+// real skills install and the `--figma` run land on two different frameworks
+// instead of stacking every "interesting" flag onto one. With exactly one
+// framework in the list, both constants resolve to it and it simply carries
+// both.
+const FIGMA_TEST_FRAMEWORK = FRAMEWORKS[FRAMEWORKS.length - 1];
+
+// This repo's own Figma file key (AGENTS.md) — any syntactically valid key
+// works here, since `--figma` never contacts Figma during scaffolding (it
+// only writes an `.mcp.json` entry and names the key in the generated
+// `figma:snapshot` script); this one is real and documented, so there is
+// nothing to invent.
+const ATELIER_FIGMA_FILE_KEY = 'QMnDD8uZQPldPrlCwZZ58T';
 
 function section(msg) {
   console.log(`\n=== ${msg} ===`);
@@ -355,6 +391,7 @@ function publishToRegistry(tarballPath, registryUrl, npmrcPath) {
 function testFramework(framework, registryUrl, npmrcPath) {
   section(`Framework: ${framework}`);
   const exerciseSkills = framework === SKILLS_TEST_FRAMEWORK;
+  const figmaEnabled = framework === FIGMA_TEST_FRAMEWORK;
   const scratch = mkdtempSync(join(tmpdir(), `atelier-e2e-${framework}-`));
   console.log(`  scratch: ${scratch}`);
   let passed = false;
@@ -374,16 +411,23 @@ function testFramework(framework, registryUrl, npmrcPath) {
     ok('CLI installed from verdaccio');
 
     const wsName = `workshop-${framework}-ws`;
-    // --no-figma keeps the CLI non-interactive (the figma MCP prompt would
-    // otherwise hang because stdio is inherited). The opt-in path is covered
-    // by unit tests in preset.spec.ts and index.spec.ts.
+    // --figma / --no-figma: both keep the CLI non-interactive (neither
+    // prompts once the flag is given — the figma-file prompt only fires when
+    // `--figma` is accepted AND no `--figma-file` was also given). Exactly
+    // FIGMA_TEST_FRAMEWORK runs with `--figma --figma-file <key>`, proving
+    // the contract loop end to end against a real install; every other
+    // framework runs `--no-figma` and asserts its absence — see the file
+    // header comment and the constant's own definition for the split.
     // --skills / --no-skills: only SKILLS_TEST_FRAMEWORK runs the real
     // storybookjs/mcp network install here — see the constant's definition
     // for why exactly one framework carries it.
     const skillsFlag = exerciseSkills ? '--skills' : '--no-skills';
+    const figmaFlags = figmaEnabled
+      ? ['--figma', '--figma-file', ATELIER_FIGMA_FILE_KEY]
+      : ['--no-figma'];
     const res = spawnSync(
       cliBin,
-      [wsName, `--framework=${framework}`, '--no-figma', skillsFlag],
+      [wsName, `--framework=${framework}`, ...figmaFlags, skillsFlag],
       {
         cwd: scratch,
         stdio: 'inherit',
@@ -426,16 +470,66 @@ function testFramework(framework, registryUrl, npmrcPath) {
       // own setup file, distinct from the browser-mode pair just above.
       `workshop-${framework}/vitest.unit.config.ts`,
       `workshop-${framework}/src/test-setup.ts`,
-      'tools/scripts/check-contracts.mjs',
-      'tools/figma/snapshot.json',
-      'contracts.config.json',
     ];
+    // The contract loop (ADR-0121 S4) is gated on Figma (ADR-0144) — it
+    // exists only for FIGMA_TEST_FRAMEWORK's run.
+    if (figmaEnabled) {
+      mustExist.push(
+        'tools/scripts/check-contracts.mjs',
+        'tools/scripts/figma-snapshot-contracts.mjs',
+        'tools/scripts/lib/ts-eval.js',
+        'tools/scripts/lib/docgen.mjs',
+        'tools/figma/snapshot.json',
+        'contracts.config.json',
+        `workshop-${framework}/src/contracts/types.ts`,
+        `workshop-${framework}/src/contracts/button.contract.ts`,
+      );
+    }
     for (const rel of mustExist) {
       if (!existsSync(join(wsPath, rel))) throw new Error(`missing: ${rel}`);
     }
     ok(
       'scaffolded files present (including local tokens.css and .storybook config)',
     );
+
+    if (!figmaEnabled) {
+      // The mirror image of the block above: --no-figma must ship NONE of
+      // the contract-loop's files (ADR-0144) — a stray one left over would
+      // be dead weight nothing in this workspace's docs point at any more.
+      const mustNotExist = [
+        'tools/scripts/check-contracts.mjs',
+        'tools/scripts/figma-snapshot-contracts.mjs',
+        'tools/scripts/lib/ts-eval.js',
+        'tools/scripts/lib/docgen.mjs',
+        'tools/figma/snapshot.json',
+        'contracts.config.json',
+        `workshop-${framework}/src/contracts`,
+      ];
+      for (const rel of mustNotExist) {
+        if (existsSync(join(wsPath, rel))) {
+          throw new Error(`should not exist under --no-figma: ${rel}`);
+        }
+      }
+      ok('no-figma workspace ships none of the contract-loop files');
+
+      const mcpJson = JSON.parse(
+        readFileSync(join(wsPath, '.mcp.json'), 'utf-8'),
+      );
+      if (mcpJson.mcpServers?.['figma-console']) {
+        throw new Error(
+          'figma-console should not be configured under --no-figma',
+        );
+      }
+      ok('.mcp.json has no figma-console entry');
+    } else {
+      const mcpJson = JSON.parse(
+        readFileSync(join(wsPath, '.mcp.json'), 'utf-8'),
+      );
+      if (!mcpJson.mcpServers?.['figma-console']) {
+        throw new Error('figma-console missing from .mcp.json under --figma');
+      }
+      ok('.mcp.json has the figma-console entry');
+    }
 
     const storyFiles = findStoryFiles(
       join(wsPath, `workshop-${framework}/src`),
@@ -476,6 +570,47 @@ function testFramework(framework, registryUrl, npmrcPath) {
     }
     ok('package.json scripts.preflight wired correctly');
 
+    // The contract loop's two npm scripts (ADR-0144: gated on the same
+    // --figma/--no-figma flag as the files themselves) — check both
+    // directions, not just file existence above, since a script silently
+    // left un-wired (or wired when it shouldn't be) would not fail any of
+    // the checks so far.
+    if (figmaEnabled) {
+      if (
+        pkgJson.scripts?.['check:contracts'] !==
+        'node tools/scripts/check-contracts.mjs'
+      ) {
+        throw new Error(
+          `package.json scripts['check:contracts'] = ${JSON.stringify(pkgJson.scripts?.['check:contracts'])}, expected the check-contracts.mjs invocation`,
+        );
+      }
+      if (
+        pkgJson.scripts?.['figma:snapshot'] !==
+        `node tools/scripts/figma-snapshot-contracts.mjs --file ${ATELIER_FIGMA_FILE_KEY}`
+      ) {
+        throw new Error(
+          `package.json scripts['figma:snapshot'] = ${JSON.stringify(pkgJson.scripts?.['figma:snapshot'])}, expected it to name ${ATELIER_FIGMA_FILE_KEY}`,
+        );
+      }
+      ok(
+        'package.json has check:contracts and figma:snapshot wired to the given --figma-file key',
+      );
+    } else {
+      if (pkgJson.scripts?.['check:contracts'] !== undefined) {
+        throw new Error(
+          'check:contracts should not be registered under --no-figma',
+        );
+      }
+      if (pkgJson.scripts?.['figma:snapshot'] !== undefined) {
+        throw new Error(
+          'figma:snapshot should not be registered under --no-figma',
+        );
+      }
+      ok(
+        'package.json has neither check:contracts nor figma:snapshot under --no-figma',
+      );
+    }
+
     // Smoke-test the npm script entrypoint resolves. Preflight will report
     // warnings/errors in this scratch environment (no Figma, no Claude CLI,
     // etc.) — we only care that `npm run preflight` doesn't exit with
@@ -514,15 +649,16 @@ function testFramework(framework, registryUrl, npmrcPath) {
     });
     ok(`npm run build:storybook (workshop-${framework}) green`);
 
-    // The contract loop (ADR-0121 S4): this proves the SHIPPED check-contracts.mjs
-    // + lib/docgen.mjs run against a REAL scaffolded workspace, through the
-    // framework's own Storybook docgen worker — where, unlike the monorepo, the
-    // story imports the published @atelier-ui/<fw> package from node_modules
-    // rather than a sibling source file. That import is exactly the
-    // package-import skip docgen.mjs's findExternalPackageDir exists for, and
-    // this is where we prove the skip actually holds in a real install: the
-    // example AtlButton component is classed as external and excluded before
-    // any contract/snapshot/story comparison runs — which makes the gate
+    // The contract loop (ADR-0121 S4, gated on --figma since ADR-0144): this
+    // proves the SHIPPED check-contracts.mjs + lib/docgen.mjs run against a
+    // REAL scaffolded workspace, through the framework's own Storybook
+    // docgen worker — where, unlike the monorepo, the story imports the
+    // published @atelier-ui/<fw> package from node_modules rather than a
+    // sibling source file. That import is exactly the package-import skip
+    // docgen.mjs's findExternalPackageDir exists for, and this is where we
+    // prove the skip actually holds in a real install: the example AtlButton
+    // component is classed as external and excluded before any
+    // contract/snapshot/story comparison runs — which makes the gate
     // vacuous by design for AtlButton, not a proof the contract stays wired.
     // The pair it DOES still compare — the example's contract.ts and the
     // projected tools/figma/snapshot.json entry — produces exactly the one
@@ -530,38 +666,49 @@ function testFramework(framework, registryUrl, npmrcPath) {
     // was just skipped as external, so nothing reaches the contract. Making
     // the example itself non-vacuous needs a
     // `--manifest` follow-up — tracked in tasks/todo.md.
-    let contractsOutput;
-    try {
-      contractsOutput = runCapture(`npm run check:contracts`, { cwd: wsPath });
-    } catch (e) {
-      if (e.stdout) console.log(e.stdout);
-      if (e.stderr) console.error(e.stderr);
-      throw e;
-    }
-    console.log(contractsOutput);
-    const assertContains = (needle) => {
-      if (!contractsOutput.includes(needle)) {
-        throw new Error(
-          `check:contracts output missing ${JSON.stringify(needle)} — see the captured output above`,
-        );
+    //
+    // Only FIGMA_TEST_FRAMEWORK ran with `--figma` — every other framework
+    // has no check:contracts script to run at all (already asserted above).
+    if (figmaEnabled) {
+      let contractsOutput;
+      try {
+        contractsOutput = runCapture(`npm run check:contracts`, {
+          cwd: wsPath,
+        });
+      } catch (e) {
+        if (e.stdout) console.log(e.stdout);
+        if (e.stderr) console.error(e.stderr);
+        throw e;
       }
-    };
-    // Assert the individual facts the summary line carries, not the line's
-    // shape — the parenthesised counter group gained `docgen-failed` on
-    // 2026-09-12 (makeWorkerDocgen stopped collapsing three distinct
-    // failures into a bare `null`), which moved external's trailing `)` and
-    // broke a previous version of this check that pinned
-    // '(no-component: 0, external: 1)' as one substring. Asserting each
-    // counter on its own means the next counter added to that group can't
-    // break this again.
-    assertContains('no-component: 0'); // no story resolved to a missing component
-    assertContains('external: 1'); // AtlButton classed as external — the package-import skip actually holding in a real install (see the comment above)
-    assertContains('docgen-failed: 0'); // the worker docgen did not silently fail
-    assertContains('[NO-STORY-META]');
-    assertContains('total: 0 error(s)');
-    ok(
-      'check:contracts exits 0 on the example — vacuous by design: the library AtlButton is skipped as external (external: 1, docgen-failed: 0), only [NO-STORY-META] remains',
-    );
+      console.log(contractsOutput);
+      const assertContains = (needle) => {
+        if (!contractsOutput.includes(needle)) {
+          throw new Error(
+            `check:contracts output missing ${JSON.stringify(needle)} — see the captured output above`,
+          );
+        }
+      };
+      // Assert the individual facts the summary line carries, not the line's
+      // shape — the parenthesised counter group gained `docgen-failed` on
+      // 2026-09-12 (makeWorkerDocgen stopped collapsing three distinct
+      // failures into a bare `null`), which moved external's trailing `)` and
+      // broke a previous version of this check that pinned
+      // '(no-component: 0, external: 1)' as one substring. Asserting each
+      // counter on its own means the next counter added to that group can't
+      // break this again.
+      assertContains('no-component: 0'); // no story resolved to a missing component
+      assertContains('external: 1'); // AtlButton classed as external — the package-import skip actually holding in a real install (see the comment above)
+      assertContains('docgen-failed: 0'); // the worker docgen did not silently fail
+      assertContains('[NO-STORY-META]');
+      assertContains('total: 0 error(s)');
+      ok(
+        'check:contracts exits 0 on the example — vacuous by design: the library AtlButton is skipped as external (external: 1, docgen-failed: 0), only [NO-STORY-META] remains',
+      );
+    } else {
+      ok(
+        'check:contracts skipped — --no-figma workspace ships no contract loop (ADR-0144)',
+      );
+    }
 
     // S5 — the unit test runner. preset.spec.ts proves the files land in an
     // in-memory Tree; only a real scaffolded workspace can prove the runner

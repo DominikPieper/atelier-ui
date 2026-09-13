@@ -120,12 +120,17 @@ function testingTemplateName(
 }
 
 // The workspace's own component skill (`.claude/skills/atelier-component/`)
-// ships as a static `files/` template — its instructions don't vary by
-// framework except for two names: the app directory (`workshop-<fw>`) and
-// the `@atelier-ui/<fw>` package/framework name. Rather than rewrite it as a
-// JS template string (like CLAUDE.md/README.md below, which vary in far more
-// places), it stays a template file with those two spots marked
-// `<app>`/`<framework>`, substituted here at generate time.
+// ships as a static `files/` template, in two variants selected by
+// `figmaMcp` (ADR-0144: SKILL.md when `--figma`, SKILL.no-figma.md
+// otherwise — whole sections differ, not just a couple of words, so this is
+// the same "pick a static file" shape as the per-framework templates below,
+// not a third substitution token). Within whichever file is picked,
+// instructions don't vary by framework except for two names: the app
+// directory (`workshop-<fw>`) and the `@atelier-ui/<fw>` package/framework
+// name. Rather than rewrite those per-framework spots as a JS template string
+// (like CLAUDE.md/README.md below, which vary in far more places), each file
+// stays a template with those two spots marked `<app>`/`<framework>`,
+// substituted here at generate time.
 //
 // `<app>` and `<framework>` (angle-bracket-wrapped) were chosen as the
 // substitution tokens deliberately, over inventing a new one: the skill's own
@@ -133,20 +138,31 @@ function testingTemplateName(
 // English (e.g. "one app (`workshop-<framework>`), one framework, ..." and "
 // ... two-way bindings ... for this framework"), so a substitution key of the
 // bare word would have corrupted those sentences. The angle-bracket form is
-// the one substring that appears ONLY at the seven spots meant to be filled
-// in (four `<app>`, three `<framework>`) — verified against the shipped
-// file, not assumed — and is
-// distinct from the file's other bracketed placeholder, `<name>` (a
-// component name, e.g. in `<name>.contract.ts`), which stays generic prose
-// for the reader and must NOT be substituted.
+// the one substring that appears ONLY at the spots meant to be filled in
+// (SKILL.md: five `<app>`, three `<framework>`; SKILL.no-figma.md: three
+// `<app>`, two `<framework>` — smaller by exactly the sections it drops) —
+// verified against each shipped file, not assumed — and is distinct from the
+// files' other bracketed placeholder, `<name>` (a component name, e.g. in
+// `<name>.contract.ts`), which stays generic prose for the reader and must
+// NOT be substituted.
+// `figmaMcp` (ADR-0144) picks between two source files, not a third
+// substitution token: the difference between the two is not a couple of
+// filled-in spots but whole sections (the contract loop, its finding-code
+// table, the Figma-specific loop steps) that either exist or don't — the
+// same "select a static template by parameter" shape `storybookTemplateName`/
+// `testingTemplateName` above already use for the per-framework axis.
 function renderAtelierComponentSkill(
   appName: string,
   framework: Framework,
+  figmaMcp: boolean,
 ): string {
   // `.split(token).join(value)` rather than `String.prototype.replaceAll`:
   // this package's tsconfig targets a lib below ES2021, where `replaceAll`
   // doesn't type-check.
-  return readTemplate('claude/skills/atelier-component/SKILL.md')
+  const templatePath = figmaMcp
+    ? 'claude/skills/atelier-component/SKILL.md'
+    : 'claude/skills/atelier-component/SKILL.no-figma.md';
+  return readTemplate(templatePath)
     .split('<app>')
     .join(appName)
     .split('<framework>')
@@ -1421,59 +1437,77 @@ export async function presetGenerator(
     return config;
   });
 
-  // ─── The contract loop (ADR-0121 S4) ─────────────────────────────────────
-  // contracts.config.json names the workshop's one framework and app —
-  // `framework`/`appName`, already established above.
-  console.log(
-    `\n◇ Writing the contract loop (check:contracts, the example AtlButton contract, the Figma snapshot projection)…`,
-  );
+  // ─── The contract loop (ADR-0121 S4, gated by --figma since ADR-0144) ────
+  // ADR-0121 defines a contract AS the set of deliberate Figma ↔ code
+  // mismatches — with no Figma there is nothing for a contract to disagree
+  // with, so `options.figmaMcp` (the same flag that decides whether
+  // `figma-console` reaches .mcp.json, below) is the one switch for this
+  // whole loop: the contract files, the two loop scripts + their shared
+  // lib/, the Figma snapshot projection, and contracts.config.json.
+  // check-contracts.mjs's own snapshot read
+  // (`JSON.parse(fs.readFileSync(snapshotPath, ...))`) is unguarded — it
+  // throws, not degrades, the moment tools/figma/snapshot.json is missing —
+  // so shipping the script without the rest of this block would hand an
+  // attendee a gate that crashes on first run, not a lenient one.
+  if (options.figmaMcp) {
+    console.log(
+      `\n◇ Writing the contract loop (check:contracts, the example AtlButton contract, the Figma snapshot projection)…`,
+    );
 
-  // .ts.template, not .ts — see the comment on storybookTemplateName() above:
-  // a literal `.ts` file under files/ is compiled away by this package's own
-  // tsconfig.lib.json (`include: ["src/**/*.ts"]`) and never reaches dist/
-  // under a name readTemplate() can find at runtime. The OUTPUT filenames
-  // below stay plain `.ts` — only the template source needs the suffix.
-  tree.write(
-    `${appName}/src/contracts/types.ts`,
-    readTemplate('contracts/types.ts.template'),
-  );
-  tree.write(
-    `${appName}/src/contracts/README.md`,
-    readTemplate('contracts/README.md'),
-  );
-  tree.write(
-    `${appName}/src/contracts/button.contract.ts`,
-    readTemplate('contracts/button.contract.ts.template'),
-  );
+    // .ts.template, not .ts — see the comment on storybookTemplateName() above:
+    // a literal `.ts` file under files/ is compiled away by this package's own
+    // tsconfig.lib.json (`include: ["src/**/*.ts"]`) and never reaches dist/
+    // under a name readTemplate() can find at runtime. The OUTPUT filenames
+    // below stay plain `.ts` — only the template source needs the suffix.
+    tree.write(
+      `${appName}/src/contracts/types.ts`,
+      readTemplate('contracts/types.ts.template'),
+    );
+    tree.write(
+      `${appName}/src/contracts/README.md`,
+      readTemplate('contracts/README.md'),
+    );
+    tree.write(
+      `${appName}/src/contracts/button.contract.ts`,
+      readTemplate('contracts/button.contract.ts.template'),
+    );
 
-  tree.write(
-    'tools/scripts/check-contracts.mjs',
-    readTemplate('tools/scripts/check-contracts.mjs'),
-  );
-  tree.write(
-    'tools/scripts/lib/ts-eval.js',
-    readTemplate('tools/scripts/lib/ts-eval.js'),
-  );
-  tree.write(
-    'tools/scripts/lib/docgen.mjs',
-    readTemplate('tools/scripts/lib/docgen.mjs'),
-  );
-  tree.write(
-    'tools/scripts/figma-snapshot-contracts.mjs',
-    readTemplate('tools/scripts/figma-snapshot-contracts.mjs'),
-  );
-  // The AtlButton-only projection of this repo's own tools/figma/snapshot.json
-  // (gen-scaffold-snapshot.mjs) — gives check:contracts a Figma side for the
-  // example contract + story on day one, before the attendee ever runs
-  // figma:snapshot themselves.
-  tree.write('tools/figma/snapshot.json', readTemplate('figma/snapshot.json'));
+    tree.write(
+      'tools/scripts/check-contracts.mjs',
+      readTemplate('tools/scripts/check-contracts.mjs'),
+    );
+    tree.write(
+      'tools/scripts/lib/ts-eval.js',
+      readTemplate('tools/scripts/lib/ts-eval.js'),
+    );
+    tree.write(
+      'tools/scripts/lib/docgen.mjs',
+      readTemplate('tools/scripts/lib/docgen.mjs'),
+    );
+    tree.write(
+      'tools/scripts/figma-snapshot-contracts.mjs',
+      readTemplate('tools/scripts/figma-snapshot-contracts.mjs'),
+    );
+    // The AtlButton-only projection of this repo's own tools/figma/snapshot.json
+    // (gen-scaffold-snapshot.mjs) — gives check:contracts a Figma side for the
+    // example contract + story on day one, before the attendee ever runs
+    // figma:snapshot themselves.
+    tree.write(
+      'tools/figma/snapshot.json',
+      readTemplate('figma/snapshot.json'),
+    );
 
-  writeJson(tree, 'contracts.config.json', {
-    framework,
-    contracts: `${appName}/src/contracts`,
-    stories: [`${appName}/src`],
-    snapshot: 'tools/figma/snapshot.json',
-  });
+    writeJson(tree, 'contracts.config.json', {
+      framework,
+      contracts: `${appName}/src/contracts`,
+      stories: [`${appName}/src`],
+      snapshot: 'tools/figma/snapshot.json',
+    });
+  } else {
+    console.log(
+      `\n◇ Skipping the contract loop (--no-figma) — no Figma, no contract (ADR-0144)…`,
+    );
+  }
 
   console.log(`\n◇ Writing project files (CLAUDE.md, README, .mcp.json)…`);
 
@@ -1585,6 +1619,76 @@ duplicate the file again`
     : `edit the \`--file\` placeholder in \`package.json\`'s \`figma:snapshot\` script to
 your own Figma file key`;
 
+  // The Contract Loop (ADR-0121 S4) is gated on Figma too (ADR-0144): ADR-0121
+  // defines a contract AS the deliberate Figma ↔ code mismatch set, so with no
+  // Figma there is nothing for one to disagree with — the whole section is
+  // omitted under --no-figma, not left dangling pointing at files this
+  // workspace never wrote.
+  const contractLoopSection = options.figmaMcp
+    ? `
+## The Contract Loop
+
+A contract (\`${appName}/src/contracts/<name>.contract.ts\`) is the one hand-authored
+spec file per component: the Figma master's node id, plus intentional Figma ↔ code
+mismatches (\`figmaOnly\`, \`codeOnly\`, \`axisMap\`) — never props, defaults, or
+descriptions; those live in the component's own types/JSDoc and its stories.
+
+Order: read the Figma handoff → write the contract → write one story per variant and
+interaction state → \`npm run check:contracts\` → \`figma_check_design_parity\` in Storybook.
+
+\`check:contracts\` joins the contract, the component's docgen, and \`tools/figma/snapshot.json\`
+offline — no browser, no Storybook build — and reports one line per finding:
+- \`[CONTRACT-MISSING]\` / \`[CONTRACT-NODE]\` — no contract file, or its node id disagrees
+- \`[AXIS]\` / \`[BOOLEAN]\` / \`[ENUM-UNDRAWN]\` — a Figma property has no matching code prop
+- \`[COVERAGE]\` / \`[COVERAGE-BOOL]\` — a variant value or boolean is never rendered by a story
+- \`[FIGMA-ONLY]\` / \`[STALE-EXEMPTION]\` / \`[UNMIRRORED]\` — an exemption is missing, stale, or unexplained
+- \`[NO-STORY-META]\` / \`[NO-MASTER]\` — a contract with nothing yet to check it against
+- \`[CONTRACT-IMPORT]\` — a story meta doesn't import its component's contract and set
+  \`contract\` in \`parameters\` (a warning here, until this workspace ships a docs block
+  that renders it)
+
+Refresh \`tools/figma/snapshot.json\` from the real master with the Figma Desktop Bridge
+connected: ${figmaSnapshotRefreshInstruction}, then run \`npm run figma:snapshot\`.
+
+\`check:contracts\` proves shape and story coverage; \`npm run check:stories\` (every story,
+rendered headless in Chromium via \`@storybook/addon-vitest\`, with axe) proves rendering
+and accessibility. It does so for components whose source lives in this workspace. For
+components imported from \`@atelier-ui/${framework}\` — the example \`AtlButton\`
+included — the check recognises that the import resolves into \`node_modules\` and skips
+docgen for it — the same rule in every framework — so it has nothing to compare and
+reports only \`[NO-STORY-META]\`; their prop tables come from the hosted
+Storybook MCP (\`docs-show\`) instead. A green \`check:contracts\` on the example story
+therefore proves the wiring, not the example. Run \`npx playwright install chromium\`
+once after \`npm install\` — see Storybook below.
+`
+    : '';
+
+  // Agent Skills intro blurb (below): the two sentences naming what the
+  // unconditional atelier-component skill actually runs vary with the same
+  // flag — no dangling mention of check:contracts when this workspace never
+  // wrote one.
+  const atelierComponentSkillBlurb = options.figmaMcp
+    ? `It runs the Figma → contract → stories → checks loop scoped to what this workspace can
+actually check — see the skill itself, or ask Claude Code to use it, for the loop and
+\`check:contracts\`'s finding codes.`
+    : `It runs the component → stories → checks loop this workspace ships without Figma —
+see the skill itself, or ask Claude Code to use it, for what each check actually proves.`;
+
+  // Definition of Done (below): four checks without Figma, five with it —
+  // `check:contracts` only exists when the contract loop does (ADR-0144).
+  const doneChecks = [
+    '`npm run check:format` — Prettier',
+    '`npm run check:stylelint` — the ported CSS-discipline rules',
+    ...(options.figmaMcp
+      ? [
+          '`npm run check:contracts` — contract ↔ docgen ↔ Figma-snapshot parity',
+        ]
+      : []),
+    '`npm run check:unit` — jsdom unit tests (components, composables, helpers)',
+    '`npm run check:stories` — every story, rendered in Chromium, axe-checked',
+  ];
+  const doneCountWord = doneChecks.length === 5 ? 'five' : 'four';
+
   tree.write(
     'CLAUDE.md',
     `# Atelier Workshop
@@ -1676,10 +1780,7 @@ npm run check:stories
 
 This workspace also ships \`atelier-component\` (\`.claude/skills/atelier-component/SKILL.md\`)
 unconditionally — this generator writes it straight to disk as part of scaffolding, with no
-network fetch and no \`skills: false\` opt-out, unlike the four skills below. It runs the
-Figma → contract → stories → checks loop scoped to what this workspace can actually check —
-see the skill itself, or ask Claude Code to use it, for the loop and \`check:contracts\`'s
-finding codes.
+network fetch and no \`skills: false\` opt-out, unlike the four skills below. ${atelierComponentSkillBlurb}
 
 ${
   skillsEnabled
@@ -1723,7 +1824,7 @@ then add this to \`.mcp.json\`'s \`mcpServers\` (only while that Storybook is up
 (\`<port>\` is the one listed for that app under Storybook below.) \`test-run\`
 works too, once that local Storybook is running — every story here IS a
 render + accessibility test (\`@storybook/addon-vitest\`, run offline via
-\`npm run check:stories\`; see "The Contract Loop" below).`
+\`npm run check:stories\`${options.figmaMcp ? '; see "The Contract Loop" below' : ''}).`
     : `Skipped for this workspace (\`skills: false\`). Install the four \`storybookjs/mcp\`
 skills for Claude Code by hand:
 
@@ -1742,42 +1843,7 @@ has generated code for one component can infer the shape of the next. When you d
 the API of your own component, these are the rules the library itself follows:
 
 - Guide: ${SITE_URL}/design-principles
-
-## The Contract Loop
-
-A contract (\`${appName}/src/contracts/<name>.contract.ts\`) is the one hand-authored
-spec file per component: the Figma master's node id, plus intentional Figma ↔ code
-mismatches (\`figmaOnly\`, \`codeOnly\`, \`axisMap\`) — never props, defaults, or
-descriptions; those live in the component's own types/JSDoc and its stories.
-
-Order: read the Figma handoff → write the contract → write one story per variant and
-interaction state → \`npm run check:contracts\` → \`figma_check_design_parity\` in Storybook.
-
-\`check:contracts\` joins the contract, the component's docgen, and \`tools/figma/snapshot.json\`
-offline — no browser, no Storybook build — and reports one line per finding:
-- \`[CONTRACT-MISSING]\` / \`[CONTRACT-NODE]\` — no contract file, or its node id disagrees
-- \`[AXIS]\` / \`[BOOLEAN]\` / \`[ENUM-UNDRAWN]\` — a Figma property has no matching code prop
-- \`[COVERAGE]\` / \`[COVERAGE-BOOL]\` — a variant value or boolean is never rendered by a story
-- \`[FIGMA-ONLY]\` / \`[STALE-EXEMPTION]\` / \`[UNMIRRORED]\` — an exemption is missing, stale, or unexplained
-- \`[NO-STORY-META]\` / \`[NO-MASTER]\` — a contract with nothing yet to check it against
-- \`[CONTRACT-IMPORT]\` — a story meta doesn't import its component's contract and set
-  \`contract\` in \`parameters\` (a warning here, until this workspace ships a docs block
-  that renders it)
-
-Refresh \`tools/figma/snapshot.json\` from the real master with the Figma Desktop Bridge
-connected: ${figmaSnapshotRefreshInstruction}, then run \`npm run figma:snapshot\`.
-
-\`check:contracts\` proves shape and story coverage; \`npm run check:stories\` (every story,
-rendered headless in Chromium via \`@storybook/addon-vitest\`, with axe) proves rendering
-and accessibility. It does so for components whose source lives in this workspace. For
-components imported from \`@atelier-ui/${framework}\` — the example \`AtlButton\`
-included — the check recognises that the import resolves into \`node_modules\` and skips
-docgen for it — the same rule in every framework — so it has nothing to compare and
-reports only \`[NO-STORY-META]\`; their prop tables come from the hosted
-Storybook MCP (\`docs-show\`) instead. A green \`check:contracts\` on the example story
-therefore proves the wiring, not the example. Run \`npx playwright install chromium\`
-once after \`npm install\` — see Storybook below.
-
+${contractLoopSection}
 ## Definition of Done
 
 This workspace is strict, not lenient-by-default: \`tsconfig.base.json\` has
@@ -1786,20 +1852,16 @@ This workspace is strict, not lenient-by-default: \`tsconfig.base.json\` has
 type-aware checks (\`no-floating-promises\`, \`no-misused-promises\`, \`await-thenable\`)
 to errors. That is the feedback loop this workspace hands an LLM, not friction to prompt
 around: code Claude Code (or you) writes has to satisfy \`npm run lint\` and \`npm run
-build\` before it is done, the same way it has to satisfy the five checks below.
+build\` before it is done, the same way it has to satisfy the ${doneCountWord} checks below.
 
-A change here is done when all five of these pass:
+A change here is done when all ${doneCountWord} of these pass:
 
-- \`npm run check:format\` — Prettier
-- \`npm run check:stylelint\` — the ported CSS-discipline rules
-- \`npm run check:contracts\` — contract ↔ docgen ↔ Figma-snapshot parity
-- \`npm run check:unit\` — jsdom unit tests (components, composables, helpers)
-- \`npm run check:stories\` — every story, rendered in Chromium, axe-checked
+${doneChecks.map((c) => `- ${c}`).join('\n')}
 
 **A gate's result is its exit code.** Run it as
 \`<command> > /tmp/x.log 2>&1; echo $?\` and read the log afterwards — never pipe
 a gate into \`head\` or \`grep\`. The pipe's own exit status is always \`0\`, which
-silently turns a failing gate into a passing one. \`/verify\` runs all five and
+silently turns a failing gate into a passing one. \`/verify\` runs all ${doneCountWord} and
 reports each exit code (\`.claude/commands/verify.md\`).
 
 ## Troubleshooting
@@ -1835,23 +1897,25 @@ file exports). The Desktop Bridge covers creation and inspection without a token
 `,
   );
 
-  // The contract loop's own devDependencies (ADR-0121 S4): the MCP SDK
-  // figma-snapshot-contracts.mjs imports directly, always; `typescript` only
-  // when the framework application generator (above) didn't already add it —
-  // read from the tree's package.json as it stands right now, after the
-  // framework's generator has run and before this generator's own writes
-  // below it.
+  // The contract loop's own devDependencies (ADR-0121 S4), gated on Figma
+  // (ADR-0144) — neither exists without `--figma`: the MCP SDK is only
+  // imported by figma-snapshot-contracts.mjs, and the defensive `typescript`
+  // add exists only because ts-eval.js (shared by check-contracts.mjs and
+  // figma-snapshot-contracts.mjs) needs it at runtime — read from the tree's
+  // package.json as it stands right now, after the framework's generator has
+  // run and before this generator's own writes below it.
   const pkgSoFar = readJson(tree, 'package.json');
   const existingDeps: Record<string, string> = {
     ...(pkgSoFar.dependencies ?? {}),
     ...(pkgSoFar.devDependencies ?? {}),
   };
   const hasTypescript = Boolean(existingDeps.typescript);
-  const contractLoopDevDeps: Record<string, string> = {
-    '@modelcontextprotocol/sdk': MCP_SDK_VERSION,
-  };
-  if (!hasTypescript) {
-    contractLoopDevDeps.typescript = TYPESCRIPT_VERSION;
+  const contractLoopDevDeps: Record<string, string> = {};
+  if (options.figmaMcp) {
+    contractLoopDevDeps['@modelcontextprotocol/sdk'] = MCP_SDK_VERSION;
+    if (!hasTypescript) {
+      contractLoopDevDeps.typescript = TYPESCRIPT_VERSION;
+    }
   }
 
   // Lever 5 (ADR-0140): `typescript-eslint`, imported by each framework's own
@@ -1968,17 +2032,21 @@ file exports). The Desktop Bridge covers creation and inspection without a token
   updateJson(tree, 'package.json', (pkg) => {
     pkg.scripts = pkg.scripts ?? {};
     pkg.scripts.preflight = 'node tools/scripts/preflight.mjs';
-    // The contract loop (ADR-0121 S4). `figma:snapshot` names the attendee's
-    // own Figma file key (schema option `figmaFile`, S5a) when the caller
-    // supplied one — QMnDD8uZQPldPrlCwZZ58T is THIS repo's own file, never a
-    // default here. Most direct-preset callers have no key to hand, so
-    // without one it ships with the same literal placeholder as before;
-    // CLAUDE.md's "The Contract Loop" section (figmaSnapshotRefreshInstruction
-    // above) spells out how to fill it in either way.
-    pkg.scripts['check:contracts'] = 'node tools/scripts/check-contracts.mjs';
-    pkg.scripts['figma:snapshot'] = options.figmaFile
-      ? `node tools/scripts/figma-snapshot-contracts.mjs --file ${options.figmaFile}`
-      : 'node tools/scripts/figma-snapshot-contracts.mjs --file <YOUR_FIGMA_FILE_KEY>';
+    // The contract loop (ADR-0121 S4), gated on Figma (ADR-0144): neither
+    // script exists without `--figma` — see the contract-loop file-writing
+    // block above. `figma:snapshot` names the attendee's own Figma file key
+    // (schema option `figmaFile`, S5a) when the caller supplied one —
+    // QMnDD8uZQPldPrlCwZZ58T is THIS repo's own file, never a default here.
+    // Most direct-preset callers have no key to hand, so without one it ships
+    // with the same literal placeholder as before; CLAUDE.md's "The Contract
+    // Loop" section (figmaSnapshotRefreshInstruction above) spells out how to
+    // fill it in either way.
+    if (options.figmaMcp) {
+      pkg.scripts['check:contracts'] = 'node tools/scripts/check-contracts.mjs';
+      pkg.scripts['figma:snapshot'] = options.figmaFile
+        ? `node tools/scripts/figma-snapshot-contracts.mjs --file ${options.figmaFile}`
+        : 'node tools/scripts/figma-snapshot-contracts.mjs --file <YOUR_FIGMA_FILE_KEY>';
+    }
     // Browser-mode Storybook tests (owner correction 2026-09-10 to ADR-0123).
     // Identical to the monorepo's own root package.json script.
     pkg.scripts['check:stories'] = 'nx run-many -t storybook-test --parallel=1';
@@ -2202,15 +2270,15 @@ Browse components at ${SITE_URL}
         // check) and anything an attendee or agent reaches for beyond the
         // fixed script set.
         'Bash(npx nx *)',
-        // The fourteen npm scripts this preset writes to package.json
-        // (preflight, check:contracts, figma:snapshot, check:unit,
-        // check:stories, check:stylelint, format, check:format, start,
-        // build, lint, storybook, build:storybook, test) — one wildcard
-        // entry rather than fourteen separate ones, since this workspace's
-        // package.json carries exactly this fixed, generator-written script
-        // set (a workshop attendee adding a script of their own opts into
-        // this same allowance by definition, having already edited
-        // package.json by hand).
+        // The npm scripts this preset writes to package.json (preflight,
+        // check:unit, check:stories, check:stylelint, format, check:format,
+        // start, build, lint, storybook, build:storybook, test, plus
+        // check:contracts/figma:snapshot when `--figma` is on, ADR-0144) —
+        // one wildcard entry rather than one per script, since this
+        // workspace's package.json carries exactly this fixed,
+        // generator-written script set (a workshop attendee adding a script
+        // of their own opts into this same allowance by definition, having
+        // already edited package.json by hand).
         'Bash(npm run *)',
         // `npm run *` above does not match npm's own bare-word aliases —
         // `npm start` and `npm test` are literally different argv than `npm
@@ -2306,33 +2374,44 @@ Browse components at ${SITE_URL}
   // narrower, more honest fit for what this actually is: a fixed action a
   // person explicitly triggers, with nothing for the model to decide about
   // *whether* to invoke it — the thing SKILL.md's richer description-driven
-  // auto-triggering and multi-file bundling exist for. Four fixed npm
-  // scripts and "read the exit code" is exactly the shape commands/*.md is
-  // for.
+  // auto-triggering and multi-file bundling exist for. Four or five fixed npm
+  // scripts (ADR-0144 — `check:contracts` only exists with `--figma`) and
+  // "read the exit code" is exactly the shape commands/*.md is for.
   tree.write(
     '.claude/commands/verify.md',
-    readTemplate('claude/commands/verify.md'),
+    readTemplate(
+      options.figmaMcp
+        ? 'claude/commands/verify.md'
+        : 'claude/commands/verify.no-figma.md',
+    ),
   );
 
   // Read-only review subagent (Read/Grep/Glob/Bash only — no Edit/Write), so
   // it can inspect and even run a gate for corroboration but never fix what
   // it finds. Static, like the hook and the command above: the checklist
-  // (contract / stories / a11y) is the same shape regardless of framework,
-  // and the agent discovers the one scaffolded app itself via Glob.
+  // (contract / stories / a11y) is the same shape regardless of framework —
+  // it varies only with `--figma` (ADR-0144: no contract file exists to
+  // review without one) — and the agent discovers the one scaffolded app
+  // itself via Glob.
   tree.write(
     '.claude/agents/component-review.md',
-    readTemplate('claude/agents/component-review.md'),
+    readTemplate(
+      options.figmaMcp
+        ? 'claude/agents/component-review.md'
+        : 'claude/agents/component-review.no-figma.md',
+    ),
   );
 
   // The workspace's own component skill — written unconditionally (no
   // network, no `skills` opt-out), unlike the four storybookjs/mcp skills
   // installSkills fetches further below. See renderAtelierComponentSkill's
-  // comment above for the `<app>`/`<framework>` substitution it performs, and
-  // CLAUDE.md's "Agent Skills" section (built above) for why this one is
-  // called out separately from those four.
+  // comment above for the `<app>`/`<framework>` substitution it performs (and
+  // the `figmaMcp`-selected source file, ADR-0144), and CLAUDE.md's "Agent
+  // Skills" section (built above) for why this one is called out separately
+  // from those four.
   tree.write(
     '.claude/skills/atelier-component/SKILL.md',
-    renderAtelierComponentSkill(appName, framework),
+    renderAtelierComponentSkill(appName, framework, options.figmaMcp ?? false),
   );
 
   // .gitignore: create-nx-workspace already writes this file (before any

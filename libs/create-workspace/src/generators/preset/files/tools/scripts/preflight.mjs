@@ -230,6 +230,33 @@ function loadMcpEndpoints() {
 }
 
 /**
+ * Whether Figma is part of THIS workspace at all — read off the same
+ * `.mcp.json` `figma-console` entry `create-workspace`'s preset.ts
+ * (`options.figmaMcp`, the `--figma`/`--no-figma` CLI flag) writes or omits.
+ * Reusing that exact entry as the signal — rather than a second marker file
+ * of its own — means it cannot drift from the flag that actually turned
+ * Figma on: preflight has no access to the generator's own options (it runs
+ * long after scaffolding, as a plain `npm run preflight`), so it has to infer
+ * the answer from something the generator left behind, and this is the one
+ * thing that is true if and only if `--figma` was passed. In a scaffolded
+ * workspace the entry exists exactly when `--figma` was — never
+ * independently written or removed by anything else (ADR-0144). In the
+ * atelier monorepo clone, this repo's own root `.mcp.json` commits the entry
+ * unconditionally (this repo always uses Figma), so the same test is
+ * correct, unconfigured, in both trees this file ships into.
+ */
+function hasFigmaConsoleMcp() {
+  const mcpPath = resolve(ROOT, '.mcp.json');
+  if (!existsSync(mcpPath)) return false;
+  try {
+    const config = JSON.parse(readFileSync(mcpPath, 'utf8'));
+    return Boolean(config.mcpServers?.['figma-console']);
+  } catch {
+    return false;
+  }
+}
+
+/**
  * Reads the exact `figma-console-mcp@<version>` pin off the `figma-console`
  * server's `args` in `.mcp.json` — the same file `loadMcpEndpoints()` reads,
  * just a different server shape (`command: npx`, not `type: http`). Returns
@@ -423,6 +450,19 @@ function checkClaudeTrust() {
 }
 
 async function checkFigmaSetup() {
+  // Figma is genuinely optional per workspace (ADR-0144, `--figma`/
+  // `--no-figma`) — a workspace that never opted in should not see Desktop
+  // Bridge / token warnings for a tool it doesn't use. See
+  // hasFigmaConsoleMcp()'s own comment for why this exact entry is the
+  // signal.
+  if (!hasFigmaConsoleMcp()) {
+    ok(
+      'Figma',
+      'not configured for this workspace (no `figma-console` entry in .mcp.json) — skipping Desktop Bridge checks',
+    );
+    return;
+  }
+
   // 1. Desktop Bridge plugin manifest — the primary channel.
   const manifestPath = join(
     homedir(),
