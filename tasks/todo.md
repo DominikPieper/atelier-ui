@@ -142,6 +142,16 @@ Ranked; each carries why it's worth doing next rather than later.
         Angular half is the risky one (`@analogjs/vitest-angular`) and gets its own real
         scaffold run, not an in-memory Tree.
 
+- [ ] **Every release leaves two files for a human to clean up.** `nx release`'s own
+      `chore(release): publish` commit bumps versions without running the generators, so
+      `docs/public/llms.txt` goes stale (known, one line, happens every time), and it embeds
+      commit bodies verbatim into each package's `CHANGELOG.md`, which Prettier then reflows
+      differently — so `check:format`, the _first_ gate in `check:all`, is red on `main`
+      immediately after every publish. Both were hit again on 2026-09-13. The fix is to run
+      `gen:llms` and `prettier --write` inside the release workflow, before its commit, rather
+      than pushing a main that fails its own first gate and waiting for the next person to
+      notice.
+
 - [ ] **No gate has ever formatted an `.astro` file.** `check:format` is `prettier --check .`,
       and without `prettier-plugin-astro` installed Prettier cannot parse `.astro` at all —
       targeted, it errors on all 24 pages; across the tree, it silently skips them. So the docs
