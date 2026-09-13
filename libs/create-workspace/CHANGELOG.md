@@ -1,3 +1,14 @@
+## 0.3.3 (2026-09-13)
+
+### 🚀 Features
+
+- **create-workspace:** no Figma, no contract — the switch is real now ([e9aa3f22](https://github.com/DominikPieper/atelier-ui/commit/e9aa3f22))
+
+### ❤️ Thank You
+
+- Claude Opus 5 (1M context)
+- Dominik Pieper @DominikPieper
+
 ## 0.3.2 (2026-09-13)
 
 ### 🚀 Features
