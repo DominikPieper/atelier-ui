@@ -1264,20 +1264,20 @@ describe('preset generator', () => {
     expect(config).toContain("from '@analogjs/vite-plugin-angular'");
   });
 
-  it("vue's vitest.unit.config.ts inlines @atelier-ui/vue so its built index.css import resolves under Vitest's default (Node-loader) externalization, unlike angular/react", async () => {
+  it("vue's and react's vitest.unit.config.ts each inline their own package so its built CSS import resolves under Vitest's default (Node-loader) externalization, unlike angular", async () => {
     await presetGenerator(tree, { name: 'my-workspace', framework: 'vue' });
 
     const vueConfig =
       tree.read('workshop-vue/vitest.unit.config.ts', 'utf-8') ?? '';
     expect(vueConfig).toContain("inline: ['@atelier-ui/vue']");
 
-    // angular and react don't need this: react's build (@nx/js:tsc) ships
-    // raw ESM import syntax in a package.json declared "type": "commonjs",
-    // which trips Vitest's own dual-package guard and forces it through the
-    // inlined path automatically; angular's build (ng-packagr) never emits a
-    // bare `.css` import at all — component styles are inlined as strings.
-    // Neither is a guarantee this generator can rely on going forward (see
-    // the template's own comment), but today, neither needs the workaround.
+    // react needs the identical entry (ADR-0138): @atelier-ui/react's built
+    // entry ships the same per-component `import './x.css'` pattern as
+    // Vue's, and its package.json now declares "type": "module" honestly —
+    // so it no longer accidentally trips Vitest's dual-package guard into
+    // force-inlining it as a side effect of a self-contradictory
+    // package.json. angular is still exempt: ng-packagr never emits a bare
+    // `.css` import at all — component styles are inlined as strings.
     const reactTree = createTreeWithEmptyWorkspace();
     await presetGenerator(reactTree, {
       name: 'my-workspace',
@@ -1285,7 +1285,7 @@ describe('preset generator', () => {
     });
     const reactConfig =
       reactTree.read('workshop-react/vitest.unit.config.ts', 'utf-8') ?? '';
-    expect(reactConfig).not.toContain('deps');
+    expect(reactConfig).toContain("inline: ['@atelier-ui/react']");
 
     const angularTree = createTreeWithEmptyWorkspace();
     await presetGenerator(angularTree, {

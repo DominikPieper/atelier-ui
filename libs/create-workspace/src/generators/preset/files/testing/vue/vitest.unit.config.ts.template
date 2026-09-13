@@ -35,14 +35,14 @@ export default defineConfig({
         // resolves component-level CSS imports for every OTHER package here.
         // `inline` forces this one package back through Vite's own pipeline,
         // where the `.css` import is handled like any other test asset.
-        // (Confirmed by direct repro: @atelier-ui/react's built entry has the
-        // identical per-component `import './x.css'` pattern and does NOT
-        // need this — its package.json inconsistently declares
-        // `"type": "commonjs"` while shipping raw ESM syntax, which trips
-        // Vitest's own dual-package guard and forces it through the same
-        // inlined path automatically. That is not a design guarantee: if
-        // @atelier-ui/react's build is ever made internally consistent, it
-        // will need this exact same `inline` entry.)
+        // (@atelier-ui/react's built entry has the identical per-component
+        // `import './x.css'` pattern and, since ADR-0138 corrected its
+        // package.json to declare "type": "module" honestly, needs this
+        // exact same `inline` entry too — see the React version of this
+        // file. Before that fix, React's self-contradictory package.json
+        // tripped Vitest's dual-package guard and got force-inlined as a
+        // side effect of the defect, which is exactly why it was a defect
+        // and not a fix.)
         inline: ['@atelier-ui/vue'],
       },
     },

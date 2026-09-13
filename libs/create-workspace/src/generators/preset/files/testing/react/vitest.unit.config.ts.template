@@ -17,5 +17,26 @@ export default defineConfig({
     environment: 'jsdom',
     include: ['src/**/*.spec.*'],
     setupFiles: ['src/test-setup.ts'],
+    server: {
+      deps: {
+        // @atelier-ui/react's built entry ships one `import './x.css'` per
+        // component, same as @atelier-ui/vue's (see that file's version of
+        // this comment for the general shape of the problem). Its
+        // package.json declares "type": "module" honestly (ADR-0138) and an
+        // unqualified `main`/`module`, so Vitest's dual-package guard sees a
+        // normal, self-consistent ESM package and hands it to Node's own
+        // module loader instead of Vite's — which then fails twice over:
+        // Node's loader has no idea what to do with a bare `.css` specifier
+        // ("Unknown file extension \".css\""), and even before it gets that
+        // far, the package's own extensionless relative imports (emitted by
+        // its `"module": "preserve"` / `"moduleResolution": "bundler"` build,
+        // which assumes a bundler resolves them) fail Node's stricter ESM
+        // resolver on their own ("Cannot find module … imported from …").
+        // `inline` forces this one package back through Vite's own
+        // pipeline, which resolves both the extensionless imports and the
+        // `.css` import the same way it does for every other package here.
+        inline: ['@atelier-ui/react'],
+      },
+    },
   },
 });
