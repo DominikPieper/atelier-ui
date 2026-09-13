@@ -1,3 +1,14 @@
+## 0.3.2 (2026-09-13)
+
+### 🚀 Features
+
+- **storybook:** a theme control that is honest about what it does not test ([80840f05](https://github.com/DominikPieper/atelier-ui/commit/80840f05))
+
+### ❤️ Thank You
+
+- Claude Opus 5 (1M context)
+- Dominik Pieper @DominikPieper
+
 ## 0.3.1 (2026-09-13)
 
 ### 🚀 Features
