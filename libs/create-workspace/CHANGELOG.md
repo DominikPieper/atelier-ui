@@ -6,15 +6,15 @@
 
 ### 🩹 Fixes
 
-- ⚠️  **react:** the published package declares what it actually ships ([68a3b528](https://github.com/DominikPieper/atelier-ui/commit/68a3b528))
+- ⚠️ **react:** the published package declares what it actually ships ([68a3b528](https://github.com/DominikPieper/atelier-ui/commit/68a3b528))
 
-### ⚠️  Breaking Changes
+### ⚠️ Breaking Changes
 
-- **react:** the published package declares what it actually ships  ([68a3b528](https://github.com/DominikPieper/atelier-ui/commit/68a3b528))
-  ` footer, and that is a judgement to review
-  rather than a claim that nothing changed. An external consumer who imports this
-  package in their own Vitest suite was silently protected by the guard and now
-  needs the same `inline` entry themselves — semver-honest grounds for a major.
+- **react:** the published package declares what it actually ships ([68a3b528](https://github.com/DominikPieper/atelier-ui/commit/68a3b528))
+  `footer, and that is a judgement to review
+rather than a claim that nothing changed. An external consumer who imports this
+package in their own Vitest suite was silently protected by the guard and now
+needs the same`inline` entry themselves — semver-honest grounds for a major.
   The footer is left off because on this setup it would likely cut 1.0.0
   automatically on push, and that is the owner's call to make deliberately, not a
   side effect of a bug fix.
