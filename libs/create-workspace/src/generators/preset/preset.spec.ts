@@ -1829,6 +1829,60 @@ describe('preset generator', () => {
     );
   });
 
+  // ─── S5a — figmaFile schema option ──────────────────────────────────────
+
+  it('names the given figmaFile key in the figma:snapshot script instead of the placeholder', async () => {
+    await presetGenerator(tree, {
+      name: 'my-workspace',
+      framework: 'angular',
+      figmaFile: 'QMnDD8uZQPldPrlCwZZ58T',
+    });
+
+    const pkg = readJson(tree, 'package.json');
+    expect(pkg.scripts['figma:snapshot']).toBe(
+      'node tools/scripts/figma-snapshot-contracts.mjs --file QMnDD8uZQPldPrlCwZZ58T',
+    );
+  });
+
+  it('keeps the literal placeholder in figma:snapshot when figmaFile is not given', async () => {
+    await presetGenerator(tree, {
+      name: 'my-workspace',
+      framework: 'angular',
+    });
+
+    const pkg = readJson(tree, 'package.json');
+    expect(pkg.scripts['figma:snapshot']).toBe(
+      'node tools/scripts/figma-snapshot-contracts.mjs --file <YOUR_FIGMA_FILE_KEY>',
+    );
+  });
+
+  it('CLAUDE.md says the figma:snapshot script is already pointed at the given figmaFile key', async () => {
+    await presetGenerator(tree, {
+      name: 'my-workspace',
+      framework: 'angular',
+      figmaFile: 'QMnDD8uZQPldPrlCwZZ58T',
+    });
+
+    const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
+    expect(md).toContain(
+      '`figma:snapshot` is already pointed at `QMnDD8uZQPldPrlCwZZ58T`; change it if you\nduplicate the file again',
+    );
+    expect(md).not.toContain('<YOUR_FIGMA_FILE_KEY>');
+  });
+
+  it('CLAUDE.md tells the reader to edit the placeholder when figmaFile is not given', async () => {
+    await presetGenerator(tree, {
+      name: 'my-workspace',
+      framework: 'angular',
+    });
+
+    const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
+    expect(md).toContain(
+      "edit the `--file` placeholder in `package.json`'s `figma:snapshot` script to\nyour own Figma file key",
+    );
+    expect(md).not.toContain('already pointed at');
+  });
+
   it('adds @modelcontextprotocol/sdk as a devDependency', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',

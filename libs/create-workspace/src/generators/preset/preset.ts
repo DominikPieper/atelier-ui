@@ -1178,6 +1178,18 @@ npm install @atelier-ui/${framework}@latest
 \`\`\`
 `;
 
+  // S5a — the generated \`figma:snapshot\` npm script names the attendee's own
+  // Figma file key when the CLI collected one (see the \`options.figmaFile\`
+  // branch on \`pkg.scripts['figma:snapshot']\` further below); otherwise it
+  // keeps today's literal \`<YOUR_FIGMA_FILE_KEY>\` placeholder. This sentence
+  // has to agree with whichever branch that assignment takes, or CLAUDE.md
+  // would tell the reader to edit a placeholder that was never written.
+  const figmaSnapshotRefreshInstruction = options.figmaFile
+    ? `\`figma:snapshot\` is already pointed at \`${options.figmaFile}\`; change it if you
+duplicate the file again`
+    : `edit the \`--file\` placeholder in \`package.json\`'s \`figma:snapshot\` script to
+your own Figma file key`;
+
   tree.write(
     'CLAUDE.md',
     `# Atelier Workshop
@@ -1341,8 +1353,7 @@ offline — no browser, no Storybook build — and reports one line per finding:
   that renders it)
 
 Refresh \`tools/figma/snapshot.json\` from the real master with the Figma Desktop Bridge
-connected: edit the \`--file\` placeholder in \`package.json\`'s \`figma:snapshot\` script to
-your own Figma file key, then run \`npm run figma:snapshot\`.
+connected: ${figmaSnapshotRefreshInstruction}, then run \`npm run figma:snapshot\`.
 
 \`check:contracts\` proves shape and story coverage; \`npm run check:stories\` (every story,
 rendered headless in Chromium via \`@storybook/addon-vitest\`, with axe) proves rendering
@@ -1525,15 +1536,17 @@ file exports). The Desktop Bridge covers creation and inspection without a token
   updateJson(tree, 'package.json', (pkg) => {
     pkg.scripts = pkg.scripts ?? {};
     pkg.scripts.preflight = 'node tools/scripts/preflight.mjs';
-    // The contract loop (ADR-0121 S4). `figma:snapshot` ships with a literal
-    // placeholder rather than the Atelier file key — this preset has no
-    // "which Figma file is yours" schema option (only the boolean
-    // `figmaMcp`), and QMnDD8uZQPldPrlCwZZ58T is THIS repo's own file, not
-    // the attendee's. CLAUDE.md's "The contract loop" section spells out how
-    // to fill it in.
+    // The contract loop (ADR-0121 S4). `figma:snapshot` names the attendee's
+    // own Figma file key (schema option `figmaFile`, S5a) when the caller
+    // supplied one — QMnDD8uZQPldPrlCwZZ58T is THIS repo's own file, never a
+    // default here. Most direct-preset callers have no key to hand, so
+    // without one it ships with the same literal placeholder as before;
+    // CLAUDE.md's "The Contract Loop" section (figmaSnapshotRefreshInstruction
+    // above) spells out how to fill it in either way.
     pkg.scripts['check:contracts'] = 'node tools/scripts/check-contracts.mjs';
-    pkg.scripts['figma:snapshot'] =
-      'node tools/scripts/figma-snapshot-contracts.mjs --file <YOUR_FIGMA_FILE_KEY>';
+    pkg.scripts['figma:snapshot'] = options.figmaFile
+      ? `node tools/scripts/figma-snapshot-contracts.mjs --file ${options.figmaFile}`
+      : 'node tools/scripts/figma-snapshot-contracts.mjs --file <YOUR_FIGMA_FILE_KEY>';
     // Browser-mode Storybook tests (owner correction 2026-09-10 to ADR-0123).
     // Identical to the monorepo's own root package.json script.
     pkg.scripts['check:stories'] = 'nx run-many -t storybook-test --parallel=1';

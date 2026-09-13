@@ -32,6 +32,10 @@
       "description": "Add the figma-console-mcp server (Figma Desktop Bridge) to .mcp.json",
       "default": false
     },
+    "figmaFile": {
+      "type": "string",
+      "description": "The attendee's own Figma file key (the segment in a Figma URL after /design/). When given, the generated figma:snapshot script and CLAUDE.md name it instead of the <YOUR_FIGMA_FILE_KEY> placeholder. No default and no x-prompt: most direct-preset callers do not have a key to hand, and the CLI (create-atelier-ui-workspace) owns the conversation that collects one."
+    },
     "skills": {
       "type": "boolean",
       "description": "Install the storybookjs/mcp agent skills (stories, storybook-init, storybook-setup, storybook-upgrade) via the skills CLI during scaffolding. Requires network access; disable for CI or offline runs.",

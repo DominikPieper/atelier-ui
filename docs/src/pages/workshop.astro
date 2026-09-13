@@ -182,14 +182,16 @@ const mcpConfig = (fw: string) => `{
         <span class="docs-step-badge">01</span>
         <div>
           <h3 class="docs-h3">Run the workspace generator</h3>
-          <p class="docs-step-desc">Run the following command, then answer three prompts — workspace name, <strong>one</strong> framework, and whether to wire up the Figma MCP:</p>
+          <p class="docs-step-desc">Run the following command, then answer three prompts — workspace name, <strong>one</strong> framework, and whether to wire up the Figma MCP. Say yes to Figma and a fourth, optional prompt asks for your own Figma file key — press enter to skip it for now:</p>
           <Code code="npx create-atelier-ui-workspace" lang="shell" />
-          <Code code={`? Workspace name: › my-workshop\n? Which framework do you want to use? …\n❯ Angular\n  React\n  Vue\n? Add the Figma Desktop Bridge MCP (figma-console-mcp)?\n  Setup guide: ${SITE_URL}/figma-token (Y/n) › true`} lang="text" />
+          <Code code={`? Workspace name: › my-workshop\n? Which framework do you want to use? …\n❯ Angular\n  React\n  Vue\n? Add the Figma Desktop Bridge MCP (figma-console-mcp)?\n  Setup guide: ${SITE_URL}/figma-token (Y/n) › true\n? Figma file key (optional) — the segment in a Figma URL after /design/,\n  e.g. figma.com/design/<key>/Some-File. Paste a full URL and the key\n  is extracted. Press enter to skip: › abc123XYZdef456UVWghi`} lang="text" />
           <p class="docs-step-desc" style="margin-top: 0.75rem">
             You pick <strong>one</strong> framework — the workspace gets a single app. Pass the answers
-            as flags to skip the prompts entirely:
+            as flags to skip the prompts entirely — <code>--figma-file</code> also accepts a full Figma
+            URL and extracts the key itself, and <code>--skills</code>/<code>--no-skills</code> toggles
+            the storybookjs/mcp skills install (defaults on, no prompt):
           </p>
-          <Code code={`npx create-atelier-ui-workspace my-workshop\n\n# fully non-interactive\nnpx create-atelier-ui-workspace my-workshop --framework angular --figma`} lang="shell" />
+          <Code code={`npx create-atelier-ui-workspace my-workshop\n\n# fully non-interactive\nnpx create-atelier-ui-workspace my-workshop --framework angular --figma --figma-file abc123XYZdef456UVWghi --skills`} lang="shell" />
         </div>
       </li>
 

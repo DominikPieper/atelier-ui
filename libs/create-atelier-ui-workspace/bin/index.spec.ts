@@ -216,6 +216,10 @@ describe('create-atelier-ui-workspace CLI', () => {
       '--framework=angular',
       '--figma',
     ];
+    // No --figma-file flag, so accepting Figma still triggers the figma-file
+    // prompt (see the dedicated section below) — answer blank, it's not what
+    // this test is about.
+    enquirer.prompt.mockResolvedValueOnce({ figmaFile: '' });
 
     await main();
 
@@ -252,7 +256,12 @@ describe('create-atelier-ui-workspace CLI', () => {
 
   it('prompts for figma inclusion when neither flag is set and links to setup docs', async () => {
     process.argv = ['node', 'index.js', 'test-ws', '--framework=angular'];
-    enquirer.prompt.mockResolvedValueOnce({ figma: true });
+    // Accepting Figma here also triggers the figma-file prompt (see the
+    // dedicated section below) — answer blank, it's not what this test is
+    // about.
+    enquirer.prompt
+      .mockResolvedValueOnce({ figma: true })
+      .mockResolvedValueOnce({ figmaFile: '' });
 
     await main();
 
@@ -283,6 +292,9 @@ describe('create-atelier-ui-workspace CLI', () => {
       '--framework=angular',
       '--figma',
     ];
+    // No --figma-file flag, so accepting Figma still triggers the figma-file
+    // prompt — answer blank, it's not what this test is about.
+    enquirer.prompt.mockResolvedValueOnce({ figmaFile: '' });
 
     await main();
 
@@ -304,6 +316,163 @@ describe('create-atelier-ui-workspace CLI', () => {
 
     const logged = consoleLogSpy.mock.calls.flat().join('\n');
     expect(logged).not.toContain('atelier.pieper.io/figma-token');
+  });
+
+  // ─── --figma-file flag / prompt (S5a) ──────────────────────────────────────
+
+  it('accepts --figma-file <key> and skips the figma-file prompt', async () => {
+    process.argv = [
+      'node',
+      'index.js',
+      'test-ws',
+      '--framework=angular',
+      '--figma',
+      '--figma-file',
+      'QMnDD8uZQPldPrlCwZZ58T',
+    ];
+
+    await main();
+
+    const promptNames = enquirer.prompt.mock.calls.map(
+      (c: [{ name: string }]) => c[0].name,
+    );
+    expect(promptNames).not.toContain('figmaFile');
+    expect(mockCreateWorkspace).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.objectContaining({ figmaFile: 'QMnDD8uZQPldPrlCwZZ58T' }),
+    );
+  });
+
+  it('extracts the file key from a full Figma URL passed to --figma-file', async () => {
+    process.argv = [
+      'node',
+      'index.js',
+      'test-ws',
+      '--framework=angular',
+      '--figma',
+      '--figma-file=https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI?node-id=1-2',
+    ];
+
+    await main();
+
+    expect(mockCreateWorkspace).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.objectContaining({ figmaFile: 'QMnDD8uZQPldPrlCwZZ58T' }),
+    );
+  });
+
+  it('rejects a --figma-file value that is neither a plausible key nor a URL', async () => {
+    process.argv = [
+      'node',
+      'index.js',
+      'test-ws',
+      '--framework=angular',
+      '--figma',
+      '--figma-file=nope',
+    ];
+
+    await expect(main()).rejects.toThrow(/Invalid --figma-file value/);
+  });
+
+  it('does not prompt for a figma file key when --no-figma was given', async () => {
+    process.argv = [
+      'node',
+      'index.js',
+      'test-ws',
+      '--framework=angular',
+      '--no-figma',
+    ];
+
+    await main();
+
+    const promptNames = enquirer.prompt.mock.calls.map(
+      (c: [{ name: string }]) => c[0].name,
+    );
+    expect(promptNames).not.toContain('figmaFile');
+    expect(mockCreateWorkspace).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.objectContaining({ figmaFile: undefined }),
+    );
+  });
+
+  it('prompts for the figma file key when figma is accepted via flag and no key flag was given, mentioning /design/', async () => {
+    process.argv = [
+      'node',
+      'index.js',
+      'test-ws',
+      '--framework=angular',
+      '--figma',
+    ];
+    enquirer.prompt.mockResolvedValueOnce({ figmaFile: '' });
+
+    await main();
+
+    type FigmaFilePromptConfig = {
+      name: string;
+      message: string;
+      type: string;
+      initial: unknown;
+    };
+    const prompt = enquirer.prompt.mock.calls
+      .map((c: [FigmaFilePromptConfig]) => c[0])
+      .find((p: FigmaFilePromptConfig) => p.name === 'figmaFile');
+    if (!prompt) throw new Error('figmaFile prompt not invoked');
+    expect(prompt.type).toBe('input');
+    expect(prompt.message).toContain('/design/');
+  });
+
+  it('skipping the figma-file prompt (blank answer) keeps the placeholder behaviour', async () => {
+    process.argv = [
+      'node',
+      'index.js',
+      'test-ws',
+      '--framework=angular',
+      '--figma',
+    ];
+    enquirer.prompt.mockResolvedValueOnce({ figmaFile: '' });
+
+    await main();
+
+    expect(mockCreateWorkspace).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.objectContaining({ figmaFile: undefined }),
+    );
+  });
+
+  it('prompts for the figma file key only after an interactive "yes" to the figma prompt, and extracts a pasted URL', async () => {
+    process.argv = ['node', 'index.js', 'test-ws', '--framework=angular'];
+    enquirer.prompt
+      .mockResolvedValueOnce({ figma: true })
+      .mockResolvedValueOnce({
+        figmaFile: 'https://figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Foo',
+      });
+
+    await main();
+
+    const promptNames = enquirer.prompt.mock.calls.map(
+      (c: [{ name: string }]) => c[0].name,
+    );
+    expect(promptNames).toEqual(['figma', 'figmaFile']);
+    expect(mockCreateWorkspace).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.objectContaining({ figmaFile: 'QMnDD8uZQPldPrlCwZZ58T' }),
+    );
+  });
+
+  it('does not prompt for a figma file key after an interactive "no" to the figma prompt', async () => {
+    process.argv = ['node', 'index.js', 'test-ws', '--framework=angular'];
+    enquirer.prompt.mockResolvedValueOnce({ figma: false });
+
+    await main();
+
+    const promptNames = enquirer.prompt.mock.calls.map(
+      (c: [{ name: string }]) => c[0].name,
+    );
+    expect(promptNames).not.toContain('figmaFile');
+    expect(mockCreateWorkspace).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.objectContaining({ figmaFile: undefined }),
+    );
   });
 
   // ─── storybookjs/mcp skills install flag ───────────────────────────────────

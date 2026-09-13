@@ -61,6 +61,39 @@ function parseBooleanFlag(args: string[], name: string): boolean | undefined {
   );
 }
 
+// Figma file/design keys are opaque, Figma-generated identifiers — this
+// repo's own key (QMnDD8uZQPldPrlCwZZ58T, see AGENTS.md) is 22 mixed-case
+// alphanumeric characters. Nothing documents an exact length or charset, so
+// this only requires letters/digits (a key never contains a hyphen, unlike a
+// URL slug) and a length generous enough to admit a real key while still
+// rejecting short garbage ("abc") that is obviously not one.
+const FIGMA_FILE_KEY_PATTERN = /^[A-Za-z0-9]{10,40}$/;
+
+// A pasted Figma URL names the file key right after `/design/`
+// (figma.com/design/<key>/Some-File-Name, optionally with a query string,
+// hash, or nothing at all following it).
+const FIGMA_FILE_URL_PATTERN =
+  /figma\.com\/design\/([A-Za-z0-9]{10,40})(?:[/?#]|$)/;
+
+// Shared by both the --figma-file flag and the interactive prompt below, so
+// a bad value is rejected the same way regardless of how it arrived. Accepts
+// a bare key as-is, extracts the key out of a full Figma URL rather than
+// writing the whole URL into the generated `figma:snapshot` script, and
+// otherwise fails loudly — same posture as the --framework validation above.
+function extractFigmaFileKey(raw: string): string {
+  const trimmed = raw.trim();
+  if (FIGMA_FILE_KEY_PATTERN.test(trimmed)) return trimmed;
+
+  const urlMatch = trimmed.match(FIGMA_FILE_URL_PATTERN);
+  if (urlMatch) return urlMatch[1];
+
+  throw new Error(
+    `Invalid --figma-file value: "${raw}". Expected a Figma file key (the ` +
+      `segment in a Figma URL after /design/, e.g. ` +
+      `figma.com/design/<key>/Some-File) or a full Figma URL containing one.`,
+  );
+}
+
 export async function main() {
   banner();
   const argv = process.argv.slice(2);
@@ -68,6 +101,15 @@ export async function main() {
   let name = argv.find((arg) => !arg.startsWith('-'));
   let framework = parseFlag(argv, 'framework') as Framework | undefined;
   let figmaMcp = parseBooleanFlag(argv, 'figma');
+  // S5a — the attendee's own Figma file key (never this repo's
+  // QMnDD8uZQPldPrlCwZZ58T, which the preset never defaults to either — see
+  // its schema.json). Validated up front, like --framework, so a bad value
+  // fails fast regardless of whether Figma was even accepted.
+  const figmaFileFlag = parseFlag(argv, 'figma-file');
+  let figmaFile =
+    figmaFileFlag === undefined
+      ? undefined
+      : extractFigmaFileKey(figmaFileFlag);
   // Unlike figma (a personal preference worth asking about), skills installs
   // a network-dependent, non-interactive default — no prompt, just a flag to
   // opt out for CI/offline runs, matching the preset schema's own default.
@@ -133,6 +175,27 @@ export async function main() {
     figmaMcp = (res as { figma: boolean }).figma;
   }
 
+  // Only asked when Figma was accepted (flag or prompt) — declining Figma
+  // must not produce a question about a Figma file key at all. Skippable:
+  // an attendee who hasn't duplicated the file yet presses enter and gets
+  // today's <YOUR_FIGMA_FILE_KEY> placeholder behaviour, same as if this
+  // prompt didn't exist.
+  if (figmaMcp && figmaFile === undefined) {
+    const res = await enquirer.prompt({
+      type: 'input',
+      name: 'figmaFile',
+      message:
+        `Figma file key (optional) — the segment in a Figma URL after /design/,\n` +
+        `  e.g. figma.com/design/<key>/Some-File. Paste a full URL and the key\n` +
+        `  is extracted. Press enter to skip:`,
+      initial: '',
+    });
+    const rawFigmaFile = (res as { figmaFile: string }).figmaFile.trim();
+    if (rawFigmaFile) {
+      figmaFile = extractFigmaFileKey(rawFigmaFile);
+    }
+  }
+
   console.log(
     `\n${c.cyan('◇')} Setting up "${c.bold(name)}" with ${c.bold(framework)}…\n`,
   );
@@ -150,6 +213,7 @@ export async function main() {
     packageManager: 'npm',
     framework,
     figmaMcp,
+    figmaFile,
     skills: skillsEnabled,
   });
 
