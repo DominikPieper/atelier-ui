@@ -754,3 +754,30 @@ Practically: name the gates whose inputs the diff intersects, plus the project's
 `test`/`lint`/`build`. Run the full chain once before the push, not once per step. And when a
 gate is skipped, say so in the report — a skipped gate that goes unmentioned reads as a green
 one.
+
+## 2026-09-13 — I handed a subagent my conclusion, and it was backwards
+
+`CLAUDE.md` says it directly: hand a subagent the artefact and the question, never your
+conclusion, because the agent will build around the conclusion instead of testing it. I did the
+opposite twice in one session on the same fact.
+
+An earlier research pass reported that `docs/src/pages/claude-md.astro` "has already drifted"
+from the `CLAUDE.md` the preset generates, citing their disagreeing `--ui-radius-*` values. I
+took the direction of that drift on trust — the docs page is further from the generator, so the
+docs page must be the stale one — and wrote it into two subagent briefs ("correct the page
+against the generator") and into an ADR's rejected-alternatives paragraph.
+
+It was inverted. `files/styles/tokens.css`, which the generator itself vendors, reads
+0.5 / 0.625 / 0.875rem and still carries the comments `/* was 0.375rem */` from the bump. The
+docs page matches it. `preset.ts` is the copy that never caught up — so every workspace
+scaffolded since the bump shipped a CLAUDE.md quoting the wrong numbers for the stylesheet
+sitting beside it. The agent checked the third source instead of obeying the brief, and reverted
+the edit my instruction had asked for.
+
+Two things to keep:
+
+- **A brief's most load-bearing sentence is the one most worth leaving out.** "X is stale
+  relative to Y" is a finding, not a fact, unless someone checked the source both copies claim
+  to follow. Name the two files and ask which agrees with the canonical one.
+- **The copy that drifts is not the one further from the source.** It is whichever one nothing
+  checks. Distance is intuition; a gate is evidence.
