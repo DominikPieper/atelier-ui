@@ -133,3 +133,30 @@ the finding precisely so it cannot be mistaken for done.
 - One new exact-pinned devDependency, `@storybook/addon-themes@10.6.0`,
   joining the family the `storybook-version-lockstep` rule already governs;
   `nx lint` was re-run to confirm the rule stays green.
+
+## Addendum 2026-09-13: the decorator was verified functionally, and a fourth option measured
+
+The decision above was recorded without anyone having seen the control work. It has since been
+checked, not by looking at the toolbar but by driving it: a throwaway portable-stories test
+composed `AtlButton`'s `Primary` and asserted the attribute the stylesheet keys on. Both
+mechanisms set it —
+
+```
+PROBE viaAnnotations=dark viaRun=dark
+```
+
+— i.e. `composeStories(stories, { initialGlobals: { theme: 'dark' } })` and
+`story.run({ globals: { theme: 'dark' } })` each flip `data-theme` to `dark`. The decorator is
+wired correctly. (A first attempt passed `{ globals: … }` as `composeStories`' second argument
+and saw no change; that argument is project annotations, not globals. The failure was the
+probe's, not the wiring's — recorded because the same mistake would read as a defect.)
+
+That adds a **fourth** option to the three costed above, and its limit: portable stories can
+render any story in either theme in jsdom, cheaply, per story. But jsdom computes no layout, so
+the axe rules that matter most for a theme — contrast — are exactly the ones it cannot check
+there. A dark-mode run that reports green in jsdom would be the vacuous kind of green this
+repo has already been bitten by (ADR-0135, and the accordion spike in ADR-0141).
+
+So the conclusion stands: real dark-mode accessibility coverage needs a second **browser** run,
+which is option (b). What changed is that the per-story mechanism it would use is now known to
+work and is written down.
