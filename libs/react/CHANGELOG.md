@@ -1,3 +1,14 @@
+## 0.3.4 (2026-09-14)
+
+### 🩹 Fixes
+
+- **storybook:** the three adapters disagreed in five places, and nothing said so ([7a44f393](https://github.com/DominikPieper/atelier-ui/commit/7a44f393))
+
+### ❤️ Thank You
+
+- Claude Opus 5 (1M context)
+- Dominik Pieper @DominikPieper
+
 ## 0.3.3 (2026-09-13)
 
 This was a version bump only for react to align it with other projects, there were no code changes.
