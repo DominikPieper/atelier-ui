@@ -1402,6 +1402,62 @@ Open, from this work:
 
 The ones the owner and I will walk through together.
 
+### From the Storybook review, 2026-09-14
+
+Full reasoning and evidence: `tasks/storybook-review-2026-09-14.md`. One item is done: the
+curriculum's backgrounds-vs-theme wording, corrected in the agenda and `schulung.astro` to match
+ADR-0142. The vendored-skills fix was written and then reverted on the owner's call — see the
+first item below. What is left needs a decision.
+
+- [ ] **Dark-mode axe coverage — ADR-0142's option (b) has a first-party replacement.** The
+      ADR costed "reading `initialGlobals.theme` from an environment variable and invoking
+      `nx storybook-test <fw>` once per value". `storybookTest()` takes `initialGlobals`
+      directly (shipped 10.5, PR #35226; the option's own JSDoc recommends exactly the
+      per-theme-Vitest-project pattern), and its `tags: { include | exclude | skip }` is the
+      coverage regulator the ADR left to the owner. `vitest.config.mjs` already lists
+      `projects:`. Decide: full second run, or a tagged sample. Then an ADR-0142 addendum —
+      the ADR's option list is incomplete as written and should say so in place.
+- [ ] **CSF factories.** Preview for all three frameworks since 10.2; the **default story
+      format in Storybook 11**. 95 CSF3 story files, a curriculum that teaches CSF3, a
+      scaffold that generates CSF3, and `storybook automigrate csf-factories` is unavailable
+      here (`@storybook/cli` is not a dependency; `check:all` is offline). Needs a spike and
+      an ADR before the next cohort, not a drive-by.
+- [ ] **`addon-designs` in the scaffold — behind ADR-0144's `--figma` switch.** 85 story files
+      here use `parameters.design`; the three `main.ts.template` files do not list the addon
+      and no scaffold story sets the parameter, so a learner in a Figma-to-code workshop never
+      sees the Figma frame beside the component. With `--figma`: addon plus parameter. With
+      `--no-figma`: neither. Ships to npm.
+- [ ] **The vendored `storybookjs/mcp` skills name a deprecated command — left untouched, on
+      purpose.** `.agents/skills/storybook-setup/SKILL.md:11` instructs `npx storybook ai setup`;
+      `.agents/skills/stories/SKILL.md:13,15,17` builds its whole mandatory workflow on
+      `STORYBOOK_FEATURE_AI_CLI=1 npx storybook ai …`. Both are deprecated in Storybook 10.6, and
+      `AGENTS.md` plus `docs/src/pages/storybook.astro` already say so — so the repo tells humans
+      one thing and agents another, and nothing gates it (`check:skill-discovery` walks `skills/`,
+      not `.agents/skills/`; nothing reads `skills-lock.json`). A patch was written on 2026-09-14
+      and reverted on the owner's call: do not touch the Storybook skills for now. Three options
+      when it is picked up — patch in place (forks upstream; a re-run of `npx skills add` silently
+      reverts it), wait for upstream (weak bet: `storybookjs/mcp` moved into `storybookjs/storybook`
+      as of 10.6.0, so the standalone package is the thing being superseded), or retire the four
+      copies in favour of the built-in `npx storybook skills` (verified working here, config-aware —
+      its `setup` output already names this repo's real addon set including `addon-designs`; this
+      supersedes ADR-0123 and removes a `.agents/skills/` surface Codex and the Antigravity CLI
+      reach). No ADR was written: no decision was taken.
+- [ ] **Storybook telemetry.** `core.disableTelemetry` defaults to false and nothing here sets
+      it — neither the three `main.ts` nor any scaffold template, so it applies to every
+      workspace a participant scaffolds. Configuration fact, not a legal reading: any
+      data-protection assessment belongs with the internal DSB.
+- [ ] **The onboarding-checklist widgets.** `sidebarOnboardingChecklist` and
+      `menuOnboardingChecklist` both default `true`, so Storybook's own guided tour sits beside
+      the workshop's guidance in every scaffolded Storybook. Embrace or disable — currently
+      neither, just an unexamined default.
+- [ ] **`experimentalReactComponentMeta` for React.** Angular and Vue extract props through the
+      docgen server; React still runs plain `react-docgen` (`@storybook/react/dist/preset.js:388`
+      — the two flags are separate and both read, not a rename). Two classes of analyzer feeding
+      `check:manifest-parity`. Worth a spike, unhurried.
+- [ ] **Four one-line calls.** `parameters.docs.toc` (the docs site treats a persistent TOC as a
+      reading requirement, ADR-0086/0087; the Storybook docs pages have none),
+      `features.experimentalSearchDocsHeadings`, and the two above.
+
 - [ ] **Confirm the lockfile flavor.** `package-lock.json` was regenerated on macOS
       for dep-batch A (Docker daemon down that day), then rewritten on Linux by the
       publish job (`7cca39c`), pruning 27 macOS-only transitive entries. What that commit
@@ -1573,6 +1629,27 @@ The ones the owner and I will walk through together.
       selector mismatch.
 
 ## Collectors
+
+### Storybook config drift, found 2026-09-14
+
+Five one-line divergences between the three `.storybook` directories, plus one pin. Nothing
+gates any of them — `check:manifest-parity` compares docgen output, not configuration. Detail
+in `tasks/storybook-review-2026-09-14.md` §1.
+
+- [ ] `libs/vue/.storybook/manager.ts` does not exist; Angular and React brand their manager.
+      `manager.ts` predates the Vue library (`5aac829`), so Vue never got one.
+- [ ] `controls.matchers` (colour/date) is in Angular's `preview.ts` only — and in all three
+      scaffold templates. The repo's React and Vue Storybooks are behind their own scaffold.
+- [ ] The three `.storybook/tsconfig.json` differ four ways: React's `include` omits its own
+      `manager.ts`, Vue has no `exclude` and names neither `preview.ts` nor `main.ts`, Vue alone
+      carries `vitest/globals`, Vue alone lacks `"outDir": ""`.
+- [ ] Dead commented-out `typescript.reactDocgen` block in `libs/react/.storybook/main.ts`.
+- [ ] `libs/react/.storybook/main.ts` uses `import { StorybookConfig }`, not `import type`.
+- [ ] `@storybook/addon-designs` is `^11.1.4` — a caret. The different major is fine and decided:
+      the package is in `atelier/storybook-version-lockstep`'s `DEFAULT_EXEMPT` because it is a
+      third-party addon on its own release line. But the exemption skips the exactness check too,
+      so the caret is unguarded, which is the drift shape that rule's own header warns about. Pin
+      `11.1.4` exactly, keep the exemption.
 
 ### Breaking changes for 0.3.0
 

@@ -83,6 +83,8 @@ const DAYS: Day[] = [
           'Hosted Storybooks öffnen — selbe Komponente (Button) in Angular/React/Vue vergleichen',
           'Die Komponente ist die Quelle der Form, der Contract die Quelle der Absicht — Parität mit check:contracts sichtbar machen',
           'Was Storybook 10.4 gebracht hat und im gepinnten 10.6.0 weiterhin aktiv ist: Agentic Setup, experimentalReactComponentMeta (Atelier lässt den Docgen aus — Reacts Prop-Tabellen kommen weiter aus react-docgen) — seit 10.6 mit eigenen Geschwistern für Angular und Vue (experimentalDocgenServer, in beiden explizit gesetzt statt sich auf den Default zu verlassen), Change Review Sidebar, Subcomponent-Docs',
+          'Nachtrag 10.5/10.6: storybookTest({ initialGlobals }) pinnt Globals pro Vitest-Projekt; 10.6 hat alle MCP-Tools auf toolset-method umbenannt und dieselben Werkzeuge als öffentliche CLI freigegeben (npx storybook tools / npx storybook skills — der Weg für Agenten ohne MCP-Client; storybook ai ist deprecated); CSF Factories werden in Storybook 11 das Default-Story-Format, der Workshop schreibt bewusst noch CSF3',
+          'Zwei Dinge, die im Atelier-Storybook sichtbar sind und nirgends sonst erklärt werden: der Design-Tab (addon-designs, parameters.design) zeigt den Figma-Frame neben der Komponente, und der Contract-Abschnitt unten auf jedem Docs-Tab kommt von contractDocsPage über parameters.docs.page (ADR-0121 S5b) — nicht von Storybook',
         ],
       },
       {
@@ -208,7 +210,7 @@ const DAYS: Day[] = [
           'Dreischritt-A11y-Check: (1) figma_audit_component_accessibility, (2) Storybook A11y-Panel (axe-core), (3) Keyboard-Walkthrough',
           'Befunde von Claude beheben lassen',
           'ARIA-Anforderungen, Fokus-Ring via Tokens, Hover/Active/Disabled-States',
-          'Dark-Mode-Toggle via Storybook backgrounds-/theme-Addon — Token-Override-Drift sichtbar machen',
+          'Dark-Mode-Toggle über das Theme-Control in der Toolbar (withThemeByDataAttribute aus addon-themes, setzt data-theme — genau den Selektor, auf den tokens.css schaltet). backgrounds sind Leinwandfarben, kein Theme; die beiden zu verwechseln war der Bug, den ADR-0142 entfernt hat. Ehrlich dazusagen: axe läuft in check:stories nur im Light-Mode — das Toggle ist Vorschau, keine Testabdeckung',
           'Eigenes codeSpec zusammensetzen, bevor parity läuft: check:contracts --emit libs/<fw>/src/lib/<name>/codespec (aus Block 02) liefert componentAPI, metadata, tokens — mehr nicht. Für accessibility die Story im laufenden Storybook öffnen, im DevTools das outerHTML des Story-Root-Elements kopieren und als html mit mapToCodeSpec: true an figma_scan_code_accessibility übergeben. figma_check_design_parity braucht dafür die verbundene Desktop Bridge — ohne sie endet der Loop nach check:contracts + storybook-test (kein Snapshot, [NO-MASTER], kein Parity-Call), das ist ein degradierter Lauf und kein "einfach weitermachen"',
           'figma_check_design_parity einmal bewusst gegen ein unvollständiges codeSpec testen: Node, Variant/State und die übergebenen codeSpec-Felder (visual, spacing, typography, tokens, componentAPI, accessibility, metadata) genau nachsehen, dann einen Spacing-Wert bewusst verfälschen — nur mit vollständigen Feldern muss der Report die Abweichung melden, nicht übergebene Felder werden nicht verglichen; ein knapp befülltes codeSpec (typischerweise nur componentAPI + metadata + tokens + accessibility) ist der Normalfall, kein vollständiges',
         ],
