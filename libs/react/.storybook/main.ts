@@ -1,6 +1,6 @@
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
-import { StorybookConfig } from '@storybook/react-vite';
+import type { StorybookConfig } from '@storybook/react-vite';
 import type { InlineConfig } from 'vite';
 
 const config: StorybookConfig = {
@@ -23,13 +23,6 @@ const config: StorybookConfig = {
   },
   staticDirs: ['../../../images'],
   docs: {},
-  /*typescript: {
-    reactDocgen: 'react-docgen-typescript',
-    reactDocgenTypescriptOptions: {
-      shouldExtractLiteralValuesFromEnum: true,
-      propFilter: (prop) => (prop.parent ? !/node_modules/.test(prop.parent.fileName) : true),
-    },
-  },*/
   features: {
     // Read by Storybook's core-server at build time (`writeManifests`) and by
     // addon-mcp's docs-toolset gate on a dev server. `@storybook/addon-mcp`

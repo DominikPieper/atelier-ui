@@ -1,14 +1,17 @@
 {
   "extends": "../tsconfig.json",
   "compilerOptions": {
-    "types": ["vitest/globals", "node"],
+    "outDir": "",
+    "types": ["node"],
     "ignoreDeprecations": "6.0"
   },
   "include": [
     "../src/**/*.stories.ts",
     "../src/**/*.mdx",
     "../src/**/*.d.ts",
-    "*.ts",
-    "*.js"
-  ]
+    "./preview.ts",
+    "./main.ts",
+    "./manager.ts"
+  ],
+  "exclude": ["../src/**/*.spec.ts", "../src/**/*.test.ts"]
 }

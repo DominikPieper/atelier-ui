@@ -1632,20 +1632,33 @@ first item below. What is left needs a decision.
 
 ### Storybook config drift, found 2026-09-14
 
-Five one-line divergences between the three `.storybook` directories, plus one pin. Nothing
-gates any of them — `check:manifest-parity` compares docgen output, not configuration. Detail
-in `tasks/storybook-review-2026-09-14.md` §1.
+**Closed 2026-09-14.** Five one-line divergences between the three `.storybook` directories,
+plus one pin. Nothing gated any of them — `check:manifest-parity` compares docgen output, not
+configuration. Detail in `tasks/storybook-review-2026-09-14.md` §1.
 
-- [ ] `libs/vue/.storybook/manager.ts` does not exist; Angular and React brand their manager.
+Two follow-ons were taken beyond the six, both necessary: Vue's rewritten `include` keeps
+`../src/**/*.d.ts` (`libs/vue/src/env.d.ts` declares `*.vue`, and Vue stories import SFCs
+directly, so the ambient declaration is load-bearing) and gains `./manager.ts`, without which
+the newly created file would have reproduced exactly the "exists but nothing type-checks it"
+defect this closed for React.
+
+Verification note worth keeping: **no gate covers `.storybook/tsconfig.json`.** `check:types`
+runs `tsc` against `libs/<fw>/tsconfig.spec.json`, so a green chain says nothing about these
+three files — the same blind spot already recorded above for a generated workspace, now known
+to apply to this repo too. The rewrite was therefore checked by hand, `tsc -p
+libs/<fw>/.storybook/tsconfig.json --noEmit` for all three, 0 errors each, alongside
+`npm run check:all` exit 0 (full chain, `check:stories` included) and `nx lint` per library.
+
+- [x] `libs/vue/.storybook/manager.ts` does not exist; Angular and React brand their manager.
       `manager.ts` predates the Vue library (`5aac829`), so Vue never got one.
-- [ ] `controls.matchers` (colour/date) is in Angular's `preview.ts` only — and in all three
+- [x] `controls.matchers` (colour/date) is in Angular's `preview.ts` only — and in all three
       scaffold templates. The repo's React and Vue Storybooks are behind their own scaffold.
-- [ ] The three `.storybook/tsconfig.json` differ four ways: React's `include` omits its own
+- [x] The three `.storybook/tsconfig.json` differ four ways: React's `include` omits its own
       `manager.ts`, Vue has no `exclude` and names neither `preview.ts` nor `main.ts`, Vue alone
       carries `vitest/globals`, Vue alone lacks `"outDir": ""`.
-- [ ] Dead commented-out `typescript.reactDocgen` block in `libs/react/.storybook/main.ts`.
-- [ ] `libs/react/.storybook/main.ts` uses `import { StorybookConfig }`, not `import type`.
-- [ ] `@storybook/addon-designs` is `^11.1.4` — a caret. The different major is fine and decided:
+- [x] Dead commented-out `typescript.reactDocgen` block in `libs/react/.storybook/main.ts`.
+- [x] `libs/react/.storybook/main.ts` uses `import { StorybookConfig }`, not `import type`.
+- [x] `@storybook/addon-designs` is `^11.1.4` — a caret. The different major is fine and decided:
       the package is in `atelier/storybook-version-lockstep`'s `DEFAULT_EXEMPT` because it is a
       third-party addon on its own release line. But the exemption skips the exactness check too,
       so the caret is unguarded, which is the drift shape that rule's own header warns about. Pin

@@ -10,6 +10,12 @@ const preview: Preview = {
     docs: {
       page: contractDocsPage,
     },
+    controls: {
+      matchers: {
+        color: /(background|color)$/i,
+        date: /Date$/i,
+      },
+    },
     backgrounds: {
       options: {
         light: { name: 'light', value: '#ffffff' },
