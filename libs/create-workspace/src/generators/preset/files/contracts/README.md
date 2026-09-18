@@ -6,6 +6,19 @@ purpose (`figmaOnly`, `codeOnly`, `axisMap`, `probes`). Everything else — prop
 defaults, unions, variant matrices, descriptions, token lists — is forbidden here; it
 lives in the component's types/JSDoc, a story, or the master.
 
+Every divergence entry is one of two kinds, and the `reason` has to make clear which
+(ADR-0145). **Settled**: the two sides differ permanently and correctly, because the
+thing they differ about is not drawn — behaviour, element or form semantics, data, keys.
+`headingLevel` "changes nothing drawn"; `multi` is "behaviour only"; `id` "is data, not
+state". These need no owner and no follow-up, and a master that grew an axis for one
+would be worse, not better. **Owed**: the difference _is_ drawn, so one side owes a
+change — a CSS-backed paint axis with no Figma axis means Figma owes an axis; a Figma
+axis with no CSS rule or render condition means either the code owes an implementation
+or the master owes a deletion. An owed entry's `reason` names which side is expected to
+change and points at the task item tracking it; being drawn makes an entry owed but does
+not decide the answer, and deleting the axis from the master is often the honest one
+(interaction states are CSS pseudo-classes here by convention, ADR-0114).
+
 The planned check reads each `<name>.contract.ts` statically with
 `tools/scripts/lib/ts-eval.js`'s `parseExportedVars`, so a contract must stay a plain
 object literal (no imports of values, no computed members).
