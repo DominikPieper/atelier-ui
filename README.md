@@ -100,6 +100,7 @@ Hosted vs. local dev is a surface split, not a per-framework one: a hosted endpo
 | ------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------ |
 | `create-atelier-ui-workspace`  | `npx` scaffolder — bootstraps a workshop workspace with framework choice                                                             |
 | `@atelier-ui/create-workspace` | Nx preset used by the scaffolder                                                                                                     |
+| `@atelier-ui/styles`           | Component CSS, class-rooted and written once — a runtime dependency of `@atelier-ui/react`, inlined by Angular and Vue at build time |
 | `@atelier-ui/angular`          | Angular 22 component library (teaching artifact)                                                                                     |
 | `@atelier-ui/react`            | React 19 component library (teaching artifact)                                                                                       |
 | `@atelier-ui/vue`              | Vue 3 component library (teaching artifact)                                                                                          |
@@ -217,6 +218,7 @@ npm run check:sync
 ```
 ├── docs/              # Astro docs site — the workshop content, deployed to atelier.pieper.io
 ├── libs/
+│   ├── styles/                     # @atelier-ui/styles — shared component CSS
 │   ├── angular/                    # @atelier-ui/angular — component library
 │   ├── react/                      # @atelier-ui/react — component library
 │   ├── vue/                        # @atelier-ui/vue — component library

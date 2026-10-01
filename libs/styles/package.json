@@ -1,0 +1,32 @@
+{
+  "name": "@atelier-ui/styles",
+  "version": "0.3.4",
+  "description": "Atelier component CSS — class-rooted, token-driven, shared by the Angular, React and Vue libraries",
+  "keywords": [
+    "css",
+    "ui",
+    "components",
+    "design-system",
+    "atelier-ui",
+    "llm"
+  ],
+  "author": "Atelier",
+  "license": "MIT",
+  "type": "module",
+  "sideEffects": [
+    "**/*.css"
+  ],
+  "exports": {
+    "./*.css": "./*.css",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "**/*.css",
+    "README.md"
+  ],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DominikPieper/atelier-ui.git",
+    "directory": "libs/styles"
+  }
+}

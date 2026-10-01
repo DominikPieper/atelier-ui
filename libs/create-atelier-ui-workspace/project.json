@@ -45,7 +45,7 @@
         "build",
         {
           "target": "build",
-          "projects": ["angular", "react", "vue"]
+          "projects": ["styles", "angular", "react", "vue"]
         }
       ]
     }

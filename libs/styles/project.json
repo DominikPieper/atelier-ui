@@ -3,20 +3,33 @@
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "sourceRoot": "libs/styles/src",
   "projectType": "library",
+  "release": {
+    "version": {
+      "manifestRootsToUpdate": ["{projectRoot}"],
+      "currentVersionResolver": "git-tag",
+      "fallbackCurrentVersionResolver": "disk"
+    }
+  },
   "tags": ["type:styles"],
   "targets": {
     "build": {
       "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/dist/libs/styles"],
       "options": {
-        "command": "rm -rf dist/libs/styles && mkdir -p dist/libs/styles && cp -R libs/styles/src/. dist/libs/styles/",
+        "command": "rm -rf dist/libs/styles && mkdir -p dist/libs/styles && cp -R libs/styles/src/. dist/libs/styles/ && cp libs/styles/package.json libs/styles/README.md dist/libs/styles/",
         "cwd": "{workspaceRoot}"
-      }
+      },
+      "inputs": ["default", "^default"]
     },
     "stylelint": {
       "executor": "nx:run-commands",
       "options": {
         "command": "stylelint 'libs/styles/src/**/*.css' --config stylelint.config.mjs"
+      }
+    },
+    "nx-release-publish": {
+      "options": {
+        "packageRoot": "dist/{projectRoot}"
       }
     }
   }

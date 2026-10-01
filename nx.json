@@ -120,6 +120,7 @@
     "groups": {
       "libraries": {
         "projects": [
+          "styles",
           "angular",
           "react",
           "vue",

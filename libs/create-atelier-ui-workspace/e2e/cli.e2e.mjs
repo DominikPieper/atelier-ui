@@ -73,6 +73,7 @@ import { join, resolve } from 'node:path';
 const ROOT = resolve(process.cwd());
 const DIST_PRESET = join(ROOT, 'dist/libs/create-workspace');
 const DIST_CLI = join(ROOT, 'dist/libs/create-atelier-ui-workspace');
+const DIST_STYLES = join(ROOT, 'dist/libs/styles');
 const DIST_ANGULAR = join(ROOT, 'dist/libs/angular');
 const DIST_REACT = join(ROOT, 'dist/libs/react');
 const DIST_VUE = join(ROOT, 'dist/libs/vue');
@@ -208,6 +209,7 @@ function ensureBuilt() {
   const needed = [
     [join(DIST_PRESET, 'src/index.js'), 'create-workspace'],
     [join(DIST_CLI, 'bin/index.js'), 'create-atelier-ui-workspace'],
+    [join(DIST_STYLES, 'package.json'), 'styles'],
     [join(DIST_ANGULAR, 'package.json'), 'angular'],
     [join(DIST_REACT, 'package.json'), 'react'],
     [join(DIST_VUE, 'package.json'), 'vue'],
@@ -260,7 +262,7 @@ async function startVerdaccio() {
   mkdirSync(storage, { recursive: true });
   writeFileSync(htpasswd, '');
 
-  // All six @atelier-ui packages are served LOCAL-ONLY (no npmjs proxy) so
+  // All seven @atelier-ui packages are served LOCAL-ONLY (no npmjs proxy) so
   // the e2e validates the source in this branch — not whatever versions are
   // currently published on npmjs. Without this, a fix to the framework libs
   // couldn't be verified until after a real release, and a still-broken
@@ -277,6 +279,10 @@ uplinks:
     timeout: 60s
 packages:
   '@atelier-ui/create-workspace':
+    access: $all
+    publish: $all
+    unpublish: $all
+  '@atelier-ui/styles':
     access: $all
     publish: $all
     unpublish: $all
@@ -778,6 +784,9 @@ async function main() {
   ok(`preset:  ${presetTarball}`);
   const cliTarball = pack(DIST_CLI);
   ok(`cli:     ${cliTarball}`);
+  // styles first: @atelier-ui/react depends on it at runtime.
+  const stylesTarball = pack(DIST_STYLES);
+  ok(`styles:  ${stylesTarball}`);
   const angularTarball = pack(DIST_ANGULAR);
   ok(`angular: ${angularTarball}`);
   const reactTarball = pack(DIST_REACT);
@@ -800,6 +809,8 @@ async function main() {
     ok('preset published');
     publishToRegistry(cliTarball, registry.url, npmrcPath);
     ok('cli published');
+    publishToRegistry(stylesTarball, registry.url, npmrcPath);
+    ok('styles published');
     publishToRegistry(angularTarball, registry.url, npmrcPath);
     ok('angular published');
     publishToRegistry(reactTarball, registry.url, npmrcPath);
