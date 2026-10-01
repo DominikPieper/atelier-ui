@@ -1299,24 +1299,16 @@ const COMPONENT_COUNT_EXEMPT_ENTRIES = [
   [
     componentCountKey(
       'docs/src/pages/claude-design.astro',
-      'Claude Design turns a prompt into a canvas of artboards. On 2026-08-26 and 27, this',
-      'library’s own 29 components were redesigned through 31 of them over two days, and those',
+      'Claude Design turns a prompt into a canvas of artboards. On 2026-08-26 and',
+      '27, this library’s own 29 components were redesigned through 31 of them',
     ),
     'Dated historical record: the 2026-08-26/27 Claude Design exercise — the same event the Proof section below restates with its own date. The 2026-09-10 fix added the date inline to this sentence, making explicit what was already true (this is a record of that exercise, not a live claim about the current catalog size).',
   ],
   [
     componentCountKey(
       'docs/src/pages/claude-design.astro',
-      'On 2026-08-26 and 27 this library was redesigned <em>through</em> the canvas.',
-      '<strong style="color: var(--ui-color-text)">31 artboards</strong> — 29 component sheets plus',
-    ),
-    'Dated historical record: same 2026-08-26/27 exercise, dated by the sentence immediately above in the same paragraph.',
-  ],
-  [
-    componentCountKey(
-      'docs/src/pages/claude-design.astro',
-      '<strong style="color: var(--ui-color-text)">31 artboards</strong> — 29 component sheets plus',
-      'two studies — covering <strong style="color: var(--ui-color-text)">29 of 29 components</strong>.',
+      'component sheets plus two studies — covering',
+      '<strong style="color: var(--ui-color-text)">29 of 29 components</strong',
     ),
     'Dated historical record: continuation of the same 2026-08-26/27 paragraph as the entry above.',
   ],
