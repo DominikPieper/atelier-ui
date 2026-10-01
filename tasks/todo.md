@@ -64,6 +64,154 @@ Ranked; each carries why it's worth doing next rather than later.
 > now regardless; **B** one authored contract record with everything else projected as
 > the direction, its own ADR naming ADR-0006/0010/0096 as revised.
 
+- [ ] **Structure lessons from the DB UX Design System (planned 2026-10-01).** Comes out of
+      a fact-check of a Gemini Deep Research report on multi-framework design systems. The
+      report says DB UX (`db-ux-design-system/core-web`) maintains native Angular, React and
+      Vue implementations in parallel in an Nx monorepo — **both false**: it writes every
+      component once in Mitosis (`*.lite.tsx`; `packages/components/configs/mitosis.config.cjs`
+      targets angular, vue, react, stencil) and is a pnpm workspace with changesets (no
+      `nx.json`). Mitosis is not on the table — it would cost the Angular idioms the workshop
+      teaches (signals, `model()`). Worth copying is the package cut around the components:
+      one SCSS per component usable without JS (`db-*` classes), a separate
+      `@db-ux/core-foundations`, lint packages for consumers (`@db-ux/core-stylelint`,
+      `@db-ux/core-eslint-plugin`), docs beside the component
+      (`<name>/docs/{HTML,Angular,React,Vue,Migration}.md`, `examples/`). Lockstep releases
+      we already have. Parked in `plan/roadmap.md` ("Later: runtime coverage beyond
+      Storybook"): Angular SSR showcase, ARIA snapshots.
+      **Order (owner, 2026-10-01): P1.0 first** — find out whether one CSS source carries at
+      all — then decide P1 vs. P2. Each P that settles an approach gets its own ADR.
+      **Framework scope (owner, 2026-10-01):** Angular is the default and first workshop
+      framework, but React and Vue may still be taught — Angular-first decides order and
+      design, not whether the other two adapters stay maintainable.
+
+  - [ ] **P1 — One source for component CSS instead of three hand-kept copies.** Facts
+        (verified 2026-10-01): React and Vue CSS are byte-identical for 27 of 29 components
+        (`chat`, `table` differ). Angular uses `:host` under Emulated encapsulation (only
+        `tooltip`, `table`, `menu` use `None`); React/Vue use a root class `.atl-X`. A
+        mechanical `:host` → `.atl-X` rewrite makes Angular equal React for only **5 of
+        29**; the other 24 differ by scoping (Angular relies on Emulated for bare selectors
+        like `.variant-icon`, React writes `.atl-badge .variant-icon`), by DOM (`select` is a
+        native `<select>` in React, a custom trigger in Angular; `dialog` splits its parts
+        differently) and by comment drift. No gate compares the CSS: `check:sync` checks
+        directory names and story presence only (its own header says so); `check:variants`,
+        `check:dead-selectors`, `check:box-sizing` run per framework because the CSS is
+        triplicated. Shipping today: Angular inlines via `styleUrl`, React via
+        `import './atl-X.css'`, Vue extracts into `index.css`.
+    - [x] **P1.0 Inventory — done 2026-10-01**, `tasks/p1-css-inventory-2026-10-01.md`.
+          **Verdict: one CSS source carries.** 23 of 29 components need no genuine
+          difference — 9 transform-only, 12 scoping-only, 2 scoping plus a value fix. Of the
+          rule-aware pass's 195 residual lines, 155 are `select` and `tooltip`. The 6
+          DOM divergences: **deliberate** — `select` (native vs CDK listbox), `tooltip` (CDK
+          overlay), `menu` (CDK menu), `table` (`atl-tr` with `display: contents`); these
+          need a per-framework override file, not convergence. **Incidental** —
+          `breadcrumbs` (custom element between `<ol>` and `<li>`; a11y snapshots equal).
+          **`drawer`** — React's wrapper is deliberate, Vue's is a bug (below).
+          The transform is not purely mechanical. It needs a per-component root/host-class
+          table, tag → class rules, `:host(X):host-context(Y)` → `Y X` (15 uses: accordion,
+          card), and class renames (combobox 21, breadcrumbs 5, avatar and drawer aliases).
+          Side benefit: React/Vue carry 80 rules with no `.atl-*` root (`.spinner`,
+          `.track`, `.page-btn` …) that leak globally today; a generated, root-prefixed copy
+          removes the leak.
+          Surfaced bugs, independent of P1 (both statically confirmed by me; not checked in
+          Storybook):
+      - [ ] **Angular `AtlStepper` uses `--step-circle` / `--step-connector-width` and
+            never defines them** (`libs/angular/src/lib/stepper/atl-stepper.css:41,59,60,188,192`);
+            React/Vue define them at `atl-stepper.css:15-16`. Reproduce in Storybook first.
+      - [ ] **Vue `AtlDrawer` puts `atl-drawer-host` on the `<dialog>` itself**
+            (`atl-drawer.vue:83-99`), so every `.atl-drawer-host dialog` rule
+            (`atl-drawer.css:38,59,65`) misses. The headless probe measured the open dialog
+            at `display: block` and ~88px wide instead of `flex` and 448px. Reproduce in
+            Storybook first.
+    - [ ] **P1.1 Spike (throwaway)** — PostCSS transform Angular → class-rooted (`:host` →
+          `.atl-X`, bare top-level rules prefixed, `:host-context` handled), run on
+          `button`, `badge`, `dialog`, diff against React. **Done when** `button` and
+          `badge` come out byte-equal after Prettier and `dialog`'s residual is DOM-only.
+    - [ ] **P1.2 ADR — where the CSS source of truth lives.** Option A (leaning): Angular
+          `:host` CSS canonical, React/Vue generated — Angular stays idiomatic, same
+          one-source-one-generated-copy shape as `icons.ts` via `sync-spec.mjs`. Option B:
+          class-rooted canonical as in DB UX, Angular on `ViewEncapsulation.None` — loses
+          scoping, leak risk into the consumer app. Option C: a shared `libs/styles` all
+          three import. Decide after P1.0/P1.1. CSS-only consumer use is not a goal unless a
+          cohort asks.
+    - [ ] **P1.3 Converge the DOM divergences** from P1.0 (c), one component at a time;
+          React/Vue templates move to the Angular structure, a kept divergence goes into
+          the contract as `codeOnly`, not into the CSS. Behaviour tests and stories stay
+          green per component.
+    - [ ] **P1.4 Generator + `--check`** (e.g. `tools/scripts/sync-styles.mjs`) replaces the
+          hand-kept React/Vue copies (AUTO-GENERATED header). Then re-evaluate
+          `check:box-sizing`, `check:dead-selectors`, `check:variants` (per ADR-0130 the
+          attribution-shaped ones likely stay). **Done when** `check:all` is green and an
+          edit to an Angular CSS file shows as `[DRIFT]` in the React/Vue copy until the
+          generator runs.
+
+    **Weakest point (after P1.0):** P1.3 shrinks to `breadcrumbs` plus the class renames;
+    the four deliberate divergences become override files. The real cost has moved into the
+    transform. Its rule table (roots, renames, `:host-context`) is configuration a reader
+    must trust; if it grows per component, renaming the classes to converge first may be
+    cheaper than teaching the transform. Settle that in the P1.1 spike.
+
+  - [ ] **P2 — Foundations as its own lib, tokens' source of truth moved there.** Facts
+        (verified 2026-10-01): canonical `tokens.css` sits in the scaffold template
+        (`libs/create-workspace/src/generators/preset/files/styles/tokens.css`);
+        `sync-tokens.mjs` copies it to `libs/{angular,react,vue}/src/styles/` and
+        `skills/atelier-design/assets/colors_and_type.css`; `docs/src/styles/tokens.css`
+        imports the _React_ copy; `stylelint.config.mjs` and the `nx.json` inputs point at
+        the preset copy; `icons.ts` is copied 3× by `sync-spec.mjs`;
+        `foundation/{colors,spacing,typography}.mdx` exist 3× by hand; no font files. The
+        preset comment saying published packages ship no `tokens.css` is stale (all three
+        builds copy it). Scaffolded workspaces vendor `tokens.css` on purpose (attendees
+        edit it) — that stays.
+    - [ ] **P2.1** `libs/foundations` (private, not published — no new release surface)
+          holds `tokens.css` as source of truth; the preset becomes a generated copy like
+          the others. Repoint `sync-tokens.mjs`, `stylelint.config.mjs`, `nx.json` inputs,
+          `gen-figma-library-tokens.mjs`, and the docs import.
+    - [ ] **P2.2** Fix the stale preset comment about `tokens.css` not shipping.
+    - [ ] **P2.3** Decide: three `foundation/*.mdx` copies → one source plus generated
+          copies, or docs app only.
+    - [ ] **P2.4** Small ADR, or a dated correction of the ADR that made the preset copy
+          canonical (find it first); record publishing `@atelier-ui/foundations` as
+          considered and deferred (tokens already ship in each framework package).
+          **Done when** exactly one hand-edited `tokens.css` exists, `check:tokens` diffs
+          every copy against it, `check:all` green.
+
+  - [ ] **P3 — Lint rules as a package, and a consumer-usage rule set.** Facts (verified
+        2026-10-01): `tools/stylelint-rules` has four rules (`no-raw-color-literal`,
+        `no-undeclared-token`, `no-primitive-token`, `no-token-bypass`), **no tests**, not
+        publishable; the preset vendors all six files byte-identically, held by
+        `check:preflight-clone-sync` (ADR-0130). `tools/eslint-rules` is repo-internal
+        hygiene only. No rule validates how a consumer uses Atl components.
+    - [ ] **P3.1** Rule tests (Vitest + `stylelint.lint()`), one valid and one invalid case
+          per rule, exemption maps included. Worth doing regardless of P3.2.
+    - [ ] **P3.2 Owner decision: package or vendored.** A published
+          `@atelier-ui/stylelint-plugin` would retire the vendored copy and that part of
+          `check:preflight-clone-sync`; against it, the vendored copy is readable and
+          editable in the attendee's repo — curriculum value. Judge it as curriculum first.
+    - [ ] **P3.3 Spike: Angular consumer-usage rules** (`@angular-eslint` template rules).
+          List 3–5 checks Angular's strict template type-check does _not_ catch (icon-only
+          `atl-button` without `aria-label`, `atl-dialog` without a title, `atl-option`
+          outside `atl-select`). Build only if at least three survive; else record and drop.
+
+  - [ ] **P4 — Docs beside the component; retire the hand-written docs props.** Facts
+        (verified 2026-10-01): `docs/src/data/components.ts` (2569 lines) is entirely
+        hand-written — `props`, `examples` per framework (rendered verbatim,
+        `ComponentDetail.tsx:854`), `aiUsage`, `a11y`, `composition`; `check:docs` diffs
+        props one way against the spec and checks none of the rest. ADR-0121 (lines 26–31,
+        Decision 6) already plans the props retirement — the "S6 monorepo retirements"
+        item further down. This item only adds what S6 does not name.
+    - [ ] **P4.1** Prop tables from each framework's `components.json` — that is S6's
+          retirement; do it there, tick it here.
+    - [ ] **P4.2** `examples` from story source (`parameters.docs.source` / CSF `render`),
+          not hand-written strings — one place per example, already tested by
+          `storybook-test`.
+    - [ ] **P4.3** `aiUsage` and `a11y` into `libs/spec/src/metadata/*.metadata.ts` (which
+          already holds `accessibility`, `antiPatterns`, `whenToUse`), so `llms.txt` and the
+          docs read one record.
+    - [ ] **P4.4 Placement** — ADR-0121 Decision 3 puts the contract beside the component in
+          a one-framework repo; check whether the scaffold does the same for metadata. In
+          this monorepo metadata stays in `libs/spec` while three adapters share it.
+          **Done when** `components.ts` holds only page-level data (category, status,
+          composition).
+
 - [ ] **The scaffold becomes the AI-development workspace, and the cohort's environment**
       (owner decisions, 2026-09-12). Four blocks chosen out of five; **"Gates + CI" was
       deliberately not chosen** — the generated workspace keeps its five separate

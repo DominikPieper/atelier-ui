@@ -173,3 +173,22 @@ _Focus: Make the library consumable and self-documenting._
   `prefers-color-scheme: dark` and an explicit `[data-theme='dark']` override in one
   `tokens.css`, so a consumer can follow the OS or force a theme. No per-theme files.
 - **Overlay positioning**: CSS Popover API used for `LlmSelect`. For `LlmMenu` and `LlmTooltip`, use `@angular/cdk/overlay` + `@angular/cdk/menu` instead — they provide positioning, scroll handling, and viewport boundary detection that the Popover API doesn't cover well for complex cases.
+
+---
+
+## Later: runtime coverage beyond Storybook (parked 2026-10-01)
+
+Parked by the owner on 2026-10-01 out of the DB UX Design System comparison
+(`tasks/todo.md` → "Structure lessons from DB UX"). Not scheduled; pick it up once the
+style/foundations restructure has landed.
+
+- [ ] **Angular SSR showcase app** — one `apps/showcase-angular-ssr` that renders every
+      component server-side and hydrates it, as a smoke test for what `storybook-test`
+      cannot see (hydration mismatches, `document`/`window` access at construction,
+      CSS custom properties resolved before hydration). Angular only, per the
+      single-framework decision of 2026-09-28. DB UX keeps `showcases/angular-ssr`,
+      `next` and `nuxt` for the same reason.
+- [ ] **ARIA snapshot tests** — Playwright `toMatchAriaSnapshot()` per component state,
+      so a lost `aria-expanded` or a changed `role` shows up as a diff instead of
+      depending on axe catching it. DB UX: `showcases/playwright.aria-snapshots.ts`.
+      Open question: run against the showcase app or against the Storybook iframe.

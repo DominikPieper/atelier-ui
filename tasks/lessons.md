@@ -837,3 +837,11 @@ The through-line, and the rule:
   higher than their fixtures.
 - **When a fix reveals a failure elsewhere, suspect the revealer is right.** All three looked
   at first like the fix had broken something. In all three the fix had removed a crutch.
+
+## 2026-10-01 — "Not planned" is not "dead" (framework scope)
+
+I argued P1's scope (one CSS source) from "two adapters that are no longer planned". The
+owner corrected: Angular is the default and first workshop framework, but React and Vue may
+still be taught. Rule: Angular-first decides *order and design*, not *whether* the other
+adapters stay maintainable. When a plan's cost lands on React/Vue, name the cost; don't
+discount it as unplanned.
