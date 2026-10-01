@@ -137,8 +137,9 @@ Ranked; each carries why it's worth doing next rather than later.
           adversarial review. It independently picks A. Its new risk is specificity: the
           `:host-context` → `.atl-x.y .z` rewrite raises specificity for consumer overrides.
           It also re-flags the leak, which is correct for the default config.
-    - [ ] **P1.1b Spike Option C on button, badge, dialog — run 2026-10-01, uncommitted in
-          the working tree.** One class-rooted file per component in `libs/styles/src/<dir>/`
+    - [x] **P1.1b Spike Option C on button, badge, dialog — done 2026-10-01**, committed as the
+          first migration step (`0ed39bb6`..`fabae87b`). The React blocker below was solved by
+          publishing `@atelier-ui/styles` (owner's choice), proven by `check:pack-styles`. One class-rooted file per component in `libs/styles/src/<dir>/`
           (Nx project, for stylelint and module boundaries). Angular uses
           `ViewEncapsulation.None` plus a static root class on the host, which survives
           `[class]`; React and Vue import the same file.
@@ -148,41 +149,53 @@ Ranked; each carries why it's worth doing next rather than later.
           **Blocker: the React package is broken as built.** `dist/libs/react/.../atl-button.js`
           imports `@atelier-ui/styles/button/atl-button.css`, which resolves nowhere, and no
           CSS is copied. I verified this myself.
-          Caveats: - Angular-projected content inside `button`/`dialog` now gets
-          `box-sizing: border-box`, like React/Vue today — visible to consumers. - `FORCEPREFIX` output needed hand fixes: an impossible
-          `.atl-dialog dialog > .panel`, and descendant selectors that hit consumer
-          content (a select's `.panel` inside a dialog). Four selectors were tightened
-          to child combinators. So prefix-everywhere is not safe by itself: a descendant
-          rule must become a child rule wherever the class name is generic. - `@keyframes` names stay global (`shimmer`, `toast-enter` would collide). - Two gates passed **vacuously** while checking fewer files than exist:
-          `check:box-sizing` (78 of 87 stylesheets) and `check:dead-selectors` (80 of 89).
-          Make both fail on "found fewer stylesheets than components", independent
-          of P1. - Stale paths remain in `tools/figma/parity.json`, `plan/` and the ADR text. - `tools/parity/typeface-baseline.json` was rebaselined: dialog NO-SIZE went
-          from 3 identities to 1, the same debt deduplicated. Review it.
-    - [ ] **P1.2 ADR — where the CSS source of truth lives.** Option A (leaning): Angular
-          `:host` CSS canonical, React/Vue generated — Angular stays idiomatic, same
-          one-source-one-generated-copy shape as `icons.ts` via `sync-spec.mjs`. Option B:
-          class-rooted canonical as in DB UX, Angular on `ViewEncapsulation.None` — loses
-          scoping, leak risk into the consumer app. Option C: a shared `libs/styles` all
-          three import. Decide after P1.0/P1.1. CSS-only consumer use is not a goal unless a
-          cohort asks.
-    - [ ] **P1.3 Converge the DOM divergences** from P1.0 (c), one component at a time;
-          React/Vue templates move to the Angular structure, a kept divergence goes into
-          the contract as `codeOnly`, not into the CSS. Behaviour tests and stories stay
-          green per component.
-    - [ ] **P1.4 Generator + `--check`** (e.g. `tools/scripts/sync-styles.mjs`) replaces the
-          hand-kept React/Vue copies (AUTO-GENERATED header). Then re-evaluate
-          `check:box-sizing`, `check:dead-selectors`, `check:variants` (per ADR-0130 the
-          attribution-shaped ones likely stay). **Done when** `check:all` is green and an
-          edit to an Angular CSS file shows as `[DRIFT]` in the React/Vue copy until the
-          generator runs.
+          Caveats: Angular-projected content inside `button`/`dialog` now gets
+          `box-sizing: border-box`, as React/Vue already do, which consumers can see.
+          `FORCEPREFIX` output needed hand fixes: an impossible
+          `.atl-dialog dialog > .panel`, and descendant selectors that hit consumer content
+          (a select's `.panel` inside a dialog), so four selectors became child combinators.
+          Prefix-everywhere is therefore not safe by itself. `@keyframes` names stay global
+          (`shimmer` and `toast-enter` would collide). Two gates had passed vacuously (see
+          the separate item below). Stale paths remain in `tools/figma/parity.json`,
+          `plan/` and the ADR text. `tools/parity/typeface-baseline.json` was rebaselined:
+          dialog NO-SIZE went from 3 identities to 1, the same debt deduplicated. Review it.
+    - [x] **P1.2 ADR — done 2026-10-01: ADR-0148**, Option C plus a published
+          `@atelier-ui/styles`. The owner questioned my lean towards A, and C won: the file
+          read is the file shipped. ADR-0028 carries the dated correction.
+    - [ ] **P1.3 Migrate the remaining 26 components, one per commit.** Per component:
+          write the class-rooted file in `libs/styles` (the spike generator in
+          `tasks/spikes/p1-css/generator` with `FORCEPREFIX=1` as a one-time aid, then fix by
+          hand); give generic part classes (`.panel`, `.track`, `.close-btn`, `.spinner`) the
+          child combinator; prefix `@keyframes` names; switch Angular to `None` with a static
+          host root class; switch React/Vue to the shared import; delete the three old files.
+          **Done per component when** `check:all` (incl. `check:pack-styles`) and the three
+          `storybook-test` runs are green and a before/after computed-style probe of the
+          Angular stories shows only the documented changes. Order: the 9 transform-only
+          components, then the 12 scoping-only ones, then stepper and toast, then breadcrumbs
+          (DOM convergence) and drawer, then menu and table, and select and tooltip last
+          (with per-framework override files). Check the three spots that change visibly when
+          the leak closes (chat `.close-btn`, drawer `.panel`, toggle `.track`) in a browser.
+    - [ ] **P1.4 Retire what the migration makes redundant.** Remove the per-framework
+          fallback in `componentCssFiles()` once no per-framework stylesheet is left. Then
+          re-evaluate `check:variants`, `check:dead-selectors` and `check:box-sizing`: do
+          they need to run three times over one file? Add a lint rule, "every selector
+          rooted in `.atl-*`", out of the spike's leak script; per ADR-0126 it is
+          single-file, so it is a stylelint rule, not a gate.
+    - [ ] **Two gates passed vacuously** (found by P1.1b): `check:box-sizing` covered 78
+          of 87 stylesheets and `check:dead-selectors` 80 of 89 before the path fix. Make
+          each fail when it finds fewer stylesheets than component directories (ADR-0080).
+          This is independent of the migration.
+    - [ ] **Before merging to main:** `check:release-drift` will report
+          `@atelier-ui/styles` as unpublished and exit 1 until the first release; the
+          main-only CI job goes red. Check whether the npm token may create a new package
+          under the `@atelier-ui` scope. Publish order is already dependency-first
+          (ADR-0148 Decision 3). Stale paths to refresh: `tools/figma/parity.json` (needs
+          a figma re-verify), `plan/` and the ADR text naming per-framework CSS.
 
-    **Weakest point (after P1.0):** P1.3 shrinks to `breadcrumbs` plus the class renames;
-    the four deliberate divergences become override files. The real cost has moved into the
-    transform. Its rule table (roots, renames, `:host-context`) is configuration a reader
-    must trust; if it grows per component, renaming the classes to converge first may be
-    cheaper than teaching the transform. Settle that in the P1.1 spike.
-
-  - [ ] **P2 — Foundations as its own lib, tokens' source of truth moved there.** Facts
+  - [ ] **P2 — Foundations as its own lib, tokens' source of truth moved there.**
+        **Re-think after ADR-0148:** with a published `@atelier-ui/styles`, the tokens
+        likely belong in that package rather than a private `libs/foundations`. Decide
+        before P2.1. Facts
         (verified 2026-10-01): canonical `tokens.css` sits in the scaffold template
         (`libs/create-workspace/src/generators/preset/files/styles/tokens.css`);
         `sync-tokens.mjs` copies it to `libs/{angular,react,vue}/src/styles/` and

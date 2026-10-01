@@ -101,6 +101,15 @@ it; giving it real styling means authoring new CSS and wiring a `styleUrl`,
 which is design work, not a mechanical scoping fix like everything else
 here. Reported to the user; not done in this pass.
 
+**Corrected 2026-10-01:** ADR-0148 revises the selector convention this ADR set, for every
+component that moves into `libs/styles`. Such a component's Angular stylesheet is no longer
+`:host`-rooted under Emulated encapsulation. It is one class-rooted file shared verbatim with
+React and Vue, consumed under `ViewEncapsulation.None`, with a static `atl-*` root class on
+the host. The root cause this ADR fixed (a host that never carries the class its CSS expects)
+is the same; the fix is now the class, not `:host`. This ADR's `AtlDialog` finding (style the
+inner `<dialog>`, not the host) carries over unchanged. Components not yet migrated keep this
+ADR's convention.
+
 ## Consequences
 
 - Verified with `nx run angular:build/lint/test` (528/528 passing throughout,

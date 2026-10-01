@@ -845,3 +845,10 @@ owner corrected: Angular is the default and first workshop framework, but React 
 still be taught. Rule: Angular-first decides _order and design_, not _whether_ the other
 adapters stay maintainable. When a plan's cost lands on React/Vue, name the cost; don't
 discount it as unplanned.
+
+## 2026-10-01 — Nested lists in `tasks/todo.md` do not survive Prettier
+
+Three times in one session a nested bullet list under a `- [ ]` item (continuation
+indented 6/10 spaces) was folded by `prettier --write` into one run-on line ("… - x; - y").
+Rule: inside a todo item, write prose, not a nested bullet list; and after `--write`,
+diff the file against its pre-format copy before committing, not only `--check` it.
