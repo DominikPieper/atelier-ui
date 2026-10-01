@@ -67,3 +67,6 @@ docs/.astro
 .nx/migrate-runs
 # wrangler dev local state (miniflare caches)
 .wrangler/
+
+# P1 spike output (tasks/spikes/p1-css/README.md)
+tasks/spikes/**/out/

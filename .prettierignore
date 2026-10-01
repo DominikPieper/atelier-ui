@@ -26,3 +26,6 @@ libs/create-workspace/src/generators/preset/files/figma/snapshot.json
 # baselines the parity/paint/typeface gates read.
 tools/figma/*.json
 tools/parity/**/*.json
+
+# Throwaway spike code kept verbatim for reference (tasks/spikes/p1-css/README.md)
+tasks/spikes/
