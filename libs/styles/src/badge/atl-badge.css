@@ -3,12 +3,12 @@
  * same file as the sizes it governs and no consuming app has to supply one.
  * Gated by check:box-sizing; the resulting boxes are measured by check:geometry.
  * See ADR-0043. */
-:host,
-:host * {
+.atl-badge,
+.atl-badge * {
   box-sizing: border-box;
 }
 
-:host {
+.atl-badge {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -21,45 +21,45 @@
 }
 
 /* Sizes */
-:host(.size-sm) {
+.atl-badge.size-sm {
   padding: 0.1875rem var(--ui-spacing-2);
   font-size: var(--ui-font-size-xs);
 }
 
-:host(.size-md) {
+.atl-badge.size-md {
   padding: 0.3125rem var(--ui-spacing-3);
   font-size: var(--ui-font-size-sm);
 }
 
 /* Variants */
-:host(.variant-default) {
+.atl-badge.variant-default {
   background-color: var(--ui-color-surface-sunken);
   color: var(--ui-color-text-muted);
   border: var(--ui-border-width) solid var(--ui-color-border);
 }
 
-:host(.variant-success) {
+.atl-badge.variant-success {
   background-color: var(--ui-color-success-bg);
   color: var(--ui-color-success-text);
   border: var(--ui-border-width) solid
     color-mix(in srgb, var(--ui-color-success-text) 25%, transparent);
 }
 
-:host(.variant-warning) {
+.atl-badge.variant-warning {
   background-color: var(--ui-color-warning-bg);
   color: var(--ui-color-warning-text);
   border: var(--ui-border-width) solid
     color-mix(in srgb, var(--ui-color-warning-text) 25%, transparent);
 }
 
-:host(.variant-danger) {
+.atl-badge.variant-danger {
   background-color: var(--ui-color-danger-bg);
   color: var(--ui-color-danger-text);
   border: var(--ui-border-width) solid
     color-mix(in srgb, var(--ui-color-danger-text) 25%, transparent);
 }
 
-:host(.variant-info) {
+.atl-badge.variant-info {
   background-color: var(--ui-color-info-bg);
   color: var(--ui-color-info-text);
   border: var(--ui-border-width) solid
@@ -67,7 +67,7 @@
 }
 
 /* Semantic indicator glyph — non-color differentiation (WCAG 1.4.1). */
-.variant-icon {
+.atl-badge > .variant-icon {
   font-weight: var(--ui-font-weight-bold);
   margin-right: 0.3em;
   line-height: 1;

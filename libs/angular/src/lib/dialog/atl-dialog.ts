@@ -9,6 +9,7 @@ import {
   model,
   signal,
   viewChild,
+  ViewEncapsulation,
 } from '@angular/core';
 import { A11yModule } from '@angular/cdk/a11y';
 import { ATL_DIALOG } from './atl-dialog.token';
@@ -64,7 +65,15 @@ let nextId = 0;
       </div>
     </dialog>
   `,
-  styleUrl: './atl-dialog.css',
+  // Class-rooted CSS shared with React and Vue (libs/styles). Unlike the other
+  // components the root class `atl-dialog` is NOT put on this host: it belongs to
+  // the inner <dialog class="atl-dialog"> (as in React and Vue), and the same
+  // rules would turn this wrapper into `display: none; position: fixed`.
+  // The header/content/footer slots below carry their own root classes and rely
+  // on this component, which always contains them, to load the stylesheet.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: '../../../../styles/src/dialog/atl-dialog.css',
   host: {
     '[class]': 'hostClasses()',
     // Same defect as atl-input.ts's identical guards: a static aria-label="…"
@@ -158,7 +167,6 @@ export class AtlDialog {
       <atl-icon name="close" size="sm" />
     </button>
   `,
-  styleUrl: './atl-dialog.css',
   host: {
     class: 'atl-dialog-header',
     '[attr.id]': 'context.headerId',
@@ -176,7 +184,6 @@ export class AtlDialogHeader {
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `<ng-content />`,
-  styleUrl: './atl-dialog.css',
   host: { class: 'atl-dialog-content' },
 })
 export class AtlDialogContent {}
@@ -189,7 +196,6 @@ export class AtlDialogContent {}
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `<ng-content />`,
-  styleUrl: './atl-dialog.css',
   host: { class: 'atl-dialog-footer' },
 })
 export class AtlDialogFooter {}

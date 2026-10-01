@@ -7,6 +7,7 @@ import {
   ElementRef,
   inject,
   input,
+  ViewEncapsulation,
 } from '@angular/core';
 import type { AtlButtonVariant, AtlButtonSize } from '../spec';
 
@@ -30,8 +31,13 @@ import type { AtlButtonVariant, AtlButtonSize } from '../spec';
     }
     <ng-content />
   `,
-  styleUrl: './atl-button.css',
+  // Class-rooted CSS shared with React and Vue (libs/styles): the root class below
+  // is what scopes it, so Emulated encapsulation is switched off.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: '../../../../styles/src/button/atl-button.css',
   host: {
+    class: 'atl-button',
     role: 'button',
     '[class]': 'hostClasses()',
     '[attr.aria-disabled]': 'isDisabled()',

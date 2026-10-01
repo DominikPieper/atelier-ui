@@ -12,6 +12,7 @@
     }
   },
   "tags": ["framework:angular", "type:ui-lib"],
+  "implicitDependencies": ["styles"],
   "targets": {
     "build": {
       "executor": "@nx/angular:package",

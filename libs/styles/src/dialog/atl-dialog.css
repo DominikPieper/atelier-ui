@@ -3,8 +3,9 @@
  * same file as the sizes it governs and no consuming app has to supply one.
  * Gated by check:box-sizing; the resulting boxes are measured by check:geometry.
  * See ADR-0043. */
-:host,
-:host * {
+:is(.atl-dialog, .atl-dialog-content, .atl-dialog-footer, .atl-dialog-header),
+:is(.atl-dialog, .atl-dialog-content, .atl-dialog-footer, .atl-dialog-header)
+  * {
   box-sizing: border-box;
 }
 
@@ -15,7 +16,9 @@
    * geometry contract has the same specificity and loses on source order, so this
    * element was content-box and 2px taller than its own CSS said (ADR-0051). */
   box-sizing: border-box;
-  /* After `all: unset`, which would otherwise reset it (ADR-0049). */
+  /* After `all: unset`, which would otherwise reset it. The library states its own
+   * typeface (ADR-0035); without this the dialog renders in the consuming app's
+   * font while its neighbours render Instrument Sans (ADR-0049). */
   font-family: var(--ui-font-family);
   /* The leading every descendant inherits. Stated here so the component keeps
      its own vertical rhythm instead of adopting the consuming app's prose
@@ -87,7 +90,7 @@
 }
 
 /* ── Panel (inner wrapper) ───────────────────────────────────────────────── */
-.panel {
+.atl-dialog > .panel {
   display: flex;
   flex-direction: column;
   width: 100%;
@@ -97,32 +100,31 @@
 
 /* ── Size variants ───────────────────────────────────────────────────────────
  * Scoped to the dialog. React applies size-* on the <dialog class="atl-dialog">
- * itself; Angular/Vue apply it on the inner .panel — hence the selector pair
- * (`dialog > .panel` covers both, including Angular's emulated-scoped template,
- * which never carries the `atl-dialog` class). Bare `.size-*` selectors leaked
- * globally and resized unrelated elements (e.g. `atl-button size-md`). */
+ * itself; Angular/Vue apply it on the inner .panel, a direct child of that same
+ * <dialog class="atl-dialog"> — hence the selector pair. Bare `.size-*` selectors
+ * leaked globally and resized unrelated elements (e.g. `atl-button size-md`). */
 .atl-dialog.size-sm,
-dialog > .panel.size-sm {
+.atl-dialog > .panel.size-sm {
   width: min(24rem, 90vw);
 }
 
 .atl-dialog.size-md,
-dialog > .panel.size-md {
+.atl-dialog > .panel.size-md {
   width: min(36rem, 90vw);
 }
 
 .atl-dialog.size-lg,
-dialog > .panel.size-lg {
+.atl-dialog > .panel.size-lg {
   width: min(48rem, 90vw);
 }
 
 .atl-dialog.size-xl,
-dialog > .panel.size-xl {
+.atl-dialog > .panel.size-xl {
   width: min(64rem, 90vw);
 }
 
 .atl-dialog.size-full,
-dialog > .panel.size-full {
+.atl-dialog > .panel.size-full {
   width: 100vw;
   height: 100dvh;
   max-width: 100vw;
@@ -132,7 +134,7 @@ dialog > .panel.size-full {
 }
 
 /* ── Sub-components ──────────────────────────────────────────────────────── */
-:host(.atl-dialog-header) {
+.atl-dialog-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -145,7 +147,7 @@ dialog > .panel.size-full {
   flex-shrink: 0;
 }
 
-:host(.atl-dialog-content) {
+.atl-dialog-content {
   display: block;
   padding: var(--ui-spacing-6);
   overflow-y: auto;
@@ -153,7 +155,7 @@ dialog > .panel.size-full {
   color: var(--ui-color-text);
 }
 
-:host(.atl-dialog-footer) {
+.atl-dialog-footer {
   display: flex;
   align-items: center;
   justify-content: flex-end;
@@ -164,7 +166,7 @@ dialog > .panel.size-full {
 }
 
 /* ── Close button ──────────────────────────────────────────────────────────── */
-.close-btn {
+.atl-dialog-header > .close-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -184,12 +186,12 @@ dialog > .panel.size-full {
   line-height: 1;
 }
 
-.close-btn:hover {
+.atl-dialog-header > .close-btn:hover {
   background-color: var(--ui-color-surface-sunken);
   color: var(--ui-color-text);
 }
 
-.close-btn:focus-visible {
+.atl-dialog-header > .close-btn:focus-visible {
   outline: none;
   box-shadow: var(--ui-focus-ring);
 }

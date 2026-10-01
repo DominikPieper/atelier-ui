@@ -21,6 +21,21 @@ describe('AtlBadge', () => {
     );
   });
 
+  it('keeps the static atl-badge class alongside the bound classes', async () => {
+    // The shared stylesheet (libs/styles) is scoped by `.atl-badge`, and the host
+    // also binds `[class]`; the two must merge, across input changes too.
+    const { container, rerender } = await render(
+      '<atl-badge [variant]="variant">Badge</atl-badge>',
+      { imports: [AtlBadge], componentProperties: { variant: 'success' } },
+    );
+    const host = container.querySelector('atl-badge') as HTMLElement;
+    expect(host).toHaveClass('atl-badge', 'variant-success', 'size-md');
+
+    await rerender({ componentProperties: { variant: 'danger' } });
+    expect(host).toHaveClass('atl-badge', 'variant-danger', 'size-md');
+    expect(host).not.toHaveClass('variant-success');
+  });
+
   describe('variant classes', () => {
     it.each(['default', 'success', 'warning', 'danger', 'info'] as const)(
       'applies variant-%s class to host',

@@ -17,6 +17,7 @@
     "paths": {
       "@atelier-ui/angular": ["libs/angular/src/index.ts"],
       "@atelier-ui/react": ["libs/react/src/index.ts"],
+      "@atelier-ui/styles/*": ["libs/styles/src/*"],
       "@atelier-ui/spec": ["libs/spec/src/index.ts"],
       "@atelier-ui/spec/behaviors.generated": [
         "libs/spec/src/behaviors.generated.ts"

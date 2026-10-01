@@ -15,6 +15,35 @@ describe('AtlButton', () => {
     },
   );
 
+  describe('root class', () => {
+    // The shared stylesheet (libs/styles) is scoped by `.atl-button`, and the host
+    // also binds `[class]`. A static class and a class binding on one host must
+    // merge, not replace each other — across input changes too.
+    it('keeps the static atl-button class alongside the bound classes', async () => {
+      const { container, rerender } = await render(
+        '<atl-button [variant]="variant" [disabled]="disabled">Btn</atl-button>',
+        {
+          imports: [AtlButton],
+          componentProperties: { variant: 'primary', disabled: false },
+        },
+      );
+      const host = container.querySelector('atl-button')!;
+      expect(host).toHaveClass('atl-button', 'variant-primary', 'size-md');
+      expect(host).not.toHaveClass('is-disabled');
+
+      await rerender({
+        componentProperties: { variant: 'danger', disabled: true },
+      });
+      expect(host).toHaveClass(
+        'atl-button',
+        'variant-danger',
+        'size-md',
+        'is-disabled',
+      );
+      expect(host).not.toHaveClass('variant-primary');
+    });
+  });
+
   describe('variant classes', () => {
     it.each(['primary', 'secondary', 'outline', 'danger'] as const)(
       'applies variant-%s class to host',
