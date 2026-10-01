@@ -12,15 +12,22 @@ const entry = GLOSSARY[term];
 const hasSlot = Astro.slots.has('default');
 ---
 
-<span class="jargon" tabindex="0" role="button" aria-describedby={entry ? `jg-${term.replace(/\s+/g, '-')}` : undefined}>
+<span
+  class="jargon"
+  tabindex="0"
+  role="button"
+  aria-describedby={entry ? `jg-${term.replace(/\s+/g, '-')}` : undefined}
+>
   {hasSlot ? <slot /> : term}
-  {entry && (
-    <span class="jargon-popup" id={`jg-${term.replace(/\s+/g, '-')}`} role="tooltip">
-      <strong class="jargon-term">{term}</strong>
-      <span class="jargon-def">{entry.definition}</span>
-      {entry.hint && <span class="jargon-hint">{entry.hint}</span>}
-    </span>
-  )}
+  {entry && <span
+    class="jargon-popup"
+    id={`jg-${term.replace(/\s+/g, '-')}`}
+    role="tooltip"
+  >
+    <strong class="jargon-term">{term}</strong>
+    <span class="jargon-def">{entry.definition}</span>
+    {entry.hint && <span class="jargon-hint">{entry.hint}</span>}
+  </span>}
 </span>
 
 <style>

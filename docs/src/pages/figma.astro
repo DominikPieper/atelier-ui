@@ -13,7 +13,8 @@ import {
   sections,
   tokenCensus,
 } from '../lib/figma-snapshot';
-const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_URL =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 ---
 
 <BaseLayout
@@ -35,25 +36,50 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-U
       <div class="docs-pagepair-card docs-pagepair-card--here">
         <span class="docs-pagepair-eyebrow">You're here</span>
         <span class="docs-pagepair-title">/figma</span>
-        <span class="docs-pagepair-desc">Manual workflow — open the inspect panel, copy token names, prompt Claude with them. No setup needed.</span>
+        <span class="docs-pagepair-desc"
+          >Manual workflow — open the inspect panel, copy token names, prompt
+          Claude with them. No setup needed.</span
+        >
       </div>
       <div class="docs-pagepair-arrow" aria-hidden="true">›</div>
-      <a href="/figma-token" class="docs-pagepair-card docs-pagepair-card--next">
+      <a
+        href="/figma-token"
+        class="docs-pagepair-card docs-pagepair-card--next"
+      >
         <span class="docs-pagepair-eyebrow">Skip the manual step</span>
         <span class="docs-pagepair-title">/figma-token →</span>
-        <span class="docs-pagepair-desc">Configure the figma-console MCP (Desktop Bridge plugin + token) so Claude reads boundVariables directly.</span>
+        <span class="docs-pagepair-desc"
+          >Configure the figma-console MCP (Desktop Bridge plugin + token) so
+          Claude reads boundVariables directly.</span
+        >
       </a>
     </aside>
 
     <!-- The Figma file -->
     <div class="docs-section" style="margin-bottom: 2.5rem">
       <h2 class="docs-section-title">The Figma file</h2>
-      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem">
-        <a href={FIGMA_URL} target="_blank" rel="noopener noreferrer" class="docs-link-primary docs-link-primary--bold">Atelier UI</a> is the single Figma file for the Atelier UI design system —
-        the component library Atelier ships. It carries a tiered variable collection whose UI tier holds the
-        <Jargon term="design tokens">design tokens</Jargon> (Light and Dark modes) that map 1:1 to the CSS token system,
-        plus several pages — foundation pages for colors, typography, and spacing, a cookbook, and an icon set.
-        Two pages are the ones you will actually work from in the workshop:
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 1.25rem;
+        "
+      >
+        <a
+          href={FIGMA_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="docs-link-primary docs-link-primary--bold"
+          >Atelier UI</a
+        >
+        is the single Figma file for the Atelier UI design system — the
+        component library Atelier ships. It carries a tiered variable collection
+        whose UI tier holds the
+        <Jargon term="design tokens">design tokens</Jargon> (Light and Dark
+        modes) that map 1:1 to the CSS token system, plus several pages —
+        foundation pages for colors, typography, and spacing, a cookbook, and an
+        icon set. Two pages are the ones you will actually work from in the
+        workshop:
       </p>
       <table class="docs-props-table" style="margin-bottom: 1.25rem">
         <thead>
@@ -65,11 +91,17 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-U
         <tbody>
           <tr>
             <td><code>Components</code></td>
-            <td>The master component sets organized by section — every variant, size, and state. Source of truth for design-to-code.</td>
+            <td>
+              The master component sets organized by section — every variant,
+              size, and state. Source of truth for design-to-code.
+            </td>
           </tr>
           <tr>
             <td><code>Inventory</code></td>
-            <td>Condensed catalog — one instance of every master on Components, for browsing the library at a glance</td>
+            <td>
+              Condensed catalog — one instance of every master on Components,
+              for browsing the library at a glance
+            </td>
           </tr>
         </tbody>
       </table>
@@ -77,7 +109,15 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-U
         href={FIGMA_URL}
         target="_blank"
         rel="noopener noreferrer"
-        style="display: inline-flex; align-items: center; gap: 0.4rem; font-size: 0.85rem; font-weight: 600; color: var(--ui-color-primary); text-decoration: none"
+        style="
+          display: inline-flex;
+          align-items: center;
+          gap: 0.4rem;
+          font-size: 0.85rem;
+          font-weight: 600;
+          color: var(--ui-color-primary);
+          text-decoration: none;
+        "
       >
         Open in Figma
       </a>
@@ -86,75 +126,274 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-U
     <!-- Token → CSS mapping -->
     <div class="docs-section" style="margin-bottom: 2.5rem">
       <h2 class="docs-section-title">Token → CSS mapping</h2>
-      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem">
-        Every Figma variable maps directly to a CSS custom property using the same name.
-        When AI references a token from Figma, it uses the identical name in code — no translation needed.
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 1.25rem;
+        "
+      >
+        Every Figma variable maps directly to a CSS custom property using the
+        same name. When AI references a token from Figma, it uses the identical
+        name in code — no translation needed.
       </p>
 
-      <DiagramFigure caption="Identical names on both sides: there is no naming layer to learn, translate, or maintain.">
-        <svg viewBox="0 0 880 320" role="img" aria-labelledby="tok-title tok-desc" preserveAspectRatio="xMidYMid meet">
-          <title id="tok-title">Figma variable to CSS custom property mapping</title>
-          <desc id="tok-desc">Each Figma variable on the left maps one-to-one to a CSS custom property on the right. The names are identical across four rows: color/primary, color/surface-raised, spacing/6, radius/lg.</desc>
+      <DiagramFigure
+        caption="Identical names on both sides: there is no naming layer to learn, translate, or maintain."
+      >
+        <svg
+          viewBox="0 0 880 320"
+          role="img"
+          aria-labelledby="tok-title tok-desc"
+          preserveAspectRatio="xMidYMid meet"
+        >
+          <title
+            id="tok-title"
+          >Figma variable to CSS custom property mapping</title>
+          <desc id="tok-desc">
+            Each Figma variable on the left maps one-to-one to a CSS custom
+            property on the right. The names are identical across four rows:
+            color/primary, color/surface-raised, spacing/6, radius/lg.
+          </desc>
 
           <defs>
-            <marker id="tok-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-              <path d="M 0 0 L 10 5 L 0 10 z" class="diagram-arrow--accent"/>
+            <marker
+              id="tok-arrow"
+              viewBox="0 0 10 10"
+              refX="8"
+              refY="5"
+              markerWidth="7"
+              markerHeight="7"
+              orient="auto-start-reverse"
+            >
+              <path d="M 0 0 L 10 5 L 0 10 z" class="diagram-arrow--accent" />
             </marker>
           </defs>
 
           <!-- Left card: Figma variables -->
           <g>
-            <rect x="40" y="48" width="320" height="248" rx="14" ry="14" class="diagram-node"/>
-            <text x="64" y="32" font-size="11" font-weight="600" class="diagram-eyebrow">Figma variable</text>
+            <rect
+              x="40"
+              y="48"
+              width="320"
+              height="248"
+              rx="14"
+              ry="14"
+              class="diagram-node"
+            />
+            <text
+              x="64"
+              y="32"
+              font-size="11"
+              font-weight="600"
+              class="diagram-eyebrow"
+              >Figma variable</text
+            >
 
             <!-- Token rows -->
-            <rect x="64" y="64" width="272" height="36" rx="8" ry="8" style="fill: var(--ui-color-primary-light); stroke: none;"/>
-            <text x="78" y="87" class="diagram-mono" font-size="13">color/primary</text>
+            <rect
+              x="64"
+              y="64"
+              width="272"
+              height="36"
+              rx="8"
+              ry="8"
+              style="fill: var(--ui-color-primary-light); stroke: none"
+            />
+            <text x="78" y="87" class="diagram-mono" font-size="13"
+              >color/primary</text
+            >
 
-            <rect x="64" y="112" width="272" height="36" rx="8" ry="8" style="fill: var(--ui-color-primary-light); stroke: none;"/>
-            <text x="78" y="135" class="diagram-mono" font-size="13">color/surface-raised</text>
+            <rect
+              x="64"
+              y="112"
+              width="272"
+              height="36"
+              rx="8"
+              ry="8"
+              style="fill: var(--ui-color-primary-light); stroke: none"
+            />
+            <text x="78" y="135" class="diagram-mono" font-size="13"
+              >color/surface-raised</text
+            >
 
-            <rect x="64" y="160" width="272" height="36" rx="8" ry="8" style="fill: var(--ui-color-primary-light); stroke: none;"/>
-            <text x="78" y="183" class="diagram-mono" font-size="13">spacing/6</text>
+            <rect
+              x="64"
+              y="160"
+              width="272"
+              height="36"
+              rx="8"
+              ry="8"
+              style="fill: var(--ui-color-primary-light); stroke: none"
+            />
+            <text x="78" y="183" class="diagram-mono" font-size="13"
+              >spacing/6</text
+            >
 
-            <rect x="64" y="208" width="272" height="36" rx="8" ry="8" style="fill: var(--ui-color-primary-light); stroke: none;"/>
-            <text x="78" y="231" class="diagram-mono" font-size="13">radius/lg</text>
+            <rect
+              x="64"
+              y="208"
+              width="272"
+              height="36"
+              rx="8"
+              ry="8"
+              style="fill: var(--ui-color-primary-light); stroke: none"
+            />
+            <text x="78" y="231" class="diagram-mono" font-size="13"
+              >radius/lg</text
+            >
           </g>
 
           <!-- Right card: CSS custom properties -->
           <g>
-            <rect x="520" y="48" width="320" height="248" rx="14" ry="14" class="diagram-node"/>
-            <text x="544" y="32" font-size="11" font-weight="600" class="diagram-eyebrow">CSS custom property</text>
+            <rect
+              x="520"
+              y="48"
+              width="320"
+              height="248"
+              rx="14"
+              ry="14"
+              class="diagram-node"
+            />
+            <text
+              x="544"
+              y="32"
+              font-size="11"
+              font-weight="600"
+              class="diagram-eyebrow"
+              >CSS custom property</text
+            >
 
-            <rect x="544" y="64" width="272" height="36" rx="8" ry="8" style="fill: var(--ui-color-primary-light); stroke: none;"/>
-            <text x="558" y="87" class="diagram-mono" font-size="13">--ui-color-primary</text>
+            <rect
+              x="544"
+              y="64"
+              width="272"
+              height="36"
+              rx="8"
+              ry="8"
+              style="fill: var(--ui-color-primary-light); stroke: none"
+            />
+            <text x="558" y="87" class="diagram-mono" font-size="13"
+              >--ui-color-primary</text
+            >
 
-            <rect x="544" y="112" width="272" height="36" rx="8" ry="8" style="fill: var(--ui-color-primary-light); stroke: none;"/>
-            <text x="558" y="135" class="diagram-mono" font-size="13">--ui-color-surface-raised</text>
+            <rect
+              x="544"
+              y="112"
+              width="272"
+              height="36"
+              rx="8"
+              ry="8"
+              style="fill: var(--ui-color-primary-light); stroke: none"
+            />
+            <text x="558" y="135" class="diagram-mono" font-size="13"
+              >--ui-color-surface-raised</text
+            >
 
-            <rect x="544" y="160" width="272" height="36" rx="8" ry="8" style="fill: var(--ui-color-primary-light); stroke: none;"/>
-            <text x="558" y="183" class="diagram-mono" font-size="13">--ui-spacing-6</text>
+            <rect
+              x="544"
+              y="160"
+              width="272"
+              height="36"
+              rx="8"
+              ry="8"
+              style="fill: var(--ui-color-primary-light); stroke: none"
+            />
+            <text x="558" y="183" class="diagram-mono" font-size="13"
+              >--ui-spacing-6</text
+            >
 
-            <rect x="544" y="208" width="272" height="36" rx="8" ry="8" style="fill: var(--ui-color-primary-light); stroke: none;"/>
-            <text x="558" y="231" class="diagram-mono" font-size="13">--ui-radius-lg</text>
+            <rect
+              x="544"
+              y="208"
+              width="272"
+              height="36"
+              rx="8"
+              ry="8"
+              style="fill: var(--ui-color-primary-light); stroke: none"
+            />
+            <text x="558" y="231" class="diagram-mono" font-size="13"
+              >--ui-radius-lg</text
+            >
           </g>
 
           <!-- Per-row bidirectional arrows -->
-          <line x1="364" y1="82"  x2="516" y2="82"  class="diagram-connector diagram-connector--accent" marker-start="url(#tok-arrow)" marker-end="url(#tok-arrow)"/>
-          <line x1="364" y1="130" x2="516" y2="130" class="diagram-connector diagram-connector--accent" marker-start="url(#tok-arrow)" marker-end="url(#tok-arrow)"/>
-          <line x1="364" y1="178" x2="516" y2="178" class="diagram-connector diagram-connector--accent" marker-start="url(#tok-arrow)" marker-end="url(#tok-arrow)"/>
-          <line x1="364" y1="226" x2="516" y2="226" class="diagram-connector diagram-connector--accent" marker-start="url(#tok-arrow)" marker-end="url(#tok-arrow)"/>
+          <line
+            x1="364"
+            y1="82"
+            x2="516"
+            y2="82"
+            class="diagram-connector diagram-connector--accent"
+            marker-start="url(#tok-arrow)"
+            marker-end="url(#tok-arrow)"
+          />
+          <line
+            x1="364"
+            y1="130"
+            x2="516"
+            y2="130"
+            class="diagram-connector diagram-connector--accent"
+            marker-start="url(#tok-arrow)"
+            marker-end="url(#tok-arrow)"
+          />
+          <line
+            x1="364"
+            y1="178"
+            x2="516"
+            y2="178"
+            class="diagram-connector diagram-connector--accent"
+            marker-start="url(#tok-arrow)"
+            marker-end="url(#tok-arrow)"
+          />
+          <line
+            x1="364"
+            y1="226"
+            x2="516"
+            y2="226"
+            class="diagram-connector diagram-connector--accent"
+            marker-start="url(#tok-arrow)"
+            marker-end="url(#tok-arrow)"
+          />
 
           <!-- Center label -->
-          <rect x="384" y="258" width="112" height="28" rx="14" ry="14" class="diagram-node diagram-node--accent"/>
-          <text x="440" y="276" text-anchor="middle" font-size="11" font-weight="700" style="fill: var(--ui-color-primary)">1 : 1 mapping</text>
-          <text x="440" y="306" text-anchor="middle" font-size="10" class="diagram-muted">automatic · no build step</text>
+          <rect
+            x="384"
+            y="258"
+            width="112"
+            height="28"
+            rx="14"
+            ry="14"
+            class="diagram-node diagram-node--accent"
+          />
+          <text
+            x="440"
+            y="276"
+            text-anchor="middle"
+            font-size="11"
+            font-weight="700"
+            style="fill: var(--ui-color-primary)"
+            >1 : 1 mapping</text
+          >
+          <text
+            x="440"
+            y="306"
+            text-anchor="middle"
+            font-size="10"
+            class="diagram-muted"
+            >automatic · no build step</text
+          >
         </svg>
       </DiagramFigure>
 
-      <ul class="token-chip-grid" aria-label="Six representative tokens — Figma variable, matching CSS custom property, and resolved values">
+      <ul
+        class="token-chip-grid"
+        aria-label="Six representative tokens — Figma variable, matching CSS custom property, and resolved values"
+      >
         <li class="token-chip">
-          <span class="token-chip-swatch token-chip-swatch--split" aria-hidden="true">
+          <span
+            class="token-chip-swatch token-chip-swatch--split"
+            aria-hidden="true"
+          >
             <span style="background: #006470"></span>
             <span style="background: #34d8d8"></span>
           </span>
@@ -164,12 +403,21 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-U
             <code class="token-chip-css">--ui-color-primary</code>
           </div>
           <div class="token-chip-meta">
-            <span><span class="token-meta-key">light</span><code>#006470</code></span>
-            <span><span class="token-meta-key">dark</span><code>#34d8d8</code></span>
+            <span
+              ><span class="token-meta-key">light</span
+              ><code>#006470</code></span
+            >
+            <span
+              ><span class="token-meta-key">dark</span
+              ><code>#34d8d8</code></span
+            >
           </div>
         </li>
         <li class="token-chip">
-          <span class="token-chip-swatch token-chip-swatch--split" aria-hidden="true">
+          <span
+            class="token-chip-swatch token-chip-swatch--split"
+            aria-hidden="true"
+          >
             <span style="background: #f8fafc"></span>
             <span style="background: #131c24"></span>
           </span>
@@ -179,12 +427,21 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-U
             <code class="token-chip-css">--ui-color-surface-raised</code>
           </div>
           <div class="token-chip-meta">
-            <span><span class="token-meta-key">light</span><code>#f8fafc</code></span>
-            <span><span class="token-meta-key">dark</span><code>#131c24</code></span>
+            <span
+              ><span class="token-meta-key">light</span
+              ><code>#f8fafc</code></span
+            >
+            <span
+              ><span class="token-meta-key">dark</span
+              ><code>#131c24</code></span
+            >
           </div>
         </li>
         <li class="token-chip">
-          <span class="token-chip-swatch token-chip-swatch--measure" aria-hidden="true">
+          <span
+            class="token-chip-swatch token-chip-swatch--measure"
+            aria-hidden="true"
+          >
             <span class="token-measure-bar" style="width: 16px"></span>
           </span>
           <div class="token-chip-names">
@@ -197,7 +454,10 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-U
           </div>
         </li>
         <li class="token-chip">
-          <span class="token-chip-swatch token-chip-swatch--measure" aria-hidden="true">
+          <span
+            class="token-chip-swatch token-chip-swatch--measure"
+            aria-hidden="true"
+          >
             <span class="token-measure-bar" style="width: 24px"></span>
           </span>
           <div class="token-chip-names">
@@ -210,8 +470,14 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-U
           </div>
         </li>
         <li class="token-chip">
-          <span class="token-chip-swatch token-chip-swatch--radius" aria-hidden="true">
-            <span class="token-radius-corner" style="border-top-left-radius: 10px"></span>
+          <span
+            class="token-chip-swatch token-chip-swatch--radius"
+            aria-hidden="true"
+          >
+            <span
+              class="token-radius-corner"
+              style="border-top-left-radius: 10px"
+            ></span>
           </span>
           <div class="token-chip-names">
             <code class="token-chip-figma">radius/md</code>
@@ -223,8 +489,14 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-U
           </div>
         </li>
         <li class="token-chip">
-          <span class="token-chip-swatch token-chip-swatch--radius" aria-hidden="true">
-            <span class="token-radius-corner" style="border-top-left-radius: 14px"></span>
+          <span
+            class="token-chip-swatch token-chip-swatch--radius"
+            aria-hidden="true"
+          >
+            <span
+              class="token-radius-corner"
+              style="border-top-left-radius: 14px"
+            ></span>
           </span>
           <div class="token-chip-names">
             <code class="token-chip-figma">radius/lg</code>
@@ -236,17 +508,34 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-U
           </div>
         </li>
       </ul>
-      <p style="font-size: 0.8rem; color: var(--ui-color-text-muted); margin: 0">
-        {tokenCensus.total} UI-tier variables: {tokenCensus.color} color, {tokenCensus.spacing} spacing, {tokenCensus.radius} radius, {tokenCensus.sizing} sizing, {tokenCensus.typography} typography, {tokenCensus.opacity} opacity (the file also carries primitive and component tiers that stay Figma-side). The full <code>--ui-*</code> list — including shadow, motion, and z-index tokens that exist only in CSS — lives in <code>libs/angular/src/styles/tokens.css</code>. These counts are read from <code>tools/figma/snapshot.json</code> at build time, not typed here.
+      <p
+        style="font-size: 0.8rem; color: var(--ui-color-text-muted); margin: 0"
+      >
+        {tokenCensus.total} UI-tier variables: {tokenCensus.color} color,
+        {tokenCensus.spacing} spacing, {tokenCensus.radius} radius,
+        {tokenCensus.sizing} sizing, {tokenCensus.typography} typography,
+        {tokenCensus.opacity} opacity (the file also carries primitive and
+        component tiers that stay Figma-side). The full <code>--ui-*</code> list
+        — including shadow, motion, and z-index tokens that exist only in CSS —
+        lives in <code>libs/angular/src/styles/tokens.css</code>. These counts
+        are read from <code>tools/figma/snapshot.json</code> at build time, not
+        typed here.
       </p>
     </div>
 
     <!-- Component frames -->
     <div class="docs-section" style="margin-bottom: 2.5rem">
       <h2 class="docs-section-title">Component frames</h2>
-      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem">
-        The <code>Components</code> page has one Figma Section per component. Each section shows all variants,
-        sizes, and states — the complete visual spec.
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 1.25rem;
+        "
+      >
+        The <code>Components</code> page has one Figma Section per component.
+        Each section shows all variants, sizes, and states — the complete visual
+        spec.
       </p>
       <table class="docs-props-table">
         <thead>
@@ -257,13 +546,14 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-U
           </tr>
         </thead>
         <tbody>
-          {featuredRows.map((r) => (
-            <tr>
-              <td><code>{r.selector}</code></td>
-              <td>{r.section}</td>
-              <td>{r.axes}{r.booleans.length > 0 && ` + ${r.booleans.join(' / ')} boolean${r.booleans.length > 1 ? 's' : ''}`}</td>
-            </tr>
-          ))}
+          {featuredRows.map((r) => <tr>
+            <td><code>{r.selector}</code></td>
+            <td>{r.section}</td>
+            <td>
+              {r.axes}{r.booleans.length > 0 &&
+                ` + ${r.booleans.join(' / ')} boolean${r.booleans.length > 1 ? 's' : ''}`}
+            </td>
+          </tr>)}
           <tr>
             <td>{remainingCount} more…</td>
             <td>{sections.join(' · ')}</td>
@@ -276,20 +566,33 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-U
     <!-- Using Figma in the workshop -->
     <div class="docs-section" style="margin-bottom: 2.5rem">
       <h2 class="docs-section-title">Using Figma in the workshop</h2>
-      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.75rem">
-        This is how Figma, Storybook, and AI work together to produce component code that matches the design exactly.
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 1.75rem;
+        "
+      >
+        This is how Figma, Storybook, and AI work together to produce component
+        code that matches the design exactly.
       </p>
 
-      <WorkflowDiagram figureId="figma-workflow" caption="This is how Figma, Storybook, and AI work together to produce component code that matches the design exactly." />
+      <WorkflowDiagram
+        figureId="figma-workflow"
+        caption="This is how Figma, Storybook, and AI work together to produce component code that matches the design exactly."
+      />
 
       <div class="docs-step-list">
         <div class="docs-step-row">
           <span class="docs-step-badge">01</span>
           <div class="docs-step-body">
-            <h3 class="docs-h3">Open the Figma file — find the component frame</h3>
+            <h3 class="docs-h3">
+              Open the Figma file — find the component frame
+            </h3>
             <p class="docs-step-desc">
-              Navigate to the <code>Components</code> page and locate the section for the component you want to build.
-              Note the variant names and states — these map directly to the component's props.
+              Navigate to the <code>Components</code> page and locate the
+              section for the component you want to build. Note the variant
+              names and states — these map directly to the component's props.
             </p>
           </div>
         </div>
@@ -297,55 +600,265 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-U
         <div class="docs-step-row">
           <span class="docs-step-badge">02</span>
           <div class="docs-step-body">
-            <h3 class="docs-h3">Note the token values from the variable panel</h3>
+            <h3 class="docs-h3">
+              Note the token values from the variable panel
+            </h3>
             <p class="docs-step-desc">
-              In the Figma inspect panel (right sidebar, <strong>Design</strong> tab), hover over fills,
-              padding, or radius values to see the bound variable name
-              (e.g. <code>color/primary</code>, <code>spacing/6</code>, <code>radius/lg</code>). These are the exact
-              CSS token names you’ll use in code.
+              In the Figma inspect panel (right sidebar, <strong>Design</strong>
+              tab), hover over fills, padding, or radius values to see the bound
+              variable name (e.g. <code>color/primary</code>,
+              <code>spacing/6</code>, <code>radius/lg</code>). These are the
+              exact CSS token names you’ll use in code.
             </p>
 
-            <DiagramFigure caption="The right sidebar in Figma. Every property bound to a variable shows the variable name instead of a raw value — that name is your CSS custom property name.">
-              <svg viewBox="0 0 640 400" role="img" aria-labelledby="insp-title insp-desc" preserveAspectRatio="xMidYMid meet">
-                <title id="insp-title">Figma Design panel with variable bindings highlighted</title>
-                <desc id="insp-desc">A mockup of the Figma right-hand Design panel. Three properties are shown — Fill, Padding, Corner radius — each with its value on the left and its bound variable name on the right. The variable names color/primary, spacing/6, and radius/lg are highlighted.</desc>
+            <DiagramFigure
+              caption="The right sidebar in Figma. Every property bound to a variable shows the variable name instead of a raw value — that name is your CSS custom property name."
+            >
+              <svg
+                viewBox="0 0 640 400"
+                role="img"
+                aria-labelledby="insp-title insp-desc"
+                preserveAspectRatio="xMidYMid meet"
+              >
+                <title
+                  id="insp-title"
+                >Figma Design panel with variable bindings highlighted</title>
+                <desc id="insp-desc">
+                  A mockup of the Figma right-hand Design panel. Three
+                  properties are shown — Fill, Padding, Corner radius — each
+                  with its value on the left and its bound variable name on the
+                  right. The variable names color/primary, spacing/6, and
+                  radius/lg are highlighted.
+                </desc>
 
                 <!-- Panel background -->
-                <rect x="24" y="24" width="592" height="352" rx="12" ry="12" class="diagram-node"/>
+                <rect
+                  x="24"
+                  y="24"
+                  width="592"
+                  height="352"
+                  rx="12"
+                  ry="12"
+                  class="diagram-node"
+                />
 
                 <!-- Panel header tabs -->
-                <text x="52" y="58" font-size="12" font-weight="700" style="fill: var(--ui-color-primary)">Design</text>
-                <text x="110" y="58" font-size="12" class="diagram-muted">Prototype</text>
-                <text x="178" y="58" font-size="12" class="diagram-muted">Inspect</text>
-                <line x1="44" y1="68" x2="80" y2="68" style="stroke: var(--ui-color-primary); stroke-width: 2;"/>
+                <text
+                  x="52"
+                  y="58"
+                  font-size="12"
+                  font-weight="700"
+                  style="fill: var(--ui-color-primary)"
+                  >Design</text
+                >
+                <text x="110" y="58" font-size="12" class="diagram-muted"
+                  >Prototype</text
+                >
+                <text x="178" y="58" font-size="12" class="diagram-muted"
+                  >Inspect</text
+                >
+                <line
+                  x1="44"
+                  y1="68"
+                  x2="80"
+                  y2="68"
+                  style="stroke: var(--ui-color-primary); stroke-width: 2"
+                />
 
                 <!-- Selected frame label -->
-                <rect x="44" y="84" width="120" height="22" rx="4" ry="4" style="fill: color-mix(in srgb, var(--ui-color-primary) 14%, transparent); stroke: var(--ui-color-primary); stroke-width: 1;"/>
-                <text x="104" y="99" text-anchor="middle" font-size="11" font-weight="600" class="diagram-mono" style="fill: var(--ui-color-primary)">Settings Card</text>
+                <rect
+                  x="44"
+                  y="84"
+                  width="120"
+                  height="22"
+                  rx="4"
+                  ry="4"
+                  style="
+                    fill: color-mix(
+                      in srgb,
+                      var(--ui-color-primary) 14%,
+                      transparent
+                    );
+                    stroke: var(--ui-color-primary);
+                    stroke-width: 1;
+                  "
+                />
+                <text
+                  x="104"
+                  y="99"
+                  text-anchor="middle"
+                  font-size="11"
+                  font-weight="600"
+                  class="diagram-mono"
+                  style="fill: var(--ui-color-primary)"
+                  >Settings Card</text
+                >
 
                 <!-- Section: Fill -->
-                <text x="44" y="140" font-size="10" font-weight="700" class="diagram-eyebrow">Fill</text>
-                <rect x="44" y="150" width="32" height="32" rx="6" ry="6" style="fill: var(--ui-color-primary); stroke: none;"/>
-                <text x="90" y="162" font-size="11" class="diagram-mono diagram-muted">#00BEBE · 100%</text>
-                <rect x="260" y="146" width="300" height="36" rx="6" ry="6" style="fill: color-mix(in srgb, var(--ui-color-primary) 14%, transparent); stroke: var(--ui-color-primary); stroke-width: 1.25;"/>
-                <text x="276" y="169" font-size="12" font-weight="700" class="diagram-mono" style="fill: var(--ui-color-primary)">color/primary</text>
+                <text
+                  x="44"
+                  y="140"
+                  font-size="10"
+                  font-weight="700"
+                  class="diagram-eyebrow"
+                  >Fill</text
+                >
+                <rect
+                  x="44"
+                  y="150"
+                  width="32"
+                  height="32"
+                  rx="6"
+                  ry="6"
+                  style="fill: var(--ui-color-primary); stroke: none"
+                />
+                <text
+                  x="90"
+                  y="162"
+                  font-size="11"
+                  class="diagram-mono diagram-muted"
+                  >#00BEBE · 100%</text
+                >
+                <rect
+                  x="260"
+                  y="146"
+                  width="300"
+                  height="36"
+                  rx="6"
+                  ry="6"
+                  style="
+                    fill: color-mix(
+                      in srgb,
+                      var(--ui-color-primary) 14%,
+                      transparent
+                    );
+                    stroke: var(--ui-color-primary);
+                    stroke-width: 1.25;
+                  "
+                />
+                <text
+                  x="276"
+                  y="169"
+                  font-size="12"
+                  font-weight="700"
+                  class="diagram-mono"
+                  style="fill: var(--ui-color-primary)"
+                  >color/primary</text
+                >
 
                 <!-- Section: Padding -->
-                <text x="44" y="214" font-size="10" font-weight="700" class="diagram-eyebrow">Padding</text>
-                <text x="44" y="244" font-size="13" class="diagram-mono" font-weight="600">24 px</text>
-                <rect x="260" y="224" width="300" height="36" rx="6" ry="6" style="fill: color-mix(in srgb, var(--ui-color-primary) 14%, transparent); stroke: var(--ui-color-primary); stroke-width: 1.25;"/>
-                <text x="276" y="247" font-size="12" font-weight="700" class="diagram-mono" style="fill: var(--ui-color-primary)">spacing/6</text>
+                <text
+                  x="44"
+                  y="214"
+                  font-size="10"
+                  font-weight="700"
+                  class="diagram-eyebrow"
+                  >Padding</text
+                >
+                <text
+                  x="44"
+                  y="244"
+                  font-size="13"
+                  class="diagram-mono"
+                  font-weight="600"
+                  >24 px</text
+                >
+                <rect
+                  x="260"
+                  y="224"
+                  width="300"
+                  height="36"
+                  rx="6"
+                  ry="6"
+                  style="
+                    fill: color-mix(
+                      in srgb,
+                      var(--ui-color-primary) 14%,
+                      transparent
+                    );
+                    stroke: var(--ui-color-primary);
+                    stroke-width: 1.25;
+                  "
+                />
+                <text
+                  x="276"
+                  y="247"
+                  font-size="12"
+                  font-weight="700"
+                  class="diagram-mono"
+                  style="fill: var(--ui-color-primary)"
+                  >spacing/6</text
+                >
 
                 <!-- Section: Corner radius -->
-                <text x="44" y="292" font-size="10" font-weight="700" class="diagram-eyebrow">Corner radius</text>
-                <text x="44" y="322" font-size="13" class="diagram-mono" font-weight="600">12 px</text>
-                <rect x="260" y="302" width="300" height="36" rx="6" ry="6" style="fill: color-mix(in srgb, var(--ui-color-primary) 14%, transparent); stroke: var(--ui-color-primary); stroke-width: 1.25;"/>
-                <text x="276" y="325" font-size="12" font-weight="700" class="diagram-mono" style="fill: var(--ui-color-primary)">radius/lg</text>
+                <text
+                  x="44"
+                  y="292"
+                  font-size="10"
+                  font-weight="700"
+                  class="diagram-eyebrow"
+                  >Corner radius</text
+                >
+                <text
+                  x="44"
+                  y="322"
+                  font-size="13"
+                  class="diagram-mono"
+                  font-weight="600"
+                  >12 px</text
+                >
+                <rect
+                  x="260"
+                  y="302"
+                  width="300"
+                  height="36"
+                  rx="6"
+                  ry="6"
+                  style="
+                    fill: color-mix(
+                      in srgb,
+                      var(--ui-color-primary) 14%,
+                      transparent
+                    );
+                    stroke: var(--ui-color-primary);
+                    stroke-width: 1.25;
+                  "
+                />
+                <text
+                  x="276"
+                  y="325"
+                  font-size="12"
+                  font-weight="700"
+                  class="diagram-mono"
+                  style="fill: var(--ui-color-primary)"
+                  >radius/lg</text
+                >
 
                 <!-- Right-hand caption -->
-                <text x="620" y="166" text-anchor="end" font-size="9" class="diagram-muted">bound variable</text>
-                <text x="620" y="244" text-anchor="end" font-size="9" class="diagram-muted">bound variable</text>
-                <text x="620" y="322" text-anchor="end" font-size="9" class="diagram-muted">bound variable</text>
+                <text
+                  x="620"
+                  y="166"
+                  text-anchor="end"
+                  font-size="9"
+                  class="diagram-muted"
+                  >bound variable</text
+                >
+                <text
+                  x="620"
+                  y="244"
+                  text-anchor="end"
+                  font-size="9"
+                  class="diagram-muted"
+                  >bound variable</text
+                >
+                <text
+                  x="620"
+                  y="322"
+                  text-anchor="end"
+                  font-size="9"
+                  class="diagram-muted"
+                  >bound variable</text
+                >
               </svg>
             </DiagramFigure>
           </div>
@@ -354,12 +867,19 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-U
         <div class="docs-step-row">
           <span class="docs-step-badge">03</span>
           <div class="docs-step-body">
-            <h3 class="docs-h3">Ask AI — reference token names and Storybook MCP</h3>
+            <h3 class="docs-h3">
+              Ask AI — reference token names and Storybook MCP
+            </h3>
             <p class="docs-step-desc">
-              Include the Figma token names in your prompt. AI will use the same names in code,
-              and will look up accurate prop names and examples from the Storybook MCP:
+              Include the Figma token names in your prompt. AI will use the same
+              names in code, and will look up accurate prop names and examples
+              from the Storybook MCP:
             </p>
-            <Code code={`Build a settings card using AtlCard with variant="elevated".\nMatch the Figma spec: --ui-color-surface-raised background,\n--ui-spacing-6 padding, --ui-radius-lg border-radius.\nUse the storybook-<your framework> MCP to check AtlCard props.`} lang="text" title="example prompt" />
+            <Code
+              code={`Build a settings card using AtlCard with variant="elevated".\nMatch the Figma spec: --ui-color-surface-raised background,\n--ui-spacing-6 padding, --ui-radius-lg border-radius.\nUse the storybook-<your framework> MCP to check AtlCard props.`}
+              lang="text"
+              title="example prompt"
+            />
           </div>
         </div>
 
@@ -368,8 +888,9 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-U
           <div class="docs-step-body">
             <h3 class="docs-h3">Ship — the component matches the design</h3>
             <p class="docs-step-desc">
-              Because Figma variables and CSS custom properties share the same names, there is no gap between
-              what the designer specified and what ships. Light and dark mode work automatically — the tokens
+              Because Figma variables and CSS custom properties share the same
+              names, there is no gap between what the designer specified and
+              what ships. Light and dark mode work automatically — the tokens
               resolve to their mode-specific values at runtime.
             </p>
           </div>
@@ -377,11 +898,28 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-U
       </div>
     </div>
 
-    <BottomNav items={[
-      { to: '/workshop',  label: 'Setup',   title: 'Workshop',     icon: 'build_circle' },
-      { to: '/storybook', label: 'Explore', title: 'Storybook',    icon: 'book' },
-      { to: '/mcp',       label: 'Tools',   title: 'MCP Explorer', icon: 'smart_toy' },
-    ]} />
+    <BottomNav
+      items={[
+        {
+          to: '/workshop',
+          label: 'Setup',
+          title: 'Workshop',
+          icon: 'build_circle',
+        },
+        {
+          to: '/storybook',
+          label: 'Explore',
+          title: 'Storybook',
+          icon: 'book',
+        },
+        {
+          to: '/mcp',
+          label: 'Tools',
+          title: 'MCP Explorer',
+          icon: 'smart_toy',
+        },
+      ]}
+    />
   </div>
 </BaseLayout>
 
@@ -464,7 +1002,8 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-U
   }
   .token-chip-figma,
   .token-chip-css {
-    font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-family:
+      var(--font-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
     font-size: 0.78rem;
   }
   .token-chip-figma {
@@ -503,4 +1042,3 @@ const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-U
     color: var(--ui-color-text-muted);
   }
 </style>
-

@@ -17,8 +17,10 @@ const ISSUES: Issue[] = [
   {
     id: 'mcp-unreachable',
     title: 'Storybook MCP server is unreachable',
-    symptom: 'Claude Code says "storybook-angular" (or react/vue) is disconnected, or no component docs are returned.',
-    cause: 'Your network blocks outbound HTTPS to atelier.pieper.io, or the server is temporarily down.',
+    symptom:
+      'Claude Code says "storybook-angular" (or react/vue) is disconnected, or no component docs are returned.',
+    cause:
+      'Your network blocks outbound HTTPS to atelier.pieper.io, or the server is temporarily down.',
     fix: [
       'Run `npm run preflight` — it makes a real MCP call against each endpoint and reports what failed.',
       'Test manually with `curl -I https://atelier.pieper.io/storybook-angular/mcp`. You should see a 200 or 405.',
@@ -28,10 +30,12 @@ const ISSUES: Issue[] = [
   {
     id: 'mcp-tools-error',
     title: 'MCP connects but every tool errors',
-    symptom: 'Claude Code lists `storybook-angular` (or react/vue) as connected, but every tool call — even `docs-list` — returns an error like "Failed to fetch manifest components.json: 522".',
-    cause: 'The endpoint answers HTTP, but the MCP server behind it is broken — "connected" only proves the URL responds, not that tools work. This is a server-side fault, not your setup.',
+    symptom:
+      'Claude Code lists `storybook-angular` (or react/vue) as connected, but every tool call — even `docs-list` — returns an error like "Failed to fetch manifest components.json: 522".',
+    cause:
+      'The endpoint answers HTTP, but the MCP server behind it is broken — "connected" only proves the URL responds, not that tools work. This is a server-side fault, not your setup.',
     fix: [
-      'Run `npm run preflight` — its MCP check issues a real JSON-RPC `tools/list` plus one actual tool call per Storybook endpoint, so this failure shows up as a red `MCP:` row with the server\'s error text instead of a green check.',
+      "Run `npm run preflight` — its MCP check issues a real JSON-RPC `tools/list` plus one actual tool call per Storybook endpoint, so this failure shows up as a red `MCP:` row with the server's error text instead of a green check.",
       'Verify manually: `curl -X POST -H "content-type: application/json" -H "accept: application/json, text/event-stream" -d \'{"jsonrpc":"2.0","id":1,"method":"tools/list","params":{}}\' https://atelier.pieper.io/storybook-react/mcp` — a healthy server answers with a tool list.',
       'If it persists, the server needs a redeploy — nothing to fix on your machine. The framework pages on this site document the same component API in the meantime.',
     ],
@@ -39,8 +43,10 @@ const ISSUES: Issue[] = [
   {
     id: 'mcp-not-loaded',
     title: 'Claude Code does not pick up the MCP config',
-    symptom: 'The MCP servers are not listed in Claude Code, even though `.mcp.json` exists.',
-    cause: 'Claude Code was started before `.mcp.json` existed, or the workspace is opened above the project root.',
+    symptom:
+      'The MCP servers are not listed in Claude Code, even though `.mcp.json` exists.',
+    cause:
+      'Claude Code was started before `.mcp.json` existed, or the workspace is opened above the project root.',
     fix: [
       'Close and reopen the project in Claude Code from the directory containing `.mcp.json`.',
       'Check that `.mcp.json` is at the workspace root (not inside an app folder).',
@@ -50,8 +56,10 @@ const ISSUES: Issue[] = [
   {
     id: 'figma-403',
     title: 'Figma REST returns 403 / invalid token',
-    symptom: 'REST-backed tools (file / variable / comment metadata reads) fail with "Forbidden" or "Invalid token". Interactive plugin tools still work.',
-    cause: '`FIGMA_ACCESS_TOKEN` is missing, expired, or does not have access to the target file. Only REST calls use it — the Desktop Bridge plugin does not.',
+    symptom:
+      'REST-backed tools (file / variable / comment metadata reads) fail with "Forbidden" or "Invalid token". Interactive plugin tools still work.',
+    cause:
+      '`FIGMA_ACCESS_TOKEN` is missing, expired, or does not have access to the target file. Only REST calls use it — the Desktop Bridge plugin does not.',
     fix: [
       'Verify the env var: `echo $FIGMA_ACCESS_TOKEN` (macOS/Linux) or `$env:FIGMA_ACCESS_TOKEN` (PowerShell).',
       'Confirm `.mcp.json` passes the token through — either inline or via `"FIGMA_ACCESS_TOKEN": "${FIGMA_ACCESS_TOKEN}"`. A bare shell export is not enough.',
@@ -62,8 +70,10 @@ const ISSUES: Issue[] = [
   {
     id: 'figma-bridge-plugin-not-connected',
     title: 'figma-console tools fail with "bridge not connected"',
-    symptom: '`figma_take_screenshot`, `figma_get_selection`, or `figma_execute` return "no active bridge" or time out. The MCP is loaded in Claude Code but has no Figma channel.',
-    cause: 'The Desktop Bridge plugin is either not imported into Figma Desktop, not running, or cannot find the MCP on ports 9223–9232.',
+    symptom:
+      '`figma_take_screenshot`, `figma_get_selection`, or `figma_execute` return "no active bridge" or time out. The MCP is loaded in Claude Code but has no Figma channel.',
+    cause:
+      'The Desktop Bridge plugin is either not imported into Figma Desktop, not running, or cannot find the MCP on ports 9223–9232.',
     fix: [
       'Open Figma Desktop and run **Plugins → Development → Figma Desktop Bridge**. Leave the panel open while you work.',
       'If the plugin is missing from Development: re-run `npx -y figma-console-mcp@latest --help` to seed `~/.figma-console-mcp/plugin/`, then **Plugins → Development → Import plugin from manifest…** and pick that `manifest.json`.',
@@ -73,8 +83,10 @@ const ISSUES: Issue[] = [
   {
     id: 'figma-bridge-port-conflict',
     title: 'Every port 9223–9232 is already in use',
-    symptom: 'figma-console MCP starts, but the Desktop Bridge panel stays on "searching…" indefinitely.',
-    cause: 'The WebSocket port range 9223–9232 is fully occupied by unrelated processes, so the MCP cannot bind.',
+    symptom:
+      'figma-console MCP starts, but the Desktop Bridge panel stays on "searching…" indefinitely.',
+    cause:
+      'The WebSocket port range 9223–9232 is fully occupied by unrelated processes, so the MCP cannot bind.',
     codeFix: `# macOS / Linux — see who is on 9223\nlsof -nP -iTCP:9223 -sTCP:LISTEN\n\n# Free up 9223–9232 if safe\nfor p in 9223 9224 9225 9226 9227 9228 9229 9230 9231 9232; do\n  lsof -ti :$p | xargs -r kill\ndone`,
     codeLang: 'shell',
     fix: [
@@ -86,8 +98,10 @@ const ISSUES: Issue[] = [
   {
     id: 'figma-mcp-apps-not-supported',
     title: 'Token Browser / Design System Dashboard missing',
-    symptom: '`ENABLE_MCP_APPS=true` is set, but the interactive MCP Apps UI (Token Browser, Design System Dashboard) never appears.',
-    cause: 'Your MCP client does not implement the `ext-apps` protocol that those rich UIs require. Core tools still work.',
+    symptom:
+      '`ENABLE_MCP_APPS=true` is set, but the interactive MCP Apps UI (Token Browser, Design System Dashboard) never appears.',
+    cause:
+      'Your MCP client does not implement the `ext-apps` protocol that those rich UIs require. Core tools still work.',
     fix: [
       'Use a client with `ext-apps` support (recent Claude Code builds qualify — run `claude --version` and upgrade if needed).',
       'Confirm the env var is actually reaching the child: add a `"LOG_LEVEL": "debug"` entry next to `ENABLE_MCP_APPS` and check the MCP startup line.',
@@ -97,8 +111,10 @@ const ISSUES: Issue[] = [
   {
     id: 'claude-cli-not-authenticated',
     title: 'Claude Code CLI installed but not authenticated',
-    symptom: '`claude --version` prints a version number and `npm run preflight` shows a green "Claude Code CLI" line, but a real prompt fails — an interactive session asks you to sign in, or `claude -p "…"` exits with an authentication error instead of a response.',
-    cause: '`preflight` only checks that the binary is on `PATH` and answers `--version` — it never sends a request to a model, so it cannot see whether you are logged in or your key is valid. Installed, connected (MCP), and authenticated (model access) are three separate things; a green preflight proves only the first.',
+    symptom:
+      '`claude --version` prints a version number and `npm run preflight` shows a green "Claude Code CLI" line, but a real prompt fails — an interactive session asks you to sign in, or `claude -p "…"` exits with an authentication error instead of a response.',
+    cause:
+      '`preflight` only checks that the binary is on `PATH` and answers `--version` — it never sends a request to a model, so it cannot see whether you are logged in or your key is valid. Installed, connected (MCP), and authenticated (model access) are three separate things; a green preflight proves only the first.',
     codeFix: `# Set your own API key (see console setup at docs.claude.com/en/docs/claude-code/setup)\nexport ANTHROPIC_API_KEY=sk-ant-...\n\n# Prove model access — not just installation\nclaude -p "Reply with exactly: PREFLIGHT-OK"`,
     codeLang: 'shell',
     fix: [
@@ -110,7 +126,8 @@ const ISSUES: Issue[] = [
   {
     id: 'node-too-old',
     title: 'Node.js version too old',
-    symptom: '`npx create-atelier-ui-workspace` exits with `engines` or `Unsupported engine` errors.',
+    symptom:
+      '`npx create-atelier-ui-workspace` exits with `engines` or `Unsupported engine` errors.',
     cause: 'Atelier requires Node 22.12+ for Angular 22 and Astro 6 support.',
     fix: [
       'Install `nvm` (https://github.com/nvm-sh/nvm) — then `nvm install 22 && nvm use 22`.',
@@ -121,8 +138,10 @@ const ISSUES: Issue[] = [
   {
     id: 'npx-permission-denied',
     title: 'Permission denied running `npx create-atelier-ui-workspace`',
-    symptom: '`EACCES` errors during install, or "command not found" for a freshly installed global.',
-    cause: 'npm is trying to write to a system-level directory that your user cannot access.',
+    symptom:
+      '`EACCES` errors during install, or "command not found" for a freshly installed global.',
+    cause:
+      'npm is trying to write to a system-level directory that your user cannot access.',
     fix: [
       'Avoid `sudo npm install -g`. Instead, point npm at a user-owned prefix: see https://docs.npmjs.com/resolving-eacces-permissions-errors-when-installing-packages-globally.',
       'Or use nvm — it installs Node + npm into your home directory by default.',
@@ -132,8 +151,10 @@ const ISSUES: Issue[] = [
   {
     id: 'nx-project-not-found',
     title: "Cannot find project 'workshop-angular'",
-    symptom: '`npx nx serve workshop-angular` (or -react / -vue) fails with "Cannot find project" — the target does not exist.',
-    cause: 'You are in a clone of the atelier monorepo, not in a scaffolded workspace. The `workshop-*` apps are written by `create-atelier-ui-workspace`; the monorepo ships the library, the docs site, and the Storybooks instead.',
+    symptom:
+      '`npx nx serve workshop-angular` (or -react / -vue) fails with "Cannot find project" — the target does not exist.',
+    cause:
+      'You are in a clone of the atelier monorepo, not in a scaffolded workspace. The `workshop-*` apps are written by `create-atelier-ui-workspace`; the monorepo ships the library, the docs site, and the Storybooks instead.',
     codeFix: `# in a clone of the atelier monorepo\nnpx nx serve docs                # the docs site you are reading\nnpx nx storybook angular         # or: react | vue\n\n# in a scaffolded workspace\nnpm start`,
     codeLang: 'shell',
     fix: [
@@ -145,8 +166,10 @@ const ISSUES: Issue[] = [
   {
     id: 'figma-node-id-not-found',
     title: "The Figma node-id doesn't resolve",
-    symptom: 'A `figma_*` call returns null for the node, or the Figma link opens the file and focuses nothing — no error, no selection.',
-    cause: 'The node id is stale (ids are file-specific and change when a frame is recreated), or you are in a duplicate of the file where the copy carries different ids, or the Desktop Bridge is pointed at a different file than the one the id belongs to.',
+    symptom:
+      'A `figma_*` call returns null for the node, or the Figma link opens the file and focuses nothing — no error, no selection.',
+    cause:
+      'The node id is stale (ids are file-specific and change when a frame is recreated), or you are in a duplicate of the file where the copy carries different ids, or the Desktop Bridge is pointed at a different file than the one the id belongs to.',
     fix: [
       'Confirm which file is open: `figma_get_status` reports the connected file key. The workshop frames live in `QMnDD8uZQPldPrlCwZZ58T`.',
       'Re-resolve the node by name instead of by id — `figma_search_components` (masters) or select the frame in Figma and call `figma_get_selection`, which returns the id that is live in your session.',
@@ -156,7 +179,8 @@ const ISSUES: Issue[] = [
   {
     id: 'port-in-use',
     title: 'Port 4200 / 4300 / 4400–4402 / 6006 already in use',
-    symptom: '`EADDRINUSE` when running `nx serve`, `nx storybook <fw>`, or `storybook` (scaffold).',
+    symptom:
+      '`EADDRINUSE` when running `nx serve`, `nx storybook <fw>`, or `storybook` (scaffold).',
     cause: 'A previous dev server process is still running.',
     fix: [
       'macOS/Linux: `lsof -ti :<port> | xargs kill` — swap in the port that is stuck.',
@@ -168,8 +192,10 @@ const ISSUES: Issue[] = [
   {
     id: 'figma-token-missing-after-restart',
     title: 'FIGMA_ACCESS_TOKEN vanishes after terminal restart',
-    symptom: '`echo $FIGMA_ACCESS_TOKEN` is empty in a new shell even though you set it yesterday.',
-    cause: '`export` only sets the variable for the current shell session — it does not persist. Also: Claude Code reads the env from `.mcp.json`, so even a persistent shell export has no effect unless `.mcp.json` references it via `${FIGMA_ACCESS_TOKEN}`.',
+    symptom:
+      '`echo $FIGMA_ACCESS_TOKEN` is empty in a new shell even though you set it yesterday.',
+    cause:
+      '`export` only sets the variable for the current shell session — it does not persist. Also: Claude Code reads the env from `.mcp.json`, so even a persistent shell export has no effect unless `.mcp.json` references it via `${FIGMA_ACCESS_TOKEN}`.',
     codeFix: `# macOS (zsh)\necho 'export FIGMA_ACCESS_TOKEN=figd_...' >> ~/.zshrc\nsource ~/.zshrc\n\n# Linux (bash)\necho 'export FIGMA_ACCESS_TOKEN=figd_...' >> ~/.bashrc\nsource ~/.bashrc`,
     codeLang: 'shell',
     fix: [
@@ -181,8 +207,10 @@ const ISSUES: Issue[] = [
   {
     id: 'windows-paths',
     title: 'Windows-specific path / symlink errors',
-    symptom: '`EPERM`, symlink failures, or mysterious path-too-long errors during `npm install`.',
-    cause: 'Windows has stricter filesystem semantics than macOS/Linux — long paths and symlinks can fail.',
+    symptom:
+      '`EPERM`, symlink failures, or mysterious path-too-long errors during `npm install`.',
+    cause:
+      'Windows has stricter filesystem semantics than macOS/Linux — long paths and symlinks can fail.',
     fix: [
       'Enable long paths: `git config --system core.longpaths true` (admin PowerShell).',
       'Prefer WSL2 for Node.js work — run everything inside a WSL2 Ubuntu shell.',
@@ -198,55 +226,135 @@ const ISSUES: Issue[] = [
   currentPath="/troubleshooting"
 >
   <div class="docs-inline-page">
-
     <PageHero kind="howto" title="Troubleshooting" ledeMax="640px">
-      The most common issues when setting up the Atelier workshop — symptom, cause, and a fix in three steps or less.
-      Start with <code>npm run preflight</code>; it flags most of these automatically.
+      The most common issues when setting up the Atelier workshop — symptom,
+      cause, and a fix in three steps or less. Start with
+      <code>npm run preflight</code>; it flags most of these automatically.
     </PageHero>
 
     <div style="display: flex; flex-direction: column; gap: 1.5rem">
-      {ISSUES.map((issue) => (
-        <section id={issue.id} style="padding: 1.25rem 1.4rem; background: var(--ui-color-surface-raised); border: 1px solid var(--ui-color-border); border-radius: var(--ui-radius-md)">
-          <h2 style="margin: 0 0 0.75rem; font-size: 1rem; font-weight: 700; color: var(--ui-color-text)">
-            {issue.title}
-          </h2>
-          <div style="display: grid; grid-template-columns: minmax(0, 1fr); gap: 0.5rem; font-size: var(--ui-font-size-md); line-height: 1.6; overflow-wrap: anywhere">
-            <div>
-              <span style="font-size: var(--ui-font-size-xs); font-weight: 700; color: var(--ui-color-text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-right: 0.4rem">Symptom</span>
-              <span style="color: var(--ui-color-text)">{issue.symptom}</span>
-            </div>
-            <div>
-              <span style="font-size: var(--ui-font-size-xs); font-weight: 700; color: var(--ui-color-text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-right: 0.4rem">Cause</span>
-              <span style="color: var(--ui-color-text)">{issue.cause}</span>
-            </div>
-            <div>
-              <div style="font-size: var(--ui-font-size-xs); font-weight: 700; color: var(--ui-color-text-muted); text-transform: uppercase; letter-spacing: 0.06em; margin-bottom: 0.4rem">Fix</div>
-              <ol style="margin: 0; padding-left: 1.2rem; color: var(--ui-color-text)">
-                {issue.fix.map((step) => (
-                  <li style="margin-bottom: 0.25rem">{step}</li>
-                ))}
-              </ol>
-            </div>
-            {issue.codeFix && (
-              <div style="margin-top: 0.5rem">
-                <Code code={issue.codeFix} lang={issue.codeLang ?? 'shell'} />
-              </div>
-            )}
+      {ISSUES.map((issue) => <section
+        id={issue.id}
+        style="
+          padding: 1.25rem 1.4rem;
+          background: var(--ui-color-surface-raised);
+          border: 1px solid var(--ui-color-border);
+          border-radius: var(--ui-radius-md);
+        "
+      >
+        <h2
+          style="
+            margin: 0 0 0.75rem;
+            font-size: 1rem;
+            font-weight: 700;
+            color: var(--ui-color-text);
+          "
+        >
+          {issue.title}
+        </h2>
+        <div
+          style="
+            display: grid;
+            grid-template-columns: minmax(0, 1fr);
+            gap: 0.5rem;
+            font-size: var(--ui-font-size-md);
+            line-height: 1.6;
+            overflow-wrap: anywhere;
+          "
+        >
+          <div>
+            <span
+              style="
+                font-size: var(--ui-font-size-xs);
+                font-weight: 700;
+                color: var(--ui-color-text-muted);
+                text-transform: uppercase;
+                letter-spacing: 0.06em;
+                margin-right: 0.4rem;
+              "
+              >Symptom</span
+            >
+            <span style="color: var(--ui-color-text)">{issue.symptom}</span>
           </div>
-        </section>
-      ))}
+          <div>
+            <span
+              style="
+                font-size: var(--ui-font-size-xs);
+                font-weight: 700;
+                color: var(--ui-color-text-muted);
+                text-transform: uppercase;
+                letter-spacing: 0.06em;
+                margin-right: 0.4rem;
+              "
+              >Cause</span
+            >
+            <span style="color: var(--ui-color-text)">{issue.cause}</span>
+          </div>
+          <div>
+            <div
+              style="
+                font-size: var(--ui-font-size-xs);
+                font-weight: 700;
+                color: var(--ui-color-text-muted);
+                text-transform: uppercase;
+                letter-spacing: 0.06em;
+                margin-bottom: 0.4rem;
+              "
+            >
+              Fix
+            </div>
+            <ol
+              style="
+                margin: 0;
+                padding-left: 1.2rem;
+                color: var(--ui-color-text);
+              "
+            >
+              {issue.fix.map((step) => <li style="margin-bottom: 0.25rem">
+                {step}
+              </li>)}
+            </ol>
+          </div>
+          {issue.codeFix && <div style="margin-top: 0.5rem">
+            <Code code={issue.codeFix} lang={issue.codeLang ?? 'shell'} />
+          </div>}
+        </div>
+      </section>)}
     </div>
 
-    <div style="margin-top: 2rem; padding: 1rem 1.25rem; background: var(--ui-color-primary-light); border: 1px solid var(--ui-color-border); border-radius: var(--ui-radius-md)">
-      <p style="margin: 0; font-size: var(--ui-font-size-md); color: var(--ui-color-text); line-height: 1.6">
-        Still stuck? Run <code>npm run preflight</code> and share its output — every line reports a specific fix.
+    <div
+      style="
+        margin-top: 2rem;
+        padding: 1rem 1.25rem;
+        background: var(--ui-color-primary-light);
+        border: 1px solid var(--ui-color-border);
+        border-radius: var(--ui-radius-md);
+      "
+    >
+      <p
+        style="
+          margin: 0;
+          font-size: var(--ui-font-size-md);
+          color: var(--ui-color-text);
+          line-height: 1.6;
+        "
+      >
+        Still stuck? Run <code>npm run preflight</code> and share its output —
+        every line reports a specific fix.
       </p>
-      <p style="margin: 0.75rem 0 0; font-size: var(--ui-font-size-md); color: var(--ui-color-text); line-height: 1.6">
-        Not a specific symptom — more like &ldquo;how do I update the plugin&rdquo; or &ldquo;why are there orphaned server
-        instances&rdquo;? Those are running-the-setup questions, and they live in the
+      <p
+        style="
+          margin: 0.75rem 0 0;
+          font-size: var(--ui-font-size-md);
+          color: var(--ui-color-text);
+          line-height: 1.6;
+        "
+      >
+        Not a specific symptom — more like &ldquo;how do I update the
+        plugin&rdquo; or &ldquo;why are there orphaned server instances&rdquo;?
+        Those are running-the-setup questions, and they live in the
         <a href="/runbook" class="docs-link-primary">runbook</a>.
       </p>
     </div>
-
   </div>
 </BaseLayout>

@@ -18,184 +18,318 @@ import PageHero from '../components/PageHero.astro';
   ]}
 >
   <div class="docs-inline-page">
-    <PageHero kind="explanation" title="LLM-optimized API design" ledeMax="580px">
+    <PageHero
+      kind="explanation"
+      title="LLM-optimized API design"
+      ledeMax="580px"
+    >
       <strong>Predictable APIs across frameworks.</strong>
       Traditional component libraries are designed for humans who browse docs,
-      copy examples, and tweak. An LLM-optimized library flips the priority:
-      the model has to infer correct usage from minimal context and produce
-      working code on the first try. The six principles below are what make
-      that possible — and what shaped every API decision in Atelier UI.
+      copy examples, and tweak. An LLM-optimized library flips the priority: the
+      model has to infer correct usage from minimal context and produce working
+      code on the first try. The six principles below are what make that
+      possible — and what shaped every API decision in Atelier UI.
     </PageHero>
 
     <!-- Principle 1 -->
     <div class="docs-section">
-      <h2 id="principle-1" class="docs-section-title">1. One name for one concept — everywhere</h2>
-      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin-bottom: 0.75rem">
-        If <code>AtlButton</code> takes a <code>variant</code> prop, then <code>AtlBadge</code>,
-        <code>AtlAlert</code>, and <code>AtlCard</code> use <code>variant</code> too.
-        If <code>size</code> controls scale on a button, it controls scale on every component
-        that has scale. No synonyms, no renamings.
+      <h2 id="principle-1" class="docs-section-title">
+        1. One name for one concept — everywhere
+      </h2>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.65;
+          margin-bottom: 0.75rem;
+        "
+      >
+        If <code>AtlButton</code> takes a <code>variant</code> prop, then
+        <code>AtlBadge</code>, <code>AtlAlert</code>, and <code>AtlCard</code>
+        use <code>variant</code> too. If <code>size</code> controls scale on a
+        button, it controls scale on every component that has scale. No
+        synonyms, no renamings.
       </p>
-      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin-bottom: 1rem">
-        The model only needs to learn the pattern once. Every subsequent component is a variation
-        on the same schema — so the inference cost is near zero and hallucination risk drops
-        to near zero.
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.65;
+          margin-bottom: 1rem;
+        "
+      >
+        The model only needs to learn the pattern once. Every subsequent
+        component is a variation on the same schema — so the inference cost is
+        near zero and hallucination risk drops to near zero.
       </p>
       <div class="docs-comparison">
         <div class="docs-comparison-bad">
           <div class="docs-comparison-label">Unpredictable</div>
           <div class="docs-code-block">
-            <div class="docs-code-block-header"><span class="docs-code-block-lang">jsx</span></div>
+            <div class="docs-code-block-header">
+              <span class="docs-code-block-lang">jsx</span>
+            </div>
             <pre><code>{"// Three components, three different names\n<Button kind=\"filled\" scale=\"lg\" />\n<Badge type=\"success\" />\n<Alert level=\"warning\" />"}</code></pre>
           </div>
         </div>
         <div class="docs-comparison-good">
           <div class="docs-comparison-label">LLM-optimized</div>
           <div class="docs-code-block">
-            <div class="docs-code-block-header"><span class="docs-code-block-lang">jsx</span></div>
+            <div class="docs-code-block-header">
+              <span class="docs-code-block-lang">jsx</span>
+            </div>
             <pre><code>{"// One pattern, every component\n<AtlButton variant=\"primary\" size=\"lg\" />\n<AtlBadge variant=\"success\" />\n<AtlAlert variant=\"warning\" />"}</code></pre>
           </div>
         </div>
       </div>
       <div class="docs-rule">
         <span class="docs-rule-label">Rule</span>
-        Every component with variants uses <code>variant</code>. Every component with sizes uses <code>size</code>. No exceptions.
+        Every component with variants uses <code>variant</code>. Every component
+        with sizes uses <code>size</code>. No exceptions.
       </div>
     </div>
 
     <!-- Principle 2 -->
     <div class="docs-section">
-      <h2 id="principle-2" class="docs-section-title">2. Narrow literal types, not wide strings</h2>
-      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin-bottom: 1rem">
-        A prop typed as <code>string</code> gives the model nothing to work with. It has to guess
-        valid values from context, documentation, or training data — all unreliable. A prop typed
-        as <code>'primary' | 'secondary' | 'outline'</code> is self-documenting: the model reads
-        the type and knows exactly what to write.
+      <h2 id="principle-2" class="docs-section-title">
+        2. Narrow literal types, not wide strings
+      </h2>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.65;
+          margin-bottom: 1rem;
+        "
+      >
+        A prop typed as <code>string</code> gives the model nothing to work
+        with. It has to guess valid values from context, documentation, or
+        training data — all unreliable. A prop typed as
+        <code>'primary' | 'secondary' | 'outline'</code> is self-documenting:
+        the model reads the type and knows exactly what to write.
       </p>
       <div class="docs-comparison">
         <div class="docs-comparison-bad">
           <div class="docs-comparison-label">Unpredictable</div>
           <div class="docs-code-block">
-            <div class="docs-code-block-header"><span class="docs-code-block-lang">ts</span></div>
+            <div class="docs-code-block-header">
+              <span class="docs-code-block-lang">ts</span>
+            </div>
             <pre><code>{"// What values are valid here?\nvariant: string\nsize: string\nposition: string"}</code></pre>
           </div>
         </div>
         <div class="docs-comparison-good">
           <div class="docs-comparison-label">LLM-optimized</div>
           <div class="docs-code-block">
-            <div class="docs-code-block-header"><span class="docs-code-block-lang">ts</span></div>
+            <div class="docs-code-block-header">
+              <span class="docs-code-block-lang">ts</span>
+            </div>
             <pre><code>{"// Self-documenting — no guessing needed\nvariant: 'primary' | 'secondary' | 'outline'\nsize: 'sm' | 'md' | 'lg'\nposition: 'top' | 'bottom' | 'left' | 'right'"}</code></pre>
           </div>
         </div>
       </div>
       <div class="docs-rule">
         <span class="docs-rule-label">Rule</span>
-        Use string literal union types everywhere. Never <code>string</code>, never numeric codes, never enums — they compile away and disappear from type information.
+        Use string literal union types everywhere. Never <code>string</code>,
+        never numeric codes, never enums — they compile away and disappear from
+        type information.
       </div>
     </div>
 
     <!-- Principle 3 -->
     <div class="docs-section">
-      <h2 id="principle-3" class="docs-section-title">3. Sensible defaults so bare usage always works</h2>
-      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin-bottom: 1rem">
-        Every input has a default. <code>&lt;atl-button&gt;Click&lt;/atl-button&gt;</code> renders
-        a correct, styled, accessible button without a single prop. This matters for AI output
-        because the model can scaffold something working first and add customization in the next
-        turn — instead of needing every prop correct on the first attempt.
+      <h2 id="principle-3" class="docs-section-title">
+        3. Sensible defaults so bare usage always works
+      </h2>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.65;
+          margin-bottom: 1rem;
+        "
+      >
+        Every input has a default.
+        <code>&lt;atl-button&gt;Click&lt;/atl-button&gt;</code> renders a
+        correct, styled, accessible button without a single prop. This matters
+        for AI output because the model can scaffold something working first and
+        add customization in the next turn — instead of needing every prop
+        correct on the first attempt.
       </p>
       <div class="docs-comparison">
         <div class="docs-comparison-bad">
           <div class="docs-comparison-label">Unpredictable</div>
           <div class="docs-code-block">
-            <div class="docs-code-block-header"><span class="docs-code-block-lang">jsx</span></div>
+            <div class="docs-code-block-header">
+              <span class="docs-code-block-lang">jsx</span>
+            </div>
             <pre><code>{"// Crashes or renders nothing without required props\n<Button />\n<Card type=\"?\" padding=\"?\">...</Card>"}</code></pre>
           </div>
         </div>
         <div class="docs-comparison-good">
           <div class="docs-comparison-label">LLM-optimized</div>
           <div class="docs-code-block">
-            <div class="docs-code-block-header"><span class="docs-code-block-lang">jsx</span></div>
+            <div class="docs-code-block-header">
+              <span class="docs-code-block-lang">jsx</span>
+            </div>
             <pre><code>{"// Always works — customize only what you need\n<atl-button>Click</atl-button>\n<atl-card>Content</atl-card>"}</code></pre>
           </div>
         </div>
       </div>
       <div class="docs-rule">
         <span class="docs-rule-label">Rule</span>
-        Every prop must have a sensible default. Required props are only allowed when there is no reasonable default (e.g., a data array that must come from the consumer).
+        Every prop must have a sensible default. Required props are only allowed
+        when there is no reasonable default (e.g., a data array that must come
+        from the consumer).
       </div>
     </div>
 
     <!-- Principle 4 -->
     <div class="docs-section">
-      <h2 id="principle-4" class="docs-section-title">4. Composition over configuration</h2>
-      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin-bottom: 0.75rem">
-        A config object hides its shape from the model — it has to guess which keys exist,
-        whether they're required, and how they nest. Composing elements doesn't: it's the
-        same HTML-like nesting the model has already seen a billion times in training data.
+      <h2 id="principle-4" class="docs-section-title">
+        4. Composition over configuration
+      </h2>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.65;
+          margin-bottom: 0.75rem;
+        "
+      >
+        A config object hides its shape from the model — it has to guess which
+        keys exist, whether they're required, and how they nest. Composing
+        elements doesn't: it's the same HTML-like nesting the model has already
+        seen a billion times in training data.
       </p>
-      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin-bottom: 1rem">
-        Shown here in Angular's own template syntax — the shape is the same in every framework,
-        only the composition primitive changes.
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.65;
+          margin-bottom: 1rem;
+        "
+      >
+        Shown here in Angular's own template syntax — the shape is the same in
+        every framework, only the composition primitive changes.
       </p>
       <div class="docs-comparison">
         <div class="docs-comparison-bad">
           <div class="docs-comparison-label">Unpredictable</div>
           <div class="docs-code-block">
-            <div class="docs-code-block-header"><span class="docs-code-block-lang">jsx</span></div>
+            <div class="docs-code-block-header">
+              <span class="docs-code-block-lang">jsx</span>
+            </div>
             <pre><code>{"<!-- Opaque config object — the model must guess the nested shape -->\n<atl-card [config]=\"{ header: { title: '...' }, footer: { actions: [...] } }\" />"}</code></pre>
           </div>
         </div>
         <div class="docs-comparison-good">
           <div class="docs-comparison-label">LLM-optimized</div>
           <div class="docs-code-block">
-            <div class="docs-code-block-header"><span class="docs-code-block-lang">jsx</span></div>
+            <div class="docs-code-block-header">
+              <span class="docs-code-block-lang">jsx</span>
+            </div>
             <pre><code>{"<!-- Composition — nesting the model already knows -->\n<atl-card>\n  <atl-card-header>Title</atl-card-header>\n  <atl-card-content>Body text here.</atl-card-content>\n  <atl-card-footer>\n    <atl-button variant=\"primary\">Save</atl-button>\n  </atl-card-footer>\n</atl-card>"}</code></pre>
           </div>
         </div>
       </div>
-      <ul style="color: var(--ui-color-text-muted); padding-left: 1.5rem; display: flex; flex-direction: column; gap: 0.35rem; margin: 0.5rem 0 1rem">
-        <li><strong>Angular:</strong> content projection via <code>&lt;ng-content&gt;</code>, named slots via <code>select</code>.</li>
+      <ul
+        style="
+          color: var(--ui-color-text-muted);
+          padding-left: 1.5rem;
+          display: flex;
+          flex-direction: column;
+          gap: 0.35rem;
+          margin: 0.5rem 0 1rem;
+        "
+      >
+        <li>
+          <strong>Angular:</strong> content projection via
+          <code>&lt;ng-content&gt;</code>, named slots via <code>select</code>.
+        </li>
         <li><strong>React:</strong> a <code>children</code> prop.</li>
         <li><strong>Vue:</strong> the default <code>&lt;slot /&gt;</code>.</li>
       </ul>
       <div class="docs-rule">
         <span class="docs-rule-label">Rule</span>
-        Never accept a complex config/option object as a component input. Compose it from
-        smaller elements instead — structural composition, not configuration.
+        Never accept a complex config/option object as a component input.
+        Compose it from smaller elements instead — structural composition, not
+        configuration.
       </div>
     </div>
 
     <!-- Principle 5 -->
     <div class="docs-section">
-      <h2 id="principle-5" class="docs-section-title">5. A single reactivity model per framework</h2>
-      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin-bottom: 0.75rem">
-        Mixing patterns forces the model to decide which approach to use — and it will sometimes
-        guess wrong. Atelier UI picks one and uses it everywhere.
+      <h2 id="principle-5" class="docs-section-title">
+        5. A single reactivity model per framework
+      </h2>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.65;
+          margin-bottom: 0.75rem;
+        "
+      >
+        Mixing patterns forces the model to decide which approach to use — and
+        it will sometimes guess wrong. Atelier UI picks one and uses it
+        everywhere.
       </p>
-      <ul style="color: var(--ui-color-text-muted); padding-left: 1.5rem; display: flex; flex-direction: column; gap: 0.35rem; margin: 0.5rem 0 1rem">
-        <li><strong>Angular:</strong> Signals only — <Jargon term="signal input"><code>input()</code></Jargon>, <code>output()</code>, <code>model()</code>. No legacy <code>@Input</code>/<code>@Output</code> decorators.</li>
-        <li><strong>React:</strong> Props + callbacks. No class components, no legacy ref patterns.</li>
-        <li><strong>Vue:</strong> <Jargon term="composition API">Composition API</Jargon> + <code>defineProps</code>/<code>defineEmits</code>. No Options API.</li>
+      <ul
+        style="
+          color: var(--ui-color-text-muted);
+          padding-left: 1.5rem;
+          display: flex;
+          flex-direction: column;
+          gap: 0.35rem;
+          margin: 0.5rem 0 1rem;
+        "
+      >
+        <li>
+          <strong>Angular:</strong> Signals only —
+          <Jargon term="signal input"><code>input()</code></Jargon>,
+          <code>output()</code>, <code>model()</code>. No legacy
+          <code>@Input</code>/<code>@Output</code> decorators.
+        </li>
+        <li>
+          <strong>React:</strong> Props + callbacks. No class components, no
+          legacy ref patterns.
+        </li>
+        <li>
+          <strong>Vue:</strong>
+          <Jargon term="composition API">Composition API</Jargon> +
+          <code>defineProps</code>/<code>defineEmits</code>. No Options API.
+        </li>
       </ul>
       <div class="docs-rule">
         <span class="docs-rule-label">Rule</span>
-        One mental model per framework. The model learns the pattern from the first component and applies it to every other one.
+        One mental model per framework. The model learns the pattern from the
+        first component and applies it to every other one.
       </div>
     </div>
 
     <!-- Principle 6 -->
     <div class="docs-section">
-      <h2 id="principle-6" class="docs-section-title">6. The MCP server closes the loop</h2>
-      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin-bottom: 0.75rem">
-        Even a perfectly designed API has details the model can't infer: exact default values,
-        which props interact, what the output event payload looks like. The MCP server provides
-        this at runtime — so the model queries it instead of guessing.
+      <h2 id="principle-6" class="docs-section-title">
+        6. The MCP server closes the loop
+      </h2>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.65;
+          margin-bottom: 0.75rem;
+        "
+      >
+        Even a perfectly designed API has details the model can't infer: exact
+        default values, which props interact, what the output event payload
+        looks like. The MCP server provides this at runtime — so the model
+        queries it instead of guessing.
       </p>
-      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin-bottom: 1rem">
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.65;
+          margin-bottom: 1rem;
+        "
+      >
         The docs toolset covers the lookup workflow: <code>docs-list</code> for
         discovery, <code>docs-show</code> for the full API of a component, and
-        <code>docs-show-story</code> for story-level usage patterns. Together they
-        mean the model never has to rely on training data for component-specific facts.
+        <code>docs-show-story</code> for story-level usage patterns. Together
+        they mean the model never has to rely on training data for
+        component-specific facts.
       </p>
       <div class="docs-rule">
         <span class="docs-rule-label">Rule</span>
@@ -214,7 +348,9 @@ import PageHero from '../components/PageHero.astro';
   }
 
   @media (max-width: 640px) {
-    .docs-comparison { grid-template-columns: 1fr; }
+    .docs-comparison {
+      grid-template-columns: 1fr;
+    }
   }
 
   .docs-comparison-bad,

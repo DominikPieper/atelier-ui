@@ -37,17 +37,25 @@ const accentAt = titleAccent ? title.indexOf(titleAccent) : -1;
 ---
 
 <header class="docs-page-hero">
-  {kind && <PageEyebrow kind={kind} kindLabel={kindLabel} time={time} tag={tag} />}
+  {kind && (
+    <PageEyebrow kind={kind} kindLabel={kindLabel} time={time} tag={tag} />
+  )}
   <h1 class="docs-page-h1">
-    {accentAt === -1 ? title : (
-      <Fragment>{title.slice(0, accentAt)}<em class="docs-accent">{titleAccent}</em>{title.slice(accentAt + titleAccent!.length)}</Fragment>
+    {accentAt === -1 ? (
+      title
+    ) : (
+      <Fragment
+        >{title.slice(0, accentAt)}<em class="docs-accent">{titleAccent}</em
+        >{title.slice(accentAt + titleAccent!.length)}</Fragment
+      >
     )}
   </h1>
-  {(lede || hasLedeSlot) && (
-    <p class="docs-page-hero-lede" style={`max-width: ${ledeMax}`}>
-      {lede ?? <slot />}
-    </p>
-  )}
+  {(lede || hasLedeSlot) && <p
+    class="docs-page-hero-lede"
+    style={`max-width: ${ledeMax}`}
+  >
+    {lede ?? <slot />}
+  </p>}
 </header>
 
 <style>
@@ -67,7 +75,13 @@ const accentAt = titleAccent ? title.indexOf(titleAccent) : -1;
   }
 
   .docs-page-hero-lede :global(code) {
-    font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+    font-family: var(
+      --font-mono,
+      ui-monospace,
+      SFMono-Regular,
+      Menlo,
+      monospace
+    );
     font-size: 0.85em;
     color: var(--ui-color-primary);
     background: var(--ui-color-primary-light);

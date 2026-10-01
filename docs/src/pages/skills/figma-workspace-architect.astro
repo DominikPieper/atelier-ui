@@ -9,7 +9,8 @@ const SITE_URL = 'https://atelier.pieper.io';
 const SKILL_URL = `${SITE_URL}/.well-known/agent-skills/figma-workspace-architect/SKILL.md`;
 const SKILL_NAME = 'figma-workspace-architect';
 const SKILL_VERSION = skillVersion;
-const REPO_URL = 'https://github.com/DominikPieper/atelier-ui/tree/main/skills/figma-workspace-architect';
+const REPO_URL =
+  'https://github.com/DominikPieper/atelier-ui/tree/main/skills/figma-workspace-architect';
 
 const INSTALL_CURL = `# Download the runtime payload (SKILL.md + references/ + assets/)
 curl -sL "${SITE_URL}/.well-known/agent-skills/${SKILL_NAME}.zip" \\
@@ -31,55 +32,67 @@ const TRIGGER_EXAMPLES = `# Triggering examples — any of these will load the s
 const modes = [
   {
     name: 'Build',
-    triggers: 'create, set up, bootstrap, scaffold, build, generate, add, refactor',
-    summary: 'Discovery → Decide → Map tools → Execute → Validate → Document. Never write to Figma without first reading what is there.',
+    triggers:
+      'create, set up, bootstrap, scaffold, build, generate, add, refactor',
+    summary:
+      'Discovery → Decide → Map tools → Execute → Validate → Document. Never write to Figma without first reading what is there.',
     subModes: [
       {
         name: 'Scaffold',
         kind: 'sub-mode',
-        summary: 'One-shot starter: Cover + Tokens + Components pages with placeholder content. For when the user wants a working skeleton in one turn.',
+        summary:
+          'One-shot starter: Cover + Tokens + Components pages with placeholder content. For when the user wants a working skeleton in one turn.',
       },
       {
         name: 'Inventory',
         kind: 'sub-mode',
-        summary: 'Visual library catalog on a dedicated Inventory page: one data card per published component (header, status badge, default-variant preview, meta row, property table), grouped by slash namespace. Seven-phase pipeline, runs after Validate or stand-alone against an existing library.',
+        summary:
+          'Visual library catalog on a dedicated Inventory page: one data card per published component (header, status badge, default-variant preview, meta row, property table), grouped by slash namespace. Seven-phase pipeline, runs after Validate or stand-alone against an existing library.',
       },
     ],
   },
   {
     name: 'Audit',
-    triggers: 'audit, review, check, assess, what\'s wrong with, how good is',
-    summary: 'Two layers: Design System Dashboard (breadth: A11y, Coverage) followed by the architectural deep-audit (depth: 5 categories with severity tags). Pre-flight pins the snapshot (git SHA + Figma lastModified) and runs cross-source greps so findings are grounded in current state.',
+    triggers: "audit, review, check, assess, what's wrong with, how good is",
+    summary:
+      'Two layers: Design System Dashboard (breadth: A11y, Coverage) followed by the architectural deep-audit (depth: 5 categories with severity tags). Pre-flight pins the snapshot (git SHA + Figma lastModified) and runs cross-source greps so findings are grounded in current state.',
     subModes: [
       {
         name: 'Re-verify',
         kind: 'sub-mode',
-        summary: 'Re-checks an existing audit report by running only the per-category verify queries. Emits still-open / auto-resolved / state-shifted per finding so stale findings drop off the priority list automatically.',
+        summary:
+          'Re-checks an existing audit report by running only the per-category verify queries. Emits still-open / auto-resolved / state-shifted per finding so stale findings drop off the priority list automatically.',
       },
     ],
   },
   {
     name: 'Decide',
     triggers: 'either/or questions, "should I…?", "is it better to…?"',
-    summary: 'Single-pass recommendation with reasoning in 1–2 sentences plus the alternative path with its trade-off. No essays.',
+    summary:
+      'Single-pass recommendation with reasoning in 1–2 sentences plus the alternative path with its trade-off. No essays.',
     subModes: [],
   },
   {
     name: 'Migrate',
-    triggers: 'rename, split, restructure, refactor, deprecate, retire, replace',
-    summary: 'The additive coordination protocol for breaking changes (add new alongside old → wait one cycle → migrate consumers → remove old). Recipes for variable renames, mode adds, variant set splits, primitive→semantic promotions, library splits.',
+    triggers:
+      'rename, split, restructure, refactor, deprecate, retire, replace',
+    summary:
+      'The additive coordination protocol for breaking changes (add new alongside old → wait one cycle → migrate consumers → remove old). Recipes for variable renames, mode adds, variant set splits, primitive→semantic promotions, library splits.',
     subModes: [
       {
         name: 'Code-verify',
         kind: 'recipe',
-        summary: 'Post-flight Storybook + browser-automation recipe to confirm Figma↔code parity in Light + Dark after a token or variant change. Catches the bug class where Figma and code each look correct but their handoff is broken.',
+        summary:
+          'Post-flight Storybook + browser-automation recipe to confirm Figma↔code parity in Light + Dark after a token or variant change. Catches the bug class where Figma and code each look correct but their handoff is broken.',
       },
     ],
   },
   {
     name: 'Sync',
-    triggers: 'propagate to Figma, sync the tokens, keep Figma and code in lockstep',
-    summary: 'Value drift after one side has already moved: direction → diff → batch-or-script → validate. Different from Migrate, which plans a coordinated structural change — Sync catches up on existing shape, and bails to Migrate the moment the diff includes adds, removes, or renames.',
+    triggers:
+      'propagate to Figma, sync the tokens, keep Figma and code in lockstep',
+    summary:
+      'Value drift after one side has already moved: direction → diff → batch-or-script → validate. Different from Migrate, which plans a coordinated structural change — Sync catches up on existing shape, and bails to Migrate the moment the diff includes adds, removes, or renames.',
     subModes: [],
   },
 ];
@@ -89,28 +102,106 @@ const modes = [
 // step-4 post-flight instead — its routing-table row reads "Migrate
 // (post-flight)". Splitting the counts here keeps this page and /agent-skills
 // saying what the skill file says.
-const subModeCount = modes.reduce((n, mode) => n + mode.subModes.filter((s) => s.kind === 'sub-mode').length, 0);
-const recipeCount = modes.reduce((n, mode) => n + mode.subModes.filter((s) => s.kind === 'recipe').length, 0);
+const subModeCount = modes.reduce(
+  (n, mode) => n + mode.subModes.filter((s) => s.kind === 'sub-mode').length,
+  0,
+);
+const recipeCount = modes.reduce(
+  (n, mode) => n + mode.subModes.filter((s) => s.kind === 'recipe').length,
+  0,
+);
 
 const references = [
-  { file: 'token-architecture.md', summary: 'Three-tier model (Primitive / Semantic / Component), Modes, Variable Scopes, anti-patterns.' },
-  { file: 'component-design.md', summary: 'Variants vs. Component Properties vs. Instance Swap, atomic composition, slot patterns.' },
-  { file: 'naming-and-file-structure.md', summary: 'Slash naming, page taxonomy, _ and . prefixes for sub-components, library boundaries.' },
-  { file: 'tool-map.md', summary: 'figma-console-mcp tools grouped by purpose with ready-to-use figma_execute payloads.' },
-  { file: 'plugin-api-gotchas.md', summary: 'The figma_execute traps that cost this library real sessions: resize() flips sizing to FIXED, layoutMode after resize reverts to AUTO, lone-child SPACE_BETWEEN, sections leave children behind, text wrap, silent instance text edits, REST 403s, batch caps.' },
-  { file: 'build-workflow.md', summary: 'Build mode in depth: discovery checklist, decide gates, validation, documentation requirements.' },
-  { file: 'build-from-code-contract.md', summary: 'Build when the code already states the component: prop contract → matrix → bound variants → gate-accepted names → description, annotations, inventory → the repo\'s closing gate.' },
-  { file: 'audit-checklist.md', summary: 'Five architectural categories with severity tags. Pre-flight: snapshot pin + cross-source grep.' },
-  { file: 'audit-verify-queries.md', summary: 'Re-verify sub-mode. One verify query per audit category with auto-resolve signals.' },
-  { file: 'decision-heuristics.md', summary: 'Decision trees for the recurring forks (Variant vs. Property, Token tier, Mode vs. Collection).' },
-  { file: 'migration-playbook.md', summary: 'Refactoring an existing file safely. Coordination protocol, recipes, removal-tombstone gotcha.' },
-  { file: 'code-verify.md', summary: 'Code-side visual verification recipe. Storybook flow for Figma↔code parity in Light + Dark.' },
-  { file: 'code-sync.md', summary: 'Keeping Figma Variables in lockstep with code-side tokens. Drift sources and mode-mapping pitfalls.' },
-  { file: 'sync-workflow.md', summary: 'Sync mode: value drift after one side moved. Direction → diff → batch-or-script → validate; bails to Migrate on structural changes.' },
-  { file: 'iconography.md', summary: 'Icon-system architecture: size stops, color binding, library-split signals.' },
-  { file: 'scaffold-payload.md', summary: 'Scaffold sub-mode of Build. Three-call recipe producing Cover + Tokens + Components pages.' },
-  { file: 'inventory-generation.md', summary: 'Inventory sub-mode of Build. Seven-phase pipeline producing the visual library catalog: layout token contract, grouping schema, batching rules.' },
-  { file: 'inventory-payload.md', summary: 'Ready-to-paste figma_execute payloads for the seven Inventory phases: discover, scaffold, populate-one-section, mark-ready + TOC.' },
+  {
+    file: 'token-architecture.md',
+    summary:
+      'Three-tier model (Primitive / Semantic / Component), Modes, Variable Scopes, anti-patterns.',
+  },
+  {
+    file: 'component-design.md',
+    summary:
+      'Variants vs. Component Properties vs. Instance Swap, atomic composition, slot patterns.',
+  },
+  {
+    file: 'naming-and-file-structure.md',
+    summary:
+      'Slash naming, page taxonomy, _ and . prefixes for sub-components, library boundaries.',
+  },
+  {
+    file: 'tool-map.md',
+    summary:
+      'figma-console-mcp tools grouped by purpose with ready-to-use figma_execute payloads.',
+  },
+  {
+    file: 'plugin-api-gotchas.md',
+    summary:
+      'The figma_execute traps that cost this library real sessions: resize() flips sizing to FIXED, layoutMode after resize reverts to AUTO, lone-child SPACE_BETWEEN, sections leave children behind, text wrap, silent instance text edits, REST 403s, batch caps.',
+  },
+  {
+    file: 'build-workflow.md',
+    summary:
+      'Build mode in depth: discovery checklist, decide gates, validation, documentation requirements.',
+  },
+  {
+    file: 'build-from-code-contract.md',
+    summary:
+      "Build when the code already states the component: prop contract → matrix → bound variants → gate-accepted names → description, annotations, inventory → the repo's closing gate.",
+  },
+  {
+    file: 'audit-checklist.md',
+    summary:
+      'Five architectural categories with severity tags. Pre-flight: snapshot pin + cross-source grep.',
+  },
+  {
+    file: 'audit-verify-queries.md',
+    summary:
+      'Re-verify sub-mode. One verify query per audit category with auto-resolve signals.',
+  },
+  {
+    file: 'decision-heuristics.md',
+    summary:
+      'Decision trees for the recurring forks (Variant vs. Property, Token tier, Mode vs. Collection).',
+  },
+  {
+    file: 'migration-playbook.md',
+    summary:
+      'Refactoring an existing file safely. Coordination protocol, recipes, removal-tombstone gotcha.',
+  },
+  {
+    file: 'code-verify.md',
+    summary:
+      'Code-side visual verification recipe. Storybook flow for Figma↔code parity in Light + Dark.',
+  },
+  {
+    file: 'code-sync.md',
+    summary:
+      'Keeping Figma Variables in lockstep with code-side tokens. Drift sources and mode-mapping pitfalls.',
+  },
+  {
+    file: 'sync-workflow.md',
+    summary:
+      'Sync mode: value drift after one side moved. Direction → diff → batch-or-script → validate; bails to Migrate on structural changes.',
+  },
+  {
+    file: 'iconography.md',
+    summary:
+      'Icon-system architecture: size stops, color binding, library-split signals.',
+  },
+  {
+    file: 'scaffold-payload.md',
+    summary:
+      'Scaffold sub-mode of Build. Three-call recipe producing Cover + Tokens + Components pages.',
+  },
+  {
+    file: 'inventory-generation.md',
+    summary:
+      'Inventory sub-mode of Build. Seven-phase pipeline producing the visual library catalog: layout token contract, grouping schema, batching rules.',
+  },
+  {
+    file: 'inventory-payload.md',
+    summary:
+      'Ready-to-paste figma_execute payloads for the seven Inventory phases: discover, scaffold, populate-one-section, mark-ready + TOC.',
+  },
 ];
 
 // Drift gate: the table above is hand-curated, but it must cover exactly the
@@ -125,14 +216,47 @@ if (references.length !== referenceCount) {
 }
 
 const tests = [
-  { name: 'audit-existing-system', mode: 'Audit', summary: 'Two-year-old library, prioritised audit report.' },
-  { name: 'build-bootstrap-tokens', mode: 'Build', summary: 'Bootstrap a fresh token system end-to-end.' },
-  { name: 'build-scaffold-starter', mode: 'Build (Scaffold)', summary: 'One-shot starter file with three-call recipe.' },
-  { name: 'decide-variant-vs-property', mode: 'Decide', summary: 'Variant vs. Component Property fork.' },
-  { name: 'migrate-rename-variable', mode: 'Migrate', summary: 'Variable rename with code-side coordination.' },
-  { name: 're-verify-stale-audit', mode: 'Audit (Re-verify)', summary: 'Re-check a 3-day-old audit before acting.' },
-  { name: 'code-verify-token-rename', mode: 'Migrate (post-flight)', summary: 'Browser confirmation after token consolidation.' },
-  { name: 'out-of-scope-code-gen', mode: 'Out-of-scope', summary: 'Figma → code translation request — agent declines and points elsewhere.' },
+  {
+    name: 'audit-existing-system',
+    mode: 'Audit',
+    summary: 'Two-year-old library, prioritised audit report.',
+  },
+  {
+    name: 'build-bootstrap-tokens',
+    mode: 'Build',
+    summary: 'Bootstrap a fresh token system end-to-end.',
+  },
+  {
+    name: 'build-scaffold-starter',
+    mode: 'Build (Scaffold)',
+    summary: 'One-shot starter file with three-call recipe.',
+  },
+  {
+    name: 'decide-variant-vs-property',
+    mode: 'Decide',
+    summary: 'Variant vs. Component Property fork.',
+  },
+  {
+    name: 'migrate-rename-variable',
+    mode: 'Migrate',
+    summary: 'Variable rename with code-side coordination.',
+  },
+  {
+    name: 're-verify-stale-audit',
+    mode: 'Audit (Re-verify)',
+    summary: 'Re-check a 3-day-old audit before acting.',
+  },
+  {
+    name: 'code-verify-token-rename',
+    mode: 'Migrate (post-flight)',
+    summary: 'Browser confirmation after token consolidation.',
+  },
+  {
+    name: 'out-of-scope-code-gen',
+    mode: 'Out-of-scope',
+    summary:
+      'Figma → code translation request — agent declines and points elsewhere.',
+  },
 ];
 ---
 
@@ -142,88 +266,235 @@ const tests = [
   currentPath="/skills/figma-workspace-architect"
 >
   <div class="docs-inline-page">
-
     <div style="margin-bottom: 2.5rem">
       <PageEyebrow kind="reference" />
-      <h1 class="docs-page-h1">
-        figma-workspace-architect
-      </h1>
-      <p style="font-size: 0.9rem; color: var(--ui-color-text-muted); margin: 0 0 0.85rem; max-width: 640px; line-height: 1.65">
-        A Claude Code skill for designing, building, auditing, and migrating Figma workspaces via
-        the <code>figma-console-mcp</code> server. Sets the bar at "a workspace where a designer
-        can find what they need without asking" — correct Variable scopes, Variants matching the
-        engineering prop API, Modes carrying theming instead of duplicate components, predictable
-        naming.
+      <h1 class="docs-page-h1">figma-workspace-architect</h1>
+      <p
+        style="
+          font-size: 0.9rem;
+          color: var(--ui-color-text-muted);
+          margin: 0 0 0.85rem;
+          max-width: 640px;
+          line-height: 1.65;
+        "
+      >
+        A Claude Code skill for designing, building, auditing, and migrating
+        Figma workspaces via the <code>figma-console-mcp</code> server. Sets the
+        bar at "a workspace where a designer can find what they need without
+        asking" — correct Variable scopes, Variants matching the engineering
+        prop API, Modes carrying theming instead of duplicate components,
+        predictable naming.
       </p>
-      <div style="display: inline-flex; gap: 0.65rem; align-items: center; flex-wrap: wrap">
-        <span style="font-family: monospace; font-size: 0.75rem; padding: 0.2rem 0.55rem; background: color-mix(in srgb, var(--ui-color-primary) 12%, transparent); border-radius: 999px; color: var(--ui-color-primary); font-weight: 600">v{SKILL_VERSION}</span>
-        <span style="font-size: 0.75rem; color: var(--ui-color-text-muted)">{modes.length} modes · {subModeCount} sub-modes · {recipeCount} post-flight recipe{recipeCount === 1 ? '' : 's'} · {referenceCount} references · {tests.length} test scenarios</span>
+      <div
+        style="
+          display: inline-flex;
+          gap: 0.65rem;
+          align-items: center;
+          flex-wrap: wrap;
+        "
+      >
+        <span
+          style="
+            font-family: monospace;
+            font-size: 0.75rem;
+            padding: 0.2rem 0.55rem;
+            background: color-mix(
+              in srgb,
+              var(--ui-color-primary) 12%,
+              transparent
+            );
+            border-radius: 999px;
+            color: var(--ui-color-primary);
+            font-weight: 600;
+          "
+          >v{SKILL_VERSION}</span
+        >
+        <span style="font-size: 0.75rem; color: var(--ui-color-text-muted)"
+          >{modes.length} modes · {subModeCount} sub-modes · {recipeCount}
+          post-flight recipe{recipeCount === 1 ? '' : 's'} · {referenceCount}
+          references · {tests.length} test scenarios</span
+        >
       </div>
     </div>
 
     <!-- What it does -->
     <div class="docs-section">
       <h2 class="docs-section-title">What it does</h2>
-      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin: 0 0 1.5rem; font-size: 0.85rem; max-width: 660px">
-        The skill activates when a user asks about Figma file architecture, design tokens, components,
-        or a workspace decision. It picks one of {modes.length} modes based on the user's intent, then loads
-        only the references it needs — references are scoped, not bundled. Sub-modes handle the
-        narrower cases that benefit from a more focused recipe.
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.65;
+          margin: 0 0 1.5rem;
+          font-size: 0.85rem;
+          max-width: 660px;
+        "
+      >
+        The skill activates when a user asks about Figma file architecture,
+        design tokens, components, or a workspace decision. It picks one of
+        {modes.length} modes based on the user's intent, then loads only the
+        references it needs — references are scoped, not bundled. Sub-modes
+        handle the narrower cases that benefit from a more focused recipe.
       </p>
 
       <div style="display: flex; flex-direction: column; gap: 1.25rem">
-        {modes.map((mode) => (
-          <div style="border: 1px solid var(--ui-color-border); border-radius: var(--ui-radius-md); padding: 1rem 1.15rem; background: var(--ui-color-surface-raised)">
-            <div style="display: flex; gap: 0.55rem; align-items: baseline; margin-bottom: 0.4rem">
-              <h3 style="margin: 0; font-size: 0.95rem; font-weight: 700; color: var(--ui-color-text)">{mode.name}</h3>
-              <span style="font-size: 0.7rem; color: var(--ui-color-text-muted); font-family: monospace">triggers on: {mode.triggers}</span>
-            </div>
-            <p style="margin: 0 0 {mode.subModes.length ? '0.75rem' : '0'}; font-size: 0.83rem; color: var(--ui-color-text-muted); line-height: 1.6">
+        {modes.map((mode) => <div
+          style="
+            border: 1px solid var(--ui-color-border);
+            border-radius: var(--ui-radius-md);
+            padding: 1rem 1.15rem;
+            background: var(--ui-color-surface-raised);
+          "
+        >
+          <div
+            style="
+              display: flex;
+              gap: 0.55rem;
+              align-items: baseline;
+              margin-bottom: 0.4rem;
+            "
+          >
+            <h3
+              style="
+                margin: 0;
+                font-size: 0.95rem;
+                font-weight: 700;
+                color: var(--ui-color-text);
+              "
+            >
+              {mode.name}
+            </h3>
+            <span
+              style="
+                font-size: 0.7rem;
+                color: var(--ui-color-text-muted);
+                font-family: monospace;
+              "
+              >triggers on: {mode.triggers}</span
+            >
+          </div>
+          <!-- prettier-ignore -->
+          <p style="margin: 0 0 {mode.subModes.length ? '0.75rem' : '0'}; font-size: 0.83rem; color: var(--ui-color-text-muted); line-height: 1.6">
               {mode.summary}
             </p>
-            {mode.subModes.length > 0 && (
-              <div style="border-left: 2px solid var(--ui-color-primary); padding-left: 0.85rem; margin-left: 0.25rem; display: flex; flex-direction: column; gap: 0.5rem">
-                {mode.subModes.map((sub) => (
-                  <div>
-                    <div style="font-size: 0.78rem; font-weight: 700; color: var(--ui-color-primary); margin-bottom: 0.2rem">↳ {sub.name} {sub.kind === 'recipe' ? 'post-flight recipe' : 'sub-mode'}</div>
-                    <p style="margin: 0; font-size: 0.78rem; color: var(--ui-color-text-muted); line-height: 1.55">{sub.summary}</p>
-                  </div>
-                ))}
+          {mode.subModes.length > 0 && <div
+            style="
+              border-left: 2px solid var(--ui-color-primary);
+              padding-left: 0.85rem;
+              margin-left: 0.25rem;
+              display: flex;
+              flex-direction: column;
+              gap: 0.5rem;
+            "
+          >
+            {mode.subModes.map((sub) => <div>
+              <div
+                style="
+                  font-size: 0.78rem;
+                  font-weight: 700;
+                  color: var(--ui-color-primary);
+                  margin-bottom: 0.2rem;
+                "
+              >
+                ↳ {sub.name}
+                {sub.kind === 'recipe' ? 'post-flight recipe' : 'sub-mode'}
               </div>
-            )}
-          </div>
-        ))}
+              <p
+                style="
+                  margin: 0;
+                  font-size: 0.78rem;
+                  color: var(--ui-color-text-muted);
+                  line-height: 1.55;
+                "
+              >
+                {sub.summary}
+              </p>
+            </div>)}
+          </div>}
+        </div>)}
       </div>
     </div>
 
     <!-- Install -->
     <div class="docs-section">
       <h2 class="docs-section-title">Install</h2>
-      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin: 0 0 1rem; font-size: 0.85rem">
-        Claude Code skills live as directories under <code>~/.claude/skills/</code> (user-global)
-        or <code>.claude/skills/</code> (project-local). Both options below land the skill in the
-        canonical layout — Claude Code auto-discovers it on the next session.
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.65;
+          margin: 0 0 1rem;
+          font-size: 0.85rem;
+        "
+      >
+        Claude Code skills live as directories under
+        <code>~/.claude/skills/</code> (user-global) or
+        <code>.claude/skills/</code> (project-local). Both options below land
+        the skill in the canonical layout — Claude Code auto-discovers it on the
+        next session.
       </p>
 
-      <h3 style="font-size: 0.85rem; font-weight: 700; margin: 0 0 0.5rem; color: var(--ui-color-text)">From the published zip</h3>
+      <h3
+        style="
+          font-size: 0.85rem;
+          font-weight: 700;
+          margin: 0 0 0.5rem;
+          color: var(--ui-color-text);
+        "
+      >
+        From the published zip
+      </h3>
       <Code code={INSTALL_CURL} lang="shell" />
 
-      <h3 style="font-size: 0.85rem; font-weight: 700; margin: 1.5rem 0 0.5rem; color: var(--ui-color-text)">From a repo clone</h3>
+      <h3
+        style="
+          font-size: 0.85rem;
+          font-weight: 700;
+          margin: 1.5rem 0 0.5rem;
+          color: var(--ui-color-text);
+        "
+      >
+        From a repo clone
+      </h3>
       <Code code={INSTALL_FROM_REPO} lang="shell" />
 
-      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin: 1rem 0 0; font-size: 0.8rem">
-        The skill needs <a href="https://github.com/southleft/figma-console-mcp" target="_blank" rel="noopener noreferrer" class="docs-link-primary">figma-console-mcp</a> configured to do anything useful — it
-        is the underlying MCP server the skill drives. See the <a href="/figma-token" class="docs-link-primary">Figma Setup</a> page for the connection guide.
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.65;
+          margin: 1rem 0 0;
+          font-size: 0.8rem;
+        "
+      >
+        The skill needs
+        <a
+          href="https://github.com/southleft/figma-console-mcp"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="docs-link-primary"
+          >figma-console-mcp</a
+        >
+        configured to do anything useful — it is the underlying MCP server the
+        skill drives. See the
+        <a href="/figma-token" class="docs-link-primary">Figma Setup</a> page
+        for the connection guide.
       </p>
     </div>
 
     <!-- Triggers -->
     <div class="docs-section">
       <h2 class="docs-section-title">When the skill loads</h2>
-      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin: 0 0 1rem; font-size: 0.85rem; max-width: 640px">
-        The skill's <code>description</code> field is tuned so Claude Code picks it up on architectural
-        / audit / build prompts about Figma — even when the user only says "Figma" without naming
-        the file or library. It explicitly does <em>not</em> trigger on Figma → code translation
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.65;
+          margin: 0 0 1rem;
+          font-size: 0.85rem;
+          max-width: 640px;
+        "
+      >
+        The skill's <code>description</code> field is tuned so Claude Code picks
+        it up on architectural / audit / build prompts about Figma — even when
+        the user only says "Figma" without naming the file or library. It
+        explicitly does <em>not</em> trigger on Figma → code translation
         requests, which are out of scope.
       </p>
       <Code code={TRIGGER_EXAMPLES} lang="text" />
@@ -232,21 +503,48 @@ const tests = [
     <!-- References -->
     <div class="docs-section">
       <h2 class="docs-section-title">References</h2>
-      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin: 0 0 1.25rem; font-size: 0.85rem; max-width: 640px">
-        Loaded on demand by the active mode. Every reference is self-contained — opening one does
-        not pull the others into context.
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.65;
+          margin: 0 0 1.25rem;
+          font-size: 0.85rem;
+          max-width: 640px;
+        "
+      >
+        Loaded on demand by the active mode. Every reference is self-contained —
+        opening one does not pull the others into context.
       </p>
       <table class="docs-props-table">
         <thead>
-          <tr><th>File</th><th>Summary</th></tr>
+          <tr>
+            <th>File</th>
+            <th>Summary</th>
+          </tr>
         </thead>
         <tbody>
-          {references.map(({ file, summary }) => (
-            <tr>
-              <td><a href={`${SITE_URL}/.well-known/agent-skills/${SKILL_NAME}/references/${file}`} style="color: var(--ui-color-primary); font-family: monospace; font-size: 0.8rem">{file}</a></td>
-              <td style="font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.55">{summary}</td>
-            </tr>
-          ))}
+          {references.map(({ file, summary }) => <tr>
+            <td>
+              <a
+                href={`${SITE_URL}/.well-known/agent-skills/${SKILL_NAME}/references/${file}`}
+                style="
+                  color: var(--ui-color-primary);
+                  font-family: monospace;
+                  font-size: 0.8rem;
+                "
+                >{file}</a
+              >
+            </td>
+            <td
+              style="
+                font-size: 0.82rem;
+                color: var(--ui-color-text-muted);
+                line-height: 1.55;
+              "
+            >
+              {summary}
+            </td>
+          </tr>)}
         </tbody>
       </table>
     </div>
@@ -254,23 +552,54 @@ const tests = [
     <!-- Test scenarios -->
     <div class="docs-section">
       <h2 class="docs-section-title">Test scenarios</h2>
-      <p style="color: var(--ui-color-text-muted); line-height: 1.65; margin: 0 0 1.25rem; font-size: 0.85rem; max-width: 640px">
-        Each scenario has an <code>input.md</code> (the user prompt) and an <code>expected.md</code>
-        (the mode + references + first tool call + regressions to flag). Scenarios are well-formedness
-        tested in CI; behavioural grading is manual or LLM-judged.
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.65;
+          margin: 0 0 1.25rem;
+          font-size: 0.85rem;
+          max-width: 640px;
+        "
+      >
+        Each scenario has an <code>input.md</code> (the user prompt) and an
+        <code>expected.md</code> (the mode + references + first tool call +
+        regressions to flag). Scenarios are well-formedness tested in CI;
+        behavioural grading is manual or LLM-judged.
       </p>
       <table class="docs-props-table">
         <thead>
-          <tr><th>Scenario</th><th>Mode</th><th>Summary</th></tr>
+          <tr>
+            <th>Scenario</th>
+            <th>Mode</th>
+            <th>Summary</th>
+          </tr>
         </thead>
         <tbody>
-          {tests.map(({ name, mode, summary }) => (
-            <tr>
-              <td><code style="font-size: 0.78rem; color: var(--ui-color-primary)">{name}</code></td>
-              <td style="font-size: 0.78rem; color: var(--ui-color-text-muted); white-space: nowrap">{mode}</td>
-              <td style="font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.55">{summary}</td>
-            </tr>
-          ))}
+          {tests.map(({ name, mode, summary }) => <tr>
+            <td>
+              <code style="font-size: 0.78rem; color: var(--ui-color-primary)"
+                >{name}</code
+              >
+            </td>
+            <td
+              style="
+                font-size: 0.78rem;
+                color: var(--ui-color-text-muted);
+                white-space: nowrap;
+              "
+            >
+              {mode}
+            </td>
+            <td
+              style="
+                font-size: 0.82rem;
+                color: var(--ui-color-text-muted);
+                line-height: 1.55;
+              "
+            >
+              {summary}
+            </td>
+          </tr>)}
         </tbody>
       </table>
     </div>
@@ -280,22 +609,61 @@ const tests = [
       <h2 class="docs-section-title">Source</h2>
       <dl class="docs-source-dl">
         <dt>SKILL.md</dt>
-        <dd><a href={SKILL_URL} target="_blank" rel="noopener noreferrer" class="docs-mono-link">{SKILL_URL}</a></dd>
+        <dd>
+          <a
+            href={SKILL_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="docs-mono-link"
+            >{SKILL_URL}</a
+          >
+        </dd>
         <dt>Repository</dt>
-        <dd><a href={REPO_URL} target="_blank" rel="noopener noreferrer" class="docs-mono-link">{REPO_URL}</a></dd>
+        <dd>
+          <a
+            href={REPO_URL}
+            target="_blank"
+            rel="noopener noreferrer"
+            class="docs-mono-link"
+            >{REPO_URL}</a
+          >
+        </dd>
         <dt>Discovery index</dt>
-        <dd><a href="/.well-known/agent-skills/index.json" class="docs-mono-link">/.well-known/agent-skills/index.json</a></dd>
+        <dd>
+          <a href="/.well-known/agent-skills/index.json" class="docs-mono-link"
+            >/.well-known/agent-skills/index.json</a
+          >
+        </dd>
         <dt>License</dt>
-        <dd>Same as the repository (MIT). The skill is <code>private: true</code> on npm — distribution is via the discovery URL only.</dd>
+        <dd>
+          Same as the repository (MIT). The skill is <code>private: true</code>
+          on npm — distribution is via the discovery URL only.
+        </dd>
       </dl>
     </div>
 
     <!-- Bottom nav -->
-    <BottomNav items={[
-      { to: '/agent-skills', label: 'Index',   title: 'All skills',   icon: 'robot_2' },
-      { to: '/figma-token',  label: 'Connect', title: 'Figma setup',  icon: 'cable' },
-      { to: '/mcp',          label: 'Explore', title: 'MCP Explorer', icon: 'smart_toy' },
-    ]} />
-
+    <BottomNav
+      items={[
+        {
+          to: '/agent-skills',
+          label: 'Index',
+          title: 'All skills',
+          icon: 'robot_2',
+        },
+        {
+          to: '/figma-token',
+          label: 'Connect',
+          title: 'Figma setup',
+          icon: 'cable',
+        },
+        {
+          to: '/mcp',
+          label: 'Explore',
+          title: 'MCP Explorer',
+          icon: 'smart_toy',
+        },
+      ]}
+    />
   </div>
 </BaseLayout>

@@ -13,17 +13,17 @@ const PKG_MANAGERS = ['npm', 'pnpm', 'yarn'] as const;
 
 const INSTALL_CMD: Record<string, Record<string, string>> = {
   Angular: {
-    npm:  'npm install @atelier-ui/angular',
+    npm: 'npm install @atelier-ui/angular',
     pnpm: 'pnpm add @atelier-ui/angular',
     yarn: 'yarn add @atelier-ui/angular',
   },
   React: {
-    npm:  'npm install @atelier-ui/react',
+    npm: 'npm install @atelier-ui/react',
     pnpm: 'pnpm add @atelier-ui/react',
     yarn: 'yarn add @atelier-ui/react',
   },
   Vue: {
-    npm:  'npm install @atelier-ui/vue',
+    npm: 'npm install @atelier-ui/vue',
     pnpm: 'pnpm add @atelier-ui/vue',
     yarn: 'yarn add @atelier-ui/vue',
   },
@@ -31,8 +31,8 @@ const INSTALL_CMD: Record<string, Record<string, string>> = {
 
 const TOKEN_IMPORT: Record<string, string> = {
   Angular: "@import '@atelier-ui/angular/styles/tokens.css';",
-  React:   "@import '@atelier-ui/react/styles/tokens.css';",
-  Vue:     "@import '@atelier-ui/vue/styles/tokens.css';",
+  React: "@import '@atelier-ui/react/styles/tokens.css';",
+  Vue: "@import '@atelier-ui/vue/styles/tokens.css';",
 };
 
 // Where the token import lives per framework. Listed as file paths
@@ -40,46 +40,54 @@ const TOKEN_IMPORT: Record<string, string> = {
 const TOKEN_FILE: Record<string, { file: string; notes: string }> = {
   Angular: {
     file: 'src/styles.css',
-    notes: 'Referenced automatically by angular.json under architect.build.options.styles.',
+    notes:
+      'Referenced automatically by angular.json under architect.build.options.styles.',
   },
   React: {
     file: 'src/index.css  (or src/App.css)',
-    notes: 'The file that is imported from src/main.tsx — any global stylesheet your app already loads on boot.',
+    notes:
+      'The file that is imported from src/main.tsx — any global stylesheet your app already loads on boot.',
   },
   Vue: {
     file: 'src/assets/main.css  (or src/style.css)',
-    notes: 'The file imported from src/main.ts — Vite/Vue projects usually ship one global stylesheet.',
+    notes:
+      'The file imported from src/main.ts — Vite/Vue projects usually ship one global stylesheet.',
   },
 };
 
 const COMPONENT_FILE: Record<string, { file: string; notes: string }> = {
   Angular: {
     file: 'any standalone component .ts file',
-    notes: 'Import into the component where you need it and add to the imports array — standalone, no NgModule registration.',
+    notes:
+      'Import into the component where you need it and add to the imports array — standalone, no NgModule registration.',
   },
   React: {
     file: 'any component .tsx file',
-    notes: 'Standard named ES imports — the bundler tree-shakes unused components automatically.',
+    notes:
+      'Standard named ES imports — the bundler tree-shakes unused components automatically.',
   },
   Vue: {
     file: 'any <script setup> block',
-    notes: 'Import inside <script setup> in a .vue SFC, then use the component in the template.',
+    notes:
+      'Import inside <script setup> in a .vue SFC, then use the component in the template.',
   },
 };
 
 const COMPONENT_IMPORT: Record<string, string> = {
   Angular: `import {\n  AtlButton, AtlCard, AtlInput, AtlTextarea,\n  AtlCheckbox, AtlToggle, AtlBadge, AtlAlert,\n  AtlSelect, AtlOption, AtlDialog, AtlTabGroup,\n  AtlTab, AtlAccordionGroup, AtlMenu, AtlMenuItem,\n  AtlTooltip, AtlToastContainer, AtlToastService,\n  AtlSkeleton, AtlAvatar, AtlAvatarGroup\n} from '@atelier-ui/angular';`,
-  React:   `import {\n  AtlButton, AtlCard, AtlInput, AtlTextarea,\n  AtlCheckbox, AtlToggle, AtlBadge, AtlAlert,\n  AtlSelect, AtlOption, AtlDialog, AtlTabGroup,\n  AtlTab, AtlAccordionGroup, AtlMenu, AtlMenuItem,\n  AtlTooltip, AtlToastProvider, useAtlToast,\n  AtlSkeleton, AtlAvatar, AtlAvatarGroup\n} from '@atelier-ui/react';`,
-  Vue:     `import {\n  AtlButton, AtlCard, AtlInput, AtlTextarea,\n  AtlCheckbox, AtlToggle, AtlBadge, AtlAlert,\n  AtlSelect, AtlOption, AtlDialog, AtlTabGroup,\n  AtlTab, AtlAccordionGroup, AtlMenu, AtlMenuItem,\n  AtlTooltip, AtlToastProvider, useAtlToast,\n  AtlSkeleton, AtlAvatar, AtlAvatarGroup\n} from '@atelier-ui/vue';`,
+  React: `import {\n  AtlButton, AtlCard, AtlInput, AtlTextarea,\n  AtlCheckbox, AtlToggle, AtlBadge, AtlAlert,\n  AtlSelect, AtlOption, AtlDialog, AtlTabGroup,\n  AtlTab, AtlAccordionGroup, AtlMenu, AtlMenuItem,\n  AtlTooltip, AtlToastProvider, useAtlToast,\n  AtlSkeleton, AtlAvatar, AtlAvatarGroup\n} from '@atelier-ui/react';`,
+  Vue: `import {\n  AtlButton, AtlCard, AtlInput, AtlTextarea,\n  AtlCheckbox, AtlToggle, AtlBadge, AtlAlert,\n  AtlSelect, AtlOption, AtlDialog, AtlTabGroup,\n  AtlTab, AtlAccordionGroup, AtlMenu, AtlMenuItem,\n  AtlTooltip, AtlToastProvider, useAtlToast,\n  AtlSkeleton, AtlAvatar, AtlAvatarGroup\n} from '@atelier-ui/vue';`,
 };
 
 // Why the import sets differ across frameworks: each framework wires toasts
 // in the idiomatic way for its own DI / composition model. The underlying
 // component set is otherwise identical.
 const IMPORT_NOTE: Record<string, string> = {
-  Angular: 'Toasts render through a <atl-toast-container> host element; an injectable AtlToastService triggers them. No Provider tree needed — Angular DI handles it.',
-  React:   'Toasts need a root <AtlToastProvider>. Call useAtlToast() inside any descendant component to push messages.',
-  Vue:     'Toasts need a root <AtlToastProvider> too — useAtlToast() injects its context and throws outside of it. Call it inside any descendant <script setup> to push messages.',
+  Angular:
+    'Toasts render through a <atl-toast-container> host element; an injectable AtlToastService triggers them. No Provider tree needed — Angular DI handles it.',
+  React:
+    'Toasts need a root <AtlToastProvider>. Call useAtlToast() inside any descendant component to push messages.',
+  Vue: 'Toasts need a root <AtlToastProvider> too — useAtlToast() injects its context and throws outside of it. Call it inside any descendant <script setup> to push messages.',
 };
 ---
 
@@ -89,22 +97,35 @@ const IMPORT_NOTE: Record<string, string> = {
   currentPath="/install"
 >
   <div class="docs-inline-page">
-
     <PageHero
       kind="howto"
       title="Installation"
       lede="Add Atelier UI to an existing app — package commands for npm, pnpm, and yarn, plus the one-line token import that wires up dark mode and theming."
     />
-    <p style="font-size: 0.78rem; color: var(--ui-color-text-muted); margin: -1.5rem 0 1.5rem; max-width: 560px; line-height: 1.55">
-      No app yet? <a href="/workshop" class="docs-link-primary docs-link-primary--bold">Workshop setup</a> scaffolds one —
-      <code>npx create-atelier-ui-workspace</code> writes an app that already has the package as a
-      dependency, the token stylesheet imported, and a <code>.mcp.json</code> — steps 1 and 2 below are
-      wired for you, and you start at step 3. One difference to expect in step 2: the scaffold
-      vendors its own copy of <code>tokens.css</code> into <code>src/styles/</code> and imports
-      <em>that</em>, so you can edit the values directly — the package path shown below is what you
-      use when adding Atelier UI to an app you already have. Attending the
-      <a href="/schulung" class="docs-link-primary">two-day training</a> (German)? Same scaffold — the
-      cohort works in its own generated workspace too.
+    <p
+      style="
+        font-size: 0.78rem;
+        color: var(--ui-color-text-muted);
+        margin: -1.5rem 0 1.5rem;
+        max-width: 560px;
+        line-height: 1.55;
+      "
+    >
+      No app yet?
+      <a href="/workshop" class="docs-link-primary docs-link-primary--bold"
+        >Workshop setup</a
+      >
+      scaffolds one — <code>npx create-atelier-ui-workspace</code> writes an app
+      that already has the package as a dependency, the token stylesheet
+      imported, and a <code>.mcp.json</code> — steps 1 and 2 below are wired for
+      you, and you start at step 3. One difference to expect in step 2: the
+      scaffold vendors its own copy of <code>tokens.css</code> into
+      <code>src/styles/</code> and imports <em>that</em>, so you can edit the
+      values directly — the package path shown below is what you use when adding
+      Atelier UI to an app you already have. Attending the
+      <a href="/schulung" class="docs-link-primary">two-day training</a>
+      (German)? Same scaffold — the cohort works in its own generated workspace
+      too.
     </p>
 
     <!-- Framework selector -->
@@ -112,67 +133,232 @@ const IMPORT_NOTE: Record<string, string> = {
       <FwSwitcher variant="segmented" label="Choose a framework" />
     </div>
 
-    <DiagramFigure caption="Each step produces the artifact the next step consumes. No config files, no bundler plugins.">
-      <svg viewBox="0 0 880 220" role="img" aria-labelledby="ins-title ins-desc" preserveAspectRatio="xMidYMid meet">
+    <DiagramFigure
+      caption="Each step produces the artifact the next step consumes. No config files, no bundler plugins."
+    >
+      <svg
+        viewBox="0 0 880 220"
+        role="img"
+        aria-labelledby="ins-title ins-desc"
+        preserveAspectRatio="xMidYMid meet"
+      >
         <title id="ins-title">Three-step installation flow</title>
-        <desc id="ins-desc">First install the package, which updates package.json. Second import the token stylesheet into global CSS. Third import components into your code. Result: tree-shakeable UI ready to use.</desc>
+        <desc id="ins-desc">
+          First install the package, which updates package.json. Second import
+          the token stylesheet into global CSS. Third import components into
+          your code. Result: tree-shakeable UI ready to use.
+        </desc>
 
         <defs>
-          <marker id="ins-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-            <path d="M 0 0 L 10 5 L 0 10 z" class="diagram-arrow"/>
+          <marker
+            id="ins-arrow"
+            viewBox="0 0 10 10"
+            refX="8"
+            refY="5"
+            markerWidth="7"
+            markerHeight="7"
+            orient="auto-start-reverse"
+          >
+            <path d="M 0 0 L 10 5 L 0 10 z" class="diagram-arrow" />
           </marker>
         </defs>
 
         <!-- Step 1: Install package -->
         <g>
-          <rect x="24" y="40" width="248" height="128" rx="14" ry="14" class="diagram-node"/>
-          <text x="48" y="68" font-size="11" font-weight="700" style="fill: var(--ui-color-primary)">STEP 1</text>
+          <rect
+            x="24"
+            y="40"
+            width="248"
+            height="128"
+            rx="14"
+            ry="14"
+            class="diagram-node"
+          />
+          <text
+            x="48"
+            y="68"
+            font-size="11"
+            font-weight="700"
+            style="fill: var(--ui-color-primary)"
+            >STEP 1</text
+          >
           <g transform="translate(200, 52)">
-            <rect x="0" y="0" width="28" height="26" rx="3" ry="3" class="diagram-icon"/>
-            <path d="M 0 8 L 28 8" class="diagram-icon"/>
-            <path d="M 14 0 L 14 8" class="diagram-icon"/>
+            <rect
+              x="0"
+              y="0"
+              width="28"
+              height="26"
+              rx="3"
+              ry="3"
+              class="diagram-icon"
+            />
+            <path d="M 0 8 L 28 8" class="diagram-icon" />
+            <path d="M 14 0 L 14 8" class="diagram-icon" />
           </g>
-          <text x="48" y="100" font-size="15" font-weight="700">Install package</text>
-          <text x="48" y="122" font-size="11" class="diagram-muted">Adds dependency to</text>
-          <text x="48" y="148" class="diagram-mono" font-size="12" style="fill: var(--ui-color-primary)">package.json</text>
+          <text x="48" y="100" font-size="15" font-weight="700"
+            >Install package</text
+          >
+          <text x="48" y="122" font-size="11" class="diagram-muted"
+            >Adds dependency to</text
+          >
+          <text
+            x="48"
+            y="148"
+            class="diagram-mono"
+            font-size="12"
+            style="fill: var(--ui-color-primary)"
+            >package.json</text
+          >
         </g>
 
-        <line x1="272" y1="104" x2="312" y2="104" class="diagram-connector" marker-end="url(#ins-arrow)"/>
+        <line
+          x1="272"
+          y1="104"
+          x2="312"
+          y2="104"
+          class="diagram-connector"
+          marker-end="url(#ins-arrow)"
+        />
 
         <!-- Step 2: Import tokens -->
         <g>
-          <rect x="312" y="40" width="248" height="128" rx="14" ry="14" class="diagram-node"/>
-          <text x="336" y="68" font-size="11" font-weight="700" style="fill: var(--ui-color-primary)">STEP 2</text>
+          <rect
+            x="312"
+            y="40"
+            width="248"
+            height="128"
+            rx="14"
+            ry="14"
+            class="diagram-node"
+          />
+          <text
+            x="336"
+            y="68"
+            font-size="11"
+            font-weight="700"
+            style="fill: var(--ui-color-primary)"
+            >STEP 2</text
+          >
           <g transform="translate(488, 52)">
-            <circle cx="8" cy="8" r="6" class="diagram-icon" style="fill: var(--ui-color-primary); stroke: none;"/>
-            <circle cx="22" cy="8" r="6" class="diagram-icon" style="fill: var(--ui-color-secondary); stroke: none; opacity: 0.6;"/>
-            <circle cx="15" cy="22" r="6" class="diagram-icon" style="fill: var(--ui-color-primary); stroke: none; opacity: 0.4;"/>
+            <circle
+              cx="8"
+              cy="8"
+              r="6"
+              class="diagram-icon"
+              style="fill: var(--ui-color-primary); stroke: none"
+            />
+            <circle
+              cx="22"
+              cy="8"
+              r="6"
+              class="diagram-icon"
+              style="
+                fill: var(--ui-color-secondary);
+                stroke: none;
+                opacity: 0.6;
+              "
+            />
+            <circle
+              cx="15"
+              cy="22"
+              r="6"
+              class="diagram-icon"
+              style="fill: var(--ui-color-primary); stroke: none; opacity: 0.4"
+            />
           </g>
-          <text x="336" y="100" font-size="15" font-weight="700">Import tokens</text>
-          <text x="336" y="122" font-size="11" class="diagram-muted">Adds CSS variables to</text>
-          <text x="336" y="148" class="diagram-mono" font-size="12" style="fill: var(--ui-color-primary)">styles.css</text>
+          <text x="336" y="100" font-size="15" font-weight="700"
+            >Import tokens</text
+          >
+          <text x="336" y="122" font-size="11" class="diagram-muted"
+            >Adds CSS variables to</text
+          >
+          <text
+            x="336"
+            y="148"
+            class="diagram-mono"
+            font-size="12"
+            style="fill: var(--ui-color-primary)"
+            >styles.css</text
+          >
         </g>
 
-        <line x1="560" y1="104" x2="600" y2="104" class="diagram-connector" marker-end="url(#ins-arrow)"/>
+        <line
+          x1="560"
+          y1="104"
+          x2="600"
+          y2="104"
+          class="diagram-connector"
+          marker-end="url(#ins-arrow)"
+        />
 
         <!-- Step 3: Import components -->
         <g>
-          <rect x="600" y="40" width="248" height="128" rx="14" ry="14" class="diagram-node diagram-node--accent"/>
-          <text x="624" y="68" font-size="11" font-weight="700" style="fill: var(--ui-color-primary)">STEP 3</text>
+          <rect
+            x="600"
+            y="40"
+            width="248"
+            height="128"
+            rx="14"
+            ry="14"
+            class="diagram-node diagram-node--accent"
+          />
+          <text
+            x="624"
+            y="68"
+            font-size="11"
+            font-weight="700"
+            style="fill: var(--ui-color-primary)"
+            >STEP 3</text
+          >
           <g transform="translate(776, 54)">
-            <path d="M 8 0 L 0 12 L 8 24" class="diagram-icon"/>
-            <path d="M 22 0 L 30 12 L 22 24" class="diagram-icon"/>
-            <path d="M 18 2 L 12 22" class="diagram-icon"/>
+            <path d="M 8 0 L 0 12 L 8 24" class="diagram-icon" />
+            <path d="M 22 0 L 30 12 L 22 24" class="diagram-icon" />
+            <path d="M 18 2 L 12 22" class="diagram-icon" />
           </g>
-          <text x="624" y="100" font-size="15" font-weight="700">Import components</text>
-          <text x="624" y="122" font-size="11" class="diagram-muted">Tree-shakeable named imports</text>
-          <text x="624" y="148" class="diagram-mono" font-size="12" style="fill: var(--ui-color-primary)">import &#123; Atl… &#125; from …</text>
+          <text x="624" y="100" font-size="15" font-weight="700"
+            >Import components</text
+          >
+          <text x="624" y="122" font-size="11" class="diagram-muted"
+            >Tree-shakeable named imports</text
+          >
+          <text
+            x="624"
+            y="148"
+            class="diagram-mono"
+            font-size="12"
+            style="fill: var(--ui-color-primary)"
+            >import &#123; Atl… &#125; from …</text
+          >
         </g>
 
         <!-- Ready badge -->
         <g transform="translate(368, 184)">
-          <rect x="0" y="0" width="144" height="28" rx="14" ry="14" style="fill: color-mix(in srgb, var(--ui-color-success) 15%, transparent); stroke: var(--ui-color-success); stroke-width: 1;"/>
-          <text x="72" y="18" text-anchor="middle" font-size="11" font-weight="700" style="fill: var(--ui-color-success)">Ready to build</text>
+          <rect
+            x="0"
+            y="0"
+            width="144"
+            height="28"
+            rx="14"
+            ry="14"
+            style="
+              fill: color-mix(
+                in srgb,
+                var(--ui-color-success) 15%,
+                transparent
+              );
+              stroke: var(--ui-color-success);
+              stroke-width: 1;
+            "
+          />
+          <text
+            x="72"
+            y="18"
+            text-anchor="middle"
+            font-size="11"
+            font-weight="700"
+            style="fill: var(--ui-color-success)"
+            >Ready to build</text
+          >
         </g>
       </svg>
     </DiagramFigure>
@@ -180,41 +366,77 @@ const IMPORT_NOTE: Record<string, string> = {
     <!-- Step 1: Install -->
     <div class="docs-section">
       <h2 class="docs-section-title">1. Install the package</h2>
-      <div class="docs-multi-code-tabs" style="border-radius: 8px 8px 0 0; margin-bottom: 0">
-        {PKG_MANAGERS.map((pm, i) => (
-          <button class={`docs-multi-code-tab${i === 0 ? ' active' : ''}`} data-pm-btn={pm}>{pm}</button>
-        ))}
+      <div
+        class="docs-multi-code-tabs"
+        style="border-radius: 8px 8px 0 0; margin-bottom: 0"
+      >
+        {PKG_MANAGERS.map((pm, i) => <button
+          class={`docs-multi-code-tab${i === 0 ? ' active' : ''}`}
+          data-pm-btn={pm}
+        >
+          {pm}
+        </button>)}
       </div>
       {FRAMEWORKS.map((fw) =>
-        PKG_MANAGERS.map((pm, pi) => (
-          <div data-install={`${fw}-${pm}`} hidden={fw !== 'Angular' || pi !== 0}>
-            <Code code={INSTALL_CMD[fw][pm]} lang="shell" />
-          </div>
-        ))
+        PKG_MANAGERS.map((pm, pi) => <div
+          data-install={`${fw}-${pm}`}
+          hidden={fw !== 'Angular' || pi !== 0}
+        >
+          <Code code={INSTALL_CMD[fw][pm]} lang="shell" />
+        </div>),
       )}
     </div>
 
     <!-- Step 2: Tokens -->
     <div class="docs-section">
       <h2 class="docs-section-title">2. Import design tokens</h2>
-      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1rem">
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 1rem;
+        "
+      >
         Add the token stylesheet to your global styles file:
       </p>
-      {FRAMEWORKS.map((fw, i) => (
-        <div data-fw-panel={fw} hidden={i !== 0}>
-          <div class="docs-file-path">
-            <Icon name="description" class="docs-file-path-icon" />
-            <span class="docs-file-path-name">{TOKEN_FILE[fw].file}</span>
-            <span class="docs-file-path-notes">{TOKEN_FILE[fw].notes}</span>
-          </div>
-          <Code code={TOKEN_IMPORT[fw]} lang="css" />
+      {FRAMEWORKS.map((fw, i) => <div data-fw-panel={fw} hidden={i !== 0}>
+        <div class="docs-file-path">
+          <Icon name="description" class="docs-file-path-icon" />
+          <span class="docs-file-path-name">{TOKEN_FILE[fw].file}</span>
+          <span class="docs-file-path-notes">{TOKEN_FILE[fw].notes}</span>
         </div>
-      ))}
-      <div style="padding: 1rem 1.25rem; background: var(--ui-color-primary-light); border: 1px solid var(--ui-color-primary-border); border-radius: var(--ui-radius-md); margin-top: 1rem">
-        <p style="margin: 0 0 0.3rem; font-size: 0.82rem; font-weight: 700; color: var(--ui-color-text)">CSS Variables</p>
-        <p style="margin: 0; font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.6">
-          Atelier UI uses CSS custom properties for all design tokens, enabling dynamic
-          theme switching between light and dark mode with zero JavaScript.
+        <Code code={TOKEN_IMPORT[fw]} lang="css" />
+      </div>)}
+      <div
+        style="
+          padding: 1rem 1.25rem;
+          background: var(--ui-color-primary-light);
+          border: 1px solid var(--ui-color-primary-border);
+          border-radius: var(--ui-radius-md);
+          margin-top: 1rem;
+        "
+      >
+        <p
+          style="
+            margin: 0 0 0.3rem;
+            font-size: 0.82rem;
+            font-weight: 700;
+            color: var(--ui-color-text);
+          "
+        >
+          CSS Variables
+        </p>
+        <p
+          style="
+            margin: 0;
+            font-size: 0.82rem;
+            color: var(--ui-color-text-muted);
+            line-height: 1.6;
+          "
+        >
+          Atelier UI uses CSS custom properties for all design tokens, enabling
+          dynamic theme switching between light and dark mode with zero
+          JavaScript.
         </p>
       </div>
     </div>
@@ -222,29 +444,50 @@ const IMPORT_NOTE: Record<string, string> = {
     <!-- Step 3: Components -->
     <div class="docs-section">
       <h2 class="docs-section-title">3. Import components</h2>
-      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1rem">
-        Import only the components you need — all are <Jargon term="tree-shakeable">tree-shakeable</Jargon>:
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 1rem;
+        "
+      >
+        Import only the components you need — all are
+        <Jargon term="tree-shakeable">tree-shakeable</Jargon>:
       </p>
-      {FRAMEWORKS.map((fw, i) => (
-        <div data-fw-panel={fw} hidden={i !== 0}>
-          <div class="docs-file-path">
-            <Icon name="description" class="docs-file-path-icon" />
-            <span class="docs-file-path-name">{COMPONENT_FILE[fw].file}</span>
-            <span class="docs-file-path-notes">{COMPONENT_FILE[fw].notes}</span>
-          </div>
-          <Code code={COMPONENT_IMPORT[fw]} lang="ts" />
-          <p style="margin: 0.6rem 0 0; padding: 0.55rem 0.85rem; font-size: 0.76rem; color: var(--ui-color-text-muted); line-height: 1.55; background: var(--ui-color-primary-light); border-radius: var(--ui-radius-sm); border-left: 2px solid var(--ui-color-primary)">
-            <strong style="color: var(--ui-color-text); font-weight: 700">Why this list:</strong> {IMPORT_NOTE[fw]}
-          </p>
+      {FRAMEWORKS.map((fw, i) => <div data-fw-panel={fw} hidden={i !== 0}>
+        <div class="docs-file-path">
+          <Icon name="description" class="docs-file-path-icon" />
+          <span class="docs-file-path-name">{COMPONENT_FILE[fw].file}</span>
+          <span class="docs-file-path-notes">{COMPONENT_FILE[fw].notes}</span>
         </div>
-      ))}
+        <Code code={COMPONENT_IMPORT[fw]} lang="ts" />
+        <p
+          style="
+            margin: 0.6rem 0 0;
+            padding: 0.55rem 0.85rem;
+            font-size: 0.76rem;
+            color: var(--ui-color-text-muted);
+            line-height: 1.55;
+            background: var(--ui-color-primary-light);
+            border-radius: var(--ui-radius-sm);
+            border-left: 2px solid var(--ui-color-primary);
+          "
+        >
+          <strong style="color: var(--ui-color-text); font-weight: 700"
+            >Why this list:</strong
+          >
+          {IMPORT_NOTE[fw]}
+        </p>
+      </div>)}
     </div>
 
     <!-- What's included -->
     <div class="docs-section">
       <h2 class="docs-section-title">What's included</h2>
       <ul class="docs-checklist">
-        <li>25+ components with identical APIs across Angular, React, and Vue</li>
+        <li>
+          25+ components with identical APIs across Angular, React, and Vue
+        </li>
         <li>CSS custom property token system — no runtime dependency</li>
         <li>Dark and light mode built in</li>
         <li>WCAG AA accessible defaults</li>
@@ -254,12 +497,28 @@ const IMPORT_NOTE: Record<string, string> = {
     </div>
 
     <!-- Next steps -->
-    <BottomNav items={[
-      { to: '/workshop',          label: 'Next',   title: 'Workshop setup',     icon: 'build_circle' },
-      { to: '/components',        label: 'Browse', title: 'Components',         icon: 'widgets' },
-      { to: '/design-principles', label: 'Read',   title: 'Design principles',  icon: 'schema' },
-    ]} />
-
+    <BottomNav
+      items={[
+        {
+          to: '/workshop',
+          label: 'Next',
+          title: 'Workshop setup',
+          icon: 'build_circle',
+        },
+        {
+          to: '/components',
+          label: 'Browse',
+          title: 'Components',
+          icon: 'widgets',
+        },
+        {
+          to: '/design-principles',
+          label: 'Read',
+          title: 'Design principles',
+          icon: 'schema',
+        },
+      ]}
+    />
   </div>
 </BaseLayout>
 
@@ -285,7 +544,8 @@ const IMPORT_NOTE: Record<string, string> = {
     color: var(--ui-color-primary);
   }
   .docs-file-path-name {
-    font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-family:
+      var(--font-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
     font-weight: 700;
     color: var(--ui-color-text);
     font-size: 0.78rem;
@@ -311,27 +571,35 @@ const IMPORT_NOTE: Record<string, string> = {
   // Framework tabs ([data-fw-btn] / [data-fw-panel]) are driven by the shared
   // framework-pref-init script in BaseLayout. This script handles the package-
   // manager tabs and the combined [data-install] panels that key on fw+pm.
-  import { getFramework, subscribeFramework, type Framework } from '../lib/framework-pref';
+  import {
+    getFramework,
+    subscribeFramework,
+    type Framework,
+  } from '../lib/framework-pref';
 
   function initInstallPmTabs() {
     let activePm = 'npm';
 
     function updateInstallPanels(fw: Framework) {
       const key = `${fw}-${activePm}`;
-      document.querySelectorAll<HTMLElement>('[data-install]').forEach(el => {
+      document.querySelectorAll<HTMLElement>('[data-install]').forEach((el) => {
         el.hidden = (el.dataset.install ?? '').toLowerCase() !== key;
       });
     }
 
-    document.querySelectorAll<HTMLButtonElement>('[data-pm-btn]').forEach(btn => {
-      btn.addEventListener('click', () => {
-        activePm = btn.dataset.pmBtn ?? activePm;
-        document.querySelectorAll('[data-pm-btn]').forEach(b => b.classList.toggle('active', b === btn));
-        updateInstallPanels(getFramework());
+    document
+      .querySelectorAll<HTMLButtonElement>('[data-pm-btn]')
+      .forEach((btn) => {
+        btn.addEventListener('click', () => {
+          activePm = btn.dataset.pmBtn ?? activePm;
+          document
+            .querySelectorAll('[data-pm-btn]')
+            .forEach((b) => b.classList.toggle('active', b === btn));
+          updateInstallPanels(getFramework());
+        });
       });
-    });
 
-    subscribeFramework(fw => updateInstallPanels(fw));
+    subscribeFramework((fw) => updateInstallPanels(fw));
     updateInstallPanels(getFramework());
   }
   document.addEventListener('astro:page-load', initInstallPmTabs);

@@ -24,7 +24,9 @@ const stepTag = `Step ${trackStep.step} of ${TRACK_LENGTH}`;
 // entry in its .mcp.json, so a hardcoded `storybook-react` is unrunnable for
 // two thirds of the room. The panels ride the same [data-fw-panel] switcher as
 // the generated output below.
-const examplePrompt = (fw: string) => `I've selected the "Settings / Card" frame in Figma.
+const examplePrompt = (
+  fw: string,
+) => `I've selected the "Settings / Card" frame in Figma.
 
 1. Use figma-console MCP (figma_get_component_for_development) to read
    the frame's spec — I need the boundVariables and the visual reference.
@@ -109,27 +111,36 @@ against the component I just generated. Fix any discrepancies.`;
 // the workspace root (no apps/ prefix), every framework serves on the default
 // port 4200, and each app renders the NxWelcome placeholder until something
 // imports the generated component.
-const RUN_IT: Record<string, { path: string; mount: string; cmd: string; port: number; expected: string }> = {
+const RUN_IT: Record<
+  string,
+  { path: string; mount: string; cmd: string; port: number; expected: string }
+> = {
   React: {
     path: 'workshop-react/src/components/SettingsCard.tsx',
-    mount: 'Import SettingsCard in workshop-react/src/app/app.tsx and replace the <NxWelcome /> placeholder with it.',
+    mount:
+      'Import SettingsCard in workshop-react/src/app/app.tsx and replace the <NxWelcome /> placeholder with it.',
     cmd: 'npm start',
     port: 4200,
-    expected: 'A card with two text inputs (Name, Email), a checked Notifications toggle, and a primary "Save" button — surface-raised background, padding from the Figma spacing token.',
+    expected:
+      'A card with two text inputs (Name, Email), a checked Notifications toggle, and a primary "Save" button — surface-raised background, padding from the Figma spacing token.',
   },
   Angular: {
     path: 'workshop-angular/src/app/components/settings-card.component.ts',
-    mount: 'Add SettingsCardComponent to the imports array in workshop-angular/src/app/app.ts and replace <app-nx-welcome> with <app-settings-card> in app.html.',
+    mount:
+      'Add SettingsCardComponent to the imports array in workshop-angular/src/app/app.ts and replace <app-nx-welcome> with <app-settings-card> in app.html.',
     cmd: 'npm start',
     port: 4200,
-    expected: 'A card with two text inputs (Name, Email), a checked Notifications toggle, and a primary "Save" button — same surface, padding, and radius as the Figma frame.',
+    expected:
+      'A card with two text inputs (Name, Email), a checked Notifications toggle, and a primary "Save" button — same surface, padding, and radius as the Figma frame.',
   },
   Vue: {
     path: 'workshop-vue/src/components/SettingsCard.vue',
-    mount: 'Import SettingsCard in workshop-vue/src/views/HomeView.vue and replace the <NxWelcome /> placeholder with it.',
+    mount:
+      'Import SettingsCard in workshop-vue/src/views/HomeView.vue and replace the <NxWelcome /> placeholder with it.',
     cmd: 'npm start',
     port: 4200,
-    expected: 'A card with two text inputs (Name, Email), a checked Notifications toggle, and a primary "Save" button — surface-raised background, identical token-driven spacing.',
+    expected:
+      'A card with two text inputs (Name, Email), a checked Notifications toggle, and a primary "Save" button — surface-raised background, identical token-driven spacing.',
   },
 };
 
@@ -153,7 +164,6 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
   currentPath="/tutorial"
 >
   <div class="docs-inline-page">
-
     <PageHero
       kind="tutorial"
       time="~30 min"
@@ -161,10 +171,28 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
       title="Tutorial"
       ledeMax="520px"
     >
-      Use <strong>figma-console MCP</strong> to read a Figma component spec directly — design tokens included — then <strong>Storybook MCP</strong> to match Atelier UI components, and let Claude Code write token-exact code. The next section explains what an MCP is.
+      Use <strong>figma-console MCP</strong> to read a Figma component spec
+      directly — design tokens included — then <strong>Storybook MCP</strong> to
+      match Atelier UI components, and let Claude Code write token-exact code.
+      The next section explains what an MCP is.
     </PageHero>
-    <p style="font-size: 0.78rem; color: var(--ui-color-text-muted); margin: -1.5rem 0 1.5rem; max-width: 520px; line-height: 1.55">
-      Just want the recipe? The <a href="/first-component" class="docs-link-primary docs-link-primary--bold">15-min kata</a> builds the same Settings / Card frame in six copy-paste steps, with the explanation stripped out.
+    <p
+      style="
+        font-size: 0.78rem;
+        color: var(--ui-color-text-muted);
+        margin: -1.5rem 0 1.5rem;
+        max-width: 520px;
+        line-height: 1.55;
+      "
+    >
+      Just want the recipe? The
+      <a
+        href="/first-component"
+        class="docs-link-primary docs-link-primary--bold"
+        >15-min kata</a
+      >
+      builds the same Settings / Card frame in six copy-paste steps, with the
+      explanation stripped out.
     </p>
 
     <!-- Page-pair: this is the MCP-driven path; /figma is the manual variant. -->
@@ -172,23 +200,34 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
       <div class="docs-pagepair-card docs-pagepair-card--here">
         <span class="docs-pagepair-eyebrow">You're here</span>
         <span class="docs-pagepair-title">/tutorial</span>
-        <span class="docs-pagepair-desc">MCP-driven — Claude reads <Jargon term="boundVariables">boundVariables</Jargon> and Storybook props directly. Setup needed.</span>
+        <span class="docs-pagepair-desc"
+          >MCP-driven — Claude reads
+          <Jargon term="boundVariables">boundVariables</Jargon> and Storybook
+          props directly. Setup needed.</span
+        >
       </div>
       <div class="docs-pagepair-arrow" aria-hidden="true">·</div>
       <a href="/figma" class="docs-pagepair-card docs-pagepair-card--prev">
         <span class="docs-pagepair-eyebrow">No-MCP variant</span>
         <span class="docs-pagepair-title">/figma →</span>
-        <span class="docs-pagepair-desc">Manual workflow — read the inspect panel, copy token names into your prompt. No plugin needed.</span>
+        <span class="docs-pagepair-desc"
+          >Manual workflow — read the inspect panel, copy token names into your
+          prompt. No plugin needed.</span
+        >
       </a>
     </aside>
 
     <!-- Learning objectives & assumed knowledge -->
     <div class="objective-box">
       <div class="objective-col">
-        <h2 class="objective-heading objective-heading--accent">What you'll learn</h2>
+        <h2 class="objective-heading objective-heading--accent">
+          What you'll learn
+        </h2>
         <ul class="objective-list">
           <li>Read a Figma component's <code>boundVariables</code> via MCP</li>
-          <li>Match the right Atelier UI component through the Storybook MCP</li>
+          <li>
+            Match the right Atelier UI component through the Storybook MCP
+          </li>
           <li>Generate token-exact code in Angular, React or Vue</li>
           <li>Verify design parity automatically</li>
         </ul>
@@ -196,9 +235,21 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
       <div class="objective-col">
         <h2 class="objective-heading">Before you start</h2>
         <ul class="objective-list objective-list--muted">
-          <li>Completed the <a href="/workshop" class="docs-link-primary">Workshop setup</a></li>
-          <li>Read the four-step loop on <a href="/design-to-code" class="docs-link-primary">Design to code</a> — this page walks it in detail</li>
-          <li><code>figma-console</code> MCP configured — see <a href="/figma-token" class="docs-link-primary">Figma Setup</a></li>
+          <li>
+            Completed the
+            <a href="/workshop" class="docs-link-primary">Workshop setup</a>
+          </li>
+          <li>
+            Read the four-step loop on
+            <a href="/design-to-code" class="docs-link-primary"
+              >Design to code</a
+            >
+            — this page walks it in detail
+          </li>
+          <li>
+            <code>figma-console</code> MCP configured — see
+            <a href="/figma-token" class="docs-link-primary">Figma Setup</a>
+          </li>
           <li>Read access to the Atelier UI Figma file (linked below)</li>
           <li>One framework picked — Angular, React or Vue</li>
         </ul>
@@ -206,7 +257,10 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
     </div>
 
     <!-- Why this is different — concrete cost of doing it the old way -->
-    <div class="mcp-compare" aria-label="Cost of building a component with vs. without MCP">
+    <div
+      class="mcp-compare"
+      aria-label="Cost of building a component with vs. without MCP"
+    >
       <div class="mcp-compare-card mcp-compare-card--neg">
         <div class="mcp-compare-head">
           <span class="mcp-compare-label">Without MCP</span>
@@ -234,7 +288,9 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
           <li>Copy the node-id from the Figma URL</li>
           <li>Send one prompt to Claude Code</li>
         </ol>
-        <pre class="mcp-compare-prompt">"build component for node-id 936-2954 using figma-console + storybook-react MCP."</pre>
+        <pre
+          class="mcp-compare-prompt"
+        >"build component for node-id 936-2954 using figma-console + storybook-react MCP."</pre>
         <ol class="mcp-compare-list" start="3">
           <li>Token-exact code lands</li>
           <li>Verify: <code>figma_check_design_parity</code></li>
@@ -246,216 +302,819 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
     <!-- What's an MCP? — mental model before specifics -->
     <div class="docs-section">
       <h2 class="docs-section-title">What's an MCP, in 30 seconds?</h2>
-      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem; font-size: 0.85rem">
-        Claude Code can call functions exposed by an external <strong style="color: var(--ui-color-text)">MCP server</strong>.
-        The server fetches structured data from a source (Figma, Storybook, Nx) and hands it back —
-        no screenshots, no copy-paste, no prompt-stuffing. Each call is one of four hops:
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 1.25rem;
+          font-size: 0.85rem;
+        "
+      >
+        Claude Code can call functions exposed by an external
+        <strong style="color: var(--ui-color-text)">MCP server</strong>. The
+        server fetches structured data from a source (Figma, Storybook, Nx) and
+        hands it back — no screenshots, no copy-paste, no prompt-stuffing. Each
+        call is one of four hops:
       </p>
 
-      <DiagramFigure caption="Each MCP call is a four-hop round trip. The dashed return arrows carry the data Claude needs — boundVariables for figma-console, prop tables for storybook-*.">
-        <svg viewBox="0 0 880 220" role="img" aria-labelledby="mcp-title mcp-desc" preserveAspectRatio="xMidYMid meet">
+      <DiagramFigure
+        caption="Each MCP call is a four-hop round trip. The dashed return arrows carry the data Claude needs — boundVariables for figma-console, prop tables for storybook-*."
+      >
+        <svg
+          viewBox="0 0 880 220"
+          role="img"
+          aria-labelledby="mcp-title mcp-desc"
+          preserveAspectRatio="xMidYMid meet"
+        >
           <title id="mcp-title">MCP request and response flow</title>
-          <desc id="mcp-desc">Four boxes left to right: User, Claude Code, MCP Server, Source. Solid arrows show the forward request flow (prompt, tool call, fetch). Dashed arrows show the return response flow (data, response, answer). Claude Code is highlighted as the active agent making the tool decision.</desc>
+          <desc id="mcp-desc">
+            Four boxes left to right: User, Claude Code, MCP Server, Source.
+            Solid arrows show the forward request flow (prompt, tool call,
+            fetch). Dashed arrows show the return response flow (data, response,
+            answer). Claude Code is highlighted as the active agent making the
+            tool decision.
+          </desc>
 
           <defs>
-            <marker id="mcp-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-              <path d="M 0 0 L 10 5 L 0 10 z" class="diagram-arrow--accent"/>
+            <marker
+              id="mcp-arr"
+              viewBox="0 0 10 10"
+              refX="9"
+              refY="5"
+              markerWidth="7"
+              markerHeight="7"
+              orient="auto"
+            >
+              <path d="M 0 0 L 10 5 L 0 10 z" class="diagram-arrow--accent" />
             </marker>
-            <marker id="mcp-arr-back" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-              <path d="M 0 0 L 10 5 L 0 10 z" class="diagram-arrow--muted-accent"/>
+            <marker
+              id="mcp-arr-back"
+              viewBox="0 0 10 10"
+              refX="9"
+              refY="5"
+              markerWidth="7"
+              markerHeight="7"
+              orient="auto"
+            >
+              <path
+                d="M 0 0 L 10 5 L 0 10 z"
+                class="diagram-arrow--muted-accent"
+              />
             </marker>
           </defs>
 
           <!-- Nodes -->
-          <rect x="40"  y="60" width="160" height="80" rx="12" ry="12" class="diagram-node"/>
-          <text x="120" y="96"  text-anchor="middle" font-size="14" font-weight="700">User</text>
-          <text x="120" y="118" text-anchor="middle" font-size="11" class="diagram-muted">"build this card"</text>
+          <rect
+            x="40"
+            y="60"
+            width="160"
+            height="80"
+            rx="12"
+            ry="12"
+            class="diagram-node"
+          />
+          <text
+            x="120"
+            y="96"
+            text-anchor="middle"
+            font-size="14"
+            font-weight="700"
+            >User</text
+          >
+          <text
+            x="120"
+            y="118"
+            text-anchor="middle"
+            font-size="11"
+            class="diagram-muted"
+            >"build this card"</text
+          >
 
-          <rect x="240" y="60" width="180" height="80" rx="12" ry="12" class="diagram-node diagram-node--accent"/>
-          <text x="330" y="96"  text-anchor="middle" font-size="14" font-weight="700" style="fill: var(--ui-color-primary)">Claude Code</text>
-          <text x="330" y="118" text-anchor="middle" font-size="11" class="diagram-muted">decides which tool to call</text>
+          <rect
+            x="240"
+            y="60"
+            width="180"
+            height="80"
+            rx="12"
+            ry="12"
+            class="diagram-node diagram-node--accent"
+          />
+          <text
+            x="330"
+            y="96"
+            text-anchor="middle"
+            font-size="14"
+            font-weight="700"
+            style="fill: var(--ui-color-primary)"
+            >Claude Code</text
+          >
+          <text
+            x="330"
+            y="118"
+            text-anchor="middle"
+            font-size="11"
+            class="diagram-muted"
+            >decides which tool to call</text
+          >
 
-          <rect x="460" y="60" width="180" height="80" rx="12" ry="12" class="diagram-node"/>
-          <text x="550" y="96"  text-anchor="middle" font-size="14" font-weight="700">MCP Server</text>
-          <text x="550" y="118" text-anchor="middle" font-size="11" class="diagram-mono diagram-muted">figma-console · storybook-*</text>
+          <rect
+            x="460"
+            y="60"
+            width="180"
+            height="80"
+            rx="12"
+            ry="12"
+            class="diagram-node"
+          />
+          <text
+            x="550"
+            y="96"
+            text-anchor="middle"
+            font-size="14"
+            font-weight="700"
+            >MCP Server</text
+          >
+          <text
+            x="550"
+            y="118"
+            text-anchor="middle"
+            font-size="11"
+            class="diagram-mono diagram-muted"
+            >figma-console · storybook-*</text
+          >
 
-          <rect x="680" y="60" width="160" height="80" rx="12" ry="12" class="diagram-node"/>
-          <text x="760" y="96"  text-anchor="middle" font-size="14" font-weight="700">Source</text>
-          <text x="760" y="118" text-anchor="middle" font-size="11" class="diagram-muted">Figma · Storybook</text>
+          <rect
+            x="680"
+            y="60"
+            width="160"
+            height="80"
+            rx="12"
+            ry="12"
+            class="diagram-node"
+          />
+          <text
+            x="760"
+            y="96"
+            text-anchor="middle"
+            font-size="14"
+            font-weight="700"
+            >Source</text
+          >
+          <text
+            x="760"
+            y="118"
+            text-anchor="middle"
+            font-size="11"
+            class="diagram-muted"
+            >Figma · Storybook</text
+          >
 
           <!-- Forward request arrows (top) -->
-          <line x1="200" y1="88"  x2="240" y2="88"  class="diagram-connector diagram-connector--accent" marker-end="url(#mcp-arr)"/>
-          <line x1="420" y1="88"  x2="460" y2="88"  class="diagram-connector diagram-connector--accent" marker-end="url(#mcp-arr)"/>
-          <line x1="640" y1="88"  x2="680" y2="88"  class="diagram-connector diagram-connector--accent" marker-end="url(#mcp-arr)"/>
+          <line
+            x1="200"
+            y1="88"
+            x2="240"
+            y2="88"
+            class="diagram-connector diagram-connector--accent"
+            marker-end="url(#mcp-arr)"
+          />
+          <line
+            x1="420"
+            y1="88"
+            x2="460"
+            y2="88"
+            class="diagram-connector diagram-connector--accent"
+            marker-end="url(#mcp-arr)"
+          />
+          <line
+            x1="640"
+            y1="88"
+            x2="680"
+            y2="88"
+            class="diagram-connector diagram-connector--accent"
+            marker-end="url(#mcp-arr)"
+          />
 
           <!-- Backward response arrows (bottom, dashed) -->
-          <line x1="680" y1="116" x2="640" y2="116" class="diagram-connector diagram-connector--dashed" marker-end="url(#mcp-arr-back)"/>
-          <line x1="460" y1="116" x2="420" y2="116" class="diagram-connector diagram-connector--dashed" marker-end="url(#mcp-arr-back)"/>
-          <line x1="240" y1="116" x2="200" y2="116" class="diagram-connector diagram-connector--dashed" marker-end="url(#mcp-arr-back)"/>
+          <line
+            x1="680"
+            y1="116"
+            x2="640"
+            y2="116"
+            class="diagram-connector diagram-connector--dashed"
+            marker-end="url(#mcp-arr-back)"
+          />
+          <line
+            x1="460"
+            y1="116"
+            x2="420"
+            y2="116"
+            class="diagram-connector diagram-connector--dashed"
+            marker-end="url(#mcp-arr-back)"
+          />
+          <line
+            x1="240"
+            y1="116"
+            x2="200"
+            y2="116"
+            class="diagram-connector diagram-connector--dashed"
+            marker-end="url(#mcp-arr-back)"
+          />
 
           <!-- Connector labels -->
-          <text x="220" y="78"  text-anchor="middle" font-size="10" class="diagram-eyebrow">prompt</text>
-          <text x="440" y="78"  text-anchor="middle" font-size="10" class="diagram-eyebrow">tool call</text>
-          <text x="660" y="78"  text-anchor="middle" font-size="10" class="diagram-eyebrow">fetch</text>
+          <text
+            x="220"
+            y="78"
+            text-anchor="middle"
+            font-size="10"
+            class="diagram-eyebrow"
+            >prompt</text
+          >
+          <text
+            x="440"
+            y="78"
+            text-anchor="middle"
+            font-size="10"
+            class="diagram-eyebrow"
+            >tool call</text
+          >
+          <text
+            x="660"
+            y="78"
+            text-anchor="middle"
+            font-size="10"
+            class="diagram-eyebrow"
+            >fetch</text
+          >
 
-          <text x="220" y="138" text-anchor="middle" font-size="10" class="diagram-eyebrow diagram-muted">answer</text>
-          <text x="440" y="138" text-anchor="middle" font-size="10" class="diagram-eyebrow diagram-muted">response</text>
-          <text x="660" y="138" text-anchor="middle" font-size="10" class="diagram-eyebrow diagram-muted">data</text>
+          <text
+            x="220"
+            y="138"
+            text-anchor="middle"
+            font-size="10"
+            class="diagram-eyebrow diagram-muted"
+            >answer</text
+          >
+          <text
+            x="440"
+            y="138"
+            text-anchor="middle"
+            font-size="10"
+            class="diagram-eyebrow diagram-muted"
+            >response</text
+          >
+          <text
+            x="660"
+            y="138"
+            text-anchor="middle"
+            font-size="10"
+            class="diagram-eyebrow diagram-muted"
+            >data</text
+          >
 
           <!-- Footer banner -->
-          <text x="440" y="190" text-anchor="middle" font-size="11" class="diagram-muted">No screenshots · no copy-paste · structured data only</text>
+          <text
+            x="440"
+            y="190"
+            text-anchor="middle"
+            font-size="11"
+            class="diagram-muted"
+            >No screenshots · no copy-paste · structured data only</text
+          >
         </svg>
       </DiagramFigure>
 
-      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-top: 1rem; font-size: 0.82rem">
-        This tutorial uses two MCP servers: <code>figma-console</code> (reads Figma component frames) and one of the <code>storybook-*</code> servers (returns Atelier UI component prop documentation). The next section walks the figma-console tools you'll use.
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-top: 1rem;
+          font-size: 0.82rem;
+        "
+      >
+        This tutorial uses two MCP servers: <code>figma-console</code> (reads
+        Figma component frames) and one of the <code>storybook-*</code> servers
+        (returns Atelier UI component prop documentation). The next section
+        walks the figma-console tools you'll use.
       </p>
     </div>
 
     <!-- What figma-console MCP provides -->
     <div class="docs-section">
       <h2 class="docs-section-title">What figma-console MCP provides</h2>
-      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem; font-size: 0.85rem">
-        The key tool is <code>figma_get_component_for_development</code>. Given a node-id it returns:
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 1.25rem;
+          font-size: 0.85rem;
+        "
+      >
+        The key tool is <code>figma_get_component_for_development</code>. Given
+        a node-id it returns:
       </p>
-      <div style="display: grid; grid-template-columns: repeat(auto-fit, minmax(200px, 1fr)); gap: 0.75rem; margin-bottom: 1.25rem">
+      <div
+        style="
+          display: grid;
+          grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+          gap: 0.75rem;
+          margin-bottom: 1.25rem;
+        "
+      >
         {[
-          { title: 'boundVariables', body: 'Each CSS property mapped to its Figma variable name — identical to the CSS custom property name in Atelier UI. No conversion needed.' },
-          { title: '2× rendered image', body: 'A screenshot of the component, included automatically. AI gets visual and structural context in a single call.' },
-          { title: 'Component tree', body: 'Full layout structure: padding, gap, constraints, text behaviour, and interaction states (reactions).' },
-        ].map(({ title, body }) => (
-          <div style="padding: 0.9rem 1rem; background: var(--ui-color-surface-raised); border-radius: var(--ui-radius-md); border: 1px solid var(--ui-color-border)">
-            <div style="font-family: monospace; font-size: 0.78rem; font-weight: 700; color: var(--ui-color-primary); margin-bottom: 0.35rem">{title}</div>
-            <div style="font-size: 0.78rem; color: var(--ui-color-text-muted); line-height: 1.6">{body}</div>
+          {
+            title: 'boundVariables',
+            body: 'Each CSS property mapped to its Figma variable name — identical to the CSS custom property name in Atelier UI. No conversion needed.',
+          },
+          {
+            title: '2× rendered image',
+            body: 'A screenshot of the component, included automatically. AI gets visual and structural context in a single call.',
+          },
+          {
+            title: 'Component tree',
+            body: 'Full layout structure: padding, gap, constraints, text behaviour, and interaction states (reactions).',
+          },
+        ].map(({ title, body }) => <div
+          style="
+            padding: 0.9rem 1rem;
+            background: var(--ui-color-surface-raised);
+            border-radius: var(--ui-radius-md);
+            border: 1px solid var(--ui-color-border);
+          "
+        >
+          <div
+            style="
+              font-family: monospace;
+              font-size: 0.78rem;
+              font-weight: 700;
+              color: var(--ui-color-primary);
+              margin-bottom: 0.35rem;
+            "
+          >
+            {title}
           </div>
-        ))}
+          <div
+            style="
+              font-size: 0.78rem;
+              color: var(--ui-color-text-muted);
+              line-height: 1.6;
+            "
+          >
+            {body}
+          </div>
+        </div>)}
       </div>
-      <Code code={BOUND_VARS_EXAMPLE} lang="js" title="figma_get_component_for_development — response shape" />
+      <Code
+        code={BOUND_VARS_EXAMPLE}
+        lang="js"
+        title="figma_get_component_for_development — response shape"
+      />
     </div>
 
     <!-- The workflow -->
     <div class="docs-section">
       <h2 class="docs-section-title">The workflow</h2>
 
-      <DiagramFigure caption="Each step passes concrete data to the next. The dashed arrow closes the loop when parity checks surface discrepancies.">
-        <svg viewBox="0 0 960 260" role="img" aria-labelledby="tut-title tut-desc" preserveAspectRatio="xMidYMid meet">
+      <DiagramFigure
+        caption="Each step passes concrete data to the next. The dashed arrow closes the loop when parity checks surface discrepancies."
+      >
+        <svg
+          viewBox="0 0 960 260"
+          role="img"
+          aria-labelledby="tut-title tut-desc"
+          preserveAspectRatio="xMidYMid meet"
+        >
           <title id="tut-title">Figma-to-code sequence diagram</title>
-          <desc id="tut-desc">Five steps from selecting a frame in Figma to verifying design parity. Data flows from left to right: node-id, boundVariables, prop spec, generated code, parity score. A dashed loop returns discrepancies to the first step.</desc>
+          <desc id="tut-desc">
+            Five steps from selecting a frame in Figma to verifying design
+            parity. Data flows from left to right: node-id, boundVariables, prop
+            spec, generated code, parity score. A dashed loop returns
+            discrepancies to the first step.
+          </desc>
 
           <defs>
-            <marker id="tut-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-              <path d="M 0 0 L 10 5 L 0 10 z" class="diagram-arrow"/>
+            <marker
+              id="tut-arrow"
+              viewBox="0 0 10 10"
+              refX="8"
+              refY="5"
+              markerWidth="6"
+              markerHeight="6"
+              orient="auto-start-reverse"
+            >
+              <path d="M 0 0 L 10 5 L 0 10 z" class="diagram-arrow" />
             </marker>
-            <marker id="tut-arrow-loop" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-              <path d="M 0 0 L 10 5 L 0 10 z" class="diagram-arrow--muted-accent"/>
+            <marker
+              id="tut-arrow-loop"
+              viewBox="0 0 10 10"
+              refX="8"
+              refY="5"
+              markerWidth="7"
+              markerHeight="7"
+              orient="auto-start-reverse"
+            >
+              <path
+                d="M 0 0 L 10 5 L 0 10 z"
+                class="diagram-arrow--muted-accent"
+              />
             </marker>
           </defs>
 
           <!-- Connector line under the step circles -->
-          <line x1="96"  y1="100" x2="200" y2="100" class="diagram-connector" marker-end="url(#tut-arrow)"/>
-          <line x1="264" y1="100" x2="368" y2="100" class="diagram-connector" marker-end="url(#tut-arrow)"/>
-          <line x1="432" y1="100" x2="536" y2="100" class="diagram-connector" marker-end="url(#tut-arrow)"/>
-          <line x1="600" y1="100" x2="704" y2="100" class="diagram-connector" marker-end="url(#tut-arrow)"/>
-          <line x1="768" y1="100" x2="864" y2="100" class="diagram-connector" marker-end="url(#tut-arrow)"/>
+          <line
+            x1="96"
+            y1="100"
+            x2="200"
+            y2="100"
+            class="diagram-connector"
+            marker-end="url(#tut-arrow)"
+          />
+          <line
+            x1="264"
+            y1="100"
+            x2="368"
+            y2="100"
+            class="diagram-connector"
+            marker-end="url(#tut-arrow)"
+          />
+          <line
+            x1="432"
+            y1="100"
+            x2="536"
+            y2="100"
+            class="diagram-connector"
+            marker-end="url(#tut-arrow)"
+          />
+          <line
+            x1="600"
+            y1="100"
+            x2="704"
+            y2="100"
+            class="diagram-connector"
+            marker-end="url(#tut-arrow)"
+          />
+          <line
+            x1="768"
+            y1="100"
+            x2="864"
+            y2="100"
+            class="diagram-connector"
+            marker-end="url(#tut-arrow)"
+          />
 
           <!-- Data labels on connectors -->
-          <text x="152" y="88" class="diagram-eyebrow" text-anchor="middle">node-id</text>
-          <text x="316" y="88" class="diagram-eyebrow" text-anchor="middle">boundVariables</text>
-          <text x="484" y="88" class="diagram-eyebrow" text-anchor="middle">prop spec</text>
-          <text x="652" y="88" class="diagram-eyebrow" text-anchor="middle">code</text>
-          <text x="816" y="88" class="diagram-eyebrow" text-anchor="middle">parity</text>
+          <text x="152" y="88" class="diagram-eyebrow" text-anchor="middle"
+            >node-id</text
+          >
+          <text x="316" y="88" class="diagram-eyebrow" text-anchor="middle"
+            >boundVariables</text
+          >
+          <text x="484" y="88" class="diagram-eyebrow" text-anchor="middle"
+            >prop spec</text
+          >
+          <text x="652" y="88" class="diagram-eyebrow" text-anchor="middle"
+            >code</text
+          >
+          <text x="816" y="88" class="diagram-eyebrow" text-anchor="middle"
+            >parity</text
+          >
 
           <!-- Loop-back: parity discrepancies fold back to step A -->
-          <path d="M 864 115 C 864 180 864 210 800 210 L 160 210 C 96 210 96 180 96 115"
-                class="diagram-connector diagram-connector--dashed"
-                marker-end="url(#tut-arrow-loop)"/>
-          <text x="480" y="240" class="diagram-eyebrow" text-anchor="middle">discrepancies · iterate</text>
+          <path
+            d="M 864 115 C 864 180 864 210 800 210 L 160 210 C 96 210 96 180 96 115"
+            class="diagram-connector diagram-connector--dashed"
+            marker-end="url(#tut-arrow-loop)"
+          />
+          <text x="480" y="240" class="diagram-eyebrow" text-anchor="middle"
+            >discrepancies · iterate</text
+          >
 
           <!-- Step circles with badges -->
           <!-- A -->
           <g>
-            <circle cx="64" cy="100" r="30" class="diagram-node"/>
-            <text x="64" y="107" text-anchor="middle" font-size="18" font-weight="700" style="fill: var(--ui-color-primary)">A</text>
-            <text x="64" y="158" text-anchor="middle" font-size="12" font-weight="700">Select</text>
-            <text x="64" y="176" text-anchor="middle" font-size="10" class="diagram-muted">Figma frame</text>
+            <circle cx="64" cy="100" r="30" class="diagram-node" />
+            <text
+              x="64"
+              y="107"
+              text-anchor="middle"
+              font-size="18"
+              font-weight="700"
+              style="fill: var(--ui-color-primary)"
+              >A</text
+            >
+            <text
+              x="64"
+              y="158"
+              text-anchor="middle"
+              font-size="12"
+              font-weight="700"
+              >Select</text
+            >
+            <text
+              x="64"
+              y="176"
+              text-anchor="middle"
+              font-size="10"
+              class="diagram-muted"
+              >Figma frame</text
+            >
           </g>
           <!-- B -->
           <g>
-            <circle cx="232" cy="100" r="30" class="diagram-node"/>
-            <text x="232" y="107" text-anchor="middle" font-size="18" font-weight="700" style="fill: var(--ui-color-primary)">B</text>
-            <text x="232" y="158" text-anchor="middle" font-size="12" font-weight="700">Read spec</text>
-            <text x="232" y="176" text-anchor="middle" font-size="10" class="diagram-mono diagram-muted">figma_get_component</text>
+            <circle cx="232" cy="100" r="30" class="diagram-node" />
+            <text
+              x="232"
+              y="107"
+              text-anchor="middle"
+              font-size="18"
+              font-weight="700"
+              style="fill: var(--ui-color-primary)"
+              >B</text
+            >
+            <text
+              x="232"
+              y="158"
+              text-anchor="middle"
+              font-size="12"
+              font-weight="700"
+              >Read spec</text
+            >
+            <text
+              x="232"
+              y="176"
+              text-anchor="middle"
+              font-size="10"
+              class="diagram-mono diagram-muted"
+              >figma_get_component</text
+            >
           </g>
           <!-- C -->
           <g>
-            <circle cx="400" cy="100" r="30" class="diagram-node"/>
-            <text x="400" y="107" text-anchor="middle" font-size="18" font-weight="700" style="fill: var(--ui-color-primary)">C</text>
-            <text x="400" y="158" text-anchor="middle" font-size="12" font-weight="700">Match props</text>
-            <text x="400" y="176" text-anchor="middle" font-size="10" class="diagram-mono diagram-muted">storybook-* MCP</text>
+            <circle cx="400" cy="100" r="30" class="diagram-node" />
+            <text
+              x="400"
+              y="107"
+              text-anchor="middle"
+              font-size="18"
+              font-weight="700"
+              style="fill: var(--ui-color-primary)"
+              >C</text
+            >
+            <text
+              x="400"
+              y="158"
+              text-anchor="middle"
+              font-size="12"
+              font-weight="700"
+              >Match props</text
+            >
+            <text
+              x="400"
+              y="176"
+              text-anchor="middle"
+              font-size="10"
+              class="diagram-mono diagram-muted"
+              >storybook-* MCP</text
+            >
           </g>
           <!-- D (accent — AI step) -->
           <g>
-            <circle cx="568" cy="100" r="32" class="diagram-node diagram-node--accent"/>
-            <text x="568" y="107" text-anchor="middle" font-size="18" font-weight="700" style="fill: var(--ui-color-primary)">D</text>
-            <text x="568" y="158" text-anchor="middle" font-size="12" font-weight="700">Generate</text>
-            <text x="568" y="176" text-anchor="middle" font-size="10" class="diagram-muted">Claude writes code</text>
+            <circle
+              cx="568"
+              cy="100"
+              r="32"
+              class="diagram-node diagram-node--accent"
+            />
+            <text
+              x="568"
+              y="107"
+              text-anchor="middle"
+              font-size="18"
+              font-weight="700"
+              style="fill: var(--ui-color-primary)"
+              >D</text
+            >
+            <text
+              x="568"
+              y="158"
+              text-anchor="middle"
+              font-size="12"
+              font-weight="700"
+              >Generate</text
+            >
+            <text
+              x="568"
+              y="176"
+              text-anchor="middle"
+              font-size="10"
+              class="diagram-muted"
+              >Claude writes code</text
+            >
           </g>
           <!-- E -->
           <g>
-            <circle cx="736" cy="100" r="30" class="diagram-node"/>
-            <text x="736" y="107" text-anchor="middle" font-size="18" font-weight="700" style="fill: var(--ui-color-primary)">E</text>
-            <text x="736" y="158" text-anchor="middle" font-size="12" font-weight="700">Verify</text>
-            <text x="736" y="176" text-anchor="middle" font-size="10" class="diagram-mono diagram-muted">check_design_parity</text>
+            <circle cx="736" cy="100" r="30" class="diagram-node" />
+            <text
+              x="736"
+              y="107"
+              text-anchor="middle"
+              font-size="18"
+              font-weight="700"
+              style="fill: var(--ui-color-primary)"
+              >E</text
+            >
+            <text
+              x="736"
+              y="158"
+              text-anchor="middle"
+              font-size="12"
+              font-weight="700"
+              >Verify</text
+            >
+            <text
+              x="736"
+              y="176"
+              text-anchor="middle"
+              font-size="10"
+              class="diagram-mono diagram-muted"
+              >check_design_parity</text
+            >
           </g>
           <!-- Output chip -->
           <g>
-            <rect x="870" y="82" width="82" height="36" rx="8" ry="8" class="diagram-node"/>
-            <text x="911" y="104" text-anchor="middle" font-size="10" font-weight="700" style="fill: var(--ui-color-success)">✓ shipped</text>
-            <text x="911" y="118" text-anchor="middle" font-size="9" class="diagram-muted">component</text>
+            <rect
+              x="870"
+              y="82"
+              width="82"
+              height="36"
+              rx="8"
+              ry="8"
+              class="diagram-node"
+            />
+            <text
+              x="911"
+              y="104"
+              text-anchor="middle"
+              font-size="10"
+              font-weight="700"
+              style="fill: var(--ui-color-success)"
+              >✓ shipped</text
+            >
+            <text
+              x="911"
+              y="118"
+              text-anchor="middle"
+              font-size="9"
+              class="diagram-muted"
+              >component</text
+            >
           </g>
         </svg>
       </DiagramFigure>
 
       <div style="display: flex; flex-direction: column; gap: 1.5rem">
-
         <div class="docs-step-row" data-step="1">
           <span class="docs-step-badge">A</span>
           <div style="flex: 1">
             <h3 class="docs-h3">Select the component in Figma</h3>
-            <p class="docs-step-desc">Open the <a href="https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI" target="_blank" rel="noopener noreferrer" class="docs-link-primary">Atelier UI Figma file</a> and click the frame you want to implement. The <Jargon term="node-id">node-id</Jargon> appears in the URL after <code>?node-id=</code> — copy that value, you’ll pass it to the MCP tool.</p>
+            <p class="docs-step-desc">
+              Open the
+              <a
+                href="https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="docs-link-primary"
+                >Atelier UI Figma file</a
+              >
+              and click the frame you want to implement. The
+              <Jargon term="node-id">node-id</Jargon> appears in the URL after
+              <code>?node-id=</code> — copy that value, you’ll pass it to the
+              MCP tool.
+            </p>
 
-            <DiagramFigure caption="The node-id is the value after ?node-id= in the Figma URL. Colons (:) appear URL-encoded as %3A or as a single dash.">
-              <svg viewBox="0 0 880 160" role="img" aria-labelledby="url-title url-desc" preserveAspectRatio="xMidYMid meet">
-                <title id="url-title">Figma URL with the node-id parameter highlighted</title>
-                <desc id="url-desc">Mockup of a browser URL bar showing a Figma design URL. The node-id=936-2954 parameter at the end is highlighted in cyan with a caption arrow pointing to it.</desc>
+            <DiagramFigure
+              caption="The node-id is the value after ?node-id= in the Figma URL. Colons (:) appear URL-encoded as %3A or as a single dash."
+            >
+              <svg
+                viewBox="0 0 880 160"
+                role="img"
+                aria-labelledby="url-title url-desc"
+                preserveAspectRatio="xMidYMid meet"
+              >
+                <title
+                  id="url-title"
+                >Figma URL with the node-id parameter highlighted</title>
+                <desc id="url-desc">
+                  Mockup of a browser URL bar showing a Figma design URL. The
+                  node-id=936-2954 parameter at the end is highlighted in cyan
+                  with a caption arrow pointing to it.
+                </desc>
 
                 <defs>
-                  <marker id="url-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="6" markerHeight="6" orient="auto-start-reverse">
-                    <path d="M 0 0 L 10 5 L 0 10 z" class="diagram-arrow--accent"/>
+                  <marker
+                    id="url-arrow"
+                    viewBox="0 0 10 10"
+                    refX="8"
+                    refY="5"
+                    markerWidth="6"
+                    markerHeight="6"
+                    orient="auto-start-reverse"
+                  >
+                    <path
+                      d="M 0 0 L 10 5 L 0 10 z"
+                      class="diagram-arrow--accent"
+                    />
                   </marker>
                 </defs>
 
                 <!-- URL bar pill -->
-                <rect x="40" y="36" width="800" height="44" rx="22" ry="22" class="diagram-node"/>
+                <rect
+                  x="40"
+                  y="36"
+                  width="800"
+                  height="44"
+                  rx="22"
+                  ry="22"
+                  class="diagram-node"
+                />
 
                 <!-- Lock icon -->
                 <g transform="translate(62, 50)">
-                  <rect x="0" y="6" width="14" height="12" rx="2" ry="2" class="diagram-icon"/>
-                  <path d="M 3 6 V 3 A 4 4 0 0 1 11 3 V 6" class="diagram-icon"/>
+                  <rect
+                    x="0"
+                    y="6"
+                    width="14"
+                    height="12"
+                    rx="2"
+                    ry="2"
+                    class="diagram-icon"
+                  />
+                  <path
+                    d="M 3 6 V 3 A 4 4 0 0 1 11 3 V 6"
+                    class="diagram-icon"
+                  />
                 </g>
 
                 <!-- URL text (broken into parts so we can highlight one segment) -->
-                <text x="96" y="64" font-size="13" class="diagram-mono diagram-muted">figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI</text>
+                <text
+                  x="96"
+                  y="64"
+                  font-size="13"
+                  class="diagram-mono diagram-muted"
+                  >figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI</text
+                >
 
                 <!-- Highlight box around the node-id parameter -->
-                <rect x="592" y="44" width="208" height="28" rx="6" ry="6"
-                      style="fill: color-mix(in srgb, var(--ui-color-primary) 18%, transparent); stroke: var(--ui-color-primary); stroke-width: 1.5;"/>
-                <text x="600" y="64" font-size="13" font-weight="700" class="diagram-mono" style="fill: var(--ui-color-primary)">?node-id=936-2954</text>
+                <rect
+                  x="592"
+                  y="44"
+                  width="208"
+                  height="28"
+                  rx="6"
+                  ry="6"
+                  style="
+                    fill: color-mix(
+                      in srgb,
+                      var(--ui-color-primary) 18%,
+                      transparent
+                    );
+                    stroke: var(--ui-color-primary);
+                    stroke-width: 1.5;
+                  "
+                />
+                <text
+                  x="600"
+                  y="64"
+                  font-size="13"
+                  font-weight="700"
+                  class="diagram-mono"
+                  style="fill: var(--ui-color-primary)"
+                  >?node-id=936-2954</text
+                >
 
                 <!-- Arrow and caption pointing to the node-id -->
-                <path d="M 696 110 L 696 76" class="diagram-connector diagram-connector--accent" marker-end="url(#url-arrow)"/>
-                <text x="696" y="132" text-anchor="middle" font-size="11" font-weight="600" style="fill: var(--ui-color-primary)">this is the node-id</text>
-                <text x="696" y="146" text-anchor="middle" font-size="10" class="diagram-muted">pass it to figma_get_component_for_development</text>
+                <path
+                  d="M 696 110 L 696 76"
+                  class="diagram-connector diagram-connector--accent"
+                  marker-end="url(#url-arrow)"
+                />
+                <text
+                  x="696"
+                  y="132"
+                  text-anchor="middle"
+                  font-size="11"
+                  font-weight="600"
+                  style="fill: var(--ui-color-primary)"
+                  >this is the node-id</text
+                >
+                <text
+                  x="696"
+                  y="146"
+                  text-anchor="middle"
+                  font-size="10"
+                  class="diagram-muted"
+                  >pass it to figma_get_component_for_development</text
+                >
               </svg>
             </DiagramFigure>
           </div>
@@ -465,7 +1124,13 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
           <span class="docs-step-badge">B</span>
           <div style="flex: 1">
             <h3 class="docs-h3">AI reads the spec</h3>
-            <p class="docs-step-desc">Claude Code calls <code>figma_get_component_for_development(nodeId)</code>. The response includes <code>boundVariables</code> listing every design token used in the frame, plus a rendered image for visual reference — no screenshots needed.</p>
+            <p class="docs-step-desc">
+              Claude Code calls
+              <code>figma_get_component_for_development(nodeId)</code>. The
+              response includes <code>boundVariables</code> listing every design
+              token used in the frame, plus a rendered image for visual
+              reference — no screenshots needed.
+            </p>
           </div>
         </div>
 
@@ -473,10 +1138,40 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
           <span class="docs-step-badge">C</span>
           <div style="flex: 1">
             <h3 class="docs-h3">AI matches to Atelier UI components</h3>
-            <p class="docs-step-desc">Claude Code queries the Storybook MCP (<code>docs-list</code> → <code>docs-show</code>) for the matching component. It gets exact prop names and variants — no guessing.</p>
-            <Callout tone="note" title="All three endpoints answer — natively, per framework">
-              <p style="margin: 0; font-size: 0.82rem; line-height: 1.6; color: var(--ui-color-text-muted)">
-                Each <code>storybook-&lt;fw&gt;</code> server emits and serves its own <code>components.json</code> — Angular's from <code>angular-component-meta</code>, Vue's from <code>vue-component-meta</code>, React's from <code>react-docgen</code> (ADR-0097). Names, variants and defaults come back shaped for the framework you asked: two-way <code>[(checked)]</code> bindings and split Inputs/Outputs for Angular, <code>v-model</code>/<code>update:*</code> events and typed slots for Vue. The manifest settles a prop name or axis value you're unsure of; inside the atelier monorepo, <code>libs/spec/src/index.ts</code> stays the cross-framework join key the drift gates read, and the component's own micro-contract only names the master and any intentional Figma↔code mismatches. Neither settles binding shape (two-way vs. one-way, slot vs. prop, an event's payload), which the format doesn't express; for that, the framework's own manifest is the answer.
+            <p class="docs-step-desc">
+              Claude Code queries the Storybook MCP (<code>docs-list</code> →
+              <code>docs-show</code>) for the matching component. It gets exact
+              prop names and variants — no guessing.
+            </p>
+            <Callout
+              tone="note"
+              title="All three endpoints answer — natively, per framework"
+            >
+              <p
+                style="
+                  margin: 0;
+                  font-size: 0.82rem;
+                  line-height: 1.6;
+                  color: var(--ui-color-text-muted);
+                "
+              >
+                Each <code>storybook-&lt;fw&gt;</code> server emits and serves
+                its own <code>components.json</code> — Angular's from
+                <code>angular-component-meta</code>, Vue's from
+                <code>vue-component-meta</code>, React's from
+                <code>react-docgen</code> (ADR-0097). Names, variants and
+                defaults come back shaped for the framework you asked: two-way
+                <code>[(checked)]</code> bindings and split Inputs/Outputs for
+                Angular, <code>v-model</code>/<code>update:*</code> events and
+                typed slots for Vue. The manifest settles a prop name or axis
+                value you're unsure of; inside the atelier monorepo,
+                <code>libs/spec/src/index.ts</code> stays the cross-framework
+                join key the drift gates read, and the component's own
+                micro-contract only names the master and any intentional
+                Figma↔code mismatches. Neither settles binding shape (two-way
+                vs. one-way, slot vs. prop, an event's payload), which the
+                format doesn't express; for that, the framework's own manifest
+                is the answer.
               </p>
             </Callout>
           </div>
@@ -486,7 +1181,12 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
           <span class="docs-step-badge">D</span>
           <div style="flex: 1">
             <h3 class="docs-h3">AI generates token-exact code</h3>
-            <p class="docs-step-desc">With the Figma token names from <code>boundVariables</code> and the correct Atelier UI props from Storybook, the generated code uses the right component APIs and the exact CSS custom properties — no hardcoded values, no style overrides.</p>
+            <p class="docs-step-desc">
+              With the Figma token names from <code>boundVariables</code> and
+              the correct Atelier UI props from Storybook, the generated code
+              uses the right component APIs and the exact CSS custom properties
+              — no hardcoded values, no style overrides.
+            </p>
           </div>
         </div>
 
@@ -494,94 +1194,157 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
           <span class="docs-step-badge">E</span>
           <div style="flex: 1">
             <h3 class="docs-h3">Verify design parity</h3>
-            <p class="docs-step-desc">Don't stop at "looks right" — close the loop. <code>figma_check_design_parity</code> compares the generated code against the Figma spec and returns a parity score plus specific discrepancies. Pass the prompt below; fix anything it flags before you call the component done.</p>
-            <Code code={PARITY_PROMPT} lang="text" title="parity check prompt" />
+            <p class="docs-step-desc">
+              Don't stop at "looks right" — close the loop.
+              <code>figma_check_design_parity</code> compares the generated code
+              against the Figma spec and returns a parity score plus specific
+              discrepancies. Pass the prompt below; fix anything it flags before
+              you call the component done.
+            </p>
+            <Code
+              code={PARITY_PROMPT}
+              lang="text"
+              title="parity check prompt"
+            />
           </div>
         </div>
-
       </div>
     </div>
 
     <!-- Example prompt -->
     <div class="docs-section">
       <h2 class="docs-section-title">Example prompt</h2>
-      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1rem; font-size: 0.85rem">
-        A prompt that drives the full A–D workflow in one shot — already set to your framework,
-        including the <code>storybook-&lt;fw&gt;</code> server name your workspace was scaffolded with:
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 1rem;
+          font-size: 0.85rem;
+        "
+      >
+        A prompt that drives the full A–D workflow in one shot — already set to
+        your framework, including the <code>storybook-&lt;fw&gt;</code> server
+        name your workspace was scaffolded with:
       </p>
-      <FwSwitcher variant="tabs" label="Choose a framework for the example prompt" />
-      {FRAMEWORKS.map((fw, i) => (
-        <div data-fw-panel={fw} hidden={i !== 0}>
-          <Code code={examplePrompt(fw)} lang="text" title={`example prompt — ${fw}`} />
-        </div>
-      ))}
+      <FwSwitcher
+        variant="tabs"
+        label="Choose a framework for the example prompt"
+      />
+      {FRAMEWORKS.map((fw, i) => <div data-fw-panel={fw} hidden={i !== 0}>
+        <Code
+          code={examplePrompt(fw)}
+          lang="text"
+          title={`example prompt — ${fw}`}
+        />
+      </div>)}
     </div>
 
     <!-- Generated output -->
     <div class="docs-section">
       <h2 class="docs-section-title">Generated output</h2>
-      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem; font-size: 0.85rem">
-        What Claude Code produces — using <code>AtlCard</code> and <code>AtlInput</code> from Atelier UI with tokens drawn directly from Figma <code>boundVariables</code>:
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 1.25rem;
+          font-size: 0.85rem;
+        "
+      >
+        What Claude Code produces — using <code>AtlCard</code> and
+        <code>AtlInput</code> from Atelier UI with tokens drawn directly from
+        Figma <code>boundVariables</code>:
       </p>
-      <FwSwitcher variant="tabs" label="Choose a framework for the generated output" />
-      {FRAMEWORKS.map((fw, i) => (
-        <div data-fw-panel={fw} hidden={i !== 0}>
-          <Code code={OUTPUT[fw]} lang={fw === 'Angular' ? 'ts' : 'tsx'} />
-        </div>
-      ))}
+      <FwSwitcher
+        variant="tabs"
+        label="Choose a framework for the generated output"
+      />
+      {FRAMEWORKS.map((fw, i) => <div data-fw-panel={fw} hidden={i !== 0}>
+        <Code code={OUTPUT[fw]} lang={fw === 'Angular' ? 'ts' : 'tsx'} />
+      </div>)}
     </div>
 
     <!-- Run it -->
     <div class="docs-section">
       <h2 class="docs-section-title">Run it</h2>
-      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem; font-size: 0.85rem">
-        Save the generated component, mount it in the app shell — the scaffolded app keeps
-        rendering the Nx welcome page until something imports your component — then start
-        the dev server and verify against the Figma frame.
-        The framework tabs above stay in sync with this section.
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 1.25rem;
+          font-size: 0.85rem;
+        "
+      >
+        Save the generated component, mount it in the app shell — the scaffolded
+        app keeps rendering the Nx welcome page until something imports your
+        component — then start the dev server and verify against the Figma
+        frame. The framework tabs above stay in sync with this section.
       </p>
-      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem; font-size: 0.85rem">
-        These paths are a <strong style="color: var(--ui-color-text)">scaffolded workspace</strong>'s.
-        In a clone of the atelier monorepo there is no <code>workshop-*</code> app: save the component
-        as a Storybook story instead — <code>libs/&lt;fw&gt;/src/lib/settings-card.stories.ts</code>
-        (<code>.tsx</code> for React), a loose file directly under <code>src/lib/</code>, not inside a
-        component subdirectory — the same convention as this repo's own
-        <code>libs/&lt;fw&gt;/src/lib/cookbook.stories.*</code>. No mount step: Storybook
-        auto-discovers any <code>*.stories.*</code> file there and lists it under "Showcase/Settings
-        Card" in the sidebar. View it with <code>npx nx storybook &lt;fw&gt;</code> — read the port
-        from the terminal it prints (angular 4400, react 4401, vue 4402). Same loop, different host —
-        see <a href="/troubleshooting#nx-project-not-found" class="docs-link-primary">Cannot find project
-        'workshop-angular'</a>.
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 1.25rem;
+          font-size: 0.85rem;
+        "
+      >
+        These paths are a
+        <strong style="color: var(--ui-color-text)">scaffolded workspace</strong
+        >'s. In a clone of the atelier monorepo there is no
+        <code>workshop-*</code> app: save the component as a Storybook story
+        instead — <code>libs/&lt;fw&gt;/src/lib/settings-card.stories.ts</code>
+        (<code>.tsx</code> for React), a loose file directly under
+        <code>src/lib/</code>, not inside a component subdirectory — the same
+        convention as this repo's own
+        <code>libs/&lt;fw&gt;/src/lib/cookbook.stories.*</code>. No mount step:
+        Storybook auto-discovers any <code>*.stories.*</code> file there and
+        lists it under "Showcase/Settings Card" in the sidebar. View it with
+        <code>npx nx storybook &lt;fw&gt;</code> — read the port from the
+        terminal it prints (angular 4400, react 4401, vue 4402). Same loop,
+        different host — see
+        <a
+          href="/troubleshooting#nx-project-not-found"
+          class="docs-link-primary"
+          >Cannot find project 'workshop-angular'</a
+        >.
       </p>
-      {FRAMEWORKS.map((fw, i) => (
-        <div data-fw-panel={fw} hidden={i !== 0}>
-          <ol class="run-steps">
-            <li>
-              <span class="run-step-label">Save as</span>
-              <code class="run-step-path">{RUN_IT[fw].path}</code>
-            </li>
-            <li>
-              <span class="run-step-label">Mount it</span>
-              <span class="run-step-detail">{RUN_IT[fw].mount} Skip this and the app stays on the Nx welcome page.</span>
-            </li>
-            <li>
-              <span class="run-step-label">Start the dev server</span>
-              <Code code={RUN_IT[fw].cmd} lang="shell" />
-            </li>
-            <li>
-              <span class="run-step-label">Open</span>
-              <a href={`http://localhost:${RUN_IT[fw].port}`} target="_blank" rel="noopener noreferrer" class="run-step-link">
-                http://localhost:{RUN_IT[fw].port}
-              </a>
-              <span class="run-step-detail">{RUN_IT[fw].expected}</span>
-            </li>
-            <li>
-              <span class="run-step-label">Verify parity</span>
-              <span class="run-step-detail">Run the parity prompt above — Claude will list any discrepancies and propose fixes.</span>
-            </li>
-          </ol>
-        </div>
-      ))}
+      {FRAMEWORKS.map((fw, i) => <div data-fw-panel={fw} hidden={i !== 0}>
+        <ol class="run-steps">
+          <li>
+            <span class="run-step-label">Save as</span>
+            <code class="run-step-path">{RUN_IT[fw].path}</code>
+          </li>
+          <li>
+            <span class="run-step-label">Mount it</span>
+            <span class="run-step-detail"
+              >{RUN_IT[fw].mount} Skip this and the app stays on the Nx welcome
+              page.</span
+            >
+          </li>
+          <li>
+            <span class="run-step-label">Start the dev server</span>
+            <Code code={RUN_IT[fw].cmd} lang="shell" />
+          </li>
+          <li>
+            <span class="run-step-label">Open</span>
+            <a
+              href={`http://localhost:${RUN_IT[fw].port}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="run-step-link"
+            >
+              http://localhost:{RUN_IT[fw].port}
+            </a>
+            <span class="run-step-detail">{RUN_IT[fw].expected}</span>
+          </li>
+          <li>
+            <span class="run-step-label">Verify parity</span>
+            <span class="run-step-detail"
+              >Run the parity prompt above — Claude will list any discrepancies
+              and propose fixes.</span
+            >
+          </li>
+        </ol>
+      </div>)}
     </div>
 
     <!-- Tool reference -->
@@ -589,28 +1352,46 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
       <h2 class="docs-section-title">figma-console MCP — tools used</h2>
       <table class="docs-props-table">
         <thead>
-          <tr><th>Tool</th><th>When to use</th></tr>
+          <tr>
+            <th>Tool</th>
+            <th>When to use</th>
+          </tr>
         </thead>
         <tbody>
           <tr>
             <td><code>figma_get_component_for_development</code></td>
-            <td>Main tool — reads component tree, boundVariables, and renders a 2× image. Use for any "build this component" task.</td>
+            <td>
+              Main tool — reads component tree, boundVariables, and renders a 2×
+              image. Use for any "build this component" task.
+            </td>
           </tr>
           <tr>
             <td><code>figma_get_component_for_development_deep</code></td>
-            <td>For complex, deeply nested components (depth &gt; 4) — resolves all boundVariables to actual token names.</td>
+            <td>
+              For complex, deeply nested components (depth &gt; 4) — resolves
+              all boundVariables to actual token names.
+            </td>
           </tr>
           <tr>
             <td><code>figma_get_variables</code></td>
-            <td>Export all design tokens as CSS / Tailwind / TypeScript. Handles Light and Dark mode values.</td>
+            <td>
+              Export all design tokens as CSS / Tailwind / TypeScript. Handles
+              Light and Dark mode values.
+            </td>
           </tr>
           <tr>
             <td><code>figma_check_design_parity</code></td>
-            <td>Compare generated code against the Figma spec. Returns a parity score and actionable fix list.</td>
+            <td>
+              Compare generated code against the Figma spec. Returns a parity
+              score and actionable fix list.
+            </td>
           </tr>
           <tr>
             <td><code>figma_generate_component_doc</code></td>
-            <td>Generate structured component documentation (anatomy, tokens, variants) by merging Figma data with code-side info.</td>
+            <td>
+              Generate structured component documentation (anatomy, tokens,
+              variants) by merging Figma data with code-side info.
+            </td>
           </tr>
         </tbody>
       </table>
@@ -618,16 +1399,26 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
 
     <Checkpoint variant="done" title="You ran the loop end to end">
       <ul class="checkpoint-checks">
-        <li><Icon name="check_circle" /> Claude read the Figma spec and matched the Atelier UI components through the Storybook MCP</li>
-        <li><Icon name="check_circle" /> The generated component renders in your app at <code>http://localhost:4200</code> — your workspace also ships its own Storybook (<code>npm run storybook</code>, port <code>6006</code>) once you add a story for it</li>
-        <li><Icon name="check_circle" /> <code>figma_check_design_parity</code> reports the node and code in sync</li>
+        <li>
+          <Icon name="check_circle" /> Claude read the Figma spec and matched
+          the Atelier UI components through the Storybook MCP
+        </li>
+        <li>
+          <Icon name="check_circle" /> The generated component renders in your
+          app at <code>http://localhost:4200</code> — your workspace also ships
+          its own Storybook (<code>npm run storybook</code>, port
+          <code>6006</code>) once you add a story for it
+        </li>
+        <li>
+          <Icon name="check_circle" /> <code>figma_check_design_parity</code>
+          reports the node and code in sync
+        </li>
       </ul>
     </Checkpoint>
 
     <HelpFooter page="tutorial" />
 
     <TrackNav />
-
   </div>
 </BaseLayout>
 
@@ -698,7 +1489,9 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
     font-size: 0.8rem;
   }
   /* Drop the default expressive-code top margin inside the run-step card */
-  .run-steps .expressive-code { margin-top: 0.35rem; }
+  .run-steps .expressive-code {
+    margin-top: 0.35rem;
+  }
 </style>
 
 <!-- Framework tabs handled by shared framework-pref-init script in BaseLayout. -->

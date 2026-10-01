@@ -236,23 +236,26 @@ const DAYS: Day[] = [
   description="Curriculum für die Atelier 2-Tages-Schulung — KI-gestützter Design-to-Code-Workflow mit Figma, Storybook, MCP und Claude Code. Jeder Teilnehmer im Wunsch-Framework (Angular / React / Vue)."
   currentPath="/schulung"
   tocItems={[
-    { id: 'zielgruppe',    label: 'Zielgruppe' },
+    { id: 'zielgruppe', label: 'Zielgruppe' },
     { id: 'hauptlernziel', label: 'Hauptlernziel' },
-    { id: 'format',        label: 'Format pro Tag' },
-    { id: 'day-tag-1',     label: 'Tag 1' },
-    { id: 'day-tag-2',     label: 'Tag 2' },
-    { id: 'verify-title',  label: 'Erfolgs-Verifizierung' },
+    { id: 'format', label: 'Format pro Tag' },
+    { id: 'day-tag-1', label: 'Tag 1' },
+    { id: 'day-tag-2', label: 'Tag 2' },
+    { id: 'verify-title', label: 'Erfolgs-Verifizierung' },
   ]}
 >
   <div class="docs-inline-page">
-
     <PageHero
       kind="tutorial"
       time="2 Tage · je 09:00–17:30 (6 h 50 min netto)"
       title="2-Tages-Schulung"
       ledeMax="640px"
     >
-      KI-gestützter Design-to-Code-Workflow für Entwickler mit solider Frontend-Basis. Jeder Teilnehmer wählt sein eigenes Framework (Angular / React / Vue) — am Ende steht eine <strong>selbst designte und implementierte Komponente</strong> in Figma, Storybook und Code.
+      KI-gestützter Design-to-Code-Workflow für Entwickler mit solider
+      Frontend-Basis. Jeder Teilnehmer wählt sein eigenes Framework (Angular /
+      React / Vue) — am Ende steht eine
+      <strong>selbst designte und implementierte Komponente</strong> in Figma,
+      Storybook und Code.
     </PageHero>
 
     <!--
@@ -263,26 +266,34 @@ const DAYS: Day[] = [
     -->
     <Callout tone="note" title="For instructors">
       <p>
-        This page is the German two-day training curriculum, aimed at instructors planning a
-        cohort. Workshop participants can skip straight to <a href="/workshop" class="docs-link-primary">Setup</a>.
+        This page is the German two-day training curriculum, aimed at
+        instructors planning a cohort. Workshop participants can skip straight
+        to <a href="/workshop" class="docs-link-primary">Setup</a>.
       </p>
     </Callout>
 
     <div class="objective-box">
       <div class="objective-col">
-        <h2 id="zielgruppe" class="objective-heading objective-heading--accent">Zielgruppe</h2>
+        <h2 id="zielgruppe" class="objective-heading objective-heading--accent">
+          Zielgruppe
+        </h2>
         <ul class="objective-list">
           <li>Entwickler mit Frontend-Basis (Angular, React oder Vue)</li>
           <li>Wenig Erfahrung mit Figma, Storybook, MCP oder AI-Codegen</li>
           <li>Sprache: Deutsch</li>
-          <li>Material (Docs, Storybook, Briefs, Prompts) ist durchgängig Englisch — Leseverständnis vorausgesetzt</li>
+          <li>
+            Material (Docs, Storybook, Briefs, Prompts) ist durchgängig Englisch
+            — Leseverständnis vorausgesetzt
+          </li>
           <li>Eigenes Framework wählbar — Code ist zweitrangig</li>
         </ul>
       </div>
       <div class="objective-col">
         <h2 id="hauptlernziel" class="objective-heading">Hauptlernziel</h2>
         <ul class="objective-list objective-list--muted">
-          <li>Die vier Pillars verstehen: Figma · Storybook · MCP · Claude Code</li>
+          <li>
+            Die vier Pillars verstehen: Figma · Storybook · MCP · Claude Code
+          </li>
           <li>End-to-End Design-to-Code-Workflow beherrschen</li>
           <li>Komponente von Figma-Spec bis Production-Code prompten</li>
           <li>A11y- und Dark-Mode-Loop sicher anwenden</li>
@@ -291,93 +302,166 @@ const DAYS: Day[] = [
     </div>
 
     <div id="format">
-    <Callout tone="tip" title="Format pro Tag">
-      <p>
-        6 h 50 min netto, 09:00–17:30 · 60 min Mittagspause · 2× 15 min Kaffeepausen · 10 min Puffer. Pre-Workshop-Setup
-        (Node ≥ 22.12 LTS, Claude Code CLI, Figma-Account mit Draft-Rechten + importiertes Desktop-Bridge-Plugin, <code>npm run preflight</code> grün)
-        ist Pflicht-Hausaufgabe — siehe <a href="/workshop" class="docs-link-primary">Workshop Setup</a>.
-      </p>
-      <p>
-        Kanonische Umgebung für die Kohorte ist seit 2026-09-13 der
-        <code>create-atelier-ui-workspace</code>-Scaffold (ADR-0137) — derselbe Weg wie auf
-        <a href="/workshop" class="docs-link-primary">Workshop Setup</a>, kein Sonderpfad mehr für die
-        Schulung. Der Grund für die frühere Trennung war Ausstattung: der Scaffold hatte damals kein
-        Storybook, keinen Contract-Loop und keine Gates. Heute bringt er beides mit, dazu einen
-        Unit-Runner und ein fertiges <code>.claude/</code>-Setup — und vor allem gehören seine Gates
-        der eigenen Arbeit. Im Klon wurde ein Teil davon <em>by design</em> rot, sobald jemand eine
-        eigene Komponente anlegte; das musste erklärt statt behoben werden. Der Klon bleibt kanonisch
-        für Arbeit an Atelier selbst.
-      </p>
-    </Callout>
+      <Callout tone="tip" title="Format pro Tag">
+        <p>
+          6 h 50 min netto, 09:00–17:30 · 60 min Mittagspause · 2× 15 min
+          Kaffeepausen · 10 min Puffer. Pre-Workshop-Setup (Node ≥ 22.12 LTS,
+          Claude Code CLI, Figma-Account mit Draft-Rechten + importiertes
+          Desktop-Bridge-Plugin, <code>npm run preflight</code> grün) ist
+          Pflicht-Hausaufgabe — siehe
+          <a href="/workshop" class="docs-link-primary">Workshop Setup</a>.
+        </p>
+        <p>
+          Kanonische Umgebung für die Kohorte ist seit 2026-09-13 der
+          <code>create-atelier-ui-workspace</code>-Scaffold (ADR-0137) —
+          derselbe Weg wie auf
+          <a href="/workshop" class="docs-link-primary">Workshop Setup</a>, kein
+          Sonderpfad mehr für die Schulung. Der Grund für die frühere Trennung
+          war Ausstattung: der Scaffold hatte damals kein Storybook, keinen
+          Contract-Loop und keine Gates. Heute bringt er beides mit, dazu einen
+          Unit-Runner und ein fertiges <code>.claude/</code>-Setup — und vor
+          allem gehören seine Gates der eigenen Arbeit. Im Klon wurde ein Teil
+          davon <em>by design</em> rot, sobald jemand eine eigene Komponente
+          anlegte; das musste erklärt statt behoben werden. Der Klon bleibt
+          kanonisch für Arbeit an Atelier selbst.
+        </p>
+      </Callout>
     </div>
 
-    {DAYS.map((day) => (
-      <section class="schulung-day" aria-labelledby={`day-${day.day.replace(' ', '-').toLowerCase()}`}>
-        <header class="schulung-day-header">
-          <span class="schulung-day-eyebrow">{day.day}</span>
-          <h2 class="schulung-day-title" id={`day-${day.day.replace(' ', '-').toLowerCase()}`}>
-            {day.title}
-          </h2>
-          <p class="schulung-day-goal"><strong>Tagesziel:</strong> {day.goal}</p>
-        </header>
+    {DAYS.map((day) => <section
+      class="schulung-day"
+      aria-labelledby={`day-${day.day.replace(' ', '-').toLowerCase()}`}
+    >
+      <header class="schulung-day-header">
+        <span class="schulung-day-eyebrow">{day.day}</span>
+        <h2
+          class="schulung-day-title"
+          id={`day-${day.day.replace(' ', '-').toLowerCase()}`}
+        >
+          {day.title}
+        </h2>
+        <p class="schulung-day-goal"><strong>Tagesziel:</strong> {day.goal}</p>
+      </header>
 
-        <ol class="docs-step-list schulung-blocks">
-          {day.blocks.map((block) => (
-            <li class={`docs-step-row schulung-block${block.risk ? ' schulung-block--risk' : ''}`}>
-              <span class="docs-step-badge">{block.num}</span>
-              <div>
-                <div class="schulung-block-meta">
-                  <span class="schulung-block-time">{block.time}</span>
-                  <span class="schulung-block-format">{block.format}</span>
-                  {block.risk && <span class="schulung-block-risk">High-Risk</span>}
-                </div>
-                <h3 class="docs-h3">{block.title}</h3>
-                <ul class="schulung-bullets">
-                  {block.bullets.map((b) => <li>{b}</li>)}
-                </ul>
-              </div>
-            </li>
-          ))}
-        </ol>
+      <ol class="docs-step-list schulung-blocks">
+        {day.blocks.map((block) => <li
+          class={`docs-step-row schulung-block${block.risk ? ' schulung-block--risk' : ''}`}
+        >
+          <span class="docs-step-badge">{block.num}</span>
+          <div>
+            <div class="schulung-block-meta">
+              <span class="schulung-block-time">{block.time}</span>
+              <span class="schulung-block-format">{block.format}</span>
+              {block.risk && <span class="schulung-block-risk">High-Risk</span>}
+            </div>
+            <h3 class="docs-h3">{block.title}</h3>
+            <ul class="schulung-bullets">
+              {block.bullets.map((b) => <li>{b}</li>)}
+            </ul>
+          </div>
+        </li>)}
+      </ol>
 
-        <div class="schulung-result">
-          <h3 class="schulung-result-heading">Lieferergebnis pro Teilnehmer</h3>
-          <ul class="objective-list">
-            {day.result.map((r) => <li>{r}</li>)}
-          </ul>
-        </div>
-      </section>
-    ))}
+      <div class="schulung-result">
+        <h3 class="schulung-result-heading">Lieferergebnis pro Teilnehmer</h3>
+        <ul class="objective-list">
+          {day.result.map((r) => <li>{r}</li>)}
+        </ul>
+      </div>
+    </section>)}
 
     <section class="docs-section" aria-labelledby="verify-title">
-      <h2 class="docs-section-title" id="verify-title">Erfolgs-Verifizierung</h2>
-      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1rem; font-size: 0.85rem">
-        End-to-End-Check am Ende von Tag 2 pro Teilnehmer. Seit ADR-0137 arbeitet jeder im
-        eigenen generierten Workspace, und damit gehören die Gates dort seiner eigenen Arbeit:
-        rot heißt rot, nicht „by design rot". Der frühere Hinweis auf drei erwartbar rote Gates
-        (<code>check:sync</code>, <code>check:a11y-parity</code>, <code>check:design-status</code>)
-        galt für den Klon und entfällt — er war ein Nebeneffekt davon, dass Teilnehmer in
-        <em>unserem</em> Repo arbeiteten.
+      <h2 class="docs-section-title" id="verify-title">
+        Erfolgs-Verifizierung
+      </h2>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 1rem;
+          font-size: 0.85rem;
+        "
+      >
+        End-to-End-Check am Ende von Tag 2 pro Teilnehmer. Seit ADR-0137
+        arbeitet jeder im eigenen generierten Workspace, und damit gehören die
+        Gates dort seiner eigenen Arbeit: rot heißt rot, nicht „by design rot".
+        Der frühere Hinweis auf drei erwartbar rote Gates
+        (<code>check:sync</code>, <code>check:a11y-parity</code>,
+        <code>check:design-status</code>) galt für den Klon und entfällt — er
+        war ein Nebeneffekt davon, dass Teilnehmer in <em>unserem</em> Repo
+        arbeiteten.
       </p>
       <ol class="schulung-verify">
-        <li>Komponente liegt als Component-Set im eigenen Figma-Draft (Duplikat des Atelier-Files) — mit Variants, Properties und Dark-Mode-Variante</li>
-        <li><code>/verify</code> in Claude Code (oder die fünf Checks einzeln: <code>check:format</code>, <code>check:stylelint</code>, <code>check:contracts</code>, <code>check:unit</code>, <code>check:stories</code>) — jeder mit Exit-Code 0. <code>check:contracts</code> ist der Punkt, der die eigene Arbeit wirklich prüft: er verbindet Contract, Docgen und den Figma-Snapshot und meldet <code>[COVERAGE]</code>, wenn ein Variantenwert von keiner Story gerendert wird</li>
-        <li><code>npm run storybook</code> läuft und zeigt die Komponente als Story (Canvas + Docs-Tab)</li>
-        <li>Test-Loop grün: <code>test-run</code> MCP-Call passes bzw. äquivalent <code>npm run check:stories</code> passes (jede Story in Chromium, play-Assertions, axe) — <code>npm run check:unit</code> deckt nur die jsdom-Hälfte ab und ist kein Ersatz dafür</li>
-        <li><code>figma_audit_component_accessibility</code> ohne kritische Findings <strong>und</strong> Storybook A11y-Tab ohne axe-core-Findings</li>
+        <li>
+          Komponente liegt als Component-Set im eigenen Figma-Draft (Duplikat
+          des Atelier-Files) — mit Variants, Properties und Dark-Mode-Variante
+        </li>
+        <li>
+          <code>/verify</code> in Claude Code (oder die fünf Checks einzeln:
+          <code>check:format</code>, <code>check:stylelint</code>,
+          <code>check:contracts</code>, <code>check:unit</code>,
+          <code>check:stories</code>) — jeder mit Exit-Code 0.
+          <code>check:contracts</code> ist der Punkt, der die eigene Arbeit
+          wirklich prüft: er verbindet Contract, Docgen und den Figma-Snapshot
+          und meldet <code>[COVERAGE]</code>, wenn ein Variantenwert von keiner
+          Story gerendert wird
+        </li>
+        <li>
+          <code>npm run storybook</code> läuft und zeigt die Komponente als
+          Story (Canvas + Docs-Tab)
+        </li>
+        <li>
+          Test-Loop grün: <code>test-run</code> MCP-Call passes bzw. äquivalent
+          <code>npm run check:stories</code> passes (jede Story in Chromium,
+          play-Assertions, axe) — <code>npm run check:unit</code> deckt nur die
+          jsdom-Hälfte ab und ist kein Ersatz dafür
+        </li>
+        <li>
+          <code>figma_audit_component_accessibility</code> ohne kritische
+          Findings <strong>und</strong> Storybook A11y-Tab ohne
+          axe-core-Findings
+        </li>
         <li>Dark Mode wird durch Token-Override korrekt umgeschaltet</li>
-        <li><code>figma_check_design_parity</code> (braucht die verbundene Desktop Bridge) auf den eigenen Figma-Node gegen die generierte Komponente: der Report kommt ohne Abweichungen zurück — das beweist etwas für genau die Sektionen, die übergeben wurden (siehe Block 04): <code>componentAPI</code>, <code>metadata</code>, <code>tokens</code> aus <code>check:contracts --emit</code> plus <code>accessibility</code> aus <code>figma_scan_code_accessibility</code>; nicht übergebene Felder werden nicht verglichen — ein knapp befülltes <code>codeSpec</code> mit nur diesen vier Sektionen ist der Normalfall, kein Sonderfall, solange der Report nennt, welche Sektionen es waren. Findings an Claude zurückgeben und erneut prüfen. Gemeint ist der MCP-Call, nicht <code>npm run check:parity</code>: das Repo-Gate prüft die Atelier-Master aus <code>tools/figma/snapshot.json</code>, in denen die eigene Komponente nicht steht</li>
-        <li><code>check:contracts</code> mit den eigenen Flags (<code>--fw</code>, <code>--contracts</code>, <code>--stories</code>, <code>--snapshot</code>) exit 0, und <code>nx storybook-test &lt;fw&gt;</code> grün — jede Story rendert in Chromium und besteht axe</li>
+        <li>
+          <code>figma_check_design_parity</code> (braucht die verbundene Desktop
+          Bridge) auf den eigenen Figma-Node gegen die generierte Komponente:
+          der Report kommt ohne Abweichungen zurück — das beweist etwas für
+          genau die Sektionen, die übergeben wurden (siehe Block 04):
+          <code>componentAPI</code>, <code>metadata</code>, <code>tokens</code>
+          aus <code>check:contracts --emit</code> plus
+          <code>accessibility</code> aus
+          <code>figma_scan_code_accessibility</code>; nicht übergebene Felder
+          werden nicht verglichen — ein knapp befülltes <code>codeSpec</code>
+          mit nur diesen vier Sektionen ist der Normalfall, kein Sonderfall,
+          solange der Report nennt, welche Sektionen es waren. Findings an
+          Claude zurückgeben und erneut prüfen. Gemeint ist der MCP-Call, nicht
+          <code>npm run check:parity</code>: das Repo-Gate prüft die
+          Atelier-Master aus <code>tools/figma/snapshot.json</code>, in denen
+          die eigene Komponente nicht steht
+        </li>
+        <li>
+          <code>check:contracts</code> mit den eigenen Flags (<code>--fw</code>,
+          <code>--contracts</code>, <code>--stories</code>,
+          <code>--snapshot</code>) exit 0, und
+          <code>nx storybook-test &lt;fw&gt;</code> grün — jede Story rendert in
+          Chromium und besteht axe
+        </li>
       </ol>
     </section>
 
     <HelpFooter page="schulung" />
 
-    <BottomNav items={[
-      { to: '/',         label: 'Prev', title: 'Overview', icon: 'dashboard' },
-      { to: '/workshop', label: 'Next', title: 'Setup',    icon: 'build_circle' },
-    ]} />
-
+    <BottomNav
+      items={[
+        { to: '/', label: 'Prev', title: 'Overview', icon: 'dashboard' },
+        {
+          to: '/workshop',
+          label: 'Next',
+          title: 'Setup',
+          icon: 'build_circle',
+        },
+      ]}
+    />
   </div>
 </BaseLayout>
 

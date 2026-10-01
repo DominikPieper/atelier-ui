@@ -25,7 +25,10 @@ const defaultEyebrow = variant === 'done' ? 'Done' : "What you'll build";
 const kicker = eyebrow ?? defaultEyebrow;
 ---
 
-<div class={`checkpoint checkpoint--${variant}`} aria-label={ariaLabel ?? title}>
+<div
+  class={`checkpoint checkpoint--${variant}`}
+  aria-label={ariaLabel ?? title}
+>
   <div class="checkpoint-head">
     <span class="checkpoint-eyebrow">{kicker}</span>
     <h2 class="checkpoint-title">{title}</h2>
@@ -69,7 +72,8 @@ const kicker = eyebrow ?? defaultEyebrow;
     margin: 2rem 0 1.5rem;
     padding: 1.25rem 1.4rem;
     background: var(--ui-color-primary-light);
-    border: 1px solid color-mix(in srgb, var(--ui-color-primary) 30%, transparent);
+    border: 1px solid
+      color-mix(in srgb, var(--ui-color-primary) 30%, transparent);
     border-radius: var(--ui-radius-md);
   }
   .checkpoint--done .checkpoint-head {

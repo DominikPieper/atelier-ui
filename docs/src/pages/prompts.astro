@@ -6,25 +6,40 @@ import PageHero from '../components/PageHero.astro';
 const DOCS_URL = 'https://atelier.pieper.io/llms-full.txt';
 type Fw = 'react' | 'angular' | 'vue';
 
-const FW_LABELS: Record<Fw, string> = { react: 'React', angular: 'Angular', vue: 'Vue' };
+const FW_LABELS: Record<Fw, string> = {
+  react: 'React',
+  angular: 'Angular',
+  vue: 'Vue',
+};
 // `bg`  — brand hue, used for the active-tab background tint.
 // `text` — AA-safe darker variant of the same hue, used for the active-tab label.
 const FW_COLORS: Record<Fw, { bg: string; text: string }> = {
   angular: { bg: '#e23237', text: '#991b1b' },
-  react:   { bg: '#61dafb', text: '#155e75' },
-  vue:     { bg: '#42b883', text: '#166534' },
+  react: { bg: '#61dafb', text: '#155e75' },
+  vue: { bg: '#42b883', text: '#166534' },
 };
 
 function fwNote(fw: Fw): string {
   return {
-    react: 'Use @atelier-ui/react. Use functional components with hooks. Handle state with useState.',
-    angular: 'Use @atelier-ui/angular. Use standalone components with signal inputs and OnPush change detection.',
-    vue: 'Use @atelier-ui/vue. Use <' + 'script setup> with defineProps and ref/computed.',
+    react:
+      'Use @atelier-ui/react. Use functional components with hooks. Handle state with useState.',
+    angular:
+      'Use @atelier-ui/angular. Use standalone components with signal inputs and OnPush change detection.',
+    vue:
+      'Use @atelier-ui/vue. Use <' +
+      'script setup> with defineProps and ref/computed.',
   }[fw];
 }
 
-interface Card { title: string; description: string; prompt: (fw: Fw) => string }
-interface Section { title: string; cards: Card[] }
+interface Card {
+  title: string;
+  description: string;
+  prompt: (fw: Fw) => string;
+}
+interface Section {
+  title: string;
+  cards: Card[];
+}
 
 const SECTIONS: Section[] = [
   {
@@ -32,13 +47,17 @@ const SECTIONS: Section[] = [
     cards: [
       {
         title: 'Chat interface',
-        description: 'A chat UI with message history, a text input, and a send button. Shows a skeleton while the response streams.',
-        prompt: (fw) => `Fetch the Atelier UI API reference first:\n${DOCS_URL}\n\nBuild a chat interface using Atelier UI components. ${fwNote(fw)}\n\nRequirements:\n- Message list with user and assistant message bubbles (different alignment/background)\n- AtlTextarea with autoResize for the chat input field\n- AtlButton (primary, "Send") to submit the message\n- AtlSkeleton (3 rows) shown while the assistant response is loading\n- AtlCard wrapping the whole chat panel\n- Keyboard shortcut: pressing Enter submits the message\n\nState to manage:\n- messages: Array<{ role: 'user' | 'assistant'; content: string }>\n- inputValue: string\n- isLoading: boolean\n\nDo not call a real API — use a 1.5s setTimeout to simulate a response.`,
+        description:
+          'A chat UI with message history, a text input, and a send button. Shows a skeleton while the response streams.',
+        prompt: (fw) =>
+          `Fetch the Atelier UI API reference first:\n${DOCS_URL}\n\nBuild a chat interface using Atelier UI components. ${fwNote(fw)}\n\nRequirements:\n- Message list with user and assistant message bubbles (different alignment/background)\n- AtlTextarea with autoResize for the chat input field\n- AtlButton (primary, "Send") to submit the message\n- AtlSkeleton (3 rows) shown while the assistant response is loading\n- AtlCard wrapping the whole chat panel\n- Keyboard shortcut: pressing Enter submits the message\n\nState to manage:\n- messages: Array<{ role: 'user' | 'assistant'; content: string }>\n- inputValue: string\n- isLoading: boolean\n\nDo not call a real API — use a 1.5s setTimeout to simulate a response.`,
       },
       {
         title: 'Generated code output',
-        description: 'Displays AI-generated code with a AtlCodeBlock inside a AtlCard, with a regenerate button.',
-        prompt: (fw) => `Fetch the Atelier UI API reference first:\n${DOCS_URL}\n\nBuild a "generated code" panel using Atelier UI components. ${fwNote(fw)}\n\nRequirements:\n- AtlCard with a header ("Generated Component") and content area\n- AtlCodeBlock showing a hardcoded TypeScript snippet (language="typescript", filename="component.ts", showLineNumbers=true)\n- A "Regenerate" AtlButton (variant="outline") below the code block\n- A AtlBadge (variant="success") in the card header showing "Ready"\n- While "regenerating" (simulate with 1.2s timeout), show AtlSkeleton with 4 rows instead of the code block and change the badge to variant="warning" with text "Generating…"`,
+        description:
+          'Displays AI-generated code with a AtlCodeBlock inside a AtlCard, with a regenerate button.',
+        prompt: (fw) =>
+          `Fetch the Atelier UI API reference first:\n${DOCS_URL}\n\nBuild a "generated code" panel using Atelier UI components. ${fwNote(fw)}\n\nRequirements:\n- AtlCard with a header ("Generated Component") and content area\n- AtlCodeBlock showing a hardcoded TypeScript snippet (language="typescript", filename="component.ts", showLineNumbers=true)\n- A "Regenerate" AtlButton (variant="outline") below the code block\n- A AtlBadge (variant="success") in the card header showing "Ready"\n- While "regenerating" (simulate with 1.2s timeout), show AtlSkeleton with 4 rows instead of the code block and change the badge to variant="warning" with text "Generating…"`,
       },
     ],
   },
@@ -47,13 +66,17 @@ const SECTIONS: Section[] = [
     cards: [
       {
         title: 'Login form',
-        description: 'Email + password fields in a card, with a submit button and basic validation feedback.',
-        prompt: (fw) => `Fetch the Atelier UI API reference first:\n${DOCS_URL}\n\nBuild a login form using Atelier UI components. ${fwNote(fw)}\n\nRequirements:\n- AtlCard (max-width 400px, centered) containing:\n  - Card header: "Sign in to your account"\n  - AtlInput (type="email", label "Email", required)\n  - AtlInput (type="password", label "Password", required)\n  - AtlButton (variant="primary", full width, "Sign in")\n  - AtlButton (variant="outline", full width, "Continue with Google")\n- Show AtlAlert (variant="danger") above the form if both fields are empty on submit\n- Show loading state on the Sign in button while submitting (simulate 1.5s)`,
+        description:
+          'Email + password fields in a card, with a submit button and basic validation feedback.',
+        prompt: (fw) =>
+          `Fetch the Atelier UI API reference first:\n${DOCS_URL}\n\nBuild a login form using Atelier UI components. ${fwNote(fw)}\n\nRequirements:\n- AtlCard (max-width 400px, centered) containing:\n  - Card header: "Sign in to your account"\n  - AtlInput (type="email", label "Email", required)\n  - AtlInput (type="password", label "Password", required)\n  - AtlButton (variant="primary", full width, "Sign in")\n  - AtlButton (variant="outline", full width, "Continue with Google")\n- Show AtlAlert (variant="danger") above the form if both fields are empty on submit\n- Show loading state on the Sign in button while submitting (simulate 1.5s)`,
       },
       {
         title: 'Settings page',
-        description: 'Profile and notification settings inside cards with save feedback via a toast or alert.',
-        prompt: (fw) => `Fetch the Atelier UI API reference first:\n${DOCS_URL}\n\nBuild a settings page using Atelier UI components. ${fwNote(fw)}\n\nRequirements:\n- Page title "Settings"\n- Two AtlCard sections:\n\n  Profile card:\n  - AtlInput for "Display name" (type="text")\n  - AtlInput for "Email" (type="email")\n  - AtlSelect with options: "UTC", "US/Eastern", "US/Pacific", "Europe/London"\n  - AtlButton (primary, "Save profile") — show loading for 1s, then show AtlAlert (variant="success", "Profile saved!")\n\n  Notifications card:\n  - AtlToggle labeled "Email notifications"\n  - AtlToggle labeled "Weekly digest"\n  - AtlToggle labeled "Product updates"\n  - AtlButton (outline, "Save preferences")`,
+        description:
+          'Profile and notification settings inside cards with save feedback via a toast or alert.',
+        prompt: (fw) =>
+          `Fetch the Atelier UI API reference first:\n${DOCS_URL}\n\nBuild a settings page using Atelier UI components. ${fwNote(fw)}\n\nRequirements:\n- Page title "Settings"\n- Two AtlCard sections:\n\n  Profile card:\n  - AtlInput for "Display name" (type="text")\n  - AtlInput for "Email" (type="email")\n  - AtlSelect with options: "UTC", "US/Eastern", "US/Pacific", "Europe/London"\n  - AtlButton (primary, "Save profile") — show loading for 1s, then show AtlAlert (variant="success", "Profile saved!")\n\n  Notifications card:\n  - AtlToggle labeled "Email notifications"\n  - AtlToggle labeled "Weekly digest"\n  - AtlToggle labeled "Product updates"\n  - AtlButton (outline, "Save preferences")`,
       },
     ],
   },
@@ -62,13 +85,17 @@ const SECTIONS: Section[] = [
     cards: [
       {
         title: 'Stats dashboard',
-        description: 'Three metric cards with numbers, labels, and status badges in a responsive grid.',
-        prompt: (fw) => `Fetch the Atelier UI API reference first:\n${DOCS_URL}\n\nBuild a stats dashboard using Atelier UI components. ${fwNote(fw)}\n\nRequirements:\n- Page title "Dashboard"\n- Responsive grid (3 columns on desktop, 1 on mobile) of AtlCard components:\n  1. "Total Requests" — value: 12,847 — AtlBadge (variant="success") "+12% this week"\n  2. "Avg Latency" — value: 342ms — AtlBadge (variant="warning") "p95: 890ms"\n  3. "Error Rate" — value: 0.3% — AtlBadge (variant="success") "Below threshold"\n- Each card: large bold metric number, muted label below it, badge in card header\n- AtlProgress bar below each metric (values: 78, 34, 8 out of 100)`,
+        description:
+          'Three metric cards with numbers, labels, and status badges in a responsive grid.',
+        prompt: (fw) =>
+          `Fetch the Atelier UI API reference first:\n${DOCS_URL}\n\nBuild a stats dashboard using Atelier UI components. ${fwNote(fw)}\n\nRequirements:\n- Page title "Dashboard"\n- Responsive grid (3 columns on desktop, 1 on mobile) of AtlCard components:\n  1. "Total Requests" — value: 12,847 — AtlBadge (variant="success") "+12% this week"\n  2. "Avg Latency" — value: 342ms — AtlBadge (variant="warning") "p95: 890ms"\n  3. "Error Rate" — value: 0.3% — AtlBadge (variant="success") "Below threshold"\n- Each card: large bold metric number, muted label below it, badge in card header\n- AtlProgress bar below each metric (values: 78, 34, 8 out of 100)`,
       },
       {
         title: 'Data table with pagination',
-        description: 'A sortable table of users with status badges, and pagination controls below.',
-        prompt: (fw) => `Fetch the Atelier UI API reference first:\n${DOCS_URL}\n\nBuild a data table using Atelier UI components. ${fwNote(fw)}\n\nRequirements:\n- Hardcode 20 users: { id, name, email, role: 'admin'|'editor'|'viewer', status: 'active'|'inactive' }\n- AtlTable with columns: Name, Email, Role, Status, Actions\n- Status column: AtlBadge — variant="success" for active, variant="default" for inactive\n- Role column: AtlBadge — variant="info" for admin, no variant for others\n- Actions column: AtlButton (size="sm", variant="outline", "Edit") per row\n- AtlPagination below the table — show 5 users per page\n- AtlInput above the table for filtering by name (client-side)`,
+        description:
+          'A sortable table of users with status badges, and pagination controls below.',
+        prompt: (fw) =>
+          `Fetch the Atelier UI API reference first:\n${DOCS_URL}\n\nBuild a data table using Atelier UI components. ${fwNote(fw)}\n\nRequirements:\n- Hardcode 20 users: { id, name, email, role: 'admin'|'editor'|'viewer', status: 'active'|'inactive' }\n- AtlTable with columns: Name, Email, Role, Status, Actions\n- Status column: AtlBadge — variant="success" for active, variant="default" for inactive\n- Role column: AtlBadge — variant="info" for admin, no variant for others\n- Actions column: AtlButton (size="sm", variant="outline", "Edit") per row\n- AtlPagination below the table — show 5 users per page\n- AtlInput above the table for filtering by name (client-side)`,
       },
     ],
   },
@@ -77,13 +104,17 @@ const SECTIONS: Section[] = [
     cards: [
       {
         title: 'Multi-step form wizard',
-        description: 'A 3-step wizard using AtlStepper with back/next buttons and validation gating.',
-        prompt: (fw) => `Fetch the Atelier UI API reference first:\n${DOCS_URL}\n\nBuild a multi-step form wizard using Atelier UI components. ${fwNote(fw)}\n\nRequirements:\n- AtlStepper with 3 steps: "Account", "Profile", "Review"\n- Step 1 — Account: AtlInput (email, required), AtlInput (password, required)\n- Step 2 — Profile: AtlInput (display name), AtlSelect (timezone), AtlToggle (marketing emails)\n- Step 3 — Review: Read-only summary of entered values in a AtlCard\n- Navigation: AtlButton (outline, "Back") + AtlButton (primary, "Next" / "Submit" on last step)\n- Validate required fields before allowing Next — show AtlAlert (variant="warning") if invalid\n- On Submit: show AtlAlert (variant="success", "Account created!") and reset to step 0`,
+        description:
+          'A 3-step wizard using AtlStepper with back/next buttons and validation gating.',
+        prompt: (fw) =>
+          `Fetch the Atelier UI API reference first:\n${DOCS_URL}\n\nBuild a multi-step form wizard using Atelier UI components. ${fwNote(fw)}\n\nRequirements:\n- AtlStepper with 3 steps: "Account", "Profile", "Review"\n- Step 1 — Account: AtlInput (email, required), AtlInput (password, required)\n- Step 2 — Profile: AtlInput (display name), AtlSelect (timezone), AtlToggle (marketing emails)\n- Step 3 — Review: Read-only summary of entered values in a AtlCard\n- Navigation: AtlButton (outline, "Back") + AtlButton (primary, "Next" / "Submit" on last step)\n- Validate required fields before allowing Next — show AtlAlert (variant="warning") if invalid\n- On Submit: show AtlAlert (variant="success", "Account created!") and reset to step 0`,
       },
       {
         title: 'Tabbed content panel',
-        description: 'Three tabs (Overview, Analytics, Settings) each with different content.',
-        prompt: (fw) => `Fetch the Atelier UI API reference first:\n${DOCS_URL}\n\nBuild a tabbed panel using Atelier UI components. ${fwNote(fw)}\n\nRequirements:\n- AtlTabGroup with 3 tabs:\n  1. Overview — AtlCard with a paragraph of placeholder text and an AtlBadge (variant="success", "Active")\n  2. Analytics — Three AtlProgress bars labeled "Impressions", "Clicks", "Conversions" (values 82, 47, 23)\n  3. Settings — AtlToggle ("Public visibility"), AtlInput ("Custom domain"), AtlButton (primary, "Save")\n- AtlCard wrapping the entire panel`,
+        description:
+          'Three tabs (Overview, Analytics, Settings) each with different content.',
+        prompt: (fw) =>
+          `Fetch the Atelier UI API reference first:\n${DOCS_URL}\n\nBuild a tabbed panel using Atelier UI components. ${fwNote(fw)}\n\nRequirements:\n- AtlTabGroup with 3 tabs:\n  1. Overview — AtlCard with a paragraph of placeholder text and an AtlBadge (variant="success", "Active")\n  2. Analytics — Three AtlProgress bars labeled "Impressions", "Clicks", "Conversions" (values 82, 47, 23)\n  3. Settings — AtlToggle ("Public visibility"), AtlInput ("Custom domain"), AtlButton (primary, "Save")\n- AtlCard wrapping the entire panel`,
       },
     ],
   },
@@ -93,7 +124,7 @@ const SECTIONS: Section[] = [
 const computed = SECTIONS.map((section, si) => ({
   ...section,
   index: si + 1,
-  cards: section.cards.map(card => ({
+  cards: section.cards.map((card) => ({
     title: card.title,
     description: card.description,
     prompts: {
@@ -113,7 +144,6 @@ const FRAMEWORKS: Fw[] = ['react', 'angular', 'vue'];
   currentPath="/prompts"
 >
   <div class="docs-inline-page">
-
     <PageHero
       kind="howto"
       title="Prompt templates"
@@ -121,70 +151,206 @@ const FRAMEWORKS: Fw[] = ['react', 'angular', 'vue'];
       ledeMax="560px"
     />
 
-    <div style="padding: 1rem 1.25rem; background: rgba(68,218,218,0.05); border: 1px solid rgba(68,218,218,0.1); border-radius: var(--ui-radius-md); margin-bottom: 2rem">
-      <p style="margin: 0 0 0.5rem; font-size: 0.82rem; font-weight: 700; color: var(--ui-color-text)">How to use</p>
-      <p style="margin: 0 0 0.55rem; font-size: 0.78rem; color: var(--ui-color-text-muted); line-height: 1.55">
-        <strong style="color: var(--ui-color-text)">When you need this:</strong> use these prompts after the workshop, when you are starting fresh projects or working in an LLM client without MCP support. During the workshop itself you will mostly let Claude Code drive the Storybook MCP directly.
+    <div
+      style="
+        padding: 1rem 1.25rem;
+        background: rgba(68, 218, 218, 0.05);
+        border: 1px solid rgba(68, 218, 218, 0.1);
+        border-radius: var(--ui-radius-md);
+        margin-bottom: 2rem;
+      "
+    >
+      <p
+        style="
+          margin: 0 0 0.5rem;
+          font-size: 0.82rem;
+          font-weight: 700;
+          color: var(--ui-color-text);
+        "
+      >
+        How to use
       </p>
-      <p style="margin: 0 0 0.65rem; font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.6">
-        Each prompt fetches <code>llms-full.txt</code> first — the complete API reference. The LLM reads it before generating, so it uses the correct prop names and import paths without hallucinating.
+      <p
+        style="
+          margin: 0 0 0.55rem;
+          font-size: 0.78rem;
+          color: var(--ui-color-text-muted);
+          line-height: 1.55;
+        "
+      >
+        <strong style="color: var(--ui-color-text)">When you need this:</strong>
+        use these prompts after the workshop, when you are starting fresh
+        projects or working in an LLM client without MCP support. During the
+        workshop itself you will mostly let Claude Code drive the Storybook MCP
+        directly.
       </p>
-      <ol style="margin: 0; padding-left: 1.1rem; font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.9">
+      <p
+        style="
+          margin: 0 0 0.65rem;
+          font-size: 0.82rem;
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+        "
+      >
+        Each prompt fetches <code>llms-full.txt</code> first — the complete API
+        reference. The LLM reads it before generating, so it uses the correct
+        prop names and import paths without hallucinating.
+      </p>
+      <ol
+        style="
+          margin: 0;
+          padding-left: 1.1rem;
+          font-size: 0.82rem;
+          color: var(--ui-color-text-muted);
+          line-height: 1.9;
+        "
+      >
         <li>Select your framework below.</li>
-        <li>Click <strong style="color: var(--ui-color-text); font-family: monospace">Copy prompt</strong> on any card.</li>
-        <li>Paste into your LLM of choice (Claude, ChatGPT, Gemini, …) and send.</li>
+        <li>
+          Click
+          <strong style="color: var(--ui-color-text); font-family: monospace"
+            >Copy prompt</strong
+          >
+          on any card.
+        </li>
+        <li>
+          Paste into your LLM of choice (Claude, ChatGPT, Gemini, …) and send.
+        </li>
       </ol>
     </div>
 
     <!-- Framework selector -->
-    <div style="display: flex; align-items: center; gap: 0.75rem; margin-bottom: 2rem">
-      <span style="font-size: 0.7rem; font-weight: 600; text-transform: uppercase; letter-spacing: 0.08em; color: var(--ui-color-text-muted)">Framework</span>
+    <div
+      style="
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+        margin-bottom: 2rem;
+      "
+    >
+      <span
+        style="
+          font-size: 0.7rem;
+          font-weight: 600;
+          text-transform: uppercase;
+          letter-spacing: 0.08em;
+          color: var(--ui-color-text-muted);
+        "
+        >Framework</span
+      >
       <div style="display: inline-flex; gap: 0.25rem">
-        {FRAMEWORKS.map(fw => (
-          <button
-            data-fw-btn={fw}
-            class={fw === 'react' ? 'prompt-fw-btn active' : 'prompt-fw-btn'}
-            style={`--fw-bg: ${FW_COLORS[fw].bg}; --fw-text: ${FW_COLORS[fw].text}`}
-          >
-            {FW_LABELS[fw]}
-          </button>
-        ))}
+        {FRAMEWORKS.map((fw) => <button
+          data-fw-btn={fw}
+          class={fw === 'react' ? 'prompt-fw-btn active' : 'prompt-fw-btn'}
+          style={`--fw-bg: ${FW_COLORS[fw].bg}; --fw-text: ${FW_COLORS[fw].text}`}
+        >
+          {FW_LABELS[fw]}
+        </button>)}
       </div>
     </div>
 
     <!-- Sections -->
-    {computed.map(section => (
-      <div style="margin-bottom: 2.5rem">
-        <div style="display: flex; align-items: center; gap: 0.6rem; margin-bottom: 1rem">
-          <span style="font-family: monospace; font-size: 0.62rem; font-weight: 700; color: var(--ui-color-primary); background: var(--ui-color-primary-light); padding: 0.1rem 0.4rem; border-radius: 3px; letter-spacing: 0.04em">
-            {String(section.index).padStart(2, '0')}
-          </span>
-          <h2 style="margin: 0; font-size: 0.95rem; font-weight: 700; color: var(--ui-color-text); letter-spacing: -0.02em">{section.title}</h2>
-        </div>
-
-        <div style="display: flex; flex-direction: column; gap: 0.85rem">
-          {section.cards.map(card => (
-            <div class="prompt-card" data-prompt-card>
-              <div style="display: flex; align-items: flex-start; justify-content: space-between; gap: 1rem; padding: 0.9rem 1.1rem; background: var(--ui-color-surface-raised); border-bottom: 1px solid var(--ui-color-border)">
-                <div>
-                  <div style="font-weight: 700; font-size: 0.9rem; margin-bottom: 0.2rem; color: var(--ui-color-text)">{card.title}</div>
-                  <div style="font-size: 0.78rem; color: var(--ui-color-text-muted); line-height: 1.55">{card.description}</div>
-                </div>
-                <button class="copy-prompt-btn" style="flex-shrink: 0; display: inline-flex; align-items: center; gap: 0.3rem; padding: 0.3rem 0.75rem; border: none; border-radius: var(--ui-radius-sm); background: var(--ui-color-primary); color: var(--ui-color-text-on-primary); font-size: 0.72rem; font-weight: 700; font-family: monospace; cursor: pointer; white-space: nowrap">
-                  Copy prompt
-                </button>
-              </div>
-              {FRAMEWORKS.map(fw => (
-                <div data-prompt-fw={fw} hidden={fw !== 'react'}>
-                  <Code code={card.prompts[fw]} lang="markdown" />
-                </div>
-              ))}
-            </div>
-          ))}
-        </div>
+    {computed.map((section) => <div style="margin-bottom: 2.5rem">
+      <div
+        style="
+          display: flex;
+          align-items: center;
+          gap: 0.6rem;
+          margin-bottom: 1rem;
+        "
+      >
+        <span
+          style="
+            font-family: monospace;
+            font-size: 0.62rem;
+            font-weight: 700;
+            color: var(--ui-color-primary);
+            background: var(--ui-color-primary-light);
+            padding: 0.1rem 0.4rem;
+            border-radius: 3px;
+            letter-spacing: 0.04em;
+          "
+        >
+          {String(section.index).padStart(2, '0')}
+        </span>
+        <h2
+          style="
+            margin: 0;
+            font-size: 0.95rem;
+            font-weight: 700;
+            color: var(--ui-color-text);
+            letter-spacing: -0.02em;
+          "
+        >
+          {section.title}
+        </h2>
       </div>
-    ))}
 
+      <div style="display: flex; flex-direction: column; gap: 0.85rem">
+        {section.cards.map((card) => <div class="prompt-card" data-prompt-card>
+          <div
+            style="
+              display: flex;
+              align-items: flex-start;
+              justify-content: space-between;
+              gap: 1rem;
+              padding: 0.9rem 1.1rem;
+              background: var(--ui-color-surface-raised);
+              border-bottom: 1px solid var(--ui-color-border);
+            "
+          >
+            <div>
+              <div
+                style="
+                  font-weight: 700;
+                  font-size: 0.9rem;
+                  margin-bottom: 0.2rem;
+                  color: var(--ui-color-text);
+                "
+              >
+                {card.title}
+              </div>
+              <div
+                style="
+                  font-size: 0.78rem;
+                  color: var(--ui-color-text-muted);
+                  line-height: 1.55;
+                "
+              >
+                {card.description}
+              </div>
+            </div>
+            <button
+              class="copy-prompt-btn"
+              style="
+                flex-shrink: 0;
+                display: inline-flex;
+                align-items: center;
+                gap: 0.3rem;
+                padding: 0.3rem 0.75rem;
+                border: none;
+                border-radius: var(--ui-radius-sm);
+                background: var(--ui-color-primary);
+                color: var(--ui-color-text-on-primary);
+                font-size: 0.72rem;
+                font-weight: 700;
+                font-family: monospace;
+                cursor: pointer;
+                white-space: nowrap;
+              "
+            >
+              Copy prompt
+            </button>
+          </div>
+          {FRAMEWORKS.map((fw) => <div
+            data-prompt-fw={fw}
+            hidden={fw !== 'react'}
+          >
+            <Code code={card.prompts[fw]} lang="markdown" />
+          </div>)}
+        </div>)}
+      </div>
+    </div>)}
   </div>
 </BaseLayout>
 
@@ -205,7 +371,9 @@ const FRAMEWORKS: Fw[] = ['react', 'angular', 'vue'];
     font-weight: 500;
     background: transparent;
     color: var(--ui-color-text-muted);
-    transition: background var(--ui-transition-fast), color var(--ui-transition-fast);
+    transition:
+      background var(--ui-transition-fast),
+      color var(--ui-transition-fast);
   }
 
   .prompt-fw-btn.active {
@@ -218,41 +386,59 @@ const FRAMEWORKS: Fw[] = ['react', 'angular', 'vue'];
      tints of the same hue. `:global(...)` keeps the ancestor `<html>` selector
      unscoped — Astro otherwise attaches the scoping data-attribute to the
      `[data-theme]` selector, which never matches because <html> has no scope. */
-  :global([data-theme='dark']) .prompt-fw-btn.active[data-fw-btn='angular'] { color: #fca5a5; }
-  :global([data-theme='dark']) .prompt-fw-btn.active[data-fw-btn='react']   { color: #67e8f9; }
-  :global([data-theme='dark']) .prompt-fw-btn.active[data-fw-btn='vue']     { color: #86efac; }
+  :global([data-theme='dark']) .prompt-fw-btn.active[data-fw-btn='angular'] {
+    color: #fca5a5;
+  }
+  :global([data-theme='dark']) .prompt-fw-btn.active[data-fw-btn='react'] {
+    color: #67e8f9;
+  }
+  :global([data-theme='dark']) .prompt-fw-btn.active[data-fw-btn='vue'] {
+    color: #86efac;
+  }
 </style>
 
 <script>
   // Framework tab activation is driven by the shared framework-pref-init script
   // in BaseLayout. This script keeps [data-prompt-fw] panels in sync with the
   // shared preference and wires the copy-prompt buttons.
-  import { getFramework, subscribeFramework, type Framework } from '../lib/framework-pref';
+  import {
+    getFramework,
+    subscribeFramework,
+    type Framework,
+  } from '../lib/framework-pref';
 
   function initPrompts() {
     let activeFw: Framework = getFramework();
 
     function applyFw(fw: Framework) {
       activeFw = fw;
-      document.querySelectorAll<HTMLElement>('[data-prompt-fw]').forEach(el => {
-        el.hidden = (el.dataset.promptFw ?? '').toLowerCase() !== fw;
-      });
+      document
+        .querySelectorAll<HTMLElement>('[data-prompt-fw]')
+        .forEach((el) => {
+          el.hidden = (el.dataset.promptFw ?? '').toLowerCase() !== fw;
+        });
     }
 
     subscribeFramework(applyFw);
     applyFw(activeFw);
 
-    document.querySelectorAll<HTMLButtonElement>('.copy-prompt-btn').forEach(btn => {
-      btn.addEventListener('click', () => {
-        const card = btn.closest('[data-prompt-card]');
-        const pre = card?.querySelector<HTMLElement>(`[data-prompt-fw="${activeFw}"]:not([hidden]) pre`);
-        const text = pre?.textContent ?? '';
-        navigator.clipboard.writeText(text).then(() => {
-          btn.textContent = 'Copied';
-          setTimeout(() => { btn.textContent = 'Copy prompt'; }, 1800);
+    document
+      .querySelectorAll<HTMLButtonElement>('.copy-prompt-btn')
+      .forEach((btn) => {
+        btn.addEventListener('click', () => {
+          const card = btn.closest('[data-prompt-card]');
+          const pre = card?.querySelector<HTMLElement>(
+            `[data-prompt-fw="${activeFw}"]:not([hidden]) pre`,
+          );
+          const text = pre?.textContent ?? '';
+          navigator.clipboard.writeText(text).then(() => {
+            btn.textContent = 'Copied';
+            setTimeout(() => {
+              btn.textContent = 'Copy prompt';
+            }, 1800);
+          });
         });
       });
-    });
   }
   document.addEventListener('astro:page-load', initPrompts);
   initPrompts();

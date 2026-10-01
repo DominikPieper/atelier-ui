@@ -4,7 +4,7 @@ import ComponentDetail from '../../components/ComponentDetail';
 import { ALL_COMPONENTS, componentDocs } from '../../data/components';
 
 export function getStaticPaths() {
-  return ALL_COMPONENTS.map(name => ({ params: { name } }));
+  return ALL_COMPONENTS.map((name) => ({ params: { name } }));
 }
 
 const { name } = Astro.params;
@@ -15,6 +15,11 @@ const description = doc?.description
   : `${title} — framework-agnostic UI component with Angular, React, and Vue adapters.`;
 ---
 
-<BaseLayout title={title} description={description} currentPath={`/components/${name}`} width="full">
+<BaseLayout
+  title={title}
+  description={description}
+  currentPath={`/components/${name}`}
+  width="full"
+>
   <ComponentDetail name={name as string} client:load />
 </BaseLayout>

@@ -1,6 +1,10 @@
 ---
 import Icon from './Icon.astro';
-import { getPrevNext, getTrackStep, TRACK_LENGTH } from '../data/workshop-track';
+import {
+  getPrevNext,
+  getTrackStep,
+  TRACK_LENGTH,
+} from '../data/workshop-track';
 
 // Prev/next pager for pages on the numbered workshop track. Takes no
 // props — it derives everything from the current pathname against the single
@@ -11,37 +15,48 @@ const current = getTrackStep(pathname);
 const { prev, next } = getPrevNext(pathname);
 ---
 
-{current && (prev || next) && (
-  <nav class="track-nav" aria-label="Workshop track">
-    {prev ? (
-      <a href={prev.href} class="bottom-nav-card track-nav-card track-nav-card--prev">
-        <span class="track-nav-arrow" aria-hidden="true">
-          <Icon name="arrow_left" />
-        </span>
-        <div class="track-nav-text">
-          <div class="bottom-nav-label">Step {prev.step} of {TRACK_LENGTH} · Previous</div>
-          <div class="bottom-nav-title">{prev.title ?? prev.label}</div>
+{current && (prev || next) && <nav
+  class="track-nav"
+  aria-label="Workshop track"
+>
+  {prev ? (
+    <a
+      href={prev.href}
+      class="bottom-nav-card track-nav-card track-nav-card--prev"
+    >
+      <span class="track-nav-arrow" aria-hidden="true">
+        <Icon name="arrow_left" />
+      </span>
+      <div class="track-nav-text">
+        <div class="bottom-nav-label">
+          Step {prev.step} of {TRACK_LENGTH} · Previous
         </div>
-      </a>
-    ) : (
-      <span class="track-nav-spacer" aria-hidden="true"></span>
-    )}
+        <div class="bottom-nav-title">{prev.title ?? prev.label}</div>
+      </div>
+    </a>
+  ) : (
+    <span class="track-nav-spacer" aria-hidden="true"></span>
+  )}
 
-    {next ? (
-      <a href={next.href} class="bottom-nav-card track-nav-card track-nav-card--next">
-        <div class="track-nav-text">
-          <div class="bottom-nav-label">Step {next.step} of {TRACK_LENGTH} · Next</div>
-          <div class="bottom-nav-title">{next.title ?? next.label}</div>
+  {next ? (
+    <a
+      href={next.href}
+      class="bottom-nav-card track-nav-card track-nav-card--next"
+    >
+      <div class="track-nav-text">
+        <div class="bottom-nav-label">
+          Step {next.step} of {TRACK_LENGTH} · Next
         </div>
-        <span class="track-nav-arrow" aria-hidden="true">
-          <Icon name="arrow_right" />
-        </span>
-      </a>
-    ) : (
-      <span class="track-nav-spacer" aria-hidden="true"></span>
-    )}
-  </nav>
-)}
+        <div class="bottom-nav-title">{next.title ?? next.label}</div>
+      </div>
+      <span class="track-nav-arrow" aria-hidden="true">
+        <Icon name="arrow_right" />
+      </span>
+    </a>
+  ) : (
+    <span class="track-nav-spacer" aria-hidden="true"></span>
+  )}
+</nav>}
 
 <style>
   /* Two-column pager: prev pinned left, next pinned right. Reuses the
@@ -61,7 +76,11 @@ const { prev, next } = getPrevNext(pathname);
   }
   .track-nav-card--next {
     /* Primary affordance — the forward step gets the accent border. */
-    border-color: color-mix(in srgb, var(--ui-color-primary) 40%, var(--ui-color-border));
+    border-color: color-mix(
+      in srgb,
+      var(--ui-color-primary) 40%,
+      var(--ui-color-border)
+    );
     text-align: right;
   }
 

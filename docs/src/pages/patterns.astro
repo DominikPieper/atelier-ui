@@ -18,10 +18,12 @@ import {
 // "Step N of M" hero tag — derived from the single source of truth so the
 // number stays correct if the track is ever reordered.
 const trackStep = getTrackStep('/patterns');
-const stepTag = trackStep ? `Step ${trackStep.step} of ${TRACK_LENGTH}` : undefined;
+const stepTag = trackStep
+  ? `Step ${trackStep.step} of ${TRACK_LENGTH}`
+  : undefined;
 
 const FRAMEWORKS = ['Angular', 'React', 'Vue'] as const;
-type Framework = typeof FRAMEWORKS[number];
+type Framework = (typeof FRAMEWORKS)[number];
 
 const LANG_MAP: Record<Framework, string> = {
   Angular: 'html',
@@ -29,7 +31,7 @@ const LANG_MAP: Record<Framework, string> = {
   Vue: 'vue',
 };
 
-function frameworkCode(p: typeof PATTERNS[number], fw: Framework): string {
+function frameworkCode(p: (typeof PATTERNS)[number], fw: Framework): string {
   return fw === 'Angular' ? p.angular : fw === 'React' ? p.react : p.vue;
 }
 ---
@@ -41,10 +43,13 @@ function frameworkCode(p: typeof PATTERNS[number], fw: Framework): string {
   tocItems={PATTERNS.map((p) => ({ id: `pattern-${p.num}`, label: p.title }))}
 >
   <div class="docs-inline-page">
-
     <PageHero
       kind="howto"
-      tag={stepTag ? `${stepTag} · ${PATTERNS.length} patterns` : `${PATTERNS.length} patterns · 3 frameworks`}
+      tag={
+        stepTag
+          ? `${stepTag} · ${PATTERNS.length} patterns`
+          : `${PATTERNS.length} patterns · 3 frameworks`
+      }
       title="Cookbook patterns"
       lede="Composition recipes for common UI scenarios. Each pattern shows the intended way to combine atomic components — Card with Form, Dialog with Alert, Table with Badge — and ships in Angular, React, and Vue."
       ledeMax="640px"
@@ -52,66 +57,84 @@ function frameworkCode(p: typeof PATTERNS[number], fw: Framework): string {
 
     <!-- Composition over configuration. -->
     <Callout tone="tip" title="Composition over configuration.">
-      <code>AtlCard</code> breaks into <code>AtlCardHeader</code>, <code>AtlCardContent</code>, and <code>AtlCardFooter</code> instead of flat props like <code>header={'…'}</code> / <code>footer={'…'}</code>.
-      Composition wins three things an LLM cannot: you can drop sections you don’t need (no empty <code>footer</code> slot to null-guard), you can put any JSX/markup inside each part (buttons, badges, form controls), and screen readers get a real DOM landmark for each section instead of a flat container.
-      All Atelier UI container components follow the same pattern.
+      <code>AtlCard</code> breaks into <code>AtlCardHeader</code>,
+      <code>AtlCardContent</code>, and <code>AtlCardFooter</code> instead of
+      flat props like <code>header={'…'}</code> / <code>footer={'…'}</code>.
+      Composition wins three things an LLM cannot: you can drop sections you
+      don’t need (no empty <code>footer</code> slot to null-guard), you can put
+      any JSX/markup inside each part (buttons, badges, form controls), and
+      screen readers get a real DOM landmark for each section instead of a flat
+      container. All Atelier UI container components follow the same pattern.
     </Callout>
 
-    {PATTERNS.map((p) => (
-      <section id={`pattern-${p.num}`} class="pattern-section">
-        <div class="pattern-section-head">
-          <span class="pattern-num">{String(p.num).padStart(2, '0')}</span>
-          <div style="flex: 1; min-width: 0">
-            <h2 class="pattern-title">
-              <a href={`/patterns/${p.id}`} class="pattern-title-link">{p.title}</a>
-            </h2>
-            <p class="pattern-desc">{p.description}</p>
-            <div class="pattern-tags">
-              {p.tags.map((tag) => {
-                const slug = TAG_TO_SLUG[tag];
-                return slug ? (
-                  <a href={`/components/${slug}`} class="pattern-tag pattern-tag--link">{tag}</a>
-                ) : (
-                  <span class="pattern-tag">{tag}</span>
-                );
-              })}
-            </div>
-            <a href={`/patterns/${p.id}`} class="pattern-deeplink">Read full guide</a>
+    {PATTERNS.map((p) => <section
+      id={`pattern-${p.num}`}
+      class="pattern-section"
+    >
+      <div class="pattern-section-head">
+        <span class="pattern-num">{String(p.num).padStart(2, '0')}</span>
+        <div style="flex: 1; min-width: 0">
+          <h2 class="pattern-title">
+            <a href={`/patterns/${p.id}`} class="pattern-title-link"
+              >{p.title}</a
+            >
+          </h2>
+          <p class="pattern-desc">{p.description}</p>
+          <div class="pattern-tags">
+            {p.tags.map((tag) => {
+              const slug = TAG_TO_SLUG[tag];
+              return slug ? (
+                <a
+                  href={`/components/${slug}`}
+                  class="pattern-tag pattern-tag--link"
+                  >{tag}</a
+                >
+              ) : (
+                <span class="pattern-tag">{tag}</span>
+              );
+            })}
           </div>
+          <a href={`/patterns/${p.id}`} class="pattern-deeplink"
+            >Read full guide</a
+          >
         </div>
+      </div>
 
-        <!-- Live demo (React island, hydrates on idle).
+      <!-- Live demo (React island, hydrates on idle).
              Astro requires each island to reference its imported component
              statically, so we switch on p.id rather than a map lookup. -->
-        <div class="pattern-demo">
-          {p.id === 'login-form'           && <LoginFormDemo client:idle />}
-          {p.id === 'settings-page'        && <SettingsPageDemo client:idle />}
-          {p.id === 'confirmation-dialog'  && <ConfirmationDemo client:idle />}
-          {p.id === 'data-list'            && <DataListDemo client:idle />}
-          {p.id === 'notification-center'  && <NotificationCenterDemo client:idle />}
-          {p.id === 'management-dashboard' && <ManagementDashboardDemo client:idle />}
-        </div>
+      <div class="pattern-demo">
+        {p.id === 'login-form' && <LoginFormDemo client:idle />}
+        {p.id === 'settings-page' && <SettingsPageDemo client:idle />}
+        {p.id === 'confirmation-dialog' && <ConfirmationDemo client:idle />}
+        {p.id === 'data-list' && <DataListDemo client:idle />}
+        {p.id === 'notification-center' && (
+          <NotificationCenterDemo client:idle />
+        )}
+        {p.id === 'management-dashboard' && (
+          <ManagementDashboardDemo client:idle />
+        )}
+      </div>
 
-        <!-- Framework-tabbed code blocks (SSG, indexable) -->
-        <div class="docs-multi-code-tabs" style="border-radius: 8px 8px 0 0; margin: 0">
-          {FRAMEWORKS.map((fw, i) => (
-            <button
-              class={`docs-multi-code-tab${i === 0 ? ' active' : ''}`}
-              data-fw-btn={fw}
-              type="button"
-            >{fw}</button>
-          ))}
-        </div>
-        {FRAMEWORKS.map((fw, i) => (
-          <div data-fw-panel={fw} hidden={i !== 0}>
-            <Code code={frameworkCode(p, fw)} lang={LANG_MAP[fw]} />
-          </div>
-        ))}
-      </section>
-    ))}
+      <!-- Framework-tabbed code blocks (SSG, indexable) -->
+      <div
+        class="docs-multi-code-tabs"
+        style="border-radius: 8px 8px 0 0; margin: 0"
+      >
+        {FRAMEWORKS.map((fw, i) => <button
+          class={`docs-multi-code-tab${i === 0 ? ' active' : ''}`}
+          data-fw-btn={fw}
+          type="button"
+        >
+          {fw}
+        </button>)}
+      </div>
+      {FRAMEWORKS.map((fw, i) => <div data-fw-panel={fw} hidden={i !== 0}>
+        <Code code={frameworkCode(p, fw)} lang={LANG_MAP[fw]} />
+      </div>)}
+    </section>)}
 
     <TrackNav />
-
   </div>
 </BaseLayout>
 
@@ -166,7 +189,8 @@ function frameworkCode(p: typeof PATTERNS[number], fw: Framework): string {
     font-weight: 600;
     color: var(--docs-secondary);
     background: var(--ui-color-surface-raised);
-    border: 1px solid color-mix(in srgb, var(--docs-secondary) 35%, var(--ui-color-border));
+    border: 1px solid
+      color-mix(in srgb, var(--docs-secondary) 35%, var(--ui-color-border));
     padding: 0.12rem 0.42rem;
     border-radius: 3px;
     text-decoration: none;
@@ -175,10 +199,16 @@ function frameworkCode(p: typeof PATTERNS[number], fw: Framework): string {
     display: inline-flex;
     align-items: center;
     min-height: 24px;
-    transition: background var(--ui-transition-fast), border-color var(--ui-transition-fast);
+    transition:
+      background var(--ui-transition-fast),
+      border-color var(--ui-transition-fast);
   }
   .pattern-tag--link:hover {
-    background: color-mix(in srgb, var(--docs-secondary) 10%, var(--ui-color-surface-raised));
+    background: color-mix(
+      in srgb,
+      var(--docs-secondary) 10%,
+      var(--ui-color-surface-raised)
+    );
     border-color: var(--docs-secondary);
   }
   .pattern-title-link {

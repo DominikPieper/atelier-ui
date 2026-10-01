@@ -9,21 +9,22 @@ const SITE_URL = 'https://atelier.pieper.io';
 const FRAMEWORKS = ['React', 'Angular', 'Vue'] as const;
 
 const PKG: Record<string, string> = {
-  React:   '@atelier-ui/react',
+  React: '@atelier-ui/react',
   Angular: '@atelier-ui/angular',
-  Vue:     '@atelier-ui/vue',
+  Vue: '@atelier-ui/vue',
 };
 
 const MCP_NAME: Record<string, string> = {
-  React:   'storybook-react',
+  React: 'storybook-react',
   Angular: 'storybook-angular',
-  Vue:     'storybook-vue',
+  Vue: 'storybook-vue',
 };
 
 const IMPORT_EXAMPLE: Record<string, string> = {
-  React:   "import { AtlButton, AtlCard, AtlInput } from '@atelier-ui/react';",
-  Angular: "import { AtlButton, AtlCard, AtlInput } from '@atelier-ui/angular';",
-  Vue:     "import { AtlButton, AtlCard, AtlInput } from '@atelier-ui/vue';",
+  React: "import { AtlButton, AtlCard, AtlInput } from '@atelier-ui/react';",
+  Angular:
+    "import { AtlButton, AtlCard, AtlInput } from '@atelier-ui/angular';",
+  Vue: "import { AtlButton, AtlCard, AtlInput } from '@atelier-ui/vue';",
 };
 
 const TEMPLATE: Record<string, string> = {
@@ -154,35 +155,77 @@ Token names match Figma variable names 1-to-1. Dark/light mode is automatic.
   currentPath="/claude-md"
 >
   <div class="docs-inline-page">
-
     <PageHero kind="reference" title="CLAUDE.md template" ledeMax="520px">
-      Drop this into your project root as <code>CLAUDE.md</code> to give Claude Code persistent context about Atelier UI — MCP servers, design tokens, and component conventions — so every session starts component-aware.
+      Drop this into your project root as <code>CLAUDE.md</code> to give Claude
+      Code persistent context about Atelier UI — MCP servers, design tokens, and
+      component conventions — so every session starts component-aware.
     </PageHero>
 
     <!-- What is CLAUDE.md -->
-    <div style="padding: 1rem 1.25rem; background: var(--ui-color-primary-light); border: 1px solid var(--ui-color-primary-border); border-radius: var(--ui-radius-md); margin-bottom: 2rem">
-      <p style="margin: 0 0 0.3rem; font-size: 0.82rem; font-weight: 700; color: var(--ui-color-text)">What is CLAUDE.md?</p>
-      <p style="margin: 0 0 0.55rem; font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.6">
-        <code>CLAUDE.md</code> is a project-level instructions file that Claude Code reads at the start of every session. It sets rules, conventions, and context so you never have to repeat "this project uses Atelier UI" in every prompt.
+    <div
+      style="
+        padding: 1rem 1.25rem;
+        background: var(--ui-color-primary-light);
+        border: 1px solid var(--ui-color-primary-border);
+        border-radius: var(--ui-radius-md);
+        margin-bottom: 2rem;
+      "
+    >
+      <p
+        style="
+          margin: 0 0 0.3rem;
+          font-size: 0.82rem;
+          font-weight: 700;
+          color: var(--ui-color-text);
+        "
+      >
+        What is CLAUDE.md?
       </p>
-      <p style="margin: 0; font-size: 0.78rem; color: var(--ui-color-text-muted); line-height: 1.55">
-        <strong style="color: var(--ui-color-text)">When you need this:</strong> the workshop workspace generator already ships a CLAUDE.md for you. Come back to this page when you start a new project of your own and want the same component-aware behaviour.
+      <p
+        style="
+          margin: 0 0 0.55rem;
+          font-size: 0.82rem;
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+        "
+      >
+        <code>CLAUDE.md</code> is a project-level instructions file that Claude
+        Code reads at the start of every session. It sets rules, conventions,
+        and context so you never have to repeat "this project uses Atelier UI"
+        in every prompt.
+      </p>
+      <p
+        style="
+          margin: 0;
+          font-size: 0.78rem;
+          color: var(--ui-color-text-muted);
+          line-height: 1.55;
+        "
+      >
+        <strong style="color: var(--ui-color-text)">When you need this:</strong>
+        the workshop workspace generator already ships a CLAUDE.md for you. Come
+        back to this page when you start a new project of your own and want the
+        same component-aware behaviour.
       </p>
     </div>
 
     <!-- Framework selector -->
-    <div class="docs-multi-code-tabs" style="border-radius: 8px; margin-bottom: 1.5rem; width: fit-content">
-      {FRAMEWORKS.map((fw, i) => (
-        <button class={`docs-multi-code-tab${i === 0 ? ' active' : ''}`} data-fw-btn={fw}>{fw}</button>
-      ))}
+    <div
+      class="docs-multi-code-tabs"
+      style="border-radius: 8px; margin-bottom: 1.5rem; width: fit-content"
+    >
+      {FRAMEWORKS.map((fw, i) => <button
+        class={`docs-multi-code-tab${i === 0 ? ' active' : ''}`}
+        data-fw-btn={fw}
+      >
+        {fw}
+      </button>)}
     </div>
 
     <!-- Templates -->
-    {FRAMEWORKS.map((fw, i) => (
-      <div data-fw-panel={fw} hidden={i !== 0}>
-        <Code code={TEMPLATE[fw]} lang="markdown" title="CLAUDE.md" />
-      </div>
-    ))}
+    {FRAMEWORKS.map((fw, i) => <div data-fw-panel={fw} hidden={i !== 0}>
+      <Code code={TEMPLATE[fw]} lang="markdown" title="CLAUDE.md" />
+    </div>)}
 
     <!-- How to use -->
     <div class="docs-section" style="margin-top: 2.5rem">
@@ -192,7 +235,10 @@ Token names match Figma variable names 1-to-1. Dark/light mode is automatic.
           <span class="docs-step-badge">01</span>
           <div class="docs-step-body">
             <h3 class="docs-h3">Copy the template above</h3>
-            <p class="docs-step-desc">Choose your framework, then copy the CLAUDE.md content into a file at your project root.</p>
+            <p class="docs-step-desc">
+              Choose your framework, then copy the CLAUDE.md content into a file
+              at your project root.
+            </p>
           </div>
         </div>
         <div class="docs-step-row">
@@ -200,8 +246,11 @@ Token names match Figma variable names 1-to-1. Dark/light mode is automatic.
           <div class="docs-step-body">
             <h3 class="docs-h3">Confirm MCP is configured</h3>
             <p class="docs-step-desc">
-              The template references the MCP server by name. Make sure the matching server is wired up in your
-              <code>.mcp.json</code> at the project root — the <a href="/workshop" class="docs-link-primary">Workshop Setup</a> does this automatically.
+              The template references the MCP server by name. Make sure the
+              matching server is wired up in your <code>.mcp.json</code> at the
+              project root — the
+              <a href="/workshop" class="docs-link-primary">Workshop Setup</a>
+              does this automatically.
             </p>
           </div>
         </div>
@@ -210,7 +259,8 @@ Token names match Figma variable names 1-to-1. Dark/light mode is automatic.
           <div class="docs-step-body">
             <h3 class="docs-h3">Open the project in Claude Code</h3>
             <p class="docs-step-desc">
-              Claude Code picks up CLAUDE.md on session start. From here, every prompt has component awareness — no preamble needed.
+              Claude Code picks up CLAUDE.md on session start. From here, every
+              prompt has component awareness — no preamble needed.
             </p>
           </div>
         </div>
@@ -218,12 +268,28 @@ Token names match Figma variable names 1-to-1. Dark/light mode is automatic.
     </div>
 
     <!-- Bottom nav -->
-    <BottomNav items={[
-      { to: '/workshop', label: 'Setup',  title: 'Workshop',         icon: 'build_circle' },
-      { to: '/tokens',   label: 'Browse', title: 'Design tokens',    icon: 'palette' },
-      { to: '/prompts',  label: 'Use',    title: 'Prompt templates', icon: 'chat' },
-    ]} />
-
+    <BottomNav
+      items={[
+        {
+          to: '/workshop',
+          label: 'Setup',
+          title: 'Workshop',
+          icon: 'build_circle',
+        },
+        {
+          to: '/tokens',
+          label: 'Browse',
+          title: 'Design tokens',
+          icon: 'palette',
+        },
+        {
+          to: '/prompts',
+          label: 'Use',
+          title: 'Prompt templates',
+          icon: 'chat',
+        },
+      ]}
+    />
   </div>
 </BaseLayout>
 

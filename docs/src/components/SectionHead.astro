@@ -35,8 +35,13 @@ const accentAt = titleAccent ? title.indexOf(titleAccent) : -1;
 <header class:list={['docs-section-head', `docs-section-head--${align}`]}>
   {eyebrow && <span class="docs-section-eyebrow">{eyebrow}</span>}
   <Tag class="docs-section-title" id={id}>
-    {accentAt === -1 ? title : (
-      <Fragment>{title.slice(0, accentAt)}<em class="docs-accent">{titleAccent}</em>{title.slice(accentAt + titleAccent!.length)}</Fragment>
+    {accentAt === -1 ? (
+      title
+    ) : (
+      <Fragment
+        >{title.slice(0, accentAt)}<em class="docs-accent">{titleAccent}</em
+        >{title.slice(accentAt + titleAccent!.length)}</Fragment
+      >
     )}
   </Tag>
   {sub && <p class="docs-section-sub">{sub}</p>}

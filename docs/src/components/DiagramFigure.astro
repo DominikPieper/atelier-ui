@@ -11,22 +11,41 @@ interface Props {
   kind?: 'diagram' | 'mockup';
 }
 
-const { caption, align = 'center', compact = false, kind = 'diagram' } = Astro.props;
+const {
+  caption,
+  align = 'center',
+  compact = false,
+  kind = 'diagram',
+} = Astro.props;
 ---
 
-<figure class:list={["diagram-figure", `diagram-figure--${align}`, compact && "diagram-figure--compact", kind === 'mockup' && "diagram-figure--mockup", Astro.slots.has('mobile-fallback') && "diagram-figure--has-fallback"]}>
+<figure
+  class:list={[
+    'diagram-figure',
+    `diagram-figure--${align}`,
+    compact && 'diagram-figure--compact',
+    kind === 'mockup' && 'diagram-figure--mockup',
+    Astro.slots.has('mobile-fallback') && 'diagram-figure--has-fallback',
+  ]}
+>
   <div
     class="diagram-figure-surface diagram-figure-surface--svg"
-    data-scroll-label={caption ? `${caption} (scrollable diagram)` : 'Diagram, scrollable'}
+    data-scroll-label={
+      caption ? `${caption} (scrollable diagram)` : 'Diagram, scrollable'
+    }
   >
-    {kind === 'mockup' && <span class="diagram-figure-mockup-tag" aria-hidden="true">Mockup</span>}
+    {kind === 'mockup' && <span
+      class="diagram-figure-mockup-tag"
+      aria-hidden="true"
+      >Mockup</span
+    >}
     <slot />
   </div>
-  {Astro.slots.has('mobile-fallback') && (
-    <div class="diagram-figure-surface diagram-figure-surface--fallback">
-      <slot name="mobile-fallback" />
-    </div>
-  )}
+  {Astro.slots.has('mobile-fallback') && <div
+    class="diagram-figure-surface diagram-figure-surface--fallback"
+  >
+    <slot name="mobile-fallback" />
+  </div>}
   {caption && <figcaption class="diagram-figure-caption">{caption}</figcaption>}
 </figure>
 
@@ -52,18 +71,20 @@ const { caption, align = 'center', compact = false, kind = 'diagram' } = Astro.p
   // `.diagram-figure-surface--svg` currently in the document, so no extra
   // once-per-navigation guard is needed here.
   function evaluateDiagramSurfaces() {
-    document.querySelectorAll<HTMLElement>('.diagram-figure-surface--svg').forEach((surface) => {
-      if (surface.scrollWidth > surface.clientWidth) {
-        surface.setAttribute('tabindex', '0');
-        surface.setAttribute('role', 'region');
-        const label = surface.dataset.scrollLabel;
-        if (label) surface.setAttribute('aria-label', label);
-      } else {
-        surface.removeAttribute('tabindex');
-        surface.removeAttribute('role');
-        surface.removeAttribute('aria-label');
-      }
-    });
+    document
+      .querySelectorAll<HTMLElement>('.diagram-figure-surface--svg')
+      .forEach((surface) => {
+        if (surface.scrollWidth > surface.clientWidth) {
+          surface.setAttribute('tabindex', '0');
+          surface.setAttribute('role', 'region');
+          const label = surface.dataset.scrollLabel;
+          if (label) surface.setAttribute('aria-label', label);
+        } else {
+          surface.removeAttribute('tabindex');
+          surface.removeAttribute('role');
+          surface.removeAttribute('aria-label');
+        }
+      });
   }
 
   let resizeTimer: ReturnType<typeof setTimeout>;
@@ -85,8 +106,12 @@ const { caption, align = 'center', compact = false, kind = 'diagram' } = Astro.p
     gap: 0.65rem;
   }
 
-  .diagram-figure--start { align-items: flex-start; }
-  .diagram-figure--center { align-items: stretch; }
+  .diagram-figure--start {
+    align-items: flex-start;
+  }
+  .diagram-figure--center {
+    align-items: stretch;
+  }
 
   .diagram-figure-surface {
     width: 100%;
@@ -156,8 +181,16 @@ const { caption, align = 'center', compact = false, kind = 'diagram' } = Astro.p
   @media (max-width: 640px) {
     .diagram-figure-surface--svg {
       overflow-x: auto;
-      -webkit-mask-image: linear-gradient(to right, black calc(100% - 28px), transparent 100%);
-      mask-image: linear-gradient(to right, black calc(100% - 28px), transparent 100%);
+      -webkit-mask-image: linear-gradient(
+        to right,
+        black calc(100% - 28px),
+        transparent 100%
+      );
+      mask-image: linear-gradient(
+        to right,
+        black calc(100% - 28px),
+        transparent 100%
+      );
     }
     .diagram-figure-surface--svg :global(svg) {
       min-width: 600px;
@@ -169,10 +202,16 @@ const { caption, align = 'center', compact = false, kind = 'diagram' } = Astro.p
    * to the stacked HTML alternative below 640px — densely-overlapping
    * diagrams (Venns, multi-panel sequences) can't be salvaged by scroll
    * alone. The fallback is hidden on desktop so AT only sees one. */
-  .diagram-figure-surface--fallback { display: none; }
+  .diagram-figure-surface--fallback {
+    display: none;
+  }
   @media (max-width: 640px) {
-    .diagram-figure--has-fallback .diagram-figure-surface--svg { display: none; }
-    .diagram-figure--has-fallback .diagram-figure-surface--fallback { display: block; }
+    .diagram-figure--has-fallback .diagram-figure-surface--svg {
+      display: none;
+    }
+    .diagram-figure--has-fallback .diagram-figure-surface--fallback {
+      display: block;
+    }
   }
   .diagram-figure-surface--fallback {
     padding: 1.25rem 1.1rem;
@@ -197,7 +236,8 @@ const { caption, align = 'center', compact = false, kind = 'diagram' } = Astro.p
   }
 
   .diagram-figure-surface :global(svg text.diagram-mono) {
-    font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-family:
+      var(--font-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
   }
 
   .diagram-figure-surface :global(svg text.diagram-muted) {
@@ -219,7 +259,11 @@ const { caption, align = 'center', compact = false, kind = 'diagram' } = Astro.p
   }
 
   .diagram-figure-surface :global(svg .diagram-node--accent) {
-    fill: color-mix(in srgb, var(--ui-color-primary) 10%, var(--ui-color-surface));
+    fill: color-mix(
+      in srgb,
+      var(--ui-color-primary) 10%,
+      var(--ui-color-surface)
+    );
     stroke: var(--ui-color-primary);
     stroke-width: 1.5;
   }
@@ -239,7 +283,11 @@ const { caption, align = 'center', compact = false, kind = 'diagram' } = Astro.p
   /* Dashed connector is used for feedback loops — needs to read as
      "alternative path" at a glance, not fade into the background. */
   .diagram-figure-surface :global(svg .diagram-connector--dashed) {
-    stroke: color-mix(in srgb, var(--ui-color-primary) 55%, var(--ui-color-border-hover));
+    stroke: color-mix(
+      in srgb,
+      var(--ui-color-primary) 55%,
+      var(--ui-color-border-hover)
+    );
     stroke-dasharray: 5 5;
     stroke-width: 1.75;
   }
@@ -253,7 +301,11 @@ const { caption, align = 'center', compact = false, kind = 'diagram' } = Astro.p
   }
 
   .diagram-figure-surface :global(svg .diagram-arrow--muted-accent) {
-    fill: color-mix(in srgb, var(--ui-color-primary) 55%, var(--ui-color-border-hover));
+    fill: color-mix(
+      in srgb,
+      var(--ui-color-primary) 55%,
+      var(--ui-color-border-hover)
+    );
   }
 
   .diagram-figure-surface :global(svg .diagram-icon) {

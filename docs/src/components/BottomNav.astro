@@ -18,15 +18,14 @@ const { items, ariaLabel = 'Continue exploring' } = Astro.props;
 ---
 
 <nav class="bottom-nav-grid" aria-label={ariaLabel}>
-  {items.map(({ to, label, title, icon }) => (
-    <a href={to} class="bottom-nav-card">
-      {icon && (
-        <span class="bottom-nav-icon"><Icon name={icon} /></span>
-      )}
-      <div>
-        <div class="bottom-nav-label">{label}</div>
-        <div class="bottom-nav-title">{title}</div>
-      </div>
-    </a>
-  ))}
+  {items.map(({ to, label, title, icon }) => <a
+    href={to}
+    class="bottom-nav-card"
+  >
+    {icon && <span class="bottom-nav-icon"><Icon name={icon} /></span>}
+    <div>
+      <div class="bottom-nav-label">{label}</div>
+      <div class="bottom-nav-title">{title}</div>
+    </div>
+  </a>)}
 </nav>

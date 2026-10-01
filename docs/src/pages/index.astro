@@ -75,10 +75,13 @@ const SCAFFOLD_CMD = 'npx create-atelier-ui-workspace';
     <div class="docs-pillars">
       <article class="docs-pillar">
         <div class="docs-pillar-step">01 &middot; Inspect</div>
-        <div class="docs-pillar-icon" aria-hidden="true"><Icon name="figma" /></div>
+        <div class="docs-pillar-icon" aria-hidden="true">
+          <Icon name="figma" />
+        </div>
         <h3 class="docs-pillar-name">Figma</h3>
         <p class="docs-pillar-desc">
-          Master frames and the variant matrix live here. Token values are owned in code and push to Figma — not the reverse.
+          Master frames and the variant matrix live here. Token values are owned
+          in code and push to Figma — not the reverse.
         </p>
         <div class="docs-pillar-meta">
           <span class="docs-pill-tag">Variables</span>
@@ -87,10 +90,13 @@ const SCAFFOLD_CMD = 'npx create-atelier-ui-workspace';
       </article>
       <article class="docs-pillar">
         <div class="docs-pillar-step">02 &middot; Prompt</div>
-        <div class="docs-pillar-icon" aria-hidden="true"><Icon name="book" /></div>
+        <div class="docs-pillar-icon" aria-hidden="true">
+          <Icon name="book" />
+        </div>
         <h3 class="docs-pillar-name">Storybook</h3>
         <p class="docs-pillar-desc">
-          Per-framework live explorer. Each instance hosts an <Jargon term="MCP">MCP</Jargon> endpoint Claude can call.
+          Per-framework live explorer. Each instance hosts an
+          <Jargon term="MCP">MCP</Jargon> endpoint Claude can call.
         </p>
         <div class="docs-pillar-meta">
           <span class="docs-pill-tag">/mcp</span>
@@ -99,10 +105,13 @@ const SCAFFOLD_CMD = 'npx create-atelier-ui-workspace';
       </article>
       <article class="docs-pillar">
         <div class="docs-pillar-step">03 &middot; Ship</div>
-        <div class="docs-pillar-icon" aria-hidden="true"><Icon name="sparkles" /></div>
+        <div class="docs-pillar-icon" aria-hidden="true">
+          <Icon name="sparkles" />
+        </div>
         <h3 class="docs-pillar-name">Claude + MCP</h3>
         <p class="docs-pillar-desc">
-          Reads Figma + Storybook through MCP, writes spec-aligned code in Angular, React, or Vue.
+          Reads Figma + Storybook through MCP, writes spec-aligned code in
+          Angular, React, or Vue.
         </p>
         <div class="docs-pillar-meta">
           <span class="docs-pill-tag">Spec-aware</span>
@@ -125,7 +134,10 @@ const SCAFFOLD_CMD = 'npx create-atelier-ui-workspace';
         <ul class="docs-mcp-checklist">
           <li>HTTP transport — no local processes to babysit.</li>
           <li>Hosted alongside the Storybook itself, no extra deploy.</li>
-          <li>Manifest-aware — Claude reads each framework's component manifest before suggesting code.</li>
+          <li>
+            Manifest-aware — Claude reads each framework's component manifest
+            before suggesting code.
+          </li>
         </ul>
       </div>
       <CodeCard lang=".mcp.json" code={MCP_CONFIG} id="home-mcp-config" />
@@ -138,7 +150,8 @@ const SCAFFOLD_CMD = 'npx create-atelier-ui-workspace';
       <div class="docs-cta-eyebrow">Get started in 60 seconds</div>
       <h2 class="docs-cta-title" id="cta-title">Scaffold a workspace.</h2>
       <p class="docs-cta-sub">
-        An Nx workspace with your framework choice, the component library wired up, and the MCP config pre-seeded.
+        An Nx workspace with your framework choice, the component library wired
+        up, and the MCP config pre-seeded.
       </p>
       <div class="docs-cta-cmd">
         <Icon name="terminal" class="docs-cta-cmd-icon" />
@@ -148,10 +161,16 @@ const SCAFFOLD_CMD = 'npx create-atelier-ui-workspace';
           type="button"
           class="docs-cta-cmd-copy"
           data-cta-copy={SCAFFOLD_CMD}
-          aria-label="Copy scaffold command to clipboard">
+          aria-label="Copy scaffold command to clipboard"
+        >
           Copy
         </button>
-        <span class="docs-visually-hidden" data-cta-copy-status aria-live="polite" role="status"></span>
+        <span
+          class="docs-visually-hidden"
+          data-cta-copy-status
+          aria-live="polite"
+          role="status"
+        ></span>
       </div>
     </div>
   </section>
@@ -159,13 +178,16 @@ const SCAFFOLD_CMD = 'npx create-atelier-ui-workspace';
 
 <script>
   function bindCtaCopy() {
-    const btns = document.querySelectorAll<HTMLButtonElement>('[data-cta-copy]');
+    const btns =
+      document.querySelectorAll<HTMLButtonElement>('[data-cta-copy]');
     btns.forEach((btn) => {
       if (btn.dataset.ctaCopyBound === '1') return;
       btn.dataset.ctaCopyBound = '1';
       btn.addEventListener('click', async () => {
         const payload = btn.getAttribute('data-cta-copy') ?? '';
-        const status = btn.parentElement?.querySelector<HTMLElement>('[data-cta-copy-status]');
+        const status = btn.parentElement?.querySelector<HTMLElement>(
+          '[data-cta-copy-status]',
+        );
         try {
           await navigator.clipboard.writeText(payload);
           const original = btn.textContent;
@@ -179,7 +201,8 @@ const SCAFFOLD_CMD = 'npx create-atelier-ui-workspace';
           }, 1400);
         } catch (err) {
           console.error('Clipboard write failed', err);
-          if (status) status.textContent = 'Copy failed. Select and copy manually.';
+          if (status)
+            status.textContent = 'Copy failed. Select and copy manually.';
         }
       });
     });
@@ -202,8 +225,15 @@ const SCAFFOLD_CMD = 'npx create-atelier-ui-workspace';
   }
 
   @keyframes docs-hero-eyebrow-pulse {
-    0%, 100% { opacity: 1; transform: scale(1); }
-    50% { opacity: 0.5; transform: scale(1.4); }
+    0%,
+    100% {
+      opacity: 1;
+      transform: scale(1);
+    }
+    50% {
+      opacity: 0.5;
+      transform: scale(1.4);
+    }
   }
 
   .docs-mcp-section,

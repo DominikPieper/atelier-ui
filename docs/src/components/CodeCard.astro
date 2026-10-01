@@ -17,13 +17,7 @@ interface Props {
   id?: string;
 }
 
-const {
-  lang,
-  code,
-  copyable = true,
-  copyText,
-  id,
-} = Astro.props;
+const { lang, code, copyable = true, copyText, id } = Astro.props;
 
 // Stable IDs so multiple CodeCards on a page don't collide.
 const slug = id ?? `codecard-${Math.random().toString(36).slice(2, 9)}`;
@@ -35,25 +29,37 @@ const payload = copyText ?? code ?? '';
 <figure class="docs-code-card" data-code-card>
   <div class="docs-code-card-head">
     <span class="docs-code-card-lang">{lang}</span>
-    {copyable && (
-      <button
-        type="button"
-        class="docs-code-card-copy"
-        data-copy-target={bodyId}
-        data-copy-status={statusId}
-        data-copy-payload={payload}
-        aria-label={`Copy ${lang} contents to clipboard`}>
-        Copy
-      </button>
-    )}
+    {copyable && <button
+      type="button"
+      class="docs-code-card-copy"
+      data-copy-target={bodyId}
+      data-copy-status={statusId}
+      data-copy-payload={payload}
+      aria-label={`Copy ${lang} contents to clipboard`}
+    >
+      Copy
+    </button>}
   </div>
   {code !== undefined ? (
-    <pre class="docs-code-card-body" id={bodyId} tabindex="0"><code>{code}</code></pre>
+    <pre
+      class="docs-code-card-body"
+      id={bodyId}
+      tabindex="0"
+    ><code>{code}</code></pre>
   ) : (
-    <pre class="docs-code-card-body" id={bodyId} tabindex="0"><code><slot /></code></pre>
+    <pre
+      class="docs-code-card-body"
+      id={bodyId}
+      tabindex="0"
+    ><code><slot /></code></pre>
   )}
   {copyable && (
-    <span class="docs-code-card-status" id={statusId} aria-live="polite" role="status"></span>
+    <span
+      class="docs-code-card-status"
+      id={statusId}
+      aria-live="polite"
+      role="status"
+    ></span>
   )}
 </figure>
 
@@ -82,7 +88,8 @@ const payload = copyText ?? code ?? '';
         }, 1400);
       } catch (err) {
         console.error('Clipboard write failed', err);
-        if (status) status.textContent = 'Copy failed. Select and copy manually.';
+        if (status)
+          status.textContent = 'Copy failed. Select and copy manually.';
       }
     });
   }
@@ -117,7 +124,13 @@ const payload = copyText ?? code ?? '';
   }
 
   .docs-code-card-lang {
-    font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+    font-family: var(
+      --font-mono,
+      ui-monospace,
+      SFMono-Regular,
+      Menlo,
+      monospace
+    );
     font-size: var(--ui-font-size-xs);
     font-weight: 600;
     text-transform: uppercase;
@@ -135,7 +148,8 @@ const payload = copyText ?? code ?? '';
     color: var(--ui-color-text-muted);
     cursor: pointer;
     font-family: inherit;
-    transition: color var(--ui-duration-fast) var(--ui-ease-out),
+    transition:
+      color var(--ui-duration-fast) var(--ui-ease-out),
       border-color var(--ui-duration-fast) var(--ui-ease-out),
       background var(--ui-duration-fast) var(--ui-ease-out);
   }
@@ -159,7 +173,13 @@ const payload = copyText ?? code ?? '';
   .docs-code-card-body {
     margin: 0;
     padding: 1.125rem 1.25rem;
-    font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
+    font-family: var(
+      --font-mono,
+      ui-monospace,
+      SFMono-Regular,
+      Menlo,
+      monospace
+    );
     font-size: 0.8125rem;
     line-height: 1.75;
     overflow-x: auto;

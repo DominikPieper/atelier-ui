@@ -40,18 +40,20 @@ const recoveryLinks = [
       This piece isn't in the <span class="docs-accent">collection</span>.
     </h1>
     <p class="notfound-lede">
-      The page you're looking for was moved, renamed, or never made it past the sketch.
-      The navigation and search above still work — or pick up the trail here:
+      The page you're looking for was moved, renamed, or never made it past the
+      sketch. The navigation and search above still work — or pick up the trail
+      here:
     </p>
 
     <nav class="notfound-cards" aria-label="Recovery links">
-      {recoveryLinks.map(({ href, eyebrow, title, desc }) => (
-        <a href={href} class="docs-pagepair-card">
-          <span class="docs-pagepair-eyebrow">{eyebrow}</span>
-          <span class="docs-pagepair-title">{title}</span>
-          <span class="docs-pagepair-desc">{desc}</span>
-        </a>
-      ))}
+      {recoveryLinks.map(({ href, eyebrow, title, desc }) => <a
+        href={href}
+        class="docs-pagepair-card"
+      >
+        <span class="docs-pagepair-eyebrow">{eyebrow}</span>
+        <span class="docs-pagepair-title">{title}</span>
+        <span class="docs-pagepair-desc">{desc}</span>
+      </a>)}
     </nav>
   </div>
 </BaseLayout>

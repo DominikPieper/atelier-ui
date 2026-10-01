@@ -30,16 +30,16 @@ const FRAMEWORK_LABELS: Record<Framework, string> = {
 <div
   class:list={['docs-fw-switcher', `docs-fw-switcher--${variant}`]}
   role="tablist"
-  aria-label={label}>
-  {frameworks.map((fw) => (
-    <button
-      type="button"
-      class="docs-fw-switcher-btn"
-      data-fw-btn={fw}
-      role="tab">
-      {FRAMEWORK_LABELS[fw]}
-    </button>
-  ))}
+  aria-label={label}
+>
+  {frameworks.map((fw) => <button
+    type="button"
+    class="docs-fw-switcher-btn"
+    data-fw-btn={fw}
+    role="tab"
+  >
+    {FRAMEWORK_LABELS[fw]}
+  </button>)}
 </div>
 
 <style>
@@ -62,7 +62,8 @@ const FRAMEWORK_LABELS: Record<Framework, string> = {
     border-radius: var(--ui-radius-sm);
     cursor: pointer;
     font-family: inherit;
-    transition: color var(--ui-duration-fast) var(--ui-ease-out),
+    transition:
+      color var(--ui-duration-fast) var(--ui-ease-out),
       background var(--ui-duration-fast) var(--ui-ease-out),
       box-shadow var(--ui-duration-fast) var(--ui-ease-out);
   }
@@ -91,7 +92,8 @@ const FRAMEWORK_LABELS: Record<Framework, string> = {
     font-family: inherit;
     border-bottom: 2px solid transparent;
     margin-bottom: -1px;
-    transition: color var(--ui-duration-fast) var(--ui-ease-out),
+    transition:
+      color var(--ui-duration-fast) var(--ui-ease-out),
       border-bottom-color var(--ui-duration-fast) var(--ui-ease-out);
   }
 

@@ -8,12 +8,15 @@ import Checkpoint from '../components/Checkpoint.astro';
 import { getTrackStep, TRACK_LENGTH } from '../data/workshop-track';
 import personalAccessTokenScreenshot from '../assets/screenshots/personal-access-token.png';
 
-const FIGMA_FILE_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
+const FIGMA_FILE_URL =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 const CLOUD_RELAY_URL = 'https://figma-console-mcp.southleft.com/mcp';
 
 // "Step N of M" derived from the single source of truth in workshop-track.ts.
 const trackStep = getTrackStep('/figma-token');
-const stepTag = trackStep ? `Step ${trackStep.step} of ${TRACK_LENGTH}` : undefined;
+const stepTag = trackStep
+  ? `Step ${trackStep.step} of ${TRACK_LENGTH}`
+  : undefined;
 ---
 
 <BaseLayout
@@ -22,12 +25,12 @@ const stepTag = trackStep ? `Step ${trackStep.step} of ${TRACK_LENGTH}` : undefi
   currentPath="/figma-token"
 >
   <div class="docs-inline-page">
-
     <PageHero kind="howto" tag={stepTag} title="Figma access" ledeMax="660px">
-      Figma is the single source of truth, and the <code>figma-console</code> MCP server reads it through a
-      <strong>Desktop Bridge plugin</strong> running inside Figma Desktop. A REST access token is
-      a <em>secondary</em> channel — it only authorizes read-only metadata calls and is not
-      required for screenshots, selection tracking, or any interactive tool.
+      Figma is the single source of truth, and the <code>figma-console</code>
+      MCP server reads it through a <strong>Desktop Bridge plugin</strong>
+      running inside Figma Desktop. A REST access token is a <em>secondary</em>
+      channel — it only authorizes read-only metadata calls and is not required
+      for screenshots, selection tracking, or any interactive tool.
     </PageHero>
 
     <!-- Page-pair: setup is a precondition for the Figma reference page. -->
@@ -35,81 +38,290 @@ const stepTag = trackStep ? `Step ${trackStep.step} of ${TRACK_LENGTH}` : undefi
       <a href="/figma" class="docs-pagepair-card docs-pagepair-card--prev">
         <span class="docs-pagepair-eyebrow">← Without setup</span>
         <span class="docs-pagepair-title">/figma</span>
-        <span class="docs-pagepair-desc">Manual workflow — read the inspect panel, copy token names, no plugin needed.</span>
+        <span class="docs-pagepair-desc"
+          >Manual workflow — read the inspect panel, copy token names, no plugin
+          needed.</span
+        >
       </a>
       <div class="docs-pagepair-arrow" aria-hidden="true">›</div>
       <div class="docs-pagepair-card docs-pagepair-card--here">
         <span class="docs-pagepair-eyebrow">You're here</span>
         <span class="docs-pagepair-title">/figma-token</span>
-        <span class="docs-pagepair-desc">Plugin install, token, and <code>.mcp.json</code> entry — one-time, ~5 min.</span>
+        <span class="docs-pagepair-desc"
+          >Plugin install, token, and <code>.mcp.json</code> entry — one-time,
+          ~5 min.</span
+        >
       </div>
     </aside>
 
     <!-- How this connects -->
     <section style="margin-bottom: 2.25rem">
       <h2 class="docs-section-title">How the pieces connect</h2>
-      <p style="color: var(--ui-color-text-muted); font-size: 0.85rem; margin: 0 0 0.5rem; line-height: 1.6">
-        Claude Code spawns the MCP server, which opens a local WebSocket. The Figma Desktop plugin
-        connects to that socket. The REST token is an optional side channel the MCP uses for
-        metadata reads — it does not carry any of the live plugin traffic.
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          font-size: 0.85rem;
+          margin: 0 0 0.5rem;
+          line-height: 1.6;
+        "
+      >
+        Claude Code spawns the MCP server, which opens a local WebSocket. The
+        Figma Desktop plugin connects to that socket. The REST token is an
+        optional side channel the MCP uses for metadata reads — it does not
+        carry any of the live plugin traffic.
       </p>
 
-      <DiagramFigure caption="Two channels. The plugin WebSocket (solid) carries every interactive call. The REST token (dashed) only covers read-only file/variable metadata.">
-        <svg viewBox="0 0 880 260" role="img" aria-labelledby="arch-title arch-desc" preserveAspectRatio="xMidYMid meet">
+      <DiagramFigure
+        caption="Two channels. The plugin WebSocket (solid) carries every interactive call. The REST token (dashed) only covers read-only file/variable metadata."
+      >
+        <svg
+          viewBox="0 0 880 260"
+          role="img"
+          aria-labelledby="arch-title arch-desc"
+          preserveAspectRatio="xMidYMid meet"
+        >
           <title id="arch-title">figma-console-mcp architecture</title>
-          <desc id="arch-desc">Claude Code launches the figma-console-mcp process via npx. The MCP opens a WebSocket on port 9223 which a plugin running inside Figma Desktop connects to. Separately and optionally, the MCP can call Figma's REST API using a personal access token to read file and variable metadata.</desc>
+          <desc id="arch-desc">
+            Claude Code launches the figma-console-mcp process via npx. The MCP
+            opens a WebSocket on port 9223 which a plugin running inside Figma
+            Desktop connects to. Separately and optionally, the MCP can call
+            Figma's REST API using a personal access token to read file and
+            variable metadata.
+          </desc>
 
           <defs>
-            <marker id="arch-arrow" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-              <path d="M 0 0 L 10 5 L 0 10 z" class="diagram-arrow--accent"/>
+            <marker
+              id="arch-arrow"
+              viewBox="0 0 10 10"
+              refX="8"
+              refY="5"
+              markerWidth="7"
+              markerHeight="7"
+              orient="auto-start-reverse"
+            >
+              <path d="M 0 0 L 10 5 L 0 10 z" class="diagram-arrow--accent" />
             </marker>
-            <marker id="arch-arrow-muted" viewBox="0 0 10 10" refX="8" refY="5" markerWidth="7" markerHeight="7" orient="auto-start-reverse">
-              <path d="M 0 0 L 10 5 L 0 10 z" class="diagram-arrow--muted-accent"/>
+            <marker
+              id="arch-arrow-muted"
+              viewBox="0 0 10 10"
+              refX="8"
+              refY="5"
+              markerWidth="7"
+              markerHeight="7"
+              orient="auto-start-reverse"
+            >
+              <path
+                d="M 0 0 L 10 5 L 0 10 z"
+                class="diagram-arrow--muted-accent"
+              />
             </marker>
           </defs>
 
           <!-- Claude Code -->
-          <rect x="24" y="96" width="152" height="68" rx="10" ry="10" class="diagram-node"/>
-          <text x="100" y="126" text-anchor="middle" font-size="12" font-weight="700">Claude Code</text>
-          <text x="100" y="146" text-anchor="middle" font-size="10" class="diagram-muted">reads .mcp.json</text>
+          <rect
+            x="24"
+            y="96"
+            width="152"
+            height="68"
+            rx="10"
+            ry="10"
+            class="diagram-node"
+          />
+          <text
+            x="100"
+            y="126"
+            text-anchor="middle"
+            font-size="12"
+            font-weight="700"
+            >Claude Code</text
+          >
+          <text
+            x="100"
+            y="146"
+            text-anchor="middle"
+            font-size="10"
+            class="diagram-muted"
+            >reads .mcp.json</text
+          >
 
           <!-- MCP server -->
-          <rect x="232" y="78" width="208" height="104" rx="12" ry="12" class="diagram-node diagram-node--accent"/>
-          <text x="336" y="106" text-anchor="middle" font-size="12" font-weight="700" style="fill: var(--ui-color-primary)">figma-console-mcp</text>
-          <text x="336" y="126" text-anchor="middle" font-size="10" class="diagram-mono diagram-muted">npx -y figma-console-mcp@latest</text>
-          <text x="336" y="150" text-anchor="middle" font-size="10" class="diagram-muted">WebSocket :9223–9232</text>
-          <text x="336" y="166" text-anchor="middle" font-size="10" class="diagram-muted">REST → api.figma.com</text>
+          <rect
+            x="232"
+            y="78"
+            width="208"
+            height="104"
+            rx="12"
+            ry="12"
+            class="diagram-node diagram-node--accent"
+          />
+          <text
+            x="336"
+            y="106"
+            text-anchor="middle"
+            font-size="12"
+            font-weight="700"
+            style="fill: var(--ui-color-primary)"
+            >figma-console-mcp</text
+          >
+          <text
+            x="336"
+            y="126"
+            text-anchor="middle"
+            font-size="10"
+            class="diagram-mono diagram-muted"
+            >npx -y figma-console-mcp@latest</text
+          >
+          <text
+            x="336"
+            y="150"
+            text-anchor="middle"
+            font-size="10"
+            class="diagram-muted"
+            >WebSocket :9223–9232</text
+          >
+          <text
+            x="336"
+            y="166"
+            text-anchor="middle"
+            font-size="10"
+            class="diagram-muted"
+            >REST → api.figma.com</text
+          >
 
           <!-- Figma Desktop plugin -->
-          <rect x="496" y="24" width="232" height="84" rx="12" ry="12" class="diagram-node diagram-node--accent"/>
-          <text x="612" y="52" text-anchor="middle" font-size="12" font-weight="700" style="fill: var(--ui-color-primary)">Figma Desktop</text>
-          <text x="612" y="72" text-anchor="middle" font-size="10" class="diagram-muted">Desktop Bridge plugin</text>
-          <text x="612" y="92" text-anchor="middle" font-size="10" class="diagram-muted">live selection · screenshots · edits</text>
+          <rect
+            x="496"
+            y="24"
+            width="232"
+            height="84"
+            rx="12"
+            ry="12"
+            class="diagram-node diagram-node--accent"
+          />
+          <text
+            x="612"
+            y="52"
+            text-anchor="middle"
+            font-size="12"
+            font-weight="700"
+            style="fill: var(--ui-color-primary)"
+            >Figma Desktop</text
+          >
+          <text
+            x="612"
+            y="72"
+            text-anchor="middle"
+            font-size="10"
+            class="diagram-muted"
+            >Desktop Bridge plugin</text
+          >
+          <text
+            x="612"
+            y="92"
+            text-anchor="middle"
+            font-size="10"
+            class="diagram-muted"
+            >live selection · screenshots · edits</text
+          >
 
           <!-- Figma REST (secondary) -->
-          <rect x="496" y="152" width="232" height="76" rx="12" ry="12" class="diagram-node"/>
-          <text x="612" y="178" text-anchor="middle" font-size="12" font-weight="700">Figma REST API</text>
-          <text x="612" y="198" text-anchor="middle" font-size="10" class="diagram-muted">read: file · variables · comments</text>
-          <text x="612" y="216" text-anchor="middle" font-size="10" class="diagram-mono diagram-muted">auth: figd_…</text>
+          <rect
+            x="496"
+            y="152"
+            width="232"
+            height="76"
+            rx="12"
+            ry="12"
+            class="diagram-node"
+          />
+          <text
+            x="612"
+            y="178"
+            text-anchor="middle"
+            font-size="12"
+            font-weight="700"
+            >Figma REST API</text
+          >
+          <text
+            x="612"
+            y="198"
+            text-anchor="middle"
+            font-size="10"
+            class="diagram-muted"
+            >read: file · variables · comments</text
+          >
+          <text
+            x="612"
+            y="216"
+            text-anchor="middle"
+            font-size="10"
+            class="diagram-mono diagram-muted"
+            >auth: figd_…</text
+          >
 
           <!-- Arrows -->
-          <line x1="176" y1="130" x2="228" y2="130" class="diagram-connector diagram-connector--accent" marker-end="url(#arch-arrow)"/>
-          <line x1="440" y1="104" x2="492" y2="66"  class="diagram-connector diagram-connector--accent" marker-start="url(#arch-arrow)" marker-end="url(#arch-arrow)"/>
-          <line x1="440" y1="156" x2="492" y2="188" class="diagram-connector diagram-connector--dashed" marker-end="url(#arch-arrow-muted)"/>
+          <line
+            x1="176"
+            y1="130"
+            x2="228"
+            y2="130"
+            class="diagram-connector diagram-connector--accent"
+            marker-end="url(#arch-arrow)"
+          />
+          <line
+            x1="440"
+            y1="104"
+            x2="492"
+            y2="66"
+            class="diagram-connector diagram-connector--accent"
+            marker-start="url(#arch-arrow)"
+            marker-end="url(#arch-arrow)"
+          />
+          <line
+            x1="440"
+            y1="156"
+            x2="492"
+            y2="188"
+            class="diagram-connector diagram-connector--dashed"
+            marker-end="url(#arch-arrow-muted)"
+          />
 
           <!-- Labels on the two channels -->
-          <text x="466" y="70"  font-size="10" font-weight="700" style="fill: var(--ui-color-primary)">primary</text>
-          <text x="466" y="176" font-size="10" font-weight="600" class="diagram-muted">optional</text>
+          <text
+            x="466"
+            y="70"
+            font-size="10"
+            font-weight="700"
+            style="fill: var(--ui-color-primary)"
+            >primary</text
+          >
+          <text
+            x="466"
+            y="176"
+            font-size="10"
+            font-weight="600"
+            class="diagram-muted"
+            >optional</text
+          >
         </svg>
       </DiagramFigure>
     </section>
 
     <!-- Step 1 — Plugin (required) -->
     <section style="margin-bottom: 2.25rem">
-      <h2 class="docs-section-title">Step 1 — Install the Desktop Bridge plugin (required)</h2>
-      <p style="color: var(--ui-color-text-muted); font-size: 0.85rem; margin: 0 0 1rem; line-height: 1.6">
-        Takes ~90 seconds. One-time setup. The plugin is bundled with the MCP package — no separate
-        download.
+      <h2 class="docs-section-title">
+        Step 1 — Install the Desktop Bridge plugin (required)
+      </h2>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          font-size: 0.85rem;
+          margin: 0 0 1rem;
+          line-height: 1.6;
+        "
+      >
+        Takes ~90 seconds. One-time setup. The plugin is bundled with the MCP
+        package — no separate download.
       </p>
 
       <div style="display: flex; flex-direction: column; gap: 1rem">
@@ -119,9 +331,13 @@ const stepTag = trackStep ? `Step ${trackStep.step} of ${TRACK_LENGTH}` : undefi
             <h3 class="docs-h3">Seed the plugin directory</h3>
             <p class="docs-step-desc">
               Run the MCP package once. On first launch it auto-populates
-              <code>~/.figma-console-mcp/plugin/</code> with <code>manifest.json</code> and UI assets.
+              <code>~/.figma-console-mcp/plugin/</code> with
+              <code>manifest.json</code> and UI assets.
             </p>
-            <Code code={`# safe to run any time — exits quickly\nnpx -y figma-console-mcp@latest --help\n\n# confirm the manifest landed\nls ~/.figma-console-mcp/plugin/manifest.json`} lang="shell" />
+            <Code
+              code={`# safe to run any time — exits quickly\nnpx -y figma-console-mcp@latest --help\n\n# confirm the manifest landed\nls ~/.figma-console-mcp/plugin/manifest.json`}
+              lang="shell"
+            />
           </div>
         </div>
 
@@ -130,47 +346,169 @@ const stepTag = trackStep ? `Step ${trackStep.step} of ${TRACK_LENGTH}` : undefi
           <div>
             <h3 class="docs-h3">Import the plugin into Figma Desktop</h3>
             <p class="docs-step-desc">
-              Open Figma Desktop (normal launch, no special flags). In the top menu, go to
-              <strong>Plugins → Development → Import plugin from manifest…</strong> and pick
-              <code>~/.figma-console-mcp/plugin/manifest.json</code>.
+              Open Figma Desktop (normal launch, no special flags). In the top
+              menu, go to
+              <strong
+                >Plugins → Development → Import plugin from manifest…</strong
+              >
+              and pick <code>~/.figma-console-mcp/plugin/manifest.json</code>.
             </p>
 
-            <DiagramFigure caption="Figma Desktop → Plugins → Development → Import plugin from manifest… Select the manifest from the path below.">
-              <svg viewBox="0 0 640 360" role="img" aria-labelledby="plg-title plg-desc" preserveAspectRatio="xMidYMid meet">
-                <title id="plg-title">Importing the Desktop Bridge plugin into Figma</title>
-                <desc id="plg-desc">A mockup of the Figma Desktop menu showing the Plugins menu open, with the Development submenu expanded and the 'Import plugin from manifest…' item highlighted. Below it, a file picker shows the manifest.json path at ~/.figma-console-mcp/plugin/manifest.json.</desc>
+            <DiagramFigure
+              caption="Figma Desktop → Plugins → Development → Import plugin from manifest… Select the manifest from the path below."
+            >
+              <svg
+                viewBox="0 0 640 360"
+                role="img"
+                aria-labelledby="plg-title plg-desc"
+                preserveAspectRatio="xMidYMid meet"
+              >
+                <title
+                  id="plg-title"
+                >Importing the Desktop Bridge plugin into Figma</title>
+                <desc id="plg-desc">
+                  A mockup of the Figma Desktop menu showing the Plugins menu
+                  open, with the Development submenu expanded and the 'Import
+                  plugin from manifest…' item highlighted. Below it, a file
+                  picker shows the manifest.json path at
+                  ~/.figma-console-mcp/plugin/manifest.json.
+                </desc>
 
                 <!-- Window chrome -->
-                <rect x="20" y="16" width="600" height="140" rx="12" ry="12" class="diagram-node"/>
-                <text x="44" y="42" font-size="11" class="diagram-eyebrow">Figma Desktop · menu bar</text>
+                <rect
+                  x="20"
+                  y="16"
+                  width="600"
+                  height="140"
+                  rx="12"
+                  ry="12"
+                  class="diagram-node"
+                />
+                <text x="44" y="42" font-size="11" class="diagram-eyebrow"
+                  >Figma Desktop · menu bar</text
+                >
 
                 <!-- Menu chain -->
-                <text x="44" y="70" font-size="12" font-weight="700">Plugins</text>
-                <text x="110" y="70" font-size="12" class="diagram-muted">›</text>
-                <text x="128" y="70" font-size="12" font-weight="700">Development</text>
-                <text x="228" y="70" font-size="12" class="diagram-muted">›</text>
+                <text x="44" y="70" font-size="12" font-weight="700"
+                  >Plugins</text
+                >
+                <text x="110" y="70" font-size="12" class="diagram-muted"
+                  >›</text
+                >
+                <text x="128" y="70" font-size="12" font-weight="700"
+                  >Development</text
+                >
+                <text x="228" y="70" font-size="12" class="diagram-muted"
+                  >›</text
+                >
 
                 <!-- Highlighted submenu item -->
-                <rect x="248" y="54" width="340" height="26" rx="5" ry="5" style="fill: color-mix(in srgb, var(--ui-color-primary) 14%, transparent); stroke: var(--ui-color-primary); stroke-width: 1.25;"/>
-                <text x="262" y="71" font-size="12" font-weight="700" class="diagram-mono" style="fill: var(--ui-color-primary)">Import plugin from manifest…</text>
+                <rect
+                  x="248"
+                  y="54"
+                  width="340"
+                  height="26"
+                  rx="5"
+                  ry="5"
+                  style="
+                    fill: color-mix(
+                      in srgb,
+                      var(--ui-color-primary) 14%,
+                      transparent
+                    );
+                    stroke: var(--ui-color-primary);
+                    stroke-width: 1.25;
+                  "
+                />
+                <text
+                  x="262"
+                  y="71"
+                  font-size="12"
+                  font-weight="700"
+                  class="diagram-mono"
+                  style="fill: var(--ui-color-primary)"
+                  >Import plugin from manifest…</text
+                >
 
                 <!-- Other submenu items (dimmed for context) -->
-                <text x="262" y="100" font-size="11" class="diagram-mono diagram-muted">New plugin…</text>
-                <text x="262" y="120" font-size="11" class="diagram-mono diagram-muted">Show/Hide Console</text>
-                <text x="262" y="140" font-size="11" class="diagram-mono diagram-muted">Figma Desktop Bridge  (appears after import)</text>
+                <text
+                  x="262"
+                  y="100"
+                  font-size="11"
+                  class="diagram-mono diagram-muted"
+                  >New plugin…</text
+                >
+                <text
+                  x="262"
+                  y="120"
+                  font-size="11"
+                  class="diagram-mono diagram-muted"
+                  >Show/Hide Console</text
+                >
+                <text
+                  x="262"
+                  y="140"
+                  font-size="11"
+                  class="diagram-mono diagram-muted"
+                  >Figma Desktop Bridge (appears after import)</text
+                >
 
                 <!-- File picker card -->
-                <rect x="60" y="188" width="520" height="152" rx="12" ry="12" class="diagram-node"/>
-                <text x="84" y="216" font-size="12" font-weight="700">Select plugin manifest</text>
+                <rect
+                  x="60"
+                  y="188"
+                  width="520"
+                  height="152"
+                  rx="12"
+                  ry="12"
+                  class="diagram-node"
+                />
+                <text x="84" y="216" font-size="12" font-weight="700"
+                  >Select plugin manifest</text
+                >
 
-                <text x="84" y="244" font-size="10" class="diagram-eyebrow">Path</text>
-                <rect x="84" y="252" width="472" height="28" rx="5" ry="5" style="fill: var(--ui-color-surface-sunken); stroke: var(--ui-color-border); stroke-width: 1;"/>
-                <text x="96" y="271" font-size="11" class="diagram-mono">~/.figma-console-mcp/plugin/manifest.json</text>
+                <text x="84" y="244" font-size="10" class="diagram-eyebrow"
+                  >Path</text
+                >
+                <rect
+                  x="84"
+                  y="252"
+                  width="472"
+                  height="28"
+                  rx="5"
+                  ry="5"
+                  style="
+                    fill: var(--ui-color-surface-sunken);
+                    stroke: var(--ui-color-border);
+                    stroke-width: 1;
+                  "
+                />
+                <text x="96" y="271" font-size="11" class="diagram-mono"
+                  >~/.figma-console-mcp/plugin/manifest.json</text
+                >
 
                 <!-- Open button -->
-                <rect x="484" y="294" width="72" height="28" rx="5" ry="5" style="fill: var(--ui-color-primary); stroke: none;"/>
-                <text x="520" y="313" text-anchor="middle" font-size="11" font-weight="700" style="fill: var(--ui-color-on-primary)">Open</text>
-                <text x="84" y="313" font-size="11" class="diagram-muted">The plugin will appear under Plugins → Development.</text>
+                <rect
+                  x="484"
+                  y="294"
+                  width="72"
+                  height="28"
+                  rx="5"
+                  ry="5"
+                  style="fill: var(--ui-color-primary); stroke: none"
+                />
+                <text
+                  x="520"
+                  y="313"
+                  text-anchor="middle"
+                  font-size="11"
+                  font-weight="700"
+                  style="fill: var(--ui-color-on-primary)"
+                  >Open</text
+                >
+                <text x="84" y="313" font-size="11" class="diagram-muted"
+                  >The plugin will appear under Plugins → Development.</text
+                >
               </svg>
             </DiagramFigure>
           </div>
@@ -181,11 +519,13 @@ const stepTag = trackStep ? `Step ${trackStep.step} of ${TRACK_LENGTH}` : undefi
           <div>
             <h3 class="docs-h3">Run the plugin and keep it open</h3>
             <p class="docs-step-desc">
-              From the menu: <strong>Plugins → Development → Figma Desktop Bridge</strong>. A small
-              plugin panel opens — keep it visible while you work. The panel scans ports
-              <code>9223–9232</code> and connects to any MCP server it finds. You will see the
-              status flip from <em>searching…</em> to <em>connected</em> once Claude Code starts the
-              MCP.
+              From the menu:
+              <strong>Plugins → Development → Figma Desktop Bridge</strong>. A
+              small plugin panel opens — keep it visible while you work. The
+              panel scans ports <code>9223–9232</code> and connects to any MCP
+              server it finds. You will see the status flip from
+              <em>searching…</em> to <em>connected</em> once Claude Code starts
+              the MCP.
             </p>
           </div>
         </div>
@@ -194,16 +534,35 @@ const stepTag = trackStep ? `Step ${trackStep.step} of ${TRACK_LENGTH}` : undefi
 
     <!-- Step 2 — Optional REST token -->
     <section style="margin-bottom: 2.25rem">
-      <h2 class="docs-section-title">Step 2 — Add a REST access token (optional)</h2>
-      <p style="color: var(--ui-color-text-muted); font-size: 0.85rem; margin: 0 0 1rem; line-height: 1.6">
-        Only needed if you want Claude to read file/variable/comment metadata via Figma's REST API.
-        All interactive work — screenshots, selection, edits — already flows through the plugin and
-        does <strong>not</strong> require this token.
+      <h2 class="docs-section-title">
+        Step 2 — Add a REST access token (optional)
+      </h2>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          font-size: 0.85rem;
+          margin: 0 0 1rem;
+          line-height: 1.6;
+        "
+      >
+        Only needed if you want Claude to read file/variable/comment metadata
+        via Figma's REST API. All interactive work — screenshots, selection,
+        edits — already flows through the plugin and does <strong>not</strong>
+        require this token.
       </p>
-      <p style="color: var(--ui-color-text-muted); font-size: 0.85rem; margin: 0 0 1rem; line-height: 1.6">
-        Attending the <a href="/schulung" class="docs-link-primary">two-day training</a> (German)? The cohort
-        sets the token anyway, as policy — but Step 1 above is the one that gates Day 2. A token
-        without the Desktop Bridge plugin cannot run a single <code>figma_*</code> tool.
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          font-size: 0.85rem;
+          margin: 0 0 1rem;
+          line-height: 1.6;
+        "
+      >
+        Attending the
+        <a href="/schulung" class="docs-link-primary">two-day training</a>
+        (German)? The cohort sets the token anyway, as policy — but Step 1 above
+        is the one that gates Day 2. A token without the Desktop Bridge plugin
+        cannot run a single <code>figma_*</code> tool.
       </p>
 
       <div style="display: flex; flex-direction: column; gap: 1rem">
@@ -212,8 +571,14 @@ const stepTag = trackStep ? `Step ${trackStep.step} of ${TRACK_LENGTH}` : undefi
           <div>
             <h3 class="docs-h3">Open Figma settings</h3>
             <p class="docs-step-desc">
-              Go to <a href="https://www.figma.com/developers/api#access-tokens" target="_blank" rel="noopener noreferrer" class="docs-link-primary">Figma → Settings → Security</a>,
-              scroll to <strong>Personal access tokens</strong>.
+              Go to
+              <a
+                href="https://www.figma.com/developers/api#access-tokens"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="docs-link-primary"
+                >Figma → Settings → Security</a
+              >, scroll to <strong>Personal access tokens</strong>.
             </p>
           </div>
         </div>
@@ -222,17 +587,20 @@ const stepTag = trackStep ? `Step ${trackStep.step} of ${TRACK_LENGTH}` : undefi
           <div>
             <h3 class="docs-h3">Generate the token</h3>
             <p class="docs-step-desc">
-              Name it <code>atelier-ui-workshop</code>. Pick an expiration (default is
-              <em>1 day</em>; bump it to 30 or 90 days if you plan to keep using the workshop).
-              Under <strong>Scopes</strong>, enable
-              <strong>Files → File content (Read)</strong> as the minimum. For the Token
-              Browser and Design System Dashboard, also tick
+              Name it <code>atelier-ui-workshop</code>. Pick an expiration
+              (default is <em>1 day</em>; bump it to 30 or 90 days if you plan
+              to keep using the workshop). Under <strong>Scopes</strong>, enable
+              <strong>Files → File content (Read)</strong> as the minimum. For
+              the Token Browser and Design System Dashboard, also tick
               <strong>Design systems → Library content (Read)</strong> and
-              <strong>Library assets (Read)</strong>. Click <strong>Generate token</strong>
-              and copy the value (<code>figd_…</code>) — it is shown only once.
+              <strong>Library assets (Read)</strong>. Click
+              <strong>Generate token</strong> and copy the value
+              (<code>figd_…</code>) — it is shown only once.
             </p>
 
-            <DiagramFigure caption="Figma Settings → Security → Personal access tokens. The value is shown once — copy it straight into your password manager or .mcp.json.">
+            <DiagramFigure
+              caption="Figma Settings → Security → Personal access tokens. The value is shown once — copy it straight into your password manager or .mcp.json."
+            >
               <img
                 src={personalAccessTokenScreenshot.src}
                 width={personalAccessTokenScreenshot.width}
@@ -240,112 +608,285 @@ const stepTag = trackStep ? `Step ${trackStep.step} of ${TRACK_LENGTH}` : undefi
                 alt="Figma's Generate new token dialog: a Token name field, an Expiration dropdown defaulting to 1 day, and a scrollable list of read scopes grouped by Users, Files, Design systems and Development. The Generate token button at the bottom right stays disabled until a name is entered."
                 loading="lazy"
                 decoding="async"
-                style="display: block; max-width: 320px; width: 100%; height: auto; margin: 0 auto; border-radius: var(--ui-radius-md);"
+                style="
+                  display: block;
+                  max-width: 320px;
+                  width: 100%;
+                  height: auto;
+                  margin: 0 auto;
+                  border-radius: var(--ui-radius-md);
+                "
               />
             </DiagramFigure>
 
-            <div style="margin-top: 1rem; padding: 0.75rem 1rem; background: var(--ui-color-surface-sunken); border: 1px solid var(--ui-color-border); border-radius: var(--ui-radius-md); display: flex; flex-direction: column; gap: 0.45rem;">
-              <div style="display: flex; justify-content: space-between; align-items: center">
-                <span style="font-size: 0.66rem; font-weight: 700; color: var(--ui-color-text-muted); letter-spacing: 0.08em; text-transform: uppercase">Your token value</span>
-                <span style="font-size: 0.66rem; color: var(--ui-color-text-muted); font-family: monospace">copy once</span>
+            <div
+              style="
+                margin-top: 1rem;
+                padding: 0.75rem 1rem;
+                background: var(--ui-color-surface-sunken);
+                border: 1px solid var(--ui-color-border);
+                border-radius: var(--ui-radius-md);
+                display: flex;
+                flex-direction: column;
+                gap: 0.45rem;
+              "
+            >
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                "
+              >
+                <span
+                  style="
+                    font-size: 0.66rem;
+                    font-weight: 700;
+                    color: var(--ui-color-text-muted);
+                    letter-spacing: 0.08em;
+                    text-transform: uppercase;
+                  "
+                  >Your token value</span
+                >
+                <span
+                  style="
+                    font-size: 0.66rem;
+                    color: var(--ui-color-text-muted);
+                    font-family: monospace;
+                  "
+                  >copy once</span
+                >
               </div>
-              <div tabindex="0" style="display: flex; align-items: center; gap: 0.4rem; font-family: var(--font-mono), monospace; font-size: 0.88rem; overflow-x: auto; white-space: nowrap">
-                <span style="padding: 0.15rem 0.4rem; border-radius: 4px; background: color-mix(in srgb, var(--ui-color-primary) 18%, transparent); color: var(--ui-color-primary); font-weight: 700">figd_</span>
-                <span style="color: var(--ui-color-text)">AbCd1234-wXyZ5678-QrSt9012-mNoP3456</span>
+              <div
+                tabindex="0"
+                style="
+                  display: flex;
+                  align-items: center;
+                  gap: 0.4rem;
+                  font-family: var(--font-mono), monospace;
+                  font-size: 0.88rem;
+                  overflow-x: auto;
+                  white-space: nowrap;
+                "
+              >
+                <span
+                  style="
+                    padding: 0.15rem 0.4rem;
+                    border-radius: 4px;
+                    background: color-mix(
+                      in srgb,
+                      var(--ui-color-primary) 18%,
+                      transparent
+                    );
+                    color: var(--ui-color-primary);
+                    font-weight: 700;
+                  "
+                  >figd_</span
+                >
+                <span style="color: var(--ui-color-text)"
+                  >AbCd1234-wXyZ5678-QrSt9012-mNoP3456</span
+                >
               </div>
-              <span style="font-size: 0.72rem; color: var(--ui-color-text-muted); line-height: 1.55">
-                Every Figma token starts with <code style="font-weight: 700; color: var(--ui-color-primary)">figd_</code> followed by ~36 characters. Figma hides it after the dialog closes.
+              <span
+                style="
+                  font-size: 0.72rem;
+                  color: var(--ui-color-text-muted);
+                  line-height: 1.55;
+                "
+              >
+                Every Figma token starts with
+                <code style="font-weight: 700; color: var(--ui-color-primary)"
+                  >figd_</code
+                >
+                followed by ~36 characters. Figma hides it after the dialog
+                closes.
               </span>
             </div>
           </div>
         </div>
       </div>
-
     </section>
 
     <!-- Step 3 — Wire the token into .mcp.json -->
     <section style="margin-bottom: 2.25rem">
-      <h2 class="docs-section-title">Step 3 — Wire the token into <code>.mcp.json</code> (only if Step 2)</h2>
-      <p style="color: var(--ui-color-text-muted); font-size: 0.85rem; margin: 0 0 1rem; line-height: 1.6">
-        The MCP process receives its environment from the <code>env</code> block of
-        <code>.mcp.json</code>, <em>not</em> from your login shell. A bare <code>export</code> will
-        not reach the child process unless <code>.mcp.json</code> references it explicitly. Two
-        options:
+      <h2 class="docs-section-title">
+        Step 3 — Wire the token into <code>.mcp.json</code> (only if Step 2)
+      </h2>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          font-size: 0.85rem;
+          margin: 0 0 1rem;
+          line-height: 1.6;
+        "
+      >
+        The MCP process receives its environment from the <code>env</code> block
+        of <code>.mcp.json</code>, <em>not</em> from your login shell. A bare
+        <code>export</code> will not reach the child process unless
+        <code>.mcp.json</code> references it explicitly. Two options:
       </p>
 
-      <h3 class="docs-h3" style="margin-top: 0.5rem">Option A — Shell export + <code>${'${VAR}'}</code> substitution (recommended)</h3>
+      <h3 class="docs-h3" style="margin-top: 0.5rem">
+        Option A — Shell export + <code>${'${VAR}'}</code> substitution
+        (recommended)
+      </h3>
       <p class="docs-step-desc" style="margin-bottom: 0.5rem">
         Keeps the token out of version control. Claude Code expands
         <code>${'${FIGMA_ACCESS_TOKEN}'}</code> from your shell at MCP startup
-        (see the <a href="https://code.claude.com/docs/en/mcp-servers#environment-variable-expansion-in-mcpjson" target="_blank" rel="noopener noreferrer" class="docs-link-primary">expansion docs</a>).
+        (see the
+        <a
+          href="https://code.claude.com/docs/en/mcp-servers#environment-variable-expansion-in-mcpjson"
+          target="_blank"
+          rel="noopener noreferrer"
+          class="docs-link-primary"
+          >expansion docs</a
+        >).
       </p>
-      <Code code={`// .mcp.json\n"figma-console": {\n  "command": "npx",\n  "args": ["-y", "figma-console-mcp@latest"],\n  "env": {\n    "FIGMA_ACCESS_TOKEN": "\${FIGMA_ACCESS_TOKEN}",\n    "ENABLE_MCP_APPS": "true"\n  }\n}`} lang="json" title=".mcp.json" />
-      <Code code={`# macOS / Linux (zsh / bash) — persist the token\necho 'export FIGMA_ACCESS_TOKEN=figd_your_token_here' >> ~/.zshrc\nsource ~/.zshrc\n\n# Windows (PowerShell)\n[Environment]::SetEnvironmentVariable("FIGMA_ACCESS_TOKEN","figd_your_token_here","User")`} lang="shell" />
+      <Code
+        code={`// .mcp.json\n"figma-console": {\n  "command": "npx",\n  "args": ["-y", "figma-console-mcp@latest"],\n  "env": {\n    "FIGMA_ACCESS_TOKEN": "\${FIGMA_ACCESS_TOKEN}",\n    "ENABLE_MCP_APPS": "true"\n  }\n}`}
+        lang="json"
+        title=".mcp.json"
+      />
+      <Code
+        code={`# macOS / Linux (zsh / bash) — persist the token\necho 'export FIGMA_ACCESS_TOKEN=figd_your_token_here' >> ~/.zshrc\nsource ~/.zshrc\n\n# Windows (PowerShell)\n[Environment]::SetEnvironmentVariable("FIGMA_ACCESS_TOKEN","figd_your_token_here","User")`}
+        lang="shell"
+      />
 
       <h3 class="docs-h3 docs-h3--spaced">Option B — Inline value</h3>
       <p class="docs-step-desc" style="margin-bottom: 0.5rem">
-        Simpler, but the token lives in the file. Fine for a machine-local, git-ignored
-        <code>.mcp.json</code> — never commit it.
+        Simpler, but the token lives in the file. Fine for a machine-local,
+        git-ignored <code>.mcp.json</code> — never commit it.
       </p>
-      <Code code={`"env": {\n  "FIGMA_ACCESS_TOKEN": "figd_your_token_here",\n  "ENABLE_MCP_APPS": "true"\n}`} lang="json" />
+      <Code
+        code={`"env": {\n  "FIGMA_ACCESS_TOKEN": "figd_your_token_here",\n  "ENABLE_MCP_APPS": "true"\n}`}
+        lang="json"
+      />
 
-      <p style="margin: 1rem 0 0; font-size: 0.8rem; color: var(--ui-color-text-muted); line-height: 1.6">
-        Restart Claude Code after either change so it re-reads <code>.mcp.json</code>.
-        <code>ENABLE_MCP_APPS=true</code> unlocks the Token Browser and Design System Dashboard UI
-        (clients without <code>ext-apps</code> protocol support will ignore it).
+      <p
+        style="
+          margin: 1rem 0 0;
+          font-size: 0.8rem;
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+        "
+      >
+        Restart Claude Code after either change so it re-reads
+        <code>.mcp.json</code>. <code>ENABLE_MCP_APPS=true</code> unlocks the
+        Token Browser and Design System Dashboard UI (clients without
+        <code>ext-apps</code> protocol support will ignore it).
       </p>
     </section>
 
     <!-- Cloud fallback -->
     <section style="margin-bottom: 2.25rem">
       <h2 class="docs-section-title">Can't run Figma Desktop? Cloud mode</h2>
-      <p style="color: var(--ui-color-text-muted); font-size: 0.85rem; margin: 0 0 1rem; line-height: 1.6">
-        If you are on a locked-down machine, in a browser-only Codespace, or using
-        Claude.ai on the web, point the MCP at the hosted relay at
-        <a href={CLOUD_RELAY_URL} target="_blank" rel="noopener noreferrer" class="docs-link-primary"><code>{CLOUD_RELAY_URL}</code></a>.
-        You will be issued a 6-character pairing code (5-minute TTL) and get a reduced set of
-        ~44 write tools. Selection tracking and console streaming are not available in cloud mode.
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          font-size: 0.85rem;
+          margin: 0 0 1rem;
+          line-height: 1.6;
+        "
+      >
+        If you are on a locked-down machine, in a browser-only Codespace, or
+        using Claude.ai on the web, point the MCP at the hosted relay at
+        <a
+          href={CLOUD_RELAY_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="docs-link-primary"
+          ><code>{CLOUD_RELAY_URL}</code></a
+        >. You will be issued a 6-character pairing code (5-minute TTL) and get
+        a reduced set of ~44 write tools. Selection tracking and console
+        streaming are not available in cloud mode.
       </p>
-      <Code code={`// .mcp.json — cloud variant\n"figma-console": {\n  "type": "http",\n  "url": "${CLOUD_RELAY_URL}"\n}`} lang="json" />
+      <Code
+        code={`// .mcp.json — cloud variant\n"figma-console": {\n  "type": "http",\n  "url": "${CLOUD_RELAY_URL}"\n}`}
+        lang="json"
+      />
     </section>
 
     <!-- Verification -->
     <section>
       <h2 class="docs-section-title">Verify the setup</h2>
       <Code code={`npm run preflight`} lang="shell" />
-      <p style="color: var(--ui-color-text-muted); font-size: 0.85rem; margin-top: 0.75rem; line-height: 1.6">
-        Preflight checks the plugin manifest, the port range, and the token — in that order. The
-        plugin manifest check is the important one: if it's missing, re-run Step 1.
-        Token-related lines are warnings, not failures. See
-        <a href="/troubleshooting#figma-bridge-plugin-not-connected" class="docs-link-primary">troubleshooting</a>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          font-size: 0.85rem;
+          margin-top: 0.75rem;
+          line-height: 1.6;
+        "
+      >
+        Preflight checks the plugin manifest, the port range, and the token — in
+        that order. The plugin manifest check is the important one: if it's
+        missing, re-run Step 1. Token-related lines are warnings, not failures.
+        See
+        <a
+          href="/troubleshooting#figma-bridge-plugin-not-connected"
+          class="docs-link-primary"
+          >troubleshooting</a
+        >
         for the most common connection issues.
       </p>
 
-      <p style="color: var(--ui-color-text-muted); font-size: 0.85rem; margin-top: 1rem; line-height: 1.6">
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          font-size: 0.85rem;
+          margin-top: 1rem;
+          line-height: 1.6;
+        "
+      >
         For a live smoke test, open Claude Code in this repo and ask:
       </p>
-      <Code code={`Use the figma-console MCP to call figma_get_status and report what it returns.`} lang="text" title="smoke test prompt" />
-      <p style="color: var(--ui-color-text-muted); font-size: 0.8rem; margin-top: 0.5rem; line-height: 1.55">
-        A successful response means the WebSocket bridge is live. A "not connected" error means the
-        plugin is either not imported, not running, or blocked by a port conflict.
+      <Code
+        code={`Use the figma-console MCP to call figma_get_status and report what it returns.`}
+        lang="text"
+        title="smoke test prompt"
+      />
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          font-size: 0.8rem;
+          margin-top: 0.5rem;
+          line-height: 1.55;
+        "
+      >
+        A successful response means the WebSocket bridge is live. A "not
+        connected" error means the plugin is either not imported, not running,
+        or blocked by a port conflict.
       </p>
-      <p style="color: var(--ui-color-text-muted); font-size: 0.8rem; margin-top: 0.75rem; line-height: 1.55">
-        Once this is running, <a href="/runbook" class="docs-link-primary">/runbook</a> is where the
-        ongoing operational notes live — updating the plugin later, and cleaning up stale server
-        instances.
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          font-size: 0.8rem;
+          margin-top: 0.75rem;
+          line-height: 1.55;
+        "
+      >
+        Once this is running,
+        <a href="/runbook" class="docs-link-primary">/runbook</a> is where the
+        ongoing operational notes live — updating the plugin later, and cleaning
+        up stale server instances.
       </p>
     </section>
 
     <Checkpoint variant="done" title="Figma is connected">
-      You should now have the Desktop Bridge plugin running in Figma Desktop and the smoke test
-      passing — <code>figma_get_status</code> reports the WebSocket bridge as connected. If you did
-      Steps 2–3, <code>FIGMA_ACCESS_TOKEN</code> is set and wired into <code>.mcp.json</code> so
-      metadata reads work too. If <code>figma_get_status</code> returns "not connected", re-check
-      Step 1 or see <a href="/troubleshooting#figma-bridge-plugin-not-connected" class="docs-link-primary">troubleshooting</a>.
+      You should now have the Desktop Bridge plugin running in Figma Desktop and
+      the smoke test passing — <code>figma_get_status</code> reports the
+      WebSocket bridge as connected. If you did Steps 2–3,
+      <code>FIGMA_ACCESS_TOKEN</code> is set and wired into
+      <code>.mcp.json</code> so metadata reads work too. If
+      <code>figma_get_status</code> returns "not connected", re-check Step 1 or
+      see
+      <a
+        href="/troubleshooting#figma-bridge-plugin-not-connected"
+        class="docs-link-primary"
+        >troubleshooting</a
+      >.
     </Checkpoint>
 
     <TrackNav />
-
   </div>
 </BaseLayout>
-

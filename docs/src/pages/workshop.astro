@@ -16,7 +16,9 @@ const SITE_URL = 'https://atelier.pieper.io';
 // "Step N of M" hero tag — derived from the single source of truth so the
 // number stays correct if the track is ever reordered.
 const trackStep = getTrackStep('/workshop');
-const stepTag = trackStep ? `Step ${trackStep.step} of ${TRACK_LENGTH}` : undefined;
+const stepTag = trackStep
+  ? `Step ${trackStep.step} of ${TRACK_LENGTH}`
+  : undefined;
 
 const PREREQ_CMD = {
   macOS: `# 1. Node 22+ (use Homebrew or nvm)\nnode --version   # need v22.12 or newer\n\n# 2. Claude Code CLI\nnpm install -g @anthropic-ai/claude-code\nclaude --version   # only proves it's installed, not logged in\n\n# 3. Authenticate with your own API key (console.anthropic.com)\nexport ANTHROPIC_API_KEY=sk-ant-...\nclaude -p "Reply with exactly: PREFLIGHT-OK"   # proves model access\n\n# 4. Figma access token (or use the demo token)\nexport FIGMA_ACCESS_TOKEN=figd_...`,
@@ -27,9 +29,24 @@ const PREREQ_CMD = {
 // What the preset actually scaffolds, per framework. One framework is
 // generated per workspace — the generator asks for exactly one.
 const SCAFFOLD = [
-  { name: 'Angular', app: 'workshop-angular', pkg: '@atelier-ui/angular', mcp: 'storybook-angular' },
-  { name: 'React',   app: 'workshop-react',   pkg: '@atelier-ui/react',   mcp: 'storybook-react' },
-  { name: 'Vue',     app: 'workshop-vue',     pkg: '@atelier-ui/vue',     mcp: 'storybook-vue' },
+  {
+    name: 'Angular',
+    app: 'workshop-angular',
+    pkg: '@atelier-ui/angular',
+    mcp: 'storybook-angular',
+  },
+  {
+    name: 'React',
+    app: 'workshop-react',
+    pkg: '@atelier-ui/react',
+    mcp: 'storybook-react',
+  },
+  {
+    name: 'Vue',
+    app: 'workshop-vue',
+    pkg: '@atelier-ui/vue',
+    mcp: 'storybook-vue',
+  },
 ] as const;
 
 // The generated .mcp.json carries ONE storybook entry — the framework you
@@ -78,7 +95,6 @@ const mcpConfig = (fw: string) => `{
   currentPath="/workshop"
 >
   <div class="docs-inline-page">
-
     <PageHero
       kind="tutorial"
       time="~25 min"
@@ -86,14 +102,17 @@ const mcpConfig = (fw: string) => `{
       title="Workshop setup"
       ledeMax="520px"
     >
-      Spin up a fully-configured Atelier workspace in one command — framework selection,
-      library install, and <Jargon term="MCP">MCP</Jargon> server wired up automatically.
+      Spin up a fully-configured Atelier workspace in one command — framework
+      selection, library install, and <Jargon term="MCP">MCP</Jargon> server
+      wired up automatically.
     </PageHero>
 
     <!-- Learning objectives & assumed knowledge -->
     <div class="objective-box">
       <div class="objective-col">
-        <h2 class="objective-heading objective-heading--accent">What you'll learn</h2>
+        <h2 class="objective-heading objective-heading--accent">
+          What you'll learn
+        </h2>
         <ul class="objective-list">
           <li>Scaffold an Atelier workspace with one command</li>
           <li>Verify your environment with <code>preflight</code></li>
@@ -107,7 +126,12 @@ const mcpConfig = (fw: string) => `{
           <li>Frontend experience in Angular, React or Vue</li>
           <li>Comfortable with the terminal — Node 22+ available</li>
           <li>Claude Code CLI (we walk you through installing it)</li>
-          <li>Figma account — optional here; the <a href="/schulung" class="docs-link-primary">two-day training</a> (German) requires one with draft rights plus the Desktop Bridge plugin</li>
+          <li>
+            Figma account — optional here; the
+            <a href="/schulung" class="docs-link-primary">two-day training</a>
+            (German) requires one with draft rights plus the Desktop Bridge
+            plugin
+          </li>
         </ul>
       </div>
     </div>
@@ -115,77 +139,157 @@ const mcpConfig = (fw: string) => `{
     <!-- Shortcut for users arriving from a repo clone -->
     <Callout tone="tip" title="Already cloned the repo">
       <p>
-        This page's default path is the <strong>scaffold</strong> — the self-serve route, and now
-        also the <a href="/schulung" class="docs-link-primary">two-day training</a> (German), which
-        works in a generated workspace too. This callout is for a different case: you cloned the
-        <strong>atelier monorepo itself</strong> to contribute to Atelier — the rig, the adapters, the
-        gates — not to attend the workshop. If that's you, follow this callout instead of Step 01.
+        This page's default path is the <strong>scaffold</strong> — the
+        self-serve route, and now also the
+        <a href="/schulung" class="docs-link-primary">two-day training</a>
+        (German), which works in a generated workspace too. This callout is for
+        a different case: you cloned the
+        <strong>atelier monorepo itself</strong> to contribute to Atelier — the
+        rig, the adapters, the gates — not to attend the workshop. If that's
+        you, follow this callout instead of Step 01.
       </p>
       <p>
-        <strong>Step 01</strong> (workspace generator) is for a fresh-scaffolded workspace — a clone of
-        the atelier monorepo has none of the generator's <code>workshop-*</code> apps. <strong>Step 02</strong>
-        still applies: the clone ships the same <code>npm run preflight</code>. Run these from the
-        repo root, and use them in place of <strong>Step 03</strong>:
+        <strong>Step 01</strong> (workspace generator) is for a fresh-scaffolded
+        workspace — a clone of the atelier monorepo has none of the generator's
+        <code>workshop-*</code> apps. <strong>Step 02</strong> still applies:
+        the clone ships the same <code>npm run preflight</code>. Run these from
+        the repo root, and use them in place of <strong>Step 03</strong>:
       </p>
-      <Code code={`npm install\nnpm run preflight\n\n# the docs site you are reading\nnpx nx serve docs\n\n# the component library in Storybook — pick one framework\nnpx nx storybook angular   # or: react | vue`} lang="shell" />
+      <Code
+        code={`npm install\nnpm run preflight\n\n# the docs site you are reading\nnpx nx serve docs\n\n# the component library in Storybook — pick one framework\nnpx nx storybook angular   # or: react | vue`}
+        lang="shell"
+      />
       <p style="margin-bottom: 0">
-        Everything from <strong>Step 04</strong> on applies unchanged — the repo ships its own
-        <code>.mcp.json</code> with all three <code>storybook-*</code> entries already wired
-        (a scaffold gets exactly the one you picked).
+        Everything from <strong>Step 04</strong> on applies unchanged — the repo
+        ships its own <code>.mcp.json</code> with all three
+        <code>storybook-*</code> entries already wired (a scaffold gets exactly
+        the one you picked).
       </p>
     </Callout>
 
     <!-- Prerequisites -->
-    <div class="docs-section" style="margin-bottom: 2rem; padding: 1.25rem 1.4rem; background: var(--ui-color-surface-raised); border: 1px solid var(--ui-color-border); border-radius: var(--ui-radius-md)">
-      <div style="display: flex; justify-content: space-between; align-items: baseline; gap: 0.5rem; flex-wrap: wrap; margin-bottom: 0.85rem">
-        <h2 class="docs-section-title" style="margin: 0; font-size: 1rem">Install prerequisites</h2>
-        <a href="/troubleshooting" style="font-size: 0.78rem; color: var(--ui-color-primary); text-decoration: none">Troubleshooting</a>
+    <div
+      class="docs-section"
+      style="
+        margin-bottom: 2rem;
+        padding: 1.25rem 1.4rem;
+        background: var(--ui-color-surface-raised);
+        border: 1px solid var(--ui-color-border);
+        border-radius: var(--ui-radius-md);
+      "
+    >
+      <div
+        style="
+          display: flex;
+          justify-content: space-between;
+          align-items: baseline;
+          gap: 0.5rem;
+          flex-wrap: wrap;
+          margin-bottom: 0.85rem;
+        "
+      >
+        <h2 class="docs-section-title" style="margin: 0; font-size: 1rem">
+          Install prerequisites
+        </h2>
+        <a
+          href="/troubleshooting"
+          style="
+            font-size: 0.78rem;
+            color: var(--ui-color-primary);
+            text-decoration: none;
+          "
+          >Troubleshooting</a
+        >
       </div>
-      <p style="margin: 0 0 0.85rem; color: var(--ui-color-text-muted); font-size: 0.85rem; line-height: 1.55">
-        Pick your platform, run the commands below, then verify with <code>npm run preflight</code>
-        inside the scaffolded workspace. Connecting Figma? See <a href="/figma-token" class="docs-link-primary">Figma Setup</a>
-        — it walks through the Desktop Bridge plugin and the optional REST token.
+      <p
+        style="
+          margin: 0 0 0.85rem;
+          color: var(--ui-color-text-muted);
+          font-size: 0.85rem;
+          line-height: 1.55;
+        "
+      >
+        Pick your platform, run the commands below, then verify with
+        <code>npm run preflight</code> inside the scaffolded workspace.
+        Connecting Figma? See
+        <a href="/figma-token" class="docs-link-primary">Figma Setup</a> — it
+        walks through the Desktop Bridge plugin and the optional REST token.
       </p>
-      <div class="docs-multi-code-tabs" style="border-radius: 8px 8px 0 0; margin-bottom: 0">
-        {Object.keys(PREREQ_CMD).map((platform, i) => (
-          <button class={`docs-multi-code-tab${i === 0 ? ' active' : ''}`} data-plat-btn={platform}>{platform}</button>
-        ))}
+      <div
+        class="docs-multi-code-tabs"
+        style="border-radius: 8px 8px 0 0; margin-bottom: 0"
+      >
+        {Object.keys(PREREQ_CMD).map((platform, i) => <button
+          class={`docs-multi-code-tab${i === 0 ? ' active' : ''}`}
+          data-plat-btn={platform}
+        >
+          {platform}
+        </button>)}
       </div>
-      {Object.entries(PREREQ_CMD).map(([platform, cmd], i) => (
-        <div data-plat-panel={platform} hidden={i !== 0}>
-          <Code code={cmd} lang="shell" />
-        </div>
-      ))}
-      <p style="margin: 0.85rem 0 0; color: var(--ui-color-text-muted); font-size: 0.8rem; line-height: 1.55">
-        <strong style="color: var(--ui-color-text)">Installed, connected, and authenticated are three
-        different things.</strong> <code>claude --version</code> only proves the binary is on your
-        <code>PATH</code> — it says nothing about whether Claude Code can reach a model. Get your own
-        key from the Anthropic Console (see the
-        <a href="https://docs.claude.com/en/docs/claude-code/setup" class="docs-link-primary" target="_blank" rel="noopener noreferrer">Claude Code setup guide</a>
-        for the exact steps), set <code>ANTHROPIC_API_KEY</code>, then run the <code>claude -p "…"</code>
-        line above — a real prompt-and-response round trip is the only thing that actually proves model
-        access. No key yet and you have a Claude subscription instead? Run <code>claude auth login</code>
-        and sign in through the browser.
+      {Object.entries(PREREQ_CMD).map(([platform, cmd], i) => <div
+        data-plat-panel={platform}
+        hidden={i !== 0}
+      >
+        <Code code={cmd} lang="shell" />
+      </div>)}
+      <p
+        style="
+          margin: 0.85rem 0 0;
+          color: var(--ui-color-text-muted);
+          font-size: 0.8rem;
+          line-height: 1.55;
+        "
+      >
+        <strong style="color: var(--ui-color-text)"
+          >Installed, connected, and authenticated are three different
+          things.</strong
+        >
+        <code>claude --version</code> only proves the binary is on your
+        <code>PATH</code> — it says nothing about whether Claude Code can reach
+        a model. Get your own key from the Anthropic Console (see the
+        <a
+          href="https://docs.claude.com/en/docs/claude-code/setup"
+          class="docs-link-primary"
+          target="_blank"
+          rel="noopener noreferrer"
+          >Claude Code setup guide</a
+        >
+        for the exact steps), set <code>ANTHROPIC_API_KEY</code>, then run the
+        <code>claude -p "…"</code> line above — a real prompt-and-response round
+        trip is the only thing that actually proves model access. No key yet and
+        you have a Claude subscription instead? Run
+        <code>claude auth login</code> and sign in through the browser.
       </p>
     </div>
 
     <ol class="docs-step-list" style="margin-bottom: 2.5rem">
-
       <!-- Step 01 -->
       <li class="docs-step-row" data-step="1">
         <span class="docs-step-badge">01</span>
         <div>
           <h3 class="docs-h3">Run the workspace generator</h3>
-          <p class="docs-step-desc">Run the following command, then answer three prompts — workspace name, <strong>one</strong> framework, and whether to wire up the Figma MCP. Say yes to Figma and a fourth, optional prompt asks for your own Figma file key — press enter to skip it for now:</p>
-          <Code code="npx create-atelier-ui-workspace" lang="shell" />
-          <Code code={`? Workspace name: › my-workshop\n? Which framework do you want to use? …\n❯ Angular\n  React\n  Vue\n? Add the Figma Desktop Bridge MCP (figma-console-mcp)?\n  Setup guide: ${SITE_URL}/figma-token (Y/n) › true\n? Figma file key (optional) — the segment in a Figma URL after /design/,\n  e.g. figma.com/design/<key>/Some-File. Paste a full URL and the key\n  is extracted. Press enter to skip: › abc123XYZdef456UVWghi`} lang="text" />
-          <p class="docs-step-desc" style="margin-top: 0.75rem">
-            You pick <strong>one</strong> framework — the workspace gets a single app. Pass the answers
-            as flags to skip the prompts entirely — <code>--figma-file</code> also accepts a full Figma
-            URL and extracts the key itself, and <code>--skills</code>/<code>--no-skills</code> toggles
-            the storybookjs/mcp skills install (defaults on, no prompt):
+          <p class="docs-step-desc">
+            Run the following command, then answer three prompts — workspace
+            name, <strong>one</strong> framework, and whether to wire up the
+            Figma MCP. Say yes to Figma and a fourth, optional prompt asks for
+            your own Figma file key — press enter to skip it for now:
           </p>
-          <Code code={`npx create-atelier-ui-workspace my-workshop\n\n# fully non-interactive\nnpx create-atelier-ui-workspace my-workshop --framework angular --figma --figma-file abc123XYZdef456UVWghi --skills`} lang="shell" />
+          <Code code="npx create-atelier-ui-workspace" lang="shell" />
+          <Code
+            code={`? Workspace name: › my-workshop\n? Which framework do you want to use? …\n❯ Angular\n  React\n  Vue\n? Add the Figma Desktop Bridge MCP (figma-console-mcp)?\n  Setup guide: ${SITE_URL}/figma-token (Y/n) › true\n? Figma file key (optional) — the segment in a Figma URL after /design/,\n  e.g. figma.com/design/<key>/Some-File. Paste a full URL and the key\n  is extracted. Press enter to skip: › abc123XYZdef456UVWghi`}
+            lang="text"
+          />
+          <p class="docs-step-desc" style="margin-top: 0.75rem">
+            You pick <strong>one</strong> framework — the workspace gets a
+            single app. Pass the answers as flags to skip the prompts entirely —
+            <code>--figma-file</code> also accepts a full Figma URL and extracts
+            the key itself, and <code>--skills</code>/<code>--no-skills</code>
+            toggles the storybookjs/mcp skills install (defaults on, no prompt):
+          </p>
+          <Code
+            code={`npx create-atelier-ui-workspace my-workshop\n\n# fully non-interactive\nnpx create-atelier-ui-workspace my-workshop --framework angular --figma --figma-file abc123XYZdef456UVWghi --skills`}
+            lang="shell"
+          />
         </div>
       </li>
 
@@ -194,23 +298,47 @@ const mcpConfig = (fw: string) => `{
         <span class="docs-step-badge">02</span>
         <div>
           <h3 class="docs-h3">Install dependencies &amp; run preflight</h3>
-          <p class="docs-step-desc">Navigate into your workspace, install deps, and verify your environment:</p>
-          <Code code={`cd my-workshop\nnpm install\nnpm run preflight`} lang="shell" />
+          <p class="docs-step-desc">
+            Navigate into your workspace, install deps, and verify your
+            environment:
+          </p>
+          <Code
+            code={`cd my-workshop\nnpm install\nnpm run preflight`}
+            lang="shell"
+          />
           <p class="docs-step-desc" style="margin-top: 0.75rem">
-            <code>preflight</code> checks Node, npm, git, that the Claude Code CLI is installed and on
-            <code>PATH</code> (presence only — it never sends a request, so it cannot tell whether you
-            are authenticated), whether you've trusted this folder in Claude Code yet, the Figma token,
-            MCP reachability, and port availability. If anything fails, each line prints a one-step fix.
-            A green "Claude Code CLI" row here is not proof of model access — that's what the
-            <code>claude -p "…"</code> command in Prerequisites above is for. A yellow "Claude Code
-            workspace trust" row is expected on a workspace you haven't opened in Claude Code yet — the
-            permissions and MCP servers this scaffold pre-configures do nothing until you accept the
+            <code>preflight</code> checks Node, npm, git, that the Claude Code
+            CLI is installed and on <code>PATH</code> (presence only — it never
+            sends a request, so it cannot tell whether you are authenticated),
+            whether you've trusted this folder in Claude Code yet, the Figma
+            token, MCP reachability, and port availability. If anything fails,
+            each line prints a one-step fix. A green "Claude Code CLI" row here
+            is not proof of model access — that's what the
+            <code>claude -p "…"</code> command in Prerequisites above is for. A
+            yellow "Claude Code workspace trust" row is expected on a workspace
+            you haven't opened in Claude Code yet — the permissions and MCP
+            servers this scaffold pre-configures do nothing until you accept the
             trust prompt in your first session here.
           </p>
 
-          <div class="docs-multi-code-tabs" style="border-radius: 8px 8px 0 0; margin: 0.85rem 0 0">
-            <button class="docs-multi-code-tab active" data-pre-btn="success" type="button">Successful run</button>
-            <button class="docs-multi-code-tab" data-pre-btn="failed" type="button">Failed run</button>
+          <div
+            class="docs-multi-code-tabs"
+            style="border-radius: 8px 8px 0 0; margin: 0.85rem 0 0"
+          >
+            <button
+              class="docs-multi-code-tab active"
+              data-pre-btn="success"
+              type="button"
+            >
+              Successful run
+            </button>
+            <button
+              class="docs-multi-code-tab"
+              data-pre-btn="failed"
+              type="button"
+            >
+              Failed run
+            </button>
           </div>
 
           <figure class="preflight-mock" data-pre-panel="success">
@@ -218,7 +346,9 @@ const mcpConfig = (fw: string) => `{
               <span class="preflight-mock-dot preflight-mock-dot--r"></span>
               <span class="preflight-mock-dot preflight-mock-dot--y"></span>
               <span class="preflight-mock-dot preflight-mock-dot--g"></span>
-              <span class="preflight-mock-label">preflight — successful run</span>
+              <span class="preflight-mock-label"
+                >preflight — successful run</span
+              >
             </figcaption>
             <pre class="preflight-mock-body">
 <span class="pre-prompt">➜</span> <span class="pre-cmd">npm run preflight</span>
@@ -257,7 +387,9 @@ const mcpConfig = (fw: string) => `{
               <span class="preflight-mock-dot preflight-mock-dot--r"></span>
               <span class="preflight-mock-dot preflight-mock-dot--y"></span>
               <span class="preflight-mock-dot preflight-mock-dot--g"></span>
-              <span class="preflight-mock-label">preflight — failed run with fix hints</span>
+              <span class="preflight-mock-label"
+                >preflight — failed run with fix hints</span
+              >
             </figcaption>
             <pre class="preflight-mock-body">
 <span class="pre-prompt">➜</span> <span class="pre-cmd">npm run preflight</span>
@@ -295,9 +427,18 @@ const mcpConfig = (fw: string) => `{
 <span class="pre-muted">Fix the items above, then re-run </span><span class="pre-cmd">`npm run preflight`</span><span class="pre-muted">.</span>
 <span class="pre-muted">Full troubleshooting guide: </span><a href="/troubleshooting" class="pre-link">https://atelier.pieper.io/troubleshooting</a></pre>
           </figure>
-          <p class="docs-step-desc" style="margin-top: 0.6rem; font-size: 0.76rem">
-            Toggle the tabs above to compare. Each <span style="color: var(--ui-color-danger); font-weight: 700">✗</span> line ends with a one-step fix — copy, run, re-run <code>preflight</code>.
-            The <strong>MCP reachability</strong> section lists the one <code>storybook-*</code> endpoint your workspace was scaffolded with — Angular here.
+          <p
+            class="docs-step-desc"
+            style="margin-top: 0.6rem; font-size: 0.76rem"
+          >
+            Toggle the tabs above to compare. Each
+            <span style="color: var(--ui-color-danger); font-weight: 700"
+              >✗</span
+            >
+            line ends with a one-step fix — copy, run, re-run
+            <code>preflight</code>. The <strong>MCP reachability</strong>
+            section lists the one <code>storybook-*</code> endpoint your
+            workspace was scaffolded with — Angular here.
           </p>
         </div>
       </li>
@@ -308,12 +449,12 @@ const mcpConfig = (fw: string) => `{
         <div>
           <h3 class="docs-h3">Serve your app</h3>
           <p class="docs-step-desc">
-            Start the dev server — the same command regardless of which framework you
-            picked (the generated <code>package.json</code> names the one app it
-            scaffolded for you). You should see the
-            <strong style="color: var(--ui-color-text)">Nx welcome page</strong> at
-            <code>localhost:4200</code> — that is the correct result until you mount a
-            component of your own.
+            Start the dev server — the same command regardless of which
+            framework you picked (the generated <code>package.json</code> names
+            the one app it scaffolded for you). You should see the
+            <strong style="color: var(--ui-color-text)">Nx welcome page</strong>
+            at <code>localhost:4200</code> — that is the correct result until
+            you mount a component of your own.
           </p>
           <Code code="npm start" lang="shell" />
         </div>
@@ -325,68 +466,139 @@ const mcpConfig = (fw: string) => `{
         <div>
           <h3 class="docs-h3">Open in Claude Code</h3>
           <p class="docs-step-desc">
-            Open the workspace in VS Code or any editor with Claude Code. The MCP servers
-            connect automatically — your AI assistant can look up component props, variants,
-            and usage examples directly from Storybook without any extra setup.
+            Open the workspace in VS Code or any editor with Claude Code. The
+            MCP servers connect automatically — your AI assistant can look up
+            component props, variants, and usage examples directly from
+            Storybook without any extra setup.
           </p>
-          <div style="padding: 1rem 1.25rem; background: var(--ui-color-primary-light); border: 1px solid var(--ui-color-border); border-radius: var(--ui-radius-md)">
-            <p style="margin: 0 0 0.35rem; font-size: 0.82rem; font-weight: 700; color: var(--ui-color-text)">MCP auto-configuration</p>
-            <p style="margin: 0; font-size: 0.82rem; color: var(--ui-color-text-muted); line-height: 1.6">
-              The generated <code>.mcp.json</code> wires up the Nx MCP, the hosted
-              Storybook MCP server for the framework you picked, and the
+          <div
+            style="
+              padding: 1rem 1.25rem;
+              background: var(--ui-color-primary-light);
+              border: 1px solid var(--ui-color-border);
+              border-radius: var(--ui-radius-md);
+            "
+          >
+            <p
+              style="
+                margin: 0 0 0.35rem;
+                font-size: 0.82rem;
+                font-weight: 700;
+                color: var(--ui-color-text);
+              "
+            >
+              MCP auto-configuration
+            </p>
+            <p
+              style="
+                margin: 0;
+                font-size: 0.82rem;
+                color: var(--ui-color-text-muted);
+                line-height: 1.6;
+              "
+            >
+              The generated <code>.mcp.json</code> wires up the Nx MCP, the
+              hosted Storybook MCP server for the framework you picked, and the
               <code>uianatomy</code> MCP automatically.
             </p>
           </div>
         </div>
       </li>
-
     </ol>
 
     <!-- Once set up: hand off to the workflow pages instead of repeating them. -->
-    <aside class="docs-pagepair" aria-label="What to do once setup is done" style="margin-top: 2.5rem">
-      <a href="/figma-token" class="docs-pagepair-card docs-pagepair-card--next" style="grid-column: 1 / -1">
+    <aside
+      class="docs-pagepair"
+      aria-label="What to do once setup is done"
+      style="margin-top: 2.5rem"
+    >
+      <a
+        href="/figma-token"
+        class="docs-pagepair-card docs-pagepair-card--next"
+        style="grid-column: 1 / -1"
+      >
         <span class="docs-pagepair-eyebrow">Do this first</span>
         <span class="docs-pagepair-title">/figma-token →</span>
-        <span class="docs-pagepair-desc">Desktop Bridge plugin and access token — the <code>figma-console</code> MCP the tutorial runs on reads Figma through them. One-time, ~5 min; the manual <code>/figma</code> path needs neither.</span>
+        <span class="docs-pagepair-desc"
+          >Desktop Bridge plugin and access token — the
+          <code>figma-console</code> MCP the tutorial runs on reads Figma
+          through them. One-time, ~5 min; the manual <code>/figma</code> path
+          needs neither.</span
+        >
       </a>
-      <a href="/design-to-code" class="docs-pagepair-card docs-pagepair-card--next" style="grid-column: 1 / -1">
+      <a
+        href="/design-to-code"
+        class="docs-pagepair-card docs-pagepair-card--next"
+        style="grid-column: 1 / -1"
+      >
         <span class="docs-pagepair-eyebrow">Then read the map</span>
         <span class="docs-pagepair-title">/design-to-code →</span>
-        <span class="docs-pagepair-desc">The four-step loop — Inspect, Contract, Generate, Verify — on one page. The two workflows below are the territory; this is the map they walk.</span>
+        <span class="docs-pagepair-desc"
+          >The four-step loop — Inspect, Contract, Generate, Verify — on one
+          page. The two workflows below are the territory; this is the map they
+          walk.</span
+        >
       </a>
       <a href="/tutorial" class="docs-pagepair-card docs-pagepair-card--next">
         <span class="docs-pagepair-eyebrow">MCP-driven workflow</span>
         <span class="docs-pagepair-title">/tutorial →</span>
-        <span class="docs-pagepair-desc">Walk Figma → MCP → token-exact code in five steps. ~30 min.</span>
+        <span class="docs-pagepair-desc"
+          >Walk Figma → MCP → token-exact code in five steps. ~30 min.</span
+        >
       </a>
       <div class="docs-pagepair-arrow" aria-hidden="true">·</div>
       <a href="/figma" class="docs-pagepair-card docs-pagepair-card--next">
         <span class="docs-pagepair-eyebrow">Manual workflow</span>
         <span class="docs-pagepair-title">/figma →</span>
-        <span class="docs-pagepair-desc">No-MCP variant — read the inspect panel by hand, copy token names into your prompt.</span>
+        <span class="docs-pagepair-desc"
+          >No-MCP variant — read the inspect panel by hand, copy token names
+          into your prompt.</span
+        >
       </a>
     </aside>
 
     <!-- What gets created -->
     <div class="docs-section" style="margin-top: 2.5rem">
       <h2 class="docs-section-title">What gets created</h2>
-      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem">
-        The preset scaffolds <strong>one</strong> app — for the framework you picked at the prompt —
-        installs the matching Atelier UI package, and pre-configures Claude Code's MCP servers.
-        Switch the tabs to see what a workspace looks like for each choice.
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 1.25rem;
+        "
+      >
+        The preset scaffolds <strong>one</strong> app — for the framework you
+        picked at the prompt — installs the matching Atelier UI package, and
+        pre-configures Claude Code's MCP servers. Switch the tabs to see what a
+        workspace looks like for each choice.
       </p>
-      <FwSwitcher variant="tabs" label="Choose a framework to see what gets created" />
+      <FwSwitcher
+        variant="tabs"
+        label="Choose a framework to see what gets created"
+      />
       <!-- Desktop / tablet: dense 4-column table -->
-      <table class="docs-props-table docs-props-table--md-up" style="margin-bottom: 1.5rem">
+      <table
+        class="docs-props-table docs-props-table--md-up"
+        style="margin-bottom: 1.5rem"
+      >
         <thead>
-          <tr><th>Framework</th><th>App</th><th>Package</th><th>MCP</th></tr>
+          <tr>
+            <th>Framework</th>
+            <th>App</th>
+            <th>Package</th>
+            <th>MCP</th>
+          </tr>
         </thead>
         <tbody>
-          {SCAFFOLD.map(({ name, app, pkg, mcp }, i) => (
-            <tr data-fw-panel={name} hidden={i !== 0}>
-              <td>{name}</td><td><code>{app}</code></td><td><code>{pkg}</code></td><td><code>{mcp}</code></td>
-            </tr>
-          ))}
+          {SCAFFOLD.map(({ name, app, pkg, mcp }, i) => <tr
+            data-fw-panel={name}
+            hidden={i !== 0}
+          >
+            <td>{name}</td>
+            <td><code>{app}</code></td>
+            <td><code>{pkg}</code></td>
+            <td><code>{mcp}</code></td>
+          </tr>)}
         </tbody>
       </table>
 
@@ -394,63 +606,98 @@ const mcpConfig = (fw: string) => `{
            CSS hides whichever doesn't match the breakpoint, so screen
            readers only ever see one copy of the data. -->
       <div class="docs-fw-cards" style="margin-bottom: 1.5rem">
-        {SCAFFOLD.map(({ name, app, pkg, mcp }, i) => (
-          <div class="docs-fw-card" data-fw-panel={name} hidden={i !== 0}>
-            <div class="docs-fw-card-name">{name}</div>
-            <dl class="docs-fw-card-list">
-              <div class="docs-fw-card-row">
-                <dt>App</dt><dd><code>{app}</code></dd>
-              </div>
-              <div class="docs-fw-card-row">
-                <dt>Package</dt><dd><code>{pkg}</code></dd>
-              </div>
-              <div class="docs-fw-card-row">
-                <dt>MCP</dt><dd><code>{mcp}</code></dd>
-              </div>
-            </dl>
-          </div>
-        ))}
+        {SCAFFOLD.map(({ name, app, pkg, mcp }, i) => <div
+          class="docs-fw-card"
+          data-fw-panel={name}
+          hidden={i !== 0}
+        >
+          <div class="docs-fw-card-name">{name}</div>
+          <dl class="docs-fw-card-list">
+            <div class="docs-fw-card-row">
+              <dt>App</dt>
+              <dd><code>{app}</code></dd>
+            </div>
+            <div class="docs-fw-card-row">
+              <dt>Package</dt>
+              <dd><code>{pkg}</code></dd>
+            </div>
+            <div class="docs-fw-card-row">
+              <dt>MCP</dt>
+              <dd><code>{mcp}</code></dd>
+            </div>
+          </dl>
+        </div>)}
       </div>
     </div>
 
     <!-- MCP configuration -->
     <div class="docs-section">
       <h2 class="docs-section-title">MCP configuration</h2>
-      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem">
-        The generated <code>.mcp.json</code> wires up the Nx MCP, the hosted Storybook MCP
-        server <strong>for the one framework you picked</strong>, <code>uianatomy</code> (canonical
-        component anatomy — axes, slots, states, and where the common libraries disagree),
-        and <code>figma-console</code> — needed for the
-        <a href="/tutorial" class="docs-link-primary">Figma-to-Code Tutorial</a>. Pick Angular
-        and you also get the <code>angular-cli</code> MCP:
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 1.25rem;
+        "
+      >
+        The generated <code>.mcp.json</code> wires up the Nx MCP, the hosted
+        Storybook MCP server <strong>for the one framework you picked</strong>,
+        <code>uianatomy</code> (canonical component anatomy — axes, slots,
+        states, and where the common libraries disagree), and
+        <code>figma-console</code> — needed for the
+        <a href="/tutorial" class="docs-link-primary">Figma-to-Code Tutorial</a
+        >. Pick Angular and you also get the <code>angular-cli</code> MCP:
       </p>
-      <FwSwitcher variant="tabs" label="Choose a framework for the MCP config" />
-      {SCAFFOLD.map(({ name }, i) => (
-        <div data-fw-panel={name} hidden={i !== 0}>
-          <Code code={mcpConfig(name.toLowerCase())} lang="json" />
-        </div>
-      ))}
-      <p style="margin: 0.75rem 0 0; font-size: 0.78rem; color: var(--ui-color-text-muted); line-height: 1.55">
-        <code>figma-console</code> is written only if you answered <strong>yes</strong> to the
-        generator's Figma question. It needs the Desktop Bridge plugin — see
-        <a href="/figma-token" class="docs-link-primary">Figma Setup</a>; the access token is
-        optional, which is why it falls back to empty (<code>:-</code>).
+      <FwSwitcher
+        variant="tabs"
+        label="Choose a framework for the MCP config"
+      />
+      {SCAFFOLD.map(({ name }, i) => <div data-fw-panel={name} hidden={i !== 0}>
+        <Code code={mcpConfig(name.toLowerCase())} lang="json" />
+      </div>)}
+      <p
+        style="
+          margin: 0.75rem 0 0;
+          font-size: 0.78rem;
+          color: var(--ui-color-text-muted);
+          line-height: 1.55;
+        "
+      >
+        <code>figma-console</code> is written only if you answered
+        <strong>yes</strong> to the generator's Figma question. It needs the
+        Desktop Bridge plugin — see
+        <a href="/figma-token" class="docs-link-primary">Figma Setup</a>; the
+        access token is optional, which is why it falls back to empty
+        (<code>:-</code>).
       </p>
     </div>
 
     <Checkpoint variant="done" title="Your workspace is ready">
       <ul class="checkpoint-checks">
-        <li><Icon name="check_circle" /> <code>npm run preflight</code> reports all checks green</li>
-        <li><Icon name="check_circle" /> <code>claude -p "…"</code> returned a real response, not an auth error — <code>preflight</code> only confirms the CLI is installed, not logged in</li>
-        <li><Icon name="check_circle" /> Dev server running on <code>http://localhost:4200</code> — every framework's app serves on port <code>4200</code></li>
-        <li><Icon name="check_circle" /> Claude Code open in the workspace with the MCP servers connected</li>
+        <li>
+          <Icon name="check_circle" /> <code>npm run preflight</code> reports
+          all checks green
+        </li>
+        <li>
+          <Icon name="check_circle" /> <code>claude -p "…"</code> returned a
+          real response, not an auth error — <code>preflight</code> only
+          confirms the CLI is installed, not logged in
+        </li>
+        <li>
+          <Icon name="check_circle" /> Dev server running on
+          <code>http://localhost:4200</code> — every framework's app serves on
+          port <code>4200</code>
+        </li>
+        <li>
+          <Icon name="check_circle" /> Claude Code open in the workspace with
+          the MCP servers connected
+        </li>
       </ul>
     </Checkpoint>
 
     <HelpFooter page="workshop" />
 
     <TrackNav />
-
   </div>
 </BaseLayout>
 
@@ -465,7 +712,8 @@ const mcpConfig = (fw: string) => `{
     border: 1px solid var(--docs-term-border);
     border-radius: var(--ui-radius-md);
     overflow: hidden;
-    font-family: var(--font-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
+    font-family:
+      var(--font-mono), ui-monospace, SFMono-Regular, Menlo, monospace;
   }
   .preflight-mock-title {
     display: flex;
@@ -484,9 +732,15 @@ const mcpConfig = (fw: string) => `{
     border-radius: 50%;
     display: inline-block;
   }
-  .preflight-mock-dot--r { background: #ff5f56; }
-  .preflight-mock-dot--y { background: #ffbd2e; }
-  .preflight-mock-dot--g { background: #27c93f; }
+  .preflight-mock-dot--r {
+    background: #ff5f56;
+  }
+  .preflight-mock-dot--y {
+    background: #ffbd2e;
+  }
+  .preflight-mock-dot--g {
+    background: #27c93f;
+  }
   .preflight-mock-label {
     margin-left: 0.5rem;
   }
@@ -498,23 +752,62 @@ const mcpConfig = (fw: string) => `{
     color: var(--docs-term-text);
     white-space: pre-wrap;
   }
-  .preflight-mock-body .pre-prompt { color: var(--docs-term-accent-strong); font-weight: 700; }
-  .preflight-mock-body .pre-cmd { color: var(--docs-term-strong); }
-  .preflight-mock-body .pre-muted { color: var(--docs-term-muted); }
-  .preflight-mock-body .pre-ok { color: var(--docs-term-success); font-weight: 700; }
-  .preflight-mock-body .pre-ok-strong { color: var(--docs-term-success); font-weight: 700; }
-  .preflight-mock-body .pre-val { color: var(--docs-term-info); }
-  .preflight-mock-body .pre-fail { color: var(--ui-color-danger); font-weight: 700; }
-  .preflight-mock-body .pre-fix { color: var(--docs-term-accent-strong); font-weight: 700; }
-  .preflight-mock-body .pre-issue { color: var(--ui-color-danger); font-weight: 700; }
-  .preflight-mock-body .pre-link { color: var(--ui-color-primary); text-decoration: underline; }
-  .preflight-mock-body .pre-section { color: var(--docs-term-strong); font-weight: 700; }
-  .preflight-mock-body .pre-warn { color: var(--docs-term-warning); font-weight: 700; }
+  .preflight-mock-body .pre-prompt {
+    color: var(--docs-term-accent-strong);
+    font-weight: 700;
+  }
+  .preflight-mock-body .pre-cmd {
+    color: var(--docs-term-strong);
+  }
+  .preflight-mock-body .pre-muted {
+    color: var(--docs-term-muted);
+  }
+  .preflight-mock-body .pre-ok {
+    color: var(--docs-term-success);
+    font-weight: 700;
+  }
+  .preflight-mock-body .pre-ok-strong {
+    color: var(--docs-term-success);
+    font-weight: 700;
+  }
+  .preflight-mock-body .pre-val {
+    color: var(--docs-term-info);
+  }
+  .preflight-mock-body .pre-fail {
+    color: var(--ui-color-danger);
+    font-weight: 700;
+  }
+  .preflight-mock-body .pre-fix {
+    color: var(--docs-term-accent-strong);
+    font-weight: 700;
+  }
+  .preflight-mock-body .pre-issue {
+    color: var(--ui-color-danger);
+    font-weight: 700;
+  }
+  .preflight-mock-body .pre-link {
+    color: var(--ui-color-primary);
+    text-decoration: underline;
+  }
+  .preflight-mock-body .pre-section {
+    color: var(--docs-term-strong);
+    font-weight: 700;
+  }
+  .preflight-mock-body .pre-warn {
+    color: var(--docs-term-warning);
+    font-weight: 700;
+  }
 
   /* Stack the failed mockup directly under the tabs (no extra top margin
    * — the tabs already provide the visual seam). */
-  .docs-multi-code-tabs + .preflight-mock { margin-top: 0; border-top-left-radius: 0; border-top-right-radius: 0; }
-  .preflight-mock + .preflight-mock { margin-top: 0; }
+  .docs-multi-code-tabs + .preflight-mock {
+    margin-top: 0;
+    border-top-left-radius: 0;
+    border-top-right-radius: 0;
+  }
+  .preflight-mock + .preflight-mock {
+    margin-top: 0;
+  }
 </style>
 
 <script>
@@ -522,24 +815,32 @@ const mcpConfig = (fw: string) => `{
   // This script handles platform (macOS/Linux/Windows) tabs and the
   // preflight success/failed mockup tabs.
   function initWorkshopPlatformTabs() {
-    const platButtons = document.querySelectorAll<HTMLButtonElement>('[data-plat-btn]');
-    const platPanels = document.querySelectorAll<HTMLElement>('[data-plat-panel]');
-    platButtons.forEach(btn => {
+    const platButtons =
+      document.querySelectorAll<HTMLButtonElement>('[data-plat-btn]');
+    const platPanels =
+      document.querySelectorAll<HTMLElement>('[data-plat-panel]');
+    platButtons.forEach((btn) => {
       btn.addEventListener('click', () => {
         const plat = btn.dataset.platBtn;
-        platButtons.forEach(b => b.classList.toggle('active', b === btn));
-        platPanels.forEach(p => { p.hidden = p.dataset.platPanel !== plat; });
+        platButtons.forEach((b) => b.classList.toggle('active', b === btn));
+        platPanels.forEach((p) => {
+          p.hidden = p.dataset.platPanel !== plat;
+        });
       });
     });
   }
   function initWorkshopPreflightTabs() {
-    const preButtons = document.querySelectorAll<HTMLButtonElement>('[data-pre-btn]');
-    const prePanels = document.querySelectorAll<HTMLElement>('[data-pre-panel]');
-    preButtons.forEach(btn => {
+    const preButtons =
+      document.querySelectorAll<HTMLButtonElement>('[data-pre-btn]');
+    const prePanels =
+      document.querySelectorAll<HTMLElement>('[data-pre-panel]');
+    preButtons.forEach((btn) => {
       btn.addEventListener('click', () => {
         const pre = btn.dataset.preBtn;
-        preButtons.forEach(b => b.classList.toggle('active', b === btn));
-        prePanels.forEach(p => { p.hidden = p.dataset.prePanel !== pre; });
+        preButtons.forEach((b) => b.classList.toggle('active', b === btn));
+        prePanels.forEach((p) => {
+          p.hidden = p.dataset.prePanel !== pre;
+        });
       });
     });
   }

@@ -12,7 +12,9 @@ import { getTrackStep, TRACK_LENGTH } from '../data/workshop-track';
 // "Step N of M" hero tag, derived from the single source of truth so a
 // reordering of the workshop track updates this page automatically.
 const trackStep = getTrackStep('/design-to-code');
-const heroTag = trackStep ? `Step ${trackStep.step} of ${TRACK_LENGTH}` : undefined;
+const heroTag = trackStep
+  ? `Step ${trackStep.step} of ${TRACK_LENGTH}`
+  : undefined;
 
 const FRAMEWORKS = ['Angular', 'React', 'Vue'] as const;
 
@@ -54,8 +56,10 @@ const GENERATE_PROMPT: Record<string, string> = {
 
 // Per-framework note for the Generate step: where component docs come from.
 const GENERATE_NOTE: Record<string, string> = {
-  React: 'React exposes component metadata over the hosted Storybook MCP — docs-list gives Claude every prop and variant before it writes a line.',
-  Angular: "storybook-angular emits and serves its own components.json, via angular-component-meta (ADR-0097) — it answers component lookups with real names, variants and defaults, already in Angular's own shape: two-way model() bindings, split Inputs/Outputs, ng-content instead of children.",
+  React:
+    'React exposes component metadata over the hosted Storybook MCP — docs-list gives Claude every prop and variant before it writes a line.',
+  Angular:
+    "storybook-angular emits and serves its own components.json, via angular-component-meta (ADR-0097) — it answers component lookups with real names, variants and defaults, already in Angular's own shape: two-way model() bindings, split Inputs/Outputs, ng-content instead of children.",
   Vue: "storybook-vue emits and serves its own components.json, via vue-component-meta (ADR-0097) — it answers component lookups with real names, variants and defaults, already in Vue's own shape: update:* emits, typed slots instead of children.",
 };
 
@@ -69,7 +73,6 @@ the component I just generated. Fix every discrepancy it reports.`;
   currentPath="/design-to-code"
 >
   <div class="docs-inline-page">
-
     <PageHero
       kind="explanation"
       tag={heroTag}
@@ -77,62 +80,245 @@ the component I just generated. Fix every discrepancy it reports.`;
       titleAccent="Code"
       ledeMax="560px"
     >
-      From a Figma component to a verified, framework-native component — the Atelier loop. This is the map; the <a href="/tutorial" class="docs-link-primary">tutorial</a> and the <a href="/first-component" class="docs-link-primary">kata</a> are the territory.
+      From a Figma component to a verified, framework-native component — the
+      Atelier loop. This is the map; the
+      <a href="/tutorial" class="docs-link-primary">tutorial</a> and the
+      <a href="/first-component" class="docs-link-primary">kata</a> are the
+      territory.
     </PageHero>
 
     <!-- Framing: one framework per session -->
     <Callout tone="note" title="Pick one framework per session">
-      <p style="margin: 0; font-size: 0.85rem; line-height: 1.6; color: var(--ui-color-text-muted)">
-        Every workshop runs in a <strong style="color: var(--ui-color-text)">single framework</strong> — pick Angular, React, or Vue with the switcher in the <a href="#step-generate" class="docs-link-primary">Generate step</a> below. The other two adapters are reference infrastructure that keeps the API contract honest; you don't touch them in a session.
+      <p
+        style="
+          margin: 0;
+          font-size: 0.85rem;
+          line-height: 1.6;
+          color: var(--ui-color-text-muted);
+        "
+      >
+        Every workshop runs in a
+        <strong style="color: var(--ui-color-text)">single framework</strong> —
+        pick Angular, React, or Vue with the switcher in the
+        <a href="#step-generate" class="docs-link-primary">Generate step</a>
+        below. The other two adapters are reference infrastructure that keeps
+        the API contract honest; you don't touch them in a session.
       </p>
     </Callout>
 
     <!-- The loop at a glance -->
     <div class="docs-section">
       <h2 class="docs-section-title">The loop at a glance</h2>
-      <p style="color: var(--ui-color-text-muted); line-height: 1.6; margin-bottom: 1.25rem; font-size: 0.85rem">
-        Four steps turn a design into shipped code. Each one hands concrete data to the next — no screenshots, no copy-paste guessing.
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 1.25rem;
+          font-size: 0.85rem;
+        "
+      >
+        Four steps turn a design into shipped code. Each one hands concrete data
+        to the next — no screenshots, no copy-paste guessing.
       </p>
 
-      <DiagramFigure caption="The four-step loop. Inspect reads the design, Contract is the micro-contract and stories, Generate writes framework-native code, Verify proves parity against Figma.">
-        <svg viewBox="0 0 940 200" role="img" aria-labelledby="d2c-title d2c-desc" preserveAspectRatio="xMidYMid meet">
+      <DiagramFigure
+        caption="The four-step loop. Inspect reads the design, Contract is the micro-contract and stories, Generate writes framework-native code, Verify proves parity against Figma."
+      >
+        <svg
+          viewBox="0 0 940 200"
+          role="img"
+          aria-labelledby="d2c-title d2c-desc"
+          preserveAspectRatio="xMidYMid meet"
+        >
           <title id="d2c-title">Design-to-code four-step loop</title>
-          <desc id="d2c-desc">Four boxes left to right: Inspect in Figma, Contract in libs/spec/src/contracts, Generate with Claude and the Storybook MCP, Verify in Storybook with figma_check_design_parity. Accent arrows connect each step forward; the Generate step is highlighted as the AI step.</desc>
+          <desc id="d2c-desc">
+            Four boxes left to right: Inspect in Figma, Contract in
+            libs/spec/src/contracts, Generate with Claude and the Storybook MCP,
+            Verify in Storybook with figma_check_design_parity. Accent arrows
+            connect each step forward; the Generate step is highlighted as the
+            AI step.
+          </desc>
 
           <defs>
-            <marker id="d2c-arr" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="7" markerHeight="7" orient="auto">
-              <path d="M 0 0 L 10 5 L 0 10 z" class="diagram-arrow--accent"/>
+            <marker
+              id="d2c-arr"
+              viewBox="0 0 10 10"
+              refX="9"
+              refY="5"
+              markerWidth="7"
+              markerHeight="7"
+              orient="auto"
+            >
+              <path d="M 0 0 L 10 5 L 0 10 z" class="diagram-arrow--accent" />
             </marker>
           </defs>
 
           <!-- Step 1: Inspect -->
-          <rect x="20"  y="56" width="200" height="88" rx="12" ry="12" class="diagram-node"/>
-          <text x="120" y="88"  text-anchor="middle" font-size="14" font-weight="700">1 · Inspect</text>
-          <text x="120" y="110" text-anchor="middle" font-size="11" class="diagram-muted">Figma component</text>
-          <text x="120" y="128" text-anchor="middle" font-size="10" class="diagram-mono diagram-muted">figma-console MCP</text>
+          <rect
+            x="20"
+            y="56"
+            width="200"
+            height="88"
+            rx="12"
+            ry="12"
+            class="diagram-node"
+          />
+          <text
+            x="120"
+            y="88"
+            text-anchor="middle"
+            font-size="14"
+            font-weight="700"
+            >1 · Inspect</text
+          >
+          <text
+            x="120"
+            y="110"
+            text-anchor="middle"
+            font-size="11"
+            class="diagram-muted"
+            >Figma component</text
+          >
+          <text
+            x="120"
+            y="128"
+            text-anchor="middle"
+            font-size="10"
+            class="diagram-mono diagram-muted"
+            >figma-console MCP</text
+          >
 
           <!-- Step 2: Contract -->
-          <rect x="260" y="56" width="200" height="88" rx="12" ry="12" class="diagram-node"/>
-          <text x="360" y="88"  text-anchor="middle" font-size="14" font-weight="700">2 · Contract</text>
-          <text x="360" y="110" text-anchor="middle" font-size="11" class="diagram-muted">micro-contract + stories</text>
-          <text x="360" y="128" text-anchor="middle" font-size="10" class="diagram-mono diagram-muted">libs/spec/src/contracts</text>
+          <rect
+            x="260"
+            y="56"
+            width="200"
+            height="88"
+            rx="12"
+            ry="12"
+            class="diagram-node"
+          />
+          <text
+            x="360"
+            y="88"
+            text-anchor="middle"
+            font-size="14"
+            font-weight="700"
+            >2 · Contract</text
+          >
+          <text
+            x="360"
+            y="110"
+            text-anchor="middle"
+            font-size="11"
+            class="diagram-muted"
+            >micro-contract + stories</text
+          >
+          <text
+            x="360"
+            y="128"
+            text-anchor="middle"
+            font-size="10"
+            class="diagram-mono diagram-muted"
+            >libs/spec/src/contracts</text
+          >
 
           <!-- Step 3: Generate (accent — AI step) -->
-          <rect x="500" y="52" width="200" height="96" rx="12" ry="12" class="diagram-node diagram-node--accent"/>
-          <text x="600" y="86"  text-anchor="middle" font-size="14" font-weight="700" style="fill: var(--ui-color-primary)">3 · Generate</text>
-          <text x="600" y="108" text-anchor="middle" font-size="11" class="diagram-muted">Claude writes code</text>
-          <text x="600" y="126" text-anchor="middle" font-size="10" class="diagram-mono diagram-muted">+ Storybook MCP</text>
+          <rect
+            x="500"
+            y="52"
+            width="200"
+            height="96"
+            rx="12"
+            ry="12"
+            class="diagram-node diagram-node--accent"
+          />
+          <text
+            x="600"
+            y="86"
+            text-anchor="middle"
+            font-size="14"
+            font-weight="700"
+            style="fill: var(--ui-color-primary)"
+            >3 · Generate</text
+          >
+          <text
+            x="600"
+            y="108"
+            text-anchor="middle"
+            font-size="11"
+            class="diagram-muted"
+            >Claude writes code</text
+          >
+          <text
+            x="600"
+            y="126"
+            text-anchor="middle"
+            font-size="10"
+            class="diagram-mono diagram-muted"
+            >+ Storybook MCP</text
+          >
 
           <!-- Step 4: Verify -->
-          <rect x="740" y="56" width="200" height="88" rx="12" ry="12" class="diagram-node"/>
-          <text x="840" y="88"  text-anchor="middle" font-size="14" font-weight="700">4 · Verify</text>
-          <text x="840" y="110" text-anchor="middle" font-size="11" class="diagram-muted">Storybook + parity</text>
-          <text x="840" y="128" text-anchor="middle" font-size="10" class="diagram-mono diagram-muted">check_design_parity</text>
+          <rect
+            x="740"
+            y="56"
+            width="200"
+            height="88"
+            rx="12"
+            ry="12"
+            class="diagram-node"
+          />
+          <text
+            x="840"
+            y="88"
+            text-anchor="middle"
+            font-size="14"
+            font-weight="700"
+            >4 · Verify</text
+          >
+          <text
+            x="840"
+            y="110"
+            text-anchor="middle"
+            font-size="11"
+            class="diagram-muted"
+            >Storybook + parity</text
+          >
+          <text
+            x="840"
+            y="128"
+            text-anchor="middle"
+            font-size="10"
+            class="diagram-mono diagram-muted"
+            >check_design_parity</text
+          >
 
           <!-- Forward arrows -->
-          <line x1="220" y1="100" x2="260" y2="100" class="diagram-connector diagram-connector--accent" marker-end="url(#d2c-arr)"/>
-          <line x1="460" y1="100" x2="500" y2="100" class="diagram-connector diagram-connector--accent" marker-end="url(#d2c-arr)"/>
-          <line x1="700" y1="100" x2="740" y2="100" class="diagram-connector diagram-connector--accent" marker-end="url(#d2c-arr)"/>
+          <line
+            x1="220"
+            y1="100"
+            x2="260"
+            y2="100"
+            class="diagram-connector diagram-connector--accent"
+            marker-end="url(#d2c-arr)"
+          />
+          <line
+            x1="460"
+            y1="100"
+            x2="500"
+            y2="100"
+            class="diagram-connector diagram-connector--accent"
+            marker-end="url(#d2c-arr)"
+          />
+          <line
+            x1="700"
+            y1="100"
+            x2="740"
+            y2="100"
+            class="diagram-connector diagram-connector--accent"
+            marker-end="url(#d2c-arr)"
+          />
         </svg>
       </DiagramFigure>
     </div>
@@ -144,21 +330,54 @@ the component I just generated. Fix every discrepancy it reports.`;
         <div style="flex: 1">
           <h2 class="docs-h3">Inspect — read the Figma component</h2>
           <p class="docs-step-desc">
-            Run <code>figma_get_component_for_development</code> (figma-console MCP) on the node, or open the master on the <strong style="color: var(--ui-color-text)">Components page</strong> of the
-            <a href="https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI" target="_blank" rel="noopener noreferrer" class="docs-link-primary">Atelier UI Figma file</a>.
-            Note the <strong style="color: var(--ui-color-text)">variants</strong>, the <code>--ui-*</code> tokens bound to each property (<code>boundVariables</code>), and any accessibility annotations. These map one-to-one to CSS custom properties — no conversion needed.
+            Run <code>figma_get_component_for_development</code> (figma-console
+            MCP) on the node, or open the master on the
+            <strong style="color: var(--ui-color-text)">Components page</strong>
+            of the
+            <a
+              href="https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="docs-link-primary"
+              >Atelier UI Figma file</a
+            >. Note the
+            <strong style="color: var(--ui-color-text)">variants</strong>, the
+            <code>--ui-*</code> tokens bound to each property
+            (<code>boundVariables</code>), and any accessibility annotations.
+            These map one-to-one to CSS custom properties — no conversion
+            needed.
           </p>
           <Callout tone="note" title="Write it down before you generate">
-            <p style="margin: 0; font-size: 0.85rem; line-height: 1.6; color: var(--ui-color-text-muted)">
-              A picture cannot carry behaviour, scope, or the reuse-vs-new decision — that is what a
-              <strong style="color: var(--ui-color-text)">written handoff document</strong> is for, and the
-              <code>design-to-code</code> skill gates its Build mode on one before any code exists.
-              Fill the provenance from what you just inspected (file, node id, axes, bindings, snapshot
-              stamp), then leave behaviour, exclusions, and reuse-vs-new as visible blanks for you to
-              decide and write — not inferred from the picture. Template:
-              <code>skills/design-to-code/references/handoff-document.md</code>. This is the checkpoint
-              <a href="https://github.com/DominikPieper/atelier-ui/blob/main/plan/adr/0096-the-handoff-a-picture-cannot-carry.md" target="_blank" rel="noopener noreferrer" class="docs-link-primary">ADR-0096</a>
-              exists to force: prompting straight from a screenshot is the failure mode this step prevents.
+            <p
+              style="
+                margin: 0;
+                font-size: 0.85rem;
+                line-height: 1.6;
+                color: var(--ui-color-text-muted);
+              "
+            >
+              A picture cannot carry behaviour, scope, or the reuse-vs-new
+              decision — that is what a
+              <strong style="color: var(--ui-color-text)"
+                >written handoff document</strong
+              >
+              is for, and the <code>design-to-code</code> skill gates its Build
+              mode on one before any code exists. Fill the provenance from what
+              you just inspected (file, node id, axes, bindings, snapshot
+              stamp), then leave behaviour, exclusions, and reuse-vs-new as
+              visible blanks for you to decide and write — not inferred from the
+              picture. Template:
+              <code>skills/design-to-code/references/handoff-document.md</code>.
+              This is the checkpoint
+              <a
+                href="https://github.com/DominikPieper/atelier-ui/blob/main/plan/adr/0096-the-handoff-a-picture-cannot-carry.md"
+                target="_blank"
+                rel="noopener noreferrer"
+                class="docs-link-primary"
+                >ADR-0096</a
+              >
+              exists to force: prompting straight from a screenshot is the
+              failure mode this step prevents.
             </p>
           </Callout>
         </div>
@@ -172,30 +391,104 @@ the component I just generated. Fix every discrepancy it reports.`;
         <div style="flex: 1">
           <h2 class="docs-h3">Contract — what the picture cannot carry</h2>
           <p class="docs-step-desc">
-            Under ADR-0121, the one hand-authored artefact is a <strong style="color: var(--ui-color-text)">micro-contract</strong> (<code>libs/spec/src/contracts/&lt;name&gt;.contract.ts</code>): the master's node id, and only the Figma ↔ code mismatches you chose on purpose — never props, defaults, unions or prose. Those live in the component's own types and JSDoc instead, which <em>are</em> the API — your framework's docgen manifest derives the prop table from them directly, so there is nothing left to keep in sync by hand.
+            Under ADR-0121, the one hand-authored artefact is a
+            <strong style="color: var(--ui-color-text)">micro-contract</strong>
+            (<code>libs/spec/src/contracts/&lt;name&gt;.contract.ts</code>): the
+            master's node id, and only the Figma ↔ code mismatches you chose on
+            purpose — never props, defaults, unions or prose. Those live in the
+            component's own types and JSDoc instead, which <em>are</em> the API
+            — your framework's docgen manifest derives the prop table from them
+            directly, so there is nothing left to keep in sync by hand.
           </p>
           <p class="docs-step-desc">
-            <strong style="color: var(--ui-color-text)">"Chose on purpose" has a test, and it is "is it drawn?"</strong> A divergence is <em>settled</em> when the thing the two sides disagree about changes nothing the master draws — behaviour, element or form semantics, data, keys. <code>headingLevel</code> picks <code>h2..h6</code> and changes nothing drawn; <code>multi</code> guards how many accordion items <em>may</em> be open and looks identical either way; <code>id</code> is data. Those entries are finished, and a master that grew an axis for one would be worse, not better. A divergence is <em>owed</em> when it <em>is</em> drawn: a CSS-backed paint axis with no Figma axis means Figma owes an axis, and a Figma axis with no CSS rule means either the code owes an implementation or the master owes a deletion. An owed entry's <code>reason</code> has to say which side is expected to change, and where that is tracked.
+            <strong style="color: var(--ui-color-text)"
+              >"Chose on purpose" has a test, and it is "is it drawn?"</strong
+            >
+            A divergence is <em>settled</em> when the thing the two sides
+            disagree about changes nothing the master draws — behaviour, element
+            or form semantics, data, keys. <code>headingLevel</code> picks
+            <code>h2..h6</code> and changes nothing drawn; <code>multi</code>
+            guards how many accordion items <em>may</em> be open and looks
+            identical either way; <code>id</code> is data. Those entries are
+            finished, and a master that grew an axis for one would be worse, not
+            better. A divergence is <em>owed</em> when it <em>is</em> drawn: a
+            CSS-backed paint axis with no Figma axis means Figma owes an axis,
+            and a Figma axis with no CSS rule means either the code owes an
+            implementation or the master owes a deletion. An owed entry's
+            <code>reason</code> has to say which side is expected to change, and
+            where that is tracked.
           </p>
           <p class="docs-step-desc">
-            <strong style="color: var(--ui-color-text)">Drawn makes it owed; it does not decide it.</strong> This is the promotion question every design system eventually argues about — a feature needs a red button, and the choice is a library variant, a local exception, a semantic token, or the discovery that the product's status model is incomplete. The failure mode in both directions is well known: promote every one-off and the shared library becomes unreadable; bury every decision locally and the system stops describing the product. Atelier's version of the rule: a code-side axis earns a place on the master when it is drawn, when the gates already enforce it across every adapter, when accessibility holds, and when the task item carries an owner. Otherwise the honest promotion is often the opposite one — delete the axis from the master and let the state be a CSS pseudo-class, which is already the convention for interaction states here. The reasoning, and the nine entries in this repo that are currently owed rather than settled: <code>plan/adr/0145-the-contract-records-the-difference-not-who-owes-it.md</code>.
+            <strong style="color: var(--ui-color-text)"
+              >Drawn makes it owed; it does not decide it.</strong
+            >
+            This is the promotion question every design system eventually argues
+            about — a feature needs a red button, and the choice is a library
+            variant, a local exception, a semantic token, or the discovery that
+            the product's status model is incomplete. The failure mode in both
+            directions is well known: promote every one-off and the shared
+            library becomes unreadable; bury every decision locally and the
+            system stops describing the product. Atelier's version of the rule:
+            a code-side axis earns a place on the master when it is drawn, when
+            the gates already enforce it across every adapter, when
+            accessibility holds, and when the task item carries an owner.
+            Otherwise the honest promotion is often the opposite one — delete
+            the axis from the master and let the state be a CSS pseudo-class,
+            which is already the convention for interaction states here. The
+            reasoning, and the nine entries in this repo that are currently owed
+            rather than settled:
+            <code
+              >plan/adr/0145-the-contract-records-the-difference-not-who-owes-it.md</code
+            >.
           </p>
           <p class="docs-step-desc">
-            <strong style="color: var(--ui-color-text)">The stories are the claims.</strong> One story per variant value and per Boolean state, with a <code>play</code> for every behaviour line from the handoff document you wrote in step 1 — that is where behaviour, not just appearance, gets checked. <code>check:contracts</code> joins the contract, the manifest and the stories' <code>args</code> against the Figma snapshot and reports drift; <code>storybook-test</code> renders every story in a real browser with axe. Together they replace what a hand-typed spec used to promise but never checked.
+            <strong style="color: var(--ui-color-text)"
+              >The stories are the claims.</strong
+            >
+            One story per variant value and per Boolean state, with a
+            <code>play</code> for every behaviour line from the handoff document
+            you wrote in step 1 — that is where behaviour, not just appearance,
+            gets checked. <code>check:contracts</code> joins the contract, the
+            manifest and the stories' <code>args</code> against the Figma
+            snapshot and reports drift; <code>storybook-test</code> renders
+            every story in a real browser with axe. Together they replace what a
+            hand-typed spec used to promise but never checked.
           </p>
           <p class="docs-step-desc">
-            A scaffolded workspace writes the same contract, at <code>workshop-&lt;fw&gt;/src/contracts/&lt;name&gt;.contract.ts</code>,
-            checked by the same <code>check:contracts</code> (ADR-0121 S4 — see "Building for one framework?"
-            below). What it does not carry is this library's own <code>Atl*</code> component set — for those,
-            read the equivalent framework docs through the hosted
-            <code>storybook-*</code> MCP (<code>docs-list</code> → <code>docs-show</code>),
-            or from <a href="/llms-full.txt" class="docs-link-primary">llms-full.txt</a>. The prop tables the
-            MCP returns are exact, and so are the code snippets alongside them — each endpoint answers
-            in its own framework's syntax (ADR-0097), generated from that adapter's source by docgen, so what you
-            read there is what the adapter actually does.
+            A scaffolded workspace writes the same contract, at
+            <code
+              >workshop-&lt;fw&gt;/src/contracts/&lt;name&gt;.contract.ts</code
+            >, checked by the same <code>check:contracts</code> (ADR-0121 S4 —
+            see "Building for one framework?" below). What it does not carry is
+            this library's own <code>Atl*</code> component set — for those, read
+            the equivalent framework docs through the hosted
+            <code>storybook-*</code> MCP (<code>docs-list</code> →
+            <code>docs-show</code>), or from
+            <a href="/llms-full.txt" class="docs-link-primary">llms-full.txt</a
+            >. The prop tables the MCP returns are exact, and so are the code
+            snippets alongside them — each endpoint answers in its own
+            framework's syntax (ADR-0097), generated from that adapter's source
+            by docgen, so what you read there is what the adapter actually does.
           </p>
           <p class="docs-step-desc">
-            <strong style="color: var(--ui-color-text)">Building for one framework?</strong> That is the normal case for a team taking this home, and the artefacts that transfer are exactly the ones above: the contract file, the stories, and the two checks that read them — <code>check:contracts</code> and <code>check:stories</code>. The <code>create-workspace</code> scaffold ships all four (ADR-0121 S4), so a one-framework repo starts with the same loop this monorepo runs, nothing translated. What does <em>not</em> transfer is <code>libs/spec/src/index.ts</code>: in this repo it is still the cross-framework join key a handful of drift gates (<code>check:props</code>, <code>check:variants</code>, <code>check:metadata</code>) read, kept there only until ADR-0121's S6 retires them — a one-framework repo has nothing to keep those gates in sync with. The review behind this shape, and the retirement order: <code>tasks/spec-format-review-2026-09-10.md</code> and <code>plan/adr/0121-the-stories-are-the-spec.md</code>.
+            <strong style="color: var(--ui-color-text)"
+              >Building for one framework?</strong
+            >
+            That is the normal case for a team taking this home, and the
+            artefacts that transfer are exactly the ones above: the contract
+            file, the stories, and the two checks that read them —
+            <code>check:contracts</code> and <code>check:stories</code>. The
+            <code>create-workspace</code> scaffold ships all four (ADR-0121 S4),
+            so a one-framework repo starts with the same loop this monorepo
+            runs, nothing translated. What does <em>not</em> transfer is
+            <code>libs/spec/src/index.ts</code>: in this repo it is still the
+            cross-framework join key a handful of drift gates
+            (<code>check:props</code>, <code>check:variants</code>,
+            <code>check:metadata</code>) read, kept there only until ADR-0121's
+            S6 retires them — a one-framework repo has nothing to keep those
+            gates in sync with. The review behind this shape, and the retirement
+            order: <code>tasks/spec-format-review-2026-09-10.md</code> and
+            <code>plan/adr/0121-the-stories-are-the-spec.md</code>.
           </p>
         </div>
       </div>
@@ -208,18 +501,34 @@ the component I just generated. Fix every discrepancy it reports.`;
         <div style="flex: 1">
           <h2 class="docs-h3">Generate — prompt Claude in your framework</h2>
           <p class="docs-step-desc">
-            Prompt Claude Code to build or edit the component in your chosen framework, using the Storybook MCP for exact component docs. Pick a framework — the prompt and the source-of-docs note update to match:
+            Prompt Claude Code to build or edit the component in your chosen
+            framework, using the Storybook MCP for exact component docs. Pick a
+            framework — the prompt and the source-of-docs note update to match:
           </p>
 
-          <FwSwitcher variant="tabs" label="Choose a framework for the generate step" />
-          {FRAMEWORKS.map((fw, i) => (
-            <div data-fw-panel={fw} hidden={i !== 0}>
-              <Callout tone="note">
-                <p style="margin: 0; font-size: 0.82rem; line-height: 1.6; color: var(--ui-color-text-muted)">{GENERATE_NOTE[fw]}</p>
-              </Callout>
-              <Code code={GENERATE_PROMPT[fw]} lang="text" title={`generate prompt — ${fw}`} />
-            </div>
-          ))}
+          <FwSwitcher
+            variant="tabs"
+            label="Choose a framework for the generate step"
+          />
+          {FRAMEWORKS.map((fw, i) => <div data-fw-panel={fw} hidden={i !== 0}>
+            <Callout tone="note">
+              <p
+                style="
+                  margin: 0;
+                  font-size: 0.82rem;
+                  line-height: 1.6;
+                  color: var(--ui-color-text-muted);
+                "
+              >
+                {GENERATE_NOTE[fw]}
+              </p>
+            </Callout>
+            <Code
+              code={GENERATE_PROMPT[fw]}
+              lang="text"
+              title={`generate prompt — ${fw}`}
+            />
+          </div>)}
         </div>
       </div>
     </div>
@@ -231,13 +540,33 @@ the component I just generated. Fix every discrepancy it reports.`;
         <div style="flex: 1">
           <h2 class="docs-h3">Verify — prove design parity</h2>
           <p class="docs-step-desc">
-            See the component rendered, then run <code>figma_check_design_parity</code> to catch padding, colour, and variant drift against the Figma spec.
-            In the atelier monorepo that means the story in Storybook (<code>nx storybook &lt;fw&gt;</code>); in a scaffolded workspace it means the app (<code>npx nx serve workshop-&lt;fw&gt;</code>) — or, once you've written a story for it, the workspace's own Storybook (<code>npx nx storybook workshop-&lt;fw&gt;</code>, port <code>6006</code>).
-            <strong style="color: var(--ui-color-text)">This step is required</strong> — it's what turns "looks about right" into a verified component.
+            See the component rendered, then run
+            <code>figma_check_design_parity</code> to catch padding, colour, and
+            variant drift against the Figma spec. In the atelier monorepo that
+            means the story in Storybook (<code>nx storybook &lt;fw&gt;</code>);
+            in a scaffolded workspace it means the app
+            (<code>npx nx serve workshop-&lt;fw&gt;</code>) — or, once you've
+            written a story for it, the workspace's own Storybook
+            (<code>npx nx storybook workshop-&lt;fw&gt;</code>, port
+            <code>6006</code>).
+            <strong style="color: var(--ui-color-text)"
+              >This step is required</strong
+            >
+            — it's what turns "looks about right" into a verified component.
           </p>
           <Code code={PARITY_PROMPT} lang="text" title="parity check prompt" />
           <p class="docs-step-desc">
-            When the component maps to a <strong style="color: var(--ui-color-text)">library master</strong> and you are working <strong style="color: var(--ui-color-text)">in the atelier monorepo</strong>, persist the result so drift is caught later: <code>npm run parity:record -- --component &lt;AtlFoo&gt;</code>. The offline <code>npm run check:parity</code> gate then flags that component if its code changes after this verify (see ADR-0024). Both are repo scripts — a scaffolded workspace stops at the parity prompt above.
+            When the component maps to a
+            <strong style="color: var(--ui-color-text)">library master</strong>
+            and you are working
+            <strong style="color: var(--ui-color-text)"
+              >in the atelier monorepo</strong
+            >, persist the result so drift is caught later:
+            <code>npm run parity:record -- --component &lt;AtlFoo&gt;</code>.
+            The offline <code>npm run check:parity</code> gate then flags that
+            component if its code changes after this verify (see ADR-0024). Both
+            are repo scripts — a scaffolded workspace stops at the parity prompt
+            above.
           </p>
         </div>
       </div>
@@ -246,15 +575,30 @@ the component I just generated. Fix every discrepancy it reports.`;
     <!-- Where to go next -->
     <div class="docs-section">
       <h2 class="docs-section-title">Where to go next</h2>
-      <p style="color: var(--ui-color-text-muted); line-height: 1.6; font-size: 0.85rem">
-        Read the <a href="/tutorial" class="docs-link-primary docs-link-primary--bold">tutorial</a> next for the deeper MCP mechanics behind each step, then run the same loop on the clock in the <a href="/first-component" class="docs-link-primary docs-link-primary--bold">15-min kata</a>. That is the order the pager below walks, too.
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          font-size: 0.85rem;
+        "
+      >
+        Read the
+        <a href="/tutorial" class="docs-link-primary docs-link-primary--bold"
+          >tutorial</a
+        >
+        next for the deeper MCP mechanics behind each step, then run the same
+        loop on the clock in the
+        <a
+          href="/first-component"
+          class="docs-link-primary docs-link-primary--bold"
+          >15-min kata</a
+        >. That is the order the pager below walks, too.
       </p>
     </div>
 
     <HelpFooter page="design-to-code" />
 
     <TrackNav />
-
   </div>
 </BaseLayout>
 

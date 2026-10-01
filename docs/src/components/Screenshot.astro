@@ -29,15 +29,8 @@ interface Props {
   height?: number;
 }
 
-const {
-  srcLight,
-  srcDark,
-  alt,
-  caption,
-  captionId,
-  width,
-  height,
-} = Astro.props;
+const { srcLight, srcDark, alt, caption, captionId, width, height } =
+  Astro.props;
 
 function urlOf(src: ImageMetadata | string): string {
   return typeof src === 'string' ? src : src.src;
@@ -70,9 +63,9 @@ const finalHeight = height ?? heightOf(srcLight) ?? heightOf(srcDark);
       decoding="async"
     />
   </picture>
-  {caption && (
-    <figcaption class="docs-screenshot-caption" id={captionId}>{caption}</figcaption>
-  )}
+  {caption && <figcaption class="docs-screenshot-caption" id={captionId}>
+    {caption}
+  </figcaption>}
 </figure>
 
 <script>

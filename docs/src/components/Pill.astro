@@ -15,7 +15,8 @@ const { label, value, active = false } = Astro.props;
   type="button"
   class:list={['docs-pill', { 'is-active': active }]}
   data-pill-value={value}
-  aria-pressed={active}>
+  aria-pressed={active}
+>
   {label}
 </button>
 
@@ -30,7 +31,8 @@ const { label, value, active = false } = Astro.props;
     font-weight: 500;
     font-family: inherit;
     cursor: pointer;
-    transition: color var(--ui-duration-fast) var(--ui-ease-out),
+    transition:
+      color var(--ui-duration-fast) var(--ui-ease-out),
       border-color var(--ui-duration-fast) var(--ui-ease-out),
       background var(--ui-duration-fast) var(--ui-ease-out);
   }
@@ -41,7 +43,7 @@ const { label, value, active = false } = Astro.props;
   }
 
   .docs-pill.is-active,
-  .docs-pill[aria-pressed="true"] {
+  .docs-pill[aria-pressed='true'] {
     background: var(--ui-color-primary-light);
     border-color: var(--ui-color-primary);
     color: var(--ui-color-primary);

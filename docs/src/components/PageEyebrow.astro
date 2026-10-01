@@ -26,12 +26,10 @@ const label = kindLabel ?? KIND_LABEL[kind];
 
 <div class="page-eyebrow">
   <span class={`page-eyebrow-kind page-eyebrow-kind--${kind}`}>{label}</span>
-  {time && (
-    <span class="page-eyebrow-time">
-      <Icon name="schedule" class="page-eyebrow-time-icon" />
-      <span>{time}</span>
-    </span>
-  )}
+  {time && <span class="page-eyebrow-time">
+    <Icon name="schedule" class="page-eyebrow-time-icon" />
+    <span>{time}</span>
+  </span>}
   {tag && <span class="page-eyebrow-tag">{tag}</span>}
 </div>
 

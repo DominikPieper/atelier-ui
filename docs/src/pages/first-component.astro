@@ -7,9 +7,10 @@ import PageHero from '../components/PageHero.astro';
 import TrackNav from '../components/TrackNav.astro';
 import { getTrackStep, TRACK_LENGTH } from '../data/workshop-track';
 
-const FIGMA_URL = 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI?node-id=936-2954';
+const FIGMA_URL =
+  'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI?node-id=936-2954';
 const FRAMEWORKS = ['Angular', 'React', 'Vue'] as const;
-type Framework = typeof FRAMEWORKS[number];
+type Framework = (typeof FRAMEWORKS)[number];
 
 // Step indicator for the hero — derived from the workshop track so it tracks
 // any reordering in workshop-track.ts rather than being hardcoded here.
@@ -23,24 +24,30 @@ const stepTag = step ? `Step ${step.step} of ${TRACK_LENGTH}` : undefined;
 // `directory: appName`), every framework serves on the default port 4200,
 // and each app ships rendering the NxWelcome placeholder until something
 // imports the generated component — the mountHint names the exact file.
-const SCAFFOLD: Record<Framework, { file: string; cmd: string; port: number; mountHint: string }> = {
+const SCAFFOLD: Record<
+  Framework,
+  { file: string; cmd: string; port: number; mountHint: string }
+> = {
   Angular: {
     file: 'workshop-angular/src/app/components/settings-card.component.ts',
-    cmd:  'npm start',
+    cmd: 'npm start',
     port: 4200,
-    mountHint: 'add SettingsCardComponent to the imports array in workshop-angular/src/app/app.ts and replace <app-nx-welcome> with <app-settings-card> in app.html',
+    mountHint:
+      'add SettingsCardComponent to the imports array in workshop-angular/src/app/app.ts and replace <app-nx-welcome> with <app-settings-card> in app.html',
   },
   React: {
     file: 'workshop-react/src/components/SettingsCard.tsx',
-    cmd:  'npm start',
+    cmd: 'npm start',
     port: 4200,
-    mountHint: 'import SettingsCard in workshop-react/src/app/app.tsx and replace the <NxWelcome /> placeholder with it',
+    mountHint:
+      'import SettingsCard in workshop-react/src/app/app.tsx and replace the <NxWelcome /> placeholder with it',
   },
   Vue: {
     file: 'workshop-vue/src/components/SettingsCard.vue',
-    cmd:  'npm start',
+    cmd: 'npm start',
     port: 4200,
-    mountHint: 'import SettingsCard in workshop-vue/src/views/HomeView.vue and replace the <NxWelcome /> placeholder with it',
+    mountHint:
+      'import SettingsCard in workshop-vue/src/views/HomeView.vue and replace the <NxWelcome /> placeholder with it',
   },
 };
 
@@ -50,7 +57,9 @@ const SCAFFOLD: Record<Framework, { file: string; cmd: string; port: number; mou
 // global framework-pref-init script toggles which [data-fw-panel] is
 // visible, keeping the shown prompt in sync with the tabs the same way
 // step 4 already works.
-const prompt = (fw: Framework) => `Build the Settings / Card Figma frame as an Atelier UI component.
+const prompt = (
+  fw: Framework,
+) => `Build the Settings / Card Figma frame as an Atelier UI component.
 
 1. Use figma-console MCP (figma_get_component_for_development) on
    node-id 936-2954 — read the frame's spec, boundVariables, and
@@ -77,7 +86,6 @@ the SettingsCard component I just generated. Fix any discrepancies.`;
   currentPath="/first-component"
 >
   <div class="docs-inline-page">
-
     <PageHero
       kind="tutorial"
       time="~15 min"
@@ -86,17 +94,26 @@ the SettingsCard component I just generated. Fix any discrepancies.`;
       titleAccent="component"
       ledeMax="580px"
     >
-      Six copy-paste steps that build the Settings Card end-to-end.
-      For the why behind each step, read <a href="/tutorial" class="docs-link-primary">/tutorial</a> instead —
-      it builds from the same Settings / Card frame with the reasoning attached, so if you have
-      just finished it, run this as a timed second lap rather than as new ground.
+      Six copy-paste steps that build the Settings Card end-to-end. For the why
+      behind each step, read
+      <a href="/tutorial" class="docs-link-primary">/tutorial</a> instead — it
+      builds from the same Settings / Card frame with the reasoning attached, so
+      if you have just finished it, run this as a timed second lap rather than
+      as new ground.
     </PageHero>
 
     <!-- What you'll build -->
-    <div class="kata-target" aria-label="What you'll have built when you're done">
+    <div
+      class="kata-target"
+      aria-label="What you'll have built when you're done"
+    >
       <div class="kata-target-eyebrow">What you'll build</div>
       <div class="kata-target-body">
-        <div class="kata-target-mock" role="img" aria-label="Settings Card preview: a card titled Settings with two text inputs (Name, Email), a Notifications toggle switched on, and a primary Save button.">
+        <div
+          class="kata-target-mock"
+          role="img"
+          aria-label="Settings Card preview: a card titled Settings with two text inputs (Name, Email), a Notifications toggle switched on, and a primary Save button."
+        >
           <div class="kata-mock-card">
             <div class="kata-mock-title">Settings</div>
             <div class="kata-mock-input">
@@ -109,17 +126,30 @@ the SettingsCard component I just generated. Fix any discrepancies.`;
             </div>
             <div class="kata-mock-toggle">
               <span class="kata-mock-toggle-label">Notifications</span>
-              <span class="kata-mock-toggle-track" aria-hidden="true"><span class="kata-mock-toggle-knob"></span></span>
+              <span class="kata-mock-toggle-track" aria-hidden="true"
+                ><span class="kata-mock-toggle-knob"></span></span
+              >
             </div>
             <div class="kata-mock-btn">Save</div>
           </div>
         </div>
         <ul class="kata-target-checks">
-          <li><Icon name="check_circle" /> AtlCard <code>variant="elevated"</code></li>
+          <li>
+            <Icon name="check_circle" /> AtlCard <code>variant="elevated"</code>
+          </li>
           <li><Icon name="check_circle" /> Two AtlInputs (Name, Email)</li>
-          <li><Icon name="check_circle" /> AtlToggle <code>checked</code> (Notifications)</li>
-          <li><Icon name="check_circle" /> AtlButton <code>variant="primary"</code> ("Save")</li>
-          <li><Icon name="check_circle" /> Tokens: <code>--ui-spacing-6</code> · <code>--ui-spacing-4</code> · <code>--ui-color-surface-raised</code></li>
+          <li>
+            <Icon name="check_circle" /> AtlToggle <code>checked</code>
+            (Notifications)
+          </li>
+          <li>
+            <Icon name="check_circle" /> AtlButton
+            <code>variant="primary"</code> ("Save")
+          </li>
+          <li>
+            <Icon name="check_circle" /> Tokens: <code>--ui-spacing-6</code> ·
+            <code>--ui-spacing-4</code> · <code>--ui-color-surface-raised</code>
+          </li>
         </ul>
       </div>
     </div>
@@ -131,10 +161,17 @@ the SettingsCard component I just generated. Fix any discrepancies.`;
         <h2 class="kata-step-title">Open the Figma frame</h2>
       </div>
       <p class="kata-step-desc">
-        Open <a href={FIGMA_URL} target="_blank" rel="noopener noreferrer" class="docs-link-primary docs-link-primary--bold">the Settings / Card frame</a>.
-        The URL already carries <code>?node-id=936-2954</code> — that's the node-id you'll
-        pass to Claude. No need to copy it manually. Step 3 reads that frame through the
-        <code>figma-console</code> MCP, so wire it up first if you have not:
+        Open
+        <a
+          href={FIGMA_URL}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="docs-link-primary docs-link-primary--bold"
+          >the Settings / Card frame</a
+        >. The URL already carries <code>?node-id=936-2954</code> — that's the
+        node-id you'll pass to Claude. No need to copy it manually. Step 3 reads
+        that frame through the <code>figma-console</code> MCP, so wire it up
+        first if you have not:
         <a href="/figma-token" class="docs-link-primary">Figma access</a>.
       </p>
     </section>
@@ -145,20 +182,36 @@ the SettingsCard component I just generated. Fix any discrepancies.`;
         <span class="kata-step-num">2</span>
         <h2 class="kata-step-title">Pick your framework</h2>
       </div>
-      <p class="kata-step-desc">Pick the framework you scaffolded in <a href="/workshop" class="docs-link-primary">Setup</a>. The tabs below stay in sync across this page.</p>
-      <div class="docs-multi-code-tabs" style="border-radius: 8px; margin: 0.5rem 0 0; width: fit-content">
-        {FRAMEWORKS.map((fw, i) => (
-          <button class={`docs-multi-code-tab${i === 0 ? ' active' : ''}`} data-fw-btn={fw} type="button">{fw}</button>
-        ))}
+      <p class="kata-step-desc">
+        Pick the framework you scaffolded in
+        <a href="/workshop" class="docs-link-primary">Setup</a>. The tabs below
+        stay in sync across this page.
+      </p>
+      <div
+        class="docs-multi-code-tabs"
+        style="border-radius: 8px; margin: 0.5rem 0 0; width: fit-content"
+      >
+        {FRAMEWORKS.map((fw, i) => <button
+          class={`docs-multi-code-tab${i === 0 ? ' active' : ''}`}
+          data-fw-btn={fw}
+          type="button"
+        >
+          {fw}
+        </button>)}
       </div>
       <p class="kata-step-desc" style="margin-top: 0.6rem">
-        This kata assumes the <strong style="color: var(--ui-color-text)">scaffolded workspace</strong> from
-        <a href="/workshop" class="docs-link-primary">Setup</a> (<code>npx create-atelier-ui-workspace</code>) —
-        the environment both the self-serve path and the two-day cohort now use. Run <code>npx nx show
-        projects</code> to confirm: a <code>workshop-*</code> entry means you're in it. (Working inside a
-        clone of the atelier repo itself instead? That's for contributing to Atelier, not this kata —
-        see <a href="/tutorial" class="docs-link-primary">/tutorial</a>'s "Run it" section for that
-        environment's paths.)
+        This kata assumes the
+        <strong style="color: var(--ui-color-text)"
+          >scaffolded workspace</strong
+        >
+        from <a href="/workshop" class="docs-link-primary">Setup</a>
+        (<code>npx create-atelier-ui-workspace</code>) — the environment both
+        the self-serve path and the two-day cohort now use. Run
+        <code>npx nx show projects</code> to confirm: a <code>workshop-*</code>
+        entry means you're in it. (Working inside a clone of the atelier repo
+        itself instead? That's for contributing to Atelier, not this kata — see
+        <a href="/tutorial" class="docs-link-primary">/tutorial</a>'s "Run it"
+        section for that environment's paths.)
       </p>
     </section>
 
@@ -169,28 +222,34 @@ the SettingsCard component I just generated. Fix any discrepancies.`;
         <h2 class="kata-step-title">Paste this prompt into Claude Code</h2>
       </div>
       <p class="kata-step-desc">
-        Copy the block verbatim — it's already set to the framework you picked in Step 2 (the
-        <code>storybook-*</code> MCP name is filled in). Claude fetches the Figma spec and Storybook
-        props, then writes the component.
+        Copy the block verbatim — it's already set to the framework you picked
+        in Step 2 (the <code>storybook-*</code> MCP name is filled in). Claude
+        fetches the Figma spec and Storybook props, then writes the component.
       </p>
       <p class="kata-step-desc" style="margin-top: 0.4rem">
-        On Angular and Vue the hosted <code>storybook-*</code> MCP answers component
-        lookups natively, already in that framework's own shape (ADR-0097) — each
-        framework's own docgen manifest is where its props and variants come from, and
-        the component's micro-contract names the master those variants have to match.
+        On Angular and Vue the hosted <code>storybook-*</code> MCP answers
+        component lookups natively, already in that framework's own shape
+        (ADR-0097) — each framework's own docgen manifest is where its props and
+        variants come from, and the component's micro-contract names the master
+        those variants have to match.
       </p>
-      {FRAMEWORKS.map((fw, i) => (
-        <div data-fw-panel={fw} hidden={i !== 0}>
-          <Code code={prompt(fw)} lang="text" title={`prompt — paste into Claude Code (${fw})`} />
-        </div>
-      ))}
+      {FRAMEWORKS.map((fw, i) => <div data-fw-panel={fw} hidden={i !== 0}>
+        <Code
+          code={prompt(fw)}
+          lang="text"
+          title={`prompt — paste into Claude Code (${fw})`}
+        />
+      </div>)}
       <p class="kata-step-desc" style="margin-top: 0.6rem">
-        <strong style="color: var(--ui-color-text)">Checkpoint:</strong> the file exists at the
-        path Step 4 names, it imports <code>Atl*</code> components from the Atelier UI package,
-        and it contains <strong style="color: var(--ui-color-text)">zero hex colours and zero
-        pixel paddings</strong> — every value is a <code>--ui-*</code> custom property. If Claude
-        wrote <code>#ffffff</code> or <code>24px</code> anywhere, say so and have it redo that
-        line from <code>boundVariables</code>.
+        <strong style="color: var(--ui-color-text)">Checkpoint:</strong> the
+        file exists at the path Step 4 names, it imports <code>Atl*</code>
+        components from the Atelier UI package, and it contains
+        <strong style="color: var(--ui-color-text)"
+          >zero hex colours and zero pixel paddings</strong
+        >
+        — every value is a <code>--ui-*</code> custom property. If Claude wrote
+        <code>#ffffff</code> or <code>24px</code> anywhere, say so and have it
+        redo that line from <code>boundVariables</code>.
       </p>
     </section>
 
@@ -201,33 +260,43 @@ the SettingsCard component I just generated. Fix any discrepancies.`;
         <h2 class="kata-step-title">Save the output and view it</h2>
       </div>
       <p class="kata-step-desc">
-        The prompt's step 4 already told Claude where to save the file and how to wire it into
-        the app shell. Confirm that happened, then:
+        The prompt's step 4 already told Claude where to save the file and how
+        to wire it into the app shell. Confirm that happened, then:
       </p>
-      {FRAMEWORKS.map((fw, i) => (
-        <div data-fw-panel={fw} hidden={i !== 0}>
-          <ol class="run-steps" style="margin-top: 0.5rem">
-            <li>
-              <span class="run-step-label">Save as</span>
-              <code class="run-step-path">{SCAFFOLD[fw].file}</code>
-            </li>
-            <li>
-              <span class="run-step-label">Mount</span>
-              <span class="run-step-note">Claude should have done this already — if not, {SCAFFOLD[fw].mountHint}.</span>
-            </li>
-            <li>
-              <span class="run-step-label">Serve</span>
-              <Code code={SCAFFOLD[fw].cmd} lang="shell" title="start dev server" />
-            </li>
-            <li>
-              <span class="run-step-label">Open</span>
-              <a href={`http://localhost:${SCAFFOLD[fw].port}`} target="_blank" rel="noopener noreferrer" class="run-step-link">
-                http://localhost:{SCAFFOLD[fw].port}
-              </a>
-            </li>
-          </ol>
-        </div>
-      ))}
+      {FRAMEWORKS.map((fw, i) => <div data-fw-panel={fw} hidden={i !== 0}>
+        <ol class="run-steps" style="margin-top: 0.5rem">
+          <li>
+            <span class="run-step-label">Save as</span>
+            <code class="run-step-path">{SCAFFOLD[fw].file}</code>
+          </li>
+          <li>
+            <span class="run-step-label">Mount</span>
+            <span class="run-step-note"
+              >Claude should have done this already — if not,
+              {SCAFFOLD[fw].mountHint}.</span
+            >
+          </li>
+          <li>
+            <span class="run-step-label">Serve</span>
+            <Code
+              code={SCAFFOLD[fw].cmd}
+              lang="shell"
+              title="start dev server"
+            />
+          </li>
+          <li>
+            <span class="run-step-label">Open</span>
+            <a
+              href={`http://localhost:${SCAFFOLD[fw].port}`}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="run-step-link"
+            >
+              http://localhost:{SCAFFOLD[fw].port}
+            </a>
+          </li>
+        </ol>
+      </div>)}
     </section>
 
     <!-- Step 5 -->
@@ -237,23 +306,26 @@ the SettingsCard component I just generated. Fix any discrepancies.`;
         <h2 class="kata-step-title">Compare to the target</h2>
       </div>
       <p class="kata-step-desc">
-        You should see the card from the <strong style="color: var(--ui-color-text)">"What you'll build"</strong> mockup
-        above — surface-raised background, two labelled inputs, a checked
-        Notifications toggle, and a right-aligned primary Save button.
-        Spacing should match the Figma frame because the generated code uses
-        <code>--ui-spacing-6</code> and <code>--ui-spacing-4</code> (not pixel values).
+        You should see the card from the
+        <strong style="color: var(--ui-color-text)">"What you'll build"</strong>
+        mockup above — surface-raised background, two labelled inputs, a checked
+        Notifications toggle, and a right-aligned primary Save button. Spacing
+        should match the Figma frame because the generated code uses
+        <code>--ui-spacing-6</code> and <code>--ui-spacing-4</code> (not pixel
+        values).
       </p>
-      {FRAMEWORKS.map((fw, i) => (
-        <div data-fw-panel={fw} hidden={i !== 0}>
-          <p class="kata-step-desc" style="margin-top: 0.4rem">
-            <strong style="color: var(--ui-color-text)">Still the Nx welcome page?</strong> Nothing
-            imports your component yet — {SCAFFOLD[fw].mountHint}, save, and the dev
-            server reloads with the card.
-          </p>
-        </div>
-      ))}
+      {FRAMEWORKS.map((fw, i) => <div data-fw-panel={fw} hidden={i !== 0}>
+        <p class="kata-step-desc" style="margin-top: 0.4rem">
+          <strong style="color: var(--ui-color-text)"
+            >Still the Nx welcome page?</strong
+          >
+          Nothing imports your component yet — {SCAFFOLD[fw].mountHint}, save,
+          and the dev server reloads with the card.
+        </p>
+      </div>)}
       <p class="kata-step-desc" style="margin-top: 0.4rem">
-        If the spacing or colors look off — that's a token drift. Run the parity check below.
+        If the spacing or colors look off — that's a token drift. Run the parity
+        check below.
       </p>
     </section>
 
@@ -264,18 +336,21 @@ the SettingsCard component I just generated. Fix any discrepancies.`;
         <h2 class="kata-step-title">Run the parity check</h2>
       </div>
       <p class="kata-step-desc">
-        Eyeballing the result isn't enough — close the loop. <code>figma_check_design_parity</code>
-        compares the generated code against the Figma spec and lists every discrepancy —
-        exact paddings, exact colors, missing variants — so you ship a verified component, not a lookalike.
-        Pass this prompt:
+        Eyeballing the result isn't enough — close the loop.
+        <code>figma_check_design_parity</code> compares the generated code
+        against the Figma spec and lists every discrepancy — exact paddings,
+        exact colors, missing variants — so you ship a verified component, not a
+        lookalike. Pass this prompt:
       </p>
       <Code code={PARITY_PROMPT} lang="text" title="parity check prompt" />
       <p class="kata-step-desc" style="margin-top: 0.6rem">
-        <strong style="color: var(--ui-color-text)">Checkpoint:</strong> the report comes back with
-        <strong style="color: var(--ui-color-text)">0 discrepancies</strong>. Anything else — a
-        padding off by one step, a colour that resolved to a literal — is not something to eyeball
-        away: paste the report straight back to Claude and have it fix each entry the report names,
-        then re-run the check until it is clean.
+        <strong style="color: var(--ui-color-text)">Checkpoint:</strong> the
+        report comes back with
+        <strong style="color: var(--ui-color-text)">0 discrepancies</strong>.
+        Anything else — a padding off by one step, a colour that resolved to a
+        literal — is not something to eyeball away: paste the report straight
+        back to Claude and have it fix each entry the report names, then re-run
+        the check until it is clean.
       </p>
     </section>
 
@@ -283,19 +358,24 @@ the SettingsCard component I just generated. Fix any discrepancies.`;
     <div class="kata-done">
       <div class="kata-done-head">
         <span class="kata-done-eyebrow">Done</span>
-        <h2 class="kata-done-title">You shipped a token-exact component in ~15 min.</h2>
+        <h2 class="kata-done-title">
+          You shipped a token-exact component in ~15 min.
+        </h2>
       </div>
       <p class="kata-done-desc">
-        Browse <a href="/patterns" class="docs-link-primary docs-link-primary--bold">/patterns</a>
-        for variations on the recipe — Login Form, Confirmation Dialog, Management Dashboard —
-        all use the same Figma → MCP → Storybook → code loop you just ran.
+        Browse
+        <a href="/patterns" class="docs-link-primary docs-link-primary--bold"
+          >/patterns</a
+        >
+        for variations on the recipe — Login Form, Confirmation Dialog,
+        Management Dashboard — all use the same Figma → MCP → Storybook → code
+        loop you just ran.
       </p>
     </div>
 
     <HelpFooter page="first-component" />
 
     <TrackNav />
-
   </div>
 </BaseLayout>
 
@@ -337,7 +417,8 @@ the SettingsCard component I just generated. Fix any discrepancies.`;
     background: var(--ui-color-surface);
     border: 1px solid var(--ui-color-border);
     border-radius: var(--ui-radius-md);
-    box-shadow: 0 4px 16px color-mix(in srgb, var(--ui-color-primary) 8%, transparent);
+    box-shadow: 0 4px 16px
+      color-mix(in srgb, var(--ui-color-primary) 8%, transparent);
     display: flex;
     flex-direction: column;
     gap: 0.75rem;
@@ -438,7 +519,9 @@ the SettingsCard component I just generated. Fix any discrepancies.`;
     border-radius: 3px;
   }
   @media (max-width: 768px) {
-    .kata-target-body { grid-template-columns: minmax(0, 1fr); }
+    .kata-target-body {
+      grid-template-columns: minmax(0, 1fr);
+    }
   }
 
   /* "Run it" three-step list — Save / Serve / Open */
@@ -479,7 +562,9 @@ the SettingsCard component I just generated. Fix any discrepancies.`;
     font-family: var(--docs-font-code);
     font-size: 0.85rem;
   }
-  .run-step-link:hover { color: var(--ui-color-primary-hover); }
+  .run-step-link:hover {
+    color: var(--ui-color-primary-hover);
+  }
   .run-step-note {
     color: var(--ui-color-text-muted);
     font-size: 0.8rem;
@@ -491,7 +576,9 @@ the SettingsCard component I just generated. Fix any discrepancies.`;
     padding-bottom: 1.5rem;
     border-bottom: 1px solid var(--ui-color-border);
   }
-  .kata-step:last-of-type { border-bottom: 0; }
+  .kata-step:last-of-type {
+    border-bottom: 0;
+  }
   .kata-step-head {
     display: flex;
     align-items: center;
@@ -525,14 +612,17 @@ the SettingsCard component I just generated. Fix any discrepancies.`;
     color: var(--ui-color-text-muted);
     line-height: 1.6;
   }
-  .kata-step-desc:last-child { margin-bottom: 0; }
+  .kata-step-desc:last-child {
+    margin-bottom: 0;
+  }
 
   /* "Done" closer */
   .kata-done {
     margin: 2rem 0 1.5rem;
     padding: 1.25rem 1.4rem;
     background: var(--ui-color-primary-light);
-    border: 1px solid color-mix(in srgb, var(--ui-color-primary) 30%, transparent);
+    border: 1px solid
+      color-mix(in srgb, var(--ui-color-primary) 30%, transparent);
     border-radius: var(--ui-radius-md);
   }
   .kata-done-head {

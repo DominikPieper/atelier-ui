@@ -26,12 +26,22 @@ const issueUrl = `${REPO_URL}/issues/new?title=${encodeURIComponent(issueTitle)}
     <a href="/troubleshooting" class="docs-help-footer-link">
       <span class="docs-help-footer-link-eyebrow">Read</span>
       <span class="docs-help-footer-link-title">/troubleshooting</span>
-      <span class="docs-help-footer-link-desc">Fourteen common failure modes with one-line fixes.</span>
+      <span class="docs-help-footer-link-desc"
+        >Fourteen common failure modes with one-line fixes.</span
+      >
     </a>
-    <a href={issueUrl} target="_blank" rel="noopener noreferrer" class="docs-help-footer-link">
+    <a
+      href={issueUrl}
+      target="_blank"
+      rel="noopener noreferrer"
+      class="docs-help-footer-link"
+    >
       <span class="docs-help-footer-link-eyebrow">Report</span>
       <span class="docs-help-footer-link-title">Open a GitHub issue</span>
-      <span class="docs-help-footer-link-desc">Pre-filled title <code>{issueTitle}</code> — describe what blocked you.</span>
+      <span class="docs-help-footer-link-desc"
+        >Pre-filled title <code>{issueTitle}</code> — describe what blocked
+        you.</span
+      >
     </a>
   </div>
 </aside>
