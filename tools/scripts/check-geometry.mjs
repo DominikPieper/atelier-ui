@@ -52,6 +52,7 @@ const require = createRequire(import.meta.url);
 const {
   FRAMEWORKS,
   isComponentDir,
+  componentCssFiles,
   getComponentDirs,
 } = require('./lib/component-discovery.js');
 
@@ -104,7 +105,7 @@ const CONTROLS = [
       default: (s) =>
         `<button class="atl-button variant-primary size-${s}">Label</button>`,
       angular: (s) =>
-        `<atl-button class="variant-primary size-${s}">Label</atl-button>`,
+        `<atl-button class="atl-button variant-primary size-${s}">Label</atl-button>`,
     },
     measure: { default: '.atl-button', angular: 'atl-button' },
   },
@@ -381,11 +382,11 @@ for (const fw of FRAMEWORKS) {
   for (const dir of getComponentDirs(base)) {
     const dirPath = join(base, dir);
     if (!isComponentDir(dirPath)) continue;
-    for (const f of readdirSync(dirPath).filter((f) => f.endsWith('.css'))) {
+    // Own stylesheets plus the shared `libs/styles` one; a component moved there
+    // has none left in its framework directory.
+    for (const { abs } of componentCssFiles(fw, dir)) {
       if (
-        /var\(\s*--ui-(control|row)-height-/.test(
-          readFileSync(join(dirPath, f), 'utf8'),
-        )
+        /var\(\s*--ui-(control|row)-height-/.test(readFileSync(abs, 'utf8'))
       ) {
         referencing.add(dir);
       }
@@ -462,18 +463,25 @@ for (const fw of FRAMEWORKS) {
     // option row exists to measure, while Angular renders a custom panel. Without
     // this the entry would report [MARKUP] against the two that are correct.
     if (control.only && !control.only.includes(fw)) continue;
-    const dirPath = join(ROOT, 'libs', fw, 'src/lib', control.dir);
     const isNg = fw === 'angular';
     // Hostified per FILE, not per directory. A directory can hold more than one
     // component — select/ ships atl-select.css and atl-option.css — and rewriting
     // atl-option.css's `:host` to `atl-select` would drop one component's rules
     // onto the other. The tag comes from the stylesheet name, which is the
     // convention every component in this repo follows.
-    const componentCss = readdirSync(dirPath)
-      .filter((f) => f.endsWith('.css'))
-      .map((f) => {
-        const css = readFileSync(join(dirPath, f), 'utf8');
-        return isNg ? hostify(css, f.replace(/\.css$/, '')) : css;
+    // A shared `libs/styles` sheet is class-rooted and has no `:host` to rewrite.
+    const componentCss = componentCssFiles(fw, control.dir)
+      .map(({ abs, shared }) => {
+        const css = readFileSync(abs, 'utf8');
+        return isNg && !shared
+          ? hostify(
+              css,
+              abs
+                .split('/')
+                .pop()
+                .replace(/\.css$/, ''),
+            )
+          : css;
       })
       .join('\n');
     const markup = isNg ? control.markup.angular : control.markup.default;

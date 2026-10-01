@@ -957,17 +957,22 @@ function collectStoryClaims(csf, fw, componentName, source) {
 
 function scanCssTokens(dir) {
   const tokens = new Set();
-  let files = [];
-  try {
-    files = fs.readdirSync(dir).filter((f) => f.endsWith('.css'));
-  } catch {
-    /* dir missing */
-  }
-  for (const f of files) {
-    const src = fs.readFileSync(path.join(dir, f), 'utf-8');
-    const re = /var\(\s*(--ui-[\w-]+)/g;
-    let m;
-    while ((m = re.exec(src))) tokens.add(m[1]);
+  // The component's own directory plus the shared, class-rooted `libs/styles`
+  // sheet — a component whose CSS moved there has none left in its own directory.
+  const dirs = [dir, path.join(ROOT, 'libs/styles/src', path.basename(dir))];
+  for (const d of dirs) {
+    let files = [];
+    try {
+      files = fs.readdirSync(d).filter((f) => f.endsWith('.css'));
+    } catch {
+      /* dir missing */
+    }
+    for (const f of files) {
+      const src = fs.readFileSync(path.join(d, f), 'utf-8');
+      const re = /var\(\s*(--ui-[\w-]+)/g;
+      let m;
+      while ((m = re.exec(src))) tokens.add(m[1]);
+    }
   }
   return [...tokens].sort();
 }

@@ -95,6 +95,7 @@ const {
   FRAMEWORKS,
   isComponentDir,
   getComponentDirs,
+  componentCssFiles,
 } = require('./lib/component-discovery');
 const { rootsFor } = require('./lib/component-roots');
 const { DEAD_SELECTOR_EXEMPT } = require('./lib/allowlists');
@@ -933,11 +934,9 @@ for (const fw of FRAMEWORKS) {
 
     /** @type {Map<string, {file: string, line: number, selector: string, generated: boolean}[]>} */
     const css = new Map();
-    for (const entry of fs
-      .readdirSync(dirPath)
-      .filter((f) => f.endsWith('.css'))
-      .sort()) {
-      const file = path.join(dirPath, entry);
+    // Own stylesheets plus the shared `libs/styles` one. A shared sheet is judged
+    // against each framework's emission in turn: it styles a class for all three.
+    for (const { abs: file } of componentCssFiles(fw, dir)) {
       stylesheets++;
       for (const [name, sites] of classSelectors(
         fs.readFileSync(file, 'utf8'),

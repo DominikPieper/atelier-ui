@@ -40,6 +40,7 @@ const {
   FRAMEWORKS,
   isComponentDir,
   getComponentDirs,
+  componentCssFiles,
 } = require('./lib/component-discovery.js');
 const { moduleForSelector } = require('./lib/parity-inputs.js');
 
@@ -72,12 +73,16 @@ const a11yFrameworks = (dir) => {
 };
 
 const cssOf = (dir) => {
+  // Every framework's own sheets plus the shared `libs/styles` one (once).
+  const seen = new Set();
   const out = [];
   for (const fw of FRAMEWORKS) {
     const p = join(ROOT, 'libs', fw, 'src/lib', dir);
     if (!existsSync(p) || !statSync(p).isDirectory()) continue;
-    for (const f of readdirSync(p).filter((f) => f.endsWith('.css'))) {
-      out.push(readFileSync(join(p, f), 'utf8'));
+    for (const { abs } of componentCssFiles(fw, dir)) {
+      if (seen.has(abs)) continue;
+      seen.add(abs);
+      out.push(readFileSync(abs, 'utf8'));
     }
   }
   return out.join('\n');

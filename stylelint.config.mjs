@@ -106,6 +106,23 @@ export default {
         },
       };
     }),
+    // The class-rooted component sheets all three frameworks consume
+    // (`libs/styles`). No `componentRoot`: that option makes a rule scan one tree
+    // for allowlist entries it no longer sees, and an entry that lives in a
+    // framework tree would be reported stale here. The per-declaration checks
+    // key on the file's own directory name, which is the component either way.
+    {
+      files: ['libs/styles/src/**/*.css'],
+      rules: {
+        'atelier/no-raw-color-literal': true,
+        'atelier/no-undeclared-token': [true, { tokenFiles: [TOKENS_CSS] }],
+        'atelier/no-primitive-token': [true, { allowlistsFile: ALLOWLISTS }],
+        'atelier/no-token-bypass': [
+          true,
+          { tokenFile: TOKENS_CSS, allowlistsFile: ALLOWLISTS },
+        ],
+      },
+    },
     {
       files: ['docs/src/styles/global.css'],
       rules: {

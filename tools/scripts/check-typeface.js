@@ -64,7 +64,7 @@
 
 const fs = require('fs');
 const path = require('path');
-const { FRAMEWORKS } = require('./lib/component-discovery');
+const { FRAMEWORKS, componentCssFiles } = require('./lib/component-discovery');
 const { rootsFor } = require('./lib/component-roots');
 const { typeRoles, roleOfFontShorthand } = require('./lib/type-roles');
 
@@ -137,7 +137,10 @@ for (const fw of FRAMEWORKS) {
   for (const dir of fs.readdirSync(base)) {
     const dirPath = path.join(base, dir);
     if (!fs.statSync(dirPath).isDirectory()) continue;
-    const files = fs.readdirSync(dirPath).filter((f) => f.endsWith('.css'));
+    // Own stylesheets plus the shared `libs/styles` one: a component moved there
+    // has no .css left in its framework directory, and reading only that
+    // directory would make this check pass over it without reading anything.
+    const files = componentCssFiles(fw, dir);
     if (files.length === 0) continue;
     checked++;
 
@@ -146,11 +149,8 @@ for (const fw of FRAMEWORKS) {
     // directory: a directory declares its family and its leading, or it does not.
     let rootFamilyRules = 0;
     let rootFamilyRulesWithLeading = 0;
-    for (const file of files) {
-      const rel = `libs/${fw}/src/lib/${dir}/${file}`;
-      const css = fs
-        .readFileSync(path.join(dirPath, file), 'utf8')
-        .replace(/\/\*[\s\S]*?\*\//g, '');
+    for (const { abs, rel } of files) {
+      const css = fs.readFileSync(abs, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
       // [NO-SIZE] asks about a root, not a rule, so a root's rules are gathered
       // before they are judged. Per FILE and not per directory, because Angular's
       // shared stylesheets hold several roots and each answers for itself.
@@ -291,7 +291,15 @@ for (const fw of FRAMEWORKS) {
       }
 
       for (const root of rootsInFile.values()) {
-        if (root.prose && !root.size)
+        // A shared sheet is read once per framework; record its root once.
+        if (
+          root.prose &&
+          !root.size &&
+          !noSize.some(
+            (n) =>
+              n.rel === rel && n.selector === root.selector && n.dir === dir,
+          )
+        )
           noSize.push({ dir, rel, selector: root.selector });
       }
     }
@@ -455,6 +463,11 @@ for (const dir of [
     );
   }
 }
+
+// A shared stylesheet is read once per framework, so its findings repeat.
+const uniqueErrors = [...new Set(errors)];
+errors.length = 0;
+errors.push(...uniqueErrors);
 
 if (errors.length > 0) {
   for (const e of errors) console.error(`✗ ${e}`);

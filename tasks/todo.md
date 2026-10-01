@@ -137,6 +137,27 @@ Ranked; each carries why it's worth doing next rather than later.
           adversarial review. It independently picks A. Its new risk is specificity: the
           `:host-context` → `.atl-x.y .z` rewrite raises specificity for consumer overrides.
           It also re-flags the leak, which is correct for the default config.
+    - [ ] **P1.1b Spike Option C on button, badge, dialog — run 2026-10-01, uncommitted in
+          the working tree.** One class-rooted file per component in `libs/styles/src/<dir>/`
+          (Nx project, for stylelint and module boundaries). Angular uses
+          `ViewEncapsulation.None` plus a static root class on the host, which survives
+          `[class]`; React and Vue import the same file.
+          Green: `check:all`, `storybook-test`, `test` and `lint` for all three frameworks.
+          The declaration-level diff against the old React CSS is zero, and 151 Angular
+          elements measure identical computed styles.
+          **Blocker: the React package is broken as built.** `dist/libs/react/.../atl-button.js`
+          imports `@atelier-ui/styles/button/atl-button.css`, which resolves nowhere, and no
+          CSS is copied. I verified this myself.
+          Caveats: - Angular-projected content inside `button`/`dialog` now gets
+          `box-sizing: border-box`, like React/Vue today — visible to consumers. - `FORCEPREFIX` output needed hand fixes: an impossible
+          `.atl-dialog dialog > .panel`, and descendant selectors that hit consumer
+          content (a select's `.panel` inside a dialog). Four selectors were tightened
+          to child combinators. So prefix-everywhere is not safe by itself: a descendant
+          rule must become a child rule wherever the class name is generic. - `@keyframes` names stay global (`shimmer`, `toast-enter` would collide). - Two gates passed **vacuously** while checking fewer files than exist:
+          `check:box-sizing` (78 of 87 stylesheets) and `check:dead-selectors` (80 of 89).
+          Make both fail on "found fewer stylesheets than components", independent
+          of P1. - Stale paths remain in `tools/figma/parity.json`, `plan/` and the ADR text. - `tools/parity/typeface-baseline.json` was rebaselined: dialog NO-SIZE went
+          from 3 identities to 1, the same debt deduplicated. Review it.
     - [ ] **P1.2 ADR — where the CSS source of truth lives.** Option A (leaning): Angular
           `:host` CSS canonical, React/Vue generated — Angular stays idiomatic, same
           one-source-one-generated-copy shape as `icons.ts` via `sync-spec.mjs`. Option B:

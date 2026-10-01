@@ -67,6 +67,20 @@ const { typeRoles, roleOfFontShorthand } = require('./lib/type-roles');
 const { FIGMA_CONFORMANCE_EXCEPTIONS } = require('./lib/allowlists');
 
 const ROOT = path.resolve(__dirname, '../..');
+
+/**
+ * Where a component stylesheet named relative to `src/lib` lives. A component
+ * whose sheet moved to the shared, class-rooted `libs/styles/src/` serves all
+ * three frameworks from there, so the framework directory no longer has it —
+ * and a missing file here only downgrades the check to a warning, which would
+ * hide the loss of coverage.
+ */
+function componentCssPath(lib, file) {
+  const own = path.join(ROOT, 'libs', lib, 'src/lib', file);
+  if (fs.existsSync(own)) return own;
+  const shared = path.join(ROOT, 'libs/styles/src', file);
+  return fs.existsSync(shared) ? shared : own;
+}
 const SNAPSHOT_FILE = path.join(ROOT, 'tools/figma/snapshot.json');
 const TEXT_NODES_REL = 'tools/figma/text-nodes.json';
 const TEXT_NODES_FILE = path.join(ROOT, TEXT_NODES_REL);
@@ -2093,13 +2107,7 @@ function checkLayerSize() {
   for (const entry of SIZE_LAYER_CASCADES) {
     const comp = bySelector.get(entry.label);
     if (!comp) continue;
-    const file = path.join(
-      ROOT,
-      'libs',
-      entry.lib || 'react',
-      'src/lib',
-      entry.file,
-    );
+    const file = componentCssPath(entry.lib || 'react', entry.file);
     if (!fs.existsSync(file)) {
       warning(
         'LAYER-SIZE',
@@ -2217,13 +2225,7 @@ function cssRules(file) {
 }
 
 function resolveRootPaint(entry, axes) {
-  const file = path.join(
-    ROOT,
-    'libs',
-    entry.lib || 'react',
-    'src/lib',
-    entry.file,
-  );
+  const file = componentCssPath(entry.lib || 'react', entry.file);
   if (!fs.existsSync(file)) {
     warning(
       'ROOT-PAINT',
@@ -2741,13 +2743,7 @@ function checkTextNodes() {
  *  ROOT_TYPE entry falls back to its ROOT_PAINT cascade, and several of those state no
  *  type at all because they legitimately inherit it from the parent master. */
 function resolveRootType(entry, axes) {
-  const file = path.join(
-    ROOT,
-    'libs',
-    entry.lib || 'react',
-    'src/lib',
-    entry.file,
-  );
+  const file = componentCssPath(entry.lib || 'react', entry.file);
   if (!fs.existsSync(file)) {
     warning(
       'ROOT-TYPE',
@@ -3554,13 +3550,7 @@ function cssFileFor(selector) {
   let out = null;
   const entry = ROOT_PAINT.find((e) => e.label === selector);
   if (entry) {
-    const f = path.join(
-      ROOT,
-      'libs',
-      entry.lib || 'react',
-      'src/lib',
-      entry.file,
-    );
+    const f = componentCssPath(entry.lib || 'react', entry.file);
     if (fs.existsSync(f)) out = f;
   }
   if (!out) {
@@ -3572,11 +3562,23 @@ function cssFileFor(selector) {
           .replace(/^Atl/, 'atl')
           .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
           .toLowerCase();
-        const exact = path.join(dir, `${kebab}.css`);
-        if (fs.existsSync(exact)) out = exact;
+        // The component's own directory first, then the shared `libs/styles` one.
+        const sheets = [
+          dir,
+          path.join(ROOT, 'libs/styles/src', moduleName),
+        ].filter((d) => fs.existsSync(d));
+        const exact = sheets
+          .map((d) => path.join(d, `${kebab}.css`))
+          .find((p) => fs.existsSync(p));
+        if (exact) out = exact;
         else {
-          const any = fs.readdirSync(dir).filter((f) => f.endsWith('.css'));
-          if (any.length === 1) out = path.join(dir, any[0]);
+          const any = sheets.flatMap((d) =>
+            fs
+              .readdirSync(d)
+              .filter((f) => f.endsWith('.css'))
+              .map((f) => path.join(d, f)),
+          );
+          if (any.length === 1) out = any[0];
         }
       }
     }

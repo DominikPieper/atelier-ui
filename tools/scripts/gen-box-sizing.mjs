@@ -46,7 +46,10 @@ import { createRequire } from 'node:module';
 import { format, resolveConfig } from 'prettier';
 
 const require = createRequire(import.meta.url);
-const { FRAMEWORKS } = require('./lib/component-discovery.js');
+const {
+  FRAMEWORKS,
+  componentCssFiles,
+} = require('./lib/component-discovery.js');
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const CHECK = process.argv.includes('--check');
@@ -65,8 +68,9 @@ function leadingAtlClasses(css) {
   return found;
 }
 
-function selectorFor(fw, roots) {
-  if (fw === 'angular') return ':host';
+function selectorFor(fw, roots, shared) {
+  // A shared sheet is class-rooted for every framework, Angular included.
+  if (fw === 'angular' && !shared) return ':host';
   if (roots.length === 1) return `.${roots[0]}`;
   return `:is(\n  .${roots.join(',\n  .')}\n)`;
 }
@@ -102,6 +106,7 @@ async function formattedBlockFor(selector, target) {
   return formatted.replace(/\n$/, '') + '\n\n';
 }
 
+const seenShared = new Set();
 const problems = [];
 let written = 0;
 let verified = 0;
@@ -111,44 +116,54 @@ for (const fw of FRAMEWORKS) {
   for (const dir of readdirSync(base)) {
     const dirPath = join(base, dir);
     if (!statSync(dirPath).isDirectory()) continue;
-    const cssFiles = readdirSync(dirPath).filter((f) => f.endsWith('.css'));
-    if (cssFiles.length === 0) continue; // no stylesheet, no geometry to contract
+    // Own stylesheets plus the shared `libs/styles` one. A component moved there
+    // has no .css left in its framework directory; reading only that directory
+    // would verify nothing while reporting success.
+    const sheets = componentCssFiles(fw, dir);
+    if (sheets.length === 0) continue; // no stylesheet, no geometry to contract
 
     // The component's primary stylesheet: atl-<dir>.css when it exists. Roots are
     // collected across all of the directory's stylesheets, so a class declared in
     // a split-out file (Angular's atl-toast-container.css) is still covered.
-    const primary = cssFiles.includes(`atl-${dir}.css`)
-      ? `atl-${dir}.css`
-      : [...cssFiles].sort()[0];
-    const target = join(dirPath, primary);
-    const rel = `libs/${fw}/src/lib/${dir}/${primary}`;
+    const primarySheet =
+      sheets.find((x) => x.abs.endsWith(`/atl-${dir}.css`)) ??
+      [...sheets].sort((a, b) => a.abs.localeCompare(b.abs))[0];
+    const target = primarySheet.abs;
+    const rel = primarySheet.rel;
+    const shared = primarySheet.shared;
+    // One shared sheet serves all three frameworks: judge it once.
+    if (shared) {
+      if (seenShared.has(target)) continue;
+      seenShared.add(target);
+    }
+    const cssFiles = sheets.map((x) => x.abs);
 
     const roots = [
       ...new Set(
         cssFiles.flatMap((f) => [
-          ...leadingAtlClasses(readFileSync(join(dirPath, f), 'utf8')),
+          ...leadingAtlClasses(readFileSync(f, 'utf8')),
         ]),
       ),
     ].sort();
 
-    if (fw !== 'angular' && roots.length === 0) {
+    if ((fw !== 'angular' || shared) && roots.length === 0) {
       problems.push(
         `[NO-ROOT] ${rel} declares no .atl-* root class, so the contract has nothing to attach to.`,
       );
       continue;
     }
 
-    const want = await formattedBlockFor(selectorFor(fw, roots), target);
+    const want = await formattedBlockFor(
+      selectorFor(fw, roots, shared),
+      target,
+    );
     const css = readFileSync(target, 'utf8');
     const has = css.startsWith(want);
 
     // A reset in any of the directory's stylesheets undoes the contract for that
     // element, whatever the block at the top says.
     for (const file of cssFiles) {
-      const css = readFileSync(join(dirPath, file), 'utf8').replace(
-        /\/\*[\s\S]*?\*\//g,
-        '',
-      );
+      const css = readFileSync(file, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
       for (const rule of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
         const body = rule[2];
         if (!/(^|;)\s*all\s*:\s*(unset|initial|revert)/.test(body)) continue;
@@ -156,7 +171,7 @@ for (const fw of FRAMEWORKS) {
         const parts = rule[1].split(/,(?![^(]*\))/);
         const selector = parts[parts.length - 1].trim().replace(/\s+/g, ' ');
         problems.push(
-          `[RESET-WIPED] libs/${fw}/src/lib/${dir}/${file} — \`${selector}\` uses \`all: unset\`, which ` +
+          `[RESET-WIPED] ${file.slice(ROOT.length + 1)} — \`${selector}\` uses \`all: unset\`, which ` +
             `resets the box model. The contract has the same specificity and loses on source order, so this ` +
             `element is content-box and larger than its own CSS states. Restate \`box-sizing: border-box\` ` +
             `below the reset.`,

@@ -21,6 +21,7 @@ const path = require('path');
 const fs = require('fs');
 const ts = require('typescript');
 const { UNION_TO_COMPONENT, AXIS_PREFIX } = require('./lib/component-axes');
+const { componentCssFiles } = require('./lib/component-discovery');
 const {
   VARIANT_AXIS_EXCEPTIONS,
   DEFAULT_IS_BASE,
@@ -69,19 +70,17 @@ function parseSpecUnions() {
   return found;
 }
 
-/** Collect class names defined in every .css file of a component dir. */
+/**
+ * Collect class names defined in every .css file of a component — its own
+ * directory plus the shared `libs/styles` sheet, which all frameworks consume.
+ */
 function cssClasses(framework, component) {
   const dir = path.join(ROOT, 'libs', framework, 'src', 'lib', component);
-  let files = [];
-  try {
-    files = fs.readdirSync(dir).filter((f) => f.endsWith('.css'));
-  } catch {
-    return null; // dir missing — surfaced separately
-  }
+  if (!fs.existsSync(dir)) return null; // dir missing — surfaced separately
   const classes = new Set();
   const re = /\.([a-zA-Z][\w-]*)/g;
-  for (const f of files) {
-    const src = fs.readFileSync(path.join(dir, f), 'utf-8');
+  for (const { abs } of componentCssFiles(framework, component)) {
+    const src = fs.readFileSync(abs, 'utf-8');
     let mm;
     while ((mm = re.exec(src)) !== null) classes.add(mm[1]);
   }

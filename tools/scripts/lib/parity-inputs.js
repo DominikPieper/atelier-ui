@@ -94,6 +94,10 @@ function inputFiles(moduleName) {
       if (fs.existsSync(tokens)) found.push(tokens);
     }
   }
+  // The class-rooted sheet all three frameworks share (`libs/styles`) is a rendered
+  // input of the component in the same sense its own css is.
+  const shared = path.join(ROOT, 'libs', 'styles', 'src', moduleName);
+  if (found.length && fs.existsSync(shared)) walkFiles(shared, found);
   return found
     .map((abs) => path.relative(ROOT, abs).split(path.sep).join('/'))
     .sort();
