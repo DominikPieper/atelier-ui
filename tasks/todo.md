@@ -122,10 +122,21 @@ Ranked; each carries why it's worth doing next rather than later.
             (`atl-drawer.css:38,59,65`) misses. The headless probe measured the open dialog
             at `display: block` and ~88px wide instead of `flex` and 448px. Reproduce in
             Storybook first.
-    - [ ] **P1.1 Spike (throwaway)** — PostCSS transform Angular → class-rooted (`:host` →
-          `.atl-X`, bare top-level rules prefixed, `:host-context` handled), run on
-          `button`, `badge`, `dialog`, diff against React. **Done when** `button` and
-          `badge` come out byte-equal after Prettier and `dialog`'s residual is DOM-only.
+    - [x] **P1.1 Spike — done 2026-10-01**, `tasks/p1-1-spike-2026-10-01.md`. A 208-line
+          prototype generator plus a 30-line config (scratchpad only, not kept) reproduces
+          today's React/Vue CSS for 23 of 29 components, comment-stripped and after
+          Prettier. I re-counted that independently. It needs 32 config entries: 5 inherent
+          and 27 accidental naming or scope drift. A rename pass first brings that to about
+          8, at a cost of roughly 14 Angular and 6 React/Vue template lines.
+          `select` and `tooltip` stay hand-kept overrides, about 140 lines.
+          **Caveat:** 11 of the entries are a `scope: 'bare'` switch whose only job is to
+          reproduce today's global leak (~80 React/Vue rules with no `.atl-*` root). The
+          intended policy is prefix-everywhere, which changes three places that depend on
+          the leak today: chat `.close-btn`, drawer `.panel`, toggle `.track`.
+          Second model: Gemini 3.1 Pro (Codex quota out until 2026-10-06), via
+          adversarial review. It independently picks A. Its new risk is specificity: the
+          `:host-context` → `.atl-x.y .z` rewrite raises specificity for consumer overrides.
+          It also re-flags the leak, which is correct for the default config.
     - [ ] **P1.2 ADR — where the CSS source of truth lives.** Option A (leaning): Angular
           `:host` CSS canonical, React/Vue generated — Angular stays idiomatic, same
           one-source-one-generated-copy shape as `icons.ts` via `sync-spec.mjs`. Option B:
