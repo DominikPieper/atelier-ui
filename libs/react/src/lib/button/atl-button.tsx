@@ -1,6 +1,6 @@
 import { ButtonHTMLAttributes, ReactNode, forwardRef } from 'react';
 import type { AtlButtonSpec } from '../spec';
-import './atl-button.css';
+import '@atelier-ui/styles/button/atl-button.css';
 
 /**
  * Accessibility requirement: the button must carry an accessible name

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import './atl-badge.css';
+import '@atelier-ui/styles/badge/atl-badge.css';
 import type { AtlIconName } from '../spec';
 import AtlIcon from '../icon/atl-icon.vue';
 

@@ -9,7 +9,7 @@ import {
   MouseEvent,
 } from 'react';
 import type { AtlDialogSpec } from '../spec';
-import './atl-dialog.css';
+import '@atelier-ui/styles/dialog/atl-dialog.css';
 import { AtlIcon } from '../icon/atl-icon';
 
 interface DialogContextValue {

@@ -1,6 +1,6 @@
 import { HTMLAttributes, ReactNode } from 'react';
 import type { AtlBadgeSpec, AtlIconName } from '../spec';
-import './atl-badge.css';
+import '@atelier-ui/styles/badge/atl-badge.css';
 import { AtlIcon } from '../icon/atl-icon';
 
 /** Which AtlIcon each variant carries. Names, not glyphs: a glyph in a string map

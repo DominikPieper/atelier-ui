@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, onMounted, ref } from 'vue';
-import './atl-button.css';
+import '@atelier-ui/styles/button/atl-button.css';
 
 defineOptions({ name: 'AtlButton' });
 

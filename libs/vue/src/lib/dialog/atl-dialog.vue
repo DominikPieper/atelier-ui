@@ -18,7 +18,7 @@ export interface AtlDialogProps {
 
 <script setup lang="ts">
 import { computed, onMounted, provide, ref, useId, watch } from 'vue';
-import './atl-dialog.css';
+import '@atelier-ui/styles/dialog/atl-dialog.css';
 
 defineOptions({ name: 'AtlDialog' });
 

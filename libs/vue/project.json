@@ -11,6 +11,7 @@
     }
   },
   "tags": ["framework:vue", "type:ui-lib"],
+  "implicitDependencies": ["styles"],
   "targets": {
     "build": {
       "executor": "nx:run-commands",
