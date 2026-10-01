@@ -657,6 +657,7 @@ const stepTag = trackStep
                   >copy once</span
                 >
               </div>
+              {/* eslint-disable astro/jsx-a11y/no-noninteractive-tabindex -- keyboard access to a horizontally scrollable region (WCAG 2.1.1) */}
               <div
                 tabindex="0"
                 style="
@@ -687,6 +688,7 @@ const stepTag = trackStep
                   >AbCd1234-wXyZ5678-QrSt9012-mNoP3456</span
                 >
               </div>
+              {/* eslint-enable astro/jsx-a11y/no-noninteractive-tabindex */}
               <span
                 style="
                   font-size: 0.72rem;

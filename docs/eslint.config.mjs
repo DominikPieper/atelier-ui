@@ -10,6 +10,14 @@ export default [
   ...astro.configs.recommended,
   ...astro.configs['jsx-a11y-recommended'],
   {
+    rules: {
+      // `<pre tabindex="0">` is how a horizontally scrollable code block gets
+      // keyboard access (WCAG 2.1.1, axe scrollable-region-focusable); the
+      // rule's default treats every non-interactive element as a violation.
+      'astro/jsx-a11y/no-noninteractive-tabindex': ['error', { tags: ['pre'] }],
+    },
+  },
+  {
     ignores: ['.astro/**', 'dist/**'],
   },
 ];

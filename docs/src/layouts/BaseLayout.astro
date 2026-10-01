@@ -239,8 +239,8 @@ const breadcrumbSchema = {
     <!-- Prevent flash of wrong theme & preserve across View Transitions -->
     <script is:inline>
       (function () {
-        var stored = localStorage.getItem('docs-theme');
-        var theme =
+        const stored = localStorage.getItem('docs-theme');
+        const theme =
           stored ||
           (window.matchMedia('(prefers-color-scheme: dark)').matches
             ? 'dark'
@@ -249,7 +249,7 @@ const breadcrumbSchema = {
         // Sync aria-pressed on the theme toggle as soon as the button mounts so
         // assistive tech reads the correct state on first paint, not after JS init.
         document.addEventListener('DOMContentLoaded', function () {
-          var btn = document.getElementById('theme-btn');
+          const btn = document.getElementById('theme-btn');
           if (btn)
             btn.setAttribute(
               'aria-pressed',
@@ -260,7 +260,7 @@ const breadcrumbSchema = {
 
       // Before Astro swaps in the new document, copy data-theme to it so there's no flash
       document.addEventListener('astro:before-swap', function (e) {
-        var theme = document.documentElement.getAttribute('data-theme');
+        const theme = document.documentElement.getAttribute('data-theme');
         if (theme)
           e.newDocument.documentElement.setAttribute('data-theme', theme);
       });
@@ -809,7 +809,7 @@ const breadcrumbSchema = {
         // so each click toggles open/close → mobile nav appears dead. WHY: shared
         // doc-level listeners accumulate; per-element data-attr is the simplest dedupe.
         if (!el) return;
-        var key = 'bound_' + event;
+        const key = 'bound_' + event;
         if (el.dataset[key]) return;
         el.dataset[key] = '1';
         el.addEventListener(event, handler);
@@ -817,12 +817,12 @@ const breadcrumbSchema = {
 
       function initPage() {
         // Theme toggle
-        var themeBtn = document.getElementById('theme-btn');
-        var moonIcon = document.getElementById('theme-icon-moon');
-        var sunIcon = document.getElementById('theme-icon-sun');
+        const themeBtn = document.getElementById('theme-btn');
+        const moonIcon = document.getElementById('theme-icon-moon');
+        const sunIcon = document.getElementById('theme-icon-sun');
 
         function updateThemeIcon() {
-          var theme = document.documentElement.getAttribute('data-theme');
+          const theme = document.documentElement.getAttribute('data-theme');
           if (moonIcon && sunIcon) {
             moonIcon.style.display = theme === 'dark' ? 'block' : 'none';
             sunIcon.style.display = theme === 'dark' ? 'none' : 'block';
@@ -838,8 +838,8 @@ const breadcrumbSchema = {
         updateThemeIcon();
 
         bindOnce(themeBtn, 'click', function () {
-          var current = document.documentElement.getAttribute('data-theme');
-          var next = current === 'dark' ? 'light' : 'dark';
+          const current = document.documentElement.getAttribute('data-theme');
+          const next = current === 'dark' ? 'light' : 'dark';
 
           function apply() {
             document.documentElement.setAttribute('data-theme', next);
@@ -851,7 +851,7 @@ const breadcrumbSchema = {
           // using the View Transitions API. Falls back to an instant swap
           // when the browser doesn't support it (Firefox today) or when the
           // user prefers reduced motion.
-          var prefersReduce = window.matchMedia(
+          const prefersReduce = window.matchMedia(
             '(prefers-reduced-motion: reduce)',
           ).matches;
           if (!document.startViewTransition || prefersReduce) {
@@ -859,15 +859,15 @@ const breadcrumbSchema = {
             return;
           }
 
-          var rect = themeBtn.getBoundingClientRect();
-          var cx = rect.left + rect.width / 2;
-          var cy = rect.top + rect.height / 2;
+          const rect = themeBtn.getBoundingClientRect();
+          const cx = rect.left + rect.width / 2;
+          const cy = rect.top + rect.height / 2;
           // Furthest viewport corner from the click → reveal radius.
-          var radius = Math.hypot(
+          const radius = Math.hypot(
             Math.max(cx, window.innerWidth - cx),
             Math.max(cy, window.innerHeight - cy),
           );
-          var root = document.documentElement;
+          const root = document.documentElement;
           root.style.setProperty('--theme-x', cx + 'px');
           root.style.setProperty('--theme-y', cy + 'px');
           root.style.setProperty('--theme-r', radius + 'px');
@@ -884,12 +884,14 @@ const breadcrumbSchema = {
             next === 'light',
           );
 
-          var transition = document.startViewTransition(apply);
+          const transition = document.startViewTransition(apply);
           // Rapid double-clicks skip the in-flight transition with an
           // AbortError on `.finished`. That's expected; swallow it so the
           // browser console stays clean. `finally` still runs on rejection.
           transition.finished
-            .catch(function () {})
+            .catch(function () {
+              // expected AbortError, see above
+            })
             .finally(function () {
               root.classList.remove('docs-theme-transitioning');
               root.classList.remove('docs-theme-transitioning--to-dark');
@@ -902,13 +904,13 @@ const breadcrumbSchema = {
         // mobile (off-canvas drawer). So focus-trap / Escape / inert apply ONLY
         // below the 768px breakpoint — on desktop the drawer concept doesn't
         // exist and we must never make the sidebar inert or steal focus.
-        var menuBtn = document.getElementById('menu-btn');
-        var sidebar = document.getElementById('sidebar');
-        var backdrop = document.getElementById('sidebar-backdrop');
-        var closeBtn = document.getElementById('sidebar-close');
-        var mainEl = document.getElementById('main');
-        var footerEl = document.querySelector('.docs-footer');
-        var mobileMq = window.matchMedia('(max-width: 768px)');
+        const menuBtn = document.getElementById('menu-btn');
+        const sidebar = document.getElementById('sidebar');
+        const backdrop = document.getElementById('sidebar-backdrop');
+        const closeBtn = document.getElementById('sidebar-close');
+        const mainEl = document.getElementById('main');
+        const footerEl = document.querySelector('.docs-footer');
+        const mobileMq = window.matchMedia('(max-width: 768px)');
 
         // A fresh page load (initial, or a ClientRouter swap after tapping a
         // sidebar link while the drawer was open) never starts with the drawer
@@ -930,7 +932,7 @@ const breadcrumbSchema = {
         // the attribute is always cleared so the sticky sidebar stays reachable.
         function syncInert() {
           if (!sidebar) return;
-          var hidden =
+          const hidden =
             isMobile() && !sidebar.classList.contains('docs-sidebar--open');
           if (hidden) sidebar.setAttribute('inert', '');
           else sidebar.removeAttribute('inert');
@@ -969,7 +971,7 @@ const breadcrumbSchema = {
             // body scroll is locked below, so the banner can't move underneath
             // the drawer while it's open, but its own height keeps shifting
             // the topbar off-screen as the page scrolls.
-            var topbar = document.querySelector('.docs-topbar');
+            const topbar = document.querySelector('.docs-topbar');
             if (topbar) {
               sidebar.style.setProperty(
                 '--docs-drawer-top',
@@ -984,7 +986,7 @@ const breadcrumbSchema = {
             if (isMobile()) lockPageForDrawer();
             // Move focus into the drawer so keyboard/SR users land inside it.
             if (isMobile()) {
-              var first = closeBtn || getFocusable()[0];
+              const first = closeBtn || getFocusable()[0];
               if (first) first.focus();
             }
           }
@@ -992,7 +994,7 @@ const breadcrumbSchema = {
 
         function closeSidebar() {
           if (sidebar && backdrop && menuBtn) {
-            var wasOpen = sidebar.classList.contains('docs-sidebar--open');
+            const wasOpen = sidebar.classList.contains('docs-sidebar--open');
             sidebar.classList.remove('docs-sidebar--open');
             sidebar.style.removeProperty('--docs-drawer-top');
             backdrop.classList.remove('docs-sidebar-backdrop--visible');
@@ -1006,9 +1008,11 @@ const breadcrumbSchema = {
         }
 
         bindOnce(menuBtn, 'click', function () {
-          sidebar && sidebar.classList.contains('docs-sidebar--open')
-            ? closeSidebar()
-            : openSidebar();
+          if (sidebar && sidebar.classList.contains('docs-sidebar--open')) {
+            closeSidebar();
+          } else {
+            openSidebar();
+          }
         });
 
         bindOnce(backdrop, 'click', closeSidebar);
@@ -1024,10 +1028,10 @@ const breadcrumbSchema = {
             return;
           }
           if (e.key !== 'Tab') return;
-          var focusable = getFocusable();
+          const focusable = getFocusable();
           if (!focusable.length) return;
-          var firstEl = focusable[0];
-          var lastEl = focusable[focusable.length - 1];
+          const firstEl = focusable[0];
+          const lastEl = focusable[focusable.length - 1];
           if (e.shiftKey && document.activeElement === firstEl) {
             e.preventDefault();
             lastEl.focus();
@@ -1043,9 +1047,9 @@ const breadcrumbSchema = {
         if (!window.__atelierDrawerMqBound) {
           window.__atelierDrawerMqBound = true;
           mobileMq.addEventListener('change', function () {
-            var sb = document.getElementById('sidebar');
+            const sb = document.getElementById('sidebar');
             if (!sb) return;
-            var hidden =
+            const hidden =
               mobileMq.matches && !sb.classList.contains('docs-sidebar--open');
             if (hidden) sb.setAttribute('inert', '');
             else sb.removeAttribute('inert');
@@ -1056,8 +1060,8 @@ const breadcrumbSchema = {
             if (!mobileMq.matches) {
               document.documentElement.classList.remove('docs-drawer-open');
               sb.style.removeProperty('--docs-drawer-top');
-              var m = document.getElementById('main');
-              var f = document.querySelector('.docs-footer');
+              const m = document.getElementById('main');
+              const f = document.querySelector('.docs-footer');
               if (m) m.removeAttribute('inert');
               if (f) f.removeAttribute('inert');
             }
@@ -1081,9 +1085,9 @@ const breadcrumbSchema = {
         // swaps <body>, and a captured node would keep being updated after the
         // navigation that detached it.
         function handleScroll() {
-          var scrollTopBtn = document.getElementById('scroll-top');
-          var progressBar = document.getElementById('scroll-progress');
-          var scrollY = window.scrollY;
+          const scrollTopBtn = document.getElementById('scroll-top');
+          const progressBar = document.getElementById('scroll-progress');
+          const scrollY = window.scrollY;
           if (scrollTopBtn) {
             scrollTopBtn.classList.toggle(
               'docs-scroll-top--visible',
@@ -1091,9 +1095,9 @@ const breadcrumbSchema = {
             );
           }
           if (progressBar) {
-            var max =
+            const max =
               document.documentElement.scrollHeight - window.innerHeight;
-            var pct =
+            const pct =
               max > 0 ? Math.min(100, Math.max(0, (scrollY / max) * 100)) : 0;
             progressBar.style.width = pct + '%';
           }
@@ -1109,7 +1113,7 @@ const breadcrumbSchema = {
         handleScroll();
 
         bindOnce(document.getElementById('scroll-top'), 'click', function () {
-          var prefersReduce = window.matchMedia(
+          const prefersReduce = window.matchMedia(
             '(prefers-reduced-motion: reduce)',
           ).matches;
           window.scrollTo({
@@ -1149,7 +1153,7 @@ const breadcrumbSchema = {
           document.querySelectorAll('pre'),
           function (pre) {
             if (pre.hasAttribute('tabindex')) return;
-            var overflow =
+            const overflow =
               (pre.style.overflow || pre.style.overflowX || '') +
               ' ' +
               (getComputedStyle(pre).overflow || '') +
@@ -1165,21 +1169,21 @@ const breadcrumbSchema = {
         );
 
         // TOC active state via IntersectionObserver
-        var toc = document.querySelector('.docs-toc');
+        const toc = document.querySelector('.docs-toc');
         if (toc) {
-          var links = Array.from(toc.querySelectorAll('.docs-toc-link'));
-          var headings = links
+          const links = Array.from(toc.querySelectorAll('.docs-toc-link'));
+          const headings = links
             .map(function (l) {
-              var href = l.getAttribute('href');
+              const href = l.getAttribute('href');
               return href ? document.getElementById(href.slice(1)) : null;
             })
             .filter(Boolean);
           if (headings.length) {
-            var observer = new IntersectionObserver(
+            const observer = new IntersectionObserver(
               function (entries) {
                 entries.forEach(function (entry) {
                   if (entry.isIntersecting) {
-                    var id = entry.target.id;
+                    const id = entry.target.id;
                     links.forEach(function (l) {
                       l.classList.toggle(
                         'active',
