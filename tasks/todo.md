@@ -114,10 +114,10 @@ Ranked; each carries why it's worth doing next rather than later.
           removes the leak.
           Surfaced bugs, independent of P1 (both statically confirmed by me; not checked in
           Storybook):
-      - [ ] **Angular `AtlStepper` uses `--step-circle` / `--step-connector-width` and
+      - [x] **Fixed 2026-10-01 (`c8273cbe`).** **Angular `AtlStepper` uses `--step-circle` / `--step-connector-width` and
             never defines them** (`libs/angular/src/lib/stepper/atl-stepper.css:41,59,60,188,192`);
             React/Vue define them at `atl-stepper.css:15-16`. Reproduce in Storybook first.
-      - [ ] **Vue `AtlDrawer` puts `atl-drawer-host` on the `<dialog>` itself**
+      - [x] **Fixed 2026-10-01 (`b21a0e0b`; contract probe note corrected in `643597f9`).** **Vue `AtlDrawer` puts `atl-drawer-host` on the `<dialog>` itself**
             (`atl-drawer.vue:83-99`), so every `.atl-drawer-host dialog` rule
             (`atl-drawer.css:38,59,65`) misses. The headless probe measured the open dialog
             at `display: block` and ~88px wide instead of `flex` and 448px. Reproduce in

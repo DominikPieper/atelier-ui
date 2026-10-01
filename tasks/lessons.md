@@ -842,6 +842,6 @@ The through-line, and the rule:
 
 I argued P1's scope (one CSS source) from "two adapters that are no longer planned". The
 owner corrected: Angular is the default and first workshop framework, but React and Vue may
-still be taught. Rule: Angular-first decides *order and design*, not *whether* the other
+still be taught. Rule: Angular-first decides _order and design_, not _whether_ the other
 adapters stay maintainable. When a plan's cost lands on React/Vue, name the cost; don't
 discount it as unplanned.
