@@ -182,8 +182,8 @@ Ranked; each carries why it's worth doing next rather than later.
         ignored by the plugin; `astroCompressHTML: "html"` (matches Astro 6's
         `compressHTML: true`) brings it to 0/61. Cross-checked with Chromium `innerText` of
         every page and link: 0 diffs, control run without the option 61 diffs.
-  - [x] S2 `ee2d4733` config, `0ec9fd50` format-only, `b759c99d` blame-ignore; plus
-        `656a8448`/`e66449ef` re-keying `allowlists.js` entries the reflow broke.
+  - [x] S2 `3f14528d` config, `ab1f4946` format-only, `ce0b3906` blame-ignore; plus
+        `6a6e5daf`/`29324f0d` re-keying `allowlists.js` entries the reflow broke.
         `check:all` exit 0.
   - [ ] Found by S2, owner call: `skills/figma-workspace-architect.astro` has
         `style="margin: 0 0 {mode.subModes.length ? …}"` — braces in a quoted attribute are
@@ -193,7 +193,7 @@ Ranked; each carries why it's worth doing next rather than later.
   - [ ] Found by S2: `check:component-count` / `check:docs` allowlists key on exact
         adjacent source lines, so any reflow of a prose paragraph breaks them. Key on content
         instead?
-  - [x] S3 `e8705848` config (`eslint-plugin-astro@1.7.0`), `18b671f9` 54 findings fixed
+  - [x] S3 `97ddb2bd` config (`eslint-plugin-astro@1.7.0`), `31373193` 54 findings fixed
         (49 `no-var`, 3 tabindex, 2 TS); browser smoke across ClientRouter navigation clean.
   - [x] S4 ADR-0147 (0146 is taken on branch `spike/own-mcp-server`).
 
