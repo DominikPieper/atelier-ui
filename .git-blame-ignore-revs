@@ -1,7 +1,2 @@
-# Commits listed here are ignored by `git blame` (GitHub honours this file
-# automatically; a local clone needs `git config blame.ignoreRevsFile
-# .git-blame-ignore-revs` for it to take effect).
-
-# style(repo): Prettier owns the file, the generator owns its block (ADR-0127)
-# First repo-wide Prettier pass: 881 files reformatted in one commit.
-07007f1135a9b0dd4cbfef03d072998a88fbf867
+# Reformat of every .astro file with prettier-plugin-astro (formatting only)
+0ec9fd504ac259f176bd4cf48c51da1e632eb0e9
