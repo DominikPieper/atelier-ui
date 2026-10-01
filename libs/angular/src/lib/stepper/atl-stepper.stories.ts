@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/angular';
+import { expect } from 'storybook/test';
 import { AtlStepper, AtlStep } from './atl-stepper';
 import { AtlButton } from '../button/atl-button';
 
@@ -65,6 +66,18 @@ export const Default: Story = {
       </atl-stepper>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    // The sizes live in --step-circle / --step-connector-width on the host.
+    // An undefined variable does not fail loudly: width/height fall back to
+    // auto and the circle and connector silently collapse.
+    const circle = canvasElement.querySelector('.step-circle') as HTMLElement;
+    const connector = canvasElement.querySelector(
+      '.step-connector',
+    ) as HTMLElement;
+    await expect(getComputedStyle(circle).width).toBe('36px');
+    await expect(getComputedStyle(circle).height).toBe('36px');
+    await expect(getComputedStyle(connector).height).toBe('2px');
+  },
   parameters: { design: figmaNode('421-407') },
 };
 
@@ -137,5 +150,17 @@ export const Vertical: Story = {
       </atl-stepper>
     `,
   }),
+  play: async ({ canvasElement }) => {
+    // The sizes live in --step-circle / --step-connector-width on the host.
+    // An undefined variable does not fail loudly: width/height fall back to
+    // auto and the circle and connector silently collapse.
+    const circle = canvasElement.querySelector('.step-circle') as HTMLElement;
+    const connector = canvasElement.querySelector(
+      '.step-connector',
+    ) as HTMLElement;
+    await expect(getComputedStyle(circle).width).toBe('36px');
+    await expect(getComputedStyle(circle).height).toBe('36px');
+    await expect(getComputedStyle(connector).width).toBe('2px');
+  },
   parameters: { design: figmaNode('421-485') },
 };

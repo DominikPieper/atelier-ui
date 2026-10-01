@@ -9,6 +9,11 @@
 }
 
 :host {
+  /* Local, not tokens: one component, two uses each, and the connector offset is
+     DERIVED from them (ADR-0071). A single-use dimension is not a token, but a
+     relationship between two of them should be visible. */
+  --step-circle: 36px;
+  --step-connector-width: 2px;
   display: block;
   font-family: var(--ui-font-family);
   /* The leading every descendant inherits. Stated here so the component keeps
