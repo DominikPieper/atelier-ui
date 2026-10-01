@@ -89,22 +89,25 @@ const hostClasses = computed(() => [
 </script>
 
 <template>
-  <!-- Backdrop-click-to-close on a native <dialog>: keyboard users already
-  have a keyboard-equivalent close path via the native Escape key, wired
-  through @cancel/@close below — the click handler is a pointer-only
-  convenience on top of that, not the only way to dismiss the dialog. -->
-  <!-- eslint-disable-next-line vuejs-accessibility/click-events-have-key-events, vuejs-accessibility/no-static-element-interactions -->
-  <dialog
-    ref="dialogRef"
-    :class="hostClasses"
-    :aria-labelledby="headerId"
-    aria-modal="true"
-    @close="onDialogClose"
-    @cancel="onDialogCancel"
-    @click="onBackdropClick"
-  >
-    <div class="panel" @click.stop>
-      <slot />
-    </div>
-  </dialog>
+  <!-- The host classes sit on a wrapper (display: contents), not on the
+  <dialog>: the shared CSS styles `.atl-drawer-host dialog`, as in React. -->
+  <div :class="hostClasses">
+    <!-- Backdrop-click-to-close on a native <dialog>: keyboard users already
+    have a keyboard-equivalent close path via the native Escape key, wired
+    through @cancel/@close below — the click handler is a pointer-only
+    convenience on top of that, not the only way to dismiss the dialog. -->
+    <!-- eslint-disable-next-line vuejs-accessibility/click-events-have-key-events, vuejs-accessibility/no-static-element-interactions -->
+    <dialog
+      ref="dialogRef"
+      :aria-labelledby="headerId"
+      aria-modal="true"
+      @close="onDialogClose"
+      @cancel="onDialogCancel"
+      @click="onBackdropClick"
+    >
+      <div class="panel" @click.stop>
+        <slot />
+      </div>
+    </dialog>
+  </div>
 </template>

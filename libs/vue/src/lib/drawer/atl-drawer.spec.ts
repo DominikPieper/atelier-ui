@@ -66,19 +66,21 @@ describe('AtlDrawer', () => {
     const { container } = render(DrawerFixture, {
       props: { open: false, position: 'left' },
     });
-    expect(container.querySelector('dialog')).toHaveClass('position-left');
+    expect(container.querySelector('.atl-drawer-host')).toHaveClass(
+      'position-left',
+    );
   });
 
   it('applies size class', () => {
     const { container } = render(AtlDrawer, {
       props: { open: false, size: 'lg' },
     });
-    expect(container.querySelector('dialog')).toHaveClass('size-lg');
+    expect(container.querySelector('.atl-drawer-host')).toHaveClass('size-lg');
   });
 
   covers('drawer', 'is-open-class')('applies is-open class when open', () => {
     const { container } = render(AtlDrawer, { props: { open: true } });
-    expect(container.querySelector('dialog')).toHaveClass('is-open');
+    expect(container.querySelector('.atl-drawer-host')).toHaveClass('is-open');
   });
 
   covers('drawer', 'aria-modal')('sets aria-modal', () => {

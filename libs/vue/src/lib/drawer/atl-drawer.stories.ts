@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import { ref } from 'vue';
+import { expect, userEvent } from 'storybook/test';
 import AtlDrawer from './atl-drawer.vue';
 import AtlDrawerHeader from './atl-drawer-header.vue';
 import AtlDrawerContent from './atl-drawer-content.vue';
@@ -73,6 +74,17 @@ export const Default: Story = {
       </div>
     `,
   }),
+  play: async ({ canvas, canvasElement }) => {
+    await userEvent.click(canvas.getByRole('button', { name: 'Open Drawer' }));
+    const dialog = canvasElement.querySelector('dialog') as HTMLDialogElement;
+    await expect(dialog).toHaveAttribute('open');
+    // The shared CSS styles `.atl-drawer-host dialog`: the host class must sit
+    // on a wrapper ABOVE the <dialog>, or none of these rules match and the
+    // dialog falls back to the UA default (display: block, fit-content width).
+    await expect(getComputedStyle(dialog).display).toBe('flex');
+    // default size md = 28rem (16px root)
+    await expect(getComputedStyle(dialog).width).toBe('448px');
+  },
   parameters: { design: figmaNode('421-342') },
 };
 
