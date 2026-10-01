@@ -161,13 +161,41 @@ Ranked; each carries why it's worth doing next rather than later.
       than pushing a main that fails its own first gate and waiting for the next person to
       notice.
 
-- [ ] **No gate has ever formatted an `.astro` file.** `check:format` is `prettier --check .`,
+- [x] **No gate has ever formatted an `.astro` file — fixed 2026-10-01 (ADR-0147).** `check:format` is `prettier --check .`,
       and without `prettier-plugin-astro` installed Prettier cannot parse `.astro` at all —
       targeted, it errors on all 24 pages; across the tree, it silently skips them. So the docs
       site, which is most of what this repo publishes, has never had a formatter's word on it.
       Found 2026-09-13 while extending `design-principles.astro`. Installing the plugin would
       reformat every page in one commit, which is the reason to decide it deliberately rather
       than discover it mid-review.
+      **Decided 2026-10-01 (owner):** one format-only commit, listed in `.git-blame-ignore-revs`;
+      ESLint via `eslint-plugin-astro@1.7` on ESLint 9 now, the ESLint 10 bump separately.
+      Spike (scratchpad copy): `prettier-plugin-astro@1.1.0` reformats 46/50 files
+      (+10870/−3226), idempotent; it wraps text inside inline elements (`<a>…</a>.`), which
+      Astro's whitespace collapsing may render as "Setup ." — unproven, S1 measures it. Also:
+      `docs/` has no `eslint.config.mjs`, so no `lint` target exists and CI never lints it.
+      Done when: `check:format` covers `.astro`; `nx lint docs` exists and is clean with
+      `eslint-plugin-astro` + jsx-a11y; reformatting changes no page's rendered text (built
+      HTML text diff); `check:all` exit 0; ADR recorded.
+  - [x] S1 built-HTML text diff — plugin defaults changed visible text on 27/61 pages
+        (spaces before punctuation and inside links); `htmlWhitespaceSensitivity: strict` is
+        ignored by the plugin; `astroCompressHTML: "html"` (matches Astro 6's
+        `compressHTML: true`) brings it to 0/61. Cross-checked with Chromium `innerText` of
+        every page and link: 0 diffs, control run without the option 61 diffs.
+  - [x] S2 `ee2d4733` config, `0ec9fd50` format-only, `b759c99d` blame-ignore; plus
+        `656a8448`/`e66449ef` re-keying `allowlists.js` entries the reflow broke.
+        `check:all` exit 0.
+  - [ ] Found by S2, owner call: `skills/figma-workspace-architect.astro` has
+        `style="margin: 0 0 {mode.subModes.length ? …}"` — braces in a quoted attribute are
+        never evaluated, so the margin has never applied on the live site. Fix is
+        `style={`…${…}`}`, which changes rendering; until then it carries a
+        `<!-- prettier-ignore -->` (the plugin lowercased `subModes` inside the string).
+  - [ ] Found by S2: `check:component-count` / `check:docs` allowlists key on exact
+        adjacent source lines, so any reflow of a prose paragraph breaks them. Key on content
+        instead?
+  - [x] S3 `e8705848` config (`eslint-plugin-astro@1.7.0`), `18b671f9` 54 findings fixed
+        (49 `no-var`, 3 tabindex, 2 TS); browser smoke across ClientRouter navigation clean.
+  - [x] S4 ADR-0147 (0146 is taken on branch `spike/own-mcp-server`).
 
 - [x] **`@atelier-ui/react` is published as a self-contradictory package — fixed 2026-09-13**
       (`68a3b52`, ADR-0138; the `"type": "module"` declaration then exposed `check:exports`
