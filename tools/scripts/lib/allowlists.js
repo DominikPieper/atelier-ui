@@ -208,8 +208,8 @@ const SCAFFOLD_PORT_EXEMPT_ENTRIES = [
   [
     scaffoldPortKey(
       'docs/src/pages/storybook.astro',
-      'terminal that started it. A scaffolded workspace ships only one framework, and its Storybook',
-      'binds the single port <code>6006</code>.',
+      'started it. A scaffolded workspace ships only one framework, and',
+      'its Storybook binds the single port <code>6006</code>.',
     ),
     "States, by name, that a scaffolded workspace's single Storybook binds 6006 — the sentence exists to contrast it with the clone's 4400/4401/4402 (ADR-0084).",
   ],
@@ -232,16 +232,16 @@ const SCAFFOLD_PORT_EXEMPT_ENTRIES = [
   [
     scaffoldPortKey(
       'docs/src/pages/tutorial.astro',
-      '<li><Icon name="check_circle" /> Claude read the Figma spec and matched the Atelier UI components through the Storybook MCP</li>',
-      '<li><Icon name="check_circle" /> The generated component renders in your app at <code>http://localhost:4200</code> — your workspace also ships its own Storybook (<code>npm run storybook</code>, port <code>6006</code>) once you add a story for it</li>',
+      'its own Storybook (<code>npm run storybook</code>, port',
+      '<code>6006</code>) once you add a story for it',
     ),
     'Corrects the "the scaffold has no Storybook of its own" claim ADR-0137 names directly — a generated workspace now ships a Storybook per app, bound to 6006. Re-keyed when the citation moved from `npx nx storybook workshop-<fw>` to the `npm run storybook` script (owner requirement: no Nx knowledge needed).',
   ],
   [
     scaffoldPortKey(
       'docs/src/pages/design-to-code.astro',
-      'See the component rendered, then run <code>figma_check_design_parity</code> to catch padding, colour, and variant drift against the Figma spec.',
-      "In the atelier monorepo that means the story in Storybook (<code>nx storybook &lt;fw&gt;</code>); in a scaffolded workspace it means the app (<code>npx nx serve workshop-&lt;fw&gt;</code>) — or, once you've written a story for it, the workspace's own Storybook (<code>npx nx storybook workshop-&lt;fw&gt;</code>, port <code>6006</code>).",
+      '(<code>npx nx storybook workshop-&lt;fw&gt;</code>, port',
+      '<code>6006</code>).',
     ),
     'Same stale "no Storybook of its own" claim as tutorial.astro, in the Verify step of the four-step loop — corrected per ADR-0137.',
   ],
