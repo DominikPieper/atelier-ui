@@ -60,10 +60,17 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const CHECK = process.argv.includes('--check');
 const MARKER = '/* Geometry contract';
 
+/** The sheet without its geometry-contract block (which would otherwise name its own roots). */
+function withoutBlock(css) {
+  return css.startsWith(MARKER)
+    ? css.slice(css.indexOf('*/') + 2).replace(/^[\s\S]*?\n\n/, '')
+    : css;
+}
+
 /** Every `.atl-*` class that starts a rule — the component's root classes. */
 function leadingAtlClasses(css) {
   const found = new Set();
-  const clean = css.replace(/\/\*[\s\S]*?\*\//g, '');
+  const clean = withoutBlock(css).replace(/\/\*[\s\S]*?\*\//g, '');
   for (const rule of clean.matchAll(/(^|[};])\s*([^{};@][^{}]*?)\{/g)) {
     for (const selector of rule[2].split(',')) {
       const m = selector.trim().match(/^\.(atl-[a-z0-9-]+)/);
@@ -239,10 +246,7 @@ for (const fw of FRAMEWORKS) {
       }
 
       // Replace an existing stale block, or prepend a new one.
-      const body = css.startsWith(MARKER)
-        ? css.slice(css.indexOf('*/') + 2).replace(/^[\s\S]*?\n\n/, '')
-        : css;
-      writeFileSync(target, want + body);
+      writeFileSync(target, want + withoutBlock(css));
       written++;
     }
   }
