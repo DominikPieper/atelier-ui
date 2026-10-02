@@ -3,10 +3,18 @@
  * same file as the sizes it governs and no consuming app has to supply one.
  * Gated by check:box-sizing; the resulting boxes are measured by check:geometry.
  * See ADR-0043. */
-:is(.atl-tooltip, .atl-tooltip-wrapper),
-:is(.atl-tooltip, .atl-tooltip-wrapper) * {
+.atl-tooltip-wrapper,
+.atl-tooltip-wrapper * {
   box-sizing: border-box;
 }
+
+/* React and Vue tooltip: no overlay. The tooltip is a sibling of the trigger inside
+ * an inline-block wrapper, positioned against it with CSS (the Angular directive
+ * attaches the same visual to a CDK overlay instead — atl-tooltip.angular.css).
+ * That is why the wrapper, the position classes and the translate-carrying
+ * keyframes exist only here; the DOM difference is recorded in allowlists.js
+ * (VARIANT_AXIS_EXCEPTIONS, "angular:AtlTooltipPosition:*") and ADR-0148
+ * Decision 4. */
 
 /* Tooltip wrapper — inline container */
 .atl-tooltip-wrapper {
@@ -19,27 +27,10 @@
   position: relative;
 }
 
-/* Tooltip content */
-.atl-tooltip {
+.atl-tooltip-wrapper > .atl-tooltip {
   position: absolute;
   z-index: var(--ui-z-dropdown);
-  display: block;
-  padding: var(--ui-spacing-1) var(--ui-spacing-2);
-  background: var(--ui-color-text);
-  color: var(--ui-color-surface);
-  font-family: var(--ui-font-family);
-  font-size: var(--ui-font-size-xs);
-  line-height: var(--ui-line-height-normal);
-  border-radius: var(--ui-radius-sm);
-  box-shadow: var(--ui-shadow-md);
-  max-width: 20rem;
-  word-wrap: break-word;
-  pointer-events: none;
   white-space: nowrap;
-
-  /* Entry animation */
-  animation: atl-tooltip-enter var(--ui-duration-fast) var(--ui-ease-out)
-    forwards;
 }
 
 /* Positioning */

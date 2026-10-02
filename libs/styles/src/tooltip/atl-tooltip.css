@@ -3,12 +3,14 @@
  * same file as the sizes it governs and no consuming app has to supply one.
  * Gated by check:box-sizing; the resulting boxes are measured by check:geometry.
  * See ADR-0043. */
-:host,
-:host * {
+.atl-tooltip,
+.atl-tooltip * {
   box-sizing: border-box;
 }
 
-/* Tooltip content — rendered in CDK overlay */
+/* Tooltip content — the visual every framework shares. How it is placed (a CDK
+ * overlay in Angular, a positioned sibling of the trigger in React and Vue) and
+ * how it animates in is per framework: atl-tooltip.<framework>.css. */
 .atl-tooltip {
   display: block;
   padding: var(--ui-spacing-1) var(--ui-spacing-2);
@@ -23,18 +25,7 @@
   word-wrap: break-word;
   pointer-events: none;
 
-  /* Entry animation */
+  /* Entry animation; the keyframes are per framework. */
   animation: atl-tooltip-enter var(--ui-duration-fast) var(--ui-ease-out)
     forwards;
-}
-
-@keyframes atl-tooltip-enter {
-  from {
-    opacity: 0;
-    transform: scale(0.95);
-  }
-  to {
-    opacity: 1;
-    transform: scale(1);
-  }
 }

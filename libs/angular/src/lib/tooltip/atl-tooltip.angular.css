@@ -1,0 +1,17 @@
+/* Angular tooltip: the content is rendered inside a CDK overlay pane
+ * (atl-tooltip.ts, createFlexibleConnectedPositionStrategy), which positions it
+ * with inline transforms on the pane. The element itself is therefore never
+ * transformed, and the entry animation must not carry a translate: React and Vue
+ * position the tooltip with CSS transforms on the element, so their keyframes
+ * do. The DOM difference is recorded in allowlists.js (VARIANT_AXIS_EXCEPTIONS,
+ * "angular:AtlTooltipPosition:*") and ADR-0148 Decision 4. */
+@keyframes atl-tooltip-enter {
+  from {
+    opacity: 0;
+    transform: scale(0.95);
+  }
+  to {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

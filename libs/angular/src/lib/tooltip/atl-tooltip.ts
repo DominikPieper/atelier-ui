@@ -29,7 +29,12 @@ let nextTooltipId = 0;
   // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
   encapsulation: ViewEncapsulation.None,
   template: `{{ text() }}`,
-  styleUrl: './atl-tooltip.css',
+  // The shared sheet, then Angular's own entry animation (the CDK overlay positions the
+  // element, so the keyframes carry no translate).
+  styleUrls: [
+    '../../../../styles/src/tooltip/atl-tooltip.css',
+    './atl-tooltip.angular.css',
+  ],
   host: {
     class: 'atl-tooltip',
     role: 'tooltip',
