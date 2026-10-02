@@ -55,12 +55,15 @@ export class AtlMenuTrigger {}
   selector: 'atl-menu',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
+  // Class-rooted CSS shared with React and Vue (libs/styles): the root class below
+  // is what scopes it, so Emulated encapsulation is switched off.
   // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
   encapsulation: ViewEncapsulation.None,
   hostDirectives: [CdkMenu],
   template: `<ng-content />`,
-  styleUrl: './atl-menu.css',
+  styleUrl: '../../../../styles/src/menu/atl-menu.css',
   host: {
+    class: 'atl-menu',
     '[class]': 'hostClasses()',
   },
 })
@@ -69,9 +72,7 @@ export class AtlMenu {
   readonly variant = input<'default' | 'compact'>('default');
 
   /** @internal */
-  protected readonly hostClasses = computed(
-    () => `atl-menu variant-${this.variant()}`,
-  );
+  protected readonly hostClasses = computed(() => `variant-${this.variant()}`);
 }
 
 /**

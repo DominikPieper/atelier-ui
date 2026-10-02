@@ -43,6 +43,21 @@ describe('AtlMenu', () => {
     expect(menu).toHaveClass('variant-default');
   });
 
+  it('keeps the static atl-menu root class alongside the variant class', async () => {
+    // The shared stylesheet (libs/styles) is scoped by `.atl-menu`; the host also
+    // binds `[class]` for the variant, and the two must merge.
+    await render(MENU_TEMPLATE, { imports: MENU_IMPORTS });
+    screen.getByText('Open Menu').click();
+    const menu = document.querySelector('atl-menu');
+    expect(menu).toHaveClass('atl-menu', 'variant-default');
+    expect(document.querySelector('atl-menu-item')).toHaveClass(
+      'atl-menu-item',
+    );
+    expect(document.querySelector('atl-menu-separator')).toHaveClass(
+      'atl-menu-separator',
+    );
+  });
+
   covers('menu', 'variant-class')('applies compact variant class', async () => {
     await render(
       `
