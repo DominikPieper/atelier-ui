@@ -64,6 +64,7 @@ const DOCS_THEME_CSS = 'docs/src/styles/docs-theme.css';
 // at all — it has no allowlists.js and starts with zero exemptions; see
 // those rules' own headers for the documented empty-map default).
 const ALLOWLISTS = 'tools/scripts/lib/allowlists.js';
+const SHARED_ROOT = 'libs/styles/src';
 
 export default {
   plugins: [atelier],
@@ -91,14 +92,22 @@ export default {
         rules: {
           'atelier/no-raw-color-literal': true,
           'atelier/no-undeclared-token': [true, { tokenFiles: [TOKENS_CSS] }],
+          // `sharedRoot`: a component that moved into `libs/styles` leaves no
+          // literal here, but its exemptions are still in use there, so the
+          // staleness scan reads both trees.
           'atelier/no-primitive-token': [
             true,
-            { componentRoot, allowlistsFile: ALLOWLISTS },
+            {
+              componentRoot,
+              sharedRoot: SHARED_ROOT,
+              allowlistsFile: ALLOWLISTS,
+            },
           ],
           'atelier/no-token-bypass': [
             true,
             {
               componentRoot,
+              sharedRoot: SHARED_ROOT,
               tokenFile: TOKENS_CSS,
               allowlistsFile: ALLOWLISTS,
             },

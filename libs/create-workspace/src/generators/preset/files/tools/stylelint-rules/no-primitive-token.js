@@ -229,13 +229,17 @@ function scanComponentRootForSeenKeys(absBase, primitiveTokens) {
 // claim 3, reproduced: a componentRoot processed second had its own
 // genuinely-stale exemption go unreported once a differently-configured
 // override sharing that root ran first in the same process).
-function cacheKey(componentRoot, allowlistsFile) {
+function cacheKey(componentRoot, allowlistsFile, sharedRoot) {
   // JSON-encode the tuple rather than joining with a separator character:
   // that's unambiguous no matter what either string contains, unlike a
   // literal join (space, NUL, or any other single character) which two
   // different (componentRoot, allowlistsFile) pairs could in principle
   // both produce.
-  return JSON.stringify([componentRoot, allowlistsFile || '']);
+  return JSON.stringify([
+    componentRoot,
+    allowlistsFile || '',
+    sharedRoot || '',
+  ]);
 }
 const seenByRoot = new Map();
 const staleReportedForRoot = new Set();
@@ -251,6 +255,7 @@ const rule = (primary, secondaryOptions) => {
         actual: secondaryOptions,
         possible: {
           componentRoot: [isNonEmptyString],
+          sharedRoot: [isNonEmptyString],
           allowlistsFile: [isNonEmptyString],
         },
       },
@@ -265,6 +270,12 @@ const rule = (primary, secondaryOptions) => {
     const rawComponentRoot = secondaryOptions && secondaryOptions.componentRoot;
     const componentRoot = rawComponentRoot
       ? normalizeRepoRelative(rawComponentRoot)
+      : undefined;
+    // A second tree whose stylesheets count as evidence that an exemption is
+    // still in use (never as a scope to lint) — see no-token-bypass.js.
+    const rawSharedRoot = secondaryOptions && secondaryOptions.sharedRoot;
+    const sharedRoot = rawSharedRoot
+      ? normalizeRepoRelative(rawSharedRoot)
       : undefined;
     const allowlistsFile = secondaryOptions && secondaryOptions.allowlistsFile;
     const { module: allowlists, invalidReason } = getAllowlists(allowlistsFile);
@@ -291,16 +302,21 @@ const rule = (primary, secondaryOptions) => {
     // could ever produce — skip the scan (and the staleness report loop)
     // outright rather than run it and find nothing, every file, forever.
     const hasExemptions = PRIMITIVE_EXEMPTIONS.size > 0;
-    const rootKey = cacheKey(componentRoot, allowlistsFile);
+    const rootKey = cacheKey(componentRoot, allowlistsFile, sharedRoot);
 
     if (inScope && hasExemptions && !seenByRoot.has(rootKey)) {
-      seenByRoot.set(
-        rootKey,
-        scanComponentRootForSeenKeys(
-          path.resolve(REPO_ROOT, componentRoot),
-          PRIMITIVE_TOKENS,
-        ),
+      const seen = scanComponentRootForSeenKeys(
+        path.resolve(REPO_ROOT, componentRoot),
+        PRIMITIVE_TOKENS,
       );
+      if (sharedRoot) {
+        for (const key of scanComponentRootForSeenKeys(
+          path.resolve(REPO_ROOT, sharedRoot),
+          PRIMITIVE_TOKENS,
+        ))
+          seen.add(key);
+      }
+      seenByRoot.set(rootKey, seen);
     }
     const seenKeys =
       inScope && hasExemptions ? seenByRoot.get(rootKey) : new Set();

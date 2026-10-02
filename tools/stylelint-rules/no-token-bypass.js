@@ -332,13 +332,18 @@ function scanComponentRootForSeenKeys(absBase, tokenValue) {
 // second, silently suppressing the second's own staleness check — see
 // `no-primitive-token.js` for the full reasoning and its own reproduction
 // of the same shape of bug (2026-09-12 stylelint review, claim 3).
-function cacheKey(componentRoot, tokenFile, allowlistsFile) {
+function cacheKey(componentRoot, tokenFile, allowlistsFile, sharedRoot) {
   // JSON-encode the tuple rather than joining with a separator character:
   // that's unambiguous no matter what any of the three strings contain,
   // unlike a literal join (space, NUL, or any other single character) which
   // two different (componentRoot, tokenFile, allowlistsFile) triples could
   // in principle both produce.
-  return JSON.stringify([componentRoot, tokenFile || '', allowlistsFile || '']);
+  return JSON.stringify([
+    componentRoot,
+    tokenFile || '',
+    allowlistsFile || '',
+    sharedRoot || '',
+  ]);
 }
 const seenByRoot = new Map();
 const staleReportedForRoot = new Set();
@@ -355,6 +360,7 @@ const rule = (primary, secondaryOptions) => {
         possible: {
           tokenFile: [isNonEmptyString],
           componentRoot: [isNonEmptyString],
+          sharedRoot: [isNonEmptyString],
           allowlistsFile: [isNonEmptyString],
         },
       },
@@ -370,6 +376,14 @@ const rule = (primary, secondaryOptions) => {
     const rawComponentRoot = secondaryOptions && secondaryOptions.componentRoot;
     const componentRoot = rawComponentRoot
       ? normalizeRepoRelative(rawComponentRoot)
+      : undefined;
+    // A second tree whose stylesheets count as evidence that an exemption is
+    // still in use (never as a scope to lint): a component that moved into the
+    // shared `libs/styles` keeps its exemptions, and the framework tree it left
+    // no longer carries the literal. See stylelint.config.mjs.
+    const rawSharedRoot = secondaryOptions && secondaryOptions.sharedRoot;
+    const sharedRoot = rawSharedRoot
+      ? normalizeRepoRelative(rawSharedRoot)
       : undefined;
     const tokenFile = secondaryOptions && secondaryOptions.tokenFile;
     const tokenValue = getTokenValues(tokenFile);
@@ -397,16 +411,26 @@ const rule = (primary, secondaryOptions) => {
     // could ever produce — skip the scan (and the staleness report loop)
     // outright rather than run it and find nothing, every file, forever.
     const hasExemptions = Object.keys(TOKEN_BYPASS_EXEMPT).length > 0;
-    const rootKey = cacheKey(componentRoot, tokenFile, allowlistsFile);
+    const rootKey = cacheKey(
+      componentRoot,
+      tokenFile,
+      allowlistsFile,
+      sharedRoot,
+    );
 
     if (inScope && hasExemptions && !seenByRoot.has(rootKey)) {
-      seenByRoot.set(
-        rootKey,
-        scanComponentRootForSeenKeys(
-          path.resolve(REPO_ROOT, componentRoot),
-          tokenValue,
-        ),
+      const seen = scanComponentRootForSeenKeys(
+        path.resolve(REPO_ROOT, componentRoot),
+        tokenValue,
       );
+      if (sharedRoot) {
+        for (const key of scanComponentRootForSeenKeys(
+          path.resolve(REPO_ROOT, sharedRoot),
+          tokenValue,
+        ))
+          seen.add(key);
+      }
+      seenByRoot.set(rootKey, seen);
     }
     const seenKeys =
       inScope && hasExemptions ? seenByRoot.get(rootKey) : new Set();
