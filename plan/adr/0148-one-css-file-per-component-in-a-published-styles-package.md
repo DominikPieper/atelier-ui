@@ -82,6 +82,24 @@ package cut is what this ADR takes over; Mitosis is not.
    legitimately differs.** React has a native `<select>` and a positioned span; Angular
    has CDK listbox and overlay. Those differences are recorded in the contract
    (`codeOnly` / probes), not hidden in CSS.
+
+   **Corrected 2026-10-02.** The roster is four, not two, and the shape is settled.
+   `select`, `tooltip`, `table` and `menu` keep a per-framework file next to the
+   component, `libs/<fw>/src/lib/<dir>/atl-<name>.<fw>.css`, loaded after the shared
+   sheet; its header comment says why the DOM differs. The shared sheet holds
+   everything the frameworks render the same way. `table` has one override, Angular's
+   (`<atl-tr>` wrappers, so the striped rule counts them); `menu` has React's and Vue's
+   (the positioned `.atl-menu-panel` that Angular's CDK overlay replaces); `tooltip` has
+   all three; `select` has all three, with Angular's the largest. Where React and Vue
+   render the same DOM their two files are identical, because the layout has no place for
+   "React and Vue, not Angular". `componentCssFiles(fw, dir)` returns the shared sheet
+   first and then the framework's own override, `gen-box-sizing` gives an override a
+   contract block only for the roots it adds, and `check:figma` indexes shared plus
+   override. A generic part inside an override is still reached through the child
+   combinator. (Decision 5 also needs a note: `check:paint` reads the built
+   `dist/storybook/<fw>`, not the source, so it checks nothing about a component until
+   `check:storybook-manifests` has rebuilt it.)
+
 5. **The gates read component CSS from `libs/styles` first**, through one helper
    (`componentCssFiles(fw, dir)` in `tools/scripts/lib/component-discovery.js`). A new
    offline gate, `check:pack-styles`, proves the published shape: it packs
