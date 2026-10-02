@@ -9,7 +9,7 @@ import {
   MouseEvent,
 } from 'react';
 import type { AtlDrawerSpec } from '../spec';
-import './atl-drawer.css';
+import '@atelier-ui/styles/drawer/atl-drawer.css';
 import { AtlIcon } from '../icon/atl-icon';
 
 interface DrawerContextValue {
@@ -104,7 +104,7 @@ export function AtlDrawer({
   };
 
   const hostClass = [
-    'atl-drawer-host',
+    'atl-drawer',
     `position-${position}`,
     `size-${size}`,
     open && 'is-open',

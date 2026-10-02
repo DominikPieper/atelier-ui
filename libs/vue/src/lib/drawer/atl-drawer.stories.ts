@@ -78,7 +78,7 @@ export const Default: Story = {
     await userEvent.click(canvas.getByRole('button', { name: 'Open Drawer' }));
     const dialog = canvasElement.querySelector('dialog') as HTMLDialogElement;
     await expect(dialog).toHaveAttribute('open');
-    // The shared CSS styles `.atl-drawer-host dialog`: the host class must sit
+    // The shared CSS styles `.atl-drawer > dialog`: the host class must sit
     // on a wrapper ABOVE the <dialog>, or none of these rules match and the
     // dialog falls back to the UA default (display: block, fit-content width).
     await expect(getComputedStyle(dialog).display).toBe('flex');

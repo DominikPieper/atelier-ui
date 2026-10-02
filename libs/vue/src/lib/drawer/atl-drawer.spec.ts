@@ -62,25 +62,31 @@ describe('AtlDrawer', () => {
     },
   );
 
+  it('puts the atl-drawer root class on the wrapper directly above the dialog', () => {
+    // The shared stylesheet (libs/styles) addresses `.atl-drawer > dialog`.
+    const { container } = render(AtlDrawer, { props: { open: false } });
+    const dialog = container.querySelector('dialog') as HTMLDialogElement;
+    expect(dialog.parentElement).toHaveClass('atl-drawer');
+    expect(container.querySelectorAll('.atl-drawer')).toHaveLength(1);
+  });
+
   it('applies position class', () => {
     const { container } = render(DrawerFixture, {
       props: { open: false, position: 'left' },
     });
-    expect(container.querySelector('.atl-drawer-host')).toHaveClass(
-      'position-left',
-    );
+    expect(container.querySelector('.atl-drawer')).toHaveClass('position-left');
   });
 
   it('applies size class', () => {
     const { container } = render(AtlDrawer, {
       props: { open: false, size: 'lg' },
     });
-    expect(container.querySelector('.atl-drawer-host')).toHaveClass('size-lg');
+    expect(container.querySelector('.atl-drawer')).toHaveClass('size-lg');
   });
 
   covers('drawer', 'is-open-class')('applies is-open class when open', () => {
     const { container } = render(AtlDrawer, { props: { open: true } });
-    expect(container.querySelector('.atl-drawer-host')).toHaveClass('is-open');
+    expect(container.querySelector('.atl-drawer')).toHaveClass('is-open');
   });
 
   covers('drawer', 'aria-modal')('sets aria-modal', () => {

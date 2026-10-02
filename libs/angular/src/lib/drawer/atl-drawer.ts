@@ -9,6 +9,7 @@ import {
   model,
   signal,
   viewChild,
+  ViewEncapsulation,
 } from '@angular/core';
 import { A11yModule } from '@angular/cdk/a11y';
 import { ATL_DRAWER } from './atl-drawer.token';
@@ -66,8 +67,13 @@ let nextId = 0;
       </div>
     </dialog>
   `,
-  styleUrl: './atl-drawer.css',
+  // Class-rooted CSS shared with React and Vue (libs/styles): the root class below
+  // is what scopes it, so Emulated encapsulation is switched off.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: '../../../../styles/src/drawer/atl-drawer.css',
   host: {
+    class: 'atl-drawer',
     '[class]': 'hostClasses()',
   },
 })
@@ -94,7 +100,7 @@ export class AtlDrawer {
 
   protected readonly hostClasses = computed(
     () =>
-      `atl-drawer position-${this.position()} size-${this.size()}${this.open() ? ' is-open' : ''}`,
+      `position-${this.position()} size-${this.size()}${this.open() ? ' is-open' : ''}`,
   );
 
   constructor() {
@@ -147,7 +153,11 @@ export class AtlDrawer {
       <atl-icon name="close" size="sm" />
     </button>
   `,
-  styleUrl: './atl-drawer.css',
+  // Class-rooted CSS shared with React and Vue (libs/styles): the root class below
+  // is what scopes it, so Emulated encapsulation is switched off.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: '../../../../styles/src/drawer/atl-drawer.css',
   host: {
     class: 'atl-drawer-header',
     '[attr.id]': 'context.headerId',
@@ -165,7 +175,11 @@ export class AtlDrawerHeader {
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `<ng-content />`,
-  styleUrl: './atl-drawer.css',
+  // Class-rooted CSS shared with React and Vue (libs/styles): the root class below
+  // is what scopes it, so Emulated encapsulation is switched off.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: '../../../../styles/src/drawer/atl-drawer.css',
   host: { class: 'atl-drawer-content' },
 })
 export class AtlDrawerContent {}
@@ -178,7 +192,11 @@ export class AtlDrawerContent {}
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `<ng-content />`,
-  styleUrl: './atl-drawer.css',
+  // Class-rooted CSS shared with React and Vue (libs/styles): the root class below
+  // is what scopes it, so Emulated encapsulation is switched off.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: '../../../../styles/src/drawer/atl-drawer.css',
   host: { class: 'atl-drawer-footer' },
 })
 export class AtlDrawerFooter {}

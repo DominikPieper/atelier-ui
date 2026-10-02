@@ -37,7 +37,6 @@ const EXTRA_ROOTS = {
   accordion: ['.atl-accordion-group', '.atl-accordion-item'],
   breadcrumbs: ['.atl-breadcrumb-item'],
   chat: ['.atl-chat-message', '.atl-chat-suggestion', '.atl-chat-typing'],
-  drawer: ['.atl-drawer-host'],
   menu: ['.atl-menu-item'],
   stepper: ['.step-item'],
   tabs: ['.atl-tab-group'],

@@ -77,6 +77,14 @@ describe('AtlDrawer', () => {
     },
   );
 
+  it('puts the atl-drawer root class on the wrapper directly above the dialog', () => {
+    // The shared stylesheet (libs/styles) addresses `.atl-drawer > dialog`.
+    const { container } = render(<AtlDrawer open={false} />);
+    const dialog = container.querySelector('dialog') as HTMLDialogElement;
+    expect(container.firstChild).toHaveClass('atl-drawer');
+    expect(dialog.parentElement).toBe(container.firstChild);
+  });
+
   it.each(['left', 'right', 'top', 'bottom'] as const)(
     'applies position-%s class to host wrapper',
     (position) => {

@@ -99,6 +99,48 @@ describe('AtlDrawer', () => {
     expect(container.querySelector('atl-drawer')).not.toHaveClass('is-open');
   });
 
+  it('keeps the static atl-drawer class alongside the bound classes', async () => {
+    // The shared stylesheet (libs/styles) is scoped by `.atl-drawer`, and the host
+    // also binds `[class]`; the two must merge, across input changes too.
+    const { container, rerender } = await render(
+      '<atl-drawer [position]="position">Content</atl-drawer>',
+      { imports: [AtlDrawer], componentProperties: { position: 'right' } },
+    );
+    const host = container.querySelector('atl-drawer') as HTMLElement;
+    expect(host).toHaveClass('atl-drawer', 'position-right');
+
+    await rerender({ componentProperties: { position: 'left' } });
+    expect(host).toHaveClass('atl-drawer', 'position-left');
+    expect(host).not.toHaveClass('position-right');
+  });
+
+  it('gives the header, content and footer their static root classes', async () => {
+    const { container } = await render(
+      `<atl-drawer>
+        <atl-drawer-header>H</atl-drawer-header>
+        <atl-drawer-content>C</atl-drawer-content>
+        <atl-drawer-footer>F</atl-drawer-footer>
+      </atl-drawer>`,
+      {
+        imports: [
+          AtlDrawer,
+          AtlDrawerHeader,
+          AtlDrawerContent,
+          AtlDrawerFooter,
+        ],
+      },
+    );
+    expect(container.querySelector('atl-drawer-header')).toHaveClass(
+      'atl-drawer-header',
+    );
+    expect(container.querySelector('atl-drawer-content')).toHaveClass(
+      'atl-drawer-content',
+    );
+    expect(container.querySelector('atl-drawer-footer')).toHaveClass(
+      'atl-drawer-footer',
+    );
+  });
+
   describe('position variants', () => {
     for (const position of ['left', 'right', 'top', 'bottom'] as const) {
       it(`applies position-${position} class to host`, async () => {

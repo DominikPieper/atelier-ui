@@ -342,6 +342,29 @@ const FIGMA_CONFORMANCE_EXCEPTIONS = new Set([
   // Delete this entry the day that decision lands — [STALE-EXEMPTION] will flag it
   // unused the moment either happens.
   'AtlButton:root-paint:padding-off-scale',
+  // AtlDrawer's header, content and footer layers draw 16/20px padding, a 16px title and
+  // an 8px footer gap where the CSS states 20/24px, 20px and 12px. The mismatch is old;
+  // it was invisible because the layers never resolved to a rule: the drawer's root was
+  // `.atl-drawer-host` on React and Vue, so the convention `<root>-<layer>` looked for
+  // `.atl-drawer-host-header`. Rooting the shared sheet at `.atl-drawer` (ADR-0148) makes
+  // `.atl-drawer-header` resolve, and the comparison now runs. Which side is right is a
+  // design decision (the Figma master or the CSS), not a migration one: recorded here so
+  // the migration does not decide it, and listed in tasks/todo.md. Delete these entries
+  // when the master or the CSS is changed; [STALE-EXEMPTION] flags them then.
+  'AtlDrawer:layer:padding-top:header',
+  'AtlDrawer:layer:padding-right:header',
+  'AtlDrawer:layer:padding-bottom:header',
+  'AtlDrawer:layer:padding-left:header',
+  'AtlDrawer:layer:font-size:header',
+  'AtlDrawer:layer:padding-top:content',
+  'AtlDrawer:layer:padding-right:content',
+  'AtlDrawer:layer:padding-bottom:content',
+  'AtlDrawer:layer:padding-left:content',
+  'AtlDrawer:layer:padding-top:footer',
+  'AtlDrawer:layer:padding-right:footer',
+  'AtlDrawer:layer:padding-bottom:footer',
+  'AtlDrawer:layer:padding-left:footer',
+  'AtlDrawer:layer:gap:footer',
   'AtlChat:token:radius:Rectangle',
   // The Chat drawer variant embeds a miniature APP MOCKUP (page header,
   // content blocks, dividers, message bubbles) as illustrative context.

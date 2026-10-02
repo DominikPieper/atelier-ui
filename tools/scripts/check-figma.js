@@ -834,7 +834,7 @@ const ROOT_PAINT = [
   // every position/size variant measures the same (verified against the refreshed
   // snapshot) — and the panel that actually resizes per variant is the `dialog`
   // descendant, so ITS size cascade lives in SIZE_LAYER_CASCADES below, not here:
-  // appending `.atl-drawer-host.position-{position}.size-{size} dialog` to THIS table
+  // appending `.atl-drawer.position-{position}.size-{size} > dialog` to THIS table
   // would have compared a descendant's width against the constant-720 root and fired
   // on every variant — a false positive discovered before it shipped, not after.
   {
@@ -845,7 +845,7 @@ const ROOT_PAINT = [
   {
     label: 'AtlDrawer',
     file: 'drawer/atl-drawer.css',
-    cascade: ['.atl-drawer-host dialog'],
+    cascade: ['.atl-drawer > dialog'],
   },
   {
     label: 'AtlToast',
@@ -961,7 +961,7 @@ const ROOT_PAINT = [
 // AtlBreadcrumbItem, AtlAccordionItem, AtlChatSuggestion, AtlChatTyping, AtlAvatarGroup)
 // and stay silently unchecked: they legitimately inherit their type from the parent
 // master that places them. AtlDrawer is a seventh and is NOT legitimate —
-// `.atl-drawer-host dialog` states nothing typographic through `all: unset`. That is a
+// `.atl-drawer > dialog` states nothing typographic through `all: unset`. That is a
 // CSS fix recorded in tasks/todo.md, not a gate exemption; warning about all seven would
 // be six-sevenths unclearable, which is exactly what ADR-0066 threw out.
 //
@@ -1082,7 +1082,7 @@ const LAYER_ALIASES = {
   // The layer was called `panel` and the CSS really does have a `.panel` — the inner
   // flex wrapper, which paints nothing — so the resolution matched a rule that exists
   // and is the wrong element. Renamed the layer to `dialog` (ADR-0077) and mapped it.
-  AtlDrawer: { dialog: '.atl-drawer-host dialog' },
+  AtlDrawer: { dialog: '.atl-drawer > dialog' },
 };
 
 /** Root/layer WIDTH+HEIGHT cascades that a named DESCENDANT states, for masters where
@@ -1110,7 +1110,7 @@ const SIZE_LAYER_CASCADES = [
     label: 'AtlDrawer',
     layer: 'dialog',
     file: 'drawer/atl-drawer.css',
-    cascade: ['.atl-drawer-host.position-{position}.size-{size} dialog'],
+    cascade: ['.atl-drawer.position-{position}.size-{size} > dialog'],
   },
 ];
 

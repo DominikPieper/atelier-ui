@@ -18,7 +18,7 @@ export interface AtlDrawerProps {
 
 <script setup lang="ts">
 import { computed, onMounted, provide, ref, useId, watch } from 'vue';
-import './atl-drawer.css';
+import '@atelier-ui/styles/drawer/atl-drawer.css';
 
 defineOptions({ name: 'AtlDrawer' });
 
@@ -81,7 +81,7 @@ function onBackdropClick(event: MouseEvent) {
 }
 
 const hostClasses = computed(() => [
-  'atl-drawer-host',
+  'atl-drawer',
   `position-${props.position}`,
   `size-${props.size}`,
   props.open && 'is-open',
@@ -90,7 +90,7 @@ const hostClasses = computed(() => [
 
 <template>
   <!-- The host classes sit on a wrapper (display: contents), not on the
-  <dialog>: the shared CSS styles `.atl-drawer-host dialog`, as in React. -->
+  <dialog>: the shared CSS styles `.atl-drawer > dialog`, as in React. -->
   <div :class="hostClasses">
     <!-- Backdrop-click-to-close on a native <dialog>: keyboard users already
     have a keyboard-equivalent close path via the native Escape key, wired

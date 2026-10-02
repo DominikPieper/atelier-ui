@@ -35,7 +35,14 @@ export const contract = {
         'this entry. A fix for them needs a component change (aligning the host class with ' +
         "AtlDialog's convention), which this contract-only entry deliberately does not make. " +
         'Corrected 2026-10-01: commit b21a0e0b moved the Vue host classes from the <dialog> ' +
-        'onto a wrapper <div>, so Vue now matches React; the [NO-PROBE] conclusion is unchanged.',
+        'onto a wrapper <div>, so Vue now matches React; the [NO-PROBE] conclusion is unchanged. ' +
+        "Corrected 2026-10-02: the [NO-PROBE] conclusion no longer holds. ADR-0148's root-class rule gives " +
+        "every framework a root named 'atl-drawer': React and Vue's wrapper <div> now carries " +
+        "'atl-drawer' (it was 'atl-drawer-host') and Angular's host always did, and the shared " +
+        'stylesheet addresses `.atl-drawer > dialog` in all three. The root therefore resolves in ' +
+        "React and Vue, this relative 'dialog' selector finds the real panel under it, and a closed " +
+        "drawer reports [NOT-RENDERED] in all three frameworks, as Angular always did; Vue's Default " +
+        'story opens the drawer and is measured (verified with check:paint --component AtlDrawer).',
     },
   ],
 } satisfies ComponentContract;
