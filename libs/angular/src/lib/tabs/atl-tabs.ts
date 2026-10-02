@@ -10,6 +10,7 @@ import {
   OnInit,
   signal,
   viewChildren,
+  ViewEncapsulation,
 } from '@angular/core';
 import {
   ATL_TAB_GROUP,
@@ -59,8 +60,13 @@ let nextId = 0;
     </div>
     <ng-content />
   `,
-  styleUrl: './atl-tabs.css',
+  // Class-rooted CSS shared with React and Vue (libs/styles): the root class below
+  // is what scopes it, so Emulated encapsulation is switched off.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: '../../../../styles/src/tabs/atl-tabs.css',
   host: {
+    class: 'atl-tab-group',
     '[class]': 'hostClasses()',
   },
   providers: [{ provide: ATL_TAB_GROUP, useExisting: AtlTabGroup }],
@@ -80,9 +86,7 @@ export class AtlTabGroup implements AtlTabGroupContext {
     viewChildren<ElementRef<HTMLButtonElement>>('tabBtn');
 
   /** @internal */
-  protected readonly hostClasses = computed(
-    () => `atl-tab-group variant-${this.variant()}`,
-  );
+  protected readonly hostClasses = computed(() => `variant-${this.variant()}`);
 
   /** @internal — called by AtlTab on init */
   registerTab(info: TabInfo): void {
@@ -163,21 +167,9 @@ export class AtlTabGroup implements AtlTabGroupContext {
       </div>
     }
   `,
-  styles: `
-    :host {
-      display: contents;
-    }
-
-    [role='tabpanel'] {
-      padding: var(--ui-spacing-5) 0;
-    }
-
-    [role='tabpanel']:focus-visible {
-      outline: none;
-      box-shadow: var(--ui-focus-ring);
-      border-radius: var(--ui-radius-md);
-    }
-  `,
+  // Its rules (display: contents on this host, the panel padding and focus ring)
+  // live in the shared tabs stylesheet, which AtlTabGroup always loads first.
+  host: { class: 'atl-tab' },
 })
 export class AtlTab implements OnInit, OnDestroy {
   /** Text displayed on the tab button. Required. */

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/angular';
+import { expect } from 'storybook/test';
 import { AtlTabGroup, AtlTab } from './atl-tabs';
 import { AtlInput } from '../input/atl-input';
 import { AtlButton } from '../button/atl-button';
@@ -158,4 +159,26 @@ export const WithRichContent: Story = {
       </atl-tab-group>
     `,
   }),
+};
+
+export const PanelScope: Story = {
+  render: () => ({
+    moduleMetadata: { imports: [AtlTabGroup, AtlTab] },
+    template: `
+      <atl-tab-group>
+        <atl-tab label="First">
+          Own panel
+          <div role="tabpanel" aria-label="Decoy">Projected content that only looks like a panel</div>
+        </atl-tab>
+      </atl-tab-group>
+    `,
+  }),
+  play: async ({ canvas }) => {
+    // Only the group's own panel carries the panel padding. Projected content that
+    // happens to say role="tabpanel" must not match the panel rule.
+    const own = canvas.getByRole('tabpanel', { name: 'First' });
+    const decoy = canvas.getByRole('tabpanel', { name: 'Decoy' });
+    await expect(getComputedStyle(own).paddingTop).not.toBe('0px');
+    await expect(getComputedStyle(decoy).paddingTop).toBe('0px');
+  },
 };

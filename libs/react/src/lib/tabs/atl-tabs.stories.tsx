@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
+import { expect } from 'storybook/test';
 import { AtlTabGroup, AtlTab } from './atl-tabs';
 
 import { metadata } from '@atelier-ui/spec/metadata/tabs.metadata';
@@ -121,4 +122,25 @@ export const ManyTabs: Story = {
       ))}
     </AtlTabGroup>
   ),
+};
+
+export const PanelScope: Story = {
+  render: () => (
+    <AtlTabGroup>
+      <AtlTab label="First">
+        Own panel
+        <div role="tabpanel" aria-label="Decoy">
+          Projected content that only looks like a panel
+        </div>
+      </AtlTab>
+    </AtlTabGroup>
+  ),
+  play: async ({ canvas }) => {
+    // Only the group's own panel carries the panel padding. Projected content that
+    // happens to say role="tabpanel" must not match the panel rule.
+    const own = canvas.getByRole('tabpanel', { name: 'First' });
+    const decoy = canvas.getByRole('tabpanel', { name: 'Decoy' });
+    await expect(getComputedStyle(own).paddingTop).not.toBe('0px');
+    await expect(getComputedStyle(decoy).paddingTop).toBe('0px');
+  },
 };

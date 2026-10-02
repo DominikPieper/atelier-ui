@@ -20,7 +20,7 @@
 }
 
 /* ─── Tab list ─── */
-.atl-tab-group .tablist {
+.atl-tab-group > .tablist {
   display: flex;
   gap: var(--ui-spacing-2);
   border-bottom: var(--ui-border-width) solid var(--ui-color-border);
@@ -28,12 +28,12 @@
   scrollbar-width: none;
 }
 
-.atl-tab-group .tablist::-webkit-scrollbar {
+.atl-tab-group > .tablist::-webkit-scrollbar {
   display: none;
 }
 
 /* ─── Tab button ─── */
-.atl-tab-group .tablist button {
+.atl-tab-group > .tablist > button {
   all: unset;
   box-sizing: border-box;
   position: relative;
@@ -66,7 +66,7 @@
 }
 
 /* Active indicator (underline) — 3px for modern weight */
-.atl-tab-group .tablist button::after {
+.atl-tab-group > .tablist > button::after {
   content: '';
   position: absolute;
   bottom: -1px;
@@ -78,46 +78,60 @@
   transition: background var(--ui-transition-fast);
 }
 
-.atl-tab-group .tablist button.is-active {
+.atl-tab-group > .tablist > button.is-active {
   color: var(--ui-color-primary);
 }
 
-.atl-tab-group .tablist button.is-active::after {
+.atl-tab-group > .tablist > button.is-active::after {
   background: var(--ui-color-primary);
 }
 
 /* Hover */
-.atl-tab-group .tablist button:hover:not(.is-disabled):not(.is-active) {
+.atl-tab-group > .tablist > button:hover:not(.is-disabled):not(.is-active) {
   color: var(--ui-color-text);
   background: var(--ui-color-surface-sunken);
 }
 
 /* Focus */
-.atl-tab-group .tablist button:focus-visible {
+.atl-tab-group > .tablist > button:focus-visible {
   outline: none;
   box-shadow: var(--ui-focus-ring);
   border-radius: var(--ui-radius-md);
 }
 
 /* Disabled */
-.atl-tab-group .tablist button.is-disabled {
+.atl-tab-group > .tablist > button.is-disabled {
   opacity: var(--ui-opacity-disabled);
   cursor: not-allowed;
 }
 
 /* ─── Tab panel ─── */
-.atl-tab-group [role='tabpanel'] {
+/* The panel sits at a different depth in each framework (React: a direct child;
+ * Vue: inside .tab-panels; Angular: inside the display:contents <atl-tab> host),
+ * so each shape is listed with child combinators. A tab group nested in a panel
+ * is matched through its own root only, and a consumer's [role='tabpanel'] in
+ * projected content is not matched at all. */
+.atl-tab-group > [role='tabpanel'],
+.atl-tab-group > .tab-panels > [role='tabpanel'],
+.atl-tab-group > .atl-tab > [role='tabpanel'] {
   padding: var(--ui-spacing-5) 0;
 }
 
-.atl-tab-group [role='tabpanel']:focus-visible {
+.atl-tab-group > [role='tabpanel']:focus-visible,
+.atl-tab-group > .tab-panels > [role='tabpanel']:focus-visible,
+.atl-tab-group > .atl-tab > [role='tabpanel']:focus-visible {
   outline: none;
   box-shadow: var(--ui-focus-ring);
   border-radius: var(--ui-radius-md);
 }
 
+/* Angular only: the <atl-tab> element is a pass-through around its panel. */
+.atl-tab-group > .atl-tab {
+  display: contents;
+}
+
 /* ─── Pills variant ─── */
-.atl-tab-group.variant-pills .tablist {
+.atl-tab-group.variant-pills > .tablist {
   border-bottom: none;
   gap: var(--ui-spacing-2);
   padding: var(--ui-spacing-1);
@@ -125,7 +139,7 @@
   border-radius: var(--ui-radius-lg);
 }
 
-.atl-tab-group.variant-pills .tablist button {
+.atl-tab-group.variant-pills > .tablist > button {
   border-radius: var(--ui-radius-md);
   min-height: var(--ui-control-height-sm);
   /* Stated, not inherited: an inherited line-height makes the box grow with the
@@ -143,19 +157,19 @@
   font-size: var(--ui-font-size-sm);
 }
 
-.atl-tab-group.variant-pills .tablist button::after {
+.atl-tab-group.variant-pills > .tablist > button::after {
   display: none;
 }
 
-.atl-tab-group.variant-pills .tablist button.is-active {
+.atl-tab-group.variant-pills > .tablist > button.is-active {
   background: var(--ui-color-surface);
   color: var(--ui-color-text);
   box-shadow: var(--ui-shadow-sm);
 }
 
 .atl-tab-group.variant-pills
-  .tablist
-  button:hover:not(.is-disabled):not(.is-active) {
+  > .tablist
+  > button:hover:not(.is-disabled):not(.is-active) {
   background: transparent;
   color: var(--ui-color-text);
 }

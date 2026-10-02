@@ -28,7 +28,7 @@ export interface AtlTabGroupProps {
 
 <script setup lang="ts">
 import { computed, provide, ref, watch } from 'vue';
-import './atl-tabs.css';
+import '@atelier-ui/styles/tabs/atl-tabs.css';
 
 defineOptions({ name: 'AtlTabGroup' });
 

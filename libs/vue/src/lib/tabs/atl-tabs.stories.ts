@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import { ref } from 'vue';
+import { expect } from 'storybook/test';
 import AtlTabGroup from './atl-tab-group.vue';
 import AtlTab from './atl-tab.vue';
 import AtlInput from '../input/atl-input.vue';
@@ -202,4 +203,26 @@ export const Controlled: Story = {
       </div>
     `,
   }),
+};
+
+export const PanelScope: Story = {
+  render: () => ({
+    components: { AtlTabGroup, AtlTab },
+    template: `
+      <AtlTabGroup>
+        <AtlTab label="First">
+          Own panel
+          <div role="tabpanel" aria-label="Decoy">Projected content that only looks like a panel</div>
+        </AtlTab>
+      </AtlTabGroup>
+    `,
+  }),
+  play: async ({ canvas }) => {
+    // Only the group's own panel carries the panel padding. Projected content that
+    // happens to say role="tabpanel" must not match the panel rule.
+    const own = canvas.getByRole('tabpanel', { name: 'First' });
+    const decoy = canvas.getByRole('tabpanel', { name: 'Decoy' });
+    await expect(getComputedStyle(own).paddingTop).not.toBe('0px');
+    await expect(getComputedStyle(decoy).paddingTop).toBe('0px');
+  },
 };

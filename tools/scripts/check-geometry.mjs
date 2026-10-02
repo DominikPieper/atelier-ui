@@ -156,7 +156,7 @@ const CONTROLS = [
       default: () =>
         `<div class="atl-tab-group" style="width:260px"><div class="tablist"><button class="is-active">One</button><button>Two</button></div></div>`,
       angular: () =>
-        `<atl-tab-group style="display:block;width:260px"><div class="tablist"><button class="is-active">One</button><button>Two</button></div></atl-tab-group>`,
+        `<atl-tab-group class="atl-tab-group" style="display:block;width:260px"><div class="tablist"><button class="is-active">One</button><button>Two</button></div></atl-tab-group>`,
     },
     measure: { default: '.tablist button', angular: '.tablist button' },
   },

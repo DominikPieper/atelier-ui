@@ -753,9 +753,10 @@ const PRIMITIVE_EXEMPTIONS = new Map([
  * to one stylesheet would be precision the check does not have (four Angular
  * components ship no styleUrl at all).
  *
- * Same two kinds as the other allowlists here, and every entry below is `gap` on
+ * Same two kinds as the other allowlists here. The radio-group entries are `gap` on
  * purpose: each one is a real cross-framework divergence that warns on every run
- * until somebody decides it, rather than a closed question. An entry whose class IS
+ * until somebody decides it, rather than a closed question. The tabs entries are
+ * `design`: a deliberate DOM-depth difference the one shared sheet spells out. An entry whose class IS
  * emitted now is an error — see [STALE-EXEMPTION].
  */
 const DEAD_SELECTOR_EXEMPT = new Map([
@@ -765,6 +766,28 @@ const DEAD_SELECTOR_EXEMPT = new Map([
   // carry the two rules and only one adapter can reach them. The remedy is a spec
   // decision — promote the axis to AtlRadioGroupSpec and implement it twice, or drop
   // it from React and delete six rules — not an edit either way.
+  // The tab panel sits at a different depth in each framework, and the one tabs
+  // stylesheet states each shape with child combinators so that it matches only the
+  // group's own panels (a role="tabpanel" in projected content, or a nested group's
+  // panel through its own root, is not caught): React emits it as a direct child of
+  // .atl-tab-group, Vue inside a .tab-panels wrapper, Angular inside the
+  // display:contents <atl-tab> host. Each framework therefore emits two of the three
+  // shapes' classes and not the third, by design (ADR-0148 Decision 1).
+  ...[
+    ['angular', 'tab-panels'],
+    ['react', 'tab-panels'],
+    ['react', 'atl-tab'],
+    ['vue', 'atl-tab'],
+  ].map(([fw, cls]) => [
+    `${fw}:tabs:${cls}`,
+    {
+      kind: 'design',
+      reason:
+        'the tab panel is a direct child of the group in React, wrapped in .tab-panels in Vue and ' +
+        'wrapped in the <atl-tab> host in Angular; the shared sheet lists each shape with child ' +
+        'combinators so it matches only its own panels (ADR-0148)',
+    },
+  ]),
   ...['angular', 'vue'].flatMap((fw) =>
     ['vertical', 'horizontal'].map((member) => [
       `${fw}:radio-group:orientation-${member}`,

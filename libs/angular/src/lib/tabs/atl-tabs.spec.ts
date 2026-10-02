@@ -22,6 +22,22 @@ const WITH_DISABLED = `
 `;
 
 describe('AtlTabGroup', () => {
+  it('keeps the static atl-tab-group and atl-tab classes alongside the bound variant', async () => {
+    // The shared stylesheet (libs/styles) is scoped by `.atl-tab-group`, and the host
+    // also binds `[class]`; the two must merge, across input changes too.
+    const { container, rerender } = await render(
+      '<atl-tab-group [variant]="variant"><atl-tab label="A">A</atl-tab></atl-tab-group>',
+      { imports: IMPORTS, componentProperties: { variant: 'default' } },
+    );
+    const host = container.querySelector('atl-tab-group') as HTMLElement;
+    expect(host).toHaveClass('atl-tab-group', 'variant-default');
+    expect(container.querySelector('atl-tab')).toHaveClass('atl-tab');
+
+    await rerender({ componentProperties: { variant: 'pills' } });
+    expect(host).toHaveClass('atl-tab-group', 'variant-pills');
+    expect(host).not.toHaveClass('variant-default');
+  });
+
   describe('rendering', () => {
     it('renders a tablist', async () => {
       await render(BASIC_TEMPLATE, { imports: IMPORTS });

@@ -10,7 +10,7 @@ import {
   ReactElement,
 } from 'react';
 import type { AtlTabGroupSpec, AtlTabSpec } from '../spec';
-import './atl-tabs.css';
+import '@atelier-ui/styles/tabs/atl-tabs.css';
 
 interface TabInfo {
   label: string;
