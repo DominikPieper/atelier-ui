@@ -21,7 +21,11 @@
  * The root list is DERIVED from each component's own CSS: every `.atl-*` class
  * that starts a rule in that directory. So a new root class added later without
  * re-running this script fails `--check` instead of silently sitting outside the
- * contract. Angular encapsulates its styles, so `:host` covers it by definition.
+ * contract. A component that has not moved to `libs/styles` yet and is Angular encapsulates
+ * its styles, so `:host` covers it by definition. A shared sheet, and a per-framework
+ * override next to a component (`atl-select.angular.css`, ADR-0148 Decision 4), is
+ * class-rooted: the override carries a block of its own only for the roots it adds, since
+ * the shared sheet already contracts the rest.
  *
  * Specificity is deliberately (0,1,0) — a plain class, not `:where()`. It has to
  * beat a consumer's `* { box-sizing: content-box }` while still losing to any rule
@@ -49,6 +53,7 @@ const require = createRequire(import.meta.url);
 const {
   FRAMEWORKS,
   componentCssFiles,
+  OVERRIDE_SHEET,
 } = require('./lib/component-discovery.js');
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
@@ -68,9 +73,10 @@ function leadingAtlClasses(css) {
   return found;
 }
 
-function selectorFor(fw, roots, shared) {
-  // A shared sheet is class-rooted for every framework, Angular included.
-  if (fw === 'angular' && !shared) return ':host';
+function selectorFor(fw, roots, classRooted) {
+  // A shared sheet, and a per-framework override (atl-<name>.<fw>.css), is
+  // class-rooted for every framework, Angular included.
+  if (fw === 'angular' && !classRooted) return ':host';
   if (roots.length === 1) return `.${roots[0]}`;
   return `:is(\n  .${roots.join(',\n  .')}\n)`;
 }
@@ -106,7 +112,7 @@ async function formattedBlockFor(selector, target) {
   return formatted.replace(/\n$/, '') + '\n\n';
 }
 
-const seenShared = new Set();
+const seenSheets = new Set();
 const problems = [];
 let written = 0;
 let verified = 0;
@@ -119,88 +125,126 @@ for (const fw of FRAMEWORKS) {
     // Own stylesheets plus the shared `libs/styles` one. A component moved there
     // has no .css left in its framework directory; reading only that directory
     // would verify nothing while reporting success.
-    const sheets = componentCssFiles(fw, dir);
+    const sheets = componentCssFiles(fw, dir).filter(
+      (x) => !seenSheets.has(x.abs),
+    );
     if (sheets.length === 0) continue; // no stylesheet, no geometry to contract
 
-    // The component's primary stylesheet: atl-<dir>.css when it exists. Roots are
-    // collected across all of the directory's stylesheets, so a class declared in
-    // a split-out file (Angular's atl-toast-container.css) is still covered.
-    const primarySheet =
-      sheets.find((x) => x.abs.endsWith(`/atl-${dir}.css`)) ??
-      [...sheets].sort((a, b) => a.abs.localeCompare(b.abs))[0];
-    const target = primarySheet.abs;
-    const rel = primarySheet.rel;
-    const shared = primarySheet.shared;
-    // One shared sheet serves all three frameworks: judge it once.
-    if (shared) {
-      if (seenShared.has(target)) continue;
-      seenShared.add(target);
-    }
-    const cssFiles = sheets.map((x) => x.abs);
-
-    const roots = [
-      ...new Set(
-        cssFiles.flatMap((f) => [
-          ...leadingAtlClasses(readFileSync(f, 'utf8')),
-        ]),
-      ),
-    ].sort();
-
-    if ((fw !== 'angular' || shared) && roots.length === 0) {
-      problems.push(
-        `[NO-ROOT] ${rel} declares no .atl-* root class, so the contract has nothing to attach to.`,
-      );
-      continue;
-    }
-
-    const want = await formattedBlockFor(
-      selectorFor(fw, roots, shared),
-      target,
+    const sharedSheets = componentCssFiles(fw, dir).filter((x) => x.shared);
+    const sharedRoots = new Set(
+      sharedSheets.flatMap((x) => [
+        ...leadingAtlClasses(readFileSync(x.abs, 'utf8')),
+      ]),
     );
-    const css = readFileSync(target, 'utf8');
-    const has = css.startsWith(want);
 
-    // A reset in any of the directory's stylesheets undoes the contract for that
-    // element, whatever the block at the top says.
-    for (const file of cssFiles) {
-      const css = readFileSync(file, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
-      for (const rule of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
-        const body = rule[2];
-        if (!/(^|;)\s*all\s*:\s*(unset|initial|revert)/.test(body)) continue;
-        if (/(^|;)\s*box-sizing\s*:/.test(body)) continue;
-        const parts = rule[1].split(/,(?![^(]*\))/);
-        const selector = parts[parts.length - 1].trim().replace(/\s+/g, ' ');
-        problems.push(
-          `[RESET-WIPED] ${file.slice(ROOT.length + 1)} — \`${selector}\` uses \`all: unset\`, which ` +
-            `resets the box model. The contract has the same specificity and loses on source order, so this ` +
-            `element is content-box and larger than its own CSS states. Restate \`box-sizing: border-box\` ` +
-            `below the reset.`,
-        );
+    // One unit per contract block: the shared sheet(s) (judged once for all three
+    // frameworks), each per-framework override on its own, and the legacy
+    // per-framework sheets of a component that has not moved yet (pooled, as before).
+    const units = [];
+    const shared = sheets.filter((x) => x.shared);
+    const overrides = sheets.filter(
+      (x) => !x.shared && OVERRIDE_SHEET.test(x.abs),
+    );
+    const legacy = sheets.filter(
+      (x) => !x.shared && !OVERRIDE_SHEET.test(x.abs),
+    );
+    if (shared.length > 0)
+      units.push({ files: shared, classRooted: true, exclude: new Set() });
+    for (const o of overrides)
+      units.push({ files: [o], classRooted: true, exclude: sharedRoots });
+    if (legacy.length > 0)
+      units.push({ files: legacy, classRooted: false, exclude: new Set() });
+
+    for (const unit of units) {
+      for (const f of unit.files) seenSheets.add(f.abs);
+      // The component's primary stylesheet: atl-<dir>.css when it exists. Roots are
+      // collected across all of the unit's stylesheets, so a class declared in a
+      // split-out file is still covered.
+      const primarySheet =
+        unit.files.find((x) => x.abs.endsWith(`/atl-${dir}.css`)) ??
+        [...unit.files].sort((a, b) => a.abs.localeCompare(b.abs))[0];
+      const target = primarySheet.abs;
+      const rel = primarySheet.rel;
+      const cssFiles = unit.files.map((x) => x.abs);
+
+      const roots = [
+        ...new Set(
+          cssFiles.flatMap((f) => [
+            ...leadingAtlClasses(readFileSync(f, 'utf8')),
+          ]),
+        ),
+      ]
+        .filter((r) => !unit.exclude.has(r))
+        .sort();
+
+      // A reset in any of the unit's stylesheets undoes the contract for that
+      // element, whatever the block at the top says.
+      for (const file of cssFiles) {
+        const css = readFileSync(file, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+        for (const rule of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
+          const body = rule[2];
+          if (!/(^|;)\s*all\s*:\s*(unset|initial|revert)/.test(body)) continue;
+          if (/(^|;)\s*box-sizing\s*:/.test(body)) continue;
+          const parts = rule[1].split(/,(?![^(]*\))/);
+          const selector = parts[parts.length - 1].trim().replace(/\s+/g, ' ');
+          problems.push(
+            `[RESET-WIPED] ${file.slice(ROOT.length + 1)} — \`${selector}\` uses \`all: unset\`, which ` +
+              `resets the box model. The contract has the same specificity and loses on source order, so this ` +
+              `element is content-box and larger than its own CSS states. Restate \`box-sizing: border-box\` ` +
+              `below the reset.`,
+          );
+        }
       }
-    }
 
-    if (has) {
-      verified++;
-      continue;
-    }
+      // An override whose rules all hang off roots the shared sheet already
+      // contracts needs no block of its own.
+      if (roots.length === 0 && unit.exclude.size > 0) {
+        const css = readFileSync(target, 'utf8');
+        if (css.startsWith(MARKER)) {
+          problems.push(
+            `[STALE] ${rel} carries a geometry-contract block but declares no root of its own; remove it.`,
+          );
+        } else verified++;
+        continue;
+      }
 
-    if (CHECK) {
-      problems.push(
-        css.includes(MARKER)
-          ? `[STALE] ${rel} has a geometry-contract block that no longer matches its root classes ` +
-              `(${roots.join(', ') || ':host'}). Run: npm run gen:box-sizing`
-          : `[MISSING] ${rel} declares sizes but no geometry contract, so its boxes depend on the ` +
-              `consuming app's reset. Run: npm run gen:box-sizing`,
+      if ((fw !== 'angular' || unit.classRooted) && roots.length === 0) {
+        problems.push(
+          `[NO-ROOT] ${rel} declares no .atl-* root class, so the contract has nothing to attach to.`,
+        );
+        continue;
+      }
+
+      const want = await formattedBlockFor(
+        selectorFor(fw, roots, unit.classRooted),
+        target,
       );
-      continue;
-    }
+      const css = readFileSync(target, 'utf8');
+      const has = css.startsWith(want);
 
-    // Replace an existing stale block, or prepend a new one.
-    const body = css.startsWith(MARKER)
-      ? css.slice(css.indexOf('*/') + 2).replace(/^[\s\S]*?\n\n/, '')
-      : css;
-    writeFileSync(target, want + body);
-    written++;
+      if (has) {
+        verified++;
+        continue;
+      }
+
+      if (CHECK) {
+        problems.push(
+          css.includes(MARKER)
+            ? `[STALE] ${rel} has a geometry-contract block that no longer matches its root classes ` +
+                `(${roots.join(', ') || ':host'}). Run: npm run gen:box-sizing`
+            : `[MISSING] ${rel} declares sizes but no geometry contract, so its boxes depend on the ` +
+                `consuming app's reset. Run: npm run gen:box-sizing`,
+        );
+        continue;
+      }
+
+      // Replace an existing stale block, or prepend a new one.
+      const body = css.startsWith(MARKER)
+        ? css.slice(css.indexOf('*/') + 2).replace(/^[\s\S]*?\n\n/, '')
+        : css;
+      writeFileSync(target, want + body);
+      written++;
+    }
   }
 }
 

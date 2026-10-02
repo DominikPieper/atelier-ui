@@ -2115,7 +2115,7 @@ function checkLayerSize() {
       );
       continue;
     }
-    const rules = cssRules(file);
+    const rules = cssRules(file, entry.lib || 'react');
     // Keyed by variant — dedup in figma-snapshot.mjs keys on variant name + fact
     // together, so two variants that happen to share an identical box (right,md and
     // left,md both are 448×480 today) still produce two distinct `layers[]` entries,
@@ -2201,15 +2201,30 @@ function parseAxisName(name) {
  *  Rules are indexed by INDIVIDUAL selector, so a comma-separated list
  *  (`.atl-chat-message.role-assistant, .atl-chat-message.role-system`) is found
  *  under either of its members — a regex on the whole selector text was not. */
-function cssRules(file) {
+function cssRules(file, lib = 'react') {
   // Cached on the function: the checks run before a module-level `const` below
   // them is initialised.
   if (!cssRules.cache) cssRules.cache = new Map();
   const cssRuleCache = cssRules.cache;
-  if (cssRuleCache.has(file)) return cssRuleCache.get(file);
+  const cacheKey = `${lib}:${file}`;
+  if (cssRuleCache.has(cacheKey)) return cssRuleCache.get(cacheKey);
   const index = new Map();
-  if (fs.existsSync(file)) {
-    const css = fs.readFileSync(file, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
+  // A shared sheet is followed, in cascade order, by the framework's own override of
+  // it (`atl-<name>.<lib>.css`, for DOM that legitimately differs; ADR-0148
+  // Decision 4), so a cascade that crosses the two resolves like the browser does.
+  const files = [file];
+  const sharedDir = path.join(ROOT, 'libs/styles/src');
+  if (file.startsWith(sharedDir + path.sep)) {
+    const dir = path.basename(path.dirname(file));
+    const own = path.join(ROOT, 'libs', lib, 'src/lib', dir);
+    if (fs.existsSync(own)) {
+      for (const f of fs.readdirSync(own).sort())
+        if (f.endsWith(`.${lib}.css`)) files.push(path.join(own, f));
+    }
+  }
+  for (const f of files) {
+    if (!fs.existsSync(f)) continue;
+    const css = fs.readFileSync(f, 'utf8').replace(/\/\*[\s\S]*?\*\//g, '');
     for (const m of css.matchAll(/([^{}]+)\{([^{}]*)\}/g)) {
       const body = m[2];
       for (const sel of m[1].split(',')) {
@@ -2220,7 +2235,7 @@ function cssRules(file) {
       }
     }
   }
-  cssRuleCache.set(file, index);
+  cssRuleCache.set(cacheKey, index);
   return index;
 }
 
@@ -2233,7 +2248,7 @@ function resolveRootPaint(entry, axes) {
     );
     return null;
   }
-  const rules = cssRules(file);
+  const rules = cssRules(file, entry.lib || 'react');
   const want = { from: {} };
   let joined = '';
   for (const template of entry.cascade) {
@@ -2751,7 +2766,7 @@ function resolveRootType(entry, axes) {
     );
     return null;
   }
-  const rules = cssRules(file);
+  const rules = cssRules(file, entry.lib || 'react');
   let joined = '';
   let matched = 0;
   // Ancestor-first, and every matched body goes into ONE string: `font-size: inherit` on

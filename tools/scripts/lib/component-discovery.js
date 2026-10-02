@@ -40,12 +40,20 @@ const REPO_ROOT = path.resolve(__dirname, '../../..');
 /** Where class-rooted stylesheets shared by all three frameworks live (`libs/styles`). */
 const SHARED_STYLES_DIR = path.join(REPO_ROOT, 'libs/styles/src');
 
+/** `atl-select.angular.css`: a per-framework override of a shared sheet (ADR-0148 Decision 4). */
+const OVERRIDE_SHEET = /\.(angular|react|vue)\.css$/;
+
 /**
- * Every stylesheet a component ships to one framework: the `.css` files in its
- * own directory plus the shared `libs/styles/src/<dir>/` ones. A component that
- * has moved to the shared location has nothing left in `libs/<fw>/src/lib/<dir>/`,
- * so a gate that only reads that directory would pass without reading any CSS.
- * Returns `{ abs, rel, shared }`, `rel` being repo-relative with forward slashes.
+ * Every stylesheet a component ships to one framework, in cascade order: the shared
+ * `libs/styles/src/<dir>/` sheet first, then the `.css` files in the component's own
+ * directory. A component that has moved to the shared location has nothing left in
+ * `libs/<fw>/src/lib/<dir>/` but, at most, the per-framework overrides
+ * (`atl-<name>.<fw>.css`, for DOM that legitimately differs), which load after the
+ * shared sheet; a gate that only read that directory would pass without reading the
+ * component's CSS. A component that has not moved yet has only its own files.
+ * Returns `{ abs, rel, shared, override }`, `rel` being repo-relative with forward
+ * slashes. `shared` and `override` sheets are class-rooted (no `:host`); an override
+ * sheet of another framework is never returned for `fw`.
  */
 function componentCssFiles(fw, dir) {
   const out = [];
@@ -53,16 +61,19 @@ function componentCssFiles(fw, dir) {
     if (!fs.existsSync(base) || !fs.statSync(base).isDirectory()) return;
     for (const f of fs.readdirSync(base).sort()) {
       if (!f.endsWith('.css')) continue;
+      const m = OVERRIDE_SHEET.exec(f);
+      if (m && m[1] !== fw) continue;
       const abs = path.join(base, f);
       out.push({
         abs,
         rel: path.relative(REPO_ROOT, abs).split(path.sep).join('/'),
         shared,
+        override: Boolean(m),
       });
     }
   };
-  add(path.join(REPO_ROOT, 'libs', fw, 'src/lib', dir), false);
   add(path.join(SHARED_STYLES_DIR, dir), true);
+  add(path.join(REPO_ROOT, 'libs', fw, 'src/lib', dir), false);
   return out;
 }
 
@@ -73,4 +84,5 @@ module.exports = {
   hasStory,
   SHARED_STYLES_DIR,
   componentCssFiles,
+  OVERRIDE_SHEET,
 };

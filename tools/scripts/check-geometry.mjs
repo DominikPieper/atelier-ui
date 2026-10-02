@@ -472,11 +472,12 @@ for (const fw of FRAMEWORKS) {
     // atl-option.css's `:host` to `atl-select` would drop one component's rules
     // onto the other. The tag comes from the stylesheet name, which is the
     // convention every component in this repo follows.
-    // A shared `libs/styles` sheet is class-rooted and has no `:host` to rewrite.
+    // A shared `libs/styles` sheet and a per-framework override are class-rooted and have
+    // no `:host` to rewrite.
     const componentCss = componentCssFiles(fw, control.dir)
-      .map(({ abs, shared }) => {
+      .map(({ abs, shared, override }) => {
         const css = readFileSync(abs, 'utf8');
-        return isNg && !shared
+        return isNg && !shared && !override
           ? hostify(
               css,
               abs
