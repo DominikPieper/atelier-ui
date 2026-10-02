@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect } from 'storybook/test';
 import {
   AtlCard,
   AtlCardHeader,
@@ -125,4 +126,39 @@ export const ContentOnly: Story = {
       </AtlCardContent>
     </AtlCard>
   ),
+};
+
+export const NestedPadding: Story = {
+  render: () => (
+    <>
+      <AtlCard variant="outlined" padding="lg">
+        <AtlCardHeader>Outer</AtlCardHeader>
+        <AtlCardContent>
+          <AtlCard variant="outlined" padding="sm">
+            <AtlCardHeader>Inner</AtlCardHeader>
+            <AtlCardContent>Inner body</AtlCardContent>
+          </AtlCard>
+        </AtlCardContent>
+      </AtlCard>
+      <AtlCard variant="outlined" padding="sm">
+        <AtlCardHeader>Reference small</AtlCardHeader>
+      </AtlCard>
+      <AtlCard variant="outlined" padding="lg">
+        <AtlCardHeader>Reference large</AtlCardHeader>
+      </AtlCard>
+    </>
+  ),
+  play: async ({ canvas }) => {
+    // A card nested in a card keeps its own padding. With descendant selectors
+    // the inner padding-sm card also matched the outer padding-lg rule, and the
+    // later (larger) rule won.
+    const padding = (text: string): string =>
+      getComputedStyle(canvas.getByText(text)).paddingTop;
+    await expect(padding('Reference small')).not.toBe(
+      padding('Reference large'),
+    );
+    await expect(padding('Outer')).toBe(padding('Reference large'));
+    await expect(padding('Inner')).toBe(padding('Reference small'));
+    await expect(padding('Inner body')).toBe(padding('Reference small'));
+  },
 };

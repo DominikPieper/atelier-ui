@@ -3,6 +3,7 @@ import {
   Component,
   computed,
   input,
+  ViewEncapsulation,
 } from '@angular/core';
 
 /**
@@ -25,8 +26,13 @@ import {
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `<ng-content />`,
-  styleUrl: './atl-card.css',
+  // Class-rooted CSS shared with React and Vue (libs/styles): the root class below
+  // is what scopes it, so Emulated encapsulation is switched off.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: '../../../../styles/src/card/atl-card.css',
   host: {
+    class: 'atl-card',
     '[class]': 'hostClasses()',
     '[attr.role]': 'role() || null',
   },
@@ -54,7 +60,7 @@ export class AtlCard {
   );
 
   protected readonly hostClasses = computed(
-    () => `atl-card variant-${this.variant()} padding-${this.padding()}`,
+    () => `variant-${this.variant()} padding-${this.padding()}`,
   );
 }
 
@@ -71,7 +77,11 @@ export class AtlCard {
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `<ng-content />`,
-  styleUrl: './atl-card.css',
+  // Class-rooted CSS shared with React and Vue (libs/styles): the root class below
+  // is what scopes it, so Emulated encapsulation is switched off.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: '../../../../styles/src/card/atl-card.css',
   host: { class: 'atl-card-header' },
 })
 export class AtlCardHeader {}
@@ -89,7 +99,11 @@ export class AtlCardHeader {}
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `<ng-content />`,
-  styleUrl: './atl-card.css',
+  // Class-rooted CSS shared with React and Vue (libs/styles): the root class below
+  // is what scopes it, so Emulated encapsulation is switched off.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: '../../../../styles/src/card/atl-card.css',
   host: { class: 'atl-card-content' },
 })
 export class AtlCardContent {}
@@ -109,7 +123,11 @@ export class AtlCardContent {}
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `<ng-content />`,
-  styleUrl: './atl-card.css',
+  // Class-rooted CSS shared with React and Vue (libs/styles): the root class below
+  // is what scopes it, so Emulated encapsulation is switched off.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: '../../../../styles/src/card/atl-card.css',
   host: { class: 'atl-card-footer' },
 })
 export class AtlCardFooter {}

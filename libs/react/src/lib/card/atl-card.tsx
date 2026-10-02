@@ -1,6 +1,6 @@
 import { HTMLAttributes, ReactNode } from 'react';
 import type { AtlCardSpec, AtlCardRole } from '../spec';
-import './atl-card.css';
+import '@atelier-ui/styles/card/atl-card.css';
 
 /**
  * Properties for the AtlCard component.

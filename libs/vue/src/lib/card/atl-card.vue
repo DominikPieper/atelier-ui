@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import './atl-card.css';
+import '@atelier-ui/styles/card/atl-card.css';
 
 defineOptions({ name: 'AtlCard' });
 

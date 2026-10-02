@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/angular';
 import { argsToTemplate } from '@storybook/angular';
+import { expect } from 'storybook/test';
 import {
   AtlCard,
   AtlCardContent,
@@ -174,4 +175,36 @@ export const Playground: Story = {
       </atl-card>
     `,
   }),
+};
+
+export const NestedPadding: Story = {
+  render: () => ({
+    moduleMetadata: { imports: [AtlCard, AtlCardHeader, AtlCardContent] },
+    template: `
+      <atl-card variant="outlined" padding="lg">
+        <atl-card-header>Outer</atl-card-header>
+        <atl-card-content>
+          <atl-card variant="outlined" padding="sm">
+            <atl-card-header>Inner</atl-card-header>
+            <atl-card-content>Inner body</atl-card-content>
+          </atl-card>
+        </atl-card-content>
+      </atl-card>
+      <atl-card variant="outlined" padding="sm"><atl-card-header>Reference small</atl-card-header></atl-card>
+      <atl-card variant="outlined" padding="lg"><atl-card-header>Reference large</atl-card-header></atl-card>
+    `,
+  }),
+  play: async ({ canvas }) => {
+    // A card nested in a card keeps its own padding. With descendant selectors
+    // the inner padding-sm card also matched the outer padding-lg rule, and the
+    // later (larger) rule won.
+    const padding = (text: string): string =>
+      getComputedStyle(canvas.getByText(text)).paddingTop;
+    await expect(padding('Reference small')).not.toBe(
+      padding('Reference large'),
+    );
+    await expect(padding('Outer')).toBe(padding('Reference large'));
+    await expect(padding('Inner')).toBe(padding('Reference small'));
+    await expect(padding('Inner body')).toBe(padding('Reference small'));
+  },
 };

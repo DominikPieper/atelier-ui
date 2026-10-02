@@ -41,28 +41,30 @@
   background-color: var(--ui-color-surface-sunken);
 }
 
-/* Padding on .atl-card directly affects all slots */
-.atl-card.padding-none .atl-card-header,
-.atl-card.padding-none .atl-card-content,
-.atl-card.padding-none .atl-card-footer {
+/* Padding on .atl-card directly affects all slots. The child combinator keeps a
+ * nested card on its own padding: with a descendant selector an inner padding-sm
+ * card inside a padding-lg card would match both rules and take the later one. */
+.atl-card.padding-none > .atl-card-header,
+.atl-card.padding-none > .atl-card-content,
+.atl-card.padding-none > .atl-card-footer {
   padding: 0;
 }
 
-.atl-card.padding-sm .atl-card-header,
-.atl-card.padding-sm .atl-card-content,
-.atl-card.padding-sm .atl-card-footer {
+.atl-card.padding-sm > .atl-card-header,
+.atl-card.padding-sm > .atl-card-content,
+.atl-card.padding-sm > .atl-card-footer {
   padding: var(--ui-spacing-4);
 }
 
-.atl-card.padding-md .atl-card-header,
-.atl-card.padding-md .atl-card-content,
-.atl-card.padding-md .atl-card-footer {
+.atl-card.padding-md > .atl-card-header,
+.atl-card.padding-md > .atl-card-content,
+.atl-card.padding-md > .atl-card-footer {
   padding: var(--ui-spacing-6);
 }
 
-.atl-card.padding-lg .atl-card-header,
-.atl-card.padding-lg .atl-card-content,
-.atl-card.padding-lg .atl-card-footer {
+.atl-card.padding-lg > .atl-card-header,
+.atl-card.padding-lg > .atl-card-content,
+.atl-card.padding-lg > .atl-card-footer {
   padding: var(--ui-spacing-8);
 }
 

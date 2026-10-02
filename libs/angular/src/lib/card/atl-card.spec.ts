@@ -10,6 +10,21 @@ import { covers } from '../../testing/behavior';
 const imports = [AtlCard, AtlCardHeader, AtlCardContent, AtlCardFooter];
 
 describe('AtlCard', () => {
+  it('keeps the static atl-card class alongside the bound variant and padding', async () => {
+    // The shared stylesheet (libs/styles) is scoped by `.atl-card`, and the host also
+    // binds `[class]`; the two must merge, across input changes too.
+    const { container, rerender } = await render(
+      '<atl-card [padding]="padding"><atl-card-header>H</atl-card-header></atl-card>',
+      { imports, componentProperties: { padding: 'md' } },
+    );
+    const host = container.querySelector('atl-card') as HTMLElement;
+    expect(host).toHaveClass('atl-card', 'variant-elevated', 'padding-md');
+
+    await rerender({ componentProperties: { padding: 'sm' } });
+    expect(host).toHaveClass('atl-card', 'padding-sm');
+    expect(host).not.toHaveClass('padding-md');
+  });
+
   covers('card', 'renders-content')(
     'renders without error with default inputs',
     async () => {
