@@ -3,6 +3,7 @@ import {
   Component,
   computed,
   input,
+  ViewEncapsulation,
 } from '@angular/core';
 import type { AtlIconName, AtlIconSize } from '../spec';
 import {
@@ -43,8 +44,13 @@ import {
       }
     </svg>
   `,
-  styleUrl: './atl-icon.css',
+  // Class-rooted CSS shared with React and Vue (libs/styles): the root class below
+  // is what scopes it, so Emulated encapsulation is switched off.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: '../../../../styles/src/icon/atl-icon.css',
   host: {
+    class: 'atl-icon',
     '[class]': 'hostClasses()',
     '[attr.role]': 'label() ? "img" : null',
     '[attr.aria-label]': 'label() || null',

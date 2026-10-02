@@ -4,6 +4,21 @@ import { ATL_ICON_GEOMETRY } from '../icons';
 import { AtlIcon } from './atl-icon';
 
 describe('AtlIcon', () => {
+  it('keeps the static atl-icon class alongside the bound classes', async () => {
+    // The shared stylesheet (libs/styles) is scoped by `.atl-icon`, and the host
+    // also binds `[class]`; the two must merge, across input changes too.
+    const { container, rerender } = await render(
+      '<atl-icon name="info" [size]="size" />',
+      { imports: [AtlIcon], componentProperties: { size: 'sm' } },
+    );
+    const host = container.querySelector('atl-icon') as HTMLElement;
+    expect(host).toHaveClass('atl-icon', 'size-sm');
+
+    await rerender({ componentProperties: { size: 'lg' } });
+    expect(host).toHaveClass('atl-icon', 'size-lg');
+    expect(host).not.toHaveClass('size-sm');
+  });
+
   covers('icon', 'renders-geometry')(
     'renders the geometry for the named icon',
     async () => {

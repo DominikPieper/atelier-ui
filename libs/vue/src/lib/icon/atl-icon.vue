@@ -6,7 +6,7 @@ import {
   ATL_ICON_STROKE_WIDTH,
   ATL_ICON_VIEWBOX,
 } from '../icons';
-import './atl-icon.css';
+import '@atelier-ui/styles/icon/atl-icon.css';
 
 defineOptions({ name: 'AtlIcon' });
 
