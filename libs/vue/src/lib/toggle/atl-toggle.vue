@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, useId } from 'vue';
-import './atl-toggle.css';
+import '@atelier-ui/styles/toggle/atl-toggle.css';
 
 defineOptions({ name: 'AtlToggle' });
 

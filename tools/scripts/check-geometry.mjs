@@ -311,7 +311,7 @@ const CONTROLS = [
       default: () =>
         `<div class="atl-toggle"><label><input type="checkbox" role="switch"><span class="track"><span class="thumb"></span></span><span>Notifications</span></label></div>`,
       angular: () =>
-        `<atl-toggle><label><input type="checkbox" role="switch"><span class="track"><span class="thumb"></span></span><span>Notifications</span></label></atl-toggle>`,
+        `<atl-toggle class="atl-toggle"><label><input type="checkbox" role="switch"><span class="track"><span class="thumb"></span></span><span>Notifications</span></label></atl-toggle>`,
     },
     measure: { default: '.atl-toggle', angular: 'atl-toggle' },
   },

@@ -4,6 +4,20 @@ import { covers } from '../../testing/behavior';
 import { AtlToggle } from './atl-toggle';
 
 describe('AtlToggle', () => {
+  it('keeps the static atl-toggle class alongside the bound classes', async () => {
+    // The shared stylesheet (libs/styles) is scoped by `.atl-toggle`, and the host
+    // also binds `[class]`; the two must merge, across input changes too.
+    const { container, rerender } = await render(
+      '<atl-toggle [disabled]="disabled">Label</atl-toggle>',
+      { imports: [AtlToggle], componentProperties: { disabled: false } },
+    );
+    const host = container.querySelector('atl-toggle') as HTMLElement;
+    expect(host).toHaveClass('atl-toggle');
+
+    await rerender({ componentProperties: { disabled: true } });
+    expect(host).toHaveClass('atl-toggle', 'is-disabled');
+  });
+
   covers('toggle', 'role-switch')(
     'renders a native checkbox input with role=switch',
     async () => {

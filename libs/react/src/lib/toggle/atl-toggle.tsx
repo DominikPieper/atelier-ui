@@ -1,6 +1,6 @@
 import { InputHTMLAttributes, ReactNode, useId } from 'react';
 import type { AtlToggleSpec } from '../spec';
-import './atl-toggle.css';
+import '@atelier-ui/styles/toggle/atl-toggle.css';
 
 /**
  * Properties for the AtlToggle component.

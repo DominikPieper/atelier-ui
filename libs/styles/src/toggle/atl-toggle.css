@@ -18,7 +18,7 @@
   line-height: var(--ui-line-height-tight);
 }
 
-.atl-toggle label {
+.atl-toggle > label {
   display: inline-flex;
   align-items: center;
   gap: var(--ui-spacing-3);
@@ -34,7 +34,7 @@
 }
 
 /* Hide native checkbox visually but keep it accessible */
-.atl-toggle input[type='checkbox'] {
+.atl-toggle > label > input[type='checkbox'] {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -47,7 +47,7 @@
 }
 
 /* Track — pill-shaped container */
-.atl-toggle .track {
+.atl-toggle > label > .track {
   position: relative;
   display: inline-flex;
   align-items: center;
@@ -65,7 +65,7 @@
 }
 
 /* Thumb — circular slider */
-.atl-toggle .thumb {
+.atl-toggle > label > .track > .thumb {
   position: absolute;
   left: 0.125rem;
   width: 1.125rem;
@@ -79,34 +79,34 @@
 }
 
 /* Hover state */
-.atl-toggle label:hover:not(:has(input:disabled)) .track {
+.atl-toggle > label:hover:not(:has(> input:disabled)) > .track {
   border-color: var(--ui-color-primary);
 }
 
 /* Focus ring on track when native input is focused */
-.atl-toggle input[type='checkbox']:focus-visible + .track {
+.atl-toggle > label > input[type='checkbox']:focus-visible + .track {
   box-shadow: var(--ui-focus-ring);
   border-color: var(--ui-color-primary);
 }
 
 /* Checked state — track */
-.atl-toggle.is-checked .track {
+.atl-toggle.is-checked > label > .track {
   background-color: var(--ui-color-primary);
   border-color: var(--ui-color-primary);
 }
 
 /* Checked state — thumb slides right */
-.atl-toggle.is-checked .thumb {
+.atl-toggle.is-checked > label > .track > .thumb {
   transform: translateX(1.25rem);
   background-color: var(--ui-color-text-on-primary);
 }
 
 /* Invalid state — track border */
-.atl-toggle.is-invalid .track {
+.atl-toggle.is-invalid > label > .track {
   border-color: var(--ui-color-input-border-invalid);
 }
 
-.atl-toggle.is-invalid input[type='checkbox']:focus-visible + .track {
+.atl-toggle.is-invalid > label > input[type='checkbox']:focus-visible + .track {
   border-color: var(--ui-color-input-border-invalid);
   box-shadow: var(--ui-focus-ring-danger);
 }
@@ -117,20 +117,20 @@
   cursor: not-allowed;
 }
 
-.atl-toggle.is-disabled label {
+.atl-toggle.is-disabled > label {
   cursor: not-allowed;
 }
 
-.atl-toggle.is-disabled .track {
+.atl-toggle.is-disabled > label > .track {
   cursor: not-allowed;
 }
 
 /* Error messages */
-.atl-toggle .errors {
+.atl-toggle > .errors {
   margin-top: var(--ui-spacing-2);
 }
 
-.atl-toggle .error-message {
+.atl-toggle > .errors > .error-message {
   margin: 0;
   font-size: var(--ui-font-size-sm);
   color: var(--ui-color-error-text);
