@@ -207,7 +207,7 @@ const CONTROLS = [
       default: () =>
         `<div class="atl-code-block" style="width:260px"><div class="code-block-header">tokens.css</div></div>`,
       angular: () =>
-        `<atl-code-block style="display:block;width:260px"><div class="code-block-header">tokens.css</div></atl-code-block>`,
+        `<atl-code-block class="atl-code-block" style="display:block;width:260px"><div class="code-block-header">tokens.css</div></atl-code-block>`,
     },
     measure: { default: '.code-block-header', angular: '.code-block-header' },
   },

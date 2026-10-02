@@ -24,6 +24,16 @@ function defaults(): {
 }
 
 describe('AtlCodeBlock', () => {
+  it('carries the static atl-code-block root class the shared stylesheet is scoped by', async () => {
+    const { container } = await render(TEMPLATE, {
+      imports: [AtlCodeBlock],
+      componentProperties: defaults(),
+    });
+    expect(container.querySelector('atl-code-block')).toHaveClass(
+      'atl-code-block',
+    );
+  });
+
   covers('code-block', 'renders-code')('renders the code content', async () => {
     await render(TEMPLATE, {
       imports: [AtlCodeBlock],

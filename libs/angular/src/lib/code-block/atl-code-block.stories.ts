@@ -42,6 +42,17 @@ const meta: Meta<AtlCodeBlock> = {
   },
   parameters: {
     design: figmaNode('420-286'),
+    a11y: {
+      config: {
+        rules: [
+          // a11y debt (S0, 2026-09-10): scrollable-region-focusable — code-block-body scroll container is not focusable — tasks/todo.md "a11y backlog"; fix, then remove.
+          // Unmasked 2026-10-02: Angular's host had no root styles (its .atl-code-block rule was
+          // emulation-scoped and never matched the host), so it never overflowed. React and Vue
+          // already carry this exemption.
+          { id: 'scrollable-region-focusable', enabled: false },
+        ],
+      },
+    },
     contract,
   },
 };

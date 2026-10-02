@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import './atl-code-block.css';
+import '@atelier-ui/styles/code-block/atl-code-block.css';
 import { AtlIcon } from '../icon/atl-icon';
 
 export interface AtlCodeBlockProps {

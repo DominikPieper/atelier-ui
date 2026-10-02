@@ -4,6 +4,7 @@ import {
   computed,
   input,
   signal,
+  ViewEncapsulation,
 } from '@angular/core';
 import { AtlIcon } from '../icon/atl-icon';
 
@@ -55,9 +56,13 @@ import { AtlIcon } from '../icon/atl-icon';
         }</code></pre>
     </div>
   `,
-  styleUrl: './atl-code-block.css',
+  // Class-rooted CSS shared with React and Vue (libs/styles): the root class below
+  // is what scopes it, so Emulated encapsulation is switched off.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: '../../../../styles/src/code-block/atl-code-block.css',
   host: {
-    '[class]': '"atl-code-block"',
+    class: 'atl-code-block',
   },
 })
 export class AtlCodeBlock {

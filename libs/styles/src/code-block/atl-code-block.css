@@ -3,8 +3,8 @@
  * same file as the sizes it governs and no consuming app has to supply one.
  * Gated by check:box-sizing; the resulting boxes are measured by check:geometry.
  * See ADR-0043. */
-:host,
-:host * {
+.atl-code-block,
+.atl-code-block * {
   box-sizing: border-box;
 }
 
@@ -28,7 +28,7 @@
    Header
    --------------------------------------------------------------------------- */
 
-.code-block-header {
+.atl-code-block > .code-block-header {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -47,7 +47,7 @@
   min-height: var(--ui-control-height-md);
 }
 
-.code-block-label {
+.atl-code-block > .code-block-header > .code-block-label {
   font-family: var(--ui-font-mono);
   font-size: var(--ui-font-size-xs);
   font-weight: var(--ui-font-weight-semibold);
@@ -61,7 +61,7 @@
    Copy button
    --------------------------------------------------------------------------- */
 
-.code-block-copy {
+.atl-code-block > .code-block-header > .code-block-copy {
   display: inline-flex;
   align-items: center;
   gap: var(--ui-spacing-1);
@@ -81,13 +81,13 @@
   white-space: nowrap;
 }
 
-.code-block-copy:hover {
+.atl-code-block > .code-block-header > .code-block-copy:hover {
   color: var(--ui-color-text);
   background: var(--ui-color-surface);
   border-color: var(--ui-color-input-border);
 }
 
-.code-block-copy:focus-visible {
+.atl-code-block > .code-block-header > .code-block-copy:focus-visible {
   outline: none;
   box-shadow: var(--ui-focus-ring);
 }
@@ -96,12 +96,12 @@
    Code body
    --------------------------------------------------------------------------- */
 
-.code-block-body {
+.atl-code-block > .code-block-body {
   background: var(--ui-color-surface);
   overflow-x: auto;
 }
 
-.code-block-pre {
+.atl-code-block > .code-block-body > .code-block-pre {
   margin: 0;
   padding: var(--ui-spacing-4);
   font: var(--ui-type-code);
@@ -114,11 +114,16 @@
    Line numbers
    --------------------------------------------------------------------------- */
 
-.code-line {
+.atl-code-block > .code-block-body > .code-block-pre > code > .code-line {
   display: flex;
 }
 
-.code-line-number {
+.atl-code-block
+  > .code-block-body
+  > .code-block-pre
+  > code
+  > .code-line
+  > .code-line-number {
   display: inline-block;
   min-width: 2rem;
   padding-right: var(--ui-spacing-3);
@@ -131,6 +136,11 @@
   opacity: 0.6;
 }
 
-.code-line-text {
+.atl-code-block
+  > .code-block-body
+  > .code-block-pre
+  > code
+  > .code-line
+  > .code-line-text {
   flex: 1;
 }

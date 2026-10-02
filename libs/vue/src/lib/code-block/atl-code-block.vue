@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, ref } from 'vue';
-import './atl-code-block.css';
+import '@atelier-ui/styles/code-block/atl-code-block.css';
 import AtlIcon from '../icon/atl-icon.vue';
 
 defineOptions({ name: 'AtlCodeBlock' });
