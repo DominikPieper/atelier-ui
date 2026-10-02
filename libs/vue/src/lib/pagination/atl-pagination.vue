@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import './atl-pagination.css';
+import '@atelier-ui/styles/pagination/atl-pagination.css';
 import AtlIcon from '../icon/atl-icon.vue';
 
 defineOptions({ name: 'AtlPagination' });

@@ -18,7 +18,7 @@
   line-height: var(--ui-line-height-tight);
 }
 
-.page-list {
+.atl-pagination .page-list {
   display: flex;
   flex-wrap: wrap;
   align-items: center;
@@ -29,7 +29,7 @@
 }
 
 /* Page button */
-.page-btn {
+.atl-pagination .page-btn {
   all: unset;
   /* Restated after `all: unset`, which resets the box model too — the component's
    * geometry contract has the same specificity and loses on source order, so this
@@ -55,12 +55,12 @@
     color var(--ui-transition-fast);
 }
 
-.page-btn:hover:not(:disabled) {
+.atl-pagination .page-btn:hover:not(:disabled) {
   background-color: var(--ui-color-surface-sunken);
   color: var(--ui-color-text);
 }
 
-.page-btn:focus-visible {
+.atl-pagination .page-btn:focus-visible {
   outline: none;
   box-shadow: var(--ui-focus-ring);
 }
@@ -69,27 +69,27 @@
  * medium (ADR-0074): the Figma master renders this label Medium in every state, and
  * .atl-tab-group's own .is-active — the other stateful member of the same six-rule
  * consumer list — changes only colour, never weight, on its current item. */
-.page-btn.is-active {
+.atl-pagination .page-btn.is-active {
   background-color: var(--ui-color-primary);
   border-color: var(--ui-color-primary);
   color: var(--ui-color-text-on-primary);
 }
 
-.page-btn.is-active:hover {
+.atl-pagination .page-btn.is-active:hover {
   background-color: var(--ui-color-primary-hover);
   border-color: var(--ui-color-primary-hover);
 }
 
 /* Disabled */
-.page-btn.is-disabled,
-.page-btn:disabled {
+.atl-pagination .page-btn.is-disabled,
+.atl-pagination .page-btn:disabled {
   opacity: var(--ui-opacity-disabled);
   pointer-events: none;
   cursor: default;
 }
 
 /* Ellipsis */
-.ellipsis {
+.atl-pagination .ellipsis {
   display: inline-flex;
   align-items: center;
   justify-content: center;

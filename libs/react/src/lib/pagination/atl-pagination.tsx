@@ -1,6 +1,6 @@
 import { HTMLAttributes, useMemo } from 'react';
 import type { AtlPaginationSpec } from '../spec';
-import './atl-pagination.css';
+import '@atelier-ui/styles/pagination/atl-pagination.css';
 import { AtlIcon } from '../icon/atl-icon';
 
 type PageItem =

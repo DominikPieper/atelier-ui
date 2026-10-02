@@ -4,6 +4,7 @@ import {
   computed,
   input,
   model,
+  ViewEncapsulation,
 } from '@angular/core';
 import { AtlIcon } from '../icon/atl-icon';
 
@@ -98,7 +99,12 @@ export type PageItem =
       </ul>
     </nav>
   `,
-  styleUrl: './atl-pagination.css',
+  // Class-rooted CSS shared with React and Vue (libs/styles): the root class below
+  // is what scopes it, so Emulated encapsulation is switched off.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: '../../../../styles/src/pagination/atl-pagination.css',
+  host: { class: 'atl-pagination' },
 })
 export class AtlPagination {
   /** Current page (1-based). Supports two-way binding: [(page)]="currentPage". */

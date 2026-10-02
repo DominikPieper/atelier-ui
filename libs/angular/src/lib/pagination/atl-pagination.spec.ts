@@ -4,6 +4,15 @@ import { covers } from '../../testing/behavior';
 import { AtlPagination } from './atl-pagination';
 
 describe('AtlPagination', () => {
+  it('carries the static atl-pagination root class the shared stylesheet is scoped by', async () => {
+    const { container } = await render('<atl-pagination />', {
+      imports: [AtlPagination],
+    });
+    expect(container.querySelector('atl-pagination')).toHaveClass(
+      'atl-pagination',
+    );
+  });
+
   it('renders a nav with aria-label="Pagination"', async () => {
     const { container } = await render('<atl-pagination />', {
       imports: [AtlPagination],
