@@ -881,7 +881,7 @@ const ROOT_PAINT = [
   {
     label: 'AtlStep',
     file: 'stepper/atl-stepper.css',
-    cascade: ['.step-item'],
+    cascade: ['.atl-stepper > .stepper-header > .step-item'],
   },
   // Only Angular renders an option row at all: React and Vue emit a native
   // <select> the operating system draws (ADR-0028).

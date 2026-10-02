@@ -9,6 +9,7 @@ import {
   OnDestroy,
   OnInit,
   signal,
+  ViewEncapsulation,
 } from '@angular/core';
 import {
   ATL_STEPPER,
@@ -86,8 +87,13 @@ let nextId = 0;
       <ng-content />
     </div>
   `,
-  styleUrl: './atl-stepper.css',
+  // Class-rooted CSS shared with React and Vue (libs/styles): the root class below
+  // is what scopes it, so Emulated encapsulation is switched off.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: '../../../../styles/src/stepper/atl-stepper.css',
   host: {
+    class: 'atl-stepper',
     '[class]': 'hostClasses()',
   },
   providers: [{ provide: ATL_STEPPER, useExisting: AtlStepper }],
@@ -193,11 +199,12 @@ export class AtlStepper implements AtlStepperContext {
       </div>
     }
   `,
-  styles: `
-    :host {
-      display: contents;
-    }
-  `,
+  // Class-rooted CSS shared with React and Vue (libs/styles): the root class below
+  // is what scopes it, so Emulated encapsulation is switched off.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: '../../../../styles/src/stepper/atl-stepper.css',
+  host: { class: 'atl-step' },
 })
 export class AtlStep implements OnInit, OnDestroy {
   /** Text displayed on the step indicator. Required. */

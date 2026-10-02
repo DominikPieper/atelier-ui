@@ -11,7 +11,7 @@ import {
   ReactElement,
 } from 'react';
 import type { AtlStepperSpec, AtlStepSpec } from '../spec';
-import './atl-stepper.css';
+import '@atelier-ui/styles/stepper/atl-stepper.css';
 import { AtlIcon } from '../icon/atl-icon';
 
 interface StepInfo {

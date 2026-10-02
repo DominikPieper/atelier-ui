@@ -788,6 +788,19 @@ const DEAD_SELECTOR_EXEMPT = new Map([
         'combinators so it matches only its own panels (ADR-0148)',
     },
   ]),
+  // Angular renders each step as an <atl-step> element (a display: contents wrapper
+  // around its panel, `.atl-step`); React and Vue render the panel straight into the
+  // stepper's content area, so the class exists in one framework's DOM only. The shared
+  // sheet lists the panel with and without the wrapper, each with child combinators.
+  ...['react', 'vue'].map((fw) => [
+    `${fw}:stepper:atl-step`,
+    {
+      kind: 'design',
+      reason:
+        "the <atl-step> wrapper (display: contents) is Angular's component host; React and Vue " +
+        'render the step panel without it, and the shared sheet states both shapes (ADR-0148)',
+    },
+  ]),
   ...['angular', 'vue'].flatMap((fw) =>
     ['vertical', 'horizontal'].map((member) => [
       `${fw}:radio-group:orientation-${member}`,

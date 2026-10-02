@@ -219,6 +219,36 @@ describe('AtlStepper', () => {
     );
   });
 
+  describe('shared stylesheet scoping', () => {
+    it('keeps the static atl-stepper class alongside the orientation class', async () => {
+      // The shared stylesheet (libs/styles) is scoped by `.atl-stepper`, and the
+      // host also binds `[class]`; the two must merge, across input changes too.
+      const { container, rerender } = await render(
+        `<atl-stepper [orientation]="orientation">
+          <atl-step label="A">A</atl-step>
+          <atl-step label="B">B</atl-step>
+        </atl-stepper>`,
+        {
+          imports: IMPORTS,
+          componentProperties: { orientation: 'horizontal' },
+        },
+      );
+      const host = container.querySelector('atl-stepper') as HTMLElement;
+      expect(host).toHaveClass('atl-stepper', 'orientation-horizontal');
+
+      await rerender({ componentProperties: { orientation: 'vertical' } });
+      expect(host).toHaveClass('atl-stepper', 'orientation-vertical');
+      expect(host).not.toHaveClass('orientation-horizontal');
+    });
+
+    it('gives each step a static atl-step host class', async () => {
+      const { container } = await render(BASIC_TEMPLATE, { imports: IMPORTS });
+      const steps = container.querySelectorAll('atl-step');
+      expect(steps).toHaveLength(3);
+      steps.forEach((step) => expect(step).toHaveClass('atl-step'));
+    });
+  });
+
   describe('optional label', () => {
     it('shows Optional text for optional steps that are not completed', async () => {
       await render(

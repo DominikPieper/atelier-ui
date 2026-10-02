@@ -30,7 +30,7 @@ export const AtlStepperKey: InjectionKey<AtlStepperContext> =
 
 <script setup lang="ts">
 import { computed, provide, ref, watch } from 'vue';
-import './atl-stepper.css';
+import '@atelier-ui/styles/stepper/atl-stepper.css';
 
 defineOptions({ name: 'AtlStepper' });
 
