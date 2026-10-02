@@ -4,6 +4,20 @@ import { AtlTextarea } from './atl-textarea';
 import { covers } from '../../testing/behavior';
 
 describe('AtlTextarea', () => {
+  it('keeps the static atl-textarea class alongside the bound classes', async () => {
+    // The shared stylesheet (libs/styles) is scoped by `.atl-textarea`, and the host
+    // also binds `[class]`; the two must merge, across input changes too.
+    const { container, rerender } = await render(
+      '<atl-textarea [invalid]="invalid" />',
+      { imports: [AtlTextarea], componentProperties: { invalid: false } },
+    );
+    const host = container.querySelector('atl-textarea') as HTMLElement;
+    expect(host).toHaveClass('atl-textarea');
+
+    await rerender({ componentProperties: { invalid: true } });
+    expect(host).toHaveClass('atl-textarea', 'is-invalid');
+  });
+
   covers('textarea', 'renders-textarea')(
     'renders a native textarea element',
     async () => {

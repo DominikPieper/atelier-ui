@@ -53,7 +53,7 @@
   box-shadow: var(--ui-focus-ring);
 }
 
-.atl-textarea .textarea-field {
+.atl-textarea > .textarea-field {
   position: relative;
 }
 
@@ -71,7 +71,7 @@
 /* Non-color invalid indicator (WCAG 1.4.1). A real AtlIcon rather than a CSS
  * `content: '✕'`: the glyph could not follow the icon set and Figma cannot put an
  * icon instance behind a pseudo-element (ADR-0046). */
-.atl-textarea.is-invalid .textarea-field .invalid-icon {
+.atl-textarea.is-invalid > .textarea-field > .invalid-icon {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -107,11 +107,11 @@
 }
 
 /* Error messages */
-.atl-textarea .errors {
+.atl-textarea > .errors {
   margin-top: var(--ui-spacing-2);
 }
 
-.atl-textarea .error-message {
+.atl-textarea > .errors > .error-message {
   margin: 0;
   font-size: var(--ui-font-size-sm);
   color: var(--ui-color-error-text);

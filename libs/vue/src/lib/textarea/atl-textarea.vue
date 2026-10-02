@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch, onMounted, computed, nextTick, useId } from 'vue';
-import './atl-textarea.css';
+import '@atelier-ui/styles/textarea/atl-textarea.css';
 import AtlIcon from '../icon/atl-icon.vue';
 
 defineOptions({ name: 'AtlTextarea' });

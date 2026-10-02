@@ -4,6 +4,7 @@ import {
   computed,
   input,
   model,
+  ViewEncapsulation,
 } from '@angular/core';
 import { TextFieldModule } from '@angular/cdk/text-field';
 import type { FormValueControl } from '@angular/forms/signals';
@@ -64,8 +65,13 @@ let nextId = 0;
       </div>
     }
   `,
-  styleUrl: './atl-textarea.css',
+  // Class-rooted CSS shared with React and Vue (libs/styles): the root class below
+  // is what scopes it, so Emulated encapsulation is switched off.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: '../../../../styles/src/textarea/atl-textarea.css',
   host: {
+    class: 'atl-textarea',
     '[class]': 'hostClasses()',
     // See atl-input.ts's identical host binding for why: a static `id="…"`
     // attribute matches the `id` input AND stays on this host element, which

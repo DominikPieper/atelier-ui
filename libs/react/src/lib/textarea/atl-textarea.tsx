@@ -1,6 +1,6 @@
 import { TextareaHTMLAttributes, useRef, useEffect, useId } from 'react';
 import type { AtlTextareaSpec } from '../spec';
-import './atl-textarea.css';
+import '@atelier-ui/styles/textarea/atl-textarea.css';
 import { AtlIcon } from '../icon/atl-icon';
 
 /**
