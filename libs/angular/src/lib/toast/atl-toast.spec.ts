@@ -100,6 +100,21 @@ describe('AtlToastService', () => {
 });
 
 describe('AtlToast', () => {
+  it('keeps the static atl-toast class alongside the variant class', async () => {
+    // The shared stylesheet (libs/styles) is scoped by `.atl-toast`, and the host
+    // also binds `[class]`; the two must merge, across input changes too.
+    const { container, rerender } = await render(
+      '<atl-toast [variant]="variant" message="Test" />',
+      { imports: [AtlToast], componentProperties: { variant: 'default' } },
+    );
+    const host = container.querySelector('atl-toast') as HTMLElement;
+    expect(host).toHaveClass('atl-toast', 'variant-default');
+
+    await rerender({ componentProperties: { variant: 'danger' } });
+    expect(host).toHaveClass('atl-toast', 'variant-danger');
+    expect(host).not.toHaveClass('variant-default');
+  });
+
   it('renders message text', async () => {
     await render('<atl-toast message="Hello world" />', {
       imports: [AtlToast],
@@ -168,6 +183,22 @@ describe('AtlToast', () => {
 });
 
 describe('AtlToastContainer', () => {
+  it('keeps the static atl-toast-container class alongside the position class', async () => {
+    const { container, rerender } = await render(
+      '<atl-toast-container [position]="position" />',
+      {
+        imports: [AtlToastContainer],
+        componentProperties: { position: 'bottom-right' },
+      },
+    );
+    const host = container.querySelector('atl-toast-container') as HTMLElement;
+    expect(host).toHaveClass('atl-toast-container', 'position-bottom-right');
+
+    await rerender({ componentProperties: { position: 'top-center' } });
+    expect(host).toHaveClass('atl-toast-container', 'position-top-center');
+    expect(host).not.toHaveClass('position-bottom-right');
+  });
+
   it('has aria-live="polite" on host', async () => {
     const { container } = await render('<atl-toast-container />', {
       imports: [AtlToastContainer],

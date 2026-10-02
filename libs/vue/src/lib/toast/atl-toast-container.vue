@@ -2,7 +2,7 @@
 import { computed, inject } from 'vue';
 import { AtlToastKey } from './atl-toast';
 import AtlToastItem from './atl-toast-item.vue';
-import './atl-toast.css';
+import '@atelier-ui/styles/toast/atl-toast.css';
 
 defineOptions({ name: 'AtlToastContainer' });
 

@@ -7,7 +7,7 @@ import {
   ReactNode,
 } from 'react';
 import type { AtlToastOptions, AtlToastContainerPosition } from '../spec';
-import './atl-toast.css';
+import '@atelier-ui/styles/toast/atl-toast.css';
 import { AtlIcon } from '../icon/atl-icon';
 
 /**

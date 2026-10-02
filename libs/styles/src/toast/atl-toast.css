@@ -67,7 +67,7 @@
   min-width: 18rem;
   max-width: 100%;
   box-sizing: border-box;
-  animation: toast-enter 0.3s ease-out;
+  animation: atl-toast-enter 0.3s ease-out;
 }
 
 /* ── Variant borders & tints ── */
@@ -112,12 +112,12 @@
 }
 
 /* ── Message ── */
-.atl-toast .message {
+.atl-toast > .message {
   flex: 1;
 }
 
 /* ── Dismiss button ── */
-.atl-toast .dismiss {
+.atl-toast > .dismiss {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -137,19 +137,19 @@
   line-height: 1;
 }
 
-.atl-toast .dismiss:hover {
+.atl-toast > .dismiss:hover {
   opacity: 1;
   background-color: color-mix(in srgb, currentColor 10%, transparent);
 }
 
-.atl-toast .dismiss:focus-visible {
+.atl-toast > .dismiss:focus-visible {
   outline: none;
   box-shadow: var(--ui-focus-ring);
   opacity: 1;
 }
 
 /* ── Enter animation ── */
-@keyframes toast-enter {
+@keyframes atl-toast-enter {
   from {
     opacity: 0;
     transform: translateY(0.5rem);
