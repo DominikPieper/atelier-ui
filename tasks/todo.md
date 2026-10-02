@@ -187,6 +187,33 @@ Ranked; each carries why it's worth doing next rather than later.
           and closes only when progress migrates. Checked by me: 11 shared files, 168
           selectors, 0 unrooted, every `@keyframes` prefixed. Not covered: the React side was
           probed only for toggle; the others rest on story tests and the shared file.
+          **Progress 2026-10-02, batch 2:** 21 of 29 migrated. Batch 2 is skeleton,
+          code-block, pagination, progress, avatar, tabs, accordion, card, chat and
+          combobox (`379e0d7b`..`3561298c`), with fix-forwards `e29b7c7f` (typeface
+          rebaseline) and `eb4de871` (`check:figma` resolves child-combinator parts).
+          `check:all` exits 0.
+          The migration fixed five Angular bugs that Emulated `:host` had been hiding, and
+          each is a visible change in Angular:
+          the card slots had no padding at all (the default card grows from 82.5px to
+          226.5px);
+          every accordion item got a bottom border (the group is now 1px shorter);
+          chat `status-streaming` never matched;
+          the code-block host was never styled;
+          the avatar group host was styled as an avatar.
+          `check:figma` had been skipping layers silently whenever a part was rooted
+          through child combinators: 31 resolved before, 77 after.
+          Progress → toggle leak, measured: the toggle `.track` goes from
+          `overflow: hidden` to `visible` in the React showcase, and the thumb was never
+          clipped.
+          Chat `.close-btn` now states `margin-left: 0` and `line-height: normal`, so a
+          later drawer migration cannot change it.
+          The new stories `NestedPadding` (card), `NestedGroups` (accordion) and
+          `PanelScope` (tabs) pin the nesting case. The card and accordion ones fail in
+          React with descendant selectors.
+          combobox was renamed on the Angular side.
+          Checked by me: 21 shared files, 391 selectors, every one rooted in `.atl-*` or
+          `[data-theme]`, every `@keyframes` prefixed.
+          Open: Vue visuals rest on `storybook-test` only.
     - [ ] **P1.4 Retire what the migration makes redundant.** Remove the per-framework
           fallback in `componentCssFiles()` once no per-framework stylesheet is left. Then
           re-evaluate `check:variants`, `check:dead-selectors` and `check:box-sizing`: do
