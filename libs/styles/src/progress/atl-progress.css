@@ -19,7 +19,7 @@
   line-height: var(--ui-line-height-tight);
 }
 
-.track {
+.atl-progress > .track {
   position: relative;
   width: 100%;
   border-radius: var(--ui-radius-full);
@@ -28,20 +28,20 @@
 }
 
 /* Size variants — modernised for visibility (sm was 4px → 6px) */
-.atl-progress.size-sm .track {
+.atl-progress.size-sm > .track {
   height: 6px;
 }
 
-.atl-progress.size-md .track {
+.atl-progress.size-md > .track {
   height: 10px;
 }
 
-.atl-progress.size-lg .track {
+.atl-progress.size-lg > .track {
   height: 14px;
 }
 
 /* Fill */
-.fill {
+.atl-progress > .track > .fill {
   height: 100%;
   border-radius: var(--ui-radius-full);
   background-color: var(--ui-color-primary);
@@ -49,20 +49,20 @@
 }
 
 /* Color variants */
-.atl-progress.variant-success .fill {
+.atl-progress.variant-success > .track > .fill {
   background-color: var(--ui-color-success);
 }
 
-.atl-progress.variant-warning .fill {
+.atl-progress.variant-warning > .track > .fill {
   background-color: var(--ui-color-warning);
 }
 
-.atl-progress.variant-danger .fill {
+.atl-progress.variant-danger > .track > .fill {
   background-color: var(--ui-color-danger);
 }
 
 /* Indeterminate animation */
-@keyframes progress-indeterminate {
+@keyframes atl-progress-indeterminate {
   0% {
     transform: translateX(-150%);
   }
@@ -71,13 +71,13 @@
   }
 }
 
-.atl-progress.is-indeterminate .fill {
+.atl-progress.is-indeterminate > .track > .fill {
   width: 40% !important;
-  animation: progress-indeterminate 1.4s var(--ui-ease-in-out) infinite;
+  animation: atl-progress-indeterminate 1.4s var(--ui-ease-in-out) infinite;
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .atl-progress.is-indeterminate .fill {
+  .atl-progress.is-indeterminate > .track > .fill {
     animation: none;
     opacity: 0.5;
   }

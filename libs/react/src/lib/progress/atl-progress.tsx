@@ -1,6 +1,6 @@
 import { HTMLAttributes } from 'react';
 import type { AtlProgressSpec } from '../spec';
-import './atl-progress.css';
+import '@atelier-ui/styles/progress/atl-progress.css';
 
 /**
  * Properties for the AtlProgress component.

@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import './atl-progress.css';
+import '@atelier-ui/styles/progress/atl-progress.css';
 
 defineOptions({ name: 'AtlProgress' });
 

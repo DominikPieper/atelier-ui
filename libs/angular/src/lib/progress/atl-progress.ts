@@ -3,6 +3,7 @@ import {
   Component,
   computed,
   input,
+  ViewEncapsulation,
 } from '@angular/core';
 
 /**
@@ -24,8 +25,13 @@ import {
       <div class="fill" [style.width]="fillWidth()"></div>
     </div>
   `,
-  styleUrl: './atl-progress.css',
+  // Class-rooted CSS shared with React and Vue (libs/styles): the root class below
+  // is what scopes it, so Emulated encapsulation is switched off.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: '../../../../styles/src/progress/atl-progress.css',
   host: {
+    class: 'atl-progress',
     role: 'progressbar',
     'aria-valuemin': '0',
     '[attr.aria-valuenow]': 'indeterminate() ? null : clampedValue()',

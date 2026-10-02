@@ -3,6 +3,21 @@ import { covers } from '../../testing/behavior';
 import { AtlProgress } from './atl-progress';
 
 describe('AtlProgress', () => {
+  it('keeps the static atl-progress class alongside the bound classes', async () => {
+    // The shared stylesheet (libs/styles) is scoped by `.atl-progress`, and the host
+    // also binds `[class]`; the two must merge, across input changes too.
+    const { container, rerender } = await render(
+      '<atl-progress [variant]="variant" />',
+      { imports: [AtlProgress], componentProperties: { variant: 'default' } },
+    );
+    const host = container.querySelector('atl-progress') as HTMLElement;
+    expect(host).toHaveClass('atl-progress', 'variant-default');
+
+    await rerender({ componentProperties: { variant: 'success' } });
+    expect(host).toHaveClass('atl-progress', 'variant-success');
+    expect(host).not.toHaveClass('variant-default');
+  });
+
   it('has role="progressbar"', async () => {
     const { container } = await render('<atl-progress />', {
       imports: [AtlProgress],
