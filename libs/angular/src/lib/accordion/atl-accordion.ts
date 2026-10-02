@@ -10,6 +10,7 @@ import {
   OnDestroy,
   OnInit,
   signal,
+  ViewEncapsulation,
 } from '@angular/core';
 import { CdkAccordion, CdkAccordionItem } from '@angular/cdk/accordion';
 import {
@@ -40,9 +41,14 @@ let nextId = 0;
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `<ng-content />`,
-  styleUrl: './atl-accordion.css',
+  // Class-rooted CSS shared with React and Vue (libs/styles): the root class below
+  // is what scopes it, so Emulated encapsulation is switched off.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: '../../../../styles/src/accordion/atl-accordion.css',
   hostDirectives: [{ directive: CdkAccordion, inputs: ['multi'] }],
   host: {
+    class: 'atl-accordion-group',
     '[class]': 'hostClassesValue',
     role: 'presentation',
   },
@@ -56,9 +62,7 @@ export class AtlAccordionGroup implements AtlAccordionGroupContext {
   readonly variant = input<'default' | 'bordered' | 'separated'>('default');
 
   /** @internal */
-  protected readonly hostClasses = computed(
-    () => `atl-accordion-group variant-${this.variant()}`,
-  );
+  protected readonly hostClasses = computed(() => `variant-${this.variant()}`);
 
   /** @internal */
   get hostClassesValue(): string {
@@ -170,7 +174,11 @@ export class AtlAccordionHeader {}
       </div>
     </div>
   `,
-  styleUrl: './atl-accordion.css',
+  // Class-rooted CSS shared with React and Vue (libs/styles): the root class below
+  // is what scopes it, so Emulated encapsulation is switched off.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: '../../../../styles/src/accordion/atl-accordion.css',
   host: {
     class: 'atl-accordion-item',
     '[attr.data-accordion-id]': 'id',

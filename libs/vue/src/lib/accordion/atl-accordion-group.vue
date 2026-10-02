@@ -20,7 +20,7 @@ export const AtlAccordionGroupKey: InjectionKey<AtlAccordionGroupContext> =
 
 <script setup lang="ts">
 import { computed, provide, ref } from 'vue';
-import './atl-accordion.css';
+import '@atelier-ui/styles/accordion/atl-accordion.css';
 
 defineOptions({ name: 'AtlAccordionGroup' });
 

@@ -57,6 +57,24 @@ const WITH_DISABLED = `
 `;
 
 describe('AtlAccordionGroup', () => {
+  it('keeps the static atl-accordion-group class alongside the bound variant', async () => {
+    // The shared stylesheet (libs/styles) is scoped by `.atl-accordion-group`, and the
+    // host also binds `[class]`; the two must merge, across input changes too.
+    const { container, rerender } = await render(
+      '<atl-accordion-group [variant]="variant"><atl-accordion-item><span atlAccordionHeader>A</span>a</atl-accordion-item></atl-accordion-group>',
+      { imports: IMPORTS, componentProperties: { variant: 'default' } },
+    );
+    const host = container.querySelector('atl-accordion-group') as HTMLElement;
+    expect(host).toHaveClass('atl-accordion-group', 'variant-default');
+    expect(container.querySelector('atl-accordion-item')).toHaveClass(
+      'atl-accordion-item',
+    );
+
+    await rerender({ componentProperties: { variant: 'bordered' } });
+    expect(host).toHaveClass('atl-accordion-group', 'variant-bordered');
+    expect(host).not.toHaveClass('variant-default');
+  });
+
   describe('rendering & content projection', () => {
     it('renders all accordion items', async () => {
       await render(BASIC_TEMPLATE, { imports: IMPORTS });

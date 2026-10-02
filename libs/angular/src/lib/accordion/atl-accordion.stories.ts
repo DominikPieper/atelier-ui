@@ -270,3 +270,36 @@ export const CollapseOnClick: Story = {
     await waitFor(() => expect(wrapper.getBoundingClientRect().height).toBe(0));
   },
 };
+
+export const NestedGroups: Story = {
+  render: () => ({
+    moduleMetadata: { imports: IMPORTS },
+    template: `
+      <atl-accordion-group variant="separated">
+        <atl-accordion-item [expanded]="true">
+          <span atlAccordionHeader>Outer</span>
+          <atl-accordion-group variant="default">
+            <atl-accordion-item>
+              <span atlAccordionHeader>Inner</span>
+              Inner content
+            </atl-accordion-item>
+          </atl-accordion-group>
+        </atl-accordion-item>
+      </atl-accordion-group>
+    `,
+  }),
+  play: async ({ canvas }) => {
+    // The outer separated group boxes each of its items; the inner default group
+    // only draws a bottom rule. The inner item must keep its own group's look and
+    // not pick up the outer group's variant rule.
+    const outer = canvas
+      .getByRole('button', { name: 'Outer' })
+      .closest('.atl-accordion-item') as HTMLElement;
+    const inner = canvas
+      .getByRole('button', { name: 'Inner' })
+      .closest('.atl-accordion-item') as HTMLElement;
+    await expect(getComputedStyle(outer).borderLeftWidth).not.toBe('0px');
+    await expect(getComputedStyle(inner).borderLeftWidth).toBe('0px');
+    await expect(getComputedStyle(inner).borderBottomWidth).not.toBe('0px');
+  },
+};

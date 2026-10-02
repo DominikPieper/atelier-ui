@@ -11,7 +11,7 @@ import {
   KeyboardEvent,
 } from 'react';
 import type { AtlAccordionGroupSpec, AtlAccordionItemSpec } from '../spec';
-import './atl-accordion.css';
+import '@atelier-ui/styles/accordion/atl-accordion.css';
 import { AtlIcon } from '../icon/atl-icon';
 
 interface AccordionGroupContextValue {
