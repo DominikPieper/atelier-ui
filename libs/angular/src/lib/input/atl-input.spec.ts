@@ -4,6 +4,20 @@ import { covers } from '../../testing/behavior';
 import { AtlInput } from './atl-input';
 
 describe('AtlInput', () => {
+  it('keeps the static atl-input class alongside the bound classes', async () => {
+    // The shared stylesheet (libs/styles) is scoped by `.atl-input`, and the host
+    // also binds `[class]`; the two must merge, across input changes too.
+    const { container, rerender } = await render(
+      '<atl-input [invalid]="invalid" />',
+      { imports: [AtlInput], componentProperties: { invalid: false } },
+    );
+    const host = container.querySelector('atl-input') as HTMLElement;
+    expect(host).toHaveClass('atl-input');
+
+    await rerender({ componentProperties: { invalid: true } });
+    expect(host).toHaveClass('atl-input', 'is-invalid');
+  });
+
   covers('input', 'renders-input')(
     'renders a native input element',
     async () => {

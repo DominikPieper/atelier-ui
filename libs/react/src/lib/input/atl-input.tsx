@@ -1,6 +1,6 @@
 import { InputHTMLAttributes, useId } from 'react';
 import type { AtlInputSpec } from '../spec';
-import './atl-input.css';
+import '@atelier-ui/styles/input/atl-input.css';
 import { AtlIcon } from '../icon/atl-icon';
 
 /**

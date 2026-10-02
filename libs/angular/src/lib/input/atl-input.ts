@@ -4,6 +4,7 @@ import {
   computed,
   input,
   model,
+  ViewEncapsulation,
 } from '@angular/core';
 import type { FormValueControl } from '@angular/forms/signals';
 import {
@@ -61,8 +62,13 @@ let nextId = 0;
       </div>
     }
   `,
-  styleUrl: './atl-input.css',
+  // Class-rooted CSS shared with React and Vue (libs/styles): the root class below
+  // is what scopes it, so Emulated encapsulation is switched off.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: '../../../../styles/src/input/atl-input.css',
   host: {
+    class: 'atl-input',
     '[class]': 'hostClasses()',
     // A static `id="…"` attribute on `<atl-input>` matches the `id` input AND
     // stays as a literal attribute on this host element (Angular keeps static

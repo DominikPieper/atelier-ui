@@ -117,7 +117,7 @@ const CONTROLS = [
       default: () =>
         `<div class="atl-input" style="width:240px"><div class="input-field"><input value="Value"></div></div>`,
       angular: () =>
-        `<atl-input style="display:block;width:240px"><div class="input-field"><input value="Value"></div></atl-input>`,
+        `<atl-input class="atl-input" style="display:block;width:240px"><div class="input-field"><input value="Value"></div></atl-input>`,
     },
     measure: { default: '.atl-input input', angular: 'atl-input input' },
   },

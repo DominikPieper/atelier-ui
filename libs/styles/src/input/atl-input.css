@@ -3,12 +3,12 @@
  * same file as the sizes it governs and no consuming app has to supply one.
  * Gated by check:box-sizing; the resulting boxes are measured by check:geometry.
  * See ADR-0043. */
-:host,
-:host * {
+.atl-input,
+.atl-input * {
   box-sizing: border-box;
 }
 
-:host {
+.atl-input {
   display: block;
   font-family: var(--ui-font-family);
   /* The leading every descendant inherits, stated so the component keeps its
@@ -18,7 +18,7 @@
   font-size: var(--ui-font-size-md);
 }
 
-input {
+.atl-input input {
   display: block;
   width: 100%;
   min-height: var(--ui-control-height-md);
@@ -47,31 +47,31 @@ input {
   box-sizing: border-box;
 }
 
-input::placeholder {
+.atl-input input::placeholder {
   color: var(--ui-color-placeholder);
 }
 
-input:hover:not(:disabled):not(:read-only) {
+.atl-input input:hover:not(:disabled):not(:read-only) {
   border-color: var(--ui-color-input-border-hover);
 }
 
-input:focus {
+.atl-input input:focus {
   border-color: var(--ui-color-input-border-focus);
   background-color: var(--ui-color-input-bg-focus);
   box-shadow: var(--ui-focus-ring);
 }
 
-.input-field {
+.atl-input > .input-field {
   position: relative;
 }
 
 /* Invalid state */
-:host(.is-invalid) input {
+.atl-input.is-invalid input {
   border-color: var(--ui-color-input-border-invalid);
   padding-right: 2.25rem;
 }
 
-:host(.is-invalid) input:focus {
+.atl-input.is-invalid input:focus {
   border-color: var(--ui-color-input-border-invalid);
   box-shadow: var(--ui-focus-ring-danger);
 }
@@ -79,7 +79,7 @@ input:focus {
 /* Non-color invalid indicator (WCAG 1.4.1). A real AtlIcon rather than a CSS
  * `content: '✕'`: the glyph could not follow the icon set and Figma cannot put an
  * icon instance behind a pseudo-element (ADR-0046). */
-:host(.is-invalid) .input-field .invalid-icon {
+.atl-input.is-invalid > .input-field > .invalid-icon {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);
@@ -89,17 +89,17 @@ input:focus {
 }
 
 /* Disabled state */
-:host(.is-disabled) {
+.atl-input.is-disabled {
   opacity: var(--ui-opacity-disabled);
   cursor: not-allowed;
 }
 
-:host(.is-disabled) input {
+.atl-input.is-disabled input {
   cursor: not-allowed;
 }
 
 /* Readonly state */
-:host(.is-readonly) input {
+.atl-input.is-readonly input {
   background-color: var(--ui-color-surface-sunken);
   /* Readonly is content, not a control: the interactive edge goes away while the
    * filled surface stays. Transparent rather than removed so the 1px border keeps
@@ -109,11 +109,11 @@ input:focus {
 }
 
 /* Error messages */
-.errors {
+.atl-input > .errors {
   margin-top: var(--ui-spacing-2);
 }
 
-.error-message {
+.atl-input > .errors > .error-message {
   margin: 0;
   font-size: var(--ui-font-size-sm);
   color: var(--ui-color-error-text);
