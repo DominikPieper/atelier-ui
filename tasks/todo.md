@@ -175,6 +175,18 @@ Ranked; each carries why it's worth doing next rather than later.
           (DOM convergence) and drawer, then menu and table, and select and tooltip last
           (with per-framework override files). Check the three spots that change visibly when
           the leak closes (chat `.close-btn`, drawer `.panel`, toggle `.track`) in a browser.
+          **Progress 2026-10-02:** 11 of 29 migrated (button, badge, dialog in P1.1b; batch 1
+          alert, checkbox, icon, input, radio, radio-group, textarea, toggle in
+          `948e34dd`..`ef83e334` plus fix-forward `e6f5362a`); `check:all` exits 0. Findings:
+          checkbox now takes Angular's hover-on-invalid behaviour, so a hovered invalid
+          checkbox keeps its red border in React/Vue too (visible change there). Table's
+          `.atl-tr-select-cell .atl-checkbox label` now matches in Angular
+          (`justify-content: center`); its dead-selector exemption was removed. The
+          stylelint exemption-staleness scan now reads `libs/styles` as evidence
+          (`sharedRoot`). The toggle `.track` leak comes from progress's unrooted `.track`
+          and closes only when progress migrates. Checked by me: 11 shared files, 168
+          selectors, 0 unrooted, every `@keyframes` prefixed. Not covered: the React side was
+          probed only for toggle; the others rest on story tests and the shared file.
     - [ ] **P1.4 Retire what the migration makes redundant.** Remove the per-framework
           fallback in `componentCssFiles()` once no per-framework stylesheet is left. Then
           re-evaluate `check:variants`, `check:dead-selectors` and `check:box-sizing`: do
