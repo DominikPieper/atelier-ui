@@ -8,6 +8,7 @@ import {
   model,
   signal,
   viewChild,
+  ViewEncapsulation,
 } from '@angular/core';
 import type { FormValueControl } from '@angular/forms/signals';
 import {
@@ -42,10 +43,10 @@ let nextId = 0;
   imports: [AtlIcon],
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <div class="combobox-wrapper">
+    <div class="atl-combobox-wrapper">
       <input
         #inputEl
-        class="combobox-input"
+        class="atl-combobox-input"
         type="text"
         autocomplete="off"
         role="combobox"
@@ -70,7 +71,7 @@ let nextId = 0;
       @if (invalid()) {
         <atl-icon name="danger" size="sm" class="invalid-icon" />
       }
-      <span class="combobox-icon" aria-hidden="true">
+      <span class="atl-combobox-icon" aria-hidden="true">
         <atl-icon name="chevron-down" size="sm" />
       </span>
     </div>
@@ -80,14 +81,14 @@ let nextId = 0;
       [id]="panelId"
       popover="manual"
       role="listbox"
-      class="panel"
+      class="atl-combobox-panel"
       [attr.aria-labelledby]="inputId"
     >
       @for (option of filteredOptions(); track option.value; let i = $index) {
         <li
           [id]="optionId(i)"
           role="option"
-          class="option"
+          class="atl-combobox-option"
           [class.is-active]="activeIndex() === i"
           [class.is-selected]="option.value === value()"
           [class.is-disabled]="option.disabled"
@@ -98,13 +99,13 @@ let nextId = 0;
         >
           <span>{{ option.label }}</span>
           @if (option.value === value()) {
-            <atl-icon name="check" size="sm" class="option-check" />
+            <atl-icon name="check" size="sm" class="atl-combobox-check" />
           }
         </li>
       }
       @if (filteredOptions().length === 0) {
         <li
-          class="no-results"
+          class="atl-combobox-no-results"
           role="option"
           aria-selected="false"
           aria-disabled="true"
@@ -115,15 +116,20 @@ let nextId = 0;
     </ul>
 
     @if (showErrors()) {
-      <div class="errors" [id]="errorId" aria-live="polite">
+      <div class="atl-combobox-errors" [id]="errorId" aria-live="polite">
         @for (error of errors(); track error.kind) {
-          <p class="error-message">{{ error.message }}</p>
+          <p class="atl-combobox-error-message">{{ error.message }}</p>
         }
       </div>
     }
   `,
-  styleUrl: './atl-combobox.css',
+  // Class-rooted CSS shared with React and Vue (libs/styles): the root class below
+  // is what scopes it, so Emulated encapsulation is switched off.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: '../../../../styles/src/combobox/atl-combobox.css',
   host: {
+    class: 'atl-combobox',
     '[class]': 'hostClasses()',
   },
 })

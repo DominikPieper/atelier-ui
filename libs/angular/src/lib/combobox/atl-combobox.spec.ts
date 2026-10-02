@@ -45,6 +45,34 @@ function getInput(container: Element): HTMLInputElement {
 }
 
 describe('AtlCombobox', () => {
+  it('uses the class names the shared stylesheet (libs/styles) is written against', async () => {
+    // Angular used to drop the `atl-` prefix (combobox-input, panel, option, ...);
+    // React and Vue always had the prefixed names, and the one stylesheet is rooted
+    // in them. The static root class must also survive the bound state classes.
+    const user = userEvent.setup();
+    const { container } = await render(TEMPLATE, {
+      imports: [AtlCombobox],
+      componentProperties: { value: 'banana', options: OPTIONS },
+    });
+    const host = container.querySelector('atl-combobox') as HTMLElement;
+    expect(host).toHaveClass('atl-combobox');
+    expect(
+      container.querySelector('.atl-combobox-wrapper > .atl-combobox-input'),
+    ).toBeInTheDocument();
+    expect(
+      container.querySelector('.atl-combobox-wrapper > .atl-combobox-icon'),
+    ).toBeInTheDocument();
+    const panel = container.querySelector('.atl-combobox-panel');
+    expect(panel).toHaveAttribute('role', 'listbox');
+    expect(panel?.querySelectorAll('.atl-combobox-option')).toHaveLength(4);
+    expect(
+      panel?.querySelector('.atl-combobox-option .atl-combobox-check'),
+    ).toBeInTheDocument();
+
+    await user.click(getInput(container));
+    expect(host).toHaveClass('atl-combobox', 'is-open');
+  });
+
   covers('combobox', 'render-input')(
     'renders an input with role="combobox"',
     async () => {

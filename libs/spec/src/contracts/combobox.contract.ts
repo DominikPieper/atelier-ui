@@ -35,11 +35,12 @@ export const contract = {
       selector: "input[role='combobox']",
       reason:
         'the .atl-combobox root only sets display/font/line-height — background-color, border ' +
-        'and border-radius are painted on the nested text input. Its class name is NOT shared ' +
-        "across frameworks ('atl-combobox-input' in React/Vue, 'combobox-input' in Angular, " +
-        "whose :host-scoped stylesheet drops the 'atl-' prefix), so the selector uses the one " +
-        "attribute all three set explicitly on that element instead: role='combobox' " +
-        '(atl-combobox.tsx / .vue / .ts all set it verbatim, not left to an implicit ARIA role).',
+        'and border-radius are painted on the nested text input. The selector names the one ' +
+        "attribute all three frameworks set explicitly on that element, role='combobox' " +
+        '(atl-combobox.tsx / .vue / .ts all set it verbatim, not left to an implicit ARIA role), ' +
+        "rather than its class: Angular's input used to be 'combobox-input' against " +
+        "'atl-combobox-input' in React/Vue, which ADR-0148 removed, but the attribute is the " +
+        'element this probe means whatever the class is called.',
     },
   ],
 } satisfies ComponentContract;

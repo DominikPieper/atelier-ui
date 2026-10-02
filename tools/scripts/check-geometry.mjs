@@ -144,9 +144,9 @@ const CONTROLS = [
       default: () =>
         `<div class="atl-combobox" style="width:220px"><div class="atl-combobox-wrapper"><input class="atl-combobox-input" value="Value"></div></div>`,
       angular: () =>
-        `<atl-combobox style="display:block;width:220px"><div class="combobox-wrapper"><input class="combobox-input" value="Value"></div></atl-combobox>`,
+        `<atl-combobox class="atl-combobox" style="display:block;width:220px"><div class="atl-combobox-wrapper"><input class="atl-combobox-input" value="Value"></div></atl-combobox>`,
     },
-    measure: { default: '.atl-combobox-input', angular: '.combobox-input' },
+    measure: { default: '.atl-combobox-input', angular: '.atl-combobox-input' },
   },
   {
     dir: 'tabs',
@@ -195,9 +195,12 @@ const CONTROLS = [
       default: () =>
         `<div class="atl-combobox"><div class="atl-combobox-panel" style="position:static"><div class="atl-combobox-option">Angular</div></div></div>`,
       angular: () =>
-        `<atl-combobox><div class="panel"><div class="option">Angular</div></div></atl-combobox>`,
+        `<atl-combobox class="atl-combobox"><div class="atl-combobox-panel"><div class="atl-combobox-option">Angular</div></div></atl-combobox>`,
     },
-    measure: { default: '.atl-combobox-option', angular: '.option' },
+    measure: {
+      default: '.atl-combobox-option',
+      angular: '.atl-combobox-option',
+    },
   },
   {
     dir: 'code-block',

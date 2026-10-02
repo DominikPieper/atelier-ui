@@ -1,6 +1,6 @@
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
 import type { AtlComboboxOption, AtlComboboxSpec } from '../spec';
-import './atl-combobox.css';
+import '@atelier-ui/styles/combobox/atl-combobox.css';
 import { AtlIcon } from '../icon/atl-icon';
 
 export type { AtlComboboxOption };

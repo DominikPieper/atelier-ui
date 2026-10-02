@@ -3,8 +3,31 @@
  * same file as the sizes it governs and no consuming app has to supply one.
  * Gated by check:box-sizing; the resulting boxes are measured by check:geometry.
  * See ADR-0043. */
-:host,
-:host * {
+:is(
+  .atl-combobox,
+  .atl-combobox-check,
+  .atl-combobox-error-message,
+  .atl-combobox-errors,
+  .atl-combobox-icon,
+  .atl-combobox-input,
+  .atl-combobox-no-results,
+  .atl-combobox-option,
+  .atl-combobox-panel,
+  .atl-combobox-wrapper
+),
+:is(
+    .atl-combobox,
+    .atl-combobox-check,
+    .atl-combobox-error-message,
+    .atl-combobox-errors,
+    .atl-combobox-icon,
+    .atl-combobox-input,
+    .atl-combobox-no-results,
+    .atl-combobox-option,
+    .atl-combobox-panel,
+    .atl-combobox-wrapper
+  )
+  * {
   box-sizing: border-box;
 }
 
@@ -12,7 +35,7 @@
    atl-combobox.css
    ============================================================ */
 
-:host {
+.atl-combobox {
   display: block;
   position: relative;
   font-family: var(--ui-font-family);
@@ -26,13 +49,13 @@
 /* ---------------------------------------------------------------------------
    Input wrapper
    --------------------------------------------------------------------------- */
-.combobox-wrapper {
+.atl-combobox-wrapper {
   position: relative;
   display: flex;
   align-items: center;
 }
 
-.combobox-input {
+.atl-combobox-input {
   width: 100%;
   min-height: var(--ui-control-height-md);
   box-sizing: border-box;
@@ -71,42 +94,42 @@
   cursor: text;
 }
 
-.combobox-input::placeholder {
+.atl-combobox-input::placeholder {
   color: var(--ui-color-placeholder);
 }
 
-.combobox-input:hover:not(:disabled) {
+.atl-combobox-input:hover:not(:disabled) {
   border-color: var(--ui-color-input-border-hover);
 }
 
-.combobox-input:focus-visible,
-:host(.is-open) .combobox-input {
+.atl-combobox-input:focus-visible,
+.atl-combobox.is-open .atl-combobox-input {
   border-color: var(--ui-color-input-border-focus);
   box-shadow: var(--ui-focus-ring);
 }
 
-:host(.is-invalid) .combobox-input {
+.atl-combobox.is-invalid .atl-combobox-input {
   border-color: var(--ui-color-input-border-invalid);
 }
 
-:host(.is-invalid) .combobox-input:focus-visible {
+.atl-combobox.is-invalid .atl-combobox-input:focus-visible {
   border-color: var(--ui-color-input-border-invalid);
   box-shadow: var(--ui-focus-ring-danger);
 }
 
-:host(.is-disabled) {
+.atl-combobox.is-disabled {
   opacity: var(--ui-opacity-disabled);
   cursor: not-allowed;
 }
 
-:host(.is-disabled) .combobox-input {
+.atl-combobox.is-disabled .atl-combobox-input {
   cursor: not-allowed;
 }
 
 /* ---------------------------------------------------------------------------
    Chevron icon
    --------------------------------------------------------------------------- */
-.combobox-icon {
+.atl-combobox-icon {
   position: absolute;
   inset-inline-end: var(--ui-spacing-4);
   pointer-events: none;
@@ -116,14 +139,14 @@
   align-items: center;
 }
 
-:host(.is-open) .combobox-icon {
+.atl-combobox.is-open .atl-combobox-icon {
   transform: rotate(180deg);
 }
 
 /* ---------------------------------------------------------------------------
    Panel
    --------------------------------------------------------------------------- */
-.panel {
+.atl-combobox-panel {
   position: absolute;
   left: 0;
   top: calc(100% + var(--ui-spacing-2));
@@ -143,7 +166,7 @@
 /* ---------------------------------------------------------------------------
    Options
    --------------------------------------------------------------------------- */
-.option {
+.atl-combobox-option {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -162,25 +185,29 @@
   transition: background-color var(--ui-transition-fast);
 }
 
-.option:hover:not(.is-disabled) {
+.atl-combobox-option:hover:not(.is-disabled) {
   background-color: var(--ui-color-surface-sunken);
 }
 
-.option.is-active {
+.atl-combobox-option.is-active {
   background-color: var(--ui-color-primary-light);
   color: var(--ui-color-primary);
 }
 
-.option.is-selected {
+.atl-combobox-option.is-selected {
   font-weight: var(--ui-font-weight-semibold);
 }
 
-.option.is-disabled {
+.atl-combobox-option.is-disabled {
   opacity: var(--ui-opacity-disabled);
   cursor: not-allowed;
 }
 
-.option-check {
+/* Two classes deep on purpose: the check is an <atl-icon>, and the icon's own
+ * `.atl-icon { color: currentColor }` has the same one-class specificity, so a bare
+ * `.atl-combobox-check` was decided by which stylesheet was inserted last (Angular
+ * emulation hid that, since it added an attribute and so won outright). */
+.atl-combobox-option > .atl-combobox-check {
   color: var(--ui-color-primary);
   flex-shrink: 0;
 }
@@ -188,7 +215,7 @@
 /* ---------------------------------------------------------------------------
    No results
    --------------------------------------------------------------------------- */
-.no-results {
+.atl-combobox-no-results {
   padding: var(--ui-spacing-4);
   text-align: center;
   color: var(--ui-color-text-muted);
@@ -198,11 +225,11 @@
 /* ---------------------------------------------------------------------------
    Errors
    --------------------------------------------------------------------------- */
-.errors {
+.atl-combobox-errors {
   margin-top: var(--ui-spacing-2);
 }
 
-.error-message {
+.atl-combobox-error-message {
   margin: 0;
   font-size: var(--ui-font-size-sm);
   color: var(--ui-color-error-text);
@@ -212,17 +239,18 @@
 /* Readonly state — content, not a control: the interactive edge goes away while
  * the filled surface stays. Transparent rather than removed so the 1px border
  * keeps its space and the height stays put (ADR-0045). */
-:host(.is-readonly) .combobox-input {
+.atl-combobox.is-readonly .atl-combobox-input {
   border-color: transparent;
   cursor: default;
 }
 
 /* The invalid indicator sits inline-end, left of the chevron, and the field reserves
- * the space for it unconditionally so nothing shifts when the state flips.
+ * the space for it unconditionally so nothing shifts when the state flips. Slot:
+ * 16px inset + 16px chevron + 4px gap + 16px indicator + 4px = 56px.
  * AtlInput and AtlTextarea already showed this indicator; carrying invalid on border
  * colour alone left AtlSelect and AtlCombobox failing WCAG 1.4.1 whenever a consumer
  * set invalid without passing errors (ADR-0055). */
-:host(.is-invalid) .invalid-icon {
+.atl-combobox.is-invalid > .atl-combobox-wrapper > .invalid-icon {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);

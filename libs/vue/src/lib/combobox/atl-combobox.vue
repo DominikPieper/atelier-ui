@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, onUnmounted, ref, watch } from 'vue';
 import type { AtlComboboxOption } from '../spec';
-import './atl-combobox.css';
+import '@atelier-ui/styles/combobox/atl-combobox.css';
 import AtlIcon from '../icon/atl-icon.vue';
 
 defineOptions({ name: 'AtlCombobox' });
