@@ -51,10 +51,10 @@
     color-mix(in srgb, var(--ui-color-surface-raised) 80%, transparent) 50%,
     transparent 100%
   );
-  animation: shimmer 1.5s infinite;
+  animation: atl-skeleton-shimmer 1.5s infinite;
 }
 
-@keyframes shimmer {
+@keyframes atl-skeleton-shimmer {
   0% {
     transform: translateX(-100%);
   }

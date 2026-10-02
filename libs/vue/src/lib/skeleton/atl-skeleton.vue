@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import './atl-skeleton.css';
+import '@atelier-ui/styles/skeleton/atl-skeleton.css';
 
 defineOptions({ name: 'AtlSkeleton' });
 

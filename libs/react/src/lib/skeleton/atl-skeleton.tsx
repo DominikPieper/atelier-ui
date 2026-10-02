@@ -1,6 +1,6 @@
 import { CSSProperties, HTMLAttributes } from 'react';
 import type { AtlSkeletonSpec } from '../spec';
-import './atl-skeleton.css';
+import '@atelier-ui/styles/skeleton/atl-skeleton.css';
 
 /**
  * Properties for the AtlSkeleton component.

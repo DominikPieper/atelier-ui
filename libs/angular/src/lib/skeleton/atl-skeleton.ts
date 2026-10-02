@@ -3,6 +3,7 @@ import {
   Component,
   computed,
   input,
+  ViewEncapsulation,
 } from '@angular/core';
 
 /**
@@ -20,8 +21,13 @@ import {
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: ``,
-  styleUrl: './atl-skeleton.css',
+  // Class-rooted CSS shared with React and Vue (libs/styles): the root class below
+  // is what scopes it, so Emulated encapsulation is switched off.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: '../../../../styles/src/skeleton/atl-skeleton.css',
   host: {
+    class: 'atl-skeleton',
     '[class]': 'hostClasses()',
     '[style.width]': 'width()',
     '[style.height]': 'computedHeight()',

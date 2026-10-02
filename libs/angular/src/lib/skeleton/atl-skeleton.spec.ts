@@ -3,6 +3,21 @@ import { AtlSkeleton } from './atl-skeleton';
 import { covers } from '../../testing/behavior';
 
 describe('AtlSkeleton', () => {
+  it('keeps the static atl-skeleton class alongside the bound classes', async () => {
+    // The shared stylesheet (libs/styles) is scoped by `.atl-skeleton`, and the host
+    // also binds `[class]`; the two must merge, across input changes too.
+    const { container, rerender } = await render(
+      '<atl-skeleton [variant]="variant" />',
+      { imports: [AtlSkeleton], componentProperties: { variant: 'text' } },
+    );
+    const host = container.querySelector('atl-skeleton') as HTMLElement;
+    expect(host).toHaveClass('atl-skeleton', 'variant-text');
+
+    await rerender({ componentProperties: { variant: 'circular' } });
+    expect(host).toHaveClass('atl-skeleton', 'variant-circular');
+    expect(host).not.toHaveClass('variant-text');
+  });
+
   it('renders with default variant class', async () => {
     const { container } = await render('<atl-skeleton />', {
       imports: [AtlSkeleton],
