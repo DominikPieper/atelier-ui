@@ -876,7 +876,7 @@ const ROOT_PAINT = [
   {
     label: 'AtlTab',
     file: 'tabs/atl-tabs.css',
-    cascade: ['.atl-tab-group .tablist button'],
+    cascade: ['.atl-tab-group > .tablist > button'],
   },
   {
     label: 'AtlStep',
@@ -904,7 +904,7 @@ const ROOT_PAINT = [
   {
     label: 'AtlChatSuggestion',
     file: 'chat/atl-chat.css',
-    cascade: ['.atl-chat-suggestion .chip'],
+    cascade: ['.atl-chat-suggestion > .chip'],
   },
   {
     label: 'AtlChatTyping',
@@ -1061,8 +1061,8 @@ function typeEntryFor(label) {
 // legitimate fill as invented.
 const LAYER_ALIASES = {
   AtlTabGroup: {
-    tab: '.atl-tab-group .tablist button',
-    tabpanel: '.atl-tab-group [role="tabpanel"]',
+    tab: '.atl-tab-group > .tablist > button',
+    tabpanel: '.atl-tab-group > [role="tabpanel"]',
   },
   AtlTable: {
     th: '.atl-table thead th',
@@ -2909,6 +2909,16 @@ function checkLayerPaint() {
         if (rootForLayer) {
           c.push(`${rootForLayer} .${name}`); // .atl-toggle .track
           c.push(`${rootForLayer}-${name}`); // .atl-combobox-input
+          // ADR-0148: the shared sheets root a part through child combinators,
+          // `.atl-progress > .track > .fill` or `.atl-toggle > label > .track`. Without
+          // this a part written that way never resolves, and an unresolved layer is
+          // skipped here, silently, for fill, radius and stroke alike.
+          const esc = (t) => t.replace(/[.*+?^${}()|[\]\\]/g, '\\$&');
+          const viaChildren = new RegExp(
+            `^${esc(rootForLayer)}( > [^\\s:>]+)* > \\.${esc(name)}$`,
+          );
+          for (const key of rules.keys())
+            if (viaChildren.test(key)) c.push(key);
         }
         return c;
       };
