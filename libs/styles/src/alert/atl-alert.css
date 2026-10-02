@@ -20,7 +20,7 @@
   width: 100%;
 }
 
-.atl-alert .content {
+.atl-alert > .content {
   flex: 1;
 }
 
@@ -62,7 +62,7 @@
 }
 
 /* Dismiss button */
-.atl-alert .dismiss {
+.atl-alert > .dismiss {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -82,19 +82,19 @@
   line-height: 1;
 }
 
-.atl-alert .dismiss:hover {
+.atl-alert > .dismiss:hover {
   opacity: 1;
   background-color: color-mix(in srgb, currentColor 10%, transparent);
 }
 
-.atl-alert .dismiss:focus-visible {
+.atl-alert > .dismiss:focus-visible {
   outline: none;
   box-shadow: var(--ui-focus-ring);
   opacity: 1;
 }
 
 /* Semantic indicator glyph — non-color differentiation (WCAG 1.4.1). */
-.atl-alert .content .variant-icon {
+.atl-alert > .content > .variant-icon {
   display: inline-block;
   font-weight: var(--ui-font-weight-bold);
   margin-right: 0.4em;

@@ -4,6 +4,7 @@ import {
   computed,
   input,
   output,
+  ViewEncapsulation,
 } from '@angular/core';
 import type { AtlIconName, AtlAlertVariant } from '../spec';
 import { AtlIcon } from '../icon/atl-icon';
@@ -52,8 +53,13 @@ const VARIANT_ICON_NAMES: Partial<Record<AtlAlertVariant, AtlIconName>> = {
       </button>
     }
   `,
-  styleUrl: './atl-alert.css',
+  // Class-rooted CSS shared with React and Vue (libs/styles): the root class below
+  // is what scopes it, so Emulated encapsulation is switched off.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: '../../../../styles/src/alert/atl-alert.css',
   host: {
+    class: 'atl-alert',
     '[class]': 'hostClassesValue',
     role: 'alert',
     '[attr.aria-live]': 'ariaLive',

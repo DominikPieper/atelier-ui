@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import './atl-alert.css';
+import '@atelier-ui/styles/alert/atl-alert.css';
 import type { AtlIconName } from '../spec';
 import AtlIcon from '../icon/atl-icon.vue';
 

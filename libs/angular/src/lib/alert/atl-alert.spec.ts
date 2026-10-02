@@ -4,6 +4,21 @@ import { AtlAlert } from './atl-alert';
 import { covers } from '../../testing/behavior';
 
 describe('AtlAlert', () => {
+  it('keeps the static atl-alert class alongside the bound classes', async () => {
+    // The shared stylesheet (libs/styles) is scoped by `.atl-alert`, and the host
+    // also binds `[class]`; the two must merge, across input changes too.
+    const { container, rerender } = await render(
+      '<atl-alert [variant]="variant">Message</atl-alert>',
+      { imports: [AtlAlert], componentProperties: { variant: 'info' } },
+    );
+    const host = container.querySelector('atl-alert') as HTMLElement;
+    expect(host).toHaveClass('atl-alert', 'variant-info');
+
+    await rerender({ componentProperties: { variant: 'danger' } });
+    expect(host).toHaveClass('atl-alert', 'variant-danger');
+    expect(host).not.toHaveClass('variant-info');
+  });
+
   it('renders projected content', async () => {
     await render('<atl-alert>Your changes were saved.</atl-alert>', {
       imports: [AtlAlert],
