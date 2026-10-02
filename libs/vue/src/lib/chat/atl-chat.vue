@@ -30,7 +30,7 @@ import {
   useTemplateRef,
   watch,
 } from 'vue';
-import './atl-chat.css';
+import '@atelier-ui/styles/chat/atl-chat.css';
 
 defineOptions({ name: 'AtlChat' });
 

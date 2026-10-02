@@ -243,7 +243,7 @@ const CONTROLS = [
       default: () =>
         `<div class="atl-chat-header"><button class="close-btn">x</button></div>`,
       angular: () =>
-        `<atl-chat-header><button class="close-btn">x</button></atl-chat-header>`,
+        `<atl-chat-header class="atl-chat-header"><button class="close-btn">x</button></atl-chat-header>`,
     },
     measure: { default: '.close-btn', angular: '.close-btn' },
   },

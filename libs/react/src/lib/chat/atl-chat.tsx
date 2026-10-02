@@ -17,7 +17,7 @@ import type {
   AtlChatStatus,
   AtlChatVariant,
 } from '../spec';
-import './atl-chat.css';
+import '@atelier-ui/styles/chat/atl-chat.css';
 import { AtlIcon } from '../icon/atl-icon';
 
 interface ChatContextValue {

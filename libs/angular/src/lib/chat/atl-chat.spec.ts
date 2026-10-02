@@ -36,6 +36,41 @@ beforeAll(() => {
 });
 
 describe('AtlChat', () => {
+  it('puts a static root class on the host of every chat part, next to the bound classes', async () => {
+    // The shared stylesheet (libs/styles) is scoped by these classes.
+    const { container } = await render(
+      `<atl-chat variant="inline" [open]="true">
+        <atl-chat-header>Title</atl-chat-header>
+        <atl-chat-messages>
+          <atl-chat-message role="user">Hi</atl-chat-message>
+          <atl-chat-typing />
+        </atl-chat-messages>
+        <atl-chat-suggestion label="Try this" />
+        <atl-chat-input />
+      </atl-chat>`,
+      { imports: ALL_CHAT },
+    );
+    expect(container.querySelector('atl-chat')).toHaveClass(
+      'atl-chat',
+      'variant-inline',
+    );
+    for (const part of [
+      'header',
+      'messages',
+      'message',
+      'typing',
+      'suggestion',
+      'input',
+    ]) {
+      expect(container.querySelector(`atl-chat-${part}`)).toHaveClass(
+        `atl-chat-${part}`,
+      );
+    }
+    expect(container.querySelector('atl-chat-message')).toHaveClass(
+      'role-user',
+    );
+  });
+
   describe('variant classes', () => {
     covers('chat', 'variant-class').each([
       'drawer',

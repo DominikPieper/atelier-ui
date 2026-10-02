@@ -41,7 +41,8 @@
 }
 
 /* ── Shared surface (header / messages / input column) ─────────────────────── */
-.atl-chat .surface {
+.atl-chat > .surface,
+.atl-chat > dialog > .surface {
   display: flex;
   flex-direction: column;
   background: var(--ui-color-surface);
@@ -52,7 +53,7 @@
 /* ═══════════════════════════════════════════════════════════════════════════ */
 /* DRAWER variant                                                              */
 /* ═══════════════════════════════════════════════════════════════════════════ */
-.atl-chat.variant-drawer dialog {
+.atl-chat.variant-drawer > dialog {
   all: unset;
   /* Restated after `all: unset`, which resets the box model too — the component's
    * geometry contract has the same specificity and loses on source order, so this
@@ -77,18 +78,18 @@
     overlay var(--ui-duration-slow) allow-discrete;
 }
 
-.atl-chat.variant-drawer dialog[open] {
+.atl-chat.variant-drawer > dialog[open] {
   display: flex;
   transform: translateX(0);
 }
 
 @starting-style {
-  .atl-chat.variant-drawer dialog[open] {
+  .atl-chat.variant-drawer > dialog[open] {
     transform: translateX(100%);
   }
 }
 
-.atl-chat.variant-drawer dialog::backdrop {
+.atl-chat.variant-drawer > dialog::backdrop {
   background: var(--ui-color-overlay);
   backdrop-filter: blur(2px);
   transition:
@@ -97,7 +98,7 @@
     overlay var(--ui-duration-slow) allow-discrete;
 }
 
-.atl-chat.variant-drawer .drawer-surface {
+.atl-chat.variant-drawer > dialog > .drawer-surface {
   width: 100%;
   height: 100%;
 }
@@ -105,7 +106,7 @@
 /* ═══════════════════════════════════════════════════════════════════════════ */
 /* POPUP variant                                                               */
 /* ═══════════════════════════════════════════════════════════════════════════ */
-.atl-chat.variant-popup .popup-surface {
+.atl-chat.variant-popup > .popup-surface {
   position: fixed;
   bottom: calc(var(--ui-spacing-6) + 3.5rem + var(--ui-spacing-4));
   right: var(--ui-spacing-6);
@@ -116,7 +117,7 @@
   z-index: var(--ui-z-dropdown);
 }
 
-.atl-chat.variant-popup .fab-bubble {
+.atl-chat.variant-popup > .fab-bubble {
   position: fixed;
   bottom: var(--ui-spacing-6);
   right: var(--ui-spacing-6);
@@ -136,12 +137,12 @@
   z-index: 101;
 }
 
-.atl-chat.variant-popup .fab-bubble:hover {
+.atl-chat.variant-popup > .fab-bubble:hover {
   transform: scale(1.05);
   box-shadow: 0 8px 20px rgba(0, 0, 0, 0.22);
 }
 
-.atl-chat.variant-popup .fab-bubble:focus-visible {
+.atl-chat.variant-popup > .fab-bubble:focus-visible {
   outline: none;
   box-shadow:
     var(--ui-focus-ring),
@@ -151,7 +152,7 @@
 /* ═══════════════════════════════════════════════════════════════════════════ */
 /* INLINE variant                                                              */
 /* ═══════════════════════════════════════════════════════════════════════════ */
-.atl-chat.variant-inline .inline-surface {
+.atl-chat.variant-inline > .inline-surface {
   width: 100%;
   height: 100%;
   min-height: 24rem;
@@ -159,7 +160,7 @@
   border-radius: var(--ui-radius-xl);
 }
 
-.atl-chat.variant-inline .atl-chat-header .close-btn {
+.atl-chat.variant-inline .atl-chat-header > .close-btn {
   display: none;
 }
 
@@ -176,7 +177,7 @@
   flex-shrink: 0;
 }
 
-.atl-chat-header .title-block {
+.atl-chat-header > .title-block {
   display: flex;
   align-items: center;
   gap: var(--ui-spacing-3);
@@ -188,7 +189,7 @@
   min-width: 0;
 }
 
-.atl-chat-header .close-btn {
+.atl-chat-header > .close-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -196,6 +197,15 @@
   width: var(--ui-control-height-sm);
   height: var(--ui-control-height-sm);
   padding: 0;
+  /* Stated, not left to the cascade. The header spaces its children with `gap`,
+   * so the button has no margin of its own and no leading override. React and Vue
+   * used to pick up `margin-left: var(--ui-spacing-3)` and `line-height: 1` from
+   * the global `.close-btn` of drawer's stylesheet (and dialog's, before it was
+   * rooted); this rule beats it on specificity and keeps chat identical whether or
+   * not that leak is still there. Every other declaration the leak carried (the
+   * hover background, the focus outline and ring) is stated below. */
+  margin-left: 0;
+  line-height: normal;
   background: transparent;
   border: var(--ui-border-width) solid var(--ui-color-border);
   border-radius: var(--ui-radius-sm);
@@ -206,12 +216,12 @@
     color var(--ui-transition-fast);
 }
 
-.atl-chat-header .close-btn:hover {
+.atl-chat-header > .close-btn:hover {
   background-color: var(--ui-color-surface-sunken);
   color: var(--ui-color-text);
 }
 
-.atl-chat-header .close-btn:focus-visible {
+.atl-chat-header > .close-btn:focus-visible {
   outline: none;
   box-shadow: var(--ui-focus-ring);
 }
@@ -234,7 +244,7 @@
 /* The role="list" wrapper the log's listitems need (a node has one role, so it
    can't be the log root itself) — display:contents keeps it invisible to the
    flex/gap layout above, so the messages still lay out as if it were absent. */
-.atl-chat-messages .messages-list {
+.atl-chat-messages > .messages-list {
   display: contents;
 }
 
@@ -288,7 +298,7 @@
   align-self: flex-start;
 }
 
-.atl-chat-typing .dot {
+.atl-chat-typing > .dot {
   width: 0.375rem;
   height: 0.375rem;
   border-radius: 50%;
@@ -296,11 +306,11 @@
   animation: atl-chat-typing 1.4s infinite ease-in-out;
 }
 
-.atl-chat-typing .dot:nth-child(2) {
+.atl-chat-typing > .dot:nth-child(2) {
   animation-delay: 0.16s;
 }
 
-.atl-chat-typing .dot:nth-child(3) {
+.atl-chat-typing > .dot:nth-child(3) {
   animation-delay: 0.32s;
 }
 
@@ -316,7 +326,7 @@
   align-self: auto;
 }
 
-.atl-chat-typing.is-inline .dot {
+.atl-chat-typing.is-inline > .dot {
   width: 0.25rem;
   height: 0.25rem;
 }
@@ -335,13 +345,13 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .atl-chat-typing .dot {
+  .atl-chat-typing > .dot {
     animation: none;
     opacity: 0.6;
   }
 }
 
-.atl-chat-typing .sr-only {
+.atl-chat-typing > .sr-only {
   position: absolute;
   width: 1px;
   height: 1px;
@@ -360,7 +370,7 @@
   display: block;
 }
 
-.atl-chat-suggestion .chip {
+.atl-chat-suggestion > .chip {
   display: flex;
   flex-direction: column;
   align-items: flex-start;
@@ -378,23 +388,23 @@
     border-color var(--ui-transition-fast);
 }
 
-.atl-chat-suggestion .chip:hover {
+.atl-chat-suggestion > .chip:hover {
   background-color: var(--ui-color-surface-sunken);
   border-color: var(--ui-color-border-hover);
 }
 
-.atl-chat-suggestion .chip:focus-visible {
+.atl-chat-suggestion > .chip:focus-visible {
   outline: none;
   box-shadow: var(--ui-focus-ring);
 }
 
-.atl-chat-suggestion .chip-label {
+.atl-chat-suggestion > .chip > .chip-label {
   font-size: var(--ui-font-size-sm);
   font-weight: var(--ui-font-weight-medium);
   color: var(--ui-color-text);
 }
 
-.atl-chat-suggestion .chip-hint {
+.atl-chat-suggestion > .chip > .chip-hint {
   font-size: var(--ui-font-size-xs);
   color: var(--ui-color-text-muted);
 }
@@ -412,7 +422,7 @@
   flex-shrink: 0;
 }
 
-.atl-chat-input .field {
+.atl-chat-input > .field {
   flex: 1;
   min-width: 0;
   padding: var(--ui-spacing-2) var(--ui-spacing-3);
@@ -427,29 +437,29 @@
   transition: border-color var(--ui-transition-fast);
 }
 
-.atl-chat-input .field::placeholder {
+.atl-chat-input > .field::placeholder {
   color: var(--ui-color-text-muted);
 }
 
-.atl-chat-input .field:hover:not(:disabled) {
+.atl-chat-input > .field:hover:not(:disabled) {
   border-color: var(
     --ui-color-input-border-hover,
     var(--ui-color-border-hover)
   );
 }
 
-.atl-chat-input .field:focus-visible {
+.atl-chat-input > .field:focus-visible {
   outline: none;
   border-color: var(--ui-color-primary);
   box-shadow: var(--ui-focus-ring);
 }
 
-.atl-chat-input .field:disabled {
+.atl-chat-input > .field:disabled {
   opacity: var(--ui-opacity-disabled);
   cursor: not-allowed;
 }
 
-.atl-chat-input .action-btn {
+.atl-chat-input > .action-btn {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -466,34 +476,34 @@
     transform var(--ui-transition-fast);
 }
 
-.atl-chat-input .action-btn.variant-primary {
+.atl-chat-input > .action-btn.variant-primary {
   background: var(--ui-color-primary);
   color: var(--ui-color-text-on-primary);
   border-color: var(--ui-color-primary);
 }
 
-.atl-chat-input .action-btn.variant-primary:hover:not(:disabled) {
+.atl-chat-input > .action-btn.variant-primary:hover:not(:disabled) {
   background: var(--ui-color-primary-hover);
   border-color: var(--ui-color-primary-hover);
 }
 
-.atl-chat-input .action-btn.variant-danger {
+.atl-chat-input > .action-btn.variant-danger {
   background: var(--ui-color-danger);
   color: var(--ui-color-text-on-danger);
   border-color: var(--ui-color-danger);
 }
 
-.atl-chat-input .action-btn.variant-danger:hover {
+.atl-chat-input > .action-btn.variant-danger:hover {
   background: var(--ui-color-danger-hover);
   border-color: var(--ui-color-danger-hover);
 }
 
-.atl-chat-input .action-btn:disabled {
+.atl-chat-input > .action-btn:disabled {
   opacity: var(--ui-opacity-disabled);
   cursor: not-allowed;
 }
 
-.atl-chat-input .action-btn:focus-visible {
+.atl-chat-input > .action-btn:focus-visible {
   outline: none;
   box-shadow: var(--ui-focus-ring);
 }
@@ -501,6 +511,6 @@
 /* ═══════════════════════════════════════════════════════════════════════════ */
 /* STATUS-aware tweaks                                                         */
 /* ═══════════════════════════════════════════════════════════════════════════ */
-.atl-chat.status-streaming .atl-chat-input .field {
+.atl-chat.status-streaming .atl-chat-input > .field {
   cursor: wait;
 }

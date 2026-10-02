@@ -12,6 +12,7 @@ import {
   output,
   signal,
   viewChild,
+  ViewEncapsulation,
 } from '@angular/core';
 import { A11yModule } from '@angular/cdk/a11y';
 import { NgTemplateOutlet } from '@angular/common';
@@ -121,8 +122,13 @@ let nextId = 0;
       }
     }
   `,
-  styleUrl: './atl-chat.css',
+  // Class-rooted CSS shared with React and Vue (libs/styles): the root class below
+  // is what scopes it, so Emulated encapsulation is switched off.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: '../../../../styles/src/chat/atl-chat.css',
   host: {
+    class: 'atl-chat',
     '[class]': 'hostClasses()',
   },
 })
@@ -215,8 +221,13 @@ export class AtlChat {
       </button>
     }
   `,
-  styleUrl: './atl-chat.css',
+  // Class-rooted CSS shared with React and Vue (libs/styles): the root class below
+  // is what scopes it, so Emulated encapsulation is switched off.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: '../../../../styles/src/chat/atl-chat.css',
   host: {
+    class: 'atl-chat-header',
     '[attr.id]': 'context.headerId',
   },
 })
@@ -248,8 +259,13 @@ export class AtlChatHeader {
   template: `<div class="messages-list" role="list" aria-label="Messages">
     <ng-content />
   </div>`,
-  styleUrl: './atl-chat.css',
+  // Class-rooted CSS shared with React and Vue (libs/styles): the root class below
+  // is what scopes it, so Emulated encapsulation is switched off.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: '../../../../styles/src/chat/atl-chat.css',
   host: {
+    class: 'atl-chat-messages',
     '[attr.role]': '"log"',
     '[attr.aria-live]': '"polite"',
     '[attr.aria-label]': '"Conversation"',
@@ -292,8 +308,13 @@ export class AtlChatMessages {
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `<ng-content />`,
-  styleUrl: './atl-chat.css',
+  // Class-rooted CSS shared with React and Vue (libs/styles): the root class below
+  // is what scopes it, so Emulated encapsulation is switched off.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: '../../../../styles/src/chat/atl-chat.css',
   host: {
+    class: 'atl-chat-message',
     '[class]': 'hostClasses()',
     '[attr.role]': '"listitem"',
   },
@@ -332,8 +353,13 @@ export class AtlChatMessage {
     <span class="dot"></span>
     <span class="sr-only">Assistant is typing</span>
   `,
-  styleUrl: './atl-chat.css',
+  // Class-rooted CSS shared with React and Vue (libs/styles): the root class below
+  // is what scopes it, so Emulated encapsulation is switched off.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: '../../../../styles/src/chat/atl-chat.css',
   host: {
+    class: 'atl-chat-typing',
     '[class]': 'hostClasses()',
     '[attr.role]': '"status"',
     '[attr.aria-live]': '"polite"',
@@ -368,7 +394,12 @@ export class AtlChatTyping {
       }
     </button>
   `,
-  styleUrl: './atl-chat.css',
+  // Class-rooted CSS shared with React and Vue (libs/styles): the root class below
+  // is what scopes it, so Emulated encapsulation is switched off.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: '../../../../styles/src/chat/atl-chat.css',
+  host: { class: 'atl-chat-suggestion' },
 })
 export class AtlChatSuggestion {
   /** Primary label of the suggestion. */
@@ -427,7 +458,12 @@ export class AtlChatSuggestion {
       </button>
     }
   `,
-  styleUrl: './atl-chat.css',
+  // Class-rooted CSS shared with React and Vue (libs/styles): the root class below
+  // is what scopes it, so Emulated encapsulation is switched off.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: '../../../../styles/src/chat/atl-chat.css',
+  host: { class: 'atl-chat-input' },
 })
 export class AtlChatInput {
   /** Placeholder shown in the empty input. Defaults change per parent status. */
