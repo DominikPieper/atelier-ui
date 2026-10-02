@@ -7,6 +7,7 @@ import {
   input,
   OnDestroy,
   OnInit,
+  ViewEncapsulation,
 } from '@angular/core';
 import {
   ATL_RADIO_GROUP,
@@ -46,8 +47,13 @@ let nextId = 0;
       <ng-content />
     </label>
   `,
-  styleUrl: './atl-radio.css',
+  // Class-rooted CSS shared with React and Vue (libs/styles): the root class below
+  // is what scopes it, so Emulated encapsulation is switched off.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: '../../../../styles/src/radio/atl-radio.css',
   host: {
+    class: 'atl-radio',
     '[class]': 'hostClasses()',
   },
 })

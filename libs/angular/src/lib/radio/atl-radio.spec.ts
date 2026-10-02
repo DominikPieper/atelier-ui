@@ -7,6 +7,20 @@ import { covers } from '../../testing/behavior';
 const GROUP_IMPORTS = [AtlRadioGroup, AtlRadio];
 
 describe('AtlRadio', () => {
+  it('keeps the static atl-radio class alongside the bound classes', async () => {
+    // The shared stylesheet (libs/styles) is scoped by `.atl-radio`, and the host
+    // also binds `[class]`; the two must merge, across input changes too.
+    const { container, rerender } = await render(
+      '<atl-radio-group name="g"><atl-radio radioValue="a" [disabled]="disabled">A</atl-radio></atl-radio-group>',
+      { imports: GROUP_IMPORTS, componentProperties: { disabled: false } },
+    );
+    const host = container.querySelector('atl-radio') as HTMLElement;
+    expect(host).toHaveClass('atl-radio');
+
+    await rerender({ componentProperties: { disabled: true } });
+    expect(host).toHaveClass('atl-radio', 'is-disabled');
+  });
+
   covers('radio', 'renders-input')('renders a native radio input', async () => {
     const { container } = await render(
       `<atl-radio-group name="test">

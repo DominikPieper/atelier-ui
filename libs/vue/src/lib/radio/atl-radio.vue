@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, inject } from 'vue';
 import { AtlRadioGroupKey } from '../radio-group/atl-radio-group.vue';
-import './atl-radio.css';
+import '@atelier-ui/styles/radio/atl-radio.css';
 
 defineOptions({ name: 'AtlRadio' });
 

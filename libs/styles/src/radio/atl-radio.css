@@ -30,6 +30,9 @@
   color: var(--ui-color-primary);
 }
 
+/* The native input is selected as a descendant, not a child: the root is the
+   <label> in React and Vue but the <atl-radio> host in Angular, where the label
+   sits one level further in. The label holds only the radio's own text. */
 .atl-radio input[type='radio'] {
   appearance: none;
   -webkit-appearance: none;

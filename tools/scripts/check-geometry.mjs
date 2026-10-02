@@ -298,7 +298,7 @@ const CONTROLS = [
       default: () =>
         `<label class="atl-radio"><input type="radio"><span class="radio-text">Small</span></label>`,
       angular: () =>
-        `<atl-radio><input type="radio"><span class="radio-text">Small</span></atl-radio>`,
+        `<atl-radio class="atl-radio"><input type="radio"><span class="radio-text">Small</span></atl-radio>`,
     },
     measure: { default: '.atl-radio', angular: 'atl-radio' },
   },

@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import type { AtlRadioSpec } from '../spec';
 import { useRadioGroup } from '../radio-group/atl-radio-group';
-import './atl-radio.css';
+import '@atelier-ui/styles/radio/atl-radio.css';
 
 /**
  * Properties for the AtlRadio component.
