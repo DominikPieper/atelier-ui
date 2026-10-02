@@ -162,7 +162,7 @@ Ranked; each carries why it's worth doing next rather than later.
     - [x] **P1.2 ADR — done 2026-10-01: ADR-0148**, Option C plus a published
           `@atelier-ui/styles`. The owner questioned my lean towards A, and C won: the file
           read is the file shipped. ADR-0028 carries the dated correction.
-    - [ ] **P1.3 Migrate the remaining 26 components, one per commit.** Per component:
+    - [x] **P1.3 Migrate the remaining 26 components, one per commit — done 2026-10-02.** Per component:
           write the class-rooted file in `libs/styles` (the spike generator in
           `tasks/spikes/p1-css/generator` with `FORCEPREFIX=1` as a one-time aid, then fix by
           hand); give generic part classes (`.panel`, `.track`, `.close-btn`, `.spinner`) the
@@ -214,6 +214,37 @@ Ranked; each carries why it's worth doing next rather than later.
           Checked by me: 21 shared files, 391 selectors, every one rooted in `.atl-*` or
           `[data-theme]`, every `@keyframes` prefixed.
           Open: Vue visuals rest on `storybook-test` only.
+          **Batch 3, done 2026-10-02:** stepper, toast, drawer, breadcrumbs, table, menu,
+          tooltip and select (`c05003ea`..`b74562ff`), plus `2599781d` (gates read override
+          sheets), `d660926f` (gen-box-sizing) and `e78b7d6c` (ADR-0148 Decision 4
+          correction). `check:all` exits 0. All 29 are migrated.
+          The per-framework overrides are `atl-<name>.<fw>.css` next to the component. The
+          ones that exist: table (Angular), menu (React, Vue), tooltip and select (all
+          three); React's and Vue's copies are byte-identical.
+          Visible Angular changes from bugs the old setup hid:
+          menu rows were content-box (224px in a 192px menu, now 190px);
+          tooltip LongText goes from 336px to 320px;
+          table's five sub-components were still Emulated;
+          the drawer host is now `display: contents` (showcase 12px shorter);
+          the select label is now styled as in React/Vue.
+          React/Vue `th.align-*` was out-ranked by `thead th` and is now fixed.
+          breadcrumbs converged on the React/Vue DOM (host is the list item, current page
+          is `<span aria-current>`), and the a11y snapshot passes unmodified.
+          drawer's `check:paint` NO-PROBE is resolved.
+          Checked by me: 38 shared and override files, 615 selectors, 0 unrooted, no
+          `:host`, every `@keyframes` prefixed.
+    - [ ] **Owner decisions from batch 3.**
+          (1) **Drawer padding:** the Figma master draws 16/20px, the CSS states 20/24px.
+          14 `allowlists.js` exemptions hold this until you decide which side is right.
+          (2) **React and Vue override files are byte-identical** (menu, tooltip, select).
+          Proposal: one shared `libs/styles/src/<dir>/atl-<name>.native.css`, imported by
+          React and Vue, so "React and Vue, not Angular" has a home.
+          (3) **breadcrumbs NoLinks:** a non-current crumb without an `href` renders
+          semibold in all three frameworks now, so all three crumbs are bold in Angular's
+          NoLinks story; fixing it is a shared-CSS change.
+          (4) **`check:paint` reads the built `dist/storybook`**, not the source. It
+          checks nothing until `check:storybook-manifests` has rebuilt; decide whether to
+          make that dependency explicit.
     - [ ] **P1.4 Retire what the migration makes redundant.** Remove the per-framework
           fallback in `componentCssFiles()` once no per-framework stylesheet is left. Then
           re-evaluate `check:variants`, `check:dead-selectors` and `check:box-sizing`: do
