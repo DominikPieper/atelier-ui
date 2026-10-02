@@ -13,7 +13,7 @@ import type {
   AtlSortDirection,
 } from '../spec';
 import { AtlCheckbox } from '../checkbox/atl-checkbox';
-import './atl-table.css';
+import '@atelier-ui/styles/table/atl-table.css';
 import { AtlIcon } from '../icon/atl-icon';
 
 export type { AtlSortDirection };

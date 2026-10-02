@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed } from 'vue';
-import './atl-table.css';
+import '@atelier-ui/styles/table/atl-table.css';
 
 defineOptions({ name: 'AtlTable' });
 

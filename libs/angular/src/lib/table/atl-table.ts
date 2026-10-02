@@ -71,8 +71,13 @@ export const ATL_TABLE = new InjectionToken<AtlTableContext>('ATL_TABLE');
       </table>
     </div>
   `,
-  styleUrl: './atl-table.css',
+  // The shared sheet, then the rules for Angular's own DOM (<atl-tr> wrappers).
+  styleUrls: [
+    '../../../../styles/src/table/atl-table.css',
+    './atl-table.angular.css',
+  ],
   host: {
+    class: 'atl-table',
     '[class]': 'hostClasses()',
     // Same defect as atl-input.ts's identical guard: a static aria-label="…"
     // attribute on <atl-table> matches the aliased input above AND stays on
@@ -85,6 +90,8 @@ export const ATL_TABLE = new InjectionToken<AtlTableContext>('ATL_TABLE');
     '[attr.aria-label]': 'null',
   },
   providers: [{ provide: ATL_TABLE, useExisting: AtlTable }],
+  // Class-rooted CSS: the root classes on the host and in the template scope it, so
+  // Emulated encapsulation is off.
   // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
   encapsulation: ViewEncapsulation.None,
 })
@@ -110,11 +117,7 @@ export class AtlTable implements AtlTableContext {
 
   /** @internal */
   protected readonly hostClasses = computed(() => {
-    const classes = [
-      'atl-table',
-      `variant-${this.variant()}`,
-      `size-${this.size()}`,
-    ];
+    const classes = [`variant-${this.variant()}`, `size-${this.size()}`];
     if (this.stickyHeader()) classes.push('is-sticky-header');
     return classes.join(' ');
   });
@@ -143,7 +146,11 @@ export class AtlTable implements AtlTableContext {
   template: `<thead>
     <ng-content />
   </thead>`,
-  styleUrl: './atl-table.css',
+  // Class-rooted CSS shared with React and Vue (libs/styles): the root classes in the
+  // template and on the host are what scope it, so Emulated encapsulation is off.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: '../../../../styles/src/table/atl-table.css',
   host: { '[style.display]': '"contents"' },
 })
 export class AtlThead {}
@@ -182,7 +189,11 @@ export class AtlThead {}
       }
     </tbody>
   `,
-  styleUrl: './atl-table.css',
+  // Class-rooted CSS shared with React and Vue (libs/styles): the root classes in the
+  // template and on the host are what scope it, so Emulated encapsulation is off.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: '../../../../styles/src/table/atl-table.css',
   host: { '[style.display]': '"contents"' },
 })
 export class AtlTbody {
@@ -229,7 +240,11 @@ export class AtlTbody {
       <ng-content />
     </tr>
   `,
-  styleUrl: './atl-table.css',
+  // Class-rooted CSS shared with React and Vue (libs/styles): the root classes in the
+  // template and on the host are what scope it, so Emulated encapsulation is off.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: '../../../../styles/src/table/atl-table.css',
   host: {
     '[class]': 'hostClasses()',
     '[style.display]': '"contents"',
@@ -303,7 +318,11 @@ export type AtlSortDirection = 'asc' | 'desc' | null;
       }
     </th>
   `,
-  styleUrl: './atl-table.css',
+  // Class-rooted CSS shared with React and Vue (libs/styles): the root classes in the
+  // template and on the host are what scope it, so Emulated encapsulation is off.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: '../../../../styles/src/table/atl-table.css',
   host: { '[style.display]': '"contents"' },
 })
 export class AtlTh {
@@ -373,7 +392,11 @@ export class AtlTh {
       <ng-content />
     </td>
   `,
-  styleUrl: './atl-table.css',
+  // Class-rooted CSS shared with React and Vue (libs/styles): the root classes in the
+  // template and on the host are what scope it, so Emulated encapsulation is off.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: '../../../../styles/src/table/atl-table.css',
   host: { '[style.display]': '"contents"' },
 })
 export class AtlTd {

@@ -27,6 +27,24 @@ const BASIC_TABLE = `
 `;
 
 describe('AtlTable', () => {
+  it('keeps the static atl-table class alongside the variant and size classes', async () => {
+    // The shared stylesheet (libs/styles) is scoped by `.atl-table`, and the host
+    // also binds `[class]`; the two must merge, across input changes too.
+    const { container, rerender } = await render(
+      '<atl-table [variant]="variant"><atl-tbody></atl-tbody></atl-table>',
+      {
+        imports: [AtlTable, AtlTbody],
+        componentProperties: { variant: 'default' },
+      },
+    );
+    const host = container.querySelector('atl-table') as HTMLElement;
+    expect(host).toHaveClass('atl-table', 'variant-default', 'size-md');
+
+    await rerender({ componentProperties: { variant: 'striped' } });
+    expect(host).toHaveClass('atl-table', 'variant-striped');
+    expect(host).not.toHaveClass('variant-default');
+  });
+
   describe('rendering', () => {
     covers('table', 'renders-table')('renders a table element', async () => {
       const { container } = await render(BASIC_TABLE, { imports: IMPORTS });

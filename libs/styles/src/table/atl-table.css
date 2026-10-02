@@ -28,7 +28,7 @@
 }
 
 /* ============================================================
-   atl-table.css — Styles for the Vue table component
+   atl-table.css — Styles for the table component
    ============================================================ */
 
 /* ---------------------------------------------------------------------------
@@ -133,18 +133,18 @@
 /* ---------------------------------------------------------------------------
    Alignment
    --------------------------------------------------------------------------- */
-th.align-start,
-td.align-start {
+.atl-table th.align-start,
+.atl-table td.align-start {
   text-align: start;
 }
 
-th.align-center,
-td.align-center {
+.atl-table th.align-center,
+.atl-table td.align-center {
   text-align: center;
 }
 
-th.align-end,
-td.align-end {
+.atl-table th.align-end,
+.atl-table td.align-end {
   text-align: end;
 }
 
@@ -229,15 +229,15 @@ td.align-end {
   transition: opacity var(--ui-transition-fast);
 }
 
-th.is-sorted .atl-th-sort-icon {
+.atl-table th.is-sorted .atl-th-sort-icon {
   color: var(--ui-color-primary);
 }
 
-th.sort-asc .atl-th-sort-asc-arrow {
+.atl-table th.sort-asc .atl-th-sort-asc-arrow {
   opacity: 1;
 }
 
-th.sort-desc .atl-th-sort-desc-arrow {
+.atl-table th.sort-desc .atl-th-sort-desc-arrow {
   opacity: 1;
 }
 

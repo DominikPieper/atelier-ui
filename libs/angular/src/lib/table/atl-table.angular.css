@@ -1,0 +1,10 @@
+/* Angular table: every <tr> is wrapped in its own <atl-tr style="display: contents">
+ * (and the head and body in <atl-thead>/<atl-tbody>), because the rows are components.
+ * React and Vue render plain <tr>s. The wrapper is a tbody's real child, so the
+ * striped rule has to count the <atl-tr> wrappers: each <tr> inside one is an
+ * only-child, and the shared sheet's `tr:nth-child(even)` never matches it.
+ * The wrapper is the DOM difference; it is Angular's component model, not a choice
+ * of this stylesheet (ADR-0007, ADR-0148 Decision 4). */
+.atl-table.variant-striped tbody atl-tr:nth-child(even) td {
+  background-color: var(--ui-color-surface-sunken);
+}

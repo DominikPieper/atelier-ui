@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect } from 'storybook/test';
 import {
   AtlTable,
   AtlThead,
@@ -535,6 +536,20 @@ function KitchenSinkStory() {
 }
 
 export const KitchenSink: Story = {
+  play: async ({ canvasElement }) => {
+    // Header cells follow `align` like body cells do. The shared sheet roots the
+    // alignment rules under .atl-table so they out-rank `thead th { text-align:
+    // start }`; unrooted, the class lost that tie in React and Vue and headers
+    // ignored `align`.
+    const align = (label: string): string => {
+      const th = [...canvasElement.querySelectorAll('thead th')].find(
+        (cell) => cell.textContent.trim() === label,
+      ) as HTMLElement;
+      return getComputedStyle(th).textAlign;
+    };
+    await expect(align('Status')).toBe('center');
+    await expect(align('Actions')).toBe('end');
+  },
   render: () => <KitchenSinkStory />,
   parameters: {
     design: figmaNode('421-1183'),
