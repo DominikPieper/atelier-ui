@@ -7,6 +7,7 @@ import {
   computed,
   inject,
   input,
+  ViewEncapsulation,
 } from '@angular/core';
 import { ATL_SELECT } from './atl-select.token';
 
@@ -24,7 +25,16 @@ let nextOptionId = 0;
   selector: 'atl-option',
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
-  styleUrl: './atl-option.css',
+  // Class-rooted CSS: the shared sheet (libs/styles), then Angular's own rules for the
+  // button trigger and the CDK listbox (atl-select.angular.css). The root classes below
+  // scope them, so Emulated encapsulation is switched off.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrls: [
+    '../../../../styles/src/select/atl-select.css',
+    './atl-select.angular.css',
+  ],
+  host: { class: 'atl-option' },
   template: `
     <!-- eslint-disable-next-line @angular-eslint/template/click-events-have-key-events, @angular-eslint/template/interactive-supports-focus -->
     <div

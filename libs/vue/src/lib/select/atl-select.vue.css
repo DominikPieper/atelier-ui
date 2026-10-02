@@ -1,40 +1,18 @@
-/* Geometry contract: every size this component states is a border-box size.
- * Declared with the component rather than as a global reset, so it ships in the
- * same file as the sizes it governs and no consuming app has to supply one.
- * Gated by check:box-sizing; the resulting boxes are measured by check:geometry.
- * See ADR-0043. */
-.atl-select,
-.atl-select * {
-  box-sizing: border-box;
-}
-
-.atl-select {
-  display: inline-block;
-  position: relative;
-  font-family: var(--ui-font-family);
-  /* The leading every descendant inherits, stated so the component keeps its
-     own rhythm rather than the consuming app's prose leading (ADR-0052).
-     A single-line field, so tight. */
-  line-height: var(--ui-line-height-tight);
-  font-size: var(--ui-font-size-md);
-}
-
-.atl-select label {
-  display: block;
-  margin-bottom: var(--ui-spacing-2);
-  font-size: var(--ui-font-size-sm);
-  color: var(--ui-color-text);
-  font-weight: var(--ui-font-weight-medium);
-}
+/* React and Vue select: a native <select> inside a wrapper, with the chevron and the
+ * invalid indicator absolutely placed over it; the operating system draws the
+ * option list. Angular's field is a button plus a CDK-overlay listbox
+ * (atl-select.angular.css), so none of this exists there. Recorded in the contract
+ * (select.contract.ts), allowlists.js (A11Y_PARITY_EXEMPT, "select") and ADR-0007 /
+ * ADR-0145. */
 
 /* Select wrapper — holds native select + arrow icon */
-.atl-select .select-wrapper {
+.atl-select > .select-wrapper {
   position: relative;
   display: flex;
   align-items: center;
 }
 
-.atl-select select {
+.atl-select > .select-wrapper > select {
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -69,43 +47,32 @@
     background-color var(--ui-transition-fast);
 }
 
-.atl-select select:hover:not(:disabled) {
+.atl-select > .select-wrapper > select:hover:not(:disabled) {
   border-color: var(--ui-color-input-border-hover);
 }
 
-.atl-select select:focus-visible {
+.atl-select > .select-wrapper > select:focus-visible {
   outline: none;
   box-shadow: var(--ui-focus-ring);
   border-color: var(--ui-color-input-border-focus);
 }
 
-.atl-select select:disabled {
+.atl-select > .select-wrapper > select:disabled {
   opacity: var(--ui-opacity-disabled);
   cursor: not-allowed;
 }
 
-.atl-select.is-invalid select {
+.atl-select.is-invalid > .select-wrapper > select {
   border-color: var(--ui-color-input-border-invalid);
 }
 
 /* Arrow icon */
-.atl-select .select-arrow {
+.atl-select > .select-wrapper > .select-arrow {
   position: absolute;
   inset-inline-end: var(--ui-spacing-4);
   pointer-events: none;
   font-size: var(--ui-font-size-xs);
   color: var(--ui-color-text-muted);
-}
-
-/* Error display */
-.atl-select .errors {
-  margin-top: var(--ui-spacing-2);
-}
-
-.atl-select .error-message {
-  margin: 0;
-  font-size: var(--ui-font-size-sm);
-  color: var(--ui-color-error-text);
 }
 
 /* The invalid indicator sits inline-end, left of the chevron, and the field reserves
@@ -114,7 +81,7 @@
  * AtlInput and AtlTextarea already showed this indicator; carrying invalid on border
  * colour alone left AtlSelect and AtlCombobox failing WCAG 1.4.1 whenever a consumer
  * set invalid without passing errors (ADR-0055). */
-.atl-select.is-invalid .invalid-icon {
+.atl-select.is-invalid > .select-wrapper > .invalid-icon {
   position: absolute;
   top: 50%;
   transform: translateY(-50%);

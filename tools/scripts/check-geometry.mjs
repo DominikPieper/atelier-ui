@@ -130,9 +130,9 @@ const CONTROLS = [
     steps: ['md'],
     markup: {
       default: () =>
-        `<div class="atl-select" style="width:220px"><select><option>Option</option></select></div>`,
+        `<div class="atl-select" style="width:220px"><div class="select-wrapper"><select><option>Option</option></select></div></div>`,
       angular: () =>
-        `<atl-select style="display:block;width:220px"><button type="button" class="trigger">Option</button></atl-select>`,
+        `<atl-select class="atl-select" style="display:block;width:220px"><button type="button" class="trigger">Option</button></atl-select>`,
     },
     measure: { default: '.atl-select select', angular: 'atl-select .trigger' },
   },
@@ -340,7 +340,7 @@ const CONTROLS = [
     markup: {
       default: () => '',
       angular: () =>
-        `<atl-select><div class="panel is-open"><atl-option><div role="option">United States</div></atl-option></div></atl-select>`,
+        `<atl-select class="atl-select"><div class="atl-select-panel is-open"><atl-option class="atl-option"><div role="option">United States</div></atl-option></div></atl-select>`,
     },
     measure: { default: '', angular: "[role='option']" },
   },

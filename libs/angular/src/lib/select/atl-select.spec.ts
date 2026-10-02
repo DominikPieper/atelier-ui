@@ -37,6 +37,34 @@ beforeAll(() => {
 });
 
 describe('AtlSelect', () => {
+  it('keeps the static atl-select root class alongside the state classes', async () => {
+    // The shared stylesheet (libs/styles) is scoped by `.atl-select`, and the host
+    // also binds `[class]` for is-open/is-disabled/is-invalid; they must merge.
+    const { container, rerender } = await render(
+      '<atl-select [(value)]="value" [invalid]="invalid"><atl-option optionValue="a">A</atl-option></atl-select>',
+      {
+        imports: [AtlSelect, AtlOption],
+        componentProperties: { value: '', invalid: false },
+      },
+    );
+    const host = container.querySelector('atl-select') as HTMLElement;
+    expect(host).toHaveClass('atl-select');
+    expect(host).not.toHaveClass('is-invalid');
+
+    await rerender({ componentProperties: { invalid: true } });
+    expect(host).toHaveClass('atl-select', 'is-invalid');
+  });
+
+  it('gives the options their static atl-option root class', async () => {
+    const { container } = await render(SELECT_TEMPLATE, {
+      imports: [AtlSelect, AtlOption],
+      componentProperties: { value: '' },
+    });
+    const options = container.querySelectorAll('atl-option');
+    expect(options).toHaveLength(3);
+    options.forEach((option) => expect(option).toHaveClass('atl-option'));
+  });
+
   covers('select', 'render-element')(
     'renders with role="combobox"',
     async () => {
@@ -99,7 +127,7 @@ describe('AtlSelect', () => {
       componentProperties: { value: '' },
     });
     expect(
-      container.querySelector('.panel[role="listbox"]'),
+      container.querySelector('.atl-select-panel[role="listbox"]'),
     ).toBeInTheDocument();
   });
 

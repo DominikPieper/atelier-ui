@@ -10,6 +10,7 @@ import {
   model,
   signal,
   viewChild,
+  ViewEncapsulation,
 } from '@angular/core';
 import { ActiveDescendantKeyManager, Highlightable } from '@angular/cdk/a11y';
 import {
@@ -122,7 +123,7 @@ let nextId = 0;
       #panel
       [id]="panelId"
       role="listbox"
-      class="panel"
+      class="atl-select-panel"
       [attr.aria-labelledby]="triggerId"
     >
       <ng-content />
@@ -136,8 +137,17 @@ let nextId = 0;
       </div>
     }
   `,
-  styleUrl: './atl-select.css',
+  // Class-rooted CSS: the shared sheet (libs/styles), then Angular's own rules for the
+  // button trigger and the CDK listbox (atl-select.angular.css). The root classes below
+  // scope them, so Emulated encapsulation is switched off.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrls: [
+    '../../../../styles/src/select/atl-select.css',
+    './atl-select.angular.css',
+  ],
   host: {
+    class: 'atl-select',
     '[class]': 'hostClasses()',
     '(keydown)': 'onKeydown($event)',
     // Same fix as atl-input.ts's `id`: a static `aria-label="…"` attribute

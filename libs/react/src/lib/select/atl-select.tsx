@@ -5,7 +5,8 @@ import {
   useId,
 } from 'react';
 import type { AtlSelectSpec, AtlOptionSpec } from '../spec';
-import './atl-select.css';
+import '@atelier-ui/styles/select/atl-select.css';
+import './atl-select.react.css';
 import { AtlIcon } from '../icon/atl-icon';
 
 /**

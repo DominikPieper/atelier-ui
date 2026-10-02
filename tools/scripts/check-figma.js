@@ -778,7 +778,7 @@ const ROOT_PAINT = [
   {
     label: 'AtlSelect',
     file: 'select/atl-select.css',
-    cascade: ['.atl-select select'],
+    cascade: ['.atl-select > .select-wrapper > select'],
   },
   {
     label: 'AtlBadge',
@@ -887,9 +887,9 @@ const ROOT_PAINT = [
   // <select> the operating system draws (ADR-0028).
   {
     label: 'AtlOption',
-    file: 'select/atl-option.css',
+    file: 'select/atl-select.css',
     lib: 'angular',
-    cascade: ["[role='option']"],
+    cascade: [".atl-option > [role='option']"],
   },
   {
     label: 'AtlAccordionItem',
@@ -984,7 +984,7 @@ const ROOT_TYPE = [
   {
     label: 'AtlSelect',
     file: 'select/atl-select.css',
-    cascade: ['.atl-select', '.atl-select select'],
+    cascade: ['.atl-select', '.atl-select > .select-wrapper > select'],
   },
   // `.atl-menu-item` says `font: inherit`, and the size it inherits lives on `.atl-menu`.
   {
@@ -1072,7 +1072,7 @@ const LAYER_ALIASES = {
   },
   AtlInput: { field: '.atl-input input' },
   AtlTextarea: { field: '.atl-textarea textarea' },
-  AtlSelect: { field: '.atl-select select' },
+  AtlSelect: { field: '.atl-select > .select-wrapper > select' },
   AtlTr: {
     'atl-tr-select-cell': ['.atl-table tbody td', '.atl-tr-select-cell'],
     td: '.atl-table tbody td',

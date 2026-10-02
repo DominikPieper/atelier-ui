@@ -38,6 +38,7 @@ const EXTRA_ROOTS = {
   breadcrumbs: ['.atl-breadcrumb-item'],
   chat: ['.atl-chat-message', '.atl-chat-suggestion', '.atl-chat-typing'],
   menu: ['.atl-menu-item'],
+  select: ['.atl-option'],
   stepper: ['.step-item'],
   tabs: ['.atl-tab-group'],
   // Named nowhere else in the repo. AtlAvatarGroup has a spec but no entry in any

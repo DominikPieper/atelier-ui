@@ -1,0 +1,43 @@
+/* Geometry contract: every size this component states is a border-box size.
+ * Declared with the component rather than as a global reset, so it ships in the
+ * same file as the sizes it governs and no consuming app has to supply one.
+ * Gated by check:box-sizing; the resulting boxes are measured by check:geometry.
+ * See ADR-0043. */
+.atl-select,
+.atl-select * {
+  box-sizing: border-box;
+}
+
+/* What the three adapters share: the root, the caption and the error list. The
+ * field itself differs — a native <select> in React and Vue, a CDK-overlay
+ * listbox in Angular (ADR-0007, ADR-0145) — and is styled per framework:
+ * atl-select.<framework>.css. */
+.atl-select {
+  display: inline-block;
+  position: relative;
+  font-family: var(--ui-font-family);
+  /* The leading every descendant inherits, stated so the component keeps its
+     own rhythm rather than the consuming app's prose leading (ADR-0052).
+     A single-line field, so tight. */
+  line-height: var(--ui-line-height-tight);
+  font-size: var(--ui-font-size-md);
+}
+
+.atl-select > label {
+  display: block;
+  margin-bottom: var(--ui-spacing-2);
+  font-size: var(--ui-font-size-sm);
+  color: var(--ui-color-text);
+  font-weight: var(--ui-font-weight-medium);
+}
+
+/* Error display */
+.atl-select > .errors {
+  margin-top: var(--ui-spacing-2);
+}
+
+.atl-select > .errors > .error-message {
+  margin: 0;
+  font-size: var(--ui-font-size-sm);
+  color: var(--ui-color-error-text);
+}
