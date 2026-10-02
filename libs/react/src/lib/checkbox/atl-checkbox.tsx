@@ -6,7 +6,7 @@ import {
   useId,
 } from 'react';
 import type { AtlCheckboxSpec } from '../spec';
-import './atl-checkbox.css';
+import '@atelier-ui/styles/checkbox/atl-checkbox.css';
 
 /**
  * Properties for the AtlCheckbox component.

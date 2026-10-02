@@ -778,19 +778,6 @@ const DEAD_SELECTOR_EXEMPT = new Map([
       },
     ]),
   ),
-  [
-    'angular:table:atl-checkbox',
-    {
-      kind: 'gap',
-      reason:
-        'atl-table.css:157 centres the select cell via `.atl-tr-select-cell .atl-checkbox label`, ' +
-        'but Angular renders the child as the ELEMENT <atl-checkbox> and its host binding emits ' +
-        'only is-checked/is-disabled/is-invalid/is-touched — React and Vue emit `atl-checkbox` as ' +
-        'a class. Either give the Angular host the class hook the other two expose, or select the ' +
-        'element here; both are cross-framework decisions about what the class contract is. ' +
-        'Unresolved: see tasks/todo.md',
-    },
-  ],
 ]);
 
 /**

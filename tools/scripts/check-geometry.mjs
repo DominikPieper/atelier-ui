@@ -285,7 +285,7 @@ const CONTROLS = [
       default: () =>
         `<div class="atl-checkbox"><label><input type="checkbox"><span>Ship it</span></label></div>`,
       angular: () =>
-        `<atl-checkbox><label><input type="checkbox"><span>Ship it</span></label></atl-checkbox>`,
+        `<atl-checkbox class="atl-checkbox"><label><input type="checkbox"><span>Ship it</span></label></atl-checkbox>`,
     },
     measure: { default: '.atl-checkbox', angular: 'atl-checkbox' },
   },

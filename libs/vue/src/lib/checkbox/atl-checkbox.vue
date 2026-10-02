@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch, onMounted, computed, useId } from 'vue';
-import './atl-checkbox.css';
+import '@atelier-ui/styles/checkbox/atl-checkbox.css';
 
 defineOptions({ name: 'AtlCheckbox' });
 

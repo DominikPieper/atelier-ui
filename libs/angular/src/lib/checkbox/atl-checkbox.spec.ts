@@ -4,6 +4,20 @@ import { covers } from '../../testing/behavior';
 import { AtlCheckbox } from './atl-checkbox';
 
 describe('AtlCheckbox', () => {
+  it('keeps the static atl-checkbox class alongside the bound classes', async () => {
+    // The shared stylesheet (libs/styles) is scoped by `.atl-checkbox`, and the host
+    // also binds `[class]`; the two must merge, across input changes too.
+    const { container, rerender } = await render(
+      '<atl-checkbox [disabled]="disabled">Label</atl-checkbox>',
+      { imports: [AtlCheckbox], componentProperties: { disabled: false } },
+    );
+    const host = container.querySelector('atl-checkbox') as HTMLElement;
+    expect(host).toHaveClass('atl-checkbox');
+
+    await rerender({ componentProperties: { disabled: true } });
+    expect(host).toHaveClass('atl-checkbox', 'is-disabled');
+  });
+
   it('renders a native checkbox input', async () => {
     const { container } = await render('<atl-checkbox>Label</atl-checkbox>', {
       imports: [AtlCheckbox],

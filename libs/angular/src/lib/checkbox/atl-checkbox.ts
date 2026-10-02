@@ -7,6 +7,7 @@ import {
   input,
   model,
   viewChild,
+  ViewEncapsulation,
 } from '@angular/core';
 import type { FormCheckboxControl } from '@angular/forms/signals';
 import {
@@ -54,8 +55,13 @@ let nextId = 0;
       </div>
     }
   `,
-  styleUrl: './atl-checkbox.css',
+  // Class-rooted CSS shared with React and Vue (libs/styles): the root class below
+  // is what scopes it, so Emulated encapsulation is switched off.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: '../../../../styles/src/checkbox/atl-checkbox.css',
   host: {
+    class: 'atl-checkbox',
     '[class]': 'hostClasses()',
   },
 })
