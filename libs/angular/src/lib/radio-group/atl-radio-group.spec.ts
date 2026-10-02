@@ -13,6 +13,20 @@ const GROUP_TEMPLATE = `
 `;
 
 describe('AtlRadioGroup', () => {
+  it('keeps the static atl-radio-group class alongside the bound classes', async () => {
+    // The shared stylesheet (libs/styles) is scoped by `.atl-radio-group`, and the host
+    // also binds `[class]`; the two must merge, across input changes too.
+    const { container, rerender } = await render(
+      '<atl-radio-group name="g" [disabled]="disabled"></atl-radio-group>',
+      { imports: [AtlRadioGroup], componentProperties: { disabled: false } },
+    );
+    const host = container.querySelector('atl-radio-group') as HTMLElement;
+    expect(host).toHaveClass('atl-radio-group');
+
+    await rerender({ componentProperties: { disabled: true } });
+    expect(host).toHaveClass('atl-radio-group', 'is-disabled');
+  });
+
   covers('radio-group', 'role')('renders with role="radiogroup"', async () => {
     const { container } = await render(GROUP_TEMPLATE, {
       imports: [AtlRadioGroup, AtlRadio],

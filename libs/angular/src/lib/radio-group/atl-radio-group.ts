@@ -5,6 +5,7 @@ import {
   input,
   model,
   signal,
+  ViewEncapsulation,
 } from '@angular/core';
 import { FocusKeyManager } from '@angular/cdk/a11y';
 import type { FormValueControl } from '@angular/forms/signals';
@@ -52,8 +53,13 @@ let nextId = 0;
       </div>
     }
   `,
-  styleUrl: './atl-radio-group.css',
+  // Class-rooted CSS shared with React and Vue (libs/styles): the root class below
+  // is what scopes it, so Emulated encapsulation is switched off.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: '../../../../styles/src/radio-group/atl-radio-group.css',
   host: {
+    class: 'atl-radio-group',
     role: 'radiogroup',
     '[class]': 'hostClasses()',
     '[attr.aria-invalid]': 'invalid() || null',

@@ -26,7 +26,7 @@ export interface AtlRadioGroupProps {
 
 <script setup lang="ts">
 import { computed, provide, ref } from 'vue';
-import './atl-radio-group.css';
+import '@atelier-ui/styles/radio-group/atl-radio-group.css';
 
 defineOptions({ name: 'AtlRadioGroup' });
 

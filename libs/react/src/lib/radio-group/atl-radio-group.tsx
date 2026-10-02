@@ -7,7 +7,7 @@ import {
   ReactNode,
 } from 'react';
 import type { AtlRadioGroupSpec } from '../spec';
-import './atl-radio-group.css';
+import '@atelier-ui/styles/radio-group/atl-radio-group.css';
 
 /**
  * Interface for the RadioGroup context.
