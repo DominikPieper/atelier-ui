@@ -8,7 +8,7 @@ import {
 } from 'react';
 import type { CSSProperties } from 'react';
 import type { AtlBreadcrumbsSpec, AtlBreadcrumbItemSpec } from '../spec';
-import './atl-breadcrumbs.css';
+import '@atelier-ui/styles/breadcrumbs/atl-breadcrumbs.css';
 
 /**
  * Properties for the AtlBreadcrumbs component.

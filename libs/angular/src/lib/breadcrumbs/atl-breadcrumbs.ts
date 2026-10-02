@@ -1,3 +1,4 @@
+import { NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
@@ -7,6 +8,7 @@ import {
   inject,
   input,
   signal,
+  ViewEncapsulation,
 } from '@angular/core';
 import type { AtlBreadcrumbsSpec } from '../spec';
 import { ATL_BREADCRUMBS } from './atl-breadcrumbs.token';
@@ -41,12 +43,16 @@ import { ATL_BREADCRUMBS } from './atl-breadcrumbs.token';
   ],
   template: `
     <nav aria-label="Breadcrumb">
-      <ol role="list" class="list">
+      <ol role="list" class="breadcrumbs-list">
         <ng-content />
       </ol>
     </nav>
   `,
-  styleUrl: './atl-breadcrumbs.css',
+  // Class-rooted CSS shared with React and Vue (libs/styles): the root class below
+  // is what scopes it, so Emulated encapsulation is switched off.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: '../../../../styles/src/breadcrumbs/atl-breadcrumbs.css',
   host: {
     class: 'atl-breadcrumbs',
     '[style.--atl-separator]': 'separatorCssVar()',
@@ -86,19 +92,36 @@ export class AtlBreadcrumbs {
 @Component({
   selector: 'atl-breadcrumb-item',
   standalone: true,
+  imports: [NgTemplateOutlet],
   changeDetection: ChangeDetectionStrategy.OnPush,
+  // The host is the list item, as the <li> is in React and Vue: it carries
+  // role="listitem" instead of wrapping an <li>, so the item is a direct child of
+  // the <ol> and the shared stylesheet's `.atl-breadcrumb-item > .breadcrumb-link`
+  // matches in all three frameworks. The current page is a <span aria-current="page">
+  // there as well, not an <a> without an href.
   template: `
-    <li class="item">
-      <a
-        [attr.href]="href() && !isCurrent() ? href() : null"
+    <ng-template #label><ng-content /></ng-template>
+    @if (href() && !isCurrent()) {
+      <a class="breadcrumb-link" [attr.href]="href()">
+        <ng-container *ngTemplateOutlet="label" />
+      </a>
+    } @else {
+      <span
+        class="breadcrumb-current"
         [attr.aria-current]="isCurrent() ? 'page' : null"
-        ><ng-content
-      /></a>
-    </li>
+      >
+        <ng-container *ngTemplateOutlet="label" />
+      </span>
+    }
   `,
-  styleUrl: './atl-breadcrumbs.css',
+  // Class-rooted CSS shared with React and Vue (libs/styles): the root class below
+  // is what scopes it, so Emulated encapsulation is switched off.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: '../../../../styles/src/breadcrumbs/atl-breadcrumbs.css',
   host: {
     class: 'atl-breadcrumb-item',
+    role: 'listitem',
     '[class.is-current]': 'isCurrent()',
   },
 })

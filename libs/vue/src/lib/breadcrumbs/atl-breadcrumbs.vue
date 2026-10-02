@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import './atl-breadcrumbs.css';
+import '@atelier-ui/styles/breadcrumbs/atl-breadcrumbs.css';
 
 defineOptions({ name: 'AtlBreadcrumbs' });
 
