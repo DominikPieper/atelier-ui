@@ -184,7 +184,11 @@ export const FallbackChain: Story = {
 export const AvatarGroup: Story = {
   parameters: { design: figmaNode('508-7221') },
   render: () => ({
-    imports: [AtlAvatarGroup],
+    // `imports` is not a story-render key; moduleMetadata is what registers the
+    // components. With the key ignored, <atl-avatar-group> rendered as a plain
+    // unknown element and only the old :host-context(atl-avatar-group) tag match
+    // gave its avatars their overlap.
+    moduleMetadata: { imports: [AtlAvatar, AtlAvatarGroup] },
     template: `
       <div style="display: flex; flex-direction: column; gap: 1.5rem;">
         <div>

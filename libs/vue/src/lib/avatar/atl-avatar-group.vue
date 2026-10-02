@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { computed, type VNode } from 'vue';
-import './atl-avatar.css';
+import '@atelier-ui/styles/avatar/atl-avatar.css';
 
 defineOptions({ name: 'AtlAvatarGroup' });
 

@@ -1,6 +1,6 @@
 import { HTMLAttributes, ReactNode, Children, useState } from 'react';
 import type { AtlAvatarSpec, AtlAvatarGroupSpec } from '../spec';
-import './atl-avatar.css';
+import '@atelier-ui/styles/avatar/atl-avatar.css';
 import { AtlIcon } from '../icon/atl-icon';
 
 /**

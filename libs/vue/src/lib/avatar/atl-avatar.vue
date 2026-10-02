@@ -1,6 +1,6 @@
 <script setup lang="ts">
 import { ref, watch, computed } from 'vue';
-import './atl-avatar.css';
+import '@atelier-ui/styles/avatar/atl-avatar.css';
 import AtlIcon from '../icon/atl-icon.vue';
 
 defineOptions({ name: 'AtlAvatar' });

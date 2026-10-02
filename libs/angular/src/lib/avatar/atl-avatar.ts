@@ -8,6 +8,7 @@ import {
   input,
   signal,
   untracked,
+  ViewEncapsulation,
 } from '@angular/core';
 import { AtlIcon } from '../icon/atl-icon';
 
@@ -41,8 +42,13 @@ import { AtlIcon } from '../icon/atl-icon';
       <span [class]="'status-dot status-' + status()" aria-hidden="true"></span>
     }
   `,
-  styleUrl: './atl-avatar.css',
+  // Class-rooted CSS shared with React and Vue (libs/styles): the root class below
+  // is what scopes it, so Emulated encapsulation is switched off.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: '../../../../styles/src/avatar/atl-avatar.css',
   host: {
+    class: 'atl-avatar',
     '[class]': 'hostClasses()',
     role: 'img',
     '[attr.aria-label]': 'ariaLabel()',
@@ -125,10 +131,14 @@ export class AtlAvatar {
       >
     }
   `,
-  styleUrl: './atl-avatar.css',
+  // Class-rooted CSS shared with React and Vue (libs/styles): the root class below
+  // is what scopes it, so Emulated encapsulation is switched off.
+  // eslint-disable-next-line @angular-eslint/use-component-view-encapsulation
+  encapsulation: ViewEncapsulation.None,
+  styleUrl: '../../../../styles/src/avatar/atl-avatar.css',
   host: {
-    class: 'group',
-    '[class]': '"group size-" + size()',
+    class: 'atl-avatar-group',
+    '[class]': '"size-" + size()',
   },
 })
 export class AtlAvatarGroup {

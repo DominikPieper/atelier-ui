@@ -4,6 +4,21 @@ import { AtlAvatar, AtlAvatarGroup } from './atl-avatar';
 import { covers } from '../../testing/behavior';
 
 describe('AtlAvatar', () => {
+  it('keeps the static atl-avatar class alongside the bound classes', async () => {
+    // The shared stylesheet (libs/styles) is scoped by `.atl-avatar`, and the host
+    // also binds `[class]`; the two must merge, across input changes too.
+    const { container, rerender } = await render(
+      '<atl-avatar [size]="size" />',
+      { imports: [AtlAvatar], componentProperties: { size: 'md' } },
+    );
+    const host = container.querySelector('atl-avatar') as HTMLElement;
+    expect(host).toHaveClass('atl-avatar', 'size-md');
+
+    await rerender({ componentProperties: { size: 'lg' } });
+    expect(host).toHaveClass('atl-avatar', 'size-lg');
+    expect(host).not.toHaveClass('size-md');
+  });
+
   it('renders without error with default inputs', async () => {
     const { container } = await render('<atl-avatar />', {
       imports: [AtlAvatar],
@@ -179,6 +194,23 @@ describe('AtlAvatar', () => {
 });
 
 describe('AtlAvatarGroup', () => {
+  it('keeps the static atl-avatar-group class alongside the bound size class', async () => {
+    const { container, rerender } = await render(
+      '<atl-avatar-group [size]="size"><atl-avatar name="Alice" /></atl-avatar-group>',
+      {
+        imports: [AtlAvatarGroup, AtlAvatar],
+        componentProperties: { size: 'md' },
+      },
+    );
+    const host = container.querySelector('atl-avatar-group') as HTMLElement;
+    expect(host).toHaveClass('atl-avatar-group', 'size-md');
+    expect(host).not.toHaveClass('group');
+
+    await rerender({ componentProperties: { size: 'lg' } });
+    expect(host).toHaveClass('atl-avatar-group', 'size-lg');
+    expect(host).not.toHaveClass('size-md');
+  });
+
   it('renders all avatars when count is within max', async () => {
     const { container } = await render(
       `<atl-avatar-group [max]="5">
@@ -208,10 +240,12 @@ describe('AtlAvatarGroup', () => {
     ).toBe('+2');
   });
 
-  it('has group class on host', async () => {
+  it('has the atl-avatar-group root class on the host', async () => {
     const { container } = await render('<atl-avatar-group />', {
       imports: [AtlAvatarGroup],
     });
-    expect(container.querySelector('atl-avatar-group')).toHaveClass('group');
+    expect(container.querySelector('atl-avatar-group')).toHaveClass(
+      'atl-avatar-group',
+    );
   });
 });
