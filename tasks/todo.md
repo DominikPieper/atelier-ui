@@ -263,6 +263,18 @@ Ranked; each carries why it's worth doing next rather than later.
           of 87 stylesheets and `check:dead-selectors` 80 of 89 before the path fix. Make
           each fail when it finds fewer stylesheets than component directories (ADR-0080).
           This is independent of the migration.
+    - [ ] **Batch-3 decisions (1) and (3), owner 2026-10-03.** (3) is done in `4ea59019`:
+          a crumb that has no link and is not the current page renders
+          `<span class="breadcrumb-text">` (regular weight, muted), and only the current item
+          keeps `breadcrumb-current` and `aria-current="page"`. That is pinned by a `NoLinks`
+          play in all three libs. Found along the way: Angular and React mark the _last_ item
+          as current, while Vue uses an explicit `current` prop. That is an older
+          cross-framework difference and not part of this fix; check it against the contract.
+          (1) Owner decision: **the CSS is right.** The Figma drawer master moves to 20/24px
+          padding, a 20px title and a 12px footer gap, matching AtlDialog. Then the 14
+          `AtlDrawer:layer:*` exemptions in `allowlists.js` are deleted. This is blocked
+          until the Desktop Bridge is connected to the Atelier UI file: on 2026-10-03 it was
+          connected to a different file, so nothing was changed.
     - [ ] **Follow-ups from ADR-0149 (2026-10-03).** Split the 80 `LAYER-UNRESOLVED`
           entries in `tools/figma/type-baseline.json` into `design` (true wrappers,
           auto-layout frames) and `gap` (parts whose layer name does not spell their
