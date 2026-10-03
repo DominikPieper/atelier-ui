@@ -10,7 +10,7 @@ import {
 } from 'react';
 import type { AtlMenuSpec, AtlMenuItemSpec } from '../spec';
 import '@atelier-ui/styles/menu/atl-menu.css';
-import './atl-menu.react.css';
+import '@atelier-ui/styles/menu/atl-menu.native.css';
 
 interface MenuContextValue {
   close: () => void;

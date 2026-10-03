@@ -2221,6 +2221,14 @@ function cssRules(file, lib = 'react') {
       for (const f of fs.readdirSync(own).sort())
         if (f.endsWith(`.${lib}.css`)) files.push(path.join(own, f));
     }
+    // React and Vue share one override that lives with the styles package.
+    if (lib !== 'angular') {
+      const native = path.join(
+        path.dirname(file),
+        `${path.basename(file, '.css')}.native.css`,
+      );
+      if (fs.existsSync(native)) files.push(native);
+    }
   }
   for (const f of files) {
     if (!fs.existsSync(f)) continue;

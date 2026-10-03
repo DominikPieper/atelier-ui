@@ -955,7 +955,7 @@ function collectStoryClaims(csf, fw, componentName, source) {
 
 // ─── Tokens (for --emit) ────────────────────────────────────────────────────
 
-function scanCssTokens(dir) {
+function scanCssTokens(dir, fw) {
   const tokens = new Set();
   // The component's own directory plus the shared, class-rooted `libs/styles`
   // sheet — a component whose CSS moved there has none left in its own directory.
@@ -963,7 +963,15 @@ function scanCssTokens(dir) {
   for (const d of dirs) {
     let files = [];
     try {
-      files = fs.readdirSync(d).filter((f) => f.endsWith('.css'));
+      files = fs
+        .readdirSync(d)
+        .filter((f) => f.endsWith('.css'))
+        // A per-framework override (`.<fw>.css`) or the React/Vue-only `.native.css`
+        // is a file this framework does not load; its tokens are not this framework's.
+        .filter((f) => {
+          const m = /\.(angular|react|vue|native)\.css$/.exec(f);
+          return !m || (m[1] === 'native' ? fw !== 'angular' : m[1] === fw);
+        });
     } catch {
       /* dir missing */
     }
@@ -1541,7 +1549,7 @@ async function runFramework(fw) {
           slots: entry.docgenResult.slots,
         },
         metadata: { name, description: entry.docgenResult.description },
-        tokens: { usedTokens: scanCssTokens(entry.contextDir) },
+        tokens: { usedTokens: scanCssTokens(entry.contextDir, fw) },
       };
       const outDir = path.join(path.resolve(args.emit), fw);
       fs.mkdirSync(outDir, { recursive: true });

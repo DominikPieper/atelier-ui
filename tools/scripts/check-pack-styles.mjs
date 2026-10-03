@@ -22,7 +22,7 @@
  *      stopped declaring it, the styles package would simply not be installed
  *      and step 5 fails — which is the point. (Installing both tarballs on the
  *      command line would pass either way and prove nothing.)
- *   5. bundles `import { AtlButton } from '@atelier-ui/react'` with esbuild
+ *   5. bundles `import { AtlButton, AtlTooltip } from '@atelier-ui/react'` with esbuild
  *      (react/react-dom external — resolving the CSS is the question, not
  *      React) and asserts the emitted CSS holds the `.atl-button` rules, and
  *      that esbuild read them from the consumer's node_modules, not the repo.
@@ -62,6 +62,10 @@ const DIST_REACT = join(ROOT, 'dist/libs/react');
 // atl-button.css; if that file changes these, update them here.
 const EXPECT_SELECTOR = '.atl-button.variant-primary';
 const EXPECT_DECLARATION = 'letter-spacing: var(--ui-letter-spacing-tight)';
+// The React/Vue-only override (`atl-tooltip.native.css`, ADR-0148 Decision 4) must travel
+// too: `.atl-tooltip-wrapper` exists in that file alone, `.atl-tooltip` in the shared one.
+const EXPECT_NATIVE_SELECTOR = '.atl-tooltip-wrapper';
+const EXPECT_SHARED_TOOLTIP_SELECTOR = '.atl-tooltip';
 
 const failures = [];
 const fail = (msg) => failures.push(msg);
@@ -108,6 +112,17 @@ try {
   const reactPkg = JSON.parse(
     readFileSync(join(DIST_REACT, 'package.json'), 'utf8'),
   );
+
+  for (const f of [
+    'tooltip/atl-tooltip.css',
+    'tooltip/atl-tooltip.native.css',
+  ]) {
+    if (!styles.files.includes(f)) {
+      fail(
+        `styles tarball does not contain ${f} (${styles.files.join(', ')}).`,
+      );
+    }
+  }
 
   if (!styles.files.includes('button/atl-button.css')) {
     fail(
@@ -160,7 +175,7 @@ try {
 
   writeFileSync(
     join(app, 'entry.js'),
-    "import { AtlButton } from '@atelier-ui/react';\nconsole.log(AtlButton);\n",
+    "import { AtlButton, AtlTooltip } from '@atelier-ui/react';\nconsole.log(AtlButton, AtlTooltip);\n",
   );
 
   let result;
@@ -198,10 +213,31 @@ try {
     if (!flat.includes(EXPECT_DECLARATION)) {
       fail(`bundled CSS lacks the declaration "${EXPECT_DECLARATION}".`);
     }
+    if (!css.includes(EXPECT_SHARED_TOOLTIP_SELECTOR)) {
+      fail(
+        `bundled CSS lacks the shared tooltip selector ${EXPECT_SHARED_TOOLTIP_SELECTOR}.`,
+      );
+    }
+    if (!css.includes(EXPECT_NATIVE_SELECTOR)) {
+      fail(
+        `bundled CSS lacks ${EXPECT_NATIVE_SELECTOR}: atl-tooltip.native.css did not travel with ` +
+          '@atelier-ui/react.',
+      );
+    }
     const inputs = Object.keys(result.metafile.inputs);
     const fromPackage = inputs.some((p) =>
       p.endsWith('node_modules/@atelier-ui/styles/button/atl-button.css'),
     );
+    const nativeFromPackage = inputs.some((p) =>
+      p.endsWith(
+        'node_modules/@atelier-ui/styles/tooltip/atl-tooltip.native.css',
+      ),
+    );
+    if (!nativeFromPackage) {
+      fail(
+        'atl-tooltip.native.css was not read from node_modules/@atelier-ui/styles in the consumer.',
+      );
+    }
     if (!fromPackage) {
       fail(
         'the CSS was not read from node_modules/@atelier-ui/styles in the consumer ' +
@@ -223,5 +259,5 @@ if (failures.length) {
   process.exit(1);
 }
 console.log(
-  '✓ check:pack-styles — installing the packed @atelier-ui/react pulls @atelier-ui/styles, and a bundle of AtlButton carries the .atl-button CSS.',
+  '✓ check:pack-styles — installing the packed @atelier-ui/react pulls @atelier-ui/styles, and a bundle of AtlButton and AtlTooltip carries the .atl-button CSS and the React/Vue-only tooltip CSS (atl-tooltip.native.css).',
 );

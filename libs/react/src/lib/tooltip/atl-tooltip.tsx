@@ -1,7 +1,7 @@
 import { useState, useRef, useEffect, ReactNode, useId } from 'react';
 import type { AtlTooltipSpec } from '../spec';
 import '@atelier-ui/styles/tooltip/atl-tooltip.css';
-import './atl-tooltip.react.css';
+import '@atelier-ui/styles/tooltip/atl-tooltip.native.css';
 
 /**
  * Properties for the AtlTooltip component.

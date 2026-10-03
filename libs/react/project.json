@@ -84,7 +84,7 @@
     "stylelint": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "stylelint 'libs/react/src/lib/**/*.css' --config stylelint.config.mjs"
+        "command": "stylelint 'libs/react/src/lib/**/*.css' --config stylelint.config.mjs --allow-empty-input"
       }
     }
   }

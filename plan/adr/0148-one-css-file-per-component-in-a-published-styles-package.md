@@ -100,6 +100,15 @@ package cut is what this ADR takes over; Mitosis is not.
    `dist/storybook/<fw>`, not the source, so it checks nothing about a component until
    `check:storybook-manifests` has rebuilt it.)
 
+   **Corrected 2026-10-03.** The sentence "the layout has no place for 'React and Vue,
+   not Angular'" is withdrawn: it now has one. Where React and Vue render the same DOM,
+   the shared override is a single published file, `libs/styles/src/<dir>/atl-<name>.native.css`
+   (menu, tooltip, select), which both import right after the shared sheet; the identical
+   `.react.css`/`.vue.css` pairs are gone. Angular keeps `atl-<name>.angular.css` next to
+   its component. `componentCssFiles(fw, dir)` returns shared + `native` for React and Vue,
+   shared + `angular` for Angular; `native` is never returned for Angular. An override that
+   differs between React and Vue would still be a `.react.css`/`.vue.css` file in its own lib.
+
 5. **The gates read component CSS from `libs/styles` first**, through one helper
    (`componentCssFiles(fw, dir)` in `tools/scripts/lib/component-discovery.js`). A new
    offline gate, `check:pack-styles`, proves the published shape: it packs

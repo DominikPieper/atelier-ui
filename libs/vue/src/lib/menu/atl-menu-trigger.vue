@@ -12,7 +12,7 @@ export const AtlMenuTriggerKey: InjectionKey<AtlMenuTriggerContext> =
 <script setup lang="ts">
 import { onBeforeUnmount, onMounted, provide, ref, watch } from 'vue';
 import '@atelier-ui/styles/menu/atl-menu.css';
-import './atl-menu.vue.css';
+import '@atelier-ui/styles/menu/atl-menu.native.css';
 
 defineOptions({ name: 'AtlMenuTrigger' });
 

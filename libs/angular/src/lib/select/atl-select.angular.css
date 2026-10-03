@@ -12,7 +12,7 @@
  * live in a listbox panel that is moved into a CDK overlay on open, so the panel
  * and its rows are styled here. React and Vue render a native <select> inside a
  * wrapper and the operating system draws the option list, so no option row exists
- * there (atl-select.react.css / .vue.css). Recorded in the contract
+ * there (atl-select.native.css, shared by React and Vue). Recorded in the contract
  * (select.contract.ts), allowlists.js (A11Y_PARITY_EXEMPT, "select") and ADR-0007 /
  * ADR-0145.
  *

@@ -1,7 +1,8 @@
-/* React and Vue select: a native <select> inside a wrapper, with the chevron and the
- * invalid indicator absolutely placed over it; the operating system draws the
- * option list. Angular's field is a button plus a CDK-overlay listbox
- * (atl-select.angular.css), so none of this exists there. Recorded in the contract
+/* Served to React and Vue only, after atl-select.css (the shared sheet): both render a
+ * native <select> inside a wrapper, with the chevron and the invalid indicator
+ * absolutely placed over it; the operating system draws the option list. Angular's
+ * field is a button plus a CDK-overlay listbox (libs/angular/.../atl-select.angular.css,
+ * which loads instead of this file), so none of this exists there. Recorded in the contract
  * (select.contract.ts), allowlists.js (A11Y_PARITY_EXEMPT, "select") and ADR-0007 /
  * ADR-0145. */
 

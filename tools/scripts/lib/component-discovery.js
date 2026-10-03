@@ -40,8 +40,17 @@ const REPO_ROOT = path.resolve(__dirname, '../../..');
 /** Where class-rooted stylesheets shared by all three frameworks live (`libs/styles`). */
 const SHARED_STYLES_DIR = path.join(REPO_ROOT, 'libs/styles/src');
 
-/** `atl-select.angular.css`: a per-framework override of a shared sheet (ADR-0148 Decision 4). */
-const OVERRIDE_SHEET = /\.(angular|react|vue)\.css$/;
+/**
+ * A per-framework override of a shared sheet (ADR-0148 Decision 4). `atl-select.angular.css`
+ * lives with its framework; `atl-select.native.css` lives in `libs/styles` and serves the
+ * two frameworks that render a native DOM, React and Vue, never Angular.
+ */
+const OVERRIDE_SHEET = /\.(angular|react|vue|native)\.css$/;
+
+/** Does an override sheet (`.<tag>.css`) load for `fw`? `native` is React and Vue. */
+function overrideAppliesTo(tag, fw) {
+  return tag === 'native' ? fw !== 'angular' : tag === fw;
+}
 
 /**
  * Every stylesheet a component ships to one framework, in cascade order: the shared
@@ -62,12 +71,13 @@ function componentCssFiles(fw, dir) {
     for (const f of fs.readdirSync(base).sort()) {
       if (!f.endsWith('.css')) continue;
       const m = OVERRIDE_SHEET.exec(f);
-      if (m && m[1] !== fw) continue;
+      if (m && !overrideAppliesTo(m[1], fw)) continue;
       const abs = path.join(base, f);
       out.push({
         abs,
         rel: path.relative(REPO_ROOT, abs).split(path.sep).join('/'),
-        shared,
+        // A `.native.css` next to the shared sheet is an override, not part of it.
+        shared: shared && !m,
         override: Boolean(m),
       });
     }
@@ -85,4 +95,5 @@ module.exports = {
   SHARED_STYLES_DIR,
   componentCssFiles,
   OVERRIDE_SHEET,
+  overrideAppliesTo,
 };

@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { computed, useId } from 'vue';
 import '@atelier-ui/styles/select/atl-select.css';
-import './atl-select.vue.css';
+import '@atelier-ui/styles/select/atl-select.native.css';
 import AtlIcon from '../icon/atl-icon.vue';
 
 defineOptions({ name: 'AtlSelect' });

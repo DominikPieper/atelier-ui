@@ -8,7 +8,8 @@
   box-sizing: border-box;
 }
 
-/* React and Vue tooltip: no overlay. The tooltip is a sibling of the trigger inside
+/* Served to React and Vue only, after atl-tooltip.css (the shared sheet): no overlay.
+ * The tooltip is a sibling of the trigger inside
  * an inline-block wrapper, positioned against it with CSS (the Angular directive
  * attaches the same visual to a CDK overlay instead — atl-tooltip.angular.css).
  * That is why the wrapper, the position classes and the translate-carrying

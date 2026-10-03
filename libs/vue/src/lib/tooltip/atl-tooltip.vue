@@ -1,7 +1,7 @@
 <script setup lang="ts">
 import { ref, onUnmounted } from 'vue';
 import '@atelier-ui/styles/tooltip/atl-tooltip.css';
-import './atl-tooltip.vue.css';
+import '@atelier-ui/styles/tooltip/atl-tooltip.native.css';
 
 defineOptions({ name: 'AtlTooltip' });
 
