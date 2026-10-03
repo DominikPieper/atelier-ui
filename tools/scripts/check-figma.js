@@ -2963,7 +2963,8 @@ function checkUnnamedFrames() {
       comp.selector,
       total,
       comp.unnamedFrames.map(
-        (f) => `${f.path} (${f.layoutMode})${f.count > 1 ? ` \u00d7${f.count}` : ''}`,
+        (f) =>
+          `${f.path} (${f.layoutMode})${f.count > 1 ? ` \u00d7${f.count}` : ''}`,
       ),
     );
   }
