@@ -1115,6 +1115,10 @@ const SIZE_LAYER_CASCADES = [
  *  authoritative and --update-baseline preserves it — otherwise a human's correction
  *  would be overwritten by whatever this constant last said. */
 const RATCHET_SEED = {
+  'LAYER-UNRESOLVED': {
+    kind: 'design',
+    why: 'Named Figma layers that resolve to no CSS rule (wrappers, auto-layout frames, or a part whose class the layer name does not spell), so [LAYER-PAINT] never compares their fill, radius or stroke. Recorded so that a layer that stops resolving, because a selector was renamed or moved, fails the gate instead of silently narrowing it (ADR-0080). A layer that starts resolving also fails until the baseline is re-recorded, which is how the coverage ratchets up.',
+  },
   'ROOT-TYPE': {
     kind: 'gap',
     why: 'Six masters draw their root text at a size or leading the CSS does not state — AtlInput and AtlSelect at 14px against a 16px CSS, four more on AUTO leading against 125%. Correcting the Figma side means retyping nodes whose sizes bind to the docs-site collection, which is the FIGMA-VARIABLE-COLLECTION debt below; doing it first would only move the problem. Promote to a plain blocker once that entry is gone.',
@@ -2895,6 +2899,45 @@ function checkOverlays() {
  */
 
 function checkLayerPaint() {
+  // A layer this check cannot resolve to a CSS rule is not checked at all: its fill,
+  // radius and stroke pass unseen. Most are wrappers and that is fine, but the gate
+  // used to skip them in silence, which is how it once covered 31 of 77 resolvable
+  // layers without anyone knowing. The unresolved ones are counted per master and held
+  // to the recorded set (ADR-0080, ADR-0078): a master whose layers stop resolving, for
+  // whatever reason, fails here instead of quietly narrowing the gate.
+  const unresolved = new Map(); // selector -> Set of layer names never resolved
+  const resolved = new Map(); // selector -> Set of layer names resolved at least once
+  const mark = (map, selector, layer) => {
+    if (!map.has(selector)) map.set(selector, new Set());
+    map.get(selector).add(layer);
+  };
+  try {
+    for (const comp of snapshot.components) {
+      const layers = comp.layers || [];
+      if (!layers.length) continue;
+      const file = cssFileFor(comp.selector);
+      if (!file) {
+        // The whole master's sheet was not found: every one of its layers is unchecked.
+        for (const L of layers) mark(unresolved, comp.selector, L.layer);
+      }
+    }
+    checkLayerPaintCore(unresolved, resolved, mark);
+  } finally {
+    for (const [selector, names] of unresolved) {
+      const never = [...names].filter(
+        (n) => !(resolved.get(selector) || new Set()).has(n),
+      );
+      if (!never.length) continue;
+      ratchet(
+        'LAYER-UNRESOLVED',
+        selector,
+        never.length,
+        never.map((n) => `${selector}/${n}`),
+      );
+    }
+  }
+}
+function checkLayerPaintCore(unresolved, resolved, mark) {
   for (const comp of snapshot.components) {
     const layers = comp.layers || [];
     if (!layers.length) continue;
@@ -2986,7 +3029,12 @@ function checkLayerPaint() {
         const b = rules.get(sel);
         if (b !== undefined) body = (body === undefined ? '' : body) + ';' + b;
       }
-      if (body === undefined) continue; // not a CSS part — a wrapper, and that is fine
+      if (body === undefined) {
+        // Not a CSS part. Usually a wrapper, and that is fine — but it is counted, below.
+        mark(unresolved, comp.selector, L.layer);
+        continue;
+      }
+      mark(resolved, comp.selector, L.layer);
       const selector = base;
 
       // Every colour this component's CSS gives this layer, in ANY state. A layer

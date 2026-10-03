@@ -92,6 +92,61 @@ function componentCssFiles(fw, dir) {
   return out;
 }
 
+/** Every `.css` file under `dir`, recursively (absolute paths). */
+function walkCss(dir, out = []) {
+  if (!fs.existsSync(dir)) return out;
+  for (const entry of fs.readdirSync(dir, { withFileTypes: true })) {
+    const abs = path.join(dir, entry.name);
+    if (entry.isDirectory()) walkCss(abs, out);
+    else if (entry.name.endsWith('.css')) out.push(abs);
+  }
+  return out;
+}
+
+/**
+ * Every component stylesheet that EXISTS for `fw`, found by walking the trees rather
+ * than by asking `componentCssFiles()`: a gate that reads its sheets through that
+ * helper is blind to exactly the sheets the helper does not reach (a directory name
+ * the framework does not share, a stray `.css` beside a component), and was found
+ * passing over 78 of 87 of them. This is the independent count to hold it against.
+ * `libs/styles/src/<dir>/*.css` minus the overrides that are not this framework's,
+ * plus every `.css` under `libs/<fw>/src/lib`.
+ */
+function existingCssFiles(fw) {
+  const own = walkCss(path.join(REPO_ROOT, 'libs', fw, 'src/lib'));
+  const shared = walkCss(SHARED_STYLES_DIR).filter((abs) => {
+    const m = OVERRIDE_SHEET.exec(path.basename(abs));
+    return !m || overrideAppliesTo(m[1], fw);
+  });
+  return [...shared, ...own].sort();
+}
+
+/**
+ * Compare the sheets a gate read for `fw` (`visited`, a Set of absolute paths, or any
+ * iterable) with the sheets that exist. Returns null when it read them all, otherwise
+ * the `[PARTIAL-COVERAGE]` message naming what it skipped (ADR-0080: a guard that
+ * covers less than exists is not a check). `fws` may be a list when the gate pools
+ * its sheets across frameworks.
+ */
+function coverageGap(gate, fws, visited) {
+  const seen = new Set(visited);
+  const frameworks = Array.isArray(fws) ? fws : [fws];
+  const exist = [
+    ...new Set(frameworks.flatMap((fw) => existingCssFiles(fw))),
+  ].sort();
+  const missing = exist.filter((abs) => !seen.has(abs));
+  if (missing.length === 0) return null;
+  const dirs = new Set(exist.map((abs) => path.basename(path.dirname(abs))));
+  const found = exist.length - missing.length;
+  const rel = (abs) => path.relative(REPO_ROOT, abs).split(path.sep).join('/');
+  return (
+    `[PARTIAL-COVERAGE] ${gate} (${frameworks.join(', ')}) read ${found} component stylesheet(s) but ` +
+    `${exist.length} exist across ${dirs.size} component director(ies) with CSS; unread: ` +
+    `${missing.slice(0, 5).map(rel).join(', ')}${missing.length > 5 ? ', …' : ''}. ` +
+    'A gate that skips sheets passes while blind to them.'
+  );
+}
+
 module.exports = {
   FRAMEWORKS,
   isComponentDir,
@@ -101,4 +156,6 @@ module.exports = {
   componentCssFiles,
   OVERRIDE_SHEET,
   overrideAppliesTo,
+  existingCssFiles,
+  coverageGap,
 };

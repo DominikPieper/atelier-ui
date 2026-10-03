@@ -96,6 +96,7 @@ const {
   isComponentDir,
   getComponentDirs,
   componentCssFiles,
+  coverageGap,
 } = require('./lib/component-discovery');
 const { rootsFor } = require('./lib/component-roots');
 const { DEAD_SELECTOR_EXEMPT } = require('./lib/allowlists');
@@ -922,6 +923,10 @@ const errors = [];
 const warnings = [];
 const seenExemptions = new Set();
 let stylesheets = 0;
+/** The sheets read, per framework, held against the sheets that exist (ADR-0080). */
+const visitedSheets = Object.fromEntries(
+  FRAMEWORKS.map((fw) => [fw, new Set()]),
+);
 let selectorsScanned = 0;
 
 for (const fw of FRAMEWORKS) {
@@ -938,6 +943,7 @@ for (const fw of FRAMEWORKS) {
     // against each framework's emission in turn: it styles a class for all three.
     for (const { abs: file } of componentCssFiles(fw, dir)) {
       stylesheets++;
+      visitedSheets[fw].add(file);
       for (const [name, sites] of classSelectors(
         fs.readFileSync(file, 'utf8'),
       )) {
@@ -1020,6 +1026,11 @@ for (const fw of FRAMEWORKS) {
       );
     }
   }
+}
+
+for (const fw of FRAMEWORKS) {
+  const gap = coverageGap('check:dead-selectors', fw, visitedSheets[fw]);
+  if (gap) errors.push(gap);
 }
 
 // Allowlist hygiene: an exemption whose class is emitted now is a repair nobody

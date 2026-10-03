@@ -52,6 +52,7 @@ const require = createRequire(import.meta.url);
 const {
   FRAMEWORKS,
   componentCssFiles,
+  coverageGap,
 } = require('./lib/component-discovery.js');
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
@@ -232,6 +233,13 @@ for (const fw of FRAMEWORKS) {
       written++;
     }
   }
+}
+
+// Every sheet that exists must have been judged: a sheet this loop never reached would
+// pass while its boxes depend on the consuming app's reset (ADR-0080).
+{
+  const gap = coverageGap('check:box-sizing', FRAMEWORKS, seenSheets);
+  if (gap) problems.push(gap);
 }
 
 if (problems.length > 0) {
