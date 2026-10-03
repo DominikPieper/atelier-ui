@@ -110,6 +110,16 @@ function inputFiles(moduleName) {
  */
 function computeInputsHash(moduleName) {
   const inputs = inputFiles(moduleName);
+  return { hash: hashFiles(inputs), inputs };
+}
+
+/**
+ * The hash itself, for a sorted list of repo-relative paths: path and bytes of each,
+ * so a rename or an edit both move it. Shared with the Storybook build stamp
+ * (`lib/storybook-build-stamp.js`), which asks the same question of a different
+ * input set: has anything this was computed from changed?
+ */
+function hashFiles(inputs) {
   const h = crypto.createHash('sha256');
   for (const rel of inputs) {
     h.update(rel, 'utf8');
@@ -117,7 +127,14 @@ function computeInputsHash(moduleName) {
     h.update(fs.readFileSync(path.join(ROOT, rel)));
     h.update('\0');
   }
-  return { hash: `sha256:${h.digest('hex')}`, inputs };
+  return `sha256:${h.digest('hex')}`;
 }
 
-module.exports = { ROOT, moduleForSelector, inputFiles, computeInputsHash };
+module.exports = {
+  ROOT,
+  moduleForSelector,
+  inputFiles,
+  computeInputsHash,
+  hashFiles,
+  walkFiles,
+};

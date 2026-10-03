@@ -13,7 +13,11 @@
  * Inputs, all offline (no live Figma, no dev server):
  *   - `dist/storybook/<fw>` — built by `nx run-many -t build-storybook` (the same
  *     step `check:storybook-manifests` runs). This gate does NOT build it; it
- *     fails with a clear message if a framework's build is missing.
+ *     fails with a clear message if a framework's build is missing, and with
+ *     `[STALE]` if it was built from different source than the tree holds now: the
+ *     build records a hash of its inputs (`lib/storybook-build-stamp.js`, written by
+ *     `tools/scripts/storybook-build.mjs`, which the `build-storybook` targets run)
+ *     and this gate compares it before it renders anything.
  *   - `tools/figma/snapshot.json` — `rootPaint` per master, keyed
  *     `axis=value, …, state=<state>`.
  *   - `libs/spec/src/contracts/*.contract.ts` — the same micro-contracts stage 1
@@ -219,6 +223,7 @@ import { loadCsf, createStoryArgsResolver } from 'storybook/internal/csf-tools';
 const require = createRequire(import.meta.url);
 const { parseExportedVars } = require('./lib/ts-eval.js');
 const { PAINT_ROSTER_EXEMPT } = require('./lib/allowlists.js');
+const { staleReason } = require('./lib/storybook-build-stamp.js');
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '../..');
@@ -271,6 +276,25 @@ for (const fw of targetFrameworks) {
       `Unknown framework '${fw}' — expected one of ${FRAMEWORKS.join(', ')}`,
     );
     process.exit(2);
+  }
+}
+// This gate measures the BUILT Storybook, not the source. A build that no longer
+// matches the source would be measured as if it did, and the verdict would describe
+// code that is gone — so before anything is rendered, every build in scope must carry
+// a stamp equal to the hash of its inputs now (`lib/storybook-build-stamp.js`).
+// A missing build is reported by runFramework as [BUILD-MISSING]; staleness is not.
+{
+  const stale = targetFrameworks
+    .filter((fw) =>
+      fs.existsSync(
+        path.join(path.join(ROOT, 'dist/storybook'), fw, 'index.json'),
+      ),
+    )
+    .map((fw) => staleReason(fw))
+    .filter(Boolean);
+  if (stale.length > 0) {
+    for (const msg of stale) console.error(`✗ ${msg}`);
+    process.exit(1);
   }
 }
 // A --component or --fw run only ever measures part of the roster, so neither the

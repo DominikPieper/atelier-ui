@@ -57,7 +57,7 @@
       "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/dist/storybook/vue"],
       "options": {
-        "command": "npx storybook build --config-dir libs/vue/.storybook --output-dir dist/storybook/vue"
+        "command": "node tools/scripts/storybook-build.mjs vue"
       }
     },
     "storybook-test": {

@@ -71,7 +71,7 @@
       "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/dist/storybook/react"],
       "options": {
-        "command": "npx storybook build --config-dir libs/react/.storybook --output-dir dist/storybook/react"
+        "command": "node tools/scripts/storybook-build.mjs react"
       }
     },
     "storybook-test": {

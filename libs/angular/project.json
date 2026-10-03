@@ -65,7 +65,7 @@
       "executor": "nx:run-commands",
       "outputs": ["{workspaceRoot}/dist/storybook/angular"],
       "options": {
-        "command": "npx storybook build --config-dir libs/angular/.storybook --output-dir dist/storybook/angular"
+        "command": "node tools/scripts/storybook-build.mjs angular"
       }
     },
     "storybook-test": {
