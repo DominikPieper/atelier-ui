@@ -64,6 +64,17 @@ Ranked; each carries why it's worth doing next rather than later.
 > now regardless; **B** one authored contract record with everything else projected as
 > the direction, its own ADR naming ADR-0006/0010/0096 as revised.
 
+- [ ] **0.3.5 on npm is not this repo's 0.3.5 (found 2026-10-03).** A release run on
+      2026-10-01 (`9a14c13c`, run 36884693651) published react, angular, vue, create-workspace and
+      create-atelier-ui-workspace 0.3.5, then failed before its release commit and tag. Today's
+      release (`cfd43ce6`) re-used 0.3.5. npm skipped the five existing versions, and only
+      `@atelier-ui/styles@0.3.5` is new. So the published react/angular/vue 0.3.5 are the
+      pre-migration code: self-contained and working, but without ADR-0148. Needed: (1) a 0.3.6
+      release carrying the migration; (2) make the publish step fail instead of skipping when a
+      version already exists on npm; (3) `check:release-drift` compares versions only, so it
+      should also catch "same version, different content", e.g. by comparing the published
+      `gitHead` with the tagged commit.
+
 - [ ] **Structure lessons from the DB UX Design System (planned 2026-10-01).** Comes out of
       a fact-check of a Gemini Deep Research report on multi-framework design systems. The
       report says DB UX (`db-ux-design-system/core-web`) maintains native Angular, React and

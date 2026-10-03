@@ -860,3 +860,13 @@ CSS with 0 exemptions". It did not: its layers are unnamed `Frame`s, so `check:f
 them, and its footer is 16/24 against the CSS's 20/24. The very pattern ADR-0149 had recorded the
 same day. Rule: before citing a gate's silence as evidence, confirm the gate actually looked at that
 thing (the snapshot's `layers`, the gate's coverage count), and say so when quoting it.
+
+## 2026-10-03 — Run `check:release-drift` before pushing a release, not after
+
+I pushed the ADR-0148 branch to main without running `check:release-drift` first. It would have
+printed "local 0.3.4 vs published 0.3.5" for five packages: a half-failed release on 2026-10-01 had
+already put 0.3.5 on npm without a release commit or tag. The new release therefore re-used 0.3.5,
+npm skipped the five existing versions silently, and only `@atelier-ui/styles` went out. Nothing
+broke (the old 0.3.5 packages are self-contained), but the migration did not ship. Rule: before any
+push that triggers a release, run `npm run check:release-drift` and read every line; a published
+version the repo never tagged means the next release needs a version above it.
