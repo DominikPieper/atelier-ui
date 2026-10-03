@@ -69,17 +69,13 @@ const { FIGMA_CONFORMANCE_EXCEPTIONS } = require('./lib/allowlists');
 const ROOT = path.resolve(__dirname, '../..');
 
 /**
- * Where a component stylesheet named relative to `src/lib` lives. A component
- * whose sheet moved to the shared, class-rooted `libs/styles/src/` serves all
- * three frameworks from there, so the framework directory no longer has it —
- * and a missing file here only downgrades the check to a warning, which would
- * hide the loss of coverage.
+ * Where a component stylesheet named relative to `src/lib` lives: in the shared,
+ * class-rooted `libs/styles/src/` (ADR-0148), which serves all three frameworks. A
+ * path that does not exist is returned anyway, so the caller reports the file that
+ * ought to be there rather than quietly downgrading the check to a warning.
  */
 function componentCssPath(lib, file) {
-  const own = path.join(ROOT, 'libs', lib, 'src/lib', file);
-  if (fs.existsSync(own)) return own;
-  const shared = path.join(ROOT, 'libs/styles/src', file);
-  return fs.existsSync(shared) ? shared : own;
+  return path.join(ROOT, 'libs/styles/src', file);
 }
 const SNAPSHOT_FILE = path.join(ROOT, 'tools/figma/snapshot.json');
 const TEXT_NODES_REL = 'tools/figma/text-nodes.json';
@@ -3595,11 +3591,9 @@ function cssFileFor(selector) {
           .replace(/^Atl/, 'atl')
           .replace(/([a-z0-9])([A-Z])/g, '$1-$2')
           .toLowerCase();
-        // The component's own directory first, then the shared `libs/styles` one.
-        const sheets = [
-          dir,
-          path.join(ROOT, 'libs/styles/src', moduleName),
-        ].filter((d) => fs.existsSync(d));
+        const sheets = [path.join(ROOT, 'libs/styles/src', moduleName)].filter(
+          (d) => fs.existsSync(d),
+        );
         const exact = sheets
           .map((d) => path.join(d, `${kebab}.css`))
           .find((p) => fs.existsSync(p));

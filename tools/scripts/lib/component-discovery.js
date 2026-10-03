@@ -53,16 +53,19 @@ function overrideAppliesTo(tag, fw) {
 }
 
 /**
- * Every stylesheet a component ships to one framework, in cascade order: the shared
- * `libs/styles/src/<dir>/` sheet first, then the `.css` files in the component's own
- * directory. A component that has moved to the shared location has nothing left in
- * `libs/<fw>/src/lib/<dir>/` but, at most, the per-framework overrides
- * (`atl-<name>.<fw>.css`, for DOM that legitimately differs), which load after the
- * shared sheet; a gate that only read that directory would pass without reading the
- * component's CSS. A component that has not moved yet has only its own files.
+ * Every stylesheet a component ships to one framework, in cascade order:
+ *   1. the shared sheet, `libs/styles/src/<dir>/atl-<name>.css`;
+ *   2. an override that lives with the styles package and serves React and Vue only,
+ *      `libs/styles/src/<dir>/atl-<name>.native.css` (never returned for Angular);
+ *   3. the framework's own override, `libs/<fw>/src/lib/<dir>/atl-<name>.<fw>.css`
+ *      (Angular's CDK-overlay select, tooltip and table).
+ * Every component's CSS lives in `libs/styles` (ADR-0148); a `.css` file in a
+ * framework directory that is not a `.<fw>.css` override is not a stylesheet this
+ * helper knows, so it is not returned, and `check:box-sizing` and `check:dead-selectors`
+ * count what exists against what this returns to catch a sheet that is skipped.
  * Returns `{ abs, rel, shared, override }`, `rel` being repo-relative with forward
- * slashes. `shared` and `override` sheets are class-rooted (no `:host`); an override
- * sheet of another framework is never returned for `fw`.
+ * slashes. Every sheet is class-rooted (no `:host`); an override of another framework
+ * is never returned for `fw`.
  */
 function componentCssFiles(fw, dir) {
   const out = [];
@@ -71,12 +74,14 @@ function componentCssFiles(fw, dir) {
     for (const f of fs.readdirSync(base).sort()) {
       if (!f.endsWith('.css')) continue;
       const m = OVERRIDE_SHEET.exec(f);
+      // The shared directory holds the shared sheet and the `.native.css` override; the
+      // framework directory holds nothing but its own `.<fw>.css` override.
+      if (!shared && !m) continue;
       if (m && !overrideAppliesTo(m[1], fw)) continue;
       const abs = path.join(base, f);
       out.push({
         abs,
         rel: path.relative(REPO_ROOT, abs).split(path.sep).join('/'),
-        // A `.native.css` next to the shared sheet is an override, not part of it.
         shared: shared && !m,
         override: Boolean(m),
       });

@@ -21,11 +21,10 @@
  * The root list is DERIVED from each component's own CSS: every `.atl-*` class
  * that starts a rule in that directory. So a new root class added later without
  * re-running this script fails `--check` instead of silently sitting outside the
- * contract. A component that has not moved to `libs/styles` yet and is Angular encapsulates
- * its styles, so `:host` covers it by definition. A shared sheet, and a per-framework
- * override next to a component (`atl-select.angular.css`, ADR-0148 Decision 4), is
- * class-rooted: the override carries a block of its own only for the roots it adds, since
- * the shared sheet already contracts the rest.
+ * contract. Every sheet is class-rooted (ADR-0148): the shared sheet, and an override
+ * (`atl-select.angular.css` next to the component, `atl-select.native.css` beside the
+ * shared sheet for React and Vue), which carries a block of its own only for the roots
+ * it adds, since the shared sheet already contracts the rest.
  *
  * Specificity is deliberately (0,1,0) — a plain class, not `:where()`. It has to
  * beat a consumer's `* { box-sizing: content-box }` while still losing to any rule
@@ -53,7 +52,6 @@ const require = createRequire(import.meta.url);
 const {
   FRAMEWORKS,
   componentCssFiles,
-  OVERRIDE_SHEET,
 } = require('./lib/component-discovery.js');
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
@@ -80,10 +78,7 @@ function leadingAtlClasses(css) {
   return found;
 }
 
-function selectorFor(fw, roots, classRooted) {
-  // A shared sheet, and a per-framework override (atl-<name>.<fw>.css), is
-  // class-rooted for every framework, Angular included.
-  if (fw === 'angular' && !classRooted) return ':host';
+function selectorFor(roots) {
   if (roots.length === 1) return `.${roots[0]}`;
   return `:is(\n  .${roots.join(',\n  .')}\n)`;
 }
@@ -145,22 +140,12 @@ for (const fw of FRAMEWORKS) {
     );
 
     // One unit per contract block: the shared sheet(s) (judged once for all three
-    // frameworks), each per-framework override on its own, and the legacy
-    // per-framework sheets of a component that has not moved yet (pooled, as before).
+    // frameworks) and each override on its own.
     const units = [];
     const shared = sheets.filter((x) => x.shared);
-    const overrides = sheets.filter(
-      (x) => !x.shared && OVERRIDE_SHEET.test(x.abs),
-    );
-    const legacy = sheets.filter(
-      (x) => !x.shared && !OVERRIDE_SHEET.test(x.abs),
-    );
-    if (shared.length > 0)
-      units.push({ files: shared, classRooted: true, exclude: new Set() });
-    for (const o of overrides)
-      units.push({ files: [o], classRooted: true, exclude: sharedRoots });
-    if (legacy.length > 0)
-      units.push({ files: legacy, classRooted: false, exclude: new Set() });
+    const overrides = sheets.filter((x) => x.override);
+    if (shared.length > 0) units.push({ files: shared, exclude: new Set() });
+    for (const o of overrides) units.push({ files: [o], exclude: sharedRoots });
 
     for (const unit of units) {
       for (const f of unit.files) seenSheets.add(f.abs);
@@ -215,17 +200,14 @@ for (const fw of FRAMEWORKS) {
         continue;
       }
 
-      if ((fw !== 'angular' || unit.classRooted) && roots.length === 0) {
+      if (roots.length === 0) {
         problems.push(
           `[NO-ROOT] ${rel} declares no .atl-* root class, so the contract has nothing to attach to.`,
         );
         continue;
       }
 
-      const want = await formattedBlockFor(
-        selectorFor(fw, roots, unit.classRooted),
-        target,
-      );
+      const want = await formattedBlockFor(selectorFor(roots), target);
       const css = readFileSync(target, 'utf8');
       const has = css.startsWith(want);
 
@@ -238,7 +220,7 @@ for (const fw of FRAMEWORKS) {
         problems.push(
           css.includes(MARKER)
             ? `[STALE] ${rel} has a geometry-contract block that no longer matches its root classes ` +
-                `(${roots.join(', ') || ':host'}). Run: npm run gen:box-sizing`
+                `(${roots.join(', ')}). Run: npm run gen:box-sizing`
             : `[MISSING] ${rel} declares sizes but no geometry contract, so its boxes depend on the ` +
                 `consuming app's reset. Run: npm run gen:box-sizing`,
         );
