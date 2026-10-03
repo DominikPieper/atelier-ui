@@ -342,6 +342,18 @@ const FIGMA_CONFORMANCE_EXCEPTIONS = new Set([
   // Delete this entry the day that decision lands — [STALE-EXEMPTION] will flag it
   // unused the moment either happens.
   'AtlButton:root-paint:padding-off-scale',
+  // AtlDialog draws its header and footer rules as separate 1px divider frames
+  // (empty, filled with color/border) between the layers, where the CSS gives the
+  // header a border-bottom and the footer a border-top. The pixels agree; the structure
+  // does not, so [LAYER-PAINT] sees a header and footer with no stroke. They came into
+  // view when the layers were named (the dialog's header, content and footer were
+  // unnamed `Frame`s and never compared). The fix is a stroke on the layer, as
+  // AtlDrawer draws it, and deleting the dividers: a structural edit, listed in
+  // tasks/todo.md. Delete these entries then; [STALE-EXEMPTION] flags them.
+  'AtlDialog:layer:border:header',
+  'AtlDialog:layer:stroke:header',
+  'AtlDialog:layer:border:footer',
+  'AtlDialog:layer:stroke:footer',
   'AtlChat:token:radius:Rectangle',
   // The Chat drawer variant embeds a miniature APP MOCKUP (page header,
   // content blocks, dividers, message bubbles) as illustrative context.

@@ -2,9 +2,9 @@
   "meta": {
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "fileName": "Atelier UI",
-    "figmaLastModified": "2026-09-10T04:18:29Z",
-    "generatedAt": "2026-10-03T06:53:04.408Z",
-    "gitSha": "77c08b89",
+    "figmaLastModified": "2026-10-03T06:57:31Z",
+    "generatedAt": "2026-10-03T07:20:19.948Z",
+    "gitSha": "468c1450",
     "serverVersion": "0.1.0",
     "coverage": "All 43 masters. Token/auto-layout checks sample each master's default variant.",
     "note": "Facts captured from Figma via figma-console MCP read-tools. Rules live in check-figma.js."
@@ -5892,7 +5892,7 @@
         "size=md": {
           "layoutMode": "VERTICAL",
           "width": 576,
-          "height": 205,
+          "height": 223,
           "pad": [
             0,
             0,
@@ -5928,7 +5928,7 @@
         "size=sm": {
           "layoutMode": "VERTICAL",
           "width": 384,
-          "height": 205,
+          "height": 223,
           "pad": [
             0,
             0,
@@ -5964,7 +5964,7 @@
         "size=lg": {
           "layoutMode": "VERTICAL",
           "width": 768,
-          "height": 205,
+          "height": 223,
           "pad": [
             0,
             0,
@@ -6000,7 +6000,7 @@
         "size=xl": {
           "layoutMode": "VERTICAL",
           "width": 1024,
-          "height": 205,
+          "height": 223,
           "pad": [
             0,
             0,
@@ -6036,7 +6036,7 @@
         "size=full": {
           "layoutMode": "VERTICAL",
           "width": 1280,
-          "height": 205,
+          "height": 223,
           "pad": [
             0,
             0,
@@ -6071,14 +6071,450 @@
         }
       },
       "overlays": [],
-      "layers": [],
+      "layers": [
+        {
+          "variant": "size=md",
+          "count": 1,
+          "layer": "header",
+          "type": "FRAME",
+          "fill": null,
+          "stroke": null,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "effects": [],
+          "layoutMode": "HORIZONTAL",
+          "padding": [
+            20,
+            24,
+            20,
+            24
+          ],
+          "gap": 0,
+          "minHeight": null,
+          "height": 65,
+          "width": 576,
+          "fontSize": 20,
+          "lineHeight": 125
+        },
+        {
+          "variant": "size=md",
+          "count": 1,
+          "layer": "content",
+          "type": "FRAME",
+          "fill": null,
+          "stroke": null,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "effects": [],
+          "layoutMode": "VERTICAL",
+          "padding": [
+            24,
+            24,
+            24,
+            24
+          ],
+          "gap": 0,
+          "minHeight": null,
+          "height": 82,
+          "width": 576,
+          "fontSize": 14,
+          "lineHeight": null
+        },
+        {
+          "variant": "size=md",
+          "count": 1,
+          "layer": "footer",
+          "type": "FRAME",
+          "fill": null,
+          "stroke": null,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "effects": [],
+          "layoutMode": "HORIZONTAL",
+          "padding": [
+            20,
+            24,
+            20,
+            24
+          ],
+          "gap": 12,
+          "minHeight": null,
+          "height": 74,
+          "width": 576,
+          "fontSize": null,
+          "lineHeight": null
+        },
+        {
+          "variant": "size=sm",
+          "count": 1,
+          "layer": "header",
+          "type": "FRAME",
+          "fill": null,
+          "stroke": null,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "effects": [],
+          "layoutMode": "HORIZONTAL",
+          "padding": [
+            20,
+            24,
+            20,
+            24
+          ],
+          "gap": 0,
+          "minHeight": null,
+          "height": 65,
+          "width": 384,
+          "fontSize": 20,
+          "lineHeight": 125
+        },
+        {
+          "variant": "size=sm",
+          "count": 1,
+          "layer": "content",
+          "type": "FRAME",
+          "fill": null,
+          "stroke": null,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "effects": [],
+          "layoutMode": "VERTICAL",
+          "padding": [
+            24,
+            24,
+            24,
+            24
+          ],
+          "gap": 0,
+          "minHeight": null,
+          "height": 82,
+          "width": 384,
+          "fontSize": 14,
+          "lineHeight": null
+        },
+        {
+          "variant": "size=sm",
+          "count": 1,
+          "layer": "footer",
+          "type": "FRAME",
+          "fill": null,
+          "stroke": null,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "effects": [],
+          "layoutMode": "HORIZONTAL",
+          "padding": [
+            20,
+            24,
+            20,
+            24
+          ],
+          "gap": 12,
+          "minHeight": null,
+          "height": 74,
+          "width": 384,
+          "fontSize": null,
+          "lineHeight": null
+        },
+        {
+          "variant": "size=lg",
+          "count": 1,
+          "layer": "header",
+          "type": "FRAME",
+          "fill": null,
+          "stroke": null,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "effects": [],
+          "layoutMode": "HORIZONTAL",
+          "padding": [
+            20,
+            24,
+            20,
+            24
+          ],
+          "gap": 0,
+          "minHeight": null,
+          "height": 65,
+          "width": 768,
+          "fontSize": 20,
+          "lineHeight": 125
+        },
+        {
+          "variant": "size=lg",
+          "count": 1,
+          "layer": "content",
+          "type": "FRAME",
+          "fill": null,
+          "stroke": null,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "effects": [],
+          "layoutMode": "VERTICAL",
+          "padding": [
+            24,
+            24,
+            24,
+            24
+          ],
+          "gap": 0,
+          "minHeight": null,
+          "height": 82,
+          "width": 768,
+          "fontSize": 14,
+          "lineHeight": null
+        },
+        {
+          "variant": "size=lg",
+          "count": 1,
+          "layer": "footer",
+          "type": "FRAME",
+          "fill": null,
+          "stroke": null,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "effects": [],
+          "layoutMode": "HORIZONTAL",
+          "padding": [
+            20,
+            24,
+            20,
+            24
+          ],
+          "gap": 12,
+          "minHeight": null,
+          "height": 74,
+          "width": 768,
+          "fontSize": null,
+          "lineHeight": null
+        },
+        {
+          "variant": "size=xl",
+          "count": 1,
+          "layer": "header",
+          "type": "FRAME",
+          "fill": null,
+          "stroke": null,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "effects": [],
+          "layoutMode": "HORIZONTAL",
+          "padding": [
+            20,
+            24,
+            20,
+            24
+          ],
+          "gap": 0,
+          "minHeight": null,
+          "height": 65,
+          "width": 1024,
+          "fontSize": 20,
+          "lineHeight": 125
+        },
+        {
+          "variant": "size=xl",
+          "count": 1,
+          "layer": "content",
+          "type": "FRAME",
+          "fill": null,
+          "stroke": null,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "effects": [],
+          "layoutMode": "VERTICAL",
+          "padding": [
+            24,
+            24,
+            24,
+            24
+          ],
+          "gap": 0,
+          "minHeight": null,
+          "height": 82,
+          "width": 1024,
+          "fontSize": 14,
+          "lineHeight": null
+        },
+        {
+          "variant": "size=xl",
+          "count": 1,
+          "layer": "footer",
+          "type": "FRAME",
+          "fill": null,
+          "stroke": null,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "effects": [],
+          "layoutMode": "HORIZONTAL",
+          "padding": [
+            20,
+            24,
+            20,
+            24
+          ],
+          "gap": 12,
+          "minHeight": null,
+          "height": 74,
+          "width": 1024,
+          "fontSize": null,
+          "lineHeight": null
+        },
+        {
+          "variant": "size=full",
+          "count": 1,
+          "layer": "header",
+          "type": "FRAME",
+          "fill": null,
+          "stroke": null,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "effects": [],
+          "layoutMode": "HORIZONTAL",
+          "padding": [
+            20,
+            24,
+            20,
+            24
+          ],
+          "gap": 0,
+          "minHeight": null,
+          "height": 65,
+          "width": 1280,
+          "fontSize": 20,
+          "lineHeight": 125
+        },
+        {
+          "variant": "size=full",
+          "count": 1,
+          "layer": "content",
+          "type": "FRAME",
+          "fill": null,
+          "stroke": null,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "effects": [],
+          "layoutMode": "VERTICAL",
+          "padding": [
+            24,
+            24,
+            24,
+            24
+          ],
+          "gap": 0,
+          "minHeight": null,
+          "height": 82,
+          "width": 1280,
+          "fontSize": 14,
+          "lineHeight": null
+        },
+        {
+          "variant": "size=full",
+          "count": 1,
+          "layer": "footer",
+          "type": "FRAME",
+          "fill": null,
+          "stroke": null,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "effects": [],
+          "layoutMode": "HORIZONTAL",
+          "padding": [
+            20,
+            24,
+            20,
+            24
+          ],
+          "gap": 12,
+          "minHeight": null,
+          "height": 74,
+          "width": 1280,
+          "fontSize": null,
+          "lineHeight": null
+        }
+      ],
       "box": {
         "type": "COMPONENT_SET",
         "width": 4288,
-        "height": 205,
+        "height": 223,
         "childrenExtent": {
           "right": 4288,
-          "bottom": 205
+          "bottom": 223
         },
         "clipsContent": true
       },
@@ -6097,7 +6533,7 @@
           "nonSemanticTokens": []
         },
         {
-          "name": "Frame",
+          "name": "header",
           "type": "FRAME",
           "hasChildren": true,
           "hidden": false,
@@ -6119,7 +6555,7 @@
           "nonSemanticTokens": []
         },
         {
-          "name": "Frame",
+          "name": "content",
           "type": "FRAME",
           "hasChildren": true,
           "hidden": false,
@@ -6130,7 +6566,7 @@
           "nonSemanticTokens": []
         },
         {
-          "name": "Frame",
+          "name": "footer",
           "type": "FRAME",
           "hasChildren": true,
           "hidden": false,
