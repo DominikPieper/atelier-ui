@@ -1879,6 +1879,7 @@ describe('preset generator', () => {
       'no-undeclared-token.js',
       'no-primitive-token.js',
       'no-token-bypass.js',
+      'rooted-selector.js',
     ]) {
       expect(tree.exists(`tools/stylelint-rules/${file}`)).toBe(true);
     }
@@ -1900,6 +1901,9 @@ describe('preset generator', () => {
     // rule-key form (quoted, as it would appear if actually wired) rather
     // than banning the bare word.
     expect(config).not.toContain("'atelier/no-primitive-token'");
+    // Likewise shipped (index.js requires it) and never wired: the scaffold's own
+    // CSS has no `.atl-` root for it to demand.
+    expect(config).not.toContain("'atelier/rooted-selector'");
     expect(config).toContain(
       "import atelier from './tools/stylelint-rules/index.js';",
     );

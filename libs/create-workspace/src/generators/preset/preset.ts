@@ -228,12 +228,15 @@ function appendToFlatEslintConfig(
 // CLAUDE.md/README.md below are assembled from `framework`, not copied
 // verbatim.
 //
-// Only three of the four shipped rules are wired: `atelier/no-primitive-token`
+// Only three of the five shipped rules are wired. `atelier/rooted-selector` is not
+// either: it demands every selector start with a `.atl-*` class, which is true of
+// the library's component sheets and of nothing in an attendee's own CSS. It ships
+// for the same reason as the next one. `atelier/no-primitive-token`
 // polices reaching past the semantic token tier into a primitive ramp (e.g.
 // `--ui-color-teal-500`), which presupposes knowing that ramp exists — this
 // workspace's own tokens.css has no such tiering to police. The file still
 // ships (see the loop that writes tools/stylelint-rules/* below) because
-// index.js requires all four rule files unconditionally, and a
+// index.js requires every rule file unconditionally, and a
 // byte-identical index.js (kept in sync with the canonical copy by
 // sync-preflight.mjs) is worth more than a scaffold-specific fork that drops
 // one require().
@@ -262,13 +265,14 @@ function buildStylelintConfig(framework: Framework): string {
 // opt-in @stylistic plugin, which this workspace does not install), so there
 // is nothing here that could fight Prettier.
 //
-// Three of the four shipped rules are wired below. atelier/no-primitive-token
+// Three of the five shipped rules are wired below. atelier/no-primitive-token
 // is NOT — it polices reaching past the semantic token tier into a primitive
 // ramp, which presupposes knowing that ramp exists, and this workspace's own
-// tokens.css has no such tiering. The three below catch what an attendee does
-// by writing ordinary component CSS on day one: a raw color literal, a
-// typo'd or undeclared --ui-* token, and a literal that duplicates a token's
-// value instead of binding to it.
+// tokens.css has no such tiering — and neither is atelier/rooted-selector,
+// which demands every selector start with a library .atl-* class. The three
+// below catch what an attendee does by writing ordinary component CSS on day
+// one: a raw color literal, a typo'd or undeclared --ui-* token, and a literal
+// that duplicates a token's value instead of binding to it.
 //
 // tokens.css itself is EXCLUDED from the app's stylelint target (via
 // --ignore-pattern in the app's project.json, not an exemption here): it is
@@ -1393,7 +1397,7 @@ export async function presetGenerator(
 
   tree.write('stylelint.config.mjs', buildStylelintConfig(framework));
 
-  // Six files, byte-identical to the canonical copies in tools/stylelint-rules/
+  // Seven files, byte-identical to the canonical copies in tools/stylelint-rules/
   // (kept that way by this repo's own sync-preflight.mjs) — see
   // buildStylelintConfig's comment above for why no-primitive-token.js ships
   // even though it's never wired into the config just written.
@@ -1404,6 +1408,7 @@ export async function presetGenerator(
     'no-undeclared-token.js',
     'no-primitive-token.js',
     'no-token-bypass.js',
+    'rooted-selector.js',
   ]) {
     tree.write(
       `tools/stylelint-rules/${ruleFile}`,

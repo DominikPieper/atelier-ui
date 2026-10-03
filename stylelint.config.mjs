@@ -91,6 +91,7 @@ export default {
         files: [`${componentRoot}/**/*.css`],
         rules: {
           'atelier/no-raw-color-literal': true,
+          'atelier/rooted-selector': true,
           'atelier/no-undeclared-token': [true, { tokenFiles: [TOKENS_CSS] }],
           // `sharedRoot`: a component that moved into `libs/styles` leaves no
           // literal here, but its exemptions are still in use there, so the
@@ -124,6 +125,7 @@ export default {
       files: ['libs/styles/src/**/*.css'],
       rules: {
         'atelier/no-raw-color-literal': true,
+        'atelier/rooted-selector': true,
         'atelier/no-undeclared-token': [true, { tokenFiles: [TOKENS_CSS] }],
         'atelier/no-primitive-token': [true, { allowlistsFile: ALLOWLISTS }],
         'atelier/no-token-bypass': [

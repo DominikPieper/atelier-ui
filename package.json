@@ -20,7 +20,7 @@
     "check:behavior": "node tools/parity/behavior-coverage.mjs tools/parity/behavior.config.mjs",
     "check:variants": "node tools/scripts/check-variants.js",
     "check:dead-selectors": "node tools/scripts/check-dead-selectors.js",
-    "check:stylelint": "nx run-many -t stylelint",
+    "check:stylelint": "nx run-many -t stylelint && node --test tools/stylelint-rules/*.test.js",
     "check:figma-token-names": "node tools/scripts/check-figma-token-names.js",
     "check:token-annotations": "node tools/scripts/check-token-annotations.js",
     "check:exports": "node tools/scripts/check-exports.js",

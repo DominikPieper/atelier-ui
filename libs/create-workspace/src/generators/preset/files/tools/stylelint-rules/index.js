@@ -18,4 +18,5 @@ module.exports = [
   require('./no-undeclared-token'),
   require('./no-primitive-token'),
   require('./no-token-bypass'),
+  require('./rooted-selector'),
 ];

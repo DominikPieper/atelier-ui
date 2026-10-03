@@ -130,6 +130,13 @@ const FILES = [
     source: 'tools/stylelint-rules/no-token-bypass.js',
     target: `${PRESET_FILES_DIR}/tools/stylelint-rules/no-token-bypass.js`,
   },
+  // Ships for the same reason no-primitive-token.js does: index.js requires every rule
+  // file, and index.js stays byte-identical. The scaffold's config does not wire it;
+  // its own CSS has no `.atl-` root. Its test file stays in this repo.
+  {
+    source: 'tools/stylelint-rules/rooted-selector.js',
+    target: `${PRESET_FILES_DIR}/tools/stylelint-rules/rooted-selector.js`,
+  },
 ];
 
 const mode = process.argv[2];
