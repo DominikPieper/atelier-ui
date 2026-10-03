@@ -3,9 +3,9 @@
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "fileName": "Atelier UI",
     "figmaLastModified": "2026-09-10T04:18:29Z",
-    "generatedAt": "2026-09-10T04:22:44.802Z",
-    "gitSha": "4b0fcff",
-    "serverVersion": null,
+    "generatedAt": "2026-10-03T06:53:04.408Z",
+    "gitSha": "77c08b89",
+    "serverVersion": "0.1.0",
     "coverage": "All 43 masters. Token/auto-layout checks sample each master's default variant.",
     "note": "Facts captured from Figma via figma-console MCP read-tools. Rules live in check-figma.js."
   },
@@ -13917,16 +13917,16 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            16,
             20,
-            16,
-            20
+            24,
+            20,
+            24
           ],
           "gap": 12,
           "minHeight": null,
           "height": 52,
           "width": 448,
-          "fontSize": 16,
+          "fontSize": 20,
           "lineHeight": null
         },
         {
@@ -13975,10 +13975,10 @@
           "effects": [],
           "layoutMode": "VERTICAL",
           "padding": [
-            20,
-            20,
-            20,
-            20
+            24,
+            24,
+            24,
+            24
           ],
           "gap": 8,
           "minHeight": null,
@@ -14004,12 +14004,12 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            16,
             20,
-            16,
-            20
+            24,
+            20,
+            24
           ],
-          "gap": 8,
+          "gap": 12,
           "minHeight": null,
           "height": 64,
           "width": 448,
@@ -14088,16 +14088,16 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            16,
             20,
-            16,
-            20
+            24,
+            20,
+            24
           ],
           "gap": 12,
           "minHeight": null,
           "height": 52,
           "width": 448,
-          "fontSize": 16,
+          "fontSize": 20,
           "lineHeight": null
         },
         {
@@ -14146,10 +14146,10 @@
           "effects": [],
           "layoutMode": "VERTICAL",
           "padding": [
-            20,
-            20,
-            20,
-            20
+            24,
+            24,
+            24,
+            24
           ],
           "gap": 8,
           "minHeight": null,
@@ -14175,12 +14175,12 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            16,
             20,
-            16,
-            20
+            24,
+            20,
+            24
           ],
-          "gap": 8,
+          "gap": 12,
           "minHeight": null,
           "height": 64,
           "width": 448,
@@ -14259,16 +14259,16 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            16,
             20,
-            16,
-            20
+            24,
+            20,
+            24
           ],
           "gap": 12,
           "minHeight": null,
           "height": 52,
           "width": 720,
-          "fontSize": 16,
+          "fontSize": 20,
           "lineHeight": null
         },
         {
@@ -14317,10 +14317,10 @@
           "effects": [],
           "layoutMode": "VERTICAL",
           "padding": [
-            20,
-            20,
-            20,
-            20
+            24,
+            24,
+            24,
+            24
           ],
           "gap": 8,
           "minHeight": null,
@@ -14346,12 +14346,12 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            16,
             20,
-            16,
-            20
+            24,
+            20,
+            24
           ],
-          "gap": 8,
+          "gap": 12,
           "minHeight": null,
           "height": 64,
           "width": 720,
@@ -14430,16 +14430,16 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            16,
             20,
-            16,
-            20
+            24,
+            20,
+            24
           ],
           "gap": 12,
           "minHeight": null,
           "height": 52,
           "width": 720,
-          "fontSize": 16,
+          "fontSize": 20,
           "lineHeight": null
         },
         {
@@ -14488,10 +14488,10 @@
           "effects": [],
           "layoutMode": "VERTICAL",
           "padding": [
-            20,
-            20,
-            20,
-            20
+            24,
+            24,
+            24,
+            24
           ],
           "gap": 8,
           "minHeight": null,
@@ -14517,12 +14517,12 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            16,
             20,
-            16,
-            20
+            24,
+            20,
+            24
           ],
-          "gap": 8,
+          "gap": 12,
           "minHeight": null,
           "height": 64,
           "width": 720,
@@ -14601,16 +14601,16 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            16,
             20,
-            16,
-            20
+            24,
+            20,
+            24
           ],
           "gap": 12,
           "minHeight": null,
           "height": 52,
           "width": 320,
-          "fontSize": 16,
+          "fontSize": 20,
           "lineHeight": null
         },
         {
@@ -14659,10 +14659,10 @@
           "effects": [],
           "layoutMode": "VERTICAL",
           "padding": [
-            20,
-            20,
-            20,
-            20
+            24,
+            24,
+            24,
+            24
           ],
           "gap": 8,
           "minHeight": null,
@@ -14688,12 +14688,12 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            16,
             20,
-            16,
-            20
+            24,
+            20,
+            24
           ],
-          "gap": 8,
+          "gap": 12,
           "minHeight": null,
           "height": 64,
           "width": 320,
@@ -14772,16 +14772,16 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            16,
             20,
-            16,
-            20
+            24,
+            20,
+            24
           ],
           "gap": 12,
           "minHeight": null,
           "height": 52,
           "width": 640,
-          "fontSize": 16,
+          "fontSize": 20,
           "lineHeight": null
         },
         {
@@ -14830,10 +14830,10 @@
           "effects": [],
           "layoutMode": "VERTICAL",
           "padding": [
-            20,
-            20,
-            20,
-            20
+            24,
+            24,
+            24,
+            24
           ],
           "gap": 8,
           "minHeight": null,
@@ -14859,12 +14859,12 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            16,
             20,
-            16,
-            20
+            24,
+            20,
+            24
           ],
-          "gap": 8,
+          "gap": 12,
           "minHeight": null,
           "height": 64,
           "width": 640,
@@ -14943,16 +14943,16 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            16,
             20,
-            16,
-            20
+            24,
+            20,
+            24
           ],
           "gap": 12,
           "minHeight": null,
           "height": 52,
           "width": 720,
-          "fontSize": 16,
+          "fontSize": 20,
           "lineHeight": null
         },
         {
@@ -15001,10 +15001,10 @@
           "effects": [],
           "layoutMode": "VERTICAL",
           "padding": [
-            20,
-            20,
-            20,
-            20
+            24,
+            24,
+            24,
+            24
           ],
           "gap": 8,
           "minHeight": null,
@@ -15030,12 +15030,12 @@
           "effects": [],
           "layoutMode": "HORIZONTAL",
           "padding": [
-            16,
             20,
-            16,
-            20
+            24,
+            20,
+            24
           ],
-          "gap": 8,
+          "gap": 12,
           "minHeight": null,
           "height": 64,
           "width": 720,
