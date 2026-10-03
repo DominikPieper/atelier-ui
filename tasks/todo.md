@@ -263,6 +263,11 @@ Ranked; each carries why it's worth doing next rather than later.
           of 87 stylesheets and `check:dead-selectors` 80 of 89 before the path fix. Make
           each fail when it finds fewer stylesheets than component directories (ADR-0080).
           This is independent of the migration.
+    - [ ] **Follow-ups from ADR-0149 (2026-10-03).** Split the 80 `LAYER-UNRESOLVED`
+          entries in `tools/figma/type-baseline.json` into `design` (true wrappers,
+          auto-layout frames) and `gap` (parts whose layer name does not spell their
+          class); today all are `design`. Remove the dead `:host` handling in
+          `check-typeface` and `check-geometry`.
     - [ ] **Before merging to main:** `check:release-drift` will report
           `@atelier-ui/styles` as unpublished and exit 1 until the first release; the
           main-only CI job goes red. Check whether the npm token may create a new package
