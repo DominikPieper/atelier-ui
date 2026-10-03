@@ -79,6 +79,15 @@ describe('AtlBreadcrumbs', () => {
     );
     const currentSpan = screen.getByText('Current Page');
     expect(currentSpan).toHaveAttribute('aria-current', 'page');
+    expect(currentSpan).toHaveClass('breadcrumb-current');
+  });
+
+  it('renders a non-current item without href as plain text', () => {
+    render(<AtlBreadcrumbItem>Plain</AtlBreadcrumbItem>);
+    const span = screen.getByText('Plain');
+    expect(span).toHaveClass('breadcrumb-text');
+    expect(span).not.toHaveClass('breadcrumb-current');
+    expect(span).not.toHaveAttribute('aria-current');
   });
 });
 

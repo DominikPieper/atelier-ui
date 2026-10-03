@@ -73,6 +73,7 @@ describe('AtlBreadcrumbs', () => {
       const text = lastItem.querySelector('span');
       expect(text).toHaveTextContent('Current');
       expect(text).toHaveAttribute('aria-current', 'page');
+      expect(text).toHaveClass('breadcrumb-current');
     });
 
     it('renders a non-current item without an href as plain text, without aria-current', async () => {
@@ -86,6 +87,8 @@ describe('AtlBreadcrumbs', () => {
       const first = container.querySelector('atl-breadcrumb-item') as Element;
       expect(first.querySelector('a')).not.toBeInTheDocument();
       expect(first.querySelector('span')).toHaveTextContent('Middle');
+      expect(first.querySelector('span')).toHaveClass('breadcrumb-text');
+      expect(first.querySelector('span')).not.toHaveClass('breadcrumb-current');
       expect(first.querySelector('[aria-current]')).not.toBeInTheDocument();
     });
 

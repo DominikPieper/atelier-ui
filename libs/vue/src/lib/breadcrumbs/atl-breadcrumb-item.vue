@@ -23,11 +23,10 @@ const classes = computed(() =>
     <a v-if="href && !current" :href="href" class="breadcrumb-link">
       <slot />
     </a>
-    <span
-      v-else
-      class="breadcrumb-current"
-      :aria-current="current ? 'page' : undefined"
-    >
+    <span v-else-if="current" class="breadcrumb-current" aria-current="page">
+      <slot />
+    </span>
+    <span v-else class="breadcrumb-text">
       <slot />
     </span>
   </li>

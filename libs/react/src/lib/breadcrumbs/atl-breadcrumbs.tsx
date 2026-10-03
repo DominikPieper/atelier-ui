@@ -100,13 +100,12 @@ export function AtlBreadcrumbItem({
         <a href={href} className="breadcrumb-link" {...rest}>
           {children}
         </a>
-      ) : (
-        <span
-          className="breadcrumb-current"
-          aria-current={current ? 'page' : undefined}
-        >
+      ) : current ? (
+        <span className="breadcrumb-current" aria-current="page">
           {children}
         </span>
+      ) : (
+        <span className="breadcrumb-text">{children}</span>
       )}
     </li>
   );

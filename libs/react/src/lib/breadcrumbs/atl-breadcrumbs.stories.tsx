@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect } from 'storybook/test';
 import { AtlBreadcrumbs, AtlBreadcrumbItem } from './atl-breadcrumbs';
 
 import { metadata } from '@atelier-ui/spec/metadata/breadcrumbs.metadata';
@@ -73,4 +74,16 @@ export const NoLinks: Story = {
       <AtlBreadcrumbItem>Profile</AtlBreadcrumbItem>
     </AtlBreadcrumbs>
   ),
+  play: async ({ canvas }) => {
+    // Only the current page is semibold + aria-current; a crumb without a link
+    // that is not the current page is plain text (regular weight, no aria-current).
+    for (const name of ['Home', 'Settings']) {
+      const el = canvas.getByText(name);
+      await expect(el).not.toHaveAttribute('aria-current');
+      await expect(getComputedStyle(el).fontWeight).toBe('400');
+    }
+    const current = canvas.getByText('Profile');
+    await expect(current).toHaveAttribute('aria-current', 'page');
+    await expect(getComputedStyle(current).fontWeight).toBe('600');
+  },
 };

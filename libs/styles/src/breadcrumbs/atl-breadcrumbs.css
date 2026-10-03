@@ -87,6 +87,13 @@
   box-shadow: var(--ui-focus-ring);
 }
 
+/* A crumb without a link that is not the current page: plain text, in the colour
+   a link has at rest, regular weight, not interactive. Not `.breadcrumb-current`,
+   which would make it look like the current page without being it. */
+.atl-breadcrumb-item > .breadcrumb-text {
+  color: var(--ui-color-text-muted);
+}
+
 /* Current item (plain text). Deliberately no padding: `.breadcrumb-link`'s
    padding is exactly cancelled by its own negative margin (a hit/hover-area
    enlargement, invisible in the flow), so its text occupies exactly the same

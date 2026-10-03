@@ -105,11 +105,12 @@ export class AtlBreadcrumbs {
       <a class="breadcrumb-link" [attr.href]="href()">
         <ng-container *ngTemplateOutlet="label" />
       </a>
+    } @else if (isCurrent()) {
+      <span class="breadcrumb-current" aria-current="page">
+        <ng-container *ngTemplateOutlet="label" />
+      </span>
     } @else {
-      <span
-        class="breadcrumb-current"
-        [attr.aria-current]="isCurrent() ? 'page' : null"
-      >
+      <span class="breadcrumb-text">
         <ng-container *ngTemplateOutlet="label" />
       </span>
     }

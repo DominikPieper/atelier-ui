@@ -44,6 +44,7 @@ describe('AtlBreadcrumbItem', () => {
     const span = screen.getByText('Current');
     expect(span.tagName).toBe('SPAN');
     expect(span).toHaveAttribute('aria-current', 'page');
+    expect(span).toHaveClass('breadcrumb-current');
   });
 
   it('renders a span without aria-current when no href and not current', () => {
@@ -51,6 +52,8 @@ describe('AtlBreadcrumbItem', () => {
     const span = screen.getByText('Item');
     expect(span.tagName).toBe('SPAN');
     expect(span).not.toHaveAttribute('aria-current');
+    expect(span).toHaveClass('breadcrumb-text');
+    expect(span).not.toHaveClass('breadcrumb-current');
   });
 
   covers('breadcrumbs', 'current-class')(
