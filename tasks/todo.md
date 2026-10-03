@@ -64,7 +64,7 @@ Ranked; each carries why it's worth doing next rather than later.
 > now regardless; **B** one authored contract record with everything else projected as
 > the direction, its own ADR naming ADR-0006/0010/0096 as revised.
 
-- [ ] **0.3.5 on npm is not this repo's 0.3.5 (found 2026-10-03).** Guards done 2026-10-03
+- [x] **0.3.5 on npm is not this repo's 0.3.5 (found 2026-10-03; resolved by 0.3.6 the same day, `12840b2e`: all six packages published from that commit, react depends on styles 0.3.6, a fresh npm consumer bundle carries the shared and native CSS, `check:release-drift` exits 0).** Guards done 2026-10-03
       (ADR-0150: `--pre-publish` task, `[CONTENT-DRIFT]` via `gitHead`); still open is (1), the
       0.3.6 release itself — pushing the guard commit triggers it. A release run on
       2026-10-01 (`9a14c13c`, run 36884693651) published react, angular, vue, create-workspace and
