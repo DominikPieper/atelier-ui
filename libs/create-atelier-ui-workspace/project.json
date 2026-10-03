@@ -23,6 +23,10 @@
       }
     },
     "nx-release-publish": {
+      "dependsOn": [
+        "build",
+        { "projects": ["styles"], "target": "assert-unpublished" }
+      ],
       "options": {
         "packageRoot": "dist/{projectRoot}"
       }

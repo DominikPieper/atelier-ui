@@ -42,10 +42,35 @@
  * plus a verification step in `.github/workflows/publish.yml` right after the
  * release/publish step it is meant to catch.
  *
+ * A THIRD failure mode, added 2026-10-03 after the 0.3.5 incident: the version
+ * number matches but the CONTENT does not. A release run published five packages
+ * at 0.3.5 and then failed before its commit and tag, so git stayed at v0.3.4;
+ * the next run re-used 0.3.5, and Nx's `nx-release-publish` executor SKIPPED the
+ * five existing versions with exit 0 ("Skipped package ... because v0.3.5 already
+ * exists ... with tag \"latest\""). Version numbers agreed, the registry held
+ * pre-migration code, and nothing noticed. npm records `gitHead` (the commit the
+ * publisher's checkout was on) in the packument of every version published from
+ * a git checkout, so when the versions match this gate also compares the
+ * published `gitHead` with the commit the local `v<version>` tag points to and
+ * reports [CONTENT-DRIFT] if they differ. A version without a recorded gitHead,
+ * or a missing local tag, is reported as unverifiable, never as in sync.
+ *
+ * `--pre-publish` is the guard that stops that from happening again. Nx's
+ * executor has no option to fail on an existing version, so this mode runs as an
+ * Nx task the publish targets depend on (`assert-unpublished` on the `styles`
+ * project, a dependency of every library's `nx-release-publish`): after
+ * `nx release` has versioned and committed, before anything is uploaded, it
+ * asks npm about every `<package>@<local version>` of the whole group and fails
+ * if one is already there, unless that version was published from this exact
+ * HEAD (a genuine `publish-only` resume of a half-finished publish of the same
+ * commit). It also fails closed if the registry cannot be reached.
+ *
  * Run via:
  *   node tools/scripts/check-release-drift.mjs             check every publishable package
  *   node tools/scripts/check-release-drift.mjs <project>   check one project only (matches
  *                                                           the name in nx.json's release group)
+ *   node tools/scripts/check-release-drift.mjs --pre-publish   fail if any about-to-be-published
+ *                                                           version already exists on npm
  * (or  npm run check:release-drift)
  */
 import { readFileSync, readdirSync, existsSync } from 'node:fs';
@@ -57,7 +82,9 @@ const ROOT = join(dirname(fileURLToPath(import.meta.url)), '../..');
 const LIBS_DIR = join(ROOT, 'libs');
 const NPM_VIEW_TIMEOUT_MS = 10_000;
 
-const only = process.argv[2];
+const cliArgs = process.argv.slice(2);
+const prePublish = cliArgs.includes('--pre-publish');
+const only = cliArgs.find((a) => !a.startsWith('--'));
 
 /** `release.groups.libraries.projects` from nx.json — the roster, not hardcoded. */
 function readLibraryProjectNames() {
@@ -189,6 +216,74 @@ function queryPublishedVersion(pkgName) {
   }
 }
 
+/**
+ * Look up one exact `<pkg>@<version>`: does the registry have it, and which
+ * commit does it say it was published from? Same bounded-npm discipline as
+ * queryPublishedVersion. Returns
+ *   { unreachable: true,  detail }
+ *   { unreachable: false, exists: false }
+ *   { unreachable: false, exists: true, gitHead }   gitHead is undefined when not recorded
+ */
+function queryExactVersion(pkgName, version) {
+  const result = spawnSync(
+    'npm',
+    [
+      'view',
+      `${pkgName}@${version}`,
+      'version',
+      'gitHead',
+      '--json',
+      '--fetch-timeout=8000',
+      '--fetch-retries=0',
+    ],
+    { encoding: 'utf8', timeout: NPM_VIEW_TIMEOUT_MS },
+  );
+  if (result.error || result.signal) {
+    return {
+      unreachable: true,
+      detail: result.error
+        ? result.error.message
+        : `npm view killed (${result.signal})`,
+    };
+  }
+  const stderr = (result.stderr || '').trim();
+  if (result.status !== 0) {
+    if (/\bE404\b/.test(stderr)) return { unreachable: false, exists: false };
+    return {
+      unreachable: true,
+      detail: summarizeStderr(stderr) || `npm view exited ${result.status}`,
+    };
+  }
+  try {
+    const parsed = JSON.parse(result.stdout);
+    const entry = Array.isArray(parsed) ? parsed[parsed.length - 1] : parsed;
+    // npm prints `""` (or nothing) for a version that does not exist but whose
+    // package does; an object with `version` means it is really there.
+    if (!entry || typeof entry !== 'object' || entry.version !== version) {
+      return { unreachable: false, exists: false };
+    }
+    return { unreachable: false, exists: true, gitHead: entry.gitHead };
+  } catch (err) {
+    return {
+      unreachable: true,
+      detail: `unparsable npm view output: ${err.message}`,
+    };
+  }
+}
+
+/** The commit a local ref points to, or undefined (no such tag, shallow clone, no git). */
+function gitCommit(ref) {
+  const r = spawnSync(
+    'git',
+    ['rev-parse', '--verify', '--quiet', `${ref}^{commit}`],
+    {
+      cwd: ROOT,
+      encoding: 'utf8',
+    },
+  );
+  return r.status === 0 ? r.stdout.trim() : undefined;
+}
+
 const projectNames = readLibraryProjectNames();
 
 if (only && !projectNames.includes(only)) {
@@ -260,7 +355,60 @@ if (resolved.length === 0) {
 // registry is unreliable right now, so the honest response is "couldn't ask",
 // not a partial report dressed up as a full one.
 // ---------------------------------------------------------------------------
+if (prePublish) {
+  const head = gitCommit('HEAD');
+  const clashes = [];
+  const fresh = [];
+  const resumed = [];
+  for (const pkg of resolved) {
+    const r = queryExactVersion(pkg.pkgName, pkg.localVersion);
+    if (r.unreachable) {
+      console.error(
+        `✗ [PRE-PUBLISH] npm registry unreachable while checking '${pkg.pkgName}@${pkg.localVersion}' (${r.detail}). ` +
+          `A publish is about to run, so an unanswered question is a failure here, not a skip.`,
+      );
+      process.exit(1);
+    }
+    if (!r.exists) {
+      fresh.push(pkg.pkgName);
+    } else if (r.gitHead && head && r.gitHead === head) {
+      resumed.push(pkg.pkgName);
+    } else {
+      clashes.push(
+        `[ALREADY-PUBLISHED] ${pkg.pkgName}@${pkg.localVersion} is already on npm` +
+          (r.gitHead
+            ? `, published from ${r.gitHead.slice(0, 8)} (this checkout is ${(head || 'unknown').slice(0, 8)})`
+            : ', with no gitHead recorded, so its content cannot be tied to this checkout') +
+          `.`,
+      );
+    }
+  }
+  for (const w of warnings) console.warn(`⚠ [WARNING] ${w}`);
+  if (clashes.length === 0) {
+    console.log(
+      `✓ pre-publish: ${fresh.length} package(s) new to npm` +
+        (resumed.length
+          ? `, ${resumed.length} already published from this exact commit (publish-only resume: ${resumed.join(', ')})`
+          : '') +
+        '.',
+    );
+    process.exit(0);
+  }
+  for (const c of clashes) console.error(`✗ ${c}`);
+  console.error(
+    `\n${clashes.length} of ${resolved.length} package(s) already exist on npm at the version about to be published` +
+      (fresh.length
+        ? `, ${fresh.length} do not (${fresh.join(', ')}) — publishing would release only part of the group`
+        : '') +
+      `. Nx's nx-release-publish executor would SKIP these with exit 0 and leave npm holding different content ` +
+      `under the same version (the 0.3.5 incident, tasks/todo.md). Nothing was published. ` +
+      `Cut a new version instead: see the 'workflow_dispatch' inputs in .github/workflows/publish.yml.`,
+  );
+  process.exit(1);
+}
+
 const drifted = [];
+const unverified = [];
 let inSync = 0;
 
 for (const pkg of resolved) {
@@ -281,11 +429,35 @@ for (const pkg of resolved) {
       `[DRIFT] ${pkg.pkgName}: local ${pkg.localVersion} vs published ${published}`,
     );
   } else {
-    inSync++;
+    // Same version number. That is not yet the same content: compare the commit
+    // npm says this version was published from with the commit its tag marks.
+    const exact = queryExactVersion(pkg.pkgName, pkg.localVersion);
+    const tagCommit = gitCommit(`v${pkg.localVersion}`);
+    if (exact.unreachable || !exact.exists) {
+      inSync++; // the version compare above already answered; no extra evidence to add
+    } else if (!exact.gitHead) {
+      unverified.push(
+        `[NO-GITHEAD] ${pkg.pkgName}@${pkg.localVersion}: npm records no gitHead, content not verifiable against v${pkg.localVersion}`,
+      );
+      inSync++;
+    } else if (!tagCommit) {
+      unverified.push(
+        `[NO-TAG] ${pkg.pkgName}@${pkg.localVersion}: no local tag v${pkg.localVersion} (fetch tags), content not verifiable`,
+      );
+      inSync++;
+    } else if (exact.gitHead !== tagCommit) {
+      drifted.push(
+        `[CONTENT-DRIFT] ${pkg.pkgName}@${pkg.localVersion}: npm was published from ${exact.gitHead.slice(0, 8)}, ` +
+          `tag v${pkg.localVersion} points at ${tagCommit.slice(0, 8)} — same version, different content`,
+      );
+    } else {
+      inSync++;
+    }
   }
 }
 
 for (const w of warnings) console.warn(`⚠ [WARNING] ${w}`);
+for (const u of unverified) console.warn(`⚠ ${u}`);
 
 const total =
   `${inSync} of ${resolved.length} publishable package(s) in sync with npm` +
@@ -300,8 +472,10 @@ if (drifted.length === 0) {
 for (const d of drifted) console.error(`✗ ${d}`);
 console.error(
   `\n${drifted.length} release-drift issue(s). ${total}. ` +
-    `A publish did not reach the registry — check the token/scope used by ` +
+    `[DRIFT]: a publish did not reach the registry — check the token/scope used by ` +
     `.github/workflows/publish.yml (secrets.NPM_TOKEN) and republish with ` +
-    `'workflow_dispatch: publish-only' once fixed.`,
+    `'workflow_dispatch: publish-only' once fixed. ` +
+    `[CONTENT-DRIFT]: the version exists but was published from another commit than its tag — ` +
+    `it cannot be republished (npm versions are immutable); release a new version.`,
 );
 process.exit(1);

@@ -21,6 +21,14 @@
       },
       "inputs": ["default", "^default"]
     },
+    "assert-unpublished": {
+      "executor": "nx:run-commands",
+      "cache": false,
+      "options": {
+        "command": "node tools/scripts/check-release-drift.mjs --pre-publish",
+        "cwd": "{workspaceRoot}"
+      }
+    },
     "stylelint": {
       "executor": "nx:run-commands",
       "options": {
@@ -28,6 +36,10 @@
       }
     },
     "nx-release-publish": {
+      "dependsOn": [
+        "build",
+        { "projects": ["styles"], "target": "assert-unpublished" }
+      ],
       "options": {
         "packageRoot": "dist/{projectRoot}"
       }
