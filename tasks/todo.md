@@ -233,7 +233,10 @@ Ranked; each carries why it's worth doing next rather than later.
           drawer's `check:paint` NO-PROBE is resolved.
           Checked by me: 38 shared and override files, 615 selectors, 0 unrooted, no
           `:host`, every `@keyframes` prefixed.
-    - [ ] **Owner decisions from batch 3.**
+    - [ ] **Owner decisions from batch 3.** (2) and (4) were settled on 2026-10-03: the
+          React/Vue override is now `libs/styles/src/<dir>/atl-<name>.native.css`
+          (ADR-0148 Decision 4, "Corrected 2026-10-03"), and `check:paint` fails with
+          `[STALE]` when its Storybook build is older than the source. (1) and (3) stay open.
           (1) **Drawer padding:** the Figma master draws 16/20px, the CSS states 20/24px.
           14 `allowlists.js` exemptions hold this until you decide which side is right.
           (2) **React and Vue override files are byte-identical** (menu, tooltip, select).
@@ -245,13 +248,18 @@ Ranked; each carries why it's worth doing next rather than later.
           (4) **`check:paint` reads the built `dist/storybook`**, not the source. It
           checks nothing until `check:storybook-manifests` has rebuilt; decide whether to
           make that dependency explicit.
-    - [ ] **P1.4 Retire what the migration makes redundant.** Remove the per-framework
+    - [x] **P1.4 Retire what the migration makes redundant (2026-10-03).** Remove the per-framework
           fallback in `componentCssFiles()` once no per-framework stylesheet is left. Then
           re-evaluate `check:variants`, `check:dead-selectors` and `check:box-sizing`: do
           they need to run three times over one file? Add a lint rule, "every selector
           rooted in `.atl-*`", out of the spike's leak script; per ADR-0126 it is
           single-file, so it is a stylelint rule, not a gate.
-    - [ ] **Two gates passed vacuously** (found by P1.1b): `check:box-sizing` covered 78
+          Done: the fallback is gone from `componentCssFiles()`, `gen-box-sizing` and
+          `check-figma`; `atelier/rooted-selector` is wired for `libs/styles` and the
+          framework overrides, with 31 `node:test` cases run by `check:stylelint`. The
+          three gates stay: variants and dead-selectors judge each framework's own
+          templates and overrides, and box-sizing already judges a shared sheet once.
+    - [x] **Two gates passed vacuously (fixed 2026-10-03: `[PARTIAL-COVERAGE]`; `check:figma` ratchets its 80 unresolved layers)** (found by P1.1b): `check:box-sizing` covered 78
           of 87 stylesheets and `check:dead-selectors` 80 of 89 before the path fix. Make
           each fail when it finds fewer stylesheets than component directories (ADR-0080).
           This is independent of the migration.
