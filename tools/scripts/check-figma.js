@@ -1119,6 +1119,10 @@ const RATCHET_SEED = {
     kind: 'design',
     why: 'Named Figma layers that resolve to no CSS rule (wrappers, auto-layout frames, or a part whose class the layer name does not spell), so [LAYER-PAINT] never compares their fill, radius or stroke. Recorded so that a layer that stops resolving, because a selector was renamed or moved, fails the gate instead of silently narrowing it (ADR-0080). A layer that starts resolving also fails until the baseline is re-recorded, which is how the coverage ratchets up.',
   },
+  'LAYER-UNNAMED': {
+    kind: 'design',
+    why: 'Auto-layout frames inside a master still named `Frame` (or `Frame 12`), so no CSS rule can be resolved from the layer name and [LAYER-PAINT] / [LAYER-SIZE] never compare their padding, gap, fill or stroke. LAYER-UNRESOLVED counts named layers that resolve to nothing; this counts the ones with no name to resolve, which is how AtlDialog sat outside the gate with `layers: []` and looked clean (ADR-0149, one level up). Naming a frame fails until re-recorded, which is how the coverage ratchets up; a new unnamed frame fails outright.',
+  },
   'ROOT-TYPE': {
     kind: 'gap',
     why: 'Six masters draw their root text at a size or leading the CSS does not state — AtlInput and AtlSelect at 14px against a 16px CSS, four more on AUTO leading against 125%. Correcting the Figma side means retyping nodes whose sizes bind to the docs-site collection, which is the FIGMA-VARIABLE-COLLECTION debt below; doing it first would only move the problem. Promote to a plain blocker once that entry is gone.',
@@ -1226,6 +1230,7 @@ checkLayerSize();
 checkTextNodes();
 checkOverlays();
 checkLayerPaint();
+checkUnnamedFrames();
 checkPageGlyphs();
 checkSetClips();
 checkStaleExemptions();
@@ -2935,6 +2940,32 @@ function checkLayerPaint() {
         never.map((n) => `${selector}/${n}`),
       );
     }
+  }
+}
+function checkUnnamedFrames() {
+  // The coverage of the layer checks has a second hole besides LAYER-UNRESOLVED: a
+  // frame with no resolvable name is not a layer at all, so a master drawn from
+  // anonymous `Frame`s has `layers: []` and nothing to resolve or fail. Counted per
+  // master, as LAYER-UNRESOLVED is, and held to the recorded set.
+  for (const comp of snapshot.components) {
+    if (!Array.isArray(comp.unnamedFrames)) {
+      // Not "none": the snapshot was written before this field existed, or the probe did
+      // not read the master. Treating that as zero would call an unread master clean.
+      blocker(
+        'LAYER-UNNAMED',
+        `${comp.selector}: snapshot.json carries no unnamedFrames for this master, so its anonymous frames were not counted. Re-run npm run figma:snapshot.`,
+      );
+      continue;
+    }
+    const total = comp.unnamedFrames.reduce((n, f) => n + f.count, 0);
+    ratchet(
+      'LAYER-UNNAMED',
+      comp.selector,
+      total,
+      comp.unnamedFrames.map(
+        (f) => `${f.path} (${f.layoutMode})${f.count > 1 ? ` \u00d7${f.count}` : ''}`,
+      ),
+    );
   }
 }
 function checkLayerPaintCore(unresolved, resolved, mark) {

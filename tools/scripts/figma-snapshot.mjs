@@ -505,6 +505,36 @@ async function main() {
           }
         }
         for (const L of layers) delete L.key;
+        // Auto-layout frames no rule can address: still named Frame (or Frame 12), so
+        // the layer walk above skips them and nothing about them is ever compared. The
+        // layers list says what WAS compared; this one says what was not (ADR-0149, one
+        // level up). A master whose layers are all unnamed has an empty layers list and would
+        // otherwise look clean. Recorded as a path from the variant root, collapsed
+        // across identical siblings and variants with a count.
+        const unnamedFrames = [];
+        const unnamedIdx = {};
+        for (const v of kids) {
+          for (const n of v.findAll((x) => x.type === 'FRAME' && x.layoutMode && x.layoutMode !== 'NONE')) {
+            const nm = String(n.name);
+            if (nm.charAt(0) === '_') continue;
+            if (GENERIC.indexOf(nm) < 0 && !/^Frame [0-9]+$/.test(nm)) continue;
+            const chain = [];
+            let anc = n.parent, nested = false;
+            while (anc && anc.id !== v.id) {
+              if (anc.type === 'INSTANCE') { nested = true; break; }
+              chain.unshift(String(anc.name));
+              anc = anc.parent;
+            }
+            if (nested) continue; // inside an instance: its own master's frames, as above
+            chain.push(nm);
+            const path = chain.join('/');
+            if (unnamedIdx[path] === undefined) {
+              unnamedIdx[path] = unnamedFrames.length;
+              unnamedFrames.push({ path, layoutMode: n.layoutMode, count: 0 });
+            }
+            unnamedFrames[unnamedIdx[path]].count++;
+          }
+        }
         const props = {};
         for (const [k, v] of Object.entries(set.componentPropertyDefinitions || {})) props[k] = v.type;
         const seen = new Set();
@@ -537,6 +567,7 @@ async function main() {
           rootPaint,
           overlays,
           layers,
+          unnamedFrames,
           glyphTextNodes: glyphs.filter((g) => { const k = g.layer + '|' + g.chars; if (seen.has(k)) return false; seen.add(k); return true; }),
         };
       }
@@ -801,6 +832,8 @@ async function main() {
         rootPaint: probe.masters?.[nodeId]?.rootPaint ?? {},
         overlays: probe.masters?.[nodeId]?.overlays ?? [],
         layers: probe.masters?.[nodeId]?.layers ?? [],
+        // null, not [], when the probe did not read it: "none" and "not read" differ (ADR-0149).
+        unnamedFrames: probe.masters?.[nodeId]?.unnamedFrames ?? null,
         box: probe.masters?.[nodeId]?.box ?? null,
         glyphTextNodes: probe.masters?.[nodeId]?.glyphTextNodes ?? [],
         sampledVariant: defaultVariantId,

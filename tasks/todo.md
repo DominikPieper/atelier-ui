@@ -284,12 +284,20 @@ Ranked; each carries why it's worth doing next rather than later.
           snapshot). It also has no `LAYER-UNRESOLVED` entries, because that ratchet only
           counts _named_ layers. The drawer agent read the dialog's real values: its footer
           is 16/24px against the CSS's 20/24px.
-    - [ ] **AtlDialog master is not layer-checked at all.** Name its header, content and
-          footer frames like the drawer's, so `check:figma` compares them. Then decide its
-          footer padding: Figma 16/24 vs CSS 20/24. By the owner's drawer decision the CSS
-          wins. Also make the coverage ratchet count _unnamed_ auto-layout frames inside a
-          master, or a master with `layers: []`, so a master that is never compared cannot
-          look clean (ADR-0149's gap, one level up).
+    - [x] **AtlDialog master is not layer-checked at all.** (2026-10-03) Header, content and
+          footer frames are named in all 5 variants, so `check:figma` compares them. Footer
+          20/24 and gap 12, content 24/24 and the 20px title now follow the CSS (c286d6f0).
+          `check:figma` also counts _unnamed_ auto-layout frames per master now
+          (`LAYER-UNNAMED` in `type-baseline.json`: 127 in 5 masters, AtlTable 75, AtlAvatarGroup
+          20, AtlDrawer 14, AtlDialog 10, AtlToast 8); a new one fails, a named one fails until
+          re-recorded.
+    - [ ] **AtlDialog draws its header and footer rules as 1px divider frames.** The CSS has a
+          border-bottom on the header and a border-top on the footer; the master has two empty
+          frames between the layers. Same pixels, so four `AtlDialog:layer:border|stroke`
+          entries in `allowlists.js` carry it. Move the rule onto the layers as strokes (as
+          AtlDrawer draws it), delete the dividers and the four entries. The footer buttons
+          are anonymous `Frame`s too (10 of the `LAYER-UNNAMED` entries); instances of
+          AtlButton would retire them.
     - [ ] **Follow-ups from ADR-0149 (2026-10-03).** Split the 80 `LAYER-UNRESOLVED`
           entries in `tools/figma/type-baseline.json` into `design` (true wrappers,
           auto-layout frames) and `gap` (parts whose layer name does not spell their

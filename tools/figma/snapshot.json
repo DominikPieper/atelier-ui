@@ -3,8 +3,8 @@
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "fileName": "Atelier UI",
     "figmaLastModified": "2026-10-03T06:57:31Z",
-    "generatedAt": "2026-10-03T07:20:19.948Z",
-    "gitSha": "468c1450",
+    "generatedAt": "2026-10-03T07:22:40.051Z",
+    "gitSha": "c286d6f0",
     "serverVersion": "0.1.0",
     "coverage": "All 43 masters. Token/auto-layout checks sample each master's default variant.",
     "note": "Facts captured from Figma via figma-console MCP read-tools. Rules live in check-figma.js."
@@ -2202,6 +2202,7 @@
         }
       ],
       "layers": [],
+      "unnamedFrames": [],
       "box": {
         "type": "COMPONENT_SET",
         "width": 576,
@@ -2640,6 +2641,7 @@
         }
       ],
       "layers": [],
+      "unnamedFrames": [],
       "box": {
         "type": "COMPONENT_SET",
         "width": 1528,
@@ -4893,6 +4895,7 @@
           "lineHeight": 125
         }
       ],
+      "unnamedFrames": [],
       "box": {
         "type": "COMPONENT_SET",
         "width": 1056,
@@ -5368,6 +5371,7 @@
       },
       "overlays": [],
       "layers": [],
+      "unnamedFrames": [],
       "box": {
         "type": "COMPONENT_SET",
         "width": 202,
@@ -5813,6 +5817,7 @@
         }
       ],
       "layers": [],
+      "unnamedFrames": [],
       "box": {
         "type": "COMPONENT_SET",
         "width": 1328,
@@ -6506,6 +6511,13 @@
           "width": 1280,
           "fontSize": null,
           "lineHeight": null
+        }
+      ],
+      "unnamedFrames": [
+        {
+          "path": "footer/Frame",
+          "layoutMode": "HORIZONTAL",
+          "count": 10
         }
       ],
       "box": {
@@ -7225,6 +7237,7 @@
           "lineHeight": null
         }
       ],
+      "unnamedFrames": [],
       "box": {
         "type": "COMPONENT_SET",
         "width": 792,
@@ -7818,6 +7831,7 @@
           "lineHeight": null
         }
       ],
+      "unnamedFrames": [],
       "box": {
         "type": "COMPONENT_SET",
         "width": 1084,
@@ -8120,6 +8134,7 @@
           "lineHeight": 125
         }
       ],
+      "unnamedFrames": [],
       "box": {
         "type": "COMPONENT_SET",
         "width": 432,
@@ -8483,6 +8498,7 @@
       },
       "overlays": [],
       "layers": [],
+      "unnamedFrames": [],
       "box": {
         "type": "COMPONENT_SET",
         "width": 524,
@@ -8767,6 +8783,7 @@
         }
       ],
       "layers": [],
+      "unnamedFrames": [],
       "box": {
         "type": "COMPONENT_SET",
         "width": 1544,
@@ -9248,6 +9265,7 @@
         }
       ],
       "layers": [],
+      "unnamedFrames": [],
       "box": {
         "type": "COMPONENT_SET",
         "width": 422,
@@ -9860,6 +9878,7 @@
           "lineHeight": null
         }
       ],
+      "unnamedFrames": [],
       "box": {
         "type": "COMPONENT_SET",
         "width": 482,
@@ -10312,6 +10331,7 @@
         }
       ],
       "layers": [],
+      "unnamedFrames": [],
       "box": {
         "type": "COMPONENT_SET",
         "width": 1128,
@@ -10683,6 +10703,7 @@
         }
       ],
       "layers": [],
+      "unnamedFrames": [],
       "box": {
         "type": "COMPONENT_SET",
         "width": 238,
@@ -11266,6 +11287,7 @@
           "lineHeight": null
         }
       ],
+      "unnamedFrames": [],
       "box": {
         "type": "COMPONENT_SET",
         "width": 448,
@@ -11498,6 +11520,7 @@
         }
       ],
       "layers": [],
+      "unnamedFrames": [],
       "box": {
         "type": "COMPONENT_SET",
         "width": 592,
@@ -12576,6 +12599,7 @@
           "lineHeight": null
         }
       ],
+      "unnamedFrames": [],
       "box": {
         "type": "COMPONENT_SET",
         "width": 574,
@@ -13002,6 +13026,7 @@
       },
       "overlays": [],
       "layers": [],
+      "unnamedFrames": [],
       "box": {
         "type": "COMPONENT_SET",
         "width": 336,
@@ -13553,6 +13578,13 @@
         }
       ],
       "layers": [],
+      "unnamedFrames": [
+        {
+          "path": "Frame",
+          "layoutMode": "HORIZONTAL",
+          "count": 8
+        }
+      ],
       "box": {
         "type": "COMPONENT_SET",
         "width": 884,
@@ -13720,6 +13752,7 @@
         }
       ],
       "layers": [],
+      "unnamedFrames": [],
       "box": {
         "type": "COMPONENT",
         "width": 329,
@@ -13934,6 +13967,7 @@
           "lineHeight": 125
         }
       ],
+      "unnamedFrames": [],
       "box": {
         "type": "COMPONENT",
         "width": 388,
@@ -15479,6 +15513,13 @@
           "lineHeight": null
         }
       ],
+      "unnamedFrames": [
+        {
+          "path": "dialog/footer/Frame",
+          "layoutMode": "HORIZONTAL",
+          "count": 14
+        }
+      ],
       "box": {
         "type": "COMPONENT_SET",
         "width": 3024,
@@ -16935,6 +16976,133 @@
           "width": 560,
           "fontSize": null,
           "lineHeight": null
+        }
+      ],
+      "unnamedFrames": [
+        {
+          "path": "AtlTable / default-md/thead/Frame",
+          "layoutMode": "HORIZONTAL",
+          "count": 3
+        },
+        {
+          "path": "AtlTable / default-md/tbody/tr-1/Frame",
+          "layoutMode": "HORIZONTAL",
+          "count": 3
+        },
+        {
+          "path": "AtlTable / default-md/tbody/tr-2/Frame",
+          "layoutMode": "HORIZONTAL",
+          "count": 3
+        },
+        {
+          "path": "AtlTable / default-md/tbody/tr-3/Frame",
+          "layoutMode": "HORIZONTAL",
+          "count": 3
+        },
+        {
+          "path": "AtlTable / default-md/tbody/tr-4/Frame",
+          "layoutMode": "HORIZONTAL",
+          "count": 3
+        },
+        {
+          "path": "AtlTable / striped-md/thead/Frame",
+          "layoutMode": "HORIZONTAL",
+          "count": 3
+        },
+        {
+          "path": "AtlTable / striped-md/tbody/tr-1/Frame",
+          "layoutMode": "HORIZONTAL",
+          "count": 3
+        },
+        {
+          "path": "AtlTable / striped-md/tbody/tr-2/Frame",
+          "layoutMode": "HORIZONTAL",
+          "count": 3
+        },
+        {
+          "path": "AtlTable / striped-md/tbody/tr-3/Frame",
+          "layoutMode": "HORIZONTAL",
+          "count": 3
+        },
+        {
+          "path": "AtlTable / striped-md/tbody/tr-4/Frame",
+          "layoutMode": "HORIZONTAL",
+          "count": 3
+        },
+        {
+          "path": "AtlTable / bordered-md/thead/Frame",
+          "layoutMode": "HORIZONTAL",
+          "count": 3
+        },
+        {
+          "path": "AtlTable / bordered-md/tbody/tr-1/Frame",
+          "layoutMode": "HORIZONTAL",
+          "count": 3
+        },
+        {
+          "path": "AtlTable / bordered-md/tbody/tr-2/Frame",
+          "layoutMode": "HORIZONTAL",
+          "count": 3
+        },
+        {
+          "path": "AtlTable / bordered-md/tbody/tr-3/Frame",
+          "layoutMode": "HORIZONTAL",
+          "count": 3
+        },
+        {
+          "path": "AtlTable / bordered-md/tbody/tr-4/Frame",
+          "layoutMode": "HORIZONTAL",
+          "count": 3
+        },
+        {
+          "path": "AtlTable / default-sm/thead/Frame",
+          "layoutMode": "HORIZONTAL",
+          "count": 3
+        },
+        {
+          "path": "AtlTable / default-sm/tbody/tr-1/Frame",
+          "layoutMode": "HORIZONTAL",
+          "count": 3
+        },
+        {
+          "path": "AtlTable / default-sm/tbody/tr-2/Frame",
+          "layoutMode": "HORIZONTAL",
+          "count": 3
+        },
+        {
+          "path": "AtlTable / default-sm/tbody/tr-3/Frame",
+          "layoutMode": "HORIZONTAL",
+          "count": 3
+        },
+        {
+          "path": "AtlTable / default-sm/tbody/tr-4/Frame",
+          "layoutMode": "HORIZONTAL",
+          "count": 3
+        },
+        {
+          "path": "AtlTable / default-lg/thead/Frame",
+          "layoutMode": "HORIZONTAL",
+          "count": 3
+        },
+        {
+          "path": "AtlTable / default-lg/tbody/tr-1/Frame",
+          "layoutMode": "HORIZONTAL",
+          "count": 3
+        },
+        {
+          "path": "AtlTable / default-lg/tbody/tr-2/Frame",
+          "layoutMode": "HORIZONTAL",
+          "count": 3
+        },
+        {
+          "path": "AtlTable / default-lg/tbody/tr-3/Frame",
+          "layoutMode": "HORIZONTAL",
+          "count": 3
+        },
+        {
+          "path": "AtlTable / default-lg/tbody/tr-4/Frame",
+          "layoutMode": "HORIZONTAL",
+          "count": 3
         }
       ],
       "box": {
@@ -18782,6 +18950,7 @@
           "lineHeight": 164.9999976158142
         }
       ],
+      "unnamedFrames": [],
       "box": {
         "type": "COMPONENT_SET",
         "width": 2256,
@@ -19969,6 +20138,7 @@
           "lineHeight": null
         }
       ],
+      "unnamedFrames": [],
       "box": {
         "type": "COMPONENT_SET",
         "width": 2080,
@@ -22729,6 +22899,7 @@
           "lineHeight": 125
         }
       ],
+      "unnamedFrames": [],
       "box": {
         "type": "COMPONENT_SET",
         "width": 1262,
@@ -23093,6 +23264,13 @@
       },
       "overlays": [],
       "layers": [],
+      "unnamedFrames": [
+        {
+          "path": "Frame",
+          "layoutMode": "HORIZONTAL",
+          "count": 20
+        }
+      ],
       "box": {
         "type": "COMPONENT_SET",
         "width": 888,
@@ -24556,6 +24734,7 @@
           "lineHeight": null
         }
       ],
+      "unnamedFrames": [],
       "box": {
         "type": "COMPONENT_SET",
         "width": 3352,
@@ -25127,6 +25306,7 @@
         }
       ],
       "layers": [],
+      "unnamedFrames": [],
       "box": {
         "type": "COMPONENT_SET",
         "width": 432,
@@ -25225,6 +25405,7 @@
           "lineHeight": null
         }
       ],
+      "unnamedFrames": [],
       "box": {
         "type": "COMPONENT",
         "width": 200,
@@ -25410,6 +25591,7 @@
           "lineHeight": 125
         }
       ],
+      "unnamedFrames": [],
       "box": {
         "type": "COMPONENT_SET",
         "width": 197,
@@ -25628,6 +25810,7 @@
           "lineHeight": null
         }
       ],
+      "unnamedFrames": [],
       "box": {
         "type": "COMPONENT_SET",
         "width": 212,
@@ -26145,6 +26328,7 @@
           "lineHeight": null
         }
       ],
+      "unnamedFrames": [],
       "box": {
         "type": "COMPONENT_SET",
         "width": 480,
@@ -26447,6 +26631,7 @@
         }
       ],
       "layers": [],
+      "unnamedFrames": [],
       "box": {
         "type": "COMPONENT_SET",
         "width": 976,
@@ -26701,6 +26886,7 @@
           "lineHeight": 150
         }
       ],
+      "unnamedFrames": [],
       "box": {
         "type": "COMPONENT_SET",
         "width": 872,
@@ -26946,6 +27132,7 @@
         }
       ],
       "layers": [],
+      "unnamedFrames": [],
       "box": {
         "type": "COMPONENT_SET",
         "width": 964,
@@ -27025,6 +27212,7 @@
       },
       "overlays": [],
       "layers": [],
+      "unnamedFrames": [],
       "box": {
         "type": "COMPONENT",
         "width": 300,
@@ -27141,6 +27329,7 @@
           "lineHeight": null
         }
       ],
+      "unnamedFrames": [],
       "box": {
         "type": "COMPONENT",
         "width": 50,
@@ -27377,6 +27566,7 @@
           "lineHeight": null
         }
       ],
+      "unnamedFrames": [],
       "box": {
         "type": "COMPONENT_SET",
         "width": 664,
@@ -27534,6 +27724,7 @@
       },
       "overlays": [],
       "layers": [],
+      "unnamedFrames": [],
       "box": {
         "type": "COMPONENT_SET",
         "width": 664,
@@ -27799,6 +27990,7 @@
           "lineHeight": null
         }
       ],
+      "unnamedFrames": [],
       "box": {
         "type": "COMPONENT_SET",
         "width": 1232,
@@ -28023,6 +28215,7 @@
           "lineHeight": 125
         }
       ],
+      "unnamedFrames": [],
       "box": {
         "type": "COMPONENT",
         "width": 600,
