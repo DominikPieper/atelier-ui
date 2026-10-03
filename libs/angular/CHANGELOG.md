@@ -1,3 +1,19 @@
+## 0.3.5 (2026-10-03)
+
+### 🚀 Features
+
+- **paint:** check:paint fails with [STALE] when its Storybook build is older than the source ([99bb076f](https://github.com/DominikPieper/atelier-ui/commit/99bb076f))
+
+### 🩹 Fixes
+
+- **breadcrumbs:** style a non-current crumb without a link as plain text ([4ea59019](https://github.com/DominikPieper/atelier-ui/commit/4ea59019))
+- **angular:** define stepper size variables on AtlStepper host ([c8273cbe](https://github.com/DominikPieper/atelier-ui/commit/c8273cbe))
+
+### ❤️ Thank You
+
+- Claude Opus 5.5
+- Dominik Pieper @DominikPieper
+
 ## 0.3.4 (2026-09-14)
 
 This was a version bump only for angular to align it with other projects, there were no code changes.

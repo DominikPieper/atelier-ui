@@ -1,3 +1,14 @@
+## 0.3.5 (2026-10-03)
+
+### 🚀 Features
+
+- **styles:** publish @atelier-ui/styles and make react depend on it ([c6104c36](https://github.com/DominikPieper/atelier-ui/commit/c6104c36))
+
+### ❤️ Thank You
+
+- Claude Opus 5.5
+- Dominik Pieper @DominikPieper
+
 ## 0.3.4 (2026-09-14)
 
 This was a version bump only for create-atelier-ui-workspace to align it with other projects, there were no code changes.
