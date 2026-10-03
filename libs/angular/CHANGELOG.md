@@ -1,3 +1,14 @@
+## 0.3.6 (2026-10-03)
+
+### 🩹 Fixes
+
+- **release:** fail the publish when a version already exists on npm ([6dc7191d](https://github.com/DominikPieper/atelier-ui/commit/6dc7191d))
+
+### ❤️ Thank You
+
+- Claude Opus 5.5
+- Dominik Pieper @DominikPieper
+
 ## 0.3.5 (2026-10-03)
 
 ### 🚀 Features
