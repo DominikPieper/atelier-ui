@@ -852,3 +852,11 @@ Three times in one session a nested bullet list under a `- [ ]` item (continuati
 indented 6/10 spaces) was folded by `prettier --write` into one run-on line ("… - x; - y").
 Rule: inside a todo item, write prose, not a nested bullet list; and after `--write`,
 diff the file against its pre-format copy before committing, not only `--check` it.
+
+## 2026-10-03 — "Zero exemptions" is not "matches"
+
+I recommended "CSS is right" for the drawer padding partly because AtlDialog's master "matches the
+CSS with 0 exemptions". It did not: its layers are unnamed `Frame`s, so `check:figma` never compared
+them, and its footer is 16/24 against the CSS's 20/24. The very pattern ADR-0149 had recorded the
+same day. Rule: before citing a gate's silence as evidence, confirm the gate actually looked at that
+thing (the snapshot's `layers`, the gate's coverage count), and say so when quoting it.

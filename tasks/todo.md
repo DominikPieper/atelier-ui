@@ -275,6 +275,21 @@ Ranked; each carries why it's worth doing next rather than later.
           `AtlDrawer:layer:*` exemptions in `allowlists.js` are deleted. This is blocked
           until the Desktop Bridge is connected to the Atelier UI file: on 2026-10-03 it was
           connected to a different file, so nothing was changed.
+          **Done 2026-10-03 in `d291e7cd`.** All 7 drawer variants are bound to `spacing/5`,
+          `spacing/6`, `spacing/3` and `font-size/xl`. The 14 exemptions are deleted and
+          `check:figma` exits 0. **Correction to my argument:** I told the owner that
+          AtlDialog's master matches the CSS "with 0 exemptions". That was an absence of
+          signal, not agreement. AtlDialog's header, content and footer layers are unnamed
+          `Frame`s, so `check:figma` captures no layers for it (`layers: []` in the
+          snapshot). It also has no `LAYER-UNRESOLVED` entries, because that ratchet only
+          counts _named_ layers. The drawer agent read the dialog's real values: its footer
+          is 16/24px against the CSS's 20/24px.
+    - [ ] **AtlDialog master is not layer-checked at all.** Name its header, content and
+          footer frames like the drawer's, so `check:figma` compares them. Then decide its
+          footer padding: Figma 16/24 vs CSS 20/24. By the owner's drawer decision the CSS
+          wins. Also make the coverage ratchet count _unnamed_ auto-layout frames inside a
+          master, or a master with `layers: []`, so a master that is never compared cannot
+          look clean (ADR-0149's gap, one level up).
     - [ ] **Follow-ups from ADR-0149 (2026-10-03).** Split the 80 `LAYER-UNRESOLVED`
           entries in `tools/figma/type-baseline.json` into `design` (true wrappers,
           auto-layout frames) and `gap` (parts whose layer name does not spell their
