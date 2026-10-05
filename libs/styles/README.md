@@ -18,8 +18,17 @@ the `--ui-*` design tokens.
   Vue extracts it into `index.css`. They do not depend on this package at
   runtime.
 
-You normally do not install this package yourself. The tokens (`--ui-*`) come
-from your framework package, e.g. `@atelier-ui/react/styles/tokens.css`.
+The design tokens (`--ui-*`: colour, type, spacing, radius, shadow, light and
+dark) are published here too, and this is their source of truth:
+
+```css
+@import '@atelier-ui/styles/tokens.css';
+```
+
+The same file still ships inside each framework package, so
+`@import '@atelier-ui/react/styles/tokens.css'` (and the `angular` / `vue`
+equivalents) keeps working unchanged. `@atelier-ui/react` depends on this
+package; with Angular or Vue, install it yourself to use the import above.
 
 ## Layout
 
