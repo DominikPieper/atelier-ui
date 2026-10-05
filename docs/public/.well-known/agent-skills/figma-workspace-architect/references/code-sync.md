@@ -193,12 +193,13 @@ earlier version of this section named the pre-ADR-0030 state — the superseded 
 collection, a bidirectional/manual model — and has been corrected below.)
 
 - **Code owns the value.** The canonical file is
-  `libs/create-workspace/src/generators/preset/files/styles/tokens.css`. Every other
-  `tokens.css`-shaped file — `libs/{angular,react,vue}/src/styles/tokens.css`,
+  `libs/styles/src/tokens.css`. Every other
+  `tokens.css`-shaped file — `libs/{angular,react,vue}/src/styles/tokens.css`, the scaffold seed,
   `skills/atelier-design/assets/colors_and_type.css` — is a generated, byte-identical
   projection of it (`tools/scripts/sync-tokens.mjs`, gated by `npm run check:tokens`).
-  `docs/src/styles/tokens.css` isn't a copy at all; it `@import`s the React projection
-  live.
+  `libs/create-workspace/src/generators/preset/files/styles/tokens.css` (the scaffold seed)
+  is one of those projections too. `docs/src/styles/tokens.css` isn't a copy at all; it
+  `@import`s the source live.
 - **Figma's `Library Tokens` Variable Collection is also a generated projection, not an
   independent source** (ADR-0030 — the docs site's own brand system is a separate
   collection, renamed `Docs Brand Tokens` in that same decision, and out of scope here).

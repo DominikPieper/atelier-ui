@@ -12,7 +12,7 @@ values as of 2026-09-07).
 ## Where the block comes from
 
 - **Generated**, never maintained: `tools/scripts/gen-artboard-palette.mjs` derives it from
-  `libs/create-workspace/src/generators/preset/files/styles/tokens.css` (the token source
+  `libs/styles/src/tokens.css` (the token source
   of truth per `sync-tokens.mjs`) and writes `tools/design/artboard-palette.css`.
 - **Gated**: `npm run check:artboard-palette` fails when the committed file no longer
   matches what the generator would produce.

@@ -6,7 +6,7 @@
  * Every `--ui-*` custom property a stylesheet READS via `var(--ui-x, ...)`
  * must be declared somewhere in the token source(s) named by the `tokenFiles`
  * secondary option (repo-root-relative paths, e.g.
- * `['libs/create-workspace/src/generators/preset/files/styles/tokens.css']`).
+ * `['libs/styles/src/tokens.css']`).
  * A `var()` fallback is what makes an undeclared reference silent: the
  * component still renders, plausibly, at a value the design system does not
  * control. Two real incidents motivated this (not hypothetical):

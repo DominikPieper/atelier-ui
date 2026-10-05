@@ -26,6 +26,10 @@
  *      (react/react-dom external — resolving the CSS is the question, not
  *      React) and asserts the emitted CSS holds the `.atl-button` rules, and
  *      that esbuild read them from the consumer's node_modules, not the repo.
+ *   6. the token source of truth is published in the styles package as
+ *      `@atelier-ui/styles/tokens.css`: the tarball holds it, byte-identical to
+ *      libs/styles/src/tokens.css, and a consumer can `@import` that specifier
+ *      (through the package's `exports` map) and get `--ui-color-primary`.
  *
  * Offline choices: `npm install --offline --ignore-scripts --legacy-peer-deps`.
  * `--legacy-peer-deps` stops npm fetching react/react-dom (the peers) from
@@ -66,6 +70,10 @@ const EXPECT_DECLARATION = 'letter-spacing: var(--ui-letter-spacing-tight)';
 // too: `.atl-tooltip-wrapper` exists in that file alone, `.atl-tooltip` in the shared one.
 const EXPECT_NATIVE_SELECTOR = '.atl-tooltip-wrapper';
 const EXPECT_SHARED_TOOLTIP_SELECTOR = '.atl-tooltip';
+
+// The tokens, published in @atelier-ui/styles as the source of truth. Any core token
+// declared in :root would do; this one is the brand colour.
+const EXPECT_TOKEN = '--ui-color-primary:';
 
 const failures = [];
 const fail = (msg) => failures.push(msg);
@@ -130,6 +138,19 @@ try {
     );
   }
 
+  if (!styles.files.includes('tokens.css')) {
+    fail(
+      `styles tarball does not contain tokens.css (${styles.files.join(', ')})`,
+    );
+  } else if (
+    readFileSync(join(DIST_STYLES, 'tokens.css'), 'utf8') !==
+    readFileSync(join(ROOT, 'libs/styles/src/tokens.css'), 'utf8')
+  ) {
+    fail(
+      'dist/libs/styles/tokens.css differs from libs/styles/src/tokens.css.',
+    );
+  }
+
   const declared = reactPkg.dependencies?.['@atelier-ui/styles'];
   if (!declared) {
     fail(
@@ -177,6 +198,48 @@ try {
     join(app, 'entry.js'),
     "import { AtlButton, AtlTooltip } from '@atelier-ui/react';\nconsole.log(AtlButton, AtlTooltip);\n",
   );
+
+  // `@atelier-ui/styles/tokens.css` must resolve for a consumer through the
+  // installed package's exports map, and carry the core tokens.
+  writeFileSync(
+    join(app, 'tokens-entry.css'),
+    "@import '@atelier-ui/styles/tokens.css';\n",
+  );
+  try {
+    const tokens = await build({
+      entryPoints: [join(app, 'tokens-entry.css')],
+      bundle: true,
+      outdir: join(app, 'out-tokens'),
+      absWorkingDir: app,
+      metafile: true,
+      logLevel: 'silent',
+    });
+    const tokensCss = readFileSync(
+      join(app, 'out-tokens/tokens-entry.css'),
+      'utf8',
+    );
+    if (!tokensCss.includes(EXPECT_TOKEN)) {
+      fail(
+        `@import '@atelier-ui/styles/tokens.css' resolved, but the CSS does not declare ${EXPECT_TOKEN}`,
+      );
+    }
+    const readFromPackage = Object.keys(tokens.metafile.inputs).some((p) =>
+      p.endsWith('node_modules/@atelier-ui/styles/tokens.css'),
+    );
+    if (!readFromPackage) {
+      fail(
+        'tokens.css was not read from node_modules/@atelier-ui/styles in the consumer.',
+      );
+    }
+  } catch (err) {
+    fail(
+      `a consumer cannot resolve @atelier-ui/styles/tokens.css from the installed tarball:\n${(
+        err.errors ?? [err]
+      )
+        .map((e) => `    ${e.text ?? e.message}`)
+        .join('\n')}`,
+    );
+  }
 
   let result;
   try {
@@ -259,5 +322,5 @@ if (failures.length) {
   process.exit(1);
 }
 console.log(
-  '✓ check:pack-styles — installing the packed @atelier-ui/react pulls @atelier-ui/styles, and a bundle of AtlButton and AtlTooltip carries the .atl-button CSS and the React/Vue-only tooltip CSS (atl-tooltip.native.css).',
+  '✓ check:pack-styles — installing the packed @atelier-ui/react pulls @atelier-ui/styles, and a bundle of AtlButton and AtlTooltip carries the .atl-button CSS and the React/Vue-only tooltip CSS (atl-tooltip.native.css), and an import of @atelier-ui/styles/tokens.css resolves and declares --ui-color-primary.',
 );

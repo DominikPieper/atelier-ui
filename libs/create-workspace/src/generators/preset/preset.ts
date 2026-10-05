@@ -1184,9 +1184,11 @@ export async function presetGenerator(
   });
 
   // Copy design tokens into the scaffolded app so attendees can edit them
-  // directly. They're not imported from the @atelier-ui/<fw> npm package
-  // because (a) those published packages don't ship tokens.css, and (b) a
-  // workshop attendee editing colors in node_modules is a bad experience.
+  // directly. They're not imported from a published package
+  // (@atelier-ui/styles/tokens.css, or @atelier-ui/<fw>/styles/tokens.css) because
+  // a workshop attendee editing colors in node_modules is a bad experience. This
+  // template copy is generated from libs/styles/src/tokens.css by
+  // tools/scripts/sync-tokens.mjs; edit the source, not the template.
   tree.write(
     `${appName}/src/styles/tokens.css`,
     readTemplate('styles/tokens.css'),

@@ -40,10 +40,7 @@ const path = require('path');
 const { parseExportedVars } = require('./lib/ts-eval');
 
 const ROOT = path.resolve(__dirname, '../..');
-const TOKEN_CSS = path.join(
-  ROOT,
-  'libs/create-workspace/src/generators/preset/files/styles/tokens.css',
-);
+const TOKEN_CSS = path.join(ROOT, 'libs/styles/src/tokens.css');
 const TOKEN_MANIFEST = path.join(ROOT, 'libs/spec/src/tokens.manifest.ts');
 
 const errors = [];
@@ -79,7 +76,7 @@ const annotatedTokens = new Set(Object.keys(manifest));
 for (const name of annotatedTokens) {
   if (!declaredTokens.has(name)) {
     errors.push(
-      `[STALE-MANIFEST] tokens.manifest.ts annotates '${name}' but it is not declared in libs/create-workspace/src/generators/preset/files/styles/tokens.css.`,
+      `[STALE-MANIFEST] tokens.manifest.ts annotates '${name}' but it is not declared in libs/styles/src/tokens.css.`,
     );
   }
 }

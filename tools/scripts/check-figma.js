@@ -108,10 +108,7 @@ const BASELINE_NOTE =
 const SPEC_FILE = path.join(ROOT, 'libs/spec/src/index.ts');
 const METADATA_INDEX = path.join(ROOT, 'libs/spec/src/metadata/index.ts');
 const METADATA_DIR = path.join(ROOT, 'libs/spec/src/metadata');
-const TOKENS_FILE = path.join(
-  ROOT,
-  'libs/create-workspace/src/generators/preset/files/styles/tokens.css',
-);
+const TOKENS_FILE = path.join(ROOT, 'libs/styles/src/tokens.css');
 
 // Severity → bucket. BLOCKER + CRITICAL fail the build; WARNING is advisory.
 const errors = []; // { sev, tag, msg }

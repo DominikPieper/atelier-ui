@@ -1,2 +1,2 @@
-/* Re-export design tokens from the component library */
-@import '../../../libs/react/src/styles/tokens.css';
+/* The design tokens, straight from their source of truth: @atelier-ui/styles */
+@import '../../../libs/styles/src/tokens.css';

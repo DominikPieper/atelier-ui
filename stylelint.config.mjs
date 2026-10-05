@@ -56,8 +56,7 @@ const FRAMEWORKS = readdirSync(LIBS_DIR, { withFileTypes: true })
 // input glob. `nx.json`'s `stylelint` target-default block lists it as an
 // explicit input — omitting that would let a change here serve a stale
 // cached pass instead of the `[UNDECLARED]` failures it should produce.
-const TOKENS_CSS =
-  'libs/create-workspace/src/generators/preset/files/styles/tokens.css';
+const TOKENS_CSS = 'libs/styles/src/tokens.css';
 const DOCS_THEME_CSS = 'docs/src/styles/docs-theme.css';
 // Read by `no-primitive-token`/`no-token-bypass` via their `allowlistsFile`
 // secondary option (a scaffolded workspace passes neither rule this option
@@ -122,7 +121,9 @@ export default {
     // framework tree would be reported stale here. The per-declaration checks
     // key on the file's own directory name, which is the component either way.
     {
-      files: ['libs/styles/src/**/*.css'],
+      // `*/**` skips `tokens.css` at the package root: it is the token source itself,
+      // where the raw literals the rules forbid are the point.
+      files: ['libs/styles/src/*/**/*.css'],
       rules: {
         'atelier/no-raw-color-literal': true,
         'atelier/rooted-selector': true,

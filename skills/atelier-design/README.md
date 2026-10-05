@@ -12,7 +12,7 @@ references/
                                Source of truth for everything stylistic.
 assets/
   colors_and_type.css        ← Token sheet snapshot (mirror of upstream
-                               libs/react/src/styles/tokens.css). Light + dark.
+                               libs/styles/src/tokens.css). Light + dark.
   logo.png                   ← Atelier mark (pen + brush + capital A).
 preview/                     ← 21 static HTML swatch cards for the design system.
                                Auxiliary; not bundled in the distribution zip.
@@ -42,4 +42,4 @@ Re-launch Claude Code afterwards. Or: symlink `.claude/skills/atelier-design →
 
 ## Token sync
 
-`assets/colors_and_type.css` is a snapshot of `libs/react/src/styles/tokens.css`. When the canonical token sheet changes, regenerate the snapshot (preserving the skill-snapshot header comment) so the skill stays in lockstep. A drift-guard script under `tools/scripts/` is a sensible follow-up if hand-syncing becomes painful.
+`assets/colors_and_type.css` is a snapshot of `libs/styles/src/tokens.css`. When the canonical token sheet changes, regenerate the snapshot (preserving the skill-snapshot header comment) so the skill stays in lockstep. A drift-guard script under `tools/scripts/` is a sensible follow-up if hand-syncing becomes painful.

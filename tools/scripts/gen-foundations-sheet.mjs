@@ -16,7 +16,7 @@ const contrast = (a, b) => {
   return (x + 0.05) / (y + 0.05);
 };
 
-const T = 'libs/create-workspace/src/generators/preset/files/styles/tokens.css';
+const T = 'libs/styles/src/tokens.css';
 const css = readFileSync(T, 'utf8');
 
 // ── ramps, read back out of the shipped token source ────────────────────────

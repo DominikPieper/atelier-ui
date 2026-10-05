@@ -2,7 +2,7 @@ import { OGImageRoute } from 'astro-og-canvas';
 import { OG_PAGES } from '../../data/og-pages';
 
 // Conciso teal brand. Dark slate canvas with teal anchor, mirroring
-// libs/react/src/styles/tokens.css (--ui-color-primary: #006470).
+// libs/styles/src/tokens.css (--ui-color-primary: #006470).
 const TEAL: [number, number, number] = [0, 100, 112];
 const SLATE_900: [number, number, number] = [15, 23, 42];
 const SLATE_700: [number, number, number] = [30, 41, 59];

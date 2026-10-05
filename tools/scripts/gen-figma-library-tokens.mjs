@@ -33,10 +33,7 @@ import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
-const SOURCE = resolve(
-  ROOT,
-  'libs/create-workspace/src/generators/preset/files/styles/tokens.css',
-);
+const SOURCE = resolve(ROOT, 'libs/styles/src/tokens.css');
 
 const SKIP =
   /^--ui-(shadow|ease|duration|transition|z|focus-ring|letter-spacing)/;

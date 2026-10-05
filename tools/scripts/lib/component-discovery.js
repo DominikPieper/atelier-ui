@@ -115,6 +115,9 @@ function walkCss(dir, out = []) {
 function existingCssFiles(fw) {
   const own = walkCss(path.join(REPO_ROOT, 'libs', fw, 'src/lib'));
   const shared = walkCss(SHARED_STYLES_DIR).filter((abs) => {
+    // `libs/styles/src/tokens.css` sits at the package root, beside the component
+    // directories: it is the token source, not a component stylesheet.
+    if (path.dirname(abs) === SHARED_STYLES_DIR) return false;
     const m = OVERRIDE_SHEET.exec(path.basename(abs));
     return !m || overrideAppliesTo(m[1], fw);
   });

@@ -1,9 +1,15 @@
 #!/usr/bin/env node
 /**
- * Copy the design tokens stylesheet from the create-workspace preset (the
- * seed scaffolded into every new Atelier workspace) into each framework
- * lib's own styles/tokens.css. The preset copy is the source of truth so a
- * freshly generated workspace and the shipped libs always agree.
+ * Copy the design tokens stylesheet from its source of truth,
+ * libs/styles/src/tokens.css (published as @atelier-ui/styles/tokens.css), into
+ * every other place that carries it: each framework lib's own styles/tokens.css
+ * (kept so consumers' `@import '@atelier-ui/<fw>/styles/tokens.css'` keeps working),
+ * and the create-workspace preset (the seed scaffolded into every new Atelier
+ * workspace, which vendors it on purpose so attendees can edit their copy).
+ * The copies are byte-identical, with no header comment: the parity record
+ * hashes the framework copies' bytes (lib/parity-inputs.js), and the preset copy
+ * is what a scaffolded workspace receives, so a "generated, do not edit" banner
+ * would be wrong there and would invalidate every parity stamp.
  *
  * The atelier-design skill's token sheet is a fourth target. It called itself a
  * mirror of libs/react/src/styles/tokens.css while it was hand-maintained, and by
@@ -21,11 +27,12 @@ import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
-const SOURCE = resolve(
-  ROOT,
-  'libs/create-workspace/src/generators/preset/files/styles/tokens.css',
-);
+const SOURCE = resolve(ROOT, 'libs/styles/src/tokens.css');
 const TARGETS = [
+  resolve(
+    ROOT,
+    'libs/create-workspace/src/generators/preset/files/styles/tokens.css',
+  ),
   resolve(ROOT, 'libs/angular/src/styles/tokens.css'),
   resolve(ROOT, 'libs/react/src/styles/tokens.css'),
   resolve(ROOT, 'libs/vue/src/styles/tokens.css'),

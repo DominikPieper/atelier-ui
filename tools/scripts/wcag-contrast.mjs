@@ -49,10 +49,7 @@ import { resolve, dirname } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
-const TOKENS_FILE = resolve(
-  ROOT,
-  'libs/create-workspace/src/generators/preset/files/styles/tokens.css',
-);
+const TOKENS_FILE = resolve(ROOT, 'libs/styles/src/tokens.css');
 const css = readFileSync(TOKENS_FILE, 'utf-8');
 
 /** Every `--ui-color-*: value;` inside one brace-balanced block, keyed without the prefix. */

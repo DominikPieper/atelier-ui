@@ -1,6 +1,6 @@
 /**
  * Token manifest — agent-readable annotations for every `--ui-*` CSS
- * token declared in `libs/{angular,react,vue}/src/styles/tokens.css`.
+ * token declared in `libs/styles/src/tokens.css`.
  *
  * Why this exists: a CSS token alone (`--ui-color-primary: #3b82f6`)
  * tells a downstream agent the value but not the intent. An agent

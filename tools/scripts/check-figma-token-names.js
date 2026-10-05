@@ -4,7 +4,7 @@
  *
  * Cross-checks tools/figma/snapshot.json's `uiTokens` census against the
  * canonical `--ui-*` token declarations in code (ADR-0115 names
- * `libs/create-workspace/src/generators/preset/files/styles/tokens.css` as
+ * `libs/styles/src/tokens.css` as
  * the canonical token file).
  *
  * WHY THIS EXISTS, AND WHAT IT REPLACES:
@@ -75,10 +75,7 @@ const path = require('path');
 
 const ROOT = path.resolve(__dirname, '../..');
 const SNAPSHOT_FILE = path.join(ROOT, 'tools/figma/snapshot.json');
-const TOKEN_CSS = path.join(
-  ROOT,
-  'libs/create-workspace/src/generators/preset/files/styles/tokens.css',
-);
+const TOKEN_CSS = path.join(ROOT, 'libs/styles/src/tokens.css');
 
 // Exactly the three prefixes the task named — see the header for why the
 // rest of the uiTokens collection (font-size, opacity, ...) is out of scope.
@@ -113,7 +110,7 @@ for (const name of uiTokens) {
     errors.push(
       `[TOKEN-FAMILY] uiTokens '${name}' (tools/figma/snapshot.json) has no matching declaration in ` +
         `tokens.css — expected '${expected}' among the ${declaredTokens.size} --ui-* custom properties ` +
-        'declared in libs/create-workspace/src/generators/preset/files/styles/tokens.css (ADR-0115). ' +
+        'declared in libs/styles/src/tokens.css (ADR-0115). ' +
         'Either the Figma variable was renamed or removed from code without regenerating the snapshot ' +
         '(npm run figma:sync-library-tokens, then npm run figma:snapshot), or tokens.css dropped the ' +
         'declaration and the Figma side is now stale — see plan/adr/0030-library-tokens-collection.md for ' +

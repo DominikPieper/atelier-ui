@@ -32,7 +32,7 @@
     "stylelint": {
       "executor": "nx:run-commands",
       "options": {
-        "command": "stylelint 'libs/styles/src/**/*.css' --config stylelint.config.mjs"
+        "command": "stylelint 'libs/styles/src/*/**/*.css' --config stylelint.config.mjs"
       }
     },
     "nx-release-publish": {

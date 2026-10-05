@@ -351,10 +351,7 @@ const rows = [];
 
 // ── the heights the tokens claim ──────────────────────────────────────────────
 const tokensCss = readFileSync(
-  resolve(
-    ROOT,
-    'libs/create-workspace/src/generators/preset/files/styles/tokens.css',
-  ),
+  resolve(ROOT, 'libs/styles/src/tokens.css'),
   'utf8',
 );
 const claimed = { control: {}, row: {} };
