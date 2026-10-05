@@ -1,3 +1,7 @@
+## 0.3.7 (2026-10-05)
+
+This was a version bump only for vue to align it with other projects, there were no code changes.
+
 ## 0.3.6 (2026-10-03)
 
 ### 🩹 Fixes

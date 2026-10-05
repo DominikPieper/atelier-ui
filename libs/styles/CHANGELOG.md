@@ -1,3 +1,14 @@
+## 0.3.7 (2026-10-05)
+
+### 🚀 Features
+
+- **styles:** publish tokens.css from @atelier-ui/styles, its new source of truth ([e375af65](https://github.com/DominikPieper/atelier-ui/commit/e375af65))
+
+### ❤️ Thank You
+
+- Claude Opus 5.5
+- Dominik Pieper @DominikPieper
+
 ## 0.3.6 (2026-10-03)
 
 ### 🩹 Fixes
