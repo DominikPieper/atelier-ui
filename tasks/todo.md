@@ -323,7 +323,7 @@ Ranked; each carries why it's worth doing next rather than later.
           (ADR-0148 Decision 3). Stale paths to refresh: `tools/figma/parity.json` (needs
           a figma re-verify), `plan/` and the ADR text naming per-framework CSS.
 
-  - [x] **P2 — Foundations as its own lib, tokens' source of truth moved there. Done 2026-10-05 as ADR-0151** (`2675dc00`, `82fb81da`): the source is `libs/styles/src/tokens.css`, published as `@atelier-ui/styles/tokens.css`, with every other copy generated; the stale preset comment is fixed. P2.3 (the three byte-identical `foundation/*.mdx` pages with literal hex values) stays open.
+  - [x] **P2 — Foundations as its own lib, tokens' source of truth moved there. Done 2026-10-05 as ADR-0151** (`e375af65`, `13ae030b`): the source is `libs/styles/src/tokens.css`, published as `@atelier-ui/styles/tokens.css`, with every other copy generated; the stale preset comment is fixed. P2.3 (the three byte-identical `foundation/*.mdx` pages with literal hex values) stays open.
         **Re-think after ADR-0148:** with a published `@atelier-ui/styles`, the tokens
         likely belong in that package rather than a private `libs/foundations`. Decide
         before P2.1. Facts
