@@ -23,7 +23,9 @@ describe('AtlDialog dev-mode accessible-name warning', () => {
   afterEach(() => warn.mockRestore());
 
   const dialogWarnings = (): unknown[][] =>
-    warn.mock.calls.filter((c) => String(c[0]).includes('AtlDialog'));
+    warn.mock.calls.filter((c: unknown[]) =>
+      String(c[0]).includes('AtlDialog'),
+    );
 
   it('warns once when it opens with no header and no aria-label', async () => {
     const { rerender } = await render(

@@ -21,7 +21,9 @@ describe('AtlDrawer dev-mode accessible-name warning', () => {
   afterEach(() => warn.mockRestore());
 
   const warnings = (): unknown[][] =>
-    warn.mock.calls.filter((c) => String(c[0]).includes('AtlDrawer'));
+    warn.mock.calls.filter((c: unknown[]) =>
+      String(c[0]).includes('AtlDrawer'),
+    );
 
   it('warns once when it opens with no header', async () => {
     const { rerender } = render(AtlDrawer, {

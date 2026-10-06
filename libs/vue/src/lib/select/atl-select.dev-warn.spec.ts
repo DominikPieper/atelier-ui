@@ -10,7 +10,9 @@ describe('AtlSelect dev-mode accessible-name warning', () => {
   afterEach(() => warn.mockRestore());
 
   const warnings = (): unknown[][] =>
-    warn.mock.calls.filter((c) => String(c[0]).includes('AtlSelect'));
+    warn.mock.calls.filter((c: unknown[]) =>
+      String(c[0]).includes('AtlSelect'),
+    );
 
   it('warns once when there is no label, aria-label or <label for>', async () => {
     const { rerender } = render(AtlSelect, { props: { placeholder: 'a' } });
