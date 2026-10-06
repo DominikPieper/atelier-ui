@@ -1,3 +1,14 @@
+## 0.3.8 (2026-10-06)
+
+### 🚀 Features
+
+- **angular,vue:** warn in dev mode when a dialog, drawer or form control has no accessible name ([4be078c3](https://github.com/DominikPieper/atelier-ui/commit/4be078c3))
+
+### ❤️ Thank You
+
+- Claude Opus 5.5
+- Dominik Pieper @DominikPieper
+
 ## 0.3.7 (2026-10-05)
 
 This was a version bump only for vue to align it with other projects, there were no code changes.

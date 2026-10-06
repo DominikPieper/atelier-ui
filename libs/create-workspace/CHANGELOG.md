@@ -1,3 +1,20 @@
+## 0.3.8 (2026-10-06)
+
+### 🚀 Features
+
+- **eslint:** two Angular template rules, vendored into the scaffold as a teaching pair ([4394f6f0](https://github.com/DominikPieper/atelier-ui/commit/4394f6f0))
+
+### 🩹 Fixes
+
+- **stylelint:** no-token-bypass sees a literal border width beside a token colour ([036a6405](https://github.com/DominikPieper/atelier-ui/commit/036a6405))
+- **stylelint:** no-undeclared-token ignores declarations inside comments ([04db7926](https://github.com/DominikPieper/atelier-ui/commit/04db7926))
+- **stylelint:** no-raw-color-literal checks every literal in a declaration ([2472c279](https://github.com/DominikPieper/atelier-ui/commit/2472c279))
+
+### ❤️ Thank You
+
+- Claude Opus 5.5
+- Dominik Pieper @DominikPieper
+
 ## 0.3.7 (2026-10-05)
 
 ### 🚀 Features
