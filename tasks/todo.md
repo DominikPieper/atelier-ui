@@ -356,8 +356,14 @@ Ranked; each carries why it's worth doing next rather than later.
         publishable; the preset vendors all six files byte-identically, held by
         `check:preflight-clone-sync` (ADR-0130). `tools/eslint-rules` is repo-internal
         hygiene only. No rule validates how a consumer uses Atl components.
-    - [ ] **P3.1** Rule tests (Vitest + `stylelint.lint()`), one valid and one invalid case
-          per rule, exemption maps included. Worth doing regardless of P3.2.
+    - [x] **P3.1** Rule tests, one valid and one invalid case per branch, exemption maps
+          included. Done 2026-10-06 as `node:test` files beside the rules (not Vitest: that is
+          how `rooted-selector.test.js` is wired and `check:stylelint` already runs it), one per
+          rule, fixtures in `os.tmpdir()`. Not vendored into the scaffold:
+          `tools/scripts/sync-preflight.mjs` clones an explicit list, and the tests read repo
+          paths a scaffold lacks. Known limit, recorded not fixed: token values, the allowlists
+          module and the staleness scan are cached per process, so a long-lived editor server
+          keeps the first answer until restart.
     - [ ] **P3.2 Owner decision: package or vendored.** A published
           `@atelier-ui/stylelint-plugin` would retire the vendored copy and that part of
           `check:preflight-clone-sync`; against it, the vendored copy is readable and
