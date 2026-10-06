@@ -363,8 +363,10 @@ Ranked; each carries why it's worth doing next rather than later.
           `tools/scripts/sync-preflight.mjs` clones an explicit list, and the tests read repo
           paths a scaffold lacks. Known limit, recorded not fixed: token values, the allowlists
           module and the staleness scan are cached per process, so a long-lived editor server
-          keeps the first answer until restart.
-    - [ ] **P3.2 Owner decision: package or vendored.** A published
+          keeps the first answer until restart. Commits: `45a9cf50` (tests), and test-first fixes
+          `2472c279`, `04db7926`, `036a6405` for four defects the tests found.
+    - [x] **P3.2 Owner decision: package or vendored. Decided 2026-10-06: vendored, as
+          today** (participants adapt the rules for their own design system). A published
           `@atelier-ui/stylelint-plugin` would retire the vendored copy and that part of
           `check:preflight-clone-sync`; against it, the vendored copy is readable and
           editable in the attendee's repo — curriculum value. Judge it as curriculum first.
