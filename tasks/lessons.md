@@ -870,3 +870,11 @@ npm skipped the five existing versions silently, and only `@atelier-ui/styles` w
 broke (the old 0.3.5 packages are self-contained), but the migration did not ship. Rule: before any
 push that triggers a release, run `npm run check:release-drift` and read every line; a published
 version the repo never tagged means the next release needs a version above it.
+
+## 2026-10-06 — A background command's exit code is the last command's
+
+I ran `npm run check:all > out 2>&1; echo "check:all $?" >> out` with `run_in_background`, read the
+harness's "completed (exit code 0)" as the gate result, and committed an ADR on top of a red chain.
+The 0 was `echo`'s. The gate's real code was inside the file, as `check:all 1`. Rule: for a
+backgrounded gate, read the exit code the command wrote into its output file, never the harness's
+completion status, and do not act on the result before reading it.
