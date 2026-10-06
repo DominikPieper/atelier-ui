@@ -236,6 +236,7 @@ function getTokenValues(tokenFile) {
 function describeExport(value) {
   if (value === undefined) return 'is undefined (no such export)';
   if (Array.isArray(value)) return 'is an array';
+  if (value instanceof Map) return 'is a Map';
   if (value === null) return 'is null';
   return `is a ${typeof value}`;
 }
@@ -261,8 +262,11 @@ function getAllowlists(allowlistsFile) {
   if (!allowlistsCache.has(absPath)) {
     const required = require(absPath);
     const value = required.TOKEN_BYPASS_EXEMPT;
+    // A plain object only. `PRIMITIVE_EXEMPTIONS` beside it is a Map, and a Map
+    // here would pass a bare `typeof === 'object'` check while `Object.keys` of
+    // it is empty: every exemption silently gone, the failure ADR-0124 names.
     const isValidShape =
-      value !== null && typeof value === 'object' && !Array.isArray(value);
+      Object.prototype.toString.call(value) === '[object Object]';
     allowlistsCache.set(
       absPath,
       isValidShape
@@ -304,14 +308,16 @@ function scanComponentRootForSeenKeys(absBase, tokenValue) {
       for (const m of css.matchAll(/(^|[;{])\s*([a-z-]+)\s*:\s*([^;{}]+)/g)) {
         const prop = m[2];
         const value = m[3].trim().replace(/\s+/g, ' ');
-        if (value.includes('var(--ui-')) continue;
         if (STRUCTURAL.has(value)) continue;
 
+        // Checked before the `var(--ui-` skip: `1px solid var(--ui-color-x)` has
+        // a token colour and a literal width, and the width is the bypass.
         if (BORDER_PROP.test(prop)) {
           const width = value.match(/^([\d.]+)(px|rem|em)\b/);
           if (width) seen.add(`${dir}:${prop}:${width[0]}`);
           continue;
         }
+        if (value.includes('var(--ui-')) continue;
         const family = FAMILY[prop];
         if (!family) continue;
         if (tokensHolding(value, family, tokenValue).length > 0) {
@@ -455,9 +461,10 @@ const rule = (primary, secondaryOptions) => {
     root.walkDecls((decl) => {
       const prop = decl.prop.toLowerCase();
       const value = decl.value.trim().replace(/\s+/g, ' ');
-      if (value.includes('var(--ui-')) return;
       if (STRUCTURAL.has(value)) return;
 
+      // Checked before the `var(--ui-` skip, as in the scan above: a token
+      // colour beside a literal width is still a literal width.
       if (BORDER_PROP.test(prop)) {
         const width = value.match(/^([\d.]+)(px|rem|em)\b/);
         if (!width) return;
@@ -485,6 +492,7 @@ const rule = (primary, secondaryOptions) => {
         return;
       }
 
+      if (value.includes('var(--ui-')) return;
       const family = FAMILY[prop];
       if (!family) return;
       const holders = tokensHolding(value, family, tokenValue);

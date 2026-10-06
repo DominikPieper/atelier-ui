@@ -240,6 +240,26 @@ for (const decl of [
   });
 }
 
+for (const [decl, shown] of [
+  ['border: 1px solid var(--ui-color-border);', '1px'],
+  ['border-left: 4px solid var(--ui-color-danger);', '4px'],
+  ['border-bottom: 0.0625rem dashed var(--ui-color-border, red);', '0.0625rem'],
+]) {
+  test(`[BORDER] rejects a literal width beside a token colour: ${decl}`, async () => {
+    const { ws, tokenFile } = setup();
+    const found = texts(await lintIn(ws, { tokenFile }, 'button', decl));
+    assert.equal(found.length, 1, found.join('\n'));
+    assert.match(found[0], /\[BORDER\]/);
+    assert.ok(found[0].includes(shown), found[0]);
+  });
+}
+
+test('[BORDER] accepts a token width beside a token colour', async () => {
+  const { ws, tokenFile } = setup();
+  const decl = 'border: var(--ui-border-width) solid var(--ui-color-border);';
+  assert.deepEqual(texts(await lintIn(ws, { tokenFile }, 'button', decl)), []);
+});
+
 test('[BORDER] needs no token to be held: the width is wrong on its own', async () => {
   const { ws } = setup();
   assert.equal(
@@ -399,6 +419,11 @@ for (const [name, body, reason] of [
     'TOKEN_BYPASS_EXEMPT an array',
     'module.exports = { TOKEN_BYPASS_EXEMPT: [] };',
     /is an array, expected an object/,
+  ],
+  [
+    'TOKEN_BYPASS_EXEMPT a Map (the shape of PRIMITIVE_EXEMPTIONS, not of this one)',
+    "module.exports = { TOKEN_BYPASS_EXEMPT: new Map([['toast:border-left:4px', { kind: 'design', why: 'x' }]]) };",
+    /is a Map, expected an object/,
   ],
   [
     'TOKEN_BYPASS_EXEMPT null',
@@ -610,6 +635,19 @@ test('reports [STALE-EXEMPT] for an exemption no stylesheet carries any more', a
 
 test('an exemption whose literal is still in a stylesheet is not stale', async () => {
   const s = staleSetup({ css: TABS_CSS });
+  assert.deepEqual(
+    errorsOf(await lintIn(s.ws, staleOptions(s), 'button', 'color: red;')),
+    [],
+  );
+});
+
+test('a border exemption is kept alive by a literal width beside a token colour', async () => {
+  const s = staleSetup({
+    exempt: [EXEMPT_DESIGN],
+    css: {
+      'toast/atl.css': '.x { border-left: 4px solid var(--ui-color-danger); }',
+    },
+  });
   assert.deepEqual(
     errorsOf(await lintIn(s.ws, staleOptions(s), 'button', 'color: red;')),
     [],
