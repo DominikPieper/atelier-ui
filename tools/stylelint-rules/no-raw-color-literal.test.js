@@ -175,6 +175,17 @@ for (const [name, entry] of Object.entries({
   });
 }
 
+test('an exemption excuses only its own literal, not a second one in the same value', async () => {
+  const rel = toRepoRelative(FILE);
+  const found = texts(
+    await lint('background: linear-gradient(#fff, #000);', {
+      exempt: [exemption(rel, '#fff')],
+    }),
+  );
+  assert.equal(found.length, 1);
+  assert.ok(found[0].includes("'#000'"), found[0]);
+});
+
 test('works on a real temp file, not just inline code', async () => {
   const ws = workspace();
   const file = ws.write('card/atl-card.css', '.atl-card { color: #fff; }\n');

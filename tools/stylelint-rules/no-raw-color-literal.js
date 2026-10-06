@@ -50,7 +50,7 @@ const meta = {
   url: 'tools/stylelint-rules/no-raw-color-literal.js',
 };
 
-const COLOR_LITERAL = /#[0-9a-fA-F]{3,8}\b|rgba?\(|hsla?\(/;
+const COLOR_LITERAL_ALL = /#[0-9a-fA-F]{3,8}\b|rgba?\(|hsla?\(/g;
 
 // Both patterns tolerate an optional leading `-` and an optional `webkit-`
 // segment independently (so `box-shadow`, `-webkit-box-shadow`, and the
@@ -127,15 +127,21 @@ const rule = (primary, secondaryOptions) => {
       const prop = decl.prop.toLowerCase();
       if (SHADOW_PROP.test(prop) || MASK_PROP.test(prop)) return;
 
+      // Every literal in the value, not just the first: an exemption excuses
+      // the literal it names, so a second, unexempted one in the same
+      // declaration must still be reported (one report per declaration, for
+      // the first literal nothing exempts).
       const stripped = stripVarCalls(decl.value);
-      const match = stripped.match(COLOR_LITERAL);
-      if (!match) return;
-
-      const literal = match[0];
-      const isExempt = exempt.some(
-        (entry) => entry.file === relFile && entry.literal === literal,
+      const literal = Array.from(
+        stripped.matchAll(COLOR_LITERAL_ALL),
+        (m) => m[0],
+      ).find(
+        (found) =>
+          !exempt.some(
+            (entry) => entry.file === relFile && entry.literal === found,
+          ),
       );
-      if (isExempt) return;
+      if (literal === undefined) return;
 
       stylelint.utils.report({
         message: messages.rejected(decl.prop, literal),
