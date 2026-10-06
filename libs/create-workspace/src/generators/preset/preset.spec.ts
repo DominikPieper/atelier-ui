@@ -924,6 +924,52 @@ describe('preset generator', () => {
     expect(additionIndex).toBeGreaterThan(baselineIndex);
   });
 
+  it('Angular: vendors the two template rules and wires both as errors on *.html (ADR-0152)', async () => {
+    await presetGenerator(tree, {
+      name: 'my-workspace',
+      framework: 'angular',
+    });
+
+    for (const file of [
+      'angular-template.js',
+      'atl-button-icon-only-needs-name.js',
+      'atl-sub-component-needs-parent.js',
+    ]) {
+      expect(tree.exists(`tools/eslint-rules/${file}`)).toBe(true);
+    }
+    // The tests and the story processor read this repo's own sources; they stay here.
+    expect(tree.children('tools/eslint-rules').sort()).toEqual([
+      'angular-template.js',
+      'atl-button-icon-only-needs-name.js',
+      'atl-sub-component-needs-parent.js',
+    ]);
+
+    const config =
+      tree.read('workshop-angular/eslint.config.mjs', 'utf-8') ?? '';
+    expect(config).toContain(
+      "import atelierTemplate from '../tools/eslint-rules/angular-template.js';",
+    );
+    expect(config).toContain(
+      "'atelier-template/atl-button-icon-only-needs-name': 'error'",
+    );
+    expect(config).toContain(
+      "'atelier-template/atl-sub-component-needs-parent': 'error'",
+    );
+    expect(config.trim().endsWith('];')).toBe(true);
+  });
+
+  it.each(['react', 'vue'] as const)(
+    '%s: ships no Angular template rules and does not wire them',
+    async (framework) => {
+      await presetGenerator(tree, { name: 'my-workspace', framework });
+
+      expect(tree.exists('tools/eslint-rules')).toBe(false);
+      const config =
+        tree.read(`workshop-${framework}/eslint.config.mjs`, 'utf-8') ?? '';
+      expect(config).not.toContain('atelier-template');
+    },
+  );
+
   it('React: the baseline content survives verbatim, with the strictness additions (levers 3/4/5, ADR-0140) spliced in before the closing `];`', async () => {
     // Superseded by ADR-0140: React used to get nothing appended here at all
     // ("flat/react" already carried jsx-a11y's active set) — it now also gets

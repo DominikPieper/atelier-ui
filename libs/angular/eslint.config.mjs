@@ -5,6 +5,9 @@ import nx from '@nx/eslint-plugin';
 import tseslint from 'typescript-eslint';
 import baseConfig from '../../eslint.config.mjs';
 import atelier from '../../tools/eslint-rules/index.js';
+import atelierTemplate from '../../tools/eslint-rules/angular-template.js';
+import storyTemplateProcessor from '../../tools/eslint-rules/story-template-processor.js';
+import templateParser from '@angular-eslint/template-parser';
 
 export default tseslint.config(
   ...baseConfig,
@@ -168,6 +171,37 @@ export default tseslint.config(
     // disable the same rule there too.
     rules: {
       '@angular-eslint/template/no-call-expression': 'off',
+    },
+  },
+  {
+    // How the components are USED, which `strictTemplates` cannot see (ADR-0152):
+    // an icon-only <atl-button> with no accessible name, and a sub-component
+    // outside its required parent. The same two rules the create-workspace
+    // scaffold vendors (tools/eslint-rules/angular-template.js). `**/*.html`
+    // also reaches the inline `@Component` templates the processor extracts.
+    files: ['**/*.html'],
+    plugins: { 'atelier-template': atelierTemplate },
+    rules: {
+      'atelier-template/atl-button-icon-only-needs-name': 'error',
+      'atelier-template/atl-sub-component-needs-parent': 'error',
+    },
+  },
+  {
+    // Story markup lives in `render: () => ({ template: `...` })`, which no stock
+    // Angular processor reads, so cookbook, showcase and every component story were
+    // never template-linted. This processor (superset of the stock one, same file
+    // glob) hands each story `template:` to the same two rules, under the
+    // `.atl-tpl` extension so the stricter `**/*.html` blocks above do not apply.
+    files: ['**/*.stories.ts'],
+    processor: storyTemplateProcessor,
+  },
+  {
+    files: ['**/*.stories.ts/*.atl-tpl'],
+    plugins: { 'atelier-template': atelierTemplate },
+    languageOptions: { parser: templateParser },
+    rules: {
+      'atelier-template/atl-button-icon-only-needs-name': 'error',
+      'atelier-template/atl-sub-component-needs-parent': 'error',
     },
   },
   storybook.configs['flat/recommended'],

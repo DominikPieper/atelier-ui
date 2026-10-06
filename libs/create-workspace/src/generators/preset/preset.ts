@@ -834,13 +834,42 @@ export async function presetGenerator(
     ],
   },
 },
+{
+  // How the components are USED, which \`strictTemplates\` cannot see (ADR-0152):
+  // an icon-only <atl-button> with no accessible name, and a sub-component
+  // outside its required parent. Vendored from the parent Atelier monorepo's
+  // tools/eslint-rules/ (see the copy loop below); it reads every \`.html\`
+  // template and the inline \`@Component\` templates the processor extracts.
+  files: ['**/*.html'],
+  plugins: { 'atelier-template': atelierTemplate },
+  rules: {
+    'atelier-template/atl-button-icon-only-needs-name': 'error',
+    'atelier-template/atl-sub-component-needs-parent': 'error',
+  },
+},
 `,
       [
         `import { dirname } from 'node:path';`,
         `import tseslint from 'typescript-eslint';`,
         `import storybook from 'eslint-plugin-storybook';`,
+        `import atelierTemplate from '../tools/eslint-rules/angular-template.js';`,
       ],
     );
+
+    // Three files, byte-identical to the canonical copies in tools/eslint-rules/
+    // (kept that way by this repo's own sync-preflight.mjs). Their tests, and the
+    // story-template processor, stay in the parent repo: the tests read the
+    // library's own component sources, which a scaffolded workspace does not have.
+    for (const ruleFile of [
+      'angular-template.js',
+      'atl-button-icon-only-needs-name.js',
+      'atl-sub-component-needs-parent.js',
+    ]) {
+      tree.write(
+        `tools/eslint-rules/${ruleFile}`,
+        readTemplate(`tools/eslint-rules/${ruleFile}`),
+      );
+    }
   }
 
   if (framework === 'react') {
