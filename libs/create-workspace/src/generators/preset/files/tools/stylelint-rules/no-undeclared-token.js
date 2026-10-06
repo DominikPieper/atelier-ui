@@ -74,7 +74,11 @@ function readDeclaredTokens(tokenFiles) {
   const declared = new Set();
   for (const relFile of tokenFiles) {
     const absFile = path.resolve(REPO_ROOT, relFile);
-    const src = fs.readFileSync(absFile, 'utf-8');
+    // A commented-out `--ui-x: …;` is not a declaration; counting it would let
+    // a deleted token keep passing for as long as its comment survives.
+    const src = fs
+      .readFileSync(absFile, 'utf-8')
+      .replace(/\/\*[\s\S]*?\*\//g, '');
     for (const match of src.matchAll(TOKEN_DECLARATION)) {
       declared.add(match[1]);
     }

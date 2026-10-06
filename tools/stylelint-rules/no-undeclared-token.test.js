@@ -157,6 +157,26 @@ test('a token the real token source declares passes (smoke, live tokens)', async
   assert.deepEqual(texts(result), []);
 });
 
+test('a declaration inside a comment in the token source does not declare the token', async () => {
+  const { ws } = setup();
+  const tokenFile = ws.write(
+    'commented.css',
+    ':root { --ui-real: 1; }\n/* --ui-ghost: 1; */\n/*\n  --ui-ghost-multi: 2;\n*/',
+  );
+  assert.deepEqual(
+    texts(await lint([tokenFile], 'color: var(--ui-real);')),
+    [],
+  );
+  assert.equal(
+    texts(await lint([tokenFile], 'color: var(--ui-ghost);')).length,
+    1,
+  );
+  assert.equal(
+    texts(await lint([tokenFile], 'color: var(--ui-ghost-multi);')).length,
+    1,
+  );
+});
+
 test('a token source that does not exist fails loudly, it does not pass', async () => {
   const ws = workspace();
   await assert.rejects(
