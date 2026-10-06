@@ -370,7 +370,7 @@ Ranked; each carries why it's worth doing next rather than later.
           `@atelier-ui/stylelint-plugin` would retire the vendored copy and that part of
           `check:preflight-clone-sync`; against it, the vendored copy is readable and
           editable in the attendee's repo — curriculum value. Judge it as curriculum first.
-    - [ ] **P3.3 Spike: Angular consumer-usage rules** (`@angular-eslint` template rules).
+    - [x] **P3.3 — done 2026-10-06 as ADR-0152** (`4be078c3` dev-mode warnings in Angular and Vue, `4394f6f0` two vendored template rules; spike report `tasks/p3-3-angular-usage-rules-spike-2026-10-06.md`). Follow-ups: `AtlCombobox` has no `label`/`aria-label` API at all (an a11y API gap that needs a spec decision); the input/textarea `label-title-only` axe waivers may now be removable; run the generated scaffold's own `nx lint` with the new rules; add `tools/eslint-rules` to the scaffold's lint cache inputs. Original item: Spike: Angular consumer-usage rules (`@angular-eslint` template rules).
           List 3–5 checks Angular's strict template type-check does _not_ catch (icon-only
           `atl-button` without `aria-label`, `atl-dialog` without a title, `atl-option`
           outside `atl-select`). Build only if at least three survive; else record and drop.
