@@ -26,6 +26,7 @@ import {
   type WithOptionalFieldTree,
 } from '@angular/forms/signals';
 import { ATL_SELECT, type AtlSelectContext } from './atl-select.token';
+import { warnIfUnnamedControl } from '../a11y-dev-warn';
 import { AtlIcon } from '../icon/atl-icon';
 
 /** @internal — Wrapper item for ActiveDescendantKeyManager integration. */
@@ -268,6 +269,15 @@ export class AtlSelect
   private outsideClickHandler: ((e: MouseEvent) => void) | null = null;
   private readonly elementRef = inject<ElementRef<HTMLElement>>(ElementRef);
   private readonly injector = inject(Injector);
+
+  constructor() {
+    warnIfUnnamedControl(
+      this.elementRef.nativeElement,
+      'AtlSelect',
+      'button.trigger',
+      'set [label] or [aria-label], or wrap it in a <label>',
+    );
+  }
 
   /** @internal — called by AtlOption on init */
   registerOption(

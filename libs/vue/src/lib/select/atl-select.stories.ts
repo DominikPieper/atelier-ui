@@ -23,7 +23,7 @@ const meta: Meta<typeof AtlSelect> = {
       return { args, value };
     },
     template: `
-      <AtlSelect v-bind="args" v-model:value="value">
+      <AtlSelect :aria-label="args.label ? undefined : 'Select'" v-bind="args" v-model:value="value">
         <AtlOption optionValue="us">United States</AtlOption>
         <AtlOption optionValue="ca">Canada</AtlOption>
         <AtlOption optionValue="uk">United Kingdom</AtlOption>
@@ -105,7 +105,7 @@ export const WithErrors: Story = {
       return { args, value, errors };
     },
     template: `
-      <AtlSelect v-bind="args" v-model:value="value" :errors="errors">
+      <AtlSelect :aria-label="args.label ? undefined : 'Select'" v-bind="args" v-model:value="value" :errors="errors">
         <AtlOption optionValue="us">United States</AtlOption>
         <AtlOption optionValue="ca">Canada</AtlOption>
         <AtlOption optionValue="uk">United Kingdom</AtlOption>
@@ -157,7 +157,7 @@ export const Playground: Story = {
       return { args, value };
     },
     template: `
-      <AtlSelect v-bind="args" v-model:value="value">
+      <AtlSelect :aria-label="args.label ? undefined : 'Select'" v-bind="args" v-model:value="value">
         <AtlOption optionValue="a">Option A</AtlOption>
         <AtlOption optionValue="b">Option B</AtlOption>
         <AtlOption optionValue="c">Option C</AtlOption>

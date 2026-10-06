@@ -50,16 +50,28 @@ import { AtlRadio } from './radio/atl-radio';
           <div class="form-grid">
             <div class="form-field">
               <label class="field-label">Full Name</label>
-              <atl-input type="text" placeholder="John Doe" />
+              <atl-input
+                aria-label="John Doe"
+                type="text"
+                placeholder="John Doe"
+              />
             </div>
             <div class="form-field">
               <label class="field-label">Email</label>
-              <atl-input type="email" placeholder="john@example.com" />
+              <atl-input
+                aria-label="john@example.com"
+                type="email"
+                placeholder="john@example.com"
+              />
             </div>
           </div>
           <div class="form-field" style="margin-top: 1rem;">
             <label class="field-label">Bio</label>
-            <atl-textarea placeholder="Tell us about yourself..." [rows]="3" />
+            <atl-textarea
+              aria-label="Tell us about yourself"
+              placeholder="Tell us about yourself..."
+              [rows]="3"
+            />
           </div>
         </atl-card-content>
         <atl-card-footer>

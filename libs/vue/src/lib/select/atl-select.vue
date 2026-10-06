@@ -1,7 +1,8 @@
 <script setup lang="ts">
-import { computed, useId } from 'vue';
+import { computed, onMounted, ref, useId } from 'vue';
 import '@atelier-ui/styles/select/atl-select.css';
 import '@atelier-ui/styles/select/atl-select.native.css';
+import { warnIfUnnamedControl } from '../a11y-dev-warn';
 import AtlIcon from '../icon/atl-icon.vue';
 
 defineOptions({ name: 'AtlSelect' });
@@ -53,6 +54,16 @@ const wrapperClasses = computed(() => [
   props.disabled && 'is-disabled',
 ]);
 
+const selectRef = ref<HTMLSelectElement | null>(null);
+
+onMounted(() =>
+  warnIfUnnamedControl(
+    selectRef.value,
+    'AtlSelect',
+    'set label or aria-label, or wrap it in a <label>',
+  ),
+);
+
 function onChange(event: Event) {
   if (props.disabled) return;
   emit('update:value', (event.target as HTMLSelectElement).value);
@@ -64,6 +75,7 @@ function onChange(event: Event) {
     <label v-if="label" :for="selectId">{{ label }}</label>
     <div class="select-wrapper">
       <select
+        ref="selectRef"
         :id="selectId"
         :name="name"
         :value="value"

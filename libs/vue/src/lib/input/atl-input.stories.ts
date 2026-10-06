@@ -21,7 +21,8 @@ const meta: Meta<typeof AtlInput> = {
       const value = ref('');
       return { args, value };
     },
-    template: '<AtlInput v-bind="args" v-model:value="value" />',
+    template:
+      '<AtlInput :aria-label="args.label ? undefined : \'Input\'" v-bind="args" v-model:value="value" />',
   }),
   argTypes: {
     type: {
@@ -75,7 +76,8 @@ export const Readonly: Story = {
     setup() {
       return { args };
     },
-    template: '<AtlInput v-bind="args" value="Read-only value" />',
+    template:
+      '<AtlInput :aria-label="args.label ? undefined : \'Input\'" v-bind="args" value="Read-only value" />',
   }),
 };
 
@@ -90,7 +92,8 @@ export const WithErrors: Story = {
       ];
       return { args, errors };
     },
-    template: '<AtlInput v-bind="args" :errors="errors" />',
+    template:
+      '<AtlInput :aria-label="args.label ? undefined : \'Input\'" v-bind="args" :errors="errors" />',
   }),
   parameters: {
     a11y: {
@@ -109,12 +112,12 @@ export const AllTypes: Story = {
     components: { AtlInput },
     template: `
       <div style="display:flex;flex-direction:column;gap:1rem;max-width:320px">
-        <AtlInput type="text" placeholder="Text input" />
-        <AtlInput type="email" placeholder="Email input" />
-        <AtlInput type="password" placeholder="Password input" />
-        <AtlInput type="number" placeholder="Number input" />
-        <AtlInput type="tel" placeholder="Tel input" />
-        <AtlInput type="url" placeholder="URL input" />
+        <AtlInput aria-label="Text input" type="text" placeholder="Text input" />
+        <AtlInput aria-label="Email input" type="email" placeholder="Email input" />
+        <AtlInput aria-label="Password input" type="password" placeholder="Password input" />
+        <AtlInput aria-label="Number input" type="number" placeholder="Number input" />
+        <AtlInput aria-label="Tel input" type="tel" placeholder="Tel input" />
+        <AtlInput aria-label="URL input" type="url" placeholder="URL input" />
       </div>
     `,
   }),
@@ -136,9 +139,9 @@ export const AllVariants: Story = {
       <div style="display:flex;flex-direction:column;gap:1rem;max-width:400px">
         <AtlInput label="Email" type="email" placeholder="you@example.com" v-model:value="email" />
         <AtlInput label="Password" type="password" placeholder="Password" v-model:value="password" />
-        <AtlInput placeholder="Disabled" :disabled="true" />
-        <AtlInput placeholder="With error" :invalid="true" :errors="['This field is required']" />
-        <AtlInput placeholder="Read only" :readonly="true" value="Read only value" />
+        <AtlInput aria-label="Disabled" placeholder="Disabled" :disabled="true" />
+        <AtlInput aria-label="With error" placeholder="With error" :invalid="true" :errors="['This field is required']" />
+        <AtlInput aria-label="Read only" placeholder="Read only" :readonly="true" value="Read only value" />
       </div>
     `,
   }),
@@ -160,6 +163,7 @@ export const Playground: Story = {
     setup() {
       return { args };
     },
-    template: '<AtlInput v-bind="args" />',
+    template:
+      '<AtlInput :aria-label="args.label ? undefined : \'Input\'" v-bind="args" />',
   }),
 };

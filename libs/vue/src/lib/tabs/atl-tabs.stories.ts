@@ -158,8 +158,8 @@ export const WithRichContent: Story = {
       <AtlTabGroup v-bind="args">
         <AtlTab label="Profile">
           <div style="display:flex;flex-direction:column;gap:12px;max-width:400px;padding:1rem">
-            <AtlInput placeholder="Display name" />
-            <AtlInput type="email" placeholder="Email address" />
+            <AtlInput aria-label="Display name" placeholder="Display name" />
+            <AtlInput aria-label="Email address" type="email" placeholder="Email address" />
             <AtlButton variant="primary" size="sm">Save Changes</AtlButton>
           </div>
         </AtlTab>

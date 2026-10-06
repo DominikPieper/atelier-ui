@@ -226,13 +226,25 @@ import { AtlTooltip } from '../tooltip/atl-tooltip';
         <div class="section-body">
           <div class="row">
             <div style="flex: 1; min-width: 180px;">
-              <atl-input placeholder="Text input" [(value)]="inputValue" />
+              <atl-input
+                aria-label="Text input"
+                placeholder="Text input"
+                [(value)]="inputValue"
+              />
             </div>
             <div style="flex: 1; min-width: 180px;">
-              <atl-input type="email" placeholder="Email input" />
+              <atl-input
+                aria-label="Email input"
+                type="email"
+                placeholder="Email input"
+              />
             </div>
             <div style="flex: 1; min-width: 180px;">
-              <atl-input placeholder="Invalid state" [invalid]="true" />
+              <atl-input
+                aria-label="Invalid state"
+                placeholder="Invalid state"
+                [invalid]="true"
+              />
             </div>
           </div>
         </div>
@@ -243,11 +255,16 @@ import { AtlTooltip } from '../tooltip/atl-tooltip';
         <h2 class="section-title">Textarea</h2>
         <div class="section-body">
           <atl-textarea
+            aria-label="Write something here"
             placeholder="Write something here…"
             [rows]="3"
             [(value)]="textareaValue"
           />
-          <atl-textarea placeholder="Auto-resize" [autoResize]="true" />
+          <atl-textarea
+            aria-label="Auto-resize"
+            placeholder="Auto-resize"
+            [autoResize]="true"
+          />
         </div>
       </section>
 
@@ -304,7 +321,11 @@ import { AtlTooltip } from '../tooltip/atl-tooltip';
         <h2 class="section-title">Select</h2>
         <div class="section-body">
           <div style="max-width: 300px;">
-            <atl-select [(value)]="selectValue" placeholder="Select a country">
+            <atl-select
+              aria-label="Select a country"
+              [(value)]="selectValue"
+              placeholder="Select a country"
+            >
               <atl-option optionValue="us">United States</atl-option>
               <atl-option optionValue="ca">Canada</atl-option>
               <atl-option optionValue="uk">United Kingdom</atl-option>
@@ -515,7 +536,10 @@ import { AtlTooltip } from '../tooltip/atl-tooltip';
             <atl-drawer-header>Settings Panel</atl-drawer-header>
             <atl-drawer-content>
               <div style="display: flex; flex-direction: column; gap: 1rem;">
-                <atl-input placeholder="Display name" />
+                <atl-input
+                  aria-label="Display name"
+                  placeholder="Display name"
+                />
                 <atl-toggle [(checked)]="toggleOn"
                   >Email notifications</atl-toggle
                 >

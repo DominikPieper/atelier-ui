@@ -87,6 +87,7 @@ import { AtlProgress } from './progress/atl-progress';
             <div class="form-field">
               <label class="field-label">Email</label>
               <atl-input
+                aria-label="you@example.com"
                 type="email"
                 placeholder="you@example.com"
                 [invalid]="showErrors"
@@ -95,6 +96,7 @@ import { AtlProgress } from './progress/atl-progress';
             <div class="form-field">
               <label class="field-label">Password</label>
               <atl-input
+                aria-label="Enter your password"
                 type="password"
                 placeholder="Enter your password"
                 [invalid]="showErrors"
@@ -199,6 +201,7 @@ class LoginFormComponent {
             <div class="form-field">
               <label class="field-label">Email</label>
               <atl-input
+                aria-label="you@example.com"
                 type="email"
                 placeholder="you@example.com"
                 [invalid]="true"
@@ -207,6 +210,7 @@ class LoginFormComponent {
             <div class="form-field">
               <label class="field-label">Password</label>
               <atl-input
+                aria-label="Enter your password"
                 type="password"
                 placeholder="Enter your password"
                 [invalid]="true"
@@ -312,11 +316,19 @@ class LoginFormWithErrorsComponent {
             <div class="form-grid">
               <div class="form-field">
                 <label class="field-label">Full Name</label>
-                <atl-input type="text" placeholder="John Doe" />
+                <atl-input
+                  aria-label="John Doe"
+                  type="text"
+                  placeholder="John Doe"
+                />
               </div>
               <div class="form-field">
                 <label class="field-label">Email</label>
-                <atl-input type="email" placeholder="john@example.com" />
+                <atl-input
+                  aria-label="john@example.com"
+                  type="email"
+                  placeholder="john@example.com"
+                />
               </div>
             </div>
           </div>
@@ -346,6 +358,7 @@ class LoginFormWithErrorsComponent {
             <div class="form-field">
               <label class="field-label">Profile visibility</label>
               <atl-select
+                aria-label="Select visibility"
                 [(value)]="visibility"
                 placeholder="Select visibility"
               >

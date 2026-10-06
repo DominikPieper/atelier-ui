@@ -20,7 +20,7 @@ const meta: Meta<AtlSelect> = {
     props: { ...args, value: '' },
     moduleMetadata: { imports: [AtlOption] },
     template: `
-      <atl-select ${argsToTemplate(args)} [(value)]="value">
+      <atl-select ${args.label ? '' : 'aria-label="Select"'} ${argsToTemplate(args)} [(value)]="value">
         <atl-option optionValue="us">United States</atl-option>
         <atl-option optionValue="ca">Canada</atl-option>
         <atl-option optionValue="uk">United Kingdom</atl-option>
@@ -71,7 +71,7 @@ export const WithSelection: Story = {
     props: { ...args, value: 'ca' },
     moduleMetadata: { imports: [AtlOption] },
     template: `
-      <atl-select ${argsToTemplate(args)} [(value)]="value">
+      <atl-select ${args.label ? '' : 'aria-label="Select"'} ${argsToTemplate(args)} [(value)]="value">
         <atl-option optionValue="us">United States</atl-option>
         <atl-option optionValue="ca">Canada</atl-option>
         <atl-option optionValue="uk">United Kingdom</atl-option>
@@ -100,7 +100,7 @@ export const WithErrors: Story = {
     },
     moduleMetadata: { imports: [AtlOption] },
     template: `
-      <atl-select ${argsToTemplate(args)} [(value)]="value" [errors]="errors" [touched]="touched">
+      <atl-select ${args.label ? '' : 'aria-label="Select"'} ${argsToTemplate(args)} [(value)]="value" [errors]="errors" [touched]="touched">
         <atl-option optionValue="us">United States</atl-option>
         <atl-option optionValue="ca">Canada</atl-option>
         <atl-option optionValue="uk">United Kingdom</atl-option>
@@ -115,7 +115,7 @@ export const WithDisabledOption: Story = {
     props: { ...args, value: '' },
     moduleMetadata: { imports: [AtlOption] },
     template: `
-      <atl-select ${argsToTemplate(args)} [(value)]="value">
+      <atl-select ${args.label ? '' : 'aria-label="Select"'} ${argsToTemplate(args)} [(value)]="value">
         <atl-option optionValue="us">United States</atl-option>
         <atl-option optionValue="ca" [disabled]="true">Canada (unavailable)</atl-option>
         <atl-option optionValue="uk">United Kingdom</atl-option>
@@ -133,7 +133,7 @@ export const Playground: Story = {
     props: { ...args, value: '' },
     moduleMetadata: { imports: [AtlOption] },
     template: `
-      <atl-select ${argsToTemplate(args)} [(value)]="value">
+      <atl-select ${args.label ? '' : 'aria-label="Select"'} ${argsToTemplate(args)} [(value)]="value">
         <atl-option optionValue="a">Option A</atl-option>
         <atl-option optionValue="b">Option B</atl-option>
         <atl-option optionValue="c">Option C</atl-option>

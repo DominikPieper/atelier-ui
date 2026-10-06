@@ -1,10 +1,12 @@
 import {
+  afterNextRender,
   ChangeDetectionStrategy,
   Component,
   ElementRef,
   computed,
   effect,
   inject,
+  Injector,
   input,
   model,
   signal,
@@ -13,6 +15,7 @@ import {
 } from '@angular/core';
 import { A11yModule } from '@angular/cdk/a11y';
 import { ATL_DIALOG } from './atl-dialog.token';
+import { isNgDevMode } from '../a11y-dev-warn';
 import { AtlIcon } from '../icon/atl-icon';
 
 let nextId = 0;
@@ -111,6 +114,8 @@ export class AtlDialog {
   protected readonly dialogRef =
     viewChild<ElementRef<HTMLDialogElement>>('dialogEl');
   private readonly triggerEl = signal<HTMLElement | null>(null);
+  private readonly injector = inject(Injector);
+  private warnedUnnamed = false;
 
   protected readonly panelClass = computed(() => `panel size-${this.size()}`);
   protected readonly hostClasses = computed(() =>
@@ -124,12 +129,39 @@ export class AtlDialog {
       if (this.open()) {
         this.triggerEl.set(document.activeElement as HTMLElement);
         dialog.showModal();
+        this.warnIfUnnamed(dialog);
       } else {
         if (dialog.open) dialog.close();
         this.triggerEl()?.focus();
         this.triggerEl.set(null);
       }
     });
+  }
+
+  /**
+   * Dev-mode warning, once per instance, when the dialog opens with nothing
+   * naming it. Checked after render so a header projected later (or an
+   * `aria-label` bound dynamically) has settled by then.
+   */
+  private warnIfUnnamed(dialog: HTMLDialogElement): void {
+    if (!isNgDevMode() || this.warnedUnnamed) return;
+    this.warnedUnnamed = true;
+    afterNextRender(
+      () => {
+        const named =
+          this.ariaLabel() !== '' ||
+          this.ariaLabelledby() !== '' ||
+          dialog.querySelector(`[id="${this.headerId}"]`) !== null;
+        if (!named) {
+          console.warn(
+            '[AtlDialog] opened with no accessible name — ' +
+              'add an <atl-dialog-header> or set [aria-label] / [aria-labelledby] so screen readers announce its purpose.',
+            dialog,
+          );
+        }
+      },
+      { injector: this.injector },
+    );
   }
 
   protected onCancel(event: Event): void {

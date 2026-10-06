@@ -2,6 +2,8 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  ElementRef,
+  inject,
   input,
   model,
   ViewEncapsulation,
@@ -12,6 +14,7 @@ import {
   type ValidationError,
   type WithOptionalFieldTree,
 } from '@angular/forms/signals';
+import { warnIfUnnamedControl } from '../a11y-dev-warn';
 import { AtlIcon } from '../icon/atl-icon';
 
 let nextId = 0;
@@ -181,6 +184,17 @@ export class AtlTextarea implements FormValueControl<string> {
     if (this.autoResize()) classes.push('is-auto-resize');
     return classes.join(' ');
   });
+
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  constructor() {
+    warnIfUnnamedControl(
+      this.host.nativeElement,
+      'AtlTextarea',
+      'textarea',
+      'set [label] or [aria-label], or associate a <label for> with the textarea id',
+    );
+  }
 
   /** @internal */
   protected onInput(event: Event): void {

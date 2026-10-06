@@ -17,7 +17,8 @@ export interface AtlDrawerProps {
 </script>
 
 <script setup lang="ts">
-import { computed, onMounted, provide, ref, useId, watch } from 'vue';
+import { computed, nextTick, onMounted, provide, ref, useId, watch } from 'vue';
+import { isDevBuild } from '../a11y-dev-warn';
 import '@atelier-ui/styles/drawer/atl-drawer.css';
 
 defineOptions({ name: 'AtlDrawer' });
@@ -36,6 +37,29 @@ const emit = defineEmits<{
 const dialogRef = ref<HTMLDialogElement | null>(null);
 const headerId = useId();
 
+let warnedUnnamed = false;
+
+// Dev-mode warning, once per instance, when the dialog opens with nothing naming
+// it: no header in the slot and no aria-label / aria-labelledby override. Checked
+// after the next tick so a header rendered later has settled.
+function warnIfUnnamed() {
+  const dialog = dialogRef.value;
+  if (!isDevBuild() || warnedUnnamed || !dialog) return;
+  warnedUnnamed = true;
+  void nextTick(() => {
+    const named =
+      dialog.getAttribute('aria-labelledby') !== headerId ||
+      dialog.querySelector(`[id="${headerId}"]`) !== null;
+    if (!named) {
+      console.warn(
+        '[AtlDrawer] opened with no accessible name — ' +
+          'add an <atl-drawer-header> so screen readers announce its purpose.',
+        dialog,
+      );
+    }
+  });
+}
+
 function close() {
   emit('update:open', false);
 }
@@ -48,6 +72,7 @@ provide(AtlDrawerKey, {
 onMounted(() => {
   if (props.open && dialogRef.value) {
     dialogRef.value.showModal();
+    warnIfUnnamed();
   }
 });
 
@@ -58,6 +83,7 @@ watch(
     if (!dialog) return;
     if (isOpen) {
       if (!dialog.open) dialog.showModal();
+      warnIfUnnamed();
     } else {
       if (dialog.open) dialog.close();
     }

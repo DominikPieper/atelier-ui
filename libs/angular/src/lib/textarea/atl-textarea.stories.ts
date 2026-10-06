@@ -17,7 +17,7 @@ const meta: Meta<AtlTextarea> = {
   tags: ['autodocs'],
   render: (args) => ({
     props: args,
-    template: `<atl-textarea ${argsToTemplate(args)} />`,
+    template: `<atl-textarea ${args.label ? '' : 'aria-label="Text area"'} ${argsToTemplate(args)} />`,
   }),
   argTypes: {
     rows: { control: { type: 'number', min: 1, max: 20 } },
@@ -72,7 +72,7 @@ export const Readonly: Story = {
   args: { readonly: true },
   render: (args) => ({
     props: args,
-    template: `<atl-textarea ${argsToTemplate(args)} value="This content cannot be edited." />`,
+    template: `<atl-textarea ${args.label ? '' : 'aria-label="Text area"'} ${argsToTemplate(args)} value="This content cannot be edited." />`,
   }),
 };
 
@@ -86,7 +86,7 @@ export const WithErrors: Story = {
         { kind: 'minLength', message: 'Must be at least 20 characters' },
       ],
     },
-    template: `<atl-textarea ${argsToTemplate(args)} [errors]="errors" [touched]="true" />`,
+    template: `<atl-textarea ${args.label ? '' : 'aria-label="Text area"'} ${argsToTemplate(args)} [errors]="errors" [touched]="true" />`,
   }),
   parameters: {
     a11y: {
@@ -110,6 +110,6 @@ export const AutoResize: Story = {
 export const Playground: Story = {
   render: (args) => ({
     props: args,
-    template: `<atl-textarea ${argsToTemplate(args)} />`,
+    template: `<atl-textarea ${args.label ? '' : 'aria-label="Text area"'} ${argsToTemplate(args)} />`,
   }),
 };

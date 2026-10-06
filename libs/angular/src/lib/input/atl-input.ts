@@ -2,6 +2,8 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  ElementRef,
+  inject,
   input,
   model,
   ViewEncapsulation,
@@ -11,6 +13,7 @@ import {
   type ValidationError,
   type WithOptionalFieldTree,
 } from '@angular/forms/signals';
+import { warnIfUnnamedControl } from '../a11y-dev-warn';
 import { AtlIcon } from '../icon/atl-icon';
 
 let nextId = 0;
@@ -198,6 +201,17 @@ export class AtlInput implements FormValueControl<string> {
     if (this.touched()) classes.push('is-touched');
     return classes.join(' ');
   });
+
+  private readonly host = inject<ElementRef<HTMLElement>>(ElementRef);
+
+  constructor() {
+    warnIfUnnamedControl(
+      this.host.nativeElement,
+      'AtlInput',
+      'input',
+      'set [label] or [aria-label], or associate a <label for> with the input id',
+    );
+  }
 
   /** @internal */
   protected onInput(event: Event): void {

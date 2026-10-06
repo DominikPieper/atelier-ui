@@ -21,7 +21,8 @@ const meta: Meta<typeof AtlTextarea> = {
       const value = ref('');
       return { args, value };
     },
-    template: '<AtlTextarea v-bind="args" v-model:value="value" />',
+    template:
+      '<AtlTextarea :aria-label="args.label ? undefined : \'Text area\'" v-bind="args" v-model:value="value" />',
   }),
   argTypes: {
     rows: { control: { type: 'number', min: 1, max: 20 } },
@@ -75,7 +76,7 @@ export const Readonly: Story = {
       return { args };
     },
     template:
-      '<AtlTextarea v-bind="args" value="This content cannot be edited." />',
+      '<AtlTextarea :aria-label="args.label ? undefined : \'Text area\'" v-bind="args" value="This content cannot be edited." />',
   }),
 };
 
@@ -90,7 +91,8 @@ export const WithErrors: Story = {
       ];
       return { args, errors };
     },
-    template: '<AtlTextarea v-bind="args" :errors="errors" />',
+    template:
+      '<AtlTextarea :aria-label="args.label ? undefined : \'Text area\'" v-bind="args" :errors="errors" />',
   }),
   parameters: {
     a11y: {
@@ -123,9 +125,9 @@ export const AllVariants: Story = {
       <div style="display:flex;flex-direction:column;gap:1rem;max-width:400px">
         <AtlTextarea label="Bio" placeholder="Tell us about yourself" v-model:value="bio" />
         <AtlTextarea label="Notes" :autoResize="true" placeholder="Auto-resizing textarea..." v-model:value="notes" />
-        <AtlTextarea placeholder="Disabled" :disabled="true" />
-        <AtlTextarea placeholder="With error" :invalid="true" :errors="['This field is required']" />
-        <AtlTextarea :rows="6" placeholder="6 rows tall" />
+        <AtlTextarea aria-label="Disabled" placeholder="Disabled" :disabled="true" />
+        <AtlTextarea aria-label="With error" placeholder="With error" :invalid="true" :errors="['This field is required']" />
+        <AtlTextarea aria-label="6 rows tall" :rows="6" placeholder="6 rows tall" />
       </div>
     `,
   }),
@@ -147,6 +149,7 @@ export const Playground: Story = {
     setup() {
       return { args };
     },
-    template: '<AtlTextarea v-bind="args" />',
+    template:
+      '<AtlTextarea :aria-label="args.label ? undefined : \'Text area\'" v-bind="args" />',
   }),
 };

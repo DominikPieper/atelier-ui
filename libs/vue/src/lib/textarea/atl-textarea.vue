@@ -1,6 +1,7 @@
 <script setup lang="ts">
 import { ref, watch, onMounted, computed, nextTick, useId } from 'vue';
 import '@atelier-ui/styles/textarea/atl-textarea.css';
+import { warnIfUnnamedControl } from '../a11y-dev-warn';
 import AtlIcon from '../icon/atl-icon.vue';
 
 defineOptions({ name: 'AtlTextarea' });
@@ -78,7 +79,14 @@ watch(
   },
 );
 
-onMounted(() => adjustHeight());
+onMounted(() => {
+  adjustHeight();
+  warnIfUnnamedControl(
+    textareaRef.value,
+    'AtlTextarea',
+    'set label or aria-label, or associate a <label for> with the textarea id',
+  );
+});
 
 function onInput(event: Event) {
   emit('update:value', (event.target as HTMLTextAreaElement).value);

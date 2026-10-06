@@ -73,11 +73,11 @@ const loginTemplate = (showErrors: boolean) => `
         <div style="${S.stack}gap:var(--ui-spacing-4);margin-top:var(--ui-spacing-4);">
           <div style="${S.formField}">
             <label style="${S.fieldLabel}">Email</label>
-            <AtlInput type="email" placeholder="you@example.com" :invalid="${showErrors}" />
+            <AtlInput aria-label="you@example.com" type="email" placeholder="you@example.com" :invalid="${showErrors}" />
           </div>
           <div style="${S.formField}">
             <label style="${S.fieldLabel}">Password</label>
-            <AtlInput type="password" placeholder="Enter your password" :invalid="${showErrors}" />
+            <AtlInput aria-label="Enter your password" type="password" placeholder="Enter your password" :invalid="${showErrors}" />
           </div>
           <AtlCheckbox>Remember me</AtlCheckbox>
         </div>
@@ -127,15 +127,15 @@ const settingsTemplate = `
         <div style="${S.stack}gap:var(--ui-spacing-4);padding:var(--ui-spacing-4) 0;">
           <div style="${S.formField}">
             <label style="${S.fieldLabel}">Display name</label>
-            <AtlInput placeholder="Jane Doe" />
+            <AtlInput aria-label="Jane Doe" placeholder="Jane Doe" />
           </div>
           <div style="${S.formField}">
             <label style="${S.fieldLabel}">Email</label>
-            <AtlInput type="email" placeholder="you@example.com" />
+            <AtlInput aria-label="you@example.com" type="email" placeholder="you@example.com" />
           </div>
           <div style="${S.formField}">
             <label style="${S.fieldLabel}">Timezone</label>
-            <AtlSelect placeholder="Select timezone">
+            <AtlSelect aria-label="Select timezone" placeholder="Select timezone">
               <AtlOption optionValue="utc">UTC</AtlOption>
               <AtlOption optionValue="cet">Central European Time</AtlOption>
               <AtlOption optionValue="pst">Pacific Standard Time</AtlOption>

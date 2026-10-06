@@ -1,6 +1,7 @@
 <script setup lang="ts">
-import { computed, useId } from 'vue';
+import { computed, onMounted, ref, useId } from 'vue';
 import '@atelier-ui/styles/input/atl-input.css';
+import { warnIfUnnamedControl } from '../a11y-dev-warn';
 import AtlIcon from '../icon/atl-icon.vue';
 
 defineOptions({ name: 'AtlInput' });
@@ -62,6 +63,16 @@ const inputId = computed(
   () => props.id || (props.label ? `input-${generatedId}` : undefined),
 );
 
+const inputRef = ref<HTMLInputElement | null>(null);
+
+onMounted(() =>
+  warnIfUnnamedControl(
+    inputRef.value,
+    'AtlInput',
+    'set label or aria-label, or associate a <label for> with the input id',
+  ),
+);
+
 function onInput(event: Event) {
   emit('update:value', (event.target as HTMLInputElement).value);
 }
@@ -79,6 +90,7 @@ function onInput(event: Event) {
     <label v-if="label" :for="inputId">{{ label }}</label>
     <div class="input-field">
       <input
+        ref="inputRef"
         :id="inputId"
         :type="type"
         :value="value"

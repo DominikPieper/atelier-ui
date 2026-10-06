@@ -246,11 +246,11 @@ export const WithForm: Story = {
           <div style="display: flex; flex-direction: column; gap: 1rem;">
             <div>
               <label style="display: block; margin-bottom: 0.25rem; font-size: 0.875rem; font-weight: 500;">Name</label>
-              <atl-input [(value)]="name" placeholder="Enter your name" />
+              <atl-input aria-label="Enter your name" [(value)]="name" placeholder="Enter your name" />
             </div>
             <div>
               <label style="display: block; margin-bottom: 0.25rem; font-size: 0.875rem; font-weight: 500;">Country</label>
-              <atl-select [(value)]="country" placeholder="Select a country">
+              <atl-select aria-label="Select a country" [(value)]="country" placeholder="Select a country">
                 <atl-option optionValue="us">United States</atl-option>
                 <atl-option optionValue="ca">Canada</atl-option>
                 <atl-option optionValue="uk">United Kingdom</atl-option>

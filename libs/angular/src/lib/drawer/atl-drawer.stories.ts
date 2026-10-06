@@ -251,11 +251,11 @@ export const WithForm: Story = {
           <div style="display: flex; flex-direction: column; gap: 1rem;">
             <div>
               <label style="display: block; margin-bottom: 0.25rem; font-size: 0.875rem; font-weight: 500;">Name</label>
-              <atl-input [(value)]="name" placeholder="Your name" />
+              <atl-input aria-label="Your name" [(value)]="name" placeholder="Your name" />
             </div>
             <div>
               <label style="display: block; margin-bottom: 0.25rem; font-size: 0.875rem; font-weight: 500;">Email</label>
-              <atl-input type="email" [(value)]="email" placeholder="you@example.com" />
+              <atl-input aria-label="you@example.com" type="email" [(value)]="email" placeholder="you@example.com" />
             </div>
           </div>
         </atl-drawer-content>

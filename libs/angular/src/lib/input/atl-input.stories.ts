@@ -17,7 +17,7 @@ const meta: Meta<AtlInput> = {
   tags: ['autodocs'],
   render: (args) => ({
     props: args,
-    template: `<atl-input ${argsToTemplate(args)} />`,
+    template: `<atl-input ${args.label ? '' : 'aria-label="Input"'} ${argsToTemplate(args)} />`,
   }),
   argTypes: {
     type: {
@@ -77,7 +77,7 @@ export const Readonly: Story = {
   args: { readonly: true },
   render: (args) => ({
     props: args,
-    template: `<atl-input ${argsToTemplate(args)} value="Read-only value" />`,
+    template: `<atl-input ${args.label ? '' : 'aria-label="Input"'} ${argsToTemplate(args)} value="Read-only value" />`,
   }),
 };
 
@@ -91,7 +91,7 @@ export const WithErrors: Story = {
         { kind: 'email', message: 'Please enter a valid email address' },
       ],
     },
-    template: `<atl-input ${argsToTemplate(args)} [errors]="errors" [touched]="true" />`,
+    template: `<atl-input ${args.label ? '' : 'aria-label="Input"'} ${argsToTemplate(args)} [errors]="errors" [touched]="true" />`,
   }),
   parameters: {
     a11y: {
@@ -109,12 +109,12 @@ export const AllTypes: Story = {
   render: () => ({
     template: `
       <div style="display: flex; flex-direction: column; gap: 1rem; max-width: 320px;">
-        <atl-input type="text" placeholder="Text input" />
-        <atl-input type="email" placeholder="Email input" />
-        <atl-input type="password" placeholder="Password input" />
-        <atl-input type="number" placeholder="Number input" />
-        <atl-input type="tel" placeholder="Tel input" />
-        <atl-input type="url" placeholder="URL input" />
+        <atl-input aria-label="Text input" type="text" placeholder="Text input" />
+        <atl-input aria-label="Email input" type="email" placeholder="Email input" />
+        <atl-input aria-label="Password input" type="password" placeholder="Password input" />
+        <atl-input aria-label="Number input" type="number" placeholder="Number input" />
+        <atl-input aria-label="Tel input" type="tel" placeholder="Tel input" />
+        <atl-input aria-label="URL input" type="url" placeholder="URL input" />
       </div>
     `,
   }),
@@ -127,6 +127,6 @@ export const Required: Story = {
 export const Playground: Story = {
   render: (args) => ({
     props: args,
-    template: `<atl-input ${argsToTemplate(args)} />`,
+    template: `<atl-input ${args.label ? '' : 'aria-label="Input"'} ${argsToTemplate(args)} />`,
   }),
 };

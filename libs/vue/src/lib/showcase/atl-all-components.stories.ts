@@ -257,13 +257,13 @@ export const AllComponents: Story = {
           <div class="section-body">
             <div class="row">
               <div style="flex: 1; min-width: 180px;">
-                <AtlInput placeholder="Text input" :value="inputValue" @update:value="inputValue = $event" />
+                <AtlInput aria-label="Text input" placeholder="Text input" :value="inputValue" @update:value="inputValue = $event" />
               </div>
               <div style="flex: 1; min-width: 180px;">
-                <AtlInput type="email" placeholder="Email input" />
+                <AtlInput aria-label="Email input" type="email" placeholder="Email input" />
               </div>
               <div style="flex: 1; min-width: 180px;">
-                <AtlInput placeholder="Invalid state" :invalid="true" />
+                <AtlInput aria-label="Invalid state" placeholder="Invalid state" :invalid="true" />
               </div>
             </div>
           </div>
@@ -273,8 +273,8 @@ export const AllComponents: Story = {
         <section style="margin-bottom: 3rem;">
           <h2 class="section-title">Textarea</h2>
           <div class="section-body">
-            <AtlTextarea placeholder="Write something here…" :rows="3" :value="textareaValue" @update:value="textareaValue = $event" />
-            <AtlTextarea placeholder="Auto-resize" :autoResize="true" />
+            <AtlTextarea aria-label="Write something here" placeholder="Write something here…" :rows="3" :value="textareaValue" @update:value="textareaValue = $event" />
+            <AtlTextarea aria-label="Auto-resize" placeholder="Auto-resize" :autoResize="true" />
           </div>
         </section>
 
@@ -321,7 +321,7 @@ export const AllComponents: Story = {
           <h2 class="section-title">Select</h2>
           <div class="section-body">
             <div style="max-width: 300px;">
-              <AtlSelect :value="selectValue" @update:value="selectValue = $event" placeholder="Select a country">
+              <AtlSelect aria-label="Select a country" :value="selectValue" @update:value="selectValue = $event" placeholder="Select a country">
                 <AtlOption optionValue="us">United States</AtlOption>
                 <AtlOption optionValue="ca">Canada</AtlOption>
                 <AtlOption optionValue="uk">United Kingdom</AtlOption>
@@ -472,7 +472,7 @@ export const AllComponents: Story = {
               <AtlDrawerHeader>Settings Panel</AtlDrawerHeader>
               <AtlDrawerContent>
                 <div style="display: flex; flex-direction: column; gap: 1rem;">
-                  <AtlInput placeholder="Display name" />
+                  <AtlInput aria-label="Display name" placeholder="Display name" />
                   <AtlToggle :checked="toggleOn" @update:checked="toggleOn = $event">Email notifications</AtlToggle>
                   <AtlToggle :checked="false">Push notifications</AtlToggle>
                 </div>
