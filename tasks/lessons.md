@@ -878,3 +878,14 @@ harness's "completed (exit code 0)" as the gate result, and committed an ADR on 
 The 0 was `echo`'s. The gate's real code was inside the file, as `check:all 1`. Rule: for a
 backgrounded gate, read the exit code the command wrote into its output file, never the harness's
 completion status, and do not act on the result before reading it.
+
+## 2026-10-07 — When each fix needs a fix, the first decision was wrong
+
+P4a's spec said "the docs build reads the Storybook manifests at build time". From that came: docs
+build depends on three Storybook builds; each deploy builds Storybook twice; `gen-llms` depends on
+Storybook; the release workflow would have to build Storybook; the pre-push hook would need a
+degraded path; the generator would need a freshness check. Each step was locally sensible, and I
+was dispatching the fourth patch when the owner asked whether this was getting more complicated. It
+was. The repo already had the answer (ADR-0009): one source, a committed projection, a `--check`
+gate. Rule: when a change forces a second change somewhere unrelated, and that forces a third, stop
+and re-examine the decision at the root of the chain before writing the next patch.
