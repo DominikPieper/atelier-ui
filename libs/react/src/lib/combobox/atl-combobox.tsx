@@ -6,8 +6,45 @@ import { AtlIcon } from '../icon/atl-icon';
 export type { AtlComboboxOption };
 
 export interface AtlComboboxProps extends AtlComboboxSpec {
+  /**
+   * The selected option's `value`. Controlled: pair it with `onValueChange`.
+   */
   value?: string;
+  /**
+   * Callback fired with the chosen option's `value` when the user selects an option.
+   */
   onValueChange?: (value: string) => void;
+  /**
+   * Whether the combobox is disabled.
+   */
+  disabled?: boolean;
+  /**
+   * Whether the combobox has validation errors.
+   */
+  invalid?: boolean;
+  /**
+   * Whether the combobox is required.
+   */
+  required?: boolean;
+  /**
+   * The input's name attribute, used for form submission.
+   */
+  name?: string;
+  /**
+   * Whether the value can be read but not changed. Enforced by the component: typing, opening the panel and selecting an option are all blocked.
+   */
+  readonly?: boolean;
+  /**
+   * Options to display and filter. Each option is `{ value, label, disabled? }`.
+   */
+  options?: AtlComboboxOption[];
+  /**
+   * Placeholder text for the input.
+   */
+  placeholder?: string;
+  /**
+   * Array of error messages to display.
+   */
   errors?: string[];
 }
 

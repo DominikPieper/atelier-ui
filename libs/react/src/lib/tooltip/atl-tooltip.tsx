@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect, ReactNode, useId } from 'react';
-import type { AtlTooltipSpec } from '../spec';
+import type { AtlTooltipSpec, AtlTooltipPosition } from '../spec';
 import '@atelier-ui/styles/tooltip/atl-tooltip.css';
 import '@atelier-ui/styles/tooltip/atl-tooltip.native.css';
 
@@ -7,6 +7,26 @@ import '@atelier-ui/styles/tooltip/atl-tooltip.native.css';
  * Properties for the AtlTooltip component.
  */
 export interface AtlTooltipProps extends AtlTooltipSpec {
+  /**
+   * The tooltip text.
+   */
+  atlTooltip: string;
+  /**
+   * Preferred tooltip placement. Falls back to the opposite side if clipped.
+   */
+  atlTooltipPosition?: AtlTooltipPosition;
+  /**
+   * Disables the tooltip without removing the wrapper.
+   */
+  atlTooltipDisabled?: boolean;
+  /**
+   * Delay in ms before the tooltip appears.
+   */
+  atlTooltipShowDelay?: number;
+  /**
+   * Delay in ms before the tooltip hides.
+   */
+  atlTooltipHideDelay?: number;
   /**
    * The content to trigger the tooltip.
    */

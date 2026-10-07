@@ -46,6 +46,7 @@ export interface AtlChatProps {
   open?: boolean;
   /** Callback when open state should change. */
   onOpenChange?: (open: boolean) => void;
+  /** The chat parts: `AtlChatHeader`, `AtlChatMessages` and `AtlChatInput`. */
   children?: ReactNode;
 }
 

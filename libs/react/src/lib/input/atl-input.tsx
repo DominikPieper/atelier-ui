@@ -11,6 +11,26 @@ export interface AtlInputProps
     Omit<InputHTMLAttributes<HTMLInputElement>, 'type' | 'readOnly'>,
     AtlInputSpec {
   /**
+   * Whether the input is disabled.
+   */
+  disabled?: boolean;
+  /**
+   * Whether the input is required.
+   */
+  required?: boolean;
+  /**
+   * The input's name attribute, used for form submission.
+   */
+  name?: string;
+  /**
+   * Lowercase alias of `readOnly`: whether the input is read-only. `readOnly` wins when both are set.
+   */
+  readonly?: boolean;
+  /**
+   * Placeholder text shown when the input is empty.
+   */
+  placeholder?: string;
+  /**
    * The type of input to render.
    */
   type?: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url';

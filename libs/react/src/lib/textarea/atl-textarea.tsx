@@ -11,6 +11,38 @@ export interface AtlTextareaProps
     Omit<TextareaHTMLAttributes<HTMLTextAreaElement>, 'readOnly'>,
     AtlTextareaSpec {
   /**
+   * Whether the textarea is disabled.
+   */
+  disabled?: boolean;
+  /**
+   * Whether the textarea has validation errors.
+   */
+  invalid?: boolean;
+  /**
+   * Whether the textarea is required.
+   */
+  required?: boolean;
+  /**
+   * The textarea's name attribute, used for form submission.
+   */
+  name?: string;
+  /**
+   * Lowercase alias of `readOnly`: whether the textarea is read-only. `readOnly` wins when both are set.
+   */
+  readonly?: boolean;
+  /**
+   * Number of visible text rows.
+   */
+  rows?: number;
+  /**
+   * Placeholder text shown when the textarea is empty.
+   */
+  placeholder?: string;
+  /**
+   * Whether the textarea height grows automatically to fit its content.
+   */
+  autoResize?: boolean;
+  /**
    * Current value of the textarea.
    */
   value?: string;

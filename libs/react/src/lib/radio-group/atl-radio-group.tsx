@@ -61,6 +61,10 @@ export interface AtlRadioGroupProps
     Omit<InputHTMLAttributes<HTMLDivElement>, 'onChange'>,
     AtlRadioGroupSpec {
   /**
+   * Lowercase alias of `readOnly`: whether the selection can be read but not changed. `readOnly` wins when both are set.
+   */
+  readonly?: boolean;
+  /**
    * The current value of the radio group.
    */
   value?: string;

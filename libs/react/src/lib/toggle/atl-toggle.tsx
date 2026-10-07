@@ -13,6 +13,22 @@ export interface AtlToggleProps
     >,
     AtlToggleSpec {
   /**
+   * Whether the toggle is on. Controlled: pair it with `onCheckedChange`.
+   */
+  checked?: boolean;
+  /**
+   * Whether the toggle has validation errors.
+   */
+  invalid?: boolean;
+  /**
+   * Whether the toggle is disabled.
+   */
+  disabled?: boolean;
+  /**
+   * Whether the toggle is required.
+   */
+  required?: boolean;
+  /**
    * Callback fired when the checked state changes.
    */
   onCheckedChange?: (checked: boolean) => void;

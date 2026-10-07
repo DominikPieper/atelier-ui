@@ -16,6 +16,10 @@ import '@atelier-ui/styles/breadcrumbs/atl-breadcrumbs.css';
 export interface AtlBreadcrumbsProps
   extends HTMLAttributes<HTMLElement>, AtlBreadcrumbsSpec {
   /**
+   * Separator character shown between breadcrumb items.
+   */
+  separator?: string;
+  /**
    * The breadcrumb items to be rendered.
    */
   children?: ReactNode;

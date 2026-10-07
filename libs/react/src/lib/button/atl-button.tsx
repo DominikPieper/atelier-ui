@@ -1,5 +1,5 @@
 import { ButtonHTMLAttributes, ReactNode, forwardRef } from 'react';
-import type { AtlButtonSpec } from '../spec';
+import type { AtlButtonSpec, AtlButtonVariant, AtlButtonSize } from '../spec';
 import '@atelier-ui/styles/button/atl-button.css';
 
 /**
@@ -19,7 +19,16 @@ export type AtlButtonProps = Omit<
   'children' | 'aria-label'
 > &
   AtlButtonSpec &
-  AtlButtonAccessibleName;
+  AtlButtonAccessibleName & {
+    /** Visual style of the button. */
+    variant?: AtlButtonVariant;
+    /** Size of the button. */
+    size?: AtlButtonSize;
+    /** Disables the button, preventing interaction. */
+    disabled?: boolean;
+    /** Shows a loading spinner and disables interaction. */
+    loading?: boolean;
+  };
 
 /**
  * A versatile button component that supports various styles, sizes, and states.

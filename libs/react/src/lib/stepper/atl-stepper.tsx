@@ -58,6 +58,7 @@ export interface AtlStepperProps
   orientation?: 'horizontal' | 'vertical';
   /** Restrict forward navigation until previous steps are completed. */
   linear?: boolean;
+  /** The `AtlStep` elements, in order, plus any step content. */
   children?: ReactNode;
 }
 

@@ -24,6 +24,21 @@ export type { AtlSortDirection };
 
 export interface AtlTableProps
   extends HTMLAttributes<HTMLDivElement>, AtlTableSpec {
+  /**
+   * Visual style of the table rows.
+   */
+  variant?: 'default' | 'striped' | 'bordered';
+  /**
+   * Row density: the vertical padding of cells.
+   */
+  size?: 'sm' | 'md' | 'lg';
+  /**
+   * Whether the header row sticks to the top when the table scrolls.
+   */
+  stickyHeader?: boolean;
+  /**
+   * The table sections: `AtlThead` and `AtlTbody` elements.
+   */
   children?: ReactNode;
   /**
    * Accessible name for the scrollable table region. Surfaces to

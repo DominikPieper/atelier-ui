@@ -19,6 +19,14 @@ export interface AtlCheckboxProps
     >,
     AtlCheckboxSpec {
   /**
+   * Whether the checkbox is disabled.
+   */
+  disabled?: boolean;
+  /**
+   * Whether the checkbox is required.
+   */
+  required?: boolean;
+  /**
    * Whether the checkbox is checked.
    */
   checked?: boolean;

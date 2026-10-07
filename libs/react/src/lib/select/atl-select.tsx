@@ -17,6 +17,18 @@ export interface AtlSelectProps
     Omit<SelectHTMLAttributes<HTMLSelectElement>, 'value' | 'onChange'>,
     AtlSelectSpec {
   /**
+   * Whether the select is disabled.
+   */
+  disabled?: boolean;
+  /**
+   * Whether the select is required.
+   */
+  required?: boolean;
+  /**
+   * The select's name attribute, used for form submission.
+   */
+  name?: string;
+  /**
    * The current value of the select.
    */
   value?: string;
