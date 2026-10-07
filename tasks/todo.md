@@ -1319,7 +1319,7 @@ check:manifest-parity` → `sh` → `MainThread`. The gate finished its work and
         React/Vue combobox skip-disabled (`38536d84`), Angular checkbox/toggle `id`
         (`b109160a`), Vue toggle `useId()` (`22d3749c`). React tooltip JSDoc no longer claims a
         flip it does not do; the flip itself stays an owner decision. Still open from the
-        triage: items 6a (menu keyboard in React and Vue) and 7b (Angular button `type`), and
+        triage: item 7b (Angular button `type`), and
         the Figma master text for stepper `linear` (needs the Desktop Bridge).
   - [x] **Owner decisions of 2026-10-08 on the triage, done** (see the "Resolved 2026-10-08"
         column in `tasks/divergence-triage-2026-10-08.md`): `errors` accept the shared
@@ -1328,6 +1328,15 @@ check:manifest-parity` → `sh` → `MainThread`. The gate finished its work and
         the default off (`3b850592`); the tooltip no-flip is recorded in its contract and the
         position JSDoc (`b7ce573e`); pagination, stepper `linear`, select keyboard, dialog and
         alert records (`6b3e4aa2`).
+  - [x] **Menu keyboard in React and Vue (triage 6a), done 2026-10-08, owner decision**: the
+        trigger and menu follow the WAI-ARIA menu-button pattern (`74fab516`): Enter/Space/
+        ArrowDown open on the first enabled item, ArrowUp on the last, arrows wrap, Home/End,
+        type-ahead, roving tabindex, Escape/Tab/activation close and return focus. Submenus
+        stay Angular-only (metadata says so). Disabled items are skipped in React/Vue; the
+        CDK keeps them focusable, a recorded difference. 15 specs per framework red then
+        green, plus a `KeyboardNavigation` story play each. `a11y-tree.ts` now records
+        `aria-describedby` presence, so the Vue-tooltip class of defect fails `check:a11y-parity`
+        (shown by reverting `f96a861f` in a scratch change).
   - [ ] Stepper `linear` in the Figma master description still says "only the active and
         completed steps are clickable"; the code (all three) also passes `optional` steps.
         Correct the master's description line, then refresh `tools/figma/snapshot.json`.

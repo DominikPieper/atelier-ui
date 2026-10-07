@@ -14,7 +14,8 @@
  *   - `aria-X="false"`/absent are dropped (no false-positive divergence),
  *   - `aria-hidden`/`hidden` subtrees are excluded (not in the a11y tree — e.g. the
  *     loading spinner), and so are their text in the accessible name,
- *   - role-less wrapper elements are skipped but their children are still visited.
+ *   - role-less wrapper elements are skipped but their children are still visited,
+ *   - `aria-describedby` is recorded as presence only (`describedby: true`), never the id.
  *
  * Dependency-free on purpose: it is co-located in each adapter's `testing/` dir
  * (like behavior.ts) so the spec import stays intra-project and the file ships no
@@ -198,6 +199,11 @@ function normalizedStates(
     states.checked = true;
   if (typeof asInput.required === 'boolean' && asInput.required)
     states.required = true;
+
+  // Presence only, never the id value: ids are generated per framework and differ
+  // by design, but a described control that loses its description (the Vue tooltip,
+  // f96a861f) must not compare equal to one that keeps it.
+  if (el.getAttribute('aria-describedby')?.trim()) states.describedby = true;
 
   for (const attr of STATE_ATTRS) {
     const v = el.getAttribute(attr);

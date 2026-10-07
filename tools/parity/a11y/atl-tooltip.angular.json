@@ -8,7 +8,10 @@
   "open": [
     {
       "role": "button",
-      "name": "Save"
+      "name": "Save",
+      "states": {
+        "describedby": true
+      }
     },
     {
       "role": "tooltip",
