@@ -105,4 +105,26 @@ describe('AtlTooltip', () => {
       expect(screen.getByRole('tooltip')).toHaveClass('position-below');
     });
   });
+
+  it('points the trigger at the tooltip via aria-describedby while it is shown', async () => {
+    const user = userEvent.setup();
+    render(AtlTooltip, {
+      props: {
+        atlTooltip: 'Helpful hint',
+        atlTooltipShowDelay: 0,
+        atlTooltipHideDelay: 0,
+      },
+      slots: { default: '<button>Hover me</button>' },
+    });
+    const trigger = screen.getByText('Hover me');
+    expect(trigger).not.toHaveAttribute('aria-describedby');
+    await user.hover(trigger);
+    const tooltip = await screen.findByRole('tooltip');
+    expect(tooltip.id).not.toBe('');
+    expect(trigger).toHaveAttribute('aria-describedby', tooltip.id);
+    await user.unhover(trigger);
+    await waitFor(() =>
+      expect(trigger).not.toHaveAttribute('aria-describedby'),
+    );
+  });
 });

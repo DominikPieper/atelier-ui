@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { ref, onUnmounted } from 'vue';
+import { ref, useId, watch, onUnmounted } from 'vue';
 import '@atelier-ui/styles/tooltip/atl-tooltip.css';
 import '@atelier-ui/styles/tooltip/atl-tooltip.native.css';
 
@@ -27,6 +27,9 @@ const props = withDefaults(defineProps<AtlTooltipProps>(), {
 });
 
 const visible = ref(false);
+const wrapper = ref<HTMLElement | null>(null);
+// useId(): stable per instance and SSR-safe, so the trigger can reference it.
+const tooltipId = `tooltip-${useId()}`;
 let showTimer: ReturnType<typeof setTimeout> | null = null;
 let hideTimer: ReturnType<typeof setTimeout> | null = null;
 
@@ -63,6 +66,19 @@ function onKeydown(event: KeyboardEvent) {
   }
 }
 
+// The slotted element is the trigger. While the tooltip is shown it is
+// described by it (same contract as React and Angular).
+watch(
+  visible,
+  (isVisible) => {
+    const trigger = wrapper.value?.firstElementChild;
+    if (!trigger) return;
+    if (isVisible) trigger.setAttribute('aria-describedby', tooltipId);
+    else trigger.removeAttribute('aria-describedby');
+  },
+  { flush: 'post' },
+);
+
 onUnmounted(() => clearTimers());
 </script>
 
@@ -76,6 +92,7 @@ onUnmounted(() => clearTimers());
   Escape — the wrapper itself is never a tab stop and doesn't need to be. -->
   <!-- eslint-disable-next-line vuejs-accessibility/no-static-element-interactions -->
   <span
+    ref="wrapper"
     class="atl-tooltip-wrapper"
     @mouseenter="show"
     @mouseleave="hide"
@@ -86,6 +103,7 @@ onUnmounted(() => clearTimers());
     <slot />
     <div
       v-if="visible && !atlTooltipDisabled && atlTooltip"
+      :id="tooltipId"
       role="tooltip"
       :class="`atl-tooltip position-${atlTooltipPosition}`"
     >
