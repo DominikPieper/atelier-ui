@@ -31,6 +31,14 @@
  *              `worker/mcp.ts`'s `manifestProvider` was fixed for: proves the
  *              shard the ref names is actually there, not just that the ref
  *              string is present.
+ *   [NO-DESCRIPTION] a component prop has an empty description in the manifest
+ *              (Angular `input()`/`output()`, React props type member, Vue
+ *              `defineProps` member; Vue's `global` attributes are not API and
+ *              are skipped). The docs render prop tables from these manifests,
+ *              and the per-framework Storybook MCP answers from them, so an
+ *              undescribed prop is a hole in both. A prop that cannot carry a
+ *              description is listed in PROP_DESCRIPTION_EXEMPT
+ *              (tools/scripts/lib/allowlists.js) with a written reason.
  *
  * WHY THIS READS BUILT OUTPUT, AND WHY THAT IS SAFE HERE:
  * `dist/storybook/<fw>/manifests/components.json` only exists after
@@ -54,6 +62,8 @@
 const fs = require('fs');
 const path = require('path');
 const { FRAMEWORKS } = require('./lib/component-discovery');
+const { allProps } = require('./lib/manifest-props');
+const { PROP_DESCRIPTION_EXEMPT } = require('./lib/allowlists');
 
 const ROOT = path.resolve(__dirname, '../..');
 const DIST = path.join(ROOT, 'dist/storybook');
@@ -85,6 +95,8 @@ function resolvePointer(obj, pointer) {
 }
 
 let componentsChecked = 0;
+let propsChecked = 0;
+const exemptUsed = new Set();
 
 for (const fw of FRAMEWORKS) {
   const manifestDir = path.join(DIST, fw, 'manifests');
@@ -199,6 +211,39 @@ for (const fw of FRAMEWORKS) {
       );
     }
   }
+
+  // [NO-DESCRIPTION] — every prop of every documented component says what it is.
+  for (const p of allProps(fw, manifestDir, components)) {
+    propsChecked++;
+    if (typeof p.description === 'string' && p.description.trim().length > 0) {
+      continue;
+    }
+    const key = `${fw}/${p.id}/${p.name}`;
+    const exempt = PROP_DESCRIPTION_EXEMPT[key];
+    if (exempt) {
+      exemptUsed.add(key);
+      if (exempt.kind === 'gap') {
+        console.warn(
+          `⚠ [NO-DESCRIPTION] ${key}: exempt as a gap — ${exempt.why}`,
+        );
+      }
+      continue;
+    }
+    fail(
+      'NO-DESCRIPTION',
+      `${key}: empty description in the manifest. Add a JSDoc comment to the prop in the ` +
+        `${fw} source, or — if docgen cannot carry one — a reasoned entry in PROP_DESCRIPTION_EXEMPT.`,
+    );
+  }
+}
+
+for (const key of Object.keys(PROP_DESCRIPTION_EXEMPT)) {
+  if (!exemptUsed.has(key)) {
+    fail(
+      'NO-DESCRIPTION',
+      `PROP_DESCRIPTION_EXEMPT entry '${key}' matches no undescribed prop. Delete it.`,
+    );
+  }
 }
 
 if (errors.length > 0) {
@@ -207,6 +252,6 @@ if (errors.length > 0) {
   process.exit(1);
 } else {
   console.log(
-    `✓ Storybook component manifests present, docgen-backed, and resolvable for all ${FRAMEWORKS.length} frameworks (${componentsChecked} components checked).`,
+    `✓ Storybook component manifests present, docgen-backed, and resolvable for all ${FRAMEWORKS.length} frameworks (${componentsChecked} components, ${propsChecked} props checked, every prop described).`,
   );
 }

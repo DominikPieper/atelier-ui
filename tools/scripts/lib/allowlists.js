@@ -1392,7 +1392,21 @@ const COMPONENT_COUNT_EXEMPT_ENTRIES = [
 }
 const COMPONENT_COUNT_EXEMPT = new Map(COMPONENT_COUNT_EXEMPT_ENTRIES);
 
+/**
+ * Props that legitimately have no description in a framework's docgen manifest
+ * (check:storybook-manifests, [NO-DESCRIPTION]; tools/scripts/check-manifests.js).
+ *
+ * Keyed `<framework>/<component id>/<prop>`, e.g. `vue/components-inputs-atlinput/modelValue`.
+ * Two kinds, same as the other allowlists here:
+ *   kind 'design' — the docgen cannot carry a description for this prop and the
+ *                   source is right as it is. Silent.
+ *   kind 'gap'    — it should be described and is not yet. Warns on every run.
+ * An entry that no longer matches an undescribed prop fails the gate: delete it.
+ */
+const PROP_DESCRIPTION_EXEMPT = {};
+
 module.exports = {
+  PROP_DESCRIPTION_EXEMPT,
   DEAD_SELECTOR_EXEMPT,
   VARIANT_AXIS_EXCEPTIONS,
   DEFAULT_IS_BASE,
