@@ -409,7 +409,7 @@ Ranked; each carries why it's worth doing next rather than later.
           Compare these against the contracts; each is either a recorded `codeOnly` difference
           or a bug. Open: React sub-components that are not a story's `meta.component`
           (`AtlOption`, `AtlTd`, …) are not in the manifest, so their props are unmeasured.
-    - [ ] **P4b — examples from one tagged story per component. Spiked 2026-10-07: blocked,
+    - [x] **Closed 2026-10-07 by owner decision: examples stay hand-authored in `components.ts`** (no story parsing, no Angular-only second path). P4b — examples from one tagged story per component. Spiked 2026-10-07: blocked,
           not built.** The examples stay hand-authored, as ADR-0121 keeps prose examples
           authored; the plan was one `docs-example`-tagged story per component and framework
           with an explicit `parameters.docs.source.code`, projected like the props (ADR-0154).
