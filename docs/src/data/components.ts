@@ -733,14 +733,17 @@ export const componentDocs: Record<string, ComponentDoc> = {
       angular: `<atl-progress [value]="25" label="Upload progress" />
 <atl-progress [value]="60" variant="success" label="Form completion" />
 <atl-progress [value]="85" variant="warning" label="Quota usage" />
+<atl-progress [value]="95" variant="danger" label="Storage almost full" />
 <atl-progress [indeterminate]="true" label="Loading…" />`,
       react: `<AtlProgress value={25} label="Upload progress" />
 <AtlProgress value={60} variant="success" label="Form completion" />
 <AtlProgress value={85} variant="warning" label="Quota usage" />
+<AtlProgress value={95} variant="danger" label="Storage almost full" />
 <AtlProgress indeterminate label="Loading…" />`,
       vue: `<AtlProgress :value="25" label="Upload progress" />
 <AtlProgress :value="60" variant="success" label="Form completion" />
 <AtlProgress :value="85" variant="warning" label="Quota usage" />
+<AtlProgress :value="95" variant="danger" label="Storage almost full" />
 <AtlProgress :indeterminate="true" label="Loading…" />`,
     },
   },

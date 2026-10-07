@@ -1199,7 +1199,7 @@ export default function McpExplorer() {
       >
         <h2
           style={{
-            fontSize: '1.1rem',
+            fontSize: 'var(--ui-font-size-2xl)',
             fontWeight: 800,
             letterSpacing: '-0.03em',
             marginBottom: '0.4rem',

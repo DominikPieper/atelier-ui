@@ -1012,9 +1012,18 @@ const breadcrumbSchema = {
         function getFocusable() {
           if (!sidebar) return [];
           return Array.prototype.slice
-            .call(sidebar.querySelectorAll('a[href], button:not([disabled])'))
+            .call(
+              sidebar.querySelectorAll(
+                'a[href], button:not([disabled]), summary',
+              ),
+            )
             .filter(function (el) {
-              return el.offsetParent !== null;
+              // checkVisibility() also drops links inside a closed <details>
+              // (content-visibility: hidden), which offsetParent does not;
+              // focus() on those is a silent no-op and would stall the trap.
+              return el.checkVisibility
+                ? el.checkVisibility({ visibilityProperty: true })
+                : el.offsetParent !== null;
             });
         }
 
@@ -1088,8 +1097,11 @@ const breadcrumbSchema = {
 
         bindOnce(backdrop, 'click', closeSidebar);
 
-        // Escape closes the drawer; Tab is trapped inside it while open (mobile).
-        bindOnce(sidebar, 'keydown', function (e) {
+        // Escape closes the drawer; Tab is trapped while open (mobile). The
+        // hamburger (now an X) is the only close control, so it is part of the
+        // focus cycle: [menu button, ...drawer focusables]. Bound on both the
+        // sidebar and the button, since the button sits outside the sidebar.
+        function onDrawerKeydown(e) {
           if (!isMobile() || !sidebar.classList.contains('docs-sidebar--open'))
             return;
           if (e.key === 'Escape') {
@@ -1098,18 +1110,22 @@ const breadcrumbSchema = {
             return;
           }
           if (e.key !== 'Tab') return;
-          const focusable = getFocusable();
-          if (!focusable.length) return;
-          const firstEl = focusable[0];
-          const lastEl = focusable[focusable.length - 1];
-          if (e.shiftKey && document.activeElement === firstEl) {
-            e.preventDefault();
-            lastEl.focus();
-          } else if (!e.shiftKey && document.activeElement === lastEl) {
-            e.preventDefault();
-            firstEl.focus();
+          // Explicit next/prev with wrap: the DOM between the button and the
+          // sidebar holds other topbar controls that must not leak into the
+          // cycle, so native tab order is not relied on.
+          const cycle = [menuBtn].concat(getFocusable());
+          const i = cycle.indexOf(document.activeElement);
+          if (i === -1) return;
+          e.preventDefault();
+          const step = e.shiftKey ? -1 : 1;
+          // Skip any target that refuses focus, so the trap can never stall.
+          for (let n = 1; n < cycle.length; n++) {
+            cycle[(i + step * n + cycle.length * n) % cycle.length].focus();
+            if (document.activeElement !== cycle[i]) break;
           }
-        });
+        }
+        bindOnce(sidebar, 'keydown', onDrawerKeydown);
+        bindOnce(menuBtn, 'keydown', onDrawerKeydown);
 
         // Keep inert correct across rotation / resize across the breakpoint
         // (e.g. desktop→mobile must hide a non-open drawer; mobile→desktop must
