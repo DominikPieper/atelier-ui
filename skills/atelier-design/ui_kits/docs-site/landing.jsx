@@ -291,14 +291,16 @@ const McpSection = () => {
       <div className="section-narrow">
         <div className="mcp-row">
           <div className="mcp-text">
-            <h2>Three endpoints. One config.</h2>
+            <h2>One endpoint. One config.</h2>
             <p>
-              Drop these into your Claude Code MCP config. Each Storybook
-              instance exposes the same four tools —{' '}
-              <span className="ui-mono">docs-list</span>,{' '}
+              Drop this into your Claude Code MCP config. Angular is the
+              default; React and Vue use{' '}
+              <span className="ui-mono">storybook-react</span> and{' '}
+              <span className="ui-mono">storybook-vue</span> at the same path
+              pattern. Each Storybook endpoint exposes the same three docs tools
+              — <span className="ui-mono">docs-list</span>,{' '}
               <span className="ui-mono">docs-show</span>,{' '}
-              <span className="ui-mono">stories-preview</span>,{' '}
-              <span className="ui-mono">test-run</span>.
+              <span className="ui-mono">docs-show-story</span>.
             </p>
             <ul className="mcp-checklist">
               <li>HTTP transport — no local processes to babysit.</li>
@@ -334,38 +336,6 @@ const McpSection = () => {
               {`: `}
               <span className="code-str">
                 "https://atelier.pieper.io/storybook-angular/mcp"
-              </span>
-              {`
-    },
-    `}
-              <span className="code-name">"storybook-react"</span>
-              {`: {
-      `}
-              <span className="code-name">"type"</span>
-              {`: `}
-              <span className="code-str">"http"</span>
-              {`,
-      `}
-              <span className="code-name">"url"</span>
-              {`: `}
-              <span className="code-str">
-                "https://atelier.pieper.io/storybook-react/mcp"
-              </span>
-              {`
-    },
-    `}
-              <span className="code-name">"storybook-vue"</span>
-              {`: {
-      `}
-              <span className="code-name">"type"</span>
-              {`: `}
-              <span className="code-str">"http"</span>
-              {`,
-      `}
-              <span className="code-name">"url"</span>
-              {`: `}
-              <span className="code-str">
-                "https://atelier.pieper.io/storybook-vue/mcp"
               </span>
               {`
     }

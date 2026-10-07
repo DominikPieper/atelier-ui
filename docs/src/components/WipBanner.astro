@@ -2,14 +2,59 @@
 import Icon from './Icon.astro';
 ---
 
+<!-- Read the dismissed flag before the banner paints: this inline script runs
+     synchronously, ahead of the <aside> below, so a viewer who dismissed it
+     never sees it (same idea as the theme-before-paint script in BaseLayout).
+     ClientRouter swaps <body> and re-runs inline scripts, so the flag is also
+     copied onto the incoming <html>. Storage can throw (private window,
+     blocked site data); every access is guarded and the banner then simply
+     shows. -->
+<script is:inline>
+  (function () {
+    const KEY = 'docs-wip-dismissed';
+    const CLASS = 'docs-wip-dismissed';
+    const root = document.documentElement;
+    try {
+      if (localStorage.getItem(KEY) === '1') root.classList.add(CLASS);
+    } catch {
+      // storage unavailable: the banner just shows
+    }
+    if (!window.__docsWipBound) {
+      window.__docsWipBound = true;
+      document.addEventListener('astro:before-swap', function (e) {
+        if (document.documentElement.classList.contains(CLASS))
+          e.newDocument.documentElement.classList.add(CLASS);
+      });
+      // Delegated, so it survives the <body> swap without re-binding.
+      document.addEventListener('click', function (e) {
+        if (!e.target.closest('.docs-wip-banner-close')) return;
+        document.documentElement.classList.add(CLASS);
+        try {
+          localStorage.setItem(KEY, '1');
+        } catch {
+          // not remembered; dismissed for this page view only
+        }
+      });
+    }
+  })();
+</script>
 <aside class="docs-wip-banner" role="note">
   <span class="docs-wip-banner-icon" aria-hidden="true">
-    <Icon name="warning" />
+    <Icon name="info" />
   </span>
   <p class="docs-wip-banner-text">
-    <strong>Work in progress</strong> — Atelier is under active development;
-    content and APIs may change.
+    <strong>Work in progress</strong>
+    <span class="docs-wip-banner-long">
+      — Atelier is under active development; content and APIs may change.</span
+    ><span class="docs-wip-banner-short"> · APIs may change</span>
   </p>
+  <button
+    type="button"
+    class="docs-wip-banner-close"
+    aria-label="Dismiss the work-in-progress notice"
+  >
+    <Icon name="close" />
+  </button>
 </aside>
 
 <style>
@@ -18,25 +63,72 @@ import Icon from './Icon.astro';
     align-items: center;
     justify-content: center;
     gap: 0.5rem;
-    padding: var(--ui-spacing-2) var(--ui-spacing-4);
-    background: var(--ui-color-warning-bg);
-    color: var(--ui-color-warning-text);
+    padding: var(--ui-spacing-1) var(--ui-spacing-2) var(--ui-spacing-1)
+      var(--ui-spacing-4);
+    background: var(--ui-color-info-bg);
+    color: var(--ui-color-info-text);
     border-bottom: 1px solid
-      color-mix(in srgb, var(--ui-color-warning) 30%, transparent);
+      color-mix(in srgb, var(--ui-color-info) 25%, transparent);
     font-size: var(--ui-font-size-sm);
     line-height: 1.4;
-    text-align: center;
+  }
+
+  :global(html.docs-wip-dismissed) .docs-wip-banner {
+    display: none;
   }
 
   .docs-wip-banner-icon {
     display: inline-flex;
     align-items: center;
     flex-shrink: 0;
-    color: var(--ui-color-warning);
     font-size: 1rem;
   }
 
   .docs-wip-banner-text {
     margin: 0;
+    min-width: 0;
+    white-space: nowrap;
+  }
+
+  .docs-wip-banner-short {
+    display: none;
+  }
+
+  .docs-wip-banner-close {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 2rem;
+    height: 2rem;
+    padding: 0;
+    margin-left: 0.25rem;
+    background: transparent;
+    color: inherit;
+    border: none;
+    border-radius: var(--ui-radius-md);
+    cursor: pointer;
+    font-size: 1rem;
+  }
+
+  .docs-wip-banner-close:hover {
+    background: color-mix(in srgb, var(--ui-color-info) 15%, transparent);
+  }
+
+  .docs-wip-banner-close:focus-visible {
+    outline: 2px solid var(--ui-color-info-text);
+    outline-offset: 1px;
+  }
+
+  @media (max-width: 640px) {
+    .docs-wip-banner {
+      justify-content: flex-start;
+    }
+    .docs-wip-banner-long {
+      display: none;
+    }
+    .docs-wip-banner-short {
+      display: inline;
+    }
   }
 </style>

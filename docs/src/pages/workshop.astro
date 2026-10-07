@@ -9,16 +9,8 @@ import Checkpoint from '../components/Checkpoint.astro';
 import Icon from '../components/Icon.astro';
 import Callout from '../components/Callout.astro';
 import FwSwitcher from '../components/FwSwitcher.astro';
-import { getTrackStep, TRACK_LENGTH } from '../data/workshop-track';
 
 const SITE_URL = 'https://atelier.pieper.io';
-
-// "Step N of M" hero tag — derived from the single source of truth so the
-// number stays correct if the track is ever reordered.
-const trackStep = getTrackStep('/workshop');
-const stepTag = trackStep
-  ? `Step ${trackStep.step} of ${TRACK_LENGTH}`
-  : undefined;
 
 const PREREQ_CMD = {
   macOS: `# 1. Node 22+ (use Homebrew or nvm)\nnode --version   # need v22.12 or newer\n\n# 2. Claude Code CLI\nnpm install -g @anthropic-ai/claude-code\nclaude --version   # only proves it's installed, not logged in\n\n# 3. Authenticate with your own API key (console.anthropic.com)\nexport ANTHROPIC_API_KEY=sk-ant-...\nclaude -p "Reply with exactly: PREFLIGHT-OK"   # proves model access\n\n# 4. Figma access token (or use the demo token)\nexport FIGMA_ACCESS_TOKEN=figd_...`,
@@ -95,13 +87,7 @@ const mcpConfig = (fw: string) => `{
   currentPath="/workshop"
 >
   <div class="docs-inline-page">
-    <PageHero
-      kind="tutorial"
-      time="~25 min"
-      tag={stepTag}
-      title="Workshop setup"
-      ledeMax="520px"
-    >
+    <PageHero time="~25 min" title="Workshop setup" ledeMax="520px">
       Spin up a fully-configured Atelier workspace in one command — framework
       selection, library install, and <Jargon term="MCP">MCP</Jargon> server
       wired up automatically.

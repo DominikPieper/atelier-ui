@@ -5,17 +5,11 @@ import HelpFooter from '../components/HelpFooter.astro';
 import Icon from '../components/Icon.astro';
 import PageHero from '../components/PageHero.astro';
 import TrackNav from '../components/TrackNav.astro';
-import { getTrackStep, TRACK_LENGTH } from '../data/workshop-track';
 
 const FIGMA_URL =
   'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI?node-id=936-2954';
 const FRAMEWORKS = ['Angular', 'React', 'Vue'] as const;
 type Framework = (typeof FRAMEWORKS)[number];
-
-// Step indicator for the hero — derived from the workshop track so it tracks
-// any reordering in workshop-track.ts rather than being hardcoded here.
-const step = getTrackStep('/first-component');
-const stepTag = step ? `Step ${step.step} of ${TRACK_LENGTH}` : undefined;
 
 // One environment: the generated workspace (ADR-0137 — the scaffold is now
 // canonical for the two-day cohort as well as the self-serve reader; the
@@ -87,19 +81,16 @@ the SettingsCard component I just generated. Fix any discrepancies.`;
 >
   <div class="docs-inline-page">
     <PageHero
-      kind="tutorial"
       time="~15 min"
-      tag={stepTag}
       title="First component"
       titleAccent="component"
       ledeMax="580px"
     >
-      Six copy-paste steps that build the Settings Card end-to-end. For the why
-      behind each step, read
-      <a href="/tutorial" class="docs-link-primary">/tutorial</a> instead — it
-      builds from the same Settings / Card frame with the reasoning attached, so
-      if you have just finished it, run this as a timed second lap rather than
-      as new ground.
+      You did this guided in the
+      <a href="/tutorial" class="docs-link-primary">tutorial</a>; now do it
+      solo, against the clock. Same Settings Card, six copy-paste steps, no
+      explanations. Stuck on a step? The tutorial has the reasoning behind each
+      one.
     </PageHero>
 
     <!-- What you'll build -->
@@ -237,6 +228,7 @@ the SettingsCard component I just generated. Fix any discrepancies.`;
         <Code
           code={prompt(fw)}
           lang="text"
+          wrap
           title={`prompt — paste into Claude Code (${fw})`}
         />
       </div>)}
@@ -342,7 +334,7 @@ the SettingsCard component I just generated. Fix any discrepancies.`;
         exact colors, missing variants — so you ship a verified component, not a
         lookalike. Pass this prompt:
       </p>
-      <Code code={PARITY_PROMPT} lang="text" title="parity check prompt" />
+      <Code code={PARITY_PROMPT} lang="text" wrap title="parity check prompt" />
       <p class="kata-step-desc" style="margin-top: 0.6rem">
         <strong style="color: var(--ui-color-text)">Checkpoint:</strong> the
         report comes back with
@@ -354,24 +346,55 @@ the SettingsCard component I just generated. Fix any discrepancies.`;
       </p>
     </section>
 
-    <!-- Done -->
-    <div class="kata-done">
-      <div class="kata-done-head">
-        <span class="kata-done-eyebrow">Done</span>
-        <h2 class="kata-done-title">
-          You shipped a token-exact component in ~15 min.
-        </h2>
-      </div>
-      <p class="kata-done-desc">
-        Browse
-        <a href="/patterns" class="docs-link-primary docs-link-primary--bold"
-          >/patterns</a
-        >
-        for variations on the recipe — Login Form, Confirmation Dialog,
-        Management Dashboard — all use the same Figma → MCP → Storybook → code
-        loop you just ran.
+    <!-- Finish -->
+    <section class="kata-finish" aria-labelledby="kata-finish-title">
+      <h2 id="kata-finish-title" class="kata-finish-title">
+        Token-exact, and proven.
+      </h2>
+      <p class="kata-finish-lede">
+        You went from a Figma frame to a working Settings Card in about 15
+        minutes, and you checked it instead of eyeballing it.
       </p>
-    </div>
+      <ul class="kata-finish-recap">
+        <li>
+          <Icon name="check_circle" />
+          <span
+            >The parity check came back with <strong>0 discrepancies</strong>
+            against the Figma frame.</span
+          >
+        </li>
+        <li>
+          <Icon name="check_circle" />
+          <span
+            >Every value is a <code>--ui-*</code> token: no hex colours, no
+            pixel paddings.</span
+          >
+        </li>
+        <li>
+          <Icon name="check_circle" />
+          <span
+            >Built from Atelier components (AtlCard, AtlInput, AtlToggle,
+            AtlButton), not a lookalike.</span
+          >
+        </li>
+      </ul>
+      <div class="kata-finish-actions">
+        <a href="/patterns" class="docs-btn docs-btn-primary">
+          Next: try a pattern
+        </a>
+        <span class="kata-finish-more">
+          Same loop, new designs:
+          <a href="/patterns/login-form" class="docs-link-primary">Login Form</a
+          >,
+          <a href="/patterns/confirmation-dialog" class="docs-link-primary"
+            >Confirmation Dialog</a
+          >,
+          <a href="/patterns/management-dashboard" class="docs-link-primary"
+            >Management Dashboard</a
+          >.
+        </span>
+      </div>
+    </section>
 
     <HelpFooter page="first-component" />
 
@@ -616,39 +639,76 @@ the SettingsCard component I just generated. Fix any discrepancies.`;
     margin-bottom: 0;
   }
 
-  /* "Done" closer */
-  .kata-done {
-    margin: 2rem 0 1.5rem;
-    padding: 1.25rem 1.4rem;
+  /* Finish moment — the kata's closing beat */
+  .kata-finish {
+    margin: 3rem 0 2rem;
+    padding: 2rem 1.75rem;
     background: var(--ui-color-primary-light);
     border: 1px solid
       color-mix(in srgb, var(--ui-color-primary) 30%, transparent);
-    border-radius: var(--ui-radius-md);
+    border-radius: var(--ui-radius-lg, var(--ui-radius-md));
   }
-  .kata-done-head {
-    display: flex;
-    flex-direction: column;
-    gap: 0.3rem;
-    margin-bottom: 0.6rem;
-  }
-  .kata-done-eyebrow {
-    font-size: var(--ui-font-size-xs);
-    font-weight: 800;
-    letter-spacing: 0.06em;
-    text-transform: uppercase;
-    color: var(--ui-color-primary);
-  }
-  .kata-done-title {
-    margin: 0;
-    font-size: var(--ui-font-size-lg);
+  .kata-finish-title {
+    margin: 0 0 0.5rem;
+    font-size: var(--ui-font-size-2xl);
     font-weight: 800;
     letter-spacing: -0.02em;
     color: var(--ui-color-text);
   }
-  .kata-done-desc {
-    margin: 0;
+  .kata-finish-lede {
+    margin: 0 0 1.25rem;
+    max-width: 52ch;
     font-size: var(--ui-font-size-md);
+    line-height: 1.6;
+    color: var(--ui-color-text);
+  }
+  .kata-finish-recap {
+    margin: 0 0 1.5rem;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.5rem;
+    font-size: var(--ui-font-size-md);
+    line-height: 1.5;
+    color: var(--ui-color-text);
+  }
+  .kata-finish-recap li {
+    display: flex;
+    gap: 0.6rem;
+    align-items: baseline;
+  }
+  .kata-finish-recap li :global(svg) {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    align-self: flex-start;
+    margin-top: 2px;
+    color: var(--ui-color-primary);
+  }
+  .kata-finish-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1.25rem;
+  }
+  .kata-finish-more {
+    font-size: var(--ui-font-size-sm);
     color: var(--ui-color-text-muted);
     line-height: 1.6;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .kata-finish {
+      animation: kata-finish-in 500ms ease-out both;
+    }
+    @keyframes kata-finish-in {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
   }
 </style>

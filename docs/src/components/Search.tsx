@@ -248,7 +248,7 @@ export default function Search() {
           ref={inputRef}
           type="text"
           className="docs-search-input"
-          placeholder="Search docs and components..."
+          placeholder="Search"
           value={query}
           onChange={(e) => {
             setQuery(e.target.value);

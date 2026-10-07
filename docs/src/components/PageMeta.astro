@@ -1,0 +1,50 @@
+---
+import Icon from './Icon.astro';
+import {
+  getPrevNext,
+  getTrackStep,
+  TRACK_LENGTH,
+} from '../data/workshop-track';
+
+interface Props {
+  /** Optional time estimate, e.g. "~30 min". Rendered with a clock icon. */
+  time?: string;
+  /** Optional short modifier, e.g. "Workflow · 3 sources". */
+  tag?: string;
+}
+
+// A quiet meta line that sits below the page's H1/lede (never above the H1 —
+// the craft floor bans an eyebrow there). On a numbered workshop-track page
+// the "Step N of 7 · Next: <label> →" part is derived from workshop-track.ts
+// (the single source of truth), so pages never hand-build it.
+const { time, tag } = Astro.props;
+const pathname = Astro.url.pathname;
+const current = getTrackStep(pathname);
+const { next } = getPrevNext(pathname);
+---
+
+{(time || tag || current) && <p class="page-meta">
+  {time && <span class="page-meta-item page-meta-time">
+    <Icon name="schedule" class="page-meta-time-icon" />
+    <span>{time}</span>
+  </span>}
+  {tag && <span class="page-meta-item">{tag}</span>}
+  {current && <span class="page-meta-item">
+    Step {current.step} of {TRACK_LENGTH}
+  </span>}
+  {next && <span class="page-meta-item">
+    <a href={next.href} class="page-meta-next">Next: {next.label} →</a>
+  </span>}
+</p>}
+
+<style>
+  .page-meta-time {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.3em;
+  }
+  .page-meta-time-icon {
+    width: 1em;
+    height: 1em;
+  }
+</style>

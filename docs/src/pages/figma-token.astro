@@ -5,18 +5,11 @@ import DiagramFigure from '../components/DiagramFigure.astro';
 import PageHero from '../components/PageHero.astro';
 import TrackNav from '../components/TrackNav.astro';
 import Checkpoint from '../components/Checkpoint.astro';
-import { getTrackStep, TRACK_LENGTH } from '../data/workshop-track';
 import personalAccessTokenScreenshot from '../assets/screenshots/personal-access-token.png';
 
 const FIGMA_FILE_URL =
   'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
 const CLOUD_RELAY_URL = 'https://figma-console-mcp.southleft.com/mcp';
-
-// "Step N of M" derived from the single source of truth in workshop-track.ts.
-const trackStep = getTrackStep('/figma-token');
-const stepTag = trackStep
-  ? `Step ${trackStep.step} of ${TRACK_LENGTH}`
-  : undefined;
 ---
 
 <BaseLayout
@@ -25,7 +18,7 @@ const stepTag = trackStep
   currentPath="/figma-token"
 >
   <div class="docs-inline-page">
-    <PageHero kind="howto" tag={stepTag} title="Figma access" ledeMax="660px">
+    <PageHero title="Figma access" ledeMax="660px">
       Figma is the single source of truth, and the <code>figma-console</code>
       MCP server reads it through a <strong>Desktop Bridge plugin</strong>
       running inside Figma Desktop. A REST access token is a <em>secondary</em>

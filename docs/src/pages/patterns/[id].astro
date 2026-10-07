@@ -2,7 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
 import { PATTERNS, TAG_TO_SLUG } from '../../data/patterns';
-import PageEyebrow from '../../components/PageEyebrow.astro';
+import PageMeta from '../../components/PageMeta.astro';
 import {
   LoginFormDemo,
   SettingsPageDemo,
@@ -77,10 +77,6 @@ const nextPattern = PATTERNS.find((p) => p.num === pattern.num + 1) ?? null;
 >
   <div class="docs-inline-page">
     <div style="margin-bottom: 1.25rem">
-      <PageEyebrow
-        kind="howto"
-        tag={`Pattern ${String(pattern.num).padStart(2, '0')} of ${PATTERNS.length}`}
-      />
       <h1 class="docs-page-h1">{pattern.title}</h1>
       <p
         style="
@@ -92,6 +88,9 @@ const nextPattern = PATTERNS.find((p) => p.num === pattern.num + 1) ?? null;
       >
         {pattern.description}
       </p>
+      <PageMeta
+        tag={`Pattern ${String(pattern.num).padStart(2, '0')} of ${PATTERNS.length}`}
+      />
       <div class="pattern-tags" style="margin-top: 1rem">
         {pattern.tags.map((tag) => {
           const slug = TAG_TO_SLUG[tag];

@@ -4,7 +4,6 @@ import { join } from 'node:path';
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
 import Jargon from '../components/Jargon.astro';
-import PageEyebrow from '../components/PageEyebrow.astro';
 import Callout from '../components/Callout.astro';
 import { ALL_COMPONENTS } from '../data/components';
 import { repoRoot } from '../lib/skill-meta';
@@ -111,7 +110,6 @@ const previewCode = `# Atelier UI — Full API Reference
 >
   <div class="docs-inline-page">
     <div style="margin-bottom: 2.5rem">
-      <PageEyebrow kind="reference" />
       <div
         style="
           display: flex;

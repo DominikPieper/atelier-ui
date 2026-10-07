@@ -107,10 +107,12 @@ function getCategory(name: string): string {
   return '';
 }
 
+// What each snippet is, as a reader names it: the examples in data/components.ts
+// are Angular templates, React JSX (TSX when typed) and Vue SFC templates.
 const EXAMPLE_LANG: Record<Framework, string> = {
-  angular: 'html',
-  react: 'jsx',
-  vue: 'vue',
+  angular: 'Angular template',
+  react: 'React (TSX)',
+  vue: 'Vue SFC template',
 };
 
 // Storybook docs IDs: see ../lib/storybook-id.ts (shared with the manifest loader).
@@ -302,6 +304,7 @@ function ComponentDemo({ name }: { name: string }) {
           <AtlButton variant="primary">Primary</AtlButton>
           <AtlButton variant="secondary">Secondary</AtlButton>
           <AtlButton variant="outline">Outline</AtlButton>
+          <AtlButton variant="danger">Danger</AtlButton>
           <AtlButton variant="primary" size="sm">
             Small
           </AtlButton>
@@ -471,6 +474,19 @@ function ComponentDemo({ name }: { name: string }) {
               </AtlButton>
             </AtlCardFooter>
           </AtlCard>
+          <AtlCard
+            variant="flat"
+            padding="md"
+            style={{ flex: '1 1 220px', minWidth: 0 }}
+          >
+            <AtlCardHeader>Flat Card</AtlCardHeader>
+            <AtlCardContent>No shadow and no border.</AtlCardContent>
+            <AtlCardFooter>
+              <AtlButton variant="outline" size="sm">
+                Action
+              </AtlButton>
+            </AtlCardFooter>
+          </AtlCard>
         </div>
       );
     case 'avatar':
@@ -485,6 +501,8 @@ function ComponentDemo({ name }: { name: string }) {
             <AtlAvatar name="John Smith" size="sm" />
             <AtlAvatar name="Alice Johnson" size="md" status="online" />
             <AtlAvatar name="Bob Brown" size="lg" status="away" />
+            <AtlAvatar name="Dan Green" size="md" status="busy" />
+            <AtlAvatar name="Eva Black" size="md" status="offline" />
             <AtlAvatar name="Carol White" size="xl" shape="square" />
           </div>
           <div>
@@ -591,6 +609,18 @@ function ComponentDemo({ name }: { name: string }) {
                 opacity: 0.7,
               }}
             >
+              95% — Danger
+            </p>
+            <AtlProgress value={95} variant="danger" />
+          </div>
+          <div>
+            <p
+              style={{
+                margin: '0 0 0.5rem',
+                fontSize: 'var(--ui-font-size-sm)',
+                opacity: 0.7,
+              }}
+            >
               Indeterminate
             </p>
             <AtlProgress indeterminate={true} />
@@ -637,6 +667,19 @@ function ComponentDemo({ name }: { name: string }) {
             <AtlTab label="Billing" disabled={true}>
               Billing (disabled)
             </AtlTab>
+          </AtlTabGroup>
+          <p
+            style={{
+              margin: '1.5rem 0 0.5rem',
+              fontSize: 'var(--ui-font-size-sm)',
+              opacity: 0.7,
+            }}
+          >
+            Pills variant
+          </p>
+          <AtlTabGroup variant="pills">
+            <AtlTab label="Overview">Overview content</AtlTab>
+            <AtlTab label="Activity">Activity content</AtlTab>
           </AtlTabGroup>
         </div>
       );
@@ -728,7 +771,19 @@ function ComponentDemo({ name }: { name: string }) {
     case 'accordion':
       return (
         <div style={{ width: '100%' }}>
-          <AtlAccordionGroup variant="bordered">
+          <AtlAccordionGroup variant="default">
+            <AtlAccordionItem>
+              <AtlAccordionHeader>Default variant</AtlAccordionHeader>
+              Dividers between items, no outer frame.
+            </AtlAccordionItem>
+          </AtlAccordionGroup>
+          <AtlAccordionGroup variant="separated" style={{ marginTop: '1rem' }}>
+            <AtlAccordionItem>
+              <AtlAccordionHeader>Separated variant</AtlAccordionHeader>
+              Each item sits in its own card.
+            </AtlAccordionItem>
+          </AtlAccordionGroup>
+          <AtlAccordionGroup variant="bordered" style={{ marginTop: '1rem' }}>
             <AtlAccordionItem
               expanded={accordionExpanded}
               onExpandedChange={setAccordionExpanded}
@@ -925,9 +980,9 @@ export default function ComponentDetail({
             <span className="docs-demo-label">Live Preview</span>
             <span
               className="docs-demo-fw-tag"
-              title="The live preview renders the React build. Angular and Vue use the same props and produce equivalent output."
+              title="The preview is always the React adapter, whichever framework is selected. All three adapters load the same stylesheet from @atelier-ui/styles (select, tooltip, table and menu add a small per-framework override), so the markup classes and CSS match."
             >
-              React
+              Preview rendered with the React adapter
             </span>
           </div>
           <div className="docs-demo-canvas docs-demo-canvas--column">

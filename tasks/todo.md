@@ -34,16 +34,25 @@ Atelier token system instead of the generic gradient/grid look.
       gone; side stripes replaced site-wide; kit, `SKILL.md`, `brand-guide.md` updated, and the
       kit's broken token-sheet path fixed. Open: at a 1200 px window the Inspect card loses
       its leader lines.
-- [ ] **3. distill** — track pages show the 7 steps, Reference/How-to/Explanation
-      collapsed; one primary home CTA; one MCP endpoint on home; one product name; mobile
-      bottom nav offers "Next step".
-- [ ] **4. clarify** — `/design-to-code` in attendee language, ADRs behind a "Why (for
-      maintainers)" disclosure; component pages label the Angular snippet and explain the
-      React-rendered preview; resolve tutorial/kata overlap.
-- [ ] **5. harden** — `danger` in button demo, disabled/loading distinct in dark,
-      placeholder contrast ≥4.5:1, distinct nav landmark labels, `forced-colors` focus
-      outline, wrapped prompt blocks, unclipped search placeholder, single drawer close.
-- [ ] **6. delight** — kata end as a real finish moment; WIP banner dismissible or moved.
+- [x] **3. distill** — done 2026-10-07 (ADR-0157). Track-first sidebar with `<details>`
+      groups (24 → 7 visible links on `/design-to-code`), `PageMeta` under the H1 instead of
+      the eyebrow, one name, one MCP endpoint on the home, Prev/Step/Next bottom nav.
+- [x] **4. clarify** — done 2026-10-07. `/design-to-code` in attendee language with a
+      "Why (for maintainers)" disclosure per step; tutorial/kata roles stated on both pages;
+      component pages label snippets by framework and say the preview is the React adapter;
+      demos show every variant the API lists (button `danger`, card `flat`, tabs `pills`, …).
+- [x] **5. harden** — done 2026-10-07 except two library findings (below). Forced-colors
+      focus outline, unclipped search placeholder, one drawer close, scroll-top clear of the
+      bottom nav, prompt blocks wrap, nav landmark labels distinct.
+- [ ] **5a. library: placeholder contrast** — `--ui-color-placeholder` `#64748b` on
+      `--ui-color-input-bg` (= surface-sunken `#f1f5f9`) is 4.34:1, below AA, in light mode;
+      `check:contrast` has no placeholder pair, which is why it passed. Needs an owner
+      decision (token change touches all three adapters and Figma).
+- [ ] **5b. library: dark disabled button** — `.atl-button.is-disabled` relies on
+      `--ui-opacity-disabled: 0.65` in dark, so Disabled/Loading read as enabled. Needs an
+      owner decision.
+- [x] **6. delight** — done 2026-10-07. Kata ends with a real finish (recap, one action to
+      `/patterns`); WIP banner calm, dismissible, remembered before paint.
 - [ ] **7. polish** + re-run `/impeccable critique`.
 
 > **Picking this up in a new session?** Read

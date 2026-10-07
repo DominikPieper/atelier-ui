@@ -213,33 +213,6 @@ body {
   color: var(--ui-color-text);
 }
 
-.docs-sidebar-close {
-  display: none;
-  background: transparent;
-  border: 1px solid var(--ui-color-border);
-  border-radius: 6px;
-  padding: 4px;
-  cursor: pointer;
-  color: var(--ui-color-text-muted);
-  flex-shrink: 0;
-  transition: all var(--ui-transition-fast);
-  width: 28px;
-  height: 28px;
-  align-items: center;
-  justify-content: center;
-}
-
-.docs-sidebar-close svg {
-  width: 14px;
-  height: 14px;
-  display: block;
-}
-
-.docs-sidebar-close:hover {
-  color: var(--ui-color-text);
-  border-color: var(--ui-color-primary);
-}
-
 .docs-nav-section {
   margin-bottom: 1rem;
 }
@@ -255,6 +228,45 @@ body {
   align-items: center;
   gap: 0.5rem;
   margin-top: 0.5rem;
+}
+
+/* Non-workshop groups are native <details> disclosures: the summary is the
+ * heading, a chevron shows state, the browser supplies keyboard + AT behaviour. */
+.docs-nav-group > summary {
+  cursor: pointer;
+  list-style: none;
+  min-height: 32px;
+}
+.docs-nav-group > summary::-webkit-details-marker {
+  display: none;
+}
+.docs-nav-group > summary::after {
+  content: '';
+  margin-left: auto;
+  width: 0.4rem;
+  height: 0.4rem;
+  border-right: 2px solid currentColor;
+  border-bottom: 2px solid currentColor;
+  transform: rotate(-45deg);
+  transition: transform var(--ui-transition-fast);
+}
+.docs-nav-group[open] > summary::after {
+  transform: rotate(45deg);
+}
+.docs-nav-group > summary:hover {
+  color: var(--ui-color-text);
+}
+.docs-nav-group > summary:focus-visible {
+  outline: 2px solid var(--ui-color-primary);
+  outline-offset: -2px;
+  border-radius: var(--ui-radius-sm);
+}
+
+/* The workshop track is the primary path: its heading carries full text
+ * colour while the disclosure groups below stay muted. */
+.docs-nav-section--workshop .docs-nav-heading {
+  color: var(--ui-color-text);
+  font-weight: 700;
 }
 
 .docs-nav-heading-icon {
@@ -743,7 +755,11 @@ select:focus-visible,
 textarea:focus-visible,
 summary:focus-visible,
 [tabindex]:not([tabindex='-1']):focus-visible {
-  outline: none;
+  /* Transparent, not none: forced-colors mode drops box-shadow but paints a
+   * transparent outline in a system colour, so the ring survives Windows
+   * High Contrast. Invisible in normal mode. */
+  outline: 2px solid transparent;
+  outline-offset: 2px;
   box-shadow: var(--ui-focus-ring);
   border-radius: var(--ui-radius-sm);
 }
@@ -2174,9 +2190,6 @@ summary:focus-visible,
   .docs-sidebar--open {
     left: 0;
   }
-  .docs-sidebar-close {
-    display: flex;
-  }
 
   html {
     scroll-padding-bottom: calc(var(--docs-bottom-nav-height, 60px) + 1rem);
@@ -2231,8 +2244,19 @@ summary:focus-visible,
     height: 1em;
   }
 
+  /* Track variant: Previous / "Step N of M" / Next. */
+  .docs-bottom-nav-step {
+    justify-content: center;
+    color: var(--ui-color-text);
+    font-weight: 600;
+    flex: 1.2;
+  }
+  .docs-bottom-nav-item--next {
+    color: var(--ui-color-primary);
+  }
+
   .docs-scroll-top {
-    bottom: calc(56px + 1rem);
+    bottom: calc(var(--docs-bottom-nav-height, 60px) + 1.25rem);
     right: 1rem;
   }
 
@@ -2924,64 +2948,30 @@ summary:focus-visible,
   color: var(--ui-color-text);
 }
 
-/* ─── Page eyebrow (time + tag chips above page h1) ──────────────────────── */
-.page-eyebrow {
-  display: inline-flex;
-  gap: 0.55rem;
+/* ─── Page meta (reading time, step, next — one quiet line under the lede) ── */
+.page-meta {
+  display: flex;
+  flex-wrap: wrap;
   align-items: center;
-  margin-bottom: 0.85rem;
-  font-size: var(--ui-font-size-xs);
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-}
-.page-eyebrow-time {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-  padding: 0.18rem 0.55rem;
-  background: var(--ui-color-surface-raised);
-  border: 1px solid
-    color-mix(in srgb, var(--ui-color-primary) 38%, var(--ui-color-border));
-  border-radius: 999px;
-  color: var(--ui-color-primary);
-}
-.page-eyebrow-tag {
+  column-gap: 0.5rem;
+  row-gap: 0.15rem;
+  margin: 0.85rem 0 0;
+  font-size: var(--ui-font-size-sm);
   color: var(--ui-color-text-muted);
 }
-
-/* Diátaxis kind chip — categorizes the page so readers calibrate their
- * expectations before reading. Color is dimension-coded:
- *   Tutorial    — primary cyan/teal  (sequential, learning-oriented)
- *   How-To      — amber               (problem-oriented, recipe)
- *   Reference   — indigo              (information-oriented, look-up)
- *   Explanation — lime                (understanding-oriented, theory) */
-.page-eyebrow-kind {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.3rem;
-  padding: 0.18rem 0.55rem;
-  border-radius: 999px;
-  /* Non-tinted background so the same-color text keeps full
-   * contrast against its own background (color-mix tint with
-   * currentColor used to drop AA below 4.5:1 for small bold text). */
-  background: var(--ui-color-surface-raised);
-  border: 1px solid color-mix(in srgb, currentColor 38%, var(--ui-color-border));
+.page-meta-item + .page-meta-item::before {
+  content: '·';
+  margin-right: 0.5rem;
 }
-/* Diátaxis Eyebrow tints — Direction A (Conciso only):
- * Tutorial → primary teal · How-To → warning amber ·
- * Reference → text-muted · Explanation → success green. */
-.page-eyebrow-kind--tutorial {
+.page-meta-next {
   color: var(--ui-color-primary);
+  text-decoration: none;
+  font-weight: 600;
 }
-.page-eyebrow-kind--howto {
-  color: var(--ui-color-warning);
-}
-.page-eyebrow-kind--reference {
-  color: var(--ui-color-text-muted);
-}
-.page-eyebrow-kind--explanation {
-  color: var(--ui-color-success);
+.page-meta-next:hover,
+.page-meta-next:focus-visible {
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
 }
 
 /* ─── Learning-objectives box ("What you'll learn" / "Before you start") ── */

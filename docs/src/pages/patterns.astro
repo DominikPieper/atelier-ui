@@ -5,7 +5,6 @@ import { PATTERNS, TAG_TO_SLUG } from '../data/patterns';
 import PageHero from '../components/PageHero.astro';
 import Callout from '../components/Callout.astro';
 import TrackNav from '../components/TrackNav.astro';
-import { getTrackStep, TRACK_LENGTH } from '../data/workshop-track';
 import {
   LoginFormDemo,
   SettingsPageDemo,
@@ -14,13 +13,6 @@ import {
   NotificationCenterDemo,
   ManagementDashboardDemo,
 } from '../components/PatternsPage';
-
-// "Step N of M" hero tag — derived from the single source of truth so the
-// number stays correct if the track is ever reordered.
-const trackStep = getTrackStep('/patterns');
-const stepTag = trackStep
-  ? `Step ${trackStep.step} of ${TRACK_LENGTH}`
-  : undefined;
 
 const FRAMEWORKS = ['Angular', 'React', 'Vue'] as const;
 type Framework = (typeof FRAMEWORKS)[number];
@@ -44,12 +36,7 @@ function frameworkCode(p: (typeof PATTERNS)[number], fw: Framework): string {
 >
   <div class="docs-inline-page">
     <PageHero
-      kind="howto"
-      tag={
-        stepTag
-          ? `${stepTag} · ${PATTERNS.length} patterns`
-          : `${PATTERNS.length} patterns · 3 frameworks`
-      }
+      tag={`${PATTERNS.length} patterns · 3 frameworks`}
       title="Cookbook patterns"
       lede="Composition recipes for common UI scenarios. Each pattern shows the intended way to combine atomic components — Card with Form, Dialog with Alert, Table with Badge — and ships in Angular, React, and Vue."
       ledeMax="640px"

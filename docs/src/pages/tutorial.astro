@@ -10,14 +10,8 @@ import TrackNav from '../components/TrackNav.astro';
 import Checkpoint from '../components/Checkpoint.astro';
 import Icon from '../components/Icon.astro';
 import FwSwitcher from '../components/FwSwitcher.astro';
-import { getTrackStep, TRACK_LENGTH } from '../data/workshop-track';
 
 const FRAMEWORKS = ['Angular', 'React', 'Vue'] as const;
-
-// "Step N of M" hero tag — derived from the single source of truth so a
-// reorder in workshop-track.ts updates this page automatically.
-const trackStep = getTrackStep('/tutorial')!;
-const stepTag = `Step ${trackStep.step} of ${TRACK_LENGTH}`;
 
 // Rendered once per framework so the copied text names the participant's own
 // `storybook-<fw>` server — a scaffolded workspace has exactly one storybook
@@ -164,13 +158,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
   currentPath="/tutorial"
 >
   <div class="docs-inline-page">
-    <PageHero
-      kind="tutorial"
-      time="~30 min"
-      tag={stepTag}
-      title="Tutorial"
-      ledeMax="520px"
-    >
+    <PageHero time="~30 min" title="Tutorial" ledeMax="520px">
       Use <strong>figma-console MCP</strong> to read a Figma component spec
       directly — design tokens included — then <strong>Storybook MCP</strong> to
       match Atelier UI components, and let Claude Code write token-exact code.
@@ -185,14 +173,13 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
         line-height: 1.55;
       "
     >
-      Just want the recipe? The
+      This is the guided walk-through, with the reasoning attached. Next you
+      will do it again alone in the
       <a
         href="/first-component"
         class="docs-link-primary docs-link-primary--bold"
         >15-min kata</a
-      >
-      builds the same Settings / Card frame in six copy-paste steps, with the
-      explanation stripped out.
+      >: the same Settings / Card frame, with no step-by-step guidance.
     </p>
 
     <!-- Page-pair: this is the MCP-driven path; /figma is the manual variant. -->
@@ -1294,6 +1281,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
             <Code
               code={PARITY_PROMPT}
               lang="text"
+              wrap
               title="parity check prompt"
             />
           </div>
@@ -1323,6 +1311,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
         <Code
           code={examplePrompt(fw)}
           lang="text"
+          wrap
           title={`example prompt — ${fw}`}
         />
       </div>)}
