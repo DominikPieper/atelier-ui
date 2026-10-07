@@ -1,3 +1,21 @@
+## 0.3.10 (2026-10-07)
+
+### 🚀 Features
+
+- **gates:** a11y parity records aria-describedby ([f7bedf2c](https://github.com/DominikPieper/atelier-ui/commit/f7bedf2c))
+- **breadcrumbs:** the last item is current by default in every framework, current overrides it ([3b850592](https://github.com/DominikPieper/atelier-ui/commit/3b850592))
+- **react,vue:** errors accept the shared error item, not only strings ([aaf1cbd3](https://github.com/DominikPieper/atelier-ui/commit/aaf1cbd3))
+
+### 🩹 Fixes
+
+- **react,vue:** menu keyboard follows the WAI-ARIA menu-button pattern ([74fab516](https://github.com/DominikPieper/atelier-ui/commit/74fab516))
+- **react,vue:** combobox arrow navigation skips disabled options ([38536d84](https://github.com/DominikPieper/atelier-ui/commit/38536d84))
+
+### ❤️ Thank You
+
+- Claude Opus 5.5
+- Dominik Pieper @DominikPieper
+
 ## 0.3.9 (2026-10-07)
 
 This was a version bump only for react to align it with other projects, there were no code changes.

@@ -1,3 +1,25 @@
+## 0.3.10 (2026-10-07)
+
+### 🚀 Features
+
+- **gates:** a11y parity records aria-describedby ([f7bedf2c](https://github.com/DominikPieper/atelier-ui/commit/f7bedf2c))
+- **breadcrumbs:** the last item is current by default in every framework, current overrides it ([3b850592](https://github.com/DominikPieper/atelier-ui/commit/3b850592))
+- **react,vue:** errors accept the shared error item, not only strings ([aaf1cbd3](https://github.com/DominikPieper/atelier-ui/commit/aaf1cbd3))
+
+### 🩹 Fixes
+
+- **react,vue:** menu keyboard follows the WAI-ARIA menu-button pattern ([74fab516](https://github.com/DominikPieper/atelier-ui/commit/74fab516))
+- **vue:** toggle builds its generated id with useId() ([22d3749c](https://github.com/DominikPieper/atelier-ui/commit/22d3749c))
+- **react,vue:** combobox arrow navigation skips disabled options ([38536d84](https://github.com/DominikPieper/atelier-ui/commit/38536d84))
+- **vue:** accordion arrow navigation stays inside its own group ([553fa4ce](https://github.com/DominikPieper/atelier-ui/commit/553fa4ce))
+- **vue:** tabs move DOM focus with the arrow-key selection ([8fc1bd77](https://github.com/DominikPieper/atelier-ui/commit/8fc1bd77))
+- **vue:** tooltip points its trigger at itself via aria-describedby ([f96a861f](https://github.com/DominikPieper/atelier-ui/commit/f96a861f))
+
+### ❤️ Thank You
+
+- Claude Opus 5.5
+- Dominik Pieper @DominikPieper
+
 ## 0.3.9 (2026-10-07)
 
 This was a version bump only for vue to align it with other projects, there were no code changes.

@@ -1,3 +1,17 @@
+## 0.3.10 (2026-10-07)
+
+### 🚀 Features
+
+- **gates:** a11y parity records aria-describedby ([f7bedf2c](https://github.com/DominikPieper/atelier-ui/commit/f7bedf2c))
+- **breadcrumbs:** the last item is current by default in every framework, current overrides it ([3b850592](https://github.com/DominikPieper/atelier-ui/commit/3b850592))
+- **react,vue:** errors accept the shared error item, not only strings ([aaf1cbd3](https://github.com/DominikPieper/atelier-ui/commit/aaf1cbd3))
+- **angular:** checkbox and toggle accept an id for the native input ([b109160a](https://github.com/DominikPieper/atelier-ui/commit/b109160a))
+
+### ❤️ Thank You
+
+- Claude Opus 5.5
+- Dominik Pieper @DominikPieper
+
 ## 0.3.9 (2026-10-07)
 
 This was a version bump only for angular to align it with other projects, there were no code changes.
