@@ -135,6 +135,25 @@ function onBlur() {
   query.value = selectedLabel.value;
 }
 
+/**
+ * Next enabled option from `from` in `step` direction (1 or -1), wrapping.
+ * Disabled options are skipped; with none enabled the index is unchanged.
+ */
+function nextEnabledIndex(
+  options: readonly { disabled?: boolean }[],
+  from: number,
+  step: 1 | -1,
+): number {
+  const len = options.length;
+  // From "nothing active" (-1), ArrowUp starts at the end, not before it.
+  const start = from < 0 && step === -1 ? 0 : from;
+  for (let n = 1; n <= len; n++) {
+    const i = (((start + step * n) % len) + len) % len;
+    if (!options[i].disabled) return i;
+  }
+  return from;
+}
+
 function onKeydown(event: KeyboardEvent) {
   const filtered = filteredOptions.value;
   switch (event.key) {
@@ -144,8 +163,7 @@ function onKeydown(event: KeyboardEvent) {
         open();
         return;
       }
-      const next = activeIndex.value + 1;
-      activeIndex.value = next >= filtered.length ? 0 : next;
+      activeIndex.value = nextEnabledIndex(filtered, activeIndex.value, 1);
       break;
     }
     case 'ArrowUp': {
@@ -154,8 +172,7 @@ function onKeydown(event: KeyboardEvent) {
         open();
         return;
       }
-      const prev = activeIndex.value - 1;
-      activeIndex.value = prev < 0 ? filtered.length - 1 : prev;
+      activeIndex.value = nextEnabledIndex(filtered, activeIndex.value, -1);
       break;
     }
     case 'Enter': {

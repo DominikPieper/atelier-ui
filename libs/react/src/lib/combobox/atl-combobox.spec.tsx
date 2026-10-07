@@ -23,6 +23,48 @@ function Controlled(props: { initialValue?: string }) {
   );
 }
 
+const SKIP_CASES: {
+  name: string;
+  disabled: string[];
+  down: string[];
+  up: string;
+}[] = [
+  {
+    name: 'first option disabled',
+    disabled: ['A'],
+    down: ['B', 'C', 'D', 'B'],
+    up: 'D',
+  },
+  {
+    name: 'middle option disabled',
+    disabled: ['B'],
+    down: ['A', 'C', 'D', 'A'],
+    up: 'D',
+  },
+  {
+    name: 'last option disabled',
+    disabled: ['D'],
+    down: ['A', 'B', 'C', 'A'],
+    up: 'C',
+  },
+  {
+    name: 'all options disabled',
+    disabled: ['A', 'B', 'C', 'D'],
+    down: [],
+    up: '',
+  },
+];
+const skipOptions = (disabled: string[]) =>
+  ['A', 'B', 'C', 'D'].map((l) => ({
+    value: l.toLowerCase(),
+    label: l,
+    disabled: disabled.includes(l) || undefined,
+  }));
+const activeLabel = (input: HTMLElement) =>
+  document
+    .getElementById(input.getAttribute('aria-activedescendant') ?? '')
+    ?.textContent?.trim() ?? '';
+
 describe('AtlCombobox', () => {
   covers('combobox', 'render-input')(
     'renders an input with role="combobox"',
@@ -118,10 +160,8 @@ describe('AtlCombobox', () => {
     const onChange = vi.fn();
     render(<AtlCombobox value="" onValueChange={onChange} options={OPTIONS} />);
     await user.click(screen.getByRole('combobox'));
-    // 5 ArrowDowns: -1→0(apple)→1(banana)→2(cherry)→3(grape)→wraps to 0(apple)
-    await user.keyboard(
-      '{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}{Enter}',
-    );
+    // 4 ArrowDowns: -1→0(apple)→1(banana)→2(cherry)→skips disabled grape, wraps to 0(apple)
+    await user.keyboard('{ArrowDown}{ArrowDown}{ArrowDown}{ArrowDown}{Enter}');
     expect(onChange).toHaveBeenCalledWith('apple');
   });
 
@@ -194,5 +234,43 @@ describe('AtlCombobox', () => {
     }
     await user.click(grapeOption);
     expect(onChange).not.toHaveBeenCalled();
+  });
+
+  describe.each(SKIP_CASES)('arrow navigation with $name', (c) => {
+    it('ArrowDown skips disabled options and wraps', async () => {
+      const user = userEvent.setup();
+      render(
+        <AtlCombobox
+          value=""
+          onValueChange={() => undefined}
+          options={skipOptions(c.disabled)}
+        />,
+      );
+      const input = screen.getByRole('combobox');
+      await user.click(input);
+      if (c.down.length === 0) {
+        await user.keyboard('{ArrowDown}');
+        expect(input).not.toHaveAttribute('aria-activedescendant');
+      }
+      for (const label of c.down) {
+        await user.keyboard('{ArrowDown}');
+        expect(activeLabel(input)).toBe(label);
+      }
+    });
+
+    it('ArrowUp from no selection lands on the last enabled option', async () => {
+      const user = userEvent.setup();
+      render(
+        <AtlCombobox
+          value=""
+          onValueChange={() => undefined}
+          options={skipOptions(c.disabled)}
+        />,
+      );
+      const input = screen.getByRole('combobox');
+      await user.click(input);
+      await user.keyboard('{ArrowUp}');
+      expect(activeLabel(input)).toBe(c.up);
+    });
   });
 });

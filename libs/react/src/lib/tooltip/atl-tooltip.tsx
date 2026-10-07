@@ -12,7 +12,8 @@ export interface AtlTooltipProps extends AtlTooltipSpec {
    */
   atlTooltip: string;
   /**
-   * Preferred tooltip placement. Falls back to the opposite side if clipped.
+   * Preferred tooltip placement. Applied as a fixed CSS class, so unlike
+   * Angular it does not flip to the opposite side when clipped.
    */
   atlTooltipPosition?: AtlTooltipPosition;
   /**

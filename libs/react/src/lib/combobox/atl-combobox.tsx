@@ -49,6 +49,25 @@ export interface AtlComboboxProps extends AtlComboboxSpec {
 }
 
 /**
+ * Next enabled option from `from` in `step` direction (1 or -1), wrapping.
+ * Disabled options are skipped; with none enabled the index is unchanged.
+ */
+function nextEnabledIndex(
+  options: readonly { disabled?: boolean }[],
+  from: number,
+  step: 1 | -1,
+): number {
+  const len = options.length;
+  // From "nothing active" (-1), ArrowUp starts at the end, not before it.
+  const start = from < 0 && step === -1 ? 0 : from;
+  for (let n = 1; n <= len; n++) {
+    const i = (((start + step * n) % len) + len) % len;
+    if (!options[i].disabled) return i;
+  }
+  return from;
+}
+
+/**
  * Filterable autocomplete combobox. Accepts an `options` array and emits the
  * selected option's `value`. The user types to narrow the list; selecting an
  * option commits the value and displays its label.
@@ -156,7 +175,7 @@ export function AtlCombobox({
           open();
           return;
         }
-        setActiveIndex((i) => (i + 1 >= filteredOptions.length ? 0 : i + 1));
+        setActiveIndex((i) => nextEnabledIndex(filteredOptions, i, 1));
         break;
       }
       case 'ArrowUp': {
@@ -165,7 +184,7 @@ export function AtlCombobox({
           open();
           return;
         }
-        setActiveIndex((i) => (i - 1 < 0 ? filteredOptions.length - 1 : i - 1));
+        setActiveIndex((i) => nextEnabledIndex(filteredOptions, i, -1));
         break;
       }
       case 'Enter': {
