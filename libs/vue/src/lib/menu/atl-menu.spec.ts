@@ -90,7 +90,8 @@ describe('AtlMenuTrigger', () => {
       render(MenuFixture);
       await user.click(screen.getByRole('button', { name: 'Open Menu' }));
       const deleteBtn = screen.getByRole('menuitem', { name: 'Delete' });
-      expect(deleteBtn).toBeDisabled();
+      expect(deleteBtn).toHaveAttribute('aria-disabled', 'true');
+      expect(deleteBtn).not.toHaveAttribute('disabled');
     },
   );
 });
@@ -98,7 +99,10 @@ describe('AtlMenuTrigger', () => {
 describe('AtlMenuTrigger — WAI-ARIA menu-button keyboard', () => {
   const Keyboard = {
     components: { AtlMenuTrigger, AtlMenu, AtlMenuItem, AtlMenuSeparator },
-    props: { onCopy: { type: Function, default: () => undefined } },
+    props: {
+      onCopy: { type: Function, default: () => undefined },
+      onCut: { type: Function, default: () => undefined },
+    },
     template: `
       <AtlMenuTrigger>
         <template #trigger>
@@ -107,7 +111,7 @@ describe('AtlMenuTrigger — WAI-ARIA menu-button keyboard', () => {
         <template #menu>
           <AtlMenu>
             <AtlMenuItem @triggered="onCopy">Copy</AtlMenuItem>
-            <AtlMenuItem :disabled="true">Cut</AtlMenuItem>
+            <AtlMenuItem :disabled="true" @triggered="onCut">Cut</AtlMenuItem>
             <AtlMenuSeparator />
             <AtlMenuItem>Paste</AtlMenuItem>
             <AtlMenuItem>Archive</AtlMenuItem>
@@ -131,7 +135,7 @@ describe('AtlMenuTrigger — WAI-ARIA menu-button keyboard', () => {
   }
 
   it.each(['{Enter}', '{ }', '{ArrowDown}'])(
-    'trigger: %s opens the menu and focuses the first enabled item',
+    'trigger: %s opens the menu and focuses the first item',
     async (key) => {
       await openWith(key);
       expect(screen.getByRole('menu')).toBeInTheDocument();
@@ -139,33 +143,31 @@ describe('AtlMenuTrigger — WAI-ARIA menu-button keyboard', () => {
     },
   );
 
-  it('trigger: ArrowUp opens the menu and focuses the last enabled item', async () => {
+  it('trigger: ArrowUp opens the menu and focuses the last item, even when disabled', async () => {
     await openWith('{ArrowUp}');
-    expect(item('Archive')).toHaveFocus();
+    expect(item('Delete')).toHaveFocus();
   });
 
-  it('ArrowDown moves down, skips disabled items and wraps', async () => {
+  it('ArrowDown moves through disabled items too, and wraps', async () => {
     const user = await openWith('{ArrowDown}');
-    await user.keyboard('{ArrowDown}');
-    expect(item('Paste')).toHaveFocus();
-    await user.keyboard('{ArrowDown}');
-    expect(item('Archive')).toHaveFocus();
-    await user.keyboard('{ArrowDown}');
-    expect(item('Copy')).toHaveFocus();
+    for (const name of ['Cut', 'Paste', 'Archive', 'Delete', 'Copy']) {
+      await user.keyboard('{ArrowDown}');
+      expect(item(name)).toHaveFocus();
+    }
   });
 
-  it('ArrowUp moves up, skips disabled items and wraps', async () => {
+  it('ArrowUp moves through disabled items too, and wraps', async () => {
     const user = await openWith('{ArrowDown}');
-    await user.keyboard('{ArrowUp}');
-    expect(item('Archive')).toHaveFocus();
-    await user.keyboard('{ArrowUp}');
-    expect(item('Paste')).toHaveFocus();
+    for (const name of ['Delete', 'Archive', 'Paste', 'Cut', 'Copy']) {
+      await user.keyboard('{ArrowUp}');
+      expect(item(name)).toHaveFocus();
+    }
   });
 
-  it('Home and End jump to the first and last enabled item', async () => {
+  it('Home and End jump to the first and last item, disabled or not', async () => {
     const user = await openWith('{ArrowDown}');
     await user.keyboard('{End}');
-    expect(item('Archive')).toHaveFocus();
+    expect(item('Delete')).toHaveFocus();
     await user.keyboard('{Home}');
     expect(item('Copy')).toHaveFocus();
   });
@@ -173,7 +175,7 @@ describe('AtlMenuTrigger — WAI-ARIA menu-button keyboard', () => {
   it('roving tabindex: only the focused item is tabbable', async () => {
     const user = await openWith('{ArrowDown}');
     await user.keyboard('{ArrowDown}');
-    expect(item('Paste')).toHaveAttribute('tabindex', '0');
+    expect(item('Cut')).toHaveAttribute('tabindex', '0');
     expect(item('Copy')).toHaveAttribute('tabindex', '-1');
     expect(item('Archive')).toHaveAttribute('tabindex', '-1');
   });
@@ -221,9 +223,35 @@ describe('AtlMenuTrigger — WAI-ARIA menu-button keyboard', () => {
     expect(item('Paste')).toHaveFocus();
   });
 
-  it('type-ahead ignores disabled items', async () => {
+  it('type-ahead reaches a disabled item', async () => {
     const user = await openWith('{ArrowDown}');
     await user.keyboard('d');
-    expect(item('Copy')).toHaveFocus();
+    expect(item('Delete')).toHaveFocus();
+  });
+
+  it.each(['{Enter}', '{ }'])(
+    '%s on a disabled item does nothing: no activation, menu stays open',
+    async (key) => {
+      const user = userEvent.setup();
+      const onCut = vi.fn();
+      render(Keyboard, { props: { onCut } });
+      trigger().focus();
+      await user.keyboard('{ArrowDown}{ArrowDown}');
+      expect(item('Cut')).toHaveFocus();
+      await user.keyboard(key);
+      expect(onCut).not.toHaveBeenCalled();
+      expect(screen.getByRole('menu')).toBeInTheDocument();
+      expect(item('Cut')).toHaveFocus();
+    },
+  );
+
+  it('clicking a disabled item does not activate it or close the menu', async () => {
+    const user = userEvent.setup();
+    const onCut = vi.fn();
+    render(Keyboard, { props: { onCut } });
+    await user.click(trigger());
+    await user.click(item('Cut'));
+    expect(onCut).not.toHaveBeenCalled();
+    expect(screen.getByRole('menu')).toBeInTheDocument();
   });
 });

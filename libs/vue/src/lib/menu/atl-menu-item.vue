@@ -35,7 +35,7 @@ const classes = computed(() => [
     :class="classes"
     role="menuitem"
     type="button"
-    :disabled="disabled"
+    :aria-disabled="disabled || undefined"
     @click="onClick"
   >
     <slot />

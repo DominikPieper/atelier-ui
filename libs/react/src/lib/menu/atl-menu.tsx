@@ -20,16 +20,14 @@ interface MenuContextValue {
 /** Idle time after which the type-ahead buffer is forgotten (uianatomy menu: ~500ms). */
 const TYPE_AHEAD_RESET_MS = 500;
 
-/** Enabled menu items of one panel, in DOM order. Disabled items cannot take focus. */
-function enabledItems(panel: HTMLElement): HTMLElement[] {
+/**
+ * Menu items of one panel, in DOM order. Disabled items are included: they stay
+ * focusable (APG, and the Angular CDK menu) and are announced as disabled.
+ */
+function menuItems(panel: HTMLElement): HTMLElement[] {
   return Array.from(
     panel.querySelectorAll<HTMLElement>('[role="menuitem"]'),
-  ).filter(
-    (el) =>
-      el.closest('.atl-menu-panel') === panel &&
-      !(el as HTMLButtonElement).disabled &&
-      el.getAttribute('aria-disabled') !== 'true',
-  );
+  ).filter((el) => el.closest('.atl-menu-panel') === panel);
 }
 
 /** Roving tabindex: the focused item is the only tab stop. */
@@ -122,7 +120,7 @@ export function AtlMenuItem({
     <button
       className={classes}
       role="menuitem"
-      disabled={disabled}
+      aria-disabled={disabled || undefined}
       onClick={handleClick}
       {...rest}
     >
@@ -184,7 +182,7 @@ export function AtlMenuTrigger({ menu, children }: AtlMenuTriggerProps) {
   // Opening moves focus into the menu (WAI-ARIA menu button pattern).
   useEffect(() => {
     if (!open || !menuRef.current) return;
-    const items = enabledItems(menuRef.current);
+    const items = menuItems(menuRef.current);
     const target =
       initialFocus.current === 'last' ? items[items.length - 1] : items[0];
     if (target) focusItem(items, target);
@@ -236,7 +234,7 @@ export function AtlMenuTrigger({ menu, children }: AtlMenuTriggerProps) {
       return;
     }
 
-    const items = enabledItems(panel);
+    const items = menuItems(panel);
     if (!items.length) return;
     const current = items.indexOf(document.activeElement as HTMLElement);
     let next: HTMLElement | undefined;

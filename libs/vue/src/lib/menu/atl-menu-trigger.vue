@@ -47,18 +47,16 @@ function triggerElement(): HTMLElement | null {
   return (triggerRef.value?.firstElementChild as HTMLElement | null) ?? null;
 }
 
-/** Enabled menu items of the panel, in DOM order. Disabled items cannot take focus. */
-function enabledItems(): HTMLElement[] {
+/**
+ * Menu items of the panel, in DOM order. Disabled items are included: they stay
+ * focusable (APG, and the Angular CDK menu) and are announced as disabled.
+ */
+function menuItems(): HTMLElement[] {
   const panel = menuRef.value;
   if (!panel) return [];
   return Array.from(
     panel.querySelectorAll<HTMLElement>('[role="menuitem"]'),
-  ).filter(
-    (el) =>
-      el.closest('.atl-menu-panel') === panel &&
-      !(el as HTMLButtonElement).disabled &&
-      el.getAttribute('aria-disabled') !== 'true',
-  );
+  ).filter((el) => el.closest('.atl-menu-panel') === panel);
 }
 
 /** Roving tabindex: the focused item is the only tab stop. */
@@ -76,7 +74,7 @@ function toggle() {
 function close(restoreFocus = true) {
   // The panel leaves the DOM on the next flush, which can come after a Tab's
   // default action; take its items out of the tab order right away.
-  enabledItems().forEach((el) => el.setAttribute('tabindex', '-1'));
+  menuItems().forEach((el) => el.setAttribute('tabindex', '-1'));
   open.value = false;
   if (restoreFocus) triggerElement()?.focus();
 }
@@ -87,7 +85,7 @@ provide(AtlMenuTriggerKey, { close: () => close(true) });
 watch(open, async (isOpen) => {
   if (!isOpen) return;
   await nextTick();
-  const items = enabledItems();
+  const items = menuItems();
   const target = initialFocus === 'last' ? items[items.length - 1] : items[0];
   if (target) focusItem(items, target);
 });
@@ -111,7 +109,7 @@ function onWrapperKeydown(event: KeyboardEvent) {
     return;
   }
 
-  const items = enabledItems();
+  const items = menuItems();
   if (!items.length) return;
   const current = items.indexOf(document.activeElement as HTMLElement);
   let next: HTMLElement | undefined;

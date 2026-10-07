@@ -98,7 +98,8 @@
   background: var(--ui-color-surface-sunken);
 }
 
-.atl-menu-item.is-disabled {
+.atl-menu-item.is-disabled,
+.atl-menu-item[aria-disabled='true'] {
   opacity: var(--ui-opacity-disabled);
   cursor: not-allowed;
 }

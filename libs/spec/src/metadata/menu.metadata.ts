@@ -53,7 +53,8 @@ export const metadata: ComponentMetadata = {
       { key: 'Home / End', action: 'Jump to the first / last item.' },
       {
         key: 'Enter / Space',
-        action: 'Activate the focused item and close the menu.',
+        action:
+          'Activate the focused item and close the menu (a disabled item does nothing).',
       },
       { key: 'Escape', action: 'Close and return focus to the trigger.' },
       { key: 'Tab', action: 'Close the menu and move focus on.' },
@@ -66,7 +67,7 @@ export const metadata: ComponentMetadata = {
     ],
     notes: [
       'Submenus are Angular only: React and Vue have no nesting API, so Arrow Right and Arrow Left do nothing there.',
-      'Disabled items are skipped by arrow keys, Home, End and type-ahead in React and Vue (a native disabled button cannot take focus); the Angular CDK keeps them reachable.',
+      'Disabled items carry aria-disabled="true" (not the native disabled attribute) in all three frameworks. They stay in the arrow-key, Home, End and type-ahead rotation and are announced as disabled, but Enter, Space and click do not activate them and the menu stays open.',
       'Focus is roving: the focused item is the only tab stop (tabindex 0, others -1). Opening, by key or by click, moves focus to an item.',
       'The trigger carries aria-haspopup="menu" and aria-expanded.',
       'Separators render as role="separator" and are skipped by keyboard navigation.',
