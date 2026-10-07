@@ -77,6 +77,14 @@ Ranked; each carries why it's worth doing next rather than later.
       should also catch "same version, different content", e.g. by comparing the published
       `gitHead` with the tagged commit.
 
+- [ ] **Menu: disabled items — React/Vue skip them, Angular keeps them focusable (2026-10-08).**
+      My spec for `74fab516` said "skip disabled items" without checking. Angular's CDK menu does
+      not skip them (`skipPredicate(() => false)`), and uianatomy/APG keep disabled menu items
+      focusable, announced as disabled. React and Vue skip them because they render native
+      `disabled` buttons, which cannot take focus. Align on the APG behaviour: `aria-disabled`
+      plus no activation, focusable, in React and Vue. Recorded in the menu metadata notes until
+      then.
+
 - [ ] **Structure lessons from the DB UX Design System (planned 2026-10-01).** Comes out of
       a fact-check of a Gemini Deep Research report on multi-framework design systems. The
       report says DB UX (`db-ux-design-system/core-web`) maintains native Angular, React and
