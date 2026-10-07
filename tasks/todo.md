@@ -62,6 +62,14 @@ Atelier token system instead of the generic gradient/grid look.
 - [ ] **10. one framework switcher** — the kata's switcher has no `aria-selected`, is 27 px tall
       and silently restores Vue; `FwSwitcher` exists; two storage keys (`atelier.fw`,
       `atelier-framework`). Also: footer sits under the sticky sidebar (copyright clipped).
+- [ ] **11. mobile prose column** — `.docs-inline-page` keeps `padding: 2.5rem 2rem` at 390px
+      (global.css:624, no override) on top of the shell gutter: 294 px column, 28–41
+      characters per line on 26 pages (critique 3, 2026-10-07).
+- [ ] **12. `/design-to-code` wayfinding** — 7 H2s and no `tocItems`; the Contract section's
+      settled/owed theory still sits inline instead of in its maintainer disclosure.
+- [ ] **13. small consistency** — topbar "Workshop" active only on `/workshop`; "Patterns" vs
+      "Cookbook patterns"; gallery slices descriptions at 85 chars mid-word; "Identical APIs"
+      claim (`ComponentGallery.tsx:65`) contradicts the framework-native story.
 
 > **Picking this up in a new session?** Read
 > `tasks/handover-design-skills-2026-09-08.md` first — it carries what is blocked
