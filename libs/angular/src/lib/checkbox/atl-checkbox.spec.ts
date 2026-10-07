@@ -304,4 +304,28 @@ describe('AtlCheckbox', () => {
       expect(input.indeterminate).toBe(false);
     });
   });
+
+  describe('id', () => {
+    // A static `id="…"` stays on the host even though `id` is also an input
+    // (host-attr-guard, ADR-0091): without `'[attr.id]': 'null'` the host and the
+    // native input would both carry it and `<label for>` would resolve to the host.
+    it('lets an external <label for> reach the native input, with the id on it exactly once', async () => {
+      await render(
+        '<label for="ext-id">External</label><atl-checkbox id="ext-id">Inner</atl-checkbox>',
+        { imports: [AtlCheckbox] },
+      );
+      const input = screen.getByLabelText('External');
+      expect(input.tagName).toBe('INPUT');
+      expect(document.querySelectorAll('#ext-id')).toHaveLength(1);
+      expect(document.querySelector('atl-checkbox')).not.toHaveAttribute('id');
+    });
+
+    it('keeps a generated id, linked to its own label, when no id is given', async () => {
+      await render('<atl-checkbox>Inner</atl-checkbox>', {
+        imports: [AtlCheckbox],
+      });
+      const input = screen.getByLabelText('Inner');
+      expect(input.id).not.toBe('');
+    });
+  });
 });

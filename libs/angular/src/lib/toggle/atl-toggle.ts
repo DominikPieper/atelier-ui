@@ -30,11 +30,11 @@ let nextId = 0;
   standalone: true,
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
-    <label [attr.for]="inputId">
+    <label [attr.for]="inputId()">
       <input
         type="checkbox"
         role="switch"
-        [id]="inputId"
+        [id]="inputId()"
         [checked]="checked()"
         (change)="onChange($event)"
         (blur)="touched.set(true)"
@@ -65,6 +65,9 @@ let nextId = 0;
   styleUrl: '../../../../styles/src/toggle/atl-toggle.css',
   host: {
     class: 'atl-toggle',
+    // `id` is an input: a static id="…" would otherwise stay on the host and
+    // duplicate the native input's id (host-attr-guard, ADR-0091).
+    '[attr.id]': 'null',
     '[class]': 'hostClasses()',
   },
 })
@@ -92,8 +95,17 @@ export class AtlToggle implements FormCheckboxControl {
     [],
   );
 
+  /**
+   * Explicit id for the native input. Wins over the generated id — set this
+   * when something outside the component (an external `<label for>`, or
+   * `aria-describedby` from elsewhere on the page) needs a stable id to point at.
+   */
+  readonly id = input('');
+
+  private readonly generatedId = `atl-toggle-${nextId++}`;
+
   /** @internal */
-  protected readonly inputId = `atl-toggle-${nextId++}`;
+  protected readonly inputId = computed(() => this.id() || this.generatedId);
 
   /** @internal */
   protected readonly errorId = `atl-toggle-errors-${nextId++}`;
