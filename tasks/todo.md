@@ -409,17 +409,29 @@ Ranked; each carries why it's worth doing next rather than later.
           Compare these against the contracts; each is either a recorded `codeOnly` difference
           or a bug. Open: React sub-components that are not a story's `meta.component`
           (`AtlOption`, `AtlTd`, …) are not in the manifest, so their props are unmeasured.
-    - [ ] **P4b — examples from one tagged story per component.** The examples stay
-          hand-authored, as ADR-0121 keeps prose examples authored. Each comes from a story
-          tagged `docs-example` in each framework, so a docs example is also a rendered,
-          tested story. Give that story an explicit `parameters.docs.source`, because the
-          generated snippets show one story's args, not a composed example. Then delete
-          `examples` from `components.ts`.
-    - [ ] **P4c — move `a11y` into the metadata.** 11 entries partly overlap
-          `metadata.accessibility`; merge them into one record and render the docs from it.
-          `aiUsage` (3 entries), `composition` (13) and `status` (6) stay in the docs data as
-          page data. Done when `components.ts` holds only page data: category, status,
-          composition, aiUsage and description.
+    - [ ] **P4b — examples from one tagged story per component. Spiked 2026-10-07: blocked,
+          not built.** The examples stay hand-authored, as ADR-0121 keeps prose examples
+          authored; the plan was one `docs-example`-tagged story per component and framework
+          with an explicit `parameters.docs.source.code`, projected like the props (ADR-0154).
+          The spike (button `Primary`, tag + explicit source in all three frameworks, built with
+          `nx run-many -t build-storybook`) says the manifest cannot carry it:
+          Angular's `story-docs` shard honours `docs.source.code` as the story's `snippet`;
+          React's `components.json` and Vue's story-docs shard still print the args-generated
+          snippet (both build it statically from the CSF AST in `@storybook/react` /
+          `@storybook/vue3`, which never read `parameters.docs.source`); and no framework's
+          manifest carries a story's `tags`, so "the story tagged `docs-example`" cannot be
+          found. Workarounds (parsing story files, a second Storybook build in the docs path)
+          were excluded by the build-time constraint of ADR-0154. Options for the owner:
+          Angular-only examples from the projection (Angular is the workshop framework) with
+          React/Vue examples staying in `components.ts`; or wait for React/Vue manifests to
+          honour `docs.source`; or keep `examples` authored as today.
+    - [x] **P4c — move `a11y` into the metadata — done 2026-10-07 except toast.** 10 of the 11
+          entries are merged into `metadata.accessibility` (`role`, `relatedRoles`, `notes`, and
+          `keyboard` rows or prose `keyboardBehavior`, exactly one; `check:metadata` enforces
+          it) and the docs page renders from it. Toast has no metadata file and
+          `AtlToastOptions` is not a registry spec, so its `a11y` stays in `components.ts`
+          until toast gets a metadata home. `aiUsage` (3 entries), `composition` (13) and
+          `status` (6) stay in the docs data as page data.
 
 - [ ] **The scaffold becomes the AI-development workspace, and the cohort's environment**
       (owner decisions, 2026-09-12). Four blocks chosen out of five; **"Gates + CI" was
