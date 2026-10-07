@@ -1199,7 +1199,7 @@ Each entry lists:
 
   Props:
     atlTooltip           string                                —        The tooltip text.
-    atlTooltipPosition   'above' | 'below' | 'left' | 'right'  'above'  Preferred tooltip placement. Falls back to the opposite side if clipped.
+    atlTooltipPosition   'above' | 'below' | 'left' | 'right'  'above'  Preferred tooltip placement. Applied as a fixed CSS class, so unlike Angular it does not flip to the opposite side when clipped.
     atlTooltipDisabled   boolean                               false    Disables the tooltip without removing the wrapper.
     atlTooltipShowDelay  number                                300      Delay in ms before the tooltip appears.
     atlTooltipHideDelay  number                                0        Delay in ms before the tooltip hides.
