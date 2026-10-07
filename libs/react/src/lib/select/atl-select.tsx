@@ -4,10 +4,11 @@ import {
   OptionHTMLAttributes,
   useId,
 } from 'react';
-import type { AtlSelectSpec, AtlOptionSpec } from '../spec';
+import type { AtlSelectSpec, AtlOptionSpec, AtlErrorItem } from '../spec';
 import '@atelier-ui/styles/select/atl-select.css';
 import '@atelier-ui/styles/select/atl-select.native.css';
 import { AtlIcon } from '../icon/atl-icon';
+import { errorMessage } from '../error-message';
 
 /**
  * Properties for the AtlSelect component.
@@ -47,7 +48,7 @@ export interface AtlSelectProps
   /**
    * Array of error messages to display.
    */
-  errors?: string[];
+  errors?: ReadonlyArray<string | AtlErrorItem>;
   /**
    * The label for the select.
    */
@@ -120,7 +121,7 @@ export function AtlSelect({
         <div className="errors" id={errorsId} aria-live="polite">
           {errors.map((err, i) => (
             <p key={i} className="error-message">
-              {err}
+              {errorMessage(err)}
             </p>
           ))}
         </div>

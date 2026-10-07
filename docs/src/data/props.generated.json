@@ -1077,7 +1077,7 @@
         },
         {
           "name": "errors",
-          "type": "string[]",
+          "type": "ReadonlyArray<string | AtlErrorItem>",
           "default": "[]",
           "description": "Array of error messages to display.",
           "required": false,
@@ -1122,7 +1122,7 @@
         },
         {
           "name": "errors",
-          "type": "string[]",
+          "type": "readonly (string | AtlErrorItem)[]",
           "default": "[]",
           "description": "Validation error messages shown below the control and linked to it via `aria-describedby`.",
           "required": false,
@@ -1422,6 +1422,14 @@
     "react": {
       "props": [
         {
+          "name": "errors",
+          "type": "ReadonlyArray<string | AtlErrorItem>",
+          "default": "[]",
+          "description": "Validation errors to show under the field. Angular takes Signal Forms' `ValidationError` objects; React and Vue take those objects or plain strings.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
           "name": "value",
           "type": "string",
           "default": "''",
@@ -1490,14 +1498,6 @@
           "type": "string",
           "default": "''",
           "description": "Placeholder text for the input.",
-          "required": false,
-          "kind": "prop"
-        },
-        {
-          "name": "errors",
-          "type": "string[]",
-          "default": "[]",
-          "description": "Array of error messages to display.",
           "required": false,
           "kind": "prop"
         }
@@ -1572,7 +1572,7 @@
         },
         {
           "name": "errors",
-          "type": "string[]",
+          "type": "readonly (string | AtlErrorItem)[]",
           "default": "[]",
           "description": "Validation error messages shown below the control and linked to it via `aria-describedby`.",
           "required": false,
@@ -2154,6 +2154,14 @@
     "react": {
       "props": [
         {
+          "name": "errors",
+          "type": "ReadonlyArray<string | AtlErrorItem>",
+          "default": "[]",
+          "description": "Validation errors to show under the field. Angular takes Signal Forms' `ValidationError` objects; React and Vue take those objects or plain strings.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
           "name": "value",
           "type": "string",
           "default": "—",
@@ -2234,14 +2242,6 @@
           "kind": "prop"
         },
         {
-          "name": "errors",
-          "type": "string[]",
-          "default": "[]",
-          "description": "Array of error messages to display.",
-          "required": false,
-          "kind": "prop"
-        },
-        {
           "name": "readOnly",
           "type": "boolean",
           "default": "—",
@@ -2288,7 +2288,7 @@
         },
         {
           "name": "errors",
-          "type": "string[]",
+          "type": "readonly (string | AtlErrorItem)[]",
           "default": "[]",
           "description": "Validation error messages shown below the control and linked to it via `aria-describedby`.",
           "required": false,
@@ -2834,6 +2834,14 @@
     "react": {
       "props": [
         {
+          "name": "errors",
+          "type": "ReadonlyArray<string | AtlErrorItem>",
+          "default": "[]",
+          "description": "Validation errors to show under the field. Angular takes Signal Forms' `ValidationError` objects; React and Vue take those objects or plain strings.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
           "name": "value",
           "type": "string",
           "default": "''",
@@ -2902,14 +2910,6 @@
           "type": "boolean",
           "default": "—",
           "description": "Whether the radio group is read-only.",
-          "required": false,
-          "kind": "prop"
-        },
-        {
-          "name": "errors",
-          "type": "string[]",
-          "default": "[]",
-          "description": "Array of error messages to display.",
           "required": false,
           "kind": "prop"
         },
@@ -3003,7 +3003,7 @@
         },
         {
           "name": "errors",
-          "type": "string[]",
+          "type": "readonly (string | AtlErrorItem)[]",
           "default": "[]",
           "description": "Validation error messages shown below the group.",
           "required": false,
@@ -3163,6 +3163,14 @@
     "react": {
       "props": [
         {
+          "name": "errors",
+          "type": "ReadonlyArray<string | AtlErrorItem>",
+          "default": "[]",
+          "description": "Validation errors to show under the field. Angular takes Signal Forms' `ValidationError` objects; React and Vue take those objects or plain strings.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
           "name": "value",
           "type": "string",
           "default": "''",
@@ -3225,14 +3233,6 @@
           "description": "Placeholder text to display when no value is selected.",
           "required": false,
           "kind": "prop"
-        },
-        {
-          "name": "errors",
-          "type": "string[]",
-          "default": "[]",
-          "description": "Array of error messages to display.",
-          "required": false,
-          "kind": "prop"
         }
       ],
       "parts": {
@@ -3267,7 +3267,7 @@
         },
         {
           "name": "errors",
-          "type": "string[]",
+          "type": "readonly (string | AtlErrorItem)[]",
           "default": "[]",
           "description": "Validation error messages shown below the control and linked to it via `aria-describedby`.",
           "required": false,
@@ -3978,6 +3978,14 @@
     "react": {
       "props": [
         {
+          "name": "errors",
+          "type": "ReadonlyArray<string | AtlErrorItem>",
+          "default": "[]",
+          "description": "Validation errors to show under the field. Angular takes Signal Forms' `ValidationError` objects; React and Vue take those objects or plain strings.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
           "name": "value",
           "type": "string",
           "default": "—",
@@ -4072,14 +4080,6 @@
           "description": "Whether the textarea is read-only.",
           "required": false,
           "kind": "prop"
-        },
-        {
-          "name": "errors",
-          "type": "string[]",
-          "default": "[]",
-          "description": "List of error messages to display.",
-          "required": false,
-          "kind": "prop"
         }
       ],
       "parts": {}
@@ -4120,7 +4120,7 @@
         },
         {
           "name": "errors",
-          "type": "string[]",
+          "type": "readonly (string | AtlErrorItem)[]",
           "default": "[]",
           "description": "Validation error messages shown below the control and linked to it via `aria-describedby`.",
           "required": false,
@@ -4346,7 +4346,7 @@
         },
         {
           "name": "errors",
-          "type": "string[]",
+          "type": "ReadonlyArray<string | AtlErrorItem>",
           "default": "[]",
           "description": "List of error messages to display.",
           "required": false,
@@ -4383,7 +4383,7 @@
         },
         {
           "name": "errors",
-          "type": "string[]",
+          "type": "readonly (string | AtlErrorItem)[]",
           "default": "[]",
           "description": "Validation error messages shown below the control and linked to it via `aria-describedby`.",
           "required": false,

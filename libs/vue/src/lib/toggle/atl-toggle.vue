@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { computed, useId } from 'vue';
 import '@atelier-ui/styles/toggle/atl-toggle.css';
+import type { AtlErrorItem } from '../spec';
+import { errorMessage } from '../error-message';
 
 defineOptions({ name: 'AtlToggle' });
 
@@ -10,7 +12,7 @@ interface AtlToggleProps {
   /** Whether the toggle has validation errors; sets `aria-invalid`. */
   invalid?: boolean;
   /** Validation error messages shown below the control and linked to it via `aria-describedby`. */
-  errors?: string[];
+  errors?: ReadonlyArray<string | AtlErrorItem>;
   /** Whether the toggle is disabled. */
   disabled?: boolean;
   /** Whether the toggle is required. */
@@ -77,7 +79,7 @@ function onChange(event: Event) {
     </label>
     <div v-if="errors.length" :id="errorsId" class="errors" aria-live="polite">
       <p v-for="(error, i) in errors" :key="i" class="error-message">
-        {{ error }}
+        {{ errorMessage(error) }}
       </p>
     </div>
   </div>

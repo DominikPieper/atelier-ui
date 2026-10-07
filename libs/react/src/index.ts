@@ -27,3 +27,4 @@ export * from './lib/toggle/atl-toggle';
 export * from './lib/tooltip/atl-tooltip';
 export * from './lib/code-block/atl-code-block';
 export * from './lib/chat/atl-chat';
+export type { AtlErrorItem } from './lib/spec';

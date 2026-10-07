@@ -1,8 +1,10 @@
 <script setup lang="ts">
 import { computed, onUnmounted, ref, watch } from 'vue';
-import type { AtlComboboxOption } from '../spec';
+import type { AtlComboboxOption, AtlErrorItem } from '../spec';
 import '@atelier-ui/styles/combobox/atl-combobox.css';
 import AtlIcon from '../icon/atl-icon.vue';
+
+import { errorMessage } from '../error-message';
 
 defineOptions({ name: 'AtlCombobox' });
 
@@ -24,7 +26,7 @@ interface Props {
   /** The input's `name` attribute. */
   name?: string;
   /** Validation error messages shown below the control and linked to it via `aria-describedby`. */
-  errors?: string[];
+  errors?: ReadonlyArray<string | AtlErrorItem>;
 }
 
 const props = withDefaults(defineProps<Props>(), {
@@ -288,7 +290,7 @@ function onKeydown(event: KeyboardEvent) {
         :key="i"
         class="atl-combobox-error-message"
       >
-        {{ error }}
+        {{ errorMessage(error) }}
       </p>
     </div>
   </div>

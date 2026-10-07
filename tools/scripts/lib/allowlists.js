@@ -850,31 +850,6 @@ const DEAD_SELECTOR_EXEMPT = new Map([
  * check:props never asks the question they answer.
  */
 const PROP_SURFACE_EXEMPT = new Map([
-  // `errors` — validation messages — is a real prop on all three adapters of
-  // every form control, but AtlFormFieldSpec never grew one: Angular types it
-  // `WithOptionalFieldTree<ValidationError>[]` (Signal Forms' own error shape),
-  // React and Vue take `string[]`. Agreeing a shared type is a contract
-  // change with its own ADR, not a one-line fix.
-  ...[
-    'AtlCheckboxSpec',
-    'AtlToggleSpec',
-    'AtlInputSpec',
-    'AtlTextareaSpec',
-    'AtlRadioGroupSpec',
-    'AtlSelectSpec',
-    'AtlComboboxSpec',
-  ].flatMap((spec) =>
-    ['angular', 'react', 'vue'].map((fw) => [
-      `${spec}:errors:${fw}`,
-      {
-        kind: 'gap',
-        reason:
-          "'errors' is declared by all three adapters but AtlFormFieldSpec has no matching prop — Angular's " +
-          "WithOptionalFieldTree<ValidationError>[] vs React/Vue's string[] means a shared type is a contract " +
-          'change with its own ADR, not this gate. Unresolved: see tasks/todo.md.',
-      },
-    ]),
-  ),
   // AtlDialogSpec never grew aria-label/aria-labelledby, but this is no
   // longer an allowlist entry: `id`/`aria-label`/`aria-labelledby`/
   // `aria-describedby`/`type` are native passthrough attributes React

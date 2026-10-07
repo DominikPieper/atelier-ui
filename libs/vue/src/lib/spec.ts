@@ -101,7 +101,26 @@ export interface AtlCardSpec {
 // Using `unknown` would force every downstream consumer to redeclare the
 // property, defeating the purpose of the shared spec.
 /* eslint-disable @typescript-eslint/no-explicit-any */
+
+/**
+ * One validation error. Structurally the same as Angular Signal Forms'
+ * `ValidationError` (`kind` plus an optional `message`), so Angular's
+ * `[formField]` binding passes its errors straight through, and React and Vue
+ * consumers can build the same shape by hand.
+ */
+export interface AtlErrorItem {
+  /** Identifies the kind of error, e.g. `'required'`. */
+  readonly kind: string;
+  /** Human readable message, rendered under the field. */
+  readonly message?: string;
+}
+
 export interface AtlFormFieldSpec {
+  /**
+   * Validation errors to show under the field. Angular takes Signal Forms'
+   * `ValidationError` objects; React and Vue take those objects or plain strings.
+   */
+  errors?: ReadonlyArray<string | AtlErrorItem>;
   value?: any;
   onValueChange?: (value: any) => void;
   disabled?: boolean;

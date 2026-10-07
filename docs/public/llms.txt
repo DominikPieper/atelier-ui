@@ -22,13 +22,13 @@ Docs: https://atelier.pieper.io
 ## Components
 
 - [Button](https://atelier.pieper.io/components/button): variant (primary|secondary|outline|danger), size (sm|md|lg), disabled, loading, aria-label
-- [Input](https://atelier.pieper.io/components/input): type (text|email|password|number|tel|url), value, disabled, invalid, required, name
-- [Textarea](https://atelier.pieper.io/components/textarea): value, disabled, invalid, required, name, readonly
+- [Input](https://atelier.pieper.io/components/input): type (text|email|password|number|tel|url), errors, value, disabled, invalid, required
+- [Textarea](https://atelier.pieper.io/components/textarea): errors, value, disabled, invalid, required, name
 - [Checkbox](https://atelier.pieper.io/components/checkbox): checked, indeterminate, disabled, required, invalid, errors
 - [Toggle](https://atelier.pieper.io/components/toggle): checked, invalid, disabled, required, errors
-- [RadioGroup](https://atelier.pieper.io/components/radio-group): orientation (horizontal|vertical), value, disabled, invalid, required, name
-- [Select](https://atelier.pieper.io/components/select): value, disabled, invalid, required, name, label
-- [Combobox](https://atelier.pieper.io/components/combobox): value, disabled, invalid, required, name, readonly
+- [RadioGroup](https://atelier.pieper.io/components/radio-group): orientation (horizontal|vertical), errors, value, disabled, invalid, required
+- [Select](https://atelier.pieper.io/components/select): errors, value, disabled, invalid, required, name
+- [Combobox](https://atelier.pieper.io/components/combobox): errors, value, disabled, invalid, required, name
 - [Badge](https://atelier.pieper.io/components/badge): variant (default|success|warning|danger|info), size (sm|md)
 - [Icon](https://atelier.pieper.io/components/icon): size (sm|md|lg), name, label
 - [Card](https://atelier.pieper.io/components/card): variant (elevated|outlined|flat), padding (none|sm|md|lg), role (article|region|section)

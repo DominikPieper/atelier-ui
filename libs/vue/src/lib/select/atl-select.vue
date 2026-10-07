@@ -4,6 +4,8 @@ import '@atelier-ui/styles/select/atl-select.css';
 import '@atelier-ui/styles/select/atl-select.native.css';
 import { warnIfUnnamedControl } from '../a11y-dev-warn';
 import AtlIcon from '../icon/atl-icon.vue';
+import type { AtlErrorItem } from '../spec';
+import { errorMessage } from '../error-message';
 
 defineOptions({ name: 'AtlSelect' });
 
@@ -15,7 +17,7 @@ interface AtlSelectProps {
   /** Whether the select has validation errors; sets `aria-invalid`. */
   invalid?: boolean;
   /** Validation error messages shown below the control and linked to it via `aria-describedby`. */
-  errors?: string[];
+  errors?: ReadonlyArray<string | AtlErrorItem>;
   /** Whether the select is disabled. */
   disabled?: boolean;
   /** Whether the select is required. */
@@ -112,7 +114,7 @@ function onChange(event: Event) {
       aria-live="polite"
     >
       <p v-for="(error, index) in errors" :key="index" class="error-message">
-        {{ error }}
+        {{ errorMessage(error) }}
       </p>
     </div>
   </div>

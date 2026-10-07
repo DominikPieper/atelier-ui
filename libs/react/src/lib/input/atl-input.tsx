@@ -1,7 +1,8 @@
 import { InputHTMLAttributes, useId } from 'react';
-import type { AtlInputSpec } from '../spec';
+import type { AtlInputSpec, AtlErrorItem } from '../spec';
 import '@atelier-ui/styles/input/atl-input.css';
 import { AtlIcon } from '../icon/atl-icon';
+import { errorMessage } from '../error-message';
 
 /**
  * Properties for the AtlInput component.
@@ -49,7 +50,7 @@ export interface AtlInputProps
   /**
    * Array of error messages to display.
    */
-  errors?: string[];
+  errors?: ReadonlyArray<string | AtlErrorItem>;
   /**
    * The label for the input.
    */
@@ -126,7 +127,7 @@ export function AtlInput({
         <div className="errors" id={errorId} aria-live="polite">
           {errors.map((err, i) => (
             <p key={i} className="error-message">
-              {err}
+              {errorMessage(err)}
             </p>
           ))}
         </div>

@@ -102,3 +102,4 @@ export {
 } from './lib/chat/atl-chat';
 export { ATL_CHAT } from './lib/chat/atl-chat.token';
 export type { AtlChatContext } from './lib/chat/atl-chat.token';
+export type { AtlErrorItem } from './lib/spec';

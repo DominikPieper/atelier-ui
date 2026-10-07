@@ -6,8 +6,9 @@ import {
   InputHTMLAttributes,
   ReactNode,
 } from 'react';
-import type { AtlRadioGroupSpec } from '../spec';
+import type { AtlRadioGroupSpec, AtlErrorItem } from '../spec';
 import '@atelier-ui/styles/radio-group/atl-radio-group.css';
+import { errorMessage } from '../error-message';
 
 /**
  * Interface for the RadioGroup context.
@@ -99,7 +100,7 @@ export interface AtlRadioGroupProps
   /**
    * Array of error messages to display.
    */
-  errors?: string[];
+  errors?: ReadonlyArray<string | AtlErrorItem>;
   /**
    * The radio buttons to be rendered.
    */
@@ -188,7 +189,7 @@ export function AtlRadioGroup({
           <div className="errors" role="alert" aria-live="polite">
             {errors.map((err, i) => (
               <p key={i} className="error-message">
-                {err}
+                {errorMessage(err)}
               </p>
             ))}
           </div>

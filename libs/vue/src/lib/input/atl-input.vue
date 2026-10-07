@@ -3,6 +3,8 @@ import { computed, onMounted, ref, useId } from 'vue';
 import '@atelier-ui/styles/input/atl-input.css';
 import { warnIfUnnamedControl } from '../a11y-dev-warn';
 import AtlIcon from '../icon/atl-icon.vue';
+import type { AtlErrorItem } from '../spec';
+import { errorMessage } from '../error-message';
 
 defineOptions({ name: 'AtlInput' });
 
@@ -16,7 +18,7 @@ interface AtlInputProps {
   /** Whether the input has validation errors; sets `aria-invalid`. */
   invalid?: boolean;
   /** Validation error messages shown below the control and linked to it via `aria-describedby`. */
-  errors?: string[];
+  errors?: ReadonlyArray<string | AtlErrorItem>;
   /** Whether the input is disabled. */
   disabled?: boolean;
   /** Whether the input is read-only. */
@@ -120,7 +122,7 @@ function onInput(event: Event) {
     </div>
     <div v-if="errors.length" :id="errorsId" class="errors" aria-live="polite">
       <p v-for="(error, i) in errors" :key="i" class="error-message">
-        {{ error }}
+        {{ errorMessage(error) }}
       </p>
     </div>
   </div>

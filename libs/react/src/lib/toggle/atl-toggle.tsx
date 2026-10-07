@@ -1,6 +1,7 @@
 import { InputHTMLAttributes, ReactNode, useId } from 'react';
-import type { AtlToggleSpec } from '../spec';
+import type { AtlToggleSpec, AtlErrorItem } from '../spec';
 import '@atelier-ui/styles/toggle/atl-toggle.css';
+import { errorMessage } from '../error-message';
 
 /**
  * Properties for the AtlToggle component.
@@ -35,7 +36,7 @@ export interface AtlToggleProps
   /**
    * List of error messages to display.
    */
-  errors?: string[];
+  errors?: ReadonlyArray<string | AtlErrorItem>;
   /**
    * Optional content to display alongside the toggle.
    */
@@ -99,7 +100,7 @@ export function AtlToggle({
         <div className="errors" id={errorId} aria-live="polite">
           {errors.map((err, i) => (
             <p key={i} className="error-message">
-              {err}
+              {errorMessage(err)}
             </p>
           ))}
         </div>

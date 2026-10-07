@@ -27,13 +27,15 @@ export interface AtlRadioGroupProps {
   /** Whether the group is required; sets `aria-required`. */
   required?: boolean;
   /** Validation error messages shown below the group. */
-  errors?: string[];
+  errors?: ReadonlyArray<string | AtlErrorItem>;
 }
 </script>
 
 <script setup lang="ts">
 import { computed, provide, ref } from 'vue';
 import '@atelier-ui/styles/radio-group/atl-radio-group.css';
+import type { AtlErrorItem } from '../spec';
+import { errorMessage } from '../error-message';
 
 defineOptions({ name: 'AtlRadioGroup' });
 
@@ -124,7 +126,7 @@ function onKeydown(event: KeyboardEvent): void {
     <slot />
     <div v-if="errors.length > 0" class="errors" role="alert">
       <p v-for="(error, index) in errors" :key="index" class="error-message">
-        {{ error }}
+        {{ errorMessage(error) }}
       </p>
     </div>
   </div>

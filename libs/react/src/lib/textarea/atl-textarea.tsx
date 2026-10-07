@@ -1,7 +1,8 @@
 import { TextareaHTMLAttributes, useRef, useEffect, useId } from 'react';
-import type { AtlTextareaSpec } from '../spec';
+import type { AtlTextareaSpec, AtlErrorItem } from '../spec';
 import '@atelier-ui/styles/textarea/atl-textarea.css';
 import { AtlIcon } from '../icon/atl-icon';
+import { errorMessage } from '../error-message';
 
 /**
  * Properties for the AtlTextarea component.
@@ -57,7 +58,7 @@ export interface AtlTextareaProps
   /**
    * List of error messages to display.
    */
-  errors?: string[];
+  errors?: ReadonlyArray<string | AtlErrorItem>;
   /**
    * Label text for the textarea.
    */
@@ -147,7 +148,7 @@ export function AtlTextarea({
         <div className="errors" id={errorId} aria-live="polite">
           {errors.map((err, i) => (
             <p key={i} className="error-message">
-              {err}
+              {errorMessage(err)}
             </p>
           ))}
         </div>

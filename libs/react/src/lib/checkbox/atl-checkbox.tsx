@@ -5,8 +5,9 @@ import {
   useEffect,
   useId,
 } from 'react';
-import type { AtlCheckboxSpec } from '../spec';
+import type { AtlCheckboxSpec, AtlErrorItem } from '../spec';
 import '@atelier-ui/styles/checkbox/atl-checkbox.css';
+import { errorMessage } from '../error-message';
 
 /**
  * Properties for the AtlCheckbox component.
@@ -45,7 +46,7 @@ export interface AtlCheckboxProps
   /**
    * Array of error messages to display.
    */
-  errors?: string[];
+  errors?: ReadonlyArray<string | AtlErrorItem>;
   /**
    * The content to be rendered as the label for the checkbox.
    */
@@ -113,7 +114,7 @@ export function AtlCheckbox({
         <div className="errors" id={errorId} aria-live="polite">
           {errors.map((err, i) => (
             <p key={i} className="error-message">
-              {err}
+              {errorMessage(err)}
             </p>
           ))}
         </div>

@@ -115,3 +115,4 @@ export { default as AtlChatMessage } from './lib/chat/atl-chat-message.vue';
 export { default as AtlChatTyping } from './lib/chat/atl-chat-typing.vue';
 export { default as AtlChatSuggestion } from './lib/chat/atl-chat-suggestion.vue';
 export { default as AtlChatInput } from './lib/chat/atl-chat-input.vue';
+export type { AtlErrorItem } from './lib/spec';

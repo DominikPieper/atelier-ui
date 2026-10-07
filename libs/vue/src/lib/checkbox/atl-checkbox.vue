@@ -1,6 +1,8 @@
 <script setup lang="ts">
 import { ref, watch, onMounted, computed, useId } from 'vue';
 import '@atelier-ui/styles/checkbox/atl-checkbox.css';
+import type { AtlErrorItem } from '../spec';
+import { errorMessage } from '../error-message';
 
 defineOptions({ name: 'AtlCheckbox' });
 
@@ -12,7 +14,7 @@ interface AtlCheckboxProps {
   /** Whether the checkbox has validation errors; sets `aria-invalid`. */
   invalid?: boolean;
   /** Validation error messages shown below the control and linked to it via `aria-describedby`. */
-  errors?: string[];
+  errors?: ReadonlyArray<string | AtlErrorItem>;
   /** Whether the checkbox is disabled. */
   disabled?: boolean;
   /** Whether the checkbox is required. */
@@ -87,7 +89,7 @@ function onChange(event: Event) {
     </label>
     <div v-if="errors.length" :id="errorsId" class="errors" aria-live="polite">
       <p v-for="(error, i) in errors" :key="i" class="error-message">
-        {{ error }}
+        {{ errorMessage(error) }}
       </p>
     </div>
   </div>

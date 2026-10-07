@@ -112,6 +112,7 @@ Each entry lists:
   A text input field that integrates with Signal Forms. Supports all standard HTML input types, validation states, and error display.
 
   Props:
+    errors         ReadonlyArray<string | AtlErrorItem>                      []      Validation errors to show under the field. Angular takes Signal Forms' `ValidationError` objects; React and Vue take those objects or plain strings.
     value          string                                                    —       The current value of the input.
     onValueChange  (value: string) => void                                   —       Callback triggered when the value changes.
     disabled       boolean                                                   false   Whether the input is disabled.
@@ -122,7 +123,6 @@ Each entry lists:
     label          string                                                    —       The label for the input.
     type           'text' | 'email' | 'password' | 'number' | 'tel' | 'url'  'text'  The type of input to render.
     placeholder    string                                                    —       Placeholder text shown when the input is empty.
-    errors         string[]                                                  []      Array of error messages to display.
     readOnly       boolean                                                   —       Whether the input is read-only.
 
   Usage:
@@ -166,19 +166,19 @@ Each entry lists:
   A multi-line text input. Supports auto-resize to fit content and integrates with Signal Forms.
 
   Props:
-    value          string                   —      Current value of the textarea.
-    onValueChange  (value: string) => void  —      Callback fired when the value changes.
-    disabled       boolean                  false  Whether the textarea is disabled.
-    invalid        boolean                  false  Whether the textarea has validation errors.
-    required       boolean                  false  Whether the textarea is required.
-    name           string                   —      The textarea's name attribute, used for form submission.
-    readonly       boolean                  —      Lowercase alias of `readOnly`: whether the textarea is read-only. `readOnly` wins when both are set.
-    label          string                   —      Label text for the textarea.
-    rows           number                   3      Number of visible text rows.
-    placeholder    string                   —      Placeholder text shown when the textarea is empty.
-    autoResize     boolean                  false  Whether the textarea height grows automatically to fit its content.
-    readOnly       boolean                  —      Whether the textarea is read-only.
-    errors         string[]                 []     List of error messages to display.
+    errors         ReadonlyArray<string | AtlErrorItem>  []     Validation errors to show under the field. Angular takes Signal Forms' `ValidationError` objects; React and Vue take those objects or plain strings.
+    value          string                                —      Current value of the textarea.
+    onValueChange  (value: string) => void               —      Callback fired when the value changes.
+    disabled       boolean                               false  Whether the textarea is disabled.
+    invalid        boolean                               false  Whether the textarea has validation errors.
+    required       boolean                               false  Whether the textarea is required.
+    name           string                                —      The textarea's name attribute, used for form submission.
+    readonly       boolean                               —      Lowercase alias of `readOnly`: whether the textarea is read-only. `readOnly` wins when both are set.
+    label          string                                —      Label text for the textarea.
+    rows           number                                3      Number of visible text rows.
+    placeholder    string                                —      Placeholder text shown when the textarea is empty.
+    autoResize     boolean                               false  Whether the textarea height grows automatically to fit its content.
+    readOnly       boolean                               —      Whether the textarea is read-only.
 
   Usage:
     Angular:
@@ -217,14 +217,14 @@ Each entry lists:
   A checkbox input that supports indeterminate state. Integrates with Signal Forms.
 
   Props:
-    checked          boolean                     false  Whether the checkbox is checked.
-    onCheckedChange  (checked: boolean) => void  —      Callback triggered when the checked state changes.
-    indeterminate    boolean                     false  Whether the checkbox is in an indeterminate state.
-    disabled         boolean                     false  Whether the checkbox is disabled.
-    required         boolean                     false  Whether the checkbox is required.
-    invalid          boolean                     false  Whether the checkbox is in an invalid state.
-    errors           string[]                    []     Array of error messages to display.
-    children         ReactNode                   —      The content to be rendered as the label for the checkbox.
+    checked          boolean                               false  Whether the checkbox is checked.
+    onCheckedChange  (checked: boolean) => void            —      Callback triggered when the checked state changes.
+    indeterminate    boolean                               false  Whether the checkbox is in an indeterminate state.
+    disabled         boolean                               false  Whether the checkbox is disabled.
+    required         boolean                               false  Whether the checkbox is required.
+    invalid          boolean                               false  Whether the checkbox is in an invalid state.
+    errors           ReadonlyArray<string | AtlErrorItem>  []     Array of error messages to display.
+    children         ReactNode                             —      The content to be rendered as the label for the checkbox.
 
   Usage:
     Angular:
@@ -263,13 +263,13 @@ Each entry lists:
   A toggle switch for boolean settings. Integrates with Signal Forms.
 
   Props:
-    checked          boolean                     false  Whether the toggle is on. Controlled: pair it with `onCheckedChange`.
-    onCheckedChange  (checked: boolean) => void  —      Callback fired when the checked state changes.
-    invalid          boolean                     false  Whether the toggle has validation errors.
-    disabled         boolean                     false  Whether the toggle is disabled.
-    required         boolean                     false  Whether the toggle is required.
-    errors           string[]                    []     List of error messages to display.
-    children         ReactNode                   —      Optional content to display alongside the toggle.
+    checked          boolean                               false  Whether the toggle is on. Controlled: pair it with `onCheckedChange`.
+    onCheckedChange  (checked: boolean) => void            —      Callback fired when the checked state changes.
+    invalid          boolean                               false  Whether the toggle has validation errors.
+    disabled         boolean                               false  Whether the toggle is disabled.
+    required         boolean                               false  Whether the toggle is required.
+    errors           ReadonlyArray<string | AtlErrorItem>  []     List of error messages to display.
+    children         ReactNode                             —      Optional content to display alongside the toggle.
 
   Usage:
     Angular:
@@ -305,17 +305,17 @@ Each entry lists:
   A group of radio buttons with keyboard navigation. The group handles arrow key navigation and value management.
 
   Props:
-    value          string                     ''          The current value of the radio group.
-    onValueChange  (value: string) => void    —           Callback triggered when the value changes.
-    disabled       boolean                    false       Whether the radio group is disabled.
-    invalid        boolean                    false       Whether the radio group is in an invalid state.
-    required       boolean                    false       Whether a value is required.
-    name           string                     ''          The name of the radio group, applied to all child radio buttons.
-    readonly       boolean                    —           Lowercase alias of `readOnly`: whether the selection can be read but not changed. `readOnly` wins when both are set.
-    orientation    'horizontal' | 'vertical'  'vertical'  The layout orientation of the radio group.
-    readOnly       boolean                    —           Whether the radio group is read-only.
-    errors         string[]                   []          Array of error messages to display.
-    children       ReactNode                  —           The radio buttons to be rendered.
+    errors         ReadonlyArray<string | AtlErrorItem>  []          Validation errors to show under the field. Angular takes Signal Forms' `ValidationError` objects; React and Vue take those objects or plain strings.
+    value          string                                ''          The current value of the radio group.
+    onValueChange  (value: string) => void               —           Callback triggered when the value changes.
+    disabled       boolean                               false       Whether the radio group is disabled.
+    invalid        boolean                               false       Whether the radio group is in an invalid state.
+    required       boolean                               false       Whether a value is required.
+    name           string                                ''          The name of the radio group, applied to all child radio buttons.
+    readonly       boolean                               —           Lowercase alias of `readOnly`: whether the selection can be read but not changed. `readOnly` wins when both are set.
+    orientation    'horizontal' | 'vertical'             'vertical'  The layout orientation of the radio group.
+    readOnly       boolean                               —           Whether the radio group is read-only.
+    children       ReactNode                             —           The radio buttons to be rendered.
 
   Usage:
     Angular:
@@ -344,15 +344,15 @@ Each entry lists:
   A custom select dropdown built on the native Popover API. Supports keyboard navigation, type-ahead, and disabled options.
 
   Props:
-    value          string                   ''     The current value of the select.
-    onValueChange  (value: string) => void  —      Callback triggered when the value changes.
-    disabled       boolean                  false  Whether the select is disabled.
-    invalid        boolean                  false  Whether the select is in an invalid state.
-    required       boolean                  false  Whether the select is required.
-    name           string                   —      The select's name attribute, used for form submission.
-    label          string                   —      The label for the select.
-    placeholder    string                   —      Placeholder text to display when no value is selected.
-    errors         string[]                 []     Array of error messages to display.
+    errors         ReadonlyArray<string | AtlErrorItem>  []     Validation errors to show under the field. Angular takes Signal Forms' `ValidationError` objects; React and Vue take those objects or plain strings.
+    value          string                                ''     The current value of the select.
+    onValueChange  (value: string) => void               —      Callback triggered when the value changes.
+    disabled       boolean                               false  Whether the select is disabled.
+    invalid        boolean                               false  Whether the select is in an invalid state.
+    required       boolean                               false  Whether the select is required.
+    name           string                                —      The select's name attribute, used for form submission.
+    label          string                                —      The label for the select.
+    placeholder    string                                —      Placeholder text to display when no value is selected.
 
   Usage:
     Angular:
@@ -381,16 +381,16 @@ Each entry lists:
   A filterable autocomplete input. The user can type to narrow down a large list of options.
 
   Props:
-    value          string                   ''     The selected option's `value`. Controlled: pair it with `onValueChange`.
-    onValueChange  (value: string) => void  —      Callback fired with the chosen option's `value` when the user selects an option.
-    disabled       boolean                  false  Whether the combobox is disabled.
-    invalid        boolean                  false  Whether the combobox has validation errors.
-    required       boolean                  false  Whether the combobox is required.
-    name           string                   —      The input's name attribute, used for form submission.
-    readonly       boolean                  false  Whether the value can be read but not changed. Enforced by the component: typing, opening the panel and selecting an option are all blocked.
-    options        AtlComboboxOption[]      []     Options to display and filter. Each option is `{ value, label, disabled? }`.
-    placeholder    string                   ''     Placeholder text for the input.
-    errors         string[]                 []     Array of error messages to display.
+    errors         ReadonlyArray<string | AtlErrorItem>  []     Validation errors to show under the field. Angular takes Signal Forms' `ValidationError` objects; React and Vue take those objects or plain strings.
+    value          string                                ''     The selected option's `value`. Controlled: pair it with `onValueChange`.
+    onValueChange  (value: string) => void               —      Callback fired with the chosen option's `value` when the user selects an option.
+    disabled       boolean                               false  Whether the combobox is disabled.
+    invalid        boolean                               false  Whether the combobox has validation errors.
+    required       boolean                               false  Whether the combobox is required.
+    name           string                                —      The input's name attribute, used for form submission.
+    readonly       boolean                               false  Whether the value can be read but not changed. Enforced by the component: typing, opening the panel and selecting an option are all blocked.
+    options        AtlComboboxOption[]                   []     Options to display and filter. Each option is `{ value, label, disabled? }`.
+    placeholder    string                                ''     Placeholder text for the input.
 
   Usage:
     Angular:

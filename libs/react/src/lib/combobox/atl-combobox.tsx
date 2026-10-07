@@ -1,7 +1,8 @@
 import { useEffect, useId, useMemo, useRef, useState } from 'react';
-import type { AtlComboboxOption, AtlComboboxSpec } from '../spec';
+import type { AtlComboboxOption, AtlComboboxSpec, AtlErrorItem } from '../spec';
 import '@atelier-ui/styles/combobox/atl-combobox.css';
 import { AtlIcon } from '../icon/atl-icon';
+import { errorMessage } from '../error-message';
 
 export type { AtlComboboxOption };
 
@@ -45,7 +46,7 @@ export interface AtlComboboxProps extends AtlComboboxSpec {
   /**
    * Array of error messages to display.
    */
-  errors?: string[];
+  errors?: ReadonlyArray<string | AtlErrorItem>;
 }
 
 /**
@@ -312,7 +313,7 @@ export function AtlCombobox({
         <div className="atl-combobox-errors" id={errorsId} aria-live="polite">
           {errors.map((e, i) => (
             <p key={i} className="atl-combobox-error-message">
-              {e}
+              {errorMessage(e)}
             </p>
           ))}
         </div>
