@@ -5,6 +5,11 @@ defineOptions({ name: 'AtlBreadcrumbItem' });
 
 interface AtlBreadcrumbItemProps {
   href?: string;
+  /**
+   * Whether this is the current page. Leave it unset and the last item inside
+   * `AtlBreadcrumbs` is the current page; set it on any item and only explicit
+   * values count.
+   */
   current?: boolean;
 }
 

@@ -3,9 +3,11 @@ import {
   ReactNode,
   AnchorHTMLAttributes,
   Children,
+  Fragment,
   isValidElement,
   cloneElement,
 } from 'react';
+import type { ReactElement } from 'react';
 import type { CSSProperties } from 'react';
 import type { AtlBreadcrumbsSpec, AtlBreadcrumbItemSpec } from '../spec';
 import '@atelier-ui/styles/breadcrumbs/atl-breadcrumbs.css';
@@ -26,7 +28,25 @@ export interface AtlBreadcrumbsProps
 }
 
 /**
+ * The children with every Fragment unwrapped, so items wrapped in `<>...</>` or
+ * produced by `.map()` inside one are seen as the siblings they render as.
+ */
+function flattenChildren(children: ReactNode): ReactNode[] {
+  return Children.toArray(children).flatMap((child) =>
+    isValidElement<{ children?: ReactNode }>(child) && child.type === Fragment
+      ? flattenChildren(child.props.children)
+      : [child],
+  );
+}
+
+/**
  * A breadcrumbs component for displaying a navigation trail.
+ *
+ * The last item is the current page unless an item sets `current` explicitly.
+ * If any item does, only explicit values count: `current` on the item that is
+ * the page, or `current={false}` on every item for a trail with no current page.
+ * Items must be direct children, or inside a Fragment; a custom wrapper component
+ * around them is not looked into, so set `current` on those items yourself.
  */
 export function AtlBreadcrumbs({
   children,
@@ -37,14 +57,19 @@ export function AtlBreadcrumbs({
 }: AtlBreadcrumbsProps) {
   const classes = ['atl-breadcrumbs', className].filter(Boolean).join(' ');
 
-  // Automatically mark the last child as current
-  const childArray = Children.toArray(children);
-  const enhancedChildren = childArray.map((child, index) => {
-    if (isValidElement(child) && index === childArray.length - 1) {
-      return cloneElement(child, { current: true } as object);
-    }
-    return child;
-  });
+  const flat = flattenChildren(children);
+  const isItem = (
+    child: ReactNode,
+  ): child is ReactElement<{ current?: boolean }> =>
+    isValidElement(child) && typeof child.type !== 'string';
+  const items = flat.filter(isItem);
+  const anyExplicit = items.some((item) => item.props.current !== undefined);
+  const last = items[items.length - 1];
+  const enhancedChildren = anyExplicit
+    ? flat
+    : flat.map((child) =>
+        child === last ? cloneElement(last, { current: true }) : child,
+      );
 
   return (
     <nav
@@ -75,7 +100,8 @@ export interface AtlBreadcrumbItemProps
    */
   href?: string;
   /**
-   * Whether this is the current page.
+   * Whether this is the current page. Leave it unset and the last item is the
+   * current page; set it on any item and only explicit values count.
    */
   current?: boolean;
   /**

@@ -860,21 +860,6 @@ const PROP_SURFACE_EXEMPT = new Map([
   // React) and aria-label (Vue, camelCase `ariaLabel` — Vue hardcodes its own
   // headerId as the aria-labelledby target instead of exposing a prop for it)
   // are silenced structurally there now, not here.
-  // Angular computes "is this the last item" internally via a registration
-  // token (ATL_BREADCRUMBS) and never exposes it as a prop — the spec, React,
-  // and Vue all model it as a settable `current`. Making Angular's internal
-  // computation an explicit input (or dropping `current` from the other two
-  // in favour of always-auto-detect) is a real API decision, not this gate.
-  [
-    'AtlBreadcrumbItemSpec:current:angular',
-    {
-      kind: 'gap',
-      reason:
-        'AtlBreadcrumbItem computes "is this the last item" internally via the ATL_BREADCRUMBS registration token ' +
-        'and never exposes it as an input — the spec, React, and Vue all model `current` as a settable prop. ' +
-        'Unresolved: see tasks/todo.md.',
-    },
-  ],
   // AtlTr.rowId: declared in the spec, and in Angular's own input() (single
   // occurrence in libs/angular/src/lib/table/atl-table.ts — verified), and
   // inherited into React's AtlTrProps via `extends AtlTrSpec` but never

@@ -171,6 +171,75 @@ describe('AtlBreadcrumbs', () => {
       ).toBeInTheDocument();
     });
 
+    describe('current', () => {
+      it('defaults to the last item', async () => {
+        const { container } = await render(
+          `<atl-breadcrumbs>
+            <atl-breadcrumb-item href="/a">A</atl-breadcrumb-item>
+            <atl-breadcrumb-item>B</atl-breadcrumb-item>
+          </atl-breadcrumbs>`,
+          { imports: ALL_IMPORTS },
+        );
+        const items = container.querySelectorAll('atl-breadcrumb-item');
+        expect(items[0]).not.toHaveClass('is-current');
+        expect(items[1]).toHaveClass('is-current');
+      });
+
+      it('an explicit current on another item overrides the last-item default', async () => {
+        const { container } = await render(
+          `<atl-breadcrumbs>
+            <atl-breadcrumb-item href="/a">A</atl-breadcrumb-item>
+            <atl-breadcrumb-item [current]="true">B</atl-breadcrumb-item>
+            <atl-breadcrumb-item href="/c">C</atl-breadcrumb-item>
+          </atl-breadcrumbs>`,
+          { imports: ALL_IMPORTS },
+        );
+        const items = container.querySelectorAll('atl-breadcrumb-item');
+        expect(items[0]).not.toHaveClass('is-current');
+        expect(items[1]).toHaveClass('is-current');
+        expect(items[2]).not.toHaveClass('is-current');
+        expect(
+          container.querySelectorAll('[aria-current="page"]'),
+        ).toHaveLength(1);
+        // the last item is no longer current, so it is a link again
+        expect(items[2].querySelector('a')).toHaveAttribute('href', '/c');
+      });
+
+      it('current=false on the last item leaves no current item', async () => {
+        const { container } = await render(
+          `<atl-breadcrumbs>
+            <atl-breadcrumb-item href="/a">A</atl-breadcrumb-item>
+            <atl-breadcrumb-item href="/b" [current]="false">B</atl-breadcrumb-item>
+          </atl-breadcrumbs>`,
+          { imports: ALL_IMPORTS },
+        );
+        expect(container.querySelector('.is-current')).not.toBeInTheDocument();
+        expect(
+          container.querySelector('[aria-current]'),
+        ).not.toBeInTheDocument();
+        expect(container.querySelector('a[href="/b"]')).toBeInTheDocument();
+      });
+
+      it('finds the last item when the items come from @for', async () => {
+        const { container } = await render(
+          `<atl-breadcrumbs>
+            @for (label of labels; track label) {
+              <atl-breadcrumb-item>{{ label }}</atl-breadcrumb-item>
+            }
+          </atl-breadcrumbs>`,
+          {
+            imports: ALL_IMPORTS,
+            componentProperties: { labels: ['A', 'B', 'C'] },
+          },
+        );
+        const items = container.querySelectorAll('atl-breadcrumb-item');
+        expect(items).toHaveLength(3);
+        expect(items[0]).not.toHaveClass('is-current');
+        expect(items[1]).not.toHaveClass('is-current');
+        expect(items[2]).toHaveClass('is-current');
+      });
+    });
+
     it('renders projected content', async () => {
       await render(
         `<atl-breadcrumbs>

@@ -30,6 +30,6 @@ export const metadata: ComponentMetadata = {
   accessibility: {
     role: 'navigation',
     keyboardBehavior:
-      'Items are links and reach focus via Tab in source order. Enter activates the focused link. The item with `current` carries `aria-current="page"` and is announced as the active location.',
+      'Items are links and reach focus via Tab in source order. Enter activates the focused link. The current item carries `aria-current="page"` and is announced as the active location. It is the last item unless an item sets `current` explicitly; if any does, only explicit values count.',
   },
 };

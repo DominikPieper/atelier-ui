@@ -22,6 +22,78 @@ describe('AtlBreadcrumbs', () => {
   });
 });
 
+describe('AtlBreadcrumbs current', () => {
+  const wrap = (template: string, data: object = {}) => ({
+    components: { AtlBreadcrumbs, AtlBreadcrumbItem },
+    setup: () => data,
+    template: `<AtlBreadcrumbs>${template}</AtlBreadcrumbs>`,
+  });
+
+  it('defaults to the last item', () => {
+    const { container } = render(
+      wrap(`<AtlBreadcrumbItem href="/a">A</AtlBreadcrumbItem>
+            <AtlBreadcrumbItem>B</AtlBreadcrumbItem>`),
+    );
+    const items = container.querySelectorAll('.atl-breadcrumb-item');
+    expect(items[0]).not.toHaveClass('is-current');
+    expect(items[1]).toHaveClass('is-current');
+  });
+
+  it('an explicit current on another item overrides the last-item default', () => {
+    const { container } = render(
+      wrap(`<AtlBreadcrumbItem href="/a">A</AtlBreadcrumbItem>
+            <AtlBreadcrumbItem :current="true">B</AtlBreadcrumbItem>
+            <AtlBreadcrumbItem href="/c">C</AtlBreadcrumbItem>`),
+    );
+    const items = container.querySelectorAll('.atl-breadcrumb-item');
+    expect(items[0]).not.toHaveClass('is-current');
+    expect(items[1]).toHaveClass('is-current');
+    expect(items[2]).not.toHaveClass('is-current');
+    expect(container.querySelectorAll('[aria-current="page"]')).toHaveLength(1);
+    expect(screen.getByRole('link', { name: 'C' })).toHaveAttribute(
+      'href',
+      '/c',
+    );
+  });
+
+  it(':current="false" on the last item leaves no current item', () => {
+    const { container } = render(
+      wrap(`<AtlBreadcrumbItem href="/a">A</AtlBreadcrumbItem>
+            <AtlBreadcrumbItem href="/b" :current="false">B</AtlBreadcrumbItem>`),
+    );
+    expect(container.querySelector('.is-current')).not.toBeInTheDocument();
+    expect(container.querySelector('[aria-current]')).not.toBeInTheDocument();
+    expect(screen.getByRole('link', { name: 'B' })).toBeInTheDocument();
+  });
+
+  it('finds the last item in a v-for', () => {
+    const { container } = render(
+      wrap(
+        `<AtlBreadcrumbItem href="/a">A</AtlBreadcrumbItem>
+         <AtlBreadcrumbItem v-for="label in labels" :key="label">{{ label }}</AtlBreadcrumbItem>`,
+        { labels: ['B', 'C'] },
+      ),
+    );
+    const items = container.querySelectorAll('.atl-breadcrumb-item');
+    expect(items).toHaveLength(3);
+    expect(items[1]).not.toHaveClass('is-current');
+    expect(items[2]).toHaveClass('is-current');
+  });
+
+  it('finds the last item behind a v-if', () => {
+    const { container } = render(
+      wrap(
+        `<AtlBreadcrumbItem href="/a">A</AtlBreadcrumbItem>
+         <AtlBreadcrumbItem>B</AtlBreadcrumbItem>
+         <AtlBreadcrumbItem v-if="false">C</AtlBreadcrumbItem>`,
+      ),
+    );
+    const items = container.querySelectorAll('.atl-breadcrumb-item');
+    expect(items).toHaveLength(2);
+    expect(items[1]).toHaveClass('is-current');
+  });
+});
+
 describe('AtlBreadcrumbItem', () => {
   covers('breadcrumbs', 'link-when-href')(
     'renders a link when href is provided and current is false',

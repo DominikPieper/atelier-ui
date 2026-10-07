@@ -2,11 +2,13 @@ import { NgTemplateOutlet } from '@angular/common';
 import {
   ChangeDetectionStrategy,
   Component,
+  booleanAttribute,
   OnDestroy,
   OnInit,
   computed,
   inject,
   input,
+  Signal,
   signal,
   ViewEncapsulation,
 } from '@angular/core';
@@ -15,7 +17,10 @@ import { ATL_BREADCRUMBS } from './atl-breadcrumbs.token';
 
 /**
  * Accessible breadcrumb navigation. Wrap `atl-breadcrumb-item` elements inside.
- * The last item is automatically marked as the current page.
+ * The last item is automatically marked as the current page, unless an item sets
+ * `current` itself. If any item does, only explicit values count: `[current]="true"`
+ * on the item that is the page, or `[current]="false"` for a trail with no current
+ * page.
  *
  * Usage:
  * ```html
@@ -34,9 +39,11 @@ import { ATL_BREADCRUMBS } from './atl-breadcrumbs.token';
     {
       provide: ATL_BREADCRUMBS,
       useFactory: (bc: AtlBreadcrumbs) => ({
-        registerItem: () => bc.registerItem(),
+        registerItem: (explicit: Signal<boolean | undefined>) =>
+          bc.registerItem(explicit),
         unregisterItem: (id: number) => bc.unregisterItem(id),
         lastItemId: bc.lastItemId,
+        hasExplicitCurrent: bc.hasExplicitCurrent,
       }),
       deps: [AtlBreadcrumbs],
     },
@@ -64,31 +71,39 @@ export class AtlBreadcrumbs {
 
   protected readonly separatorCssVar = computed(() => `'${this.separator()}'`);
 
-  private readonly _itemIds = signal<number[]>([]);
+  private readonly _items = signal<
+    { id: number; explicit: Signal<boolean | undefined> }[]
+  >([]);
   private _nextId = 0;
 
   /** @internal — used by AtlBreadcrumbItem via ATL_BREADCRUMBS token */
   readonly lastItemId = computed(() => {
-    const ids = this._itemIds();
-    return ids.length > 0 ? ids[ids.length - 1] : -1;
+    const items = this._items();
+    return items.length > 0 ? items[items.length - 1].id : -1;
   });
 
   /** @internal */
-  registerItem(): number {
+  readonly hasExplicitCurrent = computed(() =>
+    this._items().some((item) => item.explicit() !== undefined),
+  );
+
+  /** @internal */
+  registerItem(explicit: Signal<boolean | undefined>): number {
     const id = this._nextId++;
-    this._itemIds.update((ids) => [...ids, id]);
+    this._items.update((items) => [...items, { id, explicit }]);
     return id;
   }
 
   /** @internal */
   unregisterItem(id: number): void {
-    this._itemIds.update((ids) => ids.filter((i) => i !== id));
+    this._items.update((items) => items.filter((i) => i.id !== id));
   }
 }
 
 /**
  * A single breadcrumb step. The last item is automatically treated as
- * `aria-current="page"` and rendered as plain text (no link).
+ * `aria-current="page"` and rendered as plain text (no link), unless `current`
+ * is set on any item (see `AtlBreadcrumbs`).
  */
 @Component({
   selector: 'atl-breadcrumb-item',
@@ -128,18 +143,31 @@ export class AtlBreadcrumbs {
   },
 })
 export class AtlBreadcrumbItem implements OnInit, OnDestroy {
-  /** Optional href for navigation. Ignored on the last (current) item. */
+  /** Optional href for navigation. Ignored on the current item. */
   readonly href = input('');
+
+  /**
+   * Whether this is the current page. Leave it unset and the last item is the
+   * current page; set it on any item and only explicit values count.
+   */
+  readonly current = input<boolean | undefined, boolean | string | undefined>(
+    undefined,
+    {
+      transform: (value) =>
+        value === undefined ? undefined : booleanAttribute(value),
+    },
+  );
 
   private readonly context = inject(ATL_BREADCRUMBS);
   private readonly myIndex = signal(-1);
 
-  protected readonly isCurrent = computed(
-    () => this.myIndex() >= 0 && this.myIndex() === this.context.lastItemId(),
-  );
+  protected readonly isCurrent = computed(() => {
+    if (this.context.hasExplicitCurrent()) return this.current() === true;
+    return this.myIndex() >= 0 && this.myIndex() === this.context.lastItemId();
+  });
 
   ngOnInit(): void {
-    this.myIndex.set(this.context.registerItem());
+    this.myIndex.set(this.context.registerItem(this.current));
   }
 
   ngOnDestroy(): void {

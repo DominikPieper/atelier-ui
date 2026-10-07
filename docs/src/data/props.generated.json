@@ -512,14 +512,6 @@
           "description": "Separator character shown between breadcrumb items.",
           "required": false,
           "kind": "prop"
-        },
-        {
-          "name": "default",
-          "type": "{}",
-          "default": "—",
-          "description": "",
-          "required": false,
-          "kind": "slot"
         }
       ],
       "parts": {
