@@ -889,3 +889,13 @@ was dispatching the fourth patch when the owner asked whether this was getting m
 was. The repo already had the answer (ADR-0009): one source, a committed projection, a `--check`
 gate. Rule: when a change forces a second change somewhere unrelated, and that forces a third, stop
 and re-examine the decision at the root of the chain before writing the next patch.
+
+## 2026-10-07 — A docs task that edits a skill file has the skill gates in its blast radius
+
+During the docs redesign I changed `skills/atelier-design/SKILL.md` and `brand-guide.md` by hand
+(ADR-0156) and ran only the docs gates. `check:skill-discovery` reads those files through the
+published copies under `docs/public/.well-known/agent-skills/`, and its digest went stale. The
+failure surfaced only in `check:all`, and the harness reported the backgrounded chain as "exit 0"
+while the file said `CHECK_ALL_EXIT 1`. The 2026-10-06 lesson caught it a second time. Rule: when a
+change touches `skills/**`, run `npm run sync:generated` and `check:skill-discovery` in the same
+step. Derive the gate list from the files touched, not from the task's label ("docs").

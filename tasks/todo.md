@@ -53,7 +53,15 @@ Atelier token system instead of the generic gradient/grid look.
       owner decision.
 - [x] **6. delight** — done 2026-10-07. Kata ends with a real finish (recap, one action to
       `/patterns`); WIP banner calm, dismissible, remembered before paint.
-- [ ] **7. polish** + re-run `/impeccable critique`.
+- [x] **7. polish + re-critique** — done 2026-10-07. Re-critique scored 26/40 (was 27): a fresh
+      reviewer found new, pre-existing problems rather than regressions. Its P1s are open as 8–10.
+- [ ] **8. gallery shows components** — `/components` cards are letter monograms; render
+      previews, legend for the framework dots.
+- [ ] **9. track ends on a finish** — step 7 `/patterns` is a reference page ending on a
+      "Previous" card; the finish moment sits on step 6.
+- [ ] **10. one framework switcher** — the kata's switcher has no `aria-selected`, is 27 px tall
+      and silently restores Vue; `FwSwitcher` exists; two storage keys (`atelier.fw`,
+      `atelier-framework`). Also: footer sits under the sticky sidebar (copyright clipped).
 
 > **Picking this up in a new session?** Read
 > `tasks/handover-design-skills-2026-09-08.md` first — it carries what is blocked
