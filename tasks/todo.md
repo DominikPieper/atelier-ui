@@ -397,6 +397,18 @@ Ranked; each carries why it's worth doing next rather than later.
           manifest of the selected framework. The `PropRow` entries in `components.ts` are
           deleted, as is the props half of `check:docs`. This is the docs part of S6; tick
           it there too.
+          **Step 1 done 2026-10-07** (`1b47efb9`, `3a16141c`, `8444ed34`, `bff43d3e`). All 468
+          props in the three manifests are described, with no exemptions, and
+          `check:storybook-manifests` fails on `[NO-DESCRIPTION]`. Writing the descriptions
+          surfaced behaviour that differs between frameworks, now documented honestly in each
+          framework's JSDoc but not reconciled:
+          pagination `page` is two-way in Angular and controlled in Vue;
+          tooltip flips when clipped in Angular only;
+          Vue stepper `linear` lets users pass optional steps;
+          `errors` is `ValidationError[]` in Angular and `string[]` in Vue.
+          Compare these against the contracts; each is either a recorded `codeOnly` difference
+          or a bug. Open: React sub-components that are not a story's `meta.component`
+          (`AtlOption`, `AtlTd`, …) are not in the manifest, so their props are unmeasured.
     - [ ] **P4b — examples from one tagged story per component.** The examples stay
           hand-authored, as ADR-0121 keeps prose examples authored. Each comes from a story
           tagged `docs-example` in each framework, so a docs example is also a rendered,
