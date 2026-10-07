@@ -15,7 +15,8 @@
  *   Angular  `<prop> = input<…>('value')`
  *   React    `<prop> = 'value'`  (destructured default)
  *   Vue      `withDefaults(…, { <prop>: 'value' })`
- * Docs       components.ts prop `default` field.
+ * Docs       the prop's `default` in each framework's built Storybook manifest
+ *            (the docs prop tables are generated from it).
  *
  * Run via:  node tools/scripts/check-defaults.js  (or  npm run check:defaults)
  */
@@ -29,6 +30,8 @@ const {
   axisOf,
 } = require('./lib/component-axes');
 const { DEFAULT_PROP_EXCEPTIONS } = require('./lib/allowlists');
+const { parseExportedVars } = require('./lib/ts-eval');
+const { docsApiFromRepo } = require('./lib/manifest-props');
 
 const ROOT = path.resolve(__dirname, '../..');
 const DOCS_FILE = path.join(ROOT, 'docs/src/data/components.ts');
@@ -72,23 +75,26 @@ function vueDefault(src, prop) {
   return undefined;
 }
 
-/** docsKey -> { prop -> default(string, quotes stripped) } */
+/**
+ * framework -> docsKey -> { prop -> default (quotes stripped) }, read from the
+ * built Storybook manifests, which is where the docs tables now get their
+ * defaults (ADR-0121). Throws when a manifest is missing, so this gate cannot
+ * pass vacuously: `npm run check:defaults` builds them first.
+ */
 function parseDocsDefaults() {
-  const t = fs.readFileSync(DOCS_FILE, 'utf-8');
+  const componentDocs = parseExportedVars(DOCS_FILE).componentDocs;
   const result = {};
-  // crude but sufficient: walk each `key: { … props: [ … ] }` component block
-  const compRe = /(['"]?[\w-]+['"]?)\s*:\s*\{[\s\S]*?props:\s*\[([\s\S]*?)\]/g;
-  let cm;
-  while ((cm = compRe.exec(t)) !== null) {
-    const key = cm[1].replace(/['"]/g, '');
-    const props = {};
-    const propRe =
-      /\{[^}]*?name:\s*'([^']+)'[^}]*?default:\s*"([^"]*)"[^}]*?\}/g;
-    let pm;
-    while ((pm = propRe.exec(cm[2])) !== null) {
-      props[pm[1]] = pm[2].replace(/^'|'$/g, '');
+  for (const fw of FRAMEWORKS) {
+    const api = docsApiFromRepo(fw, ROOT, componentDocs);
+    result[fw] = {};
+    for (const [key, { props }] of Object.entries(api)) {
+      if (!props) continue; // a declared MANIFEST_GAPS component
+      result[fw][key] = {};
+      for (const row of props) {
+        if (row.default !== '—')
+          result[fw][key][row.name] = row.default.replace(/^'|'$/g, '');
+      }
     }
-    result[key] = props;
   }
   return result;
 }
@@ -137,11 +143,13 @@ for (const [union, component] of Object.entries(UNION_TO_COMPONENT)) {
     continue;
   }
   // Docs cross-check.
-  const docsVal = docs[component] && docs[component][prop];
-  if (docsVal !== undefined && docsVal !== values[0]) {
-    errors.push(
-      `[DOCS-DEFAULT-DRIFT] ${component}.${prop}: adapters default '${values[0]}' but docs say '${docsVal}'`,
-    );
+  for (const fw of FRAMEWORKS) {
+    const docsVal = docs[fw][component] && docs[fw][component][prop];
+    if (docsVal !== undefined && docsVal !== values[0]) {
+      errors.push(
+        `[DOCS-DEFAULT-DRIFT] ${component}.${prop}: adapters default '${values[0]}' but the ${fw} manifest says '${docsVal}'`,
+      );
+    }
   }
 }
 

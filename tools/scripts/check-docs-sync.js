@@ -3,13 +3,10 @@
  * check-docs-sync.js
  *
  * Validates that docs/src/data/components.ts is in sync with the spec interfaces
- * in libs/spec/src/index.ts.
+ * in libs/spec/src/index.ts, and guards the docs pages' Figma and port citations.
  *
  * Checks:
  *   [MISSING]    A spec interface has no corresponding entry in componentDocs
- *   [DRIFT]      A prop defined in the spec is absent from the component's props array
- *   [TYPE-DRIFT] A string-literal-union prop allows a value in the spec that is
- *                not present in the docs `type` string (docs undersell the API)
  *   [NODE-ID]    A Figma node-id cited in participant-facing material does not
  *                resolve against tools/figma/snapshot.json (masters, sampled
  *                variants, or the Workshop-Templates kata frames in
@@ -33,11 +30,12 @@
  *                above it): a purely additive edit anywhere else in the file
  *                cannot desync the exemption (ADR-0119).
  *
- * Note: extra props in docs (e.g. callbacks like onValueChange) are intentionally
- * not checked — they are legitimate additions beyond the spec. Likewise, only
- * pure string-literal unions get TYPE-DRIFT checks; boolean/number/callback props
- * carry no enumerable values to compare. The check is one-directional (spec →
- * docs): docs listing extra literals is allowed, dropping a spec literal is not.
+ * Retired (P4a, ADR-0121): [DRIFT] and [TYPE-DRIFT], which compared the spec's
+ * props and string-literal unions with the hand-written `props` arrays in
+ * components.ts. Those arrays are gone: the docs prop tables are generated from
+ * each framework's Storybook manifest (docs/src/data/manifest-props.ts), so the
+ * docs cannot drift from the adapters. The spec <-> adapter comparison itself is
+ * check:props (prop names), check:variants (union values) and check:defaults.
  *
  * Run via:  node tools/scripts/check-docs-sync.js
  *           (or  npm run check:docs)
@@ -50,7 +48,6 @@ const ts = require('typescript');
 const { SCAFFOLD_PORT_EXEMPT, scaffoldPortKey } = require('./lib/allowlists');
 
 const ROOT = path.resolve(__dirname, '../..');
-const SPEC_FILE = path.join(ROOT, 'libs/spec/src/index.ts');
 const DOCS_FILE = path.join(ROOT, 'docs/src/data/components.ts');
 const SNAPSHOT_FILE = path.join(ROOT, 'tools/figma/snapshot.json');
 const DOCS_SRC = path.join(ROOT, 'docs/src');
@@ -75,82 +72,9 @@ const NODE_ID_ROOTS = [DOCS_SRC, path.join(ROOT, 'workshop')];
 const SPEC_TO_DOCS = require('./lib/component-map').maps().docsPrimary;
 
 /**
- * Returns the set of string-literal values a type permits, or null when the
- * type is not a pure string-literal union (e.g. boolean, number, callback, or
- * a union mixing `string` with literals). `undefined` members from optional
- * props are ignored so `variant?: 'a' | 'b'` resolves to { 'a', 'b' }.
- * @param {import('typescript').Type} type
- * @returns {Set<string> | null}
- */
-function stringLiteralsOf(type) {
-  const members = type.isUnion() ? type.types : [type];
-  const lits = new Set();
-  let sawNonLiteral = false;
-  for (const t of members) {
-    if (t.isStringLiteral()) lits.add(t.value);
-    else if (t.flags & ts.TypeFlags.Undefined) continue;
-    else sawNonLiteral = true;
-  }
-  if (sawNonLiteral || lits.size === 0) return null;
-  return lits;
-}
-
-/**
- * Parses the spec file. Returns the prop-name set per docs key plus, for any
- * pure string-literal-union prop, the set of literal values it permits.
- * Uses the TypeScript type checker to resolve inherited properties.
- * @returns {{ propMap: Record<string, Set<string>>, litMap: Record<string, Record<string, Set<string>>> }}
- */
-function parseSpec() {
-  const program = ts.createProgram([SPEC_FILE], {
-    target: ts.ScriptTarget.Latest,
-    moduleResolution: ts.ModuleResolutionKind.NodeNext,
-    noEmit: true,
-  });
-  const checker = program.getTypeChecker();
-  const sourceFile = program.getSourceFile(SPEC_FILE);
-
-  if (!sourceFile) {
-    throw new Error(`Could not load spec file: ${SPEC_FILE}`);
-  }
-
-  /** @type {Record<string, Set<string>>} */
-  const propMap = {};
-  /** @type {Record<string, Record<string, Set<string>>>} */
-  const litMap = {};
-
-  ts.forEachChild(sourceFile, (node) => {
-    const name =
-      ts.isInterfaceDeclaration(node) || ts.isTypeAliasDeclaration(node)
-        ? node.name.text
-        : null;
-
-    const docsKey = name && SPEC_TO_DOCS[name];
-    if (!docsKey) return;
-
-    const type = checker.getTypeAtLocation(node.name);
-    const props = checker.getPropertiesOfType(type);
-    propMap[docsKey] = new Set(props.map((p) => p.name));
-
-    /** @type {Record<string, Set<string>>} */
-    const lits = {};
-    for (const p of props) {
-      const decl = p.valueDeclaration ?? p.declarations?.[0] ?? node.name;
-      const literals = stringLiteralsOf(
-        checker.getTypeOfSymbolAtLocation(p, decl),
-      );
-      if (literals) lits[p.name] = literals;
-    }
-    litMap[docsKey] = lits;
-  });
-
-  return { propMap, litMap };
-}
-
-/**
- * Parses component-data.ts and returns the prop-name set per docs key, the
- * `type` string per prop, and the set of all keys listed in COMPONENT_CATEGORIES.
- * @returns {{ docsMap: Record<string, Set<string>>, typeMap: Record<string, Record<string, string>>, categoryKeys: Set<string> }}
+ * Parses component-data.ts and returns the componentDocs keys and the set of all
+ * keys listed in COMPONENT_CATEGORIES.
+ * @returns {{ docKeys: Set<string>, categoryKeys: Set<string> }}
  */
 function parseDocs() {
   const program = ts.createProgram([DOCS_FILE], {
@@ -164,10 +88,8 @@ function parseDocs() {
     throw new Error(`Could not load docs file: ${DOCS_FILE}`);
   }
 
-  /** @type {Record<string, Set<string>>} */
-  const result = {};
-  /** @type {Record<string, Record<string, string>>} */
-  const typeResult = {};
+  /** @type {Set<string>} */
+  const docKeys = new Set();
   /** @type {Set<string>} */
   const categoryKeys = new Set();
 
@@ -187,53 +109,12 @@ function parseDocs() {
   function extractComponentDocs(objNode) {
     for (const prop of objNode.properties) {
       if (!ts.isPropertyAssignment(prop)) continue;
-
       const key = ts.isStringLiteral(prop.name)
         ? prop.name.text
         : ts.isIdentifier(prop.name)
           ? prop.name.text
           : null;
-      if (!key) continue;
-
-      const compObj = prop.initializer;
-      if (!ts.isObjectLiteralExpression(compObj)) continue;
-
-      for (const compField of compObj.properties) {
-        if (!ts.isPropertyAssignment(compField)) continue;
-        if (!ts.isIdentifier(compField.name) || compField.name.text !== 'props')
-          continue;
-
-        const propsArr = compField.initializer;
-        if (!ts.isArrayLiteralExpression(propsArr)) continue;
-
-        const propNames = new Set();
-        /** @type {Record<string, string>} */
-        const typeByName = {};
-        for (const elem of propsArr.elements) {
-          if (!ts.isObjectLiteralExpression(elem)) continue;
-          let propName = null;
-          let propType = null;
-          for (const field of elem.properties) {
-            if (!ts.isPropertyAssignment(field)) continue;
-            if (!ts.isIdentifier(field.name)) continue;
-            const literal =
-              ts.isStringLiteral(field.initializer) ||
-              ts.isNoSubstitutionTemplateLiteral(field.initializer)
-                ? field.initializer.text
-                : null;
-            if (field.name.text === 'name' && literal != null)
-              propName = literal;
-            if (field.name.text === 'type' && literal != null)
-              propType = literal;
-          }
-          if (propName != null) {
-            propNames.add(propName);
-            if (propType != null) typeByName[propName] = propType;
-          }
-        }
-        result[key] = propNames;
-        typeResult[key] = typeByName;
-      }
+      if (key) docKeys.add(key);
     }
   }
 
@@ -258,23 +139,7 @@ function parseDocs() {
   }
 
   visit(sourceFile);
-  return { docsMap: result, typeMap: typeResult, categoryKeys };
-}
-
-/**
- * Extracts the quoted string literals from a docs `type` string, e.g.
- * "'primary' | 'secondary'" → { 'primary', 'secondary' }.
- * @param {string} typeStr
- * @returns {Set<string>}
- */
-function docsLiteralsOf(typeStr) {
-  const set = new Set();
-  const re = /'([^']*)'|"([^"]*)"/g;
-  let m;
-  while ((m = re.exec(typeStr)) !== null) {
-    set.add(m[1] !== undefined ? m[1] : m[2]);
-  }
-  return set;
+  return { docKeys, categoryKeys };
 }
 
 // ---------------------------------------------------------------------------
@@ -424,60 +289,29 @@ function checkScaffoldPortCitations(errors) {
 // Main
 // ---------------------------------------------------------------------------
 
-const { propMap: specMap, litMap: specLitMap } = parseSpec();
-const { docsMap, typeMap, categoryKeys } = parseDocs();
+const { docKeys, categoryKeys } = parseDocs();
 
 const errors = [];
 
-// 1. Spec ↔ docs props parity (+ string-literal-union value parity)
+// 1. Every primary spec interface has a docs entry. (Prop and union-value
+// parity moved to the manifests; see the header.)
 for (const [specInterface, docsKey] of Object.entries(SPEC_TO_DOCS)) {
-  if (!docsMap[docsKey]) {
+  if (!docKeys.has(docsKey)) {
     errors.push(
       `[MISSING] '${docsKey}' has no entry in component-data.ts (spec: ${specInterface})`,
     );
-    continue;
-  }
-
-  const specProps = specMap[docsKey];
-  if (!specProps) continue;
-
-  const docProps = docsMap[docsKey];
-  for (const prop of specProps) {
-    if (!docProps.has(prop)) {
-      errors.push(
-        `[DRIFT] ${docsKey}.props: '${prop}' exists in spec (${specInterface}) but is missing from docs`,
-      );
-    }
-  }
-
-  // String-literal-union value parity: every literal the spec allows must
-  // appear in the docs `type` string. Only checked for props the docs
-  // actually list a type for (name-presence is handled above).
-  const specLits = specLitMap[docsKey] ?? {};
-  const docTypes = typeMap[docsKey] ?? {};
-  for (const [prop, lits] of Object.entries(specLits)) {
-    const typeStr = docTypes[prop];
-    if (typeStr == null) continue;
-    const docLits = docsLiteralsOf(typeStr);
-    const missing = [...lits].filter((l) => !docLits.has(l));
-    if (missing.length) {
-      errors.push(
-        `[TYPE-DRIFT] ${docsKey}.${prop}: spec (${specInterface}) allows ` +
-          `${missing.map((v) => `'${v}'`).join(', ')} not present in docs type "${typeStr}"`,
-      );
-    }
   }
 }
 
 // 2. COMPONENT_CATEGORIES ↔ componentDocs parity
 for (const key of categoryKeys) {
-  if (!docsMap[key]) {
+  if (!docKeys.has(key)) {
     errors.push(
       `[MISSING] '${key}' is listed in COMPONENT_CATEGORIES but has no entry in componentDocs`,
     );
   }
 }
-for (const key of Object.keys(docsMap)) {
+for (const key of docKeys) {
   if (!categoryKeys.has(key)) {
     errors.push(
       `[MISSING] '${key}' is in componentDocs but not listed in COMPONENT_CATEGORIES`,
@@ -512,7 +346,7 @@ if (errors.length > 0) {
 } else {
   const count = Object.keys(SPEC_TO_DOCS).length;
   console.log(
-    `✓ All ${count} spec interfaces, props, and categories match component-data.ts`,
+    `✓ All ${count} spec interfaces and categories match component-data.ts`,
   );
   console.log(
     '✓ Every Figma node-id cited under docs/src and workshop/ resolves against tools/figma/snapshot.json',

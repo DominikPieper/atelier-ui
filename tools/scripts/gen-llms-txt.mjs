@@ -3,7 +3,8 @@
  * gen-llms-txt.mjs
  *
  * Generates docs/public/llms.txt (short index) and docs/public/llms-full.txt
- * (complete API reference) from docs/src/data/components.ts.
+ * (complete API reference) from docs/src/data/components.ts, with the prop
+ * tables read from the built React Storybook manifest.
  *
  * Why this exists: the library's value proposition is "LLM-optimized", so the
  * public text reference MUST stay fresh. Before this generator, both files
@@ -25,6 +26,7 @@ import ts from 'typescript';
 // them without an ESM wrapper. Pull them in via createRequire here.
 const require = createRequire(import.meta.url);
 const { evalNode, parseExportedVars } = require('./lib/ts-eval.js');
+const { docsApiFromRepo } = require('./lib/manifest-props.js');
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const DATA_FILE = resolve(ROOT, 'docs/src/data/components.ts');
@@ -162,10 +164,13 @@ function orderedKeys(categories) {
 // Compact one-line prop summary for llms.txt — picks up to 5 key props and
 // lists them bare, dropping defaults/descriptions. Keeps the short index
 // small enough to paste into a tight context window.
-function compactPropSummary(comp) {
-  const props = comp.props ?? [];
+function compactPropSummary(props) {
+  // Manifest order is declaration order, not importance: lead with the
+  // string-literal unions (variant, size, type, ...) and leave out `children`.
+  const isUnion = (p) => /^'[^']+'(?:\s*\|\s*'[^']+')+/.test(p.type);
   const names = props
-    .filter((p) => !p.name.startsWith('on'))
+    .filter((p) => !p.name.startsWith('on') && p.name !== 'children')
+    .sort((a, b) => Number(isUnion(b)) - Number(isUnion(a)))
     .slice(0, 6)
     .map((p) => {
       const m = p.type.match(/^'([^']+)'(?:\s*\|\s*'([^']+)')+/);
@@ -233,7 +238,7 @@ function buildShortIndex({ categories, docs }, version) {
   for (const key of orderedKeys(categories)) {
     const comp = docs[key];
     if (!comp) continue;
-    const summary = compactPropSummary(comp);
+    const summary = compactPropSummary(propsOf(key));
     lines.push(`- [${comp.name}](${SITE_URL}/components/${key}): ${summary}`);
   }
   return lines.join('\n') + '\n';
@@ -432,7 +437,7 @@ function buildFullReference(
     lines.push(`  ${comp.description}`);
     lines.push('');
     lines.push('  Props:');
-    lines.push(formatPropsTable(comp.props));
+    lines.push(formatPropsTable(propsOf(key)));
     lines.push('');
     lines.push('  Usage:');
     const ex = comp.examples ?? {};
@@ -482,6 +487,28 @@ function buildFullReference(
 const mode = process.argv[2];
 
 const parsed = parseComponents();
+
+// The prop rows come from the React manifest (`dist/storybook/react/manifests`),
+// the same source the docs page renders: React's prop names (`onValueChange`,
+// `variant`, ...) are the framework-neutral spelling these files have always
+// used. A MANIFEST_GAPS component (toast) keeps its hand-written rows in
+// components.ts. Throws when the manifest is not built (`npm run gen:llms` and
+// `check:llms` build it first).
+const reactApi = docsApiFromRepo('react', ROOT, parsed.docs);
+function propsOf(key) {
+  const rows = reactApi[key]?.props;
+  if (!rows) return parsed.docs[key]?.props ?? [];
+  return rows
+    .filter(
+      (r) => r.kind === 'prop' || r.kind === 'input' || r.kind === 'output',
+    )
+    .map(({ name, type, default: def, description }) => ({
+      name,
+      type,
+      default: def,
+      description,
+    }));
+}
 const version = readVersion();
 const metadataBySpec = loadMetadata();
 const tokenManifest = loadTokenManifest();

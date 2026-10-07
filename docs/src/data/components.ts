@@ -1,17 +1,14 @@
-export interface FrameworkPropOverrides {
-  name?: string;
-  type?: string;
-  default?: string;
-}
-
+/**
+ * A hand-written prop row. Prop tables are generated from the Storybook
+ * manifests (data/manifest-props.ts); a row survives here only where a manifest
+ * cannot serve it, which is a gap to close, not a place to add props.
+ * TODO(tasks/todo.md, P4a): delete the remaining rows once the gaps are closed.
+ */
 export interface PropRow {
   name: string;
   type: string;
   default: string;
   description: string;
-  angular?: FrameworkPropOverrides;
-  react?: FrameworkPropOverrides;
-  vue?: FrameworkPropOverrides;
 }
 
 export interface KeyBinding {
@@ -28,7 +25,12 @@ export interface A11yInfo {
 export interface CompositionPart {
   name: string;
   description?: string;
-  props: PropRow[];
+  /**
+   * Fallback rows for a part that is not a story's `meta.component` in some
+   * framework, so no manifest describes it. Absent for slot-only parts and for
+   * parts every manifest covers. TODO(tasks/todo.md, P4a).
+   */
+  props?: PropRow[];
 }
 
 export interface ComponentDoc {
@@ -36,7 +38,12 @@ export interface ComponentDoc {
   selector: string;
   description: string;
   category: string;
-  props: PropRow[];
+  /**
+   * Only for MANIFEST_GAPS components (toast: its docs describe the service /
+   * hook options, not a rendered component's props). Everything else reads the
+   * manifest. TODO(tasks/todo.md, P4a).
+   */
+  props?: PropRow[];
   examples: { angular: string; react: string; vue: string };
   status?: 'new' | 'updated' | 'stable';
   aiUsage?: {
@@ -113,39 +120,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
       'A versatile button component with multiple variants and sizes. Supports loading and disabled states.',
     category: 'Inputs',
     status: 'stable',
-    props: [
-      {
-        name: 'variant',
-        type: "'primary' | 'secondary' | 'outline' | 'danger'",
-        default: "'primary'",
-        description: 'Visual style variant',
-      },
-      {
-        name: 'size',
-        type: "'sm' | 'md' | 'lg'",
-        default: "'md'",
-        description: 'Size of the button',
-      },
-      {
-        name: 'disabled',
-        type: 'boolean',
-        default: 'false',
-        description: 'Disables the button',
-      },
-      {
-        name: 'loading',
-        type: 'boolean',
-        default: 'false',
-        description: 'Shows a loading spinner, disables interaction',
-      },
-      {
-        name: 'aria-label',
-        type: 'string',
-        default: '—',
-        description:
-          'Accessible name. Required for icon-only buttons (no children). React enforces this at compile time via a discriminated union; Angular/Vue warn at runtime in dev mode.',
-      },
-    ],
     examples: {
       angular: `<atl-button variant="primary">Primary</atl-button>
 <atl-button variant="secondary">Secondary</atl-button>
@@ -184,71 +158,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
     description:
       'A text input field that integrates with Signal Forms. Supports all standard HTML input types, validation states, and error display.',
     category: 'Inputs',
-    props: [
-      {
-        name: 'value',
-        type: 'string',
-        default: "''",
-        description: 'Controlled value',
-        angular: { name: '[(value)]' },
-      },
-      {
-        name: 'onValueChange',
-        type: '(value: string) => void',
-        default: '—',
-        description: 'Called when the input value changes',
-        angular: { name: '(valueChange)' },
-      },
-      {
-        name: 'type',
-        type: "'text' | 'email' | 'password' | 'number' | 'tel' | 'url'",
-        default: "'text'",
-        description: 'Input type',
-      },
-      {
-        name: 'placeholder',
-        type: 'string',
-        default: "''",
-        description: 'Placeholder text',
-      },
-      {
-        name: 'label',
-        type: 'string',
-        default: "''",
-        description:
-          'Visible caption rendered as a <label> associated with the input via for/id. When omitted, the input renders with no visible caption — supply an external <label> or an aria-label at the call site in that case, or the field has no accessible name.',
-      },
-      {
-        name: 'disabled',
-        type: 'boolean',
-        default: 'false',
-        description: 'Disables the input',
-      },
-      {
-        name: 'readonly',
-        type: 'boolean',
-        default: 'false',
-        description: 'Makes the input read-only',
-      },
-      {
-        name: 'invalid',
-        type: 'boolean',
-        default: 'false',
-        description: 'Applies invalid/error styling',
-      },
-      {
-        name: 'required',
-        type: 'boolean',
-        default: 'false',
-        description: 'Marks field as required',
-      },
-      {
-        name: 'name',
-        type: 'string',
-        default: "''",
-        description: 'HTML name attribute for form submission',
-      },
-    ],
     examples: {
       angular: `<atl-input type="email" placeholder="you@example.com" [(value)]="email" />
 <atl-input label="Email" type="email" placeholder="you@example.com" [(value)]="email" />
@@ -287,76 +196,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
     description:
       'A multi-line text input. Supports auto-resize to fit content and integrates with Signal Forms.',
     category: 'Inputs',
-    props: [
-      {
-        name: 'value',
-        type: 'string',
-        default: "''",
-        description: 'Controlled value',
-      },
-      {
-        name: 'onValueChange',
-        type: '(value: string) => void',
-        default: '—',
-        description: 'Called when the textarea value changes',
-        angular: { name: '(valueChange)' },
-      },
-      {
-        name: 'rows',
-        type: 'number',
-        default: '3',
-        description: 'Initial number of visible rows',
-      },
-      {
-        name: 'placeholder',
-        type: 'string',
-        default: "''",
-        description: 'Placeholder text',
-      },
-      {
-        name: 'label',
-        type: 'string',
-        default: "''",
-        description:
-          'Visible caption rendered as a <label> associated with the textarea via for/id. When omitted, the textarea renders with no visible caption — supply an external <label> or an aria-label at the call site in that case, or the field has no accessible name.',
-      },
-      {
-        name: 'disabled',
-        type: 'boolean',
-        default: 'false',
-        description: 'Disables the textarea',
-      },
-      {
-        name: 'readonly',
-        type: 'boolean',
-        default: 'false',
-        description: 'Makes the textarea read-only',
-      },
-      {
-        name: 'invalid',
-        type: 'boolean',
-        default: 'false',
-        description: 'Applies invalid/error styling',
-      },
-      {
-        name: 'required',
-        type: 'boolean',
-        default: 'false',
-        description: 'Marks field as required',
-      },
-      {
-        name: 'name',
-        type: 'string',
-        default: "''",
-        description: 'HTML name attribute for form submission',
-      },
-      {
-        name: 'autoResize',
-        type: 'boolean',
-        default: 'false',
-        description: 'Grows height automatically as content grows',
-      },
-    ],
     examples: {
       angular: `<atl-textarea placeholder="Tell us about yourself" [rows]="4" [(value)]="bio" />
 <atl-textarea label="Bio" placeholder="Tell us about yourself" [(value)]="bio" />
@@ -379,50 +218,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
     description:
       'A checkbox input that supports indeterminate state. Integrates with Signal Forms.',
     category: 'Inputs',
-    props: [
-      {
-        name: 'checked',
-        type: 'boolean',
-        default: 'false',
-        description: 'Controlled checked state',
-      },
-      {
-        name: 'onCheckedChange',
-        type: '(checked: boolean) => void',
-        default: '—',
-        description: 'Called when the checked state changes',
-      },
-      {
-        name: 'indeterminate',
-        type: 'boolean',
-        default: 'false',
-        description: 'Shows a dash (indeterminate state)',
-      },
-      {
-        name: 'disabled',
-        type: 'boolean',
-        default: 'false',
-        description: 'Disables the checkbox',
-      },
-      {
-        name: 'invalid',
-        type: 'boolean',
-        default: 'false',
-        description: 'Applies invalid/error styling',
-      },
-      {
-        name: 'required',
-        type: 'boolean',
-        default: 'false',
-        description: 'Marks field as required',
-      },
-      {
-        name: 'name',
-        type: 'string',
-        default: "''",
-        description: 'HTML name attribute for form submission',
-      },
-    ],
     examples: {
       angular: `<atl-checkbox [(checked)]="agreed">I agree to the terms</atl-checkbox>
 <atl-checkbox [(checked)]="pre">Pre-checked</atl-checkbox>
@@ -445,44 +240,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
     description:
       'A toggle switch for boolean settings. Integrates with Signal Forms.',
     category: 'Inputs',
-    props: [
-      {
-        name: 'checked',
-        type: 'boolean',
-        default: 'false',
-        description: 'Controlled checked state',
-      },
-      {
-        name: 'onCheckedChange',
-        type: '(checked: boolean) => void',
-        default: '—',
-        description: 'Called when the checked state changes',
-      },
-      {
-        name: 'disabled',
-        type: 'boolean',
-        default: 'false',
-        description: 'Disables the toggle',
-      },
-      {
-        name: 'invalid',
-        type: 'boolean',
-        default: 'false',
-        description: 'Applies invalid/error styling',
-      },
-      {
-        name: 'required',
-        type: 'boolean',
-        default: 'false',
-        description: 'Marks field as required',
-      },
-      {
-        name: 'name',
-        type: 'string',
-        default: "''",
-        description: 'HTML name attribute for form submission',
-      },
-    ],
     examples: {
       angular: `<atl-toggle [(checked)]="notifications">Enable notifications</atl-toggle>
 <atl-toggle [(checked)]="active">Active toggle</atl-toggle>
@@ -502,50 +259,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
     description:
       'A group of radio buttons with keyboard navigation. The group handles arrow key navigation and value management.',
     category: 'Inputs',
-    props: [
-      {
-        name: 'value',
-        type: 'string',
-        default: "''",
-        description: 'Currently selected value',
-      },
-      {
-        name: 'onValueChange',
-        type: '(value: string) => void',
-        default: '—',
-        description: 'Called when selection changes',
-      },
-      {
-        name: 'disabled',
-        type: 'boolean',
-        default: 'false',
-        description: 'Disables all radios in the group',
-      },
-      {
-        name: 'readonly',
-        type: 'boolean',
-        default: 'false',
-        description: 'Makes all radios in the group read-only',
-      },
-      {
-        name: 'invalid',
-        type: 'boolean',
-        default: 'false',
-        description: 'Applies invalid/error styling',
-      },
-      {
-        name: 'required',
-        type: 'boolean',
-        default: 'false',
-        description: 'Marks field as required',
-      },
-      {
-        name: 'name',
-        type: 'string',
-        default: "''",
-        description: 'HTML name attribute (propagated to radios)',
-      },
-    ],
     examples: {
       angular: `<atl-radio-group name="plan" [(value)]="plan">
   <atl-radio radioValue="free">Free</atl-radio>
@@ -568,21 +281,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
         name: 'AtlRadio',
         description:
           'An individual radio button. Place inside AtlRadioGroup — the group manages the checked state.',
-        props: [
-          {
-            name: 'radioValue',
-            type: 'string',
-            default: '—',
-            description:
-              'Value this radio contributes when selected (required).',
-          },
-          {
-            name: 'disabled',
-            type: 'boolean',
-            default: 'false',
-            description: 'Disable this radio only.',
-          },
-        ],
       },
     ],
     a11y: {
@@ -616,59 +314,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
     description:
       'A custom select dropdown built on the native Popover API. Supports keyboard navigation, type-ahead, and disabled options.',
     category: 'Inputs',
-    props: [
-      {
-        name: 'value',
-        type: 'string',
-        default: "''",
-        description: 'Currently selected value',
-        angular: { name: '[(value)]' },
-      },
-      {
-        name: 'onValueChange',
-        type: '(value: string) => void',
-        default: '—',
-        description: 'Called when selection changes',
-        angular: { name: '(valueChange)' },
-      },
-      {
-        name: 'placeholder',
-        type: 'string',
-        default: "''",
-        description: 'Placeholder text when no option is selected',
-      },
-      {
-        name: 'label',
-        type: 'string',
-        default: "''",
-        description:
-          'Visible caption rendered as a <label> associated with the select via for/id. When omitted, the select renders with no visible caption — supply an external <label> or an aria-label at the call site in that case, or the field has no accessible name.',
-      },
-      {
-        name: 'disabled',
-        type: 'boolean',
-        default: 'false',
-        description: 'Disables the select',
-      },
-      {
-        name: 'invalid',
-        type: 'boolean',
-        default: 'false',
-        description: 'Applies invalid/error styling',
-      },
-      {
-        name: 'required',
-        type: 'boolean',
-        default: 'false',
-        description: 'Marks field as required',
-      },
-      {
-        name: 'name',
-        type: 'string',
-        default: "''",
-        description: 'HTML name attribute for form submission',
-      },
-    ],
     examples: {
       angular: `<atl-select label="Country" placeholder="Select a country" [(value)]="country">
   <atl-option optionValue="us">United States</atl-option>
@@ -748,50 +393,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
       'A filterable autocomplete input. The user can type to narrow down a large list of options.',
     category: 'Inputs',
     status: 'new',
-    props: [
-      {
-        name: 'value',
-        type: 'string',
-        default: "''",
-        description: 'Controlled value',
-      },
-      {
-        name: 'onValueChange',
-        type: '(value: string) => void',
-        default: '—',
-        description: 'Called when selection changes',
-      },
-      {
-        name: 'options',
-        type: 'AtlComboboxOption[]',
-        default: '[]',
-        description: 'Array of { label, value } objects',
-      },
-      {
-        name: 'placeholder',
-        type: 'string',
-        default: "''",
-        description: 'Placeholder text',
-      },
-      {
-        name: 'disabled',
-        type: 'boolean',
-        default: 'false',
-        description: 'Disables the combobox',
-      },
-      {
-        name: 'readonly',
-        type: 'boolean',
-        default: 'false',
-        description: 'Shows the value but blocks typing, opening and selection',
-      },
-      {
-        name: 'invalid',
-        type: 'boolean',
-        default: 'false',
-        description: 'Applies invalid/error styling',
-      },
-    ],
     examples: {
       angular: `<atl-combobox
   placeholder="Search framework..."
@@ -851,20 +452,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
     description:
       'A small inline label for status, categories, or counts. Use alongside cards, list items, and table cells.',
     category: 'Display',
-    props: [
-      {
-        name: 'variant',
-        type: "'default' | 'success' | 'warning' | 'danger' | 'info'",
-        default: "'default'",
-        description: 'Color scheme of the badge',
-      },
-      {
-        name: 'size',
-        type: "'sm' | 'md'",
-        default: "'md'",
-        description: 'Size of the badge',
-      },
-    ],
     examples: {
       angular: `<atl-badge>Default</atl-badge>
 <atl-badge variant="success">Active</atl-badge>
@@ -893,28 +480,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
     description:
       "Vector icon drawn from one geometry source (`libs/spec/src/icons.ts`), so the same shape appears everywhere it is used. The `name` prop's type below is the exact, current set. Decorative by default; pass `label` to announce a meaning to assistive tech.",
     category: 'Display',
-    props: [
-      {
-        name: 'name',
-        type: "'success' | 'check' | 'warning' | 'danger' | 'info' | 'error' | 'chevron-up' | 'chevron-down' | 'chevron-left' | 'chevron-right' | 'chevron-double-left' | 'chevron-double-right' | 'sort-asc' | 'sort-desc' | 'arrow-right' | 'arrow-left' | 'copy' | 'paste' | 'add' | 'edit' | 'delete' | 'close' | 'more' | 'person' | 'default-toast'",
-        default: '—',
-        description: 'The icon name. Required.',
-      },
-      {
-        name: 'size',
-        type: "'sm' | 'md' | 'lg'",
-        default: "'md'",
-        description:
-          'Icon size: sm 16px, md 20px, lg 24px. The geometry is one 24-unit viewBox, so every size is the same shape at a different scale.',
-      },
-      {
-        name: 'label',
-        type: 'string',
-        default: 'undefined',
-        description:
-          'Accessible label. When provided, the icon is announced as an image with this label. When omitted, the icon is hidden from assistive tech (treated as decorative).',
-      },
-    ],
     examples: {
       angular: `<atl-icon name="success" />
 <atl-icon name="warning" size="lg" label="Warning" />
@@ -934,27 +499,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
     description:
       'A container component for grouped content. Compose with AtlCardHeader, AtlCardContent, and AtlCardFooter.',
     category: 'Display',
-    props: [
-      {
-        name: 'variant',
-        type: "'elevated' | 'outlined' | 'flat'",
-        default: "'elevated'",
-        description: 'Visual style of the card',
-      },
-      {
-        name: 'padding',
-        type: "'none' | 'sm' | 'md' | 'lg'",
-        default: "'md'",
-        description: 'Padding size inside the card',
-      },
-      {
-        name: 'role',
-        type: "'article' | 'region' | 'section'",
-        default: '—',
-        description:
-          'Opt-in landmark role. Default is no role (plain div). Use article for self-contained content, region for a perceivable area (pair with aria-label), section for HTML <section> semantics.',
-      },
-    ],
     examples: {
       angular: `<atl-card variant="elevated" padding="md">
   <atl-card-header>Card Title</atl-card-header>
@@ -989,18 +533,15 @@ export const componentDocs: Record<string, ComponentDoc> = {
         name: 'AtlCardHeader',
         description:
           'Title row at the top of the card. Slot-only — takes no props.',
-        props: [],
       },
       {
         name: 'AtlCardContent',
         description: 'Main body of the card. Slot-only — takes no props.',
-        props: [],
       },
       {
         name: 'AtlCardFooter',
         description:
           'Action row at the bottom of the card. Slot-only — takes no props.',
-        props: [],
       },
     ],
   },
@@ -1012,33 +553,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
       'A comprehensive data table component for displaying structured information. Supports sorting, row selection, sticky headers, and custom empty states.',
     category: 'Display',
     status: 'new',
-    props: [
-      {
-        name: 'variant',
-        type: "'default' | 'striped' | 'bordered'",
-        default: "'default'",
-        description: 'Row background styling',
-      },
-      {
-        name: 'size',
-        type: "'sm' | 'md' | 'lg'",
-        default: "'md'",
-        description: 'Vertical padding of cells',
-      },
-      {
-        name: 'stickyHeader',
-        type: 'boolean',
-        default: 'false',
-        description: 'Makes header row stick to the top on scroll',
-      },
-      {
-        name: 'aria-label',
-        type: 'string',
-        default: "'Table'",
-        description:
-          'Accessible name for the scrollable wrapper region. Announced by screen readers when keyboard users focus the wrapper to scroll horizontally.',
-      },
-    ],
     examples: {
       angular: `<atl-table variant="striped">
   <atl-thead>
@@ -1093,7 +607,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
       {
         name: 'AtlThead',
         description: 'Header row container. Slot-only — takes no props.',
-        props: [],
       },
       {
         name: 'AtlTbody',
@@ -1194,39 +707,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
     description:
       'User avatar with image, initials fallback, and status indicator. Group avatars with AtlAvatarGroup.',
     category: 'Display',
-    props: [
-      { name: 'src', type: 'string', default: "''", description: 'Image URL' },
-      {
-        name: 'alt',
-        type: 'string',
-        default: "''",
-        description: 'Alt text for the avatar image',
-      },
-      {
-        name: 'name',
-        type: 'string',
-        default: "''",
-        description: 'Used for initials fallback and aria-label',
-      },
-      {
-        name: 'size',
-        type: "'xs' | 'sm' | 'md' | 'lg' | 'xl'",
-        default: "'md'",
-        description: 'Size of the avatar',
-      },
-      {
-        name: 'shape',
-        type: "'circle' | 'square'",
-        default: "'circle'",
-        description: 'Shape of the avatar',
-      },
-      {
-        name: 'status',
-        type: "'online' | 'offline' | 'away' | 'busy' | ''",
-        default: "''",
-        description: 'Status dot indicator',
-      },
-    ],
     examples: {
       angular: `<atl-avatar name="Jane Doe" size="md" status="online" />
 <atl-avatar name="John Smith" size="lg" shape="square" />
@@ -1284,32 +764,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
     description:
       'Loading placeholder that mimics content shape. Compose multiple skeletons to match your layout.',
     category: 'Display',
-    props: [
-      {
-        name: 'variant',
-        type: "'text' | 'circular' | 'rectangular'",
-        default: "'text'",
-        description: 'Shape of the skeleton',
-      },
-      {
-        name: 'width',
-        type: 'string',
-        default: "'100%'",
-        description: 'CSS width (e.g. "200px", "60%")',
-      },
-      {
-        name: 'height',
-        type: 'string',
-        default: "''",
-        description: 'CSS height. Auto per variant if not set.',
-      },
-      {
-        name: 'animated',
-        type: 'boolean',
-        default: 'true',
-        description: 'Enables shimmer animation',
-      },
-    ],
     examples: {
       angular: `<atl-skeleton variant="text" />
 <atl-skeleton variant="text" width="60%" />
@@ -1332,45 +786,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
     description:
       'A horizontal progress bar for showing completion percentage or indeterminate loading.',
     category: 'Display',
-    props: [
-      {
-        name: 'value',
-        type: 'number',
-        default: '0',
-        description: 'Progress value from 0 to 100',
-      },
-      {
-        name: 'max',
-        type: 'number',
-        default: '100',
-        description: 'Maximum value',
-      },
-      {
-        name: 'indeterminate',
-        type: 'boolean',
-        default: 'false',
-        description: 'Shows animated indeterminate state',
-      },
-      {
-        name: 'variant',
-        type: "'default' | 'success' | 'warning' | 'danger'",
-        default: "'default'",
-        description: 'Color variant',
-      },
-      {
-        name: 'size',
-        type: "'sm' | 'md' | 'lg'",
-        default: "'md'",
-        description: 'Size of the progress bar',
-      },
-      {
-        name: 'label',
-        type: 'string',
-        default: '—',
-        description:
-          'Accessible name (aria-label). Required by ARIA when no visible label is nearby.',
-      },
-    ],
     examples: {
       angular: `<atl-progress [value]="25" label="Upload progress" />
 <atl-progress [value]="60" variant="success" label="Form completion" />
@@ -1393,14 +808,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
     description:
       'Navigation breadcrumb trail showing the current page location within a hierarchy.',
     category: 'Navigation',
-    props: [
-      {
-        name: 'separator',
-        type: 'string',
-        default: "'/'",
-        description: 'Separator character between items',
-      },
-    ],
     examples: {
       angular: `<atl-breadcrumbs>
   <atl-breadcrumb-item href="/">Home</atl-breadcrumb-item>
@@ -1448,26 +855,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
     description:
       'An accessible tabbed interface. Supports roving tabindex, arrow key navigation, and a pills variant.',
     category: 'Navigation',
-    props: [
-      {
-        name: 'selectedIndex',
-        type: 'number',
-        default: '0',
-        description: 'Index of the selected tab',
-      },
-      {
-        name: 'onSelectedIndexChange',
-        type: '(index: number) => void',
-        default: '—',
-        description: 'Called when selection changes',
-      },
-      {
-        name: 'variant',
-        type: "'default' | 'pills'",
-        default: "'default'",
-        description: 'Visual style of the tab strip',
-      },
-    ],
     examples: {
       angular: `<atl-tab-group [selectedIndex]="0">
   <atl-tab label="Account">Account settings content.</atl-tab>
@@ -1534,26 +921,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
       'A multi-step wizard for complex processes. Supports linear and non-linear navigation.',
     category: 'Navigation',
     status: 'new',
-    props: [
-      {
-        name: 'activeStep',
-        type: 'number',
-        default: '0',
-        description: 'Currently active step index',
-      },
-      {
-        name: 'linear',
-        type: 'boolean',
-        default: 'false',
-        description: 'Forces user to complete steps in order',
-      },
-      {
-        name: 'orientation',
-        type: "'horizontal' | 'vertical'",
-        default: "'horizontal'",
-        description: 'Stepper layout direction',
-      },
-    ],
     examples: {
       angular: `<atl-stepper [activeStep]="0">
   <atl-step label="Basic Info">Step 1 content</atl-step>
@@ -1624,38 +991,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
     description:
       'Page navigation control for paginated data. Shows page numbers with previous/next buttons.',
     category: 'Navigation',
-    props: [
-      {
-        name: 'page',
-        type: 'number',
-        default: '1',
-        description: 'Current page (1-indexed)',
-      },
-      {
-        name: 'pageCount',
-        type: 'number',
-        default: '1',
-        description: 'Total number of pages',
-      },
-      {
-        name: 'onPageChange',
-        type: '(page: number) => void',
-        default: '—',
-        description: 'Called when the user navigates to a page',
-      },
-      {
-        name: 'siblingCount',
-        type: 'number',
-        default: '1',
-        description: 'Number of page buttons on each side of current page',
-      },
-      {
-        name: 'showFirstLast',
-        type: 'boolean',
-        default: 'true',
-        description: 'Show first/last page jump buttons',
-      },
-    ],
     examples: {
       angular: `<atl-pagination
   [(page)]="page"
@@ -1680,14 +1015,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
     description:
       'A dropdown context menu. Handles keyboard navigation, focus management, ARIA, and nested submenus.',
     category: 'Navigation',
-    props: [
-      {
-        name: 'variant',
-        type: "'default' | 'compact'",
-        default: "'default'",
-        description: 'Density of the menu',
-      },
-    ],
     examples: {
       angular: `<atl-button [atlMenuTriggerFor]="actions">Actions ▾</atl-button>
 <ng-template #actions>
@@ -1746,7 +1073,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
         name: 'AtlMenuSeparator',
         description:
           'A visual divider between groups of menu items. Rendered with role="separator" — screen readers announce it as a group boundary. Takes no props.',
-        props: [],
       },
     ],
     a11y: {
@@ -1785,32 +1111,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
     description:
       'A modal dialog using the native <dialog> element. Includes focus trap, Escape to close, backdrop click to close, and smooth animations.',
     category: 'Overlay',
-    props: [
-      {
-        name: 'open',
-        type: 'boolean',
-        default: 'false',
-        description: 'Controls dialog visibility',
-      },
-      {
-        name: 'onOpenChange',
-        type: '(open: boolean) => void',
-        default: '—',
-        description: 'Called when open state changes',
-      },
-      {
-        name: 'closeOnBackdrop',
-        type: 'boolean',
-        default: 'true',
-        description: 'Close when clicking the backdrop',
-      },
-      {
-        name: 'size',
-        type: "'sm' | 'md' | 'lg' | 'xl' | 'full'",
-        default: "'md'",
-        description: 'Max-width of the dialog',
-      },
-    ],
     examples: {
       angular: `<atl-button (click)="open = true">Open Dialog</atl-button>
 <atl-dialog [(open)]="open" size="sm">
@@ -1845,19 +1145,16 @@ export const componentDocs: Record<string, ComponentDoc> = {
         name: 'AtlDialogHeader',
         description:
           "Title area. The text becomes the dialog's accessible name. Slot-only.",
-        props: [],
       },
       {
         name: 'AtlDialogContent',
         description:
           'Main body. Receives initial focus when the dialog opens. Slot-only.',
-        props: [],
       },
       {
         name: 'AtlDialogFooter',
         description:
           'Action row — typically Cancel / Confirm buttons. Slot-only.',
-        props: [],
       },
     ],
     a11y: {
@@ -1888,38 +1185,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
     description:
       'A slide-in panel from the edge of the viewport. Useful for sidebars, filter panels, and detail views.',
     category: 'Overlay',
-    props: [
-      {
-        name: 'open',
-        type: 'boolean',
-        default: 'false',
-        description: 'Controls drawer visibility',
-      },
-      {
-        name: 'onOpenChange',
-        type: '(open: boolean) => void',
-        default: '—',
-        description: 'Called when open state changes',
-      },
-      {
-        name: 'position',
-        type: "'left' | 'right' | 'top' | 'bottom'",
-        default: "'right'",
-        description: 'Which edge the drawer slides from',
-      },
-      {
-        name: 'size',
-        type: "'sm' | 'md' | 'lg' | 'full'",
-        default: "'md'",
-        description: 'Width (or height for top/bottom)',
-      },
-      {
-        name: 'closeOnBackdrop',
-        type: 'boolean',
-        default: 'true',
-        description: 'Close when clicking the backdrop',
-      },
-    ],
     examples: {
       angular: `<atl-button (click)="open = true">Open Drawer</atl-button>
 <atl-drawer [(open)]="open" position="right">
@@ -1957,17 +1222,14 @@ export const componentDocs: Record<string, ComponentDoc> = {
         name: 'AtlDrawerHeader',
         description:
           'Title area — doubles as the drag handle on touch. Slot-only.',
-        props: [],
       },
       {
         name: 'AtlDrawerContent',
         description: 'Scrollable body. Slot-only.',
-        props: [],
       },
       {
         name: 'AtlDrawerFooter',
         description: 'Pinned action row at the bottom edge. Slot-only.',
-        props: [],
       },
     ],
     a11y: {
@@ -1996,38 +1258,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
     description:
       'An attribute directive that adds a tooltip to any element. Uses a viewport-aware overlay layer so the tooltip flips to stay on-screen.',
     category: 'Overlay',
-    props: [
-      {
-        name: 'atlTooltip',
-        type: 'string',
-        default: '—',
-        description: 'Tooltip text content (required)',
-      },
-      {
-        name: 'atlTooltipPosition',
-        type: "'above' | 'below' | 'left' | 'right'",
-        default: "'above'",
-        description: 'Preferred position',
-      },
-      {
-        name: 'atlTooltipDisabled',
-        type: 'boolean',
-        default: 'false',
-        description: 'Disables the tooltip',
-      },
-      {
-        name: 'atlTooltipShowDelay',
-        type: 'number',
-        default: '300',
-        description: 'Delay in ms before showing',
-      },
-      {
-        name: 'atlTooltipHideDelay',
-        type: 'number',
-        default: '0',
-        description: 'Delay in ms before hiding',
-      },
-    ],
     examples: {
       angular: `<atl-button atlTooltip="Save your changes">Save</atl-button>
 <atl-button
@@ -2157,20 +1387,6 @@ show('Persistent', { duration: 0 });`,
     description:
       'Expandable/collapsible sections. Supports multi-expand mode and smooth CSS grid animations.',
     category: 'Feedback',
-    props: [
-      {
-        name: 'multi',
-        type: 'boolean',
-        default: 'false',
-        description: 'Allow multiple items expanded simultaneously',
-      },
-      {
-        name: 'variant',
-        type: "'default' | 'bordered' | 'separated'",
-        default: "'default'",
-        description: 'Visual style of the group',
-      },
-    ],
     examples: {
       angular: `<atl-accordion-group variant="separated">
   <atl-accordion-item>
@@ -2268,26 +1484,6 @@ show('Persistent', { duration: 0 });`,
     description:
       'Inline status messages for feedback, warnings, and errors. Optionally dismissible.',
     category: 'Feedback',
-    props: [
-      {
-        name: 'variant',
-        type: "'info' | 'success' | 'warning' | 'danger'",
-        default: "'info'",
-        description: 'Color scheme and icon',
-      },
-      {
-        name: 'dismissible',
-        type: 'boolean',
-        default: 'false',
-        description: 'Show a close button',
-      },
-      {
-        name: 'onDismissed',
-        type: '() => void',
-        default: '—',
-        description: 'Called when the dismiss button is clicked',
-      },
-    ],
     examples: {
       angular: `<atl-alert variant="info">This is an informational message.</atl-alert>
 <atl-alert variant="success">Your changes were saved successfully.</atl-alert>
@@ -2311,40 +1507,6 @@ show('Persistent', { duration: 0 });`,
       'Displays a block of code with an optional header, language label, filename, and copy-to-clipboard button. Designed for rendering LLM-generated code output, API examples, and inline snippets.',
     category: 'Display',
     status: 'new',
-    props: [
-      {
-        name: 'code',
-        type: 'string',
-        default: "''",
-        description: 'The code string to display',
-      },
-      {
-        name: 'language',
-        type: 'string',
-        default: "'text'",
-        description:
-          'Language label shown in the header. Ignored when filename is set.',
-      },
-      {
-        name: 'filename',
-        type: 'string',
-        default: "''",
-        description:
-          'Optional filename shown in the header instead of the language label',
-      },
-      {
-        name: 'copyable',
-        type: 'boolean',
-        default: 'true',
-        description: 'Whether to show a copy-to-clipboard button',
-      },
-      {
-        name: 'showLineNumbers',
-        type: 'boolean',
-        default: 'false',
-        description: 'Whether to display line numbers alongside the code',
-      },
-    ],
     examples: {
       angular: `<atl-code-block code="const x = 1;" language="typescript" />
 <atl-code-block [code]="tsCode" filename="app.ts" [showLineNumbers]="true" />
@@ -2368,36 +1530,6 @@ show('Persistent', { duration: 0 });`,
       'Composable AI assistant surface. Three layout variants (drawer, popup, inline) share the same content slots and a status-driven Send/Stop button toggle. Provider-agnostic — wire it to CopilotKit, Vercel AI SDK, or your own backend by binding the Send/Stop events.',
     category: 'AI',
     status: 'new',
-    props: [
-      {
-        name: 'variant',
-        type: "'drawer' | 'popup' | 'inline'",
-        default: "'drawer'",
-        description:
-          'Layout — slide-in drawer, floating bubble + popup window, or embedded inline card.',
-      },
-      {
-        name: 'status',
-        type: "'idle' | 'streaming' | 'error'",
-        default: "'idle'",
-        description:
-          'Connection / response status. Drives the input footer button (Send → Stop) and disables the textarea while streaming.',
-      },
-      {
-        name: 'open',
-        type: 'boolean',
-        default: 'false',
-        description:
-          'Whether the chat is open. Only used by drawer and popup variants. Two-way bindable.',
-      },
-      {
-        name: 'onOpenChange',
-        type: '(open: boolean) => void',
-        default: '—',
-        description:
-          'React: emitted when the open state should change. Vue uses v-model:open; Angular uses [(open)].',
-      },
-    ],
     examples: {
       angular: `<atl-chat variant="drawer" [(open)]="open" status="idle">
   <atl-chat-header>
@@ -2450,13 +1582,11 @@ show('Persistent', { duration: 0 });`,
         name: 'AtlChatHeader',
         description:
           'Title block (avatar / name / status badge) plus the close button. Slot-only. The close button is auto-hidden on the inline variant.',
-        props: [],
       },
       {
         name: 'AtlChatMessages',
         description:
           'Scrollable message list. Project AtlChatMessage, AtlChatTyping, and AtlChatSuggestion children inside.',
-        props: [],
       },
       {
         name: 'AtlChatMessage',
@@ -2482,7 +1612,6 @@ show('Persistent', { duration: 0 });`,
         name: 'AtlChatTyping',
         description:
           'Three animated dots. Render at the end of the message list while the assistant is streaming. Respects prefers-reduced-motion.',
-        props: [],
       },
       {
         name: 'AtlChatSuggestion',

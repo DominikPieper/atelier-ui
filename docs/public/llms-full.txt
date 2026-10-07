@@ -65,11 +65,11 @@ Each entry lists:
   A versatile button component with multiple variants and sizes. Supports loading and disabled states.
 
   Props:
-    variant     'primary' | 'secondary' | 'outline' | 'danger'  'primary'  Visual style variant
-    size        'sm' | 'md' | 'lg'                              'md'       Size of the button
-    disabled    boolean                                         false      Disables the button
-    loading     boolean                                         false      Shows a loading spinner, disables interaction
-    aria-label  string                                          —          Accessible name. Required for icon-only buttons (no children). React enforces this at compile time via a discriminated union; Angular/Vue warn at runtime in dev mode.
+    variant     'primary' | 'secondary' | 'outline' | 'danger'  'primary'  Visual style of the button.
+    size        'sm' | 'md' | 'lg'                              'md'       Size of the button.
+    disabled    boolean                                         false      Disables the button, preventing interaction.
+    loading     boolean                                         false      Shows a loading spinner and disables interaction.
+    aria-label  string                                          —          Accessible name — rendered as `aria-label`. Required when the button has no visible text label (icon-only buttons), otherwise the button is unnamed for assistive tech. The React adapter encodes this requirement at the type level via a discriminated union; the Angular and Vue adapters log a dev-mode warning when a rendered button has no accessible name.
 
   Usage:
     Angular:
@@ -112,16 +112,18 @@ Each entry lists:
   A text input field that integrates with Signal Forms. Supports all standard HTML input types, validation states, and error display.
 
   Props:
-    value          string                                                    ''      Controlled value
-    onValueChange  (value: string) => void                                   —       Called when the input value changes
-    type           'text' | 'email' | 'password' | 'number' | 'tel' | 'url'  'text'  Input type
-    placeholder    string                                                    ''      Placeholder text
-    label          string                                                    ''      Visible caption rendered as a <label> associated with the input via for/id. When omitted, the input renders with no visible caption — supply an external <label> or an aria-label at the call site in that case, or the field has no accessible name.
-    disabled       boolean                                                   false   Disables the input
-    readonly       boolean                                                   false   Makes the input read-only
-    invalid        boolean                                                   false   Applies invalid/error styling
-    required       boolean                                                   false   Marks field as required
-    name           string                                                    ''      HTML name attribute for form submission
+    value          string                                                    —       The current value of the input.
+    onValueChange  (value: string) => void                                   —       Callback triggered when the value changes.
+    disabled       boolean                                                   false   Whether the input is disabled.
+    invalid        boolean                                                   false   Whether the input is in an invalid state.
+    required       boolean                                                   false   Whether the input is required.
+    name           string                                                    —       The input's name attribute, used for form submission.
+    readonly       boolean                                                   —       Lowercase alias of `readOnly`: whether the input is read-only. `readOnly` wins when both are set.
+    label          string                                                    —       The label for the input.
+    type           'text' | 'email' | 'password' | 'number' | 'tel' | 'url'  'text'  The type of input to render.
+    placeholder    string                                                    —       Placeholder text shown when the input is empty.
+    errors         string[]                                                  []      Array of error messages to display.
+    readOnly       boolean                                                   —       Whether the input is read-only.
 
   Usage:
     Angular:
@@ -164,17 +166,19 @@ Each entry lists:
   A multi-line text input. Supports auto-resize to fit content and integrates with Signal Forms.
 
   Props:
-    value          string                   ''     Controlled value
-    onValueChange  (value: string) => void  —      Called when the textarea value changes
-    rows           number                   3      Initial number of visible rows
-    placeholder    string                   ''     Placeholder text
-    label          string                   ''     Visible caption rendered as a <label> associated with the textarea via for/id. When omitted, the textarea renders with no visible caption — supply an external <label> or an aria-label at the call site in that case, or the field has no accessible name.
-    disabled       boolean                  false  Disables the textarea
-    readonly       boolean                  false  Makes the textarea read-only
-    invalid        boolean                  false  Applies invalid/error styling
-    required       boolean                  false  Marks field as required
-    name           string                   ''     HTML name attribute for form submission
-    autoResize     boolean                  false  Grows height automatically as content grows
+    value          string                   —      Current value of the textarea.
+    onValueChange  (value: string) => void  —      Callback fired when the value changes.
+    disabled       boolean                  false  Whether the textarea is disabled.
+    invalid        boolean                  false  Whether the textarea has validation errors.
+    required       boolean                  false  Whether the textarea is required.
+    name           string                   —      The textarea's name attribute, used for form submission.
+    readonly       boolean                  —      Lowercase alias of `readOnly`: whether the textarea is read-only. `readOnly` wins when both are set.
+    label          string                   —      Label text for the textarea.
+    rows           number                   3      Number of visible text rows.
+    placeholder    string                   —      Placeholder text shown when the textarea is empty.
+    autoResize     boolean                  false  Whether the textarea height grows automatically to fit its content.
+    readOnly       boolean                  —      Whether the textarea is read-only.
+    errors         string[]                 []     List of error messages to display.
 
   Usage:
     Angular:
@@ -213,13 +217,14 @@ Each entry lists:
   A checkbox input that supports indeterminate state. Integrates with Signal Forms.
 
   Props:
-    checked          boolean                     false  Controlled checked state
-    onCheckedChange  (checked: boolean) => void  —      Called when the checked state changes
-    indeterminate    boolean                     false  Shows a dash (indeterminate state)
-    disabled         boolean                     false  Disables the checkbox
-    invalid          boolean                     false  Applies invalid/error styling
-    required         boolean                     false  Marks field as required
-    name             string                      ''     HTML name attribute for form submission
+    checked          boolean                     false  Whether the checkbox is checked.
+    onCheckedChange  (checked: boolean) => void  —      Callback triggered when the checked state changes.
+    indeterminate    boolean                     false  Whether the checkbox is in an indeterminate state.
+    disabled         boolean                     false  Whether the checkbox is disabled.
+    required         boolean                     false  Whether the checkbox is required.
+    invalid          boolean                     false  Whether the checkbox is in an invalid state.
+    errors           string[]                    []     Array of error messages to display.
+    children         ReactNode                   —      The content to be rendered as the label for the checkbox.
 
   Usage:
     Angular:
@@ -258,12 +263,13 @@ Each entry lists:
   A toggle switch for boolean settings. Integrates with Signal Forms.
 
   Props:
-    checked          boolean                     false  Controlled checked state
-    onCheckedChange  (checked: boolean) => void  —      Called when the checked state changes
-    disabled         boolean                     false  Disables the toggle
-    invalid          boolean                     false  Applies invalid/error styling
-    required         boolean                     false  Marks field as required
-    name             string                      ''     HTML name attribute for form submission
+    checked          boolean                     false  Whether the toggle is on. Controlled: pair it with `onCheckedChange`.
+    onCheckedChange  (checked: boolean) => void  —      Callback fired when the checked state changes.
+    invalid          boolean                     false  Whether the toggle has validation errors.
+    disabled         boolean                     false  Whether the toggle is disabled.
+    required         boolean                     false  Whether the toggle is required.
+    errors           string[]                    []     List of error messages to display.
+    children         ReactNode                   —      Optional content to display alongside the toggle.
 
   Usage:
     Angular:
@@ -299,13 +305,17 @@ Each entry lists:
   A group of radio buttons with keyboard navigation. The group handles arrow key navigation and value management.
 
   Props:
-    value          string                   ''     Currently selected value
-    onValueChange  (value: string) => void  —      Called when selection changes
-    disabled       boolean                  false  Disables all radios in the group
-    readonly       boolean                  false  Makes all radios in the group read-only
-    invalid        boolean                  false  Applies invalid/error styling
-    required       boolean                  false  Marks field as required
-    name           string                   ''     HTML name attribute (propagated to radios)
+    value          string                     ''          The current value of the radio group.
+    onValueChange  (value: string) => void    —           Callback triggered when the value changes.
+    disabled       boolean                    false       Whether the radio group is disabled.
+    invalid        boolean                    false       Whether the radio group is in an invalid state.
+    required       boolean                    false       Whether a value is required.
+    name           string                     ''          The name of the radio group, applied to all child radio buttons.
+    readonly       boolean                    —           Lowercase alias of `readOnly`: whether the selection can be read but not changed. `readOnly` wins when both are set.
+    orientation    'horizontal' | 'vertical'  'vertical'  The layout orientation of the radio group.
+    readOnly       boolean                    —           Whether the radio group is read-only.
+    errors         string[]                   []          Array of error messages to display.
+    children       ReactNode                  —           The radio buttons to be rendered.
 
   Usage:
     Angular:
@@ -334,14 +344,15 @@ Each entry lists:
   A custom select dropdown built on the native Popover API. Supports keyboard navigation, type-ahead, and disabled options.
 
   Props:
-    value          string                   ''     Currently selected value
-    onValueChange  (value: string) => void  —      Called when selection changes
-    placeholder    string                   ''     Placeholder text when no option is selected
-    label          string                   ''     Visible caption rendered as a <label> associated with the select via for/id. When omitted, the select renders with no visible caption — supply an external <label> or an aria-label at the call site in that case, or the field has no accessible name.
-    disabled       boolean                  false  Disables the select
-    invalid        boolean                  false  Applies invalid/error styling
-    required       boolean                  false  Marks field as required
-    name           string                   ''     HTML name attribute for form submission
+    value          string                   ''     The current value of the select.
+    onValueChange  (value: string) => void  —      Callback triggered when the value changes.
+    disabled       boolean                  false  Whether the select is disabled.
+    invalid        boolean                  false  Whether the select is in an invalid state.
+    required       boolean                  false  Whether the select is required.
+    name           string                   —      The select's name attribute, used for form submission.
+    label          string                   —      The label for the select.
+    placeholder    string                   —      Placeholder text to display when no value is selected.
+    errors         string[]                 []     Array of error messages to display.
 
   Usage:
     Angular:
@@ -370,13 +381,16 @@ Each entry lists:
   A filterable autocomplete input. The user can type to narrow down a large list of options.
 
   Props:
-    value          string                   ''     Controlled value
-    onValueChange  (value: string) => void  —      Called when selection changes
-    options        AtlComboboxOption[]      []     Array of { label, value } objects
-    placeholder    string                   ''     Placeholder text
-    disabled       boolean                  false  Disables the combobox
-    readonly       boolean                  false  Shows the value but blocks typing, opening and selection
-    invalid        boolean                  false  Applies invalid/error styling
+    value          string                   ''     The selected option's `value`. Controlled: pair it with `onValueChange`.
+    onValueChange  (value: string) => void  —      Callback fired with the chosen option's `value` when the user selects an option.
+    disabled       boolean                  false  Whether the combobox is disabled.
+    invalid        boolean                  false  Whether the combobox has validation errors.
+    required       boolean                  false  Whether the combobox is required.
+    name           string                   —      The input's name attribute, used for form submission.
+    readonly       boolean                  false  Whether the value can be read but not changed. Enforced by the component: typing, opening the panel and selecting an option are all blocked.
+    options        AtlComboboxOption[]      []     Options to display and filter. Each option is `{ value, label, disabled? }`.
+    placeholder    string                   ''     Placeholder text for the input.
+    errors         string[]                 []     Array of error messages to display.
 
   Usage:
     Angular:
@@ -432,8 +446,9 @@ Each entry lists:
   A small inline label for status, categories, or counts. Use alongside cards, list items, and table cells.
 
   Props:
-    variant  'default' | 'success' | 'warning' | 'danger' | 'info'  'default'  Color scheme of the badge
-    size     'sm' | 'md'                                            'md'       Size of the badge
+    variant   'default' | 'success' | 'warning' | 'danger' | 'info'  'default'  The visual style variant of the badge.
+    size      'sm' | 'md'                                            'md'       The size of the badge.
+    children  ReactNode                                              —          The content to be rendered inside the badge.
 
   Usage:
     Angular:
@@ -479,9 +494,33 @@ Each entry lists:
   Vector icon drawn from one geometry source (`libs/spec/src/icons.ts`), so the same shape appears everywhere it is used. The `name` prop's type below is the exact, current set. Decorative by default; pass `label` to announce a meaning to assistive tech.
 
   Props:
-    name   'success' | 'check' | 'warning' | 'danger' | 'info' | 'error' | 'chevron-up' | 'chevron-down' | 'chevron-left' | 'chevron-right' | 'chevron-double-left' | 'chevron-double-right' | 'sort-asc' | 'sort-desc' | 'arrow-right' | 'arrow-left' | 'copy' | 'paste' | 'add' | 'edit' | 'delete' | 'close' | 'more' | 'person' | 'default-toast'  —          The icon name. Required.
-    size   'sm' | 'md' | 'lg'                                                                                                                                                                                                                                                                                                                          'md'       Icon size: sm 16px, md 20px, lg 24px. The geometry is one 24-unit viewBox, so every size is the same shape at a different scale.
-    label  string                                                                                                                                                                                                                                                                                                                                      undefined  Accessible label. When provided, the icon is announced as an image with this label. When omitted, the icon is hidden from assistive tech (treated as decorative).
+    name   | 'success'
+| 'check'
+| 'warning'
+| 'danger'
+| 'info'
+| 'error'
+| 'chevron-up'
+| 'chevron-down'
+| 'chevron-left'
+| 'chevron-right'
+| 'chevron-double-left'
+| 'chevron-double-right'
+| 'sort-asc'
+| 'sort-desc'
+| 'arrow-right'
+| 'arrow-left'
+| 'copy'
+| 'paste'
+| 'add'
+| 'edit'
+| 'delete'
+| 'close'
+| 'more'
+| 'person'
+| 'default-toast'  —     The icon name.
+    size   'sm' | 'md' | 'lg'                                                                                                                                                                                                                                                                                                                            'md'  The icon size.
+    label  string                                                                                                                                                                                                                                                                                                                                        —     Accessible label. When provided, the icon is announced as an image with this label. When omitted, the icon is hidden from assistive tech (treated as decorative).
 
   Usage:
     Angular:
@@ -518,9 +557,10 @@ Each entry lists:
   A container component for grouped content. Compose with AtlCardHeader, AtlCardContent, and AtlCardFooter.
 
   Props:
-    variant  'elevated' | 'outlined' | 'flat'  'elevated'  Visual style of the card
-    padding  'none' | 'sm' | 'md' | 'lg'       'md'        Padding size inside the card
-    role     'article' | 'region' | 'section'  —           Opt-in landmark role. Default is no role (plain div). Use article for self-contained content, region for a perceivable area (pair with aria-label), section for HTML <section> semantics.
+    variant   'elevated' | 'outlined' | 'flat'  'elevated'  The visual style variant of the card.
+    padding   'none' | 'sm' | 'md' | 'lg'       'md'        The padding size within the card.
+    role      'article' | 'region' | 'section'  —           Opt-in landmark role. Default is no role (plain `<div>`). See {@link AtlCardRole} for when to use each value.
+    children  ReactNode                         —           The content to be rendered inside the card.
 
   Usage:
     Angular:
@@ -576,10 +616,11 @@ Each entry lists:
   A comprehensive data table component for displaying structured information. Supports sorting, row selection, sticky headers, and custom empty states.
 
   Props:
-    variant       'default' | 'striped' | 'bordered'  'default'  Row background styling
-    size          'sm' | 'md' | 'lg'                  'md'       Vertical padding of cells
-    stickyHeader  boolean                             false      Makes header row stick to the top on scroll
-    aria-label    string                              'Table'    Accessible name for the scrollable wrapper region. Announced by screen readers when keyboard users focus the wrapper to scroll horizontally.
+    variant       'default' | 'striped' | 'bordered'  'default'  Visual style of the table rows.
+    size          'sm' | 'md' | 'lg'                  'md'       Row density: the vertical padding of cells.
+    stickyHeader  boolean                             false      Whether the header row sticks to the top when the table scrolls.
+    aria-label    string                              —          Accessible name for the scrollable table region. The wrapper around the `<table>` is keyboard-focusable (tabindex=0) so that users can scroll horizontally; this label is what screen readers announce when focus enters the region. Defaults to `"Table"`.
+    children      ReactNode                           —          The table sections: `AtlThead` and `AtlTbody` elements.
 
   Usage:
     Angular:
@@ -656,12 +697,12 @@ Each entry lists:
   User avatar with image, initials fallback, and status indicator. Group avatars with AtlAvatarGroup.
 
   Props:
-    src     string                                       ''        Image URL
-    alt     string                                       ''        Alt text for the avatar image
-    name    string                                       ''        Used for initials fallback and aria-label
-    size    'xs' | 'sm' | 'md' | 'lg' | 'xl'             'md'      Size of the avatar
-    shape   'circle' | 'square'                          'circle'  Shape of the avatar
-    status  'online' | 'offline' | 'away' | 'busy' | ''  ''        Status dot indicator
+    src     string                                       ''        The URL of the image to display.
+    alt     string                                       ''        Accessible text for the avatar image.
+    name    string                                       ''        The name of the person/entity, used for initials if no image is provided.
+    size    'xs' | 'sm' | 'md' | 'lg' | 'xl'             'md'      The size of the avatar.
+    shape   'circle' | 'square'                          'circle'  The shape of the avatar.
+    status  'online' | 'offline' | 'away' | 'busy' | ''  ''        The status indicator to display on the avatar.
 
   Usage:
     Angular:
@@ -699,10 +740,10 @@ Each entry lists:
   Loading placeholder that mimics content shape. Compose multiple skeletons to match your layout.
 
   Props:
-    variant   'text' | 'circular' | 'rectangular'  'text'  Shape of the skeleton
-    width     string                               '100%'  CSS width (e.g. "200px", "60%")
-    height    string                               ''      CSS height. Auto per variant if not set.
-    animated  boolean                              true    Enables shimmer animation
+    variant   'text' | 'circular' | 'rectangular'  'text'  The visual style variant of the skeleton.
+    width     string                               '100%'  The width of the skeleton.
+    height    string                               —       The height of the skeleton.
+    animated  boolean                              true    Whether the skeleton should be animated.
 
   Usage:
     Angular:
@@ -741,12 +782,12 @@ Each entry lists:
   A horizontal progress bar for showing completion percentage or indeterminate loading.
 
   Props:
-    value          number                                        0          Progress value from 0 to 100
-    max            number                                        100        Maximum value
-    indeterminate  boolean                                       false      Shows animated indeterminate state
-    variant        'default' | 'success' | 'warning' | 'danger'  'default'  Color variant
-    size           'sm' | 'md' | 'lg'                            'md'       Size of the progress bar
-    label          string                                        —          Accessible name (aria-label). Required by ARIA when no visible label is nearby.
+    value          number                                        0          The current progress value.
+    max            number                                        100        The maximum progress value.
+    variant        'default' | 'success' | 'warning' | 'danger'  'default'  The visual style variant of the progress bar.
+    size           'sm' | 'md' | 'lg'                            'md'       The size of the progress bar.
+    indeterminate  boolean                                       false      Whether the progress bar is in an indeterminate state.
+    label          string                                        —          Accessible name for the progress bar — rendered as `aria-label`. Required by ARIA when there is no visible label nearby; without it screen readers announce only "progress bar 47%". Examples: `"Upload progress"`, `"Form completion"`, `"Quota usage"`.
 
   Usage:
     Angular:
@@ -786,11 +827,11 @@ Each entry lists:
   Displays a block of code with an optional header, language label, filename, and copy-to-clipboard button. Designed for rendering LLM-generated code output, API examples, and inline snippets.
 
   Props:
-    code             string   ''      The code string to display
-    language         string   'text'  Language label shown in the header. Ignored when filename is set.
-    filename         string   ''      Optional filename shown in the header instead of the language label
-    copyable         boolean  true    Whether to show a copy-to-clipboard button
-    showLineNumbers  boolean  false   Whether to display line numbers alongside the code
+    code             string   —       The code string to display.
+    language         string   'text'  Language label shown in the header. Ignored if filename is set.
+    filename         string   —       Optional filename shown in the header instead of the language label.
+    copyable         boolean  true    Whether to show a copy-to-clipboard button.
+    showLineNumbers  boolean  false   Whether to display line numbers alongside the code.
 
   Usage:
     Angular:
@@ -816,7 +857,8 @@ Each entry lists:
   Navigation breadcrumb trail showing the current page location within a hierarchy.
 
   Props:
-    separator  string  '/'  Separator character between items
+    separator  string     '/'  Separator character shown between breadcrumb items.
+    children   ReactNode  —    The breadcrumb items to be rendered.
 
   Usage:
     Angular:
@@ -845,9 +887,10 @@ Each entry lists:
   An accessible tabbed interface. Supports roving tabindex, arrow key navigation, and a pills variant.
 
   Props:
-    selectedIndex          number                   0          Index of the selected tab
-    onSelectedIndexChange  (index: number) => void  —          Called when selection changes
-    variant                'default' | 'pills'      'default'  Visual style of the tab strip
+    selectedIndex          number                   —          The index of the currently selected tab.
+    onSelectedIndexChange  (index: number) => void  —          Callback triggered when the selected tab index changes.
+    variant                'default' | 'pills'      'default'  The visual style variant of the tabs.
+    children               ReactNode                —          The AtlTab components to be rendered.
 
   Usage:
     Angular:
@@ -876,9 +919,11 @@ Each entry lists:
   A multi-step wizard for complex processes. Supports linear and non-linear navigation.
 
   Props:
-    activeStep   number                     0             Currently active step index
-    linear       boolean                    false         Forces user to complete steps in order
-    orientation  'horizontal' | 'vertical'  'horizontal'  Stepper layout direction
+    activeStep          number                     —             Currently active step index.
+    orientation         'horizontal' | 'vertical'  'horizontal'  Layout orientation.
+    linear              boolean                    false         Restrict forward navigation until previous steps are completed.
+    onActiveStepChange  (index: number) => void    —             Callback when the active step changes.
+    children            ReactNode                  —             The `AtlStep` elements, in order, plus any step content.
 
   Usage:
     Angular:
@@ -907,11 +952,11 @@ Each entry lists:
   Page navigation control for paginated data. Shows page numbers with previous/next buttons.
 
   Props:
-    page           number                  1     Current page (1-indexed)
-    pageCount      number                  1     Total number of pages
-    onPageChange   (page: number) => void  —     Called when the user navigates to a page
-    siblingCount   number                  1     Number of page buttons on each side of current page
-    showFirstLast  boolean                 true  Show first/last page jump buttons
+    page           number                  1     The currently active page.
+    pageCount      number                  1     The total number of pages.
+    siblingCount   number                  1     The number of pages to show on either side of the current page.
+    showFirstLast  boolean                 true  Whether to show buttons for first and last pages.
+    onPageChange   (page: number) => void  —     Callback triggered when the page changes.
 
   Usage:
     Angular:
@@ -952,7 +997,8 @@ Each entry lists:
   A dropdown context menu. Handles keyboard navigation, focus management, ARIA, and nested submenus.
 
   Props:
-    variant  'default' | 'compact'  'default'  Density of the menu
+    variant   'default' | 'compact'  'default'  The visual style variant of the menu.
+    children  ReactNode              —          The menu items to be rendered.
 
   Usage:
     Angular:
@@ -1004,10 +1050,13 @@ Each entry lists:
   A modal dialog using the native <dialog> element. Includes focus trap, Escape to close, backdrop click to close, and smooth animations.
 
   Props:
-    open             boolean                             false  Controls dialog visibility
-    onOpenChange     (open: boolean) => void             —      Called when open state changes
-    closeOnBackdrop  boolean                             true   Close when clicking the backdrop
-    size             'sm' | 'md' | 'lg' | 'xl' | 'full'  'md'   Max-width of the dialog
+    open             boolean                             false  Whether the dialog is open.
+    onOpenChange     (open: boolean) => void             —      Callback triggered when the open state changes.
+    closeOnBackdrop  boolean                             true   Whether to close the dialog when clicking on the backdrop.
+    size             'sm' | 'md' | 'lg' | 'xl' | 'full'  'md'   The size of the dialog.
+    aria-label       string                              —      Accessible label for the dialog.
+    aria-labelledby  string                              —      Accessible label provided by another element.
+    children         ReactNode                           —      The content of the dialog.
 
   Usage:
     Angular:
@@ -1063,11 +1112,12 @@ Each entry lists:
   A slide-in panel from the edge of the viewport. Useful for sidebars, filter panels, and detail views.
 
   Props:
-    open             boolean                              false    Controls drawer visibility
-    onOpenChange     (open: boolean) => void              —        Called when open state changes
-    position         'left' | 'right' | 'top' | 'bottom'  'right'  Which edge the drawer slides from
-    size             'sm' | 'md' | 'lg' | 'full'          'md'     Width (or height for top/bottom)
-    closeOnBackdrop  boolean                              true     Close when clicking the backdrop
+    open             boolean                              false    Whether the drawer is open.
+    position         'left' | 'right' | 'top' | 'bottom'  'right'  The position of the drawer on the screen.
+    size             'sm' | 'md' | 'lg' | 'full'          'md'     The size of the drawer.
+    closeOnBackdrop  boolean                              true     Whether to close the drawer when clicking on the backdrop.
+    onOpenChange     (open: boolean) => void              —        Callback triggered when the open state changes.
+    children         ReactNode                            —        The content of the drawer.
 
   Usage:
     Angular:
@@ -1126,11 +1176,12 @@ Each entry lists:
   An attribute directive that adds a tooltip to any element. Uses a viewport-aware overlay layer so the tooltip flips to stay on-screen.
 
   Props:
-    atlTooltip           string                                —        Tooltip text content (required)
-    atlTooltipPosition   'above' | 'below' | 'left' | 'right'  'above'  Preferred position
-    atlTooltipDisabled   boolean                               false    Disables the tooltip
-    atlTooltipShowDelay  number                                300      Delay in ms before showing
-    atlTooltipHideDelay  number                                0        Delay in ms before hiding
+    atlTooltip           string                                —        The tooltip text.
+    atlTooltipPosition   'above' | 'below' | 'left' | 'right'  'above'  Preferred tooltip placement. Falls back to the opposite side if clipped.
+    atlTooltipDisabled   boolean                               false    Disables the tooltip without removing the wrapper.
+    atlTooltipShowDelay  number                                300      Delay in ms before the tooltip appears.
+    atlTooltipHideDelay  number                                0        Delay in ms before the tooltip hides.
+    children             ReactNode                             —        The content to trigger the tooltip.
 
   Usage:
     Angular:
@@ -1214,8 +1265,9 @@ Each entry lists:
   Expandable/collapsible sections. Supports multi-expand mode and smooth CSS grid animations.
 
   Props:
-    multi    boolean                               false      Allow multiple items expanded simultaneously
-    variant  'default' | 'bordered' | 'separated'  'default'  Visual style of the group
+    multi     boolean                               false      Whether multiple items can be expanded simultaneously.
+    variant   'default' | 'bordered' | 'separated'  'default'  The visual style variant of the accordion.
+    children  ReactNode                             —          The accordion items to be rendered.
 
   Usage:
     Angular:
@@ -1259,9 +1311,10 @@ Each entry lists:
   Inline status messages for feedback, warnings, and errors. Optionally dismissible.
 
   Props:
-    variant      'info' | 'success' | 'warning' | 'danger'  'info'  Color scheme and icon
-    dismissible  boolean                                    false   Show a close button
-    onDismissed  () => void                                 —       Called when the dismiss button is clicked
+    variant      'info' | 'success' | 'warning' | 'danger'  'info'  The visual style variant of the alert.
+    dismissible  boolean                                    false   Whether the alert can be dismissed by the user.
+    onDismissed  () => void                                 —       Callback triggered when the alert is dismissed.
+    children     ReactNode                                  —       The content to be rendered inside the alert.
 
   Usage:
     Angular:
@@ -1302,10 +1355,11 @@ Each entry lists:
   Composable AI assistant surface. Three layout variants (drawer, popup, inline) share the same content slots and a status-driven Send/Stop button toggle. Provider-agnostic — wire it to CopilotKit, Vercel AI SDK, or your own backend by binding the Send/Stop events.
 
   Props:
-    variant       'drawer' | 'popup' | 'inline'   'drawer'  Layout — slide-in drawer, floating bubble + popup window, or embedded inline card.
-    status        'idle' | 'streaming' | 'error'  'idle'    Connection / response status. Drives the input footer button (Send → Stop) and disables the textarea while streaming.
-    open          boolean                         false     Whether the chat is open. Only used by drawer and popup variants. Two-way bindable.
-    onOpenChange  (open: boolean) => void         —         React: emitted when the open state should change. Vue uses v-model:open; Angular uses [(open)].
+    variant       'drawer' | 'popup' | 'inline'   'drawer'  Layout variant.
+    status        'idle' | 'streaming' | 'error'  'idle'    Connection / response status.
+    open          boolean                         false     Whether the chat is open (drawer / popup variants).
+    onOpenChange  (open: boolean) => void         —         Callback when open state should change.
+    children      ReactNode                       —         The chat parts: `AtlChatHeader`, `AtlChatMessages` and `AtlChatInput`.
 
   Usage:
     Angular:
