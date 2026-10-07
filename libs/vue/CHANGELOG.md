@@ -1,3 +1,14 @@
+## 0.3.11 (2026-10-07)
+
+### 🩹 Fixes
+
+- **react,vue:** disabled menu items stay focusable, as in Angular and the APG ([e3d93334](https://github.com/DominikPieper/atelier-ui/commit/e3d93334))
+
+### ❤️ Thank You
+
+- Claude Opus 5.5
+- Dominik Pieper @DominikPieper
+
 ## 0.3.10 (2026-10-07)
 
 ### 🚀 Features
