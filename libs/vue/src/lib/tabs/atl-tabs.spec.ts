@@ -25,8 +25,8 @@ describe('AtlTabGroup', () => {
     expect(screen.getByRole('tab', { name: 'Tab Three' })).toBeInTheDocument();
   });
 
-  // Vue tabs use automatic activation: ArrowRight selects the next tab
-  // (React/Angular use manual activation — arrow moves focus, Enter selects).
+  // All three frameworks use automatic activation: an arrow key selects the
+  // target tab and moves DOM focus to it (roving tabindex).
   covers('tabs', 'keyboard-nav')(
     'ArrowRight activates the next tab',
     async () => {
@@ -41,6 +41,24 @@ describe('AtlTabGroup', () => {
       );
     },
   );
+
+  it('moves DOM focus with the selection on ArrowRight, ArrowLeft, End and Home', async () => {
+    const user = userEvent.setup();
+    render(TabsFixture);
+    await flushPromises();
+    const one = screen.getByRole('tab', { name: 'Tab One' });
+    const two = screen.getByRole('tab', { name: 'Tab Two' });
+    const three = screen.getByRole('tab', { name: 'Tab Three' });
+    one.focus();
+    await user.keyboard('{ArrowRight}');
+    expect(two).toHaveFocus();
+    await user.keyboard('{ArrowLeft}');
+    expect(one).toHaveFocus();
+    await user.keyboard('{End}');
+    expect(three).toHaveFocus();
+    await user.keyboard('{Home}');
+    expect(one).toHaveFocus();
+  });
 
   covers('tabs', 'home-end')(
     'Home activates the first tab and End the last',

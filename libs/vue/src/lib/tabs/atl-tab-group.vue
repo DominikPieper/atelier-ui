@@ -78,6 +78,12 @@ provide(AtlTabGroupKey, {
 });
 
 function onKeydown(event: KeyboardEvent) {
+  const tablist = event.currentTarget as HTMLElement;
+  // Select the tab and move DOM focus with it (roving tabindex).
+  const activate = (index: number) => {
+    selectTab(index);
+    tablist.querySelectorAll<HTMLElement>('[role="tab"]')[index]?.focus();
+  };
   const enabledIndices = tabs.value
     .map((t, i) => ({ i, disabled: t.disabled }))
     .filter((x) => !x.disabled)
@@ -88,21 +94,21 @@ function onKeydown(event: KeyboardEvent) {
   if (event.key === 'ArrowRight') {
     event.preventDefault();
     const next = enabledIndices[(currentPos + 1) % enabledIndices.length];
-    if (next !== undefined) selectTab(next);
+    if (next !== undefined) activate(next);
   } else if (event.key === 'ArrowLeft') {
     event.preventDefault();
     const prev =
       enabledIndices[
         (currentPos - 1 + enabledIndices.length) % enabledIndices.length
       ];
-    if (prev !== undefined) selectTab(prev);
+    if (prev !== undefined) activate(prev);
   } else if (event.key === 'Home') {
     event.preventDefault();
-    if (enabledIndices[0] !== undefined) selectTab(enabledIndices[0]);
+    if (enabledIndices[0] !== undefined) activate(enabledIndices[0]);
   } else if (event.key === 'End') {
     event.preventDefault();
     const last = enabledIndices[enabledIndices.length - 1];
-    if (last !== undefined) selectTab(last);
+    if (last !== undefined) activate(last);
   }
 }
 
