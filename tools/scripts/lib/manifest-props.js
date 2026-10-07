@@ -272,9 +272,27 @@ function docsApi(fw, root, docs, idOf) {
   return out;
 }
 
+/**
+ * Load a dependency-free `.ts` module (no imports) as CommonJS. Used for the one
+ * pure helper the docs app and these scripts share, docs/src/lib/storybook-id.ts,
+ * so its logic has a single source.
+ */
+function loadTsModule(filePath) {
+  const ts = require('typescript');
+  const out = ts.transpileModule(fs.readFileSync(filePath, 'utf8'), {
+    compilerOptions: {
+      module: ts.ModuleKind.CommonJS,
+      target: ts.ScriptTarget.ES2022,
+    },
+  });
+  const mod = { exports: {} };
+  new Function('module', 'exports', out.outputText)(mod, mod.exports);
+  return mod.exports;
+}
+
 /** docsApi for scripts: loads the story-id helper from the docs app itself. */
 function docsApiFromRepo(fw, root, docs) {
-  const { storybookComponentId } = require('./ts-eval').loadTsModule(
+  const { storybookComponentId } = loadTsModule(
     path.join(root, 'docs/src/lib/storybook-id.ts'),
   );
   return docsApi(fw, root, docs, storybookComponentId);

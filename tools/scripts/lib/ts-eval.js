@@ -123,27 +123,4 @@ function findExportedInterfaces(filePath, suffix = 'Spec') {
   return names;
 }
 
-/**
- * Load a dependency-free `.ts` module (no imports) as CommonJS and return its
- * exports. For the few pure helpers that both the docs app and a Node script
- * need, so the logic has one source (e.g. docs/src/lib/storybook-id.ts).
- */
-function loadTsModule(filePath) {
-  const fs = require('fs');
-  const out = ts.transpileModule(fs.readFileSync(filePath, 'utf8'), {
-    compilerOptions: {
-      module: ts.ModuleKind.CommonJS,
-      target: ts.ScriptTarget.ES2022,
-    },
-  });
-  const mod = { exports: {} };
-  new Function('module', 'exports', out.outputText)(mod, mod.exports);
-  return mod.exports;
-}
-
-module.exports = {
-  evalNode,
-  parseExportedVars,
-  findExportedInterfaces,
-  loadTsModule,
-};
+module.exports = { evalNode, parseExportedVars, findExportedInterfaces };
