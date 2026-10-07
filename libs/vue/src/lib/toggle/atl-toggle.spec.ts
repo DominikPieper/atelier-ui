@@ -108,4 +108,17 @@ describe('AtlToggle', () => {
     render(AtlToggle, { slots: { default: 'Toggle' } });
     expect(screen.getByRole('switch')).not.toHaveAttribute('aria-describedby');
   });
+
+  // Math.random() inside a computed() re-rolls whenever it re-evaluates (here:
+  // when `id` changes and is cleared again) and differs between server and
+  // client render. useId() is stable for the lifetime of the instance.
+  it('keeps its generated id stable when a custom id is set and cleared again', async () => {
+    const { rerender } = render(AtlToggle, { slots: { default: 'Wi-Fi' } });
+    const generated = screen.getByRole('switch').id;
+    expect(generated).not.toBe('');
+    await rerender({ id: 'custom' });
+    expect(screen.getByRole('switch').id).toBe('custom');
+    await rerender({ id: '' });
+    expect(screen.getByRole('switch').id).toBe(generated);
+  });
 });

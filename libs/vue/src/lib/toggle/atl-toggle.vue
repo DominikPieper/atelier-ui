@@ -35,9 +35,11 @@ const emit = defineEmits<{
   'update:checked': [value: boolean];
 }>();
 
-const inputId = computed(
-  () => props.id || `toggle-${Math.random().toString(36).slice(2)}`,
-);
+// useId(), not Math.random(): a random id inside a computed() re-rolls on every
+// re-evaluation and differs between server and client render, breaking SSR
+// hydration. useId() is stable per component instance.
+const generatedId = useId();
+const inputId = computed(() => props.id || `toggle-${generatedId}`);
 const errorsId = useId();
 
 function onChange(event: Event) {
