@@ -21,7 +21,7 @@ import PageHero from '../components/PageHero.astro';
 
     <p
       style="
-        font-size: 0.82rem;
+        font-size: var(--ui-font-size-sm);
         color: var(--ui-color-text-muted);
         margin: -1.5rem 0 2rem;
         max-width: 620px;
@@ -42,7 +42,6 @@ import PageHero from '../components/PageHero.astro';
         border: 1px solid var(--ui-color-border);
         border-radius: var(--ui-radius-md);
         background: var(--ui-color-surface-raised);
-        font-size: 0.82rem;
         line-height: 1.65;
         max-width: 720px;
       "
@@ -79,7 +78,6 @@ import PageHero from '../components/PageHero.astro';
         border: 1px solid var(--ui-color-border);
         border-radius: var(--ui-radius-md);
         background: var(--ui-color-surface-raised);
-        font-size: 0.82rem;
         line-height: 1.65;
         max-width: 720px;
       "
@@ -127,7 +125,7 @@ import PageHero from '../components/PageHero.astro';
       caption="One AI client talks to three parallel Storybook MCP servers — one per framework. The request format (JSON-RPC) is identical. Each hosted endpoint emits and serves its own components.json — Angular via angular-component-meta, Vue via vue-component-meta, React via react-docgen — so each answers in its own framework's shape (ADR-0097)."
     >
       <svg
-        viewBox="0 0 960 340"
+        viewBox="0 0 960 352"
         role="img"
         aria-labelledby="mcp-title mcp-desc"
         preserveAspectRatio="xMidYMid meet"
@@ -178,7 +176,13 @@ import PageHero from '../components/PageHero.astro';
           class="diagram-connector"
           marker-end="url(#mcp-arrow)"
         />
-        <text x="264" y="158" class="diagram-eyebrow" text-anchor="middle"
+        <text
+          font-size="15"
+          style="letter-spacing: 0; text-transform: none"
+          x="264"
+          y="158"
+          class="diagram-eyebrow"
+          text-anchor="middle"
           >user intent</text
         >
 
@@ -198,7 +202,13 @@ import PageHero from '../components/PageHero.astro';
           class="diagram-connector diagram-connector--accent"
           marker-end="url(#mcp-arrow-accent)"
         />
-        <text x="544" y="158" class="diagram-eyebrow" text-anchor="middle"
+        <text
+          font-size="15"
+          style="letter-spacing: 0; text-transform: none"
+          x="544"
+          y="158"
+          class="diagram-eyebrow"
+          text-anchor="middle"
           >JSON-RPC</text
         >
 
@@ -229,15 +239,15 @@ import PageHero from '../components/PageHero.astro';
             x="130"
             y="184"
             text-anchor="middle"
-            font-size="13"
+            font-size="15"
             font-weight="700"
             >Client</text
           >
           <text
             x="130"
-            y="202"
+            y="206"
             text-anchor="middle"
-            font-size="10"
+            font-size="15"
             class="diagram-muted"
             >Claude · Cursor · VS Code</text
           >
@@ -284,15 +294,15 @@ import PageHero from '../components/PageHero.astro';
             x="404"
             y="184"
             text-anchor="middle"
-            font-size="13"
+            font-size="15"
             font-weight="700"
             >Claude · Agent</text
           >
           <text
             x="404"
-            y="202"
+            y="206"
             text-anchor="middle"
-            font-size="10"
+            font-size="15"
             class="diagram-muted"
             >picks server by framework</text
           >
@@ -326,18 +336,18 @@ import PageHero from '../components/PageHero.astro';
             x="624"
             y="82"
             text-anchor="middle"
-            font-size="13"
+            font-size="15"
             font-weight="800"
             style="fill: #e23237"
             >A</text
           >
-          <text x="660" y="70" font-size="12" font-weight="700"
+          <text x="660" y="65" font-size="15" font-weight="700"
             >storybook-angular</text
           >
-          <text x="660" y="88" font-size="10" class="diagram-mono diagram-muted"
+          <text x="660" y="86" font-size="15" class="diagram-mono diagram-muted"
             >/storybook-angular/mcp</text
           >
-          <text x="660" y="105" font-size="10" class="diagram-muted"
+          <text x="660" y="107" font-size="15" class="diagram-muted"
             >docs · props · stories</text
           >
         </g>
@@ -370,22 +380,22 @@ import PageHero from '../components/PageHero.astro';
             x="624"
             y="174"
             text-anchor="middle"
-            font-size="13"
+            font-size="15"
             font-weight="800"
             style="fill: #61dafb"
             >R</text
           >
-          <text x="660" y="162" font-size="12" font-weight="700"
+          <text x="660" y="157" font-size="15" font-weight="700"
             >storybook-react</text
           >
           <text
             x="660"
-            y="180"
-            font-size="10"
+            y="178"
+            font-size="15"
             class="diagram-mono diagram-muted"
             >/storybook-react/mcp</text
           >
-          <text x="660" y="197" font-size="10" class="diagram-muted"
+          <text x="660" y="199" font-size="15" class="diagram-muted"
             >docs · props · stories</text
           >
         </g>
@@ -418,42 +428,42 @@ import PageHero from '../components/PageHero.astro';
             x="624"
             y="266"
             text-anchor="middle"
-            font-size="13"
+            font-size="15"
             font-weight="800"
             style="fill: #42b883"
             >V</text
           >
-          <text x="660" y="254" font-size="12" font-weight="700"
+          <text x="660" y="249" font-size="15" font-weight="700"
             >storybook-vue</text
           >
           <text
             x="660"
-            y="272"
-            font-size="10"
+            y="270"
+            font-size="15"
             class="diagram-mono diagram-muted"
             >/storybook-vue/mcp</text
           >
-          <text x="660" y="289" font-size="10" class="diagram-muted"
+          <text x="660" y="291" font-size="15" class="diagram-muted"
             >docs · props · stories</text
           >
         </g>
 
         <!-- Label: Identical protocol -->
-        <g transform="translate(348, 316)">
+        <g transform="translate(290, 316)">
           <rect
             x="0"
             y="0"
-            width="264"
-            height="22"
-            rx="11"
-            ry="11"
+            width="380"
+            height="30"
+            rx="15"
+            ry="15"
             class="diagram-node"
           />
           <text
-            x="132"
-            y="15"
+            x="190"
+            y="20"
             text-anchor="middle"
-            font-size="10"
+            font-size="15"
             font-weight="600"
             class="diagram-muted"
             >same JSON-RPC contract · different frameworks</text

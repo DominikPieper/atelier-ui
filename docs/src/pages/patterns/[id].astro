@@ -84,7 +84,6 @@ const nextPattern = PATTERNS.find((p) => p.num === pattern.num + 1) ?? null;
       <h1 class="docs-page-h1">{pattern.title}</h1>
       <p
         style="
-          font-size: 0.95rem;
           color: var(--ui-color-text-muted);
           margin: 0.5rem 0 0;
           max-width: 720px;
@@ -125,7 +124,6 @@ const nextPattern = PATTERNS.find((p) => p.num === pattern.num + 1) ?? null;
       <h2 class="docs-section-title">Visual reference</h2>
       <p
         style="
-          font-size: 0.85rem;
           color: var(--ui-color-text-muted);
           margin: 0 0 0.85rem;
           line-height: 1.6;
@@ -206,7 +204,6 @@ const nextPattern = PATTERNS.find((p) => p.num === pattern.num + 1) ?? null;
       <h2 class="docs-section-title">Common pitfalls</h2>
       <p
         style="
-          font-size: 0.85rem;
           color: var(--ui-color-text-muted);
           margin: 0 0 0.85rem;
           line-height: 1.6;
@@ -235,7 +232,6 @@ const nextPattern = PATTERNS.find((p) => p.num === pattern.num + 1) ?? null;
       <h2 class="docs-section-title">Code</h2>
       <p
         style="
-          font-size: 0.85rem;
           color: var(--ui-color-text-muted);
           margin: 0 0 0.85rem;
           line-height: 1.6;
@@ -267,7 +263,6 @@ const nextPattern = PATTERNS.find((p) => p.num === pattern.num + 1) ?? null;
       <h2 class="docs-section-title">Open in Storybook</h2>
       <p
         style="
-          font-size: 0.85rem;
           color: var(--ui-color-text-muted);
           margin: 0 0 0.85rem;
           line-height: 1.6;
@@ -317,7 +312,7 @@ const nextPattern = PATTERNS.find((p) => p.num === pattern.num + 1) ?? null;
   .pattern-tag-link,
   .pattern-tag-static {
     font-family: var(--font-mono), ui-monospace, SFMono-Regular, monospace;
-    font-size: 0.7rem;
+    font-size: var(--ui-font-size-xs);
     font-weight: 600;
     color: var(--docs-secondary);
     background: var(--ui-color-surface-raised);
@@ -399,7 +394,7 @@ const nextPattern = PATTERNS.find((p) => p.num === pattern.num + 1) ?? null;
     margin: 0;
     padding-left: 1.1rem;
     color: var(--ui-color-text);
-    font-size: 0.875rem;
+    font-size: var(--ui-font-size-md);
     line-height: 1.65;
   }
   .pattern-list li + li {
@@ -407,7 +402,7 @@ const nextPattern = PATTERNS.find((p) => p.num === pattern.num + 1) ?? null;
   }
   .pattern-foot-note {
     margin: 1rem 0 0;
-    font-size: 0.8rem;
+    font-size: var(--ui-font-size-sm);
     color: var(--ui-color-text-muted);
     line-height: 1.55;
   }
@@ -435,7 +430,7 @@ const nextPattern = PATTERNS.find((p) => p.num === pattern.num + 1) ?? null;
   }
   .pattern-variation-note {
     margin: 0;
-    font-size: 0.85rem;
+    font-size: var(--ui-font-size-sm);
     color: var(--ui-color-text-muted);
     line-height: 1.6;
   }
@@ -474,7 +469,7 @@ const nextPattern = PATTERNS.find((p) => p.num === pattern.num + 1) ?? null;
     background: var(--ui-color-surface);
   }
   .pattern-shot figcaption {
-    font-size: 0.72rem;
+    font-size: var(--ui-font-size-sm);
     color: var(--ui-color-text-muted);
     font-weight: 600;
     letter-spacing: 0.04em;
@@ -514,7 +509,7 @@ const nextPattern = PATTERNS.find((p) => p.num === pattern.num + 1) ?? null;
     text-align: right;
   }
   .pattern-pager-dir {
-    font-size: 0.72rem;
+    font-size: var(--ui-font-size-xs);
     color: var(--ui-color-text-muted);
     font-weight: 600;
     letter-spacing: 0.04em;

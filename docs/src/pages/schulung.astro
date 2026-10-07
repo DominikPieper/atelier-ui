@@ -379,7 +379,6 @@ const DAYS: Day[] = [
           color: var(--ui-color-text-muted);
           line-height: 1.6;
           margin-bottom: 1rem;
-          font-size: 0.85rem;
         "
       >
         End-to-End-Check am Ende von Tag 2 pro Teilnehmer. Seit ADR-0137
@@ -480,9 +479,9 @@ const DAYS: Day[] = [
   .schulung-day-eyebrow {
     display: inline-block;
     font-family: var(--font-mono, ui-monospace, monospace);
-    font-size: 0.7rem;
+    font-size: var(--ui-font-size-xs);
     font-weight: 700;
-    letter-spacing: 0.12em;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--ui-color-primary);
     background: color-mix(in srgb, var(--ui-color-primary) 12%, transparent);
@@ -501,7 +500,7 @@ const DAYS: Day[] = [
   .schulung-day-goal {
     margin: 0;
     color: var(--ui-color-text-muted);
-    font-size: 0.88rem;
+    font-size: var(--ui-font-size-sm);
     line-height: 1.6;
     max-width: 60rem;
   }
@@ -518,7 +517,7 @@ const DAYS: Day[] = [
     flex-wrap: wrap;
     gap: 0.5rem 0.75rem;
     margin-bottom: 0.45rem;
-    font-size: 0.72rem;
+    font-size: var(--ui-font-size-sm);
     font-family: var(--font-mono, ui-monospace, monospace);
     color: var(--ui-color-text-muted);
   }
@@ -560,7 +559,7 @@ const DAYS: Day[] = [
     display: flex;
     flex-direction: column;
     gap: 0.4rem;
-    font-size: 0.85rem;
+    font-size: var(--ui-font-size-md);
     line-height: 1.55;
     color: var(--ui-color-text);
   }
@@ -598,9 +597,9 @@ const DAYS: Day[] = [
   }
   .schulung-result-heading {
     margin: 0 0 0.65rem;
-    font-size: 0.7rem;
+    font-size: var(--ui-font-size-xs);
     font-weight: 700;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
     color: var(--ui-color-success);
   }
@@ -611,7 +610,7 @@ const DAYS: Day[] = [
     display: flex;
     flex-direction: column;
     gap: 0.5rem;
-    font-size: 0.85rem;
+    font-size: var(--ui-font-size-md);
     line-height: 1.55;
     color: var(--ui-color-text);
   }

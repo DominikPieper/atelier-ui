@@ -178,7 +178,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
     </PageHero>
     <p
       style="
-        font-size: 0.78rem;
+        font-size: var(--ui-font-size-sm);
         color: var(--ui-color-text-muted);
         margin: -1.5rem 0 1.5rem;
         max-width: 520px;
@@ -307,7 +307,6 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
           color: var(--ui-color-text-muted);
           line-height: 1.6;
           margin-bottom: 1.25rem;
-          font-size: 0.85rem;
         "
       >
         Claude Code can call functions exposed by an external
@@ -321,7 +320,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
         caption="Each MCP call is a four-hop round trip. The dashed return arrows carry the data Claude needs — boundVariables for figma-console, prop tables for storybook-*."
       >
         <svg
-          viewBox="0 0 880 220"
+          viewBox="0 0 880 226"
           role="img"
           aria-labelledby="mcp-title mcp-desc"
           preserveAspectRatio="xMidYMid meet"
@@ -365,131 +364,152 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
 
           <!-- Nodes -->
           <rect
-            x="40"
+            x="8"
             y="60"
-            width="160"
-            height="80"
+            width="144"
+            height="100"
             rx="12"
             ry="12"
             class="diagram-node"
           />
           <text
-            x="120"
-            y="96"
+            x="80"
+            y="92"
             text-anchor="middle"
-            font-size="14"
+            font-size="16"
             font-weight="700"
             >User</text
           >
           <text
-            x="120"
-            y="118"
+            x="80"
+            y="116"
             text-anchor="middle"
-            font-size="11"
+            font-size="15.5"
             class="diagram-muted"
             >"build this card"</text
           >
-
           <rect
-            x="240"
+            x="248"
             y="60"
-            width="180"
-            height="80"
+            width="144"
+            height="100"
             rx="12"
             ry="12"
             class="diagram-node diagram-node--accent"
           />
           <text
-            x="330"
-            y="96"
+            x="320"
+            y="92"
             text-anchor="middle"
-            font-size="14"
+            font-size="16"
             font-weight="700"
             style="fill: var(--ui-color-primary)"
             >Claude Code</text
           >
           <text
-            x="330"
-            y="118"
+            x="320"
+            y="116"
             text-anchor="middle"
-            font-size="11"
+            font-size="15.5"
             class="diagram-muted"
-            >decides which tool to call</text
+            >decides which</text
           >
-
+          <text
+            x="320"
+            y="138"
+            text-anchor="middle"
+            font-size="15.5"
+            class="diagram-muted"
+            >tool to call</text
+          >
           <rect
-            x="460"
+            x="488"
             y="60"
-            width="180"
-            height="80"
+            width="144"
+            height="100"
             rx="12"
             ry="12"
             class="diagram-node"
           />
           <text
-            x="550"
-            y="96"
+            x="560"
+            y="92"
             text-anchor="middle"
-            font-size="14"
+            font-size="16"
             font-weight="700"
             >MCP Server</text
           >
           <text
-            x="550"
-            y="118"
+            x="560"
+            y="116"
             text-anchor="middle"
-            font-size="11"
+            font-size="15.5"
             class="diagram-mono diagram-muted"
-            >figma-console · storybook-*</text
+            >figma-console</text
           >
-
+          <text
+            x="560"
+            y="138"
+            text-anchor="middle"
+            font-size="15.5"
+            class="diagram-mono diagram-muted"
+            >· storybook-*</text
+          >
           <rect
-            x="680"
+            x="728"
             y="60"
-            width="160"
-            height="80"
+            width="144"
+            height="100"
             rx="12"
             ry="12"
             class="diagram-node"
           />
           <text
-            x="760"
-            y="96"
+            x="800"
+            y="92"
             text-anchor="middle"
-            font-size="14"
+            font-size="16"
             font-weight="700"
             >Source</text
           >
           <text
-            x="760"
-            y="118"
+            x="800"
+            y="116"
             text-anchor="middle"
-            font-size="11"
+            font-size="15.5"
             class="diagram-muted"
-            >Figma · Storybook</text
+            >Figma ·</text
+          >
+          <text
+            x="800"
+            y="138"
+            text-anchor="middle"
+            font-size="15.5"
+            class="diagram-muted"
+            >Storybook</text
           >
 
           <!-- Forward request arrows (top) -->
           <line
-            x1="200"
+            x1="152"
             y1="88"
-            x2="240"
+            x2="248"
             y2="88"
             class="diagram-connector diagram-connector--accent"
             marker-end="url(#mcp-arr)"
           />
           <line
-            x1="420"
+            x1="392"
             y1="88"
-            x2="460"
+            x2="488"
             y2="88"
             class="diagram-connector diagram-connector--accent"
             marker-end="url(#mcp-arr)"
           />
           <line
-            x1="640"
+            x1="632"
             y1="88"
-            x2="680"
+            x2="728"
             y2="88"
             class="diagram-connector diagram-connector--accent"
             marker-end="url(#mcp-arr)"
@@ -497,36 +517,37 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
 
           <!-- Backward response arrows (bottom, dashed) -->
           <line
-            x1="680"
-            y1="116"
-            x2="640"
-            y2="116"
+            x1="248"
+            y1="136"
+            x2="152"
+            y2="136"
             class="diagram-connector diagram-connector--dashed"
             marker-end="url(#mcp-arr-back)"
           />
           <line
-            x1="460"
-            y1="116"
-            x2="420"
-            y2="116"
+            x1="488"
+            y1="136"
+            x2="392"
+            y2="136"
             class="diagram-connector diagram-connector--dashed"
             marker-end="url(#mcp-arr-back)"
           />
           <line
-            x1="240"
-            y1="116"
-            x2="200"
-            y2="116"
+            x1="728"
+            y1="136"
+            x2="632"
+            y2="136"
             class="diagram-connector diagram-connector--dashed"
             marker-end="url(#mcp-arr-back)"
           />
 
           <!-- Connector labels -->
           <text
-            x="220"
+            x="200"
             y="78"
             text-anchor="middle"
-            font-size="10"
+            font-size="15.5"
+            style="letter-spacing: 0; text-transform: none"
             class="diagram-eyebrow"
             >prompt</text
           >
@@ -534,40 +555,44 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
             x="440"
             y="78"
             text-anchor="middle"
-            font-size="10"
+            font-size="15.5"
+            style="letter-spacing: 0; text-transform: none"
             class="diagram-eyebrow"
             >tool call</text
           >
           <text
-            x="660"
+            x="680"
             y="78"
             text-anchor="middle"
-            font-size="10"
+            font-size="15.5"
+            style="letter-spacing: 0; text-transform: none"
             class="diagram-eyebrow"
             >fetch</text
           >
-
           <text
-            x="220"
-            y="138"
+            x="200"
+            y="158"
             text-anchor="middle"
-            font-size="10"
+            font-size="15.5"
+            style="letter-spacing: 0; text-transform: none"
             class="diagram-eyebrow diagram-muted"
             >answer</text
           >
           <text
             x="440"
-            y="138"
+            y="158"
             text-anchor="middle"
-            font-size="10"
+            font-size="15.5"
+            style="letter-spacing: 0; text-transform: none"
             class="diagram-eyebrow diagram-muted"
             >response</text
           >
           <text
-            x="660"
-            y="138"
+            x="680"
+            y="158"
             text-anchor="middle"
-            font-size="10"
+            font-size="15.5"
+            style="letter-spacing: 0; text-transform: none"
             class="diagram-eyebrow diagram-muted"
             >data</text
           >
@@ -575,9 +600,9 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
           <!-- Footer banner -->
           <text
             x="440"
-            y="190"
+            y="206"
             text-anchor="middle"
-            font-size="11"
+            font-size="15.5"
             class="diagram-muted"
             >No screenshots · no copy-paste · structured data only</text
           >
@@ -589,7 +614,6 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
           color: var(--ui-color-text-muted);
           line-height: 1.6;
           margin-top: 1rem;
-          font-size: 0.82rem;
         "
       >
         This tutorial uses two MCP servers: <code>figma-console</code> (reads
@@ -607,7 +631,6 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
           color: var(--ui-color-text-muted);
           line-height: 1.6;
           margin-bottom: 1.25rem;
-          font-size: 0.85rem;
         "
       >
         The key tool is <code>figma_get_component_for_development</code>. Given
@@ -655,7 +678,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
           </div>
           <div
             style="
-              font-size: 0.78rem;
+              font-size: var(--ui-font-size-md);
               color: var(--ui-color-text-muted);
               line-height: 1.6;
             "
@@ -679,7 +702,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
         caption="Each step passes concrete data to the next. The dashed arrow closes the loop when parity checks surface discrepancies."
       >
         <svg
-          viewBox="0 0 960 260"
+          viewBox="0 0 960 272"
           role="img"
           aria-labelledby="tut-title tut-desc"
           preserveAspectRatio="xMidYMid meet"
@@ -722,79 +745,115 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
 
           <!-- Connector line under the step circles -->
           <line
-            x1="96"
+            x1="98"
             y1="100"
-            x2="200"
+            x2="198"
             y2="100"
             class="diagram-connector"
             marker-end="url(#tut-arrow)"
           />
           <line
-            x1="264"
+            x1="258"
             y1="100"
-            x2="368"
+            x2="358"
             y2="100"
             class="diagram-connector"
             marker-end="url(#tut-arrow)"
           />
           <line
-            x1="432"
+            x1="418"
             y1="100"
-            x2="536"
+            x2="518"
             y2="100"
             class="diagram-connector"
             marker-end="url(#tut-arrow)"
           />
           <line
-            x1="600"
+            x1="578"
             y1="100"
-            x2="704"
+            x2="678"
             y2="100"
             class="diagram-connector"
             marker-end="url(#tut-arrow)"
           />
           <line
-            x1="768"
+            x1="738"
             y1="100"
-            x2="864"
+            x2="798"
             y2="100"
             class="diagram-connector"
             marker-end="url(#tut-arrow)"
           />
 
-          <!-- Data labels on connectors -->
-          <text x="152" y="88" class="diagram-eyebrow" text-anchor="middle"
+          <!-- Data labels on connectors (above the circle tops so long names may overhang) -->
+          <text
+            x="148"
+            y="64"
+            font-size="17"
+            style="letter-spacing: 0; text-transform: none"
+            class="diagram-eyebrow"
+            text-anchor="middle"
             >node-id</text
           >
-          <text x="316" y="88" class="diagram-eyebrow" text-anchor="middle"
+          <text
+            x="308"
+            y="64"
+            font-size="17"
+            style="letter-spacing: 0; text-transform: none"
+            class="diagram-eyebrow"
+            text-anchor="middle"
             >boundVariables</text
           >
-          <text x="484" y="88" class="diagram-eyebrow" text-anchor="middle"
+          <text
+            x="468"
+            y="64"
+            font-size="17"
+            style="letter-spacing: 0; text-transform: none"
+            class="diagram-eyebrow"
+            text-anchor="middle"
             >prop spec</text
           >
-          <text x="652" y="88" class="diagram-eyebrow" text-anchor="middle"
+          <text
+            x="628"
+            y="64"
+            font-size="17"
+            style="letter-spacing: 0; text-transform: none"
+            class="diagram-eyebrow"
+            text-anchor="middle"
             >code</text
           >
-          <text x="816" y="88" class="diagram-eyebrow" text-anchor="middle"
+          <text
+            x="755"
+            y="64"
+            font-size="17"
+            style="letter-spacing: 0; text-transform: none"
+            class="diagram-eyebrow"
+            text-anchor="middle"
             >parity</text
           >
 
           <!-- Loop-back: parity discrepancies fold back to step A -->
           <path
-            d="M 864 115 C 864 180 864 210 800 210 L 160 210 C 96 210 96 180 96 115"
+            d="M 877 132 V 200 Q 877 232 845 232 H 46 Q 14 232 14 200 V 100 H 38"
             class="diagram-connector diagram-connector--dashed"
             marker-end="url(#tut-arrow-loop)"
           />
-          <text x="480" y="240" class="diagram-eyebrow" text-anchor="middle"
+          <text
+            x="480"
+            y="258"
+            font-size="17"
+            style="letter-spacing: 0; text-transform: none"
+            class="diagram-eyebrow"
+            text-anchor="middle"
             >discrepancies · iterate</text
           >
 
           <!-- Step circles with badges -->
           <!-- A -->
           <g>
-            <circle cx="64" cy="100" r="30" class="diagram-node" />
+            <circle cx="68" cy="100" r="26" class="diagram-node" />
             <text
-              x="64"
+              x="68"
               y="107"
               text-anchor="middle"
               font-size="18"
@@ -803,27 +862,27 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
               >A</text
             >
             <text
-              x="64"
+              x="68"
               y="158"
               text-anchor="middle"
-              font-size="12"
+              font-size="17"
               font-weight="700"
               >Select</text
             >
             <text
-              x="64"
-              y="176"
+              x="68"
+              y="180"
               text-anchor="middle"
-              font-size="10"
+              font-size="17"
               class="diagram-muted"
               >Figma frame</text
             >
           </g>
           <!-- B -->
           <g>
-            <circle cx="232" cy="100" r="30" class="diagram-node" />
+            <circle cx="228" cy="100" r="26" class="diagram-node" />
             <text
-              x="232"
+              x="228"
               y="107"
               text-anchor="middle"
               font-size="18"
@@ -832,27 +891,35 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
               >B</text
             >
             <text
-              x="232"
+              x="228"
               y="158"
               text-anchor="middle"
-              font-size="12"
+              font-size="17"
               font-weight="700"
               >Read spec</text
             >
             <text
-              x="232"
-              y="176"
+              x="228"
+              y="180"
               text-anchor="middle"
-              font-size="10"
+              font-size="17"
               class="diagram-mono diagram-muted"
-              >figma_get_component</text
+              >figma_get_</text
+            >
+            <text
+              x="228"
+              y="202"
+              text-anchor="middle"
+              font-size="17"
+              class="diagram-mono diagram-muted"
+              >component</text
             >
           </g>
           <!-- C -->
           <g>
-            <circle cx="400" cy="100" r="30" class="diagram-node" />
+            <circle cx="388" cy="100" r="26" class="diagram-node" />
             <text
-              x="400"
+              x="388"
               y="107"
               text-anchor="middle"
               font-size="18"
@@ -861,32 +928,40 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
               >C</text
             >
             <text
-              x="400"
+              x="388"
               y="158"
               text-anchor="middle"
-              font-size="12"
+              font-size="17"
               font-weight="700"
               >Match props</text
             >
             <text
-              x="400"
-              y="176"
+              x="388"
+              y="180"
               text-anchor="middle"
-              font-size="10"
+              font-size="17"
               class="diagram-mono diagram-muted"
-              >storybook-* MCP</text
+              >storybook-*</text
+            >
+            <text
+              x="388"
+              y="202"
+              text-anchor="middle"
+              font-size="17"
+              class="diagram-mono diagram-muted"
+              >MCP</text
             >
           </g>
-          <!-- D (accent — AI step) -->
+          <!-- D -->
           <g>
             <circle
-              cx="568"
+              cx="548"
               cy="100"
-              r="32"
+              r="28"
               class="diagram-node diagram-node--accent"
             />
             <text
-              x="568"
+              x="548"
               y="107"
               text-anchor="middle"
               font-size="18"
@@ -895,27 +970,35 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
               >D</text
             >
             <text
-              x="568"
+              x="548"
               y="158"
               text-anchor="middle"
-              font-size="12"
+              font-size="17"
               font-weight="700"
               >Generate</text
             >
             <text
-              x="568"
-              y="176"
+              x="548"
+              y="180"
               text-anchor="middle"
-              font-size="10"
+              font-size="17"
               class="diagram-muted"
-              >Claude writes code</text
+              >Claude</text
+            >
+            <text
+              x="548"
+              y="202"
+              text-anchor="middle"
+              font-size="17"
+              class="diagram-muted"
+              >writes code</text
             >
           </g>
           <!-- E -->
           <g>
-            <circle cx="736" cy="100" r="30" class="diagram-node" />
+            <circle cx="708" cy="100" r="26" class="diagram-node" />
             <text
-              x="736"
+              x="708"
               y="107"
               text-anchor="middle"
               font-size="18"
@@ -924,47 +1007,55 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
               >E</text
             >
             <text
-              x="736"
+              x="708"
               y="158"
               text-anchor="middle"
-              font-size="12"
+              font-size="17"
               font-weight="700"
               >Verify</text
             >
             <text
-              x="736"
-              y="176"
+              x="708"
+              y="180"
               text-anchor="middle"
-              font-size="10"
+              font-size="17"
               class="diagram-mono diagram-muted"
-              >check_design_parity</text
+              >check_design_</text
+            >
+            <text
+              x="708"
+              y="202"
+              text-anchor="middle"
+              font-size="17"
+              class="diagram-mono diagram-muted"
+              >parity</text
             >
           </g>
           <!-- Output chip -->
           <g>
             <rect
-              x="870"
-              y="82"
-              width="82"
-              height="36"
+              x="802"
+              y="72"
+              width="150"
+              height="56"
               rx="8"
               ry="8"
               class="diagram-node"
             />
             <text
-              x="911"
-              y="104"
+              x="877"
+              y="97"
               text-anchor="middle"
-              font-size="10"
+              font-size="17"
               font-weight="700"
               style="fill: var(--ui-color-success)"
               >✓ shipped</text
             >
             <text
-              x="911"
+              x="877"
               y="118"
               text-anchor="middle"
-              font-size="9"
+              font-size="17"
               class="diagram-muted"
               >component</text
             >
@@ -996,7 +1087,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
               caption="The node-id is the value after ?node-id= in the Figma URL. Colons (:) appear URL-encoded as %3A or as a single dash."
             >
               <svg
-                viewBox="0 0 880 160"
+                viewBox="0 0 880 172"
                 role="img"
                 aria-labelledby="url-title url-desc"
                 preserveAspectRatio="xMidYMid meet"
@@ -1059,16 +1150,16 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
                 <text
                   x="96"
                   y="64"
-                  font-size="13"
+                  font-size="16.5"
                   class="diagram-mono diagram-muted"
                   >figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI</text
                 >
 
                 <!-- Highlight box around the node-id parameter -->
                 <rect
-                  x="592"
+                  x="636"
                   y="44"
-                  width="208"
+                  width="196"
                   height="28"
                   rx="6"
                   ry="6"
@@ -1083,9 +1174,9 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
                   "
                 />
                 <text
-                  x="600"
+                  x="644"
                   y="64"
-                  font-size="13"
+                  font-size="16.5"
                   font-weight="700"
                   class="diagram-mono"
                   style="fill: var(--ui-color-primary)"
@@ -1094,24 +1185,24 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
 
                 <!-- Arrow and caption pointing to the node-id -->
                 <path
-                  d="M 696 110 L 696 76"
+                  d="M 734 112 L 734 76"
                   class="diagram-connector diagram-connector--accent"
                   marker-end="url(#url-arrow)"
                 />
                 <text
-                  x="696"
-                  y="132"
+                  x="734"
+                  y="136"
                   text-anchor="middle"
-                  font-size="11"
+                  font-size="16.5"
                   font-weight="600"
                   style="fill: var(--ui-color-primary)"
                   >this is the node-id</text
                 >
                 <text
-                  x="696"
-                  y="146"
-                  text-anchor="middle"
-                  font-size="10"
+                  x="840"
+                  y="160"
+                  text-anchor="end"
+                  font-size="16.5"
                   class="diagram-muted"
                   >pass it to figma_get_component_for_development</text
                 >
@@ -1150,7 +1241,6 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
               <p
                 style="
                   margin: 0;
-                  font-size: 0.82rem;
                   line-height: 1.6;
                   color: var(--ui-color-text-muted);
                 "
@@ -1219,7 +1309,6 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
           color: var(--ui-color-text-muted);
           line-height: 1.6;
           margin-bottom: 1rem;
-          font-size: 0.85rem;
         "
       >
         A prompt that drives the full A–D workflow in one shot — already set to
@@ -1247,7 +1336,6 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
           color: var(--ui-color-text-muted);
           line-height: 1.6;
           margin-bottom: 1.25rem;
-          font-size: 0.85rem;
         "
       >
         What Claude Code produces — using <code>AtlCard</code> and
@@ -1271,7 +1359,6 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
           color: var(--ui-color-text-muted);
           line-height: 1.6;
           margin-bottom: 1.25rem;
-          font-size: 0.85rem;
         "
       >
         Save the generated component, mount it in the app shell — the scaffolded
@@ -1284,7 +1371,6 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
           color: var(--ui-color-text-muted);
           line-height: 1.6;
           margin-bottom: 1.25rem;
-          font-size: 0.85rem;
         "
       >
         These paths are a
@@ -1453,7 +1539,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
     border-radius: 50%;
     background: var(--ui-color-primary-light);
     color: var(--ui-color-primary);
-    font-size: 0.7rem;
+    font-size: var(--ui-font-size-xs);
     font-weight: 700;
     display: inline-flex;
     align-items: center;
@@ -1462,10 +1548,10 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
   }
   .run-step-label {
     display: block;
-    font-size: 0.68rem;
+    font-size: var(--ui-font-size-xs);
     font-weight: 700;
     text-transform: uppercase;
-    letter-spacing: 0.08em;
+    letter-spacing: 0.06em;
     color: var(--ui-color-text-muted);
     margin-bottom: 0.3rem;
   }
@@ -1486,7 +1572,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
     display: block;
     margin-top: 0.35rem;
     color: var(--ui-color-text-muted);
-    font-size: 0.8rem;
+    font-size: var(--ui-font-size-sm);
   }
   /* Drop the default expressive-code top margin inside the run-step card */
   .run-steps .expressive-code {

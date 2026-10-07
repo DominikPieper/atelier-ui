@@ -113,7 +113,7 @@ const IMPORT_NOTE: Record<string, string> = {
     />
     <p
       style="
-        font-size: 0.78rem;
+        font-size: var(--ui-font-size-sm);
         color: var(--ui-color-text-muted);
         margin: -1.5rem 0 1.5rem;
         max-width: 560px;
@@ -146,7 +146,7 @@ const IMPORT_NOTE: Record<string, string> = {
       caption="Each step produces the artifact the next step consumes. No config files, no bundler plugins."
     >
       <svg
-        viewBox="0 0 880 220"
+        viewBox="0 0 880 240"
         role="img"
         aria-labelledby="ins-title ins-desc"
         preserveAspectRatio="xMidYMid meet"
@@ -178,7 +178,7 @@ const IMPORT_NOTE: Record<string, string> = {
             x="24"
             y="40"
             width="248"
-            height="128"
+            height="144"
             rx="14"
             ry="14"
             class="diagram-node"
@@ -186,7 +186,7 @@ const IMPORT_NOTE: Record<string, string> = {
           <text
             x="48"
             y="68"
-            font-size="11"
+            font-size="16"
             font-weight="700"
             style="fill: var(--ui-color-primary)"
             >STEP 1</text
@@ -204,17 +204,17 @@ const IMPORT_NOTE: Record<string, string> = {
             <path d="M 0 8 L 28 8" class="diagram-icon" />
             <path d="M 14 0 L 14 8" class="diagram-icon" />
           </g>
-          <text x="48" y="100" font-size="15" font-weight="700"
+          <text x="48" y="100" font-size="16" font-weight="700"
             >Install package</text
           >
-          <text x="48" y="122" font-size="11" class="diagram-muted"
+          <text x="48" y="122" font-size="16" class="diagram-muted"
             >Adds dependency to</text
           >
           <text
             x="48"
-            y="148"
+            y="170"
             class="diagram-mono"
-            font-size="12"
+            font-size="16"
             style="fill: var(--ui-color-primary)"
             >package.json</text
           >
@@ -222,9 +222,9 @@ const IMPORT_NOTE: Record<string, string> = {
 
         <line
           x1="272"
-          y1="104"
+          y1="112"
           x2="312"
-          y2="104"
+          y2="112"
           class="diagram-connector"
           marker-end="url(#ins-arrow)"
         />
@@ -235,7 +235,7 @@ const IMPORT_NOTE: Record<string, string> = {
             x="312"
             y="40"
             width="248"
-            height="128"
+            height="144"
             rx="14"
             ry="14"
             class="diagram-node"
@@ -243,7 +243,7 @@ const IMPORT_NOTE: Record<string, string> = {
           <text
             x="336"
             y="68"
-            font-size="11"
+            font-size="16"
             font-weight="700"
             style="fill: var(--ui-color-primary)"
             >STEP 2</text
@@ -275,17 +275,17 @@ const IMPORT_NOTE: Record<string, string> = {
               style="fill: var(--ui-color-primary); stroke: none; opacity: 0.4"
             />
           </g>
-          <text x="336" y="100" font-size="15" font-weight="700"
+          <text x="336" y="100" font-size="16" font-weight="700"
             >Import tokens</text
           >
-          <text x="336" y="122" font-size="11" class="diagram-muted"
+          <text x="336" y="122" font-size="16" class="diagram-muted"
             >Adds CSS variables to</text
           >
           <text
             x="336"
-            y="148"
+            y="170"
             class="diagram-mono"
-            font-size="12"
+            font-size="16"
             style="fill: var(--ui-color-primary)"
             >styles.css</text
           >
@@ -293,9 +293,9 @@ const IMPORT_NOTE: Record<string, string> = {
 
         <line
           x1="560"
-          y1="104"
+          y1="112"
           x2="600"
-          y2="104"
+          y2="112"
           class="diagram-connector"
           marker-end="url(#ins-arrow)"
         />
@@ -306,7 +306,7 @@ const IMPORT_NOTE: Record<string, string> = {
             x="600"
             y="40"
             width="248"
-            height="128"
+            height="144"
             rx="14"
             ry="14"
             class="diagram-node diagram-node--accent"
@@ -314,7 +314,7 @@ const IMPORT_NOTE: Record<string, string> = {
           <text
             x="624"
             y="68"
-            font-size="11"
+            font-size="16"
             font-weight="700"
             style="fill: var(--ui-color-primary)"
             >STEP 3</text
@@ -324,24 +324,27 @@ const IMPORT_NOTE: Record<string, string> = {
             <path d="M 22 0 L 30 12 L 22 24" class="diagram-icon" />
             <path d="M 18 2 L 12 22" class="diagram-icon" />
           </g>
-          <text x="624" y="100" font-size="15" font-weight="700"
+          <text x="624" y="100" font-size="16" font-weight="700"
             >Import components</text
           >
-          <text x="624" y="122" font-size="11" class="diagram-muted"
-            >Tree-shakeable named imports</text
+          <text x="624" y="122" font-size="16" class="diagram-muted"
+            >Tree-shakeable</text
+          >
+          <text x="624" y="144" font-size="16" class="diagram-muted"
+            >named imports</text
           >
           <text
             x="624"
-            y="148"
+            y="170"
             class="diagram-mono"
-            font-size="12"
+            font-size="16"
             style="fill: var(--ui-color-primary)"
             >import &#123; Atl… &#125; from …</text
           >
         </g>
 
         <!-- Ready badge -->
-        <g transform="translate(368, 184)">
+        <g transform="translate(368, 200)">
           <rect
             x="0"
             y="0"
@@ -363,7 +366,7 @@ const IMPORT_NOTE: Record<string, string> = {
             x="72"
             y="18"
             text-anchor="middle"
-            font-size="11"
+            font-size="16"
             font-weight="700"
             style="fill: var(--ui-color-success)"
             >Ready to build</text
@@ -418,7 +421,6 @@ const IMPORT_NOTE: Record<string, string> = {
         <p
           style="
             color: var(--ui-color-text-muted);
-            font-size: 0.82rem;
             line-height: 1.55;
             margin: 0.75rem 0 0.5rem;
           "
@@ -451,7 +453,6 @@ const IMPORT_NOTE: Record<string, string> = {
         <p
           style="
             margin: 0 0 0.3rem;
-            font-size: 0.82rem;
             font-weight: 700;
             color: var(--ui-color-text);
           "
@@ -459,12 +460,7 @@ const IMPORT_NOTE: Record<string, string> = {
           CSS Variables
         </p>
         <p
-          style="
-            margin: 0;
-            font-size: 0.82rem;
-            color: var(--ui-color-text-muted);
-            line-height: 1.6;
-          "
+          style="margin: 0; color: var(--ui-color-text-muted); line-height: 1.6"
         >
           Atelier UI uses CSS custom properties for all design tokens, enabling
           dynamic theme switching between light and dark mode with zero
@@ -497,7 +493,6 @@ const IMPORT_NOTE: Record<string, string> = {
           style="
             margin: 0.6rem 0 0;
             padding: 0.55rem 0.85rem;
-            font-size: 0.76rem;
             color: var(--ui-color-text-muted);
             line-height: 1.55;
             background: var(--ui-color-primary-light);
@@ -567,7 +562,7 @@ const IMPORT_NOTE: Record<string, string> = {
     border-bottom: none;
     border-top-left-radius: var(--ui-radius-md);
     border-top-right-radius: var(--ui-radius-md);
-    font-size: 0.76rem;
+    font-size: var(--ui-font-size-sm);
   }
   .docs-file-path-icon {
     font-size: 1rem;
@@ -584,7 +579,7 @@ const IMPORT_NOTE: Record<string, string> = {
   }
   .docs-file-path-notes {
     color: var(--ui-color-text-muted);
-    font-size: 0.72rem;
+    font-size: var(--ui-font-size-sm);
     line-height: 1.45;
   }
   @media (max-width: 640px) {

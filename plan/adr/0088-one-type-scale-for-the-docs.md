@@ -117,3 +117,10 @@ already renders in every component the docs embed.
   by an agent, and spot-checked. A class that styles both a caption and a
   paragraph will have landed on one side; the before/after screenshots at
   1440 and 375 on six pages are the check, not a proof.
+
+**Corrected 2026-10-07:** ADR-0155 revises §1's "SVG `<text>` … is out of this scale's
+reach" and closes §5's follow-up. The second pass (review n13) never ran, and the critique of
+2026-10-07 measured 13 px prose and 7 px diagram labels again. Page-scoped, inline and island
+sizes now follow the role table above. SVG labels are raised to render at 12 px or more at
+desktop width. The 12 px floor is enforced on rendered text by `check:docs-layout`'s
+`[FONT-SIZE]` check, not by review.

@@ -15,6 +15,38 @@ underneath it._
 
 Ranked; each carries why it's worth doing next rather than later.
 
+### Docs-site critique follow-up (2026-10-07)
+
+Impeccable critique of the docs site scored 27/40 (snapshot in
+`.impeccable/critique/2026-10-07T17-32-18Z__docs-src-pages.md`). Owner chose: all five
+priority issues, typography first, and the hero/chrome should visibly practise the
+Atelier token system instead of the generic gradient/grid look.
+
+- [x] **1. typeset** — done 2026-10-07 (ADR-0155). Not a new scale: ADR-0088 had already
+      decided the roles on the library's `--ui-font-size-*` and rejected `--docs-text-*`;
+      its page-scoped second pass (review n13) simply never ran, and nothing gated it.
+      Pages, islands and SVG diagram labels are now on the roles; `check:docs-layout`
+      fails on any text under 12 px at 1440 (`[FONT-SIZE]`, negative-tested for HTML and
+      SVG). Open from this step: the H2/body ratio (20/16) is still weak, and the guard
+      does not cover the sidebar, topbar or collapsed `<details>`.
+- [ ] **2. shape** — hero and chrome show the token system; drop gradient wordmark, grid
+      background, pulsing dot, eyebrow chips, identical pillar cards; callouts lose the
+      coloured left border; descriptive H1. Owner decided 2026-10-07: the brand kit
+      (`skills/atelier-design/ui_kits/docs-site/`) changes with the docs (one authority,
+      one ADR), and the home's first view is the Figma → contract → code → verify loop as
+      the main image with one start button.
+- [ ] **3. distill** — track pages show the 7 steps, Reference/How-to/Explanation
+      collapsed; one primary home CTA; one MCP endpoint on home; one product name; mobile
+      bottom nav offers "Next step".
+- [ ] **4. clarify** — `/design-to-code` in attendee language, ADRs behind a "Why (for
+      maintainers)" disclosure; component pages label the Angular snippet and explain the
+      React-rendered preview; resolve tutorial/kata overlap.
+- [ ] **5. harden** — `danger` in button demo, disabled/loading distinct in dark,
+      placeholder contrast ≥4.5:1, distinct nav landmark labels, `forced-colors` focus
+      outline, wrapped prompt blocks, unclipped search placeholder, single drawer close.
+- [ ] **6. delight** — kata end as a real finish moment; WIP banner dismissible or moved.
+- [ ] **7. polish** + re-run `/impeccable critique`.
+
 > **Picking this up in a new session?** Read
 > `tasks/handover-design-skills-2026-09-08.md` first — it carries what is blocked
 > (figma-console reconnect, 37/37 parity DRIFT), the agreed order of next steps, the

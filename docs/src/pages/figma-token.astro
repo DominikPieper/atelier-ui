@@ -60,7 +60,6 @@ const stepTag = trackStep
       <p
         style="
           color: var(--ui-color-text-muted);
-          font-size: 0.85rem;
           margin: 0 0 0.5rem;
           line-height: 1.6;
         "
@@ -75,7 +74,7 @@ const stepTag = trackStep
         caption="Two channels. The plugin WebSocket (solid) carries every interactive call. The REST token (dashed) only covers read-only file/variable metadata."
       >
         <svg
-          viewBox="0 0 880 260"
+          viewBox="0 0 880 264"
           role="img"
           aria-labelledby="arch-title arch-desc"
           preserveAspectRatio="xMidYMid meet"
@@ -119,186 +118,199 @@ const stepTag = trackStep
 
           <!-- Claude Code -->
           <rect
-            x="24"
-            y="96"
-            width="152"
-            height="68"
-            rx="10"
-            ry="10"
+            x="8"
+            y="98"
+            width="150"
+            height="72"
+            rx="12"
+            ry="12"
             class="diagram-node"
           />
           <text
-            x="100"
-            y="126"
+            x="83"
+            y="128"
             text-anchor="middle"
-            font-size="12"
+            font-size="16.5"
             font-weight="700"
             >Claude Code</text
           >
           <text
-            x="100"
-            y="146"
+            x="83"
+            y="150"
             text-anchor="middle"
-            font-size="10"
+            font-size="15.3"
             class="diagram-muted"
             >reads .mcp.json</text
           >
-
           <!-- MCP server -->
           <rect
-            x="232"
-            y="78"
-            width="208"
-            height="104"
+            x="196"
+            y="68"
+            width="316"
+            height="130"
             rx="12"
             ry="12"
             class="diagram-node diagram-node--accent"
           />
           <text
-            x="336"
-            y="106"
+            x="354"
+            y="98"
             text-anchor="middle"
-            font-size="12"
+            font-size="16.5"
             font-weight="700"
             style="fill: var(--ui-color-primary)"
             >figma-console-mcp</text
           >
           <text
-            x="336"
-            y="126"
+            x="354"
+            y="122"
             text-anchor="middle"
-            font-size="10"
+            font-size="15.3"
             class="diagram-mono diagram-muted"
             >npx -y figma-console-mcp@latest</text
           >
           <text
-            x="336"
+            x="354"
             y="150"
             text-anchor="middle"
-            font-size="10"
+            font-size="15.3"
             class="diagram-muted"
             >WebSocket :9223–9232</text
           >
           <text
-            x="336"
-            y="166"
+            x="354"
+            y="170"
             text-anchor="middle"
-            font-size="10"
+            font-size="15.3"
             class="diagram-muted"
             >REST → api.figma.com</text
           >
-
           <!-- Figma Desktop plugin -->
           <rect
-            x="496"
-            y="24"
-            width="232"
-            height="84"
+            x="604"
+            y="10"
+            width="268"
+            height="108"
             rx="12"
             ry="12"
             class="diagram-node diagram-node--accent"
           />
           <text
-            x="612"
-            y="52"
+            x="738"
+            y="38"
             text-anchor="middle"
-            font-size="12"
+            font-size="16.5"
             font-weight="700"
             style="fill: var(--ui-color-primary)"
             >Figma Desktop</text
           >
           <text
-            x="612"
-            y="72"
+            x="738"
+            y="60"
             text-anchor="middle"
-            font-size="10"
+            font-size="15.3"
             class="diagram-muted"
             >Desktop Bridge plugin</text
           >
           <text
-            x="612"
-            y="92"
+            x="738"
+            y="80"
             text-anchor="middle"
-            font-size="10"
+            font-size="15.3"
             class="diagram-muted"
-            >live selection · screenshots · edits</text
+            >live selection ·</text
           >
-
+          <text
+            x="738"
+            y="100"
+            text-anchor="middle"
+            font-size="15.3"
+            class="diagram-muted"
+            >screenshots · edits</text
+          >
           <!-- Figma REST (secondary) -->
           <rect
-            x="496"
-            y="152"
-            width="232"
-            height="76"
+            x="604"
+            y="136"
+            width="268"
+            height="112"
             rx="12"
             ry="12"
             class="diagram-node"
           />
           <text
-            x="612"
-            y="178"
+            x="738"
+            y="164"
             text-anchor="middle"
-            font-size="12"
+            font-size="16.5"
             font-weight="700"
             >Figma REST API</text
           >
           <text
-            x="612"
-            y="198"
+            x="738"
+            y="186"
             text-anchor="middle"
-            font-size="10"
+            font-size="15.3"
             class="diagram-muted"
-            >read: file · variables · comments</text
+            >read: file · variables ·</text
           >
           <text
-            x="612"
-            y="216"
+            x="738"
+            y="206"
             text-anchor="middle"
-            font-size="10"
+            font-size="15.3"
+            class="diagram-muted"
+            >comments</text
+          >
+          <text
+            x="738"
+            y="228"
+            text-anchor="middle"
+            font-size="15.3"
             class="diagram-mono diagram-muted"
             >auth: figd_…</text
           >
-
           <!-- Arrows -->
           <line
-            x1="176"
-            y1="130"
-            x2="228"
-            y2="130"
+            x1="158"
+            y1="134"
+            x2="192"
+            y2="134"
             class="diagram-connector diagram-connector--accent"
             marker-end="url(#arch-arrow)"
           />
           <line
-            x1="440"
-            y1="104"
-            x2="492"
-            y2="66"
+            x1="512"
+            y1="96"
+            x2="600"
+            y2="64"
             class="diagram-connector diagram-connector--accent"
             marker-start="url(#arch-arrow)"
             marker-end="url(#arch-arrow)"
           />
           <line
-            x1="440"
-            y1="156"
-            x2="492"
-            y2="188"
+            x1="512"
+            y1="160"
+            x2="600"
+            y2="192"
             class="diagram-connector diagram-connector--dashed"
             marker-end="url(#arch-arrow-muted)"
           />
-
           <!-- Labels on the two channels -->
           <text
-            x="466"
-            y="70"
-            font-size="10"
+            x="556"
+            y="60"
+            text-anchor="middle"
+            font-size="15.3"
             font-weight="700"
             style="fill: var(--ui-color-primary)"
             >primary</text
           >
           <text
-            x="466"
-            y="176"
-            font-size="10"
+            x="556"
+            y="214"
+            text-anchor="middle"
+            font-size="15.3"
             font-weight="600"
             class="diagram-muted"
             >optional</text
@@ -315,7 +327,6 @@ const stepTag = trackStep
       <p
         style="
           color: var(--ui-color-text-muted);
-          font-size: 0.85rem;
           margin: 0 0 1rem;
           line-height: 1.6;
         "
@@ -384,7 +395,7 @@ const stepTag = trackStep
                   ry="12"
                   class="diagram-node"
                 />
-                <text x="44" y="42" font-size="11" class="diagram-eyebrow"
+                <text x="44" y="42" class="diagram-eyebrow" font-size="11.8"
                   >Figma Desktop · menu bar</text
                 >
 
@@ -434,21 +445,21 @@ const stepTag = trackStep
                 <text
                   x="262"
                   y="100"
-                  font-size="11"
+                  font-size="11.8"
                   class="diagram-mono diagram-muted"
                   >New plugin…</text
                 >
                 <text
                   x="262"
                   y="120"
-                  font-size="11"
+                  font-size="11.8"
                   class="diagram-mono diagram-muted"
                   >Show/Hide Console</text
                 >
                 <text
                   x="262"
                   y="140"
-                  font-size="11"
+                  font-size="11.8"
                   class="diagram-mono diagram-muted"
                   >Figma Desktop Bridge (appears after import)</text
                 >
@@ -467,7 +478,7 @@ const stepTag = trackStep
                   >Select plugin manifest</text
                 >
 
-                <text x="84" y="244" font-size="10" class="diagram-eyebrow"
+                <text x="84" y="244" class="diagram-eyebrow" font-size="11.8"
                   >Path</text
                 >
                 <rect
@@ -483,7 +494,7 @@ const stepTag = trackStep
                     stroke-width: 1;
                   "
                 />
-                <text x="96" y="271" font-size="11" class="diagram-mono"
+                <text x="96" y="271" font-size="11.8" class="diagram-mono"
                   >~/.figma-console-mcp/plugin/manifest.json</text
                 >
 
@@ -501,12 +512,12 @@ const stepTag = trackStep
                   x="520"
                   y="313"
                   text-anchor="middle"
-                  font-size="11"
+                  font-size="11.8"
                   font-weight="700"
                   style="fill: var(--ui-color-on-primary)"
                   >Open</text
                 >
-                <text x="84" y="313" font-size="11" class="diagram-muted"
+                <text x="84" y="313" font-size="11.8" class="diagram-muted"
                   >The plugin will appear under Plugins → Development.</text
                 >
               </svg>
@@ -540,7 +551,6 @@ const stepTag = trackStep
       <p
         style="
           color: var(--ui-color-text-muted);
-          font-size: 0.85rem;
           margin: 0 0 1rem;
           line-height: 1.6;
         "
@@ -553,7 +563,6 @@ const stepTag = trackStep
       <p
         style="
           color: var(--ui-color-text-muted);
-          font-size: 0.85rem;
           margin: 0 0 1rem;
           line-height: 1.6;
         "
@@ -640,17 +649,17 @@ const stepTag = trackStep
               >
                 <span
                   style="
-                    font-size: 0.66rem;
+                    font-size: var(--ui-font-size-xs);
                     font-weight: 700;
                     color: var(--ui-color-text-muted);
-                    letter-spacing: 0.08em;
+                    letter-spacing: 0.06em;
                     text-transform: uppercase;
                   "
                   >Your token value</span
                 >
                 <span
                   style="
-                    font-size: 0.66rem;
+                    font-size: var(--ui-font-size-xs);
                     color: var(--ui-color-text-muted);
                     font-family: monospace;
                   "
@@ -691,7 +700,7 @@ const stepTag = trackStep
               {/* eslint-enable astro/jsx-a11y/no-noninteractive-tabindex */}
               <span
                 style="
-                  font-size: 0.72rem;
+                  font-size: var(--ui-font-size-sm);
                   color: var(--ui-color-text-muted);
                   line-height: 1.55;
                 "
@@ -717,7 +726,6 @@ const stepTag = trackStep
       <p
         style="
           color: var(--ui-color-text-muted);
-          font-size: 0.85rem;
           margin: 0 0 1rem;
           line-height: 1.6;
         "
@@ -767,7 +775,6 @@ const stepTag = trackStep
       <p
         style="
           margin: 1rem 0 0;
-          font-size: 0.8rem;
           color: var(--ui-color-text-muted);
           line-height: 1.6;
         "
@@ -785,7 +792,6 @@ const stepTag = trackStep
       <p
         style="
           color: var(--ui-color-text-muted);
-          font-size: 0.85rem;
           margin: 0 0 1rem;
           line-height: 1.6;
         "
@@ -815,7 +821,6 @@ const stepTag = trackStep
       <p
         style="
           color: var(--ui-color-text-muted);
-          font-size: 0.85rem;
           margin-top: 0.75rem;
           line-height: 1.6;
         "
@@ -835,7 +840,6 @@ const stepTag = trackStep
       <p
         style="
           color: var(--ui-color-text-muted);
-          font-size: 0.85rem;
           margin-top: 1rem;
           line-height: 1.6;
         "
@@ -850,7 +854,6 @@ const stepTag = trackStep
       <p
         style="
           color: var(--ui-color-text-muted);
-          font-size: 0.8rem;
           margin-top: 0.5rem;
           line-height: 1.55;
         "
@@ -862,7 +865,6 @@ const stepTag = trackStep
       <p
         style="
           color: var(--ui-color-text-muted);
-          font-size: 0.8rem;
           margin-top: 0.75rem;
           line-height: 1.55;
         "

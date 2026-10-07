@@ -3321,7 +3321,7 @@ a.docs-pagepair-card:hover {
   line-height: 1.5;
 }
 .docs-pagepair-desc code {
-  font-size: 0.74rem;
+  font-size: var(--ui-font-size-xs);
 }
 .docs-pagepair-arrow {
   display: flex;
@@ -3525,7 +3525,7 @@ a.docs-pagepair-card:hover {
   line-height: 1.45;
 }
 .docs-help-footer-link-desc code {
-  font-size: 0.72rem;
+  font-size: var(--ui-font-size-xs);
   padding: 0 0.25rem;
   background: var(--ui-color-primary-light);
   border-radius: 3px;

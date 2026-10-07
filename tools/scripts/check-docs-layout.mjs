@@ -39,6 +39,19 @@
  *                     BOTH runs are kept as real findings, and the default
  *                     (non `--check`) output logs the retry's before → after
  *                     count.
+ *   [FONT-SIZE]      at 1440 only (SVG diagrams scale down on phones by
+ *                     design) — every visible text node inside
+ *                     `.docs-main-content` renders at >= 12px (ADR-0088: 12px
+ *                     is the floor for anything that carries information).
+ *                     HTML text is measured by its computed font-size; SVG
+ *                     text by computed font-size x the screen scale of its
+ *                     coordinate system (viewBox -> rendered width), because
+ *                     a `font-size="12"` in a 960-unit viewBox shown 800px
+ *                     wide is 10px on screen. Code is NOT exempt. The only
+ *                     exemption is an element inside `[data-type-specimen]`
+ *                     (the /tokens type-scale table renders `2xs` at 10px
+ *                     on purpose). A finding names page, width, selector,
+ *                     text snippet and rendered px.
  *   [BREAKPOINT]     a static pass over `docs/src` for `@media` widths that
  *                     are not one of the documented breakpoints — the
  *                     review's static audit found eleven distinct values,
@@ -82,6 +95,9 @@ const DIST = join(ROOT, 'dist/docs');
 const QUIET = process.argv.includes('--check');
 const WIDTHS = [1440, 1024, 768, 375];
 const AXE_WIDTHS = new Set([1440, 375]);
+const FONT_SIZE_WIDTH = 1440;
+// ADR-0088: `--ui-font-size-xs`. Compared with a hair of float tolerance.
+const MIN_FONT_PX = 12;
 
 /**
  * The three breakpoints ADR-0086 actually reasons about: the mobile nav
@@ -116,6 +132,23 @@ const COLUMN_SCROLL_ALLOW = [
     contains: '.atl-tab-group',
     reason:
       'AtlTabs pills do not wrap or scroll at 375 — library component, review L4',
+  },
+];
+
+/**
+ * Library-rendered text below 12px that the docs site cannot fix from its own
+ * CSS (the same shape as COLUMN_SCROLL_ALLOW): the docs are rendering a
+ * component's own, intentional design, not setting type themselves.
+ *
+ * AtlAvatar sizes its initials with `--ui-font-size-2xs` on purpose (tokens.css:
+ * the initials in a 24px avatar); they are `aria-hidden` and repeat the name.
+ */
+const FONT_SIZE_ALLOW = [
+  {
+    path: /^\/components\/avatar$/,
+    selector: /^span\.initials$/,
+    reason:
+      'AtlAvatar initials at --ui-font-size-2xs in a 24px avatar — library design',
   },
 ];
 
@@ -372,6 +405,60 @@ function findWidestOffender(scope) {
 }
 
 /**
+ * Runs in the page. Returns every visible text node inside
+ * `.docs-main-content` that renders below `min` px, outside any
+ * `[data-type-specimen]`. HTML text: computed font-size. SVG text: computed
+ * font-size x the element's screen scale (getScreenCTM folds in the svg's
+ * viewBox-to-box scale and any nested transforms).
+ */
+function findSmallText(min) {
+  const root = document.querySelector('.docs-main-content');
+  if (!root) return [];
+  const sel = (e) =>
+    e.tagName.toLowerCase() +
+    (typeof e.className === 'string' && e.className.trim()
+      ? '.' + e.className.trim().split(/\s+/).slice(0, 2).join('.')
+      : '');
+  const walker = document.createTreeWalker(root, NodeFilter.SHOW_TEXT);
+  const seen = new Map();
+  for (let n = walker.nextNode(); n; n = walker.nextNode()) {
+    const text = n.nodeValue.replace(/\s+/g, ' ').trim();
+    if (!text) continue;
+    const el = n.parentElement;
+    if (!el) continue;
+    if (el.closest('[data-type-specimen]')) continue;
+    if (el.closest('script, style, noscript, template, title, desc')) continue;
+    if (el.checkVisibility && !el.checkVisibility({ visibilityProperty: true }))
+      continue;
+    const range = document.createRange();
+    range.selectNodeContents(n);
+    const rect = range.getBoundingClientRect();
+    // not laid out, or a visually-hidden (sr-only) clip box
+    if (rect.width <= 1 || rect.height <= 1) continue;
+    let px = parseFloat(getComputedStyle(el).fontSize);
+    let scale = 1;
+    if (el instanceof SVGElement) {
+      const ctm = el.getScreenCTM();
+      if (ctm) scale = Math.hypot(ctm.a, ctm.b);
+      px *= scale;
+    }
+    if (px >= min - 0.05) continue;
+    const key = sel(el) + '|' + px.toFixed(1);
+    const hit = seen.get(key);
+    if (hit) hit.count += 1;
+    else
+      seen.set(key, {
+        selector: sel(el),
+        svg: el instanceof SVGElement,
+        text: text.slice(0, 40),
+        px: Math.round(px * 10) / 10,
+        count: 1,
+      });
+  }
+  return [...seen.values()];
+}
+
+/**
  * Settles the page once per load, right after the theme flip and before any
  * measurement reads it (OVERFLOW/COLUMN-SCROLL included, not just axe):
  * `document.fonts.ready` (a webfont swap reflows text), two animation
@@ -585,6 +672,27 @@ for (const width of WIDTHS) {
             );
           findings.push(
             `[AXE:${v.id}] ${url} @${width}: impact=${v.impact} targets=${targets.join(' | ')}`,
+          );
+        }
+      }
+
+      // [FONT-SIZE] — 1440 only
+      if (width === FONT_SIZE_WIDTH) {
+        const small = await page.evaluate(findSmallText, MIN_FONT_PX);
+        for (const t of small) {
+          const allow = FONT_SIZE_ALLOW.find(
+            (a) => a.path.test(url) && a.selector.test(t.selector),
+          );
+          if (allow) {
+            if (!QUIET)
+              progress.push(
+                `  [${width}px] ${url}: [FONT-SIZE allowed] ${t.selector} ${t.px}px — ${allow.reason}`,
+              );
+            continue;
+          }
+          findings.push(
+            `[FONT-SIZE] ${url} @${width}: ${t.selector}${t.svg ? ' (svg)' : ''} "${t.text}" renders ${t.px}px < ${MIN_FONT_PX}px` +
+              (t.count > 1 ? ` (x${t.count})` : ''),
           );
         }
       }

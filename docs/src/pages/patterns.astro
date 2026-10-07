@@ -150,7 +150,7 @@ function frameworkCode(p: (typeof PATTERNS)[number], fw: Framework): string {
   }
   .pattern-num {
     font-family: var(--font-mono), ui-monospace, SFMono-Regular, monospace;
-    font-size: 0.65rem;
+    font-size: var(--ui-font-size-xs);
     font-weight: 700;
     color: var(--ui-color-primary);
     background: var(--ui-color-primary-light);
@@ -162,14 +162,14 @@ function frameworkCode(p: (typeof PATTERNS)[number], fw: Framework): string {
   }
   .pattern-title {
     margin: 0 0 0.3rem;
-    font-size: 1.15rem;
+    font-size: var(--ui-font-size-lg);
     font-weight: 800;
     letter-spacing: -0.02em;
     color: var(--ui-color-text);
   }
   .pattern-desc {
     margin: 0;
-    font-size: 0.85rem;
+    font-size: var(--ui-font-size-sm);
     color: var(--ui-color-text-muted);
     line-height: 1.6;
   }
@@ -185,7 +185,7 @@ function frameworkCode(p: (typeof PATTERNS)[number], fw: Framework): string {
    * so we can use it directly without local overrides. */
   .pattern-tag {
     font-family: var(--font-mono), ui-monospace, SFMono-Regular, monospace;
-    font-size: 0.65rem;
+    font-size: var(--ui-font-size-xs);
     font-weight: 600;
     color: var(--docs-secondary);
     background: var(--ui-color-surface-raised);
@@ -221,7 +221,7 @@ function frameworkCode(p: (typeof PATTERNS)[number], fw: Framework): string {
   .pattern-deeplink {
     display: inline-block;
     margin-top: 0.7rem;
-    font-size: 0.78rem;
+    font-size: var(--ui-font-size-sm);
     font-weight: 600;
     color: var(--docs-secondary);
     text-decoration: none;

@@ -401,7 +401,7 @@ function CodePane({
         <span
           style={{
             fontFamily: 'monospace',
-            fontSize: '0.7rem',
+            fontSize: 'var(--ui-font-size-xs)',
             fontWeight: 700,
             color: labelColor,
             letterSpacing: '0.03em',
@@ -415,7 +415,7 @@ function CodePane({
             background: 'none',
             border: 'none',
             cursor: 'pointer',
-            fontSize: '0.68rem',
+            fontSize: 'var(--ui-font-size-xs)',
             color: copied
               ? 'var(--ui-color-primary)'
               : 'var(--ui-color-text-muted)',
@@ -600,7 +600,7 @@ export default function McpExplorer() {
         </h2>
         <p
           style={{
-            fontSize: '0.9rem',
+            fontSize: 'var(--ui-font-size-md)',
             color: 'var(--ui-color-text-muted)',
             margin: 0,
             maxWidth: '560px',
@@ -626,10 +626,10 @@ export default function McpExplorer() {
         >
           <span
             style={{
-              fontSize: '0.7rem',
+              fontSize: 'var(--ui-font-size-xs)',
               fontWeight: 600,
               textTransform: 'uppercase',
-              letterSpacing: '0.08em',
+              letterSpacing: '0.06em',
               color: 'var(--ui-color-text-muted)',
               marginRight: '0.25rem',
             }}
@@ -681,7 +681,7 @@ export default function McpExplorer() {
           <span
             style={{
               marginLeft: '0.5rem',
-              fontSize: '0.72rem',
+              fontSize: 'var(--ui-font-size-xs)',
               fontFamily: 'monospace',
               color: 'var(--ui-color-text-muted)',
             }}
@@ -694,7 +694,7 @@ export default function McpExplorer() {
               display: 'flex',
               alignItems: 'center',
               gap: '0.3rem',
-              fontSize: '0.7rem',
+              fontSize: 'var(--ui-font-size-xs)',
               fontWeight: 700,
               fontFamily: 'monospace',
               textTransform: 'uppercase',
@@ -732,7 +732,6 @@ export default function McpExplorer() {
       >
         <p
           style={{
-            fontSize: '0.82rem',
             color: 'var(--ui-color-text-muted)',
             margin: 0,
             lineHeight: '1.6',
@@ -774,7 +773,7 @@ export default function McpExplorer() {
             >
               <span
                 style={{
-                  fontSize: '0.62rem',
+                  fontSize: 'var(--ui-font-size-xs)',
                   fontFamily: 'monospace',
                   fontWeight: 700,
                   color: 'var(--ui-color-primary)',
@@ -788,7 +787,7 @@ export default function McpExplorer() {
               </span>
               <span
                 style={{
-                  fontSize: '0.75rem',
+                  fontSize: 'var(--ui-font-size-xs)',
                   fontWeight: 700,
                   color: 'var(--ui-color-text)',
                 }}
@@ -798,7 +797,7 @@ export default function McpExplorer() {
             </div>
             <p
               style={{
-                fontSize: '0.71rem',
+                fontSize: 'var(--ui-font-size-sm)',
                 color: 'var(--ui-color-text-muted)',
                 margin: 0,
                 lineHeight: '1.5',
@@ -823,10 +822,10 @@ export default function McpExplorer() {
           <div
             style={{
               padding: '0.65rem 0.85rem 0.5rem',
-              fontSize: '0.62rem',
+              fontSize: 'var(--ui-font-size-xs)',
               fontWeight: 700,
               textTransform: 'uppercase',
-              letterSpacing: '0.1em',
+              letterSpacing: '0.06em',
               color: 'var(--ui-color-text-muted)',
             }}
           >
@@ -901,7 +900,7 @@ export default function McpExplorer() {
             </div>
             <p
               style={{
-                fontSize: '0.82rem',
+                fontSize: 'var(--ui-font-size-sm)',
                 color: 'var(--ui-color-text-muted)',
                 margin: 0,
                 lineHeight: '1.6',
@@ -916,7 +915,7 @@ export default function McpExplorer() {
                   padding: '0.55rem 0.85rem',
                   background: 'var(--ui-color-info-bg)',
                   borderRadius: 'var(--ui-radius-sm)',
-                  fontSize: '0.75rem',
+                  fontSize: 'var(--ui-font-size-sm)',
                   color: 'var(--ui-color-info-text)',
                   lineHeight: '1.55',
                   display: 'flex',
@@ -942,10 +941,10 @@ export default function McpExplorer() {
             >
               <div
                 style={{
-                  fontSize: '0.62rem',
+                  fontSize: 'var(--ui-font-size-xs)',
                   fontWeight: 700,
                   textTransform: 'uppercase',
-                  letterSpacing: '0.1em',
+                  letterSpacing: '0.06em',
                   color: 'var(--ui-color-text-muted)',
                 }}
               >
@@ -975,7 +974,7 @@ export default function McpExplorer() {
                     <span
                       style={{
                         fontFamily: 'monospace',
-                        fontSize: '0.72rem',
+                        fontSize: 'var(--ui-font-size-xs)',
                         color: 'var(--docs-secondary, #89ceff)',
                       }}
                     >
@@ -984,7 +983,7 @@ export default function McpExplorer() {
                     {param.description && (
                       <span
                         style={{
-                          fontSize: '0.72rem',
+                          fontSize: 'var(--ui-font-size-sm)',
                           color: 'var(--ui-color-text-muted)',
                         }}
                       >
@@ -1051,7 +1050,7 @@ export default function McpExplorer() {
                                 : 'var(--ui-color-text-muted)',
                               cursor: 'pointer',
                               fontFamily: 'monospace',
-                              fontSize: '0.72rem',
+                              fontSize: 'var(--ui-font-size-xs)',
                               fontWeight: 500,
                             }}
                           >
@@ -1171,7 +1170,7 @@ export default function McpExplorer() {
                   background: 'rgba(68,218,218,0.04)',
                   border: '1px solid rgba(68,218,218,0.08)',
                   borderRadius: 'var(--ui-radius-sm)',
-                  fontSize: '0.75rem',
+                  fontSize: 'var(--ui-font-size-sm)',
                   color: 'var(--ui-color-text-muted)',
                   lineHeight: '1.6',
                 }}
@@ -1211,7 +1210,6 @@ export default function McpExplorer() {
         </h2>
         <p
           style={{
-            fontSize: '0.85rem',
             color: 'var(--ui-color-text-muted)',
             marginBottom: '1.75rem',
             lineHeight: '1.65',
@@ -1232,7 +1230,7 @@ export default function McpExplorer() {
             <div style={{ marginBottom: '0.6rem' }}>
               <span
                 style={{
-                  fontSize: '0.78rem',
+                  fontSize: 'var(--ui-font-size-sm)',
                   fontWeight: 700,
                   color: 'var(--ui-color-text)',
                 }}
@@ -1243,7 +1241,7 @@ export default function McpExplorer() {
                 style={{
                   marginLeft: '0.5rem',
                   fontFamily: 'monospace',
-                  fontSize: '0.7rem',
+                  fontSize: 'var(--ui-font-size-xs)',
                   color: 'var(--docs-secondary, #89ceff)',
                   overflowWrap: 'anywhere',
                 }}
@@ -1275,7 +1273,7 @@ export default function McpExplorer() {
             <div style={{ marginBottom: '0.6rem' }}>
               <span
                 style={{
-                  fontSize: '0.78rem',
+                  fontSize: 'var(--ui-font-size-sm)',
                   fontWeight: 700,
                   color: 'var(--ui-color-text)',
                 }}
@@ -1286,7 +1284,7 @@ export default function McpExplorer() {
                 style={{
                   marginLeft: '0.5rem',
                   fontFamily: 'monospace',
-                  fontSize: '0.7rem',
+                  fontSize: 'var(--ui-font-size-xs)',
                   color: 'var(--docs-secondary, #89ceff)',
                   overflowWrap: 'anywhere',
                 }}

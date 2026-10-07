@@ -491,7 +491,7 @@ function ComponentDemo({ name }: { name: string }) {
             <p
               style={{
                 margin: '0 0 0.5rem',
-                fontSize: '0.85rem',
+                fontSize: 'var(--ui-font-size-sm)',
                 opacity: 0.7,
               }}
             >
@@ -549,7 +549,11 @@ function ComponentDemo({ name }: { name: string }) {
         >
           <div>
             <p
-              style={{ margin: '0 0 0.5rem', fontSize: '0.8rem', opacity: 0.7 }}
+              style={{
+                margin: '0 0 0.5rem',
+                fontSize: 'var(--ui-font-size-sm)',
+                opacity: 0.7,
+              }}
             >
               25%
             </p>
@@ -557,7 +561,11 @@ function ComponentDemo({ name }: { name: string }) {
           </div>
           <div>
             <p
-              style={{ margin: '0 0 0.5rem', fontSize: '0.8rem', opacity: 0.7 }}
+              style={{
+                margin: '0 0 0.5rem',
+                fontSize: 'var(--ui-font-size-sm)',
+                opacity: 0.7,
+              }}
             >
               60% — Success
             </p>
@@ -565,7 +573,11 @@ function ComponentDemo({ name }: { name: string }) {
           </div>
           <div>
             <p
-              style={{ margin: '0 0 0.5rem', fontSize: '0.8rem', opacity: 0.7 }}
+              style={{
+                margin: '0 0 0.5rem',
+                fontSize: 'var(--ui-font-size-sm)',
+                opacity: 0.7,
+              }}
             >
               85% — Warning
             </p>
@@ -573,7 +585,11 @@ function ComponentDemo({ name }: { name: string }) {
           </div>
           <div>
             <p
-              style={{ margin: '0 0 0.5rem', fontSize: '0.8rem', opacity: 0.7 }}
+              style={{
+                margin: '0 0 0.5rem',
+                fontSize: 'var(--ui-font-size-sm)',
+                opacity: 0.7,
+              }}
             >
               Indeterminate
             </p>
@@ -642,7 +658,7 @@ function ComponentDemo({ name }: { name: string }) {
           <AtlDialog open={dialogOpen} onOpenChange={setDialogOpen} size="md">
             <AtlDialogHeader>Component Specification</AtlDialogHeader>
             <AtlDialogContent>
-              <p style={{ margin: 0, fontSize: '0.9375rem' }}>
+              <p style={{ margin: 0, fontSize: 'var(--ui-font-size-md)' }}>
                 The <code>AtlDialog</code> uses the native{' '}
                 <code>&lt;dialog&gt;</code> element with built-in focus trapping
                 and Escape key handling.
@@ -785,7 +801,7 @@ function ComponentDemo({ name }: { name: string }) {
       );
     default:
       return (
-        <p style={{ opacity: 0.6, fontSize: '0.875rem' }}>
+        <p style={{ opacity: 0.6, fontSize: 'var(--ui-font-size-md)' }}>
           Interactive demo coming soon. See the code example above.
         </p>
       );

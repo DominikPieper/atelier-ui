@@ -70,3 +70,6 @@ docs/.astro
 
 # P1 spike output (tasks/spikes/p1-css/README.md)
 tasks/spikes/**/out/
+
+# Impeccable critique snapshots — local design-review state, read by /impeccable polish
+.impeccable/

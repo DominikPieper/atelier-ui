@@ -54,7 +54,13 @@ export function LoginFormDemo() {
             <h3 style={{ margin: 0, fontSize: '1.25rem', fontWeight: 600 }}>
               Sign in
             </h3>
-            <p style={{ margin: 0, fontSize: '0.875rem', opacity: 0.7 }}>
+            <p
+              style={{
+                margin: 0,
+                fontSize: 'var(--ui-font-size-sm)',
+                opacity: 0.7,
+              }}
+            >
               Enter your credentials to continue
             </p>
           </div>
@@ -75,7 +81,9 @@ export function LoginFormDemo() {
             <div
               style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}
             >
-              <label style={{ fontSize: '0.875rem', fontWeight: 500 }}>
+              <label
+                style={{ fontSize: 'var(--ui-font-size-sm)', fontWeight: 500 }}
+              >
                 Email
               </label>
               <AtlInput
@@ -87,7 +95,9 @@ export function LoginFormDemo() {
             <div
               style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}
             >
-              <label style={{ fontSize: '0.875rem', fontWeight: 500 }}>
+              <label
+                style={{ fontSize: 'var(--ui-font-size-sm)', fontWeight: 500 }}
+              >
                 Password
               </label>
               <AtlInput
@@ -118,7 +128,13 @@ export function SettingsPageDemo() {
       <h3 style={{ margin: '0 0 4px', fontSize: '1.5rem', fontWeight: 600 }}>
         Settings
       </h3>
-      <p style={{ margin: '0 0 1.5rem', fontSize: '0.9375rem', opacity: 0.7 }}>
+      <p
+        style={{
+          margin: '0 0 1.5rem',
+          fontSize: 'var(--ui-font-size-sm)',
+          opacity: 0.7,
+        }}
+      >
         Manage your account preferences.
       </p>
       {success && (
@@ -148,7 +164,9 @@ export function SettingsPageDemo() {
             <div
               style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}
             >
-              <label style={{ fontSize: '0.875rem', fontWeight: 500 }}>
+              <label
+                style={{ fontSize: 'var(--ui-font-size-sm)', fontWeight: 500 }}
+              >
                 Full Name
               </label>
               <AtlInput type="text" placeholder="John Doe" />
@@ -156,7 +174,9 @@ export function SettingsPageDemo() {
             <div
               style={{ display: 'flex', flexDirection: 'column', gap: '4px' }}
             >
-              <label style={{ fontSize: '0.875rem', fontWeight: 500 }}>
+              <label
+                style={{ fontSize: 'var(--ui-font-size-sm)', fontWeight: 500 }}
+              >
                 Email
               </label>
               <AtlInput type="email" placeholder="john@example.com" />
@@ -187,7 +207,9 @@ export function SettingsPageDemo() {
                 maxWidth: '300px',
               }}
             >
-              <label style={{ fontSize: '0.875rem', fontWeight: 500 }}>
+              <label
+                style={{ fontSize: 'var(--ui-font-size-sm)', fontWeight: 500 }}
+              >
                 Profile visibility
               </label>
               <AtlSelect placeholder="Select visibility">
@@ -234,14 +256,20 @@ export function ConfirmationDemo() {
         <h3
           style={{
             margin: '0 0 4px',
-            fontSize: '1.125rem',
+            fontSize: 'var(--ui-font-size-lg)',
             fontWeight: 600,
             color: 'var(--ui-color-danger)',
           }}
         >
           Danger Zone
         </h3>
-        <p style={{ margin: '0 0 1rem', fontSize: '0.875rem', opacity: 0.7 }}>
+        <p
+          style={{
+            margin: '0 0 1rem',
+            fontSize: 'var(--ui-font-size-sm)',
+            opacity: 0.7,
+          }}
+        >
           Deleting your account is permanent.
         </p>
         <AtlButton variant="primary" onClick={() => setOpen(true)}>
@@ -252,7 +280,7 @@ export function ConfirmationDemo() {
         <AtlDialogHeader>Delete Account</AtlDialogHeader>
         <AtlDialogContent>
           <AtlAlert variant="warning">This action cannot be undone.</AtlAlert>
-          <p style={{ marginTop: '1rem', fontSize: '0.875rem' }}>
+          <p style={{ marginTop: '1rem', fontSize: 'var(--ui-font-size-md)' }}>
             Are you sure you want to delete your account?
           </p>
         </AtlDialogContent>
@@ -337,7 +365,13 @@ export function DataListDemo() {
           marginBottom: '0.5rem',
         }}
       >
-        <h3 style={{ margin: 0, fontSize: '1.125rem', fontWeight: 600 }}>
+        <h3
+          style={{
+            margin: 0,
+            fontSize: 'var(--ui-font-size-lg)',
+            fontWeight: 600,
+          }}
+        >
           Projects
         </h3>
         <AtlButton variant="primary" size="sm">
@@ -369,7 +403,7 @@ export function DataListDemo() {
                 <p
                   style={{
                     margin: '4px 0 0',
-                    fontSize: '0.8125rem',
+                    fontSize: 'var(--ui-font-size-sm)',
                     opacity: 0.7,
                   }}
                 >
@@ -408,7 +442,13 @@ export function NotificationCenterDemo() {
           marginBottom: '1rem',
         }}
       >
-        <h3 style={{ margin: 0, fontSize: '1.125rem', fontWeight: 600 }}>
+        <h3
+          style={{
+            margin: 0,
+            fontSize: 'var(--ui-font-size-lg)',
+            fontWeight: 600,
+          }}
+        >
           Notifications
         </h3>
         <AtlButton variant="outline" size="sm">
@@ -554,10 +594,22 @@ export function ManagementDashboardDemo() {
         }}
       >
         <div>
-          <h3 style={{ margin: 0, fontSize: '1.125rem', fontWeight: 600 }}>
+          <h3
+            style={{
+              margin: 0,
+              fontSize: 'var(--ui-font-size-lg)',
+              fontWeight: 600,
+            }}
+          >
             Operations Overview
           </h3>
-          <p style={{ margin: '4px 0 0', fontSize: '0.8125rem', opacity: 0.7 }}>
+          <p
+            style={{
+              margin: '4px 0 0',
+              fontSize: 'var(--ui-font-size-sm)',
+              opacity: 0.7,
+            }}
+          >
             Snapshot across the selected range
           </p>
         </div>
@@ -588,7 +640,7 @@ export function ManagementDashboardDemo() {
             <AtlCardContent>
               <div
                 style={{
-                  fontSize: '0.75rem',
+                  fontSize: 'var(--ui-font-size-xs)',
                   opacity: 0.65,
                   textTransform: 'uppercase',
                   letterSpacing: '0.04em',
@@ -612,7 +664,11 @@ export function ManagementDashboardDemo() {
                 </AtlBadge>
               </div>
               <p
-                style={{ margin: '8px 0 0', fontSize: '0.7rem', opacity: 0.65 }}
+                style={{
+                  margin: '8px 0 0',
+                  fontSize: 'var(--ui-font-size-xs)',
+                  opacity: 0.65,
+                }}
               >
                 {m.foot}
               </p>
@@ -686,7 +742,7 @@ export function ManagementDashboardDemo() {
                   style={{
                     display: 'flex',
                     justifyContent: 'space-between',
-                    fontSize: '0.8125rem',
+                    fontSize: 'var(--ui-font-size-sm)',
                     marginBottom: '4px',
                   }}
                 >
@@ -705,7 +761,7 @@ export function ManagementDashboardDemo() {
                   style={{
                     display: 'flex',
                     justifyContent: 'space-between',
-                    fontSize: '0.8125rem',
+                    fontSize: 'var(--ui-font-size-sm)',
                     marginBottom: '4px',
                   }}
                 >
@@ -724,7 +780,7 @@ export function ManagementDashboardDemo() {
                   style={{
                     display: 'flex',
                     justifyContent: 'space-between',
-                    fontSize: '0.8125rem',
+                    fontSize: 'var(--ui-font-size-sm)',
                     marginBottom: '4px',
                   }}
                 >

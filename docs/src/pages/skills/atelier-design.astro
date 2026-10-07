@@ -91,7 +91,7 @@ if (listedReferences !== designReferenceFiles.length) {
       <h1 class="docs-page-h1">atelier-design</h1>
       <p
         style="
-          font-size: 0.9rem;
+          font-size: var(--ui-font-size-md);
           color: var(--ui-color-text-muted);
           margin: 0 0 0.85rem;
           max-width: 640px;
@@ -115,7 +115,7 @@ if (listedReferences !== designReferenceFiles.length) {
         <span
           style="
             font-family: monospace;
-            font-size: 0.75rem;
+            font-size: var(--ui-font-size-xs);
             padding: 0.2rem 0.55rem;
             background: color-mix(
               in srgb,
@@ -128,7 +128,11 @@ if (listedReferences !== designReferenceFiles.length) {
           "
           >v{designSkillVersion}</span
         >
-        <span style="font-size: 0.75rem; color: var(--ui-color-text-muted)"
+        <span
+          style="
+            font-size: var(--ui-font-size-sm);
+            color: var(--ui-color-text-muted);
+          "
           >{designTokenCount} tokens · {designTypeRoleCount} type roles ·
           {designPreviewCount} preview cards · 1 UI kit</span
         >
@@ -143,7 +147,6 @@ if (listedReferences !== designReferenceFiles.length) {
           color: var(--ui-color-text-muted);
           line-height: 1.65;
           margin: 0 0 1.25rem;
-          font-size: 0.85rem;
           max-width: 660px;
         "
       >
@@ -170,7 +173,7 @@ if (listedReferences !== designReferenceFiles.length) {
             <td>{designTypefaces.ui}</td>
             <td
               style="
-                font-size: 0.82rem;
+                font-size: var(--ui-font-size-sm);
                 color: var(--ui-color-text-muted);
                 line-height: 1.55;
               "
@@ -184,7 +187,7 @@ if (listedReferences !== designReferenceFiles.length) {
             <td>{designTypefaces.display}</td>
             <td
               style="
-                font-size: 0.82rem;
+                font-size: var(--ui-font-size-sm);
                 color: var(--ui-color-text-muted);
                 line-height: 1.55;
               "
@@ -198,7 +201,7 @@ if (listedReferences !== designReferenceFiles.length) {
             <td>{designTypefaces.mono}</td>
             <td
               style="
-                font-size: 0.82rem;
+                font-size: var(--ui-font-size-sm);
                 color: var(--ui-color-text-muted);
                 line-height: 1.55;
               "
@@ -213,7 +216,7 @@ if (listedReferences !== designReferenceFiles.length) {
           color: var(--ui-color-text-muted);
           line-height: 1.6;
           margin: 0.9rem 0 0;
-          font-size: 0.78rem;
+          font-size: var(--ui-font-size-sm);
         "
       >
         The three families above are read out of the skill's own token sheet at
@@ -230,7 +233,6 @@ if (listedReferences !== designReferenceFiles.length) {
           color: var(--ui-color-text-muted);
           line-height: 1.65;
           margin: 0 0 1rem;
-          font-size: 0.85rem;
           max-width: 660px;
         "
       >
@@ -262,7 +264,7 @@ if (listedReferences !== designReferenceFiles.length) {
             </td>
             <td
               style="
-                font-size: 0.82rem;
+                font-size: var(--ui-font-size-sm);
                 color: var(--ui-color-text-muted);
                 line-height: 1.55;
               "
@@ -291,7 +293,6 @@ if (listedReferences !== designReferenceFiles.length) {
           color: var(--ui-color-text-muted);
           line-height: 1.65;
           margin: 1rem 0 0;
-          font-size: 0.8rem;
         "
       >
         The skill needs no MCP server. If you are working in the Atelier repo
@@ -309,7 +310,6 @@ if (listedReferences !== designReferenceFiles.length) {
           color: var(--ui-color-text-muted);
           line-height: 1.65;
           margin: 0 0 1rem;
-          font-size: 0.85rem;
           max-width: 640px;
         "
       >
@@ -329,7 +329,6 @@ if (listedReferences !== designReferenceFiles.length) {
           color: var(--ui-color-text-muted);
           line-height: 1.65;
           margin: 0;
-          font-size: 0.85rem;
           max-width: 660px;
         "
       >

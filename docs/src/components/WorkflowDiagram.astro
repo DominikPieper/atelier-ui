@@ -72,16 +72,36 @@ const arrowLoopId = `${figureId}-arrow-loop`;
       </defs>
 
       <!-- Connector labels -->
-      <text x="252" y="62" class="diagram-eyebrow" text-anchor="middle"
+      <text
+        x="252"
+        y="44"
+        class="diagram-eyebrow"
+        font-size="17"
+        text-anchor="middle"
         >inspect</text
       >
-      <text x="480" y="62" class="diagram-eyebrow" text-anchor="middle"
+      <text
+        x="480"
+        y="44"
+        class="diagram-eyebrow"
+        font-size="17"
+        text-anchor="middle"
         >prompt</text
       >
-      <text x="708" y="62" class="diagram-eyebrow" text-anchor="middle"
+      <text
+        x="708"
+        y="44"
+        class="diagram-eyebrow"
+        font-size="17"
+        text-anchor="middle"
         >ships</text
       >
-      <text x="480" y="280" class="diagram-eyebrow" text-anchor="middle"
+      <text
+        x="480"
+        y="280"
+        class="diagram-eyebrow"
+        font-size="17"
+        text-anchor="middle"
         >iterate</text
       >
 
@@ -104,7 +124,7 @@ const arrowLoopId = `${figureId}-arrow-loop`;
 
       <!-- Loop-back from Component back to Figma along the bottom -->
       <path
-        d="M 822 168 C 822 230 800 248 760 248 L 200 248 C 160 248 138 230 138 168"
+        d="M 822 188 C 822 230 800 248 760 248 L 200 248 C 160 248 138 230 138 188"
         class="diagram-connector diagram-connector--dashed"
         marker-end={`url(#${arrowLoopId})`}
       />
@@ -115,7 +135,7 @@ const arrowLoopId = `${figureId}-arrow-loop`;
           x="48"
           y="56"
           width="180"
-          height="112"
+          height="132"
           rx="14"
           ry="14"
           class="diagram-node"
@@ -154,15 +174,15 @@ const arrowLoopId = `${figureId}-arrow-loop`;
           x="138"
           y="134"
           text-anchor="middle"
-          font-size="15"
+          font-size="18"
           font-weight="700"
           >Figma</text
         >
         <text
           x="138"
-          y="153"
+          y="158"
           text-anchor="middle"
-          font-size="11"
+          font-size="17"
           class="diagram-muted"
           >Tokens · Frames</text
         >
@@ -174,7 +194,7 @@ const arrowLoopId = `${figureId}-arrow-loop`;
           x="276"
           y="56"
           width="180"
-          height="112"
+          height="132"
           rx="14"
           ry="14"
           class="diagram-node"
@@ -194,15 +214,15 @@ const arrowLoopId = `${figureId}-arrow-loop`;
           x="366"
           y="134"
           text-anchor="middle"
-          font-size="15"
+          font-size="18"
           font-weight="700"
           >Storybook</text
         >
         <text
           x="366"
-          y="153"
+          y="158"
           text-anchor="middle"
-          font-size="11"
+          font-size="17"
           class="diagram-muted"
           >Props · Stories · MCP</text
         >
@@ -214,7 +234,7 @@ const arrowLoopId = `${figureId}-arrow-loop`;
           x="504"
           y="56"
           width="180"
-          height="112"
+          height="132"
           rx="14"
           ry="14"
           class="diagram-node diagram-node--accent"
@@ -256,17 +276,18 @@ const arrowLoopId = `${figureId}-arrow-loop`;
           x="594"
           y="134"
           text-anchor="middle"
-          font-size="15"
+          font-size="18"
           font-weight="700"
           >Claude</text
         >
         <text
           x="594"
-          y="153"
+          y="158"
           text-anchor="middle"
-          font-size="11"
+          font-size="17"
           class="diagram-muted"
-          >Reads both · Writes code</text
+          ><tspan x="594">Reads both ·</tspan
+          ><tspan x="594" dy="20">Writes code</tspan></text
         >
       </g>
 
@@ -276,7 +297,7 @@ const arrowLoopId = `${figureId}-arrow-loop`;
           x="732"
           y="56"
           width="180"
-          height="112"
+          height="132"
           rx="14"
           ry="14"
           class="diagram-node"
@@ -289,17 +310,18 @@ const arrowLoopId = `${figureId}-arrow-loop`;
           x="822"
           y="134"
           text-anchor="middle"
-          font-size="15"
+          font-size="18"
           font-weight="700"
           >Component</text
         >
         <text
           x="822"
-          y="153"
+          y="158"
           text-anchor="middle"
-          font-size="11"
+          font-size="17"
           class="diagram-muted"
-          >Design-accurate · Shippable</text
+          ><tspan x="822">Design-accurate ·</tspan
+          ><tspan x="822" dy="20">Shippable</tspan></text
         >
       </g>
     </svg>

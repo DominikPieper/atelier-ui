@@ -94,7 +94,6 @@ export type AtlButtonProps =
           color: var(--ui-color-text-muted);
           line-height: 1.6;
           margin-bottom: 1.25rem;
-          font-size: 0.85rem;
         "
       >
         Any single tool will miss things. Triangulating across all three keeps
@@ -105,7 +104,7 @@ export type AtlButtonProps =
         caption="The three audit lanes overlap on contrast and naming, diverge on what's design-time vs runtime. Use all three."
       >
         <svg
-          viewBox="0 0 880 380"
+          viewBox="0 0 880 780"
           role="img"
           aria-labelledby="tri-title tri-desc"
           preserveAspectRatio="xMidYMid meet"
@@ -123,32 +122,32 @@ export type AtlButtonProps =
           <!-- Three overlapping circles -->
           <g style="mix-blend-mode: normal">
             <circle
-              cx="320"
-              cy="180"
-              r="150"
+              cx="310"
+              cy="485"
+              r="240"
               fill="color-mix(in srgb, var(--ui-color-primary) 22%, transparent)"
               stroke="var(--ui-color-primary)"
               stroke-width="2"
             />
             <circle
-              cx="560"
-              cy="180"
-              r="150"
+              cx="570"
+              cy="485"
+              r="240"
               fill="color-mix(in srgb, var(--docs-secondary, #89ceff) 22%, transparent)"
               stroke="var(--docs-secondary, #89ceff)"
               stroke-width="2"
             />
             <circle
               cx="440"
-              cy="80"
-              r="150"
+              cy="260"
+              r="240"
               fill="color-mix(in srgb, var(--docs-tertiary, #a6d644) 22%, transparent)"
               stroke="var(--docs-tertiary, #a6d644)"
               stroke-width="2"
             />
           </g>
 
-          <!-- Lane labels -->
+          <!-- Lane labels (each inside its own exclusive region) -->
           <g
             font-family="system-ui"
             font-weight="800"
@@ -156,35 +155,35 @@ export type AtlButtonProps =
             text-anchor="middle"
           >
             <text
-              x="200"
-              y="305"
-              font-size="14"
+              x="210"
+              y="584"
+              font-size="16.5"
               style="fill: var(--ui-color-primary)"
               >axe-core</text
             >
-            <text x="200" y="324" font-size="10" class="diagram-muted"
+            <text x="210" y="604" font-size="15.3" class="diagram-muted"
               >DOM · runtime</text
             >
 
             <text
-              x="680"
-              y="305"
-              font-size="14"
+              x="670"
+              y="584"
+              font-size="16.5"
               style="fill: var(--docs-secondary, #89ceff)"
               >Figma a11y audit</text
             >
-            <text x="680" y="324" font-size="10" class="diagram-muted"
+            <text x="670" y="604" font-size="15.3" class="diagram-muted"
               >design · pre-handoff</text
             >
 
             <text
               x="440"
-              y="20"
-              font-size="14"
+              y="76"
+              font-size="16.5"
               style="fill: var(--docs-tertiary, #a6d644)"
               >Spec audit</text
             >
-            <text x="440" y="38" font-size="10" class="diagram-muted"
+            <text x="440" y="96" font-size="15.3" class="diagram-muted"
               >API · code-review</text
             >
           </g>
@@ -192,72 +191,96 @@ export type AtlButtonProps =
           <!-- What each catches uniquely -->
           <g
             font-family="system-ui"
-            font-size="10.5"
+            font-size="15.3"
             fill="var(--ui-color-text)"
           >
             <!-- axe-only (left bottom) -->
-            <text x="240" y="220" text-anchor="middle"
+            <text x="210" y="506" text-anchor="middle"
               >label missing on render</text
             >
-            <text x="240" y="236" text-anchor="middle"
+            <text x="210" y="528" text-anchor="middle"
               >heading-order in real DOM</text
             >
-            <text x="240" y="252" text-anchor="middle"
+            <text x="210" y="550" text-anchor="middle"
               >scrollable-region focus</text
             >
 
             <!-- Figma-only (right bottom) -->
-            <text x="640" y="220" text-anchor="middle">missing variants</text>
-            <text x="640" y="236" text-anchor="middle"
+            <text x="670" y="506" text-anchor="middle">missing variants</text>
+            <text x="670" y="528" text-anchor="middle"
               >target-size &lt; 24×24</text
             >
-            <text x="640" y="252" text-anchor="middle"
+            <text x="670" y="550" text-anchor="middle"
               >color-blind simulation</text
             >
 
             <!-- Spec-only (top) -->
-            <text x="440" y="86" text-anchor="middle">API doesn't enforce</text>
-            <text x="440" y="102" text-anchor="middle">a11y prop missing</text>
-            <text x="440" y="118" text-anchor="middle"
+            <text x="440" y="156" text-anchor="middle"
+              >API doesn't enforce</text
+            >
+            <text x="440" y="178" text-anchor="middle">a11y prop missing</text>
+            <text x="440" y="200" text-anchor="middle"
               >discriminated union gaps</text
             >
 
             <!-- axe ∩ Figma (lower middle) -->
             <text
               x="440"
-              y="220"
+              y="545"
               text-anchor="middle"
               font-style="italic"
               class="diagram-muted"
-              >contrast on real surfaces</text
+              >contrast on</text
+            >
+            <text
+              x="440"
+              y="567"
+              text-anchor="middle"
+              font-style="italic"
+              class="diagram-muted"
+              >real surfaces</text
             >
 
             <!-- spec ∩ axe (left upper) -->
             <text
-              x="320"
-              y="158"
+              x="290"
+              y="314"
               text-anchor="middle"
-              font-size="10"
               font-style="italic"
               class="diagram-muted"
-              >aria-* presence</text
+              >aria-*</text
+            >
+            <text
+              x="290"
+              y="334"
+              text-anchor="middle"
+              font-style="italic"
+              class="diagram-muted"
+              >presence</text
             >
 
             <!-- spec ∩ Figma (right upper) -->
             <text
-              x="560"
-              y="158"
+              x="590"
+              y="314"
               text-anchor="middle"
-              font-size="10"
               font-style="italic"
               class="diagram-muted"
-              >state coverage</text
+              >state</text
+            >
+            <text
+              x="590"
+              y="334"
+              text-anchor="middle"
+              font-style="italic"
+              class="diagram-muted"
+              >coverage</text
             >
 
             <!-- All three (center) -->
             <text
               x="440"
-              y="195"
+              y="414"
               text-anchor="middle"
               font-weight="700"
               style="fill: var(--ui-color-primary)"
@@ -268,9 +291,9 @@ export type AtlButtonProps =
           <!-- Below banner -->
           <text
             x="440"
-            y="364"
+            y="764"
             text-anchor="middle"
-            font-size="11"
+            font-size="15.3"
             font-style="italic"
             class="diagram-muted"
           >
@@ -387,7 +410,6 @@ export type AtlButtonProps =
           color: var(--ui-color-text-muted);
           line-height: 1.6;
           margin-bottom: 1.25rem;
-          font-size: 0.85rem;
         "
       >
         Five steps. Each step feeds the next; the loop closes after a
@@ -443,58 +465,58 @@ export type AtlButtonProps =
           <g font-family="system-ui">
             <!-- Step circles -->
             <g>
-              <circle cx="80" cy="100" r="46" class="diagram-node" />
+              <circle cx="80" cy="100" r="58" class="diagram-node" />
               <text
                 x="80"
-                y="98"
+                y="94"
                 text-anchor="middle"
-                font-size="11"
+                font-size="15.3"
                 font-weight="700"
                 >Collect</text
               >
               <text
                 x="80"
-                y="115"
+                y="114"
                 text-anchor="middle"
-                font-size="9"
+                font-size="15.3"
                 class="diagram-muted"
                 >all 3 sources</text
               >
             </g>
             <g>
-              <circle cx="240" cy="100" r="46" class="diagram-node" />
+              <circle cx="240" cy="100" r="58" class="diagram-node" />
               <text
                 x="240"
-                y="98"
+                y="94"
                 text-anchor="middle"
-                font-size="11"
+                font-size="15.3"
                 font-weight="700"
                 >Triangulate</text
               >
               <text
                 x="240"
-                y="115"
+                y="114"
                 text-anchor="middle"
-                font-size="9"
+                font-size="15.3"
                 class="diagram-muted"
                 >map to issues</text
               >
             </g>
             <g>
-              <circle cx="400" cy="100" r="46" class="diagram-node" />
+              <circle cx="400" cy="100" r="58" class="diagram-node" />
               <text
                 x="400"
-                y="98"
+                y="94"
                 text-anchor="middle"
-                font-size="11"
+                font-size="15.3"
                 font-weight="700"
                 >Prioritize</text
               >
               <text
                 x="400"
-                y="115"
+                y="114"
                 text-anchor="middle"
-                font-size="9"
+                font-size="15.3"
                 class="diagram-muted"
                 >WCAG impact</text
               >
@@ -503,42 +525,42 @@ export type AtlButtonProps =
               <circle
                 cx="560"
                 cy="100"
-                r="48"
+                r="60"
                 class="diagram-node diagram-node--accent"
               />
               <text
                 x="560"
-                y="98"
+                y="94"
                 text-anchor="middle"
-                font-size="11"
+                font-size="15.3"
                 font-weight="700"
                 style="fill: var(--ui-color-primary)"
                 >Fix smallest</text
               >
               <text
                 x="560"
-                y="115"
+                y="114"
                 text-anchor="middle"
-                font-size="9"
+                font-size="15.3"
                 class="diagram-muted"
                 >one PR each</text
               >
             </g>
             <g>
-              <circle cx="720" cy="100" r="46" class="diagram-node" />
+              <circle cx="720" cy="100" r="58" class="diagram-node" />
               <text
                 x="720"
-                y="98"
+                y="94"
                 text-anchor="middle"
-                font-size="11"
+                font-size="15.3"
                 font-weight="700"
                 >Verify</text
               >
               <text
                 x="720"
-                y="115"
+                y="114"
                 text-anchor="middle"
-                font-size="9"
+                font-size="15.3"
                 class="diagram-muted"
                 >re-run sources</text
               >
@@ -546,33 +568,33 @@ export type AtlButtonProps =
 
             <!-- Forward arrows -->
             <line
-              x1="128"
+              x1="142"
               y1="100"
-              x2="190"
+              x2="178"
               y2="100"
               class="diagram-connector"
               marker-end="url(#loop-arrow)"
             />
             <line
-              x1="288"
+              x1="302"
               y1="100"
-              x2="350"
+              x2="338"
               y2="100"
               class="diagram-connector"
               marker-end="url(#loop-arrow)"
             />
             <line
-              x1="448"
+              x1="462"
               y1="100"
-              x2="510"
+              x2="496"
               y2="100"
               class="diagram-connector"
               marker-end="url(#loop-arrow)"
             />
             <line
-              x1="610"
+              x1="624"
               y1="100"
-              x2="670"
+              x2="658"
               y2="100"
               class="diagram-connector"
               marker-end="url(#loop-arrow)"
@@ -580,7 +602,7 @@ export type AtlButtonProps =
 
             <!-- Loop-back -->
             <path
-              d="M 720 148 C 720 195 720 200 600 200 L 200 200 C 80 200 80 195 80 148"
+              d="M 720 158 C 720 205 720 208 600 208 L 200 208 C 80 208 80 205 80 158"
               class="diagram-connector diagram-connector--dashed"
               marker-end="url(#loop-arrow-back)"
             />
@@ -588,7 +610,7 @@ export type AtlButtonProps =
               x="400"
               y="195"
               text-anchor="middle"
-              font-size="10"
+              font-size="15.3"
               class="diagram-muted"
               >re-run on next change</text
             >
@@ -605,7 +627,6 @@ export type AtlButtonProps =
           color: var(--ui-color-text-muted);
           line-height: 1.6;
           margin-bottom: 1.25rem;
-          font-size: 0.85rem;
         "
       >
         A component all three lanes touched. Figma said it was perfect; axe said
@@ -616,7 +637,7 @@ export type AtlButtonProps =
         caption="Each lane tells a different part of the same story. The fix lands in the component and its story, with index.ts updated for the legacy gates; all three turn green."
       >
         <svg
-          viewBox="0 0 880 280"
+          viewBox="0 0 880 520"
           role="img"
           aria-labelledby="case-title case-desc"
           preserveAspectRatio="xMidYMid meet"
@@ -632,247 +653,238 @@ export type AtlButtonProps =
           </desc>
 
           <g font-family="system-ui">
-            <!-- Panel 1: Figma -->
+            <!-- Panel 1 -->
             <rect
-              x="40"
-              y="40"
-              width="200"
-              height="180"
+              x="20"
+              y="16"
+              width="410"
+              height="212"
               rx="14"
               ry="14"
               class="diagram-node"
             />
             <text
-              x="60"
-              y="68"
-              font-size="10"
+              x="40"
+              y="48"
+              font-size="15.3"
               font-weight="800"
-              letter-spacing="0.1em"
+              letter-spacing="0.06em"
               style="fill: var(--docs-secondary, #89ceff)"
               >FIGMA AUDIT</text
             >
             <text
-              x="60"
-              y="100"
+              x="40"
+              y="92"
               font-size="36"
               font-weight="800"
               style="fill: var(--ui-color-success, #34d399)"
               >100</text
             >
-            <text x="60" y="120" font-size="11" class="diagram-muted"
+            <text x="40" y="114" font-size="15.3" class="diagram-muted"
               >overall score</text
             >
-            <text x="60" y="148" font-size="10" class="diagram-muted"
+            <text x="40" y="144" font-size="15.3" class="diagram-muted"
               >✓ variant coverage</text
             >
-            <text x="60" y="166" font-size="10" class="diagram-muted"
+            <text x="40" y="164" font-size="15.3" class="diagram-muted"
               >✓ color blind</text
             >
-            <text x="60" y="184" font-size="10" class="diagram-muted"
+            <text x="40" y="184" font-size="15.3" class="diagram-muted"
               >✓ annotations</text
             >
             <text
-              x="60"
-              y="208"
-              font-size="10"
+              x="40"
+              y="212"
+              font-size="15.3"
               font-style="italic"
               class="diagram-muted"
               >"perfect"</text
             >
-
-            <!-- Panel 2: axe -->
+            <!-- Panel 2 -->
             <rect
-              x="260"
-              y="40"
-              width="200"
-              height="180"
+              x="450"
+              y="16"
+              width="410"
+              height="212"
               rx="14"
               ry="14"
               class="diagram-node"
             />
             <text
-              x="280"
-              y="68"
-              font-size="10"
+              x="470"
+              y="48"
+              font-size="15.3"
               font-weight="800"
-              letter-spacing="0.1em"
+              letter-spacing="0.06em"
               style="fill: var(--ui-color-primary)"
               >AXE-CORE</text
             >
             <text
-              x="280"
-              y="100"
+              x="470"
+              y="92"
               font-size="36"
               font-weight="800"
               style="fill: var(--ui-color-danger, #ef4444)"
               >3</text
             >
-            <text x="280" y="120" font-size="11" class="diagram-muted"
+            <text x="470" y="114" font-size="15.3" class="diagram-muted"
               >violations · serious</text
             >
             <text
-              x="280"
-              y="148"
-              font-size="10"
+              x="470"
+              y="144"
+              font-size="15.3"
               class="diagram-mono diagram-muted"
               >aria-progressbar-name</text
             >
-            <text x="280" y="174" font-size="10" class="diagram-muted"
+            <text x="470" y="164" font-size="15.3" class="diagram-muted"
               >3 progress bars on</text
             >
-            <text x="280" y="190" font-size="10" class="diagram-muted"
+            <text x="470" y="184" font-size="15.3" class="diagram-muted"
               >/patterns dashboard</text
             >
             <text
-              x="280"
-              y="208"
-              font-size="10"
+              x="470"
+              y="212"
+              font-size="15.3"
               font-style="italic"
               class="diagram-muted"
               >"missing label"</text
             >
-
-            <!-- Panel 3: Spec -->
+            <!-- Panel 3 -->
             <rect
-              x="480"
-              y="40"
-              width="200"
-              height="180"
+              x="20"
+              y="244"
+              width="410"
+              height="212"
               rx="14"
               ry="14"
               class="diagram-node"
             />
             <text
-              x="500"
-              y="68"
-              font-size="10"
+              x="40"
+              y="276"
+              font-size="15.3"
               font-weight="800"
-              letter-spacing="0.1em"
+              letter-spacing="0.06em"
               style="fill: var(--docs-tertiary, #a6d644)"
               >SPEC AUDIT</text
             >
             <text
-              x="500"
-              y="100"
+              x="40"
+              y="320"
               font-size="36"
               font-weight="800"
               style="fill: var(--ui-color-warning, #f59e0b)"
               >!</text
             >
-            <text x="500" y="120" font-size="11" class="diagram-muted"
+            <text x="40" y="342" font-size="15.3" class="diagram-muted"
               >API gap</text
             >
             <text
-              x="500"
-              y="148"
-              font-size="10"
+              x="40"
+              y="372"
+              font-size="15.3"
               class="diagram-mono diagram-muted"
               >AtlProgressSpec</text
             >
-            <text x="500" y="166" font-size="10" class="diagram-muted"
+            <text x="40" y="392" font-size="15.3" class="diagram-muted"
               >has no label prop</text
             >
-            <text x="500" y="184" font-size="10" class="diagram-muted"
+            <text x="40" y="412" font-size="15.3" class="diagram-muted"
               >consumers can't pass</text
             >
             <text
-              x="500"
-              y="208"
-              font-size="10"
+              x="40"
+              y="440"
+              font-size="15.3"
               font-style="italic"
               class="diagram-muted"
               >"the why"</text
             >
-
-            <!-- Panel 4: Fix -->
+            <!-- Panel 4 -->
             <rect
-              x="700"
-              y="40"
-              width="160"
-              height="180"
+              x="450"
+              y="244"
+              width="410"
+              height="212"
               rx="14"
               ry="14"
               class="diagram-node diagram-node--accent"
             />
             <text
-              x="720"
-              y="68"
-              font-size="10"
+              x="470"
+              y="276"
+              font-size="15.3"
               font-weight="800"
-              letter-spacing="0.1em"
+              letter-spacing="0.06em"
               style="fill: var(--ui-color-primary)"
               >FIX</text
             >
             <text
-              x="720"
-              y="100"
+              x="470"
+              y="320"
               font-size="36"
               font-weight="800"
               style="fill: var(--ui-color-success, #34d399)"
               >✓</text
             >
-            <text x="720" y="120" font-size="11" class="diagram-muted"
+            <text x="470" y="342" font-size="15.3" class="diagram-muted"
               >all green</text
             >
             <text
-              x="720"
-              y="148"
-              font-size="10"
+              x="470"
+              y="372"
+              font-size="15.3"
               class="diagram-mono diagram-muted"
               >label?: string</text
             >
-            <text x="720" y="166" font-size="10" class="diagram-muted"
+            <text x="470" y="392" font-size="15.3" class="diagram-muted"
               >component + index.ts</text
             >
-            <text x="720" y="184" font-size="10" class="diagram-muted"
+            <text x="470" y="412" font-size="15.3" class="diagram-muted"
               >36 tests pass</text
             >
             <text
-              x="720"
-              y="208"
-              font-size="10"
+              x="470"
+              y="440"
+              font-size="15.3"
               font-style="italic"
               style="fill: var(--ui-color-primary)"
               >1 prop, 1 day</text
             >
-
             <!-- Connecting arrows between panels -->
             <line
-              x1="240"
-              y1="130"
-              x2="260"
-              y2="130"
+              x1="430"
+              y1="122"
+              x2="450"
+              y2="122"
               class="diagram-connector"
               stroke-dasharray="3,3"
             />
             <line
-              x1="460"
-              y1="130"
-              x2="480"
-              y2="130"
-              class="diagram-connector"
-              stroke-dasharray="3,3"
-            />
-            <line
-              x1="680"
-              y1="130"
-              x2="700"
-              y2="130"
+              x1="430"
+              y1="350"
+              x2="450"
+              y2="350"
               class="diagram-connector"
             />
-
             <!-- Footer -->
             <text
-              x="450"
-              y="260"
+              x="440"
+              y="486"
               text-anchor="middle"
-              font-size="11"
+              font-size="15.3"
               font-style="italic"
               class="diagram-muted"
+              ><tspan x="440"
+                >The Figma score wasn't wrong — it can't see the runtime
+                DOM.</tspan
+              ><tspan x="440" dy="20"
+                >axe wasn't whining — the API really did let us miss the
+                label.</tspan
+              ></text
             >
-              The Figma score wasn't wrong — it can't see the runtime DOM. axe
-              wasn't whining — the API really did let us miss the label.
-            </text>
           </g>
         </svg>
 
@@ -939,7 +951,6 @@ export type AtlButtonProps =
           color: var(--ui-color-text-muted);
           line-height: 1.6;
           margin-bottom: 1.25rem;
-          font-size: 0.85rem;
         "
       >
         Three MCPs cover the three audit lanes. Claude Code orchestrates — runs
@@ -951,7 +962,7 @@ export type AtlButtonProps =
         caption="One chat, three MCP servers, three audit lanes. The LLM decides which tool to call based on the question."
       >
         <svg
-          viewBox="0 0 880 320"
+          viewBox="0 0 880 396"
           role="img"
           aria-labelledby="mcp-title mcp-desc"
           preserveAspectRatio="xMidYMid meet"
@@ -981,179 +992,174 @@ export type AtlButtonProps =
           <g font-family="system-ui">
             <!-- Center: Claude Code -->
             <rect
-              x="340"
-              y="120"
-              width="200"
-              height="80"
+              x="320"
+              y="150"
+              width="240"
+              height="90"
               rx="12"
               ry="12"
               class="diagram-node diagram-node--accent"
             />
             <text
               x="440"
-              y="150"
+              y="178"
               text-anchor="middle"
-              font-size="14"
+              font-size="16.5"
               font-weight="700"
               style="fill: var(--ui-color-primary)"
               >Claude Code</text
             >
             <text
               x="440"
-              y="170"
+              y="200"
               text-anchor="middle"
-              font-size="10"
+              font-size="15.3"
               class="diagram-muted"
               >orchestrates the loop</text
             >
             <text
               x="440"
-              y="186"
+              y="220"
               text-anchor="middle"
-              font-size="10"
+              font-size="15.3"
               class="diagram-muted"
               >parses, prioritizes, fixes</text
             >
-
             <!-- Left: Chrome MCP -->
             <rect
-              x="40"
+              x="16"
               y="40"
-              width="220"
-              height="80"
+              width="300"
+              height="92"
               rx="12"
               ry="12"
               class="diagram-node"
             />
             <text
-              x="150"
+              x="166"
               y="68"
               text-anchor="middle"
-              font-size="13"
+              font-size="16.5"
               font-weight="700"
               >Chrome MCP</text
             >
             <text
-              x="150"
-              y="86"
+              x="166"
+              y="90"
               text-anchor="middle"
-              font-size="10"
+              font-size="15.3"
               class="diagram-mono diagram-muted"
               >javascript_tool · navigate</text
             >
             <text
-              x="150"
-              y="102"
+              x="166"
+              y="110"
               text-anchor="middle"
-              font-size="10"
+              font-size="15.3"
               class="diagram-muted"
               >injects axe-core, runs in-page</text
             >
-
             <!-- Top right: Figma MCP -->
             <rect
-              x="620"
+              x="564"
               y="40"
-              width="220"
-              height="80"
+              width="300"
+              height="92"
               rx="12"
               ry="12"
               class="diagram-node"
             />
             <text
-              x="730"
+              x="714"
               y="68"
               text-anchor="middle"
-              font-size="13"
+              font-size="16.5"
               font-weight="700"
               >figma-console MCP</text
             >
             <text
-              x="730"
-              y="86"
+              x="714"
+              y="90"
               text-anchor="middle"
-              font-size="10"
+              font-size="15.3"
               class="diagram-mono diagram-muted"
               >audit_component_accessibility</text
             >
             <text
-              x="730"
-              y="102"
+              x="714"
+              y="110"
               text-anchor="middle"
-              font-size="10"
+              font-size="15.3"
               class="diagram-muted"
               >scorecard per component-set</text
             >
-
             <!-- Bottom: Repo (Read tool) -->
             <rect
-              x="330"
-              y="240"
-              width="220"
-              height="60"
+              x="270"
+              y="280"
+              width="340"
+              height="70"
               rx="12"
               ry="12"
               class="diagram-node"
             />
             <text
               x="440"
-              y="266"
+              y="306"
               text-anchor="middle"
-              font-size="13"
+              font-size="16.5"
               font-weight="700"
               >Repo · Read tool</text
             >
             <text
               x="440"
-              y="282"
+              y="330"
               text-anchor="middle"
-              font-size="10"
+              font-size="15.3"
               class="diagram-muted"
               >libs/spec/ · libs/&lt;fw&gt;/lib/&lt;component&gt;/</text
             >
-
             <!-- Connectors (Claude → MCP) -->
             <line
-              x1="340"
-              y1="160"
-              x2="260"
-              y2="100"
+              x1="320"
+              y1="180"
+              x2="240"
+              y2="132"
               class="diagram-connector diagram-connector--accent"
               marker-end="url(#mcp-arr)"
             />
             <line
-              x1="540"
-              y1="160"
-              x2="620"
-              y2="100"
+              x1="560"
+              y1="180"
+              x2="640"
+              y2="132"
               class="diagram-connector diagram-connector--accent"
               marker-end="url(#mcp-arr)"
             />
             <line
               x1="440"
-              y1="200"
+              y1="240"
               x2="440"
-              y2="240"
+              y2="280"
               class="diagram-connector diagram-connector--accent"
               marker-end="url(#mcp-arr)"
             />
-
             <!-- Lane labels -->
             <text
-              x="140"
-              y="20"
+              x="166"
+              y="22"
               text-anchor="middle"
-              font-size="10"
+              font-size="15.3"
               font-weight="800"
               letter-spacing="0.06em"
               style="fill: var(--ui-color-primary)"
               >DOM-time</text
             >
             <text
-              x="730"
-              y="20"
+              x="714"
+              y="22"
               text-anchor="middle"
-              font-size="10"
+              font-size="15.3"
               font-weight="800"
               letter-spacing="0.06em"
               style="fill: var(--docs-secondary, #89ceff)"
@@ -1161,9 +1167,9 @@ export type AtlButtonProps =
             >
             <text
               x="440"
-              y="316"
+              y="376"
               text-anchor="middle"
-              font-size="10"
+              font-size="15.3"
               font-weight="800"
               letter-spacing="0.06em"
               style="fill: var(--docs-tertiary, #a6d644)"
@@ -1182,7 +1188,6 @@ export type AtlButtonProps =
           color: var(--ui-color-text-muted);
           line-height: 1.6;
           margin-bottom: 1.25rem;
-          font-size: 0.85rem;
         "
       >
         What each lane looks like in practice — copy these into a Claude Code
@@ -1197,7 +1202,6 @@ export type AtlButtonProps =
           color: var(--ui-color-text-muted);
           line-height: 1.6;
           margin-bottom: 0.75rem;
-          font-size: 0.85rem;
         "
       >
         Lane 1 needs Claude to <em>drive</em> a real browser. The
@@ -1239,7 +1243,6 @@ export type AtlButtonProps =
           color: var(--ui-color-text-muted);
           line-height: 1.6;
           margin-bottom: 1.25rem;
-          font-size: 0.85rem;
         "
       >
         The numbers from the run that produced this page — start to ship, five
@@ -1275,7 +1278,6 @@ export type AtlButtonProps =
           color: var(--ui-color-text-muted);
           line-height: 1.6;
           margin-top: 1.25rem;
-          font-size: 0.85rem;
         "
       >
         The eight P-critical findings split cleanly across the three lanes: four
@@ -1293,7 +1295,6 @@ export type AtlButtonProps =
           color: var(--ui-color-text-muted);
           line-height: 1.6;
           margin-top: 0.85rem;
-          font-size: 0.85rem;
         "
       >
         End state: every directly-touched docs page reports zero axe violations
@@ -1418,7 +1419,7 @@ export type AtlButtonProps =
   }
   .lane-stack__when {
     font-weight: 500;
-    font-size: 0.72rem;
+    font-size: var(--ui-font-size-xs);
     color: var(--ui-color-text-muted);
     text-transform: uppercase;
     letter-spacing: 0.04em;
@@ -1427,12 +1428,12 @@ export type AtlButtonProps =
     margin: 0.35rem 0 0;
     padding-left: 1.1rem;
     color: var(--ui-color-text-muted);
-    font-size: 0.82rem;
+    font-size: var(--ui-font-size-md);
     line-height: 1.55;
   }
   .lane-stack__overlap {
     margin: 0.25rem 0 0;
-    font-size: 0.78rem;
+    font-size: var(--ui-font-size-sm);
     color: var(--ui-color-text-muted);
     font-style: italic;
     line-height: 1.5;
@@ -1464,9 +1465,9 @@ export type AtlButtonProps =
   }
   .case-stack__eyebrow {
     grid-column: 1 / -1;
-    font-size: 0.66rem;
+    font-size: var(--ui-font-size-xs);
     font-weight: 800;
-    letter-spacing: 0.1em;
+    letter-spacing: 0.06em;
     text-transform: uppercase;
   }
   .case-stack__eyebrow--figma {
@@ -1499,7 +1500,7 @@ export type AtlButtonProps =
   .case-stack__body {
     margin: 0;
     grid-row: 2;
-    font-size: 0.82rem;
+    font-size: var(--ui-font-size-md);
     color: var(--ui-color-text-muted);
     line-height: 1.55;
   }
@@ -1509,7 +1510,7 @@ export type AtlButtonProps =
   .case-stack__quote {
     grid-column: 1 / -1;
     margin: 0;
-    font-size: 0.78rem;
+    font-size: var(--ui-font-size-sm);
     color: var(--ui-color-text-muted);
     font-style: italic;
   }

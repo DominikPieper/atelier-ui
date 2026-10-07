@@ -353,7 +353,6 @@ const motion = [
       <p
         style="
           color: var(--ui-color-text-muted);
-          font-size: 0.82rem;
           line-height: 1.6;
           margin-bottom: 1.5rem;
           max-width: 60ch;
@@ -411,10 +410,10 @@ const motion = [
         >
           <div
             style="
-              font-size: 0.62rem;
+              font-size: var(--ui-font-size-xs);
               font-weight: 700;
               text-transform: uppercase;
-              letter-spacing: 0.08em;
+              letter-spacing: 0.06em;
               color: var(--ui-color-text-muted);
             "
           >
@@ -432,7 +431,7 @@ const motion = [
           </div>
           <div
             style="
-              font-size: 0.68rem;
+              font-size: var(--ui-font-size-sm);
               color: var(--ui-color-text-muted);
               margin-bottom: 0.7rem;
             "
@@ -442,7 +441,7 @@ const motion = [
           <div
             style="
               font-family: monospace;
-              font-size: 0.74rem;
+              font-size: var(--ui-font-size-xs);
               font-weight: 600;
               color: var(--ui-color-primary);
             "
@@ -452,7 +451,7 @@ const motion = [
           <div
             style="
               font-family: monospace;
-              font-size: 0.68rem;
+              font-size: var(--ui-font-size-xs);
               color: var(--ui-color-text-muted);
               margin-top: 0.15rem;
             "
@@ -495,7 +494,6 @@ const motion = [
       <p
         style="
           color: var(--ui-color-text-muted);
-          font-size: 0.82rem;
           line-height: 1.6;
           margin-bottom: 1.5rem;
         "
@@ -506,10 +504,10 @@ const motion = [
       {colorGroups.map((group) => <div style="margin-bottom: 1.75rem">
         <div
           style="
-            font-size: 0.68rem;
+            font-size: var(--ui-font-size-xs);
             font-weight: 700;
             text-transform: uppercase;
-            letter-spacing: 0.08em;
+            letter-spacing: 0.06em;
             color: var(--ui-color-text-muted);
             margin-bottom: 0.6rem;
           "
@@ -543,7 +541,10 @@ const motion = [
                 {token.name}
               </div>
               <div
-                style="font-size: 0.72rem; color: var(--ui-color-text-muted)"
+                style="
+                  font-size: var(--ui-font-size-sm);
+                  color: var(--ui-color-text-muted);
+                "
               >
                 {token.desc}
               </div>
@@ -561,7 +562,7 @@ const motion = [
               <span
                 style="
                   font-family: monospace;
-                  font-size: 0.68rem;
+                  font-size: var(--ui-font-size-xs);
                   color: var(--ui-color-text-muted);
                   background: var(--ui-color-surface-sunken);
                   padding: 0.1rem 0.35rem;
@@ -573,7 +574,7 @@ const motion = [
               <span
                 style="
                   font-family: monospace;
-                  font-size: 0.68rem;
+                  font-size: var(--ui-font-size-xs);
                   color: var(--ui-color-text-muted);
                   background: var(--ui-color-surface-sunken);
                   padding: 0.1rem 0.35rem;
@@ -594,7 +595,6 @@ const motion = [
       <p
         style="
           color: var(--ui-color-text-muted);
-          font-size: 0.82rem;
           line-height: 1.6;
           margin-bottom: 1rem;
         "
@@ -652,7 +652,7 @@ const motion = [
           </div>
           <div
             style="
-              font-size: 0.75rem;
+              font-size: var(--ui-font-size-sm);
               color: var(--ui-color-text-muted);
               flex: 1;
               min-width: 200px;
@@ -670,7 +670,6 @@ const motion = [
       <p
         style="
           color: var(--ui-color-text-muted);
-          font-size: 0.82rem;
           line-height: 1.6;
           margin-bottom: 1rem;
         "
@@ -700,7 +699,7 @@ const motion = [
           <div
             style="
               font-family: monospace;
-              font-size: 0.68rem;
+              font-size: var(--ui-font-size-xs);
               font-weight: 600;
               color: var(--ui-color-text);
               text-align: center;
@@ -711,7 +710,7 @@ const motion = [
           <div
             style="
               font-family: monospace;
-              font-size: 0.65rem;
+              font-size: var(--ui-font-size-xs);
               color: var(--ui-color-text-muted);
             "
           >
@@ -719,7 +718,7 @@ const motion = [
           </div>
           <div
             style="
-              font-size: 0.7rem;
+              font-size: var(--ui-font-size-sm);
               color: var(--ui-color-text-muted);
               text-align: center;
               line-height: 1.4;
@@ -737,7 +736,6 @@ const motion = [
       <p
         style="
           color: var(--ui-color-text-muted);
-          font-size: 0.82rem;
           line-height: 1.6;
           margin-bottom: 1rem;
         "
@@ -761,6 +759,7 @@ const motion = [
           "
         >
           <span
+            data-type-specimen
             style={`font-size: var(${t.name}); font-weight: 600; color: var(--ui-color-text); line-height: 1; flex-shrink: 0; min-width: 3.5rem`}
             >Aa</span
           >
@@ -793,7 +792,7 @@ const motion = [
           >
           <span
             style="
-              font-size: 0.75rem;
+              font-size: var(--ui-font-size-sm);
               color: var(--ui-color-text-muted);
               flex: 1;
               min-width: 200px;
@@ -810,7 +809,6 @@ const motion = [
       <p
         style="
           color: var(--ui-color-text-muted);
-          font-size: 0.82rem;
           line-height: 1.6;
           margin-bottom: 1rem;
         "
@@ -829,7 +827,7 @@ const motion = [
           <div
             style="
               font-family: monospace;
-              font-size: 0.72rem;
+              font-size: var(--ui-font-size-xs);
               font-weight: 600;
               color: var(--ui-color-text);
             "
@@ -839,7 +837,7 @@ const motion = [
           <div
             style="
               font-family: monospace;
-              font-size: 0.65rem;
+              font-size: var(--ui-font-size-xs);
               color: var(--ui-color-text-muted);
             "
           >
@@ -847,7 +845,7 @@ const motion = [
           </div>
           <div
             style="
-              font-size: 0.7rem;
+              font-size: var(--ui-font-size-sm);
               color: var(--ui-color-text-muted);
               text-align: center;
               line-height: 1.4;
@@ -865,7 +863,6 @@ const motion = [
       <p
         style="
           color: var(--ui-color-text-muted);
-          font-size: 0.82rem;
           line-height: 1.6;
           margin-bottom: 1rem;
         "
@@ -921,7 +918,6 @@ const motion = [
       <p
         style="
           margin: 0 0 0.3rem;
-          font-size: 0.82rem;
           font-weight: 700;
           color: var(--ui-color-text);
         "
