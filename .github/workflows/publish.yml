@@ -323,6 +323,36 @@ jobs:
           echo "check:release-drift still reports drift after $attempts attempts — treating this as a real publish failure, not lag."
           exit "$status"
 
+      - name: Regenerate llms.txt for the released version
+        if: github.event.inputs.mode != 'publish-only'
+        # docs/public/llms.txt and llms-full.txt embed the version from
+        # libs/angular/package.json (gen-llms-txt.mjs, readVersion). `nx release`
+        # bumps that file inside the release commit, so every release left
+        # `check:llms` red on main until someone hand-committed the regenerated
+        # files (four times, `git log --grep "regen llms"`). Nx 23.2 has a
+        # `preVersionCommand` but no hook between versioning and its commit, so the
+        # regeneration cannot land IN the release commit; it follows it as a second
+        # commit. The release commit is never amended, because the tag points at it.
+        #
+        # Runs after the drift check and before the push, so it is purely local: if
+        # either earlier step failed it never runs, and the push below sends the
+        # release commit, this commit and the tag(s) together under `--atomic`.
+        # `publish-only` makes no commit and is skipped, exactly like the push.
+        #
+        # No retrigger: the push is made with GITHUB_TOKEN, and GitHub does not start
+        # workflow runs for events caused by it. docs/public is not in this
+        # workflow's `paths` filter in any case. A run that bumped nothing leaves
+        # the files unchanged, so no commit is made.
+        run: |
+          node tools/scripts/gen-llms-txt.mjs
+          if git diff --quiet -- docs/public/llms.txt docs/public/llms-full.txt; then
+            echo "llms.txt and llms-full.txt already match the released version; no commit."
+          else
+            git add docs/public/llms.txt docs/public/llms-full.txt
+            git commit --no-verify -m "chore(docs): regen llms.txt after the release commit"
+          fi
+          npm run check:llms
+
       - name: Push the release commit and tag(s)
         if: github.event.inputs.mode != 'publish-only'
         # The only step in this job that touches the remote. Everything above is
