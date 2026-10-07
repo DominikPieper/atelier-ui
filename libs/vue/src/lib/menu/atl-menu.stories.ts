@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite';
+import { expect } from 'storybook/test';
 import AtlMenuTrigger from './atl-menu-trigger.vue';
 
 const FIGMA_FILE =
@@ -56,6 +57,21 @@ export const Default: Story = {
     `,
   }),
   parameters: { design: figmaNode('55-128') },
+  play: async ({ canvas, userEvent }) => {
+    // WAI-ARIA menu button: ArrowDown opens and focuses the first item, arrows
+    // wrap and skip the disabled one, Escape closes and returns focus.
+    const trigger = canvas.getByRole('button', { name: 'Actions' });
+    trigger.focus();
+    await userEvent.keyboard('{ArrowDown}');
+    await expect(canvas.getByRole('menuitem', { name: 'Copy' })).toHaveFocus();
+    await userEvent.keyboard('{ArrowDown}');
+    await expect(canvas.getByRole('menuitem', { name: 'Paste' })).toHaveFocus();
+    await userEvent.keyboard('{ArrowDown}');
+    await expect(canvas.getByRole('menuitem', { name: 'Copy' })).toHaveFocus();
+    await userEvent.keyboard('{Escape}');
+    await expect(canvas.queryByRole('menu')).toBeNull();
+    await expect(trigger).toHaveFocus();
+  },
 };
 
 export const Compact: Story = {

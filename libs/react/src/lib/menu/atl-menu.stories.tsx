@@ -5,6 +5,7 @@ import {
   AtlMenuSeparator,
   AtlMenuTrigger,
 } from './atl-menu';
+import { expect } from 'storybook/test';
 import { AtlButton } from '../button/atl-button';
 
 import { metadata } from '@atelier-ui/spec/metadata/menu.metadata';
@@ -53,6 +54,21 @@ export const Default: Story = {
     </AtlMenuTrigger>
   ),
   parameters: { design: figmaNode('55-128') },
+  play: async ({ canvas, userEvent }) => {
+    // WAI-ARIA menu button: ArrowDown opens and focuses the first item, arrows
+    // wrap and skip the disabled one, Escape closes and returns focus.
+    const trigger = canvas.getByRole('button', { name: 'Actions' });
+    trigger.focus();
+    await userEvent.keyboard('{ArrowDown}');
+    await expect(canvas.getByRole('menuitem', { name: 'Copy' })).toHaveFocus();
+    await userEvent.keyboard('{ArrowDown}');
+    await expect(canvas.getByRole('menuitem', { name: 'Paste' })).toHaveFocus();
+    await userEvent.keyboard('{ArrowDown}');
+    await expect(canvas.getByRole('menuitem', { name: 'Copy' })).toHaveFocus();
+    await userEvent.keyboard('{Escape}');
+    await expect(canvas.queryByRole('menu')).toBeNull();
+    await expect(trigger).toHaveFocus();
+  },
 };
 
 export const VariantDefault: Story = {

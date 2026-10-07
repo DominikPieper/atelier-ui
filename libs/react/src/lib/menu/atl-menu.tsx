@@ -6,6 +6,7 @@ import {
   useEffect,
   ReactNode,
   HTMLAttributes,
+  KeyboardEvent as ReactKeyboardEvent,
   RefObject,
 } from 'react';
 import type { AtlMenuSpec, AtlMenuItemSpec } from '../spec';
@@ -14,6 +15,28 @@ import '@atelier-ui/styles/menu/atl-menu.native.css';
 
 interface MenuContextValue {
   close: () => void;
+}
+
+/** Idle time after which the type-ahead buffer is forgotten (uianatomy menu: ~500ms). */
+const TYPE_AHEAD_RESET_MS = 500;
+
+/** Enabled menu items of one panel, in DOM order. Disabled items cannot take focus. */
+function enabledItems(panel: HTMLElement): HTMLElement[] {
+  return Array.from(
+    panel.querySelectorAll<HTMLElement>('[role="menuitem"]'),
+  ).filter(
+    (el) =>
+      el.closest('.atl-menu-panel') === panel &&
+      !(el as HTMLButtonElement).disabled &&
+      el.getAttribute('aria-disabled') !== 'true',
+  );
+}
+
+/** Roving tabindex: the focused item is the only tab stop. */
+function focusItem(items: HTMLElement[], target: HTMLElement) {
+  items.forEach((el) => el.setAttribute('tabindex', '-1'));
+  target.setAttribute('tabindex', '0');
+  target.focus();
 }
 
 const MenuContext = createContext<MenuContextValue>({ close: () => undefined });
@@ -139,6 +162,14 @@ export function AtlMenuTrigger({ menu, children }: AtlMenuTriggerProps) {
   const [open, setOpen] = useState(false);
   const triggerRef = useRef<HTMLElement>(null);
   const menuRef = useRef<HTMLDivElement>(null);
+  // Which item receives focus when the menu opens (ArrowUp on the trigger: last).
+  const initialFocus = useRef<'first' | 'last'>('first');
+  const typeAhead = useRef({ buffer: '', timer: 0 });
+
+  const close = (restoreFocus: boolean) => {
+    setOpen(false);
+    if (restoreFocus) triggerRef.current?.focus();
+  };
 
   // Menu-button ARIA on the trigger element itself (the render prop binds the
   // ref to it) — mirrors what the CDK menu trigger does in the Angular adapter,
@@ -148,6 +179,15 @@ export function AtlMenuTrigger({ menu, children }: AtlMenuTriggerProps) {
     if (!el) return;
     el.setAttribute('aria-haspopup', 'menu');
     el.setAttribute('aria-expanded', String(open));
+  }, [open]);
+
+  // Opening moves focus into the menu (WAI-ARIA menu button pattern).
+  useEffect(() => {
+    if (!open || !menuRef.current) return;
+    const items = enabledItems(menuRef.current);
+    const target =
+      initialFocus.current === 'last' ? items[items.length - 1] : items[0];
+    if (target) focusItem(items, target);
   }, [open]);
 
   useEffect(() => {
@@ -163,7 +203,7 @@ export function AtlMenuTrigger({ menu, children }: AtlMenuTriggerProps) {
     };
 
     const handleKeyDown = (e: globalThis.KeyboardEvent) => {
-      if (e.key === 'Escape') setOpen(false);
+      if (e.key === 'Escape') close(true);
     };
 
     document.addEventListener('mousedown', handleOutsideClick);
@@ -174,13 +214,81 @@ export function AtlMenuTrigger({ menu, children }: AtlMenuTriggerProps) {
     };
   }, [open]);
 
+  useEffect(() => () => window.clearTimeout(typeAhead.current.timer), []);
+
+  const onKeyDown = (e: ReactKeyboardEvent<HTMLDivElement>) => {
+    const target = e.target as Node;
+
+    if (triggerRef.current?.contains(target)) {
+      if (e.key === 'ArrowDown' || e.key === 'ArrowUp') {
+        e.preventDefault();
+        initialFocus.current = e.key === 'ArrowUp' ? 'last' : 'first';
+        if (!open) setOpen(true);
+      }
+      return;
+    }
+
+    const panel = menuRef.current;
+    if (!open || !panel?.contains(target)) return;
+    if (e.key === 'Tab') {
+      // Not prevented: focus returns to the trigger, then Tab moves on from it.
+      close(true);
+      return;
+    }
+
+    const items = enabledItems(panel);
+    if (!items.length) return;
+    const current = items.indexOf(document.activeElement as HTMLElement);
+    let next: HTMLElement | undefined;
+
+    if (e.key === 'ArrowDown') next = items[(current + 1) % items.length];
+    else if (e.key === 'ArrowUp')
+      next = items[current <= 0 ? items.length - 1 : current - 1];
+    else if (e.key === 'Home') next = items[0];
+    else if (e.key === 'End') next = items[items.length - 1];
+    else if (
+      e.key.length === 1 &&
+      !e.ctrlKey &&
+      !e.metaKey &&
+      !e.altKey &&
+      (e.key !== ' ' || typeAhead.current.buffer)
+    ) {
+      const ta = typeAhead.current;
+      window.clearTimeout(ta.timer);
+      ta.buffer += e.key.toLowerCase();
+      ta.timer = window.setTimeout(() => (ta.buffer = ''), TYPE_AHEAD_RESET_MS);
+      // A single character cycles to the next match; a longer prefix may keep the current item.
+      const start = ta.buffer.length === 1 ? current + 1 : Math.max(current, 0);
+      for (let i = 0; i < items.length; i++) {
+        const candidate = items[(start + i) % items.length];
+        if (candidate.textContent?.trim().toLowerCase().startsWith(ta.buffer)) {
+          next = candidate;
+          break;
+        }
+      }
+      if (!next) return;
+    } else return;
+
+    e.preventDefault();
+    if (next) focusItem(items, next);
+  };
+
   return (
-    <MenuContext.Provider value={{ close: () => setOpen(false) }}>
+    <MenuContext.Provider value={{ close: () => close(true) }}>
+      {/* The wrapper is not a control: it only listens for the keydown events
+          that bubble up from the trigger and the menu items. */}
       <div
         className="atl-menu-trigger-wrapper"
         style={{ position: 'relative', display: 'inline-block' }}
+        onKeyDown={onKeyDown}
       >
-        {children({ onClick: () => setOpen((v) => !v), ref: triggerRef })}
+        {children({
+          onClick: () => {
+            initialFocus.current = 'first';
+            setOpen((v) => !v);
+          },
+          ref: triggerRef,
+        })}
         {open && (
           <div ref={menuRef} className="atl-menu-panel">
             {menu}

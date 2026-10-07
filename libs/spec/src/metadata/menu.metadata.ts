@@ -41,6 +41,15 @@ export const metadata: ComponentMetadata = {
         key: 'Arrow Up / Down',
         action: 'Move between items, wrapping at the ends.',
       },
+      {
+        key: 'Arrow Up (on the trigger)',
+        action: 'Open the menu and focus the last item.',
+      },
+      {
+        key: 'Type a character',
+        action:
+          'Type-ahead: focus the next item whose label starts with the typed text.',
+      },
       { key: 'Home / End', action: 'Jump to the first / last item.' },
       {
         key: 'Enter / Space',
@@ -48,13 +57,17 @@ export const metadata: ComponentMetadata = {
       },
       { key: 'Escape', action: 'Close and return focus to the trigger.' },
       { key: 'Tab', action: 'Close the menu and move focus on.' },
-      { key: 'Arrow Right', action: 'Open a submenu (if present).' },
+      { key: 'Arrow Right', action: 'Open a submenu (Angular only).' },
       {
         key: 'Arrow Left',
-        action: 'Close the current submenu and return to parent.',
+        action:
+          'Close the current submenu and return to parent (Angular only).',
       },
     ],
     notes: [
+      'Submenus are Angular only: React and Vue have no nesting API, so Arrow Right and Arrow Left do nothing there.',
+      'Disabled items are skipped by arrow keys, Home, End and type-ahead in React and Vue (a native disabled button cannot take focus); the Angular CDK keeps them reachable.',
+      'Focus is roving: the focused item is the only tab stop (tabindex 0, others -1). Opening, by key or by click, moves focus to an item.',
       'The trigger carries aria-haspopup="menu" and aria-expanded.',
       'Separators render as role="separator" and are skipped by keyboard navigation.',
     ],
