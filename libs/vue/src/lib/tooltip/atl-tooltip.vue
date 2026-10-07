@@ -8,7 +8,10 @@ defineOptions({ name: 'AtlTooltip' });
 interface AtlTooltipProps {
   /** The tooltip text. */
   atlTooltip?: string;
-  /** Preferred tooltip placement relative to the wrapped content. */
+  /**
+   * Preferred tooltip placement relative to the wrapped content. Applied as a fixed
+   * CSS class: it does not flip when clipped; Angular's CDK overlay does.
+   */
   atlTooltipPosition?: 'above' | 'below' | 'left' | 'right';
   /** Disables the tooltip without removing the wrapper. */
   atlTooltipDisabled?: boolean;

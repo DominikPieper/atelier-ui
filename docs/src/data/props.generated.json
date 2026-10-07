@@ -4493,7 +4493,7 @@
           "name": "atlTooltipPosition",
           "type": "'above' | 'below' | 'left' | 'right'",
           "default": "'above'",
-          "description": "Preferred tooltip placement. Applied as a fixed CSS class, so unlike Angular it does not flip to the opposite side when clipped.",
+          "description": "Preferred tooltip placement. Applied as a fixed CSS class: it does not flip when clipped; Angular's CDK overlay does.",
           "required": false,
           "kind": "prop"
         },
@@ -4546,7 +4546,7 @@
           "name": "atlTooltipPosition",
           "type": "'right' | 'left' | 'above' | 'below'",
           "default": "'above'",
-          "description": "Preferred tooltip placement relative to the wrapped content.",
+          "description": "Preferred tooltip placement relative to the wrapped content. Applied as a fixed CSS class: it does not flip when clipped; Angular's CDK overlay does.",
           "required": false,
           "kind": "prop"
         },

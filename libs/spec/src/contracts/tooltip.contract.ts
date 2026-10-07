@@ -16,7 +16,7 @@ export const contract = {
       codeProp: 'atlTooltipPosition',
       values: { above: 'above', below: 'below', left: 'left', right: 'right' },
       reason:
-        "The axis is named after the spec union AtlTooltipPosition, the way every other master derives its axis name from its union — not after the Angular directive-input field name. A prior rename to 'atlTooltipPosition' was corrected back to 'position' (ADR-0056); the code prop itself stays atlTooltipPosition.",
+        "The axis is named after the spec union AtlTooltipPosition, the way every other master derives its axis name from its union — not after the Angular directive-input field name. A prior rename to 'atlTooltipPosition' was corrected back to 'position' (ADR-0056); the code prop itself stays atlTooltipPosition. Settled difference (ADR-0145), behaviour not drawing: only Angular flips a clipped tooltip to the opposite side (CDK flexible overlay positions with a fallback and withPush); React and Vue apply position as a fixed CSS class and do not flip, deliberately. Figma draws one position per variant and has no clipped state.",
     },
   ],
 } satisfies ComponentContract;
