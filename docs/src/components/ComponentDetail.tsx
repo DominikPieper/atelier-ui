@@ -38,7 +38,13 @@ import {
   AtlDrawerFooter,
   AtlCodeBlock,
 } from '@atelier-ui/react';
-import { componentDocs, COMPONENT_CATEGORIES } from '../data/components';
+import {
+  componentDocs,
+  COMPONENT_CATEGORIES,
+  type CompositionPart,
+} from '../data/components';
+import type { ComponentApi, ManifestRow } from '../data/manifest-props';
+import { STORYBOOK_CATEGORY, storybookSegment } from '../lib/storybook-id';
 import {
   getFramework,
   setFramework,
@@ -106,19 +112,7 @@ const EXAMPLE_LANG: Record<Framework, string> = {
   vue: 'vue',
 };
 
-// Docs-site categories → Storybook title categories (lowercased path segments).
-// Now a straight lowercase of the docs-site name for every category.
-const STORYBOOK_CATEGORY: Record<string, string> = {
-  Inputs: 'inputs',
-  Display: 'display',
-  Navigation: 'navigation',
-  Overlay: 'overlay',
-  Feedback: 'feedback',
-  AI: 'ai',
-};
-
-// Storybook docs IDs follow `components-<category>-<component>--docs`, where
-// <component> is the primary selector lowercased (e.g. AtlTabGroup → atltabgroup).
+// Storybook docs IDs: see ../lib/storybook-id.ts (shared with the manifest loader).
 function storybookDocsUrl(
   framework: Framework,
   name: string,
@@ -127,14 +121,7 @@ function storybookDocsUrl(
 ): string {
   const base = `https://atelier.pieper.io/storybook-${framework}/`;
   const cat = STORYBOOK_CATEGORY[category];
-  // Toast's docs selector is "AtlToastProvider + useAtlToast" but its Storybook id is atltoast.
-  const segment =
-    name === 'toast'
-      ? 'atltoast'
-      : selector
-          .split(' + ')[0]
-          .replace(/[^a-zA-Z0-9]/g, '')
-          .toLowerCase();
+  const segment = storybookSegment(name, selector);
   if (!cat || !segment) return base;
   return `${base}?path=/docs/components-${cat}-${segment}--docs`;
 }
@@ -147,6 +134,70 @@ function renderType(type: string) {
   const parts = type.split(' | ');
   return parts.flatMap((part, i) =>
     i === 0 ? [part] : [' | ', <wbr key={i} />, part],
+  );
+}
+
+// Backticked spans in a manifest description render as inline code.
+function renderDescription(text: string) {
+  return text
+    .split('`')
+    .map((seg, i) => (i % 2 === 1 ? <code key={i}>{seg}</code> : seg));
+}
+
+/** One row of a prop table, in the shape every table below renders. */
+interface DisplayRow {
+  name: string;
+  type: string;
+  default: string;
+  description: string;
+}
+
+// The prop tables show props, inputs and outputs; Vue's emitted events and
+// slots are in the manifest rows too but have no docgen description to show.
+function tableRows(rows: ManifestRow[]): DisplayRow[] {
+  return rows
+    .filter(
+      (r) => r.kind === 'prop' || r.kind === 'input' || r.kind === 'output',
+    )
+    .map((r) => ({
+      // Angular outputs are bound as (name).
+      name: r.kind === 'output' ? `(${r.name})` : r.name,
+      type: r.type,
+      default: r.default,
+      description: r.description,
+    }));
+}
+
+function PropsTable({ rows }: { rows: DisplayRow[] }) {
+  return (
+    <div className="docs-table-scroll">
+      <table className="docs-props-table">
+        <thead>
+          <tr>
+            <th>Prop</th>
+            <th>Type</th>
+            <th>Default</th>
+            <th>Description</th>
+          </tr>
+        </thead>
+        <tbody>
+          {rows.map((prop) => (
+            <tr key={prop.name}>
+              <td>
+                <code className="docs-prop-name">{prop.name}</code>
+              </td>
+              <td>
+                <code className="docs-prop-type">{renderType(prop.type)}</code>
+              </td>
+              <td>
+                <code className="docs-prop-default">{prop.default}</code>
+              </td>
+              <td>{renderDescription(prop.description)}</td>
+            </tr>
+          ))}
+        </tbody>
+      </table>
+    </div>
   );
 }
 
@@ -742,9 +793,11 @@ function ComponentDemo({ name }: { name: string }) {
 
 interface ComponentDetailProps {
   name: string;
+  /** Prop tables read from the Storybook manifests at build time (see data/manifest-props.ts). */
+  api: Record<Framework, ComponentApi>;
 }
 
-export default function ComponentDetail({ name }: ComponentDetailProps) {
+export default function ComponentDetail({ name, api }: ComponentDetailProps) {
   const doc = componentDocs[name];
   const [framework, setFrameworkState] = useState<Framework>(() =>
     getFramework(),
@@ -769,6 +822,14 @@ export default function ComponentDetail({ name }: ComponentDetailProps) {
   const category = getCategory(name);
   const categoryTone = CATEGORY_TONE[category] ?? 'primary';
   const importSymbols = IMPORT_MAP[name] ?? [];
+  // The manifest of the selected framework; the hand-written rows only where
+  // the manifest has no entry (see MANIFEST_GAPS in data/manifest-props.ts).
+  const fwApi = api[framework];
+  const propRows = fwApi.props ? tableRows(fwApi.props) : (doc.props ?? []);
+  const partRows = (part: CompositionPart): DisplayRow[] => {
+    const rows = fwApi.parts[part.name];
+    return rows ? tableRows(rows) : (part.props ?? []);
+  };
 
   return (
     <>
@@ -857,55 +918,12 @@ export default function ComponentDetail({ name }: ComponentDetailProps) {
       </div>
 
       {/* Props table */}
-      {doc.props.length > 0 && (
+      {propRows.length > 0 && (
         <div className="docs-section">
           <h2 className="docs-section-title">
             API ({framework.charAt(0).toUpperCase() + framework.slice(1)})
           </h2>
-          <div className="docs-table-scroll">
-            <table className="docs-props-table">
-              <thead>
-                <tr>
-                  <th>Prop</th>
-                  <th>Type</th>
-                  <th>Default</th>
-                  <th>Description</th>
-                </tr>
-              </thead>
-              <tbody>
-                {doc.props.map((prop) => {
-                  const override = prop[framework as keyof typeof prop] as
-                    | { name?: string; type?: string; default?: string }
-                    | undefined;
-                  return (
-                    <tr key={prop.name}>
-                      <td>
-                        <code className="docs-prop-name">
-                          {(override as { name?: string } | undefined)?.name ??
-                            prop.name}
-                        </code>
-                      </td>
-                      <td>
-                        <code className="docs-prop-type">
-                          {renderType(
-                            (override as { type?: string } | undefined)?.type ??
-                              prop.type,
-                          )}
-                        </code>
-                      </td>
-                      <td>
-                        <code className="docs-prop-default">
-                          {(override as { default?: string } | undefined)
-                            ?.default ?? prop.default}
-                        </code>
-                      </td>
-                      <td>{prop.description}</td>
-                    </tr>
-                  );
-                })}
-              </tbody>
-            </table>
-          </div>
+          <PropsTable rows={propRows} />
         </div>
       )}
 
@@ -925,39 +943,8 @@ export default function ComponentDetail({ name }: ComponentDetailProps) {
               {part.description && (
                 <p className="docs-composition-part-desc">{part.description}</p>
               )}
-              {part.props.length > 0 && (
-                <div className="docs-table-scroll">
-                  <table className="docs-props-table">
-                    <thead>
-                      <tr>
-                        <th>Prop</th>
-                        <th>Type</th>
-                        <th>Default</th>
-                        <th>Description</th>
-                      </tr>
-                    </thead>
-                    <tbody>
-                      {part.props.map((prop) => (
-                        <tr key={prop.name}>
-                          <td>
-                            <code className="docs-prop-name">{prop.name}</code>
-                          </td>
-                          <td>
-                            <code className="docs-prop-type">
-                              {renderType(prop.type)}
-                            </code>
-                          </td>
-                          <td>
-                            <code className="docs-prop-default">
-                              {prop.default}
-                            </code>
-                          </td>
-                          <td>{prop.description}</td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                </div>
+              {partRows(part).length > 0 && (
+                <PropsTable rows={partRows(part)} />
               )}
             </div>
           ))}

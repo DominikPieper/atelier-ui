@@ -2,6 +2,7 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ComponentDetail from '../../components/ComponentDetail';
 import { ALL_COMPONENTS, componentDocs } from '../../data/components';
+import { manifestApiFor } from '../../data/manifest-props';
 
 export function getStaticPaths() {
   return ALL_COMPONENTS.map((name) => ({ params: { name } }));
@@ -9,6 +10,8 @@ export function getStaticPaths() {
 
 const { name } = Astro.params;
 const doc = componentDocs[name as string];
+// Throws (fails the build) when a manifest or a component's entry is missing.
+const api = manifestApiFor(name as string);
 const title = doc?.name ?? name;
 const description = doc?.description
   ? `${doc.description} Framework-agnostic component with Angular, React, and Vue adapters.`
@@ -21,5 +24,5 @@ const description = doc?.description
   currentPath={`/components/${name}`}
   width="full"
 >
-  <ComponentDetail name={name as string} client:load />
+  <ComponentDetail name={name as string} api={api} client:load />
 </BaseLayout>
