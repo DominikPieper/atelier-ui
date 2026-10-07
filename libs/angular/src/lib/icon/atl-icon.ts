@@ -58,8 +58,14 @@ import {
   },
 })
 export class AtlIcon {
+  /** The icon to render. Required. */
   readonly name = input.required<AtlIconName>();
+  /** Icon size: `sm` 16px, `md` 20px, `lg` 24px. The same 24-unit geometry is scaled. */
   readonly size = input<AtlIconSize>('md');
+  /**
+   * Accessible label. When provided, the icon is announced as an image with
+   * this label. When omitted, the icon is hidden from assistive tech.
+   */
   readonly label = input<string | undefined>();
 
   protected readonly viewBox = ATL_ICON_VIEWBOX;

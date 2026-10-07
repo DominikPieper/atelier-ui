@@ -59,6 +59,7 @@ import { ATL_BREADCRUMBS } from './atl-breadcrumbs.token';
   },
 })
 export class AtlBreadcrumbs {
+  /** Separator character shown between breadcrumb items. Default `/`. */
   readonly separator = input<AtlBreadcrumbsSpec['separator']>('/');
 
   protected readonly separatorCssVar = computed(() => `'${this.separator()}'`);
