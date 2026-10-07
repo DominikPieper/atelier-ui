@@ -1304,11 +1304,20 @@ check:manifest-parity` → `sh` → `MainThread`. The gate finished its work and
     - [ ] `AtlButton` — Angular's `<atl-button>` has no `type` binding or passthrough;
           React (via `...rest`) and Vue (`type` prop) do. A `submit` button is impossible in
           Angular today.
-    - [ ] `AtlCheckbox`, `AtlToggle` — Angular offers no way to pass a custom `id`; React
-          and Vue do. Matters for external `<label for>`.
+    - [x] `AtlCheckbox`, `AtlToggle` — Angular offers no way to pass a custom `id`; React
+          and Vue do. Matters for external `<label for>`. **Done 2026-10-08** (`b109160a`):
+          Angular gained an `id` input (host `[attr.id]: 'null'` per ADR-0091); the two
+          `AtlCheckboxSpec:id:angular` / `AtlToggleSpec:id:angular` gap entries are removed.
     - [ ] `AtlAlert` — `dismissed` (Angular, Vue) vs `onDismissed` (React): the
           react-vs-vue side was never in the allowlist because `check:props` never compares
           Vue emits. Same fact, now recorded on both sides.
+  - [x] **Class-c behaviour bugs from `tasks/divergence-triage-2026-10-08.md`, fixed 2026-10-08**
+        (test red before, green after, one commit each): Vue tooltip `aria-describedby`
+        (`f96a861f`), Vue tabs focus (`8fc1bd77`), Vue accordion group scoping (`553fa4ce`),
+        React/Vue combobox skip-disabled (`38536d84`), Angular checkbox/toggle `id`
+        (`b109160a`), Vue toggle `useId()` (`22d3749c`). React tooltip JSDoc no longer claims a
+        flip it does not do; the flip itself stays an owner decision. Still open from the
+        triage: items 1, 3, 4, 5, 6a, 6c, 7a, 7b, 7d.
   - [ ] S6 monorepo retirements — as ADR-0121 Decision 6. S6a (`check:manifest-parity`,
         the three-manifest diff) is built; `--compare-props` evidence in the S6a report: 28
         findings only the manifest diff sees, 48 only `check:props` sees (`[DEAD]` inputs —

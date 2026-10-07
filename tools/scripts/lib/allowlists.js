@@ -1151,28 +1151,6 @@ const PROP_SURFACE_EXEMPT = new Map([
     },
   ],
   [
-    'AtlCheckboxSpec:id:angular',
-    {
-      kind: 'gap',
-      reason:
-        "AtlCheckboxSpec declares no 'id' at all. Angular's AtlCheckbox generates its own internal id " +
-        "('atl-checkbox-${nextId++}', atl-checkbox.ts:85) with no public input to override it, while React and " +
-        "Vue both accept an 'id' prop — matters for an external <label for>. Unresolved: see tasks/todo.md, " +
-        "'Cross-framework gaps found by check:manifest-parity (S6a, 2026-09-10)'.",
-    },
-  ],
-  [
-    'AtlToggleSpec:id:angular',
-    {
-      kind: 'gap',
-      reason:
-        "AtlToggleSpec declares no 'id' at all. Angular's AtlToggle generates its own internal id " +
-        "('atl-toggle-${nextId++}', atl-toggle.ts:85) with no public input to override it, while React and Vue " +
-        "both accept an 'id' prop — matters for an external <label for>. Unresolved: see tasks/todo.md, " +
-        "'Cross-framework gaps found by check:manifest-parity (S6a, 2026-09-10)'.",
-    },
-  ],
-  [
     'AtlAlertSpec:dismissed:vue',
     {
       kind: 'gap',

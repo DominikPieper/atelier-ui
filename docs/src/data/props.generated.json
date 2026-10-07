@@ -959,6 +959,14 @@
           "kind": "input"
         },
         {
+          "name": "id",
+          "type": "string",
+          "default": "''",
+          "description": "Explicit id for the native input. Wins over the generated id — set this when something outside the component (an external `<label for>`, or `aria-describedby` from elsewhere on the page) needs a stable id to point at.",
+          "required": false,
+          "kind": "input"
+        },
+        {
           "name": "indeterminate",
           "type": "boolean",
           "default": "false",
@@ -4236,6 +4244,14 @@
           "kind": "input"
         },
         {
+          "name": "id",
+          "type": "string",
+          "default": "''",
+          "description": "Explicit id for the native input. Wins over the generated id — set this when something outside the component (an external `<label for>`, or `aria-describedby` from elsewhere on the page) needs a stable id to point at.",
+          "required": false,
+          "kind": "input"
+        },
+        {
           "name": "invalid",
           "type": "boolean",
           "default": "false",
@@ -4485,7 +4501,7 @@
           "name": "atlTooltipPosition",
           "type": "'above' | 'below' | 'left' | 'right'",
           "default": "'above'",
-          "description": "Preferred tooltip placement. Falls back to the opposite side if clipped.",
+          "description": "Preferred tooltip placement. Applied as a fixed CSS class, so unlike Angular it does not flip to the opposite side when clipped.",
           "required": false,
           "kind": "prop"
         },
