@@ -375,26 +375,39 @@ Ranked; each carries why it's worth doing next rather than later.
           `atl-button` without `aria-label`, `atl-dialog` without a title, `atl-option`
           outside `atl-select`). Build only if at least three survive; else record and drop.
 
-  - [ ] **P4 — Docs beside the component; retire the hand-written docs props.** Facts
-        (verified 2026-10-01): `docs/src/data/components.ts` (2569 lines) is entirely
-        hand-written — `props`, `examples` per framework (rendered verbatim,
-        `ComponentDetail.tsx:854`), `aiUsage`, `a11y`, `composition`; `check:docs` diffs
-        props one way against the spec and checks none of the rest. ADR-0121 (lines 26–31,
-        Decision 6) already plans the props retirement — the "S6 monorepo retirements"
-        item further down. This item only adds what S6 does not name.
-    - [ ] **P4.1** Prop tables from each framework's `components.json` — that is S6's
-          retirement; do it there, tick it here.
-    - [ ] **P4.2** `examples` from story source (`parameters.docs.source` / CSF `render`),
-          not hand-written strings — one place per example, already tested by
-          `storybook-test`.
-    - [ ] **P4.3** `aiUsage` and `a11y` into `libs/spec/src/metadata/*.metadata.ts` (which
-          already holds `accessibility`, `antiPatterns`, `whenToUse`), so `llms.txt` and the
-          docs read one record.
-    - [ ] **P4.4 Placement** — ADR-0121 Decision 3 puts the contract beside the component in
-          a one-framework repo; check whether the scaffold does the same for metadata. In
-          this monorepo metadata stays in `libs/spec` while three adapters share it.
-          **Done when** `components.ts` holds only page-level data (category, status,
-          composition).
+  - [ ] **P4 — Docs beside the component; retire the hand-written docs props.** Re-scoped
+        with the owner on 2026-10-07 after a read-only survey. That survey found two of my
+        earlier P4 assumptions wrong: `gen-llms-txt.mjs` reads neither `aiUsage` nor `a11y`,
+        and no story carries a `docs.source` an example could come from. S6 (retiring
+        `libs/spec/src/index.ts`, the metadata modules, `behaviors.json`, `tokens.manifest.ts`
+        and `check:props`) stays its own project. It needs an answer first on ADR-0121's
+        contradictory Option B (rejected at lines 140-144, kept open as S6(c) here) and a
+        home for `check:props`' `[DEAD]` (a declared but unread prop, which a manifest cannot
+        see). Facts (2026-10-07): `docs/src/data/components.ts` has 2569 lines, 28 entries and
+        162 hand-written prop rows; `check:docs` checks name, type and default one way only.
+        Empty prop descriptions in the docgen manifests: Angular 4/145, React 49/163, Vue
+        126/138. The docs build runs before the Storybook builds (`wrangler.jsonc`), so the
+        manifests do not exist yet when the docs would need them.
+    - [ ] **P4a — prop tables from the three `components.json` manifests.** Step 1: write the
+          missing JSDoc. Vue first (126 of 138 props), then React (49) and Angular (4), so
+          that every manifest describes every prop; this also improves the per-framework
+          Storybook MCP. Step 2: the docs build reads `dist/storybook/<fw>/manifests`. That
+          needs a build dependency or a reversed order in `wrangler.jsonc`, and a fail-loud
+          check when a manifest is missing. Step 3: `ComponentDetail` renders props from the
+          manifest of the selected framework. The `PropRow` entries in `components.ts` are
+          deleted, as is the props half of `check:docs`. This is the docs part of S6; tick
+          it there too.
+    - [ ] **P4b — examples from one tagged story per component.** The examples stay
+          hand-authored, as ADR-0121 keeps prose examples authored. Each comes from a story
+          tagged `docs-example` in each framework, so a docs example is also a rendered,
+          tested story. Give that story an explicit `parameters.docs.source`, because the
+          generated snippets show one story's args, not a composed example. Then delete
+          `examples` from `components.ts`.
+    - [ ] **P4c — move `a11y` into the metadata.** 11 entries partly overlap
+          `metadata.accessibility`; merge them into one record and render the docs from it.
+          `aiUsage` (3 entries), `composition` (13) and `status` (6) stay in the docs data as
+          page data. Done when `components.ts` holds only page data: category, status,
+          composition, aiUsage and description.
 
 - [ ] **The scaffold becomes the AI-development workspace, and the cohort's environment**
       (owner decisions, 2026-09-12). Four blocks chosen out of five; **"Gates + CI" was
