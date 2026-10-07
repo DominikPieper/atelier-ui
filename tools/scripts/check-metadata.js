@@ -16,7 +16,10 @@
  *        whenToUse (non-empty array), antiPatterns (array, may be empty),
  *        relatedComponents (array, may be empty),
  *        variantMatrix (non-empty array of axis maps),
- *        accessibility.role + accessibility.keyboardBehavior (non-empty).
+ *        accessibility.role (non-empty) and exactly one of
+ *          accessibility.keyboardBehavior (non-empty prose) or
+ *          accessibility.keyboard (non-empty {key, action} rows);
+ *          relatedRoles / notes, when present, are arrays of non-empty strings.
  *   4. For every prop on the spec interface whose type is a union of
  *      string literals, `variantMatrix` covers every member of the union
  *      at least once across its entries (mirrors check-variants' axis
@@ -326,17 +329,59 @@ function validateMetadata(specName, meta, file) {
   }
   if (!meta.accessibility || typeof meta.accessibility !== 'object') {
     errors.push(
-      `${tag}: 'accessibility' must be an object with 'role' and 'keyboardBehavior'.`,
+      `${tag}: 'accessibility' must be an object with 'role' and 'keyboardBehavior' or 'keyboard'.`,
     );
   } else {
     const a = meta.accessibility;
     if (typeof a.role !== 'string' || !a.role.trim()) {
       errors.push(`${tag}: 'accessibility.role' must be a non-empty string.`);
     }
-    if (typeof a.keyboardBehavior !== 'string' || !a.keyboardBehavior.trim()) {
+    const hasProse = a.keyboardBehavior !== undefined;
+    const hasTable = a.keyboard !== undefined;
+    if (hasProse === hasTable) {
       errors.push(
-        `${tag}: 'accessibility.keyboardBehavior' must be a non-empty string.`,
+        `${tag}: 'accessibility' needs exactly one of 'keyboardBehavior' (prose) or 'keyboard' (rows), not ${hasProse ? 'both' : 'neither'}.`,
       );
+    } else if (hasProse) {
+      if (
+        typeof a.keyboardBehavior !== 'string' ||
+        !a.keyboardBehavior.trim()
+      ) {
+        errors.push(
+          `${tag}: 'accessibility.keyboardBehavior' must be a non-empty string.`,
+        );
+      }
+    } else if (!Array.isArray(a.keyboard) || a.keyboard.length === 0) {
+      errors.push(
+        `${tag}: 'accessibility.keyboard' must be a non-empty array of {key, action}.`,
+      );
+    } else {
+      for (const [i, row] of a.keyboard.entries()) {
+        if (
+          !row ||
+          typeof row.key !== 'string' ||
+          !row.key.trim() ||
+          typeof row.action !== 'string' ||
+          !row.action.trim()
+        ) {
+          errors.push(
+            `${tag}: 'accessibility.keyboard[${i}]' needs a non-empty 'key' and 'action'.`,
+          );
+        }
+      }
+    }
+    for (const field of ['relatedRoles', 'notes']) {
+      const v = a[field];
+      if (v === undefined) continue;
+      if (
+        !Array.isArray(v) ||
+        v.length === 0 ||
+        v.some((x) => typeof x !== 'string' || !x.trim())
+      ) {
+        errors.push(
+          `${tag}: 'accessibility.${field}' must be a non-empty array of non-empty strings when present.`,
+        );
+      }
     }
     checkRoleAgainstA11yBaselines(specName, a.role, file);
   }

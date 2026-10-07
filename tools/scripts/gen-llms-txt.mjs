@@ -363,8 +363,21 @@ function buildMetadataBlock(meta) {
   if (meta.accessibility) {
     const a = meta.accessibility;
     if (a.role) lines.push(`    accessibility.role: ${a.role}`);
+    if (Array.isArray(a.relatedRoles) && a.relatedRoles.length) {
+      lines.push(
+        `    accessibility.relatedRoles: ${a.relatedRoles.join(', ')}`,
+      );
+    }
     if (a.keyboardBehavior) {
       lines.push(`    accessibility.keyboardBehavior: ${a.keyboardBehavior}`);
+    }
+    if (Array.isArray(a.keyboard) && a.keyboard.length) {
+      lines.push('    accessibility.keyboard:');
+      for (const k of a.keyboard) lines.push(`      - ${k.key}: ${k.action}`);
+    }
+    if (Array.isArray(a.notes) && a.notes.length) {
+      lines.push('    accessibility.notes:');
+      for (const n of a.notes) lines.push(`      - ${n}`);
     }
   }
   return lines.join('\n');

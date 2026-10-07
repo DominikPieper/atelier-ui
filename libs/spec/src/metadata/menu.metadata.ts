@@ -31,7 +31,32 @@ export const metadata: ComponentMetadata = {
   variantMatrix: [{ variant: 'default' }, { variant: 'compact' }],
   accessibility: {
     role: 'menu',
-    keyboardBehavior:
-      'Up/Down arrows move between items, Home and End jump to the first and last item. Enter and Space activate the focused item. Escape closes the menu and returns focus to the trigger; Tab also closes and moves on. Disabled items are skipped by arrow navigation.',
+    relatedRoles: ['menuitem'],
+    keyboard: [
+      {
+        key: 'Enter / Space / Arrow Down',
+        action: 'Open the menu from the trigger and focus the first item.',
+      },
+      {
+        key: 'Arrow Up / Down',
+        action: 'Move between items, wrapping at the ends.',
+      },
+      { key: 'Home / End', action: 'Jump to the first / last item.' },
+      {
+        key: 'Enter / Space',
+        action: 'Activate the focused item and close the menu.',
+      },
+      { key: 'Escape', action: 'Close and return focus to the trigger.' },
+      { key: 'Tab', action: 'Close the menu and move focus on.' },
+      { key: 'Arrow Right', action: 'Open a submenu (if present).' },
+      {
+        key: 'Arrow Left',
+        action: 'Close the current submenu and return to parent.',
+      },
+    ],
+    notes: [
+      'The trigger carries aria-haspopup="menu" and aria-expanded.',
+      'Separators render as role="separator" and are skipped by keyboard navigation.',
+    ],
   },
 };

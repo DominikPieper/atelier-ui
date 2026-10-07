@@ -38,7 +38,28 @@ export const metadata: ComponentMetadata = {
   ],
   accessibility: {
     role: 'combobox',
-    keyboardBehavior:
-      'Receives focus via Tab. Space, Enter, Alt+Down, or any character key opens the native list. Arrow keys move the selection while open, Enter commits, Escape cancels. Typing a letter jumps to the next matching option.',
+    relatedRoles: ['listbox'],
+    keyboard: [
+      {
+        key: 'Enter / Space',
+        action:
+          'Open the listbox. While it is open, select the highlighted option and close.',
+      },
+      {
+        key: 'Arrow Up / Down, Home / End',
+        action:
+          'Open the listbox when closed; once open, move between options (Home / End jump to the first / last).',
+      },
+      { key: 'Escape', action: 'Close without changing the selection.' },
+      {
+        key: 'Type a character',
+        action:
+          'Open the listbox and jump to the next option starting with that letter.',
+      },
+    ],
+    notes: [
+      'The trigger carries aria-expanded and aria-controls that point at the listbox.',
+      'Disabled options are skipped by keyboard navigation.',
+    ],
   },
 };

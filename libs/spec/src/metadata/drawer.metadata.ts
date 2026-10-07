@@ -44,7 +44,21 @@ export const metadata: ComponentMetadata = {
   ],
   accessibility: {
     role: 'dialog',
-    keyboardBehavior:
-      'On open, focus moves into the drawer and is trapped while it is visible. Tab and Shift+Tab cycle through drawer descendants only. Escape closes the drawer and returns focus to the trigger that opened it.',
+    keyboard: [
+      {
+        key: 'Escape',
+        action: 'Close the drawer. Focus returns to the trigger.',
+      },
+      {
+        key: 'Tab / Shift+Tab',
+        action:
+          'Cycle through focusable elements inside the drawer (focus is trapped).',
+      },
+    ],
+    notes: [
+      'The drawer carries aria-modal="true".',
+      'Same accessibility model as AtlDialog — the visual slide-in is purely presentational.',
+      'Backdrop click closes the drawer only when closeOnBackdrop is true; Escape always closes.',
+    ],
   },
 };

@@ -35,8 +35,27 @@ export const metadata: ComponentMetadata = {
     { variant: 'separated', multi: true },
   ],
   accessibility: {
-    role: 'group',
-    keyboardBehavior:
-      'Each trigger is a real button. Enter and Space toggle the associated panel. Tab moves between triggers in source order; arrow-key navigation is not required by the WAI-ARIA accordion pattern and is intentionally omitted so the group composes with the page tab order.',
+    role: 'heading',
+    relatedRoles: ['region'],
+    keyboard: [
+      { key: 'Tab', action: 'Move focus between accordion headers.' },
+      {
+        key: 'Enter / Space',
+        action: 'Expand or collapse the focused section.',
+      },
+      {
+        key: 'Arrow Up / Down',
+        action:
+          'Move between headers within the same group, wrapping at the ends.',
+      },
+      {
+        key: 'Home / End',
+        action: 'Jump to the first / last header in the group.',
+      },
+    ],
+    notes: [
+      'Each header is a real button with aria-expanded reflecting state and aria-controls pointing at its panel.',
+      'Panels have role="region" with aria-labelledby pointing at their header, so the section has a screen-reader landmark.',
+    ],
   },
 };

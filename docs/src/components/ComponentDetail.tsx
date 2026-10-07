@@ -41,6 +41,7 @@ import {
 import {
   componentDocs,
   COMPONENT_CATEGORIES,
+  type A11yInfo,
   type CompositionPart,
 } from '../data/components';
 import type { ComponentApi, ManifestRow } from '../data/manifest-props';
@@ -795,9 +796,15 @@ interface ComponentDetailProps {
   name: string;
   /** Prop tables from the committed props projection (see data/manifest-props.ts). */
   api: Record<Framework, ComponentApi>;
+  /** Keyboard table and notes, from the component metadata (data/accessibility.ts). */
+  a11y: A11yInfo | null;
 }
 
-export default function ComponentDetail({ name, api }: ComponentDetailProps) {
+export default function ComponentDetail({
+  name,
+  api,
+  a11y,
+}: ComponentDetailProps) {
   const doc = componentDocs[name];
   const [framework, setFrameworkState] = useState<Framework>(() =>
     getFramework(),
@@ -960,18 +967,18 @@ export default function ComponentDetail({ name, api }: ComponentDetailProps) {
       )}
 
       {/* Accessibility */}
-      {doc.a11y && (
+      {a11y && (
         <div className="docs-section">
           <h2 className="docs-section-title">Accessibility</h2>
-          {doc.a11y.role && (
+          {a11y.role && (
             <p className="docs-a11y-role">
               <span className="docs-a11y-role-label">ARIA role</span>
-              <code>{doc.a11y.role}</code>
+              <code>{a11y.role}</code>
             </p>
           )}
           <div
             className="docs-table-scroll"
-            style={{ marginBottom: doc.a11y.notes ? '1rem' : 0 }}
+            style={{ marginBottom: a11y.notes ? '1rem' : 0 }}
           >
             <table className="docs-props-table">
               <thead>
@@ -981,7 +988,7 @@ export default function ComponentDetail({ name, api }: ComponentDetailProps) {
                 </tr>
               </thead>
               <tbody>
-                {doc.a11y.keyboard.map((row, i) => (
+                {a11y.keyboard.map((row, i) => (
                   <tr key={i}>
                     <td>
                       <kbd className="docs-a11y-kbd">{row.key}</kbd>
@@ -992,9 +999,9 @@ export default function ComponentDetail({ name, api }: ComponentDetailProps) {
               </tbody>
             </table>
           </div>
-          {doc.a11y.notes && doc.a11y.notes.length > 0 && (
+          {a11y.notes && a11y.notes.length > 0 && (
             <ul className="docs-a11y-notes">
-              {doc.a11y.notes.map((note, i) => (
+              {a11y.notes.map((note, i) => (
                 <li key={i}>{note}</li>
               ))}
             </ul>

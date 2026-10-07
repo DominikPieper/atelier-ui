@@ -16,6 +16,11 @@ export interface KeyBinding {
   action: string;
 }
 
+/**
+ * What the Accessibility section renders. The facts live in the component
+ * metadata (data/accessibility.ts); this shape is the page's view of them,
+ * and `ComponentDoc.a11y` survives only for toast, which has no metadata file.
+ */
 export interface A11yInfo {
   role?: string;
   keyboard: KeyBinding[];
@@ -283,29 +288,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
           'An individual radio button. Place inside AtlRadioGroup — the group manages the checked state.',
       },
     ],
-    a11y: {
-      role: 'radiogroup',
-      keyboard: [
-        {
-          key: 'Tab',
-          action:
-            'Move focus into the group (to the checked radio, or the first radio if none is checked).',
-        },
-        {
-          key: 'Arrow Up / Left',
-          action: 'Select the previous radio, wrapping to the last.',
-        },
-        {
-          key: 'Arrow Down / Right',
-          action: 'Select the next radio, wrapping to the first.',
-        },
-        { key: 'Space', action: 'Select the focused radio.' },
-      ],
-      notes: [
-        'Only the currently selected radio is in the tab sequence (roving tabindex) — the whole group is one tab stop.',
-        'If you supply a label via <label> or aria-labelledby on the group, screen readers announce it when focus enters.',
-      ],
-    },
   },
 
   select: {
@@ -366,24 +348,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
         'AI may try to use "items" or "options" prop instead of the composable child pattern.',
       ],
     },
-    a11y: {
-      role: 'combobox / listbox',
-      keyboard: [
-        { key: 'Enter / Space / Arrow Down', action: 'Open the listbox.' },
-        { key: 'Arrow Up / Down', action: 'Move between options.' },
-        { key: 'Home / End', action: 'Jump to the first / last option.' },
-        { key: 'Enter', action: 'Confirm the highlighted option and close.' },
-        { key: 'Escape', action: 'Close without changing selection.' },
-        {
-          key: 'Type a character',
-          action: 'Jump to the next option starting with that letter.',
-        },
-      ],
-      notes: [
-        'The trigger carries aria-expanded and aria-controls that point at the listbox.',
-        'Disabled options are skipped by keyboard navigation.',
-      ],
-    },
   },
 
   combobox: {
@@ -422,27 +386,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
     { label: 'Vue', value: 'vue' }
   ]"
 />`,
-    },
-    a11y: {
-      role: 'combobox',
-      keyboard: [
-        {
-          key: 'Type',
-          action: 'Filter the options. The list updates in place.',
-        },
-        {
-          key: 'Arrow Down',
-          action:
-            'Open the list (if closed) and focus the first matching option.',
-        },
-        { key: 'Arrow Up / Down', action: 'Move between filtered options.' },
-        { key: 'Enter', action: 'Select the highlighted option.' },
-        { key: 'Escape', action: 'Close the list and clear focus.' },
-      ],
-      notes: [
-        'The input has aria-autocomplete="list" and aria-expanded reflects the open state.',
-        'The list is exposed as aria-activedescendant so screen readers announce the highlighted option without losing text-caret focus.',
-      ],
     },
   },
 
@@ -894,24 +837,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
         ],
       },
     ],
-    a11y: {
-      role: 'tablist / tab / tabpanel',
-      keyboard: [
-        {
-          key: 'Arrow Left / Right',
-          action: 'Move between tabs. Focus wraps at the ends.',
-        },
-        { key: 'Home / End', action: 'Jump to the first / last tab.' },
-        {
-          key: 'Enter / Space',
-          action: 'Activate the focused tab (manual activation mode).',
-        },
-      ],
-      notes: [
-        'Tabs use roving tabindex — only the active tab is in the document tab sequence.',
-        'Each AtlTab has aria-controls pointing at its panel, and the panel has aria-labelledby pointing back at the tab. Disabled tabs are skipped by arrow navigation.',
-      ],
-    },
   },
 
   stepper: {
@@ -1075,34 +1000,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
           'A visual divider between groups of menu items. Rendered with role="separator" — screen readers announce it as a group boundary. Takes no props.',
       },
     ],
-    a11y: {
-      role: 'menu / menuitem',
-      keyboard: [
-        {
-          key: 'Enter / Space / Arrow Down',
-          action: 'Open the menu from the trigger and focus the first item.',
-        },
-        {
-          key: 'Arrow Up / Down',
-          action: 'Move between items, wrapping at the ends.',
-        },
-        { key: 'Home / End', action: 'Jump to the first / last item.' },
-        {
-          key: 'Enter / Space',
-          action: 'Activate the focused item and close the menu.',
-        },
-        { key: 'Escape', action: 'Close and return focus to the trigger.' },
-        { key: 'Arrow Right', action: 'Open a submenu (if present).' },
-        {
-          key: 'Arrow Left',
-          action: 'Close the current submenu and return to parent.',
-        },
-      ],
-      notes: [
-        'The trigger carries aria-haspopup="menu" and aria-expanded.',
-        'Separators render as role="separator" and are skipped by keyboard navigation.',
-      ],
-    },
   },
 
   dialog: {
@@ -1157,26 +1054,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
           'Action row — typically Cancel / Confirm buttons. Slot-only.',
       },
     ],
-    a11y: {
-      role: 'dialog (aria-modal="true")',
-      keyboard: [
-        {
-          key: 'Escape',
-          action:
-            'Close the dialog. Focus is returned to the element that opened it.',
-        },
-        {
-          key: 'Tab / Shift+Tab',
-          action:
-            'Cycle through focusable elements inside the dialog (focus is trapped).',
-        },
-      ],
-      notes: [
-        'Initial focus goes to the first tabbable element inside AtlDialogContent on open.',
-        'AtlDialogHeader is automatically linked as the accessible name via aria-labelledby.',
-        'Background content is inert while the dialog is open — screen readers only hear the dialog content.',
-      ],
-    },
   },
 
   drawer: {
@@ -1232,24 +1109,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
         description: 'Pinned action row at the bottom edge. Slot-only.',
       },
     ],
-    a11y: {
-      role: 'dialog (aria-modal="true")',
-      keyboard: [
-        {
-          key: 'Escape',
-          action: 'Close the drawer. Focus returns to the trigger.',
-        },
-        {
-          key: 'Tab / Shift+Tab',
-          action:
-            'Cycle through focusable elements inside the drawer (focus is trapped).',
-        },
-      ],
-      notes: [
-        'Same accessibility model as AtlDialog — the visual slide-in is purely presentational.',
-        'Backdrop click closes the drawer only when closeOnBackdrop is true; Escape always closes.',
-      ],
-    },
   },
 
   tooltip: {
@@ -1277,24 +1136,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
 <AtlTooltip atlTooltip="Copy to clipboard" atlTooltipPosition="right">
   <AtlButton variant="outline">Copy</AtlButton>
 </AtlTooltip>`,
-    },
-    a11y: {
-      role: 'tooltip',
-      keyboard: [
-        {
-          key: 'Tab (focus trigger)',
-          action: 'Show the tooltip. It hides when focus leaves.',
-        },
-        {
-          key: 'Escape',
-          action: 'Dismiss the tooltip while focus stays on the trigger.',
-        },
-      ],
-      notes: [
-        "Uses aria-describedby — the tooltip supplements, never replaces, the trigger's accessible name.",
-        'Tooltips are shown on focus, not only on hover, so keyboard users get the same affordance.',
-        'Never put interactive content (links, buttons) inside a tooltip — it cannot be reached by keyboard.',
-      ],
     },
   },
 
@@ -1454,28 +1295,6 @@ show('Persistent', { duration: 0 });`,
         ],
       },
     ],
-    a11y: {
-      role: 'heading + region (disclosure pattern)',
-      keyboard: [
-        { key: 'Tab', action: 'Move focus between accordion headers.' },
-        {
-          key: 'Enter / Space',
-          action: 'Expand or collapse the focused section.',
-        },
-        {
-          key: 'Arrow Up / Down',
-          action: 'Move between headers within the same group.',
-        },
-        {
-          key: 'Home / End',
-          action: 'Jump to the first / last header in the group.',
-        },
-      ],
-      notes: [
-        'Each header is a real button with aria-expanded reflecting state and aria-controls pointing at its panel.',
-        'Panels have role="region" with aria-labelledby pointing at their header, so the section has a screen-reader landmark.',
-      ],
-    },
   },
 
   alert: {
@@ -1667,32 +1486,5 @@ show('Persistent', { duration: 0 });`,
         ],
       },
     ],
-    a11y: {
-      role: 'dialog (drawer/popup), region (inline)',
-      keyboard: [
-        {
-          key: 'Escape',
-          action:
-            'Close drawer or popup variant. Inline variant ignores Escape.',
-        },
-        {
-          key: 'Tab / Shift+Tab',
-          action:
-            'Cycle focus inside the drawer (focus is trapped via CDK A11y / focus-trap equivalents).',
-        },
-        { key: 'Enter (in input)', action: 'Send the message.' },
-        {
-          key: 'Shift+Enter (in input)',
-          action: 'Insert a newline without sending.',
-        },
-      ],
-      notes: [
-        'Drawer uses native <dialog> with aria-modal — same accessibility model as AtlDialog and AtlDrawer.',
-        'AtlChatMessages renders role="log" (named, aria-label="Conversation") with aria-live="polite" — the live region that announces new messages as they arrive without interrupting whatever the user is doing (polite, not assertive — an ordinary chat message is not an interruption-worthy event). log and list are two different roles, so the projected AtlChatMessage listitems get their required list parent from a second, nested role="list" wrapper rather than from the log itself — a display:contents element that keeps the message layout unchanged.',
-        'Streaming state announces via aria-live="polite" on the typing indicator so screen readers know the assistant is responding.',
-        'Stop button uses AtlButton variant="danger" so the destructive intent is communicated by both color and label.',
-        'Inline variant has no overlay chrome — the close button is hidden because there is nothing to close.',
-      ],
-    },
   },
 };

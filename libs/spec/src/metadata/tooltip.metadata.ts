@@ -38,7 +38,25 @@ export const metadata: ComponentMetadata = {
   ],
   accessibility: {
     role: 'tooltip',
-    keyboardBehavior:
-      'Shows when the host element receives focus or hover and hides on blur, mouseleave, or Escape. Not focusable itself — the host element owns the tab stop, and the tooltip is associated via `aria-describedby`.',
+    keyboard: [
+      {
+        key: 'Hover',
+        action: 'Show the tooltip on mouseenter and hide it on mouseleave.',
+      },
+      {
+        key: 'Tab (focus trigger)',
+        action: 'Show the tooltip. It hides when focus leaves.',
+      },
+      {
+        key: 'Escape',
+        action: 'Dismiss the tooltip while focus stays on the trigger.',
+      },
+    ],
+    notes: [
+      "Uses aria-describedby — the tooltip supplements, never replaces, the trigger's accessible name.",
+      'The tooltip is not focusable itself — the host element owns the tab stop.',
+      'Tooltips are shown on focus, not only on hover, so keyboard users get the same affordance.',
+      'Never put interactive content (links, buttons) inside a tooltip — it cannot be reached by keyboard.',
+    ],
   },
 };

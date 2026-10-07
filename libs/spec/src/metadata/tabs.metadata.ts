@@ -33,7 +33,27 @@ export const metadata: ComponentMetadata = {
   variantMatrix: [{ variant: 'default' }, { variant: 'pills' }],
   accessibility: {
     role: 'tablist',
-    keyboardBehavior:
-      'Left/Right arrows move between tabs (Up/Down in vertical orientation), Home and End jump to the first and last tab. Tab moves focus into the active panel. Enter and Space activate the focused tab when activation is not automatic.',
+    relatedRoles: ['tab', 'tabpanel'],
+    keyboard: [
+      {
+        key: 'Tab',
+        action:
+          'Move focus to the active tab, then into its panel (the panel is focusable).',
+      },
+      {
+        key: 'Arrow Left / Right',
+        action:
+          'Move to and select the previous / next enabled tab. Focus wraps at the ends.',
+      },
+      {
+        key: 'Home / End',
+        action: 'Jump to and select the first / last enabled tab.',
+      },
+    ],
+    notes: [
+      'Selection follows focus (automatic activation); there is no manual-activation mode and no vertical orientation.',
+      'Tabs use roving tabindex — only the active tab is in the document tab sequence.',
+      'Each AtlTab has aria-controls pointing at its panel, and the panel has aria-labelledby pointing back at the tab. Disabled tabs are skipped by arrow navigation.',
+    ],
   },
 };

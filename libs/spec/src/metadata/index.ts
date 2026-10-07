@@ -20,7 +20,7 @@
  * shapes or options, not standalone components; they are explicitly
  * excluded here so the drift-gate does not demand metadata for them.
  */
-export type { ComponentMetadata } from './types';
+export type { ComponentMetadata, KeyBinding } from './types';
 
 /**
  * Authoritative list of spec interfaces that require metadata. Keys are the

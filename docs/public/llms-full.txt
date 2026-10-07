@@ -437,7 +437,16 @@ Each entry lists:
       - Selecting many values at once. → use A multi-select combobox (not in this spec) or a list of AtlCheckbox rows.
     relatedComponents: AtlSelectSpec, AtlInputSpec
     accessibility.role: combobox
-    accessibility.keyboardBehavior: Receives focus via Tab. Typing filters the list and opens the popup; Down/Up moves through options, Enter commits the highlighted one, Escape closes the popup without changing the value. Home and End jump to the first/last option when the popup is open.
+    accessibility.relatedRoles: listbox
+    accessibility.keyboard:
+      - Type: Filter the options. The list opens (it also opens when the input receives focus) and updates in place.
+      - Arrow Down / Up: Open the list when closed; once open, move between the enabled filtered options, wrapping at the ends.
+      - Enter: Select the highlighted option.
+      - Escape: Close the list and restore the input to the selected option’s label.
+      - Tab: Close the list and move focus on.
+    accessibility.notes:
+      - The input has aria-autocomplete="list" and aria-expanded reflects the open state.
+      - The highlighted option is exposed through aria-activedescendant, so screen readers announce it without moving focus out of the text input.
 
 ---
 
@@ -1103,7 +1112,14 @@ Each entry lists:
       - Hosting a long, multi-step workflow that needs its own URL and history. → use A dedicated route or wizard page — dialogs should not own deep flows the user might want to share or refresh.
     relatedComponents: AtlDrawerSpec, AtlAlertSpec, AtlButtonSpec
     accessibility.role: dialog
-    accessibility.keyboardBehavior: On open, focus moves to the first focusable element inside the dialog and is trapped within it. Tab and Shift+Tab cycle through dialog descendants only. Escape closes the dialog and returns focus to the trigger that opened it.
+    accessibility.keyboard:
+      - Escape: Close the dialog. Focus is returned to the element that opened it.
+      - Tab / Shift+Tab: Cycle through focusable elements inside the dialog (focus is trapped).
+    accessibility.notes:
+      - The dialog carries aria-modal="true".
+      - Initial focus goes to the first tabbable element inside AtlDialogContent on open.
+      - AtlDialogHeader is automatically linked as the accessible name via aria-labelledby.
+      - Background content is inert while the dialog is open — screen readers only hear the dialog content.
 
 ---
 
@@ -1167,7 +1183,13 @@ Each entry lists:
       - Building a dropdown menu attached to a trigger button. → use AtlMenu — menus position relative to the trigger and use roving focus, not focus trapping.
     relatedComponents: AtlDialogSpec, AtlMenuSpec
     accessibility.role: dialog
-    accessibility.keyboardBehavior: On open, focus moves into the drawer and is trapped while it is visible. Tab and Shift+Tab cycle through drawer descendants only. Escape closes the drawer and returns focus to the trigger that opened it.
+    accessibility.keyboard:
+      - Escape: Close the drawer. Focus returns to the trigger.
+      - Tab / Shift+Tab: Cycle through focusable elements inside the drawer (focus is trapped).
+    accessibility.notes:
+      - The drawer carries aria-modal="true".
+      - Same accessibility model as AtlDialog — the visual slide-in is purely presentational.
+      - Backdrop click closes the drawer only when closeOnBackdrop is true; Escape always closes.
 
 ---
 
@@ -1423,7 +1445,18 @@ Each entry lists:
       - Showing transient system notifications. → use AtlToast — notifications are unidirectional and ephemeral, chat is a two-way log.
     relatedComponents: AtlDrawerSpec, AtlDialogSpec, AtlTextareaSpec
     accessibility.role: log
-    accessibility.keyboardBehavior: The message log is a live region — new messages are announced as they stream in. Tab moves focus into the composer; Enter submits and Shift+Enter inserts a newline. In drawer and popup variants, Escape closes the surface and focus returns to the launcher.
+    accessibility.keyboard:
+      - Escape: Close drawer or popup variant. Inline variant ignores Escape.
+      - Tab / Shift+Tab: Cycle focus inside the drawer (focus is trapped via CDK A11y / focus-trap equivalents).
+      - Enter (in input): Send the message.
+      - Shift+Enter (in input): Insert a newline without sending.
+    accessibility.notes:
+      - The chat surface is a dialog in the drawer and popup variants and a region when inline; the message list inside it is the role="log" live region.
+      - Drawer uses native <dialog> with aria-modal — same accessibility model as AtlDialog and AtlDrawer.
+      - AtlChatMessages renders role="log" (named, aria-label="Conversation") with aria-live="polite" — the live region that announces new messages as they arrive without interrupting whatever the user is doing (polite, not assertive — an ordinary chat message is not an interruption-worthy event). log and list are two different roles, so the projected AtlChatMessage listitems get their required list parent from a second, nested role="list" wrapper rather than from the log itself — a display:contents element that keeps the message layout unchanged.
+      - Streaming state announces via aria-live="polite" on the typing indicator so screen readers know the assistant is responding.
+      - Stop button uses AtlButton variant="danger" so the destructive intent is communicated by both color and label.
+      - Inline variant has no overlay chrome — the close button is hidden because there is nothing to close.
 
 ---
 

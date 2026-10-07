@@ -39,7 +39,29 @@ export const metadata: ComponentMetadata = {
   ],
   accessibility: {
     role: 'combobox',
-    keyboardBehavior:
-      'Receives focus via Tab. Typing filters the list and opens the popup; Down/Up moves through options, Enter commits the highlighted one, Escape closes the popup without changing the value. Home and End jump to the first/last option when the popup is open.',
+    relatedRoles: ['listbox'],
+    keyboard: [
+      {
+        key: 'Type',
+        action:
+          'Filter the options. The list opens (it also opens when the input receives focus) and updates in place.',
+      },
+      {
+        key: 'Arrow Down / Up',
+        action:
+          'Open the list when closed; once open, move between the enabled filtered options, wrapping at the ends.',
+      },
+      { key: 'Enter', action: 'Select the highlighted option.' },
+      {
+        key: 'Escape',
+        action:
+          'Close the list and restore the input to the selected option’s label.',
+      },
+      { key: 'Tab', action: 'Close the list and move focus on.' },
+    ],
+    notes: [
+      'The input has aria-autocomplete="list" and aria-expanded reflects the open state.',
+      'The highlighted option is exposed through aria-activedescendant, so screen readers announce it without moving focus out of the text input.',
+    ],
   },
 };

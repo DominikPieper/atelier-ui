@@ -50,9 +50,27 @@ export interface ComponentMetadata {
    *  `tools/scripts/lib/component-axes.js` appears at least once. */
   variantMatrix: Record<string, string | number | boolean>[];
 
-  /** ARIA role and keyboard behavior summary for AI-driven accessibility
-   *  checks. `role` is the canonical ARIA role (or `'none'` for
-   *  decorative components). `keyboardBehavior` is a short prose
-   *  description of how the component responds to keys. */
-  accessibility: { role: string; keyboardBehavior: string };
+  /** The component's accessibility facts, one record for the docs page, the
+   *  llms.txt block and the AI accessibility checks. `role` is the canonical
+   *  ARIA role of the component (or `'none'` for decorative components);
+   *  `check-metadata` verifies it against the a11y baselines, so it names
+   *  exactly one role. Keyboard behavior is either the prose
+   *  `keyboardBehavior` or the structured `keyboard` bindings, never both. */
+  accessibility: {
+    role: string;
+    /** Further roles the component renders (`tab`, `tabpanel`, `listbox`, ...),
+     *  shown next to `role` on the docs page. */
+    relatedRoles?: string[];
+    /** Extra facts that are not a key binding: ARIA attributes, focus rules. */
+    notes?: string[];
+  } & (
+    | { keyboardBehavior: string; keyboard?: undefined }
+    | { keyboard: KeyBinding[]; keyboardBehavior?: undefined }
+  );
+}
+
+/** One row of a component's keyboard table. */
+export interface KeyBinding {
+  key: string;
+  action: string;
 }

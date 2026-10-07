@@ -35,7 +35,25 @@ export const metadata: ComponentMetadata = {
   ],
   accessibility: {
     role: 'radiogroup',
-    keyboardBehavior:
-      'Tab moves focus into the group at the selected radio (or the first when none is selected). Arrow keys move focus and selection between radios within the group; the group itself is one tab stop. Space selects the focused radio when no selection exists yet.',
+    keyboard: [
+      {
+        key: 'Tab',
+        action:
+          'Move focus into the group (to the checked radio, or the first radio if none is checked).',
+      },
+      {
+        key: 'Arrow Up / Left',
+        action: 'Select the previous radio, wrapping to the last.',
+      },
+      {
+        key: 'Arrow Down / Right',
+        action: 'Select the next radio, wrapping to the first.',
+      },
+      { key: 'Space', action: 'Select the focused radio.' },
+    ],
+    notes: [
+      'Only the currently selected radio is in the tab sequence (roving tabindex) — the whole group is one tab stop.',
+      'If you supply a label via <label> or aria-labelledby on the group, screen readers announce it when focus enters.',
+    ],
   },
 };

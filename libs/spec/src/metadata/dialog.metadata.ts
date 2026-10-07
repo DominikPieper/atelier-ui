@@ -40,7 +40,23 @@ export const metadata: ComponentMetadata = {
   ],
   accessibility: {
     role: 'dialog',
-    keyboardBehavior:
-      'On open, focus moves to the first focusable element inside the dialog and is trapped within it. Tab and Shift+Tab cycle through dialog descendants only. Escape closes the dialog and returns focus to the trigger that opened it.',
+    keyboard: [
+      {
+        key: 'Escape',
+        action:
+          'Close the dialog. Focus is returned to the element that opened it.',
+      },
+      {
+        key: 'Tab / Shift+Tab',
+        action:
+          'Cycle through focusable elements inside the dialog (focus is trapped).',
+      },
+    ],
+    notes: [
+      'The dialog carries aria-modal="true".',
+      'Initial focus goes to the first tabbable element inside AtlDialogContent on open.',
+      'AtlDialogHeader is automatically linked as the accessible name via aria-labelledby.',
+      'Background content is inert while the dialog is open — screen readers only hear the dialog content.',
+    ],
   },
 };
