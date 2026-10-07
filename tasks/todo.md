@@ -388,7 +388,7 @@ Ranked; each carries why it's worth doing next rather than later.
         Empty prop descriptions in the docgen manifests: Angular 4/145, React 49/163, Vue
         126/138. The docs build runs before the Storybook builds (`wrangler.jsonc`), so the
         manifests do not exist yet when the docs would need them.
-    - [ ] **P4a — prop tables from the three `components.json` manifests.** Step 1: write the
+    - [x] **P4a — prop tables from the three `components.json` manifests. Done 2026-10-07, ADR-0154** (final shape `572cbcf3`): a committed projection, `docs/src/data/props.generated.json`, generated from the manifests and pinned by `check:props-projection` in `check:all`. The docs, `llms.txt` and `check:defaults` read the JSON; nothing needs Storybook or `dist/` at docs-build, release or pre-push time. A first version read the manifests at build time and set off a chain of follow-up fixes; it was reworked (see `tasks/lessons.md`, 2026-10-07; the partial fix is in `git stash` as "abandoned: llms freshness chain"). `components.ts`: 2569 → 1698 lines. Still on hand-written rows: sub-components no manifest describes (AtlOption, AtlTr/Th/Td, AtlTab, AtlStep, AtlMenuItem, …) and toast. `llms.txt` stays; owner noted it could be dropped if it ever made the setup too complex, and it no longer does. Original item: Step 1: write the
           missing JSDoc. Vue first (126 of 138 props), then React (49) and Angular (4), so
           that every manifest describes every prop; this also improves the per-framework
           Storybook MCP. Step 2: the docs build reads `dist/storybook/<fw>/manifests`. That
