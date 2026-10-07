@@ -2,6 +2,13 @@
   "$schema": "node_modules/wrangler/config-schema.json",
   "name": "atelier-ui",
   "main": "worker/index.ts",
+  // Order matters twice. `docs:build` first, because astro empties dist/docs and
+  // the hosted Storybooks are written into it afterwards. And `docs:build`
+  // itself depends on `build-storybook` for angular, react and vue (docs/
+  // project.json): the prop tables are generated from their manifests in
+  // dist/storybook/<fw>/manifests. Those plain builds are not the hosted ones
+  // below, which need BUILD_STORYBOOK=1 for the /storybook-<fw>/ base path
+  // (ADR-0122), so each framework's Storybook is built twice in a deploy.
   "build": {
     "command": "npx nx run docs:build && BUILD_STORYBOOK=1 npx storybook build --config-dir libs/react/.storybook --output-dir dist/docs/storybook-react && BUILD_STORYBOOK=1 npx storybook build --config-dir libs/angular/.storybook --output-dir dist/docs/storybook-angular && BUILD_STORYBOOK=1 npx storybook build --config-dir libs/vue/.storybook --output-dir dist/docs/storybook-vue",
   },
