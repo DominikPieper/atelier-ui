@@ -3,8 +3,9 @@
  * Reads the documented props of every component out of a built docgen manifest
  * (`dist/storybook/<fw>/manifests/components.json`), whatever shape the
  * framework's docgen gives them. Shared by check-manifests.js (the
- * [NO-DESCRIPTION] finding) and by the docs app's build-time loader
- * (docs/src/data/manifest-props.ts), which renders the prop tables from it.
+ * [NO-DESCRIPTION] finding) and by gen-props-projection.mjs, the only reader of
+ * the manifests for the docs: it writes docs/src/data/props.generated.json,
+ * which the docs app, gen-llms-txt.mjs and check-defaults.js read instead.
  *
  * `rowsOf(fw, doc)` returns one normalised row per documented member:
  *   { name, type, default, description, required, kind }

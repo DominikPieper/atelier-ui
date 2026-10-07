@@ -1,0 +1,4581 @@
+{
+  "accordion": {
+    "angular": {
+      "props": [
+        {
+          "name": "multi",
+          "type": "boolean",
+          "default": "false",
+          "description": "Allow multiple items to be expanded simultaneously.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "variant",
+          "type": "'default' | 'bordered' | 'separated'",
+          "default": "'default'",
+          "description": "Visual variant.",
+          "required": false,
+          "kind": "input"
+        }
+      ],
+      "parts": {
+        "AtlAccordionItem": null
+      }
+    },
+    "react": {
+      "props": [
+        {
+          "name": "multi",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether multiple items can be expanded simultaneously.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "variant",
+          "type": "'default' | 'bordered' | 'separated'",
+          "default": "'default'",
+          "description": "The visual style variant of the accordion.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "default": "—",
+          "description": "The accordion items to be rendered.",
+          "required": false,
+          "kind": "prop"
+        }
+      ],
+      "parts": {
+        "AtlAccordionItem": null
+      }
+    },
+    "vue": {
+      "props": [
+        {
+          "name": "multi",
+          "type": "boolean",
+          "default": "false",
+          "description": "Allow multiple items to be expanded simultaneously.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "variant",
+          "type": "'default' | 'bordered' | 'separated'",
+          "default": "'default'",
+          "description": "Visual variant.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "default",
+          "type": "{}",
+          "default": "—",
+          "description": "",
+          "required": false,
+          "kind": "slot"
+        }
+      ],
+      "parts": {
+        "AtlAccordionItem": null
+      }
+    }
+  },
+  "alert": {
+    "angular": {
+      "props": [
+        {
+          "name": "dismissible",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether to show a dismiss button.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "variant",
+          "type": "'info' | 'success' | 'warning' | 'danger'",
+          "default": "'info'",
+          "description": "Semantic color variant of the alert.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "dismissed",
+          "type": "void",
+          "default": "—",
+          "description": "Emitted when the dismiss button is clicked.",
+          "required": false,
+          "kind": "output"
+        }
+      ],
+      "parts": {}
+    },
+    "react": {
+      "props": [
+        {
+          "name": "variant",
+          "type": "'info' | 'success' | 'warning' | 'danger'",
+          "default": "'info'",
+          "description": "The visual style variant of the alert.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "dismissible",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the alert can be dismissed by the user.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "onDismissed",
+          "type": "() => void",
+          "default": "—",
+          "description": "Callback triggered when the alert is dismissed.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "default": "—",
+          "description": "The content to be rendered inside the alert.",
+          "required": false,
+          "kind": "prop"
+        }
+      ],
+      "parts": {}
+    },
+    "vue": {
+      "props": [
+        {
+          "name": "variant",
+          "type": "AtlAlertVariant",
+          "default": "'info'",
+          "description": "Semantic color variant of the alert.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "dismissible",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether to show a dismiss button; clicking it emits `dismissed`.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "dismissed",
+          "type": "[]",
+          "default": "—",
+          "description": "",
+          "required": false,
+          "kind": "event"
+        },
+        {
+          "name": "default",
+          "type": "{}",
+          "default": "—",
+          "description": "",
+          "required": false,
+          "kind": "slot"
+        }
+      ],
+      "parts": {}
+    }
+  },
+  "avatar": {
+    "angular": {
+      "props": [
+        {
+          "name": "alt",
+          "type": "string",
+          "default": "''",
+          "description": "Alt text for the image (also used as aria-label).",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "default": "''",
+          "description": "Full name used to generate initials fallback and default aria-label.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "shape",
+          "type": "'circle' | 'square'",
+          "default": "'circle'",
+          "description": "Shape of the avatar.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "size",
+          "type": "'xs' | 'sm' | 'md' | 'lg' | 'xl'",
+          "default": "'md'",
+          "description": "Size of the avatar.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "src",
+          "type": "string",
+          "default": "''",
+          "description": "Image URL. Falls back to initials or icon if empty or fails to load.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "status",
+          "type": "'online' | 'offline' | 'away' | 'busy' | ''",
+          "default": "''",
+          "description": "Presence status indicator dot. Empty string hides the dot.",
+          "required": false,
+          "kind": "input"
+        }
+      ],
+      "parts": {
+        "AtlAvatarGroup": null
+      }
+    },
+    "react": {
+      "props": [
+        {
+          "name": "src",
+          "type": "string",
+          "default": "''",
+          "description": "The URL of the image to display.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "alt",
+          "type": "string",
+          "default": "''",
+          "description": "Accessible text for the avatar image.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "default": "''",
+          "description": "The name of the person/entity, used for initials if no image is provided.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "size",
+          "type": "'xs' | 'sm' | 'md' | 'lg' | 'xl'",
+          "default": "'md'",
+          "description": "The size of the avatar.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "shape",
+          "type": "'circle' | 'square'",
+          "default": "'circle'",
+          "description": "The shape of the avatar.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "status",
+          "type": "'online' | 'offline' | 'away' | 'busy' | ''",
+          "default": "''",
+          "description": "The status indicator to display on the avatar.",
+          "required": false,
+          "kind": "prop"
+        }
+      ],
+      "parts": {
+        "AtlAvatarGroup": null
+      }
+    },
+    "vue": {
+      "props": [
+        {
+          "name": "src",
+          "type": "string",
+          "default": "''",
+          "description": "Image URL. Falls back to initials if empty or if the image fails to load.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "alt",
+          "type": "string",
+          "default": "''",
+          "description": "Alt text for the image (also used as the accessible label).",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "default": "''",
+          "description": "Full name used to generate the initials fallback and the default accessible label.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "size",
+          "type": "'md' | 'sm' | 'lg' | 'xs' | 'xl'",
+          "default": "'md'",
+          "description": "Size of the avatar.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "shape",
+          "type": "'circle' | 'square'",
+          "default": "'circle'",
+          "description": "Shape of the avatar.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "status",
+          "type": "'' | 'online' | 'offline' | 'away' | 'busy'",
+          "default": "''",
+          "description": "Presence status indicator dot. Empty string hides the dot.",
+          "required": false,
+          "kind": "prop"
+        }
+      ],
+      "parts": {
+        "AtlAvatarGroup": [
+          {
+            "name": "max",
+            "type": "number",
+            "default": "5",
+            "description": "Maximum visible avatars before showing an overflow count.",
+            "required": false,
+            "kind": "prop"
+          },
+          {
+            "name": "size",
+            "type": "'md' | 'sm' | 'lg' | 'xs' | 'xl'",
+            "default": "'md'",
+            "description": "Size applied to the overflow badge (match the size used on the child avatars).",
+            "required": false,
+            "kind": "prop"
+          },
+          {
+            "name": "default",
+            "type": "any",
+            "default": "—",
+            "description": "",
+            "required": false,
+            "kind": "slot"
+          }
+        ]
+      }
+    }
+  },
+  "badge": {
+    "angular": {
+      "props": [
+        {
+          "name": "size",
+          "type": "'sm' | 'md'",
+          "default": "'md'",
+          "description": "Size of the badge.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "variant",
+          "type": "'default' | 'success' | 'warning' | 'danger' | 'info'",
+          "default": "'default'",
+          "description": "Semantic color variant of the badge.",
+          "required": false,
+          "kind": "input"
+        }
+      ],
+      "parts": {}
+    },
+    "react": {
+      "props": [
+        {
+          "name": "variant",
+          "type": "'default' | 'success' | 'warning' | 'danger' | 'info'",
+          "default": "'default'",
+          "description": "The visual style variant of the badge.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "size",
+          "type": "'sm' | 'md'",
+          "default": "'md'",
+          "description": "The size of the badge.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "default": "—",
+          "description": "The content to be rendered inside the badge.",
+          "required": false,
+          "kind": "prop"
+        }
+      ],
+      "parts": {}
+    },
+    "vue": {
+      "props": [
+        {
+          "name": "variant",
+          "type": "AtlBadgeVariant",
+          "default": "'default'",
+          "description": "Semantic color variant of the badge.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "size",
+          "type": "'md' | 'sm'",
+          "default": "'md'",
+          "description": "Size of the badge.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "default",
+          "type": "{}",
+          "default": "—",
+          "description": "",
+          "required": false,
+          "kind": "slot"
+        }
+      ],
+      "parts": {}
+    }
+  },
+  "breadcrumbs": {
+    "angular": {
+      "props": [
+        {
+          "name": "separator",
+          "type": "AtlBreadcrumbsSpec['separator']",
+          "default": "'/'",
+          "description": "Separator character shown between breadcrumb items. Default `/`.",
+          "required": false,
+          "kind": "input"
+        }
+      ],
+      "parts": {
+        "AtlBreadcrumbItem": null
+      }
+    },
+    "react": {
+      "props": [
+        {
+          "name": "separator",
+          "type": "string",
+          "default": "'/'",
+          "description": "Separator character shown between breadcrumb items.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "default": "—",
+          "description": "The breadcrumb items to be rendered.",
+          "required": false,
+          "kind": "prop"
+        }
+      ],
+      "parts": {
+        "AtlBreadcrumbItem": null
+      }
+    },
+    "vue": {
+      "props": [
+        {
+          "name": "separator",
+          "type": "string",
+          "default": "'/'",
+          "description": "Separator character shown between breadcrumb items.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "default",
+          "type": "{}",
+          "default": "—",
+          "description": "",
+          "required": false,
+          "kind": "slot"
+        }
+      ],
+      "parts": {
+        "AtlBreadcrumbItem": null
+      }
+    }
+  },
+  "button": {
+    "angular": {
+      "props": [
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "description": "Disables the button, preventing interaction.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "default": "false",
+          "description": "Shows a loading spinner and disables interaction.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "size",
+          "type": "'sm' | 'md' | 'lg'",
+          "default": "'md'",
+          "description": "Size of the button.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "variant",
+          "type": "'primary' | 'secondary' | 'outline' | 'danger'",
+          "default": "'primary'",
+          "description": "Visual style of the button.",
+          "required": false,
+          "kind": "input"
+        }
+      ],
+      "parts": {}
+    },
+    "react": {
+      "props": [
+        {
+          "name": "variant",
+          "type": "'primary' | 'secondary' | 'outline' | 'danger'",
+          "default": "'primary'",
+          "description": "Visual style of the button.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "size",
+          "type": "'sm' | 'md' | 'lg'",
+          "default": "'md'",
+          "description": "Size of the button.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "description": "Disables the button, preventing interaction.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "default": "false",
+          "description": "Shows a loading spinner and disables interaction.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "aria-label",
+          "type": "string",
+          "default": "—",
+          "description": "Accessible name — rendered as `aria-label`. Required when the button has no visible text label (icon-only buttons), otherwise the button is unnamed for assistive tech. The React adapter encodes this requirement at the type level via a discriminated union; the Angular and Vue adapters log a dev-mode warning when a rendered button has no accessible name.",
+          "required": false,
+          "kind": "prop"
+        }
+      ],
+      "parts": {}
+    },
+    "vue": {
+      "props": [
+        {
+          "name": "variant",
+          "type": "'primary' | 'secondary' | 'outline' | 'danger'",
+          "default": "'primary'",
+          "description": "Visual style of the button.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "size",
+          "type": "'md' | 'sm' | 'lg'",
+          "default": "'md'",
+          "description": "Size of the button.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "description": "Disables the button, preventing interaction.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "loading",
+          "type": "boolean",
+          "default": "false",
+          "description": "Shows a loading spinner and disables interaction.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "type",
+          "type": "'button' | 'submit' | 'reset'",
+          "default": "'button'",
+          "description": "Native `type` attribute of the button.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "default",
+          "type": "{}",
+          "default": "—",
+          "description": "",
+          "required": false,
+          "kind": "slot"
+        }
+      ],
+      "parts": {}
+    }
+  },
+  "card": {
+    "angular": {
+      "props": [
+        {
+          "name": "padding",
+          "type": "'none' | 'sm' | 'md' | 'lg'",
+          "default": "'md'",
+          "description": "Internal padding of the card.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "role",
+          "type": "'article' | 'region' | 'section'",
+          "default": "—",
+          "description": "Opt-in landmark role. Default is no role. - `'article'` — self-contained content (blog post, comment). - `'region'` — perceivable area that needs a screen-reader stop; pair with `aria-label`. - `'section'` — mirrors an HTML `<section>`. Most cards group content visually and shouldn't add a landmark. Leave unset by default.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "variant",
+          "type": "'elevated' | 'outlined' | 'flat'",
+          "default": "'elevated'",
+          "description": "Visual style of the card.",
+          "required": false,
+          "kind": "input"
+        }
+      ],
+      "parts": {
+        "AtlCardContent": null,
+        "AtlCardFooter": null,
+        "AtlCardHeader": null
+      }
+    },
+    "react": {
+      "props": [
+        {
+          "name": "variant",
+          "type": "'elevated' | 'outlined' | 'flat'",
+          "default": "'elevated'",
+          "description": "The visual style variant of the card.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "padding",
+          "type": "'none' | 'sm' | 'md' | 'lg'",
+          "default": "'md'",
+          "description": "The padding size within the card.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "role",
+          "type": "'article' | 'region' | 'section'",
+          "default": "—",
+          "description": "Opt-in landmark role. Default is no role (plain `<div>`). See {@link AtlCardRole} for when to use each value.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "default": "—",
+          "description": "The content to be rendered inside the card.",
+          "required": false,
+          "kind": "prop"
+        }
+      ],
+      "parts": {
+        "AtlCardContent": null,
+        "AtlCardFooter": null,
+        "AtlCardHeader": null
+      }
+    },
+    "vue": {
+      "props": [
+        {
+          "name": "variant",
+          "type": "'flat' | 'elevated' | 'outlined'",
+          "default": "'elevated'",
+          "description": "Visual style of the card.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "padding",
+          "type": "'md' | 'sm' | 'lg' | 'none'",
+          "default": "'md'",
+          "description": "Internal padding of the card.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "role",
+          "type": "'article' | 'region' | 'section'",
+          "default": "—",
+          "description": "Opt-in landmark role. Default is no role. - `'article'` — self-contained content (blog post, comment). - `'region'` — perceivable area that needs a screen-reader stop; pair with `aria-label`. - `'section'` — mirrors an HTML `<section>`. Most cards group content visually and shouldn't add a landmark. Leave unset by default.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "default",
+          "type": "{}",
+          "default": "—",
+          "description": "",
+          "required": false,
+          "kind": "slot"
+        }
+      ],
+      "parts": {
+        "AtlCardContent": null,
+        "AtlCardFooter": null,
+        "AtlCardHeader": null
+      }
+    }
+  },
+  "chat": {
+    "angular": {
+      "props": [
+        {
+          "name": "open",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the chat is open. Used by drawer/popup; ignored by inline. Two-way bindable via [(open)].",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "status",
+          "type": "'idle' | 'streaming' | 'error'",
+          "default": "'idle'",
+          "description": "Connection / response status. Drives badge color in header and disables input while streaming.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "variant",
+          "type": "'drawer' | 'popup' | 'inline'",
+          "default": "'drawer'",
+          "description": "Layout variant.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "openChange",
+          "type": "(e: boolean) => void",
+          "default": "—",
+          "description": "Whether the chat is open. Used by drawer/popup; ignored by inline. Two-way bindable via [(open)].",
+          "required": false,
+          "kind": "output"
+        }
+      ],
+      "parts": {
+        "AtlChatHeader": null,
+        "AtlChatInput": null,
+        "AtlChatMessage": null,
+        "AtlChatMessages": null,
+        "AtlChatSuggestion": null,
+        "AtlChatTyping": null
+      }
+    },
+    "react": {
+      "props": [
+        {
+          "name": "variant",
+          "type": "'drawer' | 'popup' | 'inline'",
+          "default": "'drawer'",
+          "description": "Layout variant.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "status",
+          "type": "'idle' | 'streaming' | 'error'",
+          "default": "'idle'",
+          "description": "Connection / response status.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the chat is open (drawer / popup variants).",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "onOpenChange",
+          "type": "(open: boolean) => void",
+          "default": "—",
+          "description": "Callback when open state should change.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "default": "—",
+          "description": "The chat parts: `AtlChatHeader`, `AtlChatMessages` and `AtlChatInput`.",
+          "required": false,
+          "kind": "prop"
+        }
+      ],
+      "parts": {
+        "AtlChatHeader": null,
+        "AtlChatInput": null,
+        "AtlChatMessage": null,
+        "AtlChatMessages": null,
+        "AtlChatSuggestion": null,
+        "AtlChatTyping": null
+      }
+    },
+    "vue": {
+      "props": [
+        {
+          "name": "variant",
+          "type": "AtlChatVariant",
+          "default": "'drawer'",
+          "description": "Layout variant.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "status",
+          "type": "AtlChatStatus",
+          "default": "'idle'",
+          "description": "Connection / response status. Drives the badge color in the header and disables input while streaming.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the chat is open. Used by drawer/popup, ignored by inline. Two-way bound via `v-model:open` (emits `update:open`).",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "update:open",
+          "type": "[open: boolean]",
+          "default": "—",
+          "description": "",
+          "required": false,
+          "kind": "event"
+        },
+        {
+          "name": "default",
+          "type": "{}",
+          "default": "—",
+          "description": "",
+          "required": false,
+          "kind": "slot"
+        }
+      ],
+      "parts": {
+        "AtlChatHeader": null,
+        "AtlChatInput": null,
+        "AtlChatMessage": null,
+        "AtlChatMessages": null,
+        "AtlChatSuggestion": null,
+        "AtlChatTyping": null
+      }
+    }
+  },
+  "checkbox": {
+    "angular": {
+      "props": [
+        {
+          "name": "checked",
+          "type": "boolean",
+          "default": "false",
+          "description": "The checked state. Bound by [formField] directive. Supports [(checked)] two-way binding.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the checkbox is disabled. Bound by [formField] directive.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "errors",
+          "type": "readonly WithOptionalFieldTree<ValidationError>[]",
+          "default": "[]",
+          "description": "Validation errors from the form system. Bound by [formField] directive.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "indeterminate",
+          "type": "boolean",
+          "default": "false",
+          "description": "Tri-state indeterminate mode (e.g. \"select all\"). Set via DOM property.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the checkbox has validation errors. Bound by [formField] directive.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "default": "''",
+          "description": "The input's name attribute. Bound by [formField] directive.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the checkbox is required. Bound by [formField] directive.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "touched",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the user has interacted with the input. Bound by [formField] directive.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "checkedChange",
+          "type": "(e: boolean) => void",
+          "default": "—",
+          "description": "The checked state. Bound by [formField] directive. Supports [(checked)] two-way binding.",
+          "required": false,
+          "kind": "output"
+        },
+        {
+          "name": "touchedChange",
+          "type": "(e: boolean) => void",
+          "default": "—",
+          "description": "Whether the user has interacted with the input. Bound by [formField] directive.",
+          "required": false,
+          "kind": "output"
+        }
+      ],
+      "parts": {}
+    },
+    "react": {
+      "props": [
+        {
+          "name": "checked",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the checkbox is checked.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "onCheckedChange",
+          "type": "(checked: boolean) => void",
+          "default": "—",
+          "description": "Callback triggered when the checked state changes.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "indeterminate",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the checkbox is in an indeterminate state.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the checkbox is disabled.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the checkbox is required.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the checkbox is in an invalid state.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "errors",
+          "type": "string[]",
+          "default": "[]",
+          "description": "Array of error messages to display.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "default": "—",
+          "description": "The content to be rendered as the label for the checkbox.",
+          "required": false,
+          "kind": "prop"
+        }
+      ],
+      "parts": {}
+    },
+    "vue": {
+      "props": [
+        {
+          "name": "checked",
+          "type": "boolean",
+          "default": "false",
+          "description": "The checked state. Two-way bound via `v-model:checked` (emits `update:checked`).",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "indeterminate",
+          "type": "boolean",
+          "default": "false",
+          "description": "Tri-state indeterminate mode (e.g. \"select all\"), shown as a dash. Applied to the native input's DOM property.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the checkbox has validation errors; sets `aria-invalid`.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "errors",
+          "type": "string[]",
+          "default": "[]",
+          "description": "Validation error messages shown below the control and linked to it via `aria-describedby`.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the checkbox is disabled.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the checkbox is required.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "default": "''",
+          "description": "The input's `name` attribute.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "default": "''",
+          "description": "Explicit id for the native input. Wins over the auto-generated id, so an external `<label for>` can point at it.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "update:checked",
+          "type": "[value: boolean]",
+          "default": "—",
+          "description": "",
+          "required": false,
+          "kind": "event"
+        },
+        {
+          "name": "default",
+          "type": "{}",
+          "default": "—",
+          "description": "",
+          "required": false,
+          "kind": "slot"
+        }
+      ],
+      "parts": {}
+    }
+  },
+  "code-block": {
+    "angular": {
+      "props": [
+        {
+          "name": "code",
+          "type": "string",
+          "default": "''",
+          "description": "The code string to display.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "copyable",
+          "type": "boolean",
+          "default": "true",
+          "description": "Whether to show a copy-to-clipboard button.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "filename",
+          "type": "string",
+          "default": "''",
+          "description": "Optional filename shown in the header instead of the language label.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "language",
+          "type": "string",
+          "default": "'text'",
+          "description": "Language label shown in the header. Ignored if filename is set.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "showLineNumbers",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether to display line numbers alongside the code.",
+          "required": false,
+          "kind": "input"
+        }
+      ],
+      "parts": {}
+    },
+    "react": {
+      "props": [
+        {
+          "name": "code",
+          "type": "string",
+          "default": "—",
+          "description": "The code string to display.",
+          "required": true,
+          "kind": "prop"
+        },
+        {
+          "name": "language",
+          "type": "string",
+          "default": "'text'",
+          "description": "Language label shown in the header. Ignored if filename is set.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "filename",
+          "type": "string",
+          "default": "—",
+          "description": "Optional filename shown in the header instead of the language label.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "copyable",
+          "type": "boolean",
+          "default": "true",
+          "description": "Whether to show a copy-to-clipboard button.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "showLineNumbers",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether to display line numbers alongside the code.",
+          "required": false,
+          "kind": "prop"
+        }
+      ],
+      "parts": {}
+    },
+    "vue": {
+      "props": [
+        {
+          "name": "code",
+          "type": "string",
+          "default": "—",
+          "description": "The code string to display.",
+          "required": true,
+          "kind": "prop"
+        },
+        {
+          "name": "language",
+          "type": "string",
+          "default": "'text'",
+          "description": "Language label shown in the header. Ignored if filename is set.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "filename",
+          "type": "string",
+          "default": "''",
+          "description": "Optional filename shown in the header instead of the language label.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "copyable",
+          "type": "boolean",
+          "default": "true",
+          "description": "Whether to show a copy-to-clipboard button.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "showLineNumbers",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether to display line numbers alongside the code.",
+          "required": false,
+          "kind": "prop"
+        }
+      ],
+      "parts": {}
+    }
+  },
+  "combobox": {
+    "angular": {
+      "props": [
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the combobox is disabled.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "errors",
+          "type": "readonly WithOptionalFieldTree<ValidationError>[]",
+          "default": "[]",
+          "description": "Validation errors from the form system.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the combobox has validation errors.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "default": "''",
+          "description": "The input's name attribute.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "options",
+          "type": "AtlComboboxOption[]",
+          "default": "[]",
+          "description": "Options to display and filter.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "default": "''",
+          "description": "Placeholder text for the input.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "readonly",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the value can be read but not changed. Enforced here rather than by the DOM: `readonly` on the text input would stop typing, but nothing stops the panel from opening and an option from being picked. See ADR-0045.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the combobox is required.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "touched",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the user has interacted. Bound by [formField] directive.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "default": "''",
+          "description": "The selected value. Supports [(value)] two-way binding and [formField] directive.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "touchedChange",
+          "type": "(e: boolean) => void",
+          "default": "—",
+          "description": "Whether the user has interacted. Bound by [formField] directive.",
+          "required": false,
+          "kind": "output"
+        },
+        {
+          "name": "valueChange",
+          "type": "(e: string) => void",
+          "default": "—",
+          "description": "The selected value. Supports [(value)] two-way binding and [formField] directive.",
+          "required": false,
+          "kind": "output"
+        }
+      ],
+      "parts": {}
+    },
+    "react": {
+      "props": [
+        {
+          "name": "value",
+          "type": "string",
+          "default": "''",
+          "description": "The selected option's `value`. Controlled: pair it with `onValueChange`.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "onValueChange",
+          "type": "(value: string) => void",
+          "default": "—",
+          "description": "Callback fired with the chosen option's `value` when the user selects an option.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the combobox is disabled.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the combobox has validation errors.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the combobox is required.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "default": "—",
+          "description": "The input's name attribute, used for form submission.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "readonly",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the value can be read but not changed. Enforced by the component: typing, opening the panel and selecting an option are all blocked.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "options",
+          "type": "AtlComboboxOption[]",
+          "default": "[]",
+          "description": "Options to display and filter. Each option is `{ value, label, disabled? }`.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "default": "''",
+          "description": "Placeholder text for the input.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "errors",
+          "type": "string[]",
+          "default": "[]",
+          "description": "Array of error messages to display.",
+          "required": false,
+          "kind": "prop"
+        }
+      ],
+      "parts": {}
+    },
+    "vue": {
+      "props": [
+        {
+          "name": "value",
+          "type": "string",
+          "default": "''",
+          "description": "The selected option value. Two-way bound via `v-model:value` (emits `update:value`).",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "options",
+          "type": "AtlComboboxOption[]",
+          "default": "[]",
+          "description": "Options to display and filter.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "default": "''",
+          "description": "Placeholder text for the input.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the combobox is disabled.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "readonly",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the value can be read but not changed: the panel does not open and no option can be picked.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the combobox has validation errors; sets `aria-invalid`.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the combobox is required.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "default": "''",
+          "description": "The input's `name` attribute.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "errors",
+          "type": "string[]",
+          "default": "[]",
+          "description": "Validation error messages shown below the control and linked to it via `aria-describedby`.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "update:value",
+          "type": "[value: string]",
+          "default": "—",
+          "description": "",
+          "required": false,
+          "kind": "event"
+        }
+      ],
+      "parts": {}
+    }
+  },
+  "dialog": {
+    "angular": {
+      "props": [
+        {
+          "name": "aria-label",
+          "type": "string",
+          "default": "''",
+          "description": "Accessible label for the dialog (use instead of aria-labelledby when no header is present).",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "aria-labelledby",
+          "type": "string",
+          "default": "''",
+          "description": "ID of the element that labels the dialog (defaults to the atl-dialog-header id).",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "closeOnBackdrop",
+          "type": "boolean",
+          "default": "true",
+          "description": "Whether clicking the backdrop closes the dialog.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the dialog is open. Supports two-way binding: [(open)]=\"isOpen\".",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "size",
+          "type": "'sm' | 'md' | 'lg' | 'xl' | 'full'",
+          "default": "'md'",
+          "description": "Size of the dialog panel.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "openChange",
+          "type": "(e: boolean) => void",
+          "default": "—",
+          "description": "Whether the dialog is open. Supports two-way binding: [(open)]=\"isOpen\".",
+          "required": false,
+          "kind": "output"
+        }
+      ],
+      "parts": {
+        "AtlDialogContent": null,
+        "AtlDialogFooter": null,
+        "AtlDialogHeader": null
+      }
+    },
+    "react": {
+      "props": [
+        {
+          "name": "open",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the dialog is open.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "onOpenChange",
+          "type": "(open: boolean) => void",
+          "default": "—",
+          "description": "Callback triggered when the open state changes.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "closeOnBackdrop",
+          "type": "boolean",
+          "default": "true",
+          "description": "Whether to close the dialog when clicking on the backdrop.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "size",
+          "type": "'sm' | 'md' | 'lg' | 'xl' | 'full'",
+          "default": "'md'",
+          "description": "The size of the dialog.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "aria-label",
+          "type": "string",
+          "default": "—",
+          "description": "Accessible label for the dialog.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "aria-labelledby",
+          "type": "string",
+          "default": "—",
+          "description": "Accessible label provided by another element.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "default": "—",
+          "description": "The content of the dialog.",
+          "required": false,
+          "kind": "prop"
+        }
+      ],
+      "parts": {
+        "AtlDialogContent": null,
+        "AtlDialogFooter": null,
+        "AtlDialogHeader": null
+      }
+    },
+    "vue": {
+      "props": [
+        {
+          "name": "open",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the dialog is open. Two-way bound via `v-model:open` (emits `update:open`).",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "closeOnBackdrop",
+          "type": "boolean",
+          "default": "true",
+          "description": "Whether clicking the backdrop closes the dialog.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "size",
+          "type": "'md' | 'sm' | 'lg' | 'xl' | 'full'",
+          "default": "'md'",
+          "description": "Size of the dialog panel.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "—",
+          "description": "Accessible label for the dialog; use it instead of a header when none is present. When set, it replaces the header as the dialog's accessible name.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "update:open",
+          "type": "[open: boolean]",
+          "default": "—",
+          "description": "",
+          "required": false,
+          "kind": "event"
+        },
+        {
+          "name": "default",
+          "type": "{}",
+          "default": "—",
+          "description": "",
+          "required": false,
+          "kind": "slot"
+        }
+      ],
+      "parts": {
+        "AtlDialogContent": null,
+        "AtlDialogFooter": null,
+        "AtlDialogHeader": null
+      }
+    }
+  },
+  "drawer": {
+    "angular": {
+      "props": [
+        {
+          "name": "closeOnBackdrop",
+          "type": "boolean",
+          "default": "true",
+          "description": "Whether clicking the backdrop closes the drawer.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "open",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the drawer is open. Supports two-way binding: [(open)]=\"isOpen\".",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "position",
+          "type": "'left' | 'right' | 'top' | 'bottom'",
+          "default": "'right'",
+          "description": "Which edge the drawer slides in from.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "size",
+          "type": "'sm' | 'md' | 'lg' | 'full'",
+          "default": "'md'",
+          "description": "Width (for left/right) or height (for top/bottom) of the panel.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "openChange",
+          "type": "(e: boolean) => void",
+          "default": "—",
+          "description": "Whether the drawer is open. Supports two-way binding: [(open)]=\"isOpen\".",
+          "required": false,
+          "kind": "output"
+        }
+      ],
+      "parts": {
+        "AtlDrawerContent": null,
+        "AtlDrawerFooter": null,
+        "AtlDrawerHeader": null
+      }
+    },
+    "react": {
+      "props": [
+        {
+          "name": "open",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the drawer is open.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "position",
+          "type": "'left' | 'right' | 'top' | 'bottom'",
+          "default": "'right'",
+          "description": "The position of the drawer on the screen.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "size",
+          "type": "'sm' | 'md' | 'lg' | 'full'",
+          "default": "'md'",
+          "description": "The size of the drawer.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "closeOnBackdrop",
+          "type": "boolean",
+          "default": "true",
+          "description": "Whether to close the drawer when clicking on the backdrop.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "onOpenChange",
+          "type": "(open: boolean) => void",
+          "default": "—",
+          "description": "Callback triggered when the open state changes.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "default": "—",
+          "description": "The content of the drawer.",
+          "required": false,
+          "kind": "prop"
+        }
+      ],
+      "parts": {
+        "AtlDrawerContent": null,
+        "AtlDrawerFooter": null,
+        "AtlDrawerHeader": null
+      }
+    },
+    "vue": {
+      "props": [
+        {
+          "name": "open",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the drawer is open. Two-way bound via `v-model:open` (emits `update:open`).",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "position",
+          "type": "'right' | 'left' | 'top' | 'bottom'",
+          "default": "'right'",
+          "description": "Which edge the drawer slides in from.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "size",
+          "type": "'md' | 'sm' | 'lg' | 'full'",
+          "default": "'md'",
+          "description": "Width (for left/right) or height (for top/bottom) of the panel.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "closeOnBackdrop",
+          "type": "boolean",
+          "default": "true",
+          "description": "Whether clicking the backdrop closes the drawer.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "update:open",
+          "type": "[open: boolean]",
+          "default": "—",
+          "description": "",
+          "required": false,
+          "kind": "event"
+        },
+        {
+          "name": "default",
+          "type": "{}",
+          "default": "—",
+          "description": "",
+          "required": false,
+          "kind": "slot"
+        }
+      ],
+      "parts": {
+        "AtlDrawerContent": null,
+        "AtlDrawerFooter": null,
+        "AtlDrawerHeader": null
+      }
+    }
+  },
+  "icon": {
+    "angular": {
+      "props": [
+        {
+          "name": "label",
+          "type": "string | undefined",
+          "default": "—",
+          "description": "Accessible label. When provided, the icon is announced as an image with this label. When omitted, the icon is hidden from assistive tech.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "name",
+          "type": "'success' | 'check' | 'warning' | 'danger' | 'info' | 'error' | 'chevron-up' | 'chevron-down' | 'chevron-left' | 'chevron-right' | 'chevron-double-left' | 'chevron-double-right' | 'sort-asc' | 'sort-desc' | 'arrow-right' | 'arrow-left' | 'copy' | 'paste' | 'add' | 'edit' | 'delete' | 'close' | 'more' | 'person' | 'default-toast'",
+          "default": "—",
+          "description": "The icon to render. Required.",
+          "required": true,
+          "kind": "input"
+        },
+        {
+          "name": "size",
+          "type": "'sm' | 'md' | 'lg'",
+          "default": "'md'",
+          "description": "Icon size: `sm` 16px, `md` 20px, `lg` 24px. The same 24-unit geometry is scaled.",
+          "required": false,
+          "kind": "input"
+        }
+      ],
+      "parts": {}
+    },
+    "react": {
+      "props": [
+        {
+          "name": "name",
+          "type": "| 'success'\n| 'check'\n| 'warning'\n| 'danger'\n| 'info'\n| 'error'\n| 'chevron-up'\n| 'chevron-down'\n| 'chevron-left'\n| 'chevron-right'\n| 'chevron-double-left'\n| 'chevron-double-right'\n| 'sort-asc'\n| 'sort-desc'\n| 'arrow-right'\n| 'arrow-left'\n| 'copy'\n| 'paste'\n| 'add'\n| 'edit'\n| 'delete'\n| 'close'\n| 'more'\n| 'person'\n| 'default-toast'",
+          "default": "—",
+          "description": "The icon name.",
+          "required": true,
+          "kind": "prop"
+        },
+        {
+          "name": "size",
+          "type": "'sm' | 'md' | 'lg'",
+          "default": "'md'",
+          "description": "The icon size.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "—",
+          "description": "Accessible label. When provided, the icon is announced as an image with this label. When omitted, the icon is hidden from assistive tech (treated as decorative).",
+          "required": false,
+          "kind": "prop"
+        }
+      ],
+      "parts": {}
+    },
+    "vue": {
+      "props": [
+        {
+          "name": "name",
+          "type": "AtlIconName",
+          "default": "—",
+          "description": "The icon to render. Required.",
+          "required": true,
+          "kind": "prop"
+        },
+        {
+          "name": "size",
+          "type": "AtlIconSize",
+          "default": "'md'",
+          "description": "Icon size: `sm` 16px, `md` 20px, `lg` 24px. The same 24-unit geometry is scaled.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "—",
+          "description": "Accessible label. When provided, the icon is announced as an image with this label. When omitted, the icon is hidden from assistive tech.",
+          "required": false,
+          "kind": "prop"
+        }
+      ],
+      "parts": {}
+    }
+  },
+  "input": {
+    "angular": {
+      "props": [
+        {
+          "name": "aria-label",
+          "type": "string",
+          "default": "''",
+          "description": "Accessible name for the native input, for when there is no visible `label`. An aliased input rather than a plain host attribute: an unrecognized `aria-label=\"…\"` on `<atl-input>` would sit on the host element, which has no role, leaving the actual control unnamed.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the input is disabled. Bound by [formField] directive.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "errors",
+          "type": "readonly WithOptionalFieldTree<ValidationError>[]",
+          "default": "[]",
+          "description": "Validation errors from the form system. Bound by [formField] directive.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "default": "''",
+          "description": "Explicit id for the native input. Wins over the auto-generated id — set this when something outside this component (an external `<label for>`, or `aria-describedby` from elsewhere on the page) needs a known, stable id to point at.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the input has validation errors. Bound by [formField] directive.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "''",
+          "description": "Visible caption rendered as a `<label>` associated with the input via `for`/`id`. Omit it when the field is captioned some other way (an external `<label>`, or `aria-label`) — without one of these the input has no accessible name.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "default": "''",
+          "description": "The input's name attribute. Bound by [formField] directive.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "default": "''",
+          "description": "Placeholder text shown when the input is empty.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "readonly",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the input is read-only. Bound by [formField] directive.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the input is required. Bound by [formField] directive.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "touched",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the user has interacted with the input. Bound by [formField] directive.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "type",
+          "type": "'text' | 'email' | 'password' | 'number' | 'tel' | 'url'",
+          "default": "'text'",
+          "description": "The type of input field.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "default": "''",
+          "description": "The current input value. Bound by [formField] directive. Supports [(value)] two-way binding.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "touchedChange",
+          "type": "(e: boolean) => void",
+          "default": "—",
+          "description": "Whether the user has interacted with the input. Bound by [formField] directive.",
+          "required": false,
+          "kind": "output"
+        },
+        {
+          "name": "valueChange",
+          "type": "(e: string) => void",
+          "default": "—",
+          "description": "The current input value. Bound by [formField] directive. Supports [(value)] two-way binding.",
+          "required": false,
+          "kind": "output"
+        }
+      ],
+      "parts": {}
+    },
+    "react": {
+      "props": [
+        {
+          "name": "value",
+          "type": "string",
+          "default": "—",
+          "description": "The current value of the input.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "onValueChange",
+          "type": "(value: string) => void",
+          "default": "—",
+          "description": "Callback triggered when the value changes.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the input is disabled.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the input is in an invalid state.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the input is required.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "default": "—",
+          "description": "The input's name attribute, used for form submission.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "readonly",
+          "type": "boolean",
+          "default": "—",
+          "description": "Lowercase alias of `readOnly`: whether the input is read-only. `readOnly` wins when both are set.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "—",
+          "description": "The label for the input.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "type",
+          "type": "'text' | 'email' | 'password' | 'number' | 'tel' | 'url'",
+          "default": "'text'",
+          "description": "The type of input to render.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "default": "—",
+          "description": "Placeholder text shown when the input is empty.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "errors",
+          "type": "string[]",
+          "default": "[]",
+          "description": "Array of error messages to display.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "readOnly",
+          "type": "boolean",
+          "default": "—",
+          "description": "Whether the input is read-only.",
+          "required": false,
+          "kind": "prop"
+        }
+      ],
+      "parts": {}
+    },
+    "vue": {
+      "props": [
+        {
+          "name": "value",
+          "type": "string",
+          "default": "''",
+          "description": "The current input value. Two-way bound via `v-model:value` (emits `update:value`).",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "type",
+          "type": "'number' | 'text' | 'email' | 'password' | 'tel' | 'url'",
+          "default": "'text'",
+          "description": "The type of input field.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "default": "''",
+          "description": "Placeholder text shown when the input is empty.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the input has validation errors; sets `aria-invalid`.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "errors",
+          "type": "string[]",
+          "default": "[]",
+          "description": "Validation error messages shown below the control and linked to it via `aria-describedby`.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the input is disabled.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "readonly",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the input is read-only.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the input is required.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "''",
+          "description": "Visible caption rendered as a `<label>` associated with the input. Omit it when the field is named some other way (an external `<label>`, or `aria-label`); without one of these the input has no accessible name.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "default": "''",
+          "description": "The input's `name` attribute.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "default": "''",
+          "description": "Explicit id for the native input. Wins over the auto-generated id, so an external `<label for>` or `aria-describedby` can point at it.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "description": "Accessible name for the native input, for when there is no visible `label`. Declared as an explicit prop (not left to Vue's default attribute fallthrough) so it lands on the native `<input>` — the fallthrough target for an undeclared attribute is this component's root `<div>`, which has no role and would leave the input unnamed. camelCase here, like every other prop: Vue's runtime camelizes BOTH the declared option key and an incoming raw prop key before matching them, so `props['aria-label']` in the script is never populated — only the camelized `props.ariaLabel` is (measured; see ADR-0091). The template still accepts either casing (`aria-label=` or `ariaLabel=`) since Vue's template compiler does its own camelCase conversion.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "update:value",
+          "type": "[value: string]",
+          "default": "—",
+          "description": "",
+          "required": false,
+          "kind": "event"
+        }
+      ],
+      "parts": {}
+    }
+  },
+  "menu": {
+    "angular": {
+      "props": [
+        {
+          "name": "variant",
+          "type": "'default' | 'compact'",
+          "default": "'default'",
+          "description": "Visual variant. `compact` reduces font size and padding.",
+          "required": false,
+          "kind": "input"
+        }
+      ],
+      "parts": {
+        "AtlMenuItem": null,
+        "AtlMenuSeparator": null
+      }
+    },
+    "react": {
+      "props": [
+        {
+          "name": "variant",
+          "type": "'default' | 'compact'",
+          "default": "'default'",
+          "description": "The visual style variant of the menu.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "default": "—",
+          "description": "The menu items to be rendered.",
+          "required": false,
+          "kind": "prop"
+        }
+      ],
+      "parts": {
+        "AtlMenuItem": null,
+        "AtlMenuSeparator": null
+      }
+    },
+    "vue": {
+      "props": [
+        {
+          "name": "variant",
+          "type": "'default' | 'compact'",
+          "default": "'default'",
+          "description": "Visual variant. `compact` reduces font size and padding.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "default",
+          "type": "{}",
+          "default": "—",
+          "description": "",
+          "required": false,
+          "kind": "slot"
+        }
+      ],
+      "parts": {
+        "AtlMenuItem": null,
+        "AtlMenuSeparator": null
+      }
+    }
+  },
+  "pagination": {
+    "angular": {
+      "props": [
+        {
+          "name": "page",
+          "type": "number",
+          "default": "1",
+          "description": "Current page (1-based). Supports two-way binding: [(page)]=\"currentPage\".",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "pageCount",
+          "type": "number",
+          "default": "1",
+          "description": "Total number of pages.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "showFirstLast",
+          "type": "boolean",
+          "default": "true",
+          "description": "Whether to show first/last page jump buttons.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "siblingCount",
+          "type": "number",
+          "default": "1",
+          "description": "Number of page buttons to show on each side of the current page.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "pageChange",
+          "type": "(e: number) => void",
+          "default": "—",
+          "description": "Current page (1-based). Supports two-way binding: [(page)]=\"currentPage\".",
+          "required": false,
+          "kind": "output"
+        }
+      ],
+      "parts": {}
+    },
+    "react": {
+      "props": [
+        {
+          "name": "page",
+          "type": "number",
+          "default": "1",
+          "description": "The currently active page.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "pageCount",
+          "type": "number",
+          "default": "1",
+          "description": "The total number of pages.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "siblingCount",
+          "type": "number",
+          "default": "1",
+          "description": "The number of pages to show on either side of the current page.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "showFirstLast",
+          "type": "boolean",
+          "default": "true",
+          "description": "Whether to show buttons for first and last pages.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "onPageChange",
+          "type": "(page: number) => void",
+          "default": "—",
+          "description": "Callback triggered when the page changes.",
+          "required": false,
+          "kind": "prop"
+        }
+      ],
+      "parts": {}
+    },
+    "vue": {
+      "props": [
+        {
+          "name": "page",
+          "type": "number",
+          "default": "1",
+          "description": "Current page (1-based). Controlled: listen to `pageChange` and feed the new page back in.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "pageCount",
+          "type": "number",
+          "default": "1",
+          "description": "Total number of pages.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "siblingCount",
+          "type": "number",
+          "default": "1",
+          "description": "Number of page buttons to show on each side of the current page.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "showFirstLast",
+          "type": "boolean",
+          "default": "true",
+          "description": "Whether to show first/last page jump buttons.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "pageChange",
+          "type": "[page: number]",
+          "default": "—",
+          "description": "",
+          "required": false,
+          "kind": "event"
+        }
+      ],
+      "parts": {}
+    }
+  },
+  "progress": {
+    "angular": {
+      "props": [
+        {
+          "name": "indeterminate",
+          "type": "boolean",
+          "default": "false",
+          "description": "Shows an animated indeterminate state (loading).",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "label",
+          "type": "string | undefined",
+          "default": "—",
+          "description": "Accessible name — rendered as `aria-label` on the host. Required by ARIA when there is no visible label nearby.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "max",
+          "type": "number",
+          "default": "100",
+          "description": "Maximum value.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "size",
+          "type": "'sm' | 'md' | 'lg'",
+          "default": "'md'",
+          "description": "Height size of the track.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "value",
+          "type": "number",
+          "default": "0",
+          "description": "Current value of the progress bar.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "variant",
+          "type": "'default' | 'success' | 'warning' | 'danger'",
+          "default": "'default'",
+          "description": "Semantic color variant.",
+          "required": false,
+          "kind": "input"
+        }
+      ],
+      "parts": {}
+    },
+    "react": {
+      "props": [
+        {
+          "name": "value",
+          "type": "number",
+          "default": "0",
+          "description": "The current progress value.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "max",
+          "type": "number",
+          "default": "100",
+          "description": "The maximum progress value.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "variant",
+          "type": "'default' | 'success' | 'warning' | 'danger'",
+          "default": "'default'",
+          "description": "The visual style variant of the progress bar.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "size",
+          "type": "'sm' | 'md' | 'lg'",
+          "default": "'md'",
+          "description": "The size of the progress bar.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "indeterminate",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the progress bar is in an indeterminate state.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "—",
+          "description": "Accessible name for the progress bar — rendered as `aria-label`. Required by ARIA when there is no visible label nearby; without it screen readers announce only \"progress bar 47%\". Examples: `\"Upload progress\"`, `\"Form completion\"`, `\"Quota usage\"`.",
+          "required": false,
+          "kind": "prop"
+        }
+      ],
+      "parts": {}
+    },
+    "vue": {
+      "props": [
+        {
+          "name": "value",
+          "type": "number",
+          "default": "0",
+          "description": "Current value of the progress bar, clamped between 0 and `max`.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "max",
+          "type": "number",
+          "default": "100",
+          "description": "Maximum value.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "variant",
+          "type": "'default' | 'danger' | 'success' | 'warning'",
+          "default": "'default'",
+          "description": "Semantic color variant.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "size",
+          "type": "'md' | 'sm' | 'lg'",
+          "default": "'md'",
+          "description": "Height size of the track.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "indeterminate",
+          "type": "boolean",
+          "default": "false",
+          "description": "Shows an animated indeterminate (loading) state.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "—",
+          "description": "Accessible name — rendered as `aria-label` on the host. Required by ARIA when there is no visible label nearby.",
+          "required": false,
+          "kind": "prop"
+        }
+      ],
+      "parts": {}
+    }
+  },
+  "radio-group": {
+    "angular": {
+      "props": [
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the group is disabled. Bound by [formField] directive.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "errors",
+          "type": "readonly WithOptionalFieldTree<ValidationError>[]",
+          "default": "[]",
+          "description": "Validation errors from the form system. Bound by [formField] directive.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the group has validation errors. Bound by [formField] directive.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "default": "''",
+          "description": "Shared name attribute propagated to all child radio inputs. Bound by [formField] directive.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "readonly",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the selection can be read but not changed. Enforced by the guards in `select()` and `onKeydown()`: HTML ignores `readonly` on a radio input, so the group has to block the change itself. See ADR-0045.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the group is required. Bound by [formField] directive.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "touched",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the user has interacted. Bound by [formField] directive.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "default": "''",
+          "description": "The selected value. Bound by [formField] directive. Supports [(value)] two-way binding.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "touchedChange",
+          "type": "(e: boolean) => void",
+          "default": "—",
+          "description": "Whether the user has interacted. Bound by [formField] directive.",
+          "required": false,
+          "kind": "output"
+        },
+        {
+          "name": "valueChange",
+          "type": "(e: string) => void",
+          "default": "—",
+          "description": "The selected value. Bound by [formField] directive. Supports [(value)] two-way binding.",
+          "required": false,
+          "kind": "output"
+        }
+      ],
+      "parts": {
+        "AtlRadio": [
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "default": "false",
+            "description": "Whether this specific radio is individually disabled (stacked with group disabled).",
+            "required": false,
+            "kind": "input"
+          },
+          {
+            "name": "radioValue",
+            "type": "string",
+            "default": "—",
+            "description": "The value this radio option represents within the group.",
+            "required": true,
+            "kind": "input"
+          }
+        ]
+      }
+    },
+    "react": {
+      "props": [
+        {
+          "name": "value",
+          "type": "string",
+          "default": "''",
+          "description": "The current value of the radio group.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "onValueChange",
+          "type": "(value: string) => void",
+          "default": "—",
+          "description": "Callback triggered when the value changes.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the radio group is disabled.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the radio group is in an invalid state.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether a value is required.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "default": "''",
+          "description": "The name of the radio group, applied to all child radio buttons.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "readonly",
+          "type": "boolean",
+          "default": "—",
+          "description": "Lowercase alias of `readOnly`: whether the selection can be read but not changed. `readOnly` wins when both are set.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "orientation",
+          "type": "'horizontal' | 'vertical'",
+          "default": "'vertical'",
+          "description": "The layout orientation of the radio group.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "readOnly",
+          "type": "boolean",
+          "default": "—",
+          "description": "Whether the radio group is read-only.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "errors",
+          "type": "string[]",
+          "default": "[]",
+          "description": "Array of error messages to display.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "default": "—",
+          "description": "The radio buttons to be rendered.",
+          "required": false,
+          "kind": "prop"
+        }
+      ],
+      "parts": {
+        "AtlRadio": [
+          {
+            "name": "radioValue",
+            "type": "string",
+            "default": "—",
+            "description": "The value of the radio button.",
+            "required": true,
+            "kind": "prop"
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "default": "false",
+            "description": "Whether the radio button is disabled.",
+            "required": false,
+            "kind": "prop"
+          },
+          {
+            "name": "children",
+            "type": "ReactNode",
+            "default": "—",
+            "description": "The content to be rendered as the label for the radio button.",
+            "required": false,
+            "kind": "prop"
+          }
+        ]
+      }
+    },
+    "vue": {
+      "props": [
+        {
+          "name": "value",
+          "type": "string",
+          "default": "''",
+          "description": "The selected radio value. Two-way bound via `v-model:value` (emits `update:value`).",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "default": "''",
+          "description": "Shared `name` attribute applied to all child radio inputs.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the whole group is disabled.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "readonly",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the selection can be read but not changed. Enforced by the group, since HTML ignores `readonly` on a radio input.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the group has validation errors; sets `aria-invalid`.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the group is required; sets `aria-required`.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "errors",
+          "type": "string[]",
+          "default": "[]",
+          "description": "Validation error messages shown below the group.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "update:value",
+          "type": "[value: string]",
+          "default": "—",
+          "description": "",
+          "required": false,
+          "kind": "event"
+        },
+        {
+          "name": "default",
+          "type": "{}",
+          "default": "—",
+          "description": "",
+          "required": false,
+          "kind": "slot"
+        }
+      ],
+      "parts": {
+        "AtlRadio": [
+          {
+            "name": "radioValue",
+            "type": "string",
+            "default": "—",
+            "description": "The value this radio option represents within the group.",
+            "required": true,
+            "kind": "prop"
+          },
+          {
+            "name": "disabled",
+            "type": "boolean",
+            "default": "false",
+            "description": "Whether this radio is individually disabled (in addition to a disabled group).",
+            "required": false,
+            "kind": "prop"
+          },
+          {
+            "name": "default",
+            "type": "{}",
+            "default": "—",
+            "description": "",
+            "required": false,
+            "kind": "slot"
+          }
+        ]
+      }
+    }
+  },
+  "select": {
+    "angular": {
+      "props": [
+        {
+          "name": "aria-label",
+          "type": "string",
+          "default": "''",
+          "description": "Accessible name for the trigger button, for when there is no visible `label`. An aliased input rather than a plain host attribute — see `atl-input.ts`'s identical `ariaLabel` for why.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the select is disabled. Bound by [formField] directive.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "errors",
+          "type": "readonly WithOptionalFieldTree<ValidationError>[]",
+          "default": "[]",
+          "description": "Validation errors from the form system. Bound by [formField] directive.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the select has validation errors. Bound by [formField] directive.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "''",
+          "description": "Visible caption rendered as a `<label>` associated with the trigger button via `for`/`id`. Omit it when the field is captioned some other way (an external `<label>`, or `aria-label`) — without one of these the select has no accessible name (this is the L1 backlog item: a select with neither produces exactly that).",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "default": "''",
+          "description": "The input's name attribute. Bound by [formField] directive.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "default": "''",
+          "description": "Placeholder text shown when no option is selected.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the select is required. Bound by [formField] directive.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "touched",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the user has interacted. Bound by [formField] directive.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "default": "''",
+          "description": "The selected value. Bound by [formField] directive. Supports [(value)] two-way binding.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "touchedChange",
+          "type": "(e: boolean) => void",
+          "default": "—",
+          "description": "Whether the user has interacted. Bound by [formField] directive.",
+          "required": false,
+          "kind": "output"
+        },
+        {
+          "name": "valueChange",
+          "type": "(e: string) => void",
+          "default": "—",
+          "description": "The selected value. Bound by [formField] directive. Supports [(value)] two-way binding.",
+          "required": false,
+          "kind": "output"
+        }
+      ],
+      "parts": {
+        "AtlOption": null
+      }
+    },
+    "react": {
+      "props": [
+        {
+          "name": "value",
+          "type": "string",
+          "default": "''",
+          "description": "The current value of the select.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "onValueChange",
+          "type": "(value: string) => void",
+          "default": "—",
+          "description": "Callback triggered when the value changes.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the select is disabled.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the select is in an invalid state.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the select is required.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "default": "—",
+          "description": "The select's name attribute, used for form submission.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "—",
+          "description": "The label for the select.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "default": "—",
+          "description": "Placeholder text to display when no value is selected.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "errors",
+          "type": "string[]",
+          "default": "[]",
+          "description": "Array of error messages to display.",
+          "required": false,
+          "kind": "prop"
+        }
+      ],
+      "parts": {
+        "AtlOption": null
+      }
+    },
+    "vue": {
+      "props": [
+        {
+          "name": "value",
+          "type": "string",
+          "default": "''",
+          "description": "The selected value. Two-way bound via `v-model:value` (emits `update:value`).",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "default": "—",
+          "description": "Placeholder text shown when no option is selected.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the select has validation errors; sets `aria-invalid`.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "errors",
+          "type": "string[]",
+          "default": "[]",
+          "description": "Validation error messages shown below the control and linked to it via `aria-describedby`.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the select is disabled.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the select is required.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "—",
+          "description": "Visible caption rendered as a `<label>` associated with the select. Omit it when the field is named some other way (an external `<label>`, or `aria-label`); without one of these the select has no accessible name.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "default": "—",
+          "description": "The select's `name` attribute.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "—",
+          "description": "Accessible name for the native select, for when there is no visible `label`. Declared as an explicit prop (not left to Vue's default attribute fallthrough) so it lands on the native `<select>` — the fallthrough target for an undeclared attribute is this component's root `<div>`, which has no role and would leave the select unnamed. camelCase here, like every other prop — see AtlInput's identical `ariaLabel` for why (Vue camelizes both sides of prop-name matching, so `props['aria-label']` in the script is never populated).",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "update:value",
+          "type": "[value: string]",
+          "default": "—",
+          "description": "",
+          "required": false,
+          "kind": "event"
+        },
+        {
+          "name": "default",
+          "type": "{}",
+          "default": "—",
+          "description": "",
+          "required": false,
+          "kind": "slot"
+        }
+      ],
+      "parts": {
+        "AtlOption": null
+      }
+    }
+  },
+  "skeleton": {
+    "angular": {
+      "props": [
+        {
+          "name": "animated",
+          "type": "boolean",
+          "default": "true",
+          "description": "Whether the shimmer animation is active.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "height",
+          "type": "string",
+          "default": "''",
+          "description": "CSS height — when empty, a sensible default is chosen per variant.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "variant",
+          "type": "'text' | 'circular' | 'rectangular'",
+          "default": "'text'",
+          "description": "Shape variant of the skeleton placeholder.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "width",
+          "type": "string",
+          "default": "'100%'",
+          "description": "CSS width of the skeleton.",
+          "required": false,
+          "kind": "input"
+        }
+      ],
+      "parts": {}
+    },
+    "react": {
+      "props": [
+        {
+          "name": "variant",
+          "type": "'text' | 'circular' | 'rectangular'",
+          "default": "'text'",
+          "description": "The visual style variant of the skeleton.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "width",
+          "type": "string",
+          "default": "'100%'",
+          "description": "The width of the skeleton.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "height",
+          "type": "string",
+          "default": "—",
+          "description": "The height of the skeleton.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "animated",
+          "type": "boolean",
+          "default": "true",
+          "description": "Whether the skeleton should be animated.",
+          "required": false,
+          "kind": "prop"
+        }
+      ],
+      "parts": {}
+    },
+    "vue": {
+      "props": [
+        {
+          "name": "variant",
+          "type": "'text' | 'circular' | 'rectangular'",
+          "default": "'text'",
+          "description": "Shape variant of the skeleton placeholder.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "width",
+          "type": "string",
+          "default": "'100%'",
+          "description": "CSS width of the skeleton.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "height",
+          "type": "string",
+          "default": "—",
+          "description": "CSS height. When unset, a sensible default is chosen per variant.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "animated",
+          "type": "boolean",
+          "default": "true",
+          "description": "Whether the shimmer animation is active.",
+          "required": false,
+          "kind": "prop"
+        }
+      ],
+      "parts": {}
+    }
+  },
+  "stepper": {
+    "angular": {
+      "props": [
+        {
+          "name": "activeStep",
+          "type": "number",
+          "default": "0",
+          "description": "Index of the currently active step. Supports two-way binding.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "linear",
+          "type": "boolean",
+          "default": "false",
+          "description": "When true, users can only navigate to completed steps or the next pending step. Use `goTo()` / `next()` in your step content to advance programmatically.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "orientation",
+          "type": "'horizontal' | 'vertical'",
+          "default": "'horizontal'",
+          "description": "Layout orientation.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "activeStepChange",
+          "type": "(e: number) => void",
+          "default": "—",
+          "description": "Index of the currently active step. Supports two-way binding.",
+          "required": false,
+          "kind": "output"
+        }
+      ],
+      "parts": {
+        "AtlStep": null
+      }
+    },
+    "react": {
+      "props": [
+        {
+          "name": "activeStep",
+          "type": "number",
+          "default": "—",
+          "description": "Currently active step index.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "orientation",
+          "type": "'horizontal' | 'vertical'",
+          "default": "'horizontal'",
+          "description": "Layout orientation.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "linear",
+          "type": "boolean",
+          "default": "false",
+          "description": "Restrict forward navigation until previous steps are completed.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "onActiveStepChange",
+          "type": "(index: number) => void",
+          "default": "—",
+          "description": "Callback when the active step changes.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "default": "—",
+          "description": "The `AtlStep` elements, in order, plus any step content.",
+          "required": false,
+          "kind": "prop"
+        }
+      ],
+      "parts": {
+        "AtlStep": null
+      }
+    },
+    "vue": {
+      "props": [
+        {
+          "name": "activeStep",
+          "type": "number",
+          "default": "0",
+          "description": "Index of the currently active step. Two-way bound via `v-model:activeStep` (emits `update:activeStep`).",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "orientation",
+          "type": "'horizontal' | 'vertical'",
+          "default": "'horizontal'",
+          "description": "Layout orientation.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "linear",
+          "type": "boolean",
+          "default": "false",
+          "description": "When true, users can only navigate to completed or optional steps behind the target, or the next pending step.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "update:activeStep",
+          "type": "[index: number]",
+          "default": "—",
+          "description": "",
+          "required": false,
+          "kind": "event"
+        },
+        {
+          "name": "default",
+          "type": "{}",
+          "default": "—",
+          "description": "",
+          "required": false,
+          "kind": "slot"
+        }
+      ],
+      "parts": {
+        "AtlStep": null
+      }
+    }
+  },
+  "table": {
+    "angular": {
+      "props": [
+        {
+          "name": "aria-label",
+          "type": "string | undefined",
+          "default": "—",
+          "description": "Accessible name for the scrollable table region. Surfaces to screen readers as the region's label so keyboard users who scroll the wrapper know what they're scrolling. Defaults to `\"Table\"` if unset.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "size",
+          "type": "'sm' | 'md' | 'lg'",
+          "default": "'md'",
+          "description": "Row density.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "stickyHeader",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the header row sticks to the top when the table scrolls.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "variant",
+          "type": "'default' | 'striped' | 'bordered'",
+          "default": "'default'",
+          "description": "Visual style of the table rows.",
+          "required": false,
+          "kind": "input"
+        }
+      ],
+      "parts": {
+        "AtlTbody": null,
+        "AtlTd": null,
+        "AtlTh": null,
+        "AtlThead": null,
+        "AtlTr": null
+      }
+    },
+    "react": {
+      "props": [
+        {
+          "name": "variant",
+          "type": "'default' | 'striped' | 'bordered'",
+          "default": "'default'",
+          "description": "Visual style of the table rows.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "size",
+          "type": "'sm' | 'md' | 'lg'",
+          "default": "'md'",
+          "description": "Row density: the vertical padding of cells.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "stickyHeader",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the header row sticks to the top when the table scrolls.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "aria-label",
+          "type": "string",
+          "default": "—",
+          "description": "Accessible name for the scrollable table region. The wrapper around the `<table>` is keyboard-focusable (tabindex=0) so that users can scroll horizontally; this label is what screen readers announce when focus enters the region. Defaults to `\"Table\"`.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "default": "—",
+          "description": "The table sections: `AtlThead` and `AtlTbody` elements.",
+          "required": false,
+          "kind": "prop"
+        }
+      ],
+      "parts": {
+        "AtlTbody": null,
+        "AtlTd": null,
+        "AtlTh": null,
+        "AtlThead": null,
+        "AtlTr": null
+      }
+    },
+    "vue": {
+      "props": [
+        {
+          "name": "variant",
+          "type": "'default' | 'striped' | 'bordered'",
+          "default": "'default'",
+          "description": "Visual style of the table rows.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "size",
+          "type": "'md' | 'sm' | 'lg'",
+          "default": "'md'",
+          "description": "Row density.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "stickyHeader",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the header row sticks to the top when the table scrolls.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "—",
+          "description": "Accessible name for the scrollable table region. Surfaces to screen readers as the region's label so keyboard users who scroll the wrapper know what they're scrolling. Defaults to `\"Table\"` if unset.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "default",
+          "type": "{}",
+          "default": "—",
+          "description": "",
+          "required": false,
+          "kind": "slot"
+        }
+      ],
+      "parts": {
+        "AtlTbody": null,
+        "AtlTd": null,
+        "AtlTh": null,
+        "AtlThead": null,
+        "AtlTr": null
+      }
+    }
+  },
+  "tabs": {
+    "angular": {
+      "props": [
+        {
+          "name": "selectedIndex",
+          "type": "number",
+          "default": "0",
+          "description": "Index of the currently active tab. Supports two-way binding.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "variant",
+          "type": "'default' | 'pills'",
+          "default": "'default'",
+          "description": "Visual variant.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "selectedIndexChange",
+          "type": "(e: number) => void",
+          "default": "—",
+          "description": "Index of the currently active tab. Supports two-way binding.",
+          "required": false,
+          "kind": "output"
+        }
+      ],
+      "parts": {
+        "AtlTab": null
+      }
+    },
+    "react": {
+      "props": [
+        {
+          "name": "selectedIndex",
+          "type": "number",
+          "default": "—",
+          "description": "The index of the currently selected tab.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "onSelectedIndexChange",
+          "type": "(index: number) => void",
+          "default": "—",
+          "description": "Callback triggered when the selected tab index changes.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "variant",
+          "type": "'default' | 'pills'",
+          "default": "'default'",
+          "description": "The visual style variant of the tabs.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "default": "—",
+          "description": "The AtlTab components to be rendered.",
+          "required": false,
+          "kind": "prop"
+        }
+      ],
+      "parts": {
+        "AtlTab": null
+      }
+    },
+    "vue": {
+      "props": [
+        {
+          "name": "selectedIndex",
+          "type": "number",
+          "default": "0",
+          "description": "Index of the currently active tab. Two-way bound via `v-model:selectedIndex` (emits `update:selectedIndex`).",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "variant",
+          "type": "'default' | 'pills'",
+          "default": "'default'",
+          "description": "Visual variant.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "update:selectedIndex",
+          "type": "[index: number]",
+          "default": "—",
+          "description": "",
+          "required": false,
+          "kind": "event"
+        },
+        {
+          "name": "default",
+          "type": "{ groupId: string; }",
+          "default": "—",
+          "description": "",
+          "required": false,
+          "kind": "slot"
+        }
+      ],
+      "parts": {
+        "AtlTab": null
+      }
+    }
+  },
+  "textarea": {
+    "angular": {
+      "props": [
+        {
+          "name": "aria-label",
+          "type": "string",
+          "default": "''",
+          "description": "Accessible name for the native textarea, for when there is no visible `label`. An aliased input rather than a plain host attribute — see `atl-input.ts`'s identical `ariaLabel` for why.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "autoResize",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether to auto-resize the textarea height to fit its content.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the textarea is disabled. Bound by [formField] directive.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "errors",
+          "type": "readonly WithOptionalFieldTree<ValidationError>[]",
+          "default": "[]",
+          "description": "Validation errors from the form system. Bound by [formField] directive.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "default": "''",
+          "description": "Explicit id for the native textarea. Wins over the auto-generated id — set this when something outside this component (an external `<label for>`, or `aria-describedby` from elsewhere on the page) needs a known, stable id to point at.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the textarea has validation errors. Bound by [formField] directive.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "''",
+          "description": "Visible caption rendered as a `<label>` associated with the textarea via `for`/`id`. Omit it when the field is captioned some other way (an external `<label>`, or `aria-label`) — without one of these the textarea has no accessible name.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "default": "''",
+          "description": "The textarea's name attribute. Bound by [formField] directive.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "default": "''",
+          "description": "Placeholder text shown when the textarea is empty.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "readonly",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the textarea is read-only. Bound by [formField] directive.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the textarea is required. Bound by [formField] directive.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "rows",
+          "type": "number",
+          "default": "3",
+          "description": "Number of visible text rows.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "touched",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the user has interacted with the textarea. Bound by [formField] directive.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "value",
+          "type": "string",
+          "default": "''",
+          "description": "The current textarea value. Supports [(value)] two-way binding.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "touchedChange",
+          "type": "(e: boolean) => void",
+          "default": "—",
+          "description": "Whether the user has interacted with the textarea. Bound by [formField] directive.",
+          "required": false,
+          "kind": "output"
+        },
+        {
+          "name": "valueChange",
+          "type": "(e: string) => void",
+          "default": "—",
+          "description": "The current textarea value. Supports [(value)] two-way binding.",
+          "required": false,
+          "kind": "output"
+        }
+      ],
+      "parts": {}
+    },
+    "react": {
+      "props": [
+        {
+          "name": "value",
+          "type": "string",
+          "default": "—",
+          "description": "Current value of the textarea.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "onValueChange",
+          "type": "(value: string) => void",
+          "default": "—",
+          "description": "Callback fired when the value changes.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the textarea is disabled.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the textarea has validation errors.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the textarea is required.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "default": "—",
+          "description": "The textarea's name attribute, used for form submission.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "readonly",
+          "type": "boolean",
+          "default": "—",
+          "description": "Lowercase alias of `readOnly`: whether the textarea is read-only. `readOnly` wins when both are set.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "—",
+          "description": "Label text for the textarea.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "rows",
+          "type": "number",
+          "default": "3",
+          "description": "Number of visible text rows.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "default": "—",
+          "description": "Placeholder text shown when the textarea is empty.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "autoResize",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the textarea height grows automatically to fit its content.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "readOnly",
+          "type": "boolean",
+          "default": "—",
+          "description": "Whether the textarea is read-only.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "errors",
+          "type": "string[]",
+          "default": "[]",
+          "description": "List of error messages to display.",
+          "required": false,
+          "kind": "prop"
+        }
+      ],
+      "parts": {}
+    },
+    "vue": {
+      "props": [
+        {
+          "name": "value",
+          "type": "string",
+          "default": "''",
+          "description": "The current textarea value. Two-way bound via `v-model:value` (emits `update:value`).",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "rows",
+          "type": "number",
+          "default": "3",
+          "description": "Number of visible text rows.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "placeholder",
+          "type": "string",
+          "default": "''",
+          "description": "Placeholder text shown when the textarea is empty.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the textarea has validation errors; sets `aria-invalid`.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "errors",
+          "type": "string[]",
+          "default": "[]",
+          "description": "Validation error messages shown below the control and linked to it via `aria-describedby`.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the textarea is disabled.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "readonly",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the textarea is read-only.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the textarea is required.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "label",
+          "type": "string",
+          "default": "''",
+          "description": "Visible caption rendered as a `<label>` associated with the textarea. Omit it when the field is named some other way (an external `<label>`, or `aria-label`); without one of these the textarea has no accessible name.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "autoResize",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the textarea height grows automatically to fit its content.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "default": "''",
+          "description": "The textarea's `name` attribute.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "default": "''",
+          "description": "Explicit id for the native textarea. Wins over the auto-generated id, so an external `<label for>` or `aria-describedby` can point at it.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "''",
+          "description": "Accessible name for the native textarea, for when there is no visible `label`. Declared as an explicit prop (not left to Vue's default attribute fallthrough) so it lands on the native `<textarea>` — the fallthrough target for an undeclared attribute is this component's root `<div>`, which has no role and would leave the textarea unnamed. camelCase here, like every other prop — see AtlInput's identical `ariaLabel` for why (Vue camelizes both sides of prop-name matching, so `props['aria-label']` in the script is never populated).",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "update:value",
+          "type": "[value: string]",
+          "default": "—",
+          "description": "",
+          "required": false,
+          "kind": "event"
+        }
+      ],
+      "parts": {}
+    }
+  },
+  "toast": {
+    "angular": {
+      "props": null,
+      "parts": {}
+    },
+    "react": {
+      "props": null,
+      "parts": {}
+    },
+    "vue": {
+      "props": null,
+      "parts": {}
+    }
+  },
+  "toggle": {
+    "angular": {
+      "props": [
+        {
+          "name": "checked",
+          "type": "boolean",
+          "default": "false",
+          "description": "The checked state. Bound by [formField] directive. Supports [(checked)] two-way binding.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the toggle is disabled. Bound by [formField] directive.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "errors",
+          "type": "readonly WithOptionalFieldTree<ValidationError>[]",
+          "default": "[]",
+          "description": "Validation errors from the form system. Bound by [formField] directive.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the toggle has validation errors. Bound by [formField] directive.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "default": "''",
+          "description": "The input's name attribute. Bound by [formField] directive.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the toggle is required. Bound by [formField] directive.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "touched",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the user has interacted with the input. Bound by [formField] directive.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "checkedChange",
+          "type": "(e: boolean) => void",
+          "default": "—",
+          "description": "The checked state. Bound by [formField] directive. Supports [(checked)] two-way binding.",
+          "required": false,
+          "kind": "output"
+        },
+        {
+          "name": "touchedChange",
+          "type": "(e: boolean) => void",
+          "default": "—",
+          "description": "Whether the user has interacted with the input. Bound by [formField] directive.",
+          "required": false,
+          "kind": "output"
+        }
+      ],
+      "parts": {}
+    },
+    "react": {
+      "props": [
+        {
+          "name": "checked",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the toggle is on. Controlled: pair it with `onCheckedChange`.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "onCheckedChange",
+          "type": "(checked: boolean) => void",
+          "default": "—",
+          "description": "Callback fired when the checked state changes.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the toggle has validation errors.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the toggle is disabled.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the toggle is required.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "errors",
+          "type": "string[]",
+          "default": "[]",
+          "description": "List of error messages to display.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "default": "—",
+          "description": "Optional content to display alongside the toggle.",
+          "required": false,
+          "kind": "prop"
+        }
+      ],
+      "parts": {}
+    },
+    "vue": {
+      "props": [
+        {
+          "name": "checked",
+          "type": "boolean",
+          "default": "false",
+          "description": "The checked state. Two-way bound via `v-model:checked` (emits `update:checked`).",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "invalid",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the toggle has validation errors; sets `aria-invalid`.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "errors",
+          "type": "string[]",
+          "default": "[]",
+          "description": "Validation error messages shown below the control and linked to it via `aria-describedby`.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "disabled",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the toggle is disabled.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "required",
+          "type": "boolean",
+          "default": "false",
+          "description": "Whether the toggle is required.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "name",
+          "type": "string",
+          "default": "''",
+          "description": "The input's `name` attribute.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "id",
+          "type": "string",
+          "default": "''",
+          "description": "Explicit id for the native input. Wins over the auto-generated id, so an external `<label for>` can point at it.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "update:checked",
+          "type": "[value: boolean]",
+          "default": "—",
+          "description": "",
+          "required": false,
+          "kind": "event"
+        },
+        {
+          "name": "default",
+          "type": "{}",
+          "default": "—",
+          "description": "",
+          "required": false,
+          "kind": "slot"
+        }
+      ],
+      "parts": {}
+    }
+  },
+  "tooltip": {
+    "angular": {
+      "props": [
+        {
+          "name": "atlTooltip",
+          "type": "string",
+          "default": "—",
+          "description": "The tooltip text.",
+          "required": true,
+          "kind": "input"
+        },
+        {
+          "name": "atlTooltipDisabled",
+          "type": "boolean",
+          "default": "false",
+          "description": "Disable the tooltip without removing the directive.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "atlTooltipHideDelay",
+          "type": "number",
+          "default": "0",
+          "description": "Delay in ms before the tooltip hides.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "atlTooltipPosition",
+          "type": "'above' | 'below' | 'left' | 'right'",
+          "default": "'above'",
+          "description": "Preferred tooltip placement. Falls back to the opposite side if clipped.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "atlTooltipShowDelay",
+          "type": "number",
+          "default": "300",
+          "description": "Delay in ms before the tooltip appears.",
+          "required": false,
+          "kind": "input"
+        }
+      ],
+      "parts": {}
+    },
+    "react": {
+      "props": [
+        {
+          "name": "atlTooltip",
+          "type": "string",
+          "default": "—",
+          "description": "The tooltip text.",
+          "required": true,
+          "kind": "prop"
+        },
+        {
+          "name": "atlTooltipPosition",
+          "type": "'above' | 'below' | 'left' | 'right'",
+          "default": "'above'",
+          "description": "Preferred tooltip placement. Falls back to the opposite side if clipped.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "atlTooltipDisabled",
+          "type": "boolean",
+          "default": "false",
+          "description": "Disables the tooltip without removing the wrapper.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "atlTooltipShowDelay",
+          "type": "number",
+          "default": "300",
+          "description": "Delay in ms before the tooltip appears.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "atlTooltipHideDelay",
+          "type": "number",
+          "default": "0",
+          "description": "Delay in ms before the tooltip hides.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "children",
+          "type": "ReactNode",
+          "default": "—",
+          "description": "The content to trigger the tooltip.",
+          "required": true,
+          "kind": "prop"
+        }
+      ],
+      "parts": {}
+    },
+    "vue": {
+      "props": [
+        {
+          "name": "atlTooltip",
+          "type": "string",
+          "default": "''",
+          "description": "The tooltip text.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "atlTooltipPosition",
+          "type": "'right' | 'left' | 'above' | 'below'",
+          "default": "'above'",
+          "description": "Preferred tooltip placement relative to the wrapped content.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "atlTooltipDisabled",
+          "type": "boolean",
+          "default": "false",
+          "description": "Disables the tooltip without removing the wrapper.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "atlTooltipShowDelay",
+          "type": "number",
+          "default": "300",
+          "description": "Delay in ms before the tooltip appears.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "atlTooltipHideDelay",
+          "type": "number",
+          "default": "0",
+          "description": "Delay in ms before the tooltip hides.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "default",
+          "type": "{}",
+          "default": "—",
+          "description": "",
+          "required": false,
+          "kind": "slot"
+        }
+      ],
+      "parts": {}
+    }
+  }
+}

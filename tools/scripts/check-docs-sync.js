@@ -33,7 +33,7 @@
  * Retired (P4a, ADR-0121): [DRIFT] and [TYPE-DRIFT], which compared the spec's
  * props and string-literal unions with the hand-written `props` arrays in
  * components.ts. Those arrays are gone: the docs prop tables are generated from
- * each framework's Storybook manifest (docs/src/data/manifest-props.ts), so the
+ * each framework's Storybook manifest (projected into docs/src/data/props.generated.json), so the
  * docs cannot drift from the adapters. The spec <-> adapter comparison itself is
  * check:props (prop names), check:variants (union values) and check:defaults.
  *

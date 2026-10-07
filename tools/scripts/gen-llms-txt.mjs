@@ -4,7 +4,8 @@
  *
  * Generates docs/public/llms.txt (short index) and docs/public/llms-full.txt
  * (complete API reference) from docs/src/data/components.ts, with the prop
- * tables read from the built React Storybook manifest.
+ * tables read from the committed props projection
+ * (docs/src/data/props.generated.json, React rows).
  *
  * Why this exists: the library's value proposition is "LLM-optimized", so the
  * public text reference MUST stay fresh. Before this generator, both files
@@ -26,7 +27,7 @@ import ts from 'typescript';
 // them without an ESM wrapper. Pull them in via createRequire here.
 const require = createRequire(import.meta.url);
 const { evalNode, parseExportedVars } = require('./lib/ts-eval.js');
-const { docsApiFromRepo } = require('./lib/manifest-props.js');
+const { projectedApi } = require('./lib/props-projection.js');
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const DATA_FILE = resolve(ROOT, 'docs/src/data/components.ts');
@@ -488,13 +489,13 @@ const mode = process.argv[2];
 
 const parsed = parseComponents();
 
-// The prop rows come from the React manifest (`dist/storybook/react/manifests`),
-// the same source the docs page renders: React's prop names (`onValueChange`,
-// `variant`, ...) are the framework-neutral spelling these files have always
-// used. A MANIFEST_GAPS component (toast) keeps its hand-written rows in
-// components.ts. Throws when the manifest is not built (`npm run gen:llms` and
-// `check:llms` build it first).
-const reactApi = docsApiFromRepo('react', ROOT, parsed.docs);
+// The prop rows come from the committed props projection, React's rows: React's
+// prop names (`onValueChange`, `variant`, ...) are the framework-neutral
+// spelling these files have always used. A MANIFEST_GAPS component (toast)
+// keeps its hand-written rows in components.ts. No Storybook build is needed
+// (the release workflow and the pre-push hook run this with no dist/);
+// check:props-projection keeps the projection in step with the manifests.
+const reactApi = projectedApi('react', ROOT, parsed.docs);
 function propsOf(key) {
   const rows = reactApi[key]?.props;
   if (!rows) return parsed.docs[key]?.props ?? [];

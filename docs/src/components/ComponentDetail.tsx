@@ -793,7 +793,7 @@ function ComponentDemo({ name }: { name: string }) {
 
 interface ComponentDetailProps {
   name: string;
-  /** Prop tables read from the Storybook manifests at build time (see data/manifest-props.ts). */
+  /** Prop tables from the committed props projection (see data/manifest-props.ts). */
   api: Record<Framework, ComponentApi>;
 }
 
@@ -823,7 +823,7 @@ export default function ComponentDetail({ name, api }: ComponentDetailProps) {
   const categoryTone = CATEGORY_TONE[category] ?? 'primary';
   const importSymbols = IMPORT_MAP[name] ?? [];
   // The manifest of the selected framework; the hand-written rows only where
-  // the manifest has no entry (see MANIFEST_GAPS in data/manifest-props.ts).
+  // the manifest has no entry (see MANIFEST_GAPS in tools/scripts/lib/manifest-props.js).
   const fwApi = api[framework];
   const propRows = fwApi.props ? tableRows(fwApi.props) : (doc.props ?? []);
   const partRows = (part: CompositionPart): DisplayRow[] => {

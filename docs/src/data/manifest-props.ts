@@ -1,24 +1,15 @@
 /**
- * Build-time prop tables, read from the three Storybook docgen manifests
- * (`dist/storybook/<fw>/manifests/components.json`) instead of being written
- * out by hand in components.ts (ADR-0121: props, defaults and descriptions are
- * generated from the manifest; ADR-0149: no silent empty table).
+ * Prop tables for the docs pages, read from the committed props projection
+ * (props.generated.json). tools/scripts/gen-props-projection.mjs writes it from
+ * the three Storybook docgen manifests (ADR-0121: props, defaults and
+ * descriptions are generated from the manifest; ADR-0149: no silent empty
+ * table), and `check:props-projection` keeps it in step with them. The docs
+ * build reads the JSON only, so it needs no Storybook build.
  *
- * Node-only (fs/path): import from `.astro` frontmatter, never from client
- * code. The extraction and the slug -> manifest-entry resolution live in
- * tools/scripts/lib/manifest-props.js, so the docs, `gen-llms-txt.mjs`,
- * `check-defaults.js` and the `check:storybook-manifests` gate all read the
- * manifests the same way.
- *
- * Fails the build — it never returns an empty table — when a manifest is
- * missing, or when a documented component has no entry in it. The only
- * declared gaps are MANIFEST_GAPS in that library file.
+ * Never returns an empty table: an unknown slug throws. A null `props` is the
+ * declared MANIFEST_GAPS case (toast), where components.ts keeps the rows.
  */
-import { existsSync } from 'node:fs';
-import { createRequire } from 'node:module';
-import { dirname, join } from 'node:path';
-import { componentDocs } from './components';
-import { storybookComponentId } from '../lib/storybook-id';
+import projection from './props.generated.json';
 
 export type Framework = 'angular' | 'react' | 'vue';
 export const FRAMEWORKS: readonly Framework[] = ['angular', 'react', 'vue'];
@@ -47,62 +38,18 @@ export interface ComponentApi {
   parts: Record<string, ManifestRow[] | null>;
 }
 
-interface ManifestLib {
-  docsApi(
-    fw: Framework,
-    root: string,
-    docs: typeof componentDocs,
-    idOf: typeof storybookComponentId,
-  ): Record<string, ComponentApi>;
-}
-
-function findRepoRoot(start: string): string {
-  let dir = start;
-  while (!existsSync(join(dir, 'nx.json'))) {
-    const parent = dirname(dir);
-    if (parent === dir) {
-      throw new Error(
-        `manifest-props: repo root (nx.json) not found walking up from ${start}`,
-      );
-    }
-    dir = parent;
-  }
-  return dir;
-}
-
-// Resolved from the repo root (found via nx.json), not import.meta.url: Astro
-// bundles this module into a prerender chunk at a different directory depth.
-const root = findRepoRoot(process.cwd());
-const lib = createRequire(join(root, 'package.json'))(
-  './tools/scripts/lib/manifest-props.js',
-) as ManifestLib;
-
-let all: Record<Framework, Record<string, ComponentApi>> | undefined;
+const all = projection as unknown as Record<
+  string,
+  Record<Framework, ComponentApi>
+>;
 
 /** The manifest API of one docs component (slug, e.g. `radio-group`), all frameworks. */
 export function manifestApiFor(slug: string): Record<Framework, ComponentApi> {
-  if (!all) {
-    try {
-      all = {
-        angular: lib.docsApi(
-          'angular',
-          root,
-          componentDocs,
-          storybookComponentId,
-        ),
-        react: lib.docsApi('react', root, componentDocs, storybookComponentId),
-        vue: lib.docsApi('vue', root, componentDocs, storybookComponentId),
-      };
-    } catch (e) {
-      throw new Error(`manifest-props: ${(e as Error).message}`);
-    }
+  const api = all[slug];
+  if (!api) {
+    throw new Error(
+      `manifest-props: no '${slug}' in props.generated.json. Run \`npm run gen:props-projection\`.`,
+    );
   }
-  if (!(slug in componentDocs)) {
-    throw new Error(`manifest-props: no docs component '${slug}'.`);
-  }
-  return {
-    angular: all.angular[slug],
-    react: all.react[slug],
-    vue: all.vue[slug],
-  };
+  return api;
 }

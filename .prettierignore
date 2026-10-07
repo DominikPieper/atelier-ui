@@ -18,6 +18,7 @@ libs/spec/src/behaviors.generated.ts
 docs/public/llms.txt
 docs/public/llms-full.txt
 docs/public/.well-known/cookbook-patterns.json
+docs/src/data/props.generated.json
 tools/design/artboard-palette.css
 plan/design-status.md
 libs/create-workspace/src/generators/preset/files/figma/snapshot.json

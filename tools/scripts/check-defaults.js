@@ -15,8 +15,8 @@
  *   Angular  `<prop> = input<…>('value')`
  *   React    `<prop> = 'value'`  (destructured default)
  *   Vue      `withDefaults(…, { <prop>: 'value' })`
- * Docs       the prop's `default` in each framework's built Storybook manifest
- *            (the docs prop tables are generated from it).
+ * Docs       the prop's `default` in each framework's slice of the committed props
+ *            projection (docs/src/data/props.generated.json).
  *
  * Run via:  node tools/scripts/check-defaults.js  (or  npm run check:defaults)
  */
@@ -31,7 +31,7 @@ const {
 } = require('./lib/component-axes');
 const { DEFAULT_PROP_EXCEPTIONS } = require('./lib/allowlists');
 const { parseExportedVars } = require('./lib/ts-eval');
-const { docsApiFromRepo } = require('./lib/manifest-props');
+const { projectedApi } = require('./lib/props-projection');
 
 const ROOT = path.resolve(__dirname, '../..');
 const DOCS_FILE = path.join(ROOT, 'docs/src/data/components.ts');
@@ -77,15 +77,17 @@ function vueDefault(src, prop) {
 
 /**
  * framework -> docsKey -> { prop -> default (quotes stripped) }, read from the
- * built Storybook manifests, which is where the docs tables now get their
- * defaults (ADR-0121). Throws when a manifest is missing, so this gate cannot
- * pass vacuously: `npm run check:defaults` builds them first.
+ * committed props projection (docs/src/data/props.generated.json), which is
+ * where the docs tables get their defaults (ADR-0121). Throws when it is
+ * missing, so this gate cannot pass vacuously. Reading the projection rather
+ * than the manifests needs no Storybook build; check:props-projection pins the
+ * projection to the manifests, so the comparison is still against them.
  */
 function parseDocsDefaults() {
   const componentDocs = parseExportedVars(DOCS_FILE).componentDocs;
   const result = {};
   for (const fw of FRAMEWORKS) {
-    const api = docsApiFromRepo(fw, ROOT, componentDocs);
+    const api = projectedApi(fw, ROOT, componentDocs);
     result[fw] = {};
     for (const [key, { props }] of Object.entries(api)) {
       if (!props) continue; // a declared MANIFEST_GAPS component
@@ -147,7 +149,7 @@ for (const [union, component] of Object.entries(UNION_TO_COMPONENT)) {
     const docsVal = docs[fw][component] && docs[fw][component][prop];
     if (docsVal !== undefined && docsVal !== values[0]) {
       errors.push(
-        `[DOCS-DEFAULT-DRIFT] ${component}.${prop}: adapters default '${values[0]}' but the ${fw} manifest says '${docsVal}'`,
+        `[DOCS-DEFAULT-DRIFT] ${component}.${prop}: adapters default '${values[0]}' but the ${fw} projection says '${docsVal}'`,
       );
     }
   }
