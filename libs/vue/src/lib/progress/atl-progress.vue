@@ -5,10 +5,15 @@ import '@atelier-ui/styles/progress/atl-progress.css';
 defineOptions({ name: 'AtlProgress' });
 
 interface AtlProgressProps {
+  /** Current value of the progress bar, clamped between 0 and `max`. */
   value?: number;
+  /** Maximum value. */
   max?: number;
+  /** Semantic color variant. */
   variant?: 'default' | 'success' | 'warning' | 'danger';
+  /** Height size of the track. */
   size?: 'sm' | 'md' | 'lg';
+  /** Shows an animated indeterminate (loading) state. */
   indeterminate?: boolean;
   /**
    * Accessible name — rendered as `aria-label` on the host.

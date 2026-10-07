@@ -36,8 +36,11 @@ defineOptions({ name: 'AtlStepper' });
 
 const props = withDefaults(
   defineProps<{
+    /** Index of the currently active step. Two-way bound via `v-model:activeStep` (emits `update:activeStep`). */
     activeStep?: number;
+    /** Layout orientation. */
     orientation?: 'horizontal' | 'vertical';
+    /** When true, users can only navigate to completed or optional steps behind the target, or the next pending step. */
     linear?: boolean;
   }>(),
   {

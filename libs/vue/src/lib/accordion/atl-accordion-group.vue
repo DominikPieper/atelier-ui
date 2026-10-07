@@ -2,7 +2,9 @@
 import type { InjectionKey, Ref } from 'vue';
 
 export interface AtlAccordionGroupProps {
+  /** Allow multiple items to be expanded simultaneously. */
   multi?: boolean;
+  /** Visual variant. */
   variant?: 'default' | 'bordered' | 'separated';
 }
 

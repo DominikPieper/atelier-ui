@@ -5,9 +5,13 @@ import '@atelier-ui/styles/skeleton/atl-skeleton.css';
 defineOptions({ name: 'AtlSkeleton' });
 
 interface AtlSkeletonProps {
+  /** Shape variant of the skeleton placeholder. */
   variant?: 'text' | 'circular' | 'rectangular';
+  /** CSS width of the skeleton. */
   width?: string;
+  /** CSS height. When unset, a sensible default is chosen per variant. */
   height?: string;
+  /** Whether the shimmer animation is active. */
   animated?: boolean;
 }
 

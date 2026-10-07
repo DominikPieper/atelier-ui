@@ -6,7 +6,9 @@ import '@atelier-ui/styles/radio/atl-radio.css';
 defineOptions({ name: 'AtlRadio' });
 
 interface AtlRadioProps {
+  /** The value this radio option represents within the group. */
   radioValue: string;
+  /** Whether this radio is individually disabled (in addition to a disabled group). */
   disabled?: boolean;
 }
 

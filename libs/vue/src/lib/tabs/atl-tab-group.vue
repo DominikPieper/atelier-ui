@@ -21,7 +21,9 @@ export const AtlTabGroupKey: InjectionKey<AtlTabGroupContext> =
   Symbol('AtlTabGroup');
 
 export interface AtlTabGroupProps {
+  /** Index of the currently active tab. Two-way bound via `v-model:selectedIndex` (emits `update:selectedIndex`). */
   selectedIndex?: number;
+  /** Visual variant. */
   variant?: 'default' | 'pills';
 }
 </script>

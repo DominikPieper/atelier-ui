@@ -5,12 +5,19 @@ import '@atelier-ui/styles/toggle/atl-toggle.css';
 defineOptions({ name: 'AtlToggle' });
 
 interface AtlToggleProps {
+  /** The checked state. Two-way bound via `v-model:checked` (emits `update:checked`). */
   checked?: boolean;
+  /** Whether the toggle has validation errors; sets `aria-invalid`. */
   invalid?: boolean;
+  /** Validation error messages shown below the control and linked to it via `aria-describedby`. */
   errors?: string[];
+  /** Whether the toggle is disabled. */
   disabled?: boolean;
+  /** Whether the toggle is required. */
   required?: boolean;
+  /** The input's `name` attribute. */
   name?: string;
+  /** Explicit id for the native input. Wins over the auto-generated id, so an external `<label for>` can point at it. */
   id?: string;
 }
 

@@ -9,7 +9,9 @@ defineOptions({ name: 'AtlBadge' });
 type AtlBadgeVariant = 'default' | 'success' | 'warning' | 'danger' | 'info';
 
 interface AtlBadgeProps {
+  /** Semantic color variant of the badge. */
   variant?: AtlBadgeVariant;
+  /** Size of the badge. */
   size?: 'sm' | 'md';
 }
 

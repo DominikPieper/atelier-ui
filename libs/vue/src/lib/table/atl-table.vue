@@ -5,8 +5,11 @@ import '@atelier-ui/styles/table/atl-table.css';
 defineOptions({ name: 'AtlTable' });
 
 interface Props {
+  /** Visual style of the table rows. */
   variant?: 'default' | 'striped' | 'bordered';
+  /** Row density. */
   size?: 'sm' | 'md' | 'lg';
+  /** Whether the header row sticks to the top when the table scrolls. */
   stickyHeader?: boolean;
   /**
    * Accessible name for the scrollable table region. Surfaces to

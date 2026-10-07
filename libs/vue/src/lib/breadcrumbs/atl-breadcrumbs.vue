@@ -3,9 +3,15 @@ import '@atelier-ui/styles/breadcrumbs/atl-breadcrumbs.css';
 
 defineOptions({ name: 'AtlBreadcrumbs' });
 
-const props = withDefaults(defineProps<{ separator?: string }>(), {
-  separator: '/',
-});
+const props = withDefaults(
+  defineProps<{
+    /** Separator character shown between breadcrumb items. */
+    separator?: string;
+  }>(),
+  {
+    separator: '/',
+  },
+);
 </script>
 
 <template>

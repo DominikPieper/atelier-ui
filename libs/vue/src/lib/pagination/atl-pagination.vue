@@ -6,9 +6,13 @@ import AtlIcon from '../icon/atl-icon.vue';
 defineOptions({ name: 'AtlPagination' });
 
 interface AtlPaginationProps {
+  /** Current page (1-based). Controlled: listen to `pageChange` and feed the new page back in. */
   page?: number;
+  /** Total number of pages. */
   pageCount?: number;
+  /** Number of page buttons to show on each side of the current page. */
   siblingCount?: number;
+  /** Whether to show first/last page jump buttons. */
   showFirstLast?: boolean;
 }
 

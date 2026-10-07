@@ -5,10 +5,15 @@ import '@atelier-ui/styles/button/atl-button.css';
 defineOptions({ name: 'AtlButton' });
 
 interface AtlButtonProps {
+  /** Visual style of the button. */
   variant?: 'primary' | 'secondary' | 'outline' | 'danger';
+  /** Size of the button. */
   size?: 'sm' | 'md' | 'lg';
+  /** Disables the button, preventing interaction. */
   disabled?: boolean;
+  /** Shows a loading spinner and disables interaction. */
   loading?: boolean;
+  /** Native `type` attribute of the button. */
   type?: 'button' | 'submit' | 'reset';
 }
 

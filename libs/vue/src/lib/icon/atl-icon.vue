@@ -11,7 +11,9 @@ import '@atelier-ui/styles/icon/atl-icon.css';
 defineOptions({ name: 'AtlIcon' });
 
 interface AtlIconProps {
+  /** The icon to render. Required. */
   name: AtlIconName;
+  /** Icon size: `sm` 16px, `md` 20px, `lg` 24px. The same 24-unit geometry is scaled. */
   size?: AtlIconSize;
   /**
    * Accessible label. When provided, the icon is announced as an image with

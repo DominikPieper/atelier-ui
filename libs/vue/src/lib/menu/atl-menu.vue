@@ -4,6 +4,7 @@ import { computed } from 'vue';
 defineOptions({ name: 'AtlMenu' });
 
 interface AtlMenuProps {
+  /** Visual variant. `compact` reduces font size and padding. */
   variant?: 'default' | 'compact';
 }
 

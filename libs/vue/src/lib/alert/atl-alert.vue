@@ -9,7 +9,9 @@ defineOptions({ name: 'AtlAlert' });
 type AtlAlertVariant = 'info' | 'success' | 'warning' | 'danger';
 
 interface AtlAlertProps {
+  /** Semantic color variant of the alert. */
   variant?: AtlAlertVariant;
+  /** Whether to show a dismiss button; clicking it emits `dismissed`. */
   dismissible?: boolean;
 }
 

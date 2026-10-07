@@ -5,13 +5,21 @@ import '@atelier-ui/styles/checkbox/atl-checkbox.css';
 defineOptions({ name: 'AtlCheckbox' });
 
 interface AtlCheckboxProps {
+  /** The checked state. Two-way bound via `v-model:checked` (emits `update:checked`). */
   checked?: boolean;
+  /** Tri-state indeterminate mode (e.g. "select all"), shown as a dash. Applied to the native input's DOM property. */
   indeterminate?: boolean;
+  /** Whether the checkbox has validation errors; sets `aria-invalid`. */
   invalid?: boolean;
+  /** Validation error messages shown below the control and linked to it via `aria-describedby`. */
   errors?: string[];
+  /** Whether the checkbox is disabled. */
   disabled?: boolean;
+  /** Whether the checkbox is required. */
   required?: boolean;
+  /** The input's `name` attribute. */
   name?: string;
+  /** Explicit id for the native input. Wins over the auto-generated id, so an external `<label for>` can point at it. */
   id?: string;
 }
 

@@ -5,7 +5,9 @@ import '@atelier-ui/styles/card/atl-card.css';
 defineOptions({ name: 'AtlCard' });
 
 interface AtlCardProps {
+  /** Visual style of the card. */
   variant?: 'elevated' | 'outlined' | 'flat';
+  /** Internal padding of the card. */
   padding?: 'none' | 'sm' | 'md' | 'lg';
   /**
    * Opt-in landmark role. Default is no role.

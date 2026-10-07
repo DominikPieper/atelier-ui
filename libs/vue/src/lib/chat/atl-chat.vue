@@ -12,8 +12,11 @@ export interface AtlChatContext {
 export const AtlChatKey: InjectionKey<AtlChatContext> = Symbol('AtlChat');
 
 export interface AtlChatProps {
+  /** Layout variant. */
   variant?: AtlChatVariant;
+  /** Connection / response status. Drives the badge color in the header and disables input while streaming. */
   status?: AtlChatStatus;
+  /** Whether the chat is open. Used by drawer/popup, ignored by inline. Two-way bound via `v-model:open` (emits `update:open`). */
   open?: boolean;
 }
 </script>

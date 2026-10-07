@@ -14,12 +14,19 @@ export const AtlRadioGroupKey: InjectionKey<AtlRadioGroupContext> =
   Symbol('AtlRadioGroup');
 
 export interface AtlRadioGroupProps {
+  /** The selected radio value. Two-way bound via `v-model:value` (emits `update:value`). */
   value?: string;
+  /** Shared `name` attribute applied to all child radio inputs. */
   name?: string;
+  /** Whether the whole group is disabled. */
   disabled?: boolean;
+  /** Whether the selection can be read but not changed. Enforced by the group, since HTML ignores `readonly` on a radio input. */
   readonly?: boolean;
+  /** Whether the group has validation errors; sets `aria-invalid`. */
   invalid?: boolean;
+  /** Whether the group is required; sets `aria-required`. */
   required?: boolean;
+  /** Validation error messages shown below the group. */
   errors?: string[];
 }
 </script>

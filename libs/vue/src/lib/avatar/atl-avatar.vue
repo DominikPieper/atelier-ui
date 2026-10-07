@@ -6,11 +6,17 @@ import AtlIcon from '../icon/atl-icon.vue';
 defineOptions({ name: 'AtlAvatar' });
 
 interface AtlAvatarProps {
+  /** Image URL. Falls back to initials if empty or if the image fails to load. */
   src?: string;
+  /** Alt text for the image (also used as the accessible label). */
   alt?: string;
+  /** Full name used to generate the initials fallback and the default accessible label. */
   name?: string;
+  /** Size of the avatar. */
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
+  /** Shape of the avatar. */
   shape?: 'circle' | 'square';
+  /** Presence status indicator dot. Empty string hides the dot. */
   status?: 'online' | 'offline' | 'away' | 'busy' | '';
 }
 

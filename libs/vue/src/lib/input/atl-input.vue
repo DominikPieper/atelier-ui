@@ -7,16 +7,27 @@ import AtlIcon from '../icon/atl-icon.vue';
 defineOptions({ name: 'AtlInput' });
 
 interface AtlInputProps {
+  /** The current input value. Two-way bound via `v-model:value` (emits `update:value`). */
   value?: string;
+  /** The type of input field. */
   type?: 'text' | 'email' | 'password' | 'number' | 'tel' | 'url';
+  /** Placeholder text shown when the input is empty. */
   placeholder?: string;
+  /** Whether the input has validation errors; sets `aria-invalid`. */
   invalid?: boolean;
+  /** Validation error messages shown below the control and linked to it via `aria-describedby`. */
   errors?: string[];
+  /** Whether the input is disabled. */
   disabled?: boolean;
+  /** Whether the input is read-only. */
   readonly?: boolean;
+  /** Whether the input is required. */
   required?: boolean;
+  /** Visible caption rendered as a `<label>` associated with the input. Omit it when the field is named some other way (an external `<label>`, or `aria-label`); without one of these the input has no accessible name. */
   label?: string;
+  /** The input's `name` attribute. */
   name?: string;
+  /** Explicit id for the native input. Wins over the auto-generated id, so an external `<label for>` or `aria-describedby` can point at it. */
   id?: string;
   /**
    * Accessible name for the native input, for when there is no visible

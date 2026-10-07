@@ -9,9 +9,13 @@ export interface AtlDialogContext {
 export const AtlDialogKey: InjectionKey<AtlDialogContext> = Symbol('AtlDialog');
 
 export interface AtlDialogProps {
+  /** Whether the dialog is open. Two-way bound via `v-model:open` (emits `update:open`). */
   open?: boolean;
+  /** Whether clicking the backdrop closes the dialog. */
   closeOnBackdrop?: boolean;
+  /** Size of the dialog panel. */
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
+  /** Accessible label for the dialog; use it instead of a header when none is present. When set, it replaces the header as the dialog's accessible name. */
   ariaLabel?: string;
 }
 </script>

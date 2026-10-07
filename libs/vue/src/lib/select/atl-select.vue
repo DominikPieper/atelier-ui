@@ -8,13 +8,21 @@ import AtlIcon from '../icon/atl-icon.vue';
 defineOptions({ name: 'AtlSelect' });
 
 interface AtlSelectProps {
+  /** The selected value. Two-way bound via `v-model:value` (emits `update:value`). */
   value?: string;
+  /** Placeholder text shown when no option is selected. */
   placeholder?: string;
+  /** Whether the select has validation errors; sets `aria-invalid`. */
   invalid?: boolean;
+  /** Validation error messages shown below the control and linked to it via `aria-describedby`. */
   errors?: string[];
+  /** Whether the select is disabled. */
   disabled?: boolean;
+  /** Whether the select is required. */
   required?: boolean;
+  /** Visible caption rendered as a `<label>` associated with the select. Omit it when the field is named some other way (an external `<label>`, or `aria-label`); without one of these the select has no accessible name. */
   label?: string;
+  /** The select's `name` attribute. */
   name?: string;
   /**
    * Accessible name for the native select, for when there is no visible

@@ -5,7 +5,9 @@ import '@atelier-ui/styles/avatar/atl-avatar.css';
 defineOptions({ name: 'AtlAvatarGroup' });
 
 interface AtlAvatarGroupProps {
+  /** Maximum visible avatars before showing an overflow count. */
   max?: number;
+  /** Size applied to the overflow badge (match the size used on the child avatars). */
   size?: 'xs' | 'sm' | 'md' | 'lg' | 'xl';
 }
 

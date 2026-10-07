@@ -6,10 +6,15 @@ import '@atelier-ui/styles/tooltip/atl-tooltip.native.css';
 defineOptions({ name: 'AtlTooltip' });
 
 interface AtlTooltipProps {
+  /** The tooltip text. */
   atlTooltip?: string;
+  /** Preferred tooltip placement relative to the wrapped content. */
   atlTooltipPosition?: 'above' | 'below' | 'left' | 'right';
+  /** Disables the tooltip without removing the wrapper. */
   atlTooltipDisabled?: boolean;
+  /** Delay in ms before the tooltip appears. */
   atlTooltipShowDelay?: number;
+  /** Delay in ms before the tooltip hides. */
   atlTooltipHideDelay?: number;
 }
 

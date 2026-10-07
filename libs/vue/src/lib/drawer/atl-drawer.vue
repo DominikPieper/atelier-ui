@@ -9,9 +9,13 @@ export interface AtlDrawerContext {
 export const AtlDrawerKey: InjectionKey<AtlDrawerContext> = Symbol('AtlDrawer');
 
 export interface AtlDrawerProps {
+  /** Whether the drawer is open. Two-way bound via `v-model:open` (emits `update:open`). */
   open?: boolean;
+  /** Which edge the drawer slides in from. */
   position?: 'left' | 'right' | 'top' | 'bottom';
+  /** Width (for left/right) or height (for top/bottom) of the panel. */
   size?: 'sm' | 'md' | 'lg' | 'full';
+  /** Whether clicking the backdrop closes the drawer. */
   closeOnBackdrop?: boolean;
 }
 </script>

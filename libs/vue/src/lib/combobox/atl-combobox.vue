@@ -7,14 +7,23 @@ import AtlIcon from '../icon/atl-icon.vue';
 defineOptions({ name: 'AtlCombobox' });
 
 interface Props {
+  /** The selected option value. Two-way bound via `v-model:value` (emits `update:value`). */
   value?: string;
+  /** Options to display and filter. */
   options?: AtlComboboxOption[];
+  /** Placeholder text for the input. */
   placeholder?: string;
+  /** Whether the combobox is disabled. */
   disabled?: boolean;
+  /** Whether the value can be read but not changed: the panel does not open and no option can be picked. */
   readonly?: boolean;
+  /** Whether the combobox has validation errors; sets `aria-invalid`. */
   invalid?: boolean;
+  /** Whether the combobox is required. */
   required?: boolean;
+  /** The input's `name` attribute. */
   name?: string;
+  /** Validation error messages shown below the control and linked to it via `aria-describedby`. */
   errors?: string[];
 }
 
