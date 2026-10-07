@@ -21,7 +21,7 @@ If creating visual artifacts (slides, mocks, throwaway prototypes, marketing pag
 - Keep voice honest and editorial — _"Tokens, not utilities."_ / _"Composition over configuration."_ / _"teaching artifact, not a production library."_ No emoji. No exclamation marks.
 - Anchor color is Conciso deep teal `#006470` (light) / bright teal `#34d8d8` (dark). Use the broader `--ui-color-brand-*` palette only for diagrams, never chrome.
 - Component names are PascalCase with the `Atl` prefix (`AtlButton`, `AtlCard`, `AtlCardHeader`).
-- Imagery is restrained — the brand prefers the wordmark, a crosshair grid, and one radial glow over photography or illustrations.
+- Imagery is restrained — no photography, no illustration, no decorative grids or glows. The one hero image is the design-to-code loop drawn as a spec sheet: real artefacts, token names annotated like measurements (ADR-0156).
 
 If working on production code, copy `assets/colors_and_type.css` into the project and read the rules in `references/brand-guide.md` to become an expert in designing with this brand. The token names line up 1:1 with the upstream `@atelier-ui/spec`.
 

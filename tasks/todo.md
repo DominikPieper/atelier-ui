@@ -29,12 +29,11 @@ Atelier token system instead of the generic gradient/grid look.
       fails on any text under 12 px at 1440 (`[FONT-SIZE]`, negative-tested for HTML and
       SVG). Open from this step: the H2/body ratio (20/16) is still weak, and the guard
       does not cover the sidebar, topbar or collapsed `<details>`.
-- [ ] **2. shape** — hero and chrome show the token system; drop gradient wordmark, grid
-      background, pulsing dot, eyebrow chips, identical pillar cards; callouts lose the
-      coloured left border; descriptive H1. Owner decided 2026-10-07: the brand kit
-      (`skills/atelier-design/ui_kits/docs-site/`) changes with the docs (one authority,
-      one ADR), and the home's first view is the Figma → contract → code → verify loop as
-      the main image with one start button.
+- [x] **2. shape** — done 2026-10-07 (ADR-0156). Home = H1 + one action + `LoopDiagram`
+      (spec-sheet loop, also on `/design-to-code`); hero decoration, eyebrows and pillar cards
+      gone; side stripes replaced site-wide; kit, `SKILL.md`, `brand-guide.md` updated, and the
+      kit's broken token-sheet path fixed. Open: at a 1200 px window the Inspect card loses
+      its leader lines.
 - [ ] **3. distill** — track pages show the 7 steps, Reference/How-to/Explanation
       collapsed; one primary home CTA; one MCP endpoint on home; one product name; mobile
       bottom nav offers "Next step".

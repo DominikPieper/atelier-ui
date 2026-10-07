@@ -868,20 +868,8 @@ summary:focus-visible,
 
 /* ── Reusable tag chips ───────────────────────────────────
  * Use when you need a small mono-styled label inline with prose
- * or in a card meta-row. Pillar tags consume .docs-pill-tag.
+ * or in a card meta-row.
  * Version pills (e.g. on llms.txt) consume .docs-mono-tag. */
-.docs-pill-tag {
-  display: inline-flex;
-  align-items: center;
-  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
-  font-size: var(--ui-font-size-xs);
-  padding: 3px 8px;
-  background: var(--ui-color-surface-sunken);
-  border: 1px solid var(--ui-color-border);
-  border-radius: var(--ui-radius-sm);
-  color: var(--ui-color-primary);
-}
-
 .docs-mono-tag {
   display: inline-flex;
   align-items: center;
@@ -1659,11 +1647,18 @@ summary:focus-visible,
 .docs-ai-list li + li {
   margin-top: 0.5rem;
 }
-.docs-ai-best-practices {
-  border-left: 4px solid var(--ui-color-primary);
+.docs-ai-best-practices,
+[data-theme='dark'] .docs-ai-best-practices {
+  background: var(--ui-color-primary-tint-6);
+  border-color: var(--ui-color-primary-border);
 }
-.docs-ai-hallucinations {
-  border-left: 4px solid var(--ui-color-warning);
+.docs-ai-hallucinations,
+[data-theme='dark'] .docs-ai-hallucinations {
+  background: var(--ui-color-warning-bg);
+  border-color: color-mix(in srgb, var(--ui-color-warning) 35%, transparent);
+}
+.docs-ai-hallucinations .docs-ai-list {
+  color: var(--ui-color-warning-text);
 }
 
 .docs-ai-prompt {
@@ -2296,127 +2291,6 @@ summary:focus-visible,
 
 /* ── Home page specific ───────────────────────────────── */
 
-/* Hero */
-.docs-hero-v2 {
-  text-align: center;
-  padding: 5rem 2rem 4rem;
-  position: relative;
-  overflow: hidden;
-}
-
-/* Crosshair grid background — tinted by primary teal, masked to fade
- * outward so the grid is densest behind the wordmark. Mirrors the kit
- * pattern at skills/atelier-design/ui_kits/docs-site/landing.css L54-60. */
-.docs-hero-grid-bg {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(
-      color-mix(in srgb, var(--ui-color-primary) 8%, transparent) 1px,
-      transparent 1px
-    ),
-    linear-gradient(
-      90deg,
-      color-mix(in srgb, var(--ui-color-primary) 8%, transparent) 1px,
-      transparent 1px
-    );
-  background-size: 40px 40px;
-  -webkit-mask-image: radial-gradient(
-    ellipse 800px 500px at center,
-    #000 30%,
-    transparent 75%
-  );
-  mask-image: radial-gradient(
-    ellipse 800px 500px at center,
-    #000 30%,
-    transparent 75%
-  );
-  pointer-events: none;
-}
-
-/* Primary center glow — primary teal, positioned above the wordmark per kit. */
-.docs-hero-glow {
-  position: absolute;
-  top: 30%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 700px;
-  height: 400px;
-  background: radial-gradient(
-    ellipse,
-    color-mix(in srgb, var(--ui-color-primary) 14%, transparent) 0%,
-    transparent 70%
-  );
-  pointer-events: none;
-}
-
-.docs-hero-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 0.4rem;
-  padding: 6px 14px;
-  background: var(--ui-color-primary-light);
-  border: 1px solid color-mix(in srgb, var(--ui-color-primary) 25%, transparent);
-  border-radius: 9999px;
-  font-size: var(--ui-font-size-xs);
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  color: var(--ui-color-primary);
-  margin-bottom: 1.25rem;
-  position: relative;
-}
-
-.docs-hero-wordmark {
-  font-size: clamp(3.5rem, 10vw, 6rem);
-  font-weight: 900;
-  letter-spacing: -0.04em;
-  line-height: 1;
-  margin: 0 0 1.25rem;
-  background: linear-gradient(
-    135deg,
-    var(--docs-hero-gradient-start) 0%,
-    var(--docs-hero-gradient-end) 100%
-  );
-  -webkit-background-clip: text;
-  -webkit-text-fill-color: transparent;
-  background-clip: text;
-  position: relative;
-}
-
-.docs-hero-subtitle {
-  font-size: 1.1rem;
-  color: var(--ui-color-text-muted);
-  margin: 0 auto 0.65rem;
-  max-width: 540px;
-  line-height: 1.7;
-  position: relative;
-}
-
-.docs-hero-disclaimer {
-  margin: 0 auto 2rem;
-  font-size: var(--ui-font-size-xs);
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: var(--ui-color-text-muted);
-  position: relative;
-}
-
-.docs-hero-actions {
-  display: flex;
-  gap: 0.75rem;
-  justify-content: center;
-  flex-wrap: wrap;
-  position: relative;
-}
-
-@media (max-width: 768px) {
-  .docs-hero-v2 {
-    padding: 3rem 1.5rem 2.5rem;
-  }
-}
-
 /* Framework strip */
 .docs-framework-strip {
   display: grid;
@@ -2811,91 +2685,6 @@ summary:focus-visible,
   background: var(--ui-color-border);
 }
 
-/* ── Three pillars ────────────────────────────────────── */
-.docs-pillars-section {
-  margin: 4rem 0 5rem;
-}
-
-.docs-pillars {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 1.5rem;
-}
-
-.docs-pillar {
-  background: var(--ui-color-surface);
-  border: 1px solid var(--ui-color-border);
-  border-top: 2px solid transparent;
-  border-radius: var(--ui-radius-lg);
-  padding: 1.75rem;
-  transition:
-    transform var(--ui-duration-normal) var(--ui-ease-out),
-    box-shadow var(--ui-duration-normal) var(--ui-ease-out),
-    border-top-color var(--ui-duration-normal) var(--ui-ease-out);
-}
-
-.docs-pillar:hover {
-  border-top-color: var(--ui-color-primary);
-  transform: translateY(-2px);
-  box-shadow: var(--ui-shadow-card-hover);
-}
-
-.docs-pillar-step {
-  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
-  font-size: var(--ui-font-size-xs);
-  font-weight: 600;
-  color: var(--ui-color-text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.06em;
-  margin-bottom: 1.125rem;
-}
-
-.docs-pillar-icon {
-  width: 3rem;
-  height: 3rem;
-  border-radius: var(--ui-radius-md);
-  background: var(--ui-color-primary-light);
-  color: var(--ui-color-primary);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 1.125rem;
-  font-size: 1.5rem;
-}
-
-.docs-pillar-name {
-  font-size: 1.25rem;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  margin: 0 0 0.5rem;
-  color: var(--ui-color-text);
-}
-
-.docs-pillar-desc {
-  font-size: var(--ui-font-size-md);
-  color: var(--ui-color-text-muted);
-  line-height: 1.6;
-  margin: 0 0 1rem;
-}
-
-.docs-pillar-desc code {
-  font-family: var(--font-mono, ui-monospace, SFMono-Regular, Menlo, monospace);
-  font-size: 0.8125rem;
-  color: var(--ui-color-primary);
-}
-
-.docs-pillar-meta {
-  display: flex;
-  gap: 0.5rem;
-  flex-wrap: wrap;
-}
-
-@media (max-width: 768px) {
-  .docs-pillars {
-    grid-template-columns: 1fr;
-  }
-}
-
 /* ── MCP setup grid ───────────────────────────────────── */
 .docs-mcp-grid {
   display: grid;
@@ -2986,16 +2775,6 @@ summary:focus-visible,
     #000 20%,
     transparent 80%
   );
-}
-
-.docs-cta-eyebrow {
-  position: relative;
-  font-size: var(--ui-font-size-xs);
-  font-weight: 700;
-  letter-spacing: 0.06em;
-  text-transform: uppercase;
-  color: color-mix(in srgb, var(--ui-color-text-on-primary) 80%, transparent);
-  margin-bottom: 1rem;
 }
 
 .docs-cta-title {

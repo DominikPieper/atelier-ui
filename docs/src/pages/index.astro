@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import Icon from '../components/Icon.astro';
 import SectionHead from '../components/SectionHead.astro';
 import CodeCard from '../components/CodeCard.astro';
-import Jargon from '../components/Jargon.astro';
+import LoopDiagram from '../components/LoopDiagram.astro';
 
 const MCP_CONFIG = `{
   "mcpServers": {
@@ -31,94 +31,26 @@ const SCAFFOLD_CMD = 'npx create-atelier-ui-workspace';
   width="full"
 >
   <!-- Hero -->
-  <section class="docs-hero-v2" aria-labelledby="hero-title">
-    <div class="docs-hero-grid-bg" aria-hidden="true"></div>
-    <div class="docs-hero-glow" aria-hidden="true"></div>
-
-    <div class="docs-hero-eyebrow">
-      <span class="docs-hero-eyebrow-dot" aria-hidden="true"></span>
-      Workshop · Component-driven UIs with AI
+  <section class="docs-home-hero" aria-labelledby="hero-title">
+    <div class="docs-home-hero-copy">
+      <h1 class="docs-page-h1 docs-home-h1" id="hero-title">
+        Design to <span class="docs-accent">code</span>, verified.
+      </h1>
+      <p class="docs-home-lede">
+        A Figma design becomes a working, verified component — in Angular, React
+        or Vue.
+      </p>
+      <div class="docs-home-actions">
+        <a href="/workshop" class="docs-btn docs-btn-primary">
+          Start the workshop
+        </a>
+        <a href="/components" class="docs-link-primary">Browse components</a>
+      </div>
     </div>
 
-    <h1 class="docs-hero-wordmark" id="hero-title">ATELIER</h1>
+    <LoopDiagram />
 
-    <p class="docs-hero-subtitle">
-      Design in Figma. Explore in Storybook. Ship with AI.
-    </p>
-    <p class="docs-hero-disclaimer">
-      Teaching artifact &middot; not a production library
-    </p>
-
-    <div class="docs-hero-actions">
-      <a href="/workshop" class="docs-btn docs-btn-primary">
-        Start the workshop
-      </a>
-      <a href="/design-to-code" class="docs-btn docs-btn-outline">
-        Design → code in 4 steps
-      </a>
-      <a href="/components" class="docs-btn docs-btn-outline">
-        Browse components
-      </a>
-    </div>
-  </section>
-
-  <!-- Three pillars -->
-  <section class="docs-pillars-section" aria-labelledby="pillars-title">
-    <SectionHead
-      eyebrow="The three pillars"
-      title="A loop, not a stack."
-      titleAccent="loop"
-      sub="Each tool reads the others through Model Context Protocol. Inspect → prompt → ship → iterate."
-      align="center"
-      id="pillars-title"
-    />
-    <div class="docs-pillars">
-      <article class="docs-pillar">
-        <div class="docs-pillar-step">01 &middot; Inspect</div>
-        <div class="docs-pillar-icon" aria-hidden="true">
-          <Icon name="figma" />
-        </div>
-        <h3 class="docs-pillar-name">Figma</h3>
-        <p class="docs-pillar-desc">
-          Master frames and the variant matrix live here. Token values are owned
-          in code and push to Figma — not the reverse.
-        </p>
-        <div class="docs-pillar-meta">
-          <span class="docs-pill-tag">Variables</span>
-          <span class="docs-pill-tag">Frames</span>
-        </div>
-      </article>
-      <article class="docs-pillar">
-        <div class="docs-pillar-step">02 &middot; Prompt</div>
-        <div class="docs-pillar-icon" aria-hidden="true">
-          <Icon name="book" />
-        </div>
-        <h3 class="docs-pillar-name">Storybook</h3>
-        <p class="docs-pillar-desc">
-          Per-framework live explorer. Each instance hosts an
-          <Jargon term="MCP">MCP</Jargon> endpoint Claude can call.
-        </p>
-        <div class="docs-pillar-meta">
-          <span class="docs-pill-tag">/mcp</span>
-          <span class="docs-pill-tag">Stories</span>
-        </div>
-      </article>
-      <article class="docs-pillar">
-        <div class="docs-pillar-step">03 &middot; Ship</div>
-        <div class="docs-pillar-icon" aria-hidden="true">
-          <Icon name="sparkles" />
-        </div>
-        <h3 class="docs-pillar-name">Claude + MCP</h3>
-        <p class="docs-pillar-desc">
-          Reads Figma + Storybook through MCP, writes spec-aligned code in
-          Angular, React, or Vue.
-        </p>
-        <div class="docs-pillar-meta">
-          <span class="docs-pill-tag">Spec-aware</span>
-          <span class="docs-pill-tag">Parity</span>
-        </div>
-      </article>
-    </div>
+    <p class="docs-home-note">Teaching artifact · not a production library</p>
   </section>
 
   <!-- MCP setup -->
@@ -126,7 +58,6 @@ const SCAFFOLD_CMD = 'npx create-atelier-ui-workspace';
     <div class="docs-mcp-grid">
       <div>
         <SectionHead
-          eyebrow="MCP setup"
           title="Three endpoints. One config."
           sub="All three endpoints, for reference. Drop the one for your framework into your Claude Code MCP config — or let the scaffolder below write it for you. Each Storybook endpoint exposes the same three docs tools — docs-list, docs-show, docs-show-story; dev and test tools (stories-preview, test-run) require a locally running Storybook with @storybook/addon-mcp."
           id="mcp-setup-title"
@@ -147,7 +78,6 @@ const SCAFFOLD_CMD = 'npx create-atelier-ui-workspace';
   <!-- Scaffolder CTA -->
   <section class="docs-cta-section" aria-labelledby="cta-title">
     <div class="docs-cta">
-      <div class="docs-cta-eyebrow">Get started in 60 seconds</div>
       <h2 class="docs-cta-title" id="cta-title">Scaffold a workspace.</h2>
       <p class="docs-cta-sub">
         An Nx workspace with your framework choice, the component library wired
@@ -213,27 +143,45 @@ const SCAFFOLD_CMD = 'npx create-atelier-ui-workspace';
 </script>
 
 <style>
-  .docs-hero-eyebrow-dot {
-    display: inline-block;
-    width: 6px;
-    height: 6px;
-    border-radius: 50%;
-    background: var(--ui-color-primary);
-    margin-right: 0.5rem;
-    vertical-align: middle;
-    animation: docs-hero-eyebrow-pulse 2s ease-in-out infinite;
+  .docs-home-hero {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ui-spacing-6);
+    padding: var(--ui-spacing-2) 0 var(--ui-spacing-12);
   }
 
-  @keyframes docs-hero-eyebrow-pulse {
-    0%,
-    100% {
-      opacity: 1;
-      transform: scale(1);
-    }
-    50% {
-      opacity: 0.5;
-      transform: scale(1.4);
-    }
+  .docs-home-hero-copy {
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: var(--ui-spacing-3);
+  }
+
+  .docs-home-h1 {
+    font-size: clamp(2.25rem, 5vw, 3.25rem);
+    margin: 0;
+  }
+
+  .docs-home-lede {
+    margin: 0;
+    max-width: 38rem;
+    font-size: var(--ui-font-size-lg);
+    line-height: 1.5;
+    color: var(--ui-color-text-muted);
+  }
+
+  .docs-home-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: var(--ui-spacing-6);
+    margin-top: var(--ui-spacing-2);
+  }
+
+  .docs-home-note {
+    margin: 0;
+    font-size: var(--ui-font-size-sm);
+    color: var(--ui-color-text-muted);
   }
 
   .docs-mcp-section,

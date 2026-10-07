@@ -121,12 +121,6 @@
    * Figma-audit one). Forest green carries "code/correct" semantics
    * and is AA-safe across surfaces. */
   --docs-tertiary: var(--ui-color-success);
-  /* Wordmark resolves to a solid primary teal — gradient end retained as the
-   * same value so any consumer still using --docs-hero-gradient-end stays
-   * brand-aligned. The kit specifies a primary-only wordmark; the cyan
-   * gradient end was a legacy SaaS-marketing affordance. */
-  --docs-hero-gradient-start: var(--ui-color-primary);
-  --docs-hero-gradient-end: var(--ui-color-primary);
   --docs-topbar-height: 68px;
   /* Height of the sticky mobile bottom-nav (≤768px only). Used to clear the
    * drawer's scrollable content and to inset scroll targets / .docs-main so

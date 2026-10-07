@@ -35,7 +35,6 @@ const TONE_ICON: Record<Tone, IconName> = {
     align-items: flex-start;
     padding: 1rem 1.125rem;
     border: 1px solid var(--ui-color-border);
-    border-left-width: 3px;
     border-radius: var(--ui-radius-md);
     background: var(--ui-color-surface-raised);
     color: var(--ui-color-text);
@@ -73,7 +72,8 @@ const TONE_ICON: Record<Tone, IconName> = {
   }
 
   .docs-callout--note {
-    border-left-color: var(--ui-color-info);
+    background: var(--ui-color-info-bg);
+    border-color: color-mix(in srgb, var(--ui-color-info) 35%, transparent);
   }
 
   .docs-callout--note .docs-callout-icon {
@@ -83,7 +83,6 @@ const TONE_ICON: Record<Tone, IconName> = {
   .docs-callout--tip {
     background: var(--ui-color-primary-tint-6);
     border-color: var(--ui-color-primary-border);
-    border-left-color: var(--ui-color-primary);
   }
 
   .docs-callout--tip .docs-callout-icon {
@@ -92,8 +91,7 @@ const TONE_ICON: Record<Tone, IconName> = {
 
   .docs-callout--warning {
     background: var(--ui-color-warning-bg);
-    border-color: color-mix(in srgb, var(--ui-color-warning) 30%, transparent);
-    border-left-color: var(--ui-color-warning);
+    border-color: color-mix(in srgb, var(--ui-color-warning) 35%, transparent);
     color: var(--ui-color-warning-text);
   }
 

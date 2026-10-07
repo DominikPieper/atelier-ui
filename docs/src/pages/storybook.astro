@@ -22,27 +22,24 @@ const MCP_CONFIG = `{
 }`;
 
 const STORYBOOK_LINKS = [
-  // border = brand hue (decorative); text color comes from a per-framework
-  // CSS class that picks an AA-safe shade per theme.
+  // Text color comes from a per-framework CSS class that picks an AA-safe
+  // shade per theme.
   {
     name: 'React',
     pkg: '@atelier-ui/react',
     href: `${SITE_URL}/storybook-react/`,
-    border: '#61dafb',
     textClass: 'storybook-card--react',
   },
   {
     name: 'Angular',
     pkg: '@atelier-ui/angular',
     href: `${SITE_URL}/storybook-angular/`,
-    border: '#e23237',
     textClass: 'storybook-card--angular',
   },
   {
     name: 'Vue',
     pkg: '@atelier-ui/vue',
     href: `${SITE_URL}/storybook-vue/`,
-    border: '#42b883',
     textClass: 'storybook-card--vue',
   },
 ];
@@ -70,11 +67,11 @@ const STORYBOOK_LINKS = [
         margin-bottom: 3rem;
       "
     >
-      {STORYBOOK_LINKS.map(({ name, pkg, href, border, textClass }) => <a
+      {STORYBOOK_LINKS.map(({ name, pkg, href, textClass }) => <a
         href={href}
         target="_blank"
         rel="noopener noreferrer"
-        style={`display: flex; flex-direction: column; gap: 0.5rem; padding: 1.1rem 1.1rem 0.9rem; background: var(--ui-color-surface-raised); border-radius: var(--ui-radius-md); text-decoration: none; border-left: 3px solid ${border}; transition: background var(--ui-transition-fast)`}
+        style={`display: flex; flex-direction: column; gap: 0.5rem; padding: 1.1rem 1.1rem 0.9rem; background: var(--ui-color-surface-raised); border-radius: var(--ui-radius-md); text-decoration: none; border: 1px solid var(--ui-color-border); transition: background var(--ui-transition-fast)`}
         class={`storybook-card ${textClass}`}
       >
         <div style="display: flex; align-items: center; gap: 0.5rem">
@@ -1052,6 +1049,7 @@ export default config;`}
 <style>
   .storybook-card:hover {
     background: var(--ui-color-surface-raised) !important;
+    border-color: var(--ui-color-primary-border) !important;
     filter: brightness(1.05);
   }
   .storybook-card__name {

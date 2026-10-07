@@ -1,0 +1,477 @@
+---
+/**
+ * The design-to-code loop as a spec sheet: Inspect → Contract → Generate →
+ * Verify, each step showing its real artefact, with `--ui-*` token names
+ * annotated the way a design spec annotates measurements. HTML/CSS so it
+ * reflows — four columns on desktop, a vertical sequence with the return
+ * path as a side rail on phones.
+ *
+ * Reading order for assistive tech: an ordered list of four steps, then the
+ * return-path sentence. Leader lines, connectors and the rail are drawn with
+ * CSS or `aria-hidden` and carry no information a reader would miss.
+ */
+import Icon from './Icon.astro';
+
+interface Props {
+  /**
+   * `full` shows the token annotations (leader line + mono token label) in
+   * the Inspect and Generate steps. `compact` drops them and keeps only the
+   * artefact headlines — for places where the loop is context, not the point.
+   */
+  density?: 'full' | 'compact';
+}
+
+const { density = 'full' } = Astro.props;
+const annotate = density === 'full';
+---
+
+<figure class="loop" data-density={density}>
+  <div class="loop-body">
+    <ol class="loop-steps" aria-label="The design-to-code loop">
+      <li class="loop-step">
+        <p class="loop-name">
+          <span class="loop-num" aria-hidden="true">1</span>Inspect
+        </p>
+        <p class="loop-tool">
+          figma-console MCP ·
+          <code>figma_get_<wbr />component_for_<wbr />development</code>
+        </p>
+        <div class="loop-artefact">
+          <p class="loop-artefact-title">boundVariables</p>
+          <ul class="loop-map">
+            <li>
+              <span class="loop-prop">fills</span>
+              {annotate && <span class="loop-leader" aria-hidden="true" />}
+              <code class="loop-token">--ui-color-surface-raised</code>
+            </li>
+            <li>
+              <span class="loop-prop">cornerRadius</span>
+              {annotate && <span class="loop-leader" aria-hidden="true" />}
+              <code class="loop-token">--ui-radius-xl</code>
+            </li>
+            <li>
+              <span class="loop-prop">paddingLeft</span>
+              {annotate && <span class="loop-leader" aria-hidden="true" />}
+              <code class="loop-token">--ui-spacing-6</code>
+            </li>
+          </ul>
+        </div>
+      </li>
+
+      <li class="loop-step">
+        <p class="loop-name">
+          <span class="loop-num" aria-hidden="true">2</span>Contract
+        </p>
+        <p class="loop-tool">Only the mismatches you chose on purpose</p>
+        <div class="loop-artefact">
+          <p class="loop-artefact-title">
+            <code
+              >libs/<wbr />spec/<wbr />src/<wbr />contracts/<wbr />button.contract.ts</code
+            >
+          </p>
+          <p class="loop-note">
+            plus one story per variant value, with a <code>play</code> per
+            behaviour
+          </p>
+        </div>
+      </li>
+
+      <li class="loop-step">
+        <p class="loop-name">
+          <span class="loop-num" aria-hidden="true">3</span>Generate
+        </p>
+        <p class="loop-tool">Storybook MCP · <code>docs-show</code></p>
+        <div class="loop-artefact">
+          <p class="loop-artefact-title">framework-native component</p>
+          <div class="loop-spec">
+            <code class="loop-code">&lt;atl-button variant="primary"&gt;</code>
+            <div class="loop-sample" aria-hidden="true">Save</div>
+            {annotate && <ul class="loop-callouts" aria-hidden="true">
+              <li>
+                <span class="loop-leader"></span>
+                <code class="loop-token">--ui-color-primary</code>
+              </li>
+              <li>
+                <span class="loop-leader"></span>
+                <code class="loop-token">--ui-radius-md</code>
+              </li>
+            </ul>}
+          </div>
+        </div>
+      </li>
+
+      <li class="loop-step">
+        <p class="loop-name">
+          <span class="loop-num" aria-hidden="true">4</span>Verify
+        </p>
+        <p class="loop-tool">
+          figma-console MCP · <code>figma_check_<wbr />design_parity</code>
+        </p>
+        <div class="loop-artefact">
+          <p class="loop-result">
+            <Icon name="check_circle" class="loop-result-icon" />
+            <span><strong>0</strong> discrepancies</span>
+          </p>
+          <p class="loop-note">
+            padding, colour and variant drift, checked against the master
+          </p>
+        </div>
+      </li>
+    </ol>
+
+    <p class="loop-return">
+      <span class="loop-return-rail" aria-hidden="true"></span>
+      <span class="loop-return-label">Discrepancies → iterate</span>
+    </p>
+    <span class="loop-side-rail" aria-hidden="true"></span>
+  </div>
+</figure>
+
+<style>
+  .loop {
+    container: loop / inline-size;
+    --loop-gap: 2.25rem;
+    margin: 0;
+    color: var(--ui-color-text);
+    font-family: var(--docs-font);
+  }
+
+  .loop-body {
+    position: relative;
+  }
+
+  .loop-steps {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: grid;
+    grid-template-columns: repeat(4, minmax(0, 1fr));
+    gap: var(--loop-gap);
+  }
+
+  .loop-step {
+    position: relative;
+    min-width: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--ui-spacing-2);
+  }
+
+  /* connector to the next step: a thin rule with an arrowhead */
+  .loop-step:not(:last-child)::after {
+    content: '';
+    position: absolute;
+    top: 0.8rem;
+    left: calc(100% + 0.35rem);
+    width: calc(var(--loop-gap) - 0.7rem);
+    height: 1px;
+    background: var(--ui-color-border-strong);
+  }
+  .loop-step:not(:last-child)::before {
+    content: '';
+    position: absolute;
+    top: calc(0.8rem - 3px);
+    left: calc(100% + var(--loop-gap) - 0.35rem - 6px);
+    width: 6px;
+    height: 6px;
+    border-top: 1px solid var(--ui-color-border-strong);
+    border-right: 1px solid var(--ui-color-border-strong);
+    transform: rotate(45deg);
+  }
+
+  .loop-name {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: var(--ui-spacing-2);
+    font-size: var(--ui-font-size-lg);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    line-height: 1.6rem;
+  }
+
+  .loop-num {
+    display: inline-grid;
+    place-items: center;
+    width: 1.6rem;
+    height: 1.6rem;
+    border: 1px solid var(--ui-color-primary);
+    border-radius: 50%;
+    color: var(--ui-color-primary);
+    font-family: var(--docs-font-code);
+    font-size: var(--ui-font-size-xs);
+    font-weight: 600;
+  }
+
+  .loop-tool {
+    margin: 0;
+    min-height: 3.2em;
+    font-size: var(--ui-font-size-xs);
+    line-height: 1.6;
+    color: var(--ui-color-text-muted);
+  }
+
+  .loop code {
+    font-family: var(--docs-font-code);
+    font-size: var(--ui-font-size-xs);
+    overflow-wrap: break-word;
+  }
+
+  .loop-artefact {
+    container: loopcard / inline-size;
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    gap: var(--ui-spacing-3);
+    padding: var(--ui-spacing-4);
+    background: var(--ui-color-surface-raised);
+    border: 1px solid var(--ui-color-border);
+    border-radius: var(--ui-radius-md);
+    min-width: 0;
+  }
+
+  .loop-artefact-title {
+    margin: 0;
+    font-size: var(--ui-font-size-xs);
+    font-weight: 600;
+    line-height: 1.5;
+    color: var(--ui-color-text);
+  }
+
+  .loop-note {
+    margin: 0;
+    font-size: var(--ui-font-size-xs);
+    line-height: 1.5;
+    color: var(--ui-color-text-muted);
+  }
+
+  /* property → token rows with a leader line */
+  .loop-map,
+  .loop-callouts {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: var(--ui-spacing-2);
+  }
+  .loop-map li,
+  .loop-callouts li {
+    display: grid;
+    grid-template-columns: auto minmax(1.5rem, 1fr) auto;
+    align-items: center;
+    column-gap: var(--ui-spacing-2);
+    row-gap: var(--ui-spacing-1);
+    min-width: 0;
+  }
+  .loop-callouts li {
+    grid-template-columns: minmax(1.5rem, 1fr) auto;
+  }
+  /* card too narrow for prop ── token on one line: prop above, leader + token below */
+  @container loopcard (max-width: 17rem) {
+    .loop-map li {
+      grid-template-columns: minmax(1.5rem, 1fr) auto;
+    }
+    .loop-map .loop-prop {
+      grid-column: 1 / -1;
+    }
+  }
+  /* narrower still: the longest token no longer fits beside any leader, so
+   * the leader is dropped and prop / token simply stack */
+  @container loopcard (max-width: 13.5rem) {
+    .loop-callouts li {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .loop-callouts .loop-leader {
+      min-width: 0;
+    }
+    .loop-map li {
+      grid-template-columns: minmax(0, 1fr);
+    }
+    .loop-map .loop-leader {
+      display: none;
+    }
+    .loop .loop-map .loop-token {
+      white-space: normal;
+      overflow-wrap: anywhere;
+    }
+  }
+  .loop-prop {
+    font-family: var(--docs-font-code);
+    font-size: var(--ui-font-size-xs);
+    color: var(--ui-color-text-muted);
+  }
+  .loop-leader {
+    position: relative;
+    flex: 1 1 0.75rem;
+    min-width: 0.75rem;
+    height: 1px;
+    background: var(--ui-color-border-strong);
+  }
+  .loop-leader::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: -2px;
+    width: 5px;
+    height: 5px;
+    border-radius: 50%;
+    background: var(--ui-color-border-strong);
+  }
+  .loop .loop-token {
+    flex: none;
+    color: var(--ui-color-primary);
+    font-weight: 600;
+    white-space: nowrap;
+  }
+  .loop-map li:not(:has(.loop-leader)) {
+    grid-template-columns: auto auto;
+    justify-content: space-between;
+  }
+
+  /* Generate: code, rendered sample, callouts */
+  .loop-spec {
+    display: flex;
+    flex-direction: column;
+    gap: var(--ui-spacing-3);
+  }
+  .loop .loop-code {
+    display: block;
+    padding: var(--ui-spacing-2) var(--ui-spacing-3);
+    background: var(--ui-color-surface-sunken);
+    border-radius: var(--ui-radius-sm);
+    overflow-wrap: anywhere;
+  }
+  .loop-sample {
+    align-self: flex-start;
+    padding: var(--ui-spacing-2) var(--ui-spacing-4);
+    background: var(--ui-color-primary);
+    color: var(--ui-color-text-on-primary);
+    border-radius: var(--ui-radius-md);
+    font-size: var(--ui-font-size-sm);
+    font-weight: 600;
+  }
+
+  /* Verify */
+  .loop-result {
+    margin: 0;
+    display: flex;
+    align-items: center;
+    gap: var(--ui-spacing-2);
+    font-size: var(--ui-font-size-md);
+    font-weight: 600;
+    white-space: nowrap;
+    color: var(--ui-color-success-text);
+  }
+  .loop :global(.loop-result-icon) {
+    width: 1.5rem;
+    height: 1.5rem;
+    flex: none;
+  }
+
+  /* return path: dashed bracket under the four columns (desktop) */
+  .loop-return {
+    position: relative;
+    margin: var(--ui-spacing-4) 12.5% 0;
+    padding-top: var(--ui-spacing-4);
+    text-align: center;
+  }
+  .loop-return-rail {
+    position: absolute;
+    inset: 0 0 auto;
+    height: 0.9rem;
+    border: 1px dashed var(--ui-color-border-strong);
+    border-top: none;
+    transform: translateY(-0.3rem);
+  }
+  .loop-return-rail::after {
+    content: '';
+    position: absolute;
+    left: -4px;
+    top: 0;
+    width: 6px;
+    height: 6px;
+    border-top: 1px solid var(--ui-color-border-strong);
+    border-left: 1px solid var(--ui-color-border-strong);
+    transform: translateY(-1px) rotate(45deg);
+  }
+  .loop-return-label {
+    display: inline-block;
+    font-size: var(--ui-font-size-sm);
+    color: var(--ui-color-text-muted);
+  }
+  .loop-side-rail {
+    display: none;
+  }
+
+  /* tablet: two columns, connectors off, steps still in order */
+  @container loop (max-width: 52rem) {
+    .loop-steps {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      row-gap: var(--ui-spacing-8);
+    }
+    .loop-step::before,
+    .loop-step::after {
+      display: none;
+    }
+    .loop-return {
+      margin-inline: 0;
+    }
+  }
+
+  /* phone: vertical sequence, return path as a rail on the right */
+  @container loop (max-width: 32rem) {
+    .loop-body {
+      padding-right: 1.75rem;
+    }
+    .loop-steps {
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: var(--ui-spacing-8);
+    }
+    .loop-tool {
+      min-height: 0;
+    }
+    .loop-step:not(:last-child)::after {
+      display: block;
+      top: calc(100% + 0.4rem);
+      left: 0.8rem;
+      width: 1px;
+      height: calc(var(--ui-spacing-8) - 0.8rem);
+    }
+    .loop-step:not(:last-child)::before {
+      display: block;
+      top: calc(100% + var(--ui-spacing-8) - 0.4rem - 6px);
+      left: calc(0.8rem - 3px);
+      transform: rotate(135deg);
+    }
+    .loop-return {
+      margin: var(--ui-spacing-4) 0 0;
+      padding-top: 0;
+      text-align: left;
+    }
+    .loop-return-rail {
+      display: none;
+    }
+    .loop-side-rail {
+      display: block;
+      position: absolute;
+      right: 0;
+      top: 0.8rem;
+      bottom: 3.5rem;
+      width: 1.25rem;
+      border: 1px dashed var(--ui-color-border-strong);
+      border-left: none;
+    }
+    .loop-side-rail::after {
+      content: '';
+      position: absolute;
+      left: -1px;
+      top: -4px;
+      width: 6px;
+      height: 6px;
+      border-top: 1px solid var(--ui-color-border-strong);
+      border-left: 1px solid var(--ui-color-border-strong);
+      transform: rotate(-45deg);
+    }
+  }
+</style>

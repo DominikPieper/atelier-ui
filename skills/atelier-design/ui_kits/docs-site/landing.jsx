@@ -46,6 +46,12 @@ const Icon = ({ name, ...props }) => {
         <polyline points="12 5 19 12 12 19" />
       </>
     ),
+    check: (
+      <>
+        <circle cx="12" cy="12" r="9" />
+        <polyline points="8 12.5 11 15.5 16 9.5" />
+      </>
+    ),
     terminal: (
       <>
         <polyline points="4 17 10 11 4 5" />
@@ -97,106 +103,179 @@ const Topbar = ({ theme, onToggleTheme }) => (
   </header>
 );
 
+/* ─────────────────────────────── Loop ───────────────────────────────
+ * The design-to-code loop drawn as a spec sheet. Mirrors
+ * docs/src/components/LoopDiagram.astro: an ordered list of four steps,
+ * each with its real artefact; token names are annotated with leader
+ * lines. Leaders, connectors and rails are decorative (aria-hidden or CSS).
+ */
+const Leader = () => <span className="loop-leader" aria-hidden="true"></span>;
+
+const LoopDiagram = () => (
+  <figure className="loop">
+    <div className="loop-body">
+      <ol className="loop-steps" aria-label="The design-to-code loop">
+        <li className="loop-step">
+          <p className="loop-name">
+            <span className="loop-num" aria-hidden="true">
+              1
+            </span>
+            Inspect
+          </p>
+          <p className="loop-tool">
+            figma-console MCP ·{' '}
+            <code>
+              figma_get_
+              <wbr />
+              component_for_
+              <wbr />
+              development
+            </code>
+          </p>
+          <div className="loop-artefact">
+            <p className="loop-artefact-title">boundVariables</p>
+            <ul className="loop-map">
+              <li>
+                <span className="loop-prop">fills</span>
+                <Leader />
+                <code className="loop-token">--ui-color-surface-raised</code>
+              </li>
+              <li>
+                <span className="loop-prop">cornerRadius</span>
+                <Leader />
+                <code className="loop-token">--ui-radius-xl</code>
+              </li>
+              <li>
+                <span className="loop-prop">paddingLeft</span>
+                <Leader />
+                <code className="loop-token">--ui-spacing-6</code>
+              </li>
+            </ul>
+          </div>
+        </li>
+
+        <li className="loop-step">
+          <p className="loop-name">
+            <span className="loop-num" aria-hidden="true">
+              2
+            </span>
+            Contract
+          </p>
+          <p className="loop-tool">Only the mismatches you chose on purpose</p>
+          <div className="loop-artefact">
+            <p className="loop-artefact-title">
+              <code>
+                libs/
+                <wbr />
+                spec/
+                <wbr />
+                src/
+                <wbr />
+                contracts/
+                <wbr />
+                button.contract.ts
+              </code>
+            </p>
+            <p className="loop-note">
+              plus one story per variant value, with a <code>play</code> per
+              behaviour
+            </p>
+          </div>
+        </li>
+
+        <li className="loop-step">
+          <p className="loop-name">
+            <span className="loop-num" aria-hidden="true">
+              3
+            </span>
+            Generate
+          </p>
+          <p className="loop-tool">
+            Storybook MCP · <code>docs-show</code>
+          </p>
+          <div className="loop-artefact">
+            <p className="loop-artefact-title">framework-native component</p>
+            <div className="loop-spec">
+              <code className="loop-code">
+                &lt;atl-button variant="primary"&gt;
+              </code>
+              <div className="loop-sample" aria-hidden="true">
+                Save
+              </div>
+              <ul className="loop-callouts" aria-hidden="true">
+                <li>
+                  <Leader />
+                  <code className="loop-token">--ui-color-primary</code>
+                </li>
+                <li>
+                  <Leader />
+                  <code className="loop-token">--ui-radius-md</code>
+                </li>
+              </ul>
+            </div>
+          </div>
+        </li>
+
+        <li className="loop-step">
+          <p className="loop-name">
+            <span className="loop-num" aria-hidden="true">
+              4
+            </span>
+            Verify
+          </p>
+          <p className="loop-tool">
+            figma-console MCP ·{' '}
+            <code>
+              figma_check_
+              <wbr />
+              design_parity
+            </code>
+          </p>
+          <div className="loop-artefact">
+            <p className="loop-result">
+              <Icon name="check" className="loop-result-icon" />
+              <span>
+                <strong>0</strong> discrepancies
+              </span>
+            </p>
+            <p className="loop-note">
+              padding, colour and variant drift, checked against the master
+            </p>
+          </div>
+        </li>
+      </ol>
+
+      <p className="loop-return">
+        <span className="loop-return-rail" aria-hidden="true"></span>
+        <span className="loop-return-label">Discrepancies → iterate</span>
+      </p>
+      <span className="loop-side-rail" aria-hidden="true"></span>
+    </div>
+  </figure>
+);
+
 /* ─────────────────────────────── Hero ─────────────────────────────── */
 const Hero = () => (
   <section className="hero">
-    <div className="hero-grid" aria-hidden="true"></div>
-    <div className="hero-glow" aria-hidden="true"></div>
-    <div className="hero-content">
-      <div className="hero-eyebrow">
-        <span className="dot"></span>Workshop · Component-driven UIs with AI
-      </div>
-      <h1 className="hero-title">Atelier</h1>
+    <div className="hero-copy">
+      <h1 className="hero-title">
+        Design to <span className="accent">code</span>, verified.
+      </h1>
       <p className="hero-sub">
-        Design in Figma. Explore in Storybook. Ship with AI.
+        A Figma design becomes a working, verified component — in Angular, React
+        or Vue.
       </p>
-      <div className="hero-disclaimer">
-        Teaching artifact · not a production library
-      </div>
       <div className="hero-actions">
         <a href="#" className="btn btn-primary btn-lg">
-          Start the workshop{' '}
-          <Icon
-            name="arrow"
-            style={{
-              width: 16,
-              height: 16,
-              stroke: 'currentColor',
-              strokeWidth: 1.75,
-              fill: 'none',
-              strokeLinecap: 'round',
-              strokeLinejoin: 'round',
-            }}
-          />
+          Start the workshop
         </a>
-        <a href="#" className="btn btn-outline btn-lg">
+        <a href="#" className="link-primary">
           Browse components
         </a>
       </div>
     </div>
-  </section>
-);
-
-/* ─────────────────────────────── Pillars ─────────────────────────────── */
-const Pillars = () => (
-  <section className="section">
-    <div className="section-narrow">
-      <div className="section-head">
-        <span className="section-eyebrow">The three pillars</span>
-        <h2 className="section-title">A loop, not a stack.</h2>
-        <p className="section-sub">
-          Each tool reads the others through Model Context Protocol. Inspect →
-          prompt → ship → iterate.
-        </p>
-      </div>
-      <div className="pillars">
-        <article className="pillar">
-          <div className="pillar-step">01 · Inspect</div>
-          <div className="pillar-icon">
-            <Icon name="figma" />
-          </div>
-          <h3 className="pillar-name">Figma</h3>
-          <p className="pillar-desc">
-            Single source of truth for tokens and component frames. Variables
-            sync to <span className="ui-mono">tokens.css</span>.
-          </p>
-          <div className="pillar-meta">
-            <span className="pillar-tag">Variables</span>
-            <span className="pillar-tag">Frames</span>
-          </div>
-        </article>
-        <article className="pillar">
-          <div className="pillar-step">02 · Prompt</div>
-          <div className="pillar-icon">
-            <Icon name="book" />
-          </div>
-          <h3 className="pillar-name">Storybook</h3>
-          <p className="pillar-desc">
-            Per-framework live explorer. Each instance hosts an MCP endpoint
-            Claude can call.
-          </p>
-          <div className="pillar-meta">
-            <span className="pillar-tag">/mcp</span>
-            <span className="pillar-tag">Stories</span>
-          </div>
-        </article>
-        <article className="pillar">
-          <div className="pillar-step">03 · Ship</div>
-          <div className="pillar-icon">
-            <Icon name="sparkles" />
-          </div>
-          <h3 className="pillar-name">Claude + MCP</h3>
-          <p className="pillar-desc">
-            Reads Figma + Storybook through MCP, writes spec-aligned code in
-            Angular, React, or Vue.
-          </p>
-          <div className="pillar-meta">
-            <span className="pillar-tag">Spec-aware</span>
-            <span className="pillar-tag">Parity</span>
-          </div>
-        </article>
-      </div>
-    </div>
+    <LoopDiagram />
+    <p className="hero-note">Teaching artifact · not a production library</p>
   </section>
 );
 
@@ -212,7 +291,6 @@ const McpSection = () => {
       <div className="section-narrow">
         <div className="mcp-row">
           <div className="mcp-text">
-            <span className="section-eyebrow">MCP setup</span>
             <h2>Three endpoints. One config.</h2>
             <p>
               Drop these into your Claude Code MCP config. Each Storybook
@@ -547,7 +625,6 @@ const Cta = () => (
   <section className="section">
     <div className="section-narrow">
       <div className="cta">
-        <div className="cta-eyebrow">Get started in 60 seconds</div>
         <h2 className="cta-title">Scaffold a workspace.</h2>
         <p className="cta-sub">
           An Nx workspace with your framework choice, the component library
@@ -607,7 +684,6 @@ const App = () => {
         }
       />
       <Hero />
-      <Pillars />
       <McpSection />
       <ComponentsGrid />
       <Cta />

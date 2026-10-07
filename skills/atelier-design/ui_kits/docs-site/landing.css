@@ -158,113 +158,413 @@ a {
 
 /* ─── Hero ──────────────────────────────────────────────────── */
 .hero {
-  position: relative;
-  padding: 120px 32px 96px;
-  text-align: center;
-  overflow: hidden;
-}
-.hero-grid {
-  position: absolute;
-  inset: 0;
-  pointer-events: none;
-  background-image:
-    linear-gradient(rgba(0, 100, 112, 0.08) 1px, transparent 1px),
-    linear-gradient(90deg, rgba(0, 100, 112, 0.08) 1px, transparent 1px);
-  background-size: 40px 40px;
-  mask-image: radial-gradient(
-    ellipse 800px 500px at center,
-    #000 30%,
-    transparent 75%
-  );
-}
-.hero-glow {
-  position: absolute;
-  top: 30%;
-  left: 50%;
-  transform: translate(-50%, -50%);
-  width: 700px;
-  height: 400px;
-  background: radial-gradient(
-    ellipse,
-    rgba(0, 100, 112, 0.14),
-    transparent 70%
-  );
-  pointer-events: none;
-}
-.hero-content {
-  position: relative;
-  max-width: 880px;
+  max-width: 1160px;
   margin: 0 auto;
+  padding: 56px 32px 64px;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-spacing-6);
 }
-.hero-eyebrow {
-  display: inline-flex;
-  align-items: center;
-  gap: 8px;
-  padding: 5px 12px;
-  background: var(--ui-color-primary-light);
-  border: 1px solid rgba(0, 100, 112, 0.25);
-  border-radius: var(--ui-radius-full);
-  font-size: 11px;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: var(--ui-letter-spacing-uppercase);
-  color: var(--ui-color-primary);
-  margin-bottom: 24px;
-}
-.hero-eyebrow .dot {
-  width: 6px;
-  height: 6px;
-  border-radius: 50%;
-  background: var(--ui-color-primary);
-  animation: pulse 2s ease-in-out infinite;
-}
-@keyframes pulse {
-  0%,
-  100% {
-    opacity: 1;
-    transform: scale(1);
-  }
-  50% {
-    opacity: 0.5;
-    transform: scale(1.4);
-  }
+.hero-copy {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  gap: var(--ui-spacing-3);
 }
 .hero-title {
-  font-size: var(--ui-font-size-5xl);
-  font-weight: 900;
+  font-size: clamp(2.25rem, 5vw, 3.25rem);
+  font-weight: 800;
   letter-spacing: -0.04em;
-  line-height: 1;
-  margin: 0 0 24px;
-  background: linear-gradient(
-    135deg,
-    var(--ui-color-primary) 0%,
-    var(--ui-color-brand-development) 100%
-  );
-  -webkit-background-clip: text;
-  background-clip: text;
-  -webkit-text-fill-color: transparent;
+  line-height: 1.1;
+  margin: 0;
+  color: var(--ui-color-primary);
+}
+/* one serif-italic keyword per heading */
+.accent {
+  font-family: 'Instrument Serif', Georgia, serif;
+  font-style: italic;
+  font-weight: 400;
+  color: var(--ui-color-primary);
 }
 .hero-sub {
-  font-size: clamp(18px, 2.5vw, 22px);
+  font-size: var(--ui-font-size-lg);
   color: var(--ui-color-text-muted);
-  margin: 0 auto 16px;
-  max-width: 640px;
+  margin: 0;
+  max-width: 38rem;
   line-height: 1.5;
-}
-.hero-disclaimer {
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.12em;
-  text-transform: uppercase;
-  color: var(--ui-color-text-muted);
-  opacity: 0.7;
-  margin-bottom: 36px;
 }
 .hero-actions {
   display: flex;
-  gap: 12px;
-  justify-content: center;
   flex-wrap: wrap;
+  align-items: center;
+  gap: var(--ui-spacing-6);
+  margin-top: var(--ui-spacing-2);
+}
+.link-primary {
+  color: var(--ui-color-primary);
+  font-weight: 500;
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+.link-primary:hover {
+  color: var(--ui-color-primary-hover);
+}
+.hero-note {
+  margin: 0;
+  font-size: var(--ui-font-size-sm);
+  color: var(--ui-color-text-muted);
+}
+
+/* ─── Loop diagram (spec sheet) ─────────────────────────────── */
+.loop {
+  container: loop / inline-size;
+  --loop-gap: 2.25rem;
+  margin: 0;
+  color: var(--ui-color-text);
+}
+
+.loop-body {
+  position: relative;
+}
+
+.loop-steps {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: var(--loop-gap);
+}
+
+.loop-step {
+  position: relative;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-spacing-2);
+}
+
+/* connector to the next step: a thin rule with an arrowhead */
+.loop-step:not(:last-child)::after {
+  content: '';
+  position: absolute;
+  top: 0.8rem;
+  left: calc(100% + 0.35rem);
+  width: calc(var(--loop-gap) - 0.7rem);
+  height: 1px;
+  background: var(--ui-color-border-strong);
+}
+.loop-step:not(:last-child)::before {
+  content: '';
+  position: absolute;
+  top: calc(0.8rem - 3px);
+  left: calc(100% + var(--loop-gap) - 0.35rem - 6px);
+  width: 6px;
+  height: 6px;
+  border-top: 1px solid var(--ui-color-border-strong);
+  border-right: 1px solid var(--ui-color-border-strong);
+  transform: rotate(45deg);
+}
+
+.loop-name {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--ui-spacing-2);
+  font-size: var(--ui-font-size-lg);
+  font-weight: 700;
+  letter-spacing: -0.02em;
+  line-height: 1.6rem;
+}
+
+.loop-num {
+  display: inline-grid;
+  place-items: center;
+  width: 1.6rem;
+  height: 1.6rem;
+  border: 1px solid var(--ui-color-primary);
+  border-radius: 50%;
+  color: var(--ui-color-primary);
+  font-family: var(--ui-font-mono);
+  font-size: var(--ui-font-size-xs);
+  font-weight: 600;
+}
+
+.loop-tool {
+  margin: 0;
+  min-height: 3.2em;
+  font-size: var(--ui-font-size-xs);
+  line-height: 1.6;
+  color: var(--ui-color-text-muted);
+}
+
+.loop code {
+  font-family: var(--ui-font-mono);
+  font-size: var(--ui-font-size-xs);
+  overflow-wrap: break-word;
+}
+
+.loop-artefact {
+  container: loopcard / inline-size;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-spacing-3);
+  padding: var(--ui-spacing-4);
+  background: var(--ui-color-surface-raised);
+  border: 1px solid var(--ui-color-border);
+  border-radius: var(--ui-radius-md);
+  min-width: 0;
+}
+
+.loop-artefact-title {
+  margin: 0;
+  font-size: var(--ui-font-size-xs);
+  font-weight: 600;
+  line-height: 1.5;
+  color: var(--ui-color-text);
+}
+
+.loop-note {
+  margin: 0;
+  font-size: var(--ui-font-size-xs);
+  line-height: 1.5;
+  color: var(--ui-color-text-muted);
+}
+
+/* property → token rows with a leader line */
+.loop-map,
+.loop-callouts {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-spacing-2);
+}
+.loop-map li,
+.loop-callouts li {
+  display: grid;
+  grid-template-columns: auto minmax(1.5rem, 1fr) auto;
+  align-items: center;
+  column-gap: var(--ui-spacing-2);
+  row-gap: var(--ui-spacing-1);
+  min-width: 0;
+}
+.loop-callouts li {
+  grid-template-columns: minmax(1.5rem, 1fr) auto;
+}
+/* card too narrow for prop ── token on one line: prop above, leader + token below */
+@container loopcard (max-width: 17rem) {
+  .loop-map li {
+    grid-template-columns: minmax(1.5rem, 1fr) auto;
+  }
+  .loop-map .loop-prop {
+    grid-column: 1 / -1;
+  }
+}
+/* narrower still: the longest token no longer fits beside any leader, so
+   * the leader is dropped and prop / token simply stack */
+@container loopcard (max-width: 13.5rem) {
+  .loop-callouts li {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .loop-callouts .loop-leader {
+    min-width: 0;
+  }
+  .loop-map li {
+    grid-template-columns: minmax(0, 1fr);
+  }
+  .loop-map .loop-leader {
+    display: none;
+  }
+  .loop .loop-map .loop-token {
+    white-space: normal;
+    overflow-wrap: anywhere;
+  }
+}
+.loop-prop {
+  font-family: var(--ui-font-mono);
+  font-size: var(--ui-font-size-xs);
+  color: var(--ui-color-text-muted);
+}
+.loop-leader {
+  position: relative;
+  flex: 1 1 0.75rem;
+  min-width: 0.75rem;
+  height: 1px;
+  background: var(--ui-color-border-strong);
+}
+.loop-leader::before {
+  content: '';
+  position: absolute;
+  left: 0;
+  top: -2px;
+  width: 5px;
+  height: 5px;
+  border-radius: 50%;
+  background: var(--ui-color-border-strong);
+}
+.loop .loop-token {
+  flex: none;
+  color: var(--ui-color-primary);
+  font-weight: 600;
+  white-space: nowrap;
+}
+.loop-map li:not(:has(.loop-leader)) {
+  grid-template-columns: auto auto;
+  justify-content: space-between;
+}
+
+/* Generate: code, rendered sample, callouts */
+.loop-spec {
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-spacing-3);
+}
+.loop .loop-code {
+  display: block;
+  padding: var(--ui-spacing-2) var(--ui-spacing-3);
+  background: var(--ui-color-surface-sunken);
+  border-radius: var(--ui-radius-sm);
+  overflow-wrap: anywhere;
+}
+.loop-sample {
+  align-self: flex-start;
+  padding: var(--ui-spacing-2) var(--ui-spacing-4);
+  background: var(--ui-color-primary);
+  color: var(--ui-color-text-on-primary);
+  border-radius: var(--ui-radius-md);
+  font-size: var(--ui-font-size-sm);
+  font-weight: 600;
+}
+
+/* Verify */
+.loop-result {
+  margin: 0;
+  display: flex;
+  align-items: center;
+  gap: var(--ui-spacing-2);
+  font-size: var(--ui-font-size-md);
+  font-weight: 600;
+  white-space: nowrap;
+  color: var(--ui-color-success-text);
+}
+.loop .loop-result-icon {
+  width: 1.5rem;
+  height: 1.5rem;
+  flex: none;
+  fill: none;
+  stroke: currentColor;
+  stroke-width: 1.75;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* return path: dashed bracket under the four columns (desktop) */
+.loop-return {
+  position: relative;
+  margin: var(--ui-spacing-4) 12.5% 0;
+  padding-top: var(--ui-spacing-4);
+  text-align: center;
+}
+.loop-return-rail {
+  position: absolute;
+  inset: 0 0 auto;
+  height: 0.9rem;
+  border: 1px dashed var(--ui-color-border-strong);
+  border-top: none;
+  transform: translateY(-0.3rem);
+}
+.loop-return-rail::after {
+  content: '';
+  position: absolute;
+  left: -4px;
+  top: 0;
+  width: 6px;
+  height: 6px;
+  border-top: 1px solid var(--ui-color-border-strong);
+  border-left: 1px solid var(--ui-color-border-strong);
+  transform: translateY(-1px) rotate(45deg);
+}
+.loop-return-label {
+  display: inline-block;
+  font-size: var(--ui-font-size-sm);
+  color: var(--ui-color-text-muted);
+}
+.loop-side-rail {
+  display: none;
+}
+
+/* tablet: two columns, connectors off, steps still in order */
+@container loop (max-width: 52rem) {
+  .loop-steps {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    row-gap: var(--ui-spacing-8);
+  }
+  .loop-step::before,
+  .loop-step::after {
+    display: none;
+  }
+  .loop-return {
+    margin-inline: 0;
+  }
+}
+
+/* phone: vertical sequence, return path as a rail on the right */
+@container loop (max-width: 32rem) {
+  .loop-body {
+    padding-right: 1.75rem;
+  }
+  .loop-steps {
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: var(--ui-spacing-8);
+  }
+  .loop-tool {
+    min-height: 0;
+  }
+  .loop-step:not(:last-child)::after {
+    display: block;
+    top: calc(100% + 0.4rem);
+    left: 0.8rem;
+    width: 1px;
+    height: calc(var(--ui-spacing-8) - 0.8rem);
+  }
+  .loop-step:not(:last-child)::before {
+    display: block;
+    top: calc(100% + var(--ui-spacing-8) - 0.4rem - 6px);
+    left: calc(0.8rem - 3px);
+    transform: rotate(135deg);
+  }
+  .loop-return {
+    margin: var(--ui-spacing-4) 0 0;
+    padding-top: 0;
+    text-align: left;
+  }
+  .loop-return-rail {
+    display: none;
+  }
+  .loop-side-rail {
+    display: block;
+    position: absolute;
+    right: 0;
+    top: 0.8rem;
+    bottom: 3.5rem;
+    width: 1.25rem;
+    border: 1px dashed var(--ui-color-border-strong);
+    border-left: none;
+  }
+  .loop-side-rail::after {
+    content: '';
+    position: absolute;
+    left: -1px;
+    top: -4px;
+    width: 6px;
+    height: 6px;
+    border-top: 1px solid var(--ui-color-border-strong);
+    border-left: 1px solid var(--ui-color-border-strong);
+    transform: rotate(-45deg);
+  }
 }
 
 /* ─── Sections ──────────────────────────────────────────────── */
@@ -305,82 +605,6 @@ a {
 
 .section-alt {
   background: var(--ui-color-surface-sunken);
-}
-
-/* ─── Three pillars ─────────────────────────────────────────── */
-.pillars {
-  display: grid;
-  grid-template-columns: repeat(3, 1fr);
-  gap: 24px;
-  position: relative;
-}
-.pillar {
-  background: var(--ui-color-surface);
-  border: 1px solid var(--ui-color-border);
-  border-top: 2px solid transparent;
-  border-radius: var(--ui-radius-lg);
-  padding: 28px;
-  transition: all var(--ui-duration-normal) var(--ui-ease-out);
-}
-.pillar:hover {
-  border-top-color: var(--ui-color-primary);
-  transform: translateY(-2px);
-  box-shadow: 0 12px 24px rgba(0, 100, 112, 0.1);
-}
-.pillar-step {
-  font-family: var(--ui-font-mono);
-  font-size: 11px;
-  font-weight: 600;
-  color: var(--ui-color-text-muted);
-  text-transform: uppercase;
-  letter-spacing: 0.08em;
-  margin-bottom: 18px;
-}
-.pillar-icon {
-  width: 48px;
-  height: 48px;
-  border-radius: var(--ui-radius-md);
-  background: var(--ui-color-primary-light);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  margin-bottom: 18px;
-  color: var(--ui-color-primary);
-}
-.pillar-icon svg {
-  width: 24px;
-  height: 24px;
-  stroke: currentColor;
-  stroke-width: 1.75;
-  fill: none;
-  stroke-linecap: round;
-  stroke-linejoin: round;
-}
-.pillar-name {
-  font-size: 20px;
-  font-weight: 700;
-  letter-spacing: -0.02em;
-  margin: 0 0 8px;
-}
-.pillar-desc {
-  font-size: 14px;
-  color: var(--ui-color-text-muted);
-  line-height: 1.6;
-  margin: 0 0 16px;
-}
-.pillar-meta {
-  display: flex;
-  gap: 8px;
-  flex-wrap: wrap;
-}
-.pillar-tag {
-  font-family: var(--ui-font-mono);
-  font-size: 11px;
-  padding: 3px 8px;
-  background: var(--ui-color-surface-sunken);
-  border: 1px solid var(--ui-color-border);
-  border-radius: var(--ui-radius-sm);
-  color: var(--ui-color-primary);
 }
 
 /* ─── MCP card ─────────────────────────────────────────────── */
@@ -653,15 +877,6 @@ a {
     transparent 80%
   );
 }
-.cta-eyebrow {
-  position: relative;
-  font-size: 11px;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-  text-transform: uppercase;
-  color: rgba(255, 255, 255, 0.7);
-  margin-bottom: 16px;
-}
 .cta-title {
   position: relative;
   font-size: var(--ui-font-size-3xl);
@@ -741,7 +956,6 @@ a {
   .topbar-nav {
     display: none;
   }
-  .pillars,
   .mcp-row {
     grid-template-columns: 1fr;
   }
@@ -749,7 +963,7 @@ a {
     padding: 64px 24px;
   }
   .hero {
-    padding: 80px 24px 64px;
+    padding: 32px 24px 48px;
   }
   .cta {
     padding: 48px 28px;

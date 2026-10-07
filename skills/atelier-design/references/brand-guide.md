@@ -56,7 +56,7 @@ The repo ships an Astro 5 docs site + three parallel component libraries (`@atel
 - `@atelier-ui/{spec,angular,react,vue}` — scoped npm packages, lowercased
 - `MCP`, `ARIA`, `WCAG` — uppercased acronyms
 - Component names: `AtlButton`, `AtlCard`, `AtlCardHeader` — PascalCase with the `Atl` prefix (Atelier — kept consistent across all three frameworks; see ADR-0029)
-- Headings: sentence case (`The three pillars`), never title case
+- Headings: sentence case (`The design-to-code loop`), never title case
 
 **Tagline.** Three sentences, em-dash separated:
 
@@ -84,15 +84,15 @@ This is the rhythm to copy across the brand: three actions, three tools, one ver
 
 ## Visual Foundations
 
-**Anchor color: Conciso deep teal `#006470`.** This is the entire identity. Light mode = deep teal on white; dark mode = bright teal `#34d8d8` on a softer mid-slate `#141d26` (deliberately _not_ near-black — it keeps the chrome readable next to white code blocks elsewhere on the page). No gradients sweeping across hero blocks (one subtle radial glow behind the wordmark, that's it). No purple-blue marketing gradient. The Conciso brand palette (`--ui-color-brand-*`) is opt-in for diagrams that need a third or fourth category — not for chrome.
+**Anchor color: Conciso deep teal `#006470`.** This is the entire identity. Light mode = deep teal on white; dark mode = bright teal `#34d8d8` on a softer mid-slate `#141d26` (deliberately _not_ near-black — it keeps the chrome readable next to white code blocks elsewhere on the page). No gradients — not across hero blocks, not as glows, not in text. No purple-blue marketing gradient. The Conciso brand palette (`--ui-color-brand-*`) is opt-in for diagrams that need a third or fourth category — not for chrome.
 
-**Type.** Instrument Sans for everything UI. Instrument Serif, italic, weight 400, for display lines only — it is never bolded (that is what `--ui-type-display` encodes). JetBrains Mono for everything monospace (tokens, code samples, prop names, terminal mocks, kbd chips, the version pill). Instrument Sans is variable 400–700, so the hero wordmark tops out at `weight 700` — with `letter-spacing -0.04em`. Body sets at 16px / 1.6. The combination of _very tight letter-spacing on big type_ + _generous line-height on body_ is the type signature.
+**Type.** Instrument Sans for everything UI. Instrument Serif, italic, weight 400, for display lines only — it is never bolded (that is what `--ui-type-display` encodes). JetBrains Mono for everything monospace (tokens, code samples, prop names, terminal mocks, kbd chips, the version pill). Instrument Sans is variable 400–700, so the hero H1 tops out at `weight 700` — with `letter-spacing -0.04em` — and carries one serif-italic accent word (_"Design to *code*, verified."_). Body sets at 16px / 1.6. The combination of _very tight letter-spacing on big type_ + _generous line-height on body_ is the type signature.
 
-**Backgrounds.** Three tiers, all flat: `surface` (chrome — topbar, sidebar, cards), `surface-raised` (slightly off canvas in light, slightly lifted in dark — for code blocks and hovered tiles), `surface-sunken` (the page body in dark / a faintly-tinted sub-region in light). No images. No textures. No noise grain. The single decorative motif is a **crosshair grid** behind the hero — 40×40px, drawn with two `linear-gradient` 1px lines tinted at 8% of primary.
+**Backgrounds.** Three tiers, all flat: `surface` (chrome — topbar, sidebar, cards), `surface-raised` (slightly off canvas in light, slightly lifted in dark — for code blocks and hovered tiles), `surface-sunken` (the page body in dark / a faintly-tinted sub-region in light). No images. No textures. No noise grain. No decorative grids or glows: the hero's visual is content — the spec-sheet loop (`LoopDiagram`), whose leader lines ending in mono token names are the brand's one ornament, and it is information.
 
 **Spacing.** Generous. The docs shell has a 256px sidebar, 200px right-rail TOC, and a 800px max-width content column with 3rem column gap. Stat ribbon: `2rem` interior padding. Hero: `5rem` top, `4rem` bottom on desktop. Whitespace is the layout primitive.
 
-**Borders.** Always `1px solid var(--ui-color-border)`. Hover-emphasis comes from changing the _top border_ to 2px in primary teal (component cards on the docs home), or from elevating the box-shadow — never from thickening the perimeter. Functional borders (input outlines that need to meet WCAG 1.4.11) use `--ui-color-border-strong` (`#64748b`).
+**Borders.** Always `1px solid var(--ui-color-border)`. Hover-emphasis comes from changing the _top border_ to 2px in primary teal (component cards on the docs home), or from elevating the box-shadow — never from thickening the perimeter. Tone (note / tip / warning callouts, accent cards) is a full 1px border tinted with the tone, a faint tone-tinted fill and the tone icon — never a thick coloured side stripe. Functional borders (input outlines that need to meet WCAG 1.4.11) use `--ui-color-border-strong` (`#64748b`).
 
 **Shadows.** Slate-tinted (`rgba(15, 23, 42, …)`), dual-layer (ambient + key light) per Material 3 conventions. Five steps `xs / sm / md / lg / xl`. Cards default to no shadow; they earn one on hover.
 
@@ -104,11 +104,11 @@ This is the rhythm to copy across the brand: three actions, three tools, one ver
 
 **Press states.** Buttons return to baseline `transform`. Primary buttons go to `--primary-active` (a darker step, e.g. `#003a42` light / `#87efef` dark). No shrink, no inset shadow.
 
-**Transparency & blur.** Used sparingly. The mobile sidebar backdrop is `rgba(0,0,0,0.55)` + `backdrop-filter: blur(2px)`. The hero center glow is a radial gradient at 14% opacity. Sticky topbar/sidebar are _opaque_ — no glassmorphism.
+**Transparency & blur.** Used sparingly. The mobile sidebar backdrop is `rgba(0,0,0,0.55)` + `backdrop-filter: blur(2px)`. Sticky topbar/sidebar are _opaque_ — no glassmorphism.
 
 **Focus.** Double-ring (`0 0 0 2px surface, 0 0 0 4px primary`) so the same ring works on any background. `:focus-visible` only — pointer focus stays clean.
 
-**Imagery.** None, by default. The brand makes a deliberate choice not to lean on illustrations or stock photography. The hero shows a wordmark, a 1-line subtitle, a 1-line uppercase disclaimer (_"Workshop / teaching artifact / not a production library"_), and two buttons.
+**Imagery.** None, by default. The brand makes a deliberate choice not to lean on illustrations or stock photography. The hero shows a descriptive H1, one sentence, one primary button plus a text link, and the spec-sheet loop (Inspect → Contract → Generate → Verify). The _"teaching artifact · not a production library"_ line sits quietly below the loop, sentence case. No eyebrow or kicker label above any heading.
 
 **Color vibe of imagery (when used).** Cool. Conciso teal + slate. Never warm.
 
@@ -156,7 +156,7 @@ person · default-toast
 
 ## UI Kits
 
-- **`ui_kits/docs-site/`** — Astro docs site landing recreation. React + JSX, `--ui-*` tokens. Sections: topbar, hero, three-pillar diagram, MCP config card, 27-component grid with category pills + framework switcher, scaffolder CTA, footer.
+- **`ui_kits/docs-site/`** — Astro docs site landing recreation. React + JSX, `--ui-*` tokens. Sections: topbar, hero with the spec-sheet loop, MCP config card, 27-component grid with category pills + framework switcher, scaffolder CTA, footer.
 
 ---
 
