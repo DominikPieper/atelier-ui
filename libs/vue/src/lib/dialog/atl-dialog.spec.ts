@@ -46,6 +46,22 @@ describe('AtlDialog', () => {
     },
   );
 
+  it('lets a caller aria-labelledby fall through to the dialog and win over the header id', () => {
+    // aria-labelledby is not a declared prop in Vue (the contract records it as a
+    // settled difference); Angular's input and React's prop reach the same result.
+    const { container } = render({
+      components: { AtlDialog, AtlDialogHeader },
+      template: `
+        <AtlDialog :open="true" aria-labelledby="my-title">
+          <AtlDialogHeader>Dialog Title</AtlDialogHeader>
+        </AtlDialog>`,
+    });
+    expect(container.querySelector('dialog')).toHaveAttribute(
+      'aria-labelledby',
+      'my-title',
+    );
+  });
+
   it('renders header, content, and footer slots', () => {
     render(DialogFixture, { props: { open: true } });
     expect(screen.getByText('Dialog Title')).toBeInTheDocument();

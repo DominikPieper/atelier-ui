@@ -2427,7 +2427,7 @@
           "name": "page",
           "type": "number",
           "default": "1",
-          "description": "Current page (1-based). Supports two-way binding: [(page)]=\"currentPage\".",
+          "description": "Current page (1-based). Two-way: `[(page)]=\"currentPage\"`. The component owns the state, so it also works unbound or with `[page]` plus `(pageChange)`. React and Vue are controlled instead: they keep no page state and expect the new page fed back in.",
           "required": false,
           "kind": "input"
         },
@@ -2459,7 +2459,7 @@
           "name": "pageChange",
           "type": "(e: number) => void",
           "default": "—",
-          "description": "Current page (1-based). Supports two-way binding: [(page)]=\"currentPage\".",
+          "description": "Current page (1-based). Two-way: `[(page)]=\"currentPage\"`. The component owns the state, so it also works unbound or with `[page]` plus `(pageChange)`. React and Vue are controlled instead: they keep no page state and expect the new page fed back in.",
           "required": false,
           "kind": "output"
         }
@@ -2472,7 +2472,7 @@
           "name": "page",
           "type": "number",
           "default": "1",
-          "description": "The currently active page.",
+          "description": "The currently active page (1-based). Controlled: the component keeps no page state, so update `page` from `onPageChange` or it will not move. Vue is controlled the same way; Angular's `page` is two-way and owns its state.",
           "required": false,
           "kind": "prop"
         },
@@ -3455,7 +3455,7 @@
           "name": "linear",
           "type": "boolean",
           "default": "false",
-          "description": "When true, users can only navigate to completed steps or the next pending step. Use `goTo()` / `next()` in your step content to advance programmatically.",
+          "description": "When true, a step can be reached only once every step before it is completed or `optional`: the user can go to completed steps and the next pending one, and can pass over optional steps. React and Vue behave the same. Use `goTo()` / `next()` in your step content to advance programmatically.",
           "required": false,
           "kind": "input"
         },
@@ -3502,7 +3502,7 @@
           "name": "linear",
           "type": "boolean",
           "default": "false",
-          "description": "Restrict forward navigation until previous steps are completed.",
+          "description": "Restrict forward navigation until every previous step is completed or `optional`: optional steps can be passed.",
           "required": false,
           "kind": "prop"
         },

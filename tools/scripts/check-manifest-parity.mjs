@@ -360,6 +360,13 @@ function exemptionFor(key) {
   return e && e.kind === 'gap' ? e : undefined;
 }
 
+/** A `design` entry is a settled difference (ADR-0145), not an open gap: the divergence
+ * is accepted silently, with no [GAP] line, so nothing reads it as work still owed. */
+function isSettled(key) {
+  const e = PROP_SURFACE_EXEMPT.get(key);
+  return e !== undefined && e.kind === 'design';
+}
+
 const gapGroups = new Map(); // reason -> Set<key>
 function recordGap(key, reason) {
   if (!gapGroups.has(reason)) gapGroups.set(reason, new Set());
@@ -483,6 +490,8 @@ for (const name of [...allComponentNames].sort()) {
       const absentKey = `${specName}:${presentEntry.rawName}:${absentFw}`;
       manifestKeys.add(presentKey);
       manifestKeys.add(absentKey);
+
+      if (isSettled(presentKey) || isSettled(absentKey)) continue;
 
       const presentExemption = exemptionFor(presentKey);
       const absentExemption = exemptionFor(absentKey);

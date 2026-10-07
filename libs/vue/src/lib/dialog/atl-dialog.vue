@@ -17,6 +17,9 @@ export interface AtlDialogProps {
   size?: 'sm' | 'md' | 'lg' | 'xl' | 'full';
   /** Accessible label for the dialog; use it instead of a header when none is present. When set, it replaces the header as the dialog's accessible name. */
   ariaLabel?: string;
+  // `aria-labelledby` is deliberately not declared: a caller's `aria-labelledby` attribute
+  // falls through to the <dialog> and overrides the header id used as the default, the
+  // way Angular's `aria-labelledby` input and React's `aria-labelledby` prop do.
 }
 </script>
 

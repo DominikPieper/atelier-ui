@@ -7,7 +7,7 @@ export const metadata: ComponentMetadata = {
   whenToUse: [
     'Walking the user through a checkout, signup, or onboarding flow split across pages.',
     'Showing progress through a fixed sequence of tasks where the user can see what comes next.',
-    'Enforcing order with `linear: true` so a later step cannot be jumped to until earlier ones complete.',
+    'Enforcing order with `linear: true` so a later step cannot be jumped to until every earlier step is completed or optional (optional steps can be passed).',
   ],
   antiPatterns: [
     {

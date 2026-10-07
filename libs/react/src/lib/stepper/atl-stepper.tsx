@@ -56,7 +56,7 @@ export interface AtlStepperProps
   onActiveStepChange?: (index: number) => void;
   /** Layout orientation. */
   orientation?: 'horizontal' | 'vertical';
-  /** Restrict forward navigation until previous steps are completed. */
+  /** Restrict forward navigation until every previous step is completed or `optional`: optional steps can be passed. */
   linear?: boolean;
   /** The `AtlStep` elements, in order, plus any step content. */
   children?: ReactNode;

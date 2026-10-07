@@ -48,7 +48,9 @@ function buildPageItems(
 export interface AtlPaginationProps
   extends Omit<HTMLAttributes<HTMLElement>, 'onChange'>, AtlPaginationSpec {
   /**
-   * The currently active page.
+   * The currently active page (1-based). Controlled: the component keeps no page
+   * state, so update `page` from `onPageChange` or it will not move. Vue is controlled
+   * the same way; Angular's `page` is two-way and owns its state.
    */
   page?: number;
   /**

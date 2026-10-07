@@ -60,6 +60,7 @@ export const metadata: ComponentMetadata = {
     notes: [
       'The trigger carries aria-expanded and aria-controls that point at the listbox.',
       'Disabled options are skipped by keyboard navigation.',
+      "The keys above describe Angular, whose select is a CDK listbox. React and Vue render a native `<select>`, so the browser's own keyboard handling applies there.",
     ],
   },
 };

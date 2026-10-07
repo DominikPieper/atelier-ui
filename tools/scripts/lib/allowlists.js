@@ -936,8 +936,6 @@ const PROP_SURFACE_EXEMPT = new Map([
   // and its name) is a spec change with its own ADR, not gate work. One
   // shared reason for all 13 — this is one decision, not thirteen.
   ...[
-    ['AtlAlertSpec', 'dismissed', 'angular'],
-    ['AtlAlertSpec', 'onDismissed', 'react'],
     ['AtlChatSpec', 'onOpenChange', 'react'],
     ['AtlChatSuggestionSpec', 'selected', 'angular'],
     ['AtlChatSuggestionSpec', 'onSelected', 'react'],
@@ -1088,14 +1086,13 @@ const PROP_SURFACE_EXEMPT = new Map([
   [
     'AtlDialogSpec:aria-labelledby:vue',
     {
-      kind: 'gap',
+      kind: 'design',
       reason:
-        "AtlDialogSpec declares no 'aria-labelledby' at all. Vue's AtlDialog hardcodes its own headerId " +
-        '(useId()) as the aria-labelledby target and exposes no prop to override it, while Angular ' +
-        "('aria-labelledby' input alias, atl-dialog.ts:96) and React ('aria-labelledby' prop, atl-dialog.tsx:52, " +
-        'falling back to headerId) both accept one. ADR-0093 Consequences named exactly this blind spot when the ' +
-        "gate shipped. Unresolved: see tasks/todo.md, 'Cross-framework gaps found by check:manifest-parity (S6a, " +
-        "2026-09-10)'.",
+        "Vue's AtlDialog declares no 'aria-labelledby' prop; its own headerId (useId()) is the default target. A " +
+        "caller's aria-labelledby is a fallthrough attribute (inheritAttrs) that lands on the <dialog> and wins " +
+        "over the default — pinned by a spec in atl-dialog.spec.ts — so the behaviour equals Angular's " +
+        "('aria-labelledby' input alias) and React's ('aria-labelledby' prop); only the declaration differs. " +
+        'Settled, not owed (ADR-0145).',
     },
   ],
   [
@@ -1110,20 +1107,24 @@ const PROP_SURFACE_EXEMPT = new Map([
         "see tasks/todo.md, 'Cross-framework gaps found by check:manifest-parity (S6a, 2026-09-10)'.",
     },
   ],
-  [
-    'AtlAlertSpec:dismissed:vue',
+  // Alert's dismiss event is named by each framework's own idiom: an Angular
+  // output() `dismissed`, a Vue emit `dismissed`, a React callback prop
+  // `onDismissed` — the same rule as `onPageChange`, `onTriggered` and the other
+  // `on<X>` callbacks. Settled, not owed (ADR-0145): there is nothing to align.
+  ...[
+    ['dismissed', 'angular'],
+    ['onDismissed', 'react'],
+    ['dismissed', 'vue'],
+  ].map(([prop, fw]) => [
+    `AtlAlertSpec:${prop}:${fw}`,
     {
-      kind: 'gap',
+      kind: 'design',
       reason:
-        'the react-vs-vue side of the same fact AtlAlertSpec:dismissed:angular and :onDismissed:react (above) ' +
-        "already record: AtlAlertSpec models no dismiss event at all, so Vue's own 'dismissed' emit " +
-        "(atl-alert.vue) is exactly as unkeyed as Angular's 'dismissed' output — it was simply never flagged " +
-        'here, because check:props never compares Vue emits for EXTRA at all (GENERIC_EXTRA_IGNORE above has no ' +
-        "Vue entry for exactly this reason — see that constant's own comment). Same fact, now recorded on the " +
-        "side check:props cannot see. Unresolved: see tasks/todo.md, 'Cross-framework gaps found by " +
-        "check:manifest-parity (S6a, 2026-09-10)'.",
+        "AtlAlertSpec models no dismiss event; each adapter names it by its framework's idiom (Angular output() " +
+        "'dismissed', React callback 'onDismissed', Vue emit 'dismissed'), the same rule as onPageChange. A " +
+        'settled difference, not a gap.',
     },
-  ],
+  ]),
 ]);
 
 /**

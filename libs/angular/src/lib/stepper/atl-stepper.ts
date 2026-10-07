@@ -106,7 +106,9 @@ export class AtlStepper implements AtlStepperContext {
   readonly orientation = input<'horizontal' | 'vertical'>('horizontal');
 
   /**
-   * When true, users can only navigate to completed steps or the next pending step.
+   * When true, a step can be reached only once every step before it is completed or
+   * `optional`: the user can go to completed steps and the next pending one, and can
+   * pass over optional steps. React and Vue behave the same.
    * Use `goTo()` / `next()` in your step content to advance programmatically.
    */
   readonly linear = input(false);

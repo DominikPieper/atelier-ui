@@ -107,7 +107,11 @@ export type PageItem =
   host: { class: 'atl-pagination' },
 })
 export class AtlPagination {
-  /** Current page (1-based). Supports two-way binding: [(page)]="currentPage". */
+  /**
+   * Current page (1-based). Two-way: `[(page)]="currentPage"`. The component owns the
+   * state, so it also works unbound or with `[page]` plus `(pageChange)`. React and Vue
+   * are controlled instead: they keep no page state and expect the new page fed back in.
+   */
   readonly page = model(1);
 
   /** Total number of pages. */
