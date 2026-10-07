@@ -1298,9 +1298,10 @@ check:manifest-parity` → `sh` → `MainThread`. The gate finished its work and
         recorded as `kind: 'gap'` in `PROP_SURFACE_EXEMPT` so the gate ships green; each is a
         real divergence `check:props` could not see because the spec is silent there
         (ADR-0093 Consequences predicted the first):
-    - [ ] `AtlDialog` — Vue exposes no `aria-labelledby`; it hardcodes its own `headerId`
-          while Angular and React accept the prop. Decide the contract (prop in all three, or
-          derived in all three) and make the spec say it.
+    - [x] `AtlDialog` — Vue exposes no `aria-labelledby`; it hardcodes its own `headerId`
+          while Angular and React accept the prop. **Resolved 2026-10-08** (`6b3e4aa2`): a
+          caller's `aria-labelledby` falls through to the `<dialog>` and wins (pinned by a Vue
+          spec), so the behaviour is equal; the allowlist entry is now `kind: 'design'`.
     - [ ] `AtlButton` — Angular's `<atl-button>` has no `type` binding or passthrough;
           React (via `...rest`) and Vue (`type` prop) do. A `submit` button is impossible in
           Angular today.
@@ -1308,16 +1309,28 @@ check:manifest-parity` → `sh` → `MainThread`. The gate finished its work and
           and Vue do. Matters for external `<label for>`. **Done 2026-10-08** (`b109160a`):
           Angular gained an `id` input (host `[attr.id]: 'null'` per ADR-0091); the two
           `AtlCheckboxSpec:id:angular` / `AtlToggleSpec:id:angular` gap entries are removed.
-    - [ ] `AtlAlert` — `dismissed` (Angular, Vue) vs `onDismissed` (React): the
-          react-vs-vue side was never in the allowlist because `check:props` never compares
-          Vue emits. Same fact, now recorded on both sides.
+    - [x] `AtlAlert` — `dismissed` (Angular, Vue) vs `onDismissed` (React). **Resolved
+          2026-10-08** (`6b3e4aa2`): framework-idiomatic naming, like `onPageChange`; the three
+          entries are `kind: 'design'`, and `check:manifest-parity` now accepts `design`
+          entries as settled.
   - [x] **Class-c behaviour bugs from `tasks/divergence-triage-2026-10-08.md`, fixed 2026-10-08**
         (test red before, green after, one commit each): Vue tooltip `aria-describedby`
         (`f96a861f`), Vue tabs focus (`8fc1bd77`), Vue accordion group scoping (`553fa4ce`),
         React/Vue combobox skip-disabled (`38536d84`), Angular checkbox/toggle `id`
         (`b109160a`), Vue toggle `useId()` (`22d3749c`). React tooltip JSDoc no longer claims a
         flip it does not do; the flip itself stays an owner decision. Still open from the
-        triage: items 1, 3, 4, 5, 6a, 6c, 7a, 7b, 7d.
+        triage: items 6a (menu keyboard in React and Vue) and 7b (Angular button `type`), and
+        the Figma master text for stepper `linear` (needs the Desktop Bridge).
+  - [x] **Owner decisions of 2026-10-08 on the triage, done** (see the "Resolved 2026-10-08"
+        column in `tasks/divergence-triage-2026-10-08.md`): `errors` accept the shared
+        `AtlErrorItem` in React and Vue, 21 gap entries removed (`aaf1cbd3`); breadcrumb
+        `current` is the last item by default in all three, any explicit `current` switches
+        the default off (`3b850592`); the tooltip no-flip is recorded in its contract and the
+        position JSDoc (`b7ce573e`); pagination, stepper `linear`, select keyboard, dialog and
+        alert records (`6b3e4aa2`).
+  - [ ] Stepper `linear` in the Figma master description still says "only the active and
+        completed steps are clickable"; the code (all three) also passes `optional` steps.
+        Correct the master's description line, then refresh `tools/figma/snapshot.json`.
   - [ ] S6 monorepo retirements — as ADR-0121 Decision 6. S6a (`check:manifest-parity`,
         the three-manifest diff) is built; `--compare-props` evidence in the S6a report: 28
         findings only the manifest diff sees, 48 only `check:props` sees (`[DEAD]` inputs —
