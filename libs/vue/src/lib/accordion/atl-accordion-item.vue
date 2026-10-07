@@ -63,12 +63,16 @@ function toggle() {
 
 function onKeydown(event: KeyboardEvent) {
   if (!group) return;
+  // Scope to this item's own group (nearest ancestor), not the whole document,
+  // so two groups on one page do not share arrow navigation.
+  const current = event.currentTarget as HTMLButtonElement;
+  const groupEl = current.closest('.atl-accordion-group');
   const buttons = Array.from(
-    document.querySelectorAll<HTMLButtonElement>(
+    groupEl?.querySelectorAll<HTMLButtonElement>(
       '.atl-accordion-item:not(.is-disabled) .accordion-trigger',
-    ),
-  );
-  const index = buttons.indexOf(event.currentTarget as HTMLButtonElement);
+    ) ?? [],
+  ).filter((b) => b.closest('.atl-accordion-group') === groupEl);
+  const index = buttons.indexOf(current);
   if (event.key === 'ArrowDown') {
     event.preventDefault();
     buttons[(index + 1) % buttons.length]?.focus();

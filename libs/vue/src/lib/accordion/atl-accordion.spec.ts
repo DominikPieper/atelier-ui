@@ -185,4 +185,36 @@ describe('AtlAccordionGroup', () => {
       'variant-separated',
     );
   });
+
+  it('keeps arrow navigation inside its own group when two groups are on the page', async () => {
+    const user = userEvent.setup();
+    render({
+      components: { AtlAccordionGroup, AtlAccordionItem, AtlAccordionHeader },
+      template: `
+        <div>
+          <AtlAccordionGroup>
+            <AtlAccordionItem><template #header><AtlAccordionHeader>A1</AtlAccordionHeader></template>a1</AtlAccordionItem>
+            <AtlAccordionItem><template #header><AtlAccordionHeader>A2</AtlAccordionHeader></template>a2</AtlAccordionItem>
+          </AtlAccordionGroup>
+          <AtlAccordionGroup>
+            <AtlAccordionItem><template #header><AtlAccordionHeader>B1</AtlAccordionHeader></template>b1</AtlAccordionItem>
+            <AtlAccordionItem><template #header><AtlAccordionHeader>B2</AtlAccordionHeader></template>b2</AtlAccordionItem>
+          </AtlAccordionGroup>
+        </div>
+      `,
+    });
+    const btn = (name: string) => screen.getByRole('button', { name });
+    btn('A2').focus();
+    await user.keyboard('{ArrowDown}');
+    expect(btn('A1')).toHaveFocus();
+    await user.keyboard('{ArrowUp}');
+    expect(btn('A2')).toHaveFocus();
+    await user.keyboard('{End}');
+    expect(btn('A2')).toHaveFocus();
+    btn('B1').focus();
+    await user.keyboard('{ArrowUp}');
+    expect(btn('B2')).toHaveFocus();
+    await user.keyboard('{Home}');
+    expect(btn('B1')).toHaveFocus();
+  });
 });
