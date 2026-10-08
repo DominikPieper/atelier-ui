@@ -1,5 +1,5 @@
 <script setup lang="ts">
-import { Comment, Fragment, cloneVNode, useSlots } from 'vue';
+import { Comment, Fragment, cloneVNode } from 'vue';
 import type { VNode } from 'vue';
 import '@atelier-ui/styles/breadcrumbs/atl-breadcrumbs.css';
 
@@ -15,7 +15,10 @@ const props = withDefaults(
   },
 );
 
-const slots = useSlots();
+const slots = defineSlots<{
+  /** The breadcrumb items, as `AtlBreadcrumbItem`s. The last one is the current page by default. */
+  default?(): VNode[];
+}>();
 
 // The slot's vnodes with Fragments (v-for, <template>) unwrapped and comments
 // (a false v-if) dropped, so the items are seen as the siblings they render as.
@@ -50,7 +53,7 @@ function markCurrent(nodes: VNode[]): VNode[] {
 }
 
 // A functional component, so the slot is re-read and re-marked on every render.
-const Items = () => markCurrent(slots['default']?.() ?? []);
+const Items = () => markCurrent(slots.default?.() ?? []);
 </script>
 
 <template>
