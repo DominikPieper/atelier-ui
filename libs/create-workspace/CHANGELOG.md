@@ -1,3 +1,14 @@
+## 0.3.14 (2026-10-08)
+
+### 🚀 Features
+
+- **check-contracts:** code-only facts are description lines, checked both ways (ADR-0161) ([fb5ac153](https://github.com/DominikPieper/atelier-ui/commit/fb5ac153))
+
+### ❤️ Thank You
+
+- Claude Opus 5.5
+- Dominik Pieper @DominikPieper
+
 ## 0.3.13 (2026-10-08)
 
 This was a version bump only for create-workspace to align it with other projects, there were no code changes.
