@@ -234,6 +234,12 @@ Decision text stays what was decided and this paragraph says what the data taugh
    says `UNEXPLAINED` is a warning that nags every run — the ADR-0093 shape, kept against
    the review's preference for rejecting sentinels, because visible debt beats a red gate
    nobody can clear.
+
+   **Corrected 2026-10-08** (ADR-0161): "mention" was a substring test, which `type`, `id`
+   and `open` pass against almost any prose. A `codeOnly` entry now counts as mirrored only
+   with a `- Code-only \`name\`: <reason>`line (or the ADR-0056`- Boolean \`name\`: not
+   modelled — <reason>`line), and a`- Code-only`line naming no manifest prop warns`[STALE-MIRROR]`. Both remain warnings; `figmaOnly`and`axisMap` keep the substring test.
+
 5. **Coverage reads what a story actually renders**, not only its `args`: literal prop
    assignments in JSX, Angular templates and Vue templates, `.map` over a literal array,
    the object-literal idiom of imperative APIs (AtlToast's `show(msg, { variant })`), and

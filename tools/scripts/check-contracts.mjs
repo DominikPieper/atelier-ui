@@ -86,6 +86,24 @@ const INTERACTION_STATE_VALUES = new Set([
 
 const UNRESOLVABLE = Symbol('unresolvable');
 
+// Master-description mirror grammar for contract `codeOnly` entries. A `codeOnly` entry
+// `x` is mirrored only by a line "- Code-only `x`: <reason>" (non-empty reason) or by the
+// existing opt-out line "- Boolean `x`: not modelled — <reason>" that check-figma.js
+// parses (same shape). Substring mentions in prose prove nothing.
+function hasCodeOnlyMirror(description, name) {
+  const n = escapeRegExp(name);
+  return new RegExp(
+    `^- Code-only \`${n}\`:\\s*\\S|^- Boolean \`${n}\`:\\s*not modelled\\s*[\\u2014-]\\s*\\S`,
+    'm',
+  ).test(description || '');
+}
+// Names of every "- Code-only `x`:" line in a master description (reverse direction).
+function codeOnlyLineNames(description) {
+  return [...(description || '').matchAll(/^- Code-only `([^`]+)`:/gm)].map(
+    (m) => m[1],
+  );
+}
+
 const TAG_LEVEL = {
   'CONTRACT-MISSING': 'error',
   'CONTRACT-DUPLICATE': 'error',
@@ -104,6 +122,7 @@ const TAG_LEVEL = {
   'DOCGEN-FAILED': 'error',
   'UNRESOLVED-ARGS': 'warning',
   UNMIRRORED: 'warning',
+  'STALE-MIRROR': 'warning',
   'NO-STORY-META': 'warning',
   ROSTER: 'error',
   // 'CONTRACT-IMPORT' is set below, once CONTRACTS_DIR is resolved — its
@@ -368,11 +387,11 @@ function runGlobalChecks() {
           `${selector}: codeOnly '${entry.name}' reason is UNEXPLAINED`,
         );
       }
-      if (!(master.description || '').includes(entry.name)) {
+      if (!hasCodeOnlyMirror(master.description, entry.name)) {
         report(
           'UNMIRRORED',
           null,
-          `${selector}: codeOnly '${entry.name}' not mentioned in the master description`,
+          `${selector}: codeOnly '${entry.name}' has no "- Code-only \`${entry.name}\`: <reason>" line in the master description`,
         );
       }
     }
@@ -1312,16 +1331,22 @@ function processComponent(
 
   // ── codeOnly staleness (R1d: cross-framework — tracked here, evaluated once after
   //    every requested framework has run, in runCodeOnlyStalenessChecks()) ──
-  for (const entry of (contract && contract.codeOnly) || []) {
+  //    The same lookup also covers names that only appear in a master-description
+  //    "- Code-only `x`:" line, for the reverse check (STALE-MIRROR).
+  const trackedNames = new Set([
+    ...((contract && contract.codeOnly) || []).map((e) => e.name),
+    ...codeOnlyLineNames(master && master.description),
+  ]);
+  for (const entryName of trackedNames) {
     const present =
-      propByName.has(entry.name) ||
-      docgenProps.some((p) => p.isOutput && p.name === entry.name);
+      propByName.has(entryName) ||
+      docgenProps.some((p) => p.isOutput && p.name === entryName);
     if (!present) continue;
     if (!codeOnlyPresentByFw.has(name))
       codeOnlyPresentByFw.set(name, new Map());
     const byEntry = codeOnlyPresentByFw.get(name);
-    if (!byEntry.has(entry.name)) byEntry.set(entry.name, new Set());
-    byEntry.get(entry.name).add(fw);
+    if (!byEntry.has(entryName)) byEntry.set(entryName, new Set());
+    byEntry.get(entryName).add(fw);
   }
 }
 
@@ -1588,6 +1613,23 @@ async function runFramework(fw) {
 // covers "the contract exists but nothing resolves to it".
 function runCodeOnlyStalenessChecks() {
   const singleFwRun = targetFrameworks.length === 1;
+  // Reverse mirror check: every "- Code-only `x`:" line in a master description must
+  // name a prop/input/event present in at least one reached framework's manifest.
+  for (const [selector, reached] of reachedByFw) {
+    if (reached.size === 0) continue;
+    const master = snapshotBySelector.get(selector);
+    for (const lineName of codeOnlyLineNames(master && master.description)) {
+      const present =
+        (codeOnlyPresentByFw.get(selector) || new Map()).get(lineName) ||
+        new Set();
+      if (present.size > 0) continue;
+      report(
+        'STALE-MIRROR',
+        null,
+        `${selector}: master description has a "- Code-only \`${lineName}\`:" line but no manifest prop/input/event of that name (checked: ${[...reached].sort().join(', ')})`,
+      );
+    }
+  }
   for (const [selector, contract] of contractsBySelector) {
     const reached = reachedByFw.get(selector);
     if (!reached || reached.size === 0) continue;
