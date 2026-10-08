@@ -5,6 +5,7 @@ import DiagramFigure from '../components/DiagramFigure.astro';
 import Jargon from '../components/Jargon.astro';
 import WorkflowDiagram from '../components/WorkflowDiagram.astro';
 import PageHero from '../components/PageHero.astro';
+import Callout from '../components/Callout.astro';
 import BottomNav from '../components/BottomNav.astro';
 import {
   featuredRows,
@@ -899,6 +900,266 @@ const FIGMA_URL =
           </div>
         </div>
       </div>
+    </div>
+
+    <!-- Readiness checklist -->
+    <div class="docs-section" style="margin-bottom: 2.5rem">
+      <h2 id="file-ready" class="docs-section-title">
+        Is the file ready for an agent?
+      </h2>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 1.25rem;
+        "
+      >
+        An agent reads the Figma file through tools, so a fault in the file
+        becomes a fault in the code. Run this checklist on a master before you
+        hand it over. The higher-level self-check for your whole design system
+        is
+        <a href="/design-to-code#ready" class="docs-link-primary"
+          >Before you start</a
+        >; this list is the Figma-file half of it.
+      </p>
+      <table class="docs-props-table" style="margin-bottom: 1.25rem">
+        <thead>
+          <tr>
+            <th>Check</th>
+            <th>How to check it</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>
+              Every fill, stroke, padding, gap and corner radius is bound to a
+              variable
+            </td>
+            <td>
+              <code>figma_lint_design</code> (rule <code>hardcoded-color</code>)
+              covers colour only. Spacing and radius need a read-only
+              <code>figma_execute</code> walk. <code>check:figma</code> checks
+              raw fills, strokes, radii and padding on each master's default
+              variant.
+            </td>
+          </tr>
+          <tr>
+            <td>Bound variables are scoped, not <code>ALL_SCOPES</code></td>
+            <td>
+              <code>figma_get_variables</code> with <code>verbosity: full</code>
+              lists each variable's <code>scopes</code>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Each variable's code name is recoverable:
+              <code>codeSyntax.WEB</code> is set, or you have chosen another
+              single place and said which
+            </td>
+            <td>
+              <code>figma_get_variables</code> with <code>verbosity: full</code>
+            </td>
+          </tr>
+          <tr>
+            <td>
+              No default layer names (<code>Frame</code>, <code>Group</code>) in
+              the component's own tree
+            </td>
+            <td>
+              <code>figma_lint_design</code> (rule <code>default-name</code>).
+              It also flags layers inside nested library instances; ignore
+              those.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              The master has a structured description: what it is, when to use
+              it, variants mapped to code props, an a11y note
+            </td>
+            <td>
+              <code>figma_get_component_for_development</code> returns it;
+              <code>check:figma</code> checks the description is present and
+              names the component's spec interface
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Variant layer names match across variants, except where a variant
+              owns a layer
+            </td>
+            <td>
+              No tool. A custom read-only <code>figma_execute</code> walk.
+            </td>
+          </tr>
+          <tr>
+            <td>
+              Label and content decisions are recorded: a TEXT property, or a
+              stated reason why not
+            </td>
+            <td>
+              <code>figma_analyze_component_set</code> lists the component
+              properties
+            </td>
+          </tr>
+          <tr>
+            <td>
+              The accessibility audit ran, and you read how it classified the
+              component
+            </td>
+            <td>
+              <code>figma_audit_component_accessibility</code>. A 100 on a
+              component classed <code>presentational</code> means the focus and
+              target-size checks were skipped.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <Callout
+        tone="warning"
+        title="What we found when we ran it on Atelier's own file"
+      >
+        <p
+          style="
+            margin: 0 0 0.6rem;
+            line-height: 1.6;
+            color: var(--ui-color-text-muted);
+          "
+        >
+          A read-only audit on 2026-10-08, with the figma-console tools above,
+          of three masters (<code>AtlBadge</code>, <code>AtlCard</code>,
+          <code>AtlDialog</code>) and the file's variables. These are open
+          defects, not a clean bill of health.
+        </p>
+        <ul
+          style="
+            margin: 0;
+            padding-left: 1.25rem;
+            line-height: 1.6;
+            color: var(--ui-color-text-muted);
+          "
+        >
+          <li>
+            <strong style="color: var(--ui-color-text)"
+              >Token binding holds.</strong
+            >
+            0 unbound fills, strokes, radii or spacing values on all three
+            masters.
+          </li>
+          <li>
+            <strong style="color: var(--ui-color-text)"
+              ><code>codeSyntax.WEB</code> is empty on 284 of 284
+              variables.</strong
+            >
+            The code name survives only as prose in each variable's description.
+            Whether the agent's tools would show a better result with
+            <code>codeSyntax.WEB</code> set was not tested.
+          </li>
+          <li>
+            <strong style="color: var(--ui-color-text)"
+              >19 variables use <code>ALL_SCOPES</code>.</strong
+            >
+            None of them is bound by the three masters.
+          </li>
+          <li>
+            <strong style="color: var(--ui-color-text)"
+              >About 20 layers in <code>AtlDialog</code> are still named
+              <code>Frame</code></strong
+            >
+            (4 per variant, across 5 variants).
+          </li>
+          <li>
+            <strong style="color: var(--ui-color-text)"
+              >Descriptions are complete:</strong
+            >
+            43 of 43 masters have one. Nothing checks that a description still
+            matches the node's properties, so it can drift.
+          </li>
+          <li>
+            <strong style="color: var(--ui-color-text)"
+              >The accessibility audit scored all three at 100,</strong
+            >
+            but classed <code>AtlDialog</code> as <code>presentational</code>,
+            so for the one master with a close button and footer actions the 100
+            means not assessed.
+          </li>
+        </ul>
+      </Callout>
+    </div>
+
+    <!-- Code-only facts -->
+    <div class="docs-section" style="margin-bottom: 2.5rem">
+      <h2 id="code-only" class="docs-section-title">
+        Facts the design cannot show: code-only props
+      </h2>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 1.25rem;
+        "
+      >
+        Some facts about a component never appear in the design: the native
+        <code>type</code> of a button, an <code>aria-label</code>, an image's
+        <code>alt</code> text, how it should behave. An agent that only sees the
+        design misses them. The "code-only props" technique, credited to Nathan
+        Curtis, puts them in a hidden layer inside each component, so an agent
+        reading the node finds them there.
+      </p>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 1.25rem;
+        "
+      >
+        Atelier keeps the same facts in the master's description instead, one
+        line each. This is the line on <code>AtlButton</code>:
+      </p>
+      <Code
+        code={
+          '- Code-only `type`: native button type (button | submit | reset) — form semantics the element always carries, not a visual axis.'
+        }
+        lang="text"
+        title="AtlButton master description"
+      />
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin: 1.25rem 0;
+        "
+      >
+        <code>check:contracts</code> joins this line to the component's contract
+        in both directions. Every <code>codeOnly</code> entry in the contract
+        needs a matching line (<code>[UNMIRRORED]</code>), and every
+        <code>- Code-only</code> line must name a prop or event that a framework
+        manifest has (<code>[STALE-MIRROR]</code>). Both are warnings.
+      </p>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 1.25rem;
+        "
+      >
+        The two are not the same thing. The contract's <code>codeOnly</code> is
+        narrower: props with no Figma axis, each with a reason. The course's
+        layer holds any non-visual fact, including ones no contract lists.
+      </p>
+      <Callout tone="note" title="Why Atelier did not adopt the hidden layer">
+        <p
+          style="margin: 0; line-height: 1.6; color: var(--ui-color-text-muted)"
+        >
+          The snapshot walks hidden layers on purpose, so a hidden frame trips
+          several gates and each would need an exemption. A layer lives per
+          variant, so <code>AtlButton</code> alone would carry 24 copies with
+          nothing to keep them in sync. And nothing in the repo reads a layer's
+          text, while tools already return the description. A team can still add
+          the layer in its own file; just count those costs first. The decision
+          is recorded as ADR-0161.
+        </p>
+      </Callout>
     </div>
 
     <BottomNav

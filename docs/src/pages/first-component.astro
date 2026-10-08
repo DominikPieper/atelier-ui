@@ -89,7 +89,7 @@ the SettingsCard component I just generated. Fix any discrepancies.`;
     >
       You did this guided in the
       <a href="/tutorial" class="docs-link-primary">tutorial</a>; now do it
-      solo, against the clock. Same Settings Card, six copy-paste steps, no
+      solo, against the clock. Same Settings Card, seven copy-paste steps, no
       explanations. Stuck on a step? The tutorial has the reasoning behind each
       one.
     </PageHero>
@@ -352,6 +352,36 @@ the SettingsCard component I just generated. Fix any discrepancies.`;
         literal — is not something to eyeball away: paste the report straight
         back to Claude and have it fix each entry the report names, then re-run
         the check until it is clean.
+      </p>
+    </section>
+
+    <!-- Step 7 -->
+    <section data-step="7" class="kata-step">
+      <div class="kata-step-head">
+        <span class="kata-step-num">7</span>
+        <h2 class="kata-step-title">Sort what the parity check found</h2>
+      </div>
+      <p class="kata-step-desc">
+        Take the report from Step 6 (or run it again on your component, if you
+        had no discrepancies, and read the score and the entries it still
+        lists). For each discrepancy, decide which of the three follow-ups it
+        is: <strong style="color: var(--ui-color-text)">fix the code</strong>,
+        <strong style="color: var(--ui-color-text)">fix Figma</strong>, or
+        <strong style="color: var(--ui-color-text)"
+          >record a deliberate mismatch</strong
+        >
+        (<code>figmaOnly</code>, <code>codeOnly</code> or <code>axisMap</code>
+        in the contract, for differences in API shape). Check the
+        <code>side</code> of each action item before you apply it.
+        <a href="/design-to-code#parity-report" class="docs-link-primary"
+          >Reading a parity result</a
+        >
+        walks through a real report.
+      </p>
+      <p class="kata-step-desc" style="margin-top: 0.6rem">
+        <strong style="color: var(--ui-color-text)">Checkpoint:</strong> every
+        discrepancy has one of the three labels and a one-line reason, and you
+        can name one thing the report did not check.
       </p>
     </section>
 

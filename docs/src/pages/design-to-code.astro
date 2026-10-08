@@ -56,7 +56,25 @@ const GENERATE_NOTE: Record<string, string> = {
 };
 
 const PARITY_PROMPT = `Run figma_check_design_parity on the settings card node against
-the component I just generated. Fix every discrepancy it reports.`;
+the component I just generated. For each discrepancy, say whether the code,
+the Figma master or the contract should change, and why. Fix only the code ones.`;
+
+// Step 4 — the self-healing loop, as one copyable brief.
+const LOOP_PROMPT = `Verify the component I just generated, in at most 3 rounds:
+
+1. Run storybook-test for this component's stories
+   (nx storybook-test <fw>, or test-run on the local Storybook MCP).
+2. Run figma_check_design_parity against the master node.
+3. Run figma_scan_code_accessibility on the rendered story HTML.
+
+Fix what fails in the component code, with --ui-* tokens and never
+literal values, then run the three checks again.
+
+Do not change any assertion, threshold, axe setting or baseline
+without asking me first.
+
+After round 3, stop. Give me a list of what still fails and what
+you tried.`;
 ---
 
 <BaseLayout
@@ -230,6 +248,38 @@ the component I just generated. Fix every discrepancy it reports.`;
       </p>
 
       <LoopDiagram />
+      <p class="docs-step-desc" style="margin-top: 1.25rem">
+        <strong style="color: var(--ui-color-text)"
+          >Run the checks in this order.</strong
+        >
+      </p>
+      <ol class="docs-step-desc">
+        <li>
+          <strong style="color: var(--ui-color-text)">Readiness</strong> — the
+          <a href="#ready" class="docs-link-primary">questions above</a>, before
+          anything is generated.
+        </li>
+        <li>
+          <strong style="color: var(--ui-color-text)">Generate</strong> — step
+          3.
+        </li>
+        <li>
+          <strong style="color: var(--ui-color-text)">Offline gates</strong> —
+          <code>check:contracts</code> and <code>storybook-test</code>. They are
+          cheap and deterministic and need no Figma connection.
+        </li>
+        <li>
+          <strong style="color: var(--ui-color-text)">Parity</strong> —
+          <code>figma_check_design_parity</code>, last.
+        </li>
+      </ol>
+      <p class="docs-step-desc">
+        Parity is the slowest check and needs the Figma Desktop Bridge running.
+        Its result also only means something once the code passes its own gates,
+        because the codeSpec it compares is assembled from
+        <code>check:contracts --emit</code>. A component that fails a gate would
+        waste a parity run on a result you will throw away.
+      </p>
     </div>
 
     <!-- Step 1 — Inspect -->
@@ -587,6 +637,178 @@ the component I just generated. Fix every discrepancy it reports.`;
               variant value, but a story that renders and passes axe is not a
               story that looks different; only a <code>play</code> that asserts
               the difference (a computed colour, say) makes it a test for this.
+            </li>
+          </ul>
+          <h3 id="parity-report" class="docs-h3 docs-h3--spaced">
+            Reading a parity result
+          </h3>
+          <p class="docs-step-desc">
+            The tool returns a report, not a verdict. This is a real run on
+            <code>AtlBadge</code> (Angular, default variant, size <code>md</code
+            >): a score of
+            <strong style="color: var(--ui-color-text)">96/100</strong>, two
+            discrepancies.
+          </p>
+          <ul class="docs-step-desc">
+            <li>
+              <strong style="color: var(--ui-color-text)">Score</strong> — 0 to
+              100, weighted by severity:
+              <code>100 − critical×15 − major×8 − minor×3 − info×1</code>. Here
+              one minor and one info give 100 − 3 − 1 = 96. The score belongs to
+              what you declared and which variant was sampled, so do not store
+              it or compare it between components (ADR-0024 recorded three runs
+              on one component scoring 70, 52 and 83).
+            </li>
+            <li>
+              <strong style="color: var(--ui-color-text)">Severity</strong> —
+              <code>critical</code> and <code>major</code> are real gaps to fix.
+              <code>minor</code> is a real gap when it is a colour, spacing,
+              radius, type or token value. <code>info</code> is a note, here a
+              missing annotation. Differences of about 2 px or 0.01 opacity are
+              absorbed as rounding.
+            </li>
+            <li>
+              <strong style="color: var(--ui-color-text)">Category</strong> —
+              which section of the codeSpec the entry belongs to. Here
+              <code>typography</code> (1) and <code>accessibility</code> (1). An
+              empty category means aligned or not declared; the summary cannot
+              tell you which.
+            </li>
+            <li>
+              <strong style="color: var(--ui-color-text)"
+                >The two entries</strong
+              >
+              — <code>typography / fontWeight</code>, minor: Figma 500, code 600
+              (confirmed in the master's text style). And
+              <code>accessibility / role</code>, info: the code sets
+              <code>role="status"</code>, the design carries no accessibility
+              annotation.
+            </li>
+          </ul>
+          <p class="docs-step-desc">
+            <strong style="color: var(--ui-color-text)"
+              >What this report did not tell you.</strong
+            >
+            A quiet report is not a clean component. Checking the same run by
+            hand found four things the 96 never showed: vertical padding (the
+            design has none and the code declares 5px, which the tool skips
+            because the design side is empty), letter-spacing
+            (<code>0.01em</code> in code, 0 in Figma, not reported), a missing
+            component description in the emitted metadata, and the other nine
+            variants, which were never compared because the tool sampled only
+            <code>variant=default, size=md</code>. Run the check once per
+            variant you care about.
+          </p>
+          <p class="docs-step-desc">
+            <strong style="color: var(--ui-color-text)"
+              >Three follow-ups per discrepancy.</strong
+            >
+            Decide per entry, then fix or record it. "Understood" is not a
+            record.
+          </p>
+          <ol class="docs-step-desc">
+            <li>
+              <strong style="color: var(--ui-color-text)">Fix the code.</strong>
+              The weight finding is this case if 500 is the intended weight: one
+              edit in the shared stylesheet.
+            </li>
+            <li>
+              <strong style="color: var(--ui-color-text)">Fix Figma.</strong> If
+              600 is intended (badges are labels), change the master's text
+              style instead.
+            </li>
+            <li>
+              <strong style="color: var(--ui-color-text)"
+                >Record a deliberate mismatch.</strong
+              >
+              For differences in API shape, the contract has three entries:
+              <code>figmaOnly</code> (a Figma property with no code prop),
+              <code>codeOnly</code> (a code prop with no Figma property) and
+              <code>axisMap</code> (a Figma axis under another name or value
+              set), each with a <code>reason</code>; see
+              <code>libs/spec/src/contracts/types.ts</code>. The contract cannot
+              hold a painted value such as a weight. Those are fixed on one
+              side, or kept as a <code>FIGMA_CONFORMANCE_EXCEPTIONS</code> entry
+              with a reason, or an open decision item in
+              <code>tasks/todo.md</code>.
+            </li>
+          </ol>
+          <Callout tone="warning" title="The suggested action can be wrong">
+            <p
+              style="
+                margin: 0;
+                line-height: 1.6;
+                color: var(--ui-color-text-muted);
+              "
+            >
+              For the <code>role</code> entry the tool's <code>suggestion</code>
+              says to add an annotation in Figma, but its
+              <code>actionItems</code> entry targets the code with
+              <code>targetValue: null</code>, which means removing the role.
+              Neither is the right first move. The real issue is a
+              contradiction: the master's description says badges are decorative
+              by default and should be wrapped in <code>role="status"</code>
+              when they convey a change, while the code puts the role on every
+              badge. A person decides which one is the truth. Read
+              <code>side</code> in each action item before you apply anything,
+              and never apply them blindly. The tool's
+              <code>canonicalSource</code> parameter defaults to
+              <code>design</code>, which is why the other side, the code, is the
+              one told to change.
+            </p>
+          </Callout>
+
+          <h3 id="self-healing-loop" class="docs-h3 docs-h3--spaced">
+            The self-healing loop
+          </h3>
+          <p class="docs-step-desc">
+            You can hand the verify step to the agent as a loop: run the checks,
+            fix what fails, run them again. In Atelier the loop is
+            <code>storybook-test</code> (every story in a browser, with axe),
+            then <code>figma_check_design_parity</code>, then
+            <code>figma_scan_code_accessibility</code>. The agent fixes and
+            reruns. The loop needs a stop condition, so cap it at about three
+            rounds, then hand back to a human with a summary of what still
+            fails.
+          </p>
+          <Code
+            code={LOOP_PROMPT}
+            lang="text"
+            wrap
+            title="self-healing loop prompt"
+          />
+          <p class="docs-step-desc">Four ways this goes wrong:</p>
+          <ul class="docs-step-desc">
+            <li>
+              <strong style="color: var(--ui-color-text)"
+                >Goalpost shifting</strong
+              >
+              — the agent weakens an assertion, lowers a threshold or switches
+              off an axe rule to get green. This is why the prompt forbids
+              changing assertions, thresholds, axe settings or baselines without
+              asking.
+            </li>
+            <li>
+              <strong style="color: var(--ui-color-text)">Oscillation</strong> —
+              fixing the padding breaks the wrapping, fixing the wrapping breaks
+              the padding. The round cap ends it; a human picks which constraint
+              wins.
+            </li>
+            <li>
+              <strong style="color: var(--ui-color-text)"
+                >False confidence</strong
+              >
+              — axe checks only part of what accessibility needs, and parity
+              checks only what you declared. Green means the checks pass, not
+              that the component is right. Look at the rendered story yourself.
+            </li>
+            <li>
+              <strong style="color: var(--ui-color-text)"
+                >Token detachment</strong
+              >
+              — to close a parity gap the agent writes a literal value instead
+              of the token. The prompt requires <code>--ui-*</code> tokens, and
+              <code>check:stylelint</code> flags raw colour literals.
             </li>
           </ul>
           <details class="d2c-why">
