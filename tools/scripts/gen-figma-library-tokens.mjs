@@ -40,7 +40,7 @@ const SKIP =
 
 function parseBlock(css, selectorRe) {
   const m = selectorRe.exec(css);
-  if (!m) return {};
+  if (!m) throw new Error(`token source has no block matching ${selectorRe}`);
   // Match the block by brace counting from the selector.
   let depth = 0;
   let i = css.indexOf('{', m.index);
@@ -56,6 +56,9 @@ function parseBlock(css, selectorRe) {
   const out = {};
   for (const decl of body.matchAll(/(--ui-[\w-]+)\s*:\s*([^;]+);/g)) {
     out[decl[1]] = decl[2].replace(/\s+/g, ' ').trim();
+  }
+  if (Object.keys(out).length === 0) {
+    throw new Error(`block ${selectorRe} parsed to zero --ui-* declarations`);
   }
   return out;
 }
@@ -140,7 +143,14 @@ function scopesFor(token) {
 export function buildDefs() {
   const css = readFileSync(SOURCE, 'utf8');
   const light = parseBlock(css, /:root\s*/);
-  const dark = parseBlock(css, /\[data-theme="dark"\]\s*/);
+  const dark = parseBlock(css, /\[data-theme\s*=\s*["']dark["']\]\s*/);
+  // Self-check: a dark block that parses but changes nothing would silently
+  // write light values into Figma's Dark mode.
+  if (light['--ui-color-surface'] === dark['--ui-color-surface']) {
+    throw new Error(
+      'dark --ui-color-surface equals light: the dark block was not parsed as dark',
+    );
+  }
 
   const defs = [];
   for (const [cssVar, rawLight] of Object.entries(light)) {

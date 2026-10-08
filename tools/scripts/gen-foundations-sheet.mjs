@@ -31,8 +31,14 @@ for (const f of Object.keys(ramps)) ramps[f].sort((a, b) => a.step - b.step);
 
 // ── which semantic token takes which step, per theme ─────────────────────────
 const blockOf = (name) => {
-  const start = css.indexOf(name + ' {');
-  return start < 0 ? '' : css.slice(start, css.indexOf('\n}', start));
+  // Quote-agnostic: Prettier normalises attribute-selector quotes.
+  const re = new RegExp(
+    name.replace(/[.*+?^${}()|[\]\\]/g, '\\$&').replace(/["']/g, `["']`) +
+      ' \\{',
+  );
+  const m = re.exec(css);
+  if (!m) throw new Error(`token source has no \`${name}\` block`);
+  return css.slice(m.index, css.indexOf('\n}', m.index));
 };
 const aliases = (block) => {
   const out = {};
