@@ -83,6 +83,32 @@ am dünnsten gelehrt.
 | 35   | C5  | Regelwerk für Kompositionen                | L       | Großer Bau, geringer Bezug zum Komponenten-Loop.              |
 | 36   | C10 | Theme Orchestrator                         | L       | Native-Teil passt nicht zu Atelier.                           |
 
+## Welle 2 – Plan (Entwurf, 2026-10-08)
+
+Recherche liegt bei: `wave2-notebooklm-a10-readiness.md`, `wave2-notebooklm-a8-self-healing.md`
+(NotebookLM-Synthesen, unverifiziert) plus die Transkripte aus den Tabellen unten.
+
+**Offene Entscheidungen (Owner):**
+
+1. **A1 – Ort.** Vorschlag: Abschnitt „Before you start: is your design system ready?“ am Anfang
+   von `design-to-code`; die Schulungsagenda verweist nur darauf, keine neue Blockzeit.
+2. **A3 – Ort.** Vorschlag: Abschnitt in `design-to-code` Schritt 4 plus ein Übungsschritt in
+   `first-component`.
+3. **A2 – Umfang.** Nur erklären (Doku, Abgrenzung zu `codeOnly`, Atelier nutzt den Layer nicht)
+   oder in den eigenen Figma-Mastern einführen? Einführen heißt ADR, Figma-Arbeit und Aufwand L
+   statt M.
+
+**Fertig, wenn …**
+
+| #   | Fertig, wenn                                                                                                                                                                                                                                                                                           |
+| --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| A1  | Checkliste mit den fünf Qualitäten, je 2–3 prüfbare Fragen; jede Frage nennt, womit Atelier sie prüft (Gate oder Tool). Teilnehmende können ihr eigenes DS in ~10 min einschätzen. Kein Score-Versprechen.                                                                                             |
+| A3  | Die Felder des `figma_check_design_parity`-Ergebnisses sind an einem echten Lauf gegen eine Atelier-Komponente erklärt (Ausgabe erzeugt, nicht erfunden). Drei Folgeschritte: Code fixen, Figma fixen, als gewollte Abweichung in den Contract. Rückwärts-Parität mit `figma_post_comment` als Option. |
+| A10 | Readiness-Checkliste vor dem Handoff (Token-Bindung, `codeSyntax.WEB`, Variable-Scopes, Layer-Namen, Beschreibung, TEXT-Properties); jeder Punkt nennt das figma-console-mcp-Tool, das ihn prüft. Einmal gegen die Atelier-Figma-Datei gelaufen, Ergebnis notiert.                                     |
+| A8  | Atelier-Variante der Schleife: `storybook-test` / `test-run` + `figma_check_design_parity` + `figma_scan_code_accessibility`. Stoppbedingung (z. B. 3 Runden, dann Mensch). Die vier Fehlerbilder, mit der Regel „Assertions und Schwellen nicht ohne Rückfrage ändern“.                               |
+| A9  | Erst nach A10 und A8: Reihenfolge Readiness → Codegen → Gates → Parity, mit Begründung, an einer Stelle in `design-to-code`.                                                                                                                                                                           |
+| A2  | Je nach Entscheidung 3: Die Seite sagt klar, was der Layer ist, was `codeOnly` ist und was Atelier davon nutzt.                                                                                                                                                                                        |
+
 ## Priorität A – passt direkt, hoher Hebel
 
 Elf Themen schärfen den Kern-Loop. Vier davon sind mit Aufwand S erledigt (A5, A6, A7, A11).
