@@ -177,7 +177,8 @@ the SettingsCard component I just generated. Fix any discrepancies.`;
       <p class="kata-step-desc">
         Pick the framework you scaffolded in
         <a href="/workshop" class="docs-link-primary">Setup</a>. The switcher
-        below stay in sync across this page.
+        below sets the framework for every code block on this page and remembers
+        your choice.
       </p>
       <div style="margin-top: 0.5rem">
         <FwSwitcher label="Choose the framework you scaffolded" />
@@ -210,11 +211,8 @@ the SettingsCard component I just generated. Fix any discrepancies.`;
         fetches the Figma spec and Storybook props, then writes the component.
       </p>
       <p class="kata-step-desc" style="margin-top: 0.4rem">
-        On Angular and Vue the hosted <code>storybook-*</code> MCP answers
-        component lookups natively, already in that framework's own shape
-        (ADR-0097) — each framework's own docgen manifest is where its props and
-        variants come from, and the component's micro-contract names the master
-        those variants have to match.
+        The Storybook MCP for your framework returns the component's props and
+        variants in your framework's own shape.
       </p>
       {FRAMEWORKS.map((fw, i) => <div data-fw-panel={fw} hidden={i !== 0}>
         <Code
@@ -224,6 +222,25 @@ the SettingsCard component I just generated. Fix any discrepancies.`;
           title={`prompt — paste into Claude Code (${fw})`}
         />
       </div>)}
+      <details class="kata-why">
+        <summary>Why (for maintainers)</summary>
+        <div class="kata-why-body">
+          <p>
+            On Angular and Vue the hosted <code>storybook-*</code> MCP answers
+            component lookups natively, already in that framework's own shape.
+            Each framework's own docgen manifest is where its props and variants
+            come from, and the component's micro-contract names the master those
+            variants have to match. See
+            <a
+              href="https://github.com/DominikPieper/atelier-ui/blob/main/plan/adr/0097-the-manifest-the-framework-can-emit-now.md"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="docs-link-primary"
+              >ADR-0097</a
+            >.
+          </p>
+        </div>
+      </details>
       <p class="kata-step-desc" style="margin-top: 0.6rem">
         <strong style="color: var(--ui-color-text)">Checkpoint:</strong> the
         file exists at the path Step 4 names, it imports <code>Atl*</code>
@@ -395,6 +412,37 @@ the SettingsCard component I just generated. Fix any discrepancies.`;
 </BaseLayout>
 
 <style>
+  .kata-why {
+    margin-top: 1rem;
+    border: 1px solid var(--ui-color-border);
+    border-radius: var(--ui-radius-md);
+    font-size: var(--ui-font-size-sm);
+    color: var(--ui-color-text-muted);
+  }
+  .kata-why summary {
+    padding: 0.5rem 0.85rem;
+    cursor: pointer;
+    border-radius: var(--ui-radius-md);
+    color: var(--ui-color-text-muted);
+    font-weight: 600;
+  }
+  .kata-why summary:hover {
+    color: var(--ui-color-text);
+  }
+  .kata-why summary:focus-visible {
+    outline: 2px solid var(--ui-color-primary);
+    outline-offset: 2px;
+  }
+  .kata-why-body {
+    padding: 0 0.85rem 0.75rem;
+  }
+  .kata-why-body p {
+    margin: 0;
+    line-height: 1.6;
+  }
+  .kata-why code {
+    font-size: inherit;
+  }
   /* Target preview block — pure CSS mock of the Settings Card so the page
    * works without any built libs or screenshots. */
   .kata-target {

@@ -162,7 +162,11 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
       Use <strong>figma-console MCP</strong> to read a Figma component spec
       directly — design tokens included — then <strong>Storybook MCP</strong> to
       match Atelier UI components, and let Claude Code write token-exact code.
-      The next section explains what an MCP is.
+      New to MCP?
+      <a href="#what-is-mcp" class="docs-link-primary"
+        >What's an MCP, in 30 seconds</a
+      >
+      is further down.
     </PageHero>
     <p
       style="
@@ -190,7 +194,8 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
         <span class="docs-pagepair-desc"
           >MCP-driven — Claude reads
           <Jargon term="boundVariables">boundVariables</Jargon> and Storybook
-          props directly. Setup needed.</span
+          props directly. Needs the Workshop setup and the figma-console MCP
+          configured first.</span
         >
       </div>
       <div class="docs-pagepair-arrow" aria-hidden="true">·</div>
@@ -275,9 +280,11 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
           <li>Copy the node-id from the Figma URL</li>
           <li>Send one prompt to Claude Code</li>
         </ol>
-        <pre
-          class="mcp-compare-prompt"
-        >"build component for node-id 936-2954 using figma-console + storybook-react MCP."</pre>
+        {FRAMEWORKS.map((fw, i) => <div data-fw-panel={fw} hidden={i !== 0}>
+          <pre
+            class="mcp-compare-prompt"
+          >{`"build component for node-id 936-2954 using figma-console + storybook-${fw.toLowerCase()} MCP."`}</pre>
+        </div>)}
         <ol class="mcp-compare-list" start="3">
           <li>Token-exact code lands</li>
           <li>Verify: <code>figma_check_design_parity</code></li>
@@ -288,7 +295,9 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
 
     <!-- What's an MCP? — mental model before specifics -->
     <div class="docs-section">
-      <h2 class="docs-section-title">What's an MCP, in 30 seconds?</h2>
+      <h2 class="docs-section-title" id="what-is-mcp">
+        What's an MCP, in 30 seconds?
+      </h2>
       <p
         style="
           color: var(--ui-color-text-muted);
