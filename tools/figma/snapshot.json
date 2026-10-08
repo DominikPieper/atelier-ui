@@ -2,9 +2,9 @@
   "meta": {
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "fileName": "Atelier UI",
-    "figmaLastModified": "2026-10-03T06:57:31Z",
-    "generatedAt": "2026-10-03T07:22:40.051Z",
-    "gitSha": "c286d6f0",
+    "figmaLastModified": "2026-10-08T07:12:19Z",
+    "generatedAt": "2026-10-08T07:28:07.725Z",
+    "gitSha": "16acec90",
     "serverVersion": "0.1.0",
     "coverage": "All 43 masters. Token/auto-layout checks sample each master's default variant.",
     "note": "Facts captured from Figma via figma-console MCP read-tools. Rules live in check-figma.js."
@@ -42,6 +42,8 @@
     "color/primary-active",
     "color/primary-hover",
     "color/primary-light",
+    "color/red-100",
+    "color/red-200",
     "color/secondary",
     "color/secondary-active",
     "color/secondary-hover",
@@ -51,6 +53,16 @@
     "color/surface",
     "color/surface-raised",
     "color/surface-sunken",
+    "color/teal-100",
+    "color/teal-200",
+    "color/teal-300",
+    "color/teal-400",
+    "color/teal-50",
+    "color/teal-500",
+    "color/teal-600",
+    "color/teal-700",
+    "color/teal-800",
+    "color/teal-900",
     "color/text",
     "color/text-muted",
     "color/text-on-danger",
@@ -64,15 +76,19 @@
     "control-height/md",
     "control-height/sm",
     "font-size/2xl",
+    "font-size/2xs",
+    "font-size/3xl",
     "font-size/lg",
     "font-size/md",
     "font-size/sm",
     "font-size/xl",
     "font-size/xs",
+    "font-weight/bold",
     "font-weight/medium",
     "font-weight/normal",
     "font-weight/semibold",
     "font/family",
+    "line-height/code",
     "line-height/normal",
     "line-height/tight",
     "opacity/disabled",
@@ -97,7 +113,7 @@
   ],
   "typography": {
     "fontFamilies": {
-      "Instrument Sans": 1674,
+      "Instrument Sans": 1705,
       "Instrument Serif": 1,
       "JetBrains Mono": 81
     },
@@ -261,7 +277,7 @@
       "name": "Inputs/AtlButton",
       "selector": "AtlButton",
       "nodeId": "129:20",
-      "description": "Action button. Maps to AtlButtonSpec in libs/spec.\n\nUse when: a user-initiated action — submit, save, delete, navigate. Pick the visual based on hierarchy: `primary` for the screen's main action (one per screen), `secondary` for supporting actions, `outline` for tertiary/inline, `danger` for destructive actions (delete, irreversible).\n\nDon't use when: the action is a navigation link (use a real `<a>` element, not a styled button), the choice is between two states (use Form/AtlToggle), or the user is filling a form field (use Form/AtlInput / Form/AtlSelect).\n\nAPI surface (Figma → spec):\n- Variant `variant`: primary | secondary | outline | danger — maps to AtlButtonSpec.variant\n- Variant `size`: sm | md | lg — maps to AtlButtonSpec.size\n- Variant `state`: default | hover | focus | active — interaction state\n- Boolean `disabled`: maps to AtlButtonSpec.disabled\n- Boolean `loading`: maps to AtlButtonSpec.loading — shows spinner, disables interaction\n- Boolean `hasIcon`: toggles the leading icon slot (Instance Swap → Icon library)\n\nA11y: native HTML <button>. When the button has no visible label (icon-only), supply `aria-label` — required by spec. Disabled state uses HTML `disabled` (not aria-disabled) for buttons since they're never expected to remain in the tab order.\n\nStatus: structural restructure 2026-04-27 — `state` enum slimmed to interaction (default/hover/focus/active); `loading` and `disabled` moved out as Booleans matching AtlButtonSpec; `hasIcon` Boolean added for icon-slot toggle.\n\nDeclared Boolean properties that reference no layer (2026-08-27, ADR-0058). check:figma reads these lines, so the reason is stated where a designer opening the master sees it:\n- Boolean `hasIcon`: declared but unbound — and it maps to nothing: `AtlButtonSpec` has no `hasIcon`. It is a Figma-side slot toggle for placing an Icon instance, which is a legitimate authoring affordance but not part of the component contract. Bind it to the icon slot layer when that slot exists, or drop it.",
+      "description": "Action button. Maps to AtlButtonSpec in libs/spec.\n\nUse when: a user-initiated action — submit, save, delete, navigate. Pick the visual based on hierarchy: `primary` for the screen's main action (one per screen), `secondary` for supporting actions, `outline` for tertiary/inline, `danger` for destructive actions (delete, irreversible).\n\nDon't use when: the action is a navigation link (use a real `<a>` element, not a styled button), the choice is between two states (use Form/AtlToggle), or the user is filling a form field (use Form/AtlInput / Form/AtlSelect).\n\nAPI surface (Figma → spec):\n- Variant `variant`: primary | secondary | outline | danger — maps to AtlButtonSpec.variant\n- Variant `size`: sm | md | lg — maps to AtlButtonSpec.size\n- Variant `state`: default | hover | focus | active — interaction state\n- Text `label`: not a property — the label is the button's content (default slot / `children` / `<ng-content>`), not a field of AtlButtonSpec. Bound to both the label and the disabled overlay's label, so one override drives both\n- Boolean `disabled`: maps to AtlButtonSpec.disabled — shows `_disabled-overlay`, an opaque layer in `color/disabled-bg` / `-border` / `-text` (ADR-0159; not an opacity wash, which kept the brand hue in dark mode)\n- Boolean `loading`: maps to AtlButtonSpec.loading — shows the spinner in `color/disabled-text`. In code loading always disables the button, so set `disabled` too\n- Boolean `hasIcon`: toggles the leading icon slot (Instance Swap → Icon library)\n\nA11y: native HTML <button>. When the button has no visible label (icon-only), supply `aria-label` — required by spec. Disabled state uses HTML `disabled` (not aria-disabled) for buttons since they're never expected to remain in the tab order.\n\nStatus: structural restructure 2026-04-27 — `state` enum slimmed to interaction (default/hover/focus/active); `loading` and `disabled` moved out as Booleans matching AtlButtonSpec; `hasIcon` Boolean added for icon-slot toggle.\n\nDeclared Boolean properties that reference no layer (2026-08-27, ADR-0058). check:figma reads these lines, so the reason is stated where a designer opening the master sees it:\n- Boolean `hasIcon`: declared but unbound — and it maps to nothing: `AtlButtonSpec` has no `hasIcon`. It is a Figma-side slot toggle for placing an Icon instance, which is a legitimate authoring affordance but not part of the component contract. Bind it to the icon slot layer when that slot exists, or drop it.",
       "variantAxes": {
         "variant": [
           "primary",
@@ -407,11 +423,13 @@
         "disabled#507:192": "BOOLEAN",
         "loading#507:217": "BOOLEAN",
         "hasIcon#507:242": "BOOLEAN",
+        "label#1169:0": "TEXT",
         "variant": "VARIANT",
         "size": "VARIANT",
         "state": "VARIANT"
       },
       "referencedProperties": [
+        "label#1169:0",
         "disabled#507:192",
         "loading#507:217"
       ],
@@ -448,7 +466,14 @@
           "radiusPx": 10,
           "effects": [],
           "fontSize": 14,
-          "lineHeight": 125
+          "lineHeight": 125,
+          "booleanCover": {
+            "disabled": {
+              "fill": "color/disabled-bg",
+              "stroke": "color/disabled-border",
+              "strokeWeight": 1
+            }
+          }
         },
         "variant=primary, size=md, state=default": {
           "layoutMode": "HORIZONTAL",
@@ -481,7 +506,14 @@
           "radiusPx": 10,
           "effects": [],
           "fontSize": 16,
-          "lineHeight": 125
+          "lineHeight": 125,
+          "booleanCover": {
+            "disabled": {
+              "fill": "color/disabled-bg",
+              "stroke": "color/disabled-border",
+              "strokeWeight": 1
+            }
+          }
         },
         "variant=primary, size=lg, state=default": {
           "layoutMode": "HORIZONTAL",
@@ -514,7 +546,14 @@
           "radiusPx": 10,
           "effects": [],
           "fontSize": 18,
-          "lineHeight": 125
+          "lineHeight": 125,
+          "booleanCover": {
+            "disabled": {
+              "fill": "color/disabled-bg",
+              "stroke": "color/disabled-border",
+              "strokeWeight": 1
+            }
+          }
         },
         "variant=secondary, size=sm, state=default": {
           "layoutMode": "HORIZONTAL",
@@ -547,7 +586,14 @@
           "radiusPx": 10,
           "effects": [],
           "fontSize": 14,
-          "lineHeight": 125
+          "lineHeight": 125,
+          "booleanCover": {
+            "disabled": {
+              "fill": "color/disabled-bg",
+              "stroke": "color/disabled-border",
+              "strokeWeight": 1
+            }
+          }
         },
         "variant=secondary, size=md, state=default": {
           "layoutMode": "HORIZONTAL",
@@ -580,7 +626,14 @@
           "radiusPx": 10,
           "effects": [],
           "fontSize": 16,
-          "lineHeight": 125
+          "lineHeight": 125,
+          "booleanCover": {
+            "disabled": {
+              "fill": "color/disabled-bg",
+              "stroke": "color/disabled-border",
+              "strokeWeight": 1
+            }
+          }
         },
         "variant=secondary, size=lg, state=default": {
           "layoutMode": "HORIZONTAL",
@@ -613,7 +666,14 @@
           "radiusPx": 10,
           "effects": [],
           "fontSize": 18,
-          "lineHeight": 125
+          "lineHeight": 125,
+          "booleanCover": {
+            "disabled": {
+              "fill": "color/disabled-bg",
+              "stroke": "color/disabled-border",
+              "strokeWeight": 1
+            }
+          }
         },
         "variant=outline, size=sm, state=default": {
           "layoutMode": "HORIZONTAL",
@@ -646,7 +706,14 @@
           "radiusPx": 10,
           "effects": [],
           "fontSize": 14,
-          "lineHeight": 125
+          "lineHeight": 125,
+          "booleanCover": {
+            "disabled": {
+              "fill": "color/surface-raised",
+              "stroke": "color/disabled-border",
+              "strokeWeight": 1
+            }
+          }
         },
         "variant=outline, size=md, state=default": {
           "layoutMode": "HORIZONTAL",
@@ -679,7 +746,14 @@
           "radiusPx": 10,
           "effects": [],
           "fontSize": 16,
-          "lineHeight": 125
+          "lineHeight": 125,
+          "booleanCover": {
+            "disabled": {
+              "fill": "color/surface-raised",
+              "stroke": "color/disabled-border",
+              "strokeWeight": 1
+            }
+          }
         },
         "variant=outline, size=lg, state=default": {
           "layoutMode": "HORIZONTAL",
@@ -712,7 +786,14 @@
           "radiusPx": 10,
           "effects": [],
           "fontSize": 18,
-          "lineHeight": 125
+          "lineHeight": 125,
+          "booleanCover": {
+            "disabled": {
+              "fill": "color/surface-raised",
+              "stroke": "color/disabled-border",
+              "strokeWeight": 1
+            }
+          }
         },
         "variant=primary, size=md, state=focus": {
           "layoutMode": "HORIZONTAL",
@@ -748,7 +829,14 @@
             "DROP_SHADOW"
           ],
           "fontSize": 16,
-          "lineHeight": 125
+          "lineHeight": 125,
+          "booleanCover": {
+            "disabled": {
+              "fill": "color/disabled-bg",
+              "stroke": null,
+              "strokeWeight": 0
+            }
+          }
         },
         "variant=primary, size=md, state=hover": {
           "layoutMode": "HORIZONTAL",
@@ -781,7 +869,14 @@
           "radiusPx": 10,
           "effects": [],
           "fontSize": 16,
-          "lineHeight": 125
+          "lineHeight": 125,
+          "booleanCover": {
+            "disabled": {
+              "fill": "color/disabled-bg",
+              "stroke": "color/disabled-border",
+              "strokeWeight": 1
+            }
+          }
         },
         "variant=primary, size=md, state=active": {
           "layoutMode": "HORIZONTAL",
@@ -816,7 +911,14 @@
             "INNER_SHADOW"
           ],
           "fontSize": 16,
-          "lineHeight": 125
+          "lineHeight": 125,
+          "booleanCover": {
+            "disabled": {
+              "fill": "color/disabled-bg",
+              "stroke": "color/disabled-border",
+              "strokeWeight": 1
+            }
+          }
         },
         "variant=danger, size=sm, state=default": {
           "layoutMode": "HORIZONTAL",
@@ -851,7 +953,14 @@
             "INNER_SHADOW"
           ],
           "fontSize": 14,
-          "lineHeight": 125
+          "lineHeight": 125,
+          "booleanCover": {
+            "disabled": {
+              "fill": "color/disabled-bg",
+              "stroke": "color/disabled-border",
+              "strokeWeight": 1
+            }
+          }
         },
         "variant=danger, size=md, state=default": {
           "layoutMode": "HORIZONTAL",
@@ -886,7 +995,14 @@
             "INNER_SHADOW"
           ],
           "fontSize": 16,
-          "lineHeight": 125
+          "lineHeight": 125,
+          "booleanCover": {
+            "disabled": {
+              "fill": "color/disabled-bg",
+              "stroke": "color/disabled-border",
+              "strokeWeight": 1
+            }
+          }
         },
         "variant=danger, size=lg, state=default": {
           "layoutMode": "HORIZONTAL",
@@ -921,7 +1037,14 @@
             "INNER_SHADOW"
           ],
           "fontSize": 18,
-          "lineHeight": 125
+          "lineHeight": 125,
+          "booleanCover": {
+            "disabled": {
+              "fill": "color/disabled-bg",
+              "stroke": "color/disabled-border",
+              "strokeWeight": 1
+            }
+          }
         },
         "variant=danger, size=md, state=hover": {
           "layoutMode": "HORIZONTAL",
@@ -956,7 +1079,14 @@
             "INNER_SHADOW"
           ],
           "fontSize": 16,
-          "lineHeight": 125
+          "lineHeight": 125,
+          "booleanCover": {
+            "disabled": {
+              "fill": "color/disabled-bg",
+              "stroke": "color/disabled-border",
+              "strokeWeight": 1
+            }
+          }
         },
         "variant=danger, size=md, state=active": {
           "layoutMode": "HORIZONTAL",
@@ -991,7 +1121,14 @@
             "INNER_SHADOW"
           ],
           "fontSize": 16,
-          "lineHeight": 125
+          "lineHeight": 125,
+          "booleanCover": {
+            "disabled": {
+              "fill": "color/disabled-bg",
+              "stroke": "color/disabled-border",
+              "strokeWeight": 1
+            }
+          }
         },
         "variant=danger, size=md, state=focus": {
           "layoutMode": "HORIZONTAL",
@@ -1028,7 +1165,14 @@
             "DROP_SHADOW"
           ],
           "fontSize": 16,
-          "lineHeight": 125
+          "lineHeight": 125,
+          "booleanCover": {
+            "disabled": {
+              "fill": "color/disabled-bg",
+              "stroke": "color/disabled-border",
+              "strokeWeight": 1
+            }
+          }
         },
         "variant=secondary, size=md, state=hover": {
           "layoutMode": "HORIZONTAL",
@@ -1061,7 +1205,14 @@
           "radiusPx": 10,
           "effects": [],
           "fontSize": 16,
-          "lineHeight": 125
+          "lineHeight": 125,
+          "booleanCover": {
+            "disabled": {
+              "fill": "color/disabled-bg",
+              "stroke": "color/disabled-border",
+              "strokeWeight": 1
+            }
+          }
         },
         "variant=secondary, size=md, state=active": {
           "layoutMode": "HORIZONTAL",
@@ -1096,7 +1247,14 @@
             "INNER_SHADOW"
           ],
           "fontSize": 16,
-          "lineHeight": 125
+          "lineHeight": 125,
+          "booleanCover": {
+            "disabled": {
+              "fill": "color/disabled-bg",
+              "stroke": "color/disabled-border",
+              "strokeWeight": 1
+            }
+          }
         },
         "variant=secondary, size=md, state=focus": {
           "layoutMode": "HORIZONTAL",
@@ -1132,7 +1290,14 @@
             "DROP_SHADOW"
           ],
           "fontSize": 16,
-          "lineHeight": 125
+          "lineHeight": 125,
+          "booleanCover": {
+            "disabled": {
+              "fill": "color/disabled-bg",
+              "stroke": null,
+              "strokeWeight": 0
+            }
+          }
         },
         "variant=outline, size=md, state=hover": {
           "layoutMode": "HORIZONTAL",
@@ -1165,7 +1330,14 @@
           "radiusPx": 10,
           "effects": [],
           "fontSize": 16,
-          "lineHeight": 125
+          "lineHeight": 125,
+          "booleanCover": {
+            "disabled": {
+              "fill": "color/surface-raised",
+              "stroke": "color/disabled-border",
+              "strokeWeight": 1
+            }
+          }
         },
         "variant=outline, size=md, state=active": {
           "layoutMode": "HORIZONTAL",
@@ -1200,7 +1372,14 @@
             "INNER_SHADOW"
           ],
           "fontSize": 16,
-          "lineHeight": 125
+          "lineHeight": 125,
+          "booleanCover": {
+            "disabled": {
+              "fill": "color/surface-raised",
+              "stroke": "color/disabled-border",
+              "strokeWeight": 1
+            }
+          }
         },
         "variant=outline, size=md, state=focus": {
           "layoutMode": "HORIZONTAL",
@@ -1236,16 +1415,23 @@
             "DROP_SHADOW"
           ],
           "fontSize": 16,
-          "lineHeight": 125
+          "lineHeight": 125,
+          "booleanCover": {
+            "disabled": {
+              "fill": "color/surface-raised",
+              "stroke": "color/disabled-border",
+              "strokeWeight": 1
+            }
+          }
         }
       },
       "overlays": [
         {
           "variant": "variant=primary, size=sm, state=default",
           "layer": "_disabled-overlay",
-          "type": "RECTANGLE",
-          "fill": "color/surface",
-          "stroke": null,
+          "type": "FRAME",
+          "fill": "color/disabled-bg",
+          "stroke": "color/disabled-border",
           "box": [
             0,
             0,
@@ -1264,7 +1450,7 @@
           "variant": "variant=primary, size=sm, state=default",
           "layer": "_loading-spinner",
           "type": "ELLIPSE",
-          "fill": "color/text-on-primary",
+          "fill": "color/disabled-text",
           "stroke": null,
           "box": [
             72,
@@ -1283,9 +1469,9 @@
         {
           "variant": "variant=primary, size=md, state=default",
           "layer": "_disabled-overlay",
-          "type": "RECTANGLE",
-          "fill": "color/surface",
-          "stroke": null,
+          "type": "FRAME",
+          "fill": "color/disabled-bg",
+          "stroke": "color/disabled-border",
           "box": [
             0,
             0,
@@ -1304,7 +1490,7 @@
           "variant": "variant=primary, size=md, state=default",
           "layer": "_loading-spinner",
           "type": "ELLIPSE",
-          "fill": "color/text-on-primary",
+          "fill": "color/disabled-text",
           "stroke": null,
           "box": [
             75,
@@ -1323,9 +1509,9 @@
         {
           "variant": "variant=primary, size=lg, state=default",
           "layer": "_disabled-overlay",
-          "type": "RECTANGLE",
-          "fill": "color/surface",
-          "stroke": null,
+          "type": "FRAME",
+          "fill": "color/disabled-bg",
+          "stroke": "color/disabled-border",
           "box": [
             0,
             0,
@@ -1344,7 +1530,7 @@
           "variant": "variant=primary, size=lg, state=default",
           "layer": "_loading-spinner",
           "type": "ELLIPSE",
-          "fill": "color/text-on-primary",
+          "fill": "color/disabled-text",
           "stroke": null,
           "box": [
             79,
@@ -1363,9 +1549,9 @@
         {
           "variant": "variant=secondary, size=sm, state=default",
           "layer": "_disabled-overlay",
-          "type": "RECTANGLE",
-          "fill": "color/surface",
-          "stroke": null,
+          "type": "FRAME",
+          "fill": "color/disabled-bg",
+          "stroke": "color/disabled-border",
           "box": [
             0,
             0,
@@ -1384,7 +1570,7 @@
           "variant": "variant=secondary, size=sm, state=default",
           "layer": "_loading-spinner",
           "type": "ELLIPSE",
-          "fill": "color/text-on-secondary",
+          "fill": "color/disabled-text",
           "stroke": null,
           "box": [
             72,
@@ -1403,9 +1589,9 @@
         {
           "variant": "variant=secondary, size=md, state=default",
           "layer": "_disabled-overlay",
-          "type": "RECTANGLE",
-          "fill": "color/surface",
-          "stroke": null,
+          "type": "FRAME",
+          "fill": "color/disabled-bg",
+          "stroke": "color/disabled-border",
           "box": [
             0,
             0,
@@ -1424,7 +1610,7 @@
           "variant": "variant=secondary, size=md, state=default",
           "layer": "_loading-spinner",
           "type": "ELLIPSE",
-          "fill": "color/text-on-secondary",
+          "fill": "color/disabled-text",
           "stroke": null,
           "box": [
             75,
@@ -1443,9 +1629,9 @@
         {
           "variant": "variant=secondary, size=lg, state=default",
           "layer": "_disabled-overlay",
-          "type": "RECTANGLE",
-          "fill": "color/surface",
-          "stroke": null,
+          "type": "FRAME",
+          "fill": "color/disabled-bg",
+          "stroke": "color/disabled-border",
           "box": [
             0,
             0,
@@ -1464,7 +1650,7 @@
           "variant": "variant=secondary, size=lg, state=default",
           "layer": "_loading-spinner",
           "type": "ELLIPSE",
-          "fill": "color/text-on-secondary",
+          "fill": "color/disabled-text",
           "stroke": null,
           "box": [
             79,
@@ -1483,9 +1669,9 @@
         {
           "variant": "variant=outline, size=sm, state=default",
           "layer": "_disabled-overlay",
-          "type": "RECTANGLE",
-          "fill": "color/surface",
-          "stroke": null,
+          "type": "FRAME",
+          "fill": "color/surface-raised",
+          "stroke": "color/disabled-border",
           "box": [
             0,
             0,
@@ -1504,7 +1690,7 @@
           "variant": "variant=outline, size=sm, state=default",
           "layer": "_loading-spinner",
           "type": "ELLIPSE",
-          "fill": "color/primary",
+          "fill": "color/disabled-text",
           "stroke": null,
           "box": [
             72,
@@ -1523,9 +1709,9 @@
         {
           "variant": "variant=outline, size=md, state=default",
           "layer": "_disabled-overlay",
-          "type": "RECTANGLE",
-          "fill": "color/surface",
-          "stroke": null,
+          "type": "FRAME",
+          "fill": "color/surface-raised",
+          "stroke": "color/disabled-border",
           "box": [
             0,
             0,
@@ -1544,7 +1730,7 @@
           "variant": "variant=outline, size=md, state=default",
           "layer": "_loading-spinner",
           "type": "ELLIPSE",
-          "fill": "color/primary",
+          "fill": "color/disabled-text",
           "stroke": null,
           "box": [
             75,
@@ -1563,9 +1749,9 @@
         {
           "variant": "variant=outline, size=lg, state=default",
           "layer": "_disabled-overlay",
-          "type": "RECTANGLE",
-          "fill": "color/surface",
-          "stroke": null,
+          "type": "FRAME",
+          "fill": "color/surface-raised",
+          "stroke": "color/disabled-border",
           "box": [
             0,
             0,
@@ -1584,7 +1770,7 @@
           "variant": "variant=outline, size=lg, state=default",
           "layer": "_loading-spinner",
           "type": "ELLIPSE",
-          "fill": "color/primary",
+          "fill": "color/disabled-text",
           "stroke": null,
           "box": [
             79,
@@ -1603,9 +1789,9 @@
         {
           "variant": "variant=primary, size=md, state=focus",
           "layer": "_disabled-overlay",
-          "type": "RECTANGLE",
-          "fill": "color/surface",
-          "stroke": null,
+          "type": "FRAME",
+          "fill": "color/disabled-bg",
+          "stroke": "color/disabled-border",
           "box": [
             0,
             0,
@@ -1624,7 +1810,7 @@
           "variant": "variant=primary, size=md, state=focus",
           "layer": "_loading-spinner",
           "type": "ELLIPSE",
-          "fill": "color/text-on-primary",
+          "fill": "color/disabled-text",
           "stroke": null,
           "box": [
             75,
@@ -1643,9 +1829,9 @@
         {
           "variant": "variant=primary, size=md, state=hover",
           "layer": "_disabled-overlay",
-          "type": "RECTANGLE",
-          "fill": "color/surface",
-          "stroke": null,
+          "type": "FRAME",
+          "fill": "color/disabled-bg",
+          "stroke": "color/disabled-border",
           "box": [
             0,
             0,
@@ -1664,7 +1850,7 @@
           "variant": "variant=primary, size=md, state=hover",
           "layer": "_loading-spinner",
           "type": "ELLIPSE",
-          "fill": "color/text-on-primary",
+          "fill": "color/disabled-text",
           "stroke": null,
           "box": [
             75,
@@ -1683,9 +1869,9 @@
         {
           "variant": "variant=primary, size=md, state=active",
           "layer": "_disabled-overlay",
-          "type": "RECTANGLE",
-          "fill": "color/surface",
-          "stroke": null,
+          "type": "FRAME",
+          "fill": "color/disabled-bg",
+          "stroke": "color/disabled-border",
           "box": [
             0,
             0,
@@ -1704,7 +1890,7 @@
           "variant": "variant=primary, size=md, state=active",
           "layer": "_loading-spinner",
           "type": "ELLIPSE",
-          "fill": "color/text-on-primary",
+          "fill": "color/disabled-text",
           "stroke": null,
           "box": [
             75,
@@ -1723,9 +1909,9 @@
         {
           "variant": "variant=danger, size=sm, state=default",
           "layer": "_disabled-overlay",
-          "type": "RECTANGLE",
-          "fill": "color/surface",
-          "stroke": null,
+          "type": "FRAME",
+          "fill": "color/disabled-bg",
+          "stroke": "color/disabled-border",
           "box": [
             0,
             0,
@@ -1744,7 +1930,7 @@
           "variant": "variant=danger, size=sm, state=default",
           "layer": "_loading-spinner",
           "type": "ELLIPSE",
-          "fill": "color/text-on-danger",
+          "fill": "color/disabled-text",
           "stroke": null,
           "box": [
             72,
@@ -1763,9 +1949,9 @@
         {
           "variant": "variant=danger, size=md, state=default",
           "layer": "_disabled-overlay",
-          "type": "RECTANGLE",
-          "fill": "color/surface",
-          "stroke": null,
+          "type": "FRAME",
+          "fill": "color/disabled-bg",
+          "stroke": "color/disabled-border",
           "box": [
             0,
             0,
@@ -1784,7 +1970,7 @@
           "variant": "variant=danger, size=md, state=default",
           "layer": "_loading-spinner",
           "type": "ELLIPSE",
-          "fill": "color/text-on-danger",
+          "fill": "color/disabled-text",
           "stroke": null,
           "box": [
             75,
@@ -1803,9 +1989,9 @@
         {
           "variant": "variant=danger, size=lg, state=default",
           "layer": "_disabled-overlay",
-          "type": "RECTANGLE",
-          "fill": "color/surface",
-          "stroke": null,
+          "type": "FRAME",
+          "fill": "color/disabled-bg",
+          "stroke": "color/disabled-border",
           "box": [
             0,
             0,
@@ -1824,7 +2010,7 @@
           "variant": "variant=danger, size=lg, state=default",
           "layer": "_loading-spinner",
           "type": "ELLIPSE",
-          "fill": "color/text-on-danger",
+          "fill": "color/disabled-text",
           "stroke": null,
           "box": [
             79,
@@ -1843,9 +2029,9 @@
         {
           "variant": "variant=danger, size=md, state=hover",
           "layer": "_disabled-overlay",
-          "type": "RECTANGLE",
-          "fill": "color/surface",
-          "stroke": null,
+          "type": "FRAME",
+          "fill": "color/disabled-bg",
+          "stroke": "color/disabled-border",
           "box": [
             0,
             0,
@@ -1864,7 +2050,7 @@
           "variant": "variant=danger, size=md, state=hover",
           "layer": "_loading-spinner",
           "type": "ELLIPSE",
-          "fill": "color/text-on-danger",
+          "fill": "color/disabled-text",
           "stroke": null,
           "box": [
             75,
@@ -1883,9 +2069,9 @@
         {
           "variant": "variant=danger, size=md, state=active",
           "layer": "_disabled-overlay",
-          "type": "RECTANGLE",
-          "fill": "color/surface",
-          "stroke": null,
+          "type": "FRAME",
+          "fill": "color/disabled-bg",
+          "stroke": "color/disabled-border",
           "box": [
             0,
             0,
@@ -1904,7 +2090,7 @@
           "variant": "variant=danger, size=md, state=active",
           "layer": "_loading-spinner",
           "type": "ELLIPSE",
-          "fill": "color/text-on-danger",
+          "fill": "color/disabled-text",
           "stroke": null,
           "box": [
             75,
@@ -1923,9 +2109,9 @@
         {
           "variant": "variant=danger, size=md, state=focus",
           "layer": "_disabled-overlay",
-          "type": "RECTANGLE",
-          "fill": "color/surface",
-          "stroke": null,
+          "type": "FRAME",
+          "fill": "color/disabled-bg",
+          "stroke": "color/disabled-border",
           "box": [
             0,
             0,
@@ -1944,7 +2130,7 @@
           "variant": "variant=danger, size=md, state=focus",
           "layer": "_loading-spinner",
           "type": "ELLIPSE",
-          "fill": "color/text-on-danger",
+          "fill": "color/disabled-text",
           "stroke": null,
           "box": [
             75,
@@ -1963,9 +2149,9 @@
         {
           "variant": "variant=secondary, size=md, state=hover",
           "layer": "_disabled-overlay",
-          "type": "RECTANGLE",
-          "fill": "color/surface",
-          "stroke": null,
+          "type": "FRAME",
+          "fill": "color/disabled-bg",
+          "stroke": "color/disabled-border",
           "box": [
             0,
             0,
@@ -1984,7 +2170,7 @@
           "variant": "variant=secondary, size=md, state=hover",
           "layer": "_loading-spinner",
           "type": "ELLIPSE",
-          "fill": "color/text-on-secondary",
+          "fill": "color/disabled-text",
           "stroke": null,
           "box": [
             75,
@@ -2003,9 +2189,9 @@
         {
           "variant": "variant=secondary, size=md, state=active",
           "layer": "_disabled-overlay",
-          "type": "RECTANGLE",
-          "fill": "color/surface",
-          "stroke": null,
+          "type": "FRAME",
+          "fill": "color/disabled-bg",
+          "stroke": "color/disabled-border",
           "box": [
             0,
             0,
@@ -2024,7 +2210,7 @@
           "variant": "variant=secondary, size=md, state=active",
           "layer": "_loading-spinner",
           "type": "ELLIPSE",
-          "fill": "color/text-on-secondary",
+          "fill": "color/disabled-text",
           "stroke": null,
           "box": [
             75,
@@ -2043,9 +2229,9 @@
         {
           "variant": "variant=secondary, size=md, state=focus",
           "layer": "_disabled-overlay",
-          "type": "RECTANGLE",
-          "fill": "color/surface",
-          "stroke": null,
+          "type": "FRAME",
+          "fill": "color/disabled-bg",
+          "stroke": "color/disabled-border",
           "box": [
             0,
             0,
@@ -2064,7 +2250,7 @@
           "variant": "variant=secondary, size=md, state=focus",
           "layer": "_loading-spinner",
           "type": "ELLIPSE",
-          "fill": "color/text-on-secondary",
+          "fill": "color/disabled-text",
           "stroke": null,
           "box": [
             75,
@@ -2083,9 +2269,9 @@
         {
           "variant": "variant=outline, size=md, state=hover",
           "layer": "_disabled-overlay",
-          "type": "RECTANGLE",
-          "fill": "color/surface",
-          "stroke": null,
+          "type": "FRAME",
+          "fill": "color/surface-raised",
+          "stroke": "color/disabled-border",
           "box": [
             0,
             0,
@@ -2104,7 +2290,7 @@
           "variant": "variant=outline, size=md, state=hover",
           "layer": "_loading-spinner",
           "type": "ELLIPSE",
-          "fill": "color/primary",
+          "fill": "color/disabled-text",
           "stroke": null,
           "box": [
             75,
@@ -2123,9 +2309,9 @@
         {
           "variant": "variant=outline, size=md, state=active",
           "layer": "_disabled-overlay",
-          "type": "RECTANGLE",
-          "fill": "color/surface",
-          "stroke": null,
+          "type": "FRAME",
+          "fill": "color/surface-raised",
+          "stroke": "color/disabled-border",
           "box": [
             0,
             0,
@@ -2144,7 +2330,7 @@
           "variant": "variant=outline, size=md, state=active",
           "layer": "_loading-spinner",
           "type": "ELLIPSE",
-          "fill": "color/primary",
+          "fill": "color/disabled-text",
           "stroke": null,
           "box": [
             75,
@@ -2163,9 +2349,9 @@
         {
           "variant": "variant=outline, size=md, state=focus",
           "layer": "_disabled-overlay",
-          "type": "RECTANGLE",
-          "fill": "color/surface",
-          "stroke": null,
+          "type": "FRAME",
+          "fill": "color/surface-raised",
+          "stroke": "color/disabled-border",
           "box": [
             0,
             0,
@@ -2184,7 +2370,7 @@
           "variant": "variant=outline, size=md, state=focus",
           "layer": "_loading-spinner",
           "type": "ELLIPSE",
-          "fill": "color/primary",
+          "fill": "color/disabled-text",
           "stroke": null,
           "box": [
             75,
@@ -2303,7 +2489,14 @@
           "radiusPx": 10,
           "effects": [],
           "fontSize": 16,
-          "lineHeight": 125
+          "lineHeight": 125,
+          "booleanCover": {
+            "readonly": {
+              "fill": "color/surface-sunken",
+              "stroke": "color/surface-sunken",
+              "strokeWeight": 1
+            }
+          }
         },
         "state=filled": {
           "layoutMode": "HORIZONTAL",
@@ -2336,7 +2529,14 @@
           "radiusPx": 10,
           "effects": [],
           "fontSize": 16,
-          "lineHeight": 125
+          "lineHeight": 125,
+          "booleanCover": {
+            "readonly": {
+              "fill": "color/surface-sunken",
+              "stroke": "color/surface-sunken",
+              "strokeWeight": 1
+            }
+          }
         },
         "state=focus": {
           "layoutMode": "HORIZONTAL",
@@ -2369,7 +2569,14 @@
           "radiusPx": 10,
           "effects": [],
           "fontSize": 16,
-          "lineHeight": 125
+          "lineHeight": 125,
+          "booleanCover": {
+            "readonly": {
+              "fill": "color/surface-sunken",
+              "stroke": "color/surface-sunken",
+              "strokeWeight": 1
+            }
+          }
         },
         "state=invalid": {
           "layoutMode": "HORIZONTAL",
@@ -2402,7 +2609,14 @@
           "radiusPx": 10,
           "effects": [],
           "fontSize": 16,
-          "lineHeight": 125
+          "lineHeight": 125,
+          "booleanCover": {
+            "readonly": {
+              "fill": "color/surface-sunken",
+              "stroke": "color/surface-sunken",
+              "strokeWeight": 1
+            }
+          }
         },
         "state=hover": {
           "layoutMode": "HORIZONTAL",
@@ -2435,7 +2649,14 @@
           "radiusPx": 10,
           "effects": [],
           "fontSize": 16,
-          "lineHeight": 125
+          "lineHeight": 125,
+          "booleanCover": {
+            "readonly": {
+              "fill": "color/surface-sunken",
+              "stroke": "color/surface-sunken",
+              "strokeWeight": 1
+            }
+          }
         }
       },
       "overlays": [
@@ -9993,7 +10214,14 @@
           "radiusPx": 10,
           "effects": [],
           "fontSize": 16,
-          "lineHeight": 150
+          "lineHeight": 150,
+          "booleanCover": {
+            "readonly": {
+              "fill": "color/surface-sunken",
+              "stroke": "color/surface-sunken",
+              "strokeWeight": 1
+            }
+          }
         },
         "state=filled": {
           "layoutMode": "HORIZONTAL",
@@ -10026,7 +10254,14 @@
           "radiusPx": 10,
           "effects": [],
           "fontSize": 16,
-          "lineHeight": 150
+          "lineHeight": 150,
+          "booleanCover": {
+            "readonly": {
+              "fill": "color/surface-sunken",
+              "stroke": "color/surface-sunken",
+              "strokeWeight": 1
+            }
+          }
         },
         "state=focus": {
           "layoutMode": "HORIZONTAL",
@@ -10059,7 +10294,14 @@
           "radiusPx": 10,
           "effects": [],
           "fontSize": 16,
-          "lineHeight": 150
+          "lineHeight": 150,
+          "booleanCover": {
+            "readonly": {
+              "fill": "color/surface-sunken",
+              "stroke": "color/surface-sunken",
+              "strokeWeight": 1
+            }
+          }
         },
         "state=invalid": {
           "layoutMode": "HORIZONTAL",
@@ -10092,7 +10334,14 @@
           "radiusPx": 10,
           "effects": [],
           "fontSize": 16,
-          "lineHeight": 150
+          "lineHeight": 150,
+          "booleanCover": {
+            "readonly": {
+              "fill": "color/surface-sunken",
+              "stroke": "color/surface-sunken",
+              "strokeWeight": 1
+            }
+          }
         },
         "state=hover": {
           "layoutMode": "HORIZONTAL",
@@ -10125,7 +10374,14 @@
           "radiusPx": 10,
           "effects": [],
           "fontSize": 16,
-          "lineHeight": 150
+          "lineHeight": 150,
+          "booleanCover": {
+            "readonly": {
+              "fill": "color/surface-sunken",
+              "stroke": "color/surface-sunken",
+              "strokeWeight": 1
+            }
+          }
         }
       },
       "overlays": [
@@ -19193,7 +19449,14 @@
           "radiusPx": 0,
           "effects": [],
           "fontSize": null,
-          "lineHeight": null
+          "lineHeight": null,
+          "booleanCover": {
+            "readonly": {
+              "fill": "color/surface-sunken",
+              "stroke": "color/surface-sunken",
+              "strokeWeight": 1
+            }
+          }
         },
         "state=open": {
           "layoutMode": "VERTICAL",
@@ -19292,7 +19555,14 @@
           "radiusPx": 0,
           "effects": [],
           "fontSize": null,
-          "lineHeight": null
+          "lineHeight": null,
+          "booleanCover": {
+            "readonly": {
+              "fill": "color/surface-sunken",
+              "stroke": "color/surface-sunken",
+              "strokeWeight": 1
+            }
+          }
         },
         "state=hover": {
           "layoutMode": "VERTICAL",
@@ -19325,7 +19595,14 @@
           "radiusPx": 10,
           "effects": [],
           "fontSize": null,
-          "lineHeight": null
+          "lineHeight": null,
+          "booleanCover": {
+            "readonly": {
+              "fill": "color/surface-sunken",
+              "stroke": "color/surface-sunken",
+              "strokeWeight": 1
+            }
+          }
         },
         "state=focus": {
           "layoutMode": "VERTICAL",
@@ -19361,7 +19638,14 @@
             "DROP_SHADOW"
           ],
           "fontSize": null,
-          "lineHeight": null
+          "lineHeight": null,
+          "booleanCover": {
+            "readonly": {
+              "fill": "color/surface-sunken",
+              "stroke": "color/surface-sunken",
+              "strokeWeight": 1
+            }
+          }
         }
       },
       "overlays": [
@@ -23374,6 +23658,7 @@
         "readonly#507:97",
         "placeholder#55:157",
         "disabled#507:91",
+        "label#1169:0",
         "disabled#507:192",
         "loading#507:217"
       ],
@@ -23586,9 +23871,9 @@
         {
           "variant": "variant=drawer",
           "layer": "_disabled-overlay",
-          "type": "RECTANGLE",
-          "fill": "color/surface",
-          "stroke": null,
+          "type": "FRAME",
+          "fill": "color/disabled-bg",
+          "stroke": "color/disabled-border",
           "box": [
             0,
             0,
@@ -23607,7 +23892,7 @@
           "variant": "variant=drawer",
           "layer": "_loading-spinner",
           "type": "ELLIPSE",
-          "fill": "color/text-on-primary",
+          "fill": "color/disabled-text",
           "stroke": null,
           "box": [
             75,
@@ -23666,9 +23951,9 @@
         {
           "variant": "variant=popup",
           "layer": "_disabled-overlay",
-          "type": "RECTANGLE",
-          "fill": "color/surface",
-          "stroke": null,
+          "type": "FRAME",
+          "fill": "color/disabled-bg",
+          "stroke": "color/disabled-border",
           "box": [
             0,
             0,
@@ -23687,7 +23972,7 @@
           "variant": "variant=popup",
           "layer": "_loading-spinner",
           "type": "ELLIPSE",
-          "fill": "color/text-on-primary",
+          "fill": "color/disabled-text",
           "stroke": null,
           "box": [
             72,
@@ -23706,9 +23991,9 @@
         {
           "variant": "variant=inline",
           "layer": "_disabled-overlay",
-          "type": "RECTANGLE",
-          "fill": "color/surface",
-          "stroke": null,
+          "type": "FRAME",
+          "fill": "color/surface-raised",
+          "stroke": "color/disabled-border",
           "box": [
             0,
             0,
@@ -23727,7 +24012,7 @@
           "variant": "variant=inline",
           "layer": "_loading-spinner",
           "type": "ELLIPSE",
-          "fill": "color/primary",
+          "fill": "color/disabled-text",
           "stroke": null,
           "box": [
             72,
@@ -23786,9 +24071,9 @@
         {
           "variant": "variant=inline",
           "layer": "_disabled-overlay",
-          "type": "RECTANGLE",
-          "fill": "color/surface",
-          "stroke": null,
+          "type": "FRAME",
+          "fill": "color/disabled-bg",
+          "stroke": "color/disabled-border",
           "box": [
             0,
             0,
@@ -23807,7 +24092,7 @@
           "variant": "variant=inline",
           "layer": "_loading-spinner",
           "type": "ELLIPSE",
-          "fill": "color/text-on-primary",
+          "fill": "color/disabled-text",
           "stroke": null,
           "box": [
             75,

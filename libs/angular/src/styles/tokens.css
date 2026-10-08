@@ -5,7 +5,7 @@
  * scale. No moss, no warm bone — just Conciso.
  *
  * All foreground/background pairs verified WCAG 2.2 AA via
- * tools/scripts/wcag-contrast.mjs (52/52 pairs passing 2026-04-26).
+ * tools/scripts/wcag-contrast.mjs (30 pairs across 4 modes, 120/120 passing 2026-10-08).
  *
  * Typography: Instrument Sans (UI) + Instrument Serif (display) + JetBrains
  * Mono (code), chosen 2026-08-26 — see ADR-0035, which revises ADR-0020's
@@ -397,7 +397,13 @@
   --ui-color-input-border-hover: #475569;
   --ui-color-input-border-focus: var(--ui-color-primary);
   --ui-color-input-border-invalid: var(--ui-color-danger);
-  --ui-color-placeholder: #64748b;
+  --ui-color-placeholder: #566579;
+
+  /* Disabled button — a neutral slate fill instead of opacity (ADR-0159).
+   * Legibility floor only; WCAG exempts disabled controls. */
+  --ui-color-disabled-bg: #e2e8f0;
+  --ui-color-disabled-text: #64748b;
+  --ui-color-disabled-border: #cbd5e1;
   --ui-color-error-text: var(--ui-color-danger-text);
 
   /* Z-index scale */
@@ -459,6 +465,12 @@
     --ui-color-input-border-hover: #94a3b8;
     --ui-color-placeholder: #94a3b8;
 
+    /* Disabled button — a neutral slate fill instead of opacity (ADR-0159).
+     * Legibility floor only; WCAG exempts disabled controls. */
+    --ui-color-disabled-bg: #1e293b;
+    --ui-color-disabled-text: #94a3b8;
+    --ui-color-disabled-border: #334155;
+
     --ui-shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
     --ui-shadow-sm:
       0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px -1px rgba(0, 0, 0, 0.3);
@@ -519,6 +531,12 @@
   --ui-color-input-border-hover: #94a3b8;
   --ui-color-placeholder: #94a3b8;
 
+  /* Disabled button — a neutral slate fill instead of opacity (ADR-0159).
+   * Legibility floor only; WCAG exempts disabled controls. */
+  --ui-color-disabled-bg: #1e293b;
+  --ui-color-disabled-text: #94a3b8;
+  --ui-color-disabled-border: #334155;
+
   --ui-shadow-xs: 0 1px 2px 0 rgba(0, 0, 0, 0.3);
   --ui-shadow-sm:
     0 1px 3px 0 rgba(0, 0, 0, 0.4), 0 1px 2px -1px rgba(0, 0, 0, 0.3);
@@ -577,7 +595,13 @@
 
   --ui-color-input-border: var(--ui-color-border-strong);
   --ui-color-input-border-hover: #475569;
-  --ui-color-placeholder: #64748b;
+  --ui-color-placeholder: #566579;
+
+  /* Disabled button — a neutral slate fill instead of opacity (ADR-0159).
+   * Legibility floor only; WCAG exempts disabled controls. */
+  --ui-color-disabled-bg: #e2e8f0;
+  --ui-color-disabled-text: #64748b;
+  --ui-color-disabled-border: #cbd5e1;
 
   --ui-shadow-xs: 0 1px 2px 0 rgba(15, 23, 42, 0.05);
   --ui-shadow-sm:

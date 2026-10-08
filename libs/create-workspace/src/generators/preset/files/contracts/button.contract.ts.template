@@ -10,6 +10,14 @@ export const contract = {
         "Native HTML button 'type' passthrough ('button'|'submit'|'reset') — a form-semantics attribute the button element always carries, not a Figma-drawn visual axis.",
     },
   ],
+  impliesBoolean: [
+    {
+      codeProp: 'loading',
+      figmaBoolean: 'disabled',
+      reason:
+        "In code `loading` always sets `is-disabled` (ADR-0159), so a loading button paints the disabled cover; the master's `loading` Boolean only adds the spinner, which sits on top of the `disabled` Boolean's opaque `_disabled-overlay`.",
+    },
+  ],
   figmaOnly: [
     {
       name: 'hasIcon',

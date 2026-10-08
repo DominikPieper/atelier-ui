@@ -394,6 +394,36 @@ async function main() {
               return lh !== figma.mixed && lh.unit === 'PERCENT' ? lh.value : null;
             })(),
           };
+          // What a Boolean turns on, when what it turns on is an OPAQUE COVER (ADR-0159).
+          // The row above is the variant's ROOT; a Boolean's only mechanism is toggling a
+          // child's visibility (ADR-0061), so a master that draws "disabled" as a layer laid
+          // over the root has a root that knows nothing about it — the paint gate compared a
+          // disabled story to the enabled fill and passed, or, once the code stopped dimming,
+          // failed against it. A cover is a direct child bound to a BOOLEAN's visibility that
+          // sits at 0,0 at the variant's own size with a solid fill at full opacity, i.e. it
+          // fully replaces the root's paint when shown. Anything translucent or partial is NOT
+          // a cover (the root still shows through, so the root row stays the comparison) and is
+          // left out on purpose. Keyed by the Boolean's name without its '#id' suffix, which is
+          // the same name the contract and the story args use. Rows with no cover get no key.
+          const defs = set.componentPropertyDefinitions || {};
+          const cover = {};
+          for (const n of v.children || []) {
+            const ref = (n.componentPropertyReferences || {}).visible;
+            if (!ref || !defs[ref] || defs[ref].type !== 'BOOLEAN') continue;
+            if (Math.abs(n.x) > 0.5 || Math.abs(n.y) > 0.5) continue;
+            if (Math.abs(n.width - v.width) > 0.5 || Math.abs(n.height - v.height) > 0.5) continue;
+            const f0 = (n.fills || [])[0];
+            const opaque = (p) => p && p.visible !== false && p.type === 'SOLID' && (p.opacity === undefined || p.opacity === 1);
+            if (!opaque(f0) || n.opacity !== 1) continue;
+            const s0 = (n.strokes || [])[0];
+            const hasStroke = opaque(s0) && typeof n.strokeWeight === 'number' && n.strokeWeight > 0;
+            cover[ref.split('#')[0]] = {
+              fill: await paintVar(n.fills),
+              stroke: hasStroke ? await paintVar(n.strokes) : null,
+              strokeWeight: hasStroke ? n.strokeWeight : 0,
+            };
+          }
+          if (Object.keys(cover).length) rootPaint[v.name].booleanCover = cover;
         }
         // Overlay layers (_disabled-overlay, _invalid-border, _readonly-surface, ...).
         // Read HERE rather than from the per-component deep read, which filters

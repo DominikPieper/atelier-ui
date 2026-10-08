@@ -1,10 +1,10 @@
 {
   "meta": {
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
-    "generatedAt": "2026-10-03T07:22:40.051Z",
-    "gitSha": "c286d6f0",
-    "totalTextNodes": 566,
-    "records": 292,
+    "generatedAt": "2026-10-08T07:28:07.725Z",
+    "gitSha": "16acec90",
+    "totalTextNodes": 594,
+    "records": 298,
     "note": "Per-TEXT-node type facts for every master, companion to snapshot.json and written by the same run — `generatedAt` must match it, and a gate that reads one without checking the other is reading two different documents. Records are deduplicated across the variants of a set, so a count of text NODES sums `count` and never `records.length`. ADDRESSING A RECORD: neither `path` nor master + path + chars is unique — `path` collides inside a variant, and 13 master + path + chars keys stand for 2-3 records each (AtlButton draws three different `Button “Button”`). Use master + path + chars + size + weight, which is unique across all records today; check-figma.js builds exactly that address. Only the fontSize variable's collection is captured — a lineHeight binding is invisible here (zero nodes carry one today). Facts only; rules live in check-figma.js and check-typeface.js."
   },
   "masters": [
@@ -23,6 +23,27 @@
           "size": 14,
           "lineHeight": "125%",
           "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
+          "variantScope": [
+            "variant=primary, size=sm, state=default",
+            "variant=secondary, size=sm, state=default",
+            "variant=outline, size=sm, state=default",
+            "variant=danger, size=sm, state=default"
+          ],
+          "count": 4
+        },
+        {
+          "path": "_disabled-overlay/label",
+          "chars": "Button",
+          "textStyleName": "ty/control",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 14,
+          "lineHeight": "125%",
+          "visible": false,
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": null,
@@ -69,6 +90,39 @@
           "count": 16
         },
         {
+          "path": "_disabled-overlay/label",
+          "chars": "Button",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 16,
+          "lineHeight": "125%",
+          "visible": false,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/md",
+          "fontSizeVariableCollection": "Library Tokens",
+          "variantScope": [
+            "variant=primary, size=md, state=default",
+            "variant=secondary, size=md, state=default",
+            "variant=outline, size=md, state=default",
+            "variant=primary, size=md, state=focus",
+            "variant=primary, size=md, state=hover",
+            "variant=primary, size=md, state=active",
+            "variant=danger, size=md, state=default",
+            "variant=danger, size=md, state=hover",
+            "variant=danger, size=md, state=active",
+            "variant=danger, size=md, state=focus",
+            "variant=secondary, size=md, state=hover",
+            "variant=secondary, size=md, state=active",
+            "variant=secondary, size=md, state=focus",
+            "variant=outline, size=md, state=hover",
+            "variant=outline, size=md, state=active",
+            "variant=outline, size=md, state=focus"
+          ],
+          "count": 16
+        },
+        {
           "path": "Button",
           "chars": "Button",
           "textStyleName": null,
@@ -77,6 +131,27 @@
           "size": 18,
           "lineHeight": "125%",
           "visible": true,
+          "insideInstance": false,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/lg",
+          "fontSizeVariableCollection": "Library Tokens",
+          "variantScope": [
+            "variant=primary, size=lg, state=default",
+            "variant=secondary, size=lg, state=default",
+            "variant=outline, size=lg, state=default",
+            "variant=danger, size=lg, state=default"
+          ],
+          "count": 4
+        },
+        {
+          "path": "_disabled-overlay/label",
+          "chars": "Button",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 18,
+          "lineHeight": "125%",
+          "visible": false,
           "insideInstance": false,
           "hasTextStyleOverride": false,
           "fontSizeVariable": "font-size/lg",
@@ -4328,6 +4403,25 @@
           "count": 2
         },
         {
+          "path": "send-button/_disabled-overlay/label",
+          "chars": "Button",
+          "textStyleName": null,
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 16,
+          "lineHeight": "125%",
+          "visible": false,
+          "insideInstance": true,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": "font-size/md",
+          "fontSizeVariableCollection": "Library Tokens",
+          "variantScope": [
+            "variant=drawer",
+            "variant=inline"
+          ],
+          "count": 2
+        },
+        {
           "path": "code-block-instance/header/my-component.ts",
           "chars": "my-component.ts",
           "textStyleName": null,
@@ -4692,6 +4786,24 @@
           "hasTextStyleOverride": true,
           "fontSizeVariable": "font-size/sm",
           "fontSizeVariableCollection": "Library Tokens",
+          "variantScope": [
+            "variant=popup"
+          ],
+          "count": 1
+        },
+        {
+          "path": "send-button/_disabled-overlay/label",
+          "chars": "Button",
+          "textStyleName": "ty/control",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 14,
+          "lineHeight": "125%",
+          "visible": false,
+          "insideInstance": true,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
           "variantScope": [
             "variant=popup"
           ],
@@ -5106,6 +5218,24 @@
           "hasTextStyleOverride": true,
           "fontSizeVariable": "font-size/sm",
           "fontSizeVariableCollection": "Library Tokens",
+          "variantScope": [
+            "variant=inline"
+          ],
+          "count": 1
+        },
+        {
+          "path": "new-chat-button/_disabled-overlay/label",
+          "chars": "Button",
+          "textStyleName": "ty/control",
+          "family": "Instrument Sans",
+          "weight": "Medium",
+          "size": 14,
+          "lineHeight": "125%",
+          "visible": false,
+          "insideInstance": true,
+          "hasTextStyleOverride": false,
+          "fontSizeVariable": null,
+          "fontSizeVariableCollection": null,
           "variantScope": [
             "variant=inline"
           ],

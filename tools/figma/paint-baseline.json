@@ -1,8 +1,8 @@
 {
   "meta": {
     "note": "Per-finding RATCHET for check:paint (ADR-0121 Decision 4 stage 2; convention reused from ADR-0079/ADR-0066). An entry recorded here means: this story, in this state, paints or sizes one field DIFFERENTLY from the master's rootPaint row — background-color or border-color against the resolved value of the Figma-bound token ([PAINT]); height, padding, gap, radius or border-width against the row's own numbers ([GEOMETRY]); font-size or line-height against the same row ([TYPE]); or a story whose resolved args produced no matching rootPaint row at all ([NO-VARIANT]). Fix the code or the master and re-record — never delete the entry by hand — because a recorded defect that just disappears from the file is indistinguishable from one that was fixed; the gate needs to see it happen. The gate PASSES while a story's findings are EXACTLY the ones recorded here, FAILS when one APPEARS that is not recorded, and FAILS when a recorded one DISAPPEARS without this file being updated — an improvement nobody records can silently reverse (that disappearance is reported as [STALE-BASELINE], and a --component/--fw run only evaluates staleness over the entries in scope for that run, so a partial run cannot report the rest of the roster as stale). This is NOT an allowlist: it does not excuse a defect, it dates it.\n\n[NOT-RENDERED] and [NO-PROBE] are NOT recorded here, on purpose — neither is a paint/geometry/type comparison a fix could even target. [NOT-RENDERED] means the probe element exists but is not drawn in this lifecycle state (display:none, zero width/height, or a <dialog> without [open] — a closed AtlDialog/AtlDrawer/AtlChat popover, most often): there is nothing painted to compare yet, so measuring it would compare Figma to a box that is not there. [NO-PROBE] means this gate does not know which descendant is the painted layer for this component: either no contract probe is declared and neither the '.atl-<kebab>' class nor the bare custom element tag was found under #storybook-root, or a probe IS declared and its selector did not resolve for this framework (see AtlSelect's contract for a worked example — Angular's button trigger shares no selector with React/Vue's native <select>). Both print as a warning on every run rather than failing the gate, because recording either would either freeze a bug that just needs a probe, or a story lifecycle state that changes on its own — see the header comment in tools/scripts/check-paint.mjs (\"NOT RENDERED\" / \"THE PROBE ELEMENT\") for the full reasoning. To add a probe: add `probes: [{ part, selector, reason }]` to the component's `.contract.ts` (libs/spec/src/contracts/); `selector` is relative to the resolved component root (the '.atl-<kebab>' element, or the bare custom-element tag on Angular's :host-only components) — verify it with `--component <Selector> --report`, which prints the matched tag+class for the component's Default story in every framework the probe is expected to cover.\n\nUpdate with `node tools/scripts/check-paint.mjs --update-baseline` — never by hand. See plan/adr/0121-the-stories-are-the-spec.md (Decision 4), plan/adr/0079-type-does-not-need-the-painted-box.md and plan/adr/0066-a-warning-nobody-can-clear.md.",
-    "generatedAt": "2026-10-07T15:44:42.883Z",
-    "gitSha": "0f87409666f929579e270a7025f33d6aee87702d"
+    "generatedAt": "2026-10-08T07:41:10.682Z",
+    "gitSha": "16acec9037584a32ea74873afd101f3c264da17c"
   },
   "findings": [
     {
@@ -404,26 +404,6 @@
       "state": "hover",
       "field": "border-color",
       "detail": "rendered rgb(153, 27, 27), figma rgb(185, 28, 28) (token --ui-color-input-border-invalid)"
-    },
-    {
-      "key": "angular|AtlButton|Disabled|hover|background-color",
-      "tag": "PAINT",
-      "fw": "angular",
-      "component": "AtlButton",
-      "story": "Disabled",
-      "state": "hover",
-      "field": "background-color",
-      "detail": "rendered rgb(0, 100, 112), figma rgb(0, 78, 88) (token --ui-color-primary-hover)"
-    },
-    {
-      "key": "angular|AtlButton|Loading|hover|background-color",
-      "tag": "PAINT",
-      "fw": "angular",
-      "component": "AtlButton",
-      "story": "Loading",
-      "state": "hover",
-      "field": "background-color",
-      "detail": "rendered rgb(0, 100, 112), figma rgb(0, 78, 88) (token --ui-color-primary-hover)"
     },
     {
       "key": "angular|AtlCard|Default|default|height",
@@ -1383,7 +1363,7 @@
       "story": "Readonly",
       "state": "default",
       "field": "border-color",
-      "detail": "rendered rgba(0, 0, 0, 0), figma rgb(100, 116, 139) (token --ui-color-input-border)"
+      "detail": "rendered rgba(0, 0, 0, 0), figma rgb(241, 245, 249) (token --ui-color-surface-sunken)"
     },
     {
       "key": "angular|AtlInput|Readonly|default|height",
@@ -1403,17 +1383,7 @@
       "story": "Readonly",
       "state": "hover",
       "field": "border-color",
-      "detail": "rendered rgba(0, 0, 0, 0), figma rgb(71, 85, 105) (token --ui-color-input-border-hover)"
-    },
-    {
-      "key": "angular|AtlInput|Readonly|focus|background-color",
-      "tag": "PAINT",
-      "fw": "angular",
-      "component": "AtlInput",
-      "story": "Readonly",
-      "state": "focus",
-      "field": "background-color",
-      "detail": "rendered rgb(241, 245, 249), figma rgb(255, 255, 255) (token --ui-color-surface)"
+      "detail": "rendered rgba(0, 0, 0, 0), figma rgb(241, 245, 249) (token --ui-color-surface-sunken)"
     },
     {
       "key": "angular|AtlInput|Readonly|focus|border-color",
@@ -1423,7 +1393,7 @@
       "story": "Readonly",
       "state": "focus",
       "field": "border-color",
-      "detail": "rendered rgba(0, 0, 0, 0), figma rgb(0, 100, 112) (token --ui-color-primary)"
+      "detail": "rendered rgba(0, 0, 0, 0), figma rgb(241, 245, 249) (token --ui-color-surface-sunken)"
     },
     {
       "key": "angular|AtlInput|WithErrors|default|border-color",
@@ -2173,7 +2143,7 @@
       "story": "Readonly",
       "state": "default",
       "field": "border-color",
-      "detail": "rendered rgba(0, 0, 0, 0), figma rgb(100, 116, 139) (token --ui-color-input-border)"
+      "detail": "rendered rgba(0, 0, 0, 0), figma rgb(241, 245, 249) (token --ui-color-surface-sunken)"
     },
     {
       "key": "angular|AtlTextarea|Readonly|default|height",
@@ -2186,14 +2156,14 @@
       "detail": "rendered 94px, figma 90px"
     },
     {
-      "key": "angular|AtlTextarea|Readonly|focus|background-color",
+      "key": "angular|AtlTextarea|Readonly|hover|border-color",
       "tag": "PAINT",
       "fw": "angular",
       "component": "AtlTextarea",
       "story": "Readonly",
-      "state": "focus",
-      "field": "background-color",
-      "detail": "rendered rgb(241, 245, 249), figma rgb(255, 255, 255) (token --ui-color-surface)"
+      "state": "hover",
+      "field": "border-color",
+      "detail": "rendered rgba(0, 0, 0, 0), figma rgb(241, 245, 249) (token --ui-color-surface-sunken)"
     },
     {
       "key": "angular|AtlTextarea|Readonly|focus|border-color",
@@ -2203,7 +2173,7 @@
       "story": "Readonly",
       "state": "focus",
       "field": "border-color",
-      "detail": "rendered rgba(0, 0, 0, 0), figma rgb(0, 100, 112) (token --ui-color-primary)"
+      "detail": "rendered rgba(0, 0, 0, 0), figma rgb(241, 245, 249) (token --ui-color-surface-sunken)"
     },
     {
       "key": "angular|AtlTextarea|WithErrors|default|border-color",
@@ -2944,26 +2914,6 @@
       "state": "hover",
       "field": "border-color",
       "detail": "rendered rgb(153, 27, 27), figma rgb(185, 28, 28) (token --ui-color-input-border-invalid)"
-    },
-    {
-      "key": "react|AtlButton|Disabled|hover|background-color",
-      "tag": "PAINT",
-      "fw": "react",
-      "component": "AtlButton",
-      "story": "Disabled",
-      "state": "hover",
-      "field": "background-color",
-      "detail": "rendered rgb(0, 100, 112), figma rgb(0, 78, 88) (token --ui-color-primary-hover)"
-    },
-    {
-      "key": "react|AtlButton|Loading|hover|background-color",
-      "tag": "PAINT",
-      "fw": "react",
-      "component": "AtlButton",
-      "story": "Loading",
-      "state": "hover",
-      "field": "background-color",
-      "detail": "rendered rgb(0, 100, 112), figma rgb(0, 78, 88) (token --ui-color-primary-hover)"
     },
     {
       "key": "react|AtlCard|Default|default|height",
@@ -5496,26 +5446,6 @@
       "detail": "rendered rgb(153, 27, 27), figma rgb(185, 28, 28) (token --ui-color-input-border-invalid)"
     },
     {
-      "key": "vue|AtlButton|Disabled|hover|background-color",
-      "tag": "PAINT",
-      "fw": "vue",
-      "component": "AtlButton",
-      "story": "Disabled",
-      "state": "hover",
-      "field": "background-color",
-      "detail": "rendered rgb(0, 100, 112), figma rgb(0, 78, 88) (token --ui-color-primary-hover)"
-    },
-    {
-      "key": "vue|AtlButton|Loading|hover|background-color",
-      "tag": "PAINT",
-      "fw": "vue",
-      "component": "AtlButton",
-      "story": "Loading",
-      "state": "hover",
-      "field": "background-color",
-      "detail": "rendered rgb(0, 100, 112), figma rgb(0, 78, 88) (token --ui-color-primary-hover)"
-    },
-    {
       "key": "vue|AtlCard|Default|default|height",
       "tag": "GEOMETRY",
       "fw": "vue",
@@ -6463,7 +6393,7 @@
       "story": "Readonly",
       "state": "default",
       "field": "border-color",
-      "detail": "rendered rgba(0, 0, 0, 0), figma rgb(100, 116, 139) (token --ui-color-input-border)"
+      "detail": "rendered rgba(0, 0, 0, 0), figma rgb(241, 245, 249) (token --ui-color-surface-sunken)"
     },
     {
       "key": "vue|AtlInput|Readonly|default|height",
@@ -6483,17 +6413,7 @@
       "story": "Readonly",
       "state": "hover",
       "field": "border-color",
-      "detail": "rendered rgba(0, 0, 0, 0), figma rgb(71, 85, 105) (token --ui-color-input-border-hover)"
-    },
-    {
-      "key": "vue|AtlInput|Readonly|focus|background-color",
-      "tag": "PAINT",
-      "fw": "vue",
-      "component": "AtlInput",
-      "story": "Readonly",
-      "state": "focus",
-      "field": "background-color",
-      "detail": "rendered rgb(241, 245, 249), figma rgb(255, 255, 255) (token --ui-color-surface)"
+      "detail": "rendered rgba(0, 0, 0, 0), figma rgb(241, 245, 249) (token --ui-color-surface-sunken)"
     },
     {
       "key": "vue|AtlInput|Readonly|focus|border-color",
@@ -6503,7 +6423,7 @@
       "story": "Readonly",
       "state": "focus",
       "field": "border-color",
-      "detail": "rendered rgba(0, 0, 0, 0), figma rgb(0, 100, 112) (token --ui-color-primary)"
+      "detail": "rendered rgba(0, 0, 0, 0), figma rgb(241, 245, 249) (token --ui-color-surface-sunken)"
     },
     {
       "key": "vue|AtlInput|WithErrors|default|border-color",
@@ -7333,7 +7253,7 @@
       "story": "Readonly",
       "state": "default",
       "field": "border-color",
-      "detail": "rendered rgba(0, 0, 0, 0), figma rgb(100, 116, 139) (token --ui-color-input-border)"
+      "detail": "rendered rgba(0, 0, 0, 0), figma rgb(241, 245, 249) (token --ui-color-surface-sunken)"
     },
     {
       "key": "vue|AtlTextarea|Readonly|default|height",
@@ -7346,14 +7266,14 @@
       "detail": "rendered 94px, figma 90px"
     },
     {
-      "key": "vue|AtlTextarea|Readonly|focus|background-color",
+      "key": "vue|AtlTextarea|Readonly|hover|border-color",
       "tag": "PAINT",
       "fw": "vue",
       "component": "AtlTextarea",
       "story": "Readonly",
-      "state": "focus",
-      "field": "background-color",
-      "detail": "rendered rgb(241, 245, 249), figma rgb(255, 255, 255) (token --ui-color-surface)"
+      "state": "hover",
+      "field": "border-color",
+      "detail": "rendered rgba(0, 0, 0, 0), figma rgb(241, 245, 249) (token --ui-color-surface-sunken)"
     },
     {
       "key": "vue|AtlTextarea|Readonly|focus|border-color",
@@ -7363,7 +7283,7 @@
       "story": "Readonly",
       "state": "focus",
       "field": "border-color",
-      "detail": "rendered rgba(0, 0, 0, 0), figma rgb(0, 100, 112) (token --ui-color-primary)"
+      "detail": "rendered rgba(0, 0, 0, 0), figma rgb(241, 245, 249) (token --ui-color-surface-sunken)"
     },
     {
       "key": "vue|AtlTextarea|WithErrors|default|border-color",

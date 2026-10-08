@@ -44,18 +44,26 @@ Atelier token system instead of the generic gradient/grid look.
 - [x] **5. harden** — done 2026-10-07 except two library findings (below). Forced-colors
       focus outline, unclipped search placeholder, one drawer close, scroll-top clear of the
       bottom nav, prompt blocks wrap, nav landmark labels distinct.
-- [ ] **5a. library: placeholder contrast** — `--ui-color-placeholder` `#64748b` on
+- [x] **5a. library: placeholder contrast** — done 2026-10-08 (ADR-0159). — `--ui-color-placeholder` `#64748b` on
       `--ui-color-input-bg` (= surface-sunken `#f1f5f9`) is 4.34:1, below AA, in light mode;
       `check:contrast` has no placeholder pair, which is why it passed. Needs an owner
-      decision (token change touches all three adapters and Figma).
-- [ ] **5b. library: dark disabled button** — `.atl-button.is-disabled` relies on
-      `--ui-opacity-disabled: 0.65` in dark, so Disabled/Loading read as enabled. Needs an
-      owner decision.
+      decision (token change touches all three adapters and Figma). Owner 2026-10-08:
+      `#566579` (5.43:1 on input-bg, 5.94 on surface, 3.00 vs entered text); add the pairs.
+- [x] **5b. library: dark disabled button** — done 2026-10-08 (ADR-0159); Figma master has a
+      `label` text property and an opaque `_disabled-overlay`. Open: ~15 other components still dim
+      by opacity (dark disabled input unmeasured); artboard generator has no disabled colours. — `.atl-button.is-disabled` relies on
+      `--ui-opacity-disabled: 0.65` in dark, so Disabled/Loading read as enabled. Owner
+      2026-10-08: dedicated button disabled colour tokens (reverses the manifest's
+      "opacity, not colour tokens" rule for the button → ADR).
+- [ ] **5c. AtlTextarea Readonly hover border** — Angular and Vue render a transparent border on
+      hover where Figma and React draw `surface-sunken` (recorded in `paint-baseline.json`
+      2026-10-08, surfaced by the Boolean-cover round of `check:paint`, ADR-0159).
 - [x] **6. delight** — done 2026-10-07. Kata ends with a real finish (recap, one action to
       `/patterns`); WIP banner calm, dismissible, remembered before paint.
 - [x] **7. polish + re-critique** — done 2026-10-07. Re-critique scored 26/40 (was 27): a fresh
       reviewer found new, pre-existing problems rather than regressions. Its P1s are open as 8–10.
-- [ ] **8. gallery shows components** — `/components` cards are letter monograms; render
+- [x] **8. gallery shows components** — done 2026-10-08: 28/28 live previews (overlays at rest,
+      `inert` + `aria-hidden`, CLS 0), framework-dot legend; +~13 KB gz JS, +9.7 KB gz CSS. — `/components` cards are letter monograms; render
       previews, legend for the framework dots. Owner 2026-10-08: live mini-previews from the
       React adapter (overlays as static resting states).
 - [x] **9. track ends on a finish** — done 2026-10-08 (ADR-0158): 6 steps, `/patterns` in the

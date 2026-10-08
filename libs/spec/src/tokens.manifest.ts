@@ -1034,7 +1034,7 @@ export const tokens: Record<string, TokenAnnotation> = {
     intent:
       'Opacity applied to disabled interactive controls so their colour reads as inert.',
     constraints: [
-      'Apply via opacity on the disabled element — do not bake into colour tokens.',
+      'Apply via opacity on the disabled element — do not bake into colour tokens. The button is the exception: it uses --ui-color-disabled-* because opacity kept its brand hue (ADR-0159).',
       'Do not use for de-emphasis of non-disabled content; use --ui-color-text-muted instead.',
     ],
   },
@@ -1383,10 +1383,32 @@ export const tokens: Record<string, TokenAnnotation> = {
   },
   '--ui-color-placeholder': {
     intent:
-      'Placeholder text colour for inputs. Sub-AA contrast — informational only.',
+      'Placeholder text colour for inputs. Meets AA (4.5:1) on the input fill and its focus fill in light mode.',
     constraints: [
       'Reserve for true placeholders (input::placeholder) — never use as a substitute for a real label.',
       'Do not use as a foreground for content users need to read; use --ui-color-text-muted instead.',
+    ],
+  },
+  '--ui-color-disabled-bg': {
+    intent:
+      'Fill of a disabled (and loading) button: a desaturated neutral slate, so it cannot be mistaken for an enabled brand-coloured button.',
+    constraints: [
+      'Button only — other controls still use --ui-opacity-disabled.',
+      'Pair with --ui-color-disabled-text and --ui-color-disabled-border; WCAG exempts disabled controls, the gate enforces only a legibility floor.',
+    ],
+  },
+  '--ui-color-disabled-text': {
+    intent:
+      'Label (and loading spinner) colour on a disabled button, drawn on --ui-color-disabled-bg.',
+    constraints: [
+      'Use only on --ui-color-disabled-bg; never for enabled or informational text.',
+    ],
+  },
+  '--ui-color-disabled-border': {
+    intent:
+      'Border of a disabled button; the only visible edge of a disabled outline button, whose fill is transparent.',
+    constraints: [
+      'Button only; pair with --ui-color-disabled-bg and --ui-color-disabled-text.',
     ],
   },
   '--ui-color-error-text': {

@@ -79,6 +79,13 @@ checkbox/radio, 1px on toggle/combobox/select); `_shimmer` is the `linear-gradie
 CSS describes rather than a flat fill; and `loading` — plus AtlTable's and
 AtlTabGroup's equally unspec'd `disabled` — is gone along with the layers it switched.
 
+**Corrected 2026-10-08:** the button no longer follows this. ADR-0159 replaced its 24 disabled
+overlays with an opaque frame in `color/disabled-bg` / `-border` / `-text` carrying its own
+label, because an opacity wash kept the brand hue in dark mode. The same work found 14
+overlays this section counts as fixed still at full opacity (AtlMenuItem, AtlTab, AtlStep,
+AtlOption, AtlAccordionItem), erasing the control when switched on; they are at 0.5 now, and
+`check:paint` compares opaque Boolean covers since ADR-0159, so it would catch a recurrence.
+
 **5. `color-mix()` and gradients are two different problems.** A gradient's bindings
 live on its **stops**, not on the paint, so a paint-level read called the bound shimmer
 raw. The probe now resolves gradient stops and treats a fully-transparent stop as

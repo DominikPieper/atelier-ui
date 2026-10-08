@@ -104,7 +104,7 @@ The current palette is **Direction A** — Conciso anchor only. Deep Conciso tea
   <ColorItem
     title="Text"
     subtitle="--ui-color-text / text-muted / placeholder"
-    colors={{ Default: '#0f172a', Muted: '#475569', Placeholder: '#64748b' }}
+    colors={{ Default: '#0f172a', Muted: '#475569', Placeholder: '#566579' }}
   />
 </ColorPalette>
 
@@ -118,18 +118,31 @@ The current palette is **Direction A** — Conciso anchor only. Deep Conciso tea
   />
 </ColorPalette>
 
+## Disabled
+
+<ColorPalette>
+  <ColorItem
+    title="Disabled"
+    subtitle="--ui-color-disabled-bg / disabled-text / disabled-border"
+    colors={{ Background: '#e2e8f0', Text: '#64748b', Border: '#cbd5e1' }}
+  />
+</ColorPalette>
+
 ## Dark Theme Overrides
 
 When `data-theme="dark"` is applied these tokens resolve to their dark-mode equivalents automatically.
 
-| Token                       | Light     | Dark      |
-| --------------------------- | --------- | --------- |
-| `--ui-color-primary`        | `#006470` | `#34d8d8` |
-| `--ui-color-surface`        | `#ffffff` | `#0a1116` |
-| `--ui-color-surface-raised` | `#f8fafc` | `#131c24` |
-| `--ui-color-surface-sunken` | `#f1f5f9` | `#060c10` |
-| `--ui-color-text`           | `#0f172a` | `#f1f5f9` |
-| `--ui-color-text-muted`     | `#475569` | `#94a3b8` |
-| `--ui-color-border`         | `#e2e8f0` | `#1e293b` |
-| `--ui-color-border-strong`  | `#64748b` | `#64748b` |
-| `--ui-color-danger`         | `#b91c1c` | `#f87171` |
+| Token                        | Light     | Dark      |
+| ---------------------------- | --------- | --------- |
+| `--ui-color-primary`         | `#006470` | `#34d8d8` |
+| `--ui-color-surface`         | `#ffffff` | `#0a1116` |
+| `--ui-color-surface-raised`  | `#f8fafc` | `#131c24` |
+| `--ui-color-surface-sunken`  | `#f1f5f9` | `#060c10` |
+| `--ui-color-text`            | `#0f172a` | `#f1f5f9` |
+| `--ui-color-text-muted`      | `#475569` | `#94a3b8` |
+| `--ui-color-border`          | `#e2e8f0` | `#1e293b` |
+| `--ui-color-border-strong`   | `#64748b` | `#64748b` |
+| `--ui-color-disabled-bg`     | `#e2e8f0` | `#1e293b` |
+| `--ui-color-disabled-text`   | `#64748b` | `#94a3b8` |
+| `--ui-color-disabled-border` | `#cbd5e1` | `#334155` |
+| `--ui-color-danger`          | `#b91c1c` | `#f87171` |

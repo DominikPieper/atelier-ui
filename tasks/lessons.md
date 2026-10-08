@@ -909,3 +909,20 @@ would have measured the wrong tree. The stash list already carries a 2026-09-07 
 mistake. Rule: every brief for an agent that runs alongside another says "no `git stash`,
 `git checkout -- <file>` or `git restore` on files you do not own"; to see the baseline, use
 `git show HEAD:<path>` or `git diff`, which never touch the tree.
+
+## 2026-10-08 — `nx lint` is not `check:format`; a per-step gate list needs both
+
+Steps A–E of the docs follow-up were each verified with `nx lint docs`, `check:docs-layout` and
+`check:docs`, and committed. `check:all` then failed on its very first gate: three files of the
+switcher commit were not Prettier-formatted. ESLint does not check formatting, and the agent's
+"prettier on the file" covered only some of the files it touched. Because `check:all` stops at the
+first red gate, nothing behind it had run either. Rule: the per-step gate list for any change
+always includes `npm run check:format`; it costs seconds.
+
+## 2026-10-08 — A sync script that "succeeds" with far more updates than the change explains is a bug report
+
+`figma:sync-tokens` after adding three tokens reported 57 created, 77 value updates. I only
+questioned it after the fact. The generator matched `[data-theme="dark"]` while `tokens.css`
+uses single quotes, so every dark value fell back to light, and the sync wrote light values into
+Figma's Dark mode. Rule: before running a write-sync, predict its update count from the diff; if
+the reported number is off by an order of magnitude, stop and diagnose before the next write.

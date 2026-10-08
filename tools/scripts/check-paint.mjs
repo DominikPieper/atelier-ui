@@ -49,6 +49,22 @@
  *               skipped where the snapshot recorded `null` (Figma AUTO leading, a
  *               mixed run, or no single direct TEXT child at the root).
  *
+ * BOOLEAN COVERS (round 4, ADR-0159, on ADR-0061's theme: what a Boolean turns on must be
+ * checked while it is on). A row is the variant's ROOT; a master that draws "disabled" as an
+ * opaque child frame over the root (`_disabled-overlay`, bound to the Boolean's visibility)
+ * has a root that knows nothing about it. While the code dimmed with `opacity` the computed
+ * background still equalled the enabled fill, so this gate passed; once the button got its own
+ * `--ui-color-disabled-*` tokens it failed against a fill nobody sees. `figma-snapshot.mjs` now
+ * records, per row, `booleanCover: { '<Boolean>': { fill, stroke, strokeWeight } }` for every
+ * direct child that is bound to a BOOLEAN's visibility, sits at 0,0 at the variant's size and
+ * is a solid at full opacity. When a story sets that Boolean true (the arg of the same name, or
+ * a code prop the contract's `impliesBoolean` maps onto it: AtlButton `loading` -> `disabled`,
+ * because loading always disables) the background-color / border-color checks, in every
+ * state, read the cover's variables instead of the root's. Geometry and type still come from
+ * the root. A translucent or partial overlay is not a cover and is not recorded, so those
+ * masters keep today's behaviour. Rows from a snapshot taken before this round have no
+ * `booleanCover` and behave as before. A cover's border is only compared when it draws one.
+ *
  * `state=hover` and `state=focus` rows, when the master has them for the same
  * variant key, are checked for PAINT ONLY (fill/stroke) — hovering or Tab-focusing
  * the probe element and re-reading. `active`/`pressed` are not checked yet.
@@ -1129,13 +1145,11 @@ async function resolveProbe(page, selector, contract) {
 // ─── Measurement ─────────────────────────────────────────────────────────────
 
 /** Full measurement (paint + geometry + type) for the `state=default` comparison. */
-async function measureFull(page, selector, row) {
+async function measureFull(page, selector, row, paintRow = row) {
   const colorVars = new Set();
   const lengthVars = new Set();
-  const fillVar = tokenCssVar(row.fill);
-  const strokeVar = tokenCssVar(row.stroke);
-  if (fillVar) colorVars.add(fillVar);
-  if (strokeVar) colorVars.add(strokeVar);
+  for (const v of [tokenCssVar(paintRow.fill), tokenCssVar(paintRow.stroke)])
+    if (v) colorVars.add(v);
   for (const b of row.padBound || []) {
     const v = tokenCssVar(b);
     if (v) lengthVars.add(v);
@@ -1240,6 +1254,33 @@ async function measurePaintOnly(page, selector, row) {
   );
 }
 
+/** ADR-0159 round: the row to take PAINT from when a Boolean the story switches on is drawn
+ * by the master as an opaque cover (`rootPaint[row].booleanCover`, `figma-snapshot.mjs`).
+ * A cover fully replaces the root's fill/stroke while shown, so the root row would describe
+ * a button nobody sees; geometry, type and padding still come from the root, which the
+ * cover does not move. `isOn(prop)` answers whether the story sets that CODE prop true.
+ * A Figma Boolean is on when the code prop of the same name is, or when the contract's
+ * `impliesBoolean` says another code prop (`loading`) switches it on. A master that draws
+ * the Boolean any other way (translucent, partial) never has a `booleanCover` entry, so it
+ * falls through to the root row exactly as before. The first matching cover wins. */
+function paintRowFor(row, contract, isOn) {
+  const covers = (row && row.booleanCover) || {};
+  const implied = (contract && contract.impliesBoolean) || [];
+  for (const [name, cover] of Object.entries(covers)) {
+    const on =
+      isOn(name) ||
+      implied.some((e) => e.figmaBoolean === name && isOn(e.codeProp));
+    if (!on) continue;
+    return {
+      ...row,
+      fill: cover.fill,
+      stroke: cover.stroke,
+      strokeWeight: cover.strokeWeight,
+    };
+  }
+  return row;
+}
+
 function comparePaint(ctx, snap, row) {
   if (!snap) {
     // Same non-ratcheted treatment as every other [NO-PROBE]: the probe resolved a moment ago
@@ -1271,7 +1312,7 @@ function comparePaint(ctx, snap, row) {
   }
 }
 
-function compareFull(ctx, snap, row) {
+function compareFull(ctx, snap, row, paintRow = row) {
   if (!snap) {
     // Same non-ratcheted treatment as every other [NO-PROBE]: the probe resolved a moment ago
     // (resolveProbe ran before this call) but is gone by the time measurement actually reads
@@ -1282,7 +1323,7 @@ function compareFull(ctx, snap, row) {
     );
     return;
   }
-  comparePaint(ctx, snap, row);
+  comparePaint(ctx, snap, paintRow);
 
   // GEOMETRY
   if (typeof row.height === 'number') {
@@ -1847,8 +1888,17 @@ async function runFramework(fw, browser) {
         timeoutMs: SETTLE_TIMEOUT_MS,
         stableFrames: SETTLE_STABLE_FRAMES,
       });
-      const snap = await measureFull(page, probe.selector, row);
-      compareFull({ ...ctx, state: 'default' }, snap, row);
+      const isOn = (prop) => {
+        const v = literalOverrides.has(prop)
+          ? literalOverrides.get(prop)
+          : values[prop] !== undefined
+            ? values[prop]
+            : docgenDefault(fw, contextDir, prop);
+        return v === true || v === 'true';
+      };
+      const paintRow = paintRowFor(row, contract, isOn);
+      const snap = await measureFull(page, probe.selector, row, paintRow);
+      compareFull({ ...ctx, state: 'default' }, snap, row, paintRow);
 
       const hoverKey = hasStateAxis ? rowKeyFor(variantParts, 'hover') : null;
       const hoverRow = hoverKey ? (master.rootPaint || {})[hoverKey] : null;
@@ -1861,12 +1911,13 @@ async function runFramework(fw, browser) {
           timeoutMs: SETTLE_TIMEOUT_MS,
           stableFrames: SETTLE_STABLE_FRAMES,
         });
+        const hoverPaint = paintRowFor(hoverRow, contract, isOn);
         const hoverSnap = await measurePaintOnly(
           page,
           probe.selector,
-          hoverRow,
+          hoverPaint,
         );
-        comparePaint({ ...ctx, state: 'hover' }, hoverSnap, hoverRow);
+        comparePaint({ ...ctx, state: 'hover' }, hoverSnap, hoverPaint);
         await page.mouse.move(0, 0);
       }
 
@@ -1882,12 +1933,13 @@ async function runFramework(fw, browser) {
             timeoutMs: SETTLE_TIMEOUT_MS,
             stableFrames: SETTLE_STABLE_FRAMES,
           });
+          const focusPaint = paintRowFor(focusRow, contract, isOn);
           const focusSnap = await measurePaintOnly(
             page,
             probe.selector,
-            focusRow,
+            focusPaint,
           );
-          comparePaint({ ...ctx, state: 'focus' }, focusSnap, focusRow);
+          comparePaint({ ...ctx, state: 'focus' }, focusSnap, focusPaint);
         } else {
           console.warn(
             `  ⚠ [NO-PROBE] (${fw}) ${metaComponent} · ${key} · focus: could not focus the probe element ` +

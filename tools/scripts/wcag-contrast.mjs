@@ -207,6 +207,27 @@ const pairs = [
     'ui',
     'input border on raised (functional)',
   ],
+  // Placeholder text (input fill, and the fill while focused)
+  ['placeholder', 'input-bg', 'normal', 'input placeholder on resting fill'],
+  [
+    'placeholder',
+    'input-bg-focus',
+    'normal',
+    'input placeholder on focus fill',
+  ],
+  // Disabled button — exempt from WCAG, legibility floor only
+  [
+    'disabled-text',
+    'disabled-bg',
+    'ui',
+    'disabled button label — exempt, legibility floor',
+  ],
+  [
+    'disabled-bg',
+    'primary',
+    'ui',
+    'disabled fill vs enabled primary fill — exempt, must not read as enabled',
+  ],
 ];
 
 // A gate is quiet on success: --check prints only the verdict.

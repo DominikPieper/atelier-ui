@@ -50,6 +50,19 @@ export interface ComponentContract {
     values?: Readonly<Record<string, string | number | boolean | null>>;
     reason: string;
   }>;
+  /**
+   * A code Boolean that, by behaviour, also switches ON another Boolean the master draws
+   * (`loading` always disables the button, so a loading story paints the disabled cover).
+   * `codeProp` is the arg a story sets; `figmaBoolean` is the master's Boolean name (without
+   * its `#id`) whose cover the paint gate compares against when `codeProp` is true. Only
+   * needed when the Figma Boolean of that name would not otherwise be reached — a code prop
+   * that shares its Figma Boolean's name needs no entry.
+   */
+  impliesBoolean?: ReadonlyArray<{
+    codeProp: string;
+    figmaBoolean: string;
+    reason: string;
+  }>;
   /** Only when the root frame is not the comparable layer: the part a parity probe measures instead. */
   probes?: ReadonlyArray<{ part: string; selector: string; reason: string }>;
 }

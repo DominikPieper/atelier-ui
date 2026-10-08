@@ -147,11 +147,22 @@
   min-height: var(--ui-control-height-lg);
 }
 
-/* Disabled */
+/* Disabled — dedicated neutral tokens, not opacity (ADR-0159). Opacity kept the
+ * brand hue, so a disabled primary still read as a muted enabled one. Loading
+ * sets .is-disabled too; the spinner draws in currentColor, i.e. the disabled
+ * label colour, so it stays visible on the fill. Declared after the variants so
+ * it wins at equal specificity; the danger inset shadow is cleared explicitly. */
 .atl-button.is-disabled {
-  opacity: var(--ui-opacity-disabled);
+  background-color: var(--ui-color-disabled-bg);
+  border-color: var(--ui-color-disabled-border);
+  color: var(--ui-color-disabled-text);
+  box-shadow: none;
   cursor: not-allowed;
   pointer-events: none;
+}
+
+.atl-button.variant-outline.is-disabled {
+  background-color: transparent;
 }
 
 /* Loading spinner */

@@ -1623,6 +1623,18 @@ Each `--ui-*` token carries an intent and a list of constraints. Reach for the t
     intent: AA-safe foreground for use on --ui-color-danger-bg in danger badges, alerts, and toasts.
     constraints: Only use as foreground on --ui-color-danger-bg; contrast is guaranteed against that surface and no other.
 
+  --ui-color-disabled-bg
+    intent: Fill of a disabled (and loading) button: a desaturated neutral slate, so it cannot be mistaken for an enabled brand-coloured button.
+    constraints: Button only — other controls still use --ui-opacity-disabled.; Pair with --ui-color-disabled-text and --ui-color-disabled-border; WCAG exempts disabled controls, the gate enforces only a legibility floor.
+
+  --ui-color-disabled-border
+    intent: Border of a disabled button; the only visible edge of a disabled outline button, whose fill is transparent.
+    constraints: Button only; pair with --ui-color-disabled-bg and --ui-color-disabled-text.
+
+  --ui-color-disabled-text
+    intent: Label (and loading spinner) colour on a disabled button, drawn on --ui-color-disabled-bg.
+    constraints: Use only on --ui-color-disabled-bg; never for enabled or informational text.
+
   --ui-color-error-text
     intent: Foreground colour for inline form error messages. Aliased to --ui-color-danger-text.
     constraints: Pair with --ui-color-input-border-invalid on the associated input — colour alone is not a sufficient error signal.; Do not use as a generic body-text colour — its meaning is "error".
@@ -1708,7 +1720,7 @@ Each `--ui-*` token carries an intent and a list of constraints. Reach for the t
     constraints: Only use as a backdrop layer — never as a fill for interactive surfaces.; Pair with --ui-z-overlay or higher; do not place at base z-index.
 
   --ui-color-placeholder
-    intent: Placeholder text colour for inputs. Sub-AA contrast — informational only.
+    intent: Placeholder text colour for inputs. Meets AA (4.5:1) on the input fill and its focus fill in light mode.
     constraints: Reserve for true placeholders (input::placeholder) — never use as a substitute for a real label.; Do not use as a foreground for content users need to read; use --ui-color-text-muted instead.
 
   --ui-color-primary
@@ -2053,7 +2065,7 @@ Each `--ui-*` token carries an intent and a list of constraints. Reach for the t
 
   --ui-opacity-disabled
     intent: Opacity applied to disabled interactive controls so their colour reads as inert.
-    constraints: Apply via opacity on the disabled element — do not bake into colour tokens.; Do not use for de-emphasis of non-disabled content; use --ui-color-text-muted instead.
+    constraints: Apply via opacity on the disabled element — do not bake into colour tokens. The button is the exception: it uses --ui-color-disabled-* because opacity kept its brand hue (ADR-0159).; Do not use for de-emphasis of non-disabled content; use --ui-color-text-muted instead.
 
   --ui-radius-full
     intent: Fully rounded (pill) shape. Use for avatar masks, status dots, and pill buttons.
