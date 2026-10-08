@@ -122,33 +122,6 @@ export default function ComponentGallery() {
             </button>
           ))}
         </div>
-        <p className="docs-fw-legend">
-          <span>
-            Frameworks:{' '}
-            <span className="docs-fw-legend-item">
-              <span
-                className="docs-fw-dot docs-fw-dot--angular"
-                aria-hidden="true"
-              ></span>
-              Angular
-            </span>
-            <span className="docs-fw-legend-item">
-              <span
-                className="docs-fw-dot docs-fw-dot--react"
-                aria-hidden="true"
-              ></span>
-              React
-            </span>
-            <span className="docs-fw-legend-item">
-              <span
-                className="docs-fw-dot docs-fw-dot--vue"
-                aria-hidden="true"
-              ></span>
-              Vue
-            </span>
-            — the dots on each card: available in all three.
-          </span>
-        </p>
       </div>
 
       {Object.entries(filteredCategories).map(([category, components]) => (
@@ -207,14 +180,6 @@ export default function ComponentGallery() {
                       aria-hidden="true"
                     >
                       View docs
-                    </span>
-                    <span className="docs-fw-dots" aria-hidden="true">
-                      <span className="docs-fw-dot docs-fw-dot--angular"></span>
-                      <span className="docs-fw-dot docs-fw-dot--react"></span>
-                      <span className="docs-fw-dot docs-fw-dot--vue"></span>
-                    </span>
-                    <span className="docs-visually-hidden">
-                      View docs. Available for Angular, React, and Vue.
                     </span>
                   </div>
                 </a>

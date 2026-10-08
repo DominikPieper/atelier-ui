@@ -1,4 +1,4 @@
-import type { ReactNode } from 'react';
+import type { CSSProperties, ReactNode } from 'react';
 import {
   AtlAccordionGroup,
   AtlAccordionHeader,
@@ -51,6 +51,23 @@ import {
  * button that would open them, tooltip shows its trigger, toast renders the
  * item inline (no provider, no portal).
  */
+/**
+ * Shrinks a sample that is taller than the 120px preview box, instead of
+ * letting the box crop it (a cropped card shows only its side borders). The
+ * wrapper is laid out 1/scale wide and scaled back down, so the visual width
+ * stays the box's width while the sample gets 1/scale more room.
+ */
+function fit(scale: number, children: ReactNode) {
+  return (
+    <div
+      className="docs-preview-fit"
+      style={{ '--docs-fit': scale } as CSSProperties}
+    >
+      {children}
+    </div>
+  );
+}
+
 export const COMPONENT_PREVIEWS: Record<string, () => ReactNode> = {
   button: () => <AtlButton variant="primary">Save changes</AtlButton>,
   input: () => <AtlInput type="email" placeholder="Email address" />,
@@ -87,28 +104,32 @@ export const COMPONENT_PREVIEWS: Record<string, () => ReactNode> = {
       <AtlIcon name="delete" size="lg" />
     </div>
   ),
-  card: () => (
-    <AtlCard>
-      <AtlCardHeader>Project</AtlCardHeader>
-      <AtlCardContent>Three open tasks.</AtlCardContent>
-    </AtlCard>
-  ),
-  table: () => (
-    <AtlTable aria-label="Preview">
-      <AtlThead>
-        <AtlTr>
-          <AtlTh>Name</AtlTh>
-          <AtlTh>Role</AtlTh>
-        </AtlTr>
-      </AtlThead>
-      <AtlTbody>
-        <AtlTr>
-          <AtlTd>Jane</AtlTd>
-          <AtlTd>Admin</AtlTd>
-        </AtlTr>
-      </AtlTbody>
-    </AtlTable>
-  ),
+  card: () =>
+    fit(
+      0.8,
+      <AtlCard padding="sm">
+        <AtlCardHeader>Project</AtlCardHeader>
+        <AtlCardContent>Three open tasks.</AtlCardContent>
+      </AtlCard>,
+    ),
+  table: () =>
+    fit(
+      0.85,
+      <AtlTable aria-label="Preview">
+        <AtlThead>
+          <AtlTr>
+            <AtlTh>Name</AtlTh>
+            <AtlTh>Role</AtlTh>
+          </AtlTr>
+        </AtlThead>
+        <AtlTbody>
+          <AtlTr>
+            <AtlTd>Jane</AtlTd>
+            <AtlTd>Admin</AtlTd>
+          </AtlTr>
+        </AtlTbody>
+      </AtlTable>,
+    ),
   avatar: () => (
     <AtlAvatarGroup max={3} size="md">
       <AtlAvatar name="Alice Johnson" />
@@ -125,21 +146,22 @@ export const COMPONENT_PREVIEWS: Record<string, () => ReactNode> = {
     </div>
   ),
   progress: () => <AtlProgress value={60} variant="success" />,
-  'code-block': () => (
-    <AtlCodeBlock code={`<AtlButton variant="primary">Hi</AtlButton>`} />
-  ),
+  'code-block': () =>
+    fit(0.85, <AtlCodeBlock code="const ok = true;" language="ts" />),
   breadcrumbs: () => (
     <AtlBreadcrumbs>
       <AtlBreadcrumbItem href="/">Home</AtlBreadcrumbItem>
       <AtlBreadcrumbItem>Button</AtlBreadcrumbItem>
     </AtlBreadcrumbs>
   ),
-  tabs: () => (
-    <AtlTabGroup>
-      <AtlTab label="Account">Account</AtlTab>
-      <AtlTab label="Billing">Billing</AtlTab>
-    </AtlTabGroup>
-  ),
+  tabs: () =>
+    fit(
+      0.85,
+      <AtlTabGroup>
+        <AtlTab label="Account">Account</AtlTab>
+        <AtlTab label="Billing">Billing</AtlTab>
+      </AtlTabGroup>,
+    ),
   stepper: () => (
     <AtlStepper activeStep={1}>
       <AtlStep label="Account" completed={true}>
@@ -165,24 +187,28 @@ export const COMPONENT_PREVIEWS: Record<string, () => ReactNode> = {
       onDismiss={() => undefined}
     />
   ),
-  accordion: () => (
-    <AtlAccordionGroup variant="bordered">
-      <AtlAccordionItem>
-        <AtlAccordionHeader>Shipping</AtlAccordionHeader>
-        Ships in two days.
-      </AtlAccordionItem>
-      <AtlAccordionItem>
-        <AtlAccordionHeader>Returns</AtlAccordionHeader>
-        Thirty days.
-      </AtlAccordionItem>
-    </AtlAccordionGroup>
-  ),
+  accordion: () =>
+    fit(
+      0.7,
+      <AtlAccordionGroup variant="bordered">
+        <AtlAccordionItem>
+          <AtlAccordionHeader>Shipping</AtlAccordionHeader>
+          Ships in two days.
+        </AtlAccordionItem>
+        <AtlAccordionItem>
+          <AtlAccordionHeader>Returns</AtlAccordionHeader>
+          Thirty days.
+        </AtlAccordionItem>
+      </AtlAccordionGroup>,
+    ),
   alert: () => <AtlAlert variant="info">Your trial ends in 3 days.</AtlAlert>,
   // Static messages only: the inline chat surface reserves 24rem of height.
-  chat: () => (
-    <div className="docs-preview-stack">
-      <AtlChatMessage role="user">Summarise this page</AtlChatMessage>
-      <AtlChatMessage role="assistant">Sure, here you go.</AtlChatMessage>
-    </div>
-  ),
+  chat: () =>
+    fit(
+      0.85,
+      <div className="docs-preview-stack">
+        <AtlChatMessage role="user">Summarise this page</AtlChatMessage>
+        <AtlChatMessage role="assistant">Sure, here you go.</AtlChatMessage>
+      </div>,
+    ),
 };

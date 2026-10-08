@@ -100,9 +100,11 @@ Atelier token system instead of the generic gradient/grid look.
       (`atl-breadcrumbs.vue:53`, fixed 2026-10-08) and exited 0; `check:types` runs `tsc` on the
       spec tsconfigs only, and plain `tsc` does not read `.vue`. Needs `vue-tsc --noEmit` or a
       gate that fails on `error TS` in the build output.
-- [ ] **17. jargon in attendee copy** — `first-component.astro:180,215`, `tutorial.astro:165,193`,
+- [x] **17. jargon in attendee copy** — done 2026-10-08: kata ADR-0097 theory in a maintainer
+      disclosure; tutorial lede links the MCP section; prompt follows the framework switcher. — `first-component.astro:180,215`, `tutorial.astro:165,193`,
       `design-to-code.astro:317,377`; "The switcher below stay in sync" (critique 4, P2).
-- [ ] **18. preview vs. switcher** — one note above the switcher that the preview is the shared
+- [x] **18. preview vs. switcher** — done 2026-10-08: one note under the switcher; gallery dots
+      removed (identical coverage); previews fit; search placeholder on the token. — one note above the switcher that the preview is the shared
       look and the switcher changes code only (owner 2026-10-08); gallery dots identical on all
       28 cards; Card/CodeBlock previews clipped; gallery search placeholder 4.4:1 (UA default).
 

@@ -956,18 +956,24 @@ export default function ComponentDetail({
               <span className="docs-meta-chip">0 deps</span>
             </div>
           </div>
-          <div className="docs-framework-switcher">
-            {(['angular', 'react', 'vue'] as const).map((fw) => (
-              <button
-                key={fw}
-                type="button"
-                aria-pressed={framework === fw}
-                className={`docs-framework-btn${framework === fw ? ' is-active' : ''}`}
-                onClick={() => setFramework(fw)}
-              >
-                {fw.charAt(0).toUpperCase() + fw.slice(1)}
-              </button>
-            ))}
+          <div className="docs-framework-control">
+            <div className="docs-framework-switcher">
+              {(['angular', 'react', 'vue'] as const).map((fw) => (
+                <button
+                  key={fw}
+                  type="button"
+                  aria-pressed={framework === fw}
+                  className={`docs-framework-btn${framework === fw ? ' is-active' : ''}`}
+                  onClick={() => setFramework(fw)}
+                >
+                  {fw.charAt(0).toUpperCase() + fw.slice(1)}
+                </button>
+              ))}
+            </div>
+            <p className="docs-framework-note">
+              The preview shows the shared look: all three adapters use one
+              stylesheet. The switcher changes the code, not the preview.
+            </p>
           </div>
         </div>
       </div>
@@ -978,12 +984,6 @@ export default function ComponentDetail({
         <div className="docs-demo">
           <div className="docs-demo-header">
             <span className="docs-demo-label">Live Preview</span>
-            <span
-              className="docs-demo-fw-tag"
-              title="The preview is always the React adapter, whichever framework is selected. All three adapters load the same stylesheet from @atelier-ui/styles (select, tooltip, table and menu add a small per-framework override), so the markup classes and CSS match."
-            >
-              Preview rendered with the React adapter
-            </span>
           </div>
           <div className="docs-demo-canvas docs-demo-canvas--column">
             <ComponentDemo name={name} />
