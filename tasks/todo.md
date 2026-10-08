@@ -56,18 +56,21 @@ Atelier token system instead of the generic gradient/grid look.
 - [x] **7. polish + re-critique** — done 2026-10-07. Re-critique scored 26/40 (was 27): a fresh
       reviewer found new, pre-existing problems rather than regressions. Its P1s are open as 8–10.
 - [ ] **8. gallery shows components** — `/components` cards are letter monograms; render
-      previews, legend for the framework dots.
+      previews, legend for the framework dots. Owner 2026-10-08: live mini-previews from the
+      React adapter (overlays as static resting states).
 - [ ] **9. track ends on a finish** — step 7 `/patterns` is a reference page ending on a
-      "Previous" card; the finish moment sits on step 6.
+      "Previous" card; the finish moment sits on step 6. Owner 2026-10-08: the track ends on the
+      kata (6 steps); `/patterns` stays reference, linked from the finish.
 - [ ] **10. one framework switcher** — the kata's switcher has no `aria-selected`, is 27 px tall
       and silently restores Vue; `FwSwitcher` exists; two storage keys (`atelier.fw`,
       `atelier-framework`). Also: footer sits under the sticky sidebar (copyright clipped).
-- [ ] **11. mobile prose column** — `.docs-inline-page` keeps `padding: 2.5rem 2rem` at 390px
+- [x] **11. mobile prose column** — done 2026-10-08: 358 px column at 390 px (measured). — `.docs-inline-page` keeps `padding: 2.5rem 2rem` at 390px
       (global.css:624, no override) on top of the shell gutter: 294 px column, 28–41
       characters per line on 26 pages (critique 3, 2026-10-07).
-- [ ] **12. `/design-to-code` wayfinding** — 7 H2s and no `tocItems`; the Contract section's
+- [x] **12. `/design-to-code` wayfinding** — done 2026-10-08: 6-entry TOC; settled/owed moved
+      verbatim into the Contract disclosure. — 7 H2s and no `tocItems`; the Contract section's
       settled/owed theory still sits inline instead of in its maintainer disclosure.
-- [ ] **13. small consistency** — topbar "Workshop" active only on `/workshop`; "Patterns" vs
+- [x] **13. small consistency** — done 2026-10-08 (footer from 10 too: x=256 at 1440). — topbar "Workshop" active only on `/workshop`; "Patterns" vs
       "Cookbook patterns"; gallery slices descriptions at 85 chars mid-word; "Identical APIs"
       claim (`ComponentGallery.tsx:65`) contradicts the framework-native story.
 

@@ -63,6 +63,14 @@ the component I just generated. Fix every discrepancy it reports.`;
   title="Design to code"
   description="From a Figma component to a verified, framework-native component — the Atelier loop. Inspect, contract, generate, verify in one signposted walkthrough."
   currentPath="/design-to-code"
+  tocItems={[
+    { id: 'loop', label: 'The loop at a glance' },
+    { id: 'step-inspect', label: '1. Inspect' },
+    { id: 'step-contract', label: '2. Contract' },
+    { id: 'step-generate', label: '3. Generate' },
+    { id: 'step-verify', label: '4. Verify' },
+    { id: 'next', label: 'Where to go next' },
+  ]}
 >
   <div class="docs-inline-page">
     <PageHero title="Design to Code" titleAccent="Code" ledeMax="560px">
@@ -87,7 +95,7 @@ the component I just generated. Fix every discrepancy it reports.`;
 
     <!-- The loop at a glance -->
     <div class="docs-section">
-      <h2 class="docs-section-title">The loop at a glance</h2>
+      <h2 id="loop" class="docs-section-title">The loop at a glance</h2>
       <p
         style="
           color: var(--ui-color-text-muted);
@@ -107,7 +115,9 @@ the component I just generated. Fix every discrepancy it reports.`;
       <div class="docs-step-row" data-step="1">
         <span class="docs-step-badge">1</span>
         <div style="flex: 1">
-          <h2 class="docs-section-title">Inspect — read the Figma component</h2>
+          <h2 id="step-inspect" class="docs-section-title">
+            Inspect — read the Figma component
+          </h2>
           <p class="docs-step-desc">
             Run <code>figma_get_component_for_development</code> (figma-console
             MCP) on the node, or open the master on the
@@ -175,50 +185,20 @@ the component I just generated. Fix every discrepancy it reports.`;
       <div class="docs-step-row" data-step="2">
         <span class="docs-step-badge">2</span>
         <div style="flex: 1">
-          <h2 class="docs-section-title">
+          <h2 id="step-contract" class="docs-section-title">
             Contract — what the picture cannot carry
           </h2>
           <p class="docs-step-desc">
             The one file you write by hand is the
             <strong style="color: var(--ui-color-text)">contract</strong>
             (<code>libs/spec/src/contracts/&lt;name&gt;.contract.ts</code>): a
-            short file that holds the Figma master's node id, and only the Figma
-            ↔ code mismatches you chose on purpose. It never lists props,
-            defaults or descriptions. Those live in the component's own types
-            and doc comments, which <em>are</em> the API: your framework's
+            short file that holds the Figma master's node id, plus a note for
+            each place where the design and the code deliberately differ. You do
+            not list props, defaults or descriptions in it. Those live in the
+            component's own types and doc comments, and your framework's
             generated prop table reads them from there, so there is nothing to
-            keep in sync by hand.
-          </p>
-          <p class="docs-step-desc">
-            <strong style="color: var(--ui-color-text)"
-              >"Chose on purpose" has a test: is it drawn?</strong
-            >
-            A mismatch is <em>settled</em> when the thing the two sides disagree
-            about changes nothing the master draws: behaviour, element or form
-            semantics, data, keys. <code>headingLevel</code> picks
-            <code>h2..h6</code> and changes nothing drawn; <code>multi</code>
-            guards how many accordion items <em>may</em> be open and looks
-            identical either way; <code>id</code> is data. Those entries are
-            finished, and a master that grew an axis for one would be worse, not
-            better. A mismatch is <em>owed</em> when it <em>is</em> drawn: a
-            CSS-backed paint axis with no Figma axis means Figma owes an axis,
-            and a Figma axis with no CSS rule means either the code owes an
-            implementation or the master owes a deletion. An owed entry's
-            <code>reason</code> has to say which side is expected to change, and
-            where that is tracked.
-          </p>
-          <p class="docs-step-desc">
-            <strong style="color: var(--ui-color-text)"
-              >Drawn makes it owed; it does not decide it.</strong
-            >
-            When a feature needs, say, a red button, you choose between a
-            library variant, a local exception, or a semantic token. A code-side
-            axis earns a place on the master when it is drawn, when the checks
-            already enforce it in every framework, when accessibility holds, and
-            when someone owns the follow-up. Otherwise the better move is often
-            the opposite: delete the axis from the master and let the state be a
-            CSS pseudo-class, which is already the convention for interaction
-            states here.
+            keep in sync by hand. For each difference you write down, say in the
+            entry's <code>reason</code> why it is there.
           </p>
           <p class="docs-step-desc">
             <strong style="color: var(--ui-color-text)"
@@ -283,6 +263,37 @@ the component I just generated. Fix every discrepancy it reports.`;
                 until ADR-0121's S6 retires them. The review behind this shape
                 and the retirement order:
                 <code>tasks/spec-format-review-2026-09-10.md</code>.
+              </p>
+              <p>
+                <strong style="color: var(--ui-color-text)"
+                  >"Chose on purpose" has a test: is it drawn?</strong
+                >
+                A mismatch is <em>settled</em> when the thing the two sides
+                disagree about changes nothing the master draws: behaviour,
+                element or form semantics, data, keys. <code>headingLevel</code>
+                picks <code>h2..h6</code> and changes nothing drawn;
+                <code>multi</code> guards how many accordion items <em>may</em>
+                be open and looks identical either way; <code>id</code> is data.
+                Those entries are finished, and a master that grew an axis for
+                one would be worse, not better. A mismatch is <em>owed</em> when
+                it <em>is</em> drawn: a CSS-backed paint axis with no Figma axis
+                means Figma owes an axis, and a Figma axis with no CSS rule
+                means either the code owes an implementation or the master owes
+                a deletion. An owed entry's <code>reason</code> has to say which
+                side is expected to change, and where that is tracked.
+              </p>
+              <p>
+                <strong style="color: var(--ui-color-text)"
+                  >Drawn makes it owed; it does not decide it.</strong
+                >
+                When a feature needs, say, a red button, you choose between a
+                library variant, a local exception, or a semantic token. A
+                code-side axis earns a place on the master when it is drawn,
+                when the checks already enforce it in every framework, when
+                accessibility holds, and when someone owns the follow-up.
+                Otherwise the better move is often the opposite: delete the axis
+                from the master and let the state be a CSS pseudo-class, which
+                is already the convention for interaction states here.
               </p>
               <p>
                 The settled-versus-owed rule, the promotion argument (promote
@@ -377,7 +388,9 @@ the component I just generated. Fix every discrepancy it reports.`;
       <div class="docs-step-row" data-step="4">
         <span class="docs-step-badge">4</span>
         <div style="flex: 1">
-          <h2 class="docs-section-title">Verify — prove design parity</h2>
+          <h2 id="step-verify" class="docs-section-title">
+            Verify — prove design parity
+          </h2>
           <p class="docs-step-desc">
             See the component rendered, then run
             <code>figma_check_design_parity</code> to catch padding, colour, and
@@ -431,7 +444,7 @@ the component I just generated. Fix every discrepancy it reports.`;
 
     <!-- Where to go next -->
     <div class="docs-section">
-      <h2 class="docs-section-title">Where to go next</h2>
+      <h2 id="next" class="docs-section-title">Where to go next</h2>
       <p style="color: var(--ui-color-text-muted); line-height: 1.6">
         Read the
         <a href="/tutorial" class="docs-link-primary docs-link-primary--bold"
