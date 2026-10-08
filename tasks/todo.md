@@ -1937,6 +1937,12 @@ The ones the owner and I will walk through together.
       (Offen / Übernehmen / Erledigt / Gestrichen), is
       `plan/research/ai-ds-course-gap-2026-10-08/triage.md` — update status there, not here.
 
+- [ ] Follow-ups from ADR-0161 (code-only facts as `- Code-only` description lines, 2026-10-08):
+  - [ ] Read-side A/B: does an agent generating from the master use a `- Code-only` line
+        (AtlButton `type`) better than the old parenthetical? Untested for both carriers.
+  - [ ] Fold the older "(code-only props on …: …)" parentheticals in master descriptions
+        into `- Code-only` lines, then drop them.
+
 - [ ] Defects found by the wave-2 research runs (2026-10-08, evidence in
       `plan/research/ai-ds-course-gap-2026-10-08/wave2-a3-parity-run.md` and
       `wave2-a10-readiness-run.md`):
