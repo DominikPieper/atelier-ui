@@ -22,6 +22,20 @@
  * sorted; rows keep the manifest's declaration order, which is the order the
  * docs tables show and is itself deterministic.
  *
+ * Union member order. vue-component-meta prints a string-literal union in the
+ * order the TypeScript checker happened to create the literal types, and the
+ * prop's default literal can come first (`'right' | 'left' | 'top' | 'bottom'`
+ * for a declared `'left' | 'right' | 'top' | 'bottom'`). That order varies
+ * between Storybook builds with no source change, so check:props-projection
+ * flipped red at random. The manifest's own `schema` list carries the same
+ * unstable order, so there is nothing to read it from. Instead a pure
+ * string-literal union in a Vue row is rewritten to the order of the same-named
+ * prop in the React manifest (react-docgen keeps declaration order), else the
+ * Angular one, of the same component, when both member sets are equal; with no
+ * such twin the members are sorted alphabetically, which is at least stable.
+ * Other types are left alone. This
+ * runs inside build(), so generate and --check see the same bytes.
+ *
  * Fails loudly (exit 1) on a missing or empty manifest, a documented component
  * with no manifest entry, or an entry with no props. The only declared gap is
  * MANIFEST_GAPS in tools/scripts/lib/manifest-props.js (props: null).
@@ -49,6 +63,46 @@ const FRAMEWORKS = ['angular', 'react', 'vue'];
 const sortKeys = (o) =>
   Object.fromEntries(Object.entries(o).sort(([a], [b]) => (a < b ? -1 : 1)));
 
+const LITERAL_UNION = /^'[^']*'( \| '[^']*')+$/;
+const members = (t) => t.split(' | ');
+
+/** Vue's union order is build-dependent; see the header. `ref` is the React twin. */
+function canonicalUnion(type, refs) {
+  if (!LITERAL_UNION.test(type)) return type;
+  const mine = members(type);
+  for (const ref of refs) {
+    if (!ref || !LITERAL_UNION.test(ref)) continue;
+    const theirs = members(ref);
+    if (
+      theirs.length === mine.length &&
+      mine.every((m) => theirs.includes(m))
+    ) {
+      return ref;
+    }
+  }
+  return [...mine].sort().join(' | ');
+}
+
+/**
+ * `refs`: the React and Angular rows of the same component (its props and every
+ * part), searched by prop name — a part such as AtlAvatarGroup has no twin part
+ * in the other frameworks but shares `size` with the component's own props.
+ */
+function canonicalVueRows(rows, refs) {
+  if (!rows) return rows;
+  return rows.map((r) => {
+    const twins = refs
+      .filter((x) => x.name === r.name && x.kind === 'prop')
+      .map((x) => x.type);
+    return { ...r, type: canonicalUnion(r.type, twins) };
+  });
+}
+
+const flatRows = ({ props, parts }) => [
+  ...(props || []),
+  ...Object.values(parts).flatMap((rows) => rows || []),
+];
+
 function build() {
   const docs = parseExportedVars(DOCS_FILE).componentDocs;
   const byFw = {};
@@ -57,7 +111,20 @@ function build() {
   for (const slug of Object.keys(docs).sort()) {
     out[slug] = {};
     for (const fw of FRAMEWORKS) {
-      const { props, parts } = byFw[fw][slug];
+      let { props, parts } = byFw[fw][slug];
+      if (fw === 'vue') {
+        const refs = [
+          ...flatRows(byFw.react[slug]),
+          ...flatRows(byFw.angular[slug]),
+        ];
+        props = canonicalVueRows(props, refs);
+        parts = Object.fromEntries(
+          Object.entries(parts).map(([n, rows]) => [
+            n,
+            canonicalVueRows(rows, refs),
+          ]),
+        );
+      }
       out[slug][fw] = { props, parts: sortKeys(parts) };
     }
   }

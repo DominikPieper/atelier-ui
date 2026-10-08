@@ -330,7 +330,7 @@
         },
         {
           "name": "size",
-          "type": "'md' | 'sm' | 'lg' | 'xs' | 'xl'",
+          "type": "'xs' | 'sm' | 'md' | 'lg' | 'xl'",
           "default": "'md'",
           "description": "Size of the avatar.",
           "required": false,
@@ -346,7 +346,7 @@
         },
         {
           "name": "status",
-          "type": "'' | 'online' | 'offline' | 'away' | 'busy'",
+          "type": "'online' | 'offline' | 'away' | 'busy' | ''",
           "default": "''",
           "description": "Presence status indicator dot. Empty string hides the dot.",
           "required": false,
@@ -365,7 +365,7 @@
           },
           {
             "name": "size",
-            "type": "'md' | 'sm' | 'lg' | 'xs' | 'xl'",
+            "type": "'xs' | 'sm' | 'md' | 'lg' | 'xl'",
             "default": "'md'",
             "description": "Size applied to the overflow badge (match the size used on the child avatars).",
             "required": false,
@@ -446,7 +446,7 @@
         },
         {
           "name": "size",
-          "type": "'md' | 'sm'",
+          "type": "'sm' | 'md'",
           "default": "'md'",
           "description": "Size of the badge.",
           "required": false,
@@ -512,6 +512,14 @@
           "description": "Separator character shown between breadcrumb items.",
           "required": false,
           "kind": "prop"
+        },
+        {
+          "name": "default",
+          "type": "any",
+          "default": "—",
+          "description": "The breadcrumb items, as `AtlBreadcrumbItem`s. The last one is the current page by default.",
+          "required": false,
+          "kind": "slot"
         }
       ],
       "parts": {
@@ -614,7 +622,7 @@
         },
         {
           "name": "size",
-          "type": "'md' | 'sm' | 'lg'",
+          "type": "'sm' | 'md' | 'lg'",
           "default": "'md'",
           "description": "Size of the button.",
           "required": false,
@@ -638,7 +646,7 @@
         },
         {
           "name": "type",
-          "type": "'button' | 'submit' | 'reset'",
+          "type": "'button' | 'reset' | 'submit'",
           "default": "'button'",
           "description": "Native `type` attribute of the button.",
           "required": false,
@@ -735,7 +743,7 @@
       "props": [
         {
           "name": "variant",
-          "type": "'flat' | 'elevated' | 'outlined'",
+          "type": "'elevated' | 'outlined' | 'flat'",
           "default": "'elevated'",
           "description": "Visual style of the card.",
           "required": false,
@@ -743,7 +751,7 @@
         },
         {
           "name": "padding",
-          "type": "'md' | 'sm' | 'lg' | 'none'",
+          "type": "'none' | 'sm' | 'md' | 'lg'",
           "default": "'md'",
           "description": "Internal padding of the card.",
           "required": false,
@@ -1725,7 +1733,7 @@
         },
         {
           "name": "size",
-          "type": "'md' | 'sm' | 'lg' | 'xl' | 'full'",
+          "type": "'sm' | 'md' | 'lg' | 'xl' | 'full'",
           "default": "'md'",
           "description": "Size of the dialog panel.",
           "required": false,
@@ -1882,7 +1890,7 @@
         },
         {
           "name": "position",
-          "type": "'right' | 'left' | 'top' | 'bottom'",
+          "type": "'left' | 'right' | 'top' | 'bottom'",
           "default": "'right'",
           "description": "Which edge the drawer slides in from.",
           "required": false,
@@ -1890,7 +1898,7 @@
         },
         {
           "name": "size",
-          "type": "'md' | 'sm' | 'lg' | 'full'",
+          "type": "'sm' | 'md' | 'lg' | 'full'",
           "default": "'md'",
           "description": "Width (for left/right) or height (for top/bottom) of the panel.",
           "required": false,
@@ -2256,7 +2264,7 @@
         },
         {
           "name": "type",
-          "type": "'number' | 'text' | 'email' | 'password' | 'tel' | 'url'",
+          "type": "'text' | 'email' | 'password' | 'number' | 'tel' | 'url'",
           "default": "'text'",
           "description": "The type of input field.",
           "required": false,
@@ -2684,7 +2692,7 @@
         },
         {
           "name": "variant",
-          "type": "'default' | 'danger' | 'success' | 'warning'",
+          "type": "'default' | 'success' | 'warning' | 'danger'",
           "default": "'default'",
           "description": "Semantic color variant.",
           "required": false,
@@ -2692,7 +2700,7 @@
         },
         {
           "name": "size",
-          "type": "'md' | 'sm' | 'lg'",
+          "type": "'sm' | 'md' | 'lg'",
           "default": "'md'",
           "description": "Height size of the track.",
           "required": false,
@@ -3682,7 +3690,7 @@
         },
         {
           "name": "size",
-          "type": "'md' | 'sm' | 'lg'",
+          "type": "'sm' | 'md' | 'lg'",
           "default": "'md'",
           "description": "Row density.",
           "required": false,
@@ -4544,7 +4552,7 @@
         },
         {
           "name": "atlTooltipPosition",
-          "type": "'right' | 'left' | 'above' | 'below'",
+          "type": "'above' | 'below' | 'left' | 'right'",
           "default": "'above'",
           "description": "Preferred tooltip placement relative to the wrapped content. Applied as a fixed CSS class: it does not flip when clipped; Angular's CDK overlay does.",
           "required": false,
