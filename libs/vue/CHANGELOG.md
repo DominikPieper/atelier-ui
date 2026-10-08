@@ -1,3 +1,14 @@
+## 0.3.13 (2026-10-08)
+
+### 🩹 Fixes
+
+- **vue:** a type error in library source fails the build (ADR-0160) ([d39e1a63](https://github.com/DominikPieper/atelier-ui/commit/d39e1a63))
+
+### ❤️ Thank You
+
+- Claude Opus 5.5
+- Dominik Pieper @DominikPieper
+
 ## 0.3.12 (2026-10-08)
 
 ### 🚀 Features
