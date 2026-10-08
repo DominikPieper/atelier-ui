@@ -61,9 +61,12 @@ Atelier token system instead of the generic gradient/grid look.
 - [ ] **9. track ends on a finish** — step 7 `/patterns` is a reference page ending on a
       "Previous" card; the finish moment sits on step 6. Owner 2026-10-08: the track ends on the
       kata (6 steps); `/patterns` stays reference, linked from the finish.
-- [ ] **10. one framework switcher** — the kata's switcher has no `aria-selected`, is 27 px tall
-      and silently restores Vue; `FwSwitcher` exists; two storage keys (`atelier.fw`,
-      `atelier-framework`). Also: footer sits under the sticky sidebar (copyright clipped).
+- [x] **10. one framework switcher** — done 2026-10-08. Kata uses `FwSwitcher`; it is now a
+      toggle group (`aria-pressed`, 44 px measured) with a quiet "Remembered from your last
+      visit" / "Set by this link" hint. Only one storage key existed already (`atelier.fw`).
+      Footer fixed in step 11–13's commit. Left: code-block tab strips on `/patterns`,
+      `/patterns/[id]`, `/claude-md`, `/prompts` stay hand-rolled (small targets, no hint;
+      they do get `aria-pressed` from the shared script).
 - [x] **11. mobile prose column** — done 2026-10-08: 358 px column at 390 px (measured). — `.docs-inline-page` keeps `padding: 2.5rem 2rem` at 390px
       (global.css:624, no override) on top of the shell gutter: 294 px column, 28–41
       characters per line on 26 pages (critique 3, 2026-10-07).

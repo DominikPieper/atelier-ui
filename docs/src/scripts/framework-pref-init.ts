@@ -1,5 +1,7 @@
 import {
+  FW_DEFAULT,
   getFramework,
+  getFrameworkSource,
   setFramework,
   subscribeFramework,
   type Framework,
@@ -19,10 +21,18 @@ function applyFramework(fw: Framework): void {
     .forEach((btn) => {
       const v = (btn.dataset.fwBtn ?? '').toLowerCase();
       btn.classList.toggle('active', v === fw);
+      btn.setAttribute('aria-pressed', String(v === fw));
     });
   document.querySelectorAll<HTMLElement>('[data-fw-panel]').forEach((el) => {
     const v = (el.dataset.fwPanel ?? '').toLowerCase();
     el.hidden = v !== fw;
+  });
+}
+
+function setHint(text: string | null): void {
+  document.querySelectorAll<HTMLElement>('[data-fw-hint]').forEach((el) => {
+    el.textContent = text ?? '';
+    el.hidden = !text;
   });
 }
 
@@ -41,9 +51,22 @@ function wireButtons(): void {
 
 function init(): void {
   wireButtons();
-  applyFramework(getFramework());
+  const fw = getFramework();
+  applyFramework(fw);
+  // A non-default framework the reader did not just pick: say where it came from.
+  const source = getFrameworkSource();
+  setHint(
+    fw === FW_DEFAULT || source === 'default'
+      ? null
+      : source === 'url'
+        ? 'Set by this link'
+        : 'Remembered from your last visit',
+  );
 }
 
-subscribeFramework(applyFramework);
+subscribeFramework((fw) => {
+  setHint(null);
+  applyFramework(fw);
+});
 document.addEventListener('astro:page-load', init);
 init();

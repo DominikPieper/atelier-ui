@@ -10,7 +10,7 @@ interface Props {
    * pre-Atelier pages. Both wire identically — only chrome differs.
    */
   variant?: 'segmented' | 'tabs';
-  /** Accessible label for the toggle group. */
+  /** Accessible label for the toggle group (buttons expose `aria-pressed`). */
   label?: string;
 }
 
@@ -27,22 +27,50 @@ const FRAMEWORK_LABELS: Record<Framework, string> = {
 };
 ---
 
-<div
-  class:list={['docs-fw-switcher', `docs-fw-switcher--${variant}`]}
-  role="tablist"
-  aria-label={label}
->
-  {frameworks.map((fw) => <button
-    type="button"
-    class="docs-fw-switcher-btn"
-    data-fw-btn={fw}
-    role="tab"
+<div class:list={['docs-fw-switcher-wrap', `docs-fw-switcher-wrap--${variant}`]}>
+  <div
+    class:list={['docs-fw-switcher', `docs-fw-switcher--${variant}`]}
+    role="group"
+    aria-label={label}
   >
-    {FRAMEWORK_LABELS[fw]}
-  </button>)}
+    {frameworks.map((fw, i) => <button
+      type="button"
+      class:list={['docs-fw-switcher-btn', { active: i === 0 }]}
+      data-fw-btn={fw}
+      aria-pressed={i === 0 ? 'true' : 'false'}
+    >
+      {FRAMEWORK_LABELS[fw]}
+    </button>)}
+    {variant === 'tabs' && <span class="docs-fw-switcher-hint" data-fw-hint hidden />}
+  </div>
+  {variant === 'segmented' && <span class="docs-fw-switcher-hint" data-fw-hint hidden />}
 </div>
 
 <style>
+  /* Pointer target: every button is at least 44px tall (WCAG 2.5.5), derived
+     from the control-height token rather than a literal. */
+  .docs-fw-switcher-wrap {
+    --docs-fw-btn-height: calc(var(--ui-control-height-md, 2.5rem) + 0.25rem);
+  }
+
+  .docs-fw-switcher-wrap--segmented {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 0.75rem;
+  }
+
+  .docs-fw-switcher-hint {
+    font-size: 0.75rem;
+    color: var(--ui-color-text-muted);
+  }
+
+  .docs-fw-switcher--tabs .docs-fw-switcher-hint {
+    margin-left: auto;
+    align-self: center;
+    padding-inline: 0.5rem;
+  }
+
   .docs-fw-switcher--segmented {
     display: inline-flex;
     background: var(--ui-color-surface-sunken);
@@ -53,7 +81,8 @@ const FRAMEWORK_LABELS: Record<Framework, string> = {
   }
 
   .docs-fw-switcher--segmented .docs-fw-switcher-btn {
-    padding: 0.4375rem 0.875rem;
+    min-height: var(--docs-fw-btn-height);
+    padding: 0 0.875rem;
     font-size: 0.8125rem;
     font-weight: 600;
     border: none;
@@ -82,7 +111,8 @@ const FRAMEWORK_LABELS: Record<Framework, string> = {
   }
 
   .docs-fw-switcher--tabs .docs-fw-switcher-btn {
-    padding: 0.45rem 0.95rem;
+    min-height: var(--docs-fw-btn-height);
+    padding: 0 0.95rem;
     font-size: 0.8rem;
     font-weight: 600;
     border: none;

@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
+import FwSwitcher from '../components/FwSwitcher.astro';
 import HelpFooter from '../components/HelpFooter.astro';
 import Icon from '../components/Icon.astro';
 import PageHero from '../components/PageHero.astro';
@@ -175,20 +176,11 @@ the SettingsCard component I just generated. Fix any discrepancies.`;
       </div>
       <p class="kata-step-desc">
         Pick the framework you scaffolded in
-        <a href="/workshop" class="docs-link-primary">Setup</a>. The tabs below
+        <a href="/workshop" class="docs-link-primary">Setup</a>. The switcher below
         stay in sync across this page.
       </p>
-      <div
-        class="docs-multi-code-tabs"
-        style="border-radius: 8px; margin: 0.5rem 0 0; width: fit-content"
-      >
-        {FRAMEWORKS.map((fw, i) => <button
-          class={`docs-multi-code-tab${i === 0 ? ' active' : ''}`}
-          data-fw-btn={fw}
-          type="button"
-        >
-          {fw}
-        </button>)}
+      <div style="margin-top: 0.5rem">
+        <FwSwitcher label="Choose the framework you scaffolded" />
       </div>
       <p class="kata-step-desc" style="margin-top: 0.6rem">
         This kata assumes the

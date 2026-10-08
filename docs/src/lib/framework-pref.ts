@@ -29,6 +29,26 @@ export function getFramework(defaultFw: Framework = FW_DEFAULT): Framework {
   return defaultFw;
 }
 
+/**
+ * Where the active framework came from: an explicit `?fw=` link, a previous
+ * visit's stored choice, or the default. Lets the UI explain a non-default
+ * selection the reader did not just make.
+ */
+export function getFrameworkSource(): 'url' | 'stored' | 'default' {
+  if (typeof window === 'undefined') return 'default';
+  try {
+    if (parse(new URL(window.location.href).searchParams.get('fw'))) return 'url';
+  } catch {
+    // fall through
+  }
+  try {
+    if (parse(localStorage.getItem(FW_STORAGE_KEY))) return 'stored';
+  } catch {
+    // fall through
+  }
+  return 'default';
+}
+
 export function setFramework(fw: Framework): void {
   if (typeof window === 'undefined') return;
   try {
