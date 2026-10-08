@@ -27,7 +27,9 @@ const FRAMEWORK_LABELS: Record<Framework, string> = {
 };
 ---
 
-<div class:list={['docs-fw-switcher-wrap', `docs-fw-switcher-wrap--${variant}`]}>
+<div
+  class:list={['docs-fw-switcher-wrap', `docs-fw-switcher-wrap--${variant}`]}
+>
   <div
     class:list={['docs-fw-switcher', `docs-fw-switcher--${variant}`]}
     role="group"
@@ -41,9 +43,13 @@ const FRAMEWORK_LABELS: Record<Framework, string> = {
     >
       {FRAMEWORK_LABELS[fw]}
     </button>)}
-    {variant === 'tabs' && <span class="docs-fw-switcher-hint" data-fw-hint hidden />}
+    {variant === 'tabs' && (
+      <span class="docs-fw-switcher-hint" data-fw-hint hidden />
+    )}
   </div>
-  {variant === 'segmented' && <span class="docs-fw-switcher-hint" data-fw-hint hidden />}
+  {variant === 'segmented' && (
+    <span class="docs-fw-switcher-hint" data-fw-hint hidden />
+  )}
 </div>
 
 <style>

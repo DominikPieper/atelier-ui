@@ -37,7 +37,8 @@ export function getFramework(defaultFw: Framework = FW_DEFAULT): Framework {
 export function getFrameworkSource(): 'url' | 'stored' | 'default' {
   if (typeof window === 'undefined') return 'default';
   try {
-    if (parse(new URL(window.location.href).searchParams.get('fw'))) return 'url';
+    if (parse(new URL(window.location.href).searchParams.get('fw')))
+      return 'url';
   } catch {
     // fall through
   }
