@@ -1937,6 +1937,20 @@ The ones the owner and I will walk through together.
       (Offen / Übernehmen / Erledigt / Gestrichen), is
       `plan/research/ai-ds-course-gap-2026-10-08/triage.md` — update status there, not here.
 
+- [ ] Defects found by the wave-2 research runs (2026-10-08, evidence in
+      `plan/research/ai-ds-course-gap-2026-10-08/wave2-a3-parity-run.md` and
+      `wave2-a10-readiness-run.md`):
+  - [ ] AtlBadge font weight: Figma master 500, code `--ui-font-weight-semibold`. Decide which
+        side is right (ADR-0107 named the same split for AtlButton).
+  - [ ] AtlBadge `role="status"` is set on every host, while the master description says badges
+        are decorative by default and only wrapped in `role="status"` when they announce changes.
+  - [ ] AtlBadge (Angular) class JSDoc sits above `VARIANT_ICON_NAMES`, not `@Component`, so
+        `check:contracts --emit` produces metadata without a description.
+  - [ ] Figma variables: `codeSyntax.WEB` empty on 284/284; 19 variables still `ALL_SCOPES`;
+        AtlDialog master has ~20 layers named "Frame".
+  - [ ] `figma_audit_component_accessibility` classifies AtlDialog as presentational and skips
+        focus/target-size checks — its 100 means "not assessed".
+
 ### From the Storybook review, 2026-09-14
 
 Full reasoning and evidence: `tasks/storybook-review-2026-09-14.md`. One item is done: the

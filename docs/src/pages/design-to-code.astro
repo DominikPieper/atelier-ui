@@ -64,6 +64,7 @@ the component I just generated. Fix every discrepancy it reports.`;
   description="From a Figma component to a verified, framework-native component — the Atelier loop. Inspect, contract, generate, verify in one signposted walkthrough."
   currentPath="/design-to-code"
   tocItems={[
+    { id: 'ready', label: 'Before you start' },
     { id: 'loop', label: 'The loop at a glance' },
     { id: 'step-inspect', label: '1. Inspect' },
     { id: 'step-contract', label: '2. Contract' },
@@ -92,6 +93,127 @@ the component I just generated. Fix every discrepancy it reports.`;
         the API consistent; you don't touch them in a session.
       </p>
     </Callout>
+
+    <!-- Before you start: is your design system ready? -->
+    <div class="docs-section">
+      <h2 id="ready" class="docs-section-title">
+        Before you start: is your design system ready?
+      </h2>
+      <p class="docs-step-desc">
+        A design system can look fine and still hide faults, like a car with the
+        check engine light on. Spend ten minutes on your own system with the
+        questions below. Answer each yes or no; the note after each question
+        says how Atelier checks the same thing. There is no score, only a list
+        of faults to sort.
+      </p>
+      <ul class="docs-step-desc">
+        <li>
+          <strong style="color: var(--ui-color-text)">Complete</strong> —
+          everything your teams need to build a product actually exists.
+          <ul>
+            <li>
+              Does every component you ship exist as a Figma master with all its
+              variants and states? Atelier: <code>check:figma</code> (variant
+              matrix) and <code>check:contracts</code> (one story per variant
+              value).
+            </li>
+            <li>
+              Are colour, spacing and type defined as named tokens, in Figma and
+              in code? Atelier: <code>check:figma-token-names</code>.
+            </li>
+          </ul>
+        </li>
+        <li>
+          <strong style="color: var(--ui-color-text)">Sound</strong> — what is
+          in the system is good: accessible, consistent, tested.
+          <ul>
+            <li>
+              Do your colour pairs meet contrast requirements, and does every
+              component pass an automated accessibility check? Atelier:
+              <code>check:contrast</code> and <code>storybook-test</code> (axe
+              on every story); in Figma,
+              <code>figma_audit_component_accessibility</code>.
+            </li>
+            <li>
+              Do components use tokens instead of raw colour, spacing or radius
+              values, and Auto Layout instead of absolute positions? Atelier:
+              <code>check:figma</code> (token-link coverage, Auto Layout) and
+              <code>check:stylelint</code> (no raw colour literals).
+            </li>
+          </ul>
+        </li>
+        <li>
+          <strong style="color: var(--ui-color-text)">Synchronized</strong> —
+          design, code and docs describe the same components.
+          <ul>
+            <li>
+              Does each Figma master map to a code component with the same name
+              and the same variant values? Atelier: <code>check:figma</code>
+              (name alignment) and <code>check:contracts</code>.
+            </li>
+            <li>
+              Does a rendered component look like its master? Atelier:
+              <code>check:paint</code> and <code>figma_check_design_parity</code
+              >.
+            </li>
+            <li>
+              Is your generated component documentation rebuilt from the code,
+              not typed by hand? Atelier: <code>check:llms</code> fails when the
+              generated reference is stale.
+            </li>
+          </ul>
+        </li>
+        <li>
+          <strong style="color: var(--ui-color-text)">Extensible</strong> — you
+          can keep improving the system on purpose.
+          <ul>
+            <li>
+              Is there a written way to propose, review and record a change to
+              the system? Atelier: no gate — judgement (decisions are recorded
+              as ADRs; <code>check:adr-refs</code> only checks their
+              cross-references).
+            </li>
+            <li>
+              Do you know which products use which components, and does product
+              feedback reach the system team? Atelier: no gate — judgement.
+            </li>
+          </ul>
+        </li>
+        <li>
+          <strong style="color: var(--ui-color-text)">AI-ready</strong> — an
+          agent can read the system and use it correctly.
+          <ul>
+            <li>
+              Does each component carry a machine-readable purpose, when-to-use
+              guidance and an accessibility note? Atelier:
+              <code>check:metadata</code>.
+            </li>
+            <li>
+              Does each token say what it is for, not only what value it has?
+              Atelier: <code>check:token-annotations</code>.
+            </li>
+            <li>
+              Can an agent look up exact props and variants without reading
+              source? Atelier: the Storybook MCP (<code>docs-list</code>,
+              <code>docs-show</code>), with
+              <code>check:storybook-manifests</code> checking that each
+              framework emits its manifest.
+            </li>
+          </ul>
+        </li>
+      </ul>
+      <p class="docs-step-desc">
+        <strong style="color: var(--ui-color-text)"
+          >Sort what you find by how much it hurts.</strong
+        >
+        Cosmetic faults (inconsistent layer names, an off token colour) are
+        annoying and can wait. Degrading faults (detached instances, hardcoded
+        values, missing component properties) slowly erode the structure. The
+        ones to fix first make AI output garbage: no semantic structure, no
+        metadata, no connection to code. Several "no" answers under
+        <em>AI-ready</em> are that kind. Fix those before you generate anything.
+      </p>
+    </div>
 
     <!-- The loop at a glance -->
     <div class="docs-section">
