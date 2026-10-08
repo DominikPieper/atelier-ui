@@ -4,6 +4,7 @@ import {
   COMPONENT_CATEGORIES,
   componentDocs,
 } from '../data/components';
+import { COMPONENT_PREVIEWS } from './ComponentPreviews';
 
 export default function ComponentGallery() {
   const [query, setQuery] = useState('');
@@ -62,8 +63,8 @@ export default function ComponentGallery() {
           </span>
         </div>
         <p className="docs-page-description">
-          The same components and design in Angular, React, and Vue, each
-          with that framework's idiomatic API.
+          The same components and design in Angular, React, and Vue, each with
+          that framework's idiomatic API.
         </p>
       </div>
 
@@ -121,6 +122,33 @@ export default function ComponentGallery() {
             </button>
           ))}
         </div>
+        <p className="docs-fw-legend">
+          <span>
+            Frameworks:{' '}
+            <span className="docs-fw-legend-item">
+              <span
+                className="docs-fw-dot docs-fw-dot--angular"
+                aria-hidden="true"
+              ></span>
+              Angular
+            </span>
+            <span className="docs-fw-legend-item">
+              <span
+                className="docs-fw-dot docs-fw-dot--react"
+                aria-hidden="true"
+              ></span>
+              React
+            </span>
+            <span className="docs-fw-legend-item">
+              <span
+                className="docs-fw-dot docs-fw-dot--vue"
+                aria-hidden="true"
+              ></span>
+              Vue
+            </span>
+            — the dots on each card: available in all three.
+          </span>
+        </p>
       </div>
 
       {Object.entries(filteredCategories).map(([category, components]) => (
@@ -135,9 +163,29 @@ export default function ComponentGallery() {
                   href={`/components/${name}`}
                   className="docs-component-card"
                 >
-                  <div className="docs-component-card-icon" aria-hidden="true">
-                    {(doc?.name ?? formatComponentName(name)).charAt(0)}
-                  </div>
+                  {(() => {
+                    const preview = COMPONENT_PREVIEWS[name];
+                    return preview ? (
+                      <div
+                        className="docs-component-card-preview"
+                        aria-hidden="true"
+                        inert
+                      >
+                        <div className="docs-component-card-preview-inner">
+                          {preview()}
+                        </div>
+                      </div>
+                    ) : (
+                      <div
+                        className="docs-component-card-preview docs-component-card-preview--fallback"
+                        aria-hidden="true"
+                      >
+                        <span className="docs-component-card-icon">
+                          {(doc?.name ?? formatComponentName(name)).charAt(0)}
+                        </span>
+                      </div>
+                    );
+                  })()}
                   <div className="docs-component-card-header">
                     <div className="docs-component-card-name">
                       {doc?.name ?? formatComponentName(name)}

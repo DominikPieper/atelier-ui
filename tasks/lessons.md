@@ -899,3 +899,13 @@ failure surfaced only in `check:all`, and the harness reported the backgrounded 
 while the file said `CHECK_ALL_EXIT 1`. The 2026-10-06 lesson caught it a second time. Rule: when a
 change touches `skills/**`, run `npm run sync:generated` and `check:skill-discovery` in the same
 step. Derive the gate list from the files touched, not from the task's label ("docs").
+
+## 2026-10-08 — Parallel agents share one working tree; a spec must forbid `git stash`
+
+Two Sonnet agents worked in the same tree (docs gallery, library tokens). The gallery agent ran
+`git stash` + `git stash pop` mid-run "to check a clean state". The pop restored everything, but
+for that window the token agent's in-progress edits were gone from disk, and a gate it ran then
+would have measured the wrong tree. The stash list already carries a 2026-09-07 entry from the same
+mistake. Rule: every brief for an agent that runs alongside another says "no `git stash`,
+`git checkout -- <file>` or `git restore` on files you do not own"; to see the baseline, use
+`git show HEAD:<path>` or `git diff`, which never touch the tree.
