@@ -917,7 +917,9 @@ Steps A–E of the docs follow-up were each verified with `nx lint docs`, `check
 switcher commit were not Prettier-formatted. ESLint does not check formatting, and the agent's
 "prettier on the file" covered only some of the files it touched. Because `check:all` stops at the
 first red gate, nothing behind it had run either. Rule: the per-step gate list for any change
-always includes `npm run check:format`; it costs seconds.
+always includes `npm run check:format`; it costs seconds. The same day, a todo-only commit
+skipped it and the release gate in CI failed on `tasks/todo.md`: the rule covers every commit
+before a push, docs and task files included.
 
 ## 2026-10-08 — A sync script that "succeeds" with far more updates than the change explains is a bug report
 

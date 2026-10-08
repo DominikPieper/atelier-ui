@@ -97,6 +97,7 @@ Atelier token system instead of the generic gradient/grid look.
 - [ ] **18. preview vs. switcher** — one note above the switcher that the preview is the shared
       look and the switcher changes code only (owner 2026-10-08); gallery dots identical on all
       28 cards; Card/CodeBlock previews clipped; gallery search placeholder 4.4:1 (UA default).
+
 > **Picking this up in a new session?** Read
 > `tasks/handover-design-skills-2026-09-08.md` first — it carries what is blocked
 > (figma-console reconnect, 37/37 parity DRIFT), the agreed order of next steps, the
