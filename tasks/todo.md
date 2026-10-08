@@ -86,6 +86,17 @@ Atelier token system instead of the generic gradient/grid look.
       "Cookbook patterns"; gallery slices descriptions at 85 chars mid-word; "Identical APIs"
       claim (`ComponentGallery.tsx:65`) contradicts the framework-native story.
 
+- [ ] **14. dark-mode logo** — the black "A" in `logo.png` vanishes on `#0a1116`
+      (`BaseLayout.astro:333`); dark variant or SVG with `currentColor` (critique 4, P1).
+- [ ] **15. `/workshop` distill + outline** — contributor callout before step 01; steps are h3
+      under "Install prerequisites"; four route cards mid-page; no TOC (critique 4, P1).
+- [ ] **16. one numbering** — track 1–6, setup 01–04, loop 1–4, tutorial A–E; numerals for
+      the track only, the four loop stages named the same everywhere (critique 4, P1).
+- [ ] **17. jargon in attendee copy** — `first-component.astro:180,215`, `tutorial.astro:165,193`,
+      `design-to-code.astro:317,377`; "The switcher below stay in sync" (critique 4, P2).
+- [ ] **18. preview vs. switcher** — one note above the switcher that the preview is the shared
+      look and the switcher changes code only (owner 2026-10-08); gallery dots identical on all
+      28 cards; Card/CodeBlock previews clipped; gallery search placeholder 4.4:1 (UA default).
 > **Picking this up in a new session?** Read
 > `tasks/handover-design-skills-2026-09-08.md` first — it carries what is blocked
 > (figma-console reconnect, 37/37 parity DRIFT), the agreed order of next steps, the
