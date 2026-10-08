@@ -19,6 +19,70 @@ Die Leitfrage war: Braucht eine Teilnehmerin das für ihr eigenes Design System,
 
 Aufwand: **S** = Absatz oder Glossareintrag, **M** = neuer Abschnitt oder Übung, **L** = neue Seite, Skill oder Gate. Nummern in der Spalte Transkripte sind die Präfixe der Dateien in `~/Downloads/ai-design-systems-transcripts`.
 
+## Reihenfolge
+
+Die 36 offenen Punkte in Arbeitsreihenfolge, in vier Wellen. Sortiert nach Nutzen für
+Teilnehmende, dann Aufwand, dann Abhängigkeiten. Die Stufe (A/B/C) sagt, wie wichtig ein
+Punkt ist; der Rang sagt, wann er dran ist. Deshalb steht A4 (L) hinter mehreren B-Punkten.
+
+**Welle 1 – schnelle Gewinne (alle S, keine Abhängigkeiten).** Schließt Fehlerbilder, auf die
+Teilnehmende schon in der Kata treffen.
+
+| Rang | # | Thema | Aufwand | Warum hier |
+| --- | --- | --- | --- | --- |
+| 1 | A6 | Prompt-Guard Canvas → Code | S | Verhindert erfundene Varianten direkt im ersten Durchlauf der Kata. |
+| 2 | A5 | Guardrail-Demo mit/ohne DS | S | Stärkster Aha-Moment für die Schulung, passt neben die Halluzinations-Demo in Block 4. |
+| 3 | A7 | Dead Prop | S | Benennt, was `check:props` schon fängt; macht ein bestehendes Gate verständlich. |
+| 4 | B11 | Session-Hygiene und Permission-Modi | S | Sicherheit für Teilnehmende; Gegengewicht zu `--dangerously-skip-permissions` aus dem Kurs. |
+| 5 | B12 | Glossar: LLM, Agent, Subagent | S | Begriffe werden auf fast jeder Seite benutzt, aber nirgends erklärt. |
+| 6 | A11 | Console MCP vs. offizielles Figma MCP | S | Die häufigste Frage von Teilnehmenden mit Figma-Erfahrung. |
+| 7 | B13 | "Kein DS mit KI von Null generieren" | S | Ein Satz in `design-principles`; verhindert einen falschen Einstieg. |
+
+**Welle 2 – Verify-Strang ausbauen (Kern-Loop, meist M).** Prüfen ist im Loop Pflicht, aber
+am dünnsten gelehrt.
+
+| Rang | # | Thema | Aufwand | Warum hier |
+| --- | --- | --- | --- | --- |
+| 8 | A1 | Ist dein DS bereit? (Selbstcheck) | M | Einstieg Tag 1; Teilnehmende bringen ihr eigenes DS mit. |
+| 9 | A3 | Parity-Bericht lesen und weiterverarbeiten | M | Jede Kata endet im Parity-Check; heute fehlt, was man mit dem Ergebnis tut. |
+| 10 | A10 | Readiness-Score vor dem Handoff | M | Sauberer Design-Input senkt alle späteren Fehler. |
+| 11 | A8 | Self-Healing-Schleife | M | Verbindet Screenshot, axe und Tastatur zu einer lehrbaren Schleife. |
+| 12 | A9 | Feste Gate-Reihenfolge | S | Erst nach A10 und A8 sinnvoll, weil es deren Reihenfolge beschreibt. |
+| 13 | A2 | Code-only Props Layer | M | Braucht eine saubere Abgrenzung zu `codeOnly` (ADR-0145), daher nicht in Welle 1. |
+
+**Welle 3 – Tiefe für das eigene DS (B-Punkte, plus A4).**
+
+| Rang | # | Thema | Aufwand | Warum hier |
+| --- | --- | --- | --- | --- |
+| 14 | B8 | a11y-Urteilsfragen | M | Atelier positioniert sich über a11y; die Entscheidungen fehlen. |
+| 15 | B9 | Struktur- vs. Verhaltens-Tests, Visual Regression | M | Ergänzt "every story is a test" um die Frage, was ein guter Test ist. |
+| 16 | B3 | Live-Beweis: Agent baut mit dem DS | S | Billiger Test, ob `llms.txt` und Skills tragen. |
+| 17 | B10 | Kontextbasierter Lebenszyklus, Context Engineer | S | Gibt dem Handoff-Dokument einen Namen und einen Platz. |
+| 18 | B6 | Theme-Exploration und Pink Test Mode | S | Kleine, anschauliche Token-Übung. |
+| 19 | B7 | Token-Pipeline praktisch | M | Nach B6, nutzt dieselben Tools tiefer. |
+| 20 | A4 | Evals für Komponenten | L | Hoher Nutzen, aber groß und erst nach A8/A9 klar einzuordnen; vermutlich ADR. |
+| 21 | B4 | Deprecation-Fenster und Codemods | M | Wichtig für gepflegte DS, nicht für den ersten Durchlauf. |
+| 22 | B5 | Benennung vereinheitlichen | M | Wie B4: Pflege, nicht Einstieg. |
+| 23 | B2 | Eigenes DS-MCP veröffentlichen | M | Für Fortgeschrittene; Atelier hat die Vorlage in `worker/mcp.ts`. |
+| 24 | B1 | DS aus laufender App extrahieren | L | Eigener Pfad für Teams ohne Figma-DS; größter Aufwand in B. |
+
+**Welle 4 – Exkurse (C-Punkte), S zuerst.**
+
+| Rang | # | Thema | Aufwand | Warum hier |
+| --- | --- | --- | --- | --- |
+| 25 | C3 | Claude Design aus der Praxis | S | Ergänzt eine bestehende Seite um Zahlen. |
+| 26 | C2 | Company Docs MCP | S | Ein Absatz Abgrenzung zum eigenen Weg. |
+| 27 | C12 | Lückenanalyse gegen andere DS | S | uianatomy ist schon angebunden. |
+| 28 | C9 | Layer-Benennung für KI begründen | S | Kurze Begründung zu bestehenden Konventionen. |
+| 29 | C1 | Story UI | S | Ein Hinweis auf der Storybook-Seite. |
+| 30 | C8 | Wartungsrezepte für große Bibliotheken | S | Gehört in den Skill, nicht auf eine Lehrseite. |
+| 31 | C6 | Agenten über Templates und Recipes steuern | M | Baut auf `patterns` auf. |
+| 32 | C7 | Seiten aus DS-Komponenten in Figma bauen | M | Nach C6, gleiche Idee in Figma. |
+| 33 | C11 | Projekt-SPEC und Phasen-Regelwerk | M | Überschneidet sich mit `AGENTS.md`; erst klären, was neu ist. |
+| 34 | C4 | Prototyping-Tools im Vergleich | M | Veraltet schnell. |
+| 35 | C5 | Regelwerk für Kompositionen | L | Großer Bau, geringer Bezug zum Komponenten-Loop. |
+| 36 | C10 | Theme Orchestrator | L | Native-Teil passt nicht zu Atelier. |
+
 ## Priorität A – passt direkt, hoher Hebel
 
 Elf Themen schärfen den Kern-Loop. Vier davon sind mit Aufwand S erledigt (A5, A6, A7, A11).
