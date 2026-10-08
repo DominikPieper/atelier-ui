@@ -928,3 +928,16 @@ questioned it after the fact. The generator matched `[data-theme="dark"]` while 
 uses single quotes, so every dark value fell back to light, and the sync wrote light values into
 Figma's Dark mode. Rule: before running a write-sync, predict its update count from the diff; if
 the reported number is off by an order of magnitude, stop and diagnose before the next write.
+
+## 2026-10-08 — An unsourced claim is removed, not swapped for a better-sounding one
+
+Principle 7 (design-principles) said AI-generated systems come out "Material- or
+Tailwind-flavoured". The drafting agent flagged that the source named Material and Carbon, and I
+replaced "Tailwind" with "Carbon". The owner asked "why Carbon?": the transcript names Material
+and Carbon only as third-party systems in the adoption analogy, never as what AI output looks
+like. Swapping a word kept an unsupported claim and gave it a source it did not have. Rule: when a
+review finds a claim the source does not carry, re-read the source sentence and delete or rephrase
+the claim to what the source says — never substitute a term from nearby context.
+
+The same session also repeated the 2026-10-08 `check:format` lesson: two research-only commits
+went in without it and turned the gate red. "Docs-only" is not an exemption.
