@@ -15,7 +15,7 @@ interface Props {
 
 // A quiet meta line that sits below the page's H1/lede (never above the H1 —
 // the craft floor bans an eyebrow there). On a numbered workshop-track page
-// the "Step N of 7 · Next: <label> →" part is derived from workshop-track.ts
+// the "Step N of M · Next: <label> →" part is derived from workshop-track.ts
 // (the single source of truth), so pages never hand-build it.
 const { time, tag } = Astro.props;
 const pathname = Astro.url.pathname;

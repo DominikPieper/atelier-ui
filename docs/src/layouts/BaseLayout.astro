@@ -90,7 +90,6 @@ const editSourceUrl = sourceUrlFor(currentPath);
 
 const isComponents = currentPath.startsWith('/components');
 const isMcp = currentPath === '/mcp';
-const isWorkshop = currentPath === '/workshop';
 // Any numbered-track page counts as "in the workshop" for the topbar link; the
 // home page is the track's first step but is not a workshop page.
 const isOnWorkshopTrack =
@@ -126,6 +125,7 @@ const GROUP_HREFS = {
   ],
   reference: [
     '/components',
+    '/patterns',
     '/storybook',
     '/tokens',
     '/mcp',
@@ -562,6 +562,13 @@ const breadcrumbSchema = {
                 Components
               </a>
               <a
+                href="/patterns"
+                class={`docs-nav-link${isActive('/patterns') ? ' active' : ''}`}
+              >
+                <Icon name="menu_book" class="docs-nav-link-icon" />
+                Patterns
+              </a>
+              <a
                 href="/storybook"
                 class={`docs-nav-link${isActive('/storybook') ? ' active' : ''}`}
               >
@@ -830,7 +837,7 @@ const breadcrumbSchema = {
         <nav class="docs-bottom-nav" aria-label="Quick links">
           <a
             href="/workshop"
-            class={`docs-bottom-nav-item${isWorkshop ? ' active' : ''}`}
+            class={`docs-bottom-nav-item${isOnWorkshopTrack ? ' active' : ''}`}
           >
             <Icon name="build_circle" class="docs-bottom-nav-icon" />
             <span class="docs-bottom-nav-label">Workshop</span>

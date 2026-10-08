@@ -58,7 +58,8 @@ Atelier token system instead of the generic gradient/grid look.
 - [ ] **8. gallery shows components** — `/components` cards are letter monograms; render
       previews, legend for the framework dots. Owner 2026-10-08: live mini-previews from the
       React adapter (overlays as static resting states).
-- [ ] **9. track ends on a finish** — step 7 `/patterns` is a reference page ending on a
+- [x] **9. track ends on a finish** — done 2026-10-08 (ADR-0158): 6 steps, `/patterns` in the
+      Reference group; measured "Step 6 of 6" on the kata, no track chrome on `/patterns`. — step 7 `/patterns` is a reference page ending on a
       "Previous" card; the finish moment sits on step 6. Owner 2026-10-08: the track ends on the
       kata (6 steps); `/patterns` stays reference, linked from the finish.
 - [x] **10. one framework switcher** — done 2026-10-08. Kata uses `FwSwitcher`; it is now a

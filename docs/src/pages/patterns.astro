@@ -4,7 +4,6 @@ import { Code } from 'astro-expressive-code/components';
 import { PATTERNS, TAG_TO_SLUG } from '../data/patterns';
 import PageHero from '../components/PageHero.astro';
 import Callout from '../components/Callout.astro';
-import TrackNav from '../components/TrackNav.astro';
 import {
   LoginFormDemo,
   SettingsPageDemo,
@@ -120,8 +119,6 @@ function frameworkCode(p: (typeof PATTERNS)[number], fw: Framework): string {
         <Code code={frameworkCode(p, fw)} lang={LANG_MAP[fw]} />
       </div>)}
     </section>)}
-
-    <TrackNav />
   </div>
 </BaseLayout>
 

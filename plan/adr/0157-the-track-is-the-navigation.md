@@ -18,6 +18,10 @@ they hold the current page. Pages no longer open with an eyebrow row. A quiet me
 below the H1 carries the reading time and, on track pages, "Step N of 7 · Next: … →". On
 track pages the mobile bottom nav is Previous / Step / Next. Recorded at decision time.
 
+**Corrected 2026-10-08:** the track is six steps, not seven. ADR-0158 removed `/patterns` from
+it so the track ends on the kata's finish; "Step N of 7" below now reads "Step N of 6", and the
+rest of this decision stands.
+
 ## Context
 
 The 2026-10-07 critique counted 25 sidebar links in five equal-weight groups, with the
