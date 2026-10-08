@@ -1,0 +1,104 @@
+# Atelier vs. AI & Design Systems – Lückenanalyse
+
+Stand: 2026-10-08 · Dominik Pieper · Übertragen aus dem Claude-Docs-Dokument
+(https://claude.ai/code/artifact/f24255a0-85eb-46e2-929f-f7b0f71a8c8b, Revision 9)
+
+Status-Werte: **Offen** · **Übernehmen** · **Erledigt** · **Gestrichen**. Zum Abhaken oder Streichen
+den Wert in der Spalte Status ändern.
+
+Von rund 60 Themen der Schulung, die Atelier nicht oder nur teilweise abdeckt, passen 11 direkt in den Design-to-Code-Kern (A), 13 als Vertiefung (B) und 12 als Exkurs (C). Der Rest ist Produkt-, Organisations- oder Zukunftsthema und gehört nicht in Atelier.
+
+## Maßstab
+
+Die Leitfrage war: Braucht eine Teilnehmerin das für ihr eigenes Design System, wenn sie eine Figma-Komponente per KI in verifizierten Code überführt? Je näher ein Thema am Loop Figma → Contract → Code → Verify liegt, desto höher die Priorität.
+
+- **A**: verbessert direkt den Kern-Loop oder seine Verifikation; gehört in Lehrseiten, Kata oder Schulungsagenda.
+- **B**: hilft beim eigenen DS rund um den Loop (Tokens, a11y, Versionierung, MCP); eigener Abschnitt oder Exkurs.
+- **C**: fremdes Tool oder Randthema; reicht als Hinweis, Vergleich oder Link.
+- **Außerhalb**: Produkt-Adoption, Organisation, Zukunftsvisionen; anderes Format.
+
+Aufwand: **S** = Absatz oder Glossareintrag, **M** = neuer Abschnitt oder Übung, **L** = neue Seite, Skill oder Gate. Nummern in der Spalte Transkripte sind die Präfixe der Dateien in `~/Downloads/ai-design-systems-transcripts`.
+
+## Priorität A – passt direkt, hoher Hebel
+
+Elf Themen schärfen den Kern-Loop. Vier davon sind mit Aufwand S erledigt (A5, A6, A7, A11).
+
+| # | Status | Thema | Was der Kurs zeigt | Stand Atelier | Wohin | Aufwand | Transkripte |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| A1 | Offen | Ist dein DS bereit? (Check Engine Light, 5 Qualitäten) | Ein DS, das gesund wirkt, versteckt Probleme in drei Schweregraden; bewertet nach Complete, Sound, Synchronized, Extensible, AI-ready. | Nur AI-ready, als Spec in `plan/ai-readiness.md`, nicht als Lehrinhalt. | Einstieg Schulung Tag 1, Selbstcheck für das eigene DS | M | 038, 057, 271 |
+| A2 | Offen | Code-only Props Layer (Nathan Curtis) | Versteckte Ebene in der Figma-Komponente trägt aria-label, alt, Verhaltensabsicht für Agenten. | Fehlt. `codeOnly` im Contract ist etwas anderes (ADR-0145) – Abgrenzung nötig. | `design-to-code`, `figma` | M | 102, 115 |
+| A3 | Offen | Parity-Bericht lesen und weiterverarbeiten | Score, Schweregrade, "Paradigmen-Unterschiede" deuten; Bericht als Issue mit Checkliste; Rückwärts-Parität mit Code als Wahrheit und Figma-Kommentaren. | Aufruf ist gezeigt, Deutung und Folgeschritte fehlen. | `design-to-code`, `first-component` | M | 109, 116, 138, 153 |
+| A4 | Offen | Evals für Komponenten | Deterministische Skripte plus LLM-as-Judge, Score 0–100; Taxonomie deterministisch vs. agentisch. | Gates decken die deterministische Hälfte; Evals gibt es nur für Skills. | Verify-Schritt, eigener Abschnitt | L | 219, 223, 228 |
+| A5 | Offen | Guardrail-Demo mit/ohne DS | Derselbe Prompt einmal frei, einmal mit DS-Grundlage; Unterschied wird sichtbar. | Fehlt; nur Halluzinations-Negativdemo in Block 4. | Schulungsagenda, `prompts` | S | 178 |
+| A6 | Offen | Prompt-Guard Canvas → Code | "Nur tun, was im Input steht"; Modelle erfinden sonst Varianten. | Fehlt als Regel und Warnung. | `prompts`, Handoff-Vorlage | S | 105, 115 |
+| A7 | Offen | Dead Prop | Dokumentierte API, die still nichts tut, zerstört Vertrauen; Fix über Token-Fallback-Kette. | `check:props` existiert, das Fehlerbild ist nicht benannt. | `design-to-code`, `tokens` | S | 076, 185 |
+| A8 | Offen | Self-Healing-Schleife mit Screenshot und Playwright | Agent rendert, prüft per Screenshot, axe und Tastatur, wiederholt bis es passt. | Steht in Server-Instruktionen und Skill, nicht auf einer Lehrseite. | `a11y-workflow`, Verify | M | 081, 227 |
+| A9 | Offen | Feste Gate-Reihenfolge | FigmaLint → Codegen → Eval → Playwright; Design-Input zuerst sauber. | Gates existieren, Reihenfolge und Begründung nicht gelehrt. | `design-to-code` | S | 227 |
+| A10 | Offen | Readiness-Score vor dem Handoff (FigmaLint-Prinzip) | Komponente in Figma erst bis Score ~90+ bringen, dann an den Agenten geben. | `figma_lint_design` vorhanden; FigmaLint nur in `plan/research`, kein Gate-Gedanke. | `figma`, Kata Schritt 1 | M | 019, 141–156 |
+| A11 | Offen | Console MCP vs. offizielles Figma MCP | JSON-Spec ohne URL vs. React+Tailwind mit URL; Kopf-an-Kopf-Vergleich. | Nur in `plan/research`. | `mcp` | S | 034, 053, 122 |
+
+## Priorität B – passt, mittlerer Hebel
+
+Dreizehn Themen helfen beim eigenen DS rund um den Loop. Die meisten sind Vertiefungen bestehender Seiten.
+
+| # | Status | Thema | Was der Kurs zeigt | Stand Atelier | Wohin | Aufwand | Transkripte |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| B1 | Offen | DS aus laufender App extrahieren | `figma_ds_analyze` → `extract_tokens` → `scaffold` → `setup_storybook` → `figma_ds_verify`, für Teams ohne Figma-DS. | Tools nur in Skill-`tool-map.md`. | Exkurs-Seite oder Kata-Variante | L | 214 |
+| B2 | Offen | Eigenes DS-MCP veröffentlichen | Remote-Server (streamable HTTP), gebündelter Wissensgraph, aus Codex, Cursor, Claude anbinden. | `worker/mcp.ts` hostet Storybook-Docs, kein How-to fürs eigene DS. | `mcp` | M | 268, 269 |
+| B3 | Offen | Live-Beweis: Agent baut mit dem DS | "Doku existiert" heißt nicht "maschinell nutzbar"; Agent baut testweise eine Seite, man schaut, wo er stolpert. | `llms.txt`, `agent-skills` vorhanden, kein Test-Ritual. | `llms`, `agent-skills` | S | 258, 263, 264 |
+| B4 | Offen | Deprecation-Fenster und Codemods | Alter Prop bleibt als Fallback, als deprecated markiert, nach N Monaten entfernt, im MCP sichtbar. | Nur Figma-seitig "erst additiv, dann entfernen". | Neuer Abschnitt Versionierung | M | 209, 213 |
+| B5 | Offen | Benennung vereinheitlichen | Konsistenzbericht, dann einmalige Normalisierung (`size=large` vs `lg`, Tokens, Layer). | Drift-Gates prüfen Gleichheit, nicht Konsistenz der Begriffe. | `figma-workspace-architect`, `tokens` | M | 205, 209, 213 |
+| B6 | Offen | Theme-Exploration und Pink Test Mode | `figma_add_mode` für Explorations-Themes; Wegwerf-Mode zeigt, welche Komponenten neue Variables nutzen. | `figma_add_mode` nur im Migration-Playbook. | `tokens` | S | 009, 128, 153 |
+| B7 | Offen | Token-Pipeline praktisch | DTCG/Style Dictionary, `export_tokens`/`import_tokens` für Code-first-Rundlauf; Knockout-Farben. | Ebenen erklärt, Pipeline nur in Research. | `tokens` | M | 063, 079, 167, 173 |
+| B8 | Offen | a11y-Urteilsfragen | Modal: Fokus auf den Dialog, Rückgabe an Trigger, `inert`; DS-a11y ≠ Produkt-a11y; manueller VoiceOver-Check. | Audit vorhanden, Entscheidungen nicht gelehrt. | `accessibility`, `a11y-workflow` | M | 197, 201 |
+| B9 | Offen | Struktur- vs. Verhaltens-Tests, Visual Regression | Tooltip von 0 auf 24 Verhaltenstests; "grüne Haken sind kein Beweis". | "Every story is a test" deckt viel; Unterscheidung und VR fehlen. | `storybook`, Verify | M | 230, 233 |
+| B10 | Offen | Kontextbasierter DS-Lebenszyklus, Rolle Context Engineer | Design-QA → Protokoll → Review auf Design-Branch → Tests → Publish; jede Stufe erbt Kontext. | Handoff-Dokument ist die Idee, aber nicht benannt; 0 Treffer für "Context Engineer". | `design-principles`, Schulung | S | 238, 064, 009 |
+| B11 | Offen | Session-Hygiene und Permission-Modi | `/doctor`, Kontext-Overhead von CLAUDE.md und MCPs; Abschlussfrage "Worin bist du am wenigsten sicher?"; Regeln gegen Sykophanz; Permission-Modi statt `--dangerously-skip-permissions`. | Fehlt für Teilnehmende. | `claude-md`, `prompts` | S | 070, 094, 108, 124, 180 |
+| B12 | Offen | LLM-, Agent-, Subagent-Grundbegriffe | Was LLMs nicht sind; Stack: LLM = Gehirn, Agent = Hände, MCP = USB, Skill = Know-how. | Glossar (`docs/src/data/glossary.ts`) ohne LLM, Agent, Subagent. | Glossar | S | 089, 187, 191, 207–229 |
+| B13 | Offen | "Kein DS mit KI von Null generieren" | Lookalike-Problem; KI nur, um Organisationskontext zu sammeln. | Fehlt als Prinzip. | `design-principles` | S | 013 |
+
+## Priorität C – passt, optional oder Exkurs
+
+Zwölf Themen reichen als Hinweis, Vergleich oder Link; die meisten betreffen fremde Tools.
+
+| # | Status | Thema | Was der Kurs zeigt | Stand Atelier | Wohin | Aufwand | Transkripte |
+| --- | --- | --- | --- | --- | --- | --- | --- |
+| C1 | Offen | Story UI (Southleft) | Prompt → Story in Storybook, Compositions, Voice Canvas, Self-Healing. | 0 Treffer. | `storybook`, Hinweis | S | 032, 051, 061, 186–194 |
+| C2 | Offen | Company Docs MCP | Doku aus Figma → Mintlify für Menschen, Vektor-DB für Maschinen. | Eigener Weg (Storybook-Manifest-MCP) wird nicht dagegen abgegrenzt. | `mcp`, ein Absatz | S | 042, 148, 260–267 |
+| C3 | Offen | Claude Design aus der Praxis | "Branded Fork" statt eigener Komponenten, ~45 min, ~82 $; Gap-Analyse per Claude Code. | Governance-Rahmen vorhanden, Erfahrungswerte fehlen. | `claude-design` | S | 070, 079, 157 |
+| C4 | Offen | Prototyping-Tools im Vergleich | Make, Bolt, v0, Lovable, Claude Design auf einem DS, A bis D-. | Nur Claude Design. | Exkurs Schulung | M | 137–166 |
+| C5 | Offen | Regelwerk für Kompositionen | YAML-Regeln für Journeys ("letzter Checkout-Schritt = Erfolg"), Skill lädt nur relevante Regeln. | Nur `antiPatterns` pro Komponente. | `patterns` | L | 094 |
+| C6 | Offen | Agenten über Templates und Recipes steuern | Page-Templates, Recipes, Starter-Stacks als Leitplanken. | `patterns` existiert, nicht auf Agenten ausgerichtet. | `patterns` | M | 049, 070, 182 |
+| C7 | Offen | Seiten aus DS-Komponenten in Figma bauen | Agent komponiert eine Seite nur aus DS-Instanzen. | Nur Komponentenebene. | `figma` | M | 106, 113, 128 |
+| C8 | Offen | Wartungsrezepte für große Bibliotheken | Detached Instances, Styles → Variables, Massen-Edits. | Teilweise im Skill. | `figma-workspace-architect` | S | 095 |
+| C9 | Offen | Layer-Benennung für KI begründen | Buttons eindeutig benennen, Junk-Frames entfernen, px vs rem. | Konventionen vorhanden, KI-Begründung fehlt. | `figma` | S | 009, 106 |
+| C10 | Offen | Theme Orchestrator | Dark Mode oder Rebrand über Figma, Storybook, Native per Skill + Skripten + WCAG-Audit. | Light/Dark-Tokens vorhanden. | `tokens` | L | 255, 257 |
+| C11 | Offen | Projekt-SPEC und Phasen-Regelwerk | SPEC mit Zielen, Nicht-Zielen, Erfolgskriterien, Gate draft → approved; Voll- und Quick-Modus. | Contracts pro Komponente, `AGENTS.md`. | `claude-md` | M | 048, 058, 182 |
+| C12 | Offen | Lückenanalyse gegen andere DS | Eigenes DS mit Material, Carbon, Polaris vergleichen, Lücken als Backlog. | `uianatomy`-MCP könnte das, nicht so gelehrt. | `mcp`, uianatomy-Abschnitt | S | 119 |
+
+## Außerhalb des Scopes
+
+Neun Themenblöcke gehören nicht in Atelier, weil sie Produkt-Teams, Organisation oder Zukunftsvisionen betreffen. Sie stehen vorbelegt auf Gestrichen; wer einen Block zurückholen will, setzt ihn auf Offen.
+
+| # | Status | Themenblock | Inhalte | Warum nicht Atelier | Transkripte |
+| --- | --- | --- | --- | --- | --- |
+| X1 | Gestrichen | DS- und Produkt-Inspektion als Vollprogramm | 10 Stationen /100, `garage.md`, Arbeitsauftrag, Issues doppelt in Produkt- und DS-Repo | Atelier lehrt den Loop für eine Komponente; der Selbstcheck A1 nimmt den Kern mit. | 067, 076, 077, 270 |
+| X2 | Gestrichen | Legacy-Adoption | Vier Arten von Produktarbeit, Adoptionsplan in Wellen, Shell → Header/Footer → Templates | Braucht ein Konsumenten-Produkt, das Atelier nicht hat. | 014, 245–253 |
+| X3 | Gestrichen | Adoption messen und Feedback-Schleifen | Reporter-Beacons, Komponenten ohne Nutzung, Steel Curtain auf Produktseite, `learning.json` | Setzt Konsumenten und Telemetrie voraus. | 101, 115, 252–256, 270 |
+| X4 | Gestrichen | Repo-Governance | Branch Protection, Issue-Templates, CONTRIBUTING, Governance-Diagramm in FigJam | Generisches Engineering, kein Design-to-Code-Thema. | 244–250 |
+| X5 | Gestrichen | KI + DS in der Organisation | Verkaufen, Pilot, Rollout, Budget, Sandbox-Experimente | Change-Management, eigenes Format. | 016, 029, 040, 050, 060 |
+| X6 | Gestrichen | Zukunft der UI | Generative UI, A2UI, Hyper-Personalisierung, Echtzeit-/Sprach-UI, multimodale Ketten | Visionen ohne Verifikations-Loop. | 008, 028, 049, 069, 100, 107 |
+| X7 | Gestrichen | Grundlagen und Haltung | KI-Prinzipien, Ethik, Geschichte, DS-Definition und ROI | Höchstens eine Einstiegsfolie. | 011, 036, 045, 064, 065, 074 |
+| X8 | Gestrichen | Git und Tooling für Einsteiger | Git, GitHub, gh CLI, IDE-Landschaft, API-Keys allgemein, Diktat | Atelier setzt Entwicklungsgrundlagen voraus; nur relevant, falls Designer ohne Git-Erfahrung teilnehmen. | 012–212 (Kap. 2) |
+| X9 | Gestrichen | Einzeltools ohne Bezug | Design Systems Assistant, ChatGPT-Connector, Jev/TypeSafe, Fractal/Twig, Declarative Shadow DOM, Plugin-Console-Loop, Component Adapter, Motion-Variables | Fremde Stacks oder Plugin-Entwicklung. | 021, 033, 053, 072, 079, 115, 243 |
+
+## Grenzen und Quellen
+
+"Fehlt" heißt: kein Treffer bei Suche mit deutschen und englischen Synonymen in `docs/src`, `AGENTS.md`, `plan/`, `workshop/`, `schulung-2tage-agenda.md` und den Skills. Ein anders benanntes Thema kann trotzdem durchgerutscht sein.
+
+- Verifiziert per Stichprobe: 0 Treffer für Story UI, FigmaLint, Context Engineer, Style Dictionary, Check Engine, Branch Protection, Code-only Props, LLM-as-Judge, Product Work, Generative UI/A2UI.
+- Viele Punkte stehen in Skill-Referenzen, nur nicht auf Lehrseiten. Für die Schulung zählt das als Lücke, für die Fähigkeiten des Repos nicht.
+- Die Priorisierung ist eine Einschätzung nach dem Maßstab oben, keine Messung.
+- Nicht abgeglichen: der separate Kurs `atomic-design-transcripts`.
+
+Quelle: 271 Transkripte des Kurses "AI & Design Systems" (Kapitel 0–7 plus Bonus- und Jam-Sessions). Vollständige Tabellen mit Belegpfaden: die übrigen Dateien in diesem Ordner (`README.md`).

@@ -1929,6 +1929,14 @@ Open, from this work:
 
 The ones the owner and I will walk through together.
 
+### AI & Design Systems course gaps (2026-10-08)
+
+- [ ] Walk through the triage of the "AI & Design Systems" course gaps (271 transcripts vs.
+      Atelier's teaching sources): 11 core-loop items (A), 13 deepening (B), 12 side notes
+      (C), 9 out-of-scope blocks (X). The single tracked list, with a status per item
+      (Offen / Übernehmen / Erledigt / Gestrichen), is
+      `plan/research/ai-ds-course-gap-2026-10-08/triage.md` — update status there, not here.
+
 ### From the Storybook review, 2026-09-14
 
 Full reasoning and evidence: `tasks/storybook-review-2026-09-14.md`. One item is done: the

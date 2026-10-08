@@ -1,0 +1,65 @@
+# Gap analysis, GROUP (transcripts 001-235, Chapters 1 and 2 plus intros)
+
+Search note: grep -ril over docs/src, AGENTS.md, CLAUDE.md, plan/, workshop/, talk/, schulung-2tage-agenda.md, skills/, .claude/skills/, tasks/todo.md. Terms are listed per row.
+
+## MISSING
+
+| Item | What the course says | Source # | Atelier evidence |
+|---|---|---|---|
+| Guiding principles for AI + DS (humanity, safety, intentionality, responsibility, nuance, quality, accessibility-as-ownership/control, foundations, context, curiosity, multiplicity, practicality, durability) | Team should adopt explicit shared AI principles before tooling; used as decision filter. | 064 | none found (principles, Prinzipien, ethic, responsible AI, bias) |
+| Human/ethical costs of AI (environment/water, stolen IP, bias, job disruption, wellbeing, "be kind", "no good UX on a dead planet") | Be eyes-open about harms; acknowledge people are overwhelmed. | 064, 117 | none found (sustainab, carbon footprint, Nachhaltig, wellbeing, overwhelm) |
+| "AI as mortar" thesis | AI reinforces the hard-earned DS asset/people/process connections instead of replacing them. | 036, 123, 130 | none found (mortar, Mörtel, connective tissue) |
+| Design system defined as "the story of how your org designs and builds UI"; ingredients = UI standards + 3-legged stool (design lib, code lib, docs) + people/process | Definition and ingredient model, comparison of Salesforce/IxDF/NN-g/Figma definitions. | 045, 055, 144, 175 | none found (three-legged, stool, narrative); Atelier only has Figma/spec/code/docs pillars in own terms |
+| Value / ROI case of design systems; politics of demonstrating ROI | Without a DS: inconsistent, slow, costly; with: source of truth, rebrand speed. | 065, 074 | none found (ROI, business case, stakeholder) |
+| What's hard about DS (standards-vs-reality gap, docs nobody reads, adoption, governance, versioning/deprecation, contribution process, maker-vs-user incentives) | Pain-point catalogue used as lens for "how can AI help". | 074 | none found as teaching content (governance, contribution process, buy-in); ADR-0016/0023 are release mechanics only |
+| Feedback loop: product usage/analytics/customer feedback flowing back into DS and process | AI makes it cheap to close the loop from shipped product back to DS foundations. | 110, 064 | none found (feedback loop hits are unrelated: DiagramFigure, talk) |
+| Three use-case categories: fix DS "check engine light"/make DS AI-ready; deliver quality at scale; invent next-gen UX (radically adaptive generative UI) | Roadmap structure for the rest of the course. | 129, 010, 123 | generative/adaptive UI: none found (generative UI, adaptive interface); AI-ready only partly, see PARTIAL |
+| Git/GitHub as safety net for AI (branch = safe parallel timeline, commit history/rollback, diff, merge conflict) incl. exercise "ask agent for new branch, review diff, commit AI output" | AI can wreck a codebase; Git makes exploration safe; teach non-devs core concepts via cheat sheet. | 130, 135, 160, 164-172, 176, 188, 192, 204 | none found for teaching (pull request, feature branch, branch). Only trainer note on `solved-*` backup branches (schulung-2tage-agenda.md) |
+| PR review + GitHub issues as quality gate and collaboration with agents (request review, approve, merge, delete branch, sync) | PRs/issues are how prototypes become production features. | 196, 200, 208 | none found (pull request, gh pr) |
+| GitHub CLI + agent: natural-language repo create, branch, issue, PR | `gh` unlocks agents for Git ops. | 155, 180, 188, 200 | none found (GitHub CLI, gh issue) |
+| Cross-repo issue filing by agent: "adoption evaluation" of a product vs the DS, issue in product repo AND DS repo with gaps (missing components) and acceptance criteria; DS-knowledge MCP ("Eddie Brain") | Agent crawls a site, compares to DS, files linked issues in both repos; DS team receives context-rich requests. | 212 | none found (adoption test, gap analysis, design system MCP, knowledge base) |
+| New handoff: designers/BAs/non-devs prototype in code via Git workflow, then dev-blessed PR; non-devs ask questions of codebases; access/security red tape | Cross-disciplinary collaboration moved downstream into the real repo. | 130, 145, 212 | none found (non-developer, non-technical, nicht-technisch) |
+| Connector vs plugin vs skill taxonomy in Claude Desktop (connectors = URL/OAuth MCP; plugins = connector + skills/markdown, local only (Cowork/Code); chat gets connectors only) | Anthropic's terms are confusing; clarify. | 124, 118 | none found (plugin.*connector); only research note plan/research/design-skills-2026-09-07/05-... touches plugin install |
+| MCP tool permission setting (always allow / needs approval / blocked) as workflow friction | Pre-approve trusted MCP tools or the agent stalls. | 124 | none found (always allow, permission prompt) |
+| LLM fundamentals: next-token predictor, trained on web, patterns not facts; "what LLMs are not" (not databases, not deterministic, not infallible, not agents on their own) | Mental model for participants. | 089, 187, 191 | glossary (docs/src/data/glossary.ts) has no LLM/agent/subagent entries; none found (non-determinis, deterministic) |
+| LLM provider landscape and differences (ChatGPT, Claude, Gemini, Perplexity, Grok, Meta; all transformer; Claude no image gen) | Pick tools by strengths; "engine alone doesn't drive". | 195, 199, 082 | none found (Perplexity, Grok, model comparison) |
+| Tool/IDE landscape: Claude Desktop (Chat/Cowork/Code), Cursor (editor vs agent window, Auto model, BYO key, thinking-effort settings), Codex, Antigravity, Windsurf, Warp | Pick environment; configure model/effort. | 012, 025, 037, 046, 104 | AGENTS.md names Codex/Antigravity only as agents sharing the repo; no tool comparison or model/effort guidance for participants |
+| API key hygiene (one key per app, password manager, console locations, PAT scopes+expiry) | Demystify keys for non-devs. | 056, 066, 075, 083, 090 | PARTIAL at most: docs/src/pages/figma-token.astro covers Figma PAT; no key-per-app/storage guidance (bring your own key, API key) |
+| Voice dictation as prompt input (Wispr Flow) | Used throughout demos. | 096 | none found (Wispr, dictat) |
+| Homework: "identify the hard" (team pain points for DS and AI) and tooling stock-take (keep/sturdy up/drop) | Reflection exercise to anchor course. | 235 | none found; existing homework is setup/kata only (schulung.astro, schulung-2tage-agenda.md) |
+| Figma Lint and Story UI (Southleft tools: lint designs before dev; AI layouts from DS in Storybook) | Named tools of the instructors. | 044 | none found (Figma Lint, Story UI); only plan/research/.../06-southleft-skills-repo.md for a different Southleft repo |
+| History of web/DS/AI as framing (Atomic Design, Photoshop-to-code, libraries, tokens, web components, Attention Is All You Need, MCP 2024, agents 2025) | Orientation narrative. | 011, 024, 082, 001 | none found (atomic design) - low teaching value for Atelier |
+| Course logistics: community Slack, resource hub, glossary site, certificate, Figma "course FigJam" | Support material. | 073, 235 | out of scope (glossary exists at docs/src/data/glossary.ts but small) |
+
+## PARTIAL
+
+| Item | What the course says | Source # | Atelier evidence / gap |
+|---|---|---|---|
+| "Is it good?" central thesis: quality, taste and judgment stay human; DS = the bar of quality that LLM speed is aimed at | The defining question of the AI era. | 096, 064, 123 | Verification culture exists (AGENTS.md "Verifying that something works", check:all gates, parity gate, plan/design-principles.md). Missing: framing as human taste/judgment, no teaching page |
+| LLM hard parts: non-determinism, hallucination, sycophancy, uneven quality, costs | Why quality is difficult. | 117 | Hallucination negative demo: schulung-2tage-agenda.md Block 4 (ask without MCP -> hallucination); docs/src/pages/prompts.astro. Missing non-determinism and sycophancy as concepts |
+| AI-ready DS (docs/metadata as context, Figma descriptions, Storybook comments synced to docs table) | Documentation matters more as AI context; JSDoc -> Storybook docs. | 175, 163, 167 | plan/ai-readiness.md, plan/big-picture.md section 10 (generated llms-full.txt), AGENTS.md (stories are the claims). Gap: no "check engine light" audit of an arbitrary DS |
+| Context-based workflow: each stage inherits the previous stage's context, with feedback upstream | TJ's context-based DS workflow. | 064 | Handoff document that ends Block 01 and seeds the prompt (docs/src/pages/schulung.astro, design-to-code skill) is the same idea; not named, no backward feedback, no general model |
+| Agents / subagents / MCP / skills stack ("LLM = brain, agent = hands, subagents parallelise, MCP = USB, skills = specialised know-how") | One-slide mental model. | 207, 211, 215, 218, 221, 225, 229 | MCP USB analogy: talk/storybook-mcp-talk.md line 71. Skills: schulung-2tage-agenda.md Block 0 Tag 2, docs/src/pages/agent-skills.astro. Agents/subagents as concepts: only operational mentions (runbook.astro, claude-design.astro, CLAUDE.md). No single recap page |
+| Why MCP matters (no glue code, real-time access vs pasted context, lower hallucination) | Contrast with Make/n8n glue. | 218 | Hallucination-vs-MCP demo covered; "no glue code/real-time" not stated in docs |
+| Custom skills for Figma MCP (rename variables, compare components to Polaris/Fluent) and Figma community skills; Figma plugin skills like generate-design | Skills pair with MCP; contribute/pull community skills. | 124 | skills/figma-workspace-architect (audit, tokens), plan/research/.../06-southleft-skills-repo.md. Missing: benchmark against other DS (Polaris/Fluent), Figma official plugin skills, community contribution |
+| Figma MCP evolution (Dev Mode read-only -> bidirectional write: variables, component sets, designs from DS components) | Two-way matters for DS work. | 124, 118 | docs/src/pages/figma.astro (bidirectional arrows), docs/src/pages/mcp.astro. Official figma-mcp vs figma-console distinction exists in memory only |
+| Publishing component library via build + npm | Build -> package -> npm install downstream. | 171 | plan/adr/0016, 0023, 0033 (release decisions); not a teaching page |
+| Documentation/reference site tooling (zeroheight, Mintlify, IBM Carbon reference site anatomy: usage, style, code, a11y docs) | Third leg of stool; AI-native docs tools. | 175 | docs/ app is itself a reference site; plan/research/.../03-figma-architecture-web.md mentions zeroheight/Supernova; no guidance for participants |
+| Design token pipeline: JSON platform-agnostic tokens, Style Dictionary transforms, export Figma->code with AI | Tokens to CSS/iOS/Android. | 167 | docs/src/pages/tokens.astro covers tiers and Figma<->CSS names; Style Dictionary only in plan/research/design-skills-2026-09-07/*. Not taught |
+| Web components as cross-framework DS delivery | Native tech serves any stack. | 024, 167 | Atelier chooses 3 native framework libs + spec (plan/big-picture.md, ADR-0121); WC only in research notes. Alternative not discussed for learners |
+| Multimodal chain demo: Figma Console MCP -> Claude Code designs site in Figma -> builds code -> new theme variant ("sequel") in both design and code | Shows design->code->theme in one session. | 096 | design-to-code loop (docs/src/pages/design-to-code.astro, first-component.astro) covers design->code; new-theme-in-both-places demo not present |
+| Dangerous autonomy flags / agent permissions in practice (`--dangerously-skip-permissions` shown in demo) | Used casually in demo. | 180 | Atelier has no guidance on agent permission modes for participants (grep dangerously only hit React prop) - flag as risk the course glosses over |
+
+## COVERED (terse)
+
+| Item | Source # | Atelier evidence |
+|---|---|---|
+| MCP definition, USB-C analogy | 215 | talk/storybook-mcp-talk.md:71; docs/src/pages/mcp.astro |
+| Skills = reusable markdown instructions | 221 | docs/src/pages/agent-skills.astro; skills/*/SKILL.md; schulung.astro |
+| Installing/configuring MCP servers (Figma MCP via OAuth, Claude Code) | 111, 118 | docs/src/pages/install.astro, workshop.astro, figma-token.astro, .mcp.json via AGENTS.md |
+| Figma components, auto layout, variants, variables, publishing a library | 149, 154, 159 | docs/src/pages/figma.astro, tokens.astro, skills/figma-workspace-architect |
+| Token tiers (primitive/semantic/component), multi-theming | 159, 167 | docs/src/pages/tokens.astro (tiers, dark mode) |
+| Storybook: stories, controls, a11y, interaction tests, token display | 163, 167 | docs/src/pages/storybook.astro; AGENTS.md (storybook-test, axe) |
+| Component docs in Figma/code feed AI context | 175 | plan/ai-readiness.md; llms.txt gates |
+| Node/IDE basics (git version check, terminal) | 140 | docs/src/pages/workshop.astro preflight |
+| Pre-workshop setup as homework | 226 | schulung.astro, schulung-2tage-agenda.md |
