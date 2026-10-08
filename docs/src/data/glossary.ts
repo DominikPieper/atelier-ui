@@ -81,4 +81,22 @@ export const GLOSSARY: Record<string, GlossaryEntry> = {
       'Named design values (colors, spacings, radii, type scales) stored as variables — so "primary color" has one canonical name instead of a hex code copy-pasted everywhere.',
     hint: 'In Atelier, tokens live as CSS custom properties like `--ui-color-primary`, and they mirror the variable names in the Figma file 1:1.',
   },
+
+  LLM: {
+    definition:
+      'Large language model — a next-token predictor that works from patterns in its training data, not a database of facts. It is not deterministic and not infallible.',
+    hint: 'That is why Atelier grounds it with MCP (real component docs instead of guesses) and verifies its output with gates.',
+  },
+
+  agent: {
+    definition:
+      'An LLM running in a loop that can call tools — read files, run commands, query MCP servers — and act on the results instead of only answering.',
+    hint: 'Claude Code is the agent you use in this workshop.',
+  },
+
+  subagent: {
+    definition:
+      'A separate agent instance the main agent hands a focused task to. It works in its own context window and returns only a summary, which keeps the main context clean and lets work run in parallel.',
+    hint: 'In this workshop: a subagent can research a Figma component while your main session keeps building.',
+  },
 };

@@ -472,6 +472,106 @@ import PageHero from '../components/PageHero.astro';
       </svg>
     </DiagramFigure>
 
+    <section
+      aria-labelledby="figma-servers-heading"
+      style="margin: 2.25rem 0 2rem; max-width: 820px"
+    >
+      <h2 id="figma-servers-heading" class="docs-h3">
+        figma-console-mcp vs. Figma's official MCP server
+      </h2>
+      <p style="line-height: 1.65">
+        If you already know Figma's own MCP server (the "Dev Mode MCP"), this is
+        how it differs from the <code>figma-console-mcp</code> that Atelier
+        wires in <code>.mcp.json</code>.
+      </p>
+      <div class="docs-table-scroll">
+        <table class="docs-props-table">
+          <thead>
+            <tr>
+              <th>Dimension</th>
+              <th>Figma's official MCP server</th>
+              <th><code>figma-console-mcp</code></th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>What it is</td>
+              <td>Figma's own server; you point it at a node with a link</td>
+              <td>
+                Open-source server that drives a plugin inside Figma Desktop
+                (the Desktop Bridge)
+              </td>
+            </tr>
+            <tr>
+              <td>Read vs. write</td>
+              <td>
+                Started read-only; since early 2026 the remote server edits the
+                canvas too (<code>use_figma</code>: frames, components,
+                variables). The local desktop server stays read-only
+              </td>
+              <td>
+                Read and write through the Plugin API, including component sets
+                and variables
+              </td>
+            </tr>
+            <tr>
+              <td>What comes back</td>
+              <td>
+                Opinionated code, in the demos React with Tailwind classes, for
+                the agent to translate into your stack
+              </td>
+              <td>
+                Structured data about the component, plus the plugin console
+                logs
+              </td>
+            </tr>
+            <tr>
+              <td>Variables / tokens</td>
+              <td>
+                <code>get_variable_defs</code> returns the variables used by a
+                selection, for the active mode; names come back raw when a
+                variable has no code syntax set
+              </td>
+              <td>
+                Variables and token tools (<code>figma_get_variables</code>,
+                <code>figma_browse_tokens</code>) that resolve aliases across
+                all modes, on any Figma plan
+              </td>
+            </tr>
+            <tr>
+              <td>Tools in the Atelier loop</td>
+              <td>None</td>
+              <td>
+                <code>figma_get_component_for_development</code>,
+                <code>figma_check_design_parity</code>,
+                <code>figma_scan_code_accessibility</code>
+              </td>
+            </tr>
+            <tr>
+              <td>Setup</td>
+              <td>
+                Remote server with OAuth, on every plan (free seats get very few
+                calls); the desktop server needs a paid Dev or Full seat
+              </td>
+              <td>
+                <code>npx</code> entry in <code>.mcp.json</code> (version pinned
+                there, ADR-0110) with a <code>FIGMA_ACCESS_TOKEN</code>, plus
+                the Desktop Bridge plugin
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="line-height: 1.65; font-size: var(--ui-font-size-sm)">
+        <strong>Dated and perishable.</strong> This reflects mid-2026; both
+        servers change quickly, so check their docs before relying on a row.
+        Atelier chose <code>figma-console-mcp</code> when the official server
+        was still read-mostly (ADR-0111). That gap has narrowed since; what
+        still decides it here are the loop's own tools above — parity, the
+        accessibility scan and multi-mode variables.
+      </p>
+    </section>
+
     <McpExplorer client:load />
   </div>
 </BaseLayout>

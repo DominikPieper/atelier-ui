@@ -118,6 +118,25 @@ const SECTIONS: Section[] = [
       },
     ],
   },
+  {
+    title: 'Guardrails',
+    cards: [
+      {
+        title: 'Same prompt, without and with the design system',
+        description:
+          'A 5-minute demo. Send this exact prompt twice: once in a plain chat with no design-system context (no MCP, no llms-full.txt), once in Claude Code with the Storybook MCP connected. Then compare the two footers: hardcoded hex colors vs --ui-* tokens, invented components vs real Atl* ones, and the a11y basics (a landmark, labelled nav, focus styles). Keep the prompt identical so the context is the only variable.',
+        prompt: () =>
+          `Add a simple page footer: a logo, three columns of links (Product, Company, Legal) and a copyright line.`,
+      },
+      {
+        title: 'Prompt guard: Figma to code',
+        description:
+          'Add this to any "turn this Figma component into code" prompt. Frontier models over-deliver: they add plausible variants, sizes and states the design never had, and those pass review because they look reasonable. The guard is the cheap first line; check:contracts catches what slips past it, because it flags variant values and enum props the Figma master does not have unless the contract declares them codeOnly.',
+        prompt: (fw) =>
+          `Implement this Figma component. ${fwNote(fw)}\n\nImplement only what the design shows:\n- No variants, sizes, states or props that are not in the design.\n- If you think something is missing (hover, disabled, an error state, a size), do not add it. Put it in a list of questions at the end.\n- Before you finish, list every variant, size and state you implemented and name the part of the design each one comes from.`,
+      },
+    ],
+  },
 ];
 
 // Pre-compute all prompts for all frameworks at build time

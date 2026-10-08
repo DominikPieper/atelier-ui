@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
 import PageHero from '../components/PageHero.astro';
 import BottomNav from '../components/BottomNav.astro';
+import Jargon from '../components/Jargon.astro';
 
 const SITE_URL = 'https://atelier.pieper.io';
 
@@ -254,6 +255,55 @@ Token names match Figma variable names 1-to-1. Dark/light mode is automatic.
             <p class="docs-step-desc">
               Claude Code picks up CLAUDE.md on session start. From here, every
               prompt has component awareness — no preamble needed.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Session hygiene -->
+    <div class="docs-section" style="margin-top: 2.5rem">
+      <h2 class="docs-section-title">Session hygiene</h2>
+      <div class="docs-step-list">
+        <div class="docs-step-row">
+          <span class="docs-step-badge">01</span>
+          <div class="docs-step-body">
+            <h3 class="docs-h3">Keep the human checkpoint</h3>
+            <p class="docs-step-desc">
+              By default Claude Code asks before it edits files or runs
+              commands. <code>plan</code> mode is read-only planning: it
+              proposes, you approve. Start it with
+              <code>claude --permission-mode plan</code>. Do not use
+              <code>--dangerously-skip-permissions</code> or
+              <code>bypassPermissions</code> mode in the workshop. Some course
+              demos do it casually, but it removes the only human checkpoint
+              between the <Jargon term="agent">agent</Jargon> and your machine.
+            </p>
+          </div>
+        </div>
+        <div class="docs-step-row">
+          <span class="docs-step-badge">02</span>
+          <div class="docs-step-body">
+            <h3 class="docs-h3">Mind the context overhead</h3>
+            <p class="docs-step-desc">
+              Every line of CLAUDE.md, every skill description and every
+              connected MCP server's tools take up context in every session.
+              Keep CLAUDE.md lean and disconnect MCP servers you do not need for
+              the task. Run <code>/doctor</code> in a session for a health check
+              of your Claude Code setup.
+            </p>
+          </div>
+        </div>
+        <div class="docs-step-row">
+          <span class="docs-step-badge">03</span>
+          <div class="docs-step-body">
+            <h3 class="docs-h3">Close every task with two questions</h3>
+            <p class="docs-step-desc">
+              Ask "What are you least confident about in what you just did?" and
+              "What's the most important thing I haven't realised yet?". The
+              answers surface skipped checks and unverified claims. And "You're
+              absolutely right" from the model is not evidence. Verification is:
+              run the gates.
             </p>
           </div>
         </div>

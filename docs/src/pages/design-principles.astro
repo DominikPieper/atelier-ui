@@ -15,6 +15,7 @@ import PageHero from '../components/PageHero.astro';
     { id: 'principle-4', label: 'Composition over configuration' },
     { id: 'principle-5', label: 'Single reactivity model' },
     { id: 'principle-6', label: 'MCP server closes the loop' },
+    { id: 'principle-7', label: 'No design system from scratch' },
   ]}
 >
   <div class="docs-inline-page">
@@ -23,7 +24,7 @@ import PageHero from '../components/PageHero.astro';
       Traditional component libraries are designed for humans who browse docs,
       copy examples, and tweak. An LLM-optimized library flips the priority: the
       model has to infer correct usage from minimal context and produce working
-      code on the first try. The six principles below are what make that
+      code on the first try. The seven principles below are what make that
       possible — and what shaped every API decision in Atelier UI.
     </PageHero>
 
@@ -330,6 +331,48 @@ import PageHero from '../components/PageHero.astro';
       <div class="docs-rule">
         <span class="docs-rule-label">Rule</span>
         The library design reduces guessing. The MCP server eliminates it.
+      </div>
+    </div>
+
+    <!-- Principle 7 -->
+    <div class="docs-section">
+      <h2 id="principle-7" class="docs-section-title">
+        7. Don't generate a design system from scratch
+      </h2>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.65;
+          margin-bottom: 0.75rem;
+        "
+      >
+        Prompting "make me a design system" works, technically. What comes back
+        is a lookalike of whatever the model has seen most — generic, Material-
+        or Carbon-flavoured — not your organisation's system. A design system is
+        the story of how <em>your</em> organisation designs and builds products,
+        and a model starting from nothing has none of that story. It is the same
+        lookalike problem as adopting someone else's system wholesale: you can
+        never be sure it serves your needs, because it was shaped somewhere
+        else.
+      </p>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.65;
+          margin-bottom: 1rem;
+        "
+      >
+        Use AI for the two jobs where it helps: gathering and structuring your
+        real context (existing UI, brand, tech stack, past decisions, the
+        problems you are trying to solve), and keeping a system that already
+        exists consistent. Deciding what the system should be stays a human
+        call. This is also why Atelier starts from a Figma master you drew, not
+        from a prompt.
+      </p>
+      <div class="docs-rule">
+        <span class="docs-rule-label">Rule</span>
+        AI gathers context and enforces consistency. People decide what the
+        system is.
       </div>
     </div>
   </div>

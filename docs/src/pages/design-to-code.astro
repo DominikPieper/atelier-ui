@@ -423,6 +423,50 @@ the component I just generated. Fix every discrepancy it reports.`;
             component if its code changes after this verify. Both are repo
             scripts — a scaffolded workspace stops at the parity prompt above.
           </p>
+          <p class="docs-step-desc">
+            <strong style="color: var(--ui-color-text)"
+              >The failure this step exists for: the dead prop.</strong
+            >
+            A dead prop is documented — in the types, the JSDoc, the manifest, a
+            story — and does nothing at runtime. <code>variant="danger"</code>
+            is in the union, so it compiles and an agent reading the manifest
+            will use it; but no token or style is wired to it, so the button
+            renders like the default. It costs more trust than a missing prop,
+            because the docs said it worked, and one dead prop makes every other
+            documented prop suspect. Which check sees it depends on where the
+            wire is cut:
+          </p>
+          <ul class="docs-step-desc">
+            <li>
+              <strong style="color: var(--ui-color-text)">No style rule</strong>
+              — <code>check:variants</code> fails when a spec union member has
+              no <code>.variant-&lt;member&gt;</code> class in a framework's
+              stylesheet, and <code>check:dead-selectors</code> fails the
+              reverse: a rule that no template can ever emit.
+            </li>
+            <li>
+              <strong style="color: var(--ui-color-text)"
+                >A rule exists, but paints like the default</strong
+              >
+              — only <code>check:paint</code> and the parity prompt above. They
+              compare what a story <em>renders</em> (fill, stroke, geometry,
+              type) against the Figma master's row for that variant. That needs
+              a master with a row for it: a code-only variant is not compared,
+              and <code>check:paint</code> only covers components with both a
+              contract and a snapshot master.
+            </li>
+            <li>
+              <strong style="color: var(--ui-color-text)"
+                >What does not catch it</strong
+              >
+              — <code>check:props</code>, <code>check:contracts</code> and
+              <code>check:defaults</code> read declared surfaces, they do not
+              look at pixels. <code>check:stories</code> renders one story per
+              variant value, but a story that renders and passes axe is not a
+              story that looks different; only a <code>play</code> that asserts
+              the difference (a computed colour, say) makes it a test for this.
+            </li>
+          </ul>
           <details class="d2c-why">
             <summary>Why (for maintainers)</summary>
             <div class="d2c-why-body">
