@@ -23,10 +23,18 @@ const year = new Date().getFullYear();
 
 <style>
   .docs-footer {
-    grid-column: 1 / -1;
+    /* Column 2 of the shell grid: the sticky sidebar owns column 1. */
+    grid-column: 2;
     padding: 3rem 2rem 2.25rem;
     border-top: 1px solid var(--ui-color-border);
     background: var(--ui-color-surface);
+  }
+
+  /* The mobile shell is a single column (sidebar becomes a drawer). */
+  @media (max-width: 768px) {
+    .docs-footer {
+      grid-column: 1 / -1;
+    }
   }
 
   .docs-footer-row {

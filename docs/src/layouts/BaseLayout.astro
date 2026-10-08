@@ -91,6 +91,10 @@ const editSourceUrl = sourceUrlFor(currentPath);
 const isComponents = currentPath.startsWith('/components');
 const isMcp = currentPath === '/mcp';
 const isWorkshop = currentPath === '/workshop';
+// Any numbered-track page counts as "in the workshop" for the topbar link; the
+// home page is the track's first step but is not a workshop page.
+const isOnWorkshopTrack =
+  currentPath !== '/' && getTrackStep(currentPath) !== undefined;
 const isStorybook = currentPath === '/storybook';
 const isFigma = currentPath === '/figma';
 
@@ -100,7 +104,7 @@ function isActive(path: string): boolean {
 }
 
 function isTopActive(path: string): boolean {
-  if (path === '/workshop') return isWorkshop;
+  if (path === '/workshop') return isOnWorkshopTrack;
   if (path === '/storybook') return isStorybook;
   if (path === '/figma') return isFigma;
   if (path === '/mcp') return isMcp;
@@ -153,7 +157,7 @@ const BREADCRUMB_LABELS: Record<string, string> = {
   components: 'Components',
   install: 'Installation',
   tokens: 'Design tokens',
-  patterns: 'Cookbook patterns',
+  patterns: 'Patterns',
   llms: 'llms.txt',
   'agent-skills': 'Agent skills',
   'claude-md': 'CLAUDE.md',

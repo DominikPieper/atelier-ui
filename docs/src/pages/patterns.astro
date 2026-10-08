@@ -29,7 +29,7 @@ function frameworkCode(p: (typeof PATTERNS)[number], fw: Framework): string {
 ---
 
 <BaseLayout
-  title="Cookbook patterns"
+  title="Patterns"
   description="Reusable Atelier UI patterns — form layouts, data tables, dialogs, navigation shells, and other multi-component recipes."
   currentPath="/patterns"
   tocItems={PATTERNS.map((p) => ({ id: `pattern-${p.num}`, label: p.title }))}
@@ -37,7 +37,7 @@ function frameworkCode(p: (typeof PATTERNS)[number], fw: Framework): string {
   <div class="docs-inline-page">
     <PageHero
       tag={`${PATTERNS.length} patterns · 3 frameworks`}
-      title="Cookbook patterns"
+      title="Patterns"
       lede="Composition recipes for common UI scenarios. Each pattern shows the intended way to combine atomic components — Card with Form, Dialog with Alert, Table with Badge — and ships in Angular, React, and Vue."
       ledeMax="640px"
     />

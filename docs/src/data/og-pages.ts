@@ -52,7 +52,7 @@ export const OG_PAGES = {
       'Atelier UI component library — buttons, inputs, dialogs, and more with framework-agnostic APIs.',
   },
   patterns: {
-    title: 'Cookbook Patterns',
+    title: 'Patterns',
     description:
       'Reusable Atelier UI patterns — form layouts, data tables, dialogs, and other multi-component recipes.',
   },

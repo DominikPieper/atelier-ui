@@ -62,8 +62,8 @@ export default function ComponentGallery() {
           </span>
         </div>
         <p className="docs-page-description">
-          Identical APIs across Angular, React, and Vue. Designed for
-          AI-assisted development.
+          The same components and design in Angular, React, and Vue, each
+          with that framework's idiomatic API.
         </p>
       </div>
 
@@ -151,8 +151,7 @@ export default function ComponentGallery() {
                     )}
                   </div>
                   <div className="docs-component-card-desc">
-                    {doc?.description.slice(0, 85) ?? ''}
-                    {(doc?.description.length ?? 0) > 85 ? '…' : ''}
+                    {doc?.description ?? ''}
                   </div>
                   <div className="docs-component-card-footer">
                     <span

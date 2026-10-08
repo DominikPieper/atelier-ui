@@ -625,6 +625,14 @@ body {
   padding: 2.5rem 2rem;
 }
 
+/* At phone width `.docs-main` already supplies the 1rem gutter; stacking the
+ * page's own 2rem on top left a ~294px column at 390px. */
+@media (max-width: 768px) {
+  .docs-inline-page {
+    padding-inline: 0;
+  }
+}
+
 /* ── Page header ─────────────────────────────────────── */
 .docs-page-header {
   margin-bottom: 2rem;
@@ -1143,6 +1151,11 @@ summary:focus-visible,
   color: var(--ui-color-text-muted);
   line-height: 1.45;
   flex: 1;
+  display: -webkit-box;
+  -webkit-box-orient: vertical;
+  -webkit-line-clamp: 2;
+  line-clamp: 2;
+  overflow: hidden;
 }
 
 .docs-component-card-footer {
