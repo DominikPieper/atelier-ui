@@ -1,3 +1,14 @@
+## 0.3.12 (2026-10-08)
+
+### 🚀 Features
+
+- **styles:** disabled button tokens and an AA placeholder (ADR-0159) ([8c66902a](https://github.com/DominikPieper/atelier-ui/commit/8c66902a))
+
+### ❤️ Thank You
+
+- Claude Opus 5.5
+- Dominik Pieper @DominikPieper
+
 ## 0.3.11 (2026-10-07)
 
 ### 🩹 Fixes

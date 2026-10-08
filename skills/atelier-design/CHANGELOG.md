@@ -1,3 +1,16 @@
+## 0.1.10 (2026-10-08)
+
+### 🚀 Features
+
+- **styles:** disabled button tokens and an AA placeholder (ADR-0159) ([8c66902a](https://github.com/DominikPieper/atelier-ui/commit/8c66902a))
+- **docs:** track-first navigation, attendee language, a real finish ([0859d287](https://github.com/DominikPieper/atelier-ui/commit/0859d287))
+- **docs:** the home shows the design-to-code loop, not decoration ([d33ea444](https://github.com/DominikPieper/atelier-ui/commit/d33ea444))
+
+### ❤️ Thank You
+
+- Claude Opus 5.5
+- Dominik Pieper @DominikPieper
+
 ## 0.1.9 (2026-10-05)
 
 ### 🚀 Features
