@@ -25,4 +25,4 @@ have slipped through.
 `triage.md` in this folder is the tracked list: the triage (A = core loop, B = deepening,
 C = side note, X = out of scope) with a status per item (Offen / Übernehmen / Erledigt /
 Gestrichen). Update status there. It was copied from the Claude Docs page "Atelier vs. AI &
-Design Systems – Lückenanalyse" (revision 9), which is no longer maintained.
+Design Systems – Lückenanalyse" (revision 9), deleted on 2026-10-08.

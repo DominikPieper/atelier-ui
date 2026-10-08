@@ -1,7 +1,7 @@
 # Atelier vs. AI & Design Systems – Lückenanalyse
 
-Stand: 2026-10-08 · Dominik Pieper · Übertragen aus dem Claude-Docs-Dokument
-(https://claude.ai/code/artifact/f24255a0-85eb-46e2-929f-f7b0f71a8c8b, Revision 9)
+Stand: 2026-10-08 · Dominik Pieper · Übertragen aus einem Claude-Docs-Dokument
+(Revision 9, am 2026-10-08 gelöscht)
 
 Status-Werte: **Offen** · **Übernehmen** · **Erledigt** · **Gestrichen**. Zum Abhaken oder Streichen
 den Wert in der Spalte Status ändern.
