@@ -696,10 +696,10 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
         >
           <title id="tut-title">Figma-to-code sequence diagram</title>
           <desc id="tut-desc">
-            Five steps from selecting a frame in Figma to verifying design
-            parity. Data flows from left to right: node-id, boundVariables, prop
-            spec, generated code, parity score. A dashed loop returns
-            discrepancies to the first step.
+            Four stages from inspecting a frame in Figma to verifying design
+            parity: Inspect, Contract, Generate, Verify. Data flows from left to
+            right: node-id, boundVariables, generated code, parity score. A
+            dashed loop returns discrepancies to Inspect.
           </desc>
 
           <defs>
@@ -730,41 +730,33 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
             </marker>
           </defs>
 
-          <!-- Connector line under the step circles -->
+          <!-- Connector line under the stage circles -->
           <line
             x1="98"
             y1="100"
-            x2="198"
+            x2="228"
             y2="100"
             class="diagram-connector"
             marker-end="url(#tut-arrow)"
           />
           <line
-            x1="258"
+            x1="288"
             y1="100"
-            x2="358"
+            x2="418"
             y2="100"
             class="diagram-connector"
             marker-end="url(#tut-arrow)"
           />
           <line
-            x1="418"
+            x1="478"
             y1="100"
-            x2="518"
+            x2="608"
             y2="100"
             class="diagram-connector"
             marker-end="url(#tut-arrow)"
           />
           <line
-            x1="578"
-            y1="100"
-            x2="678"
-            y2="100"
-            class="diagram-connector"
-            marker-end="url(#tut-arrow)"
-          />
-          <line
-            x1="738"
+            x1="668"
             y1="100"
             x2="798"
             y2="100"
@@ -772,9 +764,9 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
             marker-end="url(#tut-arrow)"
           />
 
-          <!-- Data labels on connectors (above the circle tops so long names may overhang) -->
+          <!-- Data labels on connectors -->
           <text
-            x="148"
+            x="163"
             y="64"
             font-size="17"
             style="letter-spacing: 0; text-transform: none"
@@ -783,7 +775,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
             >node-id</text
           >
           <text
-            x="308"
+            x="353"
             y="64"
             font-size="17"
             style="letter-spacing: 0; text-transform: none"
@@ -792,16 +784,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
             >boundVariables</text
           >
           <text
-            x="468"
-            y="64"
-            font-size="17"
-            style="letter-spacing: 0; text-transform: none"
-            class="diagram-eyebrow"
-            text-anchor="middle"
-            >prop spec</text
-          >
-          <text
-            x="628"
+            x="543"
             y="64"
             font-size="17"
             style="letter-spacing: 0; text-transform: none"
@@ -810,7 +793,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
             >code</text
           >
           <text
-            x="755"
+            x="733"
             y="64"
             font-size="17"
             style="letter-spacing: 0; text-transform: none"
@@ -819,7 +802,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
             >parity</text
           >
 
-          <!-- Loop-back: parity discrepancies fold back to step A -->
+          <!-- Loop-back: parity discrepancies fold back to Inspect -->
           <path
             d="M 877 132 V 200 Q 877 232 845 232 H 46 Q 14 232 14 200 V 100 H 38"
             class="diagram-connector diagram-connector--dashed"
@@ -835,26 +818,23 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
             >discrepancies · iterate</text
           >
 
-          <!-- Step circles with badges -->
-          <!-- A -->
+          <!-- The four stages -->
+          <!-- Inspect -->
           <g>
             <circle cx="68" cy="100" r="26" class="diagram-node" />
-            <text
-              x="68"
-              y="107"
-              text-anchor="middle"
-              font-size="18"
-              font-weight="700"
+            <circle
+              cx="68"
+              cy="100"
+              r="8"
               style="fill: var(--ui-color-primary)"
-              >A</text
-            >
+            />
             <text
               x="68"
               y="158"
               text-anchor="middle"
               font-size="17"
               font-weight="700"
-              >Select</text
+              >Inspect</text
             >
             <text
               x="68"
@@ -865,28 +845,25 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
               >Figma frame</text
             >
           </g>
-          <!-- B -->
+          <!-- Contract -->
           <g>
-            <circle cx="228" cy="100" r="26" class="diagram-node" />
-            <text
-              x="228"
-              y="107"
-              text-anchor="middle"
-              font-size="18"
-              font-weight="700"
+            <circle cx="258" cy="100" r="26" class="diagram-node" />
+            <circle
+              cx="258"
+              cy="100"
+              r="8"
               style="fill: var(--ui-color-primary)"
-              >B</text
-            >
+            />
             <text
-              x="228"
+              x="258"
               y="158"
               text-anchor="middle"
               font-size="17"
               font-weight="700"
-              >Read spec</text
+              >Contract</text
             >
             <text
-              x="228"
+              x="258"
               y="180"
               text-anchor="middle"
               font-size="17"
@@ -894,7 +871,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
               >figma_get_</text
             >
             <text
-              x="228"
+              x="258"
               y="202"
               text-anchor="middle"
               font-size="17"
@@ -902,62 +879,22 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
               >component</text
             >
           </g>
-          <!-- C -->
-          <g>
-            <circle cx="388" cy="100" r="26" class="diagram-node" />
-            <text
-              x="388"
-              y="107"
-              text-anchor="middle"
-              font-size="18"
-              font-weight="700"
-              style="fill: var(--ui-color-primary)"
-              >C</text
-            >
-            <text
-              x="388"
-              y="158"
-              text-anchor="middle"
-              font-size="17"
-              font-weight="700"
-              >Match props</text
-            >
-            <text
-              x="388"
-              y="180"
-              text-anchor="middle"
-              font-size="17"
-              class="diagram-mono diagram-muted"
-              >storybook-*</text
-            >
-            <text
-              x="388"
-              y="202"
-              text-anchor="middle"
-              font-size="17"
-              class="diagram-mono diagram-muted"
-              >MCP</text
-            >
-          </g>
-          <!-- D -->
+          <!-- Generate -->
           <g>
             <circle
-              cx="548"
+              cx="448"
               cy="100"
               r="28"
               class="diagram-node diagram-node--accent"
             />
-            <text
-              x="548"
-              y="107"
-              text-anchor="middle"
-              font-size="18"
-              font-weight="700"
+            <circle
+              cx="448"
+              cy="100"
+              r="8"
               style="fill: var(--ui-color-primary)"
-              >D</text
-            >
+            />
             <text
-              x="548"
+              x="448"
               y="158"
               text-anchor="middle"
               font-size="17"
@@ -965,36 +902,33 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
               >Generate</text
             >
             <text
-              x="548"
+              x="448"
               y="180"
               text-anchor="middle"
               font-size="17"
               class="diagram-muted"
-              >Claude</text
+              >Storybook MCP</text
             >
             <text
-              x="548"
+              x="448"
               y="202"
               text-anchor="middle"
               font-size="17"
               class="diagram-muted"
-              >writes code</text
+              >Claude writes code</text
             >
           </g>
-          <!-- E -->
+          <!-- Verify -->
           <g>
-            <circle cx="708" cy="100" r="26" class="diagram-node" />
-            <text
-              x="708"
-              y="107"
-              text-anchor="middle"
-              font-size="18"
-              font-weight="700"
+            <circle cx="638" cy="100" r="26" class="diagram-node" />
+            <circle
+              cx="638"
+              cy="100"
+              r="8"
               style="fill: var(--ui-color-primary)"
-              >E</text
-            >
+            />
             <text
-              x="708"
+              x="638"
               y="158"
               text-anchor="middle"
               font-size="17"
@@ -1002,7 +936,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
               >Verify</text
             >
             <text
-              x="708"
+              x="638"
               y="180"
               text-anchor="middle"
               font-size="17"
@@ -1010,7 +944,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
               >check_design_</text
             >
             <text
-              x="708"
+              x="638"
               y="202"
               text-anchor="middle"
               font-size="17"
@@ -1052,7 +986,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
 
       <div style="display: flex; flex-direction: column; gap: 1.5rem">
         <div class="docs-step-row" data-step="1">
-          <span class="docs-step-badge">A</span>
+          <span class="docs-step-badge tut-stage-badge">Inspect</span>
           <div style="flex: 1">
             <h3 class="docs-h3">Select the component in Figma</h3>
             <p class="docs-step-desc">
@@ -1199,7 +1133,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
         </div>
 
         <div class="docs-step-row" data-step="2">
-          <span class="docs-step-badge">B</span>
+          <span class="docs-step-badge tut-stage-badge">Contract</span>
           <div style="flex: 1">
             <h3 class="docs-h3">AI reads the spec</h3>
             <p class="docs-step-desc">
@@ -1213,7 +1147,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
         </div>
 
         <div class="docs-step-row" data-step="3">
-          <span class="docs-step-badge">C</span>
+          <span class="docs-step-badge tut-stage-badge">Generate</span>
           <div style="flex: 1">
             <h3 class="docs-h3">AI matches to Atelier UI components</h3>
             <p class="docs-step-desc">
@@ -1251,12 +1185,6 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
                 is the answer.
               </p>
             </Callout>
-          </div>
-        </div>
-
-        <div class="docs-step-row" data-step="4">
-          <span class="docs-step-badge">D</span>
-          <div style="flex: 1">
             <h3 class="docs-h3">AI generates token-exact code</h3>
             <p class="docs-step-desc">
               With the Figma token names from <code>boundVariables</code> and
@@ -1267,8 +1195,8 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
           </div>
         </div>
 
-        <div class="docs-step-row" data-step="5">
-          <span class="docs-step-badge">E</span>
+        <div class="docs-step-row" data-step="4">
+          <span class="docs-step-badge tut-stage-badge">Verify</span>
           <div style="flex: 1">
             <h3 class="docs-h3">Verify design parity</h3>
             <p class="docs-step-desc">
@@ -1299,9 +1227,10 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
           margin-bottom: 1rem;
         "
       >
-        A prompt that drives the full A–D workflow in one shot — already set to
-        your framework, including the <code>storybook-&lt;fw&gt;</code> server
-        name your workspace was scaffolded with:
+        A prompt that drives the full Inspect → Generate workflow in one shot —
+        already set to your framework, including the
+        <code>storybook-&lt;fw&gt;</code> server name your workspace was
+        scaffolded with:
       </p>
       <FwSwitcher
         variant="tabs"
@@ -1498,6 +1427,19 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
 </BaseLayout>
 
 <style>
+  /* Loop-stage badge: the stage word instead of a single letter */
+  /* Stack the word badge above the body so the body keeps the full row
+     width (its inline SVGs scale with it and must stay >= 12px). */
+  .docs-step-row:has(> .tut-stage-badge) {
+    flex-direction: column;
+    align-items: stretch;
+    gap: 0.5rem;
+  }
+  .tut-stage-badge {
+    align-self: flex-start;
+    margin-top: 0;
+    text-transform: uppercase;
+  }
   /* "Run it" steps — file path, command, expected outcome */
   .run-steps {
     list-style: none;

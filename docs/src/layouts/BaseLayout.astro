@@ -2,6 +2,7 @@
 import { ClientRouter } from 'astro:transitions';
 import { Font } from 'astro:assets';
 import logo from '../assets/logo.png';
+import logoDark from '../assets/logo-dark.png';
 import '../styles/tokens.css';
 import '../styles/docs-theme.css';
 import '../styles/global.css';
@@ -335,7 +336,15 @@ const breadcrumbSchema = {
           <img
             src={logo.src}
             alt=""
-            class="docs-logo-img"
+            class="docs-logo-img docs-logo-img--light"
+            width={224}
+            height={214}
+          />
+          {/* Light-slate glyph variant: the black pen-nib vanishes on the dark topbar. */}
+          <img
+            src={logoDark.src}
+            alt=""
+            class="docs-logo-img docs-logo-img--dark"
             width={224}
             height={214}
           />
@@ -1323,6 +1332,26 @@ const breadcrumbSchema = {
       import '../scripts/framework-pref-init';
     </script>
     <style>
+      /* Logo: two <img>s, one shown per theme (same box, so no layout shift).
+       * The init script always sets data-theme before first paint; the
+       * prefers-color-scheme rules cover the no-JS / unset case. */
+      .docs-logo-img--dark {
+        display: none;
+      }
+      [data-theme='dark'] .docs-logo-img--light {
+        display: none;
+      }
+      [data-theme='dark'] .docs-logo-img--dark {
+        display: block;
+      }
+      @media (prefers-color-scheme: dark) {
+        :root:not([data-theme]) .docs-logo-img--light {
+          display: none;
+        }
+        :root:not([data-theme]) .docs-logo-img--dark {
+          display: block;
+        }
+      }
       /* Touch-target floor (≥44px, WCAG 2.5.5 / 2.5.8) for the two header/drawer
        * controls that were under-sized. Scoped to BaseLayout so global.css stays
        * untouched. min-width/height grows the hit area without shifting the

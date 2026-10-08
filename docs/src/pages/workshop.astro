@@ -85,6 +85,13 @@ const mcpConfig = (fw: string) => `{
   title="Workshop setup"
   description="Set up the Atelier workshop end-to-end — scaffold a workspace, install dependencies, run Storybook, and connect the AI tooling."
   currentPath="/workshop"
+  tocItems={[
+    { id: 'prerequisites', label: 'Install prerequisites' },
+    { id: 'setup', label: 'Set up your workspace' },
+    { id: 'created', label: 'What gets created' },
+    { id: 'mcp-config', label: 'MCP configuration' },
+    { id: 'next-steps', label: 'Where to go next' },
+  ]}
 >
   <div class="docs-inline-page">
     <PageHero time="~25 min" title="Workshop setup" ledeMax="520px">
@@ -122,37 +129,6 @@ const mcpConfig = (fw: string) => `{
       </div>
     </div>
 
-    <!-- Shortcut for users arriving from a repo clone -->
-    <Callout tone="tip" title="Already cloned the repo">
-      <p>
-        This page's default path is the <strong>scaffold</strong> — the
-        self-serve route, and now also the
-        <a href="/schulung" class="docs-link-primary">two-day training</a>
-        (German), which works in a generated workspace too. This callout is for
-        a different case: you cloned the
-        <strong>atelier monorepo itself</strong> to contribute to Atelier — the
-        rig, the adapters, the gates — not to attend the workshop. If that's
-        you, follow this callout instead of Step 01.
-      </p>
-      <p>
-        <strong>Step 01</strong> (workspace generator) is for a fresh-scaffolded
-        workspace — a clone of the atelier monorepo has none of the generator's
-        <code>workshop-*</code> apps. <strong>Step 02</strong> still applies:
-        the clone ships the same <code>npm run preflight</code>. Run these from
-        the repo root, and use them in place of <strong>Step 03</strong>:
-      </p>
-      <Code
-        code={`npm install\nnpm run preflight\n\n# the docs site you are reading\nnpx nx serve docs\n\n# the component library in Storybook — pick one framework\nnpx nx storybook angular   # or: react | vue`}
-        lang="shell"
-      />
-      <p style="margin-bottom: 0">
-        Everything from <strong>Step 04</strong> on applies unchanged — the repo
-        ships its own <code>.mcp.json</code> with all three
-        <code>storybook-*</code> entries already wired (a scaffold gets exactly
-        the one you picked).
-      </p>
-    </Callout>
-
     <!-- Prerequisites -->
     <div
       class="docs-section"
@@ -174,7 +150,11 @@ const mcpConfig = (fw: string) => `{
           margin-bottom: 0.85rem;
         "
       >
-        <h2 class="docs-section-title" style="margin: 0; font-size: 1rem">
+        <h2
+          id="prerequisites"
+          class="docs-section-title"
+          style="margin: 0; font-size: 1rem"
+        >
           Install prerequisites
         </h2>
         <a
@@ -246,10 +226,27 @@ const mcpConfig = (fw: string) => `{
       </p>
     </div>
 
+    <div class="docs-section" style="margin-bottom: 0">
+      <h2 id="setup" class="docs-section-title">Set up your workspace</h2>
+    </div>
     <ol class="docs-step-list" style="margin-bottom: 2.5rem">
       <!-- Step 01 -->
       <li class="docs-step-row" data-step="1">
-        <span class="docs-step-badge">01</span>
+        <span class="docs-step-badge setup-mark" aria-hidden="true"
+          ><svg
+            viewBox="0 0 16 16"
+            width="12"
+            height="12"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            focusable="false"
+          >
+            <path d="M3 8.5l3.2 3L13 4.5"></path>
+          </svg></span
+        >
         <div>
           <h3 class="docs-h3">Run the workspace generator</h3>
           <p class="docs-step-desc">
@@ -279,7 +276,21 @@ const mcpConfig = (fw: string) => `{
 
       <!-- Step 02 -->
       <li class="docs-step-row" data-step="2">
-        <span class="docs-step-badge">02</span>
+        <span class="docs-step-badge setup-mark" aria-hidden="true"
+          ><svg
+            viewBox="0 0 16 16"
+            width="12"
+            height="12"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            focusable="false"
+          >
+            <path d="M3 8.5l3.2 3L13 4.5"></path>
+          </svg></span
+        >
         <div>
           <h3 class="docs-h3">Install dependencies &amp; run preflight</h3>
           <p class="docs-step-desc">
@@ -426,7 +437,21 @@ const mcpConfig = (fw: string) => `{
 
       <!-- Step 03 -->
       <li class="docs-step-row" data-step="3" id="step-03">
-        <span class="docs-step-badge">03</span>
+        <span class="docs-step-badge setup-mark" aria-hidden="true"
+          ><svg
+            viewBox="0 0 16 16"
+            width="12"
+            height="12"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            focusable="false"
+          >
+            <path d="M3 8.5l3.2 3L13 4.5"></path>
+          </svg></span
+        >
         <div>
           <h3 class="docs-h3">Serve your app</h3>
           <p class="docs-step-desc">
@@ -443,7 +468,21 @@ const mcpConfig = (fw: string) => `{
 
       <!-- Step 04 -->
       <li class="docs-step-row" data-step="4">
-        <span class="docs-step-badge">04</span>
+        <span class="docs-step-badge setup-mark" aria-hidden="true"
+          ><svg
+            viewBox="0 0 16 16"
+            width="12"
+            height="12"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            focusable="false"
+          >
+            <path d="M3 8.5l3.2 3L13 4.5"></path>
+          </svg></span
+        >
         <div>
           <h3 class="docs-h3">Open in Claude Code</h3>
           <p class="docs-step-desc">
@@ -485,60 +524,9 @@ const mcpConfig = (fw: string) => `{
       </li>
     </ol>
 
-    <!-- Once set up: hand off to the workflow pages instead of repeating them. -->
-    <aside
-      class="docs-pagepair"
-      aria-label="What to do once setup is done"
-      style="margin-top: 2.5rem"
-    >
-      <a
-        href="/figma-token"
-        class="docs-pagepair-card docs-pagepair-card--next"
-        style="grid-column: 1 / -1"
-      >
-        <span class="docs-pagepair-eyebrow">Do this first</span>
-        <span class="docs-pagepair-title">/figma-token →</span>
-        <span class="docs-pagepair-desc"
-          >Desktop Bridge plugin and access token — the
-          <code>figma-console</code> MCP the tutorial runs on reads Figma
-          through them. One-time, ~5 min; the manual <code>/figma</code> path
-          needs neither.</span
-        >
-      </a>
-      <a
-        href="/design-to-code"
-        class="docs-pagepair-card docs-pagepair-card--next"
-        style="grid-column: 1 / -1"
-      >
-        <span class="docs-pagepair-eyebrow">Then read the map</span>
-        <span class="docs-pagepair-title">/design-to-code →</span>
-        <span class="docs-pagepair-desc"
-          >The four-step loop — Inspect, Contract, Generate, Verify — on one
-          page. The two workflows below are the territory; this is the map they
-          walk.</span
-        >
-      </a>
-      <a href="/tutorial" class="docs-pagepair-card docs-pagepair-card--next">
-        <span class="docs-pagepair-eyebrow">MCP-driven workflow</span>
-        <span class="docs-pagepair-title">/tutorial →</span>
-        <span class="docs-pagepair-desc"
-          >Walk Figma → MCP → token-exact code in five steps. ~30 min.</span
-        >
-      </a>
-      <div class="docs-pagepair-arrow" aria-hidden="true">·</div>
-      <a href="/figma" class="docs-pagepair-card docs-pagepair-card--next">
-        <span class="docs-pagepair-eyebrow">Manual workflow</span>
-        <span class="docs-pagepair-title">/figma →</span>
-        <span class="docs-pagepair-desc"
-          >No-MCP variant — read the inspect panel by hand, copy token names
-          into your prompt.</span
-        >
-      </a>
-    </aside>
-
     <!-- What gets created -->
     <div class="docs-section" style="margin-top: 2.5rem">
-      <h2 class="docs-section-title">What gets created</h2>
+      <h2 id="created" class="docs-section-title">What gets created</h2>
       <p
         style="
           color: var(--ui-color-text-muted);
@@ -611,7 +599,7 @@ const mcpConfig = (fw: string) => `{
 
     <!-- MCP configuration -->
     <div class="docs-section">
-      <h2 class="docs-section-title">MCP configuration</h2>
+      <h2 id="mcp-config" class="docs-section-title">MCP configuration</h2>
       <p
         style="
           color: var(--ui-color-text-muted);
@@ -673,6 +661,93 @@ const mcpConfig = (fw: string) => `{
       </ul>
     </Checkpoint>
 
+    <!-- Once set up: hand off to the workflow pages instead of repeating them. -->
+    <h2 id="next-steps" class="docs-section-title" style="margin-top: 2.5rem">
+      Where to go next
+    </h2>
+    <aside
+      class="docs-pagepair workshop-next"
+      aria-label="What to do once setup is done"
+      style="margin-top: 0"
+    >
+      <a
+        href="/figma-token"
+        class="docs-pagepair-card docs-pagepair-card--next"
+        style="grid-column: 1 / -1"
+      >
+        <span class="docs-pagepair-eyebrow">Do this first</span>
+        <span class="docs-pagepair-title">Figma access →</span>
+        <span class="docs-pagepair-desc"
+          >Desktop Bridge plugin and access token — the
+          <code>figma-console</code> MCP the tutorial runs on reads Figma
+          through them. One-time, ~5 min; the manual <code>/figma</code> path
+          needs neither.</span
+        >
+      </a>
+      <a
+        href="/design-to-code"
+        class="docs-pagepair-card docs-pagepair-card--next"
+        style="grid-column: 1 / -1"
+      >
+        <span class="docs-pagepair-eyebrow">Then read the map</span>
+        <span class="docs-pagepair-title">Design to code →</span>
+        <span class="docs-pagepair-desc"
+          >The four-step loop — Inspect, Contract, Generate, Verify — on one
+          page. The two workflows below are the territory; this is the map they
+          walk.</span
+        >
+      </a>
+      <a href="/tutorial" class="docs-pagepair-card docs-pagepair-card--next">
+        <span class="docs-pagepair-eyebrow">MCP-driven workflow</span>
+        <span class="docs-pagepair-title">Figma to code tutorial →</span>
+        <span class="docs-pagepair-desc"
+          >Walk Figma → MCP → token-exact code in five steps. ~30 min.</span
+        >
+      </a>
+      <a href="/figma" class="docs-pagepair-card docs-pagepair-card--next">
+        <span class="docs-pagepair-eyebrow">Manual workflow</span>
+        <span class="docs-pagepair-title">Figma (manual workflow) →</span>
+        <span class="docs-pagepair-desc"
+          >No-MCP variant — read the inspect panel by hand, copy token names
+          into your prompt.</span
+        >
+      </a>
+    </aside>
+
+    <!-- For monorepo contributors only — kept out of the attendee path. -->
+    <details class="contributor-details">
+      <summary>For repo contributors</summary>
+      <p>
+        This page's default path is the <strong>scaffold</strong> — the
+        self-serve route, and now also the
+        <a href="/schulung" class="docs-link-primary">two-day training</a>
+        (German), which works in a generated workspace too. This section is for
+        a different case: you cloned the
+        <strong>atelier monorepo itself</strong> to contribute to Atelier — the
+        rig, the adapters, the gates — not to attend the workshop. If that's
+        you, follow this section instead of
+        <strong>Run the workspace generator</strong>.
+      </p>
+      <p>
+        <strong>Run the workspace generator</strong> is for a fresh-scaffolded
+        workspace — a clone of the atelier monorepo has none of the generator's
+        <code>workshop-*</code> apps.
+        <strong>Install dependencies &amp; run preflight</strong> still applies:
+        the clone ships the same <code>npm run preflight</code>. Run these from
+        the repo root, and use them in place of <strong>Serve your app</strong>:
+      </p>
+      <Code
+        code={`npm install\nnpm run preflight\n\n# the docs site you are reading\nnpx nx serve docs\n\n# the component library in Storybook — pick one framework\nnpx nx storybook angular   # or: react | vue`}
+        lang="shell"
+      />
+      <p style="margin-bottom: 0">
+        Everything from <strong>Open in Claude Code</strong> on applies
+        unchanged — the repo ships its own <code>.mcp.json</code> with all three
+        <code>storybook-*</code> entries already wired (a scaffold gets exactly
+        the one you picked).
+      </p>
+    </details>
+
     <HelpFooter page="workshop" />
 
     <TrackNav />
@@ -680,6 +755,43 @@ const mcpConfig = (fw: string) => `{
 </BaseLayout>
 
 <style>
+  /* Setup steps read as a checklist, not a numbered list: numerals are
+   * reserved for the six-step workshop track. The <ol> keeps the sequence
+   * semantically; the check marker is decorative. */
+  .setup-mark {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    width: 1.35rem;
+    height: 1.35rem;
+    padding: 0;
+    border-radius: 50%;
+    margin-top: 0.15rem;
+  }
+
+  .contributor-details {
+    margin: 2.5rem 0 2rem;
+    border: 1px solid var(--ui-color-border);
+    border-radius: var(--ui-radius-md);
+    background: var(--ui-color-surface-raised);
+    padding: 0.85rem 1.1rem;
+  }
+  .contributor-details > summary {
+    cursor: pointer;
+    font-weight: 700;
+    color: var(--ui-color-text);
+  }
+  .contributor-details[open] > summary {
+    margin-bottom: 0.85rem;
+  }
+
+  /* Cards stack at this width — the "·" separator between them is orphaned. */
+  @media (max-width: 640px) {
+    .workshop-next .docs-pagepair-arrow {
+      display: none;
+    }
+  }
+
   /* Preflight mockup — styled like a terminal card.
    * Colors come from the --docs-term-* tokens in global.css so
    * this card stays in sync with .docs-terminal across themes.

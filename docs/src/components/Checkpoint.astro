@@ -117,17 +117,19 @@ const kicker = eyebrow ?? defaultEyebrow;
     line-height: 1.4;
   }
   .checkpoint-body :global(.checkpoint-checks li) {
-    display: flex;
-    align-items: flex-start;
-    flex-wrap: wrap;
-    gap: 0.55rem;
+    /* Icon is a fixed leading column; the rest (text + <code>) flows as
+     * ordinary inline text. Flex would turn every text run into its own item. */
+    position: relative;
+    padding-left: calc(18px + 0.55rem);
   }
   .checkpoint-body :global(.checkpoint-checks li svg) {
-    flex-shrink: 0;
+    position: absolute;
+    left: 0;
+    /* centre the 18px icon on the first line box (line-height 1.4) */
+    top: calc((1.4em - 18px) / 2);
     width: 18px;
     height: 18px;
     color: var(--ui-color-primary);
-    margin-top: 1px;
   }
   .checkpoint-body :global(.checkpoint-checks code) {
     font-size: var(--ui-font-size-sm);

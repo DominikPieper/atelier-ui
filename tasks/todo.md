@@ -86,12 +86,19 @@ Atelier token system instead of the generic gradient/grid look.
       "Cookbook patterns"; gallery slices descriptions at 85 chars mid-word; "Identical APIs"
       claim (`ComponentGallery.tsx:65`) contradicts the framework-native story.
 
-- [ ] **14. dark-mode logo** — the black "A" in `logo.png` vanishes on `#0a1116`
+- [x] **14. dark-mode logo** — done 2026-10-08: `logo-dark.png` (glyph recoloured to `#f1f5f9`,
+      ~13.8:1), switched by `[data-theme]` with an OS fallback; measured in all three states. — the black "A" in `logo.png` vanishes on `#0a1116`
       (`BaseLayout.astro:333`); dark variant or SVG with `currentColor` (critique 4, P1).
-- [ ] **15. `/workshop` distill + outline** — contributor callout before step 01; steps are h3
+- [x] **15. `/workshop` distill + outline** — done 2026-10-08: own h2 for the setup steps, route
+      cards at the end with page names, contributor note in a closed `<details>`, 5-entry TOC. — contributor callout before step 01; steps are h3
       under "Install prerequisites"; four route cards mid-page; no TOC (critique 4, P1).
-- [ ] **16. one numbering** — track 1–6, setup 01–04, loop 1–4, tutorial A–E; numerals for
+- [x] **16. one numbering** — done 2026-10-08: setup steps are a checklist; `/tutorial` A–E became
+      the four loop stages (C+D under Generate), diagram too. — track 1–6, setup 01–04, loop 1–4, tutorial A–E; numerals for
       the track only, the four loop stages named the same everywhere (critique 4, P1).
+- [ ] **19. no gate sees TS errors in library builds** — `nx build vue` printed TS7053
+      (`atl-breadcrumbs.vue:53`, fixed 2026-10-08) and exited 0; `check:types` runs `tsc` on the
+      spec tsconfigs only, and plain `tsc` does not read `.vue`. Needs `vue-tsc --noEmit` or a
+      gate that fails on `error TS` in the build output.
 - [ ] **17. jargon in attendee copy** — `first-component.astro:180,215`, `tutorial.astro:165,193`,
       `design-to-code.astro:317,377`; "The switcher below stay in sync" (critique 4, P2).
 - [ ] **18. preview vs. switcher** — one note above the switcher that the preview is the shared
