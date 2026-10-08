@@ -5,8 +5,19 @@
  * Typecheck what `nx run-many -t build` does not: the spec projects — every
  * *.spec.*, *.stories.* and the testing helpers, per framework.
  *
- * Why this exists. The build target compiles the library entry points, and lint
- * runs ESLint, which does not typecheck. So the three `tsconfig.spec.json`
+ * What the build typechecks (verified 2026-10-08 by inserting a deliberate type
+ * error into one library source file and running `nx build <fw>`):
+ *   - angular: ng-packagr (`@nx/angular:package`) exits 1 on it.
+ *   - react:   `@nx/js:tsc` exits 1 on it.
+ *   - vue:     Vite does not typecheck at all; `vite-plugin-dts` printed the
+ *     error (TS2322, also for a .vue SFC) but the build exited 0, so it shipped.
+ *     `libs/vue/vite.config.mts` now throws from dts's `afterDiagnostic` hook, so
+ *     the build exits 1. That is the only place the library's .vue sources are
+ *     typechecked: tsc cannot read SFCs, so this script's tsc run does not cover
+ *     them (the vue spec project merely includes them as imports).
+ * So library sources are checked by the build, and this script covers the rest.
+ *
+ * Why this exists. Lint runs ESLint, which does not typecheck. So the three `tsconfig.spec.json`
  * projects were compiled by nothing, and `check:all`, `nx test` and `nx lint`
  * were all green over 146 type errors. Most were configuration rather than
  * defects — but not all, and the two that were not are exactly the kind a story

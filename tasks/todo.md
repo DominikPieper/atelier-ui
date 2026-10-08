@@ -95,7 +95,8 @@ Atelier token system instead of the generic gradient/grid look.
 - [x] **16. one numbering** — done 2026-10-08: setup steps are a checklist; `/tutorial` A–E became
       the four loop stages (C+D under Generate), diagram too. — track 1–6, setup 01–04, loop 1–4, tutorial A–E; numerals for
       the track only, the four loop stages named the same everywhere (critique 4, P1).
-- [ ] **19. no gate sees TS errors in library builds** — `nx build vue` printed TS7053
+- [x] **19. no gate sees TS errors in library builds** — done 2026-10-08 (ADR-0160): `vite-plugin-dts`
+      `afterDiagnostic` throws; negative-tested for `.vue` and `.ts`. — `nx build vue` printed TS7053
       (`atl-breadcrumbs.vue:53`, fixed 2026-10-08) and exited 0; `check:types` runs `tsc` on the
       spec tsconfigs only, and plain `tsc` does not read `.vue`. Needs `vue-tsc --noEmit` or a
       gate that fails on `error TS` in the build output.

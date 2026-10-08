@@ -16,6 +16,16 @@ export default defineConfig(() => ({
       tsconfigPath: './tsconfig.lib.json',
       entryRoot: 'src',
       rollupTypes: false,
+      // vite-plugin-dts prints type errors but lets the build exit 0 unless this
+      // hook throws. It is the only place the library's .vue sources are
+      // typechecked (plain tsc cannot read SFCs), so a diagnostic must fail the build.
+      afterDiagnostic: (diagnostics) => {
+        if (diagnostics.length > 0) {
+          throw new Error(
+            `vite-plugin-dts: ${diagnostics.length} type error(s) in libs/vue library sources (printed above).`,
+          );
+        }
+      },
     }),
   ],
   build: {
