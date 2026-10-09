@@ -99,4 +99,10 @@ export const GLOSSARY: Record<string, GlossaryEntry> = {
       'A separate agent instance the main agent hands a focused task to. It works in its own context window and returns only a summary, which keeps the main context clean and lets work run in parallel.',
     hint: 'In this workshop: a subagent can research a Figma component while your main session keeps building.',
   },
+
+  eval: {
+    definition:
+      'A repeatable check that grades a result. Deterministic evals are scripts that give the same answer every time; a judge is a model that answers what a script cannot, such as whether a focus state is missing.',
+    hint: 'In Atelier the gates are the deterministic half. The judge only advises and never blocks — see design-to-code, step 4.',
+  },
 };

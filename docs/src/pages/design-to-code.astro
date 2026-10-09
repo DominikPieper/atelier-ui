@@ -75,6 +75,49 @@ without asking me first.
 
 After round 3, stop. Give me a list of what still fails and what
 you tried.`;
+
+// Step 4 — the judge half of an eval: a rubric for what no gate checks.
+const JUDGE_PROMPT = `Review the component <Name> as a design-system reviewer. The gates
+already pass; do not repeat what they check.
+
+Read these sources yourself:
+- the Figma master: figma_get_component_for_development on node <id>
+- the contract: libs/spec/src/contracts/<name>.contract.ts
+- the component source and its stories
+- the design principles: docs/src/pages/design-principles.astro
+
+Check each line of this rubric:
+1. States: every state the master shows (hover, focus, disabled,
+   error, loading) exists in code and has a story. A visible focus
+   style counts; axe does not check it.
+2. Naming: props and values use the words the rest of the library
+   uses (sm/md/lg, not small/large; variant, not type).
+3. Contract: each figmaOnly and codeOnly entry has a reason that
+   still holds.
+4. Behaviour: the play functions test what the component does
+   (keyboard, Escape, focus return), not only that parts exist.
+5. Tokens: each --ui-* token fits its meaning (a danger colour for
+   errors, not for decoration).
+6. Accessibility: the accessible name, role and focus order are the
+   right choices for this component, not only valid ones.
+
+For each finding give: rubric line, evidence (file:line or Figma
+node id), the change you suggest, and how sure you are (high,
+medium, low). If a line has no finding, write "no finding". Do not
+invent one. No score, no fixes.`;
+
+// Step 4 — the same judge, fed the handoff document instead of the component.
+const TICKET_PROMPT = `Here is the handoff document for this task, and the diff
+(git diff main). Do not read my summary of the work.
+
+Answer:
+1. Which line of the handoff does the diff not meet?
+2. What does the diff do that the handoff does not ask for
+   (new variants, props, states, refactors)?
+3. Which line of the handoff cannot be judged from the diff alone?
+
+Quote the handoff line and the diff hunk for each answer.
+No score, no fixes.`;
 ---
 
 <BaseLayout
@@ -270,7 +313,12 @@ you tried.`;
         </li>
         <li>
           <strong style="color: var(--ui-color-text)">Parity</strong> —
-          <code>figma_check_design_parity</code>, last.
+          <code>figma_check_design_parity</code>.
+        </li>
+        <li>
+          <strong style="color: var(--ui-color-text)">Judge</strong> — optional,
+          last, and advisory: a model reviews what no gate checks (see
+          <a href="#evals" class="docs-link-primary">Evals</a>).
         </li>
       </ol>
       <p class="docs-step-desc">
@@ -822,6 +870,107 @@ you tried.`;
                   rel="noopener noreferrer"
                   class="docs-link-primary"
                   >ADR-0024</a
+                >.
+              </p>
+            </div>
+          </details>
+
+          <h3 id="evals" class="docs-h3 docs-h3--spaced">
+            Evals: where the judge comes in
+          </h3>
+          <p class="docs-step-desc">
+            An eval is any repeatable check that grades a result. There are two
+            kinds. A
+            <strong style="color: var(--ui-color-text)">deterministic</strong>
+            check is a script: it compares values and gives the same answer
+            every time. Everything above is this kind —
+            <code>check:contracts</code>, <code>storybook-test</code> with axe,
+            parity, the accessibility scan. A
+            <strong style="color: var(--ui-color-text)">judge</strong> is a
+            model that reads the component and answers what a script cannot: is
+            the focus state missing, does this prop name fit the rest of the
+            library, does the <code>play</code> function test behaviour or only
+            that the parts exist.
+          </p>
+          <p class="docs-step-desc">
+            If something can be scripted, script it. Use the judge only for what
+            is left. Three rules keep it useful:
+          </p>
+          <ul class="docs-step-desc">
+            <li>
+              <strong style="color: var(--ui-color-text)"
+                >Give it the sources, not your conclusion.</strong
+              >
+              Hand it the master, the contract, the code and the stories, and
+              let it read them itself. A judge told "I think this is done" tends
+              to agree. A different model from the one that wrote the code is
+              better still, because it does not share the same blind spots.
+            </li>
+            <li>
+              <strong style="color: var(--ui-color-text)"
+                >Findings with evidence, no score.</strong
+              >
+              Each finding names the rubric line, the file and line or Figma
+              node, and how sure the judge is. A grade like 81 out of 100 does
+              not say what failed, and it gives the agent a number to push up.
+            </li>
+            <li>
+              <strong style="color: var(--ui-color-text)"
+                >It advises, it does not block.</strong
+              >
+              The same model on the same input can answer differently, so a
+              judge cannot be a gate: a gate's result is its exit code. A human
+              reads the findings. A finding that keeps coming back is a
+              candidate for a new scripted check.
+            </li>
+          </ul>
+          <p class="docs-step-desc">
+            The rubric below covers only what Atelier's gates do not. Rewrite
+            its six lines for your own design system, and keep a tally of which
+            findings turned out to be real. That tally tells you which lines to
+            keep.
+          </p>
+          <Code
+            code={JUDGE_PROMPT}
+            lang="text"
+            wrap
+            title="component judge prompt"
+          />
+          <p class="docs-step-desc">
+            The same judge can review the task instead of the component. Give it
+            the
+            <a href="#step-inspect" class="docs-link-primary"
+              >handoff document</a
+            >
+            and the diff, and ask what the diff misses and what it adds that
+            nobody asked for. The second question catches the variants and
+            states an agent invents, which is what the
+            <a href="/prompts" class="docs-link-primary">prompt guard</a> tries
+            to prevent up front.
+          </p>
+          <Code
+            code={TICKET_PROMPT}
+            lang="text"
+            wrap
+            title="ticket review prompt"
+          />
+          <p class="docs-step-desc">
+            Not to be confused with the <code>evals/</code> folders under
+            <code>skills/</code>: those test whether an agent follows a skill.
+            They do not grade a component.
+          </p>
+          <details class="d2c-why">
+            <summary>Why (for maintainers)</summary>
+            <div class="d2c-why-body">
+              <p>
+                Why the judge has no score and never gates, and why Atelier
+                teaches a prompt instead of shipping an eval skill:
+                <a
+                  href="https://github.com/DominikPieper/atelier-ui/blob/main/plan/adr/0164-the-judge-advises-it-does-not-gate.md"
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  class="docs-link-primary"
+                  >ADR-0164</a
                 >.
               </p>
             </div>
