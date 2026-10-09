@@ -134,9 +134,13 @@ const SCOPE_RULES = [
   [/^line-height\//, ['LINE_HEIGHT']],
   [/^opacity\//, ['OPACITY']],
   [/^font\/family$/, ['FONT_FAMILY']],
+  [/^(control|row)-height\//, ['WIDTH_HEIGHT']],
 ];
 function scopesFor(token) {
   for (const [re, scopes] of SCOPE_RULES) if (re.test(token)) return scopes;
+  // Loud on purpose: an unmapped token silently becomes ALL_SCOPES in Figma,
+  // which makes it pickable for every property. Add a rule above instead.
+  console.warn(`no scope rule for "${token}" — falling back to ALL_SCOPES`);
   return ['ALL_SCOPES'];
 }
 
@@ -166,6 +170,8 @@ export function buildDefs() {
     }
     const entry = {
       cssVar,
+      // What an agent reads over MCP: Figma's codeSyntax.WEB for the variable.
+      codeSyntaxWeb: `var(${cssVar})`,
       name: named.token,
       type: named.type,
       scopes: scopesFor(named.token),

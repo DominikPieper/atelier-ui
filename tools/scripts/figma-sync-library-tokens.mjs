@@ -24,7 +24,7 @@ const PAYLOAD = `
 const DEFS = __DEFS__;
 const collections = await figma.variables.getLocalVariableCollectionsAsync();
 let coll = collections.find((c) => c.name === 'Library Tokens');
-const report = { createdCollection: false, created: 0, valueUpdates: 0, scopeUpdates: 0, aliasUpdates: 0, unchanged: 0, orphans: [] };
+const report = { createdCollection: false, created: 0, valueUpdates: 0, scopeUpdates: 0, aliasUpdates: 0, codeSyntaxUpdates: 0, unchanged: 0, orphans: [] };
 if (!coll) {
   coll = figma.variables.createVariableCollection('Library Tokens');
   coll.renameMode(coll.modes[0].modeId, 'Light');
@@ -62,6 +62,10 @@ for (const d of DEFS) {
   const haveScopes = (v.scopes || []).slice().sort().join(',');
   if (wantScopes !== haveScopes) {
     try { v.scopes = d.scopes; report.scopeUpdates++; } catch (e) { /* invalid for type */ }
+  }
+  if ((v.codeSyntax || {}).WEB !== d.codeSyntaxWeb) {
+    v.setVariableCodeSyntax('WEB', d.codeSyntaxWeb);
+    report.codeSyntaxUpdates++;
   }
   if ('aliasOf' in d) continue;
   let touched = false;
@@ -137,7 +141,7 @@ async function main() {
     console.log(
       `✓ Library Tokens synced — ${defs.length} definitions: ` +
         `${r.created} created, ${r.valueUpdates} value update(s), ${r.aliasUpdates} alias update(s), ` +
-        `${r.scopeUpdates} scope update(s), ${r.unchanged} unchanged.` +
+        `${r.scopeUpdates} scope update(s), ${r.codeSyntaxUpdates} codeSyntax update(s), ${r.unchanged} unchanged.` +
         (r.createdCollection ? ' (collection created)' : ''),
     );
     if (r.orphans.length) {
