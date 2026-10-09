@@ -181,14 +181,52 @@ test('--emit: a component without a snapshot master keeps the code names', () =>
   }
 });
 
+test('a boolean code prop on a Figma axis without `values` must be exactly true/false, else [AXIS]', () => {
+  const fx = copyFixture();
+  try {
+    const snapshot = fx.readJson('snapshot.json');
+    snapshot.components[0].variantAxes['Ausgewählt'] = ['ja', 'nein'];
+    fx.writeJson('snapshot.json', snapshot);
+    const r = runBin('check-contracts', [], { cwd: fx.dir });
+    assert.equal(r.status, 1, r.stdout + r.stderr);
+    assert.match(
+      r.stdout,
+      /\[AXIS\] \(angular\) NButton: axisMap Ausgewählt -> selected is a boolean prop but the Figma axis has values ja, nein; add `values` mapping each Figma value to true\/false/,
+    );
+    assert.match(r.stdout, /total: 1 error\(s\)/);
+  } finally {
+    fx.remove();
+  }
+});
+
+test('a boolean code prop on a Figma axis passes with explicit `values`, in either order', () => {
+  const fx = copyFixture();
+  try {
+    const snapshot = fx.readJson('snapshot.json');
+    snapshot.components[0].variantAxes['Ausgewählt'] = ['nein', 'ja'];
+    fx.writeJson('snapshot.json', snapshot);
+    const contractPath = join(fx.dir, 'contracts', 'n-button.contract.ts');
+    const src = readFileSync(contractPath, 'utf-8').replace(
+      "codeProp: 'selected',",
+      "codeProp: 'selected',\n      values: { ja: true, nein: false },",
+    );
+    writeFileSync(contractPath, src);
+    const r = runBin('check-contracts', [], { cwd: fx.dir });
+    assert.equal(r.status, 0, r.stdout + r.stderr);
+  } finally {
+    fx.remove();
+  }
+});
+
 test('--emit: a boolean code prop on a Figma axis states true/false, so value drift on that axis is reported', () => {
   const fx = copyFixture();
   try {
     const snapshot = fx.readJson('snapshot.json');
     snapshot.components[0].variantAxes['Ausgewählt'] = ['ja', 'nein'];
     fx.writeJson('snapshot.json', snapshot);
-    // The gate lets a no-values axisMap cover every axis value, so it stays 0.
-    const codeSpec = emitCodeSpec(fx);
+    // The gate now rejects this axis ([AXIS], exit 1) but --emit still writes
+    // the spec, so the parity tool shows the same drift next to the gate error.
+    const codeSpec = emitCodeSpec(fx, 1);
     const prop = codeSpec.componentAPI.props.find(
       (p) => p.name === 'Ausgewählt',
     );

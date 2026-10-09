@@ -1128,6 +1128,24 @@ function processComponent(
             }
           } else {
             for (const v of valuesToCheck) covered.add(v);
+            // Without `values`, a boolean prop's Figma axis must already be
+            // exactly the strings 'true' and 'false' (any order, case-sensitive):
+            // anything else (ja/nein, an/aus, a single value) leaves open which
+            // Figma value means true, so the author has to say it.
+            if (
+              resolved.kind === 'boolean' &&
+              !(
+                axisValues.length === 2 &&
+                axisValues.includes('true') &&
+                axisValues.includes('false')
+              )
+            ) {
+              report(
+                'AXIS',
+                fw,
+                `${name}: axisMap ${axisName} -> ${entry.codeProp} is a boolean prop but the Figma axis has values ${axisValues.join(', ')}; add \`values\` mapping each Figma value to true/false`,
+              );
+            }
             if (resolved.kind === 'enum' && resolved.members) {
               const propSet = new Set(resolved.members);
               const axisSet = new Set(axisValues);

@@ -160,6 +160,11 @@ Each finding has a tag and a level. Errors fail the run (exit 1), warnings do no
   `STALE-EXEMPTION`, `ENUM-UNDRAWN`, `COVERAGE`, `DOCGEN-EMPTY`, `DOCGEN-FAILED`, `ROSTER`
   (docgen measured nothing although stories exist: a gate that measures nothing is a
   failure, not a pass).
+- `AXIS` also fires for an `axisMap` entry **without** `values` whose code prop (direct, or
+  `Child.prop` when the child's type resolves) is boolean, unless the Figma axis is exactly
+  the two strings `true` and `false` (any order, case-sensitive). An axis like `ja | nein`
+  or `an | aus`, or a single-value axis, says nothing about which value means `true`: add
+  `values: { ja: true, nein: false }`. Entries with `values` are unaffected.
 - Warnings: `CONTRACT-ORPHAN`, `FIGMA-ONLY` (a `figmaOnly` reason still `UNEXPLAINED`),
   `FW-ONLY`, `NO-MASTER`, `COVERAGE-BOOL`, `UNRESOLVED-ARGS`, `UNMIRRORED`, `STALE-MIRROR`,
   `NO-STORY-META`.

@@ -1956,7 +1956,8 @@ and npm deprecations each need the owner's explicit go.
         fixture; Codex cross-check found two defects, both fixed). Still open: the live Snackbar
         parity run and a live multi-file snapshot against the Desktop Bridge (owner's machine);
         `--file` targeting is tested only against a fake modelled on figma-console-mcp 1.40.0.
-  - [ ] Gate gap found in review (pre-existing, not changed): an `axisMap` entry without `values`
+  - [x] Gate gap found in review, closed 2026-10-09 (`[AXIS]` error when a no-`values` boolean
+        axisMap entry meets an axis that is not exactly `true`/`false`): an `axisMap` entry without `values`
         marks every Figma axis value covered, so a boolean prop mapped to an axis `ja/nein`
         passes `check-contracts` (pinned in the package tests). `--emit` now surfaces it in
         parity; decide whether the gate should require `values` when a boolean meets a
