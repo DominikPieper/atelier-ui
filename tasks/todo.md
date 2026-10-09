@@ -1946,9 +1946,12 @@ The ones the owner and I will walk through together.
 - [ ] Defects found by the wave-2 research runs (2026-10-08, evidence in
       `plan/research/ai-ds-course-gap-2026-10-08/wave2-a3-parity-run.md` and
       `wave2-a10-readiness-run.md`):
-  - [ ] AtlBadge font weight: Figma master 500, code `--ui-font-weight-semibold`. Owner chose
-        600 (2026-10-09). Figma's `ty/label` / `ty/control` are Medium and shared; a SemiBold style
-        needs a `--ui-type-*` role first (`check:figma` [TEXT-STYLE]). Open: mint a badge role or not.
+  - [x] AtlBadge font weight (2026-10-09, ADR-0162): owner chose 600. New role
+        `--ui-type-emphasis` (SemiBold sm/tight) + Figma `ty/emphasis`, bound to badge md, step
+        numbers, current breadcrumb. Badge `sm` keeps a recorded 500/600 split: SemiBold xs has
+        only 2 clean CSS rules, so no role (ADR-0074 rule of three).
+  - [ ] Move `.step-circle` and `.breadcrumb-current` onto `font: var(--ui-type-emphasis)`
+        (computed-identical candidates from ADR-0162).
         Also: add a `live` scenario (`role="status"` passed) to the three `atl-badge.a11y.spec.*`.
   - [x] (done 2026-10-09: no default role in any framework; consumer passes `role="status"`; metadata role `none`) AtlBadge `role="status"` is set on every host, while the master description says badges
         are decorative by default and only wrapped in `role="status"` when they announce changes.
