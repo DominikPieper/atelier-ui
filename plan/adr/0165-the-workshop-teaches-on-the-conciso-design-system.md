@@ -49,6 +49,17 @@ English.
 4. **The contract tool becomes its own npm package**, `@atelier-ui/contracts`, published from
    Atelier and installed by both the CDS and the workshop workspace. Atelier keeps a release
    pipeline for that package and `create-workspace` only.
+
+   **Revised 2026-10-09** (same day, before any code): the package is named
+   `@conciso/design-contracts` and its final home is the CDS repo, next to its only CI consumer
+   after Atelier's library is removed (P6), with the CDS's existing release chain. It is first
+   built in Atelier to try it out: Atelier's library still exercises all three frameworks, and the
+   CDS consumes a packed tarball on a branch. It is not published from Atelier; it moves to the
+   CDS once proven and is published from there. The rejected option "put the contract tool in
+   the CDS repo" below is thereby reversed for the tool's _location_; its concern, that the tool
+   must stay design-system-neutral, is kept as a requirement (tests on a non-CDS fixture,
+   prefixes from config).
+
 5. **More frameworks remain likely, later, in the CDS.** The cross-framework gates and the
    per-framework docgen path are not deleted without a trace: they stay recoverable from a tagged
    commit and can move to the CDS when it gets React or Vue wrappers. Until then the workshop is

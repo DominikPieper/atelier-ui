@@ -1937,11 +1937,28 @@ and npm deprecations each need the owner's explicit go.
 - [x] P0a ADR-0165 in Atelier.
 - [ ] P0b CDS ADR superseding CDS-ADR-0015 (contract layer in the repo, `check-contracts` as an
       offline CI gate, snapshot refresh manual). In the CDS repo, via PR.
-- [ ] P1 `@atelier-ui/contracts` package from the scaffold scripts, with the spike's fixes:
-      `--file` choosing among several connected Figma files, create the output directory, works in
-      `"type": "module"` repos, configurable token prefix for `--emit`, parity codeSpec applies
-      the contract's `axisMap`. `create-workspace` consumes the package instead of copying
-      scripts. Done when its tests pass and the spike runs with no manual steps.
+- [ ] P1 `@conciso/design-contracts`, built in Atelier first to try it out, moved to the CDS repo
+      once proven (ADR-0165 §4, revised 2026-10-09). Not published from Atelier.
+  - [ ] P1.1 `libs/design-contracts`: self-contained (own `package.json`, plain Node ESM, no Nx
+        or Atelier imports), bins `check-contracts` and `figma-snapshot-contracts`, exports the
+        `ComponentContract` type. Source of truth for the scripts from now on. Done when Atelier's
+        `check:contracts` runs through the package bin with unchanged output (all three
+        frameworks).
+  - [ ] P1.2 Pin today's behaviour first: `node --test` on a small non-CDS fixture (one
+        component, snapshot, contract, story; `--ui-*` prefix, English names), golden output.
+        Done when green.
+  - [ ] P1.3 Spike fixes, each with a red test first: `--file` among several connected files,
+        create the output dir, `.cjs` for `"type": "module"`, token prefixes from config (today
+        hard-coded `--ui-`, `check-contracts.mjs:999`), `--emit` maps the codeSpec to Figma names
+        via `axisMap`/`figmaOnly`. Done when tests are green and a Snackbar parity run shows no
+        name-only discrepancies (needs the owner's bridge).
+  - [ ] P1.4 Rewire Atelier: `sync-preflight` copies from the package into the scaffold;
+        `check-manifest-parity` imports docgen from the package instead of `tools/scripts/lib`.
+        Done when `check:all` passes.
+  - [ ] P1.5 Try-out in the CDS: `npm pack` tarball installed on a CDS branch, spike scripts
+        deleted there. Done when `check:contracts` exits 0 there with no manual step.
+  - [ ] P1.6 Move to the CDS (`packages/contracts`, into its release chain), after P0b. Atelier
+        keeps no copy; the scaffold consumes the published package (P3).
 - [ ] P2 Contracts for all CDS components, `check-contracts` in the CDS CI. Done when it exits 0
       in CI.
 - [ ] P3 `create-workspace` on `@conciso/design-system-angular`; React/Vue branches removed for
@@ -1952,8 +1969,7 @@ and npm deprecations each need the owner's explicit go.
       `atelier-design` skill, rewrite the repo branch of `design-to-code`. Redo course-gap
       examples built on Atl components. Done when the docs gates pass.
 - [ ] P6 Tag the last commit with the library, then remove `libs/{angular,react,vue,spec}`, their
-      gates, Storybooks and hosted MCP endpoints; keep the release pipeline for `create-workspace`
-      and `contracts`; deprecate `@atelier-ui/{angular,react,vue}` on npm. Done when `check:all`
+      gates, Storybooks and hosted MCP endpoints; keep the release pipeline for `create-workspace`; deprecate `@atelier-ui/{angular,react,vue}` on npm. Done when `check:all`
       passes.
 
 ### AI & Design Systems course gaps (2026-10-08)
