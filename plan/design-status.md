@@ -16,7 +16,7 @@ a typography study says nothing about how the component should look.
 | `accordion` | **AtlAccordionGroup.dc.html** | expanded | 2 | 2026-08-27 (`51d2d9d`) | — | — | yes |
 | `alert` | **AtlAlert.dc.html** | variant | 4 | 2026-08-27 (`4c57b74`) | all 3 | yes | — |
 | `avatar` | **AtlAvatar.dc.html** | size | 5 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
-| `badge` | **AtlBadge.dc.html** | variant · size | 10 | 2026-08-27 (`3c15080`) | all 3 | — | yes |
+| `badge` | **AtlBadge.dc.html** | variant · size | 10 | 2026-08-27 (`3c15080`) | all 3 | yes | yes |
 | `breadcrumbs` | **AtlBreadcrumbs.dc.html** | current | 2 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
 | `button` | **AtlButton.dc.html** | variant · size · state | 24 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |
 | `card` | **AtlCard.dc.html** | variant · padding | 12 | 2026-08-27 (`51d2d9d`) | all 3 | — | yes |

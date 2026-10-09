@@ -294,6 +294,15 @@ export const tokens: Record<string, TokenAnnotation> = {
       'Added with 3 CSS sites and 10 deduplicated Figma nodes across 3 masters — on the threshold, not above it, which ADR-0085 records rather than rounds up.',
     ],
   },
+  '--ui-type-emphasis': {
+    intent:
+      'Emphasis role: semibold 0.875rem, tight. The text of a small element that is stressed rather than read — a badge, a step marker, the current breadcrumb.',
+    constraints: [
+      'Letter-spacing and text-transform are not part of the role — a badge adds its own tracking.',
+      'Tight leading, for the same reason as the row roles: these elements take their height from padding or a stated box, not from the text.',
+      'Added with 3 CSS rules and 15 Figma text nodes (ADR-0162). The semibold xs combination has no role — only 2 clean CSS rules.',
+    ],
+  },
   '--ui-type-control': {
     intent:
       'Control role: medium 0.875rem, tight. The label ON a control — a tab, a page button, a step, a chip, a select label, a chat action.',

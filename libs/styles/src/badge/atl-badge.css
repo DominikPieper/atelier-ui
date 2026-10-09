@@ -28,7 +28,7 @@
 
 .atl-badge.size-md {
   padding: 0.3125rem var(--ui-spacing-3);
-  font-size: var(--ui-font-size-sm);
+  font: var(--ui-type-emphasis);
 }
 
 /* Variants */

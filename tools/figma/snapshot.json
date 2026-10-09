@@ -2,9 +2,9 @@
   "meta": {
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "fileName": "Atelier UI",
-    "figmaLastModified": "2026-10-08T19:20:10Z",
-    "generatedAt": "2026-10-09T04:27:37.354Z",
-    "gitSha": "4b13fa79",
+    "figmaLastModified": "2026-10-09T04:30:54Z",
+    "generatedAt": "2026-10-09T04:39:40.656Z",
+    "gitSha": "cd028849",
     "serverVersion": "0.1.0",
     "coverage": "All 43 masters. Token/auto-layout checks sample each master's default variant.",
     "note": "Facts captured from Figma via figma-console MCP read-tools. Rules live in check-figma.js."
@@ -200,6 +200,14 @@
         "family": "Instrument Sans",
         "style": "SemiBold",
         "size": 16,
+        "lineHeightUnit": "PERCENT",
+        "lineHeightValue": 125
+      },
+      {
+        "name": "ty/emphasis",
+        "family": "Instrument Sans",
+        "style": "SemiBold",
+        "size": 14,
         "lineHeightUnit": "PERCENT",
         "lineHeightValue": 125
       },
@@ -5261,7 +5269,7 @@
       "rootPaint": {
         "variant=default, size=md": {
           "layoutMode": "HORIZONTAL",
-          "width": 72,
+          "width": 73,
           "height": 22,
           "pad": [
             0,
@@ -5294,7 +5302,7 @@
         },
         "variant=success, size=md": {
           "layoutMode": "HORIZONTAL",
-          "width": 92,
+          "width": 93,
           "height": 22,
           "pad": [
             0,
@@ -5327,7 +5335,7 @@
         },
         "variant=warning, size=md": {
           "layoutMode": "HORIZONTAL",
-          "width": 92,
+          "width": 93,
           "height": 22,
           "pad": [
             0,
@@ -5360,7 +5368,7 @@
         },
         "variant=danger, size=md": {
           "layoutMode": "HORIZONTAL",
-          "width": 92,
+          "width": 93,
           "height": 22,
           "pad": [
             0,
@@ -5393,7 +5401,7 @@
         },
         "variant=info, size=md": {
           "layoutMode": "HORIZONTAL",
-          "width": 92,
+          "width": 93,
           "height": 22,
           "pad": [
             0,

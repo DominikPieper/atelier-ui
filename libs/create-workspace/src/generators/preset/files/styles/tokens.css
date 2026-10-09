@@ -168,6 +168,24 @@
   --ui-type-row-sm: var(--ui-font-weight-normal) var(--ui-font-size-sm) /
     var(--ui-line-height-tight) var(--ui-font-family);
 
+  /* The emphasis role (ADR-0162). SemiBold at sm, tight: the text of a small
+   * element that is stressed rather than read — a badge, a step marker, the
+   * current breadcrumb. Measured on BOTH sides before being added (ADR-0074):
+   *
+   *   emphasis  SemiBold 14 — 3 CSS rules (.atl-badge.size-md, .step-circle,
+   *             .breadcrumb-current) and 15 Figma text nodes (AtlAvatar 2,
+   *             AtlAvatarGroup 5, AtlBreadcrumbItem 1, AtlStep 4, AtlTh 3),
+   *             all 125% leading.
+   *
+   * The xs sibling (SemiBold 12, tight) has NO role: only 2 clean CSS rules
+   * (table header cell, badge sm) — the other xs rules are mono, or inherit a
+   * leading that is not tight — so it misses the rule of three (ADR-0162).
+   * Letter-spacing and text-transform are not part of a role: badge and table
+   * header add their own.
+   */
+  --ui-type-emphasis: var(--ui-font-weight-semibold) var(--ui-font-size-sm) /
+    var(--ui-line-height-tight) var(--ui-font-family);
+
   /* ── Colours · light mode (default) ────────────────────────── */
 
   /* Primary — Conciso deep teal */

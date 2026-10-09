@@ -2205,6 +2205,10 @@ Each `--ui-*` token carries an intent and a list of constraints. Reach for the t
     intent: Display role: Instrument Serif italic at 2.25rem. The single largest line on a surface — wordmark, hero, section opener.
     constraints: At most one per surface; it stops reading as emphasis when repeated.; Never override its weight — the face has only 400. Scale it with --ui-font-size-* or change the case instead.; Pair with --ui-letter-spacing-tight; `font:` does not carry letter-spacing.
 
+  --ui-type-emphasis
+    intent: Emphasis role: semibold 0.875rem, tight. The text of a small element that is stressed rather than read — a badge, a step marker, the current breadcrumb.
+    constraints: Letter-spacing and text-transform are not part of the role — a badge adds its own tracking.; Tight leading, for the same reason as the row roles: these elements take their height from padding or a stated box, not from the text.; Added with 3 CSS rules and 15 Figma text nodes (ADR-0162). The semibold xs combination has no role — only 2 clean CSS rules.
+
   --ui-type-headline
     intent: Headline role: Instrument Sans bold at 1.5rem. Where a surface should feel heavy — this is the weight a UI actually registers.
     constraints: This is the role that carries emphasis, not the display role above it.; Declare before any font-* override on the same rule: `font:` is a shorthand and resets style, variant, stretch and line-height.
