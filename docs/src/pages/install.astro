@@ -29,15 +29,14 @@ const INSTALL_CMD: Record<string, Record<string, string>> = {
   },
 };
 
-// The recommended import is the framework-neutral one: the token source of truth
-// is published in @atelier-ui/styles. The per-framework path below it is the same
-// file, shipped in each framework package, and keeps working.
-const TOKEN_IMPORT = "@import '@atelier-ui/styles/tokens.css';";
+// The recommended import is the framework package's own copy: no extra install.
+// The neutral one is the same file, published in @atelier-ui/styles.
 const TOKEN_IMPORT_FW: Record<string, string> = {
   Angular: "@import '@atelier-ui/angular/styles/tokens.css';",
   React: "@import '@atelier-ui/react/styles/tokens.css';",
   Vue: "@import '@atelier-ui/vue/styles/tokens.css';",
 };
+const TOKEN_IMPORT = "@import '@atelier-ui/styles/tokens.css';";
 const STYLES_INSTALL: Record<string, string> = {
   Angular: 'npm install @atelier-ui/styles',
   React: '',
@@ -416,7 +415,7 @@ const IMPORT_NOTE: Record<string, string> = {
           <span class="docs-file-path-name">{TOKEN_FILE[fw].file}</span>
           <span class="docs-file-path-notes">{TOKEN_FILE[fw].notes}</span>
         </div>
-        <Code code={TOKEN_IMPORT} lang="css" />
+        <Code code={TOKEN_IMPORT_FW[fw]} lang="css" />
         <p
           style="
             color: var(--ui-color-text-muted);
@@ -424,21 +423,23 @@ const IMPORT_NOTE: Record<string, string> = {
             margin: 0.75rem 0 0.5rem;
           "
         >
+          The same stylesheet is also published as
+          <code>@atelier-ui/styles</code>, for apps that mix frameworks or want
+          the styles package directly:
           {STYLES_INSTALL[fw] ? (
             <>
-              <code>@atelier-ui/styles</code> is not installed by the {fw}
-              package, so add it first: <code>{STYLES_INSTALL[fw]}</code>.
+              {' '}
+              install it first with <code>{STYLES_INSTALL[fw]}</code>.
             </>
           ) : (
             <>
-              <code>@atelier-ui/react</code> already depends on
-              <code>@atelier-ui/styles</code>, so nothing more to install.
+              {' '}
+              <code>@atelier-ui/react</code> already depends on it, so nothing
+              more to install.
             </>
           )}
-          The same stylesheet is still shipped inside the {fw} package, so the
-          existing import keeps working:
         </p>
-        <Code code={TOKEN_IMPORT_FW[fw]} lang="css" />
+        <Code code={TOKEN_IMPORT} lang="css" />
       </div>)}
       <div
         style="

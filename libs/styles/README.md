@@ -25,10 +25,11 @@ dark) are published here too, and this is their source of truth:
 @import '@atelier-ui/styles/tokens.css';
 ```
 
-The same file still ships inside each framework package, so
-`@import '@atelier-ui/react/styles/tokens.css'` (and the `angular` / `vue`
-equivalents) keeps working unchanged. `@atelier-ui/react` depends on this
-package; with Angular or Vue, install it yourself to use the import above.
+Most apps should import the framework package's own copy instead, which needs
+no extra install: `@import '@atelier-ui/react/styles/tokens.css'` (or the
+`angular` / `vue` equivalent). Use the import above for apps that mix
+frameworks or want this package directly; with Angular or Vue, install it
+yourself first.
 
 ## Layout
 

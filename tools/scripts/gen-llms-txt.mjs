@@ -287,16 +287,16 @@ function buildQuickStart() {
 
 ### Design tokens (add to global styles)
 
-Recommended, framework-neutral (${SITE_URL}/install). Angular and Vue need
-\`npm install @atelier-ui/styles\` first; the React package already depends on it:
-
-  @import '@atelier-ui/styles/tokens.css';
-
-The same stylesheet ships inside each framework package, with no extra install:
+Recommended, the framework package's own copy, no extra install (${SITE_URL}/install):
 
   @import '@atelier-ui/angular/styles/tokens.css';
   @import '@atelier-ui/react/styles/tokens.css';
   @import '@atelier-ui/vue/styles/tokens.css';
+
+Alternative for apps that mix frameworks, or want the styles package directly. Angular
+and Vue need \`npm install @atelier-ui/styles\` first; the React package already depends on it:
+
+  @import '@atelier-ui/styles/tokens.css';
 
 ### Framework-specific patterns
 
