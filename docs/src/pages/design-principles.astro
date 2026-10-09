@@ -17,6 +17,7 @@ import PageHero from '../components/PageHero.astro';
     { id: 'principle-6', label: 'MCP server closes the loop' },
     { id: 'principle-7', label: 'No design system from scratch' },
     { id: 'context-lifecycle', label: 'The context lifecycle' },
+    { id: 'deprecation', label: 'Deprecation windows and codemods' },
   ]}
 >
   <div class="docs-inline-page">
@@ -482,6 +483,158 @@ import PageHero from '../components/PageHero.astro';
         Write the context down at the stage where it is decided, in an artefact
         the next stage reads. If it lives only in someone's head, it stops at
         the handoff.
+      </div>
+    </div>
+
+    <!-- Deprecation -->
+    <div class="docs-section">
+      <h2 id="deprecation" class="docs-section-title">
+        Deprecation windows and codemods
+      </h2>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.65;
+          margin-bottom: 0.75rem;
+        "
+      >
+        Consistent names only pay off if you can change them later. The course
+        warns that the normalising pass of its shared-language station can upend
+        hard-earned naming conventions and break things in production, so be
+        careful with component props, values and token names that consumers
+        already use. Its answer is version control, codemods and good
+        communication (transcript 213). A rename is a migration for everyone
+        downstream, and your agents are among them.
+      </p>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.65;
+          margin-bottom: 0.75rem;
+        "
+      >
+        <strong>The pattern.</strong> The course demo renames
+        <code>inverted</code> to <code>knockout</code> (components sitting on a
+        dark background). The old prop stays, flagged as deprecated, and a
+        removal date is recorded: three months in the demo. The new prop is
+        introduced right next to it, and the code applies the new behaviour if
+        either flag is set, so nothing breaks downstream. The editor draws a
+        strikethrough through the deprecated prop, which is the signal for
+        maintainers and consumers. The presenter's rule of thumb: the more
+        consequential and breaking the change, the longer the window (transcript
+        209).
+      </p>
+      <div class="docs-code-block">
+        <div class="docs-code-block-header">
+          <span class="docs-code-block-lang">ts</span>
+        </div>
+        <pre><code>{"// Sketch for your own design system, after the pattern in transcript 209\n/** Renders for a dark surface. */\nknockout?: boolean;\n/** @deprecated Use `knockout`. Removed after the deprecation window. */\ninverted?: boolean;\n\nconst isKnockout = knockout || inverted; // old callers keep working"}</code></pre>
+      </div>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.65;
+          margin: 0.75rem 0;
+        "
+      >
+        <strong>How an agent learns it.</strong> In the demo the presenter asks
+        the agent to confirm that the new name is the default way of expressing
+        the use case in the design system's MCP, and that the old one still
+        works but is flagged deprecated (transcript 209). The agent answers that
+        it is exposed there. Without that, an agent keeps generating the old
+        prop, because that is what the existing code and docs show.
+      </p>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.65;
+          margin-bottom: 0.75rem;
+        "
+      >
+        <strong>Codemods</strong> are the mechanical half: a script that
+        rewrites consumer source from the old shape to the new one, so a
+        deprecation window ends in a migration rather than a surprise. The
+        course names them but does not demonstrate one (transcript 213).
+      </p>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.65;
+          margin-bottom: 0.75rem;
+        "
+      >
+        <strong>Figma side.</strong> The <code>figma-workspace-architect</code>
+        skill's migration playbook has the same shape for a design file: add the
+        new shape alongside the old, mark the old one deprecated (a
+        <code>_deprecated</code> prefix or an updated description), migrate
+        consumers, wait until the next design review or code release, whichever
+        is later, then remove. Its warning: if you want to skip the wait because
+        "nobody uses it", assume someone does. Variant properties have no alias
+        mechanism, so a variant rename always takes this route.
+      </p>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.65;
+          margin-bottom: 0.75rem;
+        "
+      >
+        <strong>What Atelier has today.</strong> Less than the pattern above.
+        Releases use <code>nx release</code> with conventional commits for the
+        library packages. Below 1.0 a <code>feat</code> rolls the patch version
+        and a <code>!</code> (a breaking change) the minor: ADR-0163 below took
+        the packages from 0.3 to 0.4. While the packages are below 1.0, ADR-0023
+        says there is no API-stability promise and breaking changes are allowed
+        in any release. It reserves 1.0.0 for an explicit decision, paired with
+        an API-stability and deprecation policy that the audit found missing.
+        That policy is still unwritten: there is no <code>@deprecated</code> tag
+        in the library code, and no codemod in the repo.
+      </p>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.65;
+          margin-bottom: 0.75rem;
+        "
+      >
+        <strong>A worked example of the tradeoff.</strong> ADR-0163 changed the
+        Angular button from <code>&lt;atl-button&gt;</code> to
+        <code>&lt;button atl-button&gt;</code>, because the custom element could
+        not submit a form or be reached with the keyboard. It shipped as a
+        <code>feat(angular)!:</code> commit with no deprecation window and no
+        codemod, and the ADR records it as breaking for Angular consumers. The
+        ADR does not claim a window was considered. It rejects keeping
+        <code>&lt;atl-button&gt;</code> around an inner
+        <code>&lt;button&gt;</code> because tooltip, menu trigger and
+        <code>aria-label</code> would all need forwarding. In a pre-1.0 library
+        that is a defensible call. In a design system other teams build on, the
+        same rename would want a window, a migration script, and an announcement
+        first.
+      </p>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.65;
+          margin-bottom: 1rem;
+        "
+      >
+        <strong>Does the manifest carry the tag?</strong> Partly verified. The
+        Angular docgen worker in <code>@storybook/angular-vite</code> reads a
+        <code>@deprecated</code> JSDoc tag into its member data and writes it
+        back out in the doc comment it generates. We did not confirm that the
+        Storybook MCP's <code>docs-show</code> prints it: the prop mapping in
+        <code>@storybook/mcp</code> passes the prop description along, and we
+        found no separate deprecated field there. Nothing in this repo is marked
+        deprecated, so there is no example to test against. For your own system,
+        put the replacement and the removal date in the description text, so it
+        reaches the agent even if the tag does not, then test it by asking the
+        MCP about the old prop.
+      </p>
+      <div class="docs-rule">
+        <span class="docs-rule-label">Rule</span>
+        Add the new name next to the old one, flag the old one deprecated with a
+        removal date, and check that the agent's source of truth shows the flag.
+        Remove only after the window, and give the consumers a script.
       </div>
     </div>
   </div>
