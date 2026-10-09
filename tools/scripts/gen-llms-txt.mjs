@@ -37,6 +37,12 @@ const LLMS_FULL_TXT = resolve(ROOT, 'docs/public/llms-full.txt');
 const METADATA_INDEX = resolve(ROOT, 'libs/spec/src/metadata/index.ts');
 const METADATA_DIR = resolve(ROOT, 'libs/spec/src/metadata');
 const TOKEN_MANIFEST = resolve(ROOT, 'libs/spec/src/tokens.manifest.ts');
+const TOKENS_CSS = resolve(ROOT, 'libs/styles/src/tokens.css');
+const PKG_FILES = {
+  angular: resolve(ROOT, 'libs/angular/package.json'),
+  react: resolve(ROOT, 'libs/react/package.json'),
+  vue: resolve(ROOT, 'libs/vue/package.json'),
+};
 
 const SITE_URL = 'https://atelier.pieper.io';
 
@@ -234,6 +240,16 @@ function buildShortIndex({ categories, docs }, version) {
     `- [Storybook (Vue)](${SITE_URL}/storybook-vue): Vue component stories`,
   );
   lines.push('');
+  lines.push('## Hosted Storybook MCP');
+  lines.push('');
+  lines.push(
+    'Streamable-HTTP MCP endpoints, no auth (POST JSON-RPC with `Accept: application/json, text/event-stream`). Each answers `docs-list`, `docs-show` and `docs-show-story` for its own framework, with Angular two-way bindings and outputs, Vue `v-model`/emits, or React props. Ids carry a category segment (e.g. `components-inputs-atlbutton`) and cannot be guessed from a component name: call `docs-list` first.',
+  );
+  lines.push('');
+  for (const fw of ['angular', 'react', 'vue']) {
+    lines.push(`- ${SITE_URL}/storybook-${fw}/mcp`);
+  }
+  lines.push('');
   lines.push('## Components');
   lines.push('');
   for (const key of orderedKeys(categories)) {
@@ -249,15 +265,34 @@ function buildShortIndex({ categories, docs }, version) {
 // Build llms-full.txt — complete API reference.
 // ---------------------------------------------------------------------------
 
-const STATIC_QUICK_START = `## Quick Start
+// The framework ranges come from each package's peerDependencies, so the
+// install lines cannot contradict what npm will actually accept.
+function peerSummary(framework) {
+  const peers = JSON.parse(
+    readFileSync(PKG_FILES[framework], 'utf-8'),
+  ).peerDependencies;
+  return Object.entries(peers ?? {})
+    .map(([name, range]) => `${name} ${range}`)
+    .join(', ');
+}
+
+function buildQuickStart() {
+  return `## Quick Start
 
 ### Install
 
-  npm install @atelier-ui/angular   # Angular 21+
-  npm install @atelier-ui/react     # React 18+
-  npm install @atelier-ui/vue       # Vue 3+
+  npm install @atelier-ui/angular   # peers: ${peerSummary('angular')}
+  npm install @atelier-ui/react     # peers: ${peerSummary('react')}
+  npm install @atelier-ui/vue       # peers: ${peerSummary('vue')}
 
 ### Design tokens (add to global styles)
+
+Recommended, framework-neutral (${SITE_URL}/install). Angular and Vue need
+\`npm install @atelier-ui/styles\` first; the React package already depends on it:
+
+  @import '@atelier-ui/styles/tokens.css';
+
+The same stylesheet ships inside each framework package, with no extra install:
 
   @import '@atelier-ui/angular/styles/tokens.css';
   @import '@atelier-ui/react/styles/tokens.css';
@@ -268,6 +303,7 @@ const STATIC_QUICK_START = `## Quick Start
   Angular — signal inputs, two-way binding via [(value)], Signal Forms via [formField]
   React   — controlled props + callback (value + onValueChange), hooks for context
   Vue     — v-model:value, props + emits, provide/inject for compound components`;
+}
 
 const STATIC_SYNTAX_CHEATSHEET = `## Framework Syntax Cheatsheet
 
@@ -292,47 +328,115 @@ Import lines are identical across frameworks: adjust the package path.
   import { AtlButton } from '@atelier-ui/react';
   import { AtlButton } from '@atelier-ui/vue';`;
 
-const STATIC_DESIGN_TOKENS = `## Design Token System
+// Token names are read from tokens.css (the source of truth) so this section
+// cannot name a token that does not exist. Scale families list every name with
+// its light-theme value; the colour list below is a curated selection, and a
+// name that is missing from tokens.css throws rather than shipping.
+function loadCssTokens() {
+  const css = readFileSync(TOKENS_CSS, 'utf-8');
+  const values = new Map();
+  for (const m of css.matchAll(/^\s*(--ui-[a-z0-9-]+)\s*:\s*([^;]+);/gm)) {
+    if (!values.has(m[1])) values.set(m[1], m[2].replace(/\s+/g, ' ').trim());
+  }
+  return values;
+}
 
-All components use CSS custom properties. Override at :root or on any ancestor element.
+// A trailing `-*` marks a wildcard family (`--ui-row-height-*`): it must prefix
+// at least one declared token rather than equal one.
+const TOKEN_REFERENCE_RE = /--ui-[a-z0-9]+(?:-[a-z0-9]+)*(?:-\*)?/g;
 
-  --ui-font-family          Font stack
-  --ui-font-size-xs/sm/md/lg/xl  Type scale
-  --ui-font-weight-normal/medium/semibold/bold  Weight scale
+function mentionedTokens(text) {
+  return new Set(text.match(TOKEN_REFERENCE_RE) ?? []);
+}
 
-  --ui-spacing-1 through --ui-spacing-12  Spacing scale (0.25rem steps)
+function tokenExists(cssTokens, ref) {
+  if (!ref.endsWith('-*')) return cssTokens.has(ref);
+  const prefix = ref.slice(0, -1);
+  return [...cssTokens.keys()].some((n) => n.startsWith(prefix));
+}
 
-  --ui-radius-sm/md/lg/full  Border radii
-  --ui-shadow-sm/md/lg       Box shadows
+const COLOR_TOKENS = [
+  '--ui-color-primary',
+  '--ui-color-primary-light',
+  '--ui-color-text',
+  '--ui-color-text-muted',
+  '--ui-color-surface',
+  '--ui-color-surface-raised',
+  '--ui-color-surface-sunken',
+  '--ui-color-border',
+  '--ui-color-input-bg',
+  '--ui-color-input-border',
+  '--ui-color-input-border-focus',
+  '--ui-color-input-border-invalid',
+  '--ui-color-placeholder',
+  '--ui-color-error-text',
+  '--ui-focus-ring',
+];
 
-  --ui-color-primary         Brand color
-  --ui-color-primary-light   Tinted brand (for selected states)
-  --ui-color-text            Primary text
-  --ui-color-text-muted      Secondary text
-  --ui-color-background      Page background
-  --ui-color-surface-raised  Card/panel background (elevated above page)
-  --ui-color-surface-sunken  Hover/input background (recessed)
-  --ui-color-border          Default borders
-  --ui-color-input-bg        Input field background
-  --ui-color-input-border    Input border
-  --ui-color-input-border-focus  Focused input border
-  --ui-color-input-border-invalid  Error state border
-  --ui-color-placeholder     Placeholder text color
-  --ui-color-error-text      Error message text
+function firstSentence(text) {
+  const m = text.match(/^.*?[.;](?=\s|$)/);
+  return m ? m[0].replace(/[.;]$/, '') : text;
+}
 
-  --ui-focus-ring            Full focus ring box-shadow value
-
-  --ui-z-dropdown            z-index for dropdowns/panels
-  --ui-z-modal               z-index for dialogs/drawers
-
-Dark mode: all tokens shift automatically via prefers-color-scheme, or set data-theme="dark" on <html>.
-
-Custom theme example:
-  :root {
-    --ui-color-primary: #10b981;
-    --ui-color-primary-light: #d1fae5;
-    --ui-radius-md: 2px; /* sharp corners */
-  }`;
+function buildDesignTokens(cssTokens, manifest) {
+  const family = (prefix, { withValues = false } = {}) =>
+    [...cssTokens.keys()]
+      .filter((n) => n.startsWith(prefix))
+      .map((n) => (withValues ? `${n} (${cssTokens.get(n)})` : n))
+      .join(', ');
+  const lines = [];
+  lines.push('## Design Token System');
+  lines.push('');
+  lines.push(
+    'All components use CSS custom properties. Override at :root or on any ancestor element.',
+  );
+  lines.push(
+    'Use only names listed here or in tokens.css: an undefined var() is not a build error, it silently computes to nothing.',
+  );
+  lines.push('');
+  const scales = [
+    ['Spacing scale (gaps in the numbering are real)', '--ui-spacing-', true],
+    ['Type scale', '--ui-font-size-', true],
+    ['Font weights', '--ui-font-weight-', true],
+    ['Border radii', '--ui-radius-', true],
+    ['Box shadows', '--ui-shadow-', false],
+    ['Font shorthands (use with `font:`)', '--ui-type-', false],
+    ['z-index layers', '--ui-z-', true],
+  ];
+  for (const [label, prefix, withValues] of scales) {
+    const list = family(prefix, { withValues });
+    if (!list) throw new Error(`no ${prefix}* tokens in tokens.css`);
+    lines.push(`  ${label}:`);
+    lines.push(`    ${list}`);
+    lines.push('');
+  }
+  lines.push('  Colours and focus (name, then intent):');
+  for (const name of COLOR_TOKENS) {
+    if (!cssTokens.has(name)) {
+      throw new Error(
+        `${name} is curated in gen-llms-txt.mjs but not in tokens.css`,
+      );
+    }
+    const intent = manifest[name]?.intent;
+    lines.push(`    ${name}${intent ? `  ${firstSentence(intent)}` : ''}`);
+  }
+  lines.push('');
+  lines.push(
+    'The full list, with constraints, is under Token Annotations below.',
+  );
+  lines.push('');
+  lines.push(
+    'Dark mode: all tokens shift automatically via prefers-color-scheme, or set data-theme="dark" on <html>.',
+  );
+  lines.push('');
+  lines.push('Custom theme example:');
+  lines.push('  :root {');
+  lines.push('    --ui-color-primary: #10b981;');
+  lines.push('    --ui-color-primary-light: #d1fae5;');
+  lines.push('    --ui-radius-md: 2px; /* sharp corners */');
+  lines.push('  }');
+  return lines.join('\n');
+}
 
 const STATIC_A11Y = `## Accessibility Notes
 
@@ -410,7 +514,7 @@ function buildTokenAnnotationsBlock(manifest) {
 function buildFullReference(
   { categories, docs },
   version,
-  { metadataBySpec, tokenManifest },
+  { metadataBySpec, tokenManifest, cssTokens },
 ) {
   const total = orderedKeys(categories).length;
   const lines = [];
@@ -424,7 +528,7 @@ function buildFullReference(
   lines.push('');
   lines.push('---');
   lines.push('');
-  lines.push(STATIC_QUICK_START);
+  lines.push(buildQuickStart());
   lines.push('');
   lines.push('---');
   lines.push('');
@@ -474,7 +578,7 @@ function buildFullReference(
     lines.push('');
   }
 
-  lines.push(STATIC_DESIGN_TOKENS);
+  lines.push(buildDesignTokens(cssTokens, tokenManifest));
   lines.push('');
   lines.push('---');
   lines.push('');
@@ -499,6 +603,14 @@ function buildFullReference(
 // ---------------------------------------------------------------------------
 
 const mode = process.argv[2];
+
+function readIfExists(path) {
+  try {
+    return readFileSync(path, 'utf-8');
+  } catch {
+    return '';
+  }
+}
 
 const parsed = parseComponents();
 
@@ -526,10 +638,12 @@ function propsOf(key) {
 const version = readVersion();
 const metadataBySpec = loadMetadata();
 const tokenManifest = loadTokenManifest();
+const cssTokens = loadCssTokens();
 const shortOut = buildShortIndex(parsed, version);
 const fullOut = buildFullReference(parsed, version, {
   metadataBySpec,
   tokenManifest,
+  cssTokens,
 });
 
 if (mode === '--check') {
@@ -544,6 +658,23 @@ if (mode === '--check') {
     } catch {
       drift.push(path);
     }
+  }
+  // Gate: every --ui-* token the published text mentions must exist in
+  // tokens.css (joins the generated text with the token source of truth).
+  const unknown = [];
+  for (const [path, text] of [
+    [LLMS_TXT, shortOut],
+    [LLMS_FULL_TXT, fullOut],
+    ...[LLMS_TXT, LLMS_FULL_TXT].map((p) => [p, readIfExists(p)]),
+  ]) {
+    for (const token of mentionedTokens(text)) {
+      if (!tokenExists(cssTokens, token)) unknown.push(`${path}: ${token}`);
+    }
+  }
+  if (unknown.length) {
+    console.error('llms files mention --ui-* tokens missing from tokens.css:');
+    for (const u of [...new Set(unknown)]) console.error(`  - ${u}`);
+    process.exit(1);
   }
   if (drift.length) {
     console.error(

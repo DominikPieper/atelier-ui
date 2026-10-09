@@ -9,11 +9,18 @@
 
 ### Install
 
-  npm install @atelier-ui/angular   # Angular 21+
-  npm install @atelier-ui/react     # React 18+
-  npm install @atelier-ui/vue       # Vue 3+
+  npm install @atelier-ui/angular   # peers: @angular/core ^22.0.0, @angular/common ^22.0.0, @angular/forms ^22.0.0, @angular/cdk ^22.0.0
+  npm install @atelier-ui/react     # peers: react ^18.0.0 || ^19.0.0, react-dom ^18.0.0 || ^19.0.0
+  npm install @atelier-ui/vue       # peers: vue ^3.0.0
 
 ### Design tokens (add to global styles)
+
+Recommended, framework-neutral (https://atelier.pieper.io/install). Angular and Vue need
+`npm install @atelier-ui/styles` first; the React package already depends on it:
+
+  @import '@atelier-ui/styles/tokens.css';
+
+The same stylesheet ships inside each framework package, with no extra install:
 
   @import '@atelier-ui/angular/styles/tokens.css';
   @import '@atelier-ui/react/styles/tokens.css';
@@ -1468,35 +1475,47 @@ Each entry lists:
 ## Design Token System
 
 All components use CSS custom properties. Override at :root or on any ancestor element.
+Use only names listed here or in tokens.css: an undefined var() is not a build error, it silently computes to nothing.
 
-  --ui-font-family          Font stack
-  --ui-font-size-xs/sm/md/lg/xl  Type scale
-  --ui-font-weight-normal/medium/semibold/bold  Weight scale
+  Spacing scale (gaps in the numbering are real):
+    --ui-spacing-1 (0.25rem), --ui-spacing-2 (0.5rem), --ui-spacing-3 (0.75rem), --ui-spacing-4 (1rem), --ui-spacing-5 (1.25rem), --ui-spacing-6 (1.5rem), --ui-spacing-8 (2rem), --ui-spacing-10 (2.5rem), --ui-spacing-12 (3rem), --ui-spacing-16 (4rem)
 
-  --ui-spacing-1 through --ui-spacing-12  Spacing scale (0.25rem steps)
+  Type scale:
+    --ui-font-size-2xs (0.625rem), --ui-font-size-xs (0.75rem), --ui-font-size-sm (0.875rem), --ui-font-size-md (1rem), --ui-font-size-lg (1.125rem), --ui-font-size-xl (1.25rem), --ui-font-size-2xl (1.5rem), --ui-font-size-3xl (2.25rem)
 
-  --ui-radius-sm/md/lg/full  Border radii
-  --ui-shadow-sm/md/lg       Box shadows
+  Font weights:
+    --ui-font-weight-normal (400), --ui-font-weight-medium (500), --ui-font-weight-semibold (600), --ui-font-weight-bold (700)
 
-  --ui-color-primary         Brand color
-  --ui-color-primary-light   Tinted brand (for selected states)
-  --ui-color-text            Primary text
-  --ui-color-text-muted      Secondary text
-  --ui-color-background      Page background
-  --ui-color-surface-raised  Card/panel background (elevated above page)
-  --ui-color-surface-sunken  Hover/input background (recessed)
-  --ui-color-border          Default borders
-  --ui-color-input-bg        Input field background
-  --ui-color-input-border    Input border
-  --ui-color-input-border-focus  Focused input border
-  --ui-color-input-border-invalid  Error state border
-  --ui-color-placeholder     Placeholder text color
-  --ui-color-error-text      Error message text
+  Border radii:
+    --ui-radius-sm (0.5rem), --ui-radius-md (0.625rem), --ui-radius-lg (0.875rem), --ui-radius-xl (1.25rem), --ui-radius-full (9999px)
 
-  --ui-focus-ring            Full focus ring box-shadow value
+  Box shadows:
+    --ui-shadow-xs, --ui-shadow-sm, --ui-shadow-md, --ui-shadow-lg, --ui-shadow-xl
 
-  --ui-z-dropdown            z-index for dropdowns/panels
-  --ui-z-modal               z-index for dialogs/drawers
+  Font shorthands (use with `font:`):
+    --ui-type-display, --ui-type-headline, --ui-type-title, --ui-type-body-lg, --ui-type-body-md, --ui-type-body-sm, --ui-type-label, --ui-type-code, --ui-type-control, --ui-type-action, --ui-type-row, --ui-type-row-sm, --ui-type-emphasis
+
+  z-index layers:
+    --ui-z-base (0), --ui-z-dropdown (100), --ui-z-overlay (200), --ui-z-modal (300), --ui-z-toast (400)
+
+  Colours and focus (name, then intent):
+    --ui-color-primary  Primary call-to-action colour and link text
+    --ui-color-primary-light  Soft tinted background for selected / hovered ghost states and subtle primary surfaces
+    --ui-color-text  Primary body and heading text colour
+    --ui-color-text-muted  Secondary text colour for helper copy, captions, and de-emphasised content
+    --ui-color-surface  Base page background
+    --ui-color-surface-raised  Slightly elevated surface for cards, popovers, and panels resting above the page
+    --ui-color-surface-sunken  Recessed surface for input fields, code blocks, and inset containers
+    --ui-color-border  Decorative border for cards, dividers, and resting input outlines
+    --ui-color-input-bg  Resting background for text inputs, selects, and textareas
+    --ui-color-input-border  Resting border for text inputs, selects, and textareas
+    --ui-color-input-border-focus  Focused border for inputs — primary-coloured to match the focus ring
+    --ui-color-input-border-invalid  Border for inputs in an error / aria-invalid state
+    --ui-color-placeholder  Placeholder text colour for inputs
+    --ui-color-error-text  Foreground colour for inline form error messages
+    --ui-focus-ring  Double-ring box-shadow for :focus-visible — surface-coloured inner + primary outer for light/dark compatibility
+
+The full list, with constraints, is under Token Annotations below.
 
 Dark mode: all tokens shift automatically via prefers-color-scheme, or set data-theme="dark" on <html>.
 

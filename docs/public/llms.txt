@@ -19,6 +19,14 @@ Docs: https://atelier.pieper.io
 - [Storybook (React)](https://atelier.pieper.io/storybook-react): React component stories
 - [Storybook (Vue)](https://atelier.pieper.io/storybook-vue): Vue component stories
 
+## Hosted Storybook MCP
+
+Streamable-HTTP MCP endpoints, no auth (POST JSON-RPC with `Accept: application/json, text/event-stream`). Each answers `docs-list`, `docs-show` and `docs-show-story` for its own framework, with Angular two-way bindings and outputs, Vue `v-model`/emits, or React props. Ids carry a category segment (e.g. `components-inputs-atlbutton`) and cannot be guessed from a component name: call `docs-list` first.
+
+- https://atelier.pieper.io/storybook-angular/mcp
+- https://atelier.pieper.io/storybook-react/mcp
+- https://atelier.pieper.io/storybook-vue/mcp
+
 ## Components
 
 - [Button](https://atelier.pieper.io/components/button): variant (primary|secondary|outline|danger), size (sm|md|lg), disabled, loading, aria-label
