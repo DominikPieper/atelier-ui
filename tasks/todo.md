@@ -1929,6 +1929,13 @@ Open, from this work:
 
 The ones the owner and I will walk through together.
 
+### Workshop substrate: Conciso Design System? (2026-10-09)
+
+- [ ] Decide whether the workshop switches its exercise target from Atelier's own library to the
+      Conciso Design System. Spike result and open questions (CDS-ADR-0015 placement of the
+      contract layer, contributions from workshops, Angular-only):
+      `plan/research/cds-substrate-spike-2026-10-09.md`. Record the decision as an ADR.
+
 ### AI & Design Systems course gaps (2026-10-08)
 
 - [ ] Walk through the triage of the "AI & Design Systems" course gaps (271 transcripts vs.
