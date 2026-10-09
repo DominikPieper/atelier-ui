@@ -1929,12 +1929,32 @@ Open, from this work:
 
 The ones the owner and I will walk through together.
 
-### Workshop substrate: Conciso Design System? (2026-10-09)
+### Workshop substrate: move to the Conciso Design System (ADR-0165, 2026-10-09)
 
-- [ ] Decide whether the workshop switches its exercise target from Atelier's own library to the
-      Conciso Design System. Spike result and open questions (CDS-ADR-0015 placement of the
-      contract layer, contributions from workshops, Angular-only):
-      `plan/research/cds-substrate-spike-2026-10-09.md`. Record the decision as an ADR.
+Decided 2026-10-09. Spike: `plan/research/cds-substrate-spike-2026-10-09.md`. Pushes, the CDS PR
+and npm deprecations each need the owner's explicit go.
+
+- [x] P0a ADR-0165 in Atelier.
+- [ ] P0b CDS ADR superseding CDS-ADR-0015 (contract layer in the repo, `check-contracts` as an
+      offline CI gate, snapshot refresh manual). In the CDS repo, via PR.
+- [ ] P1 `@atelier-ui/contracts` package from the scaffold scripts, with the spike's fixes:
+      `--file` choosing among several connected Figma files, create the output directory, works in
+      `"type": "module"` repos, configurable token prefix for `--emit`, parity codeSpec applies
+      the contract's `axisMap`. `create-workspace` consumes the package instead of copying
+      scripts. Done when its tests pass and the spike runs with no manual steps.
+- [ ] P2 Contracts for all CDS components, `check-contracts` in the CDS CI. Done when it exits 0
+      in CI.
+- [ ] P3 `create-workspace` on `@conciso/design-system-angular`; React/Vue branches removed for
+      now. Done when the scaffold e2e passes.
+- [ ] P4 New kata: target, Figma master in the owner's training copy of the CDS file, steps. Done
+      when the kata has been run once end to end.
+- [ ] P5 Docs and skills: swap examples (~18 pages), remove library pages (~6), delete the
+      `atelier-design` skill, rewrite the repo branch of `design-to-code`. Redo course-gap
+      examples built on Atl components. Done when the docs gates pass.
+- [ ] P6 Tag the last commit with the library, then remove `libs/{angular,react,vue,spec}`, their
+      gates, Storybooks and hosted MCP endpoints; keep the release pipeline for `create-workspace`
+      and `contracts`; deprecate `@atelier-ui/{angular,react,vue}` on npm. Done when `check:all`
+      passes.
 
 ### AI & Design Systems course gaps (2026-10-08)
 
