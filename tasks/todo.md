@@ -1937,6 +1937,29 @@ The ones the owner and I will walk through together.
       (Offen / Übernehmen / Erledigt / Gestrichen), is
       `plan/research/ai-ds-course-gap-2026-10-08/triage.md` — update status there, not here.
 
+- [ ] Findings from the A4 judge dry run on AtlButton (2026-10-09; evidence and per-finding
+      verification in `plan/research/ai-ds-course-gap-2026-10-08/a4-judge-dry-run-atlbutton.md`,
+      checked against code, CSS cascade and master JSON, not in a browser):
+  - [ ] **Danger button has no visible focus ring** (WCAG 2.4.7). `.atl-button.variant-danger`
+        (`libs/styles/src/button/atl-button.css:91-96`) sets `box-shadow` at the same
+        specificity as `.atl-button:focus-visible` (`:34-37`) and comes later, so it wins in all
+        three frameworks. Master `468:2598` draws the ring plus the inset shadow. Confirm in a
+        browser, then combine both shadows in a `.variant-danger:focus-visible` rule.
+  - [ ] **Loading drops focus.** `loading` sets native `disabled` (Angular `atl-button.ts:46,66`,
+        React `atl-button.tsx:49,65`), so a focused button that starts loading loses focus, and
+        nothing announces `aria-busy`. `button.metadata.ts:41` contradicts itself ("remove from
+        the tab order" vs. "loading retains focus"). Decide which is canonical (ADR-0159 ties
+        loading to disabled).
+  - [ ] **`aria-disabled` next to `disabled`**: code sets both; the master description says
+        "HTML `disabled` (not aria-disabled)". Pick one and align the other.
+  - [ ] **Primary active inset shadow**: master `437:1516` has an 18 % inner shadow, code has
+        none outside danger. Decide which side is right.
+  - [ ] **Outline disabled fill**: master overlay `1169:834` is filled, code uses `transparent`
+        (`atl-button.css:164-166`). Deliberate or drift?
+  - [ ] **No hover/focus/active stories and no `play` functions** for the button in any
+        framework; behaviour lives only in the unit specs (ADR-0121 asks for a `play` per
+        behaviour line).
+
 - [ ] Findings from course-gap wave 3 (2026-10-09; evidence in
       `plan/research/ai-ds-course-gap-2026-10-08/wave3-b3-cold-start-log.md` and the agents'
       reads of the code):

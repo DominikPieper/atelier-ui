@@ -78,12 +78,15 @@ you tried.`;
 
 // Step 4 — the judge half of an eval: a rubric for what no gate checks.
 const JUDGE_PROMPT = `Review the component <Name> as a design-system reviewer. The gates
-already pass; do not repeat what they check.
+already pass; do not repeat what they check. What a gate exempts on
+purpose (a lint rule's allowance, a recorded contract entry) is not a
+finding.
 
 Read these sources yourself:
 - the Figma master: figma_get_component_for_development on node <id>
 - the contract: libs/spec/src/contracts/<name>.contract.ts
-- the component source and its stories
+- the metadata: libs/spec/src/metadata/<name>.metadata.ts
+- the component source, its styles and its stories
 - the design principles: docs/src/pages/design-principles.astro
 
 Check each line of this rubric:
@@ -103,8 +106,9 @@ Check each line of this rubric:
 
 For each finding give: rubric line, evidence (file:line or Figma
 node id), the change you suggest, and how sure you are (high,
-medium, low). If a line has no finding, write "no finding". Do not
-invent one. No score, no fixes.`;
+medium, low). Order the findings by their effect on users, worst
+first. If a line has no finding, write "no finding". Do not invent
+one. No score, no fixes.`;
 
 // Step 4 — the same judge, fed the handoff document instead of the component.
 const TICKET_PROMPT = `Here is the handoff document for this task, and the diff
@@ -929,6 +933,12 @@ No score, no fixes.`;
             its six lines for your own design system, and keep a tally of which
             findings turned out to be real. That tally tells you which lines to
             keep.
+          </p>
+          <p class="docs-step-desc">
+            Run it with two models if you can. In a dry run on Atelier's own
+            button, two judges agreed on three findings. The more precise one
+            missed the most serious defect, a variant with no visible focus
+            ring, which only the other one found.
           </p>
           <Code
             code={JUDGE_PROMPT}
