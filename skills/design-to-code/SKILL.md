@@ -235,7 +235,7 @@ config is stricter.
 **`check:contracts` first.** It joins the micro-contract, the framework's docgen manifest
 and the stories' `args` (plus the Figma snapshot, when one is available) and reports drift
 by tag — `libs/spec/src/contracts/README.md` and the header of
-`tools/scripts/check-contracts.mjs` carry the full tag table. **Repo case:** the default
+`libs/design-contracts/bin/check-contracts.mjs` carry the full tag table. **Repo case:** the default
 run, unchanged by any flag —
 
 ```
@@ -245,7 +245,7 @@ npm run check:contracts
 **Workshop case:** your own files, none of them on the default paths —
 
 ```
-node tools/scripts/check-contracts.mjs --fw <fw> \
+node libs/design-contracts/bin/check-contracts.mjs --fw <fw> \
   --contracts libs/<fw>/src/lib/<name> \
   --stories libs/<fw>/src/lib/<name> \
   --snapshot libs/<fw>/src/lib/<name>/figma.snapshot.json
@@ -254,7 +254,7 @@ node tools/scripts/check-contracts.mjs --fw <fw> \
 That snapshot is generated once, with the Bridge connected, before this call:
 
 ```
-node tools/scripts/figma-snapshot-contracts.mjs --file <duplicate file key> \
+node libs/design-contracts/bin/figma-snapshot-contracts.mjs --file <duplicate file key> \
   --contracts libs/<fw>/src/lib/<name> \
   --out libs/<fw>/src/lib/<name>/figma.snapshot.json
 ```
@@ -280,7 +280,7 @@ npm run check:contracts -- --emit dist/codespec
 workshop case, the same command as above with one flag added:
 
 ```
-node tools/scripts/check-contracts.mjs --fw <fw> \
+node libs/design-contracts/bin/check-contracts.mjs --fw <fw> \
   --contracts libs/<fw>/src/lib/<name> \
   --stories libs/<fw>/src/lib/<name> \
   --snapshot libs/<fw>/src/lib/<name>/figma.snapshot.json \

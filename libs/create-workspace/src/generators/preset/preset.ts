@@ -326,7 +326,7 @@ const SKILLS_CLONE_TIMEOUT_MS = 60_000;
 // exact version this monorepo runs (root package.json devDependencies) so
 // the scaffold's copy behaves the same as the canonical script.
 const MCP_SDK_VERSION = '^1.29.0';
-// ts-eval.js (shared by check-contracts.mjs and figma-snapshot-contracts.mjs)
+// ts-eval.cjs (shared by check-contracts.mjs and figma-snapshot-contracts.mjs)
 // needs `typescript` at runtime. Every framework's Nx application generator
 // already adds it, so this is a safety net, not the primary source — see the
 // conditional add near the end of presetGenerator, which only includes this
@@ -1478,8 +1478,8 @@ export async function presetGenerator(
   // mismatches — with no Figma there is nothing for a contract to disagree
   // with, so `options.figmaMcp` (the same flag that decides whether
   // `figma-console` reaches .mcp.json, below) is the one switch for this
-  // whole loop: the contract files, the two loop scripts + their shared
-  // lib/, the Figma snapshot projection, and contracts.config.json.
+  // whole loop: the contract files, the vendored contract-loop package
+  // (tools/design-contracts/), the Figma snapshot projection, and contracts.config.json.
   // check-contracts.mjs's own snapshot read
   // (`JSON.parse(fs.readFileSync(snapshotPath, ...))`) is unguarded — it
   // throws, not degrades, the moment tools/figma/snapshot.json is missing —
@@ -1508,22 +1508,24 @@ export async function presetGenerator(
       readTemplate('contracts/button.contract.ts.template'),
     );
 
-    tree.write(
-      'tools/scripts/check-contracts.mjs',
-      readTemplate('tools/scripts/check-contracts.mjs'),
-    );
-    tree.write(
-      'tools/scripts/lib/ts-eval.js',
-      readTemplate('tools/scripts/lib/ts-eval.js'),
-    );
-    tree.write(
-      'tools/scripts/lib/docgen.mjs',
-      readTemplate('tools/scripts/lib/docgen.mjs'),
-    );
-    tree.write(
-      'tools/scripts/figma-snapshot-contracts.mjs',
-      readTemplate('tools/scripts/figma-snapshot-contracts.mjs'),
-    );
+    // The contract-loop package (`@conciso/design-contracts`, canonical in this
+    // repo's libs/design-contracts, kept byte-identical by sync-preflight.mjs),
+    // vendored whole under tools/design-contracts/. `.mjs`/`.cjs` only, so no
+    // package.json is needed beside it. check-contracts.mjs and
+    // figma-snapshot-contracts.mjs resolve everything from contracts.config.json
+    // at the workspace root (written below), never from their own location.
+    for (const file of [
+      'bin/check-contracts.mjs',
+      'bin/figma-snapshot-contracts.mjs',
+      'src/config.mjs',
+      'src/docgen.mjs',
+      'src/ts-eval.cjs',
+    ]) {
+      tree.write(
+        `tools/design-contracts/${file}`,
+        readTemplate(`tools/design-contracts/${file}`),
+      );
+    }
     // The AtlButton-only projection of this repo's own tools/figma/snapshot.json
     // (gen-scaffold-snapshot.mjs) — gives check:contracts a Figma side for the
     // example contract + story on day one, before the attendee ever runs
@@ -1538,6 +1540,9 @@ export async function presetGenerator(
       contracts: `${appName}/src/contracts`,
       stories: [`${appName}/src`],
       snapshot: 'tools/figma/snapshot.json',
+      // The design-token prefix `check:contracts --emit` scans stylesheets for
+      // (the package's default is any `--` custom property).
+      tokenPrefix: '--ui-',
     });
   } else {
     console.log(
@@ -1936,7 +1941,7 @@ file exports). The Desktop Bridge covers creation and inspection without a token
   // The contract loop's own devDependencies (ADR-0121 S4), gated on Figma
   // (ADR-0144) — neither exists without `--figma`: the MCP SDK is only
   // imported by figma-snapshot-contracts.mjs, and the defensive `typescript`
-  // add exists only because ts-eval.js (shared by check-contracts.mjs and
+  // add exists only because ts-eval.cjs (shared by check-contracts.mjs and
   // figma-snapshot-contracts.mjs) needs it at runtime — read from the tree's
   // package.json as it stands right now, after the framework's generator has
   // run and before this generator's own writes below it.
@@ -2078,10 +2083,11 @@ file exports). The Desktop Bridge covers creation and inspection without a token
     // Loop" section (figmaSnapshotRefreshInstruction above) spells out how to
     // fill it in either way.
     if (options.figmaMcp) {
-      pkg.scripts['check:contracts'] = 'node tools/scripts/check-contracts.mjs';
+      pkg.scripts['check:contracts'] =
+        'node tools/design-contracts/bin/check-contracts.mjs';
       pkg.scripts['figma:snapshot'] = options.figmaFile
-        ? `node tools/scripts/figma-snapshot-contracts.mjs --file ${options.figmaFile}`
-        : 'node tools/scripts/figma-snapshot-contracts.mjs --file <YOUR_FIGMA_FILE_KEY>';
+        ? `node tools/design-contracts/bin/figma-snapshot-contracts.mjs --file ${options.figmaFile}`
+        : 'node tools/design-contracts/bin/figma-snapshot-contracts.mjs --file <YOUR_FIGMA_FILE_KEY>';
     }
     // Browser-mode Storybook tests (owner correction 2026-09-10 to ADR-0123).
     // Identical to the monorepo's own root package.json script.

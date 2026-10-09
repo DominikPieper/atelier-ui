@@ -15,10 +15,9 @@
  * resolve identifiers, or follow imports. Drift-gates want a fast,
  * deterministic read of a configuration-shaped file, not a JS runtime.
  *
- * Extracted from `tools/scripts/gen-llms-txt.mjs` (commit 7a61c26-era)
- * so `check-metadata.js`, `check-css-tokens.js`, and the generator share
- * one implementation. CommonJS so the existing `check-*.js` scripts can
- * `require` it without an ESM wrapper.
+ * CommonJS (`.cjs`) on purpose: it works unchanged in a `"type": "module"`
+ * package and from the ESM scripts that load it via `createRequire`.
+ * `typescript` is resolved from the consumer's own install (a peer dependency).
  */
 
 const ts = require('typescript');

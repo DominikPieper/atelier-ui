@@ -1939,7 +1939,7 @@ and npm deprecations each need the owner's explicit go.
       offline CI gate, snapshot refresh manual). In the CDS repo, via PR.
 - [ ] P1 `@conciso/design-contracts`, built in Atelier first to try it out, moved to the CDS repo
       once proven (ADR-0165 §4, revised 2026-10-09). Not published from Atelier.
-  - [ ] P1.1 `libs/design-contracts`: self-contained (own `package.json`, plain Node ESM, no Nx
+  - [x] P1.1 `libs/design-contracts`: self-contained (own `package.json`, plain Node ESM, no Nx
         or Atelier imports), bins `check-contracts` and `figma-snapshot-contracts`, exports the
         `ComponentContract` type. Source of truth for the scripts from now on. Done when Atelier's
         `check:contracts` runs through the package bin with unchanged output (all three
@@ -1952,7 +1952,7 @@ and npm deprecations each need the owner's explicit go.
         hard-coded `--ui-`, `check-contracts.mjs:999`), `--emit` maps the codeSpec to Figma names
         via `axisMap`/`figmaOnly`. Done when tests are green and a Snackbar parity run shows no
         name-only discrepancies (needs the owner's bridge).
-  - [ ] P1.4 Rewire Atelier: `sync-preflight` copies from the package into the scaffold;
+  - [x] P1.4 Rewire Atelier: `sync-preflight` copies from the package into the scaffold;
         `check-manifest-parity` imports docgen from the package instead of `tools/scripts/lib`.
         Done when `check:all` passes.
   - [ ] P1.5 Try-out in the CDS: `npm pack` tarball installed on a CDS branch, spike scripts

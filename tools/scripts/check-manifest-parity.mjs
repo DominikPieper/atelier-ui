@@ -13,8 +13,8 @@
  * Consequences) is visible even though there is nothing to key it against.
  *
  * Docgen recipe (Angular/Vue worker, React's own react-docgen, story-file ->
- * component resolution) is shared with check-contracts.mjs via
- * ./lib/docgen.mjs — see that file's header. `PROP_SURFACE_EXEMPT`
+ * component resolution) is shared with check-contracts via
+ * libs/design-contracts/src/docgen.mjs — see that file's header. `PROP_SURFACE_EXEMPT`
  * (tools/scripts/lib/allowlists.js) is READ, never written: an exempted
  * `<prop>:<fw>` is printed as a known `[GAP]`, grouped by reason exactly like
  * check:props does. A divergence the allowlist does not know about is a new
@@ -88,7 +88,7 @@ import {
   makeReactDocgenTools,
   normalizeReactDocgen,
   errorMessage,
-} from './lib/docgen.mjs';
+} from '../../libs/design-contracts/src/docgen.mjs';
 
 const __dirname = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(__dirname, '../..');
@@ -96,6 +96,12 @@ const CWD = process.cwd();
 const require = createRequire(import.meta.url);
 const cwdRequire = createRequire(path.join(CWD, 'package.json'));
 const { reactParseFile } = makeReactDocgenTools(cwdRequire);
+// react-docgen misses a string prop inherited through the shared form-field
+// spec; docgen.mjs recovers it from the component's destructuring (see there).
+const REACT_SHARED_PROPS = {
+  file: path.join(ROOT, 'libs/spec/src/index.ts'),
+  name: 'AtlFormFieldSpec',
+};
 
 const { PROP_SURFACE_EXEMPT } = require('./lib/allowlists.js');
 const { keyedSpecs, componentNameOf } = require('./lib/component-map.js');
@@ -144,7 +150,7 @@ function reportWarning(tag, msg) {
 }
 
 // ─── Per-framework discovery: story file -> component -> docgen props ──────
-// Mirrors check-contracts.mjs's runFramework() discovery loop (same
+// Mirrors check-contracts's runFramework() discovery loop (same
 // meta.component / react import-specifier resolution), stripped of the
 // snapshot/contract machinery this gate does not need.
 //
@@ -162,7 +168,9 @@ function reportWarning(tag, msg) {
 // `0 component(s) compared` and exit 0.
 
 async function discoverFramework(fw) {
-  const storyFiles = findStoryFiles(fw, { root: ROOT });
+  const storyFiles = findStoryFiles([
+    path.join(ROOT, 'libs', fw, 'src', 'lib'),
+  ]);
   const workerDocgen =
     fw !== 'react' ? await makeWorkerDocgen(fw, cwdRequire, ROOT) : null;
   const byComponent = new Map(); // name -> { props: NormalizedProp[] }
@@ -205,7 +213,7 @@ async function discoverFramework(fw) {
             if (match)
               docgenResult = {
                 name: match.displayName,
-                props: normalizeReactDocgen(match),
+                props: normalizeReactDocgen(match, REACT_SHARED_PROPS),
               };
           } catch (e) {
             docgenFailedCount++;

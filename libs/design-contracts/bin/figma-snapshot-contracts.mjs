@@ -1,55 +1,45 @@
 #!/usr/bin/env node
 /**
- * figma-snapshot-contracts.mjs
+ * figma-snapshot-contracts
  *
  * A snapshot generator whose roster is the contracts, not a hand-maintained
- * master list. `tools/scripts/figma-snapshot.mjs` (the monorepo's own refresh
- * step, ADR-0019) hardcodes all 43 Atelier master node ids; that list has no
- * meaning outside this repo. This script instead reads whichever
- * `<name>.contract.ts` files exist under the contracts directory (same
- * resolution as `check-contracts.mjs`, Step 1 of ADR-0121 S4) and, for each
- * one's `figmaNodeId`, writes exactly the master-entry fields `check-contracts.mjs`
+ * master list. It reads whichever `<name>.contract.ts` files exist under the
+ * contracts directory (the same settings as `check-contracts`) and, for each
+ * one's `figmaNodeId`, writes exactly the master-entry fields `check-contracts`
  * consumes: `selector`, `nodeId`, `name`, `description`, `variantAxes`,
  * `properties`, `variants`.
  *
- * Deliberately does NOT import tools/scripts/figma-snapshot.mjs — the MCP
- * client boilerplate and the `.mcp.json`-version-resolver below are copied
- * from it, not shared, so this file stands alone when copied into a
- * scaffolded workspace (ADR-0123's "the scaffold ships the check" — this is
- * its Figma-refresh half).
+ *   figma-snapshot-contracts --file <figmaFileKey> [--out <path>] [--contracts <dir>]
+ *   figma-snapshot-contracts --file <figmaFileKey> --dry-run
  *
- *   node tools/scripts/figma-snapshot-contracts.mjs --file <figmaFileKey> [--out <path>]
- *   node tools/scripts/figma-snapshot-contracts.mjs --file <figmaFileKey> --dry-run
+ * Settings: `--contracts` / `contracts` (required), `--out` / `snapshot`
+ * (required: where to write), `mcpConfig` (optional, default `.mcp.json`: the
+ * MCP client config, relative to the working directory, that pins the
+ * `figma-console` server version). All from CLI flags or `contracts.config.json`
+ * in the working directory — nothing is derived from where this package lives.
  *
- * Requirements (same as figma-snapshot.mjs): Figma Desktop running with the
- * file open and the figma-console Desktop Bridge plugin connected. Fails
- * loud (exit 2) if the bridge is not connected — never a silent/empty write.
+ * Requirements: Figma Desktop running with the file open and the figma-console
+ * Desktop Bridge plugin connected. Fails loud (exit 2) if the bridge is not
+ * connected — never a silent/empty write.
  *
  * --dry-run prints the roster (selector -> nodeId) and the figma_execute
  * plugin code that would run for the first master, then exits 0 WITHOUT
- * connecting to Figma at all — the only mode this script's own test suite
- * can exercise in an environment with no Figma Desktop Bridge.
+ * connecting to Figma at all — the only mode that can run where there is no
+ * Figma Desktop Bridge.
  */
 import { writeFileSync, readFileSync, existsSync } from 'node:fs';
-import { fileURLToPath } from 'node:url';
-import { dirname, resolve, join } from 'node:path';
+import { resolve } from 'node:path';
 import { createRequire } from 'node:module';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
+import { die, readConfigFile, CONFIG_FILE_NAME } from '../src/config.mjs';
 
-const __dirname = dirname(fileURLToPath(import.meta.url));
-// Portable the same way check-contracts.mjs is (ADR-0121 S4 Step 1): derived
-// from THIS script's own location, so a byte-identical copy dropped into
-// <scaffold>/tools/scripts/ defaults to the scaffold's own tree.
-const ROOT = resolve(__dirname, '../..');
 const CWD = process.cwd();
-const MCP_CONFIG_PATH = resolve(ROOT, '.mcp.json');
 
-// ts-eval.js is required relative to THIS script's own directory (like
-// check-contracts.mjs does) so the canonical script + lib/ts-eval.js pair
-// works unmodified wherever it is copied.
+// ts-eval.cjs ships in this package and is loaded by a path relative to THIS
+// file, so it works from node_modules and from a vendored copy alike.
 const require = createRequire(import.meta.url);
-const { parseExportedVars } = require('./lib/ts-eval.js');
+const { parseExportedVars } = require('../src/ts-eval.cjs');
 
 // ─── CLI args ───────────────────────────────────────────────────────────────
 
@@ -68,35 +58,36 @@ function parseArgs(argv) {
 const args = parseArgs(process.argv.slice(2));
 
 if (!args.file) {
-  console.error(
-    'Usage: node tools/scripts/figma-snapshot-contracts.mjs --file <figmaFileKey> [--out <path>] [--contracts <dir>] [--dry-run]',
+  die(
+    'Usage: figma-snapshot-contracts --file <figmaFileKey> [--out <path>] [--contracts <dir>] [--dry-run]',
   );
-  process.exit(2);
 }
 
-// ─── Contracts-dir resolution (same precedence as check-contracts.mjs's
-//     Step 1: CLI flag > contracts.config.json at the cwd root > monorepo
-//     default) ──────────────────────────────────────────────────────────────
-const CONFIG_PATH = join(CWD, 'contracts.config.json');
-let fileConfig = null;
-if (existsSync(CONFIG_PATH)) {
-  try {
-    fileConfig = JSON.parse(readFileSync(CONFIG_PATH, 'utf-8'));
-  } catch (e) {
-    console.error(`${CONFIG_PATH}: invalid JSON (${e.message})`);
-    process.exit(2);
-  }
+// ─── Settings (CLI flag > contracts.config.json in the working directory;
+//     no built-in locations) ────────────────────────────────────────────────
+const fileConfig = readConfigFile(CWD);
+
+const contractsSetting = args.contracts ?? fileConfig?.contracts;
+if (!contractsSetting) {
+  die(
+    `No contracts directory set — pass --contracts <dir> or set "contracts" in ${CONFIG_FILE_NAME}.`,
+  );
+}
+const CONTRACTS_DIR = resolve(CWD, contractsSetting);
+if (!existsSync(CONTRACTS_DIR)) {
+  die(`Contracts directory not found: ${CONTRACTS_DIR}`);
 }
 
-const CONTRACTS_DIR = args.contracts
-  ? resolve(CWD, args.contracts)
-  : fileConfig?.contracts
-    ? resolve(CWD, fileConfig.contracts)
-    : join(ROOT, 'libs/spec/src/contracts');
+const outSetting = args.out ?? fileConfig?.snapshot;
+if (!outSetting) {
+  die(
+    `No output path set — pass --out <file> or set "snapshot" in ${CONFIG_FILE_NAME}.`,
+  );
+}
+const OUT_PATH = resolve(CWD, outSetting);
 
-const OUT_PATH = args.out
-  ? resolve(CWD, args.out)
-  : join(ROOT, 'tools/figma/snapshot.json');
+// The MCP client config that pins the figma-console server version.
+const MCP_CONFIG_PATH = resolve(CWD, fileConfig?.mcpConfig ?? '.mcp.json');
 
 // ─── The roster: every contract's { component, figmaNodeId } ──────────────
 
@@ -141,12 +132,10 @@ if (roster.length === 0) {
 }
 
 // ─── The figma_execute plugin code, one master per call ────────────────────
-// Modelled on figma-snapshot.mjs's own probe: componentPropertyDefinitions
+// componentPropertyDefinitions
 // for `properties`/`variantAxes`, and each variant child's `name` (the
 // "axis=value, axis=value" convention) for `variants`. A single node lookup
-// per master rather than the monorepo probe's whole-file walk — this script
-// has a roster of one to a handful of contracts, not 43 masters plus every
-// child part.
+// per master rather than a whole-file walk.
 function pluginCodeFor(nodeId) {
   return `
     await figma.loadAllPagesAsync();
@@ -202,9 +191,9 @@ if (args.dryRun) {
   process.exit(0);
 }
 
-// ─── Resolve the pinned figma-console-mcp package spec from .mcp.json ─────
-// Copied from figma-snapshot.mjs (ADR-0110: pin the server the skills
-// hardcode) — deliberately not imported, so this file stands alone.
+// ─── Resolve the pinned figma-console-mcp package spec from the MCP config ─
+// The server version is pinned there rather than left to `@latest`, so a run
+// is reproducible.
 
 function resolveFigmaConsolePackageSpec() {
   let config;
@@ -222,7 +211,7 @@ function resolveFigmaConsolePackageSpec() {
   if (!spec) {
     throw new Error(
       `${MCP_CONFIG_PATH} has no mcpServers['figma-console'].args entry matching ` +
-        `/^figma-console-mcp@/ — refusing to fall back to @latest (ADR-0110 pins this server).`,
+        `/^figma-console-mcp@/ — refusing to fall back to @latest (the server version must be pinned).`,
     );
   }
   return spec;
@@ -262,7 +251,7 @@ main().catch((err) => {
 
 async function main() {
   const client = new Client(
-    { name: 'atelier-figma-snapshot-contracts', version: '1.0.0' },
+    { name: 'figma-snapshot-contracts', version: '1.0.0' },
     { capabilities: {} },
   );
   const figmaConsolePackageSpec = resolveFigmaConsolePackageSpec();
@@ -275,8 +264,8 @@ async function main() {
   const reportedServerVersion = client.getServerVersion?.();
 
   try {
-    // Probe the bridge — fail loud if the plugin is not connected. Same
-    // retry shape as figma-snapshot.mjs: the plugin attaches ~0.5s after a
+    // Probe the bridge — fail loud if the plugin is not connected. Retry:
+    // the plugin attaches ~0.5s after a
     // freshly-spawned server starts.
     let status = null;
     for (let attempt = 0; attempt < 10; attempt++) {
@@ -300,15 +289,13 @@ async function main() {
       status?.serverVersion ??
       status?.details?.serverVersion ??
       (declaredServerVersion
-        ? `${declaredServerVersion} (declared in .mcp.json; server did not report)`
+        ? `${declaredServerVersion} (declared in ${MCP_CONFIG_PATH}; server did not report)`
         : null);
 
     // ─── Verify --file actually names the open file ────────────────────────
     // The Bridge reads whichever file is open in Figma Desktop, regardless of
-    // what --file claims — figma-snapshot.mjs never had to check this because it
-    // always targets the hardcoded Atelier FILE_KEY, but this script's whole
-    // point is a participant's own duplicate, so the open file cannot be
-    // assumed to match. figma.fileKey is the ground truth reported from inside
+    // what --file claims, so the open file cannot be assumed to match (a
+    // participant works in their own duplicate). figma.fileKey is the ground truth reported from inside
     // the plugin sandbox itself.
     const openFile = (
       await call(client, 'figma_execute', {

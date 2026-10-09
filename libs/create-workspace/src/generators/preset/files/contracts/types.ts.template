@@ -1,5 +1,5 @@
 /**
- * The micro-contract (ADR-0121, Decision 3): the ONLY hand-authored spec artefact per
+ * The micro-contract: the ONLY hand-authored spec artefact per
  * component. It records what no derived artefact can know — which Figma master this
  * component is, and where Figma and code differ on purpose. Everything else about the
  * component is derived: props, types, defaults and descriptions from the docgen manifest;
@@ -12,23 +12,22 @@
  * metadata file has failed.
  *
  * Contracts are plain object literals — no imports of values, no computed members — so
- * `tools/scripts/lib/ts-eval.js` can read them statically, the way it reads the metadata
- * registry.
+ * the check can read them statically (it evaluates the literal, it never runs the file).
  */
 export interface ComponentContract {
-  /** Spec selector, e.g. `'AtlButton'`. Must equal the master's `selector` in `tools/figma/snapshot.json`. */
+  /** Spec selector, e.g. `'Button'`. Must equal the master's `selector` in the Figma snapshot. */
   component: string;
-  /** The master's `COMPONENT_SET` (or lone `COMPONENT`) node id in the Atelier file, e.g. `'129:20'`. */
+  /** The master's `COMPONENT_SET` (or lone `COMPONENT`) node id in the Figma file, e.g. `'129:20'`. */
   figmaNodeId: string;
   /**
    * Figma properties — variant axes, Booleans, Texts, instance swaps — that have no code
    * prop on purpose, each with the reason. The `state` axis is NOT listed: interaction
-   * states are CSS pseudo-classes by repo-wide convention (ADR-0114) and the check knows it.
+   * states are CSS pseudo-classes by convention and the check knows it.
    */
   figmaOnly?: ReadonlyArray<{ name: string; reason: string }>;
   /**
    * Code props or events that have no Figma property on purpose, each with the reason
-   * (e.g. `open` — "false renders nothing", ADR-0056). Domain: only string-literal enum
+   * (e.g. `open` — "false renders nothing"). Domain: only string-literal enum
    * props — the code's own axes — ever need an entry here, for the same reason
    * `[ENUM-UNDRAWN]` only ever reports enum props. Booleans, strings, numbers, callbacks
    * and events with no Figma counterpart are normal (behaviour and content) and never
@@ -39,10 +38,10 @@ export interface ComponentContract {
    * A Figma axis that maps to a code prop under another name or value set, e.g. the
    * `selection` axis (`checked` | `unchecked`) that is `checked: boolean` in code.
    * Verbatim-equal axes need no entry. `codeProp` may be dotted (`Child.prop`, e.g.
-   * `AtlStep.completed`) when the prop lives on a CHILD component's own manifest rather
+   * `Step.completed`) when the prop lives on a CHILD component's own manifest rather
    * than the story's primary component — the check resolves it there. Several entries
-   * may target the same `figmaAxis` (e.g. AtlStepper's `state` axis maps to three
-   * different `AtlStep` flags, one entry each).
+   * may target the same `figmaAxis` (e.g. Stepper's `state` axis maps to three
+   * different `Step` flags, one entry each).
    */
   axisMap?: ReadonlyArray<{
     figmaAxis: string;

@@ -481,10 +481,11 @@ function testFramework(framework, registryUrl, npmrcPath) {
     // exists only for FIGMA_TEST_FRAMEWORK's run.
     if (figmaEnabled) {
       mustExist.push(
-        'tools/scripts/check-contracts.mjs',
-        'tools/scripts/figma-snapshot-contracts.mjs',
-        'tools/scripts/lib/ts-eval.js',
-        'tools/scripts/lib/docgen.mjs',
+        'tools/design-contracts/bin/check-contracts.mjs',
+        'tools/design-contracts/bin/figma-snapshot-contracts.mjs',
+        'tools/design-contracts/src/config.mjs',
+        'tools/design-contracts/src/ts-eval.cjs',
+        'tools/design-contracts/src/docgen.mjs',
         'tools/figma/snapshot.json',
         'contracts.config.json',
         `workshop-${framework}/src/contracts/types.ts`,
@@ -503,10 +504,11 @@ function testFramework(framework, registryUrl, npmrcPath) {
       // the contract-loop's files (ADR-0144) — a stray one left over would
       // be dead weight nothing in this workspace's docs point at any more.
       const mustNotExist = [
-        'tools/scripts/check-contracts.mjs',
-        'tools/scripts/figma-snapshot-contracts.mjs',
-        'tools/scripts/lib/ts-eval.js',
-        'tools/scripts/lib/docgen.mjs',
+        'tools/design-contracts/bin/check-contracts.mjs',
+        'tools/design-contracts/bin/figma-snapshot-contracts.mjs',
+        'tools/design-contracts/src/config.mjs',
+        'tools/design-contracts/src/ts-eval.cjs',
+        'tools/design-contracts/src/docgen.mjs',
         'tools/figma/snapshot.json',
         'contracts.config.json',
         `workshop-${framework}/src/contracts`,
@@ -584,7 +586,7 @@ function testFramework(framework, registryUrl, npmrcPath) {
     if (figmaEnabled) {
       if (
         pkgJson.scripts?.['check:contracts'] !==
-        'node tools/scripts/check-contracts.mjs'
+        'node tools/design-contracts/bin/check-contracts.mjs'
       ) {
         throw new Error(
           `package.json scripts['check:contracts'] = ${JSON.stringify(pkgJson.scripts?.['check:contracts'])}, expected the check-contracts.mjs invocation`,
@@ -592,7 +594,7 @@ function testFramework(framework, registryUrl, npmrcPath) {
       }
       if (
         pkgJson.scripts?.['figma:snapshot'] !==
-        `node tools/scripts/figma-snapshot-contracts.mjs --file ${ATELIER_FIGMA_FILE_KEY}`
+        `node tools/design-contracts/bin/figma-snapshot-contracts.mjs --file ${ATELIER_FIGMA_FILE_KEY}`
       ) {
         throw new Error(
           `package.json scripts['figma:snapshot'] = ${JSON.stringify(pkgJson.scripts?.['figma:snapshot'])}, expected it to name ${ATELIER_FIGMA_FILE_KEY}`,
@@ -656,7 +658,7 @@ function testFramework(framework, registryUrl, npmrcPath) {
     ok(`npm run build:storybook (workshop-${framework}) green`);
 
     // The contract loop (ADR-0121 S4, gated on --figma since ADR-0144): this
-    // proves the SHIPPED check-contracts.mjs + lib/docgen.mjs run against a
+    // proves the SHIPPED check-contracts.mjs + docgen.mjs run against a
     // REAL scaffolded workspace, through the framework's own Storybook
     // docgen worker — where, unlike the monorepo, the story imports the
     // published @atelier-ui/<fw> package from node_modules rather than a

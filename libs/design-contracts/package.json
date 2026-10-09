@@ -1,0 +1,48 @@
+{
+  "name": "@conciso/design-contracts",
+  "version": "0.0.0",
+  "description": "The Figma-to-code contract loop: check a component's contract, docgen manifest and stories against a Figma snapshot, and refresh that snapshot from Figma.",
+  "private": true,
+  "license": "MIT",
+  "type": "module",
+  "bin": {
+    "check-contracts": "./bin/check-contracts.mjs",
+    "figma-snapshot-contracts": "./bin/figma-snapshot-contracts.mjs"
+  },
+  "exports": {
+    ".": {
+      "types": "./src/types.d.ts"
+    },
+    "./docgen": "./src/docgen.mjs",
+    "./package.json": "./package.json"
+  },
+  "files": [
+    "bin",
+    "src",
+    "README.md"
+  ],
+  "engines": {
+    "node": ">=22.12.0"
+  },
+  "dependencies": {
+    "@modelcontextprotocol/sdk": "^1.29.0"
+  },
+  "peerDependencies": {
+    "@storybook/angular-vite": "^10.6.0",
+    "@storybook/vue3": "^10.6.0",
+    "react-docgen": "^8.0.0",
+    "storybook": "^10.6.0",
+    "typescript": ">=5.0.0"
+  },
+  "peerDependenciesMeta": {
+    "@storybook/angular-vite": {
+      "optional": true
+    },
+    "@storybook/vue3": {
+      "optional": true
+    },
+    "react-docgen": {
+      "optional": true
+    }
+  }
+}

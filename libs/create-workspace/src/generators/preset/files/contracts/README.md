@@ -19,16 +19,16 @@ change and points at the task item tracking it; being drawn makes an entry owed 
 not decide the answer, and deleting the axis from the master is often the honest one
 (interaction states are CSS pseudo-classes here by convention, ADR-0114).
 
-The planned check reads each `<name>.contract.ts` statically with
-`tools/scripts/lib/ts-eval.js`'s `parseExportedVars`, so a contract must stay a plain
-object literal (no imports of values, no computed members).
+The check (`check-contracts`, from `@conciso/design-contracts`) reads each
+`<name>.contract.ts` statically (it evaluates the literal and never runs the file), so a
+contract must stay a plain object literal (no imports of values, no computed members).
 
 Every component story meta whose component has a contract must import it and set
 `contract` in its `parameters` (`docs-block.ts`'s `ContractBlock` reads
 `parameters.contract` to render the "Contract" section on the docs page); a story file
-that has a contract but doesn't wire it in is `[CONTRACT-IMPORT]` — an error where
-`docs-block.ts` ships beside the contracts (the Atelier monorepo does), a warning in a
-scaffolded workspace until it ships the block.
+that has a contract but doesn't wire it in is `[CONTRACT-IMPORT]` — its severity is the
+`contractImportSeverity` setting in `contracts.config.json` (an error in the Atelier
+monorepo, which ships the block; a warning in a scaffolded workspace until it does).
 
 To add one: create `<kebab-selector-without-atl-prefix>.contract.ts` in the contracts
 directory (`AtlButton` → `button.contract.ts`), `import type { ComponentContract } from

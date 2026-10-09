@@ -2120,19 +2120,22 @@ describe('preset generator', () => {
     expect(contract).toContain("figmaNodeId: '129:20'");
   });
 
-  it('writes the shared contract-loop scripts under tools/scripts', async () => {
+  it('writes the vendored contract-loop package under tools/design-contracts', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
       framework: 'angular',
       figmaMcp: true,
     });
 
-    expect(tree.exists('tools/scripts/check-contracts.mjs')).toBe(true);
-    expect(tree.exists('tools/scripts/lib/ts-eval.js')).toBe(true);
-    expect(tree.exists('tools/scripts/lib/docgen.mjs')).toBe(true);
-    expect(tree.exists('tools/scripts/figma-snapshot-contracts.mjs')).toBe(
-      true,
-    );
+    for (const file of [
+      'bin/check-contracts.mjs',
+      'bin/figma-snapshot-contracts.mjs',
+      'src/config.mjs',
+      'src/docgen.mjs',
+      'src/ts-eval.cjs',
+    ]) {
+      expect(tree.exists(`tools/design-contracts/${file}`)).toBe(true);
+    }
   });
 
   it('writes the AtlButton-only Figma snapshot projection', async () => {
@@ -2160,6 +2163,7 @@ describe('preset generator', () => {
     expect(config.contracts).toBe('workshop-vue/src/contracts');
     expect(config.stories).toEqual(['workshop-vue/src']);
     expect(config.snapshot).toBe('tools/figma/snapshot.json');
+    expect(config.tokenPrefix).toBe('--ui-');
   });
 
   it('adds check:contracts and a placeholder figma:snapshot script to package.json', async () => {
@@ -2171,10 +2175,10 @@ describe('preset generator', () => {
 
     const pkg = readJson(tree, 'package.json');
     expect(pkg.scripts['check:contracts']).toBe(
-      'node tools/scripts/check-contracts.mjs',
+      'node tools/design-contracts/bin/check-contracts.mjs',
     );
     expect(pkg.scripts['figma:snapshot']).toBe(
-      'node tools/scripts/figma-snapshot-contracts.mjs --file <YOUR_FIGMA_FILE_KEY>',
+      'node tools/design-contracts/bin/figma-snapshot-contracts.mjs --file <YOUR_FIGMA_FILE_KEY>',
     );
   });
 
@@ -2190,7 +2194,7 @@ describe('preset generator', () => {
 
     const pkg = readJson(tree, 'package.json');
     expect(pkg.scripts['figma:snapshot']).toBe(
-      'node tools/scripts/figma-snapshot-contracts.mjs --file QMnDD8uZQPldPrlCwZZ58T',
+      'node tools/design-contracts/bin/figma-snapshot-contracts.mjs --file QMnDD8uZQPldPrlCwZZ58T',
     );
   });
 
@@ -2203,7 +2207,7 @@ describe('preset generator', () => {
 
     const pkg = readJson(tree, 'package.json');
     expect(pkg.scripts['figma:snapshot']).toBe(
-      'node tools/scripts/figma-snapshot-contracts.mjs --file <YOUR_FIGMA_FILE_KEY>',
+      'node tools/design-contracts/bin/figma-snapshot-contracts.mjs --file <YOUR_FIGMA_FILE_KEY>',
     );
   });
 
@@ -2384,12 +2388,14 @@ describe('preset generator', () => {
       expect(
         tree.exists('workshop-react/src/contracts/button.contract.ts'),
       ).toBe(false);
-      expect(tree.exists('tools/scripts/check-contracts.mjs')).toBe(false);
-      expect(tree.exists('tools/scripts/lib/ts-eval.js')).toBe(false);
-      expect(tree.exists('tools/scripts/lib/docgen.mjs')).toBe(false);
-      expect(tree.exists('tools/scripts/figma-snapshot-contracts.mjs')).toBe(
-        false,
-      );
+      expect(
+        tree.exists('tools/design-contracts/bin/check-contracts.mjs'),
+      ).toBe(false);
+      expect(tree.exists('tools/design-contracts/src/ts-eval.cjs')).toBe(false);
+      expect(tree.exists('tools/design-contracts/src/docgen.mjs')).toBe(false);
+      expect(
+        tree.exists('tools/design-contracts/bin/figma-snapshot-contracts.mjs'),
+      ).toBe(false);
       expect(tree.exists('tools/figma/snapshot.json')).toBe(false);
       expect(tree.exists('contracts.config.json')).toBe(false);
     });
@@ -2416,7 +2422,7 @@ describe('preset generator', () => {
       expect(pkg.scripts['check:format']).toBe('prettier --check .');
     });
 
-    it('does not add the defensive typescript devDependency (only ts-eval.js needed it, and ts-eval.js does not ship)', async () => {
+    it('does not add the defensive typescript devDependency (only ts-eval.cjs needed it, and ts-eval.cjs does not ship)', async () => {
       await presetGenerator(tree, {
         name: 'my-workspace',
         framework: 'angular',

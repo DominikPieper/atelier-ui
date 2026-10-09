@@ -10,10 +10,14 @@
  *   - `tools/scripts/preflight.mjs` itself branches its port checks on which
  *     of the two trees it is running in (ADR-0090), and that only works if a
  *     fix applied to one copy always reaches the other.
- *   - `tools/scripts/check-contracts.mjs`, `tools/scripts/lib/ts-eval.js` and
- *     `tools/scripts/figma-snapshot-contracts.mjs` are the contract-loop
- *     scripts the scaffold ships (ADR-0121 S4) — the same "one canonical
- *     source, one generated copy" problem, just three more files.
+ *   - `libs/design-contracts/{bin,src}/*` is the self-contained contract-loop
+ *     package (`@conciso/design-contracts`: `check-contracts`,
+ *     `figma-snapshot-contracts`, their docgen/config/ts-eval plumbing). The
+ *     scaffold vendors it under `tools/design-contracts/` (ADR-0121 S4) — the
+ *     same "one canonical source, one generated copy" problem, just more files.
+ *     The package's `src/types.d.ts` (the `ComponentContract` type) is also
+ *     projected into `libs/spec/src/contracts/types.ts`, which this repo's
+ *     contracts import as `./types`.
  *   - `tools/stylelint-rules/{index,utils,no-raw-color-literal,
  *     no-undeclared-token,no-primitive-token,no-token-bypass}.js` are the
  *     ported CSS-discipline stylelint rules the scaffold ships (ADR-0130) —
@@ -67,21 +71,35 @@ const FILES = [
     source: 'tools/scripts/preflight.mjs',
     target: `${PRESET_FILES_DIR}/tools/scripts/preflight.mjs`,
   },
+  // The contract-loop package, vendored whole into the scaffold. `.mjs`/`.cjs`
+  // only, so the scaffold needs no package.json of its own for it: the file
+  // extension fixes the module format whatever the workspace's root `type` is.
   {
-    source: 'tools/scripts/check-contracts.mjs',
-    target: `${PRESET_FILES_DIR}/tools/scripts/check-contracts.mjs`,
+    source: 'libs/design-contracts/bin/check-contracts.mjs',
+    target: `${PRESET_FILES_DIR}/tools/design-contracts/bin/check-contracts.mjs`,
   },
   {
-    source: 'tools/scripts/lib/ts-eval.js',
-    target: `${PRESET_FILES_DIR}/tools/scripts/lib/ts-eval.js`,
+    source: 'libs/design-contracts/bin/figma-snapshot-contracts.mjs',
+    target: `${PRESET_FILES_DIR}/tools/design-contracts/bin/figma-snapshot-contracts.mjs`,
   },
   {
-    source: 'tools/scripts/lib/docgen.mjs',
-    target: `${PRESET_FILES_DIR}/tools/scripts/lib/docgen.mjs`,
+    source: 'libs/design-contracts/src/config.mjs',
+    target: `${PRESET_FILES_DIR}/tools/design-contracts/src/config.mjs`,
   },
   {
-    source: 'tools/scripts/figma-snapshot-contracts.mjs',
-    target: `${PRESET_FILES_DIR}/tools/scripts/figma-snapshot-contracts.mjs`,
+    source: 'libs/design-contracts/src/docgen.mjs',
+    target: `${PRESET_FILES_DIR}/tools/design-contracts/src/docgen.mjs`,
+  },
+  {
+    source: 'libs/design-contracts/src/ts-eval.cjs',
+    target: `${PRESET_FILES_DIR}/tools/design-contracts/src/ts-eval.cjs`,
+  },
+  // The `ComponentContract` type: canonical in the package, projected into this
+  // repo's own contracts directory (its `*.contract.ts` files import `./types`)
+  // and into the scaffold's template.
+  {
+    source: 'libs/design-contracts/src/types.d.ts',
+    target: 'libs/spec/src/contracts/types.ts',
   },
   // `.ts.template`, not `.ts`: preset.ts's own `storybookTemplateName()` comment
   // explains why — tsconfig.lib.json's `include: ["src/**/*.ts"]` compiles any
@@ -92,7 +110,7 @@ const FILES = [
   // `ENOENT .../files/contracts/types.ts` when create-atelier-ui-workspace's
   // e2e actually ran the published preset.
   {
-    source: 'libs/spec/src/contracts/types.ts',
+    source: 'libs/design-contracts/src/types.d.ts',
     target: `${PRESET_FILES_DIR}/contracts/types.ts.template`,
   },
   {

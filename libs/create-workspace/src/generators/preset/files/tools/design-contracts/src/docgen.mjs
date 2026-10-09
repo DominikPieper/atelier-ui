@@ -1,20 +1,20 @@
 /**
- * Shared docgen plumbing (ADR-0121 §5 / S6(a)).
+ * Shared docgen plumbing.
  *
- * Extracted out of check-contracts.mjs so check-manifest-parity.mjs can reuse the
- * exact same recipe rather than re-deriving it: the framework-worker docgen call
- * for Angular/Vue (`@storybook/{angular-vite,vue3}/internal/docgen-worker`, a
- * story file as the entry point), `react-docgen`'s own `parse()` for React (the
- * worker's React export is the inactive react-component-meta engine in this
- * repo), and each framework's raw-payload normaliser into the common
- * `{ name, kind: 'enum'|'boolean'|'other', members, default, isOutput }` shape
- * check-contracts.mjs already established. Both scripts importing from one place
- * means they cannot silently diverge on what a framework's docgen payload means
- * — the exact drift class this repo's gates exist to prevent elsewhere.
+ * The recipe, kept in one place so every script that reads a component's API
+ * reads it the same way: the framework-worker docgen call for Angular/Vue
+ * (`@storybook/{angular-vite,vue3}/internal/docgen-worker`, a story file as the
+ * entry point), `react-docgen`'s own `parse()` for React (the worker's React
+ * export is the react-component-meta engine, which is not the default docgen
+ * path), and each framework's raw-payload normaliser into the common
+ * `{ name, kind: 'enum'|'boolean'|'other', members, default, isOutput }` shape.
+ * Scripts importing from one place cannot silently diverge on what a
+ * framework's docgen payload means.
  *
- * Every function here is parameterized (root, cwdRequire) rather than reading
- * module-level globals, so it works identically whichever script imports it and
- * from whatever cwd that script resolves its own framework packages.
+ * Every function here is parameterized (root, cwdRequire, story dirs) rather
+ * than reading module-level globals or paths derived from this file's own
+ * location, so it works identically whichever script imports it. The framework
+ * packages themselves are resolved from the consumer's install via `cwdRequire`.
  */
 'use strict';
 
@@ -41,19 +41,15 @@ export function collectStoryFilesUnder(dir) {
 }
 
 /**
- * Story files for `fw`: every `storiesDirs` root walked recursively when given
- * (a scaffold's one roster for its one framework), else the monorepo's
- * `libs/<fw>/src/lib` convention under `root`.
+ * Every story file under the `storiesDirs` roots (absolute paths), walked
+ * recursively, de-duplicated and sorted. The caller decides the roots — there
+ * is no default location.
  */
-export function findStoryFiles(fw, { root, storiesDirs } = {}) {
-  if (storiesDirs) {
-    const out = new Set();
-    for (const dir of storiesDirs)
-      for (const f of collectStoryFilesUnder(dir)) out.add(f);
-    return [...out].sort();
-  }
-  const base = path.join(root, 'libs', fw, 'src', 'lib');
-  return collectStoryFilesUnder(base).sort();
+export function findStoryFiles(storiesDirs) {
+  const out = new Set();
+  for (const dir of storiesDirs)
+    for (const f of collectStoryFilesUnder(dir)) out.add(f);
+  return [...out].sort();
 }
 
 export function toRepoImportPath(absPath, root) {
@@ -63,9 +59,9 @@ export function toRepoImportPath(absPath, root) {
 /** Best-effort human-readable message for a caught value that might not be an
  * `Error` (a thrown string, a plain object, ...). Shared so a [DOCGEN-FAILED]
  * reason reads consistently across every catch site that reports one: this
- * file's own `makeWorkerDocgen()`, and check-contracts.mjs's / check-
- * manifest-parity.mjs's own try/catch around `reactParseFile()` (react-docgen
- * isn't guaranteed to throw an `Error` instance either). */
+ * file's own `makeWorkerDocgen()`, and a caller's own try/catch around
+ * `reactParseFile()` (react-docgen isn't guaranteed to throw an `Error`
+ * instance either). */
 export function errorMessage(e) {
   return e && e.message ? e.message : String(e);
 }
@@ -79,11 +75,10 @@ export function errorMessage(e) {
  * same way Node's own `node_modules` resolution does (parent directories,
  * `node_modules/<pkg>/package.json` at each). Returns that `node_modules/<pkg>`
  * directory, or `null` when `rawSpecifier` is missing/relative/absolute, when
- * the walk finds no matching install (e.g. a workspace tsconfig path alias
- * like this monorepo's own `@atelier-ui/*`, which has no real `node_modules`
- * entry at all), or when the matching `node_modules/<pkg>` entry is an
- * npm-workspaces SYMLINK back into the repo's own source (e.g. this repo's own
- * `node_modules/@atelier-ui/generators -> tools/generators`) — resolved via
+ * the walk finds no matching install (e.g. a workspace tsconfig path alias,
+ * which has no real `node_modules` entry at all), or when the matching
+ * `node_modules/<pkg>` entry is an npm-workspaces SYMLINK back into the
+ * repo's own source (`node_modules/@scope/pkg -> packages/pkg`) — resolved via
  * `fs.realpathSync` and classed as external only when the REAL path still
  * contains a `node_modules` path segment; a workspace symlink's real path
  * doesn't, so it's workspace code and must be docgen'd, not skipped.
@@ -91,7 +86,7 @@ export function errorMessage(e) {
  * Deliberately NOT `require.resolve`: a package's `exports` map makes that
  * throw for a subpath it doesn't list and for an ESM-only package resolved
  * through a CJS `createRequire` — exactly the packages this check exists to
- * catch (`@atelier-ui/angular` et al. in a real scaffold install). The
+ * catch (a component library installed from the registry). The
  * directory walk sidesteps both failure modes because it only needs to know
  * the package is INSTALLED, not import anything from it.
  */
@@ -149,18 +144,16 @@ export function resolveWithExtensions(base) {
  * Angular/Vue docgen via the Storybook framework worker, story file as the
  * entry point. The worker package itself is resolved from `cwdRequire`'s
  * node_modules (the caller's cwd), not this file's own directory, so a copy
- * dropped into a scaffold picks up the scaffold's own installed Storybook —
- * same portability rule check-contracts.mjs already followed.
+ * dropped into a workspace picks up that workspace's own installed Storybook.
  *
  * The returned function resolves to a DISCRIMINATED result rather than a bare
  * payload-or-null: `{ ok: true, payload }` on success, `{ ok: false, reason }`
  * for every failure mode — the provider throwing, an empty/falsy payload, or
  * `payload.error` being set. Collapsing all three into `null` (the shape this
- * function had until ADR-0124) is exactly what let a broken docgen worker
- * read as "no component here": both call sites treated `null` as "skip,
- * nothing to see" with no residual signal at all (ADR-0034's
- * roster-derivation convention, applied to this gate by ADR-0124). `reason`
- * is always a string, ready to drop straight into a finding message.
+ * function had at first) is exactly what let a broken docgen worker
+ * read as "no component here": every call site treated `null` as "skip,
+ * nothing to see" with no residual signal at all, so a gate's roster could
+ * shrink silently instead of failing. `reason` is always a string, ready to drop straight into a finding message.
  */
 export async function makeWorkerDocgen(fw, cwdRequire, root) {
   const spec =
@@ -291,7 +284,7 @@ export function normalizeVue(payload) {
 /**
  * React docgen tooling bound to one `cwdRequire`. `react-docgen` is required
  * lazily and from the caller's cwd (an Angular/Vue-only scaffold never installs
- * it), mirroring check-contracts.mjs's original lazy `getReactDocgen()`.
+ * it).
  */
 export function makeReactDocgenTools(cwdRequire) {
   let _reactDocgen = null;
@@ -338,59 +331,42 @@ export function makeReactDocgenTools(cwdRequire) {
   return { getReactDocgen, makeReactImporter, reactParseFile };
 }
 
-/**
- * Walk up from `startDir` looking for `libs/spec/src/index.ts` — the
- * framework-agnostic contract every `Atl<X>Spec` extends. Bounded (10 levels)
- * and returns `null` rather than throwing when nothing is found, so a
- * standalone scaffold that doesn't carry `libs/spec` at all (see this file's
- * own "parameterized, no module globals" header note) degrades to no
- * candidates instead of an error.
- */
-function findSpecIndexFile(startDir) {
-  let dir = startDir;
-  for (let i = 0; i < 10; i++) {
-    const candidate = path.join(dir, 'libs', 'spec', 'src', 'index.ts');
-    if (fs.existsSync(candidate)) return candidate;
-    const parent = path.dirname(dir);
-    if (parent === dir) break;
-    dir = parent;
-  }
-  return null;
-}
-
-const _formFieldStringPropsCache = new Map(); // specFile -> string[]
+const _sharedPropsCache = new Map(); // "<file>#<interface>" -> string[]
 
 /**
- * The string-typed field names declared on `AtlFormFieldSpec` in
- * `libs/spec/src/index.ts` (found by walking up from `componentFilePath`) —
- * `['name']` today (`value` is `any`, `onValueChange` a callback, `disabled`/
- * `invalid`/`required` boolean). This is the ONLY candidate set the
- * destructuring fallback below considers: it is the exact, narrow class of
- * prop this fallback exists for (a string field inherited two levels deep
- * through `Atl<X>Spec extends Omit<AtlFormFieldSpec, …>`, with no default for
- * react-docgen's own heuristic to latch onto) — never a general "every
- * destructured identifier react-docgen missed" scan, which would just as
- * happily "recover" a native HTML passthrough attribute (`id`, `style`,
- * `onChange`, …) a component destructures for its own unrelated reasons.
+ * The string-typed field names declared on the interface `sharedProps.name` in
+ * `sharedProps.file` — the framework-agnostic base interface several
+ * components' own prop types extend (e.g. a form-field spec: `['name']` when
+ * `value` is `any`, `onValueChange` a callback, `disabled`/`invalid`/`required`
+ * boolean). This is the ONLY candidate set the destructuring fallback below
+ * considers: it is the exact, narrow class of prop this fallback exists for (a
+ * string field inherited two levels deep through `Props extends
+ * Omit<SharedBase, …>`, with no default for react-docgen's own heuristic to
+ * latch onto) — never a general "every destructured identifier react-docgen
+ * missed" scan, which would just as happily "recover" a native HTML
+ * passthrough attribute (`id`, `style`, `onChange`, …) a component destructures
+ * for its own unrelated reasons. Returns `[]` when `sharedProps` is not
+ * configured or the file/interface is not found.
  */
-function formFieldStringProps(componentFilePath) {
-  const specFile = findSpecIndexFile(path.dirname(componentFilePath));
-  if (!specFile) return [];
-  if (_formFieldStringPropsCache.has(specFile))
-    return _formFieldStringPropsCache.get(specFile);
-  const src = fs.readFileSync(specFile, 'utf-8');
-  const ifaceMatch = /interface\s+AtlFormFieldSpec\s*\{([\s\S]*?)\n\}/.exec(
-    src,
-  );
+function sharedPropsStringProps(sharedProps) {
+  if (!sharedProps) return [];
+  const key = `${sharedProps.file}#${sharedProps.name}`;
+  if (_sharedPropsCache.has(key)) return _sharedPropsCache.get(key);
   const out = [];
-  if (ifaceMatch) {
-    const fieldRe = /^\s*(\w+)\??:\s*(.+?);\s*$/gm;
-    let fm;
-    while ((fm = fieldRe.exec(ifaceMatch[1])) !== null) {
-      if (fm[2].trim() === 'string') out.push(fm[1]);
+  if (fs.existsSync(sharedProps.file)) {
+    const src = fs.readFileSync(sharedProps.file, 'utf-8');
+    const ifaceMatch = new RegExp(
+      `interface\\s+${sharedProps.name}\\s*\\{([\\s\\S]*?)\\n\\}`,
+    ).exec(src);
+    if (ifaceMatch) {
+      const fieldRe = /^\s*(\w+)\??:\s*(.+?);\s*$/gm;
+      let fm;
+      while ((fm = fieldRe.exec(ifaceMatch[1])) !== null) {
+        if (fm[2].trim() === 'string') out.push(fm[1]);
+      }
     }
   }
-  _formFieldStringPropsCache.set(specFile, out);
+  _sharedPropsCache.set(key, out);
   return out;
 }
 
@@ -469,8 +445,12 @@ function scanDestructuredReactProps(source, componentName) {
   return out;
 }
 
-/** react-docgen's raw per-component payload -> array of props in the common shape. */
-export function normalizeReactDocgen(d) {
+/**
+ * react-docgen's raw per-component payload -> array of props in the common shape.
+ * `sharedProps` (`{ file, name }`, optional) enables the destructuring fallback
+ * at the end — see `sharedPropsStringProps()`; without it the fallback is off.
+ */
+export function normalizeReactDocgen(d, sharedProps) {
   const out = [];
   const known = new Set();
   for (const [propName, info] of Object.entries(d.props || {})) {
@@ -503,10 +483,10 @@ export function normalizeReactDocgen(d) {
         info.defaultValue.value === 'false')
     ) {
       // react-docgen sometimes resolves a prop inherited through a multi-level interface
-      // chain (AtlCheckboxSpec extends AtlFormFieldSpec) without a tsType at all — seen
+      // chain (a component's props extending a shared base interface) without a tsType at all — seen
       // on 'disabled'/'required' here, though the sibling 'invalid' (declared one level
       // shallower) resolves fine. A literal true/false default is otherwise only ever a
-      // boolean prop in this codebase, so infer the kind from it rather than losing the
+      // boolean prop, so infer the kind from it rather than losing the
       // prop to 'other' and under-reporting a real BOOLEAN drift.
       kind = 'boolean';
     }
@@ -533,14 +513,14 @@ export function normalizeReactDocgen(d) {
   // infer a boolean kind (above) from a literal true/false DEFAULT VALUE it
   // already found, which requires it to have returned an entry in the first
   // place — that happens for 'disabled'/'required' here (inherited two levels
-  // deep through `AtlCheckboxSpec extends Omit<AtlFormFieldSpec, …>`, same as
+  // deep through `Props extends Omit<SharedBase, …>`, same as
   // 'name', but destructured WITH a `= false` default for react-docgen's
   // resolver to latch onto). A same-depth prop with no default at all (`name`,
   // no default) gives react-docgen nothing to find, so it is missing from
   // `d.props` entirely rather than merely untyped. Recovered from the
   // component's own destructured props parameter — same regex-over-the-source
-  // idiom check-defaults.js/check-contracts.mjs use — but ONLY for the exact,
-  // narrow candidate set formFieldStringProps() names (see its own doc comment
+  // idiom the check's other source scans use — but ONLY for the exact,
+  // narrow candidate set sharedPropsStringProps() names (see its own doc comment
   // for why: this is not a general "every destructured identifier react-docgen
   // missed" scan, which would just as happily manufacture a finding for a
   // native HTML passthrough attribute — `id`, `style`, `onChange`, … — that a
@@ -549,7 +529,7 @@ export function normalizeReactDocgen(d) {
   // react-docgen's resolver can't traverse at all, not this two-level-Omit
   // shape).
   if (d.__source && d.displayName && d.__file) {
-    const candidates = new Set(formFieldStringProps(d.__file));
+    const candidates = new Set(sharedPropsStringProps(sharedProps));
     if (candidates.size > 0) {
       for (const {
         name,

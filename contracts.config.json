@@ -1,0 +1,23 @@
+{
+  "frameworks": ["angular", "react", "vue"],
+  "contracts": "libs/spec/src/contracts",
+  "snapshot": "tools/figma/snapshot.json",
+  "stories": {
+    "angular": ["libs/angular/src/lib"],
+    "react": ["libs/react/src/lib"],
+    "vue": ["libs/vue/src/lib"]
+  },
+  "componentDirs": {
+    "angular": ["libs/angular/src/lib"],
+    "react": ["libs/react/src/lib"],
+    "vue": ["libs/vue/src/lib"]
+  },
+  "styleDir": "libs/styles/src",
+  "tokenPrefix": "--ui-",
+  "contractImportAlias": "@atelier-ui/spec/contracts",
+  "contractImportSeverity": "error",
+  "sharedPropsInterface": {
+    "file": "libs/spec/src/index.ts",
+    "name": "AtlFormFieldSpec"
+  }
+}

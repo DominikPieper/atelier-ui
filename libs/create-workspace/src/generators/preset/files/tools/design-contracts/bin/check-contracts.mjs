@@ -1,36 +1,36 @@
 #!/usr/bin/env node
 /**
- * check-contracts.mjs — ADR-0121 Decision 4, stage 1 of "the stories are the spec".
+ * check-contracts — "the stories are the spec", stage 1.
  *
  * Offline, no Storybook build, no browser: joins three DERIVED inputs with the
- * hand-written micro-contracts (`libs/spec/src/contracts/*.contract.ts`) and reports
- * drift. One process per framework, driven by the recipe proven in
- * `tasks/docgen-spike-2026-09-10.md`:
+ * hand-written micro-contracts (`<name>.contract.ts`, one per component) and
+ * reports drift. One docgen pass per framework:
  *
  *   1. Docgen per component — Angular/Vue via the Storybook framework worker
  *      (`@storybook/{angular-vite,vue3}/internal/docgen-worker`, story file as the
- *      entry point); React via `react-docgen`'s own `parse()` directly (the worker's
- *      React export is the react-component-meta engine, inactive in this repo).
+ *      entry point); React via `react-docgen`'s own `parse()` directly (the
+ *      worker's React export is the react-component-meta engine, which is not
+ *      the default docgen path).
  *   2. Story `args` per story via `storybook/internal/csf-tools`
  *      (`loadCsf(...).parse()` + `createStoryArgsResolver`).
- *   3. The Figma snapshot, `tools/figma/snapshot.json`.
- *   4. The contracts, read statically with `tools/scripts/lib/ts-eval.js`.
+ *   3. The Figma snapshot (a JSON file, refreshed by `figma-snapshot-contracts`).
+ *   4. The contracts, read statically (no code is executed) with `ts-eval.cjs`.
  *
- * Rules, tags, and the CLI surface are documented in `libs/spec/src/contracts/README.md`
- * and this file's own comments above each check. Run via `npm run check:contracts`.
+ * Every setting comes from a CLI flag or `contracts.config.json` in the working
+ * directory — nothing is derived from where this package is installed. See the
+ * package README for every field. Exit codes: 0 = no errors (warnings allowed),
+ * 1 = errors found, 2 = the check could not run (bad or missing settings).
  *
- * [CONTRACT-IMPORT] (S5b): a component story file whose component has a contract
- * must import it — by the `@atelier-ui/spec/contracts/<name>.contract` alias here,
- * or by a relative path to the contracts directory in a scaffold — and set
- * `contract` in the meta's `parameters`; error where `docs-block.ts` ships beside
- * the contracts, warning otherwise — a textual check, the same heuristic
- * `check-story-descriptions.js` uses for `component: metadata.purpose`.
+ * [CONTRACT-IMPORT]: a component story file whose component has a contract
+ * must import it — by the configured `contractImportAlias`, or by a relative path
+ * to the contracts directory — and set `contract` in the meta's `parameters`;
+ * severity is `contractImportSeverity` — a textual check, the same convention-
+ * following heuristic as the other story-meta scans in this file.
  */
 'use strict';
 
 import fs from 'node:fs';
 import path from 'node:path';
-import { fileURLToPath } from 'node:url';
 import { createRequire } from 'node:module';
 import { loadCsf, createStoryArgsResolver } from 'storybook/internal/csf-tools';
 import {
@@ -43,35 +43,31 @@ import {
   normalizeReactDocgen,
   findExternalPackageDir,
   errorMessage,
-} from './lib/docgen.mjs';
+} from '../src/docgen.mjs';
+import {
+  FRAMEWORKS,
+  die,
+  readConfigFile,
+  dirsFor,
+  readSharedPropsSetting,
+  CONFIG_FILE_NAME,
+} from '../src/config.mjs';
 
-// ts-eval.js is always required relative to THIS script's own directory
-// (`lib/ts-eval.js` beside it, via createRequire(import.meta.url) — not the
-// cwd) so a copied pair (canonical script + lib/ts-eval.js) works unmodified
-// wherever it is dropped, including inside a scaffolded workspace.
+// ts-eval.cjs ships in this package (`../src/ts-eval.cjs`) and is loaded by a
+// path relative to THIS file, so it works from node_modules and from a vendored
+// copy alike. It needs `typescript`, which resolves from the consumer's install.
 const require = createRequire(import.meta.url);
-const { parseExportedVars } = require('./lib/ts-eval.js');
+const { parseExportedVars } = require('../src/ts-eval.cjs');
 
-const __dirname = path.dirname(fileURLToPath(import.meta.url));
-// ROOT is likewise derived from the script's own location, not the cwd — a
-// byte-identical copy at <scaffold>/tools/scripts/check-contracts.mjs
-// therefore defaults to the SCAFFOLD's own tree (its own libs/spec,
-// tools/figma/snapshot.json) with zero changes below, whenever CLI flags and
-// contracts.config.json don't override a given path.
-const ROOT = path.resolve(__dirname, '../..');
-// Framework docgen packages (react-docgen, the Storybook framework workers),
-// by contrast, are resolved from the CWD's node_modules — not this script's
-// own directory — so that running `node tools/scripts/check-contracts.mjs`
-// from inside a scaffold picks up the scaffold's own installed Storybook
-// packages rather than whatever happens to be findable by walking up from
-// this file (which, for a copied pair, is usually the same tree anyway, but
-// CWD is the explicit, unambiguous contract).
+// Every path below is relative to the working directory, never to this file.
+// Framework docgen packages (react-docgen, the Storybook framework workers)
+// resolve from the working directory's node_modules too, so the check always
+// reads the workspace's own installed Storybook.
 const CWD = process.cwd();
 const cwdRequire = createRequire(path.join(CWD, 'package.json'));
 const { reactParseFile } = makeReactDocgenTools(cwdRequire);
-const FRAMEWORKS = ['angular', 'react', 'vue'];
 
-// Interaction values on a `state` axis (ADR-0114): CSS pseudo-classes, not code-modelled
+// Interaction values on a `state` axis: CSS pseudo-classes, not code-modelled
 // state. Every OTHER value on a `state` axis (completed, optional, error, filled, open,
 // invalid, checked, filtered, selected, ...) is data-flavoured and must be covered by an
 // `axisMap` entry or a `figmaOnly` entry named `state=<value>`.
@@ -88,8 +84,7 @@ const UNRESOLVABLE = Symbol('unresolvable');
 
 // Master-description mirror grammar for contract `codeOnly` entries. A `codeOnly` entry
 // `x` is mirrored only by a line "- Code-only `x`: <reason>" (non-empty reason) or by the
-// existing opt-out line "- Boolean `x`: not modelled — <reason>" that check-figma.js
-// parses (same shape). Substring mentions in prose prove nothing.
+// existing opt-out line "- Boolean `x`: not modelled — <reason>" (same shape). Substring mentions in prose prove nothing.
 function hasCodeOnlyMirror(description, name) {
   const n = escapeRegExp(name);
   return new RegExp(
@@ -125,9 +120,7 @@ const TAG_LEVEL = {
   'STALE-MIRROR': 'warning',
   'NO-STORY-META': 'warning',
   ROSTER: 'error',
-  // 'CONTRACT-IMPORT' is set below, once CONTRACTS_DIR is resolved — its
-  // severity (error vs. warning) depends on whether this tree ships
-  // `docs-block.ts` beside its contracts (see the assignment near CONTRACTS_DIR).
+  // 'CONTRACT-IMPORT' is set below, from the `contractImportSeverity` setting.
 };
 
 // ─── CLI args ───────────────────────────────────────────────────────────────
@@ -155,44 +148,65 @@ function parseArgs(argv) {
 
 const args = parseArgs(process.argv.slice(2));
 
-// ─── Resolution layer (portable across the monorepo and a scaffolded
-//     single-framework workspace) ────────────────────────────────────────────
-// Precedence per field: CLI flag > `contracts.config.json` at the cwd root >
-// monorepo default. Nothing below changes what a plain
-// `node tools/scripts/check-contracts.mjs` run from the repo root does — no
-// flags, no contracts.config.json at the repo root, so every field falls
-// through to the same defaults this script always used.
-const CONFIG_PATH = path.join(CWD, 'contracts.config.json');
-let fileConfig = null;
-if (fs.existsSync(CONFIG_PATH)) {
-  try {
-    fileConfig = JSON.parse(fs.readFileSync(CONFIG_PATH, 'utf-8'));
-  } catch (e) {
-    console.error(`${CONFIG_PATH}: invalid JSON (${e.message})`);
-    process.exit(2);
-  }
-}
+// ─── Settings ───────────────────────────────────────────────────────────────
+// Precedence per field: CLI flag > `contracts.config.json` in the working
+// directory. There are no built-in defaults for locations: a missing required
+// setting is a usage error (exit 2).
+const fileConfig = readConfigFile(CWD);
 
-const requestedFw = args.fw || fileConfig?.framework || null;
-const targetFrameworks = requestedFw ? [requestedFw] : FRAMEWORKS;
+const requestedFw = args.fw
+  ? [args.fw]
+  : fileConfig?.framework
+    ? [fileConfig.framework]
+    : Array.isArray(fileConfig?.frameworks)
+      ? fileConfig.frameworks
+      : null;
+if (!requestedFw || requestedFw.length === 0) {
+  die(
+    `No framework set — pass --fw <${FRAMEWORKS.join('|')}> or set "framework" ` +
+      `(or "frameworks": [...]) in ${CONFIG_FILE_NAME}.`,
+  );
+}
+const targetFrameworks = requestedFw;
 for (const fw of targetFrameworks) {
   if (!FRAMEWORKS.includes(fw)) {
-    console.error(
-      `Unknown framework '${fw}' — expected one of ${FRAMEWORKS.join(', ')}`,
-    );
-    process.exit(2);
+    die(`Unknown framework '${fw}' — expected one of ${FRAMEWORKS.join(', ')}`);
   }
 }
 
-// `--stories` (repeatable) or config `stories: [...]` — one or more roots
-// walked recursively for `**/*.stories.{ts,tsx}` (node_modules excluded).
-// `null` means "no override": findStoryFiles() falls back to its historic
-// per-framework `libs/<fw>/src/lib` walk.
-const STORIES_DIRS = args.stories.length
-  ? args.stories.map((d) => path.resolve(CWD, d))
-  : Array.isArray(fileConfig?.stories) && fileConfig.stories.length
-    ? fileConfig.stories.map((d) => path.resolve(CWD, d))
-    : null;
+// `--stories` (repeatable, applies to every requested framework) or config
+// `stories`: either one list of roots for every framework (`["src"]`) or a map
+// per framework (`{ "angular": ["packages/a/src"] }`). Each root is walked
+// recursively for `**/*.stories.{ts,tsx}` (node_modules excluded).
+const STORIES_SETTING = args.stories.length
+  ? args.stories
+  : fileConfig?.stories;
+const STORIES_DIRS_BY_FW = new Map();
+for (const fw of targetFrameworks) {
+  const dirs = dirsFor(STORIES_SETTING, fw, CWD);
+  if (!dirs) {
+    die(
+      `No story roots for '${fw}' — pass --stories <dir> or set "stories" ` +
+        `(a list, or a map per framework) in ${CONFIG_FILE_NAME}.`,
+    );
+  }
+  STORIES_DIRS_BY_FW.set(fw, dirs);
+}
+
+// Optional: directories searched (besides a story's own directory) for a CHILD
+// component's source when an `axisMap` names `Child.prop` — a list or a map per
+// framework, like `stories`.
+const COMPONENT_DIRS_SETTING = fileConfig?.componentDirs;
+// Optional: a directory of per-component stylesheets kept apart from the
+// components, looked up as `<styleDirs>/<component directory name>` (--emit only).
+const STYLE_DIR = fileConfig?.styleDir
+  ? path.resolve(CWD, fileConfig.styleDir)
+  : null;
+// Optional: CSS custom-property prefix scanned for design tokens (--emit only).
+const TOKEN_PREFIX = fileConfig?.tokenPrefix ?? '--';
+// Optional: `{ file, name }` — a base interface whose string props the React
+// destructuring fallback may recover (see normalizeReactDocgen in docgen.mjs).
+const SHARED_PROPS = readSharedPropsSetting(fileConfig, CWD);
 
 // ─── Findings ───────────────────────────────────────────────────────────────
 
@@ -206,7 +220,7 @@ function report(tag, fw, msg) {
 // ─── codeOnly cross-framework staleness tracking (R1d) ─────────────────────
 // `codeOnly` staleness can only be judged once every requested framework has run:
 // a prop absent from one framework's manifest but present in another is
-// [FW-ONLY] (ADR-0093 territory), not a stale exemption. Populated per-framework
+// [FW-ONLY] (a cross-framework API divergence), not a stale exemption. Populated per-framework
 // inside processComponent, evaluated once in runCodeOnlyStalenessChecks() after
 // the whole `targetFrameworks` loop completes.
 const reachedByFw = new Map(); // selector -> Set<fw> the component's docgen was reached in
@@ -214,11 +228,18 @@ const codeOnlyPresentByFw = new Map(); // selector -> Map<entryName, Set<fw>> wh
 
 // ─── Snapshot ───────────────────────────────────────────────────────────────
 
-const snapshotPath = args.snapshot
-  ? path.resolve(CWD, args.snapshot)
-  : fileConfig?.snapshot
-    ? path.resolve(CWD, fileConfig.snapshot)
-    : path.join(ROOT, 'tools/figma/snapshot.json');
+const snapshotSetting = args.snapshot ?? fileConfig?.snapshot;
+if (!snapshotSetting) {
+  die(
+    `No Figma snapshot set — pass --snapshot <file> or set "snapshot" in ${CONFIG_FILE_NAME}.`,
+  );
+}
+const snapshotPath = path.resolve(CWD, snapshotSetting);
+if (!fs.existsSync(snapshotPath)) {
+  die(
+    `Figma snapshot not found: ${snapshotPath} — refresh it with figma-snapshot-contracts.`,
+  );
+}
 const snapshot = JSON.parse(fs.readFileSync(snapshotPath, 'utf-8'));
 const snapshotBySelector = new Map(
   snapshot.components.map((c) => [c.selector, c]),
@@ -231,36 +252,35 @@ function stripId(name) {
 
 // ─── Contracts ──────────────────────────────────────────────────────────────
 
-const CONTRACTS_DIR = args.contracts
-  ? path.resolve(CWD, args.contracts)
-  : fileConfig?.contracts
-    ? path.resolve(CWD, fileConfig.contracts)
-    : path.join(ROOT, 'libs/spec/src/contracts');
+const contractsSetting = args.contracts ?? fileConfig?.contracts;
+if (!contractsSetting) {
+  die(
+    `No contracts directory set — pass --contracts <dir> or set "contracts" in ${CONFIG_FILE_NAME}.`,
+  );
+}
+const CONTRACTS_DIR = path.resolve(CWD, contractsSetting);
+if (!fs.existsSync(CONTRACTS_DIR)) {
+  die(`Contracts directory not found: ${CONTRACTS_DIR}`);
+}
 
-// Whether CONTRACTS_DIR is this repo's own monorepo contracts directory — the
-// only place the `@atelier-ui/spec/contracts/<base>` path alias actually
-// resolves (a scaffold neither ships nor depends on a `@atelier-ui/spec`
-// package). Named once here so `hasContractImport` (accepting the alias) and
-// `suggestedContractSpecifier` (suggesting it) read the same test rather than
-// each re-deriving it and risking drift.
-const CONTRACTS_DIR_IS_MONOREPO =
-  CONTRACTS_DIR === path.join(ROOT, 'libs/spec/src/contracts');
+// Optional: a module-path prefix (e.g. a tsconfig path alias such as
+// `@scope/spec/contracts`) under which a story may import a contract as
+// `<alias>/<name>.contract`. Accepted by [CONTRACT-IMPORT] and used in its
+// suggestion; without it only a relative import of the contract file is accepted.
+const CONTRACT_IMPORT_ALIAS = fileConfig?.contractImportAlias
+  ? String(fileConfig.contractImportAlias).replace(/\/+$/, '')
+  : null;
 
-// [CONTRACT-IMPORT] exists because `libs/spec/src/contracts/docs-block.ts`'s
-// `ContractBlock` reads `parameters.contract` off the story meta and renders
-// it — an unwired story is a real gap in THIS repo (error) because that block
-// ships here. A fresh `create-atelier-ui-workspace` scaffold doesn't ship
-// `docs-block.ts` yet (S5b's "block that displays it" is monorepo-only so
-// far), so the identical finding has nothing to render into there — downgrade
-// to a warning rather than fail a scaffold's `check:contracts` over wiring
-// with no visible effect yet. Set once here (CONTRACTS_DIR is resolved by
-// this point) rather than in the TAG_LEVEL literal above.
-const CONTRACT_IMPORT_HAS_DOCS_BLOCK = fs.existsSync(
-  path.join(CONTRACTS_DIR, 'docs-block.ts'),
-);
-TAG_LEVEL['CONTRACT-IMPORT'] = CONTRACT_IMPORT_HAS_DOCS_BLOCK
-  ? 'error'
-  : 'warning';
+// [CONTRACT-IMPORT]: an unwired story is a gap only where something renders the
+// wiring (a docs block that reads `parameters.contract`), so the severity is a
+// setting: "error" or "warning" (the default).
+const importSeverity = fileConfig?.contractImportSeverity ?? 'warning';
+if (importSeverity !== 'error' && importSeverity !== 'warning') {
+  die(
+    `${CONFIG_FILE_NAME}: "contractImportSeverity" must be "error" or "warning", got ${JSON.stringify(importSeverity)}`,
+  );
+}
+TAG_LEVEL['CONTRACT-IMPORT'] = importSeverity;
 
 const contractFiles = fs
   .readdirSync(CONTRACTS_DIR)
@@ -412,18 +432,16 @@ function runGlobalChecks() {
 }
 
 // ─── Per-framework docgen ───────────────────────────────────────────────────
-// collectStoryFilesUnder / findStoryFiles / toRepoImportPath now live in
-// ./lib/docgen.mjs (ADR-0121 §5 / S6(a)), shared with check-manifest-parity.mjs.
-// findStoryFiles(fw) here is always findStoryFiles(fw, { root: ROOT, storiesDirs: STORIES_DIRS }).
+// collectStoryFilesUnder / findStoryFiles / toRepoImportPath live in
+// ../src/docgen.mjs, shared with any script that reads the same docgen payloads.
 
-// ─── CONTRACT-IMPORT (S5b) ──────────────────────────────────────────────────
-// The Storybook docs page's `ContractBlock` (`libs/spec/src/contracts/docs-
-// block.ts`) reads `parameters.contract` off the current story meta — it has
-// nothing to render unless the story file imports the component's contract
-// and wires it in. Textual, not AST: the same convention-following heuristic
-// `check-story-descriptions.js` uses for `component: metadata.purpose`. Every
-// story file in this repo follows one shape (`const meta ... export default
-// meta;`), so a lexical scan for that shape is enough.
+// ─── CONTRACT-IMPORT ────────────────────────────────────────────────────────
+// A Storybook docs block that displays the contract reads `parameters.contract`
+// off the current story meta — it has nothing to render unless the story file
+// imports the component's contract and wires it in. Textual, not AST: a
+// convention-following heuristic. Story files are expected to follow one shape
+// (`const meta ... export default meta;`), so a lexical scan for that shape is
+// enough.
 
 /** The `const meta = {...}; export default meta;` slice, or `null` if the file
  * doesn't follow that convention (treated as "not wired" below, not a crash). */
@@ -463,26 +481,23 @@ function findImportSpecifiers(source) {
 
 /**
  * Whether `contract` is imported by any specifier in `source`, accepting
- * EITHER of two forms: the monorepo's `@atelier-ui/spec/contracts/<base>`
- * path alias — only accepted when `CONTRACTS_DIR_IS_MONOREPO`, since that
- * alias only ever resolves inside this repo; a scaffold neither ships nor
- * depends on a `@atelier-ui/spec` package, so the identical string in a
- * scaffold's story would be a specifier that can never resolve there, not a
- * valid wiring — or a RELATIVE specifier that, resolved from `storyFile`'s own
- * directory (a trailing `.js` stripped first — a NodeNext-style
- * `./contracts/button.contract.js` import resolves to the `.ts` source file
- * under bundler/NodeNext resolution — then `.ts` appended when the resolved
- * path doesn't already end in it), lands on the exact file `CONTRACTS_DIR`
- * holds this contract at. The relative form is what a scaffold's own contract
- * import looks like — `CONTRACTS_DIR` there is `<app>/src/contracts`, not a
- * workspace alias.
+ * EITHER of two forms: the configured `contractImportAlias`
+ * (`<alias>/<name>.contract`, only when one is set — a path alias is
+ * meaningless without it), or a RELATIVE specifier that, resolved from
+ * `storyFile`'s own directory (a trailing `.js` stripped first — a
+ * NodeNext-style `./contracts/button.contract.js` import resolves to the `.ts`
+ * source file under bundler/NodeNext resolution — then `.ts` appended when the
+ * resolved path doesn't already end in it), lands on the exact file
+ * `CONTRACTS_DIR` holds this contract at.
  */
 function hasContractImport(storyFile, source, contract) {
   const expectedBase = contract.__file.replace(/\.ts$/, '');
-  const aliasSpecifier = `@atelier-ui/spec/contracts/${expectedBase}`;
+  const aliasSpecifier = CONTRACT_IMPORT_ALIAS
+    ? `${CONTRACT_IMPORT_ALIAS}/${expectedBase}`
+    : null;
   const targetFile = path.join(CONTRACTS_DIR, contract.__file);
   return findImportSpecifiers(source).some((spec) => {
-    if (CONTRACTS_DIR_IS_MONOREPO && spec === aliasSpecifier) return true;
+    if (aliasSpecifier && spec === aliasSpecifier) return true;
     if (!spec.startsWith('.')) return false;
     let resolved = path.resolve(path.dirname(storyFile), spec);
     if (resolved.endsWith('.js')) resolved = resolved.slice(0, -3);
@@ -492,17 +507,17 @@ function hasContractImport(storyFile, source, contract) {
 }
 
 /**
- * The specifier suggested in the [CONTRACT-IMPORT] message: the monorepo's
- * path alias when `CONTRACTS_DIR_IS_MONOREPO` (the only place that alias
- * resolves), otherwise a relative path from `storyFile`'s directory to the
- * contract file — extensionless, forward slashes, `./`-prefixed unless it
- * already climbs upward with `../` — i.e. exactly the form `hasContractImport`
- * above accepts, so following the suggestion always clears the finding.
+ * The specifier suggested in the [CONTRACT-IMPORT] message: the configured
+ * alias when there is one, otherwise a relative path from `storyFile`'s
+ * directory to the contract file — extensionless, forward slashes,
+ * `./`-prefixed unless it already climbs upward with `../` — i.e. exactly the
+ * form `hasContractImport` above accepts, so following the suggestion always
+ * clears the finding.
  */
 function suggestedContractSpecifier(storyFile, contract) {
   const expectedBase = contract.__file.replace(/\.ts$/, '');
-  if (CONTRACTS_DIR_IS_MONOREPO) {
-    return `@atelier-ui/spec/contracts/${expectedBase}`;
+  if (CONTRACT_IMPORT_ALIAS) {
+    return `${CONTRACT_IMPORT_ALIAS}/${expectedBase}`;
   }
   const rel = path
     .relative(path.dirname(storyFile), path.join(CONTRACTS_DIR, expectedBase))
@@ -513,10 +528,8 @@ function suggestedContractSpecifier(storyFile, contract) {
 
 /** Reports [CONTRACT-IMPORT] when `name`'s contract exists but `storyFile`
  * neither imports it (see `hasContractImport`) nor sets `contract` in the
- * meta's `parameters`. No-op when `name` has no contract. Severity is decided
- * once, near `CONTRACTS_DIR` (`TAG_LEVEL['CONTRACT-IMPORT']`): error in this
- * repo (docs-block.ts renders the wiring), warning in a scaffold that doesn't
- * ship that block yet. */
+ * meta's `parameters`. No-op when `name` has no contract. Severity is the
+ * `contractImportSeverity` setting (`TAG_LEVEL['CONTRACT-IMPORT']`). */
 function checkContractImport(fw, storyFile, source, name, contract) {
   if (!contract) return;
   const hasImport = hasContractImport(storyFile, source, contract);
@@ -529,13 +542,14 @@ function checkContractImport(fw, storyFile, source, name, contract) {
 
   if (!hasImport || !hasContractParam) {
     const suggestion = suggestedContractSpecifier(storyFile, contract);
-    const suffix = CONTRACT_IMPORT_HAS_DOCS_BLOCK
-      ? ''
-      : ' (warning here: no docs-block.ts beside the contracts, so nothing renders the wiring yet)';
+    const suffix =
+      importSeverity === 'error'
+        ? ''
+        : ' (a warning here: set "contractImportSeverity": "error" in contracts.config.json to enforce it)';
     report(
       'CONTRACT-IMPORT',
       fw,
-      `${path.relative(ROOT, storyFile)}: ${name} has a contract but its story meta ` +
+      `${path.relative(CWD, storyFile)}: ${name} has a contract but its story meta ` +
         `does not wire it in — add "import { contract } from '${suggestion}';" ` +
         `and set 'contract' in the meta's parameters.${suffix}`,
     );
@@ -543,11 +557,10 @@ function checkContractImport(fw, storyFile, source, name, contract) {
 }
 
 // --- Angular/Vue worker docgen, React's react-docgen parse(), and both
-// frameworks' normalizers now live in ./lib/docgen.mjs (ADR-0121 §5 / S6(a)) —
-// makeWorkerDocgen(fw, cwdRequire, ROOT), normalizeAngular, normalizeVue,
+// frameworks' normalizers live in ../src/docgen.mjs —
+// makeWorkerDocgen(fw, cwdRequire, root), normalizeAngular, normalizeVue,
 // makeReactDocgenTools(cwdRequire).reactParseFile, normalizeReactDocgen —
-// shared with check-manifest-parity.mjs so the two scripts read one framework
-// payload the same way.
+// shared so every script reads one framework payload the same way.
 
 // ─── Dotted child-prop resolution (R2) ──────────────────────────────────────
 // `axisMap[].codeProp` may be `Child.prop`: the prop lives on a CHILD component's own
@@ -556,7 +569,7 @@ function checkContractImport(fw, storyFile, source, name, contract) {
 // sibling is registered. Angular/Vue's worker only ever returns the ONE component
 // `meta.component` names, so the child's props are recovered with a lightweight
 // source-level scan (the same "read the component source with a regex" idiom
-// check-defaults.js already uses for cross-framework default extraction) rather than a
+// other scans in this file use) rather than a
 // second full docgen pass, which the worker's story-file-only entry point does not
 // support for an arbitrary export.
 
@@ -616,7 +629,10 @@ function classifyTypeText(typeText, literalArg) {
  * mapping, not to run AXIS/COVERAGE against the child itself (deferred to stage 2, see
  * [NO-STORY-META]). */
 function regexResolveChildProp(fw, childName, propName, contextDir) {
-  const searchDirs = [contextDir, path.join(ROOT, 'libs', fw, 'src/lib')];
+  const searchDirs = [
+    contextDir,
+    ...(dirsFor(COMPONENT_DIRS_SETTING, fw, CWD) || []),
+  ];
   for (const dir of searchDirs) {
     for (const file of walkSourceFiles(dir)) {
       const src = fs.readFileSync(file, 'utf-8');
@@ -649,7 +665,7 @@ function regexResolveChildProp(fw, childName, propName, contextDir) {
       } else if (fw === 'react') {
         // react-docgen's FindExportedDefinitionsResolver only recognises functions whose
         // body looks like a component (JSX, forwardRef, class); a pass-through function
-        // (e.g. `function AtlStep({ children }) { return children; }`) is invisible to
+        // (e.g. `function Step({ children }) { return children; }`) is invisible to
         // it, so the sibling registry above can be empty even though the export is real.
         // Fall back to the same interface-literal regex idiom as Angular/Vue.
         if (
@@ -845,7 +861,7 @@ function scanLiteralAttrs(text, fw, into) {
 }
 
 /** `(['a', 'b'] as const).map(x => <Foo prop={x} />)` — same "read the source with a
- * regex" idiom `check-defaults.js` uses for cross-framework default extraction. Does
+ * regex" idiom used for the other source scans in this file. Does
  * not evaluate the loop; only credits the array's literal members when the loop
  * variable is then forwarded verbatim into some prop in the same text. */
 function scanArrayMapCredit(text, fw, into) {
@@ -880,7 +896,7 @@ function scanArrayMapCredit(text, fw, into) {
 }
 
 /** `prop: 'value'` / `prop: "value"` object-literal idiom (R1b): the imperative
- * call-site shape (Angular `AtlToast`: `toastService.show(msg, { variant: 'success' })`)
+ * call-site shape (Angular `Toast`: `toastService.show(msg, { variant: 'success' })`)
  * and any general config-object case (`{ variant: 'success', duration: 2000 }`). Same
  * scope as `scanLiteralAttrs` — the story's own node range, plus the meta's `render`
  * when the story has none. */
@@ -976,9 +992,11 @@ function collectStoryClaims(csf, fw, componentName, source) {
 
 function scanCssTokens(dir, fw) {
   const tokens = new Set();
-  // The component's own directory plus the shared, class-rooted `libs/styles`
-  // sheet — a component whose CSS moved there has none left in its own directory.
-  const dirs = [dir, path.join(ROOT, 'libs/styles/src', path.basename(dir))];
+  // The component's own directory plus, when configured, the shared stylesheet
+  // directory (`styleDir/<component directory name>`) — a component whose CSS
+  // lives there has none left in its own directory.
+  const dirs = [dir];
+  if (STYLE_DIR) dirs.push(path.join(STYLE_DIR, path.basename(dir)));
   for (const d of dirs) {
     let files = [];
     try {
@@ -996,7 +1014,10 @@ function scanCssTokens(dir, fw) {
     }
     for (const f of files) {
       const src = fs.readFileSync(path.join(d, f), 'utf-8');
-      const re = /var\(\s*(--ui-[\w-]+)/g;
+      const re = new RegExp(
+        `var\\(\\s*(${escapeRegExp(TOKEN_PREFIX)}[\\w-]+)`,
+        'g',
+      );
       let m;
       while ((m = re.exec(src))) tokens.add(m[1]);
     }
@@ -1243,7 +1264,7 @@ function processComponent(
     report(
       'NO-MASTER',
       fw,
-      `${name}: docgen payload exists but no snapshot master in tools/figma/snapshot.json — nothing to compare against Figma; ENUM-UNDRAWN and coverage skipped`,
+      `${name}: docgen payload exists but no snapshot master in ${path.relative(CWD, snapshotPath)} — nothing to compare against Figma; ENUM-UNDRAWN and coverage skipped`,
     );
   } else {
     const axisNames = new Set(Object.keys(master.variantAxes || {}));
@@ -1354,12 +1375,9 @@ function processComponent(
 
 async function runFramework(fw) {
   const t0 = performance.now();
-  const storyFiles = findStoryFiles(fw, {
-    root: ROOT,
-    storiesDirs: STORIES_DIRS,
-  });
+  const storyFiles = findStoryFiles(STORIES_DIRS_BY_FW.get(fw));
   const workerDocgen =
-    fw !== 'react' ? await makeWorkerDocgen(fw, cwdRequire, ROOT) : null;
+    fw !== 'react' ? await makeWorkerDocgen(fw, cwdRequire, CWD) : null;
 
   const byComponent = new Map(); // name -> { docgenResult, contextDir, files: [csf...] }
   const reachedMeta = new Set();
@@ -1388,7 +1406,7 @@ async function runFramework(fw) {
       }).parse();
     } catch (e) {
       console.error(
-        `  ! ${path.relative(ROOT, storyFile)}: csf-tools failed to parse (${e.message})`,
+        `  ! ${path.relative(CWD, storyFile)}: csf-tools failed to parse (${e.message})`,
       );
       continue;
     }
@@ -1399,9 +1417,9 @@ async function runFramework(fw) {
       continue;
     }
 
-    // A component imported from an installed PACKAGE (a real scaffold's
-    // `@atelier-ui/<fw>`, not this monorepo's tsconfig path alias of the same
-    // name — that alias has no `node_modules` entry and so never matches
+    // A component imported from an installed PACKAGE (a workspace consuming a
+    // component library from the registry, not a tsconfig path alias of the
+    // same name — that alias has no `node_modules` entry and so never matches
     // here) gets skipped before any docgen call, uniformly across all three
     // frameworks. Left to each engine's own accident, the three frameworks
     // disagree on what "can't read into node_modules" means: React's relative-
@@ -1412,7 +1430,7 @@ async function runFramework(fw) {
     // this script would otherwise mistake for a workspace component with no
     // props and fail on ([DOCGEN-EMPTY], [AXIS], [BOOLEAN], ...). Skipping the
     // call here — rather than filtering its result afterwards — is what makes
-    // the scaffold's promise ("local docgen cannot read into node_modules, so
+    // the promise ("local docgen cannot read into node_modules, so
     // the check has nothing to compare and reports only [NO-STORY-META]")
     // actually true for Angular too, by construction, instead of by luck.
     if (findExternalPackageDir(storyFile, csf._rawComponentPath)) {
@@ -1436,14 +1454,18 @@ async function runFramework(fw) {
           try {
             const docgens = reactParseFile(componentFile);
             for (const d of docgens)
-              registerSibling(fw, d.displayName, normalizeReactDocgen(d));
+              registerSibling(
+                fw,
+                d.displayName,
+                normalizeReactDocgen(d, SHARED_PROPS),
+              );
             const match =
               docgens.find((d) => d.displayName === localName) ||
               docgens.find((d) => d.displayName === metaComponent);
             if (match) {
               docgenResult = {
                 name: match.displayName,
-                props: normalizeReactDocgen(match),
+                props: normalizeReactDocgen(match, SHARED_PROPS),
                 description: match.description,
                 slots: undefined,
               };
@@ -1454,7 +1476,7 @@ async function runFramework(fw) {
             report(
               'DOCGEN-FAILED',
               fw,
-              `${path.relative(ROOT, storyFile)}: react-docgen failed — ${errorMessage(e)}`,
+              `${path.relative(CWD, storyFile)}: react-docgen failed — ${errorMessage(e)}`,
             );
           }
         }
@@ -1478,7 +1500,7 @@ async function runFramework(fw) {
         report(
           'DOCGEN-FAILED',
           fw,
-          `${path.relative(ROOT, storyFile)}: ${fw} docgen failed — ${result.reason}`,
+          `${path.relative(CWD, storyFile)}: ${fw} docgen failed — ${result.reason}`,
         );
       }
     }
@@ -1489,8 +1511,8 @@ async function runFramework(fw) {
       // OUT of noComponentCount on purpose: this story file DID have a
       // resolvable meta.component, so it is still "measurable" for the
       // [ROSTER] check below. Folding it into noComponentCount is exactly
-      // the ADR-0124 bug — it let a broken docgen worker shrink the roster
-      // instead of showing up as a hole in it.
+      // the bug where a broken docgen worker shrank the roster instead of
+      // showing up as a hole in it.
       if (!docgenFailed) noComponentCount++;
       continue;
     }
@@ -1515,9 +1537,9 @@ async function runFramework(fw) {
   // component — everything except a story with no meta.component at all
   // (noComponentCount) and a deliberately-skipped external-package import
   // (externalCount, see the comment above the findExternalPackageDir() call).
-  // Subtracting externalCount before the floor is what keeps a scaffolded
-  // one-framework workspace — whose only story imports from
-  // `@atelier-ui/<fw>` — at measurable === 0 and therefore silent here,
+  // Subtracting externalCount before the floor is what keeps a
+  // workspace whose only story imports from an installed component package
+  // — at measurable === 0 and therefore silent here,
   // exactly as that comment promises ("the check has nothing to compare and
   // reports only [NO-STORY-META]"). If there WAS something measurable and
   // byComponent still ended up empty, docgen measured nothing this run.
@@ -1655,7 +1677,7 @@ function runCodeOnlyStalenessChecks() {
         report(
           'FW-ONLY',
           null,
-          `${selector}: codeOnly '${entry.name}' missing from ${absent.join(', ')} — present in the other framework(s) (ADR-0093 territory)`,
+          `${selector}: codeOnly '${entry.name}' missing from ${absent.join(', ')} — present in the other framework(s) (a cross-framework API divergence)`,
         );
       }
     }

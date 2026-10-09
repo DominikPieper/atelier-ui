@@ -39,7 +39,7 @@ Source line puts this in the **workshop case** (SKILL.md §0a): own micro-contra
    `tags: ['autodocs']`.
 7. `nx test react`, `nx lint react` and `nx storybook-test react` with exit codes read
    from redirected output.
-8. `node tools/scripts/check-contracts.mjs --fw react --contracts
+8. `node libs/design-contracts/bin/check-contracts.mjs --fw react --contracts
 libs/react/src/lib/tagchip --stories libs/react/src/lib/tagchip` (no `--snapshot` if
    the Bridge is down; a `[NO-MASTER]` warning for `AtlTagChip` is then expected, not a
    failure) exits 0, then `figma_check_design_parity` with a `codeSpec` assembled from
