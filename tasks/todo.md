@@ -1935,7 +1935,10 @@ Decided 2026-10-09. Spike: `plan/research/cds-substrate-spike-2026-10-09.md`. Pu
 and npm deprecations each need the owner's explicit go.
 
 - [x] P0a ADR-0165 in Atelier.
-- [ ] P0b CDS ADR superseding CDS-ADR-0015 (contract layer in the repo, `check-contracts` as an
+- [ ] P0b CDS ADR superseding CDS-ADR-0015 (draft, German, CDS format:
+      `plan/research/cds-adr-contract-layer-draft-2026-10-09.md`; number 0016 provisional; it
+      proposes `tools/figma/contracts/` instead of the spike's root `contracts/`, per CDS-ADR-0014)
+      (contract layer in the repo, `check-contracts` as an
       offline CI gate, snapshot refresh manual). In the CDS repo, via PR.
 - [ ] P1 `@conciso/design-contracts`, built in Atelier first to try it out, moved to the CDS repo
       once proven (ADR-0165 §4, revised 2026-10-09). Not published from Atelier.
@@ -1965,8 +1968,19 @@ and npm deprecations each need the owner's explicit go.
   - [x] P1.4 Rewire Atelier: `sync-preflight` copies from the package into the scaffold;
         `check-manifest-parity` imports docgen from the package instead of `tools/scripts/lib`.
         Done when `check:all` passes.
-  - [ ] P1.5 Try-out in the CDS: `npm pack` tarball installed on a CDS branch, spike scripts
-        deleted there. Done when `check:contracts` exits 0 there with no manual step.
+  - [ ] P1.5 Test `@conciso/design-contracts` in the CDS. Waits until the owner's running change
+        in the CDS repo is through (2026-10-09); do not touch the CDS repo before.
+    - [ ] `npm pack` in `libs/design-contracts`, install the tarball on a new CDS branch from
+          `main` (not the spike branch), move the spike's contract and snapshot over, delete the
+          spike scripts. Done when `check:contracts` exits 0 there with no manual step.
+    - [ ] Live, with the owner at the Desktop Bridge: `figma-snapshot-contracts --file
+BQCBQwIDcconnYNpb2w9fn` while a second Figma file is connected. Done when the snapshot
+          is written without switching the active file. (Tested only against a fake of
+          figma-console-mcp 1.40.0 so far.)
+    - [ ] Live parity on the Snackbar (`4:5222`) with the codeSpec from `check-contracts --emit`.
+          Done when the API part shows no name-only discrepancies (spike: 7).
+    - [ ] Check the new boolean rule on real CDS data: does any no-`values` boolean axisMap
+          meet a non-`true`/`false` axis (e.g. `Aktion anzeigen`)?
   - [ ] P1.6 Move to the CDS (`packages/contracts`, into its release chain), after P0b. Atelier
         keeps no copy; the scaffold consumes the published package (P3).
 - [ ] P2 Contracts for all CDS components, `check-contracts` in the CDS CI. Done when it exits 0
