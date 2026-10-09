@@ -148,6 +148,49 @@ describe('AtlTooltip', () => {
     },
   );
 
+  covers('tooltip', 'show-on-focus')(
+    'shows tooltip when the trigger receives keyboard focus',
+    async () => {
+      vi.useFakeTimers();
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+
+      await render(
+        '<button atlTooltip="Save changes" [atlTooltipShowDelay]="0">Save</button>',
+        { imports: TOOLTIP_IMPORTS },
+      );
+
+      await user.tab();
+      vi.advanceTimersByTime(1);
+
+      expect(document.querySelector('.atl-tooltip')).toBeInTheDocument();
+
+      vi.useRealTimers();
+    },
+  );
+
+  covers('tooltip', 'hide-on-escape')(
+    'hides an open tooltip on Escape',
+    async () => {
+      vi.useFakeTimers();
+      const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
+
+      await render(
+        '<button atlTooltip="Save changes" [atlTooltipShowDelay]="0" [atlTooltipHideDelay]="0">Save</button>',
+        { imports: TOOLTIP_IMPORTS },
+      );
+
+      await user.tab();
+      vi.advanceTimersByTime(1);
+      expect(document.querySelector('.atl-tooltip')).toBeInTheDocument();
+
+      await user.keyboard('{Escape}');
+      vi.advanceTimersByTime(1);
+      expect(document.querySelector('.atl-tooltip')).not.toBeInTheDocument();
+
+      vi.useRealTimers();
+    },
+  );
+
   it('does not show tooltip when text is empty', async () => {
     vi.useFakeTimers();
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });

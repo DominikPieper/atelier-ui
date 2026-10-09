@@ -660,6 +660,14 @@
     {
       "id": "disabled-no-show",
       "describe": "does not show when disabled"
+    },
+    {
+      "id": "show-on-focus",
+      "describe": "shows when the trigger receives keyboard focus"
+    },
+    {
+      "id": "hide-on-escape",
+      "describe": "hides on Escape"
     }
   ]
 }

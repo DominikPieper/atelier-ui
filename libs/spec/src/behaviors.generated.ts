@@ -34,7 +34,7 @@ export const BEHAVIORS = {
   textarea: ['renders-textarea', 'disabled', 'errors', 'updates-value', 'rows'],
   toast: ['show-adds', 'dismiss-button-click', 'position-class', 'variant-class'],
   toggle: ['role-switch', 'reflects-checked', 'toggle-emits', 'disabled', 'errors', 'aria-checked'],
-  tooltip: ['hidden-initially', 'show-on-hover', 'hide-on-leave', 'disabled-no-show'],
+  tooltip: ['hidden-initially', 'show-on-hover', 'hide-on-leave', 'disabled-no-show', 'show-on-focus', 'hide-on-escape'],
 } as const;
 
 export type Subject = keyof typeof BEHAVIORS;

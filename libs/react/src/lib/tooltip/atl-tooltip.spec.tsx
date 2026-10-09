@@ -83,6 +83,43 @@ describe('AtlTooltip', () => {
     },
   );
 
+  covers('tooltip', 'show-on-focus')(
+    'shows tooltip when the trigger receives keyboard focus',
+    async () => {
+      const user = userEvent.setup();
+      render(
+        <AtlTooltip atlTooltip="Save your changes" atlTooltipShowDelay={0}>
+          <button>Save</button>
+        </AtlTooltip>,
+      );
+      await user.tab();
+      expect(screen.getByText('Save')).toHaveFocus();
+      await act(async () => {
+        await new Promise((r) => setTimeout(r, 10));
+      });
+      expect(screen.getByRole('tooltip')).toBeInTheDocument();
+    },
+  );
+
+  covers('tooltip', 'hide-on-escape')(
+    'hides an open tooltip on Escape',
+    async () => {
+      const user = userEvent.setup();
+      render(
+        <AtlTooltip atlTooltip="Save your changes" atlTooltipShowDelay={0}>
+          <button>Save</button>
+        </AtlTooltip>,
+      );
+      await user.tab();
+      await act(async () => {
+        await new Promise((r) => setTimeout(r, 10));
+      });
+      expect(screen.getByRole('tooltip')).toBeInTheDocument();
+      await user.keyboard('{Escape}');
+      expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+    },
+  );
+
   it('applies position class based on position prop', async () => {
     const user = userEvent.setup();
     render(

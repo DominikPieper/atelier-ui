@@ -77,18 +77,38 @@ describe('AtlTooltip', () => {
   // fire when the *slotted* button (a descendant, not the span itself)
   // receives focus, silently breaking this for keyboard/screen-reader users
   // while every hover-only test above kept passing.
-  it('shows tooltip when the slotted trigger receives keyboard focus', async () => {
-    const user = userEvent.setup();
-    render(AtlTooltip, {
-      props: { atlTooltip: 'Helpful hint', atlTooltipShowDelay: 0 },
-      slots: { default: '<button>Focus me</button>' },
-    });
-    await user.tab();
-    expect(document.activeElement).toBe(screen.getByText('Focus me'));
-    await waitFor(() => {
-      expect(screen.getByRole('tooltip')).toBeInTheDocument();
-    });
-  });
+  covers('tooltip', 'show-on-focus')(
+    'shows tooltip when the slotted trigger receives keyboard focus',
+    async () => {
+      const user = userEvent.setup();
+      render(AtlTooltip, {
+        props: { atlTooltip: 'Helpful hint', atlTooltipShowDelay: 0 },
+        slots: { default: '<button>Focus me</button>' },
+      });
+      await user.tab();
+      expect(document.activeElement).toBe(screen.getByText('Focus me'));
+      await waitFor(() => {
+        expect(screen.getByRole('tooltip')).toBeInTheDocument();
+      });
+    },
+  );
+
+  covers('tooltip', 'hide-on-escape')(
+    'hides an open tooltip on Escape',
+    async () => {
+      const user = userEvent.setup();
+      render(AtlTooltip, {
+        props: { atlTooltip: 'Helpful hint', atlTooltipShowDelay: 0 },
+        slots: { default: '<button>Focus me</button>' },
+      });
+      await user.tab();
+      await waitFor(() =>
+        expect(screen.getByRole('tooltip')).toBeInTheDocument(),
+      );
+      await user.keyboard('{Escape}');
+      expect(screen.queryByRole('tooltip')).not.toBeInTheDocument();
+    },
+  );
 
   it('applies position class', async () => {
     const user = userEvent.setup();
