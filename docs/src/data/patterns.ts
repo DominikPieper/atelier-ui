@@ -92,9 +92,9 @@ const loginAngular = `<atl-card variant="elevated" padding="lg">
     <atl-checkbox>Remember me</atl-checkbox>
   </atl-card-content>
   <atl-card-footer>
-    <atl-button variant="primary" [loading]="loading()" (click)="signIn()">
+    <button atl-button variant="primary" [loading]="loading()" (click)="signIn()">
       Sign in
-    </atl-button>
+    </button>
   </atl-card-footer>
 </atl-card>`;
 
@@ -142,7 +142,7 @@ const settingsAngular = `<atl-tab-group [(selectedIndex)]="activeTab">
     <atl-toggle [(checked)]="pushOn">Push notifications</atl-toggle>
   </atl-tab>
 </atl-tab-group>
-<atl-button variant="primary" (click)="save()">Save changes</atl-button>`;
+<button atl-button variant="primary" (click)="save()">Save changes</button>`;
 
 const settingsReact = `<AtlTabGroup selectedIndex={tab} onSelectedIndexChange={setTab}>
   <AtlTab label="Account">
@@ -167,7 +167,7 @@ const settingsVue = `<AtlTabGroup v-model:selectedIndex="activeTab">
 </AtlTabGroup>
 <AtlButton variant="primary" @click="save">Save changes</AtlButton>`;
 
-const confirmAngular = `<atl-button variant="primary" (click)="isOpen.set(true)">Delete account</atl-button>
+const confirmAngular = `<button atl-button variant="primary" (click)="isOpen.set(true)">Delete account</button>
 
 <atl-dialog [(open)]="isOpen" size="sm">
   <atl-dialog-header>Delete Account</atl-dialog-header>
@@ -175,8 +175,8 @@ const confirmAngular = `<atl-button variant="primary" (click)="isOpen.set(true)"
     <atl-alert variant="warning">This action cannot be undone.</atl-alert>
   </atl-dialog-content>
   <atl-dialog-footer>
-    <atl-button variant="outline" (click)="isOpen.set(false)">Cancel</atl-button>
-    <atl-button variant="primary" (click)="confirm()">Yes, delete</atl-button>
+    <button atl-button variant="outline" (click)="isOpen.set(false)">Cancel</button>
+    <button atl-button variant="primary" (click)="confirm()">Yes, delete</button>
   </atl-dialog-footer>
 </atl-dialog>`;
 
@@ -208,7 +208,7 @@ const confirmVue = `<AtlButton variant="primary" @click="isOpen = true">Delete a
 
 const dataListAngular = `<div class="list-header">
   <h2>Projects</h2>
-  <atl-button variant="primary" size="sm">New project</atl-button>
+  <button atl-button variant="primary" size="sm">New project</button>
 </div>
 @for (item of items(); track item.id) {
   <atl-card variant="outlined" padding="md">
@@ -216,13 +216,13 @@ const dataListAngular = `<div class="list-header">
       <span>{{ item.name }}</span>
       <atl-badge [variant]="item.statusVariant" size="sm">{{ item.status }}</atl-badge>
       <p>{{ item.description }}</p>
-      <atl-button variant="outline" size="sm" atlTooltip="View details">View</atl-button>
-      <atl-button
+      <button atl-button variant="outline" size="sm" atlTooltip="View details">View</button>
+      <button atl-button
         variant="outline"
         size="sm"
         [atlMenuTriggerFor]="actionsMenu"
         atlTooltip="More actions"
-      >...</atl-button>
+      >...</button>
       <ng-template #actionsMenu>
         <atl-menu>
           <atl-menu-item>Edit</atl-menu-item>

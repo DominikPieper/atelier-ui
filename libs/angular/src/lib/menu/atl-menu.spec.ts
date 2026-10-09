@@ -18,7 +18,7 @@ const MENU_IMPORTS = [
 ];
 
 const MENU_TEMPLATE = `
-  <atl-button [atlMenuTriggerFor]="menu">Open Menu</atl-button>
+  <button atl-button [atlMenuTriggerFor]="menu">Open Menu</button>
   <ng-template #menu>
     <atl-menu>
       <atl-menu-item>Copy</atl-menu-item>
@@ -61,7 +61,7 @@ describe('AtlMenu', () => {
   covers('menu', 'variant-class')('applies compact variant class', async () => {
     await render(
       `
-        <atl-button [atlMenuTriggerFor]="menu">Open</atl-button>
+        <button atl-button [atlMenuTriggerFor]="menu">Open</button>
         <ng-template #menu>
           <atl-menu variant="compact">
             <atl-menu-item>Item</atl-menu-item>

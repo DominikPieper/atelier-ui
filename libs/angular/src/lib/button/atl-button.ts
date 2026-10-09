@@ -3,7 +3,6 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
-  DestroyRef,
   ElementRef,
   inject,
   input,
@@ -11,19 +10,23 @@ import {
 } from '@angular/core';
 import type { AtlButtonVariant, AtlButtonSize } from '../spec';
 
+/** Native `type` attribute of the button. */
+export type AtlButtonType = 'button' | 'submit' | 'reset';
+
 /**
- * Accessible button component with visual variants and sizes.
+ * Accessible button component with visual variants and sizes. An attribute
+ * component on a native `<button>`: focus, Tab order, Enter/Space activation and
+ * form submission are the browser's own.
  *
  * Usage:
  * ```html
- * <atl-button variant="primary" size="md" (click)="save()">Save</atl-button>
- * <atl-button variant="outline" [disabled]="true">Cancel</atl-button>
- * <atl-button [loading]="isSaving">Saving…</atl-button>
+ * <button atl-button variant="primary" size="md" (click)="save()">Save</button>
+ * <button atl-button variant="outline" [disabled]="true">Cancel</button>
+ * <button atl-button type="submit" [loading]="isSaving">Saving…</button>
  * ```
  */
 @Component({
-  selector: 'atl-button',
-  standalone: true,
+  selector: 'button[atl-button]',
   changeDetection: ChangeDetectionStrategy.OnPush,
   template: `
     @if (loading()) {
@@ -38,10 +41,10 @@ import type { AtlButtonVariant, AtlButtonSize } from '../spec';
   styleUrl: '../../../../styles/src/button/atl-button.css',
   host: {
     class: 'atl-button',
-    role: 'button',
     '[class]': 'hostClasses()',
-    '[attr.aria-disabled]': 'isDisabled()',
-    '[attr.disabled]': 'isDisabled() ? true : null',
+    '[attr.type]': 'type()',
+    '[disabled]': 'isDisabled()',
+    '[attr.aria-disabled]': 'isDisabled() || null',
   },
 })
 export class AtlButton {
@@ -57,6 +60,9 @@ export class AtlButton {
   /** Shows a loading spinner and disables interaction. */
   readonly loading = input(false);
 
+  /** Native `type` attribute of the button. */
+  readonly type = input<AtlButtonType>('button');
+
   protected readonly isDisabled = computed(
     () => this.disabled() || this.loading(),
   );
@@ -69,29 +75,7 @@ export class AtlButton {
   /** @internal — host element ref for the dev-mode a11y check. */
   private readonly el = inject<ElementRef<HTMLElement>>(ElementRef);
 
-  private readonly destroyRef = inject(DestroyRef);
-
   constructor() {
-    // Suppress clicks while disabled/loading. The host is a custom element, so
-    // — unlike a native `<button disabled>` — neither the `disabled` attribute
-    // nor `pointer-events: none` reliably blocks click dispatch (the latter only
-    // affects pointer-driven clicks, not programmatic/keyboard ones). A real
-    // click lands on projected content (a descendant), so a capture-phase
-    // listener on the host intercepts it before any consumer `(click)` handler
-    // bound on the host (which fires in the bubble phase), matching the
-    // React/Vue native-disabled behavior.
-    const host = this.el.nativeElement;
-    const guard = (event: Event): void => {
-      if (this.isDisabled()) {
-        event.stopImmediatePropagation();
-        event.preventDefault();
-      }
-    };
-    host.addEventListener('click', guard, true);
-    this.destroyRef.onDestroy(() =>
-      host.removeEventListener('click', guard, true),
-    );
-
     // Dev-mode warning when a button has no accessible name. Angular's
     // <ng-content> projection means we can't enforce this at the type
     // level (unlike the React adapter), so we check after first render.

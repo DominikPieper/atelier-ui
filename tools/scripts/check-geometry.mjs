@@ -104,10 +104,11 @@ const CONTROLS = [
     markup: {
       default: (s) =>
         `<button class="atl-button variant-primary size-${s}">Label</button>`,
+      // `button[atl-button]` is a native button, so it is the same box as React/Vue.
       angular: (s) =>
-        `<atl-button class="atl-button variant-primary size-${s}">Label</atl-button>`,
+        `<button atl-button class="atl-button variant-primary size-${s}">Label</button>`,
     },
-    measure: { default: '.atl-button', angular: 'atl-button' },
+    measure: { default: '.atl-button', angular: '.atl-button' },
   },
   {
     dir: 'input',

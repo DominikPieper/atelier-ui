@@ -62,15 +62,15 @@ export const Default: Story = {
     props: { ...args, open: signal(false) },
     moduleMetadata: { imports: ALL_IMPORTS },
     template: `
-      <atl-button variant="primary" (click)="open.set(true)">Open Drawer</atl-button>
+      <button atl-button variant="primary" (click)="open.set(true)">Open Drawer</button>
       <atl-drawer [(open)]="open" [position]="position" [size]="size" [closeOnBackdrop]="closeOnBackdrop">
         <atl-drawer-header>Settings</atl-drawer-header>
         <atl-drawer-content>
           <p>Drawer content goes here. You can put any form controls or content inside.</p>
         </atl-drawer-content>
         <atl-drawer-footer>
-          <atl-button variant="outline" (click)="open.set(false)">Cancel</atl-button>
-          <atl-button variant="primary" (click)="open.set(false)">Save</atl-button>
+          <button atl-button variant="outline" (click)="open.set(false)">Cancel</button>
+          <button atl-button variant="primary" (click)="open.set(false)">Save</button>
         </atl-drawer-footer>
       </atl-drawer>
     `,
@@ -95,7 +95,7 @@ export const PreOpened: Story = {
         <atl-drawer-header>Pre-opened Drawer</atl-drawer-header>
         <atl-drawer-content><p>This drawer is open on load.</p></atl-drawer-content>
         <atl-drawer-footer>
-          <atl-button variant="primary" (click)="open.set(false)">Close</atl-button>
+          <button atl-button variant="primary" (click)="open.set(false)">Close</button>
         </atl-drawer-footer>
       </atl-drawer>
     `,
@@ -107,14 +107,14 @@ export const Left: Story = {
     props: { ...args, open: signal(false) },
     moduleMetadata: { imports: ALL_IMPORTS },
     template: `
-      <atl-button variant="outline" (click)="open.set(true)">Open Left Drawer</atl-button>
+      <button atl-button variant="outline" (click)="open.set(true)">Open Left Drawer</button>
       <atl-drawer [(open)]="open" position="left" [size]="size">
         <atl-drawer-header>Navigation</atl-drawer-header>
         <atl-drawer-content>
           <p>Left-side navigation drawer.</p>
         </atl-drawer-content>
         <atl-drawer-footer>
-          <atl-button variant="primary" (click)="open.set(false)">Close</atl-button>
+          <button atl-button variant="primary" (click)="open.set(false)">Close</button>
         </atl-drawer-footer>
       </atl-drawer>
     `,
@@ -128,14 +128,14 @@ export const Top: Story = {
     props: { ...args, open: signal(false) },
     moduleMetadata: { imports: ALL_IMPORTS },
     template: `
-      <atl-button variant="outline" (click)="open.set(true)">Open Top Drawer</atl-button>
+      <button atl-button variant="outline" (click)="open.set(true)">Open Top Drawer</button>
       <atl-drawer [(open)]="open" position="top" [size]="size">
         <atl-drawer-header>Filters</atl-drawer-header>
         <atl-drawer-content>
           <p>Top panel for filters or search.</p>
         </atl-drawer-content>
         <atl-drawer-footer>
-          <atl-button variant="primary" (click)="open.set(false)">Apply</atl-button>
+          <button atl-button variant="primary" (click)="open.set(false)">Apply</button>
         </atl-drawer-footer>
       </atl-drawer>
     `,
@@ -149,15 +149,15 @@ export const Bottom: Story = {
     props: { ...args, open: signal(false) },
     moduleMetadata: { imports: ALL_IMPORTS },
     template: `
-      <atl-button variant="outline" (click)="open.set(true)">Open Bottom Drawer</atl-button>
+      <button atl-button variant="outline" (click)="open.set(true)">Open Bottom Drawer</button>
       <atl-drawer [(open)]="open" position="bottom" [size]="size">
         <atl-drawer-header>Action Sheet</atl-drawer-header>
         <atl-drawer-content>
           <p>Mobile-style action sheet from the bottom.</p>
         </atl-drawer-content>
         <atl-drawer-footer>
-          <atl-button variant="outline" (click)="open.set(false)">Cancel</atl-button>
-          <atl-button variant="primary" (click)="open.set(false)">Confirm</atl-button>
+          <button atl-button variant="outline" (click)="open.set(false)">Cancel</button>
+          <button atl-button variant="primary" (click)="open.set(false)">Confirm</button>
         </atl-drawer-footer>
       </atl-drawer>
     `,
@@ -178,34 +178,34 @@ export const SizeVariants: Story = {
     moduleMetadata: { imports: ALL_IMPORTS },
     template: `
       <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-        <atl-button variant="outline" size="sm" (click)="smOpen.set(true)">Small</atl-button>
-        <atl-button variant="outline" size="sm" (click)="mdOpen.set(true)">Medium</atl-button>
-        <atl-button variant="outline" size="sm" (click)="lgOpen.set(true)">Large</atl-button>
-        <atl-button variant="outline" size="sm" (click)="fullOpen.set(true)">Full</atl-button>
+        <button atl-button variant="outline" size="sm" (click)="smOpen.set(true)">Small</button>
+        <button atl-button variant="outline" size="sm" (click)="mdOpen.set(true)">Medium</button>
+        <button atl-button variant="outline" size="sm" (click)="lgOpen.set(true)">Large</button>
+        <button atl-button variant="outline" size="sm" (click)="fullOpen.set(true)">Full</button>
       </div>
 
       <atl-drawer [(open)]="smOpen" size="sm">
         <atl-drawer-header>Small Drawer</atl-drawer-header>
         <atl-drawer-content><p>Width: 20rem</p></atl-drawer-content>
-        <atl-drawer-footer><atl-button variant="primary" (click)="smOpen.set(false)">Close</atl-button></atl-drawer-footer>
+        <atl-drawer-footer><button atl-button variant="primary" (click)="smOpen.set(false)">Close</button></atl-drawer-footer>
       </atl-drawer>
 
       <atl-drawer [(open)]="mdOpen" size="md">
         <atl-drawer-header>Medium Drawer</atl-drawer-header>
         <atl-drawer-content><p>Width: 28rem (default)</p></atl-drawer-content>
-        <atl-drawer-footer><atl-button variant="primary" (click)="mdOpen.set(false)">Close</atl-button></atl-drawer-footer>
+        <atl-drawer-footer><button atl-button variant="primary" (click)="mdOpen.set(false)">Close</button></atl-drawer-footer>
       </atl-drawer>
 
       <atl-drawer [(open)]="lgOpen" size="lg">
         <atl-drawer-header>Large Drawer</atl-drawer-header>
         <atl-drawer-content><p>Width: 40rem</p></atl-drawer-content>
-        <atl-drawer-footer><atl-button variant="primary" (click)="lgOpen.set(false)">Close</atl-button></atl-drawer-footer>
+        <atl-drawer-footer><button atl-button variant="primary" (click)="lgOpen.set(false)">Close</button></atl-drawer-footer>
       </atl-drawer>
 
       <atl-drawer [(open)]="fullOpen" size="full">
         <atl-drawer-header>Full Drawer</atl-drawer-header>
         <atl-drawer-content><p>Width: 100vw</p></atl-drawer-content>
-        <atl-drawer-footer><atl-button variant="primary" (click)="fullOpen.set(false)">Close</atl-button></atl-drawer-footer>
+        <atl-drawer-footer><button atl-button variant="primary" (click)="fullOpen.set(false)">Close</button></atl-drawer-footer>
       </atl-drawer>
     `,
   }),
@@ -217,15 +217,15 @@ export const NoBackdropClose: Story = {
     props: { ...args, open: signal(false) },
     moduleMetadata: { imports: ALL_IMPORTS },
     template: `
-      <atl-button variant="primary" (click)="open.set(true)">Open Drawer</atl-button>
+      <button atl-button variant="primary" (click)="open.set(true)">Open Drawer</button>
       <atl-drawer [(open)]="open" [closeOnBackdrop]="false">
         <atl-drawer-header>Required Action</atl-drawer-header>
         <atl-drawer-content>
           <p>This drawer cannot be closed by clicking the backdrop. Use the buttons below.</p>
         </atl-drawer-content>
         <atl-drawer-footer>
-          <atl-button variant="outline" (click)="open.set(false)">Cancel</atl-button>
-          <atl-button variant="primary" (click)="open.set(false)">Confirm</atl-button>
+          <button atl-button variant="outline" (click)="open.set(false)">Cancel</button>
+          <button atl-button variant="primary" (click)="open.set(false)">Confirm</button>
         </atl-drawer-footer>
       </atl-drawer>
     `,
@@ -244,7 +244,7 @@ export const WithForm: Story = {
     },
     moduleMetadata: { imports: [...ALL_IMPORTS, AtlInput] },
     template: `
-      <atl-button variant="primary" (click)="open.set(true)">Edit Profile</atl-button>
+      <button atl-button variant="primary" (click)="open.set(true)">Edit Profile</button>
       <atl-drawer [(open)]="open" [size]="size">
         <atl-drawer-header>Edit Profile</atl-drawer-header>
         <atl-drawer-content>
@@ -260,8 +260,8 @@ export const WithForm: Story = {
           </div>
         </atl-drawer-content>
         <atl-drawer-footer>
-          <atl-button variant="outline" (click)="open.set(false)">Cancel</atl-button>
-          <atl-button variant="primary" (click)="open.set(false)">Save Changes</atl-button>
+          <button atl-button variant="outline" (click)="open.set(false)">Cancel</button>
+          <button atl-button variant="primary" (click)="open.set(false)">Save Changes</button>
         </atl-drawer-footer>
       </atl-drawer>
     `,

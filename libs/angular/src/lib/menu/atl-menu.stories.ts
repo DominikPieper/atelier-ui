@@ -46,7 +46,7 @@ export const Default: Story = {
       imports: [AtlMenuItem, AtlMenuSeparator, AtlMenuTrigger, AtlButton],
     },
     template: `
-      <atl-button [atlMenuTriggerFor]="menu">Actions</atl-button>
+      <button atl-button [atlMenuTriggerFor]="menu">Actions</button>
       <ng-template #menu>
         <atl-menu variant="${args['variant']}">
           <atl-menu-item>Copy</atl-menu-item>
@@ -66,7 +66,7 @@ export const WithDisabledItems: Story = {
       imports: [AtlMenuItem, AtlMenuSeparator, AtlMenuTrigger, AtlButton],
     },
     template: `
-      <atl-button [atlMenuTriggerFor]="menu">Edit</atl-button>
+      <button atl-button [atlMenuTriggerFor]="menu">Edit</button>
       <ng-template #menu>
         <atl-menu>
           <atl-menu-item>Cut</atl-menu-item>
@@ -87,7 +87,7 @@ export const Compact: Story = {
       imports: [AtlMenuItem, AtlMenuSeparator, AtlMenuTrigger, AtlButton],
     },
     template: `
-      <atl-button variant="outline" size="sm" [atlMenuTriggerFor]="menu">Options</atl-button>
+      <button atl-button variant="outline" size="sm" [atlMenuTriggerFor]="menu">Options</button>
       <ng-template #menu>
         <atl-menu variant="compact">
           <atl-menu-item>View</atl-menu-item>
@@ -108,7 +108,7 @@ export const NestedSubmenus: Story = {
       imports: [AtlMenuItem, AtlMenuSeparator, AtlMenuTrigger, AtlButton],
     },
     template: `
-      <atl-button [atlMenuTriggerFor]="mainMenu">File</atl-button>
+      <button atl-button [atlMenuTriggerFor]="mainMenu">File</button>
       <ng-template #mainMenu>
         <atl-menu>
           <atl-menu-item>New</atl-menu-item>
@@ -136,7 +136,7 @@ export const Playground: Story = {
       imports: [AtlMenuItem, AtlMenuSeparator, AtlMenuTrigger, AtlButton],
     },
     template: `
-      <atl-button [atlMenuTriggerFor]="menu">Open Menu</atl-button>
+      <button atl-button [atlMenuTriggerFor]="menu">Open Menu</button>
       <ng-template #menu>
         <atl-menu [variant]="variant">
           <atl-menu-item>First item</atl-menu-item>

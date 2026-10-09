@@ -106,14 +106,15 @@ import { AtlProgress } from './progress/atl-progress';
           </div>
         </atl-card-content>
         <atl-card-footer>
-          <atl-button
+          <button
+            atl-button
             variant="primary"
             size="md"
             [loading]="loading()"
             (click)="onSubmit()"
           >
             Sign in
-          </atl-button>
+          </button>
         </atl-card-footer>
       </atl-card>
     </div>
@@ -220,9 +221,9 @@ class LoginFormComponent {
           </div>
         </atl-card-content>
         <atl-card-footer>
-          <atl-button variant="primary" size="md" [loading]="loading()">
+          <button atl-button variant="primary" size="md" [loading]="loading()">
             Sign in
-          </atl-button>
+          </button>
         </atl-card-footer>
       </atl-card>
     </div>
@@ -372,10 +373,10 @@ class LoginFormWithErrorsComponent {
       </atl-tab-group>
 
       <div class="actions">
-        <atl-button variant="primary" (click)="onSave()">
+        <button atl-button variant="primary" (click)="onSave()">
           Save changes
-        </atl-button>
-        <atl-button variant="outline">Cancel</atl-button>
+        </button>
+        <button atl-button variant="outline">Cancel</button>
       </div>
     </div>
   `,
@@ -472,9 +473,9 @@ class SettingsPageComponent {
           Once you delete your account, there is no going back. Please be
           certain.
         </p>
-        <atl-button variant="primary" (click)="isOpen.set(true)">
+        <button atl-button variant="primary" (click)="isOpen.set(true)">
           Delete account
-        </atl-button>
+        </button>
       </div>
 
       <atl-dialog [(open)]="isOpen" size="sm">
@@ -490,12 +491,12 @@ class SettingsPageComponent {
           </p>
         </atl-dialog-content>
         <atl-dialog-footer>
-          <atl-button variant="outline" (click)="isOpen.set(false)">
+          <button atl-button variant="outline" (click)="isOpen.set(false)">
             Cancel
-          </atl-button>
-          <atl-button variant="primary" (click)="onConfirm()">
+          </button>
+          <button atl-button variant="primary" (click)="onConfirm()">
             Yes, delete my account
-          </atl-button>
+          </button>
         </atl-dialog-footer>
       </atl-dialog>
 
@@ -585,7 +586,7 @@ class ConfirmationDialogComponent {
     <div class="wrapper">
       <div class="list-header">
         <h2 class="list-title">Projects</h2>
-        <atl-button variant="primary" size="sm">New project</atl-button>
+        <button atl-button variant="primary" size="sm">New project</button>
       </div>
 
       @for (item of items; track item.id) {
@@ -602,15 +603,17 @@ class ConfirmationDialogComponent {
                 <p class="row-description">{{ item.description }}</p>
               </div>
               <div class="row-actions">
-                <atl-button
+                <button
+                  atl-button
                   variant="outline"
                   size="sm"
                   atlTooltip="View details"
                   atlTooltipPosition="above"
                 >
                   View
-                </atl-button>
-                <atl-button
+                </button>
+                <button
+                  atl-button
                   variant="outline"
                   size="sm"
                   [atlMenuTriggerFor]="actionsMenu"
@@ -618,7 +621,7 @@ class ConfirmationDialogComponent {
                   atlTooltipPosition="above"
                 >
                   ...
-                </atl-button>
+                </button>
                 <ng-template #actionsMenu>
                   <atl-menu>
                     <atl-menu-item>Edit</atl-menu-item>
@@ -749,9 +752,9 @@ class DataListComponent {
     <div class="wrapper">
       <div class="header">
         <h2 class="header-title">Notifications</h2>
-        <atl-button variant="outline" size="sm" (click)="dismissAll()">
+        <button atl-button variant="outline" size="sm" (click)="dismissAll()">
           Clear all
-        </atl-button>
+        </button>
       </div>
 
       <atl-accordion-group [multi]="true" variant="separated">
@@ -995,7 +998,7 @@ class NotificationCenterComponent {
           <atl-card-header>
             <div class="panel-header">
               <h3 class="panel-title">Recent Activity</h3>
-              <atl-button variant="outline" size="sm">Export</atl-button>
+              <button atl-button variant="outline" size="sm">Export</button>
             </div>
           </atl-card-header>
           <atl-card-content>

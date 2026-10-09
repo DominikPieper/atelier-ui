@@ -59,15 +59,15 @@ export const Default: Story = {
     props: { ...args, open: signal(false) },
     moduleMetadata: { imports: ALL_IMPORTS },
     template: `
-      <atl-button variant="primary" (click)="open.set(true)">Open Dialog</atl-button>
+      <button atl-button variant="primary" (click)="open.set(true)">Open Dialog</button>
       <atl-dialog [(open)]="open" [size]="size" [closeOnBackdrop]="closeOnBackdrop">
         <atl-dialog-header>Confirm Action</atl-dialog-header>
         <atl-dialog-content>
           <p>Are you sure you want to proceed with this action? This cannot be undone.</p>
         </atl-dialog-content>
         <atl-dialog-footer>
-          <atl-button variant="outline" (click)="open.set(false)">Cancel</atl-button>
-          <atl-button variant="primary" (click)="open.set(false)">Confirm</atl-button>
+          <button atl-button variant="outline" (click)="open.set(false)">Cancel</button>
+          <button atl-button variant="primary" (click)="open.set(false)">Confirm</button>
         </atl-dialog-footer>
       </atl-dialog>
     `,
@@ -97,7 +97,7 @@ export const PreOpened: Story = {
         <atl-dialog-header>Pre-opened Dialog</atl-dialog-header>
         <atl-dialog-content><p>This dialog is open on load.</p></atl-dialog-content>
         <atl-dialog-footer>
-          <atl-button variant="primary" (click)="open.set(false)">Close</atl-button>
+          <button atl-button variant="primary" (click)="open.set(false)">Close</button>
         </atl-dialog-footer>
       </atl-dialog>
     `,
@@ -110,15 +110,15 @@ export const CloseButtonDismiss: Story = {
     props: { ...args, open: signal(false) },
     moduleMetadata: { imports: ALL_IMPORTS },
     template: `
-      <atl-button variant="primary" (click)="open.set(true)">Open Dialog</atl-button>
+      <button atl-button variant="primary" (click)="open.set(true)">Open Dialog</button>
       <atl-dialog [(open)]="open" [size]="size" [closeOnBackdrop]="closeOnBackdrop">
         <atl-dialog-header>Confirm Action</atl-dialog-header>
         <atl-dialog-content>
           <p>Are you sure you want to proceed with this action? This cannot be undone.</p>
         </atl-dialog-content>
         <atl-dialog-footer>
-          <atl-button variant="outline" (click)="open.set(false)">Cancel</atl-button>
-          <atl-button variant="primary" (click)="open.set(false)">Confirm</atl-button>
+          <button atl-button variant="outline" (click)="open.set(false)">Cancel</button>
+          <button atl-button variant="primary" (click)="open.set(false)">Confirm</button>
         </atl-dialog-footer>
       </atl-dialog>
     `,
@@ -143,15 +143,15 @@ export const EscapeToClose: Story = {
     props: { ...args, open: signal(false) },
     moduleMetadata: { imports: ALL_IMPORTS },
     template: `
-      <atl-button variant="primary" (click)="open.set(true)">Open Dialog</atl-button>
+      <button atl-button variant="primary" (click)="open.set(true)">Open Dialog</button>
       <atl-dialog [(open)]="open" [size]="size" [closeOnBackdrop]="closeOnBackdrop">
         <atl-dialog-header>Confirm Action</atl-dialog-header>
         <atl-dialog-content>
           <p>Are you sure you want to proceed with this action? This cannot be undone.</p>
         </atl-dialog-content>
         <atl-dialog-footer>
-          <atl-button variant="outline" (click)="open.set(false)">Cancel</atl-button>
-          <atl-button variant="primary" (click)="open.set(false)">Confirm</atl-button>
+          <button atl-button variant="outline" (click)="open.set(false)">Cancel</button>
+          <button atl-button variant="primary" (click)="open.set(false)">Confirm</button>
         </atl-dialog-footer>
       </atl-dialog>
     `,
@@ -187,41 +187,41 @@ export const SizeVariants: Story = {
     moduleMetadata: { imports: ALL_IMPORTS },
     template: `
       <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-        <atl-button variant="outline" size="sm" (click)="smOpen.set(true)">Small</atl-button>
-        <atl-button variant="outline" size="sm" (click)="mdOpen.set(true)">Medium</atl-button>
-        <atl-button variant="outline" size="sm" (click)="lgOpen.set(true)">Large</atl-button>
-        <atl-button variant="outline" size="sm" (click)="xlOpen.set(true)">Extra Large</atl-button>
-        <atl-button variant="outline" size="sm" (click)="fullOpen.set(true)">Full Screen</atl-button>
+        <button atl-button variant="outline" size="sm" (click)="smOpen.set(true)">Small</button>
+        <button atl-button variant="outline" size="sm" (click)="mdOpen.set(true)">Medium</button>
+        <button atl-button variant="outline" size="sm" (click)="lgOpen.set(true)">Large</button>
+        <button atl-button variant="outline" size="sm" (click)="xlOpen.set(true)">Extra Large</button>
+        <button atl-button variant="outline" size="sm" (click)="fullOpen.set(true)">Full Screen</button>
       </div>
 
       <atl-dialog [(open)]="smOpen" size="sm">
         <atl-dialog-header>Small Dialog</atl-dialog-header>
         <atl-dialog-content><p>This is a small (sm) dialog.</p></atl-dialog-content>
-        <atl-dialog-footer><atl-button variant="primary" (click)="smOpen.set(false)">Close</atl-button></atl-dialog-footer>
+        <atl-dialog-footer><button atl-button variant="primary" (click)="smOpen.set(false)">Close</button></atl-dialog-footer>
       </atl-dialog>
 
       <atl-dialog [(open)]="mdOpen" size="md">
         <atl-dialog-header>Medium Dialog</atl-dialog-header>
         <atl-dialog-content><p>This is a medium (md) dialog — the default size.</p></atl-dialog-content>
-        <atl-dialog-footer><atl-button variant="primary" (click)="mdOpen.set(false)">Close</atl-button></atl-dialog-footer>
+        <atl-dialog-footer><button atl-button variant="primary" (click)="mdOpen.set(false)">Close</button></atl-dialog-footer>
       </atl-dialog>
 
       <atl-dialog [(open)]="lgOpen" size="lg">
         <atl-dialog-header>Large Dialog</atl-dialog-header>
         <atl-dialog-content><p>This is a large (lg) dialog.</p></atl-dialog-content>
-        <atl-dialog-footer><atl-button variant="primary" (click)="lgOpen.set(false)">Close</atl-button></atl-dialog-footer>
+        <atl-dialog-footer><button atl-button variant="primary" (click)="lgOpen.set(false)">Close</button></atl-dialog-footer>
       </atl-dialog>
 
       <atl-dialog [(open)]="xlOpen" size="xl">
         <atl-dialog-header>Extra Large Dialog</atl-dialog-header>
         <atl-dialog-content><p>This is an extra large (xl) dialog.</p></atl-dialog-content>
-        <atl-dialog-footer><atl-button variant="primary" (click)="xlOpen.set(false)">Close</atl-button></atl-dialog-footer>
+        <atl-dialog-footer><button atl-button variant="primary" (click)="xlOpen.set(false)">Close</button></atl-dialog-footer>
       </atl-dialog>
 
       <atl-dialog [(open)]="fullOpen" size="full">
         <atl-dialog-header>Full Screen Dialog</atl-dialog-header>
         <atl-dialog-content><p>This dialog fills the entire viewport.</p></atl-dialog-content>
-        <atl-dialog-footer><atl-button variant="primary" (click)="fullOpen.set(false)">Close</atl-button></atl-dialog-footer>
+        <atl-dialog-footer><button atl-button variant="primary" (click)="fullOpen.set(false)">Close</button></atl-dialog-footer>
       </atl-dialog>
     `,
   }),
@@ -239,7 +239,7 @@ export const WithForm: Story = {
       imports: [...ALL_IMPORTS, AtlInput, AtlSelect, AtlOption],
     },
     template: `
-      <atl-button variant="primary" (click)="open.set(true)">Open Form Dialog</atl-button>
+      <button atl-button variant="primary" (click)="open.set(true)">Open Form Dialog</button>
       <atl-dialog [(open)]="open" [size]="size">
         <atl-dialog-header>User Details</atl-dialog-header>
         <atl-dialog-content>
@@ -259,8 +259,8 @@ export const WithForm: Story = {
           </div>
         </atl-dialog-content>
         <atl-dialog-footer>
-          <atl-button variant="outline" (click)="open.set(false)">Cancel</atl-button>
-          <atl-button variant="primary" (click)="open.set(false)">Save</atl-button>
+          <button atl-button variant="outline" (click)="open.set(false)">Cancel</button>
+          <button atl-button variant="primary" (click)="open.set(false)">Save</button>
         </atl-dialog-footer>
       </atl-dialog>
     `,
@@ -272,7 +272,7 @@ export const LongContent: Story = {
     props: { ...args, open: signal(false) },
     moduleMetadata: { imports: ALL_IMPORTS },
     template: `
-      <atl-button variant="primary" (click)="open.set(true)">Open Long Content Dialog</atl-button>
+      <button atl-button variant="primary" (click)="open.set(true)">Open Long Content Dialog</button>
       <atl-dialog [(open)]="open" [size]="size">
         <atl-dialog-header>Terms of Service</atl-dialog-header>
         <atl-dialog-content>
@@ -288,8 +288,8 @@ export const LongContent: Story = {
           <p>At vero eos et accusamus et iusto odio dignissimos ducimus qui blanditiis praesentium.</p>
         </atl-dialog-content>
         <atl-dialog-footer>
-          <atl-button variant="outline" (click)="open.set(false)">Decline</atl-button>
-          <atl-button variant="primary" (click)="open.set(false)">Accept</atl-button>
+          <button atl-button variant="outline" (click)="open.set(false)">Decline</button>
+          <button atl-button variant="primary" (click)="open.set(false)">Accept</button>
         </atl-dialog-footer>
       </atl-dialog>
     `,
@@ -301,15 +301,15 @@ export const NoBackdropClose: Story = {
     props: { ...args, open: signal(false) },
     moduleMetadata: { imports: ALL_IMPORTS },
     template: `
-      <atl-button variant="primary" (click)="open.set(true)">Open Dialog</atl-button>
+      <button atl-button variant="primary" (click)="open.set(true)">Open Dialog</button>
       <atl-dialog [(open)]="open" [closeOnBackdrop]="false">
         <atl-dialog-header>Important Decision</atl-dialog-header>
         <atl-dialog-content>
           <p>This dialog cannot be closed by clicking the backdrop. You must use one of the buttons below.</p>
         </atl-dialog-content>
         <atl-dialog-footer>
-          <atl-button variant="outline" (click)="open.set(false)">Cancel</atl-button>
-          <atl-button variant="primary" (click)="open.set(false)">Confirm</atl-button>
+          <button atl-button variant="outline" (click)="open.set(false)">Cancel</button>
+          <button atl-button variant="primary" (click)="open.set(false)">Confirm</button>
         </atl-dialog-footer>
       </atl-dialog>
     `,

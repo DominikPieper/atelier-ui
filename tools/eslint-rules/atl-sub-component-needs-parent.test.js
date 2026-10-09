@@ -43,7 +43,7 @@ const valid = {
   'the parent itself inside @if, the child inside it': `@if (a) { <atl-select label="X"><atl-option optionValue="a">A</atl-option></atl-select> }`,
   'the right parent among other atl ancestors': `<atl-dialog><atl-card><atl-dialog-header>T</atl-dialog-header></atl-card></atl-dialog>`,
   'two different parents, each with its own child': `<atl-dialog><atl-dialog-header>T</atl-dialog-header></atl-dialog><atl-drawer><atl-drawer-header>T</atl-drawer-header></atl-drawer>`,
-  'the menu in an ng-template, as documented': `<atl-button [atlMenuTriggerFor]="m">Actions</atl-button><ng-template #m><atl-menu><atl-menu-item>Copy</atl-menu-item></atl-menu></ng-template>`,
+  'the menu in an ng-template, as documented': `<button atl-button [atlMenuTriggerFor]="m">Actions</button><ng-template #m><atl-menu><atl-menu-item>Copy</atl-menu-item></atl-menu></ng-template>`,
 
   // The template-local limit: a custom element may forward its content into the parent.
   'an orphan inside a custom wrapper element (ng-content forwarding)': `<my-select-chrome><atl-option optionValue="a">A</atl-option></my-select-chrome>`,

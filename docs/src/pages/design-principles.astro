@@ -144,7 +144,7 @@ import PageHero from '../components/PageHero.astro';
         "
       >
         Every input has a default.
-        <code>&lt;atl-button&gt;Click&lt;/atl-button&gt;</code> renders a
+        <code>&lt;button atl-button&gt;Click&lt;/button&gt;</code> renders a
         correct, styled, accessible button without a single prop. This matters
         for AI output because the model can scaffold something working first and
         add customization in the next turn — instead of needing every prop
@@ -166,7 +166,7 @@ import PageHero from '../components/PageHero.astro';
             <div class="docs-code-block-header">
               <span class="docs-code-block-lang">jsx</span>
             </div>
-            <pre><code>{"// Always works — customize only what you need\n<atl-button>Click</atl-button>\n<atl-card>Content</atl-card>"}</code></pre>
+            <pre><code>{"// Always works — customize only what you need\n<button atl-button>Click</button>\n<atl-card>Content</atl-card>"}</code></pre>
           </div>
         </div>
       </div>
@@ -221,7 +221,7 @@ import PageHero from '../components/PageHero.astro';
             <div class="docs-code-block-header">
               <span class="docs-code-block-lang">jsx</span>
             </div>
-            <pre><code>{"<!-- Composition — nesting the model already knows -->\n<atl-card>\n  <atl-card-header>Title</atl-card-header>\n  <atl-card-content>Body text here.</atl-card-content>\n  <atl-card-footer>\n    <atl-button variant=\"primary\">Save</atl-button>\n  </atl-card-footer>\n</atl-card>"}</code></pre>
+            <pre><code>{"<!-- Composition — nesting the model already knows -->\n<atl-card>\n  <atl-card-header>Title</atl-card-header>\n  <atl-card-content>Body text here.</atl-card-content>\n  <atl-card-footer>\n    <button atl-button variant=\"primary\">Save</button>\n  </atl-card-footer>\n</atl-card>"}</code></pre>
           </div>
         </div>
       </div>

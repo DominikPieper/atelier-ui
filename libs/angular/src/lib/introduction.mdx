@@ -6,7 +6,7 @@ import { Meta } from '@storybook/addon-docs/blocks';
 
 A workshop toolkit for hands-on AI development training. 22 LLM-optimized components, zero runtime dependencies, and a built-in MCP server so your AI assistant can look up exact prop names instead of guessing them.
 
-**Package:** `@atelier-ui/angular` &nbsp;·&nbsp; **Selectors:** `atl-button`, `atl-dialog`, … &nbsp;·&nbsp; **Style:** standalone components + CSS custom properties
+**Package:** `@atelier-ui/angular` &nbsp;·&nbsp; **Selectors:** `button[atl-button]`, `atl-dialog`, … &nbsp;·&nbsp; **Style:** standalone components + CSS custom properties
 
 ---
 
@@ -26,7 +26,7 @@ import { AtlButtonComponent } from '@atelier-ui/angular';
 
 @Component({
   imports: [AtlButtonComponent],
-  template: `<atl-button variant="primary">Save</atl-button>`,
+  template: `<button atl-button variant="primary">Save</button>`,
 })
 export class MyComponent {}
 ```

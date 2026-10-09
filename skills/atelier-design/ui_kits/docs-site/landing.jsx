@@ -197,7 +197,7 @@ const LoopDiagram = () => (
             <p className="loop-artefact-title">framework-native component</p>
             <div className="loop-spec">
               <code className="loop-code">
-                &lt;atl-button variant="primary"&gt;
+                &lt;button atl-button variant="primary"&gt;
               </code>
               <div className="loop-sample" aria-hidden="true">
                 Save

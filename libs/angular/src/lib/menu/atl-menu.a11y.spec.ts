@@ -26,7 +26,7 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../../../../..');
 const SNAP = resolve(ROOT, `tools/parity/a11y/atl-menu.${FW}.json`);
 
 const TEMPLATE = `
-  <atl-button [atlMenuTriggerFor]="menu">Open Menu</atl-button>
+  <button atl-button [atlMenuTriggerFor]="menu">Open Menu</button>
   <ng-template #menu>
     <atl-menu>
       <atl-menu-item>Copy</atl-menu-item>

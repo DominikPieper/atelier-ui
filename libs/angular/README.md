@@ -29,7 +29,7 @@ import { AtlButton } from '@atelier-ui/angular';
 @Component({
   standalone: true,
   imports: [AtlButton],
-  template: ` <atl-button variant="primary" (click)="save()">Save</atl-button> `,
+  template: ` <button atl-button variant="primary" (click)="save()">Save</button> `,
 })
 export class MyComponent {}
 ```

@@ -28,12 +28,12 @@ let nextId = 0;
  *
  * Usage:
  * ```html
- * <atl-button (click)="isOpen = true">Open</atl-button>
+ * <button atl-button (click)="isOpen = true">Open</button>
  * <atl-drawer [(open)]="isOpen" position="right">
  *   <atl-drawer-header>Settings</atl-drawer-header>
  *   <atl-drawer-content>Content here.</atl-drawer-content>
  *   <atl-drawer-footer>
- *     <atl-button variant="primary" (click)="isOpen = false">Save</atl-button>
+ *     <button atl-button variant="primary" (click)="isOpen = false">Save</button>
  *   </atl-drawer-footer>
  * </atl-drawer>
  * ```

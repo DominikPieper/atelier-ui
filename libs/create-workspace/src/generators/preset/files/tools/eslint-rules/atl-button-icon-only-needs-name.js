@@ -3,12 +3,12 @@
 /**
  * atl-button-icon-only-needs-name
  *
- * An `@angular-eslint/template` rule (ADR-0152). Flags an `<atl-button>` that has
+ * An `@angular-eslint/template` rule (ADR-0152). Flags a `<button atl-button>` that has
  * no text content and no accessible-name attribute: an icon-only button a screen
  * reader announces as just "button".
  *
- *   <atl-button><atl-icon name="close" /></atl-button>            // flagged
- *   <atl-button aria-label="Close"><atl-icon name="close" /></atl-button>   // ok
+ *   <button atl-button><atl-icon name="close" /></button>            // flagged
+ *   <button atl-button aria-label="Close"><atl-icon name="close" /></button>   // ok
  *
  * Named by any of: `aria-label`, `[aria-label]`, `[attr.aria-label]`,
  * `aria-labelledby` (and its bound forms). Named by content when the button holds
@@ -18,7 +18,7 @@
  * `@switch`, `@defer` and `*ngIf` wrappers: `@if (x) { <atl-icon /> }` is still
  * icon-only, while `@if (x) { text }` is not.
  *
- * Why the type-check cannot: `<atl-button>` projects its content with
+ * Why the type-check cannot: `button[atl-button]` projects its content with
  * `<ng-content>`, so `strictTemplates` sees an element with arbitrary children and
  * an unconstrained attribute set. Whether those children add up to an accessible
  * name is a fact about the rendered DOM. The component warns at runtime in dev mode
@@ -54,6 +54,11 @@ const kind = (node) => String(node.type).replace(/\$\d+$/, '');
  * parser reports `[attr.aria-label]` under the plain name `aria-label`).
  */
 const attrsOf = (el) => [...(el.attributes ?? []), ...(el.inputs ?? [])];
+
+// `button[atl-button]` — the selector of AtlButton: a native button carrying the
+// static `atl-button` attribute.
+const isAtlButton = (el) =>
+  (el.attributes ?? []).some((a) => a.name === 'atl-button');
 
 const hasNameAttr = (el) => attrsOf(el).some((a) => NAME_ATTRS.has(a.name));
 
@@ -123,18 +128,18 @@ module.exports = {
     type: 'problem',
     docs: {
       description:
-        '<atl-button> with no text content needs aria-label or aria-labelledby',
+        '<button atl-button> with no text content needs aria-label or aria-labelledby',
     },
     messages: {
       missing:
-        '<atl-button> has no text content and no accessible name. Add aria-label (or aria-labelledby), or visible text.',
+        '<button atl-button> has no text content and no accessible name. Add aria-label (or aria-labelledby), or visible text.',
     },
     schema: [],
   },
   create(context) {
     return {
       Element(node) {
-        if (node.name !== 'atl-button') return;
+        if (node.name !== 'button' || !isAtlButton(node)) return;
         if (hasNameAttr(node) || hasContentBinding(node)) return;
         const kinds = (node.children ?? [])
           .flatMap(contributions)

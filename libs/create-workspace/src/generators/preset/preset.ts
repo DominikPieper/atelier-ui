@@ -836,7 +836,7 @@ export async function presetGenerator(
 },
 {
   // How the components are USED, which \`strictTemplates\` cannot see (ADR-0152):
-  // an icon-only <atl-button> with no accessible name, and a sub-component
+  // an icon-only <button atl-button> with no accessible name, and a sub-component
   // outside its required parent. Vendored from the parent Atelier monorepo's
   // tools/eslint-rules/ (see the copy loop below); it reads every \`.html\`
   // template and the inline \`@Component\` templates the processor extracts.
@@ -1551,7 +1551,7 @@ export async function presetGenerator(
   let frameworkSection = '';
   if (framework === 'angular') {
     frameworkSection = `### Angular (\`@atelier-ui/angular\`)
-- Selectors: \`atl-button\`, \`atl-input\`, \`atl-dialog\`, …
+- Selectors: \`button[atl-button]\`, \`atl-input\`, \`atl-dialog\`, …
 - Import: \`import { AtlButton } from '@atelier-ui/angular';\`
 - Add to \`@Component({ imports: [AtlButton] })\`
 - Form controls implement Signal Forms (\`FormValueControl\` / \`FormCheckboxControl\`)`;

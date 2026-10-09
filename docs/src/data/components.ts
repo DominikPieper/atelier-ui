@@ -126,11 +126,11 @@ export const componentDocs: Record<string, ComponentDoc> = {
     category: 'Inputs',
     status: 'stable',
     examples: {
-      angular: `<atl-button variant="primary">Primary</atl-button>
-<atl-button variant="secondary">Secondary</atl-button>
-<atl-button variant="outline">Outline</atl-button>
-<atl-button [loading]="true">Loading</atl-button>
-<atl-button [disabled]="true">Disabled</atl-button>`,
+      angular: `<button atl-button variant="primary">Primary</button>
+<button atl-button variant="secondary">Secondary</button>
+<button atl-button variant="outline">Outline</button>
+<button atl-button [loading]="true">Loading</button>
+<button atl-button [disabled]="true">Disabled</button>`,
       react: `<AtlButton variant="primary">Primary</AtlButton>
 <AtlButton variant="secondary">Secondary</AtlButton>
 <AtlButton variant="outline">Outline</AtlButton>
@@ -449,7 +449,7 @@ export const componentDocs: Record<string, ComponentDoc> = {
     This is the card body content. It can contain anything.
   </atl-card-content>
   <atl-card-footer>
-    <atl-button variant="primary" size="sm">Action</atl-button>
+    <button atl-button variant="primary" size="sm">Action</button>
   </atl-card-footer>
 </atl-card>`,
       react: `<AtlCard variant="elevated" padding="md">
@@ -944,7 +944,7 @@ export const componentDocs: Record<string, ComponentDoc> = {
       'A dropdown context menu. Handles keyboard navigation, focus management, ARIA, and nested submenus.',
     category: 'Navigation',
     examples: {
-      angular: `<atl-button [atlMenuTriggerFor]="actions">Actions ▾</atl-button>
+      angular: `<button atl-button [atlMenuTriggerFor]="actions">Actions ▾</button>
 <ng-template #actions>
   <atl-menu>
     <atl-menu-item (triggered)="copy()">Copy</atl-menu-item>
@@ -1012,13 +1012,13 @@ export const componentDocs: Record<string, ComponentDoc> = {
       'A modal dialog using the native <dialog> element. Includes focus trap, Escape to close, backdrop click to close, and smooth animations.',
     category: 'Overlay',
     examples: {
-      angular: `<atl-button (click)="open = true">Open Dialog</atl-button>
+      angular: `<button atl-button (click)="open = true">Open Dialog</button>
 <atl-dialog [(open)]="open" size="sm">
   <atl-dialog-header>Confirm Delete</atl-dialog-header>
   <atl-dialog-content>Are you sure? This cannot be undone.</atl-dialog-content>
   <atl-dialog-footer>
-    <atl-button variant="outline" (click)="open = false">Cancel</atl-button>
-    <atl-button variant="primary" (click)="open = false">Delete</atl-button>
+    <button atl-button variant="outline" (click)="open = false">Cancel</button>
+    <button atl-button variant="primary" (click)="open = false">Delete</button>
   </atl-dialog-footer>
 </atl-dialog>`,
       react: `<AtlButton onClick={() => setOpen(true)}>Open Dialog</AtlButton>
@@ -1066,14 +1066,14 @@ export const componentDocs: Record<string, ComponentDoc> = {
       'A slide-in panel from the edge of the viewport. Useful for sidebars, filter panels, and detail views.',
     category: 'Overlay',
     examples: {
-      angular: `<atl-button (click)="open = true">Open Drawer</atl-button>
+      angular: `<button atl-button (click)="open = true">Open Drawer</button>
 <atl-drawer [(open)]="open" position="right">
   <atl-drawer-header>Settings</atl-drawer-header>
   <atl-drawer-content>
     <atl-input placeholder="Search..." />
   </atl-drawer-content>
   <atl-drawer-footer>
-    <atl-button (click)="open = false">Close</atl-button>
+    <button atl-button (click)="open = false">Close</button>
   </atl-drawer-footer>
 </atl-drawer>`,
       react: `<AtlButton onClick={() => setOpen(true)}>Open Drawer</AtlButton>
@@ -1121,12 +1121,12 @@ export const componentDocs: Record<string, ComponentDoc> = {
       'An attribute directive that adds a tooltip to any element. Uses a viewport-aware overlay layer so the tooltip flips to stay on-screen.',
     category: 'Overlay',
     examples: {
-      angular: `<atl-button atlTooltip="Save your changes">Save</atl-button>
-<atl-button
+      angular: `<button atl-button atlTooltip="Save your changes">Save</button>
+<button atl-button
   atlTooltip="Copy to clipboard"
   atlTooltipPosition="right"
   variant="outline"
->Copy</atl-button>`,
+>Copy</button>`,
       react: `<AtlTooltip atlTooltip="Save your changes">
   <AtlButton>Save</AtlButton>
 </AtlTooltip>

@@ -29,8 +29,8 @@ const meta: Meta<AtlCard> = {
         <atl-card-header>Card Header</atl-card-header>
         <atl-card-content>This is the card body content.</atl-card-content>
         <atl-card-footer>
-          <atl-button variant="primary" size="sm">Save</atl-button>
-          <atl-button variant="outline" size="sm">Cancel</atl-button>
+          <button atl-button variant="primary" size="sm">Save</button>
+          <button atl-button variant="outline" size="sm">Cancel</button>
         </atl-card-footer>
       </atl-card>
     `,
@@ -170,7 +170,7 @@ export const Playground: Story = {
         <atl-card-header>Playground Card</atl-card-header>
         <atl-card-content>Adjust the controls to explore all options.</atl-card-content>
         <atl-card-footer>
-          <atl-button variant="primary" size="sm">Action</atl-button>
+          <button atl-button variant="primary" size="sm">Action</button>
         </atl-card-footer>
       </atl-card>
     `,

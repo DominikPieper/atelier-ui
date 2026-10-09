@@ -23,10 +23,12 @@ import { contract } from '@atelier-ui/spec/contracts/toast.contract';
   imports: [AtlToastContainer, AtlButton],
   template: `
     <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-      <atl-button variant="primary" (click)="showToast()"
-        >Show Toast</atl-button
-      >
-      <atl-button variant="outline" (click)="clearAll()">Clear All</atl-button>
+      <button atl-button variant="primary" (click)="showToast()">
+        Show Toast
+      </button>
+      <button atl-button variant="outline" (click)="clearAll()">
+        Clear All
+      </button>
     </div>
     <atl-toast-container [position]="position()" />
   `,
@@ -63,10 +65,12 @@ class ToastStoryWrapper {
   imports: [AtlToastContainer, AtlButton],
   template: `
     <div style="display: flex; gap: 0.5rem; flex-wrap: wrap;">
-      <atl-button variant="outline" (click)="showAll()"
-        >Show All Variants</atl-button
-      >
-      <atl-button variant="outline" (click)="clearAll()">Clear All</atl-button>
+      <button atl-button variant="outline" (click)="showAll()">
+        Show All Variants
+      </button>
+      <button atl-button variant="outline" (click)="clearAll()">
+        Clear All
+      </button>
     </div>
     <atl-toast-container position="bottom-right" />
   `,
@@ -104,9 +108,9 @@ class ToastAllVariantsWrapper {
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [AtlToastContainer, AtlButton],
   template: `
-    <atl-button variant="primary" (click)="showQuick()"
-      >Show Toast (2s auto-dismiss)</atl-button
-    >
+    <button atl-button variant="primary" (click)="showQuick()">
+      Show Toast (2s auto-dismiss)
+    </button>
     <atl-toast-container position="bottom-right" />
   `,
 })
@@ -128,9 +132,9 @@ class ToastAutoDismissWrapper {
   changeDetection: ChangeDetectionStrategy.OnPush,
   imports: [AtlToastContainer, AtlButton],
   template: `
-    <atl-button variant="primary" (click)="showPersistent()"
-      >Show Persistent Toast</atl-button
-    >
+    <button atl-button variant="primary" (click)="showPersistent()">
+      Show Persistent Toast
+    </button>
     <atl-toast-container position="bottom-right" />
   `,
 })

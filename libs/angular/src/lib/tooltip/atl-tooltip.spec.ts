@@ -16,7 +16,7 @@ describe('AtlTooltip', () => {
   });
 
   it('renders the host element', async () => {
-    await render('<atl-button atlTooltip="Save changes">Save</atl-button>', {
+    await render('<button atl-button atlTooltip="Save changes">Save</button>', {
       imports: TOOLTIP_IMPORTS,
     });
     expect(screen.getByText('Save')).toBeInTheDocument();
@@ -25,16 +25,19 @@ describe('AtlTooltip', () => {
   covers('tooltip', 'hidden-initially')(
     'does not show tooltip initially',
     async () => {
-      await render('<atl-button atlTooltip="Save changes">Save</atl-button>', {
-        imports: TOOLTIP_IMPORTS,
-      });
+      await render(
+        '<button atl-button atlTooltip="Save changes">Save</button>',
+        {
+          imports: TOOLTIP_IMPORTS,
+        },
+      );
       expect(document.querySelector('.atl-tooltip')).not.toBeInTheDocument();
     },
   );
 
   it('does not have aria-describedby initially', async () => {
     const { container } = await render(
-      '<atl-button atlTooltip="Save changes">Save</atl-button>',
+      '<button atl-button atlTooltip="Save changes">Save</button>',
       { imports: TOOLTIP_IMPORTS },
     );
     expect(container.querySelector('[aria-describedby]')).toBeNull();
@@ -47,7 +50,7 @@ describe('AtlTooltip', () => {
       const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
 
       await render(
-        '<atl-button atlTooltip="Save changes" [atlTooltipShowDelay]="0">Save</atl-button>',
+        '<button atl-button atlTooltip="Save changes" [atlTooltipShowDelay]="0">Save</button>',
         { imports: TOOLTIP_IMPORTS },
       );
 
@@ -67,7 +70,7 @@ describe('AtlTooltip', () => {
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
 
     await render(
-      '<atl-button atlTooltip="Help text" [atlTooltipShowDelay]="0">Help</atl-button>',
+      '<button atl-button atlTooltip="Help text" [atlTooltipShowDelay]="0">Help</button>',
       { imports: TOOLTIP_IMPORTS },
     );
 
@@ -84,7 +87,7 @@ describe('AtlTooltip', () => {
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
 
     await render(
-      '<atl-button atlTooltip="Info" [atlTooltipShowDelay]="0">Btn</atl-button>',
+      '<button atl-button atlTooltip="Info" [atlTooltipShowDelay]="0">Btn</button>',
       { imports: TOOLTIP_IMPORTS },
     );
 
@@ -111,7 +114,7 @@ describe('AtlTooltip', () => {
       const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
 
       await render(
-        '<atl-button atlTooltip="Hidden" [atlTooltipDisabled]="true" [atlTooltipShowDelay]="0">Btn</atl-button>',
+        '<button atl-button atlTooltip="Hidden" [atlTooltipDisabled]="true" [atlTooltipShowDelay]="0">Btn</button>',
         { imports: TOOLTIP_IMPORTS },
       );
 
@@ -131,7 +134,7 @@ describe('AtlTooltip', () => {
       const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
 
       await render(
-        '<atl-button atlTooltip="Temp" [atlTooltipShowDelay]="0" [atlTooltipHideDelay]="0">Btn</atl-button>',
+        '<button atl-button atlTooltip="Temp" [atlTooltipShowDelay]="0" [atlTooltipHideDelay]="0">Btn</button>',
         { imports: TOOLTIP_IMPORTS },
       );
 
@@ -155,7 +158,7 @@ describe('AtlTooltip', () => {
       const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
 
       await render(
-        '<button atlTooltip="Save changes" [atlTooltipShowDelay]="0">Save</button>',
+        '<button atl-button atlTooltip="Save changes" [atlTooltipShowDelay]="0">Save</button>',
         { imports: TOOLTIP_IMPORTS },
       );
 
@@ -175,7 +178,7 @@ describe('AtlTooltip', () => {
       const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
 
       await render(
-        '<button atlTooltip="Save changes" [atlTooltipShowDelay]="0" [atlTooltipHideDelay]="0">Save</button>',
+        '<button atl-button atlTooltip="Save changes" [atlTooltipShowDelay]="0" [atlTooltipHideDelay]="0">Save</button>',
         { imports: TOOLTIP_IMPORTS },
       );
 
@@ -196,7 +199,7 @@ describe('AtlTooltip', () => {
     const user = userEvent.setup({ advanceTimers: vi.advanceTimersByTime });
 
     await render(
-      `<atl-button [atlTooltip]="text" [atlTooltipShowDelay]="0">Btn</atl-button>`,
+      `<button atl-button [atlTooltip]="text" [atlTooltipShowDelay]="0">Btn</button>`,
       {
         imports: TOOLTIP_IMPORTS,
         componentProperties: { text: '' },

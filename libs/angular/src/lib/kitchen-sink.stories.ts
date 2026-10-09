@@ -75,8 +75,8 @@ import { AtlRadio } from './radio/atl-radio';
           </div>
         </atl-card-content>
         <atl-card-footer>
-          <atl-button variant="primary" size="md">Save Changes</atl-button>
-          <atl-button variant="outline" size="md">Cancel</atl-button>
+          <button atl-button variant="primary" size="md">Save Changes</button>
+          <button atl-button variant="outline" size="md">Cancel</button>
         </atl-card-footer>
       </atl-card>
 
@@ -120,12 +120,12 @@ import { AtlRadio } from './radio/atl-radio';
 
       <!-- Button variants -->
       <div class="button-showcase" style="margin-top: 1.5rem;">
-        <atl-button variant="primary" size="lg">Get Started</atl-button>
-        <atl-button variant="secondary" size="md">Learn More</atl-button>
-        <atl-button variant="outline" size="sm">View Docs</atl-button>
-        <atl-button variant="primary" [loading]="true" size="md"
-          >Saving</atl-button
-        >
+        <button atl-button variant="primary" size="lg">Get Started</button>
+        <button atl-button variant="secondary" size="md">Learn More</button>
+        <button atl-button variant="outline" size="sm">View Docs</button>
+        <button atl-button variant="primary" [loading]="true" size="md">
+          Saving
+        </button>
       </div>
     </div>
   `,

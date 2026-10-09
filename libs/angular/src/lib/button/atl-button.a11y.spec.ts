@@ -3,8 +3,8 @@
  * See the React copy for the UPDATE_A11Y protocol; the committed per-framework
  * snapshots are diffed by `npm run check:a11y-parity`.
  *
- * Angular renders an `<atl-button role="button">` host (not a native button), so
- * this is the adapter the normalizer's role+aria handling most needs to prove out.
+ * Angular's `button[atl-button]` is a native `<button>` like the React and Vue
+ * renders, so the three snapshots are expected to match.
  */
 import { render } from '@testing-library/angular';
 import { TestBed } from '@angular/core/testing';
@@ -30,12 +30,12 @@ async function captureOne(template: string): Promise<unknown> {
 
 async function capture(): Promise<Record<string, unknown>> {
   return {
-    default: await captureOne('<atl-button>Click me</atl-button>'),
+    default: await captureOne('<button atl-button>Click me</button>'),
     disabled: await captureOne(
-      '<atl-button [disabled]="true">Click me</atl-button>',
+      '<button atl-button [disabled]="true">Click me</button>',
     ),
     loading: await captureOne(
-      '<atl-button [loading]="true">Click me</atl-button>',
+      '<button atl-button [loading]="true">Click me</button>',
     ),
   };
 }

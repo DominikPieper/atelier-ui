@@ -312,7 +312,8 @@ Apply the following transformations for Angular or Vue:
 
   Construct           JSX / React            Angular                         Vue
   ---------           -------------          ---------------                 --------------
-  Tag name            <AtlButton>            <atl-button>                    <AtlButton>
+  Tag name            <AtlCard>              <atl-card>                      <AtlCard>
+  Button (exception)  <AtlButton>            <button atl-button>             <AtlButton>
   Static attr         variant="primary"      variant="primary"               variant="primary"
   Bool attr           loading={true}         [loading]="true"                :loading="true"
   Expression          count={items.length}   [count]="items.length"          :count="items.length"

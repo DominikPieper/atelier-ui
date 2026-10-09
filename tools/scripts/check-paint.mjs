@@ -76,11 +76,12 @@
  * React and Vue everywhere, and true for Angular WHEN a component renders an
  * inner element carrying that literal class (AtlDialog's `<dialog class="atl-
  * dialog">`, AtlChatHeader's `<div class="atl-chat-header">`) — but FALSE for a
- * component styled straight on `:host` with no inner wrapper at all (AtlButton,
- * AtlChat's own root): there Angular's host element carries `role="button"` /
- * `variant-x size-y` classes and nothing named `.atl-button`. Angular's `:host`
- * compiles to the bare tag selector (`atl-button`), so the painted box in that
- * case IS the custom element itself.
+ * component styled straight on `:host` with no inner wrapper at all (AtlChat's own
+ * root; AtlButton was the other until it became the attribute component
+ * `button[atl-button]`, whose host now carries the `.atl-button` class like React
+ * and Vue): there Angular's host element carries `variant-x size-y`-style classes
+ * and nothing named `.atl-<kebab>`. Angular's `:host` compiles to the bare tag
+ * selector, so the painted box in that case IS the custom element itself.
  *
  * Round 2 (ADR-0121 Decision 4, stage 2 hardening) added `probes` to the six
  * FORM-WRAPPER contracts (AtlInput, AtlTextarea, AtlSelect, AtlCombobox,

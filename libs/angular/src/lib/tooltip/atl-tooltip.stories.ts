@@ -45,7 +45,7 @@ export const Default: Story = {
     moduleMetadata: { imports: [AtlButton] },
     template: `
       <div style="padding: 4rem; display: flex; justify-content: center;">
-        <atl-button atlTooltip="Save your changes">Save</atl-button>
+        <button atl-button atlTooltip="Save your changes">Save</button>
       </div>
     `,
   }),
@@ -57,10 +57,10 @@ export const Positions: Story = {
     moduleMetadata: { imports: [AtlButton] },
     template: `
       <div style="padding: 6rem; display: flex; gap: 2rem; justify-content: center; flex-wrap: wrap;">
-        <atl-button atlTooltip="Tooltip above" atlTooltipPosition="above">Above</atl-button>
-        <atl-button atlTooltip="Tooltip below" atlTooltipPosition="below">Below</atl-button>
-        <atl-button atlTooltip="Tooltip left" atlTooltipPosition="left">Left</atl-button>
-        <atl-button atlTooltip="Tooltip right" atlTooltipPosition="right">Right</atl-button>
+        <button atl-button atlTooltip="Tooltip above" atlTooltipPosition="above">Above</button>
+        <button atl-button atlTooltip="Tooltip below" atlTooltipPosition="below">Below</button>
+        <button atl-button atlTooltip="Tooltip left" atlTooltipPosition="left">Left</button>
+        <button atl-button atlTooltip="Tooltip right" atlTooltipPosition="right">Right</button>
       </div>
     `,
   }),
@@ -71,9 +71,9 @@ export const LongText: Story = {
     moduleMetadata: { imports: [AtlButton] },
     template: `
       <div style="padding: 4rem; display: flex; justify-content: center;">
-        <atl-button
+        <button atl-button
           atlTooltip="This is a longer tooltip message that will wrap across multiple lines when it exceeds the maximum width of the tooltip container."
-        >Hover for details</atl-button>
+        >Hover for details</button>
       </div>
     `,
   }),
@@ -84,8 +84,8 @@ export const Disabled: Story = {
     moduleMetadata: { imports: [AtlButton] },
     template: `
       <div style="padding: 4rem; display: flex; gap: 2rem; justify-content: center;">
-        <atl-button atlTooltip="This tooltip is active">Enabled</atl-button>
-        <atl-button atlTooltip="This tooltip is hidden" [atlTooltipDisabled]="true">Disabled</atl-button>
+        <button atl-button atlTooltip="This tooltip is active">Enabled</button>
+        <button atl-button atlTooltip="This tooltip is hidden" [atlTooltipDisabled]="true">Disabled</button>
       </div>
     `,
   }),
@@ -96,9 +96,9 @@ export const CustomDelay: Story = {
     moduleMetadata: { imports: [AtlButton] },
     template: `
       <div style="padding: 4rem; display: flex; gap: 2rem; justify-content: center;">
-        <atl-button atlTooltip="No delay" [atlTooltipShowDelay]="0">Instant</atl-button>
-        <atl-button atlTooltip="300ms delay (default)">Default</atl-button>
-        <atl-button atlTooltip="1 second delay" [atlTooltipShowDelay]="1000">Slow</atl-button>
+        <button atl-button atlTooltip="No delay" [atlTooltipShowDelay]="0">Instant</button>
+        <button atl-button atlTooltip="300ms delay (default)">Default</button>
+        <button atl-button atlTooltip="1 second delay" [atlTooltipShowDelay]="1000">Slow</button>
       </div>
     `,
   }),
@@ -110,13 +110,13 @@ export const Playground: Story = {
     moduleMetadata: { imports: [AtlButton] },
     template: `
       <div style="padding: 6rem; display: flex; justify-content: center;">
-        <atl-button
+        <button atl-button
           [atlTooltip]="tooltipText"
           [atlTooltipPosition]="atlTooltipPosition"
           [atlTooltipShowDelay]="atlTooltipShowDelay"
           [atlTooltipHideDelay]="atlTooltipHideDelay"
           [atlTooltipDisabled]="atlTooltipDisabled"
-        >Hover me</atl-button>
+        >Hover me</button>
       </div>
     `,
   }),

@@ -124,18 +124,20 @@ import { AtlTooltip } from '../tooltip/atl-tooltip';
         <h2 class="section-title">Button</h2>
         <div class="section-body">
           <div class="row">
-            <atl-button variant="primary">Primary</atl-button>
-            <atl-button variant="secondary">Secondary</atl-button>
-            <atl-button variant="outline">Outline</atl-button>
-            <atl-button variant="primary" [disabled]="true"
-              >Disabled</atl-button
-            >
-            <atl-button variant="primary" [loading]="true">Loading</atl-button>
+            <button atl-button variant="primary">Primary</button>
+            <button atl-button variant="secondary">Secondary</button>
+            <button atl-button variant="outline">Outline</button>
+            <button atl-button variant="primary" [disabled]="true">
+              Disabled
+            </button>
+            <button atl-button variant="primary" [loading]="true">
+              Loading
+            </button>
           </div>
           <div class="row">
-            <atl-button size="sm">Small</atl-button>
-            <atl-button size="md">Medium</atl-button>
-            <atl-button size="lg">Large</atl-button>
+            <button atl-button size="sm">Small</button>
+            <button atl-button size="md">Medium</button>
+            <button atl-button size="lg">Large</button>
           </div>
         </div>
       </section>
@@ -212,7 +214,7 @@ import { AtlTooltip } from '../tooltip/atl-tooltip';
                 <atl-card-header>{{ v | titlecase }}</atl-card-header>
                 <atl-card-content>Card content goes here.</atl-card-content>
                 <atl-card-footer>
-                  <atl-button size="sm">Action</atl-button>
+                  <button atl-button size="sm">Action</button>
                 </atl-card-footer>
               </atl-card>
             }
@@ -442,33 +444,41 @@ import { AtlTooltip } from '../tooltip/atl-tooltip';
         <h2 class="section-title">Tooltip</h2>
         <div class="section-body">
           <div class="row">
-            <atl-button
+            <button
+              atl-button
               variant="outline"
               size="sm"
               atlTooltip="Appears above (default)"
-              >Above</atl-button
             >
-            <atl-button
+              Above
+            </button>
+            <button
+              atl-button
               variant="outline"
               size="sm"
               atlTooltip="Appears below"
               atlTooltipPosition="below"
-              >Below</atl-button
             >
-            <atl-button
+              Below
+            </button>
+            <button
+              atl-button
               variant="outline"
               size="sm"
               atlTooltip="Appears to the right"
               atlTooltipPosition="right"
-              >Right</atl-button
             >
-            <atl-button
+              Right
+            </button>
+            <button
+              atl-button
               variant="outline"
               size="sm"
               atlTooltip="Appears to the left"
               atlTooltipPosition="left"
-              >Left</atl-button
             >
+              Left
+            </button>
           </div>
         </div>
       </section>
@@ -478,12 +488,14 @@ import { AtlTooltip } from '../tooltip/atl-tooltip';
         <h2 class="section-title">Menu</h2>
         <div class="section-body">
           <div class="row">
-            <atl-button
+            <button
+              atl-button
               variant="outline"
               size="sm"
               [atlMenuTriggerFor]="actionsMenu"
-              >Open Menu ▾</atl-button
             >
+              Open Menu ▾
+            </button>
             <ng-template #actionsMenu>
               <atl-menu>
                 <atl-menu-item>Edit</atl-menu-item>
@@ -504,7 +516,9 @@ import { AtlTooltip } from '../tooltip/atl-tooltip';
         <h2 class="section-title">Dialog</h2>
         <div class="section-body">
           <div class="row">
-            <atl-button (click)="dialogOpen.set(true)">Open Dialog</atl-button>
+            <button atl-button (click)="dialogOpen.set(true)">
+              Open Dialog
+            </button>
           </div>
           <atl-dialog [(open)]="dialogOpen" size="sm">
             <atl-dialog-header>Confirm Action</atl-dialog-header>
@@ -512,12 +526,20 @@ import { AtlTooltip } from '../tooltip/atl-tooltip';
               Are you sure you want to proceed? This action cannot be undone.
             </atl-dialog-content>
             <atl-dialog-footer>
-              <atl-button variant="outline" (click)="dialogOpen.set(false)"
-                >Cancel</atl-button
+              <button
+                atl-button
+                variant="outline"
+                (click)="dialogOpen.set(false)"
               >
-              <atl-button variant="primary" (click)="dialogOpen.set(false)"
-                >Confirm</atl-button
+                Cancel
+              </button>
+              <button
+                atl-button
+                variant="primary"
+                (click)="dialogOpen.set(false)"
               >
+                Confirm
+              </button>
             </atl-dialog-footer>
           </atl-dialog>
         </div>
@@ -528,9 +550,9 @@ import { AtlTooltip } from '../tooltip/atl-tooltip';
         <h2 class="section-title">Drawer</h2>
         <div class="section-body">
           <div class="row">
-            <atl-button variant="outline" (click)="drawerOpen.set(true)"
-              >Open Drawer</atl-button
-            >
+            <button atl-button variant="outline" (click)="drawerOpen.set(true)">
+              Open Drawer
+            </button>
           </div>
           <atl-drawer [(open)]="drawerOpen" position="right" size="md">
             <atl-drawer-header>Settings Panel</atl-drawer-header>
@@ -547,10 +569,14 @@ import { AtlTooltip } from '../tooltip/atl-tooltip';
               </div>
             </atl-drawer-content>
             <atl-drawer-footer>
-              <atl-button variant="outline" (click)="drawerOpen.set(false)"
-                >Cancel</atl-button
+              <button
+                atl-button
+                variant="outline"
+                (click)="drawerOpen.set(false)"
               >
-              <atl-button (click)="drawerOpen.set(false)">Save</atl-button>
+                Cancel
+              </button>
+              <button atl-button (click)="drawerOpen.set(false)">Save</button>
             </atl-drawer-footer>
           </atl-drawer>
         </div>
@@ -561,27 +587,37 @@ import { AtlTooltip } from '../tooltip/atl-tooltip';
         <h2 class="section-title">Toast</h2>
         <div class="section-body">
           <div class="row">
-            <atl-button size="sm" (click)="showToast('Saved!', 'success')"
-              >Success</atl-button
+            <button
+              atl-button
+              size="sm"
+              (click)="showToast('Saved!', 'success')"
             >
-            <atl-button
+              Success
+            </button>
+            <button
+              atl-button
               size="sm"
               variant="secondary"
               (click)="showToast('Something went wrong', 'danger')"
-              >Danger</atl-button
             >
-            <atl-button
+              Danger
+            </button>
+            <button
+              atl-button
               size="sm"
               variant="outline"
               (click)="showToast('New message', 'info')"
-              >Info</atl-button
             >
-            <atl-button
+              Info
+            </button>
+            <button
+              atl-button
               size="sm"
               variant="outline"
               (click)="showToast('Check your settings', 'warning')"
-              >Warning</atl-button
             >
+              Warning
+            </button>
           </div>
         </div>
       </section>

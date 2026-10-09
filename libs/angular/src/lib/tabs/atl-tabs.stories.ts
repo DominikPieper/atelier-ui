@@ -143,7 +143,7 @@ export const WithRichContent: Story = {
           <div style="display: flex; flex-direction: column; gap: 12px; max-width: 400px;">
             <atl-input aria-label="Display name" placeholder="Display name" />
             <atl-input aria-label="Email address" type="email" placeholder="Email address" />
-            <atl-button variant="primary" size="sm">Save Changes</atl-button>
+            <button atl-button variant="primary" size="sm">Save Changes</button>
           </div>
         </atl-tab>
         <atl-tab label="Status">

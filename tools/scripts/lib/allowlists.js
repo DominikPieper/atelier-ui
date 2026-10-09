@@ -962,7 +962,7 @@ const PROP_SURFACE_EXEMPT = new Map([
   // (icon-only buttons) — the spec's own doc comment says Angular and Vue
   // "log a dev-mode warning" instead of binding a prop. That is the contract
   // being unmet on two of three adapters, not a spec gap: an icon-only
-  // <atl-button> in Angular or Vue has no compiler-enforced way to require
+  // <button atl-button> in Angular or Vue has no compiler-enforced way to require
   // the accessible name the spec promises.
   ...['angular', 'vue'].map((fw) => [
     `AtlButtonSpec:aria-label:${fw}`,
@@ -1093,18 +1093,6 @@ const PROP_SURFACE_EXEMPT = new Map([
         "over the default — pinned by a spec in atl-dialog.spec.ts — so the behaviour equals Angular's " +
         "('aria-labelledby' input alias) and React's ('aria-labelledby' prop); only the declaration differs. " +
         'Settled, not owed (ADR-0145).',
-    },
-  ],
-  [
-    'AtlButtonSpec:type:angular',
-    {
-      kind: 'gap',
-      reason:
-        "AtlButtonSpec declares no 'type' at all. Angular's <atl-button> (atl-button.ts) renders a custom " +
-        'role="button" element with no `type` input and no native-attribute passthrough to receive one, while ' +
-        "React ('type' reaches the underlying <button> via {...rest}) and Vue (its own 'type' prop, " +
-        'atl-button.vue) both let a caller ask for a submit button — impossible in Angular today. Unresolved: ' +
-        "see tasks/todo.md, 'Cross-framework gaps found by check:manifest-parity (S6a, 2026-09-10)'.",
     },
   ],
   // Alert's dismiss event is named by each framework's own idiom: an Angular

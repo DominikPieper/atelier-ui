@@ -6,7 +6,7 @@ import { contract } from '@atelier-ui/spec/contracts/code-block.contract';
 const SAMPLE_TS = `import { AtlButton } from '@atelier-ui/angular';
 
 @Component({
-  template: \`<atl-button variant="primary" [loading]="saving">Save</atl-button>\`,
+  template: \`<button atl-button variant="primary" [loading]="saving">Save</button>\`,
 })
 export class MyComponent {
   saving = false;

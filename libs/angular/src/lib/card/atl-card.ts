@@ -16,7 +16,7 @@ import {
  *   <atl-card-header>Card Title</atl-card-header>
  *   <atl-card-content>Main content goes here.</atl-card-content>
  *   <atl-card-footer>
- *     <atl-button variant="primary">Save</atl-button>
+ *     <button atl-button variant="primary">Save</button>
  *   </atl-card-footer>
  * </atl-card>
  * ```
@@ -114,7 +114,7 @@ export class AtlCardContent {}
  * Usage:
  * ```html
  * <atl-card-footer>
- *   <atl-button variant="primary">Save</atl-button>
+ *   <button atl-button variant="primary">Save</button>
  * </atl-card-footer>
  * ```
  */

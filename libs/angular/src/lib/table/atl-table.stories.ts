@@ -458,7 +458,7 @@ export const KitchenSink: Story = {
                     </atl-badge>
                   </atl-td>
                   <atl-td align="end">
-                    <atl-button size="sm" variant="secondary">Edit</atl-button>
+                    <button atl-button size="sm" variant="secondary">Edit</button>
                   </atl-td>
                 </atl-tr>
               }

@@ -555,6 +555,14 @@
           "kind": "input"
         },
         {
+          "name": "type",
+          "type": "'button' | 'submit' | 'reset'",
+          "default": "'button'",
+          "description": "Native `type` attribute of the button.",
+          "required": false,
+          "kind": "input"
+        },
+        {
           "name": "variant",
           "type": "'primary' | 'secondary' | 'outline' | 'danger'",
           "default": "'primary'",

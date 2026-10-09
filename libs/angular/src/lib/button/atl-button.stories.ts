@@ -17,7 +17,7 @@ const meta: Meta<AtlButton> = {
   tags: ['autodocs'],
   render: (args) => ({
     props: args,
-    template: `<atl-button ${argsToTemplate(args)}>Button</atl-button>`,
+    template: `<button atl-button ${argsToTemplate(args)}>Button</button>`,
   }),
   argTypes: {
     variant: {
@@ -96,10 +96,10 @@ export const AllVariants: Story = {
   render: () => ({
     template: `
       <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
-        <atl-button variant="primary">Primary</atl-button>
-        <atl-button variant="secondary">Secondary</atl-button>
-        <atl-button variant="outline">Outline</atl-button>
-        <atl-button variant="danger">Danger</atl-button>
+        <button atl-button variant="primary">Primary</button>
+        <button atl-button variant="secondary">Secondary</button>
+        <button atl-button variant="outline">Outline</button>
+        <button atl-button variant="danger">Danger</button>
       </div>
     `,
   }),
@@ -109,9 +109,9 @@ export const AllSizes: Story = {
   render: () => ({
     template: `
       <div style="display: flex; gap: 1rem; align-items: center; flex-wrap: wrap;">
-        <atl-button size="sm">Small</atl-button>
-        <atl-button size="md">Medium</atl-button>
-        <atl-button size="lg">Large</atl-button>
+        <button atl-button size="sm">Small</button>
+        <button atl-button size="md">Medium</button>
+        <button atl-button size="lg">Large</button>
       </div>
     `,
   }),
@@ -120,6 +120,6 @@ export const AllSizes: Story = {
 export const Playground: Story = {
   render: (args) => ({
     props: args,
-    template: `<atl-button ${argsToTemplate(args)}>Playground</atl-button>`,
+    template: `<button atl-button ${argsToTemplate(args)}>Playground</button>`,
   }),
 };

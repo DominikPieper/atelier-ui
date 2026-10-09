@@ -174,8 +174,20 @@ export default tseslint.config(
     },
   },
   {
+    // AtlButton is an attribute component on a native <button> (`button[atl-button]`),
+    // the way Angular Material does it, so it keeps focus, Tab order and form
+    // submission. Every other component stays an element selector.
+    files: ['**/lib/button/atl-button.ts'],
+    rules: {
+      '@angular-eslint/component-selector': [
+        'error',
+        { type: 'attribute', prefix: 'atl', style: 'kebab-case' },
+      ],
+    },
+  },
+  {
     // How the components are USED, which `strictTemplates` cannot see (ADR-0152):
-    // an icon-only <atl-button> with no accessible name, and a sub-component
+    // an icon-only <button atl-button> with no accessible name, and a sub-component
     // outside its required parent. The same two rules the create-workspace
     // scaffold vendors (tools/eslint-rules/angular-template.js). `**/*.html`
     // also reaches the inline `@Component` templates the processor extracts.

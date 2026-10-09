@@ -7,7 +7,7 @@ import { AtlButton } from '@atelier-ui/angular';
 // story: a service, a directive, a form-validation rule.
 describe('AtlButton', () => {
   it('renders with its accessible name', async () => {
-    await render('<atl-button>Click me</atl-button>', {
+    await render('<button atl-button>Click me</button>', {
       imports: [AtlButton],
     });
     expect(
@@ -17,7 +17,7 @@ describe('AtlButton', () => {
 
   it('emits a click event when clicked', async () => {
     const onClick = vi.fn();
-    await render('<atl-button (click)="onClick()">Click me</atl-button>', {
+    await render('<button atl-button (click)="onClick()">Click me</button>', {
       imports: [AtlButton],
       componentProperties: { onClick },
     });

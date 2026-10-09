@@ -15,7 +15,7 @@ const meta: Meta<AtlButton> = {
   tags: ['autodocs'],
   render: (args) => ({
     props: args,
-    template: `<atl-button ${argsToTemplate(args)}>Button</atl-button>`,
+    template: `<button atl-button ${argsToTemplate(args)}>Button</button>`,
   }),
   argTypes: {
     variant: {
@@ -51,7 +51,7 @@ export const Primary: Story = {
     props: { ...args, clicked: false },
     template: `
       <div style="display:flex;flex-direction:column;gap:0.5rem;align-items:flex-start">
-        <atl-button ${argsToTemplate(args)} (click)="clicked = true">Button</atl-button>
+        <button atl-button ${argsToTemplate(args)} (click)="clicked = true">Button</button>
         <span>{{ clicked ? 'clicked' : 'not clicked' }}</span>
       </div>
     `,

@@ -2,8 +2,8 @@
  * a11y-tree.ts — framework-agnostic accessibility-tree normalizer (ADR-0025).
  *
  * Cross-framework parity compares what the three adapters EXPOSE to assistive
- * tech, not the DOM they emit. The DOM legitimately differs — React/Vue render a
- * native `<button>`; Angular renders `<atl-button role="button">` — but the
+ * tech, not the DOM they emit. The DOM can legitimately differ between adapters
+ * (an Angular component host vs. a React/Vue root element), but the
  * accessibility tree must match. This walks a rendered root and produces a
  * normalized {role, name, states} list so each framework's `*.a11y.spec.*` can
  * write a snapshot that `tools/scripts/check-a11y-parity.js` diffs across adapters.

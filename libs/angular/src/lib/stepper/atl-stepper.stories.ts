@@ -47,20 +47,20 @@ export const Default: Story = {
       <atl-stepper [orientation]="orientation" [linear]="linear" [(activeStep)]="activeStep">
         <atl-step label="Account" description="Basic info">
           <p>Fill in your account details.</p>
-          <atl-button variant="primary" size="sm" (click)="activeStep = activeStep + 1">Next</atl-button>
+          <button atl-button variant="primary" size="sm" (click)="activeStep = activeStep + 1">Next</button>
         </atl-step>
         <atl-step label="Profile">
           <p>Set up your profile.</p>
           <div style="display:flex;gap:8px">
-            <atl-button variant="outline" size="sm" (click)="activeStep = activeStep - 1">Back</atl-button>
-            <atl-button variant="primary" size="sm" (click)="activeStep = activeStep + 1">Next</atl-button>
+            <button atl-button variant="outline" size="sm" (click)="activeStep = activeStep - 1">Back</button>
+            <button atl-button variant="primary" size="sm" (click)="activeStep = activeStep + 1">Next</button>
           </div>
         </atl-step>
         <atl-step label="Review">
           <p>Review and confirm.</p>
           <div style="display:flex;gap:8px">
-            <atl-button variant="outline" size="sm" (click)="activeStep = activeStep - 1">Back</atl-button>
-            <atl-button variant="primary" size="sm">Submit</atl-button>
+            <button atl-button variant="outline" size="sm" (click)="activeStep = activeStep - 1">Back</button>
+            <button atl-button variant="primary" size="sm">Submit</button>
           </div>
         </atl-step>
       </atl-stepper>
@@ -131,20 +131,20 @@ export const Vertical: Story = {
       <atl-stepper orientation="vertical" [(activeStep)]="step">
         <atl-step label="Account" description="Basic info">
           <p>Fill in your account details.</p>
-          <atl-button variant="primary" size="sm" (click)="step = step + 1" style="margin-top:8px">Next</atl-button>
+          <button atl-button variant="primary" size="sm" (click)="step = step + 1" style="margin-top:8px">Next</button>
         </atl-step>
         <atl-step label="Profile">
           <p>Set up your profile.</p>
           <div style="display:flex;gap:8px;margin-top:8px">
-            <atl-button variant="outline" size="sm" (click)="step = step - 1">Back</atl-button>
-            <atl-button variant="primary" size="sm" (click)="step = step + 1">Next</atl-button>
+            <button atl-button variant="outline" size="sm" (click)="step = step - 1">Back</button>
+            <button atl-button variant="primary" size="sm" (click)="step = step + 1">Next</button>
           </div>
         </atl-step>
         <atl-step label="Review">
           <p>Review and confirm.</p>
           <div style="display:flex;gap:8px;margin-top:8px">
-            <atl-button variant="outline" size="sm" (click)="step = step - 1">Back</atl-button>
-            <atl-button variant="primary" size="sm">Submit</atl-button>
+            <button atl-button variant="outline" size="sm" (click)="step = step - 1">Back</button>
+            <button atl-button variant="primary" size="sm">Submit</button>
           </div>
         </atl-step>
       </atl-stepper>

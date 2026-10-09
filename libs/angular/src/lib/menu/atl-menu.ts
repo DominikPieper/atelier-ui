@@ -11,11 +11,11 @@ import { CdkMenu, CdkMenuItem, CdkMenuTrigger } from '@angular/cdk/menu';
 
 /**
  * Trigger directive that opens an `<atl-menu>` dropdown.
- * Apply to any element (typically `<atl-button>`) to wire up click + keyboard open/close.
+ * Apply to any element (typically `<button atl-button>`) to wire up click + keyboard open/close.
  *
  * Usage:
  * ```html
- * <atl-button [atlMenuTriggerFor]="myMenu">Open</atl-button>
+ * <button atl-button [atlMenuTriggerFor]="myMenu">Open</button>
  * <ng-template #myMenu>
  *   <atl-menu>
  *     <atl-menu-item (triggered)="action()">Action</atl-menu-item>
@@ -41,7 +41,7 @@ export class AtlMenuTrigger {}
  *
  * Usage:
  * ```html
- * <atl-button [atlMenuTriggerFor]="actions">Actions</atl-button>
+ * <button atl-button [atlMenuTriggerFor]="actions">Actions</button>
  * <ng-template #actions>
  *   <atl-menu>
  *     <atl-menu-item (triggered)="onCopy()">Copy</atl-menu-item>

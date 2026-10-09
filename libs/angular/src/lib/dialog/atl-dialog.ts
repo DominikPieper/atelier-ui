@@ -31,7 +31,7 @@ let nextId = 0;
  *   <atl-dialog-header>Dialog Title</atl-dialog-header>
  *   <atl-dialog-content>Dialog body content.</atl-dialog-content>
  *   <atl-dialog-footer>
- *     <atl-button variant="primary" (click)="isOpen = false">Confirm</atl-button>
+ *     <button atl-button variant="primary" (click)="isOpen = false">Confirm</button>
  *   </atl-dialog-footer>
  * </atl-dialog>
  * ```

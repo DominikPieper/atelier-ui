@@ -121,8 +121,8 @@ const POSITIONS: Record<string, ConnectedPosition[]> = {
  *
  * Usage:
  * ```html
- * <atl-button atlTooltip="Save your changes">Save</atl-button>
- * <atl-button atlTooltip="Copy to clipboard" atlTooltipPosition="right">Copy</atl-button>
+ * <button atl-button atlTooltip="Save your changes">Save</button>
+ * <button atl-button atlTooltip="Copy to clipboard" atlTooltipPosition="right">Copy</button>
  * ```
  */
 @Directive({
