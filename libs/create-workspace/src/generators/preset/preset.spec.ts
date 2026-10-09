@@ -2130,6 +2130,7 @@ describe('preset generator', () => {
     for (const file of [
       'bin/check-contracts.mjs',
       'bin/figma-snapshot-contracts.mjs',
+      'src/codespec.mjs',
       'src/config.mjs',
       'src/docgen.mjs',
       'src/ts-eval.cjs',

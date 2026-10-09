@@ -65,31 +65,61 @@ npx figma-snapshot-contracts --file <figmaFileKey> [--out <file>] [--contracts <
 
 Exit codes: `0` no errors (warnings are allowed), `1` the check found errors, `2` it could
 not run (invalid JSON, a missing required setting, an unknown framework, Figma bridge not
-connected, `--file` not matching the open Figma file).
+connected, `--file` not among the connected Figma files).
 
 ### `check-contracts` flags
 
-| Flag                | Meaning                                                                                                                                    |
-| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------ |
-| `--fw <name>`       | Check one framework (overrides `framework` / `frameworks`).                                                                                |
-| `--contracts <dir>` | Contracts directory (overrides `contracts`).                                                                                               |
-| `--snapshot <file>` | Figma snapshot JSON (overrides `snapshot`).                                                                                                |
-| `--stories <dir>`   | A story root; repeatable. Applies to every requested framework (overrides `stories`).                                                      |
-| `--report`          | Also print one `ok` line per component reached.                                                                                            |
-| `--emit <dir>`      | Write `<dir>/<fw>/<Component>.codespec.json` (`componentAPI`, `metadata`, `tokens.usedTokens`) per component, to feed a Figma parity tool. |
+| Flag                | Meaning                                                                                                                                                                                            |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `--fw <name>`       | Check one framework (overrides `framework` / `frameworks`).                                                                                                                                        |
+| `--contracts <dir>` | Contracts directory (overrides `contracts`).                                                                                                                                                       |
+| `--snapshot <file>` | Figma snapshot JSON (overrides `snapshot`).                                                                                                                                                        |
+| `--stories <dir>`   | A story root; repeatable. Applies to every requested framework (overrides `stories`).                                                                                                              |
+| `--report`          | Also print one `ok` line per component reached.                                                                                                                                                    |
+| `--emit <dir>`      | Write `<dir>/<fw>/<Component>.codespec.json` (`componentAPI`, `metadata`, `tokens.usedTokens`) per component, to feed `figma_check_design_parity`. The API is written in Figma's terms, see below. |
 
 ### `figma-snapshot-contracts` flags
 
-| Flag                | Meaning                                                                                |
-| ------------------- | -------------------------------------------------------------------------------------- |
-| `--file <key>`      | Required. The Figma file key. The tool exits 2 if Figma Desktop has another file open. |
-| `--out <file>`      | Where to write the snapshot (overrides `snapshot`).                                    |
-| `--contracts <dir>` | Contracts directory (overrides `contracts`).                                           |
-| `--dry-run`         | Print the roster and the plugin code for the first master; never connects to Figma.    |
+| Flag                | Meaning                                                                                                                              |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------ |
+| `--file <key>`      | Required. The Figma file key. Several files may be connected: that one is read, whichever is active. Exits 2 if it is not connected. |
+| `--out <file>`      | Where to write the snapshot (overrides `snapshot`).                                                                                  |
+| `--contracts <dir>` | Contracts directory (overrides `contracts`).                                                                                         |
+| `--dry-run`         | Print the roster and the plugin code for the first master; never connects to Figma.                                                  |
 
 It needs Figma Desktop with the file open and the figma-console Desktop Bridge plugin
-connected. The MCP server version must be pinned in the MCP config (see `mcpConfig`); it
+running in it. With several files connected (each with its own plugin), `--file` picks the
+one to read: the script looks it up in `figma_list_open_files` and reads it through
+`figma_execute_across_files` with `fileKeys: [<key>]`, so the file you are working in
+stays the active one and no target pin is touched. A file that is open in Figma without
+the plugin running in it is not connected and cannot be read (exit 2, the connected files
+are listed). The output directory is created if it does not exist. The MCP server version must be pinned in the MCP config (see `mcpConfig`); it
 refuses to fall back to `@latest`.
+
+### `--emit`: the codeSpec in Figma's terms
+
+`figma_check_design_parity` pairs the codeSpec's `componentAPI.props` with the master's
+properties by name (lower-cased, everything outside `[a-z0-9]` removed) and reports every
+code prop without a Figma partner and every Figma property without a code partner. It has
+no notion of a deliberate difference, so `--emit` writes the code's API in Figma's terms,
+using the contract and the snapshot master:
+
+| Contract entry | In the emitted `componentAPI.props`                                                                                                                                                                                                                                                            |
+| -------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `axisMap`      | One prop under the **Figma** name (the axis, or the Boolean's key), with the Figma values when the entry maps values (`values` keys), else the code prop's members. The code name is not emitted. Several entries on one axis merge into one prop.                                             |
+| `codeOnly`     | The code prop is left out.                                                                                                                                                                                                                                                                     |
+| `figmaOnly`    | A prop under the Figma name, `type: "figma-only"`, with the reason in `description`, so the tool finds a partner for it. `state=<value>` entries, and a `state` axis of interaction states only (`default`, `hover`, `focus`, `focus-visible`, `active`, `pressed`), are covered the same way. |
+
+Figma keys Boolean, Text and Instance-swap properties as `Name#<id>` and the tool keeps the
+id's digits when it compares, so a matching code prop is emitted under the master's full
+key (the snapshot keeps it). A difference the contract does not record stays a mismatch and
+is still reported: that is the point. A component with no master in the snapshot
+(`[NO-MASTER]`) keeps the code's own names, there is nothing to translate to. Events and
+slots are emitted as names, the parity schema takes strings. `visual`, `spacing`,
+`typography` and `accessibility` are not derived here.
+
+Limits: a Figma name made only of non-ASCII letters, or two names that differ only in such
+letters (`Größe` and `Gre`), collapse to the same key in the tool's comparison.
 
 ## `contracts.config.json`
 
@@ -151,3 +181,12 @@ same component manifests the check reads. Every function takes its roots and its
 The package is plain `.mjs` / `.cjs`, so it can also be copied into a repo as a folder (keep
 `bin/` and `src/` side by side) and run with `node <folder>/bin/check-contracts.mjs`. The
 file extension fixes the module format, so the host repo's `"type"` does not matter.
+
+## Tests
+
+`npm test` (in this directory) runs `node --test test/*.test.mjs`. The tests run both bins
+as child processes against a small fixture design system in `test/fixture` (one Angular
+component, German Figma names, a `--n-` token prefix) and a stand-in figma-console server
+(`test/fake-figma-console.mjs`, put on `PATH` as `npx`), so no live Figma is needed. The
+`--emit` golden is `test/golden/NButton.codespec.json`; `UPDATE_GOLDEN=1 npm test` rewrites
+it. `test/` is not published (`files`).

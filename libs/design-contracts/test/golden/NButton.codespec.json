@@ -1,0 +1,75 @@
+{
+  "componentAPI": {
+    "props": [
+      {
+        "name": "Variante",
+        "type": "\"primary\" | \"secondary\"",
+        "values": [
+          "primär",
+          "sekundär"
+        ],
+        "defaultValue": "primär",
+        "description": "Figma \"Variante\" is code \"variant\" (contract axisMap): German Figma names, English code names."
+      },
+      {
+        "name": "Größe",
+        "type": "\"sm\" | \"md\"",
+        "values": [
+          "klein",
+          "mittel"
+        ],
+        "defaultValue": "mittel",
+        "description": "Figma \"Größe\" is code \"size\" (contract axisMap): German Figma names, English code names."
+      },
+      {
+        "name": "Ausgewählt",
+        "type": "boolean",
+        "values": [
+          "true",
+          "false"
+        ],
+        "defaultValue": false,
+        "description": "Figma \"Ausgewählt\" is code \"selected\" (contract axisMap): German Figma axis for a boolean code prop; values are true/false."
+      },
+      {
+        "name": "Deaktiviert#1:2",
+        "type": "boolean",
+        "values": [
+          "true",
+          "false"
+        ],
+        "defaultValue": false,
+        "description": "Figma \"Deaktiviert\" is code \"disabled\" (contract axisMap): German Figma name for the disabled Boolean."
+      },
+      {
+        "name": "Symbol#1:3",
+        "type": "figma-only",
+        "description": "Figma-only (contract figmaOnly): Icon slot is not modelled in code yet."
+      },
+      {
+        "name": "state",
+        "type": "figma-only",
+        "values": [
+          "default",
+          "hover",
+          "laden"
+        ],
+        "description": "Figma-only (contract figmaOnly): interaction states are CSS pseudo-classes and `state=<value>` entries are figmaOnly, not code props."
+      }
+    ],
+    "events": [
+      "pressed"
+    ]
+  },
+  "metadata": {
+    "name": "NButton",
+    "description": "Action button of the fixture design system."
+  },
+  "tokens": {
+    "usedTokens": [
+      "--n-color-surface",
+      "--n-color-text",
+      "--n-space-2"
+    ]
+  }
+}

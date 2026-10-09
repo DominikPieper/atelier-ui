@@ -27,8 +27,8 @@
  * connecting to Figma at all — the only mode that can run where there is no
  * Figma Desktop Bridge.
  */
-import { writeFileSync, readFileSync, existsSync } from 'node:fs';
-import { resolve } from 'node:path';
+import { writeFileSync, readFileSync, existsSync, mkdirSync } from 'node:fs';
+import { resolve, dirname } from 'node:path';
 import { createRequire } from 'node:module';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
@@ -292,37 +292,64 @@ async function main() {
         ? `${declaredServerVersion} (declared in ${MCP_CONFIG_PATH}; server did not report)`
         : null);
 
-    // ─── Verify --file actually names the open file ────────────────────────
-    // The Bridge reads whichever file is open in Figma Desktop, regardless of
-    // what --file claims, so the open file cannot be assumed to match (a
-    // participant works in their own duplicate). figma.fileKey is the ground truth reported from inside
-    // the plugin sandbox itself.
-    const openFile = (
-      await call(client, 'figma_execute', {
-        code: `
-          await figma.loadAllPagesAsync();
-          return { fileKey: figma.fileKey ?? null, fileName: figma.root.name };
-        `,
-        timeout: 10000,
-      })
-    )?.result;
+    // ─── Target --file among the connected files ───────────────────────────
+    // The Desktop Bridge keeps one connection per Figma file that has the
+    // plugin open, and `figma_execute` runs in whichever one is ACTIVE (the
+    // user's last selection). So the requested file is looked up in
+    // `figma_list_open_files`, and every read is sent through
+    // `figma_execute_across_files` with `fileKeys: [--file]`, which targets
+    // that file only and leaves the active file (and any target pin) alone.
+    // The file must be connected: a file that is merely open in Figma, without
+    // the plugin running in it, cannot be reached.
+    const open = await call(client, 'figma_list_open_files', {});
+    const connected = Array.isArray(open?.files) ? open.files : [];
+    if (!connected.some((f) => f.fileKey === args.file)) {
+      const list = connected.length
+        ? connected.map((f) => `    ${f.fileKey}  "${f.fileName}"`).join('\n')
+        : '    (none)';
+      console.error(
+        `✗ --file ${args.file} is not connected through the Desktop Bridge. Open that file in ` +
+          `Figma Desktop and run the figma-console Desktop Bridge plugin in it, then re-run.\n` +
+          `  Connected files:\n${list}`,
+      );
+      process.exit(2);
+    }
+
+    async function executeInFile(code, timeout) {
+      const res = await call(client, 'figma_execute_across_files', {
+        code,
+        fileKeys: [args.file],
+        timeout,
+      });
+      const entry = res?.results?.[args.file];
+      if (!entry || entry.success === false) {
+        throw new Error(
+          `figma_execute_across_files failed for ${args.file}: ${entry?.error ?? res?.error ?? 'no result'}`,
+        );
+      }
+      return entry.result;
+    }
+
+    // figma.fileKey, reported from inside the plugin sandbox itself, confirms
+    // the answer came from the file that was asked.
+    const openFile = await executeInFile(
+      `
+        await figma.loadAllPagesAsync();
+        return { fileKey: figma.fileKey ?? null, fileName: figma.root.name };
+      `,
+      10000,
+    );
     if (openFile?.fileKey && openFile.fileKey !== args.file) {
       console.error(
-        `✗ --file ${args.file} does not match the file open in Figma Desktop ` +
-          `(${openFile.fileKey}, "${openFile.fileName}"). Open the file you meant to ` +
-          `snapshot, or pass --file ${openFile.fileKey}, and re-run.`,
+        `✗ asked file ${args.file}, but the plugin that answered reports ${openFile.fileKey} ` +
+          `("${openFile.fileName}"). Re-run; if it persists, close the other Figma windows.`,
       );
       process.exit(2);
     }
 
     const components = [];
     for (const { selector, nodeId } of roster) {
-      const result = (
-        await call(client, 'figma_execute', {
-          code: pluginCodeFor(nodeId),
-          timeout: 15000,
-        })
-      )?.result;
+      const result = await executeInFile(pluginCodeFor(nodeId), 15000);
       if (!result) {
         console.warn(`⚠ skipped ${selector} (${nodeId}): node not found`);
         continue;
@@ -349,6 +376,7 @@ async function main() {
       },
       components,
     };
+    mkdirSync(dirname(OUT_PATH), { recursive: true });
     writeFileSync(OUT_PATH, JSON.stringify(snapshot, null, 2) + '\n');
     console.log(`✓ wrote ${components.length} master(s) to ${OUT_PATH}`);
   } finally {

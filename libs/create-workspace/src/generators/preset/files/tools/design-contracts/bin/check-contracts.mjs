@@ -44,6 +44,7 @@ import {
   findExternalPackageDir,
   errorMessage,
 } from '../src/docgen.mjs';
+import { buildCodeSpec, INTERACTION_STATE_VALUES } from '../src/codespec.mjs';
 import {
   FRAMEWORKS,
   die,
@@ -66,19 +67,6 @@ const { parseExportedVars } = require('../src/ts-eval.cjs');
 const CWD = process.cwd();
 const cwdRequire = createRequire(path.join(CWD, 'package.json'));
 const { reactParseFile } = makeReactDocgenTools(cwdRequire);
-
-// Interaction values on a `state` axis: CSS pseudo-classes, not code-modelled
-// state. Every OTHER value on a `state` axis (completed, optional, error, filled, open,
-// invalid, checked, filtered, selected, ...) is data-flavoured and must be covered by an
-// `axisMap` entry or a `figmaOnly` entry named `state=<value>`.
-const INTERACTION_STATE_VALUES = new Set([
-  'default',
-  'hover',
-  'focus',
-  'focus-visible',
-  'active',
-  'pressed',
-]);
 
 const UNRESOLVABLE = Symbol('unresolvable');
 
@@ -1576,28 +1564,13 @@ async function runFramework(fw) {
     }
 
     if (args.emit) {
-      const props = entry.docgenResult.props.filter((p) => !p.isOutput);
-      const events = entry.docgenResult.props.filter((p) => p.isOutput);
-      const codeSpec = {
-        componentAPI: {
-          props: props.map((p) => ({
-            name: p.name,
-            type: p.typeText || p.kind,
-            values: p.kind === 'enum' ? p.members : undefined,
-            defaultValue: p.default,
-            description: p.description,
-            required: p.required,
-          })),
-          events: events.map((e) => ({
-            name: e.name,
-            type: e.typeText,
-            description: e.description,
-          })),
-          slots: entry.docgenResult.slots,
-        },
-        metadata: { name, description: entry.docgenResult.description },
-        tokens: { usedTokens: scanCssTokens(entry.contextDir, fw) },
-      };
+      const codeSpec = buildCodeSpec({
+        name,
+        docgenResult: entry.docgenResult,
+        master: snapshotBySelector.get(name) || null,
+        contract: contract || null,
+        usedTokens: scanCssTokens(entry.contextDir, fw),
+      });
       const outDir = path.join(path.resolve(args.emit), fw);
       fs.mkdirSync(outDir, { recursive: true });
       fs.writeFileSync(

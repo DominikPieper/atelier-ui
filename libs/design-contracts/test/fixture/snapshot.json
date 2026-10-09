@@ -1,0 +1,29 @@
+{
+  "meta": {
+    "fileKey": "FIXTURE",
+    "generator": "hand-written"
+  },
+  "components": [
+    {
+      "selector": "NButton",
+      "nodeId": "10:1",
+      "name": "Aktionen/Schaltfläche",
+      "description": "Schaltfläche. Variante: primär | sekundär. Größe: klein | mittel. Ausgewählt: true | false. Deaktiviert. Symbol. Zustand laden.\n- Code-only `tone`: Colour family is a code concern, not drawn.",
+      "variantAxes": {
+        "Variante": ["primär", "sekundär"],
+        "Größe": ["klein", "mittel"],
+        "state": ["default", "hover", "laden"],
+        "Ausgewählt": ["true", "false"]
+      },
+      "properties": {
+        "Variante": "VARIANT",
+        "Größe": "VARIANT",
+        "state": "VARIANT",
+        "Deaktiviert#1:2": "BOOLEAN",
+        "Symbol#1:3": "BOOLEAN",
+        "Ausgewählt": "VARIANT"
+      },
+      "variants": []
+    }
+  ]
+}

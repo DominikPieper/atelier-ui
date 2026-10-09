@@ -1,0 +1,5 @@
+.n-button {
+  color: var(--n-color-text);
+  background: var(--n-color-surface);
+  padding: var(--n-space-2);
+}

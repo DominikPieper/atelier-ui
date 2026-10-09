@@ -1,0 +1,67 @@
+/**
+ * The micro-contract: the ONLY hand-authored spec artefact per
+ * component. It records what no derived artefact can know — which Figma master this
+ * component is, and where Figma and code differ on purpose. Everything else about the
+ * component is derived: props, types, defaults and descriptions from the docgen manifest;
+ * variant coverage from the stories; geometry and paint from the rendered story and the
+ * Figma snapshot.
+ *
+ * Forbidden here, by design: props, defaults, unions, variant matrices, prose
+ * descriptions, token lists. If you want to write one of those, the place is the
+ * component's types and JSDoc, a story, or the master. A contract that regrows into a
+ * metadata file has failed.
+ *
+ * Contracts are plain object literals — no imports of values, no computed members — so
+ * the check can read them statically (it evaluates the literal, it never runs the file).
+ */
+export interface ComponentContract {
+  /** Spec selector, e.g. `'Button'`. Must equal the master's `selector` in the Figma snapshot. */
+  component: string;
+  /** The master's `COMPONENT_SET` (or lone `COMPONENT`) node id in the Figma file, e.g. `'129:20'`. */
+  figmaNodeId: string;
+  /**
+   * Figma properties — variant axes, Booleans, Texts, instance swaps — that have no code
+   * prop on purpose, each with the reason. The `state` axis is NOT listed: interaction
+   * states are CSS pseudo-classes by convention and the check knows it.
+   */
+  figmaOnly?: ReadonlyArray<{ name: string; reason: string }>;
+  /**
+   * Code props or events that have no Figma property on purpose, each with the reason
+   * (e.g. `open` — "false renders nothing"). Domain: only string-literal enum
+   * props — the code's own axes — ever need an entry here, for the same reason
+   * `[ENUM-UNDRAWN]` only ever reports enum props. Booleans, strings, numbers, callbacks
+   * and events with no Figma counterpart are normal (behaviour and content) and never
+   * need one.
+   */
+  codeOnly?: ReadonlyArray<{ name: string; reason: string }>;
+  /**
+   * A Figma axis that maps to a code prop under another name or value set, e.g. the
+   * `selection` axis (`checked` | `unchecked`) that is `checked: boolean` in code.
+   * Verbatim-equal axes need no entry. `codeProp` may be dotted (`Child.prop`, e.g.
+   * `Step.completed`) when the prop lives on a CHILD component's own manifest rather
+   * than the story's primary component — the check resolves it there. Several entries
+   * may target the same `figmaAxis` (e.g. Stepper's `state` axis maps to three
+   * different `Step` flags, one entry each).
+   */
+  axisMap?: ReadonlyArray<{
+    figmaAxis: string;
+    codeProp: string;
+    values?: Readonly<Record<string, string | number | boolean | null>>;
+    reason: string;
+  }>;
+  /**
+   * A code Boolean that, by behaviour, also switches ON another Boolean the master draws
+   * (`loading` always disables the button, so a loading story paints the disabled cover).
+   * `codeProp` is the arg a story sets; `figmaBoolean` is the master's Boolean name (without
+   * its `#id`) whose cover the paint gate compares against when `codeProp` is true. Only
+   * needed when the Figma Boolean of that name would not otherwise be reached — a code prop
+   * that shares its Figma Boolean's name needs no entry.
+   */
+  impliesBoolean?: ReadonlyArray<{
+    codeProp: string;
+    figmaBoolean: string;
+    reason: string;
+  }>;
+  /** Only when the root frame is not the comparable layer: the part a parity probe measures instead. */
+  probes?: ReadonlyArray<{ part: string; selector: string; reason: string }>;
+}

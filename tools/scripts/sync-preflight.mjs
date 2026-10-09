@@ -83,6 +83,10 @@ const FILES = [
     target: `${PRESET_FILES_DIR}/tools/design-contracts/bin/figma-snapshot-contracts.mjs`,
   },
   {
+    source: 'libs/design-contracts/src/codespec.mjs',
+    target: `${PRESET_FILES_DIR}/tools/design-contracts/src/codespec.mjs`,
+  },
+  {
     source: 'libs/design-contracts/src/config.mjs',
     target: `${PRESET_FILES_DIR}/tools/design-contracts/src/config.mjs`,
   },

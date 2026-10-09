@@ -1944,14 +1944,23 @@ and npm deprecations each need the owner's explicit go.
         `ComponentContract` type. Source of truth for the scripts from now on. Done when Atelier's
         `check:contracts` runs through the package bin with unchanged output (all three
         frameworks).
-  - [ ] P1.2 Pin today's behaviour first: `node --test` on a small non-CDS fixture (one
+  - [x] P1.2 Pin today's behaviour first: `node --test` on a small non-CDS fixture (one
         component, snapshot, contract, story; `--ui-*` prefix, English names), golden output.
         Done when green.
-  - [ ] P1.3 Spike fixes, each with a red test first: `--file` among several connected files,
+  - [x] P1.3 Spike fixes, each with a red test first: `--file` among several connected files,
         create the output dir, `.cjs` for `"type": "module"`, token prefixes from config (today
         hard-coded `--ui-`, `check-contracts.mjs:999`), `--emit` maps the codeSpec to Figma names
         via `axisMap`/`figmaOnly`. Done when tests are green and a Snackbar parity run shows no
         name-only discrepancies (needs the owner's bridge).
+  - [x] P1.3 code done 2026-10-09 (`check:contracts-package`, 14 node tests on a non-Atelier
+        fixture; Codex cross-check found two defects, both fixed). Still open: the live Snackbar
+        parity run and a live multi-file snapshot against the Desktop Bridge (owner's machine);
+        `--file` targeting is tested only against a fake modelled on figma-console-mcp 1.40.0.
+  - [ ] Gate gap found in review (pre-existing, not changed): an `axisMap` entry without `values`
+        marks every Figma axis value covered, so a boolean prop mapped to an axis `ja/nein`
+        passes `check-contracts` (pinned in the package tests). `--emit` now surfaces it in
+        parity; decide whether the gate should require `values` when a boolean meets a
+        non-`true/false` axis.
   - [x] P1.4 Rewire Atelier: `sync-preflight` copies from the package into the scaffold;
         `check-manifest-parity` imports docgen from the package instead of `tools/scripts/lib`.
         Done when `check:all` passes.

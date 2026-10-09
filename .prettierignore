@@ -30,3 +30,6 @@ tools/parity/**/*.json
 
 # Throwaway spike code kept verbatim for reference (tasks/spikes/p1-css/README.md)
 tasks/spikes/
+
+# Golden output of the design-contracts tests: the tool under test owns the bytes.
+libs/design-contracts/test/golden/

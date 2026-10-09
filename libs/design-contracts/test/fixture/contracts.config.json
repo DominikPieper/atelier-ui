@@ -1,0 +1,8 @@
+{
+  "framework": "angular",
+  "contracts": "contracts",
+  "snapshot": "snapshot.json",
+  "stories": ["src"],
+  "tokenPrefix": "--n-",
+  "contractImportSeverity": "error"
+}

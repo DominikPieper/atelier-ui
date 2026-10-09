@@ -483,6 +483,7 @@ function testFramework(framework, registryUrl, npmrcPath) {
       mustExist.push(
         'tools/design-contracts/bin/check-contracts.mjs',
         'tools/design-contracts/bin/figma-snapshot-contracts.mjs',
+        'tools/design-contracts/src/codespec.mjs',
         'tools/design-contracts/src/config.mjs',
         'tools/design-contracts/src/ts-eval.cjs',
         'tools/design-contracts/src/docgen.mjs',
@@ -506,6 +507,7 @@ function testFramework(framework, registryUrl, npmrcPath) {
       const mustNotExist = [
         'tools/design-contracts/bin/check-contracts.mjs',
         'tools/design-contracts/bin/figma-snapshot-contracts.mjs',
+        'tools/design-contracts/src/codespec.mjs',
         'tools/design-contracts/src/config.mjs',
         'tools/design-contracts/src/ts-eval.cjs',
         'tools/design-contracts/src/docgen.mjs',
