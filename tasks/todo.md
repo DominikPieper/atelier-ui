@@ -1937,6 +1937,26 @@ The ones the owner and I will walk through together.
       (Offen / Übernehmen / Erledigt / Gestrichen), is
       `plan/research/ai-ds-course-gap-2026-10-08/triage.md` — update status there, not here.
 
+- [ ] Findings from course-gap wave 3 (2026-10-09; evidence in
+      `plan/research/ai-ds-course-gap-2026-10-08/wave3-b3-cold-start-log.md` and the agents'
+      reads of the code):
+  - [ ] **Angular `atl-button` is not a native button.** The host is `<atl-button role="button">`
+        with no inner `<button>`, so it never submits a `<form>` and has no `type`; React and Vue
+        render a native `<button>`. The Figma master description says "native HTML <button>".
+        Decide: render an inner `<button>` in Angular (API/DOM change), or document the
+        divergence and correct the description.
+  - [ ] **Vue dialog/drawer do not restore focus themselves.** React and Angular store
+        `document.activeElement` on open and refocus it on close; Vue relies on native
+        `dialog.close()`. Verify in a browser; align if the platform does not cover it.
+  - [ ] **Only Angular traps focus in a dialog** (`cdkTrapFocus`); React/Vue rely on
+        `showModal()` making the page inert (Tab can leave into browser chrome). Decide whether
+        that difference is intended; the accessibility page now describes it as is.
+  - [ ] **Tooltip behaviour the spec does not ask for:** all three handle Escape and Angular/React
+        bind focus, but `libs/spec/src/behaviors.json` has no ids for them, so no test covers them.
+        Add `tooltip.hide-on-escape` / `tooltip.show-on-focus` and the tests.
+  - [ ] **Prop tables in `llms-full.txt` are React-shaped for every framework** (`onValueChange`,
+        `children`); the cold-start agent had to translate them for Angular.
+
 - [ ] Follow-ups from ADR-0161 (code-only facts as `- Code-only` description lines, 2026-10-08):
   - [ ] Read-side A/B: does an agent generating from the master use a `- Code-only` line
         (AtlButton `type`) better than the old parenthetical? Untested for both carriers.
