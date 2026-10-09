@@ -36,6 +36,8 @@ export interface AtlBadgeProps
 
 /**
  * A badge component for displaying small amounts of information or status.
+ * Decorative by default: it carries no ARIA role. When the badge announces a
+ * change, pass `role="status"` yourself.
  */
 export function AtlBadge({
   variant = 'default',
@@ -49,7 +51,7 @@ export function AtlBadge({
     .join(' ');
   const iconName = VARIANT_ICON_NAMES[variant];
   return (
-    <span className={classes} role="status" {...rest}>
+    <span className={classes} {...rest}>
       {iconName && (
         <AtlIcon className="variant-icon" name={iconName} size="sm" />
       )}

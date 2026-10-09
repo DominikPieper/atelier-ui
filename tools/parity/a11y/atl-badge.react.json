@@ -1,14 +1,4 @@
 {
-  "default": [
-    {
-      "role": "status",
-      "name": "New"
-    }
-  ],
-  "success": [
-    {
-      "role": "status",
-      "name": "Active"
-    }
-  ]
+  "default": [],
+  "success": []
 }

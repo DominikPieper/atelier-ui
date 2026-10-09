@@ -8,16 +8,6 @@ import {
 import type { AtlIconName, AtlBadgeVariant } from '../spec';
 import { AtlIcon } from '../icon/atl-icon';
 
-/**
- * Inline status badge for labeling items with semantic color variants.
- *
- * Usage:
- * ```html
- * <atl-badge variant="success">Active</atl-badge>
- * <atl-badge variant="danger" size="sm">Error</atl-badge>
- * <atl-badge variant="warning">Pending</atl-badge>
- * ```
- */
 // Which AtlIcon each variant carries. Names, not glyphs: a glyph in a string map
 // was the fifth way this library drew an icon, and the one check:icon-duplication
 // missed (ADR-0050).
@@ -28,6 +18,19 @@ const VARIANT_ICON_NAMES: Partial<Record<AtlBadgeVariant, AtlIconName>> = {
   danger: 'danger',
 };
 
+/**
+ * Inline badge for labeling items with semantic color variants.
+ *
+ * Decorative by default: it carries no ARIA role. When the badge announces a
+ * change (a count or state that updates), pass `role="status"` yourself.
+ *
+ * Usage:
+ * ```html
+ * <atl-badge variant="success">Active</atl-badge>
+ * <atl-badge variant="danger" size="sm">Error</atl-badge>
+ * <atl-badge variant="warning" role="status">3 pending</atl-badge>
+ * ```
+ */
 @Component({
   selector: 'atl-badge',
   standalone: true,
@@ -47,7 +50,6 @@ const VARIANT_ICON_NAMES: Partial<Record<AtlBadgeVariant, AtlIconName>> = {
   host: {
     class: 'atl-badge',
     '[class]': 'hostClasses()',
-    role: 'status',
   },
 })
 export class AtlBadge {

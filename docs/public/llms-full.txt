@@ -493,8 +493,10 @@ Each entry lists:
       - Surfacing a dismissable system-level message. → use AtlAlert — alerts carry a role and live region, badges do not.
       - Holding a removable user-entered chip (filter, recipient). → use A dedicated chip/tag component with its own remove affordance; badges are display-only.
     relatedComponents: AtlAlertSpec, AtlAvatarSpec
-    accessibility.role: status
+    accessibility.role: none
     accessibility.keyboardBehavior: Non-interactive. Not focusable and ignores all keyboard input — the surrounding context (row, button, nav item) handles focus.
+    accessibility.notes:
+      - Decorative by default: no role is rendered. When the badge announces a change, pass role="status" on the element yourself.
 
 ---
 

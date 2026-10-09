@@ -32,7 +32,10 @@ export const metadata: ComponentMetadata = {
     { variant: 'info', size: 'md' },
   ],
   accessibility: {
-    role: 'status',
+    role: 'none',
+    notes: [
+      'Decorative by default: no role is rendered. When the badge announces a change, pass role="status" on the element yourself.',
+    ],
     keyboardBehavior:
       'Non-interactive. Not focusable and ignores all keyboard input — the surrounding context (row, button, nav item) handles focus.',
   },

@@ -11,10 +11,18 @@ describe('AtlBadge', () => {
     },
   );
 
-  it('has role="status" for screen reader awareness', async () => {
+  it('is decorative by default: no role attribute', async () => {
     const { container } = await render('<atl-badge>Info</atl-badge>', {
       imports: [AtlBadge],
     });
+    expect(container.querySelector('atl-badge')).not.toHaveAttribute('role');
+  });
+
+  it('renders a consumer-passed role="status" on the host', async () => {
+    const { container } = await render(
+      '<atl-badge role="status">3 new</atl-badge>',
+      { imports: [AtlBadge] },
+    );
     expect(container.querySelector('atl-badge')).toHaveAttribute(
       'role',
       'status',
