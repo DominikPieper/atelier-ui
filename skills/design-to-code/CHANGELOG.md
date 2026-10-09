@@ -1,3 +1,14 @@
+## 0.1.9 (2026-10-09)
+
+### 🚀 Features
+
+- **design-contracts:** extract the contract loop into @conciso/design-contracts ([fd8da23a](https://github.com/DominikPieper/atelier-ui/commit/fd8da23a))
+
+### ❤️ Thank You
+
+- Claude Opus 5.5
+- Dominik Pieper @DominikPieper
+
 ## 0.1.8 (2026-10-05)
 
 This was a version bump only for design-to-code to align it with other projects, there were no code changes.

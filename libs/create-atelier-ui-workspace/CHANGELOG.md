@@ -1,3 +1,15 @@
+## 0.4.1 (2026-10-09)
+
+### 🚀 Features
+
+- **design-contracts:** tests, snapshot targets a connected file, emit in Figma's terms ([9b92fc4c](https://github.com/DominikPieper/atelier-ui/commit/9b92fc4c))
+- **design-contracts:** extract the contract loop into @conciso/design-contracts ([fd8da23a](https://github.com/DominikPieper/atelier-ui/commit/fd8da23a))
+
+### ❤️ Thank You
+
+- Claude Opus 5.5
+- Dominik Pieper @DominikPieper
+
 ## 0.4.0 (2026-10-09)
 
 This was a version bump only for create-atelier-ui-workspace to align it with other projects, there were no code changes.

@@ -1,3 +1,16 @@
+## 0.4.1 (2026-10-09)
+
+### 🚀 Features
+
+- **design-contracts:** a boolean axisMap entry needs values unless the axis is true/false ([0e0c7a6a](https://github.com/DominikPieper/atelier-ui/commit/0e0c7a6a))
+- **design-contracts:** tests, snapshot targets a connected file, emit in Figma's terms ([9b92fc4c](https://github.com/DominikPieper/atelier-ui/commit/9b92fc4c))
+- **design-contracts:** extract the contract loop into @conciso/design-contracts ([fd8da23a](https://github.com/DominikPieper/atelier-ui/commit/fd8da23a))
+
+### ❤️ Thank You
+
+- Claude Opus 5.5
+- Dominik Pieper @DominikPieper
+
 ## 0.4.0 (2026-10-09)
 
 ### 🚀 Features

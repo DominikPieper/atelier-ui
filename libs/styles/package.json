@@ -1,6 +1,6 @@
 {
   "name": "@atelier-ui/styles",
-  "version": "0.4.0",
+  "version": "0.4.1",
   "description": "Atelier component CSS — class-rooted, token-driven, shared by the Angular, React and Vue libraries",
   "keywords": [
     "css",
