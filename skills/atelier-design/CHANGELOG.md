@@ -1,3 +1,14 @@
+## 0.1.11 (2026-10-09)
+
+### 🚀 Features
+
+- **tokens:** --ui-type-emphasis for short SemiBold text at sm (ADR-0162) ([8ac02b33](https://github.com/DominikPieper/atelier-ui/commit/8ac02b33))
+
+### ❤️ Thank You
+
+- Claude Opus 5.5
+- Dominik Pieper @DominikPieper
+
 ## 0.1.10 (2026-10-08)
 
 ### 🚀 Features

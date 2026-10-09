@@ -1,3 +1,15 @@
+## 0.3.15 (2026-10-09)
+
+### 🚀 Features
+
+- **tokens:** --ui-type-emphasis for short SemiBold text at sm (ADR-0162) ([8ac02b33](https://github.com/DominikPieper/atelier-ui/commit/8ac02b33))
+- **figma:** variables carry their CSS name; dialog and drawer use real buttons ([654bd2c7](https://github.com/DominikPieper/atelier-ui/commit/654bd2c7))
+
+### ❤️ Thank You
+
+- Claude Opus 5.5
+- Dominik Pieper @DominikPieper
+
 ## 0.3.14 (2026-10-08)
 
 ### 🚀 Features
