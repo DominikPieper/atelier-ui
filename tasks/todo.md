@@ -1940,7 +1940,7 @@ The ones the owner and I will walk through together.
 - [ ] Findings from course-gap wave 3 (2026-10-09; evidence in
       `plan/research/ai-ds-course-gap-2026-10-08/wave3-b3-cold-start-log.md` and the agents'
       reads of the code):
-  - [ ] **Angular `atl-button` is not a native button.** The host is `<atl-button role="button">`
+  - [ ] (owner 2026-10-09: attribute selector `button[atl-button]`, as Angular Material does; in progress) **Angular `atl-button` is not a native button.** The host is `<atl-button role="button">`
         with no inner `<button>`, so it never submits a `<form>` and has no `type`; React and Vue
         render a native `<button>`. The Figma master description says "native HTML <button>".
         Decide: render an inner `<button>` in Angular (API/DOM change), or document the
@@ -1948,10 +1948,10 @@ The ones the owner and I will walk through together.
   - [ ] **Vue dialog/drawer do not restore focus themselves.** React and Angular store
         `document.activeElement` on open and refocus it on close; Vue relies on native
         `dialog.close()`. Verify in a browser; align if the platform does not cover it.
-  - [ ] **Only Angular traps focus in a dialog** (`cdkTrapFocus`); React/Vue rely on
+  - [x] (owner 2026-10-09: keep as is; the accessibility page documents it) **Only Angular traps focus in a dialog** (`cdkTrapFocus`); React/Vue rely on
         `showModal()` making the page inert (Tab can leave into browser chrome). Decide whether
         that difference is intended; the accessibility page now describes it as is.
-  - [ ] **Tooltip behaviour the spec does not ask for:** all three handle Escape and Angular/React
+  - [ ] (owner 2026-10-09: yes; in progress) **Tooltip behaviour the spec does not ask for:** all three handle Escape and Angular/React
         bind focus, but `libs/spec/src/behaviors.json` has no ids for them, so no test covers them.
         Add `tooltip.hide-on-escape` / `tooltip.show-on-focus` and the tests.
   - [ ] **Prop tables in `llms-full.txt` are React-shaped for every framework** (`onValueChange`,
