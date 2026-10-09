@@ -1946,14 +1946,26 @@ The ones the owner and I will walk through together.
 - [ ] Defects found by the wave-2 research runs (2026-10-08, evidence in
       `plan/research/ai-ds-course-gap-2026-10-08/wave2-a3-parity-run.md` and
       `wave2-a10-readiness-run.md`):
-  - [ ] AtlBadge font weight: Figma master 500, code `--ui-font-weight-semibold`. Decide which
-        side is right (ADR-0107 named the same split for AtlButton).
-  - [ ] AtlBadge `role="status"` is set on every host, while the master description says badges
+  - [ ] AtlBadge font weight: Figma master 500, code `--ui-font-weight-semibold`. Owner chose
+        600 (2026-10-09). Figma's `ty/label` / `ty/control` are Medium and shared; a SemiBold style
+        needs a `--ui-type-*` role first (`check:figma` [TEXT-STYLE]). Open: mint a badge role or not.
+        Also: add a `live` scenario (`role="status"` passed) to the three `atl-badge.a11y.spec.*`.
+  - [x] (done 2026-10-09: no default role in any framework; consumer passes `role="status"`; metadata role `none`) AtlBadge `role="status"` is set on every host, while the master description says badges
         are decorative by default and only wrapped in `role="status"` when they announce changes.
-  - [ ] AtlBadge (Angular) class JSDoc sits above `VARIANT_ICON_NAMES`, not `@Component`, so
+  - [x] (done 2026-10-09) AtlBadge (Angular) class JSDoc sits above `VARIANT_ICON_NAMES`, not `@Component`, so
         `check:contracts --emit` produces metadata without a description.
-  - [ ] Figma variables: `codeSyntax.WEB` empty on 284/284; 19 variables still `ALL_SCOPES`;
-        AtlDialog master has ~20 layers named "Frame".
+  - [x] Figma variables and AtlDialog layers (done 2026-10-09). `codeSyntax.WEB` is now set on all
+        141 Library Tokens (`figma:sync-tokens` writes it for the 135 generated ones; the 6
+        hand-made `control-height/*` / `row-height/*` were set by hand, scoped `WIDTH_HEIGHT`).
+        Primitive, Component and Docs Brand Tokens have no `--ui-*` counterpart, so they carry
+        none. The 13 Effects/Motion STRING variables (ADR-0060: cannot paint) are scoped to
+        nothing, so they leave every picker; 0 `ALL_SCOPES` remain. AtlDialog's 10 one-pixel
+        divider frames became header/footer strokes, as AtlDrawer already drew them, and the
+        hand-drawn footer buttons in AtlDialog and AtlDrawer are `AtlButton` instances
+        (`outline` Cancel, `primary` Confirm/Save, as the stories use); the Drawer footer now
+        hugs to 80px (20 + 40 + 20).
+  - [ ] `control-height/*` and `row-height/*` are not generated: `cssName()` has no mapping and
+        `row-height` is a `calc()` the parser cannot read, so the sync lists them as orphans.
   - [ ] `figma_audit_component_accessibility` classifies AtlDialog as presentational and skips
         focus/target-size checks — its 100 means "not assessed".
 

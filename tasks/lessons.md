@@ -941,3 +941,12 @@ the claim to what the source says — never substitute a term from nearby contex
 
 The same session also repeated the 2026-10-08 `check:format` lesson: two research-only commits
 went in without it and turned the gate red. "Docs-only" is not an exemption.
+
+## 2026-10-09 — Parallel agents share one working tree: no `git stash` in their briefs' reach
+
+A Sonnet agent ran `git stash` / `git stash pop` to compare a gate against the clean tree while I
+was writing the Figma snapshot and another agent's script edits into the same tree. The pop
+restored everything this time; a snapshot written between the two would have been stashed away
+or conflicted. `stash@{1}` already records the same failure on 2026-09-07. Rule: every brief for
+an agent that runs alongside other work says "no `git stash`, `git checkout`, `git reset` or
+branch switches — compare against `git show HEAD:<file>` instead".
