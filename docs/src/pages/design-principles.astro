@@ -16,6 +16,7 @@ import PageHero from '../components/PageHero.astro';
     { id: 'principle-5', label: 'Single reactivity model' },
     { id: 'principle-6', label: 'MCP server closes the loop' },
     { id: 'principle-7', label: 'No design system from scratch' },
+    { id: 'context-lifecycle', label: 'The context lifecycle' },
   ]}
 >
   <div class="docs-inline-page">
@@ -372,6 +373,115 @@ import PageHero from '../components/PageHero.astro';
         <span class="docs-rule-label">Rule</span>
         AI gathers context and enforces consistency. People decide what the
         system is.
+      </div>
+    </div>
+
+    <!-- Context lifecycle -->
+    <div class="docs-section">
+      <h2 id="context-lifecycle" class="docs-section-title">
+        The context lifecycle: who carries the context?
+      </h2>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.65;
+          margin-bottom: 0.75rem;
+        "
+      >
+        The seven principles are about one component's API. The same question
+        applies to the path a component takes from Figma to npm. The course
+        behind our training calls it the
+        <em>context-based design system workflow</em>: each stage of the design
+        and development lifecycle inherits the context of the stage before it,
+        so quality is preserved and fewer things slip between the cracks
+        (transcript 064). The context is strongest at the source of truth, and
+        every layer downstream inherits what was applied there (transcript 009).
+      </p>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.65;
+          margin-bottom: 0.75rem;
+        "
+      >
+        The course's stages are design ideation, design QA and validation, a
+        design-to-development protocol over MCP, review of a pull request from a
+        design branch, code validation and testing, then publish and versioning
+        (transcript 238). Atelier already has an artefact at most of those
+        joints. It just never gave the idea a name:
+      </p>
+      <ol
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.65;
+          margin: 0 0 1rem 1.25rem;
+        "
+      >
+        <li>
+          <strong>Ideation.</strong> The Figma master on the Components page,
+          with its variants and <code>--ui-*</code> token bindings. This is the
+          source of truth the rest inherits from.
+        </li>
+        <li>
+          <strong>Design QA.</strong> The review mode of the
+          <code>design-to-code</code> skill ("design QA on X"), plus
+          <code>check:figma</code> and <code>check:figma-token-names</code>.
+        </li>
+        <li>
+          <strong>Design-to-development protocol.</strong> The
+          <a href="/design-to-code" class="docs-link-primary"
+            >handoff document</a
+          >
+          (ADR-0096): scope, token bindings, and the behaviour a picture cannot
+          carry, written down before any code is generated. The agent reads the
+          master through figma-console-mcp.
+        </li>
+        <li>
+          <strong>Review.</strong> The contract in
+          <code>libs/spec/src/contracts/</code> (only the deliberate
+          Figma-to-code mismatches) and the repo's agent instructions,
+          <code>AGENTS.md</code> and <code>CLAUDE.md</code>.
+          <code>check:contracts</code> joins the contract, the manifest and the
+          stories against the Figma snapshot.
+        </li>
+        <li>
+          <strong>Tests.</strong> The stories are the claims (ADR-0121): one
+          story per variant value and Boolean state, a <code>play</code> per
+          behaviour line from the handoff document, every story rendered in
+          Chromium and axe-checked by <code>check:stories</code>.
+        </li>
+        <li>
+          <strong>Publish.</strong> The <code>Publish</code> workflow, which
+          starts with a verify (release gate) job. Passing local gates says
+          nothing about what reached npm.
+        </li>
+      </ol>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.65;
+          margin-bottom: 1rem;
+        "
+      >
+        <strong>Who owns it?</strong> The course names the role. After the pull
+        request, the work lands with a "context engineer", described as more of
+        a shepherd who makes sure what was done in the first part of the
+        workflow makes its way into the product engineering workflow (transcript
+        238). It is someone who applies organisational standards to a draft that
+        a product designer made, usually with AI doing part of the review. The
+        speaker in 009 adds that everyone on their team plays that role in some
+        way on a design system project. Atelier does not staff the role
+        separately. Whoever writes the handoff document owns the context at the
+        start, and from there the contract, the stories and the gates are what
+        carry it, so it does not live in one person's head. The course also has
+        a designer-owned design branch and a prompt-and-iterate playground after
+        publish. This repo has no counterpart for either.
+      </p>
+      <div class="docs-rule">
+        <span class="docs-rule-label">Rule</span>
+        Write the context down at the stage where it is decided, in an artefact
+        the next stage reads. If it lives only in someone's head, it stops at
+        the handoff.
       </div>
     </div>
   </div>

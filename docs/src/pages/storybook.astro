@@ -47,7 +47,7 @@ const STORYBOOK_LINKS = [
 
 <BaseLayout
   title="Storybook"
-  description="How Atelier UI uses Storybook as a live component explorer — stories per framework, MCP-backed docs, and visual regression tests."
+  description="How Atelier UI uses Storybook as a live component explorer — stories per framework, MCP-backed docs, and what a green story test does and does not prove."
   currentPath="/storybook"
 >
   <div class="docs-inline-page">
@@ -1037,6 +1037,235 @@ export default config;`}
               right answer. Fragmenting the gate to fast-path React alone would
               trade a real, if partial, speedup for a gate that no longer checks
               all three the same way.
+            </p>
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- Testing section -->
+    <div>
+      <h2 id="what-tests-prove" class="docs-section-title">
+        What a green test proves
+      </h2>
+      <p
+        style="
+          margin: 0 0 1.75rem;
+          color: var(--ui-color-text-muted);
+          line-height: 1.65;
+        "
+      >
+        Every story is a test: <code>check:stories</code> renders each one in
+        Chromium, runs its <code>play</code> function, and runs axe. That is a
+        floor, not a verdict. A course demo on the same problem (a tooltip
+        trigger whose tests were "just structural", checking that props were
+        present, until an agent wrote 24 behavioural ones) ended on the same
+        warning this page ends on: go beyond green checkmarks, because they are
+        not proof by themselves. What follows reads one Atelier component the
+        way that demo read its own, and counts.
+      </p>
+
+      <div class="docs-step-list">
+        <div class="docs-step-row">
+          <span class="docs-step-badge">01</span>
+          <div class="docs-step-body">
+            <h3 class="docs-h3">Structural versus behavioural</h3>
+            <p class="docs-step-desc">
+              A <strong>structural</strong> test asserts that something is
+              there: it renders, it has the class, the role, the attribute. A
+              <strong>behavioural</strong> test drives the component the way a
+              user would (hover, Tab, Esc, click) and asserts what changed. The
+              difference shows when someone breaks the component: a structural
+              test keeps passing while the feature is gone. Axe is structural in
+              this sense too. It audits the DOM that rendered; it never presses
+              a key.
+            </p>
+          </div>
+        </div>
+
+        <div class="docs-step-row">
+          <span class="docs-step-badge">02</span>
+          <div class="docs-step-body">
+            <h3 class="docs-h3">Worked example: AtlTooltip</h3>
+            <p class="docs-step-desc">
+              Read from
+              <code>libs/{'{angular,react,vue}'}/src/lib/tooltip/</code>. The
+              unit specs (<code>atl-tooltip.spec.*</code>) hold 22 tests.
+              Counted by what each one asserts:
+            </p>
+            <table class="docs-props-table">
+              <thead>
+                <tr>
+                  <th>Framework</th>
+                  <th>Structural (initial state, no interaction)</th>
+                  <th>Interaction changes visibility</th>
+                  <th>Attribute checked after hover</th>
+                  <th>Total</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Angular</td>
+                  <td>3</td>
+                  <td>4</td>
+                  <td>2</td>
+                  <td>9</td>
+                </tr>
+                <tr>
+                  <td>React</td>
+                  <td>1</td>
+                  <td>3</td>
+                  <td>2</td>
+                  <td>6</td>
+                </tr>
+                <tr>
+                  <td>Vue</td>
+                  <td>1</td>
+                  <td>4</td>
+                  <td>2</td>
+                  <td>7</td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="docs-step-desc" style="margin-top: 0.75rem">
+              The middle column is the behavioural core: show on hover, hide on
+              leave, no show when disabled, plus Angular's empty-text case and
+              Vue's keyboard-focus case. The last column is a role, a position
+              class or an <code>aria-describedby</code> pointing at the tooltip
+              id, checked once the tooltip is open. Those are structural
+              assertions that happen to need an interaction to set up. Beside
+              the specs, each framework has one a11y snapshot test that compares
+              the closed and open accessibility trees against a committed JSON
+              file in <code>tools/parity/a11y/</code>.
+            </p>
+            <p class="docs-step-desc">
+              What is <strong>not</strong> tested is the part the course demo
+              added. All three implementations handle Escape (Angular's host
+              binds <code>keydown.escape</code>, React listens on
+              <code>document</code>, Vue's wrapper has an <code>onKeydown</code
+              >), and no spec presses it. Focus opening the tooltip is bound in
+              all three (<code>focusin</code>, <code>onFocus</code>) but only
+              Vue's spec tabs to the trigger. And the tooltip stories carry no
+              <code>play</code> function at all (6 Angular, 4 React, 7 Vue
+              stories), so for AtlTooltip the story test is render plus axe,
+              nothing behavioural. Repo-wide the picture is similar: on
+              2026-10-09 fewer than a third of the component story files in each
+              framework contained a <code>play</code> function.
+            </p>
+            <p class="docs-step-desc">
+              The gate that would catch this does not, by construction.
+              <code>check:behavior</code> demands that every id in
+              <code>libs/spec/src/behaviors.json</code> is bound with
+              <code>covers('tooltip', '&lt;id&gt;')</code> in all three
+              adapters. The tooltip has four ids: hidden initially, show on
+              hover, hide on leave, no show when disabled. All four are covered
+              everywhere; Escape and keyboard focus are not ids, so nothing asks
+              for them. Green here means "the listed behaviours are covered",
+              and the list is incomplete. Closing that gap is a spec change (add
+              the ids, then the gate forces all three adapters to follow), not a
+              stricter gate.
+            </p>
+          </div>
+        </div>
+
+        <div class="docs-step-row">
+          <span class="docs-step-badge">03</span>
+          <div class="docs-step-body">
+            <h3 class="docs-h3">Visual regression: what Atelier has</h3>
+            <p class="docs-step-desc">
+              <strong>No pixel-diff visual regression.</strong> A search of the
+              repo for Chromatic, <code>toHaveScreenshot</code>,
+              <code>toMatchImageSnapshot</code>, Percy and committed screenshot
+              baselines finds no tooling and no baseline images. The Storybook
+              review of 2026-09-14 recorded the choice: Chromatic is not
+              installed, and <code>check:paint</code> plus
+              <code>figma_check_design_parity</code> cover the ground
+              differently. The course made the same call for its own system:
+              Chromatic was in place but deliberately not a blocking check while
+              the design language was still moving.
+            </p>
+            <p class="docs-step-desc">
+              What covers part of that ground compares rendered CSS against a
+              number, not a picture against a picture:
+            </p>
+            <table class="docs-props-table">
+              <thead>
+                <tr>
+                  <th>Gate</th>
+                  <th>What it does</th>
+                  <th>What it is not</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>check:paint</code></td>
+                  <td>
+                    Renders every story of every component that has a contract
+                    and a Figma snapshot master, in a real browser against the
+                    built Storybooks, and compares computed background and
+                    border colour (against the token's resolved value), height,
+                    padding, gap, radius, border width, font size and line
+                    height to the snapshot row for that variant. Hover and focus
+                    rows are checked for fill and stroke only.
+                  </td>
+                  <td>
+                    Not a screenshot diff. It reads computed styles of one probe
+                    element per story, so layout between elements, icons,
+                    shadows, text wrapping and anything the snapshot does not
+                    record are invisible to it. Offline: it reads the committed
+                    <code>tools/figma/snapshot.json</code>, not live Figma.
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>check:geometry</code></td>
+                  <td>
+                    Renders every control that claims a
+                    <code>--ui-control-height-*</code> token in all three
+                    frameworks and asserts the box is the height it claims,
+                    measured with the shipped font stack and again with a font
+                    that cannot resolve.
+                  </td>
+                  <td>
+                    One property of one family of controls (heights), not
+                    general appearance.
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>figma_check_design_parity</code></td>
+                  <td>
+                    The live Figma comparison from the design-to-code loop:
+                    padding, colour and variant drift against the master.
+                  </td>
+                  <td>
+                    A manual step in the workflow, not part of
+                    <code>check:all</code>, and likewise not pixel-based.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+            <p class="docs-step-desc" style="margin-top: 0.75rem">
+              The gap this leaves is regressions against <em>itself</em>: a
+              change that moves a component but still agrees with Figma's
+              numbers, or touches a property neither gate reads, is not caught
+              by any gate. Whether to add a per-story screenshot diff, and
+              whether it should block, is an open decision, not a missing
+              feature; <code>tasks/spec-rethink-2026-09-10.md</code> rates it
+              flaky and baseline-heavy.
+            </p>
+          </div>
+        </div>
+
+        <div class="docs-step-row">
+          <span class="docs-step-badge">04</span>
+          <div class="docs-step-body">
+            <h3 class="docs-h3">Using this in your own system</h3>
+            <p class="docs-step-desc">
+              Pick one interactive component and list what it does when a user
+              presses keys, not what it renders. Check that each line has a test
+              that would fail if the line were deleted. Then ask the agent to
+              write the missing ones and read the new tests, not the green
+              count: a test that never fails is the same structural check with
+              more lines.
             </p>
           </div>
         </div>

@@ -324,6 +324,7 @@ const motion = [
     { id: 'typography-scale', label: 'Typography scale' },
     { id: 'shadows', label: 'Shadows' },
     { id: 'motion', label: 'Motion' },
+    { id: 'pink-test', label: 'Exercise: the pink test' },
   ]}
 >
   <div class="docs-inline-page">
@@ -898,6 +899,163 @@ const motion = [
           </tr>
         </tbody>
       </table>
+    </div>
+
+    <!-- Pink test -->
+    <div class="docs-section">
+      <h2 id="pink-test" class="docs-section-title">Exercise: the pink test</h2>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 1rem;
+        "
+      >
+        A ten-minute check that shows which components really consume the
+        semantic tokens and which carry a hard-coded value. Make every colour
+        variable one obvious pink, look at a component, and anything that did
+        not turn pink is not bound. It comes from a design-system session where
+        a throwaway test mode was "bright pink" and a component that stayed
+        unchanged meant the variable had not been added properly. It does the
+        same job in Figma and in code.
+      </p>
+
+      <h3 class="docs-h3">In Figma</h3>
+      <ol
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.7;
+          margin: 0 0 1rem;
+          padding-left: 1.25rem;
+        "
+      >
+        <li>
+          Open the <code>Library Tokens</code> collection (the generated
+          semantic tier with <strong>Light</strong> and <strong>Dark</strong>
+          modes) in file <code>QMnDD8uZQPldPrlCwZZ58T</code> and add a third
+          mode, <code>Pink Test</code>. Through figma-console-mcp that is
+          <code>figma_add_mode</code>.
+        </li>
+        <li>
+          Set the colour variables in the new mode to one loud pink, for example
+          <code>#ff00c8</code>. Batch the edit rather than clicking through the
+          list.
+        </li>
+        <li>
+          Put a test frame holding instances of the masters on the
+          <code>Pink Test</code> mode (Layer → Appearance → Variable modes).
+          Component Tokens are single-mode aliases into Library Tokens, so they
+          follow the frame's mode.
+        </li>
+        <li>
+          Read the frame: every fill, stroke and text colour that is still its
+          original colour is a raw value or a binding to the wrong tier. Fix the
+          binding on the master, not the instance.
+        </li>
+        <li>
+          Delete the <code>Pink Test</code> mode. It is an instrument, not a
+          theme, and <code>Library Tokens</code> is generated from
+          <code>tokens.css</code>, so a mode nobody generated is drift by
+          definition (ADR-0030).
+        </li>
+      </ol>
+
+      <h3 class="docs-h3 docs-h3--spaced">In code</h3>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 1rem;
+        "
+      >
+        The code twin costs nothing: the UI tier is plain CSS custom properties,
+        so override every <code>--ui-color-*</code> on <code>&lt;html&gt;</code>
+        in the document that renders the component (this docs app, or a story's
+        preview) and look for anything that does not change. Run this in the
+        browser console. An inline style on <code>&lt;html&gt;</code> wins over
+        both the default and the <code>data-theme</code> blocks in
+        <code>tokens.css</code>:
+      </p>
+      <div class="docs-code-block">
+        <div class="docs-code-block-header">
+          <span class="docs-code-block-lang">js</span>
+        </div>
+        <pre><code>{"const pink = '#ff00c8';\nfor (const sheet of document.styleSheets) {\n  let rules;\n  try { rules = sheet.cssRules; } catch { continue; } // cross-origin sheet\n  for (const rule of rules) {\n    for (const name of rule.style ?? []) {\n      if (name.startsWith('--ui-color-')) {\n        document.documentElement.style.setProperty(name, pink);\n      }\n    }\n  }\n}"}</code></pre>
+        <p style="color: var(--ui-color-text-muted); line-height: 1.6">
+          Give it a second: components that animate their colours (the button
+          does) fade to pink rather than switching at once.
+        </p>
+      </div>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin: 1rem 0;
+        "
+      >
+        Text, surfaces and borders now share one colour, so the page looks
+        broken. That is the point: whatever kept its teal, grey or white takes
+        its colour from somewhere other than a <code>--ui-color-*</code> token.
+        Reload to undo it.
+      </p>
+
+      <Callout
+        tone="note"
+        title="The Storybook theme control is not this test."
+      >
+        The toolbar theme control added in ADR-0142 only flips
+        <code>data-theme</code> between <code>light</code> and <code>dark</code
+        >. It checks that both token blocks resolve, not that a component reads
+        tokens at all, so use the console snippet for the pink test.
+      </Callout>
+
+      <h3 class="docs-h3 docs-h3--spaced">The gates that catch it for you</h3>
+      <table class="docs-props-table">
+        <thead>
+          <tr>
+            <th>Pink test finding</th>
+            <th>Automatic twin</th>
+            <th>Scope</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>A colour that stays put in code</td>
+            <td>
+              <code>npm run check:stylelint</code>, rule
+              <code>atelier/no-raw-color-literal</code>
+            </td>
+            <td>
+              Hex, <code>rgb()</code> and <code>hsl()</code> literals in
+              component and docs stylesheets. A <code>var(--token, #fff)</code>
+              fallback is allowed.
+            </td>
+          </tr>
+          <tr>
+            <td>A fill or stroke that stays put in Figma</td>
+            <td><code>npm run check:figma</code>, token-link coverage</td>
+            <td>
+              Raw hex fills and strokes on masters, read offline from the
+              committed snapshot <code>tools/figma/snapshot.json</code>, not
+              from the live file.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-top: 1rem;
+        "
+      >
+        Run the pink test once after a re-architecture or a bulk token change,
+        when you want to see the result. The gates run on every
+        <code>check:all</code>. A mode added to <code>Library Tokens</code> also
+        counts against your Figma plan's mode limit, because every mode
+        duplicates every value in its collection and Figma caps modes per plan
+        tier (ADR-0018).
+      </p>
     </div>
 
     <!-- Import snippet -->

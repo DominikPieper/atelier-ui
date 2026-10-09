@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import BottomNav from '../components/BottomNav.astro';
+import Callout from '../components/Callout.astro';
 
 type KbdRow = {
   component: string;
@@ -42,7 +43,7 @@ const KEYBOARD_MAP: KbdRow[] = [
     component: 'Dialog',
     keys: 'Escape',
     action:
-      'Close. Focus is trapped inside while open and restored to the trigger on close.',
+      'Close. The page behind is inert while open; see Judgement calls for where focus goes and how it returns.',
   },
   {
     component: 'Drawer',
@@ -141,6 +142,7 @@ const RECENT_A11Y: RecentA11y[] = [
     { id: 'keyboard', label: 'Keyboard navigation' },
     { id: 'screen-readers', label: 'Screen readers' },
     { id: 'focus', label: 'Focus management' },
+    { id: 'judgement', label: 'Judgement calls' },
     { id: 'your-job', label: "What's still your job" },
     { id: 'recent', label: 'Recent improvements' },
     { id: 'reporting', label: 'Reporting issues' },
@@ -368,13 +370,16 @@ const RECENT_A11Y: RecentA11y[] = [
         </li>
         <li>
           <strong style="color: var(--ui-color-text)">Focus trapping.</strong>
-          Dialog and Drawer trap Tab focus while open and restore focus to the
-          original trigger on close.
+          Dialog and Drawer are native <code>&lt;dialog&gt;</code> elements
+          opened with <code>showModal()</code>, so the rest of the page is
+          unreachable while they are open. The decisions behind that are in
+          <a href="#judgement" class="docs-link-primary">Judgement calls</a>.
         </li>
         <li>
           <strong style="color: var(--ui-color-text)">Initial focus.</strong>
-          Menus and Comboboxes move focus to the first option on open. Dialogs
-          move focus to the first tabbable element inside the content.
+          Menus and Comboboxes move focus to the first option on open. Dialog
+          and Drawer set no initial focus themselves — see
+          <a href="#judgement" class="docs-link-primary">Judgement calls</a>.
         </li>
         <li>
           <strong style="color: var(--ui-color-text)">Skip links.</strong> Long
@@ -383,6 +388,189 @@ const RECENT_A11Y: RecentA11y[] = [
           multiple such regions.
         </li>
       </ul>
+    </section>
+
+    <!-- Judgement calls -->
+    <section class="docs-section">
+      <h2 id="judgement" class="docs-section-title">Judgement calls</h2>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.65;
+          margin: 0 0 0.75rem;
+        "
+      >
+        Some accessibility decisions are not gate output. A checker can tell you
+        a button has no name; it cannot tell you where focus should land when a
+        modal opens. Those are decisions you make once for your own design
+        system and then write down. Here is what Atelier decided for the modal,
+        and the three questions to answer for yours.
+      </p>
+
+      <h3 style="margin: 1.25rem 0 0.5rem">1. Modal focus: three decisions</h3>
+      <ul
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.75;
+          padding-left: 1.25rem;
+        "
+      >
+        <li>
+          <strong style="color: var(--ui-color-text)"
+            >Where focus goes in.</strong
+          >
+          Atelier's Dialog and Drawer call <code>showModal()</code> on a native
+          <code>&lt;dialog&gt;</code> and set no focus target of their own
+          (there is no <code>autofocus</code> and no <code>focus()</code> call
+          on open in the dialog or drawer source), so the browser's default for
+          <code>showModal()</code> decides. If you want a different target — the
+          course's example focuses the dialog itself rather than the close
+          button, following Sara Soueidan — that is your call to make and to
+          write into your component's contract.
+        </li>
+        <li>
+          <strong style="color: var(--ui-color-text)"
+            >Where focus comes back.</strong
+          >
+          React and Angular remember <code>document.activeElement</code> when
+          the dialog opens and call <code>.focus()</code> on it after close; the
+          same pattern is in the Drawer. The Vue source has no explicit
+          <code>focus()</code> call and leaves the restore to the platform.
+        </li>
+        <li>
+          <strong style="color: var(--ui-color-text)"
+            >What happens to the page behind.</strong
+          >
+          <code>showModal()</code> makes everything outside the dialog inert, so
+          Atelier does not hand-roll that. The Angular adapter additionally
+          applies <code>cdkTrapFocus</code> to the dialog; React and Vue do not.
+          The course arrived at the same place: "in 2026, don't build a focus
+          trap, use the platform".
+        </li>
+      </ul>
+      <Callout tone="note" title="Tab leaves the page, by design.">
+        With a native modal, pressing Tab on the last control moves focus out of
+        the document into the browser's own chrome rather than looping forever.
+        The course keeps that on purpose: people should still be able to reach
+        the browser or operating system. The one hard rule it cites is WCAG's
+        "no keyboard trap": there must always be a way out, and Escape closes
+        the dialog (Atelier cancels the native close and routes it through
+        <code>open</code> so your state stays the source of truth).
+      </Callout>
+
+      <h3 style="margin: 1.25rem 0 0.5rem">
+        2. Design-system accessibility is not product accessibility
+      </h3>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.65;
+          margin: 0 0 0.75rem;
+        "
+      >
+        The course's recap is blunt: accessible components and tokens do not
+        automatically make an accessible product. Composition and page level —
+        heading order, how components are arranged, what text goes in them —
+        need their own testing, and product teams often assume "that is the
+        design system's job". It is not; accessibility is everybody's
+        responsibility. What the system can give them is accessible smart
+        defaults and a head start, not an exemption. Say this in your own docs,
+        to your consumers; Atelier's version is
+        <a href="#your-job" class="docs-link-primary">What's still your job</a>.
+      </p>
+
+      <h3 style="margin: 1.25rem 0 0.5rem">
+        3. What the gates cover, and what they cannot
+      </h3>
+      <ul
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.75;
+          padding-left: 1.25rem;
+        "
+      >
+        <li>
+          <strong style="color: var(--ui-color-text)">What runs.</strong>
+          Every Storybook story is a test (<code>storybook-test</code>): it
+          renders in Chromium, runs the story's <code>play</code> function, and
+          runs axe with <code>parameters.a11y.test: 'error'</code>, so a new
+          violation is a red build. A separate parity snapshot
+          (<code>check:a11y-parity</code>) compares the accessibility tree of
+          each component across the three frameworks.
+        </li>
+        <li>
+          <strong style="color: var(--ui-color-text)"
+            >What it does not decide.</strong
+          >
+          Those checks run against components in isolation. Nothing in them
+          judges whether the initial focus target is the right one for your
+          users, whether the announced name makes sense in context, or whether a
+          page that composes your components is usable. Treat a green run as "no
+          detectable rule violations on the stories that exist", not as
+          "accessible".
+        </li>
+        <li>
+          <strong style="color: var(--ui-color-text)"
+            >Put it in the definition of done.</strong
+          >
+          The course's advice is to bake accessibility checks and reviews into
+          the workflow rather than trust individuals to remember. In Atelier the
+          automated part is the gates above; the manual part below is yours.
+        </li>
+      </ul>
+
+      <h3 style="margin: 1.25rem 0 0.5rem">
+        4. A manual pass before you call it done
+      </h3>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.65;
+          margin: 0 0 0.5rem;
+        "
+      >
+        The course names two manual checks: tab through the experience, and run
+        it through VoiceOver (the macOS screen reader). For a modal, in the
+        story's isolated view (not inside the Storybook frame, where Tab can
+        move into Storybook's own UI):
+      </p>
+      <ol
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.75;
+          padding-left: 1.25rem;
+        "
+      >
+        <li>
+          Tab to the trigger and press <kbd>Enter</kbd>. Does focus move into
+          the dialog, or does it stay on the trigger?
+        </li>
+        <li>
+          Keep pressing <kbd>Tab</kbd>. Can you reach anything behind the
+          dialog? You should not.
+        </li>
+        <li>
+          Press <kbd>Escape</kbd>. Does the dialog close and focus return to the
+          trigger?
+        </li>
+        <li>
+          Repeat with VoiceOver on and listen: is the dialog announced with a
+          meaningful name, and can you read its content in order?
+        </li>
+        <li>
+          Then do the same on a real page that composes your components, not
+          only on the story.
+        </li>
+      </ol>
+      <Callout tone="warning" title="Verified vs. assumed.">
+        The source facts above (native <code>&lt;dialog&gt;</code>,
+        <code>showModal()</code>, the focus restore in React and Angular, the
+        Angular <code>cdkTrapFocus</code>) are read from the adapters. The
+        browser's default initial focus, inert background and Tab-into-browser
+        behaviour are platform behaviour of <code>showModal()</code>, not
+        something Atelier's tests assert. Check them yourself in the steps above
+        rather than taking this page's word for it.
+      </Callout>
     </section>
 
     <!-- Your job -->
