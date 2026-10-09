@@ -1940,7 +1940,7 @@ The ones the owner and I will walk through together.
 - [ ] Findings from course-gap wave 3 (2026-10-09; evidence in
       `plan/research/ai-ds-course-gap-2026-10-08/wave3-b3-cold-start-log.md` and the agents'
       reads of the code):
-  - [ ] (owner 2026-10-09: attribute selector `button[atl-button]`, as Angular Material does; in progress) **Angular `atl-button` is not a native button.** The host is `<atl-button role="button">`
+  - [x] (done 2026-10-09, ADR-0163: `button[atl-button]`) **Angular `atl-button` is not a native button.** The host is `<atl-button role="button">`
         with no inner `<button>`, so it never submits a `<form>` and has no `type`; React and Vue
         render a native `<button>`. The Figma master description says "native HTML <button>".
         Decide: render an inner `<button>` in Angular (API/DOM change), or document the
@@ -1951,9 +1951,16 @@ The ones the owner and I will walk through together.
   - [x] (owner 2026-10-09: keep as is; the accessibility page documents it) **Only Angular traps focus in a dialog** (`cdkTrapFocus`); React/Vue rely on
         `showModal()` making the page inert (Tab can leave into browser chrome). Decide whether
         that difference is intended; the accessibility page now describes it as is.
-  - [ ] (owner 2026-10-09: yes; in progress) **Tooltip behaviour the spec does not ask for:** all three handle Escape and Angular/React
+  - [x] (done 2026-10-09: `tooltip.show-on-focus`, `tooltip.hide-on-escape`) **Tooltip behaviour the spec does not ask for:** all three handle Escape and Angular/React
         bind focus, but `libs/spec/src/behaviors.json` has no ids for them, so no test covers them.
         Add `tooltip.hide-on-escape` / `tooltip.show-on-focus` and the tests.
+  - [ ] **Button `type` default differs:** Angular and Vue default to `type="button"`, React sets
+        none, so a React `AtlButton` inside a form submits by default. Decide one default.
+  - [ ] **Outline button focus border** paints `rgb(100,116,139)` where Figma has the primary
+        colour (`check:paint`, recorded in all three frameworks now that Angular can focus).
+  - [ ] `a[atl-button]` for links styled as buttons (ADR-0163 §4).
+  - [ ] Stale comments: `libs/{react,vue}/src/testing/a11y-tree.ts` still say Angular renders
+        `<atl-button role="button">`.
   - [ ] **Prop tables in `llms-full.txt` are React-shaped for every framework** (`onValueChange`,
         `children`); the cold-start agent had to translate them for Angular.
 

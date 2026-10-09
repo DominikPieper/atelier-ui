@@ -950,3 +950,15 @@ restored everything this time; a snapshot written between the two would have bee
 or conflicted. `stash@{1}` already records the same failure on 2026-09-07. Rule: every brief for
 an agent that runs alongside other work says "no `git stash`, `git checkout`, `git reset` or
 branch switches — compare against `git show HEAD:<file>` instead".
+
+## 2026-10-09 — A research task's findings go to the record, not into the code
+
+The task was to check the course material against Atelier's teaching sources and close the
+gaps in the docs. Verification runs along the way (a parity run, a readiness audit, a cold-start
+agent build) surfaced real component defects, and I fixed each one as it came: the badge role,
+the badge weight (a new type role and ADR), Figma variables and dialog layers, and finally a
+breaking rewrite of the Angular button. Every fix was asked about and approved one at a time,
+so no single step looked like drift, but together they turned a docs task into a component
+sprint. The owner had to point it out. Rule: when a research or docs task finds a defect in a
+component, write it to `tasks/todo.md` with its evidence and keep going on the task. Offer the
+fixes as a separate batch at the end, and say plainly that they leave the task's scope.
