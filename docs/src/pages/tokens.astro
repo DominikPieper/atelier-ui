@@ -314,7 +314,7 @@ const motion = [
 
 <BaseLayout
   title="Design tokens"
-  description="The Atelier UI design token system — colors, spacing, radii, and typography primitives that flow from Figma into every component."
+  description="The Atelier UI design token system — colors, spacing, radii, and typography primitives, authored in code and projected into Figma and every component."
   currentPath="/tokens"
   tocItems={[
     { id: 'tiers', label: 'How the tiers fit together' },
@@ -324,6 +324,7 @@ const motion = [
     { id: 'typography-scale', label: 'Typography scale' },
     { id: 'shadows', label: 'Shadows' },
     { id: 'motion', label: 'Motion' },
+    { id: 'pipeline', label: 'The token pipeline in practice' },
     { id: 'pink-test', label: 'Exercise: the pink test' },
   ]}
 >
@@ -899,6 +900,244 @@ const motion = [
           </tr>
         </tbody>
       </table>
+    </div>
+
+    <!-- Token pipeline -->
+    <div class="docs-section">
+      <h2 id="pipeline" class="docs-section-title">
+        The token pipeline in practice
+      </h2>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 1rem;
+          max-width: 60ch;
+        "
+      >
+        For your own design system you have to settle three things before you
+        write a single variable: where tokens are <strong>authored</strong>, how
+        they <strong>travel</strong> between Figma and code, and which side wins
+        when the two disagree. Teams that skip this end up with two files that
+        both claim to be the source of truth.
+      </p>
+
+      <h3 class="docs-h3">The vocabulary</h3>
+      <ul
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.7;
+          margin: 0 0 1rem;
+          padding-left: 1.25rem;
+          max-width: 60ch;
+        "
+      >
+        <li>
+          <strong>DTCG</strong> is the W3C Design Tokens format: tokens as JSON.
+          In the course it is described as platform-agnostic, so with the right
+          transforms the same file can become web CSS custom properties, iOS or
+          Android values.
+        </li>
+        <li>
+          <strong>Style Dictionary</strong> is the tool the course names for
+          those transforms: JSON tokens in, one output per platform out.
+        </li>
+        <li>
+          <strong>figma-console-mcp</strong> ships its own pair of tools for
+          this. <code>figma_export_tokens</code> writes Figma variables out as
+          DTCG JSON or other formats (CSS variables, Tailwind v3 and v4, SCSS, a
+          TypeScript module, Style Dictionary v3 and Tokens Studio layouts).
+          <code>figma_import_tokens</code> pushes tokens from code into Figma as
+          variables.
+        </li>
+      </ul>
+
+      <h3 class="docs-h3 docs-h3--spaced">The course's round trip</h3>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 1rem;
+          max-width: 60ch;
+        "
+      >
+        In the DSAI jam session the export is described as deterministic: the
+        variables table becomes DTCG JSON, and a second step renders it in the
+        style you ask for, Tailwind v4 for example. The speaker's summary is
+        that this is "basically Style Dictionary built into" figma-console-mcp.
+        Import is the reverse, for a team that starts from a code-first
+        canonical source. Because both directions are deterministic, a changed
+        value is matched to that exact variable and updated, rather than
+        everything being rewritten. A third course session shows the other entry
+        point: asking the agent to create new variables straight in Figma
+        through the same server.
+      </p>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 1rem;
+          max-width: 60ch;
+        "
+      >
+        That session also shows what a token gap looks like. An inverted
+        (<strong>knockout</strong>) background for error, warning, success and
+        info states had backgrounds but no matching content and border colours,
+        so a label became illegible on it. The fix was new
+        <em>error knockout</em>, <em>warning knockout</em>,
+        <em>success knockout</em> and <em>info knockout</em> content and border
+        tokens in the semantic tier, mapped to lighter colours so they sit on
+        the dark background. Border got a darker step than content so the two
+        stay distinct. The lesson is not the colour names but the order: add the
+        token first, and the component follows.
+      </p>
+
+      <h3 class="docs-h3 docs-h3--spaced">How Atelier does it: code first</h3>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 1rem;
+          max-width: 60ch;
+        "
+      >
+        Atelier authors tokens by hand in one CSS file and projects them
+        outward. Nothing in the repo pulls a Figma edit back into code. The
+        scripts and their headers say so, and ADR-0030 records the reason: the
+        repo's gates already treat code as canonical and project outward, so
+        tokens follow the same direction, and a hand-edited Figma collection is
+        drift by definition.
+      </p>
+      <table class="docs-props-table">
+        <thead>
+          <tr>
+            <th>Step</th>
+            <th>Command</th>
+            <th>What it does</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Author</td>
+            <td><code>libs/styles/src/tokens.css</code></td>
+            <td>
+              The one hand-edited file. Light values, dark values and the
+              <code>--ui-*</code> names live here.
+            </td>
+          </tr>
+          <tr>
+            <td>Copy to code</td>
+            <td><code>npm run sync:tokens</code></td>
+            <td>
+              Copies it byte-for-byte into each framework library, the
+              create-workspace preset and the design skill's sheet.
+              <code>npm run check:tokens</code> fails on drift.
+            </td>
+          </tr>
+          <tr>
+            <td>Push to Figma</td>
+            <td><code>npm run figma:sync-tokens</code></td>
+            <td>
+              <code>gen-figma-library-tokens.mjs</code> parses the CSS into
+              variable definitions (<code>--ui-color-text</code> becomes
+              <code>color/text</code>, rem becomes px, <code>var()</code>
+              becomes an alias). <code>figma-sync-library-tokens.mjs</code>
+              upserts them into the <code>Library Tokens</code> collection
+              through figma-console-mcp's <code>figma_execute</code>. It reports
+              variables that exist only in Figma but does not delete them.
+            </td>
+          </tr>
+          <tr>
+            <td>Record</td>
+            <td><code>npm run figma:snapshot</code></td>
+            <td>
+              Refreshes the committed Figma snapshot the offline gates read. The
+              sync script prints this as the next step, followed by
+              <code>npm run check:figma</code>.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin: 1rem 0;
+          max-width: 60ch;
+        "
+      >
+        Two things are deliberately left out of the Figma projection: shadows,
+        easings, durations, letter-spacing, z-index and the composite focus ring
+        are not simple variables, so the generator skips them. And the push
+        needs Figma Desktop with the file open and the figma-console Desktop
+        Bridge plugin running, so it is run by hand and is not part of
+        <code>check:all</code>.
+      </p>
+
+      <h3 class="docs-h3 docs-h3--spaced">The gates behind it</h3>
+      <table class="docs-props-table">
+        <thead>
+          <tr>
+            <th>Gate</th>
+            <th>What it keeps honest</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>npm run check:tokens</code></td>
+            <td>Every copy of <code>tokens.css</code> equals the source.</td>
+          </tr>
+          <tr>
+            <td><code>npm run check:figma-token-names</code></td>
+            <td>
+              Every <code>color/*</code>, <code>spacing/*</code> and
+              <code>radius/*</code> variable in the Figma snapshot maps back to
+              a declared <code>--ui-*</code> token. It checks names, not values,
+              and only in that direction, because code tokens legitimately exist
+              before Figma catches up.
+            </td>
+          </tr>
+          <tr>
+            <td><code>npm run check:token-annotations</code></td>
+            <td>
+              Every declared token has an entry in
+              <code>libs/spec/src/tokens.manifest.ts</code> with an intent and
+              constraints, the agent-readable layer that says what a token is
+              for, not just its value.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <h3 class="docs-h3 docs-h3--spaced">Which approach fits your system</h3>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 1rem;
+          max-width: 60ch;
+        "
+      >
+        The export/import route is the better start when you do not want to own
+        a pipeline. You get DTCG and several output formats from a maintained
+        tool, you can start in either place, and the diff-based merge means a
+        single edited value produces a single update. Atelier wrote its own
+        scripts for a narrower reason: its source is already plain CSS custom
+        properties, and the import tool's documentation lists CSS custom
+        properties as accepted but not yet implemented, with DTCG as the fully
+        supported input. Going through it would mean first converting the CSS to
+        DTCG. The price of the hand-rolled path is that you maintain the name
+        mapping, the skip list and the drift gates yourself. Pick one direction
+        as the source of truth and write it down; the rest follows from that
+        choice.
+      </p>
+      <Callout tone="note" title="Use the same server for both.">
+        The sync script talks to the same figma-console-mcp server you use in an
+        agent session. The difference is who is driving: a script with a fixed
+        payload is repeatable and reviewable, while a prompt like the knockout
+        example is the quick way to explore a new token before you commit it to
+        the CSS.
+      </Callout>
     </div>
 
     <!-- Pink test -->
