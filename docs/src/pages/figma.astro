@@ -1087,6 +1087,268 @@ const FIGMA_URL =
       </Callout>
     </div>
 
+    <!-- Shared language -->
+    <div class="docs-section" style="margin-bottom: 2.5rem">
+      <h2 id="shared-language" class="docs-section-title">
+        Shared language: one name for one thing
+      </h2>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 1.25rem;
+        "
+      >
+        The most common fault in the design systems the course's authors audit
+        is naming inconsistency: <code>size="large"</code> on one component and
+        <code>size="lg"</code> on the next, token names built by two different
+        rules, layers called <code>Frame</code>, documentation that disagrees
+        with design and code. An agent has no way to know that two spellings
+        mean one thing. It treats each as a separate fact, so it guesses, and
+        the guess goes into code. The course's phrase for the fix is that
+        consistent language is the contract that lets AI reason about your
+        design system.
+      </p>
+      <h3
+        style="
+          font-size: var(--ui-font-size-lg);
+          font-weight: 600;
+          margin: 0 0 0.6rem;
+        "
+      >
+        Do it in this order
+      </h3>
+      <ol
+        style="
+          margin: 0 0 1.25rem;
+          padding-left: 1.25rem;
+          line-height: 1.6;
+          color: var(--ui-color-text-muted);
+        "
+      >
+        <li>
+          <strong style="color: var(--ui-color-text)">Report.</strong> Have an
+          agent list every name in use, per category, with where each appears.
+          Read-only, nothing is renamed yet.
+        </li>
+        <li>
+          <strong style="color: var(--ui-color-text)">Decide.</strong> You pick
+          one word per concept and write the vocabulary down. The agent can
+          propose; it cannot know which spelling your production code already
+          depends on.
+        </li>
+        <li>
+          <strong style="color: var(--ui-color-text)">Rename once.</strong>
+          Apply the vocabulary across Figma and code in one pass, then review
+          each asset. Anything already in production keeps the old name as a
+          deprecated alias for a stated window. The course's demo renames
+          <code>inverted</code> to <code>knockout</code> this way: the old prop
+          still works, is flagged deprecated, and is announced for removal three
+          months out.
+        </li>
+        <li>
+          <strong style="color: var(--ui-color-text)">Keep it.</strong> Turn the
+          vocabulary into a check that fails the build. A report that nobody
+          reruns decays.
+        </li>
+      </ol>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 0.75rem;
+        "
+      >
+        Four categories are worth a column each in the report: variant property
+        names and values (<code>size</code>, <code>lg</code>), token names,
+        layer names, and the words in descriptions and docs. This prompt works
+        on your own file. It is read-only: it uses figma-console-mcp reads and
+        never writes to Figma.
+      </p>
+      <Code
+        code={`Consistency report, read-only. Do not rename or write anything.
+
+1. Figma: using figma-console-mcp read tools (figma_get_variables,
+   figma_analyze_component_set, figma_search_components, and a read-only
+   figma_execute walk where no tool exists), list across ALL masters:
+   - every variant property name, with its values and the masters using it
+   - every variable name, grouped by prefix, noting where two different
+     naming rules are in use
+   - every layer name that is a default (Frame, Group, Rectangle) and
+     layer names that differ between variants of one master
+2. Code: from the component types or manifest, list every prop name and
+   every string-union value, with the component that declares it.
+3. Report, per category, every concept that has more than one spelling
+   (large / lg, outline / outlined, above / top), the count of uses of each
+   spelling, and the components affected.
+4. Mark which spelling you would pick and why. Do not apply anything.
+   List which names look like they are used by shipped code.`}
+        lang="text"
+        title="Consistency report prompt"
+      />
+      <h3
+        style="
+          font-size: var(--ui-font-size-lg);
+          font-weight: 600;
+          margin: 1.5rem 0 0.6rem;
+        "
+      >
+        What Atelier enforces, and what it does not
+      </h3>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 1.25rem;
+        "
+      >
+        Atelier's gates check that two places agree, not that the vocabulary is
+        consistent across components. Each of these joins Figma to code, or the
+        spec to the adapters, for one component at a time:
+      </p>
+      <table class="docs-props-table" style="margin-bottom: 1.25rem">
+        <thead>
+          <tr>
+            <th>Gate</th>
+            <th>Checks</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>check:contracts</code></td>
+            <td>
+              A master's axis names and values against the component's own
+              manifest and stories (<code>[AXIS]</code>). A deliberate
+              difference is written down as an <code>axisMap</code> entry with a
+              reason.
+            </td>
+          </tr>
+          <tr>
+            <td><code>check:figma</code></td>
+            <td>
+              A master's variant axis against the spec field or union it names
+              (<code>AXIS-NAME</code>, <code>AXIS-NOT-A-PROP</code>), and that
+              named layers resolve to a CSS rule (ADR-0063: the layer name is
+              the selector). A layer still called <code>Frame</code> is counted,
+              not judged.
+            </td>
+          </tr>
+          <tr>
+            <td><code>check:figma-token-names</code></td>
+            <td>
+              Every <code>color/*</code>, <code>spacing/*</code> and
+              <code>radius/*</code> variable in the Figma snapshot resolves to a
+              <code>--ui-*</code> declaration in <code>tokens.css</code>.
+            </td>
+          </tr>
+          <tr>
+            <td><code>check:variants</code>, <code>check:props</code></td>
+            <td>
+              Each spec union member has a CSS class in every framework, and
+              each framework declares every spec prop.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 0.75rem;
+        "
+      >
+        <code>axisMap</code> is where Atelier records a name that differs on
+        purpose. This is the entry on <code>AtlTh</code>:
+      </p>
+      <Code
+        code={`axisMap: [
+  {
+    figmaAxis: 'sortDirection',
+    codeProp: 'sortDirection',
+    values: { none: null, asc: 'asc', desc: 'desc' },
+    reason: "Same prop name, but the axis value 'none' stands for the code union's null ..."
+  },
+],`}
+        lang="ts"
+        title="libs/spec/src/contracts/th.contract.ts (shortened)"
+      />
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin: 1.25rem 0;
+        "
+      >
+        None of the scripts above compares one component's vocabulary with
+        another's. A search of <code>tools/scripts</code> on 2026-10-09 found no
+        gate that does; the only hit for the word <em>vocabulary</em> in
+        <code>tools/scripts</code> is a comment in <code>check-parity.js</code>.
+        So the consistency itself is a convention, kept by whoever adds the next
+        component.
+      </p>
+      <Callout
+        tone="note"
+        title="What a consistency pass found in Atelier's spec (2026-10-09)"
+      >
+        <p
+          style="
+            margin: 0 0 0.6rem;
+            line-height: 1.6;
+            color: var(--ui-color-text-muted);
+          "
+        >
+          A read-only scan of the string unions in
+          <code>libs/spec/src/index.ts</code>, plus the axes in
+          <code>tools/figma/snapshot.json</code>. Nothing was changed.
+        </p>
+        <ul
+          style="
+            margin: 0;
+            padding-left: 1.25rem;
+            line-height: 1.6;
+            color: var(--ui-color-text-muted);
+          "
+        >
+          <li>
+            <strong style="color: var(--ui-color-text)"
+              >Size is consistent.</strong
+            >
+            The <code>Atl*Size</code> unions use only <code>xs</code>,
+            <code>sm</code>, <code>md</code>, <code>lg</code>, <code>xl</code>
+            and <code>full</code>. None spells out <code>large</code>.
+          </li>
+          <li>
+            <strong style="color: var(--ui-color-text)"
+              >Position is not.</strong
+            >
+            <code>AtlTooltipPosition</code> is
+            <code>above | below | left | right</code>;
+            <code>AtlDrawerPosition</code> is
+            <code>left | right | top | bottom</code>. Same prop name, two words
+            for the vertical sides.
+          </li>
+          <li>
+            <strong style="color: var(--ui-color-text)"
+              >Outline has two spellings.</strong
+            >
+            <code>AtlButtonVariant</code> has <code>outline</code>;
+            <code>AtlCardVariant</code> has <code>outlined</code>.
+          </li>
+          <li>
+            <strong style="color: var(--ui-color-text)"
+              >Failure is named two ways.</strong
+            >
+            <code>danger</code> is the variant in button, badge, alert, toast
+            and progress; the Figma <code>state</code> axis uses both
+            <code>error</code> and <code>invalid</code>, and
+            <code>AtlIconName</code> has both <code>danger</code> and
+            <code>error</code>. Whether each pair is one concept or two was not
+            checked.
+          </li>
+        </ul>
+      </Callout>
+    </div>
+
     <!-- Code-only facts -->
     <div class="docs-section" style="margin-bottom: 2.5rem">
       <h2 id="code-only" class="docs-section-title">
