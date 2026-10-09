@@ -1964,6 +1964,23 @@ The ones the owner and I will walk through together.
   - [ ] **Prop tables in `llms-full.txt` are React-shaped for every framework** (`onValueChange`,
         `children`); the cold-start agent had to translate them for Angular.
 
+- [ ] Findings from course-gap B2/B4/B5/B7 docs sections (2026-10-09; docs only, nothing fixed):
+  - [ ] Stale header: `tools/scripts/gen-figma-library-tokens.mjs:3-4` names the create-workspace
+        preset copy as source; line 39 reads `libs/styles/src/tokens.css`.
+  - [ ] `libs/spec/src/tokens.manifest.ts:15-16` cites `tools/scripts/check-css-tokens.js`, which
+        does not exist; `check-token-annotations.js` does that job.
+  - [ ] ADR-0115 axis 2 names the preset `tokens.css` as authority and lists `check:css-tokens` /
+        `check:token-tiers`; neither gate exists and `sync-tokens.mjs:30` uses
+        `libs/styles/src/tokens.css`. Needs a dated "Corrected" paragraph.
+  - [ ] Vocabulary drift in the spec (scan 2026-10-09, figma page `#shared-language`):
+        tooltip `above/below` vs drawer `top/bottom`; button `outline` vs card `outlined`;
+        `danger` / `error` / `invalid` for failure. Decide whether each pair is one concept.
+        No gate compares vocabulary across components.
+  - [ ] No deprecation policy (ADR-0023 ties 1.0.0 to one), no `@deprecated` in `libs/`, no
+        codemod. Unverified: whether `docs-show` surfaces a `@deprecated` tag.
+  - [ ] The Storybook MCP deploy runs in Cloudflare's own build; no repo-local deploy command
+        a participant could copy (`mcp.astro#own-mcp` says so).
+
 - [ ] Follow-ups from ADR-0161 (code-only facts as `- Code-only` description lines, 2026-10-08):
   - [ ] Read-side A/B: does an agent generating from the master use a `- Code-only` line
         (AtlButton `type`) better than the old parenthetical? Untested for both carriers.
