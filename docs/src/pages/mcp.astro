@@ -572,6 +572,158 @@ import PageHero from '../components/PageHero.astro';
       </p>
     </section>
 
+    <section
+      aria-labelledby="own-mcp"
+      style="margin: 2.25rem 0 2rem; max-width: 820px"
+    >
+      <h2 id="own-mcp" class="docs-h3">Publish your own design-system MCP</h2>
+      <p style="line-height: 1.65">
+        Everything above is Atelier's servers. For your own design system the
+        question is how little you have to build. Start at the cheap end and
+        move right only when a concrete need pushes you.
+      </p>
+
+      <h3 class="docs-h3 docs-h3--spaced">
+        What a server gives an agent that a docs file does not
+      </h3>
+      <p style="line-height: 1.65">
+        A static <code>llms.txt</code> (Atelier serves
+        <a href="/llms.txt" class="docs-link-primary"><code>/llms.txt</code></a>
+        and <code>/llms-full.txt</code>) is a file the agent reads whole or
+        fetches by URL. An MCP server answers a question: the agent calls
+        <code>docs-list</code>, then <code>docs-show</code> for one component,
+        and gets only that component's props, stories and usage. So
+        <code>llms.txt</code> is enough while your design system is small enough
+        to sit in the context window and you have no need for per-component
+        lookups; a server pays off when the full text is too big to load every
+        time, or when you want the same answers inside every client without
+        pasting files.
+      </p>
+
+      <h3 class="docs-h3 docs-h3--spaced">
+        Cheapest path: static manifests behind Storybook's MCP handler
+      </h3>
+      <p style="line-height: 1.65">
+        If your design system already has a Storybook, you build no server
+        logic. Atelier's hosted endpoints
+        (<code>atelier.pieper.io/storybook-{'{angular,react,vue}'}/mcp</code>)
+        are one small Cloudflare Worker that hands Storybook's own handler the
+        static files a Storybook build already wrote. Steps to repeat:
+      </p>
+      <ol style="line-height: 1.65; padding-left: 1.2rem">
+        <li>
+          <strong>Make Storybook emit a manifest.</strong> Atelier's three
+          <code>main.ts</code> files set
+          <code>features.componentsManifest: true</code> and add
+          <code>@storybook/addon-mcp</code>; Angular and Vue also set
+          <code>experimentalDocgenServer: true</code>, React uses
+          <code>react-docgen</code> by default (ADR-0097). A build then writes
+          <code>manifests/components.json</code> and
+          <code>manifests/docs.json</code> into its output directory.
+        </li>
+        <li>
+          <strong>Build it as static output.</strong> Atelier runs
+          <code
+            >storybook build --config-dir &lt;lib&gt;/.storybook --output-dir
+            dist/docs/storybook-&lt;fw&gt;</code
+          >
+          (the exact command is the <code>build.command</code> in
+          <code>wrangler.jsonc</code>), so the manifests sit next to the
+          rendered stories.
+        </li>
+        <li>
+          <strong>Serve it with <code>@storybook/mcp</code>.</strong>
+          <code>worker/mcp.ts</code> calls
+          <code>createStorybookMcpHandler</code> with a
+          <code>manifestProvider</code> that reads the requested manifest path
+          from the Worker's static-assets binding, and
+          <code>worker/index.ts</code> routes
+          <code>/storybook-&lt;fw&gt;/mcp</code> to it. Copy those two files as
+          your template. Read the comments in <code>worker/mcp.ts</code> and
+          <code>wrangler.jsonc</code> before you copy: the manifests are fetched
+          through the binding, not by public URL (a Worker calling its own zone
+          fails), and the <code>define</code> entry works around the
+          <code>@storybook/mcp@10.6.0</code> module preamble in a Worker.
+        </li>
+        <li>
+          <strong>Guard the artefact.</strong> A manifest with zero components
+          makes <code>@storybook/mcp</code> throw, so
+          <code>check:storybook-manifests</code> builds all three Storybooks and
+          checks the files offline.
+        </li>
+        <li>
+          <strong>Deploy.</strong> Atelier's deploy is a Cloudflare build that
+          runs the <code>build.command</code> above; CI builds the same
+          Storybooks so a broken deploy shows up in a pull request
+          (<code>.github/workflows/ci.yml</code>). You do not need Cloudflare
+          for this: the course demo hosted its server on Netlify Functions.
+        </li>
+      </ol>
+      <p style="line-height: 1.65">
+        Pins that Atelier uses today: Storybook, <code>@storybook/mcp</code> and
+        <code>@storybook/addon-mcp</code> all at <code>10.6.0</code>. Because
+        the handler consumes static files, the tool surface is <code>docs</code>
+        only; <code>dev</code> and <code>test</code> need a running Storybook
+        (see above).
+      </p>
+
+      <h3 class="docs-h3 docs-h3--spaced">Connect it from a client</h3>
+      <p style="line-height: 1.65">
+        Claude Code reads a remote server from <code>.mcp.json</code>. This is
+        how Atelier wires its own:
+      </p>
+      <pre style="overflow-x: auto"><code>{`{
+  "mcpServers": {
+    "storybook-angular": {
+      "type": "http",
+      "url": "https://atelier.pieper.io/storybook-angular/mcp"
+    }
+  }
+}`}</code></pre>
+      <p style="line-height: 1.65">
+        Per the vendors' docs (checked 2026-10-09): Codex takes
+        <code>[mcp_servers.&lt;name&gt;]</code> with a <code>url</code> key in
+        <code>config.toml</code>, or
+        <code>codex mcp add &lt;name&gt; --url &lt;url&gt;</code>
+        (<a
+          href="https://learn.chatgpt.com/docs/extend/mcp?surface=cli"
+          class="docs-link-primary"
+          >Codex MCP docs</a
+        >). Cursor takes a <code>url</code> entry under <code>mcpServers</code>
+        in <code>.cursor/mcp.json</code>
+        (<a href="https://cursor.com/docs/context/mcp" class="docs-link-primary"
+          >Cursor MCP docs</a
+        >). Client settings change, so use those pages as the reference.
+      </p>
+
+      <h3 class="docs-h3 docs-h3--spaced">
+        The expensive end: a custom server with a knowledge graph
+      </h3>
+      <p style="line-height: 1.65">
+        The design-systems course goes further. Its Eddie demo had a local stdio
+        server reading a knowledge graph of component information from disk,
+        with eight tools. To publish it the demo refactored the server to run
+        remotely, added a streamable HTTP entry point, bundled the graph into
+        the deployment, wrapped it as a Netlify function and added a way to test
+        the tools over HTTP locally. It then connected from Codex as a
+        streamable-HTTP server and asked for a card component's props,
+        composition and usage guidance; the answer also surfaced a gap in the
+        graph (missing relationship metadata). The course itself says this is
+        specific to that setup, not generic advice.
+      </p>
+      <p style="line-height: 1.65">
+        Build that when the answers you need are not in a component manifest:
+        relationships between components, page patterns, composition rules. What
+        it costs is a server you own, a graph you keep current, and its own tool
+        design and tests. The course also stresses that techniques for agent
+        access are still emerging, so expect to revisit it.
+      </p>
+      <p style="line-height: 1.65">
+        <strong>One rule either way:</strong> a public docs MCP should serve
+        only public docs.
+      </p>
+    </section>
+
     <McpExplorer client:load />
   </div>
 </BaseLayout>
