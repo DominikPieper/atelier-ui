@@ -2,11 +2,11 @@
 
 ### 🚀 Features
 
-- ⚠️  **angular:** AtlButton is a native button, button[atl-button] (ADR-0163) ([a9c3d2b5](https://github.com/DominikPieper/atelier-ui/commit/a9c3d2b5))
+- ⚠️ **angular:** AtlButton is a native button, button[atl-button] (ADR-0163) ([a9c3d2b5](https://github.com/DominikPieper/atelier-ui/commit/a9c3d2b5))
 
-### ⚠️  Breaking Changes
+### ⚠️ Breaking Changes
 
-- **angular:** AtlButton is a native button, button[atl-button] (ADR-0163)  ([a9c3d2b5](https://github.com/DominikPieper/atelier-ui/commit/a9c3d2b5))
+- **angular:** AtlButton is a native button, button[atl-button] (ADR-0163) ([a9c3d2b5](https://github.com/DominikPieper/atelier-ui/commit/a9c3d2b5))
   write <button atl-button> instead of <atl-button>.
 
 ### ❤️ Thank You
