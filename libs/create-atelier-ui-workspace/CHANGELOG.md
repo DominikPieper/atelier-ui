@@ -1,3 +1,14 @@
+## 0.4.2 (2026-10-10)
+
+### 🚀 Features
+
+- **create-workspace:** ship uianatomy-mcp and figma-workspace-architect skills (ADR-0167) ([b6ef45d2](https://github.com/DominikPieper/atelier-ui/commit/b6ef45d2))
+
+### ❤️ Thank You
+
+- Claude Opus 5.5
+- Dominik Pieper @DominikPieper
+
 ## 0.4.1 (2026-10-09)
 
 ### 🚀 Features

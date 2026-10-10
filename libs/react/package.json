@@ -1,6 +1,6 @@
 {
   "name": "@atelier-ui/react",
-  "version": "0.4.1",
+  "version": "0.4.2",
   "description": "Atelier component library for React — LLM-optimised, accessible, design-token-driven",
   "keywords": [
     "react",
@@ -19,7 +19,7 @@
     "directory": "libs/react"
   },
   "dependencies": {
-    "@atelier-ui/styles": "0.4.1"
+    "@atelier-ui/styles": "0.4.2"
   },
   "peerDependencies": {
     "react": "^18.0.0 || ^19.0.0",
