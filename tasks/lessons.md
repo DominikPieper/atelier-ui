@@ -962,3 +962,19 @@ so no single step looked like drift, but together they turned a docs task into a
 sprint. The owner had to point it out. Rule: when a research or docs task finds a defect in a
 component, write it to `tasks/todo.md` with its evidence and keep going on the task. Offer the
 fixes as a separate batch at the end, and say plainly that they leave the task's scope.
+
+## 2026-10-10 — "No `exports` entry" is not "not importable": check the published tarball
+
+The content review called `@import '@atelier-ui/react/styles/tokens.css'` invalid because
+`libs/react/package.json` has no `exports` entry for it, and a follow-up removed the line from
+`gen-llms-txt.mjs`. Both were wrong: the react package has no `exports` map at all, and without
+one every file in the tarball is importable; `npm pack @atelier-ui/react@0.4.1` holds
+`package/styles/tokens.css`. The source `package.json` is also not the published one (the build
+writes `dist/`). Rule: before calling a package import invalid, read the published
+`package.json` and list the tarball (`npm pack <pkg>@<v>` + `tar tzf`); an absent `exports`
+entry only matters when an `exports` map exists.
+
+The same day a docs sentence ("`:-` keeps Claude Code from rejecting the whole `.mcp.json`") had
+been carried as "documented behaviour, not re-tested". A 5-minute spike (`claude -p --debug` with
+an unset variable) showed a per-entry warning, not a rejection. Rule: a tool-behaviour claim that
+is cheap to spike gets spiked before it ships, not labelled "assumed".

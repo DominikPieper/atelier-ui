@@ -47,18 +47,20 @@ green; two scaffold-port allowlist entries for the new 6006 lines in `workshop.a
       `/doctor` vs. `claude doctor`; `lsof | xargs kill` warning; preflight prompt string
       German vs. English
 
-Follow-ups found while fixing — first three done 2026-10-10, last three open:
+Follow-ups found while fixing — done 2026-10-10 except the AtlProgress debt:
 
-- [x] React token import: the wrong `@atelier-ui/react/styles/tokens.css` line was in
-      `tools/scripts/gen-llms-txt.mjs` (→ `llms-full.txt`), not in `llms.astro`; removed.
-      `libs/react/package.json` still has no `exports` for it (library gap, open).
+- [x] React token import: **no defect.** The review called `@atelier-ui/react/styles/tokens.css`
+      invalid because the source `package.json` has no `exports` entry; but the package has no
+      `exports` map at all and the 0.4.1 tarball holds `styles/tokens.css`, so the import resolves.
+      The line wrongly removed from `gen-llms-txt.mjs` in 19fa9b91 is restored (see lessons.md).
 - [x] Pin drift: `check:docs` now fails with `[MCP-PIN]` when a docs page or `.mcp.json` cites
       another `figma-console-mcp` version than `preset.ts` (negative-tested). The two figma sync
       scripts spawned `@latest`; they now read the pin via `tools/scripts/lib/figma-console-pin.mjs`.
 - [x] Second `lsof | xargs kill` in troubleshooting got the warning.
-- [ ] The `:-` rationale on `figma-token.astro` (Claude Code rejects `.mcp.json` when a variable
-      has no default) is from Claude Code's documented env-expansion behaviour, not re-tested here.
-- [ ] `@atelier-ui/react` has no `exports` entry for `styles/tokens.css` (Vue and Angular have one).
+- [x] `:-` rationale spiked (Claude Code 2.1.296, `claude -p --debug`, both `--mcp-config` and
+      project `.mcp.json`): an unset `${VAR}` gives a per-entry "Missing environment variables"
+      warning and the server still starts; nothing rejects the file. `figma-token.astro` now says
+      the token is optional and the default avoids the warning.
 - [ ] AtlProgress: `aria-progressbar-name` still disabled as a11y debt in all three libs; the
       a11y-workflow worked example now carries a dated correction.
 
@@ -76,9 +78,8 @@ Follow-ups found while fixing — first three done 2026-10-10, last three open:
 - [x] S8 done 2026-10-10: `/readiness` (11 master checks with Figma fix steps, 5 system groups, concepts); old anchors stubbed.
 - [x] S9 done 2026-10-10: `a11y-workflow#a11y-in-the-loop`; maintainer history under its own heading.
 - [ ] S10 maintainer content out of figma / tokens / claude-design / runbook / skills pages (§4)
-- [~] S11 partly done 2026-10-10: `tokens#naming` (naming, states, modes + contrast, knockout worked,
-  exercise), `/readiness` (scopes, modes, properties, fixing a failing master),
-  `claude-design#artboard-to-master`. Open: design-principles "check your own system" exercise (§5.12).
+- [x] S11 done 2026-10-10: `tokens#naming`, `/readiness` (scopes, modes, properties, fixing a
+      failing master), `claude-design#artboard-to-master`, `design-principles#check-your-own`.
 - [ ] S12 recovery path per tutorial/kata step; bridge exercise compose → build new (§5.10–11)
 - [ ] S13 Atl/Atelier-file → CDS swap across agenda, ~18 pages, briefs, trainer files (§7);
       blocked on the CDS kata target (P4)
