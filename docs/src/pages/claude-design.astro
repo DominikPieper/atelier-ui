@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
-import MaintainerOnly from '../components/MaintainerOnly.astro';
+import MaintainerNotes from '../components/MaintainerNotes.astro';
 import Callout from '../components/Callout.astro';
 import DiagramFigure from '../components/DiagramFigure.astro';
 import BottomNav from '../components/BottomNav.astro';
@@ -148,9 +148,7 @@ const LIMITS: Limit[] = [
     { id: 'where-it-sits', label: 'What it is, where it sits' },
     { id: 'the-fence', label: 'The fence' },
     { id: 'the-palette', label: 'The one gate that reaches it' },
-    ...(import.meta.env.DEV
-      ? [{ id: 'proof', label: 'What it found here' }]
-      : []),
+    { id: 'proof', label: 'What it found here' },
     { id: 'review', label: "Reviewing the tool's output" },
     { id: 'limits', label: 'The limits' },
   ]}
@@ -500,9 +498,7 @@ const LIMITS: Limit[] = [
         </svg>
       </DiagramFigure>
 
-      <MaintainerOnly
-        label="Current state of steps 0 and 5 in this repo · local only"
-      >
+      <MaintainerNotes topic="current state of steps 0 and 5 in this repo">
         <Callout
           tone="note"
           title="Step 0 and step 5 are not at the same stage"
@@ -550,7 +546,7 @@ const LIMITS: Limit[] = [
             run once, not yet demonstrated end to end for a room.
           </p>
         </Callout>
-      </MaintainerOnly>
+      </MaintainerNotes>
 
       <p
         style="color: var(--ui-color-text-muted); line-height: 1.65; margin: 0"
@@ -1159,9 +1155,7 @@ const LIMITS: Limit[] = [
       </p>
     </section>
 
-    <MaintainerOnly
-      label="What it found here: this repo's evidence (ADR-0041 to ADR-0057) · local only"
-    >
+    <MaintainerNotes topic="what it found here, ADR-0041 to ADR-0057">
       <!-- 4 — Proof -->
       <section class="docs-section">
         <h2 id="proof" class="docs-section-title">What it found here</h2>
@@ -1352,7 +1346,7 @@ const LIMITS: Limit[] = [
           would have held.
         </div>
       </section>
-    </MaintainerOnly>
+    </MaintainerNotes>
 
     <!-- 5 — Reviewing the tool's output -->
     <section class="docs-section">

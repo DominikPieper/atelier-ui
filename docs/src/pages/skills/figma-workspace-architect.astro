@@ -3,7 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
 import BottomNav from '../../components/BottomNav.astro';
 import Callout from '../../components/Callout.astro';
-import MaintainerOnly from '../../components/MaintainerOnly.astro';
+import MaintainerNotes from '../../components/MaintainerNotes.astro';
 import { skillVersion, referenceCount } from '../../lib/skill-meta';
 
 const SITE_URL = 'https://atelier.pieper.io';
@@ -508,9 +508,7 @@ const tests = [
       <Code code={TRIGGER_EXAMPLES} lang="text" />
     </div>
 
-    <MaintainerOnly
-      label="For maintainers · references, test scenarios, source · local only"
-    >
+    <MaintainerNotes topic="references, test scenarios, source">
       <!-- References -->
       <div class="docs-section">
         <h2 class="docs-section-title">References</h2>
@@ -653,7 +651,7 @@ const tests = [
           </dd>
         </dl>
       </div>
-    </MaintainerOnly>
+    </MaintainerNotes>
 
     <!-- Bottom nav -->
     <BottomNav

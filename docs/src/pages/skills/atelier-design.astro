@@ -3,7 +3,7 @@ import BaseLayout from '../../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
 import BottomNav from '../../components/BottomNav.astro';
 import Callout from '../../components/Callout.astro';
-import MaintainerOnly from '../../components/MaintainerOnly.astro';
+import MaintainerNotes from '../../components/MaintainerNotes.astro';
 import {
   designPreviewCount,
   designReferenceFiles,
@@ -149,9 +149,7 @@ if (listedReferences !== designReferenceFiles.length) {
       >.
     </Callout>
 
-    <MaintainerOnly
-      label="For maintainers · skill contents, install and source · local only"
-    >
+    <MaintainerNotes topic="skill contents, install and source">
       <!-- What it does -->
       <div class="docs-section">
         <h2 class="docs-section-title">What it does</h2>
@@ -385,7 +383,7 @@ if (listedReferences !== designReferenceFiles.length) {
           </dd>
         </dl>
       </div>
-    </MaintainerOnly>
+    </MaintainerNotes>
 
     <!-- Bottom nav -->
     <BottomNav

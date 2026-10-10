@@ -1,0 +1,94 @@
+---
+/**
+ * Maintainer content, deployed but collapsed (owner decision 2026-10-10,
+ * reversing the "local only" rule of ADR-0166). A native <details>, closed by
+ * default: participants pass over it, while gates, search, llms output and
+ * links still reach it. The <summary> is the control, so it is keyboard
+ * operable and announced as a disclosure with no ARIA added.
+ *
+ * Anchors into a closed block work through the script below: it opens every
+ * ancestor <details> of the element named by location.hash, on load and on
+ * hashchange. A block that replaces a "For maintainers" heading carries that
+ * heading's id on the <details> itself (`id="for-maintainers"`).
+ */
+interface Props {
+  /** What the block covers; the summary reads "For maintainers — <topic>". */
+  topic?: string;
+  /** Anchor id for the block (put the old heading's id here). */
+  id?: string;
+}
+
+const { topic, id } = Astro.props;
+const summary = topic ? `For maintainers — ${topic}` : 'For maintainers';
+---
+
+<details class="docs-maintainer-notes" id={id}>
+  <summary class="docs-maintainer-notes-summary">{summary}</summary>
+  <div class="docs-maintainer-notes-body">
+    <slot />
+  </div>
+</details>
+
+<script>
+  // Open every <details> that contains the hash target, then scroll to it.
+  // The `hashchange` event also fires for in-page link clicks that change the
+  // hash. A click on a link whose hash is already current does not fire it, so
+  // that case is handled on click as well.
+  function revealHashTarget() {
+    const raw = location.hash.slice(1);
+    if (!raw) return;
+    let id = raw;
+    try {
+      id = decodeURIComponent(raw);
+    } catch {
+      /* keep the raw value */
+    }
+    const target = document.getElementById(id);
+    if (!target) return;
+    let opened = false;
+    for (let node: Element | null = target; node; node = node.parentElement) {
+      if (node instanceof HTMLDetailsElement && !node.open) {
+        node.open = true;
+        opened = true;
+      }
+    }
+    if (opened) target.scrollIntoView();
+  }
+
+  window.addEventListener('hashchange', revealHashTarget);
+  document.addEventListener('click', (event) => {
+    const link =
+      event.target instanceof Element
+        ? event.target.closest('a[href^="#"]')
+        : null;
+    if (link && link.getAttribute('href') === location.hash) revealHashTarget();
+  });
+  revealHashTarget();
+</script>
+
+<style>
+  .docs-maintainer-notes {
+    margin: 2rem 0;
+    border: 1px dashed var(--ui-color-warning);
+    border-radius: var(--ui-radius-md);
+  }
+
+  .docs-maintainer-notes-summary {
+    padding: 0.5rem 1.125rem;
+    background: var(--ui-color-warning-bg);
+    color: var(--ui-color-warning-text);
+    border-radius: var(--ui-radius-md);
+    font-size: var(--ui-font-size-sm);
+    font-weight: 600;
+    cursor: pointer;
+  }
+
+  .docs-maintainer-notes[open] > .docs-maintainer-notes-summary {
+    border-bottom-left-radius: 0;
+    border-bottom-right-radius: 0;
+  }
+
+  .docs-maintainer-notes-body {
+    padding: 0 1.125rem 0.5rem;
+  }
+</style>

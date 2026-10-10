@@ -471,8 +471,21 @@ function findSmallText(min) {
  * color-contrast retry below, keeps both axe passes sampling the same
  * already-settled paint, so the retry is testing determinism, not just
  * giving the race a second chance to land differently.
+ *
+ * It also opens every <details> inside `.docs-main-content` first, so the
+ * collapsed maintainer notes are measured like the rest of the page.
  */
 async function settlePage(page) {
+  // Maintainer notes are a closed <details> (ADR-0166, reversed 2026-10-10).
+  // A closed <details> renders none of its content, so axe, the overflow
+  // walk and the font-size pass would all skip it. Open every disclosure in
+  // the page content before measuring. The sidebar's own nav groups stay as
+  // authored: they are chrome, not content, and their open state is part of
+  // what the shell renders for a participant.
+  await page.evaluate(() => {
+    for (const d of document.querySelectorAll('.docs-main-content details'))
+      d.open = true;
+  });
   await page.evaluate(
     () =>
       new Promise((resolve) => {

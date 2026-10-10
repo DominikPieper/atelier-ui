@@ -2,7 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
 import PageHero from '../components/PageHero.astro';
-import MaintainerOnly from '../components/MaintainerOnly.astro';
+import MaintainerNotes from '../components/MaintainerNotes.astro';
 const SITE_URL = 'https://atelier.pieper.io';
 
 const MCP_CONFIG = `{
@@ -221,10 +221,7 @@ const STORYBOOK_LINKS = [
       </div>
     </div>
 
-    <MaintainerOnly
-      label="Maintainer · MCP gating and CLI internals · local only"
-    >
-      <h2 class="docs-section-title">For maintainers</h2>
+    <MaintainerNotes id="for-maintainers" topic="MCP gating and CLI internals">
       <!-- MCP section -->
       <div>
         <h2 class="docs-section-title">MCP server</h2>
@@ -1193,7 +1190,7 @@ export default config;`}
           </div>
         </div>
       </div>
-    </MaintainerOnly>
+    </MaintainerNotes>
 
     <!-- Testing section -->
     <div>

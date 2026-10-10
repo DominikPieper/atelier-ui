@@ -7,7 +7,7 @@ import WorkflowDiagram from '../components/WorkflowDiagram.astro';
 import PageHero from '../components/PageHero.astro';
 import Callout from '../components/Callout.astro';
 import BottomNav from '../components/BottomNav.astro';
-import MaintainerOnly from '../components/MaintainerOnly.astro';
+import MaintainerNotes from '../components/MaintainerNotes.astro';
 import {
   featuredRows,
   remainingCount,
@@ -513,7 +513,7 @@ const FIGMA_URL =
           </div>
         </li>
       </ul>
-      <MaintainerOnly label="Maintainer · Atelier token census">
+      <MaintainerNotes topic="Atelier token census">
         <p
           style="
             font-size: var(--ui-font-size-sm);
@@ -531,11 +531,11 @@ const FIGMA_URL =
           are read from <code>tools/figma/snapshot.json</code> at build time,
           not typed here.
         </p>
-      </MaintainerOnly>
+      </MaintainerNotes>
     </div>
 
     <!-- Component frames -->
-    <MaintainerOnly label="Maintainer · Atelier component frame catalogue">
+    <MaintainerNotes topic="Atelier component frame catalogue">
       <div class="docs-section" style="margin-bottom: 2.5rem">
         <h2 class="docs-section-title">Component frames</h2>
         <p
@@ -574,7 +574,7 @@ const FIGMA_URL =
           </tbody>
         </table>
       </div>
-    </MaintainerOnly>
+    </MaintainerNotes>
 
     <!-- Using Figma in the workshop -->
     <div class="docs-section" style="margin-bottom: 2.5rem">
@@ -932,10 +932,7 @@ const FIGMA_URL =
         >
       </p>
 
-      <MaintainerOnly
-        label="Maintainer · audit of Atelier's own file (2026-10-08)"
-      >
-        <h3 class="docs-h3">For maintainers</h3>
+      <MaintainerNotes topic="audit of Atelier's own file (2026-10-08)">
         <Callout
           tone="warning"
           title="What we found when we ran it on Atelier's own file"
@@ -1006,7 +1003,7 @@ const FIGMA_URL =
             </li>
           </ul>
         </Callout>
-      </MaintainerOnly>
+      </MaintainerNotes>
     </div>
 
     <!-- Shared language -->
@@ -1108,10 +1105,7 @@ const FIGMA_URL =
         lang="text"
         title="Consistency report prompt"
       />
-      <MaintainerOnly
-        label="Maintainer · Atelier gates and consistency scan (2026-10-09)"
-      >
-        <h3 class="docs-h3">For maintainers</h3>
+      <MaintainerNotes topic="Atelier gates and consistency scan (2026-10-09)">
         <h3
           style="
             font-size: var(--ui-font-size-lg);
@@ -1273,7 +1267,7 @@ const FIGMA_URL =
             </li>
           </ul>
         </Callout>
-      </MaintainerOnly>
+      </MaintainerNotes>
     </div>
 
     <!-- Code-only facts -->
@@ -1312,10 +1306,7 @@ const FIGMA_URL =
         lang="text"
         title="AtlButton master description"
       />
-      <MaintainerOnly
-        label="Maintainer · how Atelier gates code-only lines, ADR-0161"
-      >
-        <h3 class="docs-h3">For maintainers</h3>
+      <MaintainerNotes topic="how Atelier gates code-only lines, ADR-0161">
         <p
           style="
             color: var(--ui-color-text-muted);
@@ -1359,7 +1350,7 @@ const FIGMA_URL =
             The decision is recorded as ADR-0161.
           </p>
         </Callout>
-      </MaintainerOnly>
+      </MaintainerNotes>
     </div>
 
     <BottomNav

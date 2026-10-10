@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import BottomNav from '../components/BottomNav.astro';
 import Callout from '../components/Callout.astro';
-import MaintainerOnly from '../components/MaintainerOnly.astro';
+import MaintainerNotes from '../components/MaintainerNotes.astro';
 
 const colorGroups = [
   {
@@ -1354,7 +1354,7 @@ const motion = [
         token first, and the component follows.
       </p>
 
-      <MaintainerOnly label="Maintainer · how the Atelier token pipeline runs">
+      <MaintainerNotes topic="how the Atelier token pipeline runs">
         <h3 class="docs-h3 docs-h3--spaced">How Atelier does it: code first</h3>
         <p
           style="
@@ -1472,7 +1472,7 @@ const motion = [
             </tr>
           </tbody>
         </table>
-      </MaintainerOnly>
+      </MaintainerNotes>
 
       <h3 class="docs-h3 docs-h3--spaced">Which approach fits your system</h3>
       <p
@@ -1613,7 +1613,7 @@ const motion = [
         tokens at all, so use the console snippet for the pink test.
       </Callout>
 
-      <MaintainerOnly label="Maintainer · Atelier gates behind the pink test">
+      <MaintainerNotes topic="Atelier gates behind the pink test">
         <h3 class="docs-h3 docs-h3--spaced">The gates that catch it for you</h3>
         <table class="docs-props-table">
           <thead>
@@ -1651,7 +1651,7 @@ const motion = [
           The mode-limit note below follows ADR-0018. These gates run on every
           <code>check:all</code>.
         </p>
-      </MaintainerOnly>
+      </MaintainerNotes>
       <p
         style="
           color: var(--ui-color-text-muted);

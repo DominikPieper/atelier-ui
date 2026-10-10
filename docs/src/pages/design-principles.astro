@@ -1,7 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Jargon from '../components/Jargon.astro';
-import MaintainerOnly from '../components/MaintainerOnly.astro';
+import MaintainerNotes from '../components/MaintainerNotes.astro';
 import PageHero from '../components/PageHero.astro';
 import { Code } from 'astro-expressive-code/components';
 
@@ -652,8 +652,8 @@ const CHECK_PROMPT = `Check my design system against the principles, read-only. 
         "nobody uses it", assume someone does. Variant properties have no alias
         mechanism, so a variant rename always takes this route.
       </p>
-      <MaintainerOnly
-        label="Release history and this repo's deprecation state · local only"
+      <MaintainerNotes
+        topic="release history and this repo's deprecation state"
       >
         <p
           style="
@@ -695,7 +695,7 @@ const CHECK_PROMPT = `Check my design system against the principles, read-only. 
           build on, the same rename would want a window, a migration script, and
           an announcement first.
         </p>
-      </MaintainerOnly>
+      </MaintainerNotes>
       <p
         style="
           color: var(--ui-color-text-muted);

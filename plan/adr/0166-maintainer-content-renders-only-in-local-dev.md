@@ -1,5 +1,6 @@
 ---
-status: accepted
+status: superseded
+superseded-by: 0168
 date: 2026-10-10
 sources:
   - tasks/content-review-2026-10-10.md §4 (what belongs where), §9 decision 4
@@ -11,7 +12,12 @@ sources:
 
 ## Status
 
-Accepted. Recorded at decision time.
+Superseded by ADR-0168 the same day. Recorded at decision time.
+
+**Corrected 2026-10-10:** the local-only mechanism was replaced by collapsed `<details>` that
+ship to production (ADR-0168). The costs listed under Consequences below (build-testing gates
+blind to the material, links into it guarded by hand) are why; the decision text is kept as
+recorded.
 
 ## Context
 

@@ -978,3 +978,15 @@ The same day a docs sentence ("`:-` keeps Claude Code from rejecting the whole `
 been carried as "documented behaviour, not re-tested". A 5-minute spike (`claude -p --debug` with
 an unset variable) showed a per-entry warning, not a rejection. Rule: a tool-behaviour claim that
 is cheap to spike gets spiked before it ships, not labelled "assumed".
+
+## 2026-10-10 — State the trade-offs of an owner's mechanism before building it
+
+The owner decided "maintainer content only in local dev, not deployed". I built it the same
+hour (ADR-0166) and rolled it across eleven pages. Only when the owner asked "was that a
+mistake?" did I lay out the costs: the build-testing gates (axe, layout) stop seeing the
+content, links into hidden sections break silently (four found by hand that day), and public
+readers lose the evidence. A collapsed `<details>` met the owner's actual goal (participants
+pass over maintainer material) without those costs, and it replaced the mechanism the same
+day. Rule: when the owner names a mechanism rather than a goal, restate the goal, list the
+mechanism's costs and one cheaper alternative in two or three lines, then build what they
+pick. That check costs a minute; the rework cost a second pass over eleven pages.

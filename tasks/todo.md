@@ -75,7 +75,7 @@ Follow-ups found while fixing — done 2026-10-10 except the AtlProgress debt:
 - [x] S7 done 2026-10-10 (ADR-0167): scaffold ships `uianatomy-mcp` + `figma-workspace-architect` (with `--figma`), sync-gated; `agent-skills#your-skills` says what ships and how to retry the Storybook skills.
 - [x] S8 done 2026-10-10: `/readiness` (11 master checks with Figma fix steps, 5 system groups, concepts); old anchors stubbed.
 - [x] S9 done 2026-10-10: `a11y-workflow#a11y-in-the-loop`; maintainer history under its own heading.
-- [x] S10 done 2026-10-10 (ADR-0166): maintainer content renders only in local dev — `/runbook` whole page; sections on mcp, a11y-workflow, figma, tokens, claude-design, design-principles, design-to-code, storybook, agent-skills, skills/*. Participant entries moved to troubleshooting (`#plugin-update`, `#stale-instances`).
+- [x] S10 done 2026-10-10 (ADR-0168, superseding 0166): maintainer content ships as collapsed `<details>` — `/runbook` whole page; sections on mcp, a11y-workflow, figma, tokens, claude-design, design-principles, design-to-code, storybook, agent-skills, skills/*. Participant entries moved to troubleshooting (`#plugin-update`, `#stale-instances`).
 - [x] S11 done 2026-10-10: `tokens#naming`, `/readiness` (scopes, modes, properties, fixing a
       failing master), `claude-design#artboard-to-master`, `design-principles#check-your-own`.
 - [ ] Gaps the new agenda links around (§3): a glossary (B12), a guardrail demo with and

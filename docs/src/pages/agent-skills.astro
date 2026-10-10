@@ -5,7 +5,7 @@ import Jargon from '../components/Jargon.astro';
 import PageHero from '../components/PageHero.astro';
 import BottomNav from '../components/BottomNav.astro';
 import Callout from '../components/Callout.astro';
-import MaintainerOnly from '../components/MaintainerOnly.astro';
+import MaintainerNotes from '../components/MaintainerNotes.astro';
 import { referenceCount } from '../lib/skill-meta';
 import { designTokenCount, designTypefaces } from '../lib/atelier-design-meta';
 
@@ -228,9 +228,7 @@ const skills = [
       </ul>
     </div>
 
-    <MaintainerOnly
-      label="For maintainers · discovery infrastructure and repo skills · local only"
-    >
+    <MaintainerNotes topic="discovery infrastructure and repo skills">
       <Callout tone="tip" title="Good to know.">
         None of this is needed in the workshop. This part documents the
         infrastructure (well-known files, RFC 9727, Link headers) so AI
@@ -652,7 +650,7 @@ const skills = [
           </div>)}
         </div>
       </div>
-    </MaintainerOnly>
+    </MaintainerNotes>
 
     <!-- Bottom nav -->
     <BottomNav

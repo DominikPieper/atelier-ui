@@ -3,7 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import McpExplorer from '../components/McpExplorer';
 import DiagramFigure from '../components/DiagramFigure.astro';
 import PageHero from '../components/PageHero.astro';
-import MaintainerOnly from '../components/MaintainerOnly.astro';
+import MaintainerNotes from '../components/MaintainerNotes.astro';
 ---
 
 <BaseLayout
@@ -212,10 +212,10 @@ import MaintainerOnly from '../components/MaintainerOnly.astro';
       </p>
     </section>
 
-    <MaintainerOnly>
-      <h2 id="for-maintainers" class="docs-h3" style="margin: 2.5rem 0 0.5rem">
-        For maintainers
-      </h2>
+    <MaintainerNotes
+      id="for-maintainers"
+      topic="Worker deployments and tool gating"
+    >
       <p
         style="
           margin: 0 0 1.25rem;
@@ -778,7 +778,7 @@ import MaintainerOnly from '../components/MaintainerOnly.astro';
           accessibility scan and multi-mode variables.
         </p>
       </section>
-    </MaintainerOnly>
+    </MaintainerNotes>
 
     <section
       aria-labelledby="own-mcp"

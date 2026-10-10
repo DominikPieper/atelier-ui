@@ -5,7 +5,7 @@ import DiagramFigure from '../components/DiagramFigure.astro';
 import HelpFooter from '../components/HelpFooter.astro';
 import PageHero from '../components/PageHero.astro';
 import BottomNav from '../components/BottomNav.astro';
-import MaintainerOnly from '../components/MaintainerOnly.astro';
+import MaintainerNotes from '../components/MaintainerNotes.astro';
 
 const AXE_INJECT = `// Inject axe-core into the Storybook story iframe and run it,
 // scoped to the story root so the Storybook chrome doesn't pollute results.
@@ -664,10 +664,9 @@ export type AtlButtonProps =
       </table>
     </div>
 
-    <MaintainerOnly>
+    <MaintainerNotes id="for-maintainers" topic="audit history and gates">
       <!-- ── For maintainers ─────────────────────────────────────────────── -->
       <div class="docs-section">
-        <h2 id="for-maintainers" class="docs-section-title">For maintainers</h2>
         <p
           style="
             color: var(--ui-color-text-muted);
@@ -759,7 +758,7 @@ export type AtlButtonProps =
                 style="fill: var(--ui-color-primary)"
                 >axe-core</text
               >
-              <text x="210" y="604" font-size="15.3" class="diagram-muted"
+              <text x="210" y="604" font-size="16.2" class="diagram-muted"
                 >DOM · runtime</text
               >
 
@@ -770,7 +769,7 @@ export type AtlButtonProps =
                 style="fill: var(--docs-secondary, #89ceff)"
                 >Figma a11y audit</text
               >
-              <text x="670" y="604" font-size="15.3" class="diagram-muted"
+              <text x="670" y="604" font-size="16.2" class="diagram-muted"
                 >design · pre-handoff</text
               >
 
@@ -781,7 +780,7 @@ export type AtlButtonProps =
                 style="fill: var(--docs-tertiary, #a6d644)"
                 >Spec audit</text
               >
-              <text x="440" y="96" font-size="15.3" class="diagram-muted"
+              <text x="440" y="96" font-size="16.2" class="diagram-muted"
                 >API · code-review</text
               >
             </g>
@@ -789,7 +788,7 @@ export type AtlButtonProps =
             <!-- What each catches uniquely -->
             <g
               font-family="system-ui"
-              font-size="15.3"
+              font-size="16.2"
               fill="var(--ui-color-text)"
             >
               <!-- axe-only (left bottom) -->
@@ -893,7 +892,7 @@ export type AtlButtonProps =
               x="440"
               y="764"
               text-anchor="middle"
-              font-size="15.3"
+              font-size="16.2"
               font-style="italic"
               class="diagram-muted"
             >
@@ -1066,7 +1065,7 @@ export type AtlButtonProps =
               <text
                 x="40"
                 y="48"
-                font-size="15.3"
+                font-size="16.2"
                 font-weight="800"
                 letter-spacing="0.06em"
                 style="fill: var(--docs-secondary, #89ceff)"
@@ -1080,22 +1079,22 @@ export type AtlButtonProps =
                 style="fill: var(--ui-color-success, #34d399)"
                 >100</text
               >
-              <text x="40" y="114" font-size="15.3" class="diagram-muted"
+              <text x="40" y="114" font-size="16.2" class="diagram-muted"
                 >overall score</text
               >
-              <text x="40" y="144" font-size="15.3" class="diagram-muted"
+              <text x="40" y="144" font-size="16.2" class="diagram-muted"
                 >✓ variant coverage</text
               >
-              <text x="40" y="164" font-size="15.3" class="diagram-muted"
+              <text x="40" y="164" font-size="16.2" class="diagram-muted"
                 >✓ color blind</text
               >
-              <text x="40" y="184" font-size="15.3" class="diagram-muted"
+              <text x="40" y="184" font-size="16.2" class="diagram-muted"
                 >✓ annotations</text
               >
               <text
                 x="40"
                 y="212"
-                font-size="15.3"
+                font-size="16.2"
                 font-style="italic"
                 class="diagram-muted"
                 >"perfect"</text
@@ -1113,7 +1112,7 @@ export type AtlButtonProps =
               <text
                 x="470"
                 y="48"
-                font-size="15.3"
+                font-size="16.2"
                 font-weight="800"
                 letter-spacing="0.06em"
                 style="fill: var(--ui-color-primary)"
@@ -1127,26 +1126,26 @@ export type AtlButtonProps =
                 style="fill: var(--ui-color-danger, #ef4444)"
                 >3</text
               >
-              <text x="470" y="114" font-size="15.3" class="diagram-muted"
+              <text x="470" y="114" font-size="16.2" class="diagram-muted"
                 >violations · serious</text
               >
               <text
                 x="470"
                 y="144"
-                font-size="15.3"
+                font-size="16.2"
                 class="diagram-mono diagram-muted"
                 >aria-progressbar-name</text
               >
-              <text x="470" y="164" font-size="15.3" class="diagram-muted"
+              <text x="470" y="164" font-size="16.2" class="diagram-muted"
                 >3 progress bars on</text
               >
-              <text x="470" y="184" font-size="15.3" class="diagram-muted"
+              <text x="470" y="184" font-size="16.2" class="diagram-muted"
                 >/patterns dashboard</text
               >
               <text
                 x="470"
                 y="212"
-                font-size="15.3"
+                font-size="16.2"
                 font-style="italic"
                 class="diagram-muted"
                 >"missing label"</text
@@ -1164,7 +1163,7 @@ export type AtlButtonProps =
               <text
                 x="40"
                 y="276"
-                font-size="15.3"
+                font-size="16.2"
                 font-weight="800"
                 letter-spacing="0.06em"
                 style="fill: var(--docs-tertiary, #a6d644)"
@@ -1178,26 +1177,26 @@ export type AtlButtonProps =
                 style="fill: var(--ui-color-warning, #f59e0b)"
                 >!</text
               >
-              <text x="40" y="342" font-size="15.3" class="diagram-muted"
+              <text x="40" y="342" font-size="16.2" class="diagram-muted"
                 >API gap</text
               >
               <text
                 x="40"
                 y="372"
-                font-size="15.3"
+                font-size="16.2"
                 class="diagram-mono diagram-muted"
                 >AtlProgressSpec</text
               >
-              <text x="40" y="392" font-size="15.3" class="diagram-muted"
+              <text x="40" y="392" font-size="16.2" class="diagram-muted"
                 >has no label prop</text
               >
-              <text x="40" y="412" font-size="15.3" class="diagram-muted"
+              <text x="40" y="412" font-size="16.2" class="diagram-muted"
                 >consumers can't pass</text
               >
               <text
                 x="40"
                 y="440"
-                font-size="15.3"
+                font-size="16.2"
                 font-style="italic"
                 class="diagram-muted"
                 >"the why"</text
@@ -1215,7 +1214,7 @@ export type AtlButtonProps =
               <text
                 x="470"
                 y="276"
-                font-size="15.3"
+                font-size="16.2"
                 font-weight="800"
                 letter-spacing="0.06em"
                 style="fill: var(--ui-color-primary)"
@@ -1229,26 +1228,26 @@ export type AtlButtonProps =
                 style="fill: var(--ui-color-success, #34d399)"
                 >✓</text
               >
-              <text x="470" y="342" font-size="15.3" class="diagram-muted"
+              <text x="470" y="342" font-size="16.2" class="diagram-muted"
                 >all green</text
               >
               <text
                 x="470"
                 y="372"
-                font-size="15.3"
+                font-size="16.2"
                 class="diagram-mono diagram-muted"
                 >label?: string</text
               >
-              <text x="470" y="392" font-size="15.3" class="diagram-muted"
+              <text x="470" y="392" font-size="16.2" class="diagram-muted"
                 >component + index.ts</text
               >
-              <text x="470" y="412" font-size="15.3" class="diagram-muted"
+              <text x="470" y="412" font-size="16.2" class="diagram-muted"
                 >36 tests pass</text
               >
               <text
                 x="470"
                 y="440"
-                font-size="15.3"
+                font-size="16.2"
                 font-style="italic"
                 style="fill: var(--ui-color-primary)"
                 >1 prop, 1 day</text
@@ -1274,7 +1273,7 @@ export type AtlButtonProps =
                 x="440"
                 y="486"
                 text-anchor="middle"
-                font-size="15.3"
+                font-size="16.2"
                 font-style="italic"
                 class="diagram-muted"
                 ><tspan x="440"
@@ -1414,7 +1413,7 @@ export type AtlButtonProps =
                 x="440"
                 y="200"
                 text-anchor="middle"
-                font-size="15.3"
+                font-size="16.2"
                 class="diagram-muted"
                 >orchestrates the loop</text
               >
@@ -1422,7 +1421,7 @@ export type AtlButtonProps =
                 x="440"
                 y="220"
                 text-anchor="middle"
-                font-size="15.3"
+                font-size="16.2"
                 class="diagram-muted"
                 >parses, prioritizes, fixes</text
               >
@@ -1448,7 +1447,7 @@ export type AtlButtonProps =
                 x="166"
                 y="90"
                 text-anchor="middle"
-                font-size="15.3"
+                font-size="16.2"
                 class="diagram-mono diagram-muted"
                 >javascript_tool · navigate</text
               >
@@ -1456,7 +1455,7 @@ export type AtlButtonProps =
                 x="166"
                 y="110"
                 text-anchor="middle"
-                font-size="15.3"
+                font-size="16.2"
                 class="diagram-muted"
                 >injects axe-core, runs in-page</text
               >
@@ -1482,7 +1481,7 @@ export type AtlButtonProps =
                 x="714"
                 y="90"
                 text-anchor="middle"
-                font-size="15.3"
+                font-size="16.2"
                 class="diagram-mono diagram-muted"
                 >audit_component_accessibility</text
               >
@@ -1490,7 +1489,7 @@ export type AtlButtonProps =
                 x="714"
                 y="110"
                 text-anchor="middle"
-                font-size="15.3"
+                font-size="16.2"
                 class="diagram-muted"
                 >scorecard per component-set</text
               >
@@ -1516,7 +1515,7 @@ export type AtlButtonProps =
                 x="440"
                 y="330"
                 text-anchor="middle"
-                font-size="15.3"
+                font-size="16.2"
                 class="diagram-muted"
                 >libs/spec/ · libs/&lt;fw&gt;/lib/&lt;component&gt;/</text
               >
@@ -1550,7 +1549,7 @@ export type AtlButtonProps =
                 x="166"
                 y="22"
                 text-anchor="middle"
-                font-size="15.3"
+                font-size="16.2"
                 font-weight="800"
                 letter-spacing="0.06em"
                 style="fill: var(--ui-color-primary)"
@@ -1560,7 +1559,7 @@ export type AtlButtonProps =
                 x="714"
                 y="22"
                 text-anchor="middle"
-                font-size="15.3"
+                font-size="16.2"
                 font-weight="800"
                 letter-spacing="0.06em"
                 style="fill: var(--docs-secondary, #89ceff)"
@@ -1570,7 +1569,7 @@ export type AtlButtonProps =
                 x="440"
                 y="376"
                 text-anchor="middle"
-                font-size="15.3"
+                font-size="16.2"
                 font-weight="800"
                 letter-spacing="0.06em"
                 style="fill: var(--docs-tertiary, #a6d644)"
@@ -1655,7 +1654,7 @@ export type AtlButtonProps =
           <code>AtlTabGroup</code> focus reading) — none block release.
         </p>
       </div>
-    </MaintainerOnly>
+    </MaintainerNotes>
 
     <HelpFooter page="a11y-workflow" />
 

@@ -7,7 +7,6 @@ import pagefind from 'astro-pagefind';
 import llms from 'astro-llms-md';
 import icon from 'astro-icon';
 import astroBrokenLinksChecker from 'astro-broken-links-checker';
-import maintainerPages from './integrations/maintainer-pages.mjs';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 
 export default defineConfig({
@@ -52,7 +51,6 @@ export default defineConfig({
     mdx(),
     react(),
     icon(),
-    maintainerPages(),
     pagefind(),
     llms({
       generateIndividualMd: true,
