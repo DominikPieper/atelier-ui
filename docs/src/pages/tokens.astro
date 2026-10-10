@@ -485,6 +485,367 @@ const motion = [
       </Callout>
     </div>
 
+    <!-- Transferable: naming rules -->
+    <div class="docs-section">
+      <h2 id="naming" class="docs-section-title">
+        Naming tokens for your own system
+      </h2>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 1rem;
+          max-width: 60ch;
+        "
+      >
+        The value catalogue below is Atelier's. What carries over to your system
+        is the rules behind the names, because an agent picks a token by reading
+        its name. A name that states a <em>role</em> lets it choose correctly; a
+        name that states a <em>value</em> forces it to guess.
+      </p>
+
+      <h3 class="docs-h3">Name the role, not the value</h3>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 1rem;
+          max-width: 60ch;
+        "
+      >
+        Atelier keeps both kinds, in different tiers. The primitive ramp is
+        named for the value (<code>--ui-color-teal-700</code>). The tokens a
+        component reads are named for the job: <code>--ui-color-primary</code>
+        aliases <code>teal-700</code> in light mode and <code>teal-300</code> in
+        dark mode. Asked for "the muted text colour", an agent finds
+        <code>--ui-color-text-muted</code> by name and gets the right result in
+        both modes. Asked the same with only <code>--ui-gray-500</code>
+        available, it has to guess which grey is the secondary text, and the
+        grey that works on a white page fails on a dark one.
+      </p>
+      <table class="docs-props-table">
+        <thead>
+          <tr>
+            <th>Value name (avoid in components)</th>
+            <th>Role name (what components read)</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><code>--ui-color-teal-700</code></td>
+            <td><code>--ui-color-primary</code></td>
+          </tr>
+          <tr>
+            <td><code>--ui-color-red-800</code></td>
+            <td><code>--ui-color-danger-text</code></td>
+          </tr>
+          <tr>
+            <td><code>--ui-color-red-100</code></td>
+            <td><code>--ui-color-danger-bg</code></td>
+          </tr>
+          <tr>
+            <td><code>#475569</code></td>
+            <td><code>--ui-color-text-muted</code></td>
+          </tr>
+        </tbody>
+      </table>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin: 1rem 0;
+          max-width: 60ch;
+        "
+      >
+        Pattern:
+        <code>--ui-color-&lt;role&gt;[-&lt;part&gt;][-&lt;state&gt;]</code>, for
+        example <code>text-on-primary</code> (the text that sits on the primary
+        fill) or <code>input-border-invalid</code>. Keep the ramp for the one
+        place that must say "this exact teal".
+      </p>
+
+      <h3 class="docs-h3 docs-h3--spaced">State suffixes</h3>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 1rem;
+          max-width: 60ch;
+        "
+      >
+        A state is a suffix on the role it modifies, never a new colour name.
+        These are the suffixes <code>tokens.css</code> uses today:
+      </p>
+      <table class="docs-props-table">
+        <thead>
+          <tr>
+            <th>State</th>
+            <th>Real tokens</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>hover</td>
+            <td>
+              <code>--ui-color-primary-hover</code>,
+              <code>--ui-color-danger-hover</code>,
+              <code>--ui-color-border-hover</code>,
+              <code>--ui-color-input-border-hover</code>
+            </td>
+          </tr>
+          <tr>
+            <td>active (pressed)</td>
+            <td>
+              <code>--ui-color-primary-active</code>,
+              <code>--ui-color-danger-active</code>
+            </td>
+          </tr>
+          <tr>
+            <td>focus</td>
+            <td>
+              <code>--ui-color-input-bg-focus</code>,
+              <code>--ui-color-input-border-focus</code>, and the ring itself,
+              <code>--ui-focus-ring</code>
+            </td>
+          </tr>
+          <tr>
+            <td>invalid</td>
+            <td>
+              <code>--ui-color-input-border-invalid</code>,
+              <code>--ui-focus-ring-danger</code>
+            </td>
+          </tr>
+          <tr>
+            <td>disabled</td>
+            <td>
+              <code>--ui-color-disabled-bg</code>,
+              <code>--ui-color-disabled-text</code>,
+              <code>--ui-color-disabled-border</code>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin: 1rem 0;
+          max-width: 60ch;
+        "
+      >
+        Check your own system for the gap this table makes visible: a state a
+        component needs but no token names. That is how the knockout example
+        below started.
+      </p>
+
+      <h3 class="docs-h3 docs-h3--spaced">Light and dark mapping</h3>
+      <ul
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.7;
+          margin: 0 0 1rem;
+          padding-left: 1.25rem;
+          max-width: 60ch;
+        "
+      >
+        <li>
+          <strong style="color: var(--ui-color-text)"
+            >Same names in both modes.</strong
+          >
+          Only the values differ. Atelier declares light values on
+          <code>:root</code> and overrides the same names under
+          <code>@media (prefers-color-scheme: dark)</code> and
+          <code>[data-theme="dark"]</code>; no component branches on the mode.
+        </li>
+        <li>
+          <strong style="color: var(--ui-color-text)"
+            >Map by role, not by flipping the ramp.</strong
+          >
+          Primary is <code>teal-700</code> in light and <code>teal-300</code> in
+          dark, and its hover moves the other way round (<code>teal-800</code>
+          in light, <code>teal-200</code> in dark), because hover on a dark
+          surface gets lighter, not darker.
+        </li>
+        <li>
+          <strong style="color: var(--ui-color-text)"
+            >Check every pair that is read together, in both modes.</strong
+          >
+          A token never has a contrast ratio on its own; a text token on a
+          background token does. List the pairs (body text on each surface, a
+          label on its fill, status text on its tinted background) and measure
+          each one in light and dark.
+        </li>
+      </ul>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 1rem;
+          max-width: 60ch;
+        "
+      >
+        Atelier does that with <code>npm run check:contrast</code>
+        (<code>node tools/scripts/wcag-contrast.mjs --check</code>). The script
+        reads <code>libs/styles/src/tokens.css</code>, resolves
+        <code>var()</code> aliases inside each mode, and measures a hand-written
+        list of <code>[foreground, background, role, note]</code> pairs in
+        light, dark, and both <code>data-theme</code> variants. Role is
+        <code>normal</code> (4.5:1), <code>large</code> or <code>ui</code>
+        (3:1), or <code>decorative</code> (reported, not failed). A pair that
+        names a token the source does not define is a gate failure, not a
+        skipped row.
+      </p>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 1rem;
+          max-width: 60ch;
+        "
+      >
+        In your own repo you do not need Atelier's tooling for this. The script
+        has no dependencies: copy it, point the token-file path at your CSS, and
+        replace the pair list with yours. If your tokens live in Figma or a JSON
+        file instead, the same idea holds: one list of pairs, a ratio per mode,
+        a non-zero exit when one fails.
+      </p>
+
+      <h3 class="docs-h3 docs-h3--spaced">Worked example: a knockout state</h3>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 1rem;
+          max-width: 60ch;
+        "
+      >
+        An alert needs an inverted (knockout) variant: a saturated fill with
+        light text, for error, warning, success and info. The component already
+        has a fill token for each status, but a label placed on the fill had no
+        token to read.
+      </p>
+      <ol
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.7;
+          margin: 0 0 1rem;
+          padding-left: 1.25rem;
+          max-width: 60ch;
+        "
+      >
+        <li>
+          <strong style="color: var(--ui-color-text)"
+            >Find the gap by name.</strong
+          >
+          The role list has <code>danger-bg</code> and <code>danger-text</code>
+          for the tinted style, but nothing for text or border on a solid fill.
+          The only way to render the knockout variant is a raw value, and that
+          is exactly what the agent will write.
+        </li>
+        <li>
+          <strong style="color: var(--ui-color-text)"
+            >Add the tokens in the UI tier, by role.</strong
+          >
+          Following the pattern above, one content and one border token per
+          status, named for the role they play on a knockout fill (the course
+          session called them <em>error knockout</em>, <em>warning knockout</em
+          >, <em>success knockout</em> and <em>info knockout</em>). They alias
+          lighter ramp steps so they sit on the dark fill.
+        </li>
+        <li>
+          <strong style="color: var(--ui-color-text)"
+            >Keep border and content distinct.</strong
+          >
+          Border gets a darker step than content, so the edge does not merge
+          with the label.
+        </li>
+        <li>
+          <strong style="color: var(--ui-color-text)"
+            >Define both modes.</strong
+          >
+          Write the dark values in the same commit; a token with only a light
+          value is a bug that shows up at night.
+        </li>
+        <li>
+          <strong style="color: var(--ui-color-text)"
+            >Add the pairs, then measure.</strong
+          >
+          Add each content token on its fill to the contrast list as a
+          <code>normal</code> pair, and the border on its fill as a
+          <code>ui</code> pair. Run the check; adjust the ramp step until every
+          pair passes in both modes.
+        </li>
+        <li>
+          <strong style="color: var(--ui-color-text)"
+            >Only then touch the component.</strong
+          >
+          The component binds the new tokens. The order is the lesson: token
+          first, component second, so nothing in the component ever needs a raw
+          value.
+        </li>
+      </ol>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 1rem;
+          max-width: 60ch;
+        "
+      >
+        Atelier's own <code>tokens.css</code> does not ship these knockout
+        tokens; the example is taken from the course session described under
+        "The token pipeline in practice" below, and the token names above are
+        the pattern to follow, not names to look up here.
+      </p>
+
+      <h3 class="docs-h3 docs-h3--spaced">
+        Exercise: audit three tokens of your own
+      </h3>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 1rem;
+          max-width: 60ch;
+        "
+      >
+        Pick three tokens from your own system that components actually use, one
+        colour, one spacing or radius, one that has a hover or disabled state.
+        For each, answer:
+      </p>
+      <ol
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.7;
+          margin: 0 0 1rem;
+          padding-left: 1.25rem;
+          max-width: 60ch;
+        "
+      >
+        <li>
+          Does the name say what the token is <em>for</em>, or what it looks
+          like?
+        </li>
+        <li>
+          If it has states, are they suffixes on the role (<code>-hover</code>,
+          <code>-disabled</code>), or separate invented names?
+        </li>
+        <li>
+          Does it have a value in every mode, and is each pair it is read in
+          measured in each mode?
+        </li>
+        <li>
+          Could an agent that has only the token list, not your Figma file, pick
+          it correctly for a new component?
+        </li>
+      </ol>
+      <div class="docs-rule">
+        <span class="docs-rule-label">Result</span>
+        Rename the tokens that fail question 1 or 4 first. A wrong name costs
+        every component the agent builds afterwards.
+      </div>
+    </div>
+
     <!-- Colors -->
     <div class="docs-section">
       <h2 id="colors" class="docs-section-title">Colors</h2>

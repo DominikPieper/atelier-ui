@@ -1381,6 +1381,106 @@ const LIMITS: Limit[] = [
       </p>
     </section>
 
+    <!-- 5b — Artboard to bound master -->
+    <section class="docs-section">
+      <h2 id="artboard-to-master" class="docs-section-title">
+        From artboard to bound master
+      </h2>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.65;
+          margin: 0 0 1rem;
+        "
+      >
+        An artboard, from Claude Design or anywhere else, is a picture of
+        intent. The agent works from a Figma master. Before you hand one over,
+        build the master and go through this list. It is the designer's half of
+        the checks on <a href="/figma" class="docs-link-primary">/figma</a>; the
+        full readiness list is on
+        <a href="/readiness" class="docs-link-primary">/readiness</a>.
+      </p>
+      <ol
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.75;
+          padding-left: 1.25rem;
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+          margin: 0;
+        "
+      >
+        <li>
+          <strong style="color: var(--ui-color-text)"
+            >Rebuild it as a component set; do not import the frame.</strong
+          >
+          An imported artboard arrives as frames, not as a
+          <code>COMPONENT_SET</code> with variant axes and bound variables. The
+          artboard informs the build; it never becomes the master.
+        </li>
+        <li>
+          <strong style="color: var(--ui-color-text)"
+            >Bind every fill, stroke, padding, gap and corner radius to a
+            variable.</strong
+          >
+          No raw hex, no raw px. Raw values are what degrade generation.
+        </li>
+        <li>
+          <strong style="color: var(--ui-color-text)"
+            >Use scoped variables with a recoverable code name.</strong
+          >
+          Not <code>ALL_SCOPES</code>, and <code>codeSyntax.WEB</code> set, so
+          the agent can get from a variable to its CSS name.
+        </li>
+        <li>
+          <strong style="color: var(--ui-color-text)"
+            >Express states and options as variant properties.</strong
+          >
+          One property per axis (size, tone, state, boolean flags), with values
+          the code can use as prop values. Keep the layer names the same across
+          variants.
+        </li>
+        <li>
+          <strong style="color: var(--ui-color-text)">Name layers.</strong> No
+          <code>Frame 12</code> or <code>Group</code> inside the component.
+        </li>
+        <li>
+          <strong style="color: var(--ui-color-text)"
+            >Write the description.</strong
+          >
+          What it is, when to use it, variants mapped to code props, an
+          accessibility note. The agent reads it back through
+          <code>figma_get_component_for_development</code>.
+        </li>
+        <li>
+          <strong style="color: var(--ui-color-text)"
+            >Put the master on the Components page.</strong
+          >
+          That page is the source of truth; note the node id, because the
+          contract refers to it.
+        </li>
+        <li>
+          <strong style="color: var(--ui-color-text)"
+            >Record what you chose on purpose.</strong
+          >
+          Anything the artboard shows that the master does not, or the reverse,
+          goes in the handoff note, so the agent does not treat it as a defect.
+        </li>
+      </ol>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.65;
+          margin: 1rem 0 0;
+        "
+      >
+        Nothing in this repo can open an artboard file that lives outside it, so
+        steps 2 and 3 on the artboard itself stay a review habit. They are
+        checked on the master, once it exists.
+      </p>
+    </section>
+
     <!-- 6 — Limits -->
     <section class="docs-section">
       <h2 id="limits" class="docs-section-title">The limits</h2>

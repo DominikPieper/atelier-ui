@@ -518,15 +518,11 @@ import PageHero from '../components/PageHero.astro';
         "
       >
         <strong>The pattern.</strong> The course demo renames
-        <code>inverted</code> to <code>knockout</code> (components sitting on a
-        dark background). The old prop stays, flagged as deprecated, and a
-        removal date is recorded: three months in the demo. The new prop is
-        introduced right next to it, and the code applies the new behaviour if
-        either flag is set, so nothing breaks downstream. The editor draws a
-        strikethrough through the deprecated prop, which is the signal for
-        maintainers and consumers. The presenter's rule of thumb: the more
-        consequential and breaking the change, the longer the window (transcript
-        209).
+        <code>inverted</code> to <code>knockout</code>, keeping the old prop as
+        a deprecated alias with a recorded removal date (see
+        <a href="/tokens#naming" class="docs-link-primary">Tokens, naming</a>).
+        The more consequential and breaking the change, the longer the window
+        (transcript 209).
       </p>
       <div class="docs-code-block">
         <div class="docs-code-block-header">
