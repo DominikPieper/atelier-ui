@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
 import BottomNav from '../components/BottomNav.astro';
 import Callout from '../components/Callout.astro';
+import MaintainerOnly from '../components/MaintainerOnly.astro';
 
 const colorGroups = [
   {
@@ -1353,122 +1354,125 @@ const motion = [
         token first, and the component follows.
       </p>
 
-      <h3 class="docs-h3 docs-h3--spaced">How Atelier does it: code first</h3>
-      <p
-        style="
-          color: var(--ui-color-text-muted);
-          line-height: 1.6;
-          margin-bottom: 1rem;
-          max-width: 60ch;
-        "
-      >
-        Atelier authors tokens by hand in one CSS file and projects them
-        outward. Nothing in the repo pulls a Figma edit back into code. The
-        scripts and their headers say so, and ADR-0030 records the reason: the
-        repo's gates already treat code as canonical and project outward, so
-        tokens follow the same direction, and a hand-edited Figma collection is
-        drift by definition.
-      </p>
-      <table class="docs-props-table">
-        <thead>
-          <tr>
-            <th>Step</th>
-            <th>Command</th>
-            <th>What it does</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>Author</td>
-            <td><code>libs/styles/src/tokens.css</code></td>
-            <td>
-              The one hand-edited file. Light values, dark values and the
-              <code>--ui-*</code> names live here.
-            </td>
-          </tr>
-          <tr>
-            <td>Copy to code</td>
-            <td><code>npm run sync:tokens</code></td>
-            <td>
-              Copies it byte-for-byte into each framework library, the
-              create-workspace preset and the design skill's sheet.
-              <code>npm run check:tokens</code> fails on drift.
-            </td>
-          </tr>
-          <tr>
-            <td>Push to Figma</td>
-            <td><code>npm run figma:sync-tokens</code></td>
-            <td>
-              <code>gen-figma-library-tokens.mjs</code> parses the CSS into
-              variable definitions (<code>--ui-color-text</code> becomes
-              <code>color/text</code>, rem becomes px, <code>var()</code>
-              becomes an alias). <code>figma-sync-library-tokens.mjs</code>
-              upserts them into the <code>Library Tokens</code> collection
-              through figma-console-mcp's <code>figma_execute</code>. It reports
-              variables that exist only in Figma but does not delete them.
-            </td>
-          </tr>
-          <tr>
-            <td>Record</td>
-            <td><code>npm run figma:snapshot</code></td>
-            <td>
-              Refreshes the committed Figma snapshot the offline gates read. The
-              sync script prints this as the next step, followed by
-              <code>npm run check:figma</code>.
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <p
-        style="
-          color: var(--ui-color-text-muted);
-          line-height: 1.6;
-          margin: 1rem 0;
-          max-width: 60ch;
-        "
-      >
-        Two things are deliberately left out of the Figma projection: shadows,
-        easings, durations, letter-spacing, z-index and the composite focus ring
-        are not simple variables, so the generator skips them. And the push
-        needs Figma Desktop with the file open and the figma-console Desktop
-        Bridge plugin running, so it is run by hand and is not part of
-        <code>check:all</code>.
-      </p>
+      <MaintainerOnly label="Maintainer · how the Atelier token pipeline runs">
+        <h3 class="docs-h3 docs-h3--spaced">How Atelier does it: code first</h3>
+        <p
+          style="
+            color: var(--ui-color-text-muted);
+            line-height: 1.6;
+            margin-bottom: 1rem;
+            max-width: 60ch;
+          "
+        >
+          Atelier authors tokens by hand in one CSS file and projects them
+          outward. Nothing in the repo pulls a Figma edit back into code. The
+          scripts and their headers say so, and ADR-0030 records the reason: the
+          repo's gates already treat code as canonical and project outward, so
+          tokens follow the same direction, and a hand-edited Figma collection
+          is drift by definition.
+        </p>
+        <table class="docs-props-table">
+          <thead>
+            <tr>
+              <th>Step</th>
+              <th>Command</th>
+              <th>What it does</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>Author</td>
+              <td><code>libs/styles/src/tokens.css</code></td>
+              <td>
+                The one hand-edited file. Light values, dark values and the
+                <code>--ui-*</code> names live here.
+              </td>
+            </tr>
+            <tr>
+              <td>Copy to code</td>
+              <td><code>npm run sync:tokens</code></td>
+              <td>
+                Copies it byte-for-byte into each framework library, the
+                create-workspace preset and the design skill's sheet.
+                <code>npm run check:tokens</code> fails on drift.
+              </td>
+            </tr>
+            <tr>
+              <td>Push to Figma</td>
+              <td><code>npm run figma:sync-tokens</code></td>
+              <td>
+                <code>gen-figma-library-tokens.mjs</code> parses the CSS into
+                variable definitions (<code>--ui-color-text</code> becomes
+                <code>color/text</code>, rem becomes px, <code>var()</code>
+                becomes an alias). <code>figma-sync-library-tokens.mjs</code>
+                upserts them into the <code>Library Tokens</code> collection
+                through figma-console-mcp's <code>figma_execute</code>. It
+                reports variables that exist only in Figma but does not delete
+                them.
+              </td>
+            </tr>
+            <tr>
+              <td>Record</td>
+              <td><code>npm run figma:snapshot</code></td>
+              <td>
+                Refreshes the committed Figma snapshot the offline gates read.
+                The sync script prints this as the next step, followed by
+                <code>npm run check:figma</code>.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p
+          style="
+            color: var(--ui-color-text-muted);
+            line-height: 1.6;
+            margin: 1rem 0;
+            max-width: 60ch;
+          "
+        >
+          Two things are deliberately left out of the Figma projection: shadows,
+          easings, durations, letter-spacing, z-index and the composite focus
+          ring are not simple variables, so the generator skips them. And the
+          push needs Figma Desktop with the file open and the figma-console
+          Desktop Bridge plugin running, so it is run by hand and is not part of
+          <code>check:all</code>.
+        </p>
 
-      <h3 class="docs-h3 docs-h3--spaced">The gates behind it</h3>
-      <table class="docs-props-table">
-        <thead>
-          <tr>
-            <th>Gate</th>
-            <th>What it keeps honest</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><code>npm run check:tokens</code></td>
-            <td>Every copy of <code>tokens.css</code> equals the source.</td>
-          </tr>
-          <tr>
-            <td><code>npm run check:figma-token-names</code></td>
-            <td>
-              Every <code>color/*</code>, <code>spacing/*</code> and
-              <code>radius/*</code> variable in the Figma snapshot maps back to
-              a declared <code>--ui-*</code> token. It checks names, not values,
-              and only in that direction, because code tokens legitimately exist
-              before Figma catches up.
-            </td>
-          </tr>
-          <tr>
-            <td><code>npm run check:token-annotations</code></td>
-            <td>
-              Every declared token has an entry in
-              <code>libs/spec/src/tokens.manifest.ts</code> with an intent and
-              constraints, the agent-readable layer that says what a token is
-              for, not just its value.
-            </td>
-          </tr>
-        </tbody>
-      </table>
+        <h3 class="docs-h3 docs-h3--spaced">The gates behind it</h3>
+        <table class="docs-props-table">
+          <thead>
+            <tr>
+              <th>Gate</th>
+              <th>What it keeps honest</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>npm run check:tokens</code></td>
+              <td>Every copy of <code>tokens.css</code> equals the source.</td>
+            </tr>
+            <tr>
+              <td><code>npm run check:figma-token-names</code></td>
+              <td>
+                Every <code>color/*</code>, <code>spacing/*</code> and
+                <code>radius/*</code> variable in the Figma snapshot maps back
+                to a declared <code>--ui-*</code> token. It checks names, not
+                values, and only in that direction, because code tokens
+                legitimately exist before Figma catches up.
+              </td>
+            </tr>
+            <tr>
+              <td><code>npm run check:token-annotations</code></td>
+              <td>
+                Every declared token has an entry in
+                <code>libs/spec/src/tokens.manifest.ts</code> with an intent and
+                constraints, the agent-readable layer that says what a token is
+                for, not just its value.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </MaintainerOnly>
 
       <h3 class="docs-h3 docs-h3--spaced">Which approach fits your system</h3>
       <p
@@ -1609,39 +1613,45 @@ const motion = [
         tokens at all, so use the console snippet for the pink test.
       </Callout>
 
-      <h3 class="docs-h3 docs-h3--spaced">The gates that catch it for you</h3>
-      <table class="docs-props-table">
-        <thead>
-          <tr>
-            <th>Pink test finding</th>
-            <th>Automatic twin</th>
-            <th>Scope</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>A colour that stays put in code</td>
-            <td>
-              <code>npm run check:stylelint</code>, rule
-              <code>atelier/no-raw-color-literal</code>
-            </td>
-            <td>
-              Hex, <code>rgb()</code> and <code>hsl()</code> literals in
-              component and docs stylesheets. A <code>var(--token, #fff)</code>
-              fallback is allowed.
-            </td>
-          </tr>
-          <tr>
-            <td>A fill or stroke that stays put in Figma</td>
-            <td><code>npm run check:figma</code>, token-link coverage</td>
-            <td>
-              Raw hex fills and strokes on masters, read offline from the
-              committed snapshot <code>tools/figma/snapshot.json</code>, not
-              from the live file.
-            </td>
-          </tr>
-        </tbody>
-      </table>
+      <MaintainerOnly label="Maintainer · Atelier gates behind the pink test">
+        <h3 class="docs-h3 docs-h3--spaced">The gates that catch it for you</h3>
+        <table class="docs-props-table">
+          <thead>
+            <tr>
+              <th>Pink test finding</th>
+              <th>Automatic twin</th>
+              <th>Scope</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td>A colour that stays put in code</td>
+              <td>
+                <code>npm run check:stylelint</code>, rule
+                <code>atelier/no-raw-color-literal</code>
+              </td>
+              <td>
+                Hex, <code>rgb()</code> and <code>hsl()</code> literals in
+                component and docs stylesheets. A
+                <code>var(--token, #fff)</code> fallback is allowed.
+              </td>
+            </tr>
+            <tr>
+              <td>A fill or stroke that stays put in Figma</td>
+              <td><code>npm run check:figma</code>, token-link coverage</td>
+              <td>
+                Raw hex fills and strokes on masters, read offline from the
+                committed snapshot <code>tools/figma/snapshot.json</code>, not
+                from the live file.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p>
+          The mode-limit note below follows ADR-0018. These gates run on every
+          <code>check:all</code>.
+        </p>
+      </MaintainerOnly>
       <p
         style="
           color: var(--ui-color-text-muted);
@@ -1650,11 +1660,10 @@ const motion = [
         "
       >
         Run the pink test once after a re-architecture or a bulk token change,
-        when you want to see the result. The gates run on every
-        <code>check:all</code>. A mode added to <code>Library Tokens</code> also
-        counts against your Figma plan's mode limit, because every mode
-        duplicates every value in its collection and Figma caps modes per plan
-        tier (ADR-0018).
+        when you want to see the result. A mode added to
+        <code>Library Tokens</code> also counts against your Figma plan's mode
+        limit, because every mode duplicates every value in its collection and
+        Figma caps modes per plan tier.
       </p>
     </div>
 

@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import PageHero from '../components/PageHero.astro';
+import MaintainerOnly from '../components/MaintainerOnly.astro';
 import Callout from '../components/Callout.astro';
 import DiagramFigure from '../components/DiagramFigure.astro';
 import BottomNav from '../components/BottomNav.astro';
@@ -143,13 +144,15 @@ const LIMITS: Limit[] = [
   description="Where Claude Design sits in Atelier's design-to-code loop — step 0 and step 5, never in between — what 31 artboards found that no gate had caught, and why an artboard still cannot be the source of truth."
   currentPath="/claude-design"
   tocItems={[
+    { id: 'governance', label: 'Governance' },
     { id: 'where-it-sits', label: 'What it is, where it sits' },
     { id: 'the-fence', label: 'The fence' },
     { id: 'the-palette', label: 'The one gate that reaches it' },
-    { id: 'proof', label: 'What it found here' },
+    ...(import.meta.env.DEV
+      ? [{ id: 'proof', label: 'What it found here' }]
+      : []),
     { id: 'review', label: "Reviewing the tool's output" },
     { id: 'limits', label: 'The limits' },
-    { id: 'governance', label: 'Governance' },
   ]}
 >
   <div class="docs-inline-page">
@@ -166,6 +169,37 @@ const LIMITS: Limit[] = [
       <strong>no gate can address it</strong>. That asymmetry is the most useful
       thing the tool teaches, so this page is built around it.
     </PageHero>
+
+    <!-- 7 — Governance -->
+    <section class="docs-section">
+      <h2 id="governance" class="docs-section-title">Governance</h2>
+      <Callout
+        tone="warning"
+        title="Before you point this at anything that is not yours"
+      >
+        <p style="margin: 0 0 0.6rem">
+          <code>/design-sync</code> uploads component source and rendered
+          previews. Three facts from Anthropic’s own admin guide for Team and
+          Enterprise plans, as recorded here on 2026-08-26:
+        </p>
+        <ul style="margin: 0 0 0.6rem; padding-left: 1.15rem; line-height: 1.7">
+          <li>
+            uploaded assets are stored <strong>persistently</strong> under
+            enterprise retention;
+          </li>
+          <li>there is <strong>no data-residency support</strong>;</li>
+          <li>Claude Design is <strong>default-off</strong> on Enterprise.</li>
+        </ul>
+        <p style="margin: 0">
+          Rehearsing on Atelier’s own open-source library is the safe case.
+          Pushing an <strong>employer’s</strong> design system is a
+          data-processing decision, not a tooling choice: route it to your
+          organisation’s data-protection officer first, and organisation-level
+          enablement to your information-security officer, before it reaches an
+          agenda a client sees.
+        </p>
+      </Callout>
+    </section>
 
     <!-- 1 — What it is, where it sits -->
     <section class="docs-section">
@@ -466,49 +500,57 @@ const LIMITS: Limit[] = [
         </svg>
       </DiagramFigure>
 
-      <Callout tone="note" title="Step 0 and step 5 are not at the same stage">
-        <p style="margin: 0 0 0.6rem">
-          Step 0 is demonstrated: the redesign below ran 31 artboards through
-          the canvas, and the one gate that reaches this surface,
-          <code>check:artboard-palette</code>, exists and passes today.
-        </p>
-        <p style="margin: 0 0 0.6rem">
-          Step 5 is not fully demonstrated — but it is no longer nothing. What
-          it is meant to produce is a single shareable link that shows a
-          finished component completely — variant sheet, dark/light pair,
-          keyboard map — to a viewer with no Figma account and no running
-          Storybook. That is designed and written down, as
-          <strong>&ldquo;Kata 5 — The Handoff Card&rdquo;</strong> in
-          <code>tasks/review-state-2026-08-26.md</code>, and its tooling now
-          exists: the <code>artboard-bridge</code> skill’s Publish mode
-          (<code>finalize_plan → write_files → render_preview →</code> registry
-          → <code>check:design-status</code>).
-        </p>
-        <p style="margin: 0 0 0.6rem">
-          It has run once, against a scratch project, and it correctly refused:
-          the component’s parity record was <code>DRIFT</code>, so it named the
-          commits that moved the inputs and wrote nothing — the same behaviour
-          this page’s fence argues for, where a skill-less baseline published
-          unverified code anyway. Its write path is still unexercised end to
-          end, because every one of this repo’s tracked parity records is
-          currently <code>DRIFT</code> after a shared-token change (ADR-0104) —
-          Publish is blocked repo-wide right now, not for this one component.
-          And per-seat access — anyone but the trainer machine writing to a
-          project shared with them — is a separate, still-open question
-          (ADR-0106 proves only that the owner seat can write).
-        </p>
-        <p style="margin: 0 0 0.6rem">
-          This is a different handoff from the one <code>design-to-code</code>
-          names: ADR-0096’s is inbound and agent-facing — the checklist that
-          gates that skill’s Build mode before any code is written. This one is
-          outbound and human-facing — the link step 5 produces after code is
-          verified. Same word, opposite ends of the loop.
-        </p>
-        <p style="margin: 0">
-          Read step 5 in the diagram above as: specified, its tool built and run
-          once, not yet demonstrated end to end for a room.
-        </p>
-      </Callout>
+      <MaintainerOnly
+        label="Current state of steps 0 and 5 in this repo · local only"
+      >
+        <Callout
+          tone="note"
+          title="Step 0 and step 5 are not at the same stage"
+        >
+          <p style="margin: 0 0 0.6rem">
+            Step 0 is demonstrated: the redesign below ran 31 artboards through
+            the canvas, and the one gate that reaches this surface,
+            <code>check:artboard-palette</code>, exists and passes today.
+          </p>
+          <p style="margin: 0 0 0.6rem">
+            Step 5 is not fully demonstrated — but it is no longer nothing. What
+            it is meant to produce is a single shareable link that shows a
+            finished component completely — variant sheet, dark/light pair,
+            keyboard map — to a viewer with no Figma account and no running
+            Storybook. That is designed and written down, as
+            <strong>&ldquo;Kata 5 — The Handoff Card&rdquo;</strong> in
+            <code>tasks/review-state-2026-08-26.md</code>, and its tooling now
+            exists: the <code>artboard-bridge</code> skill’s Publish mode
+            (<code>finalize_plan → write_files → render_preview →</code>
+            registry → <code>check:design-status</code>).
+          </p>
+          <p style="margin: 0 0 0.6rem">
+            It has run once, against a scratch project, and it correctly
+            refused: the component’s parity record was <code>DRIFT</code>, so it
+            named the commits that moved the inputs and wrote nothing — the same
+            behaviour this page’s fence argues for, where a skill-less baseline
+            published unverified code anyway. Its write path is still
+            unexercised end to end, because every one of this repo’s tracked
+            parity records is currently <code>DRIFT</code> after a shared-token
+            change (ADR-0104) — Publish is blocked repo-wide right now, not for
+            this one component. And per-seat access — anyone but the trainer
+            machine writing to a project shared with them — is a separate,
+            still-open question (ADR-0106 proves only that the owner seat can
+            write).
+          </p>
+          <p style="margin: 0 0 0.6rem">
+            This is a different handoff from the one <code>design-to-code</code>
+            names: ADR-0096’s is inbound and agent-facing — the checklist that
+            gates that skill’s Build mode before any code is written. This one
+            is outbound and human-facing — the link step 5 produces after code
+            is verified. Same word, opposite ends of the loop.
+          </p>
+          <p style="margin: 0">
+            Read step 5 in the diagram above as: specified, its tool built and
+            run once, not yet demonstrated end to end for a room.
+          </p>
+        </Callout>
+      </MaintainerOnly>
 
       <p
         style="color: var(--ui-color-text-muted); line-height: 1.65; margin: 0"
@@ -1117,195 +1159,200 @@ const LIMITS: Limit[] = [
       </p>
     </section>
 
-    <!-- 4 — Proof -->
-    <section class="docs-section">
-      <h2 id="proof" class="docs-section-title">What it found here</h2>
-      <p
-        style="
-          color: var(--ui-color-text-muted);
-          line-height: 1.65;
-          margin: 0 0 1rem;
-        "
-      >
-        On 2026-08-26 and 27 this library was redesigned <em>through</em> the
-        canvas.
-        <strong style="color: var(--ui-color-text)">31 artboards</strong> — 29
-        component sheets plus two studies — covering
-        <strong style="color: var(--ui-color-text)">29 of 29 components</strong
-        >. The two studies were a typography exploration and a foundations
-        sheet, and the foundations sheet was itself generated from
-        <code>tokens.css</code>: even on the ungated surface, the parts that
-        could be generated were.
-      </p>
-      <p
-        style="
-          color: var(--ui-color-text-muted);
-          line-height: 1.65;
-          margin: 0 0 1rem;
-        "
-      >
-        Read that coverage number the way the fence above tells you to. It comes
-        from the hand-maintained registry, not from a measurement: a person
-        wrote down which artboard covers which component, and
-        <code>gen-design-status.mjs</code> counts the rows. Nothing opened an
-        artboard to check. The <em>defects</em> below are hard — each one is a
-        decision record with a diff behind it — but
-        <strong style="color: var(--ui-color-text)"
-          >29 of 29 is a claim, not a check</strong
-        >, and on this surface that is the only kind of coverage number
-        available. That is the fence, seen from the side where it costs you
-        something.
-      </p>
-      <p
-        style="
-          color: var(--ui-color-text-muted);
-          line-height: 1.65;
-          margin: 0 0 1.25rem;
-        "
-      >
-        Direction matters for reading what follows. This was a deliberate
-        redesign, so the code and the artboards were canonical and the Figma
-        masters were the <em>target</em> of the transfer, stale by definition
-        until rebuilt. What still counted as a defect was anything wrong on its
-        own terms — internally inconsistent, invisible to users, or unbindable
-        regardless of what Figma happened to hold. Seventeen decision records
-        carry the redesign itself as their origin,
-        <strong style="color: var(--ui-color-text)"
-          >ADR-0041 through ADR-0057</strong
-        >, thirteen of which name an artboard or its findings document as their
-        source. Four are worth knowing by heart.
-      </p>
-
-      <div style="display: flex; flex-direction: column; gap: 0.85rem">
-        {DEFECTS.map((d) => <div
+    <MaintainerOnly
+      label="What it found here: this repo's evidence (ADR-0041 to ADR-0057) · local only"
+    >
+      <!-- 4 — Proof -->
+      <section class="docs-section">
+        <h2 id="proof" class="docs-section-title">What it found here</h2>
+        <p
           style="
-            padding: 1rem 1.15rem;
-            background: var(--ui-color-surface-raised);
-            border: 1px solid var(--ui-color-border);
-            border-radius: var(--ui-radius-md);
+            color: var(--ui-color-text-muted);
+            line-height: 1.65;
+            margin: 0 0 1rem;
           "
         >
-          <div
-            style="
-              display: flex;
-              align-items: baseline;
-              gap: 0.6rem;
-              margin-bottom: 0.4rem;
-              flex-wrap: wrap;
-            "
-          >
-            <span
-              style="
-                font-family: var(--font-mono);
-                font-size: var(--ui-font-size-xs);
-                font-weight: 700;
-                color: var(--ui-color-primary);
-                background: color-mix(
-                  in srgb,
-                  var(--ui-color-primary) 10%,
-                  transparent
-                );
-                padding: 0.1rem 0.45rem;
-                border-radius: 3px;
-              "
-              >{d.adr}</span
-            >
-            <span
-              style="
-                font-size: 0.92rem;
-                font-weight: 700;
-                color: var(--ui-color-text);
-              "
-              >{d.title}</span
-            >
-          </div>
-          <p
-            style="
-              margin: 0 0 0.6rem;
-              color: var(--ui-color-text-muted);
-              line-height: 1.6;
-            "
-          >
-            {d.detail}
-          </p>
-          <blockquote
-            style="
-              margin: 0 0 0.6rem;
-              padding-left: 0.75rem;
-              border-left: 1px solid var(--ui-color-border);
-              font-family: var(--docs-font-accent);
-              font-size: 1.1em;
-              color: var(--ui-color-text);
-              line-height: 1.6;
-            "
-          >
-            {d.quote}
-          </blockquote>
-          <p
-            style="
-              margin: 0;
-              color: var(--ui-color-text-muted);
-              line-height: 1.6;
-            "
-          >
-            <strong style="color: var(--ui-color-text)"
-              >What it produced:</strong
-            >
-            {d.remedy}
-          </p>
-        </div>)}
-      </div>
+          On 2026-08-26 and 27 this library was redesigned <em>through</em> the
+          canvas.
+          <strong style="color: var(--ui-color-text)">31 artboards</strong> — 29
+          component sheets plus two studies — covering
+          <strong style="color: var(--ui-color-text)"
+            >29 of 29 components</strong
+          >. The two studies were a typography exploration and a foundations
+          sheet, and the foundations sheet was itself generated from
+          <code>tokens.css</code>: even on the ungated surface, the parts that
+          could be generated were.
+        </p>
+        <p
+          style="
+            color: var(--ui-color-text-muted);
+            line-height: 1.65;
+            margin: 0 0 1rem;
+          "
+        >
+          Read that coverage number the way the fence above tells you to. It
+          comes from the hand-maintained registry, not from a measurement: a
+          person wrote down which artboard covers which component, and
+          <code>gen-design-status.mjs</code> counts the rows. Nothing opened an
+          artboard to check. The <em>defects</em> below are hard — each one is a
+          decision record with a diff behind it — but
+          <strong style="color: var(--ui-color-text)"
+            >29 of 29 is a claim, not a check</strong
+          >, and on this surface that is the only kind of coverage number
+          available. That is the fence, seen from the side where it costs you
+          something.
+        </p>
+        <p
+          style="
+            color: var(--ui-color-text-muted);
+            line-height: 1.65;
+            margin: 0 0 1.25rem;
+          "
+        >
+          Direction matters for reading what follows. This was a deliberate
+          redesign, so the code and the artboards were canonical and the Figma
+          masters were the <em>target</em> of the transfer, stale by definition
+          until rebuilt. What still counted as a defect was anything wrong on
+          its own terms — internally inconsistent, invisible to users, or
+          unbindable regardless of what Figma happened to hold. Seventeen
+          decision records carry the redesign itself as their origin,
+          <strong style="color: var(--ui-color-text)"
+            >ADR-0041 through ADR-0057</strong
+          >, thirteen of which name an artboard or its findings document as
+          their source. Four are worth knowing by heart.
+        </p>
 
-      <h3 class="docs-h3 docs-h3--spaced">The mechanism, not the count</h3>
-      <p
-        style="
-          color: var(--ui-color-text-muted);
-          line-height: 1.65;
-          margin: 0 0 0.75rem;
-        "
-      >
-        Notice what the four have in common. None was found by scanning; each
-        was found by having to <em>state</em> something on a sheet — a row
-        height, an anatomy ruler, what the alert’s icon <em>is</em>. And the
-        richest ones came from drawing a whole family on one canvas rather than
-        one component in isolation. From the redesign’s own findings document,
-        on the four choice-control sheets:
-      </p>
-      <blockquote
-        style="
-          margin: 0 0 1rem;
-          padding-left: 0.9rem;
-          border-left: 1px solid var(--ui-color-border);
-          font-family: var(--docs-font-accent);
-          font-size: 1.1em;
-          color: var(--ui-color-text);
-          line-height: 1.65;
-        "
-      >
-        four questions that only appear when the family is drawn together. None
-        is a bug in one component; each is an inconsistency <em>between</em>
-        components that every gate passes.
-      </blockquote>
-      <p
-        style="
-          color: var(--ui-color-text-muted);
-          line-height: 1.65;
-          margin: 0 0 0.75rem;
-        "
-      >
-        That is the argument for the whole track, and it does not contradict the
-        fence — it completes it. A gate only checks the mechanism its author
-        imagined; ADR-0050 says so in as many words, and ADR-0055 then found the
-        next mechanism the author of ADR-0050 had not imagined. Cheap,
-        divergent, ungated drawing is how you find the mechanism nobody
-        imagined. The gate is how you keep it found.
-      </p>
-      <div class="docs-rule">
-        <span class="docs-rule-label">Both halves</span>
-        Drawing found the defect. The gate keeps it found. Neither one alone
-        would have held.
-      </div>
-    </section>
+        <div style="display: flex; flex-direction: column; gap: 0.85rem">
+          {DEFECTS.map((d) => <div
+            style="
+              padding: 1rem 1.15rem;
+              background: var(--ui-color-surface-raised);
+              border: 1px solid var(--ui-color-border);
+              border-radius: var(--ui-radius-md);
+            "
+          >
+            <div
+              style="
+                display: flex;
+                align-items: baseline;
+                gap: 0.6rem;
+                margin-bottom: 0.4rem;
+                flex-wrap: wrap;
+              "
+            >
+              <span
+                style="
+                  font-family: var(--font-mono);
+                  font-size: var(--ui-font-size-xs);
+                  font-weight: 700;
+                  color: var(--ui-color-primary);
+                  background: color-mix(
+                    in srgb,
+                    var(--ui-color-primary) 10%,
+                    transparent
+                  );
+                  padding: 0.1rem 0.45rem;
+                  border-radius: 3px;
+                "
+                >{d.adr}</span
+              >
+              <span
+                style="
+                  font-size: 0.92rem;
+                  font-weight: 700;
+                  color: var(--ui-color-text);
+                "
+                >{d.title}</span
+              >
+            </div>
+            <p
+              style="
+                margin: 0 0 0.6rem;
+                color: var(--ui-color-text-muted);
+                line-height: 1.6;
+              "
+            >
+              {d.detail}
+            </p>
+            <blockquote
+              style="
+                margin: 0 0 0.6rem;
+                padding-left: 0.75rem;
+                border-left: 1px solid var(--ui-color-border);
+                font-family: var(--docs-font-accent);
+                font-size: 1.1em;
+                color: var(--ui-color-text);
+                line-height: 1.6;
+              "
+            >
+              {d.quote}
+            </blockquote>
+            <p
+              style="
+                margin: 0;
+                color: var(--ui-color-text-muted);
+                line-height: 1.6;
+              "
+            >
+              <strong style="color: var(--ui-color-text)"
+                >What it produced:</strong
+              >
+              {d.remedy}
+            </p>
+          </div>)}
+        </div>
+
+        <h3 class="docs-h3 docs-h3--spaced">The mechanism, not the count</h3>
+        <p
+          style="
+            color: var(--ui-color-text-muted);
+            line-height: 1.65;
+            margin: 0 0 0.75rem;
+          "
+        >
+          Notice what the four have in common. None was found by scanning; each
+          was found by having to <em>state</em> something on a sheet — a row
+          height, an anatomy ruler, what the alert’s icon <em>is</em>. And the
+          richest ones came from drawing a whole family on one canvas rather
+          than one component in isolation. From the redesign’s own findings
+          document, on the four choice-control sheets:
+        </p>
+        <blockquote
+          style="
+            margin: 0 0 1rem;
+            padding-left: 0.9rem;
+            border-left: 1px solid var(--ui-color-border);
+            font-family: var(--docs-font-accent);
+            font-size: 1.1em;
+            color: var(--ui-color-text);
+            line-height: 1.65;
+          "
+        >
+          four questions that only appear when the family is drawn together.
+          None is a bug in one component; each is an inconsistency
+          <em>between</em> components that every gate passes.
+        </blockquote>
+        <p
+          style="
+            color: var(--ui-color-text-muted);
+            line-height: 1.65;
+            margin: 0 0 0.75rem;
+          "
+        >
+          That is the argument for the whole track, and it does not contradict
+          the fence — it completes it. A gate only checks the mechanism its
+          author imagined; ADR-0050 says so in as many words, and ADR-0055 then
+          found the next mechanism the author of ADR-0050 had not imagined.
+          Cheap, divergent, ungated drawing is how you find the mechanism nobody
+          imagined. The gate is how you keep it found.
+        </p>
+        <div class="docs-rule">
+          <span class="docs-rule-label">Both halves</span>
+          Drawing found the defect. The gate keeps it found. Neither one alone
+          would have held.
+        </div>
+      </section>
+    </MaintainerOnly>
 
     <!-- 5 — Reviewing the tool's output -->
     <section class="docs-section">
@@ -1510,37 +1557,6 @@ const LIMITS: Limit[] = [
           {l.means}
         </li>)}
       </ul>
-    </section>
-
-    <!-- 7 — Governance -->
-    <section class="docs-section">
-      <h2 id="governance" class="docs-section-title">Governance</h2>
-      <Callout
-        tone="warning"
-        title="Before you point this at anything that is not yours"
-      >
-        <p style="margin: 0 0 0.6rem">
-          <code>/design-sync</code> uploads component source and rendered
-          previews. Three facts from Anthropic’s own admin guide for Team and
-          Enterprise plans, as recorded here on 2026-08-26:
-        </p>
-        <ul style="margin: 0 0 0.6rem; padding-left: 1.15rem; line-height: 1.7">
-          <li>
-            uploaded assets are stored <strong>persistently</strong> under
-            enterprise retention;
-          </li>
-          <li>there is <strong>no data-residency support</strong>;</li>
-          <li>Claude Design is <strong>default-off</strong> on Enterprise.</li>
-        </ul>
-        <p style="margin: 0">
-          Rehearsing on Atelier’s own open-source library is the safe case.
-          Pushing an <strong>employer’s</strong> design system is a
-          data-processing decision, not a tooling choice: route it to your
-          organisation’s data-protection officer first, and organisation-level
-          enablement to your information-security officer, before it reaches an
-          agenda a client sees.
-        </p>
-      </Callout>
     </section>
 
     <BottomNav

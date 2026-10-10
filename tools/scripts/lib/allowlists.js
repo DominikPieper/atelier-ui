@@ -208,8 +208,8 @@ const SCAFFOLD_PORT_EXEMPT_ENTRIES = [
   [
     scaffoldPortKey(
       'docs/src/pages/storybook.astro',
-      'started it. A scaffolded workspace ships only one framework, and',
-      'its Storybook binds the single port <code>6006</code>.',
+      'framework, and its Storybook binds the single port',
+      '<code>6006</code>.',
     ),
     "States, by name, that a scaffolded workspace's single Storybook binds 6006 — the sentence exists to contrast it with the clone's 4400/4401/4402 (ADR-0084).",
   ],
@@ -1269,8 +1269,8 @@ const COMPONENT_COUNT_EXEMPT_ENTRIES = [
   [
     componentCountKey(
       'docs/src/pages/claude-design.astro',
-      'component sheets plus two studies — covering',
-      '<strong style="color: var(--ui-color-text)">29 of 29 components</strong',
+      '<strong style="color: var(--ui-color-text)"',
+      '>29 of 29 components</strong',
     ),
     'Dated historical record: continuation of the same 2026-08-26/27 paragraph as the entry above.',
   ],

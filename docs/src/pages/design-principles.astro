@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Jargon from '../components/Jargon.astro';
+import MaintainerOnly from '../components/MaintainerOnly.astro';
 import PageHero from '../components/PageHero.astro';
 import { Code } from 'astro-expressive-code/components';
 
@@ -651,45 +652,50 @@ const CHECK_PROMPT = `Check my design system against the principles, read-only. 
         "nobody uses it", assume someone does. Variant properties have no alias
         mechanism, so a variant rename always takes this route.
       </p>
-      <p
-        style="
-          color: var(--ui-color-text-muted);
-          line-height: 1.65;
-          margin-bottom: 0.75rem;
-        "
+      <MaintainerOnly
+        label="Release history and this repo's deprecation state · local only"
       >
-        <strong>What Atelier has today.</strong> Less than the pattern above.
-        Releases use <code>nx release</code> with conventional commits for the
-        library packages. Below 1.0 a <code>feat</code> rolls the patch version
-        and a <code>!</code> (a breaking change) the minor: ADR-0163 below took
-        the packages from 0.3 to 0.4. While the packages are below 1.0, ADR-0023
-        says there is no API-stability promise and breaking changes are allowed
-        in any release. It reserves 1.0.0 for an explicit decision, paired with
-        an API-stability and deprecation policy that the audit found missing.
-        That policy is still unwritten: there is no <code>@deprecated</code> tag
-        in the library code, and no codemod in the repo.
-      </p>
-      <p
-        style="
-          color: var(--ui-color-text-muted);
-          line-height: 1.65;
-          margin-bottom: 0.75rem;
-        "
-      >
-        <strong>A worked example of the tradeoff.</strong> ADR-0163 changed the
-        Angular button from <code>&lt;atl-button&gt;</code> to
-        <code>&lt;button atl-button&gt;</code>, because the custom element could
-        not submit a form or be reached with the keyboard. It shipped as a
-        <code>feat(angular)!:</code> commit with no deprecation window and no
-        codemod, and the ADR records it as breaking for Angular consumers. The
-        ADR does not claim a window was considered. It rejects keeping
-        <code>&lt;atl-button&gt;</code> around an inner
-        <code>&lt;button&gt;</code> because tooltip, menu trigger and
-        <code>aria-label</code> would all need forwarding. In a pre-1.0 library
-        that is a defensible call. In a design system other teams build on, the
-        same rename would want a window, a migration script, and an announcement
-        first.
-      </p>
+        <p
+          style="
+            color: var(--ui-color-text-muted);
+            line-height: 1.65;
+            margin-bottom: 0.75rem;
+          "
+        >
+          <strong>What Atelier has today.</strong> Less than the pattern above.
+          Releases use <code>nx release</code> with conventional commits for the
+          library packages. Below 1.0 a <code>feat</code> rolls the patch
+          version and a <code>!</code> (a breaking change) the minor: ADR-0163
+          below took the packages from 0.3 to 0.4. While the packages are below
+          1.0, ADR-0023 says there is no API-stability promise and breaking
+          changes are allowed in any release. It reserves 1.0.0 for an explicit
+          decision, paired with an API-stability and deprecation policy that the
+          audit found missing. That policy is still unwritten: there is no
+          <code>@deprecated</code> tag in the library code, and no codemod in
+          the repo.
+        </p>
+        <p
+          style="
+            color: var(--ui-color-text-muted);
+            line-height: 1.65;
+            margin-bottom: 0.75rem;
+          "
+        >
+          <strong>A worked example of the tradeoff.</strong> ADR-0163 changed
+          the Angular button from <code>&lt;atl-button&gt;</code> to
+          <code>&lt;button atl-button&gt;</code>, because the custom element
+          could not submit a form or be reached with the keyboard. It shipped as
+          a <code>feat(angular)!:</code> commit with no deprecation window and
+          no codemod, and the ADR records it as breaking for Angular consumers.
+          The ADR does not claim a window was considered. It rejects keeping
+          <code>&lt;atl-button&gt;</code> around an inner
+          <code>&lt;button&gt;</code> because tooltip, menu trigger and
+          <code>aria-label</code> would all need forwarding. In a pre-1.0
+          library that is a defensible call. In a design system other teams
+          build on, the same rename would want a window, a migration script, and
+          an announcement first.
+        </p>
+      </MaintainerOnly>
       <p
         style="
           color: var(--ui-color-text-muted);

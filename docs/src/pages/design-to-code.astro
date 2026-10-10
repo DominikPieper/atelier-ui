@@ -5,6 +5,7 @@ import LoopDiagram from '../components/LoopDiagram.astro';
 import Callout from '../components/Callout.astro';
 import HelpFooter from '../components/HelpFooter.astro';
 import PageHero from '../components/PageHero.astro';
+import MaintainerOnly from '../components/MaintainerOnly.astro';
 import TrackNav from '../components/TrackNav.astro';
 import FwSwitcher from '../components/FwSwitcher.astro';
 
@@ -515,25 +516,27 @@ decided: fix the code, the master, or the contract.`;
               building without this document.
             </p>
           </Callout>
-          <details class="d2c-why">
-            <summary>Why (for maintainers)</summary>
-            <div class="d2c-why-body">
-              <p>
-                Prompting straight from a screenshot is the failure mode this
-                checkpoint exists to prevent. The skill gates its Build mode on
-                the handoff document, and the provenance block carries the
-                snapshot stamp so a stale Figma read is visible. Decision
-                record:
-                <a
-                  href="https://github.com/DominikPieper/atelier-ui/blob/main/plan/adr/0096-the-handoff-a-picture-cannot-carry.md"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="docs-link-primary"
-                  >ADR-0096</a
-                >.
-              </p>
-            </div>
-          </details>
+          <MaintainerOnly label="Why · maintainers, local only">
+            <details class="d2c-why">
+              <summary>Why (for maintainers)</summary>
+              <div class="d2c-why-body">
+                <p>
+                  Prompting straight from a screenshot is the failure mode this
+                  checkpoint exists to prevent. The skill gates its Build mode
+                  on the handoff document, and the provenance block carries the
+                  snapshot stamp so a stale Figma read is visible. Decision
+                  record:
+                  <a
+                    href="https://github.com/DominikPieper/atelier-ui/blob/main/plan/adr/0096-the-handoff-a-picture-cannot-carry.md"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="docs-link-primary"
+                    >ADR-0096</a
+                  >.
+                </p>
+              </div>
+            </details>
+          </MaintainerOnly>
         </div>
       </div>
     </div>
@@ -680,82 +683,86 @@ decided: fix the code, the master, or the contract.`;
             specific to this repo that a few cross-framework consistency checks
             read. A one-framework repo has nothing to keep in sync, so skip it.
           </p>
-          <details class="d2c-why">
-            <summary>Why (for maintainers)</summary>
-            <div class="d2c-why-body">
-              <p>
-                The contract is deliberately a "micro-contract": the prop table
-                comes from the docgen manifest, so a hand-written spec would
-                only duplicate it. See
-                <a
-                  href="https://github.com/DominikPieper/atelier-ui/blob/main/plan/adr/0121-the-stories-are-the-spec.md"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="docs-link-primary"
-                  >ADR-0121</a
-                >
-                (S4 covers the scaffold). <code>libs/spec/src/index.ts</code>
-                stays the join key that <code>check:props</code>,
-                <code>check:variants</code> and <code>check:metadata</code> read
-                until ADR-0121's S6 retires them. The review behind this shape
-                and the retirement order:
-                <code>tasks/spec-format-review-2026-09-10.md</code>.
-              </p>
-              <p>
-                <strong style="color: var(--ui-color-text)"
-                  >"Chose on purpose" has a test: is it drawn?</strong
-                >
-                A mismatch is <em>settled</em> when the thing the two sides
-                disagree about changes nothing the master draws: behaviour,
-                element or form semantics, data, keys. <code>headingLevel</code>
-                picks <code>h2..h6</code> and changes nothing drawn;
-                <code>multi</code> guards how many accordion items <em>may</em>
-                be open and looks identical either way; <code>id</code> is data.
-                Those entries are finished, and a master that grew an axis for
-                one would be worse, not better. A mismatch is <em>owed</em> when
-                it <em>is</em> drawn: a CSS-backed paint axis with no Figma axis
-                means Figma owes an axis, and a Figma axis with no CSS rule
-                means either the code owes an implementation or the master owes
-                a deletion. An owed entry's <code>reason</code> has to say which
-                side is expected to change, and where that is tracked.
-              </p>
-              <p>
-                <strong style="color: var(--ui-color-text)"
-                  >Drawn makes it owed; it does not decide it.</strong
-                >
-                When a feature needs, say, a red button, you choose between a
-                library variant, a local exception, or a semantic token. A
-                code-side axis earns a place on the master when it is drawn,
-                when the checks already enforce it in every framework, when
-                accessibility holds, and when someone owns the follow-up.
-                Otherwise the better move is often the opposite: delete the axis
-                from the master and let the state be a CSS pseudo-class, which
-                is already the convention for interaction states here.
-              </p>
-              <p>
-                The settled-versus-owed rule, the promotion argument (promote
-                every one-off and the shared library becomes unreadable; bury
-                every decision locally and the system stops describing the
-                product), and the nine entries currently owed rather than
-                settled:
-                <code
-                  >plan/adr/0145-the-contract-records-the-difference-not-who-owes-it.md</code
-                >.
-              </p>
-              <p>
-                Each hosted <code>storybook-*</code> endpoint emits its own
-                framework-native manifest, so its snippets come from docgen over
-                the adapter's source:
-                <a
-                  href="https://github.com/DominikPieper/atelier-ui/blob/main/plan/adr/0097-the-manifest-the-framework-can-emit-now.md"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="docs-link-primary"
-                  >ADR-0097</a
-                >.
-              </p>
-            </div>
-          </details>
+          <MaintainerOnly label="Why · maintainers, local only">
+            <details class="d2c-why">
+              <summary>Why (for maintainers)</summary>
+              <div class="d2c-why-body">
+                <p>
+                  The contract is deliberately a "micro-contract": the prop
+                  table comes from the docgen manifest, so a hand-written spec
+                  would only duplicate it. See
+                  <a
+                    href="https://github.com/DominikPieper/atelier-ui/blob/main/plan/adr/0121-the-stories-are-the-spec.md"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="docs-link-primary"
+                    >ADR-0121</a
+                  >
+                  (S4 covers the scaffold). <code>libs/spec/src/index.ts</code>
+                  stays the join key that <code>check:props</code>,
+                  <code>check:variants</code> and <code>check:metadata</code>
+                  read until ADR-0121's S6 retires them. The review behind this
+                  shape and the retirement order:
+                  <code>tasks/spec-format-review-2026-09-10.md</code>.
+                </p>
+                <p>
+                  <strong style="color: var(--ui-color-text)"
+                    >"Chose on purpose" has a test: is it drawn?</strong
+                  >
+                  A mismatch is <em>settled</em> when the thing the two sides
+                  disagree about changes nothing the master draws: behaviour,
+                  element or form semantics, data, keys.
+                  <code>headingLevel</code> picks <code>h2..h6</code> and
+                  changes nothing drawn; <code>multi</code> guards how many
+                  accordion items <em>may</em> be open and looks identical
+                  either way; <code>id</code> is data. Those entries are
+                  finished, and a master that grew an axis for one would be
+                  worse, not better. A mismatch is <em>owed</em> when it
+                  <em>is</em> drawn: a CSS-backed paint axis with no Figma axis
+                  means Figma owes an axis, and a Figma axis with no CSS rule
+                  means either the code owes an implementation or the master
+                  owes a deletion. An owed entry's <code>reason</code> has to
+                  say which side is expected to change, and where that is
+                  tracked.
+                </p>
+                <p>
+                  <strong style="color: var(--ui-color-text)"
+                    >Drawn makes it owed; it does not decide it.</strong
+                  >
+                  When a feature needs, say, a red button, you choose between a
+                  library variant, a local exception, or a semantic token. A
+                  code-side axis earns a place on the master when it is drawn,
+                  when the checks already enforce it in every framework, when
+                  accessibility holds, and when someone owns the follow-up.
+                  Otherwise the better move is often the opposite: delete the
+                  axis from the master and let the state be a CSS pseudo-class,
+                  which is already the convention for interaction states here.
+                </p>
+                <p>
+                  The settled-versus-owed rule, the promotion argument (promote
+                  every one-off and the shared library becomes unreadable; bury
+                  every decision locally and the system stops describing the
+                  product), and the nine entries currently owed rather than
+                  settled:
+                  <code
+                    >plan/adr/0145-the-contract-records-the-difference-not-who-owes-it.md</code
+                  >.
+                </p>
+                <p>
+                  Each hosted <code>storybook-*</code> endpoint emits its own
+                  framework-native manifest, so its snippets come from docgen
+                  over the adapter's source:
+                  <a
+                    href="https://github.com/DominikPieper/atelier-ui/blob/main/plan/adr/0097-the-manifest-the-framework-can-emit-now.md"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="docs-link-primary"
+                    >ADR-0097</a
+                  >.
+                </p>
+              </div>
+            </details>
+          </MaintainerOnly>
         </div>
       </div>
     </div>
@@ -797,25 +804,27 @@ decided: fix the code, the master, or the contract.`;
               title={`generate prompt — ${fw}`}
             />
           </div>)}
-          <details class="d2c-why">
-            <summary>Why (for maintainers)</summary>
-            <div class="d2c-why-body">
-              <p>
-                On Angular, the hosted <code>storybook-angular</code> manifest
-                comes from <code>angular-component-meta</code>; on Vue,
-                <code>storybook-vue</code> uses <code>vue-component-meta</code>.
-                Each endpoint serves its own manifest rather than a React one to
-                translate:
-                <a
-                  href="https://github.com/DominikPieper/atelier-ui/blob/main/plan/adr/0097-the-manifest-the-framework-can-emit-now.md"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="docs-link-primary"
-                  >ADR-0097</a
-                >.
-              </p>
-            </div>
-          </details>
+          <MaintainerOnly label="Why · maintainers, local only">
+            <details class="d2c-why">
+              <summary>Why (for maintainers)</summary>
+              <div class="d2c-why-body">
+                <p>
+                  On Angular, the hosted <code>storybook-angular</code> manifest
+                  comes from <code>angular-component-meta</code>; on Vue,
+                  <code>storybook-vue</code> uses <code>vue-component-meta</code
+                  >. Each endpoint serves its own manifest rather than a React
+                  one to translate:
+                  <a
+                    href="https://github.com/DominikPieper/atelier-ui/blob/main/plan/adr/0097-the-manifest-the-framework-can-emit-now.md"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="docs-link-primary"
+                    >ADR-0097</a
+                  >.
+                </p>
+              </div>
+            </details>
+          </MaintainerOnly>
         </div>
       </div>
     </div>
@@ -1076,21 +1085,23 @@ decided: fix the code, the master, or the contract.`;
               <code>check:stylelint</code> flags raw colour literals.
             </li>
           </ul>
-          <details class="d2c-why">
-            <summary>Why (for maintainers)</summary>
-            <div class="d2c-why-body">
-              <p>
-                The recorded parity result and the drift gate are described in
-                <a
-                  href="https://github.com/DominikPieper/atelier-ui/blob/main/plan/adr/0024-design-parity-persistence-gate.md"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="docs-link-primary"
-                  >ADR-0024</a
-                >.
-              </p>
-            </div>
-          </details>
+          <MaintainerOnly label="Why · maintainers, local only">
+            <details class="d2c-why">
+              <summary>Why (for maintainers)</summary>
+              <div class="d2c-why-body">
+                <p>
+                  The recorded parity result and the drift gate are described in
+                  <a
+                    href="https://github.com/DominikPieper/atelier-ui/blob/main/plan/adr/0024-design-parity-persistence-gate.md"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="docs-link-primary"
+                    >ADR-0024</a
+                  >.
+                </p>
+              </div>
+            </details>
+          </MaintainerOnly>
 
           <h3 id="evals" class="docs-h3 docs-h3--spaced">
             Evals: where the judge comes in
@@ -1209,22 +1220,24 @@ decided: fix the code, the master, or the contract.`;
             <code>skills/</code>: those test whether an agent follows a skill.
             They do not grade a component.
           </p>
-          <details class="d2c-why">
-            <summary>Why (for maintainers)</summary>
-            <div class="d2c-why-body">
-              <p>
-                Why the judge has no score and never gates, and why Atelier
-                teaches a prompt instead of shipping an eval skill:
-                <a
-                  href="https://github.com/DominikPieper/atelier-ui/blob/main/plan/adr/0164-the-judge-advises-it-does-not-gate.md"
-                  target="_blank"
-                  rel="noopener noreferrer"
-                  class="docs-link-primary"
-                  >ADR-0164</a
-                >.
-              </p>
-            </div>
-          </details>
+          <MaintainerOnly label="Why · maintainers, local only">
+            <details class="d2c-why">
+              <summary>Why (for maintainers)</summary>
+              <div class="d2c-why-body">
+                <p>
+                  Why the judge has no score and never gates, and why Atelier
+                  teaches a prompt instead of shipping an eval skill:
+                  <a
+                    href="https://github.com/DominikPieper/atelier-ui/blob/main/plan/adr/0164-the-judge-advises-it-does-not-gate.md"
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    class="docs-link-primary"
+                    >ADR-0164</a
+                  >.
+                </p>
+              </div>
+            </details>
+          </MaintainerOnly>
         </div>
       </div>
     </div>

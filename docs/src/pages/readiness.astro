@@ -304,7 +304,7 @@ const SYSTEM_GROUPS: {
 ];
 
 // How Atelier automates the checks above: pointers only, no counts. The audit
-// numbers for Atelier's own file live on /figma#file-ready.
+// numbers for Atelier's own file are shown only in local dev builds (ADR-0166).
 const GATES: { check: string; gate: string }[] = [
   {
     check: 'Checks 1 and 2 (bound values, Auto Layout)',
@@ -732,11 +732,10 @@ const SCOPE_SNIPPET = `// What the agent receives for one variable from figma_ge
         <p
           style="margin: 0; line-height: 1.6; color: var(--ui-color-text-muted)"
         >
-          What the checklist found when we ran it on Atelier’s own file, with
-          counts, is on
-          <a href="/figma#file-ready" class="docs-link-primary"
-            >the Figma page</a
-          >.
+          We run this same checklist on Atelier’s own file. How the gates
+          automate it is described in
+          <a href="#automate" class="docs-link-primary">Automating it</a>
+          above.
         </p>
       </Callout>
     </div>

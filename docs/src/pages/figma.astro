@@ -7,6 +7,7 @@ import WorkflowDiagram from '../components/WorkflowDiagram.astro';
 import PageHero from '../components/PageHero.astro';
 import Callout from '../components/Callout.astro';
 import BottomNav from '../components/BottomNav.astro';
+import MaintainerOnly from '../components/MaintainerOnly.astro';
 import {
   featuredRows,
   remainingCount,
@@ -512,64 +513,68 @@ const FIGMA_URL =
           </div>
         </li>
       </ul>
-      <p
-        style="
-          font-size: var(--ui-font-size-sm);
-          color: var(--ui-color-text-muted);
-          margin: 0;
-        "
-      >
-        {tokenCensus.total} UI-tier variables: {tokenCensus.color} color,
-        {tokenCensus.spacing} spacing, {tokenCensus.radius} radius,
-        {tokenCensus.sizing} sizing, {tokenCensus.typography} typography,
-        {tokenCensus.opacity} opacity (the file also carries primitive and
-        component tiers that stay Figma-side). The full <code>--ui-*</code> list
-        — including shadow, motion, and z-index tokens that exist only in CSS —
-        lives in <code>libs/styles/src/tokens.css</code>. These counts are read
-        from <code>tools/figma/snapshot.json</code> at build time, not typed
-        here.
-      </p>
+      <MaintainerOnly label="Maintainer · Atelier token census">
+        <p
+          style="
+            font-size: var(--ui-font-size-sm);
+            color: var(--ui-color-text-muted);
+            margin: 0;
+          "
+        >
+          {tokenCensus.total} UI-tier variables: {tokenCensus.color} color,
+          {tokenCensus.spacing} spacing, {tokenCensus.radius} radius,
+          {tokenCensus.sizing} sizing, {tokenCensus.typography} typography,
+          {tokenCensus.opacity} opacity (the file also carries primitive and
+          component tiers that stay Figma-side). The full <code>--ui-*</code>
+          list — including shadow, motion, and z-index tokens that exist only in
+          CSS — lives in <code>libs/styles/src/tokens.css</code>. These counts
+          are read from <code>tools/figma/snapshot.json</code> at build time,
+          not typed here.
+        </p>
+      </MaintainerOnly>
     </div>
 
     <!-- Component frames -->
-    <div class="docs-section" style="margin-bottom: 2.5rem">
-      <h2 class="docs-section-title">Component frames</h2>
-      <p
-        style="
-          color: var(--ui-color-text-muted);
-          line-height: 1.6;
-          margin-bottom: 1.25rem;
-        "
-      >
-        The <code>Components</code> page has one Figma Section per component.
-        Each section shows all variants, sizes, and states — the complete visual
-        spec.
-      </p>
-      <table class="docs-props-table">
-        <thead>
-          <tr>
-            <th>Component</th>
-            <th>Figma section</th>
-            <th>What it shows</th>
-          </tr>
-        </thead>
-        <tbody>
-          {featuredRows.map((r) => <tr>
-            <td><code>{r.selector}</code></td>
-            <td>{r.section}</td>
-            <td>
-              {r.axes}{r.booleans.length > 0 &&
-                ` + ${r.booleans.join(' / ')} boolean${r.booleans.length > 1 ? 's' : ''}`}
-            </td>
-          </tr>)}
-          <tr>
-            <td>{remainingCount} more…</td>
-            <td>{sections.join(' · ')}</td>
-            <td>{remainingSample}, and more</td>
-          </tr>
-        </tbody>
-      </table>
-    </div>
+    <MaintainerOnly label="Maintainer · Atelier component frame catalogue">
+      <div class="docs-section" style="margin-bottom: 2.5rem">
+        <h2 class="docs-section-title">Component frames</h2>
+        <p
+          style="
+            color: var(--ui-color-text-muted);
+            line-height: 1.6;
+            margin-bottom: 1.25rem;
+          "
+        >
+          The <code>Components</code> page has one Figma Section per component.
+          Each section shows all variants, sizes, and states — the complete
+          visual spec.
+        </p>
+        <table class="docs-props-table">
+          <thead>
+            <tr>
+              <th>Component</th>
+              <th>Figma section</th>
+              <th>What it shows</th>
+            </tr>
+          </thead>
+          <tbody>
+            {featuredRows.map((r) => <tr>
+              <td><code>{r.selector}</code></td>
+              <td>{r.section}</td>
+              <td>
+                {r.axes}{r.booleans.length > 0 &&
+                  ` + ${r.booleans.join(' / ')} boolean${r.booleans.length > 1 ? 's' : ''}`}
+              </td>
+            </tr>)}
+            <tr>
+              <td>{remainingCount} more…</td>
+              <td>{sections.join(' · ')}</td>
+              <td>{remainingSample}, and more</td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+    </MaintainerOnly>
 
     <!-- Using Figma in the workshop -->
     <div class="docs-section" style="margin-bottom: 2.5rem">
@@ -925,79 +930,83 @@ const FIGMA_URL =
         <a href="/readiness" class="docs-link-primary"
           >Is your Figma file ready for an agent?</a
         >
-        What follows is what it found on Atelier's own file.
       </p>
 
-      <Callout
-        tone="warning"
-        title="What we found when we ran it on Atelier's own file"
+      <MaintainerOnly
+        label="Maintainer · audit of Atelier's own file (2026-10-08)"
       >
-        <p
-          style="
-            margin: 0 0 0.6rem;
-            line-height: 1.6;
-            color: var(--ui-color-text-muted);
-          "
+        <h3 class="docs-h3">For maintainers</h3>
+        <Callout
+          tone="warning"
+          title="What we found when we ran it on Atelier's own file"
         >
-          A read-only audit on 2026-10-08, with the figma-console tools named on
-          the readiness page, of three masters (<code>AtlBadge</code>,
-          <code>AtlCard</code>, <code>AtlDialog</code>) and the file's
-          variables. These are open defects, not a clean bill of health.
-        </p>
-        <ul
-          style="
-            margin: 0;
-            padding-left: 1.25rem;
-            line-height: 1.6;
-            color: var(--ui-color-text-muted);
-          "
-        >
-          <li>
-            <strong style="color: var(--ui-color-text)"
-              >Token binding holds.</strong
-            >
-            0 unbound fills, strokes, radii or spacing values on all three
-            masters.
-          </li>
-          <li>
-            <strong style="color: var(--ui-color-text)"
-              ><code>codeSyntax.WEB</code> is empty on 284 of 284
-              variables.</strong
-            >
-            The code name survives only as prose in each variable's description.
-            Whether the agent's tools would show a better result with
-            <code>codeSyntax.WEB</code> set was not tested.
-          </li>
-          <li>
-            <strong style="color: var(--ui-color-text)"
-              >19 variables use <code>ALL_SCOPES</code>.</strong
-            >
-            None of them is bound by the three masters.
-          </li>
-          <li>
-            <strong style="color: var(--ui-color-text)"
-              >About 20 layers in <code>AtlDialog</code> are still named
-              <code>Frame</code></strong
-            >
-            (4 per variant, across 5 variants).
-          </li>
-          <li>
-            <strong style="color: var(--ui-color-text)"
-              >Descriptions are complete:</strong
-            >
-            43 of 43 masters have one. Nothing checks that a description still
-            matches the node's properties, so it can drift.
-          </li>
-          <li>
-            <strong style="color: var(--ui-color-text)"
-              >The accessibility audit scored all three at 100,</strong
-            >
-            but classed <code>AtlDialog</code> as <code>presentational</code>,
-            so for the one master with a close button and footer actions the 100
-            means not assessed.
-          </li>
-        </ul>
-      </Callout>
+          <p
+            style="
+              margin: 0 0 0.6rem;
+              line-height: 1.6;
+              color: var(--ui-color-text-muted);
+            "
+          >
+            A read-only audit on 2026-10-08, with the figma-console tools named
+            on the readiness page, of three masters (<code>AtlBadge</code>,
+            <code>AtlCard</code>, <code>AtlDialog</code>) and the file's
+            variables. These are open defects, not a clean bill of health.
+          </p>
+          <ul
+            style="
+              margin: 0;
+              padding-left: 1.25rem;
+              line-height: 1.6;
+              color: var(--ui-color-text-muted);
+            "
+          >
+            <li>
+              <strong style="color: var(--ui-color-text)"
+                >Token binding holds.</strong
+              >
+              0 unbound fills, strokes, radii or spacing values on all three
+              masters.
+            </li>
+            <li>
+              <strong style="color: var(--ui-color-text)"
+                ><code>codeSyntax.WEB</code> is empty on 284 of 284
+                variables.</strong
+              >
+              The code name survives only as prose in each variable's
+              description. Whether the agent's tools would show a better result
+              with <code>codeSyntax.WEB</code> set was not tested.
+            </li>
+            <li>
+              <strong style="color: var(--ui-color-text)"
+                >19 variables use <code>ALL_SCOPES</code>.</strong
+              >
+              None of them is bound by the three masters.
+            </li>
+            <li>
+              <strong style="color: var(--ui-color-text)"
+                >About 20 layers in <code>AtlDialog</code> are still named
+                <code>Frame</code></strong
+              >
+              (4 per variant, across 5 variants).
+            </li>
+            <li>
+              <strong style="color: var(--ui-color-text)"
+                >Descriptions are complete:</strong
+              >
+              43 of 43 masters have one. Nothing checks that a description still
+              matches the node's properties, so it can drift.
+            </li>
+            <li>
+              <strong style="color: var(--ui-color-text)"
+                >The accessibility audit scored all three at 100,</strong
+              >
+              but classed <code>AtlDialog</code> as <code>presentational</code>,
+              so for the one master with a close button and footer actions the
+              100 means not assessed.
+            </li>
+          </ul>
+        </Callout>
+      </MaintainerOnly>
     </div>
 
     <!-- Shared language -->
@@ -1099,82 +1108,86 @@ const FIGMA_URL =
         lang="text"
         title="Consistency report prompt"
       />
-      <h3
-        style="
-          font-size: var(--ui-font-size-lg);
-          font-weight: 600;
-          margin: 1.5rem 0 0.6rem;
-        "
+      <MaintainerOnly
+        label="Maintainer · Atelier gates and consistency scan (2026-10-09)"
       >
-        What Atelier enforces, and what it does not
-      </h3>
-      <p
-        style="
-          color: var(--ui-color-text-muted);
-          line-height: 1.6;
-          margin-bottom: 1.25rem;
-        "
-      >
-        Atelier's gates check that two places agree, not that the vocabulary is
-        consistent across components. Each of these joins Figma to code, or the
-        spec to the adapters, for one component at a time:
-      </p>
-      <table class="docs-props-table" style="margin-bottom: 1.25rem">
-        <thead>
-          <tr>
-            <th>Gate</th>
-            <th>Checks</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><code>check:contracts</code></td>
-            <td>
-              A master's axis names and values against the component's own
-              manifest and stories (<code>[AXIS]</code>). A deliberate
-              difference is written down as an <code>axisMap</code> entry with a
-              reason.
-            </td>
-          </tr>
-          <tr>
-            <td><code>check:figma</code></td>
-            <td>
-              A master's variant axis against the spec field or union it names
-              (<code>AXIS-NAME</code>, <code>AXIS-NOT-A-PROP</code>), and that
-              named layers resolve to a CSS rule (ADR-0063: the layer name is
-              the selector). A layer still called <code>Frame</code> is counted,
-              not judged.
-            </td>
-          </tr>
-          <tr>
-            <td><code>check:figma-token-names</code></td>
-            <td>
-              Every <code>color/*</code>, <code>spacing/*</code> and
-              <code>radius/*</code> variable in the Figma snapshot resolves to a
-              <code>--ui-*</code> declaration in <code>tokens.css</code>.
-            </td>
-          </tr>
-          <tr>
-            <td><code>check:variants</code>, <code>check:props</code></td>
-            <td>
-              Each spec union member has a CSS class in every framework, and
-              each framework declares every spec prop.
-            </td>
-          </tr>
-        </tbody>
-      </table>
-      <p
-        style="
-          color: var(--ui-color-text-muted);
-          line-height: 1.6;
-          margin-bottom: 0.75rem;
-        "
-      >
-        <code>axisMap</code> is where Atelier records a name that differs on
-        purpose. This is the entry on <code>AtlTh</code>:
-      </p>
-      <Code
-        code={`axisMap: [
+        <h3 class="docs-h3">For maintainers</h3>
+        <h3
+          style="
+            font-size: var(--ui-font-size-lg);
+            font-weight: 600;
+            margin: 1.5rem 0 0.6rem;
+          "
+        >
+          What Atelier enforces, and what it does not
+        </h3>
+        <p
+          style="
+            color: var(--ui-color-text-muted);
+            line-height: 1.6;
+            margin-bottom: 1.25rem;
+          "
+        >
+          Atelier's gates check that two places agree, not that the vocabulary
+          is consistent across components. Each of these joins Figma to code, or
+          the spec to the adapters, for one component at a time:
+        </p>
+        <table class="docs-props-table" style="margin-bottom: 1.25rem">
+          <thead>
+            <tr>
+              <th>Gate</th>
+              <th>Checks</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>check:contracts</code></td>
+              <td>
+                A master's axis names and values against the component's own
+                manifest and stories (<code>[AXIS]</code>). A deliberate
+                difference is written down as an <code>axisMap</code> entry with
+                a reason.
+              </td>
+            </tr>
+            <tr>
+              <td><code>check:figma</code></td>
+              <td>
+                A master's variant axis against the spec field or union it names
+                (<code>AXIS-NAME</code>, <code>AXIS-NOT-A-PROP</code>), and that
+                named layers resolve to a CSS rule (ADR-0063: the layer name is
+                the selector). A layer still called <code>Frame</code> is
+                counted, not judged.
+              </td>
+            </tr>
+            <tr>
+              <td><code>check:figma-token-names</code></td>
+              <td>
+                Every <code>color/*</code>, <code>spacing/*</code> and
+                <code>radius/*</code> variable in the Figma snapshot resolves to
+                a <code>--ui-*</code> declaration in <code>tokens.css</code>.
+              </td>
+            </tr>
+            <tr>
+              <td><code>check:variants</code>, <code>check:props</code></td>
+              <td>
+                Each spec union member has a CSS class in every framework, and
+                each framework declares every spec prop.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+        <p
+          style="
+            color: var(--ui-color-text-muted);
+            line-height: 1.6;
+            margin-bottom: 0.75rem;
+          "
+        >
+          <code>axisMap</code> is where Atelier records a name that differs on
+          purpose. This is the entry on <code>AtlTh</code>:
+        </p>
+        <Code
+          code={`axisMap: [
   {
     figmaAxis: 'sortDirection',
     codeProp: 'sortDirection',
@@ -1182,84 +1195,85 @@ const FIGMA_URL =
     reason: "Same prop name, but the axis value 'none' stands for the code union's null ..."
   },
 ],`}
-        lang="ts"
-        title="libs/spec/src/contracts/th.contract.ts (shortened)"
-      />
-      <p
-        style="
-          color: var(--ui-color-text-muted);
-          line-height: 1.6;
-          margin: 1.25rem 0;
-        "
-      >
-        None of the scripts above compares one component's vocabulary with
-        another's. A search of <code>tools/scripts</code> on 2026-10-09 found no
-        gate that does; the only hit for the word <em>vocabulary</em> in
-        <code>tools/scripts</code> is a comment in <code>check-parity.js</code>.
-        So the consistency itself is a convention, kept by whoever adds the next
-        component.
-      </p>
-      <Callout
-        tone="note"
-        title="What a consistency pass found in Atelier's spec (2026-10-09)"
-      >
+          lang="ts"
+          title="libs/spec/src/contracts/th.contract.ts (shortened)"
+        />
         <p
           style="
-            margin: 0 0 0.6rem;
-            line-height: 1.6;
             color: var(--ui-color-text-muted);
+            line-height: 1.6;
+            margin: 1.25rem 0;
           "
         >
-          A read-only scan of the string unions in
-          <code>libs/spec/src/index.ts</code>, plus the axes in
-          <code>tools/figma/snapshot.json</code>. Nothing was changed.
+          None of the scripts above compares one component's vocabulary with
+          another's. A search of <code>tools/scripts</code> on 2026-10-09 found
+          no gate that does; the only hit for the word <em>vocabulary</em> in
+          <code>tools/scripts</code> is a comment in <code>check-parity.js</code
+          >. So the consistency itself is a convention, kept by whoever adds the
+          next component.
         </p>
-        <ul
-          style="
-            margin: 0;
-            padding-left: 1.25rem;
-            line-height: 1.6;
-            color: var(--ui-color-text-muted);
-          "
+        <Callout
+          tone="note"
+          title="What a consistency pass found in Atelier's spec (2026-10-09)"
         >
-          <li>
-            <strong style="color: var(--ui-color-text)"
-              >Size is consistent.</strong
-            >
-            The <code>Atl*Size</code> unions use only <code>xs</code>,
-            <code>sm</code>, <code>md</code>, <code>lg</code>, <code>xl</code>
-            and <code>full</code>. None spells out <code>large</code>.
-          </li>
-          <li>
-            <strong style="color: var(--ui-color-text)"
-              >Position is not.</strong
-            >
-            <code>AtlTooltipPosition</code> is
-            <code>above | below | left | right</code>;
-            <code>AtlDrawerPosition</code> is
-            <code>left | right | top | bottom</code>. Same prop name, two words
-            for the vertical sides.
-          </li>
-          <li>
-            <strong style="color: var(--ui-color-text)"
-              >Outline has two spellings.</strong
-            >
-            <code>AtlButtonVariant</code> has <code>outline</code>;
-            <code>AtlCardVariant</code> has <code>outlined</code>.
-          </li>
-          <li>
-            <strong style="color: var(--ui-color-text)"
-              >Failure is named two ways.</strong
-            >
-            <code>danger</code> is the variant in button, badge, alert, toast
-            and progress; the Figma <code>state</code> axis uses both
-            <code>error</code> and <code>invalid</code>, and
-            <code>AtlIconName</code> has both <code>danger</code> and
-            <code>error</code>. Whether each pair is one concept or two was not
-            checked.
-          </li>
-        </ul>
-      </Callout>
+          <p
+            style="
+              margin: 0 0 0.6rem;
+              line-height: 1.6;
+              color: var(--ui-color-text-muted);
+            "
+          >
+            A read-only scan of the string unions in
+            <code>libs/spec/src/index.ts</code>, plus the axes in
+            <code>tools/figma/snapshot.json</code>. Nothing was changed.
+          </p>
+          <ul
+            style="
+              margin: 0;
+              padding-left: 1.25rem;
+              line-height: 1.6;
+              color: var(--ui-color-text-muted);
+            "
+          >
+            <li>
+              <strong style="color: var(--ui-color-text)"
+                >Size is consistent.</strong
+              >
+              The <code>Atl*Size</code> unions use only <code>xs</code>,
+              <code>sm</code>, <code>md</code>, <code>lg</code>, <code>xl</code>
+              and <code>full</code>. None spells out <code>large</code>.
+            </li>
+            <li>
+              <strong style="color: var(--ui-color-text)"
+                >Position is not.</strong
+              >
+              <code>AtlTooltipPosition</code> is
+              <code>above | below | left | right</code>;
+              <code>AtlDrawerPosition</code> is
+              <code>left | right | top | bottom</code>. Same prop name, two
+              words for the vertical sides.
+            </li>
+            <li>
+              <strong style="color: var(--ui-color-text)"
+                >Outline has two spellings.</strong
+              >
+              <code>AtlButtonVariant</code> has <code>outline</code>;
+              <code>AtlCardVariant</code> has <code>outlined</code>.
+            </li>
+            <li>
+              <strong style="color: var(--ui-color-text)"
+                >Failure is named two ways.</strong
+              >
+              <code>danger</code> is the variant in button, badge, alert, toast
+              and progress; the Figma <code>state</code> axis uses both
+              <code>error</code> and <code>invalid</code>, and
+              <code>AtlIconName</code> has both <code>danger</code> and
+              <code>error</code>. Whether each pair is one concept or two was
+              not checked.
+            </li>
+          </ul>
+        </Callout>
+      </MaintainerOnly>
     </div>
 
     <!-- Code-only facts -->
@@ -1298,43 +1312,54 @@ const FIGMA_URL =
         lang="text"
         title="AtlButton master description"
       />
-      <p
-        style="
-          color: var(--ui-color-text-muted);
-          line-height: 1.6;
-          margin: 1.25rem 0;
-        "
+      <MaintainerOnly
+        label="Maintainer · how Atelier gates code-only lines, ADR-0161"
       >
-        <code>check:contracts</code> joins this line to the component's contract
-        in both directions. Every <code>codeOnly</code> entry in the contract
-        needs a matching line (<code>[UNMIRRORED]</code>), and every
-        <code>- Code-only</code> line must name a prop or event that a framework
-        manifest has (<code>[STALE-MIRROR]</code>). Both are warnings.
-      </p>
-      <p
-        style="
-          color: var(--ui-color-text-muted);
-          line-height: 1.6;
-          margin-bottom: 1.25rem;
-        "
-      >
-        The two are not the same thing. The contract's <code>codeOnly</code> is
-        narrower: props with no Figma axis, each with a reason. The course's
-        layer holds any non-visual fact, including ones no contract lists.
-      </p>
-      <Callout tone="note" title="Why Atelier did not adopt the hidden layer">
+        <h3 class="docs-h3">For maintainers</h3>
         <p
-          style="margin: 0; line-height: 1.6; color: var(--ui-color-text-muted)"
+          style="
+            color: var(--ui-color-text-muted);
+            line-height: 1.6;
+            margin: 1.25rem 0;
+          "
         >
-          The snapshot walks hidden layers on purpose, so a hidden frame trips
-          several gates and each would need an exemption. A layer lives per
-          variant, so <code>AtlButton</code> alone would carry 24 copies with
-          nothing to keep them in sync. And nothing in the repo reads a layer's
-          text, while tools already return the description. A team can still add
-          the layer in its own file; just count those costs first. The decision
-          is recorded as ADR-0161.
+          <code>check:contracts</code> joins this line to the component's
+          contract in both directions. Every <code>codeOnly</code> entry in the
+          contract needs a matching line (<code>[UNMIRRORED]</code>), and every
+          <code>- Code-only</code> line must name a prop or event that a
+          framework manifest has (<code>[STALE-MIRROR]</code>). Both are
+          warnings.
         </p>
-      </Callout>
+        <p
+          style="
+            color: var(--ui-color-text-muted);
+            line-height: 1.6;
+            margin-bottom: 1.25rem;
+          "
+        >
+          The two are not the same thing. The contract's <code>codeOnly</code>
+          is narrower: props with no Figma axis, each with a reason. The
+          course's layer holds any non-visual fact, including ones no contract
+          lists.
+        </p>
+        <Callout tone="note" title="Why Atelier did not adopt the hidden layer">
+          <p
+            style="
+              margin: 0;
+              line-height: 1.6;
+              color: var(--ui-color-text-muted);
+            "
+          >
+            The snapshot walks hidden layers on purpose, so a hidden frame trips
+            several gates and each would need an exemption. A layer lives per
+            variant, so <code>AtlButton</code> alone would carry 24 copies with
+            nothing to keep them in sync. And nothing in the repo reads a
+            layer's text, while tools already return the description. A team can
+            still add the layer in its own file; just count those costs first.
+            The decision is recorded as ADR-0161.
+          </p>
+        </Callout>
+      </MaintainerOnly>
     </div>
 
     <BottomNav
