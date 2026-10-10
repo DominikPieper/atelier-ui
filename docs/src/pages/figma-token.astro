@@ -745,9 +745,9 @@ const CLOUD_RELAY_URL = 'https://figma-console-mcp.southleft.com/mcp';
           rel="noopener noreferrer"
           class="docs-link-primary"
           >expansion docs</a
-        >). The <code>:-</code> default (empty when unset) keeps Claude Code
-        from rejecting the whole <code>.mcp.json</code> while the token is not
-        set yet — the scaffold writes it this way.
+        >). The token is optional, so the scaffold writes the <code>:-</code>
+        default (empty when unset). Without it, Claude Code warns about a
+        missing environment variable for the entry (observed with 2.1.296).
       </p>
       <Code
         code={`// .mcp.json\n"figma-console": {\n  "command": "npx",\n  "args": ["-y", "figma-console-mcp@1.40.0"],\n  "env": {\n    "FIGMA_ACCESS_TOKEN": "\${FIGMA_ACCESS_TOKEN:-}",\n    "ENABLE_MCP_APPS": "true"\n  }\n}`}
