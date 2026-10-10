@@ -10,7 +10,7 @@ import {
   writeJson,
 } from '@nx/devkit';
 import { spawn, type SpawnOptions } from 'node:child_process';
-import { readFileSync } from 'node:fs';
+import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { PresetGeneratorSchema } from './schema';
 
@@ -119,7 +119,37 @@ function testingTemplateName(
   return `testing/${framework}/${base}.ts.template`;
 }
 
-// The workspace's own component skill (`.claude/skills/atelier-component/`)
+// Two more skills ship as verbatim copies — no remote pull, nothing to
+// substitute — and are held byte-identical to their repo sources by
+// `check:preflight-clone-sync` (tools/scripts/sync-preflight.mjs, DIRS):
+// `uianatomy-mcp` (always) and `figma-workspace-architect` (only with
+// `figmaMcp`: it drives figma-console-mcp, which the scaffold wires only then,
+// ADR-0144's figma/no-figma split). `design-to-code` deliberately does not
+// ship: `atelier-component` below is the design-to-code loop for a workspace.
+// The set of files is whatever sits under the template directory, so a
+// reference added to the source reaches the scaffold through the sync gate
+// alone, with no edit here.
+function listTemplateFiles(relativeDir: string): string[] {
+  return readdirSync(join(__dirname, 'files', relativeDir), {
+    withFileTypes: true,
+  }).flatMap((entry) =>
+    entry.isDirectory()
+      ? listTemplateFiles(`${relativeDir}/${entry.name}`)
+      : [`${relativeDir}/${entry.name}`],
+  );
+}
+
+function writeCopiedSkill(tree: Tree, skill: string): void {
+  const templateDir = `claude/skills/${skill}`;
+  for (const templatePath of listTemplateFiles(templateDir)) {
+    tree.write(
+      templatePath.replace(/^claude\//, '.claude/'),
+      readTemplate(templatePath),
+    );
+  }
+}
+
+// The workspace's own component skill (`.claude/skills/atelier-component/SKILL.md`)
 // ships as a static `files/` template, in two variants selected by
 // `figmaMcp` (ADR-0144: SKILL.md when `--figma`, SKILL.no-figma.md
 // otherwise — whole sections differ, not just a couple of words, so this is
@@ -1716,6 +1746,19 @@ actually check — see the skill itself, or ask Claude Code to use it, for the l
     : `It runs the component → stories → checks loop this workspace ships without Figma —
 see the skill itself, or ask Claude Code to use it, for what each check actually proves.`;
 
+  // What the generator writes itself into .claude/skills/ (CLAUDE.md and
+  // README.md both list it): the figma-workspace-architect line exists only
+  // when the skill does (--figma).
+  const shippedSkillsList = [
+    '- **atelier-component** (`.claude/skills/atelier-component/SKILL.md`) — build or review one component: the loop from the component to its stories and checks',
+    ...(options.figmaMcp
+      ? [
+          '- **figma-workspace-architect** (`.claude/skills/figma-workspace-architect/SKILL.md`) — structural work in the Figma file (tokens/Variables, variants, naming, audits) via figma-console-mcp; load it before larger `figma_execute` / variable calls',
+        ]
+      : []),
+    '- **uianatomy-mcp** (`.claude/skills/uianatomy-mcp/SKILL.md`) — canonical component anatomy, axes and cross-library divergences, looked up through the `uianatomy` MCP server',
+  ].join('\n');
+
   // Definition of Done (below): four checks without Figma, five with it —
   // `check:contracts` only exists when the contract loop does (ADR-0144).
   const doneChecks = [
@@ -1820,9 +1863,13 @@ npm run check:stories
 
 ## Agent Skills
 
-This workspace also ships \`atelier-component\` (\`.claude/skills/atelier-component/SKILL.md\`)
-unconditionally — this generator writes it straight to disk as part of scaffolding, with no
-network fetch and no \`skills: false\` opt-out, unlike the four skills below. ${atelierComponentSkillBlurb}
+This workspace ships these skills unconditionally — the generator writes them straight to
+disk as part of scaffolding, with no network fetch and no \`skills: false\` opt-out, unlike
+the four \`storybookjs/mcp\` skills below:
+
+${shippedSkillsList}
+
+\`atelier-component\` is the loop for building or reviewing a component. ${atelierComponentSkillBlurb}
 
 ${
   skillsEnabled
@@ -2243,6 +2290,10 @@ Every story is also a browser-mode test — run them all headless in Chromium wi
 
 ## Agent Skills
 
+Written by the generator itself, always (no network, no \`skills: false\` opt-out):
+
+${shippedSkillsList}
+
 ${
   skillsEnabled
     ? `The scaffold attempted to install the four \`storybookjs/mcp\` skills (\`stories\`,
@@ -2456,6 +2507,11 @@ Browse components at ${SITE_URL}
     '.claude/skills/atelier-component/SKILL.md',
     renderAtelierComponentSkill(appName, framework, options.figmaMcp ?? false),
   );
+
+  // The two copied skills (see listTemplateFiles' comment above). The
+  // architect only when the workspace has figma-console to drive.
+  writeCopiedSkill(tree, 'uianatomy-mcp');
+  if (options.figmaMcp) writeCopiedSkill(tree, 'figma-workspace-architect');
 
   // .gitignore: create-nx-workspace already writes this file (before any
   // preset runs) with its own standard ignores (node_modules, dist, .nx, …)

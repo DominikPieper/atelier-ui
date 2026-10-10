@@ -30,6 +30,11 @@
  *   - `tools/eslint-rules/{angular-template,atl-button-icon-only-needs-name,
  *     atl-sub-component-needs-parent}.js` are the two Angular template rules the
  *     Angular scaffold wires (ADR-0152), plus the plugin file that exposes them.
+ *   - Two Claude Code skills ship copied (no remote pull) into every scaffold:
+ *     `uianatomy-mcp` (one file) and `figma-workspace-architect` (only with
+ *     `--figma`; SKILL.md + references/ + assets/, the same payload
+ *     `package-skill.mjs` zips). Twenty-odd files, so they are listed as
+ *     directory pairs (DIRS below) and expanded, not entry by entry.
  *
  * Originally a single-file check (preflight.mjs only); generalised to a FILES
  * list here without renaming the script or changing its `--check` semantics,
@@ -56,8 +61,15 @@
  * into `check:all`). Without --check, overwrites every preset copy with its
  * canonical source.
  */
-import { readFileSync, writeFileSync, mkdirSync } from 'node:fs';
-import { resolve, dirname } from 'node:path';
+import {
+  readFileSync,
+  writeFileSync,
+  mkdirSync,
+  readdirSync,
+  existsSync,
+  statSync,
+} from 'node:fs';
+import { resolve, dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
@@ -181,6 +193,60 @@ const FILES = [
   },
 ];
 
+// Skill payloads, expanded into FILES below. `include` names the repo-relative
+// entries (relative to `source`) that ship: a file, or a directory taken whole.
+// Dev-only files (tests/, CHANGELOG, README, package.json, project.json) are
+// simply not listed. The target directory must hold exactly the expanded set:
+// a leftover file there (a reference deleted from the source) is drift too.
+const DIRS = [
+  {
+    source: '.claude/skills/uianatomy-mcp',
+    target: `${PRESET_FILES_DIR}/claude/skills/uianatomy-mcp`,
+    include: ['SKILL.md'],
+  },
+  {
+    source: 'skills/figma-workspace-architect',
+    target: `${PRESET_FILES_DIR}/claude/skills/figma-workspace-architect`,
+    include: ['SKILL.md', 'references', 'assets'],
+  },
+];
+
+function walk(dir) {
+  if (!existsSync(dir)) return [];
+  return readdirSync(dir, { withFileTypes: true }).flatMap((e) =>
+    e.isDirectory()
+      ? walk(join(dir, e.name)).map((p) => join(e.name, p))
+      : [e.name],
+  );
+}
+
+function expandDir({ source, target, include }) {
+  return include.flatMap((entry) => {
+    const isDir = statSync(resolve(ROOT, source, entry)).isDirectory();
+    const rels = isDir
+      ? walk(resolve(ROOT, source, entry)).map((p) => join(entry, p))
+      : [entry];
+    return rels.map((rel) => ({
+      source: `${source}/${rel}`,
+      target: `${target}/${rel}`,
+    }));
+  });
+}
+
+for (const dir of DIRS) {
+  FILES.push(...expandDir(dir));
+}
+
+// Files present under a DIRS target that no source entry expands to.
+function strayTargetFiles() {
+  const expected = new Set(FILES.map((f) => f.target));
+  return DIRS.flatMap((d) =>
+    walk(resolve(ROOT, d.target))
+      .map((p) => `${d.target}/${p}`)
+      .filter((t) => !expected.has(t)),
+  );
+}
+
 const mode = process.argv[2];
 
 if (mode === '--check') {
@@ -197,6 +263,10 @@ if (mode === '--check') {
       console.error(`[DRIFT] ${source} and ${target} are not byte-identical.`);
       drifted = true;
     }
+  }
+  for (const stray of strayTargetFiles()) {
+    console.error(`[DRIFT] ${stray} has no source — delete it.`);
+    drifted = true;
   }
   if (drifted) {
     console.error(`Run: node tools/scripts/sync-preflight.mjs`);

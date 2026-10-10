@@ -4,7 +4,7 @@ A Build-mode recipe for the case where the **code side already states the compon
 a typed prop contract (a TypeScript interface with string-literal unions, a Vue
 `defineProps`, a web-component attribute table) exists, and Figma needs a master that
 the codebase's own gates will accept as _the same thing_. The direction is the reverse
-of design-to-code; the discipline is the same — names, values and bindings match
+of the Figma-to-code loop; the discipline is the same — names, values and bindings match
 verbatim, and the run ends in whatever gate the repo has, not in a screenshot.
 
 Use it when the user says "put X into Figma", "create the master for X", "Figma is
@@ -60,7 +60,10 @@ existing master (rename, split) are Migrate, not this.
 Return every node id you created — the repo's records (parity, snapshot, stories'
 design links) will want them.
 
-## Worked example — the Atelier monorepo
+## Worked example — the Atelier monorepo (does not apply to a generated workspace)
+
+_The paths, scripts and gates below exist only in the Atelier repo itself. In a generated
+workspace use the contract and gate it ships instead (`contracts/`, `npm run check:contracts`)._
 
 Contract: `libs/spec/src/index.ts` (`Atl<Name>Spec`, string-literal unions) and
 `libs/spec/src/metadata/<name>.metadata.ts` (`variantMatrix`). Semantic collection:
@@ -74,7 +77,7 @@ Category = the Storybook `title:` prefix (`Inputs`, `Display`, `Navigation`, `Ov
 `INSTANCE` per master on the Inventory page plus the TOC count and date. Close:
 `npm run figma:snapshot` (needs the Desktop Bridge) then
 `npm run check:figma > /tmp/f.out 2>&1; echo $?` — zero, or the run is not done.
-The `design-to-code` skill picks up from here (its Build mode needs a node id).
+In the Atelier repo, a separate Figma-to-code skill picks up from here (it needs the master's node id).
 
 ## What this recipe does not decide
 

@@ -2925,6 +2925,192 @@ describe('preset generator', () => {
     },
   );
 
+  describe('copied skills (uianatomy-mcp, figma-workspace-architect)', () => {
+    const SKILLS_DIR = '.claude/skills';
+
+    // Every file under a skill directory in the generated tree.
+    function skillFiles(skill: string): string[] {
+      return tree
+        .listChanges()
+        .map((c) => c.path)
+        .filter((p) => p.startsWith(`${SKILLS_DIR}/${skill}/`));
+    }
+
+    function frontmatterName(skill: string): string | undefined {
+      const md = tree.read(`${SKILLS_DIR}/${skill}/SKILL.md`, 'utf-8') ?? '';
+      return /^---\n(?:[\s\S]*?\n)?name: (.+)\n[\s\S]*?\n---/.exec(md)?.[1];
+    }
+
+    // Tokens that only mean something inside the Atelier monorepo itself.
+    const REPO_ONLY = [
+      'libs/spec',
+      'parity:record',
+      'QMnDD8uZQPldPrlCwZZ58T',
+      'design-to-code',
+      'check:figma',
+      'figma:snapshot',
+      'figma:sync',
+      'tools/scripts',
+      'skills/atelier-design',
+      'plan/adr',
+      'workshop/briefs',
+    ];
+
+    // The architect skill keeps its Atelier-repo material, but only as
+    // labelled examples: two whole sections and two inline parentheticals.
+    // Those are cut out before the scan, so a repo-only token anywhere else
+    // fails — an example that lost its label, or a new unlabelled leak.
+    function withoutLabelledExamples(md: string): string {
+      return md
+        .replace(
+          /^## (?:Example from the Atelier UI repo|Worked example — the Atelier monorepo) \(does not apply to a generated workspace\)[\s\S]*?(?=^## |(?![\s\S]))/gm,
+          '',
+        )
+        .replace(/\((?:In|Example from) the Atelier repo[^)]*\)/g, '');
+    }
+
+    it('with --figma ships both skills, every file the repo payload has', async () => {
+      await presetGenerator(tree, {
+        name: 'my-workspace',
+        framework: 'angular',
+        figmaMcp: true,
+      });
+
+      expect(tree.exists(`${SKILLS_DIR}/uianatomy-mcp/SKILL.md`)).toBe(true);
+      expect(
+        tree.exists(`${SKILLS_DIR}/figma-workspace-architect/SKILL.md`),
+      ).toBe(true);
+      const architect = skillFiles('figma-workspace-architect');
+      expect(
+        architect.some((p) => p.includes('/references/code-sync.md')),
+      ).toBe(true);
+      expect(
+        architect.some((p) => p.includes('/assets/audit-report-template.md')),
+      ).toBe(true);
+      // The dev-only files package-skill.mjs also leaves out stay out.
+      for (const dev of [
+        'README.md',
+        'CHANGELOG.md',
+        'package.json',
+        'project.json',
+      ]) {
+        expect(
+          tree.exists(`${SKILLS_DIR}/figma-workspace-architect/${dev}`),
+        ).toBe(false);
+      }
+      expect(architect.some((p) => p.includes('/tests/'))).toBe(false);
+    });
+
+    it('without --figma ships uianatomy-mcp but not figma-workspace-architect', async () => {
+      await presetGenerator(tree, {
+        name: 'my-workspace',
+        framework: 'react',
+        figmaMcp: false,
+      });
+
+      expect(tree.exists(`${SKILLS_DIR}/uianatomy-mcp/SKILL.md`)).toBe(true);
+      expect(skillFiles('figma-workspace-architect')).toEqual([]);
+    });
+
+    it.each([
+      ['uianatomy-mcp', true],
+      ['figma-workspace-architect', true],
+      ['uianatomy-mcp', false],
+    ] as const)(
+      '%s: frontmatter name matches its directory (figmaMcp: %s)',
+      async (skill, figmaMcp) => {
+        await presetGenerator(tree, {
+          name: 'my-workspace',
+          framework: 'vue',
+          figmaMcp,
+        });
+
+        expect(frontmatterName(skill)).toBe(skill);
+      },
+    );
+
+    it('design-to-code is not shipped, and no shipped skill file names it', async () => {
+      await presetGenerator(tree, {
+        name: 'my-workspace',
+        framework: 'angular',
+        figmaMcp: true,
+      });
+
+      expect(skillFiles('design-to-code')).toEqual([]);
+      for (const path of tree
+        .listChanges()
+        .map((c) => c.path)
+        .filter((p) => p.startsWith(`${SKILLS_DIR}/`))) {
+        expect(tree.read(path, 'utf-8') ?? '').not.toContain('design-to-code');
+      }
+    });
+
+    it('no shipped skill file carries a repo-only token outside a labelled Atelier example', async () => {
+      await presetGenerator(tree, {
+        name: 'my-workspace',
+        framework: 'angular',
+        figmaMcp: true,
+      });
+
+      for (const path of tree
+        .listChanges()
+        .map((c) => c.path)
+        .filter(
+          (p) =>
+            p.startsWith(`${SKILLS_DIR}/uianatomy-mcp/`) ||
+            p.startsWith(`${SKILLS_DIR}/figma-workspace-architect/`),
+        )) {
+        const scanned = withoutLabelledExamples(tree.read(path, 'utf-8') ?? '');
+        for (const token of REPO_ONLY) {
+          expect({ path, token, found: scanned.includes(token) }).toEqual({
+            path,
+            token,
+            found: false,
+          });
+        }
+      }
+    });
+
+    it('the labelled examples are still there (the scan above is not vacuous)', async () => {
+      await presetGenerator(tree, {
+        name: 'my-workspace',
+        framework: 'angular',
+        figmaMcp: true,
+      });
+
+      const dir = `${SKILLS_DIR}/figma-workspace-architect/references`;
+      const sync = tree.read(`${dir}/code-sync.md`, 'utf-8') ?? '';
+      const build =
+        tree.read(`${dir}/build-from-code-contract.md`, 'utf-8') ?? '';
+      expect(sync).toContain('(does not apply to a generated workspace)');
+      expect(sync).toContain('libs/styles/src/tokens.css');
+      expect(build).toContain('(does not apply to a generated workspace)');
+      expect(build).toContain('libs/spec');
+      expect(withoutLabelledExamples(sync)).not.toContain(
+        'libs/styles/src/tokens.css',
+      );
+    });
+
+    it.each([true, false])(
+      'CLAUDE.md and README.md list exactly the skills that ship (figmaMcp: %s)',
+      async (figmaMcp) => {
+        await presetGenerator(tree, {
+          name: 'my-workspace',
+          framework: 'angular',
+          figmaMcp,
+        });
+
+        for (const file of ['CLAUDE.md', 'README.md']) {
+          const md = tree.read(file, 'utf-8') ?? '';
+          expect(md).toContain('atelier-component');
+          expect(md).toContain('uianatomy-mcp');
+          expect(md.includes('figma-workspace-architect')).toBe(figmaMcp);
+          expect(md).not.toContain('design-to-code');
+        }
+      },
+    );
+  });
+
   it('appends .claude/settings.local.json to .gitignore without disturbing existing entries', async () => {
     tree.write('.gitignore', 'node_modules\ndist\n');
 
@@ -2977,7 +3163,7 @@ describe('preset generator', () => {
       expect(md).toContain('.claude/skills/atelier-component/SKILL.md');
       expect(md).toContain('network fetch');
       expect(md).toContain('no `skills: false` opt-out');
-      expect(md).toContain('unlike the four skills below');
+      expect(md).toContain('unlike\nthe four `storybookjs/mcp` skills below');
     },
   );
 

@@ -184,7 +184,11 @@ Add these to the Audit checklist's "Engineering-Sync Readiness" category — the
 - **Aliases flattened in export.** Figma supports `--ui-color-primary → primitive/teal/600`. Some exporters resolve the alias and emit only the leaf value, losing the semantic layer. Fix: emit both or document the choice explicitly.
 - **Manual edits to the generated file.** Someone tweaks `tokens.css` directly. Next export overwrites it. Fix: top-of-file banner saying `/* AUTO-GENERATED — do not edit. Source: Figma Variables. */` and a CI check that the file is committed unchanged after a fresh export.
 
-## Project-level notes for this Atelier UI repo
+## Example from the Atelier UI repo (does not apply to a generated workspace)
+
+_This section describes the Atelier monorepo itself, as a worked example of the "pick a
+direction" question above. The paths, scripts and ADRs it names exist only in that repo, not in
+a workspace generated from it; skip it there._
 
 Token _value_ ownership across Figma, the framework libs, and the artboard/skill copies is
 mapped by axis in ADR-0115 — read that first for the full picture. This section is that

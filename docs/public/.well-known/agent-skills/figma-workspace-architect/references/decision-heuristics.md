@@ -99,9 +99,10 @@ A Mode is appropriate when **the same Semantic token resolves to a different val
 
   A Variant Property here is a Figma-side axis (`state`), curated rather than fully
   crossed against every other axis — not a licence to let a state value reach the code
-  side. The corresponding code contract (`Atl*Variant` in `libs/spec/src/index.ts`) never
-  carries a state; hover/focus/active/disabled stay CSS pseudo-classes and attributes
-  there. See `workshop/briefs/README.md`'s "states get a Figma axis" rule and ADR-0114.
+  side. The corresponding code contract never carries a state; hover/focus/active/disabled stay
+  CSS pseudo-classes and attributes there. (In the Atelier repo that is `Atl*Variant` in
+  `libs/spec/src/index.ts`, per its "states get a Figma axis" rule and ADR-0114 — an example
+  from that repo, not a file a generated workspace has.)
 
 **Default:** modes for theming/branding, separate collections for separate categories. Modes on the **Semantic** tier only.
 

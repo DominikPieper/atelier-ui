@@ -64,10 +64,11 @@ Examples:
 Don't use Boolean Properties to encode mutually exclusive states (Default / Hover / Disabled). That's a Variant.
 
 That Variant lives only on the Figma side, as its own `state` axis, curated rather than
-crossed against every other axis. It has no analogue in the code contract: `Atl*Variant`
-in `libs/spec/src/index.ts` never carries a state value — hover/focus/active/disabled
-stay CSS pseudo-classes and attributes there. See `workshop/briefs/README.md`'s "states
-get a Figma axis" rule and ADR-0114.
+crossed against every other axis. It has no analogue in the code contract: its variant type
+never carries a state value — hover/focus/active/disabled stay CSS pseudo-classes and
+attributes there. (Example from the Atelier repo, not a file a generated workspace has: the
+contract there is `libs/spec/src/index.ts`, per its "states get a Figma axis" rule and
+ADR-0114.)
 
 ### Text Property — for editable strings
 

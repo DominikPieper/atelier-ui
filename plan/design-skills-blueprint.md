@@ -481,6 +481,9 @@ The list below is kept as written before the decisions.
    after `design-to-code` has passed its eval runs in the monorepo — packaging an
    untested skill into every participant workspace multiplies the untested part.
    Either way the scaffold's `.mcp.json` gets the same version pin as ADR-0110.
+   **Decided 2026-10-10 (ADR-0167):** the generic skills ship (`uianatomy-mcp` always,
+   the architect with `--figma`); `design-to-code` stays monorepo-only, and the scaffold's
+   `atelier-component` skill is the workspace's loop.
 
 ## 9. Verified vs assumed
 
