@@ -149,3 +149,7 @@ Beyond the shared bar in [`README.md`](README.md):
 - The description states the fallback order and the initials algorithm.
 - The status dot, if you build it, is a child of the container and positioned with
   logical properties.
+
+---
+
+**Before you prompt:** write the handoff document first. A filled example (for the Toast brief) is at <https://atelier.pieper.io/design-to-code#handoff-example>.

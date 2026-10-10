@@ -122,6 +122,241 @@ Answer:
 
 Quote the handoff line and the diff hunk for each answer.
 No score, no fixes.`;
+
+// Step 2 — the finding codes, from libs/design-contracts/bin/check-contracts.mjs
+// (TAG_LEVEL and the report() messages).
+const FINDING_CODES: {
+  code: string;
+  level: string;
+  means: string;
+  fix: string;
+}[] = [
+  {
+    code: 'AXIS',
+    level: 'error',
+    means:
+      'A Figma variant axis has no matching code prop, or the values differ, or an axis value is not covered by an axisMap or figmaOnly entry.',
+    fix: 'Rename the prop or the axis so they match, or add an axisMap entry (with values for Boolean props) or a figmaOnly entry, each with a reason.',
+  },
+  {
+    code: 'BOOLEAN',
+    level: 'error',
+    means: 'A Figma Boolean property has no boolean prop in code.',
+    fix: 'Add the prop, rename it to match, or record the difference in figmaOnly or axisMap.',
+  },
+  {
+    code: 'ENUM-UNDRAWN',
+    level: 'error',
+    means:
+      'A code prop with a fixed set of string values has no Figma axis, axisMap or codeOnly entry.',
+    fix: 'Draw the axis in Figma, or add a codeOnly entry whose reason says why the master does not draw it.',
+  },
+  {
+    code: 'COVERAGE',
+    level: 'error',
+    means: 'No story sets one of the values of a prop that the master draws.',
+    fix: 'Add a story with that value (one story per variant value).',
+  },
+  {
+    code: 'STALE-EXEMPTION',
+    level: 'error',
+    means:
+      'A contract entry no longer suppresses anything: the master or the code changed and the entry points at something that is gone or now matches.',
+    fix: 'Delete the entry, or fix the name it points at.',
+  },
+  {
+    code: 'CONTRACT-MISSING',
+    level: 'error',
+    means:
+      'The component has a Figma master and a docgen result but no contract file.',
+    fix: "Write <name>.contract.ts with the master's node id.",
+  },
+  {
+    code: 'CONTRACT-NODE',
+    level: 'error',
+    means:
+      "The contract's figmaNodeId differs from the node id in the Figma snapshot.",
+    fix: 'Correct the id, or refresh the snapshot if the master was recreated.',
+  },
+  {
+    code: 'CONTRACT-DUPLICATE',
+    level: 'error',
+    means:
+      'Two contract files declare the same component. Only one is kept, the other is silently ignored.',
+    fix: 'Delete or rename one of the two files.',
+  },
+  {
+    code: 'DOCGEN-EMPTY',
+    level: 'error',
+    means:
+      "A contract exists, but reading the component's source gave zero props.",
+    fix: "Check that the story's meta.component points at the real component and that its props are declared on it.",
+  },
+  {
+    code: 'DOCGEN-FAILED',
+    level: 'error',
+    means:
+      "The tool could not read a component's source (the message names the story file and the reason).",
+    fix: 'Fix the syntax or import error the message names, then run again.',
+  },
+  {
+    code: 'ROSTER',
+    level: 'error',
+    means:
+      'Story files exist, but reading them produced no component at all. A check that measures nothing fails instead of passing.',
+    fix: 'Check the stories path in contracts.config.json and that meta.component is set in each story file.',
+  },
+  {
+    code: 'NO-MASTER',
+    level: 'warning',
+    means:
+      'A component has no master in the Figma snapshot, so there is nothing to compare it against.',
+    fix: 'Expected before you have a master. Once you have one, refresh the Figma snapshot.',
+  },
+  {
+    code: 'NO-STORY-META',
+    level: 'warning',
+    means:
+      "A contract and a master exist, but no story file's meta.component resolves to the component.",
+    fix: 'Write the story file, or point its meta.component at the component.',
+  },
+  {
+    code: 'FW-ONLY',
+    level: 'warning',
+    means:
+      'A codeOnly prop is missing in one framework but present in another (an API difference between frameworks), or a single-framework run cannot confirm it.',
+    fix: 'Add the prop to the framework that lacks it. In a one-framework workspace, check the prop name is right.',
+  },
+  {
+    code: 'FIGMA-ONLY',
+    level: 'warning',
+    means:
+      'A figmaOnly or codeOnly entry still has the placeholder reason UNEXPLAINED.',
+    fix: 'Write the real reason.',
+  },
+  {
+    code: 'UNMIRRORED',
+    level: 'warning',
+    means:
+      'A contract entry is not mentioned in the master\'s Figma description (a codeOnly entry needs a "- Code-only `name`: reason" line).',
+    fix: "Add the line to the master's description, so a designer sees the difference too.",
+  },
+  {
+    code: 'STALE-MIRROR',
+    level: 'warning',
+    means:
+      'The master\'s description has a "Code-only" line for a prop the code no longer has.',
+    fix: 'Remove the line from the description.',
+  },
+  {
+    code: 'COVERAGE-BOOL',
+    level: 'warning',
+    means: 'A boolean prop is never true in any story.',
+    fix: 'Add a story that sets it to true.',
+  },
+  {
+    code: 'UNRESOLVED-ARGS',
+    level: 'warning',
+    means:
+      'The check could not read the args of a story statically, so that story counts for nothing.',
+    fix: 'Write the args as literal values in the story.',
+  },
+  {
+    code: 'CONTRACT-ORPHAN',
+    level: 'warning',
+    means: "The contract's component name matches no master in the snapshot.",
+    fix: 'Fix the name in the contract, or refresh the snapshot.',
+  },
+  {
+    code: 'CONTRACT-IMPORT',
+    level: 'warning (configurable)',
+    means:
+      'A story\'s meta does not import its component\'s contract and set it in parameters.contract. It is an error where contractImportSeverity is "error".',
+    fix: "Add import { contract } from '...' to the story and set contract in the meta's parameters.",
+  },
+];
+
+// Step 2 — a worked contract: AtlToast's real contract, reasons shortened.
+const CONTRACT_EXAMPLE = `import type { ComponentContract } from './types';
+
+export const contract = {
+  component: 'AtlToast',
+  figmaNodeId: '55:47',
+  figmaOnly: [
+    {
+      name: 'message',
+      reason:
+        'The message is the first argument of the toast service call, not a prop.',
+    },
+  ],
+  axisMap: [
+    {
+      figmaAxis: 'position',
+      codeProp: 'AtlToastContainer.position',
+      reason:
+        'The axis lives on the sibling AtlToastContainer, not on AtlToast.',
+    },
+  ],
+} satisfies ComponentContract;`;
+
+// Step 2 — real output of the checker (see the report for how it was captured).
+const CONTRACT_FAIL_OUTPUT = `--- findings ---
+[AXIS] (angular) AtlToast: no manifest prop named 'position' for snapshot axis 'position'
+
+total: 1 error(s), 91 warning(s)      # exit code 1`;
+
+const CONTRACT_PASS_OUTPUT = `[angular] components: 31, contracts: 43, stories: 32 (...), warnings: 25, errors: 0, 5165 ms
+
+total: 0 error(s), 91 warning(s)      # exit code 0`;
+
+// Step 4 — a filled handoff document, from the Toast brief.
+const HANDOFF_EXAMPLE = `# Handoff — AtlToast · Angular
+
+**Source.** Duplicate of the Atelier file in my drafts, <draft URL>, node
+\`<node id of my copy>\` (copied from the starter frame \`Toast / Starter\`, node
+\`703:341\`). Page: my copy of the Toast frame.
+
+**Canonical record.** uianatomy \`toast\`. The record is past its 90-day review
+threshold, so I treat it as a strong prior, not as the rule.
+
+**Reuse or new.** New component. The status glyph reuses AtlIcon. It is not an
+Alert (inline, persistent) and not a Dialog (blocking).
+
+**In scope.** variant = success | danger; states = open | closing.
+\`dismissible\` and \`hasIcon\` as Booleans if time allows.
+Hover and focus-visible are CSS, not variants.
+
+**Explicitly out.** variants info and warning; the six position values (one
+corner only); stacking; the progress affordance. Each is named in the Figma
+description of the master, not left out silently.
+
+**Token bindings.** Container: fill \`--ui-color-surface-raised\`, border
+\`--ui-color-border\`, radius \`--ui-radius-md\`, padding and gap from the
+\`--ui-spacing-*\` ladder. success: \`--ui-color-success-bg\` and
+\`--ui-color-success-text\`. danger: \`--ui-color-danger-bg\` and
+\`--ui-color-danger-text\`. Close button: \`--ui-color-text-muted\`.
+Elevation: \`--ui-shadow-lg\`, CSS only. Figma has no shadow variable, so the
+Figma description says so.
+
+**Behaviour.** Each line becomes the title of one play function.
+- Auto-dismisses after N seconds (I choose N and write it here: ___).
+- Pauses on pointer-enter and on focus-in; resumes, does not restart, when both are out.
+- Escape closes the toast while focus is inside it.
+- success announces politely (role="status"); danger announces assertively (role="alert").
+- The close button has one accessible name, from aria-label or hidden text, never both.
+
+**Accessibility.** success and danger differ without colour (glyph and text).
+The glyph is aria-hidden. The action, if present, is a real button. A critical
+error is never shown as a toast.
+
+**Target files.** The component, its unit test and its story file (one story
+per variant value and Boolean state, a play function per behaviour line above),
+plus the contract at \`workshop-<fw>/src/contracts/toast.contract.ts\`.
+
+**Acceptance.** Unit tests and lint exit 0. check:stories green (every story
+renders, axe clean). check:contracts exit 0, with no [AXIS] or [BOOLEAN]
+finding. figma_check_design_parity run on my node, every discrepancy it reports
+decided: fix the code, the master, or the contract.`;
 ---
 
 <BaseLayout
@@ -272,9 +507,12 @@ No score, no fixes.`;
               <code>skills/design-to-code/references/handoff-document.md</code>
               and fill in what you just inspected (file, node id, variants,
               token bindings). Leave behaviour, exclusions, and reuse-vs-new as
-              blanks for you to decide and write. The
-              <code>design-to-code</code> skill will not start building without
-              this document.
+              blanks for you to decide and write. A
+              <a href="#handoff-example" class="docs-link-primary"
+                >filled example</a
+              >
+              is in step 4. The <code>design-to-code</code> skill will not start
+              building without this document.
             </p>
           </Callout>
           <details class="d2c-why">
@@ -320,6 +558,85 @@ No score, no fixes.`;
             keep in sync by hand. For each difference you write down, say in the
             entry's <code>reason</code> why it is there.
           </p>
+
+          <h3 id="contract-example" class="docs-h3 docs-h3--spaced">
+            A worked contract
+          </h3>
+          <p class="docs-step-desc">
+            This is the contract of this library's own <code>AtlToast</code>,
+            with the reasons shortened. Copy the shape, not the values:
+            <code>figmaNodeId</code> is the node id of <em>your</em> master. It
+            has the two kinds of entry you will write most often.
+            <code>figmaOnly</code> names something the master has and the code
+            deliberately does not (here a Text property, because the message is
+            a call argument). <code>axisMap</code> says that a Figma axis is a
+            code prop under another name or place (here the
+            <code>position</code> axis is a prop of the toast container, not of
+            the toast). Every entry needs a <code>reason</code> that says why
+            the two sides differ on purpose. The field names are the schema's
+            (<code>libs/design-contracts/src/types.d.ts</code>; a scaffolded
+            workspace has the same type in
+            <code>workshop-&lt;fw&gt;/src/contracts/types.ts</code>).
+          </p>
+          <Code code={CONTRACT_EXAMPLE} lang="ts" title="toast.contract.ts" />
+          <p class="docs-step-desc">
+            Now see what <code>npm run check:contracts</code> says when the
+            <code>axisMap</code> entry is missing. The master has a
+            <code>position</code> axis and the code has no prop of that name, so
+            the check cannot pair them and fails (exit code 1):
+          </p>
+          <Code
+            code={CONTRACT_FAIL_OUTPUT}
+            lang="text"
+            title="check:contracts, axisMap removed"
+          />
+          <p class="docs-step-desc">
+            With the entry restored, the same run reports <code>errors: 0</code>
+            and exits 0:
+          </p>
+          <Code
+            code={CONTRACT_PASS_OUTPUT}
+            lang="text"
+            title="check:contracts, contract complete"
+          />
+          <p class="docs-step-desc">
+            The output above was captured from this repo; the counts and the
+            other lines of a real run depend on your workspace. In a run with
+            several frameworks each finding is tagged with the framework it came
+            from. <strong style="color: var(--ui-color-text)">Errors</strong>
+            fail the run,
+            <strong style="color: var(--ui-color-text)">warnings</strong> do
+            not. The tag in square brackets tells you what to do next:
+          </p>
+          <h3 id="finding-codes" class="docs-h3 docs-h3--spaced">
+            Finding codes
+          </h3>
+          <p class="docs-step-desc">
+            Errors first. Each is a line starting with its code in square
+            brackets.
+          </p>
+          <div class="docs-table-scroll">
+            <table class="docs-props-table">
+              <thead>
+                <tr>
+                  <th>Code</th>
+                  <th>Level</th>
+                  <th>What it means</th>
+                  <th>Usual fix</th>
+                </tr>
+              </thead>
+              <tbody>
+                {FINDING_CODES.map((f) => <tr>
+                  <td>
+                    <code>[{f.code}]</code>
+                  </td>
+                  <td>{f.level}</td>
+                  <td>{f.means}</td>
+                  <td>{f.fix}</td>
+                </tr>)}
+              </tbody>
+            </table>
+          </div>
           <p class="docs-step-desc">
             <strong style="color: var(--ui-color-text)"
               >The stories are the claims.</strong
@@ -860,6 +1177,33 @@ No score, no fixes.`;
             wrap
             title="ticket review prompt"
           />
+
+          <h3 id="handoff-example" class="docs-h3 docs-h3--spaced">
+            Example: a filled handoff document
+          </h3>
+          <p class="docs-step-desc">
+            This is what the document from
+            <a href="#step-inspect" class="docs-link-primary">step 1</a> looks
+            like when it is filled, for the Toast brief
+            (<code>workshop/briefs/toast.md</code>), in Angular. It is a
+            checklist, not a form: its value is that you decide the scope and
+            write the behaviour in your own words before any code exists. The
+            judge prompt above reads exactly this text. Note the two blanks only
+            you can fill: your draft URL and node id, and the auto-dismiss time
+            (the brief says "configurable" and leaves the number to you).
+          </p>
+          <Code
+            code={HANDOFF_EXAMPLE}
+            lang="markdown"
+            wrap
+            title="tasks/handoff-toast.md"
+          />
+          <p class="docs-step-desc">
+            Every line of it is something the diff can be held against: a
+            variant that is not on the "In scope" line is a finding, and so is a
+            behaviour line with no play function. The empty template is
+            <code>skills/design-to-code/references/handoff-document.md</code>.
+          </p>
           <p class="docs-step-desc">
             Not to be confused with the <code>evals/</code> folders under
             <code>skills/</code>: those test whether an agent follows a skill.

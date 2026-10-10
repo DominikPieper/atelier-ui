@@ -189,3 +189,7 @@ Beyond the shared bar in [`README.md`](README.md):
 - The `delta` slot is an **instance** of your Badge (or of `Display/AtlBadge`), not a
   hand-drawn pill — the composition has to be a real composition, or the next token
   change breaks it silently.
+
+---
+
+**Before you prompt:** write the handoff document first. A filled example (for the Toast brief) is at <https://atelier.pieper.io/design-to-code#handoff-example>.

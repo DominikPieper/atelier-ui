@@ -132,3 +132,11 @@ The same bar for all four, and the one the trainer verifies in the closing block
 - `plan/design-principles.md` — surface hierarchy, timing tiers, disabled contract.
 - `tools/figma/snapshot.json` — the `Library Tokens` census and the Workshop-Templates
   starter-frame node ids.
+
+## Before you prompt
+
+Write a short handoff document for your component first (what is in scope, the token
+bindings, the behaviour lines, what is out, the acceptance checks). A filled example,
+built from the Toast brief, is at
+<https://atelier.pieper.io/design-to-code#handoff-example>; the empty template is
+`skills/design-to-code/references/handoff-document.md`.

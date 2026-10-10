@@ -173,3 +173,7 @@ Beyond the shared bar in [`README.md`](README.md):
   contract, the Escape binding, and that the shadow is CSS-only.
 - The two in-scope states are `open` and `closing`, and the description names the four
   data states you did not build.
+
+---
+
+**Before you prompt:** write the handoff document first. A filled example (for the Toast brief) is at <https://atelier.pieper.io/design-to-code#handoff-example>.

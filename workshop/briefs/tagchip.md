@@ -174,3 +174,7 @@ Beyond the shared bar in [`README.md`](README.md):
 - The description records **which** source you followed for radius and type (badge or
   tag), and why.
 - `default` and `success` are distinguishable with colour removed.
+
+---
+
+**Before you prompt:** write the handoff document first. A filled example (for the Toast brief) is at <https://atelier.pieper.io/design-to-code#handoff-example>.
