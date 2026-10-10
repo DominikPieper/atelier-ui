@@ -34,6 +34,200 @@ import PageHero from '../components/PageHero.astro';
       copy-paste.
     </p>
 
+    <section
+      aria-labelledby="your-servers"
+      style="margin: 0 0 2.5rem; max-width: 820px"
+    >
+      <h2 id="your-servers" class="docs-h3">
+        Your MCP servers in the workshop
+      </h2>
+      <p style="line-height: 1.65">
+        The workspace generator writes a <code>.mcp.json</code> at the root of
+        your workspace. Here is what each entry is for in the loop
+        (<strong>inspect → contract → code → verify</strong>), one thing to ask
+        it, and how to tell it works. Which entries you have depends on your
+        answers: <code>storybook-&lt;framework&gt;</code> is the framework you
+        picked, <code>angular-cli</code> exists only for Angular, and
+        <code>figma-console</code> only if you said yes to Figma. The exact file
+        is on
+        <a href="/workshop#mcp-config" class="docs-link-primary"
+          >the workshop page</a
+        >.
+      </p>
+      <div class="docs-table-scroll">
+        <table class="docs-props-table">
+          <thead>
+            <tr>
+              <th>Server</th>
+              <th>What it does</th>
+              <th>Loop step</th>
+              <th>Try asking</th>
+              <th>Working when</th>
+            </tr>
+          </thead>
+          <tbody>
+            <tr>
+              <td><code>storybook-&lt;framework&gt;</code></td>
+              <td>
+                Hosted, read-only component docs for your framework: props,
+                variants, stories, usage. Only <code>docs-list</code>,
+                <code>docs-show</code> and <code>docs-show-story</code>.
+              </td>
+              <td>Code (and the exact prop names the contract refers to)</td>
+              <td>
+                "Call <code>docs-list</code>, then <code>docs-show</code> for
+                the button and tell me its variants."
+              </td>
+              <td>
+                Claude lists real component IDs and prop names from the docs
+                instead of guessing them.
+              </td>
+            </tr>
+            <tr>
+              <td><code>figma-console</code> (if you chose Figma)</td>
+              <td>
+                Reads (and can write) your Figma file through the Desktop Bridge
+                plugin.
+              </td>
+              <td>Inspect, and the final parity check in Verify</td>
+              <td>
+                "Use the figma-console MCP to call <code>figma_get_status</code>
+                and report what it returns."
+              </td>
+              <td>
+                <code>figma_get_status</code> reports the bridge as connected
+                (the plugin panel must be open in Figma Desktop). Setup:
+                <a href="/figma-token" class="docs-link-primary">Figma Setup</a
+                >.
+              </td>
+            </tr>
+            <tr>
+              <td><code>uianatomy</code></td>
+              <td>
+                Canonical component anatomy: axes, slots, states, tokens,
+                events, and where the common libraries disagree.
+              </td>
+              <td>Contract: settle an ambiguous prop shape or interaction</td>
+              <td>
+                "Use uianatomy to show the anatomy of a modal (dialog): slots,
+                states and keyboard behaviour."
+              </td>
+              <td>
+                The answer names slots and states from uianatomy rather than
+                from the model's memory.
+              </td>
+            </tr>
+            <tr>
+              <td><code>nx-mcp</code></td>
+              <td>
+                Workspace knowledge: projects, targets, generators and Nx docs.
+                The Atelier preset does not set up Nx Cloud for your workspace,
+                so the CI tools only work if you connect it yourself;
+                <code>nx_docs</code> works either way.
+              </td>
+              <td>Code and Verify: find and run the right target</td>
+              <td>
+                "Use the Nx MCP's <code>nx_docs</code> to explain what
+                <code>nx test</code> does."
+              </td>
+              <td>The server shows as connected in <code>/mcp</code>.</td>
+            </tr>
+            <tr>
+              <td><code>angular-cli</code> (Angular only)</td>
+              <td>Angular best practices, API search and examples.</td>
+              <td>Code</td>
+              <td>
+                "Use angular-cli to run <code>list_projects</code>, then load
+                the best practices for this workspace."
+              </td>
+              <td>
+                <code>list_projects</code> returns your workspace and its app.
+              </td>
+            </tr>
+          </tbody>
+        </table>
+      </div>
+      <p style="line-height: 1.65; font-size: var(--ui-font-size-sm)">
+        The hosted Storybook server serves docs only. Tools that need a running
+        Storybook (<code>stories-preview</code>, <code>test-run</code>) are not
+        in your <code>.mcp.json</code>; see
+        <a href="/workshop#mcp-config" class="docs-link-primary"
+          >the workshop page</a
+        >
+        and the notes under "For maintainers" below.
+      </p>
+
+      <h3 class="docs-h3 docs-h3--spaced">Check it</h3>
+      <ol style="line-height: 1.65; padding-left: 1.2rem">
+        <li>
+          Open the workspace folder in Claude Code and accept the "do you trust
+          the files in this folder?" prompt. Until you do,
+          <code>.mcp.json</code> is ignored.
+        </li>
+        <li>
+          Run <code>/mcp</code> in the session. Every server from your
+          <code>.mcp.json</code> should be listed as connected; approve any that
+          ask for approval. A server listed as failed, or missing from the list,
+          is the one to fix. The workshop's
+          <a href="/workshop" class="docs-link-primary"
+            >Open in Claude Code step</a
+          >
+          describes the same check.
+        </li>
+        <li>
+          "Connected" only proves the server started or the URL answered. Run
+          the "Try asking" prompt from the table for each server you care about.
+        </li>
+      </ol>
+      <p style="line-height: 1.65">
+        <strong>If one fails, first:</strong> restart Claude Code from the
+        directory that contains <code>.mcp.json</code>, then run
+        <code>npm run preflight</code>, which checks each hosted Storybook
+        endpoint with a real MCP call. Details and curl checks:
+        <a href="/troubleshooting#mcp-not-loaded" class="docs-link-primary"
+          >config not picked up</a
+        >,
+        <a href="/troubleshooting#mcp-unreachable" class="docs-link-primary"
+          >server unreachable</a
+        >,
+        <a href="/troubleshooting#mcp-tools-error" class="docs-link-primary"
+          >connects but tools error</a
+        >. For <code>figma-console</code>, see
+        <a
+          href="/troubleshooting#figma-bridge-plugin-not-connected"
+          class="docs-link-primary"
+          >bridge plugin not connected</a
+        >
+        and <a href="/figma-token" class="docs-link-primary">Figma Setup</a>.
+      </p>
+
+      <h3 class="docs-h3 docs-h3--spaced">Next: your own design system</h3>
+      <p style="line-height: 1.65">
+        These servers serve Atelier's components. For your own design system the
+        same pattern applies: see
+        <a href="#own-mcp" class="docs-link-primary"
+          >Publish your own design-system MCP</a
+        >
+        below for the cheapest way to get there.
+      </p>
+    </section>
+
+    <h2 id="for-maintainers" class="docs-h3" style="margin: 2.5rem 0 0.5rem">
+      For maintainers
+    </h2>
+    <p
+      style="
+        margin: 0 0 1.25rem;
+        max-width: 720px;
+        line-height: 1.65;
+        color: var(--ui-color-text-muted);
+      "
+    >
+      Everything below is about how this repo and its hosted servers are built.
+      You do not need it to do the workshop, apart from the last section on
+      publishing your own server.
+    </p>
+
     <aside
       aria-label="Storybook MCP tool surface at a glance"
       style="
