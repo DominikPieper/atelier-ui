@@ -157,10 +157,10 @@ const MASTER_CHECKS: Check[] = [
       'The accessibility audit ran, and you read how it classified the component',
     severity: 'Degrading',
     what: 'You ran the component accessibility audit on the master and checked which class it assigned.',
-    why: 'The audit skips checks it does not think apply. A 100 on a component it classed <code>presentational</code> means the focus and target-size checks never ran, which says nothing about a master that has a button in it.',
+    why: 'The audit skips checks it does not think apply. A perfect score on a component it classed <code>presentational</code> means the focus and target-size checks never ran, which says nothing about a master that has a button in it.',
     how: '<code>figma_audit_component_accessibility</code>. Read the classification before the score.',
     fix: [
-      'If the class looks wrong (a dialog with a close button classed <code>presentational</code>), the audit decided from the master’s structure; how it decides is not documented here. Name the interactive layers, add the state variants, and re-run. If it still says <code>presentational</code>, treat the 100 as “not assessed” and review focus and target size by hand.',
+      'If the class looks wrong (a dialog with a close button classed <code>presentational</code>), the audit decided from the master’s structure; how it decides is not documented here. Name the interactive layers, add the state variants, and re-run. If it still says <code>presentational</code>, treat the perfect score as “not assessed” and review focus and target size by hand.',
       'A real finding (missing focus indicator, target too small, a state told by colour alone) is a design fix: draw the focus variant, enlarge the hit area, add a non-colour cue.',
     ],
   },
