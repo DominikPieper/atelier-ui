@@ -1,0 +1,767 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { Code } from 'astro-expressive-code/components';
+import PageHero from '../components/PageHero.astro';
+import Callout from '../components/Callout.astro';
+import BottomNav from '../components/BottomNav.astro';
+
+// Severity vocabulary, taken from the "sort what you find" paragraph that used
+// to sit on /design-to-code: cosmetic faults can wait, degrading faults erode
+// the structure, and some faults make the agent's output garbage.
+type Severity = 'Cosmetic' | 'Degrading' | 'Blocks the agent';
+
+interface Check {
+  id: string;
+  title: string;
+  severity: Severity;
+  what: string;
+  why: string;
+  how: string;
+  fix: string[];
+}
+
+// Part A: checks you run on ONE master (and the variables it binds).
+const MASTER_CHECKS: Check[] = [
+  {
+    id: 'bound',
+    title: 'Colour, spacing and radius are bound to variables',
+    severity: 'Degrading',
+    what: 'Every fill, stroke, padding, gap and corner radius in the master’s own layer tree is bound to a variable. None of them is a literal hex or number.',
+    why: 'The agent reads <code>boundVariables</code> to learn which token a property uses. A literal value carries no name, so the agent has nothing to reference and writes the literal into code.',
+    how: '<code>figma_lint_design</code> (rule <code>hardcoded-color</code>) covers colour only. Spacing and radius need a read-only <code>figma_execute</code> walk over the master (the prompt below asks for it).',
+    fix: [
+      'Select the layer. In the Design panel, click the variable icon (four dots) next to the fill, stroke, padding, gap or radius field and pick the variable. For a stroke or fill you can also ask the agent to bind it with <code>figma_set_fills</code> / <code>figma_set_strokes</code>.',
+      'If no suitable variable exists, create it first (checks 3 and 4), then bind. Do not bind to a primitive just to get rid of the warning: bind to the semantic variable that says what the value is for.',
+      'Re-run the check. A raw value that comes back usually sits on a nested layer or on a variant other than the one you looked at.',
+    ],
+  },
+  {
+    id: 'auto-layout',
+    title: 'Every frame with children uses Auto Layout',
+    severity: 'Degrading',
+    what: 'The master’s frames lay out their children with Auto Layout (horizontal or vertical), not with fixed positions.',
+    why: 'Code is built from flow layout. An agent that finds absolute positions has to guess padding, gap and alignment from pixel offsets, and the component will not reflow with a longer label.',
+    how: 'A read-only <code>figma_execute</code> walk that reports every frame with children whose <code>layoutMode</code> is <code>NONE</code>. <code>figma_get_component_for_development</code> also returns the tree with its layout.',
+    fix: [
+      'Select the frame and press <kbd>Shift</kbd>+<kbd>A</kbd> (Add auto layout). Figma infers direction and gap from the current positions.',
+      'Set the padding and gap, then bind them to variables (check 1). Set each child to Hug or Fill so the frame still reflows.',
+      'Do this on every variant, not only the default one: each variant frame is its own tree.',
+    ],
+  },
+  {
+    id: 'scopes',
+    title: 'Variables are scoped, not “all scopes”',
+    severity: 'Degrading',
+    what: 'Each variable the master binds lists the properties it may be applied to (fill, text fill, stroke, gap, corner radius, and so on) instead of the default <code>ALL_SCOPES</code>. Boolean variables are exempt.',
+    why: 'A scope states what a variable is for. Unscoped, a colour shows up in every picker, and nothing in the file says where it belongs. Designers stop using the picker and bind the wrong token; the agent’s tools list the scopes, so an unscoped variable gives it no hint.',
+    how: '<code>figma_get_variables</code> with <code>verbosity: full</code> lists each variable’s <code>scopes</code>.',
+    fix: [
+      'Open the variables panel (Local variables), select the variable, open its edit dialog and set Scoping. A text colour gets <em>Text fill</em>; a surface colour gets <em>Frame fill</em> and <em>Shape fill</em>; a border colour gets <em>Stroke</em>; spacing gets <em>Gap</em>; radius gets <em>Corner radius</em>.',
+      'Scope the primitives too. A semantic variable that aliases a wide-scoped primitive inherits the width.',
+      'For many variables at once, ask the agent to set <code>variable.scopes</code> through <code>figma_execute</code>. This writes to the file: try it on a copy first.',
+    ],
+  },
+  {
+    id: 'code-syntax',
+    title: 'Each variable’s code name is recoverable',
+    severity: 'Blocks the agent',
+    what: 'The variable’s <code>codeSyntax.WEB</code> holds the name the code uses (<code>--ui-color-primary</code>), or you have chosen exactly one other place where the mapping lives and said which: a naming rule, or a mapping table.',
+    why: 'The agent has to write the token’s name in code. If the file only says <code>color/primary</code> and nothing says how that becomes a CSS name, it guesses, or it falls back to a literal.',
+    how: '<code>figma_get_variables</code> with <code>verbosity: full</code> shows <code>codeSyntax</code> per variable.',
+    fix: [
+      'In the variable’s edit dialog, add a Code syntax entry for Web and type the name your code uses, for example <code>var(--ui-color-primary)</code>.',
+      "For all variables in one pass, set it from the code side: <code>variable.setVariableCodeSyntax('WEB', …)</code> in <code>figma_execute</code>, or <code>figma_import_tokens</code>, which round-trips it.",
+      'If the name follows a mechanical rule (slash path becomes a prefixed kebab-case name), you may keep the rule instead, but then write the rule down in one place the agent reads, such as the project’s CLAUDE.md.',
+    ],
+  },
+  {
+    id: 'intent',
+    title: 'Each variable says what it is for',
+    severity: 'Blocks the agent',
+    what: 'A variable carries a short statement of its purpose and constraints (for example “text on the primary surface; must keep 4.5:1”), not only its value.',
+    why: 'Two tokens can resolve to nearly the same colour. Without a stated purpose the agent picks by value, and the next theme change silently breaks the pick.',
+    how: '<code>figma_get_variables</code> returns the variable; check that its description is filled. In code, the same question is whether the token manifest has an <code>intent</code> per token.',
+    fix: [
+      'In the variable’s edit dialog, fill Description with one sentence: what it is for and when not to use it.',
+      'Keep the sentence about purpose. The value is already in the variable.',
+    ],
+  },
+  {
+    id: 'layer-names',
+    title: 'No default layer names in the component’s own tree',
+    severity: 'Cosmetic',
+    what: 'Layers are named for what they are (<code>label</code>, <code>icon</code>, <code>content</code>), not left as <code>Frame</code>, <code>Group</code> or <code>Rectangle</code>.',
+    why: 'Layer names are the only structure the agent can read. A tree of <code>Frame / Frame / Frame</code> becomes a tree of anonymous <code>div</code>s.',
+    how: '<code>figma_lint_design</code> (rule <code>default-name</code>). It also flags layers inside nested library instances; ignore those, they are not yours to rename.',
+    fix: [
+      'Double-click the layer in the Layers panel (or press <kbd>Cmd</kbd>+<kbd>R</kbd> / <kbd>Ctrl</kbd>+<kbd>R</kbd>) and rename it. Use the same word you would use for the element in code.',
+      'Selecting several layers and renaming them in one go is faster than one by one; the agent can do it with <code>figma_rename_node</code>.',
+      'Rename on the master. Instances inherit the name.',
+    ],
+  },
+  {
+    id: 'variant-layers',
+    title: 'Layer names match across variants',
+    severity: 'Blocks the agent',
+    what: 'The same element has the same layer name in every variant of the set. Only a variant that really owns an extra layer (an error message, say) has one the others lack.',
+    why: 'The agent compares variants to learn what changes. If the label is <code>text</code> in one variant and <code>Label</code> in the next, it reads two different elements and the diff between variants turns to noise.',
+    how: 'No tool does this. Ask for a read-only <code>figma_execute</code> walk that lists every layer name per variant and flags names missing from some variants.',
+    fix: [
+      'Rename the odd layer in the variant that disagrees, so it matches the other variants.',
+      'If the walk reports a layer that exists in only one variant and should exist in all, add it to the others (hidden, if it is not shown there) so the structure is the same everywhere.',
+    ],
+  },
+  {
+    id: 'description',
+    title: 'The master has a structured description',
+    severity: 'Blocks the agent',
+    what: 'The component set’s description says what the component is, when to use it (and when not), which variants map to which code props, and one accessibility note.',
+    why: 'The description is the only place that tells the agent why a component exists. Without it the agent chooses components by how they look.',
+    how: '<code>figma_get_component_for_development</code> returns the description. Read it: a description that only repeats the component’s name does not pass.',
+    fix: [
+      'Select the component set and fill its Description in the right-hand panel. Use the same shape for every master: one line saying what it is, <em>Use when</em>, <em>Don’t use when</em>, the variant-to-prop mapping, an accessibility note.',
+      'To fill many, ask the agent to call <code>figma_set_description</code> per master. Read what it wrote before you accept it: it can sound right and be wrong.',
+      'Keep the description about the component. Details for one spot in the design (how the focus ring is drawn) belong in a Dev Mode annotation instead.',
+    ],
+  },
+  {
+    id: 'variants-states',
+    title: 'Variants and states are complete and drawn on the right axis',
+    severity: 'Degrading',
+    what: 'Every value of every variant axis exists as a variant, and the states a designer needs to see (default, hover, focus, disabled, error, loading) are drawn. State values sit on their own <code>state</code> axis; behaviours that code expresses as a CSS pseudo-class (<code>hover</code>, <code>focus</code>, <code>active</code>) are not modelled as props.',
+    why: 'A missing variant is improvised by the agent, and improvisation is where drift starts. A state drawn as an extra variant that code never had makes the agent look for a prop that does not exist.',
+    how: '<code>figma_analyze_component_set</code> lists the variant axes, the states present and missing, and a mapping of state values to CSS.',
+    fix: [
+      'Add a variant (the plus on the component set, or duplicate the closest one), set its variant properties to the missing combination and adjust the look.',
+      'If an axis is not called <code>state</code>, <code>status</code> or <code>interaction</code>, the analysis cannot find the state mapping: rename the axis.',
+      'If the set has grown past a few dozen variants, one axis is probably a show/hide or an icon choice: convert it to a boolean or instance-swap property (check 10) instead of adding more frames.',
+    ],
+  },
+  {
+    id: 'properties',
+    title: 'Content decisions are recorded as properties, or a reason is given',
+    severity: 'Degrading',
+    what: 'Text that varies per instance (a label, a heading) is a TEXT property. Elements that appear or not are BOOLEAN properties. A swappable icon is an INSTANCE_SWAP property. Variants are for enums. Where you chose not to expose something, the description says why.',
+    why: 'Properties are the component’s public inputs: the agent turns them into props. A label that is just a layer designers overwrite by hand has no input, so the agent writes the text in as a constant.',
+    how: '<code>figma_analyze_component_set</code> lists the component properties and their types. A master with a visible label and no TEXT property is the finding.',
+    fix: [
+      'Select the component set and add the property in the Properties panel (the plus next to Component properties): Text, Boolean or Instance swap.',
+      'Then link it to a layer. For text, select the text layer and apply the property next to its content. For a boolean, select the layer and apply it to its visibility. For an instance swap, select the nested instance and apply it.',
+      'Name the property as the code names the prop, and name a boolean positively (<code>hasIcon</code>, not <code>noIcon</code>).',
+      'The agent route is <code>figma_add_component_property</code>, which takes a typed definition. It adds the property; you still link it to a layer.',
+    ],
+  },
+  {
+    id: 'a11y-audit',
+    title:
+      'The accessibility audit ran, and you read how it classified the component',
+    severity: 'Degrading',
+    what: 'You ran the component accessibility audit on the master and checked which class it assigned.',
+    why: 'The audit skips checks it does not think apply. A 100 on a component it classed <code>presentational</code> means the focus and target-size checks never ran, which says nothing about a master that has a button in it.',
+    how: '<code>figma_audit_component_accessibility</code>. Read the classification before the score.',
+    fix: [
+      'If the class looks wrong (a dialog with a close button classed <code>presentational</code>), the audit decided from the master’s structure; how it decides is not documented here. Name the interactive layers, add the state variants, and re-run. If it still says <code>presentational</code>, treat the 100 as “not assessed” and review focus and target size by hand.',
+      'A real finding (missing focus indicator, target too small, a state told by colour alone) is a design fix: draw the focus variant, enlarge the hit area, add a non-colour cue.',
+    ],
+  },
+];
+
+// Part B: questions about the whole system. These are judgement calls for a
+// person to answer; a tool checks some of them in code.
+interface Question {
+  id: string;
+  title: string;
+  severity: Severity;
+  ask: string;
+  how: string;
+  fix: string;
+}
+
+const SYSTEM_GROUPS: {
+  id: string;
+  title: string;
+  gist: string;
+  items: Question[];
+}[] = [
+  {
+    id: 'complete',
+    title: 'Complete',
+    gist: 'everything your teams need to build a product exists.',
+    items: [
+      {
+        id: 'q-masters',
+        title: 'Every component you ship exists as a master',
+        severity: 'Degrading',
+        ask: 'Does every component you ship exist as a Figma master with all its variants and states?',
+        how: 'List the masters (<code>figma_search_components</code>) and compare against the components in code or the manifest.',
+        fix: 'Build the missing master before you ask an agent to implement or review that component. An agent given no master invents one.',
+      },
+      {
+        id: 'q-token-names',
+        title: 'Colour, spacing and type are named tokens on both sides',
+        severity: 'Blocks the agent',
+        ask: 'Are colour, spacing and type defined as named tokens in Figma and in code, with the same names?',
+        how: 'Compare the variable list (<code>figma_get_variables</code>) with the token file in code.',
+        fix: 'Settle one naming rule, then apply it from the code side (check 4). Rename the variable only through a migration: everything bound to it follows the old name.',
+      },
+    ],
+  },
+  {
+    id: 'sound',
+    title: 'Sound',
+    gist: 'what is in the system is good: accessible, consistent, tested.',
+    items: [
+      {
+        id: 'q-contrast',
+        title: 'Colour pairs meet contrast, components pass an automated check',
+        severity: 'Degrading',
+        ask: 'Do your colour pairs meet contrast requirements, and does every component pass an automated accessibility check?',
+        how: 'In Figma, <code>figma_audit_component_accessibility</code> (check 11). In code, an axe run over every story.',
+        fix: 'Fix at the token: change the semantic variable once instead of patching each component.',
+      },
+    ],
+  },
+  {
+    id: 'synchronized',
+    title: 'Synchronized',
+    gist: 'design, code and docs describe the same components.',
+    items: [
+      {
+        id: 'q-names',
+        title:
+          'Each master maps to a code component with the same name and values',
+        severity: 'Blocks the agent',
+        ask: 'Does each Figma master map to a code component with the same name and the same variant values?',
+        how: 'Compare the master’s property definitions with the component’s props. <code>figma_check_design_parity</code> pairs them by name.',
+        fix: 'Rename on the Figma side so variant names and values equal the code’s (<code>primary</code>, not <code>Primary</code>). Where a difference is on purpose, write it down once instead of fixing it.',
+      },
+      {
+        id: 'q-parity',
+        title: 'A rendered component looks like its master',
+        severity: 'Degrading',
+        ask: 'Does a rendered component look like its master?',
+        how: '<code>figma_check_design_parity</code> on the master with a code spec of the rendered component.',
+        fix: 'Decide which side is right, then change that side. Do not edit both toward each other.',
+      },
+      {
+        id: 'q-docs',
+        title: 'Component documentation is generated from code',
+        severity: 'Degrading',
+        ask: 'Is your component documentation rebuilt from the code, not typed by hand?',
+        how: 'Look for a generated file or a manifest and a check that fails when it is stale.',
+        fix: 'Generate it from the component’s own types and comments, and fail the build when it is stale.',
+      },
+    ],
+  },
+  {
+    id: 'extensible',
+    title: 'Extensible',
+    gist: 'you can keep improving the system on purpose.',
+    items: [
+      {
+        id: 'q-change',
+        title: 'There is a written way to change the system',
+        severity: 'Degrading',
+        ask: 'Is there a written way to propose, review and record a change to the system?',
+        how: 'No tool: judgement. Look for a place where past decisions are recorded.',
+        fix: 'Start small: one decision log, one line per decision with the reason.',
+      },
+      {
+        id: 'q-feedback',
+        title: 'You know who uses what, and feedback arrives',
+        severity: 'Degrading',
+        ask: 'Do you know which products use which components, and does product feedback reach the system team?',
+        how: 'No tool: judgement.',
+        fix: 'Name an owner and a channel. Without one, the agent learns the system as it was, not as it is used.',
+      },
+    ],
+  },
+  {
+    id: 'ai-ready',
+    title: 'AI-ready',
+    gist: 'an agent can read the system and use it correctly.',
+    items: [
+      {
+        id: 'q-metadata',
+        title:
+          'Each component has machine-readable purpose, usage and an accessibility note in code',
+        severity: 'Blocks the agent',
+        ask: 'Does each component carry a machine-readable purpose, when-to-use guidance and an accessibility note?',
+        how: 'This is the code-side twin of check 8: the same facts as the master’s description, in a form a script can verify.',
+        fix: 'Write the three fields next to the component and keep them in step with the Figma description.',
+      },
+      {
+        id: 'q-lookup',
+        title:
+          'An agent can look up exact props and variants without reading source',
+        severity: 'Blocks the agent',
+        ask: 'Can an agent look up exact props and variants without reading source?',
+        how: 'A component-docs MCP server over a generated manifest, such as Storybook’s, answers this with a call instead of a file read.',
+        fix: 'Generate the manifest and expose it to the agent. See the Storybook page for how Atelier does it.',
+      },
+    ],
+  },
+];
+
+// How Atelier automates the checks above: pointers only, no counts. The audit
+// numbers for Atelier's own file live on /figma#file-ready.
+const GATES: { check: string; gate: string }[] = [
+  {
+    check: 'Checks 1 and 2 (bound values, Auto Layout)',
+    gate: '<code>check:figma</code> (default variant of each master)',
+  },
+  {
+    check: 'Check 8 (description)',
+    gate: '<code>check:figma</code> (present, names the spec interface)',
+  },
+  {
+    check: 'Variant names and values match code',
+    gate: '<code>check:figma</code> (name alignment), <code>check:contracts</code>',
+  },
+  {
+    check: 'Check 5 (token intent)',
+    gate: '<code>check:token-annotations</code>',
+  },
+  {
+    check: 'Token names in Figma and in code',
+    gate: '<code>check:figma-token-names</code>',
+  },
+  {
+    check: 'Contrast, automated accessibility',
+    gate: '<code>check:contrast</code>, <code>storybook-test</code> (axe on every story)',
+  },
+  {
+    check: 'Rendered matches master',
+    gate: '<code>check:paint</code>, <code>figma_check_design_parity</code>',
+  },
+  { check: 'Generated docs are current', gate: '<code>check:llms</code>' },
+  { check: 'Component metadata in code', gate: '<code>check:metadata</code>' },
+  {
+    check: 'Agent lookup of props',
+    gate: 'Storybook MCP; <code>check:storybook-manifests</code>',
+  },
+  {
+    check: 'Check 9 (variant matrix complete)',
+    gate: '<code>check:figma</code> (every variant in the matrix exists), <code>check:contracts</code> (one story per value)',
+  },
+  {
+    check: 'Checks 3, 4, 6, 7, 10, 11',
+    gate: 'No gate: use the tool named in the check, ask the agent for a read-only walk, or look in Figma',
+  },
+];
+
+const AUDIT_PROMPT = `Readiness audit of the Figma master <node id>. Read-only: do not
+rename, bind or write anything in Figma.
+
+Use figma-console-mcp read tools (figma_get_component_for_development,
+figma_get_variables with verbosity: full, figma_analyze_component_set,
+figma_lint_design, figma_audit_component_accessibility) and, where no
+tool exists, a read-only figma_execute walk.
+
+For the master and every variant, report as a table with one row per
+finding (layer or variable, what is wrong):
+1. Fills, strokes, padding, gap, corner radius that are NOT bound to a
+   variable.
+2. Frames with children whose layoutMode is NONE.
+3. For each variable the master binds: its scopes (flag ALL_SCOPES on
+   non-boolean variables), codeSyntax.WEB (flag empty), description
+   (flag empty).
+4. Layers named Frame, Group or Rectangle in the component's own tree
+   (ignore layers inside nested library instances).
+5. Layer names that differ between variants of the set.
+6. The component set description: print it, and say whether it states
+   what the component is, when to use it, the variant-to-prop mapping and
+   an accessibility note.
+7. The component properties by type, and every visible text layer or
+   optional element that has no TEXT or BOOLEAN property.
+8. How the accessibility audit classified the component.
+Do not propose fixes yet. List what you could not check.`;
+
+const SCOPE_SNIPPET = `// What the agent receives for one variable from figma_get_variables with
+// verbosity: full — the fields this page's checks read (names only; the
+// values are yours):
+//   name         the Figma path, e.g. "color/primary"
+//   scopes       e.g. ["FRAME_FILL", "SHAPE_FILL"] — or ["ALL_SCOPES"]
+//   codeSyntax   { WEB: "..." } when set
+//   description  your sentence about purpose`;
+---
+
+<BaseLayout
+  title="Is your Figma file ready for an agent?"
+  description="A checklist for a Figma design system: what an agent needs from each master and its variables, how to check it, and how to fix a master that fails."
+  currentPath="/readiness"
+  tocItems={[
+    { id: 'how-to-use', label: 'How to use this page' },
+    { id: 'master-checks', label: 'Part A: the master' },
+    { id: 'system-checks', label: 'Part B: the system' },
+    { id: 'concepts', label: 'Figma concepts behind the checks' },
+    { id: 'automate', label: 'Automating it' },
+  ]}
+>
+  <div class="docs-inline-page">
+    <PageHero
+      time="~10 min per master"
+      tag="Checklist · your own system"
+      title="Is your Figma file ready for an agent?"
+      lede="An agent reads Figma through tools, so a fault in the file becomes a fault in the code. This checklist tells you how to find the faults on one master, why each one matters, and how to fix it. Run it on your own design system."
+      ledeMax="620px"
+    />
+
+    <!-- ── How to use ──────────────────────────────────────────────────── -->
+    <div class="docs-section">
+      <h2 id="how-to-use" class="docs-section-title">How to use this page</h2>
+      <p class="docs-step-desc">
+        Think of a car with the check-engine light on: it can look fine and
+        still hide faults. Pick
+        <strong style="color: var(--ui-color-text)">one master</strong> of your
+        own, work through Part A, and write down every fault you find. Then skim
+        Part B for the system as a whole. There is no score, only a list to
+        sort.
+      </p>
+      <p class="docs-step-desc">
+        Every <em>How to check</em> uses tools from the figma-console MCP and
+        only reads. The audit prompt below asks the agent to run all of Part A
+        in one go.
+        <strong style="color: var(--ui-color-text)"
+          >Fixing writes to the file</strong
+        >, so work on a copy of the file first, and be careful with renaming or
+        deleting a variable: everything bound to it stops following. The
+        <a href="/skills/figma-workspace-architect" class="docs-link-primary"
+          >figma-workspace-architect skill</a
+        >
+        carries the migration recipes.
+      </p>
+      <Code
+        code={AUDIT_PROMPT}
+        lang="text"
+        title="Readiness audit prompt (read-only)"
+      />
+      <p class="docs-step-desc" style="margin-top: 1.25rem">
+        <strong style="color: var(--ui-color-text)"
+          >Sort what you find by how much it hurts.</strong
+        >
+        Each check carries one of three labels. <em>Cosmetic</em> faults (an
+        inconsistent layer name) are annoying and can wait. <em>Degrading</em>
+        faults (hardcoded values, missing component properties, detached
+        instances) slowly erode the structure. <em>Blocks the agent</em> faults
+        leave it without structure, metadata or a connection to code, and its
+        output is garbage. Fix those before you generate anything.
+      </p>
+    </div>
+
+    <!-- ── Part A ──────────────────────────────────────────────────────── -->
+    <div class="docs-section">
+      <h2 id="master-checks" class="docs-section-title">
+        Part A: the master and its variables
+      </h2>
+      <p class="docs-step-desc">
+        Eleven checks on a single master. For each: what it checks, why the
+        agent needs it, how to check it, and how to fix a master that fails.
+      </p>
+      <table class="docs-props-table" style="margin-bottom: 1.5rem">
+        <thead>
+          <tr>
+            <th>#</th>
+            <th>Check</th>
+            <th>If it fails</th>
+          </tr>
+        </thead>
+        <tbody>
+          {MASTER_CHECKS.map((c, i) => <tr>
+            <td>{i + 1}</td>
+            <td>
+              <a href={`#${c.id}`} class="docs-link-primary">{c.title}</a>
+            </td>
+            <td>{c.severity}</td>
+          </tr>)}
+        </tbody>
+      </table>
+
+      {MASTER_CHECKS.map((c, i) => <div style="margin-bottom: 2rem">
+        <h3
+          id={c.id}
+          style="
+            font-size: var(--ui-font-size-lg);
+            font-weight: 600;
+            margin: 0 0 0.6rem;
+          "
+        >
+          {i + 1}. {c.title}
+        </h3>
+        <ul class="docs-step-desc">
+          <li>
+            <strong style="color: var(--ui-color-text)">What it checks.</strong>
+            <Fragment set:html={' ' + c.what} />
+          </li>
+          <li>
+            <strong style="color: var(--ui-color-text)"
+              >Why the agent needs it.</strong
+            >
+            <Fragment set:html={' ' + c.why} />
+          </li>
+          <li>
+            <strong style="color: var(--ui-color-text)"
+              >How to check it.</strong
+            >
+            <Fragment set:html={' ' + c.how} />
+          </li>
+          <li>
+            <strong style="color: var(--ui-color-text)"
+              >How to fix it in Figma.</strong
+            >
+            <ol>
+              {c.fix.map((step) => <li><Fragment set:html={step} /></li>)}
+            </ol>
+          </li>
+          <li>
+            <strong style="color: var(--ui-color-text)"
+              >If you leave it.</strong
+            >
+            {' '}{c.severity}.
+          </li>
+        </ul>
+      </div>)}
+    </div>
+
+    <!-- ── Part B ──────────────────────────────────────────────────────── -->
+    <div class="docs-section">
+      <h2 id="system-checks" class="docs-section-title">
+        Part B: the system as a whole
+      </h2>
+      <p class="docs-step-desc">
+        Part A looks at one master. These questions look at the whole design
+        system, in five groups. Answer each yes or no; the note says how to find
+        out and what to do about a no. Several of them are judgement calls with
+        no tool behind them.
+      </p>
+      {SYSTEM_GROUPS.map((g) => <div style="margin-bottom: 1.5rem">
+        <h3
+          id={g.id}
+          style="
+            font-size: var(--ui-font-size-lg);
+            font-weight: 600;
+            margin: 0 0 0.6rem;
+          "
+        >
+          {g.title}
+          <span style="font-weight: 400; color: var(--ui-color-text-muted)">
+            — {g.gist}</span>
+        </h3>
+        <ul class="docs-step-desc">
+          {g.items.map((q) => <li id={q.id}>
+            <strong style="color: var(--ui-color-text)">{q.ask}</strong>
+            <ul>
+              <li>
+                <em>How to find out.</em>
+                <Fragment set:html={' ' + q.how} />
+              </li>
+              <li>
+                <em>If no.</em>
+                <Fragment set:html={' ' + q.fix} />
+                ({q.severity}.)
+              </li>
+            </ul>
+          </li>)}
+        </ul>
+      </div>)}
+    </div>
+
+    <!-- ── Concepts ────────────────────────────────────────────────────── -->
+    <div class="docs-section">
+      <h2 id="concepts" class="docs-section-title">
+        Figma concepts behind the checks, and how the agent sees them
+      </h2>
+      <p class="docs-step-desc">
+        The checks lean on four Figma features. What follows is what the
+        figma-console tools return for each, as far as this repo has verified.
+        Where it has not, the text says so.
+      </p>
+
+      <h3
+        style="
+          font-size: var(--ui-font-size-lg);
+          font-weight: 600;
+          margin: 1.25rem 0 0.6rem;
+        "
+      >
+        Variable scopes
+      </h3>
+      <p class="docs-step-desc">
+        A scope limits where a variable can be applied: a text colour only on
+        text fills, a radius only on corner radius. Boolean variables have no
+        scopes. The agent sees them as a <code>scopes</code> list per variable
+        in <code>figma_get_variables</code> with <code>verbosity: full</code>.
+        What the agent’s other tools do with that list beyond showing it has not
+        been tested here. The check treats <code>ALL_SCOPES</code> as a fault
+        because it means the variable never said where it belongs.
+      </p>
+      <Code code={SCOPE_SNIPPET} lang="js" title="Fields the checks read" />
+
+      <h3
+        style="
+          font-size: var(--ui-font-size-lg);
+          font-weight: 600;
+          margin: 1.25rem 0 0.6rem;
+        "
+      >
+        Variable modes
+      </h3>
+      <p class="docs-step-desc">
+        A mode lets one variable resolve to a different value in a different
+        context, such as light and dark. Modes belong on the semantic tier:
+        <code>color/text/primary</code> keeps its name and changes its value.
+        States (hover, disabled) and sizes are variant properties, not modes.
+        <code>figma_get_variables</code> returns the collections including their
+        modes. Which mode’s value a read of a bound node resolves to has not
+        been verified here, so do not rely on the agent picking a mode by
+        itself: tell it which one you mean. Figma caps the number of modes per
+        collection by plan, so check yours before planning more than light and
+        dark. The <a href="/tokens" class="docs-link-primary">design tokens</a>
+        page shows modes in use.
+      </p>
+
+      <h3
+        style="
+          font-size: var(--ui-font-size-lg);
+          font-weight: 600;
+          margin: 1.25rem 0 0.6rem;
+        "
+      >
+        Component properties
+      </h3>
+      <p class="docs-step-desc">
+        A component has four kinds of property, and each has one job:
+      </p>
+      <table class="docs-props-table" style="margin-bottom: 1rem">
+        <thead>
+          <tr>
+            <th>Kind</th>
+            <th>Use it for</th>
+            <th>Becomes in code</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>Variant</td>
+            <td>
+              An enum of visually distinct options (<code>size</code>,
+              <code>variant</code>)
+            </td>
+            <td>A string-literal union prop</td>
+          </tr>
+          <tr>
+            <td>Boolean</td>
+            <td>An element shown or hidden, or an on/off state</td>
+            <td>A boolean prop</td>
+          </tr>
+          <tr>
+            <td>Text</td>
+            <td>A string that varies per instance</td>
+            <td>A text prop or the content</td>
+          </tr>
+          <tr>
+            <td>Instance swap</td>
+            <td>A nested component the instance may replace (an icon)</td>
+            <td>A slot or a child</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="docs-step-desc">
+        The agent sees them as the master’s
+        <code>componentPropertyDefinitions</code>, each with a type. Verified in
+        this repo’s code: a Variant property is keyed by its plain axis name and
+        lists its options; Boolean, Text and Instance-swap properties are keyed
+        <code>Name#&lt;id&gt;</code>, with a numeric id Figma assigns.
+        <code>figma_check_design_parity</code> pairs these with the code’s props
+        by name, lower-cased and with everything outside letters and digits
+        removed, so <code>hasIcon</code> and <code>Has Icon</code> match.
+        <code>figma_analyze_component_set</code> lists the properties.
+      </p>
+
+      <h3
+        style="
+          font-size: var(--ui-font-size-lg);
+          font-weight: 600;
+          margin: 1.25rem 0 0.6rem;
+        "
+      >
+        Slots
+      </h3>
+      <p class="docs-step-desc">
+        A slot is a region of a component where any content can be dropped, the
+        equivalent of <code>children</code> in React or
+        <code>&lt;slot&gt;</code> in Vue. Figma has two ways to build one. The
+        older way is an instance-swap property pointing at a placeholder
+        component. Figma’s own Slot property is newer (open beta at the time of
+        writing) and does not need the placeholder. One limit: component
+        properties cannot be applied to layers inside a slot. Use a slot where
+        the content is open (a card body, dialog actions) and a variant where
+        the options are a fixed list. figma-console has tools to list and fill
+        slots (<code>figma_get_slots</code>, <code>figma_create_slot</code>,
+        <code>figma_append_to_slot</code>). How a slot shows up in
+        <code>figma_get_component_for_development</code>, and how the contract
+        gates treat it, has not been verified here; if your system relies on
+        slots, check one master by hand before you trust the agent’s read.
+      </p>
+    </div>
+
+    <!-- ── Automating ──────────────────────────────────────────────────── -->
+    <div class="docs-section">
+      <h2 id="automate" class="docs-section-title">Automating it</h2>
+      <p class="docs-step-desc">
+        Done by hand, the checklist is a one-off. Atelier turns most of it into
+        gates that run on every change, so a fault cannot come back unnoticed.
+        This table says which gate covers which check; your own system will have
+        different tools, but the same checks.
+      </p>
+      <table class="docs-props-table" style="margin-bottom: 1.25rem">
+        <thead>
+          <tr>
+            <th>Check</th>
+            <th>Atelier’s gate</th>
+          </tr>
+        </thead>
+        <tbody>
+          {GATES.map((g) => <tr>
+            <td>{g.check}</td>
+            <td><Fragment set:html={g.gate} /></td>
+          </tr>)}
+        </tbody>
+      </table>
+      <Callout tone="note" title="Atelier’s own results">
+        <p
+          style="margin: 0; line-height: 1.6; color: var(--ui-color-text-muted)"
+        >
+          What the checklist found when we ran it on Atelier’s own file, with
+          counts, is on
+          <a href="/figma#file-ready" class="docs-link-primary"
+            >the Figma page</a
+          >.
+        </p>
+      </Callout>
+    </div>
+
+    <BottomNav
+      items={[
+        {
+          to: '/design-to-code',
+          label: 'Next',
+          title: 'Design to code',
+          icon: 'schema',
+        },
+        {
+          to: '/figma',
+          label: 'Reference',
+          title: 'Figma workflow',
+          icon: 'palette',
+        },
+        {
+          to: '/skills/figma-workspace-architect',
+          label: 'Skill',
+          title: 'figma-workspace-architect',
+          icon: 'smart_toy',
+        },
+      ]}
+    />
+  </div>
+</BaseLayout>

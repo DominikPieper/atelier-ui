@@ -119,6 +119,7 @@ const GROUP_HREFS = {
   howto: [
     '/install',
     '/figma',
+    '/readiness',
     '/prompts',
     '/a11y-workflow',
     '/troubleshooting',
@@ -151,6 +152,7 @@ const BREADCRUMB_LABELS: Record<string, string> = {
   'figma-token': 'Figma access',
   troubleshooting: 'Troubleshooting',
   figma: 'Figma workflow',
+  readiness: 'Readiness checklist',
   tutorial: 'Figma to code',
   'design-to-code': 'Design to code',
   storybook: 'Storybook',
@@ -520,6 +522,13 @@ const breadcrumbSchema = {
               >
                 <Icon name="palette" class="docs-nav-link-icon" />
                 Figma workflow
+              </a>
+              <a
+                href="/readiness"
+                class={`docs-nav-link${isActive('/readiness') ? ' active' : ''}`}
+              >
+                <Icon name="check_circle" class="docs-nav-link-icon" />
+                Readiness checklist
               </a>
               <a
                 href="/prompts"

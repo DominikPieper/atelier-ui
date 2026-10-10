@@ -920,105 +920,13 @@ const FIGMA_URL =
         "
       >
         An agent reads the Figma file through tools, so a fault in the file
-        becomes a fault in the code. Run this checklist on a master before you
-        hand it over. The higher-level self-check for your whole design system
-        is
-        <a href="/design-to-code#ready" class="docs-link-primary"
-          >Before you start</a
-        >; this list is the Figma-file half of it.
+        becomes a fault in the code. The checklist, with how to check each point
+        and how to fix a master that fails, moved to its own page:
+        <a href="/readiness" class="docs-link-primary"
+          >Is your Figma file ready for an agent?</a
+        >
+        What follows is what it found on Atelier's own file.
       </p>
-      <table class="docs-props-table" style="margin-bottom: 1.25rem">
-        <thead>
-          <tr>
-            <th>Check</th>
-            <th>How to check it</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td>
-              Every fill, stroke, padding, gap and corner radius is bound to a
-              variable
-            </td>
-            <td>
-              <code>figma_lint_design</code> (rule <code>hardcoded-color</code>)
-              covers colour only. Spacing and radius need a read-only
-              <code>figma_execute</code> walk. <code>check:figma</code> checks
-              raw fills, strokes, radii and padding on each master's default
-              variant.
-            </td>
-          </tr>
-          <tr>
-            <td>Bound variables are scoped, not <code>ALL_SCOPES</code></td>
-            <td>
-              <code>figma_get_variables</code> with <code>verbosity: full</code>
-              lists each variable's <code>scopes</code>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              Each variable's code name is recoverable:
-              <code>codeSyntax.WEB</code> is set, or you have chosen another
-              single place and said which
-            </td>
-            <td>
-              <code>figma_get_variables</code> with <code>verbosity: full</code>
-            </td>
-          </tr>
-          <tr>
-            <td>
-              No default layer names (<code>Frame</code>, <code>Group</code>) in
-              the component's own tree
-            </td>
-            <td>
-              <code>figma_lint_design</code> (rule <code>default-name</code>).
-              It also flags layers inside nested library instances; ignore
-              those.
-            </td>
-          </tr>
-          <tr>
-            <td>
-              The master has a structured description: what it is, when to use
-              it, variants mapped to code props, an a11y note
-            </td>
-            <td>
-              <code>figma_get_component_for_development</code> returns it;
-              <code>check:figma</code> checks the description is present and
-              names the component's spec interface
-            </td>
-          </tr>
-          <tr>
-            <td>
-              Variant layer names match across variants, except where a variant
-              owns a layer
-            </td>
-            <td>
-              No tool. A custom read-only <code>figma_execute</code> walk.
-            </td>
-          </tr>
-          <tr>
-            <td>
-              Label and content decisions are recorded: a TEXT property, or a
-              stated reason why not
-            </td>
-            <td>
-              <code>figma_analyze_component_set</code> lists the component
-              properties
-            </td>
-          </tr>
-          <tr>
-            <td>
-              The accessibility audit ran, and you read how it classified the
-              component
-            </td>
-            <td>
-              <code>figma_audit_component_accessibility</code>. A 100 on a
-              component classed <code>presentational</code> means the focus and
-              target-size checks were skipped.
-            </td>
-          </tr>
-        </tbody>
-      </table>
 
       <Callout
         tone="warning"
@@ -1031,10 +939,10 @@ const FIGMA_URL =
             color: var(--ui-color-text-muted);
           "
         >
-          A read-only audit on 2026-10-08, with the figma-console tools above,
-          of three masters (<code>AtlBadge</code>, <code>AtlCard</code>,
-          <code>AtlDialog</code>) and the file's variables. These are open
-          defects, not a clean bill of health.
+          A read-only audit on 2026-10-08, with the figma-console tools named on
+          the readiness page, of three masters (<code>AtlBadge</code>,
+          <code>AtlCard</code>, <code>AtlDialog</code>) and the file's
+          variables. These are open defects, not a clean bill of health.
         </p>
         <ul
           style="
@@ -1147,9 +1055,9 @@ const FIGMA_URL =
           Apply the vocabulary across Figma and code in one pass, then review
           each asset. Anything already in production keeps the old name as a
           deprecated alias for a stated window. The course's demo renames
-          <code>inverted</code> to <code>knockout</code> this way: the old prop
-          still works, is flagged deprecated, and is announced for removal three
-          months out.
+          <code>inverted</code> to <code>knockout</code> this way; the full
+          explanation is in
+          <a href="/tokens#naming" class="docs-link-primary">Tokens, naming</a>.
         </li>
         <li>
           <strong style="color: var(--ui-color-text)">Keep it.</strong> Turn the

@@ -66,6 +66,11 @@ export const OG_PAGES = {
     description:
       'From a Figma component to a verified, framework-native component — the Atelier loop: inspect, spec, generate, verify.',
   },
+  readiness: {
+    title: 'Readiness Checklist',
+    description:
+      'Is your Figma file ready for an agent? A checklist with how to check each point and how to fix a master that fails.',
+  },
   'first-component': {
     title: 'First Component (kata)',
     description:

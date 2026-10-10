@@ -37,6 +37,7 @@ const FLAT_PAGES = new Set<string>([
   'mcp',
   'patterns',
   'prompts',
+  'readiness',
   'schulung',
   'storybook',
   'tokens',
