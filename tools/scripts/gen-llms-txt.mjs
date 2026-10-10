@@ -290,6 +290,7 @@ function buildQuickStart() {
 Recommended, the framework package's own copy, no extra install (${SITE_URL}/install):
 
   @import '@atelier-ui/angular/styles/tokens.css';
+  @import '@atelier-ui/react/styles/tokens.css';
   @import '@atelier-ui/vue/styles/tokens.css';
 
 Alternative for apps that mix frameworks, or want the styles package directly. Angular
