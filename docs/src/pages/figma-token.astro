@@ -6,6 +6,7 @@ import PageHero from '../components/PageHero.astro';
 import TrackNav from '../components/TrackNav.astro';
 import Checkpoint from '../components/Checkpoint.astro';
 import personalAccessTokenScreenshot from '../assets/screenshots/personal-access-token.png';
+import MaintainerOnly from '../components/MaintainerOnly.astro';
 
 const FIGMA_FILE_URL =
   'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/Atelier-UI';
@@ -859,18 +860,20 @@ const CLOUD_RELAY_URL = 'https://figma-console-mcp.southleft.com/mcp';
         connected" error means the plugin is either not imported, not running,
         or blocked by a port conflict.
       </p>
-      <p
-        style="
-          color: var(--ui-color-text-muted);
-          margin-top: 0.75rem;
-          line-height: 1.55;
-        "
-      >
-        Once this is running,
-        <a href="/runbook" class="docs-link-primary">/runbook</a> is where the
-        ongoing operational notes live — updating the plugin later, and cleaning
-        up stale server instances.
-      </p>
+      <MaintainerOnly>
+        <p
+          style="
+            color: var(--ui-color-text-muted);
+            margin-top: 0.75rem;
+            line-height: 1.55;
+          "
+        >
+          Once this is running,
+          <a href="/runbook" class="docs-link-primary">/runbook</a> is where the
+          ongoing operational notes live — updating the plugin later, and
+          cleaning up stale server instances.
+        </p>
+      </MaintainerOnly>
     </section>
 
     <Checkpoint variant="done" title="Figma is connected">

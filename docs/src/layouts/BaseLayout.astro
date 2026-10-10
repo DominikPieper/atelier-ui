@@ -123,7 +123,8 @@ const GROUP_HREFS = {
     '/prompts',
     '/a11y-workflow',
     '/troubleshooting',
-    '/runbook',
+    // Maintainer-only page: exists in `astro dev` only (docs/integrations).
+    ...(import.meta.env.DEV ? ['/runbook'] : []),
   ],
   reference: [
     '/components',
@@ -551,13 +552,13 @@ const breadcrumbSchema = {
                 <Icon name="help" class="docs-nav-link-icon" />
                 Troubleshooting
               </a>
-              <a
+              {import.meta.env.DEV && <a
                 href="/runbook"
                 class={`docs-nav-link${isActive('/runbook') ? ' active' : ''}`}
               >
                 <Icon name="cable" class="docs-nav-link-icon" />
                 Runbook
-              </a>
+              </a>}
             </details>
 
             {/* Reference — random-access lookups. */}

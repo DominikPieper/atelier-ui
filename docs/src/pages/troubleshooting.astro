@@ -2,6 +2,7 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
 import PageHero from '../components/PageHero.astro';
+import MaintainerOnly from '../components/MaintainerOnly.astro';
 
 type Issue = {
   id: string;
@@ -344,19 +345,21 @@ const ISSUES: Issue[] = [
         Still stuck? Run <code>npm run preflight</code> and share its output —
         every line reports a specific fix.
       </p>
-      <p
-        style="
-          margin: 0.75rem 0 0;
-          font-size: var(--ui-font-size-md);
-          color: var(--ui-color-text);
-          line-height: 1.6;
-        "
-      >
-        Not a specific symptom — more like &ldquo;how do I update the
-        plugin&rdquo; or &ldquo;why are there orphaned server instances&rdquo;?
-        Those are running-the-setup questions, and they live in the
-        <a href="/runbook" class="docs-link-primary">runbook</a>.
-      </p>
+      <MaintainerOnly>
+        <p
+          style="
+            margin: 0.75rem 0 0;
+            font-size: var(--ui-font-size-md);
+            color: var(--ui-color-text);
+            line-height: 1.6;
+          "
+        >
+          Not a specific symptom — more like &ldquo;how do I update the
+          plugin&rdquo; or &ldquo;why are there orphaned server
+          instances&rdquo;? Those are running-the-setup questions, and they live
+          in the <a href="/runbook" class="docs-link-primary">runbook</a>.
+        </p>
+      </MaintainerOnly>
     </div>
   </div>
 </BaseLayout>

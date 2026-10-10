@@ -3,6 +3,7 @@ import BaseLayout from '../layouts/BaseLayout.astro';
 import McpExplorer from '../components/McpExplorer';
 import DiagramFigure from '../components/DiagramFigure.astro';
 import PageHero from '../components/PageHero.astro';
+import MaintainerOnly from '../components/MaintainerOnly.astro';
 ---
 
 <BaseLayout
@@ -153,8 +154,7 @@ import PageHero from '../components/PageHero.astro';
         in your <code>.mcp.json</code>; see
         <a href="/workshop#mcp-config" class="docs-link-primary"
           >the workshop page</a
-        >
-        and the notes under "For maintainers" below.
+        >.
       </p>
 
       <h3 class="docs-h3 docs-h3--spaced">Check it</h3>
@@ -212,564 +212,573 @@ import PageHero from '../components/PageHero.astro';
       </p>
     </section>
 
-    <h2 id="for-maintainers" class="docs-h3" style="margin: 2.5rem 0 0.5rem">
-      For maintainers
-    </h2>
-    <p
-      style="
-        margin: 0 0 1.25rem;
-        max-width: 720px;
-        line-height: 1.65;
-        color: var(--ui-color-text-muted);
-      "
-    >
-      Everything below is about how this repo and its hosted servers are built.
-      You do not need it to do the workshop, apart from the last section on
-      publishing your own server.
-    </p>
-
-    <aside
-      aria-label="Storybook MCP tool surface at a glance"
-      style="
-        margin: -0.5rem 0 1.25rem;
-        padding: 0.95rem 1.15rem;
-        border: 1px solid var(--ui-color-border);
-        border-radius: var(--ui-radius-md);
-        background: var(--ui-color-surface-raised);
-        line-height: 1.65;
-        max-width: 720px;
-      "
-    >
-      <strong>Storybook MCP at a glance.</strong> Three toolsets —
-      <code>docs</code> (<code>docs-list</code>, <code>docs-show</code>,
-      <code>docs-show-story</code>), <code>dev</code>
-      (<code>get-storybook-story-instructions</code>,
-      <code>stories-preview</code>, <code>stories-changed</code>,
-      <code>stories-find-by-component</code>, <code>review-create</code>),
-      <code>test</code> (<code>test-run</code>). Hosted MCPs ship the
-      <code>docs</code> toolset only; <code>dev</code> + <code>test</code> live
-      in <code>@storybook/addon-mcp</code> behind a running Storybook. Those
-      tool names are the ones Atelier's pinned versions ship — Storybook 10.6.0,
-      <code>@storybook/mcp</code> 10.6.0, <code>@storybook/addon-mcp</code>
-      10.6.0 — read from the installed <code>dist/preset.js</code>, not the
-      changelog prose, which still narrates <code>review-create</code> as "the
-      display-review tool". See
-      <a href="/storybook/#toolset-configuration" class="docs-link-primary"
-        >Storybook → Toolset configuration</a
+    <MaintainerOnly>
+      <h2 id="for-maintainers" class="docs-h3" style="margin: 2.5rem 0 0.5rem">
+        For maintainers
+      </h2>
+      <p
+        style="
+          margin: 0 0 1.25rem;
+          max-width: 720px;
+          line-height: 1.65;
+          color: var(--ui-color-text-muted);
+        "
       >
-      for the full matrix, what 10.4 added
-      (<code>experimentalReactComponentMeta</code> for React's docgen, now
-      joined by Angular's and Vue's own <code>experimentalDocgenServer</code>;
-      Change Review, MCP Apps preview, multi-source composition, self-host API),
-      and gating rules.
-    </aside>
+        Everything below is about how this repo and its hosted servers are
+        built. You do not need it to do the workshop, apart from the last
+        section on publishing your own server.
+      </p>
 
-    <aside
-      aria-label="Wired vs. not wired, and the cost to close the gap"
-      style="
-        margin: 0 0 2.25rem;
-        padding: 0.95rem 1.15rem;
-        border: 1px solid var(--ui-color-border);
-        border-radius: var(--ui-radius-md);
-        background: var(--ui-color-surface-raised);
-        line-height: 1.65;
-        max-width: 720px;
-      "
-    >
-      <strong>Wired vs. not, and what closing the gap costs.</strong>
-      A scaffolded workspace's <code>.mcp.json</code> wires the one hosted
-      Storybook endpoint for your framework (plus <code>nx-mcp</code>,
-      <code>uianatomy</code>, <code>angular-cli</code> for Angular and
-      <code>figma-console</code> if chosen — see
-      <a href="/workshop#mcp-config" class="docs-link-primary"
-        >the workshop page</a
-      >) — none of them exposes the three <code>dev</code>-toolset tools that
-      need a running Storybook (<code>stories-changed</code>,
-      <code>stories-find-by-component</code>, <code>review-create</code>); only
-      a local entry pointed at <code>http://localhost:&lt;port&gt;/mcp</code>
-      does, and that stays a per-developer choice on purpose, not something this
-      repo wires for everyone.
-      <ul style="margin: 0.6rem 0 0; padding-left: 1.2rem">
-        <li>
-          <code>stories-changed</code> and
-          <code>stories-find-by-component</code> already cost nothing beyond
-          that local entry: <code>features.changeDetection</code> defaults to
-          <code>true</code> in 10.6 core and none of the three
-          <code>main.ts</code> files override it, and all three frameworks build
-          on <code>builder-vite</code>, which implements the module-graph
-          adapter <code>stories-find-by-component</code> needs.
-        </li>
-        <li>
-          <code>review-create</code> needs one more step: for a direct MCP
-          client (a local entry, not the <code>storybook ai</code> CLI channel)
-          it registers only once <code>features.experimentalReview: true</code>
-          is set explicitly — unset today in all three <code>main.ts</code>
-          files. Three one-line config additions, no new dependency; "not set to
-          <code>false</code>" is enough only on the CLI channel below, not here.
-        </li>
-        <li>
-          <code>storybook ai</code> — the CLI channel whose requests get
-          <code>review-create</code> without the flag — still ships in 10.6.0,
-          but its own <code>--help</code> now prints a deprecation notice
-          pointing at <code>storybook skills</code>. This repo already moved:
-          the <code>stories</code>, <code>storybook-init</code>,
-          <code>storybook-setup</code> and <code>storybook-upgrade</code> Claude
-          Code Skills came from <code>storybook skills setup</code> (ADR-0123) —
-          a one-time file install, unrelated to the MCP servers on this page.
-        </li>
-      </ul>
-    </aside>
-
-    <DiagramFigure
-      caption="One AI client talks to three parallel Storybook MCP servers — one per framework. The request format (JSON-RPC) is identical. Each hosted endpoint emits and serves its own components.json — Angular via angular-component-meta, Vue via vue-component-meta, React via react-docgen — so each answers in its own framework's shape (ADR-0097)."
-    >
-      <svg
-        viewBox="0 0 960 352"
-        role="img"
-        aria-labelledby="mcp-title mcp-desc"
-        preserveAspectRatio="xMidYMid meet"
+      <aside
+        aria-label="Storybook MCP tool surface at a glance"
+        style="
+          margin: -0.5rem 0 1.25rem;
+          padding: 0.95rem 1.15rem;
+          border: 1px solid var(--ui-color-border);
+          border-radius: var(--ui-radius-md);
+          background: var(--ui-color-surface-raised);
+          line-height: 1.65;
+          max-width: 720px;
+        "
       >
-        <title
-          id="mcp-title"
-        >MCP data flow from client to Storybook servers</title>
-        <desc id="mcp-desc">
-          A client application sends user intent to Claude. Claude then issues
-          JSON-RPC tools/list and tools/call requests to three parallel
-          Storybook MCP servers — one each for Angular, React, and Vue. Each
-          server returns exact component documentation, natively shaped for its
-          own framework.
-        </desc>
-
-        <defs>
-          <marker
-            id="mcp-arrow"
-            viewBox="0 0 10 10"
-            refX="8"
-            refY="5"
-            markerWidth="7"
-            markerHeight="7"
-            orient="auto-start-reverse"
-          >
-            <path d="M 0 0 L 10 5 L 0 10 z" class="diagram-arrow" />
-          </marker>
-          <marker
-            id="mcp-arrow-accent"
-            viewBox="0 0 10 10"
-            refX="8"
-            refY="5"
-            markerWidth="7"
-            markerHeight="7"
-            orient="auto-start-reverse"
-          >
-            <path d="M 0 0 L 10 5 L 0 10 z" class="diagram-arrow--accent" />
-          </marker>
-        </defs>
-
-        <!-- Connectors (behind nodes) -->
-        <!-- Client -> Claude -->
-        <line
-          x1="220"
-          y1="170"
-          x2="308"
-          y2="170"
-          class="diagram-connector"
-          marker-end="url(#mcp-arrow)"
-        />
-        <text
-          font-size="15"
-          style="letter-spacing: 0; text-transform: none"
-          x="264"
-          y="158"
-          class="diagram-eyebrow"
-          text-anchor="middle"
-          >user intent</text
+        <strong>Storybook MCP at a glance.</strong> Three toolsets —
+        <code>docs</code> (<code>docs-list</code>, <code>docs-show</code>,
+        <code>docs-show-story</code>), <code>dev</code>
+        (<code>get-storybook-story-instructions</code>,
+        <code>stories-preview</code>, <code>stories-changed</code>,
+        <code>stories-find-by-component</code>, <code>review-create</code>),
+        <code>test</code> (<code>test-run</code>). Hosted MCPs ship the
+        <code>docs</code> toolset only; <code>dev</code> + <code>test</code>
+        live in <code>@storybook/addon-mcp</code> behind a running Storybook.
+        Those tool names are the ones Atelier's pinned versions ship — Storybook
+        10.6.0, <code>@storybook/mcp</code> 10.6.0,
+        <code>@storybook/addon-mcp</code> 10.6.0 — read from the installed
+        <code>dist/preset.js</code>, not the changelog prose, which still
+        narrates <code>review-create</code> as "the display-review tool". See
+        <a href="/storybook/#toolset-configuration" class="docs-link-primary"
+          >Storybook → Toolset configuration</a
         >
+        for the full matrix, what 10.4 added
+        (<code>experimentalReactComponentMeta</code> for React's docgen, now
+        joined by Angular's and Vue's own <code>experimentalDocgenServer</code>;
+        Change Review, MCP Apps preview, multi-source composition, self-host
+        API), and gating rules.
+      </aside>
 
-        <!-- Claude -> 3 Storybook MCPs (fan-out) -->
-        <path
-          d="M 500 170 C 540 170 540 78  588 78"
-          class="diagram-connector diagram-connector--accent"
-          marker-end="url(#mcp-arrow-accent)"
-        />
-        <path
-          d="M 500 170 L 588 170"
-          class="diagram-connector diagram-connector--accent"
-          marker-end="url(#mcp-arrow-accent)"
-        />
-        <path
-          d="M 500 170 C 540 170 540 262 588 262"
-          class="diagram-connector diagram-connector--accent"
-          marker-end="url(#mcp-arrow-accent)"
-        />
-        <text
-          font-size="15"
-          style="letter-spacing: 0; text-transform: none"
-          x="544"
-          y="158"
-          class="diagram-eyebrow"
-          text-anchor="middle"
-          >JSON-RPC</text
+      <aside
+        aria-label="Wired vs. not wired, and the cost to close the gap"
+        style="
+          margin: 0 0 2.25rem;
+          padding: 0.95rem 1.15rem;
+          border: 1px solid var(--ui-color-border);
+          border-radius: var(--ui-radius-md);
+          background: var(--ui-color-surface-raised);
+          line-height: 1.65;
+          max-width: 720px;
+        "
+      >
+        <strong>Wired vs. not, and what closing the gap costs.</strong>
+        A scaffolded workspace's <code>.mcp.json</code> wires the one hosted
+        Storybook endpoint for your framework (plus <code>nx-mcp</code>,
+        <code>uianatomy</code>, <code>angular-cli</code> for Angular and
+        <code>figma-console</code> if chosen — see
+        <a href="/workshop#mcp-config" class="docs-link-primary"
+          >the workshop page</a
+        >) — none of them exposes the three <code>dev</code>-toolset tools that
+        need a running Storybook (<code>stories-changed</code>,
+        <code>stories-find-by-component</code>, <code>review-create</code>);
+        only a local entry pointed at
+        <code>http://localhost:&lt;port&gt;/mcp</code> does, and that stays a
+        per-developer choice on purpose, not something this repo wires for
+        everyone.
+        <ul style="margin: 0.6rem 0 0; padding-left: 1.2rem">
+          <li>
+            <code>stories-changed</code> and
+            <code>stories-find-by-component</code> already cost nothing beyond
+            that local entry: <code>features.changeDetection</code> defaults to
+            <code>true</code> in 10.6 core and none of the three
+            <code>main.ts</code> files override it, and all three frameworks
+            build on <code>builder-vite</code>, which implements the
+            module-graph adapter <code>stories-find-by-component</code> needs.
+          </li>
+          <li>
+            <code>review-create</code> needs one more step: for a direct MCP
+            client (a local entry, not the <code>storybook ai</code> CLI
+            channel) it registers only once
+            <code>features.experimentalReview: true</code> is set explicitly —
+            unset today in all three <code>main.ts</code> files. Three one-line
+            config additions, no new dependency; "not set to <code>false</code>"
+            is enough only on the CLI channel below, not here.
+          </li>
+          <li>
+            <code>storybook ai</code> — the CLI channel whose requests get
+            <code>review-create</code> without the flag — still ships in 10.6.0,
+            but its own <code>--help</code> now prints a deprecation notice
+            pointing at <code>storybook skills</code>. This repo already moved:
+            the <code>stories</code>, <code>storybook-init</code>,
+            <code>storybook-setup</code> and <code>storybook-upgrade</code>
+            Claude Code Skills came from <code>storybook skills setup</code>
+            (ADR-0123) — a one-time file install, unrelated to the MCP servers
+            on this page.
+          </li>
+        </ul>
+      </aside>
+
+      <DiagramFigure
+        caption="One AI client talks to three parallel Storybook MCP servers — one per framework. The request format (JSON-RPC) is identical. Each hosted endpoint emits and serves its own components.json — Angular via angular-component-meta, Vue via vue-component-meta, React via react-docgen — so each answers in its own framework's shape (ADR-0097)."
+      >
+        <svg
+          viewBox="0 0 960 352"
+          role="img"
+          aria-labelledby="mcp-title mcp-desc"
+          preserveAspectRatio="xMidYMid meet"
         >
+          <title
+            id="mcp-title"
+          >MCP data flow from client to Storybook servers</title>
+          <desc id="mcp-desc">
+            A client application sends user intent to Claude. Claude then issues
+            JSON-RPC tools/list and tools/call requests to three parallel
+            Storybook MCP servers — one each for Angular, React, and Vue. Each
+            server returns exact component documentation, natively shaped for
+            its own framework.
+          </desc>
 
-        <!-- Node: Client -->
-        <g>
-          <rect
-            x="40"
-            y="118"
-            width="180"
-            height="104"
-            rx="14"
-            ry="14"
-            class="diagram-node"
+          <defs>
+            <marker
+              id="mcp-arrow"
+              viewBox="0 0 10 10"
+              refX="8"
+              refY="5"
+              markerWidth="7"
+              markerHeight="7"
+              orient="auto-start-reverse"
+            >
+              <path d="M 0 0 L 10 5 L 0 10 z" class="diagram-arrow" />
+            </marker>
+            <marker
+              id="mcp-arrow-accent"
+              viewBox="0 0 10 10"
+              refX="8"
+              refY="5"
+              markerWidth="7"
+              markerHeight="7"
+              orient="auto-start-reverse"
+            >
+              <path d="M 0 0 L 10 5 L 0 10 z" class="diagram-arrow--accent" />
+            </marker>
+          </defs>
+
+          <!-- Connectors (behind nodes) -->
+          <!-- Client -> Claude -->
+          <line
+            x1="220"
+            y1="170"
+            x2="308"
+            y2="170"
+            class="diagram-connector"
+            marker-end="url(#mcp-arrow)"
           />
-          <g transform="translate(117, 136)">
+          <text
+            font-size="15"
+            style="letter-spacing: 0; text-transform: none"
+            x="264"
+            y="158"
+            class="diagram-eyebrow"
+            text-anchor="middle"
+            >user intent</text
+          >
+
+          <!-- Claude -> 3 Storybook MCPs (fan-out) -->
+          <path
+            d="M 500 170 C 540 170 540 78  588 78"
+            class="diagram-connector diagram-connector--accent"
+            marker-end="url(#mcp-arrow-accent)"
+          />
+          <path
+            d="M 500 170 L 588 170"
+            class="diagram-connector diagram-connector--accent"
+            marker-end="url(#mcp-arrow-accent)"
+          />
+          <path
+            d="M 500 170 C 540 170 540 262 588 262"
+            class="diagram-connector diagram-connector--accent"
+            marker-end="url(#mcp-arrow-accent)"
+          />
+          <text
+            font-size="15"
+            style="letter-spacing: 0; text-transform: none"
+            x="544"
+            y="158"
+            class="diagram-eyebrow"
+            text-anchor="middle"
+            >JSON-RPC</text
+          >
+
+          <!-- Node: Client -->
+          <g>
             <rect
-              x="0"
-              y="0"
-              width="26"
-              height="20"
-              rx="3"
-              ry="3"
-              class="diagram-icon"
+              x="40"
+              y="118"
+              width="180"
+              height="104"
+              rx="14"
+              ry="14"
+              class="diagram-node"
             />
-            <path d="M 8 20 L 8 24 L 18 24 L 18 20" class="diagram-icon" />
+            <g transform="translate(117, 136)">
+              <rect
+                x="0"
+                y="0"
+                width="26"
+                height="20"
+                rx="3"
+                ry="3"
+                class="diagram-icon"
+              />
+              <path d="M 8 20 L 8 24 L 18 24 L 18 20" class="diagram-icon" />
+            </g>
+            <text
+              x="130"
+              y="184"
+              text-anchor="middle"
+              font-size="15"
+              font-weight="700"
+              >Client</text
+            >
+            <text
+              x="130"
+              y="206"
+              text-anchor="middle"
+              font-size="15"
+              class="diagram-muted"
+              >Claude · Cursor · VS Code</text
+            >
           </g>
-          <text
-            x="130"
-            y="184"
-            text-anchor="middle"
-            font-size="15"
-            font-weight="700"
-            >Client</text
-          >
-          <text
-            x="130"
-            y="206"
-            text-anchor="middle"
-            font-size="15"
-            class="diagram-muted"
-            >Claude · Cursor · VS Code</text
-          >
-        </g>
 
-        <!-- Node: Claude Agent (accent) -->
-        <g>
-          <rect
-            x="308"
-            y="118"
-            width="192"
-            height="104"
-            rx="14"
-            ry="14"
-            class="diagram-node diagram-node--accent"
-          />
-          <g transform="translate(392, 138)">
+          <!-- Node: Claude Agent (accent) -->
+          <g>
             <rect
-              x="0"
-              y="0"
-              width="24"
-              height="20"
+              x="308"
+              y="118"
+              width="192"
+              height="104"
+              rx="14"
+              ry="14"
+              class="diagram-node diagram-node--accent"
+            />
+            <g transform="translate(392, 138)">
+              <rect
+                x="0"
+                y="0"
+                width="24"
+                height="20"
+                rx="6"
+                ry="6"
+                class="diagram-icon"
+              />
+              <circle
+                cx="8"
+                cy="10"
+                r="2"
+                class="diagram-icon"
+                style="fill: var(--ui-color-primary); stroke: none"
+              />
+              <circle
+                cx="16"
+                cy="10"
+                r="2"
+                class="diagram-icon"
+                style="fill: var(--ui-color-primary); stroke: none"
+              />
+              <path d="M 12 -4 L 12 0" class="diagram-icon" />
+            </g>
+            <text
+              x="404"
+              y="184"
+              text-anchor="middle"
+              font-size="15"
+              font-weight="700"
+              >Claude · Agent</text
+            >
+            <text
+              x="404"
+              y="206"
+              text-anchor="middle"
+              font-size="15"
+              class="diagram-muted"
+              >picks server by framework</text
+            >
+          </g>
+
+          <!-- Node: Storybook Angular -->
+          <g>
+            <rect
+              x="588"
+              y="40"
+              width="332"
+              height="76"
+              rx="14"
+              ry="14"
+              class="diagram-node"
+            />
+            <rect
+              x="604"
+              y="56"
+              width="40"
+              height="44"
               rx="6"
               ry="6"
-              class="diagram-icon"
+              style="
+                fill: color-mix(in srgb, #e23237 22%, transparent);
+                stroke: #e23237;
+                stroke-width: 1.25;
+              "
             />
-            <circle
-              cx="8"
-              cy="10"
-              r="2"
-              class="diagram-icon"
-              style="fill: var(--ui-color-primary); stroke: none"
-            />
-            <circle
-              cx="16"
-              cy="10"
-              r="2"
-              class="diagram-icon"
-              style="fill: var(--ui-color-primary); stroke: none"
-            />
-            <path d="M 12 -4 L 12 0" class="diagram-icon" />
+            <text
+              x="624"
+              y="82"
+              text-anchor="middle"
+              font-size="15"
+              font-weight="800"
+              style="fill: #e23237"
+              >A</text
+            >
+            <text x="660" y="65" font-size="15" font-weight="700"
+              >storybook-angular</text
+            >
+            <text
+              x="660"
+              y="86"
+              font-size="15"
+              class="diagram-mono diagram-muted"
+              >/storybook-angular/mcp</text
+            >
+            <text x="660" y="107" font-size="15" class="diagram-muted"
+              >docs · props · stories</text
+            >
           </g>
-          <text
-            x="404"
-            y="184"
-            text-anchor="middle"
-            font-size="15"
-            font-weight="700"
-            >Claude · Agent</text
-          >
-          <text
-            x="404"
-            y="206"
-            text-anchor="middle"
-            font-size="15"
-            class="diagram-muted"
-            >picks server by framework</text
-          >
-        </g>
 
-        <!-- Node: Storybook Angular -->
-        <g>
-          <rect
-            x="588"
-            y="40"
-            width="332"
-            height="76"
-            rx="14"
-            ry="14"
-            class="diagram-node"
-          />
-          <rect
-            x="604"
-            y="56"
-            width="40"
-            height="44"
-            rx="6"
-            ry="6"
-            style="
-              fill: color-mix(in srgb, #e23237 22%, transparent);
-              stroke: #e23237;
-              stroke-width: 1.25;
-            "
-          />
-          <text
-            x="624"
-            y="82"
-            text-anchor="middle"
-            font-size="15"
-            font-weight="800"
-            style="fill: #e23237"
-            >A</text
-          >
-          <text x="660" y="65" font-size="15" font-weight="700"
-            >storybook-angular</text
-          >
-          <text x="660" y="86" font-size="15" class="diagram-mono diagram-muted"
-            >/storybook-angular/mcp</text
-          >
-          <text x="660" y="107" font-size="15" class="diagram-muted"
-            >docs · props · stories</text
-          >
-        </g>
+          <!-- Node: Storybook React -->
+          <g>
+            <rect
+              x="588"
+              y="132"
+              width="332"
+              height="76"
+              rx="14"
+              ry="14"
+              class="diagram-node"
+            />
+            <rect
+              x="604"
+              y="148"
+              width="40"
+              height="44"
+              rx="6"
+              ry="6"
+              style="
+                fill: color-mix(in srgb, #61dafb 22%, transparent);
+                stroke: #61dafb;
+                stroke-width: 1.25;
+              "
+            />
+            <text
+              x="624"
+              y="174"
+              text-anchor="middle"
+              font-size="15"
+              font-weight="800"
+              style="fill: #61dafb"
+              >R</text
+            >
+            <text x="660" y="157" font-size="15" font-weight="700"
+              >storybook-react</text
+            >
+            <text
+              x="660"
+              y="178"
+              font-size="15"
+              class="diagram-mono diagram-muted"
+              >/storybook-react/mcp</text
+            >
+            <text x="660" y="199" font-size="15" class="diagram-muted"
+              >docs · props · stories</text
+            >
+          </g>
 
-        <!-- Node: Storybook React -->
-        <g>
-          <rect
-            x="588"
-            y="132"
-            width="332"
-            height="76"
-            rx="14"
-            ry="14"
-            class="diagram-node"
-          />
-          <rect
-            x="604"
-            y="148"
-            width="40"
-            height="44"
-            rx="6"
-            ry="6"
-            style="
-              fill: color-mix(in srgb, #61dafb 22%, transparent);
-              stroke: #61dafb;
-              stroke-width: 1.25;
-            "
-          />
-          <text
-            x="624"
-            y="174"
-            text-anchor="middle"
-            font-size="15"
-            font-weight="800"
-            style="fill: #61dafb"
-            >R</text
-          >
-          <text x="660" y="157" font-size="15" font-weight="700"
-            >storybook-react</text
-          >
-          <text
-            x="660"
-            y="178"
-            font-size="15"
-            class="diagram-mono diagram-muted"
-            >/storybook-react/mcp</text
-          >
-          <text x="660" y="199" font-size="15" class="diagram-muted"
-            >docs · props · stories</text
-          >
-        </g>
+          <!-- Node: Storybook Vue -->
+          <g>
+            <rect
+              x="588"
+              y="224"
+              width="332"
+              height="76"
+              rx="14"
+              ry="14"
+              class="diagram-node"
+            />
+            <rect
+              x="604"
+              y="240"
+              width="40"
+              height="44"
+              rx="6"
+              ry="6"
+              style="
+                fill: color-mix(in srgb, #42b883 22%, transparent);
+                stroke: #42b883;
+                stroke-width: 1.25;
+              "
+            />
+            <text
+              x="624"
+              y="266"
+              text-anchor="middle"
+              font-size="15"
+              font-weight="800"
+              style="fill: #42b883"
+              >V</text
+            >
+            <text x="660" y="249" font-size="15" font-weight="700"
+              >storybook-vue</text
+            >
+            <text
+              x="660"
+              y="270"
+              font-size="15"
+              class="diagram-mono diagram-muted"
+              >/storybook-vue/mcp</text
+            >
+            <text x="660" y="291" font-size="15" class="diagram-muted"
+              >docs · props · stories</text
+            >
+          </g>
 
-        <!-- Node: Storybook Vue -->
-        <g>
-          <rect
-            x="588"
-            y="224"
-            width="332"
-            height="76"
-            rx="14"
-            ry="14"
-            class="diagram-node"
-          />
-          <rect
-            x="604"
-            y="240"
-            width="40"
-            height="44"
-            rx="6"
-            ry="6"
-            style="
-              fill: color-mix(in srgb, #42b883 22%, transparent);
-              stroke: #42b883;
-              stroke-width: 1.25;
-            "
-          />
-          <text
-            x="624"
-            y="266"
-            text-anchor="middle"
-            font-size="15"
-            font-weight="800"
-            style="fill: #42b883"
-            >V</text
-          >
-          <text x="660" y="249" font-size="15" font-weight="700"
-            >storybook-vue</text
-          >
-          <text
-            x="660"
-            y="270"
-            font-size="15"
-            class="diagram-mono diagram-muted"
-            >/storybook-vue/mcp</text
-          >
-          <text x="660" y="291" font-size="15" class="diagram-muted"
-            >docs · props · stories</text
-          >
-        </g>
+          <!-- Label: Identical protocol -->
+          <g transform="translate(290, 316)">
+            <rect
+              x="0"
+              y="0"
+              width="380"
+              height="30"
+              rx="15"
+              ry="15"
+              class="diagram-node"
+            />
+            <text
+              x="190"
+              y="20"
+              text-anchor="middle"
+              font-size="15"
+              font-weight="600"
+              class="diagram-muted"
+              >same JSON-RPC contract · different frameworks</text
+            >
+          </g>
+        </svg>
+      </DiagramFigure>
 
-        <!-- Label: Identical protocol -->
-        <g transform="translate(290, 316)">
-          <rect
-            x="0"
-            y="0"
-            width="380"
-            height="30"
-            rx="15"
-            ry="15"
-            class="diagram-node"
-          />
-          <text
-            x="190"
-            y="20"
-            text-anchor="middle"
-            font-size="15"
-            font-weight="600"
-            class="diagram-muted"
-            >same JSON-RPC contract · different frameworks</text
-          >
-        </g>
-      </svg>
-    </DiagramFigure>
-
-    <section
-      aria-labelledby="figma-servers-heading"
-      style="margin: 2.25rem 0 2rem; max-width: 820px"
-    >
-      <h2 id="figma-servers-heading" class="docs-h3">
-        figma-console-mcp vs. Figma's official MCP server
-      </h2>
-      <p style="line-height: 1.65">
-        If you already know Figma's own MCP server (the "Dev Mode MCP"), this is
-        how it differs from the <code>figma-console-mcp</code> that Atelier
-        wires in <code>.mcp.json</code>.
-      </p>
-      <div class="docs-table-scroll">
-        <table class="docs-props-table">
-          <thead>
-            <tr>
-              <th>Dimension</th>
-              <th>Figma's official MCP server</th>
-              <th><code>figma-console-mcp</code></th>
-            </tr>
-          </thead>
-          <tbody>
-            <tr>
-              <td>What it is</td>
-              <td>Figma's own server; you point it at a node with a link</td>
-              <td>
-                Open-source server that drives a plugin inside Figma Desktop
-                (the Desktop Bridge)
-              </td>
-            </tr>
-            <tr>
-              <td>Read vs. write</td>
-              <td>
-                Started read-only; since early 2026 the remote server edits the
-                canvas too (<code>use_figma</code>: frames, components,
-                variables). The local desktop server stays read-only
-              </td>
-              <td>
-                Read and write through the Plugin API, including component sets
-                and variables
-              </td>
-            </tr>
-            <tr>
-              <td>What comes back</td>
-              <td>
-                Opinionated code, in the demos React with Tailwind classes, for
-                the agent to translate into your stack
-              </td>
-              <td>
-                Structured data about the component, plus the plugin console
-                logs
-              </td>
-            </tr>
-            <tr>
-              <td>Variables / tokens</td>
-              <td>
-                <code>get_variable_defs</code> returns the variables used by a
-                selection, for the active mode; names come back raw when a
-                variable has no code syntax set
-              </td>
-              <td>
-                Variables and token tools (<code>figma_get_variables</code>,
-                <code>figma_browse_tokens</code>) that resolve aliases across
-                all modes, on any Figma plan
-              </td>
-            </tr>
-            <tr>
-              <td>Tools in the Atelier loop</td>
-              <td>None</td>
-              <td>
-                <code>figma_get_component_for_development</code>,
-                <code>figma_check_design_parity</code>,
-                <code>figma_scan_code_accessibility</code>
-              </td>
-            </tr>
-            <tr>
-              <td>Setup</td>
-              <td>
-                Remote server with OAuth, on every plan (free seats get very few
-                calls); the desktop server needs a paid Dev or Full seat
-              </td>
-              <td>
-                <code>npx</code> entry in <code>.mcp.json</code> (version pinned
-                there, ADR-0110) with a <code>FIGMA_ACCESS_TOKEN</code>, plus
-                the Desktop Bridge plugin
-              </td>
-            </tr>
-          </tbody>
-        </table>
-      </div>
-      <p style="line-height: 1.65; font-size: var(--ui-font-size-sm)">
-        <strong>Dated and perishable.</strong> This reflects mid-2026; both
-        servers change quickly, so check their docs before relying on a row.
-        Atelier chose <code>figma-console-mcp</code> when the official server
-        was still read-mostly (ADR-0111). That gap has narrowed since; what
-        still decides it here are the loop's own tools above — parity, the
-        accessibility scan and multi-mode variables.
-      </p>
-    </section>
+      <section
+        aria-labelledby="figma-servers-heading"
+        style="margin: 2.25rem 0 2rem; max-width: 820px"
+      >
+        <h2 id="figma-servers-heading" class="docs-h3">
+          figma-console-mcp vs. Figma's official MCP server
+        </h2>
+        <p style="line-height: 1.65">
+          If you already know Figma's own MCP server (the "Dev Mode MCP"), this
+          is how it differs from the <code>figma-console-mcp</code> that Atelier
+          wires in <code>.mcp.json</code>.
+        </p>
+        <div class="docs-table-scroll">
+          <table class="docs-props-table">
+            <thead>
+              <tr>
+                <th>Dimension</th>
+                <th>Figma's official MCP server</th>
+                <th><code>figma-console-mcp</code></th>
+              </tr>
+            </thead>
+            <tbody>
+              <tr>
+                <td>What it is</td>
+                <td>Figma's own server; you point it at a node with a link</td>
+                <td>
+                  Open-source server that drives a plugin inside Figma Desktop
+                  (the Desktop Bridge)
+                </td>
+              </tr>
+              <tr>
+                <td>Read vs. write</td>
+                <td>
+                  Started read-only; since early 2026 the remote server edits
+                  the canvas too (<code>use_figma</code>: frames, components,
+                  variables). The local desktop server stays read-only
+                </td>
+                <td>
+                  Read and write through the Plugin API, including component
+                  sets and variables
+                </td>
+              </tr>
+              <tr>
+                <td>What comes back</td>
+                <td>
+                  Opinionated code, in the demos React with Tailwind classes,
+                  for the agent to translate into your stack
+                </td>
+                <td>
+                  Structured data about the component, plus the plugin console
+                  logs
+                </td>
+              </tr>
+              <tr>
+                <td>Variables / tokens</td>
+                <td>
+                  <code>get_variable_defs</code> returns the variables used by a
+                  selection, for the active mode; names come back raw when a
+                  variable has no code syntax set
+                </td>
+                <td>
+                  Variables and token tools (<code>figma_get_variables</code>,
+                  <code>figma_browse_tokens</code>) that resolve aliases across
+                  all modes, on any Figma plan
+                </td>
+              </tr>
+              <tr>
+                <td>Tools in the Atelier loop</td>
+                <td>None</td>
+                <td>
+                  <code>figma_get_component_for_development</code>,
+                  <code>figma_check_design_parity</code>,
+                  <code>figma_scan_code_accessibility</code>
+                </td>
+              </tr>
+              <tr>
+                <td>Setup</td>
+                <td>
+                  Remote server with OAuth, on every plan (free seats get very
+                  few calls); the desktop server needs a paid Dev or Full seat
+                </td>
+                <td>
+                  <code>npx</code> entry in <code>.mcp.json</code> (version
+                  pinned there, ADR-0110) with a <code>FIGMA_ACCESS_TOKEN</code
+                  >, plus the Desktop Bridge plugin
+                </td>
+              </tr>
+            </tbody>
+          </table>
+        </div>
+        <p style="line-height: 1.65; font-size: var(--ui-font-size-sm)">
+          <strong>Dated and perishable.</strong> This reflects mid-2026; both
+          servers change quickly, so check their docs before relying on a row.
+          Atelier chose <code>figma-console-mcp</code> when the official server
+          was still read-mostly (ADR-0111). That gap has narrowed since; what
+          still decides it here are the loop's own tools above — parity, the
+          accessibility scan and multi-mode variables.
+        </p>
+      </section>
+    </MaintainerOnly>
 
     <section
       aria-labelledby="own-mcp"
