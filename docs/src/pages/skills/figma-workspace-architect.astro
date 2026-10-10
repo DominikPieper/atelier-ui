@@ -2,6 +2,8 @@
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
 import BottomNav from '../../components/BottomNav.astro';
+import Callout from '../../components/Callout.astro';
+import MaintainerOnly from '../../components/MaintainerOnly.astro';
 import { skillVersion, referenceCount } from '../../lib/skill-meta';
 
 const SITE_URL = 'https://atelier.pieper.io';
@@ -319,6 +321,15 @@ const tests = [
       </div>
     </div>
 
+    <Callout tone="note" title="In your workspace.">
+      A workspace generated with Figma already has this skill in
+      <code>.claude/skills/figma-workspace-architect/</code>, so you can skip
+      the install below. Without Figma it is not copied. See
+      <a href="/agent-skills#your-skills" class="docs-link-primary"
+        >Skills in your workspace</a
+      >.
+    </Callout>
+
     <!-- What it does -->
     <div class="docs-section">
       <h2 class="docs-section-title">What it does</h2>
@@ -497,145 +508,152 @@ const tests = [
       <Code code={TRIGGER_EXAMPLES} lang="text" />
     </div>
 
-    <!-- References -->
-    <div class="docs-section">
-      <h2 class="docs-section-title">References</h2>
-      <p
-        style="
-          color: var(--ui-color-text-muted);
-          line-height: 1.65;
-          margin: 0 0 1.25rem;
-          max-width: 640px;
-        "
-      >
-        Loaded on demand by the active mode. Every reference is self-contained —
-        opening one does not pull the others into context.
-      </p>
-      <table class="docs-props-table">
-        <thead>
-          <tr>
-            <th>File</th>
-            <th>Summary</th>
-          </tr>
-        </thead>
-        <tbody>
-          {references.map(({ file, summary }) => <tr>
-            <td>
-              <a
-                href={`${SITE_URL}/.well-known/agent-skills/${SKILL_NAME}/references/${file}`}
+    <MaintainerOnly
+      label="For maintainers · references, test scenarios, source · local only"
+    >
+      <!-- References -->
+      <div class="docs-section">
+        <h2 class="docs-section-title">References</h2>
+        <p
+          style="
+            color: var(--ui-color-text-muted);
+            line-height: 1.65;
+            margin: 0 0 1.25rem;
+            max-width: 640px;
+          "
+        >
+          Loaded on demand by the active mode. Every reference is self-contained
+          — opening one does not pull the others into context.
+        </p>
+        <table class="docs-props-table">
+          <thead>
+            <tr>
+              <th>File</th>
+              <th>Summary</th>
+            </tr>
+          </thead>
+          <tbody>
+            {references.map(({ file, summary }) => <tr>
+              <td>
+                <a
+                  href={`${SITE_URL}/.well-known/agent-skills/${SKILL_NAME}/references/${file}`}
+                  style="
+                    color: var(--ui-color-primary);
+                    font-family: monospace;
+                    font-size: 0.8rem;
+                  "
+                  >{file}</a
+                >
+              </td>
+              <td
                 style="
-                  color: var(--ui-color-primary);
-                  font-family: monospace;
-                  font-size: 0.8rem;
+                  font-size: var(--ui-font-size-sm);
+                  color: var(--ui-color-text-muted);
+                  line-height: 1.55;
                 "
-                >{file}</a
               >
-            </td>
-            <td
-              style="
-                font-size: var(--ui-font-size-sm);
-                color: var(--ui-color-text-muted);
-                line-height: 1.55;
-              "
-            >
-              {summary}
-            </td>
-          </tr>)}
-        </tbody>
-      </table>
-    </div>
+                {summary}
+              </td>
+            </tr>)}
+          </tbody>
+        </table>
+      </div>
 
-    <!-- Test scenarios -->
-    <div class="docs-section">
-      <h2 class="docs-section-title">Test scenarios</h2>
-      <p
-        style="
-          color: var(--ui-color-text-muted);
-          line-height: 1.65;
-          margin: 0 0 1.25rem;
-          max-width: 640px;
-        "
-      >
-        Each scenario has an <code>input.md</code> (the user prompt) and an
-        <code>expected.md</code> (the mode + references + first tool call +
-        regressions to flag). Scenarios are well-formedness tested in CI;
-        behavioural grading is manual or LLM-judged.
-      </p>
-      <table class="docs-props-table">
-        <thead>
-          <tr>
-            <th>Scenario</th>
-            <th>Mode</th>
-            <th>Summary</th>
-          </tr>
-        </thead>
-        <tbody>
-          {tests.map(({ name, mode, summary }) => <tr>
-            <td>
-              <code style="font-size: 0.78rem; color: var(--ui-color-primary)"
-                >{name}</code
+      <!-- Test scenarios -->
+      <div class="docs-section">
+        <h2 class="docs-section-title">Test scenarios</h2>
+        <p
+          style="
+            color: var(--ui-color-text-muted);
+            line-height: 1.65;
+            margin: 0 0 1.25rem;
+            max-width: 640px;
+          "
+        >
+          Each scenario has an <code>input.md</code> (the user prompt) and an
+          <code>expected.md</code> (the mode + references + first tool call +
+          regressions to flag). Scenarios are well-formedness tested in CI;
+          behavioural grading is manual or LLM-judged.
+        </p>
+        <table class="docs-props-table">
+          <thead>
+            <tr>
+              <th>Scenario</th>
+              <th>Mode</th>
+              <th>Summary</th>
+            </tr>
+          </thead>
+          <tbody>
+            {tests.map(({ name, mode, summary }) => <tr>
+              <td>
+                <code style="font-size: 0.78rem; color: var(--ui-color-primary)"
+                  >{name}</code
+                >
+              </td>
+              <td
+                style="
+                  font-size: var(--ui-font-size-sm);
+                  color: var(--ui-color-text-muted);
+                  white-space: nowrap;
+                "
               >
-            </td>
-            <td
-              style="
-                font-size: var(--ui-font-size-sm);
-                color: var(--ui-color-text-muted);
-                white-space: nowrap;
-              "
-            >
-              {mode}
-            </td>
-            <td
-              style="
-                font-size: var(--ui-font-size-sm);
-                color: var(--ui-color-text-muted);
-                line-height: 1.55;
-              "
-            >
-              {summary}
-            </td>
-          </tr>)}
-        </tbody>
-      </table>
-    </div>
+                {mode}
+              </td>
+              <td
+                style="
+                  font-size: var(--ui-font-size-sm);
+                  color: var(--ui-color-text-muted);
+                  line-height: 1.55;
+                "
+              >
+                {summary}
+              </td>
+            </tr>)}
+          </tbody>
+        </table>
+      </div>
 
-    <!-- Source -->
-    <div class="docs-section">
-      <h2 class="docs-section-title">Source</h2>
-      <dl class="docs-source-dl">
-        <dt>SKILL.md</dt>
-        <dd>
-          <a
-            href={SKILL_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="docs-mono-link"
-            >{SKILL_URL}</a
-          >
-        </dd>
-        <dt>Repository</dt>
-        <dd>
-          <a
-            href={REPO_URL}
-            target="_blank"
-            rel="noopener noreferrer"
-            class="docs-mono-link"
-            >{REPO_URL}</a
-          >
-        </dd>
-        <dt>Discovery index</dt>
-        <dd>
-          <a href="/.well-known/agent-skills/index.json" class="docs-mono-link"
-            >/.well-known/agent-skills/index.json</a
-          >
-        </dd>
-        <dt>License</dt>
-        <dd>
-          Same as the repository (MIT). The skill is <code>private: true</code>
-          on npm — distribution is via the discovery URL only.
-        </dd>
-      </dl>
-    </div>
+      <!-- Source -->
+      <div class="docs-section">
+        <h2 class="docs-section-title">Source</h2>
+        <dl class="docs-source-dl">
+          <dt>SKILL.md</dt>
+          <dd>
+            <a
+              href={SKILL_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="docs-mono-link"
+              >{SKILL_URL}</a
+            >
+          </dd>
+          <dt>Repository</dt>
+          <dd>
+            <a
+              href={REPO_URL}
+              target="_blank"
+              rel="noopener noreferrer"
+              class="docs-mono-link"
+              >{REPO_URL}</a
+            >
+          </dd>
+          <dt>Discovery index</dt>
+          <dd>
+            <a
+              href="/.well-known/agent-skills/index.json"
+              class="docs-mono-link"
+              >/.well-known/agent-skills/index.json</a
+            >
+          </dd>
+          <dt>License</dt>
+          <dd>
+            Same as the repository (MIT). The skill is
+            <code>private: true</code> on npm — distribution is via the
+            discovery URL only.
+          </dd>
+        </dl>
+      </div>
+    </MaintainerOnly>
 
     <!-- Bottom nav -->
     <BottomNav
