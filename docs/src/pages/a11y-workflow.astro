@@ -26,6 +26,15 @@ const result = await iframe.contentWindow.axe.run(
 console.log(result.violations.map(v => v.id));
 // → ["aria-progressbar-name", "button-name", ...]`;
 
+const AXE_REPORT_SHAPE = `### <story id of an AtlProgress story> - aria-progressbar-name
+
+Ensure every ARIA progressbar node has an accessible name
+
+#### Affected Elements
+- **Impact**: serious
+  **Message**: <axe failureSummary for the node>
+  **Element**: <atl-progress role="progressbar" ...>`;
+
 const FIGMA_AUDIT = `// figma-console MCP — one audit per component-set.
 // Returns scorecard: variant coverage, focus indicator,
 // non-color differentiation (WCAG 1.4.1), target size,
@@ -84,6 +93,601 @@ export type AtlButtonProps =
       lede="Each tool catches a different layer of the same problem. Use them together, not in isolation — Figma flags missing variants before any code is written, axe flags real DOM violations after build, the spec audit catches APIs that don't enforce a11y by default."
       ledeMax="620px"
     />
+
+    <!-- ── Participant section: a11y in the loop ───────────────────────── -->
+    <div class="docs-section">
+      <h2 id="a11y-in-the-loop" class="docs-section-title">
+        Accessibility in the loop
+      </h2>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 1.25rem;
+        "
+      >
+        You do not run a separate accessibility project. The design-to-code loop
+        (inspect, contract, code, verify) already has an accessibility check at
+        three of its four steps. This is where each one sits, which tool runs
+        it, and what to do with a finding.
+      </p>
+
+      <table class="docs-props-table">
+        <thead>
+          <tr>
+            <th>Loop step</th>
+            <th>A11y check</th>
+            <th>Tool</th>
+            <th>A finding means</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>1. Inspect</strong> (Figma)</td>
+            <td>
+              Variant coverage, focus indicator, non-colour differentiation,
+              target size, annotations on the master.
+            </td>
+            <td>
+              <code>figma_audit_component_accessibility</code>; annotations via
+              <code>figma_get_annotations</code> /
+              <code>figma_set_annotations</code>
+            </td>
+            <td>
+              Fix the master (add the missing state, annotate the role) before
+              any code exists. Cheapest fix point.
+            </td>
+          </tr>
+          <tr>
+            <td><strong>2. Contract</strong></td>
+            <td>
+              No separate tool. The component's own types and JSDoc are the API,
+              so this is where you decide whether the API <em>forces</em> a name
+              (for example a required label) or leaves it optional.
+            </td>
+            <td>Types compile; <code>check:contracts</code></td>
+            <td>
+              Change the component's API, not a story. See the worked trace
+              below.
+            </td>
+          </tr>
+          <tr>
+            <td><strong>3. Code</strong></td>
+            <td>
+              Rendered DOM of every story, checked with axe. Each story sets
+              <code>parameters.a11y.test: 'error'</code> in the Storybook
+              preview, so a violation fails the run.
+            </td>
+            <td>
+              <code>storybook-test</code> (all stories:
+              <code>check:stories</code>)
+            </td>
+            <td>
+              Fix the component, then re-run. Do not disable the rule to get
+              green.
+            </td>
+          </tr>
+          <tr>
+            <td><strong>4. Verify</strong></td>
+            <td>
+              Accessibility of the rendered story HTML, fed into the parity
+              check so a11y drift between master and code shows up with the
+              padding and colour drift.
+            </td>
+            <td>
+              <code>figma_scan_code_accessibility</code>, then
+              <code>figma_check_design_parity</code>
+            </td>
+            <td>
+              Fix whichever side is wrong, then re-run both. Required, not
+              optional (see
+              <a href="/design-to-code" class="docs-link-primary"
+                >Design to code</a
+              >).
+            </td>
+          </tr>
+        </tbody>
+      </table>
+
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin: 1rem 0 0;
+        "
+      >
+        Every story is a test: <code>storybook-test</code> renders each story in
+        Chromium, runs its <code>play</code> function, and runs axe. That is why
+        adding a story for each variant and state is also how you add an
+        accessibility check for it.
+      </p>
+
+      <h3 class="docs-h3 docs-h3--spaced">
+        One finding, from red run to green
+      </h3>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 0.75rem;
+        "
+      >
+        The case is <code>AtlProgress</code>, the same component as the
+        <a href="#worked-example" class="docs-link-primary">worked example</a>
+        further down. The <code>storybook-test</code> report names the story,
+        the axe rule id, its description, and the failing element (the shape
+        below is the one Storybook's Vitest addon prints; the values are this
+        case's).
+      </p>
+      <Code
+        code={AXE_REPORT_SHAPE}
+        lang="md"
+        title="storybook-test: one a11y violation (report shape)"
+      />
+      <ol
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.75;
+          padding-left: 1.25rem;
+        "
+      >
+        <li>
+          <strong style="color: var(--ui-color-text)">Rule id.</strong>
+          <code>aria-progressbar-name</code>: a progress bar with no accessible
+          name. A screen reader announces "progress bar, 60 percent" and nothing
+          about what is progressing.
+        </li>
+        <li>
+          <strong style="color: var(--ui-color-text)">Which element.</strong>
+          The failing node is the component's host element,
+          <code>&lt;atl-progress&gt;</code>. In <code>atl-progress.ts</code> the
+          host carries <code>role="progressbar"</code>, and its
+          <code>aria-label</code> is set only from the optional
+          <code>label</code> input. The stories do not pass one, so no name is
+          rendered.
+        </li>
+        <li>
+          <strong style="color: var(--ui-color-text)">Where to fix.</strong>
+          Not by silencing axe. Either the component requires a name (React's
+          <code>AtlButton</code> uses a union so that children or
+          <code>aria-label</code> is mandatory), or every story passes a
+          meaningful <code>label</code>, as
+          <code>atl-progress.a11y.spec.ts</code> already does with
+          <code>label="Upload progress"</code>.
+        </li>
+        <li>
+          <strong style="color: var(--ui-color-text)">Re-run.</strong>
+          Run <code>nx storybook-test angular</code> (or your framework). The
+          story is green when the report no longer lists the rule for it.
+        </li>
+      </ol>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-top: 0.75rem;
+        "
+      >
+        The temptation is the shortcut. The stories for this component currently
+        switch the rule off for the meta
+        (<code>&#123; id: 'aria-progressbar-name', enabled: false &#125;</code>)
+        with a comment marking it as debt. That keeps the build green but the
+        defect in place. Treat such an entry as a to-do, remove it once the fix
+        lands, and let the run prove it.
+      </p>
+
+      <h3 class="docs-h3 docs-h3--spaced">
+        What automated checks do not catch
+      </h3>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 0.75rem;
+        "
+      >
+        A green run means no detectable rule violations on the stories that
+        exist. It is not "accessible". Axe and the Figma audit cannot judge
+        these, so a person has to:
+      </p>
+      <ul
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.75;
+          padding-left: 1.25rem;
+        "
+      >
+        <li>
+          <strong style="color: var(--ui-color-text)"
+            >Whether a name makes sense.</strong
+          >
+          Axe checks that a name exists, not that "button" or "progress" says
+          anything useful. Check: read the label out of context.
+        </li>
+        <li>
+          <strong style="color: var(--ui-color-text)"
+            >Focus order and traps.</strong
+          >
+          Where focus lands when a dialog opens, and whether Escape returns it.
+          Check: tab through the component in its isolated story view.
+        </li>
+        <li>
+          <strong style="color: var(--ui-color-text)"
+            >What a screen reader says.</strong
+          >
+          Order and announcements. Check: run it through VoiceOver.
+        </li>
+        <li>
+          <strong style="color: var(--ui-color-text)"
+            >Components composed on a page.</strong
+          >
+          Every check runs on components in isolation.
+        </li>
+      </ul>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-top: 0.75rem;
+        "
+      >
+        The step-by-step manual pass for a modal is in
+        <a href="/accessibility" class="docs-link-primary">Accessibility</a>,
+        section "A manual pass before you call it done".
+      </p>
+    </div>
+
+    <!-- ── Audit loop ──────────────────────────────────────────────────── -->
+    <div class="docs-section">
+      <h2 class="docs-section-title">The audit loop</h2>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 1.25rem;
+        "
+      >
+        Five steps. Each step feeds the next; the loop closes after a
+        verification re-run. Skip <em>Triangulate</em> at your peril — it's the
+        step where you decide whether what one tool flagged is a real issue or
+        noise. A <em>lane</em> is one of the three sources of findings: axe in
+        the browser, the Figma component audit, and a static read of the spec.
+        <em>Triangulate</em> means comparing what the lanes report for the same
+        component; the lanes are described further down, under
+        <a href="#for-maintainers" class="docs-link-primary">For maintainers</a
+        >.
+      </p>
+
+      <DiagramFigure
+        caption="Triangulate before fixing — three sources rarely all flag the same wording, but the underlying issue usually is the same."
+      >
+        <svg
+          viewBox="0 0 880 220"
+          role="img"
+          aria-labelledby="loop-title loop-desc"
+          preserveAspectRatio="xMidYMid meet"
+        >
+          <title id="loop-title">A11y audit loop — five steps</title>
+          <desc id="loop-desc">
+            Five steps arranged left-to-right with arrows: Collect, Triangulate,
+            Prioritize, Fix smallest first, Verify. A dashed return arrow loops
+            from Verify back to Collect to indicate the cycle.
+          </desc>
+
+          <defs>
+            <marker
+              id="loop-arrow"
+              viewBox="0 0 10 10"
+              refX="9"
+              refY="5"
+              markerWidth="7"
+              markerHeight="7"
+              orient="auto"
+            >
+              <path d="M 0 0 L 10 5 L 0 10 z" class="diagram-arrow" />
+            </marker>
+            <marker
+              id="loop-arrow-back"
+              viewBox="0 0 10 10"
+              refX="9"
+              refY="5"
+              markerWidth="7"
+              markerHeight="7"
+              orient="auto"
+            >
+              <path
+                d="M 0 0 L 10 5 L 0 10 z"
+                class="diagram-arrow--muted-accent"
+              />
+            </marker>
+          </defs>
+
+          <g font-family="system-ui">
+            <!-- Step circles -->
+            <g>
+              <circle cx="80" cy="100" r="58" class="diagram-node" />
+              <text
+                x="80"
+                y="94"
+                text-anchor="middle"
+                font-size="15.3"
+                font-weight="700"
+                >Collect</text
+              >
+              <text
+                x="80"
+                y="114"
+                text-anchor="middle"
+                font-size="15.3"
+                class="diagram-muted"
+                >all 3 sources</text
+              >
+            </g>
+            <g>
+              <circle cx="240" cy="100" r="58" class="diagram-node" />
+              <text
+                x="240"
+                y="94"
+                text-anchor="middle"
+                font-size="15.3"
+                font-weight="700"
+                >Triangulate</text
+              >
+              <text
+                x="240"
+                y="114"
+                text-anchor="middle"
+                font-size="15.3"
+                class="diagram-muted"
+                >map to issues</text
+              >
+            </g>
+            <g>
+              <circle cx="400" cy="100" r="58" class="diagram-node" />
+              <text
+                x="400"
+                y="94"
+                text-anchor="middle"
+                font-size="15.3"
+                font-weight="700"
+                >Prioritize</text
+              >
+              <text
+                x="400"
+                y="114"
+                text-anchor="middle"
+                font-size="15.3"
+                class="diagram-muted"
+                >WCAG impact</text
+              >
+            </g>
+            <g>
+              <circle
+                cx="560"
+                cy="100"
+                r="60"
+                class="diagram-node diagram-node--accent"
+              />
+              <text
+                x="560"
+                y="94"
+                text-anchor="middle"
+                font-size="15.3"
+                font-weight="700"
+                style="fill: var(--ui-color-primary)"
+                >Fix smallest</text
+              >
+              <text
+                x="560"
+                y="114"
+                text-anchor="middle"
+                font-size="15.3"
+                class="diagram-muted"
+                >one PR each</text
+              >
+            </g>
+            <g>
+              <circle cx="720" cy="100" r="58" class="diagram-node" />
+              <text
+                x="720"
+                y="94"
+                text-anchor="middle"
+                font-size="15.3"
+                font-weight="700"
+                >Verify</text
+              >
+              <text
+                x="720"
+                y="114"
+                text-anchor="middle"
+                font-size="15.3"
+                class="diagram-muted"
+                >re-run sources</text
+              >
+            </g>
+
+            <!-- Forward arrows -->
+            <line
+              x1="142"
+              y1="100"
+              x2="178"
+              y2="100"
+              class="diagram-connector"
+              marker-end="url(#loop-arrow)"
+            />
+            <line
+              x1="302"
+              y1="100"
+              x2="338"
+              y2="100"
+              class="diagram-connector"
+              marker-end="url(#loop-arrow)"
+            />
+            <line
+              x1="462"
+              y1="100"
+              x2="496"
+              y2="100"
+              class="diagram-connector"
+              marker-end="url(#loop-arrow)"
+            />
+            <line
+              x1="624"
+              y1="100"
+              x2="658"
+              y2="100"
+              class="diagram-connector"
+              marker-end="url(#loop-arrow)"
+            />
+
+            <!-- Loop-back -->
+            <path
+              d="M 720 158 C 720 205 720 208 600 208 L 200 208 C 80 208 80 205 80 158"
+              class="diagram-connector diagram-connector--dashed"
+              marker-end="url(#loop-arrow-back)"
+            />
+            <text
+              x="400"
+              y="195"
+              text-anchor="middle"
+              font-size="15.3"
+              class="diagram-muted"
+              >re-run on next change</text
+            >
+          </g>
+        </svg>
+      </DiagramFigure>
+    </div>
+
+    <!-- ── Code samples ─────────────────────────────────────────────── -->
+    <div class="docs-section">
+      <h2 class="docs-section-title">The three calls</h2>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 1.25rem;
+        "
+      >
+        What each lane looks like in practice — copy these into a Claude Code
+        session to start your own audit loop.
+      </p>
+
+      <h3 class="docs-h3 docs-h3--spaced">
+        Setup — launch Claude Code with Chrome attached
+      </h3>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 0.75rem;
+        "
+      >
+        Lane 1 needs Claude to <em>drive</em> a real browser. The
+        <code>--chrome</code> flag attaches a controlled Chrome instance to the
+        chat so the agent can navigate, inject scripts, and read the DOM. One
+        launch covers all subsequent axe runs in the session.
+      </p>
+      <Code
+        code={CLAUDE_CHROME_LAUNCH}
+        lang="shell"
+        title="claude --chrome (one-time per session)"
+      />
+
+      <h3 class="docs-h3 docs-h3--spaced">
+        Lane 1 — axe-core in a Storybook iframe
+      </h3>
+      <Code code={AXE_INJECT} lang="js" title="run axe scoped to one story" />
+
+      <h3 class="docs-h3 docs-h3--spaced">Lane 2 — figma-console MCP</h3>
+      <Code
+        code={FIGMA_AUDIT}
+        lang="js"
+        title="figma_audit_component_accessibility"
+      />
+
+      <h3 class="docs-h3 docs-h3--spaced">Lane 3 — spec / impl audit</h3>
+      <Code
+        code={SPEC_AUDIT}
+        lang="ts"
+        title="discriminated union for icon-only"
+      />
+    </div>
+
+    <!-- ── When to run which ──────────────────────────────────────── -->
+    <div class="docs-section">
+      <h2 class="docs-section-title">When to run which</h2>
+      <table class="docs-props-table">
+        <thead>
+          <tr>
+            <th>Phase</th>
+            <th>Source</th>
+            <th>Why now</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td><strong>Component design</strong> (Figma)</td>
+            <td>Figma a11y audit</td>
+            <td>
+              Catch missing variants and tap-target issues <em>before</em> any
+              code is written. Cheapest fix point.
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Spec change</strong> (add/edit a11y prop)</td>
+            <td>Contract + manifest audit, types compile</td>
+            <td>
+              Make sure the API enforces a11y by default, not by consumer
+              discipline. Catch missing discriminated unions.
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Story added</strong> (Storybook)</td>
+            <td>axe on the story root</td>
+            <td>
+              Verify the rendered DOM is correct in this exact prop combination.
+              Stories are your test surface.
+            </td>
+          </tr>
+          <tr>
+            <td><strong>PR check</strong></td>
+            <td>axe on changed components only</td>
+            <td>
+              Fast regression gate. The Figma + spec lanes are slower; reserve
+              them for component-level changes.
+            </td>
+          </tr>
+          <tr>
+            <td><strong>Release</strong></td>
+            <td>All three, full sweep</td>
+            <td>
+              One snapshot per release captures the baseline so the next cycle
+              can diff against it.
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <!-- ── For maintainers ─────────────────────────────────────────────── -->
+    <div class="docs-section">
+      <h2 id="for-maintainers" class="docs-section-title">For maintainers</h2>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 0;
+        "
+      >
+        Everything below is the record of how this repo audits itself: the
+        three-lane triangulation (axe in the browser, the Figma audit, a spec
+        read), the AtlProgress case across all three lanes, the MCP
+        orchestration, and the 2026-04-26 audit cycle. Read it if you maintain a
+        design system and want to run a full audit; you do not need it to work
+        through the course.
+      </p>
+    </div>
 
     <!-- ── Triangulation overview ──────────────────────────────────────── -->
     <div class="docs-section">
@@ -401,226 +1005,11 @@ export type AtlButtonProps =
       </table>
     </div>
 
-    <!-- ── Audit loop ──────────────────────────────────────────────────── -->
-    <div class="docs-section">
-      <h2 class="docs-section-title">The audit loop</h2>
-      <p
-        style="
-          color: var(--ui-color-text-muted);
-          line-height: 1.6;
-          margin-bottom: 1.25rem;
-        "
-      >
-        Five steps. Each step feeds the next; the loop closes after a
-        verification re-run. Skip <em>Triangulate</em> at your peril — it's the
-        step where you decide whether what one tool flagged is a real issue or
-        noise.
-      </p>
-
-      <DiagramFigure
-        caption="Triangulate before fixing — three sources rarely all flag the same wording, but the underlying issue usually is the same."
-      >
-        <svg
-          viewBox="0 0 880 220"
-          role="img"
-          aria-labelledby="loop-title loop-desc"
-          preserveAspectRatio="xMidYMid meet"
-        >
-          <title id="loop-title">A11y audit loop — five steps</title>
-          <desc id="loop-desc">
-            Five steps arranged left-to-right with arrows: Collect, Triangulate,
-            Prioritize, Fix smallest first, Verify. A dashed return arrow loops
-            from Verify back to Collect to indicate the cycle.
-          </desc>
-
-          <defs>
-            <marker
-              id="loop-arrow"
-              viewBox="0 0 10 10"
-              refX="9"
-              refY="5"
-              markerWidth="7"
-              markerHeight="7"
-              orient="auto"
-            >
-              <path d="M 0 0 L 10 5 L 0 10 z" class="diagram-arrow" />
-            </marker>
-            <marker
-              id="loop-arrow-back"
-              viewBox="0 0 10 10"
-              refX="9"
-              refY="5"
-              markerWidth="7"
-              markerHeight="7"
-              orient="auto"
-            >
-              <path
-                d="M 0 0 L 10 5 L 0 10 z"
-                class="diagram-arrow--muted-accent"
-              />
-            </marker>
-          </defs>
-
-          <g font-family="system-ui">
-            <!-- Step circles -->
-            <g>
-              <circle cx="80" cy="100" r="58" class="diagram-node" />
-              <text
-                x="80"
-                y="94"
-                text-anchor="middle"
-                font-size="15.3"
-                font-weight="700"
-                >Collect</text
-              >
-              <text
-                x="80"
-                y="114"
-                text-anchor="middle"
-                font-size="15.3"
-                class="diagram-muted"
-                >all 3 sources</text
-              >
-            </g>
-            <g>
-              <circle cx="240" cy="100" r="58" class="diagram-node" />
-              <text
-                x="240"
-                y="94"
-                text-anchor="middle"
-                font-size="15.3"
-                font-weight="700"
-                >Triangulate</text
-              >
-              <text
-                x="240"
-                y="114"
-                text-anchor="middle"
-                font-size="15.3"
-                class="diagram-muted"
-                >map to issues</text
-              >
-            </g>
-            <g>
-              <circle cx="400" cy="100" r="58" class="diagram-node" />
-              <text
-                x="400"
-                y="94"
-                text-anchor="middle"
-                font-size="15.3"
-                font-weight="700"
-                >Prioritize</text
-              >
-              <text
-                x="400"
-                y="114"
-                text-anchor="middle"
-                font-size="15.3"
-                class="diagram-muted"
-                >WCAG impact</text
-              >
-            </g>
-            <g>
-              <circle
-                cx="560"
-                cy="100"
-                r="60"
-                class="diagram-node diagram-node--accent"
-              />
-              <text
-                x="560"
-                y="94"
-                text-anchor="middle"
-                font-size="15.3"
-                font-weight="700"
-                style="fill: var(--ui-color-primary)"
-                >Fix smallest</text
-              >
-              <text
-                x="560"
-                y="114"
-                text-anchor="middle"
-                font-size="15.3"
-                class="diagram-muted"
-                >one PR each</text
-              >
-            </g>
-            <g>
-              <circle cx="720" cy="100" r="58" class="diagram-node" />
-              <text
-                x="720"
-                y="94"
-                text-anchor="middle"
-                font-size="15.3"
-                font-weight="700"
-                >Verify</text
-              >
-              <text
-                x="720"
-                y="114"
-                text-anchor="middle"
-                font-size="15.3"
-                class="diagram-muted"
-                >re-run sources</text
-              >
-            </g>
-
-            <!-- Forward arrows -->
-            <line
-              x1="142"
-              y1="100"
-              x2="178"
-              y2="100"
-              class="diagram-connector"
-              marker-end="url(#loop-arrow)"
-            />
-            <line
-              x1="302"
-              y1="100"
-              x2="338"
-              y2="100"
-              class="diagram-connector"
-              marker-end="url(#loop-arrow)"
-            />
-            <line
-              x1="462"
-              y1="100"
-              x2="496"
-              y2="100"
-              class="diagram-connector"
-              marker-end="url(#loop-arrow)"
-            />
-            <line
-              x1="624"
-              y1="100"
-              x2="658"
-              y2="100"
-              class="diagram-connector"
-              marker-end="url(#loop-arrow)"
-            />
-
-            <!-- Loop-back -->
-            <path
-              d="M 720 158 C 720 205 720 208 600 208 L 200 208 C 80 208 80 205 80 158"
-              class="diagram-connector diagram-connector--dashed"
-              marker-end="url(#loop-arrow-back)"
-            />
-            <text
-              x="400"
-              y="195"
-              text-anchor="middle"
-              font-size="15.3"
-              class="diagram-muted"
-              >re-run on next change</text
-            >
-          </g>
-        </svg>
-      </DiagramFigure>
-    </div>
-
     <!-- ── Worked example ─────────────────────────────────────────────── -->
     <div class="docs-section">
-      <h2 class="docs-section-title">Worked example — AtlProgress</h2>
+      <h2 id="worked-example" class="docs-section-title">
+        Worked example — AtlProgress
+      </h2>
       <p
         style="
           color: var(--ui-color-text-muted);
@@ -630,6 +1019,21 @@ export type AtlButtonProps =
       >
         A component all three lanes touched. Figma said it was perfect; axe said
         it was broken; the spec told us why and where to fix.
+      </p>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 1.25rem;
+        "
+      >
+        <strong>Corrected 2026-10-10.</strong> This example is kept as it was
+        first written. The fix it describes has not landed: the
+        <code>aria-progressbar-name</code> rule is still switched off in the
+        <code>AtlProgress</code> stories of all three libraries (marked "a11y
+        debt") and is listed as open in the repo's a11y backlog. Read the
+        "green" outcome and the test counts below as the intended end state, not
+        the current one.
       </p>
 
       <DiagramFigure
@@ -1179,61 +1583,6 @@ export type AtlButtonProps =
       </DiagramFigure>
     </div>
 
-    <!-- ── Code samples ─────────────────────────────────────────────── -->
-    <div class="docs-section">
-      <h2 class="docs-section-title">The three calls</h2>
-      <p
-        style="
-          color: var(--ui-color-text-muted);
-          line-height: 1.6;
-          margin-bottom: 1.25rem;
-        "
-      >
-        What each lane looks like in practice — copy these into a Claude Code
-        session to start your own audit loop.
-      </p>
-
-      <h3 class="docs-h3 docs-h3--spaced">
-        Setup — launch Claude Code with Chrome attached
-      </h3>
-      <p
-        style="
-          color: var(--ui-color-text-muted);
-          line-height: 1.6;
-          margin-bottom: 0.75rem;
-        "
-      >
-        Lane 1 needs Claude to <em>drive</em> a real browser. The
-        <code>--chrome</code> flag attaches a controlled Chrome instance to the
-        chat so the agent can navigate, inject scripts, and read the DOM. One
-        launch covers all subsequent axe runs in the session.
-      </p>
-      <Code
-        code={CLAUDE_CHROME_LAUNCH}
-        lang="shell"
-        title="claude --chrome (one-time per session)"
-      />
-
-      <h3 class="docs-h3 docs-h3--spaced">
-        Lane 1 — axe-core in a Storybook iframe
-      </h3>
-      <Code code={AXE_INJECT} lang="js" title="run axe scoped to one story" />
-
-      <h3 class="docs-h3 docs-h3--spaced">Lane 2 — figma-console MCP</h3>
-      <Code
-        code={FIGMA_AUDIT}
-        lang="js"
-        title="figma_audit_component_accessibility"
-      />
-
-      <h3 class="docs-h3 docs-h3--spaced">Lane 3 — spec / impl audit</h3>
-      <Code
-        code={SPEC_AUDIT}
-        lang="ts"
-        title="discriminated union for icon-only"
-      />
-    </div>
-
     <!-- ── Real numbers ────────────────────────────────────────────── -->
     <div class="docs-section">
       <h2 class="docs-section-title">From a real audit cycle (2026-04-26)</h2>
@@ -1305,62 +1654,6 @@ export type AtlButtonProps =
         (state-axis convention, protanopia rebinding, the
         <code>AtlTabGroup</code> focus reading) — none block release.
       </p>
-    </div>
-
-    <!-- ── When to run which ──────────────────────────────────────── -->
-    <div class="docs-section">
-      <h2 class="docs-section-title">When to run which</h2>
-      <table class="docs-props-table">
-        <thead>
-          <tr>
-            <th>Phase</th>
-            <th>Source</th>
-            <th>Why now</th>
-          </tr>
-        </thead>
-        <tbody>
-          <tr>
-            <td><strong>Component design</strong> (Figma)</td>
-            <td>Figma a11y audit</td>
-            <td>
-              Catch missing variants and tap-target issues <em>before</em> any
-              code is written. Cheapest fix point.
-            </td>
-          </tr>
-          <tr>
-            <td><strong>Spec change</strong> (add/edit a11y prop)</td>
-            <td>Contract + manifest audit, types compile</td>
-            <td>
-              Make sure the API enforces a11y by default, not by consumer
-              discipline. Catch missing discriminated unions.
-            </td>
-          </tr>
-          <tr>
-            <td><strong>Story added</strong> (Storybook)</td>
-            <td>axe on the story root</td>
-            <td>
-              Verify the rendered DOM is correct in this exact prop combination.
-              Stories are your test surface.
-            </td>
-          </tr>
-          <tr>
-            <td><strong>PR check</strong></td>
-            <td>axe on changed components only</td>
-            <td>
-              Fast regression gate. The Figma + spec lanes are slower; reserve
-              them for component-level changes.
-            </td>
-          </tr>
-          <tr>
-            <td><strong>Release</strong></td>
-            <td>All three, full sweep</td>
-            <td>
-              One snapshot per release captures the baseline so the next cycle
-              can diff against it.
-            </td>
-          </tr>
-        </tbody>
-      </table>
     </div>
 
     <HelpFooter page="a11y-workflow" />
