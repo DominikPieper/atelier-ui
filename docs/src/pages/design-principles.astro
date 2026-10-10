@@ -2,6 +2,27 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import Jargon from '../components/Jargon.astro';
 import PageHero from '../components/PageHero.astro';
+import { Code } from 'astro-expressive-code/components';
+
+const CHECK_PROMPT = `Check my design system against the principles, read-only. Do not rename or write anything.
+
+1. Collect, from my component library (Figma file, code, or both):
+   - every prop or variant property name, with its allowed values and the
+     components that declare it
+   - every token name, grouped by prefix
+   - every default value, and every prop that has none
+2. Principle 1, one name for one concept: list every concept with more than
+   one spelling (large / lg, outline / outlined), with the count of uses of
+   each and the components affected.
+3. Principle 2, narrow literal types: list every prop typed as a free string
+   or number where a closed set of values would do.
+4. Principle 3, sensible defaults: list every required prop that has an
+   obvious default.
+5. Principle 4, composition over configuration: list every component with
+   more than one prop that carries markup or content as a string.
+6. Rank the findings by how likely they are to make an agent generate wrong
+   code. Name the single one that would confuse it most, and say why.
+   Do not apply anything.`;
 ---
 
 <BaseLayout
@@ -17,6 +38,7 @@ import PageHero from '../components/PageHero.astro';
     { id: 'principle-6', label: 'MCP server closes the loop' },
     { id: 'principle-7', label: 'No design system from scratch' },
     { id: 'context-lifecycle', label: 'The context lifecycle' },
+    { id: 'check-your-own', label: 'Exercise: check your own system' },
     { id: 'deprecation', label: 'Deprecation windows and codemods' },
   ]}
 >
@@ -487,6 +509,63 @@ import PageHero from '../components/PageHero.astro';
         Write the context down at the stage where it is decided, in an artefact
         the next stage reads. If it lives only in someone's head, it stops at
         the handoff.
+      </div>
+    </div>
+
+    <!-- Exercise -->
+    <div class="docs-section">
+      <h2 id="check-your-own" class="docs-section-title">
+        Exercise: check your own system
+      </h2>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.65;
+          margin-bottom: 0.75rem;
+        "
+      >
+        The principles are only useful if you can hold your own library against
+        them. This prompt is the read-only consistency report from
+        <a href="/figma" class="docs-link-primary">Figma</a>, widened to cover
+        principles 1 to 4. Run it in your agent against your own file or code.
+      </p>
+      <Code code={CHECK_PROMPT} lang="text" title="Principles check prompt" />
+      <ol
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.65;
+          margin: 1rem 0 1rem 1.25rem;
+        "
+      >
+        <li>
+          <strong style="color: var(--ui-color-text)">Pick one.</strong> Read
+          the ranked list and choose the one finding that most confuses an
+          agent. Ignore the rest for now.
+        </li>
+        <li>
+          <strong style="color: var(--ui-color-text)">Fix it.</strong> Settle on
+          one spelling or one closed set of values and change it where it is
+          declared.
+        </li>
+        <li>
+          <strong style="color: var(--ui-color-text)">Re-run.</strong> Run the
+          same prompt again. The finding should be gone and nothing new should
+          have appeared.
+        </li>
+      </ol>
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.65;
+          margin-bottom: 1rem;
+        "
+      >
+        Timebox: 30 minutes. If the first run takes longer than 10, scope it to
+        one component family and widen it later.
+      </p>
+      <div class="docs-rule">
+        <span class="docs-rule-label">Rule</span>
+        One finding fixed and re-checked beats a long report nobody acts on.
       </div>
     </div>
 
