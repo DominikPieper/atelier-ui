@@ -5,13 +5,28 @@ import HelpFooter from '../components/HelpFooter.astro';
 import BottomNav from '../components/BottomNav.astro';
 import Callout from '../components/Callout.astro';
 
+type PageLink = { label: string; href: string };
+
 type Block = {
   num: string;
   time: string;
   title: string;
   format: string;
   risk?: boolean;
+  /** One sentence: why this block exists. */
+  why: string;
+  /** Docs pages (and anchors) this block uses. */
+  pages: PageLink[];
+  /** "Done when ..." — what every participant has at the end of the block. */
+  done: string;
+  /** What to do in the block. Backticks render as <code>. */
   bullets: string[];
+  /** For fast finishers. */
+  stretch: string;
+  /** The 2-minute recap question(s) that close the block. */
+  recap: string;
+  /** Notes for the trainer, not for participants. */
+  trainer?: string[];
 };
 
 type Day = {
@@ -22,323 +37,498 @@ type Day = {
   blocks: Block[];
 };
 
+// The exercise target. The kata and the tutorial both build this one frame, and
+// the agenda names it in several places. Keep every Atelier-specific name for it
+// HERE so that swapping the kata target (ADR-0165, CDS) is a one-place edit.
+const TARGET = {
+  name: 'Settings Card',
+  parts: 'AtlCard / AtlInput / AtlToggle / AtlButton',
+  node: '936-2954',
+};
+
+const SITE_REPO = 'https://github.com/DominikPieper/atelier-ui/blob/main';
+
+const L = {
+  overview: { label: 'Overview', href: '/' },
+  workshop: { label: 'Workshop setup', href: '/workshop' },
+  figmaToken: { label: 'Figma token', href: '/figma-token' },
+  troubleshooting: { label: 'Troubleshooting', href: '/troubleshooting' },
+  tutorial: { label: 'Tutorial', href: '/tutorial' },
+  firstComponent: { label: 'First-component kata', href: '/first-component' },
+  readiness: { label: 'Readiness checklist', href: '/readiness' },
+  pinkTest: { label: 'Pink test', href: '/tokens#pink-test' },
+  tokenNaming: { label: 'Token naming', href: '/tokens#naming' },
+  mcpServers: { label: 'Your MCP servers', href: '/mcp#your-servers' },
+  storybook: { label: 'Storybook', href: '/storybook' },
+  contractExample: {
+    label: 'Worked contract example',
+    href: '/design-to-code#contract-example',
+  },
+  findingCodes: {
+    label: 'Finding codes',
+    href: '/design-to-code#finding-codes',
+  },
+  handoffExample: {
+    label: 'Filled handoff document',
+    href: '/design-to-code#handoff-example',
+  },
+  parityReport: {
+    label: 'Reading a parity report',
+    href: '/design-to-code#parity-report',
+  },
+  selfHealing: {
+    label: 'Self-healing loop',
+    href: '/design-to-code#self-healing-loop',
+  },
+  a11yLoop: {
+    label: 'A11y in the loop',
+    href: '/a11y-workflow#a11y-in-the-loop',
+  },
+  accessibility: { label: 'Accessibility', href: '/accessibility' },
+  checkYourOwn: {
+    label: 'Check your own system',
+    href: '/design-principles#check-your-own',
+  },
+  briefs: {
+    label: 'Component briefs',
+    href: `${SITE_REPO}/workshop/briefs/README.md`,
+  },
+  skills: { label: 'Agent skills', href: '/agent-skills' },
+};
+
 const DAYS: Day[] = [
   {
-    day: 'Tag 1',
-    title: 'Werkzeuge verstehen & Workflow end-to-end',
-    goal: 'Jeder Teilnehmer hat ein laufendes Setup, kennt alle vier Pillars (Figma · Storybook · MCP · Claude Code) und hat einmal end-to-end eine Settings Card aus vorhandenen Atelier-Komponenten (AtlCard / AtlInput / AtlToggle / AtlButton) per Prompt komponiert — keine Änderung an einer bestehenden Komponenten-API.',
+    day: 'Day 1',
+    title: 'Understand the tools & run the workflow end to end',
+    goal: `Every participant has a working setup, knows all four pillars (Figma · Storybook · MCP · Claude Code) and has run the loop once end to end: a ${TARGET.name} composed by prompt from existing Atelier components (${TARGET.parts}) — no change to an existing component API.`,
     result: [
-      'Laufendes Atelier-Workspace mit grünem preflight',
-      'Mindestens ein erfolgreicher Prompt-zu-Code-Roundtrip',
-      'Verständnis: Figma = Quelle, Storybook = Manifest (die API), MCP = Verbindung, Claude = Ausführung',
+      'A running workspace with a green preflight',
+      'At least one successful prompt-to-code round trip',
+      'Understanding: Figma = source, Storybook = manifest (the API), MCP = connection, Claude = execution',
     ],
     blocks: [
       {
         num: '00',
         time: '09:00–09:30 · 30 min',
-        title: 'Kickoff',
-        format: 'Vortrag + Live-Demo',
+        title: 'Kickoff and thesis',
+        format: 'Talk + live demo',
+        why: 'AI scales what you already have, so the guardrails come first.',
+        pages: [L.overview],
+        done: 'Everyone can name the loop: Inspect → Contract → Code → Verify.',
         bullets: [
-          'Warum component-driven? Warum AI?',
-          'Live-Demo: in 5 min eine Atelier-Komponente per Prompt cross-framework abändern',
-          'Was lernen Teilnehmer in 2 Tagen, was nicht',
+          'Why component-driven? Why AI?',
+          'Live demo: change an Atelier component by prompt in 5 minutes',
+          'What participants learn in two days, and what they do not',
         ],
+        stretch:
+          'Write down one component in your own design system that you would trust an AI to change, and one you would not. Keep the note for Day 2.',
+        recap:
+          'Name the four steps of the loop and the tool that carries each one.',
       },
       {
         num: '01',
         time: '09:30–10:45 · 75 min',
-        title: 'Setup-Verifikation & Preflight',
-        format: 'Hands-on · High-Risk Block',
+        title: 'Verify the setup (installed as homework)',
+        format: 'Hands-on · High-risk block',
         risk: true,
+        why: 'Without a green setup, Day 2 is blind.',
+        pages: [L.workshop, L.figmaToken, L.troubleshooting],
+        done: 'preflight is green, `/mcp` lists every server, Storybook runs, Playwright Chromium is installed, and anyone still red has a rescue path.',
         bullets: [
-          'Pre-Workshop-Setup ist Pflicht-Hausaufgabe — Block prüft nur, installiert nicht von Null',
-          'Node ≥ 22.12 LTS aktiv (preflight prüft hart auf 22.12), npm-Version aus package.json#packageManager',
-          'Eigener Workspace erzeugt (npx create-atelier-ui-workspace, ein Framework gewählt), Claude Code CLI eingeloggt mit eigenem API-Key',
-          'Figma-Account mit Draft-Rechten (File → Duplicate to your drafts muss möglich sein) + figma-console Desktop-Bridge-Plugin in der Figma-Desktop-App importiert (Figma → Plugins → Development → Import plugin from manifest…) — die Bridge gated Tag 2, der Access-Token ist technisch optional (nur REST-Reads) und Kohorten-Policy',
-          'npm run preflight lokal grün — prüft aber nur Node/npm, dass die CLI vorhanden ist (which claude + claude --version), die Figma-Bridge, MCP-Erreichbarkeit und Ports. Nicht, ob der API-Key gültig ist: preflight schickt keine Modell-Anfrage',
-          'Modellzugriff getrennt bestätigen: claude auth login --console (oder ANTHROPIC_API_KEY gesetzt), dann claude -p "Reply with exactly: PREFLIGHT-OK" — kommt eine Antwort statt eines Auth-Fehlers, ist der Zugriff echt. Installierte CLI, verbundene MCP und nutzbarer Modellzugriff sind drei verschiedene Dinge',
-          'MCP-Konfig in .mcp.json gemeinsam lesen und verstehen',
-          'Bei Problemen: /troubleshooting (Bridge nicht verbunden, Node-Id löst nicht auf, Port-Konflikte, Node-Version zu alt)',
+          'The pre-workshop setup is mandatory homework — this block only verifies, it does not install from zero',
+          'Node ≥ 22.12 LTS is active (preflight checks for exactly 22.12), npm version from `package.json#packageManager`',
+          'Own workspace created (`npx create-atelier-ui-workspace`, one framework chosen), Claude Code CLI logged in with your own API key',
+          'Figma account with draft rights (File → Duplicate to your drafts must work) plus the figma-console Desktop Bridge plugin imported in the Figma desktop app (Figma → Plugins → Development → Import plugin from manifest…). The bridge gates Day 2; the access token is technically optional (REST reads only) and a cohort-policy decision',
+          '`npm run preflight` green locally. It checks Node/npm, that the CLI exists (`which claude` + `claude --version`), the Figma bridge, MCP reachability and ports. It does not check that the API key is valid: preflight sends no model request',
+          'Confirm model access separately: `claude auth login --console` (or `ANTHROPIC_API_KEY` set), then `claude -p "Reply with exactly: PREFLIGHT-OK"`. A reply instead of an auth error means access is real. An installed CLI, a connected MCP and usable model access are three different things',
+          'Read and understand the MCP config in `.mcp.json` together',
+          'When something fails: /troubleshooting (bridge not connected, node id does not resolve, port conflicts, Node version too old)',
         ],
+        stretch:
+          'Help a neighbour who is still red: read their preflight output and say which of the three (CLI, MCP, model access) is missing.',
+        recap:
+          'Which three things can be fine independently of each other when the setup looks fine?',
       },
       {
         num: '02',
         time: '11:00–12:15 · 75 min',
-        title: 'Figma für Entwickler',
-        format: 'Geführte Tour',
+        title: 'Mini-loop: first success',
+        format: 'Hands-on, everyone in sync',
+        why: 'Early proof that the loop holds.',
+        pages: [L.tutorial, L.parityReport],
+        done: `The ${TARGET.name} runs, and the parity report is present and has been read, not just "green".`,
         bullets: [
-          'Wie Designer denken — Atelier-File öffnen',
-          'Variables / Tokens: Primitives → Semantic → Component',
-          'Component-Sets, Variants, Component Properties, Auto Layout',
-          'Modes (light/dark), Inventory- vs Components-Page',
+          `The official /tutorial: Figma → MCP → token-exact code in 4 steps`,
+          `Participants prompt Claude in the cohort's framework along exactly that guide: compose a ${TARGET.name} from ${TARGET.parts} — no change to an existing component API, but composition from existing building blocks`,
+          'Important: do not type the code yourself, prompt it',
+          'Read the parity report line by line before calling it done',
+        ],
+        stretch:
+          'Change one token binding in the prompt (for example the card padding) and predict what the parity report will say before you run it.',
+        recap:
+          'What did the parity report compare, and what did it not compare?',
+        trainer: [
+          'The tutorial stays short on contracts: its verify step only runs `npm run check:contracts` and `npm run check:stories` as offline gates against the scaffolded workspace. Participants do not author a contract or read its finding codes in depth — that arrives on Day 2.',
         ],
       },
       {
         num: '03',
         time: '13:15–14:30 · 75 min',
-        title: 'Storybook als API-Wahrheit',
-        format: 'Hands-on Vergleich',
+        title: 'Figma for code: is the file ready?',
+        format: 'Guided tour + checklist',
+        why: 'AI only gets as good as the input it reads.',
+        pages: [L.readiness, L.pinkTest, L.tokenNaming],
+        done: 'The readiness checklist is filled in for one master of the Atelier file and for one master from your own design system.',
         bullets: [
-          'Was ist Storybook, was sind Stories, Prop-Tables',
-          'Hosted Storybooks öffnen — selbe Komponente (Button) in Angular/React/Vue vergleichen',
-          'Die Komponente ist die Quelle der Form, der Contract die Quelle der Absicht — Parität mit check:contracts sichtbar machen',
-          'Was Storybook 10.4 gebracht hat und im gepinnten 10.6.0 weiterhin aktiv ist: Agentic Setup, experimentalReactComponentMeta (Atelier lässt den Docgen aus — Reacts Prop-Tabellen kommen weiter aus react-docgen) — seit 10.6 mit eigenen Geschwistern für Angular und Vue (experimentalDocgenServer, in beiden explizit gesetzt statt sich auf den Default zu verlassen), Change Review Sidebar, Subcomponent-Docs',
-          'Nachtrag 10.5/10.6: storybookTest({ initialGlobals }) pinnt Globals pro Vitest-Projekt; 10.6 hat alle MCP-Tools auf toolset-method umbenannt und dieselben Werkzeuge als öffentliche CLI freigegeben (npx storybook tools / npx storybook skills — der Weg für Agenten ohne MCP-Client; storybook ai ist deprecated); CSF Factories werden in Storybook 11 das Default-Story-Format, der Workshop schreibt bewusst noch CSF3',
-          'Zwei Dinge, die im Atelier-Storybook sichtbar sind und nirgends sonst erklärt werden: der Design-Tab (addon-designs, parameters.design) zeigt den Figma-Frame neben der Komponente, und der Contract-Abschnitt unten auf jedem Docs-Tab kommt von contractDocsPage über parameters.docs.page (ADR-0121 S5b) — nicht von Storybook',
+          'How designers think — open the Atelier file',
+          'Variables / tokens: primitives → semantic → component',
+          'Component sets, variants, component properties, auto layout',
+          'Modes (light/dark), Inventory page vs. Components page',
+          'Run the pink test on a master and say what it showed',
         ],
+        stretch:
+          'Pick the check that fails most often in your own file and write the one-line fix a designer could apply in ten minutes.',
+        recap:
+          'Which of the checks would have stopped the AI from guessing on your own master?',
       },
       {
         num: '04',
         time: '14:45–16:00 · 75 min',
-        title: 'MCP & Claude Code Grundlagen',
-        format: 'Hands-on Demo',
+        title: 'Guardrails: stories as claims, and MCP',
+        format: 'Hands-on demo',
+        why: 'Every story is a test, and the docs come from the MCP server, not from guessing.',
+        pages: [L.storybook, L.mcpServers],
+        done: 'One story plus a `play` function written, seen red once and then green, and `docs-show` called.',
         bullets: [
-          'Was ist MCP? Welche Server sind aktiv (storybook-{angular,react,vue}, nx-mcp, figma-console, uianatomy)?',
-          'Toolset-Modell (seit 10.4, im Repo läuft 10.6.0): docs / dev / test — hosted vs. lokale Surface, inklusive Toolset-Gating (wann test für Read-Only-Agents deaktiviert wird)',
-          'Live-Übung: Claude per Prompt nach Button-Props fragen, Token-Werte ausgeben, Preview im Chat',
-          '~5 min Angular/Vue: dieselbe Live-Übung an einer Komponente mit Change-Handler — die gehosteten Angular/Vue-Endpunkte antworten seit Storybook 10.6 nativ (ADR-0097): checked / model() für Angular, v-model / update:checked für Vue, ohne Umweg über libs/spec/src/index.ts. Kurz danebenlegen genügt als Bestätigung, nicht als Übersetzungsschritt',
-          'Negativ-Demo: dieselbe Frage im Browser-Chat ohne MCP → Halluzination. Mit MCP → korrekte Antwort',
-          'Trainer-Demo Drei Richtungen (~12 min, nur Trainer-Maschine — claude.ai/design braucht ein anderes Login als der Kohorten-API-Key): drei Direction-Artboards für den Toast-Brief in Claude Design, geseedet aus der generierten Palette tools/design/artboard-palette.css — nicht aus dem atelier-design Skill, weil dieses File die Kurznamen trägt, die die Artboards selbst verwenden (--success, --border-hover), und weil genau dieses File gleich rot gemacht wird',
-          'Vor dem Zaun die vier Gate-Identitäten in einem Satz benennen (Figma-COMPONENT_SET mit Variant-Achsen, Literal-Union der Komponente, --ui-*-Token, Figma-Node-Id) — Node-Ids kommen erst in Block 05, Literal-Unions erst an Tag 2, hier also benennen statt voraussetzen. Dann der Zaun: eine Farbe im Artboard hart eintragen und npm run check:artboard-palette laufen lassen — grün, das Gate liest nur das gemeinsame Sheet gegen tokens.css und kein Artboard. Dieselbe Farbe im generierten Sheet ändern: derselbe Befehl wird rot',
-          'Checkpoint-Frage an den Raum: welche der vier Gate-Identitäten hat dieses Artboard? Erwartete Antwort: keine. Erst danach die Einordnung — im Repo gilt die Regel „nie Inline-Hex" weiter, sie gilt dort, wo ein Gate sie durchsetzen kann; Claude Design ist kein fünfter Pillar, sondern Schritt 0 (Divergenz) und Schritt 5 (Handoff), nie Schritt 1–4',
-          'Schritt 5 (Handoff) bleibt an diesem Punkt ohne Live-Vorführung, aber nicht mehr Idee: anders als Schritt 0 gibt es dafür keine Demo im Raum — sein Tooling existiert seit 2026-09-08 als Skill (artboard-bridge, Publish-Modus) und ist bereits einmal gelaufen, gegen ein Scratch-Projekt, und hat korrekt verweigert (die Komponente stand auf DRIFT), während ein skill-loser Ansatz ungeprüften Code veröffentlicht hätte — genau die Verweigerung, für die der Zaun weiter oben zwei Abschnitte lang argumentiert. Der Schreibpfad selbst (P1–P7) ist noch unerprobt, weil aktuell jeder Parity-Record im Repo auf DRIFT steht (repo-weit blockiert, nicht an dieser einen Komponente), und Zugriff für einzelne Teilnehmer-Seats bleibt eine eigene, offene Frage (ADR-0106 beweist bislang nur den Owner-Seat). Der Raum darf hier nicht den Eindruck mitnehmen, eine Live-Vorführung gesehen zu haben',
-          'Gegenmittel für die Live-Demo: Artboards in der Kaffeepause 14:30–14:45 vorab erzeugen; Fallback sind die 31 Artboards der Redesign-Phase (tools/design/artboards.json); nach der Rot-Demo git checkout tools/design/artboard-palette.css. Hintergrund für den Trainer: /claude-design',
+          'What Storybook is: stories, prop tables. The component is the source of the shape, the contract the source of intent — make parity visible with `check:contracts`',
+          'Open the hosted Storybook and look up the same component (Button) with `docs-show`: the docs come back shaped for the cohort framework',
+          'Two things in the Atelier Storybook that are explained nowhere else: the Design tab (addon-designs, `parameters.design`) shows the Figma frame next to the component, and the contract section at the bottom of every Docs tab comes from `contractDocsPage` via `parameters.docs.page` (ADR-0121 S5b) — not from Storybook',
+          'What is MCP? Which servers are active (`storybook-<framework>`, `nx-mcp`, `figma-console`, `uianatomy`)?',
+          'Toolset model (since Storybook 10.4, the repo runs 10.6.0): docs / dev / test — hosted vs. local surface, including toolset gating (when `test` is disabled for read-only agents)',
+          'Live exercise: ask Claude for Button props, print token values, preview in chat',
+          'Negative demo: the same question in a browser chat without MCP → hallucination. With MCP → correct answer',
+          'Write one story with a `play` function for a variant, watch it fail, fix it, watch it pass',
+        ],
+        stretch:
+          "Ask the MCP server for a prop that does not exist and read how it answers. Then say why 'not documented' is the right answer.",
+        recap: 'Why is a story a claim, and who checks that the claim holds?',
+        trainer: [
+          'Storybook 10.6 background for questions: `npx storybook tools` / `npx storybook skills` is the route for agents without an MCP client (`storybook ai` is deprecated); `experimentalDocgenServer` is set explicitly for Angular and Vue; CSF Factories become the default story format in Storybook 11 and the workshop deliberately still writes CSF3.',
         ],
       },
       {
         num: '05',
         time: '16:10–17:15 · 65 min',
-        title: 'Geführter End-to-End-Walkthrough',
-        format: 'Hands-on, alle synchron',
+        title: 'Kata against the clock',
+        format: 'Hands-on, no guidance',
+        why: 'Repeat the loop without guidance.',
+        pages: [L.firstComponent, L.findingCodes],
+        done: 'The kata is green and every parity finding is labelled.',
         bullets: [
-          'Das offizielle /tutorial: Figma → MCP → Token-genauer Code in 4 Schritten',
-          'Teilnehmer prompten Claude im gewählten Framework entlang genau dieser Anleitung: eine Settings Card aus AtlCard / AtlInput / AtlToggle / AtlButton komponieren — keine Änderung an einer bestehenden Komponenten-API, sondern Komposition aus vorhandenen Bausteinen',
-          'Wichtig: nicht selbst tippen, sondern prompten',
-          'Puffer für Schnelle: die 15-min-Kata /first-component — dieselbe Settings / Card-Frame (Node 936-2954) als zweite Runde auf Zeit, sieben Copy-Paste-Schritte mit demselben figma_check_design_parity am Schluss. Die Komponente liegt unter workshop-<fw>/src/ und wird in der eigenen App unter nx serve workshop-<fw> angesehen — Schritt 4 der Kata-Seite sagt das',
+          `The 15-minute /first-component kata: the same ${TARGET.name} frame (node ${TARGET.node}) as a second round against the clock, seven copy-paste steps, with the same \`figma_check_design_parity\` at the end`,
+          'The component lives under `workshop-<fw>/src/` and is viewed in your own app with `nx serve workshop-<fw>` — step 4 of the kata page says so',
+          'Label every parity finding: code, Figma, or contract',
         ],
+        stretch:
+          'Write the handoff document for the kata frame before you prompt, and compare the result with the first round.',
+        recap:
+          'Which finding did you fix in code, and which one did you leave alone? Why?',
       },
       {
         num: '06',
         time: '17:15–17:30 · 15 min',
-        title: 'Wrap-up Tag 1',
-        format: 'Diskussion',
+        title: 'Recap and exit ticket',
+        format: 'Discussion',
+        why: 'Lock in what was learned and prepare Day 2.',
+        pages: [L.briefs],
+        done: 'A brief is chosen. Homework: duplicate the Figma file and sketch the component.',
         bullets: [
-          'Was war überraschend? Wo hat AI sauber funktioniert, wo nicht?',
-          'Vorschau Tag 2 + optionale Hausaufgabe: kleine Komponente skizzieren (Toast / TagChip / StatCard / Avatar — dieselben vier wie die Starter-Frames und die Briefs)',
-          'Nachhol-Hausaufgabe für alle, die Block 05 nicht zu Ende gebracht haben: /first-component allein durchspielen — derselbe Loop im eigenen Tempo, mit Parity-Check am Schluss',
+          'What was surprising? Where did the AI work cleanly, where not?',
+          'Preview of Day 2 and the optional homework: sketch a small component (Toast / TagChip / StatCard / Avatar — the same four as the starter frames and the briefs)',
+          'Catch-up homework for everyone who did not finish the kata: play /first-component through alone — the same loop at your own pace, with the parity check at the end',
         ],
+        stretch:
+          'Read your chosen brief tonight and write down the three behaviours you would test first.',
+        recap:
+          'Exit ticket: one sentence on what you will check first next time before trusting AI output.',
       },
     ],
   },
   {
-    day: 'Tag 2',
-    title: 'Eigene Komponente bauen (Figma → Storybook → Code)',
-    goal: 'Jeder Teilnehmer hat eine selbst gestaltete Komponente durchgängig produziert: Figma-Spec mit Variants & Tokens, generierte Story, generierter Code im gewählten Framework, A11y-Check bestanden, Dark Mode funktioniert.',
+    day: 'Day 2',
+    title: 'Build your own component (Figma → Storybook → code)',
+    goal: 'Every participant has produced a self-designed component end to end: a Figma spec with variants and tokens, a generated story, generated code in the cohort framework, a passing a11y check, and working dark mode.',
     result: [
-      'Eigene Komponente im eigenen Figma-Draft (Component-Set mit Variants + Properties + Dark-Mode)',
-      'Contract + Komponente + Stories im eigenen Workspace',
-      'Funktionierende Implementierung im gewählten Framework',
-      'A11y-Audit bestanden',
+      'Own component in your own Figma draft (component set with variants + properties + dark mode)',
+      'Contract + component + stories in your own workspace',
+      'Working implementation in the cohort framework',
+      'A11y audit passed',
     ],
     blocks: [
       {
         num: '00',
         time: '09:00–09:30 · 30 min',
-        title: 'Recap & Brief',
-        format: 'Vortrag',
+        title: 'Recap (active recall), brief, skills',
+        format: 'Talk',
+        why: 'Reactivate Day 1.',
+        pages: [L.briefs, L.skills],
+        done: 'Everyone knows their target component and their skills are installed.',
         bullets: [
-          'Tag-1-Recap',
-          'Komponenten-Brief vorstellen — Anatomie, Axes, States, A11y-Anforderungen. Ein Brief je Komponente liegt im Repo unter workshop/briefs/{toast,tagchip,statcard,avatar}.md',
-          'uianatomy MCP als Hilfsmittel zeigen — und daran das Skills-Konzept: ein Skill ist eine Anleitung, die Claude lädt, wenn die Aufgabe passt. Fünf sind für diese Schulung relevant, nicht drei: uianatomy-mcp triggert hier automatisch; figma-workspace-architect und atelier-design begleiten gleich Block 01; design-to-code trägt ab Block 02 den ganzen Rest des Tages — das Routing zwischen eigenem Contract und geteiltem Master läuft bereits durch ihn (siehe Block 02 unten); artboard-bridge bindet die Schritt-0/Schritt-5-Artefakte aus /claude-design ein, mit Publish bislang trainer-only',
+          'Day 1 recap as active recall: participants answer, the trainer does not lecture',
+          'Present the component brief — anatomy, axes, states, a11y requirements. One brief per component lives in the repo under `workshop/briefs/{toast,tagchip,statcard,avatar}.md`',
+          'Show the uianatomy MCP as a helper — and use it to introduce the skills concept: a skill is a guide that Claude loads when the task matches',
+          "The skills participants have: `atelier-component` (the workspace's own skill — it is the design-to-code loop for your workspace and carries the rest of the day from Block 02 on), `uianatomy-mcp` (present in every workspace, triggers automatically here), `figma-workspace-architect` (only in workspaces generated with Figma; accompanies Block 01), and the four Storybook skills",
+        ],
+        stretch:
+          'Look up your brief component in uianatomy and list one thing the brief does not say that the canonical record does.',
+        recap:
+          'Which skill triggers when, and how would you notice it did not?',
+        trainer: [
+          'Participant skills are exactly the ones the scaffold installs: `atelier-component`, `uianatomy-mcp`, `figma-workspace-architect` (Figma workspaces only) and the four Storybook skills. `design-to-code`, `atelier-design` and `artboard-bridge` are repo/trainer-only; they appear only in the appendix.',
         ],
       },
       {
         num: '01',
         time: '09:30–11:00 · 90 min',
-        title: 'Design in Figma',
-        format: 'Hands-on · High-Risk Block',
+        title: 'Design in Figma and the handoff document',
+        format: 'Hands-on · High-risk block',
         risk: true,
+        why: "The handoff is the prompt's input.",
+        pages: [L.briefs, L.handoffExample, L.figmaToken, L.troubleshooting],
+        done: 'A master plus a filled handoff document.',
         bullets: [
-          'Pflicht-Vorabschritt: Atelier-File in eigene Drafts duplizieren — niemals im Original-File mutieren',
-          'Startpunkt ist ein Starter-Frame von der Workshop-Templates-Page, der beim Duplizieren mitkommt: Toast / Starter, StatCard / Starter, TagChip / Starter oder Avatar / Starter, dazu Variant Matrix / Scaffold. Fills und — wo die Komponente sie hat — Paddings und Radien sind dort bereits an UI-Tokens-Variablen gebunden — erster Schritt ist kopieren und umbenennen, nicht leere Leinwand',
-          '~45 min manuelles Design im Figma-UI (Layout, Variants, Token-Zuweisung)',
-          '~45 min MCP-Strukturierung (Component Properties, A11y-Audits)',
-          'Eigenes Component-Set: ≥2 Variants × 2 States, Properties, korrekte Tokens (--ui-*), Dark-Mode-Variante — die genaue Matrix steht im Komponenten-Brief',
-          'Skills als Co-Pilot, hier zum ersten Mal im Einsatz: figma-workspace-architect für Architekturentscheidungen, atelier-design für Brand-Konsistenz',
-          'Bei Problemen: /troubleshooting (Bridge nicht verbunden, Node-Id löst nicht auf, Port-Konflikte, Node-Version zu alt)',
-          'Block endet mit einem kurzen Handoff-Dokument, bevor irgendwer prompted: Draft-URL + Node-Id, gewählte Variants/States, Token-Bindings, Wiederverwendung vs. Neubau, die Behaviour aus dem Brief, explizite Ausschlüsse, Zieldateien, Abnahmekriterien — eine Checkliste, kein Template',
+          'Mandatory first step: duplicate the Atelier file into your own drafts — never mutate the original file',
+          'The starting point is a starter frame from the Workshop Templates page that comes along when you duplicate: Toast / Starter, StatCard / Starter, TagChip / Starter or Avatar / Starter, plus Variant Matrix / Scaffold. Fills and — where the component has them — paddings and radii are already bound to UI Tokens variables, so the first step is copy and rename, not an empty canvas',
+          '~45 min manual design in the Figma UI (layout, variants, token assignment)',
+          '~45 min MCP structuring (component properties, a11y audits)',
+          'Own component set: ≥ 2 variants × 2 states, properties, correct tokens (`--ui-*`), a dark-mode variant — the exact matrix is in the component brief',
+          'Skills as co-pilot, used here for the first time: `figma-workspace-architect` for architecture decisions',
+          'When something fails: /troubleshooting (bridge not connected, node id does not resolve, port conflicts, Node version too old)',
+          'The block ends with a short handoff document before anyone prompts: draft URL + node id, chosen variants/states, token bindings, reuse vs. rebuild, the behaviour from the brief, explicit exclusions, target files, acceptance criteria — a checklist, not a template',
         ],
+        stretch:
+          'Swap handoff documents with a neighbour and prompt only from theirs. List every question you had to ask.',
+        recap:
+          'Which line of the handoff document did you have to decide yourself, and what would the AI have guessed instead?',
       },
       {
         num: '02',
         time: '11:15–12:30 · 75 min',
-        title: 'Contract, Komponente & Stories per Prompt',
-        format: 'Prompt-Übung',
+        title: 'Contract, component, stories',
+        format: 'Prompt exercise',
+        why: 'The contract records the mismatches you chose deliberately.',
+        pages: [L.contractExample, L.findingCodes, L.storybook],
+        done: '`check:contracts` is green offline.',
         bullets: [
-          'Alle Teilnehmer, unabhängig vom Framework: npm run storybook parallel starten (Port 6006), dann per claude mcp add --transport http storybook-local http://localhost:<port>/mcp verbinden — bewusst lokaler Scope (Default von --scope, nicht project): das gemeinsame .mcp.json bleibt unangetastet, der Working Tree sauber. Client neu verbinden und prüfen, dass die dev/test-Tools (get-storybook-story-instructions, stories-preview, test-run) jetzt gelistet sind — seit 10.6.0 identisch für alle drei Frameworks. Ohne diesen Schritt ist das gleich folgende Pflicht-Tool schlicht nicht vorhanden: „nicht verfügbar" heißt hier „nicht konfiguriert", nicht „Server down". get-storybook-story-instructions ist Pflicht vor jedem *.stories.* Edit',
-          'Der Prompt entsteht aus dem Handoff-Dokument aus Block 01, nicht aus dem Bild allein — Behaviour und Ausschlüsse aus dem Dokument, nicht nur die Optik → von Claude in einem Schritt Contract (getypt über das ComponentContract-Schema aus workshop-<fw>/src/contracts/types.ts, relativ importiert), Komponente (inkl. Test) und Stories generieren lassen: eine Story je Variantenwert und Boolean-State, mit play für jede Behaviour-Zeile des Dokuments. Ein Schritt, nicht drei — Stories importieren die Komponente und kompilieren ohne sie nicht; design-to-code Schritt 5 behandelt das ohnehin als einen Schritt',
-          'LLM-optimierte API-Regeln: predictable naming, literal unions, composition über config, keine versteckten Defaults',
-          'Der Contract liegt im eigenen Workspace unter workshop-<fw>/src/contracts/ — es gibt hier keinen geteilten Master, in den er versehentlich landen könnte. Die Komponente selbst deklariert ihre Prop-Typen direkt; eine separate Atl*Spec-Interface-Datei gibt es nicht (ADR-0121)',
-          'Der eigene Figma-Node braucht einen Snapshot im eigenen Workspace — mit verbundener Bridge: npm run figma:snapshot (ruft node tools/design-contracts/bin/figma-snapshot-contracts.mjs --file <eigener Duplikat-Key> auf; den Platzhalter <YOUR_FIGMA_FILE_KEY> im Script in package.json vorher durch den eigenen Key ersetzen, falls er nicht schon gesetzt ist). Contracts-Ordner und Ausgabe kommen aus contracts.config.json: gelesen wird workshop-<fw>/src/contracts/, geschrieben wird tools/figma/snapshot.json — im Workspace ist das eure eigene, vorab nur mit dem AtlButton-Beispiel gefüllte Datei, kein geteilter Atelier-Snapshot, den man beschädigen könnte',
-          'Geprüft wird mit npm run check:contracts (node tools/design-contracts/bin/check-contracts.mjs; Framework, Contracts, Story-Roots und Snapshot stehen in contracts.config.json). Ohne vorher aufgefrischten Snapshot fehlt die eigene Komponente in tools/figma/snapshot.json, und der Check meldet [NO-MASTER] (Warnung) statt zu scheitern. npm run check:contracts -- --emit <Ordner> schreibt zusätzlich das codeSpec-Fragment (componentAPI, metadata, tokens) für Block 04',
-          'Iterieren bis Prop-Table passt',
-          'Wer zusätzlich eine Vorlage sehen will: docs-show-story über die hosted MCP liefert dieselbe Story framework-nativ (storybookId setzen, wenn mehrere Sources konfiguriert sind)',
+          'All participants, whatever the framework: start `npm run storybook` in parallel, then connect with `claude mcp add --transport http storybook-local http://localhost:<port>/mcp` (use the port Storybook prints) — deliberately local scope (the default of `--scope`, not project): the shared `.mcp.json` stays untouched and the working tree clean. Reconnect the client and check that the dev/test tools (`get-storybook-story-instructions`, `stories-preview`, `test-run`) are now listed — identical for all three frameworks since 10.6.0. Without this step the required tool that follows simply does not exist: "not available" here means "not configured", not "server down". `get-storybook-story-instructions` is mandatory before every `*.stories.*` edit',
+          'The prompt comes from the handoff document of Block 01, not from the picture alone — behaviour and exclusions from the document, not just the look. Let Claude produce the contract (typed through the `ComponentContract` schema from `workshop-<fw>/src/contracts/types.ts`, imported relatively), the component (including its test) and the stories in one step: one story per variant value and Boolean state, with a `play` for every behaviour line of the document. One step, not three — the stories import the component and do not compile without it; the `atelier-component` skill treats it as one step anyway',
+          'LLM-friendly API rules: predictable naming, literal unions, composition over config, no hidden defaults',
+          'The contract lives in your own workspace under `workshop-<fw>/src/contracts/` — there is no shared master it could land in by accident. The component declares its prop types directly; there is no separate `Atl*Spec` interface file (ADR-0121)',
+          'Your own Figma node needs a snapshot in your own workspace — with the bridge connected: `npm run figma:snapshot` (runs `node tools/design-contracts/bin/figma-snapshot-contracts.mjs --file <your duplicate key>`; first replace the `<YOUR_FIGMA_FILE_KEY>` placeholder in the script in `package.json` with your own key if it is not already set). The contracts folder and the output come from `contracts.config.json`: it reads `workshop-<fw>/src/contracts/` and writes `tools/figma/snapshot.json` — in the workspace that is your own file, pre-filled only with the AtlButton example, not a shared Atelier snapshot you could damage',
+          'Check with `npm run check:contracts` (`node tools/design-contracts/bin/check-contracts.mjs`; framework, contracts, story roots and snapshot are set in `contracts.config.json`). Without a freshly refreshed snapshot your component is missing from `tools/figma/snapshot.json` and the check reports `[NO-MASTER]` (a warning) instead of failing. `npm run check:contracts -- --emit <folder>` additionally writes the codeSpec fragment (componentAPI, metadata, tokens) for Block 04',
+          'Iterate until the prop table fits',
         ],
+        stretch:
+          'Want a template? `docs-show-story` over the hosted MCP returns the same story natively for your framework (set `storybookId` when several sources are configured).',
+        recap:
+          'Which Figma-vs-code mismatch did you choose on purpose, and where is it written down?',
       },
       {
         num: '03',
         time: '13:30–15:00 · 90 min',
-        title: 'Codegen im Wunsch-Framework',
-        format: 'Prompt-Übung',
+        title: 'Iterate: prompt quality and the self-healing loop',
+        format: 'Prompt exercise',
+        why: 'A single prompt is not the result.',
+        pages: [L.selfHealing, L.storybook],
+        done: 'Stories are green, and the prompt was revised at least once with the reason stated.',
         bullets: [
-          'Fokus: Prompts schreiben, Output bewerten, korrigieren — nicht selbst tippen',
-          'Token-Treue erzwingen: Golden-Prompts verlangen --ui-* Custom Properties',
-          'Golden-Prompts für diesen und Block 04 (plus Tag 1 Block 5): die Trainerin bzw. der Trainer verteilt sie vor Ort (Trainer-Notiz: Quelle ist tasks/schulung-golden-prompts.md im Atelier-Repo, nicht im eigenen Workspace)',
-          'plan/big-picture.md (API-Regeln) + plan/design-principles.md (Surface/Motion/Dark Mode) im Prompt-Kontext',
-          'Test-Loop, alle Frameworks: dev + test Toolset über die lokale addon-MCP (localhost:6006/mcp), stories-preview + test-run mit a11y — seit 10.6.0 identisch für Angular, React und Vue',
-          'Ergänzend, nicht gleichwertig: nx test <lib> --watch deckt nur die Unit-Hälfte ab; das Äquivalent zu test-run ist nx storybook-test <fw> (jede Story in Chromium, play-Assertions, axe) — dazu parallel laufende Storybook im Browser für visuelles Feedback',
-          'AI-gestütztes Debugging: Fehlermeldungen per Copy-Paste an Claude zurückgeben statt selbst debuggen',
+          'Focus: write prompts, judge output, correct — do not type it yourself',
+          'Enforce token fidelity: golden prompts demand `--ui-*` custom properties',
+          'Golden prompts for this block and Block 04 (plus Day 1 Block 05): the trainer hands them out on site',
+          '`plan/big-picture.md` (API rules) + `plan/design-principles.md` (surface/motion/dark mode) in the prompt context',
+          'Test loop, all frameworks: dev + test toolset via the local addon MCP (`localhost:<port>/mcp`), `stories-preview` + `test-run` with a11y — identical for Angular, React and Vue since 10.6.0',
+          'Supplementary, not equivalent: `nx test <lib> --watch` covers only the unit half; the equivalent of `test-run` is `nx storybook-test <fw>` (every story in Chromium, play assertions, axe) — plus the running Storybook in the browser for visual feedback',
+          'AI-assisted debugging: paste error messages back to Claude instead of debugging yourself',
+        ],
+        stretch:
+          'Rewrite your prompt so that the first run needs no correction, and compare the two runs.',
+        recap:
+          'What did you change in the prompt, and what did that change fix?',
+        trainer: [
+          "The golden prompts are in `tasks/schulung-golden-prompts.md` in the Atelier repo, not in the participants' workspace.",
         ],
       },
       {
         num: '04',
         time: '15:15–16:30 · 75 min',
-        title: 'A11y + Dark Mode + States',
+        title: 'Verify: a11y, states, parity',
         format: 'Hands-on',
+        why: '"A quiet report is not a clean component."',
+        pages: [L.a11yLoop, L.accessibility, L.parityReport],
+        done: '`storybook-test` with axe is green, and every parity finding is triaged (code / Figma / contract).',
         bullets: [
-          'Dreischritt-A11y-Check: (1) figma_audit_component_accessibility, (2) Storybook A11y-Panel (axe-core), (3) Keyboard-Walkthrough',
-          'Befunde von Claude beheben lassen',
-          'ARIA-Anforderungen, Fokus-Ring via Tokens, Hover/Active/Disabled-States',
-          'Dark-Mode-Toggle über das Theme-Control in der Toolbar (withThemeByDataAttribute aus addon-themes, setzt data-theme — genau den Selektor, auf den tokens.css schaltet). backgrounds sind Leinwandfarben, kein Theme; die beiden zu verwechseln war der Bug, den ADR-0142 entfernt hat. Ehrlich dazusagen: axe läuft in check:stories nur im Light-Mode — das Toggle ist Vorschau, keine Testabdeckung',
-          'Eigenes codeSpec zusammensetzen, bevor parity läuft: check:contracts --emit libs/<fw>/src/lib/<name>/codespec (aus Block 02) liefert componentAPI, metadata, tokens — mehr nicht. Für accessibility die Story im laufenden Storybook öffnen, im DevTools das outerHTML des Story-Root-Elements kopieren und als html mit mapToCodeSpec: true an figma_scan_code_accessibility übergeben. figma_check_design_parity braucht dafür die verbundene Desktop Bridge — ohne sie endet der Loop nach check:contracts + storybook-test (kein Snapshot, [NO-MASTER], kein Parity-Call), das ist ein degradierter Lauf und kein "einfach weitermachen"',
-          'figma_check_design_parity einmal bewusst gegen ein unvollständiges codeSpec testen: Node, Variant/State und die übergebenen codeSpec-Felder (visual, spacing, typography, tokens, componentAPI, accessibility, metadata) genau nachsehen, dann einen Spacing-Wert bewusst verfälschen — nur mit vollständigen Feldern muss der Report die Abweichung melden, nicht übergebene Felder werden nicht verglichen; ein knapp befülltes codeSpec (typischerweise nur componentAPI + metadata + tokens + accessibility) ist der Normalfall, kein vollständiges',
+          'Three-step a11y check: (1) `figma_audit_component_accessibility`, (2) the Storybook a11y panel (axe-core), (3) a keyboard walkthrough',
+          'Let Claude fix the findings',
+          'ARIA requirements, focus ring via tokens, hover/active/disabled states',
+          'Dark-mode toggle via the theme control in the toolbar (`withThemeByDataAttribute` from addon-themes, sets `data-theme` — exactly the selector `tokens.css` switches on). Backgrounds are canvas colours, not a theme; confusing the two was the bug ADR-0142 removed. Say it honestly: axe runs only in light mode in `check:stories` — the toggle is a preview, not test coverage',
+          'Assemble your own codeSpec before parity runs: `check:contracts --emit libs/<fw>/src/lib/<name>/codespec` (from Block 02) yields componentAPI, metadata, tokens — nothing more. For accessibility, open the story in the running Storybook, copy the story root element\'s outerHTML in DevTools and pass it as `html` with `mapToCodeSpec: true` to `figma_scan_code_accessibility`. `figma_check_design_parity` needs the connected Desktop Bridge for this — without it the loop ends after `check:contracts` + `storybook-test` (no snapshot, `[NO-MASTER]`, no parity call); that is a degraded run, not "just carry on"',
+          'Test `figma_check_design_parity` once, on purpose, against an incomplete codeSpec: look closely at the node, variant/state and the codeSpec fields you passed (visual, spacing, typography, tokens, componentAPI, accessibility, metadata), then falsify a spacing value deliberately — only with complete fields must the report flag the deviation; fields you did not pass are not compared. A thinly filled codeSpec (typically only componentAPI + metadata + tokens + accessibility) is the normal case, not a complete one',
         ],
+        stretch:
+          'Find one finding axe cannot catch and say which of the three checks would catch it.',
+        recap:
+          'Which findings were code, which were Figma, which were contract? Which one did you almost mislabel?',
       },
       {
         num: '05',
         time: '16:40–17:30 · 50 min',
-        title: 'Show & Tell + Best Practices',
-        format: 'Präsentation + Diskussion',
+        title: 'Show & tell and transfer to "My DS"',
+        format: 'Presentation + discussion',
+        why: "The participant's own system is the real goal.",
+        pages: [L.checkYourOwn, L.readiness],
+        done: 'Everyone leaves with a next step for their own design system, and a follow-up channel is set up.',
         bullets: [
-          'Jeder Teilnehmer zeigt 3–5 min seine Komponente',
-          'Trainer-Synthese: Prompt-Patterns die geklappt haben, Anti-Patterns, wann Claude scheitert, wie mit Drift umgehen',
-          'Ausblick: produktiver Einsatz im eigenen Repo, eigene CLAUDE.md, eigene Skills',
+          'Cohorts have up to 8 participants, so 50 minutes means about 5 minutes each, including questions. Show your component, one prompt that worked and one that failed',
+          'Trainer synthesis: prompt patterns that worked, anti-patterns, when Claude fails, how to deal with drift',
+          'Transfer: run the self-check from /design-principles on your own design system and pick one next step',
+          'Outlook: productive use in your own repo, your own CLAUDE.md, your own skills',
         ],
+        stretch:
+          'Draft the three guiding principles you would write for your own design system.',
+        recap:
+          'Exit round: one sentence each — the first thing you will do in your own design system next week.',
       },
     ],
   },
 ];
+
+// Trainer appendix: the Claude Design demo. Not a core block (participants cannot
+// reproduce it: claude.ai/design needs a different login than the cohort API key).
+const APPENDIX_BULLETS: string[] = [
+  'Trainer-only demo, "Three directions" (~12 min, trainer machine only — claude.ai/design needs a different login than the cohort API key): three direction artboards for the Toast brief in Claude Design, seeded from the generated palette `tools/design/artboard-palette.css` — not from the atelier-design skill, because that file carries the short names the artboards themselves use (`--success`, `--border-hover`), and because exactly that file is about to be turned red',
+  "Before the fence, name the four gate identities in one sentence (the Figma COMPONENT_SET with variant axes, the component's literal union, the `--ui-*` token, the Figma node id). Node ids only appear in Day 1 Block 05 and literal unions only on Day 2, so name them here instead of assuming them. Then the fence: hard-code a colour in the artboard and run `npm run check:artboard-palette` — green, because the gate reads only the shared sheet against `tokens.css` and no artboard. Change the same colour in the generated sheet: the same command turns red",
+  'Checkpoint question to the room: which of the four gate identities does this artboard have? Expected answer: none. Only then the classification — in the repo the rule "never inline hex" still holds, and it holds where a gate can enforce it; Claude Design is not a fifth pillar but step 0 (divergence) and step 5 (handoff), never steps 1–4',
+  'Step 5 (handoff) stays without a live demonstration, but is no longer just an idea. Unlike step 0 there is no demo in the room: its tooling has existed since 2026-09-08 as a skill (artboard-bridge, Publish mode) and has already run once, against a scratch project, and correctly refused (the component stood at DRIFT), while a skill-less approach would have published unverified code — exactly the refusal the fence argues for. The write path itself (P1–P7) is still untried, because currently every parity record in the repo stands at DRIFT (blocked repo-wide, not on this one component), and access for individual participant seats remains a separate open question (ADR-0106 so far proves only the owner seat). The room must not leave with the impression of having seen a live demonstration',
+  'Mitigation for the live demo: generate the artboards in the coffee break 14:30–14:45 beforehand; the fallback is the 31 artboards of the redesign phase (`tools/design/artboards.json`); after the red demo run `git checkout tools/design/artboard-palette.css`. Background for the trainer: /claude-design',
+  'Skills in this appendix: `design-to-code`, `atelier-design` and `artboard-bridge` are repo/trainer-only skills and are not part of the participant scaffold.',
+];
+
+const esc = (s: string) =>
+  s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
+// Plain strings with `backticks` become <code>; everything else is escaped.
+const md = (s: string) => esc(s).replace(/`([^`]+)`/g, '<code>$1</code>');
+
+const dayId = (d: Day) => `day-${d.day.replace(' ', '-').toLowerCase()}`;
 ---
 
 <BaseLayout
-  title="2-Tages-Schulung"
-  description="Curriculum für die Atelier 2-Tages-Schulung — KI-gestützter Design-to-Code-Workflow mit Figma, Storybook, MCP und Claude Code. Jeder Teilnehmer im Wunsch-Framework (Angular / React / Vue)."
+  title="2-Day Training"
+  description="Curriculum for the Atelier 2-day training — an AI-assisted design-to-code workflow with Figma, Storybook, MCP and Claude Code. Angular by default, other frameworks on request, one framework per cohort."
   currentPath="/schulung"
   tocItems={[
-    { id: 'zielgruppe', label: 'Zielgruppe' },
-    { id: 'hauptlernziel', label: 'Hauptlernziel' },
-    { id: 'format', label: 'Format pro Tag' },
-    { id: 'day-tag-1', label: 'Tag 1' },
-    { id: 'day-tag-2', label: 'Tag 2' },
-    { id: 'verify-title', label: 'Erfolgs-Verifizierung' },
+    { id: 'audience', label: 'Audience' },
+    { id: 'main-goal', label: 'Main goal' },
+    { id: 'format', label: 'Format per day' },
+    { id: 'day-day-1', label: 'Day 1' },
+    { id: 'day-day-2', label: 'Day 2' },
+    { id: 'verify-title', label: 'Success verification' },
+    { id: 'appendix-claude-design', label: 'Trainer appendix' },
   ]}
 >
   <div class="docs-inline-page">
     <PageHero
-      time="2 Tage · je 09:00–17:30 (6 h 50 min netto)"
-      title="2-Tages-Schulung"
+      time="2 days · 09:00–17:30 each (6 h 50 min net)"
+      title="2-Day Training"
       ledeMax="640px"
     >
-      KI-gestützter Design-to-Code-Workflow für Entwickler mit solider
-      Frontend-Basis. Jeder Teilnehmer wählt sein eigenes Framework (Angular /
-      React / Vue) — am Ende steht eine
-      <strong>selbst designte und implementierte Komponente</strong> in Figma,
-      Storybook und Code.
+      An AI-assisted design-to-code workflow for developers with a solid
+      frontend background. The default framework is Angular; other frameworks
+      are possible on request, with one framework per cohort. At the end there
+      is a <strong>self-designed and implemented component</strong> in Figma,
+      Storybook and code.
     </PageHero>
 
-    <!--
-      Deliberately English on an otherwise German page: this callout exists for a reader who
-      landed here without German and needs to be told where to go instead — a German sentence
-      would be useless to the only audience it has. The shared HelpFooter below is English for
-      the same reason. Everything addressed to the cohort and its trainer stays German.
-    -->
     <Callout tone="note" title="For instructors">
       <p>
-        This page is the German two-day training curriculum, aimed at
-        instructors planning a cohort. Workshop participants can skip straight
-        to <a href="/workshop" class="docs-link-primary">Setup</a>.
+        This page is the two-day training curriculum, aimed at instructors
+        planning a cohort. Workshop participants can skip straight to
+        <a href="/workshop" class="docs-link-primary">Setup</a>.
       </p>
     </Callout>
 
     <div class="objective-box">
       <div class="objective-col">
-        <h2 id="zielgruppe" class="objective-heading objective-heading--accent">
-          Zielgruppe
+        <h2 id="audience" class="objective-heading objective-heading--accent">
+          Audience
         </h2>
         <ul class="objective-list">
-          <li>Entwickler mit Frontend-Basis (Angular, React oder Vue)</li>
-          <li>Wenig Erfahrung mit Figma, Storybook, MCP oder AI-Codegen</li>
-          <li>Sprache: Deutsch</li>
+          <li>Developers with a frontend background</li>
+          <li>Little experience with Figma, Storybook, MCP or AI codegen</li>
+          <li>Up to 8 participants per cohort</li>
           <li>
-            Material (Docs, Storybook, Briefs, Prompts) ist durchgängig Englisch
-            — Leseverständnis vorausgesetzt
+            Cohort language: German. The material (docs, Storybook, briefs,
+            prompts) is in English throughout — reading comprehension is assumed
           </li>
-          <li>Eigenes Framework wählbar — Code ist zweitrangig</li>
+          <li>
+            Angular by default; another framework on request, one framework per
+            cohort — the code is secondary
+          </li>
         </ul>
       </div>
       <div class="objective-col">
-        <h2 id="hauptlernziel" class="objective-heading">Hauptlernziel</h2>
+        <h2 id="main-goal" class="objective-heading">Main goal</h2>
         <ul class="objective-list objective-list--muted">
           <li>
-            Die vier Pillars verstehen: Figma · Storybook · MCP · Claude Code
+            Understand the four pillars: Figma · Storybook · MCP · Claude Code
           </li>
-          <li>End-to-End Design-to-Code-Workflow beherrschen</li>
-          <li>Komponente von Figma-Spec bis Production-Code prompten</li>
-          <li>A11y- und Dark-Mode-Loop sicher anwenden</li>
+          <li>Master the end-to-end design-to-code workflow</li>
+          <li>Prompt a component from Figma spec to production code</li>
+          <li>Apply the a11y and dark-mode loop with confidence</li>
+          <li>Carry the loop over to your own design system</li>
         </ul>
       </div>
     </div>
 
     <div id="format">
-      <Callout tone="tip" title="Format pro Tag">
+      <Callout tone="tip" title="Format per day">
         <p>
-          6 h 50 min netto, 09:00–17:30 · 60 min Mittagspause · 2× 15 min
-          Kaffeepausen · 10 min Puffer. Pre-Workshop-Setup (Node ≥ 22.12 LTS,
-          Claude Code CLI, Figma-Account mit Draft-Rechten + importiertes
-          Desktop-Bridge-Plugin, <code>npm run preflight</code> grün) ist
-          Pflicht-Hausaufgabe — siehe
+          6 h 50 min net, 09:00–17:30 · 60 min lunch · 2× 15 min coffee breaks ·
+          10 min buffer. The pre-workshop setup (Node ≥ 22.12 LTS, Claude Code
+          CLI, Figma account with draft rights + imported Desktop Bridge plugin,
+          <code>npm run preflight</code> green) is mandatory homework — see
           <a href="/workshop" class="docs-link-primary">Workshop Setup</a>.
         </p>
         <p>
-          Kanonische Umgebung für die Kohorte ist seit 2026-09-13 der
-          <code>create-atelier-ui-workspace</code>-Scaffold (ADR-0137) —
-          derselbe Weg wie auf
-          <a href="/workshop" class="docs-link-primary">Workshop Setup</a>, kein
-          Sonderpfad mehr für die Schulung. Der Grund für die frühere Trennung
-          war Ausstattung: der Scaffold hatte damals kein Storybook, keinen
-          Contract-Loop und keine Gates. Heute bringt er beides mit, dazu einen
-          Unit-Runner und ein fertiges <code>.claude/</code>-Setup — und vor
-          allem gehören seine Gates der eigenen Arbeit. Im Klon wurde ein Teil
-          davon <em>by design</em> rot, sobald jemand eine eigene Komponente
-          anlegte; das musste erklärt statt behoben werden. Der Klon bleibt
-          kanonisch für Arbeit an Atelier selbst.
+          Every block has the same shape: why it exists, the docs pages it uses,
+          what everyone has when it is done, what to do, a stretch task for fast
+          finishers, and a 2-minute recap. Trainer notes are marked as such.
+        </p>
+        <p>
+          The canonical environment for the cohort since 2026-09-13 is the
+          <code>create-atelier-ui-workspace</code> scaffold (ADR-0137) — the
+          same route as on
+          <a href="/workshop" class="docs-link-primary">Workshop Setup</a>, no
+          special path for the training. The scaffold brings Storybook, the
+          contract loop, the gates, a unit runner and a ready-made
+          <code>.claude/</code> setup, and above all its gates belong to the
+          participant's own work. In the clone, part of them turned red
+          <em>by design</em> as soon as someone added their own component; that
+          had to be explained rather than fixed. The clone remains canonical for
+          work on Atelier itself.
         </p>
       </Callout>
     </div>
 
     {DAYS.map((day) => <section
       class="schulung-day"
-      aria-labelledby={`day-${day.day.replace(' ', '-').toLowerCase()}`}
+      aria-labelledby={dayId(day)}
     >
       <header class="schulung-day-header">
         <span class="schulung-day-eyebrow">{day.day}</span>
-        <h2
-          class="schulung-day-title"
-          id={`day-${day.day.replace(' ', '-').toLowerCase()}`}
-        >
+        <h2 class="schulung-day-title" id={dayId(day)}>
           {day.title}
         </h2>
-        <p class="schulung-day-goal"><strong>Tagesziel:</strong> {day.goal}</p>
+        <p class="schulung-day-goal"><strong>Day goal:</strong> {day.goal}</p>
       </header>
 
       <ol class="docs-step-list schulung-blocks">
@@ -350,18 +540,56 @@ const DAYS: Day[] = [
             <div class="schulung-block-meta">
               <span class="schulung-block-time">{block.time}</span>
               <span class="schulung-block-format">{block.format}</span>
-              {block.risk && <span class="schulung-block-risk">High-Risk</span>}
+              {block.risk && <span class="schulung-block-risk">High-risk</span>}
             </div>
             <h3 class="docs-h3">{block.title}</h3>
+            <dl class="schulung-fields">
+              <div>
+                <dt>Why</dt>
+                <dd>{block.why}</dd>
+              </div>
+              <div>
+                <dt>Pages</dt>
+                <dd>
+                  {block.pages.map((p, i) => (
+                    <>
+                      {i > 0 && ', '}
+                      <a href={p.href} class="docs-link-primary">{p.label}</a>
+                    </>
+                  ))}
+                </dd>
+              </div>
+              <div>
+                <dt>Done when</dt>
+                <dd set:html={md(block.done)} />
+              </div>
+            </dl>
             <ul class="schulung-bullets">
-              {block.bullets.map((b) => <li>{b}</li>)}
+              {block.bullets.map((b) => (
+                <li set:html={md(b)} />
+              ))}
             </ul>
+            <dl class="schulung-fields schulung-fields--after">
+              <div>
+                <dt>Stretch</dt>
+                <dd set:html={md(block.stretch)} />
+              </div>
+              <div>
+                <dt>2-min recap</dt>
+                <dd set:html={md(block.recap)} />
+              </div>
+              {block.trainer &&
+                block.trainer.map((t) => <div class="schulung-trainer">
+                  <dt>Trainer note</dt>
+                  <dd set:html={md(t)} />
+                </div>)}
+            </dl>
           </div>
         </li>)}
       </ol>
 
       <div class="schulung-result">
-        <h3 class="schulung-result-heading">Lieferergebnis pro Teilnehmer</h3>
+        <h3 class="schulung-result-heading">Deliverable per participant</h3>
         <ul class="objective-list">
           {day.result.map((r) => <li>{r}</li>)}
         </ul>
@@ -369,9 +597,7 @@ const DAYS: Day[] = [
     </section>)}
 
     <section class="docs-section" aria-labelledby="verify-title">
-      <h2 class="docs-section-title" id="verify-title">
-        Erfolgs-Verifizierung
-      </h2>
+      <h2 class="docs-section-title" id="verify-title">Success verification</h2>
       <p
         style="
           color: var(--ui-color-text-muted);
@@ -379,71 +605,91 @@ const DAYS: Day[] = [
           margin-bottom: 1rem;
         "
       >
-        End-to-End-Check am Ende von Tag 2 pro Teilnehmer. Seit ADR-0137
-        arbeitet jeder im eigenen generierten Workspace, und damit gehören die
-        Gates dort seiner eigenen Arbeit: rot heißt rot, nicht „by design rot".
-        Der frühere Hinweis auf drei erwartbar rote Gates
-        (<code>check:sync</code>, <code>check:a11y-parity</code>,
-        <code>check:design-status</code>) galt für den Klon und entfällt — er
-        war ein Nebeneffekt davon, dass Teilnehmer in <em>unserem</em> Repo
-        arbeiteten.
+        End-to-end check per participant at the end of Day 2. Since ADR-0137
+        everyone works in their own generated workspace, so the gates there
+        belong to their own work: red means red, not "red by design". The
+        earlier note about three expectedly red gates (<code>check:sync</code>,
+        <code>check:a11y-parity</code>, <code>check:design-status</code>)
+        applied to the clone and no longer holds — it was a side effect of
+        participants working in <em>our</em> repo.
       </p>
       <ol class="schulung-verify">
         <li>
-          Komponente liegt als Component-Set im eigenen Figma-Draft (Duplikat
-          des Atelier-Files) — mit Variants, Properties und Dark-Mode-Variante
+          The component is a component set in your own Figma draft (a duplicate
+          of the Atelier file) — with variants, properties and a dark-mode
+          variant
         </li>
         <li>
-          <code>/verify</code> in Claude Code (oder die fünf Checks einzeln:
+          <code>/verify</code> in Claude Code (or the five checks one by one:
           <code>check:format</code>, <code>check:stylelint</code>,
           <code>check:contracts</code>, <code>check:unit</code>,
-          <code>check:stories</code>) — jeder mit Exit-Code 0.
-          <code>check:contracts</code> ist der Punkt, der die eigene Arbeit
-          wirklich prüft: er verbindet Contract, Docgen und den Figma-Snapshot
-          und meldet <code>[COVERAGE]</code>, wenn ein Variantenwert von keiner
-          Story gerendert wird
+          <code>check:stories</code>) — each with exit code 0.
+          <code>check:contracts</code> is the one that really checks your own
+          work: it joins the contract, the docgen and the Figma snapshot and
+          reports <code>[COVERAGE]</code> when a variant value is rendered by no
+          story
         </li>
         <li>
-          <code>npm run storybook</code> läuft und zeigt die Komponente als
-          Story (Canvas + Docs-Tab)
+          <code>npm run storybook</code> is running and shows the component as a
+          story (canvas + Docs tab)
         </li>
         <li>
-          Test-Loop grün: <code>test-run</code> MCP-Call passes bzw. äquivalent
-          <code>npm run check:stories</code> passes (jede Story in Chromium,
-          play-Assertions, axe) — <code>npm run check:unit</code> deckt nur die
-          jsdom-Hälfte ab und ist kein Ersatz dafür
+          Test loop green: the <code>test-run</code> MCP call passes, or the
+          equivalent <code>npm run check:stories</code> passes (every story in
+          Chromium, play assertions, axe) — <code>npm run check:unit</code>
+          covers only the jsdom half and is no substitute
         </li>
         <li>
-          <code>figma_audit_component_accessibility</code> ohne kritische
-          Findings <strong>und</strong> Storybook A11y-Tab ohne
-          axe-core-Findings
+          <code>figma_audit_component_accessibility</code> without critical
+          findings <strong>and</strong> the Storybook a11y tab without axe-core
+          findings
         </li>
-        <li>Dark Mode wird durch Token-Override korrekt umgeschaltet</li>
+        <li>Dark mode switches correctly through the token override</li>
         <li>
-          <code>figma_check_design_parity</code> (braucht die verbundene Desktop
-          Bridge) auf den eigenen Figma-Node gegen die generierte Komponente:
-          der Report kommt ohne Abweichungen zurück — das beweist etwas für
-          genau die Sektionen, die übergeben wurden (siehe Block 04):
+          <code>figma_check_design_parity</code> (needs the connected Desktop
+          Bridge) on your own Figma node against the generated component: the
+          report comes back without deviations — that proves something for
+          exactly the sections that were passed (see Day 2 Block 04):
           <code>componentAPI</code>, <code>metadata</code>, <code>tokens</code>
-          aus <code>check:contracts --emit</code> plus
-          <code>accessibility</code> aus
-          <code>figma_scan_code_accessibility</code>; nicht übergebene Felder
-          werden nicht verglichen — ein knapp befülltes <code>codeSpec</code>
-          mit nur diesen vier Sektionen ist der Normalfall, kein Sonderfall,
-          solange der Report nennt, welche Sektionen es waren. Findings an
-          Claude zurückgeben und erneut prüfen. Gemeint ist der MCP-Call, nicht
-          <code>npm run check:parity</code>: das Repo-Gate prüft die
-          Atelier-Master aus <code>tools/figma/snapshot.json</code>, in denen
-          die eigene Komponente nicht steht
+          from <code>check:contracts --emit</code> plus
+          <code>accessibility</code> from
+          <code>figma_scan_code_accessibility</code>; fields that were not
+          passed are not compared — a thinly filled <code>codeSpec</code> with
+          just these four sections is the normal case, not a special case, as
+          long as the report names which sections they were. Hand findings back
+          to Claude and check again. This means the MCP call, not
+          <code>npm run check:parity</code>: the repo gate checks the Atelier
+          masters from <code>tools/figma/snapshot.json</code>, and your own
+          component is not in there
         </li>
         <li>
-          <code>check:contracts</code> mit den eigenen Flags (<code>--fw</code>,
+          <code>check:contracts</code> with your own flags (<code>--fw</code>,
           <code>--contracts</code>, <code>--stories</code>,
-          <code>--snapshot</code>) exit 0, und
-          <code>nx storybook-test &lt;fw&gt;</code> grün — jede Story rendert in
-          Chromium und besteht axe
+          <code>--snapshot</code>) exits 0, and
+          <code>nx storybook-test &lt;fw&gt;</code> is green — every story
+          renders in Chromium and passes axe
         </li>
       </ol>
+    </section>
+
+    <section class="docs-section" aria-labelledby="appendix-claude-design">
+      <h2 class="docs-section-title" id="appendix-claude-design">
+        Trainer appendix: Claude Design demo (optional)
+      </h2>
+      <Callout tone="note" title="Not a core block">
+        <p>
+          This demo is optional and runs on the trainer machine only:
+          participants cannot reproduce it, because claude.ai/design needs a
+          different login than the cohort API key. Slot it into Day 1 Block 04
+          if time allows, or skip it. Background:
+          <a href="/claude-design" class="docs-link-primary">Claude Design</a>.
+        </p>
+      </Callout>
+      <ul class="schulung-bullets">
+        {APPENDIX_BULLETS.map((b) => (
+          <li set:html={md(b)} />
+        ))}
+      </ul>
     </section>
 
     <HelpFooter page="schulung" />
@@ -463,6 +709,53 @@ const DAYS: Day[] = [
 </BaseLayout>
 
 <style>
+  .schulung-fields {
+    margin: 0.4rem 0 0.6rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    font-size: var(--ui-font-size-sm);
+    line-height: 1.5;
+  }
+  .schulung-fields--after {
+    margin-top: 0.8rem;
+  }
+  .schulung-fields > div {
+    display: grid;
+    grid-template-columns: 6.5rem 1fr;
+    gap: 0.75rem;
+  }
+  .schulung-fields dt {
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: var(--ui-font-size-xs);
+    font-weight: 700;
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    color: var(--ui-color-text-muted);
+    padding-top: 0.1rem;
+  }
+  .schulung-fields dd {
+    margin: 0;
+    color: var(--ui-color-text);
+    overflow-wrap: anywhere;
+  }
+  .schulung-trainer dt {
+    color: var(--ui-color-danger);
+  }
+  .schulung-fields code {
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 0.78rem;
+    color: var(--ui-color-primary);
+    background: var(--ui-color-primary-light);
+    padding: 0.05em 0.35em;
+    border-radius: var(--ui-radius-sm);
+  }
+  @media (max-width: 640px) {
+    .schulung-fields > div {
+      grid-template-columns: 1fr;
+      gap: 0.1rem;
+    }
+  }
   .schulung-day {
     margin-bottom: 3rem;
     padding-top: 1rem;
