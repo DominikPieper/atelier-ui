@@ -99,7 +99,9 @@ import { AtlCard, AtlInput, AtlToggle, AtlButton } from '@atelier-ui/vue';
 };
 
 const PARITY_PROMPT = `Run figma_check_design_parity on the settings card node
-against the component I just generated. Fix any discrepancies.`;
+against the component I just generated. For each discrepancy, say whether the
+code, the Figma master or the contract should change, and why. Fix only the
+code ones.`;
 
 // Paths, ports, and mount targets mirror the real scaffold: apps generate at
 // the workspace root (no apps/ prefix), every framework serves on the default
@@ -1212,8 +1214,8 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
               Don't stop at "looks right" — close the loop.
               <code>figma_check_design_parity</code> compares the generated code
               against the Figma spec and returns a parity score plus specific
-              discrepancies. Pass the prompt below; fix anything it flags before
-              you call the component done.
+              discrepancies. Pass the prompt below: it asks Claude to sort each
+              discrepancy by what should change and to fix only the code ones.
             </p>
             <Code
               code={PARITY_PROMPT}

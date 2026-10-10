@@ -72,7 +72,9 @@ const prompt = (
    ${SCAFFOLD[fw].mountHint}.`;
 
 const PARITY_PROMPT = `Run figma_check_design_parity on node-id 936-2954 against
-the SettingsCard component I just generated. Fix any discrepancies.`;
+the SettingsCard component I just generated. For each discrepancy, say whether
+the code, the Figma master or the contract should change, and why. Fix only the
+code ones.`;
 ---
 
 <BaseLayout
@@ -345,13 +347,16 @@ the SettingsCard component I just generated. Fix any discrepancies.`;
       </p>
       <Code code={PARITY_PROMPT} lang="text" wrap title="parity check prompt" />
       <p class="kata-step-desc" style="margin-top: 0.6rem">
-        <strong style="color: var(--ui-color-text)">Checkpoint:</strong> the
-        report comes back with
-        <strong style="color: var(--ui-color-text)">0 discrepancies</strong>.
-        Anything else — a padding off by one step, a colour that resolved to a
-        literal — is not something to eyeball away: paste the report straight
-        back to Claude and have it fix each entry the report names, then re-run
-        the check until it is clean.
+        <strong style="color: var(--ui-color-text)">Checkpoint:</strong>
+        every discrepancy in the report is fixed or labelled (code, Figma or
+        contract), and you can name one thing the report did not check. A quiet
+        report is not a clean component: the tool samples one variant and skips
+        values it cannot compare
+        (<a href="/design-to-code#parity-report" class="docs-link-primary"
+          >what a report does not show</a
+        >). Paste the report straight back to Claude and have it fix each
+        code-side entry, then re-run the check; a padding off by one step or a
+        colour that resolved to a literal is not something to eyeball away.
       </p>
     </section>
 
@@ -362,10 +367,10 @@ the SettingsCard component I just generated. Fix any discrepancies.`;
         <h2 class="kata-step-title">Sort what the parity check found</h2>
       </div>
       <p class="kata-step-desc">
-        Take the report from Step 6 (or run it again on your component, if you
-        had no discrepancies, and read the score and the entries it still
-        lists). For each discrepancy, decide which of the three follow-ups it
-        is: <strong style="color: var(--ui-color-text)">fix the code</strong>,
+        Take the report from Step 6 (or run it again on your component and read
+        the score and the entries it still lists). For each discrepancy, decide
+        which of the three follow-ups it is:
+        <strong style="color: var(--ui-color-text)">fix the code</strong>,
         <strong style="color: var(--ui-color-text)">fix Figma</strong>, or
         <strong style="color: var(--ui-color-text)"
           >record a deliberate mismatch</strong
@@ -398,8 +403,8 @@ the SettingsCard component I just generated. Fix any discrepancies.`;
         <li>
           <Icon name="check_circle" />
           <span
-            >The parity check came back with <strong>0 discrepancies</strong>
-            against the Figma frame.</span
+            >Every discrepancy the parity check reported is fixed or labelled,
+            and you can name one thing it did not check.</span
           >
         </li>
         <li>

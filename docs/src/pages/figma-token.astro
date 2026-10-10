@@ -160,7 +160,7 @@ const CLOUD_RELAY_URL = 'https://figma-console-mcp.southleft.com/mcp';
             text-anchor="middle"
             font-size="15.3"
             class="diagram-mono diagram-muted"
-            >npx -y figma-console-mcp@latest</text
+            >npx -y figma-console-mcp@1.40.0</text
           >
           <text
             x="354"
@@ -336,10 +336,12 @@ const CLOUD_RELAY_URL = 'https://figma-console-mcp.southleft.com/mcp';
             <p class="docs-step-desc">
               Run the MCP package once. On first launch it auto-populates
               <code>~/.figma-console-mcp/plugin/</code> with
-              <code>manifest.json</code> and UI assets.
+              <code>manifest.json</code> and UI assets. Use the same version as
+              the pin in your workspace's <code>.mcp.json</code> — the plugin
+              files are seeded by whichever version runs.
             </p>
             <Code
-              code={`# safe to run any time — exits quickly\nnpx -y figma-console-mcp@latest --help\n\n# confirm the manifest landed\nls ~/.figma-console-mcp/plugin/manifest.json`}
+              code={`# safe to run any time — exits quickly\nnpx -y figma-console-mcp@1.40.0 --help\n\n# confirm the manifest landed\nls ~/.figma-console-mcp/plugin/manifest.json`}
               lang="shell"
             />
           </div>
@@ -743,10 +745,12 @@ const CLOUD_RELAY_URL = 'https://figma-console-mcp.southleft.com/mcp';
           rel="noopener noreferrer"
           class="docs-link-primary"
           >expansion docs</a
-        >).
+        >). The <code>:-</code> default (empty when unset) keeps Claude Code
+        from rejecting the whole <code>.mcp.json</code> while the token is not
+        set yet — the scaffold writes it this way.
       </p>
       <Code
-        code={`// .mcp.json\n"figma-console": {\n  "command": "npx",\n  "args": ["-y", "figma-console-mcp@latest"],\n  "env": {\n    "FIGMA_ACCESS_TOKEN": "\${FIGMA_ACCESS_TOKEN}",\n    "ENABLE_MCP_APPS": "true"\n  }\n}`}
+        code={`// .mcp.json\n"figma-console": {\n  "command": "npx",\n  "args": ["-y", "figma-console-mcp@1.40.0"],\n  "env": {\n    "FIGMA_ACCESS_TOKEN": "\${FIGMA_ACCESS_TOKEN:-}",\n    "ENABLE_MCP_APPS": "true"\n  }\n}`}
         lang="json"
         title=".mcp.json"
       />

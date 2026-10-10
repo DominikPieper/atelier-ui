@@ -50,7 +50,7 @@ const ISSUES: Issue[] = [
     fix: [
       'Close and reopen the project in Claude Code from the directory containing `.mcp.json`.',
       'Check that `.mcp.json` is at the workspace root (not inside an app folder).',
-      'Run `claude doctor` to verify MCP discovery.',
+      'In a terminal (outside a session), run `claude doctor` to check your install; inside a session, `/mcp` lists the servers Claude Code discovered.',
     ],
   },
   {
@@ -62,7 +62,7 @@ const ISSUES: Issue[] = [
       '`FIGMA_ACCESS_TOKEN` is missing, expired, or does not have access to the target file. Only REST calls use it — the Desktop Bridge plugin does not.',
     fix: [
       'Verify the env var: `echo $FIGMA_ACCESS_TOKEN` (macOS/Linux) or `$env:FIGMA_ACCESS_TOKEN` (PowerShell).',
-      'Confirm `.mcp.json` passes the token through — either inline or via `"FIGMA_ACCESS_TOKEN": "${FIGMA_ACCESS_TOKEN}"`. A bare shell export is not enough.',
+      'Confirm `.mcp.json` passes the token through — either inline or via `"FIGMA_ACCESS_TOKEN": "${FIGMA_ACCESS_TOKEN:-}"`. A bare shell export is not enough.',
       'Regenerate at https://www.figma.com/developers/api#access-tokens — scope: File content read.',
       'Make sure you are a member of the Figma team that owns the file, or use the public workshop demo file.',
     ],
@@ -76,7 +76,7 @@ const ISSUES: Issue[] = [
       'The Desktop Bridge plugin is either not imported into Figma Desktop, not running, or cannot find the MCP on ports 9223–9232.',
     fix: [
       'Open Figma Desktop and run **Plugins → Development → Figma Desktop Bridge**. Leave the panel open while you work.',
-      'If the plugin is missing from Development: re-run `npx -y figma-console-mcp@latest --help` to seed `~/.figma-console-mcp/plugin/`, then **Plugins → Development → Import plugin from manifest…** and pick that `manifest.json`.',
+      'If the plugin is missing from Development: re-run `npx -y figma-console-mcp@1.40.0 --help` to seed `~/.figma-console-mcp/plugin/`, then **Plugins → Development → Import plugin from manifest…** and pick that `manifest.json`. Keep the version identical to the pin in the `.mcp.json` of your workspace — the plugin files are seeded by whichever version runs.',
       'Restart Claude Code so the MCP re-claims a WebSocket port — the plugin scans 9223–9232 on open.',
     ],
   },
@@ -87,9 +87,10 @@ const ISSUES: Issue[] = [
       'figma-console MCP starts, but the Desktop Bridge panel stays on "searching…" indefinitely.',
     cause:
       'The WebSocket port range 9223–9232 is fully occupied by unrelated processes, so the MCP cannot bind.',
-    codeFix: `# macOS / Linux — see who is on 9223\nlsof -nP -iTCP:9223 -sTCP:LISTEN\n\n# Free up 9223–9232 if safe\nfor p in 9223 9224 9225 9226 9227 9228 9229 9230 9231 9232; do\n  lsof -ti :$p | xargs -r kill\ndone`,
+    codeFix: `# macOS / Linux — see who is on 9223\nlsof -nP -iTCP:9223 -sTCP:LISTEN\n\n# Free up 9223–9232 — only after you have checked what those PIDs are\nfor p in 9223 9224 9225 9226 9227 9228 9229 9230 9231 9232; do\n  lsof -ti :$p | xargs -r kill\ndone`,
     codeLang: 'shell',
     fix: [
+      '**Do not blindly kill what is listening** — the loop above terminates every process on those ports, including your editor or another MCP. Check the PIDs first.',
       'Find the offender with `lsof -nP -iTCP:9223 -sTCP:LISTEN` (repeat for each port).',
       'Close unrelated processes, or restart your machine if the range is wedged.',
       'Windows: `netstat -ano | findstr 9223` then `taskkill /PID <pid> /F`.',
@@ -200,7 +201,7 @@ const ISSUES: Issue[] = [
     codeLang: 'shell',
     fix: [
       'Add the export line to your shell rc file (see snippet below).',
-      'In `.mcp.json`, make sure `"FIGMA_ACCESS_TOKEN": "${FIGMA_ACCESS_TOKEN}"` is under the `figma-console` env block — otherwise the shell value never reaches the MCP.',
+      'In `.mcp.json`, make sure `"FIGMA_ACCESS_TOKEN": "${FIGMA_ACCESS_TOKEN:-}"` is under the `figma-console` env block — otherwise the shell value never reaches the MCP.',
       'Windows: use `[Environment]::SetEnvironmentVariable("FIGMA_ACCESS_TOKEN","figd_...","User")` once.',
     ],
   },

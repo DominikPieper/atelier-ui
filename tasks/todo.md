@@ -21,29 +21,43 @@ Source: `tasks/content-review-2026-10-10.md` (§ numbers below refer to it). Own
 start the quick fixes now; the structural rework (§3–5) is ordered against the CDS switch
 (ADR-0165), so pages that get rewritten anyway are not polished twice.
 
-**Wave Q — quick fixes (§6), survive the CDS switch**
+**Wave Q — quick fixes (§6), survive the CDS switch** — done 2026-10-10 (Q1–Q11; gates
+`check:format`, `check:docs`, `check:llms`, `check:adr-refs`, `check:docs-layout`, `nx lint docs`
+green; two scaffold-port allowlist entries for the new 6006 lines in `workshop.astro`).
 
-- [ ] Q1 `schulung.astro`: delete the "Drei Gates werden erwartungsgemäß rot" bullet (contradicts
+- [x] Q1 `schulung.astro`: delete the "Drei Gates werden erwartungsgemäß rot" bullet (contradicts
       the verify section); replace `libs/design-contracts/bin` + `libs/<fw>/src/lib/<name>`
       with the scaffold paths (`tools/design-contracts/bin`, `workshop-<fw>/src/…`)
-- [ ] Q2 one parity prompt everywhere: tutorial + first-component take design-to-code's
+- [x] Q2 one parity prompt everywhere: tutorial + first-component take design-to-code's
       "say whether code, master or contract … fix only the code ones"
-- [ ] Q3 kata pass bar: "0 discrepancies" → every discrepancy fixed or labelled, plus one thing
+- [x] Q3 kata pass bar: "0 discrepancies" → every discrepancy fixed or labelled, plus one thing
       the report did not check
-- [ ] Q4 kata step count: agenda "sechs" vs. kata "seven"; tutorial "5 Schritte" vs. page
-- [ ] Q5 `figma-console-mcp@latest` → the scaffold pin; `${FIGMA_ACCESS_TOKEN}` → `${…:-}`
+- [x] Q4 kata step count: agenda "sechs" vs. kata "seven"; tutorial "5 Schritte" vs. page
+- [x] Q5 `figma-console-mcp@latest` → the scaffold pin; `${FIGMA_ACCESS_TOKEN}` → `${…:-}`
       (figma-token, troubleshooting)
-- [ ] Q6 `mcp.astro`: ".mcp.json wires only the three hosted endpoints" → actual server list
-- [ ] Q7 `workshop.astro`: Playwright install, Storybook 6006, `/mcp` check with expected output,
+- [x] Q6 `mcp.astro`: ".mcp.json wires only the three hosted endpoints" → actual server list
+- [x] Q7 `workshop.astro`: Playwright install, Storybook 6006, `/mcp` check with expected output,
       `claude auth login --console` (as in the agenda)
-- [ ] Q8 `claude-md.astro`: "open your generated CLAUDE.md first", strip ADR refs from the
+- [x] Q8 `claude-md.astro`: "open your generated CLAUDE.md first", strip ADR refs from the
       template, Angular as default tab
-- [ ] Q9 `tokens.astro`: React token import → Angular
-- [ ] Q10 agenda points participants at `tasks/schulung-golden-prompts.md` (not served) → reword
-- [ ] Q11 small wording: uianatomy tool count; "No exceptions" (design-principles) vs. the scan's
+- [x] Q9 `tokens.astro`: React token import → Angular
+- [x] Q10 agenda points participants at `tasks/schulung-golden-prompts.md` (not served) → reword
+- [x] Q11 small wording: uianatomy tool count; "No exceptions" (design-principles) vs. the scan's
       findings; figma "same name, no translation" vs. empty `codeSyntax.WEB`;
       `/doctor` vs. `claude doctor`; `lsof | xargs kill` warning; preflight prompt string
       German vs. English
+
+Follow-ups found while fixing (not done):
+
+- [ ] `@atelier-ui/react` has no `exports` entry for `styles/tokens.css` (`libs/react/package.json`);
+      the old tokens-page import was never valid. `llms.astro` still shows a React import.
+- [ ] `figma-console-mcp@1.40.0` is now hard-coded in four docs places (workshop, figma-token ×3,
+      troubleshooting) besides `preset.ts` and `.mcp.json`; no gate ties them together — a bump
+      will drift silently.
+- [ ] `troubleshooting.astro` ~186: a second `lsof -ti :<port> | xargs kill` (dev-server port) without
+      the warning.
+- [ ] The `:-` rationale on `figma-token.astro` (Claude Code rejects `.mcp.json` when a variable
+      has no default) is from Claude Code's documented env-expansion behaviour, not re-tested here.
 
 **Wave S — structure (§3–5), with or after the CDS swap**
 

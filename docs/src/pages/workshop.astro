@@ -43,8 +43,9 @@ const SCAFFOLD = [
 
 // The generated .mcp.json carries ONE storybook entry — the framework you
 // picked at the prompt — plus uianatomy (always) and angular-cli (Angular
-// only). `figma-console` is written only if you answered yes to the Figma
-// question; the token falls back to empty (`:-`) when unset.
+// only). The example below is the "yes" case: `figma-console` is written
+// only if you answer yes to the Figma question (`--no-figma` omits it); its
+// token falls back to empty (`:-`) when unset.
 const mcpConfig = (fw: string) => `{
   "mcpServers": {
     "nx-mcp": {
@@ -222,7 +223,9 @@ const mcpConfig = (fw: string) => `{
         <code>claude -p "…"</code> line above — a real prompt-and-response round
         trip is the only thing that actually proves model access. No key yet and
         you have a Claude subscription instead? Run
-        <code>claude auth login</code> and sign in through the browser.
+        <code>claude auth login</code> and sign in through the browser (add
+        <code>--console</code> instead to sign in with API-console billing —
+        e.g. a cohort key — rather than a subscription).
       </p>
     </div>
 
@@ -298,9 +301,17 @@ const mcpConfig = (fw: string) => `{
             environment:
           </p>
           <Code
-            code={`cd my-workshop\nnpm install\nnpm run preflight`}
+            code={`cd my-workshop\nnpm install\nnpx playwright install chromium\nnpm run preflight`}
             lang="shell"
           />
+          <p class="docs-step-desc" style="margin-top: 0.75rem">
+            <code>npx playwright install chromium</code> is a one-time download
+            of the browser the story tests (<code>npm run check:stories</code>)
+            run in — it is deliberately not a postinstall hook. Expect download
+            progress on the first run and a near-instant finish afterwards;
+            <code>preflight</code> then shows
+            <code>Playwright Chromium — installed</code>.
+          </p>
           <p class="docs-step-desc" style="margin-top: 0.75rem">
             <code>preflight</code> checks Node, npm, git, that the Claude Code
             CLI is installed and on <code>PATH</code> (presence only — it never
@@ -463,6 +474,11 @@ const mcpConfig = (fw: string) => `{
             you mount a component of your own.
           </p>
           <Code code="npm start" lang="shell" />
+          <p class="docs-step-desc" style="margin-top: 0.75rem">
+            Storybook runs separately, in a second terminal. It serves your
+            components at <code>localhost:6006</code>:
+          </p>
+          <Code code="npm run storybook" lang="shell" />
         </div>
       </li>
 
@@ -489,7 +505,15 @@ const mcpConfig = (fw: string) => `{
             Open the workspace in VS Code or any editor with Claude Code. The
             MCP servers connect automatically — your AI assistant can look up
             component props, variants, and usage examples directly from
-            Storybook without any extra setup.
+            Storybook without any extra setup. The first time you open the
+            folder, accept Claude Code's "do you trust the files in this
+            folder?" prompt — until then <code>.mcp.json</code> and the
+            pre-configured permissions are ignored. To verify, run
+            <code>/mcp</code> in the session: the servers from your
+            <code>.mcp.json</code> (<code>nx-mcp</code>, <code>storybook-*</code
+            >, <code>uianatomy</code>, plus <code>angular-cli</code> and
+            <code>figma-console</code> where they apply) should be listed as
+            connected. If one asks for approval, approve it.
           </p>
           <div
             style="
@@ -517,7 +541,9 @@ const mcpConfig = (fw: string) => `{
             >
               The generated <code>.mcp.json</code> wires up the Nx MCP, the
               hosted Storybook MCP server for the framework you picked, and the
-              <code>uianatomy</code> MCP automatically.
+              <code>uianatomy</code> MCP automatically — plus
+              <code>angular-cli</code> if you picked Angular and
+              <code>figma-console</code> if you said yes to Figma.
             </p>
           </div>
         </div>
@@ -656,7 +682,17 @@ const mcpConfig = (fw: string) => `{
         </li>
         <li>
           <Icon name="check_circle" /> Claude Code open in the workspace with
-          the MCP servers connected
+          the MCP servers connected — <code>/mcp</code> lists them
+        </li>
+        <li>
+          <Icon name="check_circle" />
+          <code>npx playwright install chromium</code> done —
+          <code>preflight</code> shows
+          <code>Playwright Chromium — installed</code>
+        </li>
+        <li>
+          <Icon name="check_circle" /> Storybook running on
+          <code>http://localhost:6006</code> (<code>npm run storybook</code>)
         </li>
       </ul>
     </Checkpoint>

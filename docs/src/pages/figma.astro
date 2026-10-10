@@ -133,13 +133,17 @@ const FIGMA_URL =
           margin-bottom: 1.25rem;
         "
       >
-        Every Figma variable maps directly to a CSS custom property using the
-        same name. When AI references a token from Figma, it uses the identical
-        name in code — no translation needed.
+        Every Figma variable maps to a CSS custom property by a mechanical
+        convention: the slash path becomes a <code>--ui-</code> prefixed,
+        kebab-case name (<code>color/primary</code> →
+        <code>--ui-color-primary</code>). When AI references a token from Figma,
+        it can derive the code name without guessing. In your own system,
+        <code>codeSyntax</code> or a mapping table is the transferable
+        mechanism.
       </p>
 
       <DiagramFigure
-        caption="Identical names on both sides: there is no naming layer to learn, translate, or maintain."
+        caption="One naming convention on both sides: the code name follows mechanically from the Figma name."
       >
         <svg
           viewBox="0 0 880 320"
@@ -892,10 +896,11 @@ const FIGMA_URL =
           <div class="docs-step-body">
             <h3 class="docs-h3">Ship — the component matches the design</h3>
             <p class="docs-step-desc">
-              Because Figma variables and CSS custom properties share the same
-              names, there is no gap between what the designer specified and
-              what ships. Light and dark mode work automatically — the tokens
-              resolve to their mode-specific values at runtime.
+              Because every Figma variable maps to a CSS custom property by a
+              fixed naming convention, the name gap between what the designer
+              specified and what ships is closed. Light and dark mode work
+              automatically — the tokens resolve to their mode-specific values
+              at runtime.
             </p>
           </div>
         </div>

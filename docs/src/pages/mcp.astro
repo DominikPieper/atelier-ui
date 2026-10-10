@@ -83,13 +83,18 @@ import PageHero from '../components/PageHero.astro';
       "
     >
       <strong>Wired vs. not, and what closing the gap costs.</strong>
-      <code>.mcp.json</code> wires only the three hosted endpoints above — none
-      of the three <code>dev</code>-toolset tools that need a running Storybook
-      (<code>stories-changed</code>, <code>stories-find-by-component</code>,
-      <code>review-create</code>) are reachable through them; only a local entry
-      pointed at <code>http://localhost:&lt;port&gt;/mcp</code> does, and that
-      stays a per-developer choice on purpose, not something this repo wires for
-      everyone.
+      A scaffolded workspace's <code>.mcp.json</code> wires the one hosted
+      Storybook endpoint for your framework (plus <code>nx-mcp</code>,
+      <code>uianatomy</code>, <code>angular-cli</code> for Angular and
+      <code>figma-console</code> if chosen — see
+      <a href="/workshop#mcp-config" class="docs-link-primary"
+        >the workshop page</a
+      >) — none of them exposes the three <code>dev</code>-toolset tools that
+      need a running Storybook (<code>stories-changed</code>,
+      <code>stories-find-by-component</code>, <code>review-create</code>); only
+      a local entry pointed at <code>http://localhost:&lt;port&gt;/mcp</code>
+      does, and that stays a per-developer choice on purpose, not something this
+      repo wires for everyone.
       <ul style="margin: 0.6rem 0 0; padding-left: 1.2rem">
         <li>
           <code>stories-changed</code> and

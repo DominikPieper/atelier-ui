@@ -7,7 +7,7 @@ import Jargon from '../components/Jargon.astro';
 
 const SITE_URL = 'https://atelier.pieper.io';
 
-const FRAMEWORKS = ['React', 'Angular', 'Vue'] as const;
+const FRAMEWORKS = ['Angular', 'React', 'Vue'] as const;
 
 const PKG: Record<string, string> = {
   React: '@atelier-ui/react',
@@ -79,8 +79,8 @@ Full API reference: ${SITE_URL}/llms-full.txt
 2. Call \`docs-show\` with the ID — never invent props
 3. Do not use a component that is not in the docs
 4. This server answers prop tables directly, natively: it emits and serves
-   its own components.json via angular-component-meta (ADR-0097). No second
-   server to query
+   its own components.json via angular-component-meta. No second server to
+   query
 
 ## Component Imports
 \`\`\`ts
@@ -123,8 +123,8 @@ Full API reference: ${SITE_URL}/llms-full.txt
 2. Call \`docs-show\` with the ID — never invent props
 3. Do not use a component that is not in the docs
 4. This server answers prop tables directly, natively: it emits and serves
-   its own components.json via vue-component-meta (ADR-0097). No second
-   server to query
+   its own components.json via vue-component-meta. No second server to
+   query
 
 ## Component Imports
 \`\`\`ts
@@ -197,9 +197,10 @@ Token names match Figma variable names 1-to-1. Dark/light mode is automatic.
         style="margin: 0; color: var(--ui-color-text-muted); line-height: 1.55"
       >
         <strong style="color: var(--ui-color-text)">When you need this:</strong>
-        the workshop workspace generator already ships a CLAUDE.md for you. Come
-        back to this page when you start a new project of your own and want the
-        same component-aware behaviour.
+        the workshop workspace generator already ships a CLAUDE.md for you —
+        open that one first. The template below is the minimal version for a
+        project without the scaffold. Come back to this page when you start a
+        new project of your own and want the same component-aware behaviour.
       </p>
     </div>
 
@@ -289,7 +290,8 @@ Token names match Figma variable names 1-to-1. Dark/light mode is automatic.
               Every line of CLAUDE.md, every skill description and every
               connected MCP server's tools take up context in every session.
               Keep CLAUDE.md lean and disconnect MCP servers you do not need for
-              the task. Run <code>/doctor</code> in a session for a health check
+              the task. Run <code>/doctor</code> inside a Claude Code session
+              (or <code>claude doctor</code> from a terminal) for a health check
               of your Claude Code setup.
             </p>
           </div>
