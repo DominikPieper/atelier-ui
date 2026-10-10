@@ -15,6 +15,61 @@ underneath it._
 
 Ranked; each carries why it's worth doing next rather than later.
 
+### Course content review follow-up (2026-10-10)
+
+Source: `tasks/content-review-2026-10-10.md` (§ numbers below refer to it). Owner, 2026-10-10:
+start the quick fixes now; the structural rework (§3–5) is ordered against the CDS switch
+(ADR-0165), so pages that get rewritten anyway are not polished twice.
+
+**Wave Q — quick fixes (§6), survive the CDS switch**
+
+- [ ] Q1 `schulung.astro`: delete the "Drei Gates werden erwartungsgemäß rot" bullet (contradicts
+      the verify section); replace `libs/design-contracts/bin` + `libs/<fw>/src/lib/<name>`
+      with the scaffold paths (`tools/design-contracts/bin`, `workshop-<fw>/src/…`)
+- [ ] Q2 one parity prompt everywhere: tutorial + first-component take design-to-code's
+      "say whether code, master or contract … fix only the code ones"
+- [ ] Q3 kata pass bar: "0 discrepancies" → every discrepancy fixed or labelled, plus one thing
+      the report did not check
+- [ ] Q4 kata step count: agenda "sechs" vs. kata "seven"; tutorial "5 Schritte" vs. page
+- [ ] Q5 `figma-console-mcp@latest` → the scaffold pin; `${FIGMA_ACCESS_TOKEN}` → `${…:-}`
+      (figma-token, troubleshooting)
+- [ ] Q6 `mcp.astro`: ".mcp.json wires only the three hosted endpoints" → actual server list
+- [ ] Q7 `workshop.astro`: Playwright install, Storybook 6006, `/mcp` check with expected output,
+      `claude auth login --console` (as in the agenda)
+- [ ] Q8 `claude-md.astro`: "open your generated CLAUDE.md first", strip ADR refs from the
+      template, Angular as default tab
+- [ ] Q9 `tokens.astro`: React token import → Angular
+- [ ] Q10 agenda points participants at `tasks/schulung-golden-prompts.md` (not served) → reword
+- [ ] Q11 small wording: uianatomy tool count; "No exceptions" (design-principles) vs. the scan's
+      findings; figma "same name, no translation" vs. empty `codeSyntax.WEB`;
+      `/doctor` vs. `claude doctor`; `lsof | xargs kill` warning; preflight prompt string
+      German vs. English
+
+**Wave S — structure (§3–5), with or after the CDS swap**
+
+- [ ] S1 agenda blocks link their pages (a `pages` field per block) + why / done-when / recap
+      per block (§3 shape)
+- [ ] S2 worked contract with failing/passing `check:contracts` output and a finding-code
+      legend (§5.1)
+- [ ] S3 offline gates (`check:contracts`, `storybook-test`) in tutorial and kata (§5.2)
+- [ ] S4 participant Storybook page: write a story, `play`, run tests, read one failure;
+      maintainer material out of `/storybook` (§4, §5.3)
+- [ ] S5 filled handoff-document example, linked from briefs and kata step 1 (§5.4)
+- [ ] S6 `/mcp` participant part: what each server does, how to check it (§4)
+- [ ] S7 skills delivery route for participants; document the scaffold's `.claude/` content (§5.5–6)
+- [ ] S8 readiness checklist (figma L905–1087 + design-to-code#ready) as its own teaching page (§4)
+- [ ] S9 a11y-workflow rewritten as "a11y in the loop" (storybook-test axe, Figma audit, scan) (§4)
+- [ ] S10 maintainer content out of figma / tokens / claude-design / runbook / skills pages (§4)
+- [ ] S11 transfer depth: token naming + mode rules, scopes/modes/component properties, fixing
+      a failing master, artboard → bound master (§5.7–9)
+- [ ] S12 recovery path per tutorial/kata step; bridge exercise compose → build new (§5.10–11)
+- [ ] S13 Atl/Atelier-file → CDS swap across agenda, ~18 pages, briefs, trainer files (§7);
+      blocked on the CDS kata target (P4)
+
+**Owner decisions (§9)** — agenda target structure (§3), agenda ↔ track source, home for
+maintainer content, Claude Design demo core/optional, page language, skills delivery, cohort
+size, framework wording in the `/schulung` hero (Angular only per ADR-0165?).
+
 ### Docs-site critique follow-up (2026-10-07)
 
 Impeccable critique of the docs site scored 27/40 (snapshot in
