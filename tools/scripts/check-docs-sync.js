@@ -30,6 +30,14 @@
  *                above it): a purely additive edit anywhere else in the file
  *                cannot desync the exemption (ADR-0119).
  *
+ *   [MCP-PIN]   A `figma-console-mcp@<x>` citation under docs/src (or the repo-root
+ *                .mcp.json, which the docs show verbatim as the clone's config)
+ *                whose <x> differs from the pin the scaffold ships in
+ *                libs/create-workspace/src/generators/preset/preset.ts — the single
+ *                source. `@latest` counts as a mismatch: the server is pinned
+ *                (ADR-0110), and a docs page telling participants to run a different
+ *                version than the scaffold installs is a silent divergence.
+ *
  * Retired (P4a, ADR-0121): [DRIFT] and [TYPE-DRIFT], which compared the spec's
  * props and string-literal unions with the hand-written `props` arrays in
  * components.ts. Those arrays are gone: the docs prop tables are generated from
@@ -63,6 +71,11 @@ const PAGES_DIR = path.join(ROOT, 'docs/src/pages');
  * Scanning it produced seven findings, all of them clock times. Cite a frame by id
  * there and this decision has to be revisited along with the extractor.
  */
+const PRESET_FILE = path.join(
+  ROOT,
+  'libs/create-workspace/src/generators/preset/preset.ts',
+);
+const MCP_CONFIG_FILE = path.join(ROOT, '.mcp.json');
 const NODE_ID_ROOTS = [DOCS_SRC, path.join(ROOT, 'workshop')];
 
 /**
@@ -285,6 +298,57 @@ function checkScaffoldPortCitations(errors) {
   }
 }
 
+/** Matches `figma-console-mcp@<version>` (version may be a tag such as `latest`). */
+const MCP_PIN_RE = /figma-console-mcp@([A-Za-z0-9][\w.-]*)/g;
+
+/**
+ * Every `figma-console-mcp@<x>` citation in one line of text.
+ * @param {string} line
+ * @returns {string[]} the <x> parts, trailing sentence dots stripped
+ */
+function mcpPinCitationsOf(line) {
+  return [...line.matchAll(MCP_PIN_RE)].map((m) => m[1].replace(/\.+$/, ''));
+}
+
+/**
+ * [MCP-PIN]: the figma-console-mcp version the scaffold pins in preset.ts is the
+ * single source; every docs citation and the repo-root .mcp.json must match it.
+ * @param {string[]} errors
+ */
+function checkMcpPinCitations(errors) {
+  const presetRel = path.relative(ROOT, PRESET_FILE);
+  const pins = new Set(
+    fs.readFileSync(PRESET_FILE, 'utf8').split('\n').flatMap(mcpPinCitationsOf),
+  );
+  if (pins.size !== 1) {
+    errors.push(
+      `[MCP-PIN] ${presetRel} must pin figma-console-mcp to exactly one version, found ${
+        pins.size ? [...pins].join(', ') : 'none'
+      } — this file is the single source the docs are checked against`,
+    );
+    return;
+  }
+  const [pin] = pins;
+  const files = [...docsSourceFiles(), MCP_CONFIG_FILE].filter((f) =>
+    fs.existsSync(f),
+  );
+  for (const file of files) {
+    const rel = path.relative(ROOT, file);
+    fs.readFileSync(file, 'utf8')
+      .split('\n')
+      .forEach((line, i) => {
+        for (const found of new Set(mcpPinCitationsOf(line))) {
+          if (found !== pin) {
+            errors.push(
+              `[MCP-PIN] ${rel}:${i + 1} cites figma-console-mcp@${found}, but ${presetRel} pins @${pin} — ` +
+                `update the citation to @${pin} (or bump the pin in preset.ts first, then every citation)`,
+            );
+          }
+        }
+      });
+  }
+}
+
 // ---------------------------------------------------------------------------
 // Main
 // ---------------------------------------------------------------------------
@@ -325,11 +389,15 @@ checkNodeIdCitations(errors);
 // 4. Scaffold-only port 6006 cited outside an allowlisted context
 checkScaffoldPortCitations(errors);
 
+// 5. figma-console-mcp version citations ↔ the scaffold's pin
+checkMcpPinCitations(errors);
+
 if (errors.length > 0) {
   errors.forEach((e) => console.error(`✗ ${e}`));
   const nodeIdIssues = errors.filter((e) => e.startsWith('[NODE-ID]')).length;
   const portIssues = errors.filter((e) => e.startsWith('[PORT-6006]')).length;
-  const docIssues = errors.length - nodeIdIssues - portIssues;
+  const pinIssues = errors.filter((e) => e.startsWith('[MCP-PIN]')).length;
+  const docIssues = errors.length - nodeIdIssues - portIssues - pinIssues;
   console.error(
     `\n${errors.length} issue(s) found.` +
       (docIssues
@@ -340,6 +408,9 @@ if (errors.length > 0) {
         : '') +
       (portIssues
         ? ' Fix the stray port 6006 citation(s), or allowlist genuine scaffold mentions.'
+        : '') +
+      (pinIssues
+        ? ' Align the figma-console-mcp version citation(s) with the pin in preset.ts.'
         : ''),
   );
   process.exit(1);
@@ -353,5 +424,8 @@ if (errors.length > 0) {
   );
   console.log(
     '✓ No stray port-6006 citation under docs/src/pages (create-atelier-ui-workspace scaffold only, ADR-0084)',
+  );
+  console.log(
+    '✓ Every figma-console-mcp@<version> citation (docs/src, .mcp.json) matches the scaffold pin in preset.ts',
   );
 }

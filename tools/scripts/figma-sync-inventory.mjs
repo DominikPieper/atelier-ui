@@ -32,6 +32,7 @@
  */
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
+import { resolveFigmaConsolePackageSpec } from './lib/figma-console-pin.mjs';
 
 // The plugin-side rewrite. No backticks inside: this is embedded in a template literal.
 const PAYLOAD = `
@@ -203,11 +204,11 @@ async function main() {
     { name: 'atelier-figma-sync-inventory', version: '1.0.0' },
     { capabilities: {} },
   );
-  // Same invocation as figma:snapshot — pinning `@latest` and passing the environment
+  // Same invocation as figma:snapshot — the pinned server (ADR-0110, read from .mcp.json) and passing the environment
   // through is what makes the Desktop Bridge visible to a spawned client.
   const transport = new StdioClientTransport({
     command: 'npx',
-    args: ['-y', 'figma-console-mcp@latest'],
+    args: ['-y', resolveFigmaConsolePackageSpec()],
     env: { ...process.env },
   });
   await client.connect(transport);

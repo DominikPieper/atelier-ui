@@ -28,17 +28,17 @@
  * each variant's own resolved width/height). All rule logic and severities live
  * in check-figma.js.
  */
-import { writeFileSync, readFileSync } from 'node:fs';
+import { writeFileSync } from 'node:fs';
 import { execSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
 import { dirname, resolve } from 'node:path';
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
+import { resolveFigmaConsolePackageSpec } from './lib/figma-console-pin.mjs';
 
 const __dirname = dirname(fileURLToPath(import.meta.url));
 const ROOT = resolve(__dirname, '../..');
 const OUT = resolve(ROOT, 'tools/figma/snapshot.json');
-const MCP_CONFIG_PATH = resolve(ROOT, '.mcp.json');
 // Per-TEXT-node type facts, written by the same run as snapshot.json. A sibling
 // rather than another key in snapshot.json because the records key on `chars`, so
 // every copy edit in Figma would churn the file the paint gates are reviewed in —
@@ -111,39 +111,6 @@ const MASTERS = [
   { nodeId: '911:1533' }, // Data/AtlTr
   { nodeId: '911:1546' }, // Data/AtlTbody
 ];
-
-/**
- * Resolve the exact `figma-console-mcp@<version>` npm spec to spawn via npx.
- * Read from .mcp.json's own `mcpServers['figma-console'].args` — the ONE place
- * this repo pins the server version (ADR-0110: pin the server the skills
- * hardcode) — rather than hardcoding a package spec here, which is exactly how
- * this script drifted from the pin: it ran `figma-console-mcp@latest` while
- * `.mcp.json` said `@1.40.0`, so the committed snapshot's `meta.serverVersion`
- * could never be attributed to the pinned server. `@latest` is deliberately
- * not a fallback when the entry is missing — a silent fallback would recreate
- * the same drift, just quietly.
- */
-function resolveFigmaConsolePackageSpec() {
-  let config;
-  try {
-    config = JSON.parse(readFileSync(MCP_CONFIG_PATH, 'utf8'));
-  } catch (err) {
-    throw new Error(
-      `could not read/parse ${MCP_CONFIG_PATH}: ${err?.message ?? err}`,
-    );
-  }
-  const args = config?.mcpServers?.['figma-console']?.args;
-  const spec = Array.isArray(args)
-    ? args.find((a) => /^figma-console-mcp@/.test(a))
-    : undefined;
-  if (!spec) {
-    throw new Error(
-      `${MCP_CONFIG_PATH} has no mcpServers['figma-console'].args entry matching ` +
-        `/^figma-console-mcp@/ — refusing to fall back to @latest (ADR-0110 pins this server).`,
-    );
-  }
-  return spec;
-}
 
 /** "figma-console-mcp@1.40.0" -> "1.40.0" (text after the last "@"). */
 function versionFromPackageSpec(spec) {

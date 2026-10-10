@@ -16,6 +16,7 @@
 import { Client } from '@modelcontextprotocol/sdk/client/index.js';
 import { StdioClientTransport } from '@modelcontextprotocol/sdk/client/stdio.js';
 import { buildDefs } from './gen-figma-library-tokens.mjs';
+import { resolveFigmaConsolePackageSpec } from './lib/figma-console-pin.mjs';
 
 const defs = buildDefs();
 
@@ -112,7 +113,7 @@ async function main() {
   );
   const transport = new StdioClientTransport({
     command: 'npx',
-    args: ['-y', 'figma-console-mcp@latest'],
+    args: ['-y', resolveFigmaConsolePackageSpec()],
     env: { ...process.env },
   });
   await client.connect(transport);

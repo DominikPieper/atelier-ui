@@ -184,7 +184,8 @@ const ISSUES: Issue[] = [
       '`EADDRINUSE` when running `nx serve`, `nx storybook <fw>`, or `storybook` (scaffold).',
     cause: 'A previous dev server process is still running.',
     fix: [
-      'macOS/Linux: `lsof -ti :<port> | xargs kill` — swap in the port that is stuck.',
+      '**Do not blindly kill what is listening** — `lsof -ti :<port> | xargs kill` terminates whatever process holds that port, which may not be the stale dev server you think (your editor, another MCP). Check the PID first with `lsof -nP -iTCP:<port> -sTCP:LISTEN`.',
+      'macOS/Linux: `lsof -ti :<port> | xargs kill` — swap in the port that is stuck, once you have confirmed the PID.',
       'Windows: `netstat -ano | findstr :<port>` → then `taskkill /PID <pid> /F`.',
       'Scaffolded workspace: run the app on a different port with `npm start -- --port 4300` (the `--` forwards the flag through the npm script to the underlying `nx serve`). Its own Storybook is fixed to port 6006 in the generated `project.json` — kill the stuck process rather than reassign, the same as the clone entry below.',
       'Clone: each Storybook already has its own port (angular 4400, react 4401, vue 4402) and docs is 4300 — kill the stuck process rather than reassign, since `.mcp.json` and this documentation both assume those exact numbers.',
