@@ -66,27 +66,48 @@ Follow-ups found while fixing — done 2026-10-10 except the AtlProgress debt:
 
 **Wave S — structure (§3–5), with or after the CDS swap**
 
-- [ ] S1 agenda blocks link their pages (a `pages` field per block) + why / done-when / recap
-      per block (§3 shape)
+- [x] S1 done 2026-10-10: `/schulung` rebuilt to §3 in English — why / pages / done / stretch / recap per block, Claude Design demo in a trainer appendix, kata names in one `TARGET` constant; `schulung-claims` e2e follows it (passed with `E2E_PORT_BASE=4500`, 4401 was taken locally).
 - [x] S2 done 2026-10-10: `design-to-code#contract-example` (AtlToast, real failing/passing output), `#finding-codes`.
 - [x] S3 done 2026-10-10: `check:contracts` + `check:stories` before parity in tutorial and kata; kata pass bar includes them.
-- [ ] S4 participant Storybook page: write a story, `play`, run tests, read one failure;
-      maintainer material out of `/storybook` (§4, §5.3)
+- [x] S4 done 2026-10-10: `storybook#write-a-story` (story + `play`, see it red then green, read a failure); the rest of `/storybook` is local-only.
 - [x] S5 done 2026-10-10: `design-to-code#handoff-example` (Toast), linked from the four briefs and kata step 1.
 - [x] S6 done 2026-10-10: `mcp#your-servers`; maintainer part under its own heading.
-- [ ] S7 skills delivery route for participants; document the scaffold's `.claude/` content (§5.5–6)
+- [x] S7 done 2026-10-10 (ADR-0167): scaffold ships `uianatomy-mcp` + `figma-workspace-architect` (with `--figma`), sync-gated; `agent-skills#your-skills` says what ships and how to retry the Storybook skills.
 - [x] S8 done 2026-10-10: `/readiness` (11 master checks with Figma fix steps, 5 system groups, concepts); old anchors stubbed.
 - [x] S9 done 2026-10-10: `a11y-workflow#a11y-in-the-loop`; maintainer history under its own heading.
-- [ ] S10 maintainer content out of figma / tokens / claude-design / runbook / skills pages (§4)
+- [x] S10 done 2026-10-10 (ADR-0166): maintainer content renders only in local dev — `/runbook` whole page; sections on mcp, a11y-workflow, figma, tokens, claude-design, design-principles, design-to-code, storybook, agent-skills, skills/*. Participant entries moved to troubleshooting (`#plugin-update`, `#stale-instances`).
 - [x] S11 done 2026-10-10: `tokens#naming`, `/readiness` (scopes, modes, properties, fixing a
       failing master), `claude-design#artboard-to-master`, `design-principles#check-your-own`.
+- [ ] Gaps the new agenda links around (§3): a glossary (B12), a guardrail demo with and
+      without a DS (A5), a published prompt rubric (Day 2 block 03), a rescue path for a red
+      setup beyond `/troubleshooting`.
+- [ ] Unverified since 2026-10-10: the `storybook#write-a-story` example (`Disabled` story +
+      `toBeDisabled`) was not run in a generated workspace; the packed-tarball e2e
+      (`libs/create-atelier-ui-workspace/e2e`) needs network and was not run.
+- [ ] Open call: the token value catalogue on `/tokens` (`#colors` … `#motion`) stays visible
+      for kata lookups; hide it with the CDS swap if participants no longer use Atelier tokens.
 - [ ] S12 recovery path per tutorial/kata step; bridge exercise compose → build new (§5.10–11)
 - [ ] S13 Atl/Atelier-file → CDS swap across agenda, ~18 pages, briefs, trainer files (§7);
       blocked on the CDS kata target (P4)
 
-**Owner decisions (§9)** — agenda target structure (§3), agenda ↔ track source, home for
-maintainer content, Claude Design demo core/optional, page language, skills delivery, cohort
-size, framework wording in the `/schulung` hero (Angular only per ADR-0165?).
+**Owner decisions (§9)** — decided 2026-10-10:
+
+- Agenda: §3 is the target structure (mini-loop before lunch, readiness on your own master,
+  transfer block Day 2). Built now on the current kata component; the CDS swap (S13) replaces it.
+- Agenda ↔ track: each agenda block links its pages (`pages` field); the track stays the
+  self-serve path.
+- Claude Design demo: optional / trainer appendix, not a core block.
+- Language: everything English, the agenda included (no more "(German)" notes).
+- Maintainer content: stays on the pages but renders only in local dev (`nx serve`), not in the
+  deployed build (ADR to record the mechanism).
+- Skills: the scaffold adds `uianatomy-mcp` (always) and `figma-workspace-architect` (with
+  `--figma`), copied and sync-gated. `design-to-code` is NOT shipped: it is monorepo-bound
+  (~60 % of it names repo paths and gates) and would collide with the scaffold's
+  `atelier-component`, which already is the design-to-code loop for a workspace (owner,
+  2026-10-10). `atelier-design`, `artboard-bridge`, `design-to-code` stay repo/trainer.
+- Cohort: up to 8 (show & tell in 50 min holds, ~5 min each).
+- `/schulung` hero: Angular by default, other frameworks on request, one framework per cohort.
+- AtlProgress a11y debt: later, not now (the CDS swap may replace the component).
 
 ### Docs-site critique follow-up (2026-10-07)
 
