@@ -2,7 +2,6 @@
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
 import PageHero from '../components/PageHero.astro';
-import MaintainerOnly from '../components/MaintainerOnly.astro';
 
 type Issue = {
   id: string;
@@ -79,6 +78,35 @@ const ISSUES: Issue[] = [
       'Open Figma Desktop and run **Plugins → Development → Figma Desktop Bridge**. Leave the panel open while you work.',
       'If the plugin is missing from Development: re-run `npx -y figma-console-mcp@1.40.0 --help` to seed `~/.figma-console-mcp/plugin/`, then **Plugins → Development → Import plugin from manifest…** and pick that `manifest.json`. Keep the version identical to the pin in the `.mcp.json` of your workspace — the plugin files are seeded by whichever version runs.',
       'Restart Claude Code so the MCP re-claims a WebSocket port — the plugin scans 9223–9232 on open.',
+    ],
+  },
+  {
+    id: 'plugin-update',
+    title: 'Figma Desktop Bridge plugin is out of date',
+    symptom:
+      '`npm run preflight` warns that the plugin files are stale, or `figma_get_status` reports `pluginUpdateAvailable: true` for the connected file.',
+    cause:
+      '"The plugin" is two things and only one refreshes itself. Every time the figma-console MCP starts it copies `manifest.json`, `code.js` and `ui.html` into `~/.figma-console-mcp/plugin/`. But Figma Desktop only reads those files when you run the plugin, so an already-open panel keeps running whatever it loaded last.',
+    fix: [
+      'Refresh the files: `npx -y figma-console-mcp@<version in your .mcp.json> --help` (or simply start Claude Code once — every server start rewrites them).',
+      'Code or UI changed, `manifest.json` did not: close the panel and re-run **Plugins → Development → Figma Desktop Bridge** (or restart Figma Desktop). No re-import needed.',
+      '`manifest.json` itself changed (port range, permissions): re-import via **Plugins → Development → Import plugin from manifest…** and pick `~/.figma-console-mcp/plugin/manifest.json` again. Figma does not document whether a plain restart picks up manifest changes, so re-importing is the safe default.',
+      'Verify: call `figma_get_status` — `pluginUpdateAvailable` absent or `false` means Figma now runs what is on disk. (`.version` and `bundledPluginVersion` are different counters by design; only the per-file `pluginVersion` shows what is loaded right now.)',
+    ],
+  },
+  {
+    id: 'stale-instances',
+    title: 'Stale figma-console servers compete for the Bridge',
+    symptom:
+      'The figma-console tools disconnect mid-session, or `figma_get_status` lists `otherInstances` on ports in 9223–9232 while the Desktop Bridge panel is connected to none of the ones you expect.',
+    cause:
+      'Every launch of figma-console-mcp (a Claude Code session, a subagent, a background loop) starts its own server on a port in 9223–9232. Figma Desktop runs exactly one Bridge plugin and it connects to exactly one of them; the rest are orphaned but keep listening.',
+    codeFix: `pkill -f figma-console-mcp`,
+    codeLang: 'shell',
+    fix: [
+      'Run the command below. It matches by process name, so it also stops the server your current session uses — safe, since Claude Code starts a fresh one on the next tool call, but worth a beat if you are mid-task.',
+      'Re-run the plugin in Figma Desktop if the panel still says "searching…" afterwards.',
+      'Prevention: run bulk or background Figma work (eval loops, several headless sessions) alone, after every other Figma-dependent task in the session has finished.',
     ],
   },
   {
@@ -345,21 +373,6 @@ const ISSUES: Issue[] = [
         Still stuck? Run <code>npm run preflight</code> and share its output —
         every line reports a specific fix.
       </p>
-      <MaintainerOnly>
-        <p
-          style="
-            margin: 0.75rem 0 0;
-            font-size: var(--ui-font-size-md);
-            color: var(--ui-color-text);
-            line-height: 1.6;
-          "
-        >
-          Not a specific symptom — more like &ldquo;how do I update the
-          plugin&rdquo; or &ldquo;why are there orphaned server
-          instances&rdquo;? Those are running-the-setup questions, and they live
-          in the <a href="/runbook" class="docs-link-primary">runbook</a>.
-        </p>
-      </MaintainerOnly>
     </div>
   </div>
 </BaseLayout>

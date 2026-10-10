@@ -514,7 +514,7 @@ async function checkFigmaSetup() {
         warn(
           'Plugin files vs. .mcp.json pin',
           `on-disk .version is ${diskVersion}, .mcp.json pins ${pinnedVersion}`,
-          `Run \`npx -y ${pinnedSpec} --help\` once to refresh the files, then re-run (or re-import) the plugin in Figma Desktop — see https://atelier.pieper.io/runbook#plugin-update`,
+          `Run \`npx -y ${pinnedSpec} --help\` once to refresh the files, then re-run (or re-import) the plugin in Figma Desktop — see https://atelier.pieper.io/troubleshooting#plugin-update`,
         );
       }
     }
