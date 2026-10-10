@@ -1209,9 +1209,41 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
         <div class="docs-step-row" data-step="4">
           <span class="docs-step-badge tut-stage-badge">Verify</span>
           <div style="flex: 1">
-            <h3 class="docs-h3">Verify design parity</h3>
+            <h3 class="docs-h3">Verify: offline gates first, then parity</h3>
             <p class="docs-step-desc">
-              Don't stop at "looks right" — close the loop.
+              Don't stop at "looks right" — close the loop, cheapest check
+              first. Run the two offline gates in your workspace before you ask
+              Figma anything:
+            </p>
+            <Code
+              code={`npm run check:contracts
+npm run check:stories`}
+              lang="shell"
+              title="offline gates"
+            />
+            <p class="docs-step-desc" style="margin-top: 0.6rem">
+              <code>check:contracts</code> joins the contract, the component's
+              docgen and the Figma snapshot without a browser; it passes when it
+              prints <code>total: 0 error(s)</code> and exits 0. A finding is
+              tagged, for example <code>[NO-STORY-META]</code>: look the tag up
+              in
+              <a href="/design-to-code#finding-codes" class="docs-link-primary"
+                >the finding codes</a
+              >. <code>check:stories</code> renders every story in Chromium,
+              runs each <code>play</code> assertion and checks accessibility
+              with axe; it passes on exit 0. For a story or axe failure see
+              <a
+                href="/a11y-workflow#a11y-in-the-loop"
+                class="docs-link-primary"
+                >accessibility in the loop</a
+              >. (<code>check:contracts</code> exists in workspaces scaffolded
+              with the Figma MCP option, which this tutorial assumes.)
+            </p>
+            <p class="docs-step-desc">
+              The order matters: both gates are offline and deterministic, so
+              they are cheap and a failure is unambiguous. The parity report is
+              the expensive, judgement-heavy last step; do not spend it on a
+              component that fails a gate.
               <code>figma_check_design_parity</code> compares the generated code
               against the Figma spec and returns a parity score plus specific
               discrepancies. Pass the prompt below: it asks Claude to sort each
@@ -1352,10 +1384,10 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
             <span class="run-step-detail">{RUN_IT[fw].expected}</span>
           </li>
           <li>
-            <span class="run-step-label">Verify parity</span>
+            <span class="run-step-label">Verify</span>
             <span class="run-step-detail"
-              >Run the parity prompt above — Claude will list any discrepancies
-              and propose fixes.</span
+              >Run the two offline gates, then the parity prompt above — Claude
+              will list any discrepancies and propose fixes.</span
             >
           </li>
         </ol>
@@ -1423,6 +1455,10 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
           app at <code>http://localhost:4200</code> — your workspace also ships
           its own Storybook (<code>npm run storybook</code>, port
           <code>6006</code>) once you add a story for it
+        </li>
+        <li>
+          <Icon name="check_circle" /> <code>npm run check:contracts</code> and
+          <code>npm run check:stories</code> both exit 0
         </li>
         <li>
           <Icon name="check_circle" /> <code>figma_check_design_parity</code>

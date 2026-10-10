@@ -166,7 +166,11 @@ code ones.`;
         node-id you'll pass to Claude. No need to copy it manually. Step 3 reads
         that frame through the <code>figma-console</code> MCP, so wire it up
         first if you have not:
-        <a href="/figma-token" class="docs-link-primary">Figma access</a>.
+        <a href="/figma-token" class="docs-link-primary">Figma access</a>. For
+        your own components, the brief you start from is a written handoff; see
+        <a href="/design-to-code#handoff-example" class="docs-link-primary"
+          >a filled handoff example</a
+        >.
       </p>
     </section>
 
@@ -336,10 +340,23 @@ code ones.`;
     <section data-step="6" class="kata-step">
       <div class="kata-step-head">
         <span class="kata-step-num">6</span>
-        <h2 class="kata-step-title">Run the parity check</h2>
+        <h2 class="kata-step-title">Run the gates, then the parity check</h2>
       </div>
       <p class="kata-step-desc">
-        Eyeballing the result isn't enough — close the loop.
+        First the two offline gates, in your workspace root:
+        <code>npm run check:contracts</code> and
+        <code>npm run check:stories</code>. Both are deterministic and cheap, so
+        they come before the expensive, judgement-heavy parity report. A
+        <code>check:contracts</code> finding is explained in
+        <a href="/design-to-code#finding-codes" class="docs-link-primary"
+          >the finding codes</a
+        >; a story or axe failure in
+        <a href="/a11y-workflow#a11y-in-the-loop" class="docs-link-primary"
+          >accessibility in the loop</a
+        >.
+      </p>
+      <p class="kata-step-desc" style="margin-top: 0.4rem">
+        Eyeballing the result isn't enough either — close the loop.
         <code>figma_check_design_parity</code> compares the generated code
         against the Figma spec and lists every discrepancy — exact paddings,
         exact colors, missing variants — so you ship a verified component, not a
@@ -348,10 +365,10 @@ code ones.`;
       <Code code={PARITY_PROMPT} lang="text" wrap title="parity check prompt" />
       <p class="kata-step-desc" style="margin-top: 0.6rem">
         <strong style="color: var(--ui-color-text)">Checkpoint:</strong>
-        every discrepancy in the report is fixed or labelled (code, Figma or
-        contract), and you can name one thing the report did not check. A quiet
-        report is not a clean component: the tool samples one variant and skips
-        values it cannot compare
+        both offline gates exit 0, and every discrepancy in the report is fixed
+        or labelled (code, Figma or contract), and you can name one thing the
+        report did not check. A quiet report is not a clean component: the tool
+        samples one variant and skips values it cannot compare
         (<a href="/design-to-code#parity-report" class="docs-link-primary"
           >what a report does not show</a
         >). Paste the report straight back to Claude and have it fix each
