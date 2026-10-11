@@ -559,7 +559,12 @@ decided: fix the code, the master, or the contract.`;
             component's own types and doc comments, and your framework's
             generated prop table reads them from there, so there is nothing to
             keep in sync by hand. For each difference you write down, say in the
-            entry's <code>reason</code> why it is there.
+            entry's <code>reason</code> why it is there. Figma's own Code
+            Connect is the vendor alternative: it links a Figma component to
+            real code snippets shown in Dev Mode, so it tells you what code to
+            use, but it does not record deliberate Figma-to-code mismatches or
+            fail a build on drift, which is what the contract plus
+            <code>check:contracts</code> does.
           </p>
 
           <h3 id="contract-example" class="docs-h3 docs-h3--spaced">

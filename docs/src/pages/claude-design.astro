@@ -711,12 +711,17 @@ const LIMITS: Limit[] = [
       >
         That is the difference between a gate that is silent and a gate that is
         absent, and it is why "iterate in the canvas, then watch parity go red"
-        is a mechanism error rather than a good demo. Both
-        <code>check:figma</code> and <code>check:parity</code> run inside
-        <code>check:all</code>, and <code>check:all</code> is the release gate —
-        the publish workflow’s <code>verify</code> job runs it before anything
-        is published. So "a Claude-Design-first component can never pass
-        <code>check:parity</code>" is a CI fact, not an editorial preference.
+        is a mechanism error rather than a good demo. The release gate does not
+        hide this, but it does not block on it either. <code>check:all</code>
+        runs <code>check:figma</code> in its blocking mode against the committed
+        Figma snapshot, which has no master to compare for an imported frame. It
+        runs <code>check:parity:report</code>, not <code>check:parity</code>:
+        that variant reports every component owed a parity record as a warning
+        and exits 0. The blocking <code>check:parity</code> is the one a person
+        runs with the Figma bridge open after touching a component, as the PR
+        checklist asks. So "a Claude-Design-first component can never pass
+        <code>check:parity</code>" holds for that blocking run, and the release
+        gate shows the debt on every run without failing on it.
       </p>
 
       <Callout

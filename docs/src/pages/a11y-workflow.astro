@@ -599,6 +599,18 @@ export type AtlButtonProps =
         lang="js"
         title="figma_audit_component_accessibility"
       />
+      <p
+        style="
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+          margin-bottom: 1.25rem;
+        "
+      >
+        The score only covers the checks the audit ran. It classifies
+        <code>AtlDialog</code> as presentational and skips the focus and
+        target-size checks, so a 100 there means "not assessed", not
+        "accessible".
+      </p>
 
       <h3 class="docs-h3 docs-h3--spaced">Lane 3 — spec / impl audit</h3>
       <Code
