@@ -435,7 +435,7 @@ count did not move".
 
 ## Open — Schulung: after the B1–B4 repairs (2026-08-29)
 
-The four blockers from tasks/schulung-review-2026-08-28.md §3 are fixed in the
+The four blockers from tasks/archive/reviews/schulung-review-2026-08-28.md §3 are fixed in the
 tree (struck through there, each with its fix note).
 
 - [x] ~~**The deploy was dead, and had been since 2026-08-26**~~ — found and fixed
@@ -476,7 +476,7 @@ tree (struck through there, each with its fix note).
 
 ## Open — Schulung: after the M1–M15 pass (2026-08-29)
 
-All 4 blockers and all 15 majors from `tasks/schulung-review-2026-08-28.md` are closed
+All 4 blockers and all 15 majors from `tasks/archive/reviews/schulung-review-2026-08-28.md` are closed
 (three of them _overtaken_ rather than fixed — M3, M4, M7 — and recorded that way there,
 along with eight defects the repair pass itself introduced or uncovered). Flows 1–7 are
 repaired. `npm run check:all` exit 0, `npx nx build docs` 59 pages.
@@ -557,7 +557,7 @@ explicit branch on the pages that serve both). Nothing enforces it; see its Cons
 
 ## Open — Schulung: after the minors + presentation-debt pass (2026-08-29)
 
-With this pass `tasks/schulung-review-2026-08-28.md` is **fully closed except p1 and p2**:
+With this pass `tasks/archive/reviews/schulung-review-2026-08-28.md` is **fully closed except p1 and p2**:
 4/4 blockers, 15/15 majors, 16/16 minors, and 3 of 5 presentation-debt items. Three more
 majors surfaced during the pass and were fixed with it (r9–r11 in that file): the German
 curriculum still taught 10.4 as the current release, /workshop's post-setup aside never

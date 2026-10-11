@@ -1,6 +1,6 @@
 # Atelier UI A11y Audit — After-snapshot (Phase 4 complete, 2026-04-26)
 
-Counterpart to `tasks/a11y-audit-2026-04-26.md` (the Phase-0 baseline).
+Counterpart to `tasks/archive/reviews/a11y-audit-2026-04-26.md` (the Phase-0 baseline).
 Phase 4 mutated the Atelier Figma file (key `QMnDD8uZQPldPrlCwZZ58T`)
 via the figma-workspace-architect skill. All mutations were atomic per
 component-set; tracked here so design ↔ code parity stays auditable.

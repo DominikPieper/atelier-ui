@@ -5,7 +5,7 @@ sources:
   - plan/adr/0046-one-concept-one-drawing.md (the geometry source this generates from)
   - plan/adr/0050-a-glyph-in-a-string-map-is-still-an-icon.md (the same defect, in TypeScript)
   - plan/adr/0055-invalid-is-not-a-colour.md (the same defect, in templates — the sixth mechanism)
-  - tasks/design-findings-2026-08-26.md (J1 — "there is no Figma master for AtlIcon")
+  - tasks/archive/reviews/design-findings-2026-08-26.md (J1 — "there is no Figma master for AtlIcon")
 ---
 
 # ADR-0057: The icon set was text in Figma too

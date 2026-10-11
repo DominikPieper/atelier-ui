@@ -3,7 +3,7 @@ status: superseded
 superseded-by: 0168
 date: 2026-10-10
 sources:
-  - tasks/content-review-2026-10-10.md §4 (what belongs where), §9 decision 4
+  - tasks/archive/reviews/content-review-2026-10-10.md §4 (what belongs where), §9 decision 4
   - owner decision, 2026-10-10 (this session): 'Maintainer-Inhalte erstmal nur bei lokalem Start, nicht beim Deployment'
   - docs/src/components/MaintainerOnly.astro, docs/integrations/maintainer-pages.mjs
 ---

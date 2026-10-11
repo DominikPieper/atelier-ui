@@ -11,7 +11,7 @@
  * min-content, not the reading column — and the only width check ever run
  * (the manual sweep in `tasks/todo.md`) stopped at 420px, one width short of
  * the phone breakpoint that actually broke
- * (`tasks/docs-ux-review-2026-09-02.md` §2.1, B1). A static read of the CSS
+ * (`tasks/archive/reviews/docs-ux-review-2026-09-02.md` §2.1, B1). A static read of the CSS
  * would not have caught it either: the overflow was the sum of a dozen
  * min-content widths across unrelated topbar children, and only a rendered
  * box tells you their sum.

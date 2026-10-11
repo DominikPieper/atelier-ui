@@ -4,7 +4,7 @@ date: 2026-10-07
 sources:
   - plan/adr/0088-one-type-scale-for-the-docs.md
   - plan/adr/0089-the-docs-css-joins-the-gates.md
-  - tasks/docs-ux-review-2026-09-02.md (n13 — the page-scoped second pass that never ran)
+  - tasks/archive/reviews/docs-ux-review-2026-09-02.md (n13 — the page-scoped second pass that never ran)
   - tools/scripts/check-docs-layout.mjs (the `[FONT-SIZE]` check)
   - docs/src/components/DiagramFigure.astro (`.diagram-eyebrow`)
   - .impeccable/critique/2026-10-07T17-32-18Z__docs-src-pages.md (the critique that re-found it)

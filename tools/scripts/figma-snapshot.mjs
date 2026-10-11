@@ -323,7 +323,7 @@ async function main() {
             // seven variants shared ONE 220×320 panel — only the outer demo frame had been
             // resized per size, so three of four advertised sizes clipped or rendered blank.
             // Both survived every green check:figma run for months and were found by a
-            // human reading a screenshot (tasks/figma-parity-sweep-2026-09-07.md). Checked
+            // human reading a screenshot (tasks/archive/reviews/figma-parity-sweep-2026-09-07.md). Checked
             // by check-figma.js's [ROOT-SIZE].
             width: Math.round(v.width * 100) / 100,
             height: Math.round(v.height * 100) / 100,

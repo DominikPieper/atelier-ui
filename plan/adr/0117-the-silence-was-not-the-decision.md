@@ -2,8 +2,8 @@
 status: accepted
 date: 2026-09-09
 sources:
-  - tasks/review-plausibility-2026-09-08.md (finding C10 — the silence flagged, not yet an editorial decision)
-  - tasks/schulung-content-review-2026-09-08.md (§ B1, § B5 — the teaching-surface consequences of the same gap)
+  - tasks/archive/reviews/review-plausibility-2026-09-08.md (finding C10 — the silence flagged, not yet an editorial decision)
+  - tasks/archive/reviews/schulung-content-review-2026-09-08.md (§ B1, § B5 — the teaching-surface consequences of the same gap)
   - tools/scripts/lib/allowlists.js (UNDISTRIBUTED_SKILLS — the repo-bound reasons this ADR cites, not restates)
   - tools/scripts/check-skill-discovery.mjs (the gate that already treats UNDISTRIBUTED_SKILLS as correct, not a defect)
   - docs/src/pages/agent-skills.astro
@@ -37,7 +37,7 @@ the allowlist is current. That non-distribution is a recorded, correct decision.
 Nothing in this ADR revisits it.
 
 What was never decided is what the _participant-facing_ material does with that
-fact. `tasks/review-plausibility-2026-09-08.md`'s finding C10 named the gap without
+fact. `tasks/archive/reviews/review-plausibility-2026-09-08.md`'s finding C10 named the gap without
 closing it: _"the human-facing silence [...] is not a recorded decision."_ Two
 things had already happened by the time that finding was written, and both are
 worse than silence:
@@ -49,7 +49,7 @@ worse than silence:
 - `claude-design.astro:249` and `schulung.astro:101` went further than silence:
   each told the reader outright that step 5's tooling _does not exist_, at the
   same time `artboard-bridge` Publish existed, had run once, and had correctly
-  refused to publish a `DRIFT` component (`tasks/schulung-content-review-2026-09-08.md`
+  refused to publish a `DRIFT` component (`tasks/archive/reviews/schulung-content-review-2026-09-08.md`
   § B1). A reader trusting either page left with a false belief about the current
   state of the tooling, not merely an incomplete one.
 

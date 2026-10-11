@@ -5,7 +5,7 @@ sources:
   - docs/src/pages/schulung.astro (Tag 2, Block 01 → Block 02 — the joint this ADR fills)
   - workshop/briefs/toast.md (timer pause/resume, Escape, live-region politeness — none of it visible in a component set)
   - workshop/briefs/README.md (the shared brief: structural variants vs. interaction states)
-  - tasks/schulung-review-2026-09-05.md (the review that found the joint; M1)
+  - tasks/archive/reviews/schulung-review-2026-09-05.md (the review that found the joint; M1)
   - skills/figma-workspace-architect/references/code-sync.md (the `codeSpec` input — fields not supplied are not compared)
   - plan/adr/0032-claude-design-as-parallel-track.md (the other handoff, step 5, and why it stays unbuilt)
   - plan/adr/0024-design-parity-persistence-gate.md (parity scores move when the declared fields move)

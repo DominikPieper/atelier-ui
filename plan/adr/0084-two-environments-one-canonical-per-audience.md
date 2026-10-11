@@ -2,7 +2,7 @@
 status: accepted
 date: 2026-08-29
 sources:
-  - tasks/schulung-review-2026-08-28.md (M2, M4, M5, M9, M10, flow 6 — the decision they all hang off)
+  - tasks/archive/reviews/schulung-review-2026-08-28.md (M2, M4, M5, M9, M10, flow 6 — the decision they all hang off)
   - libs/create-workspace/src/generators/preset/preset.ts (what the scaffold actually contains)
   - docs/src/pages/schulung.astro, schulung-2tage-agenda.md (the cohort's declared environment)
   - docs/src/pages/workshop.astro (the self-serve reader's declared environment)

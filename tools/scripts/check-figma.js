@@ -2015,7 +2015,7 @@ function checkRootType() {
  *  `overlays` nor `layers` carried it before ADR-0108 — so a master's SIZE, as
  *  opposed to its decoration, was invisible to every gate. Two real bugs lived
  *  exactly there and both survived every green check:figma run for months, found
- *  only by a human reading a screenshot (tasks/figma-parity-sweep-2026-09-07.md):
+ *  only by a human reading a screenshot (tasks/archive/reviews/figma-parity-sweep-2026-09-07.md):
  *
  *    - AtlDialog's five size variants were each the code's px ÷ 1.6 — the master had
  *      been authored at 1rem = 10px instead of 16, wrong across every size.

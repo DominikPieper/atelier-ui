@@ -4,7 +4,7 @@ date: 2026-08-27
 sources:
   - plan/adr/0038-tonal-ramps-with-checked-annotations.md (the construction this repeats for four more families)
   - plan/adr/0047-bind-the-literals-that-duplicate-a-token.md (the literal-binding campaign this finishes for colour and type)
-  - tasks/design-findings-2026-08-26.md (F2 — the status colours are literals; I2/J6 — off-scale type)
+  - tasks/archive/reviews/design-findings-2026-08-26.md (F2 — the status colours are literals; I2/J6 — off-scale type)
 ---
 
 # ADR-0054: The last values a Figma Variable could not bind

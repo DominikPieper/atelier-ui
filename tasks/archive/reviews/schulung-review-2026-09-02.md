@@ -1,6 +1,6 @@
 # Training Material Review — Second Pass, the Claude Design Track, and the Trainer Kit
 
-**Date:** 2026-09-02 · **Baseline:** `tasks/schulung-review-2026-08-28.md` (all 4 blockers / 15 majors / 16 minors closed 08-29; p1, p2, n5, n14, n15, r4, r6, r12, r13 still open — not re-listed here unless regressed) · **Inputs:** four read-only audits (Claude Design depth · Day-1 track re-audit · Day-2 build-your-own flow · trainer kit + public/private boundary) + own spot-verification of every HIGH claim (§9) · **Environment under review:** the cloned repo, which ADR-0084 makes canonical for the cohort.
+**Date:** 2026-09-02 · **Baseline:** `tasks/archive/reviews/schulung-review-2026-08-28.md` (all 4 blockers / 15 majors / 16 minors closed 08-29; p1, p2, n5, n14, n15, r4, r6, r12, r13 still open — not re-listed here unless regressed) · **Inputs:** four read-only audits (Claude Design depth · Day-1 track re-audit · Day-2 build-your-own flow · trainer kit + public/private boundary) + own spot-verification of every HIGH claim (§9) · **Environment under review:** the cloned repo, which ADR-0084 makes canonical for the cohort.
 
 The four questions asked: What can be improved? Where are the gaps? Is the Claude Design part detailed enough? What does the facilitator need that should not go on the public site?
 
@@ -35,9 +35,9 @@ Severity: **Blocker** = a participant following the page cannot reach the block'
 
 ### 3.0 Immediate (not a training defect — a public-repo hygiene defect)
 
-| #   | Finding                                                                                                         | Evidence                                                                                                                                                               | Fix                                                                                                | Serves |
-| --- | --------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- | ------ |
-| I1  | Two tracked files in the PUBLIC repo carry two colleagues' full names and the internal data-protection mailbox. | `tasks/review-state-2026-08-26.md:168`, `tasks/schulung-review-2026-08-28.md:64`; `gh repo view` → `visibility: PUBLIC`. ADR-0032 already uses the role-only phrasing. | Rewrite both lines to roles ("the internal DSB / ISB"); keep names and mailbox in the trainer kit. | R      |
+| #   | Finding                                                                                                         | Evidence                                                                                                                                                                                               | Fix                                                                                                | Serves |
+| --- | --------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | -------------------------------------------------------------------------------------------------- | ------ |
+| I1  | Two tracked files in the PUBLIC repo carry two colleagues' full names and the internal data-protection mailbox. | `tasks/archive/reviews/review-state-2026-08-26.md:168`, `tasks/archive/reviews/schulung-review-2026-08-28.md:64`; `gh repo view` → `visibility: PUBLIC`. ADR-0032 already uses the role-only phrasing. | Rewrite both lines to roles ("the internal DSB / ISB"); keep names and mailbox in the trainer kit. | R      |
 
 ### 3.1 Blockers
 
@@ -182,7 +182,7 @@ Mini-ADR (decision is the trainer's; this is the recommendation):
 | `schulung.astro:57`, `agenda:25` "Kohorten-Policy"                                                               | policy framing, not requirement                                      | rewrite as requirement                           |
 | `agenda:31` "Zeitdeckung … −5/−4/−3 min … kein Dry-Run … erste Kohorte mitstoppen"                               | minute arithmetic + admission of no rehearsal, in a public root file | kit                                              |
 | `agenda:81,208` `solved-*`                                                                                       | promise without artifact                                             | build or delete                                  |
-| `tasks/review-state-2026-08-26.md:168`, `tasks/schulung-review-2026-08-28.md:64`                                 | colleagues' names + internal mailbox                                 | roles here, names in kit (I1)                    |
+| `tasks/archive/reviews/review-state-2026-08-26.md:168`, `tasks/archive/reviews/schulung-review-2026-08-28.md:64` | colleagues' names + internal mailbox                                 | roles here, names in kit (I1)                    |
 | `tools/design/artboards.json:6-8`                                                                                | internal project ids/URL                                             | optional move (n11)                              |
 
 **Missing on the public page for a prospect/participant:** one "Voraussetzungen / Mitbringen" box · hardware/OS · accounts, who pays, budget · Figma plan tier · group size and trainer:participant ratio · what they keep + LICENSE · privacy notice · booking/contact beyond the generic footer. Present and fine: target group, language, day results, format callout, Erfolgs-Verifizierung (once corrected).

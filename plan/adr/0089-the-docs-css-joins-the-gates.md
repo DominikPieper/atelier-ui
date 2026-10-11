@@ -2,7 +2,7 @@
 status: accepted
 date: 2026-09-02
 sources:
-  - tasks/docs-ux-review-2026-09-02.md (B1 — 401 px shell at 375; n1 z-index; n2 breakpoints; n3 raw colours)
+  - tasks/archive/reviews/docs-ux-review-2026-09-02.md (B1 — 401 px shell at 375; n1 z-index; n2 breakpoints; n3 raw colours)
   - tools/scripts/check-docs-layout.mjs (the browser gate over the built docs)
   - tools/scripts/check-css-tokens.js (Pass A roster extended to `docs/src/styles`)
   - docs/src/styles/global.css (z-index bound to `--ui-z-*`; four breakpoints)

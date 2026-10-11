@@ -3,7 +3,7 @@ status: accepted
 superseded-by: plan/adr/0072-the-third-surface.md (alternative 4 only; the rest stands)
 date: 2026-08-26
 sources:
-  - tasks/review-state-2026-08-26.md (state review — Claude Design section)
+  - tasks/archive/reviews/review-state-2026-08-26.md (state review — Claude Design section)
   - https://www.anthropic.com/news/claude-design-anthropic-labs (2026-04-17)
   - https://code.claude.com/docs/en/whats-new/2026-w34 (research preview, 2026-08-17)
   - https://support.claude.com/en/articles/14604406-claude-design-admin-guide-for-team-and-enterprise-plans (2026-07-23)
@@ -107,7 +107,7 @@ status` refused in the Claude Code preview, the editor frozen at publish
   accept that to buy a Figma-free on-ramp and one honest lesson about gated
   truth.
 - **Not workshop-ready as of this date.** Three blockers, all tracked in
-  `tasks/review-state-2026-08-26.md`: per-seat save availability is
+  `tasks/archive/reviews/review-state-2026-08-26.md`: per-seat save availability is
   unverified and cannot be guaranteed across a room; the `--ui-*` artboard
   starter kit does not exist, without which the token katas teach "Claude
   invents colours" instead of "the canvas cannot hold a token architecture";

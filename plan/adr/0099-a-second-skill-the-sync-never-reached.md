@@ -10,7 +10,7 @@ sources:
   - nx.json `release.groups.skills.projects` (previously `["figma-workspace-architect"]` only)
   - git b1725d6 "feat(skills): figma-workspace-architect — auto-release + discovery mirror"
     (scoped to the one skill it names, never revisited for a second one)
-  - tasks/review-state-2026-08-26.md ("no --check mode for skill discovery"; the adjacent
+  - tasks/archive/reviews/review-state-2026-08-26.md ("no --check mode for skill discovery"; the adjacent
     half of this same gap, flagged in review and never acted on)
   - skills/atelier-design/project.json, skills/figma-workspace-architect/project.json
     (identical target shape — package, sync-discovery, lint, test, nx-release-publish)
@@ -41,7 +41,7 @@ pre-push hook runs — called it with `figma-workspace-architect` literally,
 because the commit that built the pipeline (`b1725d6`) was about that one
 skill and nothing since revisited the call site when a second skill arrived.
 That commit's scope was not wrong at the time; the gap opened later and
-nothing closed it. `tasks/review-state-2026-08-26.md` had already flagged the
+nothing closed it. `tasks/archive/reviews/review-state-2026-08-26.md` had already flagged the
 adjacent half of the same problem — no `--check` mode, CI never runs the
 per-project `sync-discovery` targets, the sole guard is a `--no-verify`-
 skippable pre-push hook — without anyone acting on it. Separately, `nx.json`'s
@@ -125,7 +125,7 @@ what the sync script does.
     `release.groups.skills.projects` entry to be auto-versioned; that stays a
     deliberate per-skill choice (a skill could reasonably want manual
     versioning) and is not mechanized by this ADR.
-- Not fixed here, left as recorded in `tasks/review-state-2026-08-26.md`: CI
+- Not fixed here, left as recorded in `tasks/archive/reviews/review-state-2026-08-26.md`: CI
   still does not run each skill's own per-project `sync-discovery` target
   directly. `check:skill-discovery` in `check:all` is the equivalent safety
   net now — it verifies the _outcome_ (index matches disk) rather than

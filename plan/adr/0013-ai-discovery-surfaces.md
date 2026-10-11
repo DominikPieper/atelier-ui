@@ -36,5 +36,5 @@ comes from the adapters via docgen, and from `docs/public/llms-full.txt`, which
 `gen-llms-txt.mjs` builds from `docs/src/data/components.ts` plus the metadata files —
 not from `libs/spec/src/index.ts`. ADR-0097 named ADR-0083 as superseded but did not
 correct this record; the 2026-09-10 spec-format review
-(`tasks/spec-format-review-2026-09-10.md`) found the stale sentence, and this paragraph
+(`tasks/archive/reviews/spec-format-review-2026-09-10.md`) found the stale sentence, and this paragraph
 closes it.

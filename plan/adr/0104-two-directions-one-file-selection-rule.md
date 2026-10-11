@@ -85,7 +85,7 @@ that: `check-parity.js` is deliberately fully offline (ADR-0024), and the only p
 that knows anything about Figma's timeline is `tools/figma/snapshot.json`'s
 `meta.figmaLastModified`, populated by a live bridge call in `figma-snapshot.mjs`
 (currently `null` there — a separate, already-open gap, see ADR-0019/ADR-0034's
-promotion notes and `tasks/review-state-2026-08-26.md`).
+promotion notes and `tasks/archive/reviews/review-state-2026-08-26.md`).
 
 `parity-record.mjs` now copies that same field through onto each record it writes,
 verbatim, `null` included. This costs nothing extra: the snapshot file is already

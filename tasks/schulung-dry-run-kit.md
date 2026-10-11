@@ -8,7 +8,7 @@ instead of an improvisation. Everything the curriculum _teaches_ lives at
 What it adds: the checklist of things that must **happen**, each with what
 "worked" looks like, where a green result actually means failure, the points
 where the run must stop and write something down, and a place to log the
-result in the same shape as `tasks/schulung-review-2026-08-28.md`,
+result in the same shape as `tasks/archive/reviews/schulung-review-2026-08-28.md`,
 `-09-02.md` and `-09-05.md`.
 
 **Who this is for:** one person, alone, timing themselves, on a machine that
@@ -439,7 +439,7 @@ before publishing it, not inferred from source alone:
   named throughout Block 03/Erfolgs-Verifizierung actually resolves (Angular
   and Vue carry the identical target name per each `project.json`, not
   re-run individually).
-- The six-gate spec-placement table (§4, Block 02) is `tasks/schulung-review-2026-09-05.md`'s
+- The six-gate spec-placement table (§4, Block 02) is `tasks/archive/reviews/schulung-review-2026-09-05.md`'s
   own reproduction against the real gate chain, re-checked here only for
   whether any of the six gate names moved in today's two gate-renaming
   commits (`ba5e29d`, `3b2b8e3`) — they did not; the renames touched

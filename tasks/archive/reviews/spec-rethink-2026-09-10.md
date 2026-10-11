@@ -1,6 +1,6 @@
 # The spec layer, rethought from the tools up — 2026-09-10
 
-_Third document of the day. The review (`tasks/spec-format-review-2026-09-10.md`) measured
+_Third document of the day. The review (`tasks/archive/reviews/spec-format-review-2026-09-10.md`) measured
 the current spec; the plan (`tasks/spec-workflow-plan-2026-09-10.md`) proposed a
 contract-document workflow on top of it. This one does what the owner asked next: ignore
 the current spec layer entirely, inventory what figma-console-mcp 1.40 and Storybook 10.6

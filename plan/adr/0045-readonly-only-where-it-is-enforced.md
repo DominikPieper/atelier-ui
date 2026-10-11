@@ -2,7 +2,7 @@
 status: accepted
 date: 2026-08-26
 sources:
-  - tasks/design-findings-2026-08-26.md (Decision C)
+  - tasks/archive/reviews/design-findings-2026-08-26.md (Decision C)
   - libs/spec/src/index.ts (AtlFormFieldSpec → AtlReadonlySpec)
 ---
 

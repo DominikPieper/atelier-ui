@@ -2,8 +2,8 @@
 status: accepted
 date: 2026-09-09
 sources:
-  - tasks/schulung-content-review-2026-09-08.md (§ Gegenprobe — Codex, 2026-09-09, finding G1)
-  - tasks/schulung-review-2026-09-05.md (§ B1, the gate reproduction table)
+  - tasks/archive/reviews/schulung-content-review-2026-09-08.md (§ Gegenprobe — Codex, 2026-09-09, finding G1)
+  - tasks/archive/reviews/schulung-review-2026-09-05.md (§ B1, the gate reproduction table)
   - skills/design-to-code/SKILL.md
   - skills/design-to-code/references/handoff-document.md
   - docs/src/pages/schulung.astro (Tag 2, Block 02)
@@ -36,7 +36,7 @@ and each instruction was correct only in its own context:
 
 Neither sentence was wrong. The skill had no branch, so it stated only the repo answer;
 the curriculum, aware of the collision, worked around the skill with a standalone
-instruction rather than fixing the skill. `tasks/schulung-review-2026-09-05.md`'s §B1
+instruction rather than fixing the skill. `tasks/archive/reviews/schulung-review-2026-09-05.md`'s §B1
 reproduction measured the cost of getting the branch wrong in the workshop direction:
 a single-framework addition already trips `check:sync`, `check:a11y-parity` and
 `check:design-status` (three reds, expected, no fault of the participant's work); adding

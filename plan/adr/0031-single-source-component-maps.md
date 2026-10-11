@@ -2,7 +2,7 @@
 status: accepted
 date: 2026-07-22
 sources:
-  - tasks/figma-audit-2026-07-22.md follow-ups / repo-health sweep 2026-07-21
+  - tasks/archive/reviews/figma-audit-2026-07-22.md follow-ups / repo-health sweep 2026-07-21
 ---
 
 # Single-source component maps in the metadata registry

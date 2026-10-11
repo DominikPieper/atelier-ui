@@ -657,7 +657,7 @@ Tokens` has `spacing/s1…s16`, `Library Tokens` has `spacing/1…16` — identi
       decides what to add — `check:figma`'s variant-matrix completeness passes today, which
       suggests the metadata `variantMatrix` does not claim the full cross-product either.
 - [ ] **All design findings from the first two artboards live in
-      `tasks/design-findings-2026-08-26.md`** — grouped by decision rather than listed,
+      `tasks/archive/reviews/design-findings-2026-08-26.md`** — grouped by decision rather than listed,
       because most are one choice each. Four decisions (the size system's stated-vs-rendered
       heights, the missing `box-sizing` reset, states that exist in only one place, literals
       that cannot be bound in Figma) plus one finding that overrides them:
@@ -676,7 +676,7 @@ Tokens` has `spacing/s1…s16`, `Library Tokens` has `spacing/1…16` — identi
       AtlTabGroup declaring a `loading` no framework renders.
 - [ ] **Both component artboards need a correction pass** for the two claims above (the
       "code-only props" labels and AtlButton's "half a matrix" note). Listed at the end of
-      `tasks/design-findings-2026-08-26.md`.
+      `tasks/archive/reviews/design-findings-2026-08-26.md`.
 - [x] ~~Migrate the remaining controls onto `--ui-control-height-*`~~ — done, and the
       answer turned out to be two ladders rather than one (ADR-0052, 2026-08-27). Select,
       textarea, combobox and the code-block header are controls and take ADR-0041's recipe.

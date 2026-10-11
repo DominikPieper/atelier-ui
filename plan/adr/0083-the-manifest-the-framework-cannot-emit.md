@@ -3,7 +3,7 @@ status: superseded
 superseded-by: plan/adr/0097-the-manifest-the-framework-can-emit-now.md
 date: 2026-08-29
 sources:
-  - tasks/schulung-review-2026-08-28.md (B2, and the workerd reproduction that found the deeper defect)
+  - tasks/archive/reviews/schulung-review-2026-08-28.md (B2, and the workerd reproduction that found the deeper defect)
   - worker/mcp.ts (the fix and its inline rationale)
   - plan/adr/0080-a-guard-that-skips-is-not-a-check.md (the preflight half of B2 follows its lesson)
   - CLAUDE.md (the hosted-surface table this changes, and the manual fallback this automates)

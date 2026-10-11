@@ -1,0 +1,226 @@
+# Review tracker
+
+Single place for every open review finding. New findings from any review (course, docs, library, gates, a11y) are added here as new `R-NNN` items, not in new review files; a finished item is ticked here and left in place.
+Built 2026-10-11 from the triage of every open review finding against ADR-0165 (CDS as workshop target) and the 2026-10-10 rewrite; method, source tables and per-row reasons are in [tasks/archive/review-triage-2026-10-11.md](archive/review-triage-2026-10-11.md).
+Only findings that still make sense are here, deduplicated across `tasks/todo.md` and the review documents; every item lists all its sources. Source line numbers are as of 2026-10-11 and will drift.
+`## Owner decisions` holds findings the triage could not judge without you (UNCLEAR), phrased as questions. The area sections hold KEEP items, most important first (blocks the course or misinforms participants).
+`## Until P6 (Atelier library)` holds findings that matter only while Atelier's own library still serves the course; at P6 they close with `libs/*`. `## Closed by this triage` counts what was dropped and why.
+
+## Owner decisions
+
+Every item the triage could not judge without you. Each is a question; answering moves it into a section below or closes it.
+
+- [ ] **R-001** Does the CDS scaffold keep the contract Docs tab (`docs-block.ts`)? — it lives only in `libs/spec`, goes at P6; scaffold ships none, `[CONTRACT-IMPORT]` only warns. Sources: `tasks/todo.md:1429` (2026-09-11)
+- [ ] **R-002** Does the CDS scaffold ship an example `*.contract.ts` for participants? — unverified whether it does; covered by the P5 swap or not. Sources: `tasks/archive/reviews/spec-format-review-2026-09-10.md:190` (2026-09-10)
+- [ ] **R-003** Is `tools/e2e/schulung-claims.e2e.mjs` still the claim checker for the new /schulung? — if yes, run it once on a clean tree. Sources: `tasks/todo.md:1474`, `tasks/todo.md:1491` (2026-09-10)
+- [ ] **R-004** Are Schulung M4-M6 (clone-first kata prompt, Block 05 exercise page, 440x snippet) still wanted? — agenda rewritten (8e73c581), kata replaced by P4. Sources: `tasks/todo.md:1846` (2026-09)
+- [ ] **R-005** Do `solved-*` recovery branches make sense for scaffold-based participants? — none exist; overlaps S12 (verdicts differ: UNCLEAR vs DONE). Sources: `tasks/archive/reviews/schulung-content-review-2026-09-08.md:344`, `tasks/archive/reviews/schulung-review-2026-09-02.md:67`, `tasks/schulung-dry-run-kit.md:94-103`, `tasks/todo.md:1848`, `tasks/todo.md:93` (2026-09-02)
+- [ ] **R-006** Invest more in the artboard-bridge publish path? — Claude Design is now an optional trainer appendix; write path unexercised. Sources: `tasks/todo.md:1632` (2026-09-08)
+- [ ] **R-007** Do you want real-browser a11y probes (tab order, native AX tree) for CDS/scaffold? — axe in check:stories (ADR-0122) covers part. Sources: `tasks/todo.md:1758` (2026-09-06)
+- [ ] **R-008** P6 deprecation of `@atelier-ui/*`: minimal policy/ADR, or just `npm deprecate`? — no policy, no `@deprecated`, no codemod today. Sources: `tasks/todo.md:2167` (2026-10-09)
+- [ ] **R-009** Run the read-side A/B of the `- Code-only` description line (ADR-0161), or drop it? — needs a master to test on. Sources: `tasks/todo.md:2173` (2026-10-08)
+- [ ] **R-010** `figma_audit_component_accessibility` scores AtlDialog 100 unassessed: report upstream or document? — candidate home is /a11y-workflow. Sources: `tasks/todo.md:2204` (2026-10-08)
+- [ ] **R-011** Do the docs host and deploy workflow survive ADR-0165 (D12, D14)? — D15 (secrets/RCE defaults review) is independent and cheap. Sources: `tasks/todo.md:2920` (2026-07)
+- [ ] **R-012** Should the CDS repo get a shared gate substrate (exemption store, severity harness)? — Atelier's 3-11 copies die at P6. Sources: `tasks/archive/reviews/gate-review-2026-08-29.md:19-37` (2026-08-29)
+- [ ] **R-013** Adopt any portable gate rules (#4-12) into the CDS repo or scaffold? — else they die with Atelier at P6. Sources: `tasks/archive/reviews/gate-review-2026-08-29.md:49-137` (2026-08-29)
+- [ ] **R-014** Should the course teach a parity audit against uianatomy on CDS components, on a cadence? — otherwise drop the 2-week re-run idea (cf. ADR-0167). Sources: `tasks/archive/reviews/uianatomy-review-2026-05-02.md:240-244` (2026-05-03)
+- [ ] **R-015** Name Code Connect in one line as the alternative to the contract? — no hit in docs/plan except the blueprint. Sources: `tasks/archive/reviews/content-review-2026-10-10.md:257-260` (2026-10-10)
+- [ ] **R-017** Still wanted: Done blocks linking briefs, inert CodeBlock `prompt` prop, truncated sentence? — D5 targets Atelier prompts. Sources: `tasks/archive/reviews/schulung-content-review-2026-09-08.md:408-410` (2026-09-08)
+- [ ] **R-018** Is `talk/storybook-mcp-talk.md` part of the course? — it is anchored to Storybook 9 and does not split hosted vs local. Sources: `tasks/archive/reviews/schulung-content-review-2026-09-08.md:497` (2026-09-08)
+- [ ] **R-019** Link `plan/ai-readiness.md` from /readiness? — currently linked from nowhere a participant reaches. Sources: `tasks/archive/reviews/schulung-content-review-2026-09-08.md:501` (2026-09-08)
+- [ ] **R-025** Fix AGENTS.md "29 tools" for uianatomy (reviewer counted 20 live)? — `AGENTS.md:64` still says 29; live count not re-measured. Sources: `tasks/archive/reviews/review-plausibility-2026-09-08.md:60` (2026-09-08)
+- [ ] **R-030** Re-run a docs critique after the P5 swap instead of working the 15 pass-through polish items? — never verified, four months old. Sources: `tasks/archive/reviews/review-docs-site-2026-06-12.md:78-88` (2026-06-12)
+- [ ] **R-032** Keep any of the docs idea backlog (feedback widget, token playground, changelog)? — "Edit this page" shipped; the rest are ideas. Sources: `tasks/archive/reviews/review-docs-ux-2026-06-12.md:98-100` (2026-06-12)
+- [ ] **R-033** Need a snapshot-freshness policy or roster meta-gate before P6? — `figmaLastModified` is populated, no age gate or reconciler found. Sources: `tasks/archive/reviews/review-state-2026-08-26.md:30-31` (2026-08-26)
+- [ ] **R-034** Should the scaffold `cli-e2e` assert that it builds and renders a component? — e2e needs network and has not been run (todo.md:105). Sources: `tasks/archive/reviews/review-state-2026-08-26.md:39` (2026-08-26)
+- [ ] **R-035** Does a CDS participant have a Figma DS (is the `figma_ds_*` extract chain in the course)? — only matters for teams without one. Sources: `plan/research/ai-ds-course-gap-2026-10-08/triage.md` B1 (2026-10-08)
+- [ ] **R-036** Is rebrand / dark-mode theme orchestration on the curriculum at all? — L effort, native part off-topic. Sources: `plan/research/ai-ds-course-gap-2026-10-08/triage.md` C10 (2026-10-08)
+
+## Course and dry run
+
+- [ ] **R-037** Dry-run kit follows the old Day 1 blocks (02-05, no kata row, old cut list) — update before the first rehearsal, else the run is wasted. Sources: `tasks/schulung-dry-run-kit.md:3,43-81`, `tasks/schulung-dry-run-kit.md:148-153`, `tasks/schulung-dry-run-kit.md:155-156`, `tasks/schulung-dry-run-kit.md:158-190`, `tasks/schulung-dry-run-kit.md:192-196` (2026-09-10)
+- [ ] **R-038** Dry-run kit follows the clone-era Day 2 (ports 440x, 3 red gates, 7-item verify) — scaffold is canonical (ADR-0137), 8 verify items. Sources: `tasks/schulung-dry-run-kit.md:198-202`, `tasks/schulung-dry-run-kit.md:204-250`, `tasks/schulung-dry-run-kit.md:252-311`, `tasks/schulung-dry-run-kit.md:312-355`, `tasks/schulung-dry-run-kit.md:357-377`, `tasks/schulung-dry-run-kit.md:379-396`, `tasks/schulung-dry-run-kit.md:398`, `tasks/schulung-dry-run-kit.md:400-403`, `tasks/schulung-dry-run-kit.md:117-128` (2026-09-10)
+- [ ] **R-039** Dry-run kit cites root `schulung-2tage-agenda.md`, German quotes and no done-when per block — decide the root file's fate, then retarget. Sources: `tasks/schulung-dry-run-kit.md:5-8,35-40`, `tasks/schulung-dry-run-kit.md:23-32`, `tasks/schulung-dry-run-kit.md:36,141` (2026-09-10)
+- [ ] **R-040** One timed rehearsal of the participant path on a non-author machine, timeboxes are estimates — best after P3/P4. Sources: `tasks/todo.md:1796`, `tasks/archive/reviews/content-review-2026-10-10.md:64,74,77,304` (2026-09-06)
+- [ ] **R-041** Agenda gaps: glossary and guardrail demo not wired in, prompt rubric not linked, no red-setup rescue — pieces exist, D1 Block 00 links only the overview. Sources: `tasks/todo.md:85`, `tasks/archive/reviews/content-review-2026-10-10.md:244-250`, `tasks/todo.md:84-94` (2026-10-10)
+- [ ] **R-042** S12: recovery path per tutorial/kata step and compose-to-build bridge exercise — not built; write it against the CDS kata. Sources: `tasks/todo.md:93`, `tasks/archive/reviews/content-review-2026-10-10.md:179-182` (2026-10-10)
+- [ ] **R-043** `storybook#write-a-story` example and packed-tarball e2e never run in a generated workspace — participant instructions unverified. Sources: `tasks/todo.md:88`, `tasks/todo.md:104` (2026-10-10)
+- [ ] **R-044** Pre-workshop mail / setup PDF, lecture deck, printable brief PDF do not exist — needed before cohort 1. Sources: `tasks/archive/reviews/schulung-content-review-2026-09-08.md:344` (2026-09-08)
+- [ ] **R-045** Briefs "Done when" says parity "report mode"; 3 of 8 items unreachable in the Figma block — split the bars. Sources: `tasks/archive/reviews/schulung-content-review-2026-09-08.md:199` (2026-09-08)
+- [ ] **R-046** Day 1 Block 04 (Storybook/MCP) still has 8 bullets incl. release trivia — trim to "a story is a claim". Sources: `tasks/archive/reviews/content-review-2026-10-10.md:66-67` (2026-10-10)
+- [ ] **R-047** Sparse-vs-complete `codeSpec` call never run live (Day 2 Block 04) — claim read from schema, never observed with the Bridge. Sources: `tasks/archive/reviews/schulung-review-2026-09-05.md:101` (2026-09-05)
+- [ ] **R-048** No "how to ask Claude when stuck"; no OS, cost, privacy, LICENSE notice for participants — privacy wording: internal DSB (datenschutz@conciso.de). Sources: `tasks/archive/reviews/schulung-review-2026-09-02.md:98-101` (2026-09-02)
+- [ ] **R-049** Trainer kit incomplete: provisioning, run-of-show, demo scripts, cheat sheet, feedback form, retro — only golden prompts and dry-run kit exist. Sources: `tasks/archive/reviews/schulung-review-2026-09-02.md:122-160` (2026-09-02)
+- [ ] **R-050** Automated parity pass validates only the resting state — decide whether an interactive pass joins the verify loop and teach the limit. Sources: `tasks/todo.md:2884`, `tasks/archive/reviews/figma-parity-sweep-2026-09-07.md:242` (2026-09-07)
+- [ ] **R-051** Walk through the course-gap triage (A/B/C/X) — pointer only; status lives in the triage file. Sources: `tasks/todo.md:2099` (2026-10-08)
+- [ ] **R-052** Verify Figma export from claude.ai/design (10-minute spike) — backs ADR-0032 tradeoff and /claude-design copy; low priority. Sources: `tasks/todo.md:2801` (2026-09)
+
+## Docs
+
+- [ ] **R-053** `claude-design.astro` says `check:parity` runs in check:all, but only `check:parity:report` does — false claim in front of participants. Sources: `tasks/archive/reviews/review-plausibility-2026-09-08.md:21`, `docs/src/pages/claude-design.astro:714-718` (2026-09-08)
+- [ ] **R-054** MCP playground teaches non-existent tools and POSTs them to the live endpoint — `McpExplorer.tsx:58,347` on a page that stays. Sources: `tasks/archive/reviews/review-plausibility-2026-09-08.md:23` (2026-09-08)
+- [ ] **R-055** `claude-md.astro` says token names match Figma "1-to-1" (3 blocks), hand-typed — overclaim. Sources: `tasks/archive/reviews/schulung-content-review-2026-09-08.md:493` (2026-09-08)
+- [ ] **R-056** design-principles says "hallucination risk near zero" and "enums compile away" unsourced — still at `design-principles.astro:83,157`. Sources: `tasks/archive/reviews/schulung-content-review-2026-09-08.md:481-488` (2026-09-08)
+- [ ] **R-057** HelpFooter says "Fourteen failure modes", troubleshooting has 17 — derive the count. Sources: `tasks/archive/reviews/schulung-review-2026-09-05.md:140` (2026-09-05)
+- [ ] **R-058** `install.astro:515` hand-types "25+ components"; counts disagree across pages — only partly covered by check:component-count. Sources: `tasks/archive/reviews/review-plausibility-2026-09-08.md:20,24` (2026-09-08)
+- [ ] **R-059** `prompts.astro` says fetch llms-full.txt first, React tabs first; no paste fallback — Atelier-bound, retarget at P5. Sources: `tasks/archive/reviews/content-review-2026-10-10.md:208`, `tasks/archive/reviews/schulung-content-review-2026-09-08.md:405-411` (2026-09-08)
+- [ ] **R-060** "design principles" names four documents, none cross-linked; two share a name — rename or link. Sources: `tasks/archive/reviews/content-review-2026-10-10.md:205`, `tasks/archive/reviews/schulung-content-review-2026-09-08.md:415` (2026-09-08)
+- [ ] **R-061** Troubleshooting lacks predicted failures (workspace trust, declined approval, `mcp add`) — Day 2 Block 02 omits the page. Sources: `tasks/archive/reviews/schulung-review-2026-09-02.md:67`, `tasks/archive/reviews/schulung-content-review-2026-09-08.md:365-370` (2026-09-02)
+- [ ] **R-062** `index.astro` never mentions `/schulung` — front page does not point to the course. Sources: `tasks/archive/reviews/schulung-content-review-2026-09-08.md:380` (2026-09-08)
+- [ ] **R-063** Never defined: design token, spec layer, "drift" — `glossary.ts` has MCP, LLM, agent, subagent, eval, boundVariables only. Sources: `tasks/archive/reviews/schulung-content-review-2026-09-08.md:451` (2026-09-08)
+- [ ] **R-064** No path for a Figma file without Variables (the common legacy case); agent confidently wrong, cost — check /readiness. Sources: `tasks/archive/reviews/schulung-content-review-2026-09-08.md:460` (2026-09-08)
+- [ ] **R-065** `/tokens` value catalogue stays visible until the CDS swap decides — hide it if participants stop using Atelier tokens. Sources: `tasks/todo.md:91` (2026-10-10)
+- [ ] **R-066** `figma-workspace-architect.astro:388`: `{expr}` never evaluated in a quoted style attribute — trainer page, cheap fix. Sources: `tasks/todo.md:754`, `tasks/archive/reviews/review-plausibility-2026-09-08.md:33` (2026-09-08)
+- [ ] **R-067** Knockout story told three times (`tokens.astro:714`, `design-principles.astro:601`, readiness) — low priority. Sources: `tasks/archive/reviews/content-review-2026-10-10.md:139-145` (2026-10-10)
+- [ ] **R-068** `McpExplorer` hardcodes `#34d399`, low contrast in terminal mock — measure ratios first. Sources: `tasks/archive/reviews/review-plausibility-2026-09-08.md:35` (2026-09-08)
+- [ ] **R-069** FwSwitcher tabs lack `aria-selected`; Jargon focusable with no activation — low. Sources: `tasks/archive/reviews/review-plausibility-2026-09-08.md:38` (2026-09-08)
+- [ ] **R-070** Docs chips (status badge, category/fw tag, prop default) below AA — verify with an axe run on docs; `global.css:1072` likely fixed. Sources: `tasks/archive/reviews/a11y-audit-2026-04-26-after.md:258` (2026-04-26)
+- [ ] **R-071** 16 horizontal-overflow page/width combos (`.docs-props-table` 849px min-content) — P5 changes content, not layout. Sources: `tasks/todo.md:2941` (2026-09)
+- [ ] **R-072** Social cards render Noto Sans; docs build fetches api.fontsource.org — `og/[...slug].ts:27,33` still `Inter` without `fonts:`. Sources: `tasks/todo.md:2761` (2026-09-07)
+- [ ] **R-073** Placeholder inline-SVG mockups instead of real captures; retired `#00BEBE` in `figma.astro:733` — replace once CDS screens exist. Sources: `tasks/todo.md:2792`, `tasks/archive/reviews/schulung-review-2026-08-28.md:193` (2026-08-28)
+- [ ] **R-074** `claude-design.astro` hand-types "twenty-four tags", "17/13 ADRs" — derive like `gate-count.ts`; page stays as trainer appendix. Sources: `tasks/todo.md:1924`, `tasks/archive/reviews/schulung-review-2026-09-02.md:55` (2026-09-02)
+- [ ] **R-075** Docs polish: no `color-scheme: dark`, media-keyed `theme-color`, two fw controls — `BaseLayout.astro:243-250`. Sources: `tasks/archive/reviews/docs-ux-review-2026-09-02.md:51-65` (2026-09-02)
+- [ ] **R-076** Docs polish: hero pill wrap at 375px, unrendered weights 800/900, focus-ring seam, storage keys — `global.css:90,2499`. Sources: `tasks/archive/reviews/docs-ux-review-2026-09-02.md:60-65` (2026-09-02)
+- [ ] **R-077** Docs polish: ~220 inline font-size literals, hover-card stacking context, dead `.docs-quicknav` CSS — `global.css:2586` has no template use. Sources: `tasks/archive/reviews/docs-ux-review-2026-09-02.md:63,141-153` (2026-09-02)
+- [ ] **R-078** Briefs README hand-types "116-117 days stale"; `artboards.json` holds project ids — low. Sources: `tasks/archive/reviews/schulung-review-2026-09-02.md:82-83` (2026-09-02)
+- [ ] **R-079** ADR-0115 axis 2 names gates that do not exist — needs a dated "Corrected" paragraph per ADR rules. Sources: `tasks/todo.md:2160` (2026-10-09)
+- [ ] **R-080** Add Story UI (Southleft) hint to /storybook — one line; optional. Sources: `plan/research/ai-ds-course-gap-2026-10-08/triage.md` C1 (2026-10-08)
+- [ ] **R-081** Add a paragraph contrasting a company-docs MCP with our own Storybook-manifest MCP in `mcp#own-mcp` — optional. Sources: `plan/research/ai-ds-course-gap-2026-10-08/triage.md` C2 (2026-10-08)
+- [ ] **R-082** Build pages from DS instances in Figma — transfers to any DS; low priority, after the CDS swap. Sources: `plan/research/ai-ds-course-gap-2026-10-08/triage.md` C7 (2026-10-08)
+- [ ] **R-083** Why layer naming matters for AI: one sentence in Day 2 Block 01 — /readiness may already cover part. Sources: `plan/research/ai-ds-course-gap-2026-10-08/triage.md` C9, `tasks/archive/reviews/content-review-2026-10-10.md:265-267` (2026-10-08)
+- [ ] **R-084** Project SPEC and phase rules: 5 min in closing block or `claude-md` — first clarify what is new vs `AGENTS.md`. Sources: `plan/research/ai-ds-course-gap-2026-10-08/triage.md` C11, `tasks/archive/reviews/content-review-2026-10-10.md:265-267` (2026-10-08)
+- [ ] **R-085** Gap analysis against other design systems via uianatomy — short paragraph in the uianatomy section (ADR-0167 ships the skill). Sources: `plan/research/ai-ds-course-gap-2026-10-08/triage.md` C12 (2026-10-08)
+- [ ] **R-021** Docs still call Figma and CSS token names "identical" although the mapping is `color/primary` → `--ui-color-primary` (which `figma.astro:139-140` now states correctly). Still wrong at `docs/src/data/glossary.ts:28` ("identical to the CSS custom property … no translation needed"), `docs/src/pages/first-component.astro:68` (kata prompt: "they're identical to the Figma variables", sent to the agent), `docs/src/pages/tutorial.astro:648` ("identical to the CSS custom property name"). Also `claude-design.astro:575` "Every gate in `check:all` is keyed on one of exactly four identities" while `check:adr-refs` and others are in the chain (`package.json:56`). Fix: say "maps by rule" and soften the gate claim. Sources: `tasks/archive/reviews/review-plausibility-2026-09-08.md:27` (2026-09-08); re-checked 2026-10-11
+- [ ] **R-022** Docs heading scale has two definitions: `docs/src/styles/global.css:657-664` sets `.docs-section-title` to `--ui-font-size-2xl`/700, `docs/src/components/SectionHead.astro:74-80` overrides the same class with `clamp(1.5rem, 2.5vw, 2rem)`/800 on every page that uses SectionHead. Pick one (or make SectionHead use `--editorial`, `global.css:666`). The forced-colors focus ring and the callout copies named in the source were not reproduced. Sources: `tasks/archive/reviews/review-plausibility-2026-09-08.md:36-39` (2026-09-08); re-checked 2026-10-11
+- [ ] **R-023** Kata page contradicts its own target: text and prompt say surface-raised with `--ui-spacing-6`/`--ui-spacing-4` (`docs/src/pages/first-component.astro:144-145,319-321`), the mock card renders plain `--ui-color-surface`, `padding: 1.25rem` (spacing 5) and `gap: 0.75rem` (spacing 3) at `first-component.astro:528-540`. Align the mock CSS to the written contract. Sources: `tasks/archive/reviews/review-plausibility-2026-09-08.md:41` (2026-09-08); re-checked 2026-10-11
+- [ ] **R-027** Preflight mock in `workshop.astro` is hand-edited, not captured: it shows `Port 4200` / `Port 6006` and no Playwright row (`docs/src/pages/workshop.astro:383-384`), but the scaffold template prints `Port <n> (<label>)` and `Playwright Chromium — installed` (`libs/create-workspace/src/generators/preset/files/tools/scripts/preflight.mjs:708,727`), which the page's own text announces at `workshop.astro:311-312`. Capture a real `npm run preflight` from a scaffolded workspace and replace the mock (success and failed panels). Sources: `tasks/archive/reviews/schulung-review-2026-08-28.md:194` (2026-08-28); re-checked 2026-10-11
+- [ ] **R-031** Nav label drift is down to one: topbar and sidebar say "MCP playground" (`docs/src/layouts/BaseLayout.astro:383,600`), the mobile bottom nav says "MCP" (`:874`); Storybook and "Figma workflow" now match in all three. Align `:874` or accept the short mobile label. Sources: `tasks/archive/reviews/review-docs-ux-2026-06-12.md:57-58` (2026-06-12); re-checked 2026-10-11
+
+## Scaffold
+
+- [ ] **R-086** `installSkills()` Windows path unverified — participants may be on Windows; run once or scope out. Sources: `tasks/todo.md:2020` (2026-09-10)
+- [ ] **R-087** Scaffold `figma:snapshot` has a `<YOUR_FIGMA_FILE_KEY>` placeholder; add a `figmaFile` option — participants need their file key. Sources: `tasks/todo.md:1442` (2026-09-11)
+- [ ] **R-088** preflight `portFree` binds 127.0.0.1 only and misses `[::1]` holders — `preflight.mjs:214`, also the scaffold copy. Sources: `tasks/archive/reviews/schulung-review-2026-09-02.md:75` (2026-09-02)
+- [ ] **R-089** Storybook telemetry not disabled in scaffold or repo — decision is not an engineering call: refer to internal DSB (datenschutz@conciso.de). Sources: `tasks/todo.md:2247`, `tasks/archive/reviews/storybook-review-2026-09-14.md:77` (2026-09-14)
+- [ ] **R-090** `addon-designs` missing from scaffold behind the `--figma` switch; no `parameters.design` story — `preset.ts:1265` says it is not used. Sources: `tasks/todo.md:2227`, `tasks/archive/reviews/storybook-review-2026-09-14.md:178` (2026-09-14)
+- [ ] **R-091** CSF factories become the Storybook 11 default; scaffold and curriculum teach CSF3 — spike plus ADR before next cohort. Sources: `tasks/todo.md:2222`, `tasks/archive/reviews/storybook-review-2026-09-14.md:121` (2026-09-14)
+- [ ] **R-092** Storybook onboarding-checklist widgets on by default in every scaffolded Storybook — one-line embrace/disable decision. Sources: `tasks/todo.md:2251`, `tasks/archive/reviews/storybook-review-2026-09-14.md:150` (2026-09-14)
+- [ ] **R-093** `docs.toc` and `experimentalSearchDocsHeadings` set in no scaffold template — cheap one-liners (verdicts differ: KEEP-UNTIL-P6 vs KEEP). Sources: `tasks/todo.md:2259`, `tasks/archive/reviews/storybook-review-2026-09-14.md:137-148` (2026-09-14)
+- [ ] **R-094** `uianatomy-mcp` skill lacks a spec-to-canon recipe and a deferred-tool loading note — scaffold ships it (ADR-0167); check upstream sync. Sources: `tasks/archive/reviews/uianatomy-review-2026-05-02.md:175-177` (2026-05-02)
+- [ ] **R-095** Nothing type-checks `.storybook/*` in a generated workspace — Angular half stays relevant. Sources: `tasks/todo.md:1088` (2026-09-12)
+- [ ] **R-096** Make stylelint a permanent assertion in the scaffold e2e? — no "stylelint" match in `cli.e2e.mjs`. Sources: `tasks/todo.md:1072` (2026-09-12)
+- [ ] **R-097** Scaffold stylelint config omits `componentRoot`/`allowlistsFile`; coupling unenforced — matters once CDS exemptions are added. Sources: `tasks/todo.md:1077` (2026-09-12)
+- [ ] **R-098** `@nx/devkit` hard dep of the preset pinned to the monorepo's nx (skew risk) — holds by discipline only. Sources: `tasks/todo.md:2932` (2026-09)
+- [ ] **R-099** `preset.ts` token-vendoring comment stale in one clause (~line 1248) — trivial; may change with P3 anyway. Sources: `tasks/todo.md:1828` (2026-09)
+
+## Contracts package and CDS move
+
+- [ ] **R-100** `check:contracts` vacuously green on the scaffold example; want a `--manifest` input — externals are skipped, real for the CDS-based scaffold. Sources: `tasks/todo.md:1415` (2026-09-11)
+- [ ] **R-101** `[DOCGEN-FAILED]` possibly load-flaky — test `check:contracts` under load; the flake would hit CDS CI too. Sources: `tasks/todo.md:1209` (2026-09-11)
+- [ ] **R-102** `findExternalPackageDir` misses `import * as UI` and aliased components — relevant for CDS imports. Sources: `tasks/todo.md:1435` (2026-09-11)
+- [ ] **R-103** `process.exit()` after big output may truncate on a pipe (not reproduced) — cheap one-off test; check-contracts ships in the package. Sources: `tasks/todo.md:1218` (2026-09-11)
+
+## Release and tooling
+
+- [ ] **R-104** Every release leaves a hand-formatted CHANGELOG reflow (llms.txt half is automated) — f1f8cfa7 hand-formatted it again. Sources: `tasks/todo.md:720` (2026-09-13)
+- [ ] **R-105** `publish.yml` `cancel-in-progress: false` lets a hung run block releases — pipeline stays for create-workspace (`publish.yml:41-43`). Sources: `tasks/todo.md:1461` (2026-09-11)
+- [ ] **R-106** `nx release --yes` commits and pushes before publish; a failed publish leaves git ahead — wants its own ADR. Sources: `tasks/todo.md:2342` (2026-09)
+- [ ] **R-107** `check:release-drift` advice treats local-behind-registry as a failed publish; no direction compare — `check-release-drift.mjs:427-431`. Sources: `tasks/todo.md:2896` (2026-09-07)
+- [ ] **R-108** Confirm the lockfile flavor: run `relock.sh` with Docker, close if the diff is empty — may be moot after 4240e376. Sources: `tasks/todo.md:2263` (2026-09)
+- [ ] **R-109** Dependency prune broke a dynamic reach (`@angular/animations`) with CI green, deploy red — add a docs-deploy smoke step. Sources: `tasks/archive/reviews/gate-review-2026-08-29.md:188` (2026-08-29)
+- [ ] **R-110** Regenerate-and-diff idiom x10; a typo'd flag mutates the repo — `sync-preflight.mjs:250`, `gen-scaffold-snapshot.mjs:67`, both survive P6. Sources: `tasks/todo.md:1131` (2026-09-11)
+- [ ] **R-111** `figma-console-mcp@latest` runs unpinned; detect the running version — pin gate ships to participants (19fa9b91). Sources: `tasks/todo.md:1876` (2026-09-10)
+- [ ] **R-112** Repo root lint covers only `package.json` — root files stay after P6; owner call still needed. Sources: `tasks/todo.md:966` (2026-09-12)
+- [ ] **R-113** npm wrapper costs ~34% of `check:all` (29 x 0.47 s); replace the && chain with one runner — low priority. Sources: `tasks/archive/reviews/gate-review-2026-08-29.md:229-247` (2026-08-29)
+- [ ] **R-114** Astro 7 batch and astro-6 independents (mdx 6, pagefind 2, llms-md 3) not done — docs app survives; low. Sources: `tasks/archive/reviews/review-state-2026-08-26.md:42,51` (2026-08-26)
+- [ ] **R-115** Broken-link checker advisory only (`throwError` false); `docs-old/` still present — trivial deletes. Sources: `tasks/archive/reviews/review-state-2026-08-26.md:46,50` (2026-08-26)
+- [ ] **R-116** Vendored storybookjs/mcp skills still instruct the deprecated `storybook ai` — owner said leave for now; check if scaffold ships them. Sources: `tasks/todo.md:2232`, `tasks/archive/reviews/storybook-review-2026-09-14.md:159` (2026-09-14)
+- [ ] **R-117** design-to-code eval iteration 2 (neutral run names, assertions, Build-from-handoff eval) — rerun after P5 rewrites its repo branch. Sources: `tasks/todo.md:1605` (2026-09-07)
+- [ ] **R-118** Description optimisation (`run_loop.py`) after owner reviews `trigger-eval.json` — owner review step. Sources: `tasks/todo.md:1608` (2026-09-07)
+- [ ] **R-119** `handoff-document.md` has no slot for Claude Design provenance (artboard-bridge Intake) — repo/trainer-only skill. Sources: `tasks/archive/reviews/schulung-content-review-2026-09-08.md:252` (2026-09-08)
+- [ ] **R-120** artboard-bridge: governance after `get_claude_design_prompt`; "confirms it is theirs" bypass — `SKILL.md:48-51,183`, matters for client DS. Sources: `tasks/archive/reviews/review-plausibility-2026-09-08.md:52-53` (2026-09-08)
+- [ ] **R-121** artboard-bridge: publish etag window; `needs_project_grant` blamed on the wrong tool — `SKILL.md:199` still says `finalize_plan`. Sources: `tasks/archive/reviews/review-plausibility-2026-09-08.md:54-55` (2026-09-08)
+- [ ] **R-122** `skills/README.md` stale (2 of 4 skills, old versions); tests README schema — low. Sources: `tasks/archive/reviews/review-plausibility-2026-09-08.md:56-58` (2026-09-08)
+- [ ] **R-123** Skill descriptions exceed 1024 chars, no length check — architect 1404, artboard-bridge 1494, design-to-code 1060. Sources: `tasks/archive/reviews/review-plausibility-2026-09-08.md:57` (2026-09-08)
+- [ ] **R-124** `design-to-code` never mentions artboard-bridge — low. Sources: `tasks/archive/reviews/review-plausibility-2026-09-08.md:59` (2026-09-08)
+- [ ] **R-125** Maintenance recipes for large libraries as a skill section — belongs in `figma-workspace-architect` (effort S). Sources: `plan/research/ai-ds-course-gap-2026-10-08/triage.md` C8 (2026-10-08)
+
+## Gates and Storybook
+
+- [ ] **R-126** Stories are load-bearing but 62 of 68 `play` files carry no assertion — re-measure; affects CDS stories and scaffold loop. Sources: `tasks/archive/reviews/spec-rethink-2026-09-10.md:333` (2026-09-10)
+- [ ] **R-127** `check:component-count`/`check:docs` allowlists key on exact adjacent lines — `allowlists.js:155-160,1213`, fragile on every reflow. Sources: `tasks/todo.md:759` (2026-10-01)
+- [ ] **R-128** check-docs-sync holes: no DEAD-ALLOWLIST, unchecked parseSpec diagnostics, node-id regex — docs-sync survives P6. Sources: `tasks/todo.md:1160` (2026-09-11)
+- [ ] **R-129** No typeface gate reaches `docs/` (41 bare `font-family: monospace`) — `check-typeface.js` scans `libs/` only. Sources: `tasks/todo.md:2841` (2026-09-07)
+- [ ] **R-130** Storybook gaps: MDX authoring, `storySort`, `stories-changed`, `review-create` never exercised — `/storybook` covers write-a-story only. Sources: `tasks/archive/reviews/storybook-review-2026-09-14.md:206` (2026-09-14)
+
+## Until P6 (Atelier library)
+
+Matters only if the course or a published package still runs on the Atelier library before P6 removes it. Each item says what before P6 needs it.
+
+- [ ] **R-131** AtlProgress `aria-progressbar-name` waived in all libs — before P6: only if docs demos or the course still show AtlProgress; owner: later. Sources: `tasks/todo.md:68`, `tasks/todo.md:1280` (2026-09-10)
+- [ ] **R-132** Docs-review backlog L1-L4 + CodeBlock scroller (Select label, hit area, Tabs pills, scroll focus) — before P6: docs demos use Atl until P5. Sources: `tasks/todo.md:1711-1722`, `tasks/archive/reviews/docs-ux-review-2026-09-02.md:67-74` (2026-09)
+- [ ] **R-133** AtlRadioGroup has no accessible-name mechanism — before P6: real a11y gap while the course uses Atl; check the CDS radio group. Sources: `tasks/todo.md:926` (2026-09-12)
+- [ ] **R-134** Danger button has no visible focus ring (WCAG 2.4.7) — before P6: real defect in Angular demos (`atl-button.css:91-96`). Sources: `tasks/todo.md:2108` (2026-10-09)
+- [ ] **R-135** AtlButton loading drops focus; metadata contradicts itself — before P6: fix or leave to the CDS button decision. Sources: `tasks/todo.md:2113` (2026-10-09)
+- [ ] **R-136** aria-required-children: AtlChat messages-list `role=list` holds non-list children (Angular x2) — before P6: only if the chat demo is shown. Sources: `tasks/todo.md:1287` (2026-09-10)
+- [ ] **R-137** axe `label` (table select checkboxes) and `label-title-only` (error inputs), Angular x9/x2 — before P6: while demos/Storybook use the lib. Sources: `tasks/todo.md:1295,1304` (2026-09-10)
+- [ ] **R-138** button-name: AtlSelect trigger and AtlTh sort button unnamed (Angular x12) — before P6: Angular-only bucket, demos. Sources: `tasks/todo.md:1314` (2026-09-10)
+- [ ] **R-139** listitem: `atl-breadcrumb-item` host wraps `li` (Angular x20) — before P6: ADR-0122 tally gap, demos. Sources: `tasks/todo.md:1321` (2026-09-10)
+- [ ] **R-140** Radio groups lay out as row in Angular/Vue, column in React (`atl-radio-group.css:23-27`) — before P6: affects Angular demos. Sources: `tasks/todo.md:1725` (2026-09)
+- [ ] **R-141** Three shared CSS defects (tbody empty cell font-size, tooltip nowrap, chat UA font) — before P6: Angular affected (`atl-table.css:247-251`). Sources: `tasks/todo.md:1738` (2026-08)
+- [ ] **R-142** `.atl-tr-select-cell` 44px wide, 12px content box for an 18px checkbox — before P6: affects Angular tables. Sources: `tasks/todo.md:1838` (2026)
+- [ ] **R-143** `.step-circle` and `.breadcrumb-current` not on `--ui-type-emphasis`; add live scenario — before P6: Angular affected. Sources: `tasks/todo.md:2185` (2026-10-09)
+- [ ] **R-144** Angular toast import snippet lists React symbols (`ComponentDetail.tsx:94`) — before P6: catalogue page until P5 retargets it. Sources: `tasks/archive/reviews/review-plausibility-2026-09-08.md:22` (2026-09-08)
+- [ ] **R-145** /accessibility claims outrun implementations (label slots, toast role, Toggle Enter) — before P6: wrong claim in front of participants until retargeted. Sources: `tasks/archive/reviews/review-plausibility-2026-09-08.md:40` (2026-09-08)
+- [ ] **R-146** `llms-full.txt` prop tables are React-shaped for every framework — before P6: Angular agents translate; replaced at P5. Sources: `tasks/todo.md:2152` (2026-10-09)
+- [ ] **R-147** Starter-frame Instructions text (node 703:333) overstates token/radii binding — before P6: only if a cohort runs on Workshop-Templates (verdicts differ: KEEP-UNTIL-P6 vs OBSOLETE-CDS). Sources: `tasks/todo.md:2667`, `tasks/archive/reviews/schulung-review-2026-08-28.md:176-186` (2026-08-28)
+- [ ] **R-148** `schulung.astro:301` says starter frames bind "UI Tokens" (collection is Library Tokens) — before P6: one-word fix while the Atelier file is the exercise. Sources: `tasks/archive/reviews/schulung-review-2026-09-02.md:61` (2026-09-02)
+- [ ] **R-149** `artboards.json` hand-maintained and drifted from the live Claude Design project (`:24`) — before P6: only while the artboard appendix runs on it. Sources: `tasks/todo.md:1642`, `tasks/archive/reviews/gate-review-2026-08-29.md:262` (2026-09-07)
+- [ ] **R-150** `/design-sync` manifest defects (phantom tokens, private `--docs-*` tokens) in the external project — before P6: trainer demo only; needs an authenticated claude-design session. Sources: `tasks/archive/reviews/gate-review-2026-08-29.md:264` (2026-08-29)
+- [ ] **R-151** `plan/figma.md` Variable Collections table still stale (`:86`) — before P6: only while plan/figma.md feeds prompt context. Sources: `tasks/todo.md:1701` (2026-09-07)
+- [ ] **R-152** Dark-mode axe via `storybookTest({initialGlobals})` and a `tags` coverage regulator — before P6: Atelier Storybooks only; CDS needs its own decision. Sources: `tasks/todo.md:2214`, `tasks/archive/reviews/storybook-review-2026-09-14.md:101`, `tasks/archive/reviews/storybook-review-2026-09-14.md:117` (2026-09-14)
+- [ ] **R-153** `storybook-version-lockstep` outlier is a majority vote, not anchored on `storybook` — before P6: while the 3 Storybooks exist. Sources: `tasks/todo.md:975` (2026-09-12)
+- [ ] **R-154** Exemption staleness checked in only 7 of 19 gates; belongs in a shared harness — before P6: only for surviving gates (docs-sync, skill-discovery, contracts). Sources: `tasks/todo.md:1126` (2026-09-11)
+- [ ] **R-155** Five smaller vacuous-green holes (component-count, skill-discovery, token-names, sync, ...) — surviving gates. Sources: `tasks/todo.md:1172` (2026-09-11)
+- [ ] **R-156** `check:stories` runs twice in CI; heavy jobs share one 60-minute job — before P6: moot once Storybooks go (`ci.yml:150-157`). Sources: `tasks/todo.md:1180` (2026-09-11)
+- [ ] **R-157** `gen-figma-library-tokens.mjs` header names the preset copy as source (`:3-4`) — before P6: trivial, tied to the Atelier Figma file. Sources: `tasks/todo.md:2156` (2026-10-09)
+
+## Closed by this triage
+
+Findings judged DONE, OBSOLETE-CDS, SUPERSEDED or DUPLICATE are not tracked here. Counts per source document:
+
+| Source document                                                       | DONE | OBSOLETE-CDS | SUPERSEDED | DUPLICATE |
+| --------------------------------------------------------------------- | ---: | -----------: | ---------: | --------: |
+| `tasks/archive/reviews/a11y-audit-2026-04-26-after.md`                |    0 |            1 |          0 |         0 |
+| `tasks/archive/reviews/a11y-audit-2026-04-26.md`                      |    1 |            0 |          0 |         0 |
+| `tasks/archive/reviews/angular-storybook-vitest-triage-2026-04-28.md` |    0 |            0 |          1 |         0 |
+| `tasks/archive/reviews/content-review-2026-10-10.md`                  |   19 |            0 |          0 |         5 |
+| `tasks/archive/reviews/design-findings-2026-08-26.md`                 |    3 |            2 |          0 |         0 |
+| `tasks/archive/reviews/divergence-triage-2026-10-08.md`               |    3 |            1 |          0 |         0 |
+| `tasks/archive/reviews/docs-ux-review-2026-09-02.md`                  |    1 |            0 |          0 |         1 |
+| `tasks/archive/reviews/figma-audit-2026-04-25.md`                     |    1 |            1 |          1 |         0 |
+| `tasks/archive/reviews/figma-audit-2026-07-22.md`                     |    3 |            1 |          0 |         0 |
+| `tasks/archive/reviews/figma-parity-sweep-2026-09-07.md`              |    1 |            2 |          0 |         0 |
+| `tasks/archive/reviews/figma-story-design-links-2026-04-28.md`        |    1 |            0 |          0 |         0 |
+| `tasks/archive/reviews/gate-review-2026-08-29.md`                     |    4 |            7 |          2 |         0 |
+| `tasks/archive/reviews/p8-schulungsmaterial-closure-2026-04-28.md`    |    1 |            0 |          0 |         0 |
+| `plan/research/ai-ds-course-gap-2026-10-08/triage.md`                 |    0 |            1 |          2 |         0 |
+| `tasks/archive/reviews/review-docs-site-2026-06-12.md`                |    4 |            0 |          0 |         0 |
+| `tasks/archive/reviews/review-docs-ux-2026-06-12.md`                  |    1 |            0 |          0 |         0 |
+| `tasks/archive/reviews/review-plausibility-2026-09-08.md`             |    3 |            1 |          1 |         0 |
+| `tasks/archive/reviews/review-state-2026-08-26.md`                    |    5 |            3 |          1 |         0 |
+| `tasks/archive/reviews/schulung-content-review-2026-09-08.md`         |    8 |            2 |          2 |         2 |
+| `tasks/schulung-dry-run-kit.md`                                       |    0 |            0 |          0 |         1 |
+| `tasks/archive/reviews/schulung-review-2026-08-28.md`                 |    3 |            2 |          1 |         0 |
+| `tasks/archive/reviews/schulung-review-2026-09-02.md`                 |    3 |            0 |          3 |         3 |
+| `tasks/archive/reviews/schulung-review-2026-09-05.md`                 |    2 |            0 |          1 |         0 |
+| `tasks/archive/reviews/spec-format-review-2026-09-10.md`              |    2 |            2 |          2 |         0 |
+| `tasks/archive/reviews/spec-rethink-2026-09-10.md`                    |    1 |            0 |          1 |         0 |
+| `tasks/archive/reviews/storybook-review-2026-09-14.md`                |    3 |            1 |          0 |         0 |
+| `tasks/todo.md`                                                       |   19 |           87 |         12 |         3 |
+| `tasks/archive/reviews/uianatomy-review-2026-05-02.md`                |    2 |            4 |          0 |         0 |
+| **Total**                                                             |   94 |          118 |         30 |        15 |
+
+Re-check 2026-10-11: 6 items closed, see archive.
+
+The per-row reasons and evidence for every closed finding are in [tasks/archive/review-triage-2026-10-11.md](archive/review-triage-2026-10-11.md).

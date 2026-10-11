@@ -13,7 +13,7 @@ sources:
   - plan/adr/0091-a-caption-two-adapters-shipped-and-the-contract-missed.md (deferred this gate explicitly)
   - plan/adr/0025-cross-framework-a11y-conformance.md (precedent: a new gate gets its own ADR)
   - plan/adr/0082-a-blocker-the-chain-cannot-clear.md (precedent: a finding that is real but not yet actionable warns instead of blocking)
-  - tasks/schulung-review-2026-09-02.md (B2, which asked for this gate)
+  - tasks/archive/reviews/schulung-review-2026-09-02.md (B2, which asked for this gate)
 ---
 
 # ADR-0093: The contract two adapters were never held to

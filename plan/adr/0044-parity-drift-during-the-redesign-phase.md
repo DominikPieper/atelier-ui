@@ -5,7 +5,7 @@ date: 2026-08-26
 sources:
   - plan/adr/0024-design-parity-persistence-gate.md (the gate this changes the semantics of)
   - plan/adr/0043-the-geometry-contract-ships-with-the-component.md (the change that forced the question)
-  - tasks/design-findings-2026-08-26.md ("Read this first: which direction is canonical")
+  - tasks/archive/reviews/design-findings-2026-08-26.md ("Read this first: which direction is canonical")
   - tasks/atelier-design-system-plan.md (Phase 3, the Figma transfer)
 ---
 

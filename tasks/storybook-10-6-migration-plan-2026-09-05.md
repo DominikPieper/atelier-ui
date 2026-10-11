@@ -1,6 +1,6 @@
 # Plan — Storybook 10.6 migration and dependency sweep
 
-**Date:** 2026-09-05 · **Basis:** `tasks/storybook-10-6-spike-2026-09-05.md` (the spike that measured this) · **Prior art:** `tasks/review-state-2026-08-26.md:97` already scoped the framework swap as "Effort: M, own PR, own ADR" · **Status: all five waves complete 2026-09-06** (`137042d`, `028099f`, `d19a2e3`, `63b6014`, `a1c30ec`, `979c1ec`) — not pushed. · **Working mode:** main branch, one commit per wave, every wave gated green before the next starts.
+**Date:** 2026-09-05 · **Basis:** `tasks/storybook-10-6-spike-2026-09-05.md` (the spike that measured this) · **Prior art:** `tasks/archive/reviews/review-state-2026-08-26.md:97` already scoped the framework swap as "Effort: M, own PR, own ADR" · **Status: all five waves complete 2026-09-06** (`137042d`, `028099f`, `d19a2e3`, `63b6014`, `a1c30ec`, `979c1ec`) — not pushed. · **Working mode:** main branch, one commit per wave, every wave gated green before the next starts.
 
 ## Decisions taken up front
 
@@ -23,7 +23,7 @@ The goal. Everything else follows from it.
 - [x] Add `@storybook/angular-vite@10.6.0`; remove `@analogjs/storybook-angular` (it is referenced only from `package.json` — verified by grep; `@analogjs/vite-plugin-angular` and `@analogjs/vitest-angular` stay, `libs/angular/src/test-setup.ts` needs them)
 - [x] `libs/angular/.storybook/main.ts`: `framework` → `@storybook/angular-vite`, add `experimentalDocgenServer: true`, delete the `atelier:stub-deprecated-angular-animations` plugin and its comment block
 - [x] `libs/vue/.storybook/main.ts`: add `experimentalDocgenServer: true` (not defaulted until Storybook 11)
-- [x] Check whether `@angular-devkit/build-angular` and `@angular/platform-browser-dynamic` actually leave the tree. `review-state-2026-08-26.md:97` predicts both do; `npm ls` currently shows build-angular pulled by `@nx/angular` and `@analogjs/vite-plugin-angular` as well, and platform-browser-dynamic is a **direct** dependency. Verify rather than assume, and adjust `package.json` to match reality.
+- [x] Check whether `@angular-devkit/build-angular` and `@angular/platform-browser-dynamic` actually leave the tree. `archive/reviews/review-state-2026-08-26.md:97` predicts both do; `npm ls` currently shows build-angular pulled by `@nx/angular` and `@analogjs/vite-plugin-angular` as well, and platform-browser-dynamic is a **direct** dependency. Verify rather than assume, and adjust `package.json` to match reality.
 
 **Gate:** `npm run check:all` exit 0 · `nx build-storybook angular|react|vue` exit 0 each · `dist/storybook/{angular,vue}/manifests/components.json` present with `meta.docgen` of `angular-component-meta` / `vue-component-meta` · `nx test angular|react|vue` exit 0 · a live MCP `docs-show` on 4400 and 4402 returning framework-native shapes (Angular `[(checked)]`, Vue `v-model:checked`).
 
@@ -88,7 +88,7 @@ Subtraction, mostly.
 - [x] `docs/src/pages/schulung.astro`: the M3 bullet added this morning (Angular/Vue translating a React-shaped reply via the spec) becomes obsolete — the hosted endpoints now answer natively. Remove or reduce to a note about pre-10.6 versions.
 - [x] `AGENTS.md`: the Storybook MCP section loses its central asymmetry ("the reply is React-shaped throughout") and the ADR-0083 substitution paragraph.
 - [x] Day 1 Block 03's `experimentalReactComponentMeta` line — revisit next to its now-existing Angular and Vue siblings.
-- [x] `tasks/schulung-review-2026-09-05.md`: mark M3 closed-by-upstream rather than closed-by-edit.
+- [x] `tasks/archive/reviews/schulung-review-2026-09-05.md`: mark M3 closed-by-upstream rather than closed-by-edit.
 
 **Gate:** `npm run check:all` exit 0 · `nx build docs` exit 0.
 

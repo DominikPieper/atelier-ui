@@ -2,7 +2,7 @@
 status: accepted
 date: 2026-09-09
 sources:
-  - tasks/schulung-content-review-2026-09-08.md (§ Gegenprobe — Codex, 2026-09-09, finding G4)
+  - tasks/archive/reviews/schulung-content-review-2026-09-08.md (§ Gegenprobe — Codex, 2026-09-09, finding G4)
   - tools/scripts/sync-tokens.mjs
   - tools/scripts/gen-artboard-palette.mjs
   - tools/scripts/gen-figma-library-tokens.mjs

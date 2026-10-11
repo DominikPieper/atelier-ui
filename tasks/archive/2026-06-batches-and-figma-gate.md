@@ -74,7 +74,7 @@ P3 polish batch done, 4 commits. Moot (already fixed earlier): skill version + r
 
 ## UX Top-5 implementation — 2026-06-12 (eve)
 
-Report: tasks/review-docs-ux-2026-06-12.md · Top-5: track infra, 404, framework-state, checkpoints, search/drawer a11y
+Report: tasks/archive/reviews/review-docs-ux-2026-06-12.md · Top-5: track infra, 404, framework-state, checkpoints, search/drawer a11y
 
 - [x] Wave 1A: workshop-track.ts + TrackNav.astro + Checkpoint.astro + BaseLayout (sidebar derive + drawer a11y + 44px targets)
 - [x] Wave 1B: branded 404.astro
@@ -101,7 +101,7 @@ Verified live (local): first-component shows "Step 7 of 8", prompt contains conc
 
 ## Fix docs review findings (P1+P2) — 2026-06-12
 
-Plan: ~/.claude/plans/mach-ein-review-von-delightful-axolotl.md · Report: tasks/review-docs-site-2026-06-12.md
+Plan: ~/.claude/plans/mach-ein-review-von-delightful-axolotl.md · Report: tasks/archive/reviews/review-docs-site-2026-06-12.md
 
 - [x] A: Agent 1 — components.ts per-framework examples + gen-llms-txt.mjs + regen llms
 - [x] A2/D2: Agent 2 — ComponentDetail.tsx renderer + Storybook link + H1 class swaps

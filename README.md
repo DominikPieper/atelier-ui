@@ -125,7 +125,7 @@ Authoritative list: [`libs/angular/src/index.ts`](libs/angular/src/index.ts), [`
 
 ## The spec layer
 
-`@atelier-ui/spec` contains one TypeScript interface per component. It carries prop names and string-literal unions — not defaults, descriptions, events, slots or behaviour. The three libraries are held to it by offline gates (`check:props`, `check:variants`, `check:defaults`, `check:figma`), not by the compiler: only the React adapter extends the spec interfaces at the type level; Angular's signal inputs and Vue's props objects are compared against it by `check:props`, with every known divergence recorded as an exemption (ADR-0093). The review that measured this, and the open decision about the format: `tasks/spec-format-review-2026-09-10.md`.
+`@atelier-ui/spec` contains one TypeScript interface per component. It carries prop names and string-literal unions — not defaults, descriptions, events, slots or behaviour. The three libraries are held to it by offline gates (`check:props`, `check:variants`, `check:defaults`, `check:figma`), not by the compiler: only the React adapter extends the spec interfaces at the type level; Angular's signal inputs and Vue's props objects are compared against it by `check:props`, with every known divergence recorded as an exemption (ADR-0093). The review that measured this, and the open decision about the format: `tasks/archive/reviews/spec-format-review-2026-09-10.md`.
 
 ```typescript
 export interface AtlButtonSpec {

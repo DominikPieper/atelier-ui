@@ -318,9 +318,9 @@ them, which is the whole claim the stamp makes.
 
 ## Open — Schulung, second review (2026-09-02)
 
-Full document: `tasks/schulung-review-2026-09-02.md` (4 blockers · 1 immediate · 13 major · 15 minor). Nothing fixed in this pass — review only.
+Full document: `tasks/archive/reviews/schulung-review-2026-09-02.md` (4 blockers · 1 immediate · 13 major · 15 minor). Nothing fixed in this pass — review only.
 
-- [x] **I1** — scrubbed two colleagues' names + internal mailbox from `tasks/review-state-2026-08-26.md:168` and `tasks/schulung-review-2026-08-28.md:64` (public repo); role phrasing as in ADR-0032. Working tree only — git history still carries the old lines; rewriting public history is a separate decision (route via the internal DSB).
+- [x] **I1** — scrubbed two colleagues' names + internal mailbox from `tasks/archive/reviews/review-state-2026-08-26.md:168` and `tasks/archive/reviews/schulung-review-2026-08-28.md:64` (public repo); role phrasing as in ADR-0032. Working tree only — git history still carries the old lines; rewriting public history is a separate decision (route via the internal DSB).
 - [x] **B1** — Storybook/docs ports swept (`7efc0be`) and preflight taught to check the environment it is actually in (`a2ff354`, ADR-0084 amendment). The gate the item asked for exists too: `[PORT-6006]` in `tools/scripts/check-docs-sync.js:357-381`, with its scaffold-context allowlist at `tools/scripts/lib/allowlists.js:87-113`.
 - [~] **B2** — the `label` half is done: ADR-0091 pulled it into a shared `AtlCaptionSpec` mixin and implemented it in Angular for Input, Textarea and Select (`a8ab0d2`, `130057f`). The **prop-parity gate** half is not — ADR-0091's Consequences defer it explicitly as its own task. Promoted to its own item below so it does not vanish under a tick.
 - [x] **B3** — Day-2 gate story repaired (`74a81f4`), then the gate list replaced by a measured one (`7c9a9a2`): a one-framework component makes exactly `check:sync`, `check:a11y-parity` and `check:design-status` red, and the material now says the participant's spec is its own file next to their component, not an edit to the shared master.
@@ -342,10 +342,10 @@ Full document: `tasks/schulung-review-2026-09-02.md` (4 blockers · 1 immediate 
 
 Scope: the docs app as a _product surface_ (visual, interaction, a11y,
 responsive, motion, navigation) — not the training content, which
-`schulung-review-2026-09-02.md` already covers. Environment: local HEAD on
+`archive/reviews/schulung-review-2026-09-02.md` already covers. Environment: local HEAD on
 `:4300`. Review only in this pass — fixes follow in the agreed order.
 
-Full document: `tasks/docs-ux-review-2026-09-02.md` (3 blockers · 13 major ·
+Full document: `tasks/archive/reviews/docs-ux-review-2026-09-02.md` (3 blockers · 13 major ·
 12 minor · 3 library defects surfaced by demos).
 
 - [x] Static scan (subagent): `global.css`, `docs-theme.css`, `BaseLayout.astro`,
@@ -355,7 +355,7 @@ Full document: `tasks/docs-ux-review-2026-09-02.md` (3 blockers · 13 major ·
       axe-core 4.13 at 1440 + 375 (236 runs), focus walk 4 pages (177 stops),
       drawer test at 375 — scripts in the session scratchpad
 - [x] Skill queries per finding class (`--domain ux`)
-- [x] `tasks/docs-ux-review-2026-09-02.md` — severity · evidence · fix · rule ·
+- [x] `tasks/archive/reviews/docs-ux-review-2026-09-02.md` — severity · evidence · fix · rule ·
       serves; §verified vs assumed; §weakest point
 
 ### Open — fixes (order from the review §6)

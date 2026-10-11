@@ -7,7 +7,7 @@
  * Figma-variable definition list for the "Library Tokens" collection:
  * one entry per token with { name, type, scopes, light, dark, aliasOf }.
  *
- * Name transformation (documented in tasks/figma-audit-2026-07-22.md):
+ * Name transformation (documented in tasks/archive/reviews/figma-audit-2026-07-22.md):
  *   --ui-color-text        → color/text
  *   --ui-spacing-4         → spacing/4
  *   --ui-radius-md         → radius/md

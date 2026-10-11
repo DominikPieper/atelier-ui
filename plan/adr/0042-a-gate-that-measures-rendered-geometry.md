@@ -3,7 +3,7 @@ status: accepted
 date: 2026-08-26
 sources:
   - plan/adr/0041-control-height-is-the-primitive.md (the defect this gate would have caught)
-  - tasks/design-findings-2026-08-26.md
+  - tasks/archive/reviews/design-findings-2026-08-26.md
 ---
 
 # ADR-0042: A gate that measures rendered geometry

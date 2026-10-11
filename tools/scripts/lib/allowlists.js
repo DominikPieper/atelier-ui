@@ -429,7 +429,7 @@ const A11Y_PARITY_EXEMPT = new Map([
         'Comparable across all three adapters (no native-vs-CDK split) and the exact component ' +
         'ADR-0025 cites as its motivating divergence, but no *.a11y.spec.* was ever written. ' +
         'It was invisible while the roster came from the snapshot directory. ' +
-        'Tracked in tasks/review-state-2026-08-26.md.',
+        'Tracked in tasks/archive/reviews/review-state-2026-08-26.md.',
     },
   ],
 ]);

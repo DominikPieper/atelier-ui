@@ -11,13 +11,17 @@ items, then optional/low-priority ones. Open work is a checkbox item; a parent
 checkbox that consolidates several original items carries them as nested checkboxes
 underneath it._
 
+Review findings are tracked in `tasks/reviews.md` since 2026-10-11; this file holds plans and
+non-review work. Items marked `→ R-NNN` keep their reasoning here but are tracked there; items
+closed by the review triage carry a `_(closed 2026-10-11 …)_` note.
+
 ## Near-term work
 
 Ranked; each carries why it's worth doing next rather than later.
 
 ### Course content review follow-up (2026-10-10)
 
-Source: `tasks/content-review-2026-10-10.md` (§ numbers below refer to it). Owner, 2026-10-10:
+Source: `tasks/archive/reviews/content-review-2026-10-10.md` (§ numbers below refer to it). Owner, 2026-10-10:
 start the quick fixes now; the structural rework (§3–5) is ordered against the CDS switch
 (ADR-0165), so pages that get rewritten anyway are not polished twice.
 
@@ -61,8 +65,8 @@ Follow-ups found while fixing — done 2026-10-10 except the AtlProgress debt:
       project `.mcp.json`): an unset `${VAR}` gives a per-entry "Missing environment variables"
       warning and the server still starts; nothing rejects the file. `figma-token.astro` now says
       the token is optional and the default avoids the warning.
-- [ ] AtlProgress: `aria-progressbar-name` still disabled as a11y debt in all three libs; the
-      a11y-workflow worked example now carries a dated correction.
+- → **R-131** AtlProgress: `aria-progressbar-name` still disabled as a11y debt in all three libs; the
+  a11y-workflow worked example now carries a dated correction.
 
 **Wave S — structure (§3–5), with or after the CDS swap**
 
@@ -78,16 +82,16 @@ Follow-ups found while fixing — done 2026-10-10 except the AtlProgress debt:
 - [x] S10 done 2026-10-10 (ADR-0168, superseding 0166): maintainer content ships as collapsed `<details>` — `/runbook` whole page; sections on mcp, a11y-workflow, figma, tokens, claude-design, design-principles, design-to-code, storybook, agent-skills, skills/*. Participant entries moved to troubleshooting (`#plugin-update`, `#stale-instances`).
 - [x] S11 done 2026-10-10: `tokens#naming`, `/readiness` (scopes, modes, properties, fixing a
       failing master), `claude-design#artboard-to-master`, `design-principles#check-your-own`.
-- [ ] Gaps the new agenda links around (§3): a glossary (B12), a guardrail demo with and
-      without a DS (A5), a published prompt rubric (Day 2 block 03), a rescue path for a red
-      setup beyond `/troubleshooting`.
-- [ ] Unverified since 2026-10-10: the `storybook#write-a-story` example (`Disabled` story +
-      `toBeDisabled`) was not run in a generated workspace; the packed-tarball e2e
-      (`libs/create-atelier-ui-workspace/e2e`) needs network and was not run.
-- [ ] Open call: the token value catalogue on `/tokens` (`#colors` … `#motion`) stays visible
-      for kata lookups; hide it with the CDS swap if participants no longer use Atelier tokens.
-- [ ] S12 recovery path per tutorial/kata step; bridge exercise compose → build new (§5.10–11)
-- [ ] S13 Atl/Atelier-file → CDS swap across agenda, ~18 pages, briefs, trainer files (§7);
+- → **R-041** Gaps the new agenda links around (§3): a glossary (B12), a guardrail demo with and
+  without a DS (A5), a published prompt rubric (Day 2 block 03), a rescue path for a red
+  setup beyond `/troubleshooting`.
+- → **R-043** Unverified since 2026-10-10: the `storybook#write-a-story` example (`Disabled` story +
+  `toBeDisabled`) was not run in a generated workspace; the packed-tarball e2e
+  (`libs/create-atelier-ui-workspace/e2e`) needs network and was not run.
+- → **R-065** Open call: the token value catalogue on `/tokens` (`#colors` … `#motion`) stays visible
+  for kata lookups; hide it with the CDS swap if participants no longer use Atelier tokens.
+- → **R-005, R-042** S12 recovery path per tutorial/kata step; bridge exercise compose → build new (§5.10–11)
+- [x] S13 Atl/Atelier-file → CDS swap across agenda, ~18 pages, briefs, trainer files (§7); _(closed 2026-10-11 by the review triage: DUPLICATE; see tasks/archive/review-triage-2026-10-11.md)_
       blocked on the CDS kata target (P4)
 
 **Owner decisions (§9)** — decided 2026-10-10:
@@ -149,7 +153,7 @@ Atelier token system instead of the generic gradient/grid look.
       `--ui-opacity-disabled: 0.65` in dark, so Disabled/Loading read as enabled. Owner
       2026-10-08: dedicated button disabled colour tokens (reverses the manifest's
       "opacity, not colour tokens" rule for the button → ADR).
-- [ ] **5c. AtlTextarea Readonly hover border** — Angular and Vue render a transparent border on
+- [x] **5c. AtlTextarea Readonly hover border** — Angular and Vue render a transparent border on _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
       hover where Figma and React draw `surface-sunken` (recorded in `paint-baseline.json`
       2026-10-08, surfaced by the Boolean-cover round of `check:paint`, ADR-0159).
 - [x] **6. delight** — done 2026-10-07. Kata ends with a real finish (recap, one action to
@@ -208,7 +212,7 @@ Atelier token system instead of the generic gradient/grid look.
 > scratch Claude Design project, and the eval-harness facts.
 
 > **Cross-model plausibility review, 2026-09-08:**
-> `tasks/review-plausibility-2026-09-08.md` — 30+ findings across the docs site, the
+> `tasks/archive/reviews/review-plausibility-2026-09-08.md` — 30+ findings across the docs site, the
 > four skills, the newest ADRs and this file's companion handover, with what was
 > verified and what is single-reader. Nothing fixed yet; the four that change
 > behaviour are A1 (mcp.astro still shows the pre-ADR-0097 "via React" model), A2 (28
@@ -217,7 +221,7 @@ Atelier token system instead of the generic gradient/grid look.
 > governance ordering, the confirmation carve-out, and the Publish etag window).
 
 > **Training-content review, 2026-09-08:**
-> `tasks/schulung-content-review-2026-09-08.md` — the first pass over the _whole_
+> `tasks/archive/reviews/schulung-content-review-2026-09-08.md` — the first pass over the _whole_
 > teaching surface (agenda, docs site, briefs, talk, the `plan/` files the curriculum
 > injects into prompts), asking whether the material teaches rather than whether it is
 > accurate. Ran without a second model (Codex quota, agy quota) — a Codex Gegenprobe is
@@ -237,7 +241,7 @@ Atelier token system instead of the generic gradient/grid look.
 > handoff document missing from the English learner path — is the part with the most
 > leverage.
 
-> **Spec-format review, 2026-09-10:** `tasks/spec-format-review-2026-09-10.md` — the
+> **Spec-format review, 2026-09-10:** `tasks/archive/reviews/spec-format-review-2026-09-10.md` — the
 > first review of `libs/spec` as a _format_ (five repo agents, one web scan, Codex
 > Gegenprobe). Verdict: the spec is a naming key for the drift gates, not a component
 > contract; the compiler binds only React (Angular 1/29, Vue 0/29 import an interface);
@@ -270,7 +274,7 @@ Atelier token system instead of the generic gradient/grid look.
       not activate them or close the menu. The CDK source (`skipPredicate(() => false)`,
       `attr.aria-disabled`) confirmed the Angular side.
 
-- [ ] **Structure lessons from the DB UX Design System (planned 2026-10-01).** Comes out of
+- [x] **Structure lessons from the DB UX Design System (planned 2026-10-01).** Comes out of _(closed 2026-10-11 by the review triage: DONE; see tasks/archive/review-triage-2026-10-11.md)_
       a fact-check of a Gemini Deep Research report on multi-framework design systems. The
       report says DB UX (`db-ux-design-system/core-web`) maintains native Angular, React and
       Vue implementations in parallel in an Nx monorepo — **both false**: it writes every
@@ -290,7 +294,7 @@ Atelier token system instead of the generic gradient/grid look.
       framework, but React and Vue may still be taught — Angular-first decides order and
       design, not whether the other two adapters stay maintainable.
 
-  - [ ] **P1 — One source for component CSS instead of three hand-kept copies.** Facts
+  - [x] **P1 — One source for component CSS instead of three hand-kept copies.** Facts _(closed 2026-10-11 by the review triage: DONE; see tasks/archive/review-triage-2026-10-11.md)_
         (verified 2026-10-01): React and Vue CSS are byte-identical for 27 of 29 components
         (`chat`, `table` differ). Angular uses `:host` under Emulated encapsulation (only
         `tooltip`, `table`, `menu` use `None`); React/Vue use a root class `.atl-X`. A
@@ -439,7 +443,7 @@ Atelier token system instead of the generic gradient/grid look.
           drawer's `check:paint` NO-PROBE is resolved.
           Checked by me: 38 shared and override files, 615 selectors, 0 unrooted, no
           `:host`, every `@keyframes` prefixed.
-    - [ ] **Owner decisions from batch 3.** (2) and (4) were settled on 2026-10-03: the
+    - [x] **Owner decisions from batch 3.** (2) and (4) were settled on 2026-10-03: the _(closed 2026-10-11 by the review triage: DONE; see tasks/archive/review-triage-2026-10-11.md)_
           React/Vue override is now `libs/styles/src/<dir>/atl-<name>.native.css`
           (ADR-0148 Decision 4, "Corrected 2026-10-03"), and `check:paint` fails with
           `[STALE]` when its Storybook build is older than the source. (1) and (3) stay open.
@@ -469,7 +473,7 @@ Atelier token system instead of the generic gradient/grid look.
           of 87 stylesheets and `check:dead-selectors` 80 of 89 before the path fix. Make
           each fail when it finds fewer stylesheets than component directories (ADR-0080).
           This is independent of the migration.
-    - [ ] **Batch-3 decisions (1) and (3), owner 2026-10-03.** (3) is done in `4ea59019`:
+    - [x] **Batch-3 decisions (1) and (3), owner 2026-10-03.** (3) is done in `4ea59019`: _(closed 2026-10-11 by the review triage: DONE; see tasks/archive/review-triage-2026-10-11.md)_
           a crumb that has no link and is not the current page renders
           `<span class="breadcrumb-text">` (regular weight, muted), and only the current item
           keeps `breadcrumb-current` and `aria-current="page"`. That is pinned by a `NoLinks`
@@ -497,19 +501,19 @@ Atelier token system instead of the generic gradient/grid look.
           (`LAYER-UNNAMED` in `type-baseline.json`: 127 in 5 masters, AtlTable 75, AtlAvatarGroup
           20, AtlDrawer 14, AtlDialog 10, AtlToast 8); a new one fails, a named one fails until
           re-recorded.
-    - [ ] **AtlDialog draws its header and footer rules as 1px divider frames.** The CSS has a
+    - [x] **AtlDialog draws its header and footer rules as 1px divider frames.** The CSS has a _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
           border-bottom on the header and a border-top on the footer; the master has two empty
           frames between the layers. Same pixels, so four `AtlDialog:layer:border|stroke`
           entries in `allowlists.js` carry it. Move the rule onto the layers as strokes (as
           AtlDrawer draws it), delete the dividers and the four entries. The footer buttons
           are anonymous `Frame`s too (10 of the `LAYER-UNNAMED` entries); instances of
           AtlButton would retire them.
-    - [ ] **Follow-ups from ADR-0149 (2026-10-03).** Split the 80 `LAYER-UNRESOLVED`
+    - [x] **Follow-ups from ADR-0149 (2026-10-03).** Split the 80 `LAYER-UNRESOLVED` _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
           entries in `tools/figma/type-baseline.json` into `design` (true wrappers,
           auto-layout frames) and `gap` (parts whose layer name does not spell their
           class); today all are `design`. Remove the dead `:host` handling in
           `check-typeface` and `check-geometry`.
-    - [ ] **Before merging to main:** `check:release-drift` will report
+    - [x] **Before merging to main:** `check:release-drift` will report _(closed 2026-10-11 by the review triage: DONE; see tasks/archive/review-triage-2026-10-11.md)_
           `@atelier-ui/styles` as unpublished and exit 1 until the first release; the
           main-only CI job goes red. Check whether the npm token may create a new package
           under the `@atelier-ui` scope. Publish order is already dependency-first
@@ -530,20 +534,20 @@ Atelier token system instead of the generic gradient/grid look.
         preset comment saying published packages ship no `tokens.css` is stale (all three
         builds copy it). Scaffolded workspaces vendor `tokens.css` on purpose (attendees
         edit it) — that stays.
-    - [ ] **P2.1** `libs/foundations` (private, not published — no new release surface)
+    - [x] **P2.1** `libs/foundations` (private, not published — no new release surface) _(closed 2026-10-11 by the review triage: SUPERSEDED; see tasks/archive/review-triage-2026-10-11.md)_
           holds `tokens.css` as source of truth; the preset becomes a generated copy like
           the others. Repoint `sync-tokens.mjs`, `stylelint.config.mjs`, `nx.json` inputs,
           `gen-figma-library-tokens.mjs`, and the docs import.
-    - [ ] **P2.2** Fix the stale preset comment about `tokens.css` not shipping.
-    - [ ] **P2.3** Decide: three `foundation/*.mdx` copies → one source plus generated
+    - [x] **P2.2** Fix the stale preset comment about `tokens.css` not shipping. _(closed 2026-10-11 by the review triage: DONE; see tasks/archive/review-triage-2026-10-11.md)_
+    - [x] **P2.3** Decide: three `foundation/*.mdx` copies → one source plus generated _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
           copies, or docs app only.
-    - [ ] **P2.4** Small ADR, or a dated correction of the ADR that made the preset copy
+    - [x] **P2.4** Small ADR, or a dated correction of the ADR that made the preset copy _(closed 2026-10-11 by the review triage: DONE; see tasks/archive/review-triage-2026-10-11.md)_
           canonical (find it first); record publishing `@atelier-ui/foundations` as
           considered and deferred (tokens already ship in each framework package).
           **Done when** exactly one hand-edited `tokens.css` exists, `check:tokens` diffs
           every copy against it, `check:all` green.
 
-  - [ ] **P3 — Lint rules as a package, and a consumer-usage rule set.** Facts (verified
+  - [x] **P3 — Lint rules as a package, and a consumer-usage rule set.** Facts (verified _(closed 2026-10-11 by the review triage: DONE; see tasks/archive/review-triage-2026-10-11.md)_
         2026-10-01): `tools/stylelint-rules` has four rules (`no-raw-color-literal`,
         `no-undeclared-token`, `no-primitive-token`, `no-token-bypass`), **no tests**, not
         publishable; the preset vendors all six files byte-identically, held by
@@ -568,7 +572,7 @@ Atelier token system instead of the generic gradient/grid look.
           `atl-button` without `aria-label`, `atl-dialog` without a title, `atl-option`
           outside `atl-select`). Build only if at least three survive; else record and drop.
 
-  - [ ] **P4 — Docs beside the component; retire the hand-written docs props.** Re-scoped
+  - [x] **P4 — Docs beside the component; retire the hand-written docs props.** Re-scoped _(closed 2026-10-11 by the review triage: DONE; see tasks/archive/review-triage-2026-10-11.md)_
         with the owner on 2026-10-07 after a read-only survey. That survey found two of my
         earlier P4 assumptions wrong: `gen-llms-txt.mjs` reads neither `aiUsage` nor `a11y`,
         and no story carries a `docs.source` an example could come from. S6 (retiring
@@ -626,7 +630,7 @@ Atelier token system instead of the generic gradient/grid look.
           until toast gets a metadata home. `aiUsage` (3 entries), `composition` (13) and
           `status` (6) stay in the docs data as page data.
 
-- [ ] **The scaffold becomes the AI-development workspace, and the cohort's environment**
+- [x] **The scaffold becomes the AI-development workspace, and the cohort's environment** _(closed 2026-10-11 by the review triage: DONE; see tasks/archive/review-triage-2026-10-11.md)_
       (owner decisions, 2026-09-12). Four blocks chosen out of five; **"Gates + CI" was
       deliberately not chosen** — the generated workspace keeps its five separate
       `check:*` scripts, gets no `check:all` umbrella, no `lint` script and no CI
@@ -704,7 +708,7 @@ Atelier token system instead of the generic gradient/grid look.
         Angular half is the risky one (`@analogjs/vitest-angular`) and gets its own real
         scaffold run, not an in-memory Tree.
 
-- [ ] **A dormant rootDir violation in the generated workspace's story-test setup.**
+- [x] **A dormant rootDir violation in the generated workspace's story-test setup.** _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
       `src/test-setup-stories.ts` imports `'../.storybook/preview'`, which reaches outside
       `tsconfig.app.json`'s `src`-scoped `rootDir`. Harmless today because nothing invokes a
       `typecheck` target in a generated workspace — `nx build` does not compile that file since
@@ -713,15 +717,15 @@ Atelier token system instead of the generic gradient/grid look.
       regression. Identical in React and Vue. Decide: relax the rootDir, move the annotations
       import, or leave it and note that a `typecheck` target cannot simply be switched on.
 
-- [ ] **Every release leaves two files for a human to clean up.** `nx release`'s own
-      `chore(release): publish` commit bumps versions without running the generators, so
-      `docs/public/llms.txt` goes stale (known, one line, happens every time), and it embeds
-      commit bodies verbatim into each package's `CHANGELOG.md`, which Prettier then reflows
-      differently — so `check:format`, the _first_ gate in `check:all`, is red on `main`
-      immediately after every publish. Both were hit again on 2026-09-13. The fix is to run
-      `gen:llms` and `prettier --write` inside the release workflow, before its commit, rather
-      than pushing a main that fails its own first gate and waiting for the next person to
-      notice.
+- → **R-104** **Every release leaves two files for a human to clean up.** `nx release`'s own
+  `chore(release): publish` commit bumps versions without running the generators, so
+  `docs/public/llms.txt` goes stale (known, one line, happens every time), and it embeds
+  commit bodies verbatim into each package's `CHANGELOG.md`, which Prettier then reflows
+  differently — so `check:format`, the _first_ gate in `check:all`, is red on `main`
+  immediately after every publish. Both were hit again on 2026-09-13. The fix is to run
+  `gen:llms` and `prettier --write` inside the release workflow, before its commit, rather
+  than pushing a main that fails its own first gate and waiting for the next person to
+  notice.
 
 - [x] **No gate has ever formatted an `.astro` file — fixed 2026-10-01 (ADR-0147).** `check:format` is `prettier --check .`,
       and without `prettier-plugin-astro` installed Prettier cannot parse `.astro` at all —
@@ -747,14 +751,14 @@ Atelier token system instead of the generic gradient/grid look.
   - [x] S2 `3f14528d` config, `ab1f4946` format-only, `ce0b3906` blame-ignore; plus
         `6a6e5daf`/`29324f0d` re-keying `allowlists.js` entries the reflow broke.
         `check:all` exit 0.
-  - [ ] Found by S2, owner call: `skills/figma-workspace-architect.astro` has
-        `style="margin: 0 0 {mode.subModes.length ? …}"` — braces in a quoted attribute are
-        never evaluated, so the margin has never applied on the live site. Fix is
-        `style={`…${…}`}`, which changes rendering; until then it carries a
-        `<!-- prettier-ignore -->` (the plugin lowercased `subModes` inside the string).
-  - [ ] Found by S2: `check:component-count` / `check:docs` allowlists key on exact
-        adjacent source lines, so any reflow of a prose paragraph breaks them. Key on content
-        instead?
+  - → **R-066** Found by S2, owner call: `skills/figma-workspace-architect.astro` has
+    `style="margin: 0 0 {mode.subModes.length ? …}"` — braces in a quoted attribute are
+    never evaluated, so the margin has never applied on the live site. Fix is
+    `style={`…${…}`}`, which changes rendering; until then it carries a
+    `<!-- prettier-ignore -->` (the plugin lowercased `subModes` inside the string).
+  - → **R-127** Found by S2: `check:component-count` / `check:docs` allowlists key on exact
+    adjacent source lines, so any reflow of a prose paragraph breaks them. Key on content
+    instead?
   - [x] S3 `97ddb2bd` config (`eslint-plugin-astro@1.7.0`), `31373193` 54 findings fixed
         (49 `no-var`, 3 tabindex, 2 TS); browser smoke across ClientRouter navigation clean.
   - [x] S4 ADR-0147 (0146 is taken on branch `spike/own-mcp-server`).
@@ -783,7 +787,7 @@ Atelier token system instead of the generic gradient/grid look.
       give React's generated config the same `inline` entry), or to leave the accident in
       place with this note as its record.
 
-- [ ] **`@nx/vue`'s application generator writes a spec file despite `unitTestRunner: 'none'`.**
+- [x] **`@nx/vue`'s application generator writes a spec file despite `unitTestRunner: 'none'`.** _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
       A generated Vue workspace carries `src/app/App.spec.ts` (Nx's own default, using
       `@vue/test-utils`' `mount`), which neither the preset writes nor documents, and which
       the unit project's deliberately recursive `src/**/*.spec.*` glob then runs. React and
@@ -829,7 +833,7 @@ Atelier token system instead of the generic gradient/grid look.
     `cli-e2e` (~7 min per framework, ~20-45 min total, and `nx affected` reaches it from
     any preset edit); run it single-framework per step and full before the last push.
 
-- [ ] **Where Angular's a11y coverage actually comes from — eslint (static) and axe
+- [x] **Where Angular's a11y coverage actually comes from — eslint (static) and axe _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
       (rendered) cover different ground, not the same ground twice.** Found 2026-09-11
       investigating a false "zero `@angular-eslint/template/accessibility-*` rules
       enabled" premise: `libs/angular/eslint.config.mjs`'s
@@ -852,8 +856,8 @@ Atelier token system instead of the generic gradient/grid look.
       exercises gets zero axe coverage but still gets the eslint pass. Neither subsumes
       the other. No action needed here — recorded so the next "is X accessibility check
       already covered by Y" question doesn't have to re-derive this from scratch.
-- [ ] **Three gaps ADR-0128 named and did not close** (2026-09-11).
-  - [ ] **`check:paint`'s measurements are not run-to-run deterministic — check this
+- [x] **Three gaps ADR-0128 named and did not close** (2026-09-11). _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
+  - [x] **`check:paint`'s measurements are not run-to-run deterministic — check this _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         before trusting any tighter tolerance.** Two `--update-baseline` runs each drifted
         Vue's `AtlAlert` height from 55px to 56px, on a _different subset of its stories each
         time_ (three, then five of six). Always the same component, field and direction, always
@@ -872,7 +876,7 @@ Atelier token system instead of the generic gradient/grid look.
         around it. Clearing it by hand-editing the baseline was done once today, under review, for
         five entries known to be this noise; the file's own header forbids hand edits and that was
         a deliberate exception, not a precedent.
-  - [ ] **`paint-baseline.json` keys a finding without its measured value, so drift inside a
+  - [x] **`paint-baseline.json` keys a finding without its measured value, so drift inside a _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         recorded finding is invisible.** `check-paint.mjs:1803` keys on
         `fw|component|story|state|field`; the `detail` string (`"rendered 172px, figma 222px"`) is
         not part of it. A height drifting 172px → 400px against the same Figma 222px keeps its key
@@ -882,36 +886,36 @@ Atelier token system instead of the generic gradient/grid look.
         it. Not a mechanical port: putting the value in the key makes every wobble inside the 2px
         tolerance a blocker, which is what the AtlAlert case shows can happen. Decide the pairing
         (value in the identity **and** a tolerance-aware comparison) rather than porting one half.
-  - [ ] **The `play` wait costs about 50% runtime**, measured 2026-09-11: `check:paint`
+  - [x] **The `play` wait costs about 50% runtime**, measured 2026-09-11: `check:paint` _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         unscoped went from ~230 s to ~345 s, because every story now pays Storybook's own
         `waitForAnimations` (~100 ms flat, since this Chromium session does not match its
         `isTestEnvironment()` check) plus the settle poll — even though no story has a `play` yet.
         A known mitigation was deliberately not taken: spoofing the page's user agent to contain
         `"StorybookTestRunner"`, the string `@storybook/test-runner` itself relies on, short-circuits
         that wait. Left out to avoid a second dependency on a Storybook internal in the same change.
-  - [ ] **The ADR-0124 `[ROSTER]` floor is cross-framework.** It fires when a component has
+  - [x] **The ADR-0124 `[ROSTER]` floor is cross-framework.** It fires when a component has _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         zero measurements in _every_ framework, so one framework silently losing all coverage of
         a component — someone breaks `meta.component` in just the Vue story — is caught by
         nothing. A per-framework floor needs its own exemption axis, because several components
         legitimately measure in one framework and not another (Angular's `AtlDrawer` resolves a
         probe where React and Vue do not).
-  - [ ] **`no-probe` never counted the "probe element vanished while measuring" case.**
+  - [x] **`no-probe` never counted the "probe element vanished while measuring" case.** _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         That warning fires from `comparePaint`/`compareFull`, which have no access to
         `runFramework`'s counter, so the sub-case is warned and never ratcheted. Pre-existing,
         preserved deliberately by ADR-0128 rather than widened alongside it.
-- [ ] **Pay down the `check:paint` skip debt, now that ADR-0128 makes it immovable.**
+- [x] **Pay down the `check:paint` skip debt, now that ADR-0128 makes it immovable.** _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
       Ordered by what the breakdown says it costs, cheapest first:
-  - [ ] **`not-rendered` is three components.** `AtlChat` contributes 12 in every framework
+  - [x] **`not-rendered` is three components.** `AtlChat` contributes 12 in every framework _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         (its Drawer, Popup and Inline stories render closed), `AtlDialog` 6-9, Angular adds
         `AtlDrawer`. Give them stories that open, or probes that measure the open state.
-  - [ ] **The resolution half of `no-probe` is four contracts.** `AtlDrawer`, `AtlMenu` and
+  - [x] **The resolution half of `no-probe` is four contracts.** `AtlDrawer`, `AtlMenu` and _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         `AtlTooltip` declare no `probes` at all; Angular's `AtlSelect` is the documented
         button-trigger case. Adding a probe to three contracts is the single highest-yield edit
         in this list.
-  - [ ] **Angular's `AtlButton` fails every one of its nine focus probes**, where React's
+  - [x] **Angular's `AtlButton` fails every one of its nine focus probes**, where React's _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         equivalent fails two of nine. That asymmetry is its own bug and is not explained by the
         contract.
-  - [ ] **`skipped-demo` is the expensive half and partly not a defect.** 16/18/24 distinct
+  - [x] **`skipped-demo` is the expensive half and partly not a defect.** 16/18/24 distinct _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         components. Vue's 62 against Angular's 37 is broader reach plus a real difference in
         story granularity — Vue's `AtlAvatarGroup` is its own roster member with four stories
         where Angular folds the same demo into one story inside `atl-avatar.stories.ts`. React's
@@ -919,13 +923,13 @@ Atelier token system instead of the generic gradient/grid look.
         itself. Decide per component whether the story or the heuristic is wrong before touching
         either.
 
-- [ ] **`AtlRadioGroup` has no accessible-name mechanism.** No `aria-label` or
-      `aria-labelledby` prop, and no story wraps it in `<fieldset><legend>`. Found 2026-09-12 by
-      the Codex cross-check during the Vue a11y work — **not** by any of the 20
-      `vuejs-accessibility` rules and not by axe's default ruleset either, so nothing in this
-      repo would have surfaced it. Likely a small API addition, and it needs Angular/React parity
-      consideration before it lands in one framework only.
-- [ ] **Where Vue's a11y coverage comes from — eslint (static) and axe (rendered).** Mirrors
+- → **R-133** **`AtlRadioGroup` has no accessible-name mechanism.** No `aria-label` or
+  `aria-labelledby` prop, and no story wraps it in `<fieldset><legend>`. Found 2026-09-12 by
+  the Codex cross-check during the Vue a11y work — **not** by any of the 20
+  `vuejs-accessibility` rules and not by axe's default ruleset either, so nothing in this
+  repo would have surfaced it. Likely a small API addition, and it needs Angular/React parity
+  consideration before it lands in one framework only.
+- [x] **Where Vue's a11y coverage comes from — eslint (static) and axe (rendered).** Mirrors _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
       the Angular entry above, measured 2026-09-12 against the installed axe-core's 105 rules.
       Twelve of `eslint-plugin-vuejs-accessibility`'s twenty rules overlap axe
       (`alt-text` ↔ `image-alt` and friends, `form-control-has-label`/`label-has-for` ↔ `label`,
@@ -939,18 +943,18 @@ Atelier token system instead of the generic gradient/grid look.
       exactly the ones that fired**, and the one overlapping rule that caught a real defect
       (`role-has-required-aria-props`, the combobox's `filteredOptions.length === 0` branch) sits
       on a branch **no story renders**, so axe never had a chance to see it.
-- [ ] **Two suppressions that rest on platform guarantees and no repo test** (Vue, 2026-09-12).
+- [x] **Two suppressions that rest on platform guarantees and no repo test** (Vue, 2026-09-12). _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
       The `<dialog>` Escape-close path behind the backdrop-click suppressions in `atl-chat.vue`,
       `atl-dialog.vue` and `atl-drawer.vue`, and the native-button Enter/Space→click path behind
       `atl-menu-trigger.vue`'s wrapper suppression. Both are standard platform behaviour and both
       are architecturally sound — but the tooltip defect found the same day proves that a
       confident comment is not evidence. Pin them with tests or accept them knowingly.
-- [ ] **Optional, lower priority:** `atl-dialog`, `atl-chat` and `atl-drawer` have no built-in
+- [x] **Optional, lower priority:** `atl-dialog`, `atl-chat` and `atl-drawer` have no built-in _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
       close-button affordance. Raised by the Codex cross-check: the backdrop-click suppression is
       sound only because Escape is guaranteed, which leaves touch-only users without a first-class
       close control.
 
-- [ ] **A NUL byte in `check-figma.js` makes `grep` go blind on it, tool- and
+- [x] **A NUL byte in `check-figma.js` makes `grep` go blind on it, tool- and _(closed 2026-10-11 by the review triage: DONE; see tasks/archive/review-triage-2026-10-11.md)_
       locale-dependently.** Byte 93981 is a literal U+0000, used deliberately as a key separator
       that cannot collide with content. The side effect is that some `grep` builds classify the
       whole 3,778-line file as binary and report zero matches without saying why — it silently
@@ -959,25 +963,25 @@ Atelier token system instead of the generic gradient/grid look.
       or record the hazard where measurement passes will meet it. Until then: `grep -a` or
       ripgrep when sweeping the gate suite.
 
-- [ ] **The repo root is lint-uninhabited apart from `package.json`.** The root
-      `eslint.config.mjs` has carried a `**/*.json` block with `jsonc-eslint-parser` since the
-      workspace was created, pointing at nothing: `@nx/eslint/plugin` only infers a lint target
-      for a project root of `.` when that root has a `src/` or `lib/` directory (read from
-      `@nx/eslint/dist/src/plugins/plugin.js`), and the repo root has neither. As of 2026-09-12 an
-      explicit root `lint` target covers `package.json` and nothing else. `nx.json`, `.prettierrc`,
-      `wrangler.jsonc` and the rest of the root configuration are still unlinted — decide
-      deliberately whether that is fine or whether the target should widen, rather than leaving it
-      to whoever next wonders why a root file has no rules.
-- [ ] **`atelier/storybook-version-lockstep`'s outlier is a majority vote.** It names the
-      package that disagrees with the majority-pinned version, lexicographic tie-break. Correct and
-      unambiguous at 11-vs-1; in an even split — mid-migration, say 5 vs 5 after a deliberate
-      partial bump — it still flags a disagreement but which half it calls the outlier is
-      arbitrary. Anchoring on `storybook`'s own version instead would be semantically meaningful
-      (the family follows core). Small change, worth doing the next time that file is open.
-      The rule also accepts prerelease and build suffixes (`10.6.0-beta.1`) as exact — defensible,
-      but it was a judgement call, not a stated requirement.
+- → **R-112** **The repo root is lint-uninhabited apart from `package.json`.** The root
+  `eslint.config.mjs` has carried a `**/*.json` block with `jsonc-eslint-parser` since the
+  workspace was created, pointing at nothing: `@nx/eslint/plugin` only infers a lint target
+  for a project root of `.` when that root has a `src/` or `lib/` directory (read from
+  `@nx/eslint/dist/src/plugins/plugin.js`), and the repo root has neither. As of 2026-09-12 an
+  explicit root `lint` target covers `package.json` and nothing else. `nx.json`, `.prettierrc`,
+  `wrangler.jsonc` and the rest of the root configuration are still unlinted — decide
+  deliberately whether that is fine or whether the target should widen, rather than leaving it
+  to whoever next wonders why a root file has no rules.
+- → **R-153** **`atelier/storybook-version-lockstep`'s outlier is a majority vote.** It names the
+  package that disagrees with the majority-pinned version, lexicographic tie-break. Correct and
+  unambiguous at 11-vs-1; in an even split — mid-migration, say 5 vs 5 after a deliberate
+  partial bump — it still flags a disagreement but which half it calls the outlier is
+  arbitrary. Anchoring on `storybook`'s own version instead would be semantically meaningful
+  (the family follows core). Small change, worth doing the next time that file is open.
+  The rule also accepts prerelease and build suffixes (`10.6.0-beta.1`) as exact — defensible,
+  but it was a judgement call, not a stated requirement.
 
-- [ ] **`storybook doctor` as a gate — blocked on an offline requirement, not on value.**
+- [x] **`storybook doctor` as a gate — blocked on an offline requirement, not on value.** _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
       Measured 2026-09-12: it is a cheap static health check (missing dependency, incompatible
       packages, mismatched versions, duplicated dependencies, config-load errors), needs no build
       and no server, and reports clean here today. But `@storybook/cli` is **not a dependency of
@@ -985,7 +989,7 @@ Atelier token system instead of the generic gradient/grid look.
       use. `check:all` is offline by design, so adding it means vendoring `@storybook/cli` as a
       devDependency first, and that is its own decision about carrying a package we otherwise
       never install.
-- [ ] **`check:storybook-manifests` cannot be made cheaper — answered, so nobody re-tries it.**
+- [x] **`check:storybook-manifests` cannot be made cheaper — answered, so nobody re-tries it.** _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
       The gate builds three Storybooks to check the emitted `components.json`, and four cheaper
       paths were tested 2026-09-12 and all fail: `storybook index` produces a different artefact
       with no docgen; `build --preview-only` emits a byte-identical manifest but saves nothing
@@ -995,32 +999,32 @@ Atelier token system instead of the generic gradient/grid look.
       check exists to catch; and a running dev server 404s the manifest routes by design under
       `experimentalDocgenServer`. Nx's caching of `build-storybook` stays the mitigation.
 
-- [ ] **Five real interactions have no behaviour id at all** (found 2026-09-11 by sweeping
+- [x] **Five real interactions have no behaviour id at all** (found 2026-09-11 by sweeping _(closed 2026-10-11: all children closed by the review triage)_
       for interactive affordances; ADR-0129 records why the manifest could not surface them
       itself — it locks what is already covered). Each needs a spec in all three frameworks
       before an id can be added, which is the manifest's own admission rule:
-  - [ ] **Tooltip**: focus/blur show and hide, and Escape to dismiss. The four existing ids
+  - [x] **Tooltip**: focus/blur show and hide, and Escape to dismiss. The four existing ids _(closed 2026-10-11 by the review triage: DONE; see tasks/archive/review-triage-2026-10-11.md)_
         are hover-only. React wires `onFocus`/`onBlur` beside the hover handlers plus a
         document-level Escape listener; Angular and Vue do the same in their own idiom.
-  - [ ] **Menu**: Escape-to-close, outside-click-to-close, and arrow-key navigation between
+  - [x] **Menu**: Escape-to-close, outside-click-to-close, and arrow-key navigation between _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         items. React and Vue implement all three by hand; Angular delegates the entire
         interaction surface to `@angular/cdk/menu`. The five existing ids cover only
         trigger-click, item-click, variant class and disabled item.
-  - [ ] **Dialog and Drawer**: the native `<dialog>` `cancel` event synced to `open` —
+  - [x] **Dialog and Drawer**: the native `<dialog>` `cancel` event synced to `open` — _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         exactly what Angular's `EscapeToClose` story play already demonstrates without an id.
-  - [ ] **Chat**: the `drawer` variant is the **default** and appears nowhere in the
+  - [x] **Chat**: the `drawer` variant is the **default** and appears nowhere in the _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         manifest, which names only `inline-variant` and `popup-variant`. It is the variant
         backed by a real `<dialog>` with `showModal`, `cancel` handling and backdrop dismissal.
-  - [ ] **Table**: `AtlTh.onSort` (cycles asc→desc→none, reflected in `aria-sort`) and
+  - [x] **Table**: `AtlTh.onSort` (cycles asc→desc→none, reflected in `aria-sort`) and _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         `AtlTr.onSelectedChange` (reflected in `aria-selected`). The ids `sort-button` and
         `checkbox-selectable` only assert the controls render.
-- [ ] **Apply ADR-0129's criterion to the remaining 47 story-classified behaviours.** The
+- [x] **Apply ADR-0129's criterion to the remaining 47 story-classified behaviours.** The _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
       accordion pilot found 2 of 9 — a play earns its place only where the assertion depends on
       computed layout, real focus order or real browser event sequencing, because every
       behaviour is already covered three times in jsdom and jsdom implements
       `activeElement`/`focus()`/`blur()` fully. Cheap now that the criterion is sharp, and it
       produces the actual work item; 49 is only the upper bound.
-- [ ] **A fixed Figma height for a content-driven component.** `AtlAccordionGroup` is
+- [x] **A fixed Figma height for a content-driven component.** `AtlAccordionGroup` is _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
       `display: block` with auto height, and every story renders a different pixel height
       against the master's single 222px row — which is why its eighteen existing height findings
       are recorded rather than fixed. Same class of question as the AtlChat master's one row for
@@ -1049,7 +1053,7 @@ Atelier token system instead of the generic gradient/grid look.
         for the same directory-scoped reason plus a ratchet baseline stylelint cannot model.
         `check:dead-selectors` joins CSS against what a template can emit. `check:box-sizing`
         was never a candidate — a generator in `--check` mode that calls Prettier's async API.
-  - [ ] **Staleness narrowed cross-framework → per-framework, as the price of cache
+  - [x] **Staleness narrowed cross-framework → per-framework, as the price of cache _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         independence.** Nx wires one `stylelint` target per project, so an exemption that is
         legitimately asymmetric across frameworks would be reported stale by the two that do
         not reference it. Every current entry is referenced identically in all three (verified
@@ -1065,15 +1069,15 @@ Atelier token system instead of the generic gradient/grid look.
       `sync-preflight` 8 pairs → 14; the generated `nx.json` declares them as `stylelint`
       inputs, so the cache trap's fix ships with the trap. Proven against a real generated
       workspace via a locally published CLI, not an in-memory Tree.
-  - [ ] **Should stylelint be a permanent assertion in `libs/create-atelier-ui-workspace/e2e/cli.e2e.mjs`?**
-        The end-to-end proof was real — verdaccio, the published CLI, a bad stylesheet failing
-        the scaffold's own target by name — but it lives in a session scratchpad, so nothing
-        re-runs it. Adding it to the e2e means adding to a file that also builds Storybook and
-        runs Playwright; decide whether the coverage is worth the minutes.
-  - [ ] **An implicit coupling nothing enforces.** The scaffold's config passes neither
-        `componentRoot` nor `allowlistsFile`, correct while it has no exemption file. Someone
-        hand-adding exemptions later without adding `componentRoot` gets a staleness scan that
-        silently does not run.
+  - → **R-096** **Should stylelint be a permanent assertion in `libs/create-atelier-ui-workspace/e2e/cli.e2e.mjs`?**
+    The end-to-end proof was real — verdaccio, the published CLI, a bad stylesheet failing
+    the scaffold's own target by name — but it lives in a session scratchpad, so nothing
+    re-runs it. Adding it to the e2e means adding to a file that also builds Storybook and
+    runs Playwright; decide whether the coverage is worth the minutes.
+  - → **R-097** **An implicit coupling nothing enforces.** The scaffold's config passes neither
+    `componentRoot` nor `allowlistsFile`, correct while it has no exemption file. Someone
+    hand-adding exemptions later without adding `componentRoot` gets a staleness scan that
+    silently does not run.
   - [x] **Formatting ships, a `types` script does not (2026-09-12, ADR-0131's dated
         extension).** A fresh Nx tree has no `prettier` devDependency and no `.prettierrc`, so
         the preset writes both plus `format` / `check:format`, in this repo's
@@ -1081,14 +1085,14 @@ Atelier token system instead of the generic gradient/grid look.
         configured" when none is resolvable, which is a silent pass on an untouched tree.
         `types` ships nothing: no generated framework exposes a `typecheck` target, and
         `nx build` already type-checks the example story (proven by injecting a `TS2322`).
-  - [ ] **Nothing type-checks `.storybook/*` in a generated workspace**, for any framework —
-        `main.ts`, `preview.ts`, `vitest.setup.ts`. Angular's scaffold writes a
-        `.storybook/tsconfig.json` that nothing runs `tsc` against; React and Vue get no such
-        file. Closing it means writing a tsconfig for two of three frameworks, which is why it
-        was left open rather than guessed at. The same gap in this repo is covered by
-        `check:types`.
+  - → **R-095** **Nothing type-checks `.storybook/*` in a generated workspace**, for any framework —
+    `main.ts`, `preview.ts`, `vitest.setup.ts`. Angular's scaffold writes a
+    `.storybook/tsconfig.json` that nothing runs `tsc` against; React and Vue get no such
+    file. Closing it means writing a tsconfig for two of three frameworks, which is why it
+    was left open rather than guessed at. The same gap in this repo is covered by
+    `check:types`.
 
-- [ ] **The staleness half of the stylelint rules has no home for its finding**, which is the
+- [x] **The staleness half of the stylelint rules has no home for its finding**, which is the _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
       attribution test of ADR-0130 failing against a rule this repo kept. A `[STALE]` report
       anchors at `1:1` of whichever file stylelint happens to process first, and that file
       varies run to run (reproduced on the unmodified code, so it predates the port). It
@@ -1096,14 +1100,14 @@ Atelier token system instead of the generic gradient/grid look.
       third such signal ever wants adding, this is the wrinkle to weigh, not a precedent to
       copy.
 
-- [ ] **Gate review of 2026-09-11 — the findings not fixed in the same session.**
-      All 47 runnable gates were run individually (exit code + duration, warm: 471 s total,
-      `check:paint` 230 s of it, tree clean afterwards). 46 green; the only red is
-      `check:parity`, whose 37 DRIFT blockers are the known debt below and whose `:report`
-      twin is what `check:all` actually runs. Three gates that could read green while
-      measuring nothing were fixed the same day (ADR-0124); these are the rest, each
-      verified by reading the code.
-  - [ ] **Nobody polices `PROP_SURFACE_EXEMPT`.** `check-prop-surface.js:1076` skips
+- → **Gate review of 2026-09-11 — the findings not fixed in the same session.** _(review triage 2026-10-11: open children tracked in tasks/reviews.md)_
+  All 47 runnable gates were run individually (exit code + duration, warm: 471 s total,
+  `check:paint` 230 s of it, tree clean afterwards). 46 green; the only red is
+  `check:parity`, whose 37 DRIFT blockers are the known debt below and whose `:report`
+  twin is what `check:all` actually runs. Three gates that could read green while
+  measuring nothing were fixed the same day (ADR-0124); these are the rest, each
+  verified by reading the code.
+  - [x] **Nobody polices `PROP_SURFACE_EXEMPT`.** `check-prop-surface.js:1076` skips _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         `[STALE]` for any key whose prop the spec does not declare, saying
         "check-manifest-parity.mjs is what actually keeps such an entry live";
         `check-manifest-parity.mjs:263` says "STALE-EXEMPTION hygiene over
@@ -1111,7 +1115,7 @@ Atelier token system instead of the generic gradient/grid look.
         police it." Both in writing, in the files. 61 entries, of which **21 key on the prop
         `errors`, a name that appears zero times in `libs/spec/src/index.ts`**. Decide which
         gate owns it and make the other stop claiming it does.
-  - [ ] **`check:manifest-parity`'s `[DEFAULT]` is guarded on both sides**
+  - [x] **`check:manifest-parity`'s `[DEFAULT]` is guarded on both sides** _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         (`:345`, `ea.default !== undefined && eb.default !== undefined && …`), so a real
         default divergence where one framework's docgen reports no default is invisible.
         The file header calls this tag "check:defaults' cross-framework half" —
@@ -1119,33 +1123,33 @@ Atelier token system instead of the generic gradient/grid look.
         three normalizers also disagree on quoting (`lib/docgen.mjs:492` strips, `:234`
         `JSON.parse`s, `:197` passes through raw), which any surviving asymmetry is
         currently masked by.
-  - [ ] **Exemption staleness is per-gate and mostly absent.** 19 gates import
-        `lib/allowlists.js`, which holds 20 exemption maps; **7 gates check their own
-        entries for rot.** ADR-0034 requires the check ("load-bearing allowlists rot") and
-        ADR-0119 sharpened what an entry is. Belongs in the shared harness, not in each
-        gate — see ADR-0125's `gate-kit` boundary.
-  - [ ] **ADR-0009's regenerate-and-diff idiom is reimplemented ~10 times**, each with
-        its own `--check`/write boundary: `check:spec`, `check:tokens`,
-        `check:preflight-clone-sync`, `check:scaffold-snapshot`, `check:artboard-palette`,
-        `check:box-sizing`, `check:behaviors-gen`, `check:llms`, `check:cookbook-manifest`,
-        `check:design-status`. Two of them decide write-vs-check with
-        `mode = process.argv[2]` and a bare `=== '--check'`
-        (`sync-preflight.mjs:96`, `gen-scaffold-snapshot.mjs:67`), so a typo'd flag
-        **mutates the repo instead of checking it**. One helper, one boundary.
-  - [ ] **`check:paint`'s two swallowed Playwright calls.** `:1190`
+  - → **R-154** **Exemption staleness is per-gate and mostly absent.** 19 gates import
+    `lib/allowlists.js`, which holds 20 exemption maps; **7 gates check their own
+    entries for rot.** ADR-0034 requires the check ("load-bearing allowlists rot") and
+    ADR-0119 sharpened what an entry is. Belongs in the shared harness, not in each
+    gate — see ADR-0125's `gate-kit` boundary.
+  - → **R-110** **ADR-0009's regenerate-and-diff idiom is reimplemented ~10 times**, each with
+    its own `--check`/write boundary: `check:spec`, `check:tokens`,
+    `check:preflight-clone-sync`, `check:scaffold-snapshot`, `check:artboard-palette`,
+    `check:box-sizing`, `check:behaviors-gen`, `check:llms`, `check:cookbook-manifest`,
+    `check:design-status`. Two of them decide write-vs-check with
+    `mode = process.argv[2]` and a bare `=== '--check'`
+    (`sync-preflight.mjs:96`, `gen-scaffold-snapshot.mjs:67`), so a typo'd flag
+    **mutates the repo instead of checking it**. One helper, one boundary.
+  - [x] **`check:paint`'s two swallowed Playwright calls.** `:1190` _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         `.hover().catch(() => undefined)` with no `page.setDefaultTimeout` anywhere: a
         non-actionable probe burns Playwright's 30 s default silently, and the element is
         then measured **un-hovered** and compared against the `state=hover` row — a pass on
         an interaction that never happened. Same shape at `:1109-1117` (15 s
         `waitForFunction`). These are the mechanism behind the "prime suspect check:paint"
         note already in this file, and they are also most of why the gate costs 230 s.
-  - [ ] **`check:paint` does not check that `dist/storybook/<fw>` is fresh** (`:983`,
+  - [x] **`check:paint` does not check that `dist/storybook/<fw>` is fresh** (`:983`, _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         it only requires `index.json` to exist), so a stale build measures old code and
         passes. The ordering dependency on `check:storybook-manifests` lives only in
         `check:all`'s `&&` chain, nowhere in the gate. Also `:1249` stamps
         `generatedAt: new Date().toISOString()`, so every `--update-baseline` is a diff even
         when the findings are identical.
-  - [ ] **`check:paint`'s story-evidence scan reads prose.** `:1043-1060` builds the
+  - [x] **`check:paint`'s story-evidence scan reads prose.** `:1043-1060` builds the _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         evidence blob from the story's whole node range and feeds it to `scanLiteralAttrs`
         (`:387`) and `scanObjectLiteralProps` (`:402`), so a
         `parameters.docs.description.story` containing `size="lg"` is indistinguishable from
@@ -1153,36 +1157,36 @@ Atelier token system instead of the generic gradient/grid look.
         is only populated inside `isRenderOnlyDemo && !isForwardingDemo`), but inside that
         branch a literal ranks **above** the resolved args in `buildVariantKey:538`, so the
         story can be compared green against the wrong master variant.
-  - [ ] **`check-docs-sync.js` holes.** `:377` populates `used` for
-        `SCAFFOLD_PORT_EXEMPT` and never reads it, so there is no `[DEAD-ALLOWLIST]` check —
-        unlike `check-component-count.js:179`, which uses the identical content-keyed idiom.
-        `:104-146` `parseSpec()` builds a one-file `ts.createProgram` and never checks
-        diagnostics, so degraded module resolution empties `specProps` and the
-        `[DRIFT]`/`[TYPE-DRIFT]` halves pass vacuously while `[MISSING]` still fires.
-        `:316` requires `[1-9]\d+` on both halves of a Figma node id, so `1:23` is never
-        validated.
-  - [ ] **`check-category-alignment.js:265`'s ALL-SKIPPED guard is `&&`, not
+  - → **R-128** **`check-docs-sync.js` holes.** `:377` populates `used` for
+    `SCAFFOLD_PORT_EXEMPT` and never reads it, so there is no `[DEAD-ALLOWLIST]` check —
+    unlike `check-component-count.js:179`, which uses the identical content-keyed idiom.
+    `:104-146` `parseSpec()` builds a one-file `ts.createProgram` and never checks
+    diagnostics, so degraded module resolution empties `specProps` and the
+    `[DRIFT]`/`[TYPE-DRIFT]` halves pass vacuously while `[MISSING]` still fires.
+    `:316` requires `[1-9]\d+` on both halves of a Figma node id, so `1:23` is never
+    validated.
+  - [x] **`check-category-alignment.js:265`'s ALL-SKIPPED guard is `&&`, not _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         per-check.** Renaming the `libs/<fw>/src/lib/<id>` convention kills the whole
         `[STORY-CATEGORY]` half while `figmaChecked` stays 43, so the guard never fires and
         half the gate goes dark quietly.
-  - [ ] **Smaller, same family:** `check-component-count.js:111` treats any
-        `/generated by/i` in the first 1000 chars as "generated, skip the file";
-        `check-vitest-discovery.js:110` is satisfied by the path appearing in a _comment_
-        (its header is honest about being a text check); `check-skill-discovery.mjs:74`
-        can report ✓ with `checked === 0`; `check-figma-token-names.js:95` matches a
-        `--ui-*` declaration in any selector block, not just `:root` (but its
-        `checked === 0` guard at `:125` is the model the others should copy);
-        `check-sync.js:65` throws on a broken symlink.
-  - [ ] **`check:stories` runs twice in CI.** `.github/workflows/ci.yml` has a
-        dedicated "Storybook tests" job (`nx affected -t storybook-test`), and the "Sync
-        checks" job's `check:all` ends with `check:stories`
-        (`nx run-many -t storybook-test`) — on a PR the first is affected-scoped and the
-        second is not, so the unscoped run happens anyway. The same 60-minute job also
-        carries `check:storybook-manifests` (three Storybook builds), `check:paint` (230 s)
-        and `check:docs-layout` (a docs build plus a browser). Splitting those out with
-        their own timeouts is the operational half of ADR-0125 and is what would have
-        bounded the 110-minute hang.
-  - [ ] **`check:paint`'s three other counters are still printed and unasserted.**
+  - → **R-155** **Smaller, same family:** `check-component-count.js:111` treats any
+    `/generated by/i` in the first 1000 chars as "generated, skip the file";
+    `check-vitest-discovery.js:110` is satisfied by the path appearing in a _comment_
+    (its header is honest about being a text check); `check-skill-discovery.mjs:74`
+    can report ✓ with `checked === 0`; `check-figma-token-names.js:95` matches a
+    `--ui-*` declaration in any selector block, not just `:root` (but its
+    `checked === 0` guard at `:125` is the model the others should copy);
+    `check-sync.js:65` throws on a broken symlink.
+  - → **R-156** **`check:stories` runs twice in CI.** `.github/workflows/ci.yml` has a
+    dedicated "Storybook tests" job (`nx affected -t storybook-test`), and the "Sync
+    checks" job's `check:all` ends with `check:stories`
+    (`nx run-many -t storybook-test`) — on a PR the first is affected-scoped and the
+    second is not, so the unscoped run happens anyway. The same 60-minute job also
+    carries `check:storybook-manifests` (three Storybook builds), `check:paint` (230 s)
+    and `check:docs-layout` (a docs build plus a browser). Splitting those out with
+    their own timeouts is the operational half of ADR-0125 and is what would have
+    bounded the 110-minute hang.
+  - [x] **`check:paint`'s three other counters are still printed and unasserted.** _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         ADR-0124 rule 1 ("every counter a gate prints is asserted or removed") is met only
         for the counters that separate "measured nothing" from "found nothing". A green run
         still reports, per framework, `skipped-demo` 37/43/62, `not-rendered` 25/20/21 and
@@ -1190,7 +1194,7 @@ Atelier token system instead of the generic gradient/grid look.
         them. Three different questions: a story the ambiguous-demo heuristic could not
         disambiguate, a story that did not render at all, and a probe that would not focus.
         Each wants its own floor or its own exemption map, the same way the roster got one.
-  - [ ] **Are the fourteen subcomponent `PAINT_ROSTER_EXEMPT` entries really closed?**
+  - [x] **Are the fourteen subcomponent `PAINT_ROSTER_EXEMPT` entries really closed?** _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         `check:paint`'s new roster floor (ADR-0124) records 24 of 43 roster components as
         never measured: 8 `gap` (real defects, warn every run) and 16 `design`. Two of the
         `design` calls are settled — `AtlRadio` matches the call `A11Y_PARITY_EXEMPT`
@@ -1202,23 +1206,23 @@ Atelier token system instead of the generic gradient/grid look.
         subcomponent gets a story and is measured, or the reason it never will be belongs in
         the entry. Left as `design` for now because authoring fourteen stories is its own
         decision, not a gate fix.
-  - [ ] **Is `[DOCGEN-FAILED]` load-flaky?** Promoting a docgen failure from a silent
-        `null` to an error (ADR-0124) is right, but it makes the gate's verdict depend on a
-        Storybook worker completing. One unexplained observation on 2026-09-11: a
-        `check:contracts` run exited 1 with 4 errors while a `check:paint` browser run was in
-        flight on the same machine; three immediately following runs were exit 0 / 0 errors
-        and the log had already been overwritten, so the 4 errors were never identified. CI
-        runs the gates sequentially, so the contention is lower there, but this needs one
-        deliberate test — run `check:contracts` under load and see whether the Angular/Vue
-        docgen workers fail — before a red build on that tag is trusted as a real finding.
-  - [ ] **Not reproduced, left recorded:** the concern that `process.exit()` immediately
-        after a large finding burst truncates output on a pipe. Measured on
-        `check:manifest-parity` — 34 lines identical with and without a pipe. Plausible only
-        above the pipe buffer, i.e. exactly on a red run of `check:paint` or
-        `check:contracts`. Worth one deliberate test before trusting a red build's output.
+  - → **R-101** **Is `[DOCGEN-FAILED]` load-flaky?** Promoting a docgen failure from a silent
+    `null` to an error (ADR-0124) is right, but it makes the gate's verdict depend on a
+    Storybook worker completing. One unexplained observation on 2026-09-11: a
+    `check:contracts` run exited 1 with 4 errors while a `check:paint` browser run was in
+    flight on the same machine; three immediately following runs were exit 0 / 0 errors
+    and the log had already been overwritten, so the 4 errors were never identified. CI
+    runs the gates sequentially, so the contention is lower there, but this needs one
+    deliberate test — run `check:contracts` under load and see whether the Angular/Vue
+    docgen workers fail — before a red build on that tag is trusted as a real finding.
+  - → **R-103** **Not reproduced, left recorded:** the concern that `process.exit()` immediately
+    after a large finding burst truncates output on a pipe. Measured on
+    `check:manifest-parity` — 34 lines identical with and without a pipe. Plausible only
+    above the pipe buffer, i.e. exactly on a red run of `check:paint` or
+    `check:contracts`. Worth one deliberate test before trusting a red build's output.
 
-- [ ] **Spec-format review follow-ups** (owner decided 2026-09-10: A first, then plan
-      the workflow — `tasks/spec-workflow-plan-2026-09-10.md`):
+- → **Spec-format review follow-ups** (owner decided 2026-09-10: A first, then plan _(review triage 2026-10-11: open children tracked in tasks/reviews.md)_
+  the workflow — `tasks/spec-workflow-plan-2026-09-10.md`):
   - [x] **Option A, honesty pass — done 2026-09-10.** Dated "Corrected" paragraphs on
         ADR-0006 (compiler claim) and ADR-0013 (Angular/Vue "read the spec" fallback);
         `README.md` spec section rewritten (gates, not compiler; example brought to the real
@@ -1254,75 +1258,75 @@ Atelier token system instead of the generic gradient/grid look.
         all three previews. Negative test: a broken `play` assertion named the story and
         turned `check:stories` red; restored from a copy. Verified: Vue 242, React 216,
         Angular 229 under `CI=1`. Real CI proof lands with the next push.
-  - [ ] **a11y backlog from S0** (React/Vue measured 2026-09-10 with `a11y.test: 'error'`:
-        **React 28 · Vue 36 failing stories**. Angular's own measurement did not land until
-        2026-09-12: the "Angular 0" first recorded here was zero _checks_, not zero failures —
-        `vitest.setup.ts` called `setProjectAnnotations([projectAnnotations])` without
-        `a11yAddonAnnotations`, so `a11y.test: 'error'` had no consumer and axe never ran in
-        the browser suite (found by injection: a bare `<img>` with no `alt` passed clean;
-        ADR-0122 "Corrected 2026-09-12"). Fixed — `import '@angular/compiler'` (the same
-        partial-Ivy idiom `src/test-setup.ts` already carries) plus the addon's project
-        annotations — Angular surfaced **32 failing stories** of its own, across 9 story files
-        and 10 components. Totals: **Angular 32 · React 28 · Vue 36**.) Recorded as
-        `parameters.a11y.config.rules` exemptions at file or story scope, each rule id and
-        reason in a comment pointing here; remove the exemption when the component or story
-        is fixed. Per rule (impact) → where; the per-story list is in the exemption comments
-        themselves:
-    - [ ] `select-name` (critical) — React ×6, Vue ×9: native `<select>` without an
+  - → **a11y backlog from S0** (React/Vue measured 2026-09-10 with `a11y.test: 'error'`: _(review triage 2026-10-11: open children tracked in tasks/reviews.md)_
+    **React 28 · Vue 36 failing stories**. Angular's own measurement did not land until
+    2026-09-12: the "Angular 0" first recorded here was zero _checks_, not zero failures —
+    `vitest.setup.ts` called `setProjectAnnotations([projectAnnotations])` without
+    `a11yAddonAnnotations`, so `a11y.test: 'error'` had no consumer and axe never ran in
+    the browser suite (found by injection: a bare `<img>` with no `alt` passed clean;
+    ADR-0122 "Corrected 2026-09-12"). Fixed — `import '@angular/compiler'` (the same
+    partial-Ivy idiom `src/test-setup.ts` already carries) plus the addon's project
+    annotations — Angular surfaced **32 failing stories** of its own, across 9 story files
+    and 10 components. Totals: **Angular 32 · React 28 · Vue 36**.) Recorded as
+    `parameters.a11y.config.rules` exemptions at file or story scope, each rule id and
+    reason in a comment pointing here; remove the exemption when the component or story
+    is fixed. Per rule (impact) → where; the per-story list is in the exemption comments
+    themselves:
+    - [x] `select-name` (critical) — React ×6, Vue ×9: native `<select>` without an _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
           accessible name (Select stories, Settings Page, Showcase). Same defect as L1 above.
           Angular's `AtlSelect` has no native `<select>` at all — a CDK-overlay custom listbox
           — so it never trips this rule; its own unlabeled-trigger defect is `button-name`
           below, a different rule id for the same missing-name shape.
-    - [ ] `aria-progressbar-name` (serious) — React ×11, Vue ×9, **Angular ×21**:
-          `role=progressbar` without `aria-label` when `label` is omitted. Same as L2 above;
-          the spec leaves `label` optional — decide whether the component requires it (React's
-          Button-style discriminated union) or every story passes one. Angular: all 6
-          `AtlProgress` stories (meta-scoped), the `ManagementDashboard` cookbook demo
-          (story-scoped — same story name and cause as React's and Vue's own
-          `ManagementDashboard`), and Showcase `AllComponents`.
-    - [ ] `aria-required-children` (critical) — React ×6, Vue ×4, **Angular ×2** (6 stories,
-          2 distinct printed violations — Vitest collapses the identical Empty-group and
-          Error-group renders into one message each): AtlChat's `.messages-list[role="list"]`
-          carries the empty-state icon/button or the error-state `[role=alert]` as children.
-          Component defect — and, corrected from the assumption this line carried before
-          Angular's suite ran at all: Angular hits the **identical shape**, not a different
-          one (all 6 Drawer/Popup/Inline × Empty/Error stories, meta-scoped). Compare all
-          three frameworks together before fixing.
-    - [ ] `label` (critical) — React ×4, Vue ×2, **Angular ×9**: Table Kitchen Sink /
-          Selectable checkbox cells, React Input Disabled / Read Only. Angular: the same
-          Table Kitchen Sink / Selectable row-select checkboxes (story-scoped). Angular's
-          Table select-all header cell already carries accessible text, so — unlike React and
-          Vue — it does not also hit `empty-table-header` below.
-    - [ ] `scrollable-region-focusable` (serious) — React ×1, Vue ×5: AtlCodeBlock's
+    - → **R-131** `aria-progressbar-name` (serious) — React ×11, Vue ×9, **Angular ×21**:
+      `role=progressbar` without `aria-label` when `label` is omitted. Same as L2 above;
+      the spec leaves `label` optional — decide whether the component requires it (React's
+      Button-style discriminated union) or every story passes one. Angular: all 6
+      `AtlProgress` stories (meta-scoped), the `ManagementDashboard` cookbook demo
+      (story-scoped — same story name and cause as React's and Vue's own
+      `ManagementDashboard`), and Showcase `AllComponents`.
+    - → **R-136** `aria-required-children` (critical) — React ×6, Vue ×4, **Angular ×2** (6 stories,
+      2 distinct printed violations — Vitest collapses the identical Empty-group and
+      Error-group renders into one message each): AtlChat's `.messages-list[role="list"]`
+      carries the empty-state icon/button or the error-state `[role=alert]` as children.
+      Component defect — and, corrected from the assumption this line carried before
+      Angular's suite ran at all: Angular hits the **identical shape**, not a different
+      one (all 6 Drawer/Popup/Inline × Empty/Error stories, meta-scoped). Compare all
+      three frameworks together before fixing.
+    - → **R-137** `label` (critical) — React ×4, Vue ×2, **Angular ×9**: Table Kitchen Sink /
+      Selectable checkbox cells, React Input Disabled / Read Only. Angular: the same
+      Table Kitchen Sink / Selectable row-select checkboxes (story-scoped). Angular's
+      Table select-all header cell already carries accessible text, so — unlike React and
+      Vue — it does not also hit `empty-table-header` below.
+    - [x] `scrollable-region-focusable` (serious) — React ×1, Vue ×5: AtlCodeBlock's _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
           `.code-block-body` scroll container is not focusable. Already open above
           (docs review); now measured in stories too. Angular's `AtlCodeBlock` stories render
           clean under this rule — not (yet) a cross-framework match.
-    - [ ] `label-title-only` (serious) — React ×1, Vue ×6, **Angular ×2**: Combobox / Input /
-          Select / Textarea error-state inputs named by `title` only. Angular's Input and
-          Textarea `WithErrors` stories (story-scoped) hit the same rule by a different path —
-          there is no `title` attribute anywhere in either component: axe's `title-only` check
-          (`!labelText && !!(title || ariaDescribedBy)`) treats a present `aria-describedby`
-          (here, pointing at the rendered error list) the same as a `title`, so it fires anyway.
-    - [ ] `empty-table-header` (minor) — React ×2, Vue ×2: the select-all checkbox
+    - → **R-137** `label-title-only` (serious) — React ×1, Vue ×6, **Angular ×2**: Combobox / Input /
+      Select / Textarea error-state inputs named by `title` only. Angular's Input and
+      Textarea `WithErrors` stories (story-scoped) hit the same rule by a different path —
+      there is no `title` attribute anywhere in either component: axe's `title-only` check
+      (`!labelText && !!(title || ariaDescribedBy)`) treats a present `aria-describedby`
+      (here, pointing at the rendered error list) the same as a `title`, so it fires anyway.
+    - [x] `empty-table-header` (minor) — React ×2, Vue ×2: the select-all checkbox _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
           header cell has no text.
-    - [ ] `landmark-unique` (moderate) — Vue ×2: Accordion panel, Pagination.
-    - [ ] `aria-allowed-attr` (critical) — Vue ×1: tooltip-wrapped menu trigger.
-    - [ ] `button-name` (critical) — **Angular ×12, new bucket, no React/Vue counterpart**.
-          AtlSelect's CDK-overlay trigger `<button>` has no accessible name when `label` is
-          omitted (meta-scoped, ×8 stories — the architectural sibling of `select-name` above:
-          same missing-name defect, different rule id because Angular's Select isn't a native
-          `<select>`). AtlTh's sort-direction button renders only an icon glyph, no accessible
-          name (Table `Sortable` + `Kitchen Sink`, story-scoped, ×3 combined). Showcase
-          `AllComponents` (×1, both causes together).
-    - [ ] `listitem` (serious) — **Angular ×20, new bucket, no React/Vue counterpart, and
-          missing from ADR-0122's "Corrected 2026-09-12" tally** — a real gap in that
-          paragraph's count, found while writing this entry: every `<atl-breadcrumb-item>`
-          wraps its own host element around the `<li>`, so the `<li>`'s immediate DOM parent
-          is `<atl-breadcrumb-item>`, not the `<ol>` — axe's `listitem` check (distinct from
-          `aria-required-children`) fires because Angular components, unlike React's and
-          Vue's plain-DOM children, always interpose a real host element between a projected
-          child and its logical parent. All 5 `AtlBreadcrumbs` stories (meta-scoped, ×16) and
-          Showcase `AllComponents` (×4).
+    - [x] `landmark-unique` (moderate) — Vue ×2: Accordion panel, Pagination. _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
+    - [x] `aria-allowed-attr` (critical) — Vue ×1: tooltip-wrapped menu trigger. _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
+    - → **R-138** `button-name` (critical) — **Angular ×12, new bucket, no React/Vue counterpart**.
+      AtlSelect's CDK-overlay trigger `<button>` has no accessible name when `label` is
+      omitted (meta-scoped, ×8 stories — the architectural sibling of `select-name` above:
+      same missing-name defect, different rule id because Angular's Select isn't a native
+      `<select>`). AtlTh's sort-direction button renders only an icon glyph, no accessible
+      name (Table `Sortable` + `Kitchen Sink`, story-scoped, ×3 combined). Showcase
+      `AllComponents` (×1, both causes together).
+    - → **R-139** `listitem` (serious) — **Angular ×20, new bucket, no React/Vue counterpart, and
+      missing from ADR-0122's "Corrected 2026-09-12" tally** — a real gap in that
+      paragraph's count, found while writing this entry: every `<atl-breadcrumb-item>`
+      wraps its own host element around the `<li>`, so the `<li>`'s immediate DOM parent
+      is `<atl-breadcrumb-item>`, not the `<ol>` — axe's `listitem` check (distinct from
+      `aria-required-children`) fires because Angular components, unlike React's and
+      Vue's plain-DOM children, always interpose a real host element between a projected
+      child and its logical parent. All 5 `AtlBreadcrumbs` stories (meta-scoped, ×16) and
+      Showcase `AllComponents` (×4).
   - [x] **S1 — standalone docgen spike — feasible, done 2026-09-10**
         (`tasks/docgen-spike-2026-09-10.md`). Call the docgen workers Storybook itself uses
         (`@storybook/angular-vite/internal/docgen-worker`, `@storybook/vue3/internal/docgen-worker`;
@@ -1351,47 +1355,47 @@ Atelier token system instead of the generic gradient/grid look.
         then restored. Closing the roster's real coverage gaps took **26 new stories**
         (Angular 5, React 10, Vue 11), all rendered and axe-clean in the browser suite.
         Exit 0 with 93 warnings — the visible debt below.
-  - [ ] **Debt `check:contracts` made visible** (93 warnings, 2026-09-10):
-    - [ ] `[COVERAGE-BOOL]` ×31 — booleans never `true` in any story (Combobox
+  - [x] **Debt `check:contracts` made visible** (93 warnings, 2026-09-10): _(closed 2026-10-11: all children closed by the review triage)_
+    - [x] `[COVERAGE-BOOL]` ×31 — booleans never `true` in any story (Combobox _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
           `required`/`readonly`, Progress `indeterminate`, Radio `disabled`, Stepper
           `linear`, Table `stickyHeader`, Textarea `required`/`readonly`, plus React-only
           Checkbox/Input/Pagination/RadioGroup/Select). Under S every Boolean state gets a
           story; promote to error once the stories exist.
-    - [ ] `[NO-STORY-META]` ×46 — 15–16 child masters per framework (Th, Td, Tr, Tbody,
+    - [x] `[NO-STORY-META]` ×46 — 15–16 child masters per framework (Th, Td, Tr, Tbody, _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
           Tab, Step, Option, MenuItem, MenuSeparator, AccordionItem, BreadcrumbItem,
           ChatMessage, ChatSuggestion, ChatTyping, AvatarGroup in Angular, Toast in
           React/Vue) have no story meta of their own — their shape and coverage are stage 2
           (nested-arg evidence).
-    - [ ] `[FIGMA-ONLY]` ×7 UNEXPLAINED — Combobox `state=filtered`/`selected`, Input and
+    - [x] `[FIGMA-ONLY]` ×7 UNEXPLAINED — Combobox `state=filtered`/`selected`, Input and _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
           Textarea `state=filled`, Select `state=filled`/`open`, Table `error`. Each needs a
           decision: draw it in code, drop it from the master, or give it a sourced reason.
-    - [ ] `[NO-MASTER]` — AtlIcon has no snapshot master (its glyphs are on the Icons page
+    - [x] `[NO-MASTER]` — AtlIcon has no snapshot master (its glyphs are on the Icons page _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
           the snapshot does not index; ADR-0057). Decide: index the Icons page into the
           snapshot, or record AtlIcon as code-only by design.
-    - [ ] `[FW-ONLY]` ×2 — AtlButton `type` exists in Vue only; AtlRadioGroup
+    - [x] `[FW-ONLY]` ×2 — AtlButton `type` exists in Vue only; AtlRadioGroup _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
           `orientation` in React only. `check:props` territory (ADR-0093); the React
           `react-docgen` importer also drops props resolved only through `node_modules` types,
           so React's `type` absence may be tooling, not code — verify before fixing.
-    - [ ] `[UNMIRRORED]` ×2 — the same two `codeOnly` entries are not named in their
+    - [x] `[UNMIRRORED]` ×2 — the same two `codeOnly` entries are not named in their _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
           masters' descriptions; add the line on the Figma side when the Bridge is connected.
   - [x] **S3 stage 2 — `check:paint` — done 2026-09-10** (ADR-0121 "S3 stage 2 done").
         Playwright over the built Storybooks, rendered values vs the resolved `--ui-*` token
         the master binds, hover/focus rows, ratchet `tools/figma/paint-baseline.json` (755
         entries after probes and `[NOT-RENDERED]`), six `probes` in contracts. ~220 s in
         `check:all` after the Storybook builds.
-  - [ ] **`check:paint` follow-ups:**
-    - [ ] Root-cause the nine frequent shapes not yet examined (Checkbox/Toggle gap,
+  - [x] **`check:paint` follow-ups:** _(closed 2026-10-11: all children closed by the review triage)_
+    - [x] Root-cause the nine frequent shapes not yet examined (Checkbox/Toggle gap, _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
           radius, font-size; Card/Badge/Textarea height). AtlInput's height (40 vs 44) is the
           2026-09-08 token change — decide code or master per shape, then re-record.
-    - [ ] React `AtlSelect` stories are classified as demos (three `optionValue`
+    - [x] React `AtlSelect` stories are classified as demos (three `optionValue` _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
           literals trip the literal-scan heuristic) and have never been measured. Teach the
           heuristic that repeated literals on _child_ elements are not a variant claim.
-    - [ ] Overlays (Dialog, Drawer, Chat) are `[NOT-RENDERED]` closed; an open-state
+    - [x] Overlays (Dialog, Drawer, Chat) are `[NOT-RENDERED]` closed; an open-state _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
           recipe per component (click the trigger, then measure) is needed before their paint
           counts. Codex's AtlChat probe finding (per-variant `drawer-panel`/`popup-bg`/
           `chat-card` layers) lives here too.
-    - [ ] `--theme dark` works but is not in `check:all`; decide whether the chain runs both.
-    - [ ] The baseline is a ratchet on 755 recorded drifts. It is only worth its 220 s if
+    - [x] `--theme dark` works but is not in `check:all`; decide whether the chain runs both. _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
+    - [x] The baseline is a ratchet on 755 recorded drifts. It is only worth its 220 s if _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
           the backlog above shrinks it; review the count monthly.
   - [x] **S6a — `check:manifest-parity` — done 2026-09-10** (ADR-0121 "S6a done"): the
         three-manifest diff with `check:props`' equivalences and allowlist; six real
@@ -1407,37 +1411,37 @@ Atelier token system instead of the generic gradient/grid look.
         `vitest.setup.ts`, `a11y.test: 'error'`, `storybook-test` target; Chromium via
         `npx playwright install chromium` (preflight warns). React e2e green in 176 s through
         verdaccio incl. `check:contracts` and `check:stories`; `nx test create-workspace` 78.
-  - [ ] **S4 follow-ups** (facts the proof surfaced, not smoothed over):
-    - [ ] `check:contracts` is **vacuously green on the scaffold's example**: `AtlButton`
-          is imported from `@atelier-ui/<fw>` in `node_modules`. Since 2026-09-11 the check
-          skips such a component itself, before any docgen call, in every framework (summary
-          `external: N`) — until then only React's resolver and Vue's worker happened to return
-          nothing, while Angular's followed the package's `.d.ts` and returned a zero-prop
-          payload (first Angular e2e, CI run 34562307047, red). Only `[NO-STORY-META]`
-          remains. Real work happens on the attendee's own components. Give the check a `--manifest <components.json|url>`
-          input so library components are compared through the hosted Storybook manifest
-          (ADR-0097) — then the example proves something. CLAUDE.md says so today.
+  - → **S4 follow-ups** (facts the proof surfaced, not smoothed over): _(review triage 2026-10-11: open children tracked in tasks/reviews.md)_
+    - → **R-100** `check:contracts` is **vacuously green on the scaffold's example**: `AtlButton`
+      is imported from `@atelier-ui/<fw>` in `node_modules`. Since 2026-09-11 the check
+      skips such a component itself, before any docgen call, in every framework (summary
+      `external: N`) — until then only React's resolver and Vue's worker happened to return
+      nothing, while Angular's followed the package's `.d.ts` and returned a zero-prop
+      payload (first Angular e2e, CI run 34562307047, red). Only `[NO-STORY-META]`
+      remains. Real work happens on the attendee's own components. Give the check a `--manifest <components.json|url>`
+      input so library components are compared through the hosted Storybook manifest
+      (ADR-0097) — then the example proves something. CLAUDE.md says so today.
     - [x] Angular and Vue scaffolds not run through a real install — **CI ran both on
           2026-09-11** (run 34562307047): Vue green; Angular red on `check:contracts` (the
           item above). Fixed the same day; `E2E_FRAMEWORKS=angular` locally green in 3 m 15 s
           with `external: 1` and only `[NO-STORY-META]`. Lesson recorded (`tasks/lessons.md`,
           2026-09-11): a "not run" follow-up on a shipped artefact is a known-red, not a follow-up.
-    - [ ] The scaffold ships no `docs-block.ts`, so `[CONTRACT-IMPORT]` is a **warning**
-          there (severity keyed on that file's presence beside the contracts — a proxy for the
-          preview's wiring, not a check of it) and an attendee's `parameters.contract` renders
-          nothing. Decide: ship the block into `<app>/src/contracts/` + `docs.page` in the
-          scaffold preview (needs `react` resolvable in the Angular/Vue scaffolds via
-          addon-docs), or make the severity an explicit `contracts.config.json` field.
-    - [ ] `findExternalPackageDir` keys on `_rawComponentPath`, which csf-tools sets only
-          for a directly imported identifier; `import * as UI` + `component: UI.AtlButton` or
-          `const C = AtlButton` bypass the skip (Codex, 2026-09-11). The templates use direct
-          imports; note, not fix.
-    - [ ] `figma-snapshot-contracts.mjs` verified in `--dry-run` only — the connect path
+    - → **R-001** The scaffold ships no `docs-block.ts`, so `[CONTRACT-IMPORT]` is a **warning**
+      there (severity keyed on that file's presence beside the contracts — a proxy for the
+      preview's wiring, not a check of it) and an attendee's `parameters.contract` renders
+      nothing. Decide: ship the block into `<app>/src/contracts/` + `docs.page` in the
+      scaffold preview (needs `react` resolvable in the Angular/Vue scaffolds via
+      addon-docs), or make the severity an explicit `contracts.config.json` field.
+    - → **R-102** `findExternalPackageDir` keys on `_rawComponentPath`, which csf-tools sets only
+      for a directly imported identifier; `import * as UI` + `component: UI.AtlButton` or
+      `const C = AtlButton` bypass the skip (Codex, 2026-09-11). The templates use direct
+      imports; note, not fix.
+    - [x] `figma-snapshot-contracts.mjs` verified in `--dry-run` only — the connect path _(closed 2026-10-11 by the review triage: DUPLICATE; see tasks/archive/review-triage-2026-10-11.md)_
           needs the Desktop Bridge. First Bridge session: run it against the Atelier file and
           diff its AtlButton entry with `tools/figma/snapshot.json`'s.
-    - [ ] The scaffold's `figma:snapshot` script carries a `<YOUR_FIGMA_FILE_KEY>`
-          placeholder because the preset has only a boolean `figmaMcp` option. Consider a
-          `figmaFile` option so the workshop duplicate's key lands at scaffold time.
+    - → **R-087** The scaffold's `figma:snapshot` script carries a `<YOUR_FIGMA_FILE_KEY>`
+      placeholder because the preset has only a boolean `figmaMcp` option. Consider a
+      `figmaFile` option so the workshop duplicate's key lands at scaffold time.
   - [x] **CI after the 2026-09-11 push (`bd28fe0`, run 34562307047 / publish 34562307018) —
         diagnosed 2026-09-11.** Storybook tests, Build, Test, Lint, Release drift green on the
         runner; CLI e2e red (Angular `check:contracts`, fixed above). `check:all` then hung ~110
@@ -1454,10 +1458,10 @@ check:manifest-parity` → `sh` → `MainThread`. The gate finished its work and
         hypothesis. Consequence worth keeping: **`check:paint`, `check:contracts` and
         `check:stories` inside `check:all` have still never run on a runner** — the chain never
         reached them. Watch the next run's duration; `check:paint` is ~220 s locally.
-  - [ ] **`publish.yml` uses `concurrency: { group: publish, cancel-in-progress: false }`**, so
-        the hung "Verify (release gate)" job blocks every later release run until GitHub's 6 h
-        timeout retires it. Cancel a hung publish run by hand; the new `timeout-minutes: 60` caps
-        the next one at an hour. Consider whether the release gate should cancel in progress.
+  - → **R-105** **`publish.yml` uses `concurrency: { group: publish, cancel-in-progress: false }`**, so
+    the hung "Verify (release gate)" job blocks every later release run until GitHub's 6 h
+    timeout retires it. Cancel a hung publish run by hand; the new `timeout-minutes: 60` caps
+    the next one at an hour. Consider whether the release gate should cancel in progress.
   - [x] **S5a — skill and curriculum — done 2026-09-10** (ADR-0121 "S5a done"; ADR-0113
         corrected). `design-to-code` steps 3/5/6/7 on contract + stories + `check:contracts`;
         handoff template and three fixtures; `schulung.astro` Tag 2 (new gate claim, Block 02
@@ -1467,27 +1471,27 @@ check:manifest-parity` → `sh` → `MainThread`. The gate finished its work and
         `schulung-claims.e2e.mjs` rewritten (wsdemo fixture, no `index.ts` scenario). Gates:
         docs build, docs-layout, adr-refs, skill-discovery, llms, contracts, lint docs,
         check-skill, test-skill (offline) all 0.
-  - [ ] **S5a follow-up:** run `node tools/e2e/schulung-claims.e2e.mjs` on a clean tree —
-        Part 1 (the gate claim) was reproduced gate by gate but not executed by the script,
-        because its `assertCleanTree` met the day's uncommitted work.
+  - → **R-003** **S5a follow-up:** run `node tools/e2e/schulung-claims.e2e.mjs` on a clean tree —
+    Part 1 (the gate claim) was reproduced gate by gate but not executed by the script,
+    because its `assertCleanTree` met the day's uncommitted work.
   - [x] **S5b — the contract docs block + story-meta import — done 2026-09-10** (ADR-0121
         "S5b done"). `libs/spec/src/contracts/docs-block.ts` (`ContractBlock`,
         `contractDocsPage`, `createElement` only), `parameters.docs.page` in all three
         previews, 83 story metas import their contract, `[CONTRACT-IMPORT]` in
         `check:contracts`. Playwright read "Contract / 129:20 / hasIcon" off AtlButton's built
         React docs page; suites 234/226/253; Angular and Vue Storybook builds green.
-  - [ ] **S5 follow-ups:**
-    - [ ] `docs-block.ts` carries one `@ts-ignore` on `@storybook/addon-docs/blocks`
+  - [x] **S5 follow-ups:** _(closed 2026-10-11: all children closed by the review triage)_
+    - [x] `docs-block.ts` carries one `@ts-ignore` on `@storybook/addon-docs/blocks` _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
           (`libs/spec/tsconfig.json` uses classic `moduleResolution`, which rejects the
           `exports` subpath; the framework tsconfigs resolve it). Decide: move the spec project
           to `bundler` resolution, or keep the ignore with its comment.
-    - [ ] React's and Vue's Toast story metas set no `component`, so they carry no contract
+    - [x] React's and Vue's Toast story metas set no `component`, so they carry no contract _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
           import and `check:contracts` cannot key them (`[NO-STORY-META]` for AtlToast there).
           Give them a `component` (the container) so the contract reaches their Docs tab.
-    - [ ] The participant walk-through (Codex, 2026-09-10) still lists: `AGENTS.md`'s local
+    - [x] The participant walk-through (Codex, 2026-09-10) still lists: `AGENTS.md`'s local _(closed 2026-10-11 by the review triage: DUPLICATE; see tasks/archive/review-triage-2026-10-11.md)_
           MCP calls heading fixed, but the e2e's Part 1 remains unexecuted until the tree is
           clean (the other session's untracked skill files count).
-  - [ ] **Cross-framework gaps found by `check:manifest-parity` (S6a, 2026-09-10)** —
+  - [x] **Cross-framework gaps found by `check:manifest-parity` (S6a, 2026-09-10)** — _(closed 2026-10-11: all children closed by the review triage)_
         recorded as `kind: 'gap'` in `PROP_SURFACE_EXEMPT` so the gate ships green; each is a
         real divergence `check:props` could not see because the spec is silent there
         (ADR-0093 Consequences predicted the first):
@@ -1495,7 +1499,7 @@ check:manifest-parity` → `sh` → `MainThread`. The gate finished its work and
           while Angular and React accept the prop. **Resolved 2026-10-08** (`6b3e4aa2`): a
           caller's `aria-labelledby` falls through to the `<dialog>` and wins (pinned by a Vue
           spec), so the behaviour is equal; the allowlist entry is now `kind: 'design'`.
-    - [ ] `AtlButton` — Angular's `<atl-button>` has no `type` binding or passthrough;
+    - [x] `AtlButton` — Angular's `<atl-button>` has no `type` binding or passthrough; _(closed 2026-10-11 by the review triage: DONE; see tasks/archive/review-triage-2026-10-11.md)_
           React (via `...rest`) and Vue (`type` prop) do. A `submit` button is impossible in
           Angular today.
     - [x] `AtlCheckbox`, `AtlToggle` — Angular offers no way to pass a custom `id`; React
@@ -1506,7 +1510,7 @@ check:manifest-parity` → `sh` → `MainThread`. The gate finished its work and
           2026-10-08** (`6b3e4aa2`): framework-idiomatic naming, like `onPageChange`; the three
           entries are `kind: 'design'`, and `check:manifest-parity` now accepts `design`
           entries as settled.
-  - [x] **Class-c behaviour bugs from `tasks/divergence-triage-2026-10-08.md`, fixed 2026-10-08**
+  - [x] **Class-c behaviour bugs from `tasks/archive/reviews/divergence-triage-2026-10-08.md`, fixed 2026-10-08**
         (test red before, green after, one commit each): Vue tooltip `aria-describedby`
         (`f96a861f`), Vue tabs focus (`8fc1bd77`), Vue accordion group scoping (`553fa4ce`),
         React/Vue combobox skip-disabled (`38536d84`), Angular checkbox/toggle `id`
@@ -1515,7 +1519,7 @@ check:manifest-parity` → `sh` → `MainThread`. The gate finished its work and
         triage: item 7b (Angular button `type`), and
         the Figma master text for stepper `linear` (needs the Desktop Bridge).
   - [x] **Owner decisions of 2026-10-08 on the triage, done** (see the "Resolved 2026-10-08"
-        column in `tasks/divergence-triage-2026-10-08.md`): `errors` accept the shared
+        column in `tasks/archive/reviews/divergence-triage-2026-10-08.md`): `errors` accept the shared
         `AtlErrorItem` in React and Vue, 21 gap entries removed (`aaf1cbd3`); breadcrumb
         `current` is the last item by default in all three, any explicit `current` switches
         the default off (`3b850592`); the tooltip no-flip is recorded in its contract and the
@@ -1530,16 +1534,16 @@ check:manifest-parity` → `sh` → `MainThread`. The gate finished its work and
         green, plus a `KeyboardNavigation` story play each. `a11y-tree.ts` now records
         `aria-describedby` presence, so the Vue-tooltip class of defect fails `check:a11y-parity`
         (shown by reverting `f96a861f` in a scratch change).
-  - [ ] Stepper `linear` in the Figma master description still says "only the active and
+  - [x] Stepper `linear` in the Figma master description still says "only the active and _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         completed steps are clickable"; the code (all three) also passes `optional` steps.
         Correct the master's description line, then refresh `tools/figma/snapshot.json`.
-  - [ ] S6 monorepo retirements — as ADR-0121 Decision 6. S6a (`check:manifest-parity`,
+  - [x] S6 monorepo retirements — as ADR-0121 Decision 6. S6a (`check:manifest-parity`, _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         the three-manifest diff) is built; `--compare-props` evidence in the S6a report: 28
         findings only the manifest diff sees, 48 only `check:props` sees (`[DEAD]` inputs —
         a manifest cannot see consumption — and the 21-key `errors` family, which is a
         spec-incompleteness finding, not a cross-framework one). Retiring `check:props` needs
         a home for `[DEAD]` first.
-  - [ ] Background for the decision — `tasks/spec-rethink-2026-09-10.md`: the greenfield
+  - [x] Background for the decision — `tasks/archive/reviews/spec-rethink-2026-09-10.md`: the greenfield _(closed 2026-10-11 by the review triage: SUPERSEDED; see tasks/archive/review-triage-2026-10-11.md)_
         pass the owner asked for. Inventories what a machine can test
         without massive effort (26 rows; 19 need no authored artefact), what figma-console-mcp
         1.40 and Storybook 10.6 extract and verify, and derives the thinnest spec: **S —
@@ -1551,7 +1555,7 @@ check:manifest-parity` → `sh` → `MainThread`. The gate finished its work and
         fallback) and adds **S0: wire the idle browser-mode suite into CI and set
         `a11y.test: 'error'`** — the largest verification gain available, needs no spec.
         Five decision points in its § 5; S1 (standalone docgen spike) stays the feasibility gate.
-  - [ ] **Side findings from the rethink, each independent of the shape decision:**
+  - [x] **Side findings from the rethink, each independent of the shape decision:** _(closed 2026-10-11: all children closed by the review triage)_
     - [x] **Done 2026-09-10** — `tools/scripts/figma-snapshot.mjs` started
           `figma-console-mcp@latest` while `.mcp.json` pins `1.40.0` (ADR-0110);
           `tools/figma/snapshot.json` recorded `serverVersion: null`. The generator now
@@ -1560,26 +1564,26 @@ check:manifest-parity` → `sh` → `MainThread`. The gate finished its work and
           declared version if the server stays silent. ADR-0110 carries the dated correction.
           The snapshot stays `serverVersion: null` until the next Bridge-connected refresh
           (Codex finding, verified 2026-09-10).
-    - [ ] The Storybook browser-mode suite (interaction + axe, ~11 s per lib) is `# NOT
+    - [x] The Storybook browser-mode suite (interaction + axe, ~11 s per lib) is `# NOT _(closed 2026-10-11 by the review triage: DONE; see tasks/archive/review-triage-2026-10-11.md)_
 WIRED` in `.github/workflows/ci.yml:122-135` because it fails under `CI=1` for an
           unfound reason; `parameters.a11y.test` is `'todo'` (React, Vue) and unset (Angular),
           so axe gates nothing today.
-    - [ ] `AGENTS.md` names an addon-mcp tool `display-review`; the wire name is
+    - [x] `AGENTS.md` names an addon-mcp tool `display-review`; the wire name is _(closed 2026-10-11 by the review triage: DONE; see tasks/archive/review-triage-2026-10-11.md)_
           `review-create` (`node_modules/@storybook/addon-mcp/dist/preset.js:193`,
           `toMcpToolName("review.create")`).
-  - [ ] Review Option B (derive `index.ts` unions from a contract record) stays open as
+  - [x] Review Option B (derive `index.ts` unions from a contract record) stays open as _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         plan S6(c) — after one cohort has used S2–S5, not before.
-  - [ ] Side finding (Codex, verified): Vue generator writes `atl-<fileName>.vue` while
+  - [x] Side finding (Codex, verified): Vue generator writes `atl-<fileName>.vue` while _(closed 2026-10-11 by the review triage: DONE; see tasks/archive/review-triage-2026-10-11.md)_
         its test template imports `./<className>.vue`
         (`tools/generators/atl-component-vue/files/atl-__fileName__.spec.ts__tmpl__:2`).
         Fix independent of the decision above.
 
-- [ ] **Design-workflow skills — build the decided catalog** (decided 2026-09-07).
-      Research and proposal in `plan/design-skills-blueprint.md` (§ 8 carries the six
-      decisions); verbatim digests in `plan/research/design-skills-2026-09-07/`, draft of
-      `design-to-code` under its `drafts/`. Decided shape: **two new skills**
-      (`design-to-code` with a review/verify mode, `artboard-bridge` for Claude Design)
-      **plus architect additions**. Order as decided:
+- → **Design-workflow skills — build the decided catalog** (decided 2026-09-07). _(review triage 2026-10-11: open children tracked in tasks/reviews.md)_
+  Research and proposal in `plan/design-skills-blueprint.md` (§ 8 carries the six
+  decisions); verbatim digests in `plan/research/design-skills-2026-09-07/`, draft of
+  `design-to-code` under its `drafts/`. Decided shape: **two new skills**
+  (`design-to-code` with a review/verify mode, `artboard-bridge` for Claude Design)
+  **plus architect additions**. Order as decided:
   - [x] `skills/figma-workspace-architect/references/plugin-api-gotchas.md` from the Figma
         section of `tasks/lessons.md`; SKILL.md references list updated; discovery re-synced
         (3a8035d).
@@ -1598,11 +1602,11 @@ WIRED` in `.github/workflows/ci.yml:122-135` because it fails under `CI=1` for a
         worktrees; graded; with-skill 86 % vs 59 % pass rate, +44k tokens, same wall time.
         Record and critique in `skills/design-to-code/evals/iteration-1.md`; revisions in
         bde4432.
-  - [ ] skill-creator iteration 2: neutral run names in the prompts, the split/added
-        assertions from iteration-1.md, a live-id variant of eval 0, and a Build-from-handoff
-        eval once a scratch Figma draft with a code-less master exists.
-  - [ ] Description optimisation (`run_loop.py`) after the owner reviews
-        `skills/design-to-code/evals/trigger-eval.json`.
+  - → **R-117** skill-creator iteration 2: neutral run names in the prompts, the split/added
+    assertions from iteration-1.md, a live-id variant of eval 0, and a Build-from-handoff
+    eval once a scratch Figma draft with a code-less master exists.
+  - → **R-118** Description optimisation (`run_loop.py`) after the owner reviews
+    `skills/design-to-code/evals/trigger-eval.json`.
   - [x] Architect additions (2026-09-07): `references/build-from-code-contract.md` (generic
         recipe, Atelier worked example — kept generic so the distributed skill stays
         repo-free); tool map 71 → 100 tool names with Bridge/REST marks and five new sections
@@ -1625,24 +1629,24 @@ WIRED` in `.github/workflows/ci.yml:122-135` because it fails under `CI=1` for a
         (AtlBadge DRIFT) while the baseline published unverified code. Revisions: description
         carve-out for third-party artboards, P0 refusal as a successful run, P0a repo-wide
         DRIFT case.
-  - [ ] `artboard-bridge` iteration 3: the write path (P1–P7) is still unexercised —
-        needs one component with a fresh parity record (Desktop Bridge re-verify +
-        `parity:record`, or a marked synthetic fixture). Also: re-run the governance eval
-        against the fixed description, add an assertion that penalises publishing over a
-        DRIFT row, lift the `list_projects`-only cap, require the correct decider roles.
-  - [ ] **Decide: package the skills into `create-workspace`** (owner's question,
+  - → **R-006** `artboard-bridge` iteration 3: the write path (P1–P7) is still unexercised —
+    needs one component with a fresh parity record (Desktop Bridge re-verify +
+    `parity:record`, or a marked synthetic fixture). Also: re-run the governance eval
+    against the fixed description, add an assertion that penalises publishing over a
+    DRIFT row, lift the `list_projects`-only cap, require the correct decider roles.
+  - [x] **Decide: package the skills into `create-workspace`** (owner's question, _(closed 2026-10-11 by the review triage: SUPERSEDED; see tasks/archive/review-triage-2026-10-11.md)_
         2026-09-07; blueprint § 8 decision 7). Preset ships `.mcp.json` + `CLAUDE.md`, no
         skills. Recommended: vendor the generic skills at generate time and give
         `design-to-code` a scaffold profile — but only after its eval runs pass in the
         monorepo. The preset's own `figma-console-mcp@latest` gets the ADR-0110 pin now.
-- [ ] **`tools/design/artboards.json` has drifted from the live Claude Design project**
-      (verified 2026-09-07 via `list_files`): the registry lists 31 artboards including
-      `Typography Directions.dc.html`, which no longer exists in the project; the project has
-      31 `.dc.html` files including `Index.dc.html`, which the registry does not list. Same
-      count, two mismatches. `gen-design-status` reads the registry, so `plan/design-status.md`
-      is stale in the one column it says cannot be derived. Why now: it is the exact staleness
-      the file's own header warns about, observed rather than hypothetical.
-- [ ] **AtlCard header tracking: decide which side moves.** `.atl-card-header` sets
+- → **R-149** **`tools/design/artboards.json` has drifted from the live Claude Design project**
+  (verified 2026-09-07 via `list_files`): the registry lists 31 artboards including
+  `Typography Directions.dc.html`, which no longer exists in the project; the project has
+  31 `.dc.html` files including `Index.dc.html`, which the registry does not list. Same
+  count, two mismatches. `gen-design-status` reads the registry, so `plan/design-status.md`
+  is stale in the one column it says cannot be derived. Why now: it is the exact staleness
+  the file's own header warns about, observed rather than hypothetical.
+- [x] **AtlCard header tracking: decide which side moves.** `.atl-card-header` sets _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
       `letter-spacing: var(--ui-letter-spacing-tight)` (−0.01em) in all three frameworks; the
       master's title text sits on the shared `ty/title` style at 0 %. Known and left open in
       c88a543 (2026-09-07 09:20, "Not changed: the master shows letter-spacing 0% against the
@@ -1651,7 +1655,7 @@ WIRED` in `.github/workflows/ci.yml:122-135` because it fails under `CI=1` for a
       does not say. Decide (tighten the master's style, or drop the tracking from the header)
       and only then treat AtlCard's parity record as clean rather than "clean except the
       documented gap".
-- [ ] **Is the `Library Tokens` collection stale against `tokens.css`?** Reported by a
+- [x] **Is the `Library Tokens` collection stale against `tokens.css`?** Reported by a _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
       baseline eval run on 2026-09-07 (unverified by me): the collection was generated
       2026-07-22 (`gen-figma-library-tokens.mjs` unchanged since 39f92a4) while `tokens.css`
       gained the teal/status ramps, `border-width-*` and the `type-*` roles since; the
@@ -1659,7 +1663,7 @@ WIRED` in `.github/workflows/ci.yml:122-135` because it fails under `CI=1` for a
       gate compares Figma variable _values_ to `tokens.css` (`check-figma.js` checks bindings,
       not values). Verify with `figma_get_variables` against the current sheet; if stale,
       re-run `npm run figma:sync-tokens` and decide whether a value-sync gate is worth having.
-- [ ] **Story `figmaNode()` design links are unchecked against the live file.** All three
+- [x] **Story `figmaNode()` design links are unchecked against the live file.** All three _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
       `atl-breadcrumbs.stories.*` point at `55-141`, which no longer exists (live
       `getNodeByIdAsync` → `null`, 2026-09-07; the master is `55:139`). 91 of the 119
       distinct ids the stories link are outside what `tools/figma/snapshot.json` records
@@ -1667,7 +1671,7 @@ WIRED` in `.github/workflows/ci.yml:122-135` because it fails under `CI=1` for a
       Extend `figma-snapshot.mjs` to resolve every story-linked id (exists / type / master
       it belongs to) and add a `check:story-designs` gate on that; fix the three Breadcrumbs
       links now.
-- [ ] **Architect Audit mode recommends deletions without its own Migrate protocol.** In
+- [x] **Architect Audit mode recommends deletions without its own Migrate protocol.** In _(closed 2026-10-11 by the review triage: DONE; see tasks/archive/review-triage-2026-10-11.md)_
       the 2026-09-07 eval run of the token-architecture prompt, `figma-workspace-architect`
       (Audit) classified findings with severities but never opened
       `references/migration-playbook.md`, called deleting the `Effects Tokens` STRING
@@ -1677,7 +1681,7 @@ WIRED` in `.github/workflows/ci.yml:122-135` because it fails under `CI=1` for a
       ADR-0018 → ADR-0030). Fix in the skill: Audit's fix column must route any delete/rebind
       through Migrate's safety classes, and Token Architecture findings must enumerate every
       collection's consumers before "unused".
-- [ ] **All 37 parity records are DRIFT after the token change** (measured 2026-09-08,
+- [x] **All 37 parity records are DRIFT after the token change** (measured 2026-09-08, _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
       `npm run check:parity` exit 1, 37 blockers, 0 critical). Expected by ADR-0104 — the
       shared `tokens.css` is part of every component's `inputsHash` — but it means the whole
       gate is red until a re-verify sweep, and `artboard-bridge` Publish is blocked repo-wide
@@ -1685,7 +1689,7 @@ WIRED` in `.github/workflows/ci.yml:122-135` because it fails under `CI=1` for a
       (`figma_check_design_parity` per component, then `parity:record`); the interactive
       Light/Dark pass is only needed for the stateful ones. Decide whether the sweep runs
       per component on demand or as one session.
-- [ ] **`AtlDrawer.dc.html`'s finding 4 is wrong and should be corrected in the sheet.**
+- [x] **`AtlDrawer.dc.html`'s finding 4 is wrong and should be corrected in the sheet.** _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
       It claims `closeOnBackdrop` is a visible Boolean on AtlDrawer's master but code-only on
       AtlDialog. `tools/figma/snapshot.json` says otherwise for both: AtlDrawer's `properties`
       are `{position, size}` only, and each component's own description cites ADR-0056 —
@@ -1694,45 +1698,45 @@ WIRED` in `.github/workflows/ci.yml:122-135` because it fails under `CI=1` for a
       sheet; a third caught it only because the skill made it cross-check. Fix the sheet in
       the redesign project (an `artboard-bridge` Publish-style edit) so the next reader does
       not inherit it.
-- [ ] **`plan/figma.md` carries two stale tables.** § Variable Collections is pre-ADR-0030
-      (flagged stale there since 2026-08-26), and the § Components node-id table still says
-      `LlmBreadcrumbs 55:141` / `LlmPagination 55:145` where `tools/figma/snapshot.json`
-      (2026-09-07) has `AtlBreadcrumbs 55:139` / `AtlPagination 55:143` — a baseline eval run
-      spent 35 tool calls on the dead `55:141` (2026-09-07). Replace both tables with pointers
-      to the snapshot and `check-figma.js`, or regenerate them from the snapshot.
+- → **R-151** **`plan/figma.md` carries two stale tables.** § Variable Collections is pre-ADR-0030
+  (flagged stale there since 2026-08-26), and the § Components node-id table still says
+  `LlmBreadcrumbs 55:141` / `LlmPagination 55:145` where `tools/figma/snapshot.json`
+  (2026-09-07) has `AtlBreadcrumbs 55:139` / `AtlPagination 55:143` — a baseline eval run
+  spent 35 tool calls on the dead `55:141` (2026-09-07). Replace both tables with pointers
+  to the snapshot and `check-figma.js`, or regenerate them from the snapshot.
 
-- [ ] **Component backlog surfaced by the docs review (L1–L4)** — not docs CSS; the
-      docs gate allowlists each with a reason pointing here. Why now: L1 is a critical axe
-      violation and the rest are already root-caused.
-  - [ ] **L1** `AtlSelect` demo / component: native `<select>` without an accessible
-        name (axe `select-name`, critical) — either the demo omits the label the
-        component needs, or the spec lets it be omitted.
-  - [ ] **L2** `AtlProgress`: `role=progressbar` without `aria-label` in 16 demo
-        instances (axe `aria-progressbar-name`) — compare `AtlButton`'s
-        discriminated-union enforcement.
-  - [ ] **L3** Checkbox/toggle inputs measure 20×20 / 1×1; login-form demo
-        `input[type=email]` under 24 px when the sticky nav overlaps — confirm the label
-        extends the hit area (WCAG 2.5.8).
-  - [ ] **L4** `AtlTabs` `variant="pills"` neither wraps nor scrolls at 375 (+19 px on
-        `/patterns*`) — `chip-collection-reflow`.
-  - [ ] `AtlCodeBlock`'s scroller has no focusable content (axe
-        `scrollable-region-focusable` on `/components/code-block`).
+- → **Component backlog surfaced by the docs review (L1–L4)** — not docs CSS; the _(review triage 2026-10-11: open children tracked in tasks/reviews.md)_
+  docs gate allowlists each with a reason pointing here. Why now: L1 is a critical axe
+  violation and the rest are already root-caused.
+  - → **R-132** **L1** `AtlSelect` demo / component: native `<select>` without an accessible
+    name (axe `select-name`, critical) — either the demo omits the label the
+    component needs, or the spec lets it be omitted.
+  - → **R-132** **L2** `AtlProgress`: `role=progressbar` without `aria-label` in 16 demo
+    instances (axe `aria-progressbar-name`) — compare `AtlButton`'s
+    discriminated-union enforcement.
+  - → **R-132** **L3** Checkbox/toggle inputs measure 20×20 / 1×1; login-form demo
+    `input[type=email]` under 24 px when the sticky nav overlaps — confirm the label
+    extends the hit area (WCAG 2.5.8).
+  - → **R-132** **L4** `AtlTabs` `variant="pills"` neither wraps nor scrolls at 375 (+19 px on
+    `/patterns*`) — `chip-collection-reflow`.
+  - → **R-132** `AtlCodeBlock`'s scroller has no focusable content (axe
+    `scrollable-region-focusable` on `/components/code-block`).
 
-- [ ] **Radio groups lay out in a row in Angular and Vue and in a column in React.**
-      `.atl-radio-group` / `:host` is `display: flex` with no `flex-direction`, so the
-      default is `row`; `flex-direction: column` lives only under `.orientation-vertical`,
-      which only React emits and whose default in React's own props interface is
-      `'vertical'`. A three-option group therefore renders stacked in React and
-      side-by-side in the other two. Why now: live rendering divergence across all three
-      frameworks, already root-caused.
+- → **R-140** **Radio groups lay out in a row in Angular and Vue and in a column in React.**
+  `.atl-radio-group` / `:host` is `display: flex` with no `flex-direction`, so the
+  default is `row`; `flex-direction: column` lives only under `.orientation-vertical`,
+  which only React emits and whose default in React's own props interface is
+  `'vertical'`. A three-option group therefore renders stacked in React and
+  side-by-side in the other two. Why now: live rendering divergence across all three
+  frameworks, already root-caused.
 
-- [ ] **Vue's checkbox and toggle still lack `aria-required`.** Angular sets
+- [x] **Vue's checkbox and toggle still lack `aria-required`.** Angular sets _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
       `[attr.aria-required]` and no native `required`; React sets both; Vue sets only the
       native `:required`. The same bug was found and fixed for `atl-input.vue`; the
       sibling controls were never swept. Why now: mechanical, same fix already proven.
 
-- [ ] **Three CSS defects from the type-role pass still stand** (two siblings already
-      closed and gated by `check:dead-selectors`, ADR-0081):
+- → **R-141** **Three CSS defects from the type-role pass still stand** (two siblings already
+  closed and gated by `check:dead-selectors`, ADR-0081):
   - `.atl-tbody-empty-cell`'s `font-size` is dead — specificity (0,1,0) loses to
     `.atl-table.size-md tbody td` at (0,2,2), so the empty message renders 14px, not
     the 16px written. Identical in Angular and Vue.
@@ -1746,59 +1750,59 @@ WIRED` in `.github/workflows/ci.yml:122-135` because it fails under `CI=1` for a
   - (`.radio-text` unstyled-in-Angular was examined and deliberately left — see the
     AtlRadioGroup pass below.)
 
-- [ ] **Write the accordion a11y specs.** The one `kind: 'gap'` entry left in
+- [x] **Write the accordion a11y specs.** The one `kind: 'gap'` entry left in _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
       `A11Y_PARITY_EXEMPT` — comparable across all three adapters and the exact component
       ADR-0025 cites as its motivating divergence. Why now: most likely place left for a
       real finding; removing the exemption is a one-line follow-up once the specs land.
 
-- [ ] **Scope a real-browser a11y check — proposal only, nothing built.**
-      `check:a11y-parity`'s header (extended 2026-09-06) now names three defect
-      classes it structurally cannot reach, all found by hand this session with
-      Playwright, none catchable by a jsdom-based gate: AtlStepper's
-      keyboard-unreachable headers (no tab order in jsdom), AtlBreadcrumbs'
-      CSS-generated separator leaking into the tree (jsdom never computes
-      `::after` content), and `a11y-tree.ts`'s accessible-name shortcuts
-      disagreeing with real engines (the stepper panel's `"2"` vs `"Profile"`,
-      the chat log's manufactured transcript-as-name). `check:docs-layout`
-      (ADR-0089) already launches Playwright+chromium+axe-core against the built
-      docs site, but its own header deliberately scopes its axe rules away from a
-      general a11y audit and points back at `check:a11y-parity` — which, per the
-      above, can't do this job either, for the opposite reason (jsdom vs. no
-      layout). Two reuse candidates worth comparing before writing a new gate
-      from scratch, not yet costed against each other: (1) add a per-component
-      whole-document Tab-order probe plus a native-tree
-      (`Accessibility.getFullAXTree`) read onto `check-docs-layout.mjs`'s
-      existing browser session, reusing its solved server/settle/retry plumbing;
-      or (2) once the blocked `storybook-test+axe` CI item below is unblocked,
-      its Vitest-browser-mode chromium session is closer to per-component
-      isolation than a full docs-page render and may be the more natural home.
-      Whichever path, a real check would need to assert on live focus order and
-      a native/ARIA-computed tree — exactly what today's three findings had to
-      be measured by hand instead.
+- → **R-007** **Scope a real-browser a11y check — proposal only, nothing built.**
+  `check:a11y-parity`'s header (extended 2026-09-06) now names three defect
+  classes it structurally cannot reach, all found by hand this session with
+  Playwright, none catchable by a jsdom-based gate: AtlStepper's
+  keyboard-unreachable headers (no tab order in jsdom), AtlBreadcrumbs'
+  CSS-generated separator leaking into the tree (jsdom never computes
+  `::after` content), and `a11y-tree.ts`'s accessible-name shortcuts
+  disagreeing with real engines (the stepper panel's `"2"` vs `"Profile"`,
+  the chat log's manufactured transcript-as-name). `check:docs-layout`
+  (ADR-0089) already launches Playwright+chromium+axe-core against the built
+  docs site, but its own header deliberately scopes its axe rules away from a
+  general a11y audit and points back at `check:a11y-parity` — which, per the
+  above, can't do this job either, for the opposite reason (jsdom vs. no
+  layout). Two reuse candidates worth comparing before writing a new gate
+  from scratch, not yet costed against each other: (1) add a per-component
+  whole-document Tab-order probe plus a native-tree
+  (`Accessibility.getFullAXTree`) read onto `check-docs-layout.mjs`'s
+  existing browser session, reusing its solved server/settle/retry plumbing;
+  or (2) once the blocked `storybook-test+axe` CI item below is unblocked,
+  its Vitest-browser-mode chromium session is closer to per-component
+  isolation than a full docs-page render and may be the more natural home.
+  Whichever path, a real check would need to assert on live focus order and
+  a native/ARIA-computed tree — exactly what today's three findings had to
+  be measured by hand instead.
 
-- [ ] **`storybook-test+axe` in CI — blocked, with a full repro.** Passes locally (216
+- [x] **`storybook-test+axe` in CI — blocked, with a full repro.** Passes locally (216 _(closed 2026-10-11 by the review triage: DONE; see tasks/archive/review-triage-2026-10-11.md)_
       React + 242 Vue, ~11s/lib) but fails identically whenever `CI` is set — a
       `vitest`-browser-provider connection issue, not a runner/chromium issue (ruled out
       via ADR-0042's `check:geometry`, which drives real chromium on the same runner and
       passes). Why now: repro is narrowed to two candidate next steps — capture the served
       page's console in CI, or bisect `@storybook/addon-vitest` / `@vitest/browser`.
 
-- [ ] **AtlInput, AtlTextarea and AtlCombobox have no non-colour invalid indicator in
+- [x] **AtlInput, AtlTextarea and AtlCombobox have no non-colour invalid indicator in _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
       Figma.** ADR-0055 made the `AtlIcon danger` indicator mandatory in code for WCAG
       1.4.1, and AtlInput's own master description already claims it — the master just
       doesn't show it. Why now: the Icon masters (ADR-0057) now make it placeable; it was
       blocked on exactly that until 2026-08-27.
 
-- [ ] **One rehearsal of the participant path on a non-author machine, timed**
-      (Schulung review §10). Why now: last unverified step — everything else in both
-      Schulung reviews is closed. Run it against `tasks/schulung-dry-run-kit.md`
-      (built 2026-09-06): the ordered checkpoint list, known-blocked items,
-      timing tracker and a findings table shaped like the three existing reviews —
-      built so the rehearsal is a one-day job with a comparable result instead of
-      an improvisation.
+- → **R-040** **One rehearsal of the participant path on a non-author machine, timed**
+  (Schulung review §10). Why now: last unverified step — everything else in both
+  Schulung reviews is closed. Run it against `tasks/schulung-dry-run-kit.md`
+  (built 2026-09-06): the ordered checkpoint list, known-blocked items,
+  timing tracker and a findings table shaped like the three existing reviews —
+  built so the rehearsal is a one-day job with a comparable result instead of
+  an improvisation.
 
-- [ ] **Schulung M11: trainer-internal tone still on the public page**
-      (`tasks/schulung-review-2026-09-02.md` §7). Re-verified 2026-09-06 while
+- [x] **Schulung M11: trainer-internal tone still on the public page** _(closed 2026-10-11 by the review triage: SUPERSEDED; see tasks/archive/review-triage-2026-10-11.md)_
+      (`tasks/archive/reviews/schulung-review-2026-09-02.md` §7). Re-verified 2026-09-06 while
       closing the `solved-*`/repo-location item below (see ADR-0103): this finding
       itself had silently dropped out of this file during today's restructuring —
       re-added here rather than left untracked. Still exactly as the review found
@@ -1812,36 +1816,36 @@ WIRED` in `.github/workflows/ci.yml:122-135` because it fails under `CI=1` for a
       page to curriculum + prerequisites and move the contingency/tone lines to
       wherever trainer prep material lives day to day.
 
-- [ ] **Small near-term fixes (grab-bag)** — none blocking, each cheap:
-  - [ ] The superseded glyph documentation frame on the Icons page is verified inert
+- → **Small near-term fixes (grab-bag)** — none blocking, each cheap: _(review triage 2026-10-11: open children tracked in tasks/reviews.md)_
+  - [x] The superseded glyph documentation frame on the Icons page is verified inert _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         (1200×1328, 107 nodes, 0 components/instances/external refs) and ready to delete;
         left standing only because deleting from the shared Figma file wasn't part of an
         approved batch.
-  - [ ] The Vue mount hint (`first-component.astro`, `tutorial.astro`: edit
+  - [x] The Vue mount hint (`first-component.astro`, `tutorial.astro`: edit _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         `workshop-vue/src/views/HomeView.vue`) has never been confirmed against a real
         scaffold — `@nx/vue` isn't in `node_modules`. Scaffold one before the next
         workshop.
-  - [ ] `libs/create-workspace`'s token-vendoring comment is stale in one clause
-        (`preset.ts:108-110`): "published packages don't ship tokens.css" is no longer
-        true (they do), but the other justification — editing colours inside
-        `node_modules` is a bad workshop experience — carries the decision on its own.
-        Comment-only fix.
-  - [ ] `coverage.thresholds` in 3 vite configs — measure current coverage first, may
+  - → **R-099** `libs/create-workspace`'s token-vendoring comment is stale in one clause
+    (`preset.ts:108-110`): "published packages don't ship tokens.css" is no longer
+    true (they do), but the other justification — editing colours inside
+    `node_modules` is a bad workshop experience — carries the decision on its own.
+    Comment-only fix.
+  - [x] `coverage.thresholds` in 3 vite configs — measure current coverage first, may _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         fail CI.
-  - [ ] Latent Chat divergence: React's `AtlChatHeader` renders its close button
+  - [x] Latent Chat divergence: React's `AtlChatHeader` renders its close button _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         unconditionally where Angular/Vue gate it behind `variant !== 'inline'`. Align
         React when Chat is next touched.
-  - [ ] `.atl-tr-select-cell` is 44px wide with 32px of inherited padding, leaving a
-        12px content box for an 18px checkbox — reset the cell's padding, or widen it (a
-        code change in three frameworks).
-  - [ ] Re-verify the 30 stale parity records with the Figma Desktop Bridge open
+  - → **R-142** `.atl-tr-select-cell` is 44px wide with 32px of inherited padding, leaving a
+    12px content box for an 18px checkbox — reset the cell's padding, or widen it (a
+    code change in three frameworks).
+  - [x] Re-verify the 30 stale parity records with the Figma Desktop Bridge open _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         (`figma_check_design_parity` per master → `parity:record` → `check:parity`).
         **Sequence this after** the parity-record-scope decision below — narrowing
         `inputsHash` first would shrink this list, so deciding it first avoids 30 wasted
         bridge round-trips.
-  - [ ] Schulung M4–M6: clone-first kata prompt + story file; Block 05 exercise page;
-        clone quickstart + local `.mcp.json` snippet on 440x.
-  - [ ] Schulung M12: `solved-*` branches — build the promise or remove it
+  - → **R-004** Schulung M4–M6: clone-first kata prompt + story file; Block 05 exercise page;
+    clone quickstart + local `.mcp.json` snippet on 440x.
+  - [x] Schulung M12: `solved-*` branches — build the promise or remove it _(closed 2026-10-11 by the review triage: DONE; see tasks/archive/review-triage-2026-10-11.md)_
         (`agenda:81,208`). Owner decision 2026-09-06: fix in place, not remove — the
         agenda's two mentions (gap-table row 81, Folie-7 bullet, now ~209) were reworded
         to say the branches don't exist yet and are trainer prep, not an existing asset;
@@ -1863,19 +1867,19 @@ WIRED` in `.github/workflows/ci.yml:122-135` because it fails under `CI=1` for a
         `check:category-alignment` passes with no exemption in use. The rule the collision
         produced — the side carrying no downstream identity moves — is ADR-0120, with the
         matching dated correction written into ADR-0118.
-  - [ ] **Figma: `AtlButton` has no card wrapper while the other nine Inputs masters do.**
+  - [x] **Figma: `AtlButton` has no card wrapper while the other nine Inputs masters do.** _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         Fallout of the merge above: `Action` laid its component directly on the Section, `Form`
         wrapped each in a white card frame. Merging kept each container "as is", so Button now
         sits bare on the tinted background — visible asymmetry in a file that is itself teaching
         material. Cosmetic only; building the wrapper is a larger mutation than the merge was.
         Owner decision pending.
-  - [ ] **A `figma-console-mcp@latest` instance is running unpinned** (pid seen 2026-09-10).
-        `.mcp.json` pins `1.40.0` (ADR-0110); this process was started as `@latest`, most likely
-        by following `preflight.mjs`'s old fix hint, which has since been corrected to derive the
-        pin. Nothing detects an unpinned _running_ server — preflight now compares the on-disk
-        `.version` against the pin, which is a different thing. Restart it against the pin, and
-        decide whether the running-version case is worth catching too.
-  - [ ] **Gate gap: `check:category-alignment`'s selector→master heuristic has no gate of
+  - → **R-111** **A `figma-console-mcp@latest` instance is running unpinned** (pid seen 2026-09-10).
+    `.mcp.json` pins `1.40.0` (ADR-0110); this process was started as `@latest`, most likely
+    by following `preflight.mjs`'s old fix hint, which has since been corrected to derive the
+    pin. Nothing detects an unpinned _running_ server — preflight now compares the on-disk
+    `.version` against the pin, which is a different thing. Restart it against the pin, and
+    decide whether the running-version case is worth catching too.
+  - [x] **Gate gap: `check:category-alignment`'s selector→master heuristic has no gate of _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         its own.** It resolves a `components.ts` entry to its Figma master by taking the first
         `Atl[A-Za-z]+` token in the `selector` field, with a hand-maintained override table for
         the two entries whose `selector` is prose (`tooltip`, `toast`). A ninth odd selector
@@ -1893,7 +1897,7 @@ WIRED` in `.github/workflows/ci.yml:122-135` because it fails under `CI=1` for a
         `AtlAccordionGroup` / `AtlAlert` under `Feedback` (`storySort.order` in all three
         `.storybook/preview.*`, and the story `title:` prefixes agree);
         `docs/src/data/components.ts` calls the same grouping `Layout`. Two sources, two
-        names, neither obviously wrong — and `tasks/schulung-content-review-2026-09-08.md`
+        names, neither obviously wrong — and `tasks/archive/reviews/schulung-content-review-2026-09-08.md`
         § E2 asserted `Layout` was simply "the actual name", which is now corrected in place.
         Surfaced by the ADR-0116 work, which hit it from the `plan/figma.md` side and
         correctly declined to pick a side from outside `docs/src/**`. Decide which name wins,
@@ -1915,12 +1919,12 @@ WIRED` in `.github/workflows/ci.yml:122-135` because it fails under `CI=1` for a
         when one copy is tampered with, exit 0 again after restore). The two copies are
         required to be byte-identical: the clone-vs-scaffold branching lives inside the single
         file's own `detectEnvironment()`, so there is no legitimate per-copy divergence.
-  - [ ] Gate gap: nothing stops a new page hardcoding `workshop-<fw>` again with no
+  - [x] Gate gap: nothing stops a new page hardcoding `workshop-<fw>` again with no _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         monorepo branch beside it.
-  - [ ] _(Bonus, spawned by ticking L2285 above, not one of the original 130):_
-        `docs/src/pages/claude-design.astro` still hand-types "twenty-four tags" and
-        "17/13 ADRs" (should read 16/12) — same derive-don't-hand-type pattern as
-        `gate-count.ts` (below), now cheap to copy.
+  - → **R-074** _(Bonus, spawned by ticking L2285 above, not one of the original 130):_
+    `docs/src/pages/claude-design.astro` still hand-types "twenty-four tags" and
+    "17/13 ADRs" (should read 16/12) — same derive-don't-hand-type pattern as
+    `gate-count.ts` (below), now cheap to copy.
 
 ### Storybook + the storybookjs/mcp skills in the scaffolded workspace (2026-09-10)
 
@@ -2004,18 +2008,18 @@ documents).
 
 Open, from this work:
 
-- [ ] Angular's `nx build-storybook` in a scaffolded workspace has not been re-run since
+- [x] Angular's `nx build-storybook` in a scaffolded workspace has not been re-run since _(closed 2026-10-11 by the review triage: SUPERSEDED; see tasks/archive/review-triage-2026-10-11.md)_
       the `@angular/cdk` peer landed — the run died on `ENOSPC` (the machine's disk was at
       100%), not on the fix. Re-run `E2E_FRAMEWORKS=angular npx nx run create-atelier-ui-workspace:e2e`
       once there is disk.
-- [ ] `@nx/dependency-checks` is still not enabled for `libs/react` and `libs/vue` — the
+- [x] `@nx/dependency-checks` is still not enabled for `libs/react` and `libs/vue` — the _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
       same structural gap that hid the `@angular/cdk` defect, currently with no defect behind
       it. Wire it the same way `libs/angular` now is, deliberately rather than as a drive-by.
-- [ ] The example story is proven to compile, not to render — a static Storybook build
+- [x] The example story is proven to compile, not to render — a static Storybook build _(closed 2026-10-11 by the review triage: SUPERSEDED; see tasks/archive/review-triage-2026-10-11.md)_
       never executes it. Nothing currently renders a scaffolded story.
-- [ ] `installSkills()`'s Windows path (`shell: true` + `taskkill /T /F` on timeout) is
-      unverified on Windows; there is no Windows machine or runner in this project.
-- [ ] `SKILLS_TEST_FRAMEWORK = FRAMEWORKS[0]` in the e2e keeps the network install to one
+- → **R-086** `installSkills()`'s Windows path (`shell: true` + `taskkill /T /F` on timeout) is
+  unverified on Windows; there is no Windows machine or runner in this project.
+- [x] `SKILLS_TEST_FRAMEWORK = FRAMEWORKS[0]` in the e2e keeps the network install to one _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
       clone per run only while CI invokes the job unmatrixed. A per-framework matrix would
       silently restore three.
 
@@ -2092,44 +2096,44 @@ BQCBQwIDcconnYNpb2w9fn` while a second Figma file is connected. Done when the sn
 
 ### AI & Design Systems course gaps (2026-10-08)
 
-- [ ] Walk through the triage of the "AI & Design Systems" course gaps (271 transcripts vs.
-      Atelier's teaching sources): 11 core-loop items (A), 13 deepening (B), 12 side notes
-      (C), 9 out-of-scope blocks (X). The single tracked list, with a status per item
-      (Offen / Übernehmen / Erledigt / Gestrichen), is
-      `plan/research/ai-ds-course-gap-2026-10-08/triage.md` — update status there, not here.
+- → **R-051** Walk through the triage of the "AI & Design Systems" course gaps (271 transcripts vs.
+  Atelier's teaching sources): 11 core-loop items (A), 13 deepening (B), 12 side notes
+  (C), 9 out-of-scope blocks (X). The single tracked list, with a status per item
+  (Offen / Übernehmen / Erledigt / Gestrichen), is
+  `plan/research/ai-ds-course-gap-2026-10-08/triage.md` — update status there, not here.
 
-- [ ] Findings from the A4 judge dry run on AtlButton (2026-10-09; evidence and per-finding
-      verification in `plan/research/ai-ds-course-gap-2026-10-08/a4-judge-dry-run-atlbutton.md`,
-      checked against code, CSS cascade and master JSON, not in a browser):
-  - [ ] **Danger button has no visible focus ring** (WCAG 2.4.7). `.atl-button.variant-danger`
-        (`libs/styles/src/button/atl-button.css:91-96`) sets `box-shadow` at the same
-        specificity as `.atl-button:focus-visible` (`:34-37`) and comes later, so it wins in all
-        three frameworks. Master `468:2598` draws the ring plus the inset shadow. Confirm in a
-        browser, then combine both shadows in a `.variant-danger:focus-visible` rule.
-  - [ ] **Loading drops focus.** `loading` sets native `disabled` (Angular `atl-button.ts:46,66`,
-        React `atl-button.tsx:49,65`), so a focused button that starts loading loses focus, and
-        nothing announces `aria-busy`. `button.metadata.ts:41` contradicts itself ("remove from
-        the tab order" vs. "loading retains focus"). Decide which is canonical (ADR-0159 ties
-        loading to disabled).
-  - [ ] **`aria-disabled` next to `disabled`**: code sets both; the master description says
+- → Findings from the A4 judge dry run on AtlButton (2026-10-09; evidence and per-finding _(review triage 2026-10-11: open children tracked in tasks/reviews.md)_
+  verification in `plan/research/ai-ds-course-gap-2026-10-08/a4-judge-dry-run-atlbutton.md`,
+  checked against code, CSS cascade and master JSON, not in a browser):
+  - → **R-134** **Danger button has no visible focus ring** (WCAG 2.4.7). `.atl-button.variant-danger`
+    (`libs/styles/src/button/atl-button.css:91-96`) sets `box-shadow` at the same
+    specificity as `.atl-button:focus-visible` (`:34-37`) and comes later, so it wins in all
+    three frameworks. Master `468:2598` draws the ring plus the inset shadow. Confirm in a
+    browser, then combine both shadows in a `.variant-danger:focus-visible` rule.
+  - → **R-135** **Loading drops focus.** `loading` sets native `disabled` (Angular `atl-button.ts:46,66`,
+    React `atl-button.tsx:49,65`), so a focused button that starts loading loses focus, and
+    nothing announces `aria-busy`. `button.metadata.ts:41` contradicts itself ("remove from
+    the tab order" vs. "loading retains focus"). Decide which is canonical (ADR-0159 ties
+    loading to disabled).
+  - [x] **`aria-disabled` next to `disabled`**: code sets both; the master description says _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         "HTML `disabled` (not aria-disabled)". Pick one and align the other.
-  - [ ] **Primary active inset shadow**: master `437:1516` has an 18 % inner shadow, code has
+  - [x] **Primary active inset shadow**: master `437:1516` has an 18 % inner shadow, code has _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         none outside danger. Decide which side is right.
-  - [ ] **Outline disabled fill**: master overlay `1169:834` is filled, code uses `transparent`
+  - [x] **Outline disabled fill**: master overlay `1169:834` is filled, code uses `transparent` _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         (`atl-button.css:164-166`). Deliberate or drift?
-  - [ ] **No hover/focus/active stories and no `play` functions** for the button in any
+  - [x] **No hover/focus/active stories and no `play` functions** for the button in any _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         framework; behaviour lives only in the unit specs (ADR-0121 asks for a `play` per
         behaviour line).
 
-- [ ] Findings from course-gap wave 3 (2026-10-09; evidence in
-      `plan/research/ai-ds-course-gap-2026-10-08/wave3-b3-cold-start-log.md` and the agents'
-      reads of the code):
+- → Findings from course-gap wave 3 (2026-10-09; evidence in _(review triage 2026-10-11: open children tracked in tasks/reviews.md)_
+  `plan/research/ai-ds-course-gap-2026-10-08/wave3-b3-cold-start-log.md` and the agents'
+  reads of the code):
   - [x] (done 2026-10-09, ADR-0163: `button[atl-button]`) **Angular `atl-button` is not a native button.** The host is `<atl-button role="button">`
         with no inner `<button>`, so it never submits a `<form>` and has no `type`; React and Vue
         render a native `<button>`. The Figma master description says "native HTML <button>".
         Decide: render an inner `<button>` in Angular (API/DOM change), or document the
         divergence and correct the description.
-  - [ ] **Vue dialog/drawer do not restore focus themselves.** React and Angular store
+  - [x] **Vue dialog/drawer do not restore focus themselves.** React and Angular store _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         `document.activeElement` on open and refocus it on close; Vue relies on native
         `dialog.close()`. Verify in a browser; align if the platform does not cover it.
   - [x] (owner 2026-10-09: keep as is; the accessibility page documents it) **Only Angular traps focus in a dialog** (`cdkTrapFocus`); React/Vue rely on
@@ -2138,49 +2142,49 @@ BQCBQwIDcconnYNpb2w9fn` while a second Figma file is connected. Done when the sn
   - [x] (done 2026-10-09: `tooltip.show-on-focus`, `tooltip.hide-on-escape`) **Tooltip behaviour the spec does not ask for:** all three handle Escape and Angular/React
         bind focus, but `libs/spec/src/behaviors.json` has no ids for them, so no test covers them.
         Add `tooltip.hide-on-escape` / `tooltip.show-on-focus` and the tests.
-  - [ ] **Button `type` default differs:** Angular and Vue default to `type="button"`, React sets
+  - [x] **Button `type` default differs:** Angular and Vue default to `type="button"`, React sets _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         none, so a React `AtlButton` inside a form submits by default. Decide one default.
-  - [ ] **Outline button focus border** paints `rgb(100,116,139)` where Figma has the primary
+  - [x] **Outline button focus border** paints `rgb(100,116,139)` where Figma has the primary _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         colour (`check:paint`, recorded in all three frameworks now that Angular can focus).
-  - [ ] `a[atl-button]` for links styled as buttons (ADR-0163 §4).
-  - [ ] Stale comments: `libs/{react,vue}/src/testing/a11y-tree.ts` still say Angular renders
+  - [x] `a[atl-button]` for links styled as buttons (ADR-0163 §4). _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
+  - [x] Stale comments: `libs/{react,vue}/src/testing/a11y-tree.ts` still say Angular renders _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         `<atl-button role="button">`.
-  - [ ] **Prop tables in `llms-full.txt` are React-shaped for every framework** (`onValueChange`,
-        `children`); the cold-start agent had to translate them for Angular.
+  - → **R-146** **Prop tables in `llms-full.txt` are React-shaped for every framework** (`onValueChange`,
+    `children`); the cold-start agent had to translate them for Angular.
 
-- [ ] Findings from course-gap B2/B4/B5/B7 docs sections (2026-10-09; docs only, nothing fixed):
-  - [ ] Stale header: `tools/scripts/gen-figma-library-tokens.mjs:3-4` names the create-workspace
-        preset copy as source; line 39 reads `libs/styles/src/tokens.css`.
-  - [ ] `libs/spec/src/tokens.manifest.ts:15-16` cites `tools/scripts/check-css-tokens.js`, which
+- → Findings from course-gap B2/B4/B5/B7 docs sections (2026-10-09; docs only, nothing fixed): _(review triage 2026-10-11: open children tracked in tasks/reviews.md)_
+  - → **R-157** Stale header: `tools/scripts/gen-figma-library-tokens.mjs:3-4` names the create-workspace
+    preset copy as source; line 39 reads `libs/styles/src/tokens.css`.
+  - [x] `libs/spec/src/tokens.manifest.ts:15-16` cites `tools/scripts/check-css-tokens.js`, which _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         does not exist; `check-token-annotations.js` does that job.
-  - [ ] ADR-0115 axis 2 names the preset `tokens.css` as authority and lists `check:css-tokens` /
-        `check:token-tiers`; neither gate exists and `sync-tokens.mjs:30` uses
-        `libs/styles/src/tokens.css`. Needs a dated "Corrected" paragraph.
-  - [ ] Vocabulary drift in the spec (scan 2026-10-09, figma page `#shared-language`):
+  - → **R-079** ADR-0115 axis 2 names the preset `tokens.css` as authority and lists `check:css-tokens` /
+    `check:token-tiers`; neither gate exists and `sync-tokens.mjs:30` uses
+    `libs/styles/src/tokens.css`. Needs a dated "Corrected" paragraph.
+  - [x] Vocabulary drift in the spec (scan 2026-10-09, figma page `#shared-language`): _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         tooltip `above/below` vs drawer `top/bottom`; button `outline` vs card `outlined`;
         `danger` / `error` / `invalid` for failure. Decide whether each pair is one concept.
         No gate compares vocabulary across components.
-  - [ ] No deprecation policy (ADR-0023 ties 1.0.0 to one), no `@deprecated` in `libs/`, no
-        codemod. Unverified: whether `docs-show` surfaces a `@deprecated` tag.
-  - [ ] The Storybook MCP deploy runs in Cloudflare's own build; no repo-local deploy command
+  - → **R-008** No deprecation policy (ADR-0023 ties 1.0.0 to one), no `@deprecated` in `libs/`, no
+    codemod. Unverified: whether `docs-show` surfaces a `@deprecated` tag.
+  - [x] The Storybook MCP deploy runs in Cloudflare's own build; no repo-local deploy command _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         a participant could copy (`mcp.astro#own-mcp` says so).
 
-- [ ] Follow-ups from ADR-0161 (code-only facts as `- Code-only` description lines, 2026-10-08):
-  - [ ] Read-side A/B: does an agent generating from the master use a `- Code-only` line
-        (AtlButton `type`) better than the old parenthetical? Untested for both carriers.
-  - [ ] Fold the older "(code-only props on …: …)" parentheticals in master descriptions
+- → Follow-ups from ADR-0161 (code-only facts as `- Code-only` description lines, 2026-10-08): _(review triage 2026-10-11: open children tracked in tasks/reviews.md)_
+  - → **R-009** Read-side A/B: does an agent generating from the master use a `- Code-only` line
+    (AtlButton `type`) better than the old parenthetical? Untested for both carriers.
+  - [x] Fold the older "(code-only props on …: …)" parentheticals in master descriptions _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         into `- Code-only` lines, then drop them.
 
-- [ ] Defects found by the wave-2 research runs (2026-10-08, evidence in
-      `plan/research/ai-ds-course-gap-2026-10-08/wave2-a3-parity-run.md` and
-      `wave2-a10-readiness-run.md`):
+- → Defects found by the wave-2 research runs (2026-10-08, evidence in _(review triage 2026-10-11: open children tracked in tasks/reviews.md)_
+  `plan/research/ai-ds-course-gap-2026-10-08/wave2-a3-parity-run.md` and
+  `wave2-a10-readiness-run.md`):
   - [x] AtlBadge font weight (2026-10-09, ADR-0162): owner chose 600. New role
         `--ui-type-emphasis` (SemiBold sm/tight) + Figma `ty/emphasis`, bound to badge md, step
         numbers, current breadcrumb. Badge `sm` keeps a recorded 500/600 split: SemiBold xs has
         only 2 clean CSS rules, so no role (ADR-0074 rule of three).
-  - [ ] Move `.step-circle` and `.breadcrumb-current` onto `font: var(--ui-type-emphasis)`
-        (computed-identical candidates from ADR-0162).
-        Also: add a `live` scenario (`role="status"` passed) to the three `atl-badge.a11y.spec.*`.
+  - → **R-143** Move `.step-circle` and `.breadcrumb-current` onto `font: var(--ui-type-emphasis)`
+    (computed-identical candidates from ADR-0162).
+    Also: add a `live` scenario (`role="status"` passed) to the three `atl-badge.a11y.spec.*`.
   - [x] (done 2026-10-09: no default role in any framework; consumer passes `role="status"`; metadata role `none`) AtlBadge `role="status"` is set on every host, while the master description says badges
         are decorative by default and only wrapped in `role="status"` when they announce changes.
   - [x] (done 2026-10-09) AtlBadge (Angular) class JSDoc sits above `VARIANT_ICON_NAMES`, not `@Component`, so
@@ -2195,80 +2199,80 @@ BQCBQwIDcconnYNpb2w9fn` while a second Figma file is connected. Done when the sn
         hand-drawn footer buttons in AtlDialog and AtlDrawer are `AtlButton` instances
         (`outline` Cancel, `primary` Confirm/Save, as the stories use); the Drawer footer now
         hugs to 80px (20 + 40 + 20).
-  - [ ] `control-height/*` and `row-height/*` are not generated: `cssName()` has no mapping and
+  - [x] `control-height/*` and `row-height/*` are not generated: `cssName()` has no mapping and _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         `row-height` is a `calc()` the parser cannot read, so the sync lists them as orphans.
-  - [ ] `figma_audit_component_accessibility` classifies AtlDialog as presentational and skips
-        focus/target-size checks — its 100 means "not assessed".
+  - → **R-010** `figma_audit_component_accessibility` classifies AtlDialog as presentational and skips
+    focus/target-size checks — its 100 means "not assessed".
 
 ### From the Storybook review, 2026-09-14
 
-Full reasoning and evidence: `tasks/storybook-review-2026-09-14.md`. One item is done: the
+Full reasoning and evidence: `tasks/archive/reviews/storybook-review-2026-09-14.md`. One item is done: the
 curriculum's backgrounds-vs-theme wording, corrected in the agenda and `schulung.astro` to match
 ADR-0142. The vendored-skills fix was written and then reverted on the owner's call — see the
 first item below. What is left needs a decision.
 
-- [ ] **Dark-mode axe coverage — ADR-0142's option (b) has a first-party replacement.** The
-      ADR costed "reading `initialGlobals.theme` from an environment variable and invoking
-      `nx storybook-test <fw>` once per value". `storybookTest()` takes `initialGlobals`
-      directly (shipped 10.5, PR #35226; the option's own JSDoc recommends exactly the
-      per-theme-Vitest-project pattern), and its `tags: { include | exclude | skip }` is the
-      coverage regulator the ADR left to the owner. `vitest.config.mjs` already lists
-      `projects:`. Decide: full second run, or a tagged sample. Then an ADR-0142 addendum —
-      the ADR's option list is incomplete as written and should say so in place.
-- [ ] **CSF factories.** Preview for all three frameworks since 10.2; the **default story
-      format in Storybook 11**. 95 CSF3 story files, a curriculum that teaches CSF3, a
-      scaffold that generates CSF3, and `storybook automigrate csf-factories` is unavailable
-      here (`@storybook/cli` is not a dependency; `check:all` is offline). Needs a spike and
-      an ADR before the next cohort, not a drive-by.
-- [ ] **`addon-designs` in the scaffold — behind ADR-0144's `--figma` switch.** 85 story files
-      here use `parameters.design`; the three `main.ts.template` files do not list the addon
-      and no scaffold story sets the parameter, so a learner in a Figma-to-code workshop never
-      sees the Figma frame beside the component. With `--figma`: addon plus parameter. With
-      `--no-figma`: neither. Ships to npm.
-- [ ] **The vendored `storybookjs/mcp` skills name a deprecated command — left untouched, on
-      purpose.** `.agents/skills/storybook-setup/SKILL.md:11` instructs `npx storybook ai setup`;
-      `.agents/skills/stories/SKILL.md:13,15,17` builds its whole mandatory workflow on
-      `STORYBOOK_FEATURE_AI_CLI=1 npx storybook ai …`. Both are deprecated in Storybook 10.6, and
-      `AGENTS.md` plus `docs/src/pages/storybook.astro` already say so — so the repo tells humans
-      one thing and agents another, and nothing gates it (`check:skill-discovery` walks `skills/`,
-      not `.agents/skills/`; nothing reads `skills-lock.json`). A patch was written on 2026-09-14
-      and reverted on the owner's call: do not touch the Storybook skills for now. Three options
-      when it is picked up — patch in place (forks upstream; a re-run of `npx skills add` silently
-      reverts it), wait for upstream (weak bet: `storybookjs/mcp` moved into `storybookjs/storybook`
-      as of 10.6.0, so the standalone package is the thing being superseded), or retire the four
-      copies in favour of the built-in `npx storybook skills` (verified working here, config-aware —
-      its `setup` output already names this repo's real addon set including `addon-designs`; this
-      supersedes ADR-0123 and removes a `.agents/skills/` surface Codex and the Antigravity CLI
-      reach). No ADR was written: no decision was taken.
-- [ ] **Storybook telemetry.** `core.disableTelemetry` defaults to false and nothing here sets
-      it — neither the three `main.ts` nor any scaffold template, so it applies to every
-      workspace a participant scaffolds. Configuration fact, not a legal reading: any
-      data-protection assessment belongs with the internal DSB.
-- [ ] **The onboarding-checklist widgets.** `sidebarOnboardingChecklist` and
-      `menuOnboardingChecklist` both default `true`, so Storybook's own guided tour sits beside
-      the workshop's guidance in every scaffolded Storybook. Embrace or disable — currently
-      neither, just an unexamined default.
-- [ ] **`experimentalReactComponentMeta` for React.** Angular and Vue extract props through the
+- → **R-152** **Dark-mode axe coverage — ADR-0142's option (b) has a first-party replacement.** The
+  ADR costed "reading `initialGlobals.theme` from an environment variable and invoking
+  `nx storybook-test <fw>` once per value". `storybookTest()` takes `initialGlobals`
+  directly (shipped 10.5, PR #35226; the option's own JSDoc recommends exactly the
+  per-theme-Vitest-project pattern), and its `tags: { include | exclude | skip }` is the
+  coverage regulator the ADR left to the owner. `vitest.config.mjs` already lists
+  `projects:`. Decide: full second run, or a tagged sample. Then an ADR-0142 addendum —
+  the ADR's option list is incomplete as written and should say so in place.
+- → **R-091** **CSF factories.** Preview for all three frameworks since 10.2; the **default story
+  format in Storybook 11**. 95 CSF3 story files, a curriculum that teaches CSF3, a
+  scaffold that generates CSF3, and `storybook automigrate csf-factories` is unavailable
+  here (`@storybook/cli` is not a dependency; `check:all` is offline). Needs a spike and
+  an ADR before the next cohort, not a drive-by.
+- → **R-090** **`addon-designs` in the scaffold — behind ADR-0144's `--figma` switch.** 85 story files
+  here use `parameters.design`; the three `main.ts.template` files do not list the addon
+  and no scaffold story sets the parameter, so a learner in a Figma-to-code workshop never
+  sees the Figma frame beside the component. With `--figma`: addon plus parameter. With
+  `--no-figma`: neither. Ships to npm.
+- → **R-116** **The vendored `storybookjs/mcp` skills name a deprecated command — left untouched, on
+  purpose.** `.agents/skills/storybook-setup/SKILL.md:11` instructs `npx storybook ai setup`;
+  `.agents/skills/stories/SKILL.md:13,15,17` builds its whole mandatory workflow on
+  `STORYBOOK_FEATURE_AI_CLI=1 npx storybook ai …`. Both are deprecated in Storybook 10.6, and
+  `AGENTS.md` plus `docs/src/pages/storybook.astro` already say so — so the repo tells humans
+  one thing and agents another, and nothing gates it (`check:skill-discovery` walks `skills/`,
+  not `.agents/skills/`; nothing reads `skills-lock.json`). A patch was written on 2026-09-14
+  and reverted on the owner's call: do not touch the Storybook skills for now. Three options
+  when it is picked up — patch in place (forks upstream; a re-run of `npx skills add` silently
+  reverts it), wait for upstream (weak bet: `storybookjs/mcp` moved into `storybookjs/storybook`
+  as of 10.6.0, so the standalone package is the thing being superseded), or retire the four
+  copies in favour of the built-in `npx storybook skills` (verified working here, config-aware —
+  its `setup` output already names this repo's real addon set including `addon-designs`; this
+  supersedes ADR-0123 and removes a `.agents/skills/` surface Codex and the Antigravity CLI
+  reach). No ADR was written: no decision was taken.
+- → **R-089** **Storybook telemetry.** `core.disableTelemetry` defaults to false and nothing here sets
+  it — neither the three `main.ts` nor any scaffold template, so it applies to every
+  workspace a participant scaffolds. Configuration fact, not a legal reading: any
+  data-protection assessment belongs with the internal DSB.
+- → **R-092** **The onboarding-checklist widgets.** `sidebarOnboardingChecklist` and
+  `menuOnboardingChecklist` both default `true`, so Storybook's own guided tour sits beside
+  the workshop's guidance in every scaffolded Storybook. Embrace or disable — currently
+  neither, just an unexamined default.
+- [x] **`experimentalReactComponentMeta` for React.** Angular and Vue extract props through the _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
       docgen server; React still runs plain `react-docgen` (`@storybook/react/dist/preset.js:388`
       — the two flags are separate and both read, not a rename). Two classes of analyzer feeding
       `check:manifest-parity`. Worth a spike, unhurried.
-- [ ] **Four one-line calls.** `parameters.docs.toc` (the docs site treats a persistent TOC as a
-      reading requirement, ADR-0086/0087; the Storybook docs pages have none),
-      `features.experimentalSearchDocsHeadings`, and the two above.
+- → **R-093** **Four one-line calls.** `parameters.docs.toc` (the docs site treats a persistent TOC as a
+  reading requirement, ADR-0086/0087; the Storybook docs pages have none),
+  `features.experimentalSearchDocsHeadings`, and the two above.
 
-- [ ] **Confirm the lockfile flavor.** `package-lock.json` was regenerated on macOS
-      for dep-batch A (Docker daemon down that day), then rewritten on Linux by the
-      publish job (`7cca39c`), pruning 27 macOS-only transitive entries. What that commit
-      did _not_ visibly touch is ~47 `dev` ↔ `devOptional` marker flips from the same
-      install. Run `tools/scripts/relock.sh` with Docker up once; if it's an empty diff,
-      close this.
+- → **R-108** **Confirm the lockfile flavor.** `package-lock.json` was regenerated on macOS
+  for dep-batch A (Docker daemon down that day), then rewritten on Linux by the
+  publish job (`7cca39c`), pruning 27 macOS-only transitive entries. What that commit
+  did _not_ visibly touch is ~47 `dev` ↔ `devOptional` marker flips from the same
+  install. Run `tools/scripts/relock.sh` with Docker up once; if it's an empty diff,
+  close this.
 
-- [ ] **AtlStepper's Figma master has two open gaps** (merged — both block on the
+- [x] **AtlStepper's Figma master has two open gaps** (merged — both block on the _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
       same "is this component chrome or artboard decoration" judgment):
-  - [ ] It pads 16 where the code root pads 0 — decide whether that's component
+  - [x] It pads 16 where the code root pads 0 — decide whether that's component _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         chrome the code is missing, or artboard breathing room Figma should drop;
         `[ROOT-BOX]` warns until settled.
-  - [ ] It has no focus variant, no disabled variant, and no a11y annotations in its
+  - [x] It has no focus variant, no disabled variant, and no a11y annotations in its _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         description (5 of 7 remaining parity findings) — pairs with the role question
         below.
   - [x] **Was a three-way disagreement, not two — resolved 2026-09-06, the other
@@ -2294,7 +2298,7 @@ first item below. What is left needs a decision.
         padding, missing focus/disabled/a11y-annotation variants) are unrelated
         and stay open.
 
-- [ ] **Harden Atelier's own design system; Conciso as theme demo.** Plan:
+- [x] **Harden Atelier's own design system; Conciso as theme demo.** Plan: _(closed 2026-10-11 by the review triage: SUPERSEDED; see tasks/archive/review-triage-2026-10-11.md)_
       `tasks/atelier-design-system-plan.md`. ADR-0020 already settled the palette
       ("Direction A: Conciso anchor only" — brand DNA is typography + motion, not
       colour); the plan ports six brand-neutral patterns from Conciso (tonal ramps,
@@ -2312,88 +2316,88 @@ first item below. What is left needs a decision.
   `check:variants`/`check:defaults` never asked about `Status`: those two are driven
   by `tools/scripts/lib/component-axes.js`'s `axisOf`, a _different_, five-word regex
   — Variant/Size/Shape/Position/Orientation — that the item conflated with `[NAME]`'s.)
-  - [ ] **Design half, open and blocked**: drawing the `AtlAvatarStatus` axis in
+  - [x] **Design half, open and blocked**: drawing the `AtlAvatarStatus` axis in _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         Figma (a real `.status-online`/`.status-offline`/`.status-away`/`.status-busy`
         paint axis, now gate-enforced in code) needs the Desktop Bridge, which is not
         connected in this environment. Not claimed here.
 
-- [ ] **`check:props`'s own known blind spots** (ADR-0093), worth a decision each:
-  - [ ] It's spec-keyed, so it can't see adapter-vs-adapter divergence where the
+- [x] **`check:props`'s own known blind spots** (ADR-0093), worth a decision each: _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
+  - [x] It's spec-keyed, so it can't see adapter-vs-adapter divergence where the _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         spec is silent — e.g. Vue's dialog hardcodes its own `headerId` as the
         `aria-labelledby` target while Angular and React expose it as a prop, and
         `AtlDialogSpec` declares neither name. Closing it means completing the spec.
-  - [ ] Seven components have no spec interface at all: `AtlCodeBlock`,
+  - [x] Seven components have no spec interface at all: `AtlCodeBlock`, _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         `AtlAccordionHeader`, `AtlMenuSeparator`, `AtlMenuTrigger`, `AtlChatInput`,
         `AtlChatTyping`, `AtlThead`. Named as unkeyed in the gate's summary; nothing
         checks them.
-  - [ ] `toast` is excluded outright — Angular takes four flat props where React/Vue
+  - [x] `toast` is excluded outright — Angular takes four flat props where React/Vue _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         take one `data: ToastData` object, and the real API is imperative
         (`AtlToastService.show()` / `useAtlToast()`). A set comparison can't express a
         shape mismatch.
-  - [ ] Worth its own investigation (from ADR-0093's rejected alternatives): Vue's
+  - [x] Worth its own investigation (from ADR-0093's rejected alternatives): Vue's _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         `defineProps<AtlXSpec>` could give Vue a real type-level link to the contract —
         the root-cause fix the gate only detects around. Angular can't (signal inputs
         are class fields, not a props object).
 
-- [ ] **`nx release --yes` commits and pushes the version bump as part of the same
-      command that publishes**, so a failed publish leaves git ahead of npm by
-      construction — exactly what happened for six releases (see the release-pipeline
-      fix, now closed, below). Reordering so the commit only lands after a successful
-      publish is the structural fix; wants its own ADR.
+- → **R-106** **`nx release --yes` commits and pushes the version bump as part of the same
+  command that publishes**, so a failed publish leaves git ahead of npm by
+  construction — exactly what happened for six releases (see the release-pipeline
+  fix, now closed, below). Reordering so the commit only lands after a successful
+  publish is the structural fix; wants its own ADR.
 
-- [ ] **Parity-record scope: what should an `inputsHash` / a parity stamp cover?**
+- [x] **Parity-record scope: what should an `inputsHash` / a parity stamp cover?** _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
       One ADR closes four separate findings:
-  - [ ] The parity gate is blind to the shared token layer — a component's
+  - [x] The parity gate is blind to the shared token layer — a component's _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         `inputsHash` covers only `libs/{angular,react,vue}/src/lib/<module>/`, so
         `styles/tokens.css` is outside it (ADR-0035 changed the UI typeface for all 29
         components and triggered no DRIFT blocker).
-  - [ ] A parity record is equally blind to a change on the _Figma_ side — it stores
+  - [x] A parity record is equally blind to a change on the _Figma_ side — it stores _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         `figmaNodeId`, `verifiedSha`, `inputsHash`, nothing about the master's state.
-  - [ ] `inputsHash` can't tell a rendered file from a test file — it walks every
+  - [x] `inputsHash` can't tell a rendered file from a test file — it walks every _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         file under the module directory, so a comment in a `.spec.tsx` triggers a false
         DRIFT. Narrowing it needs a migration (recompute each record's hash at its own
         `verifiedSha` first, or all 37 records go stale at once).
-  - [ ] Do this **before** spending 30 Figma-bridge round-trips re-verifying records
+  - [x] Do this **before** spending 30 Figma-bridge round-trips re-verifying records _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         that are stale only because of the `inputsHash` weakness above (see the
         near-term grab-bag item for the actual re-verify).
 
-- [ ] **Typography-role completion — anchor question: does `fontSize` resolve
+- [x] **Typography-role completion — anchor question: does `fontSize` resolve _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
       through Library Tokens or Docs Brand Tokens?** 212 TEXT nodes bind `fontSize` to
       the docs-site collection, not the library tier ADR-0030 made semantic. The two
       scales agree today, so nothing renders wrong yet — but it blocks promoting
       `[ROOT-TYPE]`, `[TEXT-UNSTYLED]` and `[FIGMA-AUTO-LEADING]` from ratchets to plain
       blockers, and every "correct this master's size" recommendation below is
       unexecutable until it's answered. Sub-steps, all downstream of this one decision:
-  - [ ] 311 of 566 census'd TEXT nodes across 33 masters carry no `ty/*` role; 206
+  - [x] 311 of 566 census'd TEXT nodes across 33 masters carry no `ty/*` role; 206 _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         of those sit on `lineHeight: AUTO` (matches no role at all); all three counts
         are gated as ratchets (`[TEXT-UNSTYLED]` 257, `[FIGMA-AUTO-LEADING]` 206,
         `[FIGMA-VARIABLE-COLLECTION]` 212).
-  - [ ] Two roles the existing ten don't span: `ty/row` (Instrument Sans Regular
+  - [x] Two roles the existing ten don't span: `ty/row` (Instrument Sans Regular _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         16/1.25, 10 CSS sites, 27 faithful Figma nodes) and `ty/row-sm` (Regular
         14/1.25, 5 CSS sites, 16 faithful nodes) — both clear rule-of-three several
         times over.
-  - [ ] Seven masters the six mapping groups never covered — 54 unbound nodes
+  - [x] Seven masters the six mapping groups never covered — 54 unbound nodes _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         (`AtlButton` 20, `AtlStep` 12, `AtlTr` 8, `AtlBreadcrumbs` 7, `AtlAvatar` 6,
         `AtlCodeBlock` 4, `AtlTh` 3, `AtlChatSuggestion` 1). `AtlButton` matters most —
         its `size=md`/`size=lg` labels are Medium where `.atl-button` is SemiBold.
-  - [ ] 77 Figma text nodes are in combinations no role expresses (Medium 16,
+  - [x] 77 Figma text nodes are in combinations no role expresses (Medium 16, _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         Regular 12, SemiBold 14, Medium 18, JetBrains Mono Bold 12, Italic 12, Regular
         13, Bold 10, SemiBold 15/12, and one each of SemiBold 13/20/26 and Italic 14) —
         five sizes are off the type scale entirely.
 
-- [ ] **AtlRadioGroup pass — one pass over one component:**
-  - [ ] Emits a dead `is-readonly` class in `atl-radio-group.tsx`; no stylesheet in
+- [x] **AtlRadioGroup pass — one pass over one component:** _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
+  - [x] Emits a dead `is-readonly` class in `atl-radio-group.tsx`; no stylesheet in _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         any framework has a rule for it. Style it or drop it.
-  - [ ] Its Figma master draws one radio, not a group — variants are a single 18px
+  - [x] Its Figma master draws one radio, not a group — variants are a single 18px _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         circle plus a label, so group-level states have nothing to sit on.
-  - [ ] Its parity record hashes the wrong directory: `COMPONENT_METADATA_REGISTRY`
+  - [x] Its parity record hashes the wrong directory: `COMPONENT_METADATA_REGISTRY` _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         maps it to `'radio'`, so `computeInputsHash('radio')` backs the record, whose
         `inputsHash` is byte-identical to AtlRadio's. Every change under
         `libs/*/src/lib/radio-group/` is invisible to the gate.
-  - [ ] AtlToggle/AtlCheckbox hug at 24px and AtlRadio at 28px against a code row
+  - [x] AtlToggle/AtlCheckbox hug at 24px and AtlRadio at 28px against a code row _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         height of 40px (`--ui-row-height-sm`) — the form-row masters never moved to the
         row ladder ADR-0052 shipped for everything else.
-  - [ ] Its error region is three different shapes in ARIA across the three
+  - [x] Its error region is three different shapes in ARIA across the three _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         frameworks (Angular: `<div class=errors>` + `aria-describedby` on host; React:
         `role=alert`, no id/describedby; Vue: `role=alert`, no `aria-live`, no
         id/describedby) — the element/class contract holds, the announcement contract
@@ -2401,20 +2405,20 @@ first item below. What is left needs a decision.
   - _Cross-reference:_ also touches the Figma-polish collector's row-ladder
     Figma-Variables question below.
 
-- [ ] **AtlSelect structure — one ADR-level decision, two findings, one is a
+- [x] **AtlSelect structure — one ADR-level decision, two findings, one is a _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
       symptom of the other:**
-  - [ ] It's the deepest structural divergence in the library: React and Vue render
+  - [x] It's the deepest structural divergence in the library: React and Vue render _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         a native `<select>`; Angular renders a `<button role="combobox">` and points
         `<label>` at its `triggerId`. Both are labelable in isolation, but "one spec,
         three frameworks" is weakest exactly here, and nothing measures it (not
         answerable by an a11y-tree snapshot — see the closed item on why Select is
         exempt by design).
-  - [ ] Symptom: Angular Select's `role="combobox"` sits on the host while every
+  - [x] Symptom: Angular Select's `role="combobox"` sits on the host while every _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         combobox state and the focus (`aria-expanded`, `aria-haspopup`,
         `aria-controls`, `aria-activedescendant`) sit on the `<button>` — not the
         WAI-ARIA 1.2 pattern. Bigger than a binding move; resolve with the same ADR.
 
-- [ ] **Bonus, found while restructuring (not one of the original 130, no checkbox
+- [x] **Bonus, found while restructuring (not one of the original 130, no checkbox _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
       in the old file):** is a `is-*` state class (`is-checked`, `is-open`, `is-active`,
       `is-selected` — emitted inconsistently across the three frameworks' stylesheets,
       e.g. `is-checked` only on Angular's and React's checkbox, not Vue's) **public
@@ -2432,7 +2436,7 @@ first item below. What is left needs a decision.
 
 **Closed 2026-09-14.** Five one-line divergences between the three `.storybook` directories,
 plus one pin. Nothing gated any of them — `check:manifest-parity` compares docgen output, not
-configuration. Detail in `tasks/storybook-review-2026-09-14.md` §1.
+configuration. Detail in `tasks/archive/reviews/storybook-review-2026-09-14.md` §1.
 
 Two follow-ons were taken beyond the six, both necessary: Vue's rewritten `include` keeps
 `../src/**/*.d.ts` (`libs/vue/src/env.d.ts` declares `*.vue`, and Vue stories import SFCs
@@ -2467,51 +2471,51 @@ libs/<fw>/.storybook/tsconfig.json --noEmit` for all three, 0 errors each, along
 One release, one item — each sub-bullet is an independent, already-diagnosed finding
 that wants its own ADR and a changelog line. Ship together.
 
-- [ ] **Ship the 0.3.0 breaking-changes batch:**
-  - [ ] ⚠️ **`AtlRadioGroupContext.invalid` became required** in
+- [x] **Ship the 0.3.0 breaking-changes batch:** _(closed 2026-10-11: all children closed by the review triage)_
+  - [x] ⚠️ **`AtlRadioGroupContext.invalid` became required** in _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         `libs/angular/src/lib/radio-group/atl-radio-group.token.ts` (no `?`), exported
         from the public barrel. No in-repo implementor breaks, but any outside
         implementor of the interface does — **this is an unreleased semver-major that
         has already shipped in the code and needs a changelog note before the next
         release goes out.**
-  - [ ] Angular's `touched` is public API the spec never declared (ADR-0055) —
+  - [x] Angular's `touched` is public API the spec never declared (ADR-0055) — _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         seven components expose it as `model(false)`; React/Vue have no equivalent and
         it no longer gates the error message. Remove it with this batch, or add it to
         the spec and the other two frameworks.
-  - [ ] React carries two public spellings for one prop: the spec says `readonly`
+  - [x] React carries two public spellings for one prop: the spec says `readonly` _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         (Angular/Vue agree), React redeclares `readOnly`. Not dead — both are merged
         with `readOnly` taking precedence — but only the React spelling is tested.
         Consolidating on the spec's spelling is the breaking rename. Affects Input,
         Textarea, RadioGroup.
-  - [ ] `AtlSelect.name` is a genuinely dead prop (declared, never bound, absent
+  - [x] `AtlSelect.name` is a genuinely dead prop (declared, never bound, absent _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         from `AtlSelectContext`, untested) — honoring it means deciding whether
         Angular's button-trigger select emits a hidden input.
-  - [ ] `AtlAccordionGroup.multi` is a third dead prop, via a third mechanism: the
+  - [x] `AtlAccordionGroup.multi` is a third dead prop, via a third mechanism: the _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         public binding is served by
         `hostDirectives: [{ directive: CdkAccordion, inputs: ['multi'] }]` forwarding to
         the CDK's own input, not the component's own declared `multi()`.
-  - [ ] `errors` is implemented by all three adapters on all seven form components,
+  - [x] `errors` is implemented by all three adapters on all seven form components, _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         declared by no spec — blocked on a type decision (Angular types it
         `WithOptionalFieldTree<ValidationError>[]`, React/Vue as strings).
-  - [ ] The spec models exactly one event (`AtlFormFieldSpec.onValueChange`); nine
+  - [x] The spec models exactly one event (`AtlFormFieldSpec.onValueChange`); nine _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         more are implemented consistently in all three adapters and declared nowhere
         (`Alert.dismissed`, `Chat.onOpenChange`, `ChatSuggestion.selected`,
         `Drawer.onOpenChange`, `MenuItem.onTriggered`, `Pagination.onPageChange`,
         `Stepper.onActiveStepChange`, `Th.sort`, `Tr.selectedChange`).
-  - [ ] `AtlChatMessageSpec` requires `id` and `content` (non-optional) and
+  - [x] `AtlChatMessageSpec` requires `id` and `content` (non-optional) and _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         `AtlChatSuggestionSpec` requires `id` — no adapter implements any of them;
         content is passed as children/slot everywhere.
-  - [ ] `AtlDialogSpec` declares neither `aria-label` nor `aria-labelledby` while
+  - [x] `AtlDialogSpec` declares neither `aria-label` nor `aria-labelledby` while _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         all three adapters expose both.
-  - [ ] `AtlTrSpec.rowId` is wrong three different ways: dead in Angular,
+  - [x] `AtlTrSpec.rowId` is wrong three different ways: dead in Angular, _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         inherited-but-never-wired in React, absent from Vue's props entirely.
-  - [ ] `AtlBreadcrumbItem.current` is a settable prop in the spec, React and Vue;
+  - [x] `AtlBreadcrumbItem.current` is a settable prop in the spec, React and Vue; _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         Angular computes it internally and never exposes it.
-  - [ ] `AtlButtonSpec` requires `aria-label` when the button has no visible label;
+  - [x] `AtlButtonSpec` requires `aria-label` when the button has no visible label; _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         Angular and Vue answer with a dev-mode warning instead of enforcing the prop.
-  - [ ] React-only props with no spec entry: radio-group `orientation`
+  - [x] React-only props with no spec entry: radio-group `orientation` _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         (cross-references the AtlRadioGroup pass above) and tbody `emptyContent`.
-  - [ ] `AtlChatMessageSpec.role` → `messageRole` rename across all three
+  - [x] `AtlChatMessageSpec.role` → `messageRole` rename across all three _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         frameworks (removes an ARIA-name collision for good).
 
 ### Figma polish pass
@@ -2519,165 +2523,165 @@ that wants its own ADR and a changelog line. Ship together.
 The long tail of undecided cosmetic Figma-vs-code questions with **no known live
 defect**. Tracking collapsed into one item; every finding kept as its own checkbox.
 
-- [ ] **Work through the Figma polish backlog:**
-  - [ ] `color-mix()` cannot be a Figma Variable — AtlAvatar's root, AtlBadge's
+- → **Work through the Figma polish backlog:** _(review triage 2026-10-11: open children tracked in tasks/reviews.md)_
+  - [x] `color-mix()` cannot be a Figma Variable — AtlAvatar's root, AtlBadge's _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         variant borders, AtlToast's variant fills, AtlAlert's variant borders are
         unverifiable by construction. Add resolved semantic tokens for the mixes, or
         accept as code-only.
-  - [ ] "Effects Tokens" holds eleven STRING variables (`e/0…e/5`, `tonal/1…5`)
+  - [x] "Effects Tokens" holds eleven STRING variables (`e/0…e/5`, `tonal/1…5`) _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         that duplicate the generated `shadow/xs…xl` effect styles (ADR-0060) — check
         references, remove the collection.
-  - [ ] `[MASTER-GLYPH]` walks masters only, so a content-sample frame is invisible
+  - [x] `[MASTER-GLYPH]` walks masters only, so a content-sample frame is invisible _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         to it — widen the probe to every frame on the Components page.
-  - [ ] Nothing detects an orphaned main component (Figma keeps a removed
+  - [x] Nothing detects an orphaned main component (Figma keeps a removed _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         `COMPONENT` alive while an instance still references it) — no live defect as of
         the last check, but gate work against the class: walk instances, resolve
         `getMainComponentAsync()`, assert reachability from the document.
-  - [ ] Two variable collections carry the same ten spacing values (`Primitive
+  - [x] Two variable collections carry the same ten spacing values (`Primitive _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
 Tokens` `spacing/s1…s16` vs `Library Tokens` `spacing/1…16`, only the latter
         generated from `tokens.css`) — decide whether `Primitive Tokens` (76 variables)
         is still needed.
-  - [ ] `2.25rem` appears six times for two different reasons
+  - [x] `2.25rem` appears six times for two different reasons _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         (AtlInput/AtlTextarea's invalid-icon gutter, AtlPagination's button
         min-width/height) — neither is on the spacing scale; decide a token per reason,
         or record both as intentional dimensions.
-  - [ ] `margin-top: 2px` on `.step-description`/`.step-optional` — half of
+  - [x] `margin-top: 2px` on `.step-description`/`.step-optional` — half of _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         `--ui-spacing-1`, two uses; either the scale gains a 0.5 step or these become
         4px (a design change). Figma agrees with the code on the value, on a name
         neither side has.
-  - [ ] The dialog and drawer headers are SemiBold 20px, 2px off
+  - [x] The dialog and drawer headers are SemiBold 20px, 2px off _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         `--ui-type-title` (18) — Figma masters already draw 18 and are bound to
         `ty/title`; decide whether CSS moves to the role or 20 gets justified.
-  - [ ] AtlCard and AtlDialog draw their buttons by hand at Medium 14 instead of
+  - [x] AtlCard and AtlDialog draw their buttons by hand at Medium 14 instead of _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         instantiating AtlButton (`.atl-button` is SemiBold `md`); same class as the
         icon masters — a parent can only instantiate what the child can express.
-  - [ ] `[LAYER-PAINT]` skips every variant whose `state` axis isn't `default` —
+  - [x] `[LAYER-PAINT]` skips every variant whose `state` axis isn't `default` — _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         found the hard way when AtlToggle's hover/focus tracks were bound wrong and
         nothing reported it; 12 of AtlButton's 24 variants and 4/5 of each form field
         sit in this blind spot.
-  - [ ] AtlDrawer's master paints the dialog twice (root carries `color/surface` +
+  - [x] AtlDrawer's master paints the dialog twice (root carries `color/surface` + _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         shadow, and so does the inner `dialog` layer) — decide whether the root should
         paint the backdrop, nothing, or stay as-is.
-  - [ ] `.atl-drawer-host dialog` states nothing typographic (`all: unset` wipes
+  - [x] `.atl-drawer-host dialog` states nothing typographic (`all: unset` wipes _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         size/leading and nothing restores it) — the one `[ROOT-TYPE]` gap that's a
         defect rather than legitimate delegation; fix is one CSS declaration, blocked
         on the same collection question as everything else in this cluster.
-  - [ ] AtlCombobox's fifteen unstyled TEXT nodes are a layer problem, not a root
+  - [x] AtlCombobox's fifteen unstyled TEXT nodes are a layer problem, not a root _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         one — no single direct TEXT child for `[ROOT-TYPE]` to find, and
         `[LAYER-PAINT]` can't reach them either (state-skip + `font-size: inherit` +
         spaced layer names). Needs the layer cascade to carry the component root for
         type only.
-  - [ ] AtlChat's master draws an illustrative app mockup (nav rail, breadcrumb,
+  - [x] AtlChat's master draws an illustrative app mockup (nav rail, breadcrumb, _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         page heading, two sidebar lists, minimise glyph) — scenery, excused by name in
         `TEXT_UNSTYLED_PENDING`, marked pending-removal.
-  - [ ] Six masters pad on an axis the CSS derives (AtlButton, AtlInput,
+  - [x] Six masters pad on an axis the CSS derives (AtlButton, AtlInput, _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         AtlTextarea, AtlSelect, AtlBadge, AtlTab) — ADR-0041's recipe gives numbers no
         spacing token holds and no Figma Variable can express. Decide: keep resolved
         numbers in step by hand, or state only height and stop padding.
-  - [ ] `[ROOT-PAINT]` can't see a cascade that ends at `inherit` (e.g.
+  - [x] `[ROOT-PAINT]` can't see a cascade that ends at `inherit` (e.g. _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         `.atl-textarea textarea { font-size: inherit }`) — the value the field
         actually renders comes from the root, outside the cascade. Fix the gate to walk
         up to the component root; fix the data (the 311-node census) first.
-  - [ ] Reuse the adherence regexes for ADR-0032 alternative 4 — the synced Claude
+  - [x] Reuse the adherence regexes for ADR-0032 alternative 4 — the synced Claude _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         Design file already carries the three rules an artboard/token gate wants (raw
         hex → token, raw px → spacing token, `font-family` outside the DS list); lift
         them rather than authoring new ones.
-  - [ ] 464 text nodes below 12px (306 on Inventory card meta, 156 on Colors swatch
+  - [x] 464 text nodes below 12px (306 on Inventory card meta, 156 on Colors swatch _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         labels/hex, 2 on Components — the last two already fixed as an AtlAvatar bug).
         Catalogue scaffolding, not component text; decide whether documentation pages
         adopt `--ui-font-size-2xs` (10px, exists since ADR-0054) or stay off-scale by
         intent.
-  - [ ] AtlProgress's layers were already conventionally named (`track`, `fill`)
+  - [x] AtlProgress's layers were already conventionally named (`track`, `fill`) _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         before there was a convention — worth a look at who drew it and whether other
         conventions in this cluster were arrived at once and never generalised.
-  - [ ] A glyph typed as an instance OVERRIDE is unseen by `[MASTER-GLYPH]` (which
+  - [x] A glyph typed as an instance OVERRIDE is unseen by `[MASTER-GLYPH]` (which _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         deliberately skips text inside instances, since normally that belongs to the
         child master) — compare an instance's text against its main component's
         instead of skipping wholesale.
-  - [ ] `[ROOT-BOX]`'s gap comparison is unreachable for the four form-row masters
+  - [x] `[ROOT-BOX]`'s gap comparison is unreachable for the four form-row masters _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         (AtlCheckbox, AtlToggle, AtlRadio, AtlRadioGroup are excluded from
         `ROOT_PAINT` for a paint reason that also took gap with it) — all four bind
         8px where all three stylesheets state 12px.
-  - [ ] `[LAYER-PAINT]` never compares a stroke colour when the CSS border is
+  - [x] `[LAYER-PAINT]` never compares a stroke colour when the CSS border is _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         transparent (`if (!/transparent|none/.test(border))` guard) — six visible
         strokes on AtlPagination's page buttons pass because of it; a transparent
         border is a declared value, not a missing one.
-  - [ ] AtlMenu's `ROOT_PAINT` entry has no `{variant}` template —
+  - [x] AtlMenu's `ROOT_PAINT` entry has no `{variant}` template — _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         `variant=compact` is compared against the base rule's 8px padding and passes,
         while the rule that actually applies says 4px.
-  - [ ] ADR-0055's "nothing moves when the state flips" doesn't hold for two of
+  - [x] ADR-0055's "nothing moves when the state flips" doesn't hold for two of _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         the four form fields: `.atl-input`/`.atl-textarea` narrow their text box 20px
         when invalid (`padding-right` 1rem → 2.25rem), identical in all three
         frameworks, while AtlSelect/AtlCombobox reserve the space unconditionally as
         the ADR describes.
-  - [ ] AtlTextarea's master disagrees with itself: `radius/md` (10px) on
+  - [x] AtlTextarea's master disagrees with itself: `radius/md` (10px) on _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         `state=default` vs `radius/sm` (8px) on the other four, no CSS rule changes the
         radius; plus the hover variant's root stroke is an unbound raw colour, the only
         raw paint on any of the three field masters.
-  - [ ] The combobox master stacks its panel 4px below the field where the code
+  - [x] The combobox master stacks its panel 4px below the field where the code _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         uses 8px, plus fill/radius/padding/gap deltas on the same layer — all inside
         the `state=open` skip already recorded above.
-  - [ ] AtlPagination: four painted divergences on the page buttons (visible
+  - [x] AtlPagination: four painted divergences on the page buttons (visible _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         border where CSS is transparent-by-design; muted vs full-contrast number text;
         weight differences on inactive/current page numbers) — all invisible to
         `[LAYER-PAINT]` because the colour lives on the TEXT child, not the named
         frame.
-  - [ ] ADR-0063's page-button fix was half-applied and its own record overstates
+  - [x] ADR-0063's page-button fix was half-applied and its own record overstates _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         it: the fill was removed from the six inactive buttons, the stroke was not —
         nothing has contradicted the record since because the gate can't see it (blind
         spot above).
-  - [ ] The three adapters disagree on the menu trigger-to-panel offset
+  - [x] The three adapters disagree on the menu trigger-to-panel offset _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         (React/Vue: 8px via `calc(100% + var(--ui-spacing-2))`; Angular: no explicit
         offset, CDK default applies) — the ADR-0081 cleanup deleted the only place the
         intended offset was written down. Give Angular an explicit offset, or record
         the CDK default as intended.
-  - [ ] Both component artboards (design-findings doc) need a correction pass for
+  - [x] Both component artboards (design-findings doc) need a correction pass for _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         two overstated claims: the "code-only props" labels, and AtlButton's "half a
-        matrix" note. Listed at the end of `tasks/design-findings-2026-08-26.md`.
-  - [ ] The row ladder has no Figma Variables — `--ui-row-inset` and the three
+        matrix" note. Listed at the end of `tasks/archive/reviews/design-findings-2026-08-26.md`.
+  - [x] The row ladder has no Figma Variables — `--ui-row-inset` and the three _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         `--ui-row-height-*` are `calc()` over the control scale, which Figma can't
         express as a derived Variable; they'll land as resolved numbers whose
         derivation lives only in ADR-0052 and `tokens.css`.
-  - [ ] Nothing gates the Figma icon set against `AtlIconName` (ADR-0057) — no
+  - [x] Nothing gates the Figma icon set against `AtlIconName` (ADR-0057) — no _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         live divergence today (25 `Icon/*` components, 25 names, identical sets,
         checked by hand); `check:figma` reads the Components-page snapshot only, so
         the Icons page isn't cross-checked. Capture it in `figma-snapshot.mjs`.
-  - [ ] AtlChat's master draws a minimise control the component doesn't have
+  - [x] AtlChat's master draws a minimise control the component doesn't have _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         (`AtlChatSpec` exposes only `open`/`onOpenChange`) — decide whether AtlChat
         gains the state or the master loses the button.
-  - [ ] The checkbox tick is drawn twice in the library: code draws it with a
+  - [x] The checkbox tick is drawn twice in the library: code draws it with a _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         rotated pseudo-element while `ATL_ICON_GEOMETRY` already has a `check`. Either
         render `<AtlIcon name="check">` (keeping the `atl-check-pop` animation on it),
         or accept and record the duplication — Figma now draws the CSS shape
         faithfully, so only the code carries it twice.
-  - [ ] **AtlButton: six of nine anatomy values are literals, not tokens** —
+  - [x] **AtlButton: six of nine anatomy values are literals, not tokens** — _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         min-height (32/40/48) and padding (6/9/12 block, 14/18/24 inline), of which
         only 24px lands on the spacing scale; `[ROOT-BOX]` now names it every run
         (ADR-0076). Either the size steps get tokens, or the gap is recorded as
         intended.
-  - [ ] The AtlButton Figma master has 24 variants for a 4×3×4 matrix (48) — half
+  - [x] The AtlButton Figma master has 24 variants for a 4×3×4 matrix (48) — half _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         the state combinations are unpopulated. Confirm against the master before the
         transfer decides what to add; `check:figma`'s variant-matrix completeness
         passes today, suggesting the metadata `variantMatrix` doesn't claim the full
         cross-product either.
-  - [ ] The Figma-side Instructions text overstates the token binding: node
-        `703:333` on 🛠️ Workshop-Templates says every fill/padding/radius is bound to a
-        UI-Tokens variable; `Avatar / Starter` binds only fills and strokes. Soften the
-        Figma text, or bind Avatar's corner radius and revert the (already-softened)
-        docs prose — a Figma write, out of scope for the docs pass that found it.
-  - [ ] `ComponentMetadata` has no field saying which spec a `variantMatrix`
+  - → **R-147** The Figma-side Instructions text overstates the token binding: node
+    `703:333` on 🛠️ Workshop-Templates says every fill/padding/radius is bound to a
+    UI-Tokens variable; `Avatar / Starter` binds only fills and strokes. Soften the
+    Figma text, or bind Avatar's corner radius and revert the (already-softened)
+    docs prose — a Figma write, out of scope for the docs pass that found it.
+  - [x] `ComponentMetadata` has no field saying which spec a `variantMatrix` _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         describes — sharing a metadata module between a parent and its children is
         deliberate (nine modules do it), so "specNames[0] is the primary" isn't a rule
         the data supports. Residue: one allowlist entry plus a latent risk that a
         future child inherits an unrelated matrix. Worth a `variantMatrixFor` field
         when a second collision appears, not for one entry.
-  - [ ] Compose parents from their child masters: AtlMenu's separators are
+  - [x] Compose parents from their child masters: AtlMenu's separators are _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         already instances of AtlMenuSeparator; its items, the tabs, the steps, the
         accordion items and the chat bubbles could be too — where a parent
         instantiates its child, the geometry can't drift at all. Blocker: an instance
         can't gain children, so a part taking free content (an icon plus a label)
         needs the master to expose a slot first. Decide slot-per-part, then convert.
-  - [ ] Consider a gate forbidding `--ui-font-display` outside the role
+  - [x] Consider a gate forbidding `--ui-font-display` outside the role _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         definition — cheap now that `check:typeface` already resolves a role
         shorthand. The point of ADR-0036 is that a component naming the family
         directly can still break the "serif, italic, never bolded" guarantee a role
@@ -2688,7 +2692,7 @@ Tokens` `spacing/s1…s16` vs `Library Tokens` `spacing/1…16`, only the latter
 Correctly open — not stalled, waiting on something specific. Marked "blocked —
 unblocks when X" rather than deleted.
 
-- [ ] **Claude Design participant katas, and the trainer run-sheet + participant
+- [x] **Claude Design participant katas, and the trainer run-sheet + participant _(closed 2026-10-11 by the review triage: SUPERSEDED; see tasks/archive/review-triage-2026-10-11.md)_
       how-to that go with them** — blocked, unblocks when: the per-seat Claude Design
       access test (review §5) is widened past the trainer machine. **Narrowed
       2026-09-07:** the _owner_ seat is now proven to write — `write_files` landed a
@@ -2697,17 +2701,17 @@ unblocks when X" rather than deleted.
       (ADR-0106). That is the trainer machine, so this stays blocked: what is still
       untested is whether a _participant's_ seat can write to a project shared with
       them, which is the actual precondition here.
-  - [ ] The katas themselves.
-  - [ ] Schulung M2/M3 — trainer run-sheet (product, `/design-login`, prompt,
+  - [x] The katas themselves. _(closed 2026-10-11 by the review triage: SUPERSEDED; see tasks/archive/review-triage-2026-10-11.md)_
+  - [x] Schulung M2/M3 — trainer run-sheet (product, `/design-login`, prompt, _(closed 2026-10-11 by the review triage: SUPERSEDED; see tasks/archive/review-triage-2026-10-11.md)_
         hardcode target, flip value, fallback URL) + participant how-to (image,
         prompt→canvas, Step-5 example, opener).
   - _(Unblocked halves already shipped around this — the trainer demo,
     prerequisites 2–3 — without weakening it: the demo is trainer-machine-only and
     says so in its first sentence.)_
 
-- [ ] **Work through the Figma parity sweep** — 16 of 43 masters measured
+- [x] **Work through the Figma parity sweep** — 16 of 43 masters measured _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
       2026-09-07, findings and suggested order in
-      `tasks/figma-parity-sweep-2026-09-07.md`. Already fixed: AtlCard
+      `tasks/archive/reviews/figma-parity-sweep-2026-09-07.md`. Already fixed: AtlCard
       `padding=none` (was padding like `md`), the AtlButton label wrap, the
       block-padding policy (ADR-0107), the card header's leading. Highest-value
       remaining, in order:
@@ -2729,34 +2733,34 @@ unblocks when X" rather than deleted.
         shapes and the two `root-size` allowlist entries deleted, so the gate is
         green on its own merits rather than on an exemption. 64 is also the
         on-scale value (`--ui-spacing-16`); 56 is not a step at all.
-    - [ ] **AtlAvatarGroup's own frame heights** (24/32/36/44/52 for
+    - [x] **AtlAvatarGroup's own frame heights** (24/32/36/44/52 for _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
           xs/sm/md/lg/xl) do not follow the avatar ladder (24/32/40/48/64) from `md`
           up. Noticed while fixing the avatar; not chased, and the new rule does not
           reach it (AtlAvatarGroup is outside `ROOT_PAINT`'s table). May be
           legitimate — a group frame carries overlap and ring offsets, so its height
           is not required to equal one avatar — but nothing records that either way.
-  - [ ] Code fixes: the two `control`-role weight overrides on
+  - [x] Code fixes: the two `control`-role weight overrides on _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         `.page-btn.is-active` and `.step-item.is-active .step-label` (against
         tokens.css's own role table), `.step-description`'s hardcoded `2px` margin,
         `.breadcrumb-current`'s missing padding.
-  - [ ] AtlCheckbox and AtlRadio to match AtlToggle, which is already correct in
+  - [x] AtlCheckbox and AtlRadio to match AtlToggle, which is already correct in _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         the same file (box size, `input-bg` vs `surface`, `border-strong` vs
         `border`, 1.5px vs 2px, and a real focus variant).
-  - [ ] AtlPagination's `showFirstLast` is declared but unwired — no first/last
+  - [x] AtlPagination's `showFirstLast` is declared but unwired — no first/last _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         layers, `componentPropertyReferences` empty on all nine children.
-  - [ ] The decisions, in one pass: the 8-vs-12 label gap across four selection
+  - [x] The decisions, in one pass: the 8-vs-12 label gap across four selection _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         controls, the `color-mix` borders (not expressible as a Figma Variable —
         same class as ADR-0107's derived padding), AtlCard's asymmetric padding
         scale, the breadcrumb separator glyph (code ships `/`, Figma draws `›`, and
         the CSS `'›'` fallback is unreachable), AtlAlert's `dismissible` default,
         and AtlRadioGroup's master, which does not model a radio group at all.
-  - [ ] 21 masters still unswept, including AtlIcon (25 Figma components vs the
+  - [x] 21 masters still unswept, including AtlIcon (25 Figma components vs the _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         sheet's "strict 20-name catalogue") and AtlAvatarGroup (no Claude Design
         sheet).
 
-- [ ] **The social cards render in Noto Sans, and the docs build phones home for
-      it** (found 2026-09-07 while fixing the `--docs-font` fallback; needs a brand
-      decision, so not executed). Measured, not inferred:
+- → **R-072** **The social cards render in Noto Sans, and the docs build phones home for
+  it** (found 2026-09-07 while fixing the `--docs-font` fallback; needs a brand
+  decision, so not executed). Measured, not inferred:
   - `docs/src/pages/og/[...slug].ts` passes `families: ['Inter', 'sans-serif']`
     and `weight: 'ExtraBold'`. **Both are inert.** `astro-og-canvas` takes the
     font _name_ from `font.*.families` but the font _data_ from a separate
@@ -2785,26 +2789,26 @@ unblocks when X" rather than deleted.
   - Interim, zero-risk: the file's header comment names the route
     `src/pages/og/[...slug].png.ts`; the file is `[...slug].ts`.
 
-- [ ] **Presentation-debt p1 and p2** — blocked, unblocks when: real screen
-      captures exist. p1 wants photographs of Figma's plugin menu, token dialog and
-      inspect panel to replace placeholder SVGs (interim: the retired `#00BEBE` in
-      `figma.astro:335` still needs fixing regardless); p2 wants a terminal capture of
-      `npm run preflight` from a genuinely scaffolded single-framework workspace — the
-      mock's "3 storybook rows / 15 ok" is a run the current script can't produce. p2's
-      prerequisite (the two `preflight.mjs` copies byte-identical) is already met; the
-      run itself is not.
+- → **R-073** **Presentation-debt p1 and p2** — blocked, unblocks when: real screen
+  captures exist. p1 wants photographs of Figma's plugin menu, token dialog and
+  inspect panel to replace placeholder SVGs (interim: the retired `#00BEBE` in
+  `figma.astro:335` still needs fixing regardless); p2 wants a terminal capture of
+  `npm run preflight` from a genuinely scaffolded single-framework workspace — the
+  mock's "3 storybook rows / 15 ok" is a run the current script can't produce. p2's
+  prerequisite (the two `preflight.mjs` copies byte-identical) is already met; the
+  run itself is not.
 
-- [ ] **Verify Figma _export_ from claude.ai/design** — blocked, unblocks when:
-      someone spends the ten minutes. Import via Figma links into the canvas is
-      confirmed first-party (`hifi-design` skill); export out of it is still
-      unverified, and ADR-0032's "the canvas dead-ends" tradeoff rests partly on it.
-      Treat as a 10-minute spike, not open-ended research — `/claude-design` already
-      names the asymmetry explicitly so the page can't be misread as endorsing the
-      forbidden direction.
+- → **R-052** **Verify Figma _export_ from claude.ai/design** — blocked, unblocks when:
+  someone spends the ten minutes. Import via Figma links into the canvas is
+  confirmed first-party (`hifi-design` skill); export out of it is still
+  unverified, and ADR-0032's "the canvas dead-ends" tradeoff rests partly on it.
+  Treat as a 10-minute spike, not open-ended research — `/claude-design` already
+  names the asymmetry explicitly so the page can't be misread as endorsing the
+  forbidden direction.
 
-- [ ] **Blocked on Figma/Claude-Design external access** (grouped — same root
+- [x] **Blocked on Figma/Claude-Design external access** (grouped — same root _(closed 2026-10-11: all children closed by the review triage)_
       blocker, different symptoms):
-  - [ ] Participant artboards are still ungated: `check:artboard-palette` covers
+  - [x] Participant artboards are still ungated: `check:artboard-palette` covers _(closed 2026-10-11 by the review triage: SUPERSEDED; see tasks/archive/review-triage-2026-10-11.md)_
         the shared sheet, but a participant's own `.dc.html` can hardcode a colour
         beside the palette it links, and nothing reads those 31 files. The blocker is
         reach — a gate needs the artboards in-repo or an authenticated client. Katas 2
@@ -2829,26 +2833,26 @@ unblocks when X" rather than deleted.
         prefix, which names nothing that exists (9944 `Atl*` in `libs/`, zero
         `Llm*`). **Not verified: the render** — no browser tooling in that session,
         so someone still has to look at the preview cards.
-  - [ ] The kata and the tutorial still build the same Figma artifact (one
+  - [x] The kata and the tutorial still build the same Figma artifact (one _(closed 2026-10-11 by the review triage: SUPERSEDED; see tasks/archive/review-triage-2026-10-11.md)_
         Settings/Card + four `*/Starter` frames in `snapshot.json`) — giving the kata
         its own target is a Figma write. Both pages now say plainly it's the same
         frame and the kata is a timed second lap, which is the honest interim state.
 
-- [ ] **No typeface gate reaches `docs/`.** `check:typeface`
-      (`check-typeface.js:133`) scans `libs/{fw}/src/lib` only, which is why the
-      `--docs-font` Inter fallback (fixed 2026-09-07, `a90556f`) and the OG-image
-      `families: ['Inter']` above both survived. Also uncovered: 14 bare
-      `font-family: monospace` declarations across seven `docs/src/pages/*.astro`
-      files and `docs/src/components/McpExplorer.tsx`, which bypass
-      `--ui-font-mono` rather than name a stale face — a lower-severity smell in the
-      same blind spot. Decide whether the gate widens to `docs/` or whether `docs/`
-      gets its own rule; a generic keyword is not the same violation as a retired
-      brand name, so one rule may not fit both.
+- → **R-129** **No typeface gate reaches `docs/`.** `check:typeface`
+  (`check-typeface.js:133`) scans `libs/{fw}/src/lib` only, which is why the
+  `--docs-font` Inter fallback (fixed 2026-09-07, `a90556f`) and the OG-image
+  `families: ['Inter']` above both survived. Also uncovered: 14 bare
+  `font-family: monospace` declarations across seven `docs/src/pages/*.astro`
+  files and `docs/src/components/McpExplorer.tsx`, which bypass
+  `--ui-font-mono` rather than name a stale face — a lower-severity smell in the
+  same blind spot. Decide whether the gate widens to `docs/` or whether `docs/`
+  gets its own rule; a generic keyword is not the same violation as a retired
+  brand name, so one rule may not fit both.
 
-- [ ] **Three decisions the 2026-09-07 sweep named rather than took.** Each is
+- [x] **Three decisions the 2026-09-07 sweep named rather than took.** Each is _(closed 2026-10-11: all children closed by the review triage)_
       recorded in a commit message and nowhere a reader would look, which is why
       they are here.
-  - [ ] **There is no SemiBold below 16px** — no `--ui-type-*` role and no Figma
+  - [x] **There is no SemiBold below 16px** — no `--ui-type-*` role and no Figma _(closed 2026-10-11 by the review triage: SUPERSEDED; see tasks/archive/review-triage-2026-10-11.md)_
         text style. `.atl-avatar` states `font-weight: semibold` at font sizes
         2xs/xs/sm (10/12/14px), so following the code faithfully leaves those text
         nodes unbindable; they were bound before only because they carried the wrong
@@ -2857,7 +2861,7 @@ unblocks when X" rather than deleted.
         shape as ADR-0074, which added `control` and `action` because two
         combinations were unspanned — this is a third. Decide: give the small-end
         semibold combination a role, or accept it as off-role and say so.
-  - [ ] **AtlCombobox's `input` layer passes the block-padding check by
+  - [x] **AtlCombobox's `input` layer passes the block-padding check by _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         coincidence.** It carries `padding: [9, 56, 9, 16]` against `minHeight: 40`,
         and 9px is exactly what `.atl-combobox-input`'s ADR-0041 recipe derives — so
         it reads as correct while being the same false-pass ADR-0107 retired at the
@@ -2865,7 +2869,7 @@ unblocks when X" rather than deleted.
         six masters that ADR names, so this is untouched. Decide: fix the master's
         padding data, or extend the height-derived treatment to AtlCombobox with its
         own ADR.
-  - [ ] **Three parent masters hand-draw their children instead of instancing
+  - [x] **Three parent masters hand-draw their children instead of instancing _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
         them** — AtlAvatarGroup, AtlTable and AtlAccordionGroup all have
         `compositionDependencies` null and redraw their parts as plain frames.
         `AtlTr`, `AtlTd` and `AtlTbody` compose real instances two levels deep, so
@@ -2877,71 +2881,71 @@ unblocks when X" rather than deleted.
         needs care because the parents' boolean properties are wired to their own
         hand-drawn helper layers.
 
-- [ ] **An automated parity pass validates about a fifth of what Figma paints.**
-      Measured 2026-09-07 from AtlSelect's own `cssMapping`: four of its five
-      painted states are gated behind pseudo-classes (`.has-value`,
-      `[aria-expanded]`, `:hover`, `:focus-visible`), and a static component-tree
-      read can never trigger any of them. `figma_check_design_parity` therefore
-      only ever validates the resting state. Every defect the two sweep waves found
-      came from opening painted variants by hand. Not a bug to fix — a coverage
-      fact that should shape how much a green parity score is trusted, and it is
-      why `tasks/figma-parity-sweep-2026-09-07.md` records what the score cannot
-      see. Consider whether an interactive pass (Storybook + real hover/focus, or
-      per-variant screenshot review) belongs in the workshop's own verify loop.
+- → **R-050** **An automated parity pass validates about a fifth of what Figma paints.**
+  Measured 2026-09-07 from AtlSelect's own `cssMapping`: four of its five
+  painted states are gated behind pseudo-classes (`.has-value`,
+  `[aria-expanded]`, `:hover`, `:focus-visible`), and a static component-tree
+  read can never trigger any of them. `figma_check_design_parity` therefore
+  only ever validates the resting state. Every defect the two sweep waves found
+  came from opening painted variants by hand. Not a bug to fix — a coverage
+  fact that should shape how much a green parity score is trusted, and it is
+  why `tasks/archive/reviews/figma-parity-sweep-2026-09-07.md` records what the score cannot
+  see. Consider whether an interactive pass (Storybook + real hover/focus, or
+  per-variant screenshot review) belongs in the workshop's own verify loop.
 
-- [ ] **`check:release-drift`'s diagnosis assumes one direction.** Seen
-      2026-09-07: with the registry at 0.2.39 and the working tree at 0.2.38 (a
-      `chore(release)` commit fetched but not yet rebased onto), it printed
-      `✗ [DRIFT] local 0.2.38 vs published 0.2.39` followed by _"A publish did not
-      reach the registry — check the token/scope … and republish"_. The numbers said
-      the opposite: published was AHEAD, the publish had fully succeeded, and the
-      fix was `git rebase origin/main` — after which the same gate reported 5 of 5
-      in sync. The advice it gives for local-behind is actively wrong and points at
-      a republish that would be a no-op at best. It should compare the direction
-      first and say "your tree is behind the release commit" when local < published.
+- → **R-107** **`check:release-drift`'s diagnosis assumes one direction.** Seen
+  2026-09-07: with the registry at 0.2.39 and the working tree at 0.2.38 (a
+  `chore(release)` commit fetched but not yet rebased onto), it printed
+  `✗ [DRIFT] local 0.2.38 vs published 0.2.39` followed by _"A publish did not
+  reach the registry — check the token/scope … and republish"_. The numbers said
+  the opposite: published was AHEAD, the publish had fully succeeded, and the
+  fix was `git rebase origin/main` — after which the same gate reported 5 of 5
+  in sync. The advice it gives for local-behind is actively wrong and points at
+  a republish that would be a no-op at best. It should compare the direction
+  first and say "your tree is behind the release commit" when local < published.
 
 ## Optional / low priority
 
 Not urgent; fix opportunistically or when touching the same area anyway.
 
-- [ ] **Two net-zero commits** (`98e8755`, `ac3c854`) stay in git history — they
+- [x] **Two net-zero commits** (`98e8755`, `ac3c854`) stay in git history — they _(closed 2026-10-11 by the review triage: SUPERSEDED; see tasks/archive/review-triage-2026-10-11.md)_
       cancel exactly, and rewriting unpushed history was blocked by the auto-mode
       classifier. Harmless; squash them if the branch is ever rebased anyway.
 
-- [ ] **Old "Larger workstreams" leftovers** (from the original ranked roadmap;
-      kept, not deleted):
-  - [ ] C7 capture bound-token name/value in the Figma snapshot · C8 `check:figma`
+- → **Old "Larger workstreams" leftovers** (from the original ranked roadmap; _(review triage 2026-10-11: open children tracked in tasks/reviews.md)_
+  kept, not deleted):
+  - [x] C7 capture bound-token name/value in the Figma snapshot · C8 `check:figma` _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
     - freshness check (the snapshot never checks its own age; `figmaLastModified`
       is still `null`) · C9 a full 27-master snapshot.
-  - [ ] D12 de-personalize the host + deploy workflow · D14 invert
-        `check-docs-sync` · D15 secret/RCE defaults review. (D10, D11, D13 from the
-        same original list are done and archived — see
-        `tasks/archive/2026-07-defect-batch-h1-figma-audit.md`.)
+  - → **R-011** D12 de-personalize the host + deploy workflow · D14 invert
+    `check-docs-sync` · D15 secret/RCE defaults review. (D10, D11, D13 from the
+    same original list are done and archived — see
+    `tasks/archive/2026-07-defect-batch-h1-figma-audit.md`.)
 
-- [ ] **`@angular/animations` is not the only optional peer a prune could take.**
+- [x] **`@angular/animations` is not the only optional peer a prune could take.** _(closed 2026-10-11 by the review triage: OBSOLETE-CDS; see tasks/archive/review-triage-2026-10-11.md)_
       The dep-prune reasoning that failed once already ("zero source imports") is
       sound about this repo's own code and blind to what a dev-dependency reaches for
       at build time. No gate checks that, and probably doesn't need one — recorded so
       the next prune's author reads this first. Partial mitigation already exists: CI
       now builds Storybook, so a prune that breaks a builder fails the PR.
 
-- [ ] **`@nx/devkit` is still a hard dependency of the preset, pinned to the
-      monorepo's nx.** ADR-0053 closed the peer-dependency route by which a plugin
-      outran nx core, but `NX_VERSION` is read from whichever devkit the preset itself
-      carries — if `create-nx-workspace` ever scaffolds on a newer nx than this pin,
-      the skew returns inverted. Hasn't bitten because the pin moves with the
-      monorepo, but that's discipline, not a mechanism. _(Note: the triage's "Figma
-      polish pass" list named this line, but its content has nothing to do with Figma
-      — moved here as a judgment call; see the session report.)_
+- → **R-098** **`@nx/devkit` is still a hard dependency of the preset, pinned to the
+  monorepo's nx.** ADR-0053 closed the peer-dependency route by which a plugin
+  outran nx core, but `NX_VERSION` is read from whichever devkit the preset itself
+  carries — if `create-nx-workspace` ever scaffolds on a newer nx than this pin,
+  the skew returns inverted. Hasn't bitten because the pin moves with the
+  monorepo, but that's discipline, not a mechanism. _(Note: the triage's "Figma
+  polish pass" list named this line, but its content has nothing to do with Figma
+  — moved here as a judgment call; see the session report.)_
 
-- [ ] **Bonus, found while restructuring (not one of the original 130, no
-      checkbox in the old file): 16 pre-existing horizontal-overflow page/width
-      combinations**, surfaced (not caused) when the docs scrollport fix removed
-      `.docs-main`'s `overflow-y: auto`. Contained by `.docs-main-content` — nothing
-      is cut off or pushes the page — but real responsive defects (e.g.
-      `.docs-props-table`'s 849px min-content width at narrow viewports). Deliberately
-      not fixed with the scrollport work to keep the scopes apart; the proper fix is a
-      per-element scroll container on the wide content.
+- → **R-071** **Bonus, found while restructuring (not one of the original 130, no
+  checkbox in the old file): 16 pre-existing horizontal-overflow page/width
+  combinations**, surfaced (not caused) when the docs scrollport fix removed
+  `.docs-main`'s `overflow-y: auto`. Contained by `.docs-main-content` — nothing
+  is cut off or pushes the page — but real responsive defects (e.g.
+  `.docs-props-table`'s 849px min-content width at narrow viewports). Deliberately
+  not fixed with the scrollport work to keep the scopes apart; the proper fix is a
+  per-element scroll container on the wide content.
 
 ## Closed this session (2026-09-06)
 
@@ -2987,7 +2991,7 @@ Not urgent; fix opportunistically or when touching the same area anyway.
       already phrased accurately — untouched), `plan/adr/*` (two false-positive
       greps on "unresolved"/"resolved" containing "solved" as a substring — not the
       same word, untouched). Pulling this thread reopened
-      `tasks/schulung-review-2026-09-02.md` §6.3's still-open recommendation to
+      `tasks/archive/reviews/schulung-review-2026-09-02.md` §6.3's still-open recommendation to
       move trainer material to a private `atelier-trainer` repo — re-checked and
       closed as **no, not now**: the one sensitive finding it rested on (I1,
       colleagues' names + internal mailbox) is already fixed to role-only phrasing,

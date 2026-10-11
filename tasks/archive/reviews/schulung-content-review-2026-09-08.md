@@ -7,7 +7,7 @@ tells participants and agents to read. The question asked was the owner's: where
 gaps, what is not well formulated, and — especially — does the joint between **Figma,
 Claude Design and the code** hold together.
 
-Distinct from `tasks/review-plausibility-2026-09-08.md`, which audited what the repo
+Distinct from `tasks/archive/reviews/review-plausibility-2026-09-08.md`, which audited what the repo
 _claims_ about itself. This one asks whether the material _teaches_. Findings that
 duplicate that review are not repeated; where a finding touches the same file it is a
 new instance and says so.

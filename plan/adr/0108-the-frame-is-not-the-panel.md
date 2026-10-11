@@ -2,7 +2,7 @@
 status: accepted
 date: 2026-09-07
 sources:
-  - 'tasks/figma-parity-sweep-2026-09-07.md (found and fixed both bugs this ADR gates against; states the gap this closes)'
+  - 'tasks/archive/reviews/figma-parity-sweep-2026-09-07.md (found and fixed both bugs this ADR gates against; states the gap this closes)'
   - 'tools/scripts/check-figma.js ([ROOT-BOX]/[SET-CLIPS]/[ROOT-TYPE], whose severities and table conventions this reuses)'
   - 'tools/scripts/figma-snapshot.mjs (the 2b probe this extends)'
   - "plan/adr/0107-the-master-states-the-primitive.md (the sibling expressibility family — derived values, viewport units, cancelled padding — this ADR's [ROOT-SIZE]/[LAYER-SIZE] also has to skip)"
@@ -105,7 +105,7 @@ between "found" and "fixed" except doing it.
 
 - Ran against the live file (refreshed twice, independently, to rule out a
   fluke): AtlDialog and AtlDrawer are both silent — the fixes already
-  committed under `tasks/figma-parity-sweep-2026-09-07.md` hold exactly. Proven
+  committed under `tasks/archive/reviews/figma-parity-sweep-2026-09-07.md` hold exactly. Proven
   by construction, not merely by absence of a finding: dividing AtlDialog's
   captured widths by 1.6 and forcing AtlDrawer's `dialog` layer to 220×320
   reproduces both historical bugs' exact numbers and fires `[ROOT-SIZE]` /

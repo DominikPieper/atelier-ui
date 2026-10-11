@@ -2,7 +2,7 @@
 status: accepted
 date: 2026-08-26
 sources:
-  - tasks/design-findings-2026-08-26.md (Decision A — the size system states heights it does not deliver)
+  - tasks/archive/reviews/design-findings-2026-08-26.md (Decision A — the size system states heights it does not deliver)
   - 'AtlButton.dc.html and AtlInput.dc.html in the Claude Design project *Atelier* — the artboards that surfaced it'
 ---
 

@@ -2,7 +2,7 @@
 status: accepted
 date: 2026-08-26
 sources:
-  - tasks/review-state-2026-08-26.md (state review — a11y roster hole, ADR/gate-policy drift)
+  - tasks/archive/reviews/review-state-2026-08-26.md (state review — a11y roster hole, ADR/gate-policy drift)
   - 'plan/adr/0019-figma-conformance-gate.md (§5 revised: no longer standalone)'
   - 'plan/adr/0024-design-parity-persistence-gate.md (§4 revised: no longer standalone)'
   - 'plan/adr/0025-cross-framework-a11y-conformance.md (roster derivation)'

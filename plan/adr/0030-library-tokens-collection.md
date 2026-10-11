@@ -2,7 +2,7 @@
 status: accepted
 date: 2026-07-22
 sources:
-  - tasks/figma-audit-2026-07-22.md (findings 1–3)
+  - tasks/archive/reviews/figma-audit-2026-07-22.md (findings 1–3)
   - user request ("mit dem Figma-Design anfangen … was man verbessern könnte")
 ---
 
@@ -14,7 +14,7 @@ Accepted.
 
 ## Context
 
-The workspace audit (tasks/figma-audit-2026-07-22.md) found the Figma file
+The workspace audit (tasks/archive/reviews/figma-audit-2026-07-22.md) found the Figma file
 hosting two design systems: the docs-site brand system (a well-maintained,
 mode-aware collection then named "UI Tokens") and the component library,
 whose only dedicated tier was 15 single-mode Component Tokens. Consequences:

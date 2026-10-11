@@ -32,7 +32,7 @@ the three adapters. ADR-0093 (`plan/adr/0093-the-contract-two-adapters-were-neve
 2026-09-05) measured it: no Angular class implements or extends an `Atl*Spec` — signal
 inputs are class fields, so none can — and no Vue `defineProps` points at one; only React's
 props interfaces extend the spec. The spec-format review of 2026-09-10
-(`tasks/spec-format-review-2026-09-10.md`) counted it per component: React 26 of 29,
+(`tasks/archive/reviews/spec-format-review-2026-09-10.md`) counted it per component: React 26 of 29,
 Angular 1 of 29 (an indexed-access pluck of one field), Vue 0 of 29; 27 of the file's
 exported names are imported by no adapter at all, and eight `.vue` files re-declare the
 axis union inline. What holds the three adapters to the same names is the gate chain —

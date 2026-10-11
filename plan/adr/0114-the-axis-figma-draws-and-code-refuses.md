@@ -2,7 +2,7 @@
 status: accepted
 date: 2026-09-09
 sources:
-  - "tasks/schulung-content-review-2026-09-08.md (Gegenprobe — Codex, 2026-09-09, finding G2: 'interaction states are not variants' contradicted by Atelier's own masters, by the briefs' own acceptance bar, and by the architect skill)"
+  - "tasks/archive/reviews/schulung-content-review-2026-09-08.md (Gegenprobe — Codex, 2026-09-09, finding G2: 'interaction states are not variants' contradicted by Atelier's own masters, by the briefs' own acceptance bar, and by the architect skill)"
   - "tools/figma/snapshot.json (the live `state=` variant-axis census on 15 masters, and `Action/AtlButton`'s curated 24-of-48 drawn combinations)"
   - 'libs/spec/src/index.ts (every `Atl*Variant` union — none carries a state value)'
   - "uianatomy MCP `get_component_view('card', 'designer')` (the canonical `variant-explosion-from-states` mistake record, severity minor)"

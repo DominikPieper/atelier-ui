@@ -2,9 +2,9 @@
 status: accepted
 date: 2026-09-10
 sources:
-  - tasks/spec-format-review-2026-09-10.md (what the current spec is and is not — 20 findings)
+  - tasks/archive/reviews/spec-format-review-2026-09-10.md (what the current spec is and is not — 20 findings)
   - tasks/spec-workflow-plan-2026-09-10.md (the contract-document workflow this record replaces in shape, kept as the fallback)
-  - tasks/spec-rethink-2026-09-10.md (the tool inventories, the 26-row testability matrix, the ranked shapes)
+  - tasks/archive/reviews/spec-rethink-2026-09-10.md (the tool inventories, the 26-row testability matrix, the ranked shapes)
   - plan/adr/0006-framework-agnostic-spec-source-of-truth.md (the record this one will eventually retire; corrected 2026-09-10, not superseded here)
   - plan/adr/0010-ai-readiness-layer.md (metadata, token manifest, behaviour manifest — the layers that fold)
   - plan/adr/0011-typed-covers-behavior-gate.md (the `covers()` mechanism that survives only as governance)

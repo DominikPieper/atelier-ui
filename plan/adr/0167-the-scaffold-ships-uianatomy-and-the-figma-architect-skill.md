@@ -2,7 +2,7 @@
 status: accepted
 date: 2026-10-10
 sources:
-  - tasks/content-review-2026-10-10.md §5.6 (skills delivery), §9 decision 7
+  - tasks/archive/reviews/content-review-2026-10-10.md §5.6 (skills delivery), §9 decision 7
   - plan/design-skills-blueprint.md §8 decision 7 (open since 2026-09-07)
   - owner decisions, 2026-10-10 (this session)
   - ADR-0090 (byte-identical preset clones), ADR-0123 (storybookjs/mcp skills via a pinned `skills add`), ADR-0144 (figma / no-figma scaffold variants)

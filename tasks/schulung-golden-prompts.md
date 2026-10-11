@@ -22,7 +22,7 @@ that row now points here instead.
 **Where this lives, and why not `/schulung`.** This is trainer prep, read before or
 during a live session, not participant-facing curriculum — the same standing as
 `tasks/schulung-dry-run-kit.md` and the three `tasks/schulung-review-*.md` files it
-sits beside. `tasks/schulung-review-2026-09-02.md` §6.3 recommended eventually moving
+sits beside. `tasks/archive/reviews/schulung-review-2026-09-02.md` §6.3 recommended eventually moving
 _all_ trainer-only material to a separate private repo; that repo does not exist and
 building one is out of scope here. What that same review's §7 table actually gates on
 is personal data and credential/contingency admissions (I1: two colleagues' names and

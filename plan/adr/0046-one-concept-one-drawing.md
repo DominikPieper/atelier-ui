@@ -2,7 +2,7 @@
 status: accepted
 date: 2026-08-26
 sources:
-  - tasks/design-findings-2026-08-26.md (Decision C, the `✕` glyph)
+  - tasks/archive/reviews/design-findings-2026-08-26.md (Decision C, the `✕` glyph)
   - libs/spec/src/icons.ts (the geometry this ADR introduces)
   - plan/adr/0009-drift-gate-system.md (the gate idiom)
 ---

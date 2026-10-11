@@ -2,7 +2,7 @@
 status: accepted
 date: 2026-09-09
 sources:
-  - tasks/schulung-content-review-2026-09-08.md (§ C1, § "Gegenprobe — Codex, 2026-09-09" finding G6)
+  - tasks/archive/reviews/schulung-content-review-2026-09-08.md (§ C1, § "Gegenprobe — Codex, 2026-09-09" finding G6)
   - plan/big-picture.md (this pass's rewrite)
   - plan/figma.md (this pass's rewrite)
   - tools/scripts/gen-llms-txt.mjs, package.json (check:llms, gen:llms, sync:generated)

@@ -65,7 +65,7 @@ artefact from the server. `tools/scripts/figma-snapshot.mjs` started its own cli
 every `check:figma` run compared the spec against facts an unpinned server had read, and
 `tools/figma/snapshot.json` recorded `meta.serverVersion: null` because
 `figma_get_status` does not report one. Found by the Codex Gegenprobe during the
-2026-09-10 spec rethink (`tasks/spec-rethink-2026-09-10.md`). Fixed the same day: the
+2026-09-10 spec rethink (`tasks/archive/reviews/spec-rethink-2026-09-10.md`). Fixed the same day: the
 generator now resolves the package spec from `.mcp.json`'s `figma-console` entry (one
 source; a missing entry is exit 2, and `@latest` is deliberately not a fallback), and
 records the version the server reports through the MCP SDK's `getServerVersion()`, with

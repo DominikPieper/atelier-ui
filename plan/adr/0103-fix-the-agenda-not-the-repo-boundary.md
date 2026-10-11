@@ -2,7 +2,7 @@
 status: accepted
 date: 2026-09-06
 sources:
-  - tasks/schulung-review-2026-09-02.md (§6.3 "Where it lives — recommendation":
+  - tasks/archive/reviews/schulung-review-2026-09-02.md (§6.3 "Where it lives — recommendation":
     the private `atelier-trainer` repo recommendation this ADR overturns; §7's
     public/private boundary table, row `agenda:81,208` `solved-*`; I1, the
     colleagues'-names/mailbox finding this ADR reconfirms as already closed)
@@ -11,12 +11,12 @@ sources:
     the agenda promised `solved-*` backup branches that do not exist
   - "git branch -a (run 2026-09-06): conciso-ds-migration, fleet-local-history,
     main, storybook-vue-parity, remotes/origin/{HEAD,main,storybook-vue-parity}
-    — zero solved-* branches, confirming tasks/schulung-review-2026-09-02.md's
+    — zero solved-* branches, confirming tasks/archive/reviews/schulung-review-2026-09-02.md's
     same finding still holds"
   - "git grep -nIE '@(conciso|gmail|outlook)\.[a-z]+' -- . ':!node_modules' (run
     2026-09-06): zero hits" and direct reads of
-    tasks/review-state-2026-08-26.md:168 and
-    tasks/schulung-review-2026-08-28.md:64 (the two lines I1 flagged) — both
+    tasks/archive/reviews/review-state-2026-08-26.md:168 and
+    tasks/archive/reviews/schulung-review-2026-08-28.md:64 (the two lines I1 flagged) — both
     already use role-only phrasing ("internal data-protection officer (DSB)",
     "internal information-security officer (ISB)"), no names, no mailbox
   - plan/ai-readiness.md (ADR-0083 → ADR-0097 supersession within five months;
@@ -27,7 +27,7 @@ sources:
     and the new M11 follow-up item this ADR's Consequences section restores)
   - docs/src/pages/schulung.astro:96 and schulung-2tage-agenda.md Block 4's
     "kein Dry-Run" line (read 2026-09-06, both still exactly as
-    tasks/schulung-review-2026-09-02.md's M11 finding described them) — the
+    tasks/archive/reviews/schulung-review-2026-09-02.md's M11 finding described them) — the
     tone-not-data content this ADR explicitly does NOT close, distinguished
     from the I1 personal-data finding it does
 ---
@@ -40,7 +40,7 @@ Accepted.
 
 ## Context
 
-`tasks/schulung-review-2026-09-02.md` §6.3 recommended splitting trainer-only
+`tasks/archive/reviews/schulung-review-2026-09-02.md` §6.3 recommended splitting trainer-only
 material (run-sheets, demo scripts, cheat sheets, `solved-*` backup branches,
 the two personal-data lines) into a private `atelier-trainer` repo pinned to an
 Atelier SHA, reasoning that ~20% of the kit "must not be public." That
@@ -64,8 +64,8 @@ question of tone:
 1. **Is anything currently in the tree actually sensitive?** The one prior,
    concrete finding in that sense (I1: two `tasks/` lines carrying colleagues'
    full names and the internal DSB/ISB mailbox) is **already closed** — both
-   lines (`tasks/review-state-2026-08-26.md:168`,
-   `tasks/schulung-review-2026-08-28.md:64`) now use role-only phrasing ("the
+   lines (`tasks/archive/reviews/review-state-2026-08-26.md:168`,
+   `tasks/archive/reviews/schulung-review-2026-08-28.md:64`) now use role-only phrasing ("the
    internal data-protection officer (DSB)", "the internal information-security
    officer (ISB)"), matching ADR-0032's convention. A repo-wide grep for
    `@(conciso|gmail|outlook)\.[a-z]+`-shaped addresses returns zero hits. Nothing
@@ -89,7 +89,7 @@ question of tone:
    all** pinned only to a SHA that nothing re-checks would drift faster, not
    slower — and the `solved-*` claim itself is the demonstration: a promise
    written once and never re-verified, sitting unnoticed for at least two
-   review cycles (`tasks/schulung-review-2026-09-02.md` already named it as
+   review cycles (`tasks/archive/reviews/schulung-review-2026-09-02.md` already named it as
    M12 and it was still wrong today).
 
 Both premises the original recommendation rested on have weakened: the

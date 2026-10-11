@@ -9,7 +9,7 @@ sources:
   - libs/{angular,react,vue}/vitest.storybook.config.ts and .storybook/vitest.setup.ts (the browser-mode suite)
   - node_modules/@storybook/addon-vitest/dist/vitest-plugin/index.js:2578 (`presets.apply("viteFinal", commonConfig)` — why the build condition reached the test server)
   - tasks/lessons.md, 2026-09-10 entry ("CI" is not a deploy target)
-  - tasks/spec-rethink-2026-09-10.md § 1 (the idle-instrument finding)
+  - tasks/archive/reviews/spec-rethink-2026-09-10.md § 1 (the idle-instrument finding)
 ---
 
 # ADR-0122: CI is not a deploy target, and every story is a test
@@ -35,7 +35,7 @@ this repo's `.storybook` config". The job was left out "rather than made non-blo
 which was the right call for a job that asserts nothing; it also meant that for weeks
 nothing in CI rendered a story, ran a `play` function, or ran axe.
 
-The 2026-09-10 spec rethink (`tasks/spec-rethink-2026-09-10.md` § 1) named this the
+The 2026-09-10 spec rethink (`tasks/archive/reviews/spec-rethink-2026-09-10.md` § 1) named this the
 cheapest gain in the repo and put it first. Reproducing it took one afternoon and a
 different first question: not _why does the connection time out_ but _what does the page
 fetch after it loads_. A twenty-line Playwright probe on the live orchestrator URL showed

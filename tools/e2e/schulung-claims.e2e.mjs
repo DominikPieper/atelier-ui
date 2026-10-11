@@ -6,7 +6,7 @@
  * agenda rewrite) makes checkable claims about this repo — a set of MCP
  * tools, a list of commands, a set of Figma references — and nothing else
  * checks them. Three of the four blockers in
- * tasks/schulung-review-2026-09-05.md were claims that had quietly gone
+ * tasks/archive/reviews/schulung-review-2026-09-05.md were claims that had quietly gone
  * false: a command nobody could run, a gate that verified nothing, a prop
  * that didn't exist. This is the test that finds the next one.
  *

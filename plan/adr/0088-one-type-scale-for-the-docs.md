@@ -2,7 +2,7 @@
 status: accepted
 date: 2026-09-02
 sources:
-  - tasks/docs-ux-review-2026-09-02.md (M3, M4 — body copy below 16 px on 30 of 40 prose pages; text below 12 px on 58 of 59 pages)
+  - tasks/archive/reviews/docs-ux-review-2026-09-02.md (M3, M4 — body copy below 16 px on 30 of 40 prose pages; text below 12 px on 58 of 59 pages)
   - docs/src/styles/global.css (the remapped size declarations; the prose measure rule)
   - docs/src/components/PageHero.astro, Checkpoint.astro, and the other component `<style>` blocks
   - libs/react/src/styles/tokens.css (`--ui-font-size-xs/sm/md/lg`)
@@ -21,7 +21,7 @@ Accepted. The docs site sets text sizes only through the library's
 ## Context
 
 The docs site was measured, not read, for the first time on 2026-09-02
-(`tasks/docs-ux-review-2026-09-02.md`). Of 40 prose pages, the first long
+(`tasks/archive/reviews/docs-ux-review-2026-09-02.md`). Of 40 prose pages, the first long
 paragraph rendered at 16 px on 9, at 14.4 px on 19, at 13.6 px on 7 and at
 13.12 px on 3 — identical at 375 px, because nothing bumps type on phones.
 58 of 59 pages carried text under 12 px, most of it uppercase with 0.06–0.12em

@@ -2,7 +2,7 @@
 status: accepted
 date: 2026-09-06
 sources:
-  - tasks/schulung-review-2026-09-05.md (B1's hand-run gate table; the method this test reproduces)
+  - tasks/archive/reviews/schulung-review-2026-09-05.md (B1's hand-run gate table; the method this test reproduces)
   - docs/src/pages/schulung.astro (Day 2 Block 02's gate-count claim; Blocks 02/03's local MCP dependency; the Figma node/frame citations)
   - tools/e2e/schulung-claims.e2e.mjs (the test)
   - libs/create-atelier-ui-workspace/e2e/cli.e2e.mjs (the idiom this follows)
@@ -21,7 +21,7 @@ gets its own CI job.
 
 ## Context
 
-`tasks/schulung-review-2026-09-05.md` found three blockers that were the same
+`tasks/archive/reviews/schulung-review-2026-09-05.md` found three blockers that were the same
 shape each time: a claim on the training page had quietly gone false, and
 nothing noticed until a human read it. A command nobody could run, a gate
 that verified nothing, a prop that didn't exist. The review's own gate-count

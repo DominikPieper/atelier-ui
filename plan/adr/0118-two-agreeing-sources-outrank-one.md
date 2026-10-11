@@ -6,7 +6,7 @@ sources:
   - tools/figma/snapshot.json (`Feedback/AtlAccordionGroup`, `Feedback/AtlAlert`, `Feedback/AtlAccordionItem`)
   - libs/{angular,react,vue}/.storybook/preview.*'s `storySort.order` and every `accordion`/`alert` story's `title:`
   - tasks/todo.md ("Category name split: `Feedback` vs `Layout`")
-  - tasks/schulung-content-review-2026-09-08.md § E2 (the corrected, now-wrong "Layout is the actual name" claim)
+  - tasks/archive/reviews/schulung-content-review-2026-09-08.md § E2 (the corrected, now-wrong "Layout is the actual name" claim)
   - tools/scripts/check-category-alignment.js (the gate this ADR's tie-break rule and exemption policy govern)
   - tools/scripts/lib/allowlists.js (CATEGORY_ALIGNMENT_EXEMPT)
 ---
@@ -30,7 +30,7 @@ in `tools/figma/snapshot.json`) and every Storybook story's `title:`
 (`Components/Feedback/Atl…`, and `storySort.order` in all three
 `.storybook/preview.*`). `docs/src/data/components.ts` was the sole outlier —
 and a 2026-09-08 review had briefly asserted the opposite, that `Layout` was
-"the actual name" (`tasks/schulung-content-review-2026-09-08.md` § E2),
+"the actual name" (`tasks/archive/reviews/schulung-content-review-2026-09-08.md` § E2),
 which is corrected in place there rather than restated here.
 
 Nothing enforced agreement between these three places, which is how a rename

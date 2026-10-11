@@ -2,7 +2,7 @@
 status: accepted
 date: 2026-08-27
 sources:
-  - tasks/design-findings-2026-08-26.md (E4, G6, H2, H3, J4 — five findings, one shape)
+  - tasks/archive/reviews/design-findings-2026-08-26.md (E4, G6, H2, H3, J4 — five findings, one shape)
   - plan/adr/0046-one-concept-one-drawing.md (the principle this applies to masters)
   - plan/adr/0045-readonly-only-where-it-is-enforced.md (the move whose drift this gate caught)
 ---
