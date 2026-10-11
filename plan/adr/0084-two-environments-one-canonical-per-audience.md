@@ -4,7 +4,7 @@ date: 2026-08-29
 sources:
   - tasks/archive/reviews/schulung-review-2026-08-28.md (M2, M4, M5, M9, M10, flow 6 — the decision they all hang off)
   - libs/create-workspace/src/generators/preset/preset.ts (what the scaffold actually contains)
-  - docs/src/pages/schulung.astro, schulung-2tage-agenda.md (the cohort's declared environment)
+  - docs/src/pages/schulung.astro, tasks/archive/schulung-2tage-agenda-2026-09.md (the cohort's declared environment)
   - docs/src/pages/workshop.astro (the self-serve reader's declared environment)
 ---
 
@@ -29,7 +29,7 @@ one Atelier UI package, a `.mcp.json` with exactly one `storybook-*` entry, a
 `tokens.css`, and `tools/scripts/preflight.mjs`. That is the whole list. There is
 no `libs/spec`, no `plan/`, no Storybook project, and no parity tooling.
 
-The two-day agenda (`schulung.astro`, `schulung-2tage-agenda.md`) was written
+The two-day agenda (`schulung.astro`, `tasks/archive/schulung-2tage-agenda-2026-09.md`) was written
 against a clone. Day 2 reads `plan/big-picture.md` and `plan/design-principles.md`
 into the prompt context, describes a spec "im Stil von `libs/spec/src/index.ts`",
 and verifies the participant's component through `nx storybook <fw>`. None of
@@ -113,7 +113,7 @@ on its own port — angular 4400, react 4401, vue 4402 (`libs/{angular,react,vue
 — and the docs app on 4300 (`docs/project.json`); 6006 is
 `create-atelier-ui-workspace`'s number. Corrected in the citing pages
 (`tutorial.astro`, `first-component.astro`, `storybook.astro`,
-`troubleshooting.astro`, `schulung.astro`, `schulung-2tage-agenda.md`,
+`troubleshooting.astro`, `schulung.astro`, `tasks/archive/schulung-2tage-agenda-2026-09.md`,
 `CLAUDE.md`); this decision text is left as recorded.
 
 ## Corrected 2026-09-13: the cohort's canonical environment is now the scaffold

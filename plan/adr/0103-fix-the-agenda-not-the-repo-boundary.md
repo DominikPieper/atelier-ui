@@ -6,7 +6,7 @@ sources:
     the private `atelier-trainer` repo recommendation this ADR overturns; §7's
     public/private boundary table, row `agenda:81,208` `solved-*`; I1, the
     colleagues'-names/mailbox finding this ADR reconfirms as already closed)
-  - schulung-2tage-agenda.md:81 (gap-table row, reworded 2026-09-06) and the
+  - tasks/archive/schulung-2tage-agenda-2026-09.md:81 (gap-table row, reworded 2026-09-06) and the
     Folie-7 "Gefahren-Hinweise" bullet (reworded the same day) — the two places
     the agenda promised `solved-*` backup branches that do not exist
   - "git branch -a (run 2026-09-06): conciso-ds-migration, fleet-local-history,
@@ -25,7 +25,7 @@ sources:
     still drifts and needs a dated correction, not silent editing
   - tasks/todo.md ("Decide trainer-kit repo location", the item this ADR closes,
     and the new M11 follow-up item this ADR's Consequences section restores)
-  - docs/src/pages/schulung.astro:96 and schulung-2tage-agenda.md Block 4's
+  - docs/src/pages/schulung.astro:96 and tasks/archive/schulung-2tage-agenda-2026-09.md Block 4's
     "kein Dry-Run" line (read 2026-09-06, both still exactly as
     tasks/archive/reviews/schulung-review-2026-09-02.md's M11 finding described them) — the
     tone-not-data content this ADR explicitly does NOT close, distinguished
@@ -48,7 +48,7 @@ recommendation stood as an open decision in `tasks/todo.md`
 ("Decide trainer-kit repo location (Schulung M11/§6.3)").
 
 Re-checked today, prompted by a concrete symptom of the boundary question:
-`schulung-2tage-agenda.md` claimed, in two places (the gap table at line 81 and
+`tasks/archive/schulung-2tage-agenda-2026-09.md` claimed, in two places (the gap table at line 81 and
 a Folie-7 "Gefahren-Hinweise" bullet), that Git branches `solved-toast`,
 `solved-tagchip`, `solved-statcard`, `solved-avatar` exist as a trainer
 safety net ("Teilnehmer können per `git checkout solved-<name>` springen"). They
@@ -74,7 +74,7 @@ question of tone:
 2026-09-02.md`'s broader M11 finding — trainer-internal _tone_, not personal
    data, on the public page (`docs/src/pages/schulung.astro:96`'s credential-
    class remark and the fence-script/"Gegenmittel" lines around it;
-   `schulung-2tage-agenda.md`'s own "kein Dry-Run" minute-arithmetic admission,
+   `tasks/archive/schulung-2tage-agenda-2026-09.md`'s own "kein Dry-Run" minute-arithmetic admission,
    Block 4) — is still there, verified today, still unfixed. It doesn't move
    the premise this ADR turns on (none of it is personal data or a secret), so
    it's named here rather than silently treated as closed, and left as a
@@ -103,7 +103,7 @@ do not create a second repo to hold them.**
 
 Concretely, applied today:
 
-- `schulung-2tage-agenda.md:81` (gap table) and the Folie-7 bullet reworded to
+- `tasks/archive/schulung-2tage-agenda-2026-09.md:81` (gap table) and the Folie-7 bullet reworded to
   say what is true: the four `solved-*` branches do not exist yet and are
   trainer prep work, not an existing asset participants can already rely on.
 - `tasks/todo.md`'s "Decide trainer-kit repo location" item closed with this
@@ -135,7 +135,7 @@ recommendation as it stood, against the tree as it is today.
 ## Consequences
 
 - The public agenda no longer promises a safety net that does not exist;
-  anyone reading `schulung-2tage-agenda.md` today sees the branches as trainer
+  anyone reading `tasks/archive/schulung-2tage-agenda-2026-09.md` today sees the branches as trainer
   prep, correctly.
 - `tasks/todo.md`'s open "Decide trainer-kit repo location" item is closed;
   future reviews of this repo should stop recommending a split on the basis of
@@ -146,7 +146,7 @@ recommendation as it stood, against the tree as it is today.
 - **Not closed by this ADR, named so it doesn't get lost:** M11's tone-not-data
   finding is still real — `docs/src/pages/schulung.astro:96`'s credential-class
   remark and its neighboring fence-script/"Gegenmittel" lines, and
-  `schulung-2tage-agenda.md` Block 4's "kein Dry-Run" minute-arithmetic
+  `tasks/archive/schulung-2tage-agenda-2026-09.md` Block 4's "kein Dry-Run" minute-arithmetic
   admission, are unchanged and still on the public page. It is not personal
   data or a secret (this ADR's premise stands), so it is not a reason to stand
   up a second repo — it is a trim-the-page editorial task, independent of the

@@ -92,7 +92,6 @@ const COUNT_RE =
 const SCAN_ROOTS = [
   { files: ['README.md'] },
   { dir: 'docs/src/pages', exts: ['.astro'] },
-  { files: ['schulung-2tage-agenda.md'] },
   { dir: 'workshop/briefs', exts: ['.md'] },
   { dir: 'talk', exts: ['.md'] },
   { dir: 'skills/atelier-design', exts: ['.md'] },

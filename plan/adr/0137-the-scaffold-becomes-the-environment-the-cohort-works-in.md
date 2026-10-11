@@ -5,7 +5,7 @@ sources:
   - plan/adr/0084-two-environments-one-canonical-per-audience.md (the split this revises)
   - plan/adr/0090-one-preflight-branched-inside-not-forked-outside.md (the branch that survives it)
   - plan/adr/0014-workshop-single-framework.md (one framework per session, which the clone cannot honour on its own)
-  - schulung-2tage-agenda.md (the curriculum, and the three clone-only artefacts it names)
+  - tasks/archive/schulung-2tage-agenda-2026-09.md (the curriculum, and the three clone-only artefacts it names)
   - libs/create-workspace/src/generators/preset/preset.ts (what the scaffold has become)
 ---
 
@@ -96,7 +96,7 @@ whole rig — three frameworks, Playwright, the docs app — and the agenda alre
 setup block as high-risk with a mandatory pre-workshop homework mail. A generated workspace
 installs one framework's dependencies.
 
-The switch also **deletes** curriculum rather than only moving it. `schulung-2tage-agenda.md`
+The switch also **deletes** curriculum rather than only moving it. `tasks/archive/schulung-2tage-agenda-2026-09.md`
 carries a whole passage explaining which of this repo's gates go red **by design** when an
 attendee adds a component of their own — `check:design-status` rewriting `plan/design-status.md`
 from every component directory it finds, `check:spec` demanding the spec be mirrored into three

@@ -64,12 +64,9 @@ const PAGES_DIR = path.join(ROOT, 'docs/src/pages');
  * Participant-facing material outside docs/src that also cites Figma node ids —
  * today, the Day-2 component briefs, which name the four starter frames by id.
  *
- * schulung-2tage-agenda.md is deliberately NOT scanned. It cites its Figma frames
- * by NAME (`Toast / Starter`), never by id, so there is nothing here to guard —
- * and its schedule is full of time ranges (`16:10–17:15`) on the same lines that
- * mention Figma, which is precisely the shape the bare-colon extractor accepts.
- * Scanning it produced seven findings, all of them clock times. Cite a frame by id
- * there and this decision has to be revisited along with the extractor.
+ * The retired root agenda (now tasks/archive/schulung-2tage-agenda-2026-09.md) is
+ * not scanned: it cites frames by NAME, and its time ranges (`16:10–17:15`) are
+ * exactly the shape the bare-colon extractor mis-reads as node ids.
  */
 const PRESET_FILE = path.join(
   ROOT,

@@ -9,7 +9,7 @@ sources:
   - docs/src/pages/agent-skills.astro
   - docs/src/pages/claude-design.astro
   - docs/src/pages/schulung.astro
-  - schulung-2tage-agenda.md
+  - tasks/archive/schulung-2tage-agenda-2026-09.md
   - skills/design-to-code/SKILL.md
   - skills/artboard-bridge/SKILL.md
 ---
@@ -19,7 +19,7 @@ sources:
 ## Status
 
 Accepted. `agent-skills.astro`, `claude-design.astro`, `schulung.astro` and
-`schulung-2tage-agenda.md` now name `design-to-code` and `artboard-bridge`, say
+`tasks/archive/schulung-2tage-agenda-2026-09.md` now name `design-to-code` and `artboard-bridge`, say
 plainly that both are repo-bound and undistributed, and give the reason — rather
 than staying silent about them or, worse, telling the room their tooling does not
 exist.

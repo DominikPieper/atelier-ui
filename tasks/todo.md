@@ -823,7 +823,7 @@ Atelier token system instead of the generic gradient/grid look.
         branch clone-vs-scaffold get rewritten — `tutorial.astro:622` ("the scaffold has
         no Storybook of its own") is **already false** against `preset.ts`'s per-app
         Storybook targets, `first-component.astro` mounts the kata under `libs/<fw>/…`,
-        and `schulung.astro:299-301` plus `schulung-2tage-agenda.md:14` state the
+        and `schulung.astro:299-301` plus `tasks/archive/schulung-2tage-agenda-2026-09.md:14` state the
         excluded-scaffold rule in prose. Every new docs line that cites 6006 needs a
         content-keyed `SCAFFOLD_PORT_EXEMPT` entry (`tools/scripts/lib/allowlists.js`),
         and the ADR needs its row in `plan/adr/README.md` plus a dated `Corrected`
@@ -1809,7 +1809,7 @@ WIRED` in `.github/workflows/ci.yml:122-135` because it fails under `CI=1` for a
       it: `docs/src/pages/schulung.astro:96`'s "nur Trainer-Maschine —
       claude.ai/design braucht ein anderes Login als der Kohorten-API-Key"
       credential-class remark (plus the neighboring fence-script/"Gegenmittel"
-      lines the review names at `:97-99`), and `schulung-2tage-agenda.md` Block 4's
+      lines the review names at `:97-99`), and `tasks/archive/schulung-2tage-agenda-2026-09.md` Block 4's
       "Alle Minutenangaben sind Schätzungen … kein Dry-Run … die erste Kohorte
       mitstoppen" admission. Not personal data or a secret (ADR-0103 confirms this
       is a different question from I1), so no repo-split rationale — just trim the
@@ -2981,7 +2981,7 @@ Not urgent; fix opportunistically or when touching the same area anyway.
     decision; drawing the Figma-side `AtlAvatarStatus` axis is a separate, still-open
     follow-up above (Needs an owner decision) and needs the Desktop Bridge.
 - [x] **The agenda's `solved-*` branch promise, and the trainer-kit repo-location
-      decision it turned out to be entangled with** — `schulung-2tage-agenda.md`
+      decision it turned out to be entangled with** — `tasks/archive/schulung-2tage-agenda-2026-09.md`
       claimed (gap-table row `:81` and a Folie-7 bullet) that four Git branches
       `solved-toast`/`solved-tagchip`/`solved-statcard`/`solved-avatar` exist as a
       trainer safety net; `git branch -a` confirms zero `solved-*` branches. Both

@@ -1,7 +1,7 @@
 # Gap analysis, transcript group D (Ch. 4 product work, Ch. 5 future UX, Ch. 6 operationalizing, Ch. 7 recap, Appendix)
 
 All 72 files in groups/D.txt were read in full. Transcript numbers are the filename prefixes (e.g. #016 = 016_6.01 Selling AI & Design Systems).
-Atelier searched: docs/src/pages/**, AGENTS.md, CLAUDE.md, plan/ (big-picture, design-principles, roadmap, ai-readiness, design-skills-blueprint, research/, adr/), workshop/, talk/, schulung-2tage-agenda.md, skills/, .claude/skills/, tasks/todo.md.
+Atelier searched: docs/src/pages/**, AGENTS.md, CLAUDE.md, plan/ (big-picture, design-principles, roadmap, ai-readiness, design-skills-blueprint, research/, adr/), workshop/, talk/, tasks/archive/schulung-2tage-agenda-2026-09.md, skills/, .claude/skills/, tasks/todo.md.
 Search terms were English and German (e.g. pilot|rollout|Einführung|buy-in|KPI|ROI|stakeholder, inspection|audit|Befund, generative|A2UI|ephemeral, personali|hyper, legacy|adoption|retheme|rebrand|Migration, declarative shadow|FOUC|SSR).
 
 ## MISSING

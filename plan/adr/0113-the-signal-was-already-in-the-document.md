@@ -7,7 +7,7 @@ sources:
   - skills/design-to-code/SKILL.md
   - skills/design-to-code/references/handoff-document.md
   - docs/src/pages/schulung.astro (Tag 2, Block 02)
-  - schulung-2tage-agenda.md
+  - tasks/archive/schulung-2tage-agenda-2026-09.md
   - plan/adr/0096-the-handoff-a-picture-cannot-carry.md (the document this ADR branches, and its provenance-is-mechanical correction)
   - plan/adr/0024-design-parity-persistence-gate.md (why a record against the wrong node is worse than none)
   - plan/adr/0014 (one framework per session — the shape §0a's branch had to fit inside)
@@ -100,7 +100,7 @@ Alternatives considered and rejected:
 
 The curriculum was corrected in the direction of pointing at the mechanism instead of
 substituting for it: `schulung.astro:178` and the matching passage in
-`schulung-2tage-agenda.md` (both had carried the same standalone instruction, one commit
+`tasks/archive/schulung-2tage-agenda-2026-09.md` (both had carried the same standalone instruction, one commit
 apart per the 09-05 review) now say that the skill reads the handoff document's Source
 line and routes automatically, rather than instructing the room to redirect Claude by
 hand. Both files were checked to still agree after the edit.

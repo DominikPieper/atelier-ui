@@ -194,7 +194,7 @@ Neun Themenblöcke gehören nicht in Atelier, weil sie Produkt-Teams, Organisati
 
 ## Grenzen und Quellen
 
-"Fehlt" heißt: kein Treffer bei Suche mit deutschen und englischen Synonymen in `docs/src`, `AGENTS.md`, `plan/`, `workshop/`, `schulung-2tage-agenda.md` und den Skills. Ein anders benanntes Thema kann trotzdem durchgerutscht sein.
+"Fehlt" heißt: kein Treffer bei Suche mit deutschen und englischen Synonymen in `docs/src`, `AGENTS.md`, `plan/`, `workshop/`, `tasks/archive/schulung-2tage-agenda-2026-09.md` und den Skills. Ein anders benanntes Thema kann trotzdem durchgerutscht sein.
 
 - Verifiziert per Stichprobe: 0 Treffer für Story UI, FigmaLint, Context Engineer, Style Dictionary, Check Engine, Branch Protection, Code-only Props, LLM-as-Judge, Product Work, Generative UI/A2UI.
 - Viele Punkte stehen in Skill-Referenzen, nur nicht auf Lehrseiten. Für die Schulung zählt das als Lücke, für die Fähigkeiten des Repos nicht.

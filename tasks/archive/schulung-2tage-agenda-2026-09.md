@@ -1,3 +1,10 @@
+> **Frozen copy.** Verbatim historical copy of the root `schulung-2tage-agenda.md`
+> as of its last edit (2026-09-14). Superseded by `/schulung`
+> (`docs/src/pages/schulung.astro`) on 2026-10-10. Its trainer-prep table and
+> slide outline are raw material for the open tracker items R-044 (pre-workshop
+> mail, deck, brief PDF) and R-049 (trainer kit) in `tasks/reviews.md`.
+> Do not edit below the header.
+
 # Atelier 2-Tages-Schulung — Curriculum
 
 ## Kontext

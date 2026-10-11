@@ -1,7 +1,7 @@
 # Golden-Prompts — trainer cheat sheet
 
 **What this is.** Ready-to-paste prompts for the three blocks that need them —
-`schulung-2tage-agenda.md`'s Material-Lücken table names this exact gap: _"Trainer-
+`tasks/archive/schulung-2tage-agenda-2026-09.md`'s Material-Lücken table names this exact gap: _"Trainer-
 Spickzettel mit Golden-Prompts: typische Fehler / Prompts pro Block (Tag 1 Block 5, Tag
 2 Block 3 und 4)."_ `docs/src/pages/schulung.astro` (Tag 2, Block 03) instructs
 participants to use it: _"Token-Treue erzwingen: Golden-Prompts verlangen `--ui-*`

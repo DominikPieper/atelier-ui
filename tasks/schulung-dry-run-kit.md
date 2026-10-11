@@ -1,28 +1,44 @@
 # Schulung Dry-Run Kit
 
+_Retargeted onto /schulung on 2026-10-11 (R-037–R-039)._
+
 **Purpose:** make the one still-open near-term item — _"one rehearsal of the
-participant path on a non-author machine, timed"_ (`tasks/todo.md`, Near-term
-work) — a one-day job with a result comparable to the three existing reviews,
+participant path on a non-author machine, timed"_ (R-040 in
+`tasks/reviews.md`) — a one-day job with a result comparable to the three existing reviews,
 instead of an improvisation. Everything the curriculum _teaches_ lives at
-`/schulung` and `schulung-2tage-agenda.md`; this document does not repeat it.
-What it adds: the checklist of things that must **happen**, each with what
-"worked" looks like, where a green result actually means failure, the points
-where the run must stop and write something down, and a place to log the
+`/schulung` (`docs/src/pages/schulung.astro`); this document does not repeat it.
+The 2026-09 root agenda is a frozen copy now
+(`tasks/archive/schulung-2tage-agenda-2026-09.md`) and is not a source for this
+kit. What this kit adds: the checklist of things that must **happen**, each with
+what "worked" looks like, where a green result actually means failure, the
+points where the run must stop and write something down, and a place to log the
 result in the same shape as `tasks/archive/reviews/schulung-review-2026-08-28.md`,
 `-09-02.md` and `-09-05.md`.
+
+**Rule for "not specified":** every block name, time and claim below traces to
+`/schulung` or an ADR. Where the page gives no basis, this kit says **"not
+specified on /schulung"** instead of inventing one.
 
 **Who this is for:** one person, alone, timing themselves, on a machine that
 is not the author's — closest available stand-in for a cohort participant.
 Not a cohort. Not a second review of the prose. Stated plainly, so the result
 doesn't get read as more than it is: **one runner is not a cohort** —
 concurrent-seat load on the hosted MCP endpoints, a room full of simultaneous
-Figma Bridge connections, and the variance between fifteen different laptops
-are all structurally untestable by one person on one machine. And **whoever
-runs this kit already knows the repo** — even a rehearsal run by someone other
-than the material's author is not a genuinely first-time participant's
-experience of Block 01/02 of Day 2, where not knowing Figma at all is exactly
+Figma Bridge connections, and the variance between laptops (a cohort has up to
+8 participants) are structurally untestable by one person on one machine. And
+**whoever runs this kit already knows the repo** — even a rehearsal run by
+someone other than the material's author is not a genuinely first-time
+participant's experience of Day 2 Block 01, where not knowing Figma at all is
 the condition the block is designed around. Both limits stand no matter how
-clean the run is; see §6 for what this run in particular did and didn't settle.
+clean the run is; see §6.
+
+**The environment under test:** the participant's, not ours. One Angular
+workspace generated with `npx create-atelier-ui-workspace` (ADR-0137): Storybook
+on `localhost:6006` (`npm run storybook`), the app on `localhost:4200`
+(`nx serve workshop-<fw>`), the contract in `workshop-<fw>/src/contracts/`, and
+the scaffold's own gates (`check:contracts`, `check:stories`, …). The Atelier
+clone with ports 4400–4402 is for work on Atelier itself and is **not** the
+rehearsal environment. Run the rehearsal in Angular (the default framework).
 
 **Rule for the run:** don't fix what you hit. Record it in §5, use the
 documented workaround if one exists, and keep moving. A rehearsal that stops
@@ -31,30 +47,29 @@ becomes useless the moment the clock stops for a fix.
 
 ---
 
-## 1. Known-blocked — read this before you start, don't chase any of it
+## 1. Known-blocked or undecided — read this before you start, don't chase any of it
 
-| Item                                                                                           | Why it's blocked                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                            | What to do instead                                                                                                                                                                                                                                                                                                                                |
-| ---------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Claude Design step 0 (Trainer-Demo "Drei Richtungen", Day 1 Block 04)                          | `claude.ai/design` needs a **different login** than the cohort's Claude Code API key; per-seat save/collaboration behavior for this product has never been verified.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                        | Skip the Claude Design part of the demo entirely in a solo rehearsal. The fence mechanics underneath it (`check:artboard-palette`) do **not** depend on Claude Design access and are safe to rehearse — see §4, Day 1 Block 04.                                                                                                                   |
-| Claude Design step 5 ("Handoff")                                                               | **Changed since this kit's 2026-09-06 build — re-checked 2026-09-10.** No longer "no tooling": the `artboard-bridge` skill's Publish mode exists since 2026-09-08 and has run once, against a scratch project, and **correctly refused** — the parity record was DRIFT, so it wrote nothing rather than publish unverified code (`schulung.astro` Day 1 Block 04 names this run directly: _"hat korrekt verweigert… die gleiche Verweigerung, für die der Zaun weiter oben argumentiert"_). Still nothing a solo rehearsal can exercise to a successful publish, for a different reason than before: every parity record in the repo is currently DRIFT (repo-wide, not particular to any one component), so the write path (P1–P7) stays unexercised regardless of tooling, and the per-seat `claude.ai/design` login question is still unverified. Do not confuse this with the _participant's own_ handoff document (Day 2 Block 01→02, ADR-0096) — that one is real, built, and part of the path below. | Nothing to run to a successful publish. If you want to see the one real (refused) run: it is not this kit's job to re-verify — read `schulung.astro` Day 1 Block 04's own account instead of re-running it.                                                                                                                                       |
-| Figma Desktop Bridge                                                                           | Not automatic. Every `figma_*` MCP call (Day 1 Block 02/04, Day 2 Block 01/04) depends on it being started by hand in the Figma Desktop app.                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                | Before relying on _any_ `figma_*` tool: open Figma Desktop, open the Atelier UI file (or your Day-2 duplicate), run **Plugins → Development → Figma Desktop Bridge**, then ask Claude to check Figma status (`figma_get_status` with `probe: true`) and confirm `setup.valid: true` before continuing. Re-run this check after any Figma restart. |
-| `solved-*` backup branches (`solved-toast`/`solved-tagchip`/`solved-statcard`/`solved-avatar`) | Referenced in the agenda as the participant's escape hatch for a broken component; they do not exist yet (`git branch -a` — confirmed empty 2026-09-06). Building them is a separate open item (`tasks/todo.md`, "Schulung M12").                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                                           | For the rehearsal itself, protect your own progress the ordinary way (a local commit or `git stash` before anything risky) — that is a rehearsal convenience, not something to teach a cohort.                                                                                                                                                    |
+| Item                                  | Why it's blocked                                                                                                                                                                                                                                                                                                                         | What to do instead                                                                                                                                                                                                                                                                                                         |
+| ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Claude Design demo (trainer appendix) | **Not a block step.** `/schulung` has it as an optional trainer appendix (`#appendix-claude-design`), trainer machine only: `claude.ai/design` needs a different login than the cohort API key. The page says to slot it into Day 1 Block 04 "if time allows, or skip it" (owner decision 2026-10-10). Participants cannot reproduce it. | Leave it out of the rehearsal's checklist and timing. If you want to see it, run it as a separate trainer exercise after the timed run, not inside Day 1 Block 04.                                                                                                                                                         |
+| Figma Desktop Bridge                  | Not automatic. Every `figma_*` MCP call (Day 2 Block 01/02/04) depends on the bridge plugin imported in the Figma desktop app (Plugins → Development → Import plugin from manifest…, `/schulung` Day 1 Block 01). `/schulung` says the bridge gates Day 2.                                                                               | Before relying on _any_ `figma_*` tool: Figma Desktop open, your duplicate open, bridge plugin running, then ask Claude to check Figma status and confirm it is connected. Re-check after any Figma restart. How the connected state is read: not specified on /schulung (see `/troubleshooting`: "bridge not connected"). |
+| `solved-*` recovery branches          | None exist. Whether they make sense for scaffold-based participants is an open owner question.                                                                                                                                                                                                                                           | Recovery path: see R-005 / R-042, not decided. For the rehearsal itself, protect your own progress the ordinary way (local commit or `git stash` before anything risky) — a rehearsal convenience, not something to teach a cohort.                                                                                        |
+| Figma access token                    | `/schulung` Day 1 Block 01: the token is technically optional (REST reads only) and a cohort-policy decision.                                                                                                                                                                                                                            | Decide before the run whether you rehearse with or without it, and write the choice into §5. Which one a cohort gets: not specified on /schulung.                                                                                                                                                                          |
 
 ---
 
 ## 2. How to use this kit
 
 1. Start a timer at 09:00 (or whenever you actually start — record the real clock time, not the plan's).
-2. Work the path in §4 in order. Each row names a command or action, the
-   signal that means it actually worked, and — where one exists — a signal
-   that looks fine but isn't.
+2. Work the path in §4 in order. Each block lists the page's **Done when**, the
+   checkpoints with the signal that means each one worked, and — where one
+   exists — a signal that looks fine but isn't.
 3. At every **STOP** marker, do exactly that: stop, look at the output, write
-   one line in §5 before moving on. These are not optional pauses; they are
-   the points the three prior reviews found a fresh runner is most likely to
-   diverge from what the material assumes.
+   one line in §5 before moving on. These are the points a fresh runner is most
+   likely to diverge from what the material assumes.
 4. Fill in §3 (timing) block by block as you go, not from memory afterward.
-5. When Day 2 ends, walk the Erfolgs-Verifizierung's 7 items (schulung.astro,
-   bottom section) once more as a checklist and log each as pass/fail/ambiguous
+5. When Day 2 ends, walk the **8** items of the "Success verification" section
+   on `/schulung` once more as a checklist and log each as pass/fail/ambiguous
    in §5.
 6. Finish by writing §6 (weakest point of this run) yourself, the way the
    three prior reviews each end with one.
@@ -64,314 +79,357 @@ becomes useless the moment the clock stops for a fix.
 ## 3. Timing tracker
 
 Fill in as you go. Planned times are the schedule on `/schulung`; nothing
-about them has been measured before this run.
+about them has been measured before this run. Break rows are the gaps between
+the page's block times. The page gives the break format as "60 min lunch · 2×
+15 min coffee breaks · 10 min buffer" per day; which gap is which is not
+labelled on /schulung (the 10-minute gap before the last two blocks is the
+buffer by arithmetic only).
 
 ### Day 1 (planned net 6 h 50 min)
 
-| Block                   | Planned          | Actual start | Actual end | Delta | Note |
-| ----------------------- | ---------------- | ------------ | ---------- | ----- | ---- |
-| 00 Kickoff              | 09:00–09:30 (30) |              |            |       |      |
-| 01 Setup & Preflight 🔴 | 09:30–10:45 (75) |              |            |       |      |
-| — break —               | 10:45–11:00      |              |            |       |      |
-| 02 Figma für Entwickler | 11:00–12:15 (75) |              |            |       |      |
-| — lunch —               | 12:15–13:15      |              |            |       |      |
-| 03 Storybook            | 13:15–14:30 (75) |              |            |       |      |
-| — break —               | 14:30–14:45      |              |            |       |      |
-| 04 MCP & Claude Code    | 14:45–16:00 (75) |              |            |       |      |
-| — micro-break —         | 16:00–16:10      |              |            |       |      |
-| 05 Walkthrough          | 16:10–17:15 (65) |              |            |       |      |
-| 06 Wrap-up              | 17:15–17:30 (15) |              |            |       |      |
+| Block                                     | Planned          | Actual start | Actual end | Delta | Note |
+| ----------------------------------------- | ---------------- | ------------ | ---------- | ----- | ---- |
+| 00 Kickoff and thesis                     | 09:00–09:30 (30) |              |            |       |      |
+| 01 Verify the setup 🔴                    | 09:30–10:45 (75) |              |            |       |      |
+| — gap —                                   | 10:45–11:00      |              |            |       |      |
+| 02 Mini-loop: first success               | 11:00–12:15 (75) |              |            |       |      |
+| — gap —                                   | 12:15–13:15      |              |            |       |      |
+| 03 Figma for code: is the file ready?     | 13:15–14:30 (75) |              |            |       |      |
+| — gap —                                   | 14:30–14:45      |              |            |       |      |
+| 04 Guardrails: stories as claims, and MCP | 14:45–16:00 (75) |              |            |       |      |
+| — gap —                                   | 16:00–16:10      |              |            |       |      |
+| 05 Kata against the clock                 | 16:10–17:15 (65) |              |            |       |      |
+| 06 Recap and exit ticket                  | 17:15–17:30 (15) |              |            |       |      |
 
 ### Day 2 (planned net 6 h 50 min)
 
-| Block                 | Planned          | Actual start | Actual end | Delta | Note |
-| --------------------- | ---------------- | ------------ | ---------- | ----- | ---- |
-| 00 Recap & Brief      | 09:00–09:30 (30) |              |            |       |      |
-| 01 Design in Figma 🔴 | 09:30–11:00 (90) |              |            |       |      |
-| — break —             | 11:00–11:15      |              |            |       |      |
-| 02 Spec & Story       | 11:15–12:30 (75) |              |            |       |      |
-| — lunch —             | 12:30–13:30      |              |            |       |      |
-| 03 Codegen            | 13:30–15:00 (90) |              |            |       |      |
-| — break —             | 15:00–15:15      |              |            |       |      |
-| 04 A11y + Dark Mode   | 15:15–16:30 (75) |              |            |       |      |
-| — micro-break —       | 16:30–16:40      |              |            |       |      |
-| 05 Show & Tell        | 16:40–17:30 (50) |              |            |       |      |
+| Block                                                | Planned          | Actual start | Actual end | Delta | Note |
+| ---------------------------------------------------- | ---------------- | ------------ | ---------- | ----- | ---- |
+| 00 Recap (active recall), brief, skills              | 09:00–09:30 (30) |              |            |       |      |
+| 01 Design in Figma and the handoff document 🔴       | 09:30–11:00 (90) |              |            |       |      |
+| — gap —                                              | 11:00–11:15      |              |            |       |      |
+| 02 Contract, component, stories                      | 11:15–12:30 (75) |              |            |       |      |
+| — gap —                                              | 12:30–13:30      |              |            |       |      |
+| 03 Iterate: prompt quality and the self-healing loop | 13:30–15:00 (90) |              |            |       |      |
+| — gap —                                              | 15:00–15:15      |              |            |       |      |
+| 04 Verify: a11y, states, parity                      | 15:15–16:30 (75) |              |            |       |      |
+| — gap —                                              | 16:30–16:40      |              |            |       |      |
+| 05 Show & tell and transfer to "My DS"               | 16:40–17:30 (50) |              |            |       |      |
 
 ---
 
 ## 4. The path — checkpoints, expected signal, false-positive traps
 
-Commands assume the repo clone (per `AGENTS.md` / ADR-0084), a shell in the
-repo root, and Claude Code CLI logged in.
+Commands run in the scaffolded workspace (ADR-0137), a shell in its root,
+Claude Code CLI logged in with your own API key. Every block's **Done when** is
+quoted from `/schulung` (`Block.done`); log pass/fail against it in §5.
+
+**Time-recovery cuts:** `/schulung` names none. Its only flexibility is the
+Claude Design appendix ("slot it into Day 1 Block 04 if time allows, or skip
+it") and the per-block stretch tasks, which are for fast finishers, not cuts.
+Any cut order for a block that runs long: not specified on /schulung. Do not
+invent one live; record the overrun and which bullet ate the time.
 
 ### Day 1
 
-**Before 09:00 (once):** Figma Desktop open → Atelier UI file open → Plugins
-→ Development → Figma Desktop Bridge started → ask Claude to probe Figma
-status → `setup.valid: true`. If this isn't true, every `figma_*` call below
-fails for a reason preflight never checks (see Block 01).
+**Before 09:00 (once):** the pre-workshop setup is mandatory homework
+(`/schulung`, "Format per day"): Node ≥ 22.12 LTS, Claude Code CLI, Figma
+account with draft rights plus the imported Desktop Bridge plugin,
+`npm run preflight` green. Do it before the clock starts and note how long it
+took; Block 01 only _verifies_ it.
 
-**Block 00 — Kickoff.** No gate. Time it.
+**Block 00 — Kickoff and thesis** (talk + live demo).
+_Done when:_ everyone can name the loop: Inspect → Contract → Code → Verify.
+No gate. Time it. Includes a 5-minute live demo (change an Atelier component by
+prompt); whether the live demo ran in the rehearsal workspace or needs the
+Atelier clone: not specified on /schulung — record what you used.
 
-**Block 01 — Setup & Preflight 🔴**
+**Block 01 — Verify the setup (installed as homework) 🔴**
+_Done when:_ preflight is green, `/mcp` lists every server, Storybook runs,
+Playwright Chromium is installed, and anyone still red has a rescue path.
 
-- Run `npm run preflight`. Expect a clean run: Node/npm/git ok, Claude CLI
-  present, Figma REST token optional-warn (fine, it's optional), ports
-  4300/4400/4401/4402 reported **free**, and the servers configured in
-  `.mcp.json` (the _hosted_ ones) reachable.
-- **STOP.** A green preflight proves exactly that list — nothing more. It
-  does **not** prove: (a) any `figma_*` tool actually works (it checks that
-  the bridge's port range is free, not that the plugin answers — that's the
-  Figma-status probe above), or (b) the local Storybook `dev`/`test` MCP
-  toolset exists — that endpoint doesn't exist until Day 2 Block 02, after
-  `nx storybook <fw>` is running and a local entry has been added. Record: did
-  preflight actually run clean, and were the two blind spots above clear to a
-  first-time reader of the output, or did the summary read as "everything is
-  ready"?
-- Read `.mcp.json` together. Confirm: it lists the three `storybook-*` hosted
-  servers plus `nx-mcp`, `figma-console`, `uianatomy`, `angular-cli`,
-  `Astro docs` — and **zero** `localhost` entries. That absence is correct
-  today; the local one gets added in Day 2 Block 02, not before.
-- **Added since this kit's 2026-09-06 build — confirm it's still a separate
-  step.** `preflight` only proves the CLI is installed (`which claude` +
-  `claude --version`); it sends no model request. Run
-  `claude auth login --console` (or confirm `ANTHROPIC_API_KEY` is set), then
-  `claude -p "Reply with exactly: PREFLIGHT-OK"`. A real reply, not an auth
-  error, is what "model access" actually means — `schulung.astro`'s own Block
-  01 now states this three-way split explicitly ("Installierte CLI, verbundene
-  MCP und nutzbarer Modellzugriff sind drei verschiedene Dinge"). Record
-  whether a green `preflight` on its own gave the false impression that this
-  step was already covered.
-- **Abort criterion for this 🔴 block.** If a participant's setup is still
-  broken with roughly 15 minutes left in the block, stop live-troubleshooting
-  it: hand them `/troubleshooting` to work asynchronously (the block's own
-  material already names this path — "Troubleshooting für Nachzügler") and
-  pair them with a neighbour's working machine for Block 02, which is a
-  guided tour and needs no individual environment. Move the room to Block 02
-  on schedule either way — a single broken laptop is not a reason to hold
-  fifteen finished ones. Record whether this rule was actually needed.
+- Node ≥ 22.12 active (preflight checks for exactly 22.12); own workspace
+  created with `npx create-atelier-ui-workspace`, one framework chosen (Angular).
+- Run `npm run preflight`. Expect a clean run. The page says it checks
+  Node/npm, that the CLI exists (`which claude` + `claude --version`), the
+  Figma bridge, MCP reachability and ports, and that it does **not** check that
+  the API key is valid: it sends no model request.
+- **STOP.** A green preflight proves exactly that list, nothing more. Record
+  whether the summary read as "everything is ready" to a first-time reader.
+- Confirm model access separately: `claude auth login --console` (or
+  `ANTHROPIC_API_KEY` set), then `claude -p "Reply with exactly: PREFLIGHT-OK"`.
+  A reply instead of an auth error means access is real. The page's own
+  sentence: _"An installed CLI, a connected MCP and usable model access are
+  three different things."_ Record whether a green `preflight` alone gave the
+  false impression that this was already covered.
+- Read `.mcp.json` together; run `/mcp` in Claude Code and compare against the
+  file. Server names the page uses elsewhere: `storybook-<framework>`,
+  `nx-mcp`, `figma-console`, `uianatomy` (Block 04). The exact server list of
+  the scaffold's `.mcp.json`: not specified on /schulung — write down what you
+  actually see.
+- Storybook runs (`npm run storybook`, `localhost:6006`, ADR-0137); Playwright
+  Chromium installed.
+- **Abort criterion for this 🔴 block:** the page names the rescue path only as
+  `/troubleshooting` ("when something fails") and its Done-when clause "anyone
+  still red has a rescue path". A time threshold (for example "15 minutes
+  before the end") and the pairing rule: not specified on /schulung. Record
+  whether you needed a rescue and what it was.
 
-**Block 02 — Figma für Entwickler.** No gate. If the rehearsal seat lacks
-Figma Draft rights (`File → Duplicate to your drafts` unavailable), that is
-itself a finding worth one line in §5 — it blocks Day 2 Block 01 outright.
+**Block 02 — Mini-loop: first success** (hands-on, everyone in sync).
+_Done when:_ the Settings Card runs, and the parity report is present and has
+been read, not just "green".
 
-**Block 03 — Storybook comparison.** No gate; open the three hosted
-Storybooks, compare `AtlButton`. Time it.
+- Follow `/tutorial`: Figma → MCP → token-exact code in 4 steps; compose the
+  Settings Card from `AtlCard` / `AtlInput` / `AtlToggle` / `AtlButton` in the
+  cohort framework **by prompting, not typing**. Note whether "prompt, don't
+  type" needed active enforcement or happened naturally.
+- Per the page's trainer note, the tutorial's verify step runs only
+  `npm run check:contracts` and `npm run check:stories` (offline gates against
+  the scaffolded workspace). Expect both exit 0. Participants do not author a
+  contract here; that arrives on Day 2.
+- **STOP — read the parity report line by line** before calling it done. Log
+  what it compared and what it did not (the block's recap question). A green
+  report you did not read is the failure case this block exists to catch.
+- Whether the tutorial's `figma_check_design_parity` call needs the connected
+  bridge: not specified on /schulung for this block (it is stated for Day 2
+  Block 04) — record what you hit.
 
-**Block 04 — MCP & Claude Code**
+**Block 03 — Figma for code: is the file ready?** (guided tour + checklist).
+_Done when:_ the readiness checklist is filled in for one master of the Atelier
+file and for one master from your own design system.
 
-- Ask (hosted) for a component's props — expect a correct prop table, no
-  invented props.
-- Negativ-Demo: same question with no MCP configured (a plain browser chat)
-  — expect a hallucinated answer. Illustrative only, nothing to run.
-- Angular/Vue ~5 min: ask the **hosted Angular or Vue** endpoint about a
-  component with a two-way binding (e.g. `AtlToggle`). Expect the reply
-  **already** in framework-native shape — Angular `[(checked)]` /
-  `checkedChange`, Vue `v-model` / `update:checked` — with no manual
-  translation step needed (ADR-0097 superseded the old React-shaped
-  substitution, ADR-0083). This is a genuinely different answer than it would
-  have been in early September; if the reply instead looks React-shaped
-  (JSX, `children`, `onCheckedChange`), that is a real regression — say so.
-- **Skip** the Claude Design ("Drei Richtungen") demo — known-blocked, §1.
-- The fence underneath it is independent and safe to run alone: `npm run
-check:artboard-palette` → expect exit 0. Hard-code one colour value in
-  `tools/design/artboard-palette.css`, run it again → still exit 0 (the gate
-  reads only the generated sheet against `tokens.css`, never an artboard).
-  Then `git checkout tools/design/artboard-palette.css` to revert before
-  moving on.
-- **Time-recovery action, already named by the agenda itself — use it rather
-  than improvising one.** `schulung-2tage-agenda.md`'s Block 04 row lists its
-  own cuts in order, largest first: −5 min by moving the Skills-Konzept
-  discussion to Day 2 (it resurfaces there, in Block 00 — "Recap & Brief" —
-  so nothing is lost, only deferred), then −4 min by tightening the
-  Toolset-Modell/Hosted-vs-lokal narration into one pass instead of three,
-  then −3 min from the block's own unplanned reserve. If Block 04 is running
-  long, cut in that order — do not invent a different one live.
+- Open the Atelier file; tour variables (primitives → semantic → component),
+  component sets/variants/properties/auto layout, modes, Inventory vs.
+  Components page. Run the **pink test** on a master (`/tokens#pink-test`) and
+  say what it showed. Checklist: `/readiness`; naming: `/tokens#naming`.
+- No gate. If the rehearsal seat lacks Figma draft rights (File → Duplicate to
+  your drafts unavailable), that is a finding: it blocks Day 2 Block 01
+  outright. The "master from your own design system" needs one; a stand-in for
+  a solo rehearsal: not specified on /schulung.
 
-**Block 05 — Guided walkthrough.** Follow `/tutorial` in the chosen framework
-— compose the Settings Card from `AtlCard`/`AtlInput`/`AtlToggle`/`AtlButton`
-by prompting, not typing. Time it. Note whether "prompt, don't type" needed
-active enforcement or happened naturally.
+**Block 04 — Guardrails: stories as claims, and MCP** (hands-on demo).
+_Done when:_ one story plus a `play` function written, seen red once and then
+green, and `docs-show` called.
 
-**Block 06 — Wrap-up.** No gate.
+- Hosted Storybook: look up Button with `docs-show`. Expect the docs back
+  **shaped for the cohort framework** (Angular: two-way `[(checked)]`-style
+  bindings and split inputs/outputs, ADR-0097); a React-shaped reply (JSX,
+  `children`, `on*Change`) is a real regression, say so.
+- Two Storybook details the page says are explained nowhere else: the Design
+  tab (addon-designs, `parameters.design`) and the contract section at the
+  bottom of every Docs tab (`contractDocsPage`, ADR-0121 S5b). Confirm both are
+  visible in the workspace's Storybook; if the scaffold lacks one, record it.
+- Negative demo: same question in a browser chat without MCP — expect a
+  hallucination (illustrative only, nothing to run). Then with MCP — a correct
+  answer.
+- Live exercise: ask Claude for Button props, print token values, preview in
+  chat. Ask the MCP server for a prop that does not exist (page stretch) and
+  expect "not documented", not an invention.
+- **STOP — the red-then-green story.** Write one story with a `play` function
+  for a variant, watch it **fail**, fix it, watch it pass. If it never failed,
+  the story claims nothing (green means failure here): record it.
+- The Claude Design demo is the optional appendix, not a step here (§1).
+
+**Block 05 — Kata against the clock** (hands-on, no guidance).
+_Done when:_ the kata is green and every parity finding is labelled.
+
+- `/first-component`: the 15-minute kata, the same Settings Card frame
+  (node `936-2954`) as a second round, seven copy-paste steps, ending with
+  `figma_check_design_parity`. Prompts for this block: `tasks/schulung-golden-prompts.md`
+  §1 (its block heading predates the current names; the prompt is for the Day 1
+  kata/walkthrough).
+- The component lives under `workshop-<fw>/src/` and is viewed with
+  `nx serve workshop-<fw>` (the kata page's step 4), app on `localhost:4200`.
+- Label every parity finding: code, Figma, or contract. Log how many minutes
+  the kata actually took against its 15-minute claim, and what the other 50 of
+  the block's 65 minutes were for: not specified on /schulung.
+
+**Block 06 — Recap and exit ticket** (discussion).
+_Done when:_ a brief is chosen. Homework: duplicate the Figma file and sketch
+the component.
+
+- Choose one of the four briefs (Toast / TagChip / StatCard / Avatar), found in
+  `workshop/briefs/`. Catch-up homework for anyone who did not finish the kata:
+  play `/first-component` through alone.
+- Exit ticket: one sentence on what you will check first next time before
+  trusting AI output. No gate. Time it.
 
 ### Day 2
 
-**Block 00 — Recap & Brief.** No gate.
+**Block 00 — Recap (active recall), brief, skills** (talk).
+_Done when:_ everyone knows their target component and their skills are
+installed.
 
-**Block 01 — Design in Figma 🔴**
+- **STOP — check the skills are really installed.** The page lists exactly
+  what the scaffold installs: `atelier-component` (the workspace's own skill,
+  carries the rest of the day from Block 02 on), `uianatomy-mcp`,
+  `figma-workspace-architect` (only in workspaces generated with Figma), and
+  the four Storybook skills (ADR-0167). Look in the workspace's `.claude/`
+  folder and confirm each is present; `design-to-code`, `atelier-design` and
+  `artboard-bridge` are repo/trainer-only and must **not** be there. A skill
+  you assume is installed but is not is the failure this block covers; also
+  record whether you could tell that a skill had triggered.
+- Day 1 recap as active recall (participants answer, trainer does not lecture);
+  present the brief (anatomy, axes, states, a11y requirements); show the
+  uianatomy MCP and use it to introduce skills.
+- No gate otherwise. Time it.
 
-- Duplicate the Atelier file into your own Drafts (needs Draft rights — see
-  Block 02 note above). Copy + rename the relevant starter frame from the
-  Workshop-Templates page.
-- ~45 min manual design, ~45 min MCP structuring (Component Properties,
-  `figma_audit_component_accessibility`) per the brief's matrix
-  (`workshop/briefs/<component>.md`).
-- **Added since this kit's 2026-09-06 build — the `state` axis rule changed
-  (ADR-0114).** Do not work from "interaction states are never variants" —
-  that line in `workshop/briefs/README.md` was wrong and has been rewritten.
-  The live rule: a component that must _draw_ an interaction state gets a
-  Figma `state` axis (curated, never crossed against every other axis); a
-  component whose interactivity lives entirely on a nested control does not,
-  and documents it in prose instead. Check which branch your brief takes
-  _after_ its 2026-09-09 correction, not before: TagChip draws **no** `state`
-  axis at all (its remove button is the activator, not the chip); StatCard's
-  `state` axis is `delta-up`/`delta-down` — a data pair, not `idle`/`hover`.
-  Toast (`open`/`closing`) and Avatar (`image-loaded`/`initials-fallback`)
-  were already correct. Record which brief you built and whether its current
-  scope line matches what you actually drew.
-- **STOP.** Before opening Claude for Block 02, write the handoff document
-  the block ends with (ADR-0096). The template now exists —
-  `skills/design-to-code/references/handoff-document.md` — with these exact
-  fields: **Source** (file + node id — see the branch note below),
-  **Canonical record**, **Reuse or new**, **In scope**, **Explicitly out**,
-  **Token bindings**, **Behaviour**, **Accessibility obligations**, **Target
-  files**, **Acceptance**. Use that template rather than the shorter list this
-  kit named in its first draft. Two things changed about _how_ it gets
-  written, both worth timing separately:
-  - **The Source line is not just provenance — it's ADR-0113's routing
-    signal.** Write it exactly as "duplicate of Atelier in `<your name>`'s
-    drafts", not the Atelier file's key. `design-to-code`'s Build mode (§0a)
-    reads this one line to decide, automatically, whether the spec goes into
-    the shared `libs/spec/src/index.ts` master or its own file next to the
-    component — get this line wrong and every downstream step in Block 02
-    routes to the wrong branch with no gate to catch it (ADR-0113's own
-    Consequences section says so). Confirm in Block 02 that the routing
-    actually followed this line rather than assuming it did.
-  - **ADR-0096's 2026-09-07 correction narrows what you have to write by
-    hand.** Source, node id, the canonical record and token bindings are
-    mechanical lookups the skill may prefill once invoked — **Behaviour,
-    Explicitly out and Reuse-or-new stay author-written blanks it must not
-    fill**. If you invoke Claude before writing anything (rather than
-    hand-writing the whole document first, which is still what this block's
-    prose instructs), note whether it actually stopped and asked the three
-    blanks as questions (`SKILL.md`'s own documented behaviour) instead of
-    guessing them.
-    Record how long the _author-written_ parts actually took, separately from
-    any time spent on the mechanical fields, and whether the brief left
-    anything ambiguous enough to stall writing them.
-- **Abort criterion for this 🔴 block — proposed here, not lifted from
-  existing material** (unlike the Day 1 Block 01 and Block 04 entries above,
-  the agenda and `schulung.astro` name no fallback for this block running
-  long; this is a new trainer decision, flagged as such rather than presented
-  as something already agreed). If Component Properties / the a11y audit
-  structuring is not finished with roughly 15 minutes left, stop there: the
-  handoff document is written from whatever scope actually got built, not
-  from the brief's full matrix — ADR-0096 never required the full "Done when"
-  bar before Block 02 starts, only an honest account of what's in and what's
-  explicitly out. Carry any unfinished Figma polish as the participant's own
-  follow-up rather than extending the block past its 90 minutes. Record
-  whether this rule was actually needed and, if so, what specifically ran
-  long (the ~45/~45 split is itself unverified — see §8).
+**Block 01 — Design in Figma and the handoff document 🔴**
+_Done when:_ a master plus a filled handoff document.
 
-**Block 02 — Spec & Story per Prompt**
+- Duplicate the Atelier file into your own drafts — never mutate the original.
+  Copy and rename the starter frame from the Workshop Templates page (Toast /
+  Starter, StatCard / Starter, TagChip / Starter or Avatar / Starter, plus
+  Variant Matrix / Scaffold).
+- ~45 min manual design in the Figma UI, ~45 min MCP structuring (component
+  properties, a11y audits). Target: ≥ 2 variants × 2 states, properties,
+  correct `--ui-*` tokens, a dark-mode variant; the exact matrix is in the
+  brief. Skill: `figma-workspace-architect` ("used here for the first time").
+  Record which brief you built and whether it was clear enough to draw from.
+- **STOP — the handoff document.** Before opening Claude for Block 02, write
+  it. The page's list: draft URL + node id, chosen variants/states, token
+  bindings, reuse vs. rebuild, the behaviour from the brief, explicit
+  exclusions, target files, acceptance criteria — "a checklist, not a
+  template". Worked example: `/design-to-code#handoff-example` ("Filled handoff
+  document"). Participants do **not** get the `design-to-code` skill, so do not
+  rely on it to prefill anything. Record how long writing took and which line
+  you had to decide yourself (the block's recap question).
+- **Abort criterion for this 🔴 block:** not specified on /schulung. The
+  carried-over proposal (finish with whatever scope was built, write the
+  handoff from that) is a trainer decision, undecided, not an agreed rule.
+  Record whether the block overran and what ran long (the ~45/~45 split is
+  unverified).
 
-- React path: start `nx storybook react` in a second terminal — expect the
-  "Storybook ready!" banner with `http://localhost:4401/`. Then connect:
-  `claude mcp add --transport http storybook-local http://localhost:4401/mcp`
-  (default scope is `local` — confirm with `git status --short .mcp.json`
-  staying empty, both before and after). Reconnect the client and list tools.
-  **Verified live 2026-09-06:** the local endpoint on Storybook 10.6.0 answers
-  with 8 tools, presently named `docs-list`, `docs-show`, `docs-show-story`,
-  `stories-preview`, `stories-changed`, `stories-find-by-component`,
-  `get-storybook-story-instructions`, `test-run` — this matches what
-  schulung.astro's Block 02 bullet already names. **STOP** if any of the
-  three the block calls mandatory (`get-storybook-story-instructions`,
-  `stories-preview`, `test-run`) are missing: that means "not configured",
-  not "server down" — the point of this checkpoint.
-- **Angular/Vue path — changed since this kit's 2026-09-06 build (ADR-0112).**
-  The old text here said no local MCP tools existed for these two frameworks;
-  that was a real workspace-discovery bug in the addon's `test-run`, fixed
-  2026-09-08 and now gated (`check:vitest-discovery`, in the `check:all`
-  chain). Start `nx storybook angular` / `nx storybook vue` on their own ports
-  (4400 / 4402) and connect exactly as the React path above — expect the
-  **same 8 tools**, not a smaller set. Verify this live rather than trusting
-  this note: it is a genuinely different result than it would have been
-  before 2026-09-08, and it closes the asymmetry the previous version of this
-  checkpoint asked you to measure the cost of.
-- Prompt Claude for a spec "im Stil von `libs/spec/src/index.ts`" plus a
-  story, from the handoff document — not from the picture alone. Iterate
-  until the prop table matches the brief.
-- **STOP — the spec's home.** Confirm the new spec landed in its **own
-  file** next to the component, not inside the shared `libs/spec/src/index.ts`
-  master. **Changed since this kit's 2026-09-06 build (ADR-0113):** this is no
-  longer something the participant has to remember to tell Claude — the
-  `design-to-code` skill's Build mode (§0a) now reads the handoff document's
-  Source line and routes automatically, repo case vs. workshop case. The
-  checkpoint is therefore not "did I redirect Claude correctly" but "did the
-  skill's automatic routing get it right" — confirm the Source line you wrote
-  in Block 01 actually named a duplicate (not the Atelier file), since that
-  one line is what the routing turns on and nothing re-checks it. Then run
-  these six **individually** — not `npm run check:all`,
-  whose script is one long `&&` chain that stops dead at the first non-zero
-  exit and would hide the rest (`check:sync` sits first in that chain, so a
-  single `check:all` run would show only that one failure and silently skip
-  the other five):
-  ```
-  for g in check:sync check:a11y-parity check:design-status check:spec check:variants check:metadata; do
-    npm run "$g" > "/tmp/$g.txt" 2>&1; echo "$g: $?"
-  done
-  ```
-  Reproduced against the real gate chain on 2026-09-05 and unaffected by
-  today's gate renames (`check:iconography`→`check:icon-duplication` etc. —
-  none of these six were touched): expect exactly **`check:sync`,
-  `check:a11y-parity`, `check:design-status`** to print non-zero, and
-  **`check:spec`, `check:variants`, `check:metadata`** to print `0`. All six
-  non-zero means the spec ended up in the shared master by mistake — the
-  single highest-value checkpoint in this whole kit, because it's the one
-  place two prior reviews say a fresh runner is most likely to diverge from
-  what the page assumes.
-- **STOP — the false-success check.** Run `npm run sync:generated`. Expect
-  exit 0 and an empty `git status --short` afterward. Understand — don't
-  just observe — _why_ that's correct with an out-of-master spec: the command
-  only checks that the generated copies (spec mirrors, behaviors, `llms.txt`)
-  match the shared master; with your work correctly living outside that
-  master, it has nothing of yours to see, and passing trivially is not proof
-  your component is right. That proof is items 3–7 of the
-  Erfolgs-Verifizierung, not this line.
+**Block 02 — Contract, component, stories**
+_Done when:_ `check:contracts` is green offline.
 
-**Block 03 — Codegen**
+- Start `npm run storybook` in parallel, then connect the local MCP:
+  `claude mcp add --transport http storybook-local http://localhost:<port>/mcp`
+  (use the port Storybook prints; expect 6006). Deliberately **local** scope
+  (the default): `git status --short .mcp.json` stays empty before and after.
+  Reconnect the client and expect the dev/test tools
+  (`get-storybook-story-instructions`, `stories-preview`, `test-run`) to be
+  listed, identical for all three frameworks since Storybook 10.6.0.
+- **STOP** if any of those three is missing: that means "not configured", not
+  "server down" (the page's own wording). `get-storybook-story-instructions`
+  is mandatory before every `*.stories.*` edit.
+- Prompt from the **handoff document**, not the picture alone. Claude produces
+  the contract (typed through `ComponentContract` from
+  `workshop-<fw>/src/contracts/types.ts`, imported relatively), the component
+  with its test, and the stories **in one step**: one story per variant value
+  and Boolean state, a `play` for every behaviour line of the document. The
+  `atelier-component` skill treats it as one step.
+- **STOP — the contract's home.** Confirm the contract landed in
+  `workshop-<fw>/src/contracts/` in your own workspace. There is no shared
+  master it could land in by accident, and no separate `Atl*Spec` interface
+  file (ADR-0121). If something else happened, that is a finding.
+- Snapshot: with the bridge connected, `npm run figma:snapshot` (first replace
+  the `<YOUR_FIGMA_FILE_KEY>` placeholder in the script in `package.json` with
+  your duplicate's key if not already set). Writes `tools/figma/snapshot.json`
+  (pre-filled only with the AtlButton example).
+- Run `npm run check:contracts`. **Green means failure** if the snapshot was
+  not refreshed: your component is then missing from `tools/figma/snapshot.json`
+  and the check reports `[NO-MASTER]` as a warning, not a failure. Read the
+  output for `[NO-MASTER]` and `[COVERAGE]`, not only the exit code. Check
+  `npm run check:contracts -- --emit <folder>` writes the codeSpec fragment
+  (componentAPI, metadata, tokens) Block 04 needs.
+- The scaffold's gates are the participant's own: **red means red, not "red by
+  design"** (`/schulung`, Success verification). No gate is expected to fail
+  for a reason you cannot fix; record any that does. The old clone-era "three
+  expectedly red gates" no longer apply and must not be used as a comparison.
 
-- **Changed since this kit's 2026-09-06 build (ADR-0112):** iterate with the
-  local `test-run` MCP tool regardless of framework — it's no longer a
-  React-only loop. `nx test <lib> --watch` plus the browser Storybook stays a
-  fully valid alternative for any of the three (the agenda frames it as often
-  the _faster_ inner loop for Angular/Vue specifically) — pick whichever the
-  participant prefers, don't default to MCP-for-React /
-  Vitest-for-Angular/Vue as if the tools still differed.
-- Golden prompts for this block (token fidelity, the three correction
-  prompts for an invented prop / a missing token / a wrong slot):
-  `tasks/schulung-golden-prompts.md` §2. Note whether any of the three
-  correction prompts actually got used, and on which failure.
-- Time it; note friction in the "paste the error back to Claude" loop.
+**Block 03 — Iterate: prompt quality and the self-healing loop**
+_Done when:_ stories are green, and the prompt was revised at least once with
+the reason stated.
 
-**Block 04 — A11y + Dark Mode + States**
+- Golden prompts (token fidelity, `--ui-*` custom properties, the three
+  correction prompts): `tasks/schulung-golden-prompts.md` §2 (the trainer hands
+  them out on site; they are not in the participant workspace). Note which
+  correction prompt got used and on which failure.
+- Test loop in all frameworks: local addon MCP, `stories-preview` + `test-run`
+  with a11y. The page says `nx test <lib> --watch` covers **only the unit
+  half**; the equivalent of `test-run` is `nx storybook-test <fw>` (every story
+  in Chromium, play assertions, axe). In the workspace the scaffold's script
+  for that is `npm run check:stories`. A green unit run is not a green story run.
+- Paste error messages back to Claude instead of debugging yourself; time it
+  and note friction. Record the prompt revision and the reason for it (the
+  block's Done-when requires it).
 
-- Three-step check: `figma_audit_component_accessibility` (needs the Bridge —
-  §1), Storybook's A11y panel (axe-core), a manual keyboard walkthrough
-  (Tab/Shift+Tab/Enter/Escape). Golden prompt for this exact sequence, and for
-  the dark-mode token audit below: `tasks/schulung-golden-prompts.md` §3.1–3.2.
-- Dark mode via Storybook's backgrounds/theme addon (not just
-  `prefers-color-scheme`).
-- **STOP — the parity `codeSpec` exercise.** Call `figma_check_design_parity`
-  on your own node **twice**, same node/variant both times: once with all
-  seven `codeSpec` fields supplied (`visual`, `spacing`, `typography`,
-  `tokens`, `componentAPI`, `accessibility`, `metadata`) and one spacing value
-  deliberately wrong — expect the report to catch it. Then again with the
-  `spacing` field simply omitted, same wrong value present in the component —
-  expect a **clean** report: fields not supplied are not compared. This
-  distinction has, until this run, only ever been read off the skill's schema
-  (`skills/figma-workspace-architect/references/code-sync.md`) — never watched
-  live. If the sparse call does _not_ come back clean, that overturns a claim
-  three prior reviews all repeated without testing it — record it as a
-  blocker, not a minor note. Ready-to-paste version of this exact exercise:
-  `tasks/schulung-golden-prompts.md` §3.3.
+**Block 04 — Verify: a11y, states, parity**
+_Done when:_ `storybook-test` with axe is green, and every parity finding is
+triaged (code / Figma / contract).
 
-**Block 05 — Show & Tell.** No gate. Time it.
+- Three-step a11y check: `figma_audit_component_accessibility` (needs the
+  bridge), the Storybook a11y panel (axe-core), a keyboard walkthrough. Golden
+  prompts: `tasks/schulung-golden-prompts.md` §3.1.
+- **Dark mode (ADR-0142):** use the **theme control in the Storybook toolbar**
+  (`withThemeByDataAttribute` from addon-themes, sets `data-theme` on `html`,
+  exactly the selector `tokens.css` switches on). The **backgrounds** control
+  is canvas colour, not a theme; confusing the two was the bug ADR-0142
+  removed. **Green means failure:** axe runs only in light mode in
+  `check:stories`, so a green `storybook-test` says nothing about dark mode —
+  the toggle is a manual preview, not test coverage. Walk the dark state by eye
+  and log what you saw. Golden prompt for the dark-mode token audit:
+  `tasks/schulung-golden-prompts.md` §3.2.
+- **STOP — assembling the codeSpec and the parity call.** codeSpec per the
+  page: `check:contracts --emit libs/<fw>/src/lib/<name>/codespec` yields
+  componentAPI, metadata, tokens, nothing more; for accessibility, copy the
+  story root's `outerHTML` from DevTools and pass it as `html` with
+  `mapToCodeSpec: true` to `figma_scan_code_accessibility`. (Check the
+  `--emit` path against the scaffold's layout: the page's path starts with
+  `libs/<fw>/`; whether the scaffold uses that tree is not specified on
+  /schulung — record the path you really used.)
+- Call `figma_check_design_parity` **once, on purpose**, against an incomplete
+  codeSpec: falsify one spacing value deliberately. The page's claim: only with
+  complete fields must the report flag the deviation; fields not passed are
+  **not compared**, and a thin codeSpec (componentAPI + metadata + tokens +
+  accessibility) is the normal case. Optional second call: same wrong value,
+  `spacing` supplied vs. omitted (ready-to-paste: `tasks/schulung-golden-prompts.md`
+  §3.3). If the omitted-field call does **not** come back clean, that
+  overturns a claim; record a blocker.
+- Without a connected bridge the loop ends after `check:contracts` +
+  `storybook-test` (no snapshot, `[NO-MASTER]`, no parity call): the page calls
+  that a **degraded run, not "just carry on"**. If you hit that, log the run as
+  degraded.
+- Triage every parity finding: code, Figma or contract. Log which one you
+  almost mislabelled (the recap question). Finding codes:
+  `/design-to-code#finding-codes`.
 
-**End of Day 2 — Erfolgs-Verifizierung.** Walk all 7 items on `/schulung` in
-order against your own component. Log each as pass/fail/ambiguous in §5,
-quoting the actual command or tool output you saw — not a paraphrase.
+**Block 05 — Show & tell and transfer to "My DS"**
+_Done when:_ everyone leaves with a next step for their own design system, and
+a follow-up channel is set up.
+
+- Up to 8 participants, 50 minutes: about 5 minutes each, including questions.
+  Show your component, one prompt that worked and one that failed. **Time it**:
+  8 × 5 min = 40 min leaves 10 for the trainer synthesis and the transfer
+  step; log whether the block holds at the cohort size, a solo run can only
+  simulate this.
+- Trainer synthesis: prompt patterns that worked, anti-patterns, when Claude
+  fails, how to deal with drift.
+- **Transfer step:** run the self-check from `/design-principles#check-your-own`
+  on your own design system and pick one next step. For the rehearsal, name a
+  stand-in system and note it; the page assumes participants bring their own.
+- A follow-up channel is part of the Done-when; how it is set up: not
+  specified on /schulung. Record what you would use.
+- Exit round: one sentence each — the first thing you will do in your own
+  design system next week.
+
+**End of Day 2 — Success verification.** Walk all **8** items of the "Success
+verification" section on `/schulung` in order against your own component. Log
+each as pass/fail/ambiguous in §5, quoting the actual command or tool output
+you saw, not a paraphrase. Items, in the page's order: (1) component set in
+your own Figma draft with variants, properties, dark-mode variant; (2)
+`/verify` or the five checks one by one (`check:format`, `check:stylelint`,
+`check:contracts`, `check:unit`, `check:stories`), each exit 0; (3)
+`npm run storybook` running and showing the component (canvas + Docs tab); (4)
+test loop green (`test-run` or `npm run check:stories`; `check:unit` is no
+substitute); (5) `figma_audit_component_accessibility` without critical
+findings **and** the Storybook a11y tab without axe findings; (6) dark mode
+switches through the token override; (7) `figma_check_design_parity` on your
+own node (bridge required) — green proves something only for the sections
+passed; (8) `check:contracts` with your own flags exits 0, and
+`nx storybook-test <fw>` is green. Run each gate as `cmd > /tmp/x.log 2>&1; echo $?`
+and read the exit code, not the tail of the output.
 
 ---
 
@@ -402,129 +460,36 @@ Write this last, the way each prior review does: name the one thing this
 rehearsal still didn't settle, and why. (Candidates already known going in:
 whether a cohort-sized concurrent load on the hosted MCP endpoints behaves
 differently than a solo session; whether a genuinely first-time Figma user's
-timing on Block 01/02 of Day 2 matches this run's, since this kit is still run
-by someone who already knows the repo.)
+timing on Day 2 Block 01 matches this run's, since this kit is still run by
+someone who already knows the repo; whether Day 2 Block 05 holds at 8
+participants.)
 
 ---
 
-## 7. What this kit's own commands were checked against (2026-09-06)
+## 7. Verification status of this kit
 
-Every command this document tells the runner to type was executed for real
-before publishing it, not inferred from source alone:
-
-- `npm run preflight` — read in full (`tools/scripts/preflight.mjs`) to
-  confirm exactly what it checks (ports free, hosted MCP reachable) and what
-  it structurally cannot (local dev/test tools, a live Figma Bridge roundtrip).
-- `nx storybook react` — started for real; reached "Storybook ready!" on
-  `:4401` in ~4 s.
-- The local MCP endpoint at `http://localhost:4401/mcp` — spoken to directly
-  over the streamable-HTTP transport (`initialize` → `notifications/initialized`
-  → `tools/list`); the 8 tool names quoted above are this call's live result,
-  not a doc reference.
-- `claude mcp add --transport http <name> http://localhost:4401/mcp`,
-  `claude mcp list`, `claude mcp remove <name> -s local` — run for real under
-  a throwaway name (not `storybook-local`, to avoid colliding with anything);
-  local scope confirmed default, `.mcp.json` confirmed untouched by
-  `git status --short` before and after; server showed `✔ Connected`.
-- The hosted `storybook-angular` MCP endpoint — called directly
-  (`docs-list` then `docs-show` for `AtlToggle`) to check ADR-0097's native-reply
-  claim; it returned Angular Signal Forms syntax (`[(checked)]`,
-  `checkedChange`), not the old React-shaped substitution — the claim in
-  Day 1 Block 04 above is live-verified true today, not carried over from the
-  09-05 review's now-superseded finding.
-- `npm run check:artboard-palette`, `git checkout tools/design/artboard-palette.css`
-  — both exist and were exercised.
-- `git branch -a | grep -i solved` — confirmed empty.
-- `nx test react` — run for real, exit 0, ~10 s; confirms the `test` target
-  named throughout Block 03/Erfolgs-Verifizierung actually resolves (Angular
-  and Vue carry the identical target name per each `project.json`, not
-  re-run individually).
-- The six-gate spec-placement table (§4, Block 02) is `tasks/archive/reviews/schulung-review-2026-09-05.md`'s
-  own reproduction against the real gate chain, re-checked here only for
-  whether any of the six gate names moved in today's two gate-renaming
-  commits (`ba5e29d`, `3b2b8e3`) — they did not; the renames touched
-  `check:iconography`, `check:manifests`, `check:primitives` and
-  `check:exports`'s internals, none of the six named here.
-- Deliberately **not** re-executed today, and left for the actual rehearsal to
-  be the first to observe: the parity `codeSpec` double-call (Block 04 —
-  needs a participant's own Figma node, not the maintainer's), a full Day-1/
-  Day-2 timing pass, and anything needing a second Figma seat or a cohort-sized
-  concurrent load.
-- `npm run check:all` and `npx nx build docs` were run in full as part of
-  closing this task (see the task's own verification, not repeated here).
-
-**One defect caught in drafting this kit, by re-reading it rather than by any
-gate:** the first draft of the spec's-home checkpoint (Block 02) told the
-runner to read the six expected gate results off a single `npm run check:all`
-invocation. `check:all`'s script is one long `&&` chain — a non-zero exit from
-`check:sync` (first in the chain) stops it dead, so a single run would show
-only that one failure and silently skip the other five, including
-`check:a11y-parity` and `check:design-status`. The 2026-09-05 review avoided
-this by running each gate individually (`npm run <gate> > file 2>&1; echo
-$?`); the checkpoint above now does the same. Verified the failure mode itself
-with `bash -c 'echo one && false && echo two'` — exits after "one", "two" never
-runs.
+- The block names, times, Done-when clauses, the 8 success-verification items
+  and the skills list were compared against `docs/src/pages/schulung.astro` on
+  2026-10-11 when the kit was retargeted (R-037–R-039). That is a reading of the
+  page, not a run.
+- The earlier 2026-09-06 live checks (clone-era `nx storybook react`, `:4401`,
+  `claude mcp add` against it, the six-gate spec-placement table, `solved-*`
+  branch listing) were for the old clone path and were **removed**; none of
+  them is re-verified for the scaffold. Everything marked as expected above for
+  the scaffold (ports, script names, file locations) comes from `/schulung`,
+  ADR-0137 and ADR-0142 and has **not** been executed by this kit.
+- The kit has never been run (`tasks/todo.md`). Running it is the next task;
+  fixing what it finds is the one after.
 
 ---
 
 ## 8. What this kit deliberately leaves out
 
 - The curriculum content itself — every block's _teaching_ material stays on
-  `/schulung` and in `schulung-2tage-agenda.md`; duplicating it here would
-  drift the moment either changes, which is the exact failure mode this
-  week's review work was about.
+  `/schulung`; duplicating it here would drift the moment it changes, which is
+  the exact failure mode the 2026-10 review work was about.
 - A cohort-scale test (concurrent seats, hosted-MCP rate limits, a Figma plan
   tier check) — needs a cohort, not a solo rehearsal; tracked separately in
-  `tasks/todo.md`'s trainer-kit checklist.
-- Fixing anything this run finds. That's the findings table's job, and the
-  next task after this one.
-
----
-
-## 9. 2026-09-10 update — what changed and why
-
-This kit was built 2026-09-06 and has still never been run (`tasks/todo.md`'s
-open item confirms this as of today). The material moved under it in the
-meantime — ADR-0112, ADR-0113 and ADR-0114 all landed 2026-09-08/09, after
-this kit's checkpoints were written. This pass brought the checkpoints
-current against those three ADRs and the golden-prompts sheet that now exists
-(`tasks/schulung-golden-prompts.md`), without running the rehearsal itself —
-that is still the next task, not this one. Changed, with the reasoning left
-in place at each site rather than summarized only here:
-
-- §1: the Claude Design step 5 row corrected — `artboard-bridge` Publish mode
-  now exists and has been run once (correctly refused, DRIFT); the row no
-  longer says "no tooling," but the rehearsal still cannot reach a successful
-  publish, for a repo-wide reason that has nothing to do with this kit.
-- §3 (timing tracker): checked block-by-block against the live agenda and
-  `schulung.astro` — every planned start/end/duration still matches exactly.
-  No change needed; noted here so a future updater doesn't assume it's stale
-  just because it wasn't touched.
-- §4 Day 1 Block 01: added the `claude -p` model-access checkpoint
-  (`schulung.astro` added this after this kit's build date) and an abort
-  criterion for the 🔴 block.
-- §4 Day 1 Block 04: added the agenda's own already-decided time-recovery
-  order (−5/−4/−3 min) as this block's abort action, rather than leaving the
-  rehearsal to invent one live.
-- §4 Day 2 Block 01: added the ADR-0114 `state`-axis re-check (two briefs'
-  scope lines changed under it), rewrote the handoff-document STOP to the
-  real template file and ADR-0096/ADR-0113's mechanical-vs-author-written and
-  Source-line-routing corrections, and added an abort criterion for the 🔴
-  block.
-- §4 Day 2 Block 02: the "spec's home" STOP now describes ADR-0113's
-  automatic routing instead of a manual redirect the participant has to
-  remember; the Angular/Vue local-MCP note corrected per ADR-0112 (no longer
-  "no local tools exist").
-- §4 Day 2 Block 03: same ADR-0112 correction for the codegen loop, plus a
-  pointer to the new golden-prompts sheet.
-- §4 Day 2 Block 04: pointers to the golden-prompts sheet for the three
-  ready-made prompts that exercise this block's own checkpoints.
-- Preamble: made explicit, ahead of any run, what one solo rehearsal cannot
-  establish (cohort-scale concurrency; a genuinely first-time participant's
-  timing) — previously stated only as "candidates" inside §6, after the fact.
-
-Not touched, and not verified again in this pass: the codeSpec double-call
-claim (§4 Block 04), the six-gate reproduction table (§4 Block 02), and
-everything else §7 already lists as checked 2026-09-06 — this pass corrected
-checkpoints against ADRs that landed _after_ that verification, it did not
-redo it.
+  `tasks/todo.md`'s trainer-kit checklist (see also R-049).
+- Fixing anything this run finds. That's the findings table's job.
+- The Claude Design appendix and the `solved-*` recovery path (§1).
