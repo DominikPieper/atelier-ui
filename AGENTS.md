@@ -61,7 +61,7 @@ Always use the appropriate server for the task:
   authenticate; `nx_docs` is the usable one. Reach CI state through `gh` instead.
 - **Angular-Specific CLI**: the **Angular CLI MCP server** for Angular best practices, API searches, examples.
 - **Component Discovery & Docs**: the framework-specific **Storybook MCP servers** for exact component specs. Storybook ships MCP in two layers (added in 10.4, tool surface renamed and manifests made framework-native in the pinned 10.6.0) — be explicit about which surface you're calling.
-- **Component Anatomy & Cross-Framework Mapping**: the **`uianatomy` MCP server** (HTTP at `https://uianatomy.dev/mcp`, 29 tools) for canonical component anatomy, axes, slots, transitions, motion, tokens, events, and library divergences (41 components; per-library `implementations/` audits across radix, headlessui, cdk, react-aria, vaul). Pair with the bundled `uianatomy-mcp` skill at `.claude/skills/uianatomy-mcp/SKILL.md`.
+- **Component Anatomy & Cross-Framework Mapping**: the **`uianatomy` MCP server** (HTTP at `https://uianatomy.dev/mcp`) for canonical component anatomy, axes, slots, transitions, motion, tokens, events, and library divergences (41 components; per-library `implementations/` audits across radix, headlessui, cdk, react-aria, vaul). Pair with the bundled `uianatomy-mcp` skill at `.claude/skills/uianatomy-mcp/SKILL.md`.
 
 `.mcp.json` at the repo root wires these for Claude Code. Other agents configure
 their own MCP servers; nothing in this repo does it for them.
