@@ -1389,6 +1389,7 @@ async function runFramework(fw) {
   const reachedMeta = new Set();
   let noComponentCount = 0;
   let externalCount = 0;
+  const externalNames = new Set(); // meta.component names skipped as package imports
   let docgenFailedCount = 0;
 
   // Snapshotted BEFORE the story loop (rather than after it, where this used
@@ -1441,6 +1442,7 @@ async function runFramework(fw) {
     // actually true for Angular too, by construction, instead of by luck.
     if (findExternalPackageDir(storyFile, csf._rawComponentPath)) {
       externalCount++;
+      externalNames.add(metaComponent);
       continue;
     }
 
@@ -1605,7 +1607,10 @@ async function runFramework(fw) {
     report(
       'NO-STORY-META',
       fw,
-      `${selector}: has a contract and a snapshot master, but no story file's meta.component resolves to it in ${fw}`,
+      externalNames.has(selector)
+        ? `${selector}: has a contract, a snapshot master and a story, but the story imports it from an installed package, ` +
+            `so it is not docgen-checked here (its props come from the package's own docs) — nothing was compared`
+        : `${selector}: has a contract and a snapshot master, but no story file's meta.component resolves to it in ${fw}`,
     );
   }
 
@@ -1614,7 +1619,7 @@ async function runFramework(fw) {
   const warningsAfter = findings.filter((f) => f.level === 'warning').length;
   console.log(
     `[${fw}] components: ${byComponent.size}, contracts: ${contractsBySelector.size}, stories: ${storyFiles.length} ` +
-      `(no-component: ${noComponentCount}, external: ${externalCount}, docgen-failed: ${docgenFailedCount}), warnings: ${warningsAfter - warningsBefore}, errors: ${errorsAfter - errorsBefore}, ${(t1 - t0).toFixed(0)} ms`,
+      `(no-component: ${noComponentCount}, external: ${externalCount} [package imports, not checked], docgen-failed: ${docgenFailedCount}), warnings: ${warningsAfter - warningsBefore}, errors: ${errorsAfter - errorsBefore}, ${(t1 - t0).toFixed(0)} ms`,
   );
 }
 

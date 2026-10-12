@@ -136,7 +136,7 @@ const DAYS: Day[] = [
         done: 'preflight is green, `/mcp` lists every server, Storybook runs, Playwright Chromium is installed, and anyone still red has a rescue path.',
         bullets: [
           'The pre-workshop setup is mandatory homework — this block only verifies, it does not install from zero',
-          'Node ≥ 22.12 LTS is active (preflight checks for exactly 22.12), npm version from `package.json#packageManager`',
+          'Node ≥ 22.12 LTS is active (preflight accepts 22.12 or newer), npm version from `package.json#packageManager`',
           'Own workspace created (`npx create-atelier-ui-workspace`, one framework chosen), Claude Code CLI logged in with your own API key',
           'Figma account with draft rights (File → Duplicate to your drafts must work) plus the figma-console Desktop Bridge plugin imported in the Figma desktop app (Figma → Plugins → Development → Import plugin from manifest…). The bridge gates Day 2; the access token is technically optional (REST reads only) and a cohort-policy decision',
           '`npm run preflight` green locally. It checks Node/npm, that the CLI exists (`which claude` + `claude --version`), the Figma bridge, MCP reachability and ports. It does not check that the API key is valid: preflight sends no model request',

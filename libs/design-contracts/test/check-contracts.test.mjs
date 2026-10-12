@@ -1,6 +1,6 @@
 import { test } from 'node:test';
 import assert from 'node:assert/strict';
-import { readFileSync, writeFileSync } from 'node:fs';
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
 import { join } from 'node:path';
 import {
   FIXTURE_DIR,
@@ -20,6 +20,33 @@ test('a clean fixture exits 0 with no findings', () => {
   assert.equal(r.status, 0, r.stdout + r.stderr);
   assert.match(r.stdout, /ok {2}NButton \(props: 6, stories: 8\)/);
   assert.match(r.stdout, /total: 0 error\(s\), 0 warning\(s\)/);
+});
+
+test('a story whose component comes from an installed package says so, not "no story"', () => {
+  const fx = copyFixture();
+  try {
+    const pkgDir = join(fx.dir, 'node_modules', 'fake-ui');
+    mkdirSync(pkgDir, { recursive: true });
+    writeFileSync(
+      join(pkgDir, 'package.json'),
+      JSON.stringify({ name: 'fake-ui', version: '0.0.0' }),
+    );
+    const storyPath = join(fx.dir, 'src/n-button/n-button.stories.ts');
+    writeFileSync(
+      storyPath,
+      readFileSync(storyPath, 'utf8').replace("'./n-button'", "'fake-ui'"),
+    );
+    const r = runBin('check-contracts', [], { cwd: fx.dir });
+    assert.equal(r.status, 0, r.stdout + r.stderr);
+    assert.match(r.stdout, /external: 1 \[package imports, not checked\]/);
+    assert.match(
+      r.stdout,
+      /\[NO-STORY-META\].*NButton.*and a story, but the story imports it from an installed package/,
+    );
+    assert.doesNotMatch(r.stdout, /no story file's meta\.component/);
+  } finally {
+    fx.remove();
+  }
 });
 
 test('Figma drift (an axis value the contract does not cover) exits 1 with [AXIS]', () => {

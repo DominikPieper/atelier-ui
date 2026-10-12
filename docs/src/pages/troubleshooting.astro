@@ -84,7 +84,7 @@ const ISSUES: Issue[] = [
     id: 'plugin-update',
     title: 'Figma Desktop Bridge plugin is out of date',
     symptom:
-      '`npm run preflight` warns that the plugin files are stale, or `figma_get_status` reports `pluginUpdateAvailable: true` for the connected file.',
+      '`npm run preflight` warns that the plugin files are stale or that their `.version` differs from the pin in `.mcp.json` (a newer one too, left behind by a newer figma-console-mcp run elsewhere), or `figma_get_status` reports `pluginUpdateAvailable: true` for the connected file.',
     cause:
       '"The plugin" is two things and only one refreshes itself. Every time the figma-console MCP starts it copies `manifest.json`, `code.js` and `ui.html` into `~/.figma-console-mcp/plugin/`. But Figma Desktop only reads those files when you run the plugin, so an already-open panel keeps running whatever it loaded last.',
     fix: [

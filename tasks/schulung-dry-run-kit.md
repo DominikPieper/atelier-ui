@@ -40,6 +40,11 @@ the scaffold's own gates (`check:contracts`, `check:stories`, …). The Atelier
 clone with ports 4400–4402 is for work on Atelier itself and is **not** the
 rehearsal environment. Run the rehearsal in Angular (the default framework).
 
+**Out of scope (owner, 2026-10-12):** the Claude Code login and the Figma Desktop
+Bridge setup. They stay with the person running the rehearsal, as pre-work; start
+the clock on a machine that is already logged in with the Bridge connected, and do
+not time or log those steps.
+
 **Rule for the run:** don't fix what you hit. Record it in §5, use the
 documented workaround if one exists, and keep moving. A rehearsal that stops
 to patch every rough edge never reaches the end of Day 2, and the timing data
@@ -148,7 +153,7 @@ Atelier clone: not specified on /schulung — record what you used.
 _Done when:_ preflight is green, `/mcp` lists every server, Storybook runs,
 Playwright Chromium is installed, and anyone still red has a rescue path.
 
-- Node ≥ 22.12 active (preflight checks for exactly 22.12); own workspace
+- Node ≥ 22.12 active (preflight accepts 22.12 or newer); own workspace
   created with `npx create-atelier-ui-workspace`, one framework chosen (Angular).
 - Run `npm run preflight`. Expect a clean run. The page says it checks
   Node/npm, that the CLI exists (`which claude` + `claude --version`), the
