@@ -60,7 +60,7 @@ come first. Ranked:
       `tasks/schulung-dry-run-kit.md`.
 - [x] R-176/R-177 (owner: Figma moves): Button master aligned with code; Card tracking
       documented as a deliberate mismatch (no per-component tracking in Figma styles).
-- [ ] Rest of item 1: R-044 setup mail, R-049 trainer kit, R-041 agenda gaps, R-042 recovery
+- [ ] Rest of item 1: R-044 setup mail, R-049 trainer kit, ~~R-041 agenda gaps~~ (done 2026-10-12), R-042 recovery
       path. Then item 2.
 - [x] Scaffold release on npm: `check:release-drift` in sync after the Publish run.
 
@@ -127,9 +127,9 @@ Follow-ups found while fixing — done 2026-10-10 except the AtlProgress debt:
 - [x] S10 done 2026-10-10 (ADR-0168, superseding 0166): maintainer content ships as collapsed `<details>` — `/runbook` whole page; sections on mcp, a11y-workflow, figma, tokens, claude-design, design-principles, design-to-code, storybook, agent-skills, skills/*. Participant entries moved to troubleshooting (`#plugin-update`, `#stale-instances`).
 - [x] S11 done 2026-10-10: `tokens#naming`, `/readiness` (scopes, modes, properties, fixing a
       failing master), `claude-design#artboard-to-master`, `design-principles#check-your-own`.
-- → **R-041** Gaps the new agenda links around (§3): a glossary (B12), a guardrail demo with and
-  without a DS (A5), a published prompt rubric (Day 2 block 03), a rescue path for a red
-  setup beyond `/troubleshooting`.
+- [x] → **R-041** _(done 2026-10-12, see tasks/reviews.md)_ Gaps the new agenda links around (§3): a glossary (B12), a guardrail demo with and
+      without a DS (A5), a published prompt rubric (Day 2 block 03), a rescue path for a red
+      setup beyond `/troubleshooting`.
 - [x] → **R-043** _(done 2026-10-12: example red/green in a generated workspace; packed-tarball e2e green as R-170)_ Unverified since 2026-10-10: the `storybook#write-a-story` example (`Disabled` story +
       `toBeDisabled`) was not run in a generated workspace; the packed-tarball e2e
       (`libs/create-atelier-ui-workspace/e2e`) needs network and was not run.
