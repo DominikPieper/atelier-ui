@@ -94,9 +94,40 @@ function extractFigmaFileKey(raw: string): string {
   );
 }
 
+const USAGE = `Usage: create-atelier-ui-workspace [name] [options]
+
+  name                   Workspace directory name (prompted when omitted)
+
+Options:
+  --framework <fw>       angular | react | vue (prompted when omitted)
+  --figma, --no-figma    Add / skip the Figma Desktop Bridge MCP (prompted when omitted)
+  --figma-file <key>     Your Figma file key or full Figma URL (optional; only used with --figma)
+  --skills, --no-skills  Install the Storybook agent skills (default: on)
+  -h, --help             Show this help
+
+Without a TTY (CI, closed stdin) nothing can be prompted: name, --framework and
+--figma / --no-figma must all be given, otherwise the command exits with code 1.
+`;
+
+// enquirer rejects with an empty string on Ctrl-C; normalise that into a real
+// Error so the top-level handler reports it and exits non-zero.
+async function ask(question: object): Promise<unknown> {
+  try {
+    return await enquirer.prompt(question);
+  } catch (err) {
+    throw new Error(
+      err instanceof Error && err.message ? err.message : 'Prompt cancelled.',
+    );
+  }
+}
+
 export async function main() {
-  banner();
   const argv = process.argv.slice(2);
+  if (argv.includes('--help') || argv.includes('-h')) {
+    console.log(USAGE);
+    return;
+  }
+  banner();
 
   let name = argv.find((arg) => !arg.startsWith('-'));
   let framework = parseFlag(argv, 'framework') as Framework | undefined;
@@ -121,8 +152,24 @@ export async function main() {
     );
   }
 
+  // enquirer cannot read a non-TTY stdin: its prompt promise never settles, the
+  // event loop drains and node exits 0 with nothing created. Fail up front,
+  // naming every value that would have needed a prompt.
+  if (!process.stdin.isTTY) {
+    const missing = [
+      !name && '<name>',
+      !framework && '--framework <angular|react|vue>',
+      figmaMcp === undefined && '--figma or --no-figma',
+    ].filter(Boolean);
+    if (missing.length) {
+      throw new Error(
+        `Cannot prompt without a TTY. Missing: ${missing.join(', ')}. Run with --help for usage.`,
+      );
+    }
+  }
+
   if (!name) {
-    const res = await enquirer.prompt({
+    const res = await ask({
       type: 'input',
       name: 'name',
       message: 'Workspace name:',
@@ -152,7 +199,7 @@ export async function main() {
   }
 
   if (!framework) {
-    const res = await enquirer.prompt({
+    const res = await ask({
       type: 'select',
       name: 'framework',
       message: 'Which framework do you want to use?',
@@ -166,7 +213,7 @@ export async function main() {
   }
 
   if (figmaMcp === undefined) {
-    const res = await enquirer.prompt({
+    const res = await ask({
       type: 'confirm',
       name: 'figma',
       message: `Add the Figma Desktop Bridge MCP (figma-console-mcp)?\n  Setup guide: ${FIGMA_SETUP_URL}`,
@@ -179,9 +226,9 @@ export async function main() {
   // must not produce a question about a Figma file key at all. Skippable:
   // an attendee who hasn't duplicated the file yet presses enter and gets
   // today's <YOUR_FIGMA_FILE_KEY> placeholder behaviour, same as if this
-  // prompt didn't exist.
-  if (figmaMcp && figmaFile === undefined) {
-    const res = await enquirer.prompt({
+  // prompt didn't exist. Without a TTY it is skipped the same way.
+  if (figmaMcp && figmaFile === undefined && process.stdin.isTTY) {
+    const res = await ask({
       type: 'input',
       name: 'figmaFile',
       message:
@@ -236,9 +283,19 @@ export async function main() {
 }
 
 if (require.main === module) {
-  main().catch((err: unknown) => {
-    const msg = err instanceof Error ? err.message : String(err);
-    console.error(`\n${c.red('✖')} ${msg}\n`);
-    process.exit(1);
+  // Safety net: if the event loop drains while main() is still pending (a
+  // prompt that never settles), that is a failure, not a success.
+  let finished = false;
+  process.on('exit', () => {
+    if (!finished) process.exitCode = 1;
   });
+  main()
+    .then(() => {
+      finished = true;
+    })
+    .catch((err: unknown) => {
+      const msg = err instanceof Error ? err.message : String(err);
+      console.error(`\n${c.red('✖')} ${msg}\n`);
+      process.exit(1);
+    });
 }

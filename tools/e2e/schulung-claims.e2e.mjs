@@ -218,6 +218,35 @@ async function checkMcpSurfaceForFramework(fw, expectedTools) {
   try {
     const already = await portIsUp(port);
     if (already) {
+      // An occupied port is only reusable if it really is a Storybook MCP
+      // endpoint; anything else (another dev server, a stale process) would
+      // surface as a JSON parse crash further down.
+      let isMcp = false;
+      try {
+        const probe = await mcpCall(url, {
+          jsonrpc: '2.0',
+          id: 0,
+          method: 'initialize',
+          params: {
+            protocolVersion: '2025-06-18',
+            capabilities: {},
+            clientInfo: { name: 'schulung-claims-e2e', version: '0.0.0' },
+          },
+        });
+        isMcp =
+          probe.status === 200 &&
+          probe.messages.some((m) => m && m.jsonrpc === '2.0' && m.result);
+      } catch {
+        /* not JSON — not an MCP endpoint */
+      }
+      if (!isMcp) {
+        failures.push(
+          `${fw}: port ${port} is occupied by something that is not a Storybook MCP endpoint ` +
+            `(${url} did not answer a JSON-RPC initialize). Free the port, or re-run with ` +
+            `E2E_PORT_BASE=<n> (e.g. E2E_PORT_BASE=4410) to use a different port range.`,
+        );
+        return failures;
+      }
       warn(
         `${fw}: something is already listening on ${port} — reusing it read-only (not starting/stopping it)`,
       );

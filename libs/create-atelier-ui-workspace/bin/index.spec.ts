@@ -21,9 +21,13 @@ const enquirer = require('enquirer') as { prompt: jest.Mock };
 describe('create-atelier-ui-workspace CLI', () => {
   let originalArgv: string[];
   let consoleLogSpy: jest.SpyInstance;
+  let originalIsTTY: boolean | undefined;
 
   beforeEach(() => {
     originalArgv = process.argv;
+    // The interactive tests below assume a terminal; the non-TTY tests flip it.
+    originalIsTTY = process.stdin.isTTY;
+    process.stdin.isTTY = true;
     consoleLogSpy = jest
       .spyOn(console, 'log')
       .mockImplementation(() => undefined);
@@ -35,6 +39,7 @@ describe('create-atelier-ui-workspace CLI', () => {
 
   afterEach(() => {
     process.argv = originalArgv;
+    process.stdin.isTTY = originalIsTTY as boolean;
     jest.clearAllMocks();
   });
 
@@ -588,5 +593,92 @@ describe('create-atelier-ui-workspace CLI', () => {
       errSpy.mockRestore();
       fs.rmSync(tmp, { recursive: true, force: true });
     }
+  });
+
+  it('--help prints usage with every flag, creates nothing and never prompts', async () => {
+    process.argv = ['node', 'index.js', '--help'];
+
+    await main();
+
+    const out = consoleLogSpy.mock.calls.flat().join('\n');
+    expect(out).toContain('Usage: create-atelier-ui-workspace');
+    for (const flag of [
+      '--framework',
+      '--figma',
+      '--no-figma',
+      '--figma-file',
+      '--skills',
+      '--no-skills',
+      '--help',
+    ]) {
+      expect(out).toContain(flag);
+    }
+    expect(enquirer.prompt).not.toHaveBeenCalled();
+    expect(mockCreateWorkspace).not.toHaveBeenCalled();
+  });
+
+  it('-h is an alias for --help', async () => {
+    process.argv = ['node', 'index.js', 'my-app', '-h'];
+
+    await main();
+
+    expect(consoleLogSpy.mock.calls.flat().join('\n')).toContain('Usage:');
+    expect(mockCreateWorkspace).not.toHaveBeenCalled();
+  });
+
+  it('without a TTY, names every missing value and neither prompts nor scaffolds', async () => {
+    process.stdin.isTTY = false as unknown as boolean;
+    process.argv = ['node', 'index.js'];
+
+    const err = await main().catch((e: Error) => e);
+
+    expect(err).toBeInstanceOf(Error);
+    const msg = (err as Error).message;
+    expect(msg).toContain('<name>');
+    expect(msg).toContain('--framework');
+    expect(msg).toContain('--figma or --no-figma');
+    expect(enquirer.prompt).not.toHaveBeenCalled();
+    expect(mockCreateWorkspace).not.toHaveBeenCalled();
+  });
+
+  it('without a TTY, only the missing flag is named', async () => {
+    process.stdin.isTTY = false as unknown as boolean;
+    process.argv = ['node', 'index.js', 'my-app', '--figma'];
+
+    await expect(main()).rejects.toThrow(/Missing: --framework/);
+    expect(enquirer.prompt).not.toHaveBeenCalled();
+  });
+
+  it('without a TTY, a fully flagged run does not prompt (figma file key stays optional)', async () => {
+    process.stdin.isTTY = false as unknown as boolean;
+    process.argv = [
+      'node',
+      'index.js',
+      'my-app',
+      '--framework',
+      'angular',
+      '--figma',
+      '--skills',
+    ];
+
+    await main();
+
+    expect(enquirer.prompt).not.toHaveBeenCalled();
+    expect(mockCreateWorkspace).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.objectContaining({
+        name: 'my-app',
+        framework: 'angular',
+        figmaMcp: true,
+      }),
+    );
+  });
+
+  it('turns an aborted prompt (enquirer rejects with an empty string) into an Error', async () => {
+    process.argv = ['node', 'index.js', 'my-app', '--no-figma'];
+    enquirer.prompt.mockRejectedValueOnce('');
+
+    await expect(main()).rejects.toThrow('Prompt cancelled.');
+    expect(mockCreateWorkspace).not.toHaveBeenCalled();
   });
 });
