@@ -15,6 +15,21 @@ type Issue = {
 
 const ISSUES: Issue[] = [
   {
+    id: 'still-red',
+    title: 'Still red after the setup block (training rescue path)',
+    symptom:
+      'The training setup block is running out of time and your `npm run preflight` is still red, or a real prompt still fails.',
+    cause:
+      'Setup has three independent parts: the Claude Code CLI, the MCP servers, and model access. Preflight checks the first two; model access is only proven by a real request. Usually one of the three is missing, or the workspace itself is broken.',
+    fix: [
+      'Triage first: read the preflight output and name which of the three is missing — CLI, MCP, or model access. Then jump to the matching entry on this page instead of debugging everything at once.',
+      'Time box: whoever is still red 30 minutes before the end of the setup block (Day 1 Block 01) pairs with a neighbour — one keyboard, swap at each block — instead of debugging further. The trainer fixes the setup with you in the lunch break.',
+      'Broken workspace: do not repair it. Create a fresh one with `npx create-atelier-ui-workspace` in a new directory; it takes a few minutes.',
+      'What works without the Figma Desktop Bridge: the readiness checklist (Day 1 Block 03, read the file in Figma) and the hosted Storybook MCP `docs-show` (Day 1 Block 04). The mini-loop (Block 02) and the kata (Block 05) need the bridge — pair for those.',
+      'Nobody starts Day 2 red: catch-up homework plus a trainer check before Day 2 starts.',
+    ],
+  },
+  {
     id: 'mcp-unreachable',
     title: 'Storybook MCP server is unreachable',
     symptom:

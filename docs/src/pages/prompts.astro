@@ -32,12 +32,16 @@ function fwNote(fw: Fw): string {
 }
 
 interface Card {
+  /** Optional stable anchor for the card. */
+  id?: string;
   title: string;
   description: string;
   prompt: (fw: Fw) => string;
 }
 interface Section {
   title: string;
+  /** Stable anchor for the section heading. */
+  id?: string;
   cards: Card[];
 }
 
@@ -120,8 +124,10 @@ const SECTIONS: Section[] = [
   },
   {
     title: 'Guardrails',
+    id: 'guardrails',
     cards: [
       {
+        id: 'same-prompt-demo',
         title: 'Same prompt, without and with the design system',
         description:
           'A 5-minute demo. Send this exact prompt twice: once in a plain chat with no design-system context (no MCP, no llms-full.txt), once in Claude Code with the Storybook MCP connected. Then compare the two footers: hardcoded hex colors vs --ui-* tokens, invented components vs real Atl* ones, and the a11y basics (a landmark, labelled nav, focus styles). Keep the prompt identical so the context is the only variable.',
@@ -129,6 +135,7 @@ const SECTIONS: Section[] = [
           `Add a simple page footer: a logo, three columns of links (Product, Company, Legal) and a copyright line.`,
       },
       {
+        id: 'prompt-guard',
         title: 'Prompt guard: Figma to code',
         description:
           'Add this to any "turn this Figma component into code" prompt. Frontier models over-deliver: they add plausible variants, sizes and states the design never had, and those pass review because they look reasonable. The guard is the cheap first line; check:contracts catches what slips past it, because it flags variant values and enum props the Figma master does not have unless the contract declares them codeOnly.',
@@ -144,6 +151,7 @@ const computed = SECTIONS.map((section, si) => ({
   ...section,
   index: si + 1,
   cards: section.cards.map((card) => ({
+    id: card.id,
     title: card.title,
     description: card.description,
     prompts: {
@@ -155,6 +163,36 @@ const computed = SECTIONS.map((section, si) => ({
 }));
 
 const FRAMEWORKS: Fw[] = ['react', 'angular', 'vue'];
+
+// The six checks of the prompt rubric (`#rubric`). Plain strings; `code` spans
+// are written as backticks and rendered by `md` below.
+const RUBRIC: { name: string; text: string }[] = [
+  {
+    name: 'Source named',
+    text: 'the Figma node id or the brief the component comes from.',
+  },
+  {
+    name: 'Docs first',
+    text: 'the agent reads the component docs through the Storybook MCP (`docs-show`) instead of guessing props.',
+  },
+  {
+    name: 'Tokens',
+    text: '`--ui-*` custom properties only, no hex or px literals.',
+  },
+  {
+    name: 'Scope guard',
+    text: 'implement only what the design shows; anything missing goes in a list of questions at the end. The <a href="#prompt-guard" class="docs-link-primary">Prompt guard: Figma to code</a> card is the wording.',
+  },
+  {
+    name: 'Done stated',
+    text: 'which checks must be green (`check:contracts`, `check:stories`, the parity check) and that the agent runs them itself.',
+  },
+  {
+    name: 'One change per round',
+    text: 'a revision fixes one named problem and says which finding it answers.',
+  },
+];
+const rubricHtml = (s: string) => s.replace(/`([^`]+)`/g, '<code>$1</code>');
 ---
 
 <BaseLayout
@@ -288,6 +326,7 @@ const FRAMEWORKS: Fw[] = ['react', 'angular', 'vue'];
           {String(section.index).padStart(2, '0')}
         </span>
         <h2
+          id={section.id}
           style="
             margin: 0;
             font-size: var(--ui-font-size-2xl);
@@ -301,7 +340,11 @@ const FRAMEWORKS: Fw[] = ['react', 'angular', 'vue'];
       </div>
 
       <div style="display: flex; flex-direction: column; gap: 0.85rem">
-        {section.cards.map((card) => <div class="prompt-card" data-prompt-card>
+        {section.cards.map((card) => <div
+          class="prompt-card"
+          id={card.id}
+          data-prompt-card
+        >
           <div
             style="
               display: flex;
@@ -365,6 +408,50 @@ const FRAMEWORKS: Fw[] = ['react', 'angular', 'vue'];
         </div>)}
       </div>
     </div>)}
+
+    <div id="rubric" style="margin-bottom: 2.5rem">
+      <h2
+        style="
+          margin: 0 0 0.75rem;
+          font-size: var(--ui-font-size-2xl);
+          font-weight: 700;
+          color: var(--ui-color-text);
+          letter-spacing: -0.02em;
+        "
+      >
+        Judge a prompt before you send it
+      </h2>
+      <p
+        style="
+          margin: 0 0 1rem;
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+        "
+      >
+        Six checks. A prompt that passes all six has stated its source, its
+        docs, its tokens, its limits, its finish line and its one change.
+      </p>
+      <ol
+        style="
+          margin: 0 0 1rem;
+          padding-left: 1.25rem;
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+          color: var(--ui-color-text);
+          line-height: 1.6;
+        "
+      >
+        {RUBRIC.map((check) => <li>
+          <strong>{check.name}:</strong>
+          <Fragment set:html={rubricHtml(check.text)} />
+        </li>)}
+      </ol>
+      <p style="margin: 0; color: var(--ui-color-text); line-height: 1.6">
+        When a revision is needed, the failed check is the reason you state in
+        Day 2 Block 03 of the training.
+      </p>
+    </div>
   </div>
 </BaseLayout>
 

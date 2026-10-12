@@ -53,6 +53,16 @@ const L = {
   workshop: { label: 'Workshop setup', href: '/workshop' },
   figmaToken: { label: 'Figma token', href: '/figma-token' },
   troubleshooting: { label: 'Troubleshooting', href: '/troubleshooting' },
+  stillRed: {
+    label: 'Still red: rescue path',
+    href: '/troubleshooting#still-red',
+  },
+  glossary: { label: 'Glossary', href: '/workshop#glossary' },
+  guardrailDemo: { label: 'Guardrail demo', href: '/prompts#guardrails' },
+  promptRubric: {
+    label: 'Prompt rubric',
+    href: '/prompts#rubric',
+  },
   tutorial: { label: 'Tutorial', href: '/tutorial' },
   firstComponent: { label: 'First-component kata', href: '/first-component' },
   readiness: { label: 'Readiness checklist', href: '/readiness' },
@@ -113,11 +123,13 @@ const DAYS: Day[] = [
         title: 'Kickoff and thesis',
         format: 'Talk + live demo',
         why: 'AI scales what you already have, so the guardrails come first.',
-        pages: [L.overview],
+        pages: [L.overview, L.glossary, L.guardrailDemo],
         done: 'Everyone can name the loop: Inspect → Contract → Code → Verify.',
         bullets: [
           'Why component-driven? Why AI?',
           'Live demo: change an Atelier component by prompt in 5 minutes',
+          'Two-minute glossary pass (/workshop#glossary): LLM, agent, subagent, MCP — the four words the rest of the training assumes',
+          'Guardrail demo (5 minutes, /prompts#guardrails): the same prompt twice, once in a plain chat and once with the Storybook MCP connected — the context is the only variable',
           'What participants learn in two days, and what they do not',
         ],
         stretch:
@@ -132,7 +144,7 @@ const DAYS: Day[] = [
         format: 'Hands-on · High-risk block',
         risk: true,
         why: 'Without a green setup, Day 2 is blind.',
-        pages: [L.workshop, L.figmaToken, L.troubleshooting],
+        pages: [L.workshop, L.figmaToken, L.troubleshooting, L.stillRed],
         done: 'preflight is green, `/mcp` lists every server, Storybook runs, Playwright Chromium is installed, and anyone still red has a rescue path.',
         bullets: [
           'The pre-workshop setup is mandatory homework — this block only verifies, it does not install from zero',
@@ -142,7 +154,7 @@ const DAYS: Day[] = [
           '`npm run preflight` green locally. It checks Node/npm, that the CLI exists (`which claude` + `claude --version`), the Figma bridge, MCP reachability and ports. It does not check that the API key is valid: preflight sends no model request',
           'Confirm model access separately: `claude auth login --console` (or `ANTHROPIC_API_KEY` set), then `claude -p "Reply with exactly: PREFLIGHT-OK"`. A reply instead of an auth error means access is real. An installed CLI, a connected MCP and usable model access are three different things',
           'Read and understand the MCP config in `.mcp.json` together',
-          'When something fails: /troubleshooting (bridge not connected, node id does not resolve, port conflicts, Node version too old)',
+          'When something fails: /troubleshooting (bridge not connected, node id does not resolve, port conflicts, Node version too old). Still red 30 minutes before the end of the block: follow the rescue path (/troubleshooting#still-red), pair with a neighbour and let the trainer fix the setup in the lunch break',
         ],
         stretch:
           'Help a neighbour who is still red: read their preflight output and say which of the three (CLI, MCP, model access) is missing.',
@@ -294,7 +306,13 @@ const DAYS: Day[] = [
         format: 'Hands-on · High-risk block',
         risk: true,
         why: "The handoff is the prompt's input.",
-        pages: [L.briefs, L.handoffExample, L.figmaToken, L.troubleshooting],
+        pages: [
+          L.briefs,
+          L.handoffExample,
+          L.figmaToken,
+          L.troubleshooting,
+          L.stillRed,
+        ],
         done: 'A master plus a filled handoff document.',
         bullets: [
           'Mandatory first step: duplicate the Atelier file into your own drafts — never mutate the original file',
@@ -303,7 +321,7 @@ const DAYS: Day[] = [
           '~45 min MCP structuring (component properties, a11y audits)',
           'Own component set: ≥ 2 variants × 2 states, properties, correct tokens (`--ui-*`), a dark-mode variant — the exact matrix is in the component brief',
           'Skills as co-pilot, used here for the first time: `figma-workspace-architect` for architecture decisions',
-          'When something fails: /troubleshooting (bridge not connected, node id does not resolve, port conflicts, Node version too old)',
+          'When something fails: /troubleshooting (bridge not connected, node id does not resolve, port conflicts, Node version too old). Still red: the rescue path is /troubleshooting#still-red — pair with a neighbour and tell the trainer right away, nobody continues red',
           'The block ends with a short handoff document before anyone prompts: draft URL + node id, chosen variants/states, token bindings, reuse vs. rebuild, the behaviour from the brief, explicit exclusions, target files, acceptance criteria — a checklist, not a template',
         ],
         stretch:
@@ -339,10 +357,11 @@ const DAYS: Day[] = [
         title: 'Iterate: prompt quality and the self-healing loop',
         format: 'Prompt exercise',
         why: 'A single prompt is not the result.',
-        pages: [L.selfHealing, L.storybook],
+        pages: [L.promptRubric, L.selfHealing, L.storybook],
         done: 'Stories are green, and the prompt was revised at least once with the reason stated.',
         bullets: [
           'Focus: write prompts, judge output, correct — do not type it yourself',
+          'Judge every prompt against the six-check rubric (/prompts#rubric) before you send it; when a revision is needed, the failed check is the reason you state',
           'Enforce token fidelity: golden prompts demand `--ui-*` custom properties',
           'Golden prompts for this block and Block 04 (plus Day 1 Block 05): the trainer hands them out on site',
           '`plan/big-picture.md` (API rules) + `plan/design-principles.md` (surface/motion/dark mode) in the prompt context',
