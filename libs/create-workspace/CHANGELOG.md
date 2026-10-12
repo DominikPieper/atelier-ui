@@ -1,3 +1,14 @@
+## 0.4.4 (2026-10-12)
+
+### 🩹 Fixes
+
+- **create-workspace:** ship the template lint rules outside tools/eslint-rules (R-189) ([0552ff55](https://github.com/DominikPieper/atelier-ui/commit/0552ff55))
+
+### ❤️ Thank You
+
+- Claude Opus 5.5
+- Dominik Pieper @DominikPieper
+
 ## 0.4.3 (2026-10-12)
 
 ### 🩹 Fixes
