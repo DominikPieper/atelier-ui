@@ -2,9 +2,9 @@
   "meta": {
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "fileName": "Atelier UI",
-    "figmaLastModified": "2026-10-09T04:30:54Z",
-    "generatedAt": "2026-10-12T15:14:32.979Z",
-    "gitSha": "0b4cb53d",
+    "figmaLastModified": "2026-10-12T15:18:16Z",
+    "generatedAt": "2026-10-12T15:58:03.588Z",
+    "gitSha": "f9bba5b9",
     "serverVersion": "0.1.0",
     "coverage": "All 43 masters. Token/auto-layout checks sample each master's default variant.",
     "note": "Facts captured from Figma via figma-console MCP read-tools. Rules live in check-figma.js."
@@ -2895,7 +2895,7 @@
       "name": "Display/AtlCard",
       "selector": "AtlCard",
       "nodeId": "55:65",
-      "description": "Container for grouped content. Maps to AtlCardSpec in libs/spec.\n\nUse when: distinct grouped content needs a visual container — list items, summaries, dashboard tiles. For overlay content use Overlay/AtlDialog or Overlay/AtlDrawer.\n\nAPI surface:\n- Variant `variant`: elevated | outlined | flat → AtlCardSpec.variant\n- Variant `padding`: none | sm | md | lg → AtlCardSpec.padding\n- Text `Title`, `Body`: content slots\n- (code-only: `role` — landmark role, default plain div)\n\nA11y: defaults to <div>. Set `role` only when the card is meaningful as a landmark (article, region) — adding a landmark for every card pollutes the page outline.\n\nCode-only props (no Figma property on purpose; check:contracts reads these lines against the contract's codeOnly):\n- Code-only `role`: landmark role (article | region | section) — semantics only; a variant would add a landmark to every card and pollute the page outline.",
+      "description": "Container for grouped content. Maps to AtlCardSpec in libs/spec.\n\nUse when: distinct grouped content needs a visual container — list items, summaries, dashboard tiles. For overlay content use Overlay/AtlDialog or Overlay/AtlDrawer.\n\nAPI surface:\n- Variant `variant`: elevated | outlined | flat → AtlCardSpec.variant\n- Variant `padding`: none | sm | md | lg → AtlCardSpec.padding\n- Text `Title`, `Body`: content slots\n- (code-only: `role` — landmark role, default plain div)\n\nA11y: defaults to <div>. Set `role` only when the card is meaningful as a landmark (article, region) — adding a landmark for every card pollutes the page outline.\n\nCode-only props (no Figma property on purpose; check:contracts reads these lines against the contract's codeOnly):\n- Code-only `role`: landmark role (article | region | section) — semantics only; a variant would add a landmark to every card and pollute the page outline.\n\nKnown difference, on purpose (2026-10-12): the code tightens the header title to `--ui-letter-spacing-tight` (−0.01em, atl-card.css `.atl-card-header`); the master's title stays on `ty/title` at 0 %. Figma text styles carry no per-component tracking, and overriding it on the node would detach the style. A parity check reports this gap — it is expected, not drift.",
       "variantAxes": {
         "variant": [
           "elevated",

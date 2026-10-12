@@ -245,6 +245,9 @@ _Done when:_ the kata is green and every parity finding is labelled.
   kata/walkthrough).
 - The component lives under `workshop-<fw>/src/` and is viewed with
   `nx serve workshop-<fw>` (the kata page's step 4), app on `localhost:4200`.
+- Expected finding (owner, 2026-10-12, R-176): the card title's letter-spacing — code −0.01em,
+  master 0 % on `ty/title`. It is a deliberate mismatch, stated in the AtlCard master
+  description; a runner who labels it "record a deliberate mismatch" has it right.
 - Label every parity finding: code, Figma, or contract. Log how many minutes
   the kata actually took against its 15-minute claim, and what the other 50 of
   the block's 65 minutes were for: not specified on /schulung.

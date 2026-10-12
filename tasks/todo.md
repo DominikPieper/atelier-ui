@@ -54,11 +54,11 @@ come first. Ranked:
       Angular workspace — small, next.
 - [ ] Human part of R-040: kata, Day 2 and block timing on a non-author machine, per
       `tasks/schulung-dry-run-kit.md`.
-- [ ] R-176/R-177 need an owner call: which side moves (Figma master or code) for the kata's
-      Card letter-spacing and Button disabled/shadow differences.
+- [x] R-176/R-177 (owner: Figma moves): Button master aligned with code; Card tracking
+      documented as a deliberate mismatch (no per-component tracking in Figma styles).
 - [ ] Rest of item 1: R-044 setup mail, R-049 trainer kit, R-041 agenda gaps, R-042 recovery
       path. Then item 2.
-- [ ] Verify the scaffold release reached npm after the Publish run (`check:release-drift`).
+- [x] Scaffold release on npm: `check:release-drift` in sync after the Publish run.
 
 ### Course content review follow-up (2026-10-10)
 
