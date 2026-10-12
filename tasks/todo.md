@@ -39,6 +39,27 @@ come first. Ranked:
    parity, so they rank first); none blocks the course.
 4. Everything else in `tasks/reviews.md` that names the CDS waits for the resumed migration.
 
+**Status 2026-10-12** (pushed `80dae6b6`, `check:all` green):
+
+- [x] Machine part of R-040, scripted in a fresh Angular workspace from the published scaffold:
+      setup and every scaffold gate green in ~3 min machine time (warm caches). Scope (owner):
+      Claude login and Bridge setup stay pre-work and are not rehearsed.
+- [x] R-043 write-a-story example red/green in a generated workspace; R-159 claims script kept.
+- [x] R-170 scaffold e2e green for all three frameworks (7m54s, Verdaccio, `check:stories`).
+- [x] R-183–R-188 fixed: Node claim, `check:contracts` external-skip message (reaches
+      participants with the next scaffold release), plugin-pin case in `/troubleshooting`,
+      preflight sample and no-op `npm install`, scaffolder `--help` and non-TTY exit 1,
+      claims-script port probe.
+- [ ] R-189 lint stack trace (`tools/eslint-rules/tsconfig.json` ENOENT) in the generated
+      Angular workspace — small, next.
+- [ ] Human part of R-040: kata, Day 2 and block timing on a non-author machine, per
+      `tasks/schulung-dry-run-kit.md`.
+- [ ] R-176/R-177 need an owner call: which side moves (Figma master or code) for the kata's
+      Card letter-spacing and Button disabled/shadow differences.
+- [ ] Rest of item 1: R-044 setup mail, R-049 trainer kit, R-041 agenda gaps, R-042 recovery
+      path. Then item 2.
+- [ ] Verify the scaffold release reached npm after the Publish run (`check:release-drift`).
+
 ### Course content review follow-up (2026-10-10)
 
 Source: `tasks/archive/reviews/content-review-2026-10-10.md` (§ numbers below refer to it). Owner, 2026-10-10:
@@ -105,9 +126,9 @@ Follow-ups found while fixing — done 2026-10-10 except the AtlProgress debt:
 - → **R-041** Gaps the new agenda links around (§3): a glossary (B12), a guardrail demo with and
   without a DS (A5), a published prompt rubric (Day 2 block 03), a rescue path for a red
   setup beyond `/troubleshooting`.
-- → **R-043** Unverified since 2026-10-10: the `storybook#write-a-story` example (`Disabled` story +
-  `toBeDisabled`) was not run in a generated workspace; the packed-tarball e2e
-  (`libs/create-atelier-ui-workspace/e2e`) needs network and was not run.
+- [x] → **R-043** _(done 2026-10-12: example red/green in a generated workspace; packed-tarball e2e green as R-170)_ Unverified since 2026-10-10: the `storybook#write-a-story` example (`Disabled` story +
+      `toBeDisabled`) was not run in a generated workspace; the packed-tarball e2e
+      (`libs/create-atelier-ui-workspace/e2e`) needs network and was not run.
 - → **R-065** Open call: the token value catalogue on `/tokens` (`#colors` … `#motion`) stays visible
   for kata lookups; hide it with the CDS swap if participants no longer use Atelier tokens.
 - → **R-005, R-042** S12 recovery path per tutorial/kata step; bridge exercise compose → build new (§5.10–11)
@@ -1491,9 +1512,9 @@ check:manifest-parity` → `sh` → `MainThread`. The gate finished its work and
         `schulung-claims.e2e.mjs` rewritten (wsdemo fixture, no `index.ts` scenario). Gates:
         docs build, docs-layout, adr-refs, skill-discovery, llms, contracts, lint docs,
         check-skill, test-skill (offline) all 0.
-  - → **R-003** **S5a follow-up:** run `node tools/e2e/schulung-claims.e2e.mjs` on a clean tree —
-    Part 1 (the gate claim) was reproduced gate by gate but not executed by the script,
-    because its `assertCleanTree` met the day's uncommitted work.
+  - [x] → **R-003** _(done 2026-10-12 as R-159: all claims hold, script kept)_ **S5a follow-up:** run `node tools/e2e/schulung-claims.e2e.mjs` on a clean tree —
+        Part 1 (the gate claim) was reproduced gate by gate but not executed by the script,
+        because its `assertCleanTree` met the day's uncommitted work.
   - [x] **S5b — the contract docs block + story-meta import — done 2026-09-10** (ADR-0121
         "S5b done"). `libs/spec/src/contracts/docs-block.ts` (`ContractBlock`,
         `contractDocsPage`, `createElement` only), `parameters.docs.page` in all three
@@ -1813,7 +1834,7 @@ WIRED` in `.github/workflows/ci.yml:122-135` because it fails under `CI=1` for a
       doesn't show it. Why now: the Icon masters (ADR-0057) now make it placeable; it was
       blocked on exactly that until 2026-08-27.
 
-- → **R-040** **One rehearsal of the participant path on a non-author machine, timed**
+- → **R-040** _(machine part done 2026-10-12; human part open — see "First cohort, end of November 2026")_ **One rehearsal of the participant path on a non-author machine, timed**
   (Schulung review §10). Why now: last unverified step — everything else in both
   Schulung reviews is closed. Run it against `tasks/schulung-dry-run-kit.md`
   (built 2026-09-06): the ordered checkpoint list, known-blocked items,
