@@ -1,3 +1,14 @@
+## 0.4.3 (2026-10-12)
+
+### 🩹 Fixes
+
+- **create-atelier-ui-workspace:** never exit 0 without a workspace (R-186) ([80dae6b6](https://github.com/DominikPieper/atelier-ui/commit/80dae6b6))
+
+### ❤️ Thank You
+
+- Claude Opus 5.5
+- Dominik Pieper @DominikPieper
+
 ## 0.4.2 (2026-10-10)
 
 ### 🚀 Features

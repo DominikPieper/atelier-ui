@@ -1,3 +1,14 @@
+## 0.4.3 (2026-10-12)
+
+### 🩹 Fixes
+
+- clean up the participant's first-hour output (R-183..R-187) ([53f38aae](https://github.com/DominikPieper/atelier-ui/commit/53f38aae))
+
+### ❤️ Thank You
+
+- Claude Opus 5.5
+- Dominik Pieper @DominikPieper
+
 ## 0.4.2 (2026-10-10)
 
 ### 🚀 Features
