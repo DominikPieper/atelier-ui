@@ -27,8 +27,9 @@
  *     unconditionally, and a byte-identical `index.js` is worth more than a
  *     scaffold-specific fork that drops one `require()` — see preset.ts's
  *     comment on that decision.
- *   - `tools/eslint-rules/{angular-template,atl-button-icon-only-needs-name,
- *     atl-sub-component-needs-parent}.js` are the two Angular template rules the
+ *   - `tools/atelier-eslint-rules/{angular-template,atl-button-icon-only-needs-name,
+ *     atl-sub-component-needs-parent}.js` (renamed from the canonical
+ *     `tools/eslint-rules/` so @nx/eslint-plugin does not auto-load it, R-189) are the two Angular template rules the
  *     Angular scaffold wires (ADR-0152), plus the plugin file that exposes them.
  *   - Two Claude Code skills ship copied (no remote pull) into every scaffold:
  *     `uianatomy-mcp` (one file) and `figma-workspace-architect` (only with
@@ -181,15 +182,15 @@ const FILES = [
   // stay in this repo (they read the library's component sources and its stories).
   {
     source: 'tools/eslint-rules/angular-template.js',
-    target: `${PRESET_FILES_DIR}/tools/eslint-rules/angular-template.js`,
+    target: `${PRESET_FILES_DIR}/tools/atelier-eslint-rules/angular-template.js`,
   },
   {
     source: 'tools/eslint-rules/atl-button-icon-only-needs-name.js',
-    target: `${PRESET_FILES_DIR}/tools/eslint-rules/atl-button-icon-only-needs-name.js`,
+    target: `${PRESET_FILES_DIR}/tools/atelier-eslint-rules/atl-button-icon-only-needs-name.js`,
   },
   {
     source: 'tools/eslint-rules/atl-sub-component-needs-parent.js',
-    target: `${PRESET_FILES_DIR}/tools/eslint-rules/atl-sub-component-needs-parent.js`,
+    target: `${PRESET_FILES_DIR}/tools/atelier-eslint-rules/atl-sub-component-needs-parent.js`,
   },
 ];
 

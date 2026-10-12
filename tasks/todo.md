@@ -50,7 +50,7 @@ come first. Ranked:
       participants with the next scaffold release), plugin-pin case in `/troubleshooting`,
       preflight sample and no-op `npm install`, scaffolder `--help` and non-TTY exit 1,
       claims-script port probe.
-- [ ] R-189 lint stack trace (`tools/eslint-rules/tsconfig.json` ENOENT) in the generated
+- [x] R-189 lint stack trace (`tools/eslint-rules/tsconfig.json` ENOENT) in the generated
       Angular workspace — small, next.
 - [ ] Human part of R-040: kata, Day 2 and block timing on a non-author machine, per
       `tasks/schulung-dry-run-kit.md`.

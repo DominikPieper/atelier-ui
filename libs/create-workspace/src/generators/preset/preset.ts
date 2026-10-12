@@ -868,7 +868,7 @@ export async function presetGenerator(
   // How the components are USED, which \`strictTemplates\` cannot see (ADR-0152):
   // an icon-only <button atl-button> with no accessible name, and a sub-component
   // outside its required parent. Vendored from the parent Atelier monorepo's
-  // tools/eslint-rules/ (see the copy loop below); it reads every \`.html\`
+  // tools/atelier-eslint-rules/ (see the copy loop below); it reads every \`.html\`
   // template and the inline \`@Component\` templates the processor extracts.
   files: ['**/*.html'],
   plugins: { 'atelier-template': atelierTemplate },
@@ -882,11 +882,15 @@ export async function presetGenerator(
         `import { dirname } from 'node:path';`,
         `import tseslint from 'typescript-eslint';`,
         `import storybook from 'eslint-plugin-storybook';`,
-        `import atelierTemplate from '../tools/eslint-rules/angular-template.js';`,
+        `import atelierTemplate from '../tools/atelier-eslint-rules/angular-template.js';`,
       ],
     );
 
     // Three files, byte-identical to the canonical copies in tools/eslint-rules/
+    // (landing in tools/atelier-eslint-rules/ here: @nx/eslint-plugin auto-loads
+    // any workspace dir named tools/eslint-rules as `@nx/workspace-rules` and
+    // prints an ENOENT stack for the missing tsconfig.json + index file on every
+    // lint run, R-189 — the config imports these files directly instead)
     // (kept that way by this repo's own sync-preflight.mjs). Their tests, and the
     // story-template processor, stay in the parent repo: the tests read the
     // library's own component sources, which a scaffolded workspace does not have.
@@ -896,8 +900,8 @@ export async function presetGenerator(
       'atl-sub-component-needs-parent.js',
     ]) {
       tree.write(
-        `tools/eslint-rules/${ruleFile}`,
-        readTemplate(`tools/eslint-rules/${ruleFile}`),
+        `tools/atelier-eslint-rules/${ruleFile}`,
+        readTemplate(`tools/atelier-eslint-rules/${ruleFile}`),
       );
     }
   }

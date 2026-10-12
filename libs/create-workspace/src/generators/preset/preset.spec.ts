@@ -935,10 +935,13 @@ describe('preset generator', () => {
       'atl-button-icon-only-needs-name.js',
       'atl-sub-component-needs-parent.js',
     ]) {
-      expect(tree.exists(`tools/eslint-rules/${file}`)).toBe(true);
+      expect(tree.exists(`tools/atelier-eslint-rules/${file}`)).toBe(true);
     }
+    // Not `tools/eslint-rules`: @nx/eslint-plugin auto-loads that dir (needs an
+    // index file + tsconfig.json) and prints an ENOENT stack on every lint (R-189).
+    expect(tree.exists('tools/eslint-rules')).toBe(false);
     // The tests and the story processor read this repo's own sources; they stay here.
-    expect(tree.children('tools/eslint-rules').sort()).toEqual([
+    expect(tree.children('tools/atelier-eslint-rules').sort()).toEqual([
       'angular-template.js',
       'atl-button-icon-only-needs-name.js',
       'atl-sub-component-needs-parent.js',
@@ -947,7 +950,7 @@ describe('preset generator', () => {
     const config =
       tree.read('workshop-angular/eslint.config.mjs', 'utf-8') ?? '';
     expect(config).toContain(
-      "import atelierTemplate from '../tools/eslint-rules/angular-template.js';",
+      "import atelierTemplate from '../tools/atelier-eslint-rules/angular-template.js';",
     );
     expect(config).toContain(
       "'atelier-template/atl-button-icon-only-needs-name': 'error'",
