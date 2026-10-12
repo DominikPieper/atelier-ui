@@ -1,5 +1,5 @@
 import { createTreeWithEmptyWorkspace } from '@nx/devkit/testing';
-import { Tree, readJson } from '@nx/devkit';
+import { Tree, readJson, updateJson } from '@nx/devkit';
 import { EventEmitter } from 'node:events';
 import { spawn } from 'node:child_process';
 import { readFileSync } from 'node:fs';
@@ -328,7 +328,9 @@ describe('preset generator', () => {
   let tree: Tree;
 
   beforeEach(() => {
-    tree = createTreeWithEmptyWorkspace();
+    // Nx 23 seeds `.oxfmtrc.json` by default; real scaffolds get none and the
+    // preset writes `.prettierrc`, so `formatter: 'none'` keeps the tree honest.
+    tree = createTreeWithEmptyWorkspace({ formatter: 'none' });
     // `createTreeWithEmptyWorkspace()` pre-seeds a stub `tsconfig.base.json`
     // that no real `create-nx-workspace` run provides before invoking this
     // preset — deleting it here makes every test in this file exercise the
@@ -1495,7 +1497,7 @@ describe('preset generator', () => {
     // force-inlining it as a side effect of a self-contradictory
     // package.json. angular is still exempt: ng-packagr never emits a bare
     // `.css` import at all — component styles are inlined as strings.
-    const reactTree = createTreeWithEmptyWorkspace();
+    const reactTree = createTreeWithEmptyWorkspace({ formatter: 'none' });
     await presetGenerator(reactTree, {
       name: 'my-workspace',
       framework: 'react',
@@ -1504,7 +1506,7 @@ describe('preset generator', () => {
       reactTree.read('workshop-react/vitest.unit.config.ts', 'utf-8') ?? '';
     expect(reactConfig).toContain("inline: ['@atelier-ui/react']");
 
-    const angularTree = createTreeWithEmptyWorkspace();
+    const angularTree = createTreeWithEmptyWorkspace({ formatter: 'none' });
     await presetGenerator(angularTree, {
       name: 'my-workspace',
       framework: 'angular',
@@ -1756,7 +1758,7 @@ describe('preset generator', () => {
       '2.7.1',
     );
 
-    tree = createTreeWithEmptyWorkspace();
+    tree = createTreeWithEmptyWorkspace({ formatter: 'none' });
     await presetGenerator(tree, { name: 'my-workspace', framework: 'react' });
     const reactPkg = readJson(tree, 'package.json');
     expect(
@@ -1986,14 +1988,13 @@ describe('preset generator', () => {
     expect(command).toContain('--config stylelint.config.mjs');
   });
 
-  it('leaves an existing lint target untouched and adds stylelint as a separate sibling', async () => {
-    // The real @nx/{angular,react,vue}:application generator DOES write its
-    // own `lint` target (an explicit `@nx/eslint:lint` executor entry,
-    // confirmed by running it for real) — the plain mock above doesn't, so
-    // this test seeds one itself, the same way the "preserves the
-    // application generator's own targets" test above seeds a placeholder
-    // `build` target, to actually exercise the "don't touch it" claim rather
-    // than trivially finding no `lint` key at all.
+  // The real @nx/{angular,react,vue}:application generator writes its own
+  // `lint` target as a bare `@nx/eslint:lint` executor entry (confirmed by
+  // running it for real) — deprecated, removed in Nx v24. The plain mock
+  // above doesn't, so these tests seed one themselves, the same way the
+  // "preserves the application generator's own targets" test above seeds a
+  // placeholder `build` target.
+  function seedLintTarget(lint: Record<string, unknown>) {
     reactAppMock.mockImplementationOnce(
       (t: Tree, options: { name: string }) => {
         if (!t.exists('tsconfig.base.json')) {
@@ -2001,29 +2002,150 @@ describe('preset generator', () => {
         }
         t.write(
           `${options.name}/project.json`,
-          JSON.stringify({
-            name: options.name,
-            targets: {
-              lint: { executor: '@nx/eslint:lint', options: {} },
-            },
-          }),
+          JSON.stringify({ name: options.name, targets: { lint } }),
         );
         t.write(
           `${options.name}/eslint.config.mjs`,
           ESLINT_CONFIG_BASELINE.react,
         );
+        const nxJson = JSON.parse(t.read('nx.json', 'utf-8') as string);
+        nxJson.targetDefaults = {
+          ...nxJson.targetDefaults,
+          '@nx/eslint:lint': { cache: true },
+        };
+        t.write('nx.json', JSON.stringify(nxJson));
         return Promise.resolve(undefined);
       },
     );
+  }
+
+  it('replaces the deprecated @nx/eslint:lint executor target with the inferred @nx/eslint/plugin one and adds stylelint as a separate sibling', async () => {
+    seedLintTarget({ executor: '@nx/eslint:lint' });
 
     await presetGenerator(tree, { name: 'my-workspace', framework: 'react' });
 
     const project = readJson(tree, 'workshop-react/project.json');
-    expect(project.targets.lint).toEqual({
-      executor: '@nx/eslint:lint',
-      options: {},
-    });
+    // No explicit lint target: `nx lint workshop-react` is inferred from
+    // workshop-react/eslint.config.mjs by the plugin registered below.
+    expect(project.targets.lint).toBeUndefined();
     expect(project.targets.stylelint.executor).toBe('nx:run-commands');
+
+    const nxJson = readJson(tree, 'nx.json');
+    expect(nxJson.plugins).toContainEqual({
+      plugin: '@nx/eslint/plugin',
+      options: { targetName: 'lint' },
+    });
+    expect(nxJson.targetDefaults['@nx/eslint:lint']).toBeUndefined();
+  });
+
+  it.each(['angular', 'react', 'vue'] as const)(
+    'registers @nx/eslint/plugin with targetName lint for %s',
+    async (framework) => {
+      await presetGenerator(tree, { name: 'my-workspace', framework });
+
+      expect(readJson(tree, 'nx.json').plugins).toContainEqual({
+        plugin: '@nx/eslint/plugin',
+        options: { targetName: 'lint' },
+      });
+    },
+  );
+
+  it('does not register @nx/eslint/plugin twice when nx.json already has it', async () => {
+    updateJson(tree, 'nx.json', (c) => ({
+      ...c,
+      plugins: ['@nx/eslint/plugin'],
+    }));
+
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'react' });
+
+    const plugins = readJson(tree, 'nx.json').plugins as Array<
+      string | { plugin: string }
+    >;
+    expect(
+      plugins.filter(
+        (p) => (typeof p === 'string' ? p : p.plugin) === '@nx/eslint/plugin',
+      ),
+    ).toHaveLength(1);
+  });
+
+  // Inferred lint runs `eslint .` from the project root, so the type-aware
+  // blocks scoped to `src/**` finally match (under the old executor, cwd was
+  // the workspace root and they matched nothing). Two Vue-specific
+  // consequences, pinned here:
+  it('puts vue-eslint-parser back on .vue files after the type-checked base config', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'vue' });
+
+    const config = tree.read('workshop-vue/eslint.config.mjs', 'utf-8') ?? '';
+    expect(config).toContain(
+      "parser: vue.configs['flat/base'][1].languageOptions.parser",
+    );
+  });
+
+  it("replaces @nx/vue's any-typed *.vue shim with a DefineComponent one", async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'vue' });
+
+    const shim = tree.read('workshop-vue/src/vue-shims.d.ts', 'utf-8') ?? '';
+    expect(shim).toContain("declare module '*.vue'");
+    expect(shim).toContain('DefineComponent');
+    expect(shim).not.toContain('ReturnType');
+  });
+
+  it('swallows only the "generating a deprecated @nx/eslint:lint target" warning during the Angular generator, and restores console.warn', async () => {
+    const warnSpy = jest.spyOn(console, 'warn').mockImplementation(() => {
+      /* captured */
+    });
+    // The preset wraps and restores whatever `console.warn` is when it starts,
+    // i.e. the spy; identity after the run proves the restore.
+    const warnBefore = console.warn;
+    angularAppMock.mockImplementationOnce(
+      (t: Tree, options: { name: string }) => {
+        console.warn(
+          'Generating a target that uses the deprecated `@nx/eslint:lint` executor. The executor will be removed in Nx v24.',
+        );
+        console.warn('some other warning');
+        if (!t.exists('tsconfig.base.json')) {
+          t.write('tsconfig.base.json', JSON.stringify(TSCONFIG_BASE_BASELINE));
+        }
+        t.write(
+          `${options.name}/project.json`,
+          JSON.stringify({ name: options.name, targets: {} }),
+        );
+        t.write(
+          `${options.name}/eslint.config.mjs`,
+          ESLINT_CONFIG_BASELINE.angular,
+        );
+        t.write(
+          `${options.name}/tsconfig.json`,
+          JSON.stringify(ANGULAR_TSCONFIG_BASELINE),
+        );
+        return Promise.resolve(undefined);
+      },
+    );
+
+    await presetGenerator(tree, {
+      name: 'my-workspace',
+      framework: 'angular',
+    });
+
+    const warnings = warnSpy.mock.calls.map((c) => String(c[0]));
+    expect(warnings).toContain('some other warning');
+    expect(warnings.join('\n')).not.toContain('@nx/eslint:lint');
+    expect(console.warn).toBe(warnBefore);
+    warnSpy.mockRestore();
+  });
+
+  it('leaves a lint target that carries options untouched', async () => {
+    seedLintTarget({
+      executor: '@nx/eslint:lint',
+      options: { maxWarnings: 0 },
+    });
+
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'react' });
+
+    expect(readJson(tree, 'workshop-react/project.json').targets.lint).toEqual({
+      executor: '@nx/eslint:lint',
+      options: { maxWarnings: 0 },
+    });
   });
 
   it('adds nx.json targetDefaults.stylelint with cache + the declared inputs, minus allowlists.js', async () => {
@@ -3552,7 +3674,7 @@ describe('preset generator', () => {
       expect(story).not.toContain("from '@storybook/react'");
       expect(preview).not.toContain("from '@storybook/react'");
 
-      const vueTree = createTreeWithEmptyWorkspace();
+      const vueTree = createTreeWithEmptyWorkspace({ formatter: 'none' });
       await presetGenerator(vueTree, {
         name: 'my-workspace',
         framework: 'vue',

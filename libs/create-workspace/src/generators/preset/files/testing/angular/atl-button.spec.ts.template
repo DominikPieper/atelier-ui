@@ -21,7 +21,7 @@ describe('AtlButton', () => {
       imports: [AtlButton],
       componentProperties: { onClick },
     });
-    await fireEvent.click(screen.getByRole('button', { name: 'Click me' }));
+    fireEvent.click(screen.getByRole('button', { name: 'Click me' }));
     expect(onClick).toHaveBeenCalledOnce();
   });
 });

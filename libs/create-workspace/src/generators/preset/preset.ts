@@ -14,6 +14,46 @@ import { readdirSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { PresetGeneratorSchema } from './schema';
 
+// `@nx/angular`'s add-linting hard-codes `addExplicitTargets: true`, so the
+// Angular application generator ALWAYS writes an explicit `@nx/eslint:lint`
+// target — even with `@nx/eslint/plugin` registered — and says so:
+// "Generating a target that uses the deprecated `@nx/eslint:lint` executor …".
+// This preset deletes that target straight afterwards (the plugin infers
+// `lint`), so the warning describes something that never reaches the
+// attendee's workspace; shown during scaffolding it only reads as a defect in
+// the workshop. Only that one message is dropped, only for the duration of
+// the call, and the original `console.warn` is always restored.
+//
+// It patches `console.warn`, not `@nx/devkit`'s `logger`: `ensurePackage`
+// installs `@nx/angular` (and with it `@nx/eslint` and its own `@nx/devkit`)
+// into a separate directory, so the `logger` this file imports is a
+// different object from the one that prints — measured: patching it left the
+// warning in the e2e output. `logger.warn` bottoms out in `console.warn`,
+// which is global; the message arrives wrapped in ANSI colour codes, hence
+// `includes`.
+const ESLINT_EXECUTOR_GENERATING_WARNING =
+  'Generating a target that uses the deprecated `@nx/eslint:lint` executor';
+
+async function withoutEslintExecutorWarning<T>(
+  run: () => Promise<T>,
+): Promise<T> {
+  const originalWarn = console.warn;
+  console.warn = (...args: unknown[]) => {
+    if (
+      typeof args[0] === 'string' &&
+      args[0].includes(ESLINT_EXECUTOR_GENERATING_WARNING)
+    ) {
+      return;
+    }
+    originalWarn.apply(console, args);
+  };
+  try {
+    return await run();
+  } finally {
+    console.warn = originalWarn;
+  }
+}
+
 function readTemplate(relativePath: string): string {
   return readFileSync(join(__dirname, 'files', relativePath), 'utf-8');
 }
@@ -698,6 +738,32 @@ export async function presetGenerator(
 
   const appName = `workshop-${framework}`;
 
+  // Register the inferred-lint plugin BEFORE the application generator runs.
+  // `@nx/eslint`'s lint-project generator checks nx.json for it
+  // (`hasEslintPlugin`): found, it writes NO `lint` target and prints
+  // nothing; absent, it writes an explicit `@nx/eslint:lint` executor target
+  // and warns "Generating a target that uses the deprecated `@nx/eslint:lint`
+  // executor … removed in Nx v24" — and every `nx lint` afterwards warns
+  // again. This is the shape `nx g @nx/eslint:convert-to-inferred` converts
+  // to; `nx lint <app>` / `nx run <app>:lint` keep working (targetName).
+  // The application generators' own `addPlugin` option can't be used instead:
+  // it is hard-wired false (React) or only true for rspack (Angular), and
+  // forcing it would also change how their build/serve targets are emitted.
+  updateJson(tree, 'nx.json', (config) => {
+    config.plugins ??= [];
+    const hasEslintPlugin = config.plugins.some(
+      (p: string | { plugin: string }) =>
+        (typeof p === 'string' ? p : p.plugin) === '@nx/eslint/plugin',
+    );
+    if (!hasEslintPlugin) {
+      config.plugins.push({
+        plugin: '@nx/eslint/plugin',
+        options: { targetName: 'lint' },
+      });
+    }
+    return config;
+  });
+
   if (framework === 'angular') {
     console.log(`\n◇ Generating Angular workshop app…`);
     // NX_VERSION is the version of the nx running this generator, which is the
@@ -718,39 +784,41 @@ export async function presetGenerator(
     const {
       applicationGenerator: angularAppGenerator,
     } = require('@nx/angular/generators');
-    await angularAppGenerator(tree, {
-      name: appName,
-      directory: appName,
-      style: 'css',
-      routing: true,
-      standalone: true,
-      ssr: false,
-      skipTests: true,
-      e2eTestRunner: 'none',
-      skipFormat: true,
-      // Without this, the generator's own linter choice defaults to
-      // `normalizeLinterOption`'s non-interactive fallback: follow an
-      // eslint setup already detected in the tree, or `'none'` if there is
-      // none yet. A single-framework Angular scaffold (the common,
-      // documented case — ADR-0084) starts from a genuinely empty tree, so
-      // that fallback silently produced ZERO eslint.config.mjs and no
-      // eslint devDependency at all — verified by running the real
-      // generator against an empty workspace with this line omitted.
-      // React and Vue below already pass this explicitly; Angular didn't,
-      // which was the actual defect, not merely a posture gap.
-      linter: 'eslint',
-      // Lever 2 (ADR-0140): explicit, not relied-upon-as-default.
-      // `@nx/angular:application`'s own schema already defaults `strict` to
-      // `true` (`normalize-options.js`), and that default is what already
-      // writes `compilerOptions.strict: true` plus the three
-      // `angularCompilerOptions` flags below into `${appName}/tsconfig.json`
-      // today — verified against the real generator's source
-      // (`enable-strict-type-checking.js`) and a real generated tree, not
-      // assumed. Passing it explicitly stops that outcome from depending on
-      // an upstream default this repo does not control; the `updateJson`
-      // backstop below makes it certain either way.
-      strict: true,
-    });
+    await withoutEslintExecutorWarning(() =>
+      angularAppGenerator(tree, {
+        name: appName,
+        directory: appName,
+        style: 'css',
+        routing: true,
+        standalone: true,
+        ssr: false,
+        skipTests: true,
+        e2eTestRunner: 'none',
+        skipFormat: true,
+        // Without this, the generator's own linter choice defaults to
+        // `normalizeLinterOption`'s non-interactive fallback: follow an
+        // eslint setup already detected in the tree, or `'none'` if there is
+        // none yet. A single-framework Angular scaffold (the common,
+        // documented case — ADR-0084) starts from a genuinely empty tree, so
+        // that fallback silently produced ZERO eslint.config.mjs and no
+        // eslint devDependency at all — verified by running the real
+        // generator against an empty workspace with this line omitted.
+        // React and Vue below already pass this explicitly; Angular didn't,
+        // which was the actual defect, not merely a posture gap.
+        linter: 'eslint',
+        // Lever 2 (ADR-0140): explicit, not relied-upon-as-default.
+        // `@nx/angular:application`'s own schema already defaults `strict` to
+        // `true` (`normalize-options.js`), and that default is what already
+        // writes `compilerOptions.strict: true` plus the three
+        // `angularCompilerOptions` flags below into `${appName}/tsconfig.json`
+        // today — verified against the real generator's source
+        // (`enable-strict-type-checking.js`) and a real generated tree, not
+        // assumed. Passing it explicitly stops that outcome from depending on
+        // an upstream default this repo does not control; the `updateJson`
+        // backstop below makes it certain either way.
+        strict: true,
+      }),
+    );
     deps['@atelier-ui/angular'] = componentPackageVersion;
 
     // Lever 2 (ADR-0140) backstop: `angularAppGenerator`'s own `strict: true`
@@ -1054,6 +1122,22 @@ export async function presetGenerator(
     } as Parameters<typeof vueAppGenerator>[1]);
     deps['@atelier-ui/vue'] = componentPackageVersion;
 
+    // @nx/vue writes a `*.vue` module shim typed `ReturnType<typeof
+    // defineComponent>`, which type-aware linting resolves to `any` — so
+    // `createApp(App)` in the generated main.ts and the router's
+    // `component: HomeView` trip `no-unsafe-argument` / `no-unsafe-assignment`
+    // the moment lever 5 (below) actually runs. Replaced with the canonical
+    // `DefineComponent` shim: an SFC import is a component, not `any`.
+    tree.write(
+      `${appName}/src/vue-shims.d.ts`,
+      `declare module '*.vue' {
+  import type { DefineComponent } from 'vue';
+  const component: DefineComponent<object, object, unknown>;
+  export default component;
+}
+`,
+    );
+
     // @nx/vue's own application generator (confirmed by a real run against
     // an in-memory Tree, packed from the exact pinned version — @nx/vue is
     // an optional peer, not installed in this workspace) DOES match `.vue`
@@ -1157,6 +1241,11 @@ export async function presetGenerator(
   // see this branch's comment above for why splitting them fails.
   files: ['**/*.vue'],
   languageOptions: {
+    // The type-checked base config above sets typescript-eslint's parser on
+    // every file it is scoped to, \`.vue\` included — which then fails to parse
+    // any SFC. Put vue-eslint-parser back; it delegates the <script> block to
+    // the TS parser named in \`parserOptions.parser\` below.
+    parser: vue.configs['flat/base'][1].languageOptions.parser,
     parserOptions: {
       parser: await import('@typescript-eslint/parser'),
       projectService: true,
@@ -1355,6 +1444,21 @@ export async function presetGenerator(
   const storybookPort = 6006;
   updateJson(tree, `${appName}/project.json`, (config) => {
     config.targets ??= {};
+    // The application generator writes an explicit `lint` target with the
+    // `@nx/eslint:lint` executor — deprecated, and removed in Nx v24 (every
+    // `nx lint` prints "Run `nx g @nx/eslint:convert-to-inferred`"). The
+    // inferred shape (what that generator produces) is `@nx/eslint/plugin`
+    // registered in nx.json (below) and NO explicit target: the plugin infers
+    // `lint` from this project's own eslint.config.mjs, so `nx lint <app>`
+    // keeps working. Only the bare `{ executor }` entry is dropped; a target
+    // carrying options/configurations is somebody's customisation, left alone.
+    const lint = config.targets['lint'];
+    if (
+      lint?.executor === '@nx/eslint:lint' &&
+      Object.keys(lint).every((k) => k === 'executor')
+    ) {
+      delete config.targets['lint'];
+    }
     config.targets['storybook'] = {
       executor: 'nx:run-commands',
       options: {
@@ -1493,6 +1597,12 @@ export async function presetGenerator(
   // update below is.
   updateJson(tree, 'nx.json', (config) => {
     config.targetDefaults ??= {};
+    // Inferred lint (see the project.json edit above): drop the
+    // `@nx/eslint:lint` targetDefaults entry lint-init writes for the
+    // deprecated executor — nothing refers to that executor any more, and
+    // the plugin (registered before the application generator ran, above)
+    // sets cache + inputs on the target it infers.
+    delete config.targetDefaults['@nx/eslint:lint'];
     config.targetDefaults['stylelint'] = {
       cache: true,
       inputs: [

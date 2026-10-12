@@ -206,6 +206,21 @@ noted:
    application generator already adds it independently, confirmed against a real
    generated tree — this is a safety net, matching this file's existing
    `TYPESCRIPT_VERSION` convention, not the primary source).
+   **Corrected 2026-10-12**: for `.ts`/`.tsx` this lever never took effect in a
+   generated workspace. The generated `lint` target used the `@nx/eslint:lint`
+   executor, which runs ESLint from the workspace root, so a block scoped to `src/**`
+   matched no file (the files sit at `workshop-<fw>/src/**`). Shown by experiment
+   during the Nx 23.3.0 update: `await 1` in a `.ts` file passed `nx lint` under the
+   executor. The preset now registers `@nx/eslint/plugin` and drops the explicit
+   target; the inferred target runs `eslint .` from the project root, so the blocks
+   match. Switching them on found three real defects, fixed in the same change: an
+   `await` on Angular Testing Library's synchronous `fireEvent.click` in the example
+   spec, the type-checked base config replacing vue-eslint-parser on `.vue` files,
+   and `@nx/vue`'s `any`-typed `*.vue` shim (replaced by a `DefineComponent` shim).
+   The "lint clean" claim under Consequences held only because these rules were not
+   running under `nx lint`; likewise its `npm run lint` timings. The raw `npx eslint .`
+   timings ran from inside the app directory, where the blocks do match; that
+   measurement was not repeated.
 
 Also: `libs/create-atelier-ui-workspace/e2e/cli.e2e.mjs` switches its unit-test step
 from `npx nx test workshop-${framework}` to `npm test` (matching its neighbours, which
