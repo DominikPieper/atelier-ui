@@ -52,6 +52,10 @@ come first. Ranked:
       claims-script port probe.
 - [x] R-189 lint stack trace (`tools/eslint-rules/tsconfig.json` ENOENT) in the generated
       Angular workspace — small, next.
+- [x] Nx 23.2.0 → 23.3.0 in repo and scaffold (no migrations). Generated workspaces use
+      inferred lint (`@nx/eslint/plugin`), no `@nx/eslint:lint` warning. That switched on the
+      type-aware lint blocks ADR-0140 lever 5 meant to add (corrected there); three scaffold
+      defects fixed. `check:all` and scaffold e2e green. R-192 fixed; R-190, R-191 open.
 - [ ] Human part of R-040: kata, Day 2 and block timing on a non-author machine, per
       `tasks/schulung-dry-run-kit.md`.
 - [x] R-176/R-177 (owner: Figma moves): Button master aligned with code; Card tracking
