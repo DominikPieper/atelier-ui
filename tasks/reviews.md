@@ -175,6 +175,16 @@ Every item the triage could not judge without you. Each is a question; answering
 
 Matters only if the course or a published package still runs on the Atelier library before P6 removes it. Each item says what before P6 needs it.
 
+**Live again since 2026-10-12:** the first cohort (end of November 2026) runs on this library, Angular only (ADR-0165 deferred). R-176–R-182 are `OBSOLETE-CDS` rows of `tasks/archive/review-triage-2026-10-11.md` revived for that cohort; the other 117 stay closed.
+
+- [ ] **R-176** AtlCard header letter-spacing: master 0%, code `--ui-letter-spacing-tight` (-0.01em) — the kata's parity step on "Settings / Card" (936-2954) shows it; decide which side moves. Sources: triage B #47, `libs/styles/src/card/atl-card.css:79`, `tasks/todo.md:1668` (2026-10-12)
+- [ ] **R-177** AtlButton vs master: code sets both `disabled` and `aria-disabled` (master text says not `aria-disabled`); primary active inset shadow and outline disabled fill differ — kata Save button. Master side not queried. Sources: triage B #86, `libs/angular/src/lib/button/atl-button.ts:46-47`, `libs/styles/src/button/atl-button.css:164` (2026-10-12)
+- [ ] **R-178** AtlButton sets no `aria-busy` while `loading` — distinct from R-135. Sources: triage E #71 (2026-10-12)
+- [ ] **R-179** AtlSelect `name` input declared, never bound, untested — listed in the props table. Sources: triage C #20, `libs/angular/src/lib/select/atl-select.ts:208` (2026-10-12)
+- [ ] **R-180** Breadcrumbs stories link the dead Figma node `55-141` in the Design tab (all three frameworks). Sources: triage B #49, `libs/angular/src/lib/breadcrumbs/atl-breadcrumbs.stories.ts:22` (2026-10-12)
+- [ ] **R-181** Dialog, chat and drawer have no built-in close button; with backdrop click suppressed, Escape is the only exit — touch users. Not re-verified beyond `atl-dialog.ts`. Sources: triage A #33 (2026-10-12)
+- [ ] **R-182** `patterns.astro:49` "Composition wins three things an LLM cannot" — misleading, JSX-framed on an Angular course; low priority. Sources: triage D #55 (2026-10-12)
+
 - [ ] **R-131** AtlProgress `aria-progressbar-name` waived in all libs — before P6: only if docs demos or the course still show AtlProgress; owner: later. Sources: `tasks/todo.md:68`, `tasks/todo.md:1280` (2026-09-10)
 - [ ] **R-132** Docs-review backlog L1-L4 + CodeBlock scroller (Select label, hit area, Tabs pills, scroll focus) — before P6: docs demos use Atl until P5. Sources: `tasks/todo.md:1711-1722`, `tasks/archive/reviews/docs-ux-review-2026-09-02.md:67-74` (2026-09)
 - [ ] **R-133** AtlRadioGroup has no accessible-name mechanism — before P6: real a11y gap while the course uses Atl; check the CDS radio group. Sources: `tasks/todo.md:926` (2026-09-12)

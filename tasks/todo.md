@@ -19,6 +19,26 @@ closed by the review triage carry a `_(closed 2026-10-11 …)_` note.
 
 Ranked; each carries why it's worth doing next rather than later.
 
+### First cohort, end of November 2026 (decided 2026-10-12)
+
+Owner, 2026-10-12: the course runs at the end of November 2026, on Atelier's own library, Angular
+only; the CDS switch (ADR-0165) waits until after it. Consequence: the `## Until P6` section of
+`tasks/reviews.md` is live again for Angular, and course blockers that do not depend on the CDS
+come first. Ranked:
+
+1. **Course blockers (CDS-independent):** R-040 timed rehearsal on a non-author machine (with the
+   R-170 `cli-e2e` run), R-043 unverified participant steps, R-044 pre-workshop mail / setup PDF,
+   R-049 trainer kit, R-041 agenda gaps, R-042 recovery path — now against the Atl kata, not the
+   CDS one.
+2. **Atl defects participants see in Angular:** R-134 danger focus ring, R-133 RadioGroup name,
+   R-135 button loading focus, R-145 /accessibility claims, R-144 Angular toast snippet, R-146
+   React-shaped `llms-full.txt`, R-148 token collection name; then R-137–R-143 by demo exposure.
+3. **Revived triage closures:** `OBSOLETE-CDS` rows of
+   `tasks/archive/review-triage-2026-10-11.md` that an Angular cohort on Atelier hits again —
+   7 of 124 revived on 2026-10-12 as R-176–R-182 (R-176/R-177 touch the kata's Card and Button
+   parity, so they rank first); none blocks the course.
+4. Everything else in `tasks/reviews.md` that names the CDS waits for the resumed migration.
+
 ### Course content review follow-up (2026-10-10)
 
 Source: `tasks/archive/reviews/content-review-2026-10-10.md` (§ numbers below refer to it). Owner, 2026-10-10:
@@ -2031,6 +2051,10 @@ The ones the owner and I will walk through together.
 
 Decided 2026-10-09. Spike: `plan/research/cds-substrate-spike-2026-10-09.md`. Pushes, the CDS PR
 and npm deprecations each need the owner's explicit go.
+
+**Paused 2026-10-12 (owner) until after the first cohort, end of November 2026.** That cohort runs
+on Atelier's library (Angular); see "First cohort, end of November 2026" under Near-term work.
+Nothing below proceeds until then, P1.5 included; P6 is off the table before the course.
 
 - [x] P0a ADR-0165 in Atelier.
 - [ ] P0b CDS ADR superseding CDS-ADR-0015 (draft, German, CDS format:

@@ -14,6 +14,12 @@ sources:
 
 Accepted. Recorded at decision time. Migration is planned in `tasks/todo.md` and not yet done.
 
+**Deferred 2026-10-12.** The decision stands; its schedule moves. The first cohort runs at the end
+of November 2026, and the migration (P1.5 onward) cannot finish before it without squeezing the
+course preparation. That cohort runs on Atelier's own library, Angular only; the migration resumes
+after it. Until then nothing in P6 happens: the libraries, the hosted Storybook MCP endpoints and
+the `@atelier-ui/*` packages stay. The live plan is in `tasks/todo.md`.
+
 ## Context
 
 Atelier built its own component library (Angular, React, Vue behind `libs/spec`, a Figma file,
