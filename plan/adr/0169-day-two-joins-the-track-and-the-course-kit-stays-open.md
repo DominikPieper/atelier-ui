@@ -65,3 +65,9 @@ still hard to find. Two answers came out of the code, not out of opinion:
 - Weakest point: the Day 2 block summaries on `/build-your-own` are a condensation of the
   `/schulung` Day 2 data, not shared data. Only the done checklist is single-sourced; block
   times and "done when" lines can drift between the two pages, and no gate compares them.
+
+**Corrected 2026-10-13:** the Course kit holds seven entries, not five. "When you are stuck"
+(`/prompts#stuck`, R-048) and the printable `/cheat-sheet` (R-049) joined it in the same
+course-prep pass; both are lookups a participant needs mid-exercise, the criterion §4 used.
+The cheat sheet, like the briefs, is a page of its own and highlights; the stuck entry is a
+hash entry and does not.

@@ -26,6 +26,7 @@ const FLAT_PAGES = new Set<string>([
   'accessibility',
   'agent-skills',
   'build-your-own',
+  'cheat-sheet',
   'claude-design',
   'claude-md',
   'design-principles',

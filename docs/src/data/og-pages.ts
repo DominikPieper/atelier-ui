@@ -71,6 +71,11 @@ export const OG_PAGES = {
     description:
       'Is your Figma file ready for an agent? A checklist with how to check each point and how to fix a master that fails.',
   },
+  'cheat-sheet': {
+    title: 'Cheat Sheet',
+    description:
+      'One printable page for the course: MCP tool names, Angular paths and commands, the core loop and the failures you will meet, each with its fix.',
+  },
   'first-component': {
     title: 'First Component (kata)',
     description:

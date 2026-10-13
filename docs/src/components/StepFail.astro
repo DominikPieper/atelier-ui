@@ -1,0 +1,87 @@
+---
+// "If this step fails" — the recovery block under one kata step (R-042).
+// The likely failures are one-liners (inline `code`, **bold** and
+// [text](/path) links), each pointing at the Troubleshooting entry that holds the full
+// fix; `recovery` is the ONE thing to copy when the step is red. The shared
+// rescue path is linked, never restated.
+import { Code } from 'astro-expressive-code/components';
+import { inlineMd } from '../lib/inline-md';
+
+interface Props {
+  /** Likely failures, most likely first. Inline markdown allowed. */
+  items: string[];
+  /** The single copy-paste recovery prompt or command. */
+  recovery: string;
+  /** Code-block language: `text` for a prompt, `shell` for a command. */
+  lang?: 'text' | 'shell';
+  /** Code-block title, e.g. "recovery prompt". */
+  title?: string;
+}
+
+// inlineMd covers `code` and **bold**; items also carry [text](/path) links.
+const md = (s: string) =>
+  inlineMd(s).replace(
+    /\[([^\]]+)\]\((\/[^)]*)\)/g,
+    '<a href="$2" class="docs-link-primary">$1</a>',
+  );
+
+const {
+  items,
+  recovery,
+  lang = 'text',
+  title = 'recovery prompt',
+} = Astro.props;
+---
+
+<details class="step-fail">
+  <summary>If this step fails</summary>
+  <div class="step-fail-body">
+    <ul class="step-fail-list">
+      {items.map((item) => (
+        <li set:html={md(item)} />
+      ))}
+    </ul>
+    <Code code={recovery} lang={lang} wrap title={title} />
+    <p class="step-fail-more">
+      Still red? Use the
+      <a href="/troubleshooting#still-red" class="docs-link-primary"
+        >rescue path</a
+      >, or look the symptom up in
+      <a href="/troubleshooting" class="docs-link-primary">Troubleshooting</a>.
+    </p>
+  </div>
+</details>
+
+<style>
+  .step-fail {
+    margin-top: 0.75rem;
+    border: 1px solid var(--ui-color-border);
+    border-radius: var(--ui-radius-md);
+    background: var(--ui-color-surface-raised);
+  }
+  .step-fail > summary {
+    cursor: pointer;
+    padding: 0.55rem 0.9rem;
+    font-size: var(--ui-font-size-sm);
+    font-weight: 600;
+    color: var(--ui-color-text);
+  }
+  .step-fail-body {
+    padding: 0 0.9rem 0.8rem;
+    font-size: var(--ui-font-size-md);
+    line-height: 1.6;
+    color: var(--ui-color-text);
+  }
+  .step-fail-list {
+    margin: 0 0 0.75rem;
+    padding-left: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.35rem;
+  }
+  .step-fail-more {
+    margin: 0.6rem 0 0;
+    font-size: var(--ui-font-size-sm);
+    color: var(--ui-color-text-muted);
+  }
+</style>

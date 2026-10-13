@@ -1,10 +1,12 @@
 ---
 import BaseLayout from '../layouts/BaseLayout.astro';
 import { Code } from 'astro-expressive-code/components';
+import Callout from '../components/Callout.astro';
 import FwSwitcher from '../components/FwSwitcher.astro';
 import HelpFooter from '../components/HelpFooter.astro';
 import Icon from '../components/Icon.astro';
 import PageHero from '../components/PageHero.astro';
+import StepFail from '../components/StepFail.astro';
 import TrackNav from '../components/TrackNav.astro';
 
 const FIGMA_URL =
@@ -75,6 +77,130 @@ const PARITY_PROMPT = `Run figma_check_design_parity on node-id 936-2954 against
 the SettingsCard component I just generated. For each discrepancy, say whether
 the code, the Figma master or the contract should change, and why. Fix only the
 code ones.`;
+
+// "If this step fails" (R-042): per step, the likely failures and ONE recovery
+// to copy. The full fix for each lives in /troubleshooting; only the symptom
+// and the anchor are repeated here. Every tool name below is one the kata
+// prompts already use, or one named in AGENTS.md.
+const FAIL: Record<
+  number,
+  { items: string[]; recovery: string; lang?: 'text' | 'shell' }
+> = {
+  1: {
+    items: [
+      'The link opens the file but nothing is focused: the node id does not resolve in your session. See [the node-id entry](/troubleshooting#figma-node-id-not-found).',
+      'You are in a duplicate of the file: the ids in a copy are new. Read them from your own file, not from this page.',
+    ],
+    recovery: `Call figma_get_status and tell me which Figma file is connected.
+Then call figma_get_selection (I have the Settings / Card frame selected)
+and give me the node id that is live in this session.`,
+  },
+  2: {
+    items: [
+      '`npx nx show projects` lists no `workshop-*` entry: you are not in the scaffolded workspace, or in the wrong directory. See [Cannot find project](/troubleshooting#nx-project-not-found).',
+      'The switcher still shows another framework: pick yours again, every code block follows it.',
+    ],
+    recovery: 'npx nx show projects',
+    lang: 'shell',
+  },
+  4: {
+    items: [
+      'The dev server does not start or the page is blank: read the first error in the terminal, not the last.',
+      'Still the Nx welcome page: nothing imports your component yet. The mount instruction is under Step 5.',
+      'Port 4200 is taken: see [port in use](/troubleshooting#port-in-use) (`npm start -- --port 4300` is the quick way out).',
+    ],
+    recovery: `\`npm start\` fails, or the page is blank. This is the first error:
+
+<paste the first error here>
+
+Fix only the cause of that error in the file you generated. Do not change
+anything else, and tell me which line you changed.`,
+  },
+  5: {
+    items: [
+      'Spacing or colours look off: a literal value slipped in. Search the file for `#` and `px` before you run the parity check.',
+      'A toggle or input renders unstyled: a prop name was invented. Compare against `docs-show`, not against memory.',
+    ],
+    recovery: `Open the component file you generated. List every hex colour and every
+pixel value in it. For each one, replace it with the --ui-* custom property
+from boundVariables of node 936-2954. Show me the list before and after.`,
+  },
+  6: {
+    items: [
+      '`check:contracts` prints `[NO-MASTER]`: a warning, not a failure. Your component has no master in the Figma snapshot yet. Codes: [the finding codes](/design-to-code#finding-codes).',
+      '`figma_check_design_parity` times out or reports no bridge: [bridge not connected](/troubleshooting#figma-bridge-plugin-not-connected).',
+      '`check:stories` is red: read the story name and the axe rule in the output; a11y findings are explained in [accessibility in the loop](/a11y-workflow#a11y-in-the-loop).',
+      'The agent used a prop the library does not have: check it with `docs-show` before you believe it.',
+    ],
+    recovery: `npm run check:contracts > check.out 2>&1; echo $?
+
+# Then paste to Claude: the exit code, and "read check.out and fix the first error".
+# More on how to report a red gate: /prompts#stuck`,
+    lang: 'shell',
+  },
+  7: {
+    items: [
+      'You cannot tell which side a discrepancy belongs to: ask for the `side` of each action item before you apply anything.',
+      'The report is empty and you do not trust it: it samples one variant. See [what a report does not show](/design-to-code#parity-report).',
+    ],
+    recovery: `Take the parity report above. For each discrepancy, label it: fix the code,
+fix Figma, or record a deliberate mismatch (figmaOnly, codeOnly or axisMap).
+Give a one-line reason per label. Apply only the "fix the code" ones.`,
+  },
+};
+// Bridge exercise (R-042): the step between composing (this kata) and building
+// a new component (Day 2). Paths follow SCAFFOLD above; the contract and story
+// names follow the scaffold's own example (`<app>/src/contracts/button.contract.ts`,
+// `<app>/src/atl-button.stories.*`).
+const BRIDGE: Record<Framework, { stories: string; contract: string }> = {
+  Angular: {
+    stories: 'workshop-angular/src/app/components/settings-card.stories.ts',
+    contract: 'workshop-angular/src/contracts/settings-card.contract.ts',
+  },
+  React: {
+    stories: 'workshop-react/src/components/SettingsCard.stories.tsx',
+    contract: 'workshop-react/src/contracts/settings-card.contract.ts',
+  },
+  Vue: {
+    stories: 'workshop-vue/src/components/SettingsCard.stories.ts',
+    contract: 'workshop-vue/src/contracts/settings-card.contract.ts',
+  },
+};
+
+const bridgePrompt = (
+  fw: Framework,
+) => `Add a variant to my SettingsCard (${SCAFFOLD[fw].file}).
+
+Axis: density. Values: 'comfortable' (the default, today's look) and
+'compact'. Declare it as a string-literal union type with a JSDoc line that
+says what changes. compact uses --ui-spacing-3 where comfortable uses
+--ui-spacing-4. No hex colours, no pixel values.
+
+Then, in the same change:
+1. ${BRIDGE[fw].stories}: one story per density value, args-based, copied
+   from the pattern in the AtlButton example story that ships in the
+   workspace (src/atl-button.stories.*). One play function with a real
+   assertion.
+2. ${BRIDGE[fw].contract}: copy the shape of contracts/button.contract.ts.
+   component 'SettingsCard', figmaNodeId '936:2954'. density is not drawn in
+   the Figma master, so record it as a codeOnly entry with a real reason.
+3. Verify every prop you use with docs-show on storybook-${fw.toLowerCase()}.`;
+// Step 3 depends on the framework (the storybook-* MCP name), so it is a
+// function. Kept in the frontmatter: Astro's parser mishandles template
+// literals with escaped backticks inside a JSX attribute.
+const step3Fail = (fw: Framework) => {
+  const sb = `storybook-${fw.toLowerCase()}`;
+  return {
+    items: [
+      'Figma tools fail with "bridge not connected": open the Figma Desktop Bridge plugin and keep it open. See [bridge not connected](/troubleshooting#figma-bridge-plugin-not-connected).',
+      `Claude does not list \`${sb}\`: restart Claude Code from the directory with \`.mcp.json\`, then check \`/mcp\`. See [MCP config not picked up](/troubleshooting#mcp-not-loaded).`,
+      'The agent invented a prop, or wrote a hex colour or a pixel value: it did not read the docs or `boundVariables`. Fix: check every prop with `docs-show`.',
+    ],
+    recovery: `Check the component you just wrote. First call figma_get_status; if the bridge is not connected, stop and tell me.
+Then call ${sb} docs-show for AtlCard, AtlInput, AtlToggle and AtlButton, and remove every prop that docs-show does not list.
+Replace every hex colour and pixel value with the --ui-* name from boundVariables of node 936-2954.`,
+  };
+};
 ---
 
 <BaseLayout
@@ -172,6 +298,11 @@ code ones.`;
           >a filled handoff example</a
         >.
       </p>
+      <StepFail
+        items={FAIL[1].items}
+        recovery={FAIL[1].recovery}
+        lang={FAIL[1].lang}
+      />
     </section>
 
     <!-- Step 2 -->
@@ -203,6 +334,11 @@ code ones.`;
         <a href="/tutorial" class="docs-link-primary">/tutorial</a>'s "Run it"
         section for that environment's paths.)
       </p>
+      <StepFail
+        items={FAIL[2].items}
+        recovery={FAIL[2].recovery}
+        lang={FAIL[2].lang}
+      />
     </section>
 
     <!-- Step 3 -->
@@ -258,6 +394,12 @@ code ones.`;
         <code>#ffffff</code> or <code>24px</code> anywhere, say so and have it
         redo that line from <code>boundVariables</code>.
       </p>
+      {FRAMEWORKS.map((fw, i) => <div data-fw-panel={fw} hidden={i !== 0}>
+        <StepFail
+          items={step3Fail(fw).items}
+          recovery={step3Fail(fw).recovery}
+        />
+      </div>)}
     </section>
 
     <!-- Step 4 -->
@@ -304,6 +446,11 @@ code ones.`;
           </li>
         </ol>
       </div>)}
+      <StepFail
+        items={FAIL[4].items}
+        recovery={FAIL[4].recovery}
+        lang={FAIL[4].lang}
+      />
     </section>
 
     <!-- Step 5 -->
@@ -334,6 +481,11 @@ code ones.`;
         If the spacing or colors look off — that's a token drift. Run the parity
         check below.
       </p>
+      <StepFail
+        items={FAIL[5].items}
+        recovery={FAIL[5].recovery}
+        lang={FAIL[5].lang}
+      />
     </section>
 
     <!-- Step 6 -->
@@ -375,6 +527,11 @@ code ones.`;
         code-side entry, then re-run the check; a padding off by one step or a
         colour that resolved to a literal is not something to eyeball away.
       </p>
+      <StepFail
+        items={FAIL[6].items}
+        recovery={FAIL[6].recovery}
+        lang={FAIL[6].lang}
+      />
     </section>
 
     <!-- Step 7 -->
@@ -404,6 +561,101 @@ code ones.`;
         <strong style="color: var(--ui-color-text)">Checkpoint:</strong> every
         discrepancy has one of the three labels and a one-line reason, and you
         can name one thing the report did not check.
+      </p>
+      <StepFail
+        items={FAIL[7].items}
+        recovery={FAIL[7].recovery}
+        lang={FAIL[7].lang}
+      />
+    </section>
+
+    <!-- Bridge: compose (this kata) -> build new (Day 2) -->
+    <section class="kata-bridge" id="bridge" aria-labelledby="bridge-title">
+      <p class="kata-bridge-eyebrow">Bridge to Day 2 · ~20 min · optional</p>
+      <h2 id="bridge-title" class="kata-bridge-title">
+        Add a variant to a component you already have
+      </h2>
+      <p class="kata-step-desc">
+        You composed a component from existing parts. Day 2 you build one from a
+        brief. The step in between is the one you will do most in real work:
+        <strong style="color: var(--ui-color-text)"
+          >change an existing component and keep its claims true</strong
+        >: the prop, a story per value, and a contract entry. You do it on your
+        own SettingsCard, in your workspace; the library's own components live
+        in the package and are not yours to edit.
+      </p>
+      <ol class="kata-bridge-steps">
+        <li>
+          <strong>Write the claim first.</strong> One sentence: axis
+          <code>density</code>, values <code>comfortable</code> (default) and
+          <code>compact</code>, and what changes (the card's padding and gap,
+          one step smaller). If you cannot say it in one sentence, the variant
+          is not ready.
+        </li>
+        <li>
+          <strong>Prompt the whole change at once.</strong> Component, stories
+          and contract belong together; a variant without a story is a claim
+          nothing checks.
+          {FRAMEWORKS.map((fw, i) => <div data-fw-panel={fw} hidden={i !== 0}>
+            <Code
+              code={bridgePrompt(fw)}
+              lang="text"
+              wrap
+              title={`bridge prompt — paste into Claude Code (${fw})`}
+            />
+          </div>)}
+        </li>
+        <li>
+          <strong>Look at it.</strong> <code>npm run storybook</code> starts the
+          workspace's Storybook; open the URL it prints. Both stories should
+          render, and compact should be visibly tighter.
+        </li>
+        <li>
+          <strong>Run the gates.</strong> <code>npm run check:contracts</code>,
+          then <code>npm run check:stories</code> (renders every story in
+          Chromium, runs the <code>play</code>, runs axe). Without a Figma
+          master for SettingsCard in your snapshot, <code>check:contracts</code>
+          reports
+          <a href="/design-to-code#finding-codes" class="docs-link-primary"
+            ><code>[NO-MASTER]</code></a
+          >
+          as a warning: that is expected here, and the contract file is ready
+          for the day a master exists. Any error is real: paste it back, see
+          below.
+        </li>
+        <li>
+          <strong>Name the weak point.</strong> Which of your claims does no
+          gate check? (Hint: whether compact looks right is a judgement, not an
+          assertion.)
+        </li>
+      </ol>
+      <StepFail
+        items={[
+          'The agent invents a prop or an AtlCard variant: check it with `docs-show` and have it remove what the docs do not list.',
+          "No story appears in Storybook: the file must sit under your app's `src/` and end in `.stories.ts` (`.tsx` for React), and its `meta.component` must point at SettingsCard.",
+          '`check:contracts` reports an error you do not recognise: look the code up in [the finding codes](/design-to-code#finding-codes).',
+          '`check:stories` is red on a story you just wrote: the `play` asserts something the story does not render. Read the failing story name in the output.',
+        ]}
+        recovery={`npm run check:stories > check.out 2>&1; echo $?
+
+# Then paste to Claude: the exit code, and "read check.out and fix the first failing story".
+# How to report a red gate: /prompts#stuck`}
+        lang="shell"
+      />
+      <Callout tone="note" title="In a clone of the atelier repo">
+        <p>
+          The same change is wider there: the component in
+          <code>libs/angular/src/lib/&lt;name&gt;/</code>, its contract in
+          <code>libs/spec/src/contracts/</code>, and
+          <code>libs/spec/src/index.ts</code> as the join key that
+          <code>check:variants</code> and <code>check:props</code> read. That is
+          maintaining the library, not this course.
+        </p>
+      </Callout>
+      <p class="kata-step-desc" style="margin-top: 0.6rem">
+        <strong style="color: var(--ui-color-text)">Done when</strong> both
+        density stories render, <code>check:stories</code> exits 0, and
+        <code>check:contracts</code> shows no error.
       </p>
     </section>
 
@@ -464,6 +716,35 @@ code ones.`;
 </BaseLayout>
 
 <style>
+  .kata-bridge {
+    margin-top: 2.5rem;
+    padding: 1.25rem;
+    border: 1px dashed var(--ui-color-border);
+    border-radius: var(--ui-radius-md);
+  }
+  .kata-bridge-eyebrow {
+    margin: 0 0 0.35rem;
+    font-size: var(--ui-font-size-xs);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ui-color-text-muted);
+  }
+  .kata-bridge-title {
+    margin: 0 0 0.75rem;
+    font-size: var(--ui-font-size-xl);
+    font-weight: 700;
+    color: var(--ui-color-text);
+  }
+  .kata-bridge-steps {
+    margin: 0.75rem 0;
+    padding-left: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+    line-height: 1.6;
+    color: var(--ui-color-text);
+  }
   .kata-why {
     margin-top: 1rem;
     border: 1px solid var(--ui-color-border);

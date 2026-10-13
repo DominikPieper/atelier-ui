@@ -31,6 +31,21 @@ function fwNote(fw: Fw): string {
   }[fw];
 }
 
+// "When you are stuck" (R-048): what to paste, when to stop, when to call the
+// trainer. The gate convention is AGENTS.md's: redirect to a file, print the
+// exit code, never pipe.
+const STUCK_COMMAND = `npm run check:contracts > check.out 2>&1; echo $?`;
+const STUCK_REPORT = `A gate is red. Help me find the cause, not just a patch.
+
+Ran:       npm run check:contracts > check.out 2>&1; echo $?
+Exit code: 1
+Output:    check.out (read it; the first error is the one that matters)
+Expected:  exit 0, no [AXIS] or [COVERAGE] finding
+Changed:   since the last green run I only added the density prop and its stories
+
+Before you change anything, tell me what you think the cause is and what
+would prove you wrong.`;
+
 interface Card {
   /** Optional stable anchor for the card. */
   id?: string;
@@ -209,6 +224,7 @@ const rubricHtml = (s: string) => s.replace(/`([^`]+)`/g, '<code>$1</code>');
       label: section.title,
     })),
     { id: 'rubric', label: 'Prompt rubric' },
+    { id: 'stuck', label: 'When you are stuck' },
   ]}
 >
   <div class="docs-inline-page">
@@ -462,6 +478,166 @@ const rubricHtml = (s: string) => s.replace(/`([^`]+)`/g, '<code>$1</code>');
         When a revision is needed, the failed check is the reason you state in
         Day 2 Block 03 of the training.
       </p>
+    </div>
+
+    <div id="stuck" style="margin-bottom: 2.5rem">
+      <h2
+        style="
+          margin: 0 0 0.75rem;
+          font-size: var(--ui-font-size-2xl);
+          font-weight: 700;
+          color: var(--ui-color-text);
+          letter-spacing: -0.02em;
+        "
+      >
+        When you are stuck: how to ask Claude
+      </h2>
+      <p
+        style="
+          margin: 0 0 1rem;
+          color: var(--ui-color-text-muted);
+          line-height: 1.6;
+        "
+      >
+        Claude cannot see your terminal or your screen. A report that says "it
+        does not work" gets a guess; a report with the four things below gets a
+        diagnosis.
+      </p>
+      <h3
+        style="
+          margin: 0 0 0.5rem;
+          font-size: var(--ui-font-size-lg);
+          font-weight: 600;
+          color: var(--ui-color-text);
+        "
+      >
+        Paste these four things
+      </h3>
+      <ol
+        style="
+          margin: 0 0 1rem;
+          padding-left: 1.25rem;
+          display: flex;
+          flex-direction: column;
+          gap: 0.5rem;
+          color: var(--ui-color-text);
+          line-height: 1.6;
+        "
+      >
+        <li>
+          <strong>The exact error.</strong> The first error, copied, not retyped
+          and not summarised. The last line of a long output is usually a
+          consequence.
+        </li>
+        <li>
+          <strong>The gate, its exit code and its output file.</strong> Run it
+          as below and read the file afterwards. Piping into <code>head</code>
+          or <code>grep</code> reports the pipe's exit code, which is always
+          <code>0</code>, so a red gate looks green.
+        </li>
+        <li>
+          <strong>What you expected.</strong> One line: "exit 0", "the compact
+          card is tighter", "no <code>[AXIS]</code> finding".
+        </li>
+        <li>
+          <strong>What you ran, and what changed.</strong> The commands in
+          order, and the last thing that was green before it broke.
+        </li>
+      </ol>
+      <Code
+        code={STUCK_COMMAND}
+        lang="shell"
+        title="run a gate, keep its result"
+      />
+      <Code
+        code={STUCK_REPORT}
+        lang="text"
+        wrap
+        title="a stuck report — fill in and paste"
+      />
+      <h3
+        style="
+          margin: 1.25rem 0 0.5rem;
+          font-size: var(--ui-font-size-lg);
+          font-weight: 600;
+          color: var(--ui-color-text);
+        "
+      >
+        Stop and re-plan when
+      </h3>
+      <ul
+        style="
+          margin: 0 0 1rem;
+          padding-left: 1.25rem;
+          display: flex;
+          flex-direction: column;
+          gap: 0.4rem;
+          color: var(--ui-color-text);
+          line-height: 1.6;
+        "
+      >
+        <li>
+          Two fixes in a row have not moved the same error. A third attempt
+          shares the first two attempts' mistake. Ask: "Drop your hypothesis.
+          What else could produce this exact error?"
+        </li>
+        <li>
+          A fix turns a different gate red. You are moving the problem, not
+          solving it.
+        </li>
+        <li>
+          Claude edits files you did not ask about. Say so, and ask it to revert
+          to the last green state and change only the named file.
+        </li>
+        <li>
+          You cannot say in one sentence what the step is supposed to produce.
+          Re-read the step, or your handoff document, before you prompt again.
+        </li>
+      </ul>
+      <h3
+        style="
+          margin: 1.25rem 0 0.5rem;
+          font-size: var(--ui-font-size-lg);
+          font-weight: 600;
+          color: var(--ui-color-text);
+        "
+      >
+        Call the trainer when
+      </h3>
+      <ul
+        style="
+          margin: 0 0 1rem;
+          padding-left: 1.25rem;
+          display: flex;
+          flex-direction: column;
+          gap: 0.4rem;
+          color: var(--ui-color-text);
+          line-height: 1.6;
+        "
+      >
+        <li>
+          Setup is still red after the
+          <a href="/troubleshooting#still-red" class="docs-link-primary"
+            >rescue path</a
+          >. Nobody continues red.
+        </li>
+        <li>
+          You re-planned once and the same error is back, or you have been on
+          one step longer than its time box.
+        </li>
+        <li>
+          The error is in something you did not write: the MCP server, the Figma
+          file, the bridge. Look it up in
+          <a href="/troubleshooting" class="docs-link-primary"
+            >Troubleshooting</a
+          >
+          first; if it is not there, that is the trainer's call.
+        </li>
+        <li>
+          Anything would change the shared workshop Figma file rather than your
+          own copy.
+        </li>
+      </ul>
     </div>
   </div>
 </BaseLayout>

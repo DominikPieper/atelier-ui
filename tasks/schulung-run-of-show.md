@@ -1,0 +1,320 @@
+# Schulung Run-of-Show
+
+_Written 2026-10-13. Trainer material, not participant-facing._
+
+**What this is.** The minute-level script for both days of the 2-day course
+(first cohort end of November 2026, Angular). The agenda itself is
+`docs/src/pages/schulung.astro` (`/schulung`); block names, block times and
+"done when" below are copied from it and **must be re-checked against it** if the
+page changes. Sub-times inside a block are this document's proposal (the page gives
+only block totals). Prompts are not repeated: they live in
+`tasks/schulung-golden-prompts.md` and are linked by § number
+([golden prompts](schulung-golden-prompts.md)). Live demos are scripted in
+`tasks/schulung-demo-scripts.md` (`D-x` ids below). Rehearsal checks are in
+`tasks/schulung-dry-run-kit.md`.
+
+**Out of scope here:** provisioning, mail, feedback form, retro.
+
+**Environment (the participant's, ADR-0137):** one Angular workspace from
+`npx create-atelier-ui-workspace`. Storybook on `localhost:6006`
+(`npm run storybook`), app on `localhost:4200` (`nx serve workshop-<fw>`). The Atelier
+clone (Storybook ports 4400 Angular / 4401 React / 4402 Vue) is the trainer's own
+machine, for demos only.
+
+## How to read the tables
+
+- **Checkpoint** = a thing you can see on a screen or in an exit code, not a feeling.
+  Ids are `D<day>B<block>-C<n>`. Poll with a show of hands ("green / red") or walk
+  the room; count red seats.
+- **Trainer screen** = what is projected.
+- **Fallback** = what you do if the row fails live.
+- A gate's result is its **exit code**. Never accept "it printed fine".
+- Time arithmetic: every block's rows sum to the block total on `/schulung`
+  (check line under each table).
+
+## Day frame (from `/schulung`: 09:00–17:30, 60 min lunch, 2× 15 min coffee, 10 min buffer)
+
+| Gap    | Day 1       | Day 2       | Use                                                       |
+| ------ | ----------- | ----------- | --------------------------------------------------------- |
+| Coffee | 10:45–11:00 | 11:00–11:15 | Rescue seats from the block before; reset trainer screen  |
+| Lunch  | 12:15–13:15 | 12:30–13:30 | Trainer fixes red setups (Day 1 rescue path)              |
+| Coffee | 14:30–14:45 | 15:00–15:15 | Day 1: pre-generate artboards if the appendix demo is run |
+| Buffer | 16:00–16:10 | 16:30–16:40 | Absorbs overrun. Do not spend it in advance               |
+
+Net per day: 410 min = 6 h 50 min (matches the page).
+
+---
+
+# Day 1 — Understand the tools & run the workflow end to end
+
+## Block 00 · 09:00–09:30 · 30 min · Kickoff and thesis (talk + live demo)
+
+_Done when:_ everyone can name the loop: Inspect → Contract → Code → Verify.
+
+| Time        | Min | Trainer action                                                                                    | Participant action                         | Trainer screen                         | Checkpoint                                               | Fallback                                                   |
+| ----------- | --- | ------------------------------------------------------------------------------------------------- | ------------------------------------------ | -------------------------------------- | -------------------------------------------------------- | ---------------------------------------------------------- |
+| 09:00–09:08 | 8   | Why component-driven, why AI; thesis "AI scales what you already have, guardrails first"          | Listen; late-comers join (see track below) | Slide / `/` overview                   | —                                                        | Cut the examples, keep the thesis sentence                 |
+| 09:08–09:10 | 2   | Glossary pass: LLM, agent, subagent, MCP                                                          | Listen                                     | `/workshop#glossary`                   | —                                                        | Skip definitions already known; never skip MCP             |
+| 09:10–09:15 | 5   | Guardrail demo, same prompt twice: **D-1**                                                        | Watch, compare the two footers             | Chat window + Claude Code side by side | D1B00-C1: room can name one difference (hex vs `--ui-*`) | Show the pre-recorded/pre-saved outputs from the rehearsal |
+| 09:15–09:20 | 5   | Live one-change demo: **D-2**                                                                     | Watch                                      | Terminal + Atelier Storybook (:4400)   | D1B00-C2: the changed story renders                      | Show the saved diff, revert nothing live                   |
+| 09:20–09:25 | 5   | What participants learn in two days, and what they do not                                         | Listen                                     | Agenda page `/schulung`                | —                                                        | —                                                          |
+| 09:25–09:28 | 3   | Stretch task: one component of your own design system you would / would not trust an AI to change | Write the note (kept for Day 2)            | Slide with the question                | —                                                        | Drop if the demos overran; say it out loud instead         |
+| 09:28–09:30 | 2   | Recap question: name the four steps of the loop and the tool that carries each                    | Answer aloud                               | Loop diagram                           | D1B00-C3: ≥ 6 of 8 name all four steps                   | Name them yourself, ask for the tool per step              |
+
+Sum: 8+2+5+5+5+3+2 = **30**.
+
+### Late-comer track (Day 1, first block)
+
+Trigger: someone arrives after 09:08. The thesis is the only thing that cannot be
+replayed from a page; everything else exists on `/schulung` or `/prompts#guardrails`.
+
+| Arrives                       | Do                                                                                                                                                                                                                                                                             |
+| ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ |
+| by 09:30                      | Hand over the 3-line catch-up card: the loop (Inspect → Contract → Code → Verify), the four pillars (Figma = source, Storybook = manifest, MCP = connection, Claude = execution), "do not type the code, prompt it". Seat next to a green neighbour. Do not restart the demos. |
+| 09:30–10:00 (during Block 01) | Same card, then straight into Block 01 at the row the room is at. Run preflight first: it is the only gate that blocks everyone. Trainer pair-checks once in the 10:15 rescue slot.                                                                                            |
+| after 10:00                   | Treat as red on arrival: rescue path (`/troubleshooting#still-red`), pair with a neighbour, trainer fixes setup at the coffee break 10:45–11:00. Replay D-1 on their own machine from `/prompts#guardrails` during lunch (5 min).                                              |
+
+Checkpoint for the late-comer: `npm run preflight` green **and** the model-access
+command in Block 01 answers, before Block 02 starts at 11:00.
+
+## Block 01 · 09:30–10:45 · 75 min · Verify the setup (installed as homework) · High-risk
+
+_Done when:_ preflight is green, `/mcp` lists every server, Storybook runs, Playwright
+Chromium is installed, and anyone still red has a rescue path.
+
+| Time        | Min | Trainer action                                                                                                                                                                                  | Participant action                                                   | Trainer screen                | Checkpoint                                                                      | Fallback                                                                                                                 |
+| ----------- | --- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------- | ----------------------------- | ------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------ |
+| 09:30–09:35 | 5   | Frame: this block only verifies homework. Name the three independent things: CLI, MCP, model access                                                                                             | Listen                                                               | `/workshop`                   | —                                                                               | —                                                                                                                        |
+| 09:35–09:50 | 15  | Node ≥ 22.12 active, own workspace exists; everybody runs `npm run preflight`                                                                                                                   | `node -v`; `npm run preflight`                                       | Own preflight output          | D1B01-C1: preflight exit 0. Count red seats                                     | Red: read the output aloud, route by line to `/troubleshooting`; Node too old → rule R1                                  |
+| 09:50–10:00 | 10  | Model access, separately from preflight: `claude auth login --console` (or `ANTHROPIC_API_KEY`), then `claude -p "Reply with exactly: PREFLIGHT-OK"`                                            | Run it                                                               | Terminal                      | D1B01-C2: a reply, not an auth error                                            | No key at all: pair with a neighbour, trainer provisions at coffee break                                                 |
+| 10:00–10:10 | 10  | Figma: File → Duplicate to drafts works; Desktop Bridge plugin imported and running                                                                                                             | Duplicate the file; run the bridge; ask Claude to check Figma status | Figma desktop + Claude Code   | D1B01-C3: Claude reports bridge connected. Draft rights present                 | Bridge red: `/troubleshooting` "bridge not connected"; `/runbook` for stale instances. Not blocking until Day 2 Block 01 |
+| 10:10–10:20 | 10  | Read `.mcp.json` together; `/mcp` in Claude Code                                                                                                                                                | Compare `/mcp` with the file                                         | `.mcp.json` + `/mcp`          | D1B01-C4: every server in the file is listed in `/mcp`. **10:15 rule R2**       | Missing server: restart Claude Code; if still missing, rescue path                                                       |
+| 10:20–10:25 | 5   | Storybook + Chromium: `npm run storybook` (`localhost:6006`); `npx playwright install chromium` if missing                                                                                      | Start Storybook, open it                                             | Browser on :6006              | D1B01-C5: Storybook loads, preflight says `Playwright Chromium — installed`     | Chromium download slow: start it now, continue, verify at 10:40                                                          |
+| 10:25–10:43 | 18  | Rescue slot: walk the room, work through reds in order of count of failed checks; stretch for greens: read a neighbour's preflight output and name which of CLI / MCP / model access is missing | Reds: pair with a neighbour. Greens: help or stretch task            | Own screen or a participant's | D1B01-C6: every red seat has a named cause and an owner (you, or the lunch fix) | Still red: rescue path `/troubleshooting#still-red`; trainer fixes in the lunch break                                    |
+| 10:43–10:45 | 2   | Recap: which three things can be fine independently when the setup looks fine?                                                                                                                  | Answer aloud                                                         | —                             | —                                                                               | —                                                                                                                        |
+
+Sum: 5+15+10+10+10+5+18+2 = **75**.
+
+## Block 02 · 11:00–12:15 · 75 min · Mini-loop: first success (hands-on, everyone in sync)
+
+_Done when:_ the Settings Card runs, and the parity report is present and has been
+read, not just "green".
+
+| Time        | Min | Trainer action                                                                                            | Participant action                                                                   | Trainer screen             | Checkpoint                                                     | Fallback                                                                                                                                                             |
+| ----------- | --- | --------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------ | -------------------------- | -------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 11:00–11:05 | 5   | Frame: `/tutorial`, 4 steps, "do not type the code, prompt it"                                            | Open `/tutorial`                                                                     | `/tutorial`                | —                                                              | —                                                                                                                                                                    |
+| 11:05–11:15 | 10  | Tutorial steps Figma → MCP, step by step with the room                                                    | Run the first steps; Claude reads the Settings Card frame                            | `/tutorial` + terminal     | D1B02-C1: Claude has read the frame (node id echoed)           | Bridge red: use the red-seat fallback, trainer pastes the frame data (rule R3)                                                                                       |
+| 11:15–11:45 | 30  | Everyone sends the tutorial generation prompt (live on the page, see golden prompts §1); do not retype it | Prompt Claude: compose Settings Card from AtlCard / AtlInput / AtlToggle / AtlButton | Walk the room              | D1B02-C2 (11:35): ≥ 70 % have code on screen. **Rule R3**      | Token drift in the first draft: one-line fix-up from [§1](schulung-golden-prompts.md#1-day-1--block-05-kata-against-the-clock-and-block-02-mini-loop--settings-card) |
+| 11:45–11:50 | 5   | Verify step: `npm run check:contracts` and `npm run check:stories`                                        | Run both; read the exit codes                                                        | One participant's terminal | D1B02-C3: both exit 0                                          | Red: read the finding, hand back to Claude once; second red → neighbour                                                                                              |
+| 11:50–12:00 | 10  | Run the parity check from the tutorial; model reading the report line by line for the first 5 min         | Run `figma_check_design_parity`                                                      | Parity report              | D1B02-C4: report exists on every seat                          | No bridge: see Block 04 of Day 2 (degraded run is not "just carry on"); show a saved report                                                                          |
+| 12:00–12:10 | 10  | Participants read the report line by line; ask "what did it compare, what not"                            | Read and mark each line                                                              | Report on screen           | D1B02-C5: 3 participants can name one thing it did not compare | Prompt: "which fields were passed in the codeSpec?"                                                                                                                  |
+| 12:10–12:13 | 3   | Stretch for early finishers: change one token binding in the prompt, predict the report                   | Optional                                                                             | —                          | —                                                              | Drop                                                                                                                                                                 |
+| 12:13–12:15 | 2   | Recap: what did the parity report compare, and what did it not compare?                                   | Answer aloud                                                                         | —                          | —                                                              | —                                                                                                                                                                    |
+
+Sum: 5+10+30+5+10+10+3+2 = **75**.
+
+## Block 03 · 13:15–14:30 · 75 min · Figma for code: is the file ready? (guided tour + checklist)
+
+_Done when:_ the readiness checklist is filled in for one master of the Atelier file
+and for one master from your own design system.
+
+| Time        | Min | Trainer action                                                                                                        | Participant action                                               | Trainer screen              | Checkpoint                                                            | Fallback                                                                 |
+| ----------- | --- | --------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- | --------------------------- | --------------------------------------------------------------------- | ------------------------------------------------------------------------ |
+| 13:15–13:20 | 5   | Re-entry: "how designers think"; open the Atelier file                                                                | Open own duplicate                                               | Figma, Atelier file         | —                                                                     | Lunch overrun: start at 13:20 and drop the stretch                       |
+| 13:20–13:35 | 15  | Variables / tokens: primitives → semantic → component                                                                 | Follow in own file                                               | Figma variables panel       | D1B03-C1: everyone finds `--ui-*` names behind one variable           | Show the `/tokens#naming` page instead                                   |
+| 13:35–13:50 | 15  | Component sets, variants, component properties, auto layout, modes (light/dark), Inventory vs. Components page        | Follow; find one master on Components, its instance on Inventory | Figma Components page       | D1B03-C2: everyone can say which page is the source of truth          | —                                                                        |
+| 13:50–14:00 | 10  | Pink test on one master, say what it showed (`/tokens#pink-test`)                                                     | Watch, then run it on a master                                   | Figma + `/tokens#pink-test` | D1B03-C3: a result is stated aloud ("this token is not bound")        | Seat without a master from own DS: use a second Atelier master (rule R4) |
+| 14:00–14:25 | 25  | Walk the room; readiness checklist (`/readiness`) for one Atelier master and one master from the participant's own DS | Fill in the checklist twice                                      | `/readiness`                | D1B03-C4 (14:15): ≥ 70 % have the first checklist filled. **Rule R4** | No own-DS master available: do two Atelier masters, note it              |
+| 14:25–14:28 | 3   | Stretch round: the check that fails most often in your own file, one-line fix                                         | Say it aloud                                                     | —                           | —                                                                     | Drop                                                                     |
+| 14:28–14:30 | 2   | Recap: which check would have stopped the AI from guessing on your own master?                                        | Answer aloud                                                     | —                           | —                                                                     | —                                                                        |
+
+Sum: 5+15+15+10+25+3+2 = **75**.
+
+## Block 04 · 14:45–16:00 · 75 min · Guardrails: stories as claims, and MCP (hands-on demo)
+
+_Done when:_ one story plus a `play` function written, seen red once and then green,
+and `docs-show` called.
+
+| Time        | Min | Trainer action                                                                                                      | Participant action                                               | Trainer screen                    | Checkpoint                                                                                                     | Fallback                                                                                    |
+| ----------- | --- | ------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------- | --------------------------------- | -------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------- |
+| 14:45–14:55 | 10  | Storybook: stories, prop tables; Design tab (`parameters.design`) and the contract section of the Docs tab: **D-3** | Follow in own Storybook (:6006)                                  | Atelier Storybook, AtlButton      | D1B04-C1: everyone has found the Design tab                                                                    | Design tab missing in the workspace: log it, move on                                        |
+| 14:55–15:05 | 10  | What is MCP; the active servers; toolset model docs / dev / test, hosted vs. local                                  | Run `/mcp`, name the servers                                     | `/mcp` + `/mcp#your-servers`      | D1B04-C2: participants name the four servers (`storybook-<framework>`, `nx-mcp`, `figma-console`, `uianatomy`) | —                                                                                           |
+| 15:05–15:15 | 10  | Negative demo, then `docs-show`: **D-4**                                                                            | Watch; run `docs-show` for Button                                | Browser chat vs. Claude Code      | D1B04-C3: room can say why the no-MCP answer was wrong                                                         | Pre-saved screenshots of both answers                                                       |
+| 15:15–15:30 | 15  | Live exercise: Button props, token values, preview in chat; stretch: ask for a prop that does not exist             | Do it; every seat has called `docs-show`                         | Walk the room                     | D1B04-C4: **`docs-show` called on every seat**. Rule R5 at 15:30                                               | Hosted endpoint down: local addon MCP on :6006 (needs `claude mcp add`, see Day 2 Block 02) |
+| 15:30–15:55 | 25  | Story + `play` red then green, trainer models the first red: **D-5**                                                | Write one story with a `play`, watch it fail, fix, watch it pass | Participant Storybook, play panel | D1B04-C5 (15:45): ≥ 70 % have seen red. **Rule R5**. D1B04-C6 at 15:55: green, and the red was seen            | A `play` that never failed claims nothing: have them break it on purpose                    |
+| 15:55–15:58 | 3   | Stretch round: "not documented" is the right answer, say why                                                        | Answer aloud                                                     | —                                 | —                                                                                                              | Drop                                                                                        |
+| 15:58–16:00 | 2   | Recap: why is a story a claim, and who checks that the claim holds?                                                 | Answer aloud                                                     | —                                 | —                                                                                                              | —                                                                                           |
+
+Sum: 10+10+10+15+25+3+2 = **75**.
+
+Optional **D-6** (Claude Design three directions, ~12 min, trainer machine only) is
+not scheduled in any row. `/schulung` says "slot into Block 04 if time allows, or
+skip it". This block has 3 spare minutes; the demo does not fit. Run it only after a
+block ran short, or in the 16:00–16:10 buffer, or skip. Do not take the time from the
+red-then-green row.
+
+## Block 05 · 16:10–17:15 · 65 min · Kata against the clock (hands-on, no guidance)
+
+_Done when:_ the kata is green and every parity finding is labelled.
+
+| Time        | Min | Trainer action                                                                                                                                                               | Participant action                                | Trainer screen          | Checkpoint                                                                                               | Fallback                                                                        |
+| ----------- | --- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------- | ----------------------- | -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------- |
+| 16:10–16:15 | 5   | Rules: `/first-component`, same Settings Card frame (node `936-2954`), seven steps, no guidance; start the clock                                                             | Open `/first-component`                           | `/first-component`      | —                                                                                                        | —                                                                               |
+| 16:15–16:30 | 15  | Stay silent; note who asks what                                                                                                                                              | Run the 15-minute kata                            | Timer                   | D1B05-C1 (16:30): ≥ 50 % have the card rendering in the app (`nx serve workshop-<fw>`, `localhost:4200`) | Rule R6                                                                         |
+| 16:30–16:50 | 20  | Walk the room; hints only via "which gate says that?"; golden prompts §1 add-on only if tokens drift                                                                         | Finish; run `check:contracts` and `check:stories` | A participant's gates   | D1B05-C2 (16:50): both gates exit 0 on ≥ 70 %. **Rule R6**                                               | Red at 16:50: pair with a green neighbour, continue to labelling                |
+| 16:50–17:05 | 15  | Label every parity finding: code, Figma, or contract (`/design-to-code#finding-codes`)                                                                                       | Write a label next to each finding                | Report of one volunteer | D1B05-C3: every finding on the volunteer's report has exactly one label                                  | Hand out the three labels on paper                                              |
+| 17:05–17:13 | 8   | Debrief with the expected finding: the card title's letter-spacing, code −0.01em vs master 0 % on `ty/title`, a deliberate mismatch stated in the AtlCard master description | Compare with own report                           | Parity report line      | D1B05-C4: someone labels it "record a deliberate mismatch"                                               | If the finding is absent from a report: check that the parity call actually ran |
+| 17:13–17:15 | 2   | Recap: which finding did you fix in code, which did you leave alone, why?                                                                                                    | Answer aloud                                      | —                       | —                                                                                                        | —                                                                               |
+
+Sum: 5+15+20+15+8+2 = **65**. (The 15-minute kata claim and the other 50 minutes of
+the block are not reconciled on `/schulung`; the dry run logs the actual time.)
+
+## Block 06 · 17:15–17:30 · 15 min · Recap and exit ticket (discussion)
+
+_Done when:_ a brief is chosen. Homework: duplicate the Figma file and sketch the
+component.
+
+| Time        | Min | Trainer action                                                                                                          | Participant action | Trainer screen     | Checkpoint                                    | Fallback                       |
+| ----------- | --- | ----------------------------------------------------------------------------------------------------------------------- | ------------------ | ------------------ | --------------------------------------------- | ------------------------------ |
+| 17:15–17:20 | 5   | What was surprising? Where did the AI work cleanly, where not?                                                          | Answer             | Whiteboard         | —                                             | —                              |
+| 17:20–17:25 | 5   | Preview of Day 2; the four briefs (Toast / TagChip / StatCard / Avatar)                                                 | Choose one         | `/briefs`          | D1B06-C1: every participant has named a brief | Undecided: assign Toast        |
+| 17:25–17:28 | 3   | Homework: duplicate the Figma file, sketch the component. Catch-up for kata not finished: play `/first-component` alone | Note it            | `/first-component` | —                                             | —                              |
+| 17:28–17:30 | 2   | Exit ticket: one sentence on what you will check first next time before trusting AI output                              | Write one sentence | —                  | D1B06-C2: one sentence per participant        | Spoken round if paper runs out |
+
+Sum: 5+5+3+2 = **15**.
+
+---
+
+# Day 2 — Build your own component (Figma → Storybook → code)
+
+## Block 00 · 09:00–09:30 · 30 min · Recap (active recall), brief, skills (talk)
+
+_Done when:_ everyone knows their target component and their skills are installed.
+
+| Time        | Min | Trainer action                                                                                                               | Participant action                       | Trainer screen                 | Checkpoint                                                | Fallback                                                                           |
+| ----------- | --- | ---------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------- | ------------------------------ | --------------------------------------------------------- | ---------------------------------------------------------------------------------- |
+| 09:00–09:08 | 8   | Active recall: participants answer, you do not lecture ("name the loop", "what did the parity report not compare")           | Answer                                   | Blank                          | —                                                         | Silence: ask the Day 1 recap questions one by one                                  |
+| 09:08–09:13 | 5   | Present the brief: anatomy, axes, states, a11y (`workshop/briefs/{toast,tagchip,statcard,avatar}.md`, rendered at `/briefs`) | Open own brief                           | `/briefs`                      | D2B00-C1: everyone has a brief open and has named it      | Chosen nothing: assign Toast                                                       |
+| 09:13–09:20 | 7   | uianatomy MCP as helper: **D-7**                                                                                             | Watch; look up own brief component       | Claude Code, `uianatomy` tools | D2B00-C2: one participant names something the brief lacks | Server unreachable: skip the live call, open https://uianatomy.dev                 |
+| 09:20–09:28 | 8   | Skills: `atelier-component`, `uianatomy-mcp`, `figma-workspace-architect` (Figma workspaces only), four Storybook skills     | Check `.claude/skills/` in own workspace | `ls .claude/skills`            | D2B00-C3: skills installed on every seat                  | Missing skill: re-scaffold is **not** the fix; copy from a green neighbour, log it |
+| 09:28–09:30 | 2   | Recap: which skill triggers when, and how would you notice it did not?                                                       | Answer aloud                             | —                              | —                                                         | —                                                                                  |
+
+Sum: 8+5+7+8+2 = **30**.
+
+## Block 01 · 09:30–11:00 · 90 min · Design in Figma and the handoff document (hands-on) · High-risk
+
+_Done when:_ a master plus a filled handoff document.
+
+| Time        | Min | Trainer action                                                                                                                                                                                                                                        | Participant action                                                 | Trainer screen                    | Checkpoint                                                                                                           | Fallback                                                                                                                |
+| ----------- | --- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ | --------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
+| 09:30–09:35 | 5   | Mandatory first step: duplicate the Atelier file into your own drafts, never mutate the original                                                                                                                                                      | File → Duplicate; confirm the bridge is connected to the duplicate | Figma                             | D2B01-C1: **every seat is in its own duplicate and Claude reports bridge connected**                                 | No draft rights or bridge red: rescue path (`/troubleshooting#still-red`), pair, tell the trainer. Nobody continues red |
+| 09:35–10:15 | 40  | Manual design in the Figma UI from the starter frame on the Workshop Templates page (Toast / StatCard / TagChip / Avatar `/ Starter`): copy, rename, layout, variants, token assignment                                                               | Design the component set                                           | Walk the room                     | D2B01-C2 (09:55): starter copied and renamed on ≥ 70 %. D2B01-C3 (10:15): ≥ 2 variants × 2 states drawn. **Rule R7** | Seat behind: continue from the starter, skip the dark-mode variant until the MCP row                                    |
+| 10:15–10:50 | 35  | MCP structuring: component properties, a11y audit, dark-mode variant, `--ui-*` tokens; `figma-workspace-architect` as co-pilot, first use                                                                                                             | Use Claude + `figma_*` tools to structure the master               | Participant screen                | D2B01-C4 (10:35): properties and tokens bound on ≥ 70 %. **Rule R7**                                                 | Bridge drops: `/runbook#stale-instances`, then `/troubleshooting`                                                       |
+| 10:50–10:58 | 8   | Handoff document before anyone prompts: draft URL + node id, variants/states, token bindings, reuse vs. rebuild, behaviour from the brief, exclusions, target files, acceptance criteria. Checklist, not template (`/design-to-code#handoff-example`) | Write it                                                           | `/design-to-code#handoff-example` | D2B01-C5: a handoff document exists on every seat (all eight items)                                                  | Short on time: node id + variants + exclusions first, finish after lunch before Block 02 prompts                        |
+| 10:58–11:00 | 2   | Recap: which line did you have to decide yourself, and what would the AI have guessed?                                                                                                                                                                | Answer aloud                                                       | —                                 | —                                                                                                                    | —                                                                                                                       |
+
+Sum: 5+40+35+8+2 = **90**.
+
+## Block 02 · 11:15–12:30 · 75 min · Contract, component, stories (prompt exercise)
+
+_Done when:_ `check:contracts` is green offline.
+
+| Time        | Min | Trainer action                                                                                                                                                                              | Participant action                                                                                     | Trainer screen             | Checkpoint                                                               | Fallback                                                                                        |
+| ----------- | --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------ | -------------------------- | ------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------- |
+| 11:15–11:25 | 10  | Start `npm run storybook`, then `claude mcp add --transport http storybook-local http://localhost:<port>/mcp` (port as Storybook prints it), reconnect, check tools                         | Do it; confirm `get-storybook-story-instructions`, `stories-preview`, `test-run` are listed            | Terminal                   | D2B02-C1: the three dev/test tools are listed on every seat. **Rule R8** | "Not available" means not configured, not server down: re-run `claude mcp add`, reconnect       |
+| 11:25–11:30 | 5   | LLM-friendly API rules: predictable naming, literal unions, composition over config, no hidden defaults                                                                                     | Listen                                                                                                 | —                          | —                                                                        | —                                                                                               |
+| 11:30–11:50 | 20  | Generation prompt from the handoff document, [§2.1](schulung-golden-prompts.md#21-generation-prompt-block-02--contract-component-stories). One step: contract, component with test, stories | Paste §2.1 with own handoff document; `get-storybook-story-instructions` before any `*.stories.*` edit | Walk the room              | D2B02-C2 (11:50): contract + component + stories on disk on ≥ 70 %       | Stalled seat: neighbour pairs; trainer checks the handoff document first, not the prompt        |
+| 11:50–12:00 | 10  | Figma snapshot: `npm run figma:snapshot` (bridge connected; `<YOUR_FIGMA_FILE_KEY>` placeholder in `package.json` replaced)                                                                 | Run it                                                                                                 | Terminal                   | D2B02-C3: `tools/figma/snapshot.json` contains the own node              | Bridge red: expect `[NO-MASTER]` warning instead of a pass, state it, continue in degraded mode |
+| 12:00–12:20 | 20  | Iterate until the prop table fits: `npm run check:contracts`; read findings (`/design-to-code#finding-codes`)                                                                               | Run, read, hand findings back to Claude                                                                | One participant's findings | D2B02-C4 (12:15): `check:contracts` exit 0 on ≥ 70 %. **Rule R9**        | Prop invented: [§2.2](schulung-golden-prompts.md#22-correction--invented-prop-block-03)         |
+| 12:20–12:28 | 8   | Catch-up: seats still red get a pairing; stretch: `docs-show-story` as a template                                                                                                           | Fix findings                                                                                           | —                          | D2B02-C5: green or a named finding per seat                              | Lunch fix for the still-red                                                                     |
+| 12:28–12:30 | 2   | Recap: which Figma-vs-code mismatch did you choose on purpose, and where is it written down?                                                                                                | Answer aloud                                                                                           | —                          | —                                                                        | —                                                                                               |
+
+Sum: 10+5+20+10+20+8+2 = **75**.
+
+## Block 03 · 13:30–15:00 · 90 min · Iterate: prompt quality and the self-healing loop (prompt exercise)
+
+_Done when:_ stories are green, and the prompt was revised at least once with the
+reason stated.
+
+| Time        | Min | Trainer action                                                                                                                                                                                                                                                                                | Participant action                               | Trainer screen       | Checkpoint                                                                         | Fallback                                                                                                |
+| ----------- | --- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ | -------------------- | ---------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------- |
+| 13:30–13:40 | 10  | Focus: write prompts, judge output, correct; do not type it yourself. The six-check rubric (`/prompts#rubric`)                                                                                                                                                                                | Score own Block 02 prompt against the six checks | `/prompts#rubric`    | D2B03-C1: every participant names the failed check of their prompt                 | Tell them to pick the check that failed the most often                                                  |
+| 13:40–14:00 | 20  | Hand out the golden prompts on site; correction prompts by symptom: [§2.2](schulung-golden-prompts.md#22-correction--invented-prop-block-03), [§2.3](schulung-golden-prompts.md#23-correction--missing-token-block-03), [§2.4](schulung-golden-prompts.md#24-correction--wrong-slot-block-03) | Revise the prompt, state the reason, rerun       | Walk the room        | D2B03-C2 (14:00): ≥ 70 % have **revised once and stated the reason**. **Rule R10** | Use the quick index (golden prompts §4) to pick the prompt per symptom                                  |
+| 14:00–14:10 | 10  | Test loop demo: `stories-preview` and `test-run` with a11y via the local addon MCP; supplementary `nx test <lib> --watch` covers only the unit half; equivalent of `test-run` is `nx storybook-test <fw>`                                                                                     | Run `test-run`                                   | Terminal + Storybook | D2B03-C3: `test-run` returns a result on every seat                                | Never run two `storybook-test` at once (shared browser port). Fall back to the Storybook in the browser |
+| 14:10–14:40 | 30  | Self-healing loop (`/design-to-code#self-healing-loop`): run, paste the failure back to Claude, rerun                                                                                                                                                                                         | Loop until stories are green                     | A volunteer's loop   | D2B03-C4 (14:30): stories green on ≥ 70 %. **Rule R10**                            | Stuck on one failure after two attempts: stop, re-diagnose from the failing story, not from the prompt  |
+| 14:40–14:55 | 15  | AI-assisted debugging: paste error messages back instead of debugging yourself; token fidelity (`--ui-*` only)                                                                                                                                                                                | Continue                                         | —                    | D2B03-C5: no literal hex/px left (ask Claude to grep)                              | [§2.3](schulung-golden-prompts.md#23-correction--missing-token-block-03)                                |
+| 14:55–14:58 | 3   | Stretch round: rewrite the prompt so that the first run needs no correction                                                                                                                                                                                                                   | Optional                                         | —                    | —                                                                                  | Drop                                                                                                    |
+| 14:58–15:00 | 2   | Recap: what did you change in the prompt, and what did that change fix?                                                                                                                                                                                                                       | Answer aloud                                     | —                    | —                                                                                  | —                                                                                                       |
+
+Sum: 10+20+10+30+15+3+2 = **90**.
+
+## Block 04 · 15:15–16:30 · 75 min · Verify: a11y, states, parity (hands-on)
+
+_Done when:_ `storybook-test` with axe is green, and every parity finding is triaged
+(code / Figma / contract).
+
+| Time        | Min | Trainer action                                                                                                                                                                        | Participant action                               | Trainer screen                    | Checkpoint                                                                                  | Fallback                                                                          |
+| ----------- | --- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------ | --------------------------------- | ------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------- |
+| 15:15–15:20 | 5   | Frame: "a quiet report is not a clean component"; confirm bridge connected again                                                                                                      | Check Figma status                               | `/a11y-workflow#a11y-in-the-loop` | D2B04-C1: bridge connected, or the seat is marked degraded                                  | Degraded run: only `check:contracts` + `storybook-test`; say so in the report     |
+| 15:20–15:35 | 15  | Three-step a11y check: [§3.1](schulung-golden-prompts.md#31-three-step-a11y-audit-prompt) (Figma audit, Storybook a11y panel, keyboard walk)                                          | Run the three steps in order                     | Participant's a11y panel          | D2B04-C2: three results reported, in order, on every seat                                   | Trainer demonstrates the keyboard walk once                                       |
+| 15:35–15:45 | 10  | Let Claude fix the findings; ARIA, focus ring via tokens, hover/active/disabled states                                                                                                | Fix and rerun                                    | —                                 | D2B04-C3 (15:45): `storybook-test` (`nx storybook-test <fw>`) green on ≥ 70 %. **Rule R11** | Axe finding cannot be fixed in time: write it down, mark it open                  |
+| 15:45–15:55 | 10  | Dark mode via the theme control in the toolbar ([§3.2](schulung-golden-prompts.md#32-dark-mode-token-audit-prompt)); say honestly that axe runs only in light mode in `check:stories` | Toggle theme, report three confirmations         | Storybook, theme toolbar          | D2B04-C4: every colour resolves through `--ui-*`                                            | A hardcoded colour in dark mode: back to Block 03 correction §2.3                 |
+| 15:55–16:10 | 15  | Assemble the codeSpec: `check:contracts --emit libs/<fw>/src/lib/<name>/codespec`; `figma_scan_code_accessibility` with the story root `outerHTML` and `mapToCodeSpec: true`          | Do it                                            | Terminal + DevTools               | D2B04-C5: a codeSpec exists with componentAPI, metadata, tokens, accessibility              | Skip the emit fragment: paste the three fields by hand and name which were passed |
+| 16:10–16:25 | 15  | Parity on purpose, demo then exercise: **D-8** ([§3.3](schulung-golden-prompts.md#33-parity-double-call-prompt-the-codespec-field-exercise))                                          | Run `figma_check_design_parity` twice as in §3.3 | Parity report                     | D2B04-C6: the room can say why the second report is clean while the value is still wrong    | No bridge: show a saved pair of reports                                           |
+| 16:25–16:28 | 3   | Triage every finding: code / Figma / contract                                                                                                                                         | Label                                            | —                                 | D2B04-C7: each finding has one label                                                        | —                                                                                 |
+| 16:28–16:30 | 2   | Recap: which findings were code, Figma, contract? Which did you almost mislabel?                                                                                                      | Answer aloud                                     | —                                 | —                                                                                           | —                                                                                 |
+
+Sum: 5+15+10+10+15+15+3+2 = **75**.
+
+## Block 05 · 16:40–17:30 · 50 min · Show & tell and transfer to "My DS" (presentation + discussion)
+
+_Done when:_ everyone leaves with a next step for their own design system, and a
+follow-up channel is set up.
+
+| Time        | Min | Trainer action                                                                                                                  | Participant action  | Trainer screen                      | Checkpoint                                                                                  | Fallback                                 |
+| ----------- | --- | ------------------------------------------------------------------------------------------------------------------------------- | ------------------- | ----------------------------------- | ------------------------------------------------------------------------------------------- | ---------------------------------------- |
+| 16:40–16:43 | 3   | Set the rules: component, one prompt that worked, one that failed; timer                                                        | Prepare             | Timer                               | —                                                                                           | —                                        |
+| 16:43–17:15 | 32  | Show & tell, about 4 min per participant at 8 (the page says about 5; at 5 there is no time left for transfer)                  | Present             | Participant screen                  | D2B05-C1: every participant has shown a component, a prompt that worked and one that failed | Over time: cut questions, not presenters |
+| 17:15–17:20 | 5   | Trainer synthesis: prompt patterns that worked, anti-patterns, when Claude fails, how to deal with drift                        | Listen, note        | Whiteboard                          | —                                                                                           | —                                        |
+| 17:20–17:28 | 8   | Transfer: `/design-principles#check-your-own` on your own DS; pick one next step; outlook (own repo, own CLAUDE.md, own skills) | Write the next step | `/design-principles#check-your-own` | D2B05-C2: one written next step per participant                                             | Spoken round                             |
+| 17:28–17:30 | 2   | Exit round: one sentence each, the first thing you will do next week                                                            | Say it              | —                                   | D2B05-C3: follow-up channel named (organisational, out of scope here)                       | —                                        |
+
+Sum: 3+32+5+8+2 = **50**.
+
+## End-of-Day-2 success verification
+
+The page's checklist (`DAY2_DONE` in `docs/src/data/day2-done.ts`) is the check; do not
+restate it here. Walk it on one volunteer's screen, then let each participant tick it
+in the 17:20 slot. A seat in degraded mode (no bridge) cannot tick the parity item;
+say so on the seat, not silently.
+
+---
+
+# Decision rules
+
+Counts are share of present participants who are **red** at the checkpoint named. "Red"
+means: the stated check does not pass right now. Round up (8 seats: 3 = 37.5 %, so
+"≥ 30 %" triggers at 3).
+
+| Rule | At checkpoint                 | If                                           | Then                                                                                                                                                                                                                                                                  |
+| ---- | ----------------------------- | -------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| R1   | D1B01-C1 (preflight, 09:50)   | ≥ 30 % red                                   | Stop the sequence. Pull the **most common failing line** of the preflight output onto the projector and fix that one cause for everyone in one go. Do not continue to model access until preflight is green or a seat is parked in the rescue slot                    |
+| R2   | D1B01-C4 (10:15, `/mcp`)      | ≥ 30 % red                                   | Treat as a systemic cause (shared network, shared `.mcp.json` edit): fix it once on the projector. Anyone still red moves to the rescue slot 10:25. Anyone still red at 10:15 is already on the rescue path (page rule: still red 30 min before the end of the block) |
+| R3   | D1B02-C1/C2 (11:15, 11:35)    | ≥ 30 % red                                   | Keep the room in sync: pause at the point of failure, show one working seat's screen, then continue together. If red is the bridge: do the Figma-reading step once on the trainer machine, share the frame data, and mark the room degraded for the parity row        |
+| R4   | D1B03-C3/C4 (14:15)           | ≥ 30 % red                                   | Cut the "own design system" master; use a second Atelier master and say so. Reds with no own DS keep the second form for homework                                                                                                                                     |
+| R5   | D1B04-C4 / C5 (15:30, 15:45)  | ≥ 30 % red on `docs-show` or no red-seen-yet | `docs-show`: switch the room to a pasted answer from the trainer's screen, then retry. Story: model the first red yourself once (D-5), then release. Take time from the stretch row, never from the play exercise                                                     |
+| R6   | D1B05-C1 (16:30) / C2 (16:50) | ≥ 30 % red                                   | Do not extend the kata. At 16:50 hard-stop: green seats keep going, red seats get a neighbour and the debrief runs on the one report that exists. The gap goes to the catch-up homework (17:25), not to the block                                                     |
+| R7   | D2B01-C3 (10:15) / C4 (10:35) | ≥ 30 % red                                   | Shorten the MCP structuring row by 10 min and give the time to the manual row; the handoff document row keeps its 8 min. Never skip the handoff document: it is the prompt's input                                                                                    |
+| R8   | D2B02-C1 (11:25)              | ≥ 30 % red                                   | Fix `claude mcp add` once on the projector, then continue. If red persists past 11:35, switch the room to the hosted `docs-show` (no stories-preview) and say so; tell nobody to edit `.mcp.json`                                                                     |
+| R9   | D2B02-C4 (12:15)              | ≥ 30 % red on `check:contracts`              | Read the most common finding code aloud and its fix; if it is `[NO-MASTER]` for all of them, the snapshot is the cause, not the code. Catch-up in the 12:20 row; the lunch fix for the rest                                                                           |
+| R10  | D2B03-C2 (14:00) / C4 (14:30) | ≥ 30 % red                                   | Run one shared revision on the projector: pick one volunteer's failing story and revise the prompt with the room, naming the failed rubric check. Then release                                                                                                        |
+| R11  | D2B04-C3 (15:45)              | ≥ 30 % red on `storybook-test`               | Do not start the parity rows with the room red: fix axe first (one shared finding on the projector). Parity rows shrink before a11y does; the page lists a11y as the block's whole point                                                                              |
+
+Global rules:
+
+- Two rules triggered in one block: the block's last row (stretch) is dropped first,
+  then the recap question becomes the only spoken row. Never drop a checkpoint.
+- Overrun > 5 min in any block: take it from the 10-minute buffer of that day, not
+  from lunch. Overrun > 10 min: apply the block's own fallback and tell the room.
+- A seat red twice in a row (two blocks in a row): trainer takes it at the next break.
+  Nobody continues red into Day 2 Block 01 (page rule).

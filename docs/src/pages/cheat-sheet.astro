@@ -1,0 +1,393 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import PageHero from '../components/PageHero.astro';
+
+// One printable page of lookups for the two days (R-049, participant part).
+// Everything here is a pointer to a name that exists elsewhere in the repo:
+// MCP tool names from AGENTS.md, scripts from the scaffold preset and the root
+// package.json, failures from /troubleshooting. Nothing is explained in depth;
+// each row says where the explanation lives.
+
+const HOSTED = [
+  ['docs-list', 'valid component ids; call once per session'],
+  ['docs-show', 'props, variants, stories of one id'],
+  ['docs-show-story', 'one story, when docs-show lacks the detail'],
+];
+
+const LOCAL = [
+  ['get-storybook-story-instructions', 'before every *.stories.* edit'],
+  ['stories-preview', 'preview URLs after a change'],
+  ['stories-changed', 'new and modified stories'],
+  ['test-run', 'run stories with a11y; pass { stories: [...] } to focus'],
+];
+
+const FIGMA = [
+  [
+    'figma_get_component_for_development',
+    'read a node: variants, boundVariables',
+  ],
+  ['figma_get_status', 'which file is the bridge connected to'],
+  ['figma_get_selection', 'node id of what you selected'],
+  ['figma_search_components', 'find a master by name'],
+  ['figma_check_design_parity', 'code vs. Figma, after the gates'],
+  ['figma_scan_code_accessibility', 'a11y of rendered markup'],
+];
+
+const WORKSPACE_PATHS = [
+  ['Component', 'workshop-angular/src/app/components/<name>.component.ts'],
+  ['Stories', 'next to the component: <name>.stories.ts'],
+  ['Contract', 'workshop-angular/src/contracts/<name>.contract.ts'],
+  ['Example', 'workshop-angular/src/atl-button.stories.ts'],
+];
+
+const WORKSPACE_CMDS = [
+  ['npm start', 'app on :4200'],
+  ['npm run storybook', 'Storybook (URL is printed)'],
+  ['npm test', 'jsdom unit tests (check:unit)'],
+  ['npm run check:contracts', 'contract vs. manifest vs. Figma snapshot'],
+  ['npm run figma:snapshot', 'refresh the snapshot (bridge connected)'],
+  ['npm run check:stories', 'every story in Chromium + axe'],
+  ['npm run preflight', 'setup check, real MCP calls'],
+];
+
+const CLONE_PATHS = [
+  ['Component', 'libs/angular/src/lib/<name>/<atl-name>.ts'],
+  ['Stories, tests', 'same folder: .stories.ts, .spec.ts'],
+  ['Contract', 'libs/spec/src/contracts/<name>.contract.ts'],
+  ['Join key', 'libs/spec/src/index.ts'],
+];
+
+const CLONE_CMDS = [
+  ['nx storybook angular', 'Storybook on :4400'],
+  ['nx test angular', 'unit tests'],
+  ['nx storybook-test angular', 'stories in Chromium'],
+  ['nx serve docs', 'this site on :4300'],
+  ['npm run sync:generated', 'regenerate synced files'],
+  ['npm run gen:llms', 'regenerate llms files'],
+];
+
+const LOOP = [
+  ['Inspect', 'figma_get_component_for_development on the node'],
+  ['Contract', 'node id + deliberate mismatches only; docs-show for the API'],
+  ['Generate', 'prompt from the handoff; no hex, no px, only --ui-* tokens'],
+  ['Verify', 'check:contracts, check:stories, then figma_check_design_parity'],
+];
+
+const FIXES = [
+  [
+    'figma_* "bridge not connected" or timeout',
+    'Figma Desktop: Plugins, Development, Figma Desktop Bridge. Keep it open. Restart Claude Code.',
+    'figma-bridge-plugin-not-connected',
+  ],
+  [
+    'Every MCP tool errors (e.g. 522) though it shows connected',
+    '`npm run preflight`. Server-side fault; use the framework pages meanwhile.',
+    'mcp-tools-error',
+  ],
+  [
+    'storybook-angular not listed in Claude Code',
+    'Reopen Claude Code from the folder with .mcp.json. `/mcp` lists what it found.',
+    'mcp-not-loaded',
+  ],
+  [
+    'Figma node id returns nothing',
+    'figma_get_status for the file; figma_get_selection for the live id. Copies have new ids.',
+    'figma-node-id-not-found',
+  ],
+  [
+    'Cannot find project workshop-angular',
+    '`npx nx show projects`. The app is at the workspace root, not under apps/.',
+    'nx-project-not-found',
+  ],
+  [
+    'EADDRINUSE on a dev server',
+    'Check the PID: `lsof -nP -iTCP:<port> -sTCP:LISTEN`. Or `npm start -- --port 4300`.',
+    'port-in-use',
+  ],
+  [
+    'Prompt fails though `claude --version` works',
+    '`claude -p "Reply with exactly: PREFLIGHT-OK"` proves model access. Sign in if it fails.',
+    'claude-cli-not-authenticated',
+  ],
+  [
+    'Agent invented a prop or wrote a hex colour',
+    '`docs-show` for the real props; redo the line from boundVariables.',
+    '',
+  ],
+];
+
+const md = (s: string) =>
+  s
+    .replace(/&/g, '&amp;')
+    .replace(/</g, '&lt;')
+    .replace(/>/g, '&gt;')
+    .replace(/`([^`]+)`/g, '<code>$1</code>');
+---
+
+<BaseLayout
+  title="Cheat sheet"
+  description="One printable page for the two days: MCP tool names, Angular paths and commands, the core loop and the failures you will meet, each with its fix."
+  currentPath="/cheat-sheet"
+>
+  <div class="docs-inline-page cheat">
+    <PageHero
+      tag="Course kit · printable"
+      title="Cheat sheet"
+      lede="Names, paths and fixes you reach for mid-exercise. Print it (two A4 pages) or keep it open. Every row links to where the explanation lives."
+      ledeMax="560px"
+    />
+
+    <div class="cheat-grid">
+      <section class="cheat-card" aria-labelledby="cs-loop">
+        <h2 id="cs-loop">The core loop</h2>
+        <ol class="cheat-list">
+          {LOOP.map(([k, v]) => <li><strong>{k}.</strong> {v}</li>)}
+        </ol>
+        <p class="cheat-note">
+          Stuck? Paste the error, the exit code and the output file, what you
+          expected and what you ran:
+          <a href="/prompts#stuck" class="docs-link-primary">how to ask</a>.
+        </p>
+      </section>
+
+      <section class="cheat-card" aria-labelledby="cs-mcp">
+        <h2 id="cs-mcp">MCP tool names</h2>
+        <h3>Hosted <code>storybook-angular</code> (docs only)</h3>
+        <dl class="cheat-dl">
+          {HOSTED.map(([k, v]) => (
+            <><dt><code>{k}</code></dt>
+              <dd>{v}</dd></>
+          ))}
+        </dl>
+        <h3>Local Storybook (<code>dev</code> + <code>test</code>)</h3>
+        <dl class="cheat-dl">
+          {LOCAL.map(([k, v]) => (
+            <><dt><code>{k}</code></dt>
+              <dd>{v}</dd></>
+          ))}
+        </dl>
+        <p class="cheat-note">
+          The local tools exist only after
+          <code
+            >claude mcp add --transport http storybook-local
+            http://localhost:&lt;port&gt;/mcp</code
+          >.
+        </p>
+        <h3><code>figma-console</code></h3>
+        <dl class="cheat-dl">
+          {FIGMA.map(([k, v]) => (
+            <><dt><code>{k}</code></dt>
+              <dd>{v}</dd></>
+          ))}
+        </dl>
+      </section>
+
+      <section class="cheat-card" aria-labelledby="cs-angular">
+        <h2 id="cs-angular">Angular: your workspace</h2>
+        <dl class="cheat-dl">
+          {WORKSPACE_PATHS.map(([k, v]) => (
+            <><dt>{k}</dt>
+              <dd><code>{v}</code></dd></>
+          ))}
+        </dl>
+        <h3>Commands</h3>
+        <dl class="cheat-dl">
+          {WORKSPACE_CMDS.map(([k, v]) => (
+            <><dt><code>{k}</code></dt>
+              <dd>{v}</dd></>
+          ))}
+        </dl>
+        <p class="cheat-note">
+          Read a gate's result from its exit code, never through a pipe:
+          <code
+            >npm run check:contracts &gt; check.out 2&gt;&amp;1; echo $?</code
+          >
+        </p>
+      </section>
+
+      <section class="cheat-card" aria-labelledby="cs-clone">
+        <h2 id="cs-clone">Angular: a clone of the atelier repo</h2>
+        <p class="cheat-note">
+          Only for working on the library itself, not for the course.
+        </p>
+        <dl class="cheat-dl">
+          {CLONE_PATHS.map(([k, v]) => (
+            <><dt>{k}</dt>
+              <dd><code>{v}</code></dd></>
+          ))}
+        </dl>
+        <h3>Commands</h3>
+        <dl class="cheat-dl">
+          {CLONE_CMDS.map(([k, v]) => (
+            <><dt><code>{k}</code></dt>
+              <dd>{v}</dd></>
+          ))}
+        </dl>
+        <p class="cheat-note">
+          Lint with <code>nx lint angular</code>, not the bare binary.
+        </p>
+      </section>
+    </div>
+
+    <section class="cheat-card cheat-card--wide" aria-labelledby="cs-fixes">
+      <h2 id="cs-fixes">Error, then fix</h2>
+      <table class="docs-props-table cheat-table">
+        <thead>
+          <tr>
+            <th>You see</th>
+            <th>Do this</th>
+            <th>More</th>
+          </tr>
+        </thead>
+        <tbody>
+          {FIXES.map(([sym, fix, id]) => <tr>
+            <td set:html={md(sym)} />
+            <td set:html={md(fix)} />
+            <td>
+              {id ? (
+                <a href={`/troubleshooting#${id}`} class="docs-link-primary"
+                  >Details</a
+                >
+              ) : (
+                <a href="/first-component" class="docs-link-primary">Kata</a>
+              )}
+            </td>
+          </tr>)}
+        </tbody>
+      </table>
+      <p class="cheat-note">
+        Still red after that: the
+        <a href="/troubleshooting#still-red" class="docs-link-primary"
+          >rescue path</a
+        >. Nobody continues red; pair up and tell the trainer.
+      </p>
+    </section>
+  </div>
+</BaseLayout>
+
+<style>
+  .cheat-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr));
+    gap: 1rem;
+    margin-bottom: 1rem;
+  }
+  .cheat-card {
+    border: 1px solid var(--ui-color-border);
+    border-radius: var(--ui-radius-md);
+    background: var(--ui-color-surface-raised);
+    padding: 1rem 1.1rem;
+    min-width: 0;
+  }
+  .cheat-card h2 {
+    margin: 0 0 0.6rem;
+    font-size: var(--ui-font-size-lg);
+    font-weight: 700;
+    color: var(--ui-color-text);
+  }
+  .cheat-card h3 {
+    margin: 0.8rem 0 0.3rem;
+    font-size: var(--ui-font-size-sm);
+    font-weight: 600;
+    color: var(--ui-color-text-muted);
+  }
+  .cheat-list {
+    margin: 0;
+    padding-left: 1.2rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.3rem;
+    line-height: 1.5;
+    color: var(--ui-color-text);
+  }
+  .cheat-dl {
+    margin: 0;
+    display: grid;
+    grid-template-columns: minmax(0, max-content) minmax(0, 1fr);
+    column-gap: 0.75rem;
+    row-gap: 0.25rem;
+    font-size: var(--ui-font-size-sm);
+    line-height: 1.45;
+    color: var(--ui-color-text);
+  }
+  .cheat-dl dt,
+  .cheat-dl dd {
+    margin: 0;
+    overflow-wrap: anywhere;
+  }
+  .cheat-note {
+    margin: 0.7rem 0 0;
+    font-size: var(--ui-font-size-sm);
+    line-height: 1.5;
+    color: var(--ui-color-text-muted);
+  }
+  .cheat-table td,
+  .cheat-table th {
+    vertical-align: top;
+  }
+
+  /* Two A4 pages: chrome off, one column of cards per row pair, small type,
+     cards never split across a page. Colours go to black on white. */
+  @media print {
+    :global(.docs-topbar),
+    :global(.docs-sidebar),
+    :global(.docs-sidebar-backdrop),
+    :global(.docs-toc),
+    :global(.docs-toc-mobile),
+    :global(.docs-bottom-nav),
+    :global(.docs-edit-page),
+    :global(footer),
+    :global(nav[aria-label='Breadcrumb']) {
+      display: none !important;
+    }
+    :global(body),
+    :global(.docs-shell),
+    :global(.docs-main-content) {
+      background: #fff !important;
+      color: #000 !important;
+    }
+    :global(.docs-main-content),
+    :global(.docs-shell) {
+      display: block !important;
+      margin: 0 !important;
+      padding: 0 !important;
+      max-width: none !important;
+    }
+    @page {
+      size: A4;
+      margin: 12mm;
+    }
+    .cheat {
+      font-size: 8.5pt;
+    }
+    .cheat-grid {
+      grid-template-columns: 1fr 1fr;
+      gap: 6pt;
+    }
+    .cheat-card {
+      break-inside: avoid;
+      background: #fff;
+      border-color: #888;
+      padding: 6pt 8pt;
+    }
+    .cheat-card h2 {
+      font-size: 11pt;
+      margin-bottom: 4pt;
+    }
+    .cheat-card h3 {
+      margin: 5pt 0 2pt;
+      font-size: 8.5pt;
+    }
+    .cheat-dl,
+    .cheat-note {
+      font-size: 8pt;
+    }
+    .cheat-card--wide {
+      break-before: page;
+    }
+    .cheat a {
+      color: #000;
+      text-decoration: none;
+    }
+  }
+</style>
