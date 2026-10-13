@@ -30,8 +30,9 @@
  *                above it): a purely additive edit anywhere else in the file
  *                cannot desync the exemption (ADR-0119).
  *
- *   [MCP-PIN]   A `figma-console-mcp@<x>` citation under docs/src (or the repo-root
- *                .mcp.json, which the docs show verbatim as the clone's config)
+ *   [MCP-PIN]   A `figma-console-mcp@<x>` citation under docs/src (or in the repo-root
+ *                .mcp.json, .gemini/settings.json or either preflight.mjs; the
+ *                docs show .mcp.json verbatim as the clone's config)
  *                whose <x> differs from the pin the scaffold ships in
  *                libs/create-workspace/src/generators/preset/preset.ts — the single
  *                source. `@latest` counts as a mismatch: the server is pinned
@@ -73,6 +74,19 @@ const PRESET_FILE = path.join(
   'libs/create-workspace/src/generators/preset/preset.ts',
 );
 const MCP_CONFIG_FILE = path.join(ROOT, '.mcp.json');
+/**
+ * Every non-docs file that launches or names the server with a version: the
+ * repo's own MCP configs (Claude Code, Gemini CLI) and both preflight copies.
+ */
+const MCP_PIN_FILES = [
+  MCP_CONFIG_FILE,
+  path.join(ROOT, '.gemini/settings.json'),
+  path.join(ROOT, 'tools/scripts/preflight.mjs'),
+  path.join(
+    ROOT,
+    'libs/create-workspace/src/generators/preset/files/tools/scripts/preflight.mjs',
+  ),
+];
 const NODE_ID_ROOTS = [DOCS_SRC, path.join(ROOT, 'workshop')];
 
 /**
@@ -326,7 +340,7 @@ function checkMcpPinCitations(errors) {
     return;
   }
   const [pin] = pins;
-  const files = [...docsSourceFiles(), MCP_CONFIG_FILE].filter((f) =>
+  const files = [...docsSourceFiles(), ...MCP_PIN_FILES].filter((f) =>
     fs.existsSync(f),
   );
   for (const file of files) {
@@ -423,6 +437,6 @@ if (errors.length > 0) {
     '✓ No stray port-6006 citation under docs/src/pages (create-atelier-ui-workspace scaffold only, ADR-0084)',
   );
   console.log(
-    '✓ Every figma-console-mcp@<version> citation (docs/src, .mcp.json) matches the scaffold pin in preset.ts',
+    '✓ Every figma-console-mcp@<version> citation (docs/src, .mcp.json, .gemini, preflight) matches the scaffold pin in preset.ts',
   );
 }

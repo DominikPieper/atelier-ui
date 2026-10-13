@@ -92,13 +92,26 @@ const IMPORT_MAP: Record<string, string[]> = {
   ],
   tooltip: ['AtlTooltip'],
   toast: ['AtlToastProvider', 'AtlToastContainer', 'useAtlToast'],
-  accordion: ['AtlAccordionGroup', 'AtlAccordionItem'],
+  accordion: ['AtlAccordionGroup', 'AtlAccordionItem', 'AtlAccordionHeader'],
   alert: ['AtlAlert'],
   'code-block': ['AtlCodeBlock'],
   table: ['AtlTable', 'AtlThead', 'AtlTbody', 'AtlTr', 'AtlTh', 'AtlTd'],
   stepper: ['AtlStepper', 'AtlStep'],
   combobox: ['AtlCombobox'],
 };
+
+// IMPORT_MAP holds the symbols all three packages share. Where a package
+// exports something different, the entry here replaces the shared one for that
+// framework only: Angular's toast is a service (`AtlToastService`) with no
+// provider component or hook; React and Vue use `AtlToastProvider` + the
+// `useAtlToast` hook. Checked against libs/{angular,react,vue}/src/index.ts.
+const IMPORT_OVERRIDES: Partial<Record<Framework, Record<string, string[]>>> = {
+  angular: { toast: ['AtlToastContainer', 'AtlToastService'] },
+};
+
+function importSymbolsFor(name: string, framework: Framework): string[] {
+  return IMPORT_OVERRIDES[framework]?.[name] ?? IMPORT_MAP[name] ?? [];
+}
 
 function getCategory(name: string): string {
   for (const [cat, components] of Object.entries(COMPONENT_CATEGORIES)) {
@@ -899,7 +912,7 @@ export default function ComponentDetail({
 
   const category = getCategory(name);
   const categoryTone = CATEGORY_TONE[category] ?? 'primary';
-  const importSymbols = IMPORT_MAP[name] ?? [];
+  const importSymbols = importSymbolsFor(name, framework);
   // The manifest of the selected framework; the hand-written rows only where
   // the manifest has no entry (see MANIFEST_GAPS in tools/scripts/lib/manifest-props.js).
   const fwApi = api[framework];

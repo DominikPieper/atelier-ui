@@ -471,9 +471,18 @@ async function checkFigmaSetup() {
     'manifest.json',
   );
   const pinnedVersion = getPinnedFigmaConsoleVersion();
+  // No exact pin means the workspace runs whatever npm serves today (ADR-0170):
+  // say so, and never suggest `@latest` as the fix command.
   const pinnedSpec = pinnedVersion
     ? `figma-console-mcp@${pinnedVersion}`
-    : 'figma-console-mcp@latest';
+    : 'figma-console-mcp@<exact version>';
+  if (!pinnedVersion) {
+    warn(
+      'figma-console-mcp version pin',
+      '.mcp.json does not pin `figma-console-mcp` to an exact version (x.y.z) — a new upstream release changes what you run',
+      'Set the `figma-console` args to `["-y", "figma-console-mcp@<x.y.z>"]` (the version your trainer names), then restart Claude Code',
+    );
+  }
   if (existsSync(manifestPath)) {
     ok('Figma Desktop Bridge plugin', `manifest at ${manifestPath}`);
   } else {

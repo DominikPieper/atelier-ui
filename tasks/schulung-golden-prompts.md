@@ -1,11 +1,13 @@
 # Golden-Prompts — trainer cheat sheet
 
-**What this is.** Ready-to-paste prompts for the three blocks that need them —
-`tasks/archive/schulung-2tage-agenda-2026-09.md`'s Material-Lücken table names this exact gap: _"Trainer-
-Spickzettel mit Golden-Prompts: typische Fehler / Prompts pro Block (Tag 1 Block 5, Tag
-2 Block 3 und 4)."_ `docs/src/pages/schulung.astro` (Tag 2, Block 03) instructs
-participants to use it: _"Token-Treue erzwingen: Golden-Prompts verlangen `--ui-*`
-Custom Properties."_ Neither page carried the actual prompts before this file existed.
+**What this is.** Ready-to-paste prompts for the blocks that need them — the
+retired 2026-09 agenda (`tasks/archive/schulung-2tage-agenda-2026-09.md`, German) named
+this exact gap in its material-gaps table: _"Trainer cheat sheet with golden prompts:
+typical errors / prompts per block"_ (translated; it listed Day 1 Block 5 and Day 2
+Blocks 3 and 4 under its old block numbering). The current curriculum is
+`docs/src/pages/schulung.astro`; its Day 2 Block 03 ("Iterate: prompt quality and the
+self-healing loop") tells participants: _"Enforce token fidelity: golden prompts demand
+`--ui-*` custom properties."_ Neither page carries the actual prompts; this file does.
 
 **Not a substitute for this: `docs/src/pages/prompts.astro`.** Checked directly before
 writing this — its eight cards (`Chat interface`, `Login form`, `Stats dashboard`, …)
@@ -14,9 +16,9 @@ are whole-page generation templates: "build a settings page", "build a data tabl
 MCP. Nothing there targets a single component's token fidelity, corrects an invented
 prop, or fixes a wrong slot — the granularity this sheet needs does not exist anywhere
 else in the repo. It borrows one convention from that page (fetch the API reference /
-handoff document first, then generate) and stops there. The agenda's Material-Lücken
-row says this sheet is "abgeleitet aus `docs/src/pages/prompts.astro`" — read literally,
-that overstates it; what actually transfers is the _convention_, not the _content_, and
+handoff document first, then generate) and stops there. The old agenda's
+material-gaps row said this sheet is "derived from `docs/src/pages/prompts.astro`"
+(translated) — read literally, that overstates it; what actually transfers is the _convention_, not the _content_, and
 that row now points here instead.
 
 **Where this lives, and why not `/schulung`.** This is trainer prep, read before or
@@ -40,7 +42,8 @@ below was checked against `libs/spec/src/index.ts`, `libs/{angular,react,vue}/sr
 `plan/big-picture.md`, `plan/design-principles.md`,
 `libs/create-workspace/src/generators/preset/files/styles/tokens.css` (the canonical
 token file, ADR-0115/ADR-0116) and the four `workshop/briefs/*.md` files, on
-2026-09-10. §5 lists exactly what was checked and what got cut for being unverifiable.
+2026-09-10 (block names and numbers retargeted to the current `/schulung` on 2026-10-13;
+prompt text unchanged). §5 lists exactly what was checked and what got cut for being unverifiable.
 Per ADR-0116: names below are the stable part and are cited as fact; a couple of
 current _values_ (e.g. a specific px number) are deliberately not repeated here for the
 same reason ADR-0116 gives — read them fresh from `tokens.css` at prompt time rather
@@ -67,15 +70,21 @@ than trusting a number that was correct on 2026-09-10.
   `libs/react/src/lib/card/atl-card.tsx`, `libs/angular/src/lib/dialog/atl-dialog.ts`
   and `libs/vue/src/lib/dialog/*.vue` (`plan/big-picture.md`'s "Framework
   Differences" table names the same three rows).
-- **Block mapping:** §1 = Day 1 Block 05 (existing components only — Settings Card).
-  §2 = Day 2 Block 03 (the block `schulung.astro` names by number). §3 = Day 2 Block 04
-  (a11y + dark mode + the closing parity check).
+- **Block mapping** (block numbers and titles as on `/schulung`):
+  - §1 = Day 1 Block 05 "Kata against the clock" and Day 1 Block 02 "Mini-loop: first
+    success" (existing components only — the Settings Card; both blocks run the same
+    frame).
+  - §2.1 = Day 2 Block 02 "Contract, component, stories" (the generation prompt);
+    §2.2–2.4 = Day 2 Block 03 "Iterate: prompt quality and the self-healing loop" (the
+    correction prompts — the block `schulung.astro` names for golden prompts).
+  - §3 = Day 2 Block 04 "Verify: a11y, states, parity" (a11y + dark mode + the closing
+    parity check).
 
 ---
 
-## 1. Day 1 · Block 05 — Guided walkthrough (Settings Card)
+## 1. Day 1 · Block 05 (Kata against the clock) and Block 02 (Mini-loop) — Settings Card
 
-The generation prompt for this block already exists and is live — `examplePrompt` in
+The generation prompt for these blocks already exists and is live — `examplePrompt` in
 `docs/src/pages/tutorial.astro` (mirrored in `/first-component`), which composes
 `AtlCard`/`AtlInput`/`AtlToggle`/`AtlButton` and explicitly tells Claude to pull _"the
 exact token names from `boundVariables`… no conversion needed."_ Do not re-type it here —
@@ -98,9 +107,9 @@ already use exactly these four token names for exactly these four properties.)
 
 ---
 
-## 2. Day 2 · Block 03 — Codegen (token-fidelity block)
+## 2. Day 2 · Blocks 02–03 — Codegen and corrections (token-fidelity)
 
-### 2.1 Generation prompt
+### 2.1 Generation prompt (Block 02 — Contract, component, stories)
 
 > Generate the `<FRAMEWORK>` implementation of `<ComponentName>` from the handoff
 > document below — not from the Figma picture alone (ADR-0096). Read every requirement
@@ -147,7 +156,7 @@ already use exactly these four token names for exactly these four properties.)
 > (`workshop/briefs/README.md` "Done when" item 6 — without it the story renders Canvas
 > only, no Docs tab, for a reason that has nothing to do with the component itself).
 
-### 2.2 Correction — invented prop
+### 2.2 Correction — invented prop (Block 03)
 
 Use when Claude adds a prop the handoff document never named.
 
@@ -166,7 +175,7 @@ current file's own correction note reads: _"An earlier draft of this example inv
 one; cut rather than carried forward."_ That is the exact shape of mistake this prompt
 corrects, verified against the file it happened in.
 
-### 2.3 Correction — missing token
+### 2.3 Correction — missing token (Block 03)
 
 Use when Claude hardcodes a value instead of reaching for a `--ui-*` custom property.
 
@@ -188,7 +197,7 @@ that in your Figma description; do not invent a variable for it.") and `statcard
 all four ("`Library Tokens` carries… no shadow"). Avatar and TagChip have no elevation of
 their own and neither brief mentions it.
 
-### 2.4 Correction — wrong slot
+### 2.4 Correction — wrong slot (Block 03)
 
 Use when Claude puts structural content in the wrong place instead of the region that
 owns it.
@@ -216,7 +225,7 @@ already phrased as a ready one-line correction:
 
 ---
 
-## 3. Day 2 · Block 04 — A11y + Dark Mode + States
+## 3. Day 2 · Block 04 — Verify: a11y, states, parity
 
 ### 3.1 Three-step a11y audit prompt
 
@@ -256,7 +265,7 @@ already phrased as a ready one-line correction:
 
 ### 3.3 Parity double-call prompt (the `codeSpec` field exercise)
 
-This is the exact exercise `tasks/schulung-dry-run-kit.md` §4 (Block 04) flags as
+This is the exact exercise `tasks/schulung-dry-run-kit.md` §4 (Day 2, Block 04) flags as
 "never watched live" before a real rehearsal runs it — hand it to participants verbatim
 once they've built their component:
 
@@ -278,14 +287,14 @@ exactly these seven field names, no more, no fewer.)
 
 ## 4. Quick index — which prompt for which failure
 
-| Symptom in the room                                                                                     | Use                |
-| ------------------------------------------------------------------------------------------------------- | ------------------ |
-| Inline `style`/hex/Tailwind class instead of a token, anywhere in Block 03 or the Block 05 walkthrough  | §1 add-on, or §2.3 |
-| A prop appears that the handoff document / spec never named                                             | §2.2               |
-| Structural content (header/action/remove-button/etc.) dumped as flat children instead of its own region | §2.4               |
-| A11y panel or keyboard walk turns something up in Block 04                                              | §3.1               |
-| Dark-mode toggle reveals a hardcoded colour or a stray hover animation                                  | §3.2               |
-| Closing parity check, to actually exercise the "fields not passed aren't compared" claim                | §3.3               |
+| Symptom in the room                                                                                              | Use                |
+| ---------------------------------------------------------------------------------------------------------------- | ------------------ |
+| Inline `style`/hex/Tailwind class instead of a token, anywhere in Day 2 Blocks 02–03, or the Day 1 Settings Card | §1 add-on, or §2.3 |
+| A prop appears that the handoff document / spec never named                                                      | §2.2               |
+| Structural content (header/action/remove-button/etc.) dumped as flat children instead of its own region          | §2.4               |
+| A11y panel or keyboard walk turns something up in Day 2 Block 04                                                 | §3.1               |
+| Dark-mode toggle reveals a hardcoded colour or a stray hover animation                                           | §3.2               |
+| Closing parity check, to actually exercise the "fields not passed aren't compared" claim                         | §3.3               |
 
 ---
 

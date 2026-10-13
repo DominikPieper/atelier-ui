@@ -176,16 +176,24 @@ const SCAFFOLD_PORT_EXEMPT_ENTRIES = [
   [
     scaffoldPortKey(
       'docs/src/pages/workshop.astro',
-      '<span class="pre-ok">✓</span> Port 4200<span class="pre-muted"> — free</span>',
-      '<span class="pre-ok">✓</span> Port 6006<span class="pre-muted"> — free</span>',
+      '<span class="pre-section">Local ports</span>',
+      '<span class="pre-ok">✓</span> Environment<span class="pre-muted"> — scaffolded workspace — checking dev server (4200) + Storybook (6006)</span>',
     ),
-    "Static preflight terminal mockup for the create-atelier-ui-workspace scaffold — its own Storybook binds 6006, unlike the clone's 4400/4401/4402 (ADR-0084).",
+    "Static preflight terminal mockup for the create-atelier-ui-workspace scaffold: the `Environment` row names its Storybook port 6006, unlike the clone's 4400/4401/4402 (ADR-0084). Appears in both panels, so the same key covers both.",
+  ],
+  [
+    scaffoldPortKey(
+      'docs/src/pages/workshop.astro',
+      '<span class="pre-ok">✓</span> Port 4200 (dev server)<span class="pre-muted"> — free</span>',
+      '<span class="pre-ok">✓</span> Port 6006 (Storybook)<span class="pre-muted"> — free</span>',
+    ),
+    'Same scaffold preflight mockup, the successful run: its own Storybook binds 6006 (ADR-0084).',
   ],
   [
     scaffoldPortKey(
       'docs/src/pages/workshop.astro',
       '<span class="pre-muted">→</span> Run <span class="pre-cmd">`lsof -ti :4200 | xargs kill`</span> (macOS/Linux)',
-      '<span class="pre-ok">✓</span> Port 6006<span class="pre-muted"> — free</span>',
+      '<span class="pre-ok">✓</span> Port 6006 (Storybook)<span class="pre-muted"> — free</span>',
     ),
     'Same scaffold preflight mockup, the "failed run" tab (ADR-0084).',
   ],

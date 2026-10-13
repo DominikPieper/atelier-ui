@@ -245,8 +245,7 @@ _Done when:_ the kata is green and every parity finding is labelled.
 - `/first-component`: the 15-minute kata, the same Settings Card frame
   (node `936-2954`) as a second round, seven copy-paste steps, ending with
   `figma_check_design_parity`. Prompts for this block: `tasks/schulung-golden-prompts.md`
-  §1 (its block heading predates the current names; the prompt is for the Day 1
-  kata/walkthrough).
+  §1 (the prompt for the Settings Card, shared with Block 02's mini-loop).
 - The component lives under `workshop-<fw>/src/` and is viewed with
   `nx serve workshop-<fw>` (the kata page's step 4), app on `localhost:4200`.
 - Expected finding (owner, 2026-10-12, R-176): the card title's letter-spacing — code −0.01em,
@@ -355,8 +354,9 @@ _Done when:_ stories are green, and the prompt was revised at least once with
 the reason stated.
 
 - Golden prompts (token fidelity, `--ui-*` custom properties, the three
-  correction prompts): `tasks/schulung-golden-prompts.md` §2 (the trainer hands
-  them out on site; they are not in the participant workspace). Note which
+  correction prompts): `tasks/schulung-golden-prompts.md` §2.2–2.4 (the trainer
+  hands them out on site; they are not in the participant workspace; §2.1, the
+  generation prompt, belongs to Block 02). Note which
   correction prompt got used and on which failure.
 - Test loop in all frameworks: local addon MCP, `stories-preview` + `test-run`
   with a11y. The page says `nx test <lib> --watch` covers **only the unit

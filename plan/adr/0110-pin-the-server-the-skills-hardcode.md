@@ -73,3 +73,9 @@ the declared version marked as such if the server stays silent. The snapshot its
 unchanged until the next Bridge-connected refresh, so `serverVersion` reads `null` until
 then. The Consequences above missed a fourth line: **every script that starts the server
 must read the pin from `.mcp.json`**, or the pin protects the skills and not the gates.
+
+**Corrected 2026-10-13.** The fourth Consequences line ("every script that starts the
+server must read the pin from `.mcp.json`") still missed launch sites that are not
+scripts: the tracked `.gemini/settings.json` ran `figma-console-mcp@latest`, and both
+`preflight.mjs` copies suggested `@latest` as the fix command. ADR-0170 brings them under
+the `[MCP-PIN]` gate and makes preflight warn on an unpinned config instead.
