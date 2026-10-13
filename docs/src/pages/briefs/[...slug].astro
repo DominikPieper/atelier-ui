@@ -1,0 +1,244 @@
+---
+import { getCollection, render } from 'astro:content';
+import BaseLayout from '../../layouts/BaseLayout.astro';
+import BottomNav from '../../components/BottomNav.astro';
+import HelpFooter from '../../components/HelpFooter.astro';
+import Icon from '../../components/Icon.astro';
+
+// The briefs are rendered in place from workshop/briefs/*.md (content.config.ts)
+// — this page owns the chrome around them, never a copy of their text.
+// `/briefs` is the README (shared rules + the "done when" bar); `/briefs/<name>`
+// is one component's brief.
+
+const ORDER = ['readme', 'toast', 'tagchip', 'statcard', 'avatar'] as const;
+const LABELS: Record<(typeof ORDER)[number], string> = {
+  readme: 'Shared rules',
+  toast: 'Toast',
+  tagchip: 'TagChip',
+  statcard: 'StatCard',
+  avatar: 'Avatar',
+};
+const hrefFor = (id: string) => (id === 'readme' ? '/briefs' : `/briefs/${id}`);
+
+export async function getStaticPaths() {
+  const entries = await getCollection('briefs');
+  return entries.map((entry) => ({
+    params: { slug: entry.id === 'readme' ? undefined : entry.id },
+    props: { entry },
+  }));
+}
+
+const { entry } = Astro.props;
+const { Content, headings } = await render(entry);
+
+const currentPath = hrefFor(entry.id);
+// Level-2 headings only: the briefs are numbered sections ("1. Anatomy", ...).
+const tocItems = headings
+  .filter((h) => h.depth === 2)
+  .map((h) => ({ id: h.slug, label: h.text }));
+const title = headings.find((h) => h.depth === 1)?.text ?? 'Component briefs';
+const sourceUrl = `https://github.com/DominikPieper/atelier-ui/blob/main/workshop/briefs/${entry.id === 'readme' ? 'README' : entry.id}.md`;
+---
+
+<BaseLayout
+  title={title}
+  description="The component briefs for the build-your-own day: what a finished Toast, TagChip, StatCard or Avatar owes — anatomy, axes, states and accessibility obligations. Pick one to build."
+  currentPath={currentPath}
+  tocItems={tocItems}
+>
+  <div class="docs-inline-page">
+    <nav class="brief-switch" aria-label="Component briefs">
+      {ORDER.map((id) => <a
+        href={hrefFor(id)}
+        class={`brief-switch-link${id === entry.id ? ' active' : ''}`}
+        aria-current={id === entry.id ? 'page' : undefined}
+        >{LABELS[id]}</a
+      >)}
+    </nav>
+
+    <article class="brief-body">
+      <Content />
+    </article>
+
+    <p class="brief-source">
+      <Icon name="description" />
+      <span>
+        Rendered from
+        <a
+          href={sourceUrl}
+          target="_blank"
+          rel="noopener noreferrer"
+          class="docs-link-primary"
+          ><code
+            >workshop/briefs/{entry.id === 'readme'
+              ? 'README'
+              : entry.id}.md</code
+          ></a
+        >
+        in the repo — that file is the only copy.
+      </span>
+    </p>
+
+    <HelpFooter page={`briefs/${entry.id}`} />
+
+    <BottomNav
+      items={[
+        {
+          to: '/build-your-own',
+          label: 'Back to',
+          title: 'Build your own (Day 2)',
+          icon: 'edit_square',
+        },
+        {
+          to: '/design-to-code#handoff-example',
+          label: 'Next',
+          title: 'Filled handoff document',
+          icon: 'schema',
+        },
+      ]}
+    />
+  </div>
+</BaseLayout>
+
+<style>
+  .brief-switch {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    margin-bottom: 2rem;
+  }
+  .brief-switch-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 32px;
+    padding: 0.2rem 0.8rem;
+    border: 1px solid var(--ui-color-border);
+    border-radius: 999px;
+    font-size: var(--ui-font-size-sm);
+    font-weight: 600;
+    color: var(--ui-color-text-muted);
+    text-decoration: none;
+  }
+  .brief-switch-link:hover {
+    color: var(--ui-color-text);
+    border-color: var(--ui-color-primary);
+  }
+  .brief-switch-link.active {
+    color: var(--ui-color-primary);
+    background: var(--ui-color-primary-light);
+    border-color: var(--ui-color-primary);
+  }
+
+  /* The rendered markdown has no per-element classes, so it is styled from the
+   * wrapper. Scoped styles do not reach it — hence :global under .brief-body. */
+  .brief-body {
+    color: var(--ui-color-text);
+    font-size: var(--ui-font-size-md);
+    line-height: 1.65;
+    overflow-wrap: anywhere;
+  }
+  .brief-body :global(h1) {
+    margin: 0 0 1.25rem;
+    font-size: var(--ui-font-size-3xl, 2rem);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    line-height: 1.15;
+  }
+  .brief-body :global(h2) {
+    margin: 2.5rem 0 0.75rem;
+    font-size: var(--ui-font-size-2xl);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    scroll-margin-top: 5rem;
+  }
+  .brief-body :global(h3) {
+    margin: 1.75rem 0 0.5rem;
+    font-size: var(--ui-font-size-lg, 1.15rem);
+    font-weight: 700;
+    scroll-margin-top: 5rem;
+  }
+  .brief-body :global(p),
+  .brief-body :global(ul),
+  .brief-body :global(ol),
+  .brief-body :global(blockquote) {
+    margin: 0 0 1rem;
+  }
+  .brief-body :global(ul),
+  .brief-body :global(ol) {
+    padding-left: 1.4rem;
+  }
+  .brief-body :global(li + li) {
+    margin-top: 0.35rem;
+  }
+  .brief-body :global(blockquote) {
+    padding: 0.75rem 1rem;
+    border-left: 3px solid var(--ui-color-primary);
+    background: var(--ui-color-surface-raised);
+    border-radius: 0 var(--ui-radius-md) var(--ui-radius-md) 0;
+    color: var(--ui-color-text-muted);
+    font-size: var(--ui-font-size-sm);
+  }
+  .brief-body :global(blockquote p:last-child) {
+    margin-bottom: 0;
+  }
+  .brief-body :global(hr) {
+    border: 0;
+    border-top: 1px solid var(--ui-color-border);
+    margin: 2rem 0;
+  }
+  .brief-body :global(a) {
+    color: var(--ui-color-primary);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+  }
+  .brief-body :global(:not(pre) > code) {
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 0.78rem;
+    color: var(--ui-color-primary);
+    background: var(--ui-color-primary-light);
+    padding: 0.05em 0.35em;
+    border-radius: var(--ui-radius-sm);
+  }
+  .brief-body :global(.brief-table-wrap) {
+    overflow-x: auto;
+    margin: 0 0 1.25rem;
+    border: 1px solid var(--ui-color-border);
+    border-radius: var(--ui-radius-md);
+  }
+  .brief-body :global(table) {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--ui-font-size-sm);
+    line-height: 1.5;
+  }
+  .brief-body :global(th),
+  .brief-body :global(td) {
+    padding: 0.55rem 0.75rem;
+    text-align: left;
+    vertical-align: top;
+    border-bottom: 1px solid var(--ui-color-border);
+  }
+  .brief-body :global(th) {
+    background: var(--ui-color-surface-raised);
+    font-weight: 700;
+    white-space: nowrap;
+  }
+  .brief-body :global(tr:last-child td) {
+    border-bottom: 0;
+  }
+
+  .brief-source {
+    display: flex;
+    align-items: flex-start;
+    gap: 0.5rem;
+    margin: 2.5rem 0 2rem;
+    font-size: var(--ui-font-size-sm);
+    color: var(--ui-color-text-muted);
+  }
+  .brief-source :global(svg) {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    margin-top: 2px;
+  }
+</style>

@@ -48,6 +48,7 @@ interface Section {
 const SECTIONS: Section[] = [
   {
     title: 'AI-Native',
+    id: 'ai-native',
     cards: [
       {
         title: 'Chat interface',
@@ -67,6 +68,7 @@ const SECTIONS: Section[] = [
   },
   {
     title: 'Forms',
+    id: 'forms',
     cards: [
       {
         title: 'Login form',
@@ -86,6 +88,7 @@ const SECTIONS: Section[] = [
   },
   {
     title: 'Data Display',
+    id: 'data-display',
     cards: [
       {
         title: 'Stats dashboard',
@@ -105,6 +108,7 @@ const SECTIONS: Section[] = [
   },
   {
     title: 'Navigation',
+    id: 'navigation',
     cards: [
       {
         title: 'Multi-step form wizard',
@@ -199,6 +203,13 @@ const rubricHtml = (s: string) => s.replace(/`([^`]+)`/g, '<code>$1</code>');
   title="Prompt templates"
   description="Battle-tested prompt templates for building Atelier UI components with Claude — scaffolding, refactors, Figma-to-code, and story writing."
   currentPath="/prompts"
+  tocItems={[
+    ...SECTIONS.map((section) => ({
+      id: section.id!,
+      label: section.title,
+    })),
+    { id: 'rubric', label: 'Prompt rubric' },
+  ]}
 >
   <div class="docs-inline-page">
     <PageHero

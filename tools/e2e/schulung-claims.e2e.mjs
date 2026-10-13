@@ -64,6 +64,15 @@ import { fileURLToPath } from 'node:url';
 const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
 const SCHULUNG_REL = 'docs/src/pages/schulung.astro';
 const SCHULUNG_PATH = join(ROOT, SCHULUNG_REL);
+// Day 2 is also taught from the participant page, and its "done" checklist is
+// shared data rather than page markup. Parts 2 and 3 (commands, Figma refs) read
+// every file that carries Day 2 claims, so none of them escapes the check. Part 1
+// (the MCP tool list) keeps its anchor in schulung.astro alone.
+const CLAIM_SOURCES = [
+  SCHULUNG_REL,
+  'docs/src/pages/build-your-own.astro',
+  'docs/src/data/day2-done.ts',
+];
 const SNAPSHOT_PATH = join(ROOT, 'tools/figma/snapshot.json');
 const PKG_PATH = join(ROOT, 'package.json');
 const SCAFFOLD_PRESET_PATH = join(
@@ -98,6 +107,12 @@ function warn(msg) {
 
 function readAstro() {
   return readFileSync(SCHULUNG_PATH, 'utf8');
+}
+/** Text of every file that makes curriculum claims (see CLAIM_SOURCES). */
+function readClaimText() {
+  return CLAIM_SOURCES.map((rel) => readFileSync(join(ROOT, rel), 'utf8')).join(
+    '\n',
+  );
 }
 function readPkg() {
   return JSON.parse(readFileSync(PKG_PATH, 'utf8'));
@@ -368,7 +383,7 @@ function expandProjectToken(token) {
 async function checkCommandsExist() {
   section('Part 2 — every named command exists');
   const failures = [];
-  const astroText = readAstro();
+  const astroText = readClaimText();
   const pkg = readPkg();
 
   const scripts = extractNpmScripts(astroText);
@@ -479,7 +494,7 @@ function extractFrameNames(astroText) {
 async function checkFigmaRefs() {
   section('Part 3 — Figma references cited by the curriculum');
   const failures = [];
-  const astroText = readAstro();
+  const astroText = readClaimText();
   const snapshot = JSON.parse(readFileSync(SNAPSHOT_PATH, 'utf8'));
   const refNodes = snapshot.referencedNodes || [];
   const idsInSnapshot = new Set(refNodes.map((n) => n.id));

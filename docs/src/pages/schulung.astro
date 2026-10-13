@@ -4,6 +4,8 @@ import PageHero from '../components/PageHero.astro';
 import HelpFooter from '../components/HelpFooter.astro';
 import BottomNav from '../components/BottomNav.astro';
 import Callout from '../components/Callout.astro';
+import { DAY2_DONE } from '../data/day2-done';
+import { inlineMd } from '../lib/inline-md';
 
 type PageLink = { label: string; href: string };
 
@@ -45,8 +47,6 @@ const TARGET = {
   parts: 'AtlCard / AtlInput / AtlToggle / AtlButton',
   node: '936-2954',
 };
-
-const SITE_REPO = 'https://github.com/DominikPieper/atelier-ui/blob/main';
 
 const L = {
   overview: { label: 'Overview', href: '/' },
@@ -99,10 +99,8 @@ const L = {
     label: 'Check your own system',
     href: '/design-principles#check-your-own',
   },
-  briefs: {
-    label: 'Component briefs',
-    href: `${SITE_REPO}/workshop/briefs/README.md`,
-  },
+  briefs: { label: 'Component briefs', href: '/briefs' },
+  buildYourOwn: { label: 'Build your own (Day 2)', href: '/build-your-own' },
   skills: { label: 'Agent skills', href: '/agent-skills' },
 };
 
@@ -283,11 +281,11 @@ const DAYS: Day[] = [
         title: 'Recap (active recall), brief, skills',
         format: 'Talk',
         why: 'Reactivate Day 1.',
-        pages: [L.briefs, L.skills],
+        pages: [L.buildYourOwn, L.briefs, L.skills],
         done: 'Everyone knows their target component and their skills are installed.',
         bullets: [
           'Day 1 recap as active recall: participants answer, the trainer does not lecture',
-          'Present the component brief — anatomy, axes, states, a11y requirements. One brief per component lives in the repo under `workshop/briefs/{toast,tagchip,statcard,avatar}.md`',
+          'Present the component brief — anatomy, axes, states, a11y requirements. One brief per component lives in the repo under `workshop/briefs/{toast,tagchip,statcard,avatar}.md` and is rendered on the site at /briefs from those same files',
           'Show the uianatomy MCP as a helper — and use it to introduce the skills concept: a skill is a guide that Claude loads when the task matches',
           "The skills participants have: `atelier-component` (the workspace's own skill — it is the design-to-code loop for your workspace and carries the rest of the day from Block 02 on), `uianatomy-mcp` (present in every workspace, triggers automatically here), `figma-workspace-architect` (only in workspaces generated with Figma; accompanies Block 01), and the four Storybook skills",
         ],
@@ -432,10 +430,8 @@ const APPENDIX_BULLETS: string[] = [
   'Skills in this appendix: `design-to-code`, `atelier-design` and `artboard-bridge` are repo/trainer-only skills and are not part of the participant scaffold.',
 ];
 
-const esc = (s: string) =>
-  s.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;');
 // Plain strings with `backticks` become <code>; everything else is escaped.
-const md = (s: string) => esc(s).replace(/`([^`]+)`/g, '<code>$1</code>');
+const md = inlineMd;
 
 const dayId = (d: Day) => `day-${d.day.replace(' ', '-').toLowerCase()}`;
 ---
@@ -470,8 +466,10 @@ const dayId = (d: Day) => `day-${d.day.replace(' ', '-').toLowerCase()}`;
     <Callout tone="note" title="For instructors">
       <p>
         This page is the two-day training curriculum, aimed at instructors
-        planning a cohort. Workshop participants can skip straight to
-        <a href="/workshop" class="docs-link-primary">Setup</a>.
+        planning a cohort. Participants do not need it: Day 1 starts at
+        <a href="/workshop" class="docs-link-primary">Setup</a>, and Day 2 has
+        its own page,
+        <a href="/build-your-own" class="docs-link-primary">Build your own</a>.
       </p>
     </Callout>
 
@@ -633,61 +631,9 @@ const dayId = (d: Day) => `day-${d.day.replace(' ', '-').toLowerCase()}`;
         participants working in <em>our</em> repo.
       </p>
       <ol class="schulung-verify">
-        <li>
-          The component is a component set in your own Figma draft (a duplicate
-          of the Atelier file) — with variants, properties and a dark-mode
-          variant
-        </li>
-        <li>
-          <code>/verify</code> in Claude Code (or the five checks one by one:
-          <code>check:format</code>, <code>check:stylelint</code>,
-          <code>check:contracts</code>, <code>check:unit</code>,
-          <code>check:stories</code>) — each with exit code 0.
-          <code>check:contracts</code> is the one that really checks your own
-          work: it joins the contract, the docgen and the Figma snapshot and
-          reports <code>[COVERAGE]</code> when a variant value is rendered by no
-          story
-        </li>
-        <li>
-          <code>npm run storybook</code> is running and shows the component as a
-          story (canvas + Docs tab)
-        </li>
-        <li>
-          Test loop green: the <code>test-run</code> MCP call passes, or the
-          equivalent <code>npm run check:stories</code> passes (every story in
-          Chromium, play assertions, axe) — <code>npm run check:unit</code>
-          covers only the jsdom half and is no substitute
-        </li>
-        <li>
-          <code>figma_audit_component_accessibility</code> without critical
-          findings <strong>and</strong> the Storybook a11y tab without axe-core
-          findings
-        </li>
-        <li>Dark mode switches correctly through the token override</li>
-        <li>
-          <code>figma_check_design_parity</code> (needs the connected Desktop
-          Bridge) on your own Figma node against the generated component: the
-          report comes back without deviations — that proves something for
-          exactly the sections that were passed (see Day 2 Block 04):
-          <code>componentAPI</code>, <code>metadata</code>, <code>tokens</code>
-          from <code>check:contracts --emit</code> plus
-          <code>accessibility</code> from
-          <code>figma_scan_code_accessibility</code>; fields that were not
-          passed are not compared — a thinly filled <code>codeSpec</code> with
-          just these four sections is the normal case, not a special case, as
-          long as the report names which sections they were. Hand findings back
-          to Claude and check again. This means the MCP call, not
-          <code>npm run check:parity</code>: the repo gate checks the Atelier
-          masters from <code>tools/figma/snapshot.json</code>, and your own
-          component is not in there
-        </li>
-        <li>
-          <code>check:contracts</code> with your own flags (<code>--fw</code>,
-          <code>--contracts</code>, <code>--stories</code>,
-          <code>--snapshot</code>) exits 0, and
-          <code>nx storybook-test &lt;fw&gt;</code> is green — every story
-          renders in Chromium and passes axe
-        </li>
+        {DAY2_DONE.map((item) => (
+          <li set:html={inlineMd(item)} />
+        ))}
       </ol>
     </section>
 
@@ -923,8 +869,11 @@ const dayId = (d: Day) => `day-${d.day.replace(' ', '-').toLowerCase()}`;
     font-size: var(--ui-font-size-md);
     line-height: 1.55;
     color: var(--ui-color-text);
+    overflow-wrap: anywhere;
   }
-  .schulung-verify code {
+  /* The items are set:html strings, so Astro's scope attribute never reaches
+   * their <code> elements — hence :global. */
+  .schulung-verify :global(code) {
     font-family: var(--font-mono, ui-monospace, monospace);
     font-size: 0.78rem;
     color: var(--ui-color-primary);

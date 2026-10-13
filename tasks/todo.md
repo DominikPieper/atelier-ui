@@ -60,8 +60,15 @@ come first. Ranked:
       `tasks/schulung-dry-run-kit.md`.
 - [x] R-176/R-177 (owner: Figma moves): Button master aligned with code; Card tracking
       documented as a deliberate mismatch (no per-component tracking in Figma styles).
-- [ ] Rest of item 1: R-044 setup mail, R-049 trainer kit, ~~R-041 agenda gaps~~ (done 2026-10-12), R-042 recovery
+- [ ] Rest of item 1 (organisational parts — setup mail, provisioning, notices, feedback — handled separately by the owner, 2026-10-13): R-044 deck/briefs, R-049 run-of-show/demo scripts/cheat sheet, ~~R-041 agenda gaps~~ (done 2026-10-12), R-042 recovery
       path. Then item 2.
+- [x] Docs navigation for the course (owner go 2026-10-13; done same day, ADR-0169, `check:all` green): Day 2 has no participant page —
+      the workshop track ends at the Day 1 kata, Day 2 lives only on the instructor page
+      `/schulung`. Steps: (a) new participant page for Day 2 as track step 7, briefs visible
+      on the site; (b) an always-open "Course kit" sidebar group (glossary, briefs, prompt
+      rubric, guardrail demo, rescue path); (c) `/claude-design` → "For instructors",
+      `/runbook` into the sidebar; (d) TOC on `/prompts`, `/schulung` link on the front page
+      (R-062). Done when `check:all` is green and every link resolves on the built site.
 - [x] Scaffold release on npm: `check:release-drift` in sync after the Publish run.
 
 ### Course content review follow-up (2026-10-10)

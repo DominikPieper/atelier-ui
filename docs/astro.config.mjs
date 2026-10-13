@@ -7,6 +7,7 @@ import pagefind from 'astro-pagefind';
 import llms from 'astro-llms-md';
 import icon from 'astro-icon';
 import astroBrokenLinksChecker from 'astro-broken-links-checker';
+import rehypeBriefLinks from './src/lib/rehype-brief-links.mjs';
 import { nxViteTsPaths } from '@nx/vite/plugins/nx-tsconfig-paths.plugin';
 
 export default defineConfig({
@@ -87,6 +88,8 @@ export default defineConfig({
       },
     }),
   ],
+  // Only the Day 2 briefs go through the markdown pipeline (see content.config.ts).
+  markdown: { rehypePlugins: [rehypeBriefLinks] },
   output: 'static',
   outDir: '../dist/docs',
   vite: {

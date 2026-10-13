@@ -76,6 +76,11 @@ export const OG_PAGES = {
     description:
       'A 15-minute kata. Open the Figma frame, paste the prompt, save the output, compare.',
   },
+  'build-your-own': {
+    title: 'Build Your Own Component',
+    description:
+      'Day 2 of the Atelier training: choose a brief, design it in Figma, write the handoff, generate and verify your own component.',
+  },
   'agent-skills': {
     title: 'Agent Skills',
     description:

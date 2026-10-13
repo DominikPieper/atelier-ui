@@ -115,7 +115,7 @@ function isTopActive(path: string): boolean {
 // they hold the active page. Hrefs live here so the open state and the links
 // below cannot drift apart.
 const GROUP_HREFS = {
-  instructors: ['/schulung'],
+  instructors: ['/schulung', '/runbook', '/claude-design'],
   howto: [
     '/install',
     '/figma',
@@ -134,10 +134,39 @@ const GROUP_HREFS = {
     '/claude-md',
     '/agent-skills',
   ],
-  explanation: ['/design-principles', '/claude-design', '/accessibility'],
+  explanation: ['/design-principles', '/accessibility'],
 } as const;
 const groupOpen = (key: keyof typeof GROUP_HREFS) =>
   GROUP_HREFS[key].some((h) => isActive(h));
+
+// Course kit — the pages a participant reaches for repeatedly during the two
+// days, always visible under the workshop track (not a collapsed group).
+// Most entries are anchors INTO another page, so they carry no active state of
+// their own: `isActive` compares paths, `currentPath` never contains a hash, so
+// a hash href would never match — and matching on its page instead would light
+// up "Prompt rubric" on every /prompts visit. Only an entry that is a page in
+// its own right names that page in `page` and highlights.
+const COURSE_KIT: {
+  href: string;
+  label: string;
+  icon: string;
+  page?: string;
+}[] = [
+  { href: '/workshop#glossary', label: 'Glossary', icon: 'menu_book' },
+  {
+    href: '/briefs',
+    label: 'Component briefs',
+    icon: 'description',
+    page: '/briefs',
+  },
+  { href: '/prompts#rubric', label: 'Prompt rubric', icon: 'chat' },
+  { href: '/prompts#guardrails', label: 'Guardrail demo', icon: 'lightbulb' },
+  {
+    href: '/troubleshooting#still-red',
+    label: 'Rescue path (still red)',
+    icon: 'help',
+  },
+];
 
 // Mobile bottom nav: on a workshop-track page it moves the learner along the
 // path (Previous / Step N of M / Next); elsewhere it keeps the quick links.
@@ -148,6 +177,9 @@ const { prev: trackPrev, next: trackNext } = getPrevNext(currentPath);
 const BREADCRUMB_LABELS: Record<string, string> = {
   workshop: 'Workshop setup',
   schulung: '2-Tages-Schulung',
+  'build-your-own': 'Build your own',
+  briefs: 'Component briefs',
+  runbook: 'Runbook',
   'figma-token': 'Figma access',
   troubleshooting: 'Troubleshooting',
   figma: 'Figma workflow',
@@ -475,9 +507,31 @@ const breadcrumbSchema = {
               </a>)}
             </div>
 
-            {/* For instructors — off the numbered learner path. The 2-day
-              Schulung outline lives here so it doesn't read as a workshop step
-              (see workshop-track.ts: Schulung is intentionally not on the track). */}
+            {/* Course kit — always open, deliberately not a <details>: these are
+              the lookups a participant needs mid-exercise, and a collapsed group
+              is exactly why they were hard to find. */}
+            <div class="docs-nav-section docs-nav-section--kit">
+              <div class="docs-nav-heading">
+                <Icon name="widgets" class="docs-nav-heading-icon" />
+                <span>Course kit</span>
+              </div>
+              {COURSE_KIT.map((k) => {
+                const active = k.page !== undefined && isActive(k.page);
+                return <a
+                  href={k.href}
+                  class={`docs-nav-link${active ? ' active' : ''}`}
+                  aria-current={active ? 'page' : undefined}
+                >
+                  <Icon name={k.icon} class="docs-nav-link-icon" />
+                  {k.label}
+                </a>;
+              })}
+            </div>
+
+            {/* For instructors — off the numbered learner path: the 2-day
+              Schulung curriculum, the operations runbook and the Claude Design
+              trainer appendix. None of them is a workshop step (see
+              workshop-track.ts: they are intentionally not on the track). */}
             <details
               class="docs-nav-section docs-nav-group"
               open={groupOpen('instructors')}
@@ -492,6 +546,20 @@ const breadcrumbSchema = {
               >
                 <Icon name="schedule" class="docs-nav-link-icon" />
                 Schulung (2 Tage)
+              </a>
+              <a
+                href="/runbook"
+                class={`docs-nav-link${isActive('/runbook') ? ' active' : ''}`}
+              >
+                <Icon name="build_circle" class="docs-nav-link-icon" />
+                Runbook
+              </a>
+              <a
+                href="/claude-design"
+                class={`docs-nav-link${isActive('/claude-design') ? ' active' : ''}`}
+              >
+                <Icon name="grid_view" class="docs-nav-link-icon" />
+                Claude Design
               </a>
             </details>
 
@@ -641,13 +709,6 @@ const breadcrumbSchema = {
               >
                 <Icon name="schema" class="docs-nav-link-icon" />
                 Design principles
-              </a>
-              <a
-                href="/claude-design"
-                class={`docs-nav-link${isActive('/claude-design') ? ' active' : ''}`}
-              >
-                <Icon name="grid_view" class="docs-nav-link-icon" />
-                Claude Design
               </a>
               <a
                 href="/accessibility"
@@ -1117,6 +1178,23 @@ const breadcrumbSchema = {
         });
 
         bindOnce(backdrop, 'click', closeSidebar);
+
+        // A sidebar link to an anchor on the CURRENT page never navigates, so
+        // nothing else would dismiss the drawer and it would keep covering the
+        // content it just scrolled to. Links to other pages are left alone:
+        // the page swap resets the drawer (see the reset at the top).
+        bindOnce(sidebar, 'click', function (e) {
+          if (!isMobile() || e.defaultPrevented) return;
+          const link = e.target.closest && e.target.closest('a[href]');
+          if (!link || !sidebar.classList.contains('docs-sidebar--open'))
+            return;
+          const url = new URL(link.href, location.href);
+          if (
+            url.origin === location.origin &&
+            url.pathname === location.pathname
+          )
+            closeSidebar();
+        });
 
         // Escape closes the drawer; Tab is trapped while open (mobile). The
         // hamburger (now an X) is the only close control, so it is part of the

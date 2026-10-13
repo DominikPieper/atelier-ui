@@ -22,6 +22,11 @@ track pages the mobile bottom nav is Previous / Step / Next. Recorded at decisio
 it so the track ends on the kata's finish; "Step N of 7" below now reads "Step N of 6", and the
 rest of this decision stands.
 
+**Corrected 2026-10-13:** §1 has one exception now. ADR-0169 keeps a "Course kit" group
+(glossary, briefs, prompt rubric, guardrail demo, rescue path) always expanded under the track,
+and the track is seven steps again, ending on `/build-your-own`. The other groups stay
+`<details>` as decided here.
+
 ## Context
 
 The 2026-10-07 critique counted 25 sidebar links in five equal-weight groups, with the

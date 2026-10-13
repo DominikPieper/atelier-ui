@@ -1,0 +1,457 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { Code } from 'astro-expressive-code/components';
+import PageHero from '../components/PageHero.astro';
+import Callout from '../components/Callout.astro';
+import HelpFooter from '../components/HelpFooter.astro';
+import TrackNav from '../components/TrackNav.astro';
+import { DAY2_DONE } from '../data/day2-done';
+import { inlineMd } from '../lib/inline-md';
+
+// Day 2 of the two-day training, written for the participant. The block order,
+// times and "done when" lines follow the instructor curriculum (/schulung, Day 2);
+// this page links to the detail pages rather than repeating them. The end-of-day
+// checklist is shared data (src/data/day2-done.ts), not a second copy.
+
+const MCP_ADD =
+  'claude mcp add --transport http storybook-local http://localhost:<port>/mcp';
+const SNAPSHOT_AND_CHECK = `npm run figma:snapshot
+npm run check:contracts`;
+const EMIT = 'npm run check:contracts -- --emit <folder>';
+---
+
+<BaseLayout
+  title="Build your own component (Day 2)"
+  description="Day 2 of the Atelier training, for participants: choose a component brief, design it in Figma, write the handoff, generate contract, component and stories, iterate, verify and finish with a checklist."
+  currentPath="/build-your-own"
+  tocItems={[
+    { id: 'goal', label: 'What you will have' },
+    { id: 'block-00', label: '00 · Choose your brief' },
+    { id: 'block-01', label: '01 · Design and handoff' },
+    { id: 'block-02', label: '02 · Contract, component, stories' },
+    { id: 'block-03', label: '03 · Iterate' },
+    { id: 'block-04', label: '04 · Verify' },
+    { id: 'block-05', label: '05 · Show and transfer' },
+    { id: 'done', label: 'Are you done?' },
+  ]}
+>
+  <div class="docs-inline-page">
+    <PageHero
+      time="Day 2 · 09:00–17:30"
+      title="Build your own component"
+      titleAccent="own"
+      ledeMax="620px"
+    >
+      Day 1 you ran the loop on a component we gave you. Today you run it on one
+      you design yourself: a brief, a Figma component set, a handoff document,
+      then contract, component and stories, iterated until every check is green.
+      You prompt; you do not type the code.
+    </PageHero>
+
+    <section class="docs-section" aria-labelledby="goal">
+      <h2 class="docs-section-title" id="goal">What you will have</h2>
+      <ul class="byo-list">
+        <li>
+          An own component in your own Figma draft: a component set with
+          variants, properties and dark mode
+        </li>
+        <li>
+          Contract, component and stories in your own workspace, in your
+          framework
+        </li>
+        <li>An a11y audit passed, and dark mode working</li>
+      </ul>
+      <Callout tone="tip" title="Keep these open all day">
+        <p>
+          The <strong>Course kit</strong> in the sidebar links the pages you
+          reach for most:
+          <a href="/briefs" class="docs-link-primary">component briefs</a>, the
+          <a href="/prompts#rubric" class="docs-link-primary">prompt rubric</a>,
+          the
+          <a href="/workshop#glossary" class="docs-link-primary">glossary</a>
+          and the
+          <a href="/troubleshooting#still-red" class="docs-link-primary"
+            >rescue path</a
+          >. Nobody continues red: if a step will not go green, use the rescue
+          path, pair with a neighbour and tell the trainer right away.
+        </p>
+      </Callout>
+    </section>
+
+    <section class="docs-section byo-block" aria-labelledby="block-00">
+      <p class="byo-meta">09:00–09:30 · 30 min</p>
+      <h2 class="docs-section-title" id="block-00">
+        <span class="byo-num" aria-hidden="true">00</span> Choose your brief
+      </h2>
+      <p class="docs-step-desc">
+        Pick one component: Toast, TagChip, StatCard or Avatar. Each
+        <a href="/briefs" class="docs-link-primary">brief</a> says what a
+        finished component owes: anatomy, axes, states and accessibility
+        obligations. It does not say how to draw it; that is the exercise. Read
+        the <a href="/briefs" class="docs-link-primary">shared rules</a> first,
+        then your brief:
+        <a href="/briefs/toast" class="docs-link-primary">Toast</a>,
+        <a href="/briefs/tagchip" class="docs-link-primary">TagChip</a>,
+        <a href="/briefs/statcard" class="docs-link-primary">StatCard</a>,
+        <a href="/briefs/avatar" class="docs-link-primary">Avatar</a>.
+      </p>
+      <p class="docs-step-desc">
+        You also meet the skills: a skill is a guide that Claude loads when the
+        task matches. In your workspace that is <code>atelier-component</code>
+        (the design-to-code loop for your workspace, which carries the day from
+        Block 02 on), <code>uianatomy-mcp</code>,
+        <code>figma-workspace-architect</code> (only in workspaces generated
+        with Figma) and the four Storybook skills. See
+        <a href="/agent-skills" class="docs-link-primary">Agent skills</a>.
+      </p>
+      <p class="byo-done">
+        <strong>Done when</strong> you know your target component and your
+        skills are installed.
+      </p>
+    </section>
+
+    <section class="docs-section byo-block" aria-labelledby="block-01">
+      <p class="byo-meta">09:30–11:00 · 90 min · high-risk block</p>
+      <h2 class="docs-section-title" id="block-01">
+        <span class="byo-num" aria-hidden="true">01</span> Design in Figma and
+        write the handoff
+      </h2>
+      <p class="docs-step-desc">
+        The handoff document is the prompt's input, so the quality of this block
+        decides the rest of the day.
+      </p>
+      <ol class="byo-list byo-list--ordered">
+        <li>
+          Duplicate the Atelier file into your own drafts first, and never
+          change the original file.
+        </li>
+        <li>
+          Start from your brief's starter frame on the Workshop Templates page
+          (it comes along when you duplicate): Toast / Starter, StatCard /
+          Starter, TagChip / Starter or Avatar / Starter. Fills, and where the
+          component has them paddings and radii, are already bound to token
+          variables, so the first step is copy and rename, not an empty canvas.
+        </li>
+        <li>
+          Design in the Figma UI (about 45 min): layout, variants, token
+          assignment. Then structure it through MCP (about 45 min): component
+          properties and a11y audits.
+        </li>
+        <li>
+          Aim for at least 2 variants × 2 states, properties, correct
+          <code>--ui-*</code> tokens and a dark-mode variant. The exact matrix
+          is in your brief.
+        </li>
+        <li>
+          Before anyone prompts, write a short handoff document: draft URL and
+          node id, chosen variants and states, token bindings, reuse versus
+          rebuild, the behaviour from the brief, explicit exclusions, target
+          files and acceptance criteria. It is a checklist, not a template.
+          <a href="/design-to-code#handoff-example" class="docs-link-primary"
+            >A filled handoff document</a
+          >
+          shows one.
+        </li>
+      </ol>
+      <Callout tone="warning" title="If something fails">
+        <p>
+          Bridge not connected, node id does not resolve, port conflicts: see
+          <a href="/troubleshooting" class="docs-link-primary"
+            >Troubleshooting</a
+          >
+          and <a href="/figma-token" class="docs-link-primary">Figma access</a>.
+          Still red: the
+          <a href="/troubleshooting#still-red" class="docs-link-primary"
+            >rescue path</a
+          >.
+        </p>
+      </Callout>
+      <p class="byo-done">
+        <strong>Done when</strong> you have a master plus a filled handoff
+        document.
+      </p>
+    </section>
+
+    <section class="docs-section byo-block" aria-labelledby="block-02">
+      <p class="byo-meta">11:15–12:30 · 75 min</p>
+      <h2 class="docs-section-title" id="block-02">
+        <span class="byo-num" aria-hidden="true">02</span> Contract, component,
+        stories
+      </h2>
+      <p class="docs-step-desc">
+        Prompt from the handoff document, not from the picture alone: behaviour
+        and exclusions come from the document. Let Claude produce the contract,
+        the component (with its test) and the stories in one step. One story per
+        variant value and Boolean state, and a <code>play</code> for every
+        behaviour line of the document.
+      </p>
+      <ol class="byo-list byo-list--ordered">
+        <li>
+          Start <code>npm run storybook</code> in parallel, then connect to it
+          (use the port Storybook prints). This is deliberately local scope, so
+          the shared <code>.mcp.json</code> stays untouched:
+          <Code
+            code={MCP_ADD}
+            lang="shell"
+            title="connect the local Storybook MCP"
+          />
+          Reconnect the client and check that the dev and test tools
+          (<code>get-storybook-story-instructions</code>,
+          <code>stories-preview</code>, <code>test-run</code>) are listed.
+          Without this step they simply do not exist: "not available" means "not
+          configured", not "server down".
+          <code>get-storybook-story-instructions</code> is mandatory before
+          every <code>*.stories.*</code> edit.
+        </li>
+        <li>
+          The contract lives in your own workspace under
+          <code>workshop-&lt;fw&gt;/src/contracts/</code>. The component
+          declares its prop types directly; there is no separate spec interface
+          file. See the
+          <a href="/design-to-code#contract-example" class="docs-link-primary"
+            >worked contract example</a
+          >.
+        </li>
+        <li>
+          Your Figma node needs a snapshot in your workspace. With the bridge
+          connected, run the snapshot, then the check. Before the first run,
+          replace the <code>&lt;YOUR_FIGMA_FILE_KEY&gt;</code> placeholder in
+          the <code>figma:snapshot</code> script in <code>package.json</code>
+          with your own file key if it is not already set:
+          <Code
+            code={SNAPSHOT_AND_CHECK}
+            lang="shell"
+            title="snapshot, then check"
+          />
+          Without a fresh snapshot your component is missing and the check
+          reports <code>[NO-MASTER]</code> (a warning) instead of failing. Read
+          every finding with the
+          <a href="/design-to-code#finding-codes" class="docs-link-primary"
+            >finding codes</a
+          >.
+        </li>
+        <li>
+          Later, for the parity check in Block 04, write the codeSpec fragment
+          with:
+          <Code code={EMIT} lang="shell" title="emit the codeSpec fragment" />
+        </li>
+        <li>
+          Iterate until the prop table fits. Stories and the MCP docs are
+          covered in <a href="/storybook" class="docs-link-primary">Storybook</a
+          >.
+        </li>
+      </ol>
+      <p class="byo-done">
+        <strong>Done when</strong> <code>check:contracts</code> is green
+        offline.
+      </p>
+    </section>
+
+    <section class="docs-section byo-block" aria-labelledby="block-03">
+      <p class="byo-meta">13:30–15:00 · 90 min</p>
+      <h2 class="docs-section-title" id="block-03">
+        <span class="byo-num" aria-hidden="true">03</span> Iterate: prompt
+        quality and the self-healing loop
+      </h2>
+      <p class="docs-step-desc">
+        A single prompt is not the result. Write prompts, judge the output,
+        correct it, and do not type the code yourself.
+      </p>
+      <ul class="byo-list">
+        <li>
+          Judge every prompt against the six-check
+          <a href="/prompts#rubric" class="docs-link-primary">prompt rubric</a>
+          before you send it. When a revision is needed, the failed check is the
+          reason you state.
+        </li>
+        <li>
+          Enforce token fidelity: ask for <code>--ui-*</code> custom properties.
+        </li>
+        <li>
+          Run the test loop: <code>stories-preview</code> and
+          <code>test-run</code> (with a11y) through the local Storybook MCP, or
+          <code>nx storybook-test &lt;fw&gt;</code>, which runs every story in
+          Chromium with play assertions and axe.
+          <code>nx test &lt;lib&gt; --watch</code> covers only the unit half.
+        </li>
+        <li>
+          Paste error messages back to Claude instead of debugging yourself. The
+          loop is described in
+          <a href="/design-to-code#self-healing-loop" class="docs-link-primary"
+            >the self-healing loop</a
+          >.
+        </li>
+        <li>
+          The trainer hands out the golden prompts for this block on site.
+        </li>
+      </ul>
+      <p class="byo-done">
+        <strong>Done when</strong> your stories are green and you revised the
+        prompt at least once, with the reason stated.
+      </p>
+    </section>
+
+    <section class="docs-section byo-block" aria-labelledby="block-04">
+      <p class="byo-meta">15:15–16:30 · 75 min</p>
+      <h2 class="docs-section-title" id="block-04">
+        <span class="byo-num" aria-hidden="true">04</span> Verify: a11y, states,
+        parity
+      </h2>
+      <p class="docs-step-desc">A quiet report is not a clean component.</p>
+      <ol class="byo-list byo-list--ordered">
+        <li>
+          Three-step a11y check: <code>figma_audit_component_accessibility</code
+          >, then the Storybook a11y panel (axe-core), then a keyboard
+          walkthrough. Let Claude fix the findings. Background:
+          <a href="/a11y-workflow#a11y-in-the-loop" class="docs-link-primary"
+            >a11y in the loop</a
+          >
+          and
+          <a href="/accessibility" class="docs-link-primary">Accessibility</a>.
+        </li>
+        <li>
+          Check hover, active and disabled states, and the focus ring via
+          tokens.
+        </li>
+        <li>
+          Dark mode: use the theme control in the Storybook toolbar. It sets
+          <code>data-theme</code>, exactly the selector <code>tokens.css</code>
+          switches on. Backgrounds are canvas colours, not a theme. Note that
+          axe runs only in light mode in <code>check:stories</code>: the toggle
+          is a preview, not test coverage.
+        </li>
+        <li>
+          Assemble your codeSpec from the fragment of Block 02
+          (<code>componentAPI</code>, <code>metadata</code>, <code>tokens</code
+          >). For accessibility, open the story in the running Storybook, copy
+          the story root element's <code>outerHTML</code> in DevTools and pass
+          it as <code>html</code> with <code>mapToCodeSpec: true</code> to
+          <code>figma_scan_code_accessibility</code>.
+        </li>
+        <li>
+          Run <code>figma_check_design_parity</code> on your own node. It needs
+          the connected Desktop Bridge; without it the loop ends after
+          <code>check:contracts</code> and <code>storybook-test</code>, which is
+          a degraded run, not "just carry on". Try it once on purpose with an
+          incomplete codeSpec, then falsify a spacing value deliberately: fields
+          you did not pass are not compared. Read the result with
+          <a href="/design-to-code#parity-report" class="docs-link-primary"
+            >reading a parity report</a
+          >.
+        </li>
+      </ol>
+      <p class="byo-done">
+        <strong>Done when</strong> <code>storybook-test</code> with axe is green
+        and every parity finding is triaged as code, Figma or contract.
+      </p>
+    </section>
+
+    <section class="docs-section byo-block" aria-labelledby="block-05">
+      <p class="byo-meta">16:40–17:30 · 50 min</p>
+      <h2 class="docs-section-title" id="block-05">
+        <span class="byo-num" aria-hidden="true">05</span> Show and tell, then
+        transfer to your own design system
+      </h2>
+      <ul class="byo-list">
+        <li>
+          Cohorts have up to 8 participants, so expect about 5 minutes each,
+          questions included. Show your component, one prompt that worked and
+          one that failed.
+        </li>
+        <li>
+          Transfer: run the self-check in
+          <a href="/design-principles#check-your-own" class="docs-link-primary"
+            >check your own system</a
+          >
+          on your own design system and pick one next step. The
+          <a href="/readiness" class="docs-link-primary">readiness checklist</a>
+          helps you judge a master from your own file.
+        </li>
+      </ul>
+      <p class="byo-done">
+        <strong>Done when</strong> you leave with a next step for your own
+        design system.
+      </p>
+    </section>
+
+    <section class="docs-section" aria-labelledby="done">
+      <h2 class="docs-section-title" id="done">Are you done?</h2>
+      <p class="docs-step-desc">
+        The end-of-day check, each item yours to verify. Every gate there is
+        your own: red means red.
+      </p>
+      <ol class="byo-verify">
+        {DAY2_DONE.map((item) => (
+          <li set:html={inlineMd(item)} />
+        ))}
+      </ol>
+    </section>
+
+    <HelpFooter page="build-your-own" />
+
+    <TrackNav />
+  </div>
+</BaseLayout>
+
+<style>
+  .byo-block {
+    padding-top: 0.5rem;
+  }
+  .byo-meta {
+    margin: 0 0 0.35rem;
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: var(--ui-font-size-sm);
+    color: var(--ui-color-text-muted);
+  }
+  .byo-num {
+    display: inline-block;
+    margin-right: 0.35rem;
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 0.7em;
+    font-weight: 700;
+    color: var(--ui-color-primary);
+    background: color-mix(in srgb, var(--ui-color-primary) 12%, transparent);
+    padding: 0.1rem 0.45rem;
+    border-radius: 3px;
+    vertical-align: 0.1em;
+  }
+  .byo-list,
+  .byo-verify {
+    margin: 0.6rem 0 1rem;
+    padding-left: 1.3rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: var(--ui-font-size-md);
+    line-height: 1.55;
+    color: var(--ui-color-text);
+    overflow-wrap: anywhere;
+  }
+  .byo-list code,
+  .byo-verify :global(code),
+  .docs-step-desc code {
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 0.78rem;
+    color: var(--ui-color-primary);
+    background: var(--ui-color-primary-light);
+    padding: 0.05em 0.35em;
+    border-radius: var(--ui-radius-sm);
+  }
+  .byo-done {
+    margin: 1rem 0 0;
+    padding: 0.6rem 0.9rem;
+    border-left: 3px solid var(--ui-color-success);
+    background: var(--ui-color-surface-raised);
+    border-radius: 0 var(--ui-radius-md) var(--ui-radius-md) 0;
+    font-size: var(--ui-font-size-md);
+    line-height: 1.5;
+  }
+  .byo-done code {
+    font-family: var(--font-mono, ui-monospace, monospace);
+    font-size: 0.78rem;
+    color: var(--ui-color-primary);
+    background: var(--ui-color-primary-light);
+    padding: 0.05em 0.35em;
+    border-radius: var(--ui-radius-sm);
+  }
+</style>

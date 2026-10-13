@@ -16,6 +16,10 @@ Accepted. The numbered track is six steps and ends on `/first-component`. `/patt
 reference page, reached from the kata's finish block and from the sidebar's reference
 group. Recorded at decision time.
 
+**Corrected 2026-10-13:** §1 no longer holds as stated. ADR-0169 appends `/build-your-own`
+(the Day 2 participant page) as step 7, so the track ends on the Day 2 checklist and the kata
+is step 6 with a "Next". `/patterns` stays off the track, as decided here.
+
 ## Context
 
 ADR-0157 made the track the primary navigation with seven steps, the last one

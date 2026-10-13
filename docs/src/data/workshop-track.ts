@@ -13,9 +13,12 @@
 // Each entry mirrors exactly what the sidebar rendered before this extraction:
 // the same href, the same visible label, and the same Material icon name.
 //
-// The track ends on the /first-component kata (owner decision 2026-10-08).
-// /patterns is a reference page, linked from the kata's finish block and the
-// sidebar Reference group — not a numbered step.
+// Steps 1-6 are Day 1 (setup to the /first-component kata); step 7,
+// /build-your-own, is Day 2 — the participant-facing walk through "build your
+// own component". The track ends there (it ended on the kata until 2026-10-13,
+// when Day 2 got a page of its own). /patterns is a reference page, linked from
+// the kata's finish block and the sidebar Reference group — not a numbered
+// step. /schulung is the instructor curriculum and stays off the track.
 
 export interface TrackStep {
   /** 1-based position in the path, matching the sidebar's numbered badge. */
@@ -46,6 +49,12 @@ const TRACK_ORDER: readonly Omit<TrackStep, 'step'>[] = [
   { href: '/design-to-code', label: 'Design to code', icon: 'schema' },
   { href: '/tutorial', label: 'Tutorial', icon: 'school' },
   { href: '/first-component', label: 'First component', icon: 'check_circle' },
+  {
+    href: '/build-your-own',
+    label: 'Build your own',
+    icon: 'edit_square',
+    title: 'Build your own component (Day 2)',
+  },
 ];
 
 export const WORKSHOP_TRACK: readonly TrackStep[] = TRACK_ORDER.map((s, i) => ({
