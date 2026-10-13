@@ -5,9 +5,45 @@ import { AtlRadio } from '../radio/atl-radio';
 import { covers } from '../../testing/behavior';
 
 describe('AtlRadioGroup', () => {
+  describe('accessible name', () => {
+    covers('radio-group', 'accessible-name')('is named by aria-label', () => {
+      render(
+        <AtlRadioGroup aria-label="Plan size">
+          <AtlRadio radioValue="a">A</AtlRadio>
+        </AtlRadioGroup>,
+      );
+      expect(
+        screen.getByRole('radiogroup', { name: 'Plan size' }),
+      ).toBeInTheDocument();
+    });
+
+    it('is named by aria-labelledby', () => {
+      render(
+        <>
+          <span id="cap">Plan size</span>
+          <AtlRadioGroup aria-labelledby="cap">
+            <AtlRadio radioValue="a">A</AtlRadio>
+          </AtlRadioGroup>
+        </>,
+      );
+      expect(
+        screen.getByRole('radiogroup', { name: 'Plan size' }),
+      ).toBeInTheDocument();
+    });
+
+    it('requires a name at the type level', () => {
+      // The discriminated union (as for AtlButton) rejects an unnamed group at
+      // consumer build time; this line only compiles with the directive below
+      // if the error exists.
+      // @ts-expect-error — neither aria-label nor aria-labelledby
+      const unnamed = <AtlRadioGroup name="plan" />;
+      expect(unnamed).toBeTruthy();
+    });
+  });
+
   it('renders children', () => {
     render(
-      <AtlRadioGroup name="plan">
+      <AtlRadioGroup aria-label="Plan" name="plan">
         <AtlRadio radioValue="free">Free</AtlRadio>
         <AtlRadio radioValue="pro">Pro</AtlRadio>
       </AtlRadioGroup>,
@@ -18,7 +54,7 @@ describe('AtlRadioGroup', () => {
 
   covers('radio-group', 'role')('has role="radiogroup"', () => {
     render(
-      <AtlRadioGroup name="plan">
+      <AtlRadioGroup aria-label="Plan" name="plan">
         <AtlRadio radioValue="free">Free</AtlRadio>
       </AtlRadioGroup>,
     );
@@ -29,7 +65,7 @@ describe('AtlRadioGroup', () => {
     'checks the radio matching value',
     () => {
       render(
-        <AtlRadioGroup value="pro" name="plan">
+        <AtlRadioGroup aria-label="Plan" value="pro" name="plan">
           <AtlRadio radioValue="free">Free</AtlRadio>
           <AtlRadio radioValue="pro">Pro</AtlRadio>
         </AtlRadioGroup>,
@@ -46,7 +82,12 @@ describe('AtlRadioGroup', () => {
       const user = userEvent.setup();
       const onChange = vi.fn();
       render(
-        <AtlRadioGroup value="free" onValueChange={onChange} name="plan">
+        <AtlRadioGroup
+          aria-label="Plan"
+          value="free"
+          onValueChange={onChange}
+          name="plan"
+        >
           <AtlRadio radioValue="free">Free</AtlRadio>
           <AtlRadio radioValue="pro">Pro</AtlRadio>
         </AtlRadioGroup>,
@@ -62,7 +103,12 @@ describe('AtlRadioGroup', () => {
       const user = userEvent.setup();
       const onChange = vi.fn();
       render(
-        <AtlRadioGroup value="free" onValueChange={onChange} name="plan">
+        <AtlRadioGroup
+          aria-label="Plan"
+          value="free"
+          onValueChange={onChange}
+          name="plan"
+        >
           <AtlRadio radioValue="free">Free</AtlRadio>
           <AtlRadio radioValue="pro">Pro</AtlRadio>
           <AtlRadio radioValue="enterprise">Enterprise</AtlRadio>
@@ -78,7 +124,12 @@ describe('AtlRadioGroup', () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(
-      <AtlRadioGroup value="free" onValueChange={onChange} name="plan">
+      <AtlRadioGroup
+        aria-label="Plan"
+        value="free"
+        onValueChange={onChange}
+        name="plan"
+      >
         <AtlRadio radioValue="free">Free</AtlRadio>
         <AtlRadio radioValue="pro">Pro</AtlRadio>
         <AtlRadio radioValue="enterprise">Enterprise</AtlRadio>
@@ -91,7 +142,7 @@ describe('AtlRadioGroup', () => {
 
   it('applies is-disabled class when disabled', () => {
     const { container } = render(
-      <AtlRadioGroup disabled name="plan">
+      <AtlRadioGroup aria-label="Plan" disabled name="plan">
         <AtlRadio radioValue="free">Free</AtlRadio>
       </AtlRadioGroup>,
     );
@@ -102,7 +153,13 @@ describe('AtlRadioGroup', () => {
     const user = userEvent.setup();
     const onChange = vi.fn();
     render(
-      <AtlRadioGroup value="free" onValueChange={onChange} disabled name="plan">
+      <AtlRadioGroup
+        aria-label="Plan"
+        value="free"
+        onValueChange={onChange}
+        disabled
+        name="plan"
+      >
         <AtlRadio radioValue="free">Free</AtlRadio>
         <AtlRadio radioValue="pro">Pro</AtlRadio>
       </AtlRadioGroup>,
@@ -115,7 +172,7 @@ describe('AtlRadioGroup', () => {
     'applies is-invalid class when invalid',
     () => {
       const { container } = render(
-        <AtlRadioGroup invalid name="plan">
+        <AtlRadioGroup aria-label="Plan" invalid name="plan">
           <AtlRadio radioValue="free">Free</AtlRadio>
         </AtlRadioGroup>,
       );
@@ -127,7 +184,12 @@ describe('AtlRadioGroup', () => {
     'shows error messages when invalid and errors provided',
     () => {
       render(
-        <AtlRadioGroup invalid errors={['Please select a plan']} name="plan">
+        <AtlRadioGroup
+          aria-label="Plan"
+          invalid
+          errors={['Please select a plan']}
+          name="plan"
+        >
           <AtlRadio radioValue="free">Free</AtlRadio>
         </AtlRadioGroup>,
       );
@@ -139,7 +201,7 @@ describe('AtlRadioGroup', () => {
 describe('AtlRadio', () => {
   it('renders with label text', () => {
     render(
-      <AtlRadioGroup name="plan">
+      <AtlRadioGroup aria-label="Plan" name="plan">
         <AtlRadio radioValue="free">Free plan</AtlRadio>
       </AtlRadioGroup>,
     );
@@ -148,7 +210,7 @@ describe('AtlRadio', () => {
 
   it('is disabled when individual disabled prop is set', () => {
     render(
-      <AtlRadioGroup name="plan">
+      <AtlRadioGroup aria-label="Plan" name="plan">
         <AtlRadio radioValue="free" disabled>
           Free
         </AtlRadio>
@@ -159,7 +221,7 @@ describe('AtlRadio', () => {
 
   it('propagates name from group', () => {
     render(
-      <AtlRadioGroup name="my-group">
+      <AtlRadioGroup aria-label="Plan" name="my-group">
         <AtlRadio radioValue="a">A</AtlRadio>
         <AtlRadio radioValue="b">B</AtlRadio>
       </AtlRadioGroup>,

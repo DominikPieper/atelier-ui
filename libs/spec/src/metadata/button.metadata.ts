@@ -39,6 +39,6 @@ export const metadata: ComponentMetadata = {
   accessibility: {
     role: 'button',
     keyboardBehavior:
-      'Activates on Enter or Space. Receives focus via Tab in source order. Disabled and loading states block activation and remove the button from the tab order respectively (loading retains focus but ignores activation).',
+      'Activates on Enter or Space. Receives focus via Tab in source order. A disabled button (`disabled`) is natively disabled: it blocks activation and leaves the tab order. A loading button (`loading`) is not: it keeps focus and its place in the tab order, announces `aria-busy` and `aria-disabled`, and ignores activation (clicks, Enter, Space, form submit).',
   },
 };

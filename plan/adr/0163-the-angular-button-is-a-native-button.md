@@ -69,3 +69,5 @@ Rejected:
   default while Angular and Vue do not. Recorded as a follow-up decision, not changed here.
 - Weakest point: the proof is jsdom and Storybook, not a consumer app. The combination of the
   `type` input with a static `type="submit"` attribute is covered by specs only.
+
+**Corrected 2026-10-13:** §2 says `loading` sets the native `disabled` attribute. ADR-0171 reverses that for `loading`: it sets `aria-disabled` and `aria-busy`, stays focusable and ignores activation, because native `disabled` dropped focus from a button that started loading. The `is-disabled` class on a loading button, and the neutral paint, are unchanged.

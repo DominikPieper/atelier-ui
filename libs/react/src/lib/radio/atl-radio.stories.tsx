@@ -30,7 +30,12 @@ export const Default: Story = {
   render: function Render() {
     const [value, setValue] = useState('free');
     return (
-      <AtlRadioGroup value={value} onValueChange={setValue} name="plan">
+      <AtlRadioGroup
+        aria-label="Plan"
+        value={value}
+        onValueChange={setValue}
+        name="plan"
+      >
         <AtlRadio radioValue="free">Free</AtlRadio>
         <AtlRadio radioValue="pro">Pro</AtlRadio>
         <AtlRadio radioValue="enterprise">Enterprise</AtlRadio>
@@ -42,7 +47,7 @@ export const Default: Story = {
 
 export const Disabled: Story = {
   render: () => (
-    <AtlRadioGroup value="free" name="plan-disabled" disabled>
+    <AtlRadioGroup aria-label="Plan" value="free" name="plan-disabled" disabled>
       <AtlRadio radioValue="free">Free</AtlRadio>
       <AtlRadio radioValue="pro">Pro</AtlRadio>
     </AtlRadioGroup>
@@ -54,6 +59,7 @@ export const IndividualDisabled: Story = {
     const [value, setValue] = useState('free');
     return (
       <AtlRadioGroup
+        aria-label="Plan"
         value={value}
         onValueChange={setValue}
         name="plan-individual"

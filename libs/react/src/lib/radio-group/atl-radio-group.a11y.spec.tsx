@@ -18,7 +18,7 @@ const SNAP = resolve(ROOT, `tools/parity/a11y/atl-radio-group.${FW}.json`);
 function capture() {
   const scenarios: Record<string, unknown> = {};
   let r = render(
-    <AtlRadioGroup value="sm">
+    <AtlRadioGroup aria-label="Plan" value="sm">
       <AtlRadio radioValue="sm">Small</AtlRadio>
       <AtlRadio radioValue="lg">Large</AtlRadio>
     </AtlRadioGroup>,
@@ -26,7 +26,7 @@ function capture() {
   scenarios.default = a11yTree(r.container);
   r.unmount();
   r = render(
-    <AtlRadioGroup value="sm" disabled>
+    <AtlRadioGroup aria-label="Plan" value="sm" disabled>
       <AtlRadio radioValue="sm">Small</AtlRadio>
       <AtlRadio radioValue="lg">Large</AtlRadio>
     </AtlRadioGroup>,

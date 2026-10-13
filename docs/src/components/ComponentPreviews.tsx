@@ -75,7 +75,7 @@ export const COMPONENT_PREVIEWS: Record<string, () => ReactNode> = {
   checkbox: () => <AtlCheckbox checked={true}>Accept terms</AtlCheckbox>,
   toggle: () => <AtlToggle checked={true}>Notifications</AtlToggle>,
   'radio-group': () => (
-    <AtlRadioGroup name="gallery-plan" value="pro">
+    <AtlRadioGroup aria-label="Plan" name="gallery-plan" value="pro">
       <AtlRadio radioValue="free">Free</AtlRadio>
       <AtlRadio radioValue="pro">Pro</AtlRadio>
     </AtlRadioGroup>

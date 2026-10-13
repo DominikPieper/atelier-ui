@@ -43,8 +43,13 @@ export type AtlButtonType = 'button' | 'submit' | 'reset';
     class: 'atl-button',
     '[class]': 'hostClasses()',
     '[attr.type]': 'type()',
-    '[disabled]': 'isDisabled()',
+    // Native `disabled` only for the `disabled` input. Loading is announced
+    // (aria-disabled + aria-busy) and blocked in the constructor's capture
+    // listener, but the button stays focusable so focus survives the state
+    // change (ADR-0171).
+    '[disabled]': 'disabled()',
     '[attr.aria-disabled]': 'isDisabled() || null',
+    '[attr.aria-busy]': 'loading() || null',
   },
 })
 export class AtlButton {
@@ -57,7 +62,10 @@ export class AtlButton {
   /** Disables the button, preventing interaction. */
   readonly disabled = input(false);
 
-  /** Shows a loading spinner and disables interaction. */
+  /**
+   * Shows a loading spinner, announces `aria-busy` and ignores activation.
+   * The button stays focusable (ADR-0171).
+   */
   readonly loading = input(false);
 
   /** Native `type` attribute of the button. */
@@ -76,6 +84,20 @@ export class AtlButton {
   private readonly el = inject<ElementRef<HTMLElement>>(ElementRef);
 
   constructor() {
+    // Block activation while loading. Registered here, in the capture phase,
+    // so it runs before any `(click)` the consumer binds on the same element,
+    // and `preventDefault` also stops a `type="submit"` from submitting.
+    this.el.nativeElement.addEventListener(
+      'click',
+      (event) => {
+        if (this.loading()) {
+          event.preventDefault();
+          event.stopImmediatePropagation();
+        }
+      },
+      { capture: true },
+    );
+
     // Dev-mode warning when a button has no accessible name. Angular's
     // <ng-content> projection means we can't enforce this at the type
     // level (unlike the React adapter), so we check after first render.

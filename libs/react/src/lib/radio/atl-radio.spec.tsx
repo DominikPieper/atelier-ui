@@ -47,7 +47,7 @@ describe('AtlRadio (within AtlRadioGroup)', () => {
     'reflects checked state from group value',
     () => {
       render(
-        <AtlRadioGroup value="b" name="g">
+        <AtlRadioGroup aria-label="Plan" value="b" name="g">
           <AtlRadio radioValue="a">A</AtlRadio>
           <AtlRadio radioValue="b">B</AtlRadio>
         </AtlRadioGroup>,
@@ -59,7 +59,7 @@ describe('AtlRadio (within AtlRadioGroup)', () => {
 
   it('applies is-invalid class when the group is invalid', () => {
     const { container } = render(
-      <AtlRadioGroup value="a" invalid name="g">
+      <AtlRadioGroup aria-label="Plan" value="a" invalid name="g">
         <AtlRadio radioValue="a">A</AtlRadio>
       </AtlRadioGroup>,
     );
@@ -72,7 +72,12 @@ describe('AtlRadio (within AtlRadioGroup)', () => {
       const user = userEvent.setup();
       const onChange = vi.fn();
       render(
-        <AtlRadioGroup value="a" onValueChange={onChange} name="g">
+        <AtlRadioGroup
+          aria-label="Plan"
+          value="a"
+          onValueChange={onChange}
+          name="g"
+        >
           <AtlRadio radioValue="a">A</AtlRadio>
           <AtlRadio radioValue="b">B</AtlRadio>
         </AtlRadioGroup>,

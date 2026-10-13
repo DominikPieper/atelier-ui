@@ -6,7 +6,7 @@
 // behavior-coverage gate so a wrong id is a compile error, not a silent miss.
 
 export const BEHAVIORS = {
-  button: ['default-render', 'disabled-state', 'loading-spinner', 'click-emits', 'disabled-no-click'],
+  button: ['default-render', 'disabled-state', 'loading-spinner', 'click-emits', 'disabled-no-click', 'loading-busy', 'loading-no-click'],
   dialog: ['render-dialog-element', 'open-shows-modal', 'size-class', 'aria-modal', 'close-button'],
   menu: ['closed-initially', 'open-on-trigger', 'variant-class', 'close-on-item-click', 'disabled-item'],
   select: ['render-element', 'placeholder', 'disabled', 'invalid', 'value-change', 'error-messages'],
@@ -26,7 +26,7 @@ export const BEHAVIORS = {
   pagination: ['disables-prev-first', 'disables-next-last', 'aria-current', 'page-change-on-click', 'hide-first-last'],
   progress: ['aria-value', 'clamp', 'indeterminate-omits-valuenow'],
   radio: ['renders-input', 'disabled', 'checked-from-group', 'select-on-click'],
-  'radio-group': ['role', 'checks-matching-value', 'value-change', 'invalid', 'errors', 'keyboard-nav'],
+  'radio-group': ['role', 'checks-matching-value', 'value-change', 'invalid', 'errors', 'keyboard-nav', 'accessible-name'],
   skeleton: ['not-animated', 'circular-height', 'custom-size'],
   stepper: ['renders-list', 'first-panel-default', 'aria-current-active', 'click-navigates', 'disabled-step-noop', 'future-step-not-focusable', 'completed-class', 'error-class', 'orientation-vertical'],
   table: ['renders-table', 'thead-tbody', 'variant-default', 'sticky-header', 'sort-button', 'no-sort-button', 'checkbox-selectable', 'empty-state'],

@@ -30,3 +30,29 @@ export function warnIfUnnamedControl(
     }
   });
 }
+
+/**
+ * Dev-mode check for a component whose ROOT element carries a role that needs a
+ * name (`role="radiogroup"`) and has no native control to be labelled through
+ * `<label for>`: the name has to arrive as `aria-label` or `aria-labelledby`
+ * on the root. Call from `onMounted` with the root element; re-checks after the
+ * next tick so a bound value has settled. Warns at most once per call.
+ */
+export function warnIfUnnamedHost(
+  host: HTMLElement | null,
+  component: string,
+  fix: string,
+): void {
+  if (!isDevBuild() || !host) return;
+  void nextTick(() => {
+    const named =
+      (host.getAttribute('aria-label') ?? '').trim().length > 0 ||
+      (host.getAttribute('aria-labelledby') ?? '').trim().length > 0;
+    if (!named) {
+      console.warn(
+        `[${component}] no accessible name — ${fix} so screen readers announce its purpose.`,
+        host,
+      );
+    }
+  });
+}

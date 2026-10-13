@@ -305,7 +305,7 @@ import { AtlTooltip } from '../tooltip/atl-tooltip';
       <section style="margin-bottom: 3rem;">
         <h2 class="section-title">RadioGroup</h2>
         <div class="section-body">
-          <atl-radio-group [(value)]="radioValue" name="plan">
+          <atl-radio-group aria-label="Plan" [(value)]="radioValue" name="plan">
             <div class="row">
               <atl-radio radioValue="free">Free</atl-radio>
               <atl-radio radioValue="pro">Pro</atl-radio>

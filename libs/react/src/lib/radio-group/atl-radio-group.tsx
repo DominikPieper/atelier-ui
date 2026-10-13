@@ -55,57 +55,68 @@ export const RadioGroupContext = createContext<RadioGroupContextValue>({
 });
 
 /**
+ * Accessibility requirement: a group has no `<label for>`, so it must carry an
+ * accessible name as `aria-label` OR `aria-labelledby`. TypeScript catches an
+ * unnamed group at consumer build time (ADR-0171), as it does for AtlButton.
+ */
+type AtlRadioGroupAccessibleName =
+  | { 'aria-label': string; 'aria-labelledby'?: string }
+  | { 'aria-label'?: string; 'aria-labelledby': string };
+
+/**
  * Properties for the AtlRadioGroup component.
  */
-export interface AtlRadioGroupProps
-  extends
-    Omit<InputHTMLAttributes<HTMLDivElement>, 'onChange'>,
-    AtlRadioGroupSpec {
-  /**
-   * Lowercase alias of `readOnly`: whether the selection can be read but not changed. `readOnly` wins when both are set.
-   */
-  readonly?: boolean;
-  /**
-   * The current value of the radio group.
-   */
-  value?: string;
-  /**
-   * Callback triggered when the value changes.
-   */
-  onValueChange?: (value: string) => void;
-  /**
-   * The layout orientation of the radio group.
-   */
-  orientation?: 'horizontal' | 'vertical';
-  /**
-   * The name of the radio group, applied to all child radio buttons.
-   */
-  name?: string;
-  /**
-   * Whether the radio group is disabled.
-   */
-  disabled?: boolean;
-  /**
-   * Whether the radio group is read-only.
-   */
-  readOnly?: boolean;
-  /**
-   * Whether the radio group is in an invalid state.
-   */
-  invalid?: boolean;
-  /**
-   * Whether a value is required.
-   */
-  required?: boolean;
-  /**
-   * Array of error messages to display.
-   */
-  errors?: ReadonlyArray<string | AtlErrorItem>;
-  /**
-   * The radio buttons to be rendered.
-   */
-  children?: ReactNode;
-}
+export type AtlRadioGroupProps = Omit<
+  InputHTMLAttributes<HTMLDivElement>,
+  'onChange' | 'aria-label' | 'aria-labelledby'
+> &
+  AtlRadioGroupSpec &
+  AtlRadioGroupAccessibleName & {
+    /**
+     * Lowercase alias of `readOnly`: whether the selection can be read but not changed. `readOnly` wins when both are set.
+     */
+    readonly?: boolean;
+    /**
+     * The current value of the radio group.
+     */
+    value?: string;
+    /**
+     * Callback triggered when the value changes.
+     */
+    onValueChange?: (value: string) => void;
+    /**
+     * The layout orientation of the radio group.
+     */
+    orientation?: 'horizontal' | 'vertical';
+    /**
+     * The name of the radio group, applied to all child radio buttons.
+     */
+    name?: string;
+    /**
+     * Whether the radio group is disabled.
+     */
+    disabled?: boolean;
+    /**
+     * Whether the radio group is read-only.
+     */
+    readOnly?: boolean;
+    /**
+     * Whether the radio group is in an invalid state.
+     */
+    invalid?: boolean;
+    /**
+     * Whether a value is required.
+     */
+    required?: boolean;
+    /**
+     * Array of error messages to display.
+     */
+    errors?: ReadonlyArray<string | AtlErrorItem>;
+    /**
+     * The radio buttons to be rendered.
+     */
+    children?: ReactNode;
+  };
 
 /**
  * A group of radio buttons.

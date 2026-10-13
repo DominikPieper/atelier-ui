@@ -35,6 +35,31 @@ describe('AtlRadioGroup', () => {
     expect(container.querySelector('[role="radiogroup"]')).toBeInTheDocument();
   });
 
+  describe('accessible name', () => {
+    covers('radio-group', 'accessible-name')(
+      'is named by aria-label',
+      async () => {
+        await render(
+          '<atl-radio-group aria-label="Plan size"><atl-radio radioValue="a">A</atl-radio></atl-radio-group>',
+          { imports: [AtlRadioGroup, AtlRadio] },
+        );
+        expect(
+          screen.getByRole('radiogroup', { name: 'Plan size' }),
+        ).toBeInTheDocument();
+      },
+    );
+
+    it('is named by aria-labelledby', async () => {
+      await render(
+        '<span id="cap">Plan size</span><atl-radio-group aria-labelledby="cap"><atl-radio radioValue="a">A</atl-radio></atl-radio-group>',
+        { imports: [AtlRadioGroup, AtlRadio] },
+      );
+      expect(
+        screen.getByRole('radiogroup', { name: 'Plan size' }),
+      ).toBeInTheDocument();
+    });
+  });
+
   it('renders child radio inputs', async () => {
     const { container } = await render(GROUP_TEMPLATE, {
       imports: [AtlRadioGroup, AtlRadio],

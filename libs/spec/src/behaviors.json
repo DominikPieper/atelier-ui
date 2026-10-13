@@ -20,6 +20,14 @@
     {
       "id": "disabled-no-click",
       "describe": "does not emit a click event when disabled"
+    },
+    {
+      "id": "loading-busy",
+      "describe": "while loading it is aria-busy and aria-disabled but keeps native focusability (not natively disabled)"
+    },
+    {
+      "id": "loading-no-click",
+      "describe": "does not emit a click event (or submit a form) while loading"
     }
   ],
   "dialog": [
@@ -456,6 +464,10 @@
     {
       "id": "keyboard-nav",
       "describe": "arrow keys move selection between radios (roving, wrapping)"
+    },
+    {
+      "id": "accessible-name",
+      "describe": "aria-label / aria-labelledby give the radiogroup its accessible name"
     }
   ],
   "skeleton": [

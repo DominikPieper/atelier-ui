@@ -2,6 +2,8 @@ import {
   ChangeDetectionStrategy,
   Component,
   computed,
+  ElementRef,
+  inject,
   input,
   model,
   signal,
@@ -13,6 +15,7 @@ import {
   type ValidationError,
   type WithOptionalFieldTree,
 } from '@angular/forms/signals';
+import { warnIfUnnamedHost } from '../a11y-dev-warn';
 import {
   ATL_RADIO_GROUP,
   type AtlRadioGroupContext,
@@ -32,6 +35,11 @@ let nextId = 0;
  *   <atl-radio radioValue="md">Medium</atl-radio>
  *   <atl-radio radioValue="lg">Large</atl-radio>
  * </atl-radio-group>
+ *
+ * <!-- Accessible name: a group has no <label for>, so pass `aria-label` or
+ *      `aria-labelledby` (static or bound with [aria-label]); dev mode warns
+ *      when both are missing (ADR-0171). -->
+ * <atl-radio-group aria-label="Plan size" [(value)]="size"> … </atl-radio-group>
  *
  * <!-- With Signal Forms -->
  * <atl-radio-group [formField]="form.size">
@@ -62,6 +70,8 @@ let nextId = 0;
     class: 'atl-radio-group',
     role: 'radiogroup',
     '[class]': 'hostClasses()',
+    '[attr.aria-label]': 'ariaLabel() || null',
+    '[attr.aria-labelledby]': 'ariaLabelledby() || null',
     '[attr.aria-invalid]': 'invalid() || null',
     '[attr.aria-required]': 'required() || null',
     '[attr.aria-describedby]': 'showErrors() ? errorId : null',
@@ -102,6 +112,26 @@ export class AtlRadioGroup
     [],
   );
 
+  /**
+   * Accessible name of the group, written as `aria-label` on the host, which
+   * carries `role="radiogroup"`. A `<label for>` cannot name a group, so a group
+   * needs this or `aria-labelledby`. An aliased input rather than a plain host
+   * attribute, so it is declared, bindable (`[aria-label]`) and in the spec
+   * contract; see `atl-input.ts`'s identical `ariaLabel`.
+   */
+  // host-attr-guard exists for hosts that are NOT the labelled element, where a
+  // static attribute would be a decoy. This host carries the role and the input is
+  // written back onto it above, so the static attribute and the input agree.
+  // eslint-disable-next-line atelier/host-attr-guard
+  readonly ariaLabel = input('', { alias: 'aria-label' });
+
+  /**
+   * Id of the visible caption that names the group. Use instead of `aria-label`
+   * when the text is on screen.
+   */
+  // eslint-disable-next-line atelier/host-attr-guard -- same as `ariaLabel`
+  readonly ariaLabelledby = input('', { alias: 'aria-labelledby' });
+
   /** @internal */
   protected readonly errorId = `atl-radio-group-errors-${nextId++}`;
 
@@ -130,6 +160,14 @@ export class AtlRadioGroup
     if (this.touched()) classes.push('is-touched');
     return classes.join(' ');
   });
+
+  constructor() {
+    warnIfUnnamedHost(
+      inject<ElementRef<HTMLElement>>(ElementRef).nativeElement,
+      'AtlRadioGroup',
+      'set aria-label, or aria-labelledby pointing at a visible caption',
+    );
+  }
 
   /** @internal — called by AtlRadio on change */
   select(v: string): void {

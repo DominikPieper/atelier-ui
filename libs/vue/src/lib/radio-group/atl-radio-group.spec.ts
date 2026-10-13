@@ -25,6 +25,26 @@ const RadioGroupWithOptions = {
 };
 
 describe('AtlRadioGroup', () => {
+  describe('accessible name', () => {
+    covers('radio-group', 'accessible-name')('is named by aria-label', () => {
+      render(AtlRadioGroup, { attrs: { 'aria-label': 'Plan size' } });
+      expect(
+        screen.getByRole('radiogroup', { name: 'Plan size' }),
+      ).toBeInTheDocument();
+    });
+
+    it('is named by aria-labelledby', () => {
+      render({
+        components: { AtlRadioGroup },
+        template:
+          '<span id="cap">Plan size</span><AtlRadioGroup aria-labelledby="cap" />',
+      });
+      expect(
+        screen.getByRole('radiogroup', { name: 'Plan size' }),
+      ).toBeInTheDocument();
+    });
+  });
+
   covers('radio-group', 'role')('renders with role radiogroup', () => {
     render(AtlRadioGroup);
     expect(screen.getByRole('radiogroup')).toBeInTheDocument();

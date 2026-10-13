@@ -27,17 +27,28 @@ const KEYBOARD_MAP: KbdRow[] = [
     keys: 'Space',
     action: 'Toggle. Indeterminate state supported.',
   },
-  { component: 'Toggle', keys: 'Space / Enter', action: 'Toggle on/off.' },
+  {
+    component: 'Toggle',
+    keys: 'Space',
+    action:
+      'Toggle on/off. It is a native checkbox with role="switch", so Enter does nothing.',
+  },
   {
     component: 'Radio Group',
     keys: 'Arrow keys',
     action: 'Move selection within the group. Tab moves to the next field.',
   },
   {
-    component: 'Select, Combobox',
+    component: 'Select',
     keys: 'Enter / Space',
     action:
       'Open. Arrow keys move between options. Enter confirms, Escape closes without change.',
+  },
+  {
+    component: 'Combobox',
+    keys: 'Type / Arrow Down',
+    action:
+      'A text field: it opens on focus or when you type, and Arrow Down opens it too. Space types a character; Enter commits the highlighted option, Escape closes and restores the selected label.',
   },
   {
     component: 'Dialog',
@@ -71,7 +82,7 @@ const KEYBOARD_MAP: KbdRow[] = [
     component: 'Stepper',
     keys: 'Tab',
     action:
-      'Move between step controls. Steps report status to assistive tech.',
+      'Move between step controls. The current step is marked with aria-current="step"; completed and error steps are shown by an icon only, which assistive tech does not announce.',
   },
   {
     component: 'Pagination',
@@ -87,7 +98,7 @@ const KEYBOARD_MAP: KbdRow[] = [
     component: 'Toast',
     keys: 'Tab',
     action:
-      'Dismiss button reachable by keyboard. Announced via aria-live=polite.',
+      'Dismiss button reachable by keyboard. Announced via aria-live=polite (every variant, errors included).',
   },
 ];
 
@@ -183,18 +194,22 @@ const RECENT_A11Y: RecentA11y[] = [
           WAI-ARIA Authoring Practices.
         </li>
         <li>
-          Semantic state (success / warning / danger / info / invalid) is
-          expressed in at least two channels — color + glyph or color + text —
-          so it survives greyscale, high-contrast modes, and color-vision
-          deficiencies.
+          Semantic state (success / warning / danger / info / invalid) on Badge,
+          Alert and the form controls is expressed in at least two channels —
+          color + glyph — so it survives greyscale, high-contrast modes, and
+          color-vision deficiencies. Toast variants are color only: put the
+          meaning in the message text.
         </li>
         <li>
           Design tokens are calibrated for WCAG AA against the surfaces they
           appear on. If you stay within the token set, you stay in spec.
         </li>
         <li>
-          Focus is visible at all times in keyboard navigation, and no component
-          suppresses the platform focus ring without replacing it.
+          Focus is visible in keyboard navigation: components replace the
+          platform outline with the <code>--ui-focus-ring</code> box-shadow ring
+          (menu items use a background change instead). That ring is a shadow,
+          and the library has no forced-colors fallback, so in Windows High
+          Contrast mode it is not guaranteed to show.
         </li>
       </ul>
     </section>
@@ -228,13 +243,16 @@ const RECENT_A11Y: RecentA11y[] = [
           the invalid state in addition to the red border.
         </li>
         <li>
-          <code>AtlStepper</code> steps expose their status (<em>active</em>,
-          <em>completed</em>, <em>error</em>) as text to assistive tech, not
-          only via color.
+          <code>AtlStepper</code> marks the <em>active</em> step with
+          <code>aria-current="step"</code>; <em>completed</em> and
+          <em>error</em> steps are shown by an icon (check, cross) instead of
+          the number, but that status is not announced to assistive tech.
         </li>
         <li>
-          <code>AtlProgress</code> has an accessible name and exposes its value
-          to assistive tech via <code>aria-valuenow</code>.
+          <code>AtlProgress</code> exposes its value via
+          <code>aria-valuenow</code> and takes a <code>label</code> prop that
+          becomes its <code>aria-label</code>. The prop is optional, so pass
+          one: without it the bar has no accessible name.
         </li>
       </ul>
     </section>
@@ -325,19 +343,42 @@ const RECENT_A11Y: RecentA11y[] = [
         "
       >
         <li>
-          Form fields expose their <code>label</code>, <code>hint</code>, and
-          <code>error</code> slots through <code>aria-labelledby</code> /
-          <code>aria-describedby</code> automatically — you don't wire them by
-          hand.
+          Form fields wire their own label and error text. In Angular,
+          <code>AtlInput</code>, <code>AtlTextarea</code> and
+          <code>AtlSelect</code> take a <code>label</code> prop rendered as a
+          <code>&lt;label for&gt;</code> (or an <code>aria-label</code> input);
+          <code>AtlCheckbox</code>, <code>AtlToggle</code> and
+          <code>AtlRadio</code> are named by their projected text. Messages
+          passed through the <code>errors</code> input are linked with
+          <code>aria-describedby</code> and announced politely. There are no
+          <code>hint</code> or <code>error</code> slots, and
+          <code>AtlCombobox</code> has no label mechanism yet.
         </li>
         <li>
-          <code>AtlDialog</code> and <code>AtlDrawer</code> set
-          <code>role="dialog"</code> and <code>aria-modal="true"</code>. The
-          header is announced as the accessible name.
+          <code>AtlButton</code> with <code>loading</code> is not natively
+          disabled: it sets <code>aria-disabled="true"</code> and
+          <code>aria-busy="true"</code>, stays in the tab order so focus is not
+          lost, and ignores clicks (and so Enter, Space and form submit). Only
+          the <code>disabled</code> input sets native <code>disabled</code>.
         </li>
         <li>
-          <code>AtlToast</code> announces messages in a polite live region.
-          Error toasts use <code>role="alert"</code>.
+          <code>AtlRadioGroup</code> carries <code>role="radiogroup"</code> and
+          has no <code>&lt;label for&gt;</code>: name it with
+          <code>aria-label</code> or <code>aria-labelledby</code>. React
+          requires one at the type level; Angular and Vue warn in the console in
+          dev mode when neither is set.
+        </li>
+        <li>
+          <code>AtlDialog</code> and <code>AtlDrawer</code> render a native
+          <code>&lt;dialog&gt;</code> (implicit <code>dialog</code> role) with
+          <code>aria-modal="true"</code>. The header is the accessible name;
+          <code>AtlDialog</code> also accepts <code>aria-label</code> /
+          <code>aria-labelledby</code>.
+        </li>
+        <li>
+          <code>AtlToast</code> announces messages in a polite live region
+          (<code>role="status"</code>). Every variant uses it, error toasts
+          included; none uses <code>role="alert"</code>.
         </li>
         <li>
           <code>AtlMenu</code>, <code>AtlTabGroup</code>,
@@ -366,7 +407,9 @@ const RECENT_A11Y: RecentA11y[] = [
           <strong style="color: var(--ui-color-text)">Visible focus.</strong>
           Every focusable element has a visible focus indicator in both themes.
           The ring uses <code>--ui-focus-ring</code> and does not disappear on
-          custom backgrounds.
+          custom backgrounds. The danger Button shows it too, combined with its
+          darker inset border, and a loading Button keeps it because it stays
+          focusable.
         </li>
         <li>
           <strong style="color: var(--ui-color-text)">Focus trapping.</strong>
@@ -377,7 +420,10 @@ const RECENT_A11Y: RecentA11y[] = [
         </li>
         <li>
           <strong style="color: var(--ui-color-text)">Initial focus.</strong>
-          Menus and Comboboxes move focus to the first option on open. Dialog
+          Menus move focus to the first item on open. Select and Combobox keep
+          DOM focus on the trigger or input and point
+          <code>aria-activedescendant</code> at the highlighted option (the
+          selected one, or the first for Select; none yet for Combobox). Dialog
           and Drawer set no initial focus themselves — see
           <a href="#judgement" class="docs-link-primary">Judgement calls</a>.
         </li>
@@ -594,14 +640,17 @@ const RECENT_A11Y: RecentA11y[] = [
       >
         <li>
           <strong style="color: var(--ui-color-text)">Labels.</strong> Every
-          form field needs a <code>label</code> prop — <code>placeholder</code>
-          is not an accessible name.
+          form field needs an accessible name — a <code>label</code> prop on
+          Input, Textarea and Select, projected text on Checkbox, Toggle and
+          Radio, and <code>aria-label</code> or <code>aria-labelledby</code> on
+          RadioGroup. <code>placeholder</code> is not an accessible name.
         </li>
         <li>
-          <strong style="color: var(--ui-color-text)">Alt text.</strong> Every
-          <code>&lt;img&gt;</code> inside <code>AtlAvatar</code> or user content
-          needs a meaningful <code>alt</code>, or <code>alt=""</code> if
-          decorative.
+          <strong style="color: var(--ui-color-text)">Alt text.</strong>
+          <code>AtlAvatar</code> is named from its <code>alt</code> input, then
+          its <code>name</code>; pass a meaningful one. Every
+          <code>&lt;img&gt;</code> in your own content needs a meaningful
+          <code>alt</code>, or <code>alt=""</code> if decorative.
         </li>
         <li>
           <strong style="color: var(--ui-color-text)"
@@ -622,7 +671,9 @@ const RECENT_A11Y: RecentA11y[] = [
             >Motion preferences.</strong
           >
           Respect <code>prefers-reduced-motion</code> when adding your own
-          transitions. Atelier UI's built-in animations already do.
+          transitions. Most built-in animations already do (the duration tokens
+          drop to zero; Progress, Skeleton, Chat and Toast have their own
+          rules); the Button loading spinner keeps spinning.
         </li>
       </ul>
     </section>

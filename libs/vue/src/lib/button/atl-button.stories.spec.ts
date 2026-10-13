@@ -25,6 +25,6 @@ describe('AtlButton (composed stories)', () => {
 
   it("Loading composes the story's own loading arg", async () => {
     await Loading.run();
-    expect(screen.getByRole('button')).toBeDisabled();
+    expect(screen.getByRole('button')).toHaveAttribute('aria-busy', 'true');
   });
 });

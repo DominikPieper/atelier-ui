@@ -94,7 +94,7 @@ import { AtlRadio } from './radio/atl-radio';
 
           <div class="form-field" style="margin-top: 1.5rem;">
             <label class="field-label">Theme</label>
-            <atl-radio-group name="theme" value="system">
+            <atl-radio-group aria-label="Theme" name="theme" value="system">
               <div class="radio-list">
                 <atl-radio radioValue="light">Light</atl-radio>
                 <atl-radio radioValue="dark">Dark</atl-radio>

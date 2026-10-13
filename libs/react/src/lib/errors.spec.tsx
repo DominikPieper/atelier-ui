@@ -58,7 +58,7 @@ const CONTROLS: Array<[string, (errors: typeof MIXED) => ReactElement]> = [
   [
     'radio-group',
     (errors) => (
-      <AtlRadioGroup invalid errors={errors} name="r">
+      <AtlRadioGroup aria-label="Plan" invalid errors={errors} name="r">
         <AtlRadio radioValue="a">A</AtlRadio>
       </AtlRadioGroup>
     ),

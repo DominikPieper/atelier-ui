@@ -265,17 +265,17 @@ export const componentDocs: Record<string, ComponentDoc> = {
       'A group of radio buttons with keyboard navigation. The group handles arrow key navigation and value management.',
     category: 'Inputs',
     examples: {
-      angular: `<atl-radio-group name="plan" [(value)]="plan">
+      angular: `<atl-radio-group aria-label="Plan" name="plan" [(value)]="plan">
   <atl-radio radioValue="free">Free</atl-radio>
   <atl-radio radioValue="pro">Pro</atl-radio>
   <atl-radio radioValue="enterprise">Enterprise</atl-radio>
 </atl-radio-group>`,
-      react: `<AtlRadioGroup name="plan" value="free" onValueChange={(v) => console.log(v)}>
+      react: `<AtlRadioGroup aria-label="Plan" name="plan" value="free" onValueChange={(v) => console.log(v)}>
   <AtlRadio radioValue="free">Free</AtlRadio>
   <AtlRadio radioValue="pro">Pro</AtlRadio>
   <AtlRadio radioValue="enterprise">Enterprise</AtlRadio>
 </AtlRadioGroup>`,
-      vue: `<AtlRadioGroup name="plan" v-model:value="plan">
+      vue: `<AtlRadioGroup aria-label="Plan" name="plan" v-model:value="plan">
   <AtlRadio radioValue="free">Free</AtlRadio>
   <AtlRadio radioValue="pro">Pro</AtlRadio>
   <AtlRadio radioValue="enterprise">Enterprise</AtlRadio>

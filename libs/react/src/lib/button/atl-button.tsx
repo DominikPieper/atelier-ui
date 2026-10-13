@@ -26,7 +26,10 @@ export type AtlButtonProps = Omit<
     size?: AtlButtonSize;
     /** Disables the button, preventing interaction. */
     disabled?: boolean;
-    /** Shows a loading spinner and disables interaction. */
+    /**
+     * Shows a loading spinner, announces `aria-busy` and ignores activation.
+     * The button stays focusable (ADR-0171).
+     */
     loading?: boolean;
   };
 
@@ -42,6 +45,7 @@ export const AtlButton = forwardRef<HTMLButtonElement, AtlButtonProps>(
       loading = false,
       children,
       className,
+      onClick,
       ...rest
     },
     ref,
@@ -62,9 +66,20 @@ export const AtlButton = forwardRef<HTMLButtonElement, AtlButtonProps>(
       <button
         ref={ref}
         className={classes}
-        disabled={isDisabled}
+        // Native `disabled` only for the `disabled` prop. Loading is announced
+        // and blocked below, but the button stays focusable (ADR-0171).
+        disabled={disabled}
         aria-disabled={isDisabled || undefined}
+        aria-busy={loading || undefined}
         {...rest}
+        onClick={
+          loading
+            ? (event) => {
+                // Also stops a `type="submit"` from submitting its form.
+                event.preventDefault();
+              }
+            : onClick
+        }
       >
         {loading && <span className="spinner" aria-hidden="true" />}
         {children}

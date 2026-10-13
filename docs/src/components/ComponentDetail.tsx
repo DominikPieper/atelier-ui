@@ -404,6 +404,7 @@ function ComponentDemo({ name }: { name: string }) {
     case 'radio-group':
       return (
         <AtlRadioGroup
+          aria-label="Plan"
           name="plan"
           value={radioValue}
           onValueChange={setRadioValue}

@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
 import { useState } from 'react';
+import { expect } from 'storybook/test';
 import { AtlRadioGroup } from './atl-radio-group';
 import { AtlRadio } from '../radio/atl-radio';
 
@@ -27,10 +28,22 @@ export default meta;
 type Story = StoryObj<typeof AtlRadioGroup>;
 
 export const Default: Story = {
+  // axe has no rule that requires a name on role=radiogroup, so assert it here
+  // (R-133, ADR-0171).
+  play: async ({ canvas }) => {
+    await expect(
+      canvas.getByRole('radiogroup', { name: 'Plan' }),
+    ).toBeInTheDocument();
+  },
   render: function Render() {
     const [value, setValue] = useState('free');
     return (
-      <AtlRadioGroup value={value} onValueChange={setValue} name="plan">
+      <AtlRadioGroup
+        aria-label="Plan"
+        value={value}
+        onValueChange={setValue}
+        name="plan"
+      >
         <AtlRadio radioValue="free">Free</AtlRadio>
         <AtlRadio radioValue="pro">Pro</AtlRadio>
         <AtlRadio radioValue="enterprise">Enterprise</AtlRadio>
@@ -42,7 +55,7 @@ export const Default: Story = {
 
 export const Disabled: Story = {
   render: () => (
-    <AtlRadioGroup value="free" name="plan-disabled" disabled>
+    <AtlRadioGroup aria-label="Plan" value="free" name="plan-disabled" disabled>
       <AtlRadio radioValue="free">Free</AtlRadio>
       <AtlRadio radioValue="pro">Pro</AtlRadio>
     </AtlRadioGroup>
@@ -54,6 +67,7 @@ export const IndividualDisabled: Story = {
     const [value, setValue] = useState('free');
     return (
       <AtlRadioGroup
+        aria-label="Plan"
         value={value}
         onValueChange={setValue}
         name="plan-individual"
@@ -71,6 +85,7 @@ export const IndividualDisabled: Story = {
 export const Invalid: Story = {
   render: () => (
     <AtlRadioGroup
+      aria-label="Plan"
       value=""
       name="plan-invalid"
       invalid
@@ -85,6 +100,7 @@ export const Invalid: Story = {
 export const WithErrors: Story = {
   render: () => (
     <AtlRadioGroup
+      aria-label="Plan"
       value=""
       name="plan-errors"
       invalid
@@ -102,6 +118,7 @@ export const Required: Story = {
     const [value, setValue] = useState('');
     return (
       <AtlRadioGroup
+        aria-label="Plan"
         value={value}
         onValueChange={setValue}
         name="plan-required"

@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/vue3-vite';
 import { ref } from 'vue';
+import { expect } from 'storybook/test';
 import AtlRadioGroup from './atl-radio-group.vue';
 import AtlRadio from '../radio/atl-radio.vue';
 
@@ -23,7 +24,7 @@ const meta: Meta<typeof AtlRadioGroup> = {
       return { args, value };
     },
     template: `
-      <AtlRadioGroup v-bind="args" v-model:value="value">
+      <AtlRadioGroup aria-label="Plan" v-bind="args" v-model:value="value">
         <AtlRadio radioValue="sm">Small</AtlRadio>
         <AtlRadio radioValue="md">Medium</AtlRadio>
         <AtlRadio radioValue="lg">Large</AtlRadio>
@@ -53,6 +54,13 @@ export default meta;
 type Story = StoryObj<typeof AtlRadioGroup>;
 
 export const Default: Story = {
+  // axe has no rule that requires a name on role=radiogroup, so assert it here
+  // (R-133, ADR-0171).
+  play: async ({ canvas }) => {
+    await expect(
+      canvas.getByRole('radiogroup', { name: 'Plan' }),
+    ).toBeInTheDocument();
+  },
   parameters: { design: figmaNode('55-131') },
 };
 
@@ -70,7 +78,7 @@ export const WithPreselection: Story = {
       return { args, value };
     },
     template: `
-      <AtlRadioGroup v-bind="args" v-model:value="value">
+      <AtlRadioGroup aria-label="Plan" v-bind="args" v-model:value="value">
         <AtlRadio radioValue="free">Free</AtlRadio>
         <AtlRadio radioValue="pro">Pro</AtlRadio>
         <AtlRadio radioValue="enterprise">Enterprise</AtlRadio>
@@ -97,7 +105,7 @@ export const WithErrors: Story = {
       return { args, value, errors };
     },
     template: `
-      <AtlRadioGroup v-bind="args" v-model:value="value" :errors="errors">
+      <AtlRadioGroup aria-label="Plan" v-bind="args" v-model:value="value" :errors="errors">
         <AtlRadio radioValue="sm">Small</AtlRadio>
         <AtlRadio radioValue="md">Medium</AtlRadio>
         <AtlRadio radioValue="lg">Large</AtlRadio>
@@ -118,7 +126,7 @@ export const WithDisabledOption: Story = {
       return { value };
     },
     template: `
-      <AtlRadioGroup v-model:value="value" name="size">
+      <AtlRadioGroup aria-label="Plan" v-model:value="value" name="size">
         <AtlRadio radioValue="sm">Small</AtlRadio>
         <AtlRadio radioValue="md" :disabled="true">Medium (unavailable)</AtlRadio>
         <AtlRadio radioValue="lg">Large</AtlRadio>
@@ -135,7 +143,7 @@ export const Playground: Story = {
       return { args, value };
     },
     template: `
-      <AtlRadioGroup v-bind="args" v-model:value="value">
+      <AtlRadioGroup aria-label="Plan" v-bind="args" v-model:value="value">
         <AtlRadio radioValue="a">Option A</AtlRadio>
         <AtlRadio radioValue="b">Option B</AtlRadio>
         <AtlRadio radioValue="c">Option C</AtlRadio>

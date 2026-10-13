@@ -1,5 +1,6 @@
 import type { Meta, StoryObj } from '@storybook/angular';
 import { argsToTemplate } from '@storybook/angular';
+import { expect } from 'storybook/test';
 import { AtlRadio } from '../radio/atl-radio';
 import { AtlRadioGroup } from './atl-radio-group';
 
@@ -21,7 +22,7 @@ const meta: Meta<AtlRadioGroup> = {
     props: { ...args, value: 'md' },
     moduleMetadata: { imports: [AtlRadio] },
     template: `
-      <atl-radio-group ${argsToTemplate(args)} [(value)]="value">
+      <atl-radio-group aria-label="Size" ${argsToTemplate(args)} [(value)]="value">
         <atl-radio radioValue="sm">Small</atl-radio>
         <atl-radio radioValue="md">Medium</atl-radio>
         <atl-radio radioValue="lg">Large</atl-radio>
@@ -50,6 +51,13 @@ export default meta;
 type Story = StoryObj<AtlRadioGroup>;
 
 export const Default: Story = {
+  // axe has no rule that requires a name on role=radiogroup, so assert it here
+  // (R-133, ADR-0171).
+  play: async ({ canvas }) => {
+    await expect(
+      canvas.getByRole('radiogroup', { name: 'Size' }),
+    ).toBeInTheDocument();
+  },
   parameters: { design: figmaNode('55-131') },
 };
 
@@ -58,7 +66,7 @@ export const WithSelection: Story = {
     props: { ...args, value: 'lg' },
     moduleMetadata: { imports: [AtlRadio] },
     template: `
-      <atl-radio-group ${argsToTemplate(args)} [(value)]="value">
+      <atl-radio-group aria-label="Size" ${argsToTemplate(args)} [(value)]="value">
         <atl-radio radioValue="sm">Small</atl-radio>
         <atl-radio radioValue="md">Medium</atl-radio>
         <atl-radio radioValue="lg">Large</atl-radio>
@@ -86,7 +94,7 @@ export const WithErrors: Story = {
     },
     moduleMetadata: { imports: [AtlRadio] },
     template: `
-      <atl-radio-group ${argsToTemplate(args)} [(value)]="value" [errors]="errors" [touched]="touched">
+      <atl-radio-group aria-label="Size" ${argsToTemplate(args)} [(value)]="value" [errors]="errors" [touched]="touched">
         <atl-radio radioValue="sm">Small</atl-radio>
         <atl-radio radioValue="md">Medium</atl-radio>
         <atl-radio radioValue="lg">Large</atl-radio>
@@ -105,7 +113,7 @@ export const WithDisabledOption: Story = {
     props: { ...args, value: 'sm' },
     moduleMetadata: { imports: [AtlRadio] },
     template: `
-      <atl-radio-group ${argsToTemplate(args)} [(value)]="value">
+      <atl-radio-group aria-label="Size" ${argsToTemplate(args)} [(value)]="value">
         <atl-radio radioValue="sm">Small</atl-radio>
         <atl-radio radioValue="md" [disabled]="true">Medium (unavailable)</atl-radio>
         <atl-radio radioValue="lg">Large</atl-radio>
@@ -119,7 +127,7 @@ export const Playground: Story = {
     props: { ...args, value: '' },
     moduleMetadata: { imports: [AtlRadio] },
     template: `
-      <atl-radio-group ${argsToTemplate(args)} [(value)]="value">
+      <atl-radio-group aria-label="Size" ${argsToTemplate(args)} [(value)]="value">
         <atl-radio radioValue="a">Option A</atl-radio>
         <atl-radio radioValue="b">Option B</atl-radio>
         <atl-radio radioValue="c">Option C</atl-radio>

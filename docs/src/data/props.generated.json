@@ -542,7 +542,7 @@
           "name": "loading",
           "type": "boolean",
           "default": "false",
-          "description": "Shows a loading spinner and disables interaction.",
+          "description": "Shows a loading spinner, announces `aria-busy` and ignores activation. The button stays focusable (ADR-0171).",
           "required": false,
           "kind": "input"
         },
@@ -603,7 +603,7 @@
           "name": "loading",
           "type": "boolean",
           "default": "false",
-          "description": "Shows a loading spinner and disables interaction.",
+          "description": "Shows a loading spinner, announces `aria-busy` and ignores activation. The button stays focusable (ADR-0171).",
           "required": false,
           "kind": "prop"
         },
@@ -648,7 +648,7 @@
           "name": "loading",
           "type": "boolean",
           "default": "false",
-          "description": "Shows a loading spinner and disables interaction.",
+          "description": "Shows a loading spinner, announces `aria-busy` and ignores activation. The button stays focusable (ADR-0171).",
           "required": false,
           "kind": "prop"
         },
@@ -2738,6 +2738,22 @@
     "angular": {
       "props": [
         {
+          "name": "aria-label",
+          "type": "string",
+          "default": "''",
+          "description": "Accessible name of the group, written as `aria-label` on the host, which carries `role=\"radiogroup\"`. A `<label for>` cannot name a group, so a group needs this or `aria-labelledby`. An aliased input rather than a plain host attribute, so it is declared, bindable (`[aria-label]`) and in the spec contract; see `atl-input.ts`'s identical `ariaLabel`.",
+          "required": false,
+          "kind": "input"
+        },
+        {
+          "name": "aria-labelledby",
+          "type": "string",
+          "default": "''",
+          "description": "Id of the visible caption that names the group. Use instead of `aria-label` when the text is on screen.",
+          "required": false,
+          "kind": "input"
+        },
+        {
           "name": "disabled",
           "type": "boolean",
           "default": "false",
@@ -2906,6 +2922,22 @@
           "kind": "prop"
         },
         {
+          "name": "aria-label",
+          "type": "string",
+          "default": "—",
+          "description": "Accessible name of the group — written as `aria-label` on the element that carries `role=\"radiogroup\"`. A `<label for>` cannot name a group, so a group needs this or `aria-labelledby`; there is no `label` caption prop (ADR-0171). The React adapter requires one of the two at the type level.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "aria-labelledby",
+          "type": "string",
+          "default": "—",
+          "description": "Id of the visible caption that names the group (e.g. a heading or a `<span>` above it). Use instead of `aria-label` when the text is on screen.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
           "name": "orientation",
           "type": "'horizontal' | 'vertical'",
           "default": "'vertical'",
@@ -3014,6 +3046,22 @@
           "type": "readonly (string | AtlErrorItem)[]",
           "default": "[]",
           "description": "Validation error messages shown below the group.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "ariaLabel",
+          "type": "string",
+          "default": "—",
+          "description": "Accessible name of the group, written as `aria-label` on the element that carries `role=\"radiogroup\"`. A `<label for>` cannot name a group, so a group needs this or `aria-labelledby`. Declared as an explicit prop, like `AtlSelect`'s `ariaLabel`.",
+          "required": false,
+          "kind": "prop"
+        },
+        {
+          "name": "ariaLabelledby",
+          "type": "string",
+          "default": "—",
+          "description": "Id of the visible caption that names the group. Use instead of `aria-label` when the text is on screen.",
           "required": false,
           "kind": "prop"
         },

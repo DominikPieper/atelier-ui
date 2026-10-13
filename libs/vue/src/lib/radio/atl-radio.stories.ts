@@ -42,7 +42,7 @@ export const Default: Story = {
       return { value };
     },
     template: `
-      <AtlRadioGroup v-model:value="value" name="example">
+      <AtlRadioGroup aria-label="Plan" v-model:value="value" name="example">
         <AtlRadio radioValue="a">Option A</AtlRadio>
         <AtlRadio radioValue="b">Option B</AtlRadio>
       </AtlRadioGroup>
@@ -59,7 +59,7 @@ export const Checked: Story = {
       return { value };
     },
     template: `
-      <AtlRadioGroup v-model:value="value" name="example">
+      <AtlRadioGroup aria-label="Plan" v-model:value="value" name="example">
         <AtlRadio radioValue="a">Selected by default</AtlRadio>
         <AtlRadio radioValue="b">Other</AtlRadio>
       </AtlRadioGroup>
@@ -76,7 +76,7 @@ export const Disabled: Story = {
       return { value };
     },
     template: `
-      <AtlRadioGroup v-model:value="value" name="example">
+      <AtlRadioGroup aria-label="Plan" v-model:value="value" name="example">
         <AtlRadio radioValue="a">Enabled</AtlRadio>
         <AtlRadio radioValue="b" :disabled="true">Disabled</AtlRadio>
       </AtlRadioGroup>
@@ -92,7 +92,7 @@ export const Playground: Story = {
       return { args, value };
     },
     template: `
-      <AtlRadioGroup v-model:value="value" name="playground">
+      <AtlRadioGroup aria-label="Plan" v-model:value="value" name="playground">
         <AtlRadio radioValue="a" :disabled="args.disabled">Option A</AtlRadio>
         <AtlRadio radioValue="b" :disabled="args.disabled">Option B</AtlRadio>
         <AtlRadio radioValue="c" :disabled="args.disabled">Option C</AtlRadio>

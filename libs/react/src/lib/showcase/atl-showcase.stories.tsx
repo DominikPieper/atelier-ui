@@ -334,6 +334,7 @@ function Showcase() {
         {/* ── Radio & Select ──────────────────────────────────────── */}
         <Section title="RadioGroup">
           <AtlRadioGroup
+            aria-label="Plan"
             value={radioValue}
             onValueChange={setRadioValue}
             name="plan"

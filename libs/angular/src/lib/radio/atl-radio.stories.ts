@@ -19,7 +19,7 @@ const meta: Meta<AtlRadio> = {
     props: { ...args, value: '' },
     imports: [AtlRadioGroup],
     template: `
-      <atl-radio-group [(value)]="value" name="demo">
+      <atl-radio-group aria-label="Plan" [(value)]="value" name="demo">
         <atl-radio radioValue="a">Option A</atl-radio>
         <atl-radio radioValue="b">Option B</atl-radio>
       </atl-radio-group>
@@ -50,7 +50,7 @@ export const Disabled: Story = {
     props: { value: 'a' },
     imports: [AtlRadioGroup],
     template: `
-      <atl-radio-group [(value)]="value" name="demo">
+      <atl-radio-group aria-label="Plan" [(value)]="value" name="demo">
         <atl-radio radioValue="a">Enabled</atl-radio>
         <atl-radio radioValue="b" [disabled]="true">Disabled</atl-radio>
       </atl-radio-group>
@@ -63,7 +63,7 @@ export const Checked: Story = {
     props: { value: 'a' },
     imports: [AtlRadioGroup],
     template: `
-      <atl-radio-group [(value)]="value" name="demo">
+      <atl-radio-group aria-label="Plan" [(value)]="value" name="demo">
         <atl-radio radioValue="a">Selected by default</atl-radio>
         <atl-radio radioValue="b">Other</atl-radio>
       </atl-radio-group>
@@ -77,7 +77,7 @@ export const Playground: Story = {
     props: { ...args, value: '' },
     imports: [AtlRadioGroup],
     template: `
-      <atl-radio-group [(value)]="value" name="playground">
+      <atl-radio-group aria-label="Plan" [(value)]="value" name="playground">
         <atl-radio radioValue="a" [disabled]="disabled">Option A</atl-radio>
         <atl-radio radioValue="b" [disabled]="disabled">Option B</atl-radio>
         <atl-radio radioValue="c" [disabled]="disabled">Option C</atl-radio>

@@ -1,4 +1,5 @@
 import type { Meta, StoryObj } from '@storybook/react-vite';
+import { expect, userEvent, waitFor } from 'storybook/test';
 import { AtlButton } from './atl-button';
 
 import { metadata } from '@atelier-ui/spec/metadata/button.metadata';
@@ -66,8 +67,47 @@ export const Large: Story = {
   parameters: { design: figmaNode('129-6') },
 };
 export const Disabled: Story = { args: { disabled: true } };
-export const Loading: Story = { args: { loading: true } };
+export const Loading: Story = {
+  args: { loading: true },
+  play: async ({ canvas, canvasElement }) => {
+    // Loading is announced and blocked, never natively disabled: the button
+    // stays in the tab order and keeps focus (ADR-0171, R-135/R-178).
+    await userEvent.tab();
+    const button = canvas.getByRole('button');
+    await expect(button).toHaveFocus();
+    await expect(button).toHaveAttribute('aria-busy', 'true');
+    await expect(button).toHaveAttribute('aria-disabled', 'true');
+    // ...and shows it: .is-disabled must not clear the focus ring. Portable
+    // stories in jsdom (composeStories) load no stylesheet, so nothing to measure.
+    if (getComputedStyle(button).display !== 'inline-flex') return;
+    const probe = document.createElement('div');
+    probe.style.boxShadow = 'var(--ui-focus-ring)';
+    canvasElement.append(probe);
+    const ring = getComputedStyle(probe).boxShadow;
+    probe.remove();
+    await waitFor(() =>
+      expect(getComputedStyle(button).boxShadow).toContain(ring),
+    );
+  },
+};
 export const AllVariants: Story = {
+  play: async ({ canvas, canvasElement }) => {
+    // Every variant draws the shared focus ring on keyboard focus (WCAG 2.4.7).
+    // The danger variant once overrode it with its own inset shadow (R-134).
+    const probe = document.createElement('div');
+    probe.style.boxShadow = 'var(--ui-focus-ring)';
+    canvasElement.append(probe);
+    const ring = getComputedStyle(probe).boxShadow;
+    probe.remove();
+    for (const name of ['Primary', 'Secondary', 'Outline', 'Danger']) {
+      await userEvent.tab();
+      const button = canvas.getByRole('button', { name });
+      await expect(button).toHaveFocus();
+      await waitFor(() =>
+        expect(getComputedStyle(button).boxShadow).toContain(ring),
+      );
+    }
+  },
   render: () => (
     <div
       style={{

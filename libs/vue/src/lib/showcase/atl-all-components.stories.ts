@@ -305,7 +305,7 @@ export const AllComponents: Story = {
         <section style="margin-bottom: 3rem;">
           <h2 class="section-title">RadioGroup</h2>
           <div class="section-body">
-            <AtlRadioGroup :value="radioValue" @update:value="radioValue = $event" name="plan">
+            <AtlRadioGroup aria-label="Plan" :value="radioValue" @update:value="radioValue = $event" name="plan">
               <div class="row">
                 <AtlRadio radioValue="free">Free</AtlRadio>
                 <AtlRadio radioValue="pro">Pro</AtlRadio>

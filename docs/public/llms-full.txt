@@ -76,7 +76,7 @@ Each entry lists:
     variant     'primary' | 'secondary' | 'outline' | 'danger'  'primary'  Visual style of the button.
     size        'sm' | 'md' | 'lg'                              'md'       Size of the button.
     disabled    boolean                                         false      Disables the button, preventing interaction.
-    loading     boolean                                         false      Shows a loading spinner and disables interaction.
+    loading     boolean                                         false      Shows a loading spinner, announces `aria-busy` and ignores activation. The button stays focusable (ADR-0171).
     aria-label  string                                          —          Accessible name — rendered as `aria-label`. Required when the button has no visible text label (icon-only buttons), otherwise the button is unnamed for assistive tech. The React adapter encodes this requirement at the type level via a discriminated union; the Angular and Vue adapters log a dev-mode warning when a rendered button has no accessible name.
 
   Usage:
@@ -111,7 +111,7 @@ Each entry lists:
       - Selecting an option from a list. → use AtlSelect, AtlCombobox, or AtlRadioGroup, depending on cardinality and search needs.
     relatedComponents: AtlToggle, AtlMenuSpec, AtlDialogSpec
     accessibility.role: button
-    accessibility.keyboardBehavior: Activates on Enter or Space. Receives focus via Tab in source order. Disabled and loading states block activation and remove the button from the tab order respectively (loading retains focus but ignores activation).
+    accessibility.keyboardBehavior: Activates on Enter or Space. Receives focus via Tab in source order. A disabled button (`disabled`) is natively disabled: it blocks activation and leaves the tab order. A loading button (`loading`) is not: it keeps focus and its place in the tab order, announces `aria-busy` and `aria-disabled`, and ignores activation (clicks, Enter, Space, form submit).
 
 ---
 
@@ -313,33 +313,35 @@ Each entry lists:
   A group of radio buttons with keyboard navigation. The group handles arrow key navigation and value management.
 
   Props:
-    errors         ReadonlyArray<string | AtlErrorItem>  []          Validation errors to show under the field. Angular takes Signal Forms' `ValidationError` objects; React and Vue take those objects or plain strings.
-    value          string                                ''          The current value of the radio group.
-    onValueChange  (value: string) => void               —           Callback triggered when the value changes.
-    disabled       boolean                               false       Whether the radio group is disabled.
-    invalid        boolean                               false       Whether the radio group is in an invalid state.
-    required       boolean                               false       Whether a value is required.
-    name           string                                ''          The name of the radio group, applied to all child radio buttons.
-    readonly       boolean                               —           Lowercase alias of `readOnly`: whether the selection can be read but not changed. `readOnly` wins when both are set.
-    orientation    'horizontal' | 'vertical'             'vertical'  The layout orientation of the radio group.
-    readOnly       boolean                               —           Whether the radio group is read-only.
-    children       ReactNode                             —           The radio buttons to be rendered.
+    errors           ReadonlyArray<string | AtlErrorItem>  []          Validation errors to show under the field. Angular takes Signal Forms' `ValidationError` objects; React and Vue take those objects or plain strings.
+    value            string                                ''          The current value of the radio group.
+    onValueChange    (value: string) => void               —           Callback triggered when the value changes.
+    disabled         boolean                               false       Whether the radio group is disabled.
+    invalid          boolean                               false       Whether the radio group is in an invalid state.
+    required         boolean                               false       Whether a value is required.
+    name             string                                ''          The name of the radio group, applied to all child radio buttons.
+    readonly         boolean                               —           Lowercase alias of `readOnly`: whether the selection can be read but not changed. `readOnly` wins when both are set.
+    aria-label       string                                —           Accessible name of the group — written as `aria-label` on the element that carries `role="radiogroup"`. A `<label for>` cannot name a group, so a group needs this or `aria-labelledby`; there is no `label` caption prop (ADR-0171). The React adapter requires one of the two at the type level.
+    aria-labelledby  string                                —           Id of the visible caption that names the group (e.g. a heading or a `<span>` above it). Use instead of `aria-label` when the text is on screen.
+    orientation      'horizontal' | 'vertical'             'vertical'  The layout orientation of the radio group.
+    readOnly         boolean                               —           Whether the radio group is read-only.
+    children         ReactNode                             —           The radio buttons to be rendered.
 
   Usage:
     Angular:
-      <atl-radio-group name="plan" [(value)]="plan">
+      <atl-radio-group aria-label="Plan" name="plan" [(value)]="plan">
         <atl-radio radioValue="free">Free</atl-radio>
         <atl-radio radioValue="pro">Pro</atl-radio>
         <atl-radio radioValue="enterprise">Enterprise</atl-radio>
       </atl-radio-group>
     React:
-      <AtlRadioGroup name="plan" value="free" onValueChange={(v) => console.log(v)}>
+      <AtlRadioGroup aria-label="Plan" name="plan" value="free" onValueChange={(v) => console.log(v)}>
         <AtlRadio radioValue="free">Free</AtlRadio>
         <AtlRadio radioValue="pro">Pro</AtlRadio>
         <AtlRadio radioValue="enterprise">Enterprise</AtlRadio>
       </AtlRadioGroup>
     Vue:
-      <AtlRadioGroup name="plan" v-model:value="plan">
+      <AtlRadioGroup aria-label="Plan" name="plan" v-model:value="plan">
         <AtlRadio radioValue="free">Free</AtlRadio>
         <AtlRadio radioValue="pro">Pro</AtlRadio>
         <AtlRadio radioValue="enterprise">Enterprise</AtlRadio>

@@ -28,14 +28,21 @@ export interface AtlRadioGroupProps {
   required?: boolean;
   /** Validation error messages shown below the group. */
   errors?: ReadonlyArray<string | AtlErrorItem>;
+  /**
+   * Accessible name of the group, written as `aria-label` on the element that carries `role="radiogroup"`. A `<label for>` cannot name a group, so a group needs this or `aria-labelledby`. Declared as an explicit prop, like `AtlSelect`'s `ariaLabel`.
+   */
+  ariaLabel?: string;
+  /** Id of the visible caption that names the group. Use instead of `aria-label` when the text is on screen. */
+  ariaLabelledby?: string;
 }
 </script>
 
 <script setup lang="ts">
-import { computed, provide, ref } from 'vue';
+import { computed, onMounted, provide, ref } from 'vue';
 import '@atelier-ui/styles/radio-group/atl-radio-group.css';
 import type { AtlErrorItem } from '../spec';
 import { errorMessage } from '../error-message';
+import { warnIfUnnamedHost } from '../a11y-dev-warn';
 
 defineOptions({ name: 'AtlRadioGroup' });
 
@@ -47,6 +54,8 @@ const props = withDefaults(defineProps<AtlRadioGroupProps>(), {
   invalid: false,
   required: false,
   errors: () => [],
+  ariaLabel: undefined,
+  ariaLabelledby: undefined,
 });
 
 const emit = defineEmits<{
@@ -85,6 +94,17 @@ const classes = computed(() => [
 
 const groupRef = ref<HTMLDivElement | null>(null);
 
+// A group has no <label for>. `aria-label` / `aria-labelledby` land on this
+// root, which carries role="radiogroup"; warn in dev mode when neither is there
+// (ADR-0171).
+onMounted(() =>
+  warnIfUnnamedHost(
+    groupRef.value,
+    'AtlRadioGroup',
+    'set aria-label, or aria-labelledby pointing at a visible caption',
+  ),
+);
+
 // Roving arrow-key navigation per the WAI-ARIA radiogroup pattern: Arrow
 // Down/Right move to the next enabled radio, Up/Left to the previous, both
 // wrapping, and the navigated radio is selected and focused.
@@ -119,6 +139,8 @@ function onKeydown(event: KeyboardEvent): void {
     ref="groupRef"
     :class="classes"
     role="radiogroup"
+    :aria-label="ariaLabel || undefined"
+    :aria-labelledby="ariaLabelledby || undefined"
     :aria-invalid="invalid || undefined"
     :aria-required="required || undefined"
     @keydown="onKeydown"

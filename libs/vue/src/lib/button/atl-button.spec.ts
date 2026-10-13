@@ -34,18 +34,88 @@ describe('AtlButton', () => {
   );
 
   covers('button', 'loading-spinner')(
-    'is disabled and shows spinner when loading',
+    'shows the spinner and the loading class when loading',
     () => {
       render(AtlButton, {
         props: { loading: true },
         slots: { default: 'Loading' },
       });
       const button = screen.getByRole('button', { name: 'Loading' });
-      expect(button).toBeDisabled();
-      expect(button).toHaveClass('is-loading');
+      expect(button).toHaveClass('is-loading', 'is-disabled');
       expect(button.querySelector('.spinner')).toBeInTheDocument();
     },
   );
+
+  // ADR-0171: loading is aria-disabled + aria-busy, never native `disabled`,
+  // so a focused button that starts loading keeps focus (WCAG 2.4.3).
+  covers('button', 'loading-busy')(
+    'is aria-busy and aria-disabled but not natively disabled when loading',
+    () => {
+      render(AtlButton, {
+        props: { loading: true },
+        slots: { default: 'Btn' },
+      });
+      const btn = screen.getByRole('button');
+      expect(btn).toBeEnabled();
+      expect(btn).toHaveAttribute('aria-disabled', 'true');
+      expect(btn).toHaveAttribute('aria-busy', 'true');
+    },
+  );
+
+  it('carries no aria-busy when not loading', () => {
+    render(AtlButton, { props: { disabled: true }, slots: { default: 'Btn' } });
+    expect(screen.getByRole('button')).not.toHaveAttribute('aria-busy');
+  });
+
+  it('keeps focus when a focused button starts loading', async () => {
+    const { rerender } = render(AtlButton, { slots: { default: 'Save' } });
+    const btn = screen.getByRole('button', { name: 'Save' });
+    btn.focus();
+    expect(btn).toHaveFocus();
+    await rerender({ loading: true });
+    expect(btn).toHaveFocus();
+  });
+
+  it('stays reachable with Tab while loading', async () => {
+    const user = userEvent.setup();
+    render(AtlButton, {
+      props: { loading: true },
+      slots: { default: 'Save' },
+    });
+    await user.tab();
+    expect(screen.getByRole('button')).toHaveFocus();
+  });
+
+  covers('button', 'loading-no-click')(
+    'ignores clicks and keyboard activation while loading',
+    async () => {
+      const user = userEvent.setup();
+      const onClick = vi.fn();
+      render(AtlButton, {
+        props: { loading: true },
+        slots: { default: 'Save' },
+        attrs: { onClick },
+      });
+      await user.click(screen.getByRole('button'));
+      await user.keyboard('{Enter}');
+      await user.keyboard(' ');
+      expect(onClick).not.toHaveBeenCalled();
+    },
+  );
+
+  it('does not submit the enclosing form while loading', async () => {
+    const user = userEvent.setup();
+    const onSubmit = vi.fn((e: Event) => e.preventDefault());
+    render({
+      components: { AtlButton },
+      setup: () => ({ onSubmit }),
+      template:
+        '<form @submit="onSubmit"><AtlButton type="submit" loading>Send</AtlButton></form>',
+    });
+    await user.click(screen.getByRole('button'));
+    await user.keyboard('{Enter}');
+    expect(onSubmit).not.toHaveBeenCalled();
+  });
 
   covers('button', 'click-emits')(
     'emits click events when not disabled',

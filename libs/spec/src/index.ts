@@ -213,6 +213,18 @@ export interface AtlRadioSpec {
 
 export interface AtlRadioGroupSpec extends AtlFormFieldSpec, AtlReadonlySpec {
   value?: string;
+  /**
+   * Accessible name of the group — written as `aria-label` on the element that
+   * carries `role="radiogroup"`. A `<label for>` cannot name a group, so a group
+   * needs this or `aria-labelledby`; there is no `label` caption prop (ADR-0171).
+   * The React adapter requires one of the two at the type level.
+   */
+  'aria-label'?: string;
+  /**
+   * Id of the visible caption that names the group (e.g. a heading or a
+   * `<span>` above it). Use instead of `aria-label` when the text is on screen.
+   */
+  'aria-labelledby'?: string;
 }
 
 // ---------------------------------------------------------------------------

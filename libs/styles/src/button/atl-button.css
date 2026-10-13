@@ -107,6 +107,18 @@
   box-shadow: inset 0 0 0 1px rgba(0, 0, 0, 0.18);
 }
 
+/* Keyboard focus on danger (WCAG 2.4.7, R-134). The three rules above set
+ * box-shadow at the same or higher specificity as .atl-button:focus-visible and
+ * come later, so without this the ring was replaced by the inset border. Keep
+ * both: the shared ring token, then the inset non-colour cue. The ring's inner
+ * band is the surface colour, so it separates the red fill from the outer
+ * accent band, which is gated against the surface as the focus-ring pair. */
+.atl-button.variant-danger:focus-visible:not(.is-disabled) {
+  box-shadow:
+    var(--ui-focus-ring),
+    inset 0 0 0 1px rgba(0, 0, 0, 0.18);
+}
+
 /* Sizes — modern target heights (sm 32px / md 40px / lg 48px) */
 .atl-button.size-sm {
   padding: calc(
@@ -163,6 +175,12 @@
 
 .atl-button.variant-outline.is-disabled {
   background-color: transparent;
+}
+
+/* A loading button stays focusable (ADR-0171), so .is-disabled's
+ * box-shadow: none must not remove its focus ring. */
+.atl-button.is-loading:focus-visible {
+  box-shadow: var(--ui-focus-ring);
 }
 
 /* Loading spinner */

@@ -27,13 +27,13 @@ async function captureOne(template: string): Promise<unknown> {
 async function capture(): Promise<Record<string, unknown>> {
   return {
     default: await captureOne(`
-      <atl-radio-group [value]="'sm'">
+      <atl-radio-group aria-label="Plan" [value]="'sm'">
         <atl-radio radioValue="sm">Small</atl-radio>
         <atl-radio radioValue="lg">Large</atl-radio>
       </atl-radio-group>
     `),
     disabled: await captureOne(`
-      <atl-radio-group [value]="'sm'" [disabled]="true">
+      <atl-radio-group aria-label="Plan" [value]="'sm'" [disabled]="true">
         <atl-radio radioValue="sm">Small</atl-radio>
         <atl-radio radioValue="lg">Large</atl-radio>
       </atl-radio-group>

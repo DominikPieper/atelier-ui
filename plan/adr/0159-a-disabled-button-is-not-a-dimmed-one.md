@@ -98,3 +98,5 @@ element — do not bake into colour tokens". Opacity keeps the hue, and that was
   baseline, not fixed here.
 - Weakest point: the other ~15 components still dim by opacity, and a disabled input in
   dark mode may have the same "reads as enabled" problem. That was not measured here.
+
+**Corrected 2026-10-13:** §2 and the Context say loading is "the same state" as disabled and the stylesheet comment says loading "sets .is-disabled too". The class still holds, but ADR-0171 stops a loading button from being natively `disabled`: it stays focusable with `aria-busy` and `aria-disabled`, and `.atl-button.is-loading:focus-visible` restores the focus ring that `.is-disabled` clears.

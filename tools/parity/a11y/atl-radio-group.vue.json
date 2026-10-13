@@ -2,7 +2,7 @@
   "default": [
     {
       "role": "radiogroup",
-      "name": "Small Large"
+      "name": "Plan"
     },
     {
       "role": "radio",
@@ -19,7 +19,7 @@
   "disabled": [
     {
       "role": "radiogroup",
-      "name": "Small Large"
+      "name": "Plan"
     },
     {
       "role": "radio",
