@@ -148,6 +148,10 @@ _Done when:_ everyone can name the loop: Inspect → Contract → Code → Verif
 No gate. Time it. Includes a 5-minute live demo (change an Atelier component by
 prompt); whether the live demo ran in the rehearsal workspace or needs the
 Atelier clone: not specified on /schulung — record what you used.
+Since 2026-10-13 the block also carries a two-minute glossary pass
+(`/workshop#glossary`) and the 5-minute guardrail demo (`/prompts#guardrails`),
+still inside 30 minutes; the owner chose not to shorten the live demo for them.
+Time the three parts separately so an overrun shows where it comes from.
 
 **Block 01 — Verify the setup (installed as homework) 🔴**
 _Done when:_ preflight is green, `/mcp` lists every server, Storybook runs,
