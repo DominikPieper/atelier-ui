@@ -157,6 +157,9 @@
     },
     "releaseTag": {
       "pattern": "v{version}"
+    },
+    "conventionalCommits": {
+      "useCommitScope": false
     }
   }
 }

@@ -97,9 +97,9 @@ come first. Ranked:
       without `spacing` shows no spacing row, score 48 → 72); demo D-8, golden prompts §3.3,
       dry-run kit, trainer notes and the two pages carry the observed behaviour. Real drifts
       found on the way → R-220 (button padding 18/14 vs 20/16, weight 600 vs 500).
-- [ ] R-203 reproduced: the breaking commit was scoped `a11y`, no project name, so nx's
-      `useCommitScope` downgraded it to an indirect patch before the 0.x mapping; fix is
-      `release.conventionalCommits.useCommitScope: false` or project-name scopes. Owner decides.
+- [x] R-203 reproduced and fixed: the breaking commit was scoped `a11y`, no project name, so
+      nx's `useCommitScope` downgraded it to an indirect patch before the 0.x mapping;
+      `release.conventionalCommits.useCommitScope: false` (ADR-0172), verified by dry run.
 - [ ] R-214 desk-checked (Starter has no modes per Figma's plan table; duplicate behaviour
       undocumented; dev-plugin import is on any plan); the live Starter test stays.
 - [ ] R-214: verify Figma free-plan Dark mode in the duplicate and the dev-plugin import before
