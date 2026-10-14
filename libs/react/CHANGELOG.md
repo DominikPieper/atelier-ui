@@ -2,11 +2,11 @@
 
 ### 🩹 Fixes
 
-- ⚠️  **a11y:** loading button stays focusable, danger shows its ring, radio groups get named (package 2) ([64929883](https://github.com/DominikPieper/atelier-ui/commit/64929883))
+- ⚠️ **a11y:** loading button stays focusable, danger shows its ring, radio groups get named (package 2) ([64929883](https://github.com/DominikPieper/atelier-ui/commit/64929883))
 
-### ⚠️  Breaking Changes
+### ⚠️ Breaking Changes
 
-- **a11y:** loading button stays focusable, danger shows its ring, radio groups get named (package 2)  ([64929883](https://github.com/DominikPieper/atelier-ui/commit/64929883))
+- **a11y:** loading button stays focusable, danger shows its ring, radio groups get named (package 2) ([64929883](https://github.com/DominikPieper/atelier-ui/commit/64929883))
   React `AtlRadioGroup` now requires `aria-label` or
   `aria-labelledby`; an unnamed group no longer type-checks. A loading `AtlButton`
   (all frameworks) is no longer natively `disabled`: it stays focusable and
