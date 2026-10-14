@@ -1,3 +1,21 @@
+## 0.4.5 (2026-10-14)
+
+### 🩹 Fixes
+
+- ⚠️  **a11y:** loading button stays focusable, danger shows its ring, radio groups get named (package 2) ([64929883](https://github.com/DominikPieper/atelier-ui/commit/64929883))
+
+### ⚠️  Breaking Changes
+
+- **a11y:** loading button stays focusable, danger shows its ring, radio groups get named (package 2)  ([64929883](https://github.com/DominikPieper/atelier-ui/commit/64929883))
+  React `AtlRadioGroup` now requires `aria-label` or
+  `aria-labelledby`; an unnamed group no longer type-checks. A loading `AtlButton`
+  (all frameworks) is no longer natively `disabled`: it stays focusable and
+  carries `aria-disabled` and `aria-busy` instead.
+
+### ❤️ Thank You
+
+- Dominik Pieper @DominikPieper
+
 ## 0.4.4 (2026-10-12)
 
 This was a version bump only for angular to align it with other projects, there were no code changes.
