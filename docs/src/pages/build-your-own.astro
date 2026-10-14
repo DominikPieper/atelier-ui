@@ -105,13 +105,13 @@ const EMIT = 'npm run check:contracts -- --emit <folder>';
         <a href="/agent-skills" class="docs-link-primary">Agent skills</a>.
       </p>
       <p class="docs-step-desc">
-        Skipped the optional
+        Green seats did the
         <a href="/first-component#bridge" class="docs-link-primary"
           >bridge exercise</a
         >
-        (add a variant to your SettingsCard, with story and contract)? Do it now
-        if there is time: Block 02 asks for exactly that trio, and it is cheaper
-        to meet it on a component that already works.
+        (add a variant to your SettingsCard, with story and contract) as Day 1
+        homework. If you did not, skim it: Block 02 asks for exactly that trio,
+        and it is cheaper to meet it on a component that already works.
       </p>
       <p class="byo-done">
         <strong>Done when</strong> you know your target component and your
@@ -144,15 +144,20 @@ const EMIT = 'npm run check:contracts -- --emit <folder>';
         </li>
         <li>
           Design in the Figma UI (about 40 min): layout, variants, token
-          assignment. Then structure it through MCP (about 30 min): component
+          assignment. Then structure it through MCP (about 25 min): component
           properties and a11y audits. Plan about 5 min for the duplicate at the
-          start and about 12 min for the handoff document plus a 3 min recap at
-          the end.
+          start, 5 min for the API rules talk, about 12 min for the handoff
+          document and a 3 min recap at the end.
         </li>
         <li>
           Aim for at least 2 variants × 2 states, properties, correct
           <code>--ui-*</code> tokens and a dark-mode variant. The exact matrix
           is in your brief.
+        </li>
+        <li>
+          API rules first (5 min talk), because the handoff fixes the prop names
+          and values: predictable naming, literal unions, composition over
+          config, no hidden defaults.
         </li>
         <li>
           Before anyone prompts, write a short handoff document: draft URL and
@@ -198,6 +203,14 @@ const EMIT = 'npm run check:contracts -- --emit <folder>';
         behaviour line of the document.
       </p>
       <ol class="byo-list byo-list--ordered">
+        <li>
+          The trainer opens
+          <code>workshop-&lt;fw&gt;/src/contracts/button.contract.ts</code> and
+          <code>types.ts</code> on the projector first (5 min): the
+          <code>ComponentContract</code> shape Claude generates against. Green
+          seats met it in the bridge exercise. The generation row is 25 min,
+          including this walk-through.
+        </li>
         <li>
           Start <code>npm run storybook</code> in parallel, then connect to it
           (use the port Storybook prints). This is deliberately local scope, so
@@ -260,7 +273,7 @@ const EMIT = 'npm run check:contracts -- --emit <folder>';
     </section>
 
     <section class="docs-section byo-block" aria-labelledby="block-03">
-      <p class="byo-meta">13:30–15:00 · 90 min</p>
+      <p class="byo-meta">13:30–14:45 · 75 min</p>
       <h2 class="docs-section-title" id="block-03">
         <span class="byo-num" aria-hidden="true">03</span> Iterate: prompt
         quality and the self-healing loop
@@ -294,6 +307,13 @@ const EMIT = 'npm run check:contracts -- --emit <folder>';
           >.
         </li>
         <li>
+          Undo rule: commit when a gate is green
+          (<code>git add -A &amp;&amp; git commit -m "&lt;step&gt;: green"</code
+          >). After two failed fixes, stop and re-diagnose; if the patches made
+          it worse, revert to the last green commit with
+          <code>git checkout -- .</code> rather than patching a third time.
+        </li>
+        <li>
           The trainer hands out the golden prompts for this block on site.
         </li>
       </ul>
@@ -304,7 +324,7 @@ const EMIT = 'npm run check:contracts -- --emit <folder>';
     </section>
 
     <section class="docs-section byo-block" aria-labelledby="block-04">
-      <p class="byo-meta">15:15–16:30 · 75 min</p>
+      <p class="byo-meta">15:00–16:15 · 75 min</p>
       <h2 class="docs-section-title" id="block-04">
         <span class="byo-num" aria-hidden="true">04</span> Verify: a11y, states,
         parity
@@ -346,7 +366,10 @@ const EMIT = 'npm run check:contracts -- --emit <folder>';
           <code>check:contracts</code> and <code>storybook-test</code>, which is
           a degraded run, not "just carry on". Try it once on purpose with an
           incomplete codeSpec, then falsify a spacing value deliberately: fields
-          you did not pass are not compared. Read the result with
+          you did not pass are not compared. Pass the component set for
+          <code>componentAPI</code> and the variant you built for spacing and
+          typography: a variant carries no component properties, and the set
+          answers geometry with its default variant. Read the result with
           <a href="/design-to-code#parity-report" class="docs-link-primary"
             >reading a parity report</a
           >.
@@ -359,7 +382,7 @@ const EMIT = 'npm run check:contracts -- --emit <folder>';
     </section>
 
     <section class="docs-section byo-block" aria-labelledby="block-05">
-      <p class="byo-meta">16:40–17:30 · 50 min</p>
+      <p class="byo-meta">16:25–17:30 · 65 min</p>
       <h2 class="docs-section-title" id="block-05">
         <span class="byo-num" aria-hidden="true">05</span> Show and tell, then
         transfer to your own design system
@@ -371,18 +394,32 @@ const EMIT = 'npm run check:contracts -- --emit <folder>';
           failed.
         </li>
         <li>
-          Transfer: run the self-check in
+          Workspace anatomy (15 min), what makes the loop portable, file by
+          file: <code>.mcp.json</code> (the servers), <code>CLAUDE.md</code
+          >/<code>AGENTS.md</code> (the working agreement),
+          <code>.claude/skills/</code> (<code>atelier-component</code>,
+          <code>uianatomy-mcp</code>, <code>figma-workspace-architect</code>,
+          the Storybook skills), <code>tools/design-contracts/</code> plus
+          <code>contracts.config.json</code> (the gate, copy as is),
+          <code>.storybook/main.ts</code> (addon-vitest, addon-a11y,
+          addon-themes), and the <code>package.json</code> scripts
+          (<code>verify</code>, <code>check:*</code>, <code>figma:snapshot</code
+          >). Then: what to copy into your own repo, in which order.
+        </li>
+        <li>
+          Transfer (12 min): run the self-check in
           <a href="/design-principles#check-your-own" class="docs-link-primary"
             >check your own system</a
           >
-          on your own design system and pick one next step. The
+          on your own design system and pick one finding. The fix is your
+          written next step, not room work. The
           <a href="/readiness" class="docs-link-primary">readiness checklist</a>
           helps you judge a master from your own file.
         </li>
       </ul>
       <p class="byo-done">
         <strong>Done when</strong> you leave with a next step for your own
-        design system.
+        design system, and the follow-up channel is set up.
       </p>
     </section>
 

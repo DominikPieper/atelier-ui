@@ -1050,7 +1050,10 @@ decided: fix the code, the master, or the contract.`;
             <code>figma_scan_code_accessibility</code>. The agent fixes and
             reruns. The loop needs a stop condition, so cap it at about three
             rounds, then hand back to a human with a summary of what still
-            fails.
+            fails. After two failed fixes, stop and re-diagnose; and if the
+            diagnosis says the patches made it worse, revert to the last green
+            commit (<code>git checkout -- .</code>) instead of a third patch.
+            That is why you commit whenever a gate is green.
           </p>
           <Code
             code={LOOP_PROMPT}

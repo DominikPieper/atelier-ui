@@ -463,7 +463,39 @@ const mcpConfig = (fw: string) => `{
       </li>
 
       <!-- Step 03 -->
-      <li class="docs-step-row" data-step="3" id="step-03">
+      <li class="docs-step-row" data-step="3" id="send-preflight">
+        <span class="docs-step-badge setup-mark" aria-hidden="true"
+          ><svg
+            viewBox="0 0 16 16"
+            width="12"
+            height="12"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+            focusable="false"
+          >
+            <path d="M3 8.5l3.2 3L13 4.5"></path>
+          </svg></span
+        >
+        <div>
+          <h3 class="docs-h3">Send your preflight result to the trainer</h3>
+          <p class="docs-step-desc">
+            Once <code>npm run preflight</code> is green and the
+            <code>claude -p "Reply with exactly: PREFLIGHT-OK"</code> check has
+            answered, mail the trainer your <code>npm run preflight</code>
+            output and the <code>PREFLIGHT-OK</code> reply
+            <strong style="color: var(--ui-color-text)"
+              >three working days before Day 1</strong
+            >. A red preflight on the morning of Day 1 costs the whole room its
+            first block.
+          </p>
+        </div>
+      </li>
+
+      <!-- Step 04 -->
+      <li class="docs-step-row" data-step="4" id="step-04">
         <span class="docs-step-badge setup-mark" aria-hidden="true"
           ><svg
             viewBox="0 0 16 16"
@@ -498,8 +530,8 @@ const mcpConfig = (fw: string) => `{
         </div>
       </li>
 
-      <!-- Step 04 -->
-      <li class="docs-step-row" data-step="4">
+      <!-- Step 05 -->
+      <li class="docs-step-row" data-step="5">
         <span class="docs-step-badge setup-mark" aria-hidden="true"
           ><svg
             viewBox="0 0 16 16"

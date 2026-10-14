@@ -48,6 +48,10 @@ const WORKSPACE_CMDS = [
   ['npm run figma:snapshot', 'refresh the snapshot (bridge connected)'],
   ['npm run check:stories', 'every story in Chromium + axe'],
   ['npm run preflight', 'setup check, real MCP calls'],
+  [
+    'git add -A && git commit -m "<step>: green"',
+    'commit when a gate is green',
+  ],
 ];
 
 const CLONE_PATHS = [
@@ -108,6 +112,11 @@ const FIXES = [
     'Prompt fails though `claude --version` works',
     '`claude -p "Reply with exactly: PREFLIGHT-OK"` proves model access. Sign in if it fails.',
     'claude-cli-not-authenticated',
+  ],
+  [
+    'Two fixes failed',
+    'Stop and re-diagnose. If the patches made it worse: `git checkout -- .` back to the last green commit.',
+    '',
   ],
   [
     'Agent invented a prop or wrote a hex colour',
