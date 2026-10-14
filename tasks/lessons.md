@@ -990,3 +990,12 @@ pass over maintainer material) without those costs, and it replaced the mechanis
 day. Rule: when the owner names a mechanism rather than a goal, restate the goal, list the
 mechanism's costs and one cheaper alternative in two or three lines, then build what they
 pick. That check costs a minute; the rework cost a second pass over eleven pages.
+
+## 2026-10-14 — Read the release log, not one function, before promising a version
+
+Before pushing a `fix(a11y)!:` commit I told the owner the release would be 0.5.0, because
+`nx`'s `adjustSpecifierForZeroMajorVersion` maps a breaking change on 0.x to `minor`. The
+publish log said `Applied semver relative bump "patch"` and shipped 0.4.5; the changelog does
+list the breaking change. I had read one helper and not the path that calls it. Rule: a claim
+about what a release pipeline will produce is either checked with a dry run
+(`nx release version --dry-run`) or stated as unverified; npm versions cannot be taken back.
