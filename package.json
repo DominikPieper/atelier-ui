@@ -74,6 +74,7 @@
     "check:release-drift": "node tools/scripts/check-release-drift.mjs",
     "check:pack-styles": "node tools/scripts/check-pack-styles.mjs",
     "format": "prettier --write .",
+    "trainer:print": "node tools/scripts/trainer-print.mjs",
     "check:format": "prettier --check ."
   },
   "private": true,

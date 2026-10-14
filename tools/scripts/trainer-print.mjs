@@ -1,0 +1,179 @@
+#!/usr/bin/env node
+// Prints one trainer document per course day by slicing the four Schulung
+// source files in tasks/. Read-only on the sources; writes tasks/print/day-N.md.
+// Usage: node tools/scripts/trainer-print.mjs [--day 1|2] [--out <dir>]
+import { mkdirSync, readFileSync, writeFileSync } from 'node:fs';
+import { dirname, join, resolve } from 'node:path';
+import { fileURLToPath } from 'node:url';
+
+const root = resolve(dirname(fileURLToPath(import.meta.url)), '..', '..');
+const SCRIPT = 'tools/scripts/trainer-print.mjs';
+const SOURCES = {
+  runOfShow: 'tasks/schulung-run-of-show.md',
+  notes: 'tasks/schulung-trainer-notes.md',
+  demos: 'tasks/schulung-demo-scripts.md',
+  prompts: 'tasks/schulung-golden-prompts.md',
+};
+
+function fail(message) {
+  console.error(`trainer-print: ${message}`);
+  process.exit(1);
+}
+
+function parseArgs(argv) {
+  const args = { days: [1, 2], out: join(root, 'tasks', 'print') };
+  for (let i = 0; i < argv.length; i++) {
+    const a = argv[i];
+    if (a === '--day') {
+      const v = argv[++i];
+      if (v !== '1' && v !== '2') fail(`--day expects 1 or 2, got "${v}"`);
+      args.days = [Number(v)];
+    } else if (a === '--out') {
+      if (!argv[i + 1]) fail('--out expects a directory');
+      args.out = resolve(argv[++i]);
+    } else {
+      fail(`unknown argument "${a}"`);
+    }
+  }
+  return args;
+}
+
+/** Split a file into lines and index its headings (ignoring fenced code). */
+function load(rel) {
+  let text;
+  try {
+    text = readFileSync(join(root, rel), 'utf8');
+  } catch {
+    fail(`source file missing or unreadable: ${rel}`);
+  }
+  const lines = text.split('\n');
+  const headings = [];
+  let fence = null;
+  lines.forEach((line, i) => {
+    const f = /^\s*(`{3,}|~{3,})/.exec(line);
+    if (f) {
+      if (!fence) fence = f[1][0];
+      else if (f[1][0] === fence) fence = null;
+      return;
+    }
+    if (fence) return;
+    const h = /^(#{1,6}) (.*)$/.exec(line);
+    if (h) headings.push({ line: i, level: h[1].length, text: h[2] });
+  });
+  return { rel, lines, headings };
+}
+
+/**
+ * Slice from the first heading of `level` whose text starts with/contains
+ * `match` up to the next heading of level <= `level` (or EOF when `toEof`).
+ */
+function slice(src, level, match, { toEof = false } = {}) {
+  const idx = src.headings.findIndex(
+    (h) =>
+      h.level === level &&
+      (match instanceof RegExp ? match.test(h.text) : h.text.startsWith(match)),
+  );
+  if (idx < 0)
+    fail(`heading "${'#'.repeat(level)} ${match}" not found in ${src.rel}`);
+  const start = src.headings[idx].line;
+  const next = toEof
+    ? undefined
+    : src.headings.slice(idx + 1).find((h) => h.level <= level);
+  const end = next ? next.line : src.lines.length;
+  return src.lines.slice(start, end).join('\n').trimEnd();
+}
+
+/** All headings of `level` matching a predicate, as slices, in file order. */
+function sliceAll(src, level, predicate) {
+  const out = [];
+  for (const h of src.headings) {
+    if (h.level === level && predicate(h.text))
+      out.push(slice(src, level, h.text));
+  }
+  return out;
+}
+
+/** Lines before the first heading of `level` matching `match`. */
+function preamble(src, level, match) {
+  const h = src.headings.find((x) => x.level === level && match.test(x.text));
+  if (!h) fail(`no heading matching ${match} in ${src.rel}`);
+  return src.lines.slice(0, h.line).join('\n').trimEnd();
+}
+
+const warned = new Set();
+
+function build(day, s) {
+  const dayName = `Day ${day}`;
+
+  // 1. Run-of-show
+  const ros = [
+    slice(s.runOfShow, 2, 'How to read the tables'),
+    slice(s.runOfShow, 2, 'Day frame'),
+    slice(s.runOfShow, 1, `${dayName} `),
+    slice(s.runOfShow, 1, 'Decision rules', { toEof: true }),
+  ];
+  const day2Part = slice(s.runOfShow, 1, 'Day 2 ');
+  if (day === 2 && !day2Part.includes('## End-of-Day-2 success verification')) {
+    fail(
+      '"## End-of-Day-2 success verification" is not inside the Day 2 part of the run-of-show',
+    );
+  }
+
+  // 2. Trainer notes
+  const notes = [
+    slice(s.notes, 2, 'Day 0:'),
+    slice(s.notes, 2, `${dayName}:`),
+    slice(s.notes, 2, "Answers to the deck's open TODO(owner)"),
+  ];
+
+  // 3. Demo scripts
+  for (const h of s.demos.headings) {
+    if (
+      h.level === 2 &&
+      /^D-\d+ /.test(h.text) &&
+      !/Day [12]/.test(h.text) &&
+      !warned.has(h.text)
+    ) {
+      warned.add(h.text);
+      console.error(
+        `trainer-print: warning: demo heading "## ${h.text}" names neither Day 1 nor Day 2; not included in either day`,
+      );
+    }
+  }
+  const dayDemos = sliceAll(
+    s.demos,
+    2,
+    (t) =>
+      /^D-\d+ /.test(t) &&
+      (day === 1 ? t.includes('Day 1') : t.includes('Day 2')),
+  );
+  if (dayDemos.length === 0)
+    fail(`no demo sections for ${dayName} in ${s.demos.rel}`);
+  const demos = [preamble(s.demos, 2, /^D-\d+ /), ...dayDemos];
+
+  // 4. Golden prompts
+  const nums = day === 1 ? [0, 1] : [0, 2, 3, 4];
+  const prompts = nums.map((n) => slice(s.prompts, 2, `${n}. `));
+
+  const header = `<!-- Generated by ${SCRIPT} on ${new Date().toISOString()} from ${Object.values(SOURCES).join(', ')}. Do not edit. -->`;
+  return (
+    [
+      header,
+      `# 1. Run-of-show\n\n${ros.join('\n\n')}`,
+      `# 2. Trainer notes\n\n${notes.join('\n\n')}`,
+      `# 3. Demo scripts\n\n${demos.join('\n\n')}`,
+      `# 4. Golden prompts\n\n${prompts.join('\n\n')}`,
+    ].join('\n\n') + '\n'
+  );
+}
+
+const { days, out } = parseArgs(process.argv.slice(2));
+const sources = Object.fromEntries(
+  Object.entries(SOURCES).map(([k, rel]) => [k, load(rel)]),
+);
+mkdirSync(out, { recursive: true });
+for (const day of days) {
+  const file = join(out, `day-${day}.md`);
+  writeFileSync(file, build(day, sources));
+  console.log(`wrote ${file}`);
+}

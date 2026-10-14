@@ -73,3 +73,4 @@ tasks/spikes/**/out/
 
 # Impeccable critique snapshots — local design-review state, read by /impeccable polish
 .impeccable/
+tasks/print/
