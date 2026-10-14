@@ -69,6 +69,45 @@ const ISSUES: Issue[] = [
     ],
   },
   {
+    id: 'workspace-trust',
+    title: 'Workspace trust prompt: project MCP servers stay pending',
+    symptom:
+      'On the first start in the workspace, Claude Code asks whether you trust the folder. Afterwards `/mcp` or `claude mcp list` shows a server as `⏸ Pending approval`, or the project servers are not connected.',
+    cause:
+      'Claude Code asks for approval before it uses servers from a project `.mcp.json` in an interactive session, and a cloned repo cannot approve its own servers: approvals in the checked-in `.claude/settings.json` are ignored until you have trusted the workspace.',
+    fix: [
+      'Run `claude` in the workspace root, accept the workspace trust dialog, and approve the project servers when asked.',
+      'Check with `/mcp` inside the session, or `claude mcp list` in a terminal. `⏸ Pending approval` means the server is still waiting for you.',
+    ],
+  },
+  {
+    id: 'mcp-declined',
+    title: 'I declined an MCP server approval or a tool permission',
+    symptom:
+      'You said no to a project MCP server from `.mcp.json`, or to a tool permission prompt, and now the server is missing or the tool is blocked.',
+    cause:
+      'Your choice is remembered. Project server approvals and rejections are kept as settings (`enabledMcpjsonServers`, `disabledMcpjsonServers`); a `disabledMcpjsonServers` entry in any settings file rejects the server.',
+    fix: [
+      'MCP server: run `claude mcp reset-project-choices` in the workspace, then start `claude` again and approve the servers when asked.',
+      'If the server still does not come back, check your settings files for a `disabledMcpjsonServers` entry naming it and remove that entry.',
+      'Tool permission: allow and deny rules live under `permissions` in the settings files (`allow`, `ask`, `deny`). Remove or change the matching rule; `/permissions` is the in-session entry point.',
+    ],
+  },
+  {
+    id: 'mcp-scope',
+    title:
+      '`claude mcp add` versus `.mcp.json`: wrong scope or duplicate server',
+    symptom:
+      'A server you added with `claude mcp add` is missing for your teammates, or the same server appears twice (for example `storybook-angular` from `.mcp.json` and again from a manual add).',
+    cause:
+      '`claude mcp add` writes to the local scope by default: stored in `~/.claude.json` under the current project, not shared. Only `--scope project` writes the shared `.mcp.json`; `--scope user` stores it for all your projects. When the same name exists in several scopes, Claude Code connects once, using the highest-precedence entry (local, then project, then user) and does not merge fields.',
+    fix: [
+      'List what is configured: `claude mcp list`, and details of one server with `claude mcp get <name>`.',
+      'Remove the entry in the wrong scope: `claude mcp remove <name> --scope local` (or `project`, `user`).',
+      'For servers the whole workspace needs, keep them in the workspace `.mcp.json` and do not add them again by hand. The Storybook local server from Day 2 is the one deliberate manual add (`claude mcp add --transport http storybook-local http://localhost:<port>/mcp`, local scope).',
+    ],
+  },
+  {
     id: 'figma-403',
     title: 'Figma REST returns 403 / invalid token',
     symptom:

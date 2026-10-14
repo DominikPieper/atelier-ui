@@ -210,20 +210,17 @@ const DAYS: Day[] = [
         pages: [L.storybook, L.mcpServers],
         done: 'One story plus a `play` function written, seen red once and then green, and `docs-show` called.',
         bullets: [
-          'What Storybook is: stories, prop tables. The component is the source of the shape, the contract the source of intent — make parity visible with `check:contracts`',
-          'Open the hosted Storybook and look up the same component (Button) with `docs-show`: the docs come back shaped for the cohort framework',
-          'Two things in the Atelier Storybook that are explained nowhere else: the Design tab (addon-designs, `parameters.design`) shows the Figma frame next to the component, and the contract section at the bottom of every Docs tab comes from `contractDocsPage` via `parameters.docs.page` (ADR-0121 S5b) — not from Storybook',
-          'What is MCP? Which servers are active (`storybook-<framework>`, `nx-mcp`, `figma-console`, `uianatomy`)?',
-          'Toolset model (since Storybook 10.4, the repo runs 10.6.0): docs / dev / test — hosted vs. local surface, including toolset gating (when `test` is disabled for read-only agents)',
-          'Live exercise: ask Claude for Button props, print token values, preview in chat',
-          'Negative demo: the same question in a browser chat without MCP → hallucination. With MCP → correct answer',
+          'What Storybook is: stories, prop tables. A story is a claim about a component; the component is the source of the shape, the contract the source of intent — `check:contracts` makes parity visible',
+          'Two things in the Atelier Storybook that are explained nowhere else: the Design tab (`parameters.design`) shows the Figma frame next to the component, and the contract section at the bottom of every Docs tab comes from `contractDocsPage` via `parameters.docs.page` (ADR-0121 S5b) — not from Storybook',
+          'What is MCP? Which servers are active (`storybook-<framework>`, `nx-mcp`, `figma-console`, `uianatomy`)? Run `/mcp` and name them',
+          'Negative demo: the same question in a browser chat without MCP gives a hallucination. Then open the hosted Storybook, look up Button with `docs-show` and see the correct, framework-shaped answer; live: Button props, token values, preview in chat',
           'Write one story with a `play` function for a variant, watch it fail, fix it, watch it pass',
         ],
         stretch:
           "Ask the MCP server for a prop that does not exist and read how it answers. Then say why 'not documented' is the right answer.",
         recap: 'Why is a story a claim, and who checks that the claim holds?',
         trainer: [
-          'Storybook 10.6 background for questions: `npx storybook tools` / `npx storybook skills` is the route for agents without an MCP client (`storybook ai` is deprecated); `experimentalDocgenServer` is set explicitly for Angular and Vue; CSF Factories become the default story format in Storybook 11 and the workshop deliberately still writes CSF3.',
+          'Storybook 10.6 background for questions: `npx storybook tools` / `npx storybook skills` is the route for agents without an MCP client (`storybook ai` is deprecated); `experimentalDocgenServer` is set explicitly for Angular and Vue; CSF Factories become the default story format in Storybook 11 and the workshop deliberately still writes CSF3. Toolset model (since Storybook 10.4): `docs` / `dev` / `test`, hosted vs. local surface; `test` is gated for read-only agents — only if asked.',
         ],
       },
       {
@@ -332,7 +329,12 @@ const DAYS: Day[] = [
         title: 'Contract, component, stories',
         format: 'Prompt exercise',
         why: 'The contract records the mismatches you chose deliberately.',
-        pages: [L.contractExample, L.findingCodes, L.storybook],
+        pages: [
+          L.contractExample,
+          L.findingCodes,
+          L.storybook,
+          L.troubleshooting,
+        ],
         done: '`check:contracts` is green offline.',
         bullets: [
           'All participants, whatever the framework: start `npm run storybook` in parallel, then connect with `claude mcp add --transport http storybook-local http://localhost:<port>/mcp` (use the port Storybook prints) — deliberately local scope (the default of `--scope`, not project): the shared `.mcp.json` stays untouched and the working tree clean. Reconnect the client and check that the dev/test tools (`get-storybook-story-instructions`, `stories-preview`, `test-run`) are now listed — identical for all three frameworks since 10.6.0. Without this step the required tool that follows simply does not exist: "not available" here means "not configured", not "server down". `get-storybook-story-instructions` is mandatory before every `*.stories.*` edit',

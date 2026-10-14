@@ -88,7 +88,13 @@ can see must also be available without colour — an icon, a word, or an accessi
 
 ## Done when
 
-The same bar for all four, and the one the trainer verifies in the closing block:
+The same bar for all four. It is reached in two steps, because the brief itself is only
+the Figma half of the work: items 1–4 and 7 are checkable at the end of **Day 2 Block 01**
+(Figma design and handoff document); items 5, 6 and 8 need a contract, a component and
+stories, which do not exist until **Block 02** (contract, component, stories) and
+**Block 04** (verify). The numbering is kept across both lists because the briefs cite it.
+
+### Done after the Figma block (Day 2 Block 01)
 
 1. The Figma component set carries ≥ 2 variants on a `variant` axis named exactly as the
    code union will be (`variant`, not `Variant`; `success`, not `Success`), **and** the
@@ -101,6 +107,18 @@ The same bar for all four, and the one the trainer verifies in the closing block
 3. Every frame with children uses Auto Layout.
 4. A dark-mode variant renders correctly through the collection's `Dark` mode — no
    second component, no hardcoded value.
+
+<!-- numbering follows the full 1–8 list, which the briefs cite -->
+
+7. The a11y obligations tagged **(this block)** in the brief's own section are met, and
+   any blocker-severity mistakes among them are not present. Obligations tagged **(full
+   component)** describe the shipped component for later — each one depends on a state,
+   a scenario or a property this exercise's scope section puts out of scope to build, so
+   the closing check does not evaluate it; write it into the master's description instead
+   of building it.
+
+### Done after the code blocks (Day 2 Blocks 02 and 04)
+
 5. The component's prop names and values match the Figma property names one-for-one —
    `check:contracts` with your flags reports no `[AXIS]`/`[BOOLEAN]`.
 6. The generated story file declares `tags: ['autodocs']`. Autodocs is not on globally in
@@ -109,14 +127,23 @@ The same bar for all four, and the one the trainer verifies in the closing block
    inherits the tag from the file it was modelled on; usually is not always, and without it
    the component renders a Canvas and no Docs tab, failing the closing check for a reason
    that has nothing to do with the participant's component.
-7. The a11y obligations tagged **(this block)** in the brief's own section are met, and
-   any blocker-severity mistakes among them are not present. Obligations tagged **(full
-   component)** describe the shipped component for later — each one depends on a state,
-   a scenario or a property this exercise's scope section puts out of scope to build, so
-   the closing check does not evaluate it; write it into the master's description instead
-   of building it.
-8. `figma_check_design_parity` runs in report mode against the component and the
-   discrepancies it reports are understood, not merely absent.
+
+<!-- numbering follows the full 1–8 list, which the briefs cite -->
+
+8. `figma_check_design_parity` on your own Figma node against the generated component
+   (needs the connected Desktop Bridge) comes back without unexplained deviations, and
+   the discrepancies it does report are understood, not merely absent. The tool has no
+   report mode and requires a `codeSpec`: assemble it from `check:contracts --emit`
+   (`componentAPI`, `metadata`, `tokens`) plus `figma_scan_code_accessibility`
+   (`accessibility`). Sections you did not pass are not compared, so the report is only
+   as strong as the sections it names. This is the MCP call, not `npm run check:parity`
+   (that gate checks the Atelier masters, not your component).
+
+The shared checklist for the end of the day (everything the trainer verifies at the close,
+including `check:contracts`, `check:stories` and the dark-mode switch) lives in one place:
+`docs/src/data/day2-done.ts` — rendered on `/build-your-own#done`
+and in the curriculum on `/schulung`. This bar is the brief-specific subset of it, not a
+second copy.
 
 ## Sources
 

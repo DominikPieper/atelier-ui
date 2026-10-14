@@ -82,6 +82,18 @@ export const GLOSSARY: Record<string, GlossaryEntry> = {
     hint: 'In Atelier, tokens live as CSS custom properties like `--ui-color-primary`, and they mirror the variable names in the Figma file 1:1.',
   },
 
+  'spec layer': {
+    definition:
+      'The framework-agnostic TypeScript package `libs/spec` that sits between Figma and the three framework libraries (Angular, React, Vue). It holds the shared prop types and the per-component contracts, so the compiler and the gates can compare every adapter against one source.',
+    hint: 'Contracts live in `libs/spec/src/contracts/<name>.contract.ts` and record only the Figma-to-code differences you chose on purpose; `libs/spec/src/index.ts` is the join key the cross-framework gates read.',
+  },
+
+  drift: {
+    definition:
+      'Silent divergence between two things that should agree — for example a Figma master and the code that implements it (padding, colour, a missing variant), or one framework adapter and another.',
+    hint: 'In Atelier the gates catch it: `check:contracts` and `figma_check_design_parity` for Figma versus code, `check:props` and `check:variants` across frameworks.',
+  },
+
   LLM: {
     definition:
       'Large language model — a next-token predictor that works from patterns in its training data, not a database of facts. It is not deterministic and not infallible.',
