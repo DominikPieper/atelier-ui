@@ -1006,3 +1006,13 @@ Told "Trainer bin ich", I put the git `user.name` ("Dominik Pieper") on both dec
 owner's name as it should be printed is "Dominik Cortese Pieper". Rule: a name that will be
 shown to other people (slides, docs, bylines) comes from the person, not from git config or
 an email address; when it is not given, ask once instead of deriving it.
+
+## 2026-10-14 — A `;`-chained commit step commits whatever is staged, even after the edit aborted
+
+Closing R-203 I ran `python3 apply.py; git add -A; git commit -m "…"` in one line. The
+script's own count guard aborted on a wrong pattern, but `;` carried on: the commit was created
+with a message naming changes it did not contain. Caught by reading `git show --stat` afterwards,
+fixed with a corrected run and `git commit --amend`. Rule: an edit-then-commit chain is joined
+with `&&`, so an aborted edit stops the commit; after a count-asserted script aborts, look at
+`git status` before anything else; and a commit is checked against its own message
+(`git show --stat`) before the next step starts.
