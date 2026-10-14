@@ -60,8 +60,8 @@ come first. Ranked:
       `tasks/schulung-dry-run-kit.md`.
 - [x] R-176/R-177 (owner: Figma moves): Button master aligned with code; Card tracking
       documented as a deliberate mismatch (no per-component tracking in Figma styles).
-- [ ] Rest of item 1 (organisational parts — setup mail, provisioning, notices, feedback — handled separately by the owner, 2026-10-13): R-044 deck/briefs, R-049 run-of-show/demo scripts/cheat sheet, ~~R-041 agenda gaps~~ (done 2026-10-12), R-042 recovery
-      path. Then item 2.
+- [ ] Rest of item 1 (organisational parts — setup mail, provisioning, notices, feedback — handled separately by the owner, 2026-10-13): R-044 deck (briefs done 2026-10-13; both decks built 2026-10-14, open: cohort date, follow-up channel, screenshot placeholders), ~~R-049 run-of-show/demo scripts/cheat sheet~~ (done 2026-10-13), ~~R-041 agenda gaps~~ (done 2026-10-12), ~~R-042 recovery
+      path~~ (done 2026-10-13). Then item 2.
 - [x] Docs navigation for the course (owner go 2026-10-13; done same day, ADR-0169, `check:all` green): Day 2 has no participant page —
       the workshop track ends at the Day 1 kata, Day 2 lives only on the instructor page
       `/schulung`. Steps: (a) new participant page for Day 2 as track step 7, briefs visible
@@ -70,6 +70,40 @@ come first. Ranked:
       `/runbook` into the sidebar; (d) TOC on `/prompts`, `/schulung` link on the front page
       (R-062). Done when `check:all` is green and every link resolves on the built site.
 - [x] Scaffold release on npm: `check:release-drift` in sync after the Publish run.
+
+**Status 2026-10-14** (course review and owner decisions; not committed at the time of writing):
+
+- [x] Course review (plausibility, gaps, `/schulung` as a trainer tool): findings filed as
+      R-205–R-219; per-block trainer notes in `tasks/schulung-trainer-notes.md`.
+- [x] R-205 contradictions and R-206 drifts fixed across `/schulung`, `/build-your-own`,
+      `day2-done.ts`, the run-of-show, the golden prompts, the briefing §6 and the deck outline.
+- [x] Owner decisions 2026-10-14, all as recommended, applied in the same session: R-207 Figma
+      micro-exercise (Day 1 Block 03), R-208 bridge exercise as green-seat homework and the
+      contract walk-through first in Day 2 Block 02, R-209 `/prompts#claude-code-basics` in the
+      rescue slot, R-210 undo rule (Block 03, `/cheat-sheet`, `/design-to-code`), R-211 API rules
+      before the handoff (Day 2 Block 01), R-212 Day 2 Block 03 90→75 and Block 05 16:25–17:30 with
+      15 min workspace anatomy (every Day 2 time after 14:45 is 15 min earlier), R-213 mail step
+      (`/workshop#send-preflight`), R-215 one Figma duplicate, R-216 prompted story, R-217 block
+      anchors and `npm run trainer:print` (`tools/scripts/trainer-print.mjs`, `tasks/print/`
+      gitignored), R-218 run-of-show rule R12, R-219 `/verify` bullet. Deck outline follows
+      (53 + 50 slides, 208 line citations re-verified).
+- [x] Gates: prettier, `nx lint docs`, `check:docs`, `check:llms`, `check:docs-layout`,
+      `tools/e2e/schulung-claims.e2e.mjs` (`E2E_PORT_BASE=4410`), `trainer-print.test.mjs` and
+      `check:all` all exit 0.
+- [x] R-044: both decks regenerated from the outline on 2026-10-14 (Day 1 version 13, 53 slides;
+      Day 2 version 10, 50 slides); still open on the decks: cohort date, trainer names, wordmark,
+      follow-up channel, rehearsal screenshots.
+- [x] R-047: the parity double call ran live on AtlButton (call 1 flags the wrong `gap`, call 2
+      without `spacing` shows no spacing row, score 48 → 72); demo D-8, golden prompts §3.3,
+      dry-run kit, trainer notes and the two pages carry the observed behaviour. Real drifts
+      found on the way → R-220 (button padding 18/14 vs 20/16, weight 600 vs 500).
+- [ ] R-203 reproduced: the breaking commit was scoped `a11y`, no project name, so nx's
+      `useCommitScope` downgraded it to an indirect patch before the 0.x mapping; fix is
+      `release.conventionalCommits.useCommitScope: false` or project-name scopes. Owner decides.
+- [ ] R-214 desk-checked (Starter has no modes per Figma's plan table; duplicate behaviour
+      undocumented; dev-plugin import is on any plan); the live Starter test stays.
+- [ ] R-214: verify Figma free-plan Dark mode in the duplicate and the dev-plugin import before
+      R-040. Organisational (owner): second person for Day 1 Block 01, spend cap per seat.
 
 ### Course content review follow-up (2026-10-10)
 

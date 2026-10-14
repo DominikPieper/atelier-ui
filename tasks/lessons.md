@@ -999,3 +999,10 @@ publish log said `Applied semver relative bump "patch"` and shipped 0.4.5; the c
 list the breaking change. I had read one helper and not the path that calls it. Rule: a claim
 about what a release pipeline will produce is either checked with a dry run
 (`nx release version --dry-run`) or stated as unverified; npm versions cannot be taken back.
+
+## 2026-10-14 — A git user name is not a person's display name
+
+Told "Trainer bin ich", I put the git `user.name` ("Dominik Pieper") on both deck covers. The
+owner's name as it should be printed is "Dominik Cortese Pieper". Rule: a name that will be
+shown to other people (slides, docs, bylines) comes from the person, not from git config or
+an email address; when it is not given, ask once instead of deriving it.

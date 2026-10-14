@@ -246,8 +246,10 @@ already phrased as a ready one-line correction:
 
 ### 3.2 Dark-mode token audit prompt
 
-> Toggle Storybook's backgrounds/theme addon to dark and look at `<ComponentName>` in
-> both variants/states you built. Confirm three things and report each:
+> Switch the theme control in Storybook's toolbar to dark (addon-themes, it sets
+> `data-theme="dark"`; the backgrounds control only recolours the canvas and switches
+> nothing) and look at `<ComponentName>` in both variants/states you built. Confirm
+> three things and report each:
 >
 > 1. **Every colour still resolves through a `--ui-*` custom property** — none
 >    hardcoded — so the dark override already declared in `tokens.css`'s
@@ -270,18 +272,26 @@ This is the exact exercise `tasks/schulung-dry-run-kit.md` §4 (Day 2, Block 04)
 once they've built their component:
 
 > Call `figma_check_design_parity` on `<node>`/`<variant>` twice, same node both times.
+> Use the variant node: geometry lives there. The component set is for `componentAPI`
+> only; a variant carries no component properties.
 >
 > First call: pass all seven `codeSpec` sections — `visual`, `spacing`, `typography`,
 > `tokens`, `componentAPI`, `accessibility`, `metadata` — with one spacing value
 > deliberately wrong. Expect the report to catch it.
 >
 > Second call: the same wrong value still present in the component, but omit the
-> `spacing` section from `codeSpec` entirely this time. Expect a **clean** report —
+> `spacing` section from `codeSpec` entirely this time. Expect **no spacing row** —
 > fields you don't pass are not compared, which is different from "fields that happen
 > to be correct."
 
 (Schema verified against `skills/figma-workspace-architect/references/code-sync.md` —
 exactly these seven field names, no more, no fewer.)
+
+(Run live 2026-10-14 on AtlButton, R-047: call 1 flagged the wrong `gap` as major, call 2
+showed no spacing row and the parity score rose from 48 to 72. The report echoes the
+passed sections under `codeData` and lists under `summary.categories` only the categories
+with findings; it has no "sections compared" list. Against the component set `129:20`
+`componentAPI` matched; against the variant `129:4` every prop came back as missing.)
 
 ---
 

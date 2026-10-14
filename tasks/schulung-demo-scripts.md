@@ -375,7 +375,10 @@ is flagged in one call and silent in the next.
   Claude first). Without the bridge this demo cannot run live.
 - A built component with its Figma node (the trainer's own Block 01 example, or a
   participant's volunteering machine). Node id and variant: from that component's
-  handoff document; **UNVERIFIED** until chosen.
+  handoff document. Rehearsed 2026-10-14 on AtlButton: set `129:20` for `componentAPI`,
+  variant `129:4` (primary/md/default) for `spacing`, `visual`, `typography`. A variant
+  node carries no component properties (every prop comes back "no matching Figma
+  component property"); the set answers geometry with its default variant (size=sm).
 - Tool: `figma_check_design_parity` (figma-console-mcp, pinned `1.40.0` in `.mcp.json`).
   The seven `codeSpec` sections, per
   `skills/figma-workspace-architect/references/code-sync.md`: `visual`, `spacing`,
@@ -391,10 +394,14 @@ verbatim, with `<node>`/`<variant>` filled from the handoff document.
 
 - Call 1 (all seven sections, one spacing value deliberately wrong): the report flags
   the spacing deviation.
-- Call 2 (same wrong value left in the component, `spacing` section omitted): a clean
-  report. Fields not passed are not compared; that is not the same as "correct".
-- Whether the report names the compared sections: the page says a real run must
-  (done-when item on Day 2). Exact report wording **UNVERIFIED**.
+- Call 2 (same wrong value left in the component, `spacing` section omitted): no spacing
+  row at all, the other findings unchanged. Fields not passed are not compared; that is
+  not the same as "correct".
+- The report does not name the compared sections: `summary.categories` lists only
+  categories with findings, and `codeData` echoes exactly the sections passed; point
+  at `codeData`. Observed 2026-10-14 (AtlButton, `gap: 16` wrong): call 1 → 13 findings,
+  score 48, three major spacing rows; call 2 → 10 findings, score 72, no spacing row,
+  everything else identical. The score rose because less was compared.
 
 **Point at.** The compared-section list in each report; the sentence "a thinly filled
 `codeSpec` is the normal case, not a complete one".
