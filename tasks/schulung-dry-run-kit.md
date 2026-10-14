@@ -54,12 +54,12 @@ becomes useless the moment the clock stops for a fix.
 
 ## 1. Known-blocked or undecided — read this before you start, don't chase any of it
 
-| Item                                  | Why it's blocked                                                                                                                                                                                                                                                                                                                         | What to do instead                                                                                                                                                                                                                                                                                                         |
-| ------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Claude Design demo (trainer appendix) | **Not a block step.** `/schulung` has it as an optional trainer appendix (`#appendix-claude-design`), trainer machine only: `claude.ai/design` needs a different login than the cohort API key. The page says to slot it into Day 1 Block 04 "if time allows, or skip it" (owner decision 2026-10-10). Participants cannot reproduce it. | Leave it out of the rehearsal's checklist and timing. If you want to see it, run it as a separate trainer exercise after the timed run, not inside Day 1 Block 04.                                                                                                                                                         |
-| Figma Desktop Bridge                  | Not automatic. Every `figma_*` MCP call (Day 2 Block 01/02/04) depends on the bridge plugin imported in the Figma desktop app (Plugins → Development → Import plugin from manifest…, `/schulung` Day 1 Block 01). `/schulung` says the bridge gates Day 2.                                                                               | Before relying on _any_ `figma_*` tool: Figma Desktop open, your duplicate open, bridge plugin running, then ask Claude to check Figma status and confirm it is connected. Re-check after any Figma restart. How the connected state is read: not specified on /schulung (see `/troubleshooting`: "bridge not connected"). |
-| `solved-*` recovery branches          | None exist. Whether they make sense for scaffold-based participants is an open owner question.                                                                                                                                                                                                                                           | Recovery path: see R-005 / R-042, not decided. For the rehearsal itself, protect your own progress the ordinary way (local commit or `git stash` before anything risky) — a rehearsal convenience, not something to teach a cohort.                                                                                        |
-| Figma access token                    | `/schulung` Day 1 Block 01: the token is technically optional (REST reads only) and a cohort-policy decision.                                                                                                                                                                                                                            | Decide before the run whether you rehearse with or without it, and write the choice into §5. Which one a cohort gets: not specified on /schulung.                                                                                                                                                                          |
+| Item                                  | Why it's blocked                                                                                                                                                                                                                                                                                                                                                                          | What to do instead                                                                                                                                                                                                                                                                                                         |
+| ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Claude Design demo (trainer appendix) | **Not a block step.** `/schulung` has it as an optional trainer appendix (`#appendix-claude-design`), trainer machine only: `claude.ai/design` needs a different login than the cohort API key. The page says to run it in the Day 1 buffer 16:00–16:10, cut to 10 minutes, or skip it (owner decision 2026-10-14; earlier: Block 04 "if time allows"). Participants cannot reproduce it. | Leave it out of the rehearsal's checklist and timing. If you want to see it, run it as a separate trainer exercise after the timed run, not inside Day 1 Block 04 or its buffer.                                                                                                                                           |
+| Figma Desktop Bridge                  | Not automatic. Every `figma_*` MCP call (Day 2 Block 01/02/04) depends on the bridge plugin imported in the Figma desktop app (Plugins → Development → Import plugin from manifest…, `/schulung` Day 1 Block 01). `/schulung` says the bridge gates Day 2.                                                                                                                                | Before relying on _any_ `figma_*` tool: Figma Desktop open, your duplicate open, bridge plugin running, then ask Claude to check Figma status and confirm it is connected. Re-check after any Figma restart. How the connected state is read: not specified on /schulung (see `/troubleshooting`: "bridge not connected"). |
+| `solved-*` recovery branches          | None exist. Whether they make sense for scaffold-based participants is an open owner question.                                                                                                                                                                                                                                                                                            | Recovery path: see R-005 / R-042, not decided. For the rehearsal itself, protect your own progress the ordinary way (local commit or `git stash` before anything risky) — a rehearsal convenience, not something to teach a cohort.                                                                                        |
+| Figma access token                    | `/schulung` Day 1 Block 01: the token is technically optional (REST reads only) and a cohort-policy decision.                                                                                                                                                                                                                                                                             | Decide before the run whether you rehearse with or without it, and write the choice into §5. Which one a cohort gets: not specified on /schulung.                                                                                                                                                                          |
 
 ---
 
@@ -130,8 +130,7 @@ Claude Code CLI logged in with your own API key. Every block's **Done when** is
 quoted from `/schulung` (`Block.done`); log pass/fail against it in §5.
 
 **Time-recovery cuts:** `/schulung` names none. Its only flexibility is the
-Claude Design appendix ("slot it into Day 1 Block 04 if time allows, or skip
-it") and the per-block stretch tasks, which are for fast finishers, not cuts.
+Claude Design appendix (Day 1 buffer 16:00–16:10, 10 minutes, or skip it) and the per-block stretch tasks, which are for fast finishers, not cuts.
 Any cut order for a block that runs long: not specified on /schulung. Do not
 invent one live; record the overrun and which bullet ate the time.
 
@@ -292,8 +291,8 @@ _Done when:_ a master plus a filled handoff document.
   Copy and rename the starter frame from the Workshop Templates page (Toast /
   Starter, StatCard / Starter, TagChip / Starter or Avatar / Starter, plus
   Variant Matrix / Scaffold).
-- ~45 min manual design in the Figma UI, ~45 min MCP structuring (component
-  properties, a11y audits). Target: ≥ 2 variants × 2 states, properties,
+- 5 min duplicate + starter frame, ~40 min manual design in the Figma UI, ~30 min
+  MCP structuring (component properties, a11y audits), ~12 min handoff, 3 min recap. Target: ≥ 2 variants × 2 states, properties,
   correct `--ui-*` tokens, a dark-mode variant; the exact matrix is in the
   brief. Skill: `figma-workspace-architect` ("used here for the first time").
   Record which brief you built and whether it was clear enough to draw from.
@@ -308,7 +307,7 @@ _Done when:_ a master plus a filled handoff document.
 - **Abort criterion for this 🔴 block:** not specified on /schulung. The
   carried-over proposal (finish with whatever scope was built, write the
   handoff from that) is a trainer decision, undecided, not an agreed rule.
-  Record whether the block overran and what ran long (the ~45/~45 split is
+  Record whether the block overran and what ran long (the 5/40/30/12/3 split is
   unverified).
 
 **Block 02 — Contract, component, stories**
@@ -411,10 +410,10 @@ triaged (code / Figma / contract).
 _Done when:_ everyone leaves with a next step for their own design system, and
 a follow-up channel is set up.
 
-- Up to 8 participants, 50 minutes: about 5 minutes each, including questions.
+- Up to 8 participants, 50 minutes: strictly 3 minutes each.
   Show your component, one prompt that worked and one that failed. **Time it**:
-  8 × 5 min = 40 min leaves 10 for the trainer synthesis and the transfer
-  step; log whether the block holds at the cohort size, a solo run can only
+  8 × 3 min = 24 min leaves 26 for the trainer synthesis, the transfer
+  step, the outlook and the exit round; log whether the block holds at the cohort size, a solo run can only
   simulate this.
 - Trainer synthesis: prompt patterns that worked, anti-patterns, when Claude
   fails, how to deal with drift.

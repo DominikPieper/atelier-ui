@@ -22,7 +22,7 @@ derived from the code, not from a recorded run.
 | D-3 | Design tab + contract section in Storybook                        | Day 1 Block 04                                                        | New                             |
 | D-4 | Negative (hallucination) demo + `docs-show`                       | Day 1 Block 04                                                        | Kept                            |
 | D-5 | Red-then-green story with a `play` function                       | Day 1 Block 04                                                        | New                             |
-| D-6 | Three directions (Claude Design) + palette fence                  | Trainer appendix, "if time allows, or skip it"                        | Kept, optional                  |
+| D-6 | Three directions (Claude Design) + palette fence                  | Day 1 buffer 16:00–16:10, 10 min, or skip                             | Kept, optional                  |
 | D-7 | uianatomy MCP as helper, introducing skills                       | Day 2 Block 00                                                        | New                             |
 | D-8 | Parity on purpose (`codeSpec` fields not passed are not compared) | Day 2 Block 04                                                        | New                             |
 
@@ -153,9 +153,8 @@ tab (`contractDocsPage` via `parameters.docs.page`, ADR-0121 S5b).
 
 **Preconditions.**
 
-- Atelier Angular Storybook on `http://localhost:4400` (`nx storybook angular`). The
-  hosted instance (base `https://atelier.pieper.io/storybook-angular/`, derived from
-  the MCP URL in `.mcp.json`) is **UNVERIFIED** as a browsable Storybook UI.
+- Primary: the hosted Atelier Storybook, `https://atelier.pieper.io/storybook-angular/`.
+  Local fallback: `http://localhost:4400` (`nx storybook angular`).
 - The participants' scaffolded workspace stories (the `AtlButton` template under
   `libs/create-workspace/src/generators/preset/files/storybook/angular/`) carry **no**
   `parameters.design`, so their Design tab is empty. Demo on the Atelier Storybook, not
@@ -274,13 +273,14 @@ story lacks the `play`: write the 3-line `play` live from the template shape abo
 
 ---
 
-## D-6 · Three directions, Claude Design (Trainer appendix, optional, ~12 min)
+## D-6 · Three directions, Claude Design (Trainer appendix, optional, 10 min in the Day 1 buffer)
 
 **Goal.** Show that a Claude Design artboard has none of the four gate identities, and
 that the palette gate fences exactly the generated sheet, not the artboards.
 
-**Slotting.** `/schulung`: Day 1 Block 04 "if time allows, or skip it". It does not fit
-inside Block 04's 75 minutes in the run-of-show; use the 16:00–16:10 buffer or skip.
+**Slotting.** Owner decision 2026-10-14: it runs in the Day 1 buffer 16:00–16:10
+(between Block 04 and Block 05), cut to 10 minutes, or is skipped. It does not fit
+inside Block 04's 75 minutes.
 Trainer machine only: `claude.ai/design` needs a different login than the cohort API
 key.
 

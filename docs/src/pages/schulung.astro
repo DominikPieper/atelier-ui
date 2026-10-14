@@ -315,8 +315,7 @@ const DAYS: Day[] = [
         bullets: [
           'Mandatory first step: duplicate the Atelier file into your own drafts — never mutate the original file',
           'The starting point is a starter frame from the Workshop Templates page that comes along when you duplicate: Toast / Starter, StatCard / Starter, TagChip / Starter or Avatar / Starter, plus Variant Matrix / Scaffold. Fills and — where the component has them — paddings and radii are already bound to Library Tokens variables, so the first step is copy and rename, not an empty canvas',
-          '~45 min manual design in the Figma UI (layout, variants, token assignment)',
-          '~45 min MCP structuring (component properties, a11y audits)',
+          'Timing: 5 min duplicate the file and copy the starter frame, ~40 min manual design in the Figma UI (layout, variants, token assignment), ~30 min MCP structuring (component properties, a11y audits), ~12 min handoff document, 3 min recap',
           'Own component set: ≥ 2 variants × 2 states, properties, correct tokens (`--ui-*`), a dark-mode variant — the exact matrix is in the component brief',
           'Skills as co-pilot, used here for the first time: `figma-workspace-architect` for architecture decisions',
           'When something fails: /troubleshooting (bridge not connected, node id does not resolve, port conflicts, Node version too old). Still red: the rescue path is /troubleshooting#still-red — pair with a neighbour and tell the trainer right away, nobody continues red',
@@ -405,7 +404,7 @@ const DAYS: Day[] = [
         pages: [L.checkYourOwn, L.readiness],
         done: 'Everyone leaves with a next step for their own design system, and a follow-up channel is set up.',
         bullets: [
-          'Cohorts have up to 8 participants, so 50 minutes means about 5 minutes each, including questions. Show your component, one prompt that worked and one that failed',
+          'Cohorts have up to 8 participants, so each person gets strictly 3 minutes (up to 8 participants, 24 minutes in total). Show your component, one prompt that worked and one that failed. The remaining time goes to the trainer synthesis, the transfer self-check, the outlook and the exit round',
           'Trainer synthesis: prompt patterns that worked, anti-patterns, when Claude fails, how to deal with drift',
           'Transfer: run the self-check from /design-principles on your own design system and pick one next step',
           'Outlook: productive use in your own repo, your own CLAUDE.md, your own skills',
@@ -422,7 +421,7 @@ const DAYS: Day[] = [
 // Trainer appendix: the Claude Design demo. Not a core block (participants cannot
 // reproduce it: claude.ai/design needs a different login than the cohort API key).
 const APPENDIX_BULLETS: string[] = [
-  'Trainer-only demo, "Three directions" (~12 min, trainer machine only — claude.ai/design needs a different login than the cohort API key): three direction artboards for the Toast brief in Claude Design, seeded from the generated palette `tools/design/artboard-palette.css` — not from the atelier-design skill, because that file carries the short names the artboards themselves use (`--success`, `--border-hover`), and because exactly that file is about to be turned red',
+  'Trainer-only demo, "Three directions" (10 min in the Day 1 buffer, trainer machine only — claude.ai/design needs a different login than the cohort API key): three direction artboards for the Toast brief in Claude Design, seeded from the generated palette `tools/design/artboard-palette.css` — not from the atelier-design skill, because that file carries the short names the artboards themselves use (`--success`, `--border-hover`), and because exactly that file is about to be turned red',
   "Before the fence, name the four gate identities in one sentence (the Figma COMPONENT_SET with variant axes, the component's literal union, the `--ui-*` token, the Figma node id). Node ids only appear in Day 1 Block 05 and literal unions only on Day 2, so name them here instead of assuming them. Then the fence: hard-code a colour in the artboard and run `npm run check:artboard-palette` — green, because the gate reads only the shared sheet against `tokens.css` and no artboard. Change the same colour in the generated sheet: the same command turns red",
   'Checkpoint question to the room: which of the four gate identities does this artboard have? Expected answer: none. Only then the classification — in the repo the rule "never inline hex" still holds, and it holds where a gate can enforce it; Claude Design is not a fifth pillar but step 0 (divergence) and step 5 (handoff), never steps 1–4',
   'Step 5 (handoff) stays without a live demonstration, but is no longer just an idea. Unlike step 0 there is no demo in the room: its tooling has existed since 2026-09-08 as a skill (artboard-bridge, Publish mode) and has already run once, against a scratch project, and correctly refused (the component stood at DRIFT), while a skill-less approach would have published unverified code — exactly the refusal the fence argues for. The write path itself (P1–P7) is still untried, because currently every parity record in the repo stands at DRIFT (blocked repo-wide, not on this one component), and access for individual participant seats remains a separate open question (ADR-0106 so far proves only the owner seat). The room must not leave with the impression of having seen a live demonstration',
@@ -645,8 +644,9 @@ const dayId = (d: Day) => `day-${d.day.replace(' ', '-').toLowerCase()}`;
         <p>
           This demo is optional and runs on the trainer machine only:
           participants cannot reproduce it, because claude.ai/design needs a
-          different login than the cohort API key. Slot it into Day 1 Block 04
-          if time allows, or skip it. Background:
+          different login than the cohort API key. It runs in the Day 1 buffer
+          (16:00–16:10, between Block 04 and Block 05), cut to 10 minutes, or is
+          skipped. Background:
           <a href="/claude-design" class="docs-link-primary">Claude Design</a>.
         </p>
       </Callout>

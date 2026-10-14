@@ -39,7 +39,7 @@ machine, for demos only.
 | Coffee | 10:45–11:00 | 11:00–11:15 | Rescue seats from the block before; reset trainer screen  |
 | Lunch  | 12:15–13:15 | 12:30–13:30 | Trainer fixes red setups (Day 1 rescue path)              |
 | Coffee | 14:30–14:45 | 15:00–15:15 | Day 1: pre-generate artboards if the appendix demo is run |
-| Buffer | 16:00–16:10 | 16:30–16:40 | Absorbs overrun. Do not spend it in advance               |
+| Buffer | 16:00–16:10 | 16:30–16:40 | Absorbs overrun. Day 1: optional D-6, 10 min, or skip     |
 
 Net per day: 410 min = 6 h 50 min (matches the page).
 
@@ -147,11 +147,10 @@ and `docs-show` called.
 
 Sum: 10+10+10+15+25+3+2 = **75**.
 
-Optional **D-6** (Claude Design three directions, ~12 min, trainer machine only) is
-not scheduled in any row. `/schulung` says "slot into Block 04 if time allows, or
-skip it". This block has 3 spare minutes; the demo does not fit. Run it only after a
-block ran short, or in the 16:00–16:10 buffer, or skip. Do not take the time from the
-red-then-green row.
+Optional **D-6** (Claude Design three directions, trainer machine only) runs in the
+Day 1 buffer 16:00–16:10, between this block and Block 05 (owner decision 2026-10-14),
+cut to 10 minutes, or is skipped. It is not part of any block's Sum. Do not take the
+time from the red-then-green row.
 
 ## Block 05 · 16:10–17:15 · 65 min · Kata against the clock (hands-on, no guidance)
 
@@ -209,11 +208,11 @@ _Done when:_ a master plus a filled handoff document.
 | ----------- | --- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------ | --------------------------------- | -------------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------- |
 | 09:30–09:35 | 5   | Mandatory first step: duplicate the Atelier file into your own drafts, never mutate the original                                                                                                                                                      | File → Duplicate; confirm the bridge is connected to the duplicate | Figma                             | D2B01-C1: **every seat is in its own duplicate and Claude reports bridge connected**                                 | No draft rights or bridge red: rescue path (`/troubleshooting#still-red`), pair, tell the trainer. Nobody continues red |
 | 09:35–10:15 | 40  | Manual design in the Figma UI from the starter frame on the Workshop Templates page (Toast / StatCard / TagChip / Avatar `/ Starter`): copy, rename, layout, variants, token assignment                                                               | Design the component set                                           | Walk the room                     | D2B01-C2 (09:55): starter copied and renamed on ≥ 70 %. D2B01-C3 (10:15): ≥ 2 variants × 2 states drawn. **Rule R7** | Seat behind: continue from the starter, skip the dark-mode variant until the MCP row                                    |
-| 10:15–10:50 | 35  | MCP structuring: component properties, a11y audit, dark-mode variant, `--ui-*` tokens; `figma-workspace-architect` as co-pilot, first use                                                                                                             | Use Claude + `figma_*` tools to structure the master               | Participant screen                | D2B01-C4 (10:35): properties and tokens bound on ≥ 70 %. **Rule R7**                                                 | Bridge drops: `/runbook#stale-instances`, then `/troubleshooting`                                                       |
-| 10:50–10:58 | 8   | Handoff document before anyone prompts: draft URL + node id, variants/states, token bindings, reuse vs. rebuild, behaviour from the brief, exclusions, target files, acceptance criteria. Checklist, not template (`/design-to-code#handoff-example`) | Write it                                                           | `/design-to-code#handoff-example` | D2B01-C5: a handoff document exists on every seat (all eight items)                                                  | Short on time: node id + variants + exclusions first, finish after lunch before Block 02 prompts                        |
-| 10:58–11:00 | 2   | Recap: which line did you have to decide yourself, and what would the AI have guessed?                                                                                                                                                                | Answer aloud                                                       | —                                 | —                                                                                                                    | —                                                                                                                       |
+| 10:15–10:45 | 30  | MCP structuring: component properties, a11y audit, dark-mode variant, `--ui-*` tokens; `figma-workspace-architect` as co-pilot, first use                                                                                                             | Use Claude + `figma_*` tools to structure the master               | Participant screen                | D2B01-C4 (10:35): properties and tokens bound on ≥ 70 %. **Rule R7**                                                 | Bridge drops: `/runbook#stale-instances`, then `/troubleshooting`                                                       |
+| 10:45–10:57 | 12  | Handoff document before anyone prompts: draft URL + node id, variants/states, token bindings, reuse vs. rebuild, behaviour from the brief, exclusions, target files, acceptance criteria. Checklist, not template (`/design-to-code#handoff-example`) | Write it                                                           | `/design-to-code#handoff-example` | D2B01-C5: a handoff document exists on every seat (all eight items)                                                  | Short on time: node id + variants + exclusions first, finish after lunch before Block 02 prompts                        |
+| 10:57–11:00 | 3   | Recap: which line did you have to decide yourself, and what would the AI have guessed?                                                                                                                                                                | Answer aloud                                                       | —                                 | —                                                                                                                    | —                                                                                                                       |
 
-Sum: 5+40+35+8+2 = **90**.
+Sum: 5+40+30+12+3 = **90**.
 
 ## Block 02 · 11:15–12:30 · 75 min · Contract, component, stories (prompt exercise)
 
@@ -271,15 +270,15 @@ Sum: 5+15+10+10+15+15+3+2 = **75**.
 _Done when:_ everyone leaves with a next step for their own design system, and a
 follow-up channel is set up.
 
-| Time        | Min | Trainer action                                                                                                                  | Participant action  | Trainer screen                      | Checkpoint                                                                                  | Fallback                                 |
-| ----------- | --- | ------------------------------------------------------------------------------------------------------------------------------- | ------------------- | ----------------------------------- | ------------------------------------------------------------------------------------------- | ---------------------------------------- |
-| 16:40–16:43 | 3   | Set the rules: component, one prompt that worked, one that failed; timer                                                        | Prepare             | Timer                               | —                                                                                           | —                                        |
-| 16:43–17:15 | 32  | Show & tell, about 4 min per participant at 8 (the page says about 5; at 5 there is no time left for transfer)                  | Present             | Participant screen                  | D2B05-C1: every participant has shown a component, a prompt that worked and one that failed | Over time: cut questions, not presenters |
-| 17:15–17:20 | 5   | Trainer synthesis: prompt patterns that worked, anti-patterns, when Claude fails, how to deal with drift                        | Listen, note        | Whiteboard                          | —                                                                                           | —                                        |
-| 17:20–17:28 | 8   | Transfer: `/design-principles#check-your-own` on your own DS; pick one next step; outlook (own repo, own CLAUDE.md, own skills) | Write the next step | `/design-principles#check-your-own` | D2B05-C2: one written next step per participant                                             | Spoken round                             |
-| 17:28–17:30 | 2   | Exit round: one sentence each, the first thing you will do next week                                                            | Say it              | —                                   | D2B05-C3: follow-up channel named (organisational, out of scope here)                       | —                                        |
+| Time        | Min | Trainer action                                                                                                                  | Participant action  | Trainer screen                      | Checkpoint                                                                                  | Fallback                                                |
+| ----------- | --- | ------------------------------------------------------------------------------------------------------------------------------- | ------------------- | ----------------------------------- | ------------------------------------------------------------------------------------------- | ------------------------------------------------------- |
+| 16:40–16:43 | 3   | Set the rules: component, one prompt that worked, one that failed; timer                                                        | Prepare             | Timer                               | —                                                                                           | —                                                       |
+| 16:43–17:07 | 24  | Show & tell, strictly 3 min per participant, up to 8 (owner decision 2026-10-14)                                                | Present             | Participant screen                  | D2B05-C1: every participant has shown a component, a prompt that worked and one that failed | Over time: stop at 3 min, cut questions, not presenters |
+| 17:07–17:15 | 8   | Trainer synthesis: prompt patterns that worked, anti-patterns, when Claude fails, how to deal with drift                        | Listen, note        | Whiteboard                          | —                                                                                           | —                                                       |
+| 17:15–17:27 | 12  | Transfer: `/design-principles#check-your-own` on your own DS; pick one next step; outlook (own repo, own CLAUDE.md, own skills) | Write the next step | `/design-principles#check-your-own` | D2B05-C2: one written next step per participant                                             | Spoken round                                            |
+| 17:27–17:30 | 3   | Exit round: one sentence each, the first thing you will do next week                                                            | Say it              | —                                   | D2B05-C3: follow-up channel named (organisational, out of scope here)                       | —                                                       |
 
-Sum: 3+32+5+8+2 = **50**.
+Sum: 3+24+8+12+3 = **50**.
 
 ## End-of-Day-2 success verification
 
