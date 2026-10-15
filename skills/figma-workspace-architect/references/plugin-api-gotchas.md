@@ -33,6 +33,12 @@ this file is only the part that knowledge gets wrong.
   coordinates. After changing `section.y`, apply the same delta to every child
   (`child.y += deltaY`), or reposition the component set explicitly
   (`(sec.x + 24, sec.y + 92)` is the offset the Components page uses).
+  **Re-checked 2026-10-15, plugin 1.39.0:** moving seven sections with `s.y = …` kept every
+  child attached (zero relative drift, measured after each move), so the claim above did not
+  reproduce. What the file _did_ carry was the damage it describes — seven of eight sections
+  with children at a constant relative offset — so keep the cheap guard either way: after a
+  section move or resize, re-read `min(child.y)` and re-anchor the children, and before
+  closing, assert every child's `absoluteBoundingBox` lies inside its section's.
 
 ## Text
 

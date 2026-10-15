@@ -2776,6 +2776,27 @@ Tokens` `spacing/s1…s16` vs `Library Tokens` `spacing/1…16`, only the latter
         shorthand. The point of ADR-0036 is that a component naming the family
         directly can still break the "serif, italic, never bolded" guarantee a role
         token gives for free.
+- [x] **Figma layout restructure (2026-10-15)** — the owner saw "very many overlaps" on the
+      Components page. Sections did not overlap; their children did: five sections carried
+      every child at a +1291px relative offset, two at −317px, so content spilled 1,267px into
+      the next section. Same pattern on the Icons page (all 25 icon masters 1,460px below their
+      section) and a true section overlap on Workshop-Templates (the Kata section sat on top of
+      Starter frames). Fixed live via figma-console-mcp, Figma version checkpoints "Before /
+      After layout restructure (2026-10-15)": children re-anchored to (24,24) and sections
+      resized and re-stacked at the 240px gap; the two bare Navigation masters moved into their
+      wrapper frames and the two stale sample labels ("page 1 of 10", "page 10 of 10 (last)",
+      whose content ADR-0056 moved out) removed; AtlButton wrapped like its eight siblings
+      (new frame `1218:867`); Navigation reflowed at the 140px gap the other sections use; the
+      superseded icon sheet's 4,430px-wide header text set to wrap. Verified by readback: 8
+      sections, 0 children outside, 0 overlaps, every inner gap 140, 43 masters before and
+      after; screenshots of the page, Navigation, Inputs, Display and AtlButton read clean.
+      Not touched: section order, Child masters (bare by design), the AI section (one set,
+      no wrapper), the Inventory page (clean).
+  - [ ] **Standing layout probe** — the pattern had sat in the file for weeks although
+        `plugin-api-gotchas.md` already described the mechanism. Add to the `figma:snapshot`
+        preflight (or `check:figma` over the snapshot): every section child inside its
+        section's bounding box, no two sections overlapping on a page; ~20 lines, the exact
+        check this pass ran by hand. Lesson recorded in `tasks/lessons.md` (2026-10-15).
 
 ## Blocked
 

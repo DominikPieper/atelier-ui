@@ -1016,3 +1016,26 @@ fixed with a corrected run and `git commit --amend`. Rule: an edit-then-commit c
 with `&&`, so an aborted edit stops the commit; after a count-asserted script aborts, look at
 `git status` before anything else; and a commit is checked against its own message
 (`git show --stat`) before the next step starts.
+
+## 2026-10-15 — A recorded gotcha is not a scan of the file for the damage it describes
+
+The owner saw "very many overlaps" on the Figma Components page. Top-level sections did not
+overlap at all; their _children_ did — five sections carried every child at a +1291px
+relative offset, two at −317px, so content spilled 1,267px into the next section, and on
+the Icons page all 25 icon masters sat 1,460px below their section. The mechanism was already
+written up in `plugin-api-gotchas.md` ("sections leave their children behind"), from the
+session that caused it. The note protected the next payload and did nothing for the file: the
+damage sat there for weeks and nobody looked, because a gotcha reads as "don't do this
+again", not as "go check where this already happened". Rule: when a gotcha is recorded,
+scan the artefact for the pattern it describes before closing, and if the scan is cheap
+(here: child bounding box inside section bounding box, 20 lines), say where it should live
+as a standing probe — `tasks/todo.md` now carries that as an open item under the Figma
+polish collector.
+
+Two smaller things from the same pass. Fixing the offset exposed the next layer, as it did
+on 2026-05 (lessons: "verifying a fix found two defects the fix did not cause"): two
+Navigation masters were floating bare above empty wrapper frames whose labels pointed at
+content ADR-0056 had moved out months earlier. And the gotcha's claim did **not** reproduce:
+moving seven sections by `s.y = …` kept their children attached (zero drift, measured after
+each move), so the recorded mechanism is at best version-specific — the correction is dated
+in the gotcha file, and the re-normalise guard stays because it costs nothing.
