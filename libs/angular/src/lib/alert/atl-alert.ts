@@ -9,6 +9,16 @@ import {
 import type { AtlIconName, AtlAlertVariant } from '../spec';
 import { AtlIcon } from '../icon/atl-icon';
 
+// Which AtlIcon each variant carries. Names, not glyphs: a glyph in a string map
+// was the fifth way this library drew an icon, and the one check:icon-duplication
+// missed (ADR-0050).
+const VARIANT_ICON_NAMES: Partial<Record<AtlAlertVariant, AtlIconName>> = {
+  info: 'info',
+  success: 'success',
+  warning: 'warning',
+  danger: 'danger',
+};
+
 /**
  * Inline notification banner with semantic color variants and optional dismiss button.
  *
@@ -20,16 +30,6 @@ import { AtlIcon } from '../icon/atl-icon';
  * </atl-alert>
  * ```
  */
-// Which AtlIcon each variant carries. Names, not glyphs: a glyph in a string map
-// was the fifth way this library drew an icon, and the one check:icon-duplication
-// missed (ADR-0050).
-const VARIANT_ICON_NAMES: Partial<Record<AtlAlertVariant, AtlIconName>> = {
-  info: 'info',
-  success: 'success',
-  warning: 'warning',
-  danger: 'danger',
-};
-
 @Component({
   selector: 'atl-alert',
   standalone: true,
