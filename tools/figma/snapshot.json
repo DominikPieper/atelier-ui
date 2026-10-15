@@ -2,9 +2,9 @@
   "meta": {
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "fileName": "Atelier UI",
-    "figmaLastModified": "2026-10-15T07:58:07Z",
-    "generatedAt": "2026-10-15T08:00:23.600Z",
-    "gitSha": "3e917bcb",
+    "figmaLastModified": "2026-10-15T08:15:36Z",
+    "generatedAt": "2026-10-15T08:15:48.174Z",
+    "gitSha": "9ccf80dd",
     "serverVersion": "0.1.0",
     "coverage": "All 43 masters. Token/auto-layout checks sample each master's default variant.",
     "note": "Facts captured from Figma via figma-console MCP read-tools. Rules live in check-figma.js."
@@ -113,7 +113,7 @@
   ],
   "typography": {
     "fontFamilies": {
-      "Instrument Sans": 1731,
+      "Instrument Sans": 1749,
       "Instrument Serif": 1,
       "JetBrains Mono": 81
     },

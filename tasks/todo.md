@@ -2792,6 +2792,23 @@ Tokens` `spacing/s1…s16` vs `Library Tokens` `spacing/1…16`, only the latter
       after; screenshots of the page, Navigation, Inputs, Display and AtlButton read clean.
       Not touched: section order, Child masters (bare by design), the AI section (one set,
       no wrapper), the Inventory page (clean).
+      **Second pass, same day** (owner: "Avatar and AvatarGroup still badly shifted"): the
+      section-level check had passed while seven wrapper frames carried a master set dropped
+      on top of the older hand-drawn sheet — AtlRadioGroup, AtlBadge, AtlAvatar +
+      AtlAvatarGroup (40 overlapping pairs), AtlCard, AtlSkeleton, AtlDialog, AtlToast. A
+      pairwise child-overlap scan per wrapper found all seven at once. Rebuilt generically:
+      title, subtitle, axis labels derived from each set's real variant grid (column = plain
+      value, row = `prop: value`, set shifted right of the row labels), set at y=108,
+      surviving illustrations below. Removed the orphan fakes the masters had been carved out
+      of (RadioGroup's Pro/Enterprise rows minus their "Free" item, Skeleton's two extra text
+      lines, Avatar's three square fakes), kept the status-dot illustrations because `status`
+      is a real prop whose Figma axis is still owed (avatar.contract.ts), and gave the Dialog
+      backdrop illustration a `size=sm` instance so it is not an empty grey box. Checkpoint
+      "After wrapper restructure (2026-10-15)". Verified: 0 inner overlaps across all 30
+      wrappers, 0 children outside, sections reflowed at 140/240, 43 masters, snapshot delta
+      only the loose-text count 1731→1749, `check:figma` exit 0. Left as is: AtlAvatarGroup's
+      variants sit in canvas order md, xs, sm, lg, xl — reordering touches the master's
+      variant boxes, a separate decision.
   - [ ] **Standing layout probe** — the pattern had sat in the file for weeks although
         `plugin-api-gotchas.md` already described the mechanism. Add to the `figma:snapshot`
         preflight (or `check:figma` over the snapshot): every section child inside its
