@@ -231,6 +231,15 @@ function buildShortIndex({ categories, docs }, version) {
     `- [llms-full.txt](${SITE_URL}/llms-full.txt): Complete props, types, defaults, and usage examples for every component. Paste this into your LLM context window.`,
   );
   lines.push('');
+  lines.push('## Machine-readable catalogs');
+  lines.push('');
+  lines.push(
+    `- [Component knowledge](${SITE_URL}/.well-known/components/index.json): Per-component JSON: purpose, rules with the tests that verify them, Figma mismatches, tokens`,
+  );
+  lines.push(
+    `- [Cookbook patterns](${SITE_URL}/.well-known/cookbook-patterns.json): Composition patterns with per-framework snippets`,
+  );
+  lines.push('');
   lines.push('## Documentation');
   lines.push('');
   lines.push(
@@ -459,11 +468,12 @@ const STATIC_A11Y = `## Accessibility Notes
 - Color is never the sole indicator of state — icons and text labels accompany color changes
 - All form controls support invalid, disabled, required, and readonly states with proper aria- attributes`;
 
-function buildMetadataBlock(meta) {
+function buildMetadataBlock(meta, { omitPurpose = false } = {}) {
   // Indented to slot under each component's `### Selector` heading.
   const lines = [];
   lines.push('  Metadata:');
-  if (meta.purpose) lines.push(`    purpose: ${meta.purpose}`);
+  // The description line under the heading already is metadata.purpose.
+  if (meta.purpose && !omitPurpose) lines.push(`    purpose: ${meta.purpose}`);
   if (Array.isArray(meta.whenToUse) && meta.whenToUse.length) {
     lines.push('    whenToUse:');
     for (const w of meta.whenToUse) lines.push(`      - ${w}`);
@@ -593,7 +603,9 @@ function buildFullReference(
     const meta = metadataBySpec[`${comp.selector}Spec`];
     if (meta) {
       lines.push('');
-      lines.push(buildMetadataBlock(meta));
+      lines.push(
+        buildMetadataBlock(meta, { omitPurpose: description === meta.purpose }),
+      );
     }
     lines.push('');
     lines.push('---');

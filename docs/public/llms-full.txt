@@ -100,7 +100,6 @@ Each entry lists:
       <AtlButton :disabled="true">Disabled</AtlButton>
 
   Metadata:
-    purpose: Primary action trigger. Renders a labelled button users press to commit an action — submit a form, open a dialog, advance a flow.
     whenToUse:
       - Initiating an action that changes state on the current page (submit, save, delete, open).
       - Triggering navigation in flows where a button is more semantically correct than a link.
@@ -154,7 +153,6 @@ Each entry lists:
       <AtlInput :disabled="true" placeholder="Disabled" />
 
   Metadata:
-    purpose: Single-line text field. Renders an `<input>` bound to a form value with the standard validation and disabled states.
     whenToUse:
       - Collecting a short freeform string — name, title, search query.
       - Capturing a typed value (email, password, number, tel, url) where the browser keyboard hint matters.
@@ -206,7 +204,6 @@ Each entry lists:
       <AtlTextarea :disabled="true" placeholder="Disabled" />
 
   Metadata:
-    purpose: Multi-line text field. Renders a `<textarea>` sized for wrapping prose, with optional auto-resize as content grows.
     whenToUse:
       - Collecting a description, comment, or message body where line breaks are part of the input.
       - Capturing a code snippet, log paste, or long-form note.
@@ -252,7 +249,6 @@ Each entry lists:
       <AtlCheckbox :disabled="true">Disabled</AtlCheckbox>
 
   Metadata:
-    purpose: Binary or tri-state toggle bound to a form field. Renders an `<input type="checkbox">` with optional indeterminate state.
     whenToUse:
       - Opting into a single boolean choice (terms accepted, remember me, subscribe).
       - Selecting zero or more items from a list — each row is its own checkbox.
@@ -294,7 +290,6 @@ Each entry lists:
       <AtlToggle :disabled="true">Disabled</AtlToggle>
 
   Metadata:
-    purpose: On/off switch for a setting that takes effect immediately. Renders a switch control bound to a boolean form value.
     whenToUse:
       - Flipping a setting that applies the moment it changes (dark mode, notifications, autosave).
       - Enabling or disabling a feature inside a settings panel or preferences row.
@@ -436,7 +431,6 @@ Each entry lists:
       />
 
   Metadata:
-    purpose: Searchable picker. Renders a text input plus a filtered option list so users can type to narrow a long set of choices.
     whenToUse:
       - Picking one value from a list long enough that scrolling beats scanning (countries, currencies, users).
       - Letting the user type a few characters to filter options instead of opening every group.
@@ -493,7 +487,6 @@ Each entry lists:
       <AtlBadge size="sm" variant="success">Small</AtlBadge>
 
   Metadata:
-    purpose: Compact inline label. Renders a small pill carrying a status word, count, or category alongside other content.
     whenToUse:
       - Marking the status of a row or card (active, pending, error) next to its title.
       - Showing a numeric count attached to a navigation item (unread, queued, total).
@@ -558,7 +551,6 @@ Each entry lists:
       <AtlIcon name="chevron-down" size="sm" />
 
   Metadata:
-    purpose: Inline SVG glyph. Renders one icon from the library catalog at a fixed size, with an optional accessible label.
     whenToUse:
       - Reinforcing the meaning of a button or menu item with a recognisable glyph.
       - Carrying status meaning inside a badge, alert, or toast (success, warning, danger, info).
@@ -616,7 +608,6 @@ Each entry lists:
       </AtlCard>
 
   Metadata:
-    purpose: Container that groups related content into a single visual block. Renders a padded surface with optional elevation or border; does not add a landmark role unless explicitly opted in.
     whenToUse:
       - Wrapping a self-contained piece of content (a post, a stat, a settings panel) so it reads as one unit.
       - Building a grid or list of comparable items — products, plans, dashboard tiles.
@@ -697,7 +688,6 @@ Each entry lists:
       </AtlTable>
 
   Metadata:
-    purpose: Tabular data grid. Renders rows of records with column headers, optional sorting, sticky headers, and per-cell alignment.
     whenToUse:
       - Displaying a list of records where each record has the same set of comparable fields.
       - Surfacing data users need to scan across rows or columns (totals, status, timestamps).
@@ -784,7 +774,6 @@ Each entry lists:
       <AtlSkeleton variant="rectangular" height="200px" />
 
   Metadata:
-    purpose: Loading placeholder. Renders a sized block in the shape of the content that will replace it once data resolves.
     whenToUse:
       - Filling the slot where a chunk of fetched data — card body, table row, avatar — will land, so the layout does not jump on arrival.
       - Standing in for a single line of text while a label or value loads.
@@ -831,7 +820,6 @@ Each entry lists:
       <AtlProgress :indeterminate="true" label="Loading…" />
 
   Metadata:
-    purpose: Determinate or indeterminate progress bar. Renders the share of work completed for a task whose duration is measurable, or an indeterminate animation when it is not.
     whenToUse:
       - Reporting upload, download, or file-processing progress where bytes or items completed are known.
       - Showing form completion across multiple steps as a percentage.
@@ -1002,7 +990,6 @@ Each entry lists:
       />
 
   Metadata:
-    purpose: Page navigator. Renders numbered page buttons plus previous/next (and optional first/last) controls for a paged list or table.
     whenToUse:
       - Splitting a long list or table into fixed-size pages where the total count is known.
       - Letting users jump directly to a specific page rather than scrolling.
@@ -1115,7 +1102,6 @@ Each entry lists:
       </AtlDialog>
 
   Metadata:
-    purpose: Modal overlay that interrupts the page to demand focused attention. Traps focus, dims the background with a scrim, and blocks interaction with the rest of the page until it is dismissed.
     whenToUse:
       - Confirming a destructive action (delete, discard, sign out) before it commits.
       - Hosting a short focused task — edit a row, pick a date, complete a one-step form — without navigating away.
@@ -1186,7 +1172,6 @@ Each entry lists:
       </AtlDrawer>
 
   Metadata:
-    purpose: Edge-anchored panel that slides in from one side of the viewport. Hosts secondary navigation, filters, or detail views without taking the user away from the underlying page.
     whenToUse:
       - Surfacing primary navigation on narrow viewports where a persistent sidebar does not fit.
       - Exposing filters, settings, or facets that the user toggles on and off while scanning a list.
@@ -1371,7 +1356,6 @@ Each entry lists:
       <AtlAlert variant="danger">Something went wrong. Please try again.</AtlAlert>
 
   Metadata:
-    purpose: Inline contextual message. Renders a block carrying status content (info, success, warning, danger) with an optional dismiss control.
     whenToUse:
       - Surfacing a result after a form submit (saved, failed, partial success) above or below the form.
       - Warning the user about a consequence of a destructive action before they confirm.
@@ -1449,7 +1433,6 @@ Each entry lists:
       </AtlChat>
 
   Metadata:
-    purpose: AI chat surface. Renders a conversation log with a composer for sending messages and a live status for streaming or errored replies.
     whenToUse:
       - Embedding an assistant alongside the current page as a side drawer that does not displace the workspace.
       - Offering a focused, modal-like popup chat anchored to a launcher button.

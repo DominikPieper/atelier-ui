@@ -1,0 +1,377 @@
+{
+  "version": "1",
+  "slug": "alert",
+  "name": "AtlAlert",
+  "url": "https://atelier.pieper.io/components/alert",
+  "specs": [
+    "AtlAlertSpec"
+  ],
+  "purpose": "Inline contextual message. Renders a block carrying status content (info, success, warning, danger) with an optional dismiss control.",
+  "rules": [
+    {
+      "level": "should",
+      "statement": "Surfacing a result after a form submit (saved, failed, partial success) above or below the form.",
+      "source": "libs/spec/src/metadata/alert.metadata.ts",
+      "verifiedBy": "none",
+      "checks": []
+    },
+    {
+      "level": "should",
+      "statement": "Warning the user about a consequence of a destructive action before they confirm.",
+      "source": "libs/spec/src/metadata/alert.metadata.ts",
+      "verifiedBy": "none",
+      "checks": []
+    },
+    {
+      "level": "should",
+      "statement": "Communicating a system-level notice that should stay visible until acknowledged (`dismissible: true`).",
+      "source": "libs/spec/src/metadata/alert.metadata.ts",
+      "verifiedBy": "none",
+      "checks": []
+    },
+    {
+      "level": "should",
+      "statement": "Highlighting a tip or note inside documentation or a settings panel.",
+      "source": "libs/spec/src/metadata/alert.metadata.ts",
+      "verifiedBy": "none",
+      "checks": []
+    },
+    {
+      "level": "should-not",
+      "statement": "Tagging an item with a short status word next to other content.",
+      "useInstead": "AtlBadge — badges are inline labels, alerts are block-level messages with a role.",
+      "alternatives": [
+        "badge"
+      ],
+      "source": "libs/spec/src/metadata/alert.metadata.ts",
+      "verifiedBy": "none",
+      "checks": []
+    },
+    {
+      "level": "should-not",
+      "statement": "Showing a transient confirmation that disappears on its own.",
+      "useInstead": "A toast/snackbar component — alerts stay in the layout until dismissed or unmounted.",
+      "source": "libs/spec/src/metadata/alert.metadata.ts",
+      "verifiedBy": "none",
+      "checks": []
+    },
+    {
+      "level": "should-not",
+      "statement": "Blocking the page to demand a decision.",
+      "useInstead": "AtlDialog — modal dialogs interrupt; alerts coexist with the surrounding content.",
+      "alternatives": [
+        "dialog"
+      ],
+      "source": "libs/spec/src/metadata/alert.metadata.ts",
+      "verifiedBy": "none",
+      "checks": []
+    },
+    {
+      "id": "dismiss-hidden",
+      "level": "must",
+      "statement": "no dismiss button unless dismissible",
+      "source": "libs/spec/src/behaviors.json",
+      "verifiedBy": "test",
+      "checks": [
+        {
+          "framework": "angular",
+          "file": "libs/angular/src/lib/alert/atl-alert.spec.ts",
+          "test": "does not render dismiss button when dismissible=false"
+        },
+        {
+          "framework": "react",
+          "file": "libs/react/src/lib/alert/atl-alert.spec.tsx",
+          "test": "does not show dismiss button by default"
+        },
+        {
+          "framework": "vue",
+          "file": "libs/vue/src/lib/alert/atl-alert.spec.ts",
+          "test": "does not show dismiss button by default"
+        }
+      ]
+    },
+    {
+      "id": "dismiss-shown",
+      "level": "must",
+      "statement": "renders the dismiss button when dismissible",
+      "source": "libs/spec/src/behaviors.json",
+      "verifiedBy": "test",
+      "checks": [
+        {
+          "framework": "angular",
+          "file": "libs/angular/src/lib/alert/atl-alert.spec.ts",
+          "test": "renders dismiss button when dismissible=true"
+        },
+        {
+          "framework": "react",
+          "file": "libs/react/src/lib/alert/atl-alert.spec.tsx",
+          "test": "shows dismiss button when dismissible"
+        },
+        {
+          "framework": "vue",
+          "file": "libs/vue/src/lib/alert/atl-alert.spec.ts",
+          "test": "shows dismiss button when dismissible is true"
+        }
+      ]
+    },
+    {
+      "id": "emits-dismiss",
+      "level": "must",
+      "statement": "emits/calls back when the dismiss button is clicked",
+      "source": "libs/spec/src/behaviors.json",
+      "verifiedBy": "test",
+      "checks": [
+        {
+          "framework": "angular",
+          "file": "libs/angular/src/lib/alert/atl-alert.spec.ts",
+          "test": "emits dismissed output when dismiss button is clicked"
+        },
+        {
+          "framework": "react",
+          "file": "libs/react/src/lib/alert/atl-alert.spec.tsx",
+          "test": "calls onDismissed when dismiss clicked"
+        },
+        {
+          "framework": "vue",
+          "file": "libs/vue/src/lib/alert/atl-alert.spec.ts",
+          "test": "emits dismissed event when dismiss button is clicked"
+        }
+      ]
+    },
+    {
+      "id": "aria-live",
+      "level": "must",
+      "statement": "sets aria-live according to variant severity",
+      "source": "libs/spec/src/behaviors.json",
+      "verifiedBy": "test",
+      "checks": [
+        {
+          "framework": "angular",
+          "file": "libs/angular/src/lib/alert/atl-alert.spec.ts",
+          "test": "sets aria-live=\"polite\" for non-danger variants"
+        },
+        {
+          "framework": "react",
+          "file": "libs/react/src/lib/alert/atl-alert.spec.tsx",
+          "test": "sets aria-live to assertive for danger"
+        },
+        {
+          "framework": "vue",
+          "file": "libs/vue/src/lib/alert/atl-alert.spec.ts",
+          "test": "sets aria-live to assertive for danger and warning variants"
+        }
+      ]
+    }
+  ],
+  "accessibility": {
+    "role": "alert",
+    "keyboardBehavior": "The alert body is non-interactive and not focusable. When `dismissible: true`, the close button is reachable via Tab and activates on Enter or Space, moving focus back to the document after dismissal."
+  },
+  "related": [
+    {
+      "spec": "AtlBadgeSpec",
+      "slug": "badge"
+    },
+    {
+      "spec": "AtlDialogSpec",
+      "slug": "dialog"
+    }
+  ],
+  "figma": {
+    "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
+    "masters": [
+      {
+        "component": "AtlAlert",
+        "nodeId": "55:31",
+        "url": "https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T?node-id=55-31",
+        "contract": "libs/spec/src/contracts/alert.contract.ts",
+        "mismatches": []
+      }
+    ]
+  },
+  "api": {
+    "storybookMcp": {
+      "angular": "https://atelier.pieper.io/storybook-angular/mcp",
+      "react": "https://atelier.pieper.io/storybook-react/mcp",
+      "vue": "https://atelier.pieper.io/storybook-vue/mcp"
+    },
+    "docsId": {
+      "angular": "components-feedback-atlalert",
+      "react": "components-feedback-atlalert",
+      "vue": "components-feedback-atlalert"
+    }
+  },
+  "tokens": [
+    {
+      "name": "--ui-border-width",
+      "intent": "The hairline that separates one surface from another: card and panel outlines, input borders, table rules, the transparent border a button reserves so its box does not move between variants.",
+      "constraints": [
+        "Every border in the library uses this or --ui-border-width-thick; a literal width fails check:token-bypass.",
+        "Keep it a whole pixel — a half-pixel border renders blurry at 1x device-pixel-ratio."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-color-danger-bg",
+      "intent": "Tinted background for danger badges, alerts, and toasts. AA-safe pair with --ui-color-danger-text.",
+      "constraints": [
+        "Only use as a fill — pair foreground with --ui-color-danger-text for guaranteed contrast.",
+        "Do not place arbitrary text colours on this surface — the AA pairing is specific."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-color-danger-text",
+      "intent": "AA-safe foreground for use on --ui-color-danger-bg in danger badges, alerts, and toasts.",
+      "constraints": [
+        "Only use as foreground on --ui-color-danger-bg; contrast is guaranteed against that surface and no other."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-color-info-bg",
+      "intent": "Tinted background for info badges, alerts, and toasts. AA-safe pair with --ui-color-info-text.",
+      "constraints": [
+        "Only use as a fill — pair foreground with --ui-color-info-text for guaranteed contrast.",
+        "Do not place arbitrary text colours on this surface — the AA pairing is specific."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-color-info-text",
+      "intent": "AA-safe foreground for use on --ui-color-info-bg in info badges, alerts, and toasts.",
+      "constraints": [
+        "Only use as foreground on --ui-color-info-bg; contrast is guaranteed against that surface and no other."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-color-success-bg",
+      "intent": "Tinted background for success badges, alerts, and toasts. AA-safe pair with --ui-color-success-text.",
+      "constraints": [
+        "Only use as a fill — pair foreground with --ui-color-success-text for guaranteed contrast.",
+        "Do not place arbitrary text colours on this surface — the AA pairing is specific."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-color-success-text",
+      "intent": "AA-safe foreground for use on --ui-color-success-bg in success badges, alerts, and toasts.",
+      "constraints": [
+        "Only use as foreground on --ui-color-success-bg; contrast is guaranteed against that surface and no other."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-color-warning-bg",
+      "intent": "Tinted background for warning badges, alerts, and toasts. AA-safe pair with --ui-color-warning-text.",
+      "constraints": [
+        "Only use as a fill — pair foreground with --ui-color-warning-text for guaranteed contrast.",
+        "Do not place arbitrary text colours on this surface — the AA pairing is specific."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-color-warning-text",
+      "intent": "AA-safe foreground for use on --ui-color-warning-bg in warning badges, alerts, and toasts.",
+      "constraints": [
+        "Only use as foreground on --ui-color-warning-bg; contrast is guaranteed against that surface and no other."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-focus-ring",
+      "intent": "Double-ring box-shadow for :focus-visible — surface-coloured inner + primary outer for light/dark compatibility.",
+      "constraints": [
+        "Apply via box-shadow on :focus-visible — never on :focus alone (mouse focus would flash the ring).",
+        "Do not override per component; consistency is the entire point of a global focus ring."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-font-weight-bold",
+      "intent": "Bold (700). The heaviest weight in the system; carries headline-level emphasis.",
+      "constraints": [
+        "Instrument Sans only — the display face ships a single weight, so this must never be applied to --ui-font-display.",
+        "One bold element per view; a second one cancels the first."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-radius-lg",
+      "intent": "Large rounding for prominent panels — modals, popovers, hero cards.",
+      "constraints": [
+        "Do not interpolate between scale steps; pick the nearest defined value."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-radius-sm",
+      "intent": "Small rounding (0.5rem) for compact controls — badges, tags, inline chips.",
+      "constraints": [
+        "Do not interpolate between scale steps; pick the nearest defined value."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-spacing-3",
+      "intent": "Snug spacing (0.75rem). Use for default form-control padding and chip insets.",
+      "constraints": [
+        "Do not interpolate between scale steps; pick the nearest defined value."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-spacing-4",
+      "intent": "Default inter-element spacing (1rem). Use for gaps inside cards, between form fields, between list items.",
+      "constraints": [
+        "Treat as the baseline spacing — only step up/down for hierarchy or density.",
+        "Do not interpolate between scale steps; pick the nearest defined value."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-spacing-5",
+      "intent": "Comfortable spacing (1.25rem). Use for card padding and form section gaps.",
+      "constraints": [
+        "Do not interpolate between scale steps; pick the nearest defined value."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-transition-fast",
+      "intent": "Composed transition shorthand: fast duration + ease-out. Use for hover/focus micro-interactions.",
+      "constraints": [
+        "Apply to the `transition` property with the property name (e.g. `color var(--ui-transition-fast)`).",
+        "Respects prefers-reduced-motion through its constituent --ui-duration-fast token."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-type-body-sm",
+      "intent": "Body role, small (0.875rem). Helper text, table meta, secondary descriptions.",
+      "constraints": [
+        "Pair with --ui-color-text-muted so the size and the colour agree about importance."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    }
+  ],
+  "provenance": {
+    "generatedBy": "tools/scripts/gen-component-knowledge.mjs",
+    "sources": [
+      "libs/angular/src/lib/alert/atl-alert.spec.ts",
+      "libs/angular/src/lib/alert/atl-alert.stories.ts",
+      "libs/react/src/lib/alert/atl-alert.spec.tsx",
+      "libs/react/src/lib/alert/atl-alert.stories.tsx",
+      "libs/spec/src/behaviors.json",
+      "libs/spec/src/contracts/alert.contract.ts",
+      "libs/spec/src/metadata/alert.metadata.ts",
+      "libs/spec/src/tokens.manifest.ts",
+      "libs/styles/src/alert/atl-alert.css",
+      "libs/styles/src/tokens.css",
+      "libs/vue/src/lib/alert/atl-alert.spec.ts",
+      "libs/vue/src/lib/alert/atl-alert.stories.ts",
+      "tools/figma/snapshot.json"
+    ]
+  }
+}

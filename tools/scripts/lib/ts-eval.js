@@ -42,6 +42,17 @@ function evalNode(node) {
     const v = evalNode(node.operand);
     return typeof v === 'number' ? -v : null;
   }
+  if (ts.isParenthesizedExpression(node)) return evalNode(node.expression);
+  // `'a ' + 'b'` — long prose in metadata and contracts is wrapped this way.
+  // Only string + string folds; any other operand stays "not evaluable".
+  if (
+    ts.isBinaryExpression(node) &&
+    node.operatorToken.kind === ts.SyntaxKind.PlusToken
+  ) {
+    const l = evalNode(node.left);
+    const r = evalNode(node.right);
+    return typeof l === 'string' && typeof r === 'string' ? l + r : null;
+  }
   if (ts.isArrayLiteralExpression(node)) return node.elements.map(evalNode);
   if (ts.isObjectLiteralExpression(node)) {
     const obj = {};

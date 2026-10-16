@@ -40,22 +40,26 @@ const ROOT = resolve(dirname(fileURLToPath(import.meta.url)), '../..');
  * chain: reaching an invoking CallExpression confirms it runs; `.each` is the
  * only property access allowed on the way.
  */
-function isInvokedBinding(node) {
+function invokingCall(node) {
   let cur = node;
   let parent = node.parent;
   while (parent) {
     if (ts.isCallExpression(parent) && parent.expression === cur) {
-      return true; // cur is being called: covers(...)(…) or .each(cases)(…)
+      return parent; // cur is being called: covers(...)(…) or .each(cases)(…)
     }
     if (ts.isPropertyAccessExpression(parent) && parent.expression === cur) {
-      if (parent.name.text !== 'each') return false; // .skip/.only/.todo/etc. → not live
+      if (parent.name.text !== 'each') return null; // .skip/.only/.todo/etc. → not live
       cur = parent;
       parent = parent.parent;
       continue;
     }
-    return false; // bare statement, assignment, argument, … → not a live test
+    return null; // bare statement, assignment, argument, … → not a live test
   }
-  return false;
+  return null;
+}
+
+function isInvokedBinding(node) {
+  return invokingCall(node) !== null;
 }
 
 /**
@@ -65,7 +69,7 @@ function isInvokedBinding(node) {
  * `<binder>('<a>','<b>')` CallExpression, so matching the inner call (and
  * confirming it is invoked) catches both.
  */
-function findBinderCalls(filePath, binder) {
+export function findBinderBindings(filePath, binder) {
   const text = readFileSync(filePath, 'utf-8');
   const scriptKind = filePath.endsWith('.tsx')
     ? ts.ScriptKind.TSX
@@ -77,7 +81,7 @@ function findBinderCalls(filePath, binder) {
     true,
     scriptKind,
   );
-  const pairs = [];
+  const bindings = [];
   const visit = (node) => {
     if (
       ts.isCallExpression(node) &&
@@ -88,12 +92,27 @@ function findBinderCalls(filePath, binder) {
       ts.isStringLiteralLike(node.arguments[1]) &&
       isInvokedBinding(node)
     ) {
-      pairs.push([node.arguments[0].text, node.arguments[1].text]);
+      // The test title: first argument of the invoking call. A string literal
+      // gives its text; anything else (a `.each` template) its source text.
+      const titleArg = invokingCall(node).arguments[0];
+      bindings.push({
+        subject: node.arguments[0].text,
+        id: node.arguments[1].text,
+        title: !titleArg
+          ? ''
+          : ts.isStringLiteralLike(titleArg)
+            ? titleArg.text
+            : titleArg.getText(sf),
+      });
     }
     ts.forEachChild(node, visit);
   };
   visit(sf);
-  return pairs;
+  return bindings;
+}
+
+function findBinderCalls(filePath, binder) {
+  return findBinderBindings(filePath, binder).map((b) => [b.subject, b.id]);
 }
 
 async function main() {
@@ -177,7 +196,11 @@ async function main() {
   );
 }
 
-main().catch((err) => {
-  console.error(err);
-  process.exit(2);
-});
+// Run as the gate only when invoked directly; gen-component-knowledge.mjs
+// imports `findBinderBindings` from here and must not trigger main().
+if (process.argv[1] === fileURLToPath(import.meta.url)) {
+  main().catch((err) => {
+    console.error(err);
+    process.exit(2);
+  });
+}

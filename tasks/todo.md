@@ -28,15 +28,15 @@ derive a similar, own-format projection from what we already own. Inventory foun
 an owner and a gate, but nothing joins them, and behaviours (`behaviors.json` → `covers()`) reach
 no agent-facing output at all (0 hits in `llms-full.txt`).
 
-- [ ] **Step 1 — cleanups the projection needs**
-  - [ ] Component description has one owner: docs `components.ts` `description` derives from
+- [x] **Step 1 — cleanups the projection needs** _(done 2026-10-16, 5b4b5b00; found 4 dangling `relatedComponents` and 4 components missing from `DOCS_PRIMARY_SPECS`)_
+  - [x] Component description has one owner: docs `components.ts` `description` derives from
         `metadata.purpose` where metadata exists (precedent: `docs/src/data/accessibility.ts`).
         Today Button's two texts disagree. JSDoc and the Figma master description stay as they are.
-  - [ ] `relatedComponents` validated by `check:metadata`: every entry names an exported spec
+  - [x] `relatedComponents` validated by `check:metadata`: every entry names an exported spec
         interface in `libs/spec/src/index.ts`; Button's stray `'AtlToggle'` fixed.
   - Dropped: a `level` field on `antiPatterns` — no data to fill it; the generator defaults to
     `should-not` and says so.
-- [ ] **Step 2 — generator + drift gate + ADR**: one JSON per component joining metadata,
+- [x] **Step 2 — generator + drift gate + ADR** _(done 2026-10-16, ADR-0174: `gen:knowledge` / `check:knowledge`, 26 components + index, listed in `llms.txt`; toast and code-block under `missing`. Open follow-ups: token lists are noisy (every `--ui-*` the stylesheet uses); usage rules stay `verifiedBy: "none"`)_: one JSON per component joining metadata,
       contract, behaviours (+ their `covers()` test sites), manifest/story pointers and token
       intents; `check:knowledge`-style drift gate; ADR for the format decision (own format, not
       DSDS-exact, not a new source of truth). Long-term home: `@conciso/design-contracts` (CDS, P6).

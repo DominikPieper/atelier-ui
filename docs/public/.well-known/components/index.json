@@ -1,0 +1,147 @@
+{
+  "version": "1",
+  "site": "https://atelier.pieper.io",
+  "generatedBy": "tools/scripts/gen-component-knowledge.mjs",
+  "components": [
+    {
+      "slug": "accordion",
+      "name": "AtlAccordionGroup",
+      "url": "https://atelier.pieper.io/.well-known/components/accordion.json"
+    },
+    {
+      "slug": "alert",
+      "name": "AtlAlert",
+      "url": "https://atelier.pieper.io/.well-known/components/alert.json"
+    },
+    {
+      "slug": "avatar",
+      "name": "AtlAvatar",
+      "url": "https://atelier.pieper.io/.well-known/components/avatar.json"
+    },
+    {
+      "slug": "badge",
+      "name": "AtlBadge",
+      "url": "https://atelier.pieper.io/.well-known/components/badge.json"
+    },
+    {
+      "slug": "breadcrumbs",
+      "name": "AtlBreadcrumbs",
+      "url": "https://atelier.pieper.io/.well-known/components/breadcrumbs.json"
+    },
+    {
+      "slug": "button",
+      "name": "AtlButton",
+      "url": "https://atelier.pieper.io/.well-known/components/button.json"
+    },
+    {
+      "slug": "card",
+      "name": "AtlCard",
+      "url": "https://atelier.pieper.io/.well-known/components/card.json"
+    },
+    {
+      "slug": "chat",
+      "name": "AtlChat",
+      "url": "https://atelier.pieper.io/.well-known/components/chat.json"
+    },
+    {
+      "slug": "checkbox",
+      "name": "AtlCheckbox",
+      "url": "https://atelier.pieper.io/.well-known/components/checkbox.json"
+    },
+    {
+      "slug": "combobox",
+      "name": "AtlCombobox",
+      "url": "https://atelier.pieper.io/.well-known/components/combobox.json"
+    },
+    {
+      "slug": "dialog",
+      "name": "AtlDialog",
+      "url": "https://atelier.pieper.io/.well-known/components/dialog.json"
+    },
+    {
+      "slug": "drawer",
+      "name": "AtlDrawer",
+      "url": "https://atelier.pieper.io/.well-known/components/drawer.json"
+    },
+    {
+      "slug": "icon",
+      "name": "AtlIcon",
+      "url": "https://atelier.pieper.io/.well-known/components/icon.json"
+    },
+    {
+      "slug": "input",
+      "name": "AtlInput",
+      "url": "https://atelier.pieper.io/.well-known/components/input.json"
+    },
+    {
+      "slug": "menu",
+      "name": "AtlMenu",
+      "url": "https://atelier.pieper.io/.well-known/components/menu.json"
+    },
+    {
+      "slug": "pagination",
+      "name": "AtlPagination",
+      "url": "https://atelier.pieper.io/.well-known/components/pagination.json"
+    },
+    {
+      "slug": "progress",
+      "name": "AtlProgress",
+      "url": "https://atelier.pieper.io/.well-known/components/progress.json"
+    },
+    {
+      "slug": "radio-group",
+      "name": "AtlRadioGroup",
+      "url": "https://atelier.pieper.io/.well-known/components/radio-group.json"
+    },
+    {
+      "slug": "select",
+      "name": "AtlSelect",
+      "url": "https://atelier.pieper.io/.well-known/components/select.json"
+    },
+    {
+      "slug": "skeleton",
+      "name": "AtlSkeleton",
+      "url": "https://atelier.pieper.io/.well-known/components/skeleton.json"
+    },
+    {
+      "slug": "stepper",
+      "name": "AtlStepper",
+      "url": "https://atelier.pieper.io/.well-known/components/stepper.json"
+    },
+    {
+      "slug": "table",
+      "name": "AtlTable",
+      "url": "https://atelier.pieper.io/.well-known/components/table.json"
+    },
+    {
+      "slug": "tabs",
+      "name": "AtlTabGroup",
+      "url": "https://atelier.pieper.io/.well-known/components/tabs.json"
+    },
+    {
+      "slug": "textarea",
+      "name": "AtlTextarea",
+      "url": "https://atelier.pieper.io/.well-known/components/textarea.json"
+    },
+    {
+      "slug": "toggle",
+      "name": "AtlToggle",
+      "url": "https://atelier.pieper.io/.well-known/components/toggle.json"
+    },
+    {
+      "slug": "tooltip",
+      "name": "AtlTooltip",
+      "url": "https://atelier.pieper.io/.well-known/components/tooltip.json"
+    }
+  ],
+  "missing": [
+    {
+      "slug": "code-block",
+      "reason": "no metadata file (not in COMPONENT_METADATA_REGISTRY): no purpose, rules or accessibility facts to project"
+    },
+    {
+      "slug": "toast",
+      "reason": "no metadata file (not in COMPONENT_METADATA_REGISTRY): no purpose, rules or accessibility facts to project"
+    }
+  ]
+}

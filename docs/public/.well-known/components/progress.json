@@ -1,0 +1,282 @@
+{
+  "version": "1",
+  "slug": "progress",
+  "name": "AtlProgress",
+  "url": "https://atelier.pieper.io/components/progress",
+  "specs": [
+    "AtlProgressSpec"
+  ],
+  "purpose": "Determinate or indeterminate progress bar. Renders the share of work completed for a task whose duration is measurable, or an indeterminate animation when it is not.",
+  "rules": [
+    {
+      "level": "should",
+      "statement": "Reporting upload, download, or file-processing progress where bytes or items completed are known.",
+      "source": "libs/spec/src/metadata/progress.metadata.ts",
+      "verifiedBy": "none",
+      "checks": []
+    },
+    {
+      "level": "should",
+      "statement": "Showing form completion across multiple steps as a percentage.",
+      "source": "libs/spec/src/metadata/progress.metadata.ts",
+      "verifiedBy": "none",
+      "checks": []
+    },
+    {
+      "level": "should",
+      "statement": "Indicating an in-flight background operation with `indeterminate` when the total is unknown.",
+      "source": "libs/spec/src/metadata/progress.metadata.ts",
+      "verifiedBy": "none",
+      "checks": []
+    },
+    {
+      "level": "should",
+      "statement": "Visualising quota or capacity usage against a maximum.",
+      "source": "libs/spec/src/metadata/progress.metadata.ts",
+      "verifiedBy": "none",
+      "checks": []
+    },
+    {
+      "level": "should-not",
+      "statement": "Reserving the layout slot for content that has not loaded yet.",
+      "useInstead": "AtlSkeleton — sized to the missing content, not a generic bar.",
+      "alternatives": [
+        "skeleton"
+      ],
+      "source": "libs/spec/src/metadata/progress.metadata.ts",
+      "verifiedBy": "none",
+      "checks": []
+    },
+    {
+      "level": "should-not",
+      "statement": "Acknowledging a momentary action (saved, copied).",
+      "useInstead": "AtlToast — transient confirmation belongs in a live region, not a progress bar.",
+      "alternatives": [
+        "toast"
+      ],
+      "source": "libs/spec/src/metadata/progress.metadata.ts",
+      "verifiedBy": "none",
+      "checks": []
+    },
+    {
+      "id": "aria-value",
+      "level": "must",
+      "statement": "sets aria-valuenow from value/max",
+      "source": "libs/spec/src/behaviors.json",
+      "verifiedBy": "test",
+      "checks": [
+        {
+          "framework": "angular",
+          "file": "libs/angular/src/lib/progress/atl-progress.spec.ts",
+          "test": "sets aria-valuenow to the current value"
+        },
+        {
+          "framework": "react",
+          "file": "libs/react/src/lib/progress/atl-progress.spec.tsx",
+          "test": "sets aria-valuenow to the clamped value"
+        },
+        {
+          "framework": "vue",
+          "file": "libs/vue/src/lib/progress/atl-progress.spec.ts",
+          "test": "sets aria attributes from value and max"
+        }
+      ]
+    },
+    {
+      "id": "clamp",
+      "level": "must",
+      "statement": "clamps the value within [0, max]",
+      "source": "libs/spec/src/behaviors.json",
+      "verifiedBy": "test",
+      "checks": [
+        {
+          "framework": "angular",
+          "file": "libs/angular/src/lib/progress/atl-progress.spec.ts",
+          "test": "clamps values exceeding max to max"
+        },
+        {
+          "framework": "react",
+          "file": "libs/react/src/lib/progress/atl-progress.spec.tsx",
+          "test": "clamps value to max"
+        },
+        {
+          "framework": "vue",
+          "file": "libs/vue/src/lib/progress/atl-progress.spec.ts",
+          "test": "clamps value between 0 and max"
+        }
+      ]
+    },
+    {
+      "id": "indeterminate-omits-valuenow",
+      "level": "must",
+      "statement": "omits aria-valuenow when indeterminate",
+      "source": "libs/spec/src/behaviors.json",
+      "verifiedBy": "test",
+      "checks": [
+        {
+          "framework": "angular",
+          "file": "libs/angular/src/lib/progress/atl-progress.spec.ts",
+          "test": "does not set aria-valuenow when indeterminate"
+        },
+        {
+          "framework": "react",
+          "file": "libs/react/src/lib/progress/atl-progress.spec.tsx",
+          "test": "omits aria-valuenow when indeterminate"
+        },
+        {
+          "framework": "vue",
+          "file": "libs/vue/src/lib/progress/atl-progress.spec.ts",
+          "test": "omits aria-valuenow and aria-valuemax when indeterminate"
+        }
+      ]
+    }
+  ],
+  "accessibility": {
+    "role": "progressbar",
+    "keyboardBehavior": "Not focusable; no key handling."
+  },
+  "related": [
+    {
+      "spec": "AtlSkeletonSpec",
+      "slug": "skeleton"
+    },
+    {
+      "spec": "AtlToastOptions",
+      "slug": "toast"
+    }
+  ],
+  "figma": {
+    "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
+    "masters": [
+      {
+        "component": "AtlProgress",
+        "nodeId": "420:153",
+        "url": "https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T?node-id=420-153",
+        "contract": "libs/spec/src/contracts/progress.contract.ts",
+        "mismatches": []
+      }
+    ]
+  },
+  "api": {
+    "storybookMcp": {
+      "angular": "https://atelier.pieper.io/storybook-angular/mcp",
+      "react": "https://atelier.pieper.io/storybook-react/mcp",
+      "vue": "https://atelier.pieper.io/storybook-vue/mcp"
+    },
+    "docsId": {
+      "angular": "components-display-atlprogress",
+      "react": "components-display-atlprogress",
+      "vue": "components-display-atlprogress"
+    }
+  },
+  "tokens": [
+    {
+      "name": "--ui-color-danger",
+      "intent": "Destructive action and error signal colour. Use for delete buttons and form errors.",
+      "constraints": [
+        "Pair with text + icon — never rely on colour alone for state.",
+        "Do not use for decorative emphasis.",
+        "Pair foreground text with --ui-color-text-on-danger when used as a fill."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-color-primary",
+      "intent": "Primary call-to-action colour and link text. Brand anchor on light backgrounds.",
+      "constraints": [
+        "Must meet >=4.5:1 contrast against the surface it renders on.",
+        "Reserve for one primary action per view — do not stack two side-by-side.",
+        "Pair foreground text with --ui-color-text-on-primary when used as a fill."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-color-success",
+      "intent": "Positive confirmation signal colour. Use for success buttons and confirmation icons.",
+      "constraints": [
+        "Pair with text + icon — never rely on colour alone for state.",
+        "Do not use for decorative emphasis.",
+        "Pair foreground text with --ui-color-text-on-success when used as a fill."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-color-surface-sunken",
+      "intent": "Recessed surface for input fields, code blocks, and inset containers.",
+      "constraints": [
+        "Pair with --ui-color-text or --ui-color-text-muted only — never raw black/white.",
+        "Do not combine with elevation shadows — sunken surfaces should read as inset."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-color-warning",
+      "intent": "Caution signal colour. Use for warning alerts and pending states.",
+      "constraints": [
+        "Pair with text + icon — never rely on colour alone for state.",
+        "Do not use for decorative emphasis."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-ease-in-out",
+      "intent": "Symmetrical easing curve. Use for elements moving across the screen.",
+      "constraints": [
+        "Use --ui-ease-out for entrances, --ui-ease-in-out for movement, --ui-ease-spring for emphasised transitions."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-font-family",
+      "intent": "Default UI typeface stack. Instrument Sans first, with system fallbacks for offline / first-paint (ADR-0035).",
+      "constraints": [
+        "Declare it once on each component root — not per rule, and not left to the app shell: a component that depends on the consumer applying it renders in the app's font while its neighbours render this one (measured; ADR-0049).",
+        "Use --ui-font-display for the one display line per surface; everything interactive stays on this stack."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-line-height-tight",
+      "intent": "Compact leading (1.25) for headings and single-line UI text.",
+      "constraints": [
+        "Do not use for multi-line body copy — readability suffers."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-radius-full",
+      "intent": "Fully rounded (pill) shape. Use for avatar masks, status dots, and pill buttons.",
+      "constraints": [
+        "Use on equal-sided elements (circles) or fixed-height pills — applied to rectangles it produces inconsistent corners."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-transition-normal",
+      "intent": "Composed transition shorthand: normal duration + ease-out. Default for interactive state changes.",
+      "constraints": [
+        "Apply to the `transition` property with the property name (e.g. `background var(--ui-transition-normal)`).",
+        "Respects prefers-reduced-motion through its constituent --ui-duration-normal token."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    }
+  ],
+  "provenance": {
+    "generatedBy": "tools/scripts/gen-component-knowledge.mjs",
+    "sources": [
+      "libs/angular/src/lib/progress/atl-progress.spec.ts",
+      "libs/angular/src/lib/progress/atl-progress.stories.ts",
+      "libs/react/src/lib/progress/atl-progress.spec.tsx",
+      "libs/react/src/lib/progress/atl-progress.stories.tsx",
+      "libs/spec/src/behaviors.json",
+      "libs/spec/src/contracts/progress.contract.ts",
+      "libs/spec/src/metadata/progress.metadata.ts",
+      "libs/spec/src/tokens.manifest.ts",
+      "libs/styles/src/progress/atl-progress.css",
+      "libs/styles/src/tokens.css",
+      "libs/vue/src/lib/progress/atl-progress.spec.ts",
+      "libs/vue/src/lib/progress/atl-progress.stories.ts",
+      "tools/figma/snapshot.json"
+    ]
+  }
+}

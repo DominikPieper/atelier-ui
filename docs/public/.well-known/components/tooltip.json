@@ -1,0 +1,409 @@
+{
+  "version": "1",
+  "slug": "tooltip",
+  "name": "AtlTooltip",
+  "url": "https://atelier.pieper.io/components/tooltip",
+  "specs": [
+    "AtlTooltipSpec"
+  ],
+  "purpose": "Hover- and focus-triggered label that names or briefly explains the element it is attached to. Appears on a delay, disappears when the pointer or focus moves away, and never takes focus itself.",
+  "rules": [
+    {
+      "level": "should",
+      "statement": "Naming an icon-only button or control so it reads correctly to assistive tech and on hover.",
+      "source": "libs/spec/src/metadata/tooltip.metadata.ts",
+      "verifiedBy": "none",
+      "checks": []
+    },
+    {
+      "level": "should",
+      "statement": "Annotating an abbreviation, truncated label, or terse column header with its full form.",
+      "source": "libs/spec/src/metadata/tooltip.metadata.ts",
+      "verifiedBy": "none",
+      "checks": []
+    },
+    {
+      "level": "should",
+      "statement": "Adding a short keyboard-shortcut hint to a button or menu item.",
+      "source": "libs/spec/src/metadata/tooltip.metadata.ts",
+      "verifiedBy": "none",
+      "checks": []
+    },
+    {
+      "level": "should",
+      "statement": "Explaining why a disabled control is disabled, without committing to a popover.",
+      "source": "libs/spec/src/metadata/tooltip.metadata.ts",
+      "verifiedBy": "none",
+      "checks": []
+    },
+    {
+      "level": "should-not",
+      "statement": "Holding rich content, links, or interactive controls inside the tip.",
+      "useInstead": "A popover or dialog — tooltips are non-interactive label text only.",
+      "source": "libs/spec/src/metadata/tooltip.metadata.ts",
+      "verifiedBy": "none",
+      "checks": []
+    },
+    {
+      "level": "should-not",
+      "statement": "Communicating critical information that the user must read to complete a task.",
+      "useInstead": "AtlAlert, inline help text, or visible labels — tooltips disappear on blur and are skipped on touch.",
+      "alternatives": [
+        "alert"
+      ],
+      "source": "libs/spec/src/metadata/tooltip.metadata.ts",
+      "verifiedBy": "none",
+      "checks": []
+    },
+    {
+      "level": "should-not",
+      "statement": "Acting as the only accessible name for an interactive element.",
+      "useInstead": "A proper `aria-label` or visible label — pair the tooltip with that label rather than relying on it alone.",
+      "source": "libs/spec/src/metadata/tooltip.metadata.ts",
+      "verifiedBy": "none",
+      "checks": []
+    },
+    {
+      "id": "hidden-initially",
+      "level": "must",
+      "statement": "tooltip is not shown initially",
+      "source": "libs/spec/src/behaviors.json",
+      "verifiedBy": "test",
+      "checks": [
+        {
+          "framework": "angular",
+          "file": "libs/angular/src/lib/tooltip/atl-tooltip.spec.ts",
+          "test": "does not show tooltip initially"
+        },
+        {
+          "framework": "react",
+          "file": "libs/react/src/lib/tooltip/atl-tooltip.spec.tsx",
+          "test": "does not show tooltip initially"
+        },
+        {
+          "framework": "vue",
+          "file": "libs/vue/src/lib/tooltip/atl-tooltip.spec.ts",
+          "test": "does not show tooltip by default"
+        }
+      ]
+    },
+    {
+      "id": "show-on-hover",
+      "level": "must",
+      "statement": "shows on hover/mouseenter after the delay",
+      "source": "libs/spec/src/behaviors.json",
+      "verifiedBy": "test",
+      "checks": [
+        {
+          "framework": "angular",
+          "file": "libs/angular/src/lib/tooltip/atl-tooltip.spec.ts",
+          "test": "shows tooltip on mouseenter after delay"
+        },
+        {
+          "framework": "react",
+          "file": "libs/react/src/lib/tooltip/atl-tooltip.spec.tsx",
+          "test": "shows tooltip on hover after delay"
+        },
+        {
+          "framework": "vue",
+          "file": "libs/vue/src/lib/tooltip/atl-tooltip.spec.ts",
+          "test": "shows tooltip on mouseenter after delay"
+        }
+      ]
+    },
+    {
+      "id": "hide-on-leave",
+      "level": "must",
+      "statement": "hides on mouseleave",
+      "source": "libs/spec/src/behaviors.json",
+      "verifiedBy": "test",
+      "checks": [
+        {
+          "framework": "angular",
+          "file": "libs/angular/src/lib/tooltip/atl-tooltip.spec.ts",
+          "test": "hides tooltip on mouseleave"
+        },
+        {
+          "framework": "react",
+          "file": "libs/react/src/lib/tooltip/atl-tooltip.spec.tsx",
+          "test": "hides tooltip on mouse leave"
+        },
+        {
+          "framework": "vue",
+          "file": "libs/vue/src/lib/tooltip/atl-tooltip.spec.ts",
+          "test": "hides tooltip on mouseleave"
+        }
+      ]
+    },
+    {
+      "id": "disabled-no-show",
+      "level": "must",
+      "statement": "does not show when disabled",
+      "source": "libs/spec/src/behaviors.json",
+      "verifiedBy": "test",
+      "checks": [
+        {
+          "framework": "angular",
+          "file": "libs/angular/src/lib/tooltip/atl-tooltip.spec.ts",
+          "test": "does not show tooltip when disabled"
+        },
+        {
+          "framework": "react",
+          "file": "libs/react/src/lib/tooltip/atl-tooltip.spec.tsx",
+          "test": "does not show tooltip when disabled"
+        },
+        {
+          "framework": "vue",
+          "file": "libs/vue/src/lib/tooltip/atl-tooltip.spec.ts",
+          "test": "does not show tooltip when disabled"
+        }
+      ]
+    },
+    {
+      "id": "show-on-focus",
+      "level": "must",
+      "statement": "shows when the trigger receives keyboard focus",
+      "source": "libs/spec/src/behaviors.json",
+      "verifiedBy": "test",
+      "checks": [
+        {
+          "framework": "angular",
+          "file": "libs/angular/src/lib/tooltip/atl-tooltip.spec.ts",
+          "test": "shows tooltip when the trigger receives keyboard focus"
+        },
+        {
+          "framework": "react",
+          "file": "libs/react/src/lib/tooltip/atl-tooltip.spec.tsx",
+          "test": "shows tooltip when the trigger receives keyboard focus"
+        },
+        {
+          "framework": "vue",
+          "file": "libs/vue/src/lib/tooltip/atl-tooltip.spec.ts",
+          "test": "shows tooltip when the slotted trigger receives keyboard focus"
+        }
+      ]
+    },
+    {
+      "id": "hide-on-escape",
+      "level": "must",
+      "statement": "hides on Escape",
+      "source": "libs/spec/src/behaviors.json",
+      "verifiedBy": "test",
+      "checks": [
+        {
+          "framework": "angular",
+          "file": "libs/angular/src/lib/tooltip/atl-tooltip.spec.ts",
+          "test": "hides an open tooltip on Escape"
+        },
+        {
+          "framework": "react",
+          "file": "libs/react/src/lib/tooltip/atl-tooltip.spec.tsx",
+          "test": "hides an open tooltip on Escape"
+        },
+        {
+          "framework": "vue",
+          "file": "libs/vue/src/lib/tooltip/atl-tooltip.spec.ts",
+          "test": "hides an open tooltip on Escape"
+        }
+      ]
+    }
+  ],
+  "accessibility": {
+    "role": "tooltip",
+    "keyboard": [
+      {
+        "key": "Hover",
+        "action": "Show the tooltip on mouseenter and hide it on mouseleave."
+      },
+      {
+        "key": "Tab (focus trigger)",
+        "action": "Show the tooltip. It hides when focus leaves."
+      },
+      {
+        "key": "Escape",
+        "action": "Dismiss the tooltip while focus stays on the trigger."
+      }
+    ],
+    "notes": [
+      "Uses aria-describedby — the tooltip supplements, never replaces, the trigger's accessible name.",
+      "The tooltip is not focusable itself — the host element owns the tab stop.",
+      "Tooltips are shown on focus, not only on hover, so keyboard users get the same affordance.",
+      "Never put interactive content (links, buttons) inside a tooltip — it cannot be reached by keyboard."
+    ]
+  },
+  "related": [
+    {
+      "spec": "AtlButtonSpec",
+      "slug": "button"
+    },
+    {
+      "spec": "AtlMenuSpec",
+      "slug": "menu"
+    }
+  ],
+  "figma": {
+    "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
+    "masters": [
+      {
+        "component": "AtlTooltip",
+        "nodeId": "55:52",
+        "url": "https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T?node-id=55-52",
+        "contract": "libs/spec/src/contracts/tooltip.contract.ts",
+        "mismatches": [
+          {
+            "kind": "codeOnly",
+            "name": "atlTooltipDisabled",
+            "reason": "Not modelled as a Boolean (ADR-0056): renders nothing. atl-tooltip.tsx early-returns on it, so there is no disabled tooltip to draw — only the absence of one."
+          },
+          {
+            "kind": "axisMap",
+            "name": "position",
+            "codeProp": "atlTooltipPosition",
+            "values": {
+              "above": "above",
+              "below": "below",
+              "left": "left",
+              "right": "right"
+            },
+            "reason": "The axis is named after the spec union AtlTooltipPosition, the way every other master derives its axis name from its union — not after the Angular directive-input field name. A prior rename to 'atlTooltipPosition' was corrected back to 'position' (ADR-0056); the code prop itself stays atlTooltipPosition. Settled difference (ADR-0145), behaviour not drawing: only Angular flips a clipped tooltip to the opposite side (CDK flexible overlay positions with a fallback and withPush); React and Vue apply position as a fixed CSS class and do not flip, deliberately. Figma draws one position per variant and has no clipped state."
+          }
+        ]
+      }
+    ]
+  },
+  "api": {
+    "storybookMcp": {
+      "angular": "https://atelier.pieper.io/storybook-angular/mcp",
+      "react": "https://atelier.pieper.io/storybook-react/mcp",
+      "vue": "https://atelier.pieper.io/storybook-vue/mcp"
+    },
+    "docsId": {
+      "angular": "components-overlay-atltooltip",
+      "react": "components-overlay-atltooltip",
+      "vue": "components-overlay-atltooltip"
+    }
+  },
+  "tokens": [
+    {
+      "name": "--ui-color-surface",
+      "intent": "Base page background. The canvas every other surface elevates from.",
+      "constraints": [
+        "Pair with --ui-color-text or --ui-color-text-muted only — never raw black/white.",
+        "Do not stack two surfaces of the same level on top of each other — use -raised or -sunken."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-color-text",
+      "intent": "Primary body and heading text colour. Use on --ui-color-surface and its raised/sunken variants.",
+      "constraints": [
+        "Must meet >=4.5:1 contrast against the surface it renders on (verified for all --ui-color-surface* pairs).",
+        "Do not use as a fill colour — this is a foreground token."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-duration-fast",
+      "intent": "Short transition (150ms). Use for hover/focus state changes and micro-interactions.",
+      "constraints": [
+        "Respects prefers-reduced-motion via the @media block — do not override durations elsewhere.",
+        "Do not interpolate between scale steps; pick the nearest defined value."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-ease-out",
+      "intent": "Decelerating easing curve. Use for entrances and elements arriving on screen.",
+      "constraints": [
+        "Use --ui-ease-out for entrances, --ui-ease-in-out for movement, --ui-ease-spring for emphasised transitions."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-font-family",
+      "intent": "Default UI typeface stack. Instrument Sans first, with system fallbacks for offline / first-paint (ADR-0035).",
+      "constraints": [
+        "Declare it once on each component root — not per rule, and not left to the app shell: a component that depends on the consumer applying it renders in the app's font while its neighbours render this one (measured; ADR-0049).",
+        "Use --ui-font-display for the one display line per surface; everything interactive stays on this stack."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-font-size-xs",
+      "intent": "Smallest readable size (0.75rem). Use for badges, captions, table meta, and dense labels.",
+      "constraints": [
+        "Do not use for body copy or interactive labels users must read at a glance.",
+        "Pair with --ui-color-text-muted for secondary information."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-line-height-normal",
+      "intent": "Default leading (1.5) for body copy and multi-line UI text.",
+      "constraints": [
+        "This is the implicit baseline — only set explicitly when overriding a parent."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-radius-sm",
+      "intent": "Small rounding (0.5rem) for compact controls — badges, tags, inline chips.",
+      "constraints": [
+        "Do not interpolate between scale steps; pick the nearest defined value."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-shadow-md",
+      "intent": "Default elevation for raised surfaces (cards, dropdowns at rest).",
+      "constraints": [
+        "Combine with a 1px subtle border for clarity on busy backgrounds.",
+        "Avoid stacking with --ui-shadow-lg on the same surface."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-spacing-1",
+      "intent": "Hairline spacing (0.25rem). Use for icon-to-label gaps and tightest groupings.",
+      "constraints": [
+        "Do not interpolate between scale steps; pick the nearest defined value."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-spacing-2",
+      "intent": "Tight spacing (0.5rem). Use for compact button padding and dense list rows.",
+      "constraints": [
+        "Do not interpolate between scale steps; pick the nearest defined value."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-z-dropdown",
+      "intent": "Stacking level for popovers, dropdowns, and menus that float above page content.",
+      "constraints": [
+        "Layer ordering: base < dropdown < overlay < modal < toast. Do not exceed the scale; if you need more, restructure."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    }
+  ],
+  "provenance": {
+    "generatedBy": "tools/scripts/gen-component-knowledge.mjs",
+    "sources": [
+      "libs/angular/src/lib/tooltip/atl-tooltip.spec.ts",
+      "libs/angular/src/lib/tooltip/atl-tooltip.stories.ts",
+      "libs/react/src/lib/tooltip/atl-tooltip.spec.tsx",
+      "libs/react/src/lib/tooltip/atl-tooltip.stories.tsx",
+      "libs/spec/src/behaviors.json",
+      "libs/spec/src/contracts/tooltip.contract.ts",
+      "libs/spec/src/metadata/tooltip.metadata.ts",
+      "libs/spec/src/tokens.manifest.ts",
+      "libs/styles/src/tokens.css",
+      "libs/styles/src/tooltip/atl-tooltip.css",
+      "libs/styles/src/tooltip/atl-tooltip.native.css",
+      "libs/vue/src/lib/tooltip/atl-tooltip.spec.ts",
+      "libs/vue/src/lib/tooltip/atl-tooltip.stories.ts",
+      "tools/figma/snapshot.json"
+    ]
+  }
+}

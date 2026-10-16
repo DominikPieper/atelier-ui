@@ -1,0 +1,535 @@
+{
+  "version": "1",
+  "slug": "select",
+  "name": "AtlSelect",
+  "url": "https://atelier.pieper.io/components/select",
+  "specs": [
+    "AtlSelectSpec",
+    "AtlOptionSpec"
+  ],
+  "purpose": "Dropdown picker built on the native `<select>` element. Option children declare the available values.",
+  "rules": [
+    {
+      "level": "should",
+      "statement": "Choosing one value from a known list of 7 or more items where radios would crowd the layout.",
+      "source": "libs/spec/src/metadata/select.metadata.ts",
+      "verifiedBy": "none",
+      "checks": []
+    },
+    {
+      "level": "should",
+      "statement": "Capturing a structured choice (country, currency, language) inside a form.",
+      "source": "libs/spec/src/metadata/select.metadata.ts",
+      "verifiedBy": "none",
+      "checks": []
+    },
+    {
+      "level": "should",
+      "statement": "Rendering a compact picker that needs to work without JavaScript and inherit native mobile UI.",
+      "source": "libs/spec/src/metadata/select.metadata.ts",
+      "verifiedBy": "none",
+      "checks": []
+    },
+    {
+      "level": "should-not",
+      "statement": "Picking from a list long enough that scanning becomes painful.",
+      "useInstead": "AtlCombobox — adds typeahead search over the same options.",
+      "alternatives": [
+        "combobox"
+      ],
+      "source": "libs/spec/src/metadata/select.metadata.ts",
+      "verifiedBy": "none",
+      "checks": []
+    },
+    {
+      "level": "should-not",
+      "statement": "Showing every option inline so users can compare them.",
+      "useInstead": "AtlRadioGroup — keeps the choices visible without an open/close step.",
+      "alternatives": [
+        "radio-group"
+      ],
+      "source": "libs/spec/src/metadata/select.metadata.ts",
+      "verifiedBy": "none",
+      "checks": []
+    },
+    {
+      "level": "should-not",
+      "statement": "Triggering navigation when an option is picked.",
+      "useInstead": "A menu of links — a select implies a form value, not a route change.",
+      "source": "libs/spec/src/metadata/select.metadata.ts",
+      "verifiedBy": "none",
+      "checks": []
+    },
+    {
+      "id": "render-element",
+      "level": "must",
+      "statement": "renders the select control",
+      "source": "libs/spec/src/behaviors.json",
+      "verifiedBy": "test",
+      "checks": [
+        {
+          "framework": "angular",
+          "file": "libs/angular/src/lib/select/atl-select.spec.ts",
+          "test": "renders with role=\"combobox\""
+        },
+        {
+          "framework": "react",
+          "file": "libs/react/src/lib/select/atl-select.spec.tsx",
+          "test": "renders a select element"
+        },
+        {
+          "framework": "vue",
+          "file": "libs/vue/src/lib/select/atl-select.spec.ts",
+          "test": "renders a select element"
+        }
+      ]
+    },
+    {
+      "id": "placeholder",
+      "level": "must",
+      "statement": "shows the placeholder when no value is selected",
+      "source": "libs/spec/src/behaviors.json",
+      "verifiedBy": "test",
+      "checks": [
+        {
+          "framework": "angular",
+          "file": "libs/angular/src/lib/select/atl-select.spec.ts",
+          "test": "shows placeholder when no value is selected"
+        },
+        {
+          "framework": "react",
+          "file": "libs/react/src/lib/select/atl-select.spec.tsx",
+          "test": "shows placeholder when value is empty"
+        },
+        {
+          "framework": "vue",
+          "file": "libs/vue/src/lib/select/atl-select.spec.ts",
+          "test": "renders placeholder option"
+        }
+      ]
+    },
+    {
+      "id": "disabled",
+      "level": "must",
+      "statement": "is disabled when the disabled prop is true",
+      "source": "libs/spec/src/behaviors.json",
+      "verifiedBy": "test",
+      "checks": [
+        {
+          "framework": "angular",
+          "file": "libs/angular/src/lib/select/atl-select.spec.ts",
+          "test": "disables the trigger button when disabled"
+        },
+        {
+          "framework": "react",
+          "file": "libs/react/src/lib/select/atl-select.spec.tsx",
+          "test": "is disabled when disabled prop is true"
+        },
+        {
+          "framework": "vue",
+          "file": "libs/vue/src/lib/select/atl-select.spec.ts",
+          "test": "disables the select when disabled"
+        }
+      ]
+    },
+    {
+      "id": "invalid",
+      "level": "must",
+      "statement": "reflects the invalid state (aria-invalid / is-invalid)",
+      "source": "libs/spec/src/behaviors.json",
+      "verifiedBy": "test",
+      "checks": [
+        {
+          "framework": "angular",
+          "file": "libs/angular/src/lib/select/atl-select.spec.ts",
+          "test": "sets aria-invalid on the trigger when invalid"
+        },
+        {
+          "framework": "react",
+          "file": "libs/react/src/lib/select/atl-select.spec.tsx",
+          "test": "applies is-invalid class when invalid"
+        },
+        {
+          "framework": "vue",
+          "file": "libs/vue/src/lib/select/atl-select.spec.ts",
+          "test": "sets aria-invalid when invalid"
+        }
+      ]
+    },
+    {
+      "id": "value-change",
+      "level": "must",
+      "statement": "emits / calls back on selection change",
+      "source": "libs/spec/src/behaviors.json",
+      "verifiedBy": "test",
+      "checks": [
+        {
+          "framework": "angular",
+          "file": "libs/angular/src/lib/select/atl-select.spec.ts",
+          "test": "selects an option when clicked and closes the panel"
+        },
+        {
+          "framework": "react",
+          "file": "libs/react/src/lib/select/atl-select.spec.tsx",
+          "test": "calls onValueChange when selection changes"
+        },
+        {
+          "framework": "vue",
+          "file": "libs/vue/src/lib/select/atl-select.spec.ts",
+          "test": "emits update:value on change"
+        }
+      ]
+    },
+    {
+      "id": "error-messages",
+      "level": "must",
+      "statement": "shows error messages when invalid",
+      "source": "libs/spec/src/behaviors.json",
+      "verifiedBy": "test",
+      "checks": [
+        {
+          "framework": "angular",
+          "file": "libs/angular/src/lib/select/atl-select.spec.ts",
+          "test": "shows errors when touched and invalid"
+        },
+        {
+          "framework": "react",
+          "file": "libs/react/src/lib/select/atl-select.spec.tsx",
+          "test": "shows error messages when invalid and errors provided"
+        },
+        {
+          "framework": "vue",
+          "file": "libs/vue/src/lib/select/atl-select.spec.ts",
+          "test": "renders error messages"
+        }
+      ]
+    }
+  ],
+  "accessibility": {
+    "role": "combobox",
+    "relatedRoles": [
+      "listbox"
+    ],
+    "keyboard": [
+      {
+        "key": "Enter / Space",
+        "action": "Open the listbox. While it is open, select the highlighted option and close."
+      },
+      {
+        "key": "Arrow Up / Down, Home / End",
+        "action": "Open the listbox when closed; once open, move between options (Home / End jump to the first / last)."
+      },
+      {
+        "key": "Escape",
+        "action": "Close without changing the selection."
+      },
+      {
+        "key": "Type a character",
+        "action": "Open the listbox and jump to the next option starting with that letter."
+      }
+    ],
+    "notes": [
+      "The trigger carries aria-expanded and aria-controls that point at the listbox.",
+      "Disabled options are skipped by keyboard navigation.",
+      "The keys above describe Angular, whose select is a CDK listbox. React and Vue render a native `<select>`, so the browser's own keyboard handling applies there."
+    ]
+  },
+  "related": [
+    {
+      "spec": "AtlComboboxSpec",
+      "slug": "combobox"
+    },
+    {
+      "spec": "AtlRadioGroupSpec",
+      "slug": "radio-group"
+    }
+  ],
+  "figma": {
+    "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
+    "masters": [
+      {
+        "component": "AtlSelect",
+        "nodeId": "55:92",
+        "url": "https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T?node-id=55-92",
+        "contract": "libs/spec/src/contracts/select.contract.ts",
+        "mismatches": [
+          {
+            "kind": "figmaOnly",
+            "name": "state=filled",
+            "reason": "UNEXPLAINED — grep-verified 2026-09-10: no CSS rule or component logic implements an .is-filled/:placeholder-shown visual state; decide in tasks/todo.md"
+          },
+          {
+            "kind": "figmaOnly",
+            "name": "state=open",
+            "reason": "UNEXPLAINED — grep-verified 2026-09-10: AtlSelect renders a native <select>, whose open popover is browser-drawn; no .is-open class or open-state logic exists in atl-select.tsx/.css. Decide in tasks/todo.md whether the CDK-overlay Angular adapter needs its own axis note (see ADR-0007/A11Y_PARITY_EXEMPT for the same native-vs-CDK split)."
+          },
+          {
+            "kind": "probes",
+            "name": "control",
+            "selector": "select",
+            "reason": "the .atl-select root only sets display/font/line-height — background-color, border and border-radius are painted on the nested native <select> in React and Vue. Angular's AtlSelect renders a <button class=\"trigger\" role=\"combobox\"> instead (ADR-0007's CDK-overlay divergence — no native <select> at all, so no shared tag or class exists); this selector is the one React and Vue actually share, and Angular's own stories fall to [NO-PROBE] until AtlSelect gets a second, Angular-specific probe entry."
+          }
+        ]
+      },
+      {
+        "component": "AtlOption",
+        "nodeId": "911:1086",
+        "url": "https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T?node-id=911-1086",
+        "contract": "libs/spec/src/contracts/option.contract.ts",
+        "mismatches": [
+          {
+            "kind": "codeOnly",
+            "name": "optionValue",
+            "reason": "Is data, not state — the option's value carried at render time, not a Figma-settable property."
+          }
+        ]
+      }
+    ]
+  },
+  "api": {
+    "storybookMcp": {
+      "angular": "https://atelier.pieper.io/storybook-angular/mcp",
+      "react": "https://atelier.pieper.io/storybook-react/mcp",
+      "vue": "https://atelier.pieper.io/storybook-vue/mcp"
+    },
+    "docsId": {
+      "angular": "components-inputs-atlselect",
+      "react": "components-inputs-atlselect",
+      "vue": "components-inputs-atlselect"
+    }
+  },
+  "tokens": [
+    {
+      "name": "--ui-border-width",
+      "intent": "The hairline that separates one surface from another: card and panel outlines, input borders, table rules, the transparent border a button reserves so its box does not move between variants.",
+      "constraints": [
+        "Every border in the library uses this or --ui-border-width-thick; a literal width fails check:token-bypass.",
+        "Keep it a whole pixel — a half-pixel border renders blurry at 1x device-pixel-ratio."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-color-danger",
+      "intent": "Destructive action and error signal colour. Use for delete buttons and form errors.",
+      "constraints": [
+        "Pair with text + icon — never rely on colour alone for state.",
+        "Do not use for decorative emphasis.",
+        "Pair foreground text with --ui-color-text-on-danger when used as a fill."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-color-error-text",
+      "intent": "Foreground colour for inline form error messages. Aliased to --ui-color-danger-text.",
+      "constraints": [
+        "Pair with --ui-color-input-border-invalid on the associated input — colour alone is not a sufficient error signal.",
+        "Do not use as a generic body-text colour — its meaning is \"error\"."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-color-input-bg",
+      "intent": "Resting background for text inputs, selects, and textareas. Sunken to read as fillable.",
+      "constraints": [
+        "Pair with --ui-color-text for foreground; do not place tinted text on input surfaces.",
+        "Switch to --ui-color-input-bg-focus on :focus to signal interaction."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-color-input-border",
+      "intent": "Resting border for text inputs, selects, and textareas. Functional (>=3:1 contrast).",
+      "constraints": [
+        "Functional border — do not swap for --ui-color-border (decorative, sub-3:1).",
+        "Switch to --ui-color-input-border-focus on :focus, --ui-color-input-border-invalid on error."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-color-input-border-focus",
+      "intent": "Focused border for inputs — primary-coloured to match the focus ring.",
+      "constraints": [
+        "Only use as :focus / :focus-within state — never as a resting border.",
+        "Pair with --ui-focus-ring on the same element for the full focus treatment."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-color-input-border-hover",
+      "intent": "Hover state for input borders — one shade deeper than --ui-color-input-border.",
+      "constraints": [
+        "Only use as :hover state — never as a resting border."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-color-input-border-invalid",
+      "intent": "Border for inputs in an error / aria-invalid state.",
+      "constraints": [
+        "Pair with a visible error message (via --ui-color-error-text) — never rely on colour alone for state.",
+        "Apply when aria-invalid=\"true\" or the equivalent framework signal is present."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-color-text",
+      "intent": "Primary body and heading text colour. Use on --ui-color-surface and its raised/sunken variants.",
+      "constraints": [
+        "Must meet >=4.5:1 contrast against the surface it renders on (verified for all --ui-color-surface* pairs).",
+        "Do not use as a fill colour — this is a foreground token."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-color-text-muted",
+      "intent": "Secondary text colour for helper copy, captions, and de-emphasised content.",
+      "constraints": [
+        "Must meet >=4.5:1 contrast — verified against --ui-color-surface* but not against tinted surfaces.",
+        "Do not use for primary actions, form labels, or anything users must scan quickly."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-control-height-md",
+      "intent": "Height of the default interactive control (2.5rem). The size a form row is built from.",
+      "constraints": [
+        "Derive block padding from this, do not state it.",
+        "Use the control line-height (--ui-line-height-tight) in the derivation; the prose line-height makes the box taller than the token claims."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-focus-ring",
+      "intent": "Double-ring box-shadow for :focus-visible — surface-coloured inner + primary outer for light/dark compatibility.",
+      "constraints": [
+        "Apply via box-shadow on :focus-visible — never on :focus alone (mouse focus would flash the ring).",
+        "Do not override per component; consistency is the entire point of a global focus ring."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-font-family",
+      "intent": "Default UI typeface stack. Instrument Sans first, with system fallbacks for offline / first-paint (ADR-0035).",
+      "constraints": [
+        "Declare it once on each component root — not per rule, and not left to the app shell: a component that depends on the consumer applying it renders in the app's font while its neighbours render this one (measured; ADR-0049).",
+        "Use --ui-font-display for the one display line per surface; everything interactive stays on this stack."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-font-size-md",
+      "intent": "Body copy size (1rem). The default for paragraphs and form inputs.",
+      "constraints": [
+        "Do not interpolate between scale steps; pick the nearest defined value.",
+        "Treat this as the baseline — only step up/down when a hierarchy demands it."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-font-size-sm",
+      "intent": "Compact size (0.875rem). Use for secondary text, helper messages, and dense form labels.",
+      "constraints": [
+        "Do not interpolate between scale steps; pick the nearest defined value.",
+        "Avoid combining with --ui-line-height-tight for multi-line copy — readability suffers."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-font-size-xs",
+      "intent": "Smallest readable size (0.75rem). Use for badges, captions, table meta, and dense labels.",
+      "constraints": [
+        "Do not use for body copy or interactive labels users must read at a glance.",
+        "Pair with --ui-color-text-muted for secondary information."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-font-weight-medium",
+      "intent": "Subtle emphasis weight (500). Use for form labels, button text, and table headers.",
+      "constraints": [
+        "Prefer this over bold for inline emphasis inside body copy."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-line-height-tight",
+      "intent": "Compact leading (1.25) for headings and single-line UI text.",
+      "constraints": [
+        "Do not use for multi-line body copy — readability suffers."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-opacity-disabled",
+      "intent": "Opacity applied to disabled interactive controls so their colour reads as inert.",
+      "constraints": [
+        "Apply via opacity on the disabled element — do not bake into colour tokens. The button is the exception: it uses --ui-color-disabled-* because opacity kept its brand hue (ADR-0159).",
+        "Do not use for de-emphasis of non-disabled content; use --ui-color-text-muted instead."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-radius-md",
+      "intent": "Default rounding for interactive surfaces — buttons, inputs, cards. Modern, mildly soft.",
+      "constraints": [
+        "Treat as the baseline radius — only step up/down for hierarchy or emphasis.",
+        "Do not interpolate between scale steps; pick the nearest defined value."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-spacing-2",
+      "intent": "Tight spacing (0.5rem). Use for compact button padding and dense list rows.",
+      "constraints": [
+        "Do not interpolate between scale steps; pick the nearest defined value."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-spacing-4",
+      "intent": "Default inter-element spacing (1rem). Use for gaps inside cards, between form fields, between list items.",
+      "constraints": [
+        "Treat as the baseline spacing — only step up/down for hierarchy or density.",
+        "Do not interpolate between scale steps; pick the nearest defined value."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-spacing-5",
+      "intent": "Comfortable spacing (1.25rem). Use for card padding and form section gaps.",
+      "constraints": [
+        "Do not interpolate between scale steps; pick the nearest defined value."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-transition-fast",
+      "intent": "Composed transition shorthand: fast duration + ease-out. Use for hover/focus micro-interactions.",
+      "constraints": [
+        "Apply to the `transition` property with the property name (e.g. `color var(--ui-transition-fast)`).",
+        "Respects prefers-reduced-motion through its constituent --ui-duration-fast token."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    }
+  ],
+  "provenance": {
+    "generatedBy": "tools/scripts/gen-component-knowledge.mjs",
+    "sources": [
+      "libs/angular/src/lib/select/atl-select.spec.ts",
+      "libs/angular/src/lib/select/atl-select.stories.ts",
+      "libs/react/src/lib/select/atl-select.spec.tsx",
+      "libs/react/src/lib/select/atl-select.stories.tsx",
+      "libs/spec/src/behaviors.json",
+      "libs/spec/src/contracts/option.contract.ts",
+      "libs/spec/src/contracts/select.contract.ts",
+      "libs/spec/src/metadata/select.metadata.ts",
+      "libs/spec/src/tokens.manifest.ts",
+      "libs/styles/src/select/atl-select.css",
+      "libs/styles/src/select/atl-select.native.css",
+      "libs/styles/src/tokens.css",
+      "libs/vue/src/lib/select/atl-select.spec.ts",
+      "libs/vue/src/lib/select/atl-select.stories.ts",
+      "tools/figma/snapshot.json"
+    ]
+  }
+}

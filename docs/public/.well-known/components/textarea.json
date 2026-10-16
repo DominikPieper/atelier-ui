@@ -1,0 +1,441 @@
+{
+  "version": "1",
+  "slug": "textarea",
+  "name": "AtlTextarea",
+  "url": "https://atelier.pieper.io/components/textarea",
+  "specs": [
+    "AtlTextareaSpec"
+  ],
+  "purpose": "Multi-line text field. Renders a `<textarea>` sized for wrapping prose, with optional auto-resize as content grows.",
+  "rules": [
+    {
+      "level": "should",
+      "statement": "Collecting a description, comment, or message body where line breaks are part of the input.",
+      "source": "libs/spec/src/metadata/textarea.metadata.ts",
+      "verifiedBy": "none",
+      "checks": []
+    },
+    {
+      "level": "should",
+      "statement": "Capturing a code snippet, log paste, or long-form note.",
+      "source": "libs/spec/src/metadata/textarea.metadata.ts",
+      "verifiedBy": "none",
+      "checks": []
+    },
+    {
+      "level": "should",
+      "statement": "Editing freeform content where the visible height should grow with the text (`autoResize: true`).",
+      "source": "libs/spec/src/metadata/textarea.metadata.ts",
+      "verifiedBy": "none",
+      "checks": []
+    },
+    {
+      "level": "should-not",
+      "statement": "Collecting a single short value such as a title or email.",
+      "useInstead": "AtlInput — sized for one-line entry with type-specific keyboard hints.",
+      "alternatives": [
+        "input"
+      ],
+      "source": "libs/spec/src/metadata/textarea.metadata.ts",
+      "verifiedBy": "none",
+      "checks": []
+    },
+    {
+      "level": "should-not",
+      "statement": "Building a rich-text editor with formatting toolbars.",
+      "useInstead": "A dedicated editor (Tiptap, Lexical) — textarea is plain text only.",
+      "source": "libs/spec/src/metadata/textarea.metadata.ts",
+      "verifiedBy": "none",
+      "checks": []
+    },
+    {
+      "id": "renders-textarea",
+      "level": "must",
+      "statement": "renders a native textarea element",
+      "source": "libs/spec/src/behaviors.json",
+      "verifiedBy": "test",
+      "checks": [
+        {
+          "framework": "angular",
+          "file": "libs/angular/src/lib/textarea/atl-textarea.spec.ts",
+          "test": "renders a native textarea element"
+        },
+        {
+          "framework": "react",
+          "file": "libs/react/src/lib/textarea/atl-textarea.spec.tsx",
+          "test": "renders a textarea element"
+        },
+        {
+          "framework": "vue",
+          "file": "libs/vue/src/lib/textarea/atl-textarea.spec.ts",
+          "test": "renders a textarea element"
+        }
+      ]
+    },
+    {
+      "id": "disabled",
+      "level": "must",
+      "statement": "is disabled when the disabled prop is true",
+      "source": "libs/spec/src/behaviors.json",
+      "verifiedBy": "test",
+      "checks": [
+        {
+          "framework": "angular",
+          "file": "libs/angular/src/lib/textarea/atl-textarea.spec.ts",
+          "test": "sets disabled attribute on native textarea"
+        },
+        {
+          "framework": "react",
+          "file": "libs/react/src/lib/textarea/atl-textarea.spec.tsx",
+          "test": "is disabled when disabled prop is true"
+        },
+        {
+          "framework": "vue",
+          "file": "libs/vue/src/lib/textarea/atl-textarea.spec.ts",
+          "test": "is disabled when disabled prop is true"
+        }
+      ]
+    },
+    {
+      "id": "errors",
+      "level": "must",
+      "statement": "shows error messages when invalid",
+      "source": "libs/spec/src/behaviors.json",
+      "verifiedBy": "test",
+      "checks": [
+        {
+          "framework": "angular",
+          "file": "libs/angular/src/lib/textarea/atl-textarea.spec.ts",
+          "test": "shows error messages when touched and invalid"
+        },
+        {
+          "framework": "react",
+          "file": "libs/react/src/lib/textarea/atl-textarea.spec.tsx",
+          "test": "shows error messages"
+        },
+        {
+          "framework": "vue",
+          "file": "libs/vue/src/lib/textarea/atl-textarea.spec.ts",
+          "test": "displays error messages"
+        }
+      ]
+    },
+    {
+      "id": "updates-value",
+      "level": "must",
+      "statement": "emits/calls back as the user types",
+      "source": "libs/spec/src/behaviors.json",
+      "verifiedBy": "test",
+      "checks": [
+        {
+          "framework": "angular",
+          "file": "libs/angular/src/lib/textarea/atl-textarea.spec.ts",
+          "test": "updates value when user types"
+        },
+        {
+          "framework": "react",
+          "file": "libs/react/src/lib/textarea/atl-textarea.spec.tsx",
+          "test": "calls onValueChange on input"
+        },
+        {
+          "framework": "vue",
+          "file": "libs/vue/src/lib/textarea/atl-textarea.spec.ts",
+          "test": "emits update:value on input"
+        }
+      ]
+    },
+    {
+      "id": "rows",
+      "level": "must",
+      "statement": "applies the rows attribute",
+      "source": "libs/spec/src/behaviors.json",
+      "verifiedBy": "test",
+      "checks": [
+        {
+          "framework": "angular",
+          "file": "libs/angular/src/lib/textarea/atl-textarea.spec.ts",
+          "test": "sets rows attribute on the native textarea"
+        },
+        {
+          "framework": "react",
+          "file": "libs/react/src/lib/textarea/atl-textarea.spec.tsx",
+          "test": "renders with rows attribute"
+        },
+        {
+          "framework": "vue",
+          "file": "libs/vue/src/lib/textarea/atl-textarea.spec.ts",
+          "test": "applies rows attribute"
+        }
+      ]
+    }
+  ],
+  "accessibility": {
+    "role": "textbox",
+    "keyboardBehavior": "Receives focus via Tab. Enter inserts a newline (it does not submit). Arrow keys, Home/End, and PageUp/PageDown navigate within the text. `invalid` toggles `aria-invalid`, `required` toggles `aria-required`."
+  },
+  "related": [
+    {
+      "spec": "AtlInputSpec",
+      "slug": "input"
+    }
+  ],
+  "figma": {
+    "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
+    "masters": [
+      {
+        "component": "AtlTextarea",
+        "nodeId": "55:87",
+        "url": "https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T?node-id=55-87",
+        "contract": "libs/spec/src/contracts/textarea.contract.ts",
+        "mismatches": [
+          {
+            "kind": "figmaOnly",
+            "name": "state=filled",
+            "reason": "UNEXPLAINED — grep-verified 2026-09-10: no CSS rule or component logic implements an .is-filled/:placeholder-shown visual state; decide in tasks/todo.md"
+          },
+          {
+            "kind": "axisMap",
+            "name": "state",
+            "codeProp": "invalid",
+            "values": {
+              "invalid": true
+            },
+            "reason": "AtlFormFieldSpec.invalid is a real boolean prop (libs/spec/src/index.ts) — the master's 'invalid' state value maps to it directly."
+          },
+          {
+            "kind": "probes",
+            "name": "control",
+            "selector": "textarea",
+            "reason": "the .atl-textarea root only sets display/font — background-color, border and border-radius are painted on the nested <textarea> ('.atl-textarea textarea' in React/Vue's atl-textarea.css; Angular's :host-scoped stylesheet uses the bare 'textarea' selector — the same relative selector resolves in all three once queried under each framework's own component root)."
+          }
+        ]
+      }
+    ]
+  },
+  "api": {
+    "storybookMcp": {
+      "angular": "https://atelier.pieper.io/storybook-angular/mcp",
+      "react": "https://atelier.pieper.io/storybook-react/mcp",
+      "vue": "https://atelier.pieper.io/storybook-vue/mcp"
+    },
+    "docsId": {
+      "angular": "components-inputs-atltextarea",
+      "react": "components-inputs-atltextarea",
+      "vue": "components-inputs-atltextarea"
+    }
+  },
+  "tokens": [
+    {
+      "name": "--ui-border-width",
+      "intent": "The hairline that separates one surface from another: card and panel outlines, input borders, table rules, the transparent border a button reserves so its box does not move between variants.",
+      "constraints": [
+        "Every border in the library uses this or --ui-border-width-thick; a literal width fails check:token-bypass.",
+        "Keep it a whole pixel — a half-pixel border renders blurry at 1x device-pixel-ratio."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-color-danger",
+      "intent": "Destructive action and error signal colour. Use for delete buttons and form errors.",
+      "constraints": [
+        "Pair with text + icon — never rely on colour alone for state.",
+        "Do not use for decorative emphasis.",
+        "Pair foreground text with --ui-color-text-on-danger when used as a fill."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-color-error-text",
+      "intent": "Foreground colour for inline form error messages. Aliased to --ui-color-danger-text.",
+      "constraints": [
+        "Pair with --ui-color-input-border-invalid on the associated input — colour alone is not a sufficient error signal.",
+        "Do not use as a generic body-text colour — its meaning is \"error\"."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-color-input-bg",
+      "intent": "Resting background for text inputs, selects, and textareas. Sunken to read as fillable.",
+      "constraints": [
+        "Pair with --ui-color-text for foreground; do not place tinted text on input surfaces.",
+        "Switch to --ui-color-input-bg-focus on :focus to signal interaction."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-color-input-bg-focus",
+      "intent": "Focused background for text inputs — lifts to surface level to signal active editing.",
+      "constraints": [
+        "Only use as :focus / :focus-within state — never as a resting fill."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-color-input-border",
+      "intent": "Resting border for text inputs, selects, and textareas. Functional (>=3:1 contrast).",
+      "constraints": [
+        "Functional border — do not swap for --ui-color-border (decorative, sub-3:1).",
+        "Switch to --ui-color-input-border-focus on :focus, --ui-color-input-border-invalid on error."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-color-input-border-focus",
+      "intent": "Focused border for inputs — primary-coloured to match the focus ring.",
+      "constraints": [
+        "Only use as :focus / :focus-within state — never as a resting border.",
+        "Pair with --ui-focus-ring on the same element for the full focus treatment."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-color-input-border-hover",
+      "intent": "Hover state for input borders — one shade deeper than --ui-color-input-border.",
+      "constraints": [
+        "Only use as :hover state — never as a resting border."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-color-input-border-invalid",
+      "intent": "Border for inputs in an error / aria-invalid state.",
+      "constraints": [
+        "Pair with a visible error message (via --ui-color-error-text) — never rely on colour alone for state.",
+        "Apply when aria-invalid=\"true\" or the equivalent framework signal is present."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-color-placeholder",
+      "intent": "Placeholder text colour for inputs. Meets AA (4.5:1) on the input fill and its focus fill in light mode.",
+      "constraints": [
+        "Reserve for true placeholders (input::placeholder) — never use as a substitute for a real label.",
+        "Do not use as a foreground for content users need to read; use --ui-color-text-muted instead."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-color-surface-sunken",
+      "intent": "Recessed surface for input fields, code blocks, and inset containers.",
+      "constraints": [
+        "Pair with --ui-color-text or --ui-color-text-muted only — never raw black/white.",
+        "Do not combine with elevation shadows — sunken surfaces should read as inset."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-color-text",
+      "intent": "Primary body and heading text colour. Use on --ui-color-surface and its raised/sunken variants.",
+      "constraints": [
+        "Must meet >=4.5:1 contrast against the surface it renders on (verified for all --ui-color-surface* pairs).",
+        "Do not use as a fill colour — this is a foreground token."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-focus-ring",
+      "intent": "Double-ring box-shadow for :focus-visible — surface-coloured inner + primary outer for light/dark compatibility.",
+      "constraints": [
+        "Apply via box-shadow on :focus-visible — never on :focus alone (mouse focus would flash the ring).",
+        "Do not override per component; consistency is the entire point of a global focus ring."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-focus-ring-danger",
+      "intent": "The focus ring for a control that is currently invalid. Same double-ring geometry as --ui-focus-ring, with the accent replaced by the danger colour.",
+      "constraints": [
+        "Only on a control in an invalid state — a danger ring on a valid field reads as an error that is not there.",
+        "Do not restate the geometry in component CSS; that is what this token exists to prevent."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-font-size-sm",
+      "intent": "Compact size (0.875rem). Use for secondary text, helper messages, and dense form labels.",
+      "constraints": [
+        "Do not interpolate between scale steps; pick the nearest defined value.",
+        "Avoid combining with --ui-line-height-tight for multi-line copy — readability suffers."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-line-height-normal",
+      "intent": "Default leading (1.5) for body copy and multi-line UI text.",
+      "constraints": [
+        "This is the implicit baseline — only set explicitly when overriding a parent."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-opacity-disabled",
+      "intent": "Opacity applied to disabled interactive controls so their colour reads as inert.",
+      "constraints": [
+        "Apply via opacity on the disabled element — do not bake into colour tokens. The button is the exception: it uses --ui-color-disabled-* because opacity kept its brand hue (ADR-0159).",
+        "Do not use for de-emphasis of non-disabled content; use --ui-color-text-muted instead."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-radius-md",
+      "intent": "Default rounding for interactive surfaces — buttons, inputs, cards. Modern, mildly soft.",
+      "constraints": [
+        "Treat as the baseline radius — only step up/down for hierarchy or emphasis.",
+        "Do not interpolate between scale steps; pick the nearest defined value."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-spacing-2",
+      "intent": "Tight spacing (0.5rem). Use for compact button padding and dense list rows.",
+      "constraints": [
+        "Do not interpolate between scale steps; pick the nearest defined value."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-spacing-4",
+      "intent": "Default inter-element spacing (1rem). Use for gaps inside cards, between form fields, between list items.",
+      "constraints": [
+        "Treat as the baseline spacing — only step up/down for hierarchy or density.",
+        "Do not interpolate between scale steps; pick the nearest defined value."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-transition-fast",
+      "intent": "Composed transition shorthand: fast duration + ease-out. Use for hover/focus micro-interactions.",
+      "constraints": [
+        "Apply to the `transition` property with the property name (e.g. `color var(--ui-transition-fast)`).",
+        "Respects prefers-reduced-motion through its constituent --ui-duration-fast token."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-type-body-md",
+      "intent": "Body role, default (1rem). The workhorse — every paragraph and every interactive label unless a role says otherwise.",
+      "constraints": [
+        "If unsure which role a piece of text is, it is this one."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    }
+  ],
+  "provenance": {
+    "generatedBy": "tools/scripts/gen-component-knowledge.mjs",
+    "sources": [
+      "libs/angular/src/lib/textarea/atl-textarea.spec.ts",
+      "libs/angular/src/lib/textarea/atl-textarea.stories.ts",
+      "libs/react/src/lib/textarea/atl-textarea.spec.tsx",
+      "libs/react/src/lib/textarea/atl-textarea.stories.tsx",
+      "libs/spec/src/behaviors.json",
+      "libs/spec/src/contracts/textarea.contract.ts",
+      "libs/spec/src/metadata/textarea.metadata.ts",
+      "libs/spec/src/tokens.manifest.ts",
+      "libs/styles/src/textarea/atl-textarea.css",
+      "libs/styles/src/tokens.css",
+      "libs/vue/src/lib/textarea/atl-textarea.spec.ts",
+      "libs/vue/src/lib/textarea/atl-textarea.stories.ts",
+      "tools/figma/snapshot.json"
+    ]
+  }
+}
