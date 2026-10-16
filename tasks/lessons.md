@@ -1039,3 +1039,15 @@ content ADR-0056 had moved out months earlier. And the gotcha's claim did **not*
 moving seven sections by `s.y = …` kept their children attached (zero drift, measured after
 each move), so the recorded mechanism is at best version-specific — the correction is dated
 in the gotcha file, and the re-normalise guard stays because it costs nothing.
+
+## 2026-10-16 — a push carries every unpushed commit, so run `check:all` first
+
+Pushing the Basic Auth change (ADR-0173) also pushed three local commits from the day before.
+Two of them had edited a source (`skills/figma-workspace-architect/…/plugin-api-gotchas.md`,
+`tools/figma/snapshot.json`) without regenerating its copies. The pre-push hook caught one
+mirror, CI caught the other two, and the Publish run failed its release gate. That took three
+pushes where one would have done. I had only run the gates my own diff touched, which says
+nothing about the commits riding along with it. Rule: before pushing, run
+`git log origin/main..HEAD`. If it lists commits you did not write, name them to the owner
+(a `fix`/`feat` among them triggers a release) and run the full `npm run check:all` before
+pushing, not after.
