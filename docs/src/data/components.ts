@@ -41,7 +41,12 @@ export interface CompositionPart {
 export interface ComponentDoc {
   name: string;
   selector: string;
-  description: string;
+  /**
+   * Only for components with no metadata file (toast, code-block). Everything
+   * else takes `metadata.purpose`; read it through `descriptionFor`
+   * (data/component-metadata.ts), never from here.
+   */
+  description?: string;
   category: string;
   /**
    * Only for MANIFEST_GAPS components (toast: its docs describe the service /
@@ -121,8 +126,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
   button: {
     name: 'Button',
     selector: 'AtlButton',
-    description:
-      'A versatile button component with multiple variants and sizes. Supports loading and disabled states.',
     category: 'Inputs',
     status: 'stable',
     examples: {
@@ -160,8 +163,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
   input: {
     name: 'Input',
     selector: 'AtlInput',
-    description:
-      'A text input field that integrates with Signal Forms. Supports all standard HTML input types, validation states, and error display.',
     category: 'Inputs',
     examples: {
       angular: `<atl-input type="email" placeholder="you@example.com" [(value)]="email" />
@@ -198,8 +199,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
   textarea: {
     name: 'Textarea',
     selector: 'AtlTextarea',
-    description:
-      'A multi-line text input. Supports auto-resize to fit content and integrates with Signal Forms.',
     category: 'Inputs',
     examples: {
       angular: `<atl-textarea placeholder="Tell us about yourself" [rows]="4" [(value)]="bio" />
@@ -220,8 +219,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
   checkbox: {
     name: 'Checkbox',
     selector: 'AtlCheckbox',
-    description:
-      'A checkbox input that supports indeterminate state. Integrates with Signal Forms.',
     category: 'Inputs',
     examples: {
       angular: `<atl-checkbox [(checked)]="agreed">I agree to the terms</atl-checkbox>
@@ -242,8 +239,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
   toggle: {
     name: 'Toggle',
     selector: 'AtlToggle',
-    description:
-      'A toggle switch for boolean settings. Integrates with Signal Forms.',
     category: 'Inputs',
     examples: {
       angular: `<atl-toggle [(checked)]="notifications">Enable notifications</atl-toggle>
@@ -261,8 +256,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
   'radio-group': {
     name: 'RadioGroup',
     selector: 'AtlRadioGroup + AtlRadio',
-    description:
-      'A group of radio buttons with keyboard navigation. The group handles arrow key navigation and value management.',
     category: 'Inputs',
     examples: {
       angular: `<atl-radio-group aria-label="Plan" name="plan" [(value)]="plan">
@@ -293,8 +286,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
   select: {
     name: 'Select',
     selector: 'AtlSelect + AtlOption',
-    description:
-      'A custom select dropdown built on the native Popover API. Supports keyboard navigation, type-ahead, and disabled options.',
     category: 'Inputs',
     examples: {
       angular: `<atl-select label="Country" placeholder="Select a country" [(value)]="country">
@@ -353,8 +344,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
   combobox: {
     name: 'Combobox',
     selector: 'AtlCombobox',
-    description:
-      'A filterable autocomplete input. The user can type to narrow down a large list of options.',
     category: 'Inputs',
     status: 'new',
     examples: {
@@ -392,8 +381,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
   badge: {
     name: 'Badge',
     selector: 'AtlBadge',
-    description:
-      'A small inline label for status, categories, or counts. Use alongside cards, list items, and table cells.',
     category: 'Display',
     examples: {
       angular: `<atl-badge>Default</atl-badge>
@@ -420,8 +407,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
   icon: {
     name: 'Icon',
     selector: 'AtlIcon',
-    description:
-      "Vector icon drawn from one geometry source (`libs/spec/src/icons.ts`), so the same shape appears everywhere it is used. The `name` prop's type below is the exact, current set. Decorative by default; pass `label` to announce a meaning to assistive tech.",
     category: 'Display',
     examples: {
       angular: `<atl-icon name="success" />
@@ -439,8 +424,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
   card: {
     name: 'Card',
     selector: 'AtlCard',
-    description:
-      'A container component for grouped content. Compose with AtlCardHeader, AtlCardContent, and AtlCardFooter.',
     category: 'Display',
     examples: {
       angular: `<atl-card variant="elevated" padding="md">
@@ -492,8 +475,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
   table: {
     name: 'Table',
     selector: 'AtlTable',
-    description:
-      'A comprehensive data table component for displaying structured information. Supports sorting, row selection, sticky headers, and custom empty states.',
     category: 'Display',
     status: 'new',
     examples: {
@@ -647,8 +628,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
   avatar: {
     name: 'Avatar',
     selector: 'AtlAvatar + AtlAvatarGroup',
-    description:
-      'User avatar with image, initials fallback, and status indicator. Group avatars with AtlAvatarGroup.',
     category: 'Display',
     examples: {
       angular: `<atl-avatar name="Jane Doe" size="md" status="online" />
@@ -704,8 +683,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
   skeleton: {
     name: 'Skeleton',
     selector: 'AtlSkeleton',
-    description:
-      'Loading placeholder that mimics content shape. Compose multiple skeletons to match your layout.',
     category: 'Display',
     examples: {
       angular: `<atl-skeleton variant="text" />
@@ -726,8 +703,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
   progress: {
     name: 'Progress',
     selector: 'AtlProgress',
-    description:
-      'A horizontal progress bar for showing completion percentage or indeterminate loading.',
     category: 'Display',
     examples: {
       angular: `<atl-progress [value]="25" label="Upload progress" />
@@ -751,8 +726,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
   breadcrumbs: {
     name: 'Breadcrumbs',
     selector: 'AtlBreadcrumbs + AtlBreadcrumbItem',
-    description:
-      'Navigation breadcrumb trail showing the current page location within a hierarchy.',
     category: 'Navigation',
     examples: {
       angular: `<atl-breadcrumbs>
@@ -798,8 +771,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
   tabs: {
     name: 'Tabs',
     selector: 'AtlTabGroup + AtlTab',
-    description:
-      'An accessible tabbed interface. Supports roving tabindex, arrow key navigation, and a pills variant.',
     category: 'Navigation',
     examples: {
       angular: `<atl-tab-group [selectedIndex]="0">
@@ -845,8 +816,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
   stepper: {
     name: 'Stepper',
     selector: 'AtlStepper + AtlStep',
-    description:
-      'A multi-step wizard for complex processes. Supports linear and non-linear navigation.',
     category: 'Navigation',
     status: 'new',
     examples: {
@@ -916,8 +885,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
   pagination: {
     name: 'Pagination',
     selector: 'AtlPagination',
-    description:
-      'Page navigation control for paginated data. Shows page numbers with previous/next buttons.',
     category: 'Navigation',
     examples: {
       angular: `<atl-pagination
@@ -940,8 +907,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
   menu: {
     name: 'Menu',
     selector: 'AtlMenu + AtlMenuItem + AtlMenuTrigger',
-    description:
-      'A dropdown context menu. Handles keyboard navigation, focus management, ARIA, and nested submenus.',
     category: 'Navigation',
     examples: {
       angular: `<button atl-button [atlMenuTriggerFor]="actions">Actions ▾</button>
@@ -1008,8 +973,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
   dialog: {
     name: 'Dialog',
     selector: 'AtlDialog',
-    description:
-      'A modal dialog using the native <dialog> element. Includes focus trap, Escape to close, backdrop click to close, and smooth animations.',
     category: 'Overlay',
     examples: {
       angular: `<button atl-button (click)="open = true">Open Dialog</button>
@@ -1062,8 +1025,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
   drawer: {
     name: 'Drawer',
     selector: 'AtlDrawer',
-    description:
-      'A slide-in panel from the edge of the viewport. Useful for sidebars, filter panels, and detail views.',
     category: 'Overlay',
     examples: {
       angular: `<button atl-button (click)="open = true">Open Drawer</button>
@@ -1117,8 +1078,6 @@ export const componentDocs: Record<string, ComponentDoc> = {
   tooltip: {
     name: 'Tooltip',
     selector: '[atlTooltip]',
-    description:
-      'An attribute directive that adds a tooltip to any element. Uses a viewport-aware overlay layer so the tooltip flips to stay on-screen.',
     category: 'Overlay',
     examples: {
       angular: `<button atl-button atlTooltip="Save your changes">Save</button>
@@ -1228,8 +1187,6 @@ show('Persistent', { duration: 0 });`,
   accordion: {
     name: 'Accordion',
     selector: 'AtlAccordionGroup + AtlAccordionItem',
-    description:
-      'Expandable/collapsible sections. Supports multi-expand mode and smooth CSS grid animations.',
     category: 'Feedback',
     examples: {
       angular: `<atl-accordion-group variant="separated">
@@ -1303,8 +1260,6 @@ show('Persistent', { duration: 0 });`,
   alert: {
     name: 'Alert',
     selector: 'AtlAlert',
-    description:
-      'Inline status messages for feedback, warnings, and errors. Optionally dismissible.',
     category: 'Feedback',
     examples: {
       angular: `<atl-alert variant="info">This is an informational message.</atl-alert>
@@ -1348,8 +1303,6 @@ show('Persistent', { duration: 0 });`,
   chat: {
     name: 'Chat',
     selector: 'AtlChat',
-    description:
-      'Composable AI assistant surface. Three layout variants (drawer, popup, inline) share the same content slots and a status-driven Send/Stop button toggle. Provider-agnostic — wire it to CopilotKit, Vercel AI SDK, or your own backend by binding the Send/Stop events.',
     category: 'AI',
     status: 'new',
     examples: {

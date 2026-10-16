@@ -27,7 +27,7 @@ export const metadata: ComponentMetadata = {
         'AtlSelect, AtlCombobox, or AtlRadioGroup, depending on cardinality and search needs.',
     },
   ],
-  relatedComponents: ['AtlToggle', 'AtlMenuSpec', 'AtlDialogSpec'],
+  relatedComponents: ['AtlToggleSpec', 'AtlMenuSpec', 'AtlDialogSpec'],
   variantMatrix: [
     { variant: 'primary', size: 'sm' },
     { variant: 'primary', size: 'md' },

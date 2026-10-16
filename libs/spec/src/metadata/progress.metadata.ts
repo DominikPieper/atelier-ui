@@ -22,7 +22,7 @@ export const metadata: ComponentMetadata = {
         'AtlToast — transient confirmation belongs in a live region, not a progress bar.',
     },
   ],
-  relatedComponents: ['AtlSkeletonSpec', 'AtlToastSpec'],
+  relatedComponents: ['AtlSkeletonSpec', 'AtlToastOptions'],
   variantMatrix: [
     { variant: 'default', size: 'sm' },
     { variant: 'default', size: 'md' },

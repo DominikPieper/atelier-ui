@@ -73,6 +73,10 @@ const nonComponent = readNonComponentSet(METADATA_INDEX);
 // Step 2 — discover every Atl*Spec interface in the source of truth.
 // ---------------------------------------------------------------------------
 const specInterfaces = findExportedInterfaces(SPEC_FILE, 'Spec');
+// Every exported interface (no suffix filter), for `relatedComponents`: a
+// related component may be a spec shape that is not an `Atl*Spec`
+// (AtlToastOptions is the toast's only exported interface).
+const exportedInterfaces = findExportedInterfaces(SPEC_FILE, '');
 
 // Also capture every Atl* union type (for variantMatrix coverage). Parse the
 // file once for both axes.
@@ -317,6 +321,17 @@ function validateMetadata(specName, meta, file) {
   }
   if (!Array.isArray(meta.relatedComponents)) {
     errors.push(`${tag}: 'relatedComponents' must be an array (may be empty).`);
+  } else {
+    // Each entry must name an interface exported from libs/spec/src/index.ts
+    // (convention: Atl<Name>Spec), so a typo or a renamed spec can't leave a
+    // dangling reference that agents would follow into nothing.
+    for (const rc of meta.relatedComponents) {
+      if (!exportedInterfaces.includes(rc)) {
+        errors.push(
+          `${tag}: 'relatedComponents' references '${rc}' which is not an interface exported from libs/spec/src/index.ts.`,
+        );
+      }
+    }
   }
   if (!Array.isArray(meta.variantMatrix) || meta.variantMatrix.length === 0) {
     errors.push(

@@ -19,6 +19,28 @@ closed by the review triage carry a `_(closed 2026-10-11 …)_` note.
 
 Ranked; each carries why it's worth doing next rather than later.
 
+### Component knowledge projection (owner go 2026-10-16)
+
+Triggered by DSDS 0.23.0 (designsystemdocspec.org). A throwaway spike (2026-10-16, scratchpad,
+not committed) derived a schema-valid DSDS doc for AtlButton from our sources; validate/lint exit 0
+but trait descriptions and rule levels were placeholder glue. Owner: no need for the exact schema —
+derive a similar, own-format projection from what we already own. Inventory found every fact has
+an owner and a gate, but nothing joins them, and behaviours (`behaviors.json` → `covers()`) reach
+no agent-facing output at all (0 hits in `llms-full.txt`).
+
+- [ ] **Step 1 — cleanups the projection needs**
+  - [ ] Component description has one owner: docs `components.ts` `description` derives from
+        `metadata.purpose` where metadata exists (precedent: `docs/src/data/accessibility.ts`).
+        Today Button's two texts disagree. JSDoc and the Figma master description stay as they are.
+  - [ ] `relatedComponents` validated by `check:metadata`: every entry names an exported spec
+        interface in `libs/spec/src/index.ts`; Button's stray `'AtlToggle'` fixed.
+  - Dropped: a `level` field on `antiPatterns` — no data to fill it; the generator defaults to
+    `should-not` and says so.
+- [ ] **Step 2 — generator + drift gate + ADR**: one JSON per component joining metadata,
+      contract, behaviours (+ their `covers()` test sites), manifest/story pointers and token
+      intents; `check:knowledge`-style drift gate; ADR for the format decision (own format, not
+      DSDS-exact, not a new source of truth). Long-term home: `@conciso/design-contracts` (CDS, P6).
+
 ### First cohort, end of November 2026 (decided 2026-10-12)
 
 Owner, 2026-10-12: the course runs at the end of November 2026, on Atelier's own library, Angular

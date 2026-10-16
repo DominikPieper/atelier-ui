@@ -114,6 +114,18 @@ function loadMetadata() {
   return bySpec;
 }
 
+/**
+ * Docs slug -> spec name, from DOCS_PRIMARY_SPECS (the same slug lookup the
+ * docs site uses for descriptions, docs/src/data/component-metadata.ts).
+ */
+function loadSlugToSpec() {
+  const { DOCS_PRIMARY_SPECS: primary = {} } =
+    parseExportedVars(METADATA_INDEX);
+  return Object.fromEntries(
+    Object.entries(primary).map(([s, slug]) => [slug, s]),
+  );
+}
+
 function loadTokenManifest() {
   const exported = parseExportedVars(TOKEN_MANIFEST);
   const tokens = exported.tokens;
@@ -515,7 +527,7 @@ function buildTokenAnnotationsBlock(manifest) {
 function buildFullReference(
   { categories, docs },
   version,
-  { metadataBySpec, tokenManifest, cssTokens },
+  { metadataBySpec, slugToSpec, tokenManifest, cssTokens },
 ) {
   const total = orderedKeys(categories).length;
   const lines = [];
@@ -553,7 +565,16 @@ function buildFullReference(
     if (!comp) continue;
     lines.push(`### ${comp.selector}`);
     lines.push('');
-    lines.push(`  ${comp.description}`);
+    // One owner for the description: metadata.purpose, with the hand-written
+    // componentDocs description only for components without metadata.
+    const description =
+      metadataBySpec[slugToSpec[key]]?.purpose || comp.description;
+    if (!description) {
+      throw new Error(
+        `No description for '${key}' (no metadata.purpose, no componentDocs description)`,
+      );
+    }
+    lines.push(`  ${description}`);
     lines.push('');
     lines.push('  Props:');
     lines.push(formatPropsTable(propsOf(key)));
@@ -643,6 +664,7 @@ const cssTokens = loadCssTokens();
 const shortOut = buildShortIndex(parsed, version);
 const fullOut = buildFullReference(parsed, version, {
   metadataBySpec,
+  slugToSpec: loadSlugToSpec(),
   tokenManifest,
   cssTokens,
 });

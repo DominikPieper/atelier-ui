@@ -21,7 +21,7 @@ export const metadata: ComponentMetadata = {
         'A dedicated stepper component — steps imply forward/backward progress, not nested location.',
     },
   ],
-  relatedComponents: ['AtlTabsSpec', 'AtlMenuSpec'],
+  relatedComponents: ['AtlTabGroupSpec', 'AtlMenuSpec'],
   variantMatrix: [
     { separator: '/', current: false },
     { separator: '/', current: true },

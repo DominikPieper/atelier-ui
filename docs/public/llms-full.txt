@@ -70,7 +70,7 @@ Each entry lists:
 
 ### AtlButton
 
-  A versatile button component with multiple variants and sizes. Supports loading and disabled states.
+  Primary action trigger. Renders a labelled button users press to commit an action — submit a form, open a dialog, advance a flow.
 
   Props:
     variant     'primary' | 'secondary' | 'outline' | 'danger'  'primary'  Visual style of the button.
@@ -109,7 +109,7 @@ Each entry lists:
       - Navigating to a new URL where the destination is the meaning of the interaction. → use A plain `<a>` link — links say "go somewhere", buttons say "do something".
       - Toggling a binary on/off state. → use AtlToggle — communicates the persistent state to assistive tech.
       - Selecting an option from a list. → use AtlSelect, AtlCombobox, or AtlRadioGroup, depending on cardinality and search needs.
-    relatedComponents: AtlToggle, AtlMenuSpec, AtlDialogSpec
+    relatedComponents: AtlToggleSpec, AtlMenuSpec, AtlDialogSpec
     accessibility.role: button
     accessibility.keyboardBehavior: Activates on Enter or Space. Receives focus via Tab in source order. A disabled button (`disabled`) is natively disabled: it blocks activation and leaves the tab order. A loading button (`loading`) is not: it keeps focus and its place in the tab order, announces `aria-busy` and `aria-disabled`, and ignores activation (clicks, Enter, Space, form submit).
 
@@ -117,7 +117,7 @@ Each entry lists:
 
 ### AtlInput
 
-  A text input field that integrates with Signal Forms. Supports all standard HTML input types, validation states, and error display.
+  Single-line text field. Renders an `<input>` bound to a form value with the standard validation and disabled states.
 
   Props:
     errors         ReadonlyArray<string | AtlErrorItem>                      []      Validation errors to show under the field. Angular takes Signal Forms' `ValidationError` objects; React and Vue take those objects or plain strings.
@@ -171,7 +171,7 @@ Each entry lists:
 
 ### AtlTextarea
 
-  A multi-line text input. Supports auto-resize to fit content and integrates with Signal Forms.
+  Multi-line text field. Renders a `<textarea>` sized for wrapping prose, with optional auto-resize as content grows.
 
   Props:
     errors         ReadonlyArray<string | AtlErrorItem>  []     Validation errors to show under the field. Angular takes Signal Forms' `ValidationError` objects; React and Vue take those objects or plain strings.
@@ -222,7 +222,7 @@ Each entry lists:
 
 ### AtlCheckbox
 
-  A checkbox input that supports indeterminate state. Integrates with Signal Forms.
+  Binary or tri-state toggle bound to a form field. Renders an `<input type="checkbox">` with optional indeterminate state.
 
   Props:
     checked          boolean                               false  Whether the checkbox is checked.
@@ -268,7 +268,7 @@ Each entry lists:
 
 ### AtlToggle
 
-  A toggle switch for boolean settings. Integrates with Signal Forms.
+  On/off switch for a setting that takes effect immediately. Renders a switch control bound to a boolean form value.
 
   Props:
     checked          boolean                               false  Whether the toggle is on. Controlled: pair it with `onCheckedChange`.
@@ -310,7 +310,7 @@ Each entry lists:
 
 ### AtlRadioGroup + AtlRadio
 
-  A group of radio buttons with keyboard navigation. The group handles arrow key navigation and value management.
+  Single-select control. RadioGroup owns the bound value; each Radio child contributes one mutually exclusive option.
 
   Props:
     errors           ReadonlyArray<string | AtlErrorItem>  []          Validation errors to show under the field. Angular takes Signal Forms' `ValidationError` objects; React and Vue take those objects or plain strings.
@@ -351,7 +351,7 @@ Each entry lists:
 
 ### AtlSelect + AtlOption
 
-  A custom select dropdown built on the native Popover API. Supports keyboard navigation, type-ahead, and disabled options.
+  Dropdown picker built on the native `<select>` element. Option children declare the available values.
 
   Props:
     errors         ReadonlyArray<string | AtlErrorItem>  []     Validation errors to show under the field. Angular takes Signal Forms' `ValidationError` objects; React and Vue take those objects or plain strings.
@@ -388,7 +388,7 @@ Each entry lists:
 
 ### AtlCombobox
 
-  A filterable autocomplete input. The user can type to narrow down a large list of options.
+  Searchable picker. Renders a text input plus a filtered option list so users can type to narrow a long set of choices.
 
   Props:
     errors         ReadonlyArray<string | AtlErrorItem>  []     Validation errors to show under the field. Angular takes Signal Forms' `ValidationError` objects; React and Vue take those objects or plain strings.
@@ -462,7 +462,7 @@ Each entry lists:
 
 ### AtlBadge
 
-  A small inline label for status, categories, or counts. Use alongside cards, list items, and table cells.
+  Compact inline label. Renders a small pill carrying a status word, count, or category alongside other content.
 
   Props:
     variant   'default' | 'success' | 'warning' | 'danger' | 'info'  'default'  The visual style variant of the badge.
@@ -512,7 +512,7 @@ Each entry lists:
 
 ### AtlIcon
 
-  Vector icon drawn from one geometry source (`libs/spec/src/icons.ts`), so the same shape appears everywhere it is used. The `name` prop's type below is the exact, current set. Decorative by default; pass `label` to announce a meaning to assistive tech.
+  Inline SVG glyph. Renders one icon from the library catalog at a fixed size, with an optional accessible label.
 
   Props:
     name   | 'success'
@@ -575,7 +575,7 @@ Each entry lists:
 
 ### AtlCard
 
-  A container component for grouped content. Compose with AtlCardHeader, AtlCardContent, and AtlCardFooter.
+  Container that groups related content into a single visual block. Renders a padded surface with optional elevation or border; does not add a landmark role unless explicitly opted in.
 
   Props:
     variant   'elevated' | 'outlined' | 'flat'  'elevated'  The visual style variant of the card.
@@ -634,7 +634,7 @@ Each entry lists:
 
 ### AtlTable
 
-  A comprehensive data table component for displaying structured information. Supports sorting, row selection, sticky headers, and custom empty states.
+  Tabular data grid. Renders rows of records with column headers, optional sorting, sticky headers, and per-cell alignment.
 
   Props:
     variant       'default' | 'striped' | 'bordered'  'default'  Visual style of the table rows.
@@ -715,7 +715,7 @@ Each entry lists:
 
 ### AtlAvatar + AtlAvatarGroup
 
-  User avatar with image, initials fallback, and status indicator. Group avatars with AtlAvatarGroup.
+  Identity marker for a person or entity. Renders a circular or square image, falling back to initials or a placeholder when no image is available; AvatarGroup stacks several with an overflow counter.
 
   Props:
     src     string                                       ''        The URL of the image to display.
@@ -758,7 +758,7 @@ Each entry lists:
 
 ### AtlSkeleton
 
-  Loading placeholder that mimics content shape. Compose multiple skeletons to match your layout.
+  Loading placeholder. Renders a sized block in the shape of the content that will replace it once data resolves.
 
   Props:
     variant   'text' | 'circular' | 'rectangular'  'text'  The visual style variant of the skeleton.
@@ -800,7 +800,7 @@ Each entry lists:
 
 ### AtlProgress
 
-  A horizontal progress bar for showing completion percentage or indeterminate loading.
+  Determinate or indeterminate progress bar. Renders the share of work completed for a task whose duration is measurable, or an indeterminate animation when it is not.
 
   Props:
     value          number                                        0          The current progress value.
@@ -840,7 +840,7 @@ Each entry lists:
     antiPatterns:
       - Reserving the layout slot for content that has not loaded yet. → use AtlSkeleton — sized to the missing content, not a generic bar.
       - Acknowledging a momentary action (saved, copied). → use AtlToast — transient confirmation belongs in a live region, not a progress bar.
-    relatedComponents: AtlSkeletonSpec, AtlToastSpec
+    relatedComponents: AtlSkeletonSpec, AtlToastOptions
     accessibility.role: progressbar
     accessibility.keyboardBehavior: Not focusable; no key handling.
 
@@ -878,7 +878,7 @@ Each entry lists:
 
 ### AtlBreadcrumbs + AtlBreadcrumbItem
 
-  Navigation breadcrumb trail showing the current page location within a hierarchy.
+  Hierarchical location trail. Renders the path from a root section down to the current page so users can see and jump back through the hierarchy.
 
   Props:
     separator  string     '/'  Separator character shown between breadcrumb items.
@@ -908,7 +908,7 @@ Each entry lists:
 
 ### AtlTabGroup + AtlTab
 
-  An accessible tabbed interface. Supports roving tabindex, arrow key navigation, and a pills variant.
+  Switches between sibling views that share the same parent context. Renders a labelled tab strip wired to a single visible panel at a time.
 
   Props:
     selectedIndex          number                   —          The index of the currently selected tab.
@@ -940,7 +940,7 @@ Each entry lists:
 
 ### AtlStepper + AtlStep
 
-  A multi-step wizard for complex processes. Supports linear and non-linear navigation.
+  Multi-step progress indicator. Stepper owns the active index; each Step child labels one stage with completed/error/optional state.
 
   Props:
     activeStep          number                     —             Currently active step index.
@@ -973,7 +973,7 @@ Each entry lists:
 
 ### AtlPagination
 
-  Page navigation control for paginated data. Shows page numbers with previous/next buttons.
+  Page navigator. Renders numbered page buttons plus previous/next (and optional first/last) controls for a paged list or table.
 
   Props:
     page           number                  1     The currently active page (1-based). Controlled: the component keeps no page state, so update `page` from `onPageChange` or it will not move. Vue is controlled the same way; Angular's `page` is two-way and owns its state.
@@ -1018,7 +1018,7 @@ Each entry lists:
 
 ### AtlMenu + AtlMenuItem + AtlMenuTrigger
 
-  A dropdown context menu. Handles keyboard navigation, focus management, ARIA, and nested submenus.
+  Floating list of actions attached to a trigger. Renders a temporary surface of menu items the user opens, navigates with the keyboard, and dismisses after picking one.
 
   Props:
     variant   'default' | 'compact'  'default'  The visual style variant of the menu.
@@ -1071,7 +1071,7 @@ Each entry lists:
 
 ### AtlDialog
 
-  A modal dialog using the native <dialog> element. Includes focus trap, Escape to close, backdrop click to close, and smooth animations.
+  Modal overlay that interrupts the page to demand focused attention. Traps focus, dims the background with a scrim, and blocks interaction with the rest of the page until it is dismissed.
 
   Props:
     open             boolean                             false  Whether the dialog is open.
@@ -1140,7 +1140,7 @@ Each entry lists:
 
 ### AtlDrawer
 
-  A slide-in panel from the edge of the viewport. Useful for sidebars, filter panels, and detail views.
+  Edge-anchored panel that slides in from one side of the viewport. Hosts secondary navigation, filters, or detail views without taking the user away from the underlying page.
 
   Props:
     open             boolean                              false    Whether the drawer is open.
@@ -1210,7 +1210,7 @@ Each entry lists:
 
 ### [atlTooltip]
 
-  An attribute directive that adds a tooltip to any element. Uses a viewport-aware overlay layer so the tooltip flips to stay on-screen.
+  Hover- and focus-triggered label that names or briefly explains the element it is attached to. Appears on a delay, disappears when the pointer or focus moves away, and never takes focus itself.
 
   Props:
     atlTooltip           string                                —        The tooltip text.
@@ -1299,7 +1299,7 @@ Each entry lists:
 
 ### AtlAccordionGroup + AtlAccordionItem
 
-  Expandable/collapsible sections. Supports multi-expand mode and smooth CSS grid animations.
+  Vertical stack of collapsible sections with labelled triggers. Each item expands and collapses independently or as part of a single-open group, hiding supplementary detail until the user asks for it.
 
   Props:
     multi     boolean                               false      Whether multiple items can be expanded simultaneously.
@@ -1345,7 +1345,7 @@ Each entry lists:
 
 ### AtlAlert
 
-  Inline status messages for feedback, warnings, and errors. Optionally dismissible.
+  Inline contextual message. Renders a block carrying status content (info, success, warning, danger) with an optional dismiss control.
 
   Props:
     variant      'info' | 'success' | 'warning' | 'danger'  'info'  The visual style variant of the alert.
@@ -1389,7 +1389,7 @@ Each entry lists:
 
 ### AtlChat
 
-  Composable AI assistant surface. Three layout variants (drawer, popup, inline) share the same content slots and a status-driven Send/Stop button toggle. Provider-agnostic — wire it to CopilotKit, Vercel AI SDK, or your own backend by binding the Send/Stop events.
+  AI chat surface. Renders a conversation log with a composer for sending messages and a live status for streaming or errored replies.
 
   Props:
     variant       'drawer' | 'popup' | 'inline'   'drawer'  Layout variant.

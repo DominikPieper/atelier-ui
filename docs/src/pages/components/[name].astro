@@ -4,6 +4,7 @@ import ComponentDetail from '../../components/ComponentDetail';
 import { ALL_COMPONENTS, componentDocs } from '../../data/components';
 import { manifestApiFor } from '../../data/manifest-props';
 import { a11yFor } from '../../data/accessibility';
+import { descriptionFor } from '../../data/component-metadata';
 
 export function getStaticPaths() {
   return ALL_COMPONENTS.map((name) => ({ params: { name } }));
@@ -15,8 +16,9 @@ const doc = componentDocs[name as string];
 const api = manifestApiFor(name as string);
 const a11y = a11yFor(name as string) ?? doc?.a11y ?? null;
 const title = doc?.name ?? name;
-const description = doc?.description
-  ? `${doc.description} Framework-agnostic component with Angular, React, and Vue adapters.`
+const docDescription = descriptionFor(name as string);
+const description = docDescription
+  ? `${docDescription} Framework-agnostic component with Angular, React, and Vue adapters.`
   : `${title} — framework-agnostic UI component with Angular, React, and Vue adapters.`;
 ---
 
@@ -26,5 +28,11 @@ const description = doc?.description
   currentPath={`/components/${name}`}
   width="full"
 >
-  <ComponentDetail name={name as string} api={api} a11y={a11y} client:load />
+  <ComponentDetail
+    name={name as string}
+    api={api}
+    a11y={a11y}
+    description={docDescription}
+    client:load
+  />
 </BaseLayout>

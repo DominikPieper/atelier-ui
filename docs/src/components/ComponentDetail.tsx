@@ -883,12 +883,15 @@ interface ComponentDetailProps {
   api: Record<Framework, ComponentApi>;
   /** Keyboard table and notes, from the component metadata (data/accessibility.ts). */
   a11y: A11yInfo | null;
+  /** One-sentence description, from the component metadata (data/component-metadata.ts). */
+  description?: string;
 }
 
 export default function ComponentDetail({
   name,
   api,
   a11y,
+  description,
 }: ComponentDetailProps) {
   const doc = componentDocs[name];
   const [framework, setFrameworkState] = useState<Framework>(() =>
@@ -963,7 +966,9 @@ export default function ComponentDetail({
         >
           <div>
             <h1 className="docs-page-h1">{doc.name}</h1>
-            <p className="docs-page-description">{doc.description}</p>
+            {description && (
+              <p className="docs-page-description">{description}</p>
+            )}
             <code className="docs-selector-badge">{doc.selector}</code>
             <div className="docs-meta-chips">
               <span className="docs-meta-chip">WCAG AA</span>

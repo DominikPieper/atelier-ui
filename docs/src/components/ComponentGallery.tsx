@@ -6,7 +6,14 @@ import {
 } from '../data/components';
 import { COMPONENT_PREVIEWS } from './ComponentPreviews';
 
-export default function ComponentGallery() {
+interface ComponentGalleryProps {
+  /** One-sentence description per slug, from the component metadata (data/component-metadata.ts). */
+  descriptions: Record<string, string>;
+}
+
+export default function ComponentGallery({
+  descriptions,
+}: ComponentGalleryProps) {
   const [query, setQuery] = useState('');
   const [activeCategory, setActiveCategory] = useState<string | null>(null);
 
@@ -23,14 +30,14 @@ export default function ComponentGallery() {
         return (
           name.toLowerCase().includes(q) ||
           doc?.name.toLowerCase().includes(q) ||
-          doc?.description.toLowerCase().includes(q)
+          descriptions[name]?.toLowerCase().includes(q)
         );
       });
       if (filtered.length > 0) result[category] = filtered;
     });
 
     return result;
-  }, [query, activeCategory]);
+  }, [query, activeCategory, descriptions]);
 
   const visibleCount = Object.values(filteredCategories).reduce(
     (sum, arr) => sum + arr.length,
@@ -172,7 +179,7 @@ export default function ComponentGallery() {
                     )}
                   </div>
                   <div className="docs-component-card-desc">
-                    {doc?.description ?? ''}
+                    {descriptions[name] ?? ''}
                   </div>
                   <div className="docs-component-card-footer">
                     <span

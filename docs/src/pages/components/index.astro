@@ -1,6 +1,7 @@
 ---
 import BaseLayout from '../../layouts/BaseLayout.astro';
 import ComponentGallery from '../../components/ComponentGallery';
+import { allDescriptions } from '../../data/component-metadata';
 ---
 
 <BaseLayout
@@ -9,5 +10,5 @@ import ComponentGallery from '../../components/ComponentGallery';
   currentPath="/components"
   width="full"
 >
-  <ComponentGallery client:load />
+  <ComponentGallery descriptions={allDescriptions()} client:load />
 </BaseLayout>

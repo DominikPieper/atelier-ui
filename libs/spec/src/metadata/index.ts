@@ -126,6 +126,10 @@ export const DOCS_PRIMARY_SPECS: Record<string, string> = {
   AtlDrawerSpec: 'drawer',
   AtlBreadcrumbsSpec: 'breadcrumbs',
   AtlChatSpec: 'chat',
+  AtlComboboxSpec: 'combobox',
+  AtlIconSpec: 'icon',
+  AtlTableSpec: 'table',
+  AtlStepperSpec: 'stepper',
 };
 
 /**
