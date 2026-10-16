@@ -16,10 +16,10 @@ const pkg: { scripts?: Record<string, string> } = JSON.parse(
 );
 
 const checkAll = pkg.scripts?.['check:all'] ?? '';
-const matches = checkAll.match(/npm run check:[a-zA-Z0-9:-]+/g);
+const matches = checkAll.match(/npm run (?:check|test):[a-zA-Z0-9:-]+/g);
 if (!matches || matches.length === 0) {
   throw new Error(
-    "gate-count: package.json's check:all script has no `npm run check:*` calls to count — did the script get renamed?",
+    "gate-count: package.json's check:all script has no `npm run check:*` or `npm run test:*` calls to count — did the script get renamed?",
   );
 }
 

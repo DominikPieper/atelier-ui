@@ -7,6 +7,10 @@
   },
   "compatibility_date": "2026-04-30",
   "compatibility_flags": ["nodejs_compat"],
+  // Site-wide HTTP Basic Auth (worker/basic-auth.ts) reads SITE_PASSWORD. It is
+  // a secret, not a var: set it with `npx wrangler secret put SITE_PASSWORD`,
+  // and locally in the gitignored `.dev.vars` (SITE_PASSWORD=...). Unset, the
+  // worker answers 503 rather than serving the site unprotected.
   // Works around @storybook/mcp@10.6.0's CJS-interop preamble
   // (node_modules/@storybook/mcp/dist/index.js:5-7):
   //   var __filename = fileURLToPath(import.meta.url);
