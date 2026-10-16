@@ -37,6 +37,11 @@ const config: StorybookConfig = {
     // configures — only gets the tool when `experimentalReview` is explicitly
     // `true` (verified against the installed 10.6.0 `storybook` dist).
     experimentalReview: true,
+    // Storybook's onboarding checklist (sidebar widget + menu entry) is a
+    // guided tour that competes with the workshop's own guidance; off here.
+    // Both default to `true` in the 10.6.0 core preset (R-092).
+    sidebarOnboardingChecklist: false,
+    menuOnboardingChecklist: false,
   },
 };
 

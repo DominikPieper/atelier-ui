@@ -982,6 +982,18 @@ decided: fix the code, the master, or the contract.`;
           </p>
           <p class="docs-step-desc">
             <strong style="color: var(--ui-color-text)"
+              >The check reads the resting state only.</strong
+            >
+            States that sit behind a pseudo-class or an attribute
+            (<code>:hover</code>, <code>:focus-visible</code>,
+            <code>[aria-expanded]</code>, <code>.has-value</code>) are never
+            triggered by a static read, so a green score means the resting state
+            matches. Hover, focus, open and selected states are covered by the
+            stories and their <code>play</code> functions (each state gets a
+            story), not by the parity check.
+          </p>
+          <p class="docs-step-desc">
+            <strong style="color: var(--ui-color-text)"
               >Three follow-ups per discrepancy.</strong
             >
             Decide per entry, then fix or record it. "Understood" is not a
