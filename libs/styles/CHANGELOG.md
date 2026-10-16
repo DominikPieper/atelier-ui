@@ -1,3 +1,7 @@
+## 0.4.6 (2026-10-16)
+
+This was a version bump only for styles to align it with other projects, there were no code changes.
+
 ## 0.4.5 (2026-10-14)
 
 ### 🩹 Fixes

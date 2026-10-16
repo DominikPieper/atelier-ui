@@ -1,3 +1,13 @@
+## 0.4.6 (2026-10-16)
+
+### 🩹 Fixes
+
+- **angular:** keep AtlAlert's class JSDoc attached to the component ([3d3e4bd4](https://github.com/DominikPieper/atelier-ui/commit/3d3e4bd4))
+
+### ❤️ Thank You
+
+- Dominik Pieper @DominikPieper
+
 ## 0.4.5 (2026-10-14)
 
 ### 🩹 Fixes
