@@ -265,6 +265,12 @@ const EMIT = 'npm run check:contracts -- --emit <folder>';
           covered in <a href="/storybook" class="docs-link-primary">Storybook</a
           >.
         </li>
+        <li>
+          Commit when the block is green:
+          <code
+            >git add -A &amp;&amp; git commit -m "day 2 block 02: green"</code
+          >. Block 03 falls back to this commit if it goes wrong.
+        </li>
       </ol>
       <p class="byo-done">
         <strong>Done when</strong> <code>check:contracts</code> is green
@@ -295,9 +301,9 @@ const EMIT = 'npm run check:contracts -- --emit <folder>';
         <li>
           Run the test loop: <code>stories-preview</code> and
           <code>test-run</code> (with a11y) through the local Storybook MCP, or
-          <code>nx storybook-test &lt;fw&gt;</code>, which runs every story in
-          Chromium with play assertions and axe.
-          <code>nx test &lt;lib&gt; --watch</code> covers only the unit half.
+          <code>npm run check:stories</code>, which runs every story in Chromium
+          with play assertions and axe. <code>npm test</code>
+          (<code>check:unit</code>) covers only the unit half.
         </li>
         <li>
           Paste error messages back to Claude instead of debugging yourself. The
@@ -310,8 +316,19 @@ const EMIT = 'npm run check:contracts -- --emit <folder>';
           Undo rule: commit when a gate is green
           (<code>git add -A &amp;&amp; git commit -m "&lt;step&gt;: green"</code
           >). After two failed fixes, stop and re-diagnose; if the patches made
-          it worse, revert to the last green commit with
-          <code>git checkout -- .</code> rather than patching a third time.
+          it worse, revert the failed attempt with
+          <code
+            >git reset --hard HEAD &amp;&amp; git clean -fd --
+            workshop-&lt;fw&gt;/src</code
+          >
+          rather than patching a third time (preview the delete with
+          <code>git clean -nd -- workshop-&lt;fw&gt;/src</code>).
+          <code>reset --hard</code> restores every tracked file to the last
+          green commit; <code>git checkout -- .</code> alone would leave the new
+          component and story files the agent created, so the gates would stay
+          red. The <code>clean</code> is limited to your app's <code>src/</code>
+          and never uses <code>-x</code>, so ignored files and anything outside
+          it survive.
         </li>
         <li>
           The trainer hands out the golden prompts for this block on site.
@@ -355,21 +372,28 @@ const EMIT = 'npm run check:contracts -- --emit <folder>';
         <li>
           Assemble your codeSpec from the fragment of Block 02
           (<code>componentAPI</code>, <code>metadata</code>, <code>tokens</code
-          >). For accessibility, open the story in the running Storybook, copy
-          the story root element's <code>outerHTML</code> in DevTools and pass
-          it as <code>html</code> with <code>mapToCodeSpec: true</code> to
+          >), plus <code>accessibility</code> from the next step: four of the
+          seven possible sections, which is the normal, thin codeSpec. For
+          accessibility, open the story in the running Storybook, copy the story
+          root element's <code>outerHTML</code> in DevTools and pass it as
+          <code>html</code> with <code>mapToCodeSpec: true</code> to
           <code>figma_scan_code_accessibility</code>.
         </li>
         <li>
           Run <code>figma_check_design_parity</code> on your own node. It needs
           the connected Desktop Bridge; without it the loop ends after
           <code>check:contracts</code> and <code>storybook-test</code>, which is
-          a degraded run, not "just carry on". Try it once on purpose with an
-          incomplete codeSpec, then falsify a spacing value deliberately: fields
-          you did not pass are not compared. Pass the component set for
-          <code>componentAPI</code> and the variant you built for spacing and
-          typography: a variant carries no component properties, and the set
-          answers geometry with its default variant. Read the result with
+          a degraded run, not "just carry on". Run it twice, on purpose, on the
+          variant you built (geometry lives there; a variant carries no
+          component properties, so the <code>componentAPI</code> rows are the
+          same noise in both calls). Call 1: your four sections plus one
+          <code>spacing</code> section you add by hand (padding and gap from
+          your component's CSS) with a single value deliberately wrong, for
+          example a <code>gap</code> that disagrees with the Figma variant; the
+          report flags it. Call 2: the same four sections without
+          <code>spacing</code>; no spacing row appears although the wrong value
+          is still there. Fields you did not pass are not compared. Read the
+          result with
           <a href="/design-to-code#parity-report" class="docs-link-primary"
             >reading a parity report</a
           >.

@@ -329,17 +329,21 @@ once they've built their component:
 > Use the variant node: geometry lives there. The component set is for `componentAPI`
 > only; a variant carries no component properties.
 >
-> First call: pass all seven `codeSpec` sections — `visual`, `spacing`, `typography`,
-> `tokens`, `componentAPI`, `accessibility`, `metadata` — with one spacing value
-> deliberately wrong. Expect the report to catch it.
+> First call: pass the four sections I already have — `componentAPI`, `metadata`,
+> `tokens`, `accessibility` — plus a `spacing` section I wrote by hand from the
+> component's CSS (`paddingTop`, `paddingRight`, `paddingBottom`, `paddingLeft`, `gap`)
+> with one value deliberately wrong. Expect the report to catch it.
 >
-> Second call: the same wrong value still present in the component, but omit the
-> `spacing` section from `codeSpec` entirely this time. Expect **no spacing row** —
+> Second call: the same four sections and the same wrong value, but leave the
+> `spacing` section out of `codeSpec` entirely this time. Expect **no spacing row** —
 > fields you don't pass are not compared, which is different from "fields that happen
 > to be correct."
 
 (Schema verified against `skills/figma-workspace-architect/references/code-sync.md` —
-exactly these seven field names, no more, no fewer.)
+the seven field names are `visual`, `spacing`, `typography`, `tokens`, `componentAPI`,
+`accessibility`, `metadata`, all optional. `visual` and `typography` are left out on
+purpose: 30 minutes is not enough to hand-write them. The 2026-10-14 run below used all
+seven; the four-plus-spacing pair is UNVERIFIED live, R-227.)
 
 (Run live 2026-10-14 on AtlButton, R-047: call 1 flagged the wrong `gap` as major, call 2
 showed no spacing row and the parity score rose from 48 to 72. The report echoes the

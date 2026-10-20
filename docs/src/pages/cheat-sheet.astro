@@ -115,7 +115,7 @@ const FIXES = [
   ],
   [
     'Two fixes failed',
-    'Stop and re-diagnose. If the patches made it worse: `git checkout -- .` back to the last green commit.',
+    "Stop and re-diagnose. If the patches made it worse: `git reset --hard HEAD && git clean -fd -- workshop-<fw>/src` back to the last green commit (removes the agent's new files too).",
     '',
   ],
   [

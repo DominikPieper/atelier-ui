@@ -195,6 +195,8 @@ park it, say "we name it on Day 2", and do not let anyone "fix" it in code. Brid
 data, marks the parity row degraded). "Prompt, do not type": watch for people editing
 the generated file by hand; send them back to the prompt.
 
+**Commit habit (R-226).** Participants close the block with `git add -A && git commit -m "day 1 block 02: green"` inside the recap row (no timing change). Day 2 Block 03's undo rule reverts to the last of these commits, so a revert never reaches past the current block.
+
 ### Block 03 · 13:15–14:30 · Figma for code: is the file ready?
 
 **On screen.** Figma desktop, the participant's duplicate: Variables panel, Components
@@ -259,7 +261,7 @@ Storybook :6006 for D-5.
 1. A story is a claim: `args` claim a state, `play` claims a behaviour. Three sources,
    three roles: the component's own types are the shape (the API), the contract is the
    intent (deliberate mismatches only), the story is the claim. Who checks the claim:
-   `check:stories` (`nx storybook-test`, same thing) runs it in Chromium with axe;
+   `check:stories` (the `storybook-test` target of the app) runs it in Chromium with axe;
    `check:contracts` checks that every variant value has a story (`[COVERAGE]`, error)
    and every Boolean too (`[COVERAGE-BOOL]`, warning).
 2. D-3 on the **Atelier** Storybook only: Design tab = `parameters.design` =
@@ -294,6 +296,8 @@ invented prop would compile nowhere.
 **Watch for.** Rule R5 at 15:30 (`docs-show` on every seat) and 15:45 (red seen). Take
 time from the stretch, never from the red-then-green row. Hosted endpoint down → the
 CLI passthrough from the demo script, or saved screenshots.
+
+**Commit habit (R-226).** Participants close the block with `git add -A && git commit -m "day 1 block 04: green"` inside the recap row (no timing change). Day 2 Block 03's undo rule reverts to the last of these commits, so a revert never reaches past the current block.
 
 ### Block 05 · 16:10–17:15 · A screen from Storybook, against the clock
 
@@ -362,6 +366,8 @@ forget that a filter change must go back to page 1, and put styles in an inline 
 `docs-list` entry "cookbook" lists a "Data List with Actions" story, but `docs-show-story`
 returns no code for it (checked 2026-10-20 on the Angular endpoint), so it does not hand
 over the answer.
+
+**Commit habit (R-226).** Participants close the block with `git add -A && git commit -m "day 1 block 05: green"` inside the recap row (no timing change). Day 2 Block 03's undo rule reverts to the last of these commits, so a revert never reaches past the current block.
 
 ### Block 06 · 17:15–17:30 · Recap and exit ticket
 
@@ -521,6 +527,8 @@ provider: `axisMap`." Written in `workshop-<fw>/src/contracts/<name>.contract.ts
 **Watch for.** Rule R8 at 11:25, R9 at 12:15 (all `[NO-MASTER]` = snapshot, not code).
 A stalled seat: check the handoff document first, not the prompt.
 
+**Commit habit (R-226).** Participants close the block with `git add -A && git commit -m "day 2 block 02: green"` inside the recap row (no timing change). Day 2 Block 03's undo rule reverts to the last of these commits, so a revert never reaches past the current block.
+
 ### Block 03 · 13:30–14:45 · Iterate: prompt quality and the self-healing loop
 
 **On screen.** `/prompts#rubric`, `/prompts#stuck`, `/design-to-code#self-healing-loop`,
@@ -546,16 +554,22 @@ a volunteer's loop.
    re-diagnose from the failing story, not from the prompt.
 4. Decided 2026-10-14 (R-210): commit when a gate goes green
    (`git add -A && git commit -m "<step>: green"`); after two failed fixes stop,
-   re-diagnose, and if the patches made it worse `git checkout -- .` back to the last
-   green commit instead of a third patch. The scaffold runs `git init` and stages,
+   re-diagnose, and if the patches made it worse `git reset --hard HEAD && git clean -fd -- workshop-<fw>/src` (preview:
+   `git clean -nd -- workshop-<fw>/src`) back to the last green commit instead of a
+   third patch. R-226 (2026-10-20): a bare `git checkout -- .` leaves the files the
+   agent newly created (untracked), so the gates stay red; `git stash -u` was rejected
+   because it also stashes unrelated untracked work and leaves a stash to explain; the
+   `clean` is scoped to the app's `src/` and never `-x`, so unrelated files survive.
+   Commit points: Day 1 Blocks 02, 04, 05 and Day 2 Block 02 (the recap rows). The scaffold runs `git init` and stages,
    commits nothing (`preset.ts` ~L2279); the first commit is Day 1 Block 01's. Rows since
    2026-10-14: 10 focus/rubric, 15 correction prompts (C2 at 13:55), 10 test-loop demo,
    25 self-healing loop (C4 at 14:20), 10 AI-assisted debugging, 3 stretch, 2 recap; the
    block ends 14:45, coffee 14:45–15:00.
-5. The test loop: `test-run` over the local MCP = `npm run check:stories` =
-   `nx storybook-test <fw>` (every story in Chromium, `play`, axe). `nx test` /
-   `check:unit` is the jsdom half only. Never two `storybook-test` at once (shared
-   browser port).
+5. The test loop: `test-run` over the local MCP = `npm run check:stories`
+   (every story in Chromium, `play`, axe). `npm test` / `check:unit` is the jsdom
+   half only. Never two `storybook-test` at once (shared browser port). In a
+   generated workspace the Nx project is `workshop-<fw>`, not `<fw>`: use the npm
+   scripts (R-228).
 6. Token fidelity at 14:40: ask Claude to grep the component's files for `#[0-9a-f]{3,8}`
    and `[0-9]+px` and replace each hit with the matching `--ui-*` name read from
    `tokens.css`, then report the lines.
@@ -597,11 +611,14 @@ and theme toolbar; terminal + DevTools for the codeSpec; two parity reports for 
    `tokens`; for `accessibility`, open the story in the running Storybook, DevTools →
    right-click the story's root element → Copy → Copy outerHTML, pass it as `html` with
    `mapToCodeSpec: true` to `figma_scan_code_accessibility`. Four sections is the normal
-   case. No bridge → the loop ends after `check:contracts` + `storybook-test`; say
+   case (15:40 row); the 15:55 exercise adds one hand-written `spacing` section on top
+   (R-227). No bridge → the loop ends after `check:contracts` + `storybook-test`; say
    "degraded" on the seat, not silently.
-6. D-8, parity on purpose (golden prompts §3.3): call 1 with all seven sections and one
-   wrong spacing value → flagged as major; call 2 with the same wrong value and `spacing`
-   omitted → no spacing row, and the score rises (48 → 72 on AtlButton, 2026-10-14).
+6. D-8, parity on purpose (golden prompts §3.3): call 1 with the four sections plus a
+   hand-added `spacing` section holding one wrong value → flagged as major; call 2 with
+   the four sections only → no spacing row, and the score rises (48 → 72 on AtlButton,
+   2026-10-14, measured with all seven sections; the four-plus-spacing variant is
+   UNVERIFIED live, R-227).
    Fields not passed are not compared; a rising score is not a better component. The
    report has no "compared sections" list: point at `codeData` (what was passed) and
    `summary.categories` (only categories with findings). Variant node for geometry,

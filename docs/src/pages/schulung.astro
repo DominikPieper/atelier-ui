@@ -185,6 +185,7 @@ const DAYS: Day[] = [
           'Important: do not type the code yourself, prompt it',
           'Read the parity report line by line before calling it done',
           'Label every finding with one of two labels: code (the code has to change) or Figma (the master has to change)',
+          'Commit when the block is green: `git add -A && git commit -m "day 1 block 02: green"` — the Day 2 undo rule falls back to the last of these commits',
         ],
         stretch:
           'Change one token binding in the prompt (for example the card padding) and predict what the parity report will say before you run it.',
@@ -231,6 +232,7 @@ const DAYS: Day[] = [
           'What is MCP? Which servers are active (`storybook-<framework>`, `nx-mcp`, `figma-console`, `uianatomy`, plus `angular-cli` in an Angular workspace: five in cohort 1)? Run `/mcp` and name them',
           'Negative demo: the same question in a browser chat without MCP gives a hallucination. Then open the hosted Storybook, look up Button with `docs-show` and see the correct, framework-shaped answer; live: Button props, token values, preview in chat',
           'Prompt one story with a `play` function for a variant, with the template story (`AtlButton`) as context and without `get-storybook-story-instructions`, which arrives with the local Storybook MCP on Day 2 Block 02; watch it fail, fix it by prompt, watch it pass',
+          'Commit when the block is green: `git add -A && git commit -m "day 1 block 04: green"` — the Day 2 undo rule falls back to the last of these commits',
         ],
         stretch:
           "Ask the MCP server for a prop that does not exist and read how it answers. Then say why 'not documented' is the right answer.",
@@ -255,6 +257,7 @@ const DAYS: Day[] = [
           'Serve with `npm start` (app on `localhost:4200`) and use the screen the way a user would: type in the search, change the role, page forward, filter until nothing matches',
           'Gates, run as exit codes: `npm run lint` (on Angular including the two Atelier template rules), `npm run check:stylelint`, `npm run check:format` (`npm run format` only as the fix when it fails), on Angular also `npm run build` (strict templates fail on an unknown input; on React and Vue the build does not type-check props). They do not see colours outside the `.css` file, they pass pixel spacing and named colours inside it, nothing detects a hand-built twin of a library component, and they do not check the running app for accessibility: say so out loud',
           'Audit: paste the receipts prompt from the page, have the agent print the `docs-show` passage behind every prop, and spot-check three of them yourself',
+          'Commit when the block is green: `git add -A && git commit -m "day 1 block 05: green"` — the Day 2 undo rule falls back to the last of these commits',
         ],
         stretch:
           "Write a story for the screen, copied from the `AtlButton` example story in your app's `src/`, with one `play` function that types into the search and asserts the row count. Then run `npm run check:stories`: it is the only gate here that runs axe, and it can only check what has a story.",
@@ -373,6 +376,7 @@ const DAYS: Day[] = [
           'Check with `npm run check:contracts` (`node tools/design-contracts/bin/check-contracts.mjs`; framework, contracts, story roots and snapshot are set in `contracts.config.json`). Without a freshly refreshed snapshot your component is missing from `tools/figma/snapshot.json` and the check reports `[NO-MASTER]` (a warning) instead of failing. `npm run check:contracts -- --emit <folder>` additionally writes the codeSpec fragment (componentAPI, metadata, tokens) for Block 04',
           '`/verify` runs all five gates (`check:format`, `check:stylelint`, `check:contracts`, `check:unit`, `check:stories`); the two you ran by hand in Day 1 Block 05, formatting and CSS lint, are fixed by prompt here, not by hand',
           'Iterate until the prop table fits',
+          'Commit when the block is green: `git add -A && git commit -m "day 2 block 02: green"` — the Day 2 undo rule falls back to the last of these commits',
         ],
         stretch:
           'Want a template? `docs-show-story` over the hosted MCP returns the same story natively for your framework (set `storybookId` when several sources are configured).',
@@ -395,9 +399,9 @@ const DAYS: Day[] = [
           'Golden prompts (Day 1 Blocks 02 and 05 = §1, Day 2 Block 02 = §2.1, this block = §2.2–2.4, Block 04 = §3): the trainer hands them out on site',
           '`plan/big-picture.md` (API rules) + `plan/design-principles.md` (surface/motion/dark mode) in the prompt context',
           'Test loop, all frameworks: dev + test toolset via the local addon MCP (`localhost:<port>/mcp`), `stories-preview` + `test-run` with a11y — identical for Angular, React and Vue since 10.6.0',
-          'Supplementary, not equivalent: `nx test <lib> --watch` covers only the unit half; the equivalent of `test-run` is `npm run check:stories` (`nx storybook-test <fw>`: every story in Chromium, play assertions, axe) — plus the running Storybook in the browser for visual feedback',
+          'Supplementary, not equivalent: `npm test` (`check:unit`) covers only the unit half; the equivalent of `test-run` is `npm run check:stories` (every story in Chromium, play assertions, axe) — plus the running Storybook in the browser for visual feedback',
           'AI-assisted debugging: paste error messages back to Claude instead of debugging yourself',
-          'Undo rule: commit when a gate is green (`git add -A && git commit -m "<step>: green"`); after two failed fixes stop, re-diagnose, and revert to the last green commit (`git checkout -- .`) rather than patch a third time',
+          'Undo rule: commit when a gate is green (`git add -A && git commit -m "<step>: green"`); after two failed fixes stop, re-diagnose, and revert the failed attempt with `git reset --hard HEAD && git clean -fd -- workshop-<fw>/src` (preview with `git clean -nd -- workshop-<fw>/src` first) rather than patch a third time. Why this pair: `reset --hard` restores every tracked file to the last green commit, and `git checkout -- .` would leave the new component and story files the agent created, so the gates would stay red; `clean` is limited to your app\'s `src/` and never uses `-x`, so ignored files and anything outside it survive',
         ],
         stretch:
           'Rewrite your prompt so that the first run needs no correction, and compare the two runs.',
@@ -420,9 +424,9 @@ const DAYS: Day[] = [
           'Let Claude fix the findings',
           'ARIA requirements, focus ring via tokens, hover/active/disabled states',
           'Dark-mode toggle via the theme control in the toolbar (`withThemeByDataAttribute` from addon-themes, sets `data-theme` — exactly the selector `tokens.css` switches on). Backgrounds are canvas colours, not a theme; confusing the two was the bug ADR-0142 removed. Say it honestly: axe runs only in light mode in `check:stories` — the toggle is a preview, not test coverage',
-          'Assemble your own codeSpec before parity runs: `npm run check:contracts -- --emit <folder>` (the gate from Block 02; `/build-your-own` shows the same command) yields componentAPI, metadata, tokens — nothing more. For accessibility, open the story in the running Storybook, copy the story root element\'s outerHTML in DevTools and pass it as `html` with `mapToCodeSpec: true` to `figma_scan_code_accessibility`. `figma_check_design_parity` needs the connected Desktop Bridge for this — without it the loop ends after `check:contracts` + `storybook-test` (no snapshot, `[NO-MASTER]`, no parity call); that is a degraded run, not "just carry on"',
+          'Assemble your own codeSpec before parity runs: `npm run check:contracts -- --emit <folder>` (the gate from Block 02; `/build-your-own` shows the same command) yields componentAPI, metadata, tokens — nothing more. For accessibility, open the story in the running Storybook, copy the story root element\'s outerHTML in DevTools and pass it as `html` with `mapToCodeSpec: true` to `figma_scan_code_accessibility`; that gives four of the seven codeSpec sections, which is the normal, thin codeSpec. `figma_check_design_parity` needs the connected Desktop Bridge for this — without it the loop ends after `check:contracts` + `storybook-test` (no snapshot, `[NO-MASTER]`, no parity call); that is a degraded run, not "just carry on"',
           'Triage every parity finding with three labels: code, Figma and contract. Code and Figma are the two from Day 1 Block 02; contract is new today, now that Block 02 has taught it: a mismatch chosen on purpose and recorded in the contract file (`figmaOnly`, `codeOnly`, `axisMap`, `probes`) is neither a code bug nor a Figma bug, and "fixing" it in code is the classic mislabel',
-          'Test `figma_check_design_parity` once, on purpose, against an incomplete codeSpec: look closely at the node, variant/state and the codeSpec fields you passed (visual, spacing, typography, tokens, componentAPI, accessibility, metadata), then falsify a spacing value deliberately — only with complete fields must the report flag the deviation; fields you did not pass are not compared. The report has no "sections compared" list: its codeData block echoes what you passed and summary.categories names only categories with findings, so the score rises when a section is left out. Pass the component set for componentAPI and the variant you built for visual, spacing and typography. A thinly filled codeSpec (typically only componentAPI + metadata + tokens + accessibility) is the normal case, not a complete one',
+          'Test `figma_check_design_parity` twice, on purpose, on the variant node you built (geometry lives there; a variant carries no component properties, so the componentAPI rows are the same noise in both calls). Call 1: your four sections plus one `spacing` section you add by hand (padding and gap from your component\'s CSS) with a single value deliberately wrong, for example a `gap` that disagrees with the Figma variant — the report flags it. Call 2: the same four sections without `spacing` — no spacing row appears, although the wrong value is still there: fields you did not pass are not compared. Look closely at the node, variant/state and the sections you passed (the seven possible ones are visual, spacing, typography, tokens, componentAPI, accessibility, metadata). The report has no "sections compared" list: its codeData block echoes what you passed and summary.categories names only categories with findings, so the score rises when a section is left out. A thinly filled codeSpec (typically only componentAPI + metadata + tokens + accessibility) is the normal case, not a complete one',
         ],
         stretch:
           'Find one finding axe cannot catch and say which of the three checks would catch it.',

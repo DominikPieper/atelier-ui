@@ -386,16 +386,17 @@ the reason stated.
   generation prompt, belongs to Block 02). Note which
   correction prompt got used and on which failure.
 - Test loop in all frameworks: local addon MCP, `stories-preview` + `test-run`
-  with a11y. The page says `nx test <lib> --watch` covers **only the unit
-  half**; the equivalent of `test-run` is `nx storybook-test <fw>` (every story
-  in Chromium, play assertions, axe). In the workspace the scaffold's script
-  for that is `npm run check:stories`. A green unit run is not a green story run.
+  with a11y. The page says `npm test` (`check:unit`) covers **only the unit
+  half**; the equivalent of `test-run` is `npm run check:stories` (every story
+  in Chromium, play assertions, axe). A green unit run is not a green story run.
 - Paste error messages back to Claude instead of debugging yourself; time it
   and note friction. Record the prompt revision and the reason for it (the
   block's Done-when requires it).
 - Commit when a gate is green; after two failed fixes stop, re-diagnose and revert
-  to the last green commit instead of a third patch. Note whether the seat had a
-  commit to fall back to (the scaffold's `git init` stages, commits nothing).
+  with `git reset --hard HEAD && git clean -fd -- workshop-<fw>/src` instead of a third patch. Note whether
+  the seat had a commit to fall back to (commits after Day 1 Blocks 02, 04, 05 and
+  Day 2 Block 02, R-226), and whether the `clean` removed the agent's new files and
+  nothing else.
 
 **Block 04 — Verify: a11y, states, parity**
 _Done when:_ `storybook-test` with axe is green, and every parity finding is
@@ -422,13 +423,12 @@ Figma).
   `--emit` path against the scaffold's layout: the page's path starts with
   `libs/<fw>/`; whether the scaffold uses that tree is not specified on
   /schulung — record the path you really used.)
-- Call `figma_check_design_parity` **once, on purpose**, against an incomplete
-  codeSpec: falsify one spacing value deliberately. The page's claim: only with
-  complete fields must the report flag the deviation; fields not passed are
-  **not compared**, and a thin codeSpec (componentAPI + metadata + tokens +
-  accessibility) is the normal case. Second call: same wrong value,
-  `spacing` supplied vs. omitted (ready-to-paste: `tasks/schulung-golden-prompts.md`
-  §3.3). Run once on 2026-10-14 against AtlButton (R-047): call 2 shows no spacing row
+- Call `figma_check_design_parity` **twice, on purpose**: the thin codeSpec
+  (componentAPI + metadata + tokens + accessibility) is the normal case. Call 1
+  adds one hand-written `spacing` section with a deliberately wrong value and must
+  flag it; call 2 omits `spacing`: fields not passed are **not compared**
+  (ready-to-paste: `tasks/schulung-golden-prompts.md` §3.3). The four-plus-spacing
+  variant has not been run live (R-227): record what you see. Run once on 2026-10-14 against AtlButton (R-047): call 2 shows no spacing row
   and the score rises 48 → 72; the report echoes the passed sections under `codeData`.
   Variant node for geometry, component set for `componentAPI`. If your run differs,
   record a blocker.
@@ -478,8 +478,8 @@ substitute); (5) `figma_audit_component_accessibility` without critical
 findings **and** the Storybook a11y tab without axe findings; (6) dark mode
 switches through the token override; (7) `figma_check_design_parity` on your
 own node (bridge required) — green proves something only for the sections
-passed; (8) `check:contracts` with your own flags exits 0, and
-`nx storybook-test <fw>` is green. Run each gate as `cmd > /tmp/x.log 2>&1; echo $?`
+passed; (8) `npm run check:contracts` (flags from `contracts.config.json`) exits 0, and
+`npm run check:stories` is green. Run each gate as `cmd > /tmp/x.log 2>&1; echo $?`
 and read the exit code, not the tail of the output.
 
 ---

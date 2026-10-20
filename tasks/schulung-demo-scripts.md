@@ -328,7 +328,7 @@ a story that never failed claims nothing.
 **Expected result.** Interactions panel: red with a "Unable to find an element with the
 text" style message, then green. Exact message text **UNVERIFIED**.
 
-**Gate check (optional, trainer machine, not live):** `nx storybook-test <fw>` renders
+**Gate check (optional, trainer machine, not live):** `nx storybook-test <fw>` (Atelier clone; a generated workspace uses `npm run check:stories`) renders
 every story and would fail on the broken `play`; do not run it live (shares Vitest's
 browser port; never two at once).
 
@@ -456,14 +456,17 @@ verbatim, with `<node>`/`<variant>` filled from the handoff document.
 
 **Expected result.**
 
-- Call 1 (all seven sections, one spacing value deliberately wrong): the report flags
-  the spacing deviation.
-- Call 2 (same wrong value left in the component, `spacing` section omitted): no spacing
+- Call 1 (the four sections a participant has, `componentAPI` + `metadata` + `tokens` +
+  `accessibility`, plus one hand-added `spacing` section with one value deliberately
+  wrong): the report flags the spacing deviation. The schema (`figma_check_design_parity`)
+  makes every `codeSpec` section optional, so this is a valid call.
+- Call 2 (same wrong value left in place, `spacing` section omitted): no spacing
   row at all, the other findings unchanged. Fields not passed are not compared; that is
   not the same as "correct".
 - The report does not name the compared sections: `summary.categories` lists only
   categories with findings, and `codeData` echoes exactly the sections passed; point
-  at `codeData`. Observed 2026-10-14 (AtlButton, `gap: 16` wrong): call 1 → 13 findings,
+  at `codeData`. Observed 2026-10-14 with all seven sections (AtlButton, `gap: 16` wrong;
+  not the four-plus-spacing pair participants run, which is UNVERIFIED live, R-227): call 1 → 13 findings,
   score 48, three major spacing rows; call 2 → 10 findings, score 72, no spacing row,
   everything else identical. The score rose because less was compared.
 

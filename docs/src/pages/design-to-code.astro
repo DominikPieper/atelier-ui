@@ -64,7 +64,7 @@ the Figma master or the contract should change, and why. Fix only the code ones.
 const LOOP_PROMPT = `Verify the component I just generated, in at most 3 rounds:
 
 1. Run storybook-test for this component's stories
-   (nx storybook-test <fw>, or test-run on the local Storybook MCP).
+   (npm run check:stories, or test-run on the local Storybook MCP).
 2. Run figma_check_design_parity against the master node.
 3. Run figma_scan_code_accessibility on the rendered story HTML.
 
@@ -1063,9 +1063,17 @@ decided: fix the code, the master, or the contract.`;
             reruns. The loop needs a stop condition, so cap it at about three
             rounds, then hand back to a human with a summary of what still
             fails. After two failed fixes, stop and re-diagnose; and if the
-            diagnosis says the patches made it worse, revert to the last green
-            commit (<code>git checkout -- .</code>) instead of a third patch.
-            That is why you commit whenever a gate is green.
+            diagnosis says the patches made it worse, revert the failed attempt
+            (<code
+              >git reset --hard HEAD &amp;&amp; git clean -fd --
+              workshop-&lt;fw&gt;/src</code
+            >) instead of a third patch. The <code>reset</code> restores every
+            tracked file to the last green commit, and the <code>clean</code>
+            removes the new files the agent created (a bare
+            <code>git checkout -- .</code> would leave them and the gates would
+            stay red); it is limited to your app's <code>src/</code> and never
+            uses <code>-x</code>. That is why you commit whenever a gate is
+            green.
           </p>
           <Code
             code={LOOP_PROMPT}
