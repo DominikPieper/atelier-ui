@@ -19,6 +19,41 @@ closed by the review triage carry a `_(closed 2026-10-11 …)_` note.
 
 Ranked; each carries why it's worth doing next rather than later.
 
+### Customer angle: existing Storybook + guardrails (owner go 2026-10-20)
+
+Focus review 2026-10-20: customers mostly already have Figma, a CI and a Storybook. The pitch
+for them: AI-generated frontends need not sprawl if the frontend is fenced in (Storybook MCP,
+tooling, preselected tech), and the agent then uses their library and tokens. Two gaps:
+`/readiness` checks Figma masters only, nothing says what an existing Storybook must deliver
+before `docs-show` answers usefully; and D-1 shows that context steers, never that a gate
+catches what slips through. Agenda unchanged before R-040 (owner: stages 1+2 now, a
+brownfield Day 2 track only after cohort 1).
+
+- [x] **S1 Storybook readiness page** `/storybook-readiness`. Done when: checklist items are
+      each tied to what the manifest/`docs-show` actually emits (no claimed field the 10.6
+      docgen does not produce), every "verify" line is a command or MCP call that exists;
+      one annotated real `docs-show` excerpt (hosted Angular endpoint), no invented
+      before-output; a self-check prompt + 30 min timebox in the `/design-principles`
+      check-your-own pattern; linked from `/readiness`, `/storybook`, nav; offered as the
+      second choice in Day 2 Block 05 transfer (`/schulung`, `/build-your-own`, run-of-show).
+- [x] **S2 D-1 third step: the gate catches it.** Done when: D-1 script, `/prompts#guardrails`
+      and `/schulung` Day 1 Block 00 show window (a)'s CSS dropped into a scaffold workspace
+      `.css` file and the stylelint target turning red on `atelier/no-raw-color-literal`;
+      exact target name verified; the limit stated (only `.css` files are linted — inline
+      `style=` or `styles:` strings are not).
+- [x] `npm run check:all` exit 0, generated files (llms.txt etc.) regenerated.
+
+**Review 2026-10-20.** Verified: every checklist item read against real Storybook 10.6.0 Angular
+output (hosted MCP + CLI); the red stylelint run is real (3× `[RAW-COLOR]`, 1× `[UNDECLARED]`) but on
+a stand-in workspace with the scaffold's rule files and config shape, not a freshly generated one.
+Unverified: React/Vue output shapes; story-JSDoc descriptions rendering; what window (a) of D-1
+actually emits (no hex → gate stays green → use the pre-saved output). Weakest point: the gate
+only reads `.css` under the app's `src/`; inline `style=`, `styles:` strings and a raw `<button>`
+pass — the demo names this instead of hiding it. Side findings: AGENTS.md CLI `docs show <id>` was
+wrong (fixed to `--input`), R-221 (purpose never reaches `docs-show`), R-222 (AtlButton alias types).
+Open: deck outline slides D1-00-05 and the Day 2 Block 05 transfer slide need the same change
+(outline is untracked, not edited).
+
 ### Component knowledge projection (owner go 2026-10-16)
 
 Triggered by DSDS 0.23.0 (designsystemdocspec.org). A throwaway spike (2026-10-16, scratchpad,

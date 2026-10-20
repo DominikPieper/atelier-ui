@@ -71,6 +71,11 @@ export const OG_PAGES = {
     description:
       'Is your Figma file ready for an agent? A checklist with how to check each point and how to fix a master that fails.',
   },
+  'storybook-readiness': {
+    title: 'Storybook Readiness',
+    description:
+      'Is your Storybook ready for an agent? What the component source and stories must deliver for the Storybook MCP, and how to check it.',
+  },
   'cheat-sheet': {
     title: 'Cheat Sheet',
     description:

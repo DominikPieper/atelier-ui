@@ -17,7 +17,7 @@ derived from the code, not from a recorded run.
 
 | Id  | Demo                                                              | Where on `/schulung`                                                  | Status                          |
 | --- | ----------------------------------------------------------------- | --------------------------------------------------------------------- | ------------------------------- |
-| D-1 | Guardrail demo: same prompt, without and with MCP                 | Day 1 Block 00 (5 min)                                                | New since the earlier review    |
+| D-1 | Guardrail demo: same prompt without/with MCP, then a gate         | Day 1 Block 00 (5 min)                                                | New since the earlier review    |
 | D-2 | One-change live demo                                              | Day 1 Block 00 ("change an Atelier component by prompt in 5 minutes") | Kept, narrowed to one framework |
 | D-3 | Design tab + contract section in Storybook                        | Day 1 Block 04                                                        | New                             |
 | D-4 | Negative (hallucination) demo + `docs-show`                       | Day 1 Block 04                                                        | Kept                            |
@@ -42,12 +42,12 @@ derived from the code, not from a recorded run.
 
 ## Shared preconditions (trainer machine)
 
-- Two checkouts or one: the **Atelier clone** (this repo) for D-1…D-4, D-6, D-8
+- Two checkouts or one: the **Atelier clone** (this repo) for D-1 (windows a/b), D-2…D-4, D-6, D-8
   trainer-side, with the `.mcp.json` servers connected (`/mcp` in Claude Code lists
   `storybook-angular`, `storybook-react`, `storybook-vue`, `nx-mcp`, `figma-console`,
   `uianatomy`, `angular-cli`, `Astro docs`). A **scaffolded workspace** (Angular,
   `npx create-atelier-ui-workspace`, Storybook on `localhost:6006`, app on
-  `localhost:4200`) for D-5, because that is what participants have.
+  `localhost:4200`) for D-5 and for D-1 step 3 (the stylelint gate), because that is what participants have.
 - Atelier Angular Storybook: `nx storybook angular` (project `angular`, target
   `storybook`, binds **4400**). React is 4401, Vue 4402 (`libs/react/project.json`,
   `libs/vue/project.json`); not needed for any demo.
@@ -62,14 +62,24 @@ derived from the code, not from a recorded run.
 
 ## D-1 · Guardrail demo (Day 1 Block 00, 5 min)
 
-**Goal.** Show that context is the only variable between a hallucinating answer and a
-token-exact one. Participants name one concrete difference.
+**Goal.** Two messages in one demo. (1) Context steers the agent: the same prompt gives a
+hallucinating answer or a token-exact one, and participants name one concrete
+difference. (2) Context is not enough on its own: a gate in the workspace catches what
+still slips through, so AI output cannot quietly bypass the design system.
 
 **Preconditions.**
 
 - Two windows side by side: (a) a plain chat with no design-system context (no MCP, no
   `llms-full.txt`), (b) Claude Code in the Atelier clone with the Storybook MCP
   connected (`storybook-angular`).
+- A **scaffolded workspace** (Angular, `npx create-atelier-ui-workspace`; the one from
+  the shared preconditions above) with `npm install` done and a clean tree, a terminal
+  open in its root. It must contain `stylelint.config.mjs` and `tools/stylelint-rules/`
+  (the generator writes both) and the app `workshop-angular/`. Run
+  `npx nx stylelint workshop-angular` once before the session: it must exit 0 on the
+  untouched scaffold, otherwise the red run proves nothing.
+- Rehearse step 3 once (see "Expected result") and keep the CSS file ready in a scratch
+  folder, so the live step is a copy, not a typing exercise.
 - Source of the prompt and the framing: `docs/src/pages/prompts.astro`, card
   `same-prompt-demo`, rendered at `/prompts#guardrails`.
 - Do not use a model with the Atelier files pre-loaded in window (a).
@@ -80,6 +90,21 @@ token-exact one. Participants name one concrete difference.
 Add a simple page footer: a logo, three columns of links (Product, Company, Legal) and a copyright line.
 ```
 
+**Steps and timing (5 min).**
+
+1. 0:00 to 0:30 Send the prompt in both windows (or show the pre-saved outputs).
+2. 0:30 to 2:30 Compare (a) and (b): hex vs `var(--ui-*)`, invented vs real `Atl*`
+   components, landmark and labelled `<nav>`. One sentence: "the prompt is identical; the
+   context is the only variable."
+3. 2:30 to 4:30 Take the CSS from window (a) (the `<style>` block or the footer's CSS)
+   and save it as `workshop-angular/src/footer.css` in the scaffolded workspace. Run
+   `npx nx stylelint workshop-angular` (same as `npm run check:stylelint`, which runs
+   the `stylelint` target of every project). It goes red.
+4. 4:30 to 5:00 State the limit (below) and the sentence in "Point at".
+
+If time is short, cut step 2 to one difference (hex vs token) and keep step 3; step 3
+is the new message, step 2 is the one participants can already see on screen.
+
 **Expected result.**
 
 - (a) typically hard-coded hex colours, generic class names, invented or no components,
@@ -87,14 +112,53 @@ Add a simple page footer: a logo, three columns of links (Product, Company, Lega
   tendency_, not a guaranteed output. **UNVERIFIED** (not recorded in this repo).
 - (b) uses `Atl*` components and `--ui-*` custom properties, because it reads the
   docs through the MCP first.
+- Step 3: the command exits non-zero (stylelint exit code 2 for lint errors) and prints
+  one `[RAW-COLOR]` error per raw colour, in the shape (verified 2026-10-20 by running
+  the scaffold's three rules and config shape against a stand-in file, not in a
+  freshly generated workspace):
+
+  ```text
+  workshop-angular/src/footer.css
+    1:16  ✖  [RAW-COLOR] 'background' uses literal '#1a1a2e' — use a --ui-* token (or var(--token, fallback)) instead of a raw color literal.  atelier/no-raw-color-literal
+  ```
+
+  Which lines appear depends on what window (a) wrote. If (a) used only named colours
+  or `var(--x)` of its own, nothing is flagged: pick a model output that contains hex,
+  `rgb()` or `hsl()`, or fall back to the pre-saved one. Typo'd tokens (`var(--ui-space-4)`
+  where only `--ui-spacing-4` exists) are reported as `[UNDECLARED]`, and a literal that
+  equals a token's value (e.g. `#006470` when `--ui-color-brand` holds it) as `[BYPASS]`.
+  Exact generated-workspace output is **UNVERIFIED** (no workspace was generated; it
+  needs `npm install`).
+
+- Fix to close the loop (optional, 30 s): replace the hex with the `--ui-*` token from
+  `workshop-angular/src/styles/tokens.css`, re-run, exit 0.
 
 **Point at.** Colour values (`#...` vs `var(--ui-*)`), component names that do not
-exist in the library, `<footer>` landmark, labelled `<nav>`, focus styles. One sentence:
-"the prompt is identical; the context is the only variable."
+exist in the library, `<footer>` landmark, labelled `<nav>`, focus styles; then the
+red terminal. Two sentences: "the prompt is identical; the context is the only
+variable" and "the context steers, the gate catches what still slips through."
+
+**The stated limit (say it out loud, do not let a participant find it).** The gate is
+narrow. What it reads: `workshop-angular/src/**/*.css` only (`tokens.css` is excluded,
+because it defines the literals), and only colour literals, undeclared `--ui-*` tokens
+and literals that duplicate a token's value. What it does not catch: (1) colours in
+inline `style="..."` attributes in a template, (2) colours in a component's inline
+`styles: [...]` string in a `.ts` file (and in `.scss` or any non-`.css` file), (3) a
+raw `<button>`, `<input>` or `<div class="card">` instead of `AtlButton` and friends:
+no shipped lint rule asks for library components. The two shipped template rules
+(`atl-button-icon-only-needs-name`, `atl-sub-component-needs-parent`) only check how an
+`Atl*` component is used, and angular-eslint's accessibility preset checks a11y of
+whatever is there. Closing those gaps is the participant's own next step (Day 2
+transfer). Also: `nx lint` does not run stylelint; it is a separate target, so a
+participant who only runs `nx lint` sees green.
 
 **Fallback.** Show the two pre-saved outputs from your rehearsal. If (b) does not call
 the MCP, say "it did not read the docs, so it guessed" and re-run with "Use
-`docs-list` first". Do not improvise a different prompt.
+`docs-list` first". If step 3 is green because (a)'s CSS has no hex, paste the saved
+red terminal output or run the command on the pre-saved CSS file. If `nx` is slow, run
+`npx stylelint 'workshop-angular/src/**/*.css' --ignore-pattern
+'workshop-angular/src/styles/tokens.css' --config stylelint.config.mjs` directly (the
+exact command the target runs). Do not improvise a different prompt.
 
 ---
 

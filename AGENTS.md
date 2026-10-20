@@ -73,7 +73,7 @@ preview`, `review create`, `test run`:
 
 ```
 npx storybook tools --config-dir libs/react/.storybook --json docs list
-npx storybook tools --config-dir libs/react/.storybook --json docs show <id>
+npx storybook tools --config-dir libs/react/.storybook --json docs show --input '{"id":"<id>"}'
 ```
 
 That is the route for Codex and the Antigravity CLI, which have no `.mcp.json` here. One

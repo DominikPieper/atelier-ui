@@ -51,7 +51,7 @@ verifies it before 09:30; the helper is still the owner's call (`Proposal`):
 
 ### Block 00 · 09:00–09:30 · Kickoff and thesis
 
-**On screen.** `/` overview, then `/workshop#glossary`, then two windows for D-1, then
+**On screen.** `/` overview, then `/workshop#glossary`, then two windows for D-1 plus the scaffolded workspace's terminal for its gate step, then
 terminal + Atelier Storybook :4400 for D-2, then `/schulung`.
 
 **Say.**
@@ -86,9 +86,15 @@ terminal + Atelier Storybook :4400 for D-2, then `/schulung`.
      context window, returns a summary.
    - **MCP**: Model Context Protocol, a JSON-RPC standard that lets AI assistants call
      structured tools on external servers instead of guessing from training data.
-5. D-1 (same prompt twice): point at hex vs `var(--ui-*)`, invented vs real `Atl*`
-   components, `<footer>` landmark and labelled `<nav>`. One sentence: the prompt is
-   identical, the context is the only variable.
+5. D-1 (same prompt twice, then a gate): point at hex vs `var(--ui-*)`, invented vs real
+   `Atl*` components, `<footer>` landmark and labelled `<nav>`. One sentence: the prompt
+   is identical, the context is the only variable. Then save window (a)'s CSS as
+   `workshop-angular/src/footer.css` in the scaffolded workspace and run
+   `npx nx stylelint workshop-angular`: red with `[RAW-COLOR]` lines. Second sentence:
+   context steers, the gate catches what still slips through. Say the limit yourself: it
+   reads `.css` under the app's `src/` only, not inline `style=` attributes, component
+   `styles:` strings or a raw `<button>`, and `nx lint` does not run it. If time is
+   short, cut the footer comparison to one difference, keep the gate.
 6. D-2 (one token change in `libs/styles/src/button/atl-button.css`, `.atl-button.size-sm`
    literal `0.875rem` → `var(--ui-spacing-4)`): point at docs read first, one-line diff, a
    token not a literal, Storybook updates. Undo with `git checkout` even on success.
@@ -104,7 +110,7 @@ terminal + Atelier Storybook :4400 for D-2, then `/schulung`.
 `check:contracts`, `check:stories`, `figma_check_design_parity`. Six of eight name all four
 steps or you say them yourself and ask for the tool per step.
 
-**Watch for.** D-1 window (a) must be a plain chat with no Atelier context. Late-comers:
+**Watch for.** D-1 window (a) must be a plain chat with no Atelier context, and its CSS must contain a hex/`rgb()`/`hsl()` colour or the gate stays green (use the pre-saved output). The scaffolded workspace for the gate step must be `npm install`ed and green on `nx stylelint` before the session. Late-comers:
 run-of-show late-comer track; the thesis is the only thing not on a page.
 
 ### Block 01 · 09:30–10:45 · Verify the setup
@@ -574,7 +580,7 @@ before 2026-10-14 (buffer 16:15–16:25).
 
 ### Block 05 · 16:25–17:30 · Show & tell and transfer
 
-**On screen.** The timer; participant screens; whiteboard; `/design-principles#check-your-own`;
+**On screen.** The timer; participant screens; whiteboard; `/design-principles#check-your-own` (or `/storybook-readiness#self-check`);
 `/readiness` Part B.
 
 **Say.**
@@ -592,7 +598,9 @@ before 2026-10-14 (buffer 16:15–16:25).
 3. Transfer, 17:15–17:27 (decided 2026-10-14, R-212): `/design-principles#check-your-own`
    is written as a **30-minute** exercise (run, pick one finding, fix, re-run); the block
    scopes it to run it and pick the one finding; the fix is the next step they write
-   down. `/readiness` Part B (Complete,
+   down. Second choice, same scope and same output: a participant whose team already
+   has a Storybook runs `/storybook-readiness#self-check` instead and picks one finding
+   from it. `/readiness` Part B (Complete,
    Sound, Synchronized, Extensible, AI-ready) is the other lens for a next step.
 4. Workspace anatomy, 17:00–17:15 (decided 2026-10-14, R-212), what your own repo needs
    to run this loop, one file each, shown in a participant's own workspace tree: a Storybook that emits

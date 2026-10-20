@@ -66,6 +66,10 @@ const L = {
   tutorial: { label: 'Tutorial', href: '/tutorial' },
   firstComponent: { label: 'First-component kata', href: '/first-component' },
   readiness: { label: 'Readiness checklist', href: '/readiness' },
+  storybookReadiness: {
+    label: 'Storybook readiness self-check',
+    href: '/storybook-readiness#self-check',
+  },
   pinkTest: { label: 'Pink test', href: '/tokens#pink-test' },
   tokenNaming: { label: 'Token naming', href: '/tokens#naming' },
   mcpServers: { label: 'Your MCP servers', href: '/mcp#your-servers' },
@@ -127,7 +131,7 @@ const DAYS: Day[] = [
           'Why component-driven? Why AI?',
           'Live demo: change an Atelier component by prompt in 5 minutes',
           'Two-minute glossary pass (/workshop#glossary): LLM, agent, subagent, MCP — the four words the rest of the training assumes',
-          'Guardrail demo (5 minutes, /prompts#guardrails): the same prompt twice, once in a plain chat and once with the Storybook MCP connected — the context is the only variable',
+          "Guardrail demo (5 minutes, /prompts#guardrails): the same prompt twice, once in a plain chat and once with the Storybook MCP connected — the context is the only variable — then the plain chat's CSS goes into a scaffolded workspace and `nx stylelint` fails on it: context steers, a gate catches what slips through (and the gate's limits are named, not hidden)",
           'What participants learn in two days, and what they do not',
         ],
         stretch:
@@ -413,13 +417,13 @@ const DAYS: Day[] = [
         title: 'Show & tell and transfer to "My DS"',
         format: 'Presentation + discussion',
         why: "The participant's own system is the real goal.",
-        pages: [L.checkYourOwn, L.readiness],
+        pages: [L.checkYourOwn, L.storybookReadiness, L.readiness],
         done: 'Everyone leaves with a next step for their own design system, and a follow-up channel is set up.',
         bullets: [
           'Cohorts have up to 8 participants, so each person gets strictly 3 minutes (up to 8 participants, 24 minutes in total). Show your component, one prompt that worked and one that failed. The remaining time goes to the trainer synthesis, the workspace anatomy (17:00–17:15), the transfer self-check (17:15–17:27), the outlook and the exit round',
           'Trainer synthesis: prompt patterns that worked, anti-patterns, when Claude fails, how to deal with drift',
           'Workspace anatomy (15 min), what makes the loop portable, file by file: `.mcp.json` (the servers), `CLAUDE.md`/`AGENTS.md` (the working agreement), `.claude/skills/` (`atelier-component`, `uianatomy-mcp`, `figma-workspace-architect`, the Storybook skills), `tools/design-contracts/` plus `contracts.config.json` (the gate, copy as is), `.storybook/main.ts` (addon-vitest, addon-a11y, addon-themes), the `package.json` scripts (`verify`, `check:*`, `figma:snapshot`); what to copy into your own repo, in which order',
-          'Transfer (12 min): run the self-check from /design-principles#check-your-own on your own design system and pick one finding — the fix is your written next step, not room work',
+          'Transfer (12 min): run the self-check from /design-principles#check-your-own on your own design system and pick one finding; if your team already has a Storybook, you may run the self-check at /storybook-readiness#self-check instead — the fix is your written next step, not room work',
           'Outlook: productive use in your own repo; the anatomy above is the checklist',
         ],
         stretch:

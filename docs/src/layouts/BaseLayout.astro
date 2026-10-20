@@ -120,6 +120,7 @@ const GROUP_HREFS = {
     '/install',
     '/figma',
     '/readiness',
+    '/storybook-readiness',
     '/prompts',
     '/a11y-workflow',
     '/troubleshooting',
@@ -191,6 +192,7 @@ const BREADCRUMB_LABELS: Record<string, string> = {
   troubleshooting: 'Troubleshooting',
   figma: 'Figma workflow',
   readiness: 'Readiness checklist',
+  'storybook-readiness': 'Storybook readiness',
   tutorial: 'Figma to code',
   'design-to-code': 'Design to code',
   storybook: 'Storybook',
@@ -603,6 +605,13 @@ const breadcrumbSchema = {
               >
                 <Icon name="check_circle" class="docs-nav-link-icon" />
                 Readiness checklist
+              </a>
+              <a
+                href="/storybook-readiness"
+                class={`docs-nav-link${isActive('/storybook-readiness') ? ' active' : ''}`}
+              >
+                <Icon name="check_circle" class="docs-nav-link-icon" />
+                Storybook readiness
               </a>
               <a
                 href="/prompts"

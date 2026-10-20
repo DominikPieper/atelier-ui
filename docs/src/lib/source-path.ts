@@ -43,6 +43,7 @@ const FLAT_PAGES = new Set<string>([
   'runbook',
   'schulung',
   'storybook',
+  'storybook-readiness',
   'tokens',
   'troubleshooting',
   'tutorial',
