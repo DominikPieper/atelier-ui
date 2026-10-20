@@ -58,13 +58,13 @@ const COMPONENT_CHECKS: Check[] = [
     id: 'closed-values',
     title: 'Closed value sets are visible in the Inputs block',
     severity: 'Blocks the agent',
-    what: "A prop that takes one of a few values shows those values in <code>docs-show</code>. An inline union (<code>'sm' | 'md'</code>) is printed in full. A type alias (<code>ToastVariant</code>) is printed as its name only.",
-    why: 'The agent copies values from the Inputs block. When it sees only <code>variant?: ToastVariant</code>, the values are nowhere in the component’s entry except in the story snippets, and only the first three stories that have a snippet show code. It then writes <code>size="large"</code>.',
-    how: "<code>docs-show</code> on a component whose input is typed with an alias, and on one typed with an inline union. Atelier has both. AtlButton used to print <code>size?: AtlButtonSize;</code> and now prints <code>size?: \"sm\" | \"md\" | \"lg\";</code>, because its input is typed <code>input&lt;'sm' | 'md' | 'lg'&gt;('md')</code> instead of <code>input&lt;AtlButtonSize&gt;('md')</code>. AtlToast still prints <code>variant?: ToastVariant;</code>.",
+    what: "A prop that takes one of a few values shows those values in <code>docs-show</code>. An inline union (<code>'sm' | 'md'</code>) is printed in full. A type alias (<code>AtlButtonSize</code>) is printed as its name only.",
+    why: 'The agent copies values from the Inputs block. When it sees only <code>size?: AtlButtonSize</code>, the values are nowhere in the component’s entry except in the story snippets, and only the first three stories that have a snippet show code. It then writes <code>size="large"</code>.',
+    how: "<code>docs-show</code> on a component whose input is typed with an alias, and on one typed with an inline union. Atelier had both. AtlButton used to print <code>size?: AtlButtonSize;</code> and now prints <code>size?: \"sm\" | \"md\" | \"lg\";</code>, because its input is typed <code>input&lt;'sm' | 'md' | 'lg'&gt;('md')</code> instead of <code>input&lt;AtlButtonSize&gt;('md')</code>. Atelier has since given the same treatment to AtlToast, AtlChat, AtlChatMessage, AtlIcon <code>size</code> and the table header, so no short value set prints as a bare alias any more. One alias remains on purpose: AtlIcon <code>name</code> has 25 values, so it prints <code>name: AtlIconName;</code> and its JSDoc line says where the full list is (the <code>AllIcons</code> story). Customers will find the same defect in their own libraries; check for it.",
     fix: [
       'Prefer the inline union in the input’s type, or list the values in the input’s JSDoc line (<code>/** Size of the button: sm, md or lg. */</code>). JSDoc text is printed as written.',
       'Keep a shared alias if several components use it, and still name the values in the comment.',
-      'Do not count on <code>argTypes</code> with <code>options</code> in the stories: AtlIcon declares <code>options</code> for size and the Inputs block shows only <code>size?: AtlIconSize;</code>; the values reach the agent through the JSDoc line, not through <code>argTypes</code>.',
+      'Do not count on <code>argTypes</code> with <code>options</code> in the stories: AtlIcon declares <code>options</code> for name and the Inputs block shows only <code>name: AtlIconName;</code>; the values reach the agent through the JSDoc line, not through <code>argTypes</code>.',
     ],
   },
   {
@@ -213,7 +213,7 @@ const NOT_READ: { source: string; where: string; consequence: string }[] = [
       '<code>argTypes</code> (<code>control</code>, <code>options</code>)',
     where: 'The Controls panel.',
     consequence:
-      'Not in the Inputs block. AtlIcon declares <code>options</code> for size in its meta; the block shows <code>AtlIconSize</code>.',
+      'Not in the Inputs block. AtlIcon declares <code>options</code> for name in its meta; the block shows <code>AtlIconName</code>.',
   },
   {
     source: '<code>parameters.design</code> (Figma links)',

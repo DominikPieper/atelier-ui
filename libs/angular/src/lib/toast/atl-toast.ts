@@ -131,7 +131,9 @@ export class AtlToastService {
 })
 export class AtlToast {
   /** Semantic color variant. */
-  readonly variant = input<ToastVariant>('default');
+  readonly variant = input<
+    'default' | 'success' | 'warning' | 'danger' | 'info'
+  >('default');
 
   /** Whether to show a dismiss button. */
   readonly dismissible = input(true);

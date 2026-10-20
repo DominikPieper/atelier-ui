@@ -328,7 +328,7 @@ export class AtlTh {
   readonly sortable = input(false);
 
   /** Current sort direction. Fully controlled — the consumer owns this state. */
-  readonly sortDirection = input<AtlSortDirection>(null);
+  readonly sortDirection = input<'asc' | 'desc' | null>(null);
 
   /** Text alignment of the header cell content. */
   readonly align = input<'start' | 'center' | 'end'>('start');
@@ -340,7 +340,7 @@ export class AtlTh {
    * Emits when the header is clicked.
    * Cycles: `null` → `'asc'` → `'desc'` → `null`.
    */
-  readonly sort = output<AtlSortDirection>();
+  readonly sort = output<'asc' | 'desc' | null>();
 
   /** @internal */
   protected readonly ariaSort = computed(() => {

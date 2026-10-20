@@ -12,7 +12,6 @@ import {
   signal,
   ViewEncapsulation,
 } from '@angular/core';
-import type { AtlBreadcrumbsSpec } from '../spec';
 import { ATL_BREADCRUMBS } from './atl-breadcrumbs.token';
 
 /**
@@ -67,7 +66,7 @@ import { ATL_BREADCRUMBS } from './atl-breadcrumbs.token';
 })
 export class AtlBreadcrumbs {
   /** Separator character shown between breadcrumb items. Default `/`. */
-  readonly separator = input<AtlBreadcrumbsSpec['separator']>('/');
+  readonly separator = input<string>('/');
 
   protected readonly separatorCssVar = computed(() => `'${this.separator()}'`);
 

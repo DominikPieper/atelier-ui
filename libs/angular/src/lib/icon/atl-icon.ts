@@ -5,7 +5,7 @@ import {
   input,
   ViewEncapsulation,
 } from '@angular/core';
-import type { AtlIconName, AtlIconSize } from '../spec';
+import type { AtlIconName } from '../spec';
 import {
   ATL_ICON_GEOMETRY,
   ATL_ICON_STROKE_WIDTH,
@@ -58,10 +58,15 @@ import {
   },
 })
 export class AtlIcon {
-  /** The icon to render. Required. */
+  /**
+   * The icon to render. Required. One of the names in `AtlIconName`
+   * (`spec.ts`); the AtlIcon `AllIcons` story renders every one of them.
+   * Kept as a named type, not an inline union: the set is large and grows
+   * with the icon geometry.
+   */
   readonly name = input.required<AtlIconName>();
   /** Icon size: `sm` 16px, `md` 20px, `lg` 24px. The same 24-unit geometry is scaled. */
-  readonly size = input<AtlIconSize>('md');
+  readonly size = input<'sm' | 'md' | 'lg'>('md');
   /**
    * Accessible label. When provided, the icon is announced as an image with
    * this label. When omitted, the icon is hidden from assistive tech.

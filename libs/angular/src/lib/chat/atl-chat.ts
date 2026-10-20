@@ -16,11 +16,6 @@ import {
 } from '@angular/core';
 import { A11yModule } from '@angular/cdk/a11y';
 import { NgTemplateOutlet } from '@angular/common';
-import type {
-  AtlChatMessageRole,
-  AtlChatStatus,
-  AtlChatVariant,
-} from '../spec';
 import { ATL_CHAT } from './atl-chat.token';
 import { AtlIcon } from '../icon/atl-icon';
 
@@ -134,13 +129,13 @@ let nextId = 0;
 })
 export class AtlChat {
   /** Layout variant. */
-  readonly variant = input<AtlChatVariant>('drawer');
+  readonly variant = input<'drawer' | 'popup' | 'inline'>('drawer');
 
   /** Whether the chat is open. Used by drawer/popup; ignored by inline. Two-way bindable via [(open)]. */
   readonly open = model(false);
 
   /** Connection / response status. Drives badge color in header and disables input while streaming. */
-  readonly status = input<AtlChatStatus>('idle');
+  readonly status = input<'idle' | 'streaming' | 'error'>('idle');
 
   /** @internal — referenced by AtlChatHeader via ATL_CHAT token for aria-labelledby. */
   readonly headerId = `atl-chat-header-${nextId++}`;
@@ -321,7 +316,7 @@ export class AtlChatMessages {
 })
 export class AtlChatMessage {
   /** Sender of the message. Drives bubble alignment and color. */
-  readonly role = input<AtlChatMessageRole>('assistant');
+  readonly role = input<'user' | 'assistant' | 'system'>('assistant');
 
   /** Marks the message as failed (red dashed border, used in error state). */
   readonly failed = input(false);

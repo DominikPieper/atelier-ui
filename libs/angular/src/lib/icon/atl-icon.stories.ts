@@ -5,6 +5,7 @@ import { AtlIcon } from './atl-icon';
 import { metadata } from '@atelier-ui/spec/metadata/icon.metadata';
 const ICON_NAMES = [
   'success',
+  'check',
   'warning',
   'danger',
   'info',
@@ -13,6 +14,8 @@ const ICON_NAMES = [
   'chevron-down',
   'chevron-left',
   'chevron-right',
+  'chevron-double-left',
+  'chevron-double-right',
   'sort-asc',
   'sort-desc',
   'arrow-right',
@@ -24,6 +27,7 @@ const ICON_NAMES = [
   'delete',
   'close',
   'more',
+  'person',
   'default-toast',
 ] as const;
 
