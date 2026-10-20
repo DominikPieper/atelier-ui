@@ -40,12 +40,11 @@ export const ATL_TABLE = new InjectionToken<AtlTableContext>('ATL_TABLE');
  *     </atl-tr>
  *   </atl-thead>
  *   <atl-tbody [empty]="rows.length === 0" [colSpan]="2">
- *     @for (row of rows; track row.id) {
- *       <atl-tr selectable [selected]="selection.has(row.id)" (selectedChange)="toggle(row.id, $event)">
- *         <atl-td>{{ row.name }}</atl-td>
- *         <atl-td>{{ row.status }}</atl-td>
- *       </atl-tr>
- *     }
+ *     <!-- Repeat one row per item with Angular control flow: `@for (row of rows; track row.id)`. -->
+ *     <atl-tr selectable [selected]="selection.has(row.id)" (selectedChange)="toggle(row.id, $event)">
+ *       <atl-td>{{ row.name }}</atl-td>
+ *       <atl-td>{{ row.status }}</atl-td>
+ *     </atl-tr>
  *     <div atlTableEmpty>No results found.</div>
  *   </atl-tbody>
  * </atl-table>
@@ -165,9 +164,8 @@ export class AtlThead {}
  * Usage:
  * ```html
  * <atl-tbody [empty]="rows.length === 0" [colSpan]="3">
- *   @for (row of rows; track row.id) {
- *     <atl-tr><atl-td>{{ row.name }}</atl-td></atl-tr>
- *   }
+ *   <!-- Repeat one row per item with Angular control flow: `@for (row of rows; track row.id)`. -->
+ *   <atl-tr><atl-td>{{ row.name }}</atl-td></atl-tr>
  *   <div atlTableEmpty>No results found.</div>
  * </atl-tbody>
  * ```
