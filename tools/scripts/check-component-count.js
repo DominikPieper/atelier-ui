@@ -96,6 +96,11 @@ const SCAN_ROOTS = [
   { dir: 'talk', exts: ['.md'] },
   { dir: 'skills/atelier-design', exts: ['.md'] },
   { dir: 'skills/artboard-bridge', exts: ['.md'] },
+  // Storybook MDX is served verbatim to agents via the Storybook MCP
+  // (docs-list / docs-show); R-223 was a hand-typed "22" in introduction.mdx.
+  { dir: 'libs/angular/src', exts: ['.mdx'] },
+  { dir: 'libs/react/src', exts: ['.mdx'] },
+  { dir: 'libs/vue/src', exts: ['.mdx'] },
   {
     files: [
       'plan/ai-readiness.md',
