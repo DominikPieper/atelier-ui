@@ -178,19 +178,21 @@ const DAYS: Day[] = [
         format: 'Hands-on, everyone in sync',
         why: 'Early proof that the loop holds.',
         pages: [L.tutorial, L.parityReport],
-        done: `The ${TARGET.name} runs, and the parity report is present and has been read, not just "green".`,
+        done: `The ${TARGET.name} runs, and the parity report is present, has been read, not just "green", and every finding is labelled code or Figma.`,
         bullets: [
           `The official /tutorial: Figma → MCP → token-exact code in 4 steps`,
           `Participants prompt Claude in the cohort's framework along exactly that guide: compose a ${TARGET.name} from ${TARGET.parts} — no change to an existing component API, but composition from existing building blocks`,
           'Important: do not type the code yourself, prompt it',
           'Read the parity report line by line before calling it done',
+          'Label every finding with one of two labels: code (the code has to change) or Figma (the master has to change)',
         ],
         stretch:
           'Change one token binding in the prompt (for example the card padding) and predict what the parity report will say before you run it.',
         recap:
-          'What did the parity report compare, and what did it not compare?',
+          'What did the parity report compare, and what did it not compare? Which findings were code, which were Figma?',
         trainer: [
           'The tutorial stays short on contracts: its verify step only runs `npm run check:contracts` and `npm run check:stories` as offline gates against the scaffolded workspace. Participants do not author a contract or read its finding codes in depth — that arrives on Day 2.',
+          'Two labels only on Day 1, code and Figma, applied inside the existing line-by-line reading (no extra time): for each finding, which side has to change? Do not teach a "contract" label here, the contract is not taught until Day 2 Block 02. A finding that fits neither (a mismatch someone chose on purpose) is parked with "not code, not Figma, we will name it on Day 2", and is not "fixed" in code. The tutorial prompt asks Claude for the same two-way split.',
         ],
       },
       {
@@ -244,14 +246,14 @@ const DAYS: Day[] = [
         format: 'Hands-on, no guidance',
         why: 'Most teams write application code against components that already exist, so this is the one case the first four blocks have not yet run alone.',
         pages: [L.screenFromStorybook, L.mcpServers],
-        done: 'A Team directory screen runs and behaves as the brief says, every prop in it has a source in `docs-show` (or was removed), and `npm run lint`, `npm run check:stylelint` and `npm run check:format` exit 0.',
+        done: 'A Team directory screen runs and behaves as the brief says, every prop in it has a source in `docs-show` (or was removed), and `npm run lint`, `npm run check:stylelint` and `npm run check:format` exit 0 (on Angular, `npm run build` too).',
         bullets: [
           'The page /screen-from-storybook is the brief: one screen, a Team directory with a search field, a role select, an invite button, a table with a status badge per row and pagination. No Figma frame in this block. The only source of information about the components is the Storybook MCP (`docs-list`, `docs-show`, `docs-show-story`)',
-          'Opener (inside the first 5 minutes): the trainer runs one live `docs-show` on AtlTable and points at where things live: the usage example in the description, the Inputs block, the first three stories with code, the rest by name only (`docs-show-story` for those). The page has the same walk-through under "What the Storybook MCP gives you, and what it does not"',
+          'Opener (inside the first 5 minutes): the trainer runs one live `docs-show` on AtlTable and points at where things live: the Inputs block, the first three stories with code, the rest by name only (`docs-show-story` for those), and on Angular the usage example in the description. React and Vue have no component description, and their first three stories differ (on Vue they are Empty State, Sticky Header and Playground), so `Sortable` and `Empty State` come from `docs-show-story` there. The page has the same walk-through under "What the Storybook MCP gives you, and what it does not"',
           'Four rules: look before you write (`docs-list`, then `docs-show`, before the first line of code); every prop has a source in the `docs-show` output; no hand-built element where a library component exists; no raw colours, only `--ui-*` tokens in a plain `.css` file',
           'There are no steps: the page gives the brief, the starter prompt, the gates and the clock, and nothing about how to proceed. Where the agent invents a prop or builds its own badge, you notice it and steer it',
           'Serve with `npm start` (app on `localhost:4200`) and use the screen the way a user would: type in the search, change the role, page forward, filter until nothing matches',
-          'Gates, run as exit codes: `npm run lint` (on Angular including the two Atelier template rules), `npm run check:stylelint`, `npm run check:format`, on Angular also `npm run build` (strict templates fail on an unknown input). They do not see colours outside the `.css` file and they do not check the running app for accessibility: say so out loud',
+          'Gates, run as exit codes: `npm run lint` (on Angular including the two Atelier template rules), `npm run check:stylelint`, `npm run check:format` (`npm run format` only as the fix when it fails), on Angular also `npm run build` (strict templates fail on an unknown input; on React and Vue the build does not type-check props). They do not see colours outside the `.css` file, they pass pixel spacing and named colours inside it, nothing detects a hand-built twin of a library component, and they do not check the running app for accessibility: say so out loud',
           'Audit: paste the receipts prompt from the page, have the agent print the `docs-show` passage behind every prop, and spot-check three of them yourself',
         ],
         stretch:
@@ -369,7 +371,7 @@ const DAYS: Day[] = [
           'The contract lives in your own workspace under `workshop-<fw>/src/contracts/` — there is no shared master it could land in by accident. The component declares its prop types directly; there is no separate `Atl*Spec` interface file (ADR-0121)',
           'Your own Figma node needs a snapshot in your own workspace — with the bridge connected: `npm run figma:snapshot` (runs `node tools/design-contracts/bin/figma-snapshot-contracts.mjs --file <your duplicate key>`; first replace the `<YOUR_FIGMA_FILE_KEY>` placeholder in the script in `package.json` with your own key if it is not already set). The contracts folder and the output come from `contracts.config.json`: it reads `workshop-<fw>/src/contracts/` and writes `tools/figma/snapshot.json` — in the workspace that is your own file, pre-filled only with the AtlButton example, not a shared Atelier snapshot you could damage',
           'Check with `npm run check:contracts` (`node tools/design-contracts/bin/check-contracts.mjs`; framework, contracts, story roots and snapshot are set in `contracts.config.json`). Without a freshly refreshed snapshot your component is missing from `tools/figma/snapshot.json` and the check reports `[NO-MASTER]` (a warning) instead of failing. `npm run check:contracts -- --emit <folder>` additionally writes the codeSpec fragment (componentAPI, metadata, tokens) for Block 04',
-          '`/verify` runs all five gates (`check:format`, `check:stylelint`, `check:contracts`, `check:unit`, `check:stories`); the two you have not met yet, formatting and CSS lint, are fixed by prompt, not by hand',
+          '`/verify` runs all five gates (`check:format`, `check:stylelint`, `check:contracts`, `check:unit`, `check:stories`); the two you ran by hand in Day 1 Block 05, formatting and CSS lint, are fixed by prompt here, not by hand',
           'Iterate until the prop table fits',
         ],
         stretch:
@@ -419,12 +421,16 @@ const DAYS: Day[] = [
           'ARIA requirements, focus ring via tokens, hover/active/disabled states',
           'Dark-mode toggle via the theme control in the toolbar (`withThemeByDataAttribute` from addon-themes, sets `data-theme` — exactly the selector `tokens.css` switches on). Backgrounds are canvas colours, not a theme; confusing the two was the bug ADR-0142 removed. Say it honestly: axe runs only in light mode in `check:stories` — the toggle is a preview, not test coverage',
           'Assemble your own codeSpec before parity runs: `npm run check:contracts -- --emit <folder>` (the gate from Block 02; `/build-your-own` shows the same command) yields componentAPI, metadata, tokens — nothing more. For accessibility, open the story in the running Storybook, copy the story root element\'s outerHTML in DevTools and pass it as `html` with `mapToCodeSpec: true` to `figma_scan_code_accessibility`. `figma_check_design_parity` needs the connected Desktop Bridge for this — without it the loop ends after `check:contracts` + `storybook-test` (no snapshot, `[NO-MASTER]`, no parity call); that is a degraded run, not "just carry on"',
+          'Triage every parity finding with three labels: code, Figma and contract. Code and Figma are the two from Day 1 Block 02; contract is new today, now that Block 02 has taught it: a mismatch chosen on purpose and recorded in the contract file (`figmaOnly`, `codeOnly`, `axisMap`, `probes`) is neither a code bug nor a Figma bug, and "fixing" it in code is the classic mislabel',
           'Test `figma_check_design_parity` once, on purpose, against an incomplete codeSpec: look closely at the node, variant/state and the codeSpec fields you passed (visual, spacing, typography, tokens, componentAPI, accessibility, metadata), then falsify a spacing value deliberately — only with complete fields must the report flag the deviation; fields you did not pass are not compared. The report has no "sections compared" list: its codeData block echoes what you passed and summary.categories names only categories with findings, so the score rises when a section is left out. Pass the component set for componentAPI and the variant you built for visual, spacing and typography. A thinly filled codeSpec (typically only componentAPI + metadata + tokens + accessibility) is the normal case, not a complete one',
         ],
         stretch:
           'Find one finding axe cannot catch and say which of the three checks would catch it.',
         recap:
           'Which findings were code, which were Figma, which were contract? Which one did you almost mislabel?',
+        trainer: [
+          'Introduce "contract" as the third triage label here (Day 1 Block 02 used only code and Figma). Anchor it on Block 02: the contract file holds exactly the mismatches the team chose on purpose. Timings are unchanged; the labelling stays inside the 3-minute triage row.',
+        ],
       },
       {
         num: '05',
@@ -438,7 +444,7 @@ const DAYS: Day[] = [
           'Cohorts have up to 8 participants, so each person gets strictly 3 minutes (up to 8 participants, 24 minutes in total). Show your component, one prompt that worked and one that failed. The remaining time goes to the trainer synthesis, the workspace anatomy (17:00–17:15), the transfer self-check (17:15–17:27), the outlook and the exit round',
           'Trainer synthesis: prompt patterns that worked, anti-patterns, when Claude fails, how to deal with drift',
           'Workspace anatomy (15 min), what makes the loop portable, file by file: `.mcp.json` (the servers), `CLAUDE.md`/`AGENTS.md` (the working agreement), `.claude/skills/` (`atelier-component`, `uianatomy-mcp`, `figma-workspace-architect`, the Storybook skills), `tools/design-contracts/` plus `contracts.config.json` (the gate, copy as is), `.storybook/main.ts` (addon-vitest, addon-a11y, addon-themes), the `package.json` scripts (`verify`, `check:*`, `figma:snapshot`); what to copy into your own repo, in which order',
-          'Transfer (12 min): run the self-check from /design-principles#check-your-own on your own design system and pick one finding; if your team already has a Storybook, you may run the self-check at /storybook-readiness#self-check instead — the fix is your written next step, not room work',
+          'Transfer (12 min): in the room, start the self-check from /design-principles#check-your-own on your own design system and pick one finding; if your team already has a Storybook, you may start the self-check at /storybook-readiness#self-check instead. Both pages time-box the full run at 30 minutes: the full run and the fix come after the course, and the finding you pick is your written next step',
           'Outlook: productive use in your own repo; the anatomy above is the checklist',
         ],
         stretch:

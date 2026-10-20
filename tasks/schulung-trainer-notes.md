@@ -187,8 +187,11 @@ alone.
 **Expected recap answers.** Compared: the sections the tutorial passed (likely
 `componentAPI`, `tokens`, `metadata`). Not compared: anything not passed (spacing,
 typography), plus everything a parity call never sees: dark mode, behaviour, keyboard.
+Labels (code or Figma only, no "contract" on Day 1; owner decision 2026-10-20): code, a
+literal that should be a token; Figma, a master value that is simply off.
 
-**Watch for.** Bridge red at 11:15 → rule R3 (trainer reads the frame once, shares the
+**Watch for.** A finding that fits neither label (a mismatch someone chose on purpose):
+park it, say "we name it on Day 2", and do not let anyone "fix" it in code. Bridge red at 11:15 → rule R3 (trainer reads the frame once, shares the
 data, marks the parity row degraded). "Prompt, do not type": watch for people editing
 the generated file by hand; send them back to the prompt.
 
@@ -305,22 +308,33 @@ CLI passthrough from the demo script, or saved screenshots.
    pagination), a starter prompt, the gates and the clock. Hints only as "which
    `docs-show` line says that?".
    Opener, inside the same 5 minutes: run one live `docs-show components-display-atltable`
-   and show where things live: the usage example in the description (it renders as code
-   since the JSDoc fix of 2026-10-20), the Inputs block (only `aria-label`, `size`,
-   `stickyHeader`, `variant`), the first three stories with code, the rest under "Other
-   Stories" by name only (`docs-show-story` with the id). The page section "What the
+   and show where things live (measured 2026-10-20, Angular): the usage example in the
+   description (it renders as code since the JSDoc fix of 2026-10-20), the Inputs block
+   (only `aria-label`, `size`, `stickyHeader`, `variant`), the first three stories with
+   code, the rest under "Other Stories" by name only (`docs-show-story` with the id).
+   React and Vue differ: no description or usage example (no component JSDoc), React
+   shows Default, Striped, Bordered, Vue shows Empty State, Sticky Header, Playground
+   (the first three with a snippet). `Sortable` is reachable only through
+   `docs-show-story` on both, `Empty State` on React too. This is the probe; there is no
+   separate one, and it stays inside the 5 minutes. The page section "What the
    Storybook MCP gives you, and what it does not" has the same walk-through for the room.
 2. The four rules: look before you write (`docs-list`, then `docs-show`, before any
    code); every prop has a source in the `docs-show` output or `docs-show-story`; no
    hand-built element where the library has a component; no raw colours, only `--ui-*`
    tokens in a plain `.css` file.
 3. The gates, as exit codes: `npm run lint` (on Angular it includes the two Atelier
-   template rules: an icon-only `atl-button` needs a name, a sub-component needs its
-   parent), `npm run check:stylelint`, `npm run check:format`; on Angular also
-   `npm run build` (strict templates fail on an input the component does not have). Name
-   the limits out loud: stylelint reads only `workshop-<fw>/src/**/*.css`, so a colour in
-   an inline `style`, an Angular `styles` array or a Vue `<style>` block passes it, and no
-   gate checks the running app for accessibility. `check:stories` renders stories, not the
+   template rules: an icon-only `atl-button` needs a name, `atl-option` needs its
+   `atl-select`; the table parts are not in the rule's list), `npm run check:stylelint`,
+   `npm run check:format` (`npm run format` only as the fix when it fails); on Angular also
+   `npm run build` (strict templates fail on an input the component does not have; the
+   Vue build skips type checking and the React build is Vite, so there only the receipts
+   audit catches an invented prop). Name the limits out loud: stylelint reads only
+   `workshop-<fw>/src/**/*.css`, so a colour in an inline `style`, an Angular `styles`
+   array or a Vue `<style>` block passes it; inside the css file it flags hex, rgb and hsl
+   but not named colours, `oklch()` or `color-mix()`, and it flags a spacing literal only
+   when a token holds the same value, so `padding: 13px` passes; nothing detects a
+   hand-built twin of a library component; and no gate checks the running app for
+   accessibility. `check:stories` renders stories, not the
    app; the stretch task (a story for the screen, then `check:stories`) is how a screen
    gets an axe run.
 4. The audit: the receipts prompt on the page makes the agent print the `docs-show`
@@ -334,11 +348,12 @@ CLI passthrough from the demo script, or saved screenshots.
 
 **Expected recap answers.** The agent broke rule 2 first (a prop or an input on a table
 part or `atl-option` that `docs-show` does not list on the main entry: the Inputs block
-never lists sub-component inputs such as `sortable` on `atl-th`; they are in the usage
-example and the stories, which the opener now shows) or rule 3 (a
+never lists sub-component inputs such as `sortable` on `atl-th`; on Angular they are in the usage
+example, everywhere in the `Sortable` story, which the opener now points at) or rule 3 (a
 hand-built badge or card); `npm run build` on Angular, the template lint rules, the
-receipts audit or the participant's own reading caught it. Stylelint catches a raw colour
-in the `.css` file; nothing but the grep on the page catches one elsewhere.
+receipts audit or the participant's own reading caught it. Stylelint catches a hex, rgb or hsl
+colour in the `.css` file; nothing but the greps on the page catches one elsewhere, or a
+named colour or pixel spacing anywhere.
 
 **Watch for.** Hard stop 16:55 (rule R6). The 40 build minutes are an estimate and
 nothing has been timed: if most seats are still on the table at minute 30, cut pagination
@@ -493,8 +508,8 @@ a duplicated file and can import the dev plugin.
    name the same command since 2026-10-14 (R-206).
 7. `tags: ['autodocs']` on the generated story, or there is no Docs tab.
 8. On the page since 2026-10-14 (R-219): `/verify` in Claude Code runs all five gates;
-   the two not met before, formatting and CSS lint, are cheap and mechanical, fix by
-   prompt.
+   the two first run by hand in Day 1 Block 05, formatting and CSS lint, are cheap and
+   mechanical, fix by prompt.
 9. First five minutes of the 11:25 row on the projector (R-208): `button.contract.ts` and
    `types.ts`, the `ComponentContract` shape Claude generates against; green seats met it
    in the bridge exercise. The generation row is 11:25–11:50.
@@ -592,7 +607,9 @@ and theme toolbar; terminal + DevTools for the codeSpec; two parity reports for 
    `summary.categories` (only categories with findings). Variant node for geometry,
    component set for `componentAPI` (a variant has no component properties).
 7. Triage: every finding one label, code / Figma / contract, three minutes, the same
-   labels: Day 1 Block 05 no longer practises them (the kata's step 7, optional homework, does), so teach them here.
+   labels, except that "contract" is new today: Day 1 Block 02 practised only code and
+   Figma (inside the line-by-line reading, no extra time). Introduce "contract" now, anchored
+   on Block 02: the mismatches chosen on purpose and recorded in the contract file.
 
 **Expected recap answers.** Code: a missing `aria-label` on the close button, a literal
 colour. Figma: an unbound fill, a wrong layer name. Contract: the `state` axis. Almost
@@ -620,9 +637,10 @@ before 2026-10-14 (buffer 16:15–16:25).
    session without `/clear`; drift: it starts in Figma (unbound value) or in the
    contract (an undocumented mismatch), and the parity call only sees passed sections.
 3. Transfer, 17:15–17:27 (decided 2026-10-14, R-212): `/design-principles#check-your-own`
-   is written as a **30-minute** exercise (run, pick one finding, fix, re-run); the block
-   scopes it to run it and pick the one finding; the fix is the next step they write
-   down. Second choice, same scope and same output: a participant whose team already
+   is written as a **30-minute** exercise (run, pick one finding, fix, re-run), and so is
+   `/storybook-readiness#self-check`; in the room (12 minutes) they start it and pick the
+   one finding. The full run and the fix come after the course; the finding is the next
+   step they write down. Second choice, same scope and same output: a participant whose team already
    has a Storybook runs `/storybook-readiness#self-check` instead and picks one finding
    from it. `/readiness` Part B (Complete,
    Sound, Synchronized, Extensible, AI-ready) is the other lens for a next step.

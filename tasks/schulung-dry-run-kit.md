@@ -188,8 +188,8 @@ Playwright Chromium is installed, and anyone still red has a rescue path.
   and what it was.
 
 **Block 02 — Mini-loop: first success** (hands-on, everyone in sync).
-_Done when:_ the Settings Card runs, and the parity report is present and has
-been read, not just "green".
+_Done when:_ the Settings Card runs, and the parity report is present, has been
+read, not just "green", and every finding is labelled code or Figma.
 
 - Follow `/tutorial`: Figma → MCP → token-exact code in 4 steps; compose the
   Settings Card from `AtlCard` / `AtlInput` / `AtlToggle` / `AtlButton` in the
@@ -202,6 +202,8 @@ been read, not just "green".
 - **STOP — read the parity report line by line** before calling it done. Log
   what it compared and what it did not (the block's recap question). A green
   report you did not read is the failure case this block exists to catch.
+  Label every finding **code or Figma** (two labels only; "contract" arrives on
+  Day 2). Log any finding that fit neither label and how the room handled it.
 - Whether the tutorial's `figma_check_design_parity` call needs the connected
   bridge: not specified on /schulung for this block (it is stated for Day 2
   Block 04) — record what you hit.
@@ -397,7 +399,8 @@ the reason stated.
 
 **Block 04 — Verify: a11y, states, parity**
 _Done when:_ `storybook-test` with axe is green, and every parity finding is
-triaged (code / Figma / contract).
+triaged (code / Figma / contract; contract is new today, Day 1 used code and
+Figma).
 
 - Three-step a11y check: `figma_audit_component_accessibility` (needs the
   bridge), the Storybook a11y panel (axe-core), a keyboard walkthrough. Golden
@@ -433,7 +436,8 @@ triaged (code / Figma / contract).
   `storybook-test` (no snapshot, `[NO-MASTER]`, no parity call): the page calls
   that a **degraded run, not "just carry on"**. If you hit that, log the run as
   degraded.
-- Triage every parity finding: code, Figma or contract. Log which one you
+- Triage every parity finding: code, Figma or contract ("contract" is the new
+  third label here). Log which one you
   almost mislabelled (the recap question). Finding codes:
   `/design-to-code#finding-codes`.
 

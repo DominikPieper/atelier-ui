@@ -37,14 +37,14 @@ const SCAFFOLD: Record<
     mountHint:
       'add TeamDirectoryComponent to the imports array in workshop-angular/src/app/app.ts and replace <app-nx-welcome> with <app-team-directory> in app.html',
     lintNote:
-      'On Angular, `npm run lint` also runs two Atelier template rules: an icon-only `<button atl-button>` needs an accessible name, and a sub-component such as `atl-option` or `atl-th` must sit inside its parent.',
+      'On Angular, `npm run lint` also runs two Atelier template rules: an icon-only `<button atl-button>` needs an accessible name, and a sub-component such as `atl-option` must sit inside its parent (`atl-select`). The parent check covers a fixed list of parts (select, tabs, accordion, dialog, drawer, menu and a few more) and does not include the table parts: `atl-th` or `atl-tr` outside an `atl-table` passes it.',
   },
   React: {
     pkg: '@atelier-ui/react',
     file: 'workshop-react/src/components/TeamDirectory.tsx',
     css: 'workshop-react/src/components/TeamDirectory.css',
     mountHint:
-      'import TeamDirectory in workshop-react/src/app/app.tsx and replace the <NxWelcome /> placeholder with it',
+      'import TeamDirectory in workshop-react/src/app/app.tsx, replace the <NxWelcome /> placeholder with it and remove the now-unused NxWelcome import (an unused import fails npm run lint)',
     lintNote:
       'On React, `npm run lint` runs the framework rules (including jsx-a11y) but not the two Atelier template rules, which exist for Angular templates only.',
   },
@@ -53,7 +53,7 @@ const SCAFFOLD: Record<
     file: 'workshop-vue/src/components/TeamDirectory.vue',
     css: 'workshop-vue/src/components/TeamDirectory.css',
     mountHint:
-      'import TeamDirectory in workshop-vue/src/views/HomeView.vue and replace the <NxWelcome /> placeholder with it',
+      'import TeamDirectory in workshop-vue/src/views/HomeView.vue, replace the <NxWelcome /> placeholder with it and remove the now-unused NxWelcome import (an unused import fails npm run lint)',
     lintNote:
       'The two Atelier template rules exist for Angular templates only; on Vue `npm run lint` runs the framework rules.',
   },
@@ -74,6 +74,9 @@ Before you write any code:
 2. A prop, input, slot or event may be used only if it appears in the
    docs-show output (its code examples count) or in docs-show-story.
    If something you want is not documented, do not use it. Tell me.
+3. docs-show prints full code for only some stories and lists the rest by
+   name. If you need one of those (Sortable, Empty State), call
+   docs-show-story with its id. Do not guess what a story does from its name.
 
 The screen:
 - A heading "Team directory".
@@ -92,7 +95,8 @@ Rules:
 - No hand-built element where the library has a component. Plain layout
   elements (div, h1) are fine.
 - Styles go in ${s.css} (a separate .css file), only
-  var(--ui-*) tokens: no hex, rgb or hsl colours, no pixel spacing.
+  var(--ui-*) tokens for colour and spacing: no hex, rgb, hsl or named
+  colours, no pixel values for spacing.
 - Save the screen as ${s.file}. Then mount it so the
   app shows it instead of the Nx welcome page: ${s.mountHint}.
 
@@ -132,10 +136,15 @@ const MCP_SHOW_SHAPE = `## Inputs        aria-label, size, stickyHeader, variant
 
 const GATES = `npm run lint > lint.out 2>&1; echo $?
 npm run check:stylelint > stylelint.out 2>&1; echo $?
-npm run format
 npm run check:format > format.out 2>&1; echo $?`;
 
-const GREP = String.raw`grep -nE '#[0-9a-fA-F]{3,8}\b|rgba?\(|hsla?\(' <the screen file>`;
+const GATES_ANGULAR = `npm run build > build.out 2>&1; echo $?`;
+
+const FORMAT_FIX = `npm run format
+npm run check:format > format.out 2>&1; echo $?`;
+
+const GREP = String.raw`grep -nE '#[0-9a-fA-F]{3,8}\b|rgba?\(|hsla?\(|oklch\(|oklab\(|color-mix\(' <the screen file> <the css file>
+grep -nE '[0-9.]+(px|rem|em)\b' <the screen file> <the css file>`;
 
 const FAIL: Record<
   number,
@@ -153,7 +162,7 @@ const FAIL: Record<
     items: [
       'The agent starts writing without calling `docs-list`: stop it, paste the first rule again, and ask it to name the components it will use before it continues.',
       'The agent reaches for a component the library does not have (a `Layout`, `Container`, `SearchBar` or `DataGrid`): it is not in `docs-list`, so it does not exist. The brief needs only what the list contains.',
-      'The agent uses an input on a table part (`atl-th`, `atl-tr`) or on `atl-option` that the main entry does not list: sub-components are shown in the code examples, not always in the input table. Ask for the example it copied from.',
+      'The agent uses an input on a table part (`atl-th`, `atl-tr`) or on `atl-option` that the main entry does not list: sub-components are shown in the code examples, not in the input table. Ask for the example it copied from. If the shown stories do not contain it, have it call `docs-show-story` for the story that does (Sortable, Empty State).',
     ],
     recovery: `Stop. Do not write more code yet. Call docs-list on the Storybook MCP and
 give me the ids of the components you will use. Then call docs-show on each
@@ -176,7 +185,7 @@ anything else, and tell me which line you changed.`,
     items: [
       '`npm run lint` fails on a template rule: a sub-component is outside its parent, or an icon-only button has no name. Fix the structure, do not silence the rule.',
       '`check:stylelint` names a token that does not exist, or a raw colour: replace it with a documented `--ui-*` token. Look the token up in the Colors and Spacing docs entries of the same Storybook MCP.',
-      '`check:format` fails: run `npm run format`, then check again.',
+      '`check:format` fails: run `npm run format`, then run `npm run check:format` again.',
       'Angular only: `npm run build` fails on an unknown input. The agent invented a prop. Compare it with `docs-show`, then delete it.',
     ],
     recovery: `npm run lint > lint.out 2>&1; echo $?
@@ -295,6 +304,8 @@ anything else, and tell me which line you changed.`,
         <li>
           <strong>No raw colours.</strong> Every colour and every spacing is a
           <code>var(--ui-*)</code> token, in a plain <code>.css</code> file.
+          This is a rule you keep, not a gate that enforces it: the gates below
+          catch only part of it.
         </li>
       </ol>
       <p class="sfs-step-desc">
@@ -302,8 +313,9 @@ anything else, and tell me which line you changed.`,
         screen runs and behaves as the brief says, you can point to the
         <code>docs-show</code> passage behind every prop you can pick at random,
         and <code>npm run lint</code>, <code>npm run check:stylelint</code> and
-        <code>npm run check:format</code> all exit 0. Nobody gives you the
-        steps. The recap asks which rule the agent broke first.
+        <code>npm run check:format</code> all exit 0 (on Angular,
+        <code>npm run build</code> too). Nobody gives you the steps. The recap
+        asks which rule the agent broke first.
       </p>
     </section>
 
@@ -316,9 +328,9 @@ anything else, and tell me which line you changed.`,
       </div>
       <p class="sfs-step-desc">
         Three calls, shown on the table. The excerpts below are from the Angular
-        endpoint; React and Vue answer in the same shape for their own
-        framework. Knowing where each piece of information lives is most of rule
-        2.
+        endpoint. React and Vue answer for their own framework, but not with the
+        same content: the differences are listed after the three calls. Knowing
+        where each piece of information lives is most of rule 2.
       </p>
       <ol class="sfs-rules">
         <li>
@@ -330,16 +342,17 @@ anything else, and tell me which line you changed.`,
         </li>
         <li>
           <strong><code>docs-show components-display-atltable</code></strong>
-          has three places to read. The component description holds a usage
-          example, and that example is real code:
+          has three places to read. On Angular the component description holds a
+          usage example, and that example is real code:
           <Code
             code={MCP_SHOW_USAGE}
             lang="text"
             title="docs-show: description"
           />
           The <strong>Inputs</strong> block lists only what the main component
-          declares. The first three stories, Default, Striped and Bordered, come
-          with their full code. The rest are listed by name only:
+          declares. The first three stories that have a code snippet, here
+          Default, Striped and Bordered, come with their full code. The rest are
+          listed by name only:
           <Code
             code={MCP_SHOW_SHAPE}
             lang="text"
@@ -362,9 +375,11 @@ anything else, and tell me which line you changed.`,
         <li>
           <strong>Sub-component inputs are not in the Inputs block.</strong>
           <code>sortable</code> and <code>sortDirection</code> on
-          <code>atl-th</code> appear only in the usage example and in the
-          stories. Treat an attribute in an example as a documented source, and
-          name the example it came from.
+          <code>atl-th</code> appear on Angular in the usage example, and on
+          every framework in the <code>Sortable</code> story. On React and Vue
+          that story is only listed by name, so you reach it with
+          <code>docs-show-story</code>. Treat an attribute in an example as a
+          documented source, and name the example it came from.
         </li>
         <li>
           <strong>A story you need is under "Other Stories".</strong> Call
@@ -380,6 +395,40 @@ anything else, and tell me which line you changed.`,
         <li>
           <strong>The list description is not documentation.</strong> Open the
           entry before you decide a component fits.
+        </li>
+      </ul>
+      <p class="sfs-step-desc">
+        <strong style="color: var(--ui-color-text)"
+          >What differs per framework.</strong
+        >
+        Measured on 2026-10-20 for
+        <code>docs-show components-display-atltable</code> with the Storybook
+        CLI passthrough, which uses the same formatter as the hosted endpoint:
+      </p>
+      <ul class="sfs-rules">
+        <li>
+          <strong>Angular:</strong> a description with the usage example. It
+          shows <code>sortable</code> and <code>sortDirection</code> on
+          <code>atl-th</code>, and <code>[empty]</code> and
+          <code>[colSpan]</code> on <code>atl-tbody</code> with the
+          <code>atlTableEmpty</code> element. Stories shown: Default, Striped,
+          Bordered.
+        </li>
+        <li>
+          <strong>React:</strong> no description and no usage example, because
+          the component carries no JSDoc. Stories shown: Default, Striped,
+          Bordered, none of which has sorting or an empty state. The Props block
+          comes after the stories. For <code>Sortable</code> and
+          <code>Empty State</code>, call <code>docs-show-story</code>.
+        </li>
+        <li>
+          <strong>Vue:</strong> no description and no usage example either. The
+          Props and Slots blocks come first. The stories shown are Empty State,
+          Sticky Header and Playground, the first three with a code snippet;
+          Default, Striped and Bordered are listed by name only. Empty State
+          shows <code>:empty</code>, <code>:colSpan</code> and the
+          <code>#empty</code> slot; <code>Sortable</code> needs
+          <code>docs-show-story</code>.
         </li>
       </ul>
       <p class="sfs-step-desc">
@@ -515,10 +564,27 @@ anything else, and tell me which line you changed.`,
         <h2 id="sfs-gates" class="sfs-step-title">Run the gates</h2>
       </div>
       <p class="sfs-step-desc">
-        Three commands, in your workspace root. An exit code of 0 is the result,
-        not what scrolled by. Redirect the output and read the code afterwards.
+        Three commands, in your workspace root, and on Angular a fourth. An exit
+        code of 0 is the result, not what scrolled by. Redirect the output and
+        read the code afterwards.
       </p>
       <Code code={GATES} lang="shell" title="the gates" />
+      <div data-fw-panel="Angular">
+        <Code
+          code={GATES_ANGULAR}
+          lang="shell"
+          title="Angular only: the build"
+        />
+      </div>
+      <p class="sfs-step-desc" style="margin-top: 0.6rem">
+        If <code>check:format</code> fails, <code>npm run format</code> is the
+        fix. Run it, then the check again:
+      </p>
+      <Code
+        code={FORMAT_FIX}
+        lang="shell"
+        title="only when check:format fails"
+      />
       {FRAMEWORKS.map((fw, i) => <div data-fw-panel={fw} hidden={i !== 0}>
         <p class="sfs-step-desc" style="margin-top: 0.6rem">
           {SCAFFOLD[fw].lintNote}
@@ -530,24 +596,50 @@ anything else, and tell me which line you changed.`,
           <code>workshop-*/src/**/*.css</code>. A colour in an inline
           <code>style</code> attribute, in an Angular <code>styles</code> array
           or in a Vue <code>&lt;style&gt;</code> block passes it silently, which
-          is why the prompt asks for a separate <code>.css</code> file. Look for
-          stray literals yourself:
+          is why the prompt asks for a separate <code>.css</code> file. Inside
+          the css file it is narrower than rule 4:
         </p>
+        <ul>
+          <li>
+            Colours: it flags hex, <code>rgb()</code>/<code>rgba()</code> and
+            <code>hsl()</code>/<code>hsla()</code> literals. A named colour
+            (<code>red</code>), <code>oklch()</code> or <code>color-mix()</code>
+            with literal inputs is not flagged.
+          </li>
+          <li>
+            Spacing: a literal is flagged only when its value equals a token's
+            value in the matching family, and any literal length on a
+            <code>border*</code> property. <code>padding: 13px</code> is not
+            flagged. "No pixel spacing" is a rule you keep, not one a gate
+            enforces.
+          </li>
+        </ul>
+        <p>Look for stray literals yourself:</p>
         <Code
           code={GREP}
           lang="shell"
-          title="raw colours outside the css file"
+          title="raw colours and pixel values in your files"
         />
         <p>
-          And no gate checks the running app for accessibility.
+          No gate detects a hand-built twin either (a styled <code>span</code>
+          where <code>AtlBadge</code> exists): only the receipts audit and your
+          own reading do. And no gate checks the running app for accessibility.
           <code>check:stories</code> renders stories, not your app. The stretch
           task below is how a screen gets covered.
         </p>
       </Callout>
       <p class="sfs-step-desc" style="margin-top: 0.6rem">
-        On Angular, add <code>npm run build</code>: the scaffold compiles with
+        <strong style="color: var(--ui-color-text)"
+          >What catches an invented prop:</strong
+        >
+        on Angular, <code>npm run build</code>: the scaffold compiles with
         strict templates, so an input the component does not have fails the
-        build instead of being ignored.
+        build instead of being ignored. On Vue, the scaffold's Nx build skips
+        type checking, so <code>npm run build</code> does not catch it. On
+        React, <code>npm run build</code> bundles with Vite, which does not type
+        check either. On React and Vue the receipts audit in step 6 is what
+        catches an invented prop (the React and Vue build behaviour is read from
+        the generators, not run in a generated workspace).
       </p>
       <StepFail
         items={FAIL[5].items}

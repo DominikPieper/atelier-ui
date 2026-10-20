@@ -81,3 +81,8 @@ Rejected:
   `/storybook-readiness` teaches customers to check for.
 - Weakest point: React and Vue `docs-show` output, and whether their builds reject an unknown
   prop, were not inspected. The block is written for all three, verified for Angular only.
+
+**Update 2026-10-20 (same day).** The open owner question above was decided: Day 1 Block 02 now
+labels every parity finding `code` or `Figma`, and Day 2 Block 04 adds `contract` as the third
+label (contracts are not taught before Day 2 Block 02). See `/schulung` Day 1 Block 02 and Day 2
+Block 04.

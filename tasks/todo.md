@@ -56,6 +56,17 @@ brownfield Day 2 track only after cohort 1).
       comment; `\@for` / `&#64;for` render as junk), plus a page section on what `docs-show` gives and
       where its gaps are. Unverified: hosted output after deploy, React/Vue, all timings (R-040).
       Open owner question: Day 2 Block 04 parity labels lost their Day 1 practice — label in Block 02?
+- [x] **S4 Parity labels split (owner ok 2026-10-20).** Day 1 Block 02 labels each parity finding
+      "code or Figma" (contracts are not taught yet); Day 2 Block 04 adds "contract". Done when
+      `/schulung`, `/tutorial` (if it carries the verify step), run-of-show, trainer notes, outline and
+      both decks say so; timings unchanged.
+- [x] **S5 R-223** drop the hand-typed component count from the three `introduction.mdx`; widen
+      `check:component-count` to `libs/*/src/**/*.mdx`. Done when the gate fails on a planted number.
+- [x] **S6 R-222** AtlButton `variant`/`size` values visible in `docs-show` (all three frameworks);
+      `/storybook-readiness#closed-values` shows before/after instead of citing it as a live defect.
+- [ ] **S7 R-221** purpose reaches agents: spike first (how `purpose`, the class JSDoc,
+      `parameters.docs.description.component` and `story-description-source` relate after 5b4b5b00),
+      then owner-approved change + ADR.
 
 **Review 2026-10-20.** Verified: every checklist item read against real Storybook 10.6.0 Angular
 output (hosted MCP + CLI); the red stylelint run is real (3× `[RAW-COLOR]`, 1× `[UNDECLARED]`) but on

@@ -32,10 +32,10 @@ const COMPONENT_CHECKS: Check[] = [
     title: 'The component class has a JSDoc description',
     severity: 'Blocks the agent',
     what: 'The component class (or, for React and Vue, the component) carries a JSDoc comment whose text says what the component is, when to use it and what to know before using it. A short <code>Usage:</code> block with a fenced example is welcome.',
-    why: 'This text becomes the component’s <code>description</code> in the manifest. <code>docs-show</code> prints it under the heading, and <code>docs-list</code> prints its first 90 characters next to the id. A component without one is listed as a bare name, and the agent picks it by how the name sounds.',
+    why: 'This text becomes the component’s <code>description</code> in the manifest. <code>docs-show</code> prints it under the heading, and <code>docs-list</code> prints its first 90 characters next to the id (a <code>@summary</code> tag in the JSDoc, if you write one, is printed there in full instead). A component without one is listed as a bare name, and the agent picks it by how the name sounds.',
     how: 'Call <code>docs-list</code>. A line with no text after the id has no description. In the manifest report <code>components.html</code> (check S3) the component card carries the info “No description found”.',
     fix: [
-      'Write the JSDoc directly above the component class. Make the first sentence carry the purpose: the list cuts the text at 90 characters.',
+      'Write the JSDoc directly above the component class. Make the first sentence carry the purpose: the list cuts the description at 90 characters, unless you give it a <code>@summary</code> tag, which it prints untruncated.',
       'Add one fenced <code>html</code> (or <code>tsx</code>, <code>vue</code>) usage example. It is part of the description, so it reaches the agent verbatim.',
       'Do not rely on <code>parameters.docs.description.component</code> in the stories. The manifest reads the JSDoc above the <code>meta</code> object or on the component, not that parameter (see “What the agent does not read”).',
     ],
@@ -46,10 +46,10 @@ const COMPONENT_CHECKS: Check[] = [
     severity: 'Blocks the agent',
     what: 'Each <code>input()</code> (Angular) or prop (React, Vue) carries a one-line JSDoc comment. The default is the initial value in code, not a sentence in the comment.',
     why: 'The <code>Inputs</code> block is the agent’s only list of what it may set. Each entry shows the type, the JSDoc text above it and a <code>@default</code> line. A prop with no comment is a name and a type: the agent has to guess what it does.',
-    how: '<code>docs-show</code> on the component: read the Inputs block. A property with no <code>/** … */</code> above it has no description. Atelier’s <code>check:storybook-manifests</code> fails a build for exactly that (<code>[NO-DESCRIPTION]</code>); yours can do the same over <code>components.json</code>.',
+    how: '<code>docs-show</code> on the component: read the Inputs block. A property with no <code>/** … */</code> above it has no description. Atelier’s <code>check:storybook-manifests</code> fails a build for exactly that (<code>[NO-DESCRIPTION]</code>) on the props, inputs and outputs of the main component entries, except for a short list of reasoned exemptions. It does not look at Vue events or slots. Yours can do the same over <code>components.json</code>.',
     fix: [
       'Add <code>/** One sentence. */</code> above the declaration. Say what the input does and what it does not, not its type.',
-      "Leave <code>@default</code> out of the comment. The generator reads the initial value (<code>input(false)</code>, <code>input&lt;AtlButtonVariant&gt;('primary')</code>) and prints <code>@default</code> itself. Atelier’s button shows <code>@default primary</code> with no such tag in its source.",
+      "Leave <code>@default</code> out of the comment. The generator reads the initial value (<code>input(false)</code>, <code>input&lt;'sm' | 'md'&gt;('md')</code>) and prints <code>@default</code> itself. Atelier’s button shows <code>@default primary</code> with no such tag in its source.",
       'Re-run <code>docs-show</code> and read the block again.',
     ],
   },
@@ -57,13 +57,13 @@ const COMPONENT_CHECKS: Check[] = [
     id: 'closed-values',
     title: 'Closed value sets are visible in the Inputs block',
     severity: 'Blocks the agent',
-    what: "A prop that takes one of a few values shows those values in <code>docs-show</code>. An inline union (<code>'sm' | 'md'</code>) is printed in full. An imported type alias (<code>AtlButtonSize</code>) is printed as its name only.",
-    why: 'The agent copies values from the Inputs block. When it sees only <code>size?: AtlButtonSize</code>, the values are nowhere in the component’s entry except in the story snippets, and only the first three stories show code. It then writes <code>size="large"</code>.',
-    how: '<code>docs-show</code> on a component whose input is typed with an alias, and on one typed with an inline union. Atelier has both: AtlButton prints <code>variant?: AtlButtonVariant;</code>, AtlBadge prints <code>variant?: "default" | "success" | "warning" | "danger" | "info";</code>.',
+    what: "A prop that takes one of a few values shows those values in <code>docs-show</code>. An inline union (<code>'sm' | 'md'</code>) is printed in full. A type alias (<code>ToastVariant</code>) is printed as its name only.",
+    why: 'The agent copies values from the Inputs block. When it sees only <code>variant?: ToastVariant</code>, the values are nowhere in the component’s entry except in the story snippets, and only the first three stories that have a snippet show code. It then writes <code>size="large"</code>.',
+    how: "<code>docs-show</code> on a component whose input is typed with an alias, and on one typed with an inline union. Atelier has both. AtlButton used to print <code>size?: AtlButtonSize;</code> and now prints <code>size?: \"sm\" | \"md\" | \"lg\";</code>, because its input is typed <code>input&lt;'sm' | 'md' | 'lg'&gt;('md')</code> instead of <code>input&lt;AtlButtonSize&gt;('md')</code>. AtlToast still prints <code>variant?: ToastVariant;</code>.",
     fix: [
       'Prefer the inline union in the input’s type, or list the values in the input’s JSDoc line (<code>/** Size of the button: sm, md or lg. */</code>). JSDoc text is printed as written.',
       'Keep a shared alias if several components use it, and still name the values in the comment.',
-      'Do not count on <code>argTypes</code> with <code>options</code> in the stories: AtlButton declares them and the Inputs block still shows only the alias.',
+      'Do not count on <code>argTypes</code> with <code>options</code> in the stories: AtlIcon declares <code>options</code> for size and the Inputs block shows only <code>size?: AtlIconSize;</code>; the values reach the agent through the JSDoc line, not through <code>argTypes</code>.',
     ],
   },
   {
@@ -99,7 +99,7 @@ const COMPONENT_CHECKS: Check[] = [
     severity: 'Degrading',
     what: 'The first three stories in the file are a default usage and the two most typical variations.',
     why: '<code>docs-show</code> prints complete code for the first three stories that have a snippet (the formatter’s limit is three, as long as the component has props). Every other story appears as a name and id only. The agent can ask for them with <code>docs-show-story</code>, but it only does so if it knows it needs them.',
-    how: '<code>docs-show</code>: the stories under <code>## Stories</code> are your first three exports, in file order.',
+    how: '<code>docs-show</code>: the stories under <code>## Stories</code> are your first three exports that have a snippet, in file order. An early export that produces no snippet is skipped and appears under “Other Stories” (on Atelier’s Vue AtlTable, the three shown are Empty State, Sticky Header and Playground, not the first three exports).',
     fix: [
       'Put <code>Default</code> first, then the next two most common usages. Move edge cases (<code>Playground</code>, <code>AllVariants</code>) to the end of the file.',
       'If one variant changes the markup shape (an icon-only button), make it one of the three.',
@@ -123,7 +123,7 @@ const COMPONENT_CHECKS: Check[] = [
     title: 'A story that needs explaining says so, in a JSDoc comment above it',
     severity: 'Cosmetic',
     what: 'A story whose point is not obvious from its name has a JSDoc comment on its export.',
-    why: 'The formatter prints a story’s description above its snippet, and beside its name in “Other Stories” (cut at 90 characters). Reading the source of Storybook 10.6.0, that description comes from the JSDoc comment above the story export.',
+    why: 'The formatter prints a story’s description above its snippet, and beside its name in “Other Stories” (cut at 90 characters, unless the story has a <code>@summary</code> tag, which is printed in full). Reading the source of Storybook 10.6.0, that description comes from the JSDoc comment above the story export.',
     how: '<code>docs-show</code>: a description line above a snippet. UNVERIFIED in practice: none of Atelier’s stories carries one, so no output here shows it. Try it on one story and re-run.',
     fix: [
       'Add <code>/** Shown while a request is in flight. */</code> above <code>export const Loading</code>.',
@@ -212,7 +212,7 @@ const NOT_READ: { source: string; where: string; consequence: string }[] = [
       '<code>argTypes</code> (<code>control</code>, <code>options</code>)',
     where: 'The Controls panel.',
     consequence:
-      'Not in the Inputs block. AtlButton declares <code>options</code> for variant and size in its meta; the block shows <code>AtlButtonVariant</code> and <code>AtlButtonSize</code>.',
+      'Not in the Inputs block. AtlIcon declares <code>options</code> for size in its meta; the block shows <code>AtlIconSize</code>.',
   },
   {
     source: '<code>parameters.design</code> (Figma links)',
@@ -241,7 +241,7 @@ const GATES: { check: string; gate: string }[] = [
   },
   {
     check: 'Every input has a description',
-    gate: '<code>check:storybook-manifests</code> (<code>[NO-DESCRIPTION]</code>)',
+    gate: '<code>check:storybook-manifests</code> (<code>[NO-DESCRIPTION]</code>: props, inputs and outputs, with an exemption list; not Vue events or slots)',
   },
   {
     check: 'One story per variant value; story args match the manifest',
@@ -314,7 +314,7 @@ export type AtlButtonInputs = {
    *
    * @default md
    */
-  size?: AtlButtonSize;
+  size?: "sm" | "md" | "lg";
   …
 }
 \`\`\`
@@ -376,9 +376,9 @@ const EXCERPT_MAP: { part: string; source: string }[] = [
       "Generated from the initial value <code>input('md')</code>. The source comment has no <code>@default</code> tag.",
   },
   {
-    part: '<code>size?: AtlButtonSize;</code>',
+    part: '<code>size?: "sm" | "md" | "lg";</code>',
     source:
-      'The input’s declared type, printed by name. The values <code>sm | md | lg</code> are not in this block (check 3).',
+      'The input’s declared type. The source types it as an inline union, so the values are printed in full (check 3). With a type alias this line would show only the alias name.',
   },
   {
     part: 'The <code>Primary</code> snippet',
@@ -388,7 +388,7 @@ const EXCERPT_MAP: { part: string; source: string }[] = [
   {
     part: 'Which stories get code',
     source:
-      'The first three exports in file order (<code>Default</code>, <code>Primary</code>, <code>Secondary</code>); the formatter stops at three.',
+      'The first three exports in file order that have a snippet (<code>Default</code>, <code>Primary</code>, <code>Secondary</code>); the formatter stops at three. An export without a snippet is skipped and listed under Other Stories.',
   },
   {
     part: '<code>Other Stories</code>',
@@ -471,8 +471,13 @@ const EXCERPT_MAP: { part: string; source: string }[] = [
         >
           Checked against Storybook 10.6.0 and Atelier’s Angular library. React
           and Vue fill the same slots through <code>react-docgen</code> and
-          <code>vue-component-meta</code>; their output was not inspected for
-          this page, and the checks say so where it matters.
+          <code>vue-component-meta</code>. Only <code>docs-show</code> on
+          AtlTable was inspected for them (2026-10-20): neither shows a
+          description or usage example there, and the stories shown differ (see
+          <a href="/screen-from-storybook" class="docs-link-primary"
+            >Screen from Storybook</a
+          >). Everything else on this page is stated for Angular, and the checks
+          say so where it matters.
         </p>
       </Callout>
     </div>
@@ -735,9 +740,11 @@ const EXCERPT_MAP: { part: string; source: string }[] = [
         "
       >
         Timebox: 30 minutes. If the first run takes longer than 10, scope it to
-        one component family and widen it later. The agent’s report is a list of
-        leads: open <code>docs-show</code> yourself on the component before you
-        fix anything.
+        one component family and widen it later. In the training, you have 12
+        minutes in the room: start the self-check, read the ranked list and pick
+        one finding. Fixing it and the full run happen afterwards, on your own
+        time. The agent’s report is a list of leads: open <code>docs-show</code>
+        yourself on the component before you fix anything.
       </p>
       <div class="docs-rule">
         <span class="docs-rule-label">Rule</span>
