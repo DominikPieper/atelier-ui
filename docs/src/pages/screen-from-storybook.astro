@@ -1,0 +1,1060 @@
+---
+import BaseLayout from '../layouts/BaseLayout.astro';
+import { Code } from 'astro-expressive-code/components';
+import Callout from '../components/Callout.astro';
+import FwSwitcher from '../components/FwSwitcher.astro';
+import HelpFooter from '../components/HelpFooter.astro';
+import Icon from '../components/Icon.astro';
+import PageHero from '../components/PageHero.astro';
+import StepFail from '../components/StepFail.astro';
+import TrackNav from '../components/TrackNav.astro';
+
+const FRAMEWORKS = ['Angular', 'React', 'Vue'] as const;
+type Framework = (typeof FRAMEWORKS)[number];
+
+// One environment: the generated workspace, the same one the tutorial and the
+// kata use (ADR-0137). Apps live at the workspace ROOT (preset.ts passes
+// `directory: appName`), every framework serves on the default port 4200 via
+// `npm start`, and each app renders the NxWelcome placeholder until something
+// imports the screen. The styles sit in a plain `.css` file on purpose: the
+// scaffold's `stylelint` target globs `workshop-<fw>/src/**/*.css`, so a
+// `styles: []` array in an Angular component or a `<style>` block in a Vue
+// single-file component is never read by it.
+const SCAFFOLD: Record<
+  Framework,
+  {
+    pkg: string;
+    file: string;
+    css: string;
+    mountHint: string;
+    lintNote: string;
+  }
+> = {
+  Angular: {
+    pkg: '@atelier-ui/angular',
+    file: 'workshop-angular/src/app/components/team-directory.component.ts',
+    css: 'workshop-angular/src/app/components/team-directory.component.css',
+    mountHint:
+      'add TeamDirectoryComponent to the imports array in workshop-angular/src/app/app.ts and replace <app-nx-welcome> with <app-team-directory> in app.html',
+    lintNote:
+      'On Angular, `npm run lint` also runs two Atelier template rules: an icon-only `<button atl-button>` needs an accessible name, and a sub-component such as `atl-option` or `atl-th` must sit inside its parent.',
+  },
+  React: {
+    pkg: '@atelier-ui/react',
+    file: 'workshop-react/src/components/TeamDirectory.tsx',
+    css: 'workshop-react/src/components/TeamDirectory.css',
+    mountHint:
+      'import TeamDirectory in workshop-react/src/app/app.tsx and replace the <NxWelcome /> placeholder with it',
+    lintNote:
+      'On React, `npm run lint` runs the framework rules (including jsx-a11y) but not the two Atelier template rules, which exist for Angular templates only.',
+  },
+  Vue: {
+    pkg: '@atelier-ui/vue',
+    file: 'workshop-vue/src/components/TeamDirectory.vue',
+    css: 'workshop-vue/src/components/TeamDirectory.css',
+    mountHint:
+      'import TeamDirectory in workshop-vue/src/views/HomeView.vue and replace the <NxWelcome /> placeholder with it',
+    lintNote:
+      'The two Atelier template rules exist for Angular templates only; on Vue `npm run lint` runs the framework rules.',
+  },
+};
+
+// The prompt is rendered once per framework with the storybook-* MCP name, the
+// package and the file paths already substituted, so the copied text carries
+// no placeholder. Kept in the frontmatter: Astro's parser mishandles template
+// literals with escaped backticks inside a JSX attribute.
+const prompt = (fw: Framework) => {
+  const sb = `storybook-${fw.toLowerCase()}`;
+  const s = SCAFFOLD[fw];
+  return `Build a "Team directory" screen with components from ${s.pkg} only.
+
+Before you write any code:
+1. Call docs-list on the ${sb} MCP, then docs-show for every
+   component you plan to use. Tell me the list first.
+2. A prop, input, slot or event may be used only if it appears in the
+   docs-show output (its code examples count) or in docs-show-story.
+   If something you want is not documented, do not use it. Tell me.
+
+The screen:
+- A heading "Team directory".
+- A toolbar: a search field labelled "Search people", a select labelled
+  "Role" (All roles, Engineer, Designer, Manager) and a primary button
+  "Invite member".
+- A table of members: Name, Email, Role, Status. Status is a badge:
+  active is success, invited is warning, suspended is danger.
+- Pagination under the table, 5 rows per page.
+- Search narrows by name or email, the role select narrows by role,
+  both together. Changing a filter goes back to page 1. No match shows
+  the table's own empty state.
+- Data: a hard-coded array of 12 members in the component. No HTTP.
+
+Rules:
+- No hand-built element where the library has a component. Plain layout
+  elements (div, h1) are fine.
+- Styles go in ${s.css} (a separate .css file), only
+  var(--ui-*) tokens: no hex, rgb or hsl colours, no pixel spacing.
+- Save the screen as ${s.file}. Then mount it so the
+  app shows it instead of the Nx welcome page: ${s.mountHint}.
+
+When you are done, list every library component you used with the
+docs-list id it came from, and every prop with the docs-show line
+it came from.`;
+};
+
+const RECEIPTS_PROMPT = `You listed the components and props you used. Now check yourself against the
+docs, not against memory: call docs-show again for each component and, for every
+prop, input, slot and event in the code you wrote, print one line: the name, the
+docs-show passage it appears in, or NOT DOCUMENTED. Remove everything marked NOT
+DOCUMENTED, or tell me why you kept it.`;
+
+const MCP_LIST = `- AtlTable (components-display-atltable): Accessible data table with sorting, row selection, sticky header, and empty state.
+Compose...
+- cookbook (cookbook)`;
+
+const MCP_SHOW_USAGE = `Usage:
+\`\`\`html
+<atl-table variant="striped" [stickyHeader]="true">
+  <atl-thead>
+    <atl-tr>
+      <atl-th sortable [sortDirection]="sort" (sort)="sort = $event">Name</atl-th>
+      ...`;
+
+const MCP_SHOW_SHAPE = `## Inputs        aria-label, size, stickyHeader, variant
+## Stories
+### Default      full code
+### Striped      full code
+### Bordered     full code
+### Other Stories
+- Size Lg (components-display-atltable--size-lg)
+- Sortable (components-display-atltable--sortable)
+- Selectable (components-display-atltable--selectable)
+- Sticky Header, Empty State, Kitchen Sink, Playground`;
+
+const GATES = `npm run lint > lint.out 2>&1; echo $?
+npm run check:stylelint > stylelint.out 2>&1; echo $?
+npm run format
+npm run check:format > format.out 2>&1; echo $?`;
+
+const GREP = String.raw`grep -nE '#[0-9a-fA-F]{3,8}\b|rgba?\(|hsla?\(' <the screen file>`;
+
+const FAIL: Record<
+  number,
+  { items: string[]; recovery: string; lang?: 'text' | 'shell' }
+> = {
+  2: {
+    items: [
+      '`npx nx show projects` lists no `workshop-*` entry: you are not in the scaffolded workspace, or in the wrong directory. See [Cannot find project](/troubleshooting#nx-project-not-found).',
+      'Claude does not list a `storybook-*` server in `/mcp`: restart Claude Code from the directory with `.mcp.json`. See [MCP config not picked up](/troubleshooting#mcp-not-loaded).',
+    ],
+    recovery: 'npx nx show projects',
+    lang: 'shell',
+  },
+  3: {
+    items: [
+      'The agent starts writing without calling `docs-list`: stop it, paste the first rule again, and ask it to name the components it will use before it continues.',
+      'The agent reaches for a component the library does not have (a `Layout`, `Container`, `SearchBar` or `DataGrid`): it is not in `docs-list`, so it does not exist. The brief needs only what the list contains.',
+      'The agent uses an input on a table part (`atl-th`, `atl-tr`) or on `atl-option` that the main entry does not list: sub-components are shown in the code examples, not always in the input table. Ask for the example it copied from.',
+    ],
+    recovery: `Stop. Do not write more code yet. Call docs-list on the Storybook MCP and
+give me the ids of the components you will use. Then call docs-show on each
+and tell me, for every prop you plan to use, where it appears in the output.`,
+  },
+  4: {
+    items: [
+      'The page is still the Nx welcome page: nothing imports the screen yet. The mount instruction is in the prompt.',
+      'The dev server does not start or the page is blank: read the first error in the terminal, not the last.',
+      'Port 4200 is taken: see [port in use](/troubleshooting#port-in-use) (`npm start -- --port 4300` is the quick way out).',
+    ],
+    recovery: `\`npm start\` fails, or the page is blank. This is the first error:
+
+<paste the first error here>
+
+Fix only the cause of that error in the files you generated. Do not change
+anything else, and tell me which line you changed.`,
+  },
+  5: {
+    items: [
+      '`npm run lint` fails on a template rule: a sub-component is outside its parent, or an icon-only button has no name. Fix the structure, do not silence the rule.',
+      '`check:stylelint` names a token that does not exist, or a raw colour: replace it with a documented `--ui-*` token. Look the token up in the Colors and Spacing docs entries of the same Storybook MCP.',
+      '`check:format` fails: run `npm run format`, then check again.',
+      'Angular only: `npm run build` fails on an unknown input. The agent invented a prop. Compare it with `docs-show`, then delete it.',
+    ],
+    recovery: `npm run lint > lint.out 2>&1; echo $?
+
+# Then paste to Claude: the exit code, and "read lint.out and fix the first error".
+# More on how to report a red gate: /prompts#stuck`,
+    lang: 'shell',
+  },
+};
+---
+
+<BaseLayout
+  title="Screen from Storybook"
+  description="A 65-minute exercise. Build one screen from components that already exist, with the Storybook MCP as your only source. No Figma frame, no step-by-step guidance."
+  currentPath="/screen-from-storybook"
+>
+  <div class="docs-inline-page">
+    <PageHero
+      time="65 min"
+      title="Screen from Storybook"
+      titleAccent="Storybook"
+      ledeMax="600px"
+    >
+      Most teams do not build components. They build screens out of components
+      that already exist. Here the only thing you know about those components is
+      what the Storybook MCP tells you, and nothing is going to tell you how to
+      proceed. A brief, four rules, the gates, a clock.
+    </PageHero>
+
+    <!-- What you'll build -->
+    <div
+      class="sfs-target"
+      aria-label="What you'll have built when you're done"
+    >
+      <div class="sfs-target-eyebrow">The brief</div>
+      <div class="sfs-target-body">
+        <div
+          class="sfs-target-mock"
+          role="img"
+          aria-label="Team directory preview: a heading, a toolbar with a search field, a Role select and an Invite member button, a table of people with a coloured status badge per row, and a pagination bar underneath."
+        >
+          <div class="sfs-mock">
+            <div class="sfs-mock-title">Team directory</div>
+            <div class="sfs-mock-toolbar">
+              <span class="sfs-mock-field sfs-mock-field--grow"
+                >Search people</span
+              >
+              <span class="sfs-mock-field">Role</span>
+              <span class="sfs-mock-btn">Invite member</span>
+            </div>
+            <div class="sfs-mock-row sfs-mock-row--head">
+              <span>Name</span><span>Role</span><span>Status</span>
+            </div>
+            <div class="sfs-mock-row">
+              <span>Alice</span><span>Engineer</span
+              ><span class="sfs-mock-badge sfs-mock-badge--ok">active</span>
+            </div>
+            <div class="sfs-mock-row">
+              <span>Bob</span><span>Designer</span
+              ><span class="sfs-mock-badge sfs-mock-badge--warn">invited</span>
+            </div>
+            <div class="sfs-mock-row">
+              <span>Carol</span><span>Manager</span
+              ><span class="sfs-mock-badge sfs-mock-badge--bad">suspended</span>
+            </div>
+            <div class="sfs-mock-pages">1 2 3</div>
+          </div>
+        </div>
+        <ul class="sfs-target-checks">
+          <li>
+            <Icon name="check_circle" /> AtlInput: search by name or email
+          </li>
+          <li><Icon name="check_circle" /> AtlSelect: filter by role</li>
+          <li>
+            <Icon name="check_circle" /> AtlButton <code>primary</code>: "Invite
+            member"
+          </li>
+          <li>
+            <Icon name="check_circle" /> AtlTable: Name, Email, Role, Status
+          </li>
+          <li>
+            <Icon name="check_circle" /> AtlBadge per status: success, warning,
+            danger
+          </li>
+          <li>
+            <Icon name="check_circle" /> AtlPagination: 5 rows per page, back to
+            page 1 when a filter changes
+          </li>
+        </ul>
+      </div>
+    </div>
+
+    <!-- The rules -->
+    <section class="sfs-step" aria-labelledby="sfs-rules">
+      <div class="sfs-step-head">
+        <span class="sfs-step-num">1</span>
+        <h2 id="sfs-rules" class="sfs-step-title">The four rules</h2>
+      </div>
+      <ol class="sfs-rules">
+        <li>
+          <strong>Look before you write.</strong> The agent calls
+          <code>docs-list</code>, then <code>docs-show</code> for every
+          component, before the first line of code.
+        </li>
+        <li>
+          <strong>Every prop has a source.</strong> A prop, input, slot or event
+          in your code must appear in the <code>docs-show</code> output (its
+          code examples count) or in <code>docs-show-story</code>. Not
+          documented means not used, and the agent says so.
+        </li>
+        <li>
+          <strong>No hand-built twin.</strong> Where the library has a
+          component, you use it. A <code>div</code> with a border is not a card,
+          a hand-styled <code>span</code> is not a badge.
+        </li>
+        <li>
+          <strong>No raw colours.</strong> Every colour and every spacing is a
+          <code>var(--ui-*)</code> token, in a plain <code>.css</code> file.
+        </li>
+      </ol>
+      <p class="sfs-step-desc">
+        <strong style="color: var(--ui-color-text)">Done when</strong> the
+        screen runs and behaves as the brief says, you can point to the
+        <code>docs-show</code> passage behind every prop you can pick at random,
+        and <code>npm run lint</code>, <code>npm run check:stylelint</code> and
+        <code>npm run check:format</code> all exit 0. Nobody gives you the
+        steps. The recap asks which rule the agent broke first.
+      </p>
+    </section>
+
+    <!-- What the MCP gives you -->
+    <section class="sfs-step" aria-labelledby="sfs-mcp">
+      <div class="sfs-step-head">
+        <h2 id="sfs-mcp" class="sfs-step-title">
+          What the Storybook MCP gives you, and what it does not
+        </h2>
+      </div>
+      <p class="sfs-step-desc">
+        Three calls, shown on the table. The excerpts below are from the Angular
+        endpoint; React and Vue answer in the same shape for their own
+        framework. Knowing where each piece of information lives is most of rule
+        2.
+      </p>
+      <ol class="sfs-rules">
+        <li>
+          <strong><code>docs-list</code></strong> gives you the valid ids, and
+          nothing more than a hint of what each one is. The description is cut
+          after about 90 characters, and showcase entries such as
+          <code>cookbook</code> have none.
+          <Code code={MCP_LIST} lang="text" title="docs-list (excerpt)" />
+        </li>
+        <li>
+          <strong><code>docs-show components-display-atltable</code></strong>
+          has three places to read. The component description holds a usage
+          example, and that example is real code:
+          <Code
+            code={MCP_SHOW_USAGE}
+            lang="text"
+            title="docs-show: description"
+          />
+          The <strong>Inputs</strong> block lists only what the main component
+          declares. The first three stories, Default, Striped and Bordered, come
+          with their full code. The rest are listed by name only:
+          <Code
+            code={MCP_SHOW_SHAPE}
+            lang="text"
+            title="docs-show: shape of the answer"
+          />
+        </li>
+        <li>
+          <strong><code>docs-show-story</code></strong> with one of those ids,
+          for example <code>components-display-atltable--sortable</code>,
+          returns the full code of that story. It is the only way to see a story
+          from "Other Stories".
+        </li>
+      </ol>
+      <p class="sfs-step-desc">
+        <strong style="color: var(--ui-color-text)"
+          >The gaps you will hit</strong
+        >, and what to do with each:
+      </p>
+      <ul class="sfs-rules">
+        <li>
+          <strong>Sub-component inputs are not in the Inputs block.</strong>
+          <code>sortable</code> and <code>sortDirection</code> on
+          <code>atl-th</code> appear only in the usage example and in the
+          stories. Treat an attribute in an example as a documented source, and
+          name the example it came from.
+        </li>
+        <li>
+          <strong>A story you need is under "Other Stories".</strong> Call
+          <code>docs-show-story</code> with its id. Do not guess what
+          <code>Sortable</code> or <code>Empty State</code> does from its name.
+        </li>
+        <li>
+          <strong>Some entries show names but no code.</strong>
+          <code>docs-show cookbook</code> lists story names such as "Data List
+          with Actions" and no code, so it does not hand you a finished screen.
+          Compose from the component entries.
+        </li>
+        <li>
+          <strong>The list description is not documentation.</strong> Open the
+          entry before you decide a component fits.
+        </li>
+      </ul>
+      <p class="sfs-step-desc">
+        In every case: if the answer is not in the output, say that it is not
+        documented. Never fill a gap from memory. These are the same gaps, seen
+        from the library owner's side, in the
+        <a href="/storybook-readiness" class="docs-link-primary"
+          >Storybook readiness checklist</a
+        >.
+      </p>
+    </section>
+
+    <!-- Framework + workspace -->
+    <section class="sfs-step" aria-labelledby="sfs-setup">
+      <div class="sfs-step-head">
+        <span class="sfs-step-num">2</span>
+        <h2 id="sfs-setup" class="sfs-step-title">Pick your framework</h2>
+      </div>
+      <p class="sfs-step-desc">
+        Pick the framework you scaffolded in
+        <a href="/workshop" class="docs-link-primary">Setup</a>. The switcher
+        sets the framework for every code block on this page. In your workspace,
+        <code>npx nx show projects</code> lists a <code>workshop-*</code> entry,
+        and <code>/mcp</code> in Claude Code lists the <code>storybook-*</code>
+        server for your framework.
+      </p>
+      <div style="margin-top: 0.5rem">
+        <FwSwitcher label="Choose the framework you scaffolded" />
+      </div>
+      <StepFail
+        items={FAIL[2].items}
+        recovery={FAIL[2].recovery}
+        lang={FAIL[2].lang}
+      />
+    </section>
+
+    <!-- Prompt -->
+    <section class="sfs-step" aria-labelledby="sfs-prompt">
+      <div class="sfs-step-head">
+        <span class="sfs-step-num">3</span>
+        <h2 id="sfs-prompt" class="sfs-step-title">Start the build</h2>
+      </div>
+      <p class="sfs-step-desc">
+        This is the one thing you copy, and it is only a start: the brief and
+        the four rules in a form the agent can follow. Where it goes wrong, and
+        how you steer it, is the exercise. The component names in the brief are
+        all in <code>docs-list</code> of every framework's Storybook MCP.
+      </p>
+      {FRAMEWORKS.map((fw, i) => <div data-fw-panel={fw} hidden={i !== 0}>
+        <Code
+          code={prompt(fw)}
+          lang="text"
+          wrap
+          title={`starter prompt — paste into Claude Code (${fw})`}
+        />
+      </div>)}
+      <p class="sfs-step-desc" style="margin-top: 0.6rem">
+        <strong style="color: var(--ui-color-text)">Checkpoint:</strong> before
+        any file is written, the agent has shown you the component list and the
+        <code>docs-show</code> calls behind it. If it skipped that, stop it and
+        have it start over from rule 1.
+      </p>
+      <StepFail
+        items={FAIL[3].items}
+        recovery={FAIL[3].recovery}
+        lang={FAIL[3].lang}
+      />
+    </section>
+
+    <!-- Run it -->
+    <section class="sfs-step" aria-labelledby="sfs-run">
+      <div class="sfs-step-head">
+        <span class="sfs-step-num">4</span>
+        <h2 id="sfs-run" class="sfs-step-title">Run it and use it</h2>
+      </div>
+      <p class="sfs-step-desc">
+        The prompt told Claude where to save the files and how to mount the
+        screen. Confirm that happened, then serve the app and use the screen the
+        way a user would: type in the search, change the role, page forward,
+        filter until nothing matches.
+      </p>
+      {FRAMEWORKS.map((fw, i) => <div data-fw-panel={fw} hidden={i !== 0}>
+        <ol class="run-steps" style="margin-top: 0.5rem">
+          <li>
+            <span class="run-step-label">Screen</span>
+            <code class="run-step-path">{SCAFFOLD[fw].file}</code>
+          </li>
+          <li>
+            <span class="run-step-label">Styles</span>
+            <code class="run-step-path">{SCAFFOLD[fw].css}</code>
+          </li>
+          <li>
+            <span class="run-step-label">Mount</span>
+            <span class="run-step-note"
+              >Claude should have done this already — if not,
+              {SCAFFOLD[fw].mountHint}.</span
+            >
+          </li>
+          <li>
+            <span class="run-step-label">Serve</span>
+            <Code code="npm start" lang="shell" title="start dev server" />
+          </li>
+          <li>
+            <span class="run-step-label">Open</span>
+            <a
+              href="http://localhost:4200"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="run-step-link"
+            >
+              http://localhost:4200
+            </a>
+          </li>
+        </ol>
+      </div>)}
+      <p class="sfs-step-desc" style="margin-top: 0.6rem">
+        <strong style="color: var(--ui-color-text)">Checkpoint:</strong> all
+        four behaviours work in the browser: search, role filter, paging, empty
+        state, and the badge colours match the status. Nothing here proves it
+        for you but your own eyes.
+      </p>
+      <StepFail
+        items={FAIL[4].items}
+        recovery={FAIL[4].recovery}
+        lang={FAIL[4].lang}
+      />
+    </section>
+
+    <!-- Gates -->
+    <section class="sfs-step" aria-labelledby="sfs-gates">
+      <div class="sfs-step-head">
+        <span class="sfs-step-num">5</span>
+        <h2 id="sfs-gates" class="sfs-step-title">Run the gates</h2>
+      </div>
+      <p class="sfs-step-desc">
+        Three commands, in your workspace root. An exit code of 0 is the result,
+        not what scrolled by. Redirect the output and read the code afterwards.
+      </p>
+      <Code code={GATES} lang="shell" title="the gates" />
+      {FRAMEWORKS.map((fw, i) => <div data-fw-panel={fw} hidden={i !== 0}>
+        <p class="sfs-step-desc" style="margin-top: 0.6rem">
+          {SCAFFOLD[fw].lintNote}
+        </p>
+      </div>)}
+      <Callout tone="warning" title="What these gates do not see">
+        <p>
+          <code>check:stylelint</code> reads only
+          <code>workshop-*/src/**/*.css</code>. A colour in an inline
+          <code>style</code> attribute, in an Angular <code>styles</code> array
+          or in a Vue <code>&lt;style&gt;</code> block passes it silently, which
+          is why the prompt asks for a separate <code>.css</code> file. Look for
+          stray literals yourself:
+        </p>
+        <Code
+          code={GREP}
+          lang="shell"
+          title="raw colours outside the css file"
+        />
+        <p>
+          And no gate checks the running app for accessibility.
+          <code>check:stories</code> renders stories, not your app. The stretch
+          task below is how a screen gets covered.
+        </p>
+      </Callout>
+      <p class="sfs-step-desc" style="margin-top: 0.6rem">
+        On Angular, add <code>npm run build</code>: the scaffold compiles with
+        strict templates, so an input the component does not have fails the
+        build instead of being ignored.
+      </p>
+      <StepFail
+        items={FAIL[5].items}
+        recovery={FAIL[5].recovery}
+        lang={FAIL[5].lang}
+      />
+    </section>
+
+    <!-- Audit -->
+    <section class="sfs-step" aria-labelledby="sfs-audit">
+      <div class="sfs-step-head">
+        <span class="sfs-step-num">6</span>
+        <h2 id="sfs-audit" class="sfs-step-title">
+          Audit the agent against rule 2
+        </h2>
+      </div>
+      <p class="sfs-step-desc">
+        Green gates say the code is clean, not that it is honest. Rule 2 is
+        checked by making the agent show its sources. Paste this, then
+        spot-check three of its lines yourself in <code>docs-show</code>.
+      </p>
+      <Code code={RECEIPTS_PROMPT} lang="text" wrap title="receipts prompt" />
+      <p class="sfs-step-desc" style="margin-top: 0.6rem">
+        <strong style="color: var(--ui-color-text)">Checkpoint:</strong> every
+        prop in the screen has a source, or was removed, and you can name one
+        thing the agent wanted that the library does not offer.
+      </p>
+    </section>
+
+    <!-- Time box -->
+    <section class="sfs-step" aria-labelledby="sfs-time">
+      <div class="sfs-step-head">
+        <span class="sfs-step-num">7</span>
+        <h2 id="sfs-time" class="sfs-step-title">The 65 minutes</h2>
+      </div>
+      <table class="sfs-time">
+        <thead>
+          <tr>
+            <th scope="col">Minutes</th>
+            <th scope="col">What happens</th>
+          </tr>
+        </thead>
+        <tbody>
+          <tr>
+            <td>5</td>
+            <td>
+              The brief and the four rules, plus one live <code>docs-show</code>
+              on AtlTable from the trainer. The clock starts.
+            </td>
+          </tr>
+          <tr>
+            <td>40</td>
+            <td>Build: steps 2 to 4. The trainer stays quiet.</td>
+          </tr>
+          <tr>
+            <td>10</td>
+            <td>Gates and the audit: steps 5 and 6.</td>
+          </tr>
+          <tr>
+            <td>7</td>
+            <td>One volunteer shows the receipts. Which prop had no source?</td>
+          </tr>
+          <tr>
+            <td>3</td>
+            <td>Recap question.</td>
+          </tr>
+        </tbody>
+      </table>
+      <p class="sfs-step-desc" style="margin-top: 0.6rem">
+        These time boxes are estimates. Nobody has run this block with a cohort
+        yet. If you are done early, take the stretch task. If you are stuck,
+        <a href="/prompts#stuck" class="docs-link-primary"
+          >how to report a red gate</a
+        >
+        is one page.
+      </p>
+    </section>
+
+    <!-- Stretch -->
+    <section class="sfs-stretch" aria-labelledby="sfs-stretch-title">
+      <p class="sfs-stretch-eyebrow">Stretch · for fast finishers</p>
+      <h2 id="sfs-stretch-title" class="sfs-stretch-title">
+        Give the screen a story, so the accessibility check can see it
+      </h2>
+      <p class="sfs-step-desc">
+        Your workspace's Storybook renders every story in Chromium and runs axe
+        on it, and a violation fails the run. It can only check what has a
+        story. So copy the pattern of the <code>AtlButton</code> example story
+        that ships in your app's <code>src/</code> for the screen component,
+        with one <code>play</code> function that types into the search and
+        asserts the row count. Then run <code>npm run check:stories</code> (it
+        needs the Playwright Chromium from Block 01) and read what axe says
+        about your own screen.
+      </p>
+      <p class="sfs-step-desc">
+        Second stretch: make the Name column sortable. The sortable header is a
+        table sub-component, so prove its inputs from
+        <code>docs-show-story</code> before you believe the agent.
+      </p>
+    </section>
+
+    <!-- Finish -->
+    <section class="sfs-finish" aria-labelledby="sfs-finish-title">
+      <h2 id="sfs-finish-title" class="sfs-finish-title">
+        Sourced, and checked.
+      </h2>
+      <p class="sfs-finish-lede">
+        You built a screen from components you did not write, from documentation
+        alone, and you checked the result instead of trusting it.
+      </p>
+      <ul class="sfs-finish-recap">
+        <li>
+          <Icon name="check_circle" />
+          <span
+            >Every prop in the screen has a source in the docs, or was
+            removed.</span
+          >
+        </li>
+        <li>
+          <Icon name="check_circle" />
+          <span>No hand-built twin of a library component, no raw colour.</span>
+        </li>
+        <li>
+          <Icon name="check_circle" />
+          <span
+            >Lint, stylelint and format exit 0, and you know what they cannot
+            see.</span
+          >
+        </li>
+      </ul>
+      <div class="sfs-finish-actions">
+        <a href="/first-component" class="docs-btn docs-btn-primary">
+          Homework: the first-component kata
+        </a>
+        <span class="sfs-finish-more">
+          The Settings Card from the tutorial, solo and against the clock, with
+          the parity check at the end. Optional.
+        </span>
+      </div>
+    </section>
+
+    <HelpFooter page="screen-from-storybook" />
+
+    <TrackNav />
+  </div>
+</BaseLayout>
+
+<style>
+  .sfs-stretch {
+    margin-top: 2.5rem;
+    padding: 1.25rem;
+    border: 1px dashed var(--ui-color-border);
+    border-radius: var(--ui-radius-md);
+  }
+  .sfs-stretch-eyebrow {
+    margin: 0 0 0.35rem;
+    font-size: var(--ui-font-size-xs);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ui-color-text-muted);
+  }
+  .sfs-stretch-title {
+    margin: 0 0 0.75rem;
+    font-size: var(--ui-font-size-xl);
+    font-weight: 700;
+    color: var(--ui-color-text);
+  }
+  .sfs-target {
+    margin-bottom: 2.5rem;
+    padding: 1.25rem 1.4rem;
+    background: var(--ui-color-surface-raised);
+    border: 1px solid var(--ui-color-border);
+    border-radius: var(--ui-radius-md);
+  }
+  .sfs-target-eyebrow {
+    font-size: var(--ui-font-size-xs);
+    font-weight: 800;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ui-color-primary);
+    margin-bottom: 1rem;
+  }
+  .sfs-target-body {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    gap: 1.5rem;
+    align-items: center;
+  }
+  .sfs-target-checks {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    font-size: var(--ui-font-size-md);
+    color: var(--ui-color-text);
+    line-height: 1.4;
+  }
+  .sfs-target-checks li {
+    display: flex;
+    align-items: flex-start;
+    flex-wrap: wrap;
+    gap: 0.55rem;
+  }
+  .sfs-target-checks li :global(svg) {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    color: var(--ui-color-primary);
+    margin-top: 1px;
+  }
+  .sfs-target-checks code {
+    font-size: 0.78rem;
+    padding: 0 0.25rem;
+    background: var(--ui-color-primary-light);
+    border-radius: 3px;
+  }
+  @media (max-width: 768px) {
+    .sfs-target-body {
+      grid-template-columns: minmax(0, 1fr);
+    }
+  }
+
+  /* "Run it" three-step list — Save / Serve / Open */
+  .run-steps {
+    display: flex;
+    flex-direction: column;
+    gap: 0.5rem;
+    margin: 0;
+    padding-left: 1.4rem;
+    color: var(--ui-color-text);
+  }
+  .run-step-label {
+    display: inline-block;
+    min-width: 4.5rem;
+    font-size: var(--ui-font-size-xs);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ui-color-text-muted);
+    margin-right: 0.4rem;
+  }
+  .run-step-path {
+    font-family: var(--docs-font-code);
+    font-size: 0.82rem;
+    padding: 0.1rem 0.4rem;
+    background: var(--ui-color-surface-sunken);
+    border: 1px solid var(--ui-color-border);
+    border-radius: 3px;
+    color: var(--ui-color-text);
+  }
+  .run-step-link {
+    display: inline-flex;
+    align-items: center;
+    min-height: 24px;
+    color: var(--ui-color-primary);
+    text-decoration: underline;
+    text-underline-offset: 2px;
+    font-family: var(--docs-font-code);
+    font-size: 0.85rem;
+  }
+  .run-step-link:hover {
+    color: var(--ui-color-primary-hover);
+  }
+  .run-step-note {
+    color: var(--ui-color-text-muted);
+    font-size: var(--ui-font-size-sm);
+  }
+
+  /* Step blocks — numbered, large enough to scan */
+  .sfs-step {
+    margin-bottom: 2rem;
+    padding-bottom: 1.5rem;
+    border-bottom: 1px solid var(--ui-color-border);
+  }
+  .sfs-step:last-of-type {
+    border-bottom: 0;
+  }
+  .sfs-step-head {
+    display: flex;
+    align-items: center;
+    gap: 0.85rem;
+    margin-bottom: 0.65rem;
+  }
+  .sfs-step-num {
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    flex-shrink: 0;
+    width: 1.7rem;
+    height: 1.7rem;
+    border-radius: 50%;
+    background: var(--ui-color-primary);
+    color: var(--ui-color-surface);
+    font-family: var(--font-mono), ui-monospace, monospace;
+    font-size: 0.82rem;
+    font-weight: 700;
+  }
+  .sfs-step-title {
+    margin: 0;
+    font-size: var(--ui-font-size-2xl);
+    font-weight: 700;
+    letter-spacing: -0.02em;
+    color: var(--ui-color-text);
+  }
+  .sfs-step-desc {
+    margin: 0 0 0.85rem;
+    font-size: var(--ui-font-size-md);
+    color: var(--ui-color-text-muted);
+    line-height: 1.6;
+  }
+  .sfs-step-desc:last-child {
+    margin-bottom: 0;
+  }
+
+  /* Finish moment — the closing beat */
+  .sfs-finish {
+    margin: 3rem 0 2rem;
+    padding: 2rem 1.75rem;
+    background: var(--ui-color-primary-light);
+    border: 1px solid
+      color-mix(in srgb, var(--ui-color-primary) 30%, transparent);
+    border-radius: var(--ui-radius-lg, var(--ui-radius-md));
+  }
+  .sfs-finish-title {
+    margin: 0 0 0.5rem;
+    font-size: var(--ui-font-size-2xl);
+    font-weight: 800;
+    letter-spacing: -0.02em;
+    color: var(--ui-color-text);
+  }
+  .sfs-finish-lede {
+    margin: 0 0 1.25rem;
+    max-width: 52ch;
+    font-size: var(--ui-font-size-md);
+    line-height: 1.6;
+    color: var(--ui-color-text);
+  }
+  .sfs-finish-recap {
+    margin: 0 0 1.5rem;
+    padding: 0;
+    list-style: none;
+    display: grid;
+    gap: 0.5rem;
+    font-size: var(--ui-font-size-md);
+    line-height: 1.5;
+    color: var(--ui-color-text);
+  }
+  .sfs-finish-recap li {
+    display: flex;
+    gap: 0.6rem;
+    align-items: baseline;
+  }
+  .sfs-finish-recap li :global(svg) {
+    flex-shrink: 0;
+    width: 18px;
+    height: 18px;
+    align-self: flex-start;
+    margin-top: 2px;
+    color: var(--ui-color-primary);
+  }
+  .sfs-finish-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.75rem 1.25rem;
+  }
+  .sfs-finish-more {
+    font-size: var(--ui-font-size-sm);
+    color: var(--ui-color-text-muted);
+    line-height: 1.6;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .sfs-finish {
+      animation: sfs-finish-in 500ms ease-out both;
+    }
+    @keyframes sfs-finish-in {
+      from {
+        opacity: 0;
+        transform: translateY(8px);
+      }
+      to {
+        opacity: 1;
+        transform: none;
+      }
+    }
+  }
+
+  .sfs-rules {
+    margin: 0.5rem 0 1rem;
+    padding-left: 1.25rem;
+    display: flex;
+    flex-direction: column;
+    gap: 0.6rem;
+    line-height: 1.6;
+    color: var(--ui-color-text);
+  }
+  .sfs-time {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: var(--ui-font-size-sm);
+    color: var(--ui-color-text);
+  }
+  .sfs-time th,
+  .sfs-time td {
+    padding: 0.45rem 0.6rem;
+    text-align: left;
+    border-bottom: 1px solid var(--ui-color-border);
+  }
+  .sfs-time th {
+    font-size: var(--ui-font-size-xs);
+    font-weight: 700;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ui-color-text-muted);
+  }
+  .sfs-time td:first-child {
+    width: 5rem;
+    font-weight: 700;
+  }
+
+  /* Pure CSS mock of the screen, so the page needs no screenshot. */
+  .sfs-target-mock {
+    display: flex;
+    justify-content: center;
+    padding: 1.25rem 0.75rem;
+    background: var(--ui-color-surface-sunken);
+    border-radius: var(--ui-radius-md);
+  }
+  .sfs-mock {
+    width: 100%;
+    max-width: 340px;
+    padding: var(--ui-spacing-4);
+    background: var(--ui-color-surface-raised);
+    border: 1px solid var(--ui-color-border);
+    border-radius: var(--ui-radius-md);
+    display: flex;
+    flex-direction: column;
+    gap: var(--ui-spacing-2);
+    text-align: left;
+  }
+  .sfs-mock-title {
+    font-size: 0.95rem;
+    font-weight: 700;
+    color: var(--ui-color-text);
+  }
+  .sfs-mock-toolbar {
+    display: flex;
+    gap: var(--ui-spacing-2);
+    align-items: stretch;
+  }
+  .sfs-mock-field {
+    padding: 0.3rem 0.5rem;
+    font-size: var(--ui-font-size-xs);
+    color: var(--ui-color-text-muted);
+    background: var(--ui-color-surface-sunken);
+    border: 1px solid var(--ui-color-border);
+    border-radius: 4px;
+  }
+  .sfs-mock-field--grow {
+    flex: 1;
+  }
+  .sfs-mock-btn {
+    padding: 0.3rem 0.6rem;
+    font-size: var(--ui-font-size-xs);
+    font-weight: 700;
+    color: var(--ui-color-surface);
+    background: var(--ui-color-primary);
+    border-radius: 4px;
+    white-space: nowrap;
+  }
+  .sfs-mock-row {
+    display: grid;
+    grid-template-columns: 1fr 1fr 1fr;
+    gap: var(--ui-spacing-2);
+    padding: 0.3rem 0;
+    font-size: var(--ui-font-size-xs);
+    color: var(--ui-color-text);
+    border-bottom: 1px solid var(--ui-color-border);
+    align-items: center;
+  }
+  .sfs-mock-row--head {
+    font-weight: 700;
+    color: var(--ui-color-text-muted);
+  }
+  .sfs-mock-badge {
+    justify-self: start;
+    padding: 0 0.4rem;
+    border-radius: 999px;
+    font-weight: 700;
+    border: 1px solid currentColor;
+  }
+  .sfs-mock-badge--ok {
+    color: var(--ui-color-success);
+  }
+  .sfs-mock-badge--warn {
+    color: var(--ui-color-warning);
+  }
+  .sfs-mock-badge--bad {
+    color: var(--ui-color-danger);
+  }
+  .sfs-mock-pages {
+    align-self: center;
+    font-size: var(--ui-font-size-xs);
+    letter-spacing: 0.3em;
+    color: var(--ui-color-text-muted);
+  }
+</style>

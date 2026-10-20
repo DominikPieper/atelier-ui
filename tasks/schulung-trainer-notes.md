@@ -292,47 +292,71 @@ invented prop would compile nowhere.
 time from the stretch, never from the red-then-green row. Hosted endpoint down → the
 CLI passthrough from the demo script, or saved screenshots.
 
-### Block 05 · 16:10–17:15 · Kata against the clock
+### Block 05 · 16:10–17:15 · A screen from Storybook, against the clock
 
-**On screen.** `/first-component`, the timer, then one volunteer's parity report.
+**On screen.** `/screen-from-storybook`, the timer, then one volunteer's receipts list.
 
 **Say.**
 
-1. Rules: same frame (`936-2954`), seven steps, no guidance, 15 minutes; hints only as
-   "which gate says that?". The seven steps (`first-component.astro`): open the Figma
-   frame; pick your framework; paste this prompt into Claude Code; save the output and
-   view it (`workshop-<fw>/src/`, `nx serve workshop-<fw>`, :4200); compare to the
-   target; run the gates, then the parity check; sort what the parity check found. Each
-   step has an "If this step fails" block; point at it instead of answering.
-2. Labelling: every finding gets exactly one of **fix the code**, **fix Figma**, **record
-   a deliberate mismatch** (in the contract: `figmaOnly`, `codeOnly`, `axisMap`). Check
-   which side an action item names before applying it.
-3. The expected finding to debrief on: the card title's letter-spacing, code `−0.01em`
-   vs master `0` on `ty/title`. It is a deliberate mismatch, written in the AtlCard
-   master's description (R-176). The right label is "record a deliberate mismatch"; a
-   seat that "fixed" it in code has mislabelled.
-4. Decided 2026-10-14 (R-208): the bridge exercise `/first-component#bridge` (add a
-   `density` variant to SettingsCard: component, a story per value, contract, gates) is
-   the Day 1 homework for green seats (the catch-up homework stays for red seats); say so
-   at 17:25. It is the only place a participant authors a contract before Day 2 Block 02,
-   which opens `button.contract.ts` on the projector first.
+1. Why this block: most customer teams do not build components, they write application
+   code against components that already exist, and the only thing they know about them is
+   what Storybook says. No Figma frame, no steps. The page gives the brief (a Team
+   directory: search field, role select, invite button, table with a status badge per row,
+   pagination), a starter prompt, the gates and the clock. Hints only as "which
+   `docs-show` line says that?".
+   Opener, inside the same 5 minutes: run one live `docs-show components-display-atltable`
+   and show where things live: the usage example in the description (it renders as code
+   since the JSDoc fix of 2026-10-20), the Inputs block (only `aria-label`, `size`,
+   `stickyHeader`, `variant`), the first three stories with code, the rest under "Other
+   Stories" by name only (`docs-show-story` with the id). The page section "What the
+   Storybook MCP gives you, and what it does not" has the same walk-through for the room.
+2. The four rules: look before you write (`docs-list`, then `docs-show`, before any
+   code); every prop has a source in the `docs-show` output or `docs-show-story`; no
+   hand-built element where the library has a component; no raw colours, only `--ui-*`
+   tokens in a plain `.css` file.
+3. The gates, as exit codes: `npm run lint` (on Angular it includes the two Atelier
+   template rules: an icon-only `atl-button` needs a name, a sub-component needs its
+   parent), `npm run check:stylelint`, `npm run check:format`; on Angular also
+   `npm run build` (strict templates fail on an input the component does not have). Name
+   the limits out loud: stylelint reads only `workshop-<fw>/src/**/*.css`, so a colour in
+   an inline `style`, an Angular `styles` array or a Vue `<style>` block passes it, and no
+   gate checks the running app for accessibility. `check:stories` renders stories, not the
+   app; the stretch task (a story for the screen, then `check:stories`) is how a screen
+   gets an axe run.
+4. The audit: the receipts prompt on the page makes the agent print the `docs-show`
+   passage behind every prop. Participants spot-check three. Green gates say the code is
+   clean, not that it is honest.
+5. The bridge exercise `/first-component#bridge` (add a `density` variant to SettingsCard:
+   component, a story per value, contract, gates) stays the Day 1 homework for green
+   seats (R-208, decided 2026-10-14); say so at 17:25. It is the only place a participant
+   authors a contract before Day 2 Block 02, which opens `button.contract.ts` on the
+   projector first. The kata `/first-component` is optional homework for everyone.
 
-**Expected recap answers.** Fixed in code: a token or padding that drifted. Left alone:
-the letter-spacing, because the master's description says so and the contract records
-it.
+**Expected recap answers.** The agent broke rule 2 first (a prop or an input on a table
+part or `atl-option` that `docs-show` does not list on the main entry: the Inputs block
+never lists sub-component inputs such as `sortable` on `atl-th`; they are in the usage
+example and the stories, which the opener now shows) or rule 3 (a
+hand-built badge or card); `npm run build` on Angular, the template lint rules, the
+receipts audit or the participant's own reading caught it. Stylelint catches a raw colour
+in the `.css` file; nothing but the grep on the page catches one elsewhere.
 
-**Watch for.** Hard stop 16:50 (rule R6). If a report lacks the letter-spacing finding,
-check the parity call actually ran and which sections it passed.
+**Watch for.** Hard stop 16:55 (rule R6). The 40 build minutes are an estimate and
+nothing has been timed: if most seats are still on the table at minute 30, cut pagination
+from the brief on the page, not the gates. Agents invent a search-bar or layout component,
+forget that a filter change must go back to page 1, and put styles in an inline array. The
+`docs-list` entry "cookbook" lists a "Data List with Actions" story, but `docs-show-story`
+returns no code for it (checked 2026-10-20 on the Angular endpoint), so it does not hand
+over the answer.
 
 ### Block 06 · 17:15–17:30 · Recap and exit ticket
 
-**On screen.** Whiteboard, `/briefs`, `/first-component`.
+**On screen.** Whiteboard, `/briefs`, `/first-component#bridge`.
 
 **Say.** Three questions for the five-minute discussion: where did the AI guess, and
 which guardrail caught it; which gate output did you read, which did you skip; what
 would you check first tomorrow. The four briefs in one line each (Day 2 Block 00 has
-the detail). Homework: the brief, the sketch, `/first-component` alone for unfinished
-seats, the bridge exercise for finished ones (R-208, decided). Exit ticket: one
+the detail). Homework: the brief, the sketch, the bridge exercise for green seats (R-208,
+decided), and the optional kata `/first-component` alone for anyone. Exit ticket: one
 sentence, paper or spoken.
 
 **Watch for.** Everyone names a brief aloud; undecided → Toast.
@@ -350,7 +374,7 @@ sentence, paper or spoken.
 
 1. Active recall, eight minutes, the room answers: name the loop and the tool per step;
    what did the parity report compare and not compare; which three setup things are
-   independent; why is a story a claim; which kata finding did you leave alone and why;
+   independent; why is a story a claim; which rule did the agent break first on the Team directory and what caught it;
    what is `[COVERAGE]`.
 2. The briefs: what a finished component owes (anatomy, axes, states, a11y obligations),
    not how to draw it. Provenance matters: Toast and Avatar are transcriptions of a
@@ -568,7 +592,7 @@ and theme toolbar; terminal + DevTools for the codeSpec; two parity reports for 
    `summary.categories` (only categories with findings). Variant node for geometry,
    component set for `componentAPI` (a variant has no component properties).
 7. Triage: every finding one label, code / Figma / contract, three minutes, the same
-   labels as Day 1 Block 05.
+   labels: Day 1 Block 05 no longer practises them (the kata's step 7, optional homework, does), so teach them here.
 
 **Expected recap answers.** Code: a missing `aria-label` on the close button, a literal
 colour. Figma: an unbound fill, a wrong layer name. Contract: the `state` axis. Almost

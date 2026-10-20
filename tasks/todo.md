@@ -42,6 +42,20 @@ brownfield Day 2 track only after cohort 1).
       exact target name verified; the limit stated (only `.css` files are linted — inline
       `style=` or `styles:` strings are not).
 - [x] `npm run check:all` exit 0, generated files (llms.txt etc.) regenerated.
+- [x] **S3 Consumer case in the agenda (owner go 2026-10-20: replace the kata).** Day 1 Block 05
+      (second round of the same Settings Card) becomes: build a screen only from existing library
+      components, with Storybook MCP (`docs-list`/`docs-show`) as the only source, no Figma frame,
+      no guidance, against the clock. Done when: a participant page states the screen brief, the
+      done-when and the gates a participant can actually run in the scaffold (verified target
+      names); `/schulung` Block 05, run-of-show, dry-run kit, trainer notes and golden prompts
+      updated; every reference to the kata as Block 05 retargeted (the `/first-component` page and
+      its `#bridge` homework stay); ADR recorded; customer agenda doc updated; `check:all` exit 0.
+      Done 2026-10-20: `/screen-from-storybook` (Team directory, six components), ADR-0175. Owner then
+      asked for MCP-derived content: querying the hosted Angular MCP found the AtlTable usage example
+      garbled (`@for` at line start in JSDoc is parsed as a tag) — fixed in `atl-table.ts` (one row +
+      comment; `\@for` / `&#64;for` render as junk), plus a page section on what `docs-show` gives and
+      where its gaps are. Unverified: hosted output after deploy, React/Vue, all timings (R-040).
+      Open owner question: Day 2 Block 04 parity labels lost their Day 1 practice — label in Block 02?
 
 **Review 2026-10-20.** Verified: every checklist item read against real Storybook 10.6.0 Angular
 output (hosted MCP + CLI); the red stylelint run is real (3× `[RAW-COLOR]`, 1× `[UNDECLARED]`) but on

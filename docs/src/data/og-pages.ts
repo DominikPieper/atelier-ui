@@ -86,6 +86,11 @@ export const OG_PAGES = {
     description:
       'A 15-minute kata. Open the Figma frame, paste the prompt, save the output, compare.',
   },
+  'screen-from-storybook': {
+    title: 'Screen from Storybook',
+    description:
+      'A 65-minute exercise. Build one screen from existing components with the Storybook MCP as your only source: four rules, the gates, a clock.',
+  },
   'build-your-own': {
     title: 'Build Your Own Component',
     description:

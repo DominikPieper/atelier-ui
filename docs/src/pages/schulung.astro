@@ -64,6 +64,10 @@ const L = {
     href: '/prompts#rubric',
   },
   tutorial: { label: 'Tutorial', href: '/tutorial' },
+  screenFromStorybook: {
+    label: 'Screen from Storybook',
+    href: '/screen-from-storybook',
+  },
   firstComponent: { label: 'First-component kata', href: '/first-component' },
   readiness: { label: 'Readiness checklist', href: '/readiness' },
   storybookReadiness: {
@@ -112,10 +116,11 @@ const DAYS: Day[] = [
   {
     day: 'Day 1',
     title: 'Understand the tools & run the workflow end to end',
-    goal: `Every participant has a working setup, knows all four pillars (Figma · Storybook · MCP · Claude Code) and has run the loop once end to end: a ${TARGET.name} composed by prompt from existing Atelier components (${TARGET.parts}) — no change to an existing component API.`,
+    goal: `Every participant has a working setup, knows all four pillars (Figma · Storybook · MCP · Claude Code) and has run the loop once end to end: a ${TARGET.name} composed by prompt from existing Atelier components (${TARGET.parts}) — no change to an existing component API. They have also built a screen out of existing components with Storybook as the only source.`,
     result: [
       'A running workspace with a green preflight',
       'At least one successful prompt-to-code round trip',
+      'A screen built from library components, every prop traced to the Storybook MCP',
       'Understanding: Figma = source, Storybook = manifest (the API), MCP = connection, Claude = execution',
     ],
     blocks: [
@@ -235,20 +240,30 @@ const DAYS: Day[] = [
       {
         num: '05',
         time: '16:10–17:15 · 65 min',
-        title: 'Kata against the clock',
+        title: 'A screen from Storybook, against the clock',
         format: 'Hands-on, no guidance',
-        why: 'Repeat the loop without guidance.',
-        pages: [L.firstComponent, L.findingCodes],
-        done: 'The kata is green and every parity finding is labelled.',
+        why: 'Most teams write application code against components that already exist, so this is the one case the first four blocks have not yet run alone.',
+        pages: [L.screenFromStorybook, L.mcpServers],
+        done: 'A Team directory screen runs and behaves as the brief says, every prop in it has a source in `docs-show` (or was removed), and `npm run lint`, `npm run check:stylelint` and `npm run check:format` exit 0.',
         bullets: [
-          `The 15-minute /first-component kata: the same ${TARGET.name} frame (node ${TARGET.node}) as a second round against the clock, seven copy-paste steps, with the same \`figma_check_design_parity\` at the end`,
-          'The component lives under `workshop-<fw>/src/` and is viewed in your own app with `nx serve workshop-<fw>` — step 4 of the kata page says so',
-          'Label every parity finding: code, Figma, or contract',
+          'The page /screen-from-storybook is the brief: one screen, a Team directory with a search field, a role select, an invite button, a table with a status badge per row and pagination. No Figma frame in this block. The only source of information about the components is the Storybook MCP (`docs-list`, `docs-show`, `docs-show-story`)',
+          'Opener (inside the first 5 minutes): the trainer runs one live `docs-show` on AtlTable and points at where things live: the usage example in the description, the Inputs block, the first three stories with code, the rest by name only (`docs-show-story` for those). The page has the same walk-through under "What the Storybook MCP gives you, and what it does not"',
+          'Four rules: look before you write (`docs-list`, then `docs-show`, before the first line of code); every prop has a source in the `docs-show` output; no hand-built element where a library component exists; no raw colours, only `--ui-*` tokens in a plain `.css` file',
+          'There are no steps: the page gives the brief, the starter prompt, the gates and the clock, and nothing about how to proceed. Where the agent invents a prop or builds its own badge, you notice it and steer it',
+          'Serve with `npm start` (app on `localhost:4200`) and use the screen the way a user would: type in the search, change the role, page forward, filter until nothing matches',
+          'Gates, run as exit codes: `npm run lint` (on Angular including the two Atelier template rules), `npm run check:stylelint`, `npm run check:format`, on Angular also `npm run build` (strict templates fail on an unknown input). They do not see colours outside the `.css` file and they do not check the running app for accessibility: say so out loud',
+          'Audit: paste the receipts prompt from the page, have the agent print the `docs-show` passage behind every prop, and spot-check three of them yourself',
         ],
         stretch:
-          'Write the handoff document for the kata frame before you prompt, and compare the result with the first round.',
+          "Write a story for the screen, copied from the `AtlButton` example story in your app's `src/`, with one `play` function that types into the search and asserts the row count. Then run `npm run check:stories`: it is the only gate here that runs axe, and it can only check what has a story.",
         recap:
-          'Which finding did you fix in code, and which one did you leave alone? Why?',
+          'Which rule did the agent break first, and which gate or check caught it?',
+        trainer: [
+          'The block replaces the second round of the Settings Card (decided 2026-10-20): that frame is Block 02, and a second pass on it taught the same loop twice. The kata page `/first-component` stays as optional homework, and its `#bridge` section is still the Block 06 homework for green seats.',
+          'Nothing has been rehearsed. The 40 minutes of build time are an estimate from the size of the brief, not a measurement. The dry run decides whether the brief is too big: if most seats are still on the table at minute 30, cut pagination from the brief on the page.',
+          'The screen uses only components that every framework\'s hosted `docs-list` returns (AtlInput, AtlSelect, AtlButton, AtlTable, AtlBadge, AtlPagination). The `docs-list` entry "cookbook" lists a "Data List with Actions" story, but its `docs-show-story` returns no code, so it does not give the answer away.',
+          'Expected agent slips, in rough order: inventing a layout or search-bar component, using `atl-th`/`atl-option` inputs that the main entry does not list (sub-components appear in the code examples), putting colours in an inline `styles` array or a `style` attribute where stylelint cannot see them, forgetting that a filter change must go back to page 1.',
+        ],
       },
       {
         num: '06',
@@ -261,7 +276,7 @@ const DAYS: Day[] = [
         bullets: [
           'What was surprising? Where did the AI work cleanly, where not?',
           'Preview of Day 2 and the optional homework: sketch a small component (Toast / TagChip / StatCard / Avatar — the same four as the starter frames and the briefs)',
-          'Catch-up homework for everyone who did not finish the kata: play /first-component through alone — the same loop at your own pace, with the parity check at the end',
+          'Optional homework for everyone: play the /first-component kata through alone — the Settings Card from Block 02 at your own pace, with the parity check at the end. It is no longer a block, and the catch-up for anyone who did not finish Block 05 is to run the same brief again on /screen-from-storybook',
           'Homework for green seats is the bridge exercise (a `density` variant on the Settings Card: component, one story per value, contract, gates), the one contract written before Day 2; Day 2 Block 02 opens `button.contract.ts` on the projector first',
         ],
         stretch:

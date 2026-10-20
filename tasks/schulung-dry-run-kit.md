@@ -58,7 +58,7 @@ becomes useless the moment the clock stops for a fix.
 | ------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Claude Design demo (trainer appendix) | **Not a block step.** `/schulung` has it as an optional trainer appendix (`#appendix-claude-design`), trainer machine only: `claude.ai/design` needs a different login than the cohort API key. The page says to run it in the Day 1 buffer 16:00–16:10, cut to 10 minutes, or skip it (owner decision 2026-10-14; earlier: Block 04 "if time allows"). Participants cannot reproduce it. | Leave it out of the rehearsal's checklist and timing. If you want to see it, run it as a separate trainer exercise after the timed run, not inside Day 1 Block 04 or its buffer.                                                                                                                                           |
 | Figma Desktop Bridge                  | Not automatic. Every `figma_*` MCP call (Day 2 Block 01/02/04) depends on the bridge plugin imported in the Figma desktop app (Plugins → Development → Import plugin from manifest…, `/schulung` Day 1 Block 01). `/schulung` says the bridge gates Day 2.                                                                                                                                | Before relying on _any_ `figma_*` tool: Figma Desktop open, your duplicate open, bridge plugin running, then ask Claude to check Figma status and confirm it is connected. Re-check after any Figma restart. How the connected state is read: not specified on /schulung (see `/troubleshooting`: "bridge not connected"). |
-| `solved-*` recovery branches          | None, by decision (R-042, 2026-10-13): every kata step on `/first-component` carries an "If this step fails" block with one recovery prompt or command instead.                                                                                                                                                                                                                           | Recovery path: see R-005 / R-042, not decided. For the rehearsal itself, protect your own progress the ordinary way (local commit or `git stash` before anything risky) — a rehearsal convenience, not something to teach a cohort.                                                                                        |
+| `solved-*` recovery branches          | None, by decision (R-042, 2026-10-13): every step on `/first-component` and every gate step on `/screen-from-storybook` carries an "If this step fails" block with one recovery prompt or command instead.                                                                                                                                                                                | Recovery path: see R-005 / R-042, not decided. For the rehearsal itself, protect your own progress the ordinary way (local commit or `git stash` before anything risky) — a rehearsal convenience, not something to teach a cohort.                                                                                        |
 | Figma access token                    | `/schulung` Day 1 Block 01: the token is technically optional (REST reads only) and a cohort-policy decision.                                                                                                                                                                                                                                                                             | Decide before the run whether you rehearse with or without it, and write the choice into §5. Which one a cohort gets: not specified on /schulung.                                                                                                                                                                          |
 
 ---
@@ -92,19 +92,19 @@ buffer by arithmetic only).
 
 ### Day 1 (planned net 6 h 50 min)
 
-| Block                                     | Planned          | Actual start | Actual end | Delta | Note |
-| ----------------------------------------- | ---------------- | ------------ | ---------- | ----- | ---- |
-| 00 Kickoff and thesis                     | 09:00–09:30 (30) |              |            |       |      |
-| 01 Verify the setup 🔴                    | 09:30–10:45 (75) |              |            |       |      |
-| — gap —                                   | 10:45–11:00      |              |            |       |      |
-| 02 Mini-loop: first success               | 11:00–12:15 (75) |              |            |       |      |
-| — gap —                                   | 12:15–13:15      |              |            |       |      |
-| 03 Figma for code: is the file ready?     | 13:15–14:30 (75) |              |            |       |      |
-| — gap —                                   | 14:30–14:45      |              |            |       |      |
-| 04 Guardrails: stories as claims, and MCP | 14:45–16:00 (75) |              |            |       |      |
-| — gap —                                   | 16:00–16:10      |              |            |       |      |
-| 05 Kata against the clock                 | 16:10–17:15 (65) |              |            |       |      |
-| 06 Recap and exit ticket                  | 17:15–17:30 (15) |              |            |       |      |
+| Block                                         | Planned          | Actual start | Actual end | Delta | Note |
+| --------------------------------------------- | ---------------- | ------------ | ---------- | ----- | ---- |
+| 00 Kickoff and thesis                         | 09:00–09:30 (30) |              |            |       |      |
+| 01 Verify the setup 🔴                        | 09:30–10:45 (75) |              |            |       |      |
+| — gap —                                       | 10:45–11:00      |              |            |       |      |
+| 02 Mini-loop: first success                   | 11:00–12:15 (75) |              |            |       |      |
+| — gap —                                       | 12:15–13:15      |              |            |       |      |
+| 03 Figma for code: is the file ready?         | 13:15–14:30 (75) |              |            |       |      |
+| — gap —                                       | 14:30–14:45      |              |            |       |      |
+| 04 Guardrails: stories as claims, and MCP     | 14:45–16:00 (75) |              |            |       |      |
+| — gap —                                       | 16:00–16:10      |              |            |       |      |
+| 05 A screen from Storybook, against the clock | 16:10–17:15 (65) |              |            |       |      |
+| 06 Recap and exit ticket                      | 17:15–17:30 (15) |              |            |       |      |
 
 ### Day 2 (planned net 6 h 50 min)
 
@@ -252,21 +252,24 @@ green, and `docs-show` called.
   the story claims nothing (green means failure here): record it.
 - The Claude Design demo is the optional appendix, not a step here (§1).
 
-**Block 05 — Kata against the clock** (hands-on, no guidance).
-_Done when:_ the kata is green and every parity finding is labelled.
+**Block 05 — A screen from Storybook, against the clock** (hands-on, no guidance).
+_Done when:_ a Team directory screen runs and behaves as the brief says, every prop in
+it has a source in `docs-show` (or was removed), and `npm run lint`,
+`npm run check:stylelint` and `npm run check:format` exit 0.
 
-- `/first-component`: the 15-minute kata, the same Settings Card frame
-  (node `936-2954`) as a second round, seven copy-paste steps, ending with
-  `figma_check_design_parity`. Prompts for this block: `tasks/schulung-golden-prompts.md`
-  §1 (the prompt for the Settings Card, shared with Block 02's mini-loop).
-- The component lives under `workshop-<fw>/src/` and is viewed with
-  `nx serve workshop-<fw>` (the kata page's step 4), app on `localhost:4200`.
-- Expected finding (owner, 2026-10-12, R-176): the card title's letter-spacing — code −0.01em,
-  master 0 % on `ty/title`. It is a deliberate mismatch, stated in the AtlCard master
-  description; a runner who labels it "record a deliberate mismatch" has it right.
-- Label every parity finding: code, Figma, or contract. Log how many minutes
-  the kata actually took against its 15-minute claim, and what the other 50 of
-  the block's 65 minutes were for: not specified on /schulung.
+- `/screen-from-storybook`: one screen (search field, role select, invite button, table
+  with a status badge per row, pagination), the Storybook MCP as the only source of
+  information, four rules, no steps, no Figma. Prompts for this block:
+  `tasks/schulung-golden-prompts.md` §1b (the starter prompt itself is live on the page).
+- The screen lives under `workshop-<fw>/src/` with its styles in a plain `.css` file,
+  and is viewed with `npm start` (app on `localhost:4200`).
+- Gates, logged as exit codes: `npm run lint`, `npm run check:stylelint`,
+  `npm run check:format`, on Angular also `npm run build`. Then the receipts prompt.
+  Log what the gates did not see: a colour outside the `.css` file, the accessibility of
+  the running app.
+- Log how long the build really took against the 40 minutes the block allows (an
+  estimate; nothing has been rehearsed), how many of the six components the agent
+  got right on the first try, and the first prop or element it invented.
 
 **Block 06 — Recap and exit ticket** (discussion).
 _Done when:_ a brief is chosen. Homework: sketch the component in the Figma
@@ -274,8 +277,8 @@ duplicate made in Block 01; green seats also do the bridge exercise
 (`/first-component#bridge`).
 
 - Choose one of the four briefs (Toast / TagChip / StatCard / Avatar), found in
-  `workshop/briefs/`. Catch-up homework for anyone who did not finish the kata:
-  play `/first-component` through alone. Green seats: the bridge exercise
+  `workshop/briefs/`. The kata `/first-component` is optional homework for everyone
+  (it is no longer a block); anyone who did not finish Block 05 reruns the brief alone. Green seats: the bridge exercise
   `/first-component#bridge` (a `density` variant on the Settings Card: component,
   story per value, contract, gates), the one contract before Day 2.
 - Exit ticket: one sentence on what you will check first next time before

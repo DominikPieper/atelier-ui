@@ -71,9 +71,10 @@ than trusting a number that was correct on 2026-09-10.
   and `libs/vue/src/lib/dialog/*.vue` (`plan/big-picture.md`'s "Framework
   Differences" table names the same three rows).
 - **Block mapping** (block numbers and titles as on `/schulung`):
-  - §1 = Day 1 Block 05 "Kata against the clock" and Day 1 Block 02 "Mini-loop: first
-    success" (existing components only — the Settings Card; both blocks run the same
-    frame).
+  - §1 = Day 1 Block 02 "Mini-loop: first success" (existing components only — the
+    Settings Card).
+  - §1b = Day 1 Block 05 "A screen from Storybook, against the clock" (existing
+    components only, no Figma — the Team directory screen).
   - §2.1 = Day 2 Block 02 "Contract, component, stories" (the generation prompt);
     §2.2–2.4 = Day 2 Block 03 "Iterate: prompt quality and the self-healing loop" (the
     correction prompts — the block `schulung.astro` names for golden prompts).
@@ -82,10 +83,10 @@ than trusting a number that was correct on 2026-09-10.
 
 ---
 
-## 1. Day 1 · Block 05 (Kata against the clock) and Block 02 (Mini-loop) — Settings Card
+## 1. Day 1 · Block 02 (Mini-loop) — Settings Card
 
-The generation prompt for these blocks already exists and is live — `examplePrompt` in
-`docs/src/pages/tutorial.astro` (mirrored in `/first-component`), which composes
+The generation prompt for this block already exists and is live — `examplePrompt` in
+`docs/src/pages/tutorial.astro` (mirrored in the optional kata `/first-component`), which composes
 `AtlCard`/`AtlInput`/`AtlToggle`/`AtlButton` and explicitly tells Claude to pull _"the
 exact token names from `boundVariables`… no conversion needed."_ Do not re-type it here —
 that is exactly the mistake ADR-0116 corrects elsewhere (a hand-copied restatement of a
@@ -104,6 +105,59 @@ participant this one-line fix-up rather than a full re-prompt:
 
 (Grounded directly in the tutorial's own React/Angular/Vue output blocks — all three
 already use exactly these four token names for exactly these four properties.)
+
+---
+
+## 1b. Day 1 · Block 05 (A screen from Storybook, against the clock) — Team directory
+
+The starter prompt is live on `/screen-from-storybook` (`prompt()` in that page's
+frontmatter, one copy per framework, with the MCP name, package and file paths already
+filled in), and so is the receipts prompt (`RECEIPTS_PROMPT`). Do not re-type either
+here; point participants at the page. What this section adds is the steering the trainer
+hands out when a run goes wrong, and the expected result to judge a run against.
+
+**Expected result (Angular, what a good run looks like).**
+
+- Before any file is written the agent has called `docs-list` and `docs-show` for
+  AtlInput, AtlSelect, AtlButton, AtlTable, AtlBadge and AtlPagination and named them.
+  All six are in `docs-list` of the hosted Angular, React and Vue endpoints
+  (checked 2026-10-20).
+- The screen imports them from `@atelier-ui/angular` (`AtlInput`, `AtlSelect`,
+  `AtlOption`, `AtlButton`, `AtlTable`, `AtlThead`, `AtlTbody`, `AtlTr`, `AtlTh`, `AtlTd`,
+  `AtlBadge`, `AtlPagination` are all exported by `libs/angular/src/index.ts`) and lists
+  them in the component's `imports`.
+- Search and select carry a `label` (the docs say an unlabelled input has no accessible
+  name); the status badge maps active to `success`, invited to `warning`, suspended to
+  `danger` (the documented `variant` values); the table's empty state uses the documented
+  `atlTableEmpty` content on `atl-tbody`; pagination uses `[(page)]` and `[pageCount]`.
+- Styles sit in `team-directory.component.css`, tokens only. `npm run lint`,
+  `npm run check:stylelint` and `npm run check:format` exit 0, and `npm run build`
+  compiles with strict templates.
+
+**When the agent starts writing without calling `docs-list`** (it can): hand it this.
+
+> Stop. Do not write more code yet. Call `docs-list` on the Storybook MCP and give me the
+> ids of the components you will use. Then call `docs-show` on each and tell me, for
+> every prop you plan to use, where it appears in the output.
+
+**When it uses an input the docs do not list** (typical on the table parts `atl-th` and
+`atl-tr`, and on `atl-option`: the main entry's input table does not list the
+sub-components, their inputs appear only in its code examples):
+
+> You used `<INPUT>` on `<ELEMENT>`. Show me the exact line of the `docs-show` or
+> `docs-show-story` output it comes from. If there is none, remove it and tell me what
+> you do instead.
+
+**When it hand-builds something the library has** (a bordered `div` as a card, a styled
+`span` as a badge):
+
+> `<ELEMENT>` is hand-built. Call `docs-list` and check whether the library has a
+> component for it. If it does, replace it with that component, using only documented
+> props.
+
+(Everything in this section was read from the hosted `docs-show` output and
+`libs/angular/src/index.ts` on 2026-10-20. The React and Vue shapes of AtlTable and
+AtlPagination were not read; UNVERIFIED.)
 
 ---
 
@@ -297,14 +351,15 @@ with findings; it has no "sections compared" list. Against the component set `12
 
 ## 4. Quick index — which prompt for which failure
 
-| Symptom in the room                                                                                              | Use                |
-| ---------------------------------------------------------------------------------------------------------------- | ------------------ |
-| Inline `style`/hex/Tailwind class instead of a token, anywhere in Day 2 Blocks 02–03, or the Day 1 Settings Card | §1 add-on, or §2.3 |
-| A prop appears that the handoff document / spec never named                                                      | §2.2               |
-| Structural content (header/action/remove-button/etc.) dumped as flat children instead of its own region          | §2.4               |
-| A11y panel or keyboard walk turns something up in Day 2 Block 04                                                 | §3.1               |
-| Dark-mode toggle reveals a hardcoded colour or a stray hover animation                                           | §3.2               |
-| Closing parity check, to actually exercise the "fields not passed aren't compared" claim                         | §3.3               |
+| Symptom in the room                                                                                               | Use                |
+| ----------------------------------------------------------------------------------------------------------------- | ------------------ |
+| Inline `style`/hex/Tailwind class instead of a token, anywhere in Day 2 Blocks 02–03, or the Day 1 Settings Card  | §1 add-on, or §2.3 |
+| Agent writes without `docs-list`, uses an undocumented input, or hand-builds a library component (Day 1 Block 05) | §1b                |
+| A prop appears that the handoff document / spec never named                                                       | §2.2               |
+| Structural content (header/action/remove-button/etc.) dumped as flat children instead of its own region           | §2.4               |
+| A11y panel or keyboard walk turns something up in Day 2 Block 04                                                  | §3.1               |
+| Dark-mode toggle reveals a hardcoded colour or a stray hover animation                                            | §3.2               |
+| Closing parity check, to actually exercise the "fields not passed aren't compared" claim                          | §3.3               |
 
 ---
 
