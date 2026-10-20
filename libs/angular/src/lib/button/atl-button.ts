@@ -8,7 +8,6 @@ import {
   input,
   ViewEncapsulation,
 } from '@angular/core';
-import type { AtlButtonVariant, AtlButtonSize } from '../spec';
 
 /** Native `type` attribute of the button. */
 export type AtlButtonType = 'button' | 'submit' | 'reset';
@@ -54,10 +53,12 @@ export type AtlButtonType = 'button' | 'submit' | 'reset';
 })
 export class AtlButton {
   /** Visual style of the button. */
-  readonly variant = input<AtlButtonVariant>('primary');
+  readonly variant = input<'primary' | 'secondary' | 'outline' | 'danger'>(
+    'primary',
+  );
 
   /** Size of the button. */
-  readonly size = input<AtlButtonSize>('md');
+  readonly size = input<'sm' | 'md' | 'lg'>('md');
 
   /** Disables the button, preventing interaction. */
   readonly disabled = input(false);
@@ -69,7 +70,7 @@ export class AtlButton {
   readonly loading = input(false);
 
   /** Native `type` attribute of the button. */
-  readonly type = input<AtlButtonType>('button');
+  readonly type = input<'button' | 'submit' | 'reset'>('button');
 
   protected readonly isDisabled = computed(
     () => this.disabled() || this.loading(),
