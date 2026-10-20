@@ -1,3 +1,13 @@
+## 0.4.8 (2026-10-20)
+
+### 🩹 Fixes
+
+- **angular:** keep the AtlTable usage example intact in docs-show ([1d424d57](https://github.com/DominikPieper/atelier-ui/commit/1d424d57))
+
+### ❤️ Thank You
+
+- Dominik Pieper @DominikPieper
+
 ## 0.4.7 (2026-10-20)
 
 This was a version bump only for angular to align it with other projects, there were no code changes.
