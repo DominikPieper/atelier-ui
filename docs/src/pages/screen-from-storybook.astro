@@ -111,8 +111,7 @@ prop, input, slot and event in the code you wrote, print one line: the name, the
 docs-show passage it appears in, or NOT DOCUMENTED. Remove everything marked NOT
 DOCUMENTED, or tell me why you kept it.`;
 
-const MCP_LIST = `- AtlTable (components-display-atltable): Accessible data table with sorting, row selection, sticky header, and empty state.
-Compose...
+const MCP_LIST = `- AtlTable (components-display-atltable): Tabular data grid. Renders rows of records with column headers, optional sorting, sticky h...
 - cookbook (cookbook)`;
 
 const MCP_SHOW_USAGE = `Usage:
@@ -342,7 +341,9 @@ anything else, and tell me which line you changed.`,
         </li>
         <li>
           <strong><code>docs-show components-display-atltable</code></strong>
-          has three places to read. On Angular the component description holds a
+          has three places to read. The component description starts with the
+          purpose sentence Atelier owns in its metadata, in all three
+          frameworks. On Angular it continues with the component JSDoc and a
           usage example, and that example is real code:
           <Code
             code={MCP_SHOW_USAGE}
@@ -407,26 +408,27 @@ anything else, and tell me which line you changed.`,
       </p>
       <ul class="sfs-rules">
         <li>
-          <strong>Angular:</strong> a description with the usage example. It
-          shows <code>sortable</code> and <code>sortDirection</code> on
-          <code>atl-th</code>, and <code>[empty]</code> and
-          <code>[colSpan]</code> on <code>atl-tbody</code> with the
-          <code>atlTableEmpty</code> element. Stories shown: Default, Striped,
-          Bordered.
+          <strong>Angular:</strong> the purpose sentence, then the JSDoc with
+          the usage example. It shows <code>sortable</code> and
+          <code>sortDirection</code> on <code>atl-th</code>, and
+          <code>[empty]</code> and <code>[colSpan]</code> on
+          <code>atl-tbody</code> with the <code>atlTableEmpty</code> element.
+          Stories shown: Default, Striped, Bordered.
         </li>
         <li>
-          <strong>React:</strong> no description and no usage example, because
-          the component carries no JSDoc. Stories shown: Default, Striped,
-          Bordered, none of which has sorting or an empty state. The Props block
-          comes after the stories. For <code>Sortable</code> and
-          <code>Empty State</code>, call <code>docs-show-story</code>.
+          <strong>React:</strong> the purpose sentence only, and no usage
+          example, because the component carries no JSDoc. Stories shown:
+          Default, Striped, Bordered, none of which has sorting or an empty
+          state. The Props block comes after the stories. For
+          <code>Sortable</code> and <code>Empty State</code>, call
+          <code>docs-show-story</code>.
         </li>
         <li>
-          <strong>Vue:</strong> no description and no usage example either. The
-          Props and Slots blocks come first. The stories shown are Empty State,
-          Sticky Header and Playground, the first three with a code snippet;
-          Default, Striped and Bordered are listed by name only. Empty State
-          shows <code>:empty</code>, <code>:colSpan</code> and the
+          <strong>Vue:</strong> the purpose sentence only, and no usage example
+          either. The Props and Slots blocks come first. The stories shown are
+          Empty State, Sticky Header and Playground, the first three with a code
+          snippet; Default, Striped and Bordered are listed by name only. Empty
+          State shows <code>:empty</code>, <code>:colSpan</code> and the
           <code>#empty</code> slot; <code>Sortable</code> needs
           <code>docs-show-story</code>.
         </li>

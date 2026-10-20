@@ -32,11 +32,12 @@ const COMPONENT_CHECKS: Check[] = [
     title: 'The component class has a JSDoc description',
     severity: 'Blocks the agent',
     what: 'The component class (or, for React and Vue, the component) carries a JSDoc comment whose text says what the component is, when to use it and what to know before using it. A short <code>Usage:</code> block with a fenced example is welcome.',
-    why: 'This text becomes the component’s <code>description</code> in the manifest. <code>docs-show</code> prints it under the heading, and <code>docs-list</code> prints its first 90 characters next to the id (a <code>@summary</code> tag in the JSDoc, if you write one, is printed there in full instead). A component without one is listed as a bare name, and the agent picks it by how the name sounds.',
+    why: 'This text becomes the component’s <code>description</code> in the manifest. <code>docs-show</code> prints it under the heading, and <code>docs-list</code> prints its first 90 characters next to the id (a <code>@summary</code> tag in the JSDoc, if you write one, is printed there in full instead). A component without one is listed as a bare name, and the agent picks it by how the name sounds. Atelier adds one step on top: its build prepends the purpose sentence it owns in a metadata module, so the description starts with that sentence and the JSDoc follows. Your Storybook does not do that on its own; it prints the JSDoc.',
     how: 'Call <code>docs-list</code>. A line with no text after the id has no description. In the manifest report <code>components.html</code> (check S3) the component card carries the info “No description found”.',
     fix: [
       'Write the JSDoc directly above the component class. Make the first sentence carry the purpose: the list cuts the description at 90 characters, unless you give it a <code>@summary</code> tag, which it prints untruncated.',
       'Add one fenced <code>html</code> (or <code>tsx</code>, <code>vue</code>) usage example. It is part of the description, so it reaches the agent verbatim.',
+      'If you keep the purpose sentence outside the JSDoc, as Atelier does, your Storybook will not show it to the agent until you carry it into the manifest. Atelier’s way, one of several: a generated name-to-purpose map, read by an <code>experimental_manifests</code> hook (React) or an <code>experimental_docgenProvider</code> worker (Angular and Vue), with a gate that fails when a built description does not start with the purpose. Both hooks are experimental Storybook API.',
       'Do not rely on <code>parameters.docs.description.component</code> in the stories. The manifest reads the JSDoc above the <code>meta</code> object or on the component, not that parameter (see “What the agent does not read”).',
     ],
   },
@@ -205,7 +206,7 @@ const NOT_READ: { source: string; where: string; consequence: string }[] = [
     source: '<code>parameters.docs.description.component</code>',
     where: 'The docs page in the browser.',
     consequence:
-      'Not in the manifest description. In Atelier it holds the purpose sentence from the metadata module; <code>docs-show</code> prints the class JSDoc instead and the purpose sentence does not appear. Atelier’s lint rule <code>story-description-source</code> keeps that parameter in sync for the browser docs page, not for the agent.',
+      'Not in the manifest description. In Atelier it holds the purpose sentence from the metadata module. The agent gets that sentence only because Atelier’s build prepends it to the manifest description (before that hook, <code>docs-show</code> printed the class JSDoc and the purpose sentence did not appear). Atelier’s lint rule <code>story-description-source</code> keeps the parameter in sync for the browser docs page, not for the agent.',
   },
   {
     source:
@@ -287,6 +288,9 @@ const EXCERPT = `# AtlButton
 
 ID: components-inputs-atlbutton
 
+Primary action trigger. Renders a labelled button users press to commit an
+action — submit a form, open a dialog, advance a flow.
+
 Accessible button component with visual variants and sizes. An attribute
 component on a native \`<button>\`: focus, Tab order, Enter/Space activation and
 form submission are the browser's own.
@@ -363,7 +367,7 @@ const EXCERPT_MAP: { part: string; source: string }[] = [
   {
     part: 'The paragraph and the <code>Usage:</code> block',
     source:
-      'The JSDoc above <code>export class AtlButton</code> in <code>atl-button.ts</code>, word for word. The story meta’s <code>docs.description.component</code> is not used.',
+      'First the purpose sentence from the metadata module (Atelier’s build prepends it, followed by a blank line), then the JSDoc above <code>export class AtlButton</code> in <code>atl-button.ts</code>, word for word. The story meta’s <code>docs.description.component</code> is not used.',
   },
   {
     part: 'Each comment line inside <code>Inputs</code>',
@@ -516,8 +520,9 @@ const EXCERPT_MAP: { part: string; source: string }[] = [
         <strong style="color: var(--ui-color-text)"
           >What disappears when a source is missing.</strong
         >
-        Atelier’s own entries show it. Every component with a JSDoc has its text
-        in <code>docs-list</code>; the showcase entry
+        Atelier’s own entries show it. Every component with metadata has its
+        purpose sentence in <code>docs-list</code>, and every one with a JSDoc
+        has that text in <code>docs-show</code>; the showcase entry
         <code>showcase-kitchen-sink</code> has none, so <code>docs-list</code>
         prints a bare name, and its <code>docs-show</code> has no description
         and no Inputs block: only one snippet whose

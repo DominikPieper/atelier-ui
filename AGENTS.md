@@ -125,6 +125,20 @@ Add a local entry when you need the `dev` / `test` toolsets. **Angular/Vue prop 
 3. Call `docs-show-story` only when `docs-show` lacks the story-level detail you need
 4. If a prop isn't documented, say so rather than inventing it
 
+**What the description is.** In all three frameworks, a component's `docs-list` / `docs-show`
+description starts with its owned `purpose` from `libs/spec/src/metadata/<name>.metadata.ts`,
+then a blank line, then the component's own JSDoc where it has one (Angular's carry usage examples; AtlTable's React
+and Vue components have none). The metadata's `specNames` join to the manifest component `name`, so a
+sub-component (`AtlRadio`, `AtlAvatarGroup`) carries its family's purpose; `AtlToast` and
+`AtlCodeBlock` have no metadata and keep the JSDoc. The hook is in each
+`libs/<fw>/.storybook/main.ts` (R-221): React rewrites the inline manifest through
+`experimental_manifests`; Angular and Vue run the docgen server, so they add an
+`experimental_docgenProvider` worker (`tools/storybook/purpose-docgen-worker.mjs`). Both read a
+name-to-purpose map built by `tools/scripts/lib/purpose-description.js` from
+`docs/public/.well-known/components/*.json` (generated and drift-gated by `check:knowledge`);
+`check:storybook-manifests` fails `[NO-PURPOSE]` when a built description does not start with
+the purpose. Both hooks are experimental Storybook API — re-verify after a Storybook bump.
+
 **When creating or editing components/stories (local dev, any framework — the chosen framework's Storybook running):**
 
 1. Call `get-storybook-story-instructions` before writing any code (REQUIRED before touching `*.stories.*` files)

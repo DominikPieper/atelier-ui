@@ -15,7 +15,11 @@ export default [
         'error',
         {
           enforceBuildableLibDependency: true,
-          allow: ['^.*/eslint(\\.base)?\\.config\\.[cm]?js$'],
+          allow: [
+            '^.*/eslint(\\.base)?\\.config\\.[cm]?js$',
+            // Shared with the other two `.storybook/main.ts` files (R-221).
+            '^.*/tools/scripts/lib/purpose-description\\.js$',
+          ],
           depConstraints: [{ sourceTag: '*', onlyDependOnLibsWithTags: ['*'] }],
         },
       ],

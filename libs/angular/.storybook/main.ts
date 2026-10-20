@@ -2,6 +2,7 @@ import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
 import type { StorybookConfig } from '@storybook/angular-vite';
 import type { InlineConfig } from 'vite';
+import { loadPurposes } from '../../../tools/scripts/lib/purpose-description.js';
 
 const config: StorybookConfig = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
@@ -50,6 +51,24 @@ const config: StorybookConfig = {
     // plan/adr/0143.
     experimentalReview: true,
   },
+  // R-221: an agent reading `docs-list` / `docs-show` sees the owned `purpose`
+  // (libs/spec/src/metadata) first, then the component's own JSDoc. Angular and
+  // Vue run Storybook's docgen server, where `experimental_manifests` sees an
+  // empty `components`, so the hook is a docgen-provider middleware that runs in
+  // a worker thread (hence a plain .mjs module and structured-clone-able
+  // options). Not keyed on CI (ADR-0122): the hosted build gets it too.
+  experimental_docgenProvider: (existing = []) => [
+    ...existing,
+    {
+      moduleSpecifier: fileURLToPath(
+        new URL(
+          '../../../tools/storybook/purpose-docgen-worker.mjs',
+          import.meta.url,
+        ),
+      ),
+      options: { purposes: loadPurposes() },
+    },
+  ],
   viteFinal: async (config: InlineConfig) => {
     // The hosted path (atelier.pieper.io/storybook-angular/) is opted into by the
     // deploy's own build command (wrangler.jsonc sets BUILD_STORYBOOK=1), never

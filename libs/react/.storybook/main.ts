@@ -1,9 +1,18 @@
 import { fileURLToPath } from 'node:url';
 import { dirname } from 'node:path';
 import type { StorybookConfig } from '@storybook/react-vite';
+import type { Manifests, PresetValue } from 'storybook/internal/types';
 import type { InlineConfig } from 'vite';
+import {
+  loadPurposes,
+  withPurpose,
+} from '../../../tools/scripts/lib/purpose-description.js';
 
-const config: StorybookConfig = {
+// `experimental_manifests` is a real preset property, but the framework's
+// `StorybookConfig` does not list it.
+const config: StorybookConfig & {
+  experimental_manifests?: PresetValue<Manifests>;
+} = {
   stories: ['../src/**/*.mdx', '../src/**/*.stories.@(js|jsx|mjs|ts|tsx)'],
   addons: [
     // Emits manifests/{docs,components}.json at build time for the hosted
@@ -45,6 +54,26 @@ const config: StorybookConfig = {
     // `common-preset.js`'s `isReviewExplicitlyEnabled`, 2026-09-13). See
     // plan/adr/0143.
     experimentalReview: true,
+  },
+  // R-221: an agent reading `docs-list` / `docs-show` sees the owned `purpose`
+  // (libs/spec/src/metadata) first, then the component's own JSDoc. React's
+  // `components` manifest is built inline by `@storybook/react`, so it can be
+  // rewritten here; Angular and Vue go through a docgen-provider worker
+  // instead (see their main.ts). Not keyed on CI (ADR-0122): the hosted build
+  // gets it too.
+  experimental_manifests: async (existing) => {
+    const purposes = loadPurposes();
+    for (const component of Object.values(
+      existing?.components?.components ?? {},
+    )) {
+      const description = withPurpose(
+        purposes,
+        component.name,
+        component.description,
+      );
+      if (description !== undefined) component.description = description;
+    }
+    return existing;
   },
   viteFinal: async (config: InlineConfig) => {
     // The hosted path (atelier.pieper.io/storybook-react/) is opted into by the

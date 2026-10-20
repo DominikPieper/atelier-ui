@@ -64,7 +64,7 @@ brownfield Day 2 track only after cohort 1).
       `check:component-count` to `libs/*/src/**/*.mdx`. Done when the gate fails on a planted number.
 - [x] **S6 R-222** AtlButton `variant`/`size` values visible in `docs-show` (all three frameworks);
       `/storybook-readiness#closed-values` shows before/after instead of citing it as a live defect.
-- [ ] **S7 R-221** purpose reaches agents: spike first (how `purpose`, the class JSDoc,
+- [x] **S7 R-221** (ADR-0176) purpose reaches agents: spike first (how `purpose`, the class JSDoc,
       `parameters.docs.description.component` and `story-description-source` relate after 5b4b5b00),
       then owner-approved change + ADR.
 

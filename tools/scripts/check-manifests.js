@@ -39,6 +39,14 @@
  *              undescribed prop is a hole in both. A prop that cannot carry a
  *              description is listed in PROP_DESCRIPTION_EXEMPT
  *              (tools/scripts/lib/allowlists.js) with a written reason.
+ *   [NO-PURPOSE] a component with metadata (libs/spec/src/metadata) has a
+ *              manifest `description` that does not START with its owned
+ *              `purpose`, or the metadata names a component the manifest does
+ *              not contain (R-221). `docs-list` / `docs-show` print this text to
+ *              agents; without the hook in `libs/<fw>/.storybook/main.ts` they
+ *              print the component JSDoc (Angular/React, which disagrees with
+ *              `purpose`) or nothing (Vue). Join and data source:
+ *              tools/scripts/lib/purpose-description.js.
  *
  * WHY THIS READS BUILT OUTPUT, AND WHY THAT IS SAFE HERE:
  * `dist/storybook/<fw>/manifests/components.json` only exists after
@@ -64,6 +72,7 @@ const path = require('path');
 const { FRAMEWORKS } = require('./lib/component-discovery');
 const { allProps } = require('./lib/manifest-props');
 const { PROP_DESCRIPTION_EXEMPT } = require('./lib/allowlists');
+const { loadPrimaryNames, loadPurposes } = require('./lib/purpose-description');
 
 const ROOT = path.resolve(__dirname, '../..');
 const DIST = path.join(ROOT, 'dist/storybook');
@@ -94,7 +103,10 @@ function resolvePointer(obj, pointer) {
   return cur;
 }
 
+const PURPOSES = loadPurposes();
+const PRIMARY_NAMES = loadPrimaryNames();
 let componentsChecked = 0;
+let purposesChecked = 0;
 let propsChecked = 0;
 const exemptUsed = new Set();
 
@@ -212,6 +224,34 @@ for (const fw of FRAMEWORKS) {
     }
   }
 
+  // [NO-PURPOSE] — the description an agent reads starts with the owned purpose.
+  const seen = new Set();
+  for (const id of ids) {
+    const entry = components[id];
+    const name = entry && entry.name;
+    if (typeof name !== 'string' || !Object.hasOwn(PURPOSES, name)) continue;
+    seen.add(name);
+    purposesChecked++;
+    const description =
+      typeof entry.description === 'string' ? entry.description : '';
+    if (!description.startsWith(PURPOSES[name])) {
+      fail(
+        'NO-PURPOSE',
+        `${fw}/${id}: manifest description does not start with the metadata purpose ` +
+          `(got ${JSON.stringify(description.slice(0, 60))}). The purpose hook in ` +
+          `libs/${fw}/.storybook/main.ts is missing or broken.`,
+      );
+    }
+  }
+  for (const name of PRIMARY_NAMES) {
+    if (!seen.has(name)) {
+      fail(
+        'NO-PURPOSE',
+        `${fw}: metadata names ${name} but the manifest has no component by that name to carry its purpose.`,
+      );
+    }
+  }
+
   // [NO-DESCRIPTION] — every prop of every documented component says what it is.
   for (const p of allProps(fw, manifestDir, components)) {
     propsChecked++;
@@ -252,6 +292,6 @@ if (errors.length > 0) {
   process.exit(1);
 } else {
   console.log(
-    `✓ Storybook component manifests present, docgen-backed, and resolvable for all ${FRAMEWORKS.length} frameworks (${componentsChecked} components, ${propsChecked} props checked, every prop described).`,
+    `✓ Storybook component manifests present, docgen-backed, and resolvable for all ${FRAMEWORKS.length} frameworks (${componentsChecked} components, ${propsChecked} props checked, every prop described, ${purposesChecked} descriptions start with the metadata purpose).`,
   );
 }

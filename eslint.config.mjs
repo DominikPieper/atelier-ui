@@ -57,7 +57,13 @@ export default [
         'error',
         {
           enforceBuildableLibDependency: true,
-          allow: ['^.*/eslint(\\.base)?\\.config\\.[cm]?[jt]s$'],
+          allow: [
+            '^.*/eslint(\\.base)?\\.config\\.[cm]?[jt]s$',
+            // The one tooling module the three `.storybook/main.ts` files share
+            // (R-221: the purpose-first manifest description); a Storybook
+            // config cannot import a workspace project by npm scope.
+            '^.*/tools/scripts/lib/purpose-description\\.js$',
+          ],
           depConstraints: [
             {
               sourceTag: 'framework:angular',
