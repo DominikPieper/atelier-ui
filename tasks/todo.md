@@ -38,6 +38,15 @@ anything in the CDS repo need the owner's go. Eval runs use the subscription quo
       anatomy/a11y, composition/anti-patterns, instructions). Done per layer when its ablation
       run is recorded (effect, spread, token cost, snapshot size) — a layer without effect is
       removed again, and that is a result too.
+  - [x] **Ablation L1 + L2** _(2026-10-21, `questions-layers.json`, 15 q × 3 repeats, sonnet, local package; report `eval-2026-10-21T14-35-40-439Z`, gitignored)_:
+        overall L0 53 % (51–53) → L1 64 % (61–67) → L2 64 % (62–69) → L1+L2 72 % (72–72).
+        On their own questions: L1 50 % → 96 %, L2 71 % → 100 %. Layers are additive and do not
+        touch other layers' questions (L3–L5 unchanged = control). Knowledge made answers cheaper:
+        input tokens per answer 27.6 k (L0) → 23.8 k (L1+L2), tool calls 4.3 → 3.6 (focus-ring:
+        6.3 → 1.3). `chip-filter`: badge's `useInstead` names "a dedicated chip/tag component" that
+        does not exist, so the model improvises (badge wrapping a button) — a pointer to nothing is
+        not guidance. Still open: L3 (2 q, both 0 % in every variant — figma-node-dialog is trivia),
+        L4 (1 q), L5 composition layer (source: `docs/src/data/patterns.ts`), L6 instructions split.
 - [ ] **M3 Best-practice catalog** (`plan/` or docs page, TBD): one entry per proven practice —
       claim, questions it was proven on, measured effect, cost, DS-neutral wording, CDS transfer
       status. Done when every M2 layer has an entry (kept or rejected).
