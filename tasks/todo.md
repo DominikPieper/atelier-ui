@@ -47,7 +47,7 @@ anything in the CDS repo need the owner's go. Eval runs use the subscription quo
         does not exist, so the model improvises (badge wrapping a button) — a pointer to nothing is
         not guidance. Still open: L3 (2 q, both 0 % in every variant — figma-node-dialog is trivia),
         L4 (1 q), L5 composition layer (source: `docs/src/data/patterns.ts`), L6 instructions split.
-- [ ] **M3 Best-practice catalog** (`plan/` or docs page, TBD): one entry per proven practice —
+- [ ] **M3 Best-practice catalog** (started 2026-10-21 at `plan/mcp-best-practices.md`, 9 entries with evidence; open: L5, second model): one entry per proven practice —
       claim, questions it was proven on, measured effect, cost, DS-neutral wording, CDS transfer
       status. Done when every M2 layer has an entry (kept or rejected).
 - [ ] **M4 Replace the hosted endpoints**: scaffold `.mcp.json`, `AGENTS.md` table, docs pages,
