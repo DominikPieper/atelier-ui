@@ -19,6 +19,36 @@ closed by the review triage carry a `_(closed 2026-10-11 …)_` note.
 
 Ranked; each carries why it's worth doing next rather than later.
 
+### Atelier MCP package (ADR-0177, owner go 2026-10-21)
+
+Atelier keeps its library as the lab; `@atelier-ui/mcp` (modelled on CDS-ADR-0012) is where we
+measure how much design-system knowledge an agent can use. Measure first, then build. Pushes and
+anything in the CDS repo need the owner's go. Eval runs use the subscription quota.
+
+- [ ] **M0 Eval spike.** Question set (Angular, mixed: API lookup, "which component for X",
+      styling/tokens, a11y, composition), runner `claude -p` with/without MCP, checker per
+      question. Baseline: hosted Angular endpoint vs. no server, ≥3 runs each. Done when the
+      report shows a with/without gap larger than the run-to-run spread; if not, the question
+      set is redesigned before anything is built.
+- [ ] **M1 Package L0** `libs/mcp` → `@atelier-ui/mcp`: stdio, Angular manifest snapshot from the
+      same build, `@storybook/mcp` pinned to the Storybook version, `instructions` with hard rules,
+      version-mismatch warning. Smoke test on the packed tarball as a gate in `check:all`. Done
+      when the eval reaches at least the hosted endpoint's score.
+- [ ] **M2 Layers L1–L6, one at a time** (purpose, tokens/styling rules, contract mismatches,
+      anatomy/a11y, composition/anti-patterns, instructions). Done per layer when its ablation
+      run is recorded (effect, spread, token cost, snapshot size) — a layer without effect is
+      removed again, and that is a result too.
+- [ ] **M3 Best-practice catalog** (`plan/` or docs page, TBD): one entry per proven practice —
+      claim, questions it was proven on, measured effect, cost, DS-neutral wording, CDS transfer
+      status. Done when every M2 layer has an entry (kept or rejected).
+- [ ] **M4 Replace the hosted endpoints**: scaffold `.mcp.json`, `AGENTS.md` table, docs pages,
+      worker route, correction in ADR-0173. Not before cohort 1 unless R-040 rehearses on the
+      package. Done when no hosted MCP URL is left and `check:all` exits 0.
+- [ ] **M5 Rename** `@conciso/design-contracts` → `@atelier-ui/contracts` (package, imports,
+      `sync-preflight`, scaffold, docs). Done when `check:all` exits 0 and no `@conciso/` name is
+      left outside history.
+- [ ] Triage `tasks/reviews.md` rows that waited on the CDS migration.
+
 ### Customer angle: existing Storybook + guardrails (owner go 2026-10-20)
 
 Focus review 2026-10-20: customers mostly already have Figma, a CI and a Storybook. The pitch
@@ -2196,6 +2226,9 @@ Open, from this work:
 The ones the owner and I will walk through together.
 
 ### Workshop substrate: move to the Conciso Design System (ADR-0165, 2026-10-09)
+
+**Superseded 2026-10-21 by ADR-0177 (owner).** Atelier keeps its library; the open steps below
+(P0b, P1.5, P1.6, P2–P6) are dropped, not deferred. The contract package stays here (M5 above).
 
 Decided 2026-10-09. Spike: `plan/research/cds-substrate-spike-2026-10-09.md`. Pushes, the CDS PR
 and npm deprecations each need the owner's explicit go.

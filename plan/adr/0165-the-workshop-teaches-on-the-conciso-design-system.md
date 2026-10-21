@@ -1,5 +1,6 @@
 ---
-status: accepted
+status: superseded
+superseded-by: plan/adr/0177-atelier-keeps-its-library-as-the-lab-for-an-mcp-package.md
 date: 2026-10-09
 sources:
   - plan/research/cds-substrate-spike-2026-10-09.md (the spike: contract loop, parity and story tests run against the CDS)
@@ -11,6 +12,12 @@ sources:
 # ADR-0165: The workshop teaches on the Conciso Design System
 
 ## Status
+
+**Superseded 2026-10-21 by
+[ADR-0177](0177-atelier-keeps-its-library-as-the-lab-for-an-mcp-package.md).** The owner
+keeps Atelier's own library as a lab for design-system practices (faster to change than the CDS);
+the CDS becomes a transfer target, the migration (P0b, P1.5–P6) is dropped, and the contract tool
+stays in Atelier as `@atelier-ui/contracts`. Kept below as recorded.
 
 Accepted. Recorded at decision time. Migration is planned in `tasks/todo.md` and not yet done.
 
