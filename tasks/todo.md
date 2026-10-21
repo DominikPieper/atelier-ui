@@ -30,11 +30,11 @@ anything in the CDS repo need the owner's go. Eval runs use the subscription quo
       question. Baseline: hosted Angular endpoint vs. no server, ≥3 runs each. Done when the
       report shows a with/without gap larger than the run-to-run spread; if not, the question
       set is redesigned before anything is built.
-- [ ] **M1 Package L0** `libs/mcp` → `@atelier-ui/mcp`: stdio, Angular manifest snapshot from the
+- [x] **M1 Package L0** _(done 2026-10-21: `libs/mcp`, `check:mcp-package` in `check:all`, private, not in the release group. Eval 13 × 3: local 94 % (92–95) vs hosted 96 % (95–97) — equivalent within noise (2 pts ≈ one failed check per run), same failure types. Layer seam `ATELIER_MCP_LAYERS`; likely too narrow for L1/L2, which must transform manifest content. Lockstep release needs the owner's go — seven steps listed in the agent report: nx group, drop `private`, release block, publish target, Storybook pin, publishConfig, snapshot before pack in CI.)_ `libs/mcp` → `@atelier-ui/mcp`: stdio, Angular manifest snapshot from the
       same build, `@storybook/mcp` pinned to the Storybook version, `instructions` with hard rules,
       version-mismatch warning. Smoke test on the packed tarball as a gate in `check:all`. Done
       when the eval reaches at least the hosted endpoint's score.
-- [ ] **M2 Layers L1–L6, one at a time** (purpose, tokens/styling rules, contract mismatches,
+- [ ] **M2 Layers L1–L6, one at a time** _(question set ready 2026-10-21: `questions-layers.json`, 15 questions tagged L1–L5, each fact checked present in its layer source and absent from the manifest; L0 hosted scores 52 % (51/53, 2 repeats) — the ceiling is gone. Compare L0 vs L0+layer, not vs `without`. L3/L4 are thin (2 and 1 questions survived): contract mismatches and ARIA notes are mostly derivable from docgen or generic knowledge — possibly a result in itself. Knowledge that contradicts the source must be fixed before it becomes a layer: R-230.)_ (purpose, tokens/styling rules, contract mismatches,
       anatomy/a11y, composition/anti-patterns, instructions). Done per layer when its ablation
       run is recorded (effect, spread, token cost, snapshot size) — a layer without effect is
       removed again, and that is a result too.

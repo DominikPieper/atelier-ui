@@ -1,0 +1,14 @@
+{
+  "name": "mcp",
+  "$schema": "../../node_modules/nx/schemas/project-schema.json",
+  "projectType": "library",
+  "tags": ["type:tool"],
+  "targets": {
+    "test": {
+      "executor": "nx:run-commands",
+      "cache": true,
+      "inputs": ["default"],
+      "options": { "cwd": "libs/mcp", "command": "node --test test/*.test.mjs" }
+    }
+  }
+}
