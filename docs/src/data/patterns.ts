@@ -525,13 +525,13 @@ export const PATTERNS: PatternMeta[] = [
       'When the operation is fast enough that a modal is acceptable — anything > ~3 s should open a separate destination, not a dialog.',
     ],
     whenNotToUse: [
-      'Reversible actions with an undo affordance — show an AtlToast with an "Undo" action instead.',
+      'Reversible actions where the undo lives elsewhere in your UI (AtlToast has no action button — it carries a message and an optional dismiss button, so an "Undo" must be built outside it).',
       'Form-style multi-field confirmation ("type the project name to confirm") — that\'s a destructive form, render it on its own page or in an AtlDrawer.',
       'As an "are you sure?" wrapper around every save button. Confirmation fatigue trains users to click through.',
     ],
     a11yNotes: [
       "AtlDialog uses the native `<dialog>` element with `cdkTrapFocus` — focus moves to the first focusable inside, restores on close. Don't reimplement.",
-      "Escape-to-close comes from the native `<dialog>` element's cancel event — the component intercepts it and routes it through the `open` binding as a close request. If an in-flight operation must not be interrupted, ignore that request (keep `open` true) until the mutation settles.",
+      "Escape closes the dialog by itself: the component handles the native `<dialog>` cancel event and sets `open` to false. There is no input to turn Escape off, so don't add your own Escape handler. If an in-flight operation must not be interrupted, disable the dialog's buttons and keep the trigger gated until the mutation settles.",
       'The destructive button must remain the *secondary* visual call to action — Cancel as `outline`, "Yes, delete" as `primary`. Reversing colour just to make red prominent is a contrast trap.',
     ],
     pitfalls: [
@@ -609,13 +609,13 @@ export const PATTERNS: PatternMeta[] = [
       'You expect 10–200 items — fewer than 10 should render flat without the accordion wrapper.',
     ],
     whenNotToUse: [
-      'Transient toast-style notifications — use AtlToast with `aria-live="assertive"` (error) or `polite` (info), not an accordion.',
+      'Transient toast-style notifications — use AtlToast (a `role="status"` polite live region for every variant), not an accordion.',
       'A single critical message — inline AtlAlert above the page is louder and harder to ignore than a collapsed accordion section.',
       'Real-time logs / streaming output — the accordion expansion animation fights the auto-scroll. Use a virtual-scrolled list instead.',
     ],
     a11yNotes: [
       "AtlAccordionGroup with `multi={true}` lets users keep severity sections open simultaneously — match the user's mental model of triage.",
-      "Each AtlAlert's `role` is bound to its variant (`alert` for danger/warning, `status` for info/success). Don't override.",
+      'Every AtlAlert has `role="alert"` whatever its variant; only `aria-live` follows the variant (`assertive` for danger, also for warning in React and Vue; `polite` otherwise). Don\'t override.',
       'The badge counts beside each accordion header must update when items are dismissed — assistive tech reads the header text on focus, not the changing count below.',
     ],
     pitfalls: [

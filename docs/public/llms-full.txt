@@ -346,7 +346,7 @@ Each entry lists:
 
 ### AtlSelect + AtlOption
 
-  Dropdown picker built on the native `<select>` element. Option children declare the available values.
+  Dropdown picker for one value from a known list. React and Vue render a native `<select>`; Angular renders a combobox button with a CDK listbox. Option children declare the available values.
 
   Props:
     errors         ReadonlyArray<string | AtlErrorItem>  []     Validation errors to show under the field. Angular takes Signal Forms' `ValidationError` objects; React and Vue take those objects or plain strings.

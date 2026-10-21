@@ -3,11 +3,11 @@ import type { ComponentMetadata } from './types';
 export const metadata: ComponentMetadata = {
   specNames: ['AtlSelectSpec', 'AtlOptionSpec'],
   purpose:
-    'Dropdown picker built on the native `<select>` element. Option children declare the available values.',
+    'Dropdown picker for one value from a known list. React and Vue render a native `<select>`; Angular renders a combobox button with a CDK listbox. Option children declare the available values.',
   whenToUse: [
     'Choosing one value from a known list of 7 or more items where radios would crowd the layout.',
     'Capturing a structured choice (country, currency, language) inside a form.',
-    'Rendering a compact picker that needs to work without JavaScript and inherit native mobile UI.',
+    'Rendering a compact picker where the options are plain labels. In React and Vue the native `<select>` also brings the platform picker on mobile.',
   ],
   antiPatterns: [
     {
