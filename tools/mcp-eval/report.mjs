@@ -111,7 +111,45 @@ export function summarize(attempts, questions, variants) {
         meanToolCalls: mean(scored.map((a) => a.toolCalls?.length ?? 0)),
       };
     }
-    return { id: question.id, category: question.category ?? '', cells };
+    return {
+      id: question.id,
+      category: question.category ?? '',
+      layer: question.layer ?? '',
+      cells,
+    };
+  });
+
+  // Questions tagged with a knowledge layer (`layer`) are also grouped by it: the per-run score
+  // of a layer is the mean over its questions' answers of repeat r, like the per-variant score.
+  const layers = [
+    ...new Set(questions.map((q) => q.layer).filter(Boolean)),
+  ].sort();
+  const perLayer = layers.map((layer) => {
+    const ids = new Set(
+      questions.filter((q) => q.layer === layer).map((q) => q.id),
+    );
+    const cells = {};
+    for (const variant of variants) {
+      const scored = attempts.filter(
+        (a) => ids.has(a.questionId) && a.variant === variant && a.evaluation,
+      );
+      const repeats = [...new Set(scored.map((a) => a.repeat))].sort(
+        (a, b) => a - b,
+      );
+      const runScores = repeats.map((r) =>
+        mean(
+          scored.filter((a) => a.repeat === r).map((a) => a.evaluation.score),
+        ),
+      );
+      cells[variant] = {
+        n: scored.length,
+        meanScore: mean(scored.map((a) => a.evaluation.score)),
+        runScores,
+        minScore: runScores.length ? Math.min(...runScores) : null,
+        maxScore: runScores.length ? Math.max(...runScores) : null,
+      };
+    }
+    return { layer, questions: ids.size, cells };
   });
 
   // The M0 criterion: the with/without gap must exceed the run-to-run spread.
@@ -137,7 +175,7 @@ export function summarize(attempts, questions, variants) {
       };
     });
 
-  return { perVariant, perQuestion, verdicts };
+  return { perVariant, perQuestion, perLayer, verdicts };
 }
 
 const clip = (text, max = 300) => {
@@ -159,6 +197,8 @@ export function renderReport({ meta, attempts, questions, variants }) {
   lines.push(
     `- Questions: ${questions.length}, repeats per question and variant: ${meta.repeats ?? 'n/a'}`,
   );
+  if (meta.questionsFile)
+    lines.push(`- Question file: \`${meta.questionsFile}\``);
   if (meta.filters) lines.push(`- Filters: ${meta.filters}`);
   if (meta.answersFile) lines.push(`- Raw answers: \`${meta.answersFile}\``);
   lines.push(
@@ -201,6 +241,23 @@ export function renderReport({ meta, attempts, questions, variants }) {
     lines.push('');
   }
 
+  if (s.perLayer.length) {
+    lines.push('## Per layer', '');
+    lines.push(
+      `| Layer | Questions | ${variants.map((v) => `\`${v}\` mean (run range)`).join(' | ')} |`,
+      `|---|---|${variants.map(() => '---').join('|')}|`,
+    );
+    for (const l of s.perLayer) {
+      const cells = variants.map((variant) => {
+        const c = l.cells[variant];
+        if (!c.n) return 'no answers';
+        return `${pct(c.meanScore)} (${pct(c.minScore)}-${pct(c.maxScore)})`;
+      });
+      lines.push(`| ${l.layer} | ${l.questions} | ${cells.join(' | ')} |`);
+    }
+    lines.push('');
+  }
+
   lines.push('## Per question', '');
   lines.push(
     `| Question | ${variants.map((v) => `\`${v}\``).join(' | ')} |`,
@@ -215,7 +272,9 @@ export function renderReport({ meta, attempts, questions, variants }) {
         .join(', ');
       return `${pct(c.meanScore)} (${checks}); ${fmt(c.meanToolCalls, 1)} tool calls`;
     });
-    lines.push(`| ${q.id} | ${cells.join(' | ')} |`);
+    lines.push(
+      `| ${q.id}${q.layer ? ` (${q.layer})` : ''} | ${cells.join(' | ')} |`,
+    );
   }
   lines.push('');
 

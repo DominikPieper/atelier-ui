@@ -1,5 +1,6 @@
 import assert from 'node:assert/strict';
-import { existsSync, readFileSync } from 'node:fs';
+import { existsSync, mkdtempSync, readFileSync, rmSync } from 'node:fs';
+import { tmpdir } from 'node:os';
 import { dirname, join } from 'node:path';
 import { describe, it } from 'node:test';
 import { fileURLToPath } from 'node:url';
@@ -9,6 +10,7 @@ import {
   analyzeStream,
   buildClaudeArgs,
   loadServer,
+  substituteRepoRoot,
   pool,
   SYSTEM_PROMPT,
   readConfig,
@@ -182,9 +184,53 @@ describe('config, servers and pool', () => {
     );
     assert.throws(() => readConfig({ MCP_EVAL_VARIANTS: 'with' }), /must be/);
   });
+  it('selects the question file with MCP_EVAL_QUESTIONS', () => {
+    const d = readConfig({});
+    assert.equal(d.questionsFile, 'questions.json');
+    assert.equal(d.questionsPath, join(here, 'questions.json'));
+    const c = readConfig({ MCP_EVAL_QUESTIONS: 'questions-layers.json' });
+    assert.equal(c.questionsFile, 'questions-layers.json');
+    assert.equal(c.questionsPath, join(here, 'questions-layers.json'));
+  });
   it('ships the hosted Angular server config', () => {
     assert.deepEqual(loadServer('with:hosted-angular').servers, ['atelier']);
     assert.throws(() => loadServer('with:nope'), /does not exist/);
+  });
+  it('substitutes ${REPO_ROOT} in every string value, nested, and nothing else', () => {
+    const out = substituteRepoRoot(
+      {
+        a: '${REPO_ROOT}/x',
+        n: 1,
+        l: ['${REPO_ROOT}', 'k'],
+        o: { p: 'a${REPO_ROOT}b' },
+      },
+      '/r',
+    );
+    assert.deepEqual(out, {
+      a: '/r/x',
+      n: 1,
+      l: ['/r', 'k'],
+      o: { p: 'a/rb' },
+    });
+  });
+  it('writes the resolved config to the scratch dir and leaves the shipped file alone', () => {
+    const scratch = mkdtempSync(join(tmpdir(), 'eval-test-'));
+    try {
+      const shipped = join(here, 'servers', 'local-angular.json');
+      const before = readFileSync(shipped, 'utf8');
+      assert.match(before, /\$\{REPO_ROOT\}/);
+      const { path, servers } = loadServer('with:local-angular', scratch);
+      assert.ok(path.startsWith(scratch));
+      assert.deepEqual(servers, ['atelier']);
+      const resolved = readFileSync(path, 'utf8');
+      assert.ok(!resolved.includes('${REPO_ROOT}'));
+      assert.ok(
+        JSON.parse(resolved).mcpServers.atelier.args[0].startsWith(repoRoot),
+      );
+      assert.equal(readFileSync(shipped, 'utf8'), before);
+    } finally {
+      rmSync(scratch, { recursive: true, force: true });
+    }
   });
   it('never runs more tasks at once than the limit', async () => {
     let live = 0;
@@ -197,6 +243,88 @@ describe('config, servers and pool', () => {
     await pool(Array.from({ length: 10 }, task), 3);
     assert.equal(peak, 3);
   });
+});
+
+const layerQuestions = JSON.parse(
+  readFileSync(join(here, 'questions-layers.json'), 'utf8'),
+).questions;
+
+describe('questions-layers.json', () => {
+  it('has 12 to 16 uniquely named questions, each tagged with a layer and where it was checked', () => {
+    assert.ok(layerQuestions.length >= 12 && layerQuestions.length <= 16);
+    assert.equal(
+      new Set(layerQuestions.map((q) => q.id)).size,
+      layerQuestions.length,
+    );
+    for (const q of layerQuestions) {
+      assert.match(q.layer, /^L[1-5]$/, q.id);
+      assert.ok(q.prompt && q.source && q.notInL0, q.id);
+      assert.ok(q.checks?.length, q.id);
+      for (const id of q.checks)
+        assert.ok(
+          [
+            'api',
+            'selectors',
+            'forbid',
+            'claims',
+            'tokens',
+            'raw-color',
+            'nesting',
+          ].includes(id),
+          `${q.id}: ${id}`,
+        );
+      if (q.checks.includes('selectors'))
+        assert.ok(q.expectSelectors?.length, q.id);
+      if (q.checks.includes('forbid'))
+        assert.ok(q.forbidSelectors?.length, q.id);
+      if (q.checks.includes('nesting')) assert.ok(q.forbidNested?.length, q.id);
+      if (q.checks.includes('claims')) assert.ok(q.claims?.length, q.id);
+    }
+  });
+  it('covers every layer L1 to L5', () => {
+    assert.deepEqual([...new Set(layerQuestions.map((q) => q.layer))].sort(), [
+      'L1',
+      'L2',
+      'L3',
+      'L4',
+      'L5',
+    ]);
+  });
+  it('keeps claim keywords tight: no bare numbers, no one-word stop words', () => {
+    for (const q of layerQuestions)
+      for (const kw of (q.claims ?? []).flat()) {
+        assert.ok(!/^\d+$/.test(kw), `${q.id}: bare number "${kw}"`);
+        assert.ok(
+          !['the', 'and', 'not', 'no', 'use', 'is', 'to', 'a'].includes(kw),
+          `${q.id}: common word "${kw}"`,
+        );
+      }
+  });
+  it(
+    'only expects things that exist in the library (needs the built manifest)',
+    { skip: !existsSync(join(manifestDir, 'manifests/components.json')) },
+    () => {
+      const truth = buildTruth({ manifestDir, repoRoot });
+      const known = new Set([
+        ...Object.keys(truth.elements),
+        ...Object.keys(truth.attributes),
+        ...truth.knownTags,
+        ...truth.knownAttributes,
+      ]);
+      for (const q of layerQuestions) {
+        for (const sel of [
+          ...(q.expectSelectors ?? []).flat(),
+          ...(q.forbidSelectors ?? []),
+          ...(q.forbidNested ?? []).flat(),
+        ])
+          assert.ok(known.has(sel), `${q.id}: "${sel}" is not a selector`);
+        for (const kw of (q.claims ?? [])
+          .flat()
+          .filter((k) => k.startsWith('--')))
+          assert.ok(truth.tokens.includes(kw), `${q.id}: ${kw} is not a token`);
+      }
+    },
+  );
 });
 
 describe('questions.json', () => {
@@ -255,6 +383,75 @@ describe('questions.json', () => {
       }
     },
   );
+});
+
+describe('report by layer', () => {
+  const truth = {
+    elements: {},
+    attributes: {},
+    knownTags: [],
+    knownAttributes: [],
+    tokens: [],
+  };
+  const qs = [
+    { id: 'a', layer: 'L1', checks: ['claims'], claims: [['alpha']] },
+    { id: 'b', layer: 'L1', checks: ['claims'], claims: [['alpha']] },
+    { id: 'c', layer: 'L2', checks: ['claims'], claims: [['alpha']] },
+  ];
+  const at = (questionId, variant, repeat, text) => ({
+    questionId,
+    variant,
+    repeat,
+    infraError: null,
+    text,
+    toolCalls: [],
+    toolErrors: [],
+    tokens: { input: 1, output: 1 },
+    costUsd: 0,
+    durationMs: 1,
+  });
+  const attempts = evaluateAttempts(
+    [
+      at('a', 'without', 0, 'alpha'),
+      at('b', 'without', 0, 'no'),
+      at('c', 'without', 0, 'no'),
+      at('a', 'without', 1, 'alpha'),
+      at('b', 'without', 1, 'alpha'),
+      at('c', 'without', 1, 'no'),
+    ],
+    qs,
+    truth,
+  );
+  it('groups results per layer with the run-to-run range', () => {
+    const s = summarize(attempts, qs, ['without']);
+    const byLayer = Object.fromEntries(s.perLayer.map((l) => [l.layer, l]));
+    assert.deepEqual(Object.keys(byLayer), ['L1', 'L2']);
+    assert.equal(byLayer.L1.questions, 2);
+    assert.equal(byLayer.L1.cells.without.meanScore, 0.75);
+    assert.deepEqual(byLayer.L1.cells.without.runScores, [0.5, 1]);
+    assert.equal(byLayer.L2.cells.without.meanScore, 0);
+  });
+  it('has no layer table for a question set without layers', () => {
+    const plain = [{ id: 'a', checks: ['claims'], claims: [['alpha']] }];
+    const s = summarize(
+      evaluateAttempts([at('a', 'without', 0, 'alpha')], plain, truth),
+      plain,
+      ['without'],
+    );
+    assert.deepEqual(s.perLayer, []);
+  });
+  it('renders the layer table and the question file', () => {
+    const md = renderReport({
+      meta: { createdAt: 'now', questionsFile: 'questions-layers.json' },
+      attempts,
+      questions: qs,
+      variants: ['without'],
+    });
+    assert.match(md, /Question file: `questions-layers.json`/);
+    assert.match(md, /## Per layer/);
+    assert.match(md, /\| L1 \| 2 \| 75% \(50%-100%\) \|/);
+    assert.match(md, /\| a \(L1\) \|/);
+  });
 });
 
 describe('report', () => {

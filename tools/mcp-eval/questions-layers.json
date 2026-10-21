@@ -1,0 +1,189 @@
+{
+  "version": 1,
+  "_comment": "Second question set for the knowledge-layer ablation (tasks/todo.md M2). Every question targets knowledge that sits in one layer's source and is NOT derivable from the Angular manifest (L0): `layer` is the layer that should fix it, `source` says where the fact is true, `notInL0` where it was checked to be absent from dist/storybook/angular. Same check fields as questions.json plus `nesting` (`forbidNested`: [outer, inner] pairs). Layers: L1 purpose/when-to-use, L2 tokens and styling rules, L3 Figma-code contract mismatches, L4 anatomy and component-specific a11y, L5 composition and anti-patterns.",
+  "questions": [
+    {
+      "id": "chip-filter",
+      "category": "which-component",
+      "layer": "L1",
+      "prompt": "I use @atelier-ui/angular in a standalone Angular app. My filter bar shows the active filters as removable chips: a label plus an × button that removes that filter. Which Atelier component do I use for a chip, and how do I template one? Short template please.",
+      "checks": ["api", "forbid"],
+      "forbidSelectors": ["atl-badge"],
+      "source": "libs/spec/src/metadata/badge.metadata.ts antiPatterns: 'Holding a removable user-entered chip (filter, recipient)' -> a dedicated chip/tag component with its own remove affordance; badges are display-only. docs/public/.well-known/components/badge.json rules (should-not).",
+      "notInL0": "Checked dist/storybook/angular manifests + docgen/story-docs: 'chip' occurs once (typography doc, 'kbd chips'), 'display-only' 0 hits; the badge JSDoc says only 'Inline badge for labeling items with semantic color variants'. There is no chip component, and the manifest nowhere says a badge must not be used as one. Pilot: the L0 answer still builds a chip from AtlBadge plus a button, so the claim 'there is no chip component' is derivable from L0 and was dropped; the question checks the use of atl-badge."
+    },
+    {
+      "id": "category-tree",
+      "category": "which-component",
+      "layer": "L1",
+      "prompt": "I use @atelier-ui/angular in a standalone Angular app. A product-category browser: users expand nested categories and drill into subcategories, three levels deep. Which Atelier component do I build it from? Show the template skeleton.",
+      "checks": ["api", "forbid"],
+      "forbidSelectors": ["atl-accordion-group", "atl-accordion-item"],
+      "source": "libs/spec/src/metadata/accordion.metadata.ts antiPatterns: 'Building a tree of nested categories the user can drill into' -> a dedicated tree component with role=\"tree\" and proper expanded-state semantics. docs/public/.well-known/components/accordion.json rules (should-not).",
+      "notInL0": "Checked the manifest tree: 'treeitem' 0 hits, no tree component, accordion docgen JSDoc only describes collapsible sections. Nothing in L0 says an accordion is the wrong primitive for a tree. Pilot: the claim 'role=tree' was dropped, because a correct answer can use the CDK tree, which sets the roles itself; the question checks that no accordion is used."
+    },
+    {
+      "id": "focus-ring-tile",
+      "category": "styling",
+      "layer": "L2",
+      "prompt": "I use @atelier-ui/angular in a standalone Angular app. My clickable summary tile is a `<div role=\"button\" tabindex=\"0\">`. Write the CSS for its keyboard focus indicator so it looks like focus on Atelier's own controls, in light and dark mode.",
+      "checks": ["raw-color", "tokens", "claims"],
+      "claims": [["--ui-focus-ring"], ["focus-visible"]],
+      "source": "libs/styles/src/tokens.css --ui-focus-ring (double-ring box-shadow); docs/public/.well-known/components/*.json tokens[] intent+constraints for --ui-focus-ring: apply via box-shadow on :focus-visible, never :focus alone, do not override per component.",
+      "notInL0": "grep over manifest tree: '--ui-focus-ring' 0 hits, 'focus-visible' not offered as a token recipe. Only the foundation docs list some --ui-* names (colour, spacing, radius, shadow, z), not the focus ring."
+    },
+    {
+      "id": "disabled-slider",
+      "category": "styling",
+      "layer": "L2",
+      "prompt": "I use @atelier-ui/angular in a standalone Angular app. A custom range slider I wrote sits next to Atelier controls. When it is disabled it must look inert exactly like Atelier's own disabled controls. Write the CSS for the disabled state using the library's design tokens.",
+      "checks": ["raw-color", "tokens", "claims"],
+      "claims": [["--ui-opacity-disabled"]],
+      "source": "libs/styles/src/tokens.css --ui-opacity-disabled (0.5 light / 0.65 dark); token intent in docs/public/.well-known/components/*.json: apply via opacity on the disabled element, the button is the exception (--ui-color-disabled-bg/-text/-border, button only).",
+      "notInL0": "grep over manifest tree: '--ui-opacity-disabled' 0 hits. '--ui-color-disabled-bg' does appear (button docs), which is the trap: the token exists but is button-only."
+    },
+    {
+      "id": "control-height-search",
+      "category": "styling",
+      "layer": "L2",
+      "prompt": "I use @atelier-ui/angular in a standalone Angular app. A custom search field sits in a toolbar next to an atl-button at its default size, and both must have exactly the same height. Write the CSS for the field using the library's design tokens, no hard-coded height.",
+      "checks": ["raw-color", "tokens", "claims"],
+      "claims": [["--ui-control-height-md"]],
+      "source": "libs/styles/src/tokens.css --ui-control-height-md (2.5rem); token intent in docs/public/.well-known/components/*.json: height of the default interactive control, derive block padding from it.",
+      "notInL0": "grep over manifest tree: '--ui-control-height' 0 hits, '--ui-row-height' 0 hits."
+    },
+    {
+      "id": "motion-rows",
+      "category": "styling",
+      "layer": "L2",
+      "prompt": "I use @atelier-ui/angular in a standalone Angular app. Write the CSS for a background-colour transition on hover and focus-visible of my custom list rows, using the library's motion tokens. Reduced-motion users must keep working.",
+      "checks": ["raw-color", "tokens", "claims"],
+      "claims": [
+        [
+          "--ui-transition-fast",
+          "--ui-transition-normal",
+          "--ui-duration-fast",
+          "--ui-duration-normal"
+        ]
+      ],
+      "source": "libs/styles/src/tokens.css --ui-transition-fast/-normal (composed shorthand) and --ui-duration-*; token intent in docs/public/.well-known/components/*.json: apply to `transition` with the property name; prefers-reduced-motion is handled by the tokens.",
+      "notInL0": "grep over manifest tree: '--ui-transition', '--ui-duration', '--ui-ease', 'prefers-reduced-motion' 0 hits."
+    },
+    {
+      "id": "lint-raw-color",
+      "category": "styling",
+      "layer": "L2",
+      "prompt": "I use @atelier-ui/angular in a standalone Angular app. Stylelint fails in my workspace on this CSS: `color: #1a1a1a; border: 1px solid #ccc;` (body text and a decorative divider). Which rule id fails, and what is the corrected CSS using the library's tokens?",
+      "checks": ["raw-color", "tokens", "claims"],
+      "claims": [["no-raw-color-literal"]],
+      "source": "stylelint.config.mjs + tools/stylelint-rules/no-raw-color-literal.js (rule id atelier/no-raw-color-literal, message '[RAW-COLOR] ... use a --ui-* token'); tokens --ui-color-text (primary body text) and --ui-color-border (decorative border) in libs/styles/src/tokens.css.",
+      "notInL0": "grep over manifest tree: 'no-raw-color' and 'stylelint' 0 hits; --ui-color-text and --ui-color-border are named in the foundation docs but without the intent (decorative vs functional)."
+    },
+    {
+      "id": "loading-button-grey",
+      "category": "figma-code",
+      "layer": "L3",
+      "prompt": "I use @atelier-ui/angular in a standalone Angular app. The Figma master of the primary button shows `loading` as a brand-coloured button with a spinner. In my app a loading `atl-button` turns grey like a disabled one. Is that a bug in the library or in my code?",
+      "checks": ["claims"],
+      "claims": [
+        ["by design", "intentional", "deliberate", "adr-0159"],
+        [
+          "is-disabled",
+          "disabled cover",
+          "disabled paint",
+          "disabled styling",
+          "disabled look",
+          "disabled appearance",
+          "disabled colour",
+          "disabled color",
+          "disabled state"
+        ]
+      ],
+      "source": "libs/spec/src/contracts/button.contract.ts mismatch `loading` (impliesBoolean disabled): 'In code `loading` always sets `is-disabled` (ADR-0159), so a loading button paints the disabled cover; the master's `loading` Boolean only adds the spinner, which sits on top of the `disabled` Boolean's opaque `_disabled-overlay`'; libs/angular/src/lib/button/atl-button.ts isDisabled = disabled() || loading().",
+      "notInL0": "L0 docgen says only 'Shows a loading spinner, announces aria-busy and ignores activation. The button stays focusable (ADR-0171)'; 'is-disabled' / 'ADR-0159' 0 hits; nothing about the Figma master."
+    },
+    {
+      "id": "accordion-heading-level",
+      "category": "a11y",
+      "layer": "L4",
+      "prompt": "I use @atelier-ui/angular in a standalone Angular app. My page has an h1 title and, directly below it, an accordion of FAQ sections. The accordion headers must be level 2 headings so heading order stays valid. Show the template.",
+      "checks": ["api", "selectors", "claims"],
+      "expectSelectors": ["atl-accordion-item"],
+      "claims": [
+        [
+          "headinglevel=\"2\"",
+          "headinglevel]=\"2\"",
+          "headinglevel='2'",
+          "headinglevel]='2'"
+        ]
+      ],
+      "source": "libs/angular/src/lib/accordion/atl-accordion.ts AtlAccordionItem.headingLevel input (1-6, default 3, rendered as role=heading aria-level); libs/spec/src/contracts/accordion-item.contract.ts codeOnly `headingLevel`.",
+      "notInL0": "grep over manifest tree: 'headingLevel' 0 hits. atl-accordion-item is not a manifest component entry (only atl-accordion-group is), so its inputs are not in the docgen; the usage example does not set a level. Pilot: the L0 answer mentions the word in a prose negation ('I did not invent headingLevel'), hence claimsIn: code.",
+      "claimsIn": "code"
+    },
+    {
+      "id": "destructive-type-to-confirm",
+      "category": "composition",
+      "layer": "L5",
+      "prompt": "I use @atelier-ui/angular in a standalone Angular app. Deleting a production project must require typing the project's name into a text field before the Delete button enables. Which Atelier overlay or layout do I use, and what is the template skeleton?",
+      "checks": ["api", "selectors", "forbid"],
+      "forbidSelectors": ["atl-dialog"],
+      "source": "docs/src/data/patterns.ts 'confirmation-dialog' whenNotToUse: 'Form-style multi-field confirmation (type the project name to confirm) - that's a destructive form, render it on its own page or in an AtlDrawer' (published as /.well-known/cookbook-patterns.json).",
+      "notInL0": "Manifest cookbook story-docs lists story names only ('Confirmation Dialog', no code, no guidance); 'type to confirm' 0 hits; atl-dialog docgen recommends the dialog for confirmations.",
+      "expectSelectors": ["atl-input", "atl-button"]
+    },
+    {
+      "id": "severity-day-groups",
+      "category": "composition",
+      "layer": "L5",
+      "prompt": "I use @atelier-ui/angular in a standalone Angular app. A notification centre grouped by severity (Critical, Warning, Info) and, inside each severity, by day (Today, Earlier). Compose the template from Atelier components.",
+      "checks": ["api", "nesting"],
+      "forbidNested": [
+        ["atl-accordion-group", "atl-accordion-group"],
+        ["atl-accordion-item", "atl-accordion-group"]
+      ],
+      "source": "docs/src/data/patterns.ts 'notification-center' pitfalls: 'LLMs frequently nest AtlAccordionGroup inside another accordion - flat groupings work better; switch to AtlTabs if you really need two axes'.",
+      "notInL0": "Manifest cookbook story-docs has the story name 'Notification Center' only; accordion docgen does not warn against nesting."
+    },
+    {
+      "id": "site-nav",
+      "category": "which-component",
+      "layer": "L1",
+      "prompt": "I use @atelier-ui/angular in a standalone Angular app. A top navigation bar with five page links (Home, Projects, Team, Billing, Help); the Projects entry opens a small list of sub-pages. Which Atelier components do I build it from? Show the template.",
+      "checks": ["api", "forbid"],
+      "forbidSelectors": ["atl-menu", "atl-menu-item", "atl-tab-group"],
+      "source": "libs/spec/src/metadata/menu.metadata.ts antiPatterns: 'Hosting site-level navigation links' -> a real nav with <a> links, menus are for actions; libs/spec/src/metadata/tabs.metadata.ts antiPatterns: 'Wiring tabs as top-level site navigation across distinct pages' -> a real nav with <a> links and URLs.",
+      "notInL0": "atl-menu docgen JSDoc: 'Floating dropdown menu panel ... keyboard navigation'; the manifest nowhere says menus are not for navigation (grep 'site-level' 0 hits). Pilot: the claim '<nav' was dropped, L0 answers use a nav element anyway; the check is that menu and tabs are not used for site navigation."
+    },
+    {
+      "id": "product-thumbnail",
+      "category": "which-component",
+      "layer": "L1",
+      "prompt": "I use @atelier-ui/angular in a standalone Angular app. Each row of my catalogue list shows a small square product photo (src from the API) before the product name. Which Atelier component renders the photo? Show the row template.",
+      "checks": ["api", "forbid"],
+      "forbidSelectors": ["atl-avatar"],
+      "source": "libs/spec/src/metadata/avatar.metadata.ts antiPatterns: 'Displaying a decorative product image or thumbnail' -> a plain <img> or a media component; avatars carry identity semantics and initial fallbacks.",
+      "notInL0": "The manifest description starts with the purpose 'Identity marker for a person or entity' (ADR-0176) but never says that a product thumbnail is the wrong use; the docgen offers a square shape and src input, which invites the misuse."
+    },
+    {
+      "id": "figma-node-dialog",
+      "category": "figma-code",
+      "layer": "L3",
+      "prompt": "I use @atelier-ui/angular in a standalone Angular app. I want my agent to inspect the Figma master of AtlDialog with figma_get_component_for_development. Which node id is the AtlDialog master on the Components page of the Atelier UI file?",
+      "checks": ["claims"],
+      "claims": [["55:94", "55-94"]],
+      "source": "libs/spec/src/contracts/dialog.contract.ts figmaNodeId '55:94'; docs/public/.well-known/components/dialog.json figma.masters[0].nodeId.",
+      "notInL0": "grep over the manifest tree: the file key 'QMnDD8uZQPldPrlCwZZ58T' and any node id 0 hits; node ids exist only in the contracts."
+    },
+    {
+      "id": "settings-subtabs",
+      "category": "composition",
+      "layer": "L5",
+      "prompt": "I use @atelier-ui/angular in a standalone Angular app. A settings page with tabs Account, Notifications and Billing. Inside Billing there are three more sections (Plan, Invoices, Payment methods) that the user switches between. Compose the template from Atelier components.",
+      "checks": ["api", "nesting"],
+      "forbidNested": [["atl-tab-group", "atl-tab-group"]],
+      "source": "docs/src/data/patterns.ts 'settings-page' whenNotToUse: 'Nested settings that need their own sub-tabs - collapse to an accordion or a list-detail layout instead of nesting tab groups'.",
+      "notInL0": "Manifest cookbook story-docs has the story name 'Settings Page' only; the tab-group docgen does not warn against nesting."
+    }
+  ]
+}

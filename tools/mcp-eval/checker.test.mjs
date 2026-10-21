@@ -9,6 +9,7 @@ import {
   checkApi,
   checkClaims,
   checkForbidden,
+  checkNesting,
   checkRawColors,
   checkSelectors,
   checkTokens,
@@ -550,6 +551,138 @@ describe('tokens and raw colours', () => {
   });
 });
 
+describe('tokens and raw colours in prose, comments and fallbacks', () => {
+  it('does not flag a token name that only appears in prose (a negation or a quote)', () => {
+    assert.equal(
+      checkTokens(
+        "There is no `--ui-control-height` token, and I didn't want to invent --ui-motion-duration-fast.",
+        truth,
+      ).pass,
+      true,
+    );
+  });
+  it('flags an invented token declared or read in a code block, or read via var() in prose', () => {
+    assert.deepEqual(
+      checkTokens('```css\n.a { height: 2rem; --ui-bogus: 1; }\n```', truth)
+        .invented,
+      ['--ui-bogus'],
+    );
+    assert.deepEqual(
+      checkTokens('Use `var(--ui-color-brand-fancy)` here.', truth).invented,
+      ['--ui-color-brand-fancy'],
+    );
+  });
+  it('ignores colour literals in CSS comments and in var() fallbacks, as the repo rule does', () => {
+    assert.equal(
+      checkRawColors(
+        '```css\n.a { background: var(--ui-color-primary-light); /* rgba(0,100,112,0.08) in light */ }\n```',
+      ).pass,
+      true,
+    );
+    assert.equal(
+      checkRawColors(
+        '```css\n.a { background: var(--x, rgb(0 0 0 / 0.04)); color: var(--ui-color-text, #111); }\n```',
+      ).pass,
+      true,
+    );
+  });
+  it('ignores linter output pasted in a code block', () => {
+    assert.equal(
+      checkRawColors(
+        '```\n2:10  ✖  Unexpected hex color "#1a1a1a"  color-no-hex\n```',
+      ).pass,
+      true,
+    );
+  });
+  it('ignores rgba alpha in shadow properties, but not elsewhere', () => {
+    assert.equal(
+      checkRawColors(
+        '```css\n.a { box-shadow: 0 1px 2px rgba(0,0,0,.2); }\n```',
+      ).pass,
+      true,
+    );
+    assert.equal(
+      checkRawColors('```css\n.a { --tile-ring: #005fcc; }\n```').pass,
+      false,
+    );
+    assert.equal(
+      checkRawColors(
+        '```css\n.a { color: var(--ui-color-text); border-color: rgb(0 0 0 / 10%); }\n```',
+      ).pass,
+      false,
+    );
+  });
+});
+
+describe('checkNesting', () => {
+  const pair = [['atl-accordion-item', 'atl-accordion-item']];
+  it('flags an element opened inside an open element of the same name', () => {
+    const r = checkNesting(
+      fence(
+        '<atl-accordion-group><atl-accordion-item>A\n<atl-accordion-group><atl-accordion-item>B</atl-accordion-item></atl-accordion-group>\n</atl-accordion-item></atl-accordion-group>',
+      ),
+      pair,
+    );
+    assert.equal(r.pass, false);
+    assert.deepEqual(r.found, ['atl-accordion-item in atl-accordion-item']);
+  });
+  it('accepts siblings and closed elements', () => {
+    const r = checkNesting(
+      fence(
+        '<atl-accordion-item>A</atl-accordion-item><atl-accordion-item>B</atl-accordion-item>',
+      ),
+      pair,
+    );
+    assert.equal(r.pass, true);
+  });
+  it('honours self-closing tags and elements closed by an enclosing closer', () => {
+    assert.equal(
+      checkNesting(fence('<atl-tab /><atl-tab />'), [['atl-tab', 'atl-tab']])
+        .pass,
+      true,
+    );
+    assert.equal(
+      checkNesting(fence('<div><atl-x></div><atl-x>'), [['atl-x', 'atl-x']])
+        .pass,
+      true,
+    );
+    assert.equal(
+      checkNesting(fence('<atl-x><atl-x>'), [['atl-x', 'atl-x']]).pass,
+      false,
+    );
+  });
+  it('ignores prose and tags that are not in code', () => {
+    const r = checkNesting(
+      'Do not put <atl-accordion-item> in <atl-accordion-item>.',
+      pair,
+    );
+    assert.equal(r.pass, true);
+  });
+  it('checks an outer/inner pair of different names', () => {
+    const r = checkNesting(
+      fence('<atl-card><div><atl-dialog>x</atl-dialog></div></atl-card>'),
+      [['atl-card', 'atl-dialog']],
+    );
+    assert.equal(r.pass, false);
+  });
+  it('is wired into evaluateAnswer as the nesting check', () => {
+    const q = { id: 'q', checks: ['nesting'], forbidNested: pair };
+    const bad = fence(
+      '<atl-accordion-item><atl-accordion-item>x</atl-accordion-item></atl-accordion-item>',
+    );
+    assert.equal(evaluateAnswer(q, bad, truth).score, 0);
+    assert.match(evaluateAnswer(q, bad, truth).checks[0].detail, /nested/);
+    assert.equal(
+      evaluateAnswer(
+        q,
+        fence('<atl-accordion-item>x</atl-accordion-item>'),
+        truth,
+      ).score,
+      1,
+    );
+  });
+});
+
 describe('evaluateAnswer', () => {
   it('scores the share of passed checks and names the failure', () => {
     const question = {
@@ -571,6 +704,34 @@ describe('evaluateAnswer', () => {
         ['selectors', true],
         ['claims', false],
       ],
+    );
+  });
+
+  it('can match claims in code only, so a prose negation does not count', () => {
+    const q = {
+      id: 'q',
+      checks: ['claims'],
+      claimsIn: 'code',
+      claims: [['headinglevel="2"']],
+    };
+    const prose = "I didn't invent a `headingLevel` prop.";
+    assert.equal(evaluateAnswer(q, prose, truth).score, 0);
+    assert.equal(
+      evaluateAnswer(
+        q,
+        fence('<atl-accordion-item headingLevel="2">x</atl-accordion-item>'),
+        truth,
+      ).score,
+      1,
+    );
+    // Without the option the same prose still counts (the default is the whole answer).
+    assert.equal(
+      evaluateAnswer(
+        { ...q, claimsIn: undefined, claims: [['headinglevel']] },
+        prose,
+        truth,
+      ).score,
+      1,
     );
   });
 

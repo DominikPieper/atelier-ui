@@ -620,6 +620,34 @@ export function checkForbidden(answerText, forbid) {
   return { pass: used.length === 0, used };
 }
 
+const VOID_TAGS = new Set(['br', 'hr', 'img', 'input', 'meta', 'link']);
+
+/**
+ * `pairs`: `[outer, inner]` element names that must not nest. A tag is "inside" another while the
+ * other is open in the same code block; self-closing and void tags never open, and a closer
+ * closes everything opened after its matching opener (the way a browser would). Only code is
+ * scanned, so prose such as "do not put <a> in <a>" does not count.
+ */
+export function checkNesting(answerText, pairs) {
+  const found = new Set();
+  for (const block of extractCode(answerText)) {
+    const stack = [];
+    for (const m of block.matchAll(/<(\/?)([a-zA-Z][\w-]*)([^<>]*?)(\/?)>/g)) {
+      const [, closing, name, , selfClosing] = m;
+      if (closing) {
+        const at = stack.lastIndexOf(name);
+        if (at !== -1) stack.length = at;
+        continue;
+      }
+      for (const [outer, inner] of pairs)
+        if (name === inner && stack.includes(outer))
+          found.add(`${inner} in ${outer}`);
+      if (!selfClosing && !VOID_TAGS.has(name)) stack.push(name);
+    }
+  }
+  return { pass: found.size === 0, found: [...found] };
+}
+
 function normalize(text) {
   return (text ?? '').normalize('NFC').toLowerCase();
 }
@@ -646,14 +674,35 @@ export function checkClaims(answerText, claims) {
   return { pass: missing.length === 0, missing };
 }
 
-/** Every `--ui-*` custom property the answer names must exist; wildcards and prefixes are skipped. */
+/** Fenced code bodies of a markdown answer, and the prose left over once they are cut out. */
+function splitFences(markdown) {
+  const blocks = [];
+  const prose = (markdown ?? '').replace(
+    /```[^\n]*\n([\s\S]*?)(?:```|$)/g,
+    (_, body) => {
+      blocks.push(body);
+      return ' ';
+    },
+  );
+  return { blocks, prose };
+}
+
+/**
+ * Every `--ui-*` custom property the answer USES must exist: those in code blocks and those read
+ * with `var(--ui-x)` in prose. A name that only appears in prose ("there is no `--ui-control-height`
+ * token") is a statement about the library, not a use, and is not checked. Wildcards and prefixes
+ * are skipped.
+ */
 export function checkTokens(answerText, truth) {
   const known = new Set(truth.tokens);
+  const { blocks, prose } = splitFences(answerText);
+  const scope = [
+    ...blocks,
+    ...[...prose.matchAll(/var\(\s*--ui-[a-z0-9-]*/g)].map((m) => m[0]),
+  ].join('\n');
   const invented = new Set();
-  for (const m of (answerText ?? '').matchAll(
-    /--ui-[a-z0-9]+(?:-[a-z0-9]+)*/g,
-  )) {
-    const next = answerText[m.index + m[0].length];
+  for (const m of scope.matchAll(/--ui-[a-z0-9]+(?:-[a-z0-9]+)*/g)) {
+    const next = scope[m.index + m[0].length];
     if (next && '*{<[…'.includes(next)) continue; // `--ui-color-*`, `--ui-color-{role}`
     if (next === '-') continue; // trailing hyphen: a prefix, not a name
     if (!known.has(m[0])) invented.add(m[0]);
@@ -674,13 +723,47 @@ const RAW_COLOR_RE = new RegExp(
   'i',
 );
 
-/** Raw colour literals in declarations of the answer's code blocks (CSS or inline `style`). */
+/** Removes the fallback of every `var(--x, fallback)`, the way atelier/no-raw-color-literal does. */
+function stripVarFallbacks(text) {
+  let out = '';
+  for (let i = 0; i < text.length;) {
+    const m = /^var\(\s*--[\w-]+\s*,/.exec(text.slice(i));
+    if (!m) {
+      out += text[i++];
+      continue;
+    }
+    let depth = 1;
+    let j = i + 'var('.length;
+    while (j < text.length && depth > 0) {
+      if (text[j] === '(') depth++;
+      else if (text[j] === ')') depth--;
+      j++;
+    }
+    out += 'var()';
+    i = j;
+  }
+  return out;
+}
+
+const SHADOW_PROPERTY = /^\s*-?(?:webkit-)?(?:box|text)-shadow\s*:/i;
+
+/**
+ * Raw colour literals in declarations of the answer's code blocks (CSS or inline `style`). Mirrors
+ * the repo's atelier/no-raw-color-literal: CSS comments and the fallback inside `var(--x, fb)` are
+ * not literals, and shadow properties carry rgba alpha legitimately.
+ */
 export function checkRawColors(answerText) {
   const hits = [];
   for (const block of extractCode(answerText)) {
-    for (const line of block.split('\n')) {
-      const m = line.match(RAW_COLOR_RE);
-      if (m) hits.push(line.trim());
+    const code = stripVarFallbacks(block.replace(/\/\*[\s\S]*?\*\//g, ' '));
+    for (const line of code.split('\n')) {
+      if (/^\s*\d+:\d+\s/.test(line)) continue; // pasted linter output: "2:10  ✖ ..."
+      // One declaration at a time, so a shadow next to a real colour does not hide it.
+      const bad = line
+        .split(/[;{}]/)
+        .filter((decl) => !SHADOW_PROPERTY.test(decl))
+        .filter((decl) => RAW_COLOR_RE.test(decl));
+      if (bad.length) hits.push(line.trim());
     }
   }
   return { pass: hits.length === 0, hits };
@@ -690,7 +773,8 @@ export function checkRawColors(answerText) {
 
 /**
  * Question fields read here: `checks` (any of 'api', 'selectors', 'forbid', 'claims', 'tokens',
- * 'raw-color'), `expectSelectors`, `forbidSelectors`, `claims`.
+ * 'raw-color', 'nesting'), `expectSelectors`, `forbidSelectors`, `claims`, `claimsIn` ('code' to match
+ * claims in code blocks only), `forbidNested`.
  * @returns {{ checks: { id: string, pass: boolean, detail: string }[], score: number, checkedComponents: string[] }}
  */
 export function evaluateAnswer(question, answerText, truth) {
@@ -721,8 +805,21 @@ export function evaluateAnswer(question, answerText, truth) {
         pass: r.pass,
         detail: r.used.length ? `used: ${r.used.join(', ')}` : '',
       });
+    } else if (id === 'nesting') {
+      const r = checkNesting(answerText, question.forbidNested ?? []);
+      checks.push({
+        id,
+        pass: r.pass,
+        detail: r.found.length ? `nested: ${r.found.join(', ')}` : '',
+      });
     } else if (id === 'claims') {
-      const r = checkClaims(answerText, question.claims ?? []);
+      // `claimsIn: 'code'` matches the claims in code blocks only: a negation in prose ("there is no
+      // `headingLevel` input") must not count as the claim.
+      const scope =
+        question.claimsIn === 'code'
+          ? extractCode(answerText).join('\n')
+          : answerText;
+      const r = checkClaims(scope, question.claims ?? []);
       checks.push({
         id,
         pass: r.pass,

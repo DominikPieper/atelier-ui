@@ -206,6 +206,8 @@ Every item the triage could not judge without you. Each is a question; answering
 - [ ] **R-129** No typeface gate reaches `docs/` (41 bare `font-family: monospace`) — `check-typeface.js` scans `libs/` only. Sources: `tasks/todo.md:2841` (2026-09-07)
 - [ ] **R-130** Storybook gaps: MDX authoring, `storySort`, `stories-changed`, `review-create` never exercised — `/storybook` covers write-a-story only. Sources: `tasks/archive/reviews/storybook-review-2026-09-14.md:206` (2026-09-14)
 
+- [ ] **R-230** Agent-facing knowledge contradicts the Angular implementation, found while writing M2 eval questions (ADR-0177) 2026-10-21. Verified: `select.metadata.ts` purpose says "built on the native `<select>`", but Angular `atl-select.ts` renders a CDK `role="combobox"` button — and since ADR-0176 that sentence is the first line of `docs-show`. Reported by the eval agent, unverified: patterns data says the alert role follows `variant` (atl-alert is always `role="alert"`, only danger is assertive); patterns data says to ignore Escape in atl-dialog (the component closes itself); patterns data suggests a toast "Undo" action (atl-toast has no action input). Fix the texts, and decide whether a gate can catch purpose/pattern claims that the component source contradicts — a knowledge layer that ships wrong facts is worse than none. Sources: M2 question-set report, 2026-10-21 (2026-10-21)
+
 ## Until P6 (Atelier library)
 
 Matters only if the course or a published package still runs on the Atelier library before P6 removes it. Each item says what before P6 needs it.

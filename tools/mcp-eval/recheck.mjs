@@ -32,11 +32,25 @@ function main() {
       `Unsupported schemaVersion ${saved.schemaVersion}, expected ${ANSWERS_SCHEMA_VERSION}.`,
     );
   }
+  // The question file of the run (recorded in the answers file), or MCP_EVAL_QUESTIONS to
+  // re-score against another one. Questions the file no longer has are dropped with their
+  // attempts, so a pruned set can be re-scored without re-running anything.
+  const questionsFile =
+    process.env.MCP_EVAL_QUESTIONS || saved.questionsFile || 'questions.json';
   const current = JSON.parse(
-    readFileSync(join(HERE, 'questions.json'), 'utf8'),
+    readFileSync(resolve(HERE, questionsFile), 'utf8'),
   ).questions;
   const byId = new Map(current.map((q) => [q.id, q]));
-  const questions = saved.questions.map((q) => byId.get(q.id) ?? q);
+  const dropped = saved.questions.filter((q) => !byId.has(q.id));
+  if (dropped.length)
+    console.error(
+      `note: ${questionsFile} no longer has ${dropped.map((q) => q.id).join(', ')}; dropped from this report.`,
+    );
+  const questions = saved.questions
+    .filter((q) => byId.has(q.id))
+    .map((q) => byId.get(q.id));
+  const keep = new Set(questions.map((q) => q.id));
+  saved.attempts = saved.attempts.filter((a) => keep.has(a.questionId));
   const needsRebuild = !rebuild && !saved.truth?.exports;
   if (needsRebuild) {
     console.error(
@@ -62,6 +76,7 @@ function main() {
       model: saved.model,
       repeats: saved.repeats,
       filters: saved.filters,
+      questionsFile,
       answersFile: path,
     },
     attempts: evaluated,

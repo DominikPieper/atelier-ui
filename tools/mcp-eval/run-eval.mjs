@@ -16,6 +16,7 @@
 //   MCP_EVAL_CONCURRENCY   parallel claude processes (default 4)
 //   MCP_EVAL_VARIANTS      comma list (default `without,with:hosted-angular`)
 //   MCP_EVAL_ONLY_ID       comma list of question ids to run
+//   MCP_EVAL_QUESTIONS     question file next to this script (default questions.json)
 //   MCP_EVAL_MODEL         model alias or id passed to claude (default `sonnet`)
 //   MCP_EVAL_MANIFEST      built Angular Storybook (default dist/storybook/angular)
 //   MCP_EVAL_REPORT_DIR    where report and answers go (default tools/mcp-eval/reports)
@@ -97,6 +98,8 @@ export function readConfig(env = process.env) {
     timeoutMs: int('MCP_EVAL_TIMEOUT_MS', 240_000),
     variants,
     onlyIds: list('MCP_EVAL_ONLY_ID', []),
+    questionsFile: env.MCP_EVAL_QUESTIONS || 'questions.json',
+    questionsPath: resolve(HERE, env.MCP_EVAL_QUESTIONS || 'questions.json'),
     model: env.MCP_EVAL_MODEL || 'sonnet',
     manifestDir: resolve(
       REPO_ROOT,
@@ -110,19 +113,44 @@ export function readConfig(env = process.env) {
   };
 }
 
-/** Reads servers/<name>.json and returns its path and the server names it declares. */
-export function loadServer(variant) {
+/** Replaces the `${REPO_ROOT}` placeholder in every string value of a parsed server config. */
+export function substituteRepoRoot(value, repoRoot = REPO_ROOT) {
+  if (typeof value === 'string')
+    return value.replaceAll('${REPO_ROOT}', repoRoot);
+  if (Array.isArray(value))
+    return value.map((v) => substituteRepoRoot(v, repoRoot));
+  if (value && typeof value === 'object')
+    return Object.fromEntries(
+      Object.entries(value).map(([k, v]) => [
+        k,
+        substituteRepoRoot(v, repoRoot),
+      ]),
+    );
+  return value;
+}
+
+/**
+ * Reads servers/<name>.json and returns the path to use and the server names it declares. With
+ * `scratchDir` the config is written there with `${REPO_ROOT}` resolved (the shipped file is never
+ * rewritten); without it the shipped path is returned, which is enough to fail early.
+ * Extra server env or a different layer set is a separate servers/<name>.json, selected as
+ * `with:<name>`: no new variant syntax (a comma list would clash with MCP_EVAL_VARIANTS), and
+ * each ablation config stays a reviewable file.
+ */
+export function loadServer(variant, scratchDir = null) {
   const name = variant.slice('with:'.length);
   const path = join(HERE, 'servers', `${name}.json`);
   if (!existsSync(path))
     throw new Error(
       `No MCP config for variant "${variant}": ${path} does not exist.`,
     );
-  const servers = Object.keys(
-    JSON.parse(readFileSync(path, 'utf8')).mcpServers ?? {},
-  );
+  const config = JSON.parse(readFileSync(path, 'utf8'));
+  const servers = Object.keys(config.mcpServers ?? {});
   if (servers.length === 0) throw new Error(`${path} declares no mcpServers.`);
-  return { path, servers };
+  if (!scratchDir) return { path, servers };
+  const resolved = join(scratchDir, `${name}.json`);
+  writeFileSync(resolved, JSON.stringify(substituteRepoRoot(config), null, 2));
+  return { path: resolved, servers };
 }
 
 /**
@@ -366,7 +394,7 @@ export async function runAttempt({
   const server =
     variant === 'without'
       ? { path: emptyConfigPath, servers: [] }
-      : loadServer(variant);
+      : loadServer(variant, dirname(emptyConfigPath));
   const run = await runClaude({
     config,
     prompt: question.prompt,
@@ -438,9 +466,7 @@ export function stamp(date = new Date()) {
 
 async function main() {
   const config = readConfig();
-  const all = JSON.parse(
-    readFileSync(join(HERE, 'questions.json'), 'utf8'),
-  ).questions;
+  const all = JSON.parse(readFileSync(config.questionsPath, 'utf8')).questions;
   const questions = config.onlyIds.length
     ? all.filter((q) => config.onlyIds.includes(q.id))
     : all;
@@ -496,6 +522,9 @@ async function main() {
     config.onlyIds.length
       ? `MCP_EVAL_ONLY_ID=${config.onlyIds.join(',')}`
       : null,
+    process.env.MCP_EVAL_QUESTIONS
+      ? `MCP_EVAL_QUESTIONS=${process.env.MCP_EVAL_QUESTIONS}`
+      : null,
     process.env.MCP_EVAL_VARIANTS
       ? `MCP_EVAL_VARIANTS=${process.env.MCP_EVAL_VARIANTS}`
       : null,
@@ -512,6 +541,7 @@ async function main() {
         repeats: config.repeats,
         variants: config.variants,
         filters,
+        questionsFile: config.questionsFile,
         questions,
         truth,
         attempts,
@@ -527,6 +557,7 @@ async function main() {
       model: config.model,
       repeats: config.repeats,
       filters,
+      questionsFile: config.questionsFile,
       answersFile: answersPath,
     },
     attempts: evaluated,
