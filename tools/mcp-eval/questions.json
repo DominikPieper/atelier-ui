@@ -1,0 +1,200 @@
+{
+  "version": 1,
+  "_comment": "Consumer-perspective questions for @atelier-ui/angular. `checks` selects the deterministic checks (see checker.mjs evaluateAnswer); `claims` is a list of synonym groups, all groups must hit; `source` says where each expected fact is true.",
+  "questions": [
+    {
+      "id": "button-variants",
+      "category": "api-trap",
+      "prompt": "I use @atelier-ui/angular in a standalone Angular app. I need three buttons in one template: a low-emphasis \"Cancel\", a destructive \"Delete\", and a primary \"Save\" that shows a spinner while saving. Show me the template, concisely.",
+      "checks": ["api", "selectors", "claims"],
+      "expectSelectors": ["atl-button"],
+      "claims": [["[loading]", "loading]=", "loading=\""]],
+      "source": "dist/storybook/angular/services/core/docgen/components-inputs-atlbutton.json: variant = primary|secondary|outline|danger (no ghost/text/link), inputs disabled|loading|size|type|variant, host is button[atl-button]"
+    },
+    {
+      "id": "button-icon",
+      "category": "api-trap",
+      "prompt": "I use @atelier-ui/angular in a standalone Angular app. Show me an atl-button for \"Delete row\" with a trash icon to the left of the label. Template only, concisely.",
+      "checks": ["api", "selectors"],
+      "expectSelectors": ["atl-button"],
+      "source": "components-inputs-atlbutton.json: no icon input exists; components-display-atlicon.json: AtlIcon.name is an enum (delete, edit, add, close, ...), no 'trash'"
+    },
+    {
+      "id": "country-picker",
+      "category": "which-component",
+      "prompt": "I use @atelier-ui/angular in a standalone Angular app. I need a country picker with about 200 entries where users type to narrow the list. Which Atelier component do I use and how do I wire it up? Show the template.",
+      "checks": ["api", "selectors", "forbid", "claims"],
+      "expectSelectors": ["atl-combobox"],
+      "forbidSelectors": ["atl-select"],
+      "claims": [["[options]", "options]="]],
+      "source": "libs/spec/src/metadata/combobox.metadata.ts (whenToUse: long lists, typeahead), select.metadata.ts antiPatterns (long list -> AtlCombobox); docgen components-inputs-atlcombobox.json: inputs options|value|placeholder"
+    },
+    {
+      "id": "toggle-or-checkbox",
+      "category": "which-component",
+      "prompt": "I use @atelier-ui/angular in a standalone Angular app. On my settings page I have \"Email notifications\" that must take effect the moment the user flips it, and on my signup form an \"I accept the terms\" option that is only saved when the form is submitted. Which Atelier components do I use for each, and why? Short template please.",
+      "checks": ["api", "selectors", "claims"],
+      "expectSelectors": ["atl-toggle", "atl-checkbox"],
+      "claims": [
+        [
+          "immediate",
+          "instantly",
+          "right away",
+          "as soon as",
+          "straight away",
+          "takes effect",
+          "applies the moment"
+        ],
+        [
+          "on submit",
+          "when submitted",
+          "upon submit",
+          "form is submitted",
+          "form submit",
+          "committed",
+          "staged",
+          "stage a change"
+        ]
+      ],
+      "source": "libs/spec/src/metadata/toggle.metadata.ts (purpose: setting that takes effect immediately; antiPattern: value committed on submit -> AtlCheckbox)"
+    },
+    {
+      "id": "confirm-dialog",
+      "category": "composition",
+      "prompt": "I use @atelier-ui/angular in a standalone Angular app. Build a \"Delete project?\" confirmation dialog with a title, a short message, a Cancel button and a destructive Delete button. The parent decides when it opens. Show the template and the minimal component state.",
+      "checks": ["api", "selectors", "claims"],
+      "expectSelectors": [
+        "atl-dialog",
+        "atl-dialog-header",
+        "atl-dialog-content",
+        "atl-dialog-footer",
+        "atl-button"
+      ],
+      "claims": [["variant=\"danger\"", "'danger'", "variant='danger'"]],
+      "source": "docgen components-overlay-atldialog.json: usage example composes atl-dialog + atl-dialog-header/-content/-footer, [(open)]; inputs open|size|closeOnBackdrop|aria-label|aria-labelledby, output openChange; atl-button variant danger"
+    },
+    {
+      "id": "dialog-a11y",
+      "category": "a11y",
+      "prompt": "I use @atelier-ui/angular in a standalone Angular app. For atl-dialog: which accessibility behaviours does the library already handle for me, and what do I still have to provide myself? Keep it short.",
+      "checks": ["claims"],
+      "claims": [
+        [
+          "aria-modal",
+          "native <dialog>",
+          "<dialog>",
+          "showmodal",
+          "modal semantics"
+        ],
+        ["aria-labelledby", "accessible name"],
+        ["escape"],
+        [
+          "focus trap",
+          "traps focus",
+          "trap focus",
+          "focus is trapped",
+          "trapped",
+          "trapping"
+        ]
+      ],
+      "source": "libs/spec/src/metadata/dialog.metadata.ts accessibility.notes/keyboard: aria-modal=\"true\"; AtlDialogHeader auto-linked as accessible name via aria-labelledby; Escape closes; focus trapped; libs/angular/src/lib/dialog/atl-dialog.ts: native <dialog> opened with showModal() and aria-modal=\"true\", docgen description 'Includes focus trap, Escape to close'"
+    },
+    {
+      "id": "pagination",
+      "category": "api-trap",
+      "prompt": "I use @atelier-ui/angular in a standalone Angular app. I list 240 results, 20 per page. Add the Atelier pagination with first/last buttons below the list and tell me how I react to page changes. Template and minimal component state.",
+      "checks": ["api", "selectors", "claims"],
+      "expectSelectors": ["atl-pagination"],
+      "claims": [
+        ["pageCount"],
+        [
+          "pagecount]=\"12\"",
+          "pagecount]='12'",
+          "pagecount=\"12\"",
+          "pagecount = 12",
+          "pagecount: 12",
+          "pagecount=12",
+          "totalpages = 12",
+          "240 / 20",
+          "240/20",
+          "math.ceil("
+        ]
+      ],
+      "source": "docgen components-navigation-atlpagination.json: inputs page|pageCount|showFirstLast|siblingCount, output pageChange; no total/pageSize input"
+    },
+    {
+      "id": "checkout-stepper",
+      "category": "composition",
+      "prompt": "I use @atelier-ui/angular in a standalone Angular app. A 3-step checkout (Address, Payment, Review) where users must not be able to jump ahead to a later step. Which Atelier component, and how do I enforce the order? Show the template.",
+      "checks": ["api", "selectors", "forbid", "claims"],
+      "expectSelectors": ["atl-stepper", "atl-step"],
+      "forbidSelectors": ["atl-tab-group"],
+      "claims": [["linear"]],
+      "source": "libs/spec/src/metadata/stepper.metadata.ts (whenToUse: linear:true enforces order; antiPattern: tabs for progression -> AtlTabGroup is for parallel views); docgen components-navigation-atlstepper.json: inputs activeStep|linear|orientation"
+    },
+    {
+      "id": "login-form",
+      "category": "api-trap",
+      "prompt": "I use @atelier-ui/angular in a standalone Angular app. A login form with a required email field and a required password field that show validation errors. I'm on Angular Signal Forms. Show the template and how the fields are bound.",
+      "checks": ["api", "selectors", "claims"],
+      "expectSelectors": ["atl-input"],
+      "claims": [["formField"]],
+      "source": "docgen components-inputs-atlinput.json: errors|invalid|touched|required are 'Bound by [formField] directive'; usage example `<atl-input [formField]=\"loginForm.email\" />`"
+    },
+    {
+      "id": "data-table",
+      "category": "composition",
+      "prompt": "I use @atelier-ui/angular in a standalone Angular app. Show a users table with striped rows, a header that stays visible while the table scrolls, one sortable column, and pagination below it. Template only, concisely.",
+      "checks": ["api", "selectors", "claims"],
+      "expectSelectors": ["atl-table", "atl-pagination"],
+      "claims": [["stickyHeader"], ["sortable"]],
+      "source": "docgen components-display-atltable.json: variant default|striped|bordered, input stickyHeader, usage example with atl-thead/atl-tbody/atl-tr/atl-th sortable/atl-td; components-navigation-atlpagination.json"
+    },
+    {
+      "id": "tooltip-a11y",
+      "category": "a11y",
+      "prompt": "I use @atelier-ui/angular in a standalone Angular app. I have an icon-only \"Delete row\" button with a tooltip. Is the tooltip enough as the button's accessible name? Show the correct markup with the Atelier tooltip.",
+      "checks": ["api", "selectors", "claims"],
+      "expectSelectors": ["atlTooltip", "atl-button"],
+      "claims": [
+        ["aria-label"],
+        [
+          "aria-describedby",
+          "supplement",
+          "not replace",
+          "not enough",
+          "isn't enough",
+          "not sufficient",
+          "does not replace",
+          "doesn't replace",
+          "not a substitute"
+        ]
+      ],
+      "source": "libs/spec/src/metadata/tooltip.metadata.ts antiPatterns + accessibility.notes: tooltip uses aria-describedby, supplements never replaces the accessible name, pair with aria-label; selector is the attribute [atlTooltip] (docgen components-overlay-atltooltip.json)"
+    },
+    {
+      "id": "tokens-hint-box",
+      "category": "styling",
+      "prompt": "I use @atelier-ui/angular in a standalone Angular app. I'm writing CSS for a custom hint box that sits next to library components: caption text in the muted text colour, a recessed (sunken) background, and a decorative 1px border. Light and dark mode must keep working. Write the CSS using the library's design tokens.",
+      "checks": ["raw-color", "tokens", "claims"],
+      "claims": [
+        ["--ui-color-text-muted"],
+        ["--ui-color-surface-sunken"],
+        ["--ui-color-border"]
+      ],
+      "source": "docs/public/.well-known/components/*.json tokens[]: --ui-color-text-muted (secondary/caption text), --ui-color-surface-sunken (recessed surface), --ui-color-border (decorative border); all defined in libs/styles/src/tokens.css"
+    },
+    {
+      "id": "tokens-contrast",
+      "category": "styling",
+      "prompt": "I use @atelier-ui/angular in a standalone Angular app. A custom segmented control I wrote needs an outline users can clearly perceive (WCAG non-text contrast), and I also render a custom danger notice with a tinted background. Which Atelier design tokens do I use for the outline, the notice background and the notice text? Show the CSS.",
+      "checks": ["raw-color", "tokens", "claims"],
+      "claims": [
+        ["--ui-color-border-strong"],
+        ["--ui-color-danger-bg"],
+        ["--ui-color-danger-text"]
+      ],
+      "source": "docs/public/.well-known/components/button.json tokens[] --ui-color-border-strong (functional border >=3:1, WCAG 1.4.11; --ui-color-border is decorative only); alert.json tokens[] --ui-color-danger-bg / --ui-color-danger-text (AA-safe pair)"
+    }
+  ]
+}

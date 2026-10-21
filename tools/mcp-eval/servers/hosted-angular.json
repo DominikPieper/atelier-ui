@@ -1,0 +1,8 @@
+{
+  "mcpServers": {
+    "atelier": {
+      "type": "http",
+      "url": "https://atelier.pieper.io/storybook-angular/mcp"
+    }
+  }
+}

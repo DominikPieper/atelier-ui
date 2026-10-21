@@ -34,3 +34,6 @@ tasks/spikes/
 
 # Golden output of the design-contracts tests: the tool under test owns the bytes.
 libs/design-contracts/test/golden/
+
+# MCP eval reports are run output, not source
+tools/mcp-eval/reports/

@@ -74,3 +74,6 @@ tasks/spikes/**/out/
 # Impeccable critique snapshots — local design-review state, read by /impeccable polish
 .impeccable/
 tasks/print/
+
+# MCP eval output (live runs; see tools/mcp-eval)
+tools/mcp-eval/reports/

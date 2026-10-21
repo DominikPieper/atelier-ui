@@ -25,7 +25,7 @@ Atelier keeps its library as the lab; `@atelier-ui/mcp` (modelled on CDS-ADR-001
 measure how much design-system knowledge an agent can use. Measure first, then build. Pushes and
 anything in the CDS repo need the owner's go. Eval runs use the subscription quota.
 
-- [ ] **M0 Eval spike.** Question set (Angular, mixed: API lookup, "which component for X",
+- [x] **M0 Eval spike.** _(done 2026-10-21: `tools/mcp-eval/`, `npm run eval:mcp`, 66 offline checker tests as `test:mcp-eval`. Baseline 13 questions × 3 repeats, sonnet, after checker fixes via recheck: without 48 % (47–49), hosted Angular endpoint 96 % (95–97), gap 47 pts vs spread 2.6. Findings: (1) ceiling — L0 already scores 96 %, so M2 needs questions L0 cannot answer (tokens, when-to-use, composition, component-specific a11y), else layer effects are invisible; (2) `tokens-contrast` 56 % with server, invented `--ui-color-danger-light`: manifest exposes few `--ui-*` tokens → first L2 candidate; (3) `dialog-a11y` no longer separates the variants, needs an `atl-dialog`-specific claim; (4) context cost: 25.9 k vs 1.4 k input tokens per answer. Isolation: `--setting-sources ""`, strict MCP config, no tools, neutral system prompt, temp cwd, verified per run; org instructions and account context still leak into both variants. Unexplained: one 240 s timeout during the smoke run.)_ Question set (Angular, mixed: API lookup, "which component for X",
       styling/tokens, a11y, composition), runner `claude -p` with/without MCP, checker per
       question. Baseline: hosted Angular endpoint vs. no server, ≥3 runs each. Done when the
       report shows a with/without gap larger than the run-to-run spread; if not, the question

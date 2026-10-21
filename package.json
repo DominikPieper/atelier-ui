@@ -7,6 +7,9 @@
     "node": ">=22.12.0"
   },
   "scripts": {
+    "eval:mcp": "node tools/mcp-eval/run-eval.mjs",
+    "eval:mcp:recheck": "node tools/mcp-eval/recheck.mjs",
+    "test:mcp-eval": "node --test tools/mcp-eval/*.test.mjs",
     "check:sync": "node tools/scripts/check-sync.js",
     "check:component-count": "node tools/scripts/check-component-count.js",
     "check:preflight-clone-sync": "node tools/scripts/sync-preflight.mjs --check",
