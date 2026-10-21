@@ -1051,3 +1051,16 @@ nothing about the commits riding along with it. Rule: before pushing, run
 `git log origin/main..HEAD`. If it lists commits you did not write, name them to the owner
 (a `fix`/`feat` among them triggers a release) and run the full `npm run check:all` before
 pushing, not after.
+
+## 2026-10-21 — The 2026-10-03 release-drift rule, broken again across a whole session
+
+On 2026-10-20 I pushed six times without running `check:release-drift` first. The publish run for
+bce36825 put 0.4.9 on npm but failed its npm-verify step (create-atelier-ui-workspace lagged more
+than the step's ~30 min of retries), so the release commit 0f3ffcf5 and tag `v0.4.9` never reached
+origin. Every later run re-derived 0.4.9 from `v0.4.8` and failed to publish it; a library fix
+(R-224) sat unreleased, and I only saw it when the owner asked me to check the pipeline. Recovery
+was a `v0.4.9` tag on bce36825 (the source 0.4.9 was built from) plus a re-run, not the
+`recover-git` mode, which would have tagged HEAD and left the fix commit below the tag. Rule, made
+concrete: every push I make on main ends with `gh run list` for that SHA and a look at the Publish
+conclusion before I report the push as done; `check:release-drift` runs before any push that carries
+a `fix`/`feat` commit.
