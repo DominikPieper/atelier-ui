@@ -1,3 +1,13 @@
+## 0.4.10 (2026-10-21)
+
+### 🩹 Fixes
+
+- **angular:** show allowed values for alias-typed inputs in docs-show ([90899d0e](https://github.com/DominikPieper/atelier-ui/commit/90899d0e))
+
+### ❤️ Thank You
+
+- Dominik Pieper @DominikPieper
+
 ## 0.4.8 (2026-10-20)
 
 ### 🩹 Fixes
