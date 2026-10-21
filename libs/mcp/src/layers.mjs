@@ -3,7 +3,8 @@
 //
 //   { id, summary,
 //     instructions?: string[],                          sections appended to the server instructions
-//     register?: (server) => Promise<void> | void }     adds tools to the tmcp server
+//     register?: (server) => Promise<void> | void,      adds tools to the tmcp server
+//     transformManifest?: (path, text) => string }      rewrites a manifest file the docs tools read
 //
 // Which layers run is decided by one string: the env var ATELIER_MCP_LAYERS, a comma list of ids.
 // Unset or empty means every layer in LAYERS; a list means exactly those. The base layer `api`
@@ -11,8 +12,10 @@
 // `without` variant). An unknown id is an error at start, never a silent no-op, because a typo
 // would otherwise turn an ablation run into a measurement of the wrong thing.
 //
-// Only L0 exists. A new layer is one object added to LAYERS plus its own test; nothing else in
-// the server changes.
+// L0 `api` is the Storybook docs toolset; L1 `purpose` and L2 `tokens` are in their own files.
+// A layer may add tools, instruction sections, or rewrite what the docs tools read (the manifest
+// provider applies each active layer's `transformManifest`), and it must not change what another
+// layer delivers: that is what makes an ablation run mean something.
 import {
   STORYBOOK_MCP_INSTRUCTIONS,
   addGetDocumentationTool,
@@ -21,6 +24,8 @@ import {
 } from '@storybook/mcp';
 
 import { API_RULES } from './instructions.mjs';
+import { createPurposeLayer } from './layer-purpose.mjs';
+import { createTokensLayer } from './layer-tokens.mjs';
 
 export const LAYERS_ENV = 'ATELIER_MCP_LAYERS';
 export const BASE_LAYER = 'api';
@@ -38,7 +43,7 @@ const apiLayer = {
   },
 };
 
-export const LAYERS = [apiLayer];
+export const LAYERS = [apiLayer, createPurposeLayer(), createTokensLayer()];
 
 /**
  * @param {string | undefined} spec value of ATELIER_MCP_LAYERS

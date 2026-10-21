@@ -40,3 +40,19 @@ export async function manifestProvider(
   }
   return readFile(absolute, 'utf8');
 }
+
+/**
+ * The provider the server uses: the snapshot as it is, passed through the active layers'
+ * `transformManifest`. With only the base layer it serves the snapshot's bytes unchanged.
+ * @param {{ layers: Array<{ transformManifest?: (path: string, text: string) => string }>, root?: string }} options
+ */
+export function createManifestProvider({ layers, root = SNAPSHOT_ROOT }) {
+  return async (request, manifestPath) => {
+    let text = await manifestProvider(request, manifestPath, root);
+    for (const layer of layers) {
+      if (layer.transformManifest)
+        text = layer.transformManifest(manifestPath, text);
+    }
+    return text;
+  };
+}

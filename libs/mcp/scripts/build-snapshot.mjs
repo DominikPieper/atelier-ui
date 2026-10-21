@@ -9,6 +9,8 @@ import { cpSync, existsSync, mkdirSync, rmSync, statSync } from 'node:fs';
 import { dirname, join } from 'node:path';
 import { fileURLToPath } from 'node:url';
 
+import { buildKnowledge } from './build-knowledge.mjs';
+
 const PKG_ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const DEFAULT_STORYBOOK_STATIC = join(
   PKG_ROOT,
@@ -30,15 +32,18 @@ const isJsonOrDir = (src) =>
 export const REQUIRED_FILES = [
   'manifests/components.json',
   'manifests/docs.json',
+  'knowledge/components.json',
+  'knowledge/tokens.json',
 ];
 
 /**
- * @param {{ storybookStatic?: string, snapshotDir?: string }} [options]
+ * @param {{ storybookStatic?: string, snapshotDir?: string, repoRoot?: string }} [options]
  * @returns {string} the snapshot directory written
  */
 export function buildSnapshot({
   storybookStatic = DEFAULT_STORYBOOK_STATIC,
   snapshotDir = DEFAULT_SNAPSHOT_DIR,
+  repoRoot,
 } = {}) {
   for (const name of ['manifests', 'services']) {
     const src = join(storybookStatic, name);
@@ -57,6 +62,9 @@ export function buildSnapshot({
   cpSync(join(storybookStatic, 'services'), join(snapshotDir, 'services'), {
     recursive: true,
   });
+
+  // The knowledge layers (L1, L2) come from the repo, not from the Storybook build.
+  buildKnowledge({ snapshotDir, ...(repoRoot ? { repoRoot } : {}) });
 
   for (const name of REQUIRED_FILES) {
     if (!existsSync(join(snapshotDir, name))) {

@@ -10,11 +10,11 @@ const options = (env = {}) => ({
   env: { ATELIER_MCP_VERSION_CHECK: 'off', ...env },
 });
 
-test('default build has the api layer on', async () => {
+test('default build has every layer on', async () => {
   const { layers } = await createServer(options());
   assert.deepEqual(
     layers.map((layer) => layer.id),
-    ['api'],
+    ['api', 'purpose', 'tokens'],
   );
 });
 

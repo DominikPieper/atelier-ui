@@ -1,0 +1,13 @@
+{
+  "mcpServers": {
+    "atelier": {
+      "type": "stdio",
+      "command": "node",
+      "args": ["${REPO_ROOT}/libs/mcp/bin/atelier-mcp.mjs"],
+      "env": {
+        "ATELIER_MCP_VERSION_CHECK": "off",
+        "ATELIER_MCP_LAYERS": "api,purpose"
+      }
+    }
+  }
+}

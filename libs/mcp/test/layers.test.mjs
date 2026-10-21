@@ -33,9 +33,6 @@ test('the base layer cannot be switched off', () => {
   );
 });
 
-test('the shipped registry is L0 only, and L0 is the base layer', () => {
-  assert.deepEqual(
-    LAYERS.map((layer) => layer.id),
-    [BASE_LAYER],
-  );
+test('the shipped registry starts with the base layer', () => {
+  assert.equal(LAYERS[0].id, BASE_LAYER);
 });

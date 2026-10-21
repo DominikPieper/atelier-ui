@@ -14,13 +14,16 @@
 //
 // Checks:
 //   - initialize succeeds; instructions carry the hard rules
-//   - tools/list is exactly docs-list, docs-show, docs-show-story
+//   - tools/list is docs-list, docs-show, docs-show-story and (layer tokens) tokens-search
 //   - docs-list names AtlButton; docs-show(AtlButton) shows every input and output the packed
 //     docgen documents, with `variant` and all its values, and no undocumented internals
 //   - no @internal members: AtlTabGroup's helper members are neither in its docgen nor in docs-show
 //   - docs-show answers for EVERY component and doc id in the packed snapshot
 //   - a different installed @atelier-ui/angular version warns in instructions and on stderr
-//   - ATELIER_MCP_LAYERS: an unknown layer id fails loudly, `api` alone starts
+//   - layers on the packed tarball: with all on, docs-show(AtlBadge) carries "When not to use"
+//     and tokens-search finds --ui-focus-ring; with `api` alone both are absent; `api,purpose`
+//     and `api,tokens` each deliver only their own layer
+//   - ATELIER_MCP_LAYERS: an unknown layer id fails loudly
 //   - every stdout line is JSON-RPC 2.0
 import { spawn, spawnSync } from 'node:child_process';
 import {
@@ -42,6 +45,9 @@ const PKG_ROOT = join(dirname(fileURLToPath(import.meta.url)), '..');
 const REPO_ROOT = join(PKG_ROOT, '..', '..');
 const BUTTON_ID = 'components-inputs-atlbutton';
 const TABS_ID = 'components-navigation-atltabgroup';
+const BADGE_ID = 'components-display-atlbadge';
+const GUIDANCE_MARKER = 'When not to use';
+const TOKENS_TOOL = 'tokens-search';
 const failures = [];
 
 function check(ok, message) {
@@ -186,7 +192,31 @@ async function handshake(client) {
     clientInfo: { name: 'atelier-mcp-smoke', version: '0.0.0' },
   });
   client.notify('notifications/initialized');
+  client.instructions = init.result?.instructions ?? '';
   return init;
+}
+
+/** What a running server delivers from L1 and L2: the facts the layer tests below compare. */
+async function layerProbe(client) {
+  const badge = await callTool(client, 'docs-show', { id: BADGE_ID });
+  const tools =
+    (await client.request('tools/list')).result?.tools?.map((t) => t.name) ??
+    [];
+  let tokenFound = false;
+  if (tools.includes(TOKENS_TOOL)) {
+    const found = await callTool(client, TOKENS_TOOL, { query: 'focus ring' });
+    tokenFound = !found.isError && found.text.includes('--ui-focus-ring');
+  }
+  return {
+    guidance:
+      badge.text.includes(GUIDANCE_MARKER) && badge.text.includes('removable'),
+    badgeKeepsPurpose:
+      badge.text.includes('Compact inline label') &&
+      /variant\??:/.test(badge.text),
+    tokensTool: tools.includes(TOKENS_TOOL),
+    tokenFound,
+    instructions: client.instructions ?? '',
+  };
 }
 
 const callTool = async (client, name, args) => {
@@ -243,8 +273,32 @@ async function main() {
       .sort();
     check(
       JSON.stringify(tools) ===
-        JSON.stringify(['docs-list', 'docs-show', 'docs-show-story']),
+        JSON.stringify([
+          'docs-list',
+          'docs-show',
+          'docs-show-story',
+          TOKENS_TOOL,
+        ]),
       `tools/list: got ${JSON.stringify(tools)}`,
+    );
+    check(
+      instructions.includes(TOKENS_TOOL) &&
+        instructions.includes('atelier/no-raw-color-literal') &&
+        instructions.includes(GUIDANCE_MARKER),
+      'instructions lack the layer sections (tokens tool, stylelint rules, component guidance)',
+    );
+    const layered = await layerProbe(client);
+    check(
+      layered.guidance,
+      'all layers on: docs-show(AtlBadge) lacks the guidance block',
+    );
+    check(
+      layered.guidance && layered.badgeKeepsPurpose,
+      'all layers on: docs-show(AtlBadge) lost its purpose or API sections',
+    );
+    check(
+      layered.tokenFound,
+      'all layers on: tokens-search "focus ring" lacks --ui-focus-ring',
     );
 
     const list = await callTool(client, 'docs-list', {});
@@ -367,16 +421,43 @@ async function main() {
       badCode !== 0 && bad.stderr().includes('unknown layer'),
       'an unknown ATELIER_MCP_LAYERS id did not fail loudly',
     );
-    const only = startServer(packageDir, {
-      cwd: consumer,
-      env: { ATELIER_MCP_LAYERS: 'api' },
-    });
-    const onlyInit = await handshake(only);
-    check(
-      Boolean(onlyInit.result?.serverInfo),
-      'ATELIER_MCP_LAYERS=api did not start',
-    );
-    only.stop();
+
+    // Run 4: each layer switches on its own and changes nothing of the others.
+    for (const [layers, wantGuidance, wantTokens] of [
+      ['api', false, false],
+      ['api,purpose', true, false],
+      ['api,tokens', false, true],
+      ['api,purpose,tokens', true, true],
+    ]) {
+      const run = startServer(packageDir, {
+        cwd: consumer,
+        env: { ATELIER_MCP_LAYERS: layers },
+      });
+      const runInit = await handshake(run);
+      check(
+        Boolean(runInit.result?.serverInfo),
+        `ATELIER_MCP_LAYERS=${layers} did not start`,
+      );
+      const probe = await layerProbe(run);
+      check(
+        probe.guidance === wantGuidance,
+        `ATELIER_MCP_LAYERS=${layers}: component guidance ${probe.guidance ? 'present' : 'absent'}, expected ${wantGuidance ? 'present' : 'absent'}`,
+      );
+      check(
+        probe.tokensTool === wantTokens && probe.tokenFound === wantTokens,
+        `ATELIER_MCP_LAYERS=${layers}: ${TOKENS_TOOL} ${probe.tokensTool ? 'present' : 'absent'}, expected ${wantTokens ? 'present' : 'absent'}`,
+      );
+      check(
+        probe.instructions.includes(TOKENS_TOOL) === wantTokens &&
+          probe.instructions.includes(GUIDANCE_MARKER) === wantGuidance,
+        `ATELIER_MCP_LAYERS=${layers}: instructions do not match the layer set`,
+      );
+      check(
+        probe.badgeKeepsPurpose,
+        `ATELIER_MCP_LAYERS=${layers}: docs-show(AtlBadge) lost its API sections`,
+      );
+      run.stop();
+    }
   } finally {
     rmSync(work, { recursive: true, force: true });
   }

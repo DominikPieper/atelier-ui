@@ -9,7 +9,7 @@ import { McpServer } from 'tmcp';
 
 import { buildInstructions } from './instructions.mjs';
 import { LAYERS_ENV, resolveLayers } from './layers.mjs';
-import { SNAPSHOT_ROOT, manifestProvider } from './manifest-provider.mjs';
+import { SNAPSHOT_ROOT, createManifestProvider } from './manifest-provider.mjs';
 import { checkVersion, resolveInstalledVersion } from './version-check.mjs';
 
 // createRequire rather than a JSON import attribute: it works on every Node the engines field allows.
@@ -63,7 +63,7 @@ export async function createServer({
 export async function startServer() {
   const { server, layers } = await createServer();
   const transport = new StdioTransport(server);
-  transport.listen({ manifestProvider });
+  transport.listen({ manifestProvider: createManifestProvider({ layers }) });
   console.error(
     `[atelier-mcp] ready (stdio), layers: ${layers.map((layer) => layer.id).join(', ')}, snapshot: ${SNAPSHOT_ROOT}`,
   );
