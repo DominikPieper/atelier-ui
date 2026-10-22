@@ -97,6 +97,11 @@ copied from them and from `tasks/todo.md`.
 - **Evidence.** Overall on the layer set: L0 53 % → purpose 64 % → tokens 64 % → both 72 %
   (72–72). Neither layer moved the other's questions, nor the composition/contract questions.
   Input tokens per answer fell from 27.6 k to 23.8 k with both layers, tool calls from 4.3 to 3.6.
+- **Corrected 2026-10-22.** "Cheaper" holds for usage guidance and tokens, not for every layer:
+  the composition layer raised tool calls on its own questions (5.3 → 7–8) and input tokens across
+  the set (26.0 k → 27.6 k); all four layers together cost 28.0 k against 26.0 k for the manifest
+  alone. All four layers together: 54 % (53–56) → 85 % (78–89), with a wider run-to-run spread
+  than any single layer.
 - **Transfer.** Method only.
 
 ### 8. Test the server as the packed artefact, not only with fixtures
@@ -122,10 +127,28 @@ copied from them and from `tasks/todo.md`.
 - **Transfer.** CDS has a with/without eval; isolation flags, per-layer ablation and the
   absent-from-L0 rule are new.
 
+### 10. Composition rules go on the page of every component they constrain
+
+- **Practice.** Patterns span several components, so attach each pattern's "not for" cases and
+  common mistakes to the docs page of each component in it. Components used by many patterns get
+  an index line instead of the full text, or their pages drown in other components' warnings.
+- **Evidence.** 2026-10-22 ablation, 3 questions × 3 (type-to-confirm, severity-grouped
+  notifications, settings sub-tabs): manifest-only 56 % → with the composition layer 100 %
+  (100–100). Without it the model puts type-to-confirm in a dialog and nests accordion groups and
+  tab groups. Writing the layer surfaced three more defective pattern texts: a pointer to a
+  component that does not exist (`AtlTabs`), a variation contradicting its own pattern, and a
+  false `aria-describedby` claim (entries 3 and 5 again).
+- **Cost.** +7 KB snapshot; 1–2 KB more per affected page; more tool calls (entry 7). Warnings
+  attach by pattern membership, so a page can carry warnings about its neighbours.
+- **Transfer.** Open.
+
 ## Open
 
-- Composition patterns layer (in progress), contract mismatches (2 questions, 0 % in every
-  variant), component-specific a11y (1 question), instructions as their own layer.
-- One model, one question set per layer. Before transfer, repeat the strongest entries (4, 6) on
-  a second model.
+- chip-filter still fails with every layer on: the badge's "use instead" points at a chip
+  component that does not exist (entry 5). Needs an owner decision: a chip component, or a
+  documented recipe the guidance can point at.
+- Contract mismatches (2 questions: 0 % with any single layer, 33 % with all four — helped by
+  other layers, not by a contract layer), component-specific a11y (1 question), instructions as their own layer.
+- One model, one question set per layer. Before transfer, repeat the strongest entries (4, 6, 10)
+  on a second model.
 - The CDS transfer itself: each entry's change in the CDS needs the owner's go (ADR-0177 §2).

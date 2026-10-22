@@ -47,6 +47,13 @@ anything in the CDS repo need the owner's go. Eval runs use the subscription quo
         does not exist, so the model improvises (badge wrapping a button) — a pointer to nothing is
         not guidance. Still open: L3 (2 q, both 0 % in every variant — figma-node-dialog is trivia),
         L4 (1 q), L5 composition layer (source: `docs/src/data/patterns.ts`), L6 instructions split.
+  - [x] **Ablation L5 + all** _(2026-10-22, same set and method; report `eval-2026-10-22T04-47-11-164Z`)_:
+        L0 54 % (53–56, reproduces 53 % of the day before) → L5 61 % (60–62) → all four layers
+        85 % (78–89). L5 on its own questions 56 % → 100 %. All layers: L1 88 %, L2 98 %, L5 100 %,
+        L3 33 % (loading-button-grey 2/3 — helped by other layers, not by a contract layer), L4
+        67 %. Cost: L5 adds tool calls on its questions (5.3 → 7–8); all layers 28.0 k vs 26.0 k
+        input tokens. Open: chip-filter (no chip component to point at), L3/L4 layers, L6
+        instructions split, second model.
 - [ ] **M3 Best-practice catalog** (started 2026-10-21 at `plan/mcp-best-practices.md`, 9 entries with evidence; open: L5, second model): one entry per proven practice —
       claim, questions it was proven on, measured effect, cost, DS-neutral wording, CDS transfer
       status. Done when every M2 layer has an entry (kept or rejected).
