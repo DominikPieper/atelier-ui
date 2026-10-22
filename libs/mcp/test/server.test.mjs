@@ -14,7 +14,7 @@ test('default build has every layer on', async () => {
   const { layers } = await createServer(options());
   assert.deepEqual(
     layers.map((layer) => layer.id),
-    ['api', 'purpose', 'tokens'],
+    ['api', 'purpose', 'tokens', 'composition'],
   );
 });
 

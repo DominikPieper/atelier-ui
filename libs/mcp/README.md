@@ -12,7 +12,7 @@ the library. No network, no port. `private` until the owner approves publishing.
   working directory with its own version and warns in the `instructions` and on stderr on a
   mismatch. It never aborts.
 - **Layers.** `ATELIER_MCP_LAYERS` (comma list of ids, unset = all) switches knowledge layers on
-  and off for ablation runs; see `src/layers.mjs`. Only `api` (L0) exists. An unknown id is an error.
+  and off for ablation runs; see `src/layers.mjs`. Ids: `api` (L0), `purpose` (L1), `tokens` (L2), `composition` (L5). An unknown id is an error.
   `ATELIER_MCP_VERSION_CHECK=off` disables the version note for the evaluation lab.
 - **Snapshot.** `snapshot/` is generated (`npm run build`, also run by `prepack`) from
   `dist/storybook/angular`; build that first with `npx nx build-storybook angular`. It is not

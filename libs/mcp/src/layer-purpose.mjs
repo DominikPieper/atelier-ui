@@ -13,7 +13,7 @@ Each component page from docs-show ends its description with "When to use", "Whe
 
 // Both carry `{ components: { <id>: { name, description } } }`, and `@storybook/mcp` lets the
 // manifest entry's description win over the docgen shard's, so both must be enriched.
-const COMPONENT_PAYLOAD =
+export const COMPONENT_PAYLOAD =
   /(?:services\/core\/docgen\/[^/]+|manifests\/components)\.json$/;
 
 /** @param {{ whenToUse: string[], whenNotToUse: Array<{ statement: string, useInstead?: string }>, related: string[] }} entry */

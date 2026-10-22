@@ -15,6 +15,21 @@
         "AtlAlert",
         "AtlCheckbox"
       ],
+      "whenToUse": [
+        "Email + password authentication on a public marketing or app surface.",
+        "A short, focused form (≤ 5 fields) where one Card is enough scaffolding.",
+        "You need an inline error region that does not navigate the user away from the form."
+      ],
+      "whenNotToUse": [
+        "Multi-step onboarding flows — reach for AtlStepper instead.",
+        "Passwordless / magic-link flows where the response is a separate state, not a form error.",
+        "When the form needs more than one Card column or section — switch to a Settings-style tabbed layout."
+      ],
+      "pitfalls": [
+        "LLMs love to put `aria-required` on every field. Mark required state via the validation schema and the visible label, not as a duplicate ARIA attribute.",
+        "Returning the password value into the input on a failed submit reveals it in the DOM — clear it on error like a native browser would.",
+        "Using `<button type=\"button\">` instead of `type=\"submit\"` breaks Enter-to-submit. Cookbook story uses native submit semantics."
+      ],
       "frameworks": {
         "angular": "<atl-card variant=\"elevated\" padding=\"lg\">\n  <atl-card-header>\n    <h3>Sign in</h3>\n  </atl-card-header>\n  <atl-card-content>\n    @if (showError()) {\n      <atl-alert variant=\"danger\">Invalid email or password.</atl-alert>\n    }\n    <atl-input type=\"email\" placeholder=\"you@example.com\" [invalid]=\"showError()\" />\n    <atl-input type=\"password\" placeholder=\"••••••••\" [invalid]=\"showError()\" />\n    <atl-checkbox>Remember me</atl-checkbox>\n  </atl-card-content>\n  <atl-card-footer>\n    <button atl-button variant=\"primary\" [loading]=\"loading()\" (click)=\"signIn()\">\n      Sign in\n    </button>\n  </atl-card-footer>\n</atl-card>",
         "react": "<AtlCard variant=\"elevated\" padding=\"lg\">\n  <AtlCardHeader><h3>Sign in</h3></AtlCardHeader>\n  <AtlCardContent>\n    {showError && <AtlAlert variant=\"danger\">Invalid email or password.</AtlAlert>}\n    <AtlInput type=\"email\" placeholder=\"you@example.com\" invalid={showError} />\n    <AtlInput type=\"password\" placeholder=\"••••••••\" invalid={showError} />\n    <AtlCheckbox>Remember me</AtlCheckbox>\n  </AtlCardContent>\n  <AtlCardFooter>\n    <AtlButton variant=\"primary\" loading={loading} onClick={signIn}>\n      Sign in\n    </AtlButton>\n  </AtlCardFooter>\n</AtlCard>",
@@ -35,6 +50,21 @@
         "AtlButton",
         "AtlAlert"
       ],
+      "whenToUse": [
+        "A surface where the user toggles roughly 5–25 settings grouped by topic (account, notifications, security, billing).",
+        "Settings change rarely and the user expects a \"Save\" button rather than autosave.",
+        "You need stable URLs per tab so screenshots and support links survive navigation — wire `selectedIndex` to the route."
+      ],
+      "whenNotToUse": [
+        "Single-screen inline edit of one or two values — use an AtlCard with the input directly, not a tabbed shell.",
+        "Wizard-style sequences where order matters — AtlStepper enforces progression that TabGroup intentionally does not.",
+        "Nested settings that need their own sub-tabs — collapse to an accordion or a list-detail layout instead of nesting tab groups."
+      ],
+      "pitfalls": [
+        "LLMs frequently hoist tab content into a giant switch in the parent. Each AtlTab's body is the projected child — keep state co-located with the inputs, not the parent.",
+        "Saving a partial form across tab switches breaks the user's mental model. Either persist optimistically per change or block the save button until the user returns to a complete state.",
+        "Don't bind `AtlSelect` to a tuple `{value, label}` — bind the primitive value and let the option element project the label."
+      ],
       "frameworks": {
         "angular": "<atl-tab-group [(selectedIndex)]=\"activeTab\">\n  <atl-tab label=\"Account\">\n    <label>\n      Full Name\n      <atl-input placeholder=\"John Doe\" />\n    </label>\n    <label>\n      Email\n      <atl-input placeholder=\"john@example.com\" />\n    </label>\n  </atl-tab>\n  <atl-tab label=\"Notifications\">\n    <atl-toggle [(checked)]=\"emailOn\">Email notifications</atl-toggle>\n    <atl-toggle [(checked)]=\"pushOn\">Push notifications</atl-toggle>\n  </atl-tab>\n</atl-tab-group>\n<button atl-button variant=\"primary\" (click)=\"save()\">Save changes</button>",
         "react": "<AtlTabGroup selectedIndex={tab} onSelectedIndexChange={setTab}>\n  <AtlTab label=\"Account\">\n    <AtlInput label=\"Full Name\" placeholder=\"John Doe\" />\n    <AtlInput label=\"Email\" placeholder=\"john@example.com\" />\n  </AtlTab>\n  <AtlTab label=\"Notifications\">\n    <AtlToggle checked={emailOn} onCheckedChange={setEmailOn}>Email</AtlToggle>\n    <AtlToggle checked={pushOn} onCheckedChange={setPushOn}>Push</AtlToggle>\n  </AtlTab>\n</AtlTabGroup>\n<AtlButton variant=\"primary\" onClick={save}>Save changes</AtlButton>",
@@ -51,6 +81,21 @@
         "AtlDialog",
         "AtlAlert",
         "AtlButton"
+      ],
+      "whenToUse": [
+        "Irreversible actions: deleting an account, revoking an API key, leaving an organization.",
+        "Actions whose blast radius the user might underestimate (\"delete project\" hides \"delete all 4,000 issues\").",
+        "When the operation is fast enough that a modal is acceptable — anything > ~3 s should open a separate destination, not a dialog."
+      ],
+      "whenNotToUse": [
+        "Reversible actions where the undo lives elsewhere in your UI (AtlToast has no action button — it carries a message and an optional dismiss button, so an \"Undo\" must be built outside it).",
+        "Form-style multi-field confirmation (\"type the project name to confirm\") — that's a destructive form, render it on its own page or in an AtlDrawer.",
+        "As an \"are you sure?\" wrapper around every save button. Confirmation fatigue trains users to click through."
+      ],
+      "pitfalls": [
+        "LLMs frequently add `autoFocus` to the destructive button — this nudges users into an accidental confirm. The first Tab stop should be Cancel.",
+        "Forgetting to gate the trigger when the action is already in flight produces double-deletes; flip the dialog's `open` to false only after the mutation resolves.",
+        "Putting body content as a raw string inside `AtlDialogContent` skips the AtlAlert composition the cookbook recommends — the Alert carries the warning message."
       ],
       "frameworks": {
         "angular": "<button atl-button variant=\"primary\" (click)=\"isOpen.set(true)\">Delete account</button>\n\n<atl-dialog [(open)]=\"isOpen\" size=\"sm\">\n  <atl-dialog-header>Delete Account</atl-dialog-header>\n  <atl-dialog-content>\n    <atl-alert variant=\"warning\">This action cannot be undone.</atl-alert>\n  </atl-dialog-content>\n  <atl-dialog-footer>\n    <button atl-button variant=\"outline\" (click)=\"isOpen.set(false)\">Cancel</button>\n    <button atl-button variant=\"primary\" (click)=\"confirm()\">Yes, delete</button>\n  </atl-dialog-footer>\n</atl-dialog>",
@@ -71,6 +116,21 @@
         "AtlMenu",
         "AtlTooltip"
       ],
+      "whenToUse": [
+        "Lists of 5–50 items where each item has 1 primary action and 2–4 secondary actions.",
+        "Items have a status indicator that benefits from a Badge's colour semantics (Active, Pending, Failed).",
+        "You want each row independently focusable so keyboard users can act on it without tab-trapping in a Table."
+      ],
+      "whenNotToUse": [
+        "More than ~50 items — switch to AtlTable with sorting, sticky header, and pagination.",
+        "Items whose primary affordance is reading, not acting — use a plain styled list without per-row buttons.",
+        "Lists that need column alignment across rows — Cards collapse content; Tables align it."
+      ],
+      "pitfalls": [
+        "LLMs render `<a>` and `<button>` interchangeably for row actions — use `<button>` for \"Edit\", `<a>` only for navigation. Mixing breaks Cmd-click behaviour.",
+        "Putting the entire row inside a `<button>` swallows the inner buttons' click handlers. Use a clickable region pattern (cursor + keydown) rather than a wrapping button.",
+        "The cookbook story uses AtlMenu for Edit / Duplicate / Delete because each is a separate operation. If you only have one secondary action, drop the menu and inline the button."
+      ],
       "frameworks": {
         "angular": "<div class=\"list-header\">\n  <h2>Projects</h2>\n  <button atl-button variant=\"primary\" size=\"sm\">New project</button>\n</div>\n@for (item of items(); track item.id) {\n  <atl-card variant=\"outlined\" padding=\"md\">\n    <atl-card-content>\n      <span>{{ item.name }}</span>\n      <atl-badge [variant]=\"item.statusVariant\" size=\"sm\">{{ item.status }}</atl-badge>\n      <p>{{ item.description }}</p>\n      <button atl-button variant=\"outline\" size=\"sm\" atlTooltip=\"View details\">View</button>\n      <button atl-button\n        variant=\"outline\"\n        size=\"sm\"\n        [atlMenuTriggerFor]=\"actionsMenu\"\n        atlTooltip=\"More actions\"\n      >...</button>\n      <ng-template #actionsMenu>\n        <atl-menu>\n          <atl-menu-item>Edit</atl-menu-item>\n          <atl-menu-item>Duplicate</atl-menu-item>\n          <atl-menu-separator />\n          <atl-menu-item>Delete</atl-menu-item>\n        </atl-menu>\n      </ng-template>\n    </atl-card-content>\n  </atl-card>\n}",
         "react": "<div className=\"list-header\">\n  <h2>Projects</h2>\n  <AtlButton variant=\"primary\" size=\"sm\">New project</AtlButton>\n</div>\n{items.map(item => (\n  <AtlCard key={item.id} variant=\"outlined\" padding=\"md\">\n    <AtlCardContent>\n      <span>{item.name}</span>\n      <AtlBadge variant={item.statusVariant} size=\"sm\">{item.status}</AtlBadge>\n      <p>{item.description}</p>\n      <AtlTooltip atlTooltip=\"View details\">\n        <AtlButton variant=\"outline\" size=\"sm\">View</AtlButton>\n      </AtlTooltip>\n      <AtlMenuTrigger\n        menu={\n          <AtlMenu variant=\"compact\">\n            <AtlMenuItem>Edit</AtlMenuItem>\n            <AtlMenuItem>Duplicate</AtlMenuItem>\n            <AtlMenuSeparator />\n            <AtlMenuItem>Delete</AtlMenuItem>\n          </AtlMenu>\n        }\n      >\n        {({ onClick, ref }) => (\n          <AtlTooltip atlTooltip=\"More actions\">\n            <AtlButton ref={ref} onClick={onClick} variant=\"outline\" size=\"sm\">...</AtlButton>\n          </AtlTooltip>\n        )}\n      </AtlMenuTrigger>\n    </AtlCardContent>\n  </AtlCard>\n))}",
@@ -88,6 +148,21 @@
         "AtlAlert",
         "AtlBadge",
         "AtlButton"
+      ],
+      "whenToUse": [
+        "A surface where users review historical notifications grouped by severity (errors, warnings, info).",
+        "Notifications can be dismissed independently and the user wants to see related items together.",
+        "You expect 10–200 items — fewer than 10 should render flat without the accordion wrapper."
+      ],
+      "whenNotToUse": [
+        "Transient toast-style notifications — use AtlToast (a `role=\"status\"` polite live region for every variant), not an accordion.",
+        "A single critical message — inline AtlAlert above the page is louder and harder to ignore than a collapsed accordion section.",
+        "Real-time logs / streaming output — the accordion expansion animation fights the auto-scroll. Use a virtual-scrolled list instead."
+      ],
+      "pitfalls": [
+        "LLMs frequently nest AtlAccordionGroup inside another accordion — flat groupings work better; switch to AtlTabGroup if you really need two axes.",
+        "Auto-collapsing the section when its last item is dismissed is jarring on keyboard users mid-action — leave it open and show an empty-state row.",
+        "Marking everything as `variant=\"danger\"` so the user \"really sees it\" trains them to ignore the colour. Reserve danger for actual failures."
       ],
       "frameworks": {
         "angular": "<atl-accordion-group [multi]=\"true\" variant=\"separated\">\n  <atl-accordion-item [expanded]=\"true\">\n    <span atlAccordionHeader>\n      Errors <atl-badge variant=\"danger\" size=\"sm\">2</atl-badge>\n    </span>\n    <atl-alert variant=\"danger\">Database failed.</atl-alert>\n    <atl-alert variant=\"danger\">Service 503.</atl-alert>\n  </atl-accordion-item>\n  <atl-accordion-item>\n    <span atlAccordionHeader>\n      Warnings <atl-badge variant=\"warning\" size=\"sm\">1</atl-badge>\n    </span>\n    <atl-alert variant=\"warning\">Disk at 89%.</atl-alert>\n  </atl-accordion-item>\n</atl-accordion-group>",
@@ -109,6 +184,21 @@
         "AtlAlert",
         "AtlProgress",
         "AtlButton"
+      ],
+      "whenToUse": [
+        "Operational overview pages: metric cards above, table of recent activity below, supplementary indicators (quota, plan usage) on the side.",
+        "Dashboards with a global time-range selector that re-scopes every widget — TabGroup with `variant=\"pills\"` is the right control.",
+        "When the user needs to triage at a glance and only drill in if a metric is anomalous (warning Alert above the threshold)."
+      ],
+      "whenNotToUse": [
+        "Single-metric pages — all this scaffolding is overkill for one number with a sparkline.",
+        "Pages where the data is the whole point and side-by-side cards add no value — render the table full-bleed instead.",
+        "Real-time dashboards with sub-second updates — these fight the static layout; use an SVG/canvas chart and drop the Card grids."
+      ],
+      "pitfalls": [
+        "LLMs love to project tab content into a giant `ngSwitch` / ternary that re-renders the entire grid on each tab change. Bind only the data-fetch scope to the tab; let the layout stay static.",
+        "Using `variant=\"warning\"` Alerts for every quota above 50 % numbs the signal. Reserve for crossings of the actual SLA / billing threshold.",
+        "Putting the table and the side panel into a single AtlCard collapses their independent scroll regions. They're siblings, not parent/child."
       ],
       "frameworks": {
         "angular": "<!-- Metric cards + activity table + quota widget.\n     Uses Card, Table, TabGroup, Badge, Alert, Progress. -->\n<atl-tab-group variant=\"pills\" [(selectedIndex)]=\"range\">\n  <atl-tab label=\"7D\" />\n  <atl-tab label=\"30D\" />\n  <atl-tab label=\"90D\" />\n</atl-tab-group>\n@if (quota() >= 85) {\n  <atl-alert variant=\"warning\">API quota at {{ quota() }}%.</atl-alert>\n}\n<!-- ...metric cards grid (AtlCard + AtlBadge delta)... -->\n<atl-table variant=\"striped\" size=\"sm\">\n  <atl-thead>\n    <atl-tr><atl-th>User</atl-th><atl-th>Action</atl-th></atl-tr>\n  </atl-thead>\n  <atl-tbody>\n    @for (row of activity(); track row.id) {\n      <atl-tr>\n        <atl-td>{{ row.user }}</atl-td>\n        <atl-td>{{ row.action }}</atl-td>\n      </atl-tr>\n    }\n  </atl-tbody>\n</atl-table>\n<atl-progress [value]=\"quota()\" variant=\"warning\" size=\"sm\" />",

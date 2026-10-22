@@ -20,9 +20,10 @@
 //   - no @internal members: AtlTabGroup's helper members are neither in its docgen nor in docs-show
 //   - docs-show answers for EVERY component and doc id in the packed snapshot
 //   - a different installed @atelier-ui/angular version warns in instructions and on stderr
-//   - layers on the packed tarball: with all on, docs-show(AtlBadge) carries "When not to use"
-//     and tokens-search finds --ui-focus-ring; with `api` alone both are absent; `api,purpose`
-//     and `api,tokens` each deliver only their own layer
+//   - layers on the packed tarball: with all on, docs-show(AtlBadge) carries "When not to use",
+//     docs-show(AtlDialog) carries the composition anti-patterns (type-to-confirm) and
+//     tokens-search finds --ui-focus-ring; with `api` alone all three are absent; `api,purpose`,
+//     `api,tokens` and `api,composition` each deliver only their own layer
 //   - ATELIER_MCP_LAYERS: an unknown layer id fails loudly
 //   - every stdout line is JSON-RPC 2.0
 import { spawn, spawnSync } from 'node:child_process';
@@ -46,7 +47,9 @@ const REPO_ROOT = join(PKG_ROOT, '..', '..');
 const BUTTON_ID = 'components-inputs-atlbutton';
 const TABS_ID = 'components-navigation-atltabgroup';
 const BADGE_ID = 'components-display-atlbadge';
+const DIALOG_ID = 'components-overlay-atldialog';
 const GUIDANCE_MARKER = 'When not to use';
+const COMPOSITION_MARKER = 'Composition patterns';
 const TOKENS_TOOL = 'tokens-search';
 const failures = [];
 
@@ -202,6 +205,7 @@ async function layerProbe(client) {
   const tools =
     (await client.request('tools/list')).result?.tools?.map((t) => t.name) ??
     [];
+  const dialog = await callTool(client, 'docs-show', { id: DIALOG_ID });
   let tokenFound = false;
   if (tools.includes(TOKENS_TOOL)) {
     const found = await callTool(client, TOKENS_TOOL, { query: 'focus ring' });
@@ -213,6 +217,10 @@ async function layerProbe(client) {
     badgeKeepsPurpose:
       badge.text.includes('Compact inline label') &&
       /variant\??:/.test(badge.text),
+    composition:
+      dialog.text.includes(COMPOSITION_MARKER) &&
+      dialog.text.includes('type the project name'),
+    dialogKeepsApi: /open\??:/.test(dialog.text),
     tokensTool: tools.includes(TOKENS_TOOL),
     tokenFound,
     instructions: client.instructions ?? '',
@@ -288,6 +296,14 @@ async function main() {
       'instructions lack the layer sections (tokens tool, stylelint rules, component guidance)',
     );
     const layered = await layerProbe(client);
+    check(
+      layered.composition && layered.dialogKeepsApi,
+      'all layers on: docs-show(AtlDialog) lacks the composition block or lost its API',
+    );
+    check(
+      instructions.includes(COMPOSITION_MARKER),
+      'instructions lack the composition section',
+    );
     check(
       layered.guidance,
       'all layers on: docs-show(AtlBadge) lacks the guidance block',
@@ -423,11 +439,12 @@ async function main() {
     );
 
     // Run 4: each layer switches on its own and changes nothing of the others.
-    for (const [layers, wantGuidance, wantTokens] of [
-      ['api', false, false],
-      ['api,purpose', true, false],
-      ['api,tokens', false, true],
-      ['api,purpose,tokens', true, true],
+    for (const [layers, wantGuidance, wantTokens, wantComposition] of [
+      ['api', false, false, false],
+      ['api,purpose', true, false, false],
+      ['api,tokens', false, true, false],
+      ['api,composition', false, false, true],
+      ['api,purpose,tokens,composition', true, true, true],
     ]) {
       const run = startServer(packageDir, {
         cwd: consumer,
@@ -448,8 +465,17 @@ async function main() {
         `ATELIER_MCP_LAYERS=${layers}: ${TOKENS_TOOL} ${probe.tokensTool ? 'present' : 'absent'}, expected ${wantTokens ? 'present' : 'absent'}`,
       );
       check(
+        probe.composition === wantComposition,
+        `ATELIER_MCP_LAYERS=${layers}: composition block ${probe.composition ? 'present' : 'absent'}, expected ${wantComposition ? 'present' : 'absent'}`,
+      );
+      check(
+        probe.dialogKeepsApi,
+        `ATELIER_MCP_LAYERS=${layers}: docs-show(AtlDialog) lost its API sections`,
+      );
+      check(
         probe.instructions.includes(TOKENS_TOOL) === wantTokens &&
-          probe.instructions.includes(GUIDANCE_MARKER) === wantGuidance,
+          probe.instructions.includes(GUIDANCE_MARKER) === wantGuidance &&
+          probe.instructions.includes(COMPOSITION_MARKER) === wantComposition,
         `ATELIER_MCP_LAYERS=${layers}: instructions do not match the layer set`,
       );
       check(

@@ -7,7 +7,7 @@ const cache = new Map();
 
 /**
  * @param {string} root snapshot root
- * @param {'components' | 'tokens'} name
+ * @param {'components' | 'tokens' | 'patterns'} name
  */
 export function loadKnowledge(root, name) {
   const file = join(root, 'knowledge', `${name}.json`);

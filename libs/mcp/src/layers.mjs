@@ -12,7 +12,8 @@
 // `without` variant). An unknown id is an error at start, never a silent no-op, because a typo
 // would otherwise turn an ablation run into a measurement of the wrong thing.
 //
-// L0 `api` is the Storybook docs toolset; L1 `purpose` and L2 `tokens` are in their own files.
+// L0 `api` is the Storybook docs toolset; L1 `purpose`, L2 `tokens` and L5 `composition` are in
+// their own files.
 // A layer may add tools, instruction sections, or rewrite what the docs tools read (the manifest
 // provider applies each active layer's `transformManifest`), and it must not change what another
 // layer delivers: that is what makes an ablation run mean something.
@@ -24,6 +25,7 @@ import {
 } from '@storybook/mcp';
 
 import { API_RULES } from './instructions.mjs';
+import { createCompositionLayer } from './layer-composition.mjs';
 import { createPurposeLayer } from './layer-purpose.mjs';
 import { createTokensLayer } from './layer-tokens.mjs';
 
@@ -43,7 +45,12 @@ const apiLayer = {
   },
 };
 
-export const LAYERS = [apiLayer, createPurposeLayer(), createTokensLayer()];
+export const LAYERS = [
+  apiLayer,
+  createPurposeLayer(),
+  createTokensLayer(),
+  createCompositionLayer(),
+];
 
 /**
  * @param {string | undefined} spec value of ATELIER_MCP_LAYERS

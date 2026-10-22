@@ -2,12 +2,15 @@
 //
 //   snapshot/knowledge/components.json   L1 `purpose`: when to use / not to use / related, keyed by
 //                                        component name (AtlBadge, and every sub-component spec)
+//   snapshot/knowledge/patterns.json     L5 `composition`: each cookbook pattern with the components
+//                                        it composes, when it is the wrong choice, and its pitfalls
 //   snapshot/knowledge/tokens.json       L2 `tokens`: every --ui-* token with its light and dark
 //                                        value and, where annotated, intent and constraints; plus
 //                                        the stylelint rules a scaffolded consumer workspace wires
 //
 // Sources are read from the repo at build time, never at run time, and never parsed from .ts:
 //   - docs/public/.well-known/components/*.json  (ADR-0174, drift-gated by check:knowledge)
+//   - docs/public/.well-known/cookbook-patterns.json (drift-gated by check:cookbook-manifest)
 //   - libs/styles/src/tokens.css                 (the values)
 //   - the scaffold's preset.ts and rule files    (which rules a consumer's CSS is linted against)
 import {
@@ -27,6 +30,7 @@ const REPO_ROOT = join(
   '..',
 );
 const KNOWLEDGE_DIR = 'docs/public/.well-known/components';
+const PATTERNS_JSON = 'docs/public/.well-known/cookbook-patterns.json';
 const TOKENS_CSS = 'libs/styles/src/tokens.css';
 const PRESET_DIR = 'libs/create-workspace/src/generators/preset';
 const LIGHT_SELECTOR = ':root';
@@ -107,6 +111,24 @@ function buildComponentKnowledge(units) {
     for (const spec of unit.specs ?? []) out[componentName(spec)] ??= entry;
   }
   return out;
+}
+
+/** L5 data: the composition guidance of each pattern; snippets, a11y notes and variations stay out. */
+function buildPatternKnowledge(repoRoot) {
+  const file = join(repoRoot, PATTERNS_JSON);
+  if (!existsSync(file))
+    throw new Error(`Cookbook projection missing: "${file}".`);
+  const { patterns } = JSON.parse(readFileSync(file, 'utf8'));
+  return {
+    patterns: patterns.map((pattern) => ({
+      id: pattern.id,
+      title: pattern.title,
+      description: pattern.description,
+      components: pattern.components,
+      whenNotToUse: pattern.whenNotToUse ?? [],
+      pitfalls: pattern.pitfalls ?? [],
+    })),
+  };
 }
 
 function ruleSummary(source, id) {
@@ -190,6 +212,10 @@ export function buildKnowledge({ repoRoot = REPO_ROOT, snapshotDir }) {
   writeFileSync(
     join(dir, 'components.json'),
     JSON.stringify(buildComponentKnowledge(units)),
+  );
+  writeFileSync(
+    join(dir, 'patterns.json'),
+    JSON.stringify(buildPatternKnowledge(repoRoot)),
   );
   writeFileSync(
     join(dir, 'tokens.json'),

@@ -439,7 +439,7 @@ export const PATTERNS: PatternMeta[] = [
       'When the form needs more than one Card column or section — switch to a Settings-style tabbed layout.',
     ],
     a11yNotes: [
-      'AtlInput exposes invalid + describedBy linkage automatically when paired with the Alert via aria-describedby — keep the Alert above the inputs so screen readers reach the error first.',
+      "AtlInput links only its own error messages (the `errors` input) to the control through `aria-describedby`; it does not link a separate Alert. Keep the Alert above the inputs so screen readers reach the error first, or pass the message as the input's `errors` so it is announced with the field.",
       'The submit button needs an explicit loading state, not a disabled state with a spinner — disabled buttons are skipped by some assistive tech.',
       'Label every input. Placeholder is a hint, not a label — never the only descriptor for a field.',
     ],
@@ -537,13 +537,9 @@ export const PATTERNS: PatternMeta[] = [
     pitfalls: [
       'LLMs frequently add `autoFocus` to the destructive button — this nudges users into an accidental confirm. The first Tab stop should be Cancel.',
       "Forgetting to gate the trigger when the action is already in flight produces double-deletes; flip the dialog's `open` to false only after the mutation resolves.",
-      'Putting body content as a raw string inside `AtlDialogContent` skips the AtlAlert composition the cookbook recommends — the Alert is what carries the warning role for assistive tech.',
+      'Putting body content as a raw string inside `AtlDialogContent` skips the AtlAlert composition the cookbook recommends — the Alert carries the warning message.',
     ],
     variations: [
-      {
-        title: 'With type-to-confirm input',
-        note: 'Add an AtlInput inside `AtlDialogContent` that the user must type the resource name into. Disable the destructive button until match.',
-      },
       {
         title: 'Loading state',
         note: "Bind `loading={pending}` on the destructive AtlButton; keep the dialog open so a slow network failure doesn't lose context.",
@@ -619,7 +615,7 @@ export const PATTERNS: PatternMeta[] = [
       'The badge counts beside each accordion header must update when items are dismissed — assistive tech reads the header text on focus, not the changing count below.',
     ],
     pitfalls: [
-      'LLMs frequently nest AtlAccordionGroup inside another accordion — flat groupings work better; switch to AtlTabs if you really need two axes.',
+      'LLMs frequently nest AtlAccordionGroup inside another accordion — flat groupings work better; switch to AtlTabGroup if you really need two axes.',
       'Auto-collapsing the section when its last item is dismissed is jarring on keyboard users mid-action — leave it open and show an empty-state row.',
       'Marking everything as `variant="danger"` so the user "really sees it" trains them to ignore the colour. Reserve danger for actual failures.',
     ],

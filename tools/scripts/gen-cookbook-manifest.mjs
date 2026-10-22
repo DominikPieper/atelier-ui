@@ -24,6 +24,9 @@
  *         "description": "...",
  *         "url": "https://atelier.pieper.io/patterns#pattern-1",
  *         "components": ["AtlCard", "AtlInput", ...],
+ *         "whenToUse": ["..."],
+ *         "whenNotToUse": ["..."],
+ *         "pitfalls": ["..."],
  *         "frameworks": { "angular": "...", "react": "...", "vue": "..." }
  *       }
  *     ]
@@ -161,6 +164,9 @@ function buildManifest(patterns) {
         description: p.description,
         url: `${SITE_URL}/patterns/${p.id}`,
         components: p.tags,
+        whenToUse: p.whenToUse,
+        whenNotToUse: p.whenNotToUse,
+        pitfalls: p.pitfalls,
         frameworks: {
           angular: p.angular,
           react: p.react,

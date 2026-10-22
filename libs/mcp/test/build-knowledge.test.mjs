@@ -79,6 +79,26 @@ function fixtureRepo() {
   );
   writeFileSync(join(comps, 'index.json'), '{"not":"a component"}');
   writeFileSync(
+    join(root, 'docs/public/.well-known/cookbook-patterns.json'),
+    JSON.stringify({
+      version: '1',
+      patterns: [
+        {
+          id: 'confirmation-dialog',
+          num: 3,
+          title: 'Confirmation Dialog',
+          description: 'Modal flow for destructive actions.',
+          url: 'https://example.test/patterns/confirmation-dialog',
+          components: ['AtlDialog', 'AtlButton'],
+          whenToUse: ['Irreversible actions.'],
+          whenNotToUse: ['Type-to-confirm: use a page or an AtlDrawer.'],
+          pitfalls: ['Autofocus on the destructive button.'],
+          frameworks: { angular: '<atl-dialog />', react: '', vue: '' },
+        },
+      ],
+    }),
+  );
+  writeFileSync(
     join(scaffold, 'preset.ts'),
     `const x = { 'atelier/no-raw-color-literal': true, 'atelier/no-token-bypass': [true, {}] };`,
   );
@@ -108,6 +128,22 @@ test('buildKnowledge: component guidance keyed by every spec name, tokens joined
       { statement: 'Hold a chip.', useInstead: 'A chip component.' },
     ]);
     assert.deepEqual(comps.AtlBadge.related, ['AtlAlert']);
+
+    const patterns = JSON.parse(
+      readFileSync(join(out, 'knowledge/patterns.json'), 'utf8'),
+    );
+    assert.deepEqual(patterns, {
+      patterns: [
+        {
+          id: 'confirmation-dialog',
+          title: 'Confirmation Dialog',
+          description: 'Modal flow for destructive actions.',
+          components: ['AtlDialog', 'AtlButton'],
+          whenNotToUse: ['Type-to-confirm: use a page or an AtlDrawer.'],
+          pitfalls: ['Autofocus on the destructive button.'],
+        },
+      ],
+    });
 
     const tokens = JSON.parse(
       readFileSync(join(out, 'knowledge/tokens.json'), 'utf8'),

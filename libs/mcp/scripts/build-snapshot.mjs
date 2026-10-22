@@ -33,6 +33,7 @@ export const REQUIRED_FILES = [
   'manifests/components.json',
   'manifests/docs.json',
   'knowledge/components.json',
+  'knowledge/patterns.json',
   'knowledge/tokens.json',
 ];
 
@@ -63,7 +64,7 @@ export function buildSnapshot({
     recursive: true,
   });
 
-  // The knowledge layers (L1, L2) come from the repo, not from the Storybook build.
+  // The knowledge layers (L1, L2, L5) come from the repo, not from the Storybook build.
   buildKnowledge({ snapshotDir, ...(repoRoot ? { repoRoot } : {}) });
 
   for (const name of REQUIRED_FILES) {

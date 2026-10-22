@@ -97,10 +97,10 @@ const descriptions = (text) =>
     ]),
   );
 
-test('the shipped registry is api, purpose, tokens, in that order', () => {
+test('the shipped registry is api, purpose, tokens, composition, in that order', () => {
   assert.deepEqual(
     LAYERS.map((layer) => layer.id),
-    ['api', 'purpose', 'tokens'],
+    ['api', 'purpose', 'tokens', 'composition'],
   );
 });
 
@@ -222,9 +222,9 @@ test('createServer: layer sets decide tools and instructions', async () => {
     l0.layers.map((l) => l.id),
     ['api'],
   );
-  const both = await createServer(options('api,purpose,tokens'));
+  const both = await createServer(options('api,purpose,tokens,composition'));
   assert.deepEqual(
     both.layers.map((l) => l.id),
-    ['api', 'purpose', 'tokens'],
+    ['api', 'purpose', 'tokens', 'composition'],
   );
 });
