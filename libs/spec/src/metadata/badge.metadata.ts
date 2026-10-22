@@ -19,10 +19,10 @@ export const metadata: ComponentMetadata = {
     {
       pattern: 'Holding a removable user-entered chip (filter, recipient).',
       useInstead:
-        'A dedicated chip/tag component with its own remove affordance; badges are display-only.',
+        'There is no chip component; build one from AtlButton: one small outline button (variant outline, size sm) holding the label and an aria-hidden × glyph, with an aria-label that names what it removes (e.g. "Remove filter: <label>") and a click handler that removes the item. Wrap a group of them in a container with an accessible label (role="group" plus aria-label).',
     },
   ],
-  relatedComponents: ['AtlAlertSpec', 'AtlAvatarSpec'],
+  relatedComponents: ['AtlAlertSpec', 'AtlAvatarSpec', 'AtlButtonSpec'],
   variantMatrix: [
     { variant: 'default', size: 'sm' },
     { variant: 'default', size: 'md' },

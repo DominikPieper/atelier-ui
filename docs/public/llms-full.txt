@@ -494,8 +494,8 @@ Each entry lists:
       - Annotating a heading or button with a "new" / "beta" marker.
     antiPatterns:
       - Surfacing a dismissable system-level message. → use AtlAlert — alerts carry a role and live region, badges do not.
-      - Holding a removable user-entered chip (filter, recipient). → use A dedicated chip/tag component with its own remove affordance; badges are display-only.
-    relatedComponents: AtlAlertSpec, AtlAvatarSpec
+      - Holding a removable user-entered chip (filter, recipient). → use There is no chip component; build one from AtlButton: one small outline button (variant outline, size sm) holding the label and an aria-hidden × glyph, with an aria-label that names what it removes (e.g. "Remove filter: <label>") and a click handler that removes the item. Wrap a group of them in a container with an accessible label (role="group" plus aria-label).
+    relatedComponents: AtlAlertSpec, AtlAvatarSpec, AtlButtonSpec
     accessibility.role: none
     accessibility.keyboardBehavior: Non-interactive. Not focusable and ignores all keyboard input — the surrounding context (row, button, nav item) handles focus.
     accessibility.notes:

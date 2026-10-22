@@ -74,6 +74,11 @@ copied from them and from `tasks/todo.md`.
 - **Evidence.** chip-filter: the badge's guidance says "use a dedicated chip/tag component" —
   there is none. The model reads the guidance, quotes it, and still wraps a button in a badge
   (0/3 with purpose and tokens on).
+- **Corrected 2026-10-22 — confirmed by a fix.** The guidance now names a recipe built from an
+  existing component (a small outline button with an `aria-hidden` × and an `aria-label` naming
+  what it removes). With all layers on, chip-filter went from 33 % (1/3) to 100 % (3/3), and all
+  three answers follow the recipe, read by hand — the check itself only proves the badge was not
+  used.
 - **Cost.** Editorial; checkable by a gate (component names in `useInstead` must resolve).
 - **Transfer.** Open.
 

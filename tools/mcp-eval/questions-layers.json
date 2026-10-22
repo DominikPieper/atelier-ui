@@ -9,7 +9,7 @@
       "prompt": "I use @atelier-ui/angular in a standalone Angular app. My filter bar shows the active filters as removable chips: a label plus an × button that removes that filter. Which Atelier component do I use for a chip, and how do I template one? Short template please.",
       "checks": ["api", "forbid"],
       "forbidSelectors": ["atl-badge"],
-      "source": "libs/spec/src/metadata/badge.metadata.ts antiPatterns: 'Holding a removable user-entered chip (filter, recipient)' -> a dedicated chip/tag component with its own remove affordance; badges are display-only. docs/public/.well-known/components/badge.json rules (should-not).",
+      "source": "libs/spec/src/metadata/badge.metadata.ts antiPatterns: 'Holding a removable user-entered chip (filter, recipient)' -> useInstead: there is no chip component; build one from a small outline AtlButton with an aria-hidden x and an aria-label naming what it removes (recipe since 2026-10-22; before it pointed at a non-existent chip component). docs/public/.well-known/components/badge.json rules (should-not).",
       "notInL0": "Checked dist/storybook/angular manifests + docgen/story-docs: 'chip' occurs once (typography doc, 'kbd chips'), 'display-only' 0 hits; the badge JSDoc says only 'Inline badge for labeling items with semantic color variants'. There is no chip component, and the manifest nowhere says a badge must not be used as one. Pilot: the L0 answer still builds a chip from AtlBadge plus a button, so the claim 'there is no chip component' is derivable from L0 and was dropped; the question checks the use of atl-badge."
     },
     {
