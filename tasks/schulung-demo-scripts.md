@@ -63,7 +63,7 @@ derived from the code, not from a recorded run.
   `localhost:4200`) for D-3, D-4 (window b and the compiler stage), D-5 and for D-1 step 3 (the stylelint
   check), because that is what participants have. Its `.mcp.json` has five servers: `atelier`
   (the library's docs, stdio, no port), `storybook-local` (the workspace's own Storybook,
-  connected only while `npm run storybook` runs; started after the session: `/mcp`, reconnect),
+  connected only while `npm run storybook` runs; tools missing: check Storybook runs, then `/mcp`, reconnect),
   `nx-mcp`, `angular-cli`, `figma-console`. The library Storybook is mounted at
   `http://localhost:6006/atelier/`.
 - Atelier Angular Storybook: `nx storybook angular` (project `angular`, target
@@ -433,8 +433,8 @@ browser port; never two at once).
 
 **Fallback.** HMR does not refresh the panel: reload the story. If the scaffold's
 story lacks the `play`: write the 3-line `play` live from the template shape above.
-`storybook-local` not connected: Storybook is not running or was started after the session;
-start it, `/mcp` → reconnect; the play panel shows the same red meanwhile.
+`storybook-local` not connected: Storybook is not running; start it (the tools appear on
+their own), `/mcp` → reconnect is the fallback; the play panel shows the same red meanwhile.
 
 ---
 

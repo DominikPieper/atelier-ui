@@ -578,9 +578,10 @@ const mcpConfig = (fw: string) => `{
             <code>storybook-local</code>, <code>nx-mcp</code>, plus
             <code>angular-cli</code> and <code>figma-console</code> where they
             apply) should be listed as connected. <code>storybook-local</code>
-            is connected only while <code>npm run storybook</code> runs; if you
-            started Storybook after the session, run <code>/mcp</code> and
-            reconnect. If one asks for approval, approve it.
+            is connected only while <code>npm run storybook</code> runs; if its
+            tools are missing, check that Storybook runs, then run
+            <code>/mcp</code> and reconnect. If one asks for approval, approve
+            it.
           </p>
           <div
             style="

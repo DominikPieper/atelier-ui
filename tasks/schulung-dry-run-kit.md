@@ -150,9 +150,9 @@ They sit at the block that runs them and are numbered here so none gets lost:
    without `alt` and the click `<div>`, the repair, the removal) run as participant prompts
    within the 20 minutes of the ladder row?
 2. Day 1 Block 03: the three-rule `figma_lint_design` run (`hardcoded-color`, `default-name`,
-   `detached-component`) on `Inputs/AtlButton` in the duplicate: how many findings does it
-   return? (The default run measured 59, 18 of them "critical" contrast findings, 40 about
-   text styles.)
+   `detached-component`) on `Inputs/AtlButton` in the duplicate: confirm the run returns the
+   three planted findings, one per rule. (The default run measured 59, 18 of them "critical"
+   contrast findings, 41 about text styles.)
 3. Day 1 Block 03: are 5 minutes enough for the remaining readiness checklist rows?
 4. Day 2 Block 00: after `/clear`, do the two Definition-of-Done answers differ as described
    (the second no longer names `npm run check:stories`)?
@@ -181,7 +181,8 @@ They sit at the block that runs them and are numbered here so none gets lost:
 (owner decision 2026-11-12, ADR-0178): nothing is installed at home and nothing is
 mailed. For the rehearsal, set your machine up the same way: Node ≥ 22.12 LTS, Claude
 Code CLI, Figma Desktop with the prepared duplicate and the imported Desktop Bridge
-plugin. Do it before the clock starts and note how long it took; Block 01 only
+plugin; plant the three linter findings in the duplicate once (golden prompts §1c,
+"Provisioning"). Do it before the clock starts and note how long it took; Block 01 only
 _verifies_ it, and the login happens inside Block 01.
 
 **Block 00 — Kickoff and thesis** (talk + live demo).
@@ -221,7 +222,7 @@ anyone still red has a rescue path.
   `nx-mcp`, `angular-cli`, `figma-console` (`/schulung` Block 04 names them; `uianatomy`
   left the scaffold on 2026-11-18, ADR-0181, so a sixth entry means the machine was
   provisioned from an older release: log it). `storybook-local` is connected only while
-  Storybook runs; if it was started after the session, `/mcp` → reconnect. Write down what
+  Storybook runs; if its tools are missing, check that Storybook runs first, `/mcp` → reconnect when they still do not appear. Write down what
   `/mcp` actually shows.
 - Storybook runs (`npm run storybook`, `localhost:6006`, ADR-0137); Playwright
   Chromium installed.
@@ -281,11 +282,11 @@ added and one frame uses Auto Layout. The checklist for your own file is a hando
   say what it showed. Naming: `/tokens#naming`.
 - **STOP — ladder stage 0, the Figma linter (13:45–13:55, 10 minutes, golden prompts §1c).**
   Trainer shows the default run on `Inputs/AtlButton` (node `129:20`) first (59 findings,
-  18 "critical" contrast findings on the hidden `_disabled-overlay` label, 40 about text
+  18 "critical" contrast findings on the hidden `_disabled-overlay` label, 41 about text
   styles); then the agent runs `figma_lint_design` with the three rules `hardcoded-color`,
   `default-name`, `detached-component` on the same master in the duplicate, read-only, and you
-  sort each line real / false alarm. Rehearsal check 2: log how many findings the
-  three-rule run returns.
+  sort each line real / false alarm. Rehearsal check 2: confirm the three-rule run returns
+  the three planted findings (golden prompts §1c).
 - Readiness checklist (`/readiness`) for one Atelier master, the remaining rows (13:55–14:00).
   Rehearsal check 3: log whether 5 minutes were enough.
 - Micro-exercise (10 min) on a copy of a master in the duplicate: bind one fill to a
@@ -432,8 +433,8 @@ property.
   connected; expect the dev/test tools (`get-storybook-story-instructions`,
   `stories-preview`, `test-run`) to be listed, identical for all three frameworks since
   Storybook 10.6.0. No `claude mcp add` step, nobody types a server in.
-- **STOP** if any of those three is missing: Storybook is not running on :6006 (or was
-  started after the session). Start it, `/mcp` → reconnect. `get-storybook-story-instructions`
+- **STOP** if any of those three is missing: Storybook is not running on :6006.
+  Start it; `/mcp` → reconnect when the tools still do not appear. `get-storybook-story-instructions`
   is mandatory before every `*.stories.*` edit.
 - Prompt from the **handoff document** (golden prompts §2.1, no contract; nothing about a
   contract file on the projector), not the picture alone, including its deliberate

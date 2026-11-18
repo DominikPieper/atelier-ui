@@ -291,7 +291,7 @@ as a prompt (rehearsal). Read-only: nothing is changed in the file.
 **Trainer first (Day 1 only): the default run.** On `Inputs/AtlButton` (node `129:20` in
 the Atelier file) the default `figma_lint_design` run reports **59 findings** (measured
 2026-11-17): **18 "critical"** contrast failures, all on the hidden `_disabled-overlay`
-label (false alarms), **40** about missing text styles (the file binds type to variables
+label (false alarms), **41** about missing text styles (the file binds type to variables
 instead), and none of the ones examined is a defect. Say: "a finding is something to sort,
 not a verdict."
 
@@ -309,11 +309,89 @@ yet at 10:35; it is written after this run.
 
 **Expected output.** A list, no edit. What the three rules catch: raw colours, layers left
 on default names, detached instances. The participant sorts each line: **real** or **false
-alarm**. UNVERIFIED (rehearsal): the number of findings the three-rule run returns on that
-master.
+alarm**. On the prepared duplicate the three-rule run returns exactly three findings, one per
+rule (see the answer key below); on the unplanted original it returns none (measured
+2026-11-18, 121 nodes). UNVERIFIED (rehearsal): that the planted duplicate does return those three.
 
 **What it does not see (say it).** Whether the design is right; spacing and radius. Its
 default rule set also reports false alarms (see above), which is why the rules are named.
+
+**Provisioning: plant three findings in the duplicate.** The original returns none for the
+three rules, so there would be nothing to sort. Once per prepared duplicate, whoever
+provisions runs this through `figma_execute` (or the trainer pastes it). It finds the set by
+name (page `🧩 Components`, set `Inputs/AtlButton`), not by node id (ids differ in a duplicate), and does nothing on a second run.
+UNVERIFIED: written from the Plugin API and `tools/figma/snapshot.json`, never run against
+Figma.
+
+```js
+// the page is named "🧩 Components" in the file; match the word, not the emoji
+const page = figma.root.children.find((p) => p.name.endsWith('Components'));
+if (!page) throw new Error('Components page not found');
+await page.loadAsync();
+const set = page.findOne((n) => n.type === 'COMPONENT_SET' && n.name === 'Inputs/AtlButton');
+if (!set) throw new Error('Inputs/AtlButton not found on the Components page');
+const v = (name) => {
+  const n = set.findChild((c) => c.name === `variant=${name}, size=lg, state=default`);
+  if (!n) throw new Error(`variant=${name}, size=lg, state=default not found`);
+  return n;
+};
+const done = {};
+
+// (a) hardcoded-color: secondary/lg loses its fill variable, keeps the hex
+const a = v('secondary');
+const fill = a.fills[0];
+if (fill.boundVariables && fill.boundVariables.color) {
+  const free = figma.variables.setBoundVariableForPaint(fill, 'color', null);
+  a.fills = [free];
+  const kept = JSON.stringify(a.fills[0].color) === JSON.stringify(fill.color); // same value, no link
+  done.hardcodedColor = { node: a.name, valueKept: kept };
+}
+
+// (b) default-name: the hidden disabled overlay of danger/lg becomes "Frame 12"
+const b = v('danger');
+const overlay = b.findOne((n) => n.name === '_disabled-overlay');
+if (overlay && !set.findOne((n) => n.name === 'Frame 12')) {
+  overlay.name = 'Frame 12';
+  done.defaultName = { node: b.name, layer: 'Frame 12 (was _disabled-overlay)' };
+}
+
+// (c) detached-component: hidden empty frame "Icon/Arrow" in outline/lg
+const c = v('outline');
+if (!set.findOne((n) => n.name === 'Icon/Arrow')) {
+  const f = figma.createFrame();
+  f.name = 'Icon/Arrow';
+  f.fills = [];
+  f.resize(16, 16);
+  c.appendChild(f);
+  f.layoutPositioning = 'ABSOLUTE';
+  f.visible = false;
+  done.detachedComponent = { node: c.name, layer: 'Icon/Arrow' };
+}
+return done; // {} on a second run
+```
+
+Why these targets (from the snapshot): every variant is `variant=<v>, size=<s>, state=<st>`,
+all 4 x 3 default-state cells exist, and `size=lg, state=default` is neither the sampled
+variant (`primary/md/default`, `129:4`) nor a hover/focus/active cell any story or parity
+check reads. (a) changes a fill's _binding_, not its value, so parity on values is
+unchanged. (b) renames `_disabled-overlay` of `danger/lg`: the only non-text inner frame the
+snapshot records; it is hidden and still bound to the `disabled` property, and the code side
+never reads Figma layer names (the gate `check:figma` reads overlay
+names from the repo's snapshot, not from the duplicate, and the duplicate is never synced
+back). (c) is hidden and has no fill, so nothing renders.
+
+**Expected output of the three-rule run on the duplicate: exactly three findings.**
+
+| Rule                 | Layer                                             | Real? | Why                                                                                                                         |
+| -------------------- | ------------------------------------------------- | ----- | --------------------------------------------------------------------------------------------------------------------------- |
+| `hardcoded-color`    | `variant=secondary, size=lg, state=default`       | real  | looks identical, but the fill no longer follows its colour variable: a theme or dark-mode change leaves this variant behind |
+| `default-name`       | `Frame 12` (in `variant=danger, size=lg, ...`)    | real  | a layer nobody can find by name, and the agent cannot tell it is the disabled overlay                                       |
+| `detached-component` | `Icon/Arrow` (in `variant=outline, size=lg, ...`) | real  | a dead frame named like an icon component but not an instance: a leftover that will be mistaken for the icon slot           |
+
+Answer key: all three are real, none is a false alarm. The false alarms are in the default
+run (the 18 contrast and the 41 text-style findings), not here. If a participant calls one
+a false alarm, ask what would break first: the dark-mode theme (a), the handoff document's
+layer list (b), the icon slot (c).
 
 **Fallback.** Bridge not connected (`figma_get_status`): the trainer shows a saved result
 and the participants sort that list. Do not let anyone "fix" a finding in the shared master.
@@ -669,9 +747,9 @@ with findings; it has no "sections compared" list. Against the component set `12
 **Revision 2026-11-18: NOT YET VERIFIED (rehearsal, R-040).** Every prompt in §1a, §1b (the
 closing-checks prompt), §1c, §2.1 (as revised), §2.5, §2.6 and §3.3 is new or changed and has
 not been run in a rehearsal; their expected outputs are the measured facts named in the
-sections (2026-11-17: the lint rule ids, the compiler error codes, the 59 / 18 / 40 findings,
+sections (2026-11-17: the lint rule ids, the compiler error codes, the 59 / 18 / 41 findings,
 the run times; 2026-11-18: the `storybook tools` CLI route) and nothing else. Unverified, by
-name: the number of findings of the three-rule Figma run; that the two Definition-of-Done
+name: that the planting snippet below returns three findings in the three-rule Figma run; that the two Definition-of-Done
 answers differ as described; the local-MCP form of §2.5 and whether the dev server refreshes
 after a JSDoc edit; §3.4 and §3.5 as a four-plus-spacing pair (R-227, R-235). The dates below
 belong to the earlier text only.

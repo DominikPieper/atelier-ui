@@ -220,8 +220,8 @@ run-of-show late-comer track; the thesis is the only thing not on a page.
    `http://localhost:6006/mcp`; the participant's own Storybook), `nx-mcp` (stdio,
    `npx nx mcp`), `angular-cli` (stdio), `figma-console` (`npx figma-console-mcp@1.40.0`,
    `FIGMA_ACCESS_TOKEN` optional). Say what each is for in one line; `/mcp` must list all
-   five. `storybook-local` is connected only while `npm run storybook` runs: if Storybook was
-   started after the Claude Code session, `/mcp` → reconnect. The hosted `storybook-angular`
+   five. `storybook-local` is connected only while `npm run storybook` runs: if its tools are
+   missing, check that Storybook runs first, `/mcp` → reconnect when they still do not appear. The hosted `storybook-angular`
    entry is gone from an Angular seat. `uianatomy` left the scaffold on 2026-11-18
    (ADR-0181); a machine provisioned from an older release still lists it; no block calls
    it, so a failed entry is harmless, but log the machine. The Atelier clone keeps it (and
@@ -344,15 +344,17 @@ page, Inventory page, Workshop-Templates page; `/tokens#naming`, `/tokens#pink-t
    the result aloud ("this token is not bound").
 5. Ladder stage 0, the Figma linter (13:45–13:55, 10 minutes, golden prompts §1c). First the
    default run on `Inputs/AtlButton` (node `129:20`), measured 2026-11-17: 59 findings, 18 of
-   them "critical" contrast failures on the hidden `_disabled-overlay` label, 40 about missing
+   them "critical" contrast failures on the hidden `_disabled-overlay` label, 41 about missing
    text styles. Say: "a finding is something to sort, not a verdict". Then everyone prompts: the
    agent runs `figma_lint_design` on the same master in the prepared duplicate with the rules
    `hardcoded-color`, `default-name`, `detached-component` only and returns a list; the
    participant sorts each line: real / false alarm. Read-only: nothing is changed in the file.
-   Beats: break it on purpose is the file itself (a raw colour, a default name); the tool says
+   Beats: break it on purpose is the file itself (the three planted defects: an unbound
+   colour, a default name, a detached-looking `Icon/Arrow` frame; golden prompts §1c); the tool says
    so; the agent's output is the list. What it does not see: whether the design is right,
-   spacing and radius, and its default rule set reports false alarms. UNVERIFIED (rehearsal):
-   the number of findings the three-rule run returns on that master.
+   spacing and radius, and its default rule set reports false alarms. Exactly three findings
+   come back, all real (answer key in §1c). UNVERIFIED (rehearsal): the planting snippet has not
+   run against Figma yet.
 6. The readiness checklist, Part A (the master), eleven checks (`docs/src/pages/readiness.astro`):
    colour/spacing/radius bound to variables; auto layout on every frame with children;
    variables scoped, not "all scopes"; each variable's code name recoverable; each
@@ -437,8 +439,8 @@ invented prop would compile nowhere.
 **Watch for.** Rule R5 at 15:15 (`docs-show` on every seat) and 15:30 (red seen). Take
 time from the stretch, never from the red-then-green row. D-4 down → saved screenshots.
 `atelier` not connected on a seat: `/mcp` → reconnect; still red: pair with a neighbour.
-`storybook-local` not connected: Storybook is not running or was started after the session;
-start it, `/mcp` → reconnect; the play panel shows the same red meanwhile.
+`storybook-local` not connected: Storybook is not running; start it (the tools appear on
+their own), `/mcp` → reconnect is the fallback; the play panel shows the same red meanwhile.
 
 **Commit habit (R-226).** Participants close the block with `git add -A && git commit -m "day 1 block 04: green"` inside the recap row (no timing change). Day 2 Block 03's undo rule reverts to the last of these commits, so a revert never reaches past the current block.
 
@@ -681,7 +683,7 @@ participant's `docs-show` output before and after the JSDoc edit.
 1. The local Storybook MCP (11:15–11:17, 2 minutes): start `npm run storybook` if it is not
    running; `/mcp` shows `storybook-local` connected; check `get-storybook-story-instructions`,
    `stories-preview`, `test-run` are listed. Not connected means Storybook is not running on
-   :6006 (or started after the session): start it, `/mcp` → reconnect. Nobody types a server
+   :6006: start it, `/mcp` → reconnect when the tools still do not appear. Nobody types a server
    in; there is no `claude mcp add` step. `get-storybook-story-instructions` before every
    `*.stories.*` edit.
 2. The contract file, one sentence (ADR-0121): Atelier's own repo keeps the deliberate
