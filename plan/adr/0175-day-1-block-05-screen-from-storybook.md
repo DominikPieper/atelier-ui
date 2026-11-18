@@ -81,6 +81,11 @@ Rejected:
 - **Wait until after the R-040 dry run**: the dry run should measure the agenda that will be
   taught, not one about to change.
 
+**Corrected 2026-11-18** (ADR-0182): from the scaffold release that carries ADR-0182 on, the
+block's source is the `atelier` server (`@atelier-ui/mcp`, stdio, on the seat), not a hosted
+`docs-list`. The three tools and the four rules are unchanged. Until that release the hosted
+endpoint is still what a seat calls.
+
 ## Consequences
 
 - The consumer case is now practised in the room, and the customer agenda can name it.

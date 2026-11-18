@@ -191,6 +191,85 @@ outline first, then deck, then run-of-show and prompts.
       "Vorstellung und Transfer" ends on the written next step instead of "Wahl eines ersten Befunds". After the
       decision: mirror into `tasks/schulung-kundenagenda.md`.
 
+## Local Storybook and MCP on the seat (owner go 2026-11-18)
+
+Owner 2026-11-18, after the through-line review of both days (findings R-253 to R-260 in
+`tasks/reviews.md`): the course must not depend on the hosted Storybook. The library's
+component knowledge comes from the `@atelier-ui/mcp` package (stdio, no network, no process),
+the participant's own components and stories from the MCP inside their own running Storybook
+(`@storybook/addon-mcp` on `:6006`). Owner: "Es sollte definitiv einen lokalen MCP geben" —
+read as: the local Storybook MCP is a fixed part of the course from Day 1, not a Day 2 add-on.
+
+Decision in short (full record: ADR-0182):
+
+- Context: Day 1 Block 05 has the hosted `storybook-angular` MCP as its only source for 80
+  minutes and no fallback (R-257); Cloudflare throughput has been a recurring problem
+  (ADR-0177); a scaffold release and reprovisioning are due anyway (R-252).
+- Options: (A) package plus the prebuilt static Storybook on the seat; (B) the library's
+  story sources inside the workspace Storybook; (C) an Atelier clone per seat.
+- Choice: A. The package exists (`libs/mcp`, private) and scored 94 % against the hosted
+  endpoint's 96 % (M1), so the agent's answers do not change and it needs no running server.
+- Rejected: B, because the stories are not in the npm package and import monorepo internals
+  (`./atl-button`, `@atelier-ui/spec/...`), the MCP dies with the Storybook process and
+  `check:stories` would render 32 stories the participant does not own. C, because it puts a
+  second repo and a second long-running process on every seat (ADR-0137 left the clone).
+- Tradeoff: participants see the library's Storybook, not its story sources. The scaffold's
+  one `AtlButton` story stays the pattern to copy.
+
+Two roles, two servers (this is also the teaching frame):
+
+| Role                           | Server                         | Tools                                                           | Needs               |
+| ------------------------------ | ------------------------------ | --------------------------------------------------------------- | ------------------- |
+| Use the library (Day 1)        | `@atelier-ui/mcp`, stdio       | `docs-list`, `docs-show`, `docs-show-story`                     | nothing             |
+| Build a component (Day 1 B04+) | addon MCP in the own Storybook | the same for own components, plus `stories-preview`, `test-run` | a running Storybook |
+
+Done when: on a seat generated from the release, with the network cut after install, `/mcp`
+lists five servers (`nx-mcp`, `atelier`, `storybook-local`, `angular-cli`, `figma-console`; the course material says four since ADR-0181 and moves with L4), `docs-show` answers for a library component, the library's Storybook
+opens in the browser, `npm run preflight` exits 0, the generated workspace contains no
+`atelier.pieper.io/storybook-*` URL, and the Block 05 headless run of 2026-11-12 is repeated
+on the package. The hosted endpoints stay up until after cohort 1 (the rest of M4); the
+course only stops depending on them.
+
+- [x] **L0 Spike** (2026-11-18, workspace generated from the published 0.4.10 and patched by
+      hand; logs in the session scratchpad under `spike/`). All four answered:
+      (a) Works. Packed tarball (82 KB) installed; with all network denied to the process,
+      `npx atelier-mcp` resolved from `node_modules/.bin`, `initialize` after 0.7 s, `docs-list`
+      29 components, `docs-show` answered. Four tools, `tokens-search` included.
+      (b) Works. `staticDirs` mount at `/atelier`: manager and a story render in headless
+      Chromium, also with outbound network blocked; the workspace's own index keeps its 7
+      entries; `check:stories` exits 0. Also works with the build inside
+      `node_modules/@atelier-ui/mcp/storybook`, resolved through the template's
+      `getAbsolutePath`. Costs: `build:storybook` output 11.7 MB to 27.4 MB; the Design tab is
+      empty offline (Figma embed). Static build 3.9 MB gzipped.
+      (c) Partly. One headless run asking for "the Storybook MCP": the agent called
+      `storybook-local` first (only `AtlButton` there), then `atelier`, and answered correctly.
+      Different id formats on the two servers.
+      (d) A dead `storybook-local` entry is silent: headless session starts cleanly, server
+      `failed` in the init event, its tools absent; with Storybook up, connected with nine tools.
+      Not observed: an interactive session, a reconnect when Storybook starts after `claude`, a
+      workspace generated from the working tree, the gates with network blocked.
+- [x] **L1 Decide and record** (2026-11-18, ADR-0182, with the dated correction in ADR-0175).
+      From the spike: the static build ships inside `@atelier-ui/mcp`; a fixed `storybook-local`
+      entry in `.mcp.json` replaces the `claude mcp add` step; the library's server is called
+      `atelier`. Owner confirmed all three 2026-11-18.
+- [ ] **L2 Publish `@atelier-ui/mcp`** — owner go given 2026-11-18. The seven steps are
+      listed under M1 (nx release group, drop `private`, release block, publish target,
+      Storybook pin, `publishConfig`, snapshot before pack in CI).
+- [ ] **L3 Scaffold** (Sonnet agents): both `.mcp.json` entries and the dependency, the `staticDirs` mount in the Storybook template, one routing sentence in the generated `CLAUDE.md` (library → `atelier`, own work → `storybook-local`) in place of the paragraph that argued against a fixed entry, preflight probes the
+      package instead of the hosted URL, generated `CLAUDE.md` and README text, spec tests,
+      `cli.e2e.mjs`. Same release: `/verify` runs lint and build and drops `check:contracts`
+      (R-239, R-254), the `atelier-component` skill loses its contract step (R-256).
+- [ ] **L4 Course material.** Day 1 Block 04: the local Storybook MCP is connected here, so
+      the agent runs `test-run` on the red story itself (ladder stage 4; today it cannot before
+      Day 2 Block 02). No wiring step is needed there any more (fixed entry, ADR-0182),
+      only "start Storybook first"; Day 2 Block 02 gets its ten minutes back. Prompts that say
+      "the Storybook MCP" name the server instead (`atelier` or `storybook-local`). One fallback per block instead of two (R-257), rule R8,
+      demo D-3's primary URL, a "two roles" slide. Order: `/schulung`, run-of-show, golden
+      prompts, demo scripts, trainer notes, dry-run kit, outline, then both decks. Check every
+      change against the customer agenda's communicated rows before it lands.
+- [ ] **L5 Release, reprovision, rehearse.** Closes R-252; R-040 runs on machines provisioned
+      from this release, with the two-server question from L0 (c) as a rehearsal check.
+
 ## Content review 2026-11-17: standard tools as the proof thread
 
 Owner 2026-11-17, after the content review (findings R-236 to R-247 in `tasks/reviews.md`):
