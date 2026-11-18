@@ -281,6 +281,40 @@ course only stops depending on them.
         `run-many -t lint`, all 0. Cost: the Test job now builds the Angular Storybook.
         Not verified: that a changed snapshot forces an `mcp:test` cache miss (follows from
         the inputs, not run). Lesson in `tasks/lessons.md` of the same day.
+  - [x] **Released as 0.4.12, after a half-published 0.4.11** _(2026-11-18)_. The push of
+        L0 to L4 met a red lint in the release gate (`libs/mcp/storybook/**` and
+        `snapshot/**` were linted); fixed in 7fe68c0f. That commit touches only
+        `eslint.config.mjs`, which is outside `publish.yml`'s `paths`, so the release was
+        dispatched by hand (`workflow_dispatch`, `mode=release`, run 44302309365). That run
+        published six packages at 0.4.11 and failed on `@atelier-ui/mcp` with a 422: npm
+        validates the provenance bundle against `repository.url`, and the new package had
+        none. The runner's release commit and tags never reached origin.
+        **0.4.11 is an orphan: six packages exist, `@atelier-ui/mcp@0.4.11` never did, and
+        `create-atelier-ui-workspace@0.4.11` scaffolds an Angular seat that cannot install.
+        Never provision from it.** Recovery per ADR-0150 (a new version, not a retry):
+        release commit and tags recreated locally with `nx release --skip-publish`
+        (4254809f, `v0.4.11` and four skill tags), llms regen (07a09c7e), the fix (d4843d6d:
+        `repository` in `libs/mcp/package.json`, plus an offline `[NO-REPOSITORY]` check in
+        `check-release-drift.mjs` that fails before any upload), and a final newline for the
+        changelog nx wrote (6b5438ce). The push of 6b5438ce triggered run 44308445343: gate
+        green, publish green, release commit 83bed8ee and tag `v0.4.12` pushed by the runner.
+        Verified after the run: `latest` is 0.4.12 for all seven packages (queried from
+        `registry.npmjs.org` directly), `@atelier-ui/mcp@0.4.12` carries an attestation and
+        gitHead 83bed8ee, `npm run check:release-drift` exit 0 (7 of 7 in sync), and the
+        package installed from the registry answers `initialize`, `tools/list` (four tools)
+        and `docs-list` over stdio. A seat scaffolded from the registry
+        (`npx create-atelier-ui-workspace@0.4.12 <name> --framework angular --figma`, no
+        TTY) exits 0, pins `@atelier-ui/angular` and `@atelier-ui/mcp` at 0.4.12, writes the
+        five-server `.mcp.json` of ADR-0182, and its `npx atelier-mcp` starts. Not run on
+        that seat: `npm start`, Storybook, `storybook-local`. Not done: `npm deprecate` on the six orphaned 0.4.11
+        versions (needs the owner's npm login). No ADR for the `[NO-REPOSITORY]` check; it
+        extends ADR-0150's guard and decides nothing new. Lessons in `tasks/lessons.md`.
+  - [ ] **Reprovision the course machines from 0.4.12** (owner).
+  - [ ] **R-040 rehearsal on a reprovisioned machine** (owner; closes R-252). Checks carried
+        from L4: `test-run` through `storybook-local` in Day 1 Block 04, the reconnect when
+        Storybook starts after `claude`, the Design tab in the mounted library Storybook,
+        that the two Day 2 Block 00 answers differ, which server the agent picks when a
+        prompt names none.
 
 ## Content review 2026-11-17: standard tools as the proof thread
 

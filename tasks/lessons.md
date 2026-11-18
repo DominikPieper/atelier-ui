@@ -1121,3 +1121,39 @@ generated directories, and I read `gh run list --branch main` first. A red run o
 finding to report before asking for a push go, not after receiving it. A target that reads a
 generated directory gets a `dependsOn` on the task that writes it, and that directory goes into
 its cache inputs (`dependentTasksOutputFiles`), because a gitignored path is not hashed.
+
+## 2026-11-18 — A publish dry-run checks the tarball, not the registry's rules
+
+The first release with `@atelier-ui/mcp` in the group published six packages at 0.4.11 and
+then failed on the seventh: `422 … Failed to validate repository information: package.json:
+"repository.url" is ""`. npm verifies the provenance bundle against the manifest's
+`repository.url`, and the new package was the only one of seven without the field. My cold
+`nx release publish --dry-run` had been green, because a dry-run packs and stops; nothing in
+it talks to the registry's validation. The result was a half-release: `latest` of the
+scaffold pointed at a seat that depends on a package version that never existed, the
+runner's release commit and tag were lost with the job, and ADR-0150 rightly forbids a retry
+of the same version.
+Rule: when a package joins a release group, I diff its `package.json` against a sibling that
+already publishes (`repository`, `publishConfig`, `files`, `license`, `exports`) before the
+first release, and I say in the report that a dry-run does not cover registry-side checks
+(provenance, scope permissions, name availability). A rule the registry enforces on every
+publish gets an offline check that runs before the first upload, so the failure is
+all-or-nothing: `check-release-drift.mjs` now fails `[NO-REPOSITORY]` before it queries
+anything.
+
+## 2026-11-18 — Three things about the release pipeline I assumed instead of read
+
+1. `nx release publish --groups=…` (or `--projects`) drops task dependencies, so builds and
+   the `styles:assert-unpublished` guard do not run. My first cold dry-run failed with ENOENT
+   on `dist/` for that reason alone, and I spent a round on a failure my own flag caused.
+2. `publish.yml` triggers on a path list. A push that touches only `eslint.config.mjs` (or
+   `tasks/`, `docs/`, `plan/`) releases nothing; I pushed a release-blocking fix and waited
+   for a run that could not start.
+3. `nx release` writes a new package's first `CHANGELOG.md` without a final newline, which
+   fails `check:format`. On the runner that file is created after the gate, so it only bites
+   the next push.
+
+Rule: before I rely on a workflow, I read its `on:` block and the exact step order, and I
+run the gate's steps in that order in one checkout. A flag I add to "narrow" an Nx command
+gets checked for what else it switches off. After any release commit I run `check:format`
+on the files the release tool wrote.
