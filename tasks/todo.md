@@ -269,6 +269,18 @@ course only stops depending on them.
       change against the customer agenda's communicated rows before it lands.
 - [ ] **L5 Release, reprovision, rehearse.** Closes R-252; R-040 runs on machines provisioned
       from this release, with the two-server question from L0 (c) as a rehearsal check.
+  - [x] **Release gate repaired before the push** _(2026-11-18, commit 10365740)_. The owner's
+        push go met a red main: CI and the "Verify (release gate)" job had failed since
+        2026-10-22 (c4e8d610), because `mcp:test` read the gitignored `libs/mcp/snapshot/`
+        that no task built and `mcp:build` had no edge to `angular:build-storybook`. That
+        corrects L2 above: its "`check:mcp-package` exit 0" held only on a machine with a
+        leftover snapshot. Fix: explicit `mcp:build` depending on the Storybook build,
+        `mcp:test` depending on `mcp:build`, both hashing their dependency's output files.
+        Run by exit code in a clean worktree after `npm ci`, cold: `check:all`,
+        `run-many -t test`, `run-many -t build,build-storybook`, `run-many -t package`,
+        `run-many -t lint`, all 0. Cost: the Test job now builds the Angular Storybook.
+        Not verified: that a changed snapshot forces an `mcp:test` cache miss (follows from
+        the inputs, not run). Lesson in `tasks/lessons.md` of the same day.
 
 ## Content review 2026-11-17: standard tools as the proof thread
 

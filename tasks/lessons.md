@@ -1105,3 +1105,19 @@ skill, a preflight line), grep the course material for the exact line and for th
 (`tasks/schulung-*.md`, `docs/src/pages/{schulung,build-your-own,workshop,troubleshooting}.astro`,
 the outline). An exercise that quotes, counts or edits generated text is a dependant of that
 text, and it goes into the same step's scope, not into a later review.
+
+## 2026-11-18 — A green gate that reads gitignored generated files proves nothing about CI
+
+I reported "`check:all` exit 0" and asked the owner for a push go. The push would have published
+nothing: main's CI and the release gate had been red since 2026-10-22 (c4e8d610), four weeks,
+unnoticed by me. `mcp:test` reads `libs/mcp/snapshot/`, which is generated and gitignored; no
+task built it before the test, and `mcp:build` had no edge to `angular:build-storybook`. On my
+machine both directories were left over from earlier runs, so every local run was green,
+including the "`check:mcp-package` exit 0" I recorded for L2. And because `check:all` is an
+`&&` chain, the two gates behind the failing one had not run in CI at all since then.
+Rule: before I call the gate chain green for anything that leaves the machine (a push, a
+release, a "CI will pass"), I run it in a clean `git worktree` with no `dist/`, no `.nx/` and no
+generated directories, and I read `gh run list --branch main` first. A red run on main is a
+finding to report before asking for a push go, not after receiving it. A target that reads a
+generated directory gets a `dependsOn` on the task that writes it, and that directory goes into
+its cache inputs (`dependentTasksOutputFiles`), because a gitignored path is not hashed.
