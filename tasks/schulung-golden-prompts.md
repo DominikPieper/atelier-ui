@@ -233,6 +233,9 @@ hands out when a run goes wrong, and the expected result to judge a run against.
   `npm run check:stylelint` and `npm run check:format` exit 0, and `npm run build`
   compiles with strict templates.
 
+**Fallback.** `atelier` not connected on a seat: `/mcp` → reconnect; still red: pair with a neighbour.
+It is a local process, there is no endpoint that can be down for the room.
+
 **Closing checks, run by the agent (row 16:30 to 16:45; before the receipts prompt).** NOT
 YET VERIFIED as a prompt (rehearsal). The agent runs the workspace's own checks and
 repairs from the output; `npm run format` is the fix for a format failure and nothing else.
@@ -253,7 +256,7 @@ is why the receipts come next. Fallback: the participant types the command.
 
 **When the agent starts writing without calling `docs-list`** (it can): hand it this.
 
-> Stop. Do not write more code yet. Call `docs-list` on the Storybook MCP and give me the
+> Stop. Do not write more code yet. Call `docs-list` on `atelier` and give me the
 > ids of the components you will use. Then call `docs-show` on each and tell me, for
 > every prop you plan to use, where it appears in the output.
 
@@ -489,30 +492,33 @@ participants have already carries the rule the agent reads every session. Projec
 session; a skill, loaded when the task matches and shown in demo D-7 just before; an MCP
 server from `.mcp.json`, tools and data; a hook, run without being asked), on two files:
 `CLAUDE.md` → "Definition of Done" and `.claude/settings.json` → `hooks.PostToolUse` →
-`.claude/hooks/format-edited.sh`. Then the exercise (7 min), three steps:
+`.claude/hooks/format-edited.sh`. Then the exercise (7 min), four steps:
 
 1. Ask: "Which commands does this workspace's Definition of Done list? Only list them."
-2. Lint and build are named in the paragraph above the list but not in the list. Add this
-   exact line to the list, and correct the count word ("four" becomes "five" in "the four
-   checks below" and "all four of these pass"; with Figma enabled the word is "five" and
-   becomes "six"). Leave the sentence "`/verify` runs all four" as it is: `/verify` has
-   its own list, and that sentence only changes with the stretch:
+   The answer names six.
+2. Delete this exact line from the list in `CLAUDE.md` and save. Leave the count word
+   ("all six") as it is:
 
    ```text
-   - `npm run lint` and `npm run build` — ESLint and the strict compiler
+   - `npm run check:stories` — every story, rendered in Chromium, axe-checked
    ```
 
-3. `/clear`, ask the same question again. The list now names lint and build.
+3. `/clear`, ask the same question again. The list now names five; `check:stories` is gone.
+4. Put the line back (undo) and save.
 
-**Checkpoint D2B00-C3:** the second answer on every seat names `npm run lint` and
-`npm run build`.
+**Checkpoint D2B00-C3:** the second answer on every seat no longer names
+`npm run check:stories`, and the line is back in `CLAUDE.md` at 09:28.
 
-**Trainer notes.** `/verify` has its own list in `.claude/commands/verify.md`; adding the
-same line there is the **stretch**. A Figma workspace's list also names
-`npm run check:contracts`: Atelier's own check, a trainer mention, not run today.
+**Trainer notes.** Line for the room: the agent runs what the list names, and a check that
+is not in the list is a check nobody asked for. An agent that points out "the text says six,
+the list has five" has read the file closely: say so. `/verify` has its own list in
+`.claude/commands/verify.md` and still runs six. **Stretch:** write down the one line your
+own team would add to this list, the command and what it proves. Until the scaffold release
+of 2026-11 this exercise added lint and build to the list; the scaffold now ships both
+(commit 8c8fdf6a), so the exercise takes a line out and puts it back.
 
-**Fallback.** The second answer still omits them: the edit is in the wrong file or the
-session was not cleared; show the line in `CLAUDE.md` and ask again.
+**Fallback.** The second answer still names it: the file was not saved or the session was
+not cleared; show the list in `CLAUDE.md` and ask again.
 
 ---
 
@@ -650,7 +656,7 @@ with findings; it has no "sections compared" list. Against the component set `12
 | A prop appears that the handoff document / spec never named                                                        | §2.2               |
 | Structural content (header/action/remove-button/etc.) dumped as flat children instead of its own region            | §2.4               |
 | `docs-show` on your own component: what would a consumer's agent have to guess (Day 2 Block 02, 12:05)             | §2.5               |
-| Definition-of-Done exercise (Day 2 Block 00, 09:18): the second answer does not name lint and build                | §2.6               |
+| Definition-of-Done exercise (Day 2 Block 00, 09:18): the second answer still names `check:stories`                 | §2.6               |
 | A11y panel or keyboard walk turns something up in Day 2 Block 04                                                   | §3.1               |
 | Dark-mode toggle reveals a hardcoded colour or a stray hover animation                                             | §3.2               |
 | Parity report on your own component (Day 2 Block 04, 15:45)                                                        | §3.3               |

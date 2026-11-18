@@ -54,13 +54,18 @@ derived from the code, not from a recorded run.
 
 ## Shared preconditions (trainer machine)
 
-- Two checkouts or one: the **Atelier clone** (this repo) for D-1 (windows a/b), D-2…D-4, D-6, D-8
+- Two checkouts or one: the **Atelier clone** (this repo) for D-1 (windows a/b), D-2, D-6, D-8
   (D-8 on the trainer machine only), with the `.mcp.json` servers connected (`/mcp` in Claude Code lists
   `storybook-angular`, `storybook-react`, `storybook-vue`, `nx-mcp`, `figma-console`,
   `uianatomy`, `angular-cli`, `Astro docs`; `uianatomy` is the repo's own tooling, no demo
   calls it, and a failed entry there is harmless). A **scaffolded workspace** (Angular,
   `npx create-atelier-ui-workspace`, Storybook on `localhost:6006`, app on
-  `localhost:4200`) for D-5 and for D-1 step 3 (the stylelint check), because that is what participants have.
+  `localhost:4200`) for D-3, D-4 (window b and the compiler stage), D-5 and for D-1 step 3 (the stylelint
+  check), because that is what participants have. Its `.mcp.json` has five servers: `atelier`
+  (the library's docs, stdio, no port), `storybook-local` (the workspace's own Storybook,
+  connected only while `npm run storybook` runs; started after the session: `/mcp`, reconnect),
+  `nx-mcp`, `angular-cli`, `figma-console`. The library Storybook is mounted at
+  `http://localhost:6006/atelier/`.
 - Atelier Angular Storybook: `nx storybook angular` (project `angular`, target
   `storybook`, binds **4400**). React is 4401, Vue 4402 (`libs/react/project.json`,
   `libs/vue/project.json`); not needed for any demo.
@@ -241,12 +246,15 @@ handoff document on Day 2. Do not scroll to it, do not open it.
 
 **Preconditions.**
 
-- Primary: the hosted Atelier Storybook, `https://atelier.pieper.io/storybook-angular/`.
-  Local fallback: `http://localhost:4400` (`nx storybook angular`).
+- Primary: the library Storybook mounted in the trainer's own workspace,
+  `http://localhost:6006/atelier/` (`npm run storybook` running), story AtlButton, Design
+  tab. NOT YET VERIFIED (rehearsal): the Design tab inside the mounted build. One fallback:
+  the hosted Atelier Storybook, `https://atelier.pieper.io/storybook-angular/`.
 - The participants' scaffolded workspace stories (the `AtlButton` template under
   `libs/create-workspace/src/generators/preset/files/storybook/angular/`) carry **no**
-  `parameters.design`, so their Design tab is empty. Demo on the Atelier Storybook, not
-  on a participant's.
+  `parameters.design`, so their own Design tab is empty. Participants watch the projector;
+  they may open the same `localhost:6006/atelier/` URL on their seat. Demo on the library
+  Storybook, not on a participant's own stories.
 
 **Script.**
 
@@ -275,10 +283,10 @@ for a missing prop. The 3 minutes for (2) are taken from D-3.
 **Preconditions.**
 
 - A browser chat with no MCP and no repo access (window a).
-- Claude Code in the Atelier clone with `storybook-angular` connected (window b).
-  Tools: `docs-list`, `docs-show`, `docs-show-story` (server instructions, and the
-  `docs`-only hosted surface in `AGENTS.md`).
-- A **scaffolded Angular workspace** (the one participants have) for the compiler stage,
+- Claude Code in the **scaffold workspace** with `atelier` connected (window b): the
+  workspace is already on screen for the build step. Tools: `docs-list`, `docs-show`,
+  `docs-show-story` (`atelier` serves `docs` only).
+- The same **scaffolded Angular workspace** (the one participants have) for the compiler stage,
   clean tree, with a template that already uses `atl-button` (the Settings Card from
   Block 02, or the `AtlButton` story's host). `npm run build` must exit 0 before you
   start; otherwise the red run proves nothing. Warm build measured 2026-11-17: 6-9 s.
@@ -356,7 +364,7 @@ pasted snippets (`git checkout <file>`).
 Window (b), with MCP:
 
 ```text
-Use the storybook-angular MCP. Call docs-list, then docs-show for the AtlButton id, and list its props with allowed values. Do not guess.
+Use the atelier MCP. Call docs-list, then docs-show for the AtlButton id, and list its props with allowed values. Do not guess.
 ```
 
 Stretch (page: "ask the MCP server for a prop that does not exist"):
@@ -374,10 +382,7 @@ run it once beforehand and save the answer. (b) `variant`, `size`, `disabled`,
 **Point at.** In (b) the tool calls (`docs-list` then `docs-show`) before the answer.
 The sentence: "if it is not documented, it does not exist; say so rather than invent".
 
-**Fallback (the MCP part).** Hosted endpoint down: run `npx storybook tools --config-dir
-libs/angular/.storybook --json docs list` / `docs show components-inputs-atlbutton`
-(CLI passthrough from `AGENTS.md`; **UNVERIFIED** whether the `docs show` id matches the
-MCP id). Or show pre-saved screenshots.
+**Fallback (the MCP part).** Show pre-saved screenshots.
 
 **Then (same row):** every participant runs the (b) prompt in their own workspace and
 confirms the reply is shaped for Angular. A React-shaped reply (JSX, `children`,
@@ -390,8 +395,11 @@ confirms the reply is shaped for Angular. A React-shaped reply (JSX, `children`,
 **Goal.** Model the first red-then-green cycle once, so participants copy the habit:
 a story that never failed claims nothing. This is stage 4 of the ladder; the steps do not
 change. What it does not see (say it): anything without a story, dark mode (axe runs in
-light mode only), and a keyboard path no `play` walks. Day 2 Block 03 is where the agent
-runs the story tests itself (`test-run`) and repairs.
+light mode only), and a keyboard path no `play` walks. From here the local server is part of
+the course: the agent calls `get-storybook-story-instructions` before it writes the story and
+runs `test-run` through `storybook-local` on it, so it sees the red itself; the participant
+watches the same red in the play panel. Day 2 Block 03 repeats this as the self-healing loop.
+NOT YET VERIFIED (rehearsal): `test-run` through `storybook-local` on a seat.
 
 **Preconditions.**
 
@@ -412,7 +420,9 @@ runs the story tests itself (`test-run`) and repairs.
    `getByText('never')`. Save. The play panel goes **red**. Say: "this is the claim
    failing; a play that never failed would claim nothing".
 3. Fix it back. Green again.
-4. Ask participants to do the same on a variant they write themselves (the exercise).
+4. Ask participants to do the same on a variant they write themselves (the exercise): the
+   agent calls `get-storybook-story-instructions`, writes the story, runs `test-run` through
+   `storybook-local` and reports the red; the participant fixes by prompt until green.
 
 **Expected result.** Interactions panel: red with a "Unable to find an element with the
 text" style message, then green. Exact message text **UNVERIFIED**.
@@ -423,6 +433,8 @@ browser port; never two at once).
 
 **Fallback.** HMR does not refresh the panel: reload the story. If the scaffold's
 story lacks the `play`: write the 3-line `play` live from the template shape above.
+`storybook-local` not connected: Storybook is not running or was started after the session;
+start it, `/mcp` → reconnect; the play panel shows the same red meanwhile.
 
 ---
 
@@ -517,10 +529,10 @@ is worth one sentence: a skill that is not in the folder cannot load. **UNVERIFI
 
 **Point at.** The "when" in the answer beside the `description` line in the file: the same
 sentence, and that is the whole mechanism. Then stop. The next row (09:18-09:28) puts the
-skill beside the rules file, the MCP servers and the hook. In a Figma workspace the
-description names the contract loop and `check:contracts`: one sentence, "Atelier's own
-check, the last and optional rung", and move on (the skill text itself is a scaffold change,
-Wave C).
+skill beside the rules file, the MCP servers and the hook. The
+description says writing a Figma ↔ code contract is opt-in, not part of the loop (scaffold
+release of 2026-11): if asked, one sentence, "Atelier's own check, the last and optional
+rung", and move on.
 
 **Checkpoint D2B00-C2.** Every seat's answer names `atelier-component`.
 

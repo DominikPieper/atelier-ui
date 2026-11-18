@@ -189,7 +189,7 @@ then `/schulung`.
    system from zero; CI, release, publishing; Claude Code internals.
 
 **Expected recap answers.** Inspect → figma-console MCP; Contract → the deliberate differences
-written down (the handoff document); Code → Claude Code with the Storybook MCP; Verify →
+written down (the handoff document); Code → Claude Code with the library's MCP (`atelier`); Verify →
 the ladder checks the agent runs (lint, build, stylelint, story tests) and
 `figma_check_design_parity`. Six of eight name all four
 steps or you say them yourself and ask for the tool per step.
@@ -214,14 +214,19 @@ run-of-show late-comer track; the thesis is the only thing not on a page.
    login in the browser, the CLI default), then
    `claude -p "Reply with exactly: PREFLIGHT-OK"`. A reply = access; an auth error = no
    access; login fails = pair, trainer takes it at the coffee break.
-4. `.mcp.json` of an Angular scaffold has **four** servers (`preset.ts`, the `mcpServers`
-   object): `nx-mcp` (stdio, `npx nx mcp`), `storybook-angular` (http, hosted),
-   `angular-cli` (stdio), `figma-console` (`npx figma-console-mcp@1.40.0`,
+4. `.mcp.json` of an Angular scaffold has **five** servers: `atelier` (stdio, `npx atelier-mcp`,
+   package `@atelier-ui/mcp` installed in the workspace; the library's docs: `docs-list`,
+   `docs-show`, `docs-show-story`; no network, no port), `storybook-local` (http, fixed
+   `http://localhost:6006/mcp`; the participant's own Storybook), `nx-mcp` (stdio,
+   `npx nx mcp`), `angular-cli` (stdio), `figma-console` (`npx figma-console-mcp@1.40.0`,
    `FIGMA_ACCESS_TOKEN` optional). Say what each is for in one line; `/mcp` must list all
-   four. It was five until 2026-11-18: `uianatomy` left the scaffold (ADR-0181). A machine
-   provisioned from an older release still lists it; no block calls it, so a failed entry is
-   harmless, but log the machine. The Atelier clone keeps it as the repo's own tooling: run
-   the `/mcp` walk in a scaffolded workspace, not in the clone.
+   five. `storybook-local` is connected only while `npm run storybook` runs: if Storybook was
+   started after the Claude Code session, `/mcp` → reconnect. The hosted `storybook-angular`
+   entry is gone from an Angular seat. `uianatomy` left the scaffold on 2026-11-18
+   (ADR-0181); a machine provisioned from an older release still lists it; no block calls
+   it, so a failed entry is harmless, but log the machine. The Atelier clone keeps it (and
+   its hosted `storybook-angular`) as the repo's own tooling: run the `/mcp` walk in a
+   scaffolded workspace, not in the clone.
 5. The prepared Figma duplicate opened here (09:50) is **the** duplicate for both days; it
    was made once by Conciso, nobody duplicates in the room. Do not
    duplicate again on Day 2; its file key is already in `package.json` (provisioning) and is read on Day 2 Block 02
@@ -235,7 +240,7 @@ run-of-show late-comer track; the thesis is the only thing not on a page.
    before accepting: anything that deletes or installs); `Esc` interrupts; `/clear` starts
    a fresh context, `/compact` shrinks it; one session per block, not one per day; `/mcp`
    shows servers and their state; `claude -p` for a one-shot check. Pages:
-   `/troubleshooting#workspace-trust`, `#mcp-declined`, `#mcp-scope`.
+   `/troubleshooting#workspace-trust`, `#mcp-declined`, `#storybook-local-not-connected`.
 8. First commit once preflight is green (R-210): the scaffold ran `git init` and staged
    everything, committed nothing; `git commit -m "scaffold: preflight green"` is the first
    "last green" Day 2's loop can fall back to. Everybody does it in the 10:02–10:12 row.
@@ -377,8 +382,8 @@ bridge or file is red pairs with a neighbour.
 
 ### Block 04 · 14:30–15:45 · Guardrails: stories as claims, and MCP
 
-**On screen.** Hosted Atelier Storybook (`atelier.pieper.io/storybook-angular/`, fallback
-:4400) for D-3 (7 min); `/mcp` in Claude Code; two windows for D-4 (13 min) plus the workspace terminal; the scaffold workspace's
+**On screen.** The library Storybook mounted in the trainer's own workspace
+(`localhost:6006/atelier/`, fallback the hosted `atelier.pieper.io/storybook-angular/`) for D-3 (7 min); `/mcp` in Claude Code; two windows for D-4 (13 min) plus the workspace terminal; the scaffold workspace's
 Storybook :6006 for D-5.
 
 **Say.**
@@ -387,17 +392,19 @@ Storybook :6006 for D-5.
    component = shape, story = claim, the test checks the claim. Who checks the claim:
    `check:stories` (the `storybook-test` target of the app) runs it in Chromium with axe.
    There is no contract corner and no `check:contracts` here.
-2. D-3 on the **Atelier** Storybook only (7 minutes): Design tab = `parameters.design` =
+2. D-3 on the **library** Storybook only (7 minutes; the trainer's own workspace mount
+   `localhost:6006/atelier/`, NOT YET VERIFIED (rehearsal): the Design tab inside the mounted build): Design tab = `parameters.design` =
    `figmaNode('129-4')` on AtlButton `Primary`. The Docs tab's contract section is no longer
    taught; at most one trainer sentence: Atelier's own repo keeps the deliberate differences in
    a contract file that a check reads, participants do not open one. The participant's scaffold
-   stories carry no `parameters.design`; their Design tab is empty. The run-of-show row 14:30
-   still expects them to find it in :6006 (R-205); until that is fixed, say "look at mine,
-   yours has none".
+   stories carry no `parameters.design`; their own Design tab is empty. Say "look at mine,
+   yours has none"; participants may open the same `localhost:6006/atelier/` URL on their seat.
 3. MCP in two sentences: a server exposes tools, the client (Claude Code) lists and
-   calls them over JSON-RPC. Two surfaces for Storybook: hosted = `docs` only
-   (`docs-list`, `docs-show`, `docs-show-story`); the local addon (Day 2) adds `dev` and
-   `test`. The four servers from Block 01; run `/mcp`, name them.
+   calls them over JSON-RPC. Two servers for Storybook content: the library server
+   (`atelier`: `docs` only: `docs-list`, `docs-show`, `docs-show-story`) and the local addon
+   server (`storybook-local`: `docs` + `dev` + `test`). The five servers from Block 01; run
+   `/mcp`, name them, and say the two roles: `atelier` answers for the library,
+   `storybook-local` for what you build.
 4. D-4 (13 minutes, with ladder stage 1): window (a) invents props; the compiler stage comes
    after the hallucination and before `docs-show`: paste the invented usage into the
    workspace and the agent runs `npm run build` (6–9 s warm). Beats: an invented value
@@ -406,8 +413,8 @@ Storybook :6006 for D-5.
    the agent. What it does not see: the same invented name as a static attribute
    (`shadow="lg"`) and an invented event (`(pressed)`) build clean. Line for the room: the
    compiler catches a wrong value, not an invented name; that is why `docs-show` comes first
-   and Block 05 asks for receipts. Then window (b) calls `docs-list` then `docs-show` for
-   `components-inputs-atlbutton`. AtlButton's real inputs: `variant`, `size`, `disabled`,
+   and Block 05 asks for receipts. Then window (b), in the scaffold workspace, calls
+   `docs-list` then `docs-show` for `components-inputs-atlbutton` through `atelier`. AtlButton's real inputs: `variant`, `size`, `disabled`,
    `loading`, `type`. No `shadow`, no `rounded` → "not documented" is the correct
    answer. Angular-shaped reply expected; a React-shaped one (JSX, `children`,
    `on*Change`) is a regression, note it.
@@ -417,17 +424,21 @@ Storybook :6006 for D-5.
    `play` that never failed claims nothing. What stage 4 does not see: anything without a
    story, dark mode (axe runs in light mode only), a keyboard path no `play` walks.
 6. The exercise: one story with a `play` for a variant, red once, then green, prompted
-   with the template story (`AtlButton`) as context (decided 2026-10-14, R-216). On Day 1
-   there is no local Storybook MCP yet, so `get-storybook-story-instructions` is not
-   available; say so, it arrives on Day 2 Block 02.
+   with the template story (`AtlButton`) as context (decided 2026-10-14, R-216). The local
+   server is part of the course from here: the agent calls `get-storybook-story-instructions`
+   before it writes the story and runs `test-run` through `storybook-local` on it, so it sees
+   the red itself; the participant watches the same red in the play panel, fixes by prompt,
+   green. NOT YET VERIFIED (rehearsal): `test-run` through `storybook-local` on a seat.
 
 **Expected recap answers.** "A story claims a state and a behaviour; `check:stories`
 runs the claim in a browser with axe; the build catches a wrong value, not an invented name." Stretch: "not documented" is right because the manifest is the API; an
 invented prop would compile nowhere.
 
 **Watch for.** Rule R5 at 15:15 (`docs-show` on every seat) and 15:30 (red seen). Take
-time from the stretch, never from the red-then-green row. Hosted endpoint down → the
-CLI passthrough from the demo script, or saved screenshots.
+time from the stretch, never from the red-then-green row. D-4 down → saved screenshots.
+`atelier` not connected on a seat: `/mcp` → reconnect; still red: pair with a neighbour.
+`storybook-local` not connected: Storybook is not running or was started after the session;
+start it, `/mcp` → reconnect; the play panel shows the same red meanwhile.
 
 **Commit habit (R-226).** Participants close the block with `git add -A && git commit -m "day 1 block 04: green"` inside the recap row (no timing change). Day 2 Block 03's undo rule reverts to the last of these commits, so a revert never reaches past the current block.
 
@@ -443,7 +454,7 @@ CLI passthrough from the demo script, or saved screenshots.
    directory: search field, role select, invite button, table with a status badge per row,
    pagination), a starter prompt, the checks and the clock. Hints only as "which
    `docs-show` line says that?".
-   Opener, inside the same 5 minutes: run one live `docs-show components-display-atltable`
+   Opener, inside the same 5 minutes: run one live `docs-show components-display-atltable` through `atelier`
    and show where things live (measured 2026-10-20, Angular): the usage example in the
    description (it renders as code since the JSDoc fix of 2026-10-20), the Inputs block
    (only `aria-label`, `size`, `stickyHeader`, `variant`), the first three stories with
@@ -488,7 +499,7 @@ CLI passthrough from the demo script, or saved screenshots.
    `docs-show` shows the sub-component tags (`atl-thead`, `atl-option`) but neither the class
    names to import (`AtlThead`, `AtlTbody`, `AtlTr`, `AtlTh`, `AtlTd`, `AtlOption`) nor the
    package name; the story snippets import from `./atl-table`, the library's internal path.
-   The block's premise "the Storybook MCP is the only source" has this one named exception:
+   The block's premise "`atelier` is the only source" has this one named exception:
    the names come from the package's type exports in `node_modules/@atelier-ui/angular`, the
    import is from `@atelier-ui/angular`, and the receipts say so.
 6. No machine homework (D7, 2026-11-12): the course machines stay in the room. The bridge
@@ -579,9 +590,9 @@ more files of the workspace: `CLAUDE.md` and `.claude/settings.json`.
    `name` and `description` (the description is all Claude sees until the task matches; the
    body is the procedure), then every seat asks "Which skills do you have in this workspace, and when would you load each? Only list them."
    Checkpoint D2B00-C2: every answer names `atelier-component`. Fallback:
-   `ls .claude/skills/`, the folder is the truth. In a Figma workspace the description names
-   the contract loop: one sentence ("Atelier's own check, the last and optional rung"), move
-   on. `Verify in rehearsal` (check 9): that the answer lists the skills on every seat.
+   `ls .claude/skills/`, the folder is the truth. The description says writing a contract is
+   opt-in, not part of the loop: if asked, one sentence ("Atelier's own check, the last and
+   optional rung"), move on. `Verify in rehearsal` (check 9): that the answer lists the skills on every seat.
 7. What the agent reads here, and change one line (09:18–09:28, 10 minutes; ladder "wiring").
    Projector, 3 minutes, the four things an agent gets in this workspace: the rules file
    (read every session), a skill (loads when the task matches; shown in D-7), an MCP server
@@ -589,13 +600,15 @@ more files of the workspace: `CLAUDE.md` and `.claude/settings.json`.
    `CLAUDE.md` → "Definition of Done"; `.claude/settings.json` → `hooks.PostToolUse` →
    `.claude/hooks/format-edited.sh`. Exercise,
    7 minutes: (1) ask "Which commands does this workspace's Definition of Done list? Only
-   list them."; (2) lint and build are named in the paragraph above the list but not in the
-   list: add the line ``- `npm run lint` and `npm run build` — ESLint and the strict
-compiler`` and correct the count word; (3) `/clear`, ask again: the list now names lint
-   and build. Checkpoint D2B00-C3: the second answer on every seat names `npm run lint` and
-   `npm run build`. Trainer: `/verify` has its own list in `.claude/commands/verify.md`; the
-   same line there is the stretch. A Figma workspace's list also names `npm run check:contracts`:
-   Atelier's own check, a one-sentence trainer mention, not run today. UNVERIFIED (rehearsal):
+   list them."; (2) delete the line
+   ``- `npm run check:stories` — every story, rendered in Chromium, axe-checked`` from the
+   list, save, leave the count word; (3) `/clear`, ask again: five commands, `check:stories`
+   is gone; (4) put the line back (undo), save. Checkpoint D2B00-C3: the second answer on
+   every seat no longer names `npm run check:stories`, and the line is back in `CLAUDE.md`
+   at 09:28. Line for the room: the agent runs what the list names, and a check that is not
+   in the list is a check nobody asked for. Trainer: `/verify` has its own list in
+   `.claude/commands/verify.md` and still runs six. Stretch: write down the one line your
+   own team would add to this list, the command and what it proves. UNVERIFIED (rehearsal):
    that the two answers differ as described after `/clear`.
 
 **Expected recap answers.** The recap asks where the team's check commands go so that the
@@ -660,17 +673,17 @@ a duplicated file and can import the dev plugin.
 
 ### Block 02 · 11:15–12:30 · Component and stories from the handoff
 
-**On screen.** Terminal (`claude mcp add`, tool list), a participant's running Storybook, then one
+**On screen.** Terminal (`/mcp`, tool list), a participant's running Storybook, then one
 participant's `docs-show` output before and after the JSDoc edit.
 
 **Say.**
 
-1. The local Storybook MCP: `npm run storybook`, then
-   `claude mcp add --transport http storybook-local http://localhost:<port>/mcp` with the
-   port Storybook printed, local scope (default, `.mcp.json` untouched), reconnect, check
-   `get-storybook-story-instructions`, `stories-preview`, `test-run` are listed. "Not
-   available" = not configured. From now on `get-storybook-story-instructions` before
-   every `*.stories.*` edit.
+1. The local Storybook MCP (11:15–11:17, 2 minutes): start `npm run storybook` if it is not
+   running; `/mcp` shows `storybook-local` connected; check `get-storybook-story-instructions`,
+   `stories-preview`, `test-run` are listed. Not connected means Storybook is not running on
+   :6006 (or started after the session): start it, `/mcp` → reconnect. Nobody types a server
+   in; there is no `claude mcp add` step. `get-storybook-story-instructions` before every
+   `*.stories.*` edit.
 2. The contract file, one sentence (ADR-0121): Atelier's own repo keeps the deliberate
    differences between design and code in a contract file that a check reads (the master's node
    id and only the mismatches chosen on purpose). Nothing about it on the projector;
@@ -682,7 +695,7 @@ participant's `docs-show` output before and after the JSDoc edit.
    value and Boolean state, a `play` per behaviour line. Then the participants look at the
    result: every story open in the running Storybook (or `stories-preview`), compared by eye
    with the Figma master, what is wrong handed back to Claude by prompt, never typed. That is
-   the 40-minute row (11:25–12:05). The generation prompt (§2.1) is also printed on
+   the 48-minute row (11:17–12:05). The generation prompt (§2.1) is also printed on
    `/build-your-own`.
 4. What the agent can read about your component (12:05–12:20, 15 minutes). Part 1, 10 minutes
    (golden prompts §2.5): `docs-list`, then `docs-show` on your own component through
@@ -698,20 +711,12 @@ participant's `docs-show` output before and after the JSDoc edit.
 5. Part 2, 5 minutes: the running stories next to the Figma component, every variant and state;
    write the differences down as a list (Block 04 sorts it). One pass. No `figma:snapshot`, no
    `check:contracts`, no finding codes in this block.
-6. Trainer note: the `atelier-component` skill of a Figma workspace may still write a contract
-   file or name `check:contracts`. Read from `libs/create-workspace/.../atelier-component/SKILL.md`
-   on 2026-11-18: its loop still has the step "Write the contract"
-   (`<app>/src/contracts/<name>.contract.ts`), step 5 runs `npm run check:contracts` then
-   `npm run check:stories`, and it carries a "Reading `check:contracts`" table of finding codes.
-   Say that in one sentence, leave the file alone, do not coach anyone through it. If the agent
-   on a seat writes a contract file or runs `check:contracts` anyway: let it finish, do not
-   delete the file, do not read the finding codes with the room, and move on to the stories;
-   the golden prompt's "Do not write any other file" is the only guard. UNVERIFIED
-   (rehearsal check 8): what `check:contracts` reports and exits with on a component that
-   has no master in the snapshot. No scaffold
-   change for cohort 1. The no-Figma variant has no contract loop.
+6. Trainer note: the `atelier-component` skill no longer has a contract step (scaffold release of
+   2026-11, commit 8c8fdf6a); the contract is an optional trailing section there, and nobody on
+   a seat is coached through it.
 7. `tags: ['autodocs']` on the generated story, or there is no Docs tab.
-8. `/verify` in Claude Code runs all five checks; since 2026-11-17 it is the proof line of
+8. `/verify` in Claude Code runs all six checks (`check:format`, `check:stylelint`, `lint`,
+   `build`, `check:unit`, `check:stories`); since 2026-11-17 it is the proof line of
    the end-of-day checklist, not a Block 02 target. Formatting and CSS lint, the two the
    agent first ran in Day 1 Block 05, are cheap and mechanical: fix by prompt.
 
@@ -719,7 +724,7 @@ participant's `docs-show` output before and after the JSDoc edit.
 where it was written down: the component description, a property's description, a value set
 shown as a bare alias; written as JSDoc in the component.
 
-**Watch for.** Rule R8 at 11:25. Rule R9 at 12:05 (checkpoint D2B02-C3): at 30 percent
+**Watch for.** Rule R8 at 11:17. Rule R9 at 12:05 (checkpoint D2B02-C3): at 30 percent
 without a rendering story, take one stalled seat's handoff document onto the projector,
 find the missing line with the room, re-run the prompt, and show the `docs-show` row as a
 trainer demo on one green seat. A stalled seat: check the handoff document first, not the
@@ -880,7 +885,8 @@ before 2026-10-14 (buffer 16:15–16:25).
    `.claude/agents/component-review.md`, a review agent the workspace ships) and said in the
    order to adopt it, most portable first (the list on `/build-your-own`, Block 05; ADR-0180, R-238):
    (1) a Storybook that emits `components.json` (docgen) and serves `/mcp`, and a
-   `.mcp.json` pointing at it; (2) a rules file with the token rule and the exact check
+   `.mcp.json` pointing at it (two roles: in your own repo the library half is your library's
+   manifest or package, the local half is the addon MCP of the Storybook you already run); (2) a rules file with the token rule and the exact check
    commands, its "Definition of Done" (`CLAUDE.md` or `AGENTS.md`, `/claude-md`);
    (3) strict TypeScript, ESLint and stylelint, which most repos already have: the step is
    to let the agent run them and read the output; (4) stories as tests (`addon-vitest` +
