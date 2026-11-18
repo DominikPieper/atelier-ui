@@ -1091,3 +1091,17 @@ gate appears at most as the one closing line that proves it. No slide headlined 
 enumeration of gate names on a slide, no finding codes taught beyond what a triage needs. When I
 review a block, "which gate proves it" is my question for the trainer notes, not a line for the
 room. The repo's own verification rules stay as they are.
+
+## 2026-11-18 — A scaffold fix removed the gap a course exercise was built on
+
+Commit 8c8fdf6a put lint and build into the generated workspace's Definition of Done (R-239,
+R-254). Day 2 Block 00's exercise was "ask the agent what done means, find the check the list
+is missing, add the line, ask again". With the fix the list was complete and the exercise had
+nothing left to add. Nothing flagged it: the exercise lives in the run-of-show, the golden
+prompts, `/schulung`, `/build-your-own`, the outline and a slide, none of which a scaffold test
+reads. I found it while rewriting the block for another reason, one commit later.
+Rule: before changing text the scaffold generates (`CLAUDE.md`, `.mcp.json`, `verify.md`, a
+skill, a preflight line), grep the course material for the exact line and for the file's name
+(`tasks/schulung-*.md`, `docs/src/pages/{schulung,build-your-own,workshop,troubleshooting}.astro`,
+the outline). An exercise that quotes, counts or edits generated text is a dependant of that
+text, and it goes into the same step's scope, not into a later review.
