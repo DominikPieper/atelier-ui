@@ -41,8 +41,8 @@ file's variables are file-scoped; edits there collide globally.
 
 **Bind tokens, do not type values.** Every fill, radius, padding and gap resolves through
 a Figma Variable in the `Library Tokens` collection — the semantic tier that mirrors the
-`--ui-*` custom properties. This is what `check:figma` calls "token-linked styles", and
-it is a Critical finding when it fails (`plan/figma-component-checklist.md`).
+`--ui-*` custom properties. A hardcoded value is a Critical finding in the
+Figma checklist (`plan/figma-component-checklist.md`).
 
 **Elevation is a CSS-only token.** `Library Tokens` carries 84 variables — 50 colour, 10
 spacing, 6 sizing (`control-height/*` + `row-height/*`), 5 radius, 12 typography, 1
@@ -90,8 +90,8 @@ can see must also be available without colour — an icon, a word, or an accessi
 
 The same bar for all four. It is reached in two steps, because the brief itself is only
 the Figma half of the work: items 1–4 and 7 are checkable at the end of **Day 2 Block 01**
-(Figma design and handoff document); items 5, 6 and 8 need a contract, a component and
-stories, which do not exist until **Block 02** (contract, component, stories) and
+(Figma design and handoff document); items 5, 6 and 8 are checked against the
+component and its stories, which do not exist until **Block 02** (component, stories) and
 **Block 04** (verify). The numbering is kept across both lists because the briefs cite it.
 
 ### Done after the Figma block (Day 2 Block 01)
@@ -119,8 +119,9 @@ stories, which do not exist until **Block 02** (contract, component, stories) an
 
 ### Done after the code blocks (Day 2 Blocks 02 and 04)
 
-5. The component's prop names and values match the Figma property names one-for-one —
-   `check:contracts` with your flags reports no `[AXIS]`/`[BOOLEAN]`.
+5. The component's prop names and values match the Figma property names one-for-one,
+   and there is one story per variant value and per Boolean state, so the Storybook shows
+   every axis you drew.
 6. The generated story file declares `tags: ['autodocs']`. Autodocs is not on globally in
    any of the three Storybooks (`.storybook/main.ts` sets `docs: {}` and no preview file
    sets a global tag) — every existing story opts in per file. A generated story usually
@@ -132,15 +133,16 @@ stories, which do not exist until **Block 02** (contract, component, stories) an
 
 8. `figma_check_design_parity` on your own Figma node against the generated component
    (needs the connected Desktop Bridge) comes back without unexplained deviations, and
-   the discrepancies it does report are understood, not merely absent. The tool has no
-   report mode and requires a `codeSpec`: assemble it from `check:contracts --emit`
-   (`componentAPI`, `metadata`, `tokens`) plus `figma_scan_code_accessibility`
-   (`accessibility`). Sections you did not pass are not compared, so the report is only
-   as strong as the sections it names. This is the MCP call, not `npm run check:parity`
-   (that gate checks the Atelier masters, not your component).
+   the discrepancies it does report are understood, not merely absent. Use the parity prompt from `/tutorial`
+   (node id from your handoff document); Claude assembles what the call needs. A section
+   that is not compared is not reported, so a quiet report is not a clean component. This
+   is the MCP call, not `npm run check:parity` (that gate checks the Atelier masters, not
+   your component). Without the Desktop Bridge there is no parity call: sort the
+   differences by hand instead.
 
 The shared checklist for the end of the day (everything the trainer verifies at the close,
-including `check:contracts`, `check:stories` and the dark-mode switch) lives in one place:
+including the dark-mode switch and the `/verify` proof line: format, stylelint, lint,
+build, unit tests and `npm run check:stories`) lives in one place:
 `docs/src/data/day2-done.ts` — rendered on `/build-your-own#done`
 and in the curriculum on `/schulung`. This bar is the brief-specific subset of it, not a
 second copy.
@@ -154,8 +156,7 @@ second copy.
   library ships, but treat the canonical claims as a strong prior, not as scripture. The
   course itself does not call the server (since 2026-11-18): the briefs are the
   transcription, and they are all a participant needs.
-- `plan/figma-component-checklist.md` — the pre-release checklist and what `check:figma`
-  automates.
+- `plan/figma-component-checklist.md` — the pre-release checklist for a Figma master.
 - `plan/design-principles.md` — surface hierarchy, timing tiers, disabled contract.
 - `tools/figma/snapshot.json` — the `Library Tokens` census and the Workshop-Templates
   starter-frame node ids.
@@ -165,5 +166,4 @@ second copy.
 Write a short handoff document for your component first (what is in scope, the token
 bindings, the behaviour lines, what is out, the acceptance checks). A filled example,
 built from the Toast brief, is at
-<https://atelier.pieper.io/design-to-code#handoff-example>; the empty template is
-`skills/design-to-code/references/handoff-document.md`.
+<https://atelier.pieper.io/design-to-code#handoff-example>.

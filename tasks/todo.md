@@ -315,13 +315,14 @@ course only stops depending on them.
         Storybook starts after `claude`, the Design tab in the mounted library Storybook,
         that the two Day 2 Block 00 answers differ, which server the agent picks when a
         prompt names none.
-  - [ ] **Owner verdict on the Day 2 Block 00 exercise.** L4 replaced "find the check the
+  - [x] **Owner verdict on the Day 2 Block 00 exercise** _(confirmed by the owner 2026-11-18:
+        keep the delete-and-restore version; whether the two answers differ stays a rehearsal check)_. L4 replaced "find the check the
         Definition of Done is missing and add it" with "remove the `check:stories` line,
         ask the agent what done means, restore it, ask again", because 8c8fdf6a made the
         generated list complete. Decided without the owner, explained 2026-11-18, not
         confirmed. It is in the run-of-show, golden prompts, `/schulung`,
         `/build-your-own`, the outline and the Day 2 deck; a "no" means reverting all six.
-  - [ ] **Triage before cohort 1: R-253, R-255, R-258, R-259, R-260** (`tasks/reviews.md`).
+  - [x] **Triage before cohort 1: R-253, R-255, R-258, R-259, R-260** (`tasks/reviews.md`) _(all five fixed 2026-11-18 on the owner's "make it fit"; R-255 option (a), customer agenda untouched; the two `TODO(owner)` in `/schulung` Block 06 stay open)_.
         Asked 2026-11-18, unanswered. R-255 is owner wording; the others are course text
         that contradicts itself or the workspace.
   - [ ] **Deprecate the orphaned 0.4.11 on npm** (owner's npm login, optional):

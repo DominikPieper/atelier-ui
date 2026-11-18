@@ -36,7 +36,7 @@ clean the run is; see §6.
 **The environment under test:** the participant's, not ours. One Angular
 workspace generated with `npx create-atelier-ui-workspace` (ADR-0137): Storybook
 on `localhost:6006` (`npm run storybook`), the app on `localhost:4200`
-(`nx serve workshop-<fw>`), and the scaffold's own checks (`npm run lint`,
+(`npm start`), and the scaffold's own checks (`npm run lint`,
 `npm run build`, `npm run check:stylelint`, `npm run check:stories`, …; the "ladder" of
 ADR-0180). The Atelier
 clone with ports 4400–4402 is for work on Atelier itself and is **not** the
@@ -59,7 +59,7 @@ becomes useless the moment the clock stops for a fix.
 | Item                                  | Why it's blocked                                                                                                                                                                                                                                                                                                                                                                                          | What to do instead                                                                                                                                                                                                                                                                                                         |
 | ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
 | Claude Design demo (trainer appendix) | **Not a block step.** `/schulung` has it as an optional trainer appendix (`#appendix-claude-design`), trainer machine only: `claude.ai/design` needs a different login than the cohort's training subscription. The page says to run it in the Day 1 buffer 15:45–15:55, cut to 10 minutes, or skip it (owner decision 2026-10-14; earlier: Block 04 "if time allows"). Participants cannot reproduce it. | Leave it out of the rehearsal's checklist and timing. If you want to see it, run it as a separate trainer exercise after the timed run, not inside Day 1 Block 04 or its buffer.                                                                                                                                           |
-| Figma Desktop Bridge                  | Not automatic. Every `figma_*` MCP call (Day 1 Block 03 linter, Day 2 Block 01/04) depends on the bridge plugin imported in the Figma desktop app (Plugins → Development → Import plugin from manifest…, `/schulung` Day 1 Block 01). `/schulung` says the bridge gates Day 2.                                                                                                                            | Before relying on _any_ `figma_*` tool: Figma Desktop open, your duplicate open, bridge plugin running, then ask Claude to check Figma status and confirm it is connected. Re-check after any Figma restart. How the connected state is read: not specified on /schulung (see `/troubleshooting`: "bridge not connected"). |
+| Figma Desktop Bridge                  | Not automatic. Every `figma_*` MCP call (Day 1 Block 03 linter, Day 2 Block 01/04) depends on the bridge plugin imported in the Figma desktop app (Plugins → Development → Import plugin from manifest…, `/schulung` Day 1 Block 01). `/schulung` says the bridge gates Day 1 Block 02 and 03.                                                                                                            | Before relying on _any_ `figma_*` tool: Figma Desktop open, your duplicate open, bridge plugin running, then ask Claude to check Figma status and confirm it is connected. Re-check after any Figma restart. How the connected state is read: not specified on /schulung (see `/troubleshooting`: "bridge not connected"). |
 | `solved-*` recovery branches          | None, by decision (R-042, 2026-10-13): every step on `/first-component` and every gate step on `/screen-from-storybook` carries an "If this step fails" block with one recovery prompt or command instead.                                                                                                                                                                                                | Recovery path: see R-005 / R-042, not decided. For the rehearsal itself, protect your own progress the ordinary way (local commit or `git stash` before anything risky) — a rehearsal convenience, not something to teach a cohort.                                                                                        |
 | Figma access token                    | `/schulung` Day 1 Block 01: the token is technically optional (REST reads only) and a cohort-policy decision.                                                                                                                                                                                                                                                                                             | Decide before the run whether you rehearse with or without it, and write the choice into §5. Which one a cohort gets: not specified on /schulung.                                                                                                                                                                          |
 
@@ -75,7 +75,7 @@ becomes useless the moment the clock stops for a fix.
    one line in §5 before moving on. These are the points a fresh runner is most
    likely to diverge from what the material assumes.
 4. Fill in §3 (timing) block by block as you go, not from memory afterward.
-5. When Day 2 ends, walk the **8** items of the "Success verification" section
+5. When Day 2 ends, walk the five outcomes and the proof line of the "Success verification" section
    on `/schulung` once more as a checklist and log each as pass/fail/ambiguous
    in §5.
 6. Finish by writing §6 (weakest point of this run) yourself, the way the
@@ -265,9 +265,9 @@ src="/avatar.png">` without `alt` and a `<div (click)="save()">Save</div>` in th
   catch. Label every difference **code or Figma** (two labels only; "kept on purpose"
   arrives on Day 2). A difference that fits neither is parked ("not code, not Figma, we name
   it on Day 2") and not "fixed" in code; log any and how the room handled it (D1B02-C5).
-- Whether the tutorial's `figma_check_design_parity` call needs the connected
-  bridge: not specified on /schulung for this block (it is stated for Day 2
-  Block 04) — record what you hit.
+- The tutorial's `figma_check_design_parity` call needs the connected bridge:
+  decided 2026-11-18, the bridge gates Day 1 Block 02. A red bridge at D1B01-C3 is
+  fixed right away; fallback: the seat pairs with a green neighbour. Record what you hit.
 
 **Block 03 — Figma for code: is the file ready?** (guided tour + checklist).
 _Done when:_ the readiness checklist is filled in for one master of the Atelier file, the
@@ -364,7 +364,7 @@ the room; sketch the component on paper if you like.
 ### Day 2
 
 **Block 00 — Recap (active recall), brief, skills** (talk).
-_Done when:_ everyone knows their target component, has changed one line of the rules file
+_Done when:_ everyone knows their target component, can name the workspace's skills, has changed one line of the rules file
 and has seen the agent read it.
 
 - **STOP — check the skills are really installed.** The page lists exactly

@@ -109,3 +109,5 @@ endpoint is still what a seat calls.
 labels every parity finding `code` or `Figma`, and Day 2 Block 04 adds `contract` as the third
 label (contracts are not taught before Day 2 Block 02). See `/schulung` Day 1 Block 02 and Day 2
 Block 04.
+
+**Corrected 2026-11-18**: the third label is not `contract` but `kept on purpose` (Day 2 Block 04; it must be named in the handoff document's "Deliberate differences" section, ADR-0180: contracts left the participant path). The time fallback is no longer "cut pagination first": pagination is the "Blättern" of the customer agenda, so the trainer notes and `/schulung` cut the invite button and the status badge column instead.

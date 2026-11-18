@@ -119,7 +119,7 @@ R-213) is gone for the course, and Block 01 verifies the machine in the room.
 
 ---
 
-## Day 1: understand the tools and run the workflow end to end
+## Day 1: understand the tools and practise the workflow step by step
 
 ### Block 00 · 09:00–09:30 · Kickoff and thesis
 
@@ -146,7 +146,7 @@ then `/schulung`.
    **Contract** = the deliberate differences between design and code, written down before
    generating (in the course: the "Deliberate differences" section of the handoff document,
    Day 2 Block 01; one sentence for the trainer: Atelier's own repo keeps them in a contract
-   file that a check reads, and participants never open, write or check one); **Code** = a
+   file that a check reads, and participants never open, write or check one); **Generate** = a
    prompt in Claude Code that reads the docs first (`docs-show`), one story per variant value
    and Boolean state, a `play` per behaviour; **Verify** = the agent runs the ladder checks
    (`npm run lint`, `npm run build`, `npm run check:stylelint`, the story tests) and reports
@@ -189,7 +189,7 @@ then `/schulung`.
    system from zero; CI, release, publishing; Claude Code internals.
 
 **Expected recap answers.** Inspect → figma-console MCP; Contract → the deliberate differences
-written down (the handoff document); Code → Claude Code with the library's MCP (`atelier`); Verify →
+written down (the handoff document, which comes tomorrow; no Day 1 tool carries it); Generate → Claude Code with the library's MCP (`atelier`); Verify →
 the ladder checks the agent runs (lint, build, stylelint, story tests) and
 `figma_check_design_parity`. Six of eight name all four
 steps or you say them yourself and ask for the tool per step.
@@ -376,7 +376,7 @@ page, Inventory page, Workshop-Templates page; `/tokens#naming`, `/tokens#pink-t
 read a hex), "code name recoverable" (the agent would have invented a token name),
 "variants on the right axis" (the agent would have made `hover` a prop).
 
-**Watch for.** No own-DS master → rule R4, second Atelier master, say so. Every machine
+**Watch for.** No master at hand → rule R4, second Atelier master, say so. Every machine
 has Figma Desktop logged in with a Conciso account, so no seat is without Figma; a seat whose
 bridge or file is red pairs with a neighbour.
 
@@ -522,7 +522,7 @@ named colour or pixel spacing anywhere.
 machine without permission prompts: build 195 s, the four checks from a cold cache 20 s,
 receipts prompt 39 s. UNVERIFIED is how long a participant needs to approve, read and
 judge; the dry run logs it. If most seats are still on the table at minute 20 of the 30
-build minutes, cut pagination from the brief on the page, not the checks. Agents invent a search-bar or layout component,
+build minutes, cut the invite button and the status badge column from the brief on the page, not the checks. Agents invent a search-bar or layout component,
 forget that a filter change must go back to page 1, and put styles in an inline array. The
 `docs-list` entry "cookbook" lists a "Data List with Actions" story, but `docs-show-story`
 returns no code for it (checked 2026-10-20 on the Angular endpoint), so it does not hand
@@ -557,7 +557,7 @@ more files of the workspace: `CLAUDE.md` and `.claude/settings.json`.
 
 **Say.**
 
-1. Active recall, eight minutes, the room answers: name the loop and the tool per step;
+1. Active recall, eight minutes, the room answers: name the loop and the tool for each step Day 1 practised;
    what did the parity report compare and not compare; which three setup things are
    independent; why is a story a claim; which rule did the agent break first on the Team directory and what caught it;
    which check did the agent run on its own work, and what did it report.
@@ -818,7 +818,7 @@ and theme toolbar; a participant's parity report; the trainer machine for D-8.
    `check:contracts -- --emit`. No bridge → no parity call; say "degraded" on the seat, not
    silently, and sort the Block 02 list.
 6. D-8 on the trainer machine only, about 3 minutes inside the parity row: a field you do not
-   pass is not compared, so a quiet report is not a clean component. The double call (§3.5)
+   pass is not compared (recall from Day 1 Block 02, not a new insight), so a quiet report is not a clean component. The double call (§3.5)
    and the codeSpec assembly (§3.4) are trainer-only: call 1 with the four sections plus a
    hand-added `spacing` section holding one wrong value → flagged as major; call 2 with the
    four sections only → no spacing row, and the score rises (48 → 72 on AtlButton,
