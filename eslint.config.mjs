@@ -48,6 +48,9 @@ export default [
       '**/vitest.config.*.timestamp*',
       'docs/.astro/**',
       'libs/spec/src/behaviors.generated.ts',
+      // Gitignored build output of libs/mcp/scripts (prepack copy of the static Storybook, snapshot JSON).
+      'libs/mcp/storybook/**',
+      'libs/mcp/snapshot/**',
     ],
   },
   {
