@@ -415,18 +415,34 @@ describe('preset generator', () => {
     expect(settings.mcpServers['storybook-react']).toBeUndefined();
   });
 
-  // ─── uianatomy MCP (always) ────────────────────────────────────────────────
+  // ─── uianatomy is not scaffolded ───────────────────────────────────────────
 
   it.each(['angular', 'react', 'vue'] as const)(
-    'writes .mcp.json with the uianatomy server regardless of framework (%s)',
+    'writes no uianatomy server into .mcp.json (%s)',
     async (fw) => {
       await presetGenerator(tree, { name: 'my-workspace', framework: fw });
 
       const settings = readJson(tree, '.mcp.json');
-      expect(settings.mcpServers['uianatomy']).toEqual({
-        type: 'http',
-        url: 'https://uianatomy.dev/mcp',
+      expect(settings.mcpServers['uianatomy']).toBeUndefined();
+      expect(JSON.stringify(settings)).not.toContain('uianatomy');
+    },
+  );
+
+  it.each([true, false])(
+    'mentions uianatomy in no generated file (figmaMcp: %s)',
+    async (figmaMcp) => {
+      await presetGenerator(tree, {
+        name: 'my-workspace',
+        framework: 'angular',
+        figmaMcp,
       });
+
+      for (const { path } of tree.listChanges()) {
+        expect({
+          path,
+          found: /uianatomy/i.test(tree.read(path, 'utf-8') ?? ''),
+        }).toEqual({ path, found: false });
+      }
     },
   );
 
@@ -3050,7 +3066,7 @@ describe('preset generator', () => {
     },
   );
 
-  describe('copied skills (uianatomy-mcp, figma-workspace-architect)', () => {
+  describe('copied skills (figma-workspace-architect)', () => {
     const SKILLS_DIR = '.claude/skills';
 
     // Every file under a skill directory in the generated tree.
@@ -3094,14 +3110,13 @@ describe('preset generator', () => {
         .replace(/\((?:In|Example from) the Atelier repo[^)]*\)/g, '');
     }
 
-    it('with --figma ships both skills, every file the repo payload has', async () => {
+    it('with --figma ships the architect skill, every file the repo payload has', async () => {
       await presetGenerator(tree, {
         name: 'my-workspace',
         framework: 'angular',
         figmaMcp: true,
       });
 
-      expect(tree.exists(`${SKILLS_DIR}/uianatomy-mcp/SKILL.md`)).toBe(true);
       expect(
         tree.exists(`${SKILLS_DIR}/figma-workspace-architect/SKILL.md`),
       ).toBe(true);
@@ -3126,33 +3141,40 @@ describe('preset generator', () => {
       expect(architect.some((p) => p.includes('/tests/'))).toBe(false);
     });
 
-    it('without --figma ships uianatomy-mcp but not figma-workspace-architect', async () => {
+    it('without --figma ships no copied skill', async () => {
       await presetGenerator(tree, {
         name: 'my-workspace',
         framework: 'react',
         figmaMcp: false,
       });
 
-      expect(tree.exists(`${SKILLS_DIR}/uianatomy-mcp/SKILL.md`)).toBe(true);
       expect(skillFiles('figma-workspace-architect')).toEqual([]);
     });
 
-    it.each([
-      ['uianatomy-mcp', true],
-      ['figma-workspace-architect', true],
-      ['uianatomy-mcp', false],
-    ] as const)(
-      '%s: frontmatter name matches its directory (figmaMcp: %s)',
-      async (skill, figmaMcp) => {
+    it.each([true, false])(
+      'never ships a uianatomy-mcp skill (figmaMcp: %s)',
+      async (figmaMcp) => {
         await presetGenerator(tree, {
           name: 'my-workspace',
-          framework: 'vue',
+          framework: 'react',
           figmaMcp,
         });
 
-        expect(frontmatterName(skill)).toBe(skill);
+        expect(skillFiles('uianatomy-mcp')).toEqual([]);
       },
     );
+
+    it('figma-workspace-architect: frontmatter name matches its directory', async () => {
+      await presetGenerator(tree, {
+        name: 'my-workspace',
+        framework: 'vue',
+        figmaMcp: true,
+      });
+
+      expect(frontmatterName('figma-workspace-architect')).toBe(
+        'figma-workspace-architect',
+      );
+    });
 
     it('design-to-code is not shipped, and no shipped skill file names it', async () => {
       await presetGenerator(tree, {
@@ -3180,10 +3202,8 @@ describe('preset generator', () => {
       for (const path of tree
         .listChanges()
         .map((c) => c.path)
-        .filter(
-          (p) =>
-            p.startsWith(`${SKILLS_DIR}/uianatomy-mcp/`) ||
-            p.startsWith(`${SKILLS_DIR}/figma-workspace-architect/`),
+        .filter((p) =>
+          p.startsWith(`${SKILLS_DIR}/figma-workspace-architect/`),
         )) {
         const scanned = withoutLabelledExamples(tree.read(path, 'utf-8') ?? '');
         for (const token of REPO_ONLY) {
@@ -3228,7 +3248,6 @@ describe('preset generator', () => {
         for (const file of ['CLAUDE.md', 'README.md']) {
           const md = tree.read(file, 'utf-8') ?? '';
           expect(md).toContain('atelier-component');
-          expect(md).toContain('uianatomy-mcp');
           expect(md.includes('figma-workspace-architect')).toBe(figmaMcp);
           expect(md).not.toContain('design-to-code');
         }

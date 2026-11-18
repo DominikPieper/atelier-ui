@@ -31,11 +31,11 @@
  *     atl-sub-component-needs-parent}.js` (renamed from the canonical
  *     `tools/eslint-rules/` so @nx/eslint-plugin does not auto-load it, R-189) are the two Angular template rules the
  *     Angular scaffold wires (ADR-0152), plus the plugin file that exposes them.
- *   - Two Claude Code skills ship copied (no remote pull) into every scaffold:
- *     `uianatomy-mcp` (one file) and `figma-workspace-architect` (only with
- *     `--figma`; SKILL.md + references/ + assets/, the same payload
- *     `package-skill.mjs` zips). Twenty-odd files, so they are listed as
- *     directory pairs (DIRS below) and expanded, not entry by entry.
+ *   - One Claude Code skill ships copied (no remote pull) into a scaffold:
+ *     `figma-workspace-architect` (only with `--figma`; SKILL.md +
+ *     references/ + assets/, the same payload `package-skill.mjs` zips).
+ *     Twenty-odd files, so it is listed as a directory pair (DIRS below) and
+ *     expanded, not entry by entry.
  *
  * Originally a single-file check (preflight.mjs only); generalised to a FILES
  * list here without renaming the script or changing its `--check` semantics,
@@ -200,11 +200,6 @@ const FILES = [
 // simply not listed. The target directory must hold exactly the expanded set:
 // a leftover file there (a reference deleted from the source) is drift too.
 const DIRS = [
-  {
-    source: '.claude/skills/uianatomy-mcp',
-    target: `${PRESET_FILES_DIR}/claude/skills/uianatomy-mcp`,
-    include: ['SKILL.md'],
-  },
   {
     source: 'skills/figma-workspace-architect',
     target: `${PRESET_FILES_DIR}/claude/skills/figma-workspace-architect`,

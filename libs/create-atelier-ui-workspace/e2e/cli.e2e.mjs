@@ -541,13 +541,13 @@ function testFramework(framework, registryUrl, npmrcPath) {
       ok('.mcp.json has the figma-console entry');
     }
 
-    // The two copied skills must survive packing (preset.spec.ts only proves
-    // the in-memory Tree): uianatomy-mcp always, the figma-workspace-architect
-    // payload (SKILL.md, references/, assets/) only under --figma.
+    // The copied skill must survive packing (preset.spec.ts only proves the
+    // in-memory Tree): the figma-workspace-architect payload (SKILL.md,
+    // references/, assets/) only under --figma.
     const copiedSkill = (name, rel) =>
       existsSync(join(wsPath, '.claude/skills', name, rel));
-    if (!copiedSkill('uianatomy-mcp', 'SKILL.md')) {
-      throw new Error('uianatomy-mcp skill missing from the packed scaffold');
+    if (copiedSkill('uianatomy-mcp', 'SKILL.md')) {
+      throw new Error('uianatomy-mcp skill must not ship in the scaffold');
     }
     for (const rel of [
       'SKILL.md',

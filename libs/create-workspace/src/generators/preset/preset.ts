@@ -159,12 +159,12 @@ function testingTemplateName(
   return `testing/${framework}/${base}.ts.template`;
 }
 
-// Two more skills ship as verbatim copies — no remote pull, nothing to
-// substitute — and are held byte-identical to their repo sources by
+// One more skill ships as a verbatim copy — no remote pull, nothing to
+// substitute — held byte-identical to its repo source by
 // `check:preflight-clone-sync` (tools/scripts/sync-preflight.mjs, DIRS):
-// `uianatomy-mcp` (always) and `figma-workspace-architect` (only with
-// `figmaMcp`: it drives figma-console-mcp, which the scaffold wires only then,
-// ADR-0144's figma/no-figma split). `design-to-code` deliberately does not
+// `figma-workspace-architect` (only with `figmaMcp`: it drives
+// figma-console-mcp, which the scaffold wires only then, ADR-0144's
+// figma/no-figma split). `design-to-code` deliberately does not
 // ship: `atelier-component` below is the design-to-code loop for a workspace.
 // The set of files is whatever sits under the template directory, so a
 // reference added to the source reaches the scaffold through the sync gate
@@ -1765,12 +1765,7 @@ Before using any component:
 1. Call \`docs-list\` to get valid component IDs
 2. Call \`docs-show\` with the ID — never invent props
 3. Call \`docs-show-story\` for a specific variant
-4. Do not use a component that is not in the docs
-
-### \`uianatomy\` MCP
-Canonical component anatomy, axes, slots, transitions, motion, tokens, events, and
-cross-framework/library divergences. Reach for it when a Storybook doc leaves a
-prop's shape, an interaction, or a cross-library convention ambiguous.`;
+4. Do not use a component that is not in the docs`;
 
   const angularCliMcpSection =
     framework === 'angular'
@@ -1870,7 +1865,6 @@ see the skill itself, or ask Claude Code to use it, for what each check actually
           '- **figma-workspace-architect** (`.claude/skills/figma-workspace-architect/SKILL.md`) — structural work in the Figma file (tokens/Variables, variants, naming, audits) via figma-console-mcp; load it before larger `figma_execute` / variable calls',
         ]
       : []),
-    '- **uianatomy-mcp** (`.claude/skills/uianatomy-mcp/SKILL.md`) — canonical component anatomy, axes and cross-library divergences, looked up through the `uianatomy` MCP server',
   ].join('\n');
 
   // Definition of Done (below): four checks without Figma, five with it —
@@ -2332,13 +2326,6 @@ file exports). The Desktop Bridge covers creation and inspection without a token
       type: 'http',
       url: `${SITE_URL}/storybook-${framework}/mcp`,
     },
-    // Canonical component anatomy, axes, slots, transitions, motion, tokens,
-    // events, and cross-library divergences — copied verbatim from this
-    // monorepo's own root .mcp.json, where it is wired unconditionally.
-    uianatomy: {
-      type: 'http',
-      url: 'https://uianatomy.dev/mcp',
-    },
   };
   if (framework === 'angular') {
     // Angular CLI best practices, API search, and examples — copied verbatim
@@ -2463,7 +2450,7 @@ Browse components at ${SITE_URL}
   writeJson(tree, '.claude/settings.json', {
     $schema: 'https://json.schemastore.org/claude-code-settings.json',
     // Every server the preset just wrote into .mcp.json (nx-mcp,
-    // storybook-${framework}, uianatomy, angular-cli when Angular,
+    // storybook-${framework}, angular-cli when Angular,
     // figma-console when requested) connects on session start instead of
     // needing individual first-use approval.
     enableAllProjectMcpServers: true,
@@ -2622,9 +2609,8 @@ Browse components at ${SITE_URL}
     renderAtelierComponentSkill(appName, framework, options.figmaMcp ?? false),
   );
 
-  // The two copied skills (see listTemplateFiles' comment above). The
-  // architect only when the workspace has figma-console to drive.
-  writeCopiedSkill(tree, 'uianatomy-mcp');
+  // The copied skill (see listTemplateFiles' comment above): only when the
+  // workspace has figma-console to drive.
   if (options.figmaMcp) writeCopiedSkill(tree, 'figma-workspace-architect');
 
   // .gitignore: create-nx-workspace already writes this file (before any
