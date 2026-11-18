@@ -22,6 +22,11 @@ const config: StorybookConfig = {
     options: {},
   },
   docs: {},
+  // The library's own Storybook, shipped inside @atelier-ui/mcp, at
+  // http://localhost:6006/atelier/ — the workspace's own index is untouched.
+  staticDirs: [
+    { from: `${getAbsolutePath('@atelier-ui/mcp')}/storybook`, to: '/atelier' },
+  ],
   features: {
     // Read by Storybook's core-server at build time and by addon-mcp's
     // docs-toolset gate on a dev server.
@@ -32,10 +37,9 @@ const config: StorybookConfig = {
     experimentalDocgenServer: true,
     // `review-create` (wire name for the addon-mcp `review.create` method)
     // registers for the deprecated `storybook ai` CLI proxy channel by default
-    // (unset ≠ false), but a direct MCP client — exactly what
-    // `claude mcp add --transport http storybook-local http://localhost:<port>/mcp`
-    // configures — only gets the tool when `experimentalReview` is explicitly
-    // `true` (verified against the installed 10.6.0 `storybook` dist).
+    // (unset ≠ false), but a direct MCP client — exactly what the
+    // `storybook-local` entry in .mcp.json is — only gets the tool when
+    // `experimentalReview` is explicitly `true` (verified against the installed 10.6.0 `storybook` dist).
     experimentalReview: true,
     // Storybook's onboarding checklist (sidebar widget + menu entry) is a
     // guided tour that competes with the workshop's own guidance; off here.

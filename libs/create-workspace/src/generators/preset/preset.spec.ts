@@ -355,13 +355,64 @@ describe('preset generator', () => {
 
     const settings = readJson(tree, '.mcp.json');
     expect(settings.mcpServers['nx-mcp']).toBeDefined();
-    expect(settings.mcpServers['storybook-angular']).toBeDefined();
-    expect(settings.mcpServers['storybook-angular'].url).toContain(
-      'storybook-angular/mcp',
-    );
+    expect(settings.mcpServers['atelier']).toEqual({
+      type: 'stdio',
+      command: 'npx',
+      args: ['atelier-mcp'],
+    });
+    expect(settings.mcpServers['storybook-angular']).toBeUndefined();
     expect(settings.mcpServers['storybook-react']).toBeUndefined();
     expect(settings.mcpServers['storybook-vue']).toBeUndefined();
   });
+
+  it('pins @atelier-ui/mcp to the component package version, Angular only', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
+    const pkg = readJson(tree, 'package.json');
+    expect(pkg.devDependencies['@atelier-ui/mcp']).toBe(
+      pkg.dependencies['@atelier-ui/angular'],
+    );
+    expect(pkg.devDependencies['@atelier-ui/mcp']).toBe(OWN_VERSION);
+  });
+
+  it('Angular main.ts mounts the library Storybook at /atelier', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
+    const main =
+      tree.read('workshop-angular/.storybook/main.ts', 'utf-8') ?? '';
+    expect(main).toContain('staticDirs');
+    expect(main).toContain("getAbsolutePath('@atelier-ui/mcp')}/storybook");
+    expect(main).toContain("to: '/atelier'");
+  });
+
+  it.each(['angular', 'react', 'vue'] as const)(
+    'wires a fixed storybook-local entry on the Storybook port (%s)',
+    async (framework) => {
+      await presetGenerator(tree, { name: 'my-workspace', framework });
+      const settings = readJson(tree, '.mcp.json');
+      expect(settings.mcpServers['storybook-local']).toEqual({
+        type: 'http',
+        url: 'http://localhost:6006/mcp',
+      });
+      const main =
+        tree.read(`workshop-${framework}/.storybook/main.ts`, 'utf-8') ?? '';
+      expect(main).not.toContain('claude mcp add');
+    },
+  );
+
+  it.each(['react', 'vue'] as const)(
+    'keeps the hosted library entry and no @atelier-ui/mcp for %s',
+    async (framework) => {
+      await presetGenerator(tree, { name: 'my-workspace', framework });
+      const settings = readJson(tree, '.mcp.json');
+      expect(settings.mcpServers[`storybook-${framework}`]).toEqual({
+        type: 'http',
+        url: `https://atelier.pieper.io/storybook-${framework}/mcp`,
+      });
+      expect(settings.mcpServers['atelier']).toBeUndefined();
+      const pkg = readJson(tree, 'package.json');
+      expect(pkg.devDependencies?.['@atelier-ui/mcp']).toBeUndefined();
+      expect(pkg.dependencies?.['@atelier-ui/mcp']).toBeUndefined();
+    },
+  );
 
   it('each MCP entry has type http and correct url', async () => {
     await presetGenerator(tree, { name: 'my-workspace', framework: 'react' });
@@ -722,8 +773,23 @@ describe('preset generator', () => {
     });
 
     const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
-    expect(md).toContain('storybook-angular');
+    expect(md).toContain('`atelier`');
+    expect(md).toContain('`storybook-local`');
+    expect(md).toContain('http://localhost:6006/atelier/');
+    expect(md).not.toContain('claude mcp add');
+    expect(md).not.toContain('deliberately not wired');
   });
+
+  it.each(['react', 'vue'] as const)(
+    'CLAUDE.md routes library docs to the hosted server for %s',
+    async (framework) => {
+      await presetGenerator(tree, { name: 'my-workspace', framework });
+      const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
+      expect(md).toContain(`\`storybook-${framework}\` (hosted)`);
+      expect(md).toContain('`storybook-local`');
+      expect(md).not.toContain('/atelier/');
+    },
+  );
 
   it('CLAUDE.md includes Angular-specific import pattern', async () => {
     await presetGenerator(tree, {
@@ -1124,7 +1190,8 @@ describe('preset generator', () => {
     expect(main).toContain('@storybook/addon-a11y');
     expect(main).toContain('@storybook/addon-docs');
     expect(main).not.toContain('addon-designs');
-    expect(main).not.toContain('staticDirs');
+    // The only mount is the library Storybook at /atelier (ADR-0182).
+    expect(main.match(/staticDirs/g)).toHaveLength(1);
     expect(main).not.toContain('BUILD_STORYBOOK');
   });
 

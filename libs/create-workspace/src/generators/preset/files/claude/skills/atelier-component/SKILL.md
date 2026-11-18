@@ -46,7 +46,8 @@ Before using any prop of a component from `@atelier-ui/<framework>`: call `docs-
 get valid ids, then `docs-show` for the component. The answer comes back shaped for this
 framework — two-way bindings and split Inputs/Outputs for Angular, `v-model` and typed slots
 for Vue, JSX and `children` for React. If a prop is not in the docs, it does not exist; say so
-rather than guessing from another library's naming.
+rather than guessing from another library's naming. Ask the library's server named in
+CLAUDE.md ("Storybook MCP servers"); ids from `storybook-local` are not valid there.
 
 For a component whose source lives in this workspace, its own types are the API.
 

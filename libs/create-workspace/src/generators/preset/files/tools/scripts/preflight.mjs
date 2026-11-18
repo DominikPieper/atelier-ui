@@ -11,7 +11,7 @@
  * Exits non-zero if any hard check fails. Warnings do not block.
  */
 
-import { execSync, spawnSync } from 'node:child_process';
+import { execSync, spawn, spawnSync } from 'node:child_process';
 import { createServer } from 'node:net';
 import { readFileSync, readdirSync, existsSync, statSync } from 'node:fs';
 import { homedir } from 'node:os';
@@ -215,18 +215,87 @@ function portFree(port) {
   });
 }
 
-function loadMcpEndpoints() {
+function loadMcpServers() {
   const mcpPath = resolve(ROOT, '.mcp.json');
-  if (!existsSync(mcpPath)) return [];
+  if (!existsSync(mcpPath)) return {};
   try {
-    const config = JSON.parse(readFileSync(mcpPath, 'utf8'));
-    const servers = config.mcpServers ?? {};
-    return Object.entries(servers)
-      .filter(([, v]) => v?.type === 'http' && typeof v?.url === 'string')
-      .map(([name, v]) => ({ name, url: v.url }));
+    return JSON.parse(readFileSync(mcpPath, 'utf8')).mcpServers ?? {};
   } catch {
-    return [];
+    return {};
   }
+}
+
+function loadMcpEndpoints() {
+  return Object.entries(loadMcpServers())
+    .filter(([, v]) => v?.type === 'http' && typeof v?.url === 'string')
+    .map(([name, v]) => ({ name, url: v.url }));
+}
+
+/**
+ * The `atelier` stdio entry (`@atelier-ui/mcp`, Angular workspaces): resolve
+ * the package from node_modules and run initialize + tools/list over stdio.
+ * Returns null on success, else the failure detail.
+ */
+function probeAtelierStdio() {
+  const pkgDir = join(ROOT, 'node_modules', '@atelier-ui', 'mcp');
+  if (!existsSync(join(pkgDir, 'package.json')))
+    return '@atelier-ui/mcp is not installed';
+  const bin = JSON.parse(readFileSync(join(pkgDir, 'package.json'), 'utf8'))
+    .bin?.['atelier-mcp'];
+  if (!bin) return '@atelier-ui/mcp has no atelier-mcp bin';
+  return new Promise((resolveP) => {
+    const child = spawn(process.execPath, [join(pkgDir, bin)], {
+      cwd: ROOT,
+      stdio: ['pipe', 'pipe', 'ignore'],
+    });
+    let buffer = '';
+    const done = (detail) => {
+      clearTimeout(timer);
+      child.kill();
+      resolveP(detail);
+    };
+    const timer = setTimeout(() => done('no answer within 15 s'), 15000);
+    const send = (msg) =>
+      child.stdin.write(JSON.stringify({ jsonrpc: '2.0', ...msg }) + '\n');
+    // A server that dies before answering ends the write with EPIPE.
+    child.stdin.on('error', () => {});
+    child.on('error', (err) => done(String(err.message)));
+    child.on('close', (code) =>
+      done(`exited with code ${code} before answering`),
+    );
+    child.stdout.on('data', (chunk) => {
+      buffer += chunk;
+      for (let i = buffer.indexOf('\n'); i >= 0; i = buffer.indexOf('\n')) {
+        const line = buffer.slice(0, i);
+        buffer = buffer.slice(i + 1);
+        let msg;
+        try {
+          msg = JSON.parse(line);
+        } catch {
+          continue;
+        }
+        if (msg.id === 1) {
+          send({ method: 'notifications/initialized' });
+          send({ id: 2, method: 'tools/list', params: {} });
+        } else if (msg.id === 2) {
+          done(
+            msg.result?.tools?.some((t) => t.name === 'docs-list')
+              ? null
+              : 'tools/list does not return docs-list',
+          );
+        }
+      }
+    });
+    send({
+      id: 1,
+      method: 'initialize',
+      params: {
+        protocolVersion: '2025-06-18',
+        capabilities: {},
+        clientInfo: { name: 'atelier-preflight', version: '1.0.0' },
+      },
+    });
+  });
 }
 
 /**
@@ -578,7 +647,8 @@ async function checkFigmaSetup() {
 
 async function checkMcpEndpoints(env) {
   const endpoints = loadMcpEndpoints();
-  if (endpoints.length === 0) {
+  const hasAtelier = Boolean(loadMcpServers().atelier);
+  if (endpoints.length === 0 && !hasAtelier) {
     warn(
       'MCP endpoints',
       'none configured in .mcp.json',
@@ -588,8 +658,19 @@ async function checkMcpEndpoints(env) {
     );
     return;
   }
+  if (hasAtelier) {
+    const detail = await probeAtelierStdio();
+    if (detail === null) ok('MCP: atelier', 'stdio, docs-list answers');
+    else
+      fail(
+        'MCP: atelier',
+        detail,
+        'Run `npm install`, then re-run `npm run preflight`',
+      );
+  }
   for (const { name, url } of endpoints) {
     const res = await probeMcp(url);
+    const isLocal = ['localhost', '127.0.0.1'].includes(new URL(url).hostname);
     if (res.level === 'ok') {
       ok(`MCP: ${name}`, `${url} (HTTP ${res.status})`);
     } else if (res.level === 'broken') {
@@ -597,6 +678,12 @@ async function checkMcpEndpoints(env) {
         `MCP: ${name}`,
         `${url} ${res.detail}`,
         'Server reachable but MCP calls fail — see https://atelier.pieper.io/troubleshooting#mcp-tools-error',
+      );
+    } else if (isLocal) {
+      warn(
+        `MCP: ${name}`,
+        `${url} not running`,
+        'Start `npm run storybook` when you want this server',
       );
     } else {
       fail(

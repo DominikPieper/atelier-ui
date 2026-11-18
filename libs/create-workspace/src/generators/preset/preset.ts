@@ -1354,7 +1354,7 @@ export async function presetGenerator(
   tree.write(stylesPath, `@import './styles/tokens.css';\n\n${existing}`);
 
   // Storybook config: mirrors libs/{angular,react,vue}/.storybook/main.ts
-  // minus staticDirs, the BUILD_STORYBOOK viteFinal block (hosted-path-only),
+  // minus the BUILD_STORYBOOK viteFinal block (hosted-path-only),
   // and @storybook/addon-designs (no Figma handoff doc to link from here).
   // @storybook/addon-vitest DOES ship (owner correction 2026-09-10 to
   // ADR-0123's original "no test runner" call).
@@ -1760,12 +1760,25 @@ export async function presetGenerator(
   composed components.`;
   }
 
-  const mcpSection = `### \`storybook-${framework}\` MCP
-Before using any component:
-1. Call \`docs-list\` to get valid component IDs
-2. Call \`docs-show\` with the ID — never invent props
-3. Call \`docs-show-story\` for a specific variant
-4. Do not use a component that is not in the docs`;
+  const libraryServer =
+    framework === 'angular'
+      ? '`atelier` (the installed `@atelier-ui/mcp` package, offline)'
+      : `\`storybook-${framework}\` (hosted)`;
+  const atelierBrowse =
+    framework === 'angular'
+      ? `
+The library's Storybook is browsable at http://localhost:${storybookPort}/atelier/
+while \`npm run storybook\` runs.`
+      : '';
+  const mcpSection = `### Storybook MCP servers
+- Library components (\`@atelier-ui/${framework}\`) → ${libraryServer}.
+- This workspace's own components and stories, \`stories-preview\`, \`test-run\` →
+  \`storybook-local\`. It needs \`npm run storybook\` running and shows as failed until then.
+
+Ids from one server's \`docs-list\` are not valid on the other. Before using any
+component: call \`docs-list\`, then \`docs-show\` with the ID (\`docs-show-story\` for one
+variant) — never invent props.
+Do not use a component that is not in the docs.${atelierBrowse}`;
 
   const angularCliMcpSection =
     framework === 'angular'
@@ -1834,8 +1847,8 @@ connected: ${figmaSnapshotRefreshInstruction}, then run \`npm run figma:snapshot
 components imported from \`@atelier-ui/${framework}\` — the example \`AtlButton\`
 included — the check recognises that the import resolves into \`node_modules\` and skips
 docgen for it — the same rule in every framework — so it has nothing to compare and
-reports only \`[NO-STORY-META]\`; their prop tables come from the hosted
-Storybook MCP (\`docs-show\`) instead. A green \`check:contracts\` on the example story
+reports only \`[NO-STORY-META]\`; their prop tables come from the library's
+MCP server (\`docs-show\`, see Storybook MCP servers) instead. A green \`check:contracts\` on the example story
 therefore proves the wiring, not the example.
 
 \`npm run check:stories\` (every story, rendered headless in Chromium via
@@ -1995,30 +2008,13 @@ Re-run or update the install at any time:
 ${SKILLS_ADD_COMMAND_FOR_HUMANS}
 \`\`\`
 
-**Which MCP tools these skills can reach depends on \`.mcp.json\`, not just on the
-skills being present.** \`.mcp.json\` wires only the *hosted* Storybook MCP servers
-(\`storybook-<fw>\` → ${SITE_URL}/storybook-<fw>/mcp), which serve the \`docs\`
-toolset — \`docs-list\`, \`docs-show\`, \`docs-show-story\` all work out of the box.
-The skills' \`dev\`-toolset tools (\`stories-preview\`, \`get-storybook-story-instructions\`)
-instead come from \`@storybook/addon-mcp\` inside a *running local* Storybook
-(already configured in every app's \`.storybook/main.ts\`) — that local endpoint is
-deliberately not wired into \`.mcp.json\` by default, the same as this repo's own
-root \`.mcp.json\`, because a fixed \`localhost\` entry would fail to connect on
-every Claude Code session started without that Storybook already running. To use
-the \`dev\` toolset: start \`npm run storybook\` (see Storybook below),
-then add this to \`.mcp.json\`'s \`mcpServers\` (only while that Storybook is up):
-
-\`\`\`json
-"storybook-<fw>-local": {
-  "type": "http",
-  "url": "http://localhost:<port>/mcp"
-}
-\`\`\`
-
-(\`<port>\` is the one listed for that app under Storybook below.) \`test-run\`
-works too, once that local Storybook is running — every story here IS a
-render + accessibility test (\`@storybook/addon-vitest\`, run offline via
-\`npm run check:stories\`).`
+**Which MCP tools these skills can reach depends on \`.mcp.json\`.** The \`docs\`
+toolset for library components comes from ${framework === 'angular' ? '`atelier`' : `the hosted \`storybook-${framework}\` server`};
+the \`dev\` toolset (\`stories-preview\`, \`get-storybook-story-instructions\`) and
+\`test-run\` come from \`storybook-local\`, the \`@storybook/addon-mcp\` inside this
+workspace's own Storybook — start \`npm run storybook\` (see Storybook below) and it
+connects. Every story here IS a render + accessibility test
+(\`@storybook/addon-vitest\`, run offline via \`npm run check:stories\`).`
     : `Skipped for this workspace (\`skills: false\`). Install the four \`storybookjs/mcp\`
 skills for Claude Code by hand:
 
@@ -2102,6 +2098,12 @@ file exports). The Desktop Bridge covers creation and inspection without a token
     ...(pkgSoFar.devDependencies ?? {}),
   };
   const hasTypescript = Boolean(existingDeps.typescript);
+  // The library's own MCP server (stdio) — Angular only: the package carries
+  // the Angular manifest and Storybook, nothing for React or Vue (ADR-0182).
+  const atelierMcpDevDeps: Record<string, string> =
+    framework === 'angular'
+      ? { '@atelier-ui/mcp': componentPackageVersion }
+      : {};
   const contractLoopDevDeps: Record<string, string> = {};
   if (options.figmaMcp) {
     contractLoopDevDeps['@modelcontextprotocol/sdk'] = MCP_SDK_VERSION;
@@ -2196,6 +2198,7 @@ file exports). The Desktop Bridge covers creation and inspection without a token
   const installTask = addDependenciesToPackageJson(tree, deps, {
     ...storybookDevDeps,
     ...contractLoopDevDeps,
+    ...atelierMcpDevDeps,
     ...viteFrameworkDevDeps,
     ...unitTestDevDeps,
     ...stylelintDevDeps,
@@ -2317,9 +2320,22 @@ file exports). The Desktop Bridge covers creation and inspection without a token
       command: 'npx',
       args: ['nx', 'mcp'],
     },
-    [`storybook-${framework}`]: {
+    // Library docs: the Angular package answers over stdio, offline; React and
+    // Vue keep the hosted endpoint until the package carries their manifests
+    // (ADR-0182).
+    ...(framework === 'angular'
+      ? { atelier: { type: 'stdio', command: 'npx', args: ['atelier-mcp'] } }
+      : {
+          [`storybook-${framework}`]: {
+            type: 'http',
+            url: `${SITE_URL}/storybook-${framework}/mcp`,
+          },
+        }),
+    // This workspace's own Storybook (addon-mcp). Shows as failed until
+    // `npm run storybook` runs; the failure is local to this entry.
+    'storybook-local': {
       type: 'http',
-      url: `${SITE_URL}/storybook-${framework}/mcp`,
+      url: `http://localhost:${storybookPort}/mcp`,
     },
   };
   if (framework === 'angular') {
@@ -2445,7 +2461,7 @@ Browse components at ${SITE_URL}
   writeJson(tree, '.claude/settings.json', {
     $schema: 'https://json.schemastore.org/claude-code-settings.json',
     // Every server the preset just wrote into .mcp.json (nx-mcp,
-    // storybook-${framework}, angular-cli when Angular,
+    // atelier (Angular) or storybook-${framework}, storybook-local, angular-cli when Angular,
     // figma-console when requested) connects on session start instead of
     // needing individual first-use approval.
     enableAllProjectMcpServers: true,

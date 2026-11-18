@@ -77,6 +77,9 @@ const DIST_STYLES = join(ROOT, 'dist/libs/styles');
 const DIST_ANGULAR = join(ROOT, 'dist/libs/angular');
 const DIST_REACT = join(ROOT, 'dist/libs/react');
 const DIST_VUE = join(ROOT, 'dist/libs/vue');
+// @atelier-ui/mcp is packed from its source dir; its prepack copies this build.
+const MCP_DIR = join(ROOT, 'libs/mcp');
+const DIST_STORYBOOK_ANGULAR = join(ROOT, 'dist/storybook/angular');
 
 const FRAMEWORKS = (process.env.E2E_FRAMEWORKS || 'angular,react,vue')
   .split(',')
@@ -201,6 +204,17 @@ function pack(distDir) {
   return tarballPath;
 }
 
+function packMcp(destination) {
+  // prepack rebuilds the snapshot and copies dist/storybook/angular into the package.
+  const out = runCapture(
+    `npm pack --json --pack-destination "${destination}"`,
+    {
+      cwd: MCP_DIR,
+    },
+  );
+  return join(destination, JSON.parse(out)[0].filename);
+}
+
 function ensureBuilt() {
   // Framework libs are packed and published to verdaccio so the e2e validates
   // *our source*, not whatever @atelier-ui/{angular,react,vue}@latest is on
@@ -214,6 +228,10 @@ function ensureBuilt() {
     [join(DIST_REACT, 'package.json'), 'react'],
     [join(DIST_VUE, 'package.json'), 'vue'],
   ];
+  if (!existsSync(join(DIST_STORYBOOK_ANGULAR, 'index.html'))) {
+    section('Building the Angular Storybook (shipped inside @atelier-ui/mcp)');
+    run('npx nx build-storybook angular');
+  }
   const missing = needed.filter(([p]) => !existsSync(p)).map(([, n]) => n);
   if (!missing.length) {
     ok('dist/ artifacts present');
@@ -262,7 +280,7 @@ async function startVerdaccio() {
   mkdirSync(storage, { recursive: true });
   writeFileSync(htpasswd, '');
 
-  // All seven @atelier-ui packages are served LOCAL-ONLY (no npmjs proxy) so
+  // All eight @atelier-ui packages are served LOCAL-ONLY (no npmjs proxy) so
   // the e2e validates the source in this branch — not whatever versions are
   // currently published on npmjs. Without this, a fix to the framework libs
   // couldn't be verified until after a real release, and a still-broken
@@ -295,6 +313,10 @@ packages:
     publish: $all
     unpublish: $all
   '@atelier-ui/vue':
+    access: $all
+    publish: $all
+    unpublish: $all
+  '@atelier-ui/mcp':
     access: $all
     publish: $all
     unpublish: $all
@@ -541,6 +563,38 @@ function testFramework(framework, registryUrl, npmrcPath) {
       ok('.mcp.json has the figma-console entry');
     }
 
+    // ADR-0182: the library's docs come from the installed package on Angular
+    // and from the hosted endpoint elsewhere; the local Storybook is wired in
+    // all three.
+    {
+      const servers = JSON.parse(
+        readFileSync(join(wsPath, '.mcp.json'), 'utf-8'),
+      ).mcpServers;
+      const local = servers['storybook-local'];
+      if (local?.type !== 'http' || local.url !== 'http://localhost:6006/mcp') {
+        throw new Error(`storybook-local wrong: ${JSON.stringify(local)}`);
+      }
+      if (framework === 'angular') {
+        if (
+          servers.atelier?.command !== 'npx' ||
+          servers['storybook-angular']
+        ) {
+          throw new Error(
+            'angular .mcp.json: want atelier, not storybook-angular',
+          );
+        }
+        const mcpDir = join(wsPath, 'node_modules/@atelier-ui/mcp');
+        if (!existsSync(join(mcpDir, 'storybook/index.html'))) {
+          throw new Error('@atelier-ui/mcp installed without its storybook/');
+        }
+      } else if (servers.atelier || !servers[`storybook-${framework}`]) {
+        throw new Error(
+          `${framework} .mcp.json: want the hosted entry, no atelier`,
+        );
+      }
+      ok('.mcp.json has the library and storybook-local entries');
+    }
+
     // The copied skill must survive packing (preset.spec.ts only proves the
     // in-memory Tree): the figma-workspace-architect payload (SKILL.md,
     // references/, assets/) only under --figma.
@@ -681,6 +735,17 @@ function testFramework(framework, registryUrl, npmrcPath) {
       cwd: wsPath,
     });
     ok(`npm run build:storybook (workshop-${framework}) green`);
+    if (framework === 'angular') {
+      // The staticDirs mount resolved from the installed @atelier-ui/mcp.
+      const mounted = join(
+        wsPath,
+        `dist/storybook/workshop-${framework}/atelier/index.html`,
+      );
+      if (!existsSync(mounted)) {
+        throw new Error(`library Storybook not mounted: ${mounted} missing`);
+      }
+      ok('build:storybook output contains the mounted library Storybook');
+    }
 
     // The contract loop (ADR-0121 S4, gated on --figma since ADR-0144): this
     // proves the SHIPPED check-contracts.mjs + docgen.mjs run against a
@@ -820,6 +885,8 @@ async function main() {
   ok(`react:   ${reactTarball}`);
   const vueTarball = pack(DIST_VUE);
   ok(`vue:     ${vueTarball}`);
+  const mcpTarball = packMcp(mkdtempSync(join(tmpdir(), 'atelier-e2e-mcp-')));
+  ok(`mcp:     ${mcpTarball}`);
 
   const registry = await startVerdaccio();
   const npmrcPath = join(registry.dir, '.npmrc');
@@ -844,6 +911,8 @@ async function main() {
     ok('react published');
     publishToRegistry(vueTarball, registry.url, npmrcPath);
     ok('vue published');
+    publishToRegistry(mcpTarball, registry.url, npmrcPath);
+    ok('mcp published');
 
     for (const fw of FRAMEWORKS) {
       try {
