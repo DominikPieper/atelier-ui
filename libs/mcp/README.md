@@ -2,7 +2,7 @@
 
 MCP server for consumers of `@atelier-ui/angular` (ADR-0177). It answers `docs-list`, `docs-show`
 and `docs-show-story` over stdio from a Storybook manifest snapshot built from the same commit as
-the library. No network, no port. `private` until the owner approves publishing.
+the library. No network, no port.
 
 ```json
 { "mcpServers": { "atelier": { "command": "npx", "args": ["atelier-mcp"] } } }
@@ -19,3 +19,8 @@ the library. No network, no port. `private` until the owner approves publishing.
   committed.
 - **Gate.** `npm run check:mcp-package` runs the unit tests and `scripts/smoke-test.mjs`, which
   packs the tarball and talks to the unpacked bin over stdio, offline.
+- **Static Storybook.** The tarball also ships the library's static Angular Storybook under
+  `storybook/` (copied from `dist/storybook/angular` by `prepack`, not committed). Its assets use
+  relative URLs, so it can be mounted at a sub-path of your own Storybook:
+  `staticDirs: [{ from: '<path to @atelier-ui/mcp>/storybook', to: '/atelier' }]`, then open
+  `/atelier/index.html`.

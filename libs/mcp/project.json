@@ -2,8 +2,21 @@
   "name": "mcp",
   "$schema": "../../node_modules/nx/schemas/project-schema.json",
   "projectType": "library",
+  "release": {
+    "version": {
+      "manifestRootsToUpdate": ["{projectRoot}"],
+      "currentVersionResolver": "git-tag",
+      "fallbackCurrentVersionResolver": "disk"
+    }
+  },
   "tags": ["type:tool"],
   "targets": {
+    "nx-release-publish": {
+      "dependsOn": [
+        { "projects": ["angular"], "target": "build-storybook" },
+        { "projects": ["styles"], "target": "assert-unpublished" }
+      ]
+    },
     "test": {
       "executor": "nx:run-commands",
       "cache": true,

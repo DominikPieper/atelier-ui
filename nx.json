@@ -125,7 +125,8 @@
           "react",
           "vue",
           "create-workspace",
-          "create-atelier-ui-workspace"
+          "create-atelier-ui-workspace",
+          "mcp"
         ],
         "version": {
           "conventionalCommits": true

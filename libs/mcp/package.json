@@ -2,7 +2,6 @@
   "name": "@atelier-ui/mcp",
   "version": "0.4.10",
   "description": "MCP server for consumers of @atelier-ui/angular: answers docs-list, docs-show and docs-show-story over stdio from a manifest snapshot built from the same commit, with no network access.",
-  "private": true,
   "license": "MIT",
   "type": "module",
   "bin": {
@@ -12,6 +11,7 @@
     "bin",
     "src",
     "snapshot",
+    "storybook",
     "README.md"
   ],
   "engines": {

@@ -13,6 +13,7 @@
 // Usage: node libs/mcp/scripts/smoke-test.mjs [path-to-tarball]
 //
 // Checks:
+//   - the tarball carries the static Storybook (storybook/index.html)
 //   - initialize succeeds; instructions carry the hard rules
 //   - tools/list is docs-list, docs-show, docs-show-story and (layer tokens) tokens-search
 //   - docs-list names AtlButton; docs-show(AtlButton) shows every input and output the packed
@@ -256,6 +257,11 @@ async function main() {
     check(
       existsSync(join(snapshotDir, 'manifests', 'components.json')),
       'tarball has no snapshot/manifests/components.json',
+    );
+
+    check(
+      existsSync(join(packageDir, 'storybook', 'index.html')),
+      'tarball has no storybook/index.html',
     );
 
     // Run 1: the default configuration, from a directory without @atelier-ui/angular.
