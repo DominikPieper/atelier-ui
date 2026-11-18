@@ -133,6 +133,11 @@ const MCP_SHOW_SHAPE = `## Inputs        aria-label, size, stickyHeader, variant
 - Selectable (components-display-atltable--selectable)
 - Sticky Header, Empty State, Kitchen Sink, Playground`;
 
+const CHECKS_PROMPT = `Run npm run lint, npm run check:stylelint and npm run check:format and, on
+Angular, npm run build. Report each exit code. If one is not 0, read the
+output (the full log when the summary has no error text), repair, and run it
+again. Then list what you changed.`;
+
 const GATES = `npm run lint > lint.out 2>&1; echo $?
 npm run check:stylelint > stylelint.out 2>&1; echo $?
 npm run check:format > format.out 2>&1; echo $?`;
@@ -198,12 +203,12 @@ anything else, and tell me which line you changed.`,
 
 <BaseLayout
   title="Screen from Storybook"
-  description="A 65-minute exercise. Build one screen from components that already exist, with the Storybook MCP as your only source. No Figma frame, no step-by-step guidance."
+  description="An 80-minute exercise. Build one screen from components that already exist, with the Storybook MCP as your only source. No Figma frame, no step-by-step guidance."
   currentPath="/screen-from-storybook"
 >
   <div class="docs-inline-page">
     <PageHero
-      time="65 min"
+      time="80 min"
       title="Screen from Storybook"
       titleAccent="Storybook"
       ledeMax="600px"
@@ -211,7 +216,7 @@ anything else, and tell me which line you changed.`,
       Most teams do not build components. They build screens out of components
       that already exist. Here the only thing you know about those components is
       what the Storybook MCP tells you, and nothing is going to tell you how to
-      proceed. A brief, four rules, the gates, a clock.
+      proceed. A brief, four rules, a clock, and closing checks.
     </PageHero>
 
     <!-- What you'll build -->
@@ -293,7 +298,10 @@ anything else, and tell me which line you changed.`,
           <strong>Every prop has a source.</strong> A prop, input, slot or event
           in your code must appear in the <code>docs-show</code> output (its
           code examples count) or in <code>docs-show-story</code>. Not
-          documented means not used, and the agent says so.
+          documented means not used, and the agent says so. The one exception to
+          "the Storybook MCP is the only source" is the import class names and
+          the package name: they come from the installed package's type exports,
+          and the receipts say so (see the last gap below).
         </li>
         <li>
           <strong>No hand-built twin.</strong> Where the library has a
@@ -303,18 +311,17 @@ anything else, and tell me which line you changed.`,
         <li>
           <strong>No raw colours.</strong> Every colour and every spacing is a
           <code>var(--ui-*)</code> token, in a plain <code>.css</code> file.
-          This is a rule you keep, not a gate that enforces it: the gates below
-          catch only part of it.
+          This is a rule you keep, not a check that enforces it: the checks
+          below catch only part of it.
         </li>
       </ol>
       <p class="sfs-step-desc">
         <strong style="color: var(--ui-color-text)">Done when</strong> the
-        screen runs and behaves as the brief says, you can point to the
-        <code>docs-show</code> passage behind every prop you can pick at random,
-        and <code>npm run lint</code>, <code>npm run check:stylelint</code> and
-        <code>npm run check:format</code> all exit 0 (on Angular,
-        <code>npm run build</code> too). Nobody gives you the steps. The recap
-        asks which rule the agent broke first.
+        screen runs and behaves as the brief says, and you can point to the
+        <code>docs-show</code> passage behind every prop you can pick at random
+        (or the prop was removed). Then you run the project's checks: step 5.
+        Nobody gives you the steps. The recap asks which rule the agent broke
+        first, and what caught it.
       </p>
     </section>
 
@@ -396,6 +403,21 @@ anything else, and tell me which line you changed.`,
         <li>
           <strong>The list description is not documentation.</strong> Open the
           entry before you decide a component fits.
+        </li>
+        <li>
+          <strong>Import names are not in the docs.</strong> On Angular,
+          <code>docs-show</code> shows the tags (<code>atl-thead</code>,
+          <code>atl-option</code>) but neither the class names to import
+          (<code>AtlThead</code>, <code>AtlTbody</code>, <code>AtlTr</code>,
+          <code>AtlTh</code>, <code>AtlTd</code>, <code>AtlOption</code>) nor
+          the package name. The story snippets import from
+          <code>./atl-table</code>, the library's internal path. Take the names
+          from the package's type exports in
+          <code>node_modules/@atelier-ui/angular</code>, import from
+          <code>@atelier-ui/angular</code>, and say in the receipts that this is
+          where they came from. It is the one place where the Storybook MCP is
+          not enough. Measured on the Angular endpoint, 2026-11-12; not measured
+          for React and Vue.
         </li>
       </ul>
       <p class="sfs-step-desc">
@@ -563,14 +585,26 @@ anything else, and tell me which line you changed.`,
     <section class="sfs-step" aria-labelledby="sfs-gates">
       <div class="sfs-step-head">
         <span class="sfs-step-num">5</span>
-        <h2 id="sfs-gates" class="sfs-step-title">Run the gates</h2>
+        <h2 id="sfs-gates" class="sfs-step-title">
+          Closing step: run the checks
+        </h2>
       </div>
       <p class="sfs-step-desc">
-        Three commands, in your workspace root, and on Angular a fourth. An exit
-        code of 0 is the result, not what scrolled by. Redirect the output and
-        read the code afterwards.
+        Three commands, in your workspace root, and on Angular a fourth. The
+        agent runs them, reports each exit code and repairs from the output. An
+        exit code of 0 is the result, not what scrolled by. Paste this:
       </p>
-      <Code code={GATES} lang="shell" title="the gates" />
+      <Code
+        code={CHECKS_PROMPT}
+        lang="text"
+        wrap
+        title="closing checks prompt"
+      />
+      <p class="sfs-step-desc" style="margin-top: 0.6rem">
+        If the agent stalls, type the commands yourself. Redirect the output and
+        read the code afterwards:
+      </p>
+      <Code code={GATES} lang="shell" title="the checks" />
       <div data-fw-panel="Angular">
         <Code
           code={GATES_ANGULAR}
@@ -592,7 +626,7 @@ anything else, and tell me which line you changed.`,
           {SCAFFOLD[fw].lintNote}
         </p>
       </div>)}
-      <Callout tone="warning" title="What these gates do not see">
+      <Callout tone="warning" title="What the checks do not see">
         <p>
           <code>check:stylelint</code> reads only
           <code>workshop-*/src/**/*.css</code>. A colour in an inline
@@ -612,7 +646,7 @@ anything else, and tell me which line you changed.`,
             Spacing: a literal is flagged only when its value equals a token's
             value in the matching family, and any literal length on a
             <code>border*</code> property. <code>padding: 13px</code> is not
-            flagged. "No pixel spacing" is a rule you keep, not one a gate
+            flagged. "No pixel spacing" is a rule you keep, not one a check
             enforces.
           </li>
         </ul>
@@ -623,9 +657,9 @@ anything else, and tell me which line you changed.`,
           title="raw colours and pixel values in your files"
         />
         <p>
-          No gate detects a hand-built twin either (a styled <code>span</code>
+          No check detects a hand-built twin either (a styled <code>span</code>
           where <code>AtlBadge</code> exists): only the receipts audit and your
-          own reading do. And no gate checks the running app for accessibility.
+          own reading do. And no check covers the running app for accessibility.
           <code>check:stories</code> renders stories, not your app. The stretch
           task below is how a screen gets covered.
         </p>
@@ -659,7 +693,7 @@ anything else, and tell me which line you changed.`,
         </h2>
       </div>
       <p class="sfs-step-desc">
-        Green gates say the code is clean, not that it is honest. Rule 2 is
+        Green checks say the code is clean, not that it is honest. Rule 2 is
         checked by making the agent show its sources. Paste this, then
         spot-check three of its lines yourself in <code>docs-show</code>.
       </p>
@@ -675,7 +709,7 @@ anything else, and tell me which line you changed.`,
     <section class="sfs-step" aria-labelledby="sfs-time">
       <div class="sfs-step-head">
         <span class="sfs-step-num">7</span>
-        <h2 id="sfs-time" class="sfs-step-title">The 65 minutes</h2>
+        <h2 id="sfs-time" class="sfs-step-title">The 80 minutes</h2>
       </div>
       <table class="sfs-time">
         <thead>
@@ -693,28 +727,33 @@ anything else, and tell me which line you changed.`,
             </td>
           </tr>
           <tr>
-            <td>40</td>
-            <td>Build: steps 2 to 4. The trainer stays quiet.</td>
+            <td>30</td>
+            <td>
+              Build: steps 2 to 4. The trainer stays quiet, then walks the room.
+            </td>
           </tr>
           <tr>
-            <td>10</td>
-            <td>Gates and the audit: steps 5 and 6.</td>
+            <td>15</td>
+            <td>Checks and receipts: steps 5 and 6.</td>
           </tr>
           <tr>
-            <td>7</td>
-            <td>One volunteer shows the receipts. Which prop had no source?</td>
+            <td>25</td>
+            <td>
+              Two volunteers show their receipts. Which prop had no source, and
+              where did the import names come from?
+            </td>
           </tr>
           <tr>
-            <td>3</td>
+            <td>5</td>
             <td>Recap question.</td>
           </tr>
         </tbody>
       </table>
       <p class="sfs-step-desc" style="margin-top: 0.6rem">
         These time boxes are estimates. Nobody has run this block with a cohort
-        yet. The build ends at 16:55 on the clock, whatever the state of the
-        screen: the gates start then. If you are done early, take the stretch
-        task. If you are stuck,
+        yet. The build ends at 16:30 on the clock, whatever the state of the
+        screen: the closing checks start then. If you are done early, take the
+        stretch task. If you are stuck,
         <a href="/prompts#stuck" class="docs-link-primary"
           >how to report a red gate</a
         >
@@ -776,11 +815,12 @@ anything else, and tell me which line you changed.`,
       </ul>
       <div class="sfs-finish-actions">
         <a href="/first-component" class="docs-btn docs-btn-primary">
-          Homework: the first-component kata
+          Optional, on your own machine: the first-component kata
         </a>
         <span class="sfs-finish-more">
           The Settings Card from the tutorial, solo and against the clock, with
-          the parity check at the end. Optional.
+          the parity check at the end. It needs your own machine and your own
+          Claude access; the course machines stay in the room.
         </span>
       </div>
     </section>

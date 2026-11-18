@@ -49,6 +49,17 @@ current _values_ (e.g. a specific px number) are deliberately not repeated here 
 same reason ADR-0116 gives — read them fresh from `tokens.css` at prompt time rather
 than trusting a number that was correct on 2026-09-10.
 
+**Revision 2026-11-18 (ADR-0180).** The proof thread is now five standard tools ("the
+ladder": Figma linter, compiler, ESLint, stylelint, story tests), each taught in three
+beats: break it on purpose, the tool says so, the agent gets the output and repairs. New:
+§1a, §1c, §2.5, §2.6; changed: §1, §1b, §2.1, §3.3; §3.4 and the old double call are
+trainer-only now (§3.4, §3.5, demo D-8). **Every new or changed prompt below is NOT YET
+VERIFIED (rehearsal, R-040)**, and the verification dates in §5 and in the older text refer
+to the prompts as they stood then, not to the revised ones. Measured 2026-11-17 on a fresh
+`create-atelier-ui-workspace@0.4.10` Angular scaffold: the compiler and lint results named
+below, warm run times (build 6-9 s, lint 6-7 s, stylelint 2-4 s), and one headless repair run
+(four planted defects, build and lint) in 78 s and 10 turns.
+
 ## 0. How to use this sheet
 
 - **Paste, don't paraphrase.** These are meant to go into a participant's live Claude
@@ -70,16 +81,35 @@ than trusting a number that was correct on 2026-09-10.
   `libs/react/src/lib/card/atl-card.tsx`, `libs/angular/src/lib/dialog/atl-dialog.ts`
   and `libs/vue/src/lib/dialog/*.vue` (`plan/big-picture.md`'s "Framework
   Differences" table names the same three rows).
+- **Prompts that make the agent run a command have one shape**: "Run `<command>`. Report
+  each exit code. If one is not 0, read the output (the full log when the summary has no
+  error text), repair, and run it again." The agent runs the checks, not the participant;
+  if the agent stalls, the participant types the command. The "full log" clause is there
+  because a failing command prints no error text in the agent's non-TTY shell, only a path
+  to the log (open item R-248).
+- **"Green" is not "right".** The trainer's example: lint asks for `alt`, the agent writes
+  `alt=""`, lint is green, and an image that carries meaning is now hidden from a screen
+  reader. Read every repair, not only the exit code.
+- **Sorting labels** for differences between design and code: Day 1 = **code** / **Figma**.
+  Day 2 = **code** / **Figma** / **kept on purpose** (the last points at the "Deliberate
+  differences" section of the handoff document). "Contract" is not a label any more.
 - **Block mapping** (block numbers and titles as on `/schulung`):
   - §1 = Day 1 Block 02 "Mini-loop: first success" (existing components only — the
-    Settings Card).
+    Settings Card): generation prompt and token fix-up. §1a = the same block, row 11:25 to
+    11:45: ladder stage 2, the agent checks itself with lint and build. The comparison with
+    Figma is the 10-minute row after it (the parity prompt on `/tutorial`).
   - §1b = Day 1 Block 05 "A screen from Storybook, against the clock" (existing
-    components only, no Figma — the Team directory screen).
-  - §2.1 = Day 2 Block 02 "Contract, component, stories" (the generation prompt);
+    components only, no Figma — the Team directory screen), including the closing checks.
+  - §1c = Day 1 Block 03 (ladder stage 0, 13:45 to 13:55) and Day 2 Block 01 (ladder stage 0
+    on your own component set, 10:35 to 10:40): the Figma linter.
+  - §2.1 = Day 2 Block 02 "Component and stories from the handoff" (the generation prompt);
     §2.2–2.4 = Day 2 Block 03 "Iterate: prompt quality and the self-healing loop" (the
-    correction prompts — the block `schulung.astro` names for golden prompts).
-  - §3 = Day 2 Block 04 "Verify: a11y, states, parity" (a11y + dark mode + the closing
-    parity check).
+    correction prompts — the block `schulung.astro` names for golden prompts; also the home
+    of ladder stage 4, where the agent runs `test-run` and repairs);
+    §2.5 = Day 2 Block 02, row 12:05 to 12:20 (`docs-show` on your own component);
+    §2.6 = Day 2 Block 00, row 09:18 to 09:28 (the Definition-of-Done exercise).
+  - §3 = Day 2 Block 04 "Verify: a11y, states, parity" (a11y + dark mode + the participant
+    parity prompt §3.3). §3.4 and §3.5 are trainer-only material for demo D-8.
 
 ---
 
@@ -103,8 +133,77 @@ participant this one-line fix-up rather than a full re-prompt:
 > no hex, no Tailwind class. Replace anything that isn't a `--ui-*` custom property with
 > the matching one and tell me which line you changed.
 
+**The comparison with Figma (the 10-minute row after §1a).** The prompt stays as it stands
+on `/tutorial` (`PARITY_PROMPT`: run `figma_check_design_parity` on the settings card node,
+say for each discrepancy whether the code or the Figma master should change). Nothing
+before it has participants run `check:contracts` or `check:stories`: the proof in Day 1
+Block 02 is lint and build run by the agent (§1a). Two labels only, **code** or **Figma**.
+A long list: label the three largest. A difference that fits neither (someone chose it on
+purpose) is parked: "not code, not Figma, we name it on Day 2", and is not "fixed" in code.
+
 (Grounded directly in the tutorial's own React/Angular/Vue output blocks — all three
-already use exactly these four token names for exactly these four properties.)
+already use exactly these four token names for exactly these four properties. Since
+2026-11-17 the blocks keep their styles in `settings-card.css` instead of inline `style`
+(R-237), and the heading weight is `var(--ui-font-weight-semibold)`: the literal `600`
+passed unseen while it sat inline and failed `npm run check:stylelint` with `[BYPASS]`
+the moment it moved into a `.css` file. That is the fix-up to hand over when a
+participant's draft has the same literal.)
+
+---
+
+## 1a. Day 1 · Block 02, row 11:25 to 11:45 (20 min) — ladder stage 2: the agent checks itself
+
+ESLint with the Angular template rules, run by the agent. NOT YET VERIFIED as prompts
+(rehearsal). Three prompts, in order, on the Settings Card the participant just generated.
+Beat 1 is the clean run, beats 2 and 3 are break it on purpose, the tool says so, the agent
+repairs.
+
+**Prompt 1, the clean run.**
+
+> Run `npm run lint` and `npm run build`. Report each exit code. If one is not 0, read the
+> output (the full log when the summary has no error text), repair, and run both again.
+
+**Prompt 2, break it on purpose.** Do not let the agent fix anything yet.
+
+> Add an `<img src="/avatar.png">` without `alt` and a `<div (click)="save()">Save</div>`
+> to the Settings Card. Do not fix anything. Run `npm run lint`, report the exit code and
+> the rule ids it names.
+
+**Prompt 3, repair from the output.**
+
+> Repair from the lint output. Run lint and build again and report both exit codes.
+
+Then **read the repair**: did the agent write `alt=""`? Lint is green and the image, if it
+carries meaning, is now hidden from a screen reader. Green is not right. Last prompt, the
+clean-up:
+
+> Remove the image and the div again, run both, report the exit codes.
+
+**Expected output.**
+
+- After prompt 2: a **non-zero exit code** and these rule ids (measured 2026-11-17, fresh
+  0.4.10 Angular scaffold): `alt-text` (the image), `click-events-have-key-events` and
+  `interactive-supports-focus` (the div).
+- After prompt 3: exit 0 for lint and build. The `<img>` repair is often `alt=""`.
+- After the clean-up: exit 0 for both, the two planted elements gone.
+- Warm run times (measured 2026-11-17): lint 6-7 s, build 6-9 s. One headless repair run
+  (four planted defects, build and lint): 78 s, 10 turns, one file touched, nothing invented.
+
+**What to look at.** The `alt` attribute on the image in the diff (`alt=""`); the rule ids
+named in the agent's report, not only "lint failed"; that the repair touched the two planted
+elements and nothing else.
+
+**What it does not see (say it).** A raw `<button>` where a library component exists, and
+meaning (`alt=""` passes). The compiler half is named here only as "build also ran"; its
+demo is Block 04 (D-4).
+
+**Checkpoints.** D1B02-C3: every seat has seen a non-zero lint exit code and a rule id.
+D1B02-C4: lint and build exit 0 after the repair on at least 70 % of the seats.
+
+**Fallback.** The agent stalls, or reports "failed" without error text (the known R-248
+gap): the participant types `npm run lint` (or `npm run build`) in the terminal and reads
+the rule ids from the output. If `alt-text` etc. do not appear, check the template really
+contains the planted elements before blaming the tool.
 
 ---
 
@@ -134,6 +233,24 @@ hands out when a run goes wrong, and the expected result to judge a run against.
   `npm run check:stylelint` and `npm run check:format` exit 0, and `npm run build`
   compiles with strict templates.
 
+**Closing checks, run by the agent (row 16:30 to 16:45; before the receipts prompt).** NOT
+YET VERIFIED as a prompt (rehearsal). The agent runs the workspace's own checks and
+repairs from the output; `npm run format` is the fix for a format failure and nothing else.
+On Angular the build is part of it; on React or Vue drop the `npm run build` clause.
+
+> Run `npm run lint`, `npm run check:stylelint`, `npm run check:format` and, on Angular,
+> `npm run build`. Report each exit code. If one is not 0, read the output (the full log
+> when the summary has no error text), repair, and run it again. Then list what you
+> changed.
+
+This is the page's prompt (`CHECKS_PROMPT` on `/screen-from-storybook`), which is the copy
+the participants paste. If the agent repairs formatting by hand, tell it: "`npm run format`
+is the fix for `check:format`, and for nothing else."
+
+Then the receipts prompt (live on the page as `RECEIPTS_PROMPT`). The "they do not see"
+sentence stays: these checks do not catch an invented name or a hand-built element, which
+is why the receipts come next. Fallback: the participant types the command.
+
 **When the agent starts writing without calling `docs-list`** (it can): hand it this.
 
 > Stop. Do not write more code yet. Call `docs-list` on the Storybook MCP and give me the
@@ -161,17 +278,67 @@ AtlPagination were not read; UNVERIFIED.)
 
 ---
 
+## 1c. Day 1 · Block 03 and Day 2 · Block 01 — ladder stage 0: the Figma linter
+
+Day 1 Block 03, 13:45 to 13:55 (10 min): the same prompt on the same master in the prepared
+duplicate. Day 2 Block 01, 10:35 to 10:40 (5 min): on your own component set, before the
+handoff document; real findings are fixed first, false alarms are noted. NOT YET VERIFIED
+as a prompt (rehearsal). Read-only: nothing is changed in the file.
+
+**Trainer first (Day 1 only): the default run.** On `Inputs/AtlButton` (node `129:20` in
+the Atelier file) the default `figma_lint_design` run reports **59 findings** (measured
+2026-11-17): **18 "critical"** contrast failures, all on the hidden `_disabled-overlay`
+label (false alarms), **40** about missing text styles (the file binds type to variables
+instead), and none of the ones examined is a defect. Say: "a finding is something to sort,
+not a verdict."
+
+**Participant prompt.**
+
+> Run `figma_lint_design` on the node `<NODE>` (`<MASTER NAME>`) with only the rules
+> `hardcoded-color`, `default-name` and `detached-component`. Return the findings as a list:
+> layer, rule, message. Change nothing in the file.
+
+`<NODE>`: Day 1, the same master in the prepared duplicate (`129:20` is its id in the
+Atelier file; read the id in the duplicate, do not assume it is the same); Day 2, the
+participant's own component set: select it in Figma and say "the node I have selected"
+(the agent reads the id with `figma_get_selection`). The handoff document does not exist
+yet at 10:35; it is written after this run.
+
+**Expected output.** A list, no edit. What the three rules catch: raw colours, layers left
+on default names, detached instances. The participant sorts each line: **real** or **false
+alarm**. UNVERIFIED (rehearsal): the number of findings the three-rule run returns on that
+master.
+
+**What it does not see (say it).** Whether the design is right; spacing and radius. Its
+default rule set also reports false alarms (see above), which is why the rules are named.
+
+**Fallback.** Bridge not connected (`figma_get_status`): the trainer shows a saved result
+and the participants sort that list. Do not let anyone "fix" a finding in the shared master.
+
+---
+
 ## 2. Day 2 · Blocks 02–03 — Codegen and corrections (token-fidelity)
 
-### 2.1 Generation prompt (Block 02 — Contract, component, stories)
+### 2.1 Generation prompt (Block 02)
+
+NOT YET VERIFIED as revised (rehearsal). One step, no contract file: the participant does
+not write, open or check one. The handoff document's **"Deliberate differences"** section
+(what the code will do differently from the design on purpose, and why) goes into the
+prompt as given constraints. The same prompt is printed on `/build-your-own`.
 
 > Generate the `<FRAMEWORK>` implementation of `<ComponentName>` from the handoff
 > document below — not from the Figma picture alone (ADR-0096). Read every requirement
-> before writing code.
+> before writing code. Write the component with its test, and its stories, in one step: one
+> story per variant value and per Boolean state, `args`-based where possible, and a `play`
+> function for each behaviour line the document names. Do not write any other file.
 >
 > --- HANDOFF DOCUMENT (paste yours here) ---
 > `<PASTE THE DAY-2-BLOCK-01 HANDOFF DOCUMENT>`
 > --- END HANDOFF DOCUMENT ---
+>
+> The handoff document's "Deliberate differences" are **given constraints**, not mistakes
+> to correct: where the code differs from the design on purpose, build it that way.
+> `<PASTE THE "DELIBERATE DIFFERENCES" SECTION OF THE HANDOFF DOCUMENT>`
 >
 > Hard requirements — check each one explicitly and report which you had to make a
 > judgement call on:
@@ -195,8 +362,8 @@ AtlPagination were not read; UNVERIFIED.)
 >      `children`; Vue a named SFC export per region, content via the default `<slot />`.
 >      Do not dump every region into one flat prop bag or one undifferentiated block of
 >      children.
-> 4. **Every icon-only control gets a real accessible name.** Follow `AtlIconSpec`'s own
->    pattern (`libs/spec/src/index.ts`): a `label` prop that's absent by default — the
+> 4. **Every icon-only control gets a real accessible name.** Follow `AtlIcon`'s own
+>    pattern (look it up with `docs-show`): a `label` prop that's absent by default — the
 >    icon is decorative unless a name is explicitly supplied — and `AtlButton`'s own
 >    rule: an icon-only button needs `aria-label` (the React adapter enforces this at
 >    the type level; Angular/Vue warn in dev mode). Every non-icon interactive control
@@ -207,7 +374,7 @@ AtlPagination were not read; UNVERIFIED.)
 >    ask, don't silently drop it or invent a workaround prop.
 >
 > When you're done: confirm the story you generated declares `tags: ['autodocs']`
-> (`workshop/briefs/README.md` "Done when" item 6 — without it the story renders Canvas
+> (the brief's "Done when" item 6 — without it the story renders Canvas
 > only, no Docs tab, for a reason that has nothing to do with the component itself).
 
 ### 2.2 Correction — invented prop (Block 03)
@@ -216,8 +383,8 @@ Use when Claude adds a prop the handoff document never named.
 
 > You added `<PROP>` to `<ComponentName>`. Check what actually authorizes a prop here —
 > the handoff document's "In scope" / "Token bindings" lines, or (if you're extending an
-> existing library component) `libs/spec/src/index.ts`. Is `<PROP>` named there? If not,
-> remove it — a prop that "seems reasonable" is still not in the contract. If you think
+> existing library component) its `docs-show` entry. Is `<PROP>` named there? If not,
+> remove it — a prop that "seems reasonable" is still not in the handoff document. If you think
 > the component genuinely needs it, ask me as a question instead of shipping it as code.
 
 **Why this is the right shape, not a made-up scenario:** it already happened, for real,
@@ -235,8 +402,7 @@ Use when Claude hardcodes a value instead of reaching for a `--ui-*` custom prop
 
 > You rendered `<value/effect>` on `<ComponentName>` with a hardcoded value (or with
 > none at all) instead of a `--ui-*` custom property. Check
-> `libs/create-workspace/src/generators/preset/files/styles/tokens.css` (the canonical
-> token file) for the matching name — don't guess one. If this is elevation/shadow:
+> `workshop-<fw>/src/styles/tokens.css` (the workspace's token file) for the matching name — don't guess one. If this is elevation/shadow:
 > there is no `shadow/*` Figma variable in `Library Tokens` at all — every brief in this
 > workshop says so explicitly — so elevation is _always_ CSS-only: `var(--ui-shadow-lg)`
 > for a floating surface (a toast), `var(--ui-shadow-md)` for a raised one (an elevated
@@ -275,7 +441,78 @@ Hand the trainer the one row matching whichever component the participant picked
 already phrased as a ready one-line correction:
 
 > "`<Drawn/typed as, from the row above>`" is the wrong shape here. Rebuild it as
-> "`<Belongs as, from the row above>`" — see `workshop/briefs/<component>.md` §5 for why.
+> "`<Belongs as, from the row above>`" — §5 of the brief says why.
+
+---
+
+### 2.5 `docs-show` on your own component (Day 2 Block 02, 12:05 to 12:20, part 1: 10 min)
+
+NOT YET VERIFIED (rehearsal). Through the local Storybook MCP (`storybook-local`), once the
+component and its stories render. The point: what would an agent that uses your component
+have to guess?
+
+> Call `docs-list` on `storybook-local`, then `docs-show` for my component `<ComponentName>`.
+> List what an agent using this component would have to guess: a missing component
+> description, a property without a description, a value set shown as a bare alias. Do not
+> change anything yet.
+
+Then:
+
+> Add the JSDoc that closes those gaps: a description for the component and one line per
+> property. Call `docs-show` again and show me what changed.
+
+Part 2 (5 min, no prompt): the running stories next to the Figma component, every variant and
+state; write the differences down as a list (Block 04 sorts it).
+
+**Expected output.** A list of gaps, then a second `docs-show` that has the description and
+the property lines. Checkpoint D2B02-C4 (12:20): `docs-show` ran on the own component and at
+least one description was added on at least 70 % of the seats. Rule R9: at 12:05, if 30 % or
+more have no rendering story, this row becomes a trainer demo on one green seat.
+
+**Fallback without the MCP:**
+
+```text
+npx storybook tools --config-dir workshop-<fw>/.storybook --json docs show --input '{"id":"<id>"}'
+```
+
+Measured 2026-11-18 on the 0.4.10 Angular scaffold through that CLI route: a new component
+with a story appears in `docs list`; `docs show` prints Inputs and Outputs, the JSDoc line
+where one exists and nothing where none does. UNVERIFIED: the same call over the running
+local MCP, and whether the dev server refreshes the entry after a JSDoc edit without a
+restart.
+
+### 2.6 The Definition-of-Done exercise (Day 2 Block 00, 09:18 to 09:28, 10 min)
+
+NOT YET VERIFIED (rehearsal): that the two answers differ as described. The workspace the
+participants have already carries the rule the agent reads every session. Projector first
+(3 min): the four things an agent gets in this workspace (the rules file, read every
+session; a skill, loaded when the task matches and shown in demo D-7 just before; an MCP
+server from `.mcp.json`, tools and data; a hook, run without being asked), on two files:
+`CLAUDE.md` → "Definition of Done" and `.claude/settings.json` → `hooks.PostToolUse` →
+`.claude/hooks/format-edited.sh`. Then the exercise (7 min), three steps:
+
+1. Ask: "Which commands does this workspace's Definition of Done list? Only list them."
+2. Lint and build are named in the paragraph above the list but not in the list. Add this
+   exact line to the list, and correct the count word ("four" becomes "five" in "the four
+   checks below" and "all four of these pass"; with Figma enabled the word is "five" and
+   becomes "six"). Leave the sentence "`/verify` runs all four" as it is: `/verify` has
+   its own list, and that sentence only changes with the stretch:
+
+   ```text
+   - `npm run lint` and `npm run build` — ESLint and the strict compiler
+   ```
+
+3. `/clear`, ask the same question again. The list now names lint and build.
+
+**Checkpoint D2B00-C3:** the second answer on every seat names `npm run lint` and
+`npm run build`.
+
+**Trainer notes.** `/verify` has its own list in `.claude/commands/verify.md`; adding the
+same line there is the **stretch**. A Figma workspace's list also names
+`npm run check:contracts`: Atelier's own check, a trainer mention, not run today.
+
+**Fallback.** The second answer still omits them: the edit is in the wrong file or the
+session was not cleared; show the line in `CLAUDE.md` and ask again.
 
 ---
 
@@ -293,8 +530,8 @@ already phrased as a ready one-line correction:
 > 3. Keyboard-walk the rendered component yourself: Tab, Shift+Tab, Enter, Escape — does
 >    focus order, activation and dismissal all work with no mouse?
 >
-> Fix only the obligations tagged **(this block)** in `workshop/briefs/<component>.md`
-> §4, for the variant/state you actually built. Leave **(full component)** items as a
+> Fix only the obligations tagged **(this block)** in §4 of the brief, pasted below this
+> prompt, for the variant/state you actually built. Leave **(full component)** items as a
 > written note in the master's Figma description, not as code you claim passes a check
 > it was never exercised against.
 
@@ -310,7 +547,7 @@ already phrased as a ready one-line correction:
 >    `[data-theme="dark"]` block actually takes effect. A hardcoded colour is invisible
 >    in light mode and wrong in dark mode at the same time.
 > 2. **No control gained a `transform` on hover or press.** Atelier's own rule
->    (`plan/design-principles.md` §1, "Physical Authenticity"): state is a colour/border
+>    (`/design-principles`, "Physical Authenticity"): state is a colour/border
 >    token swap only — no shrink, no lift. Confirmed against all three framework libs;
 >    the one documented exception is the Chat popup's floating action button, which
 >    doesn't apply here.
@@ -319,11 +556,58 @@ already phrased as a ready one-line correction:
 >    pattern every other component in the library uses, not a separate dark-mode-only
 >    treatment.
 
-### 3.3 Parity double-call prompt (the `codeSpec` field exercise)
+### 3.3 Parity prompt for your own component (participants)
 
-This is the exact exercise `tasks/schulung-dry-run-kit.md` §4 (Day 2, Block 04) flags as
-"never watched live" before a real rehearsal runs it — hand it to participants verbatim
-once they've built their component:
+Day 2 Block 04, parity row 15:45 to 15:53 (8 min). Same shape as the Day 1 comparison
+prompt; the node id comes from the participant's handoff document. NOT YET VERIFIED as
+rewritten (rehearsal). The report is only a list here: the **sorting row** (15:53 to
+16:13) labels each difference and fixes the code ones.
+
+> Run `figma_check_design_parity` on the node `<NODE FROM THE HANDOFF DOCUMENT>` against my
+> component `<ComponentName>`. For each discrepancy, say whether it is **code** (the code
+> should change), **Figma** (the master should change) or **kept on purpose**, and why. Only
+> call it "kept on purpose" if the handoff document's "Deliberate differences" section
+> names it. Do not fix anything yet.
+
+Without the bridge: no parity call; sort the Block 02 list instead.
+
+While this runs, the trainer shows demo D-8 (§3.5) on the trainer machine only. The
+participants do not assemble a `codeSpec` and do not run `check:contracts -- --emit`.
+
+### 3.4 codeSpec assembly prompt (trainer only: preparation for D-8)
+
+**Trainer-only material.** Participants never see or run this. It prepares the `codeSpec`
+for the D-8 demo on the trainer machine. `UNVERIFIED live (R-235)`: not yet run end to end
+in a rehearsal. The emit command is documented on `/build-your-own` and in
+`libs/design-contracts/README.md`; the accessibility step on `/build-your-own` (Block 04):
+
+> Build the `codeSpec` for `figma_check_design_parity` on my component `<Name>`.
+>
+> 1. Run `npm run check:contracts -- --emit tmp/codespec` and read what it writes for
+>    `<Name>`: that gives `componentAPI`, `metadata` and `tokens`.
+> 2. Call `figma_scan_code_accessibility` with the HTML below and `mapToCodeSpec: true`:
+>    that gives `accessibility`.
+> 3. Show me one `codeSpec` object with exactly these four sections and say for each where
+>    it came from. Do not add a section you have no source for.
+>
+> HTML (the story root's `outerHTML`, copied from DevTools):
+> `<paste>`
+
+(What `--emit` writes, read in `libs/design-contracts/README.md`: one file per component,
+`<folder>/<fw>/<Component>.codespec.json`, so with this prompt
+`tmp/codespec/<fw>/<Name>.codespec.json` for the workspace's framework, holding
+`componentAPI`, `metadata` and `tokens.usedTokens`. The command writes a file for every
+component it checks, not only `<Name>`, and the pages `/build-your-own` and
+`/design-to-code` name no file path; the prompt's "read what it writes for `<Name>`"
+therefore stands, the path is the README's. If Claude cannot find the file, ask it to list
+`tmp/codespec`.)
+
+### 3.5 Parity double-call prompt (trainer only: D-8)
+
+**Trainer-only material**, about 3 minutes on the trainer machine inside the parity row.
+One point: a field you do not pass is not compared, so a quiet report is not a clean
+component. This is the exercise `tasks/schulung-dry-run-kit.md` §4 (Day 2, Block 04) flags as
+"never watched live" before a rehearsal runs it. Run §3.4 first.
 
 > Call `figma_check_design_parity` on `<node>`/`<variant>` twice, same node both times.
 > Use the variant node: geometry lives there. The component set is for `componentAPI`
@@ -355,19 +639,36 @@ with findings; it has no "sections compared" list. Against the component set `12
 
 ## 4. Quick index — which prompt for which failure
 
-| Symptom in the room                                                                                               | Use                |
-| ----------------------------------------------------------------------------------------------------------------- | ------------------ |
-| Inline `style`/hex/Tailwind class instead of a token, anywhere in Day 2 Blocks 02–03, or the Day 1 Settings Card  | §1 add-on, or §2.3 |
-| Agent writes without `docs-list`, uses an undocumented input, or hand-builds a library component (Day 1 Block 05) | §1b                |
-| A prop appears that the handoff document / spec never named                                                       | §2.2               |
-| Structural content (header/action/remove-button/etc.) dumped as flat children instead of its own region           | §2.4               |
-| A11y panel or keyboard walk turns something up in Day 2 Block 04                                                  | §3.1               |
-| Dark-mode toggle reveals a hardcoded colour or a stray hover animation                                            | §3.2               |
-| Closing parity check, to actually exercise the "fields not passed aren't compared" claim                          | §3.3               |
+| Symptom in the room                                                                                                | Use                |
+| ------------------------------------------------------------------------------------------------------------------ | ------------------ |
+| Inline `style`/hex/Tailwind class instead of a token, anywhere in Day 2 Blocks 02–03, or the Day 1 Settings Card   | §1 add-on, or §2.3 |
+| Day 1 Block 02, 11:25: the agent runs lint and build, then the planted `alt`/click defects, then the repair        | §1a                |
+| Agent writes without `docs-list`, uses an undocumented input, or hand-builds a library component (Day 1 Block 05)  | §1b                |
+| Day 1 Block 05, 16:30: closing checks run by the agent (lint, stylelint, format, build), then the receipts         | §1b                |
+| Figma linter run (Day 1 Block 03, Day 2 Block 01): the list is long, or the default run drowns the room            | §1c                |
+| Generating the component on Day 2 (component, test and stories in one step, deliberate differences as constraints) | §2.1               |
+| A prop appears that the handoff document / spec never named                                                        | §2.2               |
+| Structural content (header/action/remove-button/etc.) dumped as flat children instead of its own region            | §2.4               |
+| `docs-show` on your own component: what would a consumer's agent have to guess (Day 2 Block 02, 12:05)             | §2.5               |
+| Definition-of-Done exercise (Day 2 Block 00, 09:18): the second answer does not name lint and build                | §2.6               |
+| A11y panel or keyboard walk turns something up in Day 2 Block 04                                                   | §3.1               |
+| Dark-mode toggle reveals a hardcoded colour or a stray hover animation                                             | §3.2               |
+| Parity report on your own component (Day 2 Block 04, 15:45)                                                        | §3.3               |
+| Trainer only: demo D-8, "a field you do not pass is not compared" (prepare with §3.4, then §3.5)                   | §3.4, then §3.5    |
 
 ---
 
 ## 5. Verification — what was checked, what was cut
+
+**Revision 2026-11-18: NOT YET VERIFIED (rehearsal, R-040).** Every prompt in §1a, §1b (the
+closing-checks prompt), §1c, §2.1 (as revised), §2.5, §2.6 and §3.3 is new or changed and has
+not been run in a rehearsal; their expected outputs are the measured facts named in the
+sections (2026-11-17: the lint rule ids, the compiler error codes, the 59 / 18 / 40 findings,
+the run times; 2026-11-18: the `storybook tools` CLI route) and nothing else. Unverified, by
+name: the number of findings of the three-rule Figma run; that the two Definition-of-Done
+answers differ as described; the local-MCP form of §2.5 and whether the dev server refreshes
+after a JSDoc edit; §3.4 and §3.5 as a four-plus-spacing pair (R-227, R-235). The dates below
+belong to the earlier text only.
 
 **Checked directly against the repo (2026-09-10), not assumed:**
 
@@ -388,6 +689,12 @@ with findings; it has no "sections compared" list. Against the component set `12
 - The `tutorial.astro` `examplePrompt`/`OUTPUT` blocks (Settings Card) — read in full,
   all three frameworks, to confirm the four token names in §1 are exactly what the page
   already generates.
+- 2026-11-17 (R-237, R-246): the Angular `OUTPUT` block was built, linted and
+  stylelinted in a fresh `create-atelier-ui-workspace@0.4.10` scaffold (exit 0 each, after
+  the weight token); the React and Vue blocks were not run. The seven repo-only paths
+  that stood inside §2 prompt text were replaced by names a scaffolded workspace has;
+  no quoted prompt line names a `libs/`, `plan/` or `workshop/briefs/` path any more
+  (checked by grep, not by pasting each prompt into a workspace).
 - The `AtlToggle`/`variant` correction example — read directly from the current
   `plan/big-picture.md` (§2), which carries its own "cut rather than carried forward"
   note; not paraphrased from memory.

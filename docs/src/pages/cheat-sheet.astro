@@ -29,14 +29,13 @@ const FIGMA = [
   ['figma_get_status', 'which file is the bridge connected to'],
   ['figma_get_selection', 'node id of what you selected'],
   ['figma_search_components', 'find a master by name'],
-  ['figma_check_design_parity', 'code vs. Figma, after the gates'],
+  ['figma_check_design_parity', 'code vs. Figma, after lint and build'],
   ['figma_scan_code_accessibility', 'a11y of rendered markup'],
 ];
 
 const WORKSPACE_PATHS = [
   ['Component', 'workshop-angular/src/app/components/<name>.component.ts'],
   ['Stories', 'next to the component: <name>.stories.ts'],
-  ['Contract', 'workshop-angular/src/contracts/<name>.contract.ts'],
   ['Example', 'workshop-angular/src/atl-button.stories.ts'],
 ];
 
@@ -44,13 +43,11 @@ const WORKSPACE_CMDS = [
   ['npm start', 'app on :4200'],
   ['npm run storybook', 'Storybook (URL is printed)'],
   ['npm test', 'jsdom unit tests (check:unit)'],
-  ['npm run check:contracts', 'contract vs. manifest vs. Figma snapshot'],
-  ['npm run figma:snapshot', 'refresh the snapshot (bridge connected)'],
   ['npm run check:stories', 'every story in Chromium + axe'],
   ['npm run preflight', 'setup check, real MCP calls'],
   [
     'git add -A && git commit -m "<step>: green"',
-    'commit when a gate is green',
+    'commit when the checks are green',
   ],
 ];
 
@@ -72,9 +69,59 @@ const CLONE_CMDS = [
 
 const LOOP = [
   ['Inspect', 'figma_get_component_for_development on the node'],
-  ['Contract', 'node id + deliberate mismatches only; docs-show for the API'],
+  [
+    'Contract',
+    'write down what the code does differently on purpose (handoff document)',
+  ],
   ['Generate', 'prompt from the handoff; no hex, no px, only --ui-* tokens'],
-  ['Verify', 'check:contracts, check:stories, then figma_check_design_parity'],
+  [
+    'Verify',
+    'the agent runs lint, build, stylelint and the story tests and reports each exit code; then compare with Figma',
+  ],
+];
+
+const LADDER = [
+  [
+    '`figma_lint_design` (agent, Figma linter)',
+    'raw colours, layers on default names, detached instances',
+    'whether the design is right; spacing and radius; false alarms in its default rule set',
+  ],
+  [
+    '`npm run build`',
+    'an invented value (`TS2322`), an invented bound input (`NG8002`)',
+    'an invented static attribute (`shadow="lg"`) and an invented event',
+  ],
+  [
+    '`npm run lint`',
+    'missing `alt`, click without keyboard, not focusable',
+    'a raw `<button>` where a library component exists; meaning (`alt=""` passes)',
+  ],
+  [
+    '`npm run check:stylelint`',
+    'a raw colour in a `.css` file, a token bypass',
+    'inline `style=`, a `styles:` array, named colours, `oklch()`',
+  ],
+  [
+    '`npm run check:stories`',
+    'a story that stops rendering, a failing `play`, an axe violation',
+    'anything without a story; dark mode; a keyboard path no `play` walks',
+  ],
+];
+
+const GENERIC_CHECKS = [
+  [
+    'npm run build',
+    'catches a value an input does not accept and a binding to an input that does not exist',
+  ],
+  [
+    'npm run lint',
+    'catches template accessibility mistakes (an image without `alt`, a click handler without a keyboard handler)',
+  ],
+  [
+    'npm run check:stylelint',
+    'catches a raw hex, `rgb()` or `hsl()` colour in a `.css` file',
+  ],
+  ['npm run check:format', 'catches formatting drift'],
 ];
 
 const FIXES = [
@@ -115,7 +162,7 @@ const FIXES = [
   ],
   [
     'Two fixes failed',
-    "Stop and re-diagnose. If the patches made it worse: `git reset --hard HEAD && git clean -fd -- workshop-<fw>/src` back to the last green commit (removes the agent's new files too).",
+    "Go back to the last green commit: `git reset --hard HEAD && git clean -fd -- workshop-<fw>/src` (removes the agent's new files too). Then re-diagnose before the next prompt.",
     '',
   ],
   [
@@ -156,6 +203,33 @@ const md = (s: string) =>
           Stuck? Paste the error, the exit code and the output file, what you
           expected and what you ran:
           <a href="/prompts#stuck" class="docs-link-primary">how to ask</a>.
+        </p>
+      </section>
+
+      <section class="cheat-card" aria-labelledby="cs-ladder">
+        <h2 id="cs-ladder">
+          The ladder: five tools the agent checks itself with
+        </h2>
+        <table class="docs-props-table cheat-table">
+          <thead>
+            <tr>
+              <th>Command</th>
+              <th>Catches</th>
+              <th>Does not see</th>
+            </tr>
+          </thead>
+          <tbody>
+            {LADDER.map(([cmd, catches, blind]) => <tr>
+              <td set:html={md(cmd)} />
+              <td set:html={md(catches)} />
+              <td set:html={md(blind)} />
+            </tr>)}
+          </tbody>
+        </table>
+        <p class="cheat-note">
+          None of the five catches an invented name or a hand-built element: the
+          receipts table (a <code>docs-show</code> source for every property)
+          stays that check.
         </p>
       </section>
 
@@ -206,11 +280,19 @@ const md = (s: string) =>
               <dd>{v}</dd></>
           ))}
         </dl>
+        <h3>Four checks any frontend repo has</h3>
         <p class="cheat-note">
-          Read a gate's result from its exit code, never through a pipe:
-          <code
-            >npm run check:contracts &gt; check.out 2&gt;&amp;1; echo $?</code
-          >
+          Ask Claude to run them and report each exit code.
+        </p>
+        <dl class="cheat-dl">
+          {GENERIC_CHECKS.map(([k, v]) => (
+            <><dt><code>{k}</code></dt>
+              <dd set:html={md(v)} /></>
+          ))}
+        </dl>
+        <p class="cheat-note">
+          Read a check's result from its exit code, never through a pipe:
+          <code>npm run lint &gt; lint.out 2&gt;&amp;1; echo $?</code>
         </p>
       </section>
 

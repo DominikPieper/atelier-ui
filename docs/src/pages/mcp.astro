@@ -45,8 +45,8 @@ import MaintainerNotes from '../components/MaintainerNotes.astro';
       <p style="line-height: 1.65">
         The workspace generator writes a <code>.mcp.json</code> at the root of
         your workspace. Here is what each entry is for in the loop
-        (<strong>inspect → contract → code → verify</strong>), one thing to ask
-        it, and how to tell it works. Which entries you have depends on your
+        (<strong>inspect → contract → generate → verify</strong>), one thing to
+        ask it, and how to tell it works. Which entries you have depends on your
         answers: <code>storybook-&lt;framework&gt;</code> is the framework you
         picked, <code>angular-cli</code> exists only for Angular, and
         <code>figma-console</code> only if you said yes to Figma. The exact file
@@ -100,22 +100,6 @@ import MaintainerNotes from '../components/MaintainerNotes.astro';
                 (the plugin panel must be open in Figma Desktop). Setup:
                 <a href="/figma-token" class="docs-link-primary">Figma Setup</a
                 >.
-              </td>
-            </tr>
-            <tr>
-              <td><code>uianatomy</code></td>
-              <td>
-                Canonical component anatomy: axes, slots, states, tokens,
-                events, and where the common libraries disagree.
-              </td>
-              <td>Contract: settle an ambiguous prop shape or interaction</td>
-              <td>
-                "Use uianatomy to show the anatomy of a modal (dialog): slots,
-                states and keyboard behaviour."
-              </td>
-              <td>
-                The answer names slots and states from uianatomy rather than
-                from the model's memory.
               </td>
             </tr>
             <tr>
@@ -280,8 +264,8 @@ import MaintainerNotes from '../components/MaintainerNotes.astro';
         <strong>Wired vs. not, and what closing the gap costs.</strong>
         A scaffolded workspace's <code>.mcp.json</code> wires the one hosted
         Storybook endpoint for your framework (plus <code>nx-mcp</code>,
-        <code>uianatomy</code>, <code>angular-cli</code> for Angular and
-        <code>figma-console</code> if chosen — see
+        <code>angular-cli</code> for Angular and <code>figma-console</code> if
+        chosen — see
         <a href="/workshop#mcp-config" class="docs-link-primary"
           >the workshop page</a
         >) — none of them exposes the three <code>dev</code>-toolset tools that

@@ -22,11 +22,11 @@ const ISSUES: Issue[] = [
     cause:
       'Setup has three independent parts: the Claude Code CLI, the MCP servers, and model access. Preflight checks the first two; model access is only proven by a real request. Usually one of the three is missing, or the workspace itself is broken.',
     fix: [
-      'Triage first: read the preflight output and name which of the three is missing — CLI, MCP, or model access. Then jump to the matching entry on this page instead of debugging everything at once.',
-      'Time box: whoever is still red 30 minutes before the end of the setup block (Day 1 Block 01) pairs with a neighbour — one keyboard, swap at each block — instead of debugging further. The trainer fixes the setup with you in the lunch break.',
-      'Broken workspace: do not repair it. Create a fresh one with `npx create-atelier-ui-workspace` in a new directory; it takes a few minutes.',
-      'What works without the Figma Desktop Bridge: the readiness checklist (Day 1 Block 03, read the file in Figma) and the hosted Storybook MCP `docs-show` (Day 1 Block 04). The mini-loop (Block 02) and the kata (Block 05) need the bridge — pair for those.',
-      'Nobody starts Day 2 red: catch-up homework plus a trainer check before Day 2 starts.',
+      'Diagnose first: read the preflight output and name which of the three is missing — CLI, MCP, or model access. Then jump to the matching entry on this page instead of debugging everything at once.',
+      'Time box: whoever is still red in the setup block (Day 1 Block 01) pairs with a neighbour — one keyboard, the neighbour drives — instead of debugging further. The trainer takes your seat at the coffee break or at lunch.',
+      'Broken workspace: do not repair it. In the course, tell the trainer right away: the machine is theirs to fix. On your own machine, create a fresh workspace with `npx create-atelier-ui-workspace` in a new directory; it takes a few minutes.',
+      'What works without the Figma Desktop Bridge: the readiness checklist (Day 1 Block 03, read the file in Figma) and the hosted Storybook MCP `docs-show` (Day 1 Block 04). The mini-loop (Day 1 Block 02) needs the bridge — pair for that. The optional kata runs only on your own machine.',
+      'Nobody starts Day 2 red: the trainer check happens at the coffee break or at lunch, not as homework.',
     ],
   },
   {
@@ -202,7 +202,7 @@ const ISSUES: Issue[] = [
     codeFix: `# Set your own API key (see console setup at docs.claude.com/en/docs/claude-code/setup)\nexport ANTHROPIC_API_KEY=sk-ant-...\n\n# Prove model access — not just installation\nclaude -p "Reply with exactly: PREFLIGHT-OK"`,
     codeLang: 'shell',
     fix: [
-      'Get a key from the Anthropic Console and set it: `export ANTHROPIC_API_KEY=sk-ant-...` — persist it in your shell rc file the same way as `FIGMA_ACCESS_TOKEN` (see that entry below).',
+      'In the two-day course the machines are provisioned and the login happens in the room (`claude auth login`); the steps below are for setting up your own machine. Get a key from the Anthropic Console and set it: `export ANTHROPIC_API_KEY=sk-ant-...` — persist it in your shell rc file the same way as `FIGMA_ACCESS_TOKEN` (see that entry below).',
       'Have a Claude subscription instead of an API key? Run `claude auth login` and finish the browser sign-in (add `--console` to sign in with API-key billing specifically).',
       'Verify with a real request, not `--version`: `claude -p "Reply with exactly: PREFLIGHT-OK"`. An auth failure surfaces here even when `--version` and `preflight` both looked fine.',
     ],
@@ -257,7 +257,7 @@ const ISSUES: Issue[] = [
     fix: [
       'Confirm which file is open: `figma_get_status` reports the connected file key. The workshop frames live in `QMnDD8uZQPldPrlCwZZ58T`.',
       'Re-resolve the node by name instead of by id — `figma_search_components` (masters) or select the frame in Figma and call `figma_get_selection`, which returns the id that is live in your session.',
-      'Duplicated a file into your own drafts for Day 2? The ids in the copy are new. Read them from your own file; the ids printed in this documentation refer to the original.',
+      'Working in the prepared duplicate (or a copy of your own)? The ids in the copy are new. Read them from the file you work in; the ids printed in this documentation refer to the original.',
     ],
   },
   {

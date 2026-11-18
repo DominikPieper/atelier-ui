@@ -31,72 +31,106 @@ const examplePrompt = (
    - The exact token names from boundVariables (they map 1-to-1 to CSS
      custom properties — no conversion needed)`;
 
-const OUTPUT: Record<string, string> = {
-  React: `import { AtlCard, AtlInput, AtlToggle, AtlButton } from '@atelier-ui/react';
+// Each sample is two files: the component and its plain `.css` stylesheet. The
+// workspace's stylelint reads only `.css` files, so nothing is styled inline.
+const CSS = `.settings-card {
+  padding: var(--ui-spacing-6);
+  display: flex;
+  flex-direction: column;
+  gap: var(--ui-spacing-4);
+}
+
+.settings-card__title {
+  font-size: var(--ui-font-size-lg);
+  font-weight: var(--ui-font-weight-semibold);
+  color: var(--ui-color-text);
+  margin: 0;
+}
+
+.settings-card__actions {
+  display: flex;
+  justify-content: flex-end;
+}`;
+
+const OUTPUT: Record<
+  string,
+  { file: string; code: string; cssFile: string; css: string }
+> = {
+  React: {
+    file: 'SettingsCard.tsx',
+    cssFile: 'settings-card.css',
+    css: CSS,
+    code: `import { AtlCard, AtlInput, AtlToggle, AtlButton } from '@atelier-ui/react';
+import './settings-card.css';
 
 export function SettingsCard() {
   return (
-    <AtlCard
-      variant="elevated"
-      style={{ padding: 'var(--ui-spacing-6)', display: 'flex', flexDirection: 'column', gap: 'var(--ui-spacing-4)' }}
-    >
-      <h2 style={{ fontSize: 'var(--ui-font-size-lg)', fontWeight: 600, color: 'var(--ui-color-text)', margin: 0 }}>
-        Settings
-      </h2>
+    <AtlCard variant="elevated" className="settings-card">
+      <h2 className="settings-card__title">Settings</h2>
       <AtlInput label="Name" />
       <AtlInput label="Email" type="email" />
       <AtlToggle checked>Notifications</AtlToggle>
-      <div style={{ display: 'flex', justifyContent: 'flex-end' }}>
+      <div className="settings-card__actions">
         <AtlButton variant="primary">Save</AtlButton>
       </div>
     </AtlCard>
   );
 }`,
+  },
 
-  Angular: `import { Component } from '@angular/core';
+  Angular: {
+    file: 'settings-card.component.ts',
+    cssFile: 'settings-card.css',
+    css: CSS,
+    code: `import { Component } from '@angular/core';
 import { AtlCard, AtlInput, AtlToggle, AtlButton } from '@atelier-ui/angular';
 
 @Component({
   selector: 'app-settings-card',
   standalone: true,
   imports: [AtlCard, AtlInput, AtlToggle, AtlButton],
+  styleUrl: './settings-card.css',
   template: \`
-    <atl-card variant="elevated" style="padding: var(--ui-spacing-6); display: flex; flex-direction: column; gap: var(--ui-spacing-4)">
-      <h2 style="font-size: var(--ui-font-size-lg); font-weight: 600; color: var(--ui-color-text); margin: 0">
-        Settings
-      </h2>
+    <atl-card variant="elevated" class="settings-card">
+      <h2 class="settings-card__title">Settings</h2>
       <atl-input label="Name" />
       <atl-input label="Email" type="email" />
       <atl-toggle [checked]="true">Notifications</atl-toggle>
-      <div style="display: flex; justify-content: flex-end">
+      <div class="settings-card__actions">
         <button atl-button variant="primary">Save</button>
       </div>
     </atl-card>
   \`,
 })
 export class SettingsCardComponent {}`,
+  },
 
-  Vue: `<script setup lang="ts">
+  Vue: {
+    file: 'SettingsCard.vue',
+    cssFile: 'settings-card.css',
+    css: CSS,
+    code: `<script setup lang="ts">
 import { AtlCard, AtlInput, AtlToggle, AtlButton } from '@atelier-ui/vue';
+import './settings-card.css';
 </script>
 
 <template>
-  <AtlCard
-    variant="elevated"
-    style="padding: var(--ui-spacing-6); display: flex; flex-direction: column; gap: var(--ui-spacing-4)"
-  >
-    <h2 style="font-size: var(--ui-font-size-lg); font-weight: 600; color: var(--ui-color-text); margin: 0">
-      Settings
-    </h2>
+  <AtlCard variant="elevated" class="settings-card">
+    <h2 class="settings-card__title">Settings</h2>
     <AtlInput label="Name" />
     <AtlInput label="Email" type="email" />
     <AtlToggle :checked="true">Notifications</AtlToggle>
-    <div style="display: flex; justify-content: flex-end">
+    <div class="settings-card__actions">
       <AtlButton variant="primary">Save</AtlButton>
     </div>
   </AtlCard>
 </template>`,
+  },
 };
+
+const LINT_BUILD_PROMPT = `Run npm run lint and npm run build. Report each exit code. If one is not 0,
+read the output (the full log when the summary has no error text), repair, and
+run both again.`;
 
 const PARITY_PROMPT = `Run figma_check_design_parity on the settings card node
 against the component I just generated. For each discrepancy, say whether the
@@ -108,9 +142,17 @@ code or the Figma master should change, and why. Fix only the code ones.`;
 // imports the generated component.
 const RUN_IT: Record<
   string,
-  { path: string; mount: string; cmd: string; port: number; expected: string }
+  {
+    path: string;
+    cssPath: string;
+    mount: string;
+    cmd: string;
+    port: number;
+    expected: string;
+  }
 > = {
   React: {
+    cssPath: 'workshop-react/src/components/settings-card.css',
     path: 'workshop-react/src/components/SettingsCard.tsx',
     mount:
       'Import SettingsCard in workshop-react/src/app/app.tsx and replace the <NxWelcome /> placeholder with it.',
@@ -120,6 +162,7 @@ const RUN_IT: Record<
       'A card with two text inputs (Name, Email), a checked Notifications toggle, and a primary "Save" button — surface-raised background, padding from the Figma spacing token.',
   },
   Angular: {
+    cssPath: 'workshop-angular/src/app/components/settings-card.css',
     path: 'workshop-angular/src/app/components/settings-card.component.ts',
     mount:
       'Add SettingsCardComponent to the imports array in workshop-angular/src/app/app.ts and replace <app-nx-welcome> with <app-settings-card> in app.html.',
@@ -129,6 +172,7 @@ const RUN_IT: Record<
       'A card with two text inputs (Name, Email), a checked Notifications toggle, and a primary "Save" button — same surface, padding, and radius as the Figma frame.',
   },
   Vue: {
+    cssPath: 'workshop-vue/src/components/settings-card.css',
     path: 'workshop-vue/src/components/SettingsCard.vue',
     mount:
       'Import SettingsCard in workshop-vue/src/views/HomeView.vue and replace the <NxWelcome /> placeholder with it.',
@@ -291,7 +335,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
         </div>)}
         <ol class="mcp-compare-list" start="3">
           <li>Token-exact code lands</li>
-          <li>Verify: <code>figma_check_design_parity</code></li>
+          <li>Verify: lint, build, then compare with Figma</li>
         </ol>
         <p class="mcp-compare-foot">Single source of truth · no drift.</p>
       </div>
@@ -1148,9 +1192,15 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
         <div class="docs-step-row" data-step="2">
           <span class="docs-step-badge tut-stage-badge">Contract</span>
           <div style="flex: 1">
-            <h3 class="docs-h3">AI reads the spec</h3>
+            <h3 class="docs-h3">Write down the deliberate differences</h3>
             <p class="docs-step-desc">
-              Claude Code calls
+              Before generating, note what the code will do differently from the
+              design on purpose, and why. In the course you write them on Day 2,
+              in the "Deliberate differences" section of the handoff document;
+              on Day 1 a difference someone chose on purpose is parked, not
+              fixed. (Atelier's own repo keeps them in a contract file that a
+              check reads; you do not open it here.) Claude Code reads the spec
+              itself: it calls
               <code>figma_get_component_for_development(nodeId)</code>. The
               response includes <code>boundVariables</code> listing every design
               token used in the frame, plus a rendered image for visual
@@ -1190,12 +1240,10 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
                 typed slots for Vue. The manifest settles a prop name or axis
                 value you're unsure of; inside the atelier monorepo,
                 <code>libs/spec/src/index.ts</code> stays the cross-framework
-                join key the drift gates read, and the component's own
-                micro-contract only names the master and any intentional
-                Figma↔code mismatches. Neither settles binding shape (two-way
-                vs. one-way, slot vs. prop, an event's payload), which the
-                format doesn't express; for that, the framework's own manifest
-                is the answer.
+                join key Atelier's own drift gates read. Neither settles binding
+                shape (two-way vs. one-way, slot vs. prop, an event's payload),
+                which the format doesn't express; for that, the framework's own
+                manifest is the answer.
               </p>
             </Callout>
             <h3 class="docs-h3">AI generates token-exact code</h3>
@@ -1211,45 +1259,41 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
         <div class="docs-step-row" data-step="4">
           <span class="docs-step-badge tut-stage-badge">Verify</span>
           <div style="flex: 1">
-            <h3 class="docs-h3">Verify: offline gates first, then parity</h3>
+            <h3 class="docs-h3">
+              Verify: the agent runs lint and build, then the comparison
+            </h3>
             <p class="docs-step-desc">
               Don't stop at "looks right" — close the loop, cheapest check
-              first. Run the two offline gates in your workspace before you ask
-              Figma anything:
+              first. Ask Claude to run both checks in your workspace and report
+              each exit code; if one is not 0, it reads the output (the full log
+              when the summary has no error text), repairs, and runs it again:
             </p>
             <Code
-              code={`npm run check:contracts
-npm run check:stories`}
-              lang="shell"
-              title="offline gates"
+              code={LINT_BUILD_PROMPT}
+              lang="text"
+              wrap
+              title="lint and build prompt"
             />
             <p class="docs-step-desc" style="margin-top: 0.6rem">
-              <code>check:contracts</code> joins the contract, the component's
-              docgen and the Figma snapshot without a browser; it passes when it
-              prints <code>total: 0 error(s)</code> and exits 0. A finding is
-              tagged, for example <code>[NO-STORY-META]</code>: look the tag up
-              in
-              <a href="/design-to-code#finding-codes" class="docs-link-primary"
-                >the finding codes</a
-              >. <code>check:stories</code> renders every story in Chromium,
-              runs each <code>play</code> assertion and checks accessibility
-              with axe; it passes on exit 0. For a story or axe failure see
+              Both are deterministic and cheap, so a failure is unambiguous.
+              <code>npm run lint</code> catches template accessibility mistakes;
+              <code>npm run build</code> catches a value or a bound input the
+              component does not accept. For an accessibility failure see
               <a
                 href="/a11y-workflow#a11y-in-the-loop"
                 class="docs-link-primary"
                 >accessibility in the loop</a
-              >. (<code>check:contracts</code> exists in workspaces scaffolded
-              with the Figma MCP option, which this tutorial assumes.)
+              >. Green is not the same as right: the checks do not see meaning
+              (an <code>alt=""</code> passes lint).
             </p>
             <p class="docs-step-desc">
-              The order matters: both gates are offline and deterministic, so
-              they are cheap and a failure is unambiguous. The parity report is
-              the expensive, judgement-heavy last step; do not spend it on a
-              component that fails a gate.
-              <code>figma_check_design_parity</code> compares the generated code
-              against the Figma spec and returns a parity score plus specific
-              discrepancies. Pass the prompt below: it asks Claude to sort each
-              discrepancy by what should change and to fix only the code ones.
+              The comparison with the Figma frame is the expensive,
+              judgement-heavy last step; do not spend it on a component that
+              fails lint or build. <code>figma_check_design_parity</code>
+              compares the generated code against the Figma spec and returns a
+              parity score plus specific discrepancies. Pass the prompt below:
+              it asks Claude to sort each discrepancy by what should change,
+              code or Figma, and to fix only the code ones.
             </p>
             <Code
               code={PARITY_PROMPT}
@@ -1257,6 +1301,9 @@ npm run check:stories`}
               wrap
               title="parity check prompt"
             />
+            <p class="docs-step-desc" style="margin-top: 0.6rem">
+              <code>/verify</code> is the single closing proof line.
+            </p>
           </div>
         </div>
       </div>
@@ -1310,7 +1357,12 @@ npm run check:stories`}
         label="Choose a framework for the generated output"
       />
       {FRAMEWORKS.map((fw, i) => <div data-fw-panel={fw} hidden={i !== 0}>
-        <Code code={OUTPUT[fw]} lang={fw === 'Angular' ? 'ts' : 'tsx'} />
+        <Code
+          code={OUTPUT[fw].code}
+          lang={fw === 'Angular' ? 'ts' : 'tsx'}
+          title={OUTPUT[fw].file}
+        />
+        <Code code={OUTPUT[fw].css} lang="css" title={OUTPUT[fw].cssFile} />
       </div>)}
     </div>
 
@@ -1324,10 +1376,11 @@ npm run check:stories`}
           margin-bottom: 1.25rem;
         "
       >
-        Save the generated component, mount it in the app shell — the scaffolded
-        app keeps rendering the Nx welcome page until something imports your
-        component — then start the dev server and verify against the Figma
-        frame. The framework tabs above stay in sync with this section.
+        Save the generated component and its stylesheet next to each other,
+        mount it in the app shell — the scaffolded app keeps rendering the Nx
+        welcome page until something imports your component — then start the dev
+        server and verify against the Figma frame. The framework tabs above stay
+        in sync with this section.
       </p>
       <p
         style="
@@ -1361,6 +1414,7 @@ npm run check:stories`}
           <li>
             <span class="run-step-label">Save as</span>
             <code class="run-step-path">{RUN_IT[fw].path}</code>
+            <code class="run-step-path">{RUN_IT[fw].cssPath}</code>
           </li>
           <li>
             <span class="run-step-label">Mount it</span>
@@ -1388,8 +1442,9 @@ npm run check:stories`}
           <li>
             <span class="run-step-label">Verify</span>
             <span class="run-step-detail"
-              >Run the two offline gates, then the parity prompt above — Claude
-              will list any discrepancies and propose fixes.</span
+              >Have the agent run lint and build, then run the parity prompt
+              above. Claude lists the differences; sort each one: code or
+              Figma.</span
             >
           </li>
         </ol>
@@ -1459,12 +1514,10 @@ npm run check:stories`}
           <code>6006</code>) once you add a story for it
         </li>
         <li>
-          <Icon name="check_circle" /> <code>npm run check:contracts</code> and
-          <code>npm run check:stories</code> both exit 0
-        </li>
-        <li>
-          <Icon name="check_circle" /> <code>figma_check_design_parity</code>
-          reports the node and code in sync
+          <Icon name="check_circle" /> The agent ran lint and build and reported
+          both exit codes, and every difference
+          <code>figma_check_design_parity</code> reports is sorted: fixed in
+          code, or noted as a fix for the Figma file
         </li>
       </ul>
     </Checkpoint>
@@ -1536,6 +1589,7 @@ npm run check:stories`}
     margin-bottom: 0.3rem;
   }
   .run-step-path {
+    display: block;
     font-size: 0.82rem;
     color: var(--ui-color-text);
     word-break: break-all;

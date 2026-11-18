@@ -51,6 +51,13 @@ The owner first decided that the scaffold ships `uianatomy-mcp`, `figma-workspac
   `CLAUDE.md` say so. `design-to-code`, `atelier-design` and `artboard-bridge` stay repo and
   trainer skills.
 
+**Corrected 2026-11-18** (ADR-0181): the scaffold no longer copies `uianatomy-mcp`, and the
+`uianatomy` server left `.mcp.json` with it (hosting overload, a risk in the room). The
+generator writes two skills: `atelier-component` and, with `--figma`,
+`figma-workspace-architect`. Everything this ADR says about the architect skill and about
+`design-to-code` stands; the directory expansion in `check:preflight-clone-sync` now covers
+the architect alone.
+
 Rejected:
 
 - **Copying `design-to-code` verbatim**: its commands and paths do not exist in the workspace,

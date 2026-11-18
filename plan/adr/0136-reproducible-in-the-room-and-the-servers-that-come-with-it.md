@@ -56,6 +56,12 @@ framework-gated because a single-framework workshop should not carry a server fo
 framework it does not use; this repo wires it unconditionally only because the monorepo
 always has an Angular app.
 
+**Corrected 2026-11-18** (ADR-0181): `uianatomy` is no longer added. The server is hosted
+elsewhere and has been overloaded more than once; the generated preflight probes it, so an
+outage would have failed a line on every seat in the course's first block. A generated
+workspace now wires `nx-mcp`, one `storybook-<framework>`, `angular-cli` for Angular and
+`figma-console` with Figma. The pinning half of this decision is unaffected.
+
 ## Consequences
 
 The `.mcp.json` the docs show and the one the preset writes now agree again —

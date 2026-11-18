@@ -14,7 +14,7 @@
 // the same href, the same visible label, and the same Material icon name.
 //
 // Steps 1-7 are Day 1 (setup, the tutorial, /screen-from-storybook, which is
-// Block 05, and the /first-component kata, now optional homework); step 8,
+// Block 05, and the /first-component kata, now optional, on your own machine); step 8,
 // /build-your-own, is Day 2 — the participant-facing walk through "build your
 // own component". The track ends there (it ended on the kata until 2026-10-13,
 // when Day 2 got a page of its own). /patterns is a reference page, linked from

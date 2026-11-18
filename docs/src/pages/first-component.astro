@@ -75,8 +75,11 @@ const prompt = (
 
 const PARITY_PROMPT = `Run figma_check_design_parity on node-id 936-2954 against
 the SettingsCard component I just generated. For each discrepancy, say whether
-the code, the Figma master or the contract should change, and why. Fix only the
-code ones.`;
+the code or the Figma master should change, and why. Fix only the code ones.`;
+
+const LINT_BUILD_PROMPT = `Run npm run lint and npm run build. Report each exit code. If one is not 0,
+read the output (the full log when the summary has no error text), repair, and
+run both again.`;
 
 // "If this step fails" (R-042): per step, the likely failures and ONE recovery
 // to copy. The full fix for each lives in /troubleshooting; only the symptom
@@ -127,14 +130,13 @@ from boundVariables of node 936-2954. Show me the list before and after.`,
   },
   6: {
     items: [
-      '`check:contracts` prints `[NO-MASTER]`: a warning, not a failure. Your component has no master in the Figma snapshot yet. Codes: [the finding codes](/design-to-code#finding-codes).',
       '`figma_check_design_parity` times out or reports no bridge: [bridge not connected](/troubleshooting#figma-bridge-plugin-not-connected).',
-      '`check:stories` is red: read the story name and the axe rule in the output; a11y findings are explained in [accessibility in the loop](/a11y-workflow#a11y-in-the-loop).',
+      '`npm run lint` is red: read the rule id in the output; a11y findings are explained in [accessibility in the loop](/a11y-workflow#a11y-in-the-loop).',
       'The agent used a prop the library does not have: check it with `docs-show` before you believe it.',
     ],
-    recovery: `npm run check:contracts > check.out 2>&1; echo $?
+    recovery: `npm run lint > lint.out 2>&1; echo $?
 
-# Then paste to Claude: the exit code, and "read check.out and fix the first error".
+# Then paste to Claude: the exit code, and "read lint.out and fix the first error".
 # More on how to report a red gate: /prompts#stuck`,
     lang: 'shell',
   },
@@ -144,26 +146,22 @@ from boundVariables of node 936-2954. Show me the list before and after.`,
       'The report is empty and you do not trust it: it samples one variant. See [what a report does not show](/design-to-code#parity-report).',
     ],
     recovery: `Take the parity report above. For each discrepancy, label it: fix the code,
-fix Figma, or record a deliberate mismatch (figmaOnly, codeOnly or axisMap).
-Give a one-line reason per label. Apply only the "fix the code" ones.`,
+or fix Figma. Give a one-line reason per label. Apply only the "fix the code"
+ones.`,
   },
 };
 // Bridge exercise (R-042): the step between composing (this kata) and building
-// a new component (Day 2). Paths follow SCAFFOLD above; the contract and story
-// names follow the scaffold's own example (`<app>/src/contracts/button.contract.ts`,
-// `<app>/src/atl-button.stories.*`).
-const BRIDGE: Record<Framework, { stories: string; contract: string }> = {
+// a new component (Day 2). Paths follow SCAFFOLD above; the story names follow
+// the scaffold's own example (`<app>/src/atl-button.stories.*`).
+const BRIDGE: Record<Framework, { stories: string }> = {
   Angular: {
     stories: 'workshop-angular/src/app/components/settings-card.stories.ts',
-    contract: 'workshop-angular/src/contracts/settings-card.contract.ts',
   },
   React: {
     stories: 'workshop-react/src/components/SettingsCard.stories.tsx',
-    contract: 'workshop-react/src/contracts/settings-card.contract.ts',
   },
   Vue: {
     stories: 'workshop-vue/src/components/SettingsCard.stories.ts',
-    contract: 'workshop-vue/src/contracts/settings-card.contract.ts',
   },
 };
 
@@ -173,7 +171,8 @@ const bridgePrompt = (
 
 Axis: density. Values: 'comfortable' (the default, today's look) and
 'compact'. Declare it as a string-literal union type with a JSDoc line that
-says what changes. compact uses --ui-spacing-3 where comfortable uses
+says what changes and that density is not drawn in the Figma frame (a
+deliberate difference). compact uses --ui-spacing-3 where comfortable uses
 --ui-spacing-4. No hex colours, no pixel values.
 
 Then, in the same change:
@@ -181,10 +180,10 @@ Then, in the same change:
    from the pattern in the AtlButton example story that ships in the
    workspace (src/atl-button.stories.*). One play function with a real
    assertion.
-2. ${BRIDGE[fw].contract}: copy the shape of contracts/button.contract.ts.
-   component 'SettingsCard', figmaNodeId '936:2954'. density is not drawn in
-   the Figma master, so record it as a codeOnly entry with a real reason.
-3. Verify every prop you use with docs-show on storybook-${fw.toLowerCase()}.`;
+2. Verify every prop you use with docs-show on storybook-${fw.toLowerCase()}.
+3. Run npm run lint, npm run build and npm run check:stories. Report each exit
+   code. If one is not 0, read the output (the full log when the summary has no
+   error text), repair, and run it again.`;
 // Step 3 depends on the framework (the storybook-* MCP name), so it is a
 // function. Kept in the frontmatter: Astro's parser mishandles template
 // literals with escaped backticks inside a JSX attribute.
@@ -219,8 +218,8 @@ Replace every hex colour and pixel value with the --ui-* name from boundVariable
       <a href="/tutorial" class="docs-link-primary">tutorial</a>; now do it
       solo, against the clock. Same Settings Card, seven copy-paste steps, no
       explanations. Stuck on a step? The tutorial has the reasoning behind each
-      one. In the two-day course this is optional homework, not a block: Day 1
-      Block 05 is
+      one. In the two-day course this is optional (only with your own machine
+      and your own Claude access), not a block: Day 1 Block 05 is
       <a href="/screen-from-storybook" class="docs-link-primary"
         >Screen from Storybook</a
       >.
@@ -496,21 +495,23 @@ Replace every hex colour and pixel value with the --ui-* name from boundVariable
     <section data-step="6" class="kata-step">
       <div class="kata-step-head">
         <span class="kata-step-num">6</span>
-        <h2 class="kata-step-title">Run the gates, then the parity check</h2>
+        <h2 class="kata-step-title">Run lint and build, then the comparison</h2>
       </div>
       <p class="kata-step-desc">
-        First the two offline gates, in your workspace root:
-        <code>npm run check:contracts</code> and
-        <code>npm run check:stories</code>. Both are deterministic and cheap, so
-        they come before the expensive, judgement-heavy parity report. A
-        <code>check:contracts</code> finding is explained in
-        <a href="/design-to-code#finding-codes" class="docs-link-primary"
-          >the finding codes</a
-        >; a story or axe failure in
+        First the agent runs lint and build in your workspace root and reports
+        each exit code. Both are deterministic and cheap, so they come before
+        the expensive, judgement-heavy parity report. A failure is repaired from
+        the output; an accessibility failure is explained in
         <a href="/a11y-workflow#a11y-in-the-loop" class="docs-link-primary"
           >accessibility in the loop</a
         >.
       </p>
+      <Code
+        code={LINT_BUILD_PROMPT}
+        lang="text"
+        wrap
+        title="lint and build prompt"
+      />
       <p class="kata-step-desc" style="margin-top: 0.4rem">
         Eyeballing the result isn't enough either — close the loop.
         <code>figma_check_design_parity</code> compares the generated code
@@ -521,15 +522,16 @@ Replace every hex colour and pixel value with the --ui-* name from boundVariable
       <Code code={PARITY_PROMPT} lang="text" wrap title="parity check prompt" />
       <p class="kata-step-desc" style="margin-top: 0.6rem">
         <strong style="color: var(--ui-color-text)">Checkpoint:</strong>
-        both offline gates exit 0, and every discrepancy in the report is fixed
-        or labelled (code, Figma or contract), and you can name one thing the
-        report did not check. A quiet report is not a clean component: the tool
-        samples one variant and skips values it cannot compare
+        lint and build exit 0, and every discrepancy in the report is sorted
+        (code or Figma), and you can name one thing the report did not check. A
+        quiet report is not a clean component: the tool samples one variant and
+        skips values it cannot compare
         (<a href="/design-to-code#parity-report" class="docs-link-primary"
           >what a report does not show</a
         >). Paste the report straight back to Claude and have it fix each
         code-side entry, then re-run the check; a padding off by one step or a
         colour that resolved to a literal is not something to eyeball away.
+        <code>/verify</code> is the single closing proof line.
       </p>
       <StepFail
         items={FAIL[6].items}
@@ -547,15 +549,10 @@ Replace every hex colour and pixel value with the --ui-* name from boundVariable
       <p class="kata-step-desc">
         Take the report from Step 6 (or run it again on your component and read
         the score and the entries it still lists). For each discrepancy, decide
-        which of the three follow-ups it is:
-        <strong style="color: var(--ui-color-text)">fix the code</strong>,
-        <strong style="color: var(--ui-color-text)">fix Figma</strong>, or
-        <strong style="color: var(--ui-color-text)"
-          >record a deliberate mismatch</strong
-        >
-        (<code>figmaOnly</code>, <code>codeOnly</code> or <code>axisMap</code>
-        in the contract, for differences in API shape). Check the
-        <code>side</code> of each action item before you apply it.
+        which of the two follow-ups it is:
+        <strong style="color: var(--ui-color-text)">fix the code</strong> or
+        <strong style="color: var(--ui-color-text)">fix Figma</strong>. Check
+        the <code>side</code> of each action item before you apply it.
         <a href="/design-to-code#parity-report" class="docs-link-primary"
           >Reading a parity result</a
         >
@@ -563,8 +560,8 @@ Replace every hex colour and pixel value with the --ui-* name from boundVariable
       </p>
       <p class="kata-step-desc" style="margin-top: 0.6rem">
         <strong style="color: var(--ui-color-text)">Checkpoint:</strong> every
-        discrepancy has one of the three labels and a one-line reason, and you
-        can name one thing the report did not check.
+        discrepancy has one of the two labels and a one-line reason, and you can
+        name one thing the report did not check.
       </p>
       <StepFail
         items={FAIL[7].items}
@@ -584,9 +581,9 @@ Replace every hex colour and pixel value with the --ui-* name from boundVariable
         brief. The step in between is the one you will do most in real work:
         <strong style="color: var(--ui-color-text)"
           >change an existing component and keep its claims true</strong
-        >: the prop, a story per value, and a contract entry. You do it on your
-        own SettingsCard, in your workspace; the library's own components live
-        in the package and are not yours to edit.
+        >: the prop and a story per value. You do it on your own SettingsCard,
+        in your workspace; the library's own components live in the package and
+        are not yours to edit.
       </p>
       <ol class="kata-bridge-steps">
         <li>
@@ -597,9 +594,9 @@ Replace every hex colour and pixel value with the --ui-* name from boundVariable
           is not ready.
         </li>
         <li>
-          <strong>Prompt the whole change at once.</strong> Component, stories
-          and contract belong together; a variant without a story is a claim
-          nothing checks.
+          <strong>Prompt the whole change at once.</strong> Component and
+          stories belong together; a variant without a story is a claim nothing
+          checks.
           {FRAMEWORKS.map((fw, i) => <div data-fw-panel={fw} hidden={i !== 0}>
             <Code
               code={bridgePrompt(fw)}
@@ -615,21 +612,15 @@ Replace every hex colour and pixel value with the --ui-* name from boundVariable
           render, and compact should be visibly tighter.
         </li>
         <li>
-          <strong>Run the gates.</strong> <code>npm run check:contracts</code>,
-          then <code>npm run check:stories</code> (renders every story in
-          Chromium, runs the <code>play</code>, runs axe). Without a Figma
-          master for SettingsCard in your snapshot, <code>check:contracts</code>
-          reports
-          <a href="/design-to-code#finding-codes" class="docs-link-primary"
-            ><code>[NO-MASTER]</code></a
-          >
-          as a warning: that is expected here, and the contract file is ready
-          for the day a master exists. Any error is real: paste it back, see
-          below.
+          <strong>Read what the agent ran.</strong> The prompt had the agent run
+          lint, build and <code>npm run check:stories</code> (renders every
+          story in Chromium, runs the <code>play</code>, runs axe). Every exit
+          code is 0, or the agent repaired and ran it again. If it stalls, type
+          the command yourself; any error is real: paste it back, see below.
         </li>
         <li>
           <strong>Name the weak point.</strong> Which of your claims does no
-          gate check? (Hint: whether compact looks right is a judgement, not an
+          check see? (Hint: whether compact looks right is a judgement, not an
           assertion.)
         </li>
       </ol>
@@ -637,13 +628,12 @@ Replace every hex colour and pixel value with the --ui-* name from boundVariable
         items={[
           'The agent invents a prop or an AtlCard variant: check it with `docs-show` and have it remove what the docs do not list.',
           "No story appears in Storybook: the file must sit under your app's `src/` and end in `.stories.ts` (`.tsx` for React), and its `meta.component` must point at SettingsCard.",
-          '`check:contracts` reports an error you do not recognise: look the code up in [the finding codes](/design-to-code#finding-codes).',
           '`check:stories` is red on a story you just wrote: the `play` asserts something the story does not render. Read the failing story name in the output.',
         ]}
         recovery={`npm run check:stories > check.out 2>&1; echo $?
 
 # Then paste to Claude: the exit code, and "read check.out and fix the first failing story".
-# How to report a red gate: /prompts#stuck`}
+# How to report a red check: /prompts#stuck`}
         lang="shell"
       />
       <Callout tone="note" title="In a clone of the atelier repo">
@@ -659,7 +649,7 @@ Replace every hex colour and pixel value with the --ui-* name from boundVariable
       <p class="kata-step-desc" style="margin-top: 0.6rem">
         <strong style="color: var(--ui-color-text)">Done when</strong> both
         density stories render, <code>check:stories</code> exits 0, and
-        <code>check:contracts</code> shows no error.
+        <code>docs-show</code> lists <code>density</code> with both values.
       </p>
     </section>
 

@@ -15,6 +15,386 @@ Review findings are tracked in `tasks/reviews.md` since 2026-10-11; this file ho
 non-review work. Items marked `→ R-NNN` keep their reasoning here but are tracked there; items
 closed by the review triage carry a `_(closed 2026-10-11 …)_` note.
 
+## Course walkthrough (started 2026-11-12)
+
+Owner decision 2026-11-12: no rebuild. Walk the existing course material block by block
+(outline, deck, run-of-show, demo scripts, golden prompts must agree), risk blocks first
+so every seat can work. Per block the owner says keep / change / cut; a change goes
+outline first, then deck, then run-of-show and prompts.
+
+- [ ] Day 1 Block 01 (setup) — package presented 2026-11-12, owner verdict open.
+      Findings: (1) trainer machine has no Playwright browsers
+      (`~/Library/Caches/ms-playwright` absent, playwright 1.63.0), so `check:stories`,
+      D-5 and the deck render scripts fail here until `npx playwright install chromium`;
+      (2) slide d1-01-04 offers only `claude auth login --console` / `ANTHROPIC_API_KEY`,
+      who provides model access is undecided; (3) no plan B for a seat that stays red on
+      a managed laptop beyond pairing; (4) 75 min is long if the preflight mails are all
+      green, candidate: move time to Day 1 Block 05 (R-225), decide after R-040.
+      **Owner 2026-11-12:** Conciso provides Claude subscriptions for trainings (not
+      API keys) and has extra training machines; setup mail and other organisational
+      parts stay with the owner, ignore them here; install Chromium on the trainer
+      machine. Open follow-up: replace the `--console` / `ANTHROPIC_API_KEY` wording
+      (outline D1-01-02..06, deck d1-01-02..06, run-of-show 09:50 row and R12, trainer
+      notes, dry-run kit, briefing, `/schulung`, `/workshop`, `/troubleshooting`,
+      customer agenda "Mitzubringen"), then `npm run trainer:print`.
+      **Owner 2026-11-12 (second answer):** every participant works on a provisioned
+      Conciso machine; the Claude login happens in the room on Day 1. Consequences, not
+      applied yet (one reconcile after the Day 1 frame is agreed): setup homework and the
+      preflight mail drop out; Block 01 becomes login + Figma + `/mcp` + Claude Code
+      basics for everyone, proposal 45 min (was 75); 30 min to reassign; Day 1 Block 06
+      homework cannot assume a machine at home; participants need a way to take their
+      workspace along after Day 2; customer agenda "Mitzubringen" shrinks to a Figma
+      account; needs an ADR (provisioned machines instead of homework). Chromium
+      installed on the trainer machine 2026-11-12 (`chromium-1243`).
+- [ ] Day 1 Block 05 (screen from Storybook, R-225) — package presented 2026-11-12,
+      owner verdict open. Measured 2026-11-12: hosted `storybook-angular` endpoint,
+      8 parallel clients x 12 `docs-show` calls on AtlTable: 96/96 HTTP 200, avg 0.10 s,
+      max 0.16 s (one burst from one IP, not a cohort).
+      **Machine-time spike 2026-11-12** (one run, trainer machine, fresh
+      `create-atelier-ui-workspace@0.4.10 --framework angular --no-figma`, starter prompt
+      verbatim, headless `claude -p`, no permission prompts, Opus main model):
+      scaffold + install 142 s; build run 195 s (`docs-list` x1, `docs-show` x6,
+      `docs-show-story` x1, no hand-built element); receipts run 39 s (`docs-show` x6,
+      nothing removed). Gates from a cold Nx cache, measured separately: lint 9 s,
+      stylelint 3 s, format 5 s, build 3 s, `check:unit` 9 s, `check:stories` 15 s, all
+      exit 0. So the machine needs about 5 minutes for the whole exercise; the 65 minutes
+      are human time (permission prompts, reading, judging), which this spike did not
+      measure. Consequence: R-225 is not a machine-time problem; the block needs
+      reweighting towards gates, receipts and debrief, not more build time.
+      Side findings: (a) the scaffolded workspace pins Playwright 1.65.0, which wants
+      Chromium build 1254; the Atelier repo's build 1243 does not serve it and
+      `check:stories` fails until `npx playwright install chromium` has run inside the
+      workspace (now done on the trainer machine; every provisioned seat needs it).
+      (b) Hosted `docs-show` for AtlTable and AtlSelect shows the sub-component selectors
+      (`atl-thead`, `atl-option`) in examples but never the class names to import
+      (`AtlThead`, `AtlTbody`, `AtlTr`, `AtlTh`, `AtlTd`, `AtlOption`: 0 hits in
+      `docs-list` and in both `docs-show` answers); the receipts run flagged exactly
+      these six. Either a debrief talking point or a manifest gap to file in
+      `tasks/reviews.md`; owner call. (c) Headless, the agent did not stop for approval
+      of the component list and delegated the file writing to a subagent; a seat in the
+      room will behave differently. Artefacts: session scratchpad `spike-block05/`
+      (not kept).
+- [ ] Figma access (owner 2026-11-12): the Atelier Figma file is public, participants
+      need no own Figma account, and the owner pre-installs the Desktop Bridge on the
+      Conciso machines. Conflict to resolve before the reconcile: the course as written
+      needs write access, not read access. Day 1 Block 01 makes a duplicate, Day 1
+      Block 03 edits a copy of a master in it (bind a fill, add a variant value, Auto
+      Layout), Day 1 Block 06 homework sketches in it, Day 2 Block 01 designs a
+      component set in it (40 min by hand, 25 min via MCP), and `figma:snapshot` reads
+      the duplicate's file key from `package.json`. Unverified: whether the Desktop
+      Bridge plugin runs at all in a file opened view-only, and whether Figma Desktop
+      starts without a login.
+      Resolved by the owner 2026-11-12: every machine gets Figma Desktop logged in with a
+      Conciso account, the Atelier file duplicated once and the bridge imported; the owner
+      does that setup. Nobody duplicates in the room.
+- [ ] Day 1 frame and reconcile (owner 2026-11-12: frame "looks good for now"; the
+      import-name gap is taught in cohort 1, not fixed). Frame: 00 09:00–09:30 (30) ·
+      01 09:30–10:15 (45, was 75) · coffee 10:15–10:30 · 02 10:30–12:00 (90, was 75) ·
+      lunch 12:00–13:00 · 03 13:00–14:15 · coffee 14:15–14:30 · 04 14:30–15:45 ·
+      buffer 15:45–15:55 · 05 15:55–17:15 (80, was 65) · 06 17:15–17:30; net 410.
+      Decision record: ADR-0178. Reconcile order, outline first:
+  - [x] `tasks/schulung-deck-outline.md`, `tasks/schulung-run-of-show.md`, trainer
+        notes, dry-run kit, demo scripts, golden prompts _(done 2026-11-12; golden prompts
+        needed no change; row sums 30/45/90/75/75/80/15)_
+  - [x] `/schulung`, `/workshop`, `/troubleshooting`, `/screen-from-storybook` (fifth
+        gap: import names), `og-pages.ts` _(done 2026-11-12; also `first-component.astro`
+        and `workshop-track.ts`. `check:docs` reads a clock time like 10:15 as a Figma node
+        id and flags port 6006 on `/schulung`, so the Block 01 bullets carry neither)_
+  - [x] ADR-0178 + README row + dated correction in ADR-0175; R-234 (manifest lacks
+        import names) and R-225 update in `tasks/reviews.md` _(done 2026-11-12)_
+  - [x] Day 1 deck slides from the finished outline, render, `check_deck.py`, publish
+        _(done 2026-11-12: 26 of 55 slides changed, render exit 0, checker only the known
+        d1-00-07 false positive, published as version 23)_
+  - [x] `npm run trainer:print`, `npm run check:all` by exit code — 2026-11-12:
+        `trainer:print` exit 0. `check:all` exit 1 at its fifth gate,
+        `check:scaffold-snapshot`: the scaffold projection still carries the
+        committed snapshot (`figmaLastModified` 2026-10-15), the working tree
+        carries an uncommitted Figma refresh of 2026-10-22 that was already
+        modified when this session started. Not caused by the reconcile and not
+        fixed here (owner's call: commit the refresh and regenerate with
+        `node tools/scripts/gen-scaffold-snapshot.mjs`, or discard it). The 45
+        gates the `&&` chain skipped were run one by one: all exit 0, including
+        `check:docs`, `check:adr-refs` and `check:stories`.
+  - [ ] Customer agenda: change list to the owner first (outward-facing), then artifact,
+        then local copy
+  - [ ] Owner verdicts still open: how a seat gets its training account, a reserve
+        account for a usage limit, how a participant takes the workspace home after
+        Day 2, and the Block 06 homework default (no machine homework)
+- [x] Day 2 reconcile (owner decisions 2026-11-17: Block 02 rebuilt around the running
+      component, Block 04 reweighted towards sorting the differences, end-of-day checklist
+      down to five outcomes plus a proof line, participants take the workspace home as it is
+      on the course machine; plus the three Day 1 rewordings and the ADR-0178 leftovers).
+      Spec: scratchpad `day2/spec.md`.
+  - [x] Task docs: outline, run-of-show, trainer notes, dry-run kit, demo scripts, golden
+        prompts (new §3.4)
+  - [x] Pages: `/schulung`, `/build-your-own`, `day2-done.ts`, `/screen-from-storybook`,
+        `/troubleshooting`, `/workshop`; docs gates by exit code
+  - [x] ADR-0179 (outcome first, gates as proof), dated addition in ADR-0178 (take-home),
+        R-235 (unmeasured: 15 min comparison, 8 min codeSpec prompt)
+  - [x] Decks Day 1 and Day 2 from the finished outline, render, checker, publish
+  - [x] `npm run trainer:print`, gate chain by exit code
+  - Review (2026-11-17). Verified: decks published, Day 1 version 26 (10 slides changed) and
+    Day 2 version 18 (17 slides changed); `check_deck.py` Day 1 exit 1 with the one known
+    false positive (d1-00-07 "Sie kommt"), Day 2 exit 0 with 51 slides and 0 problems; a
+    visible-text scan of both decks finds no "Gate", no "Triage" and no finding code outside
+    the speaker notes; contact sheets of every visibly changed slide read; every gate of
+    `check:all` run one by one by exit code, 49 green and `check:scaffold-snapshot` red (the
+    drift from the uncommitted Figma refresh of 2026-10-22, owner decision open, not from this
+    round); `nx lint docs`, `nx build docs`, `node tools/e2e/schulung-claims.e2e.mjs` and
+    `npm run trainer:print` exit 0. Assumed, not measured (R-235): the 15-minute Figma
+    comparison in Block 02, the 8-minute codeSpec prompt of golden prompts §3.4 (never run
+    live), 40 minutes for generation plus looking at every story, and Block 03 absorbing the
+    differences Block 02 leaves open. Weakest point: both shortened steps are the ones nobody
+    has timed, and they sit on the critical path of Day 2; the rehearsal (R-040) decides them.
+    Left as is on purpose: the reference pages keep their gate content, the English material
+    still says "findings" in the Day 1 Block 02 recap where the German slide says
+    "Abweichungen". Open with the owner: the scaffold-snapshot drift, the reserve account
+    (R12), the take-home channel.
+  - Customer agenda (2026-11-17, owner: change it, but the tables the customer already
+    received stand). Compared the communicated tables (owner's screenshots) row by row with
+    the outline: every row is still delivered, including Day 2 "Vom Design zum Code" (the
+    rebuilt Block 02) and the Day 1 lint demo. Three edits in the Claude Docs source
+    (revision 33) and in `tasks/schulung-kundenagenda.md`: the Setup row is back at the
+    communicated wording, the Day 1 intro says the setup is put into operation instead of
+    installed, and "Mitzubringen" is "nichts" (ADR-0178). Two rows in the source are more
+    detailed than what the customer received ("Mit der Bibliothek bauen", "Vorstellung und
+    Transfer"); they narrow the communicated wording and were left. Deck sources and the
+    outline are archived outside the repo at
+    `~/Backups/atelier-schulung/schulung-decks-2026-11-17.tar.gz`; both decks are pinned.
+- [ ] Gate weight in the course (owner, 2026-11-12: the gates are accompaniment, not the
+      primary goal; rule in `tasks/lessons.md`). Audit of 2026-11-12, outline + run-of-show +
+      `/schulung` + golden prompts: gates are the _subject_ of about 70 of 820 minutes (Day 1:
+      D-1 5, Block 02 verify 5, Block 05 gates 15; Day 2: Block 02 snapshot + `check:contracts`
+      30, Block 04 codeSpec assembly 15), so time is not the problem. The problem is that they
+      hold the definition of done in four places (Day 1 Block 05, Day 2 Block 02, Day 2
+      Block 04, slide D2-CL-01 "Are you done?") and headline three slides (D1-00-05, D1-05-06,
+      D2-02-05, the last with `[NO-MASTER]` on it). Golden prompts carry two gate lines (§1b
+      only). Not audited: the German deck slides themselves (derived one to one from the
+      outline) and the participant pages beyond a line count. Apply per block in the
+      walkthrough; Day 2 Block 02 needs a decision, not a rewording (30 of its 75 minutes).
+- [ ] Day 2 Block 01 (Figma + handoff, high-risk). Carries the Day 2 sentences the Day 1
+      reconcile left alone on purpose: "open the duplicate you made in Day 1 Block 01"
+      (`/schulung` Day 2 Block 01, run-of-show, outline D2-01-02, trainer notes, dry-run
+      kit), the `L.figmaToken` link and the "set your own file key" text for
+      `npm run figma:snapshot` on `/schulung`, the homework-check rows, and the third
+      "Format per day" paragraph ("no special path for the training"). Also stale after
+      ADR-0178: `/troubleshooting#still-red` bullets "create a fresh workspace" and
+      "the kata (Block 05)", and `/workshop` calling the course a self-setup route.
+- [ ] Day 1 Blocks 00, 02, 03, 04, 06
+- [ ] Day 2 Blocks 00, 02, 03, 04, 05
+- [ ] After the walkthrough: R-040 rehearsal, screenshots, `[Datum]` / `[Kanal]` / wordmark
+
+- [ ] Customer agenda, three open suggestions in the doc (2026-11-17, doc revision 39, owner accepts or
+      rejects each): Day 1 "Mit der Bibliothek bauen" gets the communicated middle sentence back ("Alles, was der
+      Agent ... holt er sich aus Storybook; zu Beginn zeigen wir live, was er dort findet"); Day 2 "Einstieg"
+      says what the skills part is (which are set up, when the agent loads them, how to check); Day 2
+      "Vorstellung und Transfer" ends on the written next step instead of "Wahl eines ersten Befunds". After the
+      decision: mirror into `tasks/schulung-kundenagenda.md`.
+
+## Content review 2026-11-17: standard tools as the proof thread
+
+Owner 2026-11-17, after the content review (findings R-236 to R-247 in `tasks/reviews.md`):
+the contract shrinks to a trainer mention and the comparison with Figma becomes a look at
+both, not a gate run (revises ADR-0179 points 2, 3 and 6 and two of its rejected options);
+scope in three waves; new content comes in as stages 1 to 4 of the self-check ladder
+(compiler, ESLint, stylelint, story tests with axe) plus a Figma linter in front of them.
+The customer agenda is not touched: every change below sits under a sentence it already
+has. All minutes are estimates from the run-of-show rows, unmeasured until R-040.
+
+How the new content comes in (**owner 2026-11-17: placement agreed**):
+
+- No new block and no lecture on tooling. One ladder slide in Day 1 Block 00, then each
+  stage enters in the block whose agenda row already names its subject, always as the same
+  three beats: break it on purpose, the tool says so, the agent gets the output and repairs.
+- One take-home page: the ladder as a cheat-sheet card (command, what it catches, what it
+  does not see), and the scorecard "what a design system has to bring" as a one-page
+  handout (R-245). Both work in a repo that has none of Atelier's checks.
+
+| Stage                    | Tool the participant already has                          | Enters in                                                                                        | Minutes, and where they come from                              |
+| ------------------------ | --------------------------------------------------------- | ------------------------------------------------------------------------------------------------ | -------------------------------------------------------------- |
+| 0 Design                 | `figma_lint_design`; community plugin as the manual route | Day 1 Block 03 before the checklist; Day 2 Block 01 before the handoff                           | 10 inside the checklist walk; 5 inside the design exercise     |
+| 1 Compiler               | `strict`, `strictTemplates`, `npm run build`              | Day 1 Block 04, demo D-4 (an invented value does not compile, an invented static attribute does) | 2 to 3, from the contract half of D-3 (about 5)                |
+| 2 ESLint                 | `npm run lint` (template a11y, type-aware rules)          | Day 1 Block 02: the agent runs lint and build and reports exit codes                             | 20, from the parity part (30 to 10)                            |
+| 3 Stylelint              | `npm run check:stylelint`                                 | Day 1 Block 00 demo D-1 (already there), Block 05 closing step                                   | 0, wording: the agent runs it                                  |
+| 4 Story tests            | `test-run` / `npm run check:stories`, axe                 | Day 1 Block 04 demo D-5 (already there), Day 2 Block 03                                          | 0, already the self-healing loop                               |
+| Wiring (not a new stage) | `CLAUDE.md` "Definition of Done", `/verify`               | Day 2 Block 00: open it, change one line                                                         | 10, in place of the `ls .claude/skills` check                  |
+| What a DS has to bring   | scorecard handout                                         | Day 1 Block 00 as the map; Day 2 Block 05 as the self-check frame                                | 3 on Day 1 (glossary trim); 0 on Day 2 (frames the self-check) |
+
+Freed elsewhere and spent on the participant's own work: Day 2 Block 02's snapshot row (15)
+goes to `docs-show` on the own component and its JSDoc gaps (R-243); Day 2 Block 04's
+`codeSpec` and D-8 rows (23 to 8, D-8 on the trainer machine only) go to keyboard, states
+and sorting each difference as code, Figma or kept on purpose.
+
+Order of work. Docs, ADR, outline and trainer files are written directly; `.astro`, `.ts`
+and scaffold changes go to Sonnet agents.
+
+- [x] Spikes (a) and (c), 2026-11-17, fresh `create-atelier-ui-workspace@0.4.10`
+      (`--framework angular --no-figma`), 13 planted mistakes, three commands each; exit
+      codes and messages read back from the logs, not taken from the agent's report.
+      (a) The compiler catches half of what an agent invents. On `button[atl-button]`:
+      `variant="ghost"` fails the build with `TS2322`, static or bound, and the message
+      lists the four allowed values; `[shadow]="'lg'"` fails with `NG8002` ("Can't bind to
+      'shadow' since it isn't a known property of 'button'"). A static `shadow="lg"` builds
+      clean (a plain HTML attribute), and so does `(pressed)="…"` (read as a DOM event).
+      Lint adds nothing to those four; it catches the template a11y cases (`alt-text`,
+      `click-events-have-key-events`, `interactive-supports-focus`). A raw `<button>`, an
+      inline `style=`, `color: red`, `oklch()` and a hex in a component's `styles:` pass all
+      three commands; only a hex in a `.css` file fails stylelint (R-241). Warm runs take
+      6 to 9 s for build, 6 to 7 s for lint, 2 to 4 s for stylelint.
+      (c) One headless run, three mistakes planted (bound unknown input, invalid variant,
+      `<img>` without `alt` plus a clickable `<div>`): 78 s, 10 turns, no permission denial,
+      both commands exit 0 afterwards, only `app.html` changed, nothing invented; the
+      `<div>` became a library button. Two caveats. The failing commands print no error
+      text in the agent's shell, only a path to the full log (R-248); the agent found it
+      anyway, by a route not traced. And `alt=""` satisfied the rule for an image that
+      carries meaning: lint green is not the same as right, which is the sentence the
+      block needs. Not measured: a trusted workspace (the headless run ignored the
+      workspace allowlist as untrusted and still ran `npm run`), repeatability (one run),
+      a participant's own terminal.
+      Consequence for the table above: stage 1 is taught on an invented value, not an
+      invented name, and the static attribute that builds clean is shown right after it as
+      what the compiler does not see.
+- [x] ADR-0180 written 2026-11-17 with the measured spike facts, the dated correction in
+      ADR-0179 (points 2, 3, 6 and two rejected options) and one in ADR-0175 (the agent runs
+      the closing step), and the index row. `check:adr-refs` exit 0. All uncommitted, and
+      they have to land in one commit.
+- [x] Wave A, wording and order, no new tooling, 2026-11-17: R-236, R-237, R-238 and
+      R-246 closed, R-242 closed except "contract" with three meanings (Wave B). Loop
+      step 3 is "Generate" everywhere outside the published decks: it is the customer
+      agenda's own verb for the step ("erzeugen") and what the loop diagram and four
+      reference pages already said. Verified: `check:format`, `check:adr-refs`,
+      `check:docs`, `check:docs-layout`, `check:llms`, `check:stylelint` and
+      `nx build docs` exit 0; the Angular tutorial sample builds, lints and stylelints
+      clean in a fresh scaffold. Not verified: the React and Vue samples; `check:all`
+      as a whole. Found on the way: R-249 (the cheat sheet does not print).
+- [ ] R-249 before cohort 1: the cheat sheet's print layout (five pages, unreadable).
+      Not wording, so it is its own step.
+- [x] Wave B, new content, 2026-11-18: R-243, R-244, R-245, R-247 and the rest of R-242
+      closed. Outline first, then the participant pages, run-of-show, demo scripts, golden
+      prompts (§1a to §1c, §2.5, §2.6), trainer notes, dry-run kit and three handouts
+      (`workshop/handouts/`: scorecard, Figma readiness, Storybook readiness);
+      `npm run trainer:print` regenerated `tasks/print/`; both decks republished (Day 1
+      version 28, 59 slides; Day 2 version 20, 54 slides). What changed for a participant:
+      the ladder of five standard tools with the agent running each check, the Figma linter
+      as stage 0, `docs-show` on the own component, the rules file exercise, the scorecard
+      as map and self-check, and "contract" as the deliberate differences in the handoff
+      document, with no contract file and no `figma:snapshot`/`check:contracts` on the
+      participant path.
+      Verified: `check:format`, `check:docs`, `check:docs-layout`, `check:llms`,
+      `check:stylelint`, `check:adr-refs`, `check:component-count`, `check:sync` and
+      `nx build docs` exit 0; `node tools/e2e/schulung-claims.e2e.mjs` exit 0 (every named
+      command and Figma reference exists); the published `deck.json` order read back equals
+      the outline, 59 and 54 ids; no foreign edits before the publish (108 file sizes equal
+      to the backup); `check_deck.py` reports only the known false positive (`d1-00-09`);
+      contact sheets of the changed slides looked at.
+      Not verified: `check:all` as a whole; the published decks in the claude.ai viewer
+      (local render only); the Codex cross-check, which failed twice on 2026-11-18 with
+      `model_not_found`, so the consistency review ran as one fresh-context Sonnet agent
+      instead of a second model.
+      Weakest point: the `atelier-component` skill of a Figma workspace still tells the
+      agent to write a contract file and run `check:contracts`, so the generation step can
+      show a participant the thing the course just took off their path. It is a trainer
+      note on `/schulung` and in the D2-02-03 speaker notes; the fix is a scaffold change
+      and belongs to Wave C. And `/verify` at exit 0 in a Figma workspace is read from
+      `check-contracts.mjs`, not run.
+      Consistency review, 2026-11-18 (one fresh-context agent, 15 findings, each checked
+      against the cited line before acting): 12 fixed. The undo rule now reads the same
+      everywhere (stop, go back to the last green commit, then re-diagnose, no third
+      patch: `/schulung`, run-of-show, trainer notes, outline and slide D2-03-03); the
+      golden-prompt map on `/schulung` names §1a to §1c, §2.5 and §2.6; the scripts list
+      says `lint`, `build`, `check:*` (the scaffold writes no `verify` script, `/verify`
+      is a command file); `/design-to-code` sorts a parity difference into code, Figma or
+      a deliberate difference and no longer calls the contract file the thing that
+      transfers; `/tutorial` step 2 says the deliberate differences are written on Day 2;
+      golden prompt §1b equals the page's `CHECKS_PROMPT`; §2.6 no longer asks for a
+      count word that would make the generated sentence about `/verify` false. Two are
+      left on purpose: `/verify` runs `check:contracts` in a `--figma` workspace and the
+      `atelier-component` skill writes a contract file (both Wave C, rehearsal item 8).
+      One is the owner's: the customer agenda says "Skills für den Agenten einrichten"
+      for Day 2 Block 00, and no participant sets up a skill there; they edit one line
+      of the rules file and see the shipped skill (ADR-0180 point 3).
+      Verified after the fixes, by exit code 0: `check:format`, `check:docs`,
+      `check:docs-layout`, `check:llms`, `nx build docs`,
+      `tools/e2e/schulung-claims.e2e.mjs`, `trainer:print`, `check_deck.py` on Day 2;
+      Day 2 deck republished as Version 22 (slide D2-03-03 only).
+- [x] uianatomy out of the course and the scaffold, and Day 2 Block 00 explains what a
+      skill is (owner 2026-11-18; ADR-0181; R-250, R-251). Why: the hosted server is
+      sometimes overloaded, the generated preflight probed it on every seat, and demo D-7
+      called it live. Scaffold: no `.mcp.json` entry, no copied skill, no rules-file
+      section; spec tests pin the absence. Course: D-7 is now "What a skill is, on a
+      local file" with checkpoint D2B00-C2 and rehearsal check 9; the wiring row names
+      four things on two files; "five servers" is "four" everywhere. Pages: `/schulung`,
+      `/workshop` (the `.mcp.json` sample and both preflight samples, recounted),
+      `/mcp`, `/agent-skills`, `/build-your-own`. Decks: Day 1 slide D1-04-04, Day 2
+      slides D2-00-04, D2-00-05, D2-00-06, D2-05-04, republished.
+      Left on purpose: the repo's own `.mcp.json`, `AGENTS.md`, `.claude/skills/uianatomy-mcp/`,
+      `.agents/skills/uianatomy-mcp/`, `skills/design-to-code/` and
+      `check-skill-discovery.mjs` (maintainer tooling), the briefs' provenance, the
+      sample brief text on `/design-to-code`, two code comments in the React and Vue
+      menu, and all history.
+      Verified, by exit code 0: `nx test create-workspace`,
+      `nx lint create-workspace`, `nx lint create-atelier-ui-workspace`,
+      `sync-preflight.mjs --check`, `check:adr-refs`, `check:format`, `check:docs`,
+      `check:docs-layout`,
+      `check:llms`, `nx build docs`, `tools/e2e/schulung-claims.e2e.mjs`, the deck
+      checker on Day 2 (Day 1 exits 1 on its one known false positive, D1-00-09).
+      Red and not caused here: `gen-scaffold-snapshot.mjs --check` reports `[DRIFT]`
+      for the `AtlButton` master, from the already modified `tools/figma/snapshot.json`.
+      Not verified: the new D-7 on a real seat (rehearsal check 9); `cli.e2e.mjs`; any
+      generated workspace built from the changed preset.
+      Weakest point: D-7 shows the `atelier-component` description, which in a Figma
+      workspace names the contract loop and `check:contracts` (Wave C); the trainer has
+      one sentence for it. And every "four" is false on a machine provisioned from the
+      current release (R-252).
+- [ ] Release the scaffold with the uianatomy removal and provision the course machines
+      from that release (R-252). A push is a release run.
+- [ ] Wave B leftovers. Rehearsal (R-040), the nine numbered items in
+      `tasks/schulung-dry-run-kit.md`: the planted-break prompts in 20 minutes, the
+      three-rule Figma lint count, 5 minutes for the remaining readiness rows, the two
+      Block 00 answers after `/clear`, `docs-show` over the local MCP and its refresh after
+      a JSDoc edit, "read the full log" while R-248 is open, FigmaLint without an API key
+      (owner), `/verify` at exit 0 at the end of Day 2, the D-7 question on every seat in
+      five minutes. Decks: the screenshot placeholder on
+      `d2-02-04` and the FigmaLint bullet on `d2-05-05` (speaker notes only until the owner
+      has seen the keyless run). Wording: §-references to the golden prompts in the task
+      docs carry no anchors; the contract passages left on `/design-to-code`, in the cheat
+      sheet's clone paths and in `/build-your-own` step 7 describe the Atelier repo and stay.
+- [ ] Wave C, scaffold, only with a release and the R-040 rehearsal: R-239; cohort 2:
+      R-240, R-241, a browser check stage, the scorecard as a docs page, an eval exercise.
+- [ ] Figma lint plugin. **Owner 2026-11-17:** FigmaLint, by the author of
+      figma-console-mcp (Southleft). Read from the vendor post (2025-07-02) and a third-party
+      listing mirror, the official Community page answered 403: free; checks interactive
+      states, WCAG (contrast, touch target, focus indicator, font size), component readiness
+      (properties, descriptions), detached instances, variables against hard-coded values,
+      generic layer names, and gives a readiness score; "AI API key is optional" (Anthropic,
+      OpenAI or Google, the user's own key), and which checks run without a key is not
+      stated; it can write to the file ("Apply fixes", "Fix All", bind to variables);
+      exports Markdown and JSON. Open before it goes on a slide: install it on one course
+      machine, run it without a key (ADR-0178: the course has subscription logins, no API
+      keys) and note what still works; decide whether the course shows the fix buttons at
+      all, since the block's rule is "never mutate the master". 2026-11-17: installed on
+      the owner's machine; the run without a key is the owner's, a plugin cannot be driven
+      through the bridge. Wanted from it: which checks work without a key, the Markdown or
+      JSON export for `Inputs/AtlButton`, and whether it also reports the hidden
+      `_disabled-overlay` label as a contrast failure.
+- [ ] Spike (b), half done 2026-11-17 (bridge connected to the Atelier file, read-only):
+      `figma_lint_design` on the master `Inputs/AtlButton` (`129:20`), default rules:
+      121 nodes, 59 findings, none of the ones looked at is a defect. 18 "critical"
+      `wcag-contrast` (3.9:1, `#64748B` on `#E2E8F0`) all sit on the `label` inside
+      `_disabled-overlay`, a frame with `visible: false` bound to the `disabled` Boolean
+      property, so the linter reads a hidden layer, and a disabled control is exempt from
+      the contrast criterion anyway; 40 `no-text-style` because the file binds `fontSize`
+      and `fills` to variables and uses no text styles; 1 `no-autolayout` on the component
+      set itself. 0 `hardcoded-color`. A rule filter by id works
+      (`rules: ['hardcoded-color', 'default-name', 'detached-component']`); on the page
+      `default-name` then reports vectors inside nested instances, as `/readiness` warns.
+      Consequences for the block: the exercise prompt names the rules, it does not run the
+      default set (59 findings on the reference master after lunch is noise); the 18 false
+      criticals are a ready example for "a finding is something to sort, not a verdict",
+      trainer only. Still open: the positive case (a raw colour on a duplicate, does
+      `hardcoded-color` fire and how does it name the layer) and the runtime, both on a
+      course duplicate, not on the Atelier file.
+
 ## Near-term work
 
 Ranked; each carries why it's worth doing next rather than later.

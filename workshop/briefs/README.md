@@ -148,12 +148,12 @@ second copy.
 ## Sources
 
 - uianatomy MCP (`https://uianatomy.dev/mcp`) — `list_components`, `search_components`,
-  `get_component_view`. Read 2026-08-29. **Caveat worth stating in the block:** the four
-  records were last reviewed 2026-05-04/05, which puts them 116–117 days stale against
-  the server’s own 90-day threshold. Nothing in these briefs contradicts what the Atelier
-  library ships, but treat the canonical claims as a strong prior, not as scripture — and
-  say so when you show the tool, because "check the staleness before you trust it" is part
-  of what the block is teaching.
+  `get_component_view`. Read 2026-08-29. **Caveat:** the four records were last reviewed
+  2026-05-04/05, which put them 116–117 days stale against the server’s own 90-day
+  threshold on the day they were read. Nothing in these briefs contradicts what the Atelier
+  library ships, but treat the canonical claims as a strong prior, not as scripture. The
+  course itself does not call the server (since 2026-11-18): the briefs are the
+  transcription, and they are all a participant needs.
 - `plan/figma-component-checklist.md` — the pre-release checklist and what `check:figma`
   automates.
 - `plan/design-principles.md` — surface hierarchy, timing tiers, disabled contract.

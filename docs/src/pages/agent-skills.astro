@@ -71,7 +71,7 @@ const skills = [
         A skill is a folder with a <code>SKILL.md</code> that Claude Code loads
         when your request matches the skill's description. A generated workspace
         carries its skills in <code>.claude/skills/</code>, so they travel with
-        the repo and work for everyone who clones it. Three are written by the
+        the repo and work for everyone who clones it. Two are written by the
         generator, four more are installed from the Storybook team's skill set:
       </p>
       <div class="docs-table-scroll">
@@ -94,16 +94,6 @@ const skills = [
                 it also loads when a <code>figma.com/design</code> link arrives
                 with a component name. This is your design-to-code loop. Not for
                 Storybook configuration.
-              </td>
-            </tr>
-            <tr>
-              <td><code>uianatomy-mcp</code></td>
-              <td>Always</td>
-              <td>
-                Canonical component anatomy, axes, slots, tokens, motion and how
-                other libraries differ, looked up through the
-                <code>uianatomy</code> MCP server wired in your
-                <code>.mcp.json</code>.
               </td>
             </tr>
             <tr>
@@ -155,10 +145,10 @@ const skills = [
         "
       >
         Start Claude Code in the workspace root and list the folder. You should
-        see <code>atelier-component</code>, <code>uianatomy-mcp</code>, the four
-        Storybook skills, and <code>figma-workspace-architect</code> if you
-        chose Figma. Then ask Claude Code which skills it has in this project,
-        or give it a request from the table and watch which skill it names.
+        see <code>atelier-component</code>, the four Storybook skills, and
+        <code>figma-workspace-architect</code> if you chose Figma. Then ask
+        Claude Code which skills it has in this project, or give it a request
+        from the table and watch which skill it names.
       </p>
       <Code code={CHECK_SKILLS} lang="shell" />
 
@@ -191,9 +181,9 @@ const skills = [
           max-width: 660px;
         "
       >
-        The three skills written by the generator (<code>atelier-component</code
-        >, <code>uianatomy-mcp</code>, <code>figma-workspace-architect</code>)
-        need no network and are not affected.
+        The two skills written by the generator (<code>atelier-component</code>,
+        <code>figma-workspace-architect</code>) need no network and are not
+        affected.
       </p>
 
       <h3 class="docs-h3" style="margin-top: 1.75rem">
@@ -424,7 +414,7 @@ const skills = [
           Multi-file Claude Code skills that ship architectural and brand
           playbooks — references and assets loaded on demand. Distinct from the
           MCP Skills below: these run in Claude Code itself, not as a remote MCP
-          server. Two of the five below are
+          server. Two of the four below are
           <strong style="color: var(--ui-color-text)">repo-bound</strong>: they
           name this repo's own gates, files and Claude Design project ids, so
           they are deliberately not mirrored to the discovery endpoint
@@ -558,32 +548,6 @@ const skills = [
                 Design project ids, the artboard registry and the design-status
                 gate; carries ADR-0032 governance; see
                 skills/artboard-bridge/SKILL.md</span
-              >
-            </div>
-          </div>
-
-          <div class="docs-step-row">
-            <span class="docs-step-badge">ε</span>
-            <div style="flex: 1">
-              <h3 class="docs-h3">uianatomy-mcp</h3>
-              <p class="docs-step-desc" style="margin-bottom: 0.5rem">
-                Wires the UI Anatomy MCP server for canonical component anatomy,
-                axes, slots, tokens, motion and cross-framework mapping — demoed
-                in Day 2 of the training. External: hosted at uianatomy.dev, not
-                one of this repo's own skills, so its discovery URL is its own
-                rather than this site's.
-              </p>
-              <a
-                href="https://uianatomy.dev/.well-known/agent-skills/uianatomy-mcp/SKILL.md"
-                target="_blank"
-                rel="noopener noreferrer"
-                style="
-                  font-size: var(--ui-font-size-xs);
-                  font-family: monospace;
-                  color: var(--ui-color-text-muted);
-                  text-decoration: none;
-                "
-                >https://uianatomy.dev/.well-known/agent-skills/uianatomy-mcp/SKILL.md</a
               >
             </div>
           </div>

@@ -1064,3 +1064,30 @@ was a `v0.4.9` tag on bce36825 (the source 0.4.9 was built from) plus a re-run, 
 concrete: every push I make on main ends with `gh run list` for that SHA and a look at the Publish
 conclusion before I report the push as done; `check:release-drift` runs before any push that carries
 a `fix`/`feat` commit.
+
+## 2026-11-12 — I recommended an allocation while the measurement that decides it was still running
+
+In the course walkthrough, Block 01 freed 30 minutes and I recommended giving all of them to
+Day 1 Block 05, whose timebox a second-model review had called infeasible (R-225). The spike that
+times the block was running in the background while I wrote that. It came back with about five
+machine minutes for the whole exercise, so the block was not short of build time and I had to take
+the recommendation back in the next message. The owner had not acted on it yet; that was luck.
+Rule: when a measurement I started is still running, the answer to "where should the time go" is
+"the spike says in N minutes", not a recommendation with a caveat. A recommendation the owner may
+act on waits for the number it depends on; what I can give meanwhile is the options and which
+result would favour which.
+
+## 2026-11-12 — I let the repo's gates become the course's subject
+
+Owner correction during the walkthrough: the course should not lean on the gates; they are
+accompaniment, not the primary goal. I had been carrying this repo's own proof standard ("a gate's
+result is its exit code") into the teaching material: several block done-whens are a gate command
+(`check:contracts` is green offline; three or four named commands in Day 1 Block 05), a slide lists
+"the three gates", and I raised "three versus four gates" as an open point for a block walkthrough.
+That is how this repo is verified, not what a participant comes to learn, which is getting from a
+Figma design to a working component with AI.
+Rule: in course material, a block's done-when names what the participant built or can now do; a
+gate appears at most as the one closing line that proves it. No slide headlined by a gate, no
+enumeration of gate names on a slide, no finding codes taught beyond what a triage needs. When I
+review a block, "which gate proves it" is my question for the trainer notes, not a line for the
+room. The repo's own verification rules stay as they are.

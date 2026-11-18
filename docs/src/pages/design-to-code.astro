@@ -57,8 +57,9 @@ const GENERATE_NOTE: Record<string, string> = {
 };
 
 const PARITY_PROMPT = `Run figma_check_design_parity on the settings card node against
-the component I just generated. For each discrepancy, say whether the code,
-the Figma master or the contract should change, and why. Fix only the code ones.`;
+the component I just generated. For each discrepancy, say whether the code or
+the Figma master should change, or whether it is a deliberate difference to
+keep, and why. Fix only the code ones.`;
 
 // Step 4 — the self-healing loop, as one copyable brief.
 const LOOP_PROMPT = `Verify the component I just generated, in at most 3 rounds:
@@ -339,6 +340,11 @@ description of the master, not left out silently.
 Elevation: \`--ui-shadow-lg\`, CSS only. Figma has no shadow variable, so the
 Figma description says so.
 
+**Deliberate differences.** What the code does differently from the design on
+purpose, and why. Hover and focus-visible are CSS, not variants or properties.
+Elevation is \`--ui-shadow-lg\` in CSS only, because Figma has no shadow variable
+to bind.
+
 **Behaviour.** Each line becomes the title of one play function.
 - Auto-dismisses after N seconds (I choose N and write it here: ___).
 - Pauses on pointer-enter and on focus-in; resumes, does not restart, when both are out.
@@ -351,13 +357,13 @@ The glyph is aria-hidden. The action, if present, is a real button. A critical
 error is never shown as a toast.
 
 **Target files.** The component, its unit test and its story file (one story
-per variant value and Boolean state, a play function per behaviour line above),
-plus the contract at \`workshop-<fw>/src/contracts/toast.contract.ts\`.
+per variant value and Boolean state, a play function per behaviour line above).
 
 **Acceptance.** Unit tests and lint exit 0. check:stories green (every story
-renders, axe clean). check:contracts exit 0, with no [AXIS] or [BOOLEAN]
-finding. figma_check_design_parity run on my node, every discrepancy it reports
-decided: fix the code, the master, or the contract.`;
+renders, axe clean). docs-show describes the component: a description and a line
+per property. figma_check_design_parity run on my node, every difference it
+reports sorted: code, Figma, or kept on purpose (then it is listed under
+Deliberate differences).`;
 ---
 
 <BaseLayout
@@ -678,15 +684,17 @@ decided: fix the code, the master, or the contract.`;
             <strong style="color: var(--ui-color-text)"
               >Building for one framework?</strong
             >
-            That is the normal case for a team taking this home, and the pieces
-            that transfer are the contract file, the stories, and the two checks
-            that read them: <code>check:contracts</code> and
-            <code>check:stories</code>. The <code>create-workspace</code>
-            scaffold ships all four, so a one-framework repo starts with the
-            same loop this monorepo runs, nothing translated. What does
-            <em>not</em> transfer is <code>libs/spec/src/index.ts</code>, a file
-            specific to this repo that a few cross-framework consistency checks
-            read. A one-framework repo has nothing to keep in sync, so skip it.
+            That is the normal case for a team taking this home. What transfers
+            first is what any repo has or can add: the stories, run as tests
+            (<code>check:stories</code>), and the standard checks around them
+            (the strict compiler, ESLint, stylelint). The contract file and
+            <code>check:contracts</code> are Atelier's own design-to-code check:
+            the <code>create-workspace</code> scaffold ships them when Figma is
+            enabled, and they are the last and optional thing to adopt. What
+            does <em>not</em> transfer is <code>libs/spec/src/index.ts</code>, a
+            file specific to this repo that a few cross-framework consistency
+            checks read. A one-framework repo has nothing to keep in sync, so
+            skip it.
           </p>
           <MaintainerNotes topic="why">
             <details class="d2c-why">
@@ -1062,18 +1070,17 @@ decided: fix the code, the master, or the contract.`;
             <code>figma_scan_code_accessibility</code>. The agent fixes and
             reruns. The loop needs a stop condition, so cap it at about three
             rounds, then hand back to a human with a summary of what still
-            fails. After two failed fixes, stop and re-diagnose; and if the
-            diagnosis says the patches made it worse, revert the failed attempt
+            fails. After two failed fixes, go back to the last green commit
             (<code
               >git reset --hard HEAD &amp;&amp; git clean -fd --
               workshop-&lt;fw&gt;/src</code
-            >) instead of a third patch. The <code>reset</code> restores every
-            tracked file to the last green commit, and the <code>clean</code>
-            removes the new files the agent created (a bare
-            <code>git checkout -- .</code> would leave them and the gates would
-            stay red); it is limited to your app's <code>src/</code> and never
-            uses <code>-x</code>. That is why you commit whenever a gate is
-            green.
+            >), then re-diagnose before the next prompt; no third patch. The
+            <code>reset</code> restores every tracked file to the last green
+            commit, and the <code>clean</code> removes the new files the agent
+            created (a bare <code>git checkout -- .</code> would leave them and
+            the gates would stay red); it is limited to your app's
+            <code>src/</code> and never uses <code>-x</code>. That is why you
+            commit whenever a gate is green.
           </p>
           <Code
             code={LOOP_PROMPT}

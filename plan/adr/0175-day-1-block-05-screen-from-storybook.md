@@ -50,6 +50,24 @@ the clock", on the new page `/screen-from-storybook`:
 - The `/first-component` kata stays as optional homework, and its `#bridge` section stays the
   Block 06 homework for green seats.
 
+**Corrected 2026-11-12** (ADR-0178): the slot is now 15:55–17:15, 80 minutes, with the build phase
+cut from 40 to 30 minutes and the debrief raised from 7 to 25; a measured run showed the machine
+needs about five minutes for the whole exercise. The course moved to provisioned machines that stay
+in the room, so the `#bridge` section is no longer Block 06 homework for green seats; the kata and
+the bridge exercise are optional for people with their own machine. And "the only source is the
+Storybook MCP" has one known hole: on Angular, `docs-show` never names the classes to import for
+sub-components; ADR-0178 teaches that as a fifth gap instead of fixing it for the first cohort.
+
+**Corrected 2026-11-17** (ADR-0179): the gates named above stay on `/screen-from-storybook`, as the
+closing step a participant runs. They are no longer the block's definition of done; that is the
+running screen and a source for every prop.
+
+**Corrected 2026-11-17** (ADR-0180): the closing step is run by the agent, on the participant's
+prompt, which reports each exit code and repairs from the output; the participant no longer types
+the commands. The evidence table stays the check for invented names and hand-built elements: a
+spike the same day showed that no command in the workspace catches a static attribute for an
+input that does not exist, a raw `<button>` or an inline `style`.
+
 Rejected:
 
 - **Reframe Block 02 only** (build the Settings Card via Storybook instead of the tutorial): the

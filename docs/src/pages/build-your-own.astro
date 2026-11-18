@@ -15,20 +15,32 @@ import { inlineMd } from '../lib/inline-md';
 
 const MCP_ADD =
   'claude mcp add --transport http storybook-local http://localhost:<port>/mcp';
-const SNAPSHOT_AND_CHECK = `npm run figma:snapshot
-npm run check:contracts`;
-const EMIT = 'npm run check:contracts -- --emit <folder>';
+const RULE_LINE =
+  '- `npm run lint` and `npm run build` — ESLint and the strict compiler';
+const GENERATION_PROMPT = `Generate the component from my handoff document <path or pasted text>.
+In one step, write the component with its test, and its stories: one story per
+variant value and Boolean state, and a play function for every behaviour line of
+the document. The handoff document is the input, including its "Deliberate
+differences": take them as they are.`;
+const DOCS_SHOW_CLI = `npx storybook tools --config-dir workshop-<fw>/.storybook --json docs show --input '{"id":"<id>"}'`;
+const LINT_PROMPT = `Run figma_lint_design on my component set <node id> with only the rules
+hardcoded-color, default-name and detached-component. Return the findings as a
+list. Do not change anything in the file.`;
+const PARITY_PROMPT = `Run figma_check_design_parity on the node from my handoff document against
+my component. List each discrepancy and say whether the code or the Figma
+master should change, or whether the "Deliberate differences" section already
+names it, and why. Do not change anything yet.`;
 ---
 
 <BaseLayout
   title="Build your own component (Day 2)"
-  description="Day 2 of the Atelier training, for participants: choose a component brief, design it in Figma, write the handoff, generate contract, component and stories, iterate, verify and finish with a checklist."
+  description="Day 2 of the Atelier training, for participants: choose a component brief, design it in Figma, write the handoff, generate component and stories, iterate, verify and finish with a checklist."
   currentPath="/build-your-own"
   tocItems={[
     { id: 'goal', label: 'What you will have' },
     { id: 'block-00', label: '00 · Choose your brief' },
     { id: 'block-01', label: '01 · Design and handoff' },
-    { id: 'block-02', label: '02 · Contract, component, stories' },
+    { id: 'block-02', label: '02 · Component and stories' },
     { id: 'block-03', label: '03 · Iterate' },
     { id: 'block-04', label: '04 · Verify' },
     { id: 'block-05', label: '05 · Show and transfer' },
@@ -44,21 +56,18 @@ const EMIT = 'npm run check:contracts -- --emit <folder>';
     >
       Day 1 you ran the loop on a component we gave you. Today you run it on one
       you design yourself: a brief, a Figma component set, a handoff document,
-      then contract, component and stories, iterated until every check is green.
-      You prompt; you do not type the code.
+      then component and stories, iterated until every check is green. You
+      prompt; you do not type the code.
     </PageHero>
 
     <section class="docs-section" aria-labelledby="goal">
       <h2 class="docs-section-title" id="goal">What you will have</h2>
       <ul class="byo-list">
         <li>
-          An own component in your own Figma draft: a component set with
-          variants, properties and dark mode
+          An own component in your duplicate of the Atelier file: a component
+          set with variants, properties and dark mode
         </li>
-        <li>
-          Contract, component and stories in your own workspace, in your
-          framework
-        </li>
+        <li>Component and stories in your own workspace, in your framework</li>
         <li>An a11y audit passed, and dark mode working</li>
       </ul>
       <Callout tone="tip" title="Keep these open all day">
@@ -96,26 +105,54 @@ const EMIT = 'npm run check:contracts -- --emit <folder>';
         <a href="/briefs/avatar" class="docs-link-primary">Avatar</a>.
       </p>
       <p class="docs-step-desc">
-        You also meet the skills: a skill is a guide that Claude loads when the
-        task matches. In your workspace that is <code>atelier-component</code>
-        (the design-to-code loop for your workspace, which carries the day from
-        Block 02 on), <code>uianatomy-mcp</code>,
-        <code>figma-workspace-architect</code> (only in workspaces generated
-        with Figma) and the four Storybook skills. See
-        <a href="/agent-skills" class="docs-link-primary">Agent skills</a>.
+        Skills are guides that Claude loads when the task matches; see
+        <a href="/agent-skills" class="docs-link-primary">Agent skills</a>. Now
+        look at what the agent reads in your workspace. Three files (3 min on
+        the projector):
       </p>
+      <ul class="byo-list">
+        <li>
+          <code>CLAUDE.md</code>, its "Definition of Done": the rule the agent
+          reads every session.
+        </li>
+        <li>
+          <code>.claude/skills/atelier-component/SKILL.md</code>, the
+          <code>description</code> in its frontmatter: when the skill loads.
+        </li>
+        <li>
+          <code>.claude/settings.json</code>, <code>hooks.PostToolUse</code>,
+          which runs <code>.claude/hooks/format-edited.sh</code>: it runs after
+          every edit without being asked.
+        </li>
+      </ul>
+      <p class="docs-step-desc">Then change one line (7 min):</p>
+      <ol class="byo-list byo-list--ordered">
+        <li>
+          Ask: "Which commands does this workspace's Definition of Done list?
+          Only list them."
+        </li>
+        <li>
+          Lint and build are named in the paragraph above the list but not in
+          the list. Add this line and correct the count word:
+          <Code code={RULE_LINE} lang="markdown" title="CLAUDE.md" />
+        </li>
+        <li>
+          Run <code>/clear</code> and ask again. The list now names lint and
+          build.
+        </li>
+      </ol>
       <p class="docs-step-desc">
-        Green seats did the
+        The optional
         <a href="/first-component#bridge" class="docs-link-primary"
           >bridge exercise</a
         >
-        (add a variant to your SettingsCard, with story and contract) as Day 1
-        homework. If you did not, skim it: Block 02 asks for exactly that trio,
-        and it is cheaper to meet it on a component that already works.
+        (add a variant to your SettingsCard, with story) asks for the same work
+        as Block 02. If you have not done it, skim it: it is cheaper to meet
+        that work on a component that already works.
       </p>
       <p class="byo-done">
-        <strong>Done when</strong> you know your target component and your
-        skills are installed.
+        <strong>Done when</strong> you know your target component, have changed
+        one line of the rules file and have seen the agent read it.
       </p>
     </section>
 
@@ -131,12 +168,14 @@ const EMIT = 'npm run check:contracts -- --emit <folder>';
       </p>
       <ol class="byo-list byo-list--ordered">
         <li>
-          Duplicate the Atelier file into your own drafts first, and never
-          change the original file.
+          Open the prepared duplicate of the Atelier file on your machine, the
+          one copy used on both days, and never change the original file. Do not
+          duplicate again: a second copy has a new file key, and
+          <code>package.json</code> carries the key.
         </li>
         <li>
           Start from your brief's starter frame on the Workshop Templates page
-          (it comes along when you duplicate): Toast / Starter, StatCard /
+          (it is part of the prepared duplicate): Toast / Starter, StatCard /
           Starter, TagChip / Starter or Avatar / Starter. Fills, and where the
           component has them paddings and radii, are already bound to Library
           Tokens variables, so the first step is copy and rename, not an empty
@@ -145,9 +184,9 @@ const EMIT = 'npm run check:contracts -- --emit <folder>';
         <li>
           Design in the Figma UI (about 40 min): layout, variants, token
           assignment. Then structure it through MCP (about 25 min): component
-          properties and a11y audits. Plan about 5 min for the duplicate at the
-          start, 5 min for the API rules talk, about 12 min for the handoff
-          document and a 3 min recap at the end.
+          properties and a11y audits. Plan about 5 min for opening the duplicate
+          at the start, 5 min for the API rules talk, about 12 min for the
+          handoff document and a 3 min recap at the end.
         </li>
         <li>
           Aim for at least 2 variants × 2 states, properties, correct
@@ -160,10 +199,30 @@ const EMIT = 'npm run check:contracts -- --emit <folder>';
           config, no hidden defaults.
         </li>
         <li>
-          Before anyone prompts, write a short handoff document: draft URL and
-          node id, chosen variants and states, token bindings, reuse versus
-          rebuild, the behaviour from the brief, explicit exclusions, target
-          files and acceptance criteria. It is a checklist, not a template.
+          Run the Figma linter on your own component set (5 min). Ask the agent
+          to run <code>figma_lint_design</code> with only three rules:
+          <code>hardcoded-color</code>, <code>default-name</code> and
+          <code>detached-component</code>.
+          <Code
+            code={LINT_PROMPT}
+            lang="text"
+            wrap
+            title="Figma linter prompt"
+          />
+          Sort each finding: real or false alarm. Fix the real ones before the
+          handoff document and note the false alarms. The linter does not tell
+          you whether the design is right.
+        </li>
+        <li>
+          Before anyone prompts, write a short handoff document with nine items:
+          file URL and node id, chosen variants and states, token bindings,
+          reuse versus rebuild, the behaviour from the brief, explicit
+          exclusions, target files, acceptance criteria and deliberate
+          differences. The last one says what the code will do differently from
+          the design on purpose, and why. For example, a
+          <code>State=Hover</code> variant in Figma is <code>:hover</code> in
+          CSS, not a property, and a Figma Boolean "Show icon" is a slot in
+          code. It is a checklist, not a template.
           <a href="/design-to-code#handoff-example" class="docs-link-primary"
             >A filled handoff document</a
           >
@@ -175,9 +234,7 @@ const EMIT = 'npm run check:contracts -- --emit <folder>';
           Bridge not connected, node id does not resolve, port conflicts: see
           <a href="/troubleshooting" class="docs-link-primary"
             >Troubleshooting</a
-          >
-          and <a href="/figma-token" class="docs-link-primary">Figma access</a>.
-          Still red: the
+          >. Still red: the
           <a href="/troubleshooting#still-red" class="docs-link-primary"
             >rescue path</a
           >.
@@ -185,32 +242,22 @@ const EMIT = 'npm run check:contracts -- --emit <folder>';
       </Callout>
       <p class="byo-done">
         <strong>Done when</strong> you have a master plus a filled handoff
-        document.
+        document, including its deliberate differences.
       </p>
     </section>
 
     <section class="docs-section byo-block" aria-labelledby="block-02">
       <p class="byo-meta">11:15–12:30 · 75 min</p>
       <h2 class="docs-section-title" id="block-02">
-        <span class="byo-num" aria-hidden="true">02</span> Contract, component,
-        stories
+        <span class="byo-num" aria-hidden="true">02</span> Component and stories
+        from the handoff
       </h2>
       <p class="docs-step-desc">
+        One prompt turns the handoff document into a component you can look at.
         Prompt from the handoff document, not from the picture alone: behaviour
-        and exclusions come from the document. Let Claude produce the contract,
-        the component (with its test) and the stories in one step. One story per
-        variant value and Boolean state, and a <code>play</code> for every
-        behaviour line of the document.
+        and exclusions come from the document.
       </p>
       <ol class="byo-list byo-list--ordered">
-        <li>
-          The trainer opens
-          <code>workshop-&lt;fw&gt;/src/contracts/button.contract.ts</code> and
-          <code>types.ts</code> on the projector first (5 min): the
-          <code>ComponentContract</code> shape Claude generates against. Green
-          seats met it in the bridge exercise. The generation row is 25 min,
-          including this walk-through.
-        </li>
         <li>
           Start <code>npm run storybook</code> in parallel, then connect to it
           (use the port Storybook prints). This is deliberately local scope, so
@@ -229,41 +276,51 @@ const EMIT = 'npm run check:contracts -- --emit <folder>';
           every <code>*.stories.*</code> edit.
         </li>
         <li>
-          The contract lives in your own workspace under
-          <code>workshop-&lt;fw&gt;/src/contracts/</code>. The component
-          declares its prop types directly; there is no separate spec interface
-          file. See the
-          <a href="/design-to-code#contract-example" class="docs-link-primary"
-            >worked contract example</a
-          >.
-        </li>
-        <li>
-          Your Figma node needs a snapshot in your workspace. With the bridge
-          connected, run the snapshot, then the check. Before the first run,
-          replace the <code>&lt;YOUR_FIGMA_FILE_KEY&gt;</code> placeholder in
-          the <code>figma:snapshot</code> script in <code>package.json</code>
-          with your own file key if it is not already set:
+          Send the generation prompt, with your handoff document as the input.
+          One step, not three: Claude writes the component (with its test) and
+          the stories. One story per variant value and Boolean state, and a
+          <code>play</code> for every behaviour line of the document. The
+          deliberate differences go into the prompt as they are; the component
+          declares its prop types directly.
           <Code
-            code={SNAPSHOT_AND_CHECK}
-            lang="shell"
-            title="snapshot, then check"
+            code={GENERATION_PROMPT}
+            lang="text"
+            wrap
+            title="generation prompt"
           />
-          Without a fresh snapshot your component is missing and the check
-          reports <code>[NO-MASTER]</code> (a warning) instead of failing. Read
-          every finding with the
-          <a href="/design-to-code#finding-codes" class="docs-link-primary"
-            >finding codes</a
+        </li>
+        <li>
+          Look at the result. Open every story in the running Storybook (or
+          through <code>stories-preview</code>) and hand what is wrong back to
+          Claude by prompt. Do not type the code. Background on stories and the
+          MCP docs: <a href="/storybook" class="docs-link-primary">Storybook</a
           >.
         </li>
         <li>
-          Later, for the parity check in Block 04, write the codeSpec fragment
-          with:
-          <Code code={EMIT} lang="shell" title="emit the codeSpec fragment" />
+          What can the agent read about your component (10 min)? Call
+          <code>docs-list</code>, then <code>docs-show</code> on your own
+          component through <code>storybook-local</code>. Read it as the agent
+          of a consumer: what would it have to guess? No description for the
+          component, a property without a description, a value set shown only as
+          a bare type alias. Ask Claude to add the JSDoc, then call
+          <code>docs-show</code> again and compare. If the second call still
+          shows the old text, restart Storybook and call again. Without the MCP,
+          the same call through the CLI:
+          <Code
+            code={DOCS_SHOW_CLI}
+            lang="shell"
+            wrap
+            title="docs-show without the MCP"
+          />
+          What makes these descriptions complete is on
+          <a href="/storybook-readiness" class="docs-link-primary"
+            >Storybook readiness</a
+          >.
         </li>
         <li>
-          Iterate until the prop table fits. Stories and the MCP docs are
-          covered in <a href="/storybook" class="docs-link-primary">Storybook</a
-          >.
+          Look at both (5 min). Put the running stories next to the Figma
+          component and go through every variant and state, one pass. Write the
+          differences down as a list; Block 04 sorts it.
         </li>
         <li>
           Commit when the block is green:
@@ -273,8 +330,10 @@ const EMIT = 'npm run check:contracts -- --emit <folder>';
         </li>
       </ol>
       <p class="byo-done">
-        <strong>Done when</strong> <code>check:contracts</code> is green
-        offline.
+        <strong>Done when</strong> the component from your handoff document runs
+        in Storybook with one story per variant value, and
+        <code>docs-show</code> describes it: a description for the component and
+        a line per property.
       </p>
     </section>
 
@@ -313,15 +372,14 @@ const EMIT = 'npm run check:contracts -- --emit <folder>';
           >.
         </li>
         <li>
-          Undo rule: commit when a gate is green
+          Undo rule: commit when the stories are green
           (<code>git add -A &amp;&amp; git commit -m "&lt;step&gt;: green"</code
-          >). After two failed fixes, stop and re-diagnose; if the patches made
-          it worse, revert the failed attempt with
+          >). After two failed fixes, go back to the last green commit with
           <code
             >git reset --hard HEAD &amp;&amp; git clean -fd --
             workshop-&lt;fw&gt;/src</code
           >
-          rather than patching a third time (preview the delete with
+          then re-diagnose before the next prompt (preview the delete with
           <code>git clean -nd -- workshop-&lt;fw&gt;/src</code>).
           <code>reset --hard</code> restores every tracked file to the last
           green commit; <code>git checkout -- .</code> alone would leave the new
@@ -370,38 +428,33 @@ const EMIT = 'npm run check:contracts -- --emit <folder>';
           is a preview, not test coverage.
         </li>
         <li>
-          Assemble your codeSpec from the fragment of Block 02
-          (<code>componentAPI</code>, <code>metadata</code>, <code>tokens</code
-          >), plus <code>accessibility</code> from the next step: four of the
-          seven possible sections, which is the normal, thin codeSpec. For
-          accessibility, open the story in the running Storybook, copy the story
-          root element's <code>outerHTML</code> in DevTools and pass it as
-          <code>html</code> with <code>mapToCodeSpec: true</code> to
-          <code>figma_scan_code_accessibility</code>.
-        </li>
-        <li>
-          Run <code>figma_check_design_parity</code> on your own node. It needs
-          the connected Desktop Bridge; without it the loop ends after
-          <code>check:contracts</code> and <code>storybook-test</code>, which is
-          a degraded run, not "just carry on". Run it twice, on purpose, on the
-          variant you built (geometry lives there; a variant carries no
-          component properties, so the <code>componentAPI</code> rows are the
-          same noise in both calls). Call 1: your four sections plus one
-          <code>spacing</code> section you add by hand (padding and gap from
-          your component's CSS) with a single value deliberately wrong, for
-          example a <code>gap</code> that disagrees with the Figma variant; the
-          report flags it. Call 2: the same four sections without
-          <code>spacing</code>; no spacing row appears although the wrong value
-          is still there. Fields you did not pass are not compared. Read the
-          result with
+          Parity report on your own component (8 min). Run
+          <code>figma_check_design_parity</code> with the node id from your
+          handoff document; it needs the connected Desktop Bridge, and without
+          it there is no parity call. A quiet report is not a clean component:
+          what the call does not compare, it does not report. Read the result
+          with
           <a href="/design-to-code#parity-report" class="docs-link-primary"
             >reading a parity report</a
           >.
+          <Code code={PARITY_PROMPT} lang="text" wrap title="parity prompt" />
+        </li>
+        <li>
+          Sort every difference (20 min): the list from the parity report plus
+          the list from Block 02, one label each: <strong>code</strong> (hand it
+          back to Claude; fixed inside this row), <strong>Figma</strong> (a note
+          for the designer; the master is not changed now) or
+          <strong>kept on purpose</strong> (it must be in the handoff document's
+          "Deliberate differences"; if it is not there, either write it there
+          and say why, or it is code or Figma). Classic mislabel: "fixing" in
+          code what was kept on purpose. Without the bridge there is no parity
+          call: sort the Block 02 list.
         </li>
       </ol>
       <p class="byo-done">
-        <strong>Done when</strong> <code>storybook-test</code> with axe is green
-        and every parity finding is triaged as code, Figma or contract.
+        <strong>Done when</strong> the component works by keyboard and has no
+        open accessibility finding, dark mode switches through tokens, and every
+        difference to Figma is sorted (code / Figma / kept on purpose).
       </p>
     </section>
 
@@ -419,30 +472,67 @@ const EMIT = 'npm run check:contracts -- --emit <folder>';
         </li>
         <li>
           Workspace anatomy (15 min), what makes the loop portable, file by
-          file: <code>.mcp.json</code> (the servers), <code>CLAUDE.md</code
-          >/<code>AGENTS.md</code> (the working agreement),
-          <code>.claude/skills/</code> (<code>atelier-component</code>,
-          <code>uianatomy-mcp</code>, <code>figma-workspace-architect</code>,
-          the Storybook skills), <code>tools/design-contracts/</code> plus
-          <code>contracts.config.json</code> (the gate, copy as is),
-          <code>.storybook/main.ts</code> (addon-vitest, addon-a11y,
-          addon-themes), and the <code>package.json</code> scripts
-          (<code>verify</code>, <code>check:*</code>, <code>figma:snapshot</code
-          >). Then: what to copy into your own repo, in which order.
+          file: <code>.mcp.json</code> (the servers), <code>CLAUDE.md</code>
+          (the working agreement), <code>.claude/skills/</code>
+          (<code>atelier-component</code>, <code>figma-workspace-architect</code
+          >, the Storybook skills), <code>.claude/settings.json</code>
+          (permissions and the format hook),
+          <code>.claude/commands/verify.md</code> (the one proof command),
+          <code>.claude/agents/component-review.md</code> (a review agent the
+          workspace ships), <code>.storybook/main.ts</code> (addon-vitest,
+          addon-a11y, addon-themes), and the <code>package.json</code> scripts
+          (<code>lint</code>, <code>build</code>, <code>check:*</code>). What to
+          copy into your own repo, in this order, most portable first:
+          <ol class="byo-list byo-list--ordered">
+            <li>
+              The Storybook MCP on your own Storybook (<code>.mcp.json</code>,
+              <code>@storybook/addon-mcp</code>): the agent reads your real
+              component API.
+            </li>
+            <li>
+              A rules file with the exact check commands (<code>CLAUDE.md</code>
+              or <code>AGENTS.md</code>, its "Definition of Done"): the agent
+              knows what to run before it says done.
+            </li>
+            <li>
+              Strict TypeScript, ESLint and stylelint: you probably have them;
+              let the agent run them and read the output.
+            </li>
+            <li>
+              Story tests with axe (<code>.storybook/main.ts</code>:
+              addon-vitest, addon-a11y): every story is a test.
+            </li>
+            <li>
+              One proof command and the hooks
+              (<code>.claude/commands/verify.md</code>,
+              <code>.claude/hooks/</code>).
+            </li>
+            <li>Skills (<code>.claude/skills/</code>).</li>
+            <li>
+              Atelier's own check that reads the differences kept on purpose
+              from a contract file (<code>tools/design-contracts/</code>): last
+              and optional, and not part of this course.
+            </li>
+          </ol>
+          You take the workspace home as it is on the course machine; the
+          trainer tells you how it leaves the machine.
         </li>
         <li>
-          Transfer (12 min): run the self-check in
-          <a href="/design-principles#check-your-own" class="docs-link-primary"
-            >check your own system</a
-          >
-          on your own design system and pick one finding. If your team already
-          has a Storybook, you may run the self-check at
+          Transfer (12 min): the scorecard "What a design system has to bring"
+          is the frame. Mark its seven rows for your own design system (yes /
+          partly / no), pick the weakest row, then start the checklist that
+          matches it: the Figma checklist or the Storybook checklist. Both are
+          handouts and you take both home; the pages
+          <a href="/readiness" class="docs-link-primary">readiness</a>,
           <a href="/storybook-readiness#self-check" class="docs-link-primary"
             >Storybook readiness</a
           >
-          instead. The fix is your written next step, not room work. The
-          <a href="/readiness" class="docs-link-primary">readiness checklist</a>
-          helps you judge a master from your own file.
+          and
+          <a href="/design-principles#check-your-own" class="docs-link-primary"
+            >check your own system</a
+          >
+          hold the how. The pages time-box the full run at 30 minutes; the
+          finding you pick is your written next step, not room work.
         </li>
       </ul>
       <p class="byo-done">
@@ -454,8 +544,8 @@ const EMIT = 'npm run check:contracts -- --emit <folder>';
     <section class="docs-section" aria-labelledby="done">
       <h2 class="docs-section-title" id="done">Are you done?</h2>
       <p class="docs-step-desc">
-        The end-of-day check, each item yours to verify. Every gate there is
-        your own: red means red.
+        The end-of-day check, each item yours to verify: five outcomes, then one
+        proof line. Everything there is your own work: red means red.
       </p>
       <ol class="byo-verify">
         {DAY2_DONE.map((item) => (
