@@ -2,9 +2,9 @@
   "meta": {
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "fileName": "Atelier UI",
-    "figmaLastModified": "2026-10-15T08:15:36Z",
-    "generatedAt": "2026-10-15T08:15:48.174Z",
-    "gitSha": "9ccf80dd",
+    "figmaLastModified": "2026-10-22T09:41:47Z",
+    "generatedAt": "2026-10-22T09:43:53.827Z",
+    "gitSha": "c4e8d610",
     "serverVersion": "0.1.0",
     "coverage": "All 43 masters. Token/auto-layout checks sample each master's default variant.",
     "note": "Facts captured from Figma via figma-console MCP read-tools. Rules live in check-figma.js."
@@ -13837,7 +13837,7 @@
           ],
           "gap": 12,
           "gapBound": "spacing/3",
-          "fill": "RAW",
+          "fill": "color/success-bg",
           "stroke": "color/success",
           "strokeWeight": "mixed",
           "strokeSides": [
@@ -13873,7 +13873,7 @@
           ],
           "gap": 12,
           "gapBound": "spacing/3",
-          "fill": "RAW",
+          "fill": "color/warning-bg",
           "stroke": "color/warning",
           "strokeWeight": "mixed",
           "strokeSides": [
@@ -13909,7 +13909,7 @@
           ],
           "gap": 12,
           "gapBound": "spacing/3",
-          "fill": "RAW",
+          "fill": "color/danger-bg",
           "stroke": "color/danger",
           "strokeWeight": "mixed",
           "strokeSides": [
@@ -14234,14 +14234,241 @@
           "boundTo": "dismissible#508:318"
         }
       ],
-      "layers": [],
-      "unnamedFrames": [
+      "layers": [
         {
-          "path": "Frame",
+          "variant": "variant=default, position=top-right",
+          "count": 1,
+          "layer": "content",
+          "type": "FRAME",
+          "fill": null,
+          "stroke": null,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "effects": [],
           "layoutMode": "HORIZONTAL",
-          "count": 8
+          "padding": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "gap": 12,
+          "minHeight": null,
+          "height": 17,
+          "width": 147,
+          "fontSize": 14,
+          "lineHeight": null
+        },
+        {
+          "variant": "variant=success, position=top-right",
+          "count": 1,
+          "layer": "content",
+          "type": "FRAME",
+          "fill": null,
+          "stroke": null,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "effects": [],
+          "layoutMode": "HORIZONTAL",
+          "padding": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "gap": 12,
+          "minHeight": null,
+          "height": 17,
+          "width": 147,
+          "fontSize": 14,
+          "lineHeight": null
+        },
+        {
+          "variant": "variant=warning, position=top-right",
+          "count": 1,
+          "layer": "content",
+          "type": "FRAME",
+          "fill": null,
+          "stroke": null,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "effects": [],
+          "layoutMode": "HORIZONTAL",
+          "padding": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "gap": 12,
+          "minHeight": null,
+          "height": 17,
+          "width": 147,
+          "fontSize": 14,
+          "lineHeight": null
+        },
+        {
+          "variant": "variant=danger, position=top-right",
+          "count": 1,
+          "layer": "content",
+          "type": "FRAME",
+          "fill": null,
+          "stroke": null,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "effects": [],
+          "layoutMode": "HORIZONTAL",
+          "padding": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "gap": 12,
+          "minHeight": null,
+          "height": 17,
+          "width": 147,
+          "fontSize": 14,
+          "lineHeight": null
+        },
+        {
+          "variant": "variant=info, position=top-right",
+          "count": 1,
+          "layer": "content",
+          "type": "FRAME",
+          "fill": null,
+          "stroke": null,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "effects": [],
+          "layoutMode": "HORIZONTAL",
+          "padding": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "gap": 12,
+          "minHeight": null,
+          "height": 17,
+          "width": 147,
+          "fontSize": 14,
+          "lineHeight": null
+        },
+        {
+          "variant": "variant=default, position=top-center",
+          "count": 1,
+          "layer": "content",
+          "type": "FRAME",
+          "fill": null,
+          "stroke": null,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "effects": [],
+          "layoutMode": "HORIZONTAL",
+          "padding": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "gap": 12,
+          "minHeight": null,
+          "height": 17,
+          "width": 147,
+          "fontSize": 14,
+          "lineHeight": null
+        },
+        {
+          "variant": "variant=default, position=bottom-right",
+          "count": 1,
+          "layer": "content",
+          "type": "FRAME",
+          "fill": null,
+          "stroke": null,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "effects": [],
+          "layoutMode": "HORIZONTAL",
+          "padding": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "gap": 12,
+          "minHeight": null,
+          "height": 17,
+          "width": 147,
+          "fontSize": 14,
+          "lineHeight": null
+        },
+        {
+          "variant": "variant=default, position=bottom-center",
+          "count": 1,
+          "layer": "content",
+          "type": "FRAME",
+          "fill": null,
+          "stroke": null,
+          "strokeSides": [
+            1,
+            1,
+            1,
+            1
+          ],
+          "radius": null,
+          "effects": [],
+          "layoutMode": "HORIZONTAL",
+          "padding": [
+            0,
+            0,
+            0,
+            0
+          ],
+          "gap": 12,
+          "minHeight": null,
+          "height": 17,
+          "width": 147,
+          "fontSize": 14,
+          "lineHeight": null
         }
       ],
+      "unnamedFrames": [],
       "box": {
         "type": "COMPONENT_SET",
         "width": 884,
@@ -14267,7 +14494,7 @@
           "nonSemanticTokens": []
         },
         {
-          "name": "Frame",
+          "name": "content",
           "type": "FRAME",
           "hasChildren": true,
           "hidden": false,
