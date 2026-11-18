@@ -209,7 +209,7 @@ function writeCopiedSkill(tree: Tree, skill: string): void {
 // ... two-way bindings ... for this framework"), so a substitution key of the
 // bare word would have corrupted those sentences. The angle-bracket form is
 // the one substring that appears ONLY at the spots meant to be filled in
-// (SKILL.md: five `<app>`, three `<framework>`; SKILL.no-figma.md: three
+// (SKILL.md: four `<app>`, three `<framework>`; SKILL.no-figma.md: three
 // `<app>`, two `<framework>` — smaller by exactly the sections it drops) —
 // verified against each shipped file, not assumed — and is distinct from the
 // files' other bracketed placeholder, `<name>` (a component name, e.g. in
@@ -1800,22 +1800,21 @@ duplicate the file again`
     : `edit the \`--file\` placeholder in \`package.json\`'s \`figma:snapshot\` script to
 your own Figma file key`;
 
-  // The Contract Loop (ADR-0121 S4) is gated on Figma too (ADR-0144): ADR-0121
+  // The contract section (ADR-0121 S4) is gated on Figma too (ADR-0144): ADR-0121
   // defines a contract AS the deliberate Figma ↔ code mismatch set, so with no
   // Figma there is nothing for one to disagree with — the whole section is
   // omitted under --no-figma, not left dangling pointing at files this
   // workspace never wrote.
   const contractLoopSection = options.figmaMcp
     ? `
-## The Contract Loop
+## Figma ↔ code contract (optional)
 
+Not part of the normal component loop (ADR-0180) — do not write a contract or run
+\`check:contracts\` unless you were asked to, or you want the offline Figma ↔ code join.
 A contract (\`${appName}/src/contracts/<name>.contract.ts\`) is the one hand-authored
 spec file per component: the Figma master's node id, plus intentional Figma ↔ code
 mismatches (\`figmaOnly\`, \`codeOnly\`, \`axisMap\`) — never props, defaults, or
 descriptions; those live in the component's own types/JSDoc and its stories.
-
-Order: read the Figma handoff → write the contract → write one story per variant and
-interaction state → \`npm run check:contracts\` → \`figma_check_design_parity\` in Storybook.
 
 \`check:contracts\` joins the contract, the component's docgen, and \`tools/figma/snapshot.json\`
 offline — no browser, no Storybook build — and reports one line per finding:
@@ -1831,16 +1830,17 @@ offline — no browser, no Storybook build — and reports one line per finding:
 Refresh \`tools/figma/snapshot.json\` from the real master with the Figma Desktop Bridge
 connected: ${figmaSnapshotRefreshInstruction}, then run \`npm run figma:snapshot\`.
 
-\`check:contracts\` proves shape and story coverage; \`npm run check:stories\` (every story,
-rendered headless in Chromium via \`@storybook/addon-vitest\`, with axe) proves rendering
-and accessibility. It does so for components whose source lives in this workspace. For
+\`check:contracts\` proves shape and story coverage. It does so for components whose source lives in this workspace. For
 components imported from \`@atelier-ui/${framework}\` — the example \`AtlButton\`
 included — the check recognises that the import resolves into \`node_modules\` and skips
 docgen for it — the same rule in every framework — so it has nothing to compare and
 reports only \`[NO-STORY-META]\`; their prop tables come from the hosted
 Storybook MCP (\`docs-show\`) instead. A green \`check:contracts\` on the example story
-therefore proves the wiring, not the example. Run \`npx playwright install chromium\`
-once after \`npm install\` — see Storybook below.
+therefore proves the wiring, not the example.
+
+\`npm run check:stories\` (every story, rendered headless in Chromium via
+\`@storybook/addon-vitest\`, with axe) proves rendering and accessibility. Run
+\`npx playwright install chromium\` once after \`npm install\` — see Storybook below.
 `
     : '';
 
@@ -1849,9 +1849,9 @@ once after \`npm install\` — see Storybook below.
   // flag — no dangling mention of check:contracts when this workspace never
   // wrote one.
   const atelierComponentSkillBlurb = options.figmaMcp
-    ? `It runs the Figma → contract → stories → checks loop scoped to what this workspace can
-actually check — see the skill itself, or ask Claude Code to use it, for the loop and
-\`check:contracts\`'s finding codes.`
+    ? `It runs the Figma → component → stories → checks loop scoped to what this workspace can
+actually check — see the skill itself, or ask Claude Code to use it, for the loop and the
+optional contract.`
     : `It runs the component → stories → checks loop this workspace ships without Figma —
 see the skill itself, or ask Claude Code to use it, for what each check actually proves.`;
 
@@ -1867,20 +1867,17 @@ see the skill itself, or ask Claude Code to use it, for what each check actually
       : []),
   ].join('\n');
 
-  // Definition of Done (below): four checks without Figma, five with it —
-  // `check:contracts` only exists when the contract loop does (ADR-0144).
+  // Definition of Done (below) and \`/verify\` list the same six checks, Figma or
+  // not (ADR-0180: the contract is off the default path, so \`check:contracts\`
+  // is in neither). Cheap to expensive.
   const doneChecks = [
     '`npm run check:format` — Prettier',
     '`npm run check:stylelint` — the ported CSS-discipline rules',
-    ...(options.figmaMcp
-      ? [
-          '`npm run check:contracts` — contract ↔ docgen ↔ Figma-snapshot parity',
-        ]
-      : []),
+    '`npm run lint` — ESLint (strict, type-aware)',
+    '`npm run build` — the compiler',
     '`npm run check:unit` — jsdom unit tests (components, composables, helpers)',
     '`npm run check:stories` — every story, rendered in Chromium, axe-checked',
   ];
-  const doneCountWord = doneChecks.length === 5 ? 'five' : 'four';
 
   tree.write(
     'CLAUDE.md',
@@ -2021,7 +2018,7 @@ then add this to \`.mcp.json\`'s \`mcpServers\` (only while that Storybook is up
 (\`<port>\` is the one listed for that app under Storybook below.) \`test-run\`
 works too, once that local Storybook is running — every story here IS a
 render + accessibility test (\`@storybook/addon-vitest\`, run offline via
-\`npm run check:stories\`${options.figmaMcp ? '; see "The Contract Loop" below' : ''}).`
+\`npm run check:stories\`).`
     : `Skipped for this workspace (\`skills: false\`). Install the four \`storybookjs/mcp\`
 skills for Claude Code by hand:
 
@@ -2040,7 +2037,6 @@ has generated code for one component can infer the shape of the next. When you d
 the API of your own component, these are the rules the library itself follows:
 
 - Guide: ${SITE_URL}/design-principles
-${contractLoopSection}
 ## Definition of Done
 
 This workspace is strict, not lenient-by-default: \`tsconfig.base.json\` has
@@ -2048,19 +2044,18 @@ This workspace is strict, not lenient-by-default: \`tsconfig.base.json\` has
 (\`eqeqeq\`, \`no-eval\`, and their kin — see \`eslint.config.mjs\` for the exact set) plus
 type-aware checks (\`no-floating-promises\`, \`no-misused-promises\`, \`await-thenable\`)
 to errors. That is the feedback loop this workspace hands an LLM, not friction to prompt
-around: code Claude Code (or you) writes has to satisfy \`npm run lint\` and \`npm run
-build\` before it is done, the same way it has to satisfy the ${doneCountWord} checks below.
+around.
 
-A change here is done when all ${doneCountWord} of these pass:
+A change here is done when all six of these pass:
 
 ${doneChecks.map((c) => `- ${c}`).join('\n')}
 
 **A gate's result is its exit code.** Run it as
 \`<command> > /tmp/x.log 2>&1; echo $?\` and read the log afterwards — never pipe
 a gate into \`head\` or \`grep\`. The pipe's own exit status is always \`0\`, which
-silently turns a failing gate into a passing one. \`/verify\` runs all ${doneCountWord} and
+silently turns a failing gate into a passing one. \`/verify\` runs all six and
 reports each exit code (\`.claude/commands/verify.md\`).
-
+${contractLoopSection}
 ## Troubleshooting
 
 Run the preflight self-check to verify your environment:
@@ -2569,16 +2564,11 @@ Browse components at ${SITE_URL}
   // narrower, more honest fit for what this actually is: a fixed action a
   // person explicitly triggers, with nothing for the model to decide about
   // *whether* to invoke it — the thing SKILL.md's richer description-driven
-  // auto-triggering and multi-file bundling exist for. Four or five fixed npm
-  // scripts (ADR-0144 — `check:contracts` only exists with `--figma`) and
-  // "read the exit code" is exactly the shape commands/*.md is for.
+  // auto-triggering and multi-file bundling exist for. Six fixed npm
+  // scripts and "read the exit code" is exactly the shape commands/*.md is for.
   tree.write(
     '.claude/commands/verify.md',
-    readTemplate(
-      options.figmaMcp
-        ? 'claude/commands/verify.md'
-        : 'claude/commands/verify.no-figma.md',
-    ),
+    readTemplate('claude/commands/verify.md'),
   );
 
   // Read-only review subagent (Read/Grep/Glob/Bash only — no Edit/Write), so

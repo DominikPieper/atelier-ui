@@ -55,9 +55,9 @@ For a component whose source lives in this workspace, its own types are the API.
 
 ## Definition of done
 
-`npm run check:format`, `npm run check:stylelint`, `npm run check:unit` and
-`npm run check:stories` each exit 0 — checked as exit codes, one at a time. Never pipe a
-check into `head` or `grep` to read it: the pipe's status is 0 whatever the check did,
-and that turns a red run into a green report.
+`npm run check:format`, `npm run check:stylelint`, `npm run lint`, `npm run build`,
+`npm run check:unit` and `npm run check:stories` each exit 0 — checked as exit codes, one
+at a time (`/verify` runs all six). Never pipe a check into `head` or `grep` to read it: the
+pipe's status is 0 whatever the check did, and that turns a red run into a green report.
 
 Then say which of the four loop steps you actually ran, and which you could not.

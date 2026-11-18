@@ -2494,7 +2494,7 @@ describe('preset generator', () => {
     expect(pkg.devDependencies['typescript']).toBe('5.4.0');
   });
 
-  it('CLAUDE.md contains "The Contract Loop" section', async () => {
+  it('CLAUDE.md demotes the contract to an opt-in section after Definition of Done', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
       framework: 'angular',
@@ -2502,7 +2502,10 @@ describe('preset generator', () => {
     });
 
     const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
-    expect(md).toContain('## The Contract Loop');
+    expect(md).toContain('## Figma ↔ code contract (optional)');
+    expect(md.indexOf('## Figma ↔ code contract (optional)')).toBeGreaterThan(
+      md.indexOf('## Definition of Done'),
+    );
     expect(md).toContain('check:contracts');
     expect(md).toContain('figma:snapshot');
     expect(md).toContain('addon-vitest');
@@ -2590,7 +2593,7 @@ describe('preset generator', () => {
       expect(mcp.mcpServers['figma-console']).toBeUndefined();
     });
 
-    it('CLAUDE.md omits "The Contract Loop" section entirely and names four checks, not five, in Definition of Done', async () => {
+    it('CLAUDE.md omits the contract section entirely and names the same six checks in Definition of Done', async () => {
       await presetGenerator(tree, {
         name: 'my-workspace',
         framework: 'angular',
@@ -2598,12 +2601,14 @@ describe('preset generator', () => {
       });
 
       const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
-      expect(md).not.toContain('## The Contract Loop');
+      expect(md).not.toContain('## Figma ↔ code contract');
       expect(md).not.toContain('check:contracts');
       expect(md).not.toContain('figma:snapshot');
       expect(md).toContain('## Definition of Done');
-      expect(md).toContain('all four of these pass');
-      expect(md).toContain('runs all four');
+      expect(md).toContain('all six of these pass');
+      expect(md).toContain('runs all six');
+      expect(md).toContain('npm run lint');
+      expect(md).toContain('npm run build');
       expect(md).toContain('check:format');
       expect(md).toContain('check:stylelint');
       expect(md).toContain('check:unit');
@@ -2618,11 +2623,11 @@ describe('preset generator', () => {
       });
 
       const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
-      expect(md).not.toContain('Figma → contract → stories → checks loop');
+      expect(md).not.toContain('Figma → component → stories → checks loop');
       expect(md).toContain('component → stories → checks loop');
     });
 
-    it('writes the four-check /verify command, not the five-check one', async () => {
+    it('writes the same six-check /verify command as the Figma workspace', async () => {
       await presetGenerator(tree, {
         name: 'my-workspace',
         framework: 'angular',
@@ -2630,14 +2635,14 @@ describe('preset generator', () => {
       });
 
       const verify = tree.read('.claude/commands/verify.md', 'utf-8') ?? '';
-      // Explains the absence in prose (ADR-0144) without offering the
-      // command itself — assert the command form is gone, not the bare tag.
-      expect(verify).not.toContain('npm run check:contracts');
+      expect(verify).not.toContain('check:contracts');
+      expect(verify).toContain('npm run lint');
+      expect(verify).toContain('npm run build');
       expect(verify).toContain('check:format');
       expect(verify).toContain('check:stylelint');
       expect(verify).toContain('check:unit');
       expect(verify).toContain('check:stories');
-      expect(verify).toContain('four checks');
+      expect(verify).toContain('six checks');
     });
 
     it('writes the no-figma atelier-component skill, with no dangling mention of check:contracts and both placeholders substituted', async () => {
@@ -2981,7 +2986,7 @@ describe('preset generator', () => {
     expect(hook).toContain('exit 0');
   });
 
-  it('writes a /verify command naming all five checks', async () => {
+  it('writes a /verify command naming all six checks and not check:contracts', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
       framework: 'angular',
@@ -2992,7 +2997,9 @@ describe('preset generator', () => {
     const verify = tree.read('.claude/commands/verify.md', 'utf-8') ?? '';
     expect(verify).toContain('check:format');
     expect(verify).toContain('check:stylelint');
-    expect(verify).toContain('check:contracts');
+    expect(verify).toContain('npm run lint');
+    expect(verify).toContain('npm run build');
+    expect(verify).not.toContain('check:contracts');
     expect(verify).toContain('check:unit');
     expect(verify).toContain('check:stories');
     // The exit-code rule, not a piped pass/fail summary.
@@ -3024,7 +3031,7 @@ describe('preset generator', () => {
     expect(skill).toContain('name: atelier-component');
   });
 
-  it('atelier-component skill names all five checks in "Definition of done" and check:unit in the check-capability table', async () => {
+  it('atelier-component skill names all six checks in "Definition of done" and keeps check:contracts only in its opt-in section', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
       framework: 'angular',
@@ -3036,9 +3043,13 @@ describe('preset generator', () => {
     expect(skill).toContain('## Definition of done');
     expect(skill).toContain('check:format');
     expect(skill).toContain('check:stylelint');
-    expect(skill).toContain('check:contracts');
+    expect(skill).toContain('npm run lint');
+    expect(skill).toContain('npm run build');
     expect(skill).toContain('check:unit');
     expect(skill).toContain('check:stories');
+    const optIn = skill.indexOf('## Optional: the Figma ↔ code contract');
+    expect(optIn).toBeGreaterThan(-1);
+    expect(skill.slice(0, optIn)).not.toContain('check:contracts');
   });
 
   it.each(['angular', 'react', 'vue'] as const)(
@@ -3275,7 +3286,7 @@ describe('preset generator', () => {
     expect(gitignore).toContain('.claude/settings.local.json');
   });
 
-  it('CLAUDE.md has a Definition of Done section naming all five checks and the exit-code rule', async () => {
+  it('CLAUDE.md has a Definition of Done section naming all six checks and the exit-code rule', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
       framework: 'angular',
@@ -3286,9 +3297,14 @@ describe('preset generator', () => {
     expect(md).toContain('## Definition of Done');
     expect(md).toContain('check:format');
     expect(md).toContain('check:stylelint');
-    expect(md).toContain('check:contracts');
+    expect(md).toContain('all six of these pass');
+    expect(md).toContain('npm run lint');
+    expect(md).toContain('npm run build');
     expect(md).toContain('check:unit');
     expect(md).toContain('check:stories');
+    expect(
+      md.slice(0, md.indexOf('## Figma ↔ code contract (optional)')),
+    ).not.toContain('check:contracts');
     expect(md).toContain("gate's result is its exit code");
   });
 
