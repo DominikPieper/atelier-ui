@@ -1,3 +1,13 @@
+## 0.4.12 (2026-11-18)
+
+### 🩹 Fixes
+
+- **mcp:** declare the repository so npm accepts the provenance ([d4843d6d](https://github.com/DominikPieper/atelier-ui/commit/d4843d6d))
+
+### ❤️ Thank You
+
+- Dominik Pieper @DominikPieper
+
 ## 0.4.11 (2026-11-18)
 
 ### 🚀 Features
