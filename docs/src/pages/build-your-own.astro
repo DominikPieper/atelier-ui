@@ -13,10 +13,8 @@ import { inlineMd } from '../lib/inline-md';
 // this page links to the detail pages rather than repeating them. The end-of-day
 // checklist is shared data (src/data/day2-done.ts), not a second copy.
 
-const MCP_ADD =
-  'claude mcp add --transport http storybook-local http://localhost:<port>/mcp';
 const RULE_LINE =
-  '- `npm run lint` and `npm run build` — ESLint and the strict compiler';
+  '- `npm run check:stories` — every story, rendered in Chromium, axe-checked';
 const GENERATION_PROMPT = `Generate the component from my handoff document <path or pasted text>.
 In one step, write the component with its test, and its stories: one story per
 variant value and Boolean state, and a play function for every behaviour line of
@@ -132,15 +130,20 @@ names it, and why. Do not change anything yet.`;
           Only list them."
         </li>
         <li>
-          Lint and build are named in the paragraph above the list but not in
-          the list. Add this line and correct the count word:
+          The answer names six. Delete this line from the list, save, and leave
+          the count word as it is:
           <Code code={RULE_LINE} lang="markdown" title="CLAUDE.md" />
         </li>
         <li>
-          Run <code>/clear</code> and ask again. The list now names lint and
-          build.
+          Run <code>/clear</code> and ask again. The list now names five and
+          <code>npm run check:stories</code> is gone.
         </li>
+        <li>Put the line back and save.</li>
       </ol>
+      <p class="docs-step-desc">
+        Stretch: write down the one line your own team would add to this list,
+        the command and what it proves.
+      </p>
       <p class="docs-step-desc">
         The optional
         <a href="/first-component#bridge" class="docs-link-primary"
@@ -259,19 +262,13 @@ names it, and why. Do not change anything yet.`;
       </p>
       <ol class="byo-list byo-list--ordered">
         <li>
-          Start <code>npm run storybook</code> in parallel, then connect to it
-          (use the port Storybook prints). This is deliberately local scope, so
-          the shared <code>.mcp.json</code> stays untouched:
-          <Code
-            code={MCP_ADD}
-            lang="shell"
-            title="connect the local Storybook MCP"
-          />
-          Reconnect the client and check that the dev and test tools
+          Start <code>npm run storybook</code> if it is not running, and run
+          <code>/mcp</code>: <code>storybook-local</code> shows as connected.
+          Check that the dev and test tools
           (<code>get-storybook-story-instructions</code>,
-          <code>stories-preview</code>, <code>test-run</code>) are listed.
-          Without this step they simply do not exist: "not available" means "not
-          configured", not "server down".
+          <code>stories-preview</code>, <code>test-run</code>) are listed. Not
+          connected means Storybook is not running, or it was started after the
+          session: start it, then <code>/mcp</code> and reconnect.
           <code>get-storybook-story-instructions</code> is mandatory before
           every <code>*.stories.*</code> edit.
         </li>
@@ -359,9 +356,9 @@ names it, and why. Do not change anything yet.`;
         </li>
         <li>
           Run the test loop: <code>stories-preview</code> and
-          <code>test-run</code> (with a11y) through the local Storybook MCP, or
-          <code>npm run check:stories</code>, which runs every story in Chromium
-          with play assertions and axe. <code>npm test</code>
+          <code>test-run</code> (with a11y) through <code>storybook-local</code
+          >, or <code>npm run check:stories</code>, which runs every story in
+          Chromium with play assertions and axe. <code>npm test</code>
           (<code>check:unit</code>) covers only the unit half.
         </li>
         <li>
@@ -472,11 +469,13 @@ names it, and why. Do not change anything yet.`;
         </li>
         <li>
           Workspace anatomy (15 min), what makes the loop portable, file by
-          file: <code>.mcp.json</code> (the servers), <code>CLAUDE.md</code>
-          (the working agreement), <code>.claude/skills/</code>
-          (<code>atelier-component</code>, <code>figma-workspace-architect</code
-          >, the Storybook skills), <code>.claude/settings.json</code>
-          (permissions and the format hook),
+          file: <code>.mcp.json</code> (the servers: in your own repo the
+          library half is your library's manifest or package, the local half is
+          the addon MCP of the Storybook you already run),
+          <code>CLAUDE.md</code> (the working agreement),
+          <code>.claude/skills/</code> (<code>atelier-component</code>,
+          <code>figma-workspace-architect</code>, the Storybook skills),
+          <code>.claude/settings.json</code> (permissions and the format hook),
           <code>.claude/commands/verify.md</code> (the one proof command),
           <code>.claude/agents/component-review.md</code> (a review agent the
           workspace ships), <code>.storybook/main.ts</code> (addon-vitest,

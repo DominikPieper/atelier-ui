@@ -59,12 +59,12 @@ const SCAFFOLD: Record<
   },
 };
 
-// The prompt is rendered once per framework with the storybook-* MCP name, the
+// The prompt is rendered once per framework with the library server's name, the
 // package and the file paths already substituted, so the copied text carries
 // no placeholder. Kept in the frontmatter: Astro's parser mishandles template
 // literals with escaped backticks inside a JSX attribute.
 const prompt = (fw: Framework) => {
-  const sb = `storybook-${fw.toLowerCase()}`;
+  const sb = fw === 'Angular' ? 'atelier' : `storybook-${fw.toLowerCase()}`;
   const s = SCAFFOLD[fw];
   return `Build a "Team directory" screen with components from ${s.pkg} only.
 
@@ -157,7 +157,7 @@ const FAIL: Record<
   2: {
     items: [
       '`npx nx show projects` lists no `workshop-*` entry: you are not in the scaffolded workspace, or in the wrong directory. See [Cannot find project](/troubleshooting#nx-project-not-found).',
-      'Claude does not list a `storybook-*` server in `/mcp`: restart Claude Code from the directory with `.mcp.json`. See [MCP config not picked up](/troubleshooting#mcp-not-loaded).',
+      'Claude does not list `atelier` (Angular) or the `storybook-*` server of your framework in `/mcp`: restart Claude Code from the directory with `.mcp.json`. See [MCP config not picked up](/troubleshooting#mcp-not-loaded).',
     ],
     recovery: 'npx nx show projects',
     lang: 'shell',
@@ -168,7 +168,7 @@ const FAIL: Record<
       'The agent reaches for a component the library does not have (a `Layout`, `Container`, `SearchBar` or `DataGrid`): it is not in `docs-list`, so it does not exist. The brief needs only what the list contains.',
       'The agent uses an input on a table part (`atl-th`, `atl-tr`) or on `atl-option` that the main entry does not list: sub-components are shown in the code examples, not in the input table. Ask for the example it copied from. If the shown stories do not contain it, have it call `docs-show-story` for the story that does (Sortable, Empty State).',
     ],
-    recovery: `Stop. Do not write more code yet. Call docs-list on the Storybook MCP and
+    recovery: `Stop. Do not write more code yet. Call docs-list on the library's MCP server and
 give me the ids of the components you will use. Then call docs-show on each
 and tell me, for every prop you plan to use, where it appears in the output.`,
   },
@@ -188,7 +188,7 @@ anything else, and tell me which line you changed.`,
   5: {
     items: [
       '`npm run lint` fails on a template rule: a sub-component is outside its parent, or an icon-only button has no name. Fix the structure, do not silence the rule.',
-      '`check:stylelint` names a token that does not exist, or a raw colour: replace it with a documented `--ui-*` token. Look the token up in the Colors and Spacing docs entries of the same Storybook MCP.',
+      '`check:stylelint` names a token that does not exist, or a raw colour: replace it with a documented `--ui-*` token. Look the token up in the Colors and Spacing docs entries of the same library server.',
       '`check:format` fails: run `npm run format`, then run `npm run check:format` again.',
       'Angular only: `npm run build` fails on an unknown input. The agent invented a prop. Compare it with `docs-show`, then delete it.',
     ],
@@ -203,7 +203,7 @@ anything else, and tell me which line you changed.`,
 
 <BaseLayout
   title="Screen from Storybook"
-  description="An 80-minute exercise. Build one screen from components that already exist, with the Storybook MCP as your only source. No Figma frame, no step-by-step guidance."
+  description="An 80-minute exercise. Build one screen from components that already exist, with the library's MCP server as your only source. No Figma frame, no step-by-step guidance."
   currentPath="/screen-from-storybook"
 >
   <div class="docs-inline-page">
@@ -215,8 +215,8 @@ anything else, and tell me which line you changed.`,
     >
       Most teams do not build components. They build screens out of components
       that already exist. Here the only thing you know about those components is
-      what the Storybook MCP tells you, and nothing is going to tell you how to
-      proceed. A brief, four rules, a clock, and closing checks.
+      what the library's MCP server tells you, and nothing is going to tell you
+      how to proceed. A brief, four rules, a clock, and closing checks.
     </PageHero>
 
     <!-- What you'll build -->
@@ -299,7 +299,7 @@ anything else, and tell me which line you changed.`,
           in your code must appear in the <code>docs-show</code> output (its
           code examples count) or in <code>docs-show-story</code>. Not
           documented means not used, and the agent says so. The one exception to
-          "the Storybook MCP is the only source" is the import class names and
+          "the library server is the only source" is the import class names and
           the package name: they come from the installed package's type exports,
           and the receipts say so (see the last gap below).
         </li>
@@ -329,7 +329,7 @@ anything else, and tell me which line you changed.`,
     <section class="sfs-step" aria-labelledby="sfs-mcp">
       <div class="sfs-step-head">
         <h2 id="sfs-mcp" class="sfs-step-title">
-          What the Storybook MCP gives you, and what it does not
+          What the library server gives you, and what it does not
         </h2>
       </div>
       <p class="sfs-step-desc">
@@ -415,7 +415,7 @@ anything else, and tell me which line you changed.`,
           from the package's type exports in
           <code>node_modules/@atelier-ui/angular</code>, import from
           <code>@atelier-ui/angular</code>, and say in the receipts that this is
-          where they came from. It is the one place where the Storybook MCP is
+          where they came from. It is the one place where the library server is
           not enough. Measured on the Angular endpoint, 2026-11-12; not measured
           for React and Vue.
         </li>
@@ -476,8 +476,9 @@ anything else, and tell me which line you changed.`,
         <a href="/workshop" class="docs-link-primary">Setup</a>. The switcher
         sets the framework for every code block on this page. In your workspace,
         <code>npx nx show projects</code> lists a <code>workshop-*</code> entry,
-        and <code>/mcp</code> in Claude Code lists the <code>storybook-*</code>
-        server for your framework.
+        and <code>/mcp</code> in Claude Code lists <code>atelier</code>
+        (Angular) or the <code>storybook-*</code> server for your framework
+        (React, Vue).
       </p>
       <div style="margin-top: 0.5rem">
         <FwSwitcher label="Choose the framework you scaffolded" />
@@ -499,7 +500,7 @@ anything else, and tell me which line you changed.`,
         This is the one thing you copy, and it is only a start: the brief and
         the four rules in a form the agent can follow. Where it goes wrong, and
         how you steer it, is the exercise. The component names in the brief are
-        all in <code>docs-list</code> of every framework's Storybook MCP.
+        all in <code>docs-list</code> of every framework's library server.
       </p>
       {FRAMEWORKS.map((fw, i) => <div data-fw-panel={fw} hidden={i !== 0}>
         <Code

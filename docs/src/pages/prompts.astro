@@ -149,7 +149,7 @@ const SECTIONS: Section[] = [
         id: 'same-prompt-demo',
         title: 'Same prompt, without and with the design system',
         description:
-          "A 5-minute demo. Send this exact prompt twice: once in a plain chat with no design-system context (no MCP, no llms-full.txt), once in Claude Code with the Storybook MCP connected. Then compare the two footers: hardcoded hex colors vs --ui-* tokens, invented components vs real Atl* ones, and the a11y basics (a landmark, labelled nav, focus styles). Keep the prompt identical so the context is the only variable. Then close the loop with a gate: save the plain chat's CSS as a file under src/ in a scaffolded workspace and run npx nx stylelint workshop-angular (or npm run check:stylelint). Raw color literals, undeclared --ui-* tokens and literals that duplicate a token value fail the run, so context steers the agent and the gate catches what still slips through. The gate reads .css files under the app's src/ only: it does not see inline style attributes, styles strings inside a component, or a raw <button> used instead of a library component.",
+          "A 5-minute demo. Send this exact prompt twice: once in a plain chat with no design-system context (no MCP, no llms-full.txt), once in Claude Code with the library's MCP server (`atelier`) connected. Then compare the two footers: hardcoded hex colors vs --ui-* tokens, invented components vs real Atl* ones, and the a11y basics (a landmark, labelled nav, focus styles). Keep the prompt identical so the context is the only variable. Then close the loop with a gate: save the plain chat's CSS as a file under src/ in a scaffolded workspace and run npx nx stylelint workshop-angular (or npm run check:stylelint). Raw color literals, undeclared --ui-* tokens and literals that duplicate a token value fail the run, so context steers the agent and the gate catches what still slips through. The gate reads .css files under the app's src/ only: it does not see inline style attributes, styles strings inside a component, or a raw <button> used instead of a library component.",
         prompt: () =>
           `Add a simple page footer: a logo, three columns of links (Product, Company, Legal) and a copyright line.`,
       },
@@ -192,7 +192,7 @@ const RUBRIC: { name: string; text: string }[] = [
   },
   {
     name: 'Docs first',
-    text: 'the agent reads the component docs through the Storybook MCP (`docs-show`) instead of guessing props.',
+    text: 'the agent reads the component docs through the library MCP server (`docs-show`) instead of guessing props.',
   },
   {
     name: 'Tokens',
@@ -263,7 +263,7 @@ const rubricHtml = (s: string) => s.replace(/`([^`]+)`/g, '<code>$1</code>');
         <strong style="color: var(--ui-color-text)">When you need this:</strong>
         use these prompts after the workshop, when you are starting fresh
         projects or working in an LLM client without MCP support. During the
-        workshop itself you will mostly let Claude Code drive the Storybook MCP
+        workshop itself you will mostly let Claude Code drive the MCP servers
         directly.
       </p>
       <p

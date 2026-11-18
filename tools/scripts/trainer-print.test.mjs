@@ -24,7 +24,12 @@ before(() => {
 after(() => rmSync(out, { recursive: true, force: true }));
 
 test('day 1 carries its own material and none of day 2', () => {
-  for (const s of ['Kata against the clock', '## D-5', '## 1. ', '## Day 1:'])
+  for (const s of [
+    'A screen from Storybook, against the clock',
+    '## D-5',
+    '## 1. ',
+    '## Day 1:',
+  ])
     assert.ok(day1.includes(s), s);
   for (const s of ['## D-8', '## 3. ']) assert.ok(!day1.includes(s), s);
 });

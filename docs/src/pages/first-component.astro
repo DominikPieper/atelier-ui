@@ -49,11 +49,14 @@ const SCAFFOLD: Record<
 };
 
 // The prompt is rendered once per framework, with the participant's
-// framework already substituted into `storybook-{framework}`, so the copied
-// text contains a concrete token (storybook-angular / -react / -vue). The
+// library server already substituted (`atelier` on Angular, `storybook-react`
+// / `storybook-vue` on React and Vue), so the copied text contains a concrete
+// token. The
 // global framework-pref-init script toggles which [data-fw-panel] is
 // visible, keeping the shown prompt in sync with the tabs the same way
 // step 4 already works.
+const librarySrv = (fw: Framework) =>
+  fw === 'Angular' ? 'atelier' : `storybook-${fw.toLowerCase()}`;
 const prompt = (
   fw: Framework,
 ) => `Build the Settings / Card Figma frame as an Atelier UI component.
@@ -61,7 +64,7 @@ const prompt = (
 1. Use figma-console MCP (figma_get_component_for_development) on
    node-id 936-2954 — read the frame's spec, boundVariables, and
    the rendered preview.
-2. Use the storybook-${fw.toLowerCase()} MCP (docs-list, then
+2. Use the ${librarySrv(fw)} MCP (docs-list, then
    docs-show) to look up AtlCard, AtlInput, AtlToggle, and
    AtlButton props.
 3. Generate the component using:
@@ -180,15 +183,15 @@ Then, in the same change:
    from the pattern in the AtlButton example story that ships in the
    workspace (src/atl-button.stories.*). One play function with a real
    assertion.
-2. Verify every prop you use with docs-show on storybook-${fw.toLowerCase()}.
+2. Verify every prop you use with docs-show on ${librarySrv(fw)}.
 3. Run npm run lint, npm run build and npm run check:stories. Report each exit
    code. If one is not 0, read the output (the full log when the summary has no
    error text), repair, and run it again.`;
-// Step 3 depends on the framework (the storybook-* MCP name), so it is a
+// Step 3 depends on the framework (the library server's name), so it is a
 // function. Kept in the frontmatter: Astro's parser mishandles template
 // literals with escaped backticks inside a JSX attribute.
 const step3Fail = (fw: Framework) => {
-  const sb = `storybook-${fw.toLowerCase()}`;
+  const sb = librarySrv(fw);
   return {
     items: [
       'Figma tools fail with "bridge not connected": open the Figma Desktop Bridge plugin and keep it open. See [bridge not connected](/troubleshooting#figma-bridge-plugin-not-connected).',
@@ -352,12 +355,12 @@ Replace every hex colour and pixel value with the --ui-* name from boundVariable
       </div>
       <p class="kata-step-desc">
         Copy the block verbatim — it's already set to the framework you picked
-        in Step 2 (the <code>storybook-*</code> MCP name is filled in). Claude
-        fetches the Figma spec and Storybook props, then writes the component.
+        in Step 2 (the library server's name is filled in). Claude fetches the
+        Figma spec and Storybook props, then writes the component.
       </p>
       <p class="kata-step-desc" style="margin-top: 0.4rem">
-        The Storybook MCP for your framework returns the component's props and
-        variants in your framework's own shape.
+        The library MCP server for your framework returns the component's props
+        and variants in your framework's own shape.
       </p>
       {FRAMEWORKS.map((fw, i) => <div data-fw-panel={fw} hidden={i !== 0}>
         <Code

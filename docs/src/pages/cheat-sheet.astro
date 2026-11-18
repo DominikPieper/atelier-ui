@@ -136,7 +136,7 @@ const FIXES = [
     'mcp-tools-error',
   ],
   [
-    'storybook-angular not listed in Claude Code',
+    'atelier or storybook-local not listed in Claude Code',
     'Reopen Claude Code from the folder with .mcp.json. `/mcp` lists what it found.',
     'mcp-not-loaded',
   ],
@@ -235,14 +235,17 @@ const md = (s: string) =>
 
       <section class="cheat-card" aria-labelledby="cs-mcp">
         <h2 id="cs-mcp">MCP tool names</h2>
-        <h3>Hosted <code>storybook-angular</code> (docs only)</h3>
+        <h3>Library <code>atelier</code> (docs only)</h3>
         <dl class="cheat-dl">
           {HOSTED.map(([k, v]) => (
             <><dt><code>{k}</code></dt>
               <dd>{v}</dd></>
           ))}
         </dl>
-        <h3>Local Storybook (<code>dev</code> + <code>test</code>)</h3>
+        <h3>
+          Your Storybook, <code>storybook-local</code> (<code>dev</code> +
+          <code>test</code>)
+        </h3>
         <dl class="cheat-dl">
           {LOCAL.map(([k, v]) => (
             <><dt><code>{k}</code></dt>
@@ -250,11 +253,9 @@ const md = (s: string) =>
           ))}
         </dl>
         <p class="cheat-note">
-          The local tools exist only after
-          <code
-            >claude mcp add --transport http storybook-local
-            http://localhost:&lt;port&gt;/mcp</code
-          >.
+          <code>storybook-local</code> is connected only while
+          <code>npm run storybook</code> runs. Started after the session:
+          <code>/mcp</code>, reconnect.
         </p>
         <h3><code>figma-console</code></h3>
         <dl class="cheat-dl">

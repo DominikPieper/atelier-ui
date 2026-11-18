@@ -14,17 +14,19 @@ import FwSwitcher from '../components/FwSwitcher.astro';
 const FRAMEWORKS = ['Angular', 'React', 'Vue'] as const;
 
 // Rendered once per framework so the copied text names the participant's own
-// `storybook-<fw>` server — a scaffolded workspace has exactly one storybook
-// entry in its .mcp.json, so a hardcoded `storybook-react` is unrunnable for
-// two thirds of the room. The panels ride the same [data-fw-panel] switcher as
-// the generated output below.
+// library server — `atelier` in an Angular workspace, the hosted
+// `storybook-<fw>` entry in a React or Vue one — so a hardcoded name is
+// unrunnable for part of the room. The panels ride the same [data-fw-panel]
+// switcher as the generated output below.
+const libraryServer = (fw: string) =>
+  fw === 'Angular' ? 'atelier' : `storybook-${fw.toLowerCase()}`;
 const examplePrompt = (
   fw: string,
 ) => `I've selected the "Settings / Card" frame in Figma.
 
 1. Use figma-console MCP (figma_get_component_for_development) to read
    the frame's spec — I need the boundVariables and the visual reference.
-2. Use storybook-${fw.toLowerCase()} MCP to look up AtlCard, AtlInput, AtlToggle,
+2. Use ${libraryServer(fw)} MCP to look up AtlCard, AtlInput, AtlToggle,
    and AtlButton props.
 3. Generate the ${fw} component using:
    - The Atelier UI components matched from Storybook
@@ -205,9 +207,9 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
   <div class="docs-inline-page">
     <PageHero time="~30 min" title="Tutorial" ledeMax="520px">
       Use <strong>figma-console MCP</strong> to read a Figma component spec
-      directly — design tokens included — then <strong>Storybook MCP</strong> to
-      match Atelier UI components, and let Claude Code write token-exact code.
-      New to MCP?
+      directly — design tokens included — then the <strong>library MCP</strong>
+      to match Atelier UI components, and let Claude Code write token-exact
+      code. New to MCP?
       <a href="#what-is-mcp" class="docs-link-primary"
         >What's an MCP, in 30 seconds</a
       >
@@ -266,7 +268,8 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
         <ul class="objective-list">
           <li>Read a Figma component's <code>boundVariables</code> via MCP</li>
           <li>
-            Match the right Atelier UI component through the Storybook MCP
+            Match the right Atelier UI component through the library's MCP
+            server
           </li>
           <li>Generate token-exact code in Angular, React or Vue</li>
           <li>Verify design parity automatically</li>
@@ -331,7 +334,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
         {FRAMEWORKS.map((fw, i) => <div data-fw-panel={fw} hidden={i !== 0}>
           <pre
             class="mcp-compare-prompt"
-          >{`"build component for node-id 936-2954 using figma-console + storybook-${fw.toLowerCase()} MCP."`}</pre>
+          >{`"build component for node-id 936-2954 using figma-console + ${libraryServer(fw)} MCP."`}</pre>
         </div>)}
         <ol class="mcp-compare-list" start="3">
           <li>Token-exact code lands</li>
@@ -1214,7 +1217,8 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
           <div style="flex: 1">
             <h3 class="docs-h3">AI matches to Atelier UI components</h3>
             <p class="docs-step-desc">
-              Claude Code queries the Storybook MCP (<code>docs-list</code> →
+              Claude Code queries the library's MCP server (<code>atelier</code>
+              in an Angular workspace; <code>docs-list</code> →
               <code>docs-show</code>) for the matching component. It gets exact
               prop names and variants — no guessing.
             </p>
@@ -1505,7 +1509,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
       <ul class="checkpoint-checks">
         <li>
           <Icon name="check_circle" /> Claude read the Figma spec and matched
-          the Atelier UI components through the Storybook MCP
+          the Atelier UI components through the library's MCP server
         </li>
         <li>
           <Icon name="check_circle" /> The generated component renders in your

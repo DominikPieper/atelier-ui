@@ -89,7 +89,7 @@ export const OG_PAGES = {
   'screen-from-storybook': {
     title: 'Screen from Storybook',
     description:
-      'An 80-minute exercise. Build one screen from existing components with the Storybook MCP as your only source: four rules, a clock, closing checks.',
+      'An 80-minute exercise. Build one screen from existing components with the library MCP server as your only source: four rules, a clock, closing checks.',
   },
   'build-your-own': {
     title: 'Build Your Own Component',

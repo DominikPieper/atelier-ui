@@ -47,10 +47,12 @@ import MaintainerNotes from '../components/MaintainerNotes.astro';
         your workspace. Here is what each entry is for in the loop
         (<strong>inspect → contract → generate → verify</strong>), one thing to
         ask it, and how to tell it works. Which entries you have depends on your
-        answers: <code>storybook-&lt;framework&gt;</code> is the framework you
-        picked, <code>angular-cli</code> exists only for Angular, and
-        <code>figma-console</code> only if you said yes to Figma. The exact file
-        is on
+        answers: <code>angular-cli</code> exists only for Angular, and
+        <code>figma-console</code> only if you said yes to Figma. An Angular
+        workspace has <code>atelier</code> and <code>storybook-local</code>; a
+        React or Vue workspace keeps the hosted
+        <code>storybook-&lt;framework&gt;</code> entry for its framework and
+        also has <code>storybook-local</code>. The exact file is on
         <a href="/workshop#mcp-config" class="docs-link-primary"
           >the workshop page</a
         >.
@@ -68,20 +70,44 @@ import MaintainerNotes from '../components/MaintainerNotes.astro';
           </thead>
           <tbody>
             <tr>
-              <td><code>storybook-&lt;framework&gt;</code></td>
+              <td><code>atelier</code></td>
               <td>
-                Hosted, read-only component docs for your framework: props,
-                variants, stories, usage. Only <code>docs-list</code>,
-                <code>docs-show</code> and <code>docs-show-story</code>.
+                The library: read-only component docs for the Atelier
+                components, props, variants, stories, usage. It runs as a local
+                process, no network and no port. Only <code>docs-list</code>,
+                <code>docs-show</code> and <code>docs-show-story</code>. (React
+                and Vue workspaces: the hosted
+                <code>storybook-&lt;framework&gt;</code> entry does this job.)
               </td>
-              <td>Code (and the exact prop names the contract refers to)</td>
+              <td>Code (the exact prop names)</td>
               <td>
-                "Call <code>docs-list</code>, then <code>docs-show</code> for
-                the button and tell me its variants."
+                "Call <code>docs-list</code> on <code>atelier</code>, then
+                <code>docs-show</code> for the button and tell me its variants."
               </td>
               <td>
                 Claude lists real component IDs and prop names from the docs
                 instead of guessing them.
+              </td>
+            </tr>
+            <tr>
+              <td><code>storybook-local</code></td>
+              <td>
+                Your own Storybook, through its addon server:
+                <code>docs-list</code> and <code>docs-show</code> for the
+                components you build, plus
+                <code>get-storybook-story-instructions</code>,
+                <code>stories-preview</code> and <code>test-run</code>.
+              </td>
+              <td>Code and Verify: stories for your own component</td>
+              <td>
+                "Call <code>get-storybook-story-instructions</code> on
+                <code>storybook-local</code>, then write one story for my
+                component."
+              </td>
+              <td>
+                <code>/mcp</code> shows it connected while
+                <code>npm run storybook</code> runs. If you started Storybook
+                after the session: <code>/mcp</code>, reconnect.
               </td>
             </tr>
             <tr>
@@ -133,9 +159,10 @@ import MaintainerNotes from '../components/MaintainerNotes.astro';
         </table>
       </div>
       <p style="line-height: 1.65; font-size: var(--ui-font-size-sm)">
-        The hosted Storybook server serves docs only. Tools that need a running
-        Storybook (<code>stories-preview</code>, <code>test-run</code>) are not
-        in your <code>.mcp.json</code>; see
+        <code>atelier</code> serves docs only. The tools that need a running
+        Storybook (<code>stories-preview</code>, <code>test-run</code>) come
+        from <code>storybook-local</code>, which is connected only while
+        Storybook runs; see
         <a href="/workshop#mcp-config" class="docs-link-primary"
           >the workshop page</a
         >.
@@ -152,7 +179,9 @@ import MaintainerNotes from '../components/MaintainerNotes.astro';
           Run <code>/mcp</code> in the session. Every server from your
           <code>.mcp.json</code> should be listed as connected; approve any that
           ask for approval. A server listed as failed, or missing from the list,
-          is the one to fix. The workshop's
+          is the one to fix. <code>storybook-local</code> is connected only if
+          Storybook is already running; if you started it after the session, run
+          <code>/mcp</code> and reconnect. The workshop's
           <a href="/workshop" class="docs-link-primary"
             >Open in Claude Code step</a
           >
@@ -166,8 +195,8 @@ import MaintainerNotes from '../components/MaintainerNotes.astro';
       <p style="line-height: 1.65">
         <strong>If one fails, first:</strong> restart Claude Code from the
         directory that contains <code>.mcp.json</code>, then run
-        <code>npm run preflight</code>, which checks each hosted Storybook
-        endpoint with a real MCP call. Details and curl checks:
+        <code>npm run preflight</code>, which checks Node, the CLI, the Figma
+        bridge and the MCP servers. Details and curl checks:
         <a href="/troubleshooting#mcp-not-loaded" class="docs-link-primary"
           >config not picked up</a
         >,
@@ -262,19 +291,18 @@ import MaintainerNotes from '../components/MaintainerNotes.astro';
         "
       >
         <strong>Wired vs. not, and what closing the gap costs.</strong>
-        A scaffolded workspace's <code>.mcp.json</code> wires the one hosted
-        Storybook endpoint for your framework (plus <code>nx-mcp</code>,
-        <code>angular-cli</code> for Angular and <code>figma-console</code> if
-        chosen — see
+        A scaffolded workspace's <code>.mcp.json</code> wires
+        <code>atelier</code> (a React or Vue workspace: the hosted Storybook
+        endpoint for your framework) and <code>storybook-local</code> (plus
+        <code>nx-mcp</code>, <code>angular-cli</code> for Angular and
+        <code>figma-console</code> if chosen — see
         <a href="/workshop#mcp-config" class="docs-link-primary"
           >the workshop page</a
-        >) — none of them exposes the three <code>dev</code>-toolset tools that
-        need a running Storybook (<code>stories-changed</code>,
-        <code>stories-find-by-component</code>, <code>review-create</code>);
-        only a local entry pointed at
-        <code>http://localhost:&lt;port&gt;/mcp</code> does, and that stays a
-        per-developer choice on purpose, not something this repo wires for
-        everyone.
+        >). Only <code>storybook-local</code> exposes the three <code>dev</code
+        >-toolset tools that need a running Storybook
+        (<code>stories-changed</code>, <code>stories-find-by-component</code>,
+        <code>review-create</code>); this repo's own <code>.mcp.json</code> has
+        no such entry, a local one stays a per-developer choice here.
         <ul style="margin: 0.6rem 0 0; padding-left: 1.2rem">
           <li>
             <code>stories-changed</code> and

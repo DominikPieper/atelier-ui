@@ -26,24 +26,26 @@ const SCAFFOLD = [
     name: 'Angular',
     app: 'workshop-angular',
     pkg: '@atelier-ui/angular',
-    mcp: 'storybook-angular',
+    mcp: 'atelier, storybook-local',
   },
   {
     name: 'React',
     app: 'workshop-react',
     pkg: '@atelier-ui/react',
-    mcp: 'storybook-react',
+    mcp: 'storybook-react, storybook-local',
   },
   {
     name: 'Vue',
     app: 'workshop-vue',
     pkg: '@atelier-ui/vue',
-    mcp: 'storybook-vue',
+    mcp: 'storybook-vue, storybook-local',
   },
 ] as const;
 
-// The generated .mcp.json carries ONE storybook entry — the framework you
-// picked at the prompt — plus angular-cli (Angular only). The example below
+// The generated .mcp.json carries the library entry — `atelier` for Angular,
+// the hosted storybook-<fw> entry for React and Vue — plus storybook-local
+// (this workspace's own Storybook, on its fixed port) and angular-cli (Angular
+// only). The example below
 // is the "yes" case: `figma-console` is written only if you answer yes to the
 // Figma question (`--no-figma` omits it); its token falls back to empty
 // (`:-`) when unset.
@@ -54,9 +56,21 @@ const mcpConfig = (fw: string) => `{
       "command": "npx",
       "args": ["nx", "mcp"]
     },
-    "storybook-${fw}": {
+    ${
+      fw === 'angular'
+        ? `"atelier": {
+      "type": "stdio",
+      "command": "npx",
+      "args": ["atelier-mcp"]
+    }`
+        : `"storybook-${fw}": {
       "type": "http",
       "url": "${SITE_URL}/storybook-${fw}/mcp"
+    }`
+    },
+    "storybook-local": {
+      "type": "http",
+      "url": "http://localhost:6006/mcp"
     }${
       fw === 'angular'
         ? `,
@@ -108,7 +122,7 @@ const mcpConfig = (fw: string) => `{
         <ul class="objective-list">
           <li>Scaffold an Atelier workspace with one command</li>
           <li>Verify your environment with <code>preflight</code></li>
-          <li>Connect Claude Code to the Storybook MCP servers</li>
+          <li>Connect Claude Code to the MCP servers</li>
           <li>Run the Figma → token → component loop end-to-end</li>
         </ul>
       </div>
@@ -379,7 +393,9 @@ const mcpConfig = (fw: string) => `{
   <span class="pre-ok">✓</span> FIGMA_ACCESS_TOKEN<span class="pre-muted"> — set (45 chars, REST reads enabled)</span>
 
 <span class="pre-section">MCP reachability</span>
-  <span class="pre-ok">✓</span> MCP: storybook-angular<span class="pre-muted"> — https://atelier.pieper.io/storybook-angular/mcp (HTTP 200)</span>
+  <span class="pre-ok">✓</span> MCP: atelier<span class="pre-muted"> — stdio, docs-list answers</span>
+  <span class="pre-warn">⚠</span> MCP: storybook-local<span class="pre-muted"> — http://localhost:6006/mcp not running</span>
+      <span class="pre-muted">→</span> Start <span class="pre-cmd">`npm run storybook`</span> when you want this server
 
 <span class="pre-section">Local ports</span>
   <span class="pre-ok">✓</span> Environment<span class="pre-muted"> — scaffolded workspace — checking dev server (4200) + Storybook (6006)</span>
@@ -389,7 +405,7 @@ const mcpConfig = (fw: string) => `{
 <span class="pre-section">Storybook browser tests</span>
   <span class="pre-ok">✓</span> Playwright Chromium<span class="pre-muted"> — installed</span>
 
-<span class="pre-ok-strong">All hard checks passed</span><span class="pre-muted"> · 13 ok, 1 warning(s)</span>
+<span class="pre-ok-strong">All hard checks passed</span><span class="pre-muted"> · 13 ok, 2 warning(s)</span>
 <span class="pre-muted">Warnings are non-blocking — see </span><a href="/troubleshooting" class="pre-link">https://atelier.pieper.io/troubleshooting</a></pre>
           </figure>
 
@@ -427,8 +443,10 @@ const mcpConfig = (fw: string) => `{
       <span class="pre-muted">→</span> See <span class="pre-cmd">https://atelier.pieper.io/figma-token</span> if you need metadata reads
 
 <span class="pre-section">MCP reachability</span>
-  <span class="pre-fail">✗</span> <span class="pre-fail">MCP: storybook-angular</span><span class="pre-muted"> — https://atelier.pieper.io/storybook-angular/mcp unreachable (timeout)</span>
-      <span class="pre-muted">→</span> Check your network or proxy settings
+  <span class="pre-fail">✗</span> <span class="pre-fail">MCP: atelier</span><span class="pre-muted"> — @atelier-ui/mcp is not installed</span>
+      <span class="pre-muted">→</span> Run <span class="pre-cmd">`npm install`</span>, then re-run <span class="pre-cmd">`npm run preflight`</span>
+  <span class="pre-warn">⚠</span> MCP: storybook-local<span class="pre-muted"> — http://localhost:6006/mcp not running</span>
+      <span class="pre-muted">→</span> Start <span class="pre-cmd">`npm run storybook`</span> when you want this server
 
 <span class="pre-section">Local ports</span>
   <span class="pre-ok">✓</span> Environment<span class="pre-muted"> — scaffolded workspace — checking dev server (4200) + Storybook (6006)</span>
@@ -440,7 +458,7 @@ const mcpConfig = (fw: string) => `{
   <span class="pre-warn">⚠</span> Playwright Chromium<span class="pre-muted"> — not found</span>
       <span class="pre-muted">→</span> Run <span class="pre-cmd">`npx playwright install chromium`</span> — needed for <span class="pre-cmd">`npm run check:stories`</span>
 
-<span class="pre-issue">2 check(s) failed</span><span class="pre-muted"> · 8 ok, 4 warning(s)</span>
+<span class="pre-issue">2 check(s) failed</span><span class="pre-muted"> · 8 ok, 5 warning(s)</span>
 <span class="pre-muted">Fix the items above, then re-run </span><span class="pre-cmd">`npm run preflight`</span><span class="pre-muted">.</span>
 <span class="pre-muted">Full troubleshooting guide: </span><a href="/troubleshooting" class="pre-link">https://atelier.pieper.io/troubleshooting</a></pre>
           </figure>
@@ -451,8 +469,10 @@ const mcpConfig = (fw: string) => `{
             >
             line ends with a one-step fix — copy, run, re-run
             <code>preflight</code>. The <strong>MCP reachability</strong>
-            section lists the one <code>storybook-*</code> endpoint your
-            workspace was scaffolded with — Angular here.
+            section probes the library server your workspace was scaffolded with
+            (<code>atelier</code> on Angular, here) and
+            <code>storybook-local</code>, which only warns while your own
+            Storybook is not running.
           </p>
         </div>
       </li>
@@ -547,16 +567,20 @@ const mcpConfig = (fw: string) => `{
           <p class="docs-step-desc">
             Open the workspace in VS Code or any editor with Claude Code. The
             MCP servers connect automatically — your AI assistant can look up
-            component props, variants, and usage examples directly from
-            Storybook without any extra setup. The first time you open the
-            folder, accept Claude Code's "do you trust the files in this
-            folder?" prompt — until then <code>.mcp.json</code> and the
-            pre-configured permissions are ignored. To verify, run
-            <code>/mcp</code> in the session: the servers from your
-            <code>.mcp.json</code> (<code>nx-mcp</code>, <code>storybook-*</code
-            >, plus <code>angular-cli</code> and <code>figma-console</code>
-            where they apply) should be listed as connected. If one asks for
-            approval, approve it.
+            component props, variants, and usage examples directly from the
+            library without any extra setup. The first time you open the folder,
+            accept Claude Code's "do you trust the files in this folder?" prompt
+            — until then <code>.mcp.json</code> and the pre-configured
+            permissions are ignored. To verify, run <code>/mcp</code> in the
+            session: the servers from your <code>.mcp.json</code>
+            (<code>atelier</code> on Angular, or the hosted
+            <code>storybook-*</code> entry on React and Vue,
+            <code>storybook-local</code>, <code>nx-mcp</code>, plus
+            <code>angular-cli</code> and <code>figma-console</code> where they
+            apply) should be listed as connected. <code>storybook-local</code>
+            is connected only while <code>npm run storybook</code> runs; if you
+            started Storybook after the session, run <code>/mcp</code> and
+            reconnect. If one asks for approval, approve it.
           </p>
           <div
             style="
@@ -583,7 +607,9 @@ const mcpConfig = (fw: string) => `{
               "
             >
               The generated <code>.mcp.json</code> wires up the Nx MCP, the
-              hosted Storybook MCP server for the framework you picked — plus
+              library's docs server (<code>atelier</code> on Angular, the hosted
+              Storybook MCP server on React and Vue),
+              <code>storybook-local</code> for your own Storybook — plus
               <code>angular-cli</code> if you picked Angular and
               <code>figma-console</code> if you said yes to Figma.
             </p>
@@ -675,9 +701,11 @@ const mcpConfig = (fw: string) => `{
           margin-bottom: 1.25rem;
         "
       >
-        The generated <code>.mcp.json</code> wires up the Nx MCP, the hosted
-        Storybook MCP server <strong>for the one framework you picked</strong>,
-        and <code>figma-console</code> — needed for the
+        The generated <code>.mcp.json</code> wires up the Nx MCP, the library's
+        docs server <strong>for the one framework you picked</strong>
+        (<code>atelier</code> on Angular, the hosted Storybook MCP server on
+        React and Vue), <code>storybook-local</code> for your own Storybook, and
+        <code>figma-console</code> — needed for the
         <a href="/tutorial" class="docs-link-primary">Figma-to-Code Tutorial</a
         >. Pick Angular and you also get the <code>angular-cli</code> MCP:
       </p>
@@ -860,8 +888,9 @@ const mcpConfig = (fw: string) => `{
       <p style="margin-bottom: 0">
         Everything from <strong>Open in Claude Code</strong> on applies
         unchanged — the repo ships its own <code>.mcp.json</code> with all three
-        <code>storybook-*</code> entries already wired (a scaffold gets exactly
-        the one you picked).
+        <code>storybook-*</code> entries already wired (a scaffold gets
+        <code>atelier</code> on Angular or the one <code>storybook-*</code> you
+        picked, plus <code>storybook-local</code>).
       </p>
     </details>
 

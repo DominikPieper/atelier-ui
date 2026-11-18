@@ -253,6 +253,38 @@ const SCAFFOLD_PORT_EXEMPT_ENTRIES = [
     ),
     'Same stale "no Storybook of its own" claim as tutorial.astro, in the Verify step of the four-step loop — corrected per ADR-0137.',
   ],
+  [
+    scaffoldPortKey(
+      'docs/src/pages/schulung.astro',
+      "'What Storybook is: stories, prop tables. A story is a claim about a component: the component is the shape, the story is the claim, the test checks the claim',",
+      '"One thing in the Atelier Storybook that is explained nowhere else (7 min, D-3): the Design tab (`parameters.design`) shows the Figma frame next to the component. Open the trainer\'s own workspace mount `http://localhost:6006/atelier/`, story AtlButton, Design tab; participants watch the projector (their workspace\'s own stories carry no `parameters.design`) and may open the same URL on their seat",',
+    ),
+    "Day 1 Block 04 demo D-3 on the schulung page: the trainer's own workspace serves the library Storybook mounted at `/atelier/` on the scaffold's port 6006, next to the participant's Storybook (ADR-0182).",
+  ],
+  [
+    scaffoldPortKey(
+      'docs/src/pages/workshop.astro',
+      '"type": "http",',
+      '"url": "http://localhost:6006/mcp"',
+    ),
+    "Example generated `.mcp.json` on the workshop page: the `storybook-local` entry points at the workspace's own Storybook on 6006, unlike the clone's 4400/4401/4402 (ADR-0182).",
+  ],
+  [
+    scaffoldPortKey(
+      'docs/src/pages/workshop.astro',
+      '<span class="pre-ok">✓</span> MCP: atelier<span class="pre-muted"> — stdio, docs-list answers</span>',
+      '<span class="pre-warn">⚠</span> MCP: storybook-local<span class="pre-muted"> — http://localhost:6006/mcp not running</span>',
+    ),
+    "Preflight terminal mockup for the scaffold, successful run: the `storybook-local` warning line names the workspace's Storybook on 6006 while it is not running (ADR-0182).",
+  ],
+  [
+    scaffoldPortKey(
+      'docs/src/pages/workshop.astro',
+      '<span class="pre-muted">→</span> Run <span class="pre-cmd">`npm install`</span>, then re-run <span class="pre-cmd">`npm run preflight`</span>',
+      '<span class="pre-warn">⚠</span> MCP: storybook-local<span class="pre-muted"> — http://localhost:6006/mcp not running</span>',
+    ),
+    'Same preflight mockup, the "failed run" tab: the `storybook-local` warning line follows the `@atelier-ui/mcp` failure (ADR-0182).',
+  ],
 ];
 
 // A `new Map([...])` literal silently keeps the LAST entry on a duplicate

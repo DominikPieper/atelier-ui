@@ -25,20 +25,21 @@ const ISSUES: Issue[] = [
       'Diagnose first: read the preflight output and name which of the three is missing — CLI, MCP, or model access. Then jump to the matching entry on this page instead of debugging everything at once.',
       'Time box: whoever is still red in the setup block (Day 1 Block 01) pairs with a neighbour — one keyboard, the neighbour drives — instead of debugging further. The trainer takes your seat at the coffee break or at lunch.',
       'Broken workspace: do not repair it. In the course, tell the trainer right away: the machine is theirs to fix. On your own machine, create a fresh workspace with `npx create-atelier-ui-workspace` in a new directory; it takes a few minutes.',
-      'What works without the Figma Desktop Bridge: the readiness checklist (Day 1 Block 03, read the file in Figma) and the hosted Storybook MCP `docs-show` (Day 1 Block 04). The mini-loop (Day 1 Block 02) needs the bridge — pair for that. The optional kata runs only on your own machine.',
+      'What works without the Figma Desktop Bridge: the readiness checklist (Day 1 Block 03, read the file in Figma) and `docs-show` through the `atelier` server (Day 1 Block 04). The mini-loop (Day 1 Block 02) needs the bridge — pair for that. The optional kata runs only on your own machine.',
       'Nobody starts Day 2 red: the trainer check happens at the coffee break or at lunch, not as homework.',
     ],
   },
   {
     id: 'mcp-unreachable',
-    title: 'Storybook MCP server is unreachable',
+    title:
+      'Hosted Storybook MCP server is unreachable (React and Vue workspaces)',
     symptom:
-      'Claude Code says "storybook-angular" (or react/vue) is disconnected, or no component docs are returned.',
+      'Claude Code says "storybook-react" (or vue) is disconnected, or no component docs are returned.',
     cause:
       'Your network blocks outbound HTTPS to atelier.pieper.io, or the server is temporarily down.',
     fix: [
       'Run `npm run preflight` — it makes a real MCP call against each endpoint and reports what failed.',
-      'Test manually with `curl -I https://atelier.pieper.io/storybook-angular/mcp`. You should see a 200 or 405.',
+      'Test manually with `curl -I https://atelier.pieper.io/storybook-react/mcp`. You should see a 200 or 405.',
       'If behind a corporate proxy, set `HTTPS_PROXY=http://your-proxy:port` before starting Claude Code.',
     ],
   },
@@ -46,7 +47,7 @@ const ISSUES: Issue[] = [
     id: 'mcp-tools-error',
     title: 'MCP connects but every tool errors',
     symptom:
-      'Claude Code lists `storybook-angular` (or react/vue) as connected, but every tool call — even `docs-list` — returns an error like "Failed to fetch manifest components.json: 522".',
+      'Claude Code lists `storybook-react` (or vue) as connected, but every tool call — even `docs-list` — returns an error like "Failed to fetch manifest components.json: 522".',
     cause:
       'The endpoint answers HTTP, but the MCP server behind it is broken — "connected" only proves the URL responds, not that tools work. This is a server-side fault, not your setup.',
     fix: [
@@ -94,17 +95,16 @@ const ISSUES: Issue[] = [
     ],
   },
   {
-    id: 'mcp-scope',
-    title:
-      '`claude mcp add` versus `.mcp.json`: wrong scope or duplicate server',
+    id: 'storybook-local-not-connected',
+    title: '`storybook-local` is not connected',
     symptom:
-      'A server you added with `claude mcp add` is missing for your teammates, or the same server appears twice (for example `storybook-angular` from `.mcp.json` and again from a manual add).',
+      '`/mcp` shows `storybook-local` as not connected, or `get-storybook-story-instructions`, `stories-preview` and `test-run` are not listed.',
     cause:
-      '`claude mcp add` writes to the local scope by default: stored in `~/.claude.json` under the current project, not shared. Only `--scope project` writes the shared `.mcp.json`; `--scope user` stores it for all your projects. When the same name exists in several scopes, Claude Code connects once, using the highest-precedence entry (local, then project, then user) and does not merge fields.',
+      'Three causes. Storybook is not running. Storybook was started after the Claude Code session, which only looks for the server at the start. Or the port was taken and Storybook came up on another port, while the entry in `.mcp.json` points at the default.',
     fix: [
-      'List what is configured: `claude mcp list`, and details of one server with `claude mcp get <name>`.',
-      'Remove the entry in the wrong scope: `claude mcp remove <name> --scope local` (or `project`, `user`).',
-      'For servers the whole workspace needs, keep them in the workspace `.mcp.json` and do not add them again by hand. The Storybook local server from Day 2 is the one deliberate manual add (`claude mcp add --transport http storybook-local http://localhost:<port>/mcp`, local scope).',
+      'Stop whatever holds the Storybook port (`lsof -nP -iTCP:<port> -sTCP:LISTEN`), start `npm run storybook`, then `/mcp` and reconnect `storybook-local`.',
+      'Do not edit `.mcp.json` and do not add a server by hand: the entry is part of the workspace.',
+      'A seat that stays red works on without the three tools: the browser Storybook and `npm run check:stories` show the same result.',
     ],
   },
   {

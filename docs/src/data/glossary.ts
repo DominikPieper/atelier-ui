@@ -13,7 +13,7 @@ export const GLOSSARY: Record<string, GlossaryEntry> = {
   MCP: {
     definition:
       'Model Context Protocol — a JSON-RPC standard that lets AI assistants call structured tools on external servers, instead of guessing from training data.',
-    hint: 'In this workshop: three Storybook MCP servers expose component props to Claude Code.',
+    hint: 'In this workshop: servers such as atelier (the library’s component docs) and storybook-local (your own Storybook) give Claude Code tools and data.',
   },
 
   'node ID': {
