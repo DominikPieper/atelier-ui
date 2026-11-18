@@ -1,3 +1,7 @@
+## 0.1.8 (2026-11-18)
+
+This was a version bump only for artboard-bridge to align it with other projects, there were no code changes.
+
 ## 0.1.7 (2026-10-05)
 
 ### 🚀 Features

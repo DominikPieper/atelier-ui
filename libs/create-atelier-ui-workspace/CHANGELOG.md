@@ -1,3 +1,17 @@
+## 0.4.11 (2026-11-18)
+
+### 🚀 Features
+
+- **create-workspace:** the seat reads the library from @atelier-ui/mcp and its own Storybook locally ([c048c9d2](https://github.com/DominikPieper/atelier-ui/commit/c048c9d2))
+
+### 🩹 Fixes
+
+- **create-workspace:** drop uianatomy from the generated workspace ([5fe0cc8c](https://github.com/DominikPieper/atelier-ui/commit/5fe0cc8c))
+
+### ❤️ Thank You
+
+- Dominik Pieper @DominikPieper
+
 ## 0.4.10 (2026-10-21)
 
 This was a version bump only for create-atelier-ui-workspace to align it with other projects, there were no code changes.

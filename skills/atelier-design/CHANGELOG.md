@@ -1,3 +1,7 @@
+## 0.1.13 (2026-11-18)
+
+This was a version bump only for atelier-design to align it with other projects, there were no code changes.
+
 ## 0.1.12 (2026-10-09)
 
 ### 🚀 Features
