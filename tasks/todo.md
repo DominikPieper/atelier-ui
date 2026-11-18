@@ -315,6 +315,22 @@ course only stops depending on them.
         Storybook starts after `claude`, the Design tab in the mounted library Storybook,
         that the two Day 2 Block 00 answers differ, which server the agent picks when a
         prompt names none.
+  - [ ] **Owner verdict on the Day 2 Block 00 exercise.** L4 replaced "find the check the
+        Definition of Done is missing and add it" with "remove the `check:stories` line,
+        ask the agent what done means, restore it, ask again", because 8c8fdf6a made the
+        generated list complete. Decided without the owner, explained 2026-11-18, not
+        confirmed. It is in the run-of-show, golden prompts, `/schulung`,
+        `/build-your-own`, the outline and the Day 2 deck; a "no" means reverting all six.
+  - [ ] **Triage before cohort 1: R-253, R-255, R-258, R-259, R-260** (`tasks/reviews.md`).
+        Asked 2026-11-18, unanswered. R-255 is owner wording; the others are course text
+        that contradicts itself or the workspace.
+  - [ ] **Deprecate the orphaned 0.4.11 on npm** (owner's npm login, optional):
+        `npm deprecate <pkg>@0.4.11 "incomplete release, use 0.4.12"` for
+        `@atelier-ui/styles`, `angular`, `react`, `vue`, `create-workspace` and
+        `create-atelier-ui-workspace`. `latest` is 0.4.12, so only an explicit pin hits it.
+  - [ ] **`@atelier-ui/mcp` description names three tools, the server has four**
+        (`libs/mcp/package.json:4` omits `tokens-search`). A one-line fix under `libs/**`
+        cuts a release by itself; take it along with the next real change.
 
 ## Content review 2026-11-17: standard tools as the proof thread
 
