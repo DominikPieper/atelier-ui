@@ -108,6 +108,17 @@ A scaffold release and a reprovisioning of the course machines are due anyway (R
   the two prompts that say "the Storybook MCP" are the ones that go wrong, and they need the edit
   either way.
 
+**Corrected 2026-11-18** (same day, while writing the scaffold spec): items 1, 4 and 5 hold for
+an Angular workspace only. `@atelier-ui/mcp` carries the Angular manifest and the Angular
+Storybook, nothing for React or Vue, and the Decision above did not say so. A React or Vue
+workspace keeps its hosted `storybook-<fw>` entry until the package carries that framework's
+manifest; it gets the fixed `storybook-local` entry like an Angular one, because the addon MCP
+is in all three Storybook templates. The course runs on Angular (ADR-0178), so nothing in the
+course changes; the generator must not hand a React seat Angular docs under the name `atelier`.
+
+Also found while making the package publishable: the release has no Storybook version gate. The
+package's `@storybook/mcp` pin equals the root pin today only because both were typed by hand.
+
 ## Consequences
 
 - `@atelier-ui/mcp` has to be published, which needs the owner's explicit go (L2 in

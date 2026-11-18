@@ -252,7 +252,7 @@ course only stops depending on them.
       From the spike: the static build ships inside `@atelier-ui/mcp`; a fixed `storybook-local`
       entry in `.mcp.json` replaces the `claude mcp add` step; the library's server is called
       `atelier`. Owner confirmed all three 2026-11-18.
-- [ ] **L2 Publish `@atelier-ui/mcp`** — owner go given 2026-11-18. The seven steps are
+- [x] **L2 Publish `@atelier-ui/mcp`** _(package side done 2026-11-18, commit 6bc980d4: in the `libraries` release group, `private` gone, static Angular Storybook in the tarball under `storybook/`, 4.0 MB packed; `check:mcp-package` and `nx release --dry-run` exit 0. No `publishConfig`: the siblings have none, access and provenance come from `publish.yml`. Not verified: a real publish; the `NPM_TOKEN` must be allowed to create a new package in the scope. No Storybook version gate exists, the pin is by hand.)_ — owner go given 2026-11-18. The seven steps are
       listed under M1 (nx release group, drop `private`, release block, publish target,
       Storybook pin, `publishConfig`, snapshot before pack in CI).
 - [ ] **L3 Scaffold** (Sonnet agents): both `.mcp.json` entries and the dependency, the `staticDirs` mount in the Storybook template, one routing sentence in the generated `CLAUDE.md` (library → `atelier`, own work → `storybook-local`) in place of the paragraph that argued against a fixed entry, preflight probes the
