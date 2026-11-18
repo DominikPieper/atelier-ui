@@ -13,15 +13,58 @@
   "targets": {
     "nx-release-publish": {
       "dependsOn": [
-        { "projects": ["angular"], "target": "build-storybook" },
-        { "projects": ["styles"], "target": "assert-unpublished" }
+        {
+          "projects": ["angular"],
+          "target": "build-storybook"
+        },
+        {
+          "projects": ["styles"],
+          "target": "assert-unpublished"
+        }
       ]
     },
     "test": {
       "executor": "nx:run-commands",
       "cache": true,
-      "inputs": ["default"],
-      "options": { "cwd": "libs/mcp", "command": "node --test test/*.test.mjs" }
+      "inputs": [
+        "default",
+        {
+          "dependentTasksOutputFiles": "**/*",
+          "transitive": false
+        }
+      ],
+      "options": {
+        "cwd": "libs/mcp",
+        "command": "node --test test/*.test.mjs"
+      },
+      "dependsOn": ["build"]
+    },
+    "build": {
+      "executor": "nx:run-commands",
+      "cache": true,
+      "dependsOn": [
+        {
+          "projects": ["angular"],
+          "target": "build-storybook"
+        }
+      ],
+      "inputs": [
+        "default",
+        "{workspaceRoot}/docs/public/.well-known/components/*.json",
+        "{workspaceRoot}/docs/public/.well-known/cookbook-patterns.json",
+        "{workspaceRoot}/libs/styles/src/tokens.css",
+        "{workspaceRoot}/libs/create-workspace/src/generators/preset/preset.ts",
+        "{workspaceRoot}/libs/create-workspace/src/generators/preset/files/tools/stylelint-rules/*.js",
+        {
+          "dependentTasksOutputFiles": "**/*",
+          "transitive": false
+        }
+      ],
+      "outputs": ["{projectRoot}/snapshot"],
+      "options": {
+        "cwd": "libs/mcp",
+        "command": "node scripts/build-snapshot.mjs"
+      }
     }
   }
 }
