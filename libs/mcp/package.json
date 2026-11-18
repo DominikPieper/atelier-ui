@@ -3,6 +3,11 @@
   "version": "0.4.11",
   "description": "MCP server for consumers of @atelier-ui/angular: answers docs-list, docs-show and docs-show-story over stdio from a manifest snapshot built from the same commit, with no network access.",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/DominikPieper/atelier-ui.git",
+    "directory": "libs/mcp"
+  },
   "type": "module",
   "bin": {
     "atelier-mcp": "bin/atelier-mcp.mjs"

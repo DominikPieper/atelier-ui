@@ -65,6 +65,10 @@
  * HEAD (a genuine `publish-only` resume of a half-finished publish of the same
  * commit). It also fails closed if the registry cannot be reached.
  *
+ * Both modes first run an offline provenance check: every publishable package's
+ * `repository.url` must match this repo (GITHUB_REPOSITORY, else `origin`), or
+ * npm 422s mid-publish with the group half-uploaded; fails [NO-REPOSITORY].
+ *
  * Run via:
  *   node tools/scripts/check-release-drift.mjs             check every publishable package
  *   node tools/scripts/check-release-drift.mjs <project>   check one project only (matches
@@ -336,6 +340,7 @@ for (const name of only ? [only] : projectNames) {
     dir,
     pkgName: pkgJson.name,
     localVersion: pkgJson.version,
+    repoUrl: pkgJson.repository?.url ?? pkgJson.repository,
   });
 }
 
@@ -343,6 +348,46 @@ if (resolved.length === 0) {
   for (const w of warnings) console.warn(`⚠ [WARNING] ${w}`);
   console.error(
     '✗ [CONFIG] no publishable package resolved to check against npm.',
+  );
+  process.exit(1);
+}
+
+// ---------------------------------------------------------------------------
+// Provenance metadata, offline, before ANY registry query: npm rejects a
+// provenance publish with a 422 when package.json's `repository.url` does not
+// match the repository the provenance bundle names (the 0.4.11 run uploaded six
+// packages, then died on @atelier-ui/mcp, which declared none). The expected
+// repo is derived, not hardcoded: GITHUB_REPOSITORY in CI (the very value the
+// provenance bundle is built from), else the local `origin` remote.
+// ---------------------------------------------------------------------------
+const repoSlug = (url) =>
+  typeof url === 'string'
+    ? url
+        .match(/github\.com[/:]([^/]+\/[^/]+?)(?:\.git)?\/?$/i)?.[1]
+        .toLowerCase()
+    : undefined;
+const expectedRepo =
+  process.env.GITHUB_REPOSITORY?.toLowerCase() ||
+  repoSlug(
+    spawnSync('git', ['remote', 'get-url', 'origin'], {
+      cwd: ROOT,
+      encoding: 'utf8',
+    }).stdout?.trim(),
+  );
+const badRepo = resolved.filter((p) =>
+  expectedRepo
+    ? repoSlug(p.repoUrl) !== expectedRepo
+    : !String(p.repoUrl ?? '').trim(),
+);
+if (badRepo.length > 0) {
+  for (const p of badRepo) {
+    console.error(
+      `✗ [NO-REPOSITORY] ${p.pkgName}: libs/${p.dir}/package.json "repository.url" is ${JSON.stringify(p.repoUrl ?? '')}, ` +
+        `expected to match github.com/${expectedRepo ?? '<this repo>'}`,
+    );
+  }
+  console.error(
+    `\n${badRepo.length} package(s) would be rejected by npm's provenance check (422) mid-publish. Nothing was queried or published.`,
   );
   process.exit(1);
 }
