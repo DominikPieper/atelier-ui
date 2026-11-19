@@ -437,6 +437,12 @@ const STYLELINT_VERSION = '17.15.0';
 // "declared vs. actually resolved" gap to reconcile.
 const PRETTIER_VERSION = '~3.9.6';
 
+// Angular only: pins the devkit's architect to the line the scaffold's Angular
+// 22.1 devkit uses. 0.2203.0 (Angular 22.3) ships an `exports` map without
+// "./node/index", which nx's ngcli-adapter imports, and the wide ranges in
+// @analogjs/vitest-angular and @storybook/angular pull it into a fresh install.
+const ANGULAR_DEVKIT_ARCHITECT_VERSION = '0.2201.7';
+
 // Browser-mode Storybook tests (owner correction, 2026-09-10, to ADR-0123's
 // "no test runner" decision — see the dated correction on that record).
 // Every scaffolded app gets its own vitest.config.ts + storybook-test target,
@@ -2227,6 +2233,12 @@ file exports). The Desktop Bridge covers creation and inspection without a token
   updateJson(tree, 'package.json', (pkg) => {
     pkg.scripts = pkg.scripts ?? {};
     pkg.scripts.preflight = 'node tools/scripts/preflight.mjs';
+    if (framework === 'angular') {
+      pkg.overrides = {
+        ...pkg.overrides,
+        '@angular-devkit/architect': ANGULAR_DEVKIT_ARCHITECT_VERSION,
+      };
+    }
     // The contract loop (ADR-0121 S4), gated on Figma (ADR-0144): neither
     // script exists without `--figma` — see the contract-loop file-writing
     // block above. `figma:snapshot` names the attendee's own Figma file key

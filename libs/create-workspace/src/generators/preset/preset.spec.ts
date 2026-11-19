@@ -365,6 +365,19 @@ describe('preset generator', () => {
     expect(settings.mcpServers['storybook-vue']).toBeUndefined();
   });
 
+  it('overrides @angular-devkit/architect for Angular only', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
+    expect(readJson(tree, 'package.json').overrides).toEqual({
+      '@angular-devkit/architect': '0.2201.7',
+    });
+    for (const framework of ['react', 'vue'] as const) {
+      const t = createTreeWithEmptyWorkspace({ formatter: 'none' });
+      t.delete('tsconfig.base.json');
+      await presetGenerator(t, { name: 'my-workspace', framework });
+      expect(readJson(t, 'package.json').overrides).toBeUndefined();
+    }
+  });
+
   it('pins @atelier-ui/mcp to the component package version, Angular only', async () => {
     await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
     const pkg = readJson(tree, 'package.json');
