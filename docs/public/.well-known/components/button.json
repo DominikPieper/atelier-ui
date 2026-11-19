@@ -584,6 +584,31 @@
       "source": "libs/styles/src/tokens.css"
     },
     {
+      "name": "--ui-spacing-4",
+      "intent": "Default inter-element spacing (1rem). Use for gaps inside cards, between form fields, between list items.",
+      "constraints": [
+        "Treat as the baseline spacing — only step up/down for hierarchy or density.",
+        "Do not interpolate between scale steps; pick the nearest defined value."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-spacing-5",
+      "intent": "Comfortable spacing (1.25rem). Use for card padding and form section gaps.",
+      "constraints": [
+        "Do not interpolate between scale steps; pick the nearest defined value."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
+      "name": "--ui-spacing-6",
+      "intent": "Loose spacing (1.5rem). Use for dialog padding and prominent component insets.",
+      "constraints": [
+        "Do not interpolate between scale steps; pick the nearest defined value."
+      ],
+      "source": "libs/styles/src/tokens.css"
+    },
+    {
       "name": "--ui-transition-fast",
       "intent": "Composed transition shorthand: fast duration + ease-out. Use for hover/focus micro-interactions.",
       "constraints": [

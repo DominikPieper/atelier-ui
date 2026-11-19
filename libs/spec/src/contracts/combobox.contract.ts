@@ -20,15 +20,6 @@ export const contract = {
         'UNEXPLAINED — grep-verified 2026-09-10: atl-combobox.css only has a PER-OPTION .atl-combobox-option.is-selected rule, not a root-level combobox state; decide in tasks/todo.md',
     },
   ],
-  axisMap: [
-    {
-      figmaAxis: 'state',
-      codeProp: 'invalid',
-      values: { invalid: true },
-      reason:
-        "AtlFormFieldSpec.invalid is a real boolean prop (libs/spec/src/index.ts) — the master's 'invalid' state value maps to it directly.",
-    },
-  ],
   probes: [
     {
       part: 'control',

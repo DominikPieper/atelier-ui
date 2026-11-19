@@ -128,7 +128,7 @@
         ) /
         2 - 1px
     )
-    0.875rem;
+    var(--ui-spacing-4);
   font-size: var(--ui-font-size-sm);
   min-height: var(--ui-control-height-sm);
 }
@@ -141,7 +141,7 @@
         ) /
         2 - 1px
     )
-    1.125rem;
+    var(--ui-spacing-5);
   font-size: var(--ui-font-size-md);
   min-height: var(--ui-control-height-md);
 }
@@ -154,7 +154,7 @@
         ) /
         2 - 1px
     )
-    1.5rem;
+    var(--ui-spacing-6);
   font-size: var(--ui-font-size-lg);
   min-height: var(--ui-control-height-lg);
 }
