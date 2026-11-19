@@ -1174,3 +1174,13 @@ a copy of the AtlButton master derived from `tools/figma/snapshot.json`, regener
 `node tools/scripts/gen-scaffold-snapshot.mjs`. The owner saw the red Publish run before I did.
 **Rule:** after `figma:snapshot`, or any change to a generated or derived file, run the full
 `npm run check:all` before a push — a hand-picked gate list misses the derived copies.
+
+## 2026-11-19 — a schedule that sums to zero and breaks at lunch
+
+I moved 35 minutes out of the Day 1 morning and into the afternoon, checked that the day still
+netted 410 minutes, and wrote the block lengths into the plan. The morning then ended at 11:25 and
+the afternoon at 18:05. I found it myself on the clock check, after the owner had already decided
+on the lengths.
+**Rule:** a schedule change is checked against every fixed boundary (lunch, coffee, end of day), not
+against the day total. Write the clock times, not only the durations, before the lengths go to the
+owner.

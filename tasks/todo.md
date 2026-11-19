@@ -189,7 +189,147 @@ outline first, then deck, then run-of-show and prompts.
       Agent ... holt er sich aus Storybook; zu Beginn zeigen wir live, was er dort findet"); Day 2 "Einstieg"
       says what the skills part is (which are set up, when the agent loads them, how to check); Day 2
       "Vorstellung und Transfer" ends on the written next step instead of "Wahl eines ersten Befunds". After the
-      decision: mirror into `tasks/schulung-kundenagenda.md`.
+      decision: mirror into `tasks/schulung-kundenagenda.md`. **2026-11-19:** the third suggestion
+      (`sg_s11qxbuoxx`) was reworded for Package E step E8 and the doc is at revision 41; the other two are
+      unchanged.
+
+## Package E: schedule pass — cuts, reweighting, transfer (owner decisions and go 2026-11-19, in progress)
+
+Owner asked for a pass over both days: which exercises give no real value, which only exist inside the
+Atelier repo and do not port, and whether "prepare your design system / your Figma workspace for AI" gets
+room time. Finding: the preparation content exists (scorecard, two readiness checklists) but had about 12 of
+820 minutes in the room. Fifteen decisions taken point by point; nothing is implemented yet. Everything in
+the room runs on Conciso machines with Conciso accounts, so no exercise can touch a participant's own system.
+
+Decisions:
+
+1. Exercise "Wem traust du?" (D1-00-09, 5 min): removed.
+2. Demo D-2 (D1-00-06, 5 min): removed.
+3. Day 1 Block 01 setup 45 → 25 min ("three independent things", preflight content and the recap question
+   leave; Claude Code basics stay). The 20 min go to Day 1 Block 03: checklist rows shown as "missing → this
+   is what the agent guesses".
+4. Lint break-and-repair (Day 1 Block 02) 20 → 10 min, one pass; the `alt=""` question stays.
+5. Design tab (D-3): spike first. If the Figma embed loads on a seat for the private duplicate,
+   `@storybook/addon-designs` goes into the scaffold, the story takes its Figma link from the handoff
+   document, and the demo moves from Day 1 Block 04 to Day 2 Block 02 ("look at both"). If not, D-3 is dropped.
+6. Demo D-6 (Claude Design, trainer only): removed; D1-BR-03 becomes a plain buffer slide.
+7. Demo D-8 (D2-04-05): removed; "not passed means not compared" stays as one sentence on the parity slide.
+8. Day 1 parity: visual comparison (card next to the Figma frame, list differences, sort into code / Figma)
+   instead of the tool. The tool runs only on Day 2.
+9. Day 2 Block 01 split 20 / 15 / 22: draw from the starter frame, API rules with a short exercise on the
+   own component, handoff document.
+10. Rules-file exercise (Day 2 Block 00): main task is writing the one line the own team would add (command
+    plus what it proves). The delete-a-line trick is shown once by the trainer.
+11. Workspace anatomy (D2-05-04): six steps; step 7 and the verify.md / review-agent line leave. One sentence
+    added: at home the Storybook MCP on the own Storybook replaces the `atelier` package.
+12. Self-check: scorecard in the room from memory (mark seven rows, pick the weakest, write the next step);
+    both checklists with the check prompt are explicit homework. Customer agenda sentence changes to
+    "Selbsteinschätzung".
+13. Transfer: 15 min from Day 2 Block 03 (Iterate 75 → 60), transfer 12 → 27; afternoon shifts by 15 min.
+14. Remaining freed Day 1 minutes: 5 to the scorecard in the kickoff, 15 to Block 05 (screen from Storybook).
+15. One new slide in Day 2 Block 05, no exercise: (a) Storybook MCP on the own Storybook as the route that
+    brings the DS docs to consuming teams' agents; (b) Figma linter, a11y audit and parity depend on the
+    third-party figma-console-mcp.
+
+Block times to confirm against the run-of-show before any file changes (derived, not measured):
+Day 1 — 00: 30 → 25 · 01: 45 → 25 · 02: 90 → 80 · 03: 75 → 95 · 04: 75 · 05: 80 → 95 (net 0).
+Day 2 — 03: 75 → 60 · 05: 65 → 80; Block 01 and Block 04 reweighted inside their boxes.
+
+Steps (outline first, then deck, then run-of-show and prompts — the walkthrough rule above):
+
+- [x] E0 spike, decides item 5. **Closed 2026-11-19:** owner chose embed plus PNG, so the private-file
+      question no longer decides anything (ADR-0187); it stays unmeasured until the rehearsal. Before that: Half answered 2026-11-19 on the trainer machine: addon-designs 11.1.4 turns
+      a `www.figma.com/design/…` link into an `embed.figma.com` iframe, and the repo's Angular Storybook
+      (`AtlTabGroup` Default, Design panel) shows the frame. But the Atelier file is public
+      (`link_access: view`, checked logged out with curl), so this says nothing about a participant's
+      duplicate in drafts, which is private. Still open: does the embed load for a private file in a browser
+      that is logged in to Figma, and is the seat browser logged in at all. No private file was reachable
+      from here (only the Atelier file is open in Figma Desktop). Way out that needs neither answer: the
+      addon also takes `type: 'image'` and an array, so the story can carry a PNG the agent exports through
+      figma-console next to (or instead of) the live embed.
+      **Owner decision 2026-11-19: embed plus PNG.** The story carries the Figma link and a PNG of the frame
+      exported through figma-console; the PNG shows something even where the embed hits a login wall, so no
+      further test gates the release. Scaffold change rides in C5's release, reprovision before 2026-11-23.
+      Left unchecked on purpose: the private-file embed is still unmeasured, look at it on a seat in the rehearsal.
+- [x] E1 block times confirmed against the run-of-show headings 2026-11-19: Day 1 30/45/90/75/75/80/15,
+      Day 2 30/90/75/75/75/65, both 410 min net. Day 2 afternoon after the change: Block 03 13:30–14:30,
+      coffee 14:30–14:45, Block 04 14:45–16:00, buffer 16:00–16:10, Block 05 16:10–17:30.
+      **Finding the decisions did not see:** Day 1 nets to zero over the day but not around lunch. The
+      morning loses 35 min (25 + 25 + 15 coffee + 80 ends 11:25, lunch is 12:00) and the afternoon gains 35
+      (95 + 15 + 75 + 10 + 95 + 15 = 305 min from 13:00 ends 18:05). The customer agenda only commits to
+      09:00–17:30, not to a lunch time. **Owner decision 2026-11-19: split Block 03 around lunch** — tour
+      (tokens, structure) 11:25–12:00, hands-on (pink test, linter, checklist with "missing → the agent
+      guesses", micro-exercise) 13:00–14:00. Day 1 clock: 00 09:00–09:25 · 01 09:25–09:50 · coffee
+      09:50–10:05 · 02 10:05–11:25 · 03a 11:25–12:00 · lunch · 03b 13:00–14:00 · coffee 14:00–14:15 ·
+      04 14:15–15:30 · buffer 15:30–15:40 · 05 15:40–17:15 · 06 17:15–17:30.
+- [x] E2 (2026-11-19) `tasks/schulung-deck-outline.md` (local, never committed): all fifteen items, slide ids renumbered,
+      plus D2-00-02, which still asks "name the loop and the tool per step" against the 2026-11-19 decision
+      that nobody recites the loop. Result: 55 + 55 slides, both days 410 min net, clocks as above. Seven
+      slides out (D1-00-06, D1-00-09, D1-01-02, D1-01-03, D1-01-07, D1-04-03, D2-04-05), three in (D1-03-05b,
+      D1-03-05c, D2-05-04b). Resolutions the outline pass took on its own, **open for the owner**: Day 2
+      Block 01 drawing row 40 → 20 min; Day 2 Block 03 revise row 15 → 10 min and the debugging row folded
+      into the self-healing row; Day 1 Block 01 done-when inside 25 min is not measured. Every changed line
+      carries the marker `(new 2026-11-19, to mirror into schulung.astro)` (23 lines).
+- [x] E3 (2026-11-19, published) both decks from the outline (`tmp/schulung-decks/`, Day 1 artifact F7o6AkbbLLUDfAFtmfrM6t, Day 2
+      Y5NWqQn9bPf6cqEiBYPdfp, publish with root = deck folder); changelogs updated. Day 1 version 59, Day 2
+      version 37, label "Package E schedule 2026-11-19"; both indexes read back, 55 + 55 slides, equal to the
+      local `deck.json`; no owner edits in the editor before the publish (live byte sizes against the backup).
+      `check_deck.py`: Day 2 exit 0; Day 1 exit 1 with five problems known before this round (two local
+      files outside the order, d1-00-04b and d1-00-10, neither is published; four blob references on the
+      trainer slide d1-tt-02). Backups `bak-day{1,2}/2026-11-19-package-e/`, archive
+      `~/Backups/atelier-schulung/schulung-decks-2026-11-19-package-e.tar.gz`. **Open for the owner:**
+      D1-02-05 has no sketch drawn; D2-02-05 (the Design panel) carries a screenshot placeholder until the
+      rehearsal; re-export both decks as .pptx.
+- [x] E4 (2026-11-19, uncommitted; Sonnet agent) `docs/src/pages/schulung.astro`: block times, done-when lines, exercise list.
+      Also `build-your-own.astro` (Day 2 times; workspace anatomy is six steps, Atelier's own contract check
+      and the two file-tour entries for `verify.md` and the component-review agent are out) and one stale
+      entry in `tools/scripts/lib/allowlists.js` (keyed to the removed Day 1 D-3 bullet). Agent-reported
+      exit codes: `nx lint docs` 0, `nx build docs` 0, `check:docs` 0, prettier 0; my own re-run is E10.
+      A clock next to the word "Figma" reads as a node id to `check:docs`, so those bullets carry no clock.
+      **Open for the owner:** the trainer appendix (the D-6 Claude Design notes) is gone from the page; the
+      stretch tasks of Day 1 Block 00 and Day 2 Block 00 are deleted, Day 1 Block 02's reads "predict which
+      difference you will see"; the sub-clocks (Day 1 Block 03 tour, Block 05 silent/hint split, Day 2
+      Block 03 revise row) are not on the page. Found on the way, older than this package: R-263.
+- [x] E5 (2026-11-19, uncommitted; Sonnet agent, then my review) run-of-show, trainer notes, demo scripts (D-2, D-6, D-8 out; D-3 per E0), golden prompts, dry-run kit.
+      Checked by me: `trainer:print` and its test exit 0; every block's rows in the run-of-show add up to
+      its heading and follow each other without a gap (13 blocks); no D-2, D-6, D-8, Claude Design appendix
+      or Day 1 Design tab left in the five files. The test now pins D-3 and D-7 to Day 2. My review found
+      three sentences the pass had left ("Day 2 Block 05 starts it", "a handout, not homework") against the
+      decision that both checklists are homework for after the course; fixed. It also found three stale
+      clocks in the scaffold's participant files (`day1-settings-card.md` 11:25 to 11:45 → 11:00 to 11:10,
+      `day2-prompts.md` Block 00 10 → 6 minutes, `day1-team-directory.md` time box 80 → 95 minutes with the
+      silent and the hint row); fixed, `nx test create-workspace` exit 0. `/screen-from-storybook`, the
+      trainer copy of that brief, gets the same time box. **Derived by the pass, open for the owner:** the
+      late-comer track (09:25 / 09:25–09:40 / after 09:40); checkpoint times in Day 2 Block 01 (C2 09:55,
+      C3 10:15, C4 10:35) and rule R7 now firing at C2/C3; `D2B03-C5` and `D2B04-C6` kept; golden prompts
+      §3.4 and §3.5 (they existed for D-8) kept as trainer-only reference; three new rehearsal checks in the
+      dry-run kit (10 Figma embed on a private duplicate, 11 the Day 1 Block 01 done-when inside 25
+      minutes, 12 the 20/15/22 split of Day 2 Block 01).
+- [x] E6 (2026-11-19, uncommitted; ADR-0187; Design panel with both entries seen in a browser on a
+      generated workspace, `nx test` and `nx lint create-workspace` exit 0) scaffold `course/` files (Sonnet agent, spec updated): `parity-prompt.md` Day 1 section and
+      `day1-settings-card.md` become the visual comparison; the rules-file exercise text; addon-designs and
+      the story link only if E0 is green. **Owner 2026-11-19: the addon is installed by default** — it stays
+      unconditional in the scaffold, not behind `--figma` (as ADR-0187 records it).
+- [x] E7 (2026-11-19, uncommitted) handouts: scorecard instruction for the in-room pass plus a line for the
+      weakest row and the next step; both checklists marked as homework; the Figma checklist now prints its
+      check prompt (the linter prompt, with figma-console-mcp named as a third-party tool), because nobody
+      takes the course workspace home. PDFs regenerated into local `Slides/Handouts/`, all five on one page
+      (scorecard and Figma checklist looked at). The PDF script now also sits in gitignored
+      `tmp/handouts/make.js` (run it from an empty folder; it writes its HTML and PNG there).
+- [ ] E8 customer agenda (Claude Docs 5489776f…, then the local copy): Day 2 "Vorstellung und Transfer" says
+      "Selbsteinschätzung"; Day 1 "mit dem Design vergleichen" still holds with the visual comparison. Owner
+      sends the changed wording, it is a commitment. **2026-11-19:** laid as a change to the open suggestion
+      `sg_s11qxbuoxx` (doc revision 41): "Selbsteinschätzung des eigenen Design Systems; daraus hält jede
+      Person einen konkreten nächsten Schritt fest". Open: owner accepts, then mirror into the local copy.
+      Checked against the agenda: the two demos it names are D-1 and D-4, both stay.
+- [x] E9 ADR-0186 written 2026-11-19 (`plan/adr/0186-room-time-goes-to-what-a-participant-can-take-to-their-own-system.md`),
+      README row, dated corrections in ADR-0180 and ADR-0179, `check:adr-refs` exit 0. ADR-0187
+      (addon-designs in the scaffold) written 2026-11-19 after the browser proof; R-090 closed.
+- [ ] E10 gates, commit per step, owner go to push; release and reprovision together with C5.
+      **2026-11-19:** `npm run check:all` exit 0 on the full uncommitted tree (30 files changed, two new
+      ADRs), run after the last edit. Open: the owner's go for the commits and the push, then the
+      create-workspace release (the scaffold's `course/` files and the Design addon changed) and the seat
+      reprovisioning before 2026-11-23.
 
 ## Package D: Figma ↔ Angular parity pass (owner go 2026-11-19)
 
