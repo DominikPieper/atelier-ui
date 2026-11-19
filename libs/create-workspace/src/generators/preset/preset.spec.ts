@@ -3119,6 +3119,24 @@ describe('preset generator', () => {
     expect(skill.slice(0, optIn)).not.toContain('check:contracts');
   });
 
+  it.each([true, false])(
+    'atelier-component skill carries the standing rules (region composition, accessible controls, no colour-only state, autodocs) with figmaMcp=%s',
+    async (figmaMcp) => {
+      await presetGenerator(tree, {
+        name: 'my-workspace',
+        framework: 'angular',
+        figmaMcp,
+      });
+
+      const skill =
+        tree.read('.claude/skills/atelier-component/SKILL.md', 'utf-8') ?? '';
+      expect(skill).toContain('Compose by region');
+      expect(skill).toContain('icon-only control');
+      expect(skill).toContain('visible without colour');
+      expect(skill).toContain("tags: ['autodocs']");
+    },
+  );
+
   it.each(['angular', 'react', 'vue'] as const)(
     'atelier-component skill has both placeholders fully substituted for %s, with no `<app>`/`<framework>` token left',
     async (framework) => {

@@ -30,10 +30,22 @@ wired in `.mcp.json` and the Desktop Bridge plugin is running. If it is not, the
    and nothing else, say that behaviour has not been specified yet and ask for the node.
 2. **Write the component.** Tokens only — every colour, space and radius is a `--ui-*` custom
    property. A raw hex or a hardcoded `2.5rem` is a stylelint error here, not a style opinion.
+   Compose by region: a component with more than one logical region (header, body, footer;
+   icon, label, action) gives each region its own sub-component or the framework's slot or
+   projection mechanism, the way `AtlCard` does with `AtlCardHeader`/`AtlCardContent`/`AtlCardFooter`
+   (look it up with `docs-show`) — a flat prop bag cannot take content the design did not
+   foresee, and consumers then rebuild the component. Give every icon-only control a real
+   accessible name (`aria-label`, or the library icon's `label`) and make every interactive
+   control a real `<button>` or `<a>`, not a styled `<div>`/`<span>` — axe in `check:stories`
+   flags a missing name, but not a div that only looks clickable. Make any severity, status
+   or state visible without colour (an icon, a prefix word, or visually hidden text) — colour
+   alone fails users who cannot see it, and no check here catches that.
 3. **Write the stories, because the stories are the claims.** One story per variant value and
    per Boolean state, `args`-based; one `play` per behaviour you are asserting, with a real
    assertion. Copy the shape from `<app>/src/atl-button.stories.*`, which ships with this
    workspace for exactly that purpose.
+   Declare `tags: ['autodocs']` on the story meta, as `atl-button.stories.*` does — without it
+   Storybook renders Canvas only, with no Docs tab.
 4. **Run the checks.** `npm run check:stories`. Read the exit code, not the last line of
    output.
 5. **Close the loop against Figma** if the MCP is available: `figma_check_design_parity`,
