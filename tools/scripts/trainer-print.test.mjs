@@ -31,11 +31,19 @@ test('day 1 carries its own material and none of day 2', () => {
     '## Day 1:',
   ])
     assert.ok(day1.includes(s), s);
-  for (const s of ['## D-8', '## 3. ']) assert.ok(!day1.includes(s), s);
+  for (const s of ['## D-3', '## D-7', '## 3. '])
+    assert.ok(!day1.includes(s), s);
 });
 
 test('day 2 carries its own material and none of day 1', () => {
-  for (const s of ['## D-8', '## 3. ', '## Day 2:', '## End-of-Day-2'])
+  for (const s of [
+    '## D-3',
+    '## D-7',
+    '## 3. ',
+    '## Day 2:',
+    '## End-of-Day-2',
+  ])
     assert.ok(day2.includes(s), s);
-  assert.ok(!day2.includes('## D-5'));
+  for (const s of ['## D-1', '## D-4', '## D-5'])
+    assert.ok(!day2.includes(s), s);
 });

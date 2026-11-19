@@ -1,6 +1,6 @@
 # Is your Figma file ready?
 
-Tick what holds. Part A per master, Part B once per system.
+Homework, on your own file: nobody starts this in the room. Tick what holds. Part A per master, Part B once per system.
 
 Master / file checked: ______________________________
 
@@ -44,5 +44,13 @@ Master / file checked: ______________________________
 
 - [ ] Each component has machine-readable purpose, usage and an accessibility note in code
 - [ ] An agent can look up exact props and variants without reading source
+
+## The check prompt
+
+For Part A, with figma-console-mcp connected to your file (a third-party tool) and the master selected:
+
+> Run figma_lint_design on the node I have selected with only the rules hardcoded-color, default-name and detached-component. Return the findings as a list: layer, rule, message. Change nothing in the file.
+
+Sort each finding: real or false alarm. The three rules see raw colours, default layer names and detached instances, nothing else on this page.
 
 The finding I fix first: ______________________________

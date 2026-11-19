@@ -53,11 +53,16 @@ current _values_ (e.g. a specific px number) are deliberately not repeated here 
 same reason ADR-0116 gives — read them fresh from `tokens.css` at prompt time rather
 than trusting a number that was correct on 2026-09-10.
 
+**Revision 2026-11-19 (Package E, ADR-0186, ADR-0187).** The Day 1 comparison with Figma is by
+eye (§1); §1a is one pass in 10 minutes; §2.1 allows the design image the
+`atelier-component` skill asks for; §2.5 gains the Design panel step; §2.6 is the line your team
+would add; §3.3 is the first parity call of the course.
+
 **Revision 2026-11-18 (ADR-0180).** The proof thread is now five standard tools ("the
 ladder": Figma linter, compiler, ESLint, stylelint, story tests), each taught in three
 beats: break it on purpose, the tool says so, the agent gets the output and repairs. New:
 §1a, §1c, §2.5, §2.6; changed: §1, §1b, §2.1, §3.3; §3.4 and the old double call are
-trainer-only now (§3.4, §3.5, demo D-8). **Every new or changed prompt below is NOT YET
+trainer-only now (§3.4, §3.5). **Every new or changed prompt below is NOT YET
 VERIFIED (rehearsal, R-040)**, and the verification dates in §5 and in the older text refer
 to the prompts as they stood then, not to the revised ones. Measured 2026-11-17 on a fresh
 `create-atelier-ui-workspace@0.4.10` Angular scaffold: the compiler and lint results named
@@ -107,21 +112,21 @@ below, warm run times (build 6-9 s, lint 6-7 s, stylelint 2-4 s), and one headle
   differences" section of the handoff document). "Contract" is not a label any more.
 - **Block mapping** (block numbers and titles as on `/schulung`):
   - §1 = Day 1 Block 02 "Mini-loop: first success" (existing components only — the
-    Settings Card): generation prompt and token fix-up. §1a = the same block, row 11:25 to
-    11:45: ladder stage 2, the agent checks itself with lint and build. The comparison with
-    Figma is the 10-minute row after it (the parity prompt, `course/parity-prompt.md`; trainer source `/tutorial`).
+    Settings Card): generation prompt and token fix-up. §1a = the same block, row 11:00 to
+    11:10: ladder stage 2, the agent checks itself with lint and build. The comparison with
+    Figma is the 10-minute row after it, by eye, with no tool (`course/parity-prompt.md`, Day 1 section).
   - §1b = Day 1 Block 05 "A screen from Storybook, against the clock" (existing
     components only, no Figma — the Team directory screen), including the closing checks.
-  - §1c = Day 1 Block 03 (ladder stage 0, 13:45 to 13:55) and Day 2 Block 01 (ladder stage 0
-    on your own component set, 10:35 to 10:40): the Figma linter.
+  - §1c = Day 1 Block 03 (ladder stage 0, 13:10 to 13:20) and Day 2 Block 01 (ladder stage 0
+    on your own component set, 10:15 to 10:20): the Figma linter.
   - §2.1 = Day 2 Block 02 "Component and stories from the handoff" (the generation prompt);
     §2.2–2.4 = Day 2 Block 03 "Iterate: prompt quality and the self-healing loop" (the
     correction prompts — the block `schulung.astro` names for golden prompts; also the home
     of ladder stage 4, where the agent runs `test-run` and repairs);
-    §2.5 = Day 2 Block 02, row 12:05 to 12:20 (`docs-show` on your own component);
-    §2.6 = Day 2 Block 00, row 09:18 to 09:28 (the Definition-of-Done exercise).
+    §2.5 = Day 2 Block 02, rows 12:05 to 12:23 (`docs-show` on your own component, then the Design panel and the look at both);
+    §2.6 = Day 2 Block 00, row 09:18 to 09:28 (the line your team would add, with the trainer demo).
   - §3 = Day 2 Block 04 "Verify: a11y, states, parity" (a11y + dark mode + the participant
-    parity prompt §3.3). §3.4 and §3.5 are trainer-only material for demo D-8.
+    parity prompt §3.3). §3.4 and §3.5 are trainer-only reference.
 
 ---
 
@@ -132,7 +137,7 @@ The generation prompt for this block already exists and is live — `exampleProm
 `AtlCard`/`AtlInput`/`AtlToggle`/`AtlButton` and explicitly tells Claude to pull _"the
 exact token names from `boundVariables`… no conversion needed."_ Do not re-type it here —
 that is exactly the mistake ADR-0116 corrects elsewhere (a hand-copied restatement of a
-value that already has a live source). Participants get it on the slide and from the trainer; the parity prompt is in `course/parity-prompt.md` (the trainer reads `/tutorial`).
+value that already has a live source). Participants get it on the slide and from the trainer; the by-eye steps are in `course/parity-prompt.md` (Day 1 section).
 
 **When the first draft still drifts on tokens** (it can — pattern-matching models
 sometimes fall back to a literal px/hex value even when told not to), hand the
@@ -145,13 +150,22 @@ participant this one-line fix-up rather than a full re-prompt:
 > no hex, no Tailwind class. Replace anything that isn't a `--ui-*` custom property with
 > the matching one and tell me which line you changed.
 
-**The comparison with Figma (the 10-minute row after §1a).** The prompt stays as it stands
-in `course/parity-prompt.md` (trainer source `/tutorial`, `PARITY_PROMPT`: run `figma_check_design_parity` on the settings card node,
-say for each discrepancy whether the code or the Figma master should change). Nothing
-before it has participants run `check:contracts` or `check:stories`: the proof in Day 1
-Block 02 is lint and build run by the agent (§1a). Two labels only, **code** or **Figma**.
-A long list: label the three largest. A difference that fits neither (someone chose it on
-purpose) is parked: "not code, not Figma, we name it on Day 2", and is not "fixed" in code.
+**The comparison with Figma (the 10-minute row after §1a), by eye.** No tool and no prompt for
+one: the running Settings Card next to the "Settings / Card" frame in Figma (node `936:2954`
+in the original file; ids differ in the duplicate). The steps are in `course/parity-prompt.md`,
+Day 1 section. (1) Write down every difference you can see: spacing, colour, type, an element
+that is missing or extra, a state; five minutes. (2) Label each one **code** (the code should
+change) or **Figma** (the frame should change); a long list: label the three largest. (3) Hand
+the code ones back to the agent:
+
+> The settings card differs from its Figma frame in these points:
+> `<your list>`. Fix only these. Do not change anything else.
+
+Nothing before it has participants run `check:contracts` or `check:stories`: the proof in Day 1
+Block 02 is lint and build run by the agent (§1a). A difference that fits neither (someone
+chose it on purpose) is parked: "not code, not Figma, we name it on Day 2", and is not "fixed"
+in code. The tool that automates part of this comparison comes on Day 2 (§3.3); it compares
+what it is handed, so the eye stays the first check.
 
 (Grounded directly in the tutorial's own React/Angular/Vue output blocks — all three
 already use exactly these four token names for exactly these four properties. Since
@@ -163,7 +177,7 @@ participant's draft has the same literal.)
 
 ---
 
-## 1a. Day 1 · Block 02, row 11:25 to 11:45 (20 min) — ladder stage 2: the agent checks itself
+## 1a. Day 1 · Block 02, row 11:00 to 11:10 (10 min, one pass) — ladder stage 2: the agent checks itself
 
 ESLint with the Angular template rules, run by the agent. NOT YET VERIFIED as prompts
 (rehearsal). Three prompts, in order, on the Settings Card the participant just generated.
@@ -297,8 +311,8 @@ stories, import path `./atl-table`, cookbook story without code.)
 
 ## 1c. Day 1 · Block 03 and Day 2 · Block 01 — ladder stage 0: the Figma linter
 
-Day 1 Block 03, 13:45 to 13:55 (10 min): the same prompt on the same master in the prepared
-duplicate. Day 2 Block 01, 10:35 to 10:40 (5 min): on your own component set, before the
+Day 1 Block 03, 13:10 to 13:20 (10 min): the same prompt on the same master in the prepared
+duplicate. Day 2 Block 01, 10:15 to 10:20 (5 min): on your own component set, before the
 handoff document; real findings are fixed first, false alarms are noted. NOT YET VERIFIED
 as a prompt (rehearsal). Read-only: nothing is changed in the file.
 
@@ -319,7 +333,7 @@ not a verdict."
 Atelier file; read the id in the duplicate, do not assume it is the same); Day 2, the
 participant's own component set: select it in Figma and say "the node I have selected"
 (the agent reads the id with `figma_get_selection`). The handoff document does not exist
-yet at 10:35; it is written after this run.
+yet at 10:15; it is written after this run.
 
 **Expected output.** A list, no edit. What the three rules catch: raw colours, layers left
 on default names, detached instances. The participant sorts each line: **real** or **false
@@ -435,7 +449,7 @@ story.
 
 > Generate the `<FRAMEWORK>` implementation of `<ComponentName>` with its test and its
 > stories, from the handoff document below, not from the Figma picture alone (ADR-0096).
-> Do not write any other file.
+> Do not write any other file, except the design image the `atelier-component` skill asks for.
 >
 > --- HANDOFF DOCUMENT (paste yours here) ---
 > `<PASTE THE DAY-2-BLOCK-01 HANDOFF DOCUMENT>`
@@ -519,7 +533,7 @@ already phrased as a ready one-line correction:
 
 ---
 
-### 2.5 `docs-show` on your own component (Day 2 Block 02, 12:05 to 12:20, part 1: 10 min)
+### 2.5 `docs-show` on your own component (Day 2 Block 02, 12:05 to 12:15, 10 min), then look at both (12:15 to 12:23, 8 min)
 
 The prompts are NOT YET VERIFIED as an agent run (rehearsal); the call and the refresh are verified headless 2026-11-18 (R-262); the interactive run is open in R-040 (see below). Through the local Storybook MCP (`storybook-local`), once the
 component and its stories render. The point: what would an agent that uses your component
@@ -535,11 +549,15 @@ Then:
 > Add the JSDoc that closes those gaps: a description for the component and one line per
 > property. Call `docs-show` again and show me what changed.
 
-Part 2 (5 min, no prompt): the running stories next to the Figma component, every variant and
-state; write the differences down as a list (Block 04 sorts it).
+Look at both (8 min, no prompt): demo D-3 first, about 2 minutes (the Design panel of a story,
+with the Figma embed and a PNG of the frame; the `atelier-component` skill writes both into
+the story meta from the handoff document's Source line and exports the PNG through
+figma-console; UNVERIFIED (rehearsal): that the embed loads for a private duplicate, the PNG is
+the fallback). Then the running stories next to the Figma component, every variant and state;
+write the differences down as a list (Block 04 sorts it).
 
 **Expected output.** A list of gaps, then a second `docs-show` that has the description and
-the property lines. Checkpoint D2B02-C4 (12:20): `docs-show` ran on the own component and at
+the property lines. Checkpoint D2B02-C4 (12:23): `docs-show` ran on the own component and at
 least one description was added on at least 70 % of the seats. Rule R9: at 12:05, if 30 % or
 more have no rendering story, this row becomes a trainer demo on one green seat.
 
@@ -555,15 +573,15 @@ where one exists and nothing where none does. The same call over the running
 local MCP, and the refresh of the entry after a JSDoc edit without a restart (about 1 s, by
 direct JSON-RPC, not through the agent): verified headless 2026-11-18 (R-262); the interactive run is open in R-040.
 
-### 2.6 The Definition-of-Done exercise (Day 2 Block 00, 09:18 to 09:28, 10 min)
+### 2.6 The line your team would add (Day 2 Block 00, 09:18 to 09:28: 4 min projector, 6 min exercise)
 
 That the two answers differ as described: verified headless 2026-11-18 (R-262); the interactive run is open in R-040. The workspace the
 participants have already carries the rule the agent reads every session. Projector first
-(3 min): the four things an agent gets in this workspace (the rules file, read every
+(4 min): the four things an agent gets in this workspace (the rules file, read every
 session; a skill, loaded when the task matches and shown in demo D-7 just before; an MCP
 server from `.mcp.json`, tools and data; a hook, run without being asked), on two files:
 `CLAUDE.md` → "Definition of Done" and `.claude/settings.json` → `hooks.PostToolUse` →
-`.claude/hooks/format-edited.sh`. Then the exercise (7 min), four steps:
+`.claude/hooks/format-edited.sh`. Then the trainer demo, once, four steps:
 
 1. Ask: "Which commands does this workspace's Definition of Done list? Only list them."
    The answer names six.
@@ -577,19 +595,28 @@ server from `.mcp.json`, tools and data; a hook, run without being asked), on tw
 3. `/clear`, ask the same question again. The list now names five; `check:stories` is gone.
 4. Put the line back (undo) and save.
 
-**Checkpoint D2B00-C3:** the second answer on every seat no longer names
-`npm run check:stories`, and the line is back in `CLAUDE.md` at 09:28.
+Participants do not edit `CLAUDE.md` here. Their exercise (6 min), from
+`course/day2-prompts.md`:
+
+1. Ask: "Which commands does this workspace's Definition of Done list? Only list them."
+   The answer names six.
+2. Write down the one line your own team would add to this list, in the same shape: the
+   command, a dash, what it proves. Think of the thing your reviews keep catching by hand.
+3. Compare with your neighbour: does the line name a command that exits non-zero when it
+   fails, or a wish ("the code is clean")? Only the first is a rule an agent can run.
+
+**Checkpoint D2B00-C3:** every seat has one written line with a command in it, and the
+neighbour has said command or wish, at 09:28.
 
 **Trainer notes.** Line for the room: the agent runs what the list names, and a check that
 is not in the list is a check nobody asked for. An agent that points out "the text says six,
 the list has five" has read the file closely: say so. `/verify` has its own list in
-`.claude/commands/verify.md` and still runs six. **Stretch:** write down the one line your
-own team would add to this list, the command and what it proves. Until the scaffold release
-of 2026-11 this exercise added lint and build to the list; the scaffold now ships both
-(commit 8c8fdf6a), so the exercise takes a line out and puts it back.
+`.claude/commands/verify.md` and still runs six. A wish ("the code is clean") is not a rule
+an agent can run; a command that exits non-zero is.
 
-**Fallback.** The second answer still names it: the file was not saved or the session was
-not cleared; show the list in `CLAUDE.md` and ask again.
+**Fallback.** The second answer in the trainer demo still names it: the file was not saved
+or the session was not cleared; show the list in `CLAUDE.md` and ask again. No line comes to
+mind on a seat: take the thing your reviews keep catching by hand.
 
 ---
 
@@ -637,10 +664,10 @@ Participants have this prompt in `course/day2-prompts.md`.
 
 ### 3.3 Parity prompt for your own component (participants)
 
-Day 2 Block 04, parity row 15:45 to 15:53 (8 min). Participants paste it from `course/parity-prompt.md`. Same shape as the Day 1 comparison
+Day 2 Block 04, parity row 15:30 to 15:38 (8 min). Participants paste it from `course/parity-prompt.md`. It is the tool for the Day 1 by-eye comparison
 prompt; the node id comes from the participant's handoff document. The prompt completes (79 s, 14 turns,
-no writes): verified headless 2026-11-18 (R-262); the interactive run is open in R-040. The report is only a list here: the **sorting row** (15:53 to
-16:13) labels each difference and fixes the code ones.
+no writes): verified headless 2026-11-18 (R-262); the interactive run is open in R-040. The report is only a list here: the **sorting row** (15:38 to
+15:58) labels each difference and fixes the code ones.
 
 > Run `figma_check_design_parity` on the node `<NODE FROM THE HANDOFF DOCUMENT>` against my
 > component `<ComponentName>`. For each discrepancy, say whether it is **code** (the code
@@ -650,13 +677,13 @@ no writes): verified headless 2026-11-18 (R-262); the interactive run is open in
 
 Without the bridge: no parity call; sort the Block 02 list instead.
 
-While this runs, the trainer shows demo D-8 (§3.5) on the trainer machine only. The
+Say once, as one sentence: not passed means not compared, so a quiet report is not a clean component. The
 participants do not assemble a `codeSpec` and do not run `check:contracts -- --emit`.
 
-### 3.4 codeSpec assembly prompt (trainer only: preparation for D-8)
+### 3.4 codeSpec assembly prompt (trainer only reference)
 
 **Trainer-only material.** Participants never see or run this. It prepares the `codeSpec`
-for the D-8 demo on the trainer machine. `UNVERIFIED live (R-235)`: not yet run end to end
+by hand on the trainer machine, for the double call of §3.5. `UNVERIFIED live (R-235)`: not yet run end to end
 in a rehearsal. The emit command is documented on `/build-your-own` and in
 `libs/design-contracts/README.md`; the accessibility step on `/build-your-own` (Block 04):
 
@@ -681,9 +708,9 @@ component it checks, not only `<Name>`, and the pages `/build-your-own` and
 therefore stands, the path is the README's. If Claude cannot find the file, ask it to list
 `tmp/codespec`.)
 
-### 3.5 Parity double-call prompt (trainer only: D-8)
+### 3.5 Parity double-call prompt (trainer only reference)
 
-**Trainer-only material**, about 3 minutes on the trainer machine inside the parity row.
+**Trainer-only material**, not scheduled in the room.
 One point: a field you do not pass is not compared, so a quiet report is not a clean
 component. This is the exercise `tasks/schulung-dry-run-kit.md` §4 (Day 2, Block 04) flags as
 "never watched live" before a rehearsal runs it. Run §3.4 first.
@@ -721,7 +748,7 @@ with findings; it has no "sections compared" list. Against the component set `12
 | Symptom in the room                                                                                                | Use                |
 | ------------------------------------------------------------------------------------------------------------------ | ------------------ |
 | Inline `style`/hex/Tailwind class instead of a token, anywhere in Day 2 Blocks 02–03, or the Day 1 Settings Card   | §1 add-on, or §2.3 |
-| Day 1 Block 02, 11:25: the agent runs lint and build, then the planted `alt`/click defects, then the repair        | §1a                |
+| Day 1 Block 02, 11:00: the agent runs lint and build, then the planted `alt`/click defects, then the repair        | §1a                |
 | Agent writes without `docs-list`, uses an undocumented input, or hand-builds a library component (Day 1 Block 05)  | §1b                |
 | Day 1 Block 05, 16:30: closing checks run by the agent (lint, stylelint, format, build), then the receipts         | §1b                |
 | Figma linter run (Day 1 Block 03, Day 2 Block 01): the list is long, or the default run drowns the room            | §1c                |
@@ -729,11 +756,11 @@ with findings; it has no "sections compared" list. Against the component set `12
 | A prop appears that the handoff document / spec never named                                                        | §2.2               |
 | Structural content (header/action/remove-button/etc.) dumped as flat children instead of its own region            | §2.4               |
 | `docs-show` on your own component: what would a consumer's agent have to guess (Day 2 Block 02, 12:05)             | §2.5               |
-| Definition-of-Done exercise (Day 2 Block 00, 09:18): the second answer still names `check:stories`                 | §2.6               |
+| Definition-of-Done trainer demo (Day 2 Block 00, 09:18): the second answer still names `check:stories`             | §2.6               |
 | A11y panel or keyboard walk turns something up in Day 2 Block 04                                                   | §3.1               |
 | Dark-mode toggle reveals a hardcoded colour or a stray hover animation                                             | §3.2               |
-| Parity report on your own component (Day 2 Block 04, 15:45)                                                        | §3.3               |
-| Trainer only: demo D-8, "a field you do not pass is not compared" (prepare with §3.4, then §3.5)                   | §3.4, then §3.5    |
+| Parity report on your own component (Day 2 Block 04, 15:30)                                                        | §3.3               |
+| Trainer only reference: "a field you do not pass is not compared" (assemble with §3.4, then §3.5)                  | §3.4, then §3.5    |
 
 ---
 

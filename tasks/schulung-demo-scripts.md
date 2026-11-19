@@ -4,11 +4,10 @@ _Written 2026-10-13, revised 2026-11-18 for ADR-0180 (the ladder of standard too
 
 One script per live demo the current agenda (`docs/src/pages/schulung.astro`)
 contains. Times and block names come from there; where each demo sits in the minute
-plan is in `tasks/schulung-run-of-show.md` (ids `D-1`…`D-8`). Prompts that already
+plan is in `tasks/schulung-run-of-show.md` (ids `D-1`, `D-3`, `D-4`, `D-5`, `D-7`). Prompts that already
 live in `tasks/schulung-golden-prompts.md` are linked, not copied.
 
-**Revision 2026-11-18 (ADR-0180).** D-1, D-3, D-4, D-5, D-7 and D-8 changed; D-2 and D-6
-did not. The demos are the first beat of the proof thread, "the ladder" (five standard
+**Revision 2026-11-18 (ADR-0180).** D-1, D-3, D-4, D-5 and D-7 changed. The demos are the first beat of the proof thread, "the ladder" (five standard
 tools; each taught as: break it on purpose, the tool says so, the agent gets the output and
 repairs). Every new or changed step below is **NOT YET VERIFIED (rehearsal, R-040)** unless
 it carries a measured date. Measured 2026-11-17 on a fresh `create-atelier-ui-workspace@0.4.10`
@@ -19,31 +18,28 @@ stylelint 2-4 s). The minute rows are the run-of-show estimates.
 scaffold: its hosting is not reliable enough to stand in a live block. D-7 now shows what a
 skill is on a local file and needs no network.
 
+**Revision 2026-11-19 (Package E, ADR-0186, ADR-0187).** D-3 moved from Day 1 Block 04 to Day 2
+Block 02 and shows two Design panel entries. Demo ids are not renumbered, so the ids have
+gaps.
+
 **Verification convention (original, 2026-10-13).** Every command, MCP tool name, port, path and id below was
 checked against this repo on 2026-10-13 (grep/ls, `docs-list` on the hosted Angular
-endpoint, and `npm run check:artboard-palette` exit 0). Anything I could not check is
+endpoint). Anything I could not check is
 marked **UNVERIFIED**. Nothing here has been rehearsed live; "expected result" is
 derived from the code, not from a recorded run.
 
 ## Demos in the current agenda, and what was dropped
 
-| Id  | Demo                                                                   | Where on `/schulung`                              | Min | Status                                      |
-| --- | ---------------------------------------------------------------------- | ------------------------------------------------- | --- | ------------------------------------------- |
-| D-1 | Guardrail demo: same prompt without/with MCP, then stylelint (stage 3) | Day 1 Block 00, 09:09-09:14                       | 5   | Reworded (ladder stage 3)                   |
-| D-2 | One-change live demo                                                   | Day 1 Block 00, 09:14-09:19                       | 5   | Kept, narrowed to one framework             |
-| D-3 | Design tab in Storybook                                                | Day 1 Block 04, 14:30-14:37                       | 7   | Shortened (was 10; contract section gone)   |
-| D-4 | Hallucination, the compiler stage (stage 1), then `docs-show`          | Day 1 Block 04, 14:47-15:00                       | 13  | Extended (was 10; compiler stage added)     |
-| D-5 | Red-then-green story with a `play` function (stage 4)                  | Day 1 Block 04, 15:15-15:40                       | 25  | Named as ladder stage 4, steps unchanged    |
-| D-6 | Three directions (Claude Design) + palette fence                       | Day 1 buffer 15:45-15:55, 10 min, or skip         | 10  | Kept, optional                              |
-| D-7 | What a skill is, on a local file                                       | Day 2 Block 00, 09:13-09:18                       | 5   | Rewritten (ADR-0181; was the uianatomy MCP) |
-| D-8 | Parity on purpose, trainer machine only                                | Day 2 Block 04, inside the parity row 15:45-15:53 | ~3  | Shortened (was 15), trainer only            |
+| Id  | Demo                                                                   | Where on `/schulung`        | Min     | Status                                      |
+| --- | ---------------------------------------------------------------------- | --------------------------- | ------- | ------------------------------------------- |
+| D-1 | Guardrail demo: same prompt without/with MCP, then stylelint (stage 3) | Day 1 Block 00, 09:09-09:14 | 5       | Reworded (ladder stage 3)                   |
+| D-3 | Design panel on a story: Figma embed and PNG                           | Day 2 Block 02, 12:15-12:23 | about 2 | Moved from Day 1, two entries (ADR-0187)    |
+| D-4 | Hallucination, the compiler stage (stage 1), then `docs-show`          | Day 1 Block 04, 14:25-14:38 | 13      | Extended (compiler stage added)             |
+| D-5 | Red-then-green story with a `play` function (stage 4)                  | Day 1 Block 04, 14:53-15:25 | 32      | Named as ladder stage 4, steps unchanged    |
+| D-7 | What a skill is, on a local file                                       | Day 2 Block 00, 09:13-09:18 | 5       | Rewritten (ADR-0181; was the uianatomy MCP) |
 
 **Dropped (no longer in the agenda):**
 
-- **Cross-framework "one change" demo.** The agenda is one framework per cohort;
-  D-2 shows the change in the Angular Storybook only. (The CSS under `libs/styles` is
-  shared by all three frameworks, so React/Vue would show the same change; saying so in
-  one sentence is optional, not a demo.)
 - **Changed-stories micro demo** (`stories-changed`). It appears nowhere in
   `schulung.astro` (grep). The open item is R-130 in `tasks/reviews.md`.
 - **A11y three-step on a deliberately broken component.** The agenda has the three-step
@@ -54,13 +50,12 @@ derived from the code, not from a recorded run.
 
 ## Shared preconditions (trainer machine)
 
-- Two checkouts or one: the **Atelier clone** (this repo) for D-1 (windows a/b), D-2, D-6, D-8
-  (D-8 on the trainer machine only), with the `.mcp.json` servers connected (`/mcp` in Claude Code lists
+- Two checkouts or one: the **Atelier clone** (this repo) for D-1 (windows a/b), with the `.mcp.json` servers connected (`/mcp` in Claude Code lists
   `storybook-angular`, `storybook-react`, `storybook-vue`, `nx-mcp`, `figma-console`,
   `uianatomy`, `angular-cli`, `Astro docs`; `uianatomy` is the repo's own tooling, no demo
   calls it, and a failed entry there is harmless). A **scaffolded workspace** (Angular,
   `npx create-atelier-ui-workspace`, Storybook on `localhost:6006`, app on
-  `localhost:4200`) for D-3, D-4 (window b and the compiler stage), D-5 and for D-1 step 3 (the stylelint
+  `localhost:4200`) for D-3, D-4 (window b and the compiler stage), D-5, D-7 and for D-1 step 3 (the stylelint
   check), because that is what participants have. Its `.mcp.json` has five servers: `atelier`
   (the library's docs, stdio, no port), `storybook-local` (the workspace's own Storybook,
   connected only while `npm run storybook` runs; tools missing: check Storybook runs, then `/mcp`, reconnect),
@@ -69,7 +64,7 @@ derived from the code, not from a recorded run.
 - Atelier Angular Storybook: `nx storybook angular` (project `angular`, target
   `storybook`, binds **4400**). React is 4401, Vue 4402 (`libs/react/project.json`,
   `libs/vue/project.json`); not needed for any demo.
-- Figma Desktop Bridge connected: needed only for D-8. For all others, not needed.
+- Figma Desktop Bridge connected: needed only to prepare D-3 (the PNG export of the frame). For the demos themselves, not needed.
 - Clean working tree before each demo (`git status` empty), so `git checkout <file>`
   is the whole undo.
 - Every demo has a **saved-output fallback**: run it once in the 24 h before, save the
@@ -84,7 +79,7 @@ derived from the code, not from a recorded run.
 hallucinating answer or a token-exact one, and participants name one concrete
 difference. (2) Context is not enough on its own: a lint rule (stylelint) in the
 workspace catches what still slips through, so AI output cannot quietly bypass the design
-system. This is stage 3 of the ladder (the slide at 09:19 names all five stages), and it
+system. This is stage 3 of the ladder (the slide at 09:14 names all five stages), and it
 is taught with what it does not see (below).
 
 **Preconditions.**
@@ -185,105 +180,12 @@ exact command the target runs). Do not improvise a different prompt.
 
 ---
 
-## D-2 · One-change live demo (Day 1 Block 00, 09:14-09:19, 5 min)
-
-**Goal.** Make the loop concrete before any theory: a component change by prompt, seen
-in Storybook, in five minutes.
-
-**Preconditions.**
-
-- Atelier clone, clean tree, Angular Storybook running: `nx storybook angular`,
-  open `http://localhost:4400`, story `Components/Inputs/AtlButton`.
-- Story id for the preview: `components-inputs-atlbutton--small` (title
-  `Components/Inputs/AtlButton`, export `Small` in
-  `libs/angular/src/lib/button/atl-button.stories.ts`).
-- Claude Code in the same clone with `storybook-angular` connected.
-- The button's CSS is shared by all frameworks:
-  `libs/styles/src/button/atl-button.css`; at the time of writing the small size has a
-  horizontal padding of literal `0.875rem` (line 131 of that file) **only on the demo tag**:
-  main fixed it to `var(--ui-spacing-4)` on 2026-11-19 after a Figma parity check (Figma binds
-  spacing/4 = 16px). Before the demo: `git switch --detach demo/d1-button-padding` (the tag
-  is the commit before that fix), then restart Storybook. On the tag it has no
-  `--ui-spacing-*` equivalent (the scale has `3` = 0.75rem and `4` = 1rem).
-
-**Prompt (verbatim, deliberately explicit so the diff is predictable):**
-
-```text
-Use the storybook-angular MCP (docs-show for components-inputs-atlbutton) first.
-In libs/styles/src/button/atl-button.css the small size (.atl-button.size-sm) has a
-horizontal padding of the literal 0.875rem. Change it to var(--ui-spacing-4).
-Change nothing else, no API change. Then tell me which line you changed.
-```
-
-**Expected result / diff.** One line in `libs/styles/src/button/atl-button.css`:
-`0.875rem` → `var(--ui-spacing-4)` inside `.atl-button.size-sm`. Reload story
-`Small`: the button is visibly wider by 2 px per side. **UNVERIFIED** that Claude does
-exactly this and nothing more (not rehearsed).
-
-**Point at.** (1) Claude reads the docs before editing, (2) the diff is one line,
-(3) it uses a token, not a literal, (4) the preview updates without a rebuild step you
-had to do.
-
-**Undo (always, even on success):** `git checkout libs/styles/src/button/atl-button.css && git switch main`.
-The point to add after the demo: this exact change is the real fix main received on
-2026-11-19, found by comparing the code with the Figma variable binding.
-
-**Fallback.** Live change fails or Storybook does not hot-reload: show the saved diff
-and screenshot. If Claude edits more than one file, revert and say "that is exactly why
-the next two days are about checks the agent runs on its own work".
-
-**Not specified on `/schulung`:** whether this demo runs in the Atelier clone or in a
-workspace. The scripts above assume the clone (it has the story with the stable id).
-
----
-
-## D-3 · Design tab (Day 1 Block 04, 14:30-14:37, 7 min)
-
-**Goal.** Show the one thing "explained nowhere else": the Design tab
-(`parameters.design`, addon-designs), which puts the Figma frame next to the component.
-NOT YET VERIFIED (rehearsal): the 7-minute timing.
-
-The contract section of the Docs tab (`contractDocsPage`) is no longer part of this
-script (ADR-0180: the contract leaves the participant path). If someone asks about it,
-one trainer sentence at most: Atelier's own repo keeps its deliberate differences from
-Figma in a contract file that a check reads; participants write theirs down in the
-handoff document on Day 2. Do not scroll to it, do not open it.
-
-**Preconditions.**
-
-- Primary: the library Storybook mounted in the trainer's own workspace,
-  `http://localhost:6006/atelier/` (`npm run storybook` running), story AtlButton, Design
-  tab. NOT YET VERIFIED (rehearsal): the Design tab inside the mounted build. One fallback:
-  the hosted Atelier Storybook, `https://atelier.pieper.io/storybook-angular/`.
-- The participants' scaffolded workspace stories (the `AtlButton` template under
-  `libs/create-workspace/src/generators/preset/files/storybook/angular/`) carry **no**
-  `parameters.design`, so their own Design tab is empty. Participants watch the projector;
-  they may open the same `localhost:6006/atelier/` URL on their seat. Demo on the library
-  Storybook, not on a participant's own stories.
-
-**Script.**
-
-1. Open `Components/Inputs/AtlButton` → story `Primary` (`parameters.design` is
-   `figmaNode('129-4')` in `atl-button.stories.ts`). Click the **Design** tab: the Figma
-   frame is shown next to the component.
-2. Switch to another story of the same component and back; say what the tab is: a link
-   from the story to the frame it was built from, nothing more.
-3. Name the claim, which is the lead-in to D-4: "the design is the reference; the
-   component's own types and the docs are what an agent reads".
-
-**Expected result.** Design tab shows the frame.
-
-**Fallback.** Design tab blank (Figma embed blocked/offline): show the screenshot, say
-"it is a link to the frame, nothing more".
-
----
-
-## D-4 · Hallucination, the compiler stage, and `docs-show` (Day 1 Block 04, 14:47-15:00, 13 min) · ladder stage 1
+## D-4 · Hallucination, the compiler stage, and `docs-show` (Day 1 Block 04, 14:25-14:38, 13 min) · ladder stage 1
 
 **Goal.** Participants see (1) that the same question is answered wrongly without MCP and
 correctly with it, (2) that the compiler catches a wrong value and a bound invented input
 but not an invented static attribute, and (3) that "not documented" is the right answer
-for a missing prop. The 3 minutes for (2) are taken from D-3.
+for a missing prop.
 
 **Preconditions.**
 
@@ -395,7 +297,7 @@ confirms the reply is shaped for Angular. A React-shaped reply (JSX, `children`,
 
 ---
 
-## D-5 · Red-then-green story with a `play` function (Day 1 Block 04, 15:15-15:40, 25 min exercise) · ladder stage 4
+## D-5 · Red-then-green story with a `play` function (Day 1 Block 04, 14:53-15:25, 32 min exercise) · ladder stage 4
 
 **Goal.** Model the first red-then-green cycle once, so participants copy the habit:
 a story that never failed claims nothing. This is stage 4 of the ladder; the steps do not
@@ -443,53 +345,47 @@ their own), `/mcp` → reconnect is the fallback; the play panel shows the same 
 
 ---
 
-## D-6 · Three directions, Claude Design (Trainer appendix, optional, 10 min in the Day 1 buffer)
+## D-3 · Design panel on a story (Day 2 Block 02, 12:15-12:23, about 2 min of the 8-minute row)
 
-**Goal.** Show that a Claude Design artboard has none of the four gate identities, and
-that the palette gate fences exactly the generated sheet, not the artboards.
-
-**Slotting.** Owner decision 2026-10-14: it runs in the Day 1 buffer 15:45–15:55
-(between Block 04 and Block 05), cut to 10 minutes, or is skipped. It does not fit
-inside Block 04's 75 minutes.
-Trainer machine only: `claude.ai/design` needs a different login than the cohort's training
-subscription.
+**Goal.** Show the one thing explained nowhere else: the Design panel (`parameters.design`,
+`@storybook/addon-designs`), which puts the Figma frame next to the story it was built from.
+It has two entries: the Figma frame as embed, and a PNG of the frame. The embed is live but
+shows only in a browser that is logged in to Figma; the PNG always shows and is a dated
+snapshot. NOT YET VERIFIED (rehearsal): the 2-minute timing, and that the embed loads for a
+private duplicate in a logged-in browser on a seat. The PNG is the fallback that does not
+depend on that.
 
 **Preconditions.**
 
-- Logged in to Claude Design on the trainer machine. In this session the
-  `claude-design` MCP server failed to connect (HTTP 403 on the login); re-run
-  `/design-login` before the day, and test it. **UNVERIFIED** whether it is fixed.
-- Three direction artboards for the Toast brief (`workshop/briefs/toast.md`) generated
-  **beforehand in the coffee break 14:15–14:30**, seeded from the generated palette
-  `tools/design/artboard-palette.css` (not from the `atelier-design` skill).
-- Fallback assets in the repo: `tools/design/artboards.json` holds 31 artboards
-  (checked: 31 entries), including `AtlToast.dc.html`.
-- Clean tree (the demo ends with an edit to `artboard-palette.css`).
+- A scaffolded workspace with a component built from a handoff document that names a Figma
+  source: a participant's seat that is green at 12:15, or the trainer's own (build the Toast
+  example, `course/handoff-example.md`, through the Day 2 Block 02 prompt beforehand). Its
+  story meta carries `parameters.design`, an array of two entries: `{ type: 'figma', url }`
+  with the link from the handoff document's Source line, and `{ type: 'image', url }` with
+  the saved PNG. The `atelier-component` skill writes both when the document names a Figma
+  source and the bridge is on; the PNG comes from `figma_take_screenshot` and is saved next
+  to the stories as `<component-file-name>.design.png`. `npm run storybook` running.
+- The `AtlButton` template story has no `design` parameter; do not demo on it.
+- On the trainer machine the Atelier file is public, so the embed loads there; that says
+  nothing about a participant's private duplicate. Log in to Figma in the browser you
+  project from, or let the login wall be part of the demo.
 
-**Script (as on the page).**
+**Script (2 min).**
 
-1. Name the four gate identities in one sentence: the Figma `COMPONENT_SET` with
-   variant axes, the component's literal union, the `--ui-*` token, the Figma node id.
-2. Show the three artboards. Hard-code a colour in one artboard.
-3. Run `npm run check:artboard-palette`. Expected **green** (exit 0): it reads only the
-   shared sheet against `tokens.css`, not any artboard. Verified green on 2026-10-13
-   with `npm run check:artboard-palette` (exit 0,
-   `✓ artboard palette in sync with tokens.css (48 value(s))`).
-4. Change one colour value in `tools/design/artboard-palette.css` (for example the
-   `--primary: #006470;` line), run the same command again. Expected **red** (the file
-   header says it is generated; the check script prints that it "is out of sync with
-   tokens.css"). Red output text not run today, **UNVERIFIED** as a live red.
-5. **Checkpoint question to the room:** which of the four gate identities does this
-   artboard have? Expected: none. Only then the classification: Claude Design is step 0
-   (divergence) and step 5 (handoff), never steps 1–4. Step 5 is **not** shown live.
-6. Undo: `git checkout tools/design/artboard-palette.css`.
+1. Open the story and click the **Design** panel: two entries, the embed and the PNG.
+2. Say what the panel is: a link from the story to the frame it was built from, plus a dated
+   snapshot of it, nothing more. The embed may ask for a Figma login; the PNG shows without
+   one.
+3. Hand over: everyone looks at their own stories next to the design, every variant and
+   state, and lists the differences (one pass; Day 2 Block 04 sorts the list).
 
-**Point at.** Exit codes of both runs; the sentence "never inline hex holds where a gate
-can enforce it".
+**Expected result.** The panel shows the frame twice, as embed and as PNG (the embed behind a
+login wall in a browser without a Figma session).
 
-**Fallback.** No Claude Design login or generation fails: use two or three artboards
-from `tools/design/artboards.json` and run only steps 3–6, which need no login. Skip
-entirely if time is short.
+**Fallback.** Embed blocked or offline: the PNG still shows; say so. No PNG (the bridge was
+off, no path reported): the story carries the link only; say so, never invent an image.
+Design panel empty on a seat: the story has no `parameters.design` yet; ask the agent to add
+it from the handoff document's Source line.
 
 ---
 
@@ -531,7 +427,7 @@ skills where their install landed. Seats can differ in that last group, and the 
 is worth one sentence: a skill that is not in the folder cannot load. The answer lists the skills (check 9): verified headless 2026-11-18 (R-262); the interactive run is open in R-040; that it fits in 5 minutes is **UNVERIFIED**.
 
 **Point at.** The "when" in the answer beside the `description` line in the file: the same
-sentence, and that is the whole mechanism. Then stop. The next row (09:18-09:28) puts the
+sentence, and that is the whole mechanism. Then stop. The next row (09:18-09:22) puts the
 skill beside the rules file, the MCP servers and the hook. The
 description says writing a Figma ↔ code contract is opt-in, not part of the loop (scaffold
 release of 2026-11): if asked, one sentence, "Atelier's own check, the last and optional
@@ -544,70 +440,3 @@ is the truth, and read the `description` lines from the files. A skill missing o
 copy the folder from a green neighbour and log it; re-scaffolding is not the fix. Do not
 claim a skill loaded when it did not; say "it did not load, here is how we would notice"
 (the block's recap question).
-
----
-
-## D-8 · Parity on purpose (Day 2 Block 04, about 3 min inside the parity row 15:45-15:53) · trainer machine only
-
-**Goal.** One point: **a field you do not pass is not compared, so a quiet report is not a
-clean component.** The same wrong value is flagged in one call and silent in the next.
-
-**Placement.** While the participants' parity prompt runs on their own component (the
-participant prompt is [golden prompts §3.3](schulung-golden-prompts.md#33-parity-prompt-for-your-own-component-participants)),
-the trainer shows this on the trainer machine only. Participants do **not** assemble a
-`codeSpec` and do **not** run `check:contracts -- --emit`. The sorting row (15:53-16:13)
-follows. NOT YET VERIFIED (rehearsal): that it fits in 3 minutes.
-
-**Preconditions.**
-
-- Figma Desktop Bridge connected to the trainer's duplicate (check Figma status via
-  Claude first). Without the bridge this demo cannot run live; show the saved pair of
-  reports.
-- A built component with its Figma node (the trainer's own Block 01 example). Node id and
-  variant: from that component's handoff document. Rehearsed 2026-10-14 on AtlButton: set
-  `129:20` for `componentAPI`, variant `129:4` (primary/md/default) for `spacing`,
-  `visual`, `typography`. A variant node carries no component properties (every prop comes
-  back "no matching Figma component property"); the set answers geometry with its default
-  variant (size=sm).
-- Tool: `figma_check_design_parity` (figma-console-mcp, pinned `1.40.0` in `.mcp.json`).
-  The seven `codeSpec` sections, per
-  `skills/figma-workspace-architect/references/code-sync.md`: `visual`, `spacing`,
-  `typography`, `tokens`, `componentAPI`, `accessibility`, `metadata`.
-
-**Trainer preparation (before the day, not shown to participants).** The `codeSpec` is
-assembled on the trainer machine: `check:contracts -- --emit <folder>` (an Atelier check,
-so trainer-only; participants never run it) provides `componentAPI`, `metadata` and
-`tokens` only, per the page, and Claude assembles the object from it by prompt
-([golden prompts §3.4](schulung-golden-prompts.md#34-codespec-assembly-prompt-trainer-only-preparation-for-d-8)),
-adding `accessibility` from `figma_scan_code_accessibility`. The demo starts from that
-object, saved beforehand.
-
-**Prompt (trainer only):** [golden prompts §3.5](schulung-golden-prompts.md#35-parity-double-call-prompt-trainer-only-d-8)
-verbatim, with `<node>`/`<variant>` filled from the handoff document.
-
-**Expected result.**
-
-- Call 1 (the four sections `componentAPI` + `metadata` + `tokens` + `accessibility`,
-  plus one hand-added `spacing` section with one value deliberately wrong): the report
-  flags the spacing deviation. The schema (`figma_check_design_parity`) makes every
-  `codeSpec` section optional, so this is a valid call.
-- Call 2 (same wrong value left in place, `spacing` section omitted): no spacing row at
-  all, the other findings unchanged. Fields not passed are not compared; that is not the
-  same as "correct".
-- The report does not name the compared sections: `summary.categories` lists only
-  categories with findings, and `codeData` echoes exactly the sections passed; point
-  at `codeData`. Observed 2026-10-14 with all seven sections (AtlButton, `gap: 16` wrong;
-  not the four-plus-spacing pair, which is UNVERIFIED live, R-227): call 1 → 13 findings,
-  score 48, three major spacing rows; call 2 → 10 findings, score 72, no spacing row,
-  everything else identical. The score rose because less was compared.
-
-**Point at.** The compared-section list (`codeData`) in each report; the sentence "a
-quiet report is not a clean component: what you do not pass is not compared". Then hand
-over to the participants' own reports: ask each seat what its prompt did **not** pass.
-
-**Fallback.** Bridge red or tool errors: show the saved pair of reports from rehearsal.
-If call 1 does not flag the deviation either, the codeSpec was probably too thin:
-check that `spacing` was actually in the passed object, rerun once, then stop and say
-so. Short on time: show only the saved pair and say the one sentence.
-
-**Undo.** Revert the deliberately wrong spacing value in the component.

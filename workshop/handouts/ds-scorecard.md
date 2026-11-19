@@ -1,6 +1,6 @@
 # What a design system has to bring
 
-Mark each row for your own design system: yes, partly or no.
+In the room, from memory: mark each row for your own design system, yes, partly or no. The last column is for home, where your system is open.
 
 | Row         | The question                                                                                                                  | "Yes" looks like                                                                                                                                          | yes / partly / no | Where to check it                 |
 | ----------- | ----------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- | --------------------------------- |
@@ -12,7 +12,11 @@ Mark each row for your own design system: yes, partly or no.
 | 6 Instruct  | Does the repo have its own rules file with the exact check commands, and a skill for the recurring task?                      | A rules file (`CLAUDE.md` or `AGENTS.md`) with a "Definition of Done" that lists the commands; one skill for the recurring task.                          | [ ] / [ ] / [ ]   | your rules file                   |
 | 7 Measure   | Do you know the agent is better with the design system than without?                                                          | The same prompt run with and without the context, the results compared.                                                                                   | [ ] / [ ] / [ ]   | run it once yourself              |
 
-**Pick the weakest row. That is your next step.**
+**Pick the weakest row and write your next step for it.**
+
+Weakest row: ______________ My next step: ____________________________________________
+
+Homework: run the two checklists (Figma, Storybook) on your own system.
 
 Where the course taught each row:
 

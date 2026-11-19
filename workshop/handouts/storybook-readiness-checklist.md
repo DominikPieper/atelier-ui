@@ -1,6 +1,6 @@
 # Is your Storybook ready?
 
-Tick what holds. Part A per component, Part B once per setup, then the self-check.
+Homework, on your own Storybook: nobody starts this in the room. Tick what holds. Part A per component, Part B once per setup, then the self-check.
 
 Component / Storybook checked: ______________________________
 
