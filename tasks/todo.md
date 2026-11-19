@@ -205,7 +205,9 @@ waits for measured timings.
       Fix in the right place; run-of-show, `/schulung`, deck outline, trainer notes follow
 - [x] A4 plan mode at the start of Day 2 Block 02 (about 5 of the 48 min)
 - [x] A5 golden prompts reframed as the trainer's rescue sheet
-- [ ] A6 gates green and committed 2026-11-19 (format, adr-refs, docs, knowledge, create-workspace test+lint; `check:all` not run); open: push, release of `create-workspace` + reprovisioning rides on R-252
+- [x] A6 gates green and committed 2026-11-19; pushed, released as 0.4.13 (Publish green). Same day the CI e2e went red: `@angular-devkit/architect@0.2203.0` (Angular 22.3, published 2026-11-19) exports no "./node/index", which nx 23.3's ngcli-adapter imports, so every freshly scaffolded Angular workshop failed `npm run build` — 0.4.12 and 0.4.13 included. Fix `72727ac8` pins it via npm `overrides` to 0.2201.7 in the Angular scaffold; released as 0.4.14, CI and Publish green, release-drift 7/7
+- [ ] Reprovision the seats from **0.4.14** before the 2026-11-23 rehearsal (rides on R-252); never from 0.4.12/0.4.13 for Angular
+- [ ] The architect pin is hard-coded (`ANGULAR_DEVKIT_ARCHITECT_VERSION` in preset.ts): move it with any Nx/Angular bump, or drop it once nx stops importing `architect/node/index.js`
 - [ ] Rehearsal check: does the agent load `atelier-component` during the Day 2 generation?
 
 ## Local Storybook and MCP on the seat (owner go 2026-11-18)
