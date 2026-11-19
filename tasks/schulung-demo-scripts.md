@@ -200,7 +200,10 @@ in Storybook, in five minutes.
 - Claude Code in the same clone with `storybook-angular` connected.
 - The button's CSS is shared by all frameworks:
   `libs/styles/src/button/atl-button.css`; at the time of writing the small size has a
-  horizontal padding of literal `0.875rem` (line 131 of that file), which has no
+  horizontal padding of literal `0.875rem` (line 131 of that file) **only on the demo tag**:
+  main fixed it to `var(--ui-spacing-4)` on 2026-11-19 after a Figma parity check (Figma binds
+  spacing/4 = 16px). Before the demo: `git switch --detach demo/d1-button-padding` (the tag
+  is the commit before that fix), then restart Storybook. On the tag it has no
   `--ui-spacing-*` equivalent (the scale has `3` = 0.75rem and `4` = 1rem).
 
 **Prompt (verbatim, deliberately explicit so the diff is predictable):**
@@ -221,7 +224,9 @@ exactly this and nothing more (not rehearsed).
 (3) it uses a token, not a literal, (4) the preview updates without a rebuild step you
 had to do.
 
-**Undo (always, even on success):** `git checkout libs/styles/src/button/atl-button.css`.
+**Undo (always, even on success):** `git checkout libs/styles/src/button/atl-button.css && git switch main`.
+The point to add after the demo: this exact change is the real fix main received on
+2026-11-19, found by comparing the code with the Figma variable binding.
 
 **Fallback.** Live change fails or Storybook does not hot-reload: show the saved diff
 and screenshot. If Claude edits more than one file, revert and say "that is exactly why

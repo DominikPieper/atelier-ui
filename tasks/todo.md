@@ -191,6 +191,21 @@ outline first, then deck, then run-of-show and prompts.
       "Vorstellung und Transfer" ends on the written next step instead of "Wahl eines ersten Befunds". After the
       decision: mirror into `tasks/schulung-kundenagenda.md`.
 
+## Package D: Figma ↔ Angular parity pass (owner go 2026-11-19)
+
+Owner found Figma/code differences in another session (button padding). Audit 2026-11-19: parity tool only compares the API with the emitted codespecs (no padding/colour/type), so the real gaps came from a binding audit, lint and CSS spot checks.
+
+- [x] D1 code: button inline padding on --ui-spacing-4/5/6 (was literal 14/18/24px; Figma binds spacing/4/5/6); stale exemption removed; Combobox contract axisMap removed (Figma `invalid` is a boolean)
+- [x] D2 Figma: Checkbox/Radio/RadioGroup rows 40px (row-height/sm); Combobox states on input variables; Chat 55 literals bound, 8 muted texts rebound from input-border to text-muted (the 4.3:1 contrast finding was this mis-binding, tokens match code); Avatar one style; readonly radius md; button strokes, spinner in flow, overview grid; shadows on effect styles; 194 text nodes on local text styles (276 → 70 left, sizes without a style); checkbox tick centred; focus rings on the control
+- [x] D3 demo D-? (Day 1 Block 00) runs on local tag `demo/d1-button-padding` (commit before the fix); scripts updated
+- [ ] D4 Figma: AtlCard first-column variants collapsed; RadioGroup selected dot off-centre (in progress)
+- [x] D5 snapshot refreshed 2026-11-19 (bridge shared fine), `check:figma` baseline ratcheted (TEXT-UNSTYLED 148 → 30, FIGMA-AUTO-LEADING 116 → 30), Dialog/AccordionGroup sets resized, Button labels on ty/emphasis/action/title, all 37 parity records re-recorded, `check:parity` green. `check:paint` baseline re-recorded: 29 fixed AtlInput entries dropped; new accepted entries are check limits, not drift — AtlToggle height (probe is the 24px `.track`, Figma's number is the 40px row; same shape as AtlCheckbox already in the baseline), AtlAvatar background (two stacked Figma fills vs one `color-mix`, the check reads one fill), AtlTextarea disabled/readonly hover border (code deliberately keeps the border; the check applies the Figma hover row to those stories)
+- [ ] D5b paint check limits worth fixing: per-component multiple probes (row + track), stacked fills, exclude disabled/readonly stories from hover rows
+- [ ] D5 (was) refresh `figma:snapshot` (needs exclusive bridge) + `parity:record` per component so `check:parity` is green again (37 records dated 2026-08-27)
+- [ ] D6 stale prose: `tools/scripts/check-figma.js:167` and R-220 still say AtlButton padding is raw 14/18px; ADR-0107 needs a dated correction note
+- [ ] D7 open: 70 text nodes without a matching text style (10/12/20/26 SemiBold, 12/13 Regular, italic, mono bold) — new styles or token-backed variables? Focus variants for TabGroup/Tab/Option/Table; default layer names (Table, Stepper, AvatarGroup, CodeBlock)
+- [ ] D8 push the demo tag with the next push (`git push origin demo/d1-button-padding`)
+
 ## Package C: course material complete without the docs site (owner go 2026-11-19, ADR-0184)
 
 The docs site is password-protected; participants cannot open it. Audit 2026-11-19 found prompts, briefs,
