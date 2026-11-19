@@ -1,3 +1,13 @@
+## 0.4.16 (2026-11-19)
+
+### 🩹 Fixes
+
+- **styles:** button padding on the spacing scale, as Figma binds it ([ad67c81a](https://github.com/DominikPieper/atelier-ui/commit/ad67c81a))
+
+### ❤️ Thank You
+
+- Dominik Pieper @DominikPieper
+
 ## 0.4.15 (2026-11-19)
 
 This was a version bump only for styles to align it with other projects, there were no code changes.

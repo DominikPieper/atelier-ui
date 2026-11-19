@@ -1,3 +1,7 @@
+## 0.4.16 (2026-11-19)
+
+This was a version bump only for angular to align it with other projects, there were no code changes.
+
 ## 0.4.15 (2026-11-19)
 
 This was a version bump only for angular to align it with other projects, there were no code changes.

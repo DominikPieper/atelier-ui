@@ -1,6 +1,6 @@
 {
   "name": "@atelier-ui/mcp",
-  "version": "0.4.15",
+  "version": "0.4.16",
   "description": "MCP server for consumers of @atelier-ui/angular: answers docs-list, docs-show and docs-show-story over stdio from a manifest snapshot built from the same commit, with no network access.",
   "license": "MIT",
   "repository": {

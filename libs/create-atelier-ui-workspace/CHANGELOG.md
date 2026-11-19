@@ -1,3 +1,13 @@
+## 0.4.16 (2026-11-19)
+
+### 🩹 Fixes
+
+- **create-atelier-ui-workspace:** create Angular workspaces only ([a930642e](https://github.com/DominikPieper/atelier-ui/commit/a930642e))
+
+### ❤️ Thank You
+
+- Dominik Pieper @DominikPieper
+
 ## 0.4.15 (2026-11-19)
 
 This was a version bump only for create-atelier-ui-workspace to align it with other projects, there were no code changes.

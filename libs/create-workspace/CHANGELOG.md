@@ -1,3 +1,13 @@
+## 0.4.16 (2026-11-19)
+
+### 🩹 Fixes
+
+- **create-workspace:** regenerate the scaffold's Figma snapshot ([a5967b83](https://github.com/DominikPieper/atelier-ui/commit/a5967b83))
+
+### ❤️ Thank You
+
+- Dominik Pieper @DominikPieper
+
 ## 0.4.15 (2026-11-19)
 
 ### 🩹 Fixes
