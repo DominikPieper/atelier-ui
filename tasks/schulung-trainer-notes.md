@@ -744,12 +744,15 @@ a volunteer's loop.
 **Say.**
 
 1. The six checks (`docs/src/pages/prompts.astro` `RUBRIC`), names and meaning: **Source
-   named** (node id or brief); **Docs first** (`docs-show` before guessing props);
-   **Tokens** (`--ui-*` only, no hex or px); **Scope guard** (only what the design shows,
-   missing things go in a question list); **Done stated** (which checks must be green and
-   that the agent runs them); **One change per round** (a revision fixes one named
-   problem and says which finding it answers). Everyone scores their Block 02 prompt; the
-   failed check is the reason stated on revision (the done-when).
+   named** (node id or handoff document); **Scope guard** (only what the design shows,
+   missing things go in a question list); **Plan first** (plan mode, read the plan before
+   any code); **Done stated** (what proves this task done beyond `/verify`); **One change
+   per round** (a revision fixes one named problem and says which finding it answers);
+   **Fix in the right place** (one-off into the next prompt, a recurring mistake into
+   CLAUDE.md or the skill with its reason, a never-event into a lint rule or hook).
+   Docs-first and token rules are not in the rubric: the skill and stylelint carry them
+   (ADR-0183). Everyone scores their Block 02 prompt; the
+   failed check is the reason stated on revision (the done-when), and the revision is of the prompt or the context.
 2. Correction prompts by symptom (golden prompts §4 index): invented prop → §2.2;
    hardcoded value or missing shadow → §2.3; structural content in the wrong place
    (Undo as inline link, remove as styled span, StatCard as card over invisible button,
@@ -777,17 +780,17 @@ a volunteer's loop.
    half only. Never two `storybook-test` at once (shared browser port). In a
    generated workspace the Nx project is `workshop-<fw>`, not `<fw>`: use the npm
    scripts (R-228).
-6. Token fidelity at 14:40: ask Claude to grep the component's files for `#[0-9a-f]{3,8}`
+6. Tokens at 14:40 (the skill and stylelint enforce them; this is the manual check): ask Claude to grep the component's files for `#[0-9a-f]{3,8}`
    and `[0-9]+px` and replace each hit with the matching `--ui-*` name read from
    `tokens.css`, then report the lines.
 
-**Expected recap answers.** "Added Docs first → the invented `rounded` prop disappeared."
+**Expected recap answers.** "Read the plan first → the invented `rounded` prop was a line of plan, not a red story."
 "Added the scope guard → it stopped adding the six positions." "One change per round →
 I could tell which change fixed the red story."
 
 **Watch for.** Rule R10 at 14:00 and 14:30 (one shared revision on the projector). A seat
-typing code by hand: back to the prompt. Trainer hands out the golden prompts on paper
-here, not earlier.
+typing code by hand: back to the prompt. The golden prompts are the rescue sheet: paste one or hand it to a stuck seat, never
+as the thing to copy.
 
 ### Block 04 · 15:00–16:15 · Verify: a11y, states, parity
 

@@ -15,11 +15,20 @@ import { inlineMd } from '../lib/inline-md';
 
 const RULE_LINE =
   '- `npm run check:stories` — every story, rendered in Chromium, axe-checked';
-const GENERATION_PROMPT = `Generate the component from my handoff document <path or pasted text>.
-In one step, write the component with its test, and its stories: one story per
-variant value and Boolean state, and a play function for every behaviour line of
-the document. The handoff document is the input, including its "Deliberate
-differences": take them as they are.`;
+const GENERATION_PROMPT = `Generate the <FRAMEWORK> implementation of <ComponentName> with its test and
+its stories, from my handoff document <path or pasted text>, not from the
+Figma picture alone. Do not write any other file.
+
+The handoff document's "Deliberate differences" are given constraints, not
+mistakes to correct: where the code differs from the design on purpose, build
+it that way.
+
+Every prop name matches the handoff document's sections one-for-one: add no
+prop and rename no prop. Follow the atelier-component skill for tokens,
+composition, accessibility and stories. If a requirement has no natural
+mapping onto what you are generating, ask instead of inventing a workaround.
+When you are done, run the Definition of Done checks from CLAUDE.md (the ones /verify runs) and
+report each exit code.`;
 const DOCS_SHOW_CLI = `npx storybook tools --config-dir workshop-<fw>/.storybook --json docs show --input '{"id":"<id>"}'`;
 const LINT_PROMPT = `Run figma_lint_design on my component set <node id> with only the rules
 hardcoded-color, default-name and detached-component. Return the findings as a
@@ -274,12 +283,14 @@ names it, and why. Do not change anything yet.`;
           every <code>*.stories.*</code> edit.
         </li>
         <li>
-          Send the generation prompt, with your handoff document as the input.
-          One step, not three: Claude writes the component (with its test) and
-          the stories. One story per variant value and Boolean state, and a
-          <code>play</code> for every behaviour line of the document. The
-          deliberate differences go into the prompt as they are; the component
-          declares its prop types directly.
+          Switch to plan mode (Shift+Tab until the status line shows it), send
+          the generation prompt with your handoff document as the input, and
+          read the plan before anything is built: every prop in it must be a
+          prop of the handoff document. Then let it build. One step, not three:
+          Claude writes the component (with its test) and the stories. One story
+          per variant value and Boolean state, and a <code>play</code> for every
+          behaviour line of the document. The deliberate differences go into the
+          prompt as they are; the component declares its prop types directly.
           <Code
             code={GENERATION_PROMPT}
             lang="text"
@@ -353,7 +364,10 @@ names it, and why. Do not change anything yet.`;
           reason you state.
         </li>
         <li>
-          Enforce token fidelity: ask for <code>--ui-*</code> custom properties.
+          Revise the prompt or the context: a one-off goes into the next prompt;
+          a mistake that would recur goes into CLAUDE.md or the skill, with its
+          reason. The skill and stylelint enforce the <code>--ui-*</code>
+          tokens.
         </li>
         <li>
           Run the test loop: <code>stories-preview</code> and

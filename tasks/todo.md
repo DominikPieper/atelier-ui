@@ -191,6 +191,23 @@ outline first, then deck, then run-of-show and prompts.
       "Vorstellung und Transfer" ends on the written next step instead of "Wahl eines ersten Befunds". After the
       decision: mirror into `tasks/schulung-kundenagenda.md`.
 
+## Package A: standing rules into the skill, rubric reframed (owner go 2026-11-19, ADR-0183)
+
+Course review 2026-11-19 against Anthropic's prompting guidance and the NotebookLM design-system
+notebooks. Package A before the rehearsal on Monday 2026-11-23; package B (Day 2 Block 01
+"Figma readable for agents", semantic-token lint, Code Connect demo, structured-metadata slide)
+waits for measured timings.
+
+- [x] A1 `atelier-component/SKILL.md` (+ no-Figma variant): composition, icon-only names, status
+      without colour, `autodocs`, each with its reason; preset spec pins them
+- [x] A2 §2.1 shrunk to the task; `/build-your-own` copy matches
+- [x] A3 rubric (`prompts.astro` RUBRIC): Source, Scope, Plan first, Done (this task), One change,
+      Fix in the right place; run-of-show, `/schulung`, deck outline, trainer notes follow
+- [x] A4 plan mode at the start of Day 2 Block 02 (about 5 of the 48 min)
+- [x] A5 golden prompts reframed as the trainer's rescue sheet
+- [ ] A6 gates green and committed 2026-11-19 (format, adr-refs, docs, knowledge, create-workspace test+lint; `check:all` not run); open: push, release of `create-workspace` + reprovisioning rides on R-252
+- [ ] Rehearsal check: does the agent load `atelier-component` during the Day 2 generation?
+
 ## Local Storybook and MCP on the seat (owner go 2026-11-18)
 
 Owner 2026-11-18, after the through-line review of both days (findings R-253 to R-260 in

@@ -1,5 +1,9 @@
 # Golden-Prompts — trainer cheat sheet
 
+**Rescue sheet (ADR-0183).** These are the trainer's rescue prompts: the trainer pastes one,
+or hands it to a seat that is stuck. Participants write their own prompts against the
+rubric (`/prompts#rubric`). The file name stays; many pages point at it.
+
 **What this is.** Ready-to-paste prompts for the blocks that need them — the
 retired 2026-09 agenda (`tasks/archive/schulung-2tage-agenda-2026-09.md`, German) named
 this exact gap in its material-gaps table: _"Trainer cheat sheet with golden prompts:
@@ -62,6 +66,9 @@ below, warm run times (build 6-9 s, lint 6-7 s, stylelint 2-4 s), and one headle
 
 ## 0. How to use this sheet
 
+- **This is the trainer's rescue sheet (ADR-0183).** Paste a prompt yourself, or hand it to a
+  stuck seat. Participants write their own prompts and judge them against the six-check
+  rubric (`/prompts#rubric`); do not give the sheet out as the thing to copy.
 - **Paste, don't paraphrase.** These are meant to go into a participant's live Claude
   Code session verbatim. A paraphrase risks re-inventing exactly the kind of plausible
   but wrong detail this sheet exists to avoid.
@@ -409,11 +416,21 @@ not write, open or check one. The handoff document's **"Deliberate differences"*
 (what the code will do differently from the design on purpose, and why) goes into the
 prompt as given constraints. The same prompt is printed on `/build-your-own`.
 
-> Generate the `<FRAMEWORK>` implementation of `<ComponentName>` from the handoff
-> document below — not from the Figma picture alone (ADR-0096). Read every requirement
-> before writing code. Write the component with its test, and its stories, in one step: one
-> story per variant value and per Boolean state, `args`-based where possible, and a `play`
-> function for each behaviour line the document names. Do not write any other file.
+**Why it is short (ADR-0183).** The standing rules that hold for every component (tokens,
+composition by region, a name on every icon-only control, status visible without colour,
+`tags: ['autodocs']`) live in the workspace's `atelier-component` skill, with their reasons.
+The prompt carries only what is true of this task: the source, the given constraints, the
+prop-name rule, and the finish line. A participant's own repository has no golden prompt; it
+can have a skill, and the prompt should show that.
+
+**Plan mode first.** Before pasting, the participant presses Shift+Tab until the status line shows plan mode, pastes
+the prompt, and reads the plan: every prop in it must be a prop of the handoff document. Only
+then do they let it build. An invented prop is cheaper to catch as a line of plan than as a red
+story.
+
+> Generate the `<FRAMEWORK>` implementation of `<ComponentName>` with its test and its
+> stories, from the handoff document below, not from the Figma picture alone (ADR-0096).
+> Do not write any other file.
 >
 > --- HANDOFF DOCUMENT (paste yours here) ---
 > `<PASTE THE DAY-2-BLOCK-01 HANDOFF DOCUMENT>`
@@ -423,42 +440,11 @@ prompt as given constraints. The same prompt is printed on `/build-your-own`.
 > to correct: where the code differs from the design on purpose, build it that way.
 > `<PASTE THE "DELIBERATE DIFFERENCES" SECTION OF THE HANDOFF DOCUMENT>`
 >
-> Hard requirements — check each one explicitly and report which you had to make a
-> judgement call on:
->
-> 1. **Every prop name matches the handoff document's "In scope"/"Token bindings"
->    section, one-for-one.** Do not add a prop the document doesn't name. Do not rename
->    one it does name.
-> 2. **Every fill, border, radius, spacing, gap, shadow and font-size value is a
->    `--ui-*` custom property** (`var(--ui-color-…)`, `var(--ui-radius-…)`,
->    `var(--ui-spacing-…)`, `var(--ui-shadow-…)`, `var(--ui-font-size-…)`). No hex/rgb
->    literals, no raw `px`, no Tailwind utility class (`bg-*`, `p-*`, `rounded-*`,
->    `shadow-*`) — this library has no Tailwind dependency anywhere in it.
-> 3. **Compose structurally, don't flatten.** If the component has more than one
->    logical region (a header/body/footer, a viewport/container split, an icon + label
->    - action), give each region its own sub-component or the framework's own slot
->      mechanism — the same pattern `AtlCard`/`AtlCardHeader`/`AtlCardContent`/
->      `AtlCardFooter` and `AtlDialog`/`AtlDialogHeader`/`AtlDialogContent`/
->      `AtlDialogFooter` already use in this repo, identically in all three frameworks:
->      Angular content projection (`<ng-content>`) plus a named `atl-<name>-<region>`
->      element per region; React a named function export per region, content via
->      `children`; Vue a named SFC export per region, content via the default `<slot />`.
->      Do not dump every region into one flat prop bag or one undifferentiated block of
->      children.
-> 4. **Every icon-only control gets a real accessible name.** Follow `AtlIcon`'s own
->    pattern (look it up with `docs-show`): a `label` prop that's absent by default — the
->    icon is decorative unless a name is explicitly supplied — and `AtlButton`'s own
->    rule: an icon-only button needs `aria-label` (the React adapter enforces this at
->    the type level; Angular/Vue warn in dev mode). Every non-icon interactive control
->    is a real `<button>`/`<a>`, never a styled `<div>`/`<span>`.
-> 5. **Any severity/status/state the handoff document names is visible without
->    colour** — an icon, a prefix word, or a visually-hidden string, never colour alone.
-> 6. **If a requirement has no natural mapping onto what you're generating, say so** —
->    ask, don't silently drop it or invent a workaround prop.
->
-> When you're done: confirm the story you generated declares `tags: ['autodocs']`
-> (the brief's "Done when" item 6 — without it the story renders Canvas
-> only, no Docs tab, for a reason that has nothing to do with the component itself).
+> Every prop name matches the handoff document's sections one-for-one: add no prop and
+> rename no prop. Follow the `atelier-component` skill for tokens, composition,
+> accessibility and stories. If a requirement has no natural mapping onto what you are
+> generating, ask instead of inventing a workaround. When you are done, run the Definition of Done checks from
+> CLAUDE.md (the ones `/verify` runs) and report each exit code.
 
 ### 2.2 Correction — invented prop (Block 03)
 

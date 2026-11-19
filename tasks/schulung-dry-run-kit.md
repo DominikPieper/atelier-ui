@@ -468,7 +468,7 @@ property.
 _Done when:_ stories are green, and the prompt was revised at least once with
 the reason stated.
 
-- Golden prompts (token fidelity, `--ui-*` custom properties, the three
+- Golden prompts, the trainer's rescue sheet (the three
   correction prompts): `tasks/schulung-golden-prompts.md` §2.2–2.4 (the trainer
   hands them out on site; they are not in the participant workspace; §2.1, the
   generation prompt, belongs to Block 02). Note which

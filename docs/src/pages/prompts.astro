@@ -188,27 +188,27 @@ const FRAMEWORKS: Fw[] = ['react', 'angular', 'vue'];
 const RUBRIC: { name: string; text: string }[] = [
   {
     name: 'Source named',
-    text: 'the Figma node id or the brief the component comes from.',
-  },
-  {
-    name: 'Docs first',
-    text: 'the agent reads the component docs through the library MCP server (`docs-show`) instead of guessing props.',
-  },
-  {
-    name: 'Tokens',
-    text: '`--ui-*` custom properties only, no hex or px literals.',
+    text: 'the Figma node id or the handoff document the work comes from.',
   },
   {
     name: 'Scope guard',
     text: 'implement only what the design shows; anything missing goes in a list of questions at the end. The <a href="#prompt-guard" class="docs-link-primary">Prompt guard: Figma to code</a> card is the wording.',
   },
   {
+    name: 'Plan first',
+    text: 'for anything beyond a one-file change, ask for the plan (plan mode: Shift+Tab until the status line shows it) and read it before any code is written; an invented prop is cheaper to catch as a line of plan.',
+  },
+  {
     name: 'Done stated',
-    text: 'which checks must be green (`/verify`: format, stylelint, lint, build, unit tests and `check:stories`; then the parity check) and that the agent runs them itself.',
+    text: "what proves this task done beyond `/verify`, which the workspace's CLAUDE.md already requires: the state, behaviour or story that has to exist.",
   },
   {
     name: 'One change per round',
     text: 'a revision fixes one named problem and says which finding it answers.',
+  },
+  {
+    name: 'Fix in the right place',
+    text: 'when the result was wrong, decide where the fix lives: a one-off goes into the next prompt; a mistake that would recur goes into CLAUDE.md or the skill, with its reason; one that must never happen goes into a lint rule or hook.',
   },
 ];
 const rubricHtml = (s: string) => s.replace(/`([^`]+)`/g, '<code>$1</code>');
@@ -457,7 +457,9 @@ const rubricHtml = (s: string) => s.replace(/`([^`]+)`/g, '<code>$1</code>');
         "
       >
         Six checks. A prompt that passes all six has stated its source, its
-        docs, its tokens, its limits, its finish line and its one change.
+        limits, its plan, its finish line and its one change, and a wrong result
+        has been fixed where it belongs. Docs-first and token rules are not here
+        because the workspace's skill and stylelint carry them.
       </p>
       <ol
         style="
