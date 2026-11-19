@@ -1,3 +1,13 @@
+## 0.4.15 (2026-11-19)
+
+### 🩹 Fixes
+
+- **create-workspace:** the seat carries the course material, not links to it ([7f136948](https://github.com/DominikPieper/atelier-ui/commit/7f136948))
+
+### ❤️ Thank You
+
+- Dominik Pieper @DominikPieper
+
 ## 0.4.14 (2026-11-19)
 
 ### 🩹 Fixes
