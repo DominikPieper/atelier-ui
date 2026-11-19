@@ -46,6 +46,28 @@ wired in `.mcp.json` and the Desktop Bridge plugin is running. If it is not, the
    workspace for exactly that purpose.
    Declare `tags: ['autodocs']` on the story meta, as `atl-button.stories.*` does — without it
    Storybook renders Canvas only, with no Docs tab.
+   When the component is built from a handoff document that names a Figma source, the story
+   meta also carries `parameters.design` as an array of two entries: the link from the
+   document's Source line, and a PNG of the frame. Export the PNG with `figma_take_screenshot`
+   (figma-console, Desktop Bridge, no Figma token); Claude Code saves an image a tool returns
+   to a file and prints its path in the tool result (`[Image: source: <path>]`), so copy that
+   file next to the stories as `<component-file-name>.design.png`. Reference it with
+   `new URL(...).href`, which needs no config and passes this workspace's type-check and lint:
+
+   ```ts
+   parameters: {
+     design: [
+       { type: 'figma', url: '<link from the Source line>' },
+       { type: 'image', url: new URL('./<component-file-name>.design.png', import.meta.url).href },
+     ],
+   },
+   ```
+
+   Both entries, because the embed is live but shows only in a browser that is logged in to
+   Figma, while the PNG always shows and is a dated snapshot. If the bridge is off or no path
+   is reported, carry the link only and say so; never invent an image. `atl-button.stories.*`
+   has no handoff document, so it has no `design` parameter: do not copy one from it.
+
 4. **Run the checks.** `npm run check:stories`. Read the exit code, not the last line of
    output.
 5. **Close the loop against Figma** if the MCP is available: `figma_check_design_parity`,

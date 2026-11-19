@@ -199,7 +199,7 @@ function writeCourseFolder(
       ],
       [
         'parity-prompt.md',
-        'Day 1 Block 02 (Settings Card) and Day 2 Block 04 (your own component): the parity prompt',
+        'Day 1 Block 02 (Settings Card, compared by eye) and Day 2 Block 04 (the parity tool on your own component)',
       ],
       [
         'day2-prompts.md',
@@ -233,6 +233,10 @@ function writeCourseFolder(
 // devDependencies) — the workshop needs the same Storybook every attendee's
 // neighbour has, not whatever `latest` resolves to on the day of the cohort.
 const STORYBOOK_VERSION = '10.6.0';
+
+// Exact pin of the repo root's @storybook/addon-designs (its own release line,
+// not Storybook's).
+const ADDON_DESIGNS_VERSION = '11.1.4';
 
 // Storybook's `framework.name` package per scaffolded app, and the exact
 // devDependency set each one needs beyond the common addons below.
@@ -860,6 +864,9 @@ export async function presetGenerator(
     storybook: STORYBOOK_VERSION,
     '@storybook/addon-mcp': STORYBOOK_VERSION,
     '@storybook/addon-a11y': STORYBOOK_VERSION,
+    // Design panel: a component built from a handoff document carries its
+    // Figma link and a PNG of the frame in `parameters.design` (atelier-component skill).
+    '@storybook/addon-designs': ADDON_DESIGNS_VERSION,
     '@storybook/addon-docs': STORYBOOK_VERSION,
     // Manual dark-mode toolbar: tokens.css ships dark mode but nothing let a
     // scaffolded workspace preview it before (only the OS-level
@@ -1502,8 +1509,7 @@ export async function presetGenerator(
   tree.write(stylesPath, `@import './styles/tokens.css';\n\n${existing}`);
 
   // Storybook config: mirrors libs/{angular,react,vue}/.storybook/main.ts
-  // minus the BUILD_STORYBOOK viteFinal block (hosted-path-only),
-  // and @storybook/addon-designs (no Figma handoff doc to link from here).
+  // minus the BUILD_STORYBOOK viteFinal block (hosted-path-only).
   // @storybook/addon-vitest DOES ship (owner correction 2026-09-10 to
   // ADR-0123's original "no test runner" call).
   tree.write(

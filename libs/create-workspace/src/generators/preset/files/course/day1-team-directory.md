@@ -140,12 +140,13 @@ component for it. If it does, replace it with that component, using only documen
 props.
 ```
 
-## The time box (80 minutes)
+## The time box (95 minutes)
 
 | Minutes | What happens                                                                                            |
 | ------- | ------------------------------------------------------------------------------------------------------- |
 | 5       | The brief and the four rules, plus one live `docs-show` on AtlTable from the trainer. The clock starts. |
-| 30      | Build. The trainer stays quiet, then walks the room.                                                    |
+| 15      | Build. The trainer stays quiet.                                                                         |
+| 30      | Build goes on. The trainer walks the room; a hint is a question about a `docs-show` line.               |
 | 15      | Checks and receipts.                                                                                    |
 | 25      | Two volunteers show their receipts. Which prop had no source, and where did the import names come from? |
 | 5       | Recap question.                                                                                         |

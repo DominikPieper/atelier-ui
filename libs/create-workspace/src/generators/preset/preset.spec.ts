@@ -1208,7 +1208,7 @@ describe('preset generator', () => {
     },
   );
 
-  it('main.ts keeps addon-mcp/vitest/a11y/docs but drops addon-designs', async () => {
+  it('main.ts registers addon-mcp/vitest/a11y/designs/docs', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
       framework: 'angular',
@@ -1222,7 +1222,7 @@ describe('preset generator', () => {
     expect(main).toContain('@storybook/addon-vitest');
     expect(main).toContain('@storybook/addon-a11y');
     expect(main).toContain('@storybook/addon-docs');
-    expect(main).not.toContain('addon-designs');
+    expect(main).toContain('@storybook/addon-designs');
     // The only mount is the library Storybook at /atelier (ADR-0182).
     expect(main.match(/staticDirs/g)).toHaveLength(1);
     expect(main).not.toContain('BUILD_STORYBOOK');
@@ -1388,7 +1388,7 @@ describe('preset generator', () => {
     expect(pkg.devDependencies['vitest']).toBe('^4.0.8');
     expect(pkg.devDependencies['@vitest/browser-playwright']).toBe('^4.1.0');
     expect(pkg.devDependencies['playwright']).toBe('^1.36.0');
-    expect(pkg.devDependencies['@storybook/addon-designs']).toBeUndefined();
+    expect(pkg.devDependencies['@storybook/addon-designs']).toBe('11.1.4');
   });
 
   it('adds @storybook/angular-vite when angular is selected, not the other frameworks packages', async () => {

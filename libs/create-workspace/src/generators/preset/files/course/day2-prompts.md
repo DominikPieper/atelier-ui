@@ -4,26 +4,21 @@ Used in Day 2 Block 00 (the Definition-of-Done exercise), Block 02 (generation w
 The parity prompt of Block 04 is in `parity-prompt.md`; your handoff document is the input
 for all of them (an example is in `handoff-example.md`).
 
-## Block 00: the Definition-of-Done exercise (10 minutes)
+## Block 00: the Definition-of-Done exercise (6 minutes)
 
 The workspace carries a rule the agent reads every session: `CLAUDE.md`, section "Definition
-of Done". Four steps:
+of Done". The agent runs what the list names; a check that is not in the list is a check
+nobody asked for. The trainer shows that once on the projector: delete one line, `/clear`,
+ask again, and the check is gone.
+
+Your part:
 
 1. Ask: "Which commands does this workspace's Definition of Done list? Only list them."
    The answer names six.
-2. Delete this exact line from the list in `CLAUDE.md` and save. Leave the count word
-   ("all six") as it is:
-
-   ```text
-   - `npm run check:stories` — every story, rendered in Chromium, axe-checked
-   ```
-
-3. `/clear`, ask the same question again. The list now names five; `check:stories` is gone.
-4. Put the line back (undo) and save.
-
-The agent runs what the list names; a check that is not in the list is a check nobody asked
-for. Stretch: write down the one line your own team would add to this list, the command and
-what it proves.
+2. Write down the one line your own team would add to this list, in the same shape: the
+   command, a dash, what it proves. Think of the thing your reviews keep catching by hand.
+3. Compare with your neighbour: does the line name a command that exits non-zero when it
+   fails, or a wish ("the code is clean")? Only the first is a rule an agent can run.
 
 ## Block 02, part 1: `docs-show` on your own component (10 minutes)
 
@@ -65,7 +60,8 @@ The prompt carries only what is true of this task.
 ```text
 Generate the {{FRAMEWORK}} implementation of <ComponentName> with its test and
 its stories, from my handoff document <path or pasted text>, not from the
-Figma picture alone. Do not write any other file.
+Figma picture alone. Do not write any other file, except the design image the
+atelier-component skill asks for.
 
 The handoff document's "Deliberate differences" are given constraints, not
 mistakes to correct: where the code differs from the design on purpose, build

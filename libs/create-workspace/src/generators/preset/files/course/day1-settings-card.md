@@ -36,11 +36,11 @@ the matching one and tell me which line you changed.
 A font weight such as `600` in a `.css` file also fails `npm run check:stylelint`; the token
 is `var(--ui-font-weight-semibold)`.
 
-## The agent checks itself (11:25 to 11:45)
+## The agent checks itself (11:00 to 11:10)
 
 {{LADDER}}
 
 ## The comparison with Figma
 
-The parity prompt for this row is in `parity-prompt.md`. Do not run it on a component that
-fails lint or build.
+You compare by eye today; the steps are in `parity-prompt.md`. Do not do it on a component
+that fails lint or build. The parity tool comes on Day 2.
