@@ -1,3 +1,13 @@
+## 0.4.17 (2026-11-19)
+
+### 🚀 Features
+
+- **create-workspace:** a story shows its Figma frame in the Design panel ([fc2e1df7](https://github.com/DominikPieper/atelier-ui/commit/fc2e1df7))
+
+### ❤️ Thank You
+
+- Dominik Pieper @DominikPieper
+
 ## 0.4.16 (2026-11-19)
 
 ### 🩹 Fixes
