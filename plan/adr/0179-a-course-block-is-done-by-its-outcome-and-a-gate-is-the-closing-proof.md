@@ -108,6 +108,9 @@ is a look at both, and the contract is a trainer mention. The reason is the one 
 written for, taken one step further: a check a participant does not have at home is not theirs
 to learn.
 
+**Corrected 2026-11-19** (ADR-0186): demo D-8, named twice above, is removed from the course. The
+parity slide keeps its point in one sentence: a section that was not passed was not compared.
+
 ## Consequences
 
 - A participant can finish Day 2 Block 02 with a component whose comparison with Figma still

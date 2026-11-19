@@ -255,14 +255,6 @@ const SCAFFOLD_PORT_EXEMPT_ENTRIES = [
   ],
   [
     scaffoldPortKey(
-      'docs/src/pages/schulung.astro',
-      "'What Storybook is: stories, prop tables. A story is a claim about a component: the component is the shape, the story is the claim, the test checks the claim',",
-      '"One thing in the Atelier Storybook that is explained nowhere else (7 min, D-3): the Design tab (`parameters.design`) shows the Figma frame next to the component. Open the trainer\'s own workspace mount `http://localhost:6006/atelier/`, story AtlButton, Design tab; participants watch the projector (their workspace\'s own stories carry no `parameters.design`) and may open the same URL on their seat",',
-    ),
-    "Day 1 Block 04 demo D-3 on the schulung page: the trainer's own workspace serves the library Storybook mounted at `/atelier/` on the scaffold's port 6006, next to the participant's Storybook (ADR-0182).",
-  ],
-  [
-    scaffoldPortKey(
       'docs/src/pages/workshop.astro',
       '"type": "http",',
       '"url": "http://localhost:6006/mcp"',

@@ -144,6 +144,13 @@ Rejected:
   see what the others cannot, and it is new infrastructure on provisioned machines two weeks
   before the room. Cohort 2.
 
+**Corrected 2026-11-19** (ADR-0186): two parts of point 6 and one of point 8 did not survive the
+schedule pass of that day. Demo D-8 is removed, not moved to the trainer machine; one sentence on
+the parity slide carries its point. Day 1 Block 02's comparison is by eye (card next to the Figma
+frame, differences listed and sorted into code or Figma), so the parity tool first runs on Day 2.
+The scorecard still frames the close of Day 2 Block 05, but as a self-assessment from memory; the
+check prompt and both checklists are homework, because no seat has the participant's own file.
+
 ## Consequences
 
 - What a participant takes home changes kind: a ladder card and a scorecard that hold in a repo

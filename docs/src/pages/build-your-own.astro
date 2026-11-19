@@ -132,27 +132,29 @@ names it, and why. Do not change anything yet.`;
           every edit without being asked.
         </li>
       </ul>
-      <p class="docs-step-desc">Then change one line (7 min):</p>
+      <p class="docs-step-desc">
+        The trainer shows once what the agent does with the rules file: ask
+        "Which commands does this workspace's Definition of Done list? Only list
+        them." (six), delete the line below from the list, run
+        <code>/clear</code> and ask again (five, and
+        <code>npm run check:stories</code> is gone), then put the line back. You
+        do not edit <code>CLAUDE.md</code> here.
+      </p>
+      <Code code={RULE_LINE} lang="markdown" title="CLAUDE.md" />
+      <p class="docs-step-desc">Your exercise (6 min):</p>
       <ol class="byo-list byo-list--ordered">
         <li>
-          Ask: "Which commands does this workspace's Definition of Done list?
-          Only list them."
+          Ask the same question: "Which commands does this workspace's
+          Definition of Done list? Only list them."
         </li>
         <li>
-          The answer names six. Delete this line from the list, save, and leave
-          the count word as it is:
-          <Code code={RULE_LINE} lang="markdown" title="CLAUDE.md" />
+          Write down the one line your own team would add, in the same shape as
+          the line above: the command, a dash, what it proves.
         </li>
         <li>
-          Run <code>/clear</code> and ask again. The list now names five and
-          <code>npm run check:stories</code> is gone.
+          Compare with your neighbour: is it a command that can fail, or a wish?
         </li>
-        <li>Put the line back and save.</li>
       </ol>
-      <p class="docs-step-desc">
-        Stretch: write down the one line your own team would add to this list,
-        the command and what it proves.
-      </p>
       <p class="docs-step-desc">
         The optional
         <a href="/first-component#bridge" class="docs-link-primary"
@@ -164,8 +166,9 @@ names it, and why. Do not change anything yet.`;
       </p>
       <p class="byo-done">
         <strong>Done when</strong> you know your target component, can name the
-        workspace's skills, have changed one line of the rules file and have
-        seen the agent read it.
+        workspace's skills, and have written the one line your own team would
+        add to the rules file: a command and what it proves, checked with a
+        neighbour as a command that can fail, not a wish.
       </p>
     </section>
 
@@ -195,10 +198,11 @@ names it, and why. Do not change anything yet.`;
           canvas.
         </li>
         <li>
-          Design in the Figma UI (about 40 min): layout, variants, token
-          assignment. Then structure it through MCP (about 25 min): component
-          properties and a11y audits. Plan about 5 min for opening the duplicate
-          at the start, 5 min for the API rules talk, about 12 min for the
+          Plan 5 min for opening the duplicate, 20 min to draw the set from the
+          starter frame (layout, variants, token assignment: the starter frame
+          adapted, not a design from scratch), 20 min to structure it through
+          MCP (component properties and a11y audits), 5 min for the Figma
+          linter, 15 min for the API rules with a short exercise, 22 min for the
           handoff document and a 3 min recap at the end.
         </li>
         <li>
@@ -207,9 +211,11 @@ names it, and why. Do not change anything yet.`;
           is in your brief.
         </li>
         <li>
-          API rules first (5 min talk), because the handoff fixes the prop names
-          and values: predictable naming, literal unions, composition over
-          config, no hidden defaults.
+          API rules first (15 min: about 5 on the rules, about 10 on a short
+          exercise on your own component), because the handoff fixes the prop
+          names and values: predictable naming, literal unions, composition over
+          config, no hidden defaults. The result of the exercise is the property
+          list your handoff document takes over.
         </li>
         <li>
           Run the Figma linter on your own component set (5 min). Ask the agent
@@ -327,9 +333,13 @@ names it, and why. Do not change anything yet.`;
           >.
         </li>
         <li>
-          Look at both (5 min). Put the running stories next to the Figma
-          component and go through every variant and state, one pass. Write the
-          differences down as a list; Block 04 sorts it.
+          Look at both (8 min). The trainer first shows, on one story, the
+          Design panel: the Figma frame as an embed (it may ask for a Figma
+          login) and a PNG of the frame (it shows without one). The story takes
+          its Figma link from the Source line of your handoff document. Then put
+          the running stories next to the Figma component and go through every
+          variant and state, one pass. Write the differences down as a list;
+          Block 04 sorts it.
         </li>
         <li>
           Commit when the block is green:
@@ -347,7 +357,7 @@ names it, and why. Do not change anything yet.`;
     </section>
 
     <section class="docs-section byo-block" aria-labelledby="block-03">
-      <p class="byo-meta">13:30–14:45 · 75 min</p>
+      <p class="byo-meta">13:30–14:30 · 60 min</p>
       <h2 class="docs-section-title" id="block-03">
         <span class="byo-num" aria-hidden="true">03</span> Iterate: prompt
         quality and the self-healing loop
@@ -411,7 +421,7 @@ names it, and why. Do not change anything yet.`;
     </section>
 
     <section class="docs-section byo-block" aria-labelledby="block-04">
-      <p class="byo-meta">15:00–16:15 · 75 min</p>
+      <p class="byo-meta">14:45–16:00 · 75 min</p>
       <h2 class="docs-section-title" id="block-04">
         <span class="byo-num" aria-hidden="true">04</span> Verify: a11y, states,
         parity
@@ -471,7 +481,7 @@ names it, and why. Do not change anything yet.`;
     </section>
 
     <section class="docs-section byo-block" aria-labelledby="block-05">
-      <p class="byo-meta">16:25–17:30 · 65 min</p>
+      <p class="byo-meta">16:10–17:30 · 80 min</p>
       <h2 class="docs-section-title" id="block-05">
         <span class="byo-num" aria-hidden="true">05</span> Show and tell, then
         transfer to your own design system
@@ -483,7 +493,7 @@ names it, and why. Do not change anything yet.`;
           failed.
         </li>
         <li>
-          Workspace anatomy (15 min), what makes the loop portable, file by
+          Workspace anatomy (12 min), what makes the loop portable, file by
           file: <code>.mcp.json</code> (the servers: in your own repo the
           library half is your library's manifest or package, the local half is
           the addon MCP of the Storybook you already run),
@@ -491,10 +501,8 @@ names it, and why. Do not change anything yet.`;
           <code>.claude/skills/</code> (<code>atelier-component</code>,
           <code>figma-workspace-architect</code>, the Storybook skills),
           <code>.claude/settings.json</code> (permissions and the format hook),
-          <code>.claude/commands/verify.md</code> (the one proof command),
-          <code>.claude/agents/component-review.md</code> (a review agent the
-          workspace ships), <code>.storybook/main.ts</code> (addon-vitest,
-          addon-a11y, addon-themes), and the <code>package.json</code> scripts
+          <code>.storybook/main.ts</code> (addon-vitest, addon-a11y,
+          addon-themes), and the <code>package.json</code> scripts
           (<code>lint</code>, <code>build</code>, <code>check:*</code>). What to
           copy into your own repo, in this order, most portable first:
           <ol class="byo-list byo-list--ordered">
@@ -522,21 +530,25 @@ names it, and why. Do not change anything yet.`;
               <code>.claude/hooks/</code>).
             </li>
             <li>Skills (<code>.claude/skills/</code>).</li>
-            <li>
-              Atelier's own check that reads the differences kept on purpose
-              from a contract file (<code>tools/design-contracts/</code>): last
-              and optional, and not part of this course.
-            </li>
           </ol>
           You take the workspace home as it is on the course machine; the
           trainer tells you how it leaves the machine.
         </li>
         <li>
-          Transfer (12 min): the scorecard "What a design system has to bring"
-          is the frame. Mark its seven rows for your own design system (yes /
-          partly / no), pick the weakest row, then start the checklist that
-          matches it: the Figma checklist or the Storybook checklist. Both are
-          handouts and you take both home; the pages
+          What carries your docs, and what you depend on (3 min, talk only): the
+          Storybook MCP on your own Storybook is the route that brings your
+          design system's docs to the agents of the teams that consume it, and
+          the Figma linter, the accessibility audit and the parity check all
+          stand on the third-party figma-console-mcp, a dependency you choose.
+        </li>
+        <li>
+          Transfer (27 min): the scorecard "What a design system has to bring"
+          is the frame. From memory, mark its seven rows for your own design
+          system (yes / partly / no), pick the weakest row and write your next
+          step for it, then read a neighbour's step. Homework: run both
+          checklists with the check prompt on your own system, the Figma
+          checklist and the Storybook checklist. Both are handouts and you take
+          both home; the pages
           <a href="/readiness" class="docs-link-primary">readiness</a>,
           <a href="/storybook-readiness#self-check" class="docs-link-primary"
             >Storybook readiness</a
@@ -545,13 +557,14 @@ names it, and why. Do not change anything yet.`;
           <a href="/design-principles#check-your-own" class="docs-link-primary"
             >check your own system</a
           >
-          hold the how. The pages time-box the full run at 30 minutes; the
-          finding you pick is your written next step, not room work.
+          hold the how. The pages time-box each full run at 30 minutes; nobody
+          starts a checklist in the room.
         </li>
       </ul>
       <p class="byo-done">
-        <strong>Done when</strong> you leave with a next step for your own
-        design system, and the follow-up channel is set up.
+        <strong>Done when</strong> you have marked the seven scorecard rows for
+        your own design system from memory and leave with a written next step
+        for the weakest row, and the follow-up channel is set up.
       </p>
     </section>
 
