@@ -255,7 +255,7 @@ Sum: 2+48+15+8+2 = **75**.
 
 ## Block 03 · 13:30–14:45 · 75 min · Iterate: prompt quality and the self-healing loop (prompt exercise)
 
-_Done when:_ stories are green, and the prompt was revised at least once with the
+_Done when:_ stories are green, and the prompt or the context was revised at least once with the
 reason stated.
 
 | Time        | Min | Trainer action                                                                                                                                                                                                                                                                                                                                                                                               | Participant action                               | Trainer screen       | Checkpoint                                                                         | Fallback                                                                                                |

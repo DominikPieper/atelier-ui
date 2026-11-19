@@ -465,7 +465,7 @@ property.
   expectedly red gates" no longer apply and must not be used as a comparison.
 
 **Block 03 — Iterate: prompt quality and the self-healing loop**
-_Done when:_ stories are green, and the prompt was revised at least once with
+_Done when:_ stories are green, and the prompt or the context was revised at least once with
 the reason stated.
 
 - Golden prompts, the trainer's rescue sheet (the three
