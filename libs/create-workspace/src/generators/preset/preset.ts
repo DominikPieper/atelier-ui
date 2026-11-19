@@ -87,6 +87,148 @@ const SITE_URL = 'https://atelier.pieper.io';
 
 type Framework = 'angular' | 'react' | 'vue';
 
+// ─── course/ folder (ADR-0184) ───────────────────────────────────────────────
+// Everything a participant pastes or reads during the course, as plain Markdown
+// in the workspace: the docs site is password-protected, so no file here may
+// point at it. Static templates under files/course/ carry `{{TOKEN}}`s for the
+// few framework-specific spots; whole optional sections (the Figma rescue
+// steps, the hosted-vs-local MCP rescue entry) are fragments under
+// files/course/_fragments/ that are spliced in, never written out themselves.
+const COURSE_SCAFFOLD: Record<
+  Framework,
+  {
+    name: string;
+    mcp: string;
+    file: string;
+    css: string;
+    mount: string;
+    lint: string;
+  }
+> = {
+  angular: {
+    name: 'Angular',
+    mcp: 'atelier',
+    file: 'workshop-angular/src/app/components/team-directory.component.ts',
+    css: 'workshop-angular/src/app/components/team-directory.component.css',
+    mount:
+      'add TeamDirectoryComponent to the imports array in workshop-angular/src/app/app.ts and replace <app-nx-welcome> with <app-team-directory> in app.html',
+    lint: 'On Angular, `npm run lint` also runs two Atelier template rules: an icon-only `<button atl-button>` needs an accessible name, and a sub-component such as `atl-option` must sit inside its parent (`atl-select`). The parent check covers a fixed list of parts (select, tabs, accordion, dialog, drawer, menu and a few more) and does not include the table parts: `atl-th` or `atl-tr` outside an `atl-table` passes it.',
+  },
+  react: {
+    name: 'React',
+    mcp: 'storybook-react',
+    file: 'workshop-react/src/components/TeamDirectory.tsx',
+    css: 'workshop-react/src/components/TeamDirectory.css',
+    mount:
+      'import TeamDirectory in workshop-react/src/app/app.tsx, replace the <NxWelcome /> placeholder with it and remove the now-unused NxWelcome import (an unused import fails npm run lint)',
+    lint: 'On React, `npm run lint` runs the framework rules (including jsx-a11y) but not the two Atelier template rules, which exist for Angular templates only.',
+  },
+  vue: {
+    name: 'Vue',
+    mcp: 'storybook-vue',
+    file: 'workshop-vue/src/components/TeamDirectory.vue',
+    css: 'workshop-vue/src/components/TeamDirectory.css',
+    mount:
+      'import TeamDirectory in workshop-vue/src/views/HomeView.vue, replace the <NxWelcome /> placeholder with it and remove the now-unused NxWelcome import (an unused import fails npm run lint)',
+    lint: 'The two Atelier template rules exist for Angular templates only; on Vue `npm run lint` runs the framework rules.',
+  },
+};
+
+function writeCourseFolder(
+  tree: Tree,
+  framework: Framework,
+  figmaMcp: boolean,
+): void {
+  const c = COURSE_SCAFFOLD[framework];
+  const fragment = (name: string) =>
+    readTemplate(`course/_fragments/${name}.md`).trimEnd();
+  const tokens: Record<string, string> = {
+    FRAMEWORK: c.name,
+    FRAMEWORK_LC: framework,
+    LADDER: fragment(
+      framework === 'angular' ? 'ladder-angular' : 'ladder-other',
+    )
+      .split('{{FRAMEWORK}}')
+      .join(c.name),
+    PKG: `@atelier-ui/${framework}`,
+    MCP: c.mcp,
+    FILE: c.file,
+    CSS: c.css,
+    MOUNT: c.mount,
+    LINTNOTE: c.lint,
+    CHECKS: `Run npm run lint, npm run check:stylelint and npm run check:format${
+      framework === 'angular' ? ' and, on Angular, npm run build' : ''
+    }. Report each exit code. If one is not 0, read the output (the full log when the summary has no error text), repair, and run it again. Then list what you changed.`,
+    // Without Figma there is no day2-prompts.md, so the stuck report moves
+    // into rescue.md instead of being lost.
+    STUCK_REF: figmaMcp
+      ? '`day2-prompts.md` (section "When you are stuck")'
+      : '`rescue.md` (section "When you are stuck")',
+    STUCK: figmaMcp ? fragment('stuck') : '',
+    MCP_RESCUE:
+      framework === 'angular'
+        ? fragment('rescue-mcp-angular')
+        : fragment('rescue-mcp-hosted').split('{{FW}}').join(framework),
+    FIGMA_RESCUE: `\n${fragment(figmaMcp ? 'rescue-figma' : 'stuck')}\n`,
+    INDEX: '',
+  };
+  const render = (template: string) =>
+    Object.entries(tokens).reduce(
+      (text, [key, value]) => text.split(`{{${key}}}`).join(value),
+      readTemplate(`course/${template}`),
+    );
+
+  const index: [string, string][] = [
+    [
+      'day1-team-directory.md',
+      'Day 1, Block 05: the Team directory brief, start prompt, checks prompt, receipts prompt and time box',
+    ],
+  ];
+  const write = (file: string, template = file) =>
+    tree.write(`course/${file}`, render(template));
+  write('day1-team-directory.md');
+  if (figmaMcp) {
+    index.push(
+      [
+        'day1-settings-card.md',
+        'Day 1 Block 02: the Settings Card generation prompt, the token fix-up and the lint-and-build ladder stage',
+      ],
+      [
+        'figma-linter-prompt.md',
+        'Day 1 Block 03 and Day 2 Block 01: the Figma linter prompt',
+      ],
+      [
+        'parity-prompt.md',
+        'Day 1 Block 02 (Settings Card) and Day 2 Block 04 (your own component): the parity prompt',
+      ],
+      [
+        'day2-prompts.md',
+        'Day 2 Block 00 (Definition-of-Done exercise), Block 02 (`docs-show` on your component, generation with plan mode) and Block 04 (accessibility), and what to paste when you are stuck',
+      ],
+      [
+        'briefs/',
+        'Day 2 Block 00: the four component briefs to choose from (Toast, TagChip, StatCard, Avatar)',
+      ],
+      ['handoff-example.md', 'Day 2 Block 01: a filled handoff document'],
+    );
+    write('day1-settings-card.md');
+    write('figma-linter-prompt.md');
+    write('parity-prompt.md');
+    write('day2-prompts.md');
+    write('handoff-example.md');
+    for (const brief of ['README', 'toast', 'tagchip', 'statcard', 'avatar']) {
+      write(`briefs/${brief}.md`);
+    }
+  }
+  index.push([
+    'rescue.md',
+    `When your seat is red: model access, preflight, /mcp, Storybook${figmaMcp ? ', the Figma bridge' : ', and what to paste when you are stuck'}`,
+  ]);
+  tokens.INDEX = index.map(([f, when]) => `- \`${f}\` — ${when}`).join('\n');
+  write('rescue.md');
+  write('README.md');
+}
+
 // Pinned to the exact version this monorepo runs (root package.json
 // devDependencies) — the workshop needs the same Storybook every attendee's
 // neighbour has, not whatever `latest` resolves to on the day of the cohort.
@@ -1903,7 +2045,7 @@ see the skill itself, or ask Claude Code to use it, for what each check actually
     `# Atelier Workshop
 
 This workspace uses Atelier for all UI components.
-Full API reference: ${SITE_URL}/llms-full.txt
+The API reference is the library's MCP server (see below): \`docs-list\`, then \`docs-show\`.
 
 ## MCP Servers
 
@@ -1930,12 +2072,7 @@ ${frameworkIdiomsSection}
 
 ## Composition Patterns
 
-When composing multi-component flows (login form, settings page, confirmation dialog, data list, notification center, management dashboard), check the cookbook first:
-
-- Browse: ${SITE_URL}/patterns
-- JSON catalog (machine-readable): ${SITE_URL}/.well-known/cookbook-patterns.json
-
-Patterns shown there are the canonical way to combine atoms in this library — prefer them over inventing a composition from scratch.
+When composing multi-component flows (login form, settings page, confirmation dialog, data list, notification center, management dashboard), look in the library's MCP server first: if \`docs-list\` has a \`cookbook\` entry, \`docs-show\` on it returns the patterns. They are the canonical way to combine atoms in this library — prefer them over inventing a composition from scratch.
 
 ## Design Tokens
 
@@ -2038,7 +2175,13 @@ composition over configuration, and a sensible default for every prop — so a m
 has generated code for one component can infer the shape of the next. When you design
 the API of your own component, these are the rules the library itself follows:
 
-- Guide: ${SITE_URL}/design-principles
+- One name for one concept, everywhere (\`variant\`, \`size\`, \`disabled\` mean the same on every component).
+- Narrow literal types, not wide strings (\`'primary' | 'secondary'\`, never \`string\`).
+- A sensible default for every prop, so bare usage always works.
+- Composition over configuration: slots and child components, not an opaque config object.
+- One reactivity model per framework; do not mix idioms.
+- The MCP server closes the loop: if a component or prop is not in \`docs-show\`, it does not exist.
+- Do not generate a design system from scratch: reuse the library's tokens and components.
 ## Definition of Done
 
 This workspace is strict, not lenient-by-default: \`tsconfig.base.json\` has
@@ -2067,7 +2210,7 @@ npm run preflight
 \`\`\`
 
 It checks Node, Claude CLI, \`FIGMA_ACCESS_TOKEN\`, MCP endpoint reachability, and port availability.
-Full troubleshooting guide: ${SITE_URL}/troubleshooting
+Rescue steps for a red seat: \`course/rescue.md\`.
 ${
   options.figmaMcp
     ? `
@@ -2076,18 +2219,24 @@ ${
 The \`figma-console\` MCP is enabled in \`.mcp.json\`. It needs the Figma Desktop Bridge
 plugin installed in the Figma desktop app before the server can respond.
 
-Setup guide: ${SITE_URL}/figma-token
+Setup, once: run \`npx -y figma-console-mcp@1.40.0 --help\` (puts the plugin files into
+\`~/.figma-console-mcp/plugin/\`), then in Figma Desktop choose
+**Plugins → Development → Import plugin from manifest…** and pick
+\`~/.figma-console-mcp/plugin/manifest.json\`. Run **Plugins → Development → Figma Desktop
+Bridge** and keep the panel open; it flips from "searching…" to "connected" once Claude Code
+starts the MCP. Check with \`npm run preflight\`; trouble: \`course/rescue.md\`.
 
 A \`FIGMA_ACCESS_TOKEN\` is optional — only required for REST-backed reads (screenshots,
-file exports). The Desktop Bridge covers creation and inspection without a token.
+file exports). The Desktop Bridge covers creation and inspection without a token. Create one
+under Figma → Settings → Security → Personal access tokens (scope: Files → File content,
+Read) and export it in your shell rc file.
 `
     : ''
 }
-## Reference
+## Course material
 
-- Component browser + docs: ${SITE_URL}
-- MCP Playground (inspect tool responses): ${SITE_URL}/mcp
-- CLAUDE.md template: ${SITE_URL}/claude-md
+Prompts, briefs and rescue steps for the course are in \`course/\` (start with
+\`course/README.md\`).
 `,
   );
 
@@ -2364,7 +2513,7 @@ file exports). The Desktop Bridge covers creation and inspection without a token
   }
   if (options.figmaMcp) {
     // Desktop Bridge plugin (installed separately). FIGMA_ACCESS_TOKEN is
-    // optional — only needed for REST-backed reads. See ${SITE_URL}/figma-token.
+    // optional — only needed for REST-backed reads.
     mcpServers['figma-console'] = {
       command: 'npx',
       args: ['-y', 'figma-console-mcp@1.40.0'],
@@ -2445,9 +2594,17 @@ Claude Code MCP servers are pre-configured in \`.mcp.json\`. They — and the
 permissions/hooks in \`.claude/settings.json\` — only take effect once you've
 accepted Claude Code's folder-trust prompt in your first session here; run
 \`npm run preflight\` if you're not sure whether that's happened yet.
-Browse components at ${SITE_URL}
+${
+  framework === 'angular'
+    ? `Browse the library's components in the local Storybook (\`npm run storybook\`, then
+http://localhost:${storybookPort}/atelier/).`
+    : `Look up components through the \`storybook-${framework}\` MCP server (\`docs-list\`, \`docs-show\`).`
+}
+Course material (prompts, briefs, rescue steps): \`course/README.md\`.
 `,
   );
+
+  writeCourseFolder(tree, framework, options.figmaMcp ?? false);
 
   // ─── Claude Code project setup ────────────────────────────────────────────
   // tasks/todo.md's "S3 — the workspace is set up for Claude Code" — a later,

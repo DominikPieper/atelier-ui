@@ -592,7 +592,7 @@ async function checkFigmaSetup() {
         warn(
           'Plugin files vs. .mcp.json pin',
           `on-disk .version is ${diskVersion}, .mcp.json pins ${pinnedVersion}`,
-          `Run \`npx -y ${pinnedSpec} --help\` once to refresh the files, then re-run (or re-import) the plugin in Figma Desktop — see https://atelier.pieper.io/troubleshooting#plugin-update`,
+          `Run \`npx -y ${pinnedSpec} --help\` once to refresh the files, then re-run (or re-import) the plugin in Figma Desktop (Figma: Plugins → Development → Figma Desktop Bridge; steps in course/rescue.md in your course workspace)`,
         );
       }
     }
@@ -620,7 +620,7 @@ async function checkFigmaSetup() {
     warn(
       'Bridge port range 9223–9232',
       'entire range in use',
-      'Close unrelated processes holding these ports, or see /troubleshooting#figma-bridge-port-conflict',
+      'Close unrelated processes holding these ports; check who holds them first (`lsof -nP -iTCP:9223 -sTCP:LISTEN`). See course/rescue.md in your course workspace',
     );
   }
 
@@ -630,7 +630,7 @@ async function checkFigmaSetup() {
     warn(
       'FIGMA_ACCESS_TOKEN (optional)',
       'not set — REST reads disabled, plugin tools still work',
-      'See https://atelier.pieper.io/figma-token if you need metadata reads',
+      'Only needed for metadata reads: create a token in Figma (Settings → Security → Personal access tokens, scope File content read) and export it as FIGMA_ACCESS_TOKEN; see course/rescue.md in your course workspace',
     );
     return;
   }
@@ -677,7 +677,7 @@ async function checkMcpEndpoints(env) {
       fail(
         `MCP: ${name}`,
         `${url} ${res.detail}`,
-        'Server reachable but MCP calls fail — see https://atelier.pieper.io/troubleshooting#mcp-tools-error',
+        'Server reachable but MCP calls fail — the server is broken, not your machine; tell the trainer (course/rescue.md in your course workspace)',
       );
     } else if (isLocal) {
       warn(
@@ -880,7 +880,7 @@ async function main() {
     if (warnings > 0) {
       console.log(
         dim(
-          'Warnings are non-blocking — see https://atelier.pieper.io/troubleshooting',
+          'Warnings are non-blocking; steps for each in course/rescue.md in your course workspace',
         ),
       );
     }
@@ -892,11 +892,7 @@ async function main() {
         dim(` · ${passes} ok, ${warnings} warning(s)`),
     );
     console.log(dim('Fix the items above, then re-run `npm run preflight`.'));
-    console.log(
-      dim(
-        'Full troubleshooting guide: https://atelier.pieper.io/troubleshooting',
-      ),
-    );
+    console.log(dim('Rescue steps: course/rescue.md in your course workspace'));
     console.log('');
     process.exit(1);
   }

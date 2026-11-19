@@ -578,7 +578,7 @@ describe('preset generator', () => {
     );
   });
 
-  it('CLAUDE.md includes Figma setup link when figmaMcp=true', async () => {
+  it('CLAUDE.md includes the Figma setup steps inline when figmaMcp=true', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
       framework: 'angular',
@@ -587,7 +587,7 @@ describe('preset generator', () => {
 
     const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
     expect(md).toContain('Figma Setup');
-    expect(md).toContain('atelier.pieper.io/figma-token');
+    expect(md).toContain('Import plugin from manifest');
     expect(md).toContain('Desktop Bridge');
   });
 
@@ -599,10 +599,10 @@ describe('preset generator', () => {
 
     const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
     expect(md).not.toContain('Figma Setup');
-    expect(md).not.toContain('atelier.pieper.io/figma-token');
+    expect(md).not.toContain('Import plugin from manifest');
   });
 
-  it('CLAUDE.md points at the composition cookbook', async () => {
+  it('CLAUDE.md points at the cookbook through the library MCP server', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
       framework: 'angular',
@@ -610,11 +610,11 @@ describe('preset generator', () => {
 
     const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
     expect(md).toContain('Composition Patterns');
-    expect(md).toContain('atelier.pieper.io/patterns');
-    expect(md).toContain('cookbook-patterns.json');
+    expect(md).toContain('`cookbook` entry');
+    expect(md).not.toContain('cookbook-patterns.json');
   });
 
-  it('CLAUDE.md links to the hosted API design principles page', async () => {
+  it('CLAUDE.md states the API design principles inline', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
       framework: 'angular',
@@ -622,7 +622,7 @@ describe('preset generator', () => {
 
     const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
     expect(md).toContain('## API Design Principles');
-    expect(md).toContain('atelier.pieper.io/design-principles');
+    expect(md).toContain('Composition over configuration');
   });
 
   // ─── README ────────────────────────────────────────────────────────────────
@@ -848,15 +848,35 @@ describe('preset generator', () => {
     expect(md).toContain('workshop-angular` — run with `npm start`');
   });
 
-  it('CLAUDE.md links to the docs site', async () => {
-    await presetGenerator(tree, {
-      name: 'my-workspace',
-      framework: 'angular',
-    });
+  // ADR-0184: the docs site is password-protected, so no generated file may
+  // send a participant there. The hosted Storybook MCP URL in .mcp.json is the
+  // one exception (it answers without the password).
+  it.each(['angular', 'react', 'vue'] as const)(
+    'no generated file but .mcp.json names the docs site (%s)',
+    async (framework) => {
+      await presetGenerator(tree, {
+        name: 'my-workspace',
+        framework,
+        figmaMcp: true,
+      });
 
-    const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
-    expect(md).toContain('atelier.pieper.io');
-  });
+      for (const { path } of tree.listChanges()) {
+        if (path === '.mcp.json') continue;
+        const text = tree.read(path, 'utf-8') ?? '';
+        expect({ path, found: text.includes('atelier.pieper.io') }).toEqual({
+          path,
+          found: false,
+        });
+      }
+      for (const file of [
+        'CLAUDE.md',
+        'README.md',
+        'tools/scripts/preflight.mjs',
+      ]) {
+        expect(tree.read(file, 'utf-8')).not.toContain('atelier.pieper.io');
+      }
+    },
+  );
 
   // ─── Preflight ─────────────────────────────────────────────────────────────
 
@@ -930,7 +950,7 @@ describe('preset generator', () => {
     });
     const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
     expect(md).toContain('npm run preflight');
-    expect(md).toContain('/troubleshooting');
+    expect(md).toContain('course/rescue.md');
   });
 
   // ─── Framework application generator args ─────────────────────────────────
@@ -3174,6 +3194,125 @@ describe('preset generator', () => {
       expect(skill).toContain('<name>.contract.ts');
     },
   );
+
+  describe('course/ folder (ADR-0184)', () => {
+    // Same tokens the copied-skill scan uses: they only mean something inside
+    // the Atelier monorepo.
+    const REPO_ONLY_COURSE = [
+      'libs/spec',
+      'parity:record',
+      'QMnDD8uZQPldPrlCwZZ58T',
+      'design-to-code',
+      'check:figma',
+      'figma:snapshot',
+      'figma:sync',
+      'tools/scripts',
+      'skills/atelier-design',
+      'plan/adr',
+      'workshop/briefs',
+    ];
+    const FIGMA_FILES = [
+      'day1-settings-card.md',
+      'figma-linter-prompt.md',
+      'parity-prompt.md',
+      'day2-prompts.md',
+      'handoff-example.md',
+      'briefs/README.md',
+      'briefs/toast.md',
+      'briefs/tagchip.md',
+      'briefs/statcard.md',
+      'briefs/avatar.md',
+    ];
+    const ALWAYS = ['README.md', 'day1-team-directory.md', 'rescue.md'];
+
+    function courseFiles(): string[] {
+      return tree
+        .listChanges()
+        .map((c) => c.path)
+        .filter((p) => p.startsWith('course/'));
+    }
+
+    it.each(['angular', 'react', 'vue'] as const)(
+      'with --figma writes every course file for %s, framework-resolved, with no site link or repo-only token',
+      async (framework) => {
+        await presetGenerator(tree, {
+          name: 'my-workspace',
+          framework,
+          figmaMcp: true,
+        });
+
+        for (const f of [...ALWAYS, ...FIGMA_FILES]) {
+          expect(tree.exists(`course/${f}`)).toBe(true);
+        }
+        for (const path of courseFiles()) {
+          const text = tree.read(path, 'utf-8') ?? '';
+          expect({ path, site: text.includes('pieper.io') }).toEqual({
+            path,
+            site: false,
+          });
+          expect({ path, token: /\{\{[A-Z_]+\}\}/.test(text) }).toEqual({
+            path,
+            token: false,
+          });
+          expect({ path, uianatomy: /uianatomy/i.test(text) }).toEqual({
+            path,
+            uianatomy: false,
+          });
+          for (const token of REPO_ONLY_COURSE) {
+            expect({ path, token, found: text.includes(token) }).toEqual({
+              path,
+              token,
+              found: false,
+            });
+          }
+        }
+
+        const day1 = tree.read('course/day1-team-directory.md', 'utf-8') ?? '';
+        expect(day1).toContain(`@atelier-ui/${framework}`);
+        expect(day1).toContain(
+          framework === 'angular'
+            ? 'on the atelier MCP'
+            : `on the storybook-${framework} MCP`,
+        );
+        expect(day1).toContain(`workshop-${framework}/src/`);
+        expect(day1.includes('npm run build')).toBe(framework === 'angular');
+        const day2 = tree.read('course/day2-prompts.md', 'utf-8') ?? '';
+        expect(day2).toContain('Shift+Tab');
+        expect(day2).toContain('When you are stuck');
+        expect(day2).toContain('docs-show for my component');
+        expect(day2).toContain('Definition-of-Done exercise');
+        const card = tree.read('course/day1-settings-card.md', 'utf-8') ?? '';
+        expect(card).toContain('Settings / Card');
+        expect(card.includes('alt-text')).toBe(framework === 'angular');
+        const rescue = tree.read('course/rescue.md', 'utf-8') ?? '';
+        expect(rescue).toContain(
+          'Still red: ask your neighbour, then the trainer.',
+        );
+        expect(rescue).toContain('Figma Desktop Bridge');
+        expect(tree.read('course/README.md', 'utf-8')).toContain('rescue.md');
+      },
+    );
+
+    it('without --figma writes only the Figma-free files, and rescue.md carries the stuck report', async () => {
+      await presetGenerator(tree, {
+        name: 'my-workspace',
+        framework: 'react',
+        figmaMcp: false,
+      });
+
+      for (const f of ALWAYS) expect(tree.exists(`course/${f}`)).toBe(true);
+      for (const f of FIGMA_FILES)
+        expect(tree.exists(`course/${f}`)).toBe(false);
+      const rescue = tree.read('course/rescue.md', 'utf-8') ?? '';
+      expect(rescue).toContain('When you are stuck');
+      expect(rescue).not.toContain('Figma');
+      for (const path of courseFiles()) {
+        const text = tree.read(path, 'utf-8') ?? '';
+        expect(text).not.toContain('pieper.io');
+        expect(text).not.toMatch(/\{\{[A-Z_]+\}\}/);
+      }
+    });
+  });
 
   describe('copied skills (figma-workspace-architect)', () => {
     const SKILLS_DIR = '.claude/skills';
