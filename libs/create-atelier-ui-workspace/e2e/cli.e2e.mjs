@@ -81,10 +81,20 @@ const DIST_VUE = join(ROOT, 'dist/libs/vue');
 const MCP_DIR = join(ROOT, 'libs/mcp');
 const DIST_STORYBOOK_ANGULAR = join(ROOT, 'dist/storybook/angular');
 
-const FRAMEWORKS = (process.env.E2E_FRAMEWORKS || 'angular,react,vue')
+// The CLI creates Angular workspaces only (owner decision 2026-11-19); keep in
+// step with ENABLED_FRAMEWORKS in bin/index.ts.
+const CLI_FRAMEWORKS = ['angular'];
+const FRAMEWORKS = (process.env.E2E_FRAMEWORKS || CLI_FRAMEWORKS.join(','))
   .split(',')
   .map((s) => s.trim())
   .filter(Boolean);
+const unsupported = FRAMEWORKS.filter((f) => !CLI_FRAMEWORKS.includes(f));
+if (unsupported.length) {
+  console.error(
+    `E2E_FRAMEWORKS: the CLI does not accept ${unsupported.join(', ')} (enabled: ${CLI_FRAMEWORKS.join(', ')}).`,
+  );
+  process.exit(1);
+}
 
 const KEEP_SCRATCH = process.env.E2E_KEEP_SCRATCH === 'true';
 

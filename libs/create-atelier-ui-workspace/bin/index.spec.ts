@@ -45,7 +45,6 @@ describe('create-atelier-ui-workspace CLI', () => {
 
   it('uses name from argv and skips name prompt', async () => {
     process.argv = ['node', 'index.js', 'my-app', '--no-figma'];
-    enquirer.prompt.mockResolvedValueOnce({ framework: 'angular' });
 
     await main();
 
@@ -61,9 +60,7 @@ describe('create-atelier-ui-workspace CLI', () => {
 
   it('prompts for name when not in argv', async () => {
     process.argv = ['node', 'index.js', '--no-figma'];
-    enquirer.prompt
-      .mockResolvedValueOnce({ name: 'prompted-name' })
-      .mockResolvedValueOnce({ framework: 'react' });
+    enquirer.prompt.mockResolvedValueOnce({ name: 'prompted-name' });
 
     await main();
 
@@ -84,7 +81,6 @@ describe('create-atelier-ui-workspace CLI', () => {
 
   it('calls createWorkspace with nxCloud skip and npm package manager', async () => {
     process.argv = ['node', 'index.js', 'test-ws', '--no-figma'];
-    enquirer.prompt.mockResolvedValueOnce({ framework: 'vue' });
 
     await main();
 
@@ -94,21 +90,20 @@ describe('create-atelier-ui-workspace CLI', () => {
     );
   });
 
-  it('passes selected framework as framework option', async () => {
+  it('never prompts for a framework and defaults to angular when omitted', async () => {
     process.argv = ['node', 'index.js', 'test-ws', '--no-figma'];
-    enquirer.prompt.mockResolvedValueOnce({ framework: 'react' });
 
     await main();
 
+    expect(enquirer.prompt).not.toHaveBeenCalled();
     expect(mockCreateWorkspace).toHaveBeenCalledWith(
       expect.any(String),
-      expect.objectContaining({ framework: 'react' }),
+      expect.objectContaining({ framework: 'angular' }),
     );
   });
 
   it('logs success messages with directory and the npm start command', async () => {
     process.argv = ['node', 'index.js', 'test-ws', '--no-figma'];
-    enquirer.prompt.mockResolvedValueOnce({ framework: 'angular' });
 
     await main();
 
@@ -123,44 +118,31 @@ describe('create-atelier-ui-workspace CLI', () => {
     expect(logged).not.toContain('nx serve');
   });
 
-  it('accepts --framework=<value> flag and skips the framework prompt', async () => {
-    process.argv = [
-      'node',
-      'index.js',
-      'test-ws',
-      '--framework=react',
-      '--no-figma',
-    ];
+  it('accepts --framework=angular and --framework angular', async () => {
+    for (const fw of [['--framework=angular'], ['--framework', 'angular']]) {
+      process.argv = ['node', 'index.js', 'test-ws', ...fw, '--no-figma'];
+      await main();
+    }
 
-    await main();
-
-    const promptCalls: Array<{ name: string }> = enquirer.prompt.mock.calls.map(
-      (c: [{ name: string }]) => c[0],
-    );
-    expect(promptCalls.every((p) => p.name !== 'framework')).toBe(true);
-    expect(mockCreateWorkspace).toHaveBeenCalledWith(
+    expect(enquirer.prompt).not.toHaveBeenCalled();
+    expect(mockCreateWorkspace).toHaveBeenCalledTimes(2);
+    expect(mockCreateWorkspace).toHaveBeenLastCalledWith(
       expect.any(String),
-      expect.objectContaining({ framework: 'react' }),
+      expect.objectContaining({ framework: 'angular' }),
     );
   });
 
-  it('accepts --framework <value> with a space separator', async () => {
-    process.argv = [
-      'node',
-      'index.js',
-      'test-ws',
-      '--framework',
-      'vue',
-      '--no-figma',
-    ];
+  it.each(['react', 'vue'])(
+    'rejects --framework=%s with the switched-off message and scaffolds nothing',
+    async (fw) => {
+      process.argv = ['node', 'index.js', 'test-ws', `--framework=${fw}`];
 
-    await main();
-
-    expect(mockCreateWorkspace).toHaveBeenCalledWith(
-      expect.any(String),
-      expect.objectContaining({ framework: 'vue' }),
-    );
-  });
+      await expect(main()).rejects.toThrow(
+        'React and Vue are switched off for now; this CLI creates Angular workspaces only.',
+      );
+      expect(mockCreateWorkspace).not.toHaveBeenCalled();
+    },
+  );
 
   it('throws on invalid --framework value', async () => {
     process.argv = [
@@ -635,7 +617,7 @@ describe('create-atelier-ui-workspace CLI', () => {
     expect(err).toBeInstanceOf(Error);
     const msg = (err as Error).message;
     expect(msg).toContain('<name>');
-    expect(msg).toContain('--framework');
+    expect(msg).not.toContain('--framework');
     expect(msg).toContain('--figma or --no-figma');
     expect(enquirer.prompt).not.toHaveBeenCalled();
     expect(mockCreateWorkspace).not.toHaveBeenCalled();
@@ -643,9 +625,9 @@ describe('create-atelier-ui-workspace CLI', () => {
 
   it('without a TTY, only the missing flag is named', async () => {
     process.stdin.isTTY = false as unknown as boolean;
-    process.argv = ['node', 'index.js', 'my-app', '--figma'];
+    process.argv = ['node', 'index.js', 'my-app'];
 
-    await expect(main()).rejects.toThrow(/Missing: --framework/);
+    await expect(main()).rejects.toThrow(/Missing: --figma or --no-figma/);
     expect(enquirer.prompt).not.toHaveBeenCalled();
   });
 
@@ -675,7 +657,7 @@ describe('create-atelier-ui-workspace CLI', () => {
   });
 
   it('turns an aborted prompt (enquirer rejects with an empty string) into an Error', async () => {
-    process.argv = ['node', 'index.js', 'my-app', '--no-figma'];
+    process.argv = ['node', 'index.js', '--no-figma'];
     enquirer.prompt.mockRejectedValueOnce('');
 
     await expect(main()).rejects.toThrow('Prompt cancelled.');

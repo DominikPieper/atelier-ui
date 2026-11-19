@@ -13,7 +13,9 @@ const enquirer = require('enquirer');
 process.setMaxListeners(20);
 
 type Framework = 'angular' | 'react' | 'vue';
-const VALID_FRAMEWORKS: readonly Framework[] = ['angular', 'react', 'vue'];
+// Owner decision 2026-11-19: the course is Angular only for now. The preset
+// still supports react/vue; add them back here to switch them on again.
+const ENABLED_FRAMEWORKS: readonly Framework[] = ['angular'];
 
 const FIGMA_SETUP_URL = 'https://atelier.pieper.io/figma-token';
 
@@ -99,14 +101,14 @@ const USAGE = `Usage: create-atelier-ui-workspace [name] [options]
   name                   Workspace directory name (prompted when omitted)
 
 Options:
-  --framework <fw>       angular | react | vue (prompted when omitted)
+  --framework <fw>       ${ENABLED_FRAMEWORKS.join(' | ')} (default: ${ENABLED_FRAMEWORKS[0]})
   --figma, --no-figma    Add / skip the Figma Desktop Bridge MCP (prompted when omitted)
   --figma-file <key>     Your Figma file key or full Figma URL (optional; only used with --figma)
   --skills, --no-skills  Install the Storybook agent skills (default: on)
   -h, --help             Show this help
 
-Without a TTY (CI, closed stdin) nothing can be prompted: name, --framework and
---figma / --no-figma must all be given, otherwise the command exits with code 1.
+Without a TTY (CI, closed stdin) nothing can be prompted: name and
+--figma / --no-figma must both be given, otherwise the command exits with code 1.
 `;
 
 // enquirer rejects with an empty string on Ctrl-C; normalise that into a real
@@ -130,7 +132,8 @@ export async function main() {
   banner();
 
   let name = argv.find((arg) => !arg.startsWith('-'));
-  let framework = parseFlag(argv, 'framework') as Framework | undefined;
+  const framework = (parseFlag(argv, 'framework') ??
+    ENABLED_FRAMEWORKS[0]) as Framework;
   let figmaMcp = parseBooleanFlag(argv, 'figma');
   // S5a — the attendee's own Figma file key (never this repo's
   // QMnDD8uZQPldPrlCwZZ58T, which the preset never defaults to either — see
@@ -146,9 +149,11 @@ export async function main() {
   // opt out for CI/offline runs, matching the preset schema's own default.
   const skillsEnabled = parseBooleanFlag(argv, 'skills') ?? true;
 
-  if (framework && !VALID_FRAMEWORKS.includes(framework)) {
+  if (!ENABLED_FRAMEWORKS.includes(framework)) {
     throw new Error(
-      `Invalid --framework value: "${framework}". Must be one of: ${VALID_FRAMEWORKS.join(', ')}.`,
+      framework === 'react' || framework === 'vue'
+        ? 'React and Vue are switched off for now; this CLI creates Angular workspaces only.'
+        : `Invalid --framework value: "${framework}". Must be one of: ${ENABLED_FRAMEWORKS.join(', ')}.`,
     );
   }
 
@@ -158,7 +163,6 @@ export async function main() {
   if (!process.stdin.isTTY) {
     const missing = [
       !name && '<name>',
-      !framework && '--framework <angular|react|vue>',
       figmaMcp === undefined && '--figma or --no-figma',
     ].filter(Boolean);
     if (missing.length) {
@@ -196,20 +200,6 @@ export async function main() {
       );
       process.exit(1);
     }
-  }
-
-  if (!framework) {
-    const res = await ask({
-      type: 'select',
-      name: 'framework',
-      message: 'Which framework do you want to use?',
-      choices: [
-        { name: 'angular', message: 'Angular' },
-        { name: 'react', message: 'React' },
-        { name: 'vue', message: 'Vue' },
-      ],
-    });
-    framework = (res as { framework: Framework }).framework;
   }
 
   if (figmaMcp === undefined) {
