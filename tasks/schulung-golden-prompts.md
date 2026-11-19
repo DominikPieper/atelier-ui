@@ -68,7 +68,12 @@ below, warm run times (build 6-9 s, lint 6-7 s, stylelint 2-4 s), and one headle
 
 - **This is the trainer's rescue sheet (ADR-0183).** Paste a prompt yourself, or hand it to a
   stuck seat. Participants write their own prompts and judge them against the six-check
-  rubric (`/prompts#rubric`); do not give the sheet out as the thing to copy.
+  rubric (trainer source `/prompts#rubric`); do not give the sheet out as the thing to copy.
+- **Participants cannot open the docs site (ADR-0184).** The prompts they paste live in their
+  workspace under `course/`: `day1-team-directory.md` (§1b), `parity-prompt.md` (§1 comparison,
+  §3.3), `day2-prompts.md` (§2.1, the a11y prompt of §3.1, the four things to paste back). Where
+  this sheet says "live on a page", that page is the trainer's source; the seat file is the
+  participants' copy and the two can drift, so each section names the file it mirrors.
 - **Paste, don't paraphrase.** These are meant to go into a participant's live Claude
   Code session verbatim. A paraphrase risks re-inventing exactly the kind of plausible
   but wrong detail this sheet exists to avoid.
@@ -104,7 +109,7 @@ below, warm run times (build 6-9 s, lint 6-7 s, stylelint 2-4 s), and one headle
   - §1 = Day 1 Block 02 "Mini-loop: first success" (existing components only — the
     Settings Card): generation prompt and token fix-up. §1a = the same block, row 11:25 to
     11:45: ladder stage 2, the agent checks itself with lint and build. The comparison with
-    Figma is the 10-minute row after it (the parity prompt on `/tutorial`).
+    Figma is the 10-minute row after it (the parity prompt, `course/parity-prompt.md`; trainer source `/tutorial`).
   - §1b = Day 1 Block 05 "A screen from Storybook, against the clock" (existing
     components only, no Figma — the Team directory screen), including the closing checks.
   - §1c = Day 1 Block 03 (ladder stage 0, 13:45 to 13:55) and Day 2 Block 01 (ladder stage 0
@@ -123,11 +128,11 @@ below, warm run times (build 6-9 s, lint 6-7 s, stylelint 2-4 s), and one headle
 ## 1. Day 1 · Block 02 (Mini-loop) — Settings Card
 
 The generation prompt for this block already exists and is live — `examplePrompt` in
-`docs/src/pages/tutorial.astro` (mirrored in the optional kata `/first-component`), which composes
+`docs/src/pages/tutorial.astro` (mirrored in the kata `/first-component`, which is not participant material), which composes
 `AtlCard`/`AtlInput`/`AtlToggle`/`AtlButton` and explicitly tells Claude to pull _"the
 exact token names from `boundVariables`… no conversion needed."_ Do not re-type it here —
 that is exactly the mistake ADR-0116 corrects elsewhere (a hand-copied restatement of a
-value that already has a live source). Point participants at the page.
+value that already has a live source). Participants get it on the slide and from the trainer; the parity prompt is in `course/parity-prompt.md` (the trainer reads `/tutorial`).
 
 **When the first draft still drifts on tokens** (it can — pattern-matching models
 sometimes fall back to a literal px/hex value even when told not to), hand the
@@ -141,7 +146,7 @@ participant this one-line fix-up rather than a full re-prompt:
 > the matching one and tell me which line you changed.
 
 **The comparison with Figma (the 10-minute row after §1a).** The prompt stays as it stands
-on `/tutorial` (`PARITY_PROMPT`: run `figma_check_design_parity` on the settings card node,
+in `course/parity-prompt.md` (trainer source `/tutorial`, `PARITY_PROMPT`: run `figma_check_design_parity` on the settings card node,
 say for each discrepancy whether the code or the Figma master should change). Nothing
 before it has participants run `check:contracts` or `check:stories`: the proof in Day 1
 Block 02 is lint and build run by the agent (§1a). Two labels only, **code** or **Figma**.
@@ -219,7 +224,7 @@ contains the planted elements before blaming the tool.
 The starter prompt is live on `/screen-from-storybook` (`prompt()` in that page's
 frontmatter, one copy per framework, with the MCP name, package and file paths already
 filled in), and so is the receipts prompt (`RECEIPTS_PROMPT`). Do not re-type either
-here; point participants at the page. What this section adds is the steering the trainer
+here; participants have both in `course/day1-team-directory.md`. What this section adds is the steering the trainer
 hands out when a run goes wrong, and the expected result to judge a run against.
 
 **Expected result (Angular, what a good run looks like).**
@@ -253,11 +258,11 @@ On Angular the build is part of it; on React or Vue drop the `npm run build` cla
 > when the summary has no error text), repair, and run it again. Then list what you
 > changed.
 
-This is the page's prompt (`CHECKS_PROMPT` on `/screen-from-storybook`), which is the copy
-the participants paste. If the agent repairs formatting by hand, tell it: "`npm run format`
+This is the checks prompt (`CHECKS_PROMPT` on the trainer's `/screen-from-storybook`); the participants
+paste it from `course/day1-team-directory.md`. If the agent repairs formatting by hand, tell it: "`npm run format`
 is the fix for `check:format`, and for nothing else."
 
-Then the receipts prompt (live on the page as `RECEIPTS_PROMPT`). The "they do not see"
+Then the receipts prompt (`RECEIPTS_PROMPT`; participants have it in `course/day1-team-directory.md`). The "they do not see"
 sentence stays: these checks do not catch an invented name or a hand-built element, which
 is why the receipts come next. Fallback: the participant types the command.
 
@@ -414,7 +419,7 @@ and the participants sort that list. Do not let anyone "fix" a finding in the sh
 NOT YET VERIFIED as revised (rehearsal). One step, no contract file: the participant does
 not write, open or check one. The handoff document's **"Deliberate differences"** section
 (what the code will do differently from the design on purpose, and why) goes into the
-prompt as given constraints. The same prompt is printed on `/build-your-own`.
+prompt as given constraints. The same prompt is printed on the trainer's `/build-your-own`; participants have it in `course/day2-prompts.md`.
 
 **Why it is short (ADR-0183).** The standing rules that hold for every component (tokens,
 composition by region, a name on every icon-only control, status visible without colour,
@@ -592,6 +597,8 @@ not cleared; show the list in `CLAUDE.md` and ask again.
 
 ### 3.1 Three-step a11y audit prompt
 
+Participants have this prompt in `course/day2-prompts.md`.
+
 > Run the three-step accessibility check on `<ComponentName>`, in order, and report each
 > step's result before moving to the next:
 >
@@ -630,7 +637,7 @@ not cleared; show the list in `CLAUDE.md` and ask again.
 
 ### 3.3 Parity prompt for your own component (participants)
 
-Day 2 Block 04, parity row 15:45 to 15:53 (8 min). Same shape as the Day 1 comparison
+Day 2 Block 04, parity row 15:45 to 15:53 (8 min). Participants paste it from `course/parity-prompt.md`. Same shape as the Day 1 comparison
 prompt; the node id comes from the participant's handoff document. The prompt completes (79 s, 14 turns,
 no writes): verified headless 2026-11-18 (R-262); the interactive run is open in R-040. The report is only a list here: the **sorting row** (15:53 to
 16:13) labels each difference and fixes the code ones.

@@ -1,6 +1,6 @@
 # Schulung trainer notes: what to say, show and check per block
 
-_Written 2026-10-14. Trainer material, not participant-facing._
+_Written 2026-10-14. Trainer material, not participant-facing. Participants cannot open the docs site (ADR-0184): every `/route` below is the trainer's own reference or screen. What participants paste is in `course/` in their workspace, what they keep is a printed handout._
 
 **What this is.** The content layer under the other four trainer files. `/schulung` says
 what a block is for and when it is done; `tasks/schulung-run-of-show.md` says what
@@ -26,9 +26,9 @@ file for a tablet (R-217). Blocks on `/schulung` have anchors such as `#day-1-bl
 (demos, Storybook on :4400) and a scaffolded Angular workspace (what participants have,
 Storybook on :6006, app on :4200). Saved outputs of every demo from the rehearsal. A
 timer visible to the room. Paper: the labels for sorting differences (Day 1: code / Figma; Day 2: code / Figma / kept on
-purpose), the printed `/cheat-sheet` (its ladder card), one copy per participant of the three
-handouts `workshop/handouts/ds-scorecard.md`, `figma-readiness-checklist.md` and
-`storybook-readiness-checklist.md`, the golden prompts (`tasks/schulung-golden-prompts.md`,
+purpose), one copy per participant of the five
+handouts `workshop/handouts/ds-scorecard.md`, `figma-readiness-checklist.md`,
+`storybook-readiness-checklist.md`, `ladder-card.md` and `rescue-sheet.md`, the golden prompts (`tasks/schulung-golden-prompts.md`,
 handed out on site, never on the projector). The run-of-show open on a second screen.
 
 ---
@@ -48,7 +48,7 @@ gate joins the participant path.
 
 ### The ladder
 
-Measured 2026-11-17 on a fresh 0.4.10 Angular scaffold. Slide, `/cheat-sheet` card, take-home.
+Measured 2026-11-17 on a fresh 0.4.10 Angular scaffold. Slide, printed handout `workshop/handouts/ladder-card.md`, take-home (trainer source `/cheat-sheet`).
 
 | Stage         | Command                                                                                                      | Catches                                                                                                                                    | Does not see                                                                                                                                                              |
 | ------------- | ------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------ | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
@@ -92,11 +92,12 @@ weakest row" is the next step.
 | 6 Instruct  | Does the repo have its own rules file with the exact check commands, and a skill for the recurring task?              | a rules file with the commands, a skill                                                                                                               | Day 2 Blocks 00 and 05                                     | —                      |
 | 7 Measure   | Do you know the agent is better with the design system than without?                                                  | the same prompt run with and without the context, results compared (the guardrail demo of Day 1 Block 00 is the smallest form)                        | Day 1 Block 00; an exercise of its own comes with cohort 2 | —                      |
 
-The two other handouts (`workshop/handouts/figma-readiness-checklist.md` from `/readiness`,
-`storybook-readiness-checklist.md` from `/storybook-readiness`, its checks and its self-check)
-are check titles as tick boxes plus the page link for the how, one copy of each per
-participant on paper. Nobody calls either one homework; both are handouts. The ladder is not
-a file of its own: it is a card on `/cheat-sheet`.
+The other handouts (`workshop/handouts/figma-readiness-checklist.md` from `/readiness`,
+`storybook-readiness-checklist.md` from `/storybook-readiness`, its checks and its read-only
+self-check prompt) are check titles as tick boxes, one copy of each per participant on paper;
+they name no page. Nobody calls either one homework; both are handouts. The ladder card is
+the handout `workshop/handouts/ladder-card.md` (source `/cheat-sheet`), the rescue steps are
+`workshop/handouts/rescue-sheet.md` and `course/rescue.md` in the workspace.
 
 ---
 
@@ -141,17 +142,18 @@ then `/schulung`.
    (Angular: `angular-component-meta`, ADR-0097); **MCP** = the connection: JSON-RPC
    tools such as `docs-show` and `figma_get_component_for_development`; **Claude Code**
    = execution: an agent in a loop that reads files, runs commands, calls those tools.
-3. The loop with the tool per step, because the recap asks for exactly that:
-   **Inspect** = `figma_get_component_for_development` on the node (figma-console);
-   **Contract** = the deliberate differences between design and code, written down before
-   generating (in the course: the "Deliberate differences" section of the handoff document,
+3. The loop as the map of both days, with the tool per step (participants do not memorise
+   it and nothing asks them to list it; each block's title slide shows which step it works
+   on): **Read the design** (in Figma) = `figma_get_component_for_development` on the node
+   (figma-console); **Record deliberate differences** (in the handoff document) = the
+   differences between design and code, written down before generating (in the course: the "Deliberate differences" section of the handoff document,
    Day 2 Block 01; one sentence for the trainer: Atelier's own repo keeps them in a contract
-   file that a check reads, and participants never open, write or check one); **Generate** = a
+   file that a check reads, and participants never open, write or check one); **Generate** (with Claude Code) = a
    prompt in Claude Code that reads the docs first (`docs-show`), one story per variant value
-   and Boolean state, a `play` per behaviour; **Verify** = the agent runs the ladder checks
+   and Boolean state, a `play` per behaviour; **Verify** (checks and comparison with Figma) = the agent runs the ladder checks
    (`npm run lint`, `npm run build`, `npm run check:stylelint`, the story tests) and reports
    each exit code, then the parity prompt (`figma_check_design_parity`) against the master.
-   The loop keeps its name: Inspect, Contract, Generate, Verify.
+   Slide names (German): "Design lesen (in Figma)", "Abweichungen festhalten (im Übergabedokument)", "Erzeugen (mit Claude Code)", "Prüfen (Checks und Vergleich mit Figma)". "Contract" survives only as the repo's internal file name (see above).
 4. Glossary, two minutes, the four definitions from `docs/src/data/glossary.ts`
    verbatim (also the answer to deck TODO `D1-00-03`):
    - **LLM**: a next-token predictor that works from patterns in its training data, not
@@ -188,11 +190,10 @@ then `/schulung`.
    Angular itself; Figma design craft; prompt engineering in general; building a design
    system from zero; CI, release, publishing; Claude Code internals.
 
-**Expected recap answers.** Inspect → figma-console MCP; Contract → the deliberate differences
-written down (the handoff document, which comes tomorrow; no Day 1 tool carries it); Generate → Claude Code with the library's MCP (`atelier`); Verify →
-the ladder checks the agent runs (lint, build, stylelint, story tests) and
-`figma_check_design_parity`. Six of eight name all four
-steps or you say them yourself and ask for the tool per step.
+**No recap (decided 2026-11-19).** The block has no recap row; its 2 minutes went into the
+trust exercise (09:25–09:30). Done when every participant has noted one component they would
+trust an AI to change and one they would not (checkpoint D1B00-C3). Do not ask the room to
+name the loop; it is a map, not something to memorise.
 
 **Watch for.** D-1 window (a) must be a plain chat with no Atelier context, and its CSS must contain a hex/`rgb()`/`hsl()` colour or the check stays green (use the pre-saved output). The scaffolded workspace for the gate step must be `npm install`ed and green on `nx stylelint` before the session. Late-comers:
 run-of-show late-comer track; the thesis is the only thing not on a page.
@@ -200,7 +201,7 @@ run-of-show late-comer track; the thesis is the only thing not on a page.
 ### Block 01 · 09:30–10:15 · Verify the setup
 
 **On screen.** `/workshop`, then each participant's own terminal via walking the room;
-`.mcp.json` and `/mcp` side by side; `/troubleshooting`.
+`.mcp.json` and `/mcp` side by side; the rescue sheet (trainer source `/troubleshooting`).
 
 **Say.**
 
@@ -235,11 +236,11 @@ run-of-show late-comer track; the thesis is the only thing not on a page.
 6. Storybook `npm run storybook` on :6006; `npx playwright install chromium` if
    preflight says it is missing.
 7. Decided 2026-10-14 (R-209), changed 2026-11-12: everybody, 10:02–10:12, ten minutes at the
-   projector, `/prompts#claude-code-basics`: the workspace trust dialog on first start; permission
+   projector (trainer source `/prompts#claude-code-basics`): the workspace trust dialog on first start; permission
    prompts (what to accept: edits inside the workspace, the check commands; what to read
    before accepting: anything that deletes or installs); `Esc` interrupts; `/clear` starts
    a fresh context, `/compact` shrinks it; one session per block, not one per day; `/mcp`
-   shows servers and their state; `claude -p` for a one-shot check. Pages:
+   shows servers and their state; `claude -p` for a one-shot check. Trainer pages:
    `/troubleshooting#workspace-trust`, `#mcp-declined`, `#storybook-local-not-connected`.
 8. First commit once preflight is green (R-210): the scaffold ran `git init` and staged
    everything, committed nothing; `git commit -m "scaffold: preflight green"` is the first
@@ -253,19 +254,19 @@ alone.
 
 ### Block 02 · 10:30–12:00 · Mini-loop: first success
 
-**On screen.** `/tutorial`, a participant's terminal, then one parity report.
+**On screen.** `/tutorial` (trainer screen), a participant's terminal, then one parity report.
 
 **Say.**
 
 1. The tutorial's four stages (answer to deck TODO `D1-02-02`, from
    `docs/src/pages/tutorial.astro`; re-check the titles against the page, step 4 changed with
-   ADR-0180): **Inspect** "Select the component in Figma"; **Contract** "Write down the
+   ADR-0180): **Read the design** "Select the component in Figma"; **Record deliberate differences** "Write down the
    deliberate differences" (said in one sentence on Day 1, written on Day 2 Block 01);
    **Generate** "AI matches to Atelier UI components" and "AI generates token-exact code";
    **Verify**: the agent runs lint and build, then the comparison with Figma.
 2. The target: Settings Card, node `936-2954`, composed from AtlCard / AtlInput /
    AtlToggle / AtlButton. No new component, no API change; composition from existing
-   building blocks. The prompt is live on the page (`examplePrompt`); do not retype it
+   building blocks. The prompt is live on the trainer's page (`examplePrompt`); do not retype it
    (golden prompts §1 says why).
 3. Ladder stage 2, the agent checks itself (11:25–11:45, 20 minutes, golden prompts §1a), three
    beats, each stage with what it does not see. (1) The agent runs `npm run lint` and
@@ -286,7 +287,7 @@ src="/avatar.png">` without `alt` and a `<div (click)="save()">Save</div>` in th
 4. The proof in this block is lint and build run by the agent; `check:contracts` is not part
    of the participant path (ADR-0180), and neither is `check:stories` in this block. Exit
    code is the result; read it as `cmd > /tmp/x 2>&1; echo $?` when you run one yourself.
-5. The comparison with Figma (11:45–11:55, 10 minutes): the parity prompt from `/tutorial`;
+5. The comparison with Figma (11:45–11:55, 10 minutes): the parity prompt (`course/parity-prompt.md` for participants; trainer source `/tutorial`);
    Claude lists the differences; sort each one: code or Figma; a long list: label the three
    largest. Before anyone runs one, what a parity report is: `figma_check_design_parity` compares the
    master with a `codeSpec` of up to seven sections (`visual`, `spacing`, `typography`,
@@ -446,13 +447,13 @@ their own), `/mcp` → reconnect is the fallback; the play panel shows the same 
 
 ### Block 05 · 15:55–17:15 · A screen from Storybook, against the clock
 
-**On screen.** `/screen-from-storybook`, the timer, then one volunteer's receipts list.
+**On screen.** `course/day1-team-directory.md` (trainer copy `/screen-from-storybook`), the timer, then one volunteer's receipts list.
 
 **Say.**
 
 1. Why this block: most customer teams do not build components, they write application
    code against components that already exist, and the only thing they know about them is
-   what Storybook says. No Figma frame, no steps. The page gives the brief (a Team
+   what Storybook says. No Figma frame, no steps. `course/day1-team-directory.md` gives the brief (a Team
    directory: search field, role select, invite button, table with a status badge per row,
    pagination), a starter prompt, the checks and the clock. Hints only as "which
    `docs-show` line says that?".
@@ -465,8 +466,8 @@ their own), `/mcp` → reconnect is the fallback; the play panel shows the same 
    shows Default, Striped, Bordered, Vue shows Empty State, Sticky Header, Playground
    (the first three with a snippet). `Sortable` is reachable only through
    `docs-show-story` on both, `Empty State` on React too. This is the probe; there is no
-   separate one, and it stays inside the 5 minutes. The page section "What the
-   Storybook MCP gives you, and what it does not" has the same walk-through for the room.
+   separate one, and it stays inside the 5 minutes. The section "What the
+   Storybook MCP gives you, and what it does not" has the same walk-through on the trainer's `/screen-from-storybook`.
 2. The four rules: look before you write (`docs-list`, then `docs-show`, before any
    code); every prop has a source in the `docs-show` output or `docs-show-story`; no
    hand-built element where the library has a component; no raw colours, only `--ui-*`
@@ -490,7 +491,7 @@ their own), `/mcp` → reconnect is the fallback; the play panel shows the same 
    accessibility. `check:stories` renders stories, not the
    app; the stretch task (a story for the screen, then `check:stories`) is how a screen
    gets an axe run.
-4. The audit: the receipts prompt on the page makes the agent print the `docs-show`
+4. The audit: the receipts prompt (in `course/day1-team-directory.md`) makes the agent print the `docs-show`
    passage behind every prop. Participants spot-check three and mark where each import name came from. Green checks say the code is
    clean, not that it is honest. Debrief, 16:45–17:10, on two volunteers' receipts; one question is
    fixed: where did the agent get `AtlThead` and `AtlOption` from when `docs-show` never names them?
@@ -504,10 +505,9 @@ their own), `/mcp` → reconnect is the fallback; the play panel shows the same 
    The block's premise "`atelier` is the only source" has this one named exception:
    the names come from the package's type exports in `node_modules/@atelier-ui/angular`, the
    import is from `@atelier-ui/angular`, and the receipts say so.
-6. No machine homework (D7, 2026-11-12): the course machines stay in the room. The bridge
-   exercise `/first-component#bridge` (add a `density` variant to SettingsCard: component, a
-   story per value, `docs-show`, then the agent runs lint, build and `check:stories`) and the kata `/first-component` are optional and only
-   with the participant's own machine and Claude access; say so at 17:25. An unfinished
+6. No machine homework (D7, 2026-11-12): the course machines stay in the room. The kata
+   `/first-component` and its bridge exercise are no longer participant material (ADR-0184);
+   do not offer them at 17:25. An unfinished
    screen stays in the workspace, which is still there on Day 2. The checklist for your own
    Figma file is a handout, not homework.
 
@@ -534,15 +534,14 @@ over the answer.
 
 ### Block 06 · 17:15–17:30 · Recap and exit ticket
 
-**On screen.** Whiteboard, `/briefs`, `/first-component#bridge`.
+**On screen.** Whiteboard, the briefs (`course/briefs/`; trainer copy `/briefs`).
 
 **Say.** Three questions for the five-minute discussion: where did the AI guess, and
 which guardrail caught it; which check output did you read, which did you skip; what
 would you check first tomorrow. The four briefs in one line each (Day 2 Block 00 has
 the detail). No machine homework: the course machines stay in the room. Take the brief and
 sketch it on paper if you like; the readiness checklist for your own Figma file
-(Block 03) is a handout; Day 2 Block 05 starts it. The bridge exercise and the kata `/first-component` are optional,
-only with your own machine and Claude access. Exit ticket: one
+(Block 03) is a handout; Day 2 Block 05 starts it. The kata `/first-component` is not participant material (ADR-0184). Exit ticket: one
 sentence, paper or spoken.
 
 **Watch for.** Everyone names a brief aloud; undecided → Toast.
@@ -553,13 +552,13 @@ sentence, paper or spoken.
 
 ### Block 00 · 09:00–09:30 · Recap, brief, skills
 
-**On screen.** Blank for the recall; `/briefs/<name>`; a scaffolded workspace for D-7 (5 min:
+**On screen.** Blank for the recall; the chosen brief (`course/briefs/<name>.md`); a scaffolded workspace for D-7 (5 min:
 `.claude/skills/atelier-component/SKILL.md`, then Claude Code); then the projector with two
 more files of the workspace: `CLAUDE.md` and `.claude/settings.json`.
 
 **Say.**
 
-1. Active recall, eight minutes, the room answers: name the loop and the tool for each step Day 1 practised;
+1. Active recall, eight minutes, the room answers: which check did the agent run on Day 1 and what did it catch;
    what did the parity report compare and not compare; which three setup things are
    independent; why is a story a claim; which rule did the agent break first on the Team directory and what caught it;
    which check did the agent run on its own work, and what did it report.
@@ -624,7 +623,7 @@ second answer lacks the command, or the agent skips the check. Skills as before:
 
 ### Block 01 · 09:30–11:00 · Design in Figma and the handoff document
 
-**On screen.** Figma desktop; `/build-your-own#block-01`; `/design-to-code#handoff-example`.
+**On screen.** Figma desktop; `/build-your-own#block-01`; the filled handoff document (`course/handoff-example.md`; trainer copy `/design-to-code#handoff-example`).
 
 **Say.**
 
@@ -656,7 +655,7 @@ second answer lacks the command, or the agent skips the check. Skills as before:
    variant and state, axe clean); and the ninth item, **Deliberate differences**: what the
    code will do differently from the design on purpose, and why (a `State=Hover` variant in
    Figma is `:hover` in CSS, not a property; a Figma Boolean "Show icon" is a slot in
-   code). This is agenda step 2 and loop step 2, the "Contract" of the loop. A checklist,
+   code). This is agenda step 2 and loop step 2, "Record deliberate differences". A checklist,
    not a template. Short on time: node id, variants, exclusions, deliberate differences first.
 6. Decided 2026-10-14 (R-211): the five-minute "LLM-friendly API rules" talk
    (predictable naming, literal unions, composition over config, no hidden defaults) is
@@ -738,7 +737,7 @@ description was added, each on ≥ 70 %.
 
 ### Block 03 · 13:30–14:45 · Iterate: prompt quality and the self-healing loop
 
-**On screen.** `/prompts#rubric`, `/prompts#stuck`, `/design-to-code#self-healing-loop`,
+**On screen (trainer pages; the four things to paste back are on the slide and in `course/day2-prompts.md`).** `/prompts#rubric`, `/prompts#stuck`, `/design-to-code#self-healing-loop`,
 a volunteer's loop.
 
 **Say.**
@@ -758,8 +757,8 @@ a volunteer's loop.
    (Undo as inline link, remove as styled span, StatCard as card over invisible button,
    Avatar as two components) → §2.4 with the brief's §5 row; token drift anywhere → §1
    add-on.
-3. The self-healing loop: run the check → read the exit code and the **first** error →
-   paste the four things from `/prompts#stuck` (exact error, exit code, what you expected,
+3. The self-healing loop (the slides call it "Prüfschleife", verification loop, Anthropic's term; loop step 4 when it is red; owner will revisit its content): run the check → read the exit code and the **first** error →
+   paste the four things (slide, `course/day2-prompts.md`; trainer source `/prompts#stuck`) (exact error, exit code, what you expected,
    what changed since green) → one change → rerun. Stop rule: two failed fixes → stop,
    re-diagnose from the failing story, not from the prompt.
 4. Decided 2026-10-14 (R-210): commit when the stories are green
@@ -854,8 +853,7 @@ before 2026-10-14 (buffer 16:15–16:25).
 
 ### Block 05 · 16:25–17:30 · Show & tell and transfer
 
-**On screen.** The timer; participant screens; whiteboard; `/design-principles#check-your-own` (or `/storybook-readiness#self-check`);
-`/readiness` Part B.
+**On screen.** The timer; participant screens; whiteboard; the two checklist handouts (trainer sources `/design-principles#check-your-own`, `/storybook-readiness#self-check`, `/readiness` Part B).
 
 **Say.**
 
@@ -873,12 +871,12 @@ before 2026-10-14 (buffer 16:15–16:25).
    ADR-0180): mark the seven rows of the scorecard (`workshop/handouts/ds-scorecard.md`) for
    your own design system, yes / partly / no, pick the weakest row, then start the checklist
    that matches it: the Figma checklist or the Storybook checklist (both are handouts, you take
-   both home). `/design-principles#check-your-own`
-   is written as a **30-minute** exercise (run, pick one finding, fix, re-run), and so is
-   `/storybook-readiness#self-check`; in the room (12 minutes) they start it and pick the
+   both home; the Storybook one carries the read-only self-check prompt inline). The trainer's pages
+   `/design-principles#check-your-own` and `/storybook-readiness#self-check` write the
+   exercise as a **30-minute** run (run, pick one finding, fix, re-run); in the room (12 minutes) they start it and pick the
    one finding. The full run and the fix come after the course; the finding is the next
    step they write down. Second choice, same scope and same output: a participant whose team already
-   has a Storybook runs `/storybook-readiness#self-check` instead and picks one finding
+   has a Storybook runs the handout's self-check prompt instead and picks one finding
    from it. `/readiness` Part B (Complete,
    Sound, Synchronized, Extensible, AI-ready) is the other lens for a next step. One
    conditional bullet on the transfer slide: "A designer without an agent: a lint plugin in
@@ -917,7 +915,7 @@ from what was shown, not a lecture. Rows since 2026-10-14: 3 rules, 24 show & te
 ## Answers to the deck's open TODO(owner)
 
 - `D1-00-03` glossary definitions: Day 1 Block 00 §4 above (verbatim from `glossary.ts`).
-- `D1-02-02` tutorial step titles: Inspect "Select the component in Figma" · Contract
+- `D1-02-02` tutorial step titles: Read the design "Select the component in Figma" · Record deliberate differences
   "Write down the deliberate differences" · Generate "AI matches to Atelier UI components" / "AI generates
   token-exact code" · Verify: the agent runs lint and build, then the comparison with Figma
   (`tutorial.astro`; step 4 changed with ADR-0180, re-check the title on the page).

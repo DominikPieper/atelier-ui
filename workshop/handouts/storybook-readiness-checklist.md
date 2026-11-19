@@ -25,7 +25,11 @@ Component / Storybook checked: ______________________________
 
 ## Exercise: check your Storybook
 
-Run the read-only prompt from the page (the agent calls `docs-list`, then `docs-show` per component, and reports against Part A). Then:
+Paste this read-only prompt into your agent, with your Storybook's MCP connected:
+
+> Storybook readiness check, read-only. Do not edit any file. Use only the ids `docs-list` returns. (1) Call `docs-list` once: report components with no description and entries under "Docs". (2) Call `docs-show` per component (more than 15: take 10, say which you skipped) and record: description and purpose in its first sentence; inputs without a description line; named-alias types whose values are not printed; events or two-way bindings missing from the block; stories listed by name only (no snippet); variant values or states without a story; whether the first three stories are default usage plus the two most typical variations. (3) Report a table: component, finding, which check it breaks, likelihood of wrong code (high, medium, low). (4) Name the one finding that would make you invent a prop or a value, and why. (5) List what you could not check. Propose or apply no fixes.
+
+Then:
 
 1. Pick one: the finding that would most likely make an agent invent a property or a value.
 2. Fix it where it is declared: the JSDoc, the type or the story.

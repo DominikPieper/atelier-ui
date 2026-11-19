@@ -1,6 +1,6 @@
 # Schulung Dry-Run Kit
 
-_Retargeted onto /schulung on 2026-10-11 (R-037–R-039)._
+_Retargeted onto /schulung on 2026-10-11 (R-037–R-039). Trainer material: the rehearsal walks the docs site because the trainer reads it. Participants cannot open the site (ADR-0184); they work from slides, handouts and the workspace's `course/` folder, and the rehearsal checks that path too._
 
 **Purpose:** make the one still-open near-term item — _"one rehearsal of the
 participant path on a non-author machine, timed"_ (R-040 in
@@ -82,10 +82,10 @@ becomes useless the moment the clock stops for a fix.
    three prior reviews each end with one.
 
 **Print list (before the run).** In addition to what the trainer notes list as paper: one
-copy per participant of the three handouts `workshop/handouts/ds-scorecard.md`,
-`workshop/handouts/figma-readiness-checklist.md` and
-`workshop/handouts/storybook-readiness-checklist.md`, and the ladder card (the printed
-`/cheat-sheet`). Print them the way the cohort gets them and note whether each fits one page.
+copy per participant of the five handouts `workshop/handouts/ds-scorecard.md`,
+`workshop/handouts/figma-readiness-checklist.md`,
+`workshop/handouts/storybook-readiness-checklist.md`, `workshop/handouts/ladder-card.md` and
+`workshop/handouts/rescue-sheet.md`. Print them the way the cohort gets them and note whether each fits one page.
 `npm run trainer:print` is run once, later, by the owner; this kit does not run it.
 
 ---
@@ -186,7 +186,7 @@ plugin; plant the three linter findings in the duplicate once (golden prompts §
 _verifies_ it, and the login happens inside Block 01.
 
 **Block 00 — Kickoff and thesis** (talk + live demo).
-_Done when:_ everyone can name the loop: Inspect → Contract → Generate → Verify.
+_Done when:_ everyone has seen the loop as the map of both days (Read the design → Record deliberate differences → Generate → Verify) and has noted one component they would trust an AI to change and one they would not.
 No gate. Time it. Includes a 5-minute live demo (change an Atelier component by
 prompt); whether the live demo ran in the rehearsal workspace or needs the
 Atelier clone: not specified on /schulung — record what you used.
@@ -197,6 +197,7 @@ Time the three parts separately so an overrun shows where it comes from. Since 2
 there is a 3-minute row for the ladder slide and the scorecard slide (09:19–09:22; the
 scorecard handout is given out here) and D-1 names ladder stage 3 (`npm run check:stylelint`)
 with what it does not see; the thesis is 7 minutes.
+Since 2026-11-19 the block has no recap row: the 2 minutes went into the trust exercise (09:25–09:30, 5 min), so the block is 7+2+5+5+3+3+5 = 30.
 
 **Block 01 — Verify the setup 🔴** (09:30–10:15, 45 min)
 _Done when:_ the model-access command answers, `preflight` is green, `/mcp` lists
@@ -232,7 +233,7 @@ anyone still red has a rescue path.
   everything and committed nothing). Record whether `git log` shows one commit.
 - Figma: open the prepared duplicate in Figma Desktop and start the Desktop Bridge plugin
   (09:50); Claude reports the bridge connected. Nobody duplicates in the room.
-- **Abort criterion for this 🔴 block:** `/troubleshooting#still-red` (R-041):
+- **Abort criterion for this 🔴 block:** the rescue sheet (`course/rescue.md`; trainer source `/troubleshooting#still-red`) (R-041):
   name which of the three parts is missing (CLI, MCP, model access), a 30-minute time
   box, then pairing; a broken workspace is not repaired, the trainer fixes the machine;
   nobody starts Day 2 red. Record whether you needed a rescue
@@ -333,10 +334,10 @@ green, and `docs-show` called.
 _Done when:_ a Team directory screen runs and behaves as the brief says, and every prop
 in it has a source in `docs-show` (or was removed).
 
-- `/screen-from-storybook`: one screen (search field, role select, invite button, table
+- `course/day1-team-directory.md` (trainer copy `/screen-from-storybook`): one screen (search field, role select, invite button, table
   with a status badge per row, pagination), `atelier` as the only source of
   information, four rules, no steps, no Figma. Prompts for this block:
-  `tasks/schulung-golden-prompts.md` §1b (the starter prompt itself is live on the page).
+  `tasks/schulung-golden-prompts.md` §1b (the starter prompt itself is in `course/day1-team-directory.md`).
 - The screen lives under `workshop-<fw>/src/` with its styles in a plain `.css` file,
   and is viewed with `npm start` (app on `localhost:4200`).
 - Closing checks, run by the agent (golden prompts §1b closing prompt), the exit codes it
@@ -355,10 +356,8 @@ _Done when:_ a brief is chosen. No machine homework: the course machines stay in
 the room; sketch the component on paper if you like.
 
 - Choose one of the four briefs (Toast / TagChip / StatCard / Avatar), found in
-  `workshop/briefs/`. The kata `/first-component` and the bridge exercise
-  `/first-component#bridge` (a `density` variant on the Settings Card: component,
-  story per value, then lint, build and `check:stories` run by the agent) are optional and need your own machine and Claude
-  access. An unfinished Block 05 screen stays in the workspace for Day 2.
+  `workshop/briefs/`. The kata `/first-component` is not participant material
+  (ADR-0184). An unfinished Block 05 screen stays in the workspace for Day 2.
 - Exit ticket: one sentence on what you will check first next time before
   trusting AI output. No gate. Time it.
 
@@ -414,7 +413,7 @@ _Done when:_ a master plus a filled handoff document, including its deliberate d
   bindings, reuse vs. rebuild, the behaviour from the brief, explicit
   exclusions, target files, acceptance criteria, and a ninth item, **Deliberate
   differences** (what the code will do differently from the design on purpose, and why) —
-  "a checklist, not a template". Worked example: `/design-to-code#handoff-example` ("Filled handoff
+  "a checklist, not a template". Worked example: `course/handoff-example.md` (trainer copy `/design-to-code#handoff-example`; "Filled handoff
   document"). Participants do **not** get the `design-to-code` skill, so do not
   rely on it to prefill anything. Record how long writing took and which line
   you had to decide yourself (the block's recap question).
@@ -554,8 +553,8 @@ a follow-up channel is set up.
 - **Transfer step (12 min):** the scorecard (`workshop/handouts/ds-scorecard.md`) is the
   frame: mark the seven rows for your own design system (yes / partly / no), pick the weakest
   row, then start the checklist that matches it (the Figma or the Storybook checklist; both
-  are handouts; `/readiness`, `/storybook-readiness#self-check`,
-  `/design-principles#check-your-own` hold the how) and pick one finding; the fix is the
+  are handouts and carry their own how; the trainer's sources are `/readiness`,
+  `/storybook-readiness#self-check`, `/design-principles#check-your-own`) and pick one finding; the fix is the
   written next step, not room work. Rehearsal check 7 (owner): a FigmaLint run without an API
   key, for the conditional transfer-slide bullet. For the rehearsal, name a
   stand-in system and note it; the page assumes participants bring their own.

@@ -191,6 +191,18 @@ outline first, then deck, then run-of-show and prompts.
       "Vorstellung und Transfer" ends on the written next step instead of "Wahl eines ersten Befunds". After the
       decision: mirror into `tasks/schulung-kundenagenda.md`.
 
+## Package C: course material complete without the docs site (owner go 2026-11-19, ADR-0184)
+
+The docs site is password-protected; participants cannot open it. Audit 2026-11-19 found prompts, briefs,
+handoff example, rescue steps and the ladder card only on the site, and 15 site links in seat files.
+
+- [x] C0 handouts carry no site link (scorecard last column reworded), PDFs regenerated in local `Slides/Handouts/`
+- [ ] C1 scaffold writes `course/` (team-directory brief + prompts, parity, Day 2 prompts + four things to paste back, four briefs, handoff example, rescue); seat CLAUDE.md, README, preflight without site links; spec updated
+- [ ] C2 decks: "im Brief"/"Kursmaterial"/"Tutorial" point at `course/` files; four things to paste back on d2-03-03; notes that assume an open site corrected; kata out of participant material
+- [ ] C3 handouts: ladder card and rescue steps as handouts; storybook checklist without "from the page"; PDFs
+- [ ] C4 plan docs: /schulung `pages:`, run-of-show, golden prompts name the `course/` file instead of "point participants at the page"
+- [ ] C5 gates, commit, owner go to push → create-workspace release → reprovision from that release before 2026-11-23
+
 ## Package A: standing rules into the skill, rubric reframed (owner go 2026-11-19, ADR-0183)
 
 Course review 2026-11-19 against Anthropic's prompting guidance and the NotebookLM design-system

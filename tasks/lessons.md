@@ -1157,3 +1157,11 @@ Rule: before I rely on a workflow, I read its `on:` block and the exact step ord
 run the gate's steps in that order in one checkout. A flag I add to "narrow" an Nx command
 gets checked for what else it switches off. After any release commit I run `check:format`
 on the files the release tool wrote.
+
+## 2026-11-19 — "established term" without a source
+
+I recommended keeping "Self-Healing-Loop" because the term is "established in the scene"; the owner
+asked for sources. A search found no standard definition, and Anthropic's own material says
+"verification loop" / "feedback loop", not "self-healing". The owner had already chosen on my claim.
+**Rule:** a claim that a term, practice or tool is "established", "standard" or "common" is a factual
+claim — check it (Anthropic docs first) before it goes into a recommendation, or say it is my impression.
