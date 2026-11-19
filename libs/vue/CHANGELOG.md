@@ -1,3 +1,7 @@
+## 0.4.13 (2026-11-19)
+
+This was a version bump only for vue to align it with other projects, there were no code changes.
+
 ## 0.4.12 (2026-11-18)
 
 This was a version bump only for vue to align it with other projects, there were no code changes.

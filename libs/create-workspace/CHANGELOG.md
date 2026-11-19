@@ -1,3 +1,13 @@
+## 0.4.13 (2026-11-19)
+
+### 🩹 Fixes
+
+- **create-workspace:** component skill carries the standing rules ([5ee6fd2e](https://github.com/DominikPieper/atelier-ui/commit/5ee6fd2e))
+
+### ❤️ Thank You
+
+- Dominik Pieper @DominikPieper
+
 ## 0.4.12 (2026-11-18)
 
 This was a version bump only for create-workspace to align it with other projects, there were no code changes.
