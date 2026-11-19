@@ -3,8 +3,8 @@
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "fileName": "Atelier UI",
     "figmaLastModified": "2026-11-19T15:20:38Z",
-    "generatedAt": "2026-11-19T15:20:59.735Z",
-    "gitSha": "94dfeb05",
+    "generatedAt": "2026-11-19T16:12:16.319Z",
+    "gitSha": "a5967b83",
     "serverVersion": "0.1.0",
     "coverage": "All 43 masters. Token/auto-layout checks sample each master's default variant.",
     "note": "Facts captured from Figma via figma-console MCP read-tools. Rules live in check-figma.js."
@@ -2520,12 +2520,12 @@
           "gapBound": null,
           "fill": "color/surface-sunken",
           "stroke": "color/input-border",
-          "strokeWeight": 1.5,
+          "strokeWeight": 2,
           "strokeSides": [
-            1.5,
-            1.5,
-            1.5,
-            1.5
+            2,
+            2,
+            2,
+            2
           ],
           "radius": "radius/md",
           "radiusPx": 10,
@@ -2600,12 +2600,12 @@
           "gapBound": null,
           "fill": "color/surface-sunken",
           "stroke": "color/input-border-invalid",
-          "strokeWeight": 1.5,
+          "strokeWeight": 2,
           "strokeSides": [
-            1.5,
-            1.5,
-            1.5,
-            1.5
+            2,
+            2,
+            2,
+            2
           ],
           "radius": "radius/md",
           "radiusPx": 10,
@@ -2640,12 +2640,12 @@
           "gapBound": null,
           "fill": "color/surface-sunken",
           "stroke": "color/input-border-hover",
-          "strokeWeight": 1.5,
+          "strokeWeight": 2,
           "strokeSides": [
-            1.5,
-            1.5,
-            1.5,
-            1.5
+            2,
+            2,
+            2,
+            2
           ],
           "radius": "radius/md",
           "radiusPx": 10,
@@ -7443,7 +7443,7 @@
             1,
             1
           ],
-          "radius": null,
+          "radius": "radius/full",
           "effects": [],
           "layoutMode": "NONE",
           "padding": null,
@@ -7641,7 +7641,7 @@
             1,
             1
           ],
-          "radius": null,
+          "radius": "radius/full",
           "effects": [],
           "layoutMode": "NONE",
           "padding": null,
@@ -21236,10 +21236,10 @@
           "fill": "color/surface-sunken",
           "stroke": "color/primary",
           "strokeSides": [
-            1.5,
-            1.5,
-            1.5,
-            1.5
+            2,
+            2,
+            2,
+            2
           ],
           "radius": "radius/md",
           "effects": [],
@@ -21413,10 +21413,10 @@
           "fill": "color/input-bg",
           "stroke": "color/input-border",
           "strokeSides": [
-            1.5,
-            1.5,
-            1.5,
-            1.5
+            2,
+            2,
+            2,
+            2
           ],
           "radius": "radius/md",
           "effects": [],
@@ -21532,10 +21532,10 @@
           "fill": "color/input-bg",
           "stroke": "color/input-border",
           "strokeSides": [
-            1.5,
-            1.5,
-            1.5,
-            1.5
+            2,
+            2,
+            2,
+            2
           ],
           "radius": "radius/md",
           "effects": [],
@@ -21561,10 +21561,10 @@
           "fill": "color/input-bg",
           "stroke": "color/input-border-hover",
           "strokeSides": [
-            1.5,
-            1.5,
-            1.5,
-            1.5
+            2,
+            2,
+            2,
+            2
           ],
           "radius": "radius/md",
           "effects": [],
@@ -27102,7 +27102,7 @@
             1,
             1
           ],
-          "radius": null,
+          "radius": "radius/full",
           "effects": [],
           "layoutMode": "NONE",
           "padding": null,
