@@ -219,8 +219,8 @@ hands out when a run goes wrong, and the expected result to judge a run against.
 
 - Before any file is written the agent has called `docs-list` and `docs-show` for
   AtlInput, AtlSelect, AtlButton, AtlTable, AtlBadge and AtlPagination and named them.
-  All six are in `docs-list` of the hosted Angular, React and Vue endpoints
-  (checked 2026-10-20).
+  All six are in `docs-list` of `atelier` (measured on `atelier` (0.4.12), 2026-11-19) and
+  of the hosted React and Vue endpoints (checked 2026-10-20).
 - The screen imports them from `@atelier-ui/angular` (`AtlInput`, `AtlSelect`,
   `AtlOption`, `AtlButton`, `AtlTable`, `AtlThead`, `AtlTbody`, `AtlTr`, `AtlTh`, `AtlTd`,
   `AtlBadge`, `AtlPagination` are all exported by `libs/angular/src/index.ts`) and lists
@@ -277,7 +277,9 @@ sub-components, their inputs appear only in its code examples):
 
 (Everything in this section was read from the hosted `docs-show` output and
 `libs/angular/src/index.ts` on 2026-10-20. The React and Vue shapes of AtlTable and
-AtlPagination were not read; UNVERIFIED.)
+AtlPagination were not read; UNVERIFIED. The Angular shape was measured again on
+`atelier` (0.4.12), 2026-11-19, and agrees: same components, usage example, first three
+stories, import path `./atl-table`, cookbook story without code.)
 
 ---
 
@@ -528,7 +530,7 @@ already phrased as a ready one-line correction:
 
 ### 2.5 `docs-show` on your own component (Day 2 Block 02, 12:05 to 12:20, part 1: 10 min)
 
-NOT YET VERIFIED (rehearsal). Through the local Storybook MCP (`storybook-local`), once the
+The prompts are NOT YET VERIFIED as an agent run (rehearsal); the call and the refresh are verified headless 2026-11-18 (R-262); the interactive run is open in R-040 (see below). Through the local Storybook MCP (`storybook-local`), once the
 component and its stories render. The point: what would an agent that uses your component
 have to guess?
 
@@ -558,13 +560,13 @@ npx storybook tools --config-dir workshop-<fw>/.storybook --json docs show --inp
 
 Measured 2026-11-18 on the 0.4.10 Angular scaffold through that CLI route: a new component
 with a story appears in `docs list`; `docs show` prints Inputs and Outputs, the JSDoc line
-where one exists and nothing where none does. UNVERIFIED: the same call over the running
-local MCP, and whether the dev server refreshes the entry after a JSDoc edit without a
-restart.
+where one exists and nothing where none does. The same call over the running
+local MCP, and the refresh of the entry after a JSDoc edit without a restart (about 1 s, by
+direct JSON-RPC, not through the agent): verified headless 2026-11-18 (R-262); the interactive run is open in R-040.
 
 ### 2.6 The Definition-of-Done exercise (Day 2 Block 00, 09:18 to 09:28, 10 min)
 
-NOT YET VERIFIED (rehearsal): that the two answers differ as described. The workspace the
+That the two answers differ as described: verified headless 2026-11-18 (R-262); the interactive run is open in R-040. The workspace the
 participants have already carries the rule the agent reads every session. Projector first
 (3 min): the four things an agent gets in this workspace (the rules file, read every
 session; a skill, loaded when the task matches and shown in demo D-7 just before; an MCP
@@ -643,8 +645,8 @@ not cleared; show the list in `CLAUDE.md` and ask again.
 ### 3.3 Parity prompt for your own component (participants)
 
 Day 2 Block 04, parity row 15:45 to 15:53 (8 min). Same shape as the Day 1 comparison
-prompt; the node id comes from the participant's handoff document. NOT YET VERIFIED as
-rewritten (rehearsal). The report is only a list here: the **sorting row** (15:53 to
+prompt; the node id comes from the participant's handoff document. The prompt completes (79 s, 14 turns,
+no writes): verified headless 2026-11-18 (R-262); the interactive run is open in R-040. The report is only a list here: the **sorting row** (15:53 to
 16:13) labels each difference and fixes the code ones.
 
 > Run `figma_check_design_parity` on the node `<NODE FROM THE HANDOFF DOCUMENT>` against my
@@ -744,14 +746,14 @@ with findings; it has no "sections compared" list. Against the component set `12
 
 ## 5. Verification — what was checked, what was cut
 
-**Revision 2026-11-18: NOT YET VERIFIED (rehearsal, R-040).** Every prompt in §1a, §1b (the
+**Revision 2026-11-18: NOT YET VERIFIED (rehearsal, R-040), except as noted below.** Every prompt in §1a, §1b (the
 closing-checks prompt), §1c, §2.1 (as revised), §2.5, §2.6 and §3.3 is new or changed and has
-not been run in a rehearsal; their expected outputs are the measured facts named in the
+not been run in an interactive rehearsal; the headless run of 2026-11-18 (R-262) covered the
+§2.6 answers, the §2.5 call and its refresh, and the §3.3 prompt. Their expected outputs are the measured facts named in the
 sections (2026-11-17: the lint rule ids, the compiler error codes, the 59 / 18 / 41 findings,
 the run times; 2026-11-18: the `storybook tools` CLI route) and nothing else. Unverified, by
-name: that the planting snippet below returns three findings in the three-rule Figma run; that the two Definition-of-Done
-answers differ as described; the local-MCP form of §2.5 and whether the dev server refreshes
-after a JSDoc edit; §3.4 and §3.5 as a four-plus-spacing pair (R-227, R-235). The dates below
+name: that the planting snippet below returns three findings in the three-rule Figma run;
+§3.4 and §3.5 as a four-plus-spacing pair (R-227, R-235). The dates below
 belong to the earlier text only.
 
 **Checked directly against the repo (2026-09-10), not assumed:**

@@ -430,7 +430,7 @@ Storybook :6006 for D-5.
    server is part of the course from here: the agent calls `get-storybook-story-instructions`
    before it writes the story and runs `test-run` through `storybook-local` on it, so it sees
    the red itself; the participant watches the same red in the play panel, fixes by prompt,
-   green. NOT YET VERIFIED (rehearsal): `test-run` through `storybook-local` on a seat.
+   green. `test-run` through `storybook-local` on a seat: verified headless 2026-11-18 (R-262); the interactive run is open in R-040.
 
 **Expected recap answers.** "A story claims a state and a behaviour; `check:stories`
 runs the claim in a browser with axe; the build catches a wrong value, not an invented name." Stretch: "not documented" is right because the manifest is the API; an
@@ -594,7 +594,7 @@ more files of the workspace: `CLAUDE.md` and `.claude/settings.json`.
    Checkpoint D2B00-C2: every answer names `atelier-component`. Fallback:
    `ls .claude/skills/`, the folder is the truth. The description says writing a contract is
    opt-in, not part of the loop: if asked, one sentence ("Atelier's own check, the last and
-   optional rung"), move on. `Verify in rehearsal` (check 9): that the answer lists the skills on every seat.
+   optional rung"), move on. That the answer lists the skills (check 9): verified headless 2026-11-18 (R-262); the interactive run is open in R-040.
 7. What the agent reads here, and change one line (09:18–09:28, 10 minutes; ladder "wiring").
    Projector, 3 minutes, the four things an agent gets in this workspace: the rules file
    (read every session), a skill (loads when the task matches; shown in D-7), an MCP server
@@ -610,8 +610,8 @@ more files of the workspace: `CLAUDE.md` and `.claude/settings.json`.
    at 09:28. Line for the room: the agent runs what the list names, and a check that is not
    in the list is a check nobody asked for. Trainer: `/verify` has its own list in
    `.claude/commands/verify.md` and still runs six. Stretch: write down the one line your
-   own team would add to this list, the command and what it proves. UNVERIFIED (rehearsal):
-   that the two answers differ as described after `/clear`.
+   own team would add to this list, the command and what it proves. That the two answers
+   differ as described after `/clear`: verified headless 2026-11-18 (R-262); the interactive run is open in R-040.
 
 **Expected recap answers.** The recap asks where the team's check commands go so that the
 agent runs them: the rules file's "Definition of Done" (`CLAUDE.md` or `AGENTS.md`), plus a
@@ -707,9 +707,9 @@ participant's `docs-show` output before and after the JSDoc edit.
    `npx storybook tools --config-dir workshop-<fw>/.storybook --json docs show --input '{"id":"<id>"}'`.
    Measured 2026-11-18 on the 0.4.10 Angular scaffold through that CLI route: a new component
    with a story appears in `docs list`; `docs show` prints Inputs and Outputs, the JSDoc line
-   where one exists and nothing where none does. UNVERIFIED (rehearsal): the same call over the
-   running local MCP, and whether the dev server refreshes the entry after a JSDoc edit without
-   a restart.
+   where one exists and nothing where none does. The same call over the
+   running local MCP, and the refresh of the entry after a JSDoc edit without a restart (about
+   1 s, by direct JSON-RPC, not through the agent): verified headless 2026-11-18 (R-262); the interactive run is open in R-040.
 5. Part 2, 5 minutes: the running stories next to the Figma component, every variant and state;
    write the differences down as a list (Block 04 sorts it). One pass. No `figma:snapshot`, no
    `check:contracts`, no finding codes in this block.

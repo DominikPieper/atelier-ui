@@ -155,10 +155,10 @@ They sit at the block that runs them and are numbered here so none gets lost:
    contrast findings, 41 about text styles.)
 3. Day 1 Block 03: are 5 minutes enough for the remaining readiness checklist rows?
 4. Day 2 Block 00: after `/clear`, do the two Definition-of-Done answers differ as described
-   (the second no longer names `npm run check:stories`)?
+   (the second no longer names `npm run check:stories`)? verified headless 2026-11-18 (R-262); the interactive run is open in R-040 (baseline 6/6 name six, line removed 3/3 name five).
 5. Day 2 Block 02: does `docs-show` on a fresh component work over the running local MCP,
-   and does the entry refresh after a JSDoc edit without a restart? (Measured only through
-   the CLI route `storybook tools ... docs show`, 2026-11-18.)
+   and does the entry refresh after a JSDoc edit without a restart? (Measured through
+   the CLI route `storybook tools ... docs show`, 2026-11-18; the refresh over the running local MCP is verified headless 2026-11-18 (R-262); the interactive run is open in R-040, by direct JSON-RPC, not through the agent.)
 6. Day 1 Block 02 and Day 1 Block 05: when a failing command prints no error text (R-248),
    does "read the full log" in the prompt make the agent find the cause?
 7. Day 2 Block 05: a FigmaLint run without an API key (owner): what does it do? The transfer
@@ -173,7 +173,7 @@ They sit at the block that runs them and are numbered here so none gets lost:
 9. Day 2 Block 00 (added 2026-11-18, ADR-0181): does the answer to "Which skills do you have in this workspace, and when would you load each? Only list them."
    list the skills that are in `.claude/skills/` on the seat, with `atelier-component` among
    them, and does demo D-7 fit in 5 minutes? Also note whether the four Storybook skills
-   landed on the provisioned machines.
+   landed on the provisioned machines. The skills answer is verified headless 2026-11-18 (R-262); the interactive run is open in R-040 (6/6); the 5 minutes are UNVERIFIED.
 
 ### Day 1
 
@@ -219,7 +219,7 @@ anyone still red has a rescue path.
   false impression that this was already covered.
 - Read `.mcp.json` together; run `/mcp` in Claude Code and compare against the
   file. The scaffold's `.mcp.json` for Angular lists five: `atelier`, `storybook-local`,
-  `nx-mcp`, `angular-cli`, `figma-console` (`/schulung` Block 04 names them; `uianatomy`
+  `nx-mcp`, `angular-cli`, `figma-console` (`/schulung` Block 01 names them; `uianatomy`
   left the scaffold on 2026-11-18, ADR-0181, so a sixth entry means the machine was
   provisioned from an older release: log it). `storybook-local` is connected only while
   Storybook runs; if its tools are missing, check that Storybook runs first, `/mcp` → reconnect when they still do not appear. Write down what
@@ -325,7 +325,7 @@ green, and `docs-show` called.
   for a variant (template story as context); the agent calls
   `get-storybook-story-instructions` first and runs `test-run` through `storybook-local`, so
   it sees the red itself; watch the same red in the play panel, fix it by prompt, watch it
-  pass. NOT YET VERIFIED (rehearsal): `test-run` through `storybook-local` on a seat. If it never failed,
+  pass. `test-run` through `storybook-local` on a seat: verified headless 2026-11-18 (R-262); the interactive run is open in R-040. If it never failed,
   the story claims nothing (green means failure here): record it.
 - The Claude Design demo is the optional appendix, not a step here (§1).
 

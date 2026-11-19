@@ -301,9 +301,9 @@ names it, and why. Do not change anything yet.`;
           of a consumer: what would it have to guess? No description for the
           component, a property without a description, a value set shown only as
           a bare type alias. Ask Claude to add the JSDoc, then call
-          <code>docs-show</code> again and compare. If the second call still
-          shows the old text, restart Storybook and call again. Without the MCP,
-          the same call through the CLI:
+          <code>docs-show</code> again and compare. The second call normally
+          shows the new text within about a second; restart Storybook only if it
+          does not. Without the MCP, the same call through the CLI:
           <Code
             code={DOCS_SHOW_CLI}
             lang="shell"

@@ -200,8 +200,13 @@ import MaintainerNotes from '../components/MaintainerNotes.astro';
         <a href="/troubleshooting#mcp-not-loaded" class="docs-link-primary"
           >config not picked up</a
         >,
+        <a
+          href="/troubleshooting#atelier-not-connected"
+          class="docs-link-primary"
+          >atelier not connected</a
+        >,
         <a href="/troubleshooting#mcp-unreachable" class="docs-link-primary"
-          >server unreachable</a
+          >hosted server unreachable</a
         >,
         <a href="/troubleshooting#mcp-tools-error" class="docs-link-primary"
           >connects but tools error</a
@@ -337,7 +342,7 @@ import MaintainerNotes from '../components/MaintainerNotes.astro';
       </aside>
 
       <DiagramFigure
-        caption="One AI client talks to three parallel Storybook MCP servers — one per framework. The request format (JSON-RPC) is identical. Each hosted endpoint emits and serves its own components.json — Angular via angular-component-meta, Vue via vue-component-meta, React via react-docgen — so each answers in its own framework's shape (ADR-0097)."
+        caption="One AI client talks to three parallel Storybook MCP servers — one per framework. The request format (JSON-RPC) is identical. Each hosted endpoint emits and serves its own components.json — Angular via angular-component-meta, Vue via vue-component-meta, React via react-docgen — so each answers in its own framework's shape (ADR-0097). These hosted endpoints are the public and React/Vue path; a seat on Angular uses the local atelier server plus storybook-local."
       >
         <svg
           viewBox="0 0 960 352"

@@ -399,7 +399,7 @@ light mode only), and a keyboard path no `play` walks. From here the local serve
 the course: the agent calls `get-storybook-story-instructions` before it writes the story and
 runs `test-run` through `storybook-local` on it, so it sees the red itself; the participant
 watches the same red in the play panel. Day 2 Block 03 repeats this as the self-healing loop.
-NOT YET VERIFIED (rehearsal): `test-run` through `storybook-local` on a seat.
+`test-run` through `storybook-local` on a seat: verified headless 2026-11-18 (R-262); the interactive run is open in R-040 (it passes, and a planted failure is reported).
 
 **Preconditions.**
 
@@ -492,9 +492,8 @@ entirely if time is short.
 
 **Goal.** Say what a skill is with the participants' own file in front of them: a guide
 Claude loads when the task matches its description. Nothing in this demo needs the network.
-Rewritten 2026-11-18 (ADR-0181); until then it called the uianatomy MCP live. NOT YET
-VERIFIED (rehearsal check 9): that the answer lists the skills on every seat, and that it
-fits in 5 minutes.
+Rewritten 2026-11-18 (ADR-0181); until then it called the uianatomy MCP live. That the answer lists the skills (check 9) is verified headless 2026-11-18 (R-262); the interactive run is open in R-040; that it
+fits in 5 minutes is NOT YET VERIFIED.
 
 **Preconditions.**
 
@@ -524,8 +523,7 @@ Which skills do you have in this workspace, and when would you load each? Only l
 **Expected result.** A list that names `atelier-component` with a "when" that paraphrases
 its description; in a Figma workspace also `figma-workspace-architect`; the four Storybook
 skills where their install landed. Seats can differ in that last group, and the difference
-is worth one sentence: a skill that is not in the folder cannot load. **UNVERIFIED**
-(rehearsal check 9).
+is worth one sentence: a skill that is not in the folder cannot load. The answer lists the skills (check 9): verified headless 2026-11-18 (R-262); the interactive run is open in R-040; that it fits in 5 minutes is **UNVERIFIED**.
 
 **Point at.** The "when" in the answer beside the `description` line in the file: the same
 sentence, and that is the whole mechanism. Then stop. The next row (09:18-09:28) puts the

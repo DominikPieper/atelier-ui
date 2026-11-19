@@ -664,9 +664,10 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
         "
       >
         This tutorial uses two MCP servers: <code>figma-console</code> (reads
-        Figma component frames) and one of the <code>storybook-*</code> servers
-        (returns Atelier UI component prop documentation). The next section
-        walks the figma-console tools you'll use.
+        Figma component frames) and the library's server (<code>atelier</code>
+        on Angular, a hosted <code>storybook-*</code> entry on React and Vue;
+        returns Atelier UI component prop documentation). The next section walks
+        the figma-console tools you'll use.
       </p>
     </div>
 
@@ -1224,7 +1225,7 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
             </p>
             <Callout
               tone="note"
-              title="All three endpoints answer — natively, per framework"
+              title="The library server answers — natively, per framework"
             >
               <p
                 style="
@@ -1233,9 +1234,10 @@ const BOUND_VARS_EXAMPLE = `// What figma_get_component_for_development returns 
                   color: var(--ui-color-text-muted);
                 "
               >
-                Each <code>storybook-&lt;fw&gt;</code> server emits and serves
-                its own <code>components.json</code> — Angular's from
-                <code>angular-component-meta</code>, Vue's from
+                Each framework emits its own <code>components.json</code>,
+                served by <code>atelier</code> on Angular and by the hosted
+                <code>storybook-&lt;fw&gt;</code> endpoint on React and Vue —
+                Angular's from <code>angular-component-meta</code>, Vue's from
                 <code>vue-component-meta</code>, React's from
                 <code>react-docgen</code> (ADR-0097). Names, variants and
                 defaults come back shaped for the framework you asked: two-way

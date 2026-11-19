@@ -34,14 +34,14 @@ function fwNote(fw: Fw): string {
 // "When you are stuck" (R-048): what to paste, when to stop, when to call the
 // trainer. The gate convention is AGENTS.md's: redirect to a file, print the
 // exit code, never pipe.
-const STUCK_COMMAND = `npm run check:contracts > check.out 2>&1; echo $?`;
+const STUCK_COMMAND = `npm run check:stories > check.out 2>&1; echo $?`;
 const STUCK_REPORT = `A gate is red. Help me find the cause, not just a patch.
 
-Ran:       npm run check:contracts > check.out 2>&1; echo $?
+Ran:       npm run check:stories > check.out 2>&1; echo $?
 Exit code: 1
 Output:    check.out (read it; the first error is the one that matters)
-Expected:  exit 0, no [AXIS] or [COVERAGE] finding
-Changed:   since the last green run I only added the density prop and its stories
+Expected:  exit 0, every story renders and passes its play and axe check
+Changed:   since the last green run I only added the density prop and its stories (the failing story is the new one)
 
 Before you change anything, tell me what you think the cause is and what
 would prove you wrong.`;
@@ -157,7 +157,7 @@ const SECTIONS: Section[] = [
         id: 'prompt-guard',
         title: 'Prompt guard: Figma to code',
         description:
-          'Add this to any "turn this Figma component into code" prompt. Frontier models over-deliver: they add plausible variants, sizes and states the design never had, and those pass review because they look reasonable. The guard is the cheap first line; check:contracts catches what slips past it, because it flags variant values and enum props the Figma master does not have unless the contract declares them codeOnly.',
+          'Add this to any "turn this Figma component into code" prompt. Frontier models over-deliver: they add plausible variants, sizes and states the design never had, and those pass review because they look reasonable. The guard is the cheap first line; the parity report catches what slips past it, because every difference it lists gets sorted: fix the code, fix Figma, or keep it on purpose and list it under "Deliberate differences" in the handoff document.',
         prompt: (fw) =>
           `Implement this Figma component. ${fwNote(fw)}\n\nImplement only what the design shows:\n- No variants, sizes, states or props that are not in the design.\n- If you think something is missing (hover, disabled, an error state, a size), do not add it. Put it in a list of questions at the end.\n- Before you finish, list every variant, size and state you implemented and name the part of the design each one comes from.`,
       },
@@ -204,7 +204,7 @@ const RUBRIC: { name: string; text: string }[] = [
   },
   {
     name: 'Done stated',
-    text: 'which checks must be green (`check:contracts`, `check:stories`, the parity check) and that the agent runs them itself.',
+    text: 'which checks must be green (`/verify`: format, stylelint, lint, build, unit tests and `check:stories`; then the parity check) and that the agent runs them itself.',
   },
   {
     name: 'One change per round',
@@ -604,7 +604,7 @@ const rubricHtml = (s: string) => s.replace(/`([^`]+)`/g, '<code>$1</code>');
         </li>
         <li>
           <strong>What you expected.</strong> One line: "exit 0", "the compact
-          card is tighter", "no <code>[AXIS]</code> finding".
+          card is tighter", "no axe violation".
         </li>
         <li>
           <strong>What you ran, and what changed.</strong> The commands in

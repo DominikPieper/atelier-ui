@@ -45,7 +45,8 @@ const ISSUES: Issue[] = [
   },
   {
     id: 'mcp-tools-error',
-    title: 'MCP connects but every tool errors',
+    title:
+      'Hosted MCP connects but every tool errors (React and Vue workspaces)',
     symptom:
       'Claude Code lists `storybook-react` (or vue) as connected, but every tool call — even `docs-list` — returns an error like "Failed to fetch manifest components.json: 522".',
     cause:
@@ -92,6 +93,19 @@ const ISSUES: Issue[] = [
       'MCP server: run `claude mcp reset-project-choices` in the workspace, then start `claude` again and approve the servers when asked.',
       'If the server still does not come back, check your settings files for a `disabledMcpjsonServers` entry naming it and remove that entry.',
       'Tool permission: allow and deny rules live under `permissions` in the settings files (`allow`, `ask`, `deny`). Remove or change the matching rule; `/permissions` is the in-session entry point.',
+    ],
+  },
+  {
+    id: 'atelier-not-connected',
+    title: '`atelier` is missing or not connected (Angular workspaces)',
+    symptom:
+      '`/mcp` shows `atelier` as not connected or does not list it, or `npm run preflight` prints `MCP: atelier — @atelier-ui/mcp is not installed`.',
+    cause:
+      'Three causes. The dependencies are not installed, so there is no `@atelier-ui/mcp` to start. The Claude Code session was started before `npm install` finished and has not picked the server up. Or the session lost it and `/mcp` → reconnect is the fallback.',
+    fix: [
+      'Run `npm install`, then re-run `npm run preflight`.',
+      'Start a new Claude Code session from the workspace root after the install. If the server is still not listed, `/mcp` and reconnect `atelier`.',
+      'Do not edit `.mcp.json` and do not add a server by hand: the entry is part of the workspace.',
     ],
   },
   {
