@@ -1,3 +1,13 @@
+## 0.4.14 (2026-11-19)
+
+### 🩹 Fixes
+
+- **create-workspace:** pin @angular-devkit/architect in the Angular scaffold ([72727ac8](https://github.com/DominikPieper/atelier-ui/commit/72727ac8))
+
+### ❤️ Thank You
+
+- Dominik Pieper @DominikPieper
+
 ## 0.4.13 (2026-11-19)
 
 ### 🩹 Fixes
