@@ -1,6 +1,6 @@
 # Handouts
 
-Printed handouts for the two-day course, one copy per participant. Each is one page, plain Markdown, and carries the link to the page that holds the how.
+Printed handouts for the two-day course, one copy per participant. Each is one page, plain Markdown, and carries everything it needs: the docs site is password-protected and participants cannot open it, so a handout names no page and no URL (owner, 2026-11-19).
 The ladder card (the five tools the agent checks itself with) is not a file here: it lives on [`/cheat-sheet`](https://atelier.pieper.io/cheat-sheet).
 
 - [`ds-scorecard.md`](ds-scorecard.md): what a design system has to bring, seven rows to mark yes / partly / no

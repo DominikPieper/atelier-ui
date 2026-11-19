@@ -46,5 +46,3 @@ Master / file checked: ______________________________
 - [ ] An agent can look up exact props and variants without reading source
 
 The finding I fix first: ______________________________
-
-The how: https://atelier.pieper.io/readiness

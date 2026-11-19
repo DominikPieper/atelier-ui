@@ -32,5 +32,3 @@ Run the read-only prompt from the page (the agent calls `docs-list`, then `docs-
 3. Re-run the same prompt. The finding should be gone and nothing new should have appeared.
 
 The finding I fix first: ______________________________
-
-The how: https://atelier.pieper.io/storybook-readiness
