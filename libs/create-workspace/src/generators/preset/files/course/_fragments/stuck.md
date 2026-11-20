@@ -16,6 +16,9 @@ guess; a report with the four things below gets a diagnosis. Paste these four th
 npm run check:stories > check.out 2>&1; echo $?
 ```
 
+`check.out` is a scratch file in the workspace root. Delete it when you are done
+(`rm check.out`); the workspace's `.gitignore` keeps it out of your commits.
+
 A stuck report you can fill in and paste:
 
 ```text

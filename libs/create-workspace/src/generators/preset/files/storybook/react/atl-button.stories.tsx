@@ -6,7 +6,7 @@ import { AtlButton } from '@atelier-ui/react';
 // A working pattern to copy: duplicate this file for another component from
 // @atelier-ui/react, or add more `args`/`argTypes` below.
 //
-// ADR-0121: the stories are the claims — one story per `variant` value and
+// The stories are the claims: one story per `variant` value and
 // per Boolean state (`disabled`, `loading`), args-based, plus exactly one
 // `play` function with a real assertion (not a decorative one).
 const meta: Meta<typeof AtlButton> = {

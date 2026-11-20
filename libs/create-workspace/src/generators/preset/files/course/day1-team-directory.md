@@ -3,7 +3,8 @@
 Used in Day 1 Block 05. You build a "Team directory" screen out of components that
 already exist in `{{PKG}}`. The only thing you know about those components is what the
 `{{MCP}}` MCP server tells you. Nobody gives you the steps: a brief, four rules, a clock
-and closing checks.
+and closing checks. Expect a screen that looks finished early. The second half of the
+exercise is finding out what "finished" was never checked against.
 
 ## The brief
 
@@ -36,13 +37,15 @@ Components involved: AtlInput (search), AtlSelect (role filter), AtlButton `prim
    `.css` file. This is a rule you keep, not a check that enforces it: the checks below
    catch only part of it.
 
-**Done when** the screen runs and behaves as the brief says, and you can point to the
-`docs-show` passage behind every prop you pick at random (or the prop was removed).
+**Done when** the screen runs and behaves as the brief says, you can point to the
+`docs-show` passage behind every prop you pick at random (or the prop was removed), and
+you have checked three lines of the agent's "not verified" list with your own eyes.
 
 ## The start prompt
 
-Paste this into Claude Code. It is only a start: where the agent goes wrong, and how you
-steer it, is the exercise.
+Paste this into Claude Code. It is only a start. The agent may get all of it right on the
+first pass; that is the harder case, because a green result nobody has looked at is still
+a claim. What you check afterwards is the exercise.
 
 **Checkpoint:** before any file is written, the agent has shown you the component list and
 the `docs-show` calls behind it. If it skipped that, stop it and have it start over from
@@ -114,6 +117,35 @@ docs-show passage it appears in, or NOT DOCUMENTED. Remove everything marked NOT
 DOCUMENTED, or tell me why you kept it.
 ```
 
+## What nobody looked at
+
+Paste this after the receipts. The checks are green and every prop has a source; neither
+says that anyone has seen the screen work.
+
+```text
+List what you did not verify about this screen: every claim you made from
+reading code or docs without running or seeing the result. One line each, with
+how I can check it myself in under a minute. Do not run or change anything.
+```
+
+Pick three lines and check them yourself: `npm start`, then use the screen like a user.
+Type a search that matches nothing. Combine search and role. Go to the last page, then
+change a filter. Click "Invite member". Write down what you found for each of the three:
+holds, does not hold, or the brief does not say.
+
+## Finished early: a story for the screen
+
+For the build time, when your screen runs before 16:30. A screen without a story is a
+screen nothing re-checks tomorrow.
+
+```text
+Write a story for the Team directory screen, then run npm run check:stories and
+report the exit code. If it is not 0, read the output, repair, and run it again.
+```
+
+Then read the story: what does it check that you would otherwise click through by hand,
+and what does it still leave to you?
+
 ## When the agent goes wrong
 
 If it starts writing without calling `docs-list`:
@@ -142,14 +174,14 @@ props.
 
 ## The time box (95 minutes)
 
-| Minutes | What happens                                                                                            |
-| ------- | ------------------------------------------------------------------------------------------------------- |
-| 5       | The brief and the four rules, plus one live `docs-show` on AtlTable from the trainer. The clock starts. |
-| 15      | Build. The trainer stays quiet.                                                                         |
-| 30      | Build goes on. The trainer walks the room; a hint is a question about a `docs-show` line.               |
-| 15      | Checks and receipts.                                                                                    |
-| 25      | Two volunteers show their receipts. Which prop had no source, and where did the import names come from? |
-| 5       | Recap question.                                                                                         |
+| Minutes | What happens                                                                                                                                          |
+| ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 5       | The brief and the four rules, plus one live `docs-show` on AtlTable from the trainer. The clock starts.                                               |
+| 15      | Build. The trainer stays quiet.                                                                                                                       |
+| 30      | Build goes on. The trainer walks the room; a hint is a question about a `docs-show` line. Finished early: use the screen like a user, then the story. |
+| 15      | Checks, receipts, then the "not verified" list; check three of its lines by hand.                                                                     |
+| 25      | Two volunteers show their receipts and their list. Which line did you check, and what did you find? Where did the import names come from?             |
+| 5       | Recap question.                                                                                                                                       |
 
 The build ends at 16:30 on the clock. If you are stuck, paste the four things in
 {{STUCK_REF}}, or see `rescue.md`.

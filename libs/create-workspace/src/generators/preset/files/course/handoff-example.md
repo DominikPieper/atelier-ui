@@ -11,6 +11,10 @@ Note the two blanks only you can fill: your draft URL and node id, and the auto-
 Every line of it is something the diff can be held against: a variant that is not on the
 "In scope" line is a finding, and so is a behaviour line with no play function.
 
+The name is taken: `@atelier-ui/{{FRAMEWORK_LC}}` already has a toast of its own (in Angular
+it is exported as `AtlToast`), with a different API. This document describes the one you build. When the agent asks which one you
+mean, say so, and do not let it import the library's.
+
 ---
 
 # Handoff — AtlToast · {{FRAMEWORK}}
@@ -63,6 +67,7 @@ per variant value and Boolean state, a play function per behaviour line above).
 
 **Acceptance.** Unit tests and lint exit 0. check:stories green (every story
 renders, axe clean). docs-show describes the component: a description and a line
-per property. figma_check_design_parity run on my node, every difference it
-reports sorted: code, Figma, or kept on purpose (then it is listed under
-Deliberate differences).
+per property, and nothing an agent reading only that text would have to guess.
+figma_check_design_parity run on my node, every difference it reports sorted:
+code, Figma, kept on purpose (then it is listed under Deliberate differences)
+or tool artefact.

@@ -3041,6 +3041,71 @@ describe('preset generator', () => {
     expect(allow).toContain('Bash(npx playwright install *)');
   });
 
+  it('.claude/settings.json allows the read-only MCP tools, and no server-level rule for storybook-local or figma-console', async () => {
+    await presetGenerator(tree, {
+      name: 'my-workspace',
+      framework: 'angular',
+      figmaMcp: true,
+    });
+
+    const allow: string[] = readJson(tree, '.claude/settings.json').permissions
+      .allow;
+    for (const rule of [
+      'mcp__atelier',
+      'mcp__storybook-local__docs-list',
+      'mcp__storybook-local__docs-show',
+      'mcp__storybook-local__docs-show-story',
+      'mcp__storybook-local__get-storybook-story-instructions',
+      'mcp__figma-console__figma_get_status',
+      'mcp__figma-console__figma_get_selection',
+      'mcp__figma-console__figma_get_component_for_development',
+      'mcp__figma-console__figma_lint_design',
+    ]) {
+      expect(allow).toContain(rule);
+    }
+    expect(allow).not.toContain('mcp__storybook-local');
+    expect(allow).not.toContain('mcp__figma-console');
+    expect(allow).not.toContain('mcp__figma-console__figma_execute');
+  });
+
+  it('.claude/settings.json allows no figma-console tool with --no-figma', async () => {
+    await presetGenerator(tree, {
+      name: 'my-workspace',
+      framework: 'angular',
+      figmaMcp: false,
+    });
+
+    const allow: string[] = readJson(tree, '.claude/settings.json').permissions
+      .allow;
+    expect(allow.filter((r) => r.startsWith('mcp__figma-console'))).toEqual([]);
+  });
+
+  it('.claude/settings.json allows the framework docs server: storybook-react on React, not atelier', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'react' });
+
+    const allow: string[] = readJson(tree, '.claude/settings.json').permissions
+      .allow;
+    expect(allow).toContain('mcp__storybook-react');
+    expect(allow).not.toContain('mcp__atelier');
+  });
+
+  it('.claude/settings.json allows the framework docs server: storybook-vue on Vue, not atelier', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'vue' });
+
+    const allow: string[] = readJson(tree, '.claude/settings.json').permissions
+      .allow;
+    expect(allow).toContain('mcp__storybook-vue');
+    expect(allow).not.toContain('mcp__atelier');
+    for (const tool of [
+      'docs-list',
+      'docs-show',
+      'docs-show-story',
+      'get-storybook-story-instructions',
+    ]) {
+      expect(allow).toContain(`mcp__storybook-local__${tool}`);
+    }
+  });
+
   it('.claude/settings.json asks before `npx nx migrate` despite the broad `npx nx *` allow wildcard', async () => {
     await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
 
@@ -3223,7 +3288,12 @@ describe('preset generator', () => {
       'briefs/statcard.md',
       'briefs/avatar.md',
     ];
-    const ALWAYS = ['README.md', 'day1-team-directory.md', 'rescue.md'];
+    const ALWAYS = [
+      'README.md',
+      'day1-team-directory.md',
+      'day1-stories.md',
+      'rescue.md',
+    ];
 
     function courseFiles(): string[] {
       return tree
@@ -3290,6 +3360,15 @@ describe('preset generator', () => {
         );
         expect(rescue).toContain('Figma Desktop Bridge');
         expect(tree.read('course/README.md', 'utf-8')).toContain('rescue.md');
+        expect(tree.read('course/README.md', 'utf-8')).toContain(
+          'day1-stories.md',
+        );
+        const stories = tree.read('course/day1-stories.md', 'utf-8') ?? '';
+        expect(stories).toContain(
+          framework === 'angular'
+            ? '`atelier` MCP'
+            : `\`storybook-${framework}\` MCP`,
+        );
       },
     );
 
@@ -3306,6 +3385,12 @@ describe('preset generator', () => {
       const rescue = tree.read('course/rescue.md', 'utf-8') ?? '';
       expect(rescue).toContain('When you are stuck');
       expect(rescue).not.toContain('Figma');
+      expect(tree.read('course/README.md', 'utf-8')).toContain(
+        'day1-stories.md',
+      );
+      expect(tree.read('course/day1-stories.md', 'utf-8')).toContain(
+        '`storybook-react` MCP',
+      );
       for (const path of courseFiles()) {
         const text = tree.read(path, 'utf-8') ?? '';
         expect(text).not.toContain('pieper.io');
@@ -3512,6 +3597,7 @@ describe('preset generator', () => {
     expect(gitignore).toContain('node_modules');
     expect(gitignore).toContain('dist');
     expect(gitignore).toContain('.claude/settings.local.json');
+    expect(gitignore).toContain('check.out');
   });
 
   it('writes .claude/settings.local.json to .gitignore even when no .gitignore existed yet', async () => {
@@ -3521,6 +3607,7 @@ describe('preset generator', () => {
 
     const gitignore = tree.read('.gitignore', 'utf-8') ?? '';
     expect(gitignore).toContain('.claude/settings.local.json');
+    expect(gitignore).toContain('check.out');
   });
 
   it('CLAUDE.md has a Definition of Done section naming all six checks and the exit-code rule', async () => {

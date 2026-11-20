@@ -1,8 +1,10 @@
 # Day 1, Block 02: the Settings Card
 
 Used in Day 1 Block 02. The Figma frame "Settings / Card" becomes a {{FRAMEWORK}} component
-built from `@atelier-ui/{{FRAMEWORK_LC}}`. Select the frame in Figma first (the Desktop
-Bridge must be connected, see `rescue.md`).
+built from `@atelier-ui/{{FRAMEWORK_LC}}`. The Desktop Bridge must be connected (see
+`rescue.md`). Select the frame in Figma with Claude Code already running: a selection made
+before the session started is not seen. If the agent reports that nothing is selected, click
+the frame again.
 
 ## Generate the component
 
@@ -15,8 +17,22 @@ I've selected the "Settings / Card" frame in Figma.
    and AtlButton props.
 3. Generate the {{FRAMEWORK}} component using:
    - The Atelier UI components matched from Storybook
-   - The exact token names from boundVariables (they map 1-to-1 to CSS
-     custom properties — no conversion needed)
+   - The tokens behind the frame's boundVariables: resolve each variable to
+     its name and use the matching --ui-* custom property. Where a name
+     does not match exactly, say so instead of guessing.
+```
+
+The Figma variable name and the CSS custom property are close, not identical:
+`border-width/default` is `--ui-border-width`. A property name the agent derived from a
+Figma name is a guess until it has been looked up.
+
+## Make it visible
+
+The agent saves a component; it does not put it on the screen unless you say so. Until the
+card is mounted there is nothing to compare with Figma.
+
+```text
+I cannot see the card anywhere. Put it into the app so I can look at it with npm start.
 ```
 
 ## If the first draft still drifts on tokens

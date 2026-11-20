@@ -23,12 +23,18 @@ a Figma Variable in the `Library Tokens` collection — the semantic tier that m
 `--ui-*` custom properties. A hardcoded value is a Critical finding in the
 Figma review.
 
-**Elevation is a CSS-only token.** `Library Tokens` carries 84 variables — 50 colour, 10
-spacing, 6 sizing (`control-height/*` + `row-height/*`), 5 radius, 12 typography, 1
-opacity — and **no shadow**. `--ui-shadow-*` exists only in `tokens.css`. A component
+**Elevation is a CSS-only token.** `Library Tokens` carries colour, spacing, sizing
+(`control-height/*` + `row-height/*`), radius, typography, border-width and opacity
+variables — and **no shadow**. `--ui-shadow-*` exists only in `tokens.css`. A component
 whose design depends on a drop shadow (Toast, an elevated StatCard) has to state the
 shadow in the brief and in code, because Figma cannot bind it. Notice this rather than
 inventing a shadow variable.
+
+**Two briefs share a name with the library.** `@atelier-ui/{{FRAMEWORK_LC}}` already has a toast of its own (in Angular it is exported as
+`AtlToast`) and an `AtlAvatar`, and what the Toast and Avatar briefs ask for differs from them (the
+Avatar brief's axis is `variant` where the library's says `shape`). That is known and
+wanted: you build your own component in the workshop app and do not import the library's.
+An agent that points out the collision is right; tell it which one you mean.
 
 **States get a Figma axis; the code's `variant` union never does.** Figma has exactly one
 primitive for a mutually-exclusive option — a Component Property of type Variant — so a

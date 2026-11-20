@@ -181,21 +181,26 @@ function writeCourseFolder(
   const index: [string, string][] = [
     [
       'day1-team-directory.md',
-      'Day 1, Block 05: the Team directory brief, start prompt, checks prompt, receipts prompt and time box',
+      'Day 1, Block 05: the Team directory brief, start prompt, checks prompt, receipts prompt, the "not verified" prompt, a stretch story and the time box',
+    ],
+    [
+      'day1-stories.md',
+      'Day 1 Block 04: `docs-show` on a library component, then a story with a `play`, red once and green',
     ],
   ];
   const write = (file: string, template = file) =>
     tree.write(`course/${file}`, render(template));
   write('day1-team-directory.md');
+  write('day1-stories.md');
   if (figmaMcp) {
     index.push(
       [
         'day1-settings-card.md',
-        'Day 1 Block 02: the Settings Card generation prompt, the token fix-up and the lint-and-build ladder stage',
+        'Day 1 Block 02: the Settings Card generation prompt, the token fix-up, the mount prompt and the lint-and-build ladder stage',
       ],
       [
         'figma-linter-prompt.md',
-        'Day 1 Block 03 and Day 2 Block 01: the Figma linter prompt',
+        'Day 1 Block 03 and Day 2 Block 01: the pink test prompt and the Figma linter prompt',
       ],
       [
         'parity-prompt.md',
@@ -203,7 +208,7 @@ function writeCourseFolder(
       ],
       [
         'day2-prompts.md',
-        'Day 2 Block 00 (Definition-of-Done exercise), Block 02 (`docs-show` on your component, generation with plan mode) and Block 04 (accessibility), and what to paste when you are stuck',
+        'Day 2 Block 00 (Definition-of-Done exercise), Block 02 (generation with plan mode, `docs-show` on your component), Block 03 (what was red, is the handoff document still true, red on purpose) and Block 04 (accessibility, the dark check), and what to paste when you are stuck',
       ],
       [
         'briefs/',
@@ -2692,6 +2697,27 @@ Course material (prompts, briefs, rescue steps): \`course/README.md\`.
         'Bash(git status)',
         'Bash(git diff *)',
         'Bash(git log *)',
+        // The read-only lookups the course sheets call most often; they no
+        // longer stop for approval. Not every read tool is listed (`figma_check_design_parity`,
+        // `figma_audit_component_accessibility` and `figma_take_screenshot` still ask). The
+        // docs server is allowed whole (it serves docs/token lookups only);
+        // `storybook-local` only by tool name, so `test-run`,
+        // `stories-preview` and `review-create` stay on ask, and the same
+        // for `figma-console` below: `figma_execute` and every write tool
+        // keep asking on purpose.
+        `mcp__${COURSE_SCAFFOLD[framework].mcp}`,
+        'mcp__storybook-local__docs-list',
+        'mcp__storybook-local__docs-show',
+        'mcp__storybook-local__docs-show-story',
+        'mcp__storybook-local__get-storybook-story-instructions',
+        ...(options.figmaMcp
+          ? [
+              'mcp__figma-console__figma_get_status',
+              'mcp__figma-console__figma_get_selection',
+              'mcp__figma-console__figma_get_component_for_development',
+              'mcp__figma-console__figma_lint_design',
+            ]
+          : []),
       ],
       ask: [
         // `Bash(npx nx *)` above pre-approves every `nx` subcommand, `migrate`
@@ -2807,7 +2833,7 @@ Course material (prompts, briefs, rescue steps): \`course/README.md\`.
   const gitignoreBase = existingGitignore.replace(/\n+$/, '');
   tree.write(
     '.gitignore',
-    `${gitignoreBase}${gitignoreBase ? '\n\n' : ''}# Claude Code — personal overrides, never shared\n.claude/settings.local.json\n`,
+    `${gitignoreBase}${gitignoreBase ? '\n\n' : ''}# Claude Code — personal overrides, never shared\n.claude/settings.local.json\n\n# Scratch output of a redirected gate run (course/, "When you are stuck")\ncheck.out\n`,
   );
 
   console.log(`\n◇ Formatting files…`);
