@@ -135,7 +135,7 @@ buffer by arithmetic only).
 ## 4. The path — checkpoints, expected signal, false-positive traps
 
 Commands run in the scaffolded workspace (ADR-0137), a shell in its root,
-Claude Code CLI logged in with `claude auth login` (a Claude subscription). Every block's **Done when** is
+Claude Code CLI logged in (a Claude subscription; the seats are logged in during provisioning, before the course). Every block's **Done when** is
 quoted from `/schulung` (`Block.done`); log pass/fail against it in §5.
 
 **Time-recovery cuts:** `/schulung` names none. Its only flexibility is the per-block stretch tasks, which are for fast finishers, not cuts.
@@ -178,8 +178,8 @@ They sit at the block that runs them and are numbered here so none gets lost:
     participant's duplicate is not). The PNG of the frame is the fallback that does not depend on it:
     log whether the story carries both entries (`parameters.design` with the link from the handoff
     document's Source line and the PNG) and which of the two showed.
-11. Day 1 Block 01: does the done-when hold inside 25 minutes on a provisioned seat (the verification
-    pass is 7 minutes, the basics and the first commit 10)? Not measured; log the real times.
+11. Day 1 Block 01: does the done-when hold inside 25 minutes on a provisioned seat (frame and verification
+    pass are 10 minutes, the basics and the first commit 15)? Not measured; log the real times.
 12. Day 2 Block 01: do the 20 / 15 / 22 splits (draw from the starter frame, API rules with the short
     exercise, handoff document) hold? Not measured.
 
@@ -195,25 +195,25 @@ _verifies_ it, and the login happens inside Block 01.
 
 **Block 00 — Kickoff and thesis** (talk + live demo).
 _Done when:_ everyone has seen the loop as the map of both days (Read the design → Record deliberate differences → Generate → Verify) and the seven scorecard rows as the map of what a design system has to bring.
-No gate. Time it. The block is 7+2+5+8+3 = 25: thesis 7, a two-minute glossary pass
-(`/workshop#glossary`), the 5-minute guardrail demo (`/prompts#guardrails`), 8 minutes for the
-ladder slide and the scorecard slide (09:14–09:22; the seven rows are walked one by one, each
-with the block where the room meets it, and the scorecard handout is given out here), and 3
-minutes on what participants learn in two days and what they do not. D-1 names ladder stage 3
+No gate. Time it. The block is 10+5+10 = 25: 10 minutes for the thesis with the glossary pass
+(`/workshop#glossary`), the 5-minute guardrail demo (`/prompts#guardrails`), and 10 minutes for the
+ladder slide, the scorecard slide (09:15–09:25; the seven rows are walked one by one, each
+with the block where the room meets it, and the scorecard handout is given out here) and
+what participants learn in two days and what they do not. D-1 names ladder stage 3
 (`npm run check:stylelint`) with what it does not see. Time the parts separately so an overrun
 shows where it comes from. The block has no recap row and no exercise.
 
 **Block 01 — Verify the setup 🔴** (09:25–09:50, 25 min)
-_Done when:_ the model-access command answers, `preflight` is green, `/mcp` lists
+_Done when:_ `preflight` is green, `/mcp` lists
 every server, Storybook runs, the Figma bridge is connected, the first commit exists, and
 anyone still red has a rescue path.
 
 - Node ≥ 22.12 active (preflight accepts 22.12 or newer); own workspace
   created with `npx create-atelier-ui-workspace`, one framework chosen (Angular).
-- Confirm model access first (09:27–09:33): `claude auth login` (subscription login in the
-  browser), then `claude -p "Reply with exactly: PREFLIGHT-OK"`. A reply instead of an auth
-  error means access is real; preflight sends no model request and does not check the login.
-- One verification pass (09:33–09:40, 7 minutes): run `npm run preflight` and expect a clean
+- Model access is not a step here: the seats are logged in during provisioning, before the
+  course. Preflight sends no model request and does not check the login, so a seat whose login
+  expired shows up only when Claude is first asked something; log it.
+- Frame and one verification pass (09:25–09:35, 10 minutes): run `npm run preflight` and expect a clean
   run (Node/npm, `which claude` + `claude --version`, the Figma bridge, MCP reachability and
   ports, Playwright Chromium); Storybook runs (`npm run storybook`, `localhost:6006`,
   ADR-0137); open the prepared duplicate in Figma Desktop and start the Desktop Bridge plugin,
@@ -227,9 +227,9 @@ anyone still red has a rescue path.
   appear. Write down what `/mcp` actually shows.
 - **STOP.** A green preflight proves the CLI, the bridge, MCP reachability and the ports,
   nothing more. All three checkpoints (preflight and Storybook, bridge, `/mcp`) are read at
-  09:40; record how many seats were red and whether 7 minutes were enough. Rehearsal check
+  09:35; record how many seats were red and whether 10 minutes were enough. Rehearsal check
   11 applies to the whole block.
-- Everybody, 09:40–09:50 (no rescue slot any more): ten minutes of Claude Code basics at the
+- Everybody, 09:35–09:50 (no rescue slot any more): fifteen minutes of Claude Code basics at the
   projector (`/prompts#claude-code-basics`), then the first commit
   (`git commit -m "scaffold: preflight green"`; the scaffold's `git init` staged
   everything and committed nothing). Record whether `git log` shows one commit.
@@ -310,11 +310,11 @@ added and one frame uses Auto Layout. The checklist for your own file is a hando
 _Done when:_ one story plus a `play` function written, seen red once and then
 green, and `docs-show` called.
 
-- Story as a claim and the MCP servers (14:15–14:25), then `atelier`: look up Button with `docs-show` (14:38–14:53). Expect the docs back
+- Storybook in one minute (slide D1-04-01b, provisional draft slide, part of this row), story as a claim and the MCP servers (14:15–14:25), then `atelier`: look up Button with `docs-show` (14:40–15:00, with the anatomy of a story at the end). Expect the docs back
   **shaped for the cohort framework** (Angular: two-way `[(checked)]`-style
   bindings and split inputs/outputs, ADR-0097); a React-shaped reply (JSX,
   `children`, `on*Change`) is a real regression, say so.
-- Negative demo (D-4, 13 minutes): same question in a browser chat without MCP — expect a
+- Negative demo (D-4, 14:25–14:40, 15 minutes): same question in a browser chat without MCP — expect a
   hallucination (illustrative only, nothing to run). Then the compiler stage (ladder stage 1):
   paste the invented usage into the workspace, the agent runs `npm run build`; log whether an
   invented value gives `TS2322` with the allowed values, a bound invented input gives `NG8002`,
@@ -323,7 +323,8 @@ green, and `docs-show` called.
 - Live exercise: ask Claude for Button props, print token values, preview in
   chat. Ask the MCP server for a prop that does not exist (page stretch) and
   expect "not documented", not an invention.
-- **STOP — the red-then-green story** (ladder stage 4, 14:53–15:25, 32 minutes). Prompt one story with a `play` function
+- **Anatomy of a story** (the last minutes of the `docs-show` row, about 14:55, provisional draft slide D1-04-04b, no minutes of its own). On a seat, check that each line the slide names can be found in the seat's own `docs-show` output for Button (component description, an input's line, the story code); a line that is missing is a finding.
+- **STOP — the red-then-green story** (ladder stage 4, 15:00–15:25, 25 minutes). Prompt one story with a `play` function
   for a variant (template story as context); the agent calls
   `get-storybook-story-instructions` first and runs `test-run` through `storybook-local`, so
   it sees the red itself; watch the same red in the play panel, fix it by prompt, watch it
@@ -382,15 +383,15 @@ _Done when:_ everyone knows their target component, can name the workspace's ski
   `.claude/skills/atelier-component/SKILL.md`, then ask "Which skills do you have in this workspace, and when would you load each? Only list them."
   Signal: the answer names `atelier-component` (D2B00-C2). Rehearsal check 9: log whether
   the answer lists the skills on the seat and whether 5 minutes were enough.
-- **STOP — what the agent reads here, and the line your team would add (09:18–09:28, 10
-  minutes).** Projector, 4 minutes: the four things an agent gets here (rules file, skill,
+- **STOP — what the agent reads here, and the line your team would add (09:20–09:30, 10
+  minutes).** Projector, 5 minutes: the four things an agent gets here (rules file, skill,
   MCP server, hook), then `CLAUDE.md` → "Definition of Done" and `.claude/settings.json` →
   `hooks.PostToolUse` → `.claude/hooks/format-edited.sh`; then the trainer demo, once: ask
   which commands the Definition of Done lists; delete the `npm run check:stories` line from the
-  list and save; `/clear`, ask again; put the line back. Exercise, 6 minutes: every seat asks
+  list and save; `/clear`, ask again; put the line back; close with the slide "CLAUDE.md asks. A hook enforces." (D2-00-06b, no minutes of its own, inside these 5 minutes). Exercise, 5 minutes, closed by the recap question: every seat asks
   the first question, writes down the one line their own team would add (the command, a dash,
   what it proves) and checks it with a neighbour: a command that can fail, or a wish? Signal:
-  every seat has one written line with a command in it (D2B00-C3, 09:28). Rehearsal check 4:
+  every seat has one written line with a command in it (D2B00-C3, 09:30). Rehearsal check 4:
   log whether the two answers of the trainer demo differ as described.
 - No check otherwise. Time it.
 
@@ -409,7 +410,7 @@ _Done when:_ a master plus a filled handoff document, including its deliberate d
   set: fix the real findings, note the false alarms), 15 min LLM-friendly API rules on your
   own component (about 5 min on the four rules, about 10 on the short exercise: list each
   property with its name and values, check against the four rules, rename now; before the
-  handoff: it fixes the prop names), 22 min handoff, 3 min recap. Target: ≥ 2 variants × 2
+  handoff: it fixes the prop names), 25 min handoff with the recap question closing it. Target: ≥ 2 variants × 2
   states, properties,
   correct `--ui-*` tokens, a dark-mode variant; the exact matrix is in the
   brief. Skill: `figma-workspace-architect` ("used here for the first time").
@@ -426,7 +427,7 @@ _Done when:_ a master plus a filled handoff document, including its deliberate d
 - **Abort criterion for this 🔴 block:** not specified on /schulung. The
   carried-over proposal (finish with whatever scope was built, write the
   handoff from that) is a trainer decision, undecided, not an agreed rule.
-  Record whether the block overran and what ran long (the 5/20/20/5/15/22/3 split is
+  Record whether the block overran and what ran long (the 5/20/20/5/15/25 split is
   unverified).
 
 **Block 02 — Component and stories from the handoff**
@@ -434,7 +435,7 @@ _Done when:_ the component from your handoff document runs in Storybook with one
 variant value, and `docs-show` describes it: a description for the component and a line per
 property.
 
-- 11:15–11:17: start `npm run storybook` if it is not running; `/mcp` shows `storybook-local`
+- 11:15–11:20: start `npm run storybook` if it is not running; `/mcp` shows `storybook-local`
   connected; expect the dev/test tools (`get-storybook-story-instructions`,
   `stories-preview`, `test-run`) to be listed, identical for all three frameworks since
   Storybook 10.6.0. No `claude mcp add` step, nobody types a server in.
@@ -447,7 +448,7 @@ property.
   per variant value and Boolean state, a `play` for every behaviour line of the document.
   Then look at the result: open every story in the running Storybook (or `stories-preview`),
   compare by eye with the Figma master, hand what is wrong back to Claude by prompt
-  (48-minute row, 11:17–12:05). Record how many seats had a rendering story at 12:05 (rule
+  (45-minute row, 11:20–12:05). Record how many seats had a rendering story at 12:05 (rule
   R9 at 30 percent: the `docs-show` row then becomes a trainer demo on one green seat).
 - **STOP — what the agent can read about your component (12:05–12:15, 10 minutes,
   golden prompts §2.5):** `docs-list`, then `docs-show` on your own component
@@ -459,7 +460,7 @@ property.
   `npx storybook tools --config-dir workshop-<fw>/.storybook --json docs show --input '{"id":"<id>"}'`
   (measured 2026-11-18 on the 0.4.10 Angular scaffold: a new component with a story appears
   in `docs list`; `docs show` prints Inputs, Outputs and the JSDoc line where one exists).
-- **STOP — look at both, with demo D-3 (12:15–12:23, 8 minutes).** About two minutes of demo
+- **STOP — look at both, with demo D-3 (12:15–12:25, 10 minutes).** About two minutes of demo
   on one green seat or the trainer machine: a story with the Design panel open, two entries,
   the Figma frame as embed and a PNG of the frame (golden prompts §2.5). Then the running
   stories next to the Figma component, every variant and state, differences written down as a
@@ -515,7 +516,7 @@ differences" section and is new today, Day 1 used code and Figma).
   the toggle is a manual preview, not test coverage. Walk the dark state by eye
   and log what you saw. Golden prompt for the dark-mode token audit:
   `tasks/schulung-golden-prompts.md` §3.2.
-- **STOP — the parity report (15:30–15:38, 8 minutes).** Run the parity prompt on your own
+- **STOP — the parity report (15:30–15:40, 10 minutes).** Run the parity prompt on your own
   component (the tool for the Day 1 by-eye comparison, node id from the handoff document; golden prompts §3.3
   rewritten as that prompt). No `codeSpec` assembly, no `check:contracts -- --emit` as a
   participant step. Without a connected bridge there is no parity call (a **degraded run,
@@ -530,7 +531,7 @@ differences" section and is new today, Day 1 used code and Figma).
   four-plus-spacing variant has not been run live (R-227). Per `libs/design-contracts/README.md`,
   `check:contracts --emit <folder>` writes `<folder>/<fw>/<Name>.codespec.json`. This is
   not a path any participant walks.
-- Sort every difference (20-minute row, 15:38–15:58): the parity list plus the list from
+- Sort every difference (20-minute row, 15:40–16:00): the parity list plus the list from
   Block 02, one label each: code (hand it back to Claude, fixed inside this row), Figma (a
   note for the designer; the master is not changed now) or kept on purpose (it must be in the
   handoff document's "Deliberate differences"; if it is not there, write it there and say
@@ -542,14 +543,14 @@ differences" section and is new today, Day 1 used code and Figma).
 _Done when:_ everyone has marked the seven scorecard rows for their own design system from memory and leaves with a written next step for the weakest row, and
 a follow-up channel is set up.
 
-- Up to 8 participants, 80 minutes: strictly 3 minutes each.
+- Up to 8 participants, 80 minutes: strictly 3 minutes each (25 minutes with changeover).
   Show your component, one prompt that worked and one that failed. **Time it**:
-  8 × 3 min = 24 min leaves 56 for the rules (3), the trainer synthesis (8), the workspace
-  anatomy (12), the new slide (3), the transfer step (27) and the exit round (3); log whether
+  8 × 3 min = 24 min plus changeover = 25 min leaves 55 for the rules (5), the trainer synthesis (5), the workspace
+  anatomy (10), the new slide (5), the transfer step (25) and the exit round (5); log whether
   the block holds at the cohort size, a solo run can only simulate this.
 - Trainer synthesis: prompt patterns that worked, anti-patterns, when Claude
   fails, how to deal with drift.
-- **Workspace anatomy (12 min):** `.mcp.json` (two roles: in your own repo the library half is
+- **Workspace anatomy (10 min):** `.mcp.json` (two roles: in your own repo the library half is
   your library's manifest or package, the local half is the addon MCP of the Storybook you
   already run; at home the Storybook MCP on your own Storybook replaces the `atelier` package),
   `CLAUDE.md`, `.claude/skills/`, `.claude/settings.json` (permissions and the format hook),
@@ -558,14 +559,14 @@ a follow-up channel is set up.
   commands, TypeScript + ESLint + stylelint, story tests with axe, proof command and
   hooks, skills). Add the one sentence: you take the workspace home as it
   is on the course machine, and the trainer tells you how (`TODO(owner)`: how it leaves
-  the machine). Record whether 12 minutes held.
-- **What carries your docs, and what you depend on (3 min, talk only):** the Storybook MCP on
+  the machine). Record whether 10 minutes held.
+- **What carries your docs, and what you depend on (5 min, talk only):** the Storybook MCP on
   your own Storybook as the route that brings the docs to consuming teams' agents; the Figma
   linter, the a11y audit and parity all depend on the third-party `figma-console-mcp`.
-- **Transfer step (27 min):** the scorecard (`workshop/handouts/ds-scorecard.md`) is the
-  frame: about 3 minutes to frame it, then mark the seven rows for your own design system
-  from memory (yes / partly / no, about 12 minutes), pick the weakest row and write the next
-  step (about 7), neighbours read each other's step (about 5). The Figma and the Storybook
+- **Transfer step (25 min):** the scorecard (`workshop/handouts/ds-scorecard.md`) is the
+  frame: about 5 minutes to frame it, then mark the seven rows for your own design system
+  from memory (yes / partly / no, about 10 minutes), pick the weakest row and write the next
+  step (about 5), neighbours read each other's step (about 5). The Figma and the Storybook
   checklist, with the check prompt, are explicit homework on the own system (the trainer's
   sources are `/readiness`, `/storybook-readiness#self-check`,
   `/design-principles#check-your-own`), not room work. Rehearsal check 7 (owner): a FigmaLint

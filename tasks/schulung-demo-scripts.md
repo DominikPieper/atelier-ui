@@ -32,11 +32,11 @@ derived from the code, not from a recorded run.
 
 | Id  | Demo                                                                   | Where on `/schulung`        | Min     | Status                                      |
 | --- | ---------------------------------------------------------------------- | --------------------------- | ------- | ------------------------------------------- |
-| D-1 | Guardrail demo: same prompt without/with MCP, then stylelint (stage 3) | Day 1 Block 00, 09:09-09:14 | 5       | Reworded (ladder stage 3)                   |
-| D-3 | Design panel on a story: Figma embed and PNG                           | Day 2 Block 02, 12:15-12:23 | about 2 | Moved from Day 1, two entries (ADR-0187)    |
-| D-4 | Hallucination, the compiler stage (stage 1), then `docs-show`          | Day 1 Block 04, 14:25-14:38 | 13      | Extended (compiler stage added)             |
-| D-5 | Red-then-green story with a `play` function (stage 4)                  | Day 1 Block 04, 14:53-15:25 | 32      | Named as ladder stage 4, steps unchanged    |
-| D-7 | What a skill is, on a local file                                       | Day 2 Block 00, 09:13-09:18 | 5       | Rewritten (ADR-0181; was the uianatomy MCP) |
+| D-1 | Guardrail demo: same prompt without/with MCP, then stylelint (stage 3) | Day 1 Block 00, 09:10-09:15 | 5       | Reworded (ladder stage 3)                   |
+| D-3 | Design panel on a story: Figma embed and PNG                           | Day 2 Block 02, 12:15-12:25 | about 2 | Moved from Day 1, two entries (ADR-0187)    |
+| D-4 | Hallucination, the compiler stage (stage 1), then `docs-show`          | Day 1 Block 04, 14:25-14:40 | 15      | Extended (compiler stage added)             |
+| D-5 | Red-then-green story with a `play` function (stage 4)                  | Day 1 Block 04, 15:00-15:25 | 25      | Named as ladder stage 4, steps unchanged    |
+| D-7 | What a skill is, on a local file                                       | Day 2 Block 00, 09:15-09:20 | 5       | Rewritten (ADR-0181; was the uianatomy MCP) |
 
 **Dropped (no longer in the agenda):**
 
@@ -73,13 +73,13 @@ derived from the code, not from a recorded run.
 
 ---
 
-## D-1 · Guardrail demo (Day 1 Block 00, 09:09-09:14, 5 min) · ladder stage 3
+## D-1 · Guardrail demo (Day 1 Block 00, 09:10-09:15, 5 min) · ladder stage 3
 
 **Goal.** Two messages in one demo. (1) Context steers the agent: the same prompt gives a
 hallucinating answer or a token-exact one, and participants name one concrete
 difference. (2) Context is not enough on its own: a lint rule (stylelint) in the
 workspace catches what still slips through, so AI output cannot quietly bypass the design
-system. This is stage 3 of the ladder (the slide at 09:14 names all five stages), and it
+system. This is stage 3 of the ladder (the slide at 09:15 names all five stages), and it
 is taught with what it does not see (below).
 
 **Preconditions.**
@@ -180,7 +180,7 @@ exact command the target runs). Do not improvise a different prompt.
 
 ---
 
-## D-4 · Hallucination, the compiler stage, and `docs-show` (Day 1 Block 04, 14:25-14:38, 13 min) · ladder stage 1
+## D-4 · Hallucination, the compiler stage, and `docs-show` (Day 1 Block 04, 14:25-14:40, 15 min) · ladder stage 1
 
 **Goal.** Participants see (1) that the same question is answered wrongly without MCP and
 correctly with it, (2) that the compiler catches a wrong value and a bound invented input
@@ -210,12 +210,12 @@ Window (a), no MCP:
 What props does the AtlButton component of the Atelier UI library have? List them with their allowed values.
 ```
 
-**Order of the row (13 min).**
+**Order of the row (15 min).**
 
 1. 0:00 to 2:00 Window (a): the hallucination.
 2. 2:00 to 5:00 **Compiler stage (ladder stage 1), three beats** (below).
 3. 5:00 to 10:00 Window (b): `docs-show`, then the stretch.
-4. 10:00 to 13:00 Every participant runs the (b) prompt in their own workspace (the
+4. 10:00 to 15:00 Every participant runs the (b) prompt in their own workspace (the
    "Then" paragraph at the end).
 
 ### Compiler stage (the three beats)
@@ -297,7 +297,7 @@ confirms the reply is shaped for Angular. A React-shaped reply (JSX, `children`,
 
 ---
 
-## D-5 · Red-then-green story with a `play` function (Day 1 Block 04, 14:53-15:25, 32 min exercise) · ladder stage 4
+## D-5 · Red-then-green story with a `play` function (Day 1 Block 04, 15:00-15:25, 25 min exercise) · ladder stage 4
 
 **Goal.** Model the first red-then-green cycle once, so participants copy the habit:
 a story that never failed claims nothing. This is stage 4 of the ladder; the steps do not
@@ -345,7 +345,7 @@ their own), `/mcp` → reconnect is the fallback; the play panel shows the same 
 
 ---
 
-## D-3 · Design panel on a story (Day 2 Block 02, 12:15-12:23, about 2 min of the 8-minute row)
+## D-3 · Design panel on a story (Day 2 Block 02, 12:15-12:25, about 2 min of the 10-minute row)
 
 **Goal.** Show the one thing explained nowhere else: the Design panel (`parameters.design`,
 `@storybook/addon-designs`), which puts the Figma frame next to the story it was built from.
@@ -389,7 +389,7 @@ it from the handoff document's Source line.
 
 ---
 
-## D-7 · What a skill is, on a local file (Day 2 Block 00, 09:13-09:18, 5 min)
+## D-7 · What a skill is, on a local file (Day 2 Block 00, 09:15-09:20, 5 min)
 
 **Goal.** Say what a skill is with the participants' own file in front of them: a guide
 Claude loads when the task matches its description. Nothing in this demo needs the network.
@@ -427,7 +427,7 @@ skills where their install landed. Seats can differ in that last group, and the 
 is worth one sentence: a skill that is not in the folder cannot load. The answer lists the skills (check 9): verified headless 2026-11-18 (R-262); the interactive run is open in R-040; that it fits in 5 minutes is **UNVERIFIED**.
 
 **Point at.** The "when" in the answer beside the `description` line in the file: the same
-sentence, and that is the whole mechanism. Then stop. The next row (09:18-09:22) puts the
+sentence, and that is the whole mechanism. Then stop. The next row (09:20-09:25) puts the
 skill beside the rules file, the MCP servers and the hook. The
 description says writing a Figma ↔ code contract is opt-in, not part of the loop (scaffold
 release of 2026-11): if asked, one sentence, "Atelier's own check, the last and optional

@@ -123,7 +123,7 @@ below, warm run times (build 6-9 s, lint 6-7 s, stylelint 2-4 s), and one headle
     §2.2–2.4 = Day 2 Block 03 "Iterate: prompt quality and the self-healing loop" (the
     correction prompts — the block `schulung.astro` names for golden prompts; also the home
     of ladder stage 4, where the agent runs `test-run` and repairs);
-    §2.5 = Day 2 Block 02, rows 12:05 to 12:23 (`docs-show` on your own component, then the Design panel and the look at both);
+    §2.5 = Day 2 Block 02, rows 12:05 to 12:25 (`docs-show` on your own component, then the Design panel and the look at both);
     §2.6 = Day 2 Block 00, row 09:18 to 09:28 (the line your team would add, with the trainer demo).
   - §3 = Day 2 Block 04 "Verify: a11y, states, parity" (a11y + dark mode + the participant
     parity prompt §3.3). §3.4 and §3.5 are trainer-only reference.
@@ -533,7 +533,7 @@ already phrased as a ready one-line correction:
 
 ---
 
-### 2.5 `docs-show` on your own component (Day 2 Block 02, 12:05 to 12:15, 10 min), then look at both (12:15 to 12:23, 8 min)
+### 2.5 `docs-show` on your own component (Day 2 Block 02, 12:05 to 12:15, 10 min), then look at both (12:15 to 12:25, 10 min)
 
 The prompts are NOT YET VERIFIED as an agent run (rehearsal); the call and the refresh are verified headless 2026-11-18 (R-262); the interactive run is open in R-040 (see below). Through the local Storybook MCP (`storybook-local`), once the
 component and its stories render. The point: what would an agent that uses your component
@@ -557,7 +557,7 @@ the fallback). Then the running stories next to the Figma component, every varia
 write the differences down as a list (Block 04 sorts it).
 
 **Expected output.** A list of gaps, then a second `docs-show` that has the description and
-the property lines. Checkpoint D2B02-C4 (12:23): `docs-show` ran on the own component and at
+the property lines. Checkpoint D2B02-C4 (12:25): `docs-show` ran on the own component and at
 least one description was added on at least 70 % of the seats. Rule R9: at 12:05, if 30 % or
 more have no rendering story, this row becomes a trainer demo on one green seat.
 
@@ -664,10 +664,10 @@ Participants have this prompt in `course/day2-prompts.md`.
 
 ### 3.3 Parity prompt for your own component (participants)
 
-Day 2 Block 04, parity row 15:30 to 15:38 (8 min). Participants paste it from `course/parity-prompt.md`. It is the tool for the Day 1 by-eye comparison
+Day 2 Block 04, parity row 15:30 to 15:40 (10 min). Participants paste it from `course/parity-prompt.md`. It is the tool for the Day 1 by-eye comparison
 prompt; the node id comes from the participant's handoff document. The prompt completes (79 s, 14 turns,
-no writes): verified headless 2026-11-18 (R-262); the interactive run is open in R-040. The report is only a list here: the **sorting row** (15:38 to
-15:58) labels each difference and fixes the code ones.
+no writes): verified headless 2026-11-18 (R-262); the interactive run is open in R-040. The report is only a list here: the **sorting row** (15:40 to
+16:00) labels each difference and fixes the code ones.
 
 > Run `figma_check_design_parity` on the node `<NODE FROM THE HANDOFF DOCUMENT>` against my
 > component `<ComponentName>`. For each discrepancy, say whether it is **code** (the code
