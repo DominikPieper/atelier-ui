@@ -112,9 +112,16 @@ release is on npm, and the owner knows the version to reprovision seats from.
 - [x] F6 ADR-0188 and the index row; tracker closures; this section's review
 - [x] F7 Gates by exit code, hostile diff read, cross-check (2026-11-20; see the review
       below: the cross-check was not a second model)
-- [ ] F8 Decks: stale facts and affected exercise wording in the deck sources (not
-      committed)
-- [ ] F9 Commits per step, one push, release verified on npm, version reported; memory
+- [x] F8 Decks: stale facts and affected exercise wording in the deck sources (not
+      committed). Published 2026-11-20 as drafts into both deck artifacts, label "Package F
+      2026-11-20": Day 1 version 89 (11 files), Day 2 version 55 (23 files); one slide per
+      deck read back. Not rendered after the edit; the tight slides are listed in the deck
+      change logs. The German label „Werkzeug-Artefakt" is a draft the owner has not judged.
+- [x] F9 Commits per step, one push, release verified on npm, version reported; memory.
+      Released as **0.4.18** (2026-11-20; Publish and CI runs green, all seven packages on
+      npm, `check:release-drift` exit 0, the published `@atelier-ui/create-workspace` tarball
+      lists the new course sheets). Reprovision the seats from 0.4.18 before 2026-11-23. Not
+      done: no fresh seat was scaffolded from 0.4.18.
 
 ### Review of package F (2026-11-20)
 
