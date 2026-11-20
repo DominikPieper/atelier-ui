@@ -14,6 +14,6 @@ export const DAY2_DONE: readonly string[] = [
   '`npm run storybook` is running and shows the component, with one story per variant value',
   'It works by keyboard, and neither `figma_audit_component_accessibility` nor the Storybook a11y tab reports an open finding',
   'Dark mode switches correctly through the token override',
-  'Every difference `figma_check_design_parity` reports between your Figma node and the component is sorted (code / Figma / kept on purpose) and none is left unexplained — a quiet parity report is not a clean component (see Day 2 Block 04)',
+  'Every difference `figma_check_design_parity` reports between your Figma node and the component is sorted (code / Figma / kept on purpose / tool artefact) and none is left unexplained — a quiet parity report is not a clean component (see Day 2 Block 04)',
   'As proof: `/verify` in Claude Code runs through (the checks it lists, each with exit code 0)',
 ];

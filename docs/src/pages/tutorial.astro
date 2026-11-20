@@ -30,8 +30,9 @@ const examplePrompt = (
    and AtlButton props.
 3. Generate the ${fw} component using:
    - The Atelier UI components matched from Storybook
-   - The exact token names from boundVariables (they map 1-to-1 to CSS
-     custom properties — no conversion needed)`;
+   - The tokens behind the frame's boundVariables: resolve each variable to
+     its name and use the matching --ui-* custom property. Where a name
+     does not match exactly, say so instead of guessing.`;
 
 // Each sample is two files: the component and its plain `.css` stylesheet. The
 // workspace's stylelint reads only `.css` files, so nothing is styled inline.

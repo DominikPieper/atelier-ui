@@ -47,7 +47,7 @@ Master / file checked: ______________________________
 
 ## The check prompt
 
-For Part A, with figma-console-mcp connected to your file (a third-party tool) and the master selected:
+For Part A, with figma-console-mcp connected to your file (a third-party tool). Start the agent first, then select the master: a selection made before the agent was running is not seen.
 
 > Run figma_lint_design on the node I have selected with only the rules hardcoded-color, default-name and detached-component. Return the findings as a list: layer, rule, message. Change nothing in the file.
 

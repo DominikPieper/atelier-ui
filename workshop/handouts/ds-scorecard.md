@@ -26,4 +26,4 @@ Where the course taught each row:
 4. Prove: Day 1 Block 04, Day 2 Block 03.
 5. Enforce: the ladder, Day 1 Blocks 02 and 05.
 6. Instruct: Day 2 Blocks 00 and 05.
-7. Measure: Day 1 Block 00 (the guardrail demo is the smallest form); an exercise of its own comes with cohort 2.
+7. Measure: Day 1 Block 00 (the guardrail demo is the smallest form).

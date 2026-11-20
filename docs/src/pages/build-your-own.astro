@@ -34,9 +34,12 @@ const LINT_PROMPT = `Run figma_lint_design on my component set <node id> with on
 hardcoded-color, default-name and detached-component. Return the findings as a
 list. Do not change anything in the file.`;
 const PARITY_PROMPT = `Run figma_check_design_parity on the node from my handoff document against
-my component. List each discrepancy and say whether the code or the Figma
-master should change, or whether the "Deliberate differences" section already
-names it, and why. Do not change anything yet.`;
+my component. Sort every discrepancy into one of four: code (the code should
+change), Figma (the master should change), kept on purpose (only if the
+handoff document's "Deliberate differences" section names it) or tool artefact
+(the tool compared two things that are not the same thing, so there is no
+difference to fix; say what it compared). Give the reason in one line each.
+Then list what the tool did not compare at all. Do not fix anything yet.`;
 ---
 
 <BaseLayout
@@ -314,13 +317,18 @@ names it, and why. Do not change anything yet.`;
         <li>
           What can the agent read about your component (10 min)? Call
           <code>docs-list</code>, then <code>docs-show</code> on your own
-          component through <code>storybook-local</code>. Read it as the agent
-          of a consumer: what would it have to guess? No description for the
-          component, a property without a description, a value set shown only as
-          a bare type alias. Ask Claude to add the JSDoc, then call
-          <code>docs-show</code> again and compare. The second call normally
-          shows the new text within about a second; restart Storybook only if it
-          does not. Without the MCP, the same call through the CLI:
+          component through <code>storybook-local</code>. Read it as an agent
+          that has never seen the component and has only this text: what would
+          it have to guess or get wrong? The descriptions are usually there
+          already, because the agent wrote them while it generated, so look for
+          what is left: a code snippet that would not work as shown, a value
+          whose effect is not stated, behaviour that is documented nowhere. Sort
+          the list (a gap in the documentation, or a gap in the component), ask
+          Claude to close the documentation gaps where they live (JSDoc, the
+          story), then call <code>docs-show</code> again and compare. The second
+          call normally shows the new text within about a second; restart
+          Storybook only if it does not. Without the MCP, the same call through
+          the CLI:
           <Code
             code={DOCS_SHOW_CLI}
             lang="shell"
@@ -350,9 +358,9 @@ names it, and why. Do not change anything yet.`;
       </ol>
       <p class="byo-done">
         <strong>Done when</strong> the component from your handoff document runs
-        in Storybook with one story per variant value, and
-        <code>docs-show</code> describes it: a description for the component and
-        a line per property.
+        in Storybook with one story per variant value, and you have read
+        <code>docs-show</code> on it as an agent that has only that text and
+        closed the gaps it would have had to guess.
       </p>
     </section>
 
@@ -431,7 +439,11 @@ names it, and why. Do not change anything yet.`;
         <li>
           Three-step a11y check: <code>figma_audit_component_accessibility</code
           >, then the Storybook a11y panel (axe-core), then a keyboard
-          walkthrough. Let Claude fix the findings. Background:
+          walkthrough. Read how the audit classified the component, not only the
+          score: a set classed as presentational skips the focus-indicator and
+          target-size checks, so 100 out of 100 can have checked little. The
+          keyboard walkthrough is yours, by hand: Tab, Shift+Tab, Enter, Space,
+          Escape. Let Claude fix the findings. Background:
           <a href="/a11y-workflow#a11y-in-the-loop" class="docs-link-primary"
             >a11y in the loop</a
           >
@@ -454,8 +466,13 @@ names it, and why. Do not change anything yet.`;
           <code>figma_check_design_parity</code> with the node id from your
           handoff document; it needs the connected Desktop Bridge, and without
           it there is no parity call. A quiet report is not a clean component:
-          what the call does not compare, it does not report. Read the result
-          with
+          what the call does not compare, it does not report. Expect a low score
+          and a short real list: the tool marks every finding as a code change,
+          and several are artefacts of the comparison (a resolved hex against a
+          <code>var(--ui-*)</code> string, the bounding box of the whole variant
+          set against one element, a property reported missing on both sides
+          because Figma's name carries an <code>#id</code> suffix). Read the
+          result with
           <a href="/design-to-code#parity-report" class="docs-link-primary"
             >reading a parity report</a
           >.
@@ -465,18 +482,22 @@ names it, and why. Do not change anything yet.`;
           Sort every difference (20 min): the list from the parity report plus
           the list from Block 02, one label each: <strong>code</strong> (hand it
           back to Claude; fixed inside this row), <strong>Figma</strong> (a note
-          for the designer; the master is not changed now) or
+          for the designer; the master is not changed now),
           <strong>kept on purpose</strong> (it must be in the handoff document's
           "Deliberate differences"; if it is not there, either write it there
-          and say why, or it is code or Figma). Classic mislabel: "fixing" in
-          code what was kept on purpose. Without the bridge there is no parity
-          call: sort the Block 02 list.
+          and say why, or it is code or Figma) or <strong>tool artefact</strong>
+          (the tool compared two things that are not the same thing; nothing to
+          fix, but say what it compared with what, and check two such lines
+          yourself). Classic mislabel: "fixing" in code what was kept on
+          purpose. Without the bridge there is no parity call: sort the Block 02
+          list.
         </li>
       </ol>
       <p class="byo-done">
         <strong>Done when</strong> the component works by keyboard and has no
         open accessibility finding, dark mode switches through tokens, and every
-        difference to Figma is sorted (code / Figma / kept on purpose).
+        difference to Figma is sorted (code / Figma / kept on purpose / tool
+        artefact).
       </p>
     </section>
 
