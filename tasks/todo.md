@@ -15,6 +15,62 @@ Review findings are tracked in `tasks/reviews.md` since 2026-10-11; this file ho
 non-review work. Items marked `→ R-NNN` keep their reasoning here but are tracked there; items
 closed by the review triage carry a `_(closed 2026-10-11 …)_` note.
 
+## Exercise test run: do the exercises carry? (owner request 2026-11-20, done 2026-11-20)
+
+Owner request 2026-11-20: run every participant exercise of both days for real and judge
+each one on four questions — does the idea carry (does the designed effect actually
+happen), is the done-when reached, does it fill its slot (neither idle nor overrun), and
+is there something to discover. Owner decisions: Figma write exercises run in a duplicate
+the owner created ("Atelier UI WS2", key `g7c76htXhtbQlKxBt5IaZU`; the original stays
+read-only); the stale Storybook on 6006 was stopped; the participant agent is Sonnet 5.5
+headless (`claude -p --model sonnet`, project settings only); Day 2 runs all four briefs
+once, Day 1 runs Settings Card and Team directory twice.
+
+Method: a fresh seat from `create-atelier-ui-workspace@0.4.17` in the session scratchpad,
+APFS clones per run, the participant prompts pasted verbatim from `course/`. Per exercise:
+agent wall time and turns, tool calls outside the seat allow-list (= approval moments for
+a human), done-when checked by exit code and screenshot, discoveries. Human time is an
+estimate on top of the measured agent time and is reported as an estimate.
+
+- [x] D1 B01 setup: preflight, Storybook on 6006, five servers, first commit
+- [x] D1 B02 Settings Card ×2: generation, ladder prompts 1–3 + clean-up, by-eye diff list
+- [x] D1 B03 Figma: pink test, default lint, planted findings + 3-rule lint, readiness
+      checklist on one master, micro-exercise
+- [x] D1 B04: `docs-show` Button + non-existent prop, story + `play` red → green
+- [x] D1 B05 Team directory ×2: start, checks, receipts; stretch story
+- [x] D2 B00: skills question, Definition-of-Done question
+- [x] D2 B01–B04 per brief (Toast, TagChip, StatCard, Avatar): structure in Figma, lint,
+      handoff document, plan + generation, `docs-show` + JSDoc, `test-run`, self-healing
+      loop (is anything red?), a11y three-step, parity, sorting
+- [x] D2 B05: scorecard answerable from the two days?
+- [x] Report per exercise (carries / result / time vs. slot / discoveries), verified vs.
+      assumed, findings into `tasks/reviews.md`
+
+### Review (2026-11-20)
+
+Report: [tasks/exercise-test-run-2026-11-20.md](exercise-test-run-2026-11-20.md) — one
+table row per exercise, verified vs. assumed. Open findings: R-264 to R-275 in
+`tasks/reviews.md`; R-261 closed (the planting snippet ran, the three-rule run returns
+exactly three).
+
+- Every exercise reaches its result; none overran. Agent time is 3–7 % of every slot.
+  Human time was not measured (R-266, to be timed in R-040).
+- Carries: the Settings Card by-eye comparison (green gates, visible differences in every
+  run, a false "all fixed" claim), plan mode before generation (4/4 briefs surface API the
+  handoff lacks), the red → green story, the planted linter findings, the pink test.
+- Does not fire: Team directory steering (2/2), the Day 2 self-healing loop (4/4 nothing
+  red), the `alt=""` trap (3/3), the three `docs-show` categories (4/4), dark check 3.
+  Owner question R-264.
+- Unplanned but reliable: the seat's `app` selector rule against the `atl-` convention —
+  two renames, two `eslint-disable` in four runs (R-265).
+- Weakest point of the run itself: one model (Sonnet 5.5), headless, one run per Day 2
+  brief, no human in the loop. It can say "the agent does not fail here"; it cannot say
+  how long a participant needs or what a Copilot model does.
+- Left behind on purpose: the duplicate "Atelier UI WS2" carries the three planted
+  findings and four new sections on Workshop-Templates (Toast `3037:1517`, TagChip
+  `3039:1603`, StatCard `3040:1639`, Avatar `3043:1681`). The original was fingerprinted
+  before and after: unchanged.
+
 ## Course walkthrough (started 2026-11-12)
 
 Owner decision 2026-11-12: no rebuild. Walk the existing course material block by block
@@ -193,6 +249,91 @@ outline first, then deck, then run-of-show and prompts.
       (`sg_s11qxbuoxx`) was reworded for Package E step E8 and the doc is at revision 41; the other two are
       unchanged.
 
+## Storybook explainer slides, Day 1 Block 04 (owner go 2026-11-20, draft — owner review open)
+
+Two new slides, so the room knows what Storybook is and which part of a story file the agent reads:
+D1-04-01b "Storybook in one minute" and D1-04-04b "Anatomy of a story, and who reads what". The mapping
+on D1-04-04b is measured, not recalled: `tasks/story-fields-spike-2026-11-20.md` (fresh 0.4.17 Angular
+scaffold, text mode of `storybook tools`).
+
+- [x] Spike: which story and component fields reach `docs list` / `docs show` / `docs show-story`.
+      Read: `meta.component`, JSDoc above `@Component`, JSDoc on inputs, story order (code for the first
+      three only), JSDoc above a story, `args`, `meta.title` (ids). Not read: `argTypes`,
+      `parameters.docs.description`, `subcomponents`; `play` reaches the test run only.
+- [x] Outline: D1-04-01b and D1-04-04b written, D1-04-01/02/06 adjusted (git-excluded file).
+- [x] Timing mirrored into run-of-show, trainer notes, demo scripts, dry-run kit and `schulung.astro`:
+      B at 14:53–14:56 (was the stretch round), story exercise 14:56–15:28, R5 checkpoints 14:53 / 15:11,
+      block still 75. **Provisional** — owner said 2026-11-20 to leave the times aside for now.
+- [x] Deck Day 1 locally at 57 slides (`tmp/schulung-decks/`, backup
+      `bak-day1/2026-11-20-storybook-slides/`, contact sheet `render/sheet-day1-2026-11-20-storybook.png`).
+      Render exit 0; `check_deck.py` exit 1 with the same five known problems as before.
+- [x] Published as a draft 2026-11-20 on the owner's word ("put them straight into the file so I can look
+      at them, we can still throw them out"): Day 1 deck version 61, 57 slides, index read back, order
+      confirmed. Foreign-edit check before it: d1-04-02, d1-04-06 and `deck.json` had the byte sizes of the
+      backup. Standing rule from now on: deck drafts go into the artifact right away.
+- [x] Syntax highlighting on the code panel of d1-04-01b (owner asked 2026-11-20), published as Day 1
+      version 62: keywords bold, property keys teal ink `#007575` (the colour of the labels beside them),
+      strings `#A3470A`. That last colour is not in `STYLE2.md`; add it there if the owner keeps it.
+- [x] Day 1 slide d1-01-02 (model access: `claude auth login`, PREFLIGHT-OK) removed 2026-11-20 on the owner's
+      word: seats are logged in before the course. d1-01-04 no longer asks for the login. Deck version 64,
+      56 slides. Open for the times pass: the 6 minutes of model access in Block 01 are still named in the
+      outline, run-of-show, dry-run kit, `schulung.astro` and the notes of d1-01-01/04.
+- [ ] **Day 1 deck is in REVIEW-PAIRS state since 2026-11-20 (version 65, 112 slides): every slide is followed
+      by a grey notes slide `<id>-n` holding its speaker notes as visible text; the `<aside>`s are moved out.
+      Do not present from it and do not run the old edit scripts on it. Back to a presentable deck:
+      `cd tmp/schulung-decks && python3 -I review-pairs.py merge deck-day1/project`, then render, checker
+      against `outline-ids.txt`, publish. Pre-split backup `bak-day1/2026-11-20-review-pairs-pre/`.
+      Checker against `outline-ids-review.txt` meanwhile reports "0 asides" on every slide by design.
+- [ ] **Last step before merge-back (owner 2026-11-20): AI-tell pass over every visible slide text and
+      every notes slide.** The texts are German, so run `ki-spuren-entfernen` (German patterns) first and
+      `humanizer` (English Wikipedia list) only as a second read. Commands, tool names and verbatim
+      scaffold quotes stay untouched. After the red-thread rework, not before, or it polishes text that
+      gets rewritten anyway.
+- [ ] **Handover 2026-11-20 evening:** red-thread steps 2–4 done (visual rest, outline sync, times pass with 5-minute
+      rounding), official-Anthropic-guidance round (NotebookLM c7eccc4e-…), real agent-run spike (findings
+      `tmp/schulung-decks/spike-agent-findings-2026-11-20.md`; d1-02-04 and d1-03-05b/c rebuilt from real output), Figma
+      fix on Settings Card save-button label. Decks Day 1 v86 / Day 2 v52, still review pairs. Next: merge back + .pptx
+      check, commit (course files + tasks; never decks/outline), rehearsal screenshots. Later the same evening: all times rounded to 5-minute units
+      (owner), Copilot line on d2-05-04, process 21191 stopped; decks Day 1 v87 / Day 2 v53. Still open: outline line 11 +
+      D2-00-06b source, D1-01-04 wording.
+- [ ] **Red thread (owner 2026-11-20):** many slides carry keywords with no clear message, and some results
+      make no sense. Owner go 2026-11-20. Storyline for Day 1 as a Claude Doc:
+      https://claude.ai/artifact/5L6vsDo1HVhYSFiAozSBgh (day sentence, block sentence, per-slide verdict
+      and proposed title sentence; 36 of 56 carry, 12 keywords only, 6 result without conclusion, 2 rethink).
+      Waiting on five owner decisions listed at its end; then rebuild block by block, Block 00 first.
+      Progress 2026-11-20: owner ticked day sentence, title-as-statement, scorecard (kept on Day 1 with a
+      question per row), notes rule. Rebuilt and published: Block 00 (v68), 01 (v69), 02 (v70), 03 (v71), 04 (v72), 05 (v73), 06 (v74, after the owner confirmed a publish the permission classifier had blocked): Day 1 text pass complete. Screenshots 2026-11-20 (Day 1 v75, Day 2 v40): five placeholders replaced with real images in
+      `tmp/schulung-decks/shots/` — Settings Card and Starter frames from the Figma file (read only), docs-show
+      for AtlTable from the atelier MCP server in a fresh 0.4.17 workspace, Toast brief and Team-directory
+      wireframe from the course files. Five stay for the rehearsal (pink test on a copy, receipts list, /mcp,
+      docs-show before/after, Design panel). Weak spots: wireframe and starter frames are small on the slide.
+      Day 2 storyline 2026-11-20: https://claude.ai/artifact/CfvnUZ3br2i4uxq7Efn12p (38 of 55 carry, 10 keywords
+      only, 3 result unclear, 4 duplicates: skill slides d2-00-04/05, transfer slides d2-05-05/06). Six owner
+      decisions at its end; then rebuild Day 2 block by block. Done 2026-11-20: owner ticked all six; Day 2 split into review
+      pairs (v41) and rebuilt block by block (v42–v44): skill slides and transfer slides merged (d2-00-05,
+      d2-05-05 removed), four API-rule cards, "Erzeugen" eyebrow, /verify explained in the rubric, all notes
+      in "Sag:" form. Day 2 deck: 108 slides in review-pairs state. Both days' text pass complete. AI-tell pass (ki-spuren-entfernen, then humanizer) done the same day:
+      Day 1 v76 (7 note sentences), Day 2 v45 (4 sentences, 1 visible); change tables in
+      `tmp/schulung-decks/render/ai-tells-day{1,2}.md`. Visual pass, first six (Day 1 v78, Day 2 v47): d1-04-04b mapping with arrows,
+      d1-04-04 compiler flow, d1-05-06 sieve; d2-03-03 loop with two exits, d2-04-05 sorting into three bins,
+      d2-00-06 hub. Visual pass 2 (Day 1 v79, owner picked three of four on 2026-11-20): d1-02-04 lint
+      loop with the `alt=""` trap as exit, d1-00-07 scorecard as tick sheet, d1-03-05b/c right column as code with the
+      guessed part in rust. Handgriffe d1-01-03 dropped by the owner. New Day 2 slide d2-00-06b "CLAUDE.md bittet. Ein Hook erzwingt." after the hub
+      (owner picked variant 2 on 2026-11-20, from a post on CLAUDE.md vs hooks); published as Day 2 v48. Outline needs the new slide.
+      Outline synced to both decks 2026-11-20 (56/54 ids match deck order; times untouched, list for the times pass in the session report). Open: owner's picks in the "Grafischer Durchgang" section of the storyline doc (visual pass), Day 2
+      text pass, the AI-tell pass, merge back, times pass. Check U+2011 hyphens in d1-05-02/04 titles in the
+      Slides editor and the .pptx export. Also done the same day: block references and change
+      history out of every note in both decks (Day 1 v67, Day 2 v39), docs-site references out of the notes.
+- [ ] **Owner review 2026-11-20: the slides are partly not plausible yet; to be worked out together
+      later.** Nothing committed.
+- [ ] Speaker note of `d1-04-04b.html` lacks the purpose-line nuance the outline and the trainer notes
+      carry: through `atelier` the Button description opens with the library's purpose line and the
+      JSDoc is the paragraph after it; in the own Storybook it is the JSDoc alone. Fold into the rework.
+- [ ] Not measured: that the running MCP prints the same text as the CLI text mode; the exact cut at
+      90 characters (89 intact, 91 cut). Rehearsal item (R-040).
+- [ ] Side finding: `plan/ai-readiness.md` line 99 recommends documenting props through `argTypes`
+      descriptions, which the measurement says the agent never reads.
+
 ## Package E: schedule pass — cuts, reweighting, transfer (owner decisions and go 2026-11-19, in progress)
 
 Owner asked for a pass over both days: which exercises give no real value, which only exist inside the
@@ -330,6 +471,10 @@ Steps (outline first, then deck, then run-of-show and prompts — the walkthroug
       ADRs), run after the last edit. Open: the owner's go for the commits and the push, then the
       create-workspace release (the scaffold's `course/` files and the Design addon changed) and the seat
       reprovisioning before 2026-11-23.
+      **2026-11-19, later:** owner go ("Ja Go"). Four commits `fc2e1df7`, `76807148`, `fa25a5dd`,
+      `66dde706` pushed to `main`; CI and Publish green for `66dde706`; released as **0.4.17**
+      (`npm run check:release-drift` exit 0, 7 of 7 packages in sync with npm). Still open, which keeps
+      this box unticked: reprovision the seats from 0.4.17 before the rehearsal on 2026-11-23 (with C5).
 
 ## Package D: Figma ↔ Angular parity pass (owner go 2026-11-19)
 

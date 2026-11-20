@@ -1184,3 +1184,10 @@ on the lengths.
 **Rule:** a schedule change is checked against every fixed boundary (lunch, coffee, end of day), not
 against the day total. Write the clock times, not only the durations, before the lengths go to the
 owner.
+
+## 2026-11-20 · Speaker notes written for the author, not for the presenter
+
+The course notes carried course-map references ("Tag 2 Block 03", outline ids, checkpoint codes) and
+timings. The owner, who presents, cannot use them in the room. Rule: a speaker note opens with what to
+say, explains each item on the slide in plain words, and names other parts of the course by what happens
+there, never by block number or id. Planning data lives in the run-of-show.
