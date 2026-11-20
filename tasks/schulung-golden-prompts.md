@@ -124,7 +124,7 @@ below, warm run times (build 6-9 s, lint 6-7 s, stylelint 2-4 s), and one headle
     correction prompts — the block `schulung.astro` names for golden prompts; also the home
     of ladder stage 4, where the agent runs `test-run` and repairs);
     §2.5 = Day 2 Block 02, rows 12:05 to 12:25 (`docs-show` on your own component, then the Design panel and the look at both);
-    §2.6 = Day 2 Block 00, row 09:18 to 09:28 (the line your team would add, with the trainer demo).
+    §2.6 = Day 2 Block 00, rows 09:20 to 09:30 (the line your team would add, with the trainer demo).
   - §3 = Day 2 Block 04 "Verify: a11y, states, parity" (a11y + dark mode + the participant
     parity prompt §3.3). §3.4 and §3.5 are trainer-only reference.
 
@@ -132,12 +132,17 @@ below, warm run times (build 6-9 s, lint 6-7 s, stylelint 2-4 s), and one headle
 
 ## 1. Day 1 · Block 02 (Mini-loop) — Settings Card
 
-The generation prompt for this block already exists and is live — `examplePrompt` in
-`docs/src/pages/tutorial.astro` (mirrored in the kata `/first-component`, which is not participant material), which composes
-`AtlCard`/`AtlInput`/`AtlToggle`/`AtlButton` and explicitly tells Claude to pull _"the
-exact token names from `boundVariables`… no conversion needed."_ Do not re-type it here —
-that is exactly the mistake ADR-0116 corrects elsewhere (a hand-copied restatement of a
-value that already has a live source). Participants get it on the slide and from the trainer; the by-eye steps are in `course/parity-prompt.md` (Day 1 section).
+The generation prompt for this block is on the participant sheet
+`course/day1-settings-card.md` and, in the same words, live as `examplePrompt` in
+`docs/src/pages/tutorial.astro` (the trainer's screen; the kata `/first-component` has its
+own prompt and is not participant material). It composes
+`AtlCard`/`AtlInput`/`AtlToggle`/`AtlButton` and tells Claude to resolve each bound variable
+to its name, use the matching `--ui-*` custom property and say so where a name does not
+match exactly (`border-width/default` is `--ui-border-width`; exercise test run of
+2026-11-20). Do not re-type it here — that is exactly the mistake ADR-0116 corrects
+elsewhere (a hand-copied restatement of a value that already has a live source).
+Participants paste it from the sheet; the by-eye steps are in `course/parity-prompt.md`
+(Day 1 section).
 
 **When the first draft still drifts on tokens** (it can — pattern-matching models
 sometimes fall back to a literal px/hex value even when told not to), hand the
@@ -317,10 +322,11 @@ handoff document; real findings are fixed first, false alarms are noted. NOT YET
 as a prompt (rehearsal). Read-only: nothing is changed in the file.
 
 **Trainer first (Day 1 only): the default run.** On `Inputs/AtlButton` (node `129:20` in
-the Atelier file) the default `figma_lint_design` run reports **59 findings** (measured
-2026-11-17): **18 "critical"** contrast failures, all on the hidden `_disabled-overlay`
-label (false alarms), **41** about missing text styles (the file binds type to variables
-instead), and none of the ones examined is a defect. Say: "a finding is something to sort,
+the Atelier file) the default `figma_lint_design` run reports **19 findings** (measured
+2026-11-20; it was 59 on 2026-11-17, before the text nodes carried text styles): **18
+"critical"** contrast failures, all on the hidden `_disabled-overlay` label (false
+alarms), and **one** about Auto Layout. The count moves with the file: run it once before
+the session and say the number you get. Say: "a finding is something to sort,
 not a verdict."
 
 **Participant prompt.**
@@ -417,7 +423,7 @@ back). (c) is hidden and has no fill, so nothing renders.
 | `detached-component` | `Icon/Arrow` (in `variant=outline, size=lg, ...`) | real  | a dead frame named like an icon component but not an instance: a leftover that will be mistaken for the icon slot           |
 
 Answer key: all three are real, none is a false alarm. The false alarms are in the default
-run (the 18 contrast and the 41 text-style findings), not here. If a participant calls one
+run (the 18 contrast findings on the hidden overlay), not here. If a participant calls one
 a false alarm, ask what would break first: the dark-mode theme (a), the handoff document's
 layer list (b), the icon slot (c).
 
@@ -535,19 +541,27 @@ already phrased as a ready one-line correction:
 
 ### 2.5 `docs-show` on your own component (Day 2 Block 02, 12:05 to 12:15, 10 min), then look at both (12:15 to 12:25, 10 min)
 
-The prompts are NOT YET VERIFIED as an agent run (rehearsal); the call and the refresh are verified headless 2026-11-18 (R-262); the interactive run is open in R-040 (see below). Through the local Storybook MCP (`storybook-local`), once the
-component and its stories render. The point: what would an agent that uses your component
-have to guess?
+The open prompt below ran headless on 2026-11-20 on a generated TagChip (ten gaps in under a
+minute, exercise test run); the call and the refresh are verified headless 2026-11-18 (R-262);
+the interactive run is open in R-040. Through the local Storybook MCP (`storybook-local`), once
+the component and its stories render. Participants have both prompts in
+`course/day2-prompts.md`. The point: what would an agent that uses your component have to
+guess? The descriptions are usually there already, because the agent wrote the JSDoc while it
+generated; a closed question ("is there a description?") finds nothing, so the question is an
+open one.
 
 > Call `docs-list` on `storybook-local`, then `docs-show` for my component `<ComponentName>`.
-> List what an agent using this component would have to guess: a missing component
-> description, a property without a description, a value set shown as a bare alias. Do not
-> change anything yet.
+> Read the output as an agent that has never seen this component and has only this text. List
+> everything it would have to guess or would get wrong: a missing description, a code snippet
+> that would not work as shown, a value whose effect is not stated, behaviour that is
+> documented nowhere. Do not change anything yet.
 
-Then:
+The participant reads the list and sorts it: a gap in the documentation, or a gap in the
+component. Then:
 
-> Add the JSDoc that closes those gaps: a description for the component and one line per
-> property. Call `docs-show` again and show me what changed.
+> Close the documentation gaps where they live: JSDoc for a missing or wrong description, the
+> story for a snippet that would not work as shown. Do not change the component's behaviour.
+> Call `docs-show` again and show me what changed.
 
 Look at both (8 min, no prompt): demo D-3 first, about 2 minutes (the Design panel of a story,
 with the Figma embed and a PNG of the frame; the `atelier-component` skill writes both into
@@ -556,9 +570,11 @@ figma-console; UNVERIFIED (rehearsal): that the embed loads for a private duplic
 the fallback). Then the running stories next to the Figma component, every variant and state;
 write the differences down as a list (Block 04 sorts it).
 
-**Expected output.** A list of gaps, then a second `docs-show` that has the description and
-the property lines. Checkpoint D2B02-C4 (12:25): `docs-show` ran on the own component and at
-least one description was added on at least 70 % of the seats. Rule R9: at 12:05, if 30 % or
+**Expected output.** A list of gaps (expect snippets that would not work as shown and
+behaviour that is stated nowhere, not missing descriptions), then a second `docs-show` in
+which the documentation gaps are closed. Checkpoint D2B02-C4 (12:25): `docs-show` ran on the
+own component and at least one gap was closed on at least 70 % of the seats. A gap in the
+component (not in its documentation) is a note for Block 03, not a fix in this row. Rule R9: at 12:05, if 30 % or
 more have no rendering story, this row becomes a trainer demo on one green seat.
 
 **Fallback without the MCP:**
@@ -573,11 +589,11 @@ where one exists and nothing where none does. The same call over the running
 local MCP, and the refresh of the entry after a JSDoc edit without a restart (about 1 s, by
 direct JSON-RPC, not through the agent): verified headless 2026-11-18 (R-262); the interactive run is open in R-040.
 
-### 2.6 The line your team would add (Day 2 Block 00, 09:18 to 09:28: 4 min projector, 6 min exercise)
+### 2.6 The line your team would add (Day 2 Block 00, 09:20 to 09:30: 5 min projector, 5 min exercise)
 
 That the two answers differ as described: verified headless 2026-11-18 (R-262); the interactive run is open in R-040. The workspace the
 participants have already carries the rule the agent reads every session. Projector first
-(4 min): the four things an agent gets in this workspace (the rules file, read every
+(5 min): the four things an agent gets in this workspace (the rules file, read every
 session; a skill, loaded when the task matches and shown in demo D-7 just before; an MCP
 server from `.mcp.json`, tools and data; a hook, run without being asked), on two files:
 `CLAUDE.md` → "Definition of Done" and `.claude/settings.json` → `hooks.PostToolUse` →
@@ -595,7 +611,7 @@ server from `.mcp.json`, tools and data; a hook, run without being asked), on tw
 3. `/clear`, ask the same question again. The list now names five; `check:stories` is gone.
 4. Put the line back (undo) and save.
 
-Participants do not edit `CLAUDE.md` here. Their exercise (6 min), from
+Participants do not edit `CLAUDE.md` here. Their exercise (5 min), from
 `course/day2-prompts.md`:
 
 1. Ask: "Which commands does this workspace's Definition of Done list? Only list them."
@@ -606,7 +622,7 @@ Participants do not edit `CLAUDE.md` here. Their exercise (6 min), from
    fails, or a wish ("the code is clean")? Only the first is a rule an agent can run.
 
 **Checkpoint D2B00-C3:** every seat has one written line with a command in it, and the
-neighbour has said command or wish, at 09:28.
+neighbour has said command or wish, at 09:30.
 
 **Trainer notes.** Line for the room: the agent runs what the list names, and a check that
 is not in the list is a check nobody asked for. An agent that points out "the text says six,
@@ -618,6 +634,32 @@ an agent can run; a command that exits non-zero is.
 or the session was not cleared; show the list in `CLAUDE.md` and ask again. No line comes to
 mind on a seat: take the thing your reviews keep catching by hand.
 
+### 2.7 Block 03 on a green seat: what was red, is the handoff true, red on purpose
+
+Block 02 usually ends green (exercise test run of 2026-11-20: all four briefs), so §2.2 to
+§2.4 are for the seat that is red and these three are for everyone. The prompts are in
+`course/day2-prompts.md` (Block 03) and are not repeated here; pasted in this order. The
+state to go back to is the commit that closed Block 02 (`day 2 block 02: green`); a second
+commit (`day 2 block 03: corrected`) comes before "red on purpose", so that the undo rule
+cannot take the corrected handoff document with it.
+
+1. **What was red on the way** (row 13:40 to 13:50), in the session that generated the
+   component: the agent lists every check that was red while it built and marks each repair
+   "fixed" or "went around" (a disable comment, a changed rule or config, a loosened or
+   removed assertion). The participant decides where each fix belongs, then revises the
+   prompt or one line of `CLAUDE.md` and says why: that is checkpoint D2B03-C2.
+2. **Is the handoff document still true?** (same row): the agent corrects the document to
+   the component as built and marks each line "(corrected after generation)". Measured 2026-11-20 on one TagChip: four passages corrected in under a minute (a binding still marked "to be confirmed", a pointer to a section that does not exist, an accessibility line that no longer covered every variant, an attribute credited to the wrong component).
+3. **Make it red on purpose** (row 14:00 to 14:25): one variant or state moves from
+   "Explicitly out" into scope; its story with a `play` is written first and seen red; then
+   the repair, one change per round, stop after two failed attempts and go back to the
+   commit.
+
+**Trainer notes.** The usual "went around" on Angular (four of four runs on 2026-11-20): the seat's lint rule wants the selector prefix `app`, the course convention is `atl-`, and the agent either renames the selector to `app-…` or writes an `eslint-disable-next-line`. Neither is the right place. The right place is the prefix list in the ESLint config, and changing a rule is a person's decision, not the agent's: say so on the first seat that shows it. A session that was cleared has no memory of its reds;
+the prompt says so and looks for traces in the files, which finds fewer. In step 3 ask the
+reading question before the repair: what did the `play` expect, and who chose that
+expectation?
+
 ---
 
 ## 3. Day 2 · Block 04 — Verify: a11y, states, parity
@@ -626,41 +668,50 @@ mind on a seat: take the thing your reviews keep catching by hand.
 
 Participants have this prompt in `course/day2-prompts.md`.
 
-> Run the three-step accessibility check on `<ComponentName>`, in order, and report each
-> step's result before moving to the next:
+> Run the accessibility check on `<ComponentName>`, in order, and report each step's result
+> before moving to the next:
 >
 > 1. `figma_audit_component_accessibility` against the Figma node (needs the Desktop
->    Bridge running — confirm `figma_get_status` reports `setup.valid: true` first).
-> 2. Open the story in Storybook and read the A11y panel (axe-core) — list every
+>    Bridge running: confirm `figma_get_status` reports `setup.valid: true` first). Report
+>    the score, how the tool classified the component, and which checks it skipped because
+>    of that classification.
+> 2. Open the story in Storybook and read the A11y panel (axe-core): list every
 >    violation, not just the count.
-> 3. Keyboard-walk the rendered component yourself: Tab, Shift+Tab, Enter, Escape — does
->    focus order, activation and dismissal all work with no mouse?
 >
 > Fix only the obligations tagged **(this block)** in §4 of the brief, pasted below this
 > prompt, for the variant/state you actually built. Leave **(full component)** items as a
 > written note in the master's Figma description, not as code you claim passes a check
 > it was never exercised against.
 
+**Step 3 is the participant's, by hand**, not the agent's: open the story, put the mouse
+away, Tab, Shift+Tab, Enter, Space, Escape. Does focus arrive where expected, is it visible,
+do activation and dismissal work? The agent can script the walk, but then the participant
+approves five long scripts and still has not seen the focus ring.
+
+**Trainer notes.** Step 1 returned 100 out of 100 on all four briefs in the exercise test run
+of 2026-11-20, and on each the tool had classed the set as "presentational" and skipped the
+focus-indicator and target-size checks. Line for the room: read the classification, not only
+the score; a clean audit says what it checked, not that the component is accessible.
+
 ### 3.2 Dark-mode token audit prompt
+
+Participants have this prompt in `course/day2-prompts.md`.
 
 > Switch the theme control in Storybook's toolbar to dark (addon-themes, it sets
 > `data-theme="dark"`; the backgrounds control only recolours the canvas and switches
-> nothing) and look at `<ComponentName>` in both variants/states you built. Confirm
-> three things and report each:
+> nothing) and look at `<ComponentName>` in the variants and states you built. Confirm
+> two things and report each:
 >
-> 1. **Every colour still resolves through a `--ui-*` custom property** — none
->    hardcoded — so the dark override already declared in `tokens.css`'s
->    `[data-theme="dark"]` block actually takes effect. A hardcoded colour is invisible
->    in light mode and wrong in dark mode at the same time.
-> 2. **No control gained a `transform` on hover or press.** Atelier's own rule
->    (`/design-principles`, "Physical Authenticity"): state is a colour/border
->    token swap only — no shrink, no lift. Confirmed against all three framework libs;
->    the one documented exception is the Chat popup's floating action button, which
->    doesn't apply here.
-> 3. **Disabled state still reads as `opacity: var(--ui-opacity-disabled)` with
->    `cursor: not-allowed` and `pointer-events: none`** — the same one token/one value
->    pattern every other component in the library uses, not a separate dark-mode-only
->    treatment.
+> 1. Every colour still resolves through a `--ui-*` custom property, none hardcoded, so
+>    the dark values declared for `[data-theme="dark"]` take effect. A hardcoded colour is
+>    invisible in light mode and wrong in dark mode.
+> 2. No control gained a `transform` on hover or press: state is a colour or border token
+>    swap, no shrink and no lift.
+
+Then the participant switches the toolbar and looks: the agent reads the stylesheet, a person
+sees whether the text is still readable. (A third check, a fixed disabled treatment with
+`opacity: var(--ui-opacity-disabled)`, stood here until 2026-11-20. It was wrong as a general
+rule, ADR-0159, and is removed.)
 
 ### 3.3 Parity prompt for your own component (participants)
 
@@ -670,10 +721,22 @@ no writes): verified headless 2026-11-18 (R-262); the interactive run is open in
 16:00) labels each difference and fixes the code ones.
 
 > Run `figma_check_design_parity` on the node `<NODE FROM THE HANDOFF DOCUMENT>` against my
-> component `<ComponentName>`. For each discrepancy, say whether it is **code** (the code
-> should change), **Figma** (the master should change) or **kept on purpose**, and why. Only
-> call it "kept on purpose" if the handoff document's "Deliberate differences" section
-> names it. Do not fix anything yet.
+> component `<ComponentName>`. Sort every discrepancy into one of four: **code** (the code
+> should change), **Figma** (the master should change), **kept on purpose** (only if the
+> handoff document's "Deliberate differences" section names it) or **tool artefact** (the
+> tool compared two things that are not the same thing, so there is no difference to fix;
+> say what it compared). Give the reason in one line each. Then list what the tool did not
+> compare at all. Do not fix anything yet.
+
+**Expected output.** A low score and a short real list. Measured 2026-11-20 on a generated
+TagChip (38 s): 48 out of 100, eleven discrepancies, of which seven were artefacts (a resolved
+hex on the Figma side against a `var(--ui-*)` string in code, twice; the bounding box of the
+whole variant set, 359×64, against the 24×24 remove button; a property reported missing on
+both sides because Figma's name carries an `#id` suffix, four times), two kept on purpose,
+two Figma, none code. The tool marks every finding as a code change, so the sorting is the
+work. Have each seat check two "tool artefact" lines by hand: the label is also a way to
+make a real difference disappear. And count the table, not the closing sentence: in this run
+the agent's own summary said "six tool artefacts" under a table that listed seven.
 
 Without the bridge: no parity call; sort the Block 02 list instead.
 
@@ -756,10 +819,11 @@ with findings; it has no "sections compared" list. Against the component set `12
 | A prop appears that the handoff document / spec never named                                                        | §2.2               |
 | Structural content (header/action/remove-button/etc.) dumped as flat children instead of its own region            | §2.4               |
 | `docs-show` on your own component: what would a consumer's agent have to guess (Day 2 Block 02, 12:05)             | §2.5               |
-| Definition-of-Done trainer demo (Day 2 Block 00, 09:18): the second answer still names `check:stories`             | §2.6               |
+| Day 2 Block 03: the seat is green, nothing to correct (what was red on the way, handoff truth, red on purpose)     | §2.7               |
+| Definition-of-Done trainer demo (Day 2 Block 00, 09:20): the second answer still names `check:stories`             | §2.6               |
 | A11y panel or keyboard walk turns something up in Day 2 Block 04                                                   | §3.1               |
 | Dark-mode toggle reveals a hardcoded colour or a stray hover animation                                             | §3.2               |
-| Parity report on your own component (Day 2 Block 04, 15:30)                                                        | §3.3               |
+| Parity report on your own component (Day 2 Block 04, 15:30): low score, most findings are tool artefacts           | §3.3               |
 | Trainer only reference: "a field you do not pass is not compared" (assemble with §3.4, then §3.5)                  | §3.4, then §3.5    |
 
 ---
@@ -769,10 +833,10 @@ with findings; it has no "sections compared" list. Against the component set `12
 **Revision 2026-11-18: NOT YET VERIFIED (rehearsal, R-040), except as noted below.** Every prompt in §1a, §1b (the
 closing-checks prompt), §1c, §2.1 (as revised), §2.5, §2.6 and §3.3 is new or changed and has
 not been run in an interactive rehearsal; the headless run of 2026-11-18 (R-262) covered the
-§2.6 answers, the §2.5 call and its refresh, and the §3.3 prompt. Their expected outputs are the measured facts named in the
-sections (2026-11-17: the lint rule ids, the compiler error codes, the 59 / 18 / 41 findings,
-the run times; 2026-11-18: the `storybook tools` CLI route) and nothing else. Unverified, by
-name: that the planting snippet below returns three findings in the three-rule Figma run;
+§2.6 answers, the §2.5 call and its refresh, and the §3.3 prompt; the headless exercise test run of 2026-11-20 covered §2.5 in its open form, §2.7, §3.1 (four briefs), §3.2 and §3.3 in its four-label form (one TagChip). Their expected outputs are the measured facts named in the
+sections (2026-11-17: the lint rule ids, the compiler error codes, the lint findings of the default run (re-measured 2026-11-20: 19, of which 18 contrast),
+the run times; 2026-11-18: the `storybook tools` CLI route) and nothing else. The planting snippet below ran on the duplicate on 2026-11-20 and the three-rule
+Figma run returned exactly three findings, one per rule (R-261). Unverified, by name:
 §3.4 and §3.5 as a four-plus-spacing pair (R-227, R-235). The dates below
 belong to the earlier text only.
 

@@ -150,8 +150,8 @@ They sit at the block that runs them and are numbered here so none gets lost:
    within the 10 minutes of the ladder row (one pass)?
 2. Day 1 Block 03: the three-rule `figma_lint_design` run (`hardcoded-color`, `default-name`,
    `detached-component`) on `Inputs/AtlButton` in the duplicate: confirm the run returns the
-   three planted findings, one per rule. (The default run measured 59, 18 of them "critical"
-   contrast findings, 41 about text styles.)
+   three planted findings, one per rule. (The default run measured 19 on 2026-11-20, 18 of them
+   "critical" contrast findings, one about Auto Layout.)
 3. Day 1 Block 03: are 10 minutes enough for the remaining readiness checklist rows?
 4. Day 2 Block 00: after `/clear`, do the two Definition-of-Done answers differ as described
    (the second no longer names `npm run check:stories`)? verified headless 2026-11-18 (R-262); the interactive run is open in R-040 (baseline 6/6 name six, line removed 3/3 name five).
@@ -286,9 +286,9 @@ added and one frame uses Auto Layout. The checklist for your own file is a hando
 - After lunch (13:00–13:10): one sentence on what the tour showed, then run the **pink test** on
   a master (`/tokens#pink-test`) and say what it showed.
 - **STOP — ladder stage 0, the Figma linter (13:10–13:20, 10 minutes, golden prompts §1c).**
-  Trainer shows the default run on `Inputs/AtlButton` (node `129:20`) first (59 findings,
-  18 "critical" contrast findings on the hidden `_disabled-overlay` label, 41 about text
-  styles); then the agent runs `figma_lint_design` with the three rules `hardcoded-color`,
+  Trainer shows the default run on `Inputs/AtlButton` (node `129:20`) first (19 findings
+  on 2026-11-20: 18 "critical" contrast findings on the hidden `_disabled-overlay` label, one
+  about Auto Layout); then the agent runs `figma_lint_design` with the three rules `hardcoded-color`,
   `default-name`, `detached-component` on the same master in the duplicate, read-only, and you
   sort each line real / false alarm. Rehearsal check 2: confirm the three-rule run returns
   the three planted findings (golden prompts §1c).
@@ -349,7 +349,7 @@ in it has a source in `docs-show` (or was removed).
   headless run on 2026-11-12 needed 195 s for the build, 20 s for the four checks from a cold
   cache and 39 s for the receipts prompt; what a participant needs to approve, read and
   judge is unmeasured), how many of the six components the agent
-  got right on the first try, the first prop or element it invented, and where the agent got the import
+  got right on the first try, whether it invented a prop or an element at all (two of two headless runs on 2026-11-20 invented none), what the "What nobody looked at" list contained and which three lines the participant checked by hand, and where the agent got the import
   names (`AtlThead`, `AtlOption`) from, since `docs-show` never names them.
 
 **Block 06 — Recap and exit ticket** (discussion).
@@ -452,9 +452,10 @@ property.
   R9 at 30 percent: the `docs-show` row then becomes a trainer demo on one green seat).
 - **STOP — what the agent can read about your component (12:05–12:15, 10 minutes,
   golden prompts §2.5):** `docs-list`, then `docs-show` on your own component
-  through `storybook-local`; list what an agent would have to guess (no component
-  description, a property without a description, a value set shown as a bare alias); Claude
-  adds the JSDoc; call `docs-show` again and compare.
+  through `storybook-local`, read as an agent that has only this text; the participant
+  sorts the gaps (documentation or component), Claude closes the documentation ones in the
+  JSDoc or the story; call `docs-show` again and compare. Log how many gaps came back and
+  how many were real (headless 2026-11-20 on a TagChip: about ten in 40 s).
   Rehearsal check 5: log whether the call works over the running local MCP and whether the
   entry refreshes after a JSDoc edit without a restart. Fallback without the MCP:
   `npx storybook tools --config-dir workshop-<fw>/.storybook --json docs show --input '{"id":"<id>"}'`
@@ -484,6 +485,12 @@ the reason stated.
   hands them out on site; they are not in the participant workspace; §2.1, the
   generation prompt, belongs to Block 02). Note which
   correction prompt got used and on which failure.
+- On a seat that is already green at 13:30 (headless 2026-11-20: four of four briefs), the
+  rows are filled by the three prompts under "Block 03" in `course/day2-prompts.md`
+  (golden prompts §2.7): "What was red on the way", "Is the handoff document still true?",
+  "Make it red on purpose". Log per prompt: minutes, what it found, and whether the
+  participant could say where the right place for the fix was. Log specifically what the
+  agent did with the selector-prefix lint rule (`app` against `atl-`).
 - Test loop in all frameworks (ladder stage 4: the agent runs `test-run`, gets the failure,
   repairs): local addon MCP, `stories-preview` + `test-run`
   with a11y. The page says `npm test` (`check:unit`) covers **only the unit
@@ -533,9 +540,11 @@ differences" section and is new today, Day 1 used code and Figma).
   not a path any participant walks.
 - Sort every difference (20-minute row, 15:40–16:00): the parity list plus the list from
   Block 02, one label each: code (hand it back to Claude, fixed inside this row), Figma (a
-  note for the designer; the master is not changed now) or kept on purpose (it must be in the
+  note for the designer; the master is not changed now), kept on purpose (it must be in the
   handoff document's "Deliberate differences"; if it is not there, write it there and say
-  why, or it is code or Figma). "Kept on purpose" is the new third label. Log which one you
+  why, or it is code or Figma) or tool artefact (the tool compared two things that are not
+  the same thing; check two such lines by hand). "Kept on purpose" and "tool artefact" are
+  the new third and fourth labels. Log which one you
   almost mislabelled (the recap question; the classic one is "fixing" in code what was kept
   on purpose) and whether the time held.
 
@@ -582,7 +591,7 @@ the "Success verification" section on `/schulung` in order against your own
 component (re-read the page: another change set edits it). Log each as pass/fail/ambiguous
 in §5, quoting the actual command or tool output you saw, not a paraphrase. Success is the
 component with its stories, and every difference to
-Figma sorted (code / Figma / kept on purpose); there is no contract file and no
+Figma sorted (code / Figma / kept on purpose / tool artefact); there is no contract file and no
 `check:contracts` to show. Items, in outline: (1) component set in your duplicate of the
 Atelier file with variants, properties, dark-mode variant; (2) `npm run storybook` running
 and showing the component, one story per variant value; (3)

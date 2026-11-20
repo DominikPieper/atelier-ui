@@ -15,6 +15,146 @@ Review findings are tracked in `tasks/reviews.md` since 2026-10-11; this file ho
 non-review work. Items marked `→ R-NNN` keep their reasoning here but are tracked there; items
 closed by the review triage carry a `_(closed 2026-10-11 …)_` note.
 
+## Follow-up package F: "prove green is right" (owner go 2026-11-20)
+
+Owner on 2026-11-20, after the exercise test run below: "Was sollten wir daraus ableiten?
+Was ändern?", then "Du kannst auch releasen" and "Und Go". The run's core result: with
+Sonnet 5.5 the agent does not fail loudly, it fails quietly. Every gate is green on the
+first pass, and what is wrong (a silenced lint rule, a deleted assertion, a screen nobody
+opened) is not in any exit code. Two exercises were built on waiting for a loud mistake
+(R-264). This package re-aims them and repairs the sheet-level findings R-267 to R-275,
+before the first run on 2026-11-23.
+
+Done when: the scaffold's `course/` folder carries a tested participant prompt for every
+exercise step a participant hands to the agent, the two re-aimed exercises produce a discovery in a run with a correct
+agent, the trainer documents and the course page say the same thing as the sheets, the
+release is on npm, and the owner knows the version to reprovision seats from.
+
+### Decisions (mini-ADR lines; full record in ADR-0188)
+
+- **D1 Re-aim, do not plant.** Context: Team directory (2/2) and the Day 2 self-healing
+  loop (4/4) never went red. Options: plant a defect, shorten the slots, or re-aim at what
+  the runs did produce. Choice: re-aim. Team directory gains "what nobody looked at" (the
+  agent lists its own unverified claims, the participant checks three by hand) and the
+  stretch moves onto the sheet; Day 2 Block 03 gains "what was red: fixed or went around"
+  and "make it red on purpose" (a new variant, story first, red, then one repair).
+  Tradeoff: both depend on the agent's honesty about itself; three test runs returned
+  usable lists (16 lines; `eslint-disable`, a deleted assertion, a renamed selector).
+- **D2 Keep the seat's ESLint prefix `app` (R-265).** It is the ready-made "went around"
+  case of D1 in 4/4 runs. The trainer gets the line: "fix in the right place" is the
+  prefix list in the ESLint config, and that is a human decision. Tradeoff: a known
+  friction stays in the scaffold on purpose.
+- **D3 Read-only MCP tools on the seat allow-list (R-275).** `mcp__atelier` (server level,
+  four read tools), four named `storybook-local` read tools, four named `figma-console`
+  read tools with `--figma`. Writes and `test-run` keep their prompt. Rule syntax verified
+  through `--allowedTools` on a seat (server level and tool level); a rule in a trusted
+  seat's `settings.json` is assumed to load the way the Bash rules do.
+- **D4 The AtlToast / AtlAvatar name collision stays (R-271).** One sentence on the
+  sheets says it is known and what to do; renaming four briefs three days before the run
+  costs more than it buys.
+- **D5 Slot lengths stay (R-266).** The customer agenda's tables are a commitment, and
+  human time was not measured. R-266 stays open for the rehearsal.
+- **D6 No "with and without MCP" pair comparison in Block 05.** Spike: without the MCP the
+  agent invented nothing; it read the installed package's manifest and type exports with
+  14 Bash commands. On a seat the difference is cost and reviewability, not correctness.
+  The trainer says that line in Day 1 Block 04; the browser-chat hallucination demo (D-4)
+  is unaffected.
+
+### Evidence gathered before the edits (2026-11-20, Sonnet 5.5, seat 0.4.17)
+
+- "Not verified" prompt on a finished Team directory: 16 checkable lines (no browser
+  opened, mount and tokens import unseen, no `tokens-search` on the token names, page
+  reset / combined filters / last page untested, no unit test, `Invite member` has no
+  handler, dark / narrow / keyboard unseen).
+- "What was red" prompt: Toast — selector renamed `atl-toast` → `app-toast` (self-marked
+  "fixed", with "you may rule otherwise") and `!` → `as HTMLElement` ("went around");
+  TagChip — `eslint-disable-next-line @angular-eslint/component-selector` and a deleted
+  hover-colour assertion (both "went around"), plus `--ui-border-width` in place of the
+  handoff's non-existent `--ui-border-width-default`.
+- "Red on purpose": step 1 red in 52 s (17/18, "Unable to find an element with the text:
+  Warning:"), step 2 green on the first attempt in 60 s; leftovers the agent named itself:
+  `argTypes` not updated, lint / build / unit not run, the Figma master has no `warning`.
+- Spike "Team directory without MCP": see D6.
+- Spike R-275: see D3. Side finding: in a workspace whose trust dialog was never accepted,
+  `permissions.allow` from the project settings is ignored in `-p` mode. Second spike with
+  a settings source: `mcp__atelier` (server level) and `mcp__figma-console__figma_get_status`
+  (tool level) both let their call through without a prompt.
+- "Is the handoff document still true?" on one finished TagChip (44 s, 13 turns): four
+  passages corrected (a binding still "to be confirmed", a pointer to a section that does
+  not exist, an a11y line that no longer covered every variant, `aria-hidden` credited to
+  the wrong component), no code changed. One run; the trainer text says so.
+- Open `docs-show` reading on the same TagChip (40 s, 3 turns): about ten gaps (story
+  snippets that would not compile as shown, a wrong import path, `warning` undocumented).
+- Four-label parity prompt on the same TagChip (38 s): 48 out of 100, eleven discrepancies:
+  seven tool artefacts (a resolved hex against `var(--ui-*)` twice, the set's bounding box
+  359×64 against the 24×24 remove button, the `#id` suffix four times), two kept on
+  purpose, two Figma, none code. Counted from the run's table; the agent's own closing
+  sentence said six. None of the labels was checked against the Figma file by a person.
+
+### Steps
+
+- [x] F1 Scaffold sheets (`libs/create-workspace/src/generators/preset/files/course/`):
+      Settings Card (mount prompt, token wording, selection wording), ladder (`alt`
+      question), new `day1-stories.md` (Day 1 Block 04), Team directory ("what nobody
+      looked at", stretch), Figma sheet (pink test prompts, selection wording, `Vector`
+      note), Day 2 prompts (Block 00 minutes, open `docs-show` question, plan questions,
+      new Block 03 section, keyboard by hand, classification, dark check), parity (fourth
+      label), stuck (`check.out`), briefs README ×2 (variable count dropped, collision), handoff
+      example (collision)
+- [x] F2 Scaffold code through a Sonnet agent: `day1-stories.md` written and indexed,
+      index descriptions, `preset.spec.ts`, ADR-0121 citation out of the template stories,
+      allow-list (D3); `check:scaffold-snapshot` re-run, no snapshot change needed
+- [x] F3 Course page `docs/src/pages/schulung.astro` through a Sonnet agent: stale lint
+      numbers, re-aimed exercise text
+- [x] F4 Trainer documents: run-of-show, trainer notes, golden prompts, dry-run kit; the
+      demo scripts were read and needed no change (stale facts R-268, re-aimed rows, trainer lines)
+- [x] F5 Handouts: scorecard note, readiness checklist selection wording
+- [x] F6 ADR-0188 and the index row; tracker closures; this section's review
+- [x] F7 Gates by exit code, hostile diff read, cross-check (2026-11-20; see the review
+      below: the cross-check was not a second model)
+- [ ] F8 Decks: stale facts and affected exercise wording in the deck sources (not
+      committed)
+- [ ] F9 Commits per step, one push, release verified on npm, version reported; memory
+
+### Review of package F (2026-11-20)
+
+Verified:
+
+- `npm run check:all` exit 0, run after the last change to the sheets, `preset.ts`, the spec
+  and the two docs pages. Before that, one at a time by exit code: `nx test create-workspace`,
+  `nx lint create-workspace`, `nx lint docs`, `check:scaffold-snapshot`, `check:docs`,
+  `check:format` (first run 1 on `schulung.astro`, formatted, then 0).
+- The participant prompts ran once headless on a 0.4.17 seat as worded on the sheets (the
+  second pink test prompt in a slightly narrower wording); the outputs are the evidence
+  behind the numbers in ADR-0188.
+- A fresh agent got the diff and four questions, not the reasoning, and returned 27 findings.
+  Each was checked against the files: most were fixed, four were left on purpose (index-text
+  assertions that would only detect change; two prompts that had run as worded; one finding
+  that was wrong, the prompts had been run).
+
+Assumed, not verified:
+
+- The prose changed after the headless runs was not run again: the two commit points and the
+  undo text of Day 2 Block 03, the order of the Block 02 sections, the clean-up line for the
+  pink mode.
+- The allow rules in the seat's `.claude/settings.json` are asserted by the unit tests; that an
+  interactive session on a seat stops asking for those tools was not watched.
+- Every number is from one run (two for the Team directory, four for the Day 2 briefs).
+
+Weakest point: the re-aimed exercises rest on what the agent reports about itself ("what was
+red", "not verified"), and no person has done them in a room. If the agent's self-report is
+thin on a seat, the exercise has little to sort. The rehearsal (R-040) is the only check for that; the trainer notes say what a typical report holds, not what to do with a thin one.
+
+Second weakest: the cross-check was not a second model. Codex failed with `model_not_found`
+on the account, so the reviewer was an agent of the same model family; it found the undo rule
+that would have discarded the corrected handoff document, which the author's own read had
+missed, but blind spots shared by the family stay unchecked.
+
+Left as it is: the dark-check prompt asks the agent to switch a toolbar control it cannot
+reach; it ran four of four as worded (the agent read the stylesheet instead), and replacing a
+tested wording three days before the course is the larger risk. The "1-to-1" token claim on
+two docs pages is R-276.
+
 ## Exercise test run: do the exercises carry? (owner request 2026-11-20, done 2026-11-20)
 
 Owner request 2026-11-20: run every participant exercise of both days for real and judge

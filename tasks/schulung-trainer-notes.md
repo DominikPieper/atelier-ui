@@ -268,6 +268,9 @@ src="/avatar.png">` without `alt` and a `<div (click)="save()">Save</div>` in th
    `interactive-supports-focus`) and a non-zero exit code. (3) The agent repairs from the
    output, both run again. Then read the repair: did it write `alt=""`? **Green is not
    right** (lint is green, the image that carries meaning is hidden from a screen reader).
+   With a current model expect a name instead: three of three repairs on 2026-11-20 wrote
+   `alt="User avatar"`. The question for the room is then: is that name right, and who
+   decided it? Lint is green with any text.
    What lint does not see: a raw `<button>` where a library component exists, and meaning.
    Last prompt: remove the image and the div again, run both, report the exit codes. Numbers
    for the room: lint 6–7 s, build 6–9 s warm; one headless repair run (four planted
@@ -279,6 +282,10 @@ src="/avatar.png">` without `alt` and a `<div (click)="save()">Save</div>` in th
 4. The proof in this block is lint and build run by the agent; `check:contracts` is not part
    of the participant path (ADR-0180), and neither is `check:stories` in this block. Exit
    code is the result; read it as `cmd > /tmp/x 2>&1; echo $?` when you run one yourself.
+   One difference to have ready for the comparison below, because it repeated in every run
+   of 2026-11-20: `Save` sits left in the generated card where Figma has it right (the
+   footer's `primaryAxisAlignItems` is `MAX`), and it stayed left after the agent reported
+   every listed difference fixed. "Compare again after the fix" on the sheet is for this.
 5. The comparison with Figma, by eye (11:10–11:20, 10 minutes), no tool (`course/parity-prompt.md`,
    Day 1 section, for participants; trainer source `/tutorial`): the running Settings Card next
    to the Figma frame; everyone writes down every difference they can see (spacing, colour,
@@ -316,8 +323,9 @@ stretch folded in (5).
 **Say.**
 
 1. Three tiers in the Atelier file: **Primitives** → **Library Tokens** (the semantic
-   tier; Light and Dark modes; 84 variables: 50 colour, 10 spacing, 6 sizing, 5 radius,
-   12 typography, 1 opacity; **no shadow**, elevation is CSS-only `--ui-shadow-*`) →
+   tier; Light and Dark modes; colour, spacing, sizing, radius, typography, border-width and
+   opacity variables, 143 when counted on 2026-11-20, so read the number off the Variables
+   panel instead of saying one; **no shadow**, elevation is CSS-only `--ui-shadow-*`) →
    **Component Tokens** (single-mode aliases into Library Tokens). Code sees the `--ui-*`
    names; dark mode in code is the `[data-theme="dark"]` block of `tokens.css`. The
    participant's exercise: find the `--ui-*` name behind one variable.
@@ -339,9 +347,9 @@ stretch folded in (5).
    tier; fix the binding on the master, not the instance; delete the mode afterwards. Say
    the result aloud ("this token is not bound").
 5. Ladder stage 0, the Figma linter (13:10–13:20, 10 minutes, golden prompts §1c). First the
-   default run on `Inputs/AtlButton` (node `129:20`), measured 2026-11-17: 59 findings, 18 of
-   them "critical" contrast failures on the hidden `_disabled-overlay` label, 41 about missing
-   text styles. Say: "a finding is something to sort, not a verdict". Then everyone prompts: the
+   default run on `Inputs/AtlButton` (node `129:20`), measured 2026-11-20: 19 findings, 18 of
+   them "critical" contrast failures on the hidden `_disabled-overlay` label, one about Auto
+   Layout (run it once before the session: the count moves with the file). Say: "a finding is something to sort, not a verdict". Then everyone prompts: the
    agent runs `figma_lint_design` on the same master in the prepared duplicate with the rules
    `hardcoded-color`, `default-name`, `detached-component` only and returns a list; the
    participant sorts each line: real / false alarm. Read-only: nothing is changed in the file.
@@ -433,6 +441,15 @@ Storybook :6006 for D-5.
    before it writes the story and runs `test-run` through `storybook-local` on it, so it sees
    the red itself; the participant watches the same red in the play panel, fixes by prompt,
    green. `test-run` through `storybook-local` on a seat: verified headless 2026-11-18 (R-262); the interactive run is open in R-040.
+   The participant prompts for the whole row are on `course/day1-stories.md` (parts 1 to 3; in the scaffold since the release after 0.4.17).
+6. Be exact about what the MCP buys on a seat (spike of 2026-11-20): asked to build the Team
+   directory without the docs server, the agent invented nothing. It read the installed
+   package's manifest and type exports with 14 shell commands and got the same API. So in a
+   workspace with the package installed, the difference is cost and reviewability (one
+   `docs-show` call a person can read against, instead of a trail through `node_modules`),
+   not correctness. The hallucination in D-4 is real where the agent has no package to read:
+   a browser chat, a new repository, a library that is not installed. Do not promise the
+   room that the agent "would invent props without MCP" on their seat; it will not.
 
 **Expected recap answers.** "A story claims a state and a behaviour; `check:stories`
 runs the claim in a browser with axe; the build catches a wrong value, not an invented name." Stretch: "not documented" is right because the manifest is the API; an
@@ -499,6 +516,13 @@ their own), `/mcp` → reconnect is the fallback; the play panel shows the same 
    Expected answer: it read the package's type exports under `node_modules/@atelier-ui/angular`, or got the
    names from a compile error. The point for the room's own design system: a manifest that documents
    the tag but not the import sends the agent off the documented path; put the import line into the usage example.
+   Then the second list (16:30–16:45, "What nobody looked at" on the sheet): the agent lists
+   what it claimed without running or seeing it, and every participant checks three lines by
+   hand: holds, does not hold, or the brief does not say. This is the discovery of the block
+   on a seat where everything is green. Measured 2026-11-20 on a finished Team directory:
+   16 checkable lines (no browser was opened, the mount and the tokens import were never
+   seen, page reset after a filter change, combined filters and the last page were untested,
+   `Invite member` has no handler, dark mode, narrow width and keyboard unseen).
 5. The fifth known gap (measured on the Angular endpoint 2026-11-12, not for React and Vue):
    `docs-show` shows the sub-component tags (`atl-thead`, `atl-option`) but neither the class
    names to import (`AtlThead`, `AtlTbody`, `AtlTr`, `AtlTh`, `AtlTd`, `AtlOption`) nor the
@@ -512,7 +536,14 @@ their own), `/mcp` → reconnect is the fallback; the play panel shows the same 
    screen stays in the workspace, which is still there on Day 2. The checklist for your own
    Figma file is homework for after the course (Day 2 Block 05 hands it over), not for tonight.
 
-**Expected recap answers.** The agent broke rule 2 first (a prop or an input on a table
+**Expected recap answers.** The recap asks which "not verified" line turned out wrong when
+looked at, and which check would have caught it. Typical: the page does not go back to 1
+when a filter changes (a story with a `play` would catch it), the invite button does nothing
+(the brief does not say what it should do: a question for whoever wrote the brief), a
+search that matches nothing shows an empty table without a message. On a seat with the
+start prompt and a current model, expect no broken rule on the first pass (two of two runs
+on 2026-11-20 were clean); the older expectation below describes a weaker agent or a seat
+that skipped the start prompt. The agent broke rule 2 first (a prop or an input on a table
 part or `atl-option` that `docs-show` does not list on the main entry: the Inputs block
 never lists sub-component inputs such as `sortable` on `atl-th`; on Angular they are in the usage
 example, everywhere in the `Sortable` story, which the opener now points at) or rule 3 (a
@@ -521,7 +552,7 @@ receipts audit or the participant's own reading caught it. Stylelint catches a h
 colour in the `.css` file; nothing but the greps on the page catches one elsewhere, or a
 named colour or pixel spacing anywhere.
 
-**Watch for.** The first 15 minutes of the build (15:45–16:00) are silent: note who asks what and which props or components the agents invent; hints start at 16:00. Hard stop 16:30 (rule R6). Measured 2026-11-12, one headless run on the trainer
+**Watch for.** The first 15 minutes of the build (15:45–16:00) are silent: note who asks what and whether an agent invents a prop or a component at all (do not wait for it; the "not verified" list is the block's discovery either way); hints start at 16:00. Hard stop 16:30 (rule R6). Measured 2026-11-12, one headless run on the trainer
 machine without permission prompts: build 195 s, the four checks from a cold cache 20 s,
 receipts prompt 39 s. UNVERIFIED is how long a participant needs to approve, read and
 judge; the dry run logs it. If most seats are still on the table at minute 20 of the
@@ -668,7 +699,9 @@ second answer lacks the command, or the agent skips the check. Skills as before:
    naming, literal unions, composition over config, no hidden defaults), about 10 on a short
    exercise on the own component: list each property with its name and values, check the list
    against the four rules, rename now. The exercise has no done-when of its own; its result is
-   the property list the handoff document takes over. The handoff row is 10:35–11:00 (25
+   the property list the handoff document takes over. Expect no rename: the brief fixes the
+   names, and four of four runs on 2026-11-20 renamed nothing. The work of the row is saying
+   why each name passes, and the one rule the brief's names bend (ask for it). The handoff row is 10:35–11:00 (25
    minutes, the recap question closes it). Block 02 does not have the rules.
 
 **Expected recap answers.** Lines you decided: reuse vs rebuild, exclusions, acceptance
@@ -701,7 +734,11 @@ participant's `docs-show` output before and after the JSDoc edit.
    handoff document.
 3. Start a fresh Claude session for this block (`/clear`). Paste golden prompt §2.1 (no
    contract) with the handoff document inside; the handoff's deliberate differences go into the
-   prompt as they are. One step: component with its test, and stories; one story per variant
+   prompt as they are. Plan mode: the plan asks questions and proposes things the handoff
+   document does not contain (measured 2026-11-20, four of four briefs: an extra `closed`
+   output, a role the library card cannot carry, a decorative avatar). A plain "build it"
+   approves all of them. Line for the room: answer each of the plan's questions in words,
+   yes or no, before you approve; the plan is the cheapest place to say no. One step: component with its test, and stories; one story per variant
    value and Boolean state, a `play` per behaviour line. Then the participants look at the
    result: every story open in the running Storybook (or `stories-preview`), compared by eye
    with the Figma master, what is wrong handed back to Claude by prompt, never typed. That is
@@ -709,9 +746,14 @@ participant's `docs-show` output before and after the JSDoc edit.
    `/build-your-own`.
 4. What the agent can read about your component (12:05–12:15, 10 minutes, golden prompts
    §2.5): `docs-list`, then `docs-show` on your own component through
-   `storybook-local`. List what an agent using the component would have to guess: no component
-   description, a property without a description, a value set shown as a bare alias. Claude
-   adds the JSDoc; call `docs-show` again and compare. Fallback without the MCP:
+   `storybook-local`, read as an agent that has only this text. The agent has usually written
+   the JSDoc while it generated, so the three closed categories (no component description, a
+   property without one, a value set shown as a bare alias) come back clean (four of four
+   runs on 2026-11-20). The open question finds eight to ten other gaps each time: story
+   snippets that would not compile as shown, a value whose effect is stated nowhere, an
+   import path that only resolves next to the component file. The participant sorts the list
+   (a gap in the documentation, or a gap in the component); Claude closes the documentation
+   ones in the JSDoc or the story; call `docs-show` again and compare. Fallback without the MCP:
    `npx storybook tools --config-dir workshop-<fw>/.storybook --json docs show --input '{"id":"<id>"}'`.
    Measured 2026-11-18 on the 0.4.10 Angular scaffold through that CLI route: a new component
    with a story appears in `docs list`; `docs show` prints Inputs and Outputs, the JSDoc line
@@ -740,8 +782,9 @@ participant's `docs-show` output before and after the JSDoc edit.
    agent first ran in Day 1 Block 05, are cheap and mechanical: fix by prompt.
 
 **Expected recap answers.** The recap asks what `docs-show` did not know about the component and
-where it was written down: the component description, a property's description, a value set
-shown as a bare alias; written as JSDoc in the component.
+where it was written down: a snippet that would not work as shown (fixed in the story), the
+effect of a variant value or an undocumented default (written as JSDoc in the component), a
+behaviour nobody decided (a note for Block 03, not a documentation fix).
 
 **Watch for.** Rule R8 at 11:20. Rule R9 at 12:05 (checkpoint D2B02-C3): at 30 percent
 without a rendering story, take one stalled seat's handoff document onto the projector,
@@ -749,7 +792,7 @@ find the missing line with the room, re-run the prompt, and show the `docs-show`
 trainer demo on one green seat. A stalled seat: check the handoff document first, not the
 prompt. Checkpoints: D2B02-C2 (11:50) component and stories on disk; C3 (12:05) renders with
 one story per variant value; C4 (12:25) `docs-show` ran on the own component and at least one
-description was added, each on ≥ 70 %.
+gap was closed, each on ≥ 70 %.
 
 **Commit habit (R-226).** Participants close the block with `git add -A && git commit -m "day 2 block 02: green"` inside the recap row (no timing change). Day 2 Block 03's undo rule reverts to the last of these commits, so a revert never reaches past the current block.
 
@@ -783,7 +826,9 @@ a volunteer's loop.
    (`git add -A && git commit -m "<step>: green"`); after two failed fixes stop, go back to
    the last green commit with `git reset --hard HEAD && git clean -fd -- workshop-<fw>/src` (preview:
    `git clean -nd -- workshop-<fw>/src`), then re-diagnose before the next prompt; no
-   third patch. Unconditional since 2026-11-17 (R-242), as the customer agenda says it. R-226 (2026-10-20): a bare `git checkout -- .` leaves the files the
+   third patch. On "red on purpose" the reset also takes the new story and the handoff line
+   (they are younger than the last commit): the seat pastes the first prompt of that section
+   again. The sheet has the participant commit before that section for this reason. Unconditional since 2026-11-17 (R-242), as the customer agenda says it. R-226 (2026-10-20): a bare `git checkout -- .` leaves the files the
    agent newly created (untracked), so the checks stay red; `git stash -u` was rejected
    because it also stashes unrelated untracked work and leaves a stash to explain; the
    `clean` is scoped to the app's `src/` and never `-x`, so unrelated files survive.
@@ -792,6 +837,17 @@ a volunteer's loop.
    10 rubric, 10 revise with the correction prompts (C2 at 13:50), 10 test-loop demo, 25 self-healing
    loop with pasting the error back instead of debugging yourself (C4 at 14:15), 5 recap with the stretch for early finishers folded in;
    the block ends 14:30, coffee 14:30–14:45.
+   What fills the rows on a green seat (exercise test run of 2026-11-20: Block 02 ended
+   green on four of four briefs, so nothing waits to be corrected): the three prompts under
+   "Block 03" in `course/day2-prompts.md`, golden prompts §2.7. Revise row: "What was red on
+   the way" (the agent marks each repair "fixed" or "went around") and "Is the handoff
+   document still true?". Self-healing row: "Make it red on purpose" (one variant or state
+   out of "Explicitly out", story first, red, then the loop above). The red already happened
+   in Block 02 and the agent repaired it unseen; the first prompt makes it visible. The
+   usual find on Angular: the seat's lint rule wants the selector prefix `app`, the course
+   convention is `atl-`, and the agent renamed the selector or wrote a disable comment
+   (four of four runs). "Fix in the right place" is the prefix list in the ESLint config,
+   and that is a person's decision. The scaffold keeps this friction on purpose (ADR-0188).
 5. The test loop (ladder stage 4: the agent runs `test-run`, gets the failure, repairs): `test-run` over the local MCP = `npm run check:stories`
    (every story in Chromium, `play`, axe). `npm test` / `check:unit` is the jsdom
    half only. Never two `storybook-test` at once (shared browser port). In a
@@ -801,7 +857,11 @@ a volunteer's loop.
    and `[0-9]+px` and replace each hit with the matching `--ui-*` name read from
    `tokens.css`, then report the lines.
 
-**Expected recap answers.** "Read the plan first → the invented `rounded` prop was a line of plan, not a red story."
+**Expected recap answers.** The recap asks what was changed in the prompt or the context, and
+which red line was the reason. "The agent silenced the selector rule with a disable comment →
+I added the prefix to the lint config and one line to `CLAUDE.md`: a rule is changed in its
+config, by me." "It deleted the hover assertion to get green → the assertion is back and the
+prompt says: never remove an assertion, report it." "Read the plan first → the invented `rounded` prop was a line of plan, not a red story."
 "Added the scope guard → it stopped adding the six positions." "One change per round →
 I could tell which change fixed the red story."
 
@@ -821,19 +881,26 @@ and theme toolbar; a participant's parity report.
 2. The three-step a11y check, in order, each result reported before the next (golden
    prompts §3.1): `figma_audit_component_accessibility` on the node (bridge);
    the Storybook a11y panel (axe-core, the same engine `check:stories` runs); a keyboard
-   walk (Tab, Shift+Tab, Enter, Escape). Fix only the brief's obligations tagged
+   walk (Tab, Shift+Tab, Enter, Space, Escape), done by the participant by hand, not scripted
+   by the agent. Read how the audit classified the component, not only the score: on
+   2026-11-20 it returned 100 out of 100 on all four briefs, each classed "presentational",
+   with the focus-indicator and target-size checks skipped. The keyboard walk was the only
+   step that found something real (the Toast's tab order). Fix only the brief's obligations tagged
    **(this block)**; the **(full component)** ones go into the master's description, not
    into code that claims a check it never ran.
 3. States: hover, active, disabled are CSS, never a variant; no `transform` on hover or
    press (`plan/design-principles.md` §1); after the fixes the keyboard walk is done again and
-   every state is looked at: hover, active, focus, disabled; disabled = `opacity: var(--ui-opacity-disabled)`,
-   `cursor: not-allowed`, `pointer-events: none`; the focus ring comes from tokens.
+   every state is looked at: hover, active, focus, disabled; the focus ring comes from tokens.
+   Do not teach one fixed disabled treatment: most library components dim with
+   `--ui-opacity-disabled`, the button uses dedicated neutral tokens (ADR-0159), and three of
+   the four briefs have no disabled state at all.
 4. Dark mode: the **theme** control in the Storybook toolbar (`withThemeByDataAttribute`,
    sets `data-theme`, the selector `tokens.css` switches on). The **backgrounds** control
    is canvas colour, not a theme (ADR-0142). Golden prompt §3.2 names the theme control
    since 2026-10-14 (R-205). Axe runs in light mode only: the toggle is a preview, not
-   coverage. Three confirmations per §3.2: every colour through `--ui-*`, no transform
-   on hover, disabled unchanged.
+   coverage. Two confirmations per §3.2: every colour through `--ui-*`, no transform
+   on hover or press. Then the participant switches the toolbar and looks; the agent reads
+   the stylesheet, a person sees whether the text is still readable.
 5. Parity report (15:30–15:40, 10 minutes, golden prompts §3.3 rewritten as that prompt): the
    tool for yesterday's by-eye comparison, run by participants on their own component, node id
    from the handoff document. It is the first parity call of the course. What a report is:
@@ -846,12 +913,20 @@ and theme toolbar; a participant's parity report.
    variant has no component properties). No `codeSpec` assembly by participants, no
    `check:contracts -- --emit`; the codeSpec assembly (§3.4) and the double call (§3.5) are
    trainer-only reference. No bridge → no parity call; say "degraded" on the seat, not
-   silently, and sort the Block 02 list.
+   silently, and sort the Block 02 list. Prepare the room for the result: a low score and a
+   list that is mostly not real. Measured 2026-11-20 on a TagChip: 48 out of 100, eleven
+   discrepancies, seven of them artefacts of the comparison (a resolved hex against a
+   `var(--ui-*)` string, the set's bounding box against one element, a property reported
+   missing on both sides because of Figma's `#id` suffix), two kept on purpose, two Figma,
+   none code. The tool marks every finding as a code change; the sorting is the work.
 6. Sort every difference (15:40–16:00, 20 minutes, the recap question closes it): the parity list plus the list from Block 02,
    one label each. **Code**: hand it back to Claude, fixed inside this row. **Figma**: a note
    for the designer; the master is not changed now. **Kept on purpose**: it must be in the
    handoff document's "Deliberate differences" section; if it is not there, either write it
-   there and say why, or it is code or Figma. The third label is new today (Day 1 Block 02
+   there and say why, or it is code or Figma. **Tool artefact**: the tool compared two things
+   that are not the same thing; nothing to fix, but the participant says what was compared
+   with what and checks two such lines by hand, because the label is also a way to make a
+   real difference disappear. The third and fourth labels are new today (Day 1 Block 02
    practised only code and Figma); the word "contract" is not a sorting label any more. One
    sentence for the trainer: in Atelier's own repo such a difference lives in a contract file
    that a check reads. Classic mislabel: "fixing" in code what was kept on purpose. More rows
@@ -860,7 +935,8 @@ and theme toolbar; a participant's parity report.
 
 **Expected recap answers.** Code: a missing `aria-label` on the close button, a literal
 colour. Figma: an unbound fill, a wrong layer name. Kept on purpose: the `state` axis (it must be
-in the handoff document's Deliberate differences). Almost mislabelled: a deliberate mismatch
+in the handoff document's Deliberate differences). Tool artefact: a hex against the token
+that resolves to it, the set's bounding box as a target size. Almost mislabelled: a deliberate mismatch
 nearly "fixed" in code.
 
 **Watch for.** Rule R11 at 15:20 (checkpoint D2B04-C3, the fix row ends 15:20): axe first, parity rows
