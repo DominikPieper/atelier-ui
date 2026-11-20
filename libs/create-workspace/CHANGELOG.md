@@ -1,3 +1,13 @@
+## 0.4.18 (2026-11-20)
+
+### 🚀 Features
+
+- **create-workspace:** the course sheets ask whether green is right ([b83f81c2](https://github.com/DominikPieper/atelier-ui/commit/b83f81c2))
+
+### ❤️ Thank You
+
+- Dominik Pieper @DominikPieper
+
 ## 0.4.17 (2026-11-19)
 
 ### 🚀 Features
