@@ -15,6 +15,128 @@ Review findings are tracked in `tasks/reviews.md` since 2026-10-11; this file ho
 non-review work. Items marked `→ R-NNN` keep their reasoning here but are tracked there; items
 closed by the review triage carry a `_(closed 2026-10-11 …)_` note.
 
+## Follow-up package G: "close the exercise gaps" (owner go 2026-11-21)
+
+Owner on 2026-11-21, after the Gemini cross-check of the exercises (R-277 to R-285): "Was
+ist in a und in b drin in kurz", then "Beides. Rechner mache ich heute fertig". Part A is
+trainer documents and handouts (no release), part B is scaffold sheets (release, seats
+provisioned from it the same day). The gaps are of one kind: a row of the run-of-show asks
+the participant for something no sheet on the seat instructs, or a checkpoint asks for
+something the brief cannot give.
+
+Done when: every row of Day 1 Block 03 and Day 2 Blocks 01 to 04 that a participant works
+on has its prompt or its by-hand steps on a seat sheet, the trainer documents and the
+handout say the same thing as the sheets, the new prompts ran once against the duplicate,
+the release is on npm, and the owner has the version to provision from.
+
+### Decisions (mini-ADR lines; follows ADR-0188, no new ADR)
+
+- **G1 The checklist stays room work (R-278).** Context: handout and trainer notes say
+  "homework, nobody starts this in the room", the run-of-show (decision 2026-10-14, R-207)
+  has ten minutes of room work on one Atelier master. Options: drop the row, or fix the
+  texts. Choice: fix the texts; in the room once on the master just linted, on the own
+  file as homework. Tradeoff: the handout now has two uses in one sentence.
+- **G2 The checkpoint follows the brief (R-280).** "≥ 2 variants × 2 states" becomes "the
+  axes the brief's scope line names". Changing the TagChip brief to carry a second state
+  would change a tested exercise two days before the run.
+- **G3 Six presenters fit, eight do not (R-284).** Block lengths are a commitment to the
+  customer. The row says what fits in 25 minutes and what to do with more than six.
+- **G4 The agent's own list gets a mechanical cross-check (R-281).** Two commands the
+  participant runs: what the Block 02 commit touched, and a search for disable comments
+  and skipped tests. Stated limit on the sheet: a renamed selector and a removed assertion
+  are found by neither. The handoff prompt is split: list first, the person decides, then
+  the agent corrects the named lines.
+- **G5 Block 01 gets its two prompts (R-277).** Structuring a hand-drawn set (do not
+  redraw), with the tested build-from-starter wording as the fallback for a seat behind;
+  the API-rules pass lists and does not rename, because the test run showed 0 renames in
+  4/4 and the discoveries were places where the brief fixes a name.
+- **G6 The linter runs twice on Day 1.** The three-rule run returns only real findings on
+  the planted duplicate, so "real or false alarm" has no false alarm. The default run has
+  18 of them (contrast on a hidden layer). Both prompts go onto the sheet; the trainer's
+  projector-only default run becomes everyone's.
+- **G7 By-hand steps for the micro-exercise are written from the Figma UI as known, not
+  from a run (R-279).** A headless agent cannot click the Design panel. Marked UNVERIFIED
+  in the trainer notes, rehearsal item.
+
+### Steps
+
+- [x] G-0 Headless runs of the new prompts on the duplicate (Sonnet 5.5), 2026-11-21:
+      structuring on a de-bound copy of the TagChip set, API rules twice, the all-rules
+      lint on the planted `Inputs/AtlButton` (23 findings: 18 `wcag-contrast` on the hidden
+      `_disabled-overlay`, the 3 planted ones, 1 `no-autolayout` on the set, 1
+      `empty-container`), the list-only handoff prompt. **Not run:** the pink test and its
+      repair prompt (the Bridge dropped; both are unchanged since package F and ran there),
+      the second handoff prompt (correct the named lines), the 24 × 24 px measuring step.
+- [x] G-A Trainer documents and handout: readiness checklist line, run-of-show rows (Day 1
+      Block 03 linter, checklist, micro-exercise; Day 2 Block 01 checkpoint and the two
+      rows; look at both; what was red; show & tell; transfer), trainer notes, golden
+      prompts where they restate a changed row.
+- [x] G-B Sheets: `day2-prompts.md` (Block 01, look at both, session over lunch,
+      cross-check, split handoff prompt, 24 × 24 px), `figma-linter-prompt.md` (default
+      run, by-hand steps), `briefs/README.md` (both copies); index descriptions in
+      `preset.ts` through a Sonnet agent.
+- [x] G-C Gates by exit code, hostile diff read, decks checked for contradictions. Ten deck
+      slides followed the sheets (Day 1 version 92, Day 2 version 57, drafts in the review
+      pairs form; changelogs beside the deck sources).
+- [ ] G-D Tracker, commits, one push, release verified on npm, version reported.
+- [x] G-E Duplicate cleaned 2026-11-21: section `XT — struct test` removed; no Pink Test
+      mode existed (Library Tokens has Light and Dark only). The original was not written
+      to. Left in the duplicate on purpose, the owner decides: the four component sets the
+      test run of 2026-11-20 built inside the starter frames (`Overlay/Toast`, `TagChip`,
+      `StatCard`, `Display/Avatar`) and one stray text layer `remove-label`.
+
+### Review of package G (2026-11-21)
+
+Verified:
+
+- `npm run check:all` exit 0, run after the last change to `preset.ts`, the spec and the two
+  docs pages. After the cross-check fixes (two sheets, markdown only) four gates again by
+  exit code, all 0: `nx test create-workspace`, `check:scaffold-snapshot`, `check:format`,
+  `check:docs`. The full chain was not run a second time.
+- The headless runs listed under G-0, on the duplicate, as worded on the sheets at that time.
+- Both decks were read back from their artifacts after publishing: the content equals the
+  local edits (Day 1 version 92, Day 2 version 57).
+- The `git grep` line of Day 2 Block 03 runs: tested in a throwaway repository with one line
+  per pattern. The first wording matched `process.exit(` through `xit\(`; the pattern is now
+  `(^|[^e])xit\(`, and `@ts-nocheck` is in the list.
+- The cross-check was a second model this time: Gemini through agy, two runs on the sheet
+  diff and the question, not the reasoning (the first of three calls timed out). 17 findings,
+  each checked against the sheets. Fixed: the catch-up path never said to select the built
+  set; both Block 01 prompts left Figma in Dark mode; the catch-up prompt did not bind
+  strokes; the regex (above); "Inspect" lands on the icon inside the button, not on the
+  button; "the lines <numbers>" could be read as file line numbers; a second commit moves
+  `HEAD` off the Block 02 commit; the Day 2 paragraph of the linter sheet was not labelled;
+  the Auto Layout step pointed at the component set, which shows no gap. Wrong and left: the
+  path filter hides the configs (that is what `git show --stat` is for), the primary prompt
+  returns no node id (the linter sheet works on the selection).
+
+Assumed, not verified:
+
+- The two by-hand Figma steps were not clicked through. Figma's help article states that
+  "Add property, Variant" on a main component creates the set with two variants; one Gemini
+  run claims it creates one. The sheet now says what to do when the copy is an instance. This
+  is the first thing to click in the rehearsal (R-279).
+- The wording changed after the headless runs was not run again: "switch back to Light" and
+  "stroke" in the Block 01 prompts, "the numbers <numbers> of your list" in the second handoff
+  prompt. The second handoff prompt has never run at all, nor the 24 × 24 px measuring step,
+  nor the pink test and its repair in this package.
+- "The node I have selected" was tested by node id, not by a selection in the Figma window.
+- That the new sections render in a scaffolded seat rests on the spec and the scaffold
+  snapshot until the release is out.
+- The deck slides were measured in a local Chromium harness, not in the Slides viewer.
+
+Weakest point: the by-hand steps. They are the only part of the micro-exercise the agent
+does not do, they were written from the help article and not from the Figma window, and two
+sources disagree about what the button does. Ten minutes in the duplicate settle it; until
+then the trainer should have the sentence ready, "duplicate the variant with Cmd+D".
+
+Second weakest: six prompt wordings changed on the day of the release, after their test
+runs. Each change is an added clause, none removes one, but none has run.
+
+Left as it is: `docs/src/pages/schulung.astro` still says "the three prompts" for Block 03
+(three steps, five prompts); the visible slide d2-05-02 still says three minutes; Shift+A is
+tried on "two or three layers on the page" of the duplicate, not on a prepared scratch frame.
+
 ## Follow-up package F: "prove green is right" (owner go 2026-11-20)
 
 Owner on 2026-11-20, after the exercise test run below: "Was sollten wir daraus ableiten?
