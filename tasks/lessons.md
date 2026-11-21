@@ -1191,3 +1191,16 @@ The course notes carried course-map references ("Tag 2 Block 03", outline ids, c
 timings. The owner, who presents, cannot use them in the room. Rule: a speaker note opens with what to
 say, explains each item on the slide in plain words, and names other parts of the course by what happens
 there, never by block number or id. Planning data lives in the run-of-show.
+
+## 2026-11-21 · By-hand Figma steps written into a sheet nobody asked for
+
+R-279 said the Day 1 micro-exercise names three tasks and the sheet instructs one. I closed the gap
+with two by-hand steps in the Figma UI (Properties, +, Variant; Shift+A), released them in 0.4.19, and
+reported "nobody has clicked them" as the weakest point. The owner: "Von Hand sollte eigentlich in
+Figma gar nichts gemacht werden." The steps were never the owner's wish; I took the working mode from
+a neighbouring row ("Manual design in the Figma UI", Day 2) and did not ask.
+**Rule:** in this course a participant does not edit Figma by hand; every write to the file goes
+through the agent, and the participant selects, looks and decides. A gap in an exercise is closed with
+a prompt. Before a sheet gets a new way of working (by hand instead of through the agent, or the
+reverse), name it to the owner as a decision; a step I cannot run headless is the signal to stop and
+ask, not a rehearsal item to hand on.

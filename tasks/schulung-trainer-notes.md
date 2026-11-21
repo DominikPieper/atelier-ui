@@ -395,12 +395,20 @@ stretch folded in (5).
    checklist, and explicit homework for after the course; Day 2 Block 05 hands it over); 13:45–13:55 the
    micro-exercise on a copy of a master in the prepared duplicate: bind one fill to a Library
    Tokens variable, add one variant value, put one frame on auto layout, pink test on the
-   copy. The sheet's second pink test prompt does the fill binding and the test; the variant
-   value (Design panel, Properties, +, Variant) and the Auto Layout (Shift+A on two or three
-   layers; the copy itself already has it, checked 2026-11-21 on a clone of
-   `variant=secondary, size=lg, state=default`) are by hand, steps on the sheet under that
-   prompt (R-279). UNVERIFIED (rehearsal): the by-hand steps were written from the Figma UI,
-   not clicked through. Checkpoint D1B03-C5 at 13:55: the copy's fill is bound and the pink test shows it.
+   copy. All three go through the agent; nothing is edited by hand in Figma (ADR-0189, owner
+   correction 2026-11-21, replaces the by-hand steps of R-279). The sheet's second pink test
+   prompt does the fill binding and the test; the prompt under it does the variant value (a
+   second variant "ghost" in a component set of its own) and the Auto Layout frame (two
+   instances, the gap bound to a spacing variable, then moved one step up the scale). The
+   participant looks at each screenshot and decides. Run 2026-11-21 (Sonnet, 34 s, on a
+   clone of `variant=secondary, size=lg, state=default`): the set got `variant` with
+   `secondary` and `ghost`, plus `size` and `state` with one value each, taken from the
+   copy's name; the gap went from `spacing/2` to `spacing/3`, the second button moved 4 px.
+   The find of that run: the ghost variant lost its fill and kept its white label, so the
+   label was gone on a white section. "Without a fill" was all the prompt asked. That is the
+   point to make at a seat: the agent did what it was told, the participant sees it and says
+   what they want. Not every run will show it; an agent may fix the label unasked. Checkpoint
+   D1B03-C5 at 13:55: the copy's fill is bound and the pink test shows it.
    Seat behind: the fill binding only. Without it, Day 2 Block 01 is the first time anyone
    builds in Figma.
 
@@ -680,25 +688,37 @@ second answer lacks the command, or the agent skips the check. Skills as before:
 
 1. The prepared duplicate on the machine is the one copy used on both days (R-215); do not duplicate again. Confirm the bridge is on it: Claude reports
    `figma_get_status` with `setup.valid: true`. Nobody continues red.
-2. The build order that fits 20 minutes (the starter frame is adapted, not a design from scratch): copy the starter and rename it → the `variant`
-   axis, lowercase values exactly as the code union will be (`success`, not `Success`)
-   → the second axis your brief names, as a `state` axis → the Boolean properties the
-   brief lists (`dismissible`, `hasIcon` …) → bind every fill, radius, padding, gap to a
-   Library Tokens variable → auto layout on every frame with children → switch the
-   frame to the Dark mode and look (Layer → Appearance → Variable modes) → write the
-   master's description: what is out of scope, the a11y items tagged "(full component)",
-   that the shadow is CSS-only, the duration or other behaviour the brief names.
-3. MCP structuring (20 min): `figma-workspace-architect` is the co-pilot; the tools that
-   matter are `figma_add_component_property`, `figma_analyze_component_set`,
-   `figma_audit_component_accessibility`, `figma_set_description`. Ask Claude for the
-   audit and read it; the bridge must stay connected. 20 minutes (09:55–10:15). The prompt
-   is on `course/day2-prompts.md`, Block 01 "make your component set machine-readable"
-   (R-277): it keeps the drawing and binds, structures and describes it, on the node the
-   participant has selected. Run 2026-11-21 on a hand-drawn TagChip clone (83 s): the drawing
-   stayed, an unbound fill was bound, the description was written, and the "could not bind"
-   list named a gap of 7 with no variable: that list is the participant's decision. A seat
-   whose drawing is not there takes the build-from-starter prompt below it (the prompt of the
-   2026-11-20 test run, four of four briefs).
+2. The set is built through the agent, 20 minutes (09:35–09:55). Nothing is drawn or edited
+   by hand in Figma (ADR-0189, owner correction 2026-11-21): the agent writes, the
+   participant chooses the brief, looks, compares with the brief and decides. The prompt is
+   on `course/day2-prompts.md`, Block 01 "build your component set through the agent" (the
+   prompt of the 2026-11-20 test run, four of four briefs; its agent time on a seat is a rehearsal item). It works on a copy
+   of the starter and does in one run what the old build order did by hand: the `variant`
+   axis with lowercase values as the code union will be, the states the brief names, the
+   Boolean properties, every fill, radius, padding and gap bound to a Library Tokens
+   variable, Auto Layout, a Dark check, the description (out of scope, the a11y items tagged
+   "(full component)", the shadow as CSS-only, the behaviour the brief names). That list is
+   what you walk the room with: does the set on the seat have each of them? Then the
+   participant selects the set and steers: one change per prompt, with the steer template
+   under the build prompt, so that each screenshot shows what that one change did. Run
+   2026-11-21 on a TagChip set (28 s): "the remove button is too close to the label" became
+   the gap one step up the scale (`spacing/1` to `spacing/2`), still bound, on both
+   variants. The agent's own caveat is the thing to point at: a frame has one gap, so the
+   space between the severity prefix and the label grew with it. Two or three rounds are
+   normal. A seat that has nothing to steer compares the set with the brief line by line.
+3. MCP structuring (20 min, 09:55–10:15): `figma-workspace-architect` is the co-pilot; the
+   tools that matter are `figma_add_component_property`, `figma_analyze_component_set`,
+   `figma_audit_component_accessibility`, `figma_set_description`. Ask Claude for the audit
+   and read it; the bridge must stay connected. The prompt is on `course/day2-prompts.md`,
+   Block 01 "make your component set machine-readable" (R-277): it does not redraw the set,
+   it binds, structures and describes what is selected. After a build through the agent
+   this pass is a check, and a short "changed" list is its result: the build held. Run
+   2026-11-21 on the steered TagChip set (23 s): nothing changed; the "could not bind" list
+   named a zero padding and gap (no `spacing/0`), the font family and the inside of the icon
+   instance. On an earlier run the same prompt found a gap of 7 with no variable and an
+   unbound fill. That list is the participant's decision: onto the scale, or into the
+   handoff document. A pass that finds nothing is not wasted time; say so, or the room reads
+   it as a tool that did nothing.
 4. Ladder stage 0 on your own component set (10:15–10:20, 5 minutes): the same prompt as Day 1
    Block 03 (golden prompts §1c) on the participant's own component set; real findings are
    fixed before the handoff document, false alarms are noted. Say again what the linter does
@@ -720,8 +740,13 @@ second answer lacks the command, or the agent skips the check. Skills as before:
    naming, literal unions, composition over config, no hidden defaults), about 10 on a short
    exercise on the own component: the prompt on `course/day2-prompts.md` (Block 01, the API
    rules; R-277) lists each property with its name and values, checks the list against the
-   four rules and renames nothing. The participant decides per line: rename in Figma, or keep
-   the brief's name and write the reason into the handoff document's Deliberate differences.
+   four rules and renames nothing. The participant decides per line: have the agent rename it
+   (the rename prompt is under it on the sheet), or keep the brief's name and write the
+   reason into the handoff document's Deliberate differences. Run 2026-11-21 (5 s):
+   `success` became `positive` by renaming the one variant; the "Success:" text on the chip
+   and the `color/success-*` tokens kept the old word. A rename changes the name, not what
+   the set shows; the sheet says so, and whether the old word may stay is the participant's
+   call.
    The exercise has no done-when of its own; its result is the property list the handoff
    document takes over. Expect few renames: the brief fixes the names (four of four runs on
    2026-11-20 renamed nothing). The find is where the brief's own name bends a rule; two runs
@@ -734,10 +759,11 @@ second answer lacks the command, or the agent skips the check. Skills as before:
 criteria, the deliberate differences. What the AI would have guessed: prop names, the position values, a shadow
 variable, a `state` prop.
 
-**Watch for.** Rule R7 at 09:55 and 10:15 (give MCP time to the manual row, never cut
-the handoff). Bridge drops → `/runbook#stale-instances`. Figma novices stall on the
-variant axis UI; walk the room with the five-step build order above, not with Figma
-theory. `Verify in rehearsal` (R-214): a free-plan Figma account keeps the Dark mode in
+**Watch for.** Rule R7 at 09:55 and 10:15 (give MCP time to the build row, never cut
+the handoff). Bridge drops → `/runbook#stale-instances`: without the bridge nobody on that
+seat can change the set, so a dropped bridge is the first thing to fix, not the last. A
+seat that reaches for the Figma UI to "just fix it": back to the prompt, one change per
+prompt. Walk the room with the list in item 2, not with Figma theory. `Verify in rehearsal` (R-214): a free-plan Figma account keeps the Dark mode in
 a duplicated file and can import the dev plugin.
 
 ### Block 02 · 11:15–12:30 · Component and stories from the handoff

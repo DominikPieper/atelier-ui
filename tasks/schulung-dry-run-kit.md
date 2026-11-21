@@ -182,7 +182,7 @@ They sit at the block that runs them and are numbered here so none gets lost:
     document's Source line and the PNG) and which of the two showed.
 11. Day 1 Block 01: does the done-when hold inside 25 minutes on a provisioned seat (frame and verification
     pass are 10 minutes, the basics and the first commit 15)? Not measured; log the real times.
-12. Day 2 Block 01: do the 20 / 15 / 22 splits (draw from the starter frame, API rules with the short
+12. Day 2 Block 01: do the 20 / 15 / 22 splits (build through the agent from the starter frame, API rules with the short
     exercise, handoff document) hold? Not measured.
 
 ### Day 1
@@ -406,24 +406,26 @@ _Done when:_ a master plus a filled handoff document, including its deliberate d
 - Open the prepared duplicate of the Atelier file on the machine, the one copy used on
   both days (a second one has a new file key that no longer matches `package.json`);
   never mutate the original.
-  Copy and rename the starter frame from the Workshop Templates page (Toast /
+  Pick your brief and its starter frame on the Workshop Templates page (Toast /
   Starter, StatCard / Starter, TagChip / Starter or Avatar / Starter, plus
-  Variant Matrix / Scaffold).
-- 5 min open the duplicate, 20 min draw from the starter frame (the starter adapted, not a
-  design from scratch), 20 min MCP structuring (component properties, a11y audits), 5 min
+  Variant Matrix / Scaffold). Nothing is drawn or edited by hand in Figma (ADR-0189): the
+  agent copies the starter and builds.
+- 5 min open the duplicate, 20 min build through the agent from the starter frame (the build
+  prompt on `course/day2-prompts.md`, then look, compare with the brief and steer with one
+  change per prompt), 20 min MCP structuring (component properties, a11y audits), 5 min
   ladder stage 0 (the Figma linter, the same prompt as Day 1 Block 03, on your own component
   set: fix the real findings, note the false alarms), 15 min LLM-friendly API rules on your
   own component (about 5 min on the four rules, about 10 on the short exercise: list each
   property with its name and values, check against the four rules with the prompt on
-  `course/day2-prompts.md`, which renames nothing; then decide per line: rename in Figma or
-  keep the brief's name and note the reason for the handoff; before the handoff: it fixes
+  `course/day2-prompts.md`, which renames nothing; then decide per line: have the agent rename it
+  (the rename prompt under it) or keep the brief's name and note the reason for the handoff; before the handoff: it fixes
   the prop names), 25 min handoff with the recap question closing it. The MCP structuring
   has its prompt on the same sheet ("make your component set machine-readable"). Target: two
   variants and the states the brief names (TagChip has no second state),
   properties,
   correct `--ui-*` tokens, a dark-mode variant; the exact matrix is in the
   brief. Skill: `figma-workspace-architect` ("used here for the first time").
-  Record which brief you built and whether it was clear enough to draw from.
+  Record which brief you built and whether it was clear enough to build from; log how many steering rounds you needed.
 - **STOP — the handoff document.** Before opening Claude for Block 02, write
   it. The page's list: file URL + node id, chosen variants/states, token
   bindings, reuse vs. rebuild, the behaviour from the brief, explicit

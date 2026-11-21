@@ -15,6 +15,56 @@ Review findings are tracked in `tasks/reviews.md` since 2026-10-11; this file ho
 non-review work. Items marked `→ R-NNN` keep their reasoning here but are tracked there; items
 closed by the review triage carry a `_(closed 2026-10-11 …)_` note.
 
+## Follow-up package H: "nothing in Figma by hand" (owner correction 2026-11-21)
+
+Owner on 2026-11-21, after the package G report named two by-hand Figma steps in the Day 1
+micro-exercise: "Wieso in Figma? Von Hand sollte eigentlich in Figma gar nichts gemacht
+werden." Asked how far the rule reaches, the owner chose "Alles über den Agenten": Day 1,
+the two by-hand steps become one prompt; Day 2, the 20 minutes of drawing by hand go, the
+agent builds the set from the starter (the catch-up prompt becomes the main path), the
+participant steers, looks and decides; renames in Figma go through a prompt too. 0.4.19
+carries the by-hand steps, so this needs a release (0.4.20) the seats are provisioned from.
+
+The rule (ADR-0189): a participant never edits the Figma file by hand. Every write goes
+through the agent. Selecting a node, looking at it, reading a value in the Design panel and
+deciding stay with the participant.
+
+Done when: no seat sheet, trainer document, course page or deck slide asks a participant to
+edit Figma by hand; the new and changed prompts ran once against the duplicate; the block
+times still add up (Day 2 Block 01 = 90 minutes); 0.4.20 is on npm and its tarball carries
+the new sheets; the owner has the version.
+
+Edge cases stated upfront:
+
+- **Selecting is not editing.** "The node I have selected" stays the way a participant
+  points the agent at a node. Reading W and H in the Design panel (target size, Block 04)
+  stays too.
+- **An agent-built set leaves little for the "machine-readable" pass.** It stays as the
+  check after the steering rounds, where a raw value can slip in; a short "changed" list is
+  the result, not a wasted run.
+- **Figma plans without a spare variable mode**: the fallback said "do the repair by hand
+  in the variable picker". It becomes a prompt without the pink mode.
+- **The briefs say "draw"** ("the frames you draw") in the sense of "the set carries". Left
+  as it is: rewording four tested briefs two days before the run buys nothing.
+
+Steps:
+
+- [ ] H-0 Record: this section, the lesson (`tasks/lessons.md`), ADR-0189 + index row.
+- [ ] H-1 Sheets: `figma-linter-prompt.md` (two by-hand steps → one prompt; plan-limit
+      fallback as a prompt), `day2-prompts.md` (Block 01: build through the agent, steer
+      with one change per prompt, machine-readable pass, rename through a prompt).
+- [ ] H-2 Code through a Sonnet agent: `preset.spec.ts` assertions, `preset.ts` index
+      lines, `docs/src/pages/schulung.astro` rows.
+- [ ] H-3 Headless runs of the new prompts on the duplicate (Sonnet 5.5), test section
+      removed afterwards.
+- [ ] H-4 Trainer documents: run-of-show rows (Day 1 13:45, Day 2 09:35, 09:55, 10:20),
+      trainer notes (micro-exercise, Day 2 Block 01), anything restating them.
+- [ ] H-5 Decks: Day 2 Block 01 slides and notes, Day 1 micro-exercise slide if it names
+      the by-hand steps; published as drafts, changelog and outline follow (not committed).
+- [ ] H-6 Gates by exit code, commits per step, one push, 0.4.20 verified on npm
+      (registry, drift, tarball sheets).
+- [ ] H-7 Review of package H below; memory updated.
+
 ## Follow-up package G: "close the exercise gaps" (owner go 2026-11-21)
 
 Owner on 2026-11-21, after the Gemini cross-check of the exercises (R-277 to R-285): "Was
