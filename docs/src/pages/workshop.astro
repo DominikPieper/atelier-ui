@@ -281,7 +281,8 @@ const mcpConfig = (fw: string) => `{
             single app. Pass the answers as flags to skip the prompts entirely —
             <code>--figma-file</code> also accepts a full Figma URL and extracts
             the key itself, and <code>--skills</code>/<code>--no-skills</code>
-            toggles the storybookjs/mcp skills install (defaults on, no prompt):
+            toggles the agent skills install, storybookjs/mcp plus, in an
+            Angular workspace, the two Angular skills (defaults on, no prompt):
           </p>
           <Code
             code={`npx create-atelier-ui-workspace my-workshop\n\n# fully non-interactive\nnpx create-atelier-ui-workspace my-workshop --framework angular --figma --figma-file abc123XYZdef456UVWghi --skills`}

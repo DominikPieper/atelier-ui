@@ -2844,6 +2844,19 @@ describe('preset generator', () => {
 
     const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
     expect(md).toContain('npx -y skills@1.5.25 add storybookjs/mcp');
+    expect(md).toContain(
+      'npx -y skills@1.5.25 add angular/angular --skill angular-developer',
+    );
+    expect(md).toContain(
+      'npx -y skills@1.5.25 add marmicode/skills --skill angular-testing',
+    );
+  });
+
+  it('CLAUDE.md does not mention the Angular skills for React', async () => {
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'react' });
+
+    const md = tree.read('CLAUDE.md', 'utf-8') ?? '';
+    expect(md).not.toContain('angular-developer');
   });
 
   it('README mentions the skills and the storybook command', async () => {
@@ -2882,10 +2895,10 @@ describe('preset generator', () => {
 
   it('invokes the pinned skills CLI with the expected argv and env on POSIX', async () => {
     await withPlatform('darwin', async () => {
-      await installSkills(tree, true);
+      await installSkills(tree, true, 'angular');
     });
 
-    expect(spawnMock).toHaveBeenCalledTimes(1);
+    expect(spawnMock).toHaveBeenCalledTimes(3);
     const [file, args, options] = spawnMock.mock.calls[0];
     // POSIX: no shell involved, so `spawn` gets the command and its argv as
     // two separate arguments — nothing here is in a position to glob-expand
@@ -2914,9 +2927,63 @@ describe('preset generator', () => {
     expect(options.killSignal).toBe('SIGTERM');
   });
 
+  it('runs the two Angular skill installs after storybookjs/mcp, each with its own --skill', async () => {
+    await installSkills(tree, true, 'angular');
+
+    const sources = spawnMock.mock.calls.map(([, args]) => [args[3], args[5]]);
+    expect(sources).toEqual([
+      ['storybookjs/mcp', '*'],
+      ['angular/angular', 'angular-developer'],
+      ['marmicode/skills', 'angular-testing'],
+    ]);
+    for (const [, args] of spawnMock.mock.calls) {
+      expect(args.slice(0, 3)).toEqual(['-y', 'skills@1.5.25', 'add']);
+      expect(args.slice(6)).toEqual([
+        '--agent',
+        'claude-code',
+        '--yes',
+        '--copy',
+      ]);
+    }
+  });
+
+  it.each(['react', 'vue'] as const)(
+    'runs only the storybookjs/mcp install for %s',
+    async (framework) => {
+      await installSkills(tree, true, framework);
+
+      expect(spawnMock).toHaveBeenCalledTimes(1);
+      expect(spawnMock.mock.calls[0][1][3]).toBe('storybookjs/mcp');
+    },
+  );
+
+  it('a failing install does not stop the next one and warns with its own command', async () => {
+    let call = 0;
+    spawnMock.mockImplementation(() =>
+      fakeChildProcess((child) =>
+        child.emit('exit', ++call === 1 ? 1 : 0, null),
+      ),
+    );
+    const warnSpy = jest
+      .spyOn(console, 'warn')
+      .mockImplementation(() => undefined);
+
+    await installSkills(tree, true, 'angular');
+
+    expect(spawnMock).toHaveBeenCalledTimes(3);
+    const warnings = warnSpy.mock.calls
+      .map((call) => call.join(' '))
+      .join('\n');
+    expect(warnings).toContain(
+      'npx -y skills@1.5.25 add storybookjs/mcp --skill "*"',
+    );
+    expect(warnings).not.toContain('angular/angular');
+    warnSpy.mockRestore();
+  });
+
   it('on Windows, runs the install through cmd.exe with the literal * quoted', async () => {
     await withPlatform('win32', async () => {
-      await installSkills(tree, true);
+      await installSkills(tree, true, 'react');
     });
 
     expect(spawnMock).toHaveBeenCalledTimes(1);
@@ -2935,7 +3002,7 @@ describe('preset generator', () => {
   });
 
   it('does not invoke the skills CLI when skills is disabled', async () => {
-    await installSkills(tree, false);
+    await installSkills(tree, false, 'angular');
 
     expect(spawnMock).not.toHaveBeenCalled();
   });
@@ -2954,7 +3021,7 @@ describe('preset generator', () => {
   it('does not throw when the skills command fails to spawn — non-fatal by design', async () => {
     mockSkillsCliFailure('network unreachable');
 
-    await expect(installSkills(tree, true)).resolves.toBeUndefined();
+    await expect(installSkills(tree, true, 'angular')).resolves.toBeUndefined();
   });
 
   it('prints the manual re-run command when the skills install fails to spawn', async () => {
@@ -2963,7 +3030,7 @@ describe('preset generator', () => {
       .spyOn(console, 'warn')
       .mockImplementation(() => undefined);
 
-    await installSkills(tree, true);
+    await installSkills(tree, true, 'angular');
 
     const warnings = warnSpy.mock.calls
       .map((call) => call.join(' '))
@@ -2976,7 +3043,7 @@ describe('preset generator', () => {
   it('does not throw when npx exits with a non-zero code — non-fatal by design', async () => {
     mockSkillsCliNonZeroExit(1);
 
-    await expect(installSkills(tree, true)).resolves.toBeUndefined();
+    await expect(installSkills(tree, true, 'angular')).resolves.toBeUndefined();
   });
 
   it('warns with the exit code when npx exits with a non-zero code', async () => {
@@ -2985,7 +3052,7 @@ describe('preset generator', () => {
       .spyOn(console, 'warn')
       .mockImplementation(() => undefined);
 
-    await installSkills(tree, true);
+    await installSkills(tree, true, 'angular');
 
     const warnings = warnSpy.mock.calls
       .map((call) => call.join(' '))
@@ -2998,7 +3065,7 @@ describe('preset generator', () => {
   it('does not throw when the install timeout kills the child — non-fatal by design', async () => {
     mockSkillsCliTimeoutKill('SIGTERM');
 
-    await expect(installSkills(tree, true)).resolves.toBeUndefined();
+    await expect(installSkills(tree, true, 'angular')).resolves.toBeUndefined();
   });
 
   it('warns about the timeout, not a bare signal, when the install is killed after SKILLS_INSTALL_TIMEOUT_MS', async () => {
@@ -3007,7 +3074,7 @@ describe('preset generator', () => {
       .spyOn(console, 'warn')
       .mockImplementation(() => undefined);
 
-    await installSkills(tree, true);
+    await installSkills(tree, true, 'angular');
 
     const warnings = warnSpy.mock.calls
       .map((call) => call.join(' '))
@@ -3662,7 +3729,7 @@ describe('preset generator', () => {
       expect(md).toContain('.claude/skills/atelier-component/SKILL.md');
       expect(md).toContain('network fetch');
       expect(md).toContain('no `skills: false` opt-out');
-      expect(md).toContain('unlike\nthe four `storybookjs/mcp` skills below');
+      expect(md).toContain('unlike\nthe fetched skills below');
     },
   );
 

@@ -2,6 +2,8 @@ import * as fs from 'node:fs';
 import * as os from 'node:os';
 import * as path from 'node:path';
 
+import { spawnSync } from 'node:child_process';
+
 import { createWorkspace } from 'create-nx-workspace';
 import { main } from './index';
 
@@ -11,11 +13,13 @@ jest.mock('create-nx-workspace', () => ({
     .mockResolvedValue({ directory: '/tmp/my-workspace' }),
 }));
 
+jest.mock('node:child_process', () => ({ spawnSync: jest.fn() }));
 jest.mock('enquirer', () => ({ prompt: jest.fn() }), { virtual: true });
 
 const mockCreateWorkspace = createWorkspace as jest.MockedFunction<
   typeof createWorkspace
 >;
+const mockSpawnSync = spawnSync as unknown as jest.Mock;
 const enquirer = require('enquirer') as { prompt: jest.Mock };
 
 describe('create-atelier-ui-workspace CLI', () => {
@@ -35,6 +39,8 @@ describe('create-atelier-ui-workspace CLI', () => {
       directory: '/tmp/my-workspace',
     } as Awaited<ReturnType<typeof createWorkspace>>);
     enquirer.prompt.mockReset();
+    // Default: git has an identity configured.
+    mockSpawnSync.mockReturnValue({ stdout: 'someone\n' });
   });
 
   afterEach(() => {
@@ -463,6 +469,37 @@ describe('create-atelier-ui-workspace CLI', () => {
     expect(mockCreateWorkspace).toHaveBeenCalledWith(
       expect.any(String),
       expect.objectContaining({ figmaFile: undefined }),
+    );
+  });
+
+  // ─── initial commit ────────────────────────────────────────────────────────
+
+  it('asks Nx for an initial commit and keeps the configured git identity', async () => {
+    process.argv = ['node', 'index.js', 'test-ws', '--no-figma'];
+
+    await main();
+
+    expect(mockCreateWorkspace).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.objectContaining({ commit: { message: 'Initial commit' } }),
+    );
+  });
+
+  it('passes a fallback commit identity when git has none configured', async () => {
+    mockSpawnSync.mockReturnValue({ stdout: '' });
+    process.argv = ['node', 'index.js', 'test-ws', '--no-figma'];
+
+    await main();
+
+    expect(mockCreateWorkspace).toHaveBeenCalledWith(
+      expect.any(String),
+      expect.objectContaining({
+        commit: {
+          message: 'Initial commit',
+          name: 'Atelier Workshop',
+          email: 'workshop@atelier-ui.invalid',
+        },
+      }),
     );
   });
 

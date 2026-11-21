@@ -17,7 +17,11 @@ const MARKDOWN_CURL = `curl -H "Accept: text/markdown" ${SITE_URL}/workshop`;
 
 const CONTENT_SIGNAL = `# Content Signals — https://contentsignals.org/\nContent-Signal: ai-train=no, search=yes, ai-input=yes`;
 
-const SKILLS_ADD = `npx -y skills@1.5.25 add storybookjs/mcp --skill "*" --agent claude-code --yes --copy`;
+const SKILLS_ADD = [
+  `npx -y skills@1.5.25 add storybookjs/mcp --skill "*" --agent claude-code --yes --copy`,
+  `npx -y skills@1.5.25 add angular/angular --skill angular-developer --agent claude-code --yes --copy`,
+  `npx -y skills@1.5.25 add marmicode/skills --skill angular-testing --agent claude-code --yes --copy`,
+].join('\n');
 
 const CHECK_SKILLS = `ls .claude/skills/`;
 
@@ -145,7 +149,9 @@ const skills = [
         "
       >
         Start Claude Code in the workspace root and list the folder. You should
-        see <code>atelier-component</code>, the four Storybook skills, and
+        see <code>atelier-component</code>, the four Storybook skills, in an
+        Angular workspace the two Angular skills (<code>angular-developer</code
+        >, <code>angular-testing</code>), and
         <code>figma-workspace-architect</code> if you chose Figma. Then ask
         Claude Code which skills it has in this project, or give it a request
         from the table and watch which skill it names.
@@ -153,7 +159,7 @@ const skills = [
       <Code code={CHECK_SKILLS} lang="shell" />
 
       <h3 class="docs-h3" style="margin-top: 1.75rem">
-        If the Storybook skills are missing
+        If the fetched skills are missing
       </h3>
       <p
         style="
@@ -163,14 +169,15 @@ const skills = [
           max-width: 660px;
         "
       >
-        The Storybook skills are fetched from GitHub in the last step of
-        scaffolding. That step is deliberately non-fatal: if the network blocks
-        it, the workspace is still created and the generator prints a warning
-        (<code>Could not install the storybookjs/mcp skills automatically</code
-        >) followed by the command to run by hand. If you missed the warning,
-        the symptom is that those four folders are absent from
+        The Storybook and Angular skills are fetched from GitHub in the last
+        step of scaffolding. That step is deliberately non-fatal: if the network
+        blocks it, the workspace is still created and the generator prints a
+        warning (<code>Could not install the … skills automatically</code>)
+        followed by the command to run by hand for that install. If you missed
+        the warning, the symptom is that their folders are absent from
         <code>.claude/skills/</code>. Run this from the workspace root once you
-        have network access; it is safe to repeat:
+        have network access; it is safe to repeat (a React or Vue workspace only
+        gets the first line):
       </p>
       <Code code={SKILLS_ADD} lang="shell" />
       <p

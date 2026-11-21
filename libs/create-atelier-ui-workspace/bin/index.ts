@@ -1,5 +1,6 @@
 #!/usr/bin/env node
 
+import { spawnSync } from 'node:child_process';
 import { existsSync, readdirSync, statSync } from 'node:fs';
 import { resolve } from 'node:path';
 
@@ -104,12 +105,41 @@ Options:
   --framework <fw>       ${ENABLED_FRAMEWORKS.join(' | ')} (default: ${ENABLED_FRAMEWORKS[0]})
   --figma, --no-figma    Add / skip the Figma Desktop Bridge MCP (prompted when omitted)
   --figma-file <key>     Your Figma file key or full Figma URL (optional; only used with --figma)
-  --skills, --no-skills  Install the Storybook agent skills (default: on)
+  --skills, --no-skills  Install the agent skills: Storybook's, plus Angular's (default: on)
   -h, --help             Show this help
 
 Without a TTY (CI, closed stdin) nothing can be prompted: name and
 --figma / --no-figma must both be given, otherwise the command exits with code 1.
 `;
+
+// Nx's programmatic createWorkspace() only commits when `commit` is passed
+// (the CLI gets that from a yargs default, the API has none), so without it
+// the workspace is staged but uncommitted. A commit needs an identity; a fresh
+// attendee laptop often has none, and Nx would then swallow the failed commit
+// ("Could not initialize git repository"). Offer a neutral fallback identity
+// only when git config has none, so a configured one is never overridden.
+// shortcut: reads global/system config only (the new directory has no repo
+// yet), and ignores GIT_AUTHOR_* env vars — upgrade if that ever bites.
+const gitConfigured = (key: string) =>
+  !!spawnSync('git', ['config', '--get', key], {
+    encoding: 'utf8',
+  }).stdout?.trim();
+
+// The return type is cast because Nx's typings require name/email, but its
+// runtime only reads them when truthy (git.js `options.commit?.name`).
+export function initialCommitOptions() {
+  const hasIdentity = gitConfigured('user.name') && gitConfigured('user.email');
+  // Nx wants name and email together or not at all.
+  return (
+    hasIdentity
+      ? { message: 'Initial commit' }
+      : {
+          message: 'Initial commit',
+          name: 'Atelier Workshop',
+          email: 'workshop@atelier-ui.invalid',
+        }
+  ) as { message: string; name: string; email: string };
+}
 
 // enquirer rejects with an empty string on Ctrl-C; normalise that into a real
 // Error so the top-level handler reports it and exits non-zero.
@@ -252,6 +282,7 @@ export async function main() {
     figmaMcp,
     figmaFile,
     skills: skillsEnabled,
+    commit: initialCommitOptions(),
   });
 
   // No `workshop-<fw>` app name to splice in here any more — `npm start`

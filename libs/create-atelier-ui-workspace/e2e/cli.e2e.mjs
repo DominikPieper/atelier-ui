@@ -168,12 +168,16 @@ function findStoryFiles(dir) {
 // Only called for SKILLS_TEST_FRAMEWORK — the other frameworks run with
 // `--no-skills` and never attempt the install, so checking them here would
 // just report a predetermined "NOT installed" for something never asked for.
-function checkSkillsInstalled(wsPath) {
+function checkSkillsInstalled(wsPath, framework) {
   const skillNames = [
     'stories',
     'storybook-init',
     'storybook-setup',
     'storybook-upgrade',
+    // Angular workspaces also get these two (a separate install each).
+    ...(framework === 'angular'
+      ? ['angular-developer', 'angular-testing']
+      : []),
   ];
   // The CLI's `--copy` mode is observed (in this repo's own root, added ahead
   // of this preset change) to land skills under both `.claude/skills/` and
@@ -488,6 +492,16 @@ function testFramework(framework, registryUrl, npmrcPath) {
     if (!statSync(wsPath).isDirectory())
       throw new Error(`workspace dir missing: ${wsPath}`);
     ok(`workspace at ${wsPath}`);
+
+    // The scaffold ends with an initial commit and a clean tree (the CLI
+    // passes `commit` to Nx, with a fallback identity when git has none).
+    execSync('git rev-parse --verify HEAD', { cwd: wsPath, stdio: 'ignore' });
+    const dirty = execSync('git status --porcelain', {
+      cwd: wsPath,
+      encoding: 'utf8',
+    }).trim();
+    if (dirty) throw new Error(`workspace not clean after scaffold:\n${dirty}`);
+    ok('initial commit exists, working tree clean');
 
     // preview.ts for Angular/Vue, preview.tsx for React — this is the
     // contract stated in the S1 brief (tasks/todo.md, 2026-09-10), not yet
@@ -856,7 +870,7 @@ function testFramework(framework, registryUrl, npmrcPath) {
     );
 
     if (exerciseSkills) {
-      checkSkillsInstalled(wsPath);
+      checkSkillsInstalled(wsPath, framework);
     } else {
       ok(
         'skills install skipped (--no-skills) — real install exercised by another framework in this run',

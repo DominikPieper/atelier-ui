@@ -39,7 +39,7 @@
     },
     "skills": {
       "type": "boolean",
-      "description": "Install the storybookjs/mcp agent skills (stories, storybook-init, storybook-setup, storybook-upgrade) via the skills CLI during scaffolding. Requires network access; disable for CI or offline runs.",
+      "description": "Install the agent skills via the skills CLI during scaffolding: the four storybookjs/mcp skills (stories, storybook-init, storybook-setup, storybook-upgrade), plus angular-developer and angular-testing for Angular. Requires network access; disable for CI or offline runs.",
       "default": true
     }
   },

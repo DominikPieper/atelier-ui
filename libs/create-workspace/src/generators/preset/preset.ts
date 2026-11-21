@@ -512,32 +512,65 @@ ${overrides}
 `;
 }
 
-// The four storybookjs/mcp skills this generator installs post-scaffold (S2).
+// The skills this generator installs post-scaffold (S2): the four
+// storybookjs/mcp skills everywhere, plus two Angular-only ones.
 // Pinned the same way ADR-0110 pins figma-console-mcp: a skill install is a
 // remote pull of skill *text*, and an un-pinned CLI could silently change what
 // gets written into an attendee's .claude/skills/ between one workshop and the
 // next.
 const SKILLS_CLI_VERSION = '1.5.25';
-const SKILLS_ADD_ARGV = [
-  '-y',
-  `skills@${SKILLS_CLI_VERSION}`,
-  'add',
-  'storybookjs/mcp',
-  '--skill',
-  '*',
-  '--agent',
-  'claude-code',
-  '--yes',
-  '--copy',
+
+interface SkillInstall {
+  source: string;
+  // The `--skill` selector: a skill name, or `*` for every skill in the repo.
+  skill: string;
+}
+
+const STORYBOOK_SKILLS_INSTALL: SkillInstall = {
+  source: 'storybookjs/mcp',
+  skill: '*',
+};
+// Angular workspaces only — the React/Vue paths have no equivalent, and a
+// skill about the wrong framework is noise in the agent's context.
+const ANGULAR_SKILLS_INSTALLS: SkillInstall[] = [
+  { source: 'angular/angular', skill: 'angular-developer' },
+  { source: 'marmicode/skills', skill: 'angular-testing' },
 ];
-// Kept in sync with SKILLS_ADD_ARGV by hand — this is the string shown to a
-// human (the failure warning, CLAUDE.md, README.md), quoted the way a real
-// shell needs it. It is unrelated to how SKILLS_ADD_ARGV itself reaches the
-// child process below: on POSIX it goes straight to `spawn` as an argv array
-// with no shell involved (so nothing there needs quoting at all), and on
-// Windows it is re-quoted for cmd.exe by `quoteForCmdExe` — this constant
-// exists only for the text a person reads and re-types by hand.
-const SKILLS_ADD_COMMAND_FOR_HUMANS = `npx -y skills@${SKILLS_CLI_VERSION} add storybookjs/mcp --skill "*" --agent claude-code --yes --copy`;
+
+function skillInstallsFor(framework: Framework): SkillInstall[] {
+  return framework === 'angular'
+    ? [STORYBOOK_SKILLS_INSTALL, ...ANGULAR_SKILLS_INSTALLS]
+    : [STORYBOOK_SKILLS_INSTALL];
+}
+
+function skillsAddArgv({ source, skill }: SkillInstall): string[] {
+  return [
+    '-y',
+    `skills@${SKILLS_CLI_VERSION}`,
+    'add',
+    source,
+    '--skill',
+    skill,
+    '--agent',
+    'claude-code',
+    '--yes',
+    '--copy',
+  ];
+}
+
+// The string shown to a human (the failure warning, CLAUDE.md, README.md),
+// derived from the same argv the child process gets so the two cannot drift.
+// Unrelated to how that argv reaches the child below: on POSIX it goes
+// straight to `spawn` as an array with no shell involved, on Windows it is
+// re-quoted for cmd.exe by `quoteForCmdExe` — this is only the text a person
+// reads and re-types by hand (quoting the bare `*` the way a real shell needs).
+function skillsAddCommandForHumans(install: SkillInstall): string {
+  return ['npx', ...skillsAddArgv(install)].map(quoteForCmdExe).join(' ');
+}
+
+function skillsAddCommandsForHumans(framework: Framework): string {
+  return skillInstallsFor(framework).map(skillsAddCommandForHumans).join('\n');
+}
 // Bounds the CLI's own git clone (it reads this env var itself) so a bad
 // conference network fails fast with a clear message instead of hanging.
 const SKILLS_CLONE_TIMEOUT_MS = 60_000;
@@ -669,7 +702,7 @@ const SKILLS_INSTALL_TIMEOUT_MS = 120_000;
 // shell (this is exactly what Node's DEP0190 deprecation warns about:
 // "Passing args to a child process with shell option true ... arguments are
 // not escaped, only concatenated"). So this is not a general-purpose Windows
-// command-line escaper — every token in SKILLS_ADD_ARGV is a fixed literal
+// command-line escaper — every token in skillsAddArgv() is a fixed literal
 // (a package specifier, a flag name, or the bare `*`) with no embedded quotes
 // of its own, and wrapping a token in quotes whenever it contains whitespace
 // or a metacharacter is sufficient for that fixed, known argv. `*`/`?` are
@@ -685,15 +718,17 @@ function quoteForCmdExe(token: string): string {
     : token;
 }
 
-// Runs `npx <SKILLS_ADD_ARGV...>` with the child's stdio wired to this
+// Runs `npx <skillsAddArgv(install)...>` with the child's stdio wired to this
 // process's own, resolving on a clean exit and rejecting with a descriptive
 // error otherwise (non-zero exit, the install timeout killing the child, or
 // the child never starting at all) — installSkills' catch block below turns
 // any of those into the same non-fatal warning.
 function runSkillsAddCommand(
+  install: SkillInstall,
   cwd: string,
   env: NodeJS.ProcessEnv,
 ): Promise<void> {
+  const argv = skillsAddArgv(install);
   return new Promise((resolve, reject) => {
     const isWindows = process.platform === 'win32';
     let settled = false;
@@ -734,15 +769,15 @@ function runSkillsAddCommand(
         // PATHEXT lookup, the same as typing `npx` at a Windows prompt.
         // Because `shell: true` does not escape an args array (see
         // quoteForCmdExe above), the whole command line is built and quoted
-        // by hand instead of passing SKILLS_ADD_ARGV as a separate array.
-        spawn(['npx', ...SKILLS_ADD_ARGV].map(quoteForCmdExe).join(' '), {
+        // by hand instead of passing the argv as a separate array.
+        spawn(['npx', ...argv].map(quoteForCmdExe).join(' '), {
           ...spawnOptions,
           shell: true,
         })
       : // POSIX: no shell is spawned at all, so nothing is in a position to
         // glob-expand the literal `*` in `--skill *` — `npx` is exec'd
-        // directly with SKILLS_ADD_ARGV as its argv.
-        spawn('npx', SKILLS_ADD_ARGV, spawnOptions);
+        // directly with the argv array.
+        spawn('npx', argv, spawnOptions);
 
     // Windows-only backstop for SKILLS_INSTALL_TIMEOUT_MS. `spawn`'s own
     // `timeout` + `killSignal` (used above for POSIX) only terminates the
@@ -811,38 +846,47 @@ function runSkillsAddCommand(
 export async function installSkills(
   tree: Tree,
   skillsEnabled: boolean,
+  framework: Framework,
 ): Promise<void> {
   if (!skillsEnabled) return;
 
+  const installs = skillInstallsFor(framework);
   console.log(
-    `\n◇ Installing storybookjs/mcp skills (stories, storybook-init, storybook-setup, storybook-upgrade)…`,
+    `\n◇ Installing agent skills (${installs
+      .map((i) => (i.skill === '*' ? i.source : `${i.source}:${i.skill}`))
+      .join(', ')})…`,
   );
-  try {
-    // Runs in the scaffolded workspace's real root: by the time the
-    // post-generator task calls this, Nx has already flushed the virtual Tree
-    // to disk (that's what lets installTask run a real `npm install`).
-    // `--copy` (not the CLI's default symlink farm) because an attendee on
-    // Windows without developer mode cannot create symlinks. `--agent
-    // claude-code` (not `--all`) so the scaffold doesn't also grow
-    // `.cursor/`, `.codex/`, etc.
-    const env: NodeJS.ProcessEnv = {
-      ...process.env,
-      DO_NOT_TRACK: '1',
-      SKILLS_CLONE_TIMEOUT_MS: String(SKILLS_CLONE_TIMEOUT_MS),
-    };
-    await runSkillsAddCommand(tree.root, env);
-  } catch (error) {
-    // Non-fatal by design: a scaffold that dies on this last step because a
-    // conference network can't reach GitHub is a ruined workshop morning; a
-    // workspace merely missing its skills is a nuisance the attendee (or
-    // facilitator) can fix with the command below.
-    console.warn(
-      `\n⚠ Could not install the storybookjs/mcp skills automatically (${
-        error instanceof Error ? error.message : String(error)
-      }).`,
-    );
-    console.warn(`  Run this by hand once you have network access:\n`);
-    console.warn(`    ${SKILLS_ADD_COMMAND_FOR_HUMANS}\n`);
+  // Runs in the scaffolded workspace's real root: by the time the
+  // post-generator task calls this, Nx has already flushed the virtual Tree
+  // to disk (that's what lets installTask run a real `npm install`).
+  // `--copy` (not the CLI's default symlink farm) because an attendee on
+  // Windows without developer mode cannot create symlinks. `--agent
+  // claude-code` (not `--all`) so the scaffold doesn't also grow
+  // `.cursor/`, `.codex/`, etc.
+  const env: NodeJS.ProcessEnv = {
+    ...process.env,
+    DO_NOT_TRACK: '1',
+    SKILLS_CLONE_TIMEOUT_MS: String(SKILLS_CLONE_TIMEOUT_MS),
+  };
+  // Sequential (two installs racing on one skills-lock.json would clobber
+  // each other) and each failure is caught on its own, so one unreachable
+  // repo does not cost the attendee the others.
+  for (const install of installs) {
+    try {
+      await runSkillsAddCommand(install, tree.root, env);
+    } catch (error) {
+      // Non-fatal by design: a scaffold that dies on this last step because a
+      // conference network can't reach GitHub is a ruined workshop morning; a
+      // workspace merely missing its skills is a nuisance the attendee (or
+      // facilitator) can fix with the command below.
+      console.warn(
+        `\n⚠ Could not install the ${install.source} skills automatically (${
+          error instanceof Error ? error.message : String(error)
+        }).`,
+      );
+      console.warn(`  Run this by hand once you have network access:\n`);
+      console.warn(`    ${skillsAddCommandForHumans(install)}\n`);
+    }
   }
 }
 
@@ -2137,7 +2181,7 @@ npm run check:stories
 
 This workspace ships these skills unconditionally — the generator writes them straight to
 disk as part of scaffolding, with no network fetch and no \`skills: false\` opt-out, unlike
-the four \`storybookjs/mcp\` skills below:
+the fetched skills below:
 
 ${shippedSkillsList}
 
@@ -2145,21 +2189,30 @@ ${shippedSkillsList}
 
 ${
   skillsEnabled
-    ? `The scaffold attempted to install four \`storybookjs/mcp\` skills for Claude
+    ? `The scaffold attempted to install the \`storybookjs/mcp\` skills (four of them) for Claude
 Code (\`.claude/skills/\`) during setup — a failed clone (offline, unreachable
 registry) does not stop the workspace from being created, so this file can't
-promise they actually landed. Check \`.claude/skills/\` for the four directories
+promise they actually landed. Check \`.claude/skills/\` for the directories
 below; re-run the command further down if any are missing:
 
 - **stories** — invoke first, before creating, editing, or deleting components, stories, styles, CSS, themes, colors, or design tokens
 - **storybook-init** — adding Storybook to a project that does not have it configured yet
 - **storybook-setup** — Storybook is installed and you want a working \`preview\` file and stories for real components
 - **storybook-upgrade** — Storybook exists but needs an upgrade
+${
+  framework === 'angular'
+    ? `
+Angular workspaces also get two Angular skills, fetched the same way:
 
+- **angular-developer** — the official Angular skill (\`angular/angular\`): components, signals, forms, routing, DI, accessibility
+- **angular-testing** — \`marmicode/skills\`: fakes over mocks, components tested through the DOM
+`
+    : ''
+}
 Re-run or update the install at any time:
 
 \`\`\`bash
-${SKILLS_ADD_COMMAND_FOR_HUMANS}
+${skillsAddCommandsForHumans(framework)}
 \`\`\`
 
 **Which MCP tools these skills can reach depends on \`.mcp.json\`.** The \`docs\`
@@ -2169,11 +2222,11 @@ the \`dev\` toolset (\`stories-preview\`, \`get-storybook-story-instructions\`) 
 workspace's own Storybook — start \`npm run storybook\` (see Storybook below) and it
 connects. Every story here IS a render + accessibility test
 (\`@storybook/addon-vitest\`, run offline via \`npm run check:stories\`).`
-    : `Skipped for this workspace (\`skills: false\`). Install the four \`storybookjs/mcp\`
-skills for Claude Code by hand:
+    : `Skipped for this workspace (\`skills: false\`). Install the fetched skills
+(the four \`storybookjs/mcp\` ones${framework === 'angular' ? ', plus two Angular skills' : ''}) for Claude Code by hand:
 
 \`\`\`bash
-${SKILLS_ADD_COMMAND_FOR_HUMANS}
+${skillsAddCommandsForHumans(framework)}
 \`\`\`
 `
 }
@@ -2439,17 +2492,13 @@ Prompts, briefs and rescue steps for the course are in \`course/\` (start with
     //      now installs prettier: the tool's own failure mode is "nothing is
     //      configured, so nothing is wrong", not a loud error.
     //   2. Conditional: once prettier is installed, `nx format:check`
-    //      un-flagged does NOT silently pass immediately after scaffolding —
-    //      `git init` stages files without committing, so the `main` ref
-    //      doesn't resolve yet, Nx catches that specific git failure and
-    //      falls back to an all-files scan, correctly reporting every
-    //      unformatted file with exit 1 (after an alarming
-    //      `Command failed: ... fatal: ambiguous argument 'main'` on
-    //      stderr). The silent zero-file pass only appears once the
-    //      attendee makes their own first commit, putting `main` and `HEAD`
-    //      at the same revision — the steady state a workspace reaches
-    //      within minutes of scaffolding, and the one `nx format:check`
-    //      un-flagged reads as "nothing changed, nothing to check".
+    //      un-flagged compares against the `main` ref. Historically `git
+    //      init` only staged files, `main` did not resolve, and Nx fell back
+    //      to an all-files scan (exit 1 after an alarming `fatal: ambiguous
+    //      argument 'main'`). The CLI now makes an initial commit, so a
+    //      fresh workspace starts with `main` == `HEAD`: the silent zero-file
+    //      pass ("nothing changed, nothing to check") is the immediate state,
+    //      not one the attendee reaches after a first commit of their own.
     // `prettier --check .` has neither failure mode: it always scans the
     // whole tree (honouring .gitignore's node_modules/dist/.nx exclusions
     // already, so no .prettierignore is needed), and if prettier were ever
@@ -2580,13 +2629,13 @@ ${shippedSkillsList}
 
 ${
   skillsEnabled
-    ? `The scaffold attempted to install the four \`storybookjs/mcp\` skills (\`stories\`,
-\`storybook-init\`, \`storybook-setup\`, \`storybook-upgrade\`) for Claude Code under
+    ? `The scaffold attempted to install the \`storybookjs/mcp\` skills (\`stories\`,
+\`storybook-init\`, \`storybook-setup\`, \`storybook-upgrade\`${framework === 'angular' ? ', plus `angular-developer` and `angular-testing`' : ''}) for Claude Code under
 \`.claude/skills/\` — check that directory, since a failed clone doesn't stop the
 workspace from being created. Re-run or update them with:
 
 \`\`\`bash
-${SKILLS_ADD_COMMAND_FOR_HUMANS}
+${skillsAddCommandsForHumans(framework)}
 \`\`\`
 
 Note: \`test-run\` works once a local Storybook is running — every story here is a
@@ -2595,7 +2644,7 @@ render + accessibility test (\`@storybook/addon-vitest\`, also runnable offline 
     : `Skipped (\`skills: false\`). Install by hand:
 
 \`\`\`bash
-${SKILLS_ADD_COMMAND_FOR_HUMANS}
+${skillsAddCommandsForHumans(framework)}
 \`\`\``
 }
 
@@ -2624,7 +2673,7 @@ Course material (prompts, briefs, rescue steps): \`course/README.md\`.
   // roadmap that reused the same S-numbers first).
   //
   // Everything above this point already writes CLAUDE.md, .mcp.json, and
-  // (installSkills, further below) four storybookjs/mcp skills under
+  // (installSkills, further below) the fetched skills under
   // .claude/skills/ — but nothing else under .claude/, so every session in a
   // generated workspace re-asked permission for `npx nx …` / `npm run …` and
   // had to approve each MCP server by hand. This section closes that gap:
@@ -2805,12 +2854,12 @@ Course material (prompts, briefs, rescue steps): \`course/README.md\`.
   );
 
   // The workspace's own component skill — written unconditionally (no
-  // network, no `skills` opt-out), unlike the four storybookjs/mcp skills
+  // network, no `skills` opt-out), unlike the fetched skills
   // installSkills fetches further below. See renderAtelierComponentSkill's
   // comment above for the `<app>`/`<framework>` substitution it performs (and
   // the `figmaMcp`-selected source file, ADR-0144), and CLAUDE.md's "Agent
   // Skills" section (built above) for why this one is called out separately
-  // from those four.
+  // from the fetched ones.
   tree.write(
     '.claude/skills/atelier-component/SKILL.md',
     renderAtelierComponentSkill(appName, framework, options.figmaMcp ?? false),
@@ -2847,7 +2896,7 @@ Course material (prompts, briefs, rescue steps): \`course/README.md\`.
     await installTask();
     console.log(`\n◇ Cleaning up preset package…`);
     await removePresetTask();
-    await installSkills(tree, skillsEnabled);
+    await installSkills(tree, skillsEnabled, framework);
   };
 }
 
