@@ -1,3 +1,13 @@
+## 0.4.20 (2026-11-21)
+
+### 🩹 Fixes
+
+- **create-workspace:** nothing in Figma is edited by hand on the course sheets ([2d85d340](https://github.com/DominikPieper/atelier-ui/commit/2d85d340))
+
+### ❤️ Thank You
+
+- Dominik Pieper @DominikPieper
+
 ## 0.4.19 (2026-11-21)
 
 ### 🚀 Features
