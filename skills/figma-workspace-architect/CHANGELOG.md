@@ -1,3 +1,13 @@
+## 0.2.59 (2026-11-21)
+
+### 🩹 Fixes
+
+- **create-workspace:** the figma-workspace-architect skill names both routes to Figma ([9364323a](https://github.com/DominikPieper/atelier-ui/commit/9364323a))
+
+### ❤️ Thank You
+
+- Dominik Pieper @DominikPieper
+
 ## 0.2.58 (2026-11-18)
 
 This was a version bump only for figma-workspace-architect to align it with other projects, there were no code changes.
