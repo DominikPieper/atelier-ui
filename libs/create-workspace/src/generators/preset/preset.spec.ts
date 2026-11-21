@@ -3352,6 +3352,10 @@ describe('preset generator', () => {
         expect(day2).toContain('docs-show for my component');
         expect(day2).toContain('Definition-of-Done exercise');
         expect(day2).toContain('make your component set machine-readable');
+        expect(day2).toContain('build your component set through the agent');
+        expect(day2).toContain('Change only that');
+        expect(day2).toContain('Change nothing else');
+        expect(day2).not.toContain('I drew it by hand');
         expect(day2).toContain('Do not rename anything yet');
         expect(day2).toContain('look at both');
         expect(day2).toContain('git show --stat HEAD');
@@ -3360,7 +3364,8 @@ describe('preset generator', () => {
         const linter =
           tree.read('course/figma-linter-prompt.md', 'utf-8') ?? '';
         expect(linter).toContain('all rules, no filter');
-        expect(linter).toContain('press Shift+A');
+        expect(linter).toContain('one more value on its variant axis');
+        expect(linter).not.toContain('Shift+A');
         const card = tree.read('course/day1-settings-card.md', 'utf-8') ?? '';
         expect(card).toContain('Settings / Card');
         expect(card.includes('alt-text')).toBe(framework === 'angular');

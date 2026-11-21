@@ -1,11 +1,11 @@
 # Day 2 prompts
 
-Used in Day 2 Block 00 (the Definition-of-Done exercise), Block 01 (make your component set
-machine-readable, then the API rules), Block 02 (generation with plan mode, `docs-show` on
-your own component, then look at both), Block 03 (what was red, is the handoff document
-still true, red on purpose) and Block 04 (accessibility and the dark check). The parity
-prompt of Block 04 is in `parity-prompt.md`; from Block 02 on, your handoff document is the
-input for all of them (an example is in `handoff-example.md`).
+Used in Day 2 Block 00 (the Definition-of-Done exercise), Block 01 (build your component set
+through the agent, make it machine-readable, then the API rules), Block 02 (generation with
+plan mode, `docs-show` on your own component, then look at both), Block 03 (what was red, is
+the handoff document still true, red on purpose) and Block 04 (accessibility and the dark
+check). The parity prompt of Block 04 is in `parity-prompt.md`; from Block 02 on, your
+handoff document is the input for all of them (an example is in `handoff-example.md`).
 
 ## Block 00: the Definition-of-Done exercise (5 minutes)
 
@@ -23,32 +23,10 @@ Your part:
 3. Compare with your neighbour: does the line name a command that exits non-zero when it
    fails, or a wish ("the code is clean")? Only the first is a rule an agent can run.
 
-## Block 01: make your component set machine-readable
+## Block 01: build your component set through the agent
 
-You drew the set by hand from the starter frame. The agent does not draw it again: it binds,
-structures and describes what is there. Select your component set in Figma with Claude Code
-already running (a selection made before the session started is not seen: if the agent
-reports that nothing is selected, click the set again).
-
-```text
-Read course/briefs/<your brief>.md and course/briefs/README.md. My component
-set is the node I have selected in Figma. I drew it by hand: do not redraw it
-and do not change how it looks. Use the figma-workspace-architect skill and
-make it machine-readable: bind every fill, stroke, radius, padding and gap to a
-Library Tokens variable, put Auto Layout on every frame that has children, add
-the component properties the brief's scope names, and write the master's
-description: what is out of scope and the (full component) accessibility
-obligations. Then check it in Dark mode, take a screenshot, switch back to
-Light, and tell me everything you changed and everything you could not bind.
-```
-
-Read the "could not bind" list before you go on. A value with no variable (a gap of 7 where
-the scale has 4 and 8) is yours to decide: move it onto the scale, or keep it and write it
-into the handoff document. Then compare the screenshot with what you drew: did it stay your
-drawing?
-
-If your drawing is not there yet, let the agent build from the starter and catch up by
-reading what it built:
+Nothing in this block is drawn or edited by hand in Figma. The agent builds and changes the
+set; you choose the brief, look, compare with the brief and decide.
 
 ```text
 Read course/briefs/<your brief>.md and course/briefs/README.md. In my Figma
@@ -64,8 +42,45 @@ a screenshot, switch back to Light, and tell me the node id of the component
 set and everything you could not bind.
 ```
 
-Then select the set the agent built: every prompt from here on works on your
-selection.
+Then select the set the agent built: every prompt from here on works on your selection (a
+selection made before the session started is not seen: if the agent reports that nothing is
+selected, click the set again).
+
+Look before you ask for anything. Put the brief next to the screenshot: is every variant
+and state there that the scope line names? Next to the starter, does it look like a member
+of the same library? What would you have built differently? Each thing you want changed is
+one prompt:
+
+```text
+In the component set I have selected in Figma: <what you see> should be <what
+you want>. Change only that, keep every value bound to a variable, and show me
+a screenshot.
+```
+
+One change per prompt, so that the screenshot shows what that change did. Two or three
+rounds are normal. The set is yours when you can say why each part of it is the way it is.
+
+## Block 01: make your component set machine-readable
+
+The set looks right. Is it still bound? A change on request is where a raw value slips in.
+With your set selected:
+
+```text
+Read course/briefs/<your brief>.md and course/briefs/README.md. My component
+set is the node I have selected in Figma. Do not redraw it and do not change
+how it looks. Use the figma-workspace-architect skill and make it
+machine-readable: bind every fill, stroke, radius, padding and gap to a Library
+Tokens variable, put Auto Layout on every frame that has children, add the
+component properties the brief's scope names, and write the master's
+description: what is out of scope and the (full component) accessibility
+obligations. Then check it in Dark mode, take a screenshot, switch back to
+Light, and tell me everything you changed and everything you could not bind.
+```
+
+Read both lists before you go on. A short "changed" list is a result, not a wasted run: the
+build held. A value with no variable (a gap of 7 where the scale has 4 and 8) is yours to
+decide: tell the agent to move it onto the scale, or keep it and write it into the handoff
+document. Then compare the screenshot with the one before: is it still the same set?
 
 Next is the linter on your own set: the prompt is in `figma-linter-prompt.md`.
 
@@ -93,10 +108,21 @@ change and why. Where my brief (course/briefs/<your brief>.md) fixes a name
 that breaks a rule, say so. Do not rename anything yet.
 ```
 
-Decide each line yourself: rename it in Figma now, or keep the brief's name and write the
-reason into the "Deliberate differences" of your handoff document. Expect few renames: the
-brief fixes most names. The find is the place where a fixed name breaks a rule. The result
-is the property list your handoff document takes over.
+Decide each line yourself: have the agent rename it now, or keep the brief's name and write
+the reason into the "Deliberate differences" of your handoff document.
+
+```text
+In the component set I have selected in Figma, rename <property or value> to
+<new name>, and bring every mention of the old name in the set's description
+in line. Change nothing else, then list the properties with their values
+again.
+```
+
+A rename changes the name, not what the set shows: a text layer or a token that carries
+the old word keeps it. Whether that is still right is yours to decide.
+
+Expect few renames: the brief fixes most names. The find is the place where a fixed name
+breaks a rule. The result is the property list your handoff document takes over.
 
 ## Block 02: generate the component
 

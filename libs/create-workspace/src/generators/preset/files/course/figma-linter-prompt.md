@@ -31,23 +31,35 @@ the variable its sibling variants use, and show me the pink test on the copy.
 Then delete the Pink Test mode again.
 ```
 
-The other two tasks of the micro-exercise are yours, by hand, on the same copy:
+The other two tasks of the micro-exercise are on the same copy. Nothing here is edited by
+hand in Figma: the agent writes, you look and decide.
 
-1. **One more value on the variant axis.** Select the copy. In the Design panel, under
-   Properties, press **+** and choose **Variant**: Figma puts the copy into a component set
-   and adds a second variant next to it. Give the new variant's value a name in the Design
-   panel. If **+** does not offer **Variant**, the copy is an instance, not a component:
-   ask the agent to copy the variant as a component.
-2. **One frame on Auto Layout.** The copy has it already: select one of its variants and
-   the Design panel shows direction, gap and padding. Make one yourself: select two or
-   three layers that sit next to each other on the page and press Shift+A. Change the gap
-   and watch what moves.
+```text
+Two more things on the same copy, with a screenshot after each. First: give the
+copy one more value on its variant axis: a second variant "ghost" next to the
+first, in a component set of its own, the same button without a fill. Tell me
+the property and both values. Second: put two instances of the copy into a new
+frame with Auto Layout in the test frame's section, the gap bound to a spacing
+variable. Then change the gap to the next value of the scale and tell me what
+moved.
+```
+
+Look at each screenshot before you read the answer. After the first: the `variant`
+property has two values now (the agent may list `size` and `state` as well, with one value
+each). Can you read the label of the ghost variant? "Without a fill" is all the prompt
+asked for, and an agent does what it was asked: if the label is gone, say what you see and
+what you want instead. Would the code take "ghost" as it stands, or would you name it
+differently? Tell the agent the name you want. After the second: select the new frame in
+Figma and read direction, gap and padding in the Design panel. Which of them carries a
+variable, and what moved when the gap changed?
 
 If you do not get to the micro-exercise, clean up with one line: "Delete the Pink Test mode
 again."
 
 If your Figma plan does not allow another variable mode, the agent cannot add one: watch
-the trainer's run instead and do the repair by hand in the variable picker.
+the trainer's run instead, then ask for the repair without the mode: "Copy the AtlButton
+variant <the one that stayed its own colour> into a new section on the Workshop-Templates
+page, bind its fill to the variable its sibling variants use, and show me a screenshot."
 
 ## The linter (Day 1 Block 03 and Day 2 Block 01)
 
