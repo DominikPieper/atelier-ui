@@ -4587,3 +4587,71 @@ Not urgent; fix opportunistically or when touching the same area anyway.
     behaviour rather than a local repro.
   - `check:a11y-parity`, `check:metadata` and `check:adr-refs` all exit 0 after
     this change.
+
+## Follow-up package I — Figma's own MCP server joins the seat in Day 2 Block 05 (2026-11-21)
+
+Owner, 2026-11-21: the training machines are the owner's own, each with its own
+Figma account on a Full seat; of the four routes offered (fixed in the scaffold,
+active from Day 1 at provisioning, Day 2 Block 05, trainer demo only) the owner
+chose **Block 05**. Measured the same day: `get_design_context` on the AtlButton
+master returns one React + Tailwind component even with the Angular hint
+(memory `project_figma_connector_spike_2026_11_21`).
+
+Done when: the Day 2 deck carries a comparison slide and a mini-exercise behind
+`d2-05-04b`, a participant can follow the exercise from the slide alone, and the
+scaffold, the release and the seats stay untouched.
+
+- [x] I1 `d2-05-04c` + note: the two routes to Figma side by side (Figma's own
+      MCP server / figma-console-mcp), layout differs from `d2-05-04b`.
+- [x] I2 `d2-05-04d` + note: mini-exercise, one command, login in `/mcp`, one
+      design-context question on the own component, compare with the own code;
+      rescue line for a hanging login on the slide.
+- [x] I3 `deck.json` order, `outline-ids-day2.txt`, backup, checker, render
+      heights, foreign-edit check, publish as draft, read back.
+- [x] I4 outline entries, `changelog-day2.md`, archive under `~/Backups/atelier-schulung/`.
+      Published as Day 2 version 59 (id 1795260250-6ece), read back byte-identical;
+      render heights 853 / 734 / 920 / 754; the checker's one new real line is
+      `d2-05-04d: url`, accepted because the command needs the address.
+- [x] I5 ADR-0190 + README row; memory.
+- [x] I6 **Owner, 2026-11-21: yes.** The exercise's ten minutes come from the
+      transfer exercise (`d2-05-06`, 25 → 15). New block: 5 rules, 25 show &
+      tell, 5 synthesis, 10 anatomy, 5 talk (`d2-05-04b` + `d2-05-04c`),
+      **10 exercise (17:00–17:10)**, **15 transfer (17:10–17:25)**, 5 exit.
+      The transfer drops the neighbour reading (my call, not the owner's): 10
+      framing and marking, 5 choosing and writing; the exit round reads the step.
+- [ ] I7 **Owner, 2026-11-21: yes, with R-040.** Rehearsal on a real seat:
+      `claude mcp add` + `/mcp` login with the seat's Figma account; which
+      server the agent picks with both Figma servers connected; whether the
+      output on a participant's own component is React + Tailwind as on
+      AtlButton. Written into R-040 and the dry-run kit (rehearsal check 13).
+
+### Second round, same day (owner: "1 ja 2 ja 3 kannst du noch machen")
+
+Done when: every place that states the transfer's 25 minutes or 17:00–17:25 says
+15 and 17:10–17:25, the exercise has its own row at 17:00–17:10, the
+`figma-workspace-architect` skill no longer advises against Figma's own MCP
+server in any of its three copies, both ADRs carry the dated correction, and the
+gate chain is green by exit code.
+
+- [x] I8 Deck: `d2-05-06` (15 Min.), `d2-05-06-n`, `d2-05-01-n`,
+      `d2-05-04c-n`; render, checker, publish, read back, changelog, archive.
+- [x] I9 `docs/src/pages/schulung.astro`, Day 2 Block 05: times in the first
+      bullet, a bullet for the exercise, transfer 15 min, one trainer entry.
+- [x] I10 Trainer documents: run-of-show (new row, checkpoint D2B05-C4, sum),
+      trainer notes (items 3, 5, new 6, "Watch for"), outline, dry-run kit
+      (Block 05 bullets, rehearsal check 13), R-040.
+- [x] I11 Skill `figma-workspace-architect`: six passages in the source, synced
+      to the scaffold copy and the discovery copy (`sync:preflight`,
+      `sync-skill-discovery.mjs`).
+- [x] I12 ADR-0190 (three dated corrections: minutes, "no release", the skill)
+      and ADR-0111 (dated correction: the skill no longer states the exclusion;
+      the decision stands).
+- [x] I13 Gates: `check:all` by exit code. Exit 0 on 2026-11-21, one run, after both
+      agents had finished (`storybook-test` for all three libraries included). The
+      deck: version 60 read back, four files byte-identical.
+- [ ] I14 **Owner:** commit and push. The skill is scaffold content, so the push
+      is a release, and the seats (provisioned from 0.4.20) carry the old skill
+      text until they are reprovisioned from the new version.
+- [ ] I15 Not done, named: no exercise prompt on `course/day2-prompts.md` (the
+      slide carries the steps); `d2-05-04` still says "15 Min." in its eyebrow
+      while its note says ten (older than this package).

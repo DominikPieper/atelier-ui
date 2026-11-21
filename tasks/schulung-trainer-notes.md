@@ -1026,12 +1026,14 @@ after the block is 16:00–16:10.
    library (no MCP), a question it should have asked (scope guard missing), a long
    session without `/clear`; drift: it starts in Figma (unbound value) or in a
    deliberate difference nobody wrote down, and the parity call only sees passed sections.
-3. Transfer, 17:00–17:25, 25 minutes (decided 2026-10-14, R-212; the scorecard is the frame
-   since ADR-0180; reweighted by ADR-0186): about 5 minutes to frame it, then everyone marks
+3. Transfer, 17:10–17:25, 15 minutes (decided 2026-10-14, R-212; the scorecard is the frame
+   since ADR-0180; reweighted by ADR-0186; shortened from 25 minutes on 2026-11-21, owner
+   decision: ten went to the exercise before it, ADR-0190): frame it, then everyone marks
    the seven rows of the scorecard (`workshop/handouts/ds-scorecard.md`) for their own design
-   system from memory, yes / partly / no (about 10 minutes; the course machines are Conciso's,
-   nobody has their own system open), picks the weakest row and writes the next step for it
-   (about 5 minutes), and neighbours read each other's step (about 5 minutes). Homework,
+   system from memory, yes / partly / no (about 10 minutes with the framing; the course
+   machines are Conciso's, nobody has their own system open), picks the weakest row and writes
+   the next step for it (about 5 minutes). The step is read out in the exit round; the
+   neighbour reading is gone. Homework,
    explicit: both checklists, the Figma one and the Storybook one (which carries the
    read-only self-check prompt inline), with the check prompt, on the own system; the trainer's
    pages `/design-principles#check-your-own` and `/storybook-readiness#self-check` write each
@@ -1059,20 +1061,36 @@ after the block is 16:00–16:10.
    token rule". One sentence to add here: you take the workspace home as it is on this
    machine, and the trainer tells you how (`TODO(owner)`: how it leaves the machine, the
    open question of ADR-0178).
-5. What carries your docs, and what you depend on (16:55–17:00, 5 minutes, one slide, talk
+5. What carries your docs, and what you depend on (16:55–17:00, 5 minutes, two slides, talk
    only, no exercise): two things the two days used without naming them. The route that brings
    a design system's docs to the agents of the teams that consume it is the Storybook MCP on
    your own Storybook: consuming teams' agents read your components there. And the Figma
    linter, the a11y audit and parity all stand on one third-party server, `figma-console-mcp`:
-   a dependency you choose, not part of Figma or Storybook.
-6. Exit round (17:25–17:30) and the follow-up channel (owner, TODO). Closing slide and note: the outcomes say
+   a dependency you choose, not part of Figma or Storybook. The second slide of the same five
+   minutes (`d2-05-04c`, ADR-0190) puts the two routes to Figma side by side: Figma's own MCP
+   server brings a design context with a code template and Code Connect, `figma-console-mcp`
+   carries building and the checks; they complement each other. Code Connect is not set up in
+   the course. Two slides in five minutes is tight: two sentences, not the table.
+6. The second route to Figma, 17:00–17:10, 10 minutes, an exercise (`d2-05-04d`, added
+   2026-11-21, ADR-0190; not rehearsed on a seat, R-040): everyone runs
+   `claude mcp add --transport http figma https://mcp.figma.com/mcp` in the workspace folder,
+   restarts the agent, logs in under `/mcp` with the seat's Figma account, and asks Figma's own
+   MCP server for the design context of their own component. From here on two Figma servers
+   are connected, so the prompt names the one it means. Say before they read the answer: it is
+   a template to translate, not code to check in. Measured once, 2026-11-21, on the AtlButton
+   master with the client named as Angular: one React component with Tailwind classes, a `div`
+   as root, a `state` prop, the tokens as `var(--ui-…)` with a fallback. Done when everyone has
+   seen the answer for their own component and names two places where it differs from their
+   own code. A hanging login: `/mcp` again, then watch a neighbour; the block's outcome does
+   not depend on this exercise. The checks stay with `figma-console-mcp`.
+7. Exit round (17:25–17:30) and the follow-up channel (owner, TODO). Closing slide and note: the outcomes say
    "component and stories", not "contract"; the proof line stays `/verify`.
 
 **Expected recap answers.** One sentence each; a concrete first action in their own DS.
 
 **Watch for.** Eight presenters = 24 minutes plus about one minute of changeover; the whiteboard synthesis is five minutes
 from what was shown, not a lecture. Rows: 5 rules, 25 show & tell (16:15–16:40), 5 synthesis,
-10 anatomy, 5 new slide, 25 transfer, 5 exit; 80 minutes.
+10 anatomy, 5 talk (two slides), 10 Figma's own MCP server, 15 transfer, 5 exit; 80 minutes.
 
 ---
 

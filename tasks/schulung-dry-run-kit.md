@@ -184,6 +184,13 @@ They sit at the block that runs them and are numbered here so none gets lost:
     pass are 10 minutes, the basics and the first commit 15)? Not measured; log the real times.
 12. Day 2 Block 01: do the 20 / 15 / 22 splits (build through the agent from the starter frame, API rules with the short
     exercise, handoff document) hold? Not measured.
+13. Day 2 Block 05 (added 2026-11-21, ADR-0190): the exercise with Figma's own MCP server. Does
+    `claude mcp add --transport http figma https://mcp.figma.com/mcp` plus the login under `/mcp` work with the
+    seat's Figma account, and how long does it take? With both Figma servers connected, which one does the agent
+    pick when the prompt names Figma's own server, and which when it does not? How does the agent get the file key
+    and the node of the participant's own component? Is the answer for that component React with Tailwind, as
+    measured once on the AtlButton master? Does all of it fit in 10 minutes, and does the read-call limit of the
+    seat's plan hold for eight seats? UNVERIFIED, all of it.
 
 ### Day 1
 
@@ -571,7 +578,8 @@ a follow-up channel is set up.
   2 minutes each (arithmetic corrected 2026-11-21, R-284).
   Show your component, one prompt that worked and one that failed. **Time it**:
   the 25 minutes leave 55 for the rules (5), the trainer synthesis (5), the workspace
-  anatomy (10), the new slide (5), the transfer step (25) and the exit round (5); log whether
+  anatomy (10), the talk (5, two slides), the exercise with Figma's own MCP server (10), the
+  transfer step (15) and the exit round (5); log whether
   the block holds at the cohort size, a solo run can only simulate this.
 - Trainer synthesis: prompt patterns that worked, anti-patterns, when Claude
   fails, how to deal with drift.
@@ -587,11 +595,20 @@ a follow-up channel is set up.
   the machine). Record whether 10 minutes held.
 - **What carries your docs, and what you depend on (5 min, talk only):** the Storybook MCP on
   your own Storybook as the route that brings the docs to consuming teams' agents; the Figma
-  linter, the a11y audit and parity all depend on the third-party `figma-console-mcp`.
-- **Transfer step (25 min):** the scorecard (`workshop/handouts/ds-scorecard.md`) is the
-  frame: about 5 minutes to frame it, then mark the seven rows for your own design system
-  from memory (yes / partly / no, about 10 minutes), pick the weakest row and write the next
-  step (about 5), neighbours read each other's step (about 5). The Figma and the Storybook
+  linter, the a11y audit and parity all depend on the third-party `figma-console-mcp`. The
+  second slide of the same five minutes puts the two routes to Figma side by side (Figma's
+  own MCP server, `figma-console-mcp`). Record whether five minutes held for two slides.
+- **The second route to Figma (10 min, exercise, added 2026-11-21, ADR-0190):** run
+  `claude mcp add --transport http figma https://mcp.figma.com/mcp` in the workspace folder,
+  restart the agent, log in under `/mcp`, ask Figma's own MCP server for the design context
+  of the own component, compare the answer with the own code (element and states). Done when
+  the answer was seen and two differences are named. Rehearsal check 13: none of this has run
+  on a seat.
+- **Transfer step (15 min):** the scorecard (`workshop/handouts/ds-scorecard.md`) is the
+  frame: frame it and mark the seven rows for your own design system from memory
+  (yes / partly / no, about 10 minutes together), pick the weakest row and write the next
+  step (about 5); the step is read out in the exit round. Record whether 15 minutes held
+  (25 until 2026-11-21). The Figma and the Storybook
   checklist, with the check prompt, are explicit homework on the own system (the trainer's
   sources are `/readiness`, `/storybook-readiness#self-check`,
   `/design-principles#check-your-own`), not room work. Rehearsal check 7 (owner): a FigmaLint
