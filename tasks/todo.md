@@ -78,7 +78,11 @@ the release is on npm, and the owner has the version to provision from.
 - [x] G-C Gates by exit code, hostile diff read, decks checked for contradictions. Ten deck
       slides followed the sheets (Day 1 version 92, Day 2 version 57, drafts in the review
       pairs form; changelogs beside the deck sources).
-- [ ] G-D Tracker, commits, one push, release verified on npm, version reported.
+- [x] G-D Tracker, commits, one push (2026-11-21, six commits up to `abec0e85`), released as
+      **0.4.19**: Publish and CI runs green, all seven packages on npm,
+      `check:release-drift` exit 0 after pulling the release commit. The published
+      `@atelier-ui/create-workspace@0.4.19` tarball carries the new sheet lines (unpacked and
+      read). No seat was scaffolded from it. Seats are provisioned from 0.4.19.
 - [x] G-E Duplicate cleaned 2026-11-21: section `XT — struct test` removed; no Pink Test
       mode existed (Library Tokens has Light and Dark only). The original was not written
       to. Left in the duplicate on purpose, the owner decides: the four component sets the
