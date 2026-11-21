@@ -13,7 +13,7 @@
       "type": "skill-md",
       "description": "Claude Code skill for designing, building, and auditing Figma workspaces via figma-console-mcp.",
       "url": "https://atelier.pieper.io/.well-known/agent-skills/figma-workspace-architect/SKILL.md",
-      "digest": "sha256:7ff7ea9d5960b582b4199acfb7e06e03e4638b845377ba165a620a40e0e7776d"
+      "digest": "sha256:fb7966e554f2c5ae152752b684d4c77bfc6daa00535693316d54b994955cfd8f"
     },
     {
       "name": "storybook-angular",

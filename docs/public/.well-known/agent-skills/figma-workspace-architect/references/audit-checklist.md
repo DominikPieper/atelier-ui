@@ -351,16 +351,16 @@ Check: do Variant Property names/values match code prop names/values?
 
 ### ES3 — Naming-alignment as the code bridge
 
-This skill explicitly does **not** recommend Figma's official Dev-Mode MCP or Code Connect. The bridge to code in this toolchain is **naming alignment** alone — Component names, Variant Property names/values, and Variable names matching the codebase exactly. When alignment is tight, code-gen tools infer the rest.
+The bridge to code in this skill is **naming alignment** — Component names, Variant Property names/values, and Variable names matching the codebase exactly. This skill sets up no Code Connect mappings; Figma's own MCP server (which offers the Code Connect tools) is a complementary route it neither drives nor advises against. When alignment is tight, code-gen tools infer the rest.
 
 Check: is naming alignment hard enough that an agent could map Figma↔code without an explicit Code Connect file?
 
-| State                                                                | Severity | Fix                                                                                                                                     |
-| -------------------------------------------------------------------- | -------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| Components and Variant Properties match code exactly (CD2 + N1 pass) | (pass)   | Naming alignment is the mapping. No further action.                                                                                     |
-| Some misalignment in Variant Property values (e.g. `Small` vs `sm`)  | Critical | Rename in Figma to match code. See CD2.                                                                                                 |
-| Component names abbreviated or stylized differently than code        | Critical | Rename. See N1.                                                                                                                         |
-| User asks about Code Connect / Dev-Mode MCP                          | (info)   | Out of scope for this skill. Use figma-console-mcp; rely on naming alignment. Don't pretend the official MCP is being recommended here. |
+| State                                                                | Severity | Fix                                                                                                                                            |
+| -------------------------------------------------------------------- | -------- | ---------------------------------------------------------------------------------------------------------------------------------------------- |
+| Components and Variant Properties match code exactly (CD2 + N1 pass) | (pass)   | Naming alignment is the mapping. No further action.                                                                                            |
+| Some misalignment in Variant Property values (e.g. `Small` vs `sm`)  | Critical | Rename in Figma to match code. See CD2.                                                                                                        |
+| Component names abbreviated or stylized differently than code        | Critical | Rename. See N1.                                                                                                                                |
+| User asks about Code Connect / Figma's own MCP server                | (info)   | Not set up here. Say what each route is for (see decision-heuristics, Code-side mapping); Code Connect is optional on top of naming alignment. |
 
 ### ES4 — Documentation handoff
 

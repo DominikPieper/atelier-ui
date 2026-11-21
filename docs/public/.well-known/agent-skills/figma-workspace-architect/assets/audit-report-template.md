@@ -178,4 +178,4 @@ Drop `auto-resolved` rows from the active priority list. Rewrite the `state-shif
 Anything the user should know that didn't fit above:
 
 - {e.g. "Dashboard categories scoring below 60 are out of this skill's scope and are addressed by figma-console-mcp's built-in checks."}
-- {e.g. "Code Connect is not part of figma-console-mcp; if the team wants it, recommend Figma's official Dev Mode MCP alongside."}
+- {e.g. "Code Connect is not part of figma-console-mcp; if the team wants it, recommend Figma's own MCP server alongside."}

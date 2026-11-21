@@ -350,7 +350,7 @@ See **CD2** — same query, same auto-resolve signal.
 
 ### ES3 — Naming-alignment as the code bridge
 
-This skill does not recommend Figma's official Dev-Mode MCP or Code Connect — naming alignment alone is the bridge. Re-verify the alignment, not the absence of a Code Connect file.
+In this skill, naming alignment is the bridge to code; it sets up no Code Connect mappings. Re-verify the alignment, not the absence of a Code Connect file.
 
 ```
 1. Run CD2 + N1 verify queries.

@@ -168,7 +168,7 @@ A Mode is appropriate when **the same Semantic token resolves to a different val
 
 ## Code-side mapping — naming alignment is the bridge
 
-This skill explicitly does not recommend Figma's official Dev-Mode MCP or Code Connect. The toolchain is figma-console-mcp only, and the bridge to code is **naming alignment**:
+This skill does all of its work through figma-console-mcp, and the bridge to code it builds is **naming alignment**:
 
 - Component names match code component names exactly.
 - Variant Property names and values match code prop API exactly.
@@ -176,7 +176,12 @@ This skill explicitly does not recommend Figma's official Dev-Mode MCP or Code C
 
 When alignment is tight, code-gen tools infer the mapping with high accuracy without an explicit Code Connect file. When alignment drifts, no mapping config recovers it.
 
-**Default:** invest the maintenance effort in keeping names in lockstep, not in setting up a parallel mapping system. If the user asks about Code Connect or the official Figma Dev-Mode MCP, say it is out of scope for this skill — figma-console-mcp doesn't implement it and we don't run a second MCP for it.
+**Default:** invest the maintenance effort in keeping names in lockstep, not in setting up a parallel mapping system. This skill does not set up Code Connect mappings. Figma's own MCP server (remote, browser login, no bridge) may be connected next to figma-console-mcp as a complementary second route; this skill neither sets it up nor drives it, and does not advise against it. If the user asks about it, say what each route is for:
+
+- Figma's own MCP server: a design context with a code reference, and the tools for Code Connect mappings.
+- figma-console-mcp: building, linting, accessibility audit, parity, and typed writes to variables and properties.
+
+The code reference is a template to translate into the target stack, not code to check in — in one measured call it was React with Tailwind although the client named Angular. Code Connect is an optional layer on top of naming alignment, not a substitute for it. With both servers connected, a prompt should name the server it means.
 
 ## `figma_execute` vs. high-level Component Property tools
 

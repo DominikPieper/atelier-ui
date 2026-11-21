@@ -251,7 +251,7 @@ Format:
 
 ## Not done
 
-- Code-side mapping beyond naming alignment — figma-console-mcp doesn't implement Code Connect, and this skill explicitly does not recommend the official Figma MCP. Naming alignment is the bridge; if it's tight, code-gen tools infer the rest.
+- Code-side mapping beyond naming alignment — this skill sets up no Code Connect mappings; Code Connect is a Figma feature of its own, reachable through Figma's own MCP server, and an optional layer on top of naming alignment. Naming alignment is the bridge; if it's tight, code-gen tools infer the rest.
 - Patterns / composition examples — recommend a follow-up to add a `Patterns` page.
 
 ## Notes
