@@ -1,3 +1,13 @@
+## 0.4.22 (2026-11-21)
+
+### 🚀 Features
+
+- **create-workspace:** initial commit and Angular skills in the scaffold ([67092dcd](https://github.com/DominikPieper/atelier-ui/commit/67092dcd))
+
+### ❤️ Thank You
+
+- Dominik Pieper @DominikPieper
+
 ## 0.4.21 (2026-11-21)
 
 ### 🩹 Fixes
