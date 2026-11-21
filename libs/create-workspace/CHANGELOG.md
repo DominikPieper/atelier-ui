@@ -1,3 +1,17 @@
+## 0.4.19 (2026-11-21)
+
+### 🚀 Features
+
+- **create-workspace:** the course sheets close the exercise gaps ([88a3e5fc](https://github.com/DominikPieper/atelier-ui/commit/88a3e5fc))
+
+### 🩹 Fixes
+
+- **create-workspace:** the new sheet steps survive a second-model read ([495adaa9](https://github.com/DominikPieper/atelier-ui/commit/495adaa9))
+
+### ❤️ Thank You
+
+- Dominik Pieper @DominikPieper
+
 ## 0.4.18 (2026-11-20)
 
 ### 🚀 Features
