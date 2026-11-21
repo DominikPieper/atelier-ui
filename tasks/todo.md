@@ -4673,4 +4673,5 @@ gate chain is green by exit code.
       `marmicode/skills --skill angular-testing` (spike: 8 s / 3 s with skills@1.5.25), each install
       non-fatal on its own. Unit tests + `check:all` exit 0.
 - [ ] e2e not run (Verdaccio + network): the HEAD/clean-tree assertion and the two Angular skill dirs.
-- [ ] Commit, release, reprovision seats from the new version.
+- [x] Committed (67092dcd), released as **0.4.22** on 2026-11-21 (Publish + CI green; both packages 0.4.22 on npm).
+- [ ] Reprovision seats from 0.4.22.
