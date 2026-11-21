@@ -69,3 +69,19 @@ Alternatives considered:
 - Revisit trigger: an Organization plan for the workshop _and_ a Code Connect config that
   could be generated from `libs/spec` (so it is a projection, not a second source) would
   reopen this. Until then, a request for Code Connect gets this ADR as the answer.
+
+**Corrected 2026-11-21** (ADR-0190): two sentences above no longer describe the repo.
+
+- "Skills may state the exclusion" and "a request for Code Connect gets this ADR as the
+  answer": the `figma-workspace-architect` skill no longer states an exclusion, and the
+  "explicit user constraint" sentence this record cites as its source is gone from it. The
+  skill now says that it works through figma-console-mcp, that naming alignment is the bridge
+  to code it builds, and that Figma's own MCP server is a complementary second route it
+  neither sets up nor advises against. The course adds that server at the seat for one
+  exercise in Day 2 Block 05. A request for Code Connect now gets the two routes named, with
+  Code Connect as an optional layer on top of naming alignment.
+- "Read-mostly, no Desktop Bridge writes" described Figma's server in September. On
+  2026-11-21 its tool list carries a write tool (`use_figma`); it was not tried here.
+
+What this record decided stands: the repo's toolchain and its gates use neither Code Connect
+nor Figma's own server, and the contract is the name.
