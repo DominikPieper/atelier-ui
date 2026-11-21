@@ -95,7 +95,7 @@ weakest row" is the next step.
 The other handouts (`workshop/handouts/figma-readiness-checklist.md` from `/readiness`,
 `storybook-readiness-checklist.md` from `/storybook-readiness`, its checks and its read-only
 self-check prompt) are check titles as tick boxes, one copy of each per participant on paper;
-they name no page. Both checklists are explicit homework: run on your own system with the check prompt, each time-boxed at 30 minutes on its page; nobody starts one in the room. The scorecard is the room work (Day 2 Block 05, from memory). The ladder card is
+they name no page. Both checklists are explicit homework for the participant's own system: run with the check prompt, each time-boxed at 30 minutes on its page; nobody starts one on their own system in the room. The one room use is Day 1 Block 03, 13:35–13:45: Part A of the Figma checklist, once, for the Atelier master just linted (decision 2026-10-14, R-207; the handout's first line says both since 2026-11-21, R-278). The scorecard is the room work (Day 2 Block 05, from memory). The ladder card is
 the handout `workshop/handouts/ladder-card.md` (source `/cheat-sheet`), the rescue steps are
 `workshop/handouts/rescue-sheet.md` and `course/rescue.md` in the workspace.
 
@@ -346,18 +346,26 @@ stretch folded in (5).
    modes); read the frame: anything still its original colour is a raw value or a wrong
    tier; fix the binding on the master, not the instance; delete the mode afterwards. Say
    the result aloud ("this token is not bound").
-5. Ladder stage 0, the Figma linter (13:10–13:20, 10 minutes, golden prompts §1c). First the
-   default run on `Inputs/AtlButton` (node `129:20`), measured 2026-11-20: 19 findings, 18 of
-   them "critical" contrast failures on the hidden `_disabled-overlay` label, one about Auto
-   Layout (run it once before the session: the count moves with the file). Say: "a finding is something to sort, not a verdict". Then everyone prompts: the
-   agent runs `figma_lint_design` on the same master in the prepared duplicate with the rules
-   `hardcoded-color`, `default-name`, `detached-component` only and returns a list; the
-   participant sorts each line: real / false alarm. Read-only: nothing is changed in the file.
+5. Ladder stage 0, the Figma linter (13:10–13:20, 10 minutes, golden prompts §1c). Everyone
+   runs it twice, both prompts are on `course/figma-linter-prompt.md` (changed 2026-11-21,
+   R-279 follow-up: with three real findings out of three there was nothing to sort). First:
+   the agent runs `figma_lint_design` on `Inputs/AtlButton` (node `129:20`) in the prepared
+   duplicate with the rules `hardcoded-color`, `default-name`, `detached-component` only and
+   returns a list: exactly three, all real. Second: the same master with every rule, grouped
+   by rule. Measured 2026-11-21 on the planted duplicate: 23 findings (19 on an unplanted
+   file): 18 "critical" contrast failures on the label inside the hidden `_disabled-overlay`
+   (the false alarm: nobody ever sees that layer; the sheet tells the participant to open the
+   example layer before sorting), one about Auto Layout on the set itself (a matter of
+   opinion: a component set is a canvas, not a layout), the three from the first run and the
+   planted `Icon/Arrow` frame a second time as an empty container. Run it once before the
+   session: the count moves with the file. Say: "a finding is something to sort, not a
+   verdict". The participant sorts each group: real / false alarm / opinion. Read-only:
+   nothing is changed in the file.
    Beats: break it on purpose is the file itself (the three planted defects: an unbound
    colour, a default name, a detached-looking `Icon/Arrow` frame; golden prompts §1c); the tool says
    so; the agent's output is the list. What it does not see: whether the design is right,
    spacing and radius, and its default rule set reports false alarms. Exactly three findings
-   come back, all real (answer key in §1c). UNVERIFIED (rehearsal): the planting snippet has not
+   come back from the first run, all real (answer key in §1c). UNVERIFIED (rehearsal): the planting snippet has not
    run against Figma yet.
 6. "Missing in the file: what the agent guesses" (13:20–13:35, 15 minutes, two slides). Each
    line is a row of the readiness checklist, Part A, read as "missing, so the agent guesses
@@ -387,7 +395,12 @@ stretch folded in (5).
    checklist, and explicit homework for after the course; Day 2 Block 05 hands it over); 13:45–13:55 the
    micro-exercise on a copy of a master in the prepared duplicate: bind one fill to a Library
    Tokens variable, add one variant value, put one frame on auto layout, pink test on the
-   copy. Checkpoint D1B03-C5 at 13:55: the copy's fill is bound and the pink test shows it.
+   copy. The sheet's second pink test prompt does the fill binding and the test; the variant
+   value (Design panel, Properties, +, Variant) and the Auto Layout (Shift+A on two or three
+   layers; the copy itself already has it, checked 2026-11-21 on a clone of
+   `variant=secondary, size=lg, state=default`) are by hand, steps on the sheet under that
+   prompt (R-279). UNVERIFIED (rehearsal): the by-hand steps were written from the Figma UI,
+   not clicked through. Checkpoint D1B03-C5 at 13:55: the copy's fill is bound and the pink test shows it.
    Seat behind: the fill binding only. Without it, Day 2 Block 01 is the first time anyone
    builds in Figma.
 
@@ -600,7 +613,8 @@ more files of the workspace: `CLAUDE.md` and `.claude/settings.json`.
    StatCard (`card` + `badge`) are **compositions**, there is no canonical chip or stat
    card. That is the lesson: a canonical vocabulary tells you when you build a known
    thing and when you assemble one.
-3. The shared rules all four briefs follow: 2 variants × 2 states, no more; start from
+3. The shared rules all four briefs follow: two variants and the states the brief names, no
+   more (TagChip has no second state, R-280); start from
    the starter frame; never mutate the original file; bind tokens, do not type values;
    elevation is CSS-only; a `state` axis may exist in Figma, never in the code union;
    colour is never the only signal. Scope per brief: **Toast** `success`/`danger` ×
@@ -677,7 +691,14 @@ second answer lacks the command, or the agent skips the check. Skills as before:
 3. MCP structuring (20 min): `figma-workspace-architect` is the co-pilot; the tools that
    matter are `figma_add_component_property`, `figma_analyze_component_set`,
    `figma_audit_component_accessibility`, `figma_set_description`. Ask Claude for the
-   audit and read it; the bridge must stay connected. 20 minutes (09:55–10:15).
+   audit and read it; the bridge must stay connected. 20 minutes (09:55–10:15). The prompt
+   is on `course/day2-prompts.md`, Block 01 "make your component set machine-readable"
+   (R-277): it keeps the drawing and binds, structures and describes it, on the node the
+   participant has selected. Run 2026-11-21 on a hand-drawn TagChip clone (83 s): the drawing
+   stayed, an unbound fill was bound, the description was written, and the "could not bind"
+   list named a gap of 7 with no variable: that list is the participant's decision. A seat
+   whose drawing is not there takes the build-from-starter prompt below it (the prompt of the
+   2026-11-20 test run, four of four briefs).
 4. Ladder stage 0 on your own component set (10:15–10:20, 5 minutes): the same prompt as Day 1
    Block 03 (golden prompts §1c) on the participant's own component set; real findings are
    fixed before the handoff document, false alarms are noted. Say again what the linter does
@@ -697,11 +718,16 @@ second answer lacks the command, or the agent skips the check. Skills as before:
 6. The "LLM-friendly API rules" row (10:20–10:35, 15 minutes), directly before the handoff
    because the handoff fixes the prop names: about 5 minutes on the four rules (predictable
    naming, literal unions, composition over config, no hidden defaults), about 10 on a short
-   exercise on the own component: list each property with its name and values, check the list
-   against the four rules, rename now. The exercise has no done-when of its own; its result is
-   the property list the handoff document takes over. Expect no rename: the brief fixes the
-   names, and four of four runs on 2026-11-20 renamed nothing. The work of the row is saying
-   why each name passes, and the one rule the brief's names bend (ask for it). The handoff row is 10:35–11:00 (25
+   exercise on the own component: the prompt on `course/day2-prompts.md` (Block 01, the API
+   rules; R-277) lists each property with its name and values, checks the list against the
+   four rules and renames nothing. The participant decides per line: rename in Figma, or keep
+   the brief's name and write the reason into the handoff document's Deliberate differences.
+   The exercise has no done-when of its own; its result is the property list the handoff
+   document takes over. Expect few renames: the brief fixes the names (four of four runs on
+   2026-11-20 renamed nothing). The find is where the brief's own name bends a rule; two runs
+   of the sheet prompt on the StatCard set (2026-11-21) both named `state` holding a data
+   direction (`delta-up`/`delta-down`) and `hasDelta` as a switch that should be a slot.
+   Avatar: `variant` where the library says `shape`. The handoff row is 10:35–11:00 (25
    minutes, the recap question closes it). Block 02 does not have the rules.
 
 **Expected recap answers.** Lines you decided: reuse vs rebuild, exclusions, acceptance
@@ -770,7 +796,11 @@ participant's `docs-show` output before and after the JSDoc edit.
    embed loads for a private duplicate in a logged-in browser on a seat; the PNG is the
    fallback that does not depend on it. Then everyone looks at their own stories next to the
    Figma component, every variant and state, and writes the differences down as a list
-   (Block 04 sorts it). One pass. No `figma:snapshot`, no `check:contracts`, no finding codes
+   (Block 04 sorts it). One pass; the steps are on `course/day2-prompts.md`, "Block 02: look
+   at both" (R-283): Tab once for the focus ring, the width, the shadow, do not sort or fix.
+   It is the only step that finds what a green check does not measure (test run 2026-11-20:
+   a focus ring touching the label, a card as wide as its container, a barely visible
+   shadow). The section ends with the commit and "leave this session open over lunch". No `figma:snapshot`, no `check:contracts`, no finding codes
    in this block.
 6. Trainer note: the `atelier-component` skill no longer has a contract step (scaffold release of
    2026-11, commit 8c8fdf6a); the contract is an optional trailing section there, and nobody on
@@ -838,10 +868,21 @@ a volunteer's loop.
    loop with pasting the error back instead of debugging yourself (C4 at 14:15), 5 recap with the stretch for early finishers folded in;
    the block ends 14:30, coffee 14:30–14:45.
    What fills the rows on a green seat (exercise test run of 2026-11-20: Block 02 ended
-   green on four of four briefs, so nothing waits to be corrected): the three prompts under
+   green on four of four briefs, so nothing waits to be corrected): the three steps under
    "Block 03" in `course/day2-prompts.md`, golden prompts §2.7. Revise row: "What was red on
    the way" (the agent marks each repair "fixed" or "went around") and "Is the handoff
-   document still true?". Self-healing row: "Make it red on purpose" (one variant or state
+   document still true?". The first one needs the session that generated the component: it
+   was left open over lunch, a closed one is resumed with `claude --continue` in the
+   workspace folder (on the sheet). The list is the agent's account of itself, so the sheet
+   holds two commands against it (R-281): `git show --stat HEAD` (what the Block 02 commit
+   touched; a config file is a changed rule) and a `git grep` for disable comments and
+   skipped tests (checked 2026-11-21 on the TagChip run: it finds the
+   `eslint-disable-next-line @angular-eslint/component-selector`). Neither finds a renamed
+   selector or a removed assertion: say so. The handoff question is two prompts now: the
+   agent lists the lines that no longer hold and says for each "correct the document" or
+   "correct the code" (run 2026-11-21: a numbered list, nothing changed); the participant
+   decides; a second prompt corrects only the numbers handed back. One prompt that lists and
+   rewrites lets the agent rewrite the specification to match whatever it built. Self-healing row: "Make it red on purpose" (one variant or state
    out of "Explicitly out", story first, red, then the loop above). The red already happened
    in Block 02 and the agent repaired it unseen; the first prompt makes it visible. The
    usual find on Angular: the seat's lint rule wants the selector prefix `app`, the course

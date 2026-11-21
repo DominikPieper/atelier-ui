@@ -316,20 +316,15 @@ stories, import path `./atl-table`, cookbook story without code.)
 
 ## 1c. Day 1 · Block 03 and Day 2 · Block 01 — ladder stage 0: the Figma linter
 
-Day 1 Block 03, 13:10 to 13:20 (10 min): the same prompt on the same master in the prepared
-duplicate. Day 2 Block 01, 10:15 to 10:20 (5 min): on your own component set, before the
-handoff document; real findings are fixed first, false alarms are noted. NOT YET VERIFIED
-as a prompt (rehearsal). Read-only: nothing is changed in the file.
+Day 1 Block 03, 13:10 to 13:20 (10 min): two runs on the same master in the prepared
+duplicate, first three rules, then every rule. Day 2 Block 01, 10:15 to 10:20 (5 min): the
+three-rule prompt on your own component set, before the handoff document; real findings
+are fixed first, false alarms are noted. Both prompts are on
+`course/figma-linter-prompt.md`. Verified headless (2026-11-20 the three-rule prompt,
+2026-11-21 the all-rules prompt), not yet in an interactive rehearsal. Read-only: nothing
+is changed in the file.
 
-**Trainer first (Day 1 only): the default run.** On `Inputs/AtlButton` (node `129:20` in
-the Atelier file) the default `figma_lint_design` run reports **19 findings** (measured
-2026-11-20; it was 59 on 2026-11-17, before the text nodes carried text styles): **18
-"critical"** contrast failures, all on the hidden `_disabled-overlay` label (false
-alarms), and **one** about Auto Layout. The count moves with the file: run it once before
-the session and say the number you get. Say: "a finding is something to sort,
-not a verdict."
-
-**Participant prompt.**
+**Participant prompt, first run.**
 
 > Run `figma_lint_design` on the node `<NODE>` (`<MASTER NAME>`) with only the rules
 > `hardcoded-color`, `default-name` and `detached-component`. Return the findings as a list:
@@ -345,7 +340,27 @@ yet at 10:15; it is written after this run.
 on default names, detached instances. The participant sorts each line: **real** or **false
 alarm**. On the prepared duplicate the three-rule run returns exactly three findings, one per
 rule (see the answer key below); on the unplanted original it returns none (measured
-2026-11-18, 121 nodes). UNVERIFIED (rehearsal): that the planted duplicate does return those three.
+2026-11-18, 121 nodes). The planted duplicate does return those three (2026-11-20, R-261).
+
+**Participant prompt, second run (Day 1 only): every rule.** Until 2026-11-21 this was a
+trainer demo; three real findings out of three left the room nothing to sort, so everyone
+runs it now.
+
+> Run `figma_lint_design` on the node `<NODE>` (`<MASTER NAME>`) again, this time with all
+> rules, no filter. Group the findings by rule: rule, severity, count, and one example layer
+> with its path inside the master. Change nothing in the file.
+
+**Expected output.** On the planted duplicate **23 findings** (measured 2026-11-21; 19 on
+an unplanted file; it was 59 on 2026-11-17, before the text nodes carried text styles):
+**18 "critical"** `wcag-contrast` failures, all on the `label` inside the hidden
+`_disabled-overlay` (3.9:1, `#64748B` on `#E2E8F0`; the overlay has `visible: false`:
+false alarm), **one** `no-autolayout` on the component set itself (a matter of opinion: a
+set is a canvas, not a layout), the three planted findings of the first run, and the
+planted `Icon/Arrow` frame once more as `empty-container`. The sheet tells the participant
+to open the example layer before sorting a group. One headless run (19 s) returned the
+grouped table and named the hidden overlay by itself; a seat whose agent does not is the
+better exercise. The count moves with the file: run it once before the session and say the
+number you get. Say: "a finding is something to sort, not a verdict."
 
 **What it does not see (say it).** Whether the design is right; spacing and radius. Its
 default rule set also reports false alarms (see above), which is why the rules are named.
@@ -563,7 +578,9 @@ component. Then:
 > story for a snippet that would not work as shown. Do not change the component's behaviour.
 > Call `docs-show` again and show me what changed.
 
-Look at both (8 min, no prompt): demo D-3 first, about 2 minutes (the Design panel of a story,
+Look at both (8 min, no prompt; the participant's steps are on `course/day2-prompts.md`,
+"Block 02: look at both": side by side, Tab once for the focus ring, the width, the shadow,
+write the differences down, do not sort or fix; R-283): demo D-3 first, about 2 minutes (the Design panel of a story,
 with the Figma embed and a PNG of the frame; the `atelier-component` skill writes both into
 the story meta from the handoff document's Source line and exports the PNG through
 figma-console; UNVERIFIED (rehearsal): that the embed loads for a private duplicate, the PNG is
@@ -644,12 +661,26 @@ commit (`day 2 block 03: corrected`) comes before "red on purpose", so that the 
 cannot take the corrected handoff document with it.
 
 1. **What was red on the way** (row 13:40 to 13:50), in the session that generated the
-   component: the agent lists every check that was red while it built and marks each repair
-   "fixed" or "went around" (a disable comment, a changed rule or config, a loosened or
-   removed assertion). The participant decides where each fix belongs, then revises the
-   prompt or one line of `CLAUDE.md` and says why: that is checkpoint D2B03-C2.
-2. **Is the handoff document still true?** (same row): the agent corrects the document to
-   the component as built and marks each line "(corrected after generation)". Measured 2026-11-20 on one TagChip: four passages corrected in under a minute (a binding still marked "to be confirmed", a pointer to a section that does not exist, an accessibility line that no longer covered every variant, an attribute credited to the wrong component).
+   component (left open over lunch; a closed one is resumed with `claude --continue` in the
+   workspace folder): the agent lists every check that was red while it built and marks
+   each repair "fixed" or "went around" (a disable comment, a changed rule or config, a
+   loosened or removed assertion). The list is the agent's account of itself, so the sheet
+   puts two commands next to it (R-281): `git show --stat HEAD` (what the Block 02 commit
+   touched: a config file is a changed rule) and a `git grep` for disable comments and
+   skipped tests. Neither finds a renamed selector or a removed assertion. The participant
+   decides where each fix belongs, then revises the prompt or one line of `CLAUDE.md` and
+   says why: that is checkpoint D2B03-C2.
+2. **Is the handoff document still true?** (same row), two prompts since 2026-11-21
+   (R-281): first the agent lists the lines that no longer hold, numbered, and says for
+   each whether it would correct the document or the code, changing nothing (headless
+   2026-11-21: 47 s, a numbered list, no edit); the participant decides per line; then a
+   second prompt corrects only the numbers handed back and marks each "(corrected after
+   generation)". One prompt that lists and rewrites lets the agent rewrite the
+   specification to match whatever it built. The second prompt was not run in its new
+   form; its one-prompt predecessor, measured 2026-11-20 on one TagChip: four passages
+   corrected in under a minute (a binding still marked "to be confirmed", a pointer to a
+   section that does not exist, an accessibility line that no longer covered every
+   variant, an attribute credited to the wrong component).
 3. **Make it red on purpose** (row 14:00 to 14:25): one variant or state moves from
    "Explicitly out" into scope; its story with a `play` is written first and seen red; then
    the repair, one change per round, stop after two failed attempts and go back to the
@@ -814,7 +845,7 @@ with findings; it has no "sections compared" list. Against the component set `12
 | Day 1 Block 02, 11:00: the agent runs lint and build, then the planted `alt`/click defects, then the repair        | §1a                |
 | Agent writes without `docs-list`, uses an undocumented input, or hand-builds a library component (Day 1 Block 05)  | §1b                |
 | Day 1 Block 05, 16:30: closing checks run by the agent (lint, stylelint, format, build), then the receipts         | §1b                |
-| Figma linter run (Day 1 Block 03, Day 2 Block 01): the list is long, or the default run drowns the room            | §1c                |
+| Figma linter run (Day 1 Block 03, Day 2 Block 01): the list is long, or the all-rules run drowns the room          | §1c                |
 | Generating the component on Day 2 (component, test and stories in one step, deliberate differences as constraints) | §2.1               |
 | A prop appears that the handoff document / spec never named                                                        | §2.2               |
 | Structural content (header/action/remove-button/etc.) dumped as flat children instead of its own region            | §2.4               |
@@ -834,7 +865,7 @@ with findings; it has no "sections compared" list. Against the component set `12
 closing-checks prompt), §1c, §2.1 (as revised), §2.5, §2.6 and §3.3 is new or changed and has
 not been run in an interactive rehearsal; the headless run of 2026-11-18 (R-262) covered the
 §2.6 answers, the §2.5 call and its refresh, and the §3.3 prompt; the headless exercise test run of 2026-11-20 covered §2.5 in its open form, §2.7, §3.1 (four briefs), §3.2 and §3.3 in its four-label form (one TagChip). Their expected outputs are the measured facts named in the
-sections (2026-11-17: the lint rule ids, the compiler error codes, the lint findings of the default run (re-measured 2026-11-20: 19, of which 18 contrast),
+sections (2026-11-17: the lint rule ids, the compiler error codes, the lint findings of the default run (re-measured 2026-11-21 on the planted duplicate: 23, of which 18 contrast; 19 unplanted),
 the run times; 2026-11-18: the `storybook tools` CLI route) and nothing else. The planting snippet below ran on the duplicate on 2026-11-20 and the three-rule
 Figma run returned exactly three findings, one per rule (R-261). Unverified, by name:
 §3.4 and §3.5 as a four-plus-spacing pair (R-227, R-235). The dates below

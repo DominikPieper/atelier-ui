@@ -1,6 +1,6 @@
 # Is your Figma file ready?
 
-Homework, on your own file: nobody starts this in the room. Tick what holds. Part A per master, Part B once per system.
+In the room, once: Part A for the Atelier master you just linted. On your own file: homework. Tick what holds. Part A per master, Part B once per system.
 
 Master / file checked: ______________________________
 

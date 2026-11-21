@@ -150,8 +150,10 @@ They sit at the block that runs them and are numbered here so none gets lost:
    within the 10 minutes of the ladder row (one pass)?
 2. Day 1 Block 03: the three-rule `figma_lint_design` run (`hardcoded-color`, `default-name`,
    `detached-component`) on `Inputs/AtlButton` in the duplicate: confirm the run returns the
-   three planted findings, one per rule. (The default run measured 19 on 2026-11-20, 18 of them
-   "critical" contrast findings, one about Auto Layout.)
+   three planted findings, one per rule. Then the all-rules prompt of the same sheet: measured
+   23 on the planted duplicate on 2026-11-21 (19 unplanted), 18 of them "critical" contrast
+   findings on a hidden layer, one about Auto Layout. Does the room find the hidden layer
+   in the minutes the row has?
 3. Day 1 Block 03: are 10 minutes enough for the remaining readiness checklist rows?
 4. Day 2 Block 00: after `/clear`, do the two Definition-of-Done answers differ as described
    (the second no longer names `npm run check:stories`)? verified headless 2026-11-18 (R-262); the interactive run is open in R-040 (baseline 6/6 name six, line removed 3/3 name five).
@@ -286,12 +288,15 @@ added and one frame uses Auto Layout. The checklist for your own file is a hando
 - After lunch (13:00–13:10): one sentence on what the tour showed, then run the **pink test** on
   a master (`/tokens#pink-test`) and say what it showed.
 - **STOP — ladder stage 0, the Figma linter (13:10–13:20, 10 minutes, golden prompts §1c).**
-  Trainer shows the default run on `Inputs/AtlButton` (node `129:20`) first (19 findings
-  on 2026-11-20: 18 "critical" contrast findings on the hidden `_disabled-overlay` label, one
-  about Auto Layout); then the agent runs `figma_lint_design` with the three rules `hardcoded-color`,
-  `default-name`, `detached-component` on the same master in the duplicate, read-only, and you
-  sort each line real / false alarm. Rehearsal check 2: confirm the three-rule run returns
-  the three planted findings (golden prompts §1c).
+  Two runs, both prompts on `course/figma-linter-prompt.md`: the agent runs
+  `figma_lint_design` with the three rules `hardcoded-color`, `default-name`,
+  `detached-component` on `Inputs/AtlButton` (node `129:20`) in the duplicate, read-only, and
+  you sort each line real / false alarm; then the same master with every rule, grouped by
+  rule (23 findings on the planted duplicate on 2026-11-21: 18 "critical" contrast findings
+  on the label inside the hidden `_disabled-overlay`, one about Auto Layout), and you sort
+  each group real / false alarm / opinion. Rehearsal check 2: confirm the three-rule run
+  returns the three planted findings (golden prompts §1c), and log whether both runs fit
+  the 10 minutes.
 - "Missing in the file: what the agent guesses" (13:20–13:35, 15 minutes, two slides): each
   row of the readiness checklist, Part A, read as "missing, so the agent guesses this". Log
   whether the room could name, afterwards, which check would have stopped each guess.
@@ -409,9 +414,13 @@ _Done when:_ a master plus a filled handoff document, including its deliberate d
   ladder stage 0 (the Figma linter, the same prompt as Day 1 Block 03, on your own component
   set: fix the real findings, note the false alarms), 15 min LLM-friendly API rules on your
   own component (about 5 min on the four rules, about 10 on the short exercise: list each
-  property with its name and values, check against the four rules, rename now; before the
-  handoff: it fixes the prop names), 25 min handoff with the recap question closing it. Target: ≥ 2 variants × 2
-  states, properties,
+  property with its name and values, check against the four rules with the prompt on
+  `course/day2-prompts.md`, which renames nothing; then decide per line: rename in Figma or
+  keep the brief's name and note the reason for the handoff; before the handoff: it fixes
+  the prop names), 25 min handoff with the recap question closing it. The MCP structuring
+  has its prompt on the same sheet ("make your component set machine-readable"). Target: two
+  variants and the states the brief names (TagChip has no second state),
+  properties,
   correct `--ui-*` tokens, a dark-mode variant; the exact matrix is in the
   brief. Skill: `figma-workspace-architect` ("used here for the first time").
   Record which brief you built and whether it was clear enough to draw from.
@@ -465,7 +474,8 @@ property.
   on one green seat or the trainer machine: a story with the Design panel open, two entries,
   the Figma frame as embed and a PNG of the frame (golden prompts §2.5). Then the running
   stories next to the Figma component, every variant and state, differences written down as a
-  list. Rehearsal check 10 (UNVERIFIED): whether the embed loads for a private duplicate in the
+  list (the four steps are on `course/day2-prompts.md`, "Block 02: look at both"; log what
+  the eye found that no check had reported). Rehearsal check 10 (UNVERIFIED): whether the embed loads for a private duplicate in the
   seat's browser; the PNG is the fallback.
 - No `figma:snapshot`, no `check:contracts`, no finding codes in this block. The
   `atelier-component` skill no longer has a contract step (scaffold release of 2026-11); if
@@ -486,9 +496,11 @@ the reason stated.
   generation prompt, belongs to Block 02). Note which
   correction prompt got used and on which failure.
 - On a seat that is already green at 13:30 (headless 2026-11-20: four of four briefs), the
-  rows are filled by the three prompts under "Block 03" in `course/day2-prompts.md`
-  (golden prompts §2.7): "What was red on the way", "Is the handoff document still true?",
-  "Make it red on purpose". Log per prompt: minutes, what it found, and whether the
+  rows are filled by the prompts under "Block 03" in `course/day2-prompts.md`
+  (golden prompts §2.7): "What was red on the way" (with the two git commands that check
+  the agent's list; it needs the Block 02 session, kept open over lunch or resumed with
+  `claude --continue`), "Is the handoff document still true?" (two prompts: the list, then
+  the correction of the lines you chose), "Make it red on purpose". Log per prompt: minutes, what it found, and whether the
   participant could say where the right place for the fix was. Log specifically what the
   agent did with the selector-prefix lint rule (`app` against `atl-`).
 - Test loop in all frameworks (ladder stage 4: the agent runs `test-run`, gets the failure,
@@ -552,9 +564,11 @@ differences" section and is new today, Day 1 used code and Figma).
 _Done when:_ everyone has marked the seven scorecard rows for their own design system from memory and leaves with a written next step for the weakest row, and
 a follow-up channel is set up.
 
-- Up to 8 participants, 80 minutes: strictly 3 minutes each (25 minutes with changeover).
+- Up to 8 participants, 80 minutes, 25 of them for show & tell: 3 minutes each plus about
+  1 minute of changeover fills the row with six presenters; with seven or eight it is
+  2 minutes each (arithmetic corrected 2026-11-21, R-284).
   Show your component, one prompt that worked and one that failed. **Time it**:
-  8 × 3 min = 24 min plus changeover = 25 min leaves 55 for the rules (5), the trainer synthesis (5), the workspace
+  the 25 minutes leave 55 for the rules (5), the trainer synthesis (5), the workspace
   anatomy (10), the new slide (5), the transfer step (25) and the exit round (5); log whether
   the block holds at the cohort size, a solo run can only simulate this.
 - Trainer synthesis: prompt patterns that worked, anti-patterns, when Claude
