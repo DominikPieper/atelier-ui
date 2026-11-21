@@ -4649,9 +4649,15 @@ gate chain is green by exit code.
 - [x] I13 Gates: `check:all` by exit code. Exit 0 on 2026-11-21, one run, after both
       agents had finished (`storybook-test` for all three libraries included). The
       deck: version 60 read back, four files byte-identical.
-- [ ] I14 **Owner:** commit and push. The skill is scaffold content, so the push
-      is a release, and the seats (provisioned from 0.4.20) carry the old skill
-      text until they are reprovisioned from the new version.
+- [x] I14 **Owner:** commit and push. Owner go 2026-11-21 ("Ja"). Four commits
+      (`9364323a` skill, `7de78332` course pages, `d64236e4` ADRs, `4e5a85bd`
+      trainer documents), pushed once. Publish and CI for `4e5a85bd` both
+      succeeded; released as **0.4.21** (tag `v0.4.21`, skill tag
+      `skill-figma-workspace-architect-0.2.59`), `check:release-drift` exit 0
+      afterwards, 7 of 7 packages in sync with npm.
+- [ ] I16 **Owner:** reprovision the seats from 0.4.21. Seats provisioned from
+      0.4.20 keep the old skill text, which tells the agent not to recommend
+      Figma's own MCP server — the opposite of what the Block 05 exercise does.
 - [ ] I15 Not done, named: no exercise prompt on `course/day2-prompts.md` (the
       slide carries the steps); `d2-05-04` still says "15 Min." in its eyebrow
       while its note says ten (older than this package).
