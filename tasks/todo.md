@@ -49,21 +49,82 @@ Edge cases stated upfront:
 
 Steps:
 
-- [ ] H-0 Record: this section, the lesson (`tasks/lessons.md`), ADR-0189 + index row.
-- [ ] H-1 Sheets: `figma-linter-prompt.md` (two by-hand steps → one prompt; plan-limit
+- [x] H-0 Record: this section, the lesson (`tasks/lessons.md`), ADR-0189 + index row.
+- [x] H-1 Sheets: `figma-linter-prompt.md` (two by-hand steps → one prompt; plan-limit
       fallback as a prompt), `day2-prompts.md` (Block 01: build through the agent, steer
       with one change per prompt, machine-readable pass, rename through a prompt).
-- [ ] H-2 Code through a Sonnet agent: `preset.spec.ts` assertions, `preset.ts` index
+- [x] H-2 Code through a Sonnet agent: `preset.spec.ts` assertions, `preset.ts` index
       lines, `docs/src/pages/schulung.astro` rows.
-- [ ] H-3 Headless runs of the new prompts on the duplicate (Sonnet 5.5), test section
+- [x] H-3 Headless runs of the new prompts on the duplicate (Sonnet 5.5), test section
       removed afterwards.
-- [ ] H-4 Trainer documents: run-of-show rows (Day 1 13:45, Day 2 09:35, 09:55, 10:20),
+- [x] H-4 Trainer documents: run-of-show rows (Day 1 13:45, Day 2 09:35, 09:55, 10:20),
       trainer notes (micro-exercise, Day 2 Block 01), anything restating them.
-- [ ] H-5 Decks: Day 2 Block 01 slides and notes, Day 1 micro-exercise slide if it names
+- [x] H-5 Decks: Day 2 Block 01 slides and notes, Day 1 micro-exercise slide if it names
       the by-hand steps; published as drafts, changelog and outline follow (not committed).
-- [ ] H-6 Gates by exit code, commits per step, one push, 0.4.20 verified on npm
+- [x] H-6 Gates by exit code, commits per step, one push, 0.4.20 verified on npm
       (registry, drift, tarball sheets).
-- [ ] H-7 Review of package H below; memory updated.
+- [x] H-7 Review of package H below; memory updated.
+
+### Review of package H (2026-11-21)
+
+Released as **0.4.20**. Seats are provisioned from 0.4.20; a 0.4.19 seat still carries the
+by-hand steps.
+
+**Verified**
+
+- Gates: `npm run check:all` exit 0 on the full working tree before the commits;
+  `check:format` and `check:adr-refs` exit 0 again on the committed state (the only later
+  edit was `tasks/reviews.md`). CI and Publish on `ebc1246c`: success.
+- Release: `npm view` shows 0.4.20 for `create-atelier-ui-workspace`,
+  `@atelier-ui/create-workspace`, `angular`, `react`, `vue` and `mcp`;
+  `npm run check:release-drift` exit 0 ("7 of 7 publishable packages in sync") after
+  pulling the release commits. Tarball of `@atelier-ui/create-workspace@0.4.20` unpacked:
+  `figma-linter-prompt.md` has "one more value on its variant axis" and no "Shift+A";
+  `day2-prompts.md` has "build your component set through the agent", "Change only that",
+  "Change nothing else" and no "I drew it by hand"; the generated `course/README.md` line
+  says "the micro-exercise prompts".
+- Prompts, each once, headless on the duplicate, Sonnet 5.5: the Day 1 micro-exercise
+  prompt (34 s: `variant` secondary / ghost, gap `spacing/2` to `spacing/3`, the second
+  button moved 4 px; the ghost label came out white on white, which is now the look
+  question on the sheet), the Day 2 steering prompt (28 s), the machine-readable pass
+  after it (23 s, changed nothing, three could-not-bind items), the rename prompt (5 s,
+  `success` to `positive`). The build-from-starter prompt is the wording that ran 4 of 4
+  briefs on 2026-11-20.
+- Decks: Day 1 version 93, Day 2 version 58, nine files, read back from the artifacts and
+  byte-identical to the local sources; rendered locally without a reported issue, checker
+  output equal to the pre-edit baseline. Outline and changelogs follow, archive
+  `schulung-decks-2026-11-21-package-h.tar.gz`. Not committed.
+- Duplicate: both H test sections removed, no Pink Test mode left in Library Tokens.
+
+**Assumed**
+
+- Human time. The 09:35 to 09:55 row is 20 minutes for one build run plus two or three
+  steering rounds with looking in between. Agent time for the build on a seat and the time
+  a person needs to look and decide are not measured. Rehearsal item (R-040 / R-266).
+- The rename prompt gained its clause about the set's description after its run and was
+  not run again.
+- One run per prompt, one model. Nothing says how another model words the ghost variant or
+  what it binds.
+- The click that makes "the node I have selected" true was never made by a person in these
+  runs.
+- No seat was scaffolded from 0.4.20; the tarball was read instead.
+- No second model read the sheets: Gemini through agy timed out after five minutes, Codex
+  has been failing with `model_not_found` since 2026-11-20.
+
+**Weakest point**
+
+Day 2 Block 01 has no path without the bridge any more. ADR-0189 rejects "by hand" as the
+fallback on purpose, so a seat whose bridge drops at 09:35 pairs with a neighbour or waits
+for the trainer; before, it could keep drawing. The trainer notes say to fix the bridge
+first, and nothing else covers it.
+
+**Left as it is**
+
+- The four briefs still say "the frames you draw" in the sense of "what the set shows".
+- The duplicate keeps the four agent-built sets of 2026-11-20 and the stray text
+  `remove-label` on Workshop-Templates; the owner decides.
+- Both decks are still review pairs; d1-03-07 keeps its screenshot placeholder until the
+  rehearsal.
 
 ## Follow-up package G: "close the exercise gaps" (owner go 2026-11-21)
 
