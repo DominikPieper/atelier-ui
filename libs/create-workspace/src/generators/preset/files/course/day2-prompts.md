@@ -38,8 +38,8 @@ make it machine-readable: bind every fill, stroke, radius, padding and gap to a
 Library Tokens variable, put Auto Layout on every frame that has children, add
 the component properties the brief's scope names, and write the master's
 description: what is out of scope and the (full component) accessibility
-obligations. Then check it in Dark mode, take a screenshot, and tell me
-everything you changed and everything you could not bind.
+obligations. Then check it in Dark mode, take a screenshot, switch back to
+Light, and tell me everything you changed and everything you could not bind.
 ```
 
 Read the "could not bind" list before you go on. A value with no variable (a gap of 7 where
@@ -55,14 +55,17 @@ Read course/briefs/<your brief>.md and course/briefs/README.md. In my Figma
 file, on the Workshop-Templates page, copy the starter frame the brief names
 and build my component set from the copy, in the brief's scope for the
 90-minute block. Use the figma-workspace-architect skill. Bind every fill,
-radius, padding and gap to a Library Tokens variable, use Auto Layout on every
-frame with children, add the component properties the scope names, and write
-the master's description: what is out of scope and the (full component)
-accessibility obligations. Put it into its own section next to the starters
-and do not touch the starter itself. Then check it in Dark mode, take a
-screenshot, and tell me the node id of the component set and everything you
-could not bind.
+stroke, radius, padding and gap to a Library Tokens variable, use Auto Layout
+on every frame with children, add the component properties the scope names,
+and write the master's description: what is out of scope and the (full
+component) accessibility obligations. Put it into its own section next to the
+starters and do not touch the starter itself. Then check it in Dark mode, take
+a screenshot, switch back to Light, and tell me the node id of the component
+set and everything you could not bind.
 ```
+
+Then select the set the agent built: every prompt from here on works on your
+selection.
 
 Next is the linter on your own set: the prompt is in `figma-linter-prompt.md`.
 
@@ -208,10 +211,11 @@ terminal in the workspace folder:
 
 ```shell
 git show --stat HEAD
-git grep -nE "eslint-disable|stylelint-disable|@ts-ignore|@ts-expect-error|\.skip\(|\.only\(|xit\(|xdescribe\(" -- workshop-{{FRAMEWORK_LC}}/src
+git grep -nE "eslint-disable|stylelint-disable|@ts-ignore|@ts-expect-error|@ts-nocheck|\.skip\(|\.only\(|(^|[^e])xit\(|xdescribe\(" -- workshop-{{FRAMEWORK_LC}}/src
 ```
 
-The first shows every file the Block 02 commit touched. A file outside
+The first shows every file the Block 02 commit touched (if you committed a second time
+just now, that commit is one back: `git show --stat HEAD~1`). A file outside
 `workshop-{{FRAMEWORK_LC}}/src` and `course/`, above all a config (`eslint.config.mjs`,
 `stylelint.config.mjs`, a `tsconfig`, a `project.json`), is a changed rule. The second finds
 disable comments and skipped tests. Is every hit on the agent's list? Neither command finds
@@ -246,9 +250,9 @@ wrong, the line stays and the fix is a repair of the code, one change at a time.
 document is wrong, hand back only those numbers:
 
 ```text
-Correct the handoff document for the lines <numbers>, and only those: describe
-what was built, and mark each corrected line with "(corrected after
-generation)". Do not change any code.
+Correct the handoff document for the numbers <numbers> of your list, and only
+those: describe what was built, and mark each corrected line with "(corrected
+after generation)". Do not change any code.
 ```
 
 ### Make it red on purpose
@@ -334,9 +338,10 @@ long scripts and still have not seen the focus ring.
 **Measure the target size, if your brief names one.** A minimum target (24 × 24 px on a
 remove or close button) is measured by none of the steps above: the Figma audit skips it for
 a set it calls "presentational", axe does not check it, and parity compares the outer box of
-the whole set. In the browser: right-click the control, Inspect, and read the size of the
-box in the Elements panel. In Figma: select the control's frame and read W and H in the
-Design panel. Both at least 24 × 24, or it is a finding.
+the whole set. In the browser: right-click the control, Inspect, select the `<button>`
+itself in the Elements panel (the click often lands on the icon inside it) and read the size
+of its box. In Figma: select the control's frame and read W and H in the Design panel. Both
+at least 24 × 24, or it is a finding.
 
 ## Block 04: the dark check
 

@@ -36,10 +36,12 @@ The other two tasks of the micro-exercise are yours, by hand, on the same copy:
 1. **One more value on the variant axis.** Select the copy. In the Design panel, under
    Properties, press **+** and choose **Variant**: Figma puts the copy into a component set
    and adds a second variant next to it. Give the new variant's value a name in the Design
-   panel.
-2. **One frame on Auto Layout.** The copy has it already: the Design panel shows its
-   direction, gap and padding. Make one yourself: select two or three layers that sit next
-   to each other on the page and press Shift+A. Change the gap and watch what moves.
+   panel. If **+** does not offer **Variant**, the copy is an instance, not a component:
+   ask the agent to copy the variant as a component.
+2. **One frame on Auto Layout.** The copy has it already: select one of its variants and
+   the Design panel shows direction, gap and padding. Make one yourself: select two or
+   three layers that sit next to each other on the page and press Shift+A. Change the gap
+   and watch what moves.
 
 If you do not get to the micro-exercise, clean up with one line: "Delete the Pink Test mode
 again."
@@ -83,7 +85,7 @@ group, open its example layer in Figma: is the layer visible at all? Which group
 which is a false alarm, and which is a matter of opinion? A tool that reports by rule does
 not know which layers a user ever sees. That is why a finding is something to sort.
 
-On your own set, expect `default-name` findings on `Vector` layers inside icon instances.
-Those layers belong to the library's icon, not to you: false alarm, note it and move on. A
-list with no finding of your own is not proof of a clean set. Three rules ran; nobody has
-checked spacing, radius or structure.
+**Day 2, your own set.** Expect `default-name` findings on `Vector` layers inside icon
+instances. Those layers belong to the library's icon, not to you: false alarm, note it and
+move on. A list with no finding of your own is not proof of a clean set. Three rules ran;
+nobody has checked spacing, radius or structure.
