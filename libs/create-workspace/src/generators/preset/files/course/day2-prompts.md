@@ -1,10 +1,11 @@
 # Day 2 prompts
 
-Used in Day 2 Block 00 (the Definition-of-Done exercise), Block 02 (generation with plan
-mode, then `docs-show` on your own component), Block 03 (what was red, is the handoff
-document still true, red on purpose) and Block 04 (accessibility and the dark check). The parity prompt of Block 04 is in
-`parity-prompt.md`; your handoff document is the input for all of them (an example is in
-`handoff-example.md`).
+Used in Day 2 Block 00 (the Definition-of-Done exercise), Block 01 (make your component set
+machine-readable, then the API rules), Block 02 (generation with plan mode, `docs-show` on
+your own component, then look at both), Block 03 (what was red, is the handoff document
+still true, red on purpose) and Block 04 (accessibility and the dark check). The parity
+prompt of Block 04 is in `parity-prompt.md`; from Block 02 on, your handoff document is the
+input for all of them (an example is in `handoff-example.md`).
 
 ## Block 00: the Definition-of-Done exercise (5 minutes)
 
@@ -21,6 +22,78 @@ Your part:
    command, a dash, what it proves. Think of the thing your reviews keep catching by hand.
 3. Compare with your neighbour: does the line name a command that exits non-zero when it
    fails, or a wish ("the code is clean")? Only the first is a rule an agent can run.
+
+## Block 01: make your component set machine-readable
+
+You drew the set by hand from the starter frame. The agent does not draw it again: it binds,
+structures and describes what is there. Select your component set in Figma with Claude Code
+already running (a selection made before the session started is not seen: if the agent
+reports that nothing is selected, click the set again).
+
+```text
+Read course/briefs/<your brief>.md and course/briefs/README.md. My component
+set is the node I have selected in Figma. I drew it by hand: do not redraw it
+and do not change how it looks. Use the figma-workspace-architect skill and
+make it machine-readable: bind every fill, stroke, radius, padding and gap to a
+Library Tokens variable, put Auto Layout on every frame that has children, add
+the component properties the brief's scope names, and write the master's
+description: what is out of scope and the (full component) accessibility
+obligations. Then check it in Dark mode, take a screenshot, and tell me
+everything you changed and everything you could not bind.
+```
+
+Read the "could not bind" list before you go on. A value with no variable (a gap of 7 where
+the scale has 4 and 8) is yours to decide: move it onto the scale, or keep it and write it
+into the handoff document. Then compare the screenshot with what you drew: did it stay your
+drawing?
+
+If your drawing is not there yet, let the agent build from the starter and catch up by
+reading what it built:
+
+```text
+Read course/briefs/<your brief>.md and course/briefs/README.md. In my Figma
+file, on the Workshop-Templates page, copy the starter frame the brief names
+and build my component set from the copy, in the brief's scope for the
+90-minute block. Use the figma-workspace-architect skill. Bind every fill,
+radius, padding and gap to a Library Tokens variable, use Auto Layout on every
+frame with children, add the component properties the scope names, and write
+the master's description: what is out of scope and the (full component)
+accessibility obligations. Put it into its own section next to the starters
+and do not touch the starter itself. Then check it in Dark mode, take a
+screenshot, and tell me the node id of the component set and everything you
+could not bind.
+```
+
+Next is the linter on your own set: the prompt is in `figma-linter-prompt.md`.
+
+## Block 01: the API rules, before you write a prop name
+
+The handoff document fixes the names and values the code will carry, so they are checked
+first. Four rules for an API an agent can use without guessing:
+
+1. **Predictable names.** The same thing has the same name as in the rest of the library
+   (`variant`, `size`, `disabled`), not a synonym.
+2. **Literal unions.** The allowed values are a short list (`'success' | 'danger'`), not
+   free text and not a number that means something.
+3. **Composition instead of configuration.** A region that can hold anything is a slot, not
+   a growing pile of Boolean properties.
+4. **No hidden defaults.** Every default is visible in the API; nothing depends on a value
+   that is written down nowhere.
+
+```text
+List each property of the component set I have selected in Figma with its name
+and its values. Check the list against these four rules: predictable names (as
+in the rest of the library), literal unions (the allowed values as a list, not
+free text), composition instead of configuration, no hidden defaults (every
+default is visible in the API). For each rule say what you would rename or
+change and why. Where my brief (course/briefs/<your brief>.md) fixes a name
+that breaks a rule, say so. Do not rename anything yet.
+```
+
+Decide each line yourself: rename it in Figma now, or keep the brief's name and write the
+reason into the "Deliberate differences" of your handoff document. Expect few renames: the
+brief fixes most names. The find is the place where a fixed name breaks a rule. The result
+is the property list your handoff document takes over.
 
 ## Block 02: generate the component
 
@@ -86,6 +159,26 @@ Without the MCP, the same lookup through the CLI:
 npx storybook tools --config-dir workshop-{{FRAMEWORK_LC}}/.storybook --json docs show --input '{"id":"<id>"}'
 ```
 
+## Block 02: look at both (10 minutes, no prompt)
+
+The checks are green. Nobody has looked yet. Put Storybook next to your Figma component set
+and go through every variant and state you built, one by one. This is by hand on purpose:
+it is the only step that finds what a green check does not measure.
+
+1. Same variant, same state, side by side: spacing, radius, colour, text size, icon.
+2. Press Tab once. Is the focus ring there, and does it keep its distance from the content?
+3. Compare the width. Does the component have the size the design gives it, or does it
+   take the width of whatever holds it?
+4. If your design has a shadow or a thin border: can you see it in the story?
+
+Write every difference down as a list, one line each: where, what the design shows, what the
+story shows. Do not sort and do not fix: Block 04 sorts the list (a wanted difference, a
+defect in the code, or a gap in the design). An empty list after two minutes means you
+looked at one variant.
+
+Then commit (`git add -A && git commit -m "day 2 block 02: green"`) and **leave this Claude
+Code session open over lunch**: Block 03 starts in it.
+
 ## Block 03: green is not yet right
 
 Block 02 most likely ended green. That says the checks passed at the end, not how they got
@@ -96,7 +189,8 @@ back to. If `git status` still lists changes, commit now:
 ### What was red on the way
 
 In the same session that generated the component (after `/clear` the agent has to look for
-traces in the files and finds fewer):
+traces in the files and finds fewer). If the session was closed, start Claude Code in the
+workspace folder with `claude --continue`: that resumes the last session there.
 
 ```text
 Look back over this session. Do not run or change anything. List every check
@@ -109,6 +203,21 @@ around". If you no longer have the session, say so and look for the traces in
 the files instead.
 ```
 
+The list is the agent's account of itself. Hold two commands against it, in a second
+terminal in the workspace folder:
+
+```shell
+git show --stat HEAD
+git grep -nE "eslint-disable|stylelint-disable|@ts-ignore|@ts-expect-error|\.skip\(|\.only\(|xit\(|xdescribe\(" -- workshop-{{FRAMEWORK_LC}}/src
+```
+
+The first shows every file the Block 02 commit touched. A file outside
+`workshop-{{FRAMEWORK_LC}}/src` and `course/`, above all a config (`eslint.config.mjs`,
+`stylelint.config.mjs`, a `tsconfig`, a `project.json`), is a changed rule. The second finds
+disable comments and skipped tests. Is every hit on the agent's list? Neither command finds
+a renamed selector or a removed assertion: for those you have only the list and your own
+reading of the diff.
+
 Read the "went around" lines first, then check the "fixed" ones: would you have marked
 them the same way? For each line decide where the right place for the fix is. A disable
 comment silences one line. A rule that is wrong for this workspace is changed in its
@@ -119,16 +228,27 @@ why.
 
 ### Is the handoff document still true?
 
-The agent learned things while it built that the document did not know.
+The agent learned things while it built that the document did not know. Two prompts, and a
+decision of yours between them. First the list, nothing else:
 
 ```text
 Read my handoff document <path> next to the code you find for <ComponentName>.
-Do not change any code. List every line of the document that is no longer true
-of what was built: a token that does not exist, an assumption about a library
-component that turned out wrong, a variant or state that was added or dropped.
-For each one say what the code does instead. Then correct the document so that
-it describes the component as built, and mark each corrected line with
-"(corrected after generation)".
+Do not change any code and do not change the document yet. List every line of
+the document that is no longer true of what was built: a token that does not
+exist, an assumption about a library component that turned out wrong, a variant
+or state that was added or dropped. Number the list. For each line say what the
+code does instead, and whether you would correct the document or the code.
+```
+
+Decide each number yourself: is the document wrong, or is the code wrong? A document that
+is rewritten to match whatever was built stops being a specification. Where the code is
+wrong, the line stays and the fix is a repair of the code, one change at a time. Where the
+document is wrong, hand back only those numbers:
+
+```text
+Correct the handoff document for the lines <numbers>, and only those: describe
+what was built, and mark each corrected line with "(corrected after
+generation)". Do not change any code.
 ```
 
 ### Make it red on purpose
@@ -210,6 +330,13 @@ classification, not only the score.
 Shift+Tab, Enter, Space, Escape. Does focus arrive where you expect, can you see it, does
 activation work, does dismissal work? The agent can script this, but then you approve five
 long scripts and still have not seen the focus ring.
+
+**Measure the target size, if your brief names one.** A minimum target (24 × 24 px on a
+remove or close button) is measured by none of the steps above: the Figma audit skips it for
+a set it calls "presentational", axe does not check it, and parity compares the outer box of
+the whole set. In the browser: right-click the control, Inspect, and read the size of the
+box in the Elements panel. In Figma: select the control's frame and read W and H in the
+Design panel. Both at least 24 × 24, or it is a finding.
 
 ## Block 04: the dark check
 

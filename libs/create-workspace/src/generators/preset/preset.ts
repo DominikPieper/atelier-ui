@@ -200,7 +200,7 @@ function writeCourseFolder(
       ],
       [
         'figma-linter-prompt.md',
-        'Day 1 Block 03 and Day 2 Block 01: the pink test prompt and the Figma linter prompt',
+        'Day 1 Block 03 and Day 2 Block 01: the pink test prompt, the by-hand steps of the micro-exercise, and the Figma linter prompt (three rules, then every rule)',
       ],
       [
         'parity-prompt.md',
@@ -208,7 +208,7 @@ function writeCourseFolder(
       ],
       [
         'day2-prompts.md',
-        'Day 2 Block 00 (Definition-of-Done exercise), Block 02 (generation with plan mode, `docs-show` on your component), Block 03 (what was red, is the handoff document still true, red on purpose) and Block 04 (accessibility, the dark check), and what to paste when you are stuck',
+        'Day 2 Block 00 (Definition-of-Done exercise), Block 01 (make your component set machine-readable, the API rules), Block 02 (generation with plan mode, `docs-show` on your component, look at both), Block 03 (what was red, is the handoff document still true, red on purpose) and Block 04 (accessibility, the dark check), and what to paste when you are stuck',
       ],
       [
         'briefs/',

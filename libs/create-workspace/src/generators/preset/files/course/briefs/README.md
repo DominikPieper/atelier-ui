@@ -4,9 +4,11 @@ Four briefs, one per component you can choose on Day 2 of the course: [`toast.md
 
 ## Shared rules — true for all four
 
-**Scope: 2 variants × 2 states.** The Figma block is 90 minutes with participants who
-are new to Figma. Each brief names which two variants and which two states are in scope
-and which are explicitly out. Building the full matrix is not the goal; building a
+**Scope: two variants, and the states your brief names.** The Figma block is 90 minutes
+with participants who are new to Figma. Each brief names which two variants and which
+states are in scope and which are explicitly out: Toast, Avatar and StatCard cross their two
+variants with two states; TagChip has two variants with the remove button and no second
+state. Building the full matrix is not the goal; building a
 _correct_ slice of it is. The rest of the matrix is documented in the brief so the
 participant knows what they deferred rather than what they forgot.
 

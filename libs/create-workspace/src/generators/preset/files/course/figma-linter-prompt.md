@@ -31,6 +31,16 @@ the variable its sibling variants use, and show me the pink test on the copy.
 Then delete the Pink Test mode again.
 ```
 
+The other two tasks of the micro-exercise are yours, by hand, on the same copy:
+
+1. **One more value on the variant axis.** Select the copy. In the Design panel, under
+   Properties, press **+** and choose **Variant**: Figma puts the copy into a component set
+   and adds a second variant next to it. Give the new variant's value a name in the Design
+   panel.
+2. **One frame on Auto Layout.** The copy has it already: the Design panel shows its
+   direction, gap and padding. Make one yourself: select two or three layers that sit next
+   to each other on the page and press Shift+A. Change the gap and watch what moves.
+
 If you do not get to the micro-exercise, clean up with one line: "Delete the Pink Test mode
 again."
 
@@ -58,6 +68,20 @@ Sort each line of the result: **real** or **false alarm**. A finding is somethin
 not a verdict. The three rules catch raw colours, layers left on default names and detached
 instances. They do not see whether the design is right, nor spacing and radius. On Day 2,
 fix the real findings first and note the false alarms.
+
+**Day 1, a second run: every rule.** Three rules, three real findings: a clean list is
+easy to trust. Now the same master without the filter:
+
+```text
+Run figma_lint_design on the node <NODE> (<MASTER NAME>) again, this time with
+all rules, no filter. Group the findings by rule: rule, severity, count, and one
+example layer with its path inside the master. Change nothing in the file.
+```
+
+The list is several times as long, and most of it is marked "critical". Before you sort a
+group, open its example layer in Figma: is the layer visible at all? Which group is real,
+which is a false alarm, and which is a matter of opinion? A tool that reports by rule does
+not know which layers a user ever sees. That is why a finding is something to sort.
 
 On your own set, expect `default-name` findings on `Vector` layers inside icon instances.
 Those layers belong to the library's icon, not to you: false alarm, note it and move on. A
