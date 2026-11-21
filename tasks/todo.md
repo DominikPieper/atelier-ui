@@ -4661,3 +4661,16 @@ gate chain is green by exit code.
 - [ ] I15 Not done, named: no exercise prompt on `course/day2-prompts.md` (the
       slide carries the steps); `d2-05-04` still says "15 Min." in its eyebrow
       while its note says ten (older than this package).
+
+## Scaffold: initial commit + Angular skills (2026-11-21)
+
+- [x] Root cause: `create-atelier-ui-workspace` calls Nx's programmatic `createWorkspace()` without
+      `commit`; only the Nx CLI gets the yargs default `commit.message`, so the workspace was staged
+      but never committed. Fix: `commit: initialCommitOptions()`, with a neutral fallback identity
+      only when `git config` has none. Verified against Nx 23.3.0's real `initializeGitRepo` with an
+      empty HOME: without `commit` no commit; with it "Initial commit" by the fallback, tree clean.
+- [x] ADR-0191: Angular workspaces also install `angular/angular --skill angular-developer` and
+      `marmicode/skills --skill angular-testing` (spike: 8 s / 3 s with skills@1.5.25), each install
+      non-fatal on its own. Unit tests + `check:all` exit 0.
+- [ ] e2e not run (Verdaccio + network): the HEAD/clean-tree assertion and the two Angular skill dirs.
+- [ ] Commit, release, reprovision seats from the new version.
