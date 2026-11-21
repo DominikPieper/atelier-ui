@@ -113,6 +113,11 @@ have left the room idle.
    dedicated disabled tokens (ADR-0159) and three of the four briefs have no disabled state, so
    the check did no work in any run.
 
+**Corrected 2026-11-21.** Point 9's sentence "Steps done by hand in Figma (a variant value and
+Auto Layout in the Day 1 micro-exercise) have none" described a state the owner did not want:
+participants are not meant to edit Figma by hand at all. ADR-0189 replaces those steps with a
+prompt and makes the rule explicit, for Day 2 Block 01 as well.
+
 ## Consequences
 
 - The re-aimed exercises depend on the agent's account of itself. Three test runs returned usable
