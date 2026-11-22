@@ -22,6 +22,40 @@ It cannot check design parity against the live Figma file unless the `figma-cons
 wired in `.mcp.json` and the Desktop Bridge plugin is running. If it is not, the loop ends at
 `check:stories` — and you say that, instead of claiming parity.
 
+## The handoff document comes first
+
+A handoff document (`handoff/<name>.md`) is a short-lived order: it holds only what neither
+Figma nor the code carries, in four sections, headed exactly **Quelle**, **Umfang**,
+**Verhalten** and **Bewusste Abweichungen** (the course files are German, so are the
+headings):
+
+- **Quelle**: the Figma file key and the master's node id.
+- **Umfang**: what is in scope (`Im Umfang`) and what is deliberately left out (`Bewusst
+draußen`), including whether this is a new component or a composition of library ones.
+- **Verhalten**: one line per behaviour. Each line becomes exactly one `play`.
+- **Bewusste Abweichungen**: where the code deliberately differs from Figma, with the reason.
+
+Never put variant lists, token bindings, sizes, props or target files in it: they live in
+Figma and in the code, and a copy drifts.
+
+**When asked to build a component from Figma** (a node, a URL, a selection, a brief) **and no
+handoff document exists:** create `handoff/<name>.md` in that shape first. Fill **Quelle** from
+the master (file key, node id). You may list what you see in the master as candidates, marked
+as candidates. Leave **Umfang**, **Verhalten** and **Bewusste Abweichungen** as visible blanks or
+open questions, then stop and show the file. Do not write the component, the stories or any
+other file until the human has filled those three sections: they are the decisions the
+document exists for, and a guessed scope is a decision nobody made.
+
+**When a handoff document exists,** build from it: the scope from **Umfang**, one `play` per
+**Verhalten** line (a line that cannot become one `play` is two lines or no behaviour; say
+which), and **Bewusste Abweichungen** as constraints, not as findings. The props come from the
+master, not from the document.
+
+When the work is done the human dissolves the document: behaviour lines are the `play` tests,
+"Bewusst draußen" goes into the master's description and the component's JSDoc, deliberate
+deviations into the story parameters or the PR description, and the file is deleted. Do not
+treat it as living documentation.
+
 ## The loop
 
 1. **Get the shape from Figma, not from a picture.** `figma_get_component_for_development` on

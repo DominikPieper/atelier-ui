@@ -1,8 +1,10 @@
-# Parity-Prompt
+# Parity: Vergleich mit Figma
 
 Tag 1 Block 02 vergleicht die Settings Card mit ihrem Figma-Frame nach Augenmaß. Tag 2
 Block 04 führt `figma_check_design_parity` an Deiner eigenen Komponente aus, dafür muss die
-Figma Desktop Bridge verbunden sein.
+Figma Desktop Bridge verbunden sein. Beide Male liest Figma nur: In der Datei wird nichts
+geändert. Die Prompts schreibst Du selbst; `prompt-rubrik.md` listet die sechs Prüfungen, an
+denen Du sie misst.
 
 ## Tag 1 Block 02: die Settings Card, nach Augenmaß
 
@@ -16,17 +18,37 @@ IDs anders).
    oder zusätzliches Element, ein Zustand. Fünf Minuten, kein Werkzeug.
 2. Ordne jede einzeln ein als **Code** (der Code soll sich ändern) oder **Figma** (der Frame
    soll sich ändern). Bei einer langen Liste: ordne die drei größten ein.
-3. Gib die Code-Abweichungen an den Agenten zurück:
-
-```text
-Die Settings Card weicht in diesen Punkten von ihrem Figma-Frame ab:
-<Deine Liste>. Behebe nur diese. Ändere sonst nichts.
-```
-
+3. Gib die Code-Abweichungen an den Agenten zurück (die Karte unten).
 4. Vergleiche nach der Korrektur noch einmal, Punkt für Punkt. „Alles behoben“ ist der Satz
    des Agenten, der Frame neben der Card ist die Prüfung. Eine Abweichung, die noch da ist,
    geht mit dem genauen Wert aus Figma zurück (welche Seite, wie viele Pixel, welcher
    Token).
+
+### Karte: Abweichungen der Settings Card zurückgeben
+
+**Ziel.** Jede Code-Abweichung aus Deiner Liste ist behoben, sonst hat sich nichts
+geändert, und Du hast Card und Frame danach noch einmal nebeneinander verglichen.
+
+**Material.** Deine eigene Liste der Abweichungen (Schritt 2), der Frame „Settings / Card“,
+die gerenderte Card.
+
+**Rahmen.**
+
+- Scope-Guard: Nur die Punkte Deiner Liste, sonst ändert der Agent nichts.
+- Figma-Abweichungen und absichtliche Abweichungen gehören nicht in den Prompt.
+
+**Fertig, wenn** Du jeden Punkt der Liste im Vergleich Card gegen Frame abgehakt hast und
+keine Abweichung der Kategorie „Code“ mehr offen ist.
+
+**Kür.**
+
+- Drück Tab und notiere, ob der Frame überhaupt einen Fokuszustand zeigt, mit dem Du den
+  Fokusring der Card vergleichen könntest.
+- Ordne die drei kleinsten Abweichungen ein, die Du zuerst übergangen hast.
+- Zeig die Card in einer schmaleren Breite und schreib auf, welche Abweichung dann zusätzlich
+  auftaucht.
+
+**Hängst Du fest?** Sieh in `prompt-rubrik.md` nach und in {{STUCK_REF}}.
 
 Eine Abweichung, die zu keinem Etikett passt (jemand hat sie absichtlich so gewählt), wird
 geparkt: „weder Code noch Figma, wir benennen sie an Tag 2“, und wird im Code nicht
@@ -39,15 +61,35 @@ was man ihm gibt, deshalb bleibt das Auge die erste Prüfung.
 
 Die Node-ID kommt aus Deinem Übergabedokument.
 
-```text
-Führe figma_check_design_parity auf dem Node <NODE AUS DEM ÜBERGABEDOKUMENT> gegen meine
-Komponente <Komponentenname> aus. Ordne jede Abweichung einer von vier Gruppen zu: **Code**
-(der Code soll sich ändern), **Figma** (der Master soll sich ändern), **absichtlich so**
-(nur wenn der Abschnitt „Bewusste Abweichungen“ des Übergabedokuments sie nennt) oder
-**Werkzeug-Artefakt** (das Werkzeug hat zwei Dinge verglichen, die nicht dasselbe sind, es
-gibt also nichts zu beheben; sag, was es verglichen hat). Gib zu jeder den Grund in einer
-Zeile an. Liste danach auf, was das Werkzeug gar nicht verglichen hat. Behebe noch nichts.
-```
+### Karte: das Parity-Werkzeug an Deiner Komponente
+
+**Ziel.** Ein Parity-Report, dessen Abweichungen Du jeweils einer von vier Gruppen
+zugeordnet hast, mit einer Liste, was das Werkzeug gar nicht verglichen hat. Behoben ist noch
+nichts.
+
+**Material.**
+
+- `figma_check_design_parity`, die Node-ID aus Deinem Übergabedokument und Deine Komponente.
+- Der Abschnitt „Bewusste Abweichungen“ des Übergabedokuments.
+
+**Rahmen.**
+
+- Vier Gruppen: **Code** (der Code soll sich ändern), **Figma** (der Master soll sich ändern), **absichtlich so** (nur wenn der Abschnitt „Bewusste Abweichungen“ sie nennt) oder **Werkzeug-Artefakt** (das Werkzeug hat zwei Dinge verglichen, die nicht dasselbe sind).
+- Scope-Guard: Behoben wird noch nichts.
+
+**Fertig, wenn** jede Zeile eine Gruppe und einen Grund hat, Du zwei Zeilen „Werkzeug-Artefakt“
+selbst geprüft hast und Du zu jeder Zeile sagen kannst, wem sie gehört.
+
+**Kür.**
+
+- Prüfe alle Zeilen „Werkzeug-Artefakt“ statt zwei und notiere, ob eine davon eine echte
+  Abweichung versteckt hat.
+- Schreib für jede Zeile „absichtlich so“ auf, ob sie wirklich im Abschnitt „Bewusste
+  Abweichungen“ steht, und trage fehlende nach.
+- Gib die Zeilen der Gruppe „Code“ mit einer Änderung pro Runde an den Agenten zurück und
+  lass den Report erneut laufen.
+
+**Hängst Du fest?** Sieh in `prompt-rubrik.md` nach und in {{STUCK_REF}}.
 
 Rechne mit einer niedrigen Punktzahl und einer kurzen echten Liste. Das Werkzeug markiert
 jeden Befund als Code-Änderung, das Einordnen ist die Arbeit. Typische Artefakte: ein

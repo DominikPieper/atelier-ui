@@ -200,4 +200,4 @@ Zusätzlich zur gemeinsamen Messlatte in [`README.md`](README.md):
 
 ---
 
-**Bevor Du promptest:** Schreib zuerst das Übergabedokument. Ein ausgefülltes Beispiel (zum Toast-Brief) steht in `../handoff-example.md`.
+**Bevor Du promptest:** Lass den Agenten das Übergabedokument entwerfen und entscheide Umfang, Verhalten und Bewusste Abweichungen selbst. Ein ausgefülltes Beispiel (zum Toast-Brief) steht in `../handoff-example.md`.

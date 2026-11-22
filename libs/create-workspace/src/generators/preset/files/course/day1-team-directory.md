@@ -39,144 +39,178 @@ Beteiligte Komponenten: AtlInput (Suche), AtlSelect (Rollenfilter), AtlButton `p
    einfachen `.css`-Datei. Das ist eine Regel, die Du einhältst, kein Check, der sie
    erzwingt: Die Checks unten fangen nur einen Teil davon ab.
 
-**Fertig, wenn** der Screen läuft und sich verhält, wie der Brief es sagt, Du für jede
-zufällig gewählte Prop die Passage in `docs-show` zeigen kannst (oder die Prop entfernt
-wurde) und Du drei Zeilen der Liste „nicht geprüft“ des Agenten mit eigenen Augen geprüft
-hast.
+## Die Karten
 
-## Der Start-Prompt
-
-Füge das in Claude Code ein. Es ist nur ein Anfang. Der Agent kann beim ersten Durchgang
-alles richtig machen; das ist der schwierigere Fall, denn ein grünes Ergebnis, das niemand
+Den Prompt schreibst Du selbst, in Deinen Worten. Die Karten sagen Dir, was am Ende da sein
+muss, womit der Agent arbeitet und was Dein Prompt an Regeln tragen muss. `prompt-rubrik.md`
+listet die sechs Prüfungen, an denen Du ihn misst. Der Agent kann beim ersten Durchgang alles
+richtig machen; das ist der schwierigere Fall, denn ein grünes Ergebnis, das niemand
 angesehen hat, ist trotzdem nur eine Behauptung. Was Du danach prüfst, ist die Übung.
 
 **Checkpoint:** Bevor eine Datei geschrieben wird, hat der Agent Dir die Komponentenliste
 und die `docs-show`-Aufrufe dahinter gezeigt. Hat er das übersprungen, stoppe ihn und lass
 ihn bei Regel 1 neu anfangen.
 
-```text
-Baue einen Screen "Team directory" nur mit Komponenten aus {{PKG}}.
+### Karte: den Screen bauen
 
-Bevor Du Code schreibst:
-1. Rufe docs-list auf dem {{MCP}} MCP auf, dann docs-show für jede
-   Komponente, die Du benutzen willst. Nenne mir zuerst die Liste.
-2. Eine Prop, ein Input, ein Slot oder ein Event darf nur benutzt werden, wenn es in der
-   Ausgabe von docs-show steht (die Code-Beispiele zählen mit) oder in docs-show-story.
-   Ist etwas, das Du willst, nicht dokumentiert, benutze es nicht. Sag es mir.
-3. docs-show gibt nur für manche Stories den vollen Code aus und listet die übrigen nur
-   mit Namen. Brauchst Du eine davon (Sortable, Empty State), rufe docs-show-story mit
-   ihrer ID auf. Rate nicht, was eine Story tut, nur anhand ihres Namens.
+**Ziel.** Der Screen „Team directory“ aus dem Brief läuft in der App, ersetzt die
+Nx-Willkommensseite und verhält sich, wie der Brief es sagt.
 
-Der Screen:
-- Eine Überschrift "Team directory".
-- Eine Toolbar: ein Suchfeld mit dem Label "Search people", ein Select mit dem Label
-  "Role" (All roles, Engineer, Designer, Manager) und ein primärer Button
-  "Invite member".
-- Eine Tabelle der Mitglieder: Name, Email, Role, Status. Status ist ein Badge:
-  active ist success, invited ist warning, suspended ist danger.
-- Pagination unter der Tabelle, 5 Zeilen pro Seite.
-- Die Suche grenzt nach Name oder E-Mail ein, der Rollen-Select nach Rolle,
-  beide zusammen. Ein Filterwechsel geht zurück auf Seite 1. Ohne Treffer
-  zeigt die Tabelle ihren eigenen Leerzustand.
-- Daten: ein fest einprogrammiertes Array mit 12 Mitgliedern in der Komponente. Kein HTTP.
+**Material.**
 
-Regeln:
-- Kein selbstgebautes Element, wo die Bibliothek eine Komponente hat. Einfache
-  Layout-Elemente (div, h1) sind in Ordnung.
-- Styles kommen in {{CSS}} (eine separate .css-Datei), nur
-  var(--ui-*)-Tokens für Farbe und Abstand: kein Hex, rgb, hsl und keine benannten
-  Farben, keine Pixelwerte für Abstände.
-- Speichere den Screen als {{FILE}}. Binde ihn dann ein, sodass die
-  App ihn statt der Nx-Willkommensseite zeigt: {{MOUNT}}.
+- Der Brief und die vier Regeln oben.
+- Der MCP-Server `{{MCP}}` mit `docs-list`, `docs-show` und `docs-show-story`. `docs-show`
+  gibt nur für manche Stories den vollen Code aus und listet die übrigen nur mit Namen
+  (Sortable, Empty State): Wer eine davon braucht, ruft `docs-show-story` mit ihrer ID auf.
+- Die Zieldatei {{FILE}}, die Style-Datei {{CSS}}.
+- Einbinden heißt: {{MOUNT}}.
 
-Wenn Du fertig bist, liste jede verwendete Bibliothekskomponente mit der docs-list-ID auf,
-aus der sie stammt, und jede Prop mit der docs-show-Zeile, aus der sie stammt.
-```
+**Rahmen.**
+
+- Nur Komponenten aus `{{PKG}}`, und die vier Regeln des Briefs gelten.
+- Styles nur als `var(--ui-*)`-Tokens in der separaten `.css`-Datei.
+
+**Fertig, wenn** der Screen läuft und sich verhält, wie der Brief es sagt, Du für jede
+zufällig gewählte Prop die Passage in `docs-show` zeigen kannst (oder die Prop entfernt
+wurde) und Du drei Zeilen der Liste „nicht geprüft“ des Agenten mit eigenen Augen geprüft
+hast.
+
+**Kür.**
+
+- Ergänze eine Spalte oder einen Filter, den der Brief nicht nennt, aber nur mit
+  dokumentierten Props (zum Beispiel einen Status-Filter), und prüfe, dass der Leerzustand
+  weiter greift.
+- Schreib zum Brief eine Zeile „Bewusst draußen“ (zum Beispiel Sortierung oder Einladen
+  speichern) und prüfe, dass der Agent sie nicht still gebaut hat.
+- Teste die Tastatur: Tab durch Toolbar und Pagination, und notiere, wo der Fokus hängt.
+
+**Hängst Du fest?** Sieh in `prompt-rubrik.md` nach und in {{STUCK_REF}}.
 
 {{LINTNOTE}}
 
-## Der Checks-Prompt
+### Karte: die Checks laufen lassen
 
-Füge das ein, wenn die Bauzeit endet (16:30 auf der Uhr, egal in welchem Zustand der Screen
-ist).
+Beginne, wenn die Bauzeit endet (16:30 auf der Uhr, egal in welchem Zustand der Screen ist).
 
-```text
-{{CHECKS}}
-```
+**Ziel.** Alle Checks laufen, jeder Exit-Code ist bekannt, und jeder rote ist behoben oder
+benannt.
 
-Repariert der Agent die Formatierung von Hand, sag ihm: „`npm run format` ist die Reparatur
-für `check:format` und für sonst nichts.“
+**Material.** {{CHECKS}}.
 
-## Der Belege-Prompt
+**Rahmen.**
 
-Füge das nach den Checks ein. Diese Checks fangen weder einen erfundenen Namen noch ein
-selbstgebautes Element ab, deshalb kommen als Nächstes die Belege.
+- Ein Check gilt erst, wenn Du seinen Exit-Code gesehen hast, nicht das Wort „grün“.
 
-```text
-Du hast die Komponenten und Props aufgelistet, die Du benutzt hast. Prüfe Dich jetzt
-gegen die Docs, nicht gegen das Gedächtnis: Rufe docs-show für jede Komponente noch
-einmal auf und gib für jede Prop, jeden Input, jeden Slot und jedes Event in dem Code,
-den Du geschrieben hast, eine Zeile aus: den Namen und die Passage in docs-show, in der
-er steht, oder NICHT DOKUMENTIERT. Entferne alles, was mit NICHT DOKUMENTIERT markiert
-ist, oder sag mir, warum Du es behalten hast.
-```
+**Fertig, wenn** jeder Check mit Exit-Code 0 endet und Du die Liste der Änderungen gelesen
+hast.
 
-## Was niemand angesehen hat
+**Kür.**
 
-Füge das nach den Belegen ein. Die Checks sind grün und jede Prop hat eine Quelle; beides
-sagt nicht, dass jemand den Screen hat funktionieren sehen.
+- Führe einen der Checks selbst im Terminal aus und vergleiche den Exit-Code mit dem
+  Bericht.
+- Frag den Agenten, was diese Checks nicht abfangen, und prüfe seine Antwort an einem
+  Beispiel.
 
-```text
-Liste auf, was Du an diesem Screen nicht geprüft hast: jede Aussage, die Du aus dem
-Lesen von Code oder Docs gemacht hast, ohne das Ergebnis auszuführen oder zu sehen.
-Eine Zeile pro Punkt, mit dem Hinweis, wie ich es selbst in unter einer Minute prüfen
-kann. Führe nichts aus und ändere nichts.
-```
+**Hängst Du fest?** Sieh in `prompt-rubrik.md` nach und in {{STUCK_REF}}.
+
+### Karte: die Belege
+
+Beginne nach den Checks. Sie fangen weder einen erfundenen Namen noch ein selbstgebautes
+Element ab, deshalb kommen als Nächstes die Belege.
+
+**Ziel.** Zu jeder Prop, jedem Input, jedem Slot und jedem Event im Code steht die Passage in
+`docs-show`, aus der sie stammt, oder sie ist entfernt.
+
+**Material.** Der geschriebene Screen, `docs-show` für jede benutzte Komponente über
+`{{MCP}}`.
+
+**Rahmen.**
+
+- Import-Namen und Paketname stammen aus den Typ-Exports des installierten Pakets, nicht aus `docs-show`. Das ist die einzige Ausnahme.
+
+**Fertig, wenn** keine Zeile NICHT DOKUMENTIERT trägt, die nicht begründet ist, und Du zwei
+Passagen selbst in der Ausgabe von `docs-show` gefunden hast.
+
+**Kür.**
+
+- Such im Code eine Prop, die der Agent nicht gelistet hat, und prüfe, ob sie dokumentiert
+  ist.
+- Prüfe auch die Import-Namen und den Paketnamen: Sie stammen aus den Typ-Exports des
+  installierten Pakets, nicht aus `docs-show`. Steht das in den Belegen?
+
+**Hängst Du fest?** Sieh in `prompt-rubrik.md` nach und in {{STUCK_REF}}.
+
+### Karte: was niemand angesehen hat
+
+Beginne nach den Belegen. Die Checks sind grün und jede Prop hat eine Quelle; beides sagt
+nicht, dass jemand den Screen hat funktionieren sehen.
+
+**Ziel.** Eine Liste „nicht geprüft“ mit einer Zeile pro Punkt, dazu drei Zeilen, die Du
+selbst geprüft hast, mit dem Ergebnis: gilt, gilt nicht, oder der Brief sagt dazu nichts.
+
+**Material.** Der Screen, `npm start`, die Liste des Agenten.
+
+**Rahmen.**
+
+- Scope-Guard: Der Agent führt nichts aus und ändert nichts.
+
+**Fertig, wenn** Du drei Zeilen selbst geprüft und zu jeder aufgeschrieben hast, was Du
+gefunden hast.
+
+**Kür.**
+
+- Prüfe fünf statt drei Zeilen.
+- Schreib die Zeile auf, die der Agent nicht genannt hat und die Du beim Benutzen gefunden
+  hast.
+
+**Hängst Du fest?** Sieh in `prompt-rubrik.md` nach und in {{STUCK_REF}}.
 
 Such Dir drei Zeilen aus und prüfe sie selbst: `npm start`, dann benutze den Screen wie ein
 Nutzer. Tippe eine Suche ein, die nichts trifft. Kombiniere Suche und Rolle. Geh auf die
-letzte Seite, ändere dann einen Filter. Klicke auf „Invite member“. Schreib zu jeder der drei
-Zeilen auf, was Du gefunden hast: gilt, gilt nicht, oder der Brief sagt dazu nichts.
+letzte Seite, ändere dann einen Filter. Klicke auf „Invite member“.
 
-## Früh fertig: eine Story für den Screen
+### Karte: früh fertig, eine Story für den Screen
 
 Für die Bauzeit, wenn Dein Screen vor 16:30 läuft. Ein Screen ohne Story ist ein Screen, den
 morgen nichts mehr prüft.
 
-```text
-Schreibe eine Story für den Screen "Team directory", führe dann npm run check:stories
-aus und nenne mir den Exit-Code. Ist er nicht 0, lies die Ausgabe, repariere und führe es
-erneut aus.
-```
+**Ziel.** Eine Story für den Screen „Team directory“, die grün läuft.
+
+**Material.** Der Screen, `npm run check:stories`, das Muster der Stories aus Block 04.
+
+**Rahmen.**
+
+- Die `play`-Funktion prüft Verhalten (Filter, Pagination, Leerzustand), das Du sonst von Hand durchklickst.
+
+**Fertig, wenn** `npm run check:stories` mit 0 endet und Du in der Story zeigen kannst, was
+sie prüft und was sie Dir weiter überlässt.
+
+**Kür.**
+
+- Schreib eine zweite Story für den Leerzustand.
+- Mach die Story absichtlich rot (falsche Erwartung) und lies den Fehler, bevor Du
+  reparierst.
+- Notiere eine Verhaltenszeile aus dem Brief, die die Story noch nicht beweist.
+
+**Hängst Du fest?** Sieh in `prompt-rubrik.md` nach und in {{STUCK_REF}}.
 
 Lies dann die Story: Was prüft sie, das Du sonst von Hand durchklicken würdest, und was
 überlässt sie weiterhin Dir?
 
 ## Wenn der Agent danebenliegt
 
-Fängt er an zu schreiben, ohne `docs-list` aufzurufen:
+Drei typische Fälle und was Du tust. Formuliere jeweils einen kurzen eigenen Prompt, ein
+Befund pro Runde:
 
-```text
-Stopp. Schreibe noch keinen weiteren Code. Rufe docs-list auf {{MCP}} auf und nenne mir
-die IDs der Komponenten, die Du benutzen wirst. Rufe dann docs-show für jede auf und sag
-mir zu jeder Prop, die Du benutzen willst, wo sie in der Ausgabe steht.
-```
-
-Benutzt er einen Input, den die Docs nicht listen:
-
-```text
-Du hast <INPUT> an <ELEMENT> benutzt. Zeig mir die genaue Zeile aus der Ausgabe von
-docs-show oder docs-show-story, aus der er stammt. Gibt es keine, entferne ihn und sag
-mir, was Du stattdessen tust.
-```
-
-Baut er etwas von Hand, das die Bibliothek hat:
-
-```text
-<ELEMENT> ist selbstgebaut. Rufe docs-list auf und prüfe, ob die Bibliothek eine
-Komponente dafür hat. Wenn ja, ersetze es durch diese Komponente und nutze nur
-dokumentierte Props.
-```
+- **Er schreibt, ohne `docs-list` aufzurufen.** Stopp. Er soll `docs-list` auf `{{MCP}}`
+  aufrufen, Dir die IDs der Komponenten nennen, dann `docs-show` für jede aufrufen und
+  Dir zu jeder Prop sagen, wo sie in der Ausgabe steht.
+- **Er benutzt einen Input, den die Docs nicht listen.** Er soll Dir die genaue Zeile aus
+  `docs-show` oder `docs-show-story` zeigen. Gibt es keine, entfernt er den Input und sagt
+  Dir, was er stattdessen tut.
+- **Er baut etwas von Hand, was die Bibliothek hat.** Er soll mit `docs-list` prüfen, ob es
+  dafür eine Komponente gibt. Wenn ja, ersetzt er es durch diese und nutzt nur dokumentierte
+  Props.
 
 ## Der Zeitrahmen (95 Minuten)
 
@@ -189,5 +223,5 @@ dokumentierte Props.
 | 25      | Zwei Freiwillige zeigen ihre Belege und ihre Liste. Welche Zeile hast Du geprüft, und was hast Du gefunden? Woher kamen die Import-Namen?                                   |
 | 5       | Abschlussfrage.                                                                                                                                                             |
 
-Die Bauzeit endet um 16:30 auf der Uhr. Wenn Du festhängst, füge die vier Dinge aus
-{{STUCK_REF}} ein oder sieh in `rescue.md` nach.
+Die Bauzeit endet um 16:30 auf der Uhr. Wenn Du festhängst, melde die fünf Dinge aus
+{{STUCK_REF}} oder sieh in `rescue.md` nach.

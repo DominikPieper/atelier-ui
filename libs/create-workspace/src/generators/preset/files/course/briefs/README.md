@@ -108,6 +108,8 @@ Teilmenge davon, keine zweite Kopie.
 
 ## Bevor Du promptest
 
-Schreib zuerst ein kurzes Übergabedokument für Deine Komponente (was im Umfang ist, die Token-Bindungen,
-die Verhaltenszeilen, was draußen bleibt, die Abnahme-Checks). Ein ausgefülltes Beispiel,
-gebaut aus dem Toast-Brief, steht in `../handoff-example.md`.
+Lass den Agenten zuerst ein kurzes Übergabedokument für Deine Komponente entwerfen, mit den
+Abschnitten Quelle, Umfang, Verhalten und Bewusste Abweichungen. Umfang, Verhalten und
+Abweichungen entscheidest Du. Was Figma und Code schon tragen (Varianten, Tokens, Props),
+gehört nicht hinein. Ein ausgefülltes Beispiel, gebaut aus dem Toast-Brief, steht in
+`../handoff-example.md`.

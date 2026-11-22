@@ -3263,6 +3263,27 @@ describe('preset generator', () => {
     expect(skill).toContain('name: atelier-component');
   });
 
+  it('atelier-component skill (figma) stops after drafting the handoff document and builds only from a filled one', async () => {
+    await presetGenerator(tree, {
+      name: 'my-workspace',
+      framework: 'angular',
+      figmaMcp: true,
+    });
+    const skill =
+      tree.read('.claude/skills/atelier-component/SKILL.md', 'utf-8') ?? '';
+    expect(skill).toContain('then stop and show the file');
+    expect(skill).toContain('handoff/<name>.md');
+    expect(skill).toContain('one `play` per');
+    for (const section of [
+      '**Quelle**',
+      '**Umfang**',
+      '**Verhalten**',
+      '**Bewusste Abweichungen**',
+    ]) {
+      expect(skill).toContain(section);
+    }
+  });
+
   it('atelier-component skill names all six checks in "Definition of done" and keeps check:contracts only in its opt-in section', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
@@ -3357,10 +3378,23 @@ describe('preset generator', () => {
     ];
     const ALWAYS = [
       'README.md',
+      'prompt-rubrik.md',
       'day1-team-directory.md',
       'day1-stories.md',
       'rescue.md',
     ];
+
+    const CARD_FIELDS = [
+      '**Ziel.**',
+      '**Material.**',
+      '**Rahmen.**',
+      '**Fertig, wenn**',
+      '**Kür.**',
+      '**Hängst Du fest?**',
+    ];
+    function count(text: string, needle: string): number {
+      return text.split(needle).length - 1;
+    }
 
     function courseFiles(): string[] {
       return tree
@@ -3406,32 +3440,65 @@ describe('preset generator', () => {
 
         const day1 = tree.read('course/day1-team-directory.md', 'utf-8') ?? '';
         expect(day1).toContain(`@atelier-ui/${framework}`);
+        // was: the start prompt said "auf dem <mcp> MCP"; now the card names
+        // the MCP server the participant points the agent at
         expect(day1).toContain(
           framework === 'angular'
-            ? 'auf dem atelier MCP'
-            : `auf dem storybook-${framework} MCP`,
+            ? 'MCP-Server `atelier`'
+            : `MCP-Server \`storybook-${framework}\``,
         );
+        for (const field of CARD_FIELDS) expect(day1).toContain(field);
+        expect(day1).toContain('### Karte: den Screen bauen');
+        expect(day1).toContain('Scope-Guard');
         expect(day1).toContain(`workshop-${framework}/src/`);
         expect(day1.includes('npm run build')).toBe(framework === 'angular');
         const day2 = tree.read('course/day2-prompts.md', 'utf-8') ?? '';
         expect(day2).toContain('Shift+Tab');
         expect(day2).toContain('Wenn Du festhängst');
-        expect(day2).toContain('docs-show für meine Komponente');
+        // was: the prompt "docs-show für meine Komponente"; now the card names
+        // the tool, the MCP server and its heading
+        expect(day2).toContain('`storybook-local`');
+        expect(day2).toContain('`docs-show` für Deine Komponente');
+        for (const field of CARD_FIELDS) expect(day2).toContain(field);
         expect(day2).toContain('Definition-of-Done-Übung');
         expect(day2).toContain('mach Dein Component Set maschinenlesbar');
         expect(day2).toContain('baue Dein Component Set über den Agenten');
-        expect(day2).toContain('Ändere nur das');
-        expect(day2).toContain('Ändere nichts sonst');
+        // was: the prompts 'Ändere nur das' / 'Ändere nichts sonst'; the card
+        // rules now carry the steering (one change per prompt) and the
+        // scope-guard (change nothing else, keep every value bound)
+        expect(day2).toContain('### Karte: das Set per Zuruf steuern');
+        expect(day2).toContain(
+          'Ein Befund pro Runde: pro Prompt eine Änderung',
+        );
+        expect(day2).toContain(
+          'Scope-Guard: Der Agent zeichnet nichts neu und ändert nicht, wie das Set aussieht',
+        );
+        expect(day2).toContain('Sicherheitsregel: nur im eigenen Duplikat');
+        expect(day2).toContain('Scope-Guard: Nur die Nummern, die Du nennst');
         expect(day2).not.toContain('Ich habe es von Hand gezeichnet');
-        expect(day2).toContain('Benenne noch nichts um');
+        // was: 'Benenne noch nichts um'
+        expect(day2).toContain('Scope-Guard: Er benennt noch nichts um');
         expect(day2).toContain('Beides ansehen');
         expect(day2).toContain('git show --stat HEAD');
-        expect(day2).toContain('ändere das Dokument noch nicht');
+        // was: 'ändere das Dokument noch nicht'
+        expect(day2).toContain(
+          'Er ändert weder Code noch Dokument, er listet nur',
+        );
         expect(day2).toContain('24 × 24');
         const linter =
           tree.read('course/figma-linter-prompt.md', 'utf-8') ?? '';
-        expect(linter).toContain('allen Regeln, ohne Filter');
-        expect(linter).toContain('weiteren Wert auf ihrer Variantenachse');
+        // was: 'allen Regeln, ohne Filter'
+        expect(linter).toContain('Alle Regeln, ohne Filter.');
+        expect(linter).toContain('### Karte: der Figma-Linter, alle Regeln');
+        expect(linter).toContain('Scope-Guard: Der Agent ändert nichts');
+        // was: 'weiteren Wert auf ihrer Variantenachse'
+        expect(linter).toContain(
+          '### Karte: Mikroübung 2, eine Variante und ein Auto Layout',
+        );
+        expect(linter).toContain('einen zweiten Wert auf ihrer Variantenachse');
+        expect(linter).toContain(
+          'Sicherheitsregel: gearbeitet wird an einer Kopie',
+        );
         expect(linter).not.toContain('Shift+A');
         const card = tree.read('course/day1-settings-card.md', 'utf-8') ?? '';
         expect(card).toContain('Settings / Card');
@@ -3443,6 +3510,9 @@ describe('preset generator', () => {
         expect(rescue).toContain('Figma Desktop Bridge');
         expect(tree.read('course/README.md', 'utf-8')).toContain('rescue.md');
         expect(tree.read('course/README.md', 'utf-8')).toContain(
+          'prompt-rubrik.md',
+        );
+        expect(tree.read('course/README.md', 'utf-8')).toContain(
           'day1-stories.md',
         );
         const stories = tree.read('course/day1-stories.md', 'utf-8') ?? '';
@@ -3453,6 +3523,128 @@ describe('preset generator', () => {
         );
       },
     );
+
+    it.each([
+      ['figma', true],
+      ['no-figma', false],
+    ] as const)(
+      'README index lists the course in order, rubric included (%s)',
+      async (_label, figmaMcp) => {
+        await presetGenerator(tree, {
+          name: 'my-workspace',
+          framework: 'react',
+          figmaMcp,
+        });
+        const readme = tree.read('course/README.md', 'utf-8') ?? '';
+        const order = [...readme.matchAll(/^- `([^`]+)` /gm)].map((m) => m[1]);
+        const expected = figmaMcp
+          ? [
+              'rescue.md',
+              'prompt-rubrik.md',
+              'day1-settings-card.md',
+              'parity-prompt.md',
+              'figma-linter-prompt.md',
+              'day1-stories.md',
+              'day1-team-directory.md',
+              'day2-prompts.md',
+              'briefs/',
+              'handoff-example.md',
+            ]
+          : [
+              'rescue.md',
+              'prompt-rubrik.md',
+              'day1-stories.md',
+              'day1-team-directory.md',
+            ];
+        expect(order).toEqual(expected);
+        expect(readme).not.toMatch(/Start-Prompt|Checks-Prompt|Belege-Prompt/);
+        const rubric = tree.read('course/prompt-rubrik.md', 'utf-8') ?? '';
+        for (const check of [
+          'Quelle benannt',
+          'Scope-Guard',
+          'Plan zuerst',
+          'Ziel genannt',
+          'Ein Befund pro Runde',
+          'Fix am richtigen Ort',
+        ]) {
+          expect(rubric).toContain(`**${check}.**`);
+        }
+      },
+    );
+
+    // Owner decision 2026-11-22: no ready-made prompts in the participant
+    // files. Every exercise is a task card; a ```text block would be a
+    // paste-ready prompt again.
+    it.each([
+      ['angular', true],
+      ['react', true],
+      ['vue', true],
+      ['angular', false],
+      ['react', false],
+      ['vue', false],
+    ] as const)(
+      'no course file for %s (figma=%s) holds a ```text prompt block, and every card has all six fields',
+      async (framework, figmaMcp) => {
+        await presetGenerator(tree, {
+          name: 'my-workspace',
+          framework,
+          figmaMcp,
+        });
+        for (const path of courseFiles()) {
+          const text = tree.read(path, 'utf-8') ?? '';
+          expect({ path, textBlock: /```text/.test(text) }).toEqual({
+            path,
+            textBlock: false,
+          });
+          const cards = count(text, '**Ziel.**');
+          for (const field of CARD_FIELDS) {
+            expect({ path, field, n: count(text, field) }).toEqual({
+              path,
+              field,
+              n: cards,
+            });
+          }
+        }
+      },
+    );
+
+    // Owner decision 2026-11-22: the handoff document is a short-lived order
+    // with four sections that only hold what neither Figma nor code carries.
+    it('handoff-example has exactly the four sections and none of the dropped ones, and day2 dissolves it', async () => {
+      await presetGenerator(tree, {
+        name: 'my-workspace',
+        framework: 'angular',
+        figmaMcp: true,
+      });
+      const example = tree.read('course/handoff-example.md', 'utf-8') ?? '';
+      const body = example.split('\n---\n')[1] ?? '';
+      const h2 = [...example.matchAll(/^## (.+)$/gm)].map((m) => m[1]);
+      expect(h2).toEqual([
+        'Quelle',
+        'Umfang',
+        'Verhalten',
+        'Bewusste Abweichungen',
+      ]);
+      for (const dropped of [
+        'Token-Bindungen',
+        'Zieldateien',
+        'Abnahme',
+        'Maßgebliche Quelle',
+        'Wiederverwenden oder neu',
+      ]) {
+        // only the example document counts, the intro names them as what stays out
+        expect({ dropped, found: body.includes(dropped) }).toEqual({
+          dropped,
+          found: false,
+        });
+      }
+      const day2 = tree.read('course/day2-prompts.md', 'utf-8') ?? '';
+      expect(day2).toContain('### Karte: das Übergabedokument auflösen');
+      expect(day2).toContain(
+        '### Karte: das Übergabedokument entwerfen lassen und entscheiden',
+      );
+      expect(day2).toContain('Stimmt das Übergabedokument noch?');
+    });
 
     it('without --figma writes only the Figma-free files, and rescue.md carries the stuck report', async () => {
       await presetGenerator(tree, {

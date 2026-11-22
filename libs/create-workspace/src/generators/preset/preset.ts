@@ -88,7 +88,7 @@ const SITE_URL = 'https://atelier.pieper.io';
 type Framework = 'angular' | 'react' | 'vue';
 
 // ─── course/ folder (ADR-0184) ───────────────────────────────────────────────
-// Everything a participant pastes or reads during the course, as plain Markdown
+// Everything a participant reads and works from during the course, as plain Markdown
 // in the workspace: the docs site is password-protected, so no file here may
 // point at it. Static templates under files/course/ carry `{{TOKEN}}`s for the
 // few framework-specific spots; whole optional sections (the Figma rescue
@@ -111,7 +111,7 @@ const COURSE_SCAFFOLD: Record<
     file: 'workshop-angular/src/app/components/team-directory.component.ts',
     css: 'workshop-angular/src/app/components/team-directory.component.css',
     mount:
-      'nimm TeamDirectoryComponent in das imports-Array in workshop-angular/src/app/app.ts auf und ersetze <app-nx-welcome> in app.html durch <app-team-directory>',
+      'TeamDirectoryComponent in das imports-Array in workshop-angular/src/app/app.ts aufnehmen und <app-nx-welcome> in app.html durch <app-team-directory> ersetzen',
     lint: 'In Angular führt `npm run lint` zusätzlich zwei Atelier-Template-Regeln aus: Ein `<button atl-button>` nur mit Icon braucht einen zugänglichen Namen, und eine Unterkomponente wie `atl-option` muss in ihrer Elternkomponente (`atl-select`) stehen. Die Prüfung der Elternkomponente deckt eine feste Liste von Teilen ab (select, tabs, accordion, dialog, drawer, menu und einige mehr), die Tabellenteile gehören nicht dazu: `atl-th` oder `atl-tr` außerhalb von `atl-table` besteht sie.',
   },
   react: {
@@ -120,7 +120,7 @@ const COURSE_SCAFFOLD: Record<
     file: 'workshop-react/src/components/TeamDirectory.tsx',
     css: 'workshop-react/src/components/TeamDirectory.css',
     mount:
-      'importiere TeamDirectory in workshop-react/src/app/app.tsx, ersetze den Platzhalter <NxWelcome /> dadurch und entferne den nun unbenutzten NxWelcome-Import (ein unbenutzter Import lässt npm run lint fehlschlagen)',
+      'TeamDirectory in workshop-react/src/app/app.tsx importieren, den Platzhalter <NxWelcome /> dadurch ersetzen und den nun unbenutzten NxWelcome-Import entfernen (ein unbenutzter Import lässt npm run lint fehlschlagen)',
     lint: 'In React führt `npm run lint` die Framework-Regeln aus (auch jsx-a11y), nicht aber die beiden Atelier-Template-Regeln, die es nur für Angular-Templates gibt.',
   },
   vue: {
@@ -129,7 +129,7 @@ const COURSE_SCAFFOLD: Record<
     file: 'workshop-vue/src/components/TeamDirectory.vue',
     css: 'workshop-vue/src/components/TeamDirectory.css',
     mount:
-      'importiere TeamDirectory in workshop-vue/src/views/HomeView.vue, ersetze den Platzhalter <NxWelcome /> dadurch und entferne den nun unbenutzten NxWelcome-Import (ein unbenutzter Import lässt npm run lint fehlschlagen)',
+      'TeamDirectory in workshop-vue/src/views/HomeView.vue importieren, den Platzhalter <NxWelcome /> dadurch ersetzen und den nun unbenutzten NxWelcome-Import entfernen (ein unbenutzter Import lässt npm run lint fehlschlagen)',
     lint: 'Die beiden Atelier-Template-Regeln gibt es nur für Angular-Templates; in Vue führt `npm run lint` die Framework-Regeln aus.',
   },
 };
@@ -156,11 +156,11 @@ function writeCourseFolder(
     CSS: c.css,
     MOUNT: c.mount,
     LINTNOTE: c.lint,
-    CHECKS: `Führe npm run lint, npm run check:stylelint${
+    // The checks the team-directory card lists, as a plain command list.
+    CHECKS:
       framework === 'angular'
-        ? ', npm run check:format und npm run build'
-        : ' und npm run check:format'
-    } aus. Nenne jeden Exit-Code. Ist einer nicht 0, lies die Ausgabe (das vollständige Log, wenn die Zusammenfassung keinen Fehlertext enthält), repariere und führe ihn erneut aus. Liste danach auf, was Du geändert hast.`,
+        ? '`npm run lint`, `npm run check:stylelint`, `npm run check:format` und `npm run build`'
+        : '`npm run lint`, `npm run check:stylelint` und `npm run check:format`',
     // Without Figma there is no day2-prompts.md, so the stuck report moves
     // into rescue.md instead of being lost.
     STUCK_REF: figmaMcp
@@ -180,61 +180,80 @@ function writeCourseFolder(
       readTemplate(`course/${template}`),
     );
 
-  const index: [string, string][] = [
-    [
-      'day1-team-directory.md',
-      'Tag 1, Block 05: der Team-Directory-Brief, Start-Prompt, Checks-Prompt, Belege-Prompt, der Prompt zur Liste „nicht geprüft“, eine Story für alle, die früh fertig sind, und der Zeitrahmen',
-    ],
-    [
-      'day1-stories.md',
-      'Tag 1, Block 04: `docs-show` an einer Bibliothekskomponente, dann eine Story mit `play`, einmal rot und dann grün',
-    ],
+  // README index in course order (Tag 1 Block 01 to 05, then Tag 2). The
+  // Figma entries are filtered out for seats without the Figma MCP.
+  const entries: { file: string; when: string; figma: boolean }[] = [
+    {
+      file: 'rescue.md',
+      when: `Tag 1, Block 01 (Setup): wenn Dein Platz rot ist: Modellzugang, Preflight, /mcp, Storybook${figmaMcp ? ', die Figma-Bridge' : ' und was Du meldest, wenn Du festhängst'}`,
+      figma: false,
+    },
+    {
+      file: 'prompt-rubrik.md',
+      when: 'beide Tage: die sechs Prüfungen für Deine eigenen Prompts (Quelle benannt, Scope-Guard, Plan zuerst, Ziel genannt, Ein Befund pro Runde, Fix am richtigen Ort)',
+      figma: false,
+    },
+    {
+      file: 'day1-settings-card.md',
+      when: 'Tag 1, Block 02: die Aufgabenkarten für die Settings Card (generieren, einbinden, Token-Korrektur) und die Leiterstufe mit Lint und Build',
+      figma: true,
+    },
+    {
+      file: 'parity-prompt.md',
+      when: 'Tag 1, Block 02 (Settings Card, nach Augenmaß verglichen) und Tag 2, Block 04 (die Karte für das Parity-Werkzeug an Deiner eigenen Komponente)',
+      figma: true,
+    },
+    {
+      file: 'figma-linter-prompt.md',
+      when: 'Tag 1, Block 03 und Tag 2, Block 01: der Pink-Test, die Mikroübungen und die Karten für den Figma-Linter (drei Regeln, dann alle Regeln)',
+      figma: true,
+    },
+    {
+      file: 'day1-stories.md',
+      when: 'Tag 1, Block 04: die Karten für `docs-show` an einer Bibliothekskomponente, eine Story mit `play` (einmal rot, dann grün) und das Lesen der Story-Datei',
+      figma: false,
+    },
+    {
+      file: 'day1-team-directory.md',
+      when: 'Tag 1, Block 05: der Team-Directory-Brief mit seinen vier Regeln und die Karten für Screen, Checks, Belege, die Liste „nicht geprüft“ und die Story für alle, die früh fertig sind, dazu der Zeitrahmen',
+      figma: false,
+    },
+    {
+      file: 'day2-prompts.md',
+      when: 'Tag 2, Block 00 (Definition-of-Done-Übung), Block 01 (Component Set über den Agenten bauen, maschinenlesbar machen, die API-Regeln, das Übergabedokument entwerfen lassen), Block 02 (Generierung im Plan-Modus, `docs-show` an Deiner Komponente, Beides ansehen), Block 03 (was rot war, stimmt das Übergabedokument noch, Rot mit Absicht) und Block 04 (Barrierefreiheit, Dark-Check, das Übergabedokument auflösen) und was Du meldest, wenn Du festhängst',
+      figma: true,
+    },
+    {
+      file: 'briefs/',
+      when: 'Tag 2, Block 00: die vier Komponenten-Briefs zur Auswahl (Toast, TagChip, StatCard, Avatar)',
+      figma: true,
+    },
+    {
+      file: 'handoff-example.md',
+      when: 'Tag 2, Block 01 bis 04: ein ausgefülltes Übergabedokument (vier Abschnitte, vom Agenten entworfen, von Dir entschieden, am Ende aufgelöst)',
+      figma: true,
+    },
   ];
+  const index = entries.filter((e) => figmaMcp || !e.figma);
   const write = (file: string, template = file) =>
     tree.write(`course/${file}`, render(template));
-  write('day1-team-directory.md');
-  write('day1-stories.md');
-  if (figmaMcp) {
-    index.push(
-      [
-        'day1-settings-card.md',
-        'Tag 1, Block 02: der Generierungs-Prompt für die Settings Card, die Token-Korrektur, der Mount-Prompt und die Leiterstufe mit Lint und Build',
-      ],
-      [
-        'figma-linter-prompt.md',
-        'Tag 1, Block 03 und Tag 2, Block 01: der Pink-Test-Prompt, die Prompts der Mikro-Übungen und der Prompt für den Figma-Linter (drei Regeln, dann jede Regel)',
-      ],
-      [
-        'parity-prompt.md',
-        'Tag 1, Block 02 (Settings Card, nach Augenmaß verglichen) und Tag 2, Block 04 (das Parity-Werkzeug an Deiner eigenen Komponente)',
-      ],
-      [
-        'day2-prompts.md',
-        'Tag 2, Block 00 (Definition-of-Done-Übung), Block 01 (Component Set über den Agenten bauen, maschinenlesbar machen, die API-Regeln), Block 02 (Generierung im Plan-Modus, `docs-show` an Deiner Komponente, Beides ansehen), Block 03 (was rot war, stimmt das Übergabedokument noch, Rot mit Absicht) und Block 04 (Barrierefreiheits-Check, Dark-Check) und was Du einfügst, wenn Du festhängst',
-      ],
-      [
-        'briefs/',
-        'Tag 2, Block 00: die vier Komponenten-Briefs zur Auswahl (Toast, TagChip, StatCard, Avatar)',
-      ],
-      [
-        'handoff-example.md',
-        'Tag 2, Block 01: ein ausgefülltes Übergabedokument',
-      ],
-    );
-    write('day1-settings-card.md');
-    write('figma-linter-prompt.md');
-    write('parity-prompt.md');
-    write('day2-prompts.md');
-    write('handoff-example.md');
-    for (const brief of ['README', 'toast', 'tagchip', 'statcard', 'avatar']) {
-      write(`briefs/${brief}.md`);
+  for (const { file, figma } of entries) {
+    if (figma && !figmaMcp) continue;
+    if (file === 'briefs/') {
+      for (const brief of [
+        'README',
+        'toast',
+        'tagchip',
+        'statcard',
+        'avatar',
+      ]) {
+        write(`briefs/${brief}.md`);
+      }
+    } else if (file !== 'rescue.md') {
+      write(file);
     }
   }
-  index.push([
-    'rescue.md',
-    `Wenn Dein Platz rot ist: Modellzugang, Preflight, /mcp, Storybook${figmaMcp ? ', die Figma-Bridge' : ' und was Du einfügst, wenn Du festhängst'}`,
-  ]);
-  tokens.INDEX = index.map(([f, when]) => `- \`${f}\` — ${when}`).join('\n');
+  tokens.INDEX = index.map((e) => `- \`${e.file}\` — ${e.when}`).join('\n');
   write('rescue.md');
   write('README.md');
 }

@@ -128,3 +128,5 @@ block entry, and the closing check reads those, not the document. "Nothing enfor
 in the Consequences therefore changes meaning: the document itself is still ungated, and
 that is fine, because what it produces is gated. The rejection of a machine-readable
 _format for the document_ stands.
+
+**Corrected 2026-11-22.** ADR-0193 narrows the document to four sections (Quelle, Umfang, Verhalten, Bewusste Abweichungen) and drops the checklist items above that Figma or code already hold — token bindings, target files, acceptance checks — because they drifted from both. The seat's agent now drafts the provenance and stops for the decisions, and the document is dissolved into tests, the master description and story parameters at the end of Day 2 instead of staying as a deliverable.
