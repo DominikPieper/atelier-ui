@@ -1165,6 +1165,44 @@ describe('preset generator', () => {
     expect(pkg.devDependencies['eslint-config-prettier']).toBe('^9.0.0');
   });
 
+  it('pins @angular/animations to the @angular/core spec, Angular only', async () => {
+    const seed = () =>
+      JSON.stringify({
+        name: 'my-workspace',
+        dependencies: { '@angular/core': '~22.1.0' },
+      });
+    tree.write('package.json', seed());
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
+    expect(readJson(tree, 'package.json').dependencies).toMatchObject({
+      '@angular/animations': '~22.1.0',
+    });
+
+    tree.write(
+      'package.json',
+      JSON.stringify({
+        name: 'my-workspace',
+        dependencies: {
+          '@angular/core': '~22.1.0',
+          '@angular/animations': '~21.0.0',
+        },
+      }),
+    );
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
+    expect(
+      readJson(tree, 'package.json').dependencies['@angular/animations'],
+    ).toBe('~21.0.0');
+
+    for (const framework of ['react', 'vue'] as const) {
+      const t = createTreeWithEmptyWorkspace({ formatter: 'none' });
+      t.delete('tsconfig.base.json');
+      t.write('package.json', seed());
+      await presetGenerator(t, { name: 'my-workspace', framework });
+      expect(
+        readJson(t, 'package.json').dependencies['@angular/animations'],
+      ).toBeUndefined();
+    }
+  });
+
   it('fails loudly if the app generator did not write an eslint.config.mjs for Angular', async () => {
     angularAppMock.mockImplementationOnce(
       (tree: Tree, options: { name: string }) => {

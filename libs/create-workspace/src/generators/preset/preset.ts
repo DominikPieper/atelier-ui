@@ -2395,6 +2395,14 @@ Prompts, briefs and rescue steps for the course are in \`course/\` (start with
     ...(pkgSoFar.devDependencies ?? {}),
   };
   const hasTypescript = Boolean(existingDeps.typescript);
+  // Peer of @storybook/angular-vite; left unpinned npm takes the newest, which pins @angular/core exactly.
+  if (
+    framework === 'angular' &&
+    existingDeps['@angular/core'] &&
+    !existingDeps['@angular/animations']
+  ) {
+    deps['@angular/animations'] = existingDeps['@angular/core'];
+  }
   // The library's own MCP server (stdio) — Angular only: the package carries
   // the Angular manifest and Storybook, nothing for React or Vue (ADR-0182).
   const atelierMcpDevDeps: Record<string, string> =
