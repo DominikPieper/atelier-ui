@@ -136,7 +136,7 @@ Welches davon trägt eine Variable, und was hat sich bewegt, als der Abstand sic
 ## Der Linter (Tag 1 Block 03 und Tag 2 Block 01)
 
 An Tag 1 an der Settings-Seite (hell), an Tag 2 an Deinem eigenen Component Set, bevor
-Du das Übergabedokument entwerfen lässt. Dieser Lauf liest nur: In der Datei wird nichts geändert.
+Du die Entscheidungsdatei entwerfen lässt. Dieser Lauf liest nur: In der Datei wird nichts geändert.
 
 ### Karte: der Figma-Linter, drei Regeln
 

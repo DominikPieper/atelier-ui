@@ -189,10 +189,10 @@ Zusätzlich zur gemeinsamen Messlatte in [`README.md`](README.md):
   (badge oder tag) und warum.
 - `default` und `success` sind ohne Farbe unterscheidbar.
 
-### Offene Frage für Dein Übergabedokument
+### Offene Frage für Deine Entscheidungsdatei
 
-Was passiert mit einem Label, das länger ist als der Chip breit sein darf: wird es abgeschnitten, umgebrochen, oder wächst der Chip? Wie kommt ein Nutzer an den vollen Text, und was liest ein Screenreader vor? Entscheide es im Übergabedokument.
+Was passiert mit einem Label, das länger ist als der Chip breit sein darf: wird es abgeschnitten, umgebrochen, oder wächst der Chip? Wie kommt ein Nutzer an den vollen Text, und was liest ein Screenreader vor? Entscheide es in der Entscheidungsdatei.
 
 ---
 
-**Bevor Du promptest:** Lass den Agenten das Übergabedokument entwerfen und entscheide Umfang, Verhalten und Bewusste Abweichungen selbst. Ein ausgefülltes Beispiel (zum Toast-Brief) steht in `../handoff-example.md`.
+**Bevor Du promptest:** Lass den Agenten die Entscheidungsdatei entwerfen und beantworte die offenen Fragen selbst, als Einträge für Umfang, Verhalten und Bewusste Abweichungen. Ein ausgefülltes Beispiel (zum Toast-Brief) steht in `../entscheidungen-beispiel.md`.

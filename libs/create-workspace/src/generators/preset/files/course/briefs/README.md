@@ -54,7 +54,7 @@ erkennen kann, muss auch ohne Farbe verfügbar sein: als Icon, als Wort oder als
 
 Dieselbe Messlatte für alle vier. Man erreicht sie in zwei Schritten, weil der Brief selbst nur
 die Figma-Hälfte der Arbeit ist: Die Punkte 1 bis 4 und 7 lassen sich am Ende von **Tag 2 Block 01**
-prüfen (Figma-Design und Übergabedokument). Die Punkte 5, 6 und 8 prüft man an der
+prüfen (Figma-Design und Entscheidungsdatei). Die Punkte 5, 6 und 8 prüft man an der
 Komponente und ihren Stories, die es erst in **Block 02** (Komponente, Stories) und
 **Block 04** (Verifizieren) gibt. Die Nummerierung läuft über beide Listen durch, weil die Briefs sie zitieren.
 
@@ -97,7 +97,7 @@ Komponente und ihren Stories, die es erst in **Block 02** (Komponente, Stories) 
 8. `figma_check_design_parity` auf Deinem eigenen Figma-Node gegen die generierte Komponente
    (braucht die verbundene Bridge) kommt ohne ungeklärte Abweichungen zurück, und
    die Abweichungen, die er meldet, sind verstanden und nicht bloß abwesend. Nutze den Parity-Prompt in `../parity.md`
-   (Node-ID aus Deinem Übergabedokument). Claude stellt zusammen, was der Aufruf braucht. Ein Abschnitt,
+   (Node-ID aus Deiner Entscheidungsdatei). Claude stellt zusammen, was der Aufruf braucht. Ein Abschnitt,
    der nicht verglichen wird, wird nicht gemeldet, ein stiller Report ist also keine saubere Komponente. Ohne die Bridge gibt es keinen Parity-Aufruf: Ordne die
    Abweichungen stattdessen von Hand ein.
 
@@ -108,8 +108,8 @@ Teilmenge davon, keine zweite Kopie.
 
 ## Bevor Du promptest
 
-Lass den Agenten zuerst ein kurzes Übergabedokument für Deine Komponente entwerfen, mit den
-Abschnitten Quelle, Umfang, Verhalten und Bewusste Abweichungen. Umfang, Verhalten und
-Abweichungen entscheidest Du. Was Figma und Code schon tragen (Varianten, Tokens, Props),
-gehört nicht hinein. Ein ausgefülltes Beispiel, gebaut aus dem Toast-Brief, steht in
-`../handoff-example.md`.
+Lass den Agenten zuerst eine Entscheidungsdatei für Deine Komponente entwerfen, mit Kopf
+(Ticket, Figma), Offenen Fragen und Entscheidungen. Die offenen Fragen beantwortest Du als
+Einträge (Umfang, Verhalten, Bewusste Abweichung). Was Figma und Code schon tragen
+(Varianten, Tokens, Props), gehört nicht hinein. Ein ausgefülltes Beispiel, gebaut aus dem
+Toast-Brief, steht in `../entscheidungen-beispiel.md`.

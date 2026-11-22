@@ -75,3 +75,5 @@ until then.
 - The repo's own `design-to-code` skill keeps its longer handoff template for repo work; this
   record covers the course seat.
 - Seats must be provisioned again from the release that carries this change.
+
+**Corrected 2026-11-22.** Point 4's dissolving handoff is superseded by ADR-0195: the decisions move into a permanent, append-only decision file next to the component (ticket key, Figma node, dated entries with reasons), committed with the code. The four-section content and "nothing Figma or code already holds" stand; dissolving does not.

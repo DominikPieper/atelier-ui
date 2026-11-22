@@ -73,7 +73,7 @@ was man ihm gibt, deshalb bleibt das Auge die erste Prüfung.
 
 ## Tag 2 Block 04: Deine eigene Komponente
 
-Die Node-ID kommt aus Deinem Übergabedokument.
+Die Node-ID kommt aus dem Kopf Deiner Entscheidungsdatei.
 
 ### Karte: das Parity-Werkzeug an Deiner Komponente
 
@@ -83,12 +83,12 @@ nichts.
 
 **Material.**
 
-- `figma_check_design_parity`, die Node-ID aus Deinem Übergabedokument und Deine Komponente.
-- Der Abschnitt „Bewusste Abweichungen“ des Übergabedokuments.
+- `figma_check_design_parity`, die Node-ID aus Deiner Entscheidungsdatei und Deine Komponente.
+- Die Einträge der Art „Bewusste Abweichung“ Deiner Entscheidungsdatei.
 
 **Rahmen.**
 
-- Vier Gruppen: **Code** (der Code soll sich ändern), **Figma** (der Master soll sich ändern), **absichtlich so** (nur wenn der Abschnitt „Bewusste Abweichungen“ sie nennt) oder **Werkzeug-Artefakt** (das Werkzeug hat zwei Dinge verglichen, die nicht dasselbe sind).
+- Vier Gruppen: **Code** (der Code soll sich ändern), **Figma** (der Master soll sich ändern), **absichtlich so** (nur wenn ein Eintrag der Art „Bewusste Abweichung“ sie nennt) oder **Werkzeug-Artefakt** (das Werkzeug hat zwei Dinge verglichen, die nicht dasselbe sind).
 - Scope-Guard: Behoben wird noch nichts.
 
 **Fertig, wenn** jede Zeile eine Gruppe und einen Grund hat, Du zwei Zeilen „Werkzeug-Artefakt“
@@ -115,8 +115,8 @@ glaubst: Auch ein Artefakt-Etikett kann eine echte Abweichung verschwinden lasse
 
 Ein ruhiger Report ist keine saubere Komponente: Was der Aufruf nicht vergleicht, meldet er
 nicht. Danach gehört Dir jede Zeile: Code (gib sie an Claude zurück), Figma (eine Notiz für
-die Designerin oder den Designer), absichtlich so (sie muss im Abschnitt „Bewusste Abweichungen“
-des Übergabedokuments stehen) oder Werkzeug-Artefakt (nichts zu beheben, und Du kannst
+die Designerin oder den Designer), absichtlich so (sie muss als Eintrag der Art „Bewusste Abweichung“
+in der Entscheidungsdatei stehen) oder Werkzeug-Artefakt (nichts zu beheben, und Du kannst
 sagen, was womit verglichen wurde).
 
 Ohne die Bridge gibt es keinen Parity-Aufruf: Vergleiche nach Augenmaß, wie an Tag 1.

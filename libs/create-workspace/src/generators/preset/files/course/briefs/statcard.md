@@ -198,10 +198,10 @@ Zusätzlich zur gemeinsamen Messlatte in [`README.md`](README.md):
   handgezeichnete Pille: Die Komposition muss eine echte Komposition sein, sonst bricht
   die nächste Token-Änderung sie unbemerkt.
 
-### Offene Frage für Dein Übergabedokument
+### Offene Frage für Deine Entscheidungsdatei
 
-Was zeigt die Karte, solange es noch keinen Wert gibt, etwa weil die Daten laden oder nie gemessen wurden? Was liest ein Screenreader dann vor? Entscheide es im Übergabedokument und halte fest, ob das Delta in diesem Zustand mitverschwindet.
+Was zeigt die Karte, solange es noch keinen Wert gibt, etwa weil die Daten laden oder nie gemessen wurden? Was liest ein Screenreader dann vor? Entscheide es in der Entscheidungsdatei und halte fest, ob das Delta in diesem Zustand mitverschwindet.
 
 ---
 
-**Bevor Du promptest:** Lass den Agenten das Übergabedokument entwerfen und entscheide Umfang, Verhalten und Bewusste Abweichungen selbst. Ein ausgefülltes Beispiel (zum Toast-Brief) steht in `../handoff-example.md`.
+**Bevor Du promptest:** Lass den Agenten die Entscheidungsdatei entwerfen und beantworte die offenen Fragen selbst, als Einträge für Umfang, Verhalten und Bewusste Abweichungen. Ein ausgefülltes Beispiel (zum Toast-Brief) steht in `../entscheidungen-beispiel.md`.

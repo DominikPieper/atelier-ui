@@ -6,7 +6,7 @@ Dir, was am Ende da sein muss. Wie Du den Prompt formulierst, bleibt Deine Sache
 Rubrik sagt Dir, woran Du ihn misst.
 
 1. **Quelle benannt.** Der Prompt nennt, woraus der Agent arbeitet: eine Node-ID, ein
-   Übergabedokument, eine Datei. Ohne Quelle füllt der Agent die Lücke aus dem Gedächtnis.
+   Entscheidungsdatei, eine Datei. Ohne Quelle füllt der Agent die Lücke aus dem Gedächtnis.
 2. **Scope-Guard.** Der Prompt sagt, was mit dem passiert, was fehlt: Es endet als Liste
    offener Fragen, nicht als geratener Wert.
 3. **Plan zuerst.** Für alles, was über eine Datei hinausgeht, liest Du den Plan, bevor

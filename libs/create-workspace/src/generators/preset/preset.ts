@@ -225,7 +225,7 @@ function writeCourseFolder(
     },
     {
       file: 'day2-karten.md',
-      when: 'Tag 2, Block 00 (Definition-of-Done-Übung), Block 01 (Component Set über den Agenten bauen, maschinenlesbar machen, die API-Regeln, das Übergabedokument entwerfen lassen), Block 02 (Generierung im Plan-Modus, `docs-show` an Deiner Komponente, Beides ansehen), Block 03 (was rot war, stimmt das Übergabedokument noch, Rot mit Absicht) und Block 04 (Barrierefreiheit, Dark-Check, das Übergabedokument auflösen) und was Du meldest, wenn Du festhängst',
+      when: 'Tag 2, Block 00 (die Definition of Done im Gespräch), Block 01 (Component Set über den Agenten bauen, maschinenlesbar machen, die API-Regeln, die Entscheidungsdatei entwerfen lassen), Block 02 (Generierung im Plan-Modus, `docs-show` an Deiner Komponente, Beides ansehen), Block 03 (was rot war, stimmen die Entscheidungen noch, Rot mit Absicht) und Block 04 (Barrierefreiheit, Dark-Check, Entscheidungen festhalten und committen) und was Du meldest, wenn Du festhängst',
       figma: true,
     },
     {
@@ -234,8 +234,8 @@ function writeCourseFolder(
       figma: true,
     },
     {
-      file: 'handoff-example.md',
-      when: 'Tag 2, Block 01 bis 04: ein ausgefülltes Übergabedokument (vier Abschnitte, vom Agenten entworfen, von Dir entschieden, am Ende aufgelöst)',
+      file: 'entscheidungen-beispiel.md',
+      when: 'Tag 2, Block 01 bis 04: eine ausgefüllte Entscheidungsdatei (Kopf, offene Fragen, datierte Entscheidungen; vom Agenten entworfen, von Dir beantwortet, mit der Komponente committet)',
       figma: true,
     },
   ];
@@ -942,7 +942,7 @@ export async function presetGenerator(
     storybook: STORYBOOK_VERSION,
     '@storybook/addon-mcp': STORYBOOK_VERSION,
     '@storybook/addon-a11y': STORYBOOK_VERSION,
-    // Design panel: a component built from a handoff document carries its
+    // Design panel: a component with a decisions file carries its
     // Figma link and a PNG of the frame in `parameters.design` (atelier-component skill).
     '@storybook/addon-designs': ADDON_DESIGNS_VERSION,
     '@storybook/addon-docs': STORYBOOK_VERSION,
@@ -2918,8 +2918,8 @@ Course material (prompts, briefs, rescue steps): \`course/README.md\`.
     `${gitignoreBase}${gitignoreBase ? '\n\n' : ''}# Claude Code — personal overrides, never shared\n.claude/settings.local.json\n\n# Scratch output of a redirected gate run (course/, "When you are stuck")\ncheck.out\n`,
   );
 
-  // .prettierignore: `handoff/` holds the temporary handoff document
-  // (ADR-0193): written by hand, dissolved at the end of Day 2, so it must not
+  // .prettierignore: `*.decisions.md` is the permanent, append-only decision
+  // history next to a component (ADR-0193): written by hand, so it must not
   // turn `npm run check:format` red. Appended to whatever create-nx-workspace
   // already wrote.
   const existingPrettierignore = tree.exists('.prettierignore')
@@ -2928,7 +2928,7 @@ Course material (prompts, briefs, rescue steps): \`course/README.md\`.
   const prettierignoreBase = existingPrettierignore.replace(/\n+$/, '');
   tree.write(
     '.prettierignore',
-    `${prettierignoreBase}${prettierignoreBase ? '\n\n' : ''}# Temporary handoff document (course/), written by hand\nhandoff/\n`,
+    `${prettierignoreBase}${prettierignoreBase ? '\n\n' : ''}# Decision history next to a component (course/), written by hand\n**/*.decisions.md\n`,
   );
 
   console.log(`\n◇ Formatting files…`);

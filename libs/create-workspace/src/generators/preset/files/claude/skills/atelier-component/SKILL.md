@@ -22,39 +22,54 @@ It cannot check design parity against the live Figma file unless the `figma-cons
 wired in `.mcp.json` and the Desktop Bridge plugin is running. If it is not, the loop ends at
 `check:stories` — and you say that, instead of claiming parity.
 
-## The handoff document comes first
+## The decisions file comes first
 
-A handoff document (`handoff/<name>.md`) is a short-lived order: it holds only what neither
-Figma nor the code carries, in four sections, headed exactly **Quelle**, **Umfang**,
-**Verhalten** and **Bewusste Abweichungen** (the course files are German, so are the
-headings):
+Every component keeps a permanent decision history next to its source, committed with the
+code: `<component-folder>/<name>.decisions.md` (the folder of the component's main source
+file). It records where a decision came from and why, months later. The course files are
+German, so are the headings and entry labels.
 
-- **Quelle**: the Figma file key and the master's node id.
-- **Umfang**: what is in scope (`Im Umfang`) and what is deliberately left out (`Bewusst
-draußen`), including whether this is a new component or a composition of library ones.
-- **Verhalten**: one line per behaviour. Each line becomes exactly one `play`.
-- **Bewusste Abweichungen**: where the code deliberately differs from Figma, with the reason.
+**One place per fact.** No information lives in two places; a second copy drifts.
 
-Never put variant lists, token bindings, sizes, props or target files in it: they live in
-Figma and in the code, and a copy drifts.
+| Fact                                        | Lives in                                                                                |
+| ------------------------------------------- | --------------------------------------------------------------------------------------- |
+| Requirement, story text                     | The ticket. The file holds only the key (or the brief path), never a copy.              |
+| Look, variants, tokens                      | Figma.                                                                                  |
+| API, props                                  | The code, read through `docs-show`.                                                     |
+| Behaviour in detail                         | The `play` tests. The file says only THAT a behaviour was decided and WHY, in one line. |
+| Why a decision was made, where it came from | The decisions file.                                                                     |
+
+An entry holds only what ages slowly: the decision and its reason. Never current values,
+counts, variant lists, token bindings, sizes, props or target files.
+
+Shape of the file:
+
+- Header: the component name; **Ticket** (an issue key such as `PROJ-123`; in the course the
+  brief path, `course/briefs/toast.md`); **Figma** (file key and node id).
+- `## Offene Fragen`: questions the build still needs answered. You write them; the human
+  answers each by turning it into a decision entry and removing the question.
+- `## Entscheidungen`: append-only, dated entries, never edited or deleted. A change is a new
+  entry that names the one it replaces. Entry form:
+  `- 2026-11-23 · <Ticket> · <Art>: <decision>. Grund: <reason>. Entschieden von: <name or role>.`
+  where **Art** is one of **Umfang** (in / deliberately out), **Verhalten** (one behaviour =
+  one `play`), **Bewusste Abweichung** (code differs from Figma on purpose) or **Sonstiges**.
 
 **When asked to build a component from Figma** (a node, a URL, a selection, a brief) **and no
-handoff document exists:** create `handoff/<name>.md` in that shape first. Fill **Quelle** from
-the master (file key, node id). You may list what you see in the master as candidates, marked
-as candidates. Leave **Umfang**, **Verhalten** and **Bewusste Abweichungen** as visible blanks or
-open questions, then stop and show the file. Do not write the component, the stories or any
-other file until the human has filled those three sections: they are the decisions the
-document exists for, and a guessed scope is a decision nobody made.
+decisions file exists:** create it with the header and **Offene Fragen**. Ask the human for the
+ticket key if it was not given (in the course it is the brief path). Fill **Figma** from the
+master (file key, node id). Put every question the build needs answered under **Offene
+Fragen**, then stop and show the file. Do not write the component, the stories or any other
+file until the open questions that matter are answered as entries: a guessed scope is a
+decision nobody made.
 
-**When a handoff document exists,** build from it: the scope from **Umfang**, one `play` per
-**Verhalten** line (a line that cannot become one `play` is two lines or no behaviour; say
-which), and **Bewusste Abweichungen** as constraints, not as findings. The props come from the
-master, not from the document.
+**When a decisions file exists,** read it before any change. Build one `play` per current
+**Verhalten** entry (the latest entry on a behaviour wins; an entry that cannot become one
+`play` is two behaviours or none: say which), take the scope from **Umfang**, and treat
+**Bewusste Abweichung** entries as constraints, not as findings. The props come from the
+master and the code, not from the file.
 
-When the work is done the human dissolves the document: behaviour lines are the `play` tests,
-"Bewusst draußen" goes into the master's description and the component's JSDoc, deliberate
-deviations into the story parameters or the PR description, and the file is deleted. Do not
-treat it as living documentation.
+**When a new decision is made during the work,** append an entry with date and ticket and say
+so. Never rewrite an old entry; the file is append-only.
 
 ## The loop
 
@@ -80,9 +95,9 @@ treat it as living documentation.
    workspace for exactly that purpose.
    Declare `tags: ['autodocs']` on the story meta, as `atl-button.stories.*` does — without it
    Storybook renders Canvas only, with no Docs tab.
-   When the component is built from a handoff document that names a Figma source, the story
+   When the component has a decisions file that names a Figma source, the story
    meta also carries `parameters.design` as an array of two entries: the link from the
-   document's Source line, and a PNG of the frame. Export the PNG with `figma_take_screenshot`
+   file's Figma line, and a PNG of the frame. Export the PNG with `figma_take_screenshot`
    (figma-console, Desktop Bridge, no Figma token); Claude Code saves an image a tool returns
    to a file and prints its path in the tool result (`[Image: source: <path>]`), so copy that
    file next to the stories as `<component-file-name>.design.png`. Reference it with
@@ -91,7 +106,7 @@ treat it as living documentation.
    ```ts
    parameters: {
      design: [
-       { type: 'figma', url: '<link from the Source line>' },
+       { type: 'figma', url: '<link from the Figma line>' },
        { type: 'image', url: new URL('./<component-file-name>.design.png', import.meta.url).href },
      ],
    },
@@ -100,7 +115,7 @@ treat it as living documentation.
    Both entries, because the embed is live but shows only in a browser that is logged in to
    Figma, while the PNG always shows and is a dated snapshot. If the bridge is off or no path
    is reported, carry the link only and say so; never invent an image. `atl-button.stories.*`
-   has no handoff document, so it has no `design` parameter: do not copy one from it.
+   has no decisions file, so it has no `design` parameter: do not copy one from it.
 
 4. **Run the checks.** `npm run check:stories`. Read the exit code, not the last line of
    output.

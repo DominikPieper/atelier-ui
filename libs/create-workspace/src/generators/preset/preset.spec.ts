@@ -3266,7 +3266,7 @@ describe('preset generator', () => {
     expect(skill).toContain('name: atelier-component');
   });
 
-  it('atelier-component skill (figma) stops after drafting the handoff document and builds only from a filled one', async () => {
+  it('atelier-component skill (figma) stops after drafting the decisions file and builds only from answered questions', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
       framework: 'angular',
@@ -3275,16 +3275,21 @@ describe('preset generator', () => {
     const skill =
       tree.read('.claude/skills/atelier-component/SKILL.md', 'utf-8') ?? '';
     expect(skill).toContain('then stop and show the file');
-    expect(skill).toContain('handoff/<name>.md');
-    expect(skill).toContain('one `play` per');
-    for (const section of [
-      '**Quelle**',
+    expect(skill).toContain('.decisions.md');
+    expect(skill).toContain('append-only');
+    expect(skill).toContain('one `play` per current');
+    expect(skill).toContain('One place per fact');
+    for (const part of [
+      '## Offene Fragen',
+      '## Entscheidungen',
       '**Umfang**',
       '**Verhalten**',
-      '**Bewusste Abweichungen**',
+      '**Bewusste Abweichung**',
+      '**Sonstiges**',
     ]) {
-      expect(skill).toContain(section);
+      expect(skill).toContain(part);
     }
+    expect(skill).not.toContain('handoff');
   });
 
   it('atelier-component skill names all six checks in "Definition of done" and keeps check:contracts only in its opt-in section', async () => {
@@ -3373,7 +3378,7 @@ describe('preset generator', () => {
       'readiness-checkliste.md',
       'parity.md',
       'day2-karten.md',
-      'handoff-example.md',
+      'entscheidungen-beispiel.md',
       'briefs/README.md',
       'briefs/toast.md',
       'briefs/tagchip.md',
@@ -3490,7 +3495,7 @@ describe('preset generator', () => {
         }
         for (const brief of ['toast', 'tagchip', 'statcard', 'avatar'])
           expect(tree.read(`course/briefs/${brief}.md`, 'utf-8')).toContain(
-            'Offene Frage für Dein Übergabedokument',
+            'Offene Frage für Deine Entscheidungsdatei',
           );
         expect(day1).toContain('Scope-Guard');
         expect(day1).toContain(`workshop-${framework}/src/`);
@@ -3503,7 +3508,13 @@ describe('preset generator', () => {
         expect(day2).toContain('`storybook-local`');
         expect(day2).toContain('`docs-show` für Deine Komponente');
         for (const field of CARD_FIELDS) expect(day2).toContain(field);
-        expect(day2).toContain('Definition-of-Done-Übung');
+        expect(day2).toContain(
+          '## Block 00: die Definition of Done (Gespräch, 5 Minuten)',
+        );
+        expect(day2).toContain('Kurz im Gespräch');
+        expect(day2).not.toContain(
+          'Karte: die Definition of Done des Workspace',
+        );
         expect(day2).toContain('mach Dein Component Set maschinenlesbar');
         expect(day2).toContain('baue Dein Component Set über den Agenten');
         // was: the prompts 'Ändere nur das' / 'Ändere nichts sonst'; the card
@@ -3525,7 +3536,7 @@ describe('preset generator', () => {
         expect(day2).toContain('git show --stat HEAD');
         // was: 'ändere das Dokument noch nicht'
         expect(day2).toContain(
-          'Er ändert weder Code noch Dokument, er listet nur',
+          'Er ändert weder Code noch Datei, er listet nur',
         );
         expect(day2).toContain('24 × 24');
         const linter = tree.read('course/figma-pruefen.md', 'utf-8') ?? '';
@@ -3594,7 +3605,7 @@ describe('preset generator', () => {
               'day1-team-directory.md',
               'day2-karten.md',
               'briefs/',
-              'handoff-example.md',
+              'entscheidungen-beispiel.md',
             ]
           : [
               'rescue.md',
@@ -3654,42 +3665,40 @@ describe('preset generator', () => {
       },
     );
 
-    // Owner decision 2026-11-22: the handoff document is a short-lived order
-    // with four sections that only hold what neither Figma nor code carries.
-    it('handoff-example has exactly the four sections and none of the dropped ones, and day2 dissolves it', async () => {
+    // Owner decision 2026-11-22: the handoff document is replaced by a
+    // permanent, append-only decision history next to the component.
+    it('entscheidungen-beispiel has the header fields and the two sections, day2 commits the decisions, no course file says handoff', async () => {
       await presetGenerator(tree, {
         name: 'my-workspace',
         framework: 'angular',
         figmaMcp: true,
       });
-      const example = tree.read('course/handoff-example.md', 'utf-8') ?? '';
+      const example =
+        tree.read('course/entscheidungen-beispiel.md', 'utf-8') ?? '';
       const body = example.split('\n---\n')[1] ?? '';
-      const h2 = [...example.matchAll(/^## (.+)$/gm)].map((m) => m[1]);
-      expect(h2).toEqual([
-        'Quelle',
-        'Umfang',
-        'Verhalten',
-        'Bewusste Abweichungen',
+      expect(body).toContain('**Ticket:** course/briefs/toast.md');
+      expect(body).toContain('**Figma:**');
+      expect(body).toContain('703:341');
+      expect([...body.matchAll(/^## (.+)$/gm)].map((m) => m[1])).toEqual([
+        'Offene Fragen',
+        'Entscheidungen',
       ]);
-      for (const dropped of [
-        'Token-Bindungen',
-        'Zieldateien',
-        'Abnahme',
-        'Maßgebliche Quelle',
-        'Wiederverwenden oder neu',
-      ]) {
-        // only the example document counts, the intro names them as what stays out
-        expect({ dropped, found: body.includes(dropped) }).toEqual({
-          dropped,
+      for (const art of ['Umfang', 'Verhalten', 'Bewusste Abweichung'])
+        expect(body).toMatch(new RegExp(`· ${art}: `));
+      expect(body).toMatch(/ersetzt den Eintrag vom 2026-11-23/);
+      const day2 = tree.read('course/day2-karten.md', 'utf-8') ?? '';
+      expect(day2).toContain(
+        '### Karte: Entscheidungen festhalten und committen',
+      );
+      expect(day2).toContain('Stimmen die Entscheidungen noch?');
+      for (const f of tree.listChanges().map((c) => c.path)) {
+        if (!f.startsWith('course/') || tree.isFile(f) === false) continue;
+        const text = tree.read(f, 'utf-8') ?? '';
+        expect({ f, found: /Übergabedokument|handoff/i.test(text) }).toEqual({
+          f,
           found: false,
         });
       }
-      const day2 = tree.read('course/day2-karten.md', 'utf-8') ?? '';
-      expect(day2).toContain('### Karte: das Übergabedokument auflösen');
-      expect(day2).toContain(
-        '### Karte: das Übergabedokument entwerfen lassen und entscheiden',
-      );
-      expect(day2).toContain('Stimmt das Übergabedokument noch?');
     });
 
     it('without --figma writes only the Figma-free files, and rescue.md carries the stuck report', async () => {
@@ -3944,7 +3953,7 @@ describe('preset generator', () => {
     },
   );
 
-  it('writes handoff/ into .prettierignore, keeping existing entries (the handoff document is hand-written and temporary)', async () => {
+  it('writes **/*.decisions.md into .prettierignore, keeping existing entries (the decisions file is hand-written)', async () => {
     tree.write('.prettierignore', '/dist\n/coverage\n');
 
     await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
@@ -3952,15 +3961,17 @@ describe('preset generator', () => {
     const ignore = tree.read('.prettierignore', 'utf-8') ?? '';
     expect(ignore).toContain('/dist');
     expect(ignore).toContain('/coverage');
-    expect(ignore).toMatch(/^handoff\/$/m);
+    expect(ignore).toMatch(/^\*\*\/\*\.decisions\.md$/m);
   });
 
-  it('writes .prettierignore with handoff/ even when none existed', async () => {
+  it('writes .prettierignore with **/*.decisions.md even when none existed', async () => {
     expect(tree.exists('.prettierignore')).toBe(false);
 
     await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
 
-    expect(tree.read('.prettierignore', 'utf-8') ?? '').toMatch(/^handoff\/$/m);
+    expect(tree.read('.prettierignore', 'utf-8') ?? '').toMatch(
+      /^\*\*\/\*\.decisions\.md$/m,
+    );
   });
 
   it('CLAUDE.md has a Definition of Done section naming all six checks and the exit-code rule', async () => {

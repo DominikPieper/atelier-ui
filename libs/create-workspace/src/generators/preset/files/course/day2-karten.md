@@ -1,54 +1,31 @@
 # Aufgabenkarten Tag 2
 
-Verwendet in Tag 2, Block 00 (die Definition-of-Done-Übung), Block 01 (baue Dein Component Set
-über den Agenten, mach es maschinenlesbar, dann die API-Regeln und der Entwurf Deines
-Übergabedokuments), Block 02 (Generierung mit
+Verwendet in Tag 2, Block 00 (die Definition of Done im Gespräch), Block 01 (baue Dein Component Set
+über den Agenten, mach es maschinenlesbar, dann die API-Regeln und der Entwurf Deiner
+Entscheidungsdatei), Block 02 (Generierung mit
 Plan-Modus, `docs-show` an Deiner eigenen Komponente, dann Beides ansehen), Block 03 (was rot
-war, stimmt das Übergabedokument noch, Rot mit Absicht) und Block 04 (Barrierefreiheit, der
-Dark-Check und das Auflösen des Übergabedokuments). Die Karte für die Parity aus Block 04 steht in `parity.md`, die für den
-Linter in `figma-pruefen.md`. Ab Block 02 ist Dein Übergabedokument der feste Bezugspunkt für
-diese Karten (ein Beispiel steht in `handoff-example.md`).
+war, stimmen die Entscheidungen noch, Rot mit Absicht) und Block 04 (Barrierefreiheit, der
+Dark-Check und das Festhalten der Entscheidungen). Die Karte für die Parity aus Block 04 steht in `parity.md`, die für den
+Linter in `figma-pruefen.md`. Ab Block 02 ist Deine Entscheidungsdatei der feste Bezugspunkt für
+diese Karten (ein Beispiel steht in `entscheidungen-beispiel.md`).
 
 Die Prompts schreibst Du selbst, in Deinen Worten. Jede Karte nennt das Ziel, das Material und
 den Rahmen, den Dein Prompt tragen muss. `prompt-rubrik.md` listet die sechs Prüfungen, an
 denen Du jeden Prompt misst.
 
-## Block 00: die Definition-of-Done-Übung (5 Minuten)
+## Block 00: die Definition of Done (Gespräch, 5 Minuten)
 
 Der Workspace enthält eine Regel, die der Agent in jeder Session liest: `CLAUDE.md`, Abschnitt
-„Definition of Done“. Der Agent führt aus, was die Liste nennt. Ein Check, der nicht in der
-Liste steht, ist ein Check, den niemand verlangt hat. Der Trainer zeigt das einmal am
-Beamer: eine Zeile löschen, `/clear`, noch einmal fragen, und der Check ist weg.
+„Definition of Done“. Der Agent führt aus, was die Liste nennt, und `/verify` führt jede Zeile
+dieser Liste aus, auch eine, die Ihr selbst ergänzt. Ein Check, der nicht in der Liste steht,
+ist ein Check, den niemand verlangt hat.
 
-### Karte: die Definition of Done des Workspace
+Kurz im Gespräch, ohne Aufschreiben:
 
-**Ziel.** Du kennst die Befehle, die die Definition of Done Deines Workspace nennt, hast
-eine Zeile aufgeschrieben, die Dein eigenes Team der Liste hinzufügen würde, und weißt, dass
-`/verify` jede Zeile dieser Liste ausführt, auch eine hinzugefügte.
-
-**Material.** `CLAUDE.md`, Abschnitt „Definition of Done“, der Agent als Leser, Dein Nachbar.
-
-**Rahmen.**
-
-- Die Zeile für Dein Team hat dieselbe Form wie die Liste: der Befehl, ein Gedankenstrich, was er beweist.
-
-**Fertig, wenn** Du die Liste des Agenten (sechs Befehle) neben der Datei geprüft hast, Deine
-Zeile in `CLAUDE.md` eingetragen ist, `/verify` sie mit ausführt (`/verify` liest die Liste
-aus `CLAUDE.md`; fehlt Deine Zeile im Lauf, steht sie nicht im Abschnitt „Definition of Done“) und
-Du Deine Zeile mit Deinem Nachbarn verglichen hast: Nennt sie einen Befehl, der bei einem Fehler
-mit einem Exit-Code ungleich 0 endet, oder einen Wunsch („der Code ist sauber“)? Nur der
-Befehl ist eine Regel, die ein Agent ausführen kann.
-
-**Kür.**
-
-- Schreib eine zweite Zeile für einen Befund, den kein Befehl fängt, und überlege, wie ein
-  Befehl dafür aussähe.
-- Lösche in einer Kopie von `CLAUDE.md` eine Zeile, öffne eine neue Session und frag noch
-  einmal: Was fehlt in der Antwort?
-- Prüfe, ob jeder der sechs Befehle im Workspace wirklich existiert.
-
-**Hängst Du fest?** Sieh in `prompt-rubrik.md` nach und im Abschnitt „Wenn Du festhängst“ am
-Ende dieser Datei.
+- Was findet Euer Review immer wieder von Hand?
+- Lässt es sich als Befehl prüfen, der bei einem Fehler mit einem Exit-Code ungleich 0 endet?
+- Oder ist es ein Wunsch wie „der Code ist sauber“? Ein Befehl, der scheitern kann, ist eine
+  Regel. Alles andere ist ein Wunsch.
 
 ## Block 01: baue Dein Component Set über den Agenten
 
@@ -168,7 +145,7 @@ Linter prüft nur seine Regeln. Öffne den Master und sieh nach, was sie nicht s
 ## Block 01: die API-Regeln, bevor Du einen Prop-Namen schreibst
 
 Der Master legt die Namen und Werte fest, die der Code tragen wird. Deshalb werden sie
-zuerst geprüft, noch vor dem Übergabedokument. Vier Regeln für eine API, die ein Agent ohne Raten benutzen kann:
+zuerst geprüft, noch vor der Entscheidungsdatei. Vier Regeln für eine API, die ein Agent ohne Raten benutzen kann:
 
 1. **Vorhersagbare Namen.** Dieselbe Sache heißt wie im Rest der Bibliothek (`variant`,
    `size`, `disabled`), nicht anders.
@@ -246,48 +223,51 @@ Erwarte wenige Umbenennungen: Der Brief legt die meisten Namen fest. Gefunden wi
 an der ein vorgegebener Name eine Regel bricht. Das Ergebnis ist die Property-Liste, die im Master
 steht und die der Code übernimmt.
 
-### Karte: das Übergabedokument entwerfen lassen und entscheiden
+### Karte: die Entscheidungsdatei entwerfen lassen und beantworten
 
 Das Set steht und ist gebunden. Was Figma und Code nicht tragen, steht noch nirgends: was
 Du bewusst nicht baust, wie sich die Komponente verhält und wo sie vom Design abweicht. Das zu
 entscheiden ist die Denkarbeit dieses Blocks. Der Agent entwirft die Datei, Du entscheidest.
 
-**Ziel.** Eine Datei `handoff/<Name>.md` mit den vier Abschnitten **Quelle**, **Umfang**,
-**Verhalten** und **Bewusste Abweichungen**: Die Quelle hat der Agent aus Deinem Set
-gefüllt, die drei anderen hast Du entschieden und in eigenen Worten geschrieben.
+**Ziel.** Eine Datei `<Name>.decisions.md` neben dem Quellcode Deiner Komponente. Kopf und
+**Offene Fragen** hat der Agent aus Deinem Set und Deinem Brief entworfen. Jede Frage, die für
+den Bau zählt, hast Du beantwortet, indem Du sie in einen Eintrag unter **Entscheidungen**
+umgeschrieben (Art: Umfang, Verhalten, Bewusste Abweichung oder Sonstiges, mit Datum, Ticket,
+Grund und Deinem Namen) und die Frage entfernt hast.
 
 **Material.**
 
 - Das ausgewählte Component Set, nur lesen.
-- `handoff-example.md` als Muster für Form und Länge, nicht als Text zum Abschreiben.
+- `entscheidungen-beispiel.md` als Muster für Form und Länge, nicht als Text zum Abschreiben.
 - Der Skill `atelier-component`.
 - Dein Brief `course/briefs/<Dein Brief>.md`.
 
 **Rahmen.**
 
-- Der Agent füllt nur **Quelle** und darf Kandidaten nennen, die er im Set sieht. **Umfang**,
-  **Verhalten** und **Bewusste Abweichungen** bleiben leer, bis Du sie füllst.
+- Der Agent füllt den Kopf (das Ticket ist im Kurs der Brief-Pfad, die Figma-Angabe kommt aus
+  dem Set) und schreibt, was er zum Bauen noch wissen muss, als **Offene Fragen**. Entscheidungen
+  trifft er nicht.
 - Gebaut wird noch nichts: Der Agent legt die Datei an, zeigt sie und hört auf.
 
-**Fertig, wenn** Du jede Zeile unter Umfang, Verhalten und Bewusste Abweichungen selbst
-geschrieben oder bewusst aus einem Kandidaten übernommen hast, jede Verhaltenszeile ein
-einzelnes Verhalten beschreibt (eine Zeile, eine spätere `play`-Funktion) und keine
-Variantenliste, kein Token und keine Prop im Dokument steht.
+**Fertig, wenn** jede offene Frage, die für den Bau zählt, als Eintrag beantwortet ist (die
+übrigen stehen bewusst noch offen), jeder Verhaltenseintrag ein einzelnes Verhalten beschreibt
+(ein Eintrag, eine spätere `play`-Funktion), jeder Eintrag einen Grund hat und keine
+Variantenliste, kein Token und keine Prop in der Datei steht.
 
 **Kür.**
 
-- Gib das Dokument einer Kollegin oder einem Kollegen und frag, welche Zeile sie oder er
+- Gib die Datei einer Kollegin oder einem Kollegen und frag, welche Zeile sie oder er
   anders bauen würde.
-- Streich eine Zeile aus **Verhalten**, die der Master schon trägt, und begründe in einem
-  Satz, warum sie nicht ins Dokument gehört.
-- Lass einen frischen Agenten (`/clear`) nur das Dokument lesen und frag, was er bauen
+- Such einen Eintrag, der etwas wiederholt, das der Master schon trägt, und begründe in einem
+  Satz, warum er nicht in die Datei gehört.
+- Lass einen frischen Agenten (`/clear`) nur die Datei lesen und frag, was er bauen
   würde. Wo rät er?
 
 **Hängst Du fest?** Sieh in `prompt-rubrik.md` nach und im Abschnitt „Wenn Du festhängst“ am
 Ende dieser Datei.
 
-Die Kandidaten des Agenten sind Vorschläge. Umfang ist eine Entscheidung gegen etwas: Was
-lässt Du weg, und steht das im Master? Eine Verhaltenszeile, die Du nicht in einem Satz
+Die Fragen des Agenten sind Vorschläge. Umfang ist eine Entscheidung gegen etwas: Was
+lässt Du weg, und steht das im Master? Ein Verhalten, das Du nicht in einem Satz
 sagen kannst, ist noch keine Entscheidung. Eine Abweichung ohne Grund ist ein Fehler, der
 noch nicht gefunden wurde.
 
@@ -295,11 +275,11 @@ noch nicht gefunden wurde.
 
 **Zuerst Plan-Modus.** Drück vor dem Absenden Shift+Tab, bis die Statuszeile den Plan-Modus
 zeigt, schick den Prompt ab und lies den Plan: Jede Prop darin muss eine Property Deines
-Masters sein, jede Verhaltenszeile eine Zeile Deines Übergabedokuments. Erst dann lass bauen. Eine erfundene Prop ist als Planzeile billiger
+Masters sein, jedes Verhalten ein Eintrag Deiner Entscheidungsdatei. Erst dann lass bauen. Eine erfundene Prop ist als Planzeile billiger
 zu finden als rote Story.
 
 **Beantworte die Fragen des Plans, bevor Du freigibst.** Ein Plan endet meist mit Ergänzungen,
-die weder Master noch Übergabedokument kennen (ein zusätzlicher Output, eine andere Rolle, ein Default)
+die weder Master noch Entscheidungsdatei kennen (ein zusätzlicher Output, eine andere Rolle, ein Default)
 und mit ein oder zwei Fragen. Ein schlichtes „bau es“ gibt alles frei. Sag zu jedem Punkt ja
 oder nein, in Worten.
 
@@ -308,27 +288,27 @@ gelten (Tokens, Komposition nach Bereichen, ein Name an jedem reinen Icon-Contro
 Farbe sichtbar, `tags: ['autodocs']`), stehen mit ihren Gründen im Skill `atelier-component`
 des Workspace.
 
-### Karte: die Komponente aus dem Übergabedokument generieren
+### Karte: die Komponente aus der Entscheidungsdatei generieren
 
 **Ziel.** Die {{FRAMEWORK}}-Implementierung Deiner Komponente mit Test und Stories, deren
-Prop-Namen eins zu eins aus dem Master stammen und die für jede Zeile unter **Verhalten**
+Prop-Namen eins zu eins aus dem Master stammen und die für jeden aktuellen Eintrag der Art **Verhalten**
 genau eine `play`-Funktion hat, mit gemeldeten Exit-Codes der Definition of Done.
 
 **Material.**
 
-- Dein Übergabedokument (Pfad oder eingefügter Text), Beispiel: `handoff-example.md`.
+- Deine Entscheidungsdatei (Pfad oder eingefügter Text), Beispiel: `entscheidungen-beispiel.md`.
 - Der Skill `atelier-component`, `CLAUDE.md` mit der Definition of Done (die Checks, die
   `/verify` ausführt).
 - Der Plan-Modus (Shift+Tab).
 
 **Rahmen.**
 
-- Gebaut wird aus dem Übergabedokument: eine `play`-Funktion pro Zeile unter **Verhalten**.
-- Was unter **Bewusste Abweichungen** steht, ist vorgegeben und kein Fehler.
+- Gebaut wird aus der Entscheidungsdatei: eine `play`-Funktion pro aktuellem Eintrag der Art **Verhalten** (bei zwei Einträgen zum selben Verhalten gilt der jüngste).
+- Was als **Bewusste Abweichung** eingetragen ist, ist vorgegeben und kein Fehler.
 - Plan zuerst: Du liest und beantwortest den Plan, bevor gebaut wird.
 
 **Fertig, wenn** der Plan nur Properties Deines Masters enthielt, die Komponente samt Test
-und Stories existiert, jede Verhaltenszeile eine eigene `play`-Funktion hat und jeder
+und Stories existiert, jeder Verhaltenseintrag eine eigene `play`-Funktion hat und jeder
 Exit-Code der Definition of Done gemeldet und 0 ist.
 
 **Kür.**
@@ -336,7 +316,7 @@ Exit-Code der Definition of Done gemeldet und 0 ist.
 - Schick den Plan einmal absichtlich mit einer Prop zurück, die im Master fehlt,
   und prüfe, ob der Agent sie ablehnt oder still aufnimmt.
 - Ergänze eine Story für einen Fehler- oder Leerzustand und prüfe, dass sie im Umfang des
-  Übergabedokuments gedeckt ist (sonst gehört sie nach „Bewusst draußen“).
+  Entscheidungsdatei gedeckt ist (sonst gehört sie als Eintrag der Art Umfang nach „bewusst draußen“).
 - Prüfe mit Tab die Tastaturbedienung der generierten Komponente in Storybook.
 
 **Hängst Du fest?** Sieh in `prompt-rubrik.md` nach und im Abschnitt „Wenn Du festhängst“ am
@@ -372,7 +352,7 @@ zeigt.
 
 **Kür.**
 
-- Setz die Lücken der zweiten Sorte (Lücke in der Komponente) als Zeile in „Bewusst draußen“
+- Setz die Lücken der zweiten Sorte (Lücke in der Komponente) als Eintrag der Art Umfang in die Entscheidungsdatei
   oder als Notiz für die Reviews.
 - Lass einen frischen Agenten (`/clear`) allein aus `docs-show` ein Beispiel mit Deiner
   Komponente schreiben und sieh, wo er danebenliegt.
@@ -474,58 +454,61 @@ entfernte Assertion ist ein Verhalten, das niemand mehr prüft: Bring sie zurüc
 warum sie weg ist. Überarbeite dann einmal: entweder Deinen Prompt oder eine Zeile in
 `CLAUDE.md`, die den Umweg verhindert hätte, und sag warum.
 
-### Stimmt das Übergabedokument noch?
+### Stimmen die Entscheidungen noch?
 
-Der Agent hat beim Bauen Dinge gelernt, die das Dokument nicht kannte. Zwei Karten und eine
+Der Agent hat beim Bauen Dinge gelernt, die die Entscheidungsdatei nicht kannte. Zwei Karten und eine
 Entscheidung von Dir dazwischen.
 
-#### Karte: Übergabedokument gegen Code, die Liste
+#### Karte: Entscheidungen gegen Code, die Liste
 
-**Ziel.** Eine nummerierte Liste jeder Zeile des Übergabedokuments, die für das Gebaute nicht
-mehr stimmt, mit der Empfehlung des Agenten, ob Dokument oder Code zu korrigieren ist.
+**Ziel.** Eine nummerierte Liste jedes Eintrags der Entscheidungsdatei, der für das Gebaute nicht
+mehr stimmt, mit der Empfehlung des Agenten, ob der Code zu reparieren ist oder die
+Entscheidung sich geändert hat.
 
-**Material.** Dein Übergabedokument, der Code Deiner Komponente.
+**Material.** Deine Entscheidungsdatei, der Code Deiner Komponente.
 
 **Rahmen.**
 
-- Scope-Guard: Er ändert weder Code noch Dokument, er listet nur.
+- Scope-Guard: Er ändert weder Code noch Datei, er listet nur.
 
-**Fertig, wenn** Du jede Nummer selbst entschieden hast: Dokument falsch oder Code falsch.
+**Fertig, wenn** Du jede Nummer selbst entschieden hast: Code falsch oder Entscheidung geändert.
 
 **Kür.**
 
-- Such eine Zeile, die der Agent nicht gelistet hat, und prüfe, ob sie stimmt.
+- Such einen Eintrag, den der Agent nicht gelistet hat, und prüfe, ob sie stimmt.
 - Entscheide eine Nummer gegen die Empfehlung des Agenten und schreib in einem Satz, warum.
-- Prüfe, ob die Zeile „Bewusst draußen“ noch zum Code passt.
+- Prüfe, ob die Einträge der Art Umfang („bewusst draußen“) noch zum Code passen.
 
 **Hängst Du fest?** Sieh in `prompt-rubrik.md` nach und im Abschnitt „Wenn Du festhängst“ am
 Ende dieser Datei.
 
-Ein Dokument, das an alles angepasst wird, was gebaut wurde, ist keine Spezifikation mehr.
-Wo der Code falsch ist, bleibt die Zeile stehen und die Korrektur ist eine Reparatur am Code,
-eine Änderung nach der anderen. Wo das Dokument falsch ist, gehen nur diese Nummern in die
-nächste Karte.
+Eine Entscheidungsdatei, die an alles angepasst wird, was gebaut wurde, hält keine
+Entscheidungen mehr fest. Wo der Code falsch ist, bleibt der Eintrag stehen und die Korrektur
+ist eine Reparatur am Code, eine Änderung nach der anderen. Wo sich die Entscheidung geändert
+hat, gehen nur diese Nummern in die nächste Karte, und die Änderung ist ein neuer Eintrag, nie
+eine Bearbeitung des alten.
 
-#### Karte: Übergabedokument korrigieren
+#### Karte: Entscheidungen nachtragen
 
-**Ziel.** Das Dokument beschreibt für die Nummern, die Du als „Dokument falsch“ entschieden
-hast, was gebaut wurde, jede korrigierte Zeile ist gekennzeichnet, der Code ist unberührt.
+**Ziel.** Für jede Nummer, die Du als „Entscheidung geändert“ entschieden hast, steht ein neuer
+Eintrag in der Datei, der den alten nennt und einen Grund hat. Kein alter Eintrag ist
+verändert, der Code ist unberührt.
 
-**Material.** Die Liste mit Deinen Entscheidungen, das Übergabedokument.
+**Material.** Die Liste mit Deinen Entscheidungen, die Entscheidungsdatei.
 
 **Rahmen.**
 
-- Scope-Guard: Nur die Nummern, die Du nennst, und nur im Dokument. Kein Code.
-- Jede korrigierte Zeile endet auf „(nach der Generierung korrigiert)“.
+- Scope-Guard: Nur die Nummern, die Du nennst, und nur durch neue Einträge am Ende von
+  **Entscheidungen**. Kein alter Eintrag wird bearbeitet oder gelöscht, kein Code.
+- Jeder neue Eintrag nennt den Eintrag, den er ersetzt.
 
-**Fertig, wenn** `git diff` am Dokument nur die genannten Zeilen zeigt, alle mit der
-Kennzeichnung, und am Code nichts.
+**Fertig, wenn** `git diff` an der Datei nur hinzugefügte Zeilen zeigt (eine pro genannter
+Nummer, jede mit Datum, Ticket und Grund) und am Code nichts.
 
 **Kür.**
 
-- Prüfe im Diff, ob eine Zeile außerhalb Deiner Nummern angefasst wurde, und lass sie
-  zurücknehmen.
-- Lass das Dokument von einem frischen Agenten (`/clear`) gegen den Code lesen und sieh, ob
+- Prüfe im Diff, ob eine bestehende Zeile angefasst wurde, und lass sie zurücknehmen.
+- Lass die Datei von einem frischen Agenten (`/clear`) gegen den Code lesen und sieh, ob
   die Liste jetzt leer ist.
 
 **Hängst Du fest?** Sieh in `prompt-rubrik.md` nach und im Abschnitt „Wenn Du festhängst“ am
@@ -534,22 +517,22 @@ Ende dieser Datei.
 ### Rot mit Absicht
 
 Jetzt die Schleife, nach der der Block benannt ist, an einer Änderung, die Du wählst. Nimm
-eine Variante oder einen Zustand aus der Zeile „Bewusst draußen“ Deines Übergabedokuments.
+eine Variante oder einen Zustand, den ein Umfang-Eintrag Deiner Entscheidungsdatei bewusst draußen lässt.
 Die Story kommt zuerst, damit Du das Rot selbst siehst.
 
-Committe, bevor Du anfängst (`git add -A && git commit -m "day 2 block 03: corrected"`). Das
-korrigierte Übergabedokument und Deine Überarbeitung sind dann vor dem Zurücksetzen weiter
+Committe, bevor Du anfängst (`git add -A && git commit -m "day 2 block 03: corrected"`). Die
+nachgetragenen Entscheidungen und Deine Überarbeitung sind dann vor dem Zurücksetzen weiter
 unten sicher.
 
 #### Karte: Rot mit Absicht
 
-**Ziel.** Eine Variante oder ein Zustand aus „Bewusst draußen“ ist im Übergabedokument im
-Umfang, hat dort eine Verhaltenszeile, hat eine Story mit `play`-Funktion, die Du erst rot und dann grün gesehen hast, und
+**Ziel.** Eine Variante oder ein Zustand, der bewusst draußen war, ist per neuem Umfang-Eintrag
+im Umfang, hat einen Verhaltenseintrag, hat eine Story mit `play`-Funktion, die Du erst rot und dann grün gesehen hast, und
 die Reparatur war eine Änderung an der richtigen Stelle.
 
 **Material.**
 
-- Dein Übergabedokument, Deine Komponente, `test-run` über `storybook-local` (oder
+- Deine Entscheidungsdatei, Deine Komponente, `test-run` über `storybook-local` (oder
   `npm run check:stories`, wenn Storybook nicht läuft).
 - Dein Commit vom Anfang dieses Abschnitts.
 
@@ -559,27 +542,27 @@ die Reparatur war eine Änderung an der richtigen Stelle.
 - Nach zwei gescheiterten Reparaturen gibt es keinen dritten Flicken (siehe Zurücksetzen unten).
 
 **Fertig, wenn** Du das Rot gesehen und gelesen hast (was hat die `play`-Funktion erwartet,
-und wer hat diese Erwartung gewählt: Du, das Übergabedokument oder der Agent?), die Story grün
+und wer hat diese Erwartung gewählt: Du, die Entscheidungsdatei oder der Agent?), die Story grün
 ist, Du die Liste der offenen Punkte gelesen hast und committet hast. Typische offene Punkte:
 Die Story-Controls bieten den neuen Wert nicht an, Lint und Build liefen nicht noch einmal,
 dem Figma-Master fehlt diese Variante.
 
 **Kür.**
 
-- Wähle eine zweite Sache aus „Bewusst draußen“ und lass die Schleife noch einmal laufen.
+- Wähle eine zweite Sache, die bewusst draußen war, und lass die Schleife noch einmal laufen.
 - Nimm bewusst eine schwere Änderung mit Verhalten (zum Beispiel das Stapeln mehrerer
   Instanzen oder einen Zustand mit Zeitablauf) und rechne damit, dass die erste Reparatur
   nicht reicht: Scheitern zwei, gehst Du den Weg „Zurücksetzen“ unten.
-- Lass den Agenten bei einem offenen Punkt eine Zeile in den Abschnitt „Bewusst draußen“ oder
-  in die Dokumentation schreiben.
+- Lass den Agenten bei einem offenen Punkt einen Eintrag in die Entscheidungsdatei oder
+  eine Zeile in die Dokumentation schreiben.
 - Führe nach der Reparatur Lint und Build aus und melde die Exit-Codes.
 
 **Hängst Du fest?** Sieh in `prompt-rubrik.md` nach und im Abschnitt „Wenn Du festhängst“ am
 Ende dieser Datei.
 
 Nach zwei gescheiterten Reparaturen: Geh zurück auf Deinen letzten Commit. Das verwirft alles
-seitdem, im ganzen Workspace: die Reparaturen und mit ihnen die neue Story und die Zeile, die
-Du ins Übergabedokument geschrieben hast. Sieh zuerst nach, was verschwinden würde:
+seitdem, im ganzen Workspace: die Reparaturen und mit ihnen die neue Story und den Eintrag, den
+Du in die Entscheidungsdatei geschrieben hast. Sieh zuerst nach, was verschwinden würde:
 
 ```shell
 git status --short
@@ -680,46 +663,45 @@ lesbar ist.
 **Hängst Du fest?** Sieh in `prompt-rubrik.md` nach und im Abschnitt „Wenn Du festhängst“ am
 Ende dieser Datei.
 
-## Block 04: das Übergabedokument auflösen
+## Block 04: Entscheidungen festhalten und committen
 
-Das Übergabedokument war ein Auftrag. Der Auftrag ist erledigt, und was er enthielt, muss
-jetzt dort stehen, wo es nicht veraltet: im Test, im Master, im Code.
+Die Entscheidungsdatei bleibt. Sie muss am Ende nur vollständig sein und mit der Komponente in
+die Versionsverwaltung wandern, damit in Monaten noch steht, woher eine Entscheidung kam
+und warum.
 
-### Karte: das Übergabedokument auflösen
+### Karte: Entscheidungen festhalten und committen
 
-**Ziel.** Jede Zeile des Dokuments steht an einem dauerhaften Ort, und die Datei
-`handoff/<Name>.md` ist gelöscht (oder ihr Text ist zur PR-Beschreibung geworden).
+**Ziel.** Jede offene Frage ist beantwortet oder bewusst offen gelassen, und die Datei
+`<Name>.decisions.md` ist zusammen mit der Komponente committet.
 
 **Material.**
 
-- Das Übergabedokument und die Komponente mit ihren Stories.
-- Das Component Set in Figma, die JSDoc der Komponente, die Story-Parameter.
-- figma-console-mcp, mit dem der Agent die Beschreibung des Masters schreibt.
+- Die Entscheidungsdatei und die Komponente mit ihren Stories.
+- `git status` und `git log`.
 
 **Rahmen.**
 
-- Sicherheitsregel: Figma wird nur in Deinem Duplikat geändert, nie im Original, und nur
-  durch den Agenten.
-- Gelöscht wird erst, wenn keine Zeile mehr nur im Dokument steht.
+- Alte Einträge werden nicht bearbeitet und nicht gelöscht. Was sich geändert hat, ist ein
+  neuer Eintrag.
+- Eine Frage, die offen bleibt, steht weiter unter **Offene Fragen**, mit einem Satz, warum.
+- Die Datei enthält nichts, was Figma, der Code oder ein Test schon trägt.
 
-**Fertig, wenn** jede Zeile **Verhalten** eine `play`-Funktion hat (Du hast es gezählt),
-„Bewusst draußen“ in der Figma-Beschreibung des Masters und in der JSDoc der Komponente steht,
-jede **Bewusste Abweichung** mit ihrem Grund in den Story-Parametern oder in der
-PR-Beschreibung steht und die Datei weg ist: Im Dokument ist nichts mehr übrig, was nicht
-an einem dauerhaften Ort steht.
+**Fertig, wenn** unter **Offene Fragen** nur steht, was Du bewusst offen lässt, jeder Eintrag
+Datum, Ticket, Art, Grund und Deinen Namen trägt, und `git log` die Datei im selben Commit
+wie die Komponente zeigt.
 
 **Kür.**
 
 - Lass einen frischen Agenten (`/clear`) nur die Komponente und `docs-show` lesen und frag,
-  was er über die Grenzen der Komponente weiß. Stimmt es mit dem Dokument überein?
-- Such eine Zeile, die Du nirgends dauerhaft unterbringen kannst, und entscheide, ob sie
-  überflüssig war oder ob dem Master etwas fehlt.
+  was er über die Grenzen der Komponente weiß. Was fehlt ihm, das nur die Datei weiß?
+- Such einen Eintrag, der etwas wiederholt, das ein Test oder der Master schon trägt, und
+  entscheide, ob er ein neuer Eintrag mit Verweis werden soll oder bleiben darf.
 
 **Hängst Du fest?** Sieh in `prompt-rubrik.md` nach und im Abschnitt „Wenn Du festhängst“ am
 Ende dieser Datei.
 
-Zähl die `play`-Funktionen gegen die Verhaltenszeilen, bevor Du etwas löschst. Eine Zeile
-ohne `play` ist ein Versprechen, das niemand prüft. Wenn die PR-Beschreibung die Abweichungen
-trägt, ist der Text des Dokuments ihr Rohstoff, und das Löschen der Datei kostet nichts.
+Zähl die `play`-Funktionen gegen die Verhaltenseinträge, bevor Du committest. Ein Eintrag
+ohne `play` ist ein Versprechen, das niemand prüft. Die Datei gehört in denselben Commit wie
+die Komponente: So bleibt der Grund einer Entscheidung beim Code, der sie umsetzt.
 
 {{STUCK}}
