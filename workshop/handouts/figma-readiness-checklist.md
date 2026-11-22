@@ -1,56 +1,58 @@
-# Is your Figma file ready?
+# Ist Deine Figma-Datei bereit?
 
-In the room, once: Part A for the Atelier master you just linted. On your own file: homework. Tick what holds. Part A per master, Part B once per system.
+Im Raum, einmal: Teil A für den Frame „Settings / Seite“ (Seite Workshop-Templates), den Du gerade gelintet hast. An Deiner eigenen Datei: Hausaufgabe. Hake ab, was zutrifft. Teil A pro Master oder Frame, Teil B einmal pro System.
 
-Master / file checked: ______________________________
+Die Frage hinter jeder Zeile: Wo müsste ein Agent hier raten? Was nicht zutrifft, schreibst Du mit der Ebene daneben.
 
-## Part A: one master
+Frame / Master / Datei geprüft: ______________________________
 
-- [ ] Colour, spacing and radius are bound to variables
-- [ ] Every frame with children uses Auto Layout
-- [ ] Variables are scoped, not “all scopes”
-- [ ] Each variable’s code name is recoverable
-- [ ] Each variable says what it is for
-- [ ] No default layer names in the component’s own tree
-- [ ] Layer names match across variants
-- [ ] The master has a structured description
-- [ ] Variants and states are complete and drawn on the right axis
-- [ ] Content decisions are recorded as properties, or a reason is given
-- [ ] The accessibility audit ran, and you read how it classified the component
+## Teil A: ein Frame oder Master
 
-## Part B: the system
+- [ ] Farbe, Abstand und Radius sind an Variablen gebunden
+- [ ] Jeder Frame mit Kindern nutzt Auto Layout
+- [ ] Variablen haben einen Scope und stehen nicht auf „alle Scopes“
+- [ ] Zu jeder Variablen ist ein Code-Name auffindbar
+- [ ] Jede Variable sagt in ihrer Beschreibung, wofür sie da ist
+- [ ] Keine Standardnamen wie „Frame 12“ im Baum
+- [ ] Gleiche Ebenen heißen in allen Varianten gleich
+- [ ] Der Master hat eine strukturierte Beschreibung (Zweck, Verwendung, Barrierefreiheit)
+- [ ] Varianten und Zustände sind vollständig und auf der richtigen Achse gezeichnet
+- [ ] Entscheidungen zum Inhalt sind als Properties festgehalten, oder es steht ein Grund daneben
+- [ ] Der Barrierefreiheits-Audit lief, und Du hast gelesen, wie er die Komponente eingeordnet hat
 
-### Complete
+## Teil B: das System
 
-- [ ] Every component you ship exists as a master
-- [ ] Colour, spacing and type are named tokens on both sides
+### Vollständig
 
-### Sound
+- [ ] Jede Komponente, die Ihr ausliefert, gibt es als Master
+- [ ] Farbe, Abstand und Schrift sind auf beiden Seiten benannte Tokens
 
-- [ ] Colour pairs meet contrast, components pass an automated check
+### Belastbar
 
-### Synchronized
+- [ ] Farbpaare erreichen den Kontrast, und Komponenten bestehen eine automatische Prüfung
 
-- [ ] Each master maps to a code component with the same name and values
-- [ ] A rendered component looks like its master
-- [ ] Component documentation is generated from code
+### Synchron
 
-### Extensible
+- [ ] Jeder Master gehört zu einer Code-Komponente mit demselben Namen und denselben Werten
+- [ ] Eine gerenderte Komponente sieht aus wie ihr Master
+- [ ] Die Dokumentation der Komponenten entsteht aus dem Code
 
-- [ ] There is a written way to change the system
-- [ ] You know who uses what, and feedback arrives
+### Erweiterbar
 
-### AI-ready
+- [ ] Es gibt einen schriftlichen Weg, das System zu ändern
+- [ ] Ihr wisst, wer was nutzt, und Rückmeldungen kommen an
 
-- [ ] Each component has machine-readable purpose, usage and an accessibility note in code
-- [ ] An agent can look up exact props and variants without reading source
+### Für Agenten lesbar
 
-## The check prompt
+- [ ] Jede Komponente hat im Code Zweck, Verwendung und einen Hinweis zur Barrierefreiheit, maschinenlesbar
+- [ ] Ein Agent findet genaue Props und Varianten, ohne den Quelltext zu lesen
 
-For Part A, with figma-console-mcp connected to your file (a third-party tool). Start the agent first, then select the master: a selection made before the agent was running is not seen.
+## Der Prüf-Prompt
 
-> Run figma_lint_design on the node I have selected with only the rules hardcoded-color, default-name and detached-component. Return the findings as a list: layer, rule, message. Change nothing in the file.
+Für Teil A, mit figma-console-mcp an Deiner Datei (ein Werkzeug von Dritten). Starte zuerst den Agenten, wähle dann den Frame aus: Eine Auswahl von vor dem Start sieht er nicht.
 
-Sort each finding: real or false alarm. The three rules see raw colours, default layer names and detached instances, nothing else on this page.
+> Führe figma_lint_design auf dem Node aus, den ich ausgewählt habe, nur mit den Regeln hardcoded-color, default-name und detached-component. Gib die Befunde als Liste zurück: Ebene, Regel, Meldung. Ändere nichts in der Datei.
 
-The finding I fix first: ______________________________
+Ordne jeden Befund ein: echt oder Fehlalarm. Die drei Regeln sehen rohe Farben, Standardnamen und gelöste Instanzen, sonst nichts auf dieser Seite.
+
+Der Befund, den ich zuerst behebe: ______________________________

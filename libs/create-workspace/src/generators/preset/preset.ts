@@ -111,7 +111,7 @@ const COURSE_SCAFFOLD: Record<
     file: 'workshop-angular/src/app/components/team-directory.component.ts',
     css: 'workshop-angular/src/app/components/team-directory.component.css',
     mount:
-      'TeamDirectoryComponent in das imports-Array in workshop-angular/src/app/app.ts aufnehmen und in app.html die Komponente, die jetzt dort steht (nach Block 02 <app-settings-card>, vorher <app-nx-welcome>), durch <app-team-directory> ersetzen',
+      'TeamDirectoryComponent in das imports-Array in workshop-angular/src/app/app.ts aufnehmen und in app.html die Komponente, die jetzt dort steht (nach Block 02 die Settings-Seite, vorher <app-nx-welcome>), durch <app-team-directory> ersetzen',
     lint: 'In Angular führt `npm run lint` zusätzlich zwei Atelier-Template-Regeln aus: Ein `<button atl-button>` nur mit Icon braucht einen zugänglichen Namen, und eine Unterkomponente wie `atl-option` muss in ihrer Elternkomponente (`atl-select`) stehen. Die Prüfung der Elternkomponente deckt eine feste Liste von Teilen ab (select, tabs, accordion, dialog, drawer, menu und einige mehr), die Tabellenteile gehören nicht dazu: `atl-th` oder `atl-tr` außerhalb von `atl-table` besteht sie.',
   },
   react: {
@@ -120,7 +120,7 @@ const COURSE_SCAFFOLD: Record<
     file: 'workshop-react/src/components/TeamDirectory.tsx',
     css: 'workshop-react/src/components/TeamDirectory.css',
     mount:
-      'TeamDirectory in workshop-react/src/app/app.tsx importieren, die Komponente, die jetzt dort steht (nach Block 02 die Settings Card, vorher der Platzhalter <NxWelcome />), dadurch ersetzen und den nun unbenutzten Import entfernen (ein unbenutzter Import lässt npm run lint fehlschlagen)',
+      'TeamDirectory in workshop-react/src/app/app.tsx importieren, die Komponente, die jetzt dort steht (nach Block 02 die Settings-Seite, vorher der Platzhalter <NxWelcome />), dadurch ersetzen und den nun unbenutzten Import entfernen (ein unbenutzter Import lässt npm run lint fehlschlagen)',
     lint: 'In React führt `npm run lint` die Framework-Regeln aus (auch jsx-a11y), nicht aber die beiden Atelier-Template-Regeln, die es nur für Angular-Templates gibt.',
   },
   vue: {
@@ -129,7 +129,7 @@ const COURSE_SCAFFOLD: Record<
     file: 'workshop-vue/src/components/TeamDirectory.vue',
     css: 'workshop-vue/src/components/TeamDirectory.css',
     mount:
-      'TeamDirectory in workshop-vue/src/views/HomeView.vue importieren, die Komponente, die jetzt dort steht (nach Block 02 die Settings Card, vorher der Platzhalter <NxWelcome />), dadurch ersetzen und den nun unbenutzten Import entfernen (ein unbenutzter Import lässt npm run lint fehlschlagen)',
+      'TeamDirectory in workshop-vue/src/views/HomeView.vue importieren, die Komponente, die jetzt dort steht (nach Block 02 die Settings-Seite, vorher der Platzhalter <NxWelcome />), dadurch ersetzen und den nun unbenutzten Import entfernen (ein unbenutzter Import lässt npm run lint fehlschlagen)',
     lint: 'Die beiden Atelier-Template-Regeln gibt es nur für Angular-Templates; in Vue führt `npm run lint` die Framework-Regeln aus.',
   },
 };
@@ -161,10 +161,10 @@ function writeCourseFolder(
       framework === 'angular'
         ? '`npm run lint`, `npm run check:stylelint`, `npm run check:format` und `npm run build`'
         : '`npm run lint`, `npm run check:stylelint` und `npm run check:format`',
-    // Without Figma there is no day2-prompts.md, so the stuck report moves
+    // Without Figma there is no day2-karten.md, so the stuck report moves
     // into rescue.md instead of being lost.
     STUCK_REF: figmaMcp
-      ? '`day2-prompts.md` (Abschnitt „Wenn Du festhängst“)'
+      ? '`day2-karten.md` (Abschnitt „Wenn Du festhängst“)'
       : '`rescue.md` (Abschnitt „Wenn Du festhängst“)',
     STUCK: figmaMcp ? fragment('stuck') : '',
     MCP_RESCUE:
@@ -195,16 +195,16 @@ function writeCourseFolder(
     },
     {
       file: 'day1-settings-card.md',
-      when: 'Tag 1, Block 02: die Aufgabenkarten für die Settings Card (generieren, einbinden, Token-Korrektur) und die Leiterstufe mit Lint und Build',
+      when: 'Tag 1, Block 02: die Aufgabenkarten für die Settings-Seite (generieren, einbinden, Token-Korrektur) und die Leiterstufe mit Lint und Build',
       figma: true,
     },
     {
-      file: 'parity-prompt.md',
-      when: 'Tag 1, Block 02 (Settings Card, nach Augenmaß verglichen) und Tag 2, Block 04 (die Karte für das Parity-Werkzeug an Deiner eigenen Komponente)',
+      file: 'parity.md',
+      when: 'Tag 1, Block 02 (Settings-Seite, nach Augenmaß verglichen) und Tag 2, Block 04 (die Karte für das Parity-Werkzeug an Deiner eigenen Komponente)',
       figma: true,
     },
     {
-      file: 'figma-linter-prompt.md',
+      file: 'figma-pruefen.md',
       when: 'Tag 1, Block 03 und Tag 2, Block 01: der Pink-Test, die Mikroübungen und die Karten für den Figma-Linter (drei Regeln, dann alle Regeln)',
       figma: true,
     },
@@ -224,7 +224,7 @@ function writeCourseFolder(
       figma: false,
     },
     {
-      file: 'day2-prompts.md',
+      file: 'day2-karten.md',
       when: 'Tag 2, Block 00 (Definition-of-Done-Übung), Block 01 (Component Set über den Agenten bauen, maschinenlesbar machen, die API-Regeln, das Übergabedokument entwerfen lassen), Block 02 (Generierung im Plan-Modus, `docs-show` an Deiner Komponente, Beides ansehen), Block 03 (was rot war, stimmt das Übergabedokument noch, Rot mit Absicht) und Block 04 (Barrierefreiheit, Dark-Check, das Übergabedokument auflösen) und was Du meldest, wenn Du festhängst',
       figma: true,
     },

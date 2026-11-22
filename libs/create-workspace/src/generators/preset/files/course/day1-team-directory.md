@@ -15,14 +15,23 @@ Ein Screen „Team directory“:
   (All roles, Engineer, Designer, Manager) und ein primärer Button "Invite member".
 - Eine Tabelle der Mitglieder: Name, Email, Role, Status. Status ist ein Badge: active ist
   success, invited ist warning, suspended ist danger.
+- Die Spalte Name lässt sich sortieren, aufsteigend und absteigend, mit einem Klick auf den
+  Spaltenkopf.
 - Pagination unter der Tabelle, 5 Zeilen pro Seite.
+- Jede Zeile hat die Aktion „Rolle ändern“ in einem Menü (Engineer, Designer, Manager). Die
+  neue Rolle steht sofort in der Zeile und zählt für den Rollenfilter.
+- Ein Klick auf eine Zeile öffnet eine Detailansicht als Drawer mit Name, E-Mail, Rolle und
+  Status. Schließt Du den Drawer, liegt der Fokus wieder auf der Zeile.
+- Jede Zeile hat eine Checkbox. Der Button „Entfernen“ löscht die gewählten Mitglieder aus
+  der Liste und ist deaktiviert, solange nichts gewählt ist.
 - Die Suche grenzt nach Name oder E-Mail ein, der Rollen-Select nach Rolle, beide zusammen.
   Ein Filterwechsel geht zurück auf Seite 1. Ohne Treffer zeigt die Tabelle ihren eigenen
-  Leerzustand.
+  Leerzustand, und der bietet die Aktion „Filter zurücksetzen“.
 - Daten: ein fest einprogrammiertes Array mit 12 Mitgliedern in der Komponente. Kein HTTP.
 
 Beteiligte Komponenten: AtlInput (Suche), AtlSelect (Rollenfilter), AtlButton `primary`
-(Invite member), AtlTable, AtlBadge (eins pro Status), AtlPagination.
+(Invite member), AtlTable mit sortierbarem Spaltenkopf, AtlBadge (eins pro Status),
+AtlPagination, AtlMenu (Rolle ändern), AtlDrawer (Detailansicht), AtlCheckbox (Auswahl).
 
 ## Die vier Regeln
 
@@ -54,14 +63,15 @@ ihn bei Regel 1 neu anfangen.
 ### Karte: den Screen bauen
 
 **Ziel.** Der Screen „Team directory“ aus dem Brief läuft in der App, ersetzt die
-Settings Card (oder die Willkommensseite, falls Du Block 02 nicht gemacht hast) und verhält sich, wie der Brief es sagt.
+Settings-Seite (oder die Willkommensseite, falls Du Block 02 nicht gemacht hast) und verhält sich, wie der Brief es sagt:
+Suche, Filter, Sortierung, Seiten, Rolle ändern, Drawer, Mehrfachauswahl und Leerzustand.
 
 **Material.**
 
 - Der Brief und die vier Regeln oben.
 - Der MCP-Server `{{MCP}}` mit `docs-list`, `docs-show` und `docs-show-story`. `docs-show`
   gibt nur für manche Stories den vollen Code aus und listet die übrigen nur mit Namen
-  (Sortable, Empty State): Wer eine davon braucht, ruft `docs-show-story` mit ihrer ID auf.
+  (Sortable, Selectable, Empty State): Wer eine davon braucht, ruft `docs-show-story` mit ihrer ID auf.
 - Die Zieldatei {{FILE}}, die Style-Datei {{CSS}}.
 - Einbinden heißt: {{MOUNT}}.
 
@@ -80,9 +90,10 @@ hast.
 - Ergänze eine Spalte oder einen Filter, den der Brief nicht nennt, aber nur mit
   dokumentierten Props (zum Beispiel einen Status-Filter), und prüfe, dass der Leerzustand
   weiter greift.
-- Schreib zum Brief eine Zeile „Bewusst draußen“ (zum Beispiel Sortierung oder Einladen
-  speichern) und prüfe, dass der Agent sie nicht still gebaut hat.
-- Teste die Tastatur: Tab durch Toolbar und Pagination, und notiere, wo der Fokus hängt.
+- Schreib zum Brief eine Zeile „Bewusst draußen“ (zum Beispiel Einladen speichern oder
+  Rollen dauerhaft ändern) und prüfe, dass der Agent sie nicht still gebaut hat.
+- Teste die Tastatur: Tab durch Toolbar, Menü, Tabelle und Pagination, öffne und schließe den
+  Drawer, und notiere, wo der Fokus hängt.
 
 **Hängst Du fest?** Sieh in `prompt-rubrik.md` nach und in {{STUCK_REF}}.
 
@@ -167,7 +178,9 @@ gefunden hast.
 
 Such Dir drei Zeilen aus und prüfe sie selbst: `npm start`, dann benutze den Screen wie ein
 Nutzer. Tippe eine Suche ein, die nichts trifft. Kombiniere Suche und Rolle. Geh auf die
-letzte Seite, ändere dann einen Filter. Klicke auf „Invite member“.
+letzte Seite, ändere dann einen Filter. Sortiere und blättere weiter. Ändere eine Rolle,
+während der Rollenfilter gesetzt ist. Öffne den Drawer per Tastatur und schließ ihn wieder.
+Wähle Zeilen auf Seite 1, wechsle die Seite und drück „Entfernen“. Klicke auf „Invite member“.
 
 ### Karte: früh fertig, eine Story für den Screen
 
@@ -180,7 +193,7 @@ morgen nichts mehr prüft.
 
 **Rahmen.**
 
-- Die `play`-Funktion prüft Verhalten (Filter, Pagination, Leerzustand), das Du sonst von Hand durchklickst.
+- Die `play`-Funktion prüft Verhalten (Filter, Sortierung, Pagination, Leerzustand), das Du sonst von Hand durchklickst.
 
 **Fertig, wenn** `npm run check:stories` mit 0 endet und Du in der Story zeigen kannst, was
 sie prüft und was sie Dir weiter überlässt.

@@ -1,19 +1,19 @@
 Diese Stufe nutzt die Angular-Template-Regeln, die `npm run lint` in diesem Workspace
-ausführt, an der Settings Card, die Du gerade erzeugt hast. Du machst den Lauf erst sauber,
+ausführt, an der Settings-Seite, die Du gerade erzeugt hast. Du machst den Lauf erst sauber,
 dann mit Absicht kaputt: Das Werkzeug sagt es, und der Agent repariert.
 
 ### Karte: Lint und Build, erst sauber, dann mit Absicht rot
 
 **Ziel.** Du hast die Exit-Codes von `npm run lint` und `npm run build` gesehen, danach
-zwei absichtlich eingebaute Fehler an der Settings Card von lint gemeldet bekommen, sie
+zwei absichtlich eingebaute Fehler an der Settings-Seite von lint gemeldet bekommen, sie
 reparieren lassen und wieder entfernt. Am Ende sind beide Befehle grün.
 
-**Material.** Die Settings Card aus diesem Block, `npm run lint`, `npm run build`, die
+**Material.** Die Settings-Seite aus diesem Block, `npm run lint`, `npm run build`, die
 Ausgabe von lint.
 
 **Rahmen.**
 
-- Eingebaut werden genau diese zwei Fehler in die Settings Card: ein `<img src="/avatar.png">` ohne `alt` und ein `<div (click)="save()">Save</div>`. Repariert wird erst, nachdem lint sie gemeldet hat.
+- Eingebaut werden genau diese zwei Fehler in die Settings-Seite: ein `<img src="/avatar.png">` ohne `alt` und ein `<div (click)="save()">Save</div>`. Repariert wird erst, nachdem lint sie gemeldet hat.
 - Am Ende sind beide Fehler wieder entfernt, und beide Befehle enden mit Exit-Code 0.
 
 **Fertig, wenn** lint beim kaputten Lauf Exit-Code ungleich 0 und die Regel-IDs `alt-text`

@@ -75,8 +75,8 @@ below, warm run times (build 6-9 s, lint 6-7 s, stylelint 2-4 s), and one headle
   stuck seat. Participants write their own prompts and judge them against the six-check
   rubric (trainer source `/prompts#rubric`); do not give the sheet out as the thing to copy.
 - **Participants cannot open the docs site (ADR-0184).** The prompts they paste live in their
-  workspace under `course/`: `day1-team-directory.md` (§1b), `parity-prompt.md` (§1 comparison,
-  §3.3), `day2-prompts.md` (§2.1, the a11y prompt of §3.1, the four things to paste back). Where
+  workspace under `course/`: `day1-team-directory.md` (§1b), `parity.md` (§1 comparison,
+  §3.3), `day2-karten.md` (§2.1, the a11y prompt of §3.1, the four things to paste back). Where
   this sheet says "live on a page", that page is the trainer's source; the seat file is the
   participants' copy and the two can drift, so each section names the file it mirrors.
 - **Paste, don't paraphrase.** These are meant to go into a participant's live Claude
@@ -114,7 +114,7 @@ below, warm run times (build 6-9 s, lint 6-7 s, stylelint 2-4 s), and one headle
   - §1 = Day 1 Block 02 "Mini-loop: first success" (existing components only — the
     Settings Card): generation prompt and token fix-up. §1a = the same block, row 11:00 to
     11:10: ladder stage 2, the agent checks itself with lint and build. The comparison with
-    Figma is the 10-minute row after it, by eye, with no tool (`course/parity-prompt.md`, Day 1 section).
+    Figma is the 10-minute row after it, by eye, with no tool (`course/parity.md`, Day 1 section).
   - §1b = Day 1 Block 05 "A screen from Storybook, against the clock" (existing
     components only, no Figma — the Team directory screen), including the closing checks.
   - §1c = Day 1 Block 03 (ladder stage 0, 13:10 to 13:20) and Day 2 Block 01 (ladder stage 0
@@ -141,7 +141,7 @@ to its name, use the matching `--ui-*` custom property and say so where a name d
 match exactly (`border-width/default` is `--ui-border-width`; exercise test run of
 2026-11-20). Do not re-type it here — that is exactly the mistake ADR-0116 corrects
 elsewhere (a hand-copied restatement of a value that already has a live source).
-Participants paste it from the sheet; the by-eye steps are in `course/parity-prompt.md`
+Participants paste it from the sheet; the by-eye steps are in `course/parity.md`
 (Day 1 section).
 
 **When the first draft still drifts on tokens** (it can — pattern-matching models
@@ -157,7 +157,7 @@ participant this one-line fix-up rather than a full re-prompt:
 
 **The comparison with Figma (the 10-minute row after §1a), by eye.** No tool and no prompt for
 one: the running Settings Card next to the "Settings / Card" frame in Figma (node `936:2954`
-in the original file; ids differ in the duplicate). The steps are in `course/parity-prompt.md`,
+in the original file; ids differ in the duplicate). The steps are in `course/parity.md`,
 Day 1 section. (1) Write down every difference you can see: spacing, colour, type, an element
 that is missing or extra, a state; five minutes. (2) Label each one **code** (the code should
 change) or **Figma** (the frame should change); a long list: label the three largest. (3) Hand
@@ -320,7 +320,7 @@ Day 1 Block 03, 13:10 to 13:20 (10 min): two runs on the same master in the prep
 duplicate, first three rules, then every rule. Day 2 Block 01, 10:15 to 10:20 (5 min): the
 three-rule prompt on your own component set, before the handoff document; real findings
 are fixed first, false alarms are noted. Both prompts are on
-`course/figma-linter-prompt.md`. Verified headless (2026-11-20 the three-rule prompt,
+`course/figma-pruefen.md`. Verified headless (2026-11-20 the three-rule prompt,
 2026-11-21 the all-rules prompt), not yet in an interactive rehearsal. Read-only: nothing
 is changed in the file.
 
@@ -454,7 +454,7 @@ and the participants sort that list. Do not let anyone "fix" a finding in the sh
 NOT YET VERIFIED as revised (rehearsal). One step, no contract file: the participant does
 not write, open or check one. The handoff document's **"Deliberate differences"** section
 (what the code will do differently from the design on purpose, and why) goes into the
-prompt as given constraints. The same prompt is printed on the trainer's `/build-your-own`; participants have it in `course/day2-prompts.md`.
+prompt as given constraints. The same prompt is printed on the trainer's `/build-your-own`; participants have it in `course/day2-karten.md`.
 
 **Why it is short (ADR-0183).** The standing rules that hold for every component (tokens,
 composition by region, a name on every icon-only control, status visible without colour,
@@ -560,7 +560,7 @@ The open prompt below ran headless on 2026-11-20 on a generated TagChip (ten gap
 minute, exercise test run); the call and the refresh are verified headless 2026-11-18 (R-262);
 the interactive run is open in R-040. Through the local Storybook MCP (`storybook-local`), once
 the component and its stories render. Participants have both prompts in
-`course/day2-prompts.md`. The point: what would an agent that uses your component have to
+`course/day2-karten.md`. The point: what would an agent that uses your component have to
 guess? The descriptions are usually there already, because the agent wrote the JSDoc while it
 generated; a closed question ("is there a description?") finds nothing, so the question is an
 open one.
@@ -578,7 +578,7 @@ component. Then:
 > story for a snippet that would not work as shown. Do not change the component's behaviour.
 > Call `docs-show` again and show me what changed.
 
-Look at both (8 min, no prompt; the participant's steps are on `course/day2-prompts.md`,
+Look at both (8 min, no prompt; the participant's steps are on `course/day2-karten.md`,
 "Block 02: look at both": side by side, Tab once for the focus ring, the width, the shadow,
 write the differences down, do not sort or fix; R-283): demo D-3 first, about 2 minutes (the Design panel of a story,
 with the Figma embed and a PNG of the frame; the `atelier-component` skill writes both into
@@ -629,7 +629,7 @@ server from `.mcp.json`, tools and data; a hook, run without being asked), on tw
 4. Put the line back (undo) and save.
 
 Participants do not edit `CLAUDE.md` here. Their exercise (5 min), from
-`course/day2-prompts.md`:
+`course/day2-karten.md`:
 
 1. Ask: "Which commands does this workspace's Definition of Done list? Only list them."
    The answer names six.
@@ -655,7 +655,7 @@ mind on a seat: take the thing your reviews keep catching by hand.
 
 Block 02 usually ends green (exercise test run of 2026-11-20: all four briefs), so §2.2 to
 §2.4 are for the seat that is red and these three are for everyone. The prompts are in
-`course/day2-prompts.md` (Block 03) and are not repeated here; pasted in this order. The
+`course/day2-karten.md` (Block 03) and are not repeated here; pasted in this order. The
 state to go back to is the commit that closed Block 02 (`day 2 block 02: green`); a second
 commit (`day 2 block 03: corrected`) comes before "red on purpose", so that the undo rule
 cannot take the corrected handoff document with it.
@@ -697,7 +697,7 @@ expectation?
 
 ### 3.1 Three-step a11y audit prompt
 
-Participants have this prompt in `course/day2-prompts.md`.
+Participants have this prompt in `course/day2-karten.md`.
 
 > Run the accessibility check on `<ComponentName>`, in order, and report each step's result
 > before moving to the next:
@@ -726,7 +726,7 @@ the score; a clean audit says what it checked, not that the component is accessi
 
 ### 3.2 Dark-mode token audit prompt
 
-Participants have this prompt in `course/day2-prompts.md`.
+Participants have this prompt in `course/day2-karten.md`.
 
 > Switch the theme control in Storybook's toolbar to dark (addon-themes, it sets
 > `data-theme="dark"`; the backgrounds control only recolours the canvas and switches
@@ -746,7 +746,7 @@ rule, ADR-0159, and is removed.)
 
 ### 3.3 Parity prompt for your own component (participants)
 
-Day 2 Block 04, parity row 15:30 to 15:40 (10 min). Participants paste it from `course/parity-prompt.md`. It is the tool for the Day 1 by-eye comparison
+Day 2 Block 04, parity row 15:30 to 15:40 (10 min). Participants paste it from `course/parity.md`. It is the tool for the Day 1 by-eye comparison
 prompt; the node id comes from the participant's handoff document. The prompt completes (79 s, 14 turns,
 no writes): verified headless 2026-11-18 (R-262); the interactive run is open in R-040. The report is only a list here: the **sorting row** (15:40 to
 16:00) labels each difference and fixes the code ones.

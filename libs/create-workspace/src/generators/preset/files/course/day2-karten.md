@@ -5,8 +5,8 @@ Verwendet in Tag 2, Block 00 (die Definition-of-Done-Übung), Block 01 (baue Dei
 Übergabedokuments), Block 02 (Generierung mit
 Plan-Modus, `docs-show` an Deiner eigenen Komponente, dann Beides ansehen), Block 03 (was rot
 war, stimmt das Übergabedokument noch, Rot mit Absicht) und Block 04 (Barrierefreiheit, der
-Dark-Check und das Auflösen des Übergabedokuments). Die Karte für die Parity aus Block 04 steht in `parity-prompt.md`, die für den
-Linter in `figma-linter-prompt.md`. Ab Block 02 ist Dein Übergabedokument der feste Bezugspunkt für
+Dark-Check und das Auflösen des Übergabedokuments). Die Karte für die Parity aus Block 04 steht in `parity.md`, die für den
+Linter in `figma-pruefen.md`. Ab Block 02 ist Dein Übergabedokument der feste Bezugspunkt für
 diese Karten (ein Beispiel steht in `handoff-example.md`).
 
 Die Prompts schreibst Du selbst, in Deinen Worten. Jede Karte nennt das Ziel, das Material und
@@ -162,7 +162,7 @@ behalte ihn und notiere ihn als Kandidaten für „Bewusste Abweichungen“. Ver
 vorherigen: Ist es noch dasselbe Set?
 
 Als Nächstes läuft der Figma-Linter über Dein eigenes Set: Die Karte steht in
-`figma-linter-prompt.md`. Kommt er mit 0 Befunden zurück, ist das Set damit nicht sauber: Der
+`figma-pruefen.md`. Kommt er mit 0 Befunden zurück, ist das Set damit nicht sauber: Der
 Linter prüft nur seine Regeln. Öffne den Master und sieh nach, was sie nicht sehen.
 
 ## Block 01: die API-Regeln, bevor Du einen Prop-Namen schreibst

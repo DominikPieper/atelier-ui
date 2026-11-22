@@ -168,6 +168,10 @@ Zusätzlich zur gemeinsamen Messlatte in [`README.md`](README.md):
 - Die zwei Zustände im Umfang sind `open` und `closing`, und die Beschreibung nennt die vier
   Datenzustände, die Du nicht gebaut hast.
 
+### Offene Frage für Dein Übergabedokument
+
+Der Brief nimmt das Stapeln und die Warteschlange aus dem Umfang, sagt aber nicht, was passiert, wenn derselbe Toast ausgelöst wird, während der erste noch sichtbar ist. Erscheint ein zweiter, läuft der Timer des ersten neu an, oder passiert nichts? Entscheide es im Übergabedokument und begründe es mit dem, was ein Nutzer davon hat.
+
 ---
 
 **Bevor Du promptest:** Lass den Agenten das Übergabedokument entwerfen und entscheide Umfang, Verhalten und Bewusste Abweichungen selbst. Ein ausgefülltes Beispiel (zum Toast-Brief) steht in `../handoff-example.md`.

@@ -271,7 +271,7 @@ src="/avatar.png">` without `alt` and a `<div (click)="save()">Save</div>` in th
   `check:contracts` and no `check:stories` in this block; `check:contracts` is not part of the
   participant path (ADR-0180).
 - **STOP — comparison with Figma, by eye (11:10–11:20, 10 minutes).** No tool: put the
-  running Settings Card next to the Figma frame (`course/parity-prompt.md`, Day 1 section),
+  running Settings Card next to the Figma frame (`course/parity.md`, Day 1 section),
   write down every difference you can see (five minutes), and label each **code or Figma**
   (two labels only; "kept on purpose" arrives on Day 2). A long list: label the three
   largest. Hand the code ones back to the agent. A difference that fits neither is parked
@@ -295,7 +295,7 @@ added and one frame uses Auto Layout. The checklist for your own file is a hando
 - After lunch (13:00–13:10): one sentence on what the tour showed, then run the **pink test** on
   a master (`/tokens#pink-test`) and say what it showed.
 - **STOP — ladder stage 0, the Figma linter (13:10–13:20, 10 minutes, golden prompts §1c).**
-  Two runs, both prompts on `course/figma-linter-prompt.md`: the agent runs
+  Two runs, both prompts on `course/figma-pruefen.md`: the agent runs
   `figma_lint_design` with the three rules `hardcoded-color`, `default-name`,
   `detached-component` on `Inputs/AtlButton` (node `129:20`) in the duplicate, read-only, and
   you sort each line real / false alarm; then the same master with every rule, grouped by
@@ -418,13 +418,13 @@ _Done when:_ a master plus a filled handoff document, including its deliberate d
   Variant Matrix / Scaffold). Nothing is drawn or edited by hand in Figma (ADR-0189): the
   agent copies the starter and builds.
 - 5 min open the duplicate, 20 min build through the agent from the starter frame (the build
-  prompt on `course/day2-prompts.md`, then look, compare with the brief and steer with one
+  prompt on `course/day2-karten.md`, then look, compare with the brief and steer with one
   change per prompt), 20 min MCP structuring (component properties, a11y audits), 5 min
   ladder stage 0 (the Figma linter, the same prompt as Day 1 Block 03, on your own component
   set: fix the real findings, note the false alarms), 15 min LLM-friendly API rules on your
   own component (about 5 min on the four rules, about 10 on the short exercise: list each
   property with its name and values, check against the four rules with the prompt on
-  `course/day2-prompts.md`, which renames nothing; then decide per line: have the agent rename it
+  `course/day2-karten.md`, which renames nothing; then decide per line: have the agent rename it
   (the rename prompt under it) or keep the brief's name and note the reason for the handoff; before the handoff: it fixes
   the prop names), 25 min handoff with the recap question closing it. The MCP structuring
   has its prompt on the same sheet ("make your component set machine-readable"). Target: two
@@ -483,7 +483,7 @@ property.
   on one green seat or the trainer machine: a story with the Design panel open, two entries,
   the Figma frame as embed and a PNG of the frame (golden prompts §2.5). Then the running
   stories next to the Figma component, every variant and state, differences written down as a
-  list (the four steps are on `course/day2-prompts.md`, "Block 02: look at both"; log what
+  list (the four steps are on `course/day2-karten.md`, "Block 02: look at both"; log what
   the eye found that no check had reported). Rehearsal check 10 (UNVERIFIED): whether the embed loads for a private duplicate in the
   seat's browser; the PNG is the fallback.
 - No `figma:snapshot`, no `check:contracts`, no finding codes in this block. The
@@ -505,7 +505,7 @@ the reason stated.
   generation prompt, belongs to Block 02). Note which
   correction prompt got used and on which failure.
 - On a seat that is already green at 13:30 (headless 2026-11-20: four of four briefs), the
-  rows are filled by the prompts under "Block 03" in `course/day2-prompts.md`
+  rows are filled by the prompts under "Block 03" in `course/day2-karten.md`
   (golden prompts §2.7): "What was red on the way" (with the two git commands that check
   the agent's list; it needs the Block 02 session, kept open over lunch or resumed with
   `claude --continue`), "Is the handoff document still true?" (two prompts: the list, then

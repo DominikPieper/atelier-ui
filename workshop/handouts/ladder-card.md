@@ -1,23 +1,23 @@
-# The ladder: what the agent checks itself with
+# Fünf Werkzeuge: Der Agent prüft seine Arbeit selbst
 
-Five tools, in the order the course meets them. Each one catches something the one below it cannot see.
+Jedes Werkzeug sieht etwas anderes. Was eines nicht sieht, prüfst Du selbst, oder die nächste Stufe fängt es.
 
-| Stage | Tool                                           | Catches                                                          | Does not see                                                                 | In the course                  |
-| ----- | ---------------------------------------------- | ---------------------------------------------------------------- | ---------------------------------------------------------------------------- | ------------------------------ |
-| 0     | Figma linter                                   | raw colours, default layer names, detached instances             | whether the design is right; spacing and radius                              | Day 1 Block 03, Day 2 Block 01 |
-| 1     | Compiler (`npm run build`)                     | an invented value, a binding to an input that does not exist     | an invented static attribute (`shadow="lg"`), an invented event              | Day 1 Block 04                 |
-| 2     | ESLint (`npm run lint`)                        | missing `alt`, click without keyboard, not focusable             | a raw `<button>` where a library component exists; meaning (`alt=""` passes) | Day 1 Block 02                 |
-| 3     | Stylelint (`npm run check:stylelint`)          | a raw colour in a `.css` file, a token bypass                    | inline `style=`, a `styles:` array, named colours, `oklch()`                 | Demo D-1, Day 1 Block 05       |
-| 4     | Story tests with axe (`npm run check:stories`) | a story that stops rendering, a failing `play`, an axe violation | anything without a story; dark mode; a keyboard path no `play` walks         | Day 1 Block 04, Day 2 Block 03 |
+| Stufe | Werkzeug                                      | Fängt                                                                                         | Sieht nicht                                                                                                |
+| ----- | --------------------------------------------- | --------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------- |
+| 0     | Figma-Linter                                  | feste Farben, Standardnamen, gelöste Instanzen                                                | ob der Entwurf richtig ist; Abstand und Radius                                                             |
+| 1     | Compiler, strict (`npm run build`)            | falsche Werte für Inputs, ein Binding auf einen Input, den es nicht gibt                      | erfundene Props als statisches Attribut (`shadow="lg"`), ein erfundenes Event                              |
+| 2     | ESLint (`npm run lint`)                       | Bild ohne `alt`, klickbares `div`, nicht fokussierbar                                         | ein rohes `<button>`, wo es eine Bibliothekskomponente gibt; ob der alt-Text etwas sagt (`alt=""` besteht) |
+| 3     | Stylelint (`npm run check:stylelint`)         | Rohfarben in `.css`-Dateien, am Token vorbei                                                  | Inline-`style=`, `styles:`-Arrays, benannte Farben, `oklch()`                                              |
+| 4     | Story-Tests mit axe (`npm run check:stories`) | Zustände, die nicht rendern, eine fehlschlagende `play`-Funktion, Barrierefreiheit in Stories | alles ohne Story; Dark Mode; Tastaturwege, die keine `play`-Funktion geht                                  |
 
-**Break it on purpose. The tool says so. The agent repairs.**
+**Absichtlich kaputt machen. Das Werkzeug meldet es. Der Agent repariert.**
 
-The prompt that drives each stage:
+Der Prompt, der jede Stufe antreibt:
 
-> Run `<command>`. Report every exit code. If one is not 0, read the output (the full log if the summary has no error text), fix it and run it again.
+> Führe `<Befehl>` aus. Melde jeden Exit-Code. Ist einer nicht 0, lies die Ausgabe (das ganze Log, wenn die Zusammenfassung keinen Fehlertext hat), repariere und führe ihn erneut aus.
 
-Three things to remember:
+Drei Dinge zum Mitnehmen:
 
-1. **Green does not mean right.** Lint demands `alt`, the agent writes `alt=""`, lint is green, and a meaningful image stays hidden from screen readers.
-2. **Each row has a blind spot.** What a tool does not see, you check yourself, or the next stage does.
-3. **None of the five catches an invented name or a hand-built element.** For that, every property needs a `docs-show` source in the receipts table.
+1. **Grün heißt nicht richtig.** Lint verlangt `alt`, der Agent schreibt `alt=""`, Lint ist grün, und ein Bild mit Aussage bleibt für Screenreader unsichtbar.
+2. **Jede Zeile hat einen blinden Fleck.** Was ein Werkzeug nicht sieht, prüfst Du selbst, oder die nächste Stufe.
+3. **Keines der fünf fängt einen erfundenen Namen oder ein von Hand gebautes Element.** Dafür braucht jede Eigenschaft eine `docs-show`-Quelle in der Belegtabelle.

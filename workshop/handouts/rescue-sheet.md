@@ -1,45 +1,46 @@
-# Seat is red: what to do
+# Rescue: Wenn Dein Platz rot ist
 
-Work top to bottom. Name which part is missing first (model access, the MCP servers, or Storybook) and fix only that one. Do not debug everything at once.
+Von oben nach unten. Benenne zuerst, welcher Teil fehlt (Modellzugang, MCP-Server oder Storybook), und behebe nur den. Nicht alles auf einmal.
 
-## 1. Model access
+## 1. Modellzugang
 
-`npm run preflight` never sends a request to a model, so it cannot see this. Prove it with a real one:
+`npm run preflight` sendet nie eine Anfrage an ein Modell und sieht das deshalb nicht. Beweise den Zugang mit einer echten Anfrage:
 
 ```
 claude -p "Reply with exactly: PREFLIGHT-OK"
 ```
 
-An authentication error: `claude auth login` and finish the browser sign-in.
+Authentifizierungsfehler: Sag dem Trainer Bescheid. Die Anmeldung läuft im Raum: `claude auth login`, dann die Anmeldung im Browser abschließen.
 
 ## 2. Preflight
 
-1. Run `npm run preflight` and read the red rows.
-2. `MCP: atelier ... is not installed`: run `npm install`, run preflight again.
-3. Start a new Claude Code session from the workspace root after the install.
+1. Führe `npm run preflight` aus und lies die roten Zeilen.
+2. `MCP: atelier ... is not installed`: `npm install`, dann Preflight noch einmal.
+3. Starte nach der Installation eine neue Claude-Code-Sitzung im Workspace-Root.
 
-## 3. The MCP servers
+## 3. Die MCP-Server
 
-1. In Claude Code type `/mcp`. Both `atelier` and `storybook-local` should be connected.
-2. A server is missing or not connected: reconnect it from `/mcp`.
-3. Do not edit `.mcp.json` and do not add a server by hand.
+1. Tippe in Claude Code `/mcp`. `atelier` und `storybook-local` sollten verbunden sein.
+2. Ein Server fehlt oder ist nicht verbunden: In `/mcp` neu verbinden.
+3. Bearbeite die `.mcp.json` nicht und füge keinen Server von Hand hinzu.
 
-## 4. Storybook is not running
+## 4. Storybook läuft nicht
 
-1. Start it: `npm run storybook`. The tools appear by themselves; if not, reconnect `storybook-local` in `/mcp`.
-2. Port taken: stop what holds it (`lsof -nP -iTCP:<port> -sTCP:LISTEN`), start Storybook again.
-3. A seat that stays red works on: the browser Storybook and `npm run check:stories` show the same result.
+1. Starte es: `npm run storybook`. Die Tools erscheinen von selbst; wenn nicht, `storybook-local` in `/mcp` neu verbinden.
+2. Port belegt: `npm run storybook` bricht ab (`--exact-port`), statt auf 6007 auszuweichen. Sieh nach, wer 6006 hält: `lsof -nP -iTCP:6006 -sTCP:LISTEN` (keine Ausgabe heißt: frei). Beende nur den veralteten Dev-Server, dann starte neu.
+3. `storybook-local` liest fest Port 6006. Prüfe vor jedem Lauf, dass dort Dein Storybook antwortet.
+4. Ein Platz, der rot bleibt, arbeitet weiter: Das Storybook im Browser und `npm run check:stories` zeigen dasselbe Ergebnis.
 
-## 5. The Figma bridge
+## 5. Die Figma-Bridge
 
-1. In Figma Desktop: Plugins, Development, run **Figma Desktop Bridge** in the course file.
-2. Tools disconnect or the plugin is out of date: close the panel, run it again.
-3. Several servers compete for the bridge: `pkill -f figma-console-mcp`, then call a Figma tool once. Claude Code starts a fresh server.
+1. In Figma Desktop: Plugins, Development, **Figma Desktop Bridge** starten und das Panel offen lassen. Tools getrennt oder Plugin veraltet: Panel schließen, Plugin neu starten.
+2. `WebSocket not connected`: Meist hat Dein Server auf einen anderen Port ausweichen müssen (9224 bis 9232), weil ein anderer figma-console-Server 9223 hält. Warte eine Minute, lass den Agenten `figma_get_status` mit `probe` aufrufen, versuche es dann noch einmal. Schließe andere Claude-Code-Sitzungen mit Figma. `figma_reconnect` hilft nicht.
+3. Mehrere Server belegen die Bridge: `pkill -f figma-console-mcp`, dann ein Figma-Tool aufrufen. Claude Code startet einen frischen Server.
 
-## Broken workspace
+## Kaputter Workspace
 
-Do not repair it. Tell the trainer right away: the machine is theirs to fix. Meanwhile pair with a neighbour (one keyboard, the neighbour drives).
+Repariere ihn nicht selbst. Sag dem Trainer sofort Bescheid: Der Rechner ist seine Sache. Setz Dich solange zu einem Nachbarn (eine Tastatur, der Nachbar steuert).
 
-**Still red: ask your neighbour, then the trainer.**
+**Noch rot: frag Deinen Nachbarn, dann den Trainer.**
 
-The same steps are in `course/rescue.md` in your workspace.
+Dieselben Schritte stehen in `course/rescue.md` in Deinem Workspace.

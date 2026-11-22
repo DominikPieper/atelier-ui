@@ -146,6 +146,10 @@ Zusätzlich zur gemeinsamen Messlatte in [`README.md`](README.md):
 - Der Status-Punkt, falls Du ihn baust, ist ein Kind des Containers und mit
   logischen Properties positioniert.
 
+### Offene Frage für Dein Übergabedokument
+
+Welche Initialen entstehen bei einem Namen aus einem Wort, bei „Ursula van der Berg“ und bei einem Namen in nicht-lateinischer Schrift? Entscheide den Algorithmus im Übergabedokument, damit der Agent ihn nicht still erfindet.
+
 ---
 
 **Bevor Du promptest:** Lass den Agenten das Übergabedokument entwerfen und entscheide Umfang, Verhalten und Bewusste Abweichungen selbst. Ein ausgefülltes Beispiel (zum Toast-Brief) steht in `../handoff-example.md`.

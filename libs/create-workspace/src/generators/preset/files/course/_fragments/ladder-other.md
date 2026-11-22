@@ -2,7 +2,7 @@
 
 **Ziel.** Du hast die Exit-Codes von `npm run lint` und `npm run build` gesehen, beide 0.
 
-**Material.** Die Settings Card aus diesem Block, `npm run lint`, `npm run build`.
+**Material.** Die Settings-Seite aus diesem Block, `npm run lint`, `npm run build`.
 
 **Rahmen.**
 

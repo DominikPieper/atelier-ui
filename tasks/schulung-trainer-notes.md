@@ -286,7 +286,7 @@ src="/avatar.png">` without `alt` and a `<div (click)="save()">Save</div>` in th
    of 2026-11-20: `Save` sits left in the generated card where Figma has it right (the
    footer's `primaryAxisAlignItems` is `MAX`), and it stayed left after the agent reported
    every listed difference fixed. "Compare again after the fix" on the sheet is for this.
-5. The comparison with Figma, by eye (11:10–11:20, 10 minutes), no tool (`course/parity-prompt.md`,
+5. The comparison with Figma, by eye (11:10–11:20, 10 minutes), no tool (`course/parity.md`,
    Day 1 section, for participants; trainer source `/tutorial`): the running Settings Card next
    to the Figma frame; everyone writes down every difference they can see (spacing, colour,
    type, a missing or extra element, a state; five minutes) and sorts each one: code or Figma;
@@ -347,7 +347,7 @@ stretch folded in (5).
    tier; fix the binding on the master, not the instance; delete the mode afterwards. Say
    the result aloud ("this token is not bound").
 5. Ladder stage 0, the Figma linter (13:10–13:20, 10 minutes, golden prompts §1c). Everyone
-   runs it twice, both prompts are on `course/figma-linter-prompt.md` (changed 2026-11-21,
+   runs it twice, both prompts are on `course/figma-pruefen.md` (changed 2026-11-21,
    R-279 follow-up: with three real findings out of three there was nothing to sort). First:
    the agent runs `figma_lint_design` on `Inputs/AtlButton` (node `129:20`) in the prepared
    duplicate with the rules `hardcoded-color`, `default-name`, `detached-component` only and
@@ -691,7 +691,7 @@ second answer lacks the command, or the agent skips the check. Skills as before:
 2. The set is built through the agent, 20 minutes (09:35–09:55). Nothing is drawn or edited
    by hand in Figma (ADR-0189, owner correction 2026-11-21): the agent writes, the
    participant chooses the brief, looks, compares with the brief and decides. The prompt is
-   on `course/day2-prompts.md`, Block 01 "build your component set through the agent" (the
+   on `course/day2-karten.md`, Block 01 "build your component set through the agent" (the
    prompt of the 2026-11-20 test run, four of four briefs; its agent time on a seat is a rehearsal item). It works on a copy
    of the starter and does in one run what the old build order did by hand: the `variant`
    axis with lowercase values as the code union will be, the states the brief names, the
@@ -709,7 +709,7 @@ second answer lacks the command, or the agent skips the check. Skills as before:
 3. MCP structuring (20 min, 09:55–10:15): `figma-workspace-architect` is the co-pilot; the
    tools that matter are `figma_add_component_property`, `figma_analyze_component_set`,
    `figma_audit_component_accessibility`, `figma_set_description`. Ask Claude for the audit
-   and read it; the bridge must stay connected. The prompt is on `course/day2-prompts.md`,
+   and read it; the bridge must stay connected. The prompt is on `course/day2-karten.md`,
    Block 01 "make your component set machine-readable" (R-277): it does not redraw the set,
    it binds, structures and describes what is selected. After a build through the agent
    this pass is a check, and a short "changed" list is its result: the build held. Run
@@ -738,7 +738,7 @@ second answer lacks the command, or the agent skips the check. Skills as before:
 6. The "LLM-friendly API rules" row (10:20–10:35, 15 minutes), directly before the handoff
    because the handoff fixes the prop names: about 5 minutes on the four rules (predictable
    naming, literal unions, composition over config, no hidden defaults), about 10 on a short
-   exercise on the own component: the prompt on `course/day2-prompts.md` (Block 01, the API
+   exercise on the own component: the prompt on `course/day2-karten.md` (Block 01, the API
    rules; R-277) lists each property with its name and values, checks the list against the
    four rules and renames nothing. The participant decides per line: have the agent rename it
    (the rename prompt is under it on the sheet), or keep the brief's name and write the
@@ -822,7 +822,7 @@ participant's `docs-show` output before and after the JSDoc edit.
    embed loads for a private duplicate in a logged-in browser on a seat; the PNG is the
    fallback that does not depend on it. Then everyone looks at their own stories next to the
    Figma component, every variant and state, and writes the differences down as a list
-   (Block 04 sorts it). One pass; the steps are on `course/day2-prompts.md`, "Block 02: look
+   (Block 04 sorts it). One pass; the steps are on `course/day2-karten.md`, "Block 02: look
    at both" (R-283): Tab once for the focus ring, the width, the shadow, do not sort or fix.
    It is the only step that finds what a green check does not measure (test run 2026-11-20:
    a focus ring touching the label, a card as wide as its container, a barely visible
@@ -854,7 +854,7 @@ gap was closed, each on ≥ 70 %.
 
 ### Block 03 · 13:30–14:30 · Iterate: prompt quality and the self-healing loop
 
-**On screen (trainer pages; the four things to paste back are on the slide and in `course/day2-prompts.md`).** `/prompts#rubric`, `/prompts#stuck`, `/design-to-code#self-healing-loop`,
+**On screen (trainer pages; the four things to paste back are on the slide and in `course/day2-karten.md`).** `/prompts#rubric`, `/prompts#stuck`, `/design-to-code#self-healing-loop`,
 a volunteer's loop.
 
 **Say.**
@@ -875,7 +875,7 @@ a volunteer's loop.
    Avatar as two components) → §2.4 with the brief's §5 row; token drift anywhere → §1
    add-on.
 3. The self-healing loop (the slides call it "Prüfschleife", verification loop, Anthropic's term; loop step 4 when it is red; owner will revisit its content): run the check → read the exit code and the **first** error →
-   paste the four things (slide, `course/day2-prompts.md`; trainer source `/prompts#stuck`) (exact error, exit code, what you expected,
+   paste the four things (slide, `course/day2-karten.md`; trainer source `/prompts#stuck`) (exact error, exit code, what you expected,
    what changed since green) → one change → rerun. Stop rule: two failed fixes → stop,
    re-diagnose from the failing story, not from the prompt.
 4. Decided 2026-10-14 (R-210): commit when the stories are green
@@ -895,7 +895,7 @@ a volunteer's loop.
    the block ends 14:30, coffee 14:30–14:45.
    What fills the rows on a green seat (exercise test run of 2026-11-20: Block 02 ended
    green on four of four briefs, so nothing waits to be corrected): the three steps under
-   "Block 03" in `course/day2-prompts.md`, golden prompts §2.7. Revise row: "What was red on
+   "Block 03" in `course/day2-karten.md`, golden prompts §2.7. Revise row: "What was red on
    the way" (the agent marks each repair "fixed" or "went around") and "Is the handoff
    document still true?". The first one needs the session that generated the component: it
    was left open over lunch, a closed one is resumed with `claude --continue` in the

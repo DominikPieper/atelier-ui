@@ -1,6 +1,6 @@
 # Parity: Vergleich mit Figma
 
-Tag 1 Block 02 vergleicht die Settings Card mit ihrem Figma-Frame nach Augenmaß. Tag 2
+Tag 1 Block 02 vergleicht die Settings-Seite mit ihrem Figma-Frame nach Augenmaß. Tag 2
 Block 04 führt `figma_check_design_parity` an Deiner eigenen Komponente aus, dafür muss die
 Figma Desktop Bridge verbunden sein. Beide Male liest Figma nur: In der Datei wird nichts
 geändert. Die Prompts schreibst Du selbst; `prompt-rubrik.md` listet die sechs Prüfungen, an
@@ -14,46 +14,52 @@ Die Schrift kann abweichen: Die App lädt Instrument Sans nicht, deshalb erschei
 Überschriften in einer Ersatzschrift, und Gewichte wirken anders als in Figma. Das ist kein
 Fehler der Komponente: Zähle den Schriftunterschied nicht als Abweichung.
 
-## Tag 1 Block 02: die Settings Card, nach Augenmaß
+## Tag 1 Block 02: die Settings-Seite, nach Augenmaß
 
 Mach es, wenn Lint und Build grün sind: Der Vergleich mit Figma ist der letzte Schritt, der
 Urteilskraft braucht, also verschwende ihn nicht an eine Komponente, die bei Lint oder Build
-rot ist. Stell die gerenderte Card neben den Frame „Settings / Card“ in Figma (Node
-`936:2954` auf der Seite Workshop-Templates der Originaldatei; in Deinem Duplikat sind die
-IDs anders).
+rot ist. Stell die gerenderte Seite neben den Frame „Settings / Seite“ in Figma (Seite
+Workshop-Templates, Section „Tag 1 · Settings-Seite“; die Node-ID liest Du in Deinem
+Duplikat ab, sie kann von der im Original abweichen).
 
 1. Schreib jede Abweichung auf, die Du sehen kannst: Abstand, Farbe, Schrift, ein fehlendes
-   oder zusätzliches Element, ein Zustand. Fünf Minuten, kein Werkzeug.
+   oder zusätzliches Element, ein Zustand, ein Text. Zehn Minuten, kein Werkzeug. Die Seite
+   hat mehrere Karten: Geh sie Gruppe für Gruppe durch, nicht als Ganzes.
 2. Ordne jede einzeln ein als **Code** (der Code soll sich ändern) oder **Figma** (der Frame
    soll sich ändern). Bei einer langen Liste: ordne die drei größten ein.
-3. Gib die Code-Abweichungen an den Agenten zurück (die Karte unten).
+3. Gib die Code-Abweichungen an den Agenten zurück (die Karte unten). Die Figma-Abweichungen
+   gehen nicht in den Prompt: Schreib sie als Notiz für das Design auf (Ebene, was Du siehst,
+   was Du erwartest). Ein Frame, der dem Brief widerspricht, wird nicht im Code nachgebaut.
 4. Vergleiche nach der Korrektur noch einmal, Punkt für Punkt. „Alles behoben“ ist der Satz
-   des Agenten, der Frame neben der Card ist die Prüfung. Eine Abweichung, die noch da ist,
-   geht mit dem genauen Wert aus Figma zurück (welche Seite, wie viele Pixel, welcher
+   des Agenten, der Frame neben der Seite ist die Prüfung. Eine Abweichung, die noch da ist,
+   geht mit dem genauen Wert aus Figma zurück (welche Karte, wie viele Pixel, welcher
    Token).
 
-### Karte: Abweichungen der Settings Card zurückgeben
+### Karte: Abweichungen der Settings-Seite zurückgeben
 
 **Ziel.** Jede Code-Abweichung aus Deiner Liste ist behoben, sonst hat sich nichts
-geändert, und Du hast Card und Frame danach noch einmal nebeneinander verglichen.
+geändert, die Figma-Abweichungen stehen als Notiz für das Design, und Du hast Seite und Frame
+danach noch einmal nebeneinander verglichen.
 
-**Material.** Deine eigene Liste der Abweichungen (Schritt 2), der Frame „Settings / Card“,
-die gerenderte Card.
+**Material.** Deine eigene Liste der Abweichungen (Schritt 2), der Frame „Settings / Seite“,
+die gerenderte Seite.
 
 **Rahmen.**
 
 - Scope-Guard: Nur die Punkte Deiner Liste, sonst ändert der Agent nichts.
 - Figma-Abweichungen und absichtliche Abweichungen gehören nicht in den Prompt.
 
-**Fertig, wenn** Du jeden Punkt der Liste im Vergleich Card gegen Frame abgehakt hast und
-keine Abweichung der Kategorie „Code“ mehr offen ist.
+**Fertig, wenn** Du jeden Punkt der Liste im Vergleich Seite gegen Frame abgehakt hast, keine
+Abweichung der Kategorie „Code“ mehr offen ist und die Notiz für das Design jede Abweichung der
+Kategorie „Figma“ nennt.
 
 **Kür.**
 
+- Vergleiche die Seite mit „Settings / Seite · Dark“ und schreib auf, was im Dark-Frame
+  anders aussieht als in der Seite.
 - Drück Tab und notiere, ob der Frame überhaupt einen Fokuszustand zeigt, mit dem Du den
-  Fokusring der Card vergleichen könntest.
-- Ordne die drei kleinsten Abweichungen ein, die Du zuerst übergangen hast.
-- Zeig die Card in einer schmaleren Breite und schreib auf, welche Abweichung dann zusätzlich
+  Fokusring der Seite vergleichen könntest.
+- Zeig die Seite in einer schmaleren Breite und schreib auf, welche Abweichung dann zusätzlich
   auftaucht.
 
 **Hängst Du fest?** Sieh in `prompt-rubrik.md` nach und in {{STUCK_REF}}.

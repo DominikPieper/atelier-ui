@@ -1,29 +1,29 @@
-# What a design system has to bring
+# Was ein Design-System mitbringen muss
 
-In the room, from memory: mark each row for your own design system, yes, partly or no. The last column is for home, where your system is open.
+Im Raum, aus dem Kopf: Kreuz pro Zeile für Dein eigenes Design-System ja, teilweise oder nein an. Die letzte Spalte ist für zu Hause, wo Dein System offen ist.
 
-| Row         | The question                                                                                                                  | "Yes" looks like                                                                                                                                          | yes / partly / no | Where to check it                 |
-| ----------- | ----------------------------------------------------------------------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ----------------- | --------------------------------- |
-| 1 Describe  | Can the agent read what each component is for and what each property does?                                                    | A description per component and per property, values printed in full, the import line in the usage example; read through the Storybook MCP (`docs-show`). | [ ] / [ ] / [ ]   | the Storybook checklist (handout) |
-| 2 Constrain | Does the API leave little to guess?                                                                                           | Literal unions instead of `string`, one variant axis instead of a pile of Boolean props, composition over configuration, a default for every property.    | [ ] / [ ] / [ ]   | your props in `docs-show`         |
-| 3 Tokens    | Is every colour, spacing and radius a named token, with the same name in Figma and in code, and do modes switch through them? | Every value resolves to a named token; the name is identical on both sides; dark mode switches through the tokens.                                        | [ ] / [ ] / [ ]   | the Figma checklist (handout)     |
-| 4 Prove     | Does every variant value and state have a story, and do the stories run as tests with axe?                                    | One story per variant value and Boolean state; every story runs as a test, accessibility check included.                                                  | [ ] / [ ] / [ ]   | the Storybook checklist (handout) |
-| 5 Enforce   | Is every rule that can be enforced in a linter or the compiler, and not in a wiki?                                            | Strict TypeScript, ESLint, stylelint and a Figma linter carry the rules.                                                                                  | [ ] / [ ] / [ ]   | your lint and compiler config     |
-| 6 Instruct  | Does the repo have its own rules file with the exact check commands, and a skill for the recurring task?                      | A rules file (`CLAUDE.md` or `AGENTS.md`) with a "Definition of Done" that lists the commands; one skill for the recurring task.                          | [ ] / [ ] / [ ]   | your rules file                   |
-| 7 Measure   | Do you know the agent is better with the design system than without?                                                          | The same prompt run with and without the context, the results compared.                                                                                   | [ ] / [ ] / [ ]   | run it once yourself              |
+| Zeile          | Die Frage                                                                                                        | So sieht „ja“ aus                                                                                                                                                             | ja / teilweise / nein | Wo prüfen                              |
+| -------------- | ---------------------------------------------------------------------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | --------------------- | -------------------------------------- |
+| 1 Beschreiben  | Weiß der Agent, wofür jede Komponente da ist und was jede Eigenschaft tut?                                       | Eine Beschreibung pro Komponente und pro Eigenschaft, Werte vollständig ausgeschrieben, die Import-Zeile im Verwendungsbeispiel; lesbar über den Storybook-MCP (`docs-show`). | [ ] / [ ] / [ ]       | Storybook-Checkliste (Handout)         |
+| 2 Einschränken | Lässt die API wenig zu raten?                                                                                    | Literal-Unions statt `string`, eine Variantenachse statt vieler Boolean-Props, Komposition statt Konfiguration, ein Default für jede Eigenschaft.                             | [ ] / [ ] / [ ]       | Deine Props in `docs-show`             |
+| 3 Tokens       | Hat jeder Wert einen Namen, in Figma und Code gleich, und schalten die Modi über diese Namen um?                 | Jede Farbe, jeder Abstand, jeder Radius ist ein benanntes Token; der Name ist auf beiden Seiten identisch; Dark Mode schaltet über die Tokens um.                             | [ ] / [ ] / [ ]       | Figma-Checkliste (Handout)             |
+| 4 Belegen      | Hat jeder Variantenwert und Zustand eine Story, und laufen die Stories als Tests mit axe?                        | Eine Story pro Variantenwert und Boolean-Zustand; jede Story läuft als Test, Barrierefreiheits-Check eingeschlossen.                                                          | [ ] / [ ] / [ ]       | Storybook-Checkliste (Handout)         |
+| 5 Durchsetzen  | Steht jede Regel, die sich erzwingen lässt, in einem Linter oder im Compiler statt in einem Wiki?                | Strict TypeScript, ESLint, Stylelint und ein Figma-Linter tragen die Regeln.                                                                                                  | [ ] / [ ] / [ ]       | Deine Lint- und Compiler-Konfiguration |
+| 6 Anleiten     | Hat das Repo eine eigene Regeldatei mit den genauen Prüfbefehlen und einen Skill für die wiederkehrende Aufgabe? | Eine Regeldatei (`CLAUDE.md` oder `AGENTS.md`) mit einer „Definition of Done“, die die Befehle nennt; ein Skill für die wiederkehrende Aufgabe.                               | [ ] / [ ] / [ ]       | Deine Regeldatei                       |
+| 7 Messen       | Weißt Du, dass der Agent mit dem Design-System besser ist als ohne?                                              | Derselbe Prompt mit und ohne Kontext ausgeführt, die Ergebnisse verglichen.                                                                                                   | [ ] / [ ] / [ ]       | einmal selbst durchführen              |
 
-**Pick the weakest row and write your next step for it.**
+**Such Dir die schwächste Zeile aus und schreib Deinen nächsten Schritt dazu.**
 
-Weakest row: ______________ My next step: ____________________________________________
+Schwächste Zeile: ______________ Mein nächster Schritt: ____________________________________________
 
-Homework: run the two checklists (Figma, Storybook) on your own system.
+Hausaufgabe: Geh die beiden Checklisten (Figma, Storybook) an Deinem eigenen System durch.
 
-Where the course taught each row:
+Wo der Kurs welche Zeile behandelt hat:
 
-1. Describe: Day 1 Blocks 04 and 05, Day 2 Block 02.
-2. Constrain: Day 2 Block 01.
-3. Tokens: Day 1 Block 03.
-4. Prove: Day 1 Block 04, Day 2 Block 03.
-5. Enforce: the ladder, Day 1 Blocks 02 and 05.
-6. Instruct: Day 2 Blocks 00 and 05.
-7. Measure: Day 1 Block 00 (the guardrail demo is the smallest form).
+1. Beschreiben: Tag 1 Block 04 und 05, Tag 2 Block 02.
+2. Einschränken: Tag 2 Block 01.
+3. Tokens: Tag 1 Block 03.
+4. Belegen: Tag 1 Block 04, Tag 2 Block 03.
+5. Durchsetzen: die fünf Werkzeuge, Tag 1 Block 02 und 05.
+6. Anleiten: Tag 2 Block 00 und 05.
+7. Messen: Tag 1 Block 00 (die Guardrail-Demo ist die kleinste Form).

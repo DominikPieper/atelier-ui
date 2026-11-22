@@ -3369,10 +3369,10 @@ describe('preset generator', () => {
     ];
     const FIGMA_FILES = [
       'day1-settings-card.md',
-      'figma-linter-prompt.md',
+      'figma-pruefen.md',
       'readiness-checkliste.md',
-      'parity-prompt.md',
-      'day2-prompts.md',
+      'parity.md',
+      'day2-karten.md',
       'handoff-example.md',
       'briefs/README.md',
       'briefs/toast.md',
@@ -3453,10 +3453,49 @@ describe('preset generator', () => {
         );
         for (const field of CARD_FIELDS) expect(day1).toContain(field);
         expect(day1).toContain('### Karte: den Screen bauen');
+        // the harder brief: sorting, row menu, drawer, multi-select, empty-state action
+        for (const need of [
+          'aufsteigend und absteigend',
+          '„Rolle ändern“',
+          'als Drawer',
+          'Fokus wieder auf der Zeile',
+          'Der Button „Entfernen“',
+          'deaktiviert, solange nichts gewählt ist',
+          '„Filter zurücksetzen“',
+          '5 Zeilen pro Seite',
+          'AtlMenu',
+          'AtlDrawer',
+          'AtlCheckbox',
+        ])
+          expect(day1).toContain(need);
+        // the planted page-size trap stays unmentioned in the brief
+        expect(day1).not.toMatch(/Story[^\n]*Zeilen pro Seite/);
+        // the renamed card files: old names are gone from every generated file
+        const generated = [
+          ...tree.children('course').map((f) => `course/${f}`),
+          ...tree.children('course/briefs').map((f) => `course/briefs/${f}`),
+        ].filter((f) => f.endsWith('.md'));
+        for (const f of generated) {
+          const body = tree.read(f, 'utf-8') ?? '';
+          for (const old of [
+            'day2-prompts',
+            'parity-prompt',
+            'figma-linter-prompt',
+          ])
+            expect({ f, old, found: body.includes(old) }).toEqual({
+              f,
+              old,
+              found: false,
+            });
+        }
+        for (const brief of ['toast', 'tagchip', 'statcard', 'avatar'])
+          expect(tree.read(`course/briefs/${brief}.md`, 'utf-8')).toContain(
+            'Offene Frage für Dein Übergabedokument',
+          );
         expect(day1).toContain('Scope-Guard');
         expect(day1).toContain(`workshop-${framework}/src/`);
         expect(day1.includes('npm run build')).toBe(framework === 'angular');
-        const day2 = tree.read('course/day2-prompts.md', 'utf-8') ?? '';
+        const day2 = tree.read('course/day2-karten.md', 'utf-8') ?? '';
         expect(day2).toContain('Shift+Tab');
         expect(day2).toContain('Wenn Du festhängst');
         // was: the prompt "docs-show für meine Komponente"; now the card names
@@ -3489,8 +3528,7 @@ describe('preset generator', () => {
           'Er ändert weder Code noch Dokument, er listet nur',
         );
         expect(day2).toContain('24 × 24');
-        const linter =
-          tree.read('course/figma-linter-prompt.md', 'utf-8') ?? '';
+        const linter = tree.read('course/figma-pruefen.md', 'utf-8') ?? '';
         // was: 'allen Regeln, ohne Filter'
         expect(linter).toContain('Alle Regeln, ohne Filter.');
         expect(linter).toContain('### Karte: der Figma-Linter, alle Regeln');
@@ -3505,7 +3543,10 @@ describe('preset generator', () => {
         );
         expect(linter).not.toContain('Shift+A');
         const card = tree.read('course/day1-settings-card.md', 'utf-8') ?? '';
-        expect(card).toContain('Settings / Card');
+        expect(card).toContain('Settings / Seite');
+        expect(card).toContain('Settings / Seite · Dark');
+        expect(card).toContain('parity.md');
+        expect(card).not.toContain('Settings / Card');
         expect(card.includes('alt-text')).toBe(framework === 'angular');
         const rescue = tree.read('course/rescue.md', 'utf-8') ?? '';
         expect(rescue).toContain(
@@ -3546,12 +3587,12 @@ describe('preset generator', () => {
               'rescue.md',
               'prompt-rubrik.md',
               'day1-settings-card.md',
-              'parity-prompt.md',
-              'figma-linter-prompt.md',
+              'parity.md',
+              'figma-pruefen.md',
               'readiness-checkliste.md',
               'day1-stories.md',
               'day1-team-directory.md',
-              'day2-prompts.md',
+              'day2-karten.md',
               'briefs/',
               'handoff-example.md',
             ]
@@ -3643,7 +3684,7 @@ describe('preset generator', () => {
           found: false,
         });
       }
-      const day2 = tree.read('course/day2-prompts.md', 'utf-8') ?? '';
+      const day2 = tree.read('course/day2-karten.md', 'utf-8') ?? '';
       expect(day2).toContain('### Karte: das Übergabedokument auflösen');
       expect(day2).toContain(
         '### Karte: das Übergabedokument entwerfen lassen und entscheiden',
@@ -3896,7 +3937,7 @@ describe('preset generator', () => {
 
       const card = tree.read('course/day1-team-directory.md', 'utf-8') ?? '';
       expect(card).toContain('nach Block 02');
-      expect(card).toMatch(/Settings Card|settings-card/);
+      expect(card).toContain('Settings-Seite');
       const rescue = tree.read('course/rescue.md', 'utf-8') ?? '';
       expect(rescue).toContain('lsof -nP -iTCP:6006 -sTCP:LISTEN');
       expect(rescue).toContain('--exact-port');

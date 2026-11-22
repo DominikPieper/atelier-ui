@@ -1,38 +1,38 @@
-# Is your Storybook ready?
+# Ist Dein Storybook bereit?
 
-Homework, on your own Storybook: nobody starts this in the room. Tick what holds. Part A per component, Part B once per setup, then the self-check.
+Hausaufgabe, an Deinem eigenen Storybook: Im Raum fängt das niemand an. Hake ab, was zutrifft. Teil A pro Komponente, Teil B einmal pro Setup, danach der Selbsttest.
 
-Component / Storybook checked: ______________________________
+Komponente / Storybook geprüft: ______________________________
 
-## Part A: one component
+## Teil A: eine Komponente
 
-- [ ] The component class has a JSDoc description
-- [ ] Every input has a JSDoc line, and defaults are real initial values
-- [ ] Closed value sets are visible in the Inputs block
-- [ ] Outputs and two-way bindings are declared with the framework’s own API
-- [ ] One story per variant value and state, driven by args
-- [ ] The three stories that come first are the ones to copy
-- [ ] Every story produces a complete snippet
-- [ ] A story that needs explaining says so, in a JSDoc comment above it
+- [ ] Die Komponentenklasse hat eine JSDoc-Beschreibung
+- [ ] Jeder Input hat eine JSDoc-Zeile, und Defaults sind echte Startwerte
+- [ ] Geschlossene Wertemengen sind im Inputs-Block sichtbar
+- [ ] Outputs und Two-Way-Bindings sind mit der eigenen API des Frameworks deklariert
+- [ ] Eine Story pro Variantenwert und Zustand, gesteuert über Args
+- [ ] Die drei ersten Stories sind die, die man kopieren soll
+- [ ] Jede Story erzeugt ein vollständiges Snippet
+- [ ] Eine Story, die eine Erklärung braucht, sagt das in einem JSDoc-Kommentar darüber
 
-## Part B: the setup
+## Teil B: das Setup
 
-- [ ] The build emits a manifest with a real docgen pass
-- [ ] An agent can reach it, without a browser
-- [ ] You have looked at the manifest report
-- [ ] Story titles are stable and carry the category
-- [ ] Guidance that is not about one component sits in a docs entry, written as Markdown
+- [ ] Der Build erzeugt ein Manifest mit einem echten Docgen-Durchlauf
+- [ ] Ein Agent erreicht es, ohne Browser
+- [ ] Du hast den Manifest-Report angesehen
+- [ ] Story-Titel sind stabil und tragen die Kategorie
+- [ ] Hinweise, die nicht zu einer einzelnen Komponente gehören, stehen in einem Docs-Eintrag, als Markdown geschrieben
 
-## Exercise: check your Storybook
+## Übung: Prüfe Dein Storybook
 
-Paste this read-only prompt into your agent, with your Storybook's MCP connected:
+Füge diesen schreibgeschützten Prompt in Deinen Agenten ein, mit dem MCP Deines Storybooks verbunden:
 
-> Storybook readiness check, read-only. Do not edit any file. Use only the ids `docs-list` returns. (1) Call `docs-list` once: report components with no description and entries under "Docs". (2) Call `docs-show` per component (more than 15: take 10, say which you skipped) and record: description and purpose in its first sentence; inputs without a description line; named-alias types whose values are not printed; events or two-way bindings missing from the block; stories listed by name only (no snippet); variant values or states without a story; whether the first three stories are default usage plus the two most typical variations. (3) Report a table: component, finding, which check it breaks, likelihood of wrong code (high, medium, low). (4) Name the one finding that would make you invent a prop or a value, and why. (5) List what you could not check. Propose or apply no fixes.
+> Storybook-Bereitschaftscheck, nur lesen. Ändere keine Datei. Nutze nur die IDs, die `docs-list` liefert. (1) Rufe `docs-list` einmal auf: nenne Komponenten ohne Beschreibung und Einträge unter „Docs“. (2) Rufe `docs-show` pro Komponente auf (bei mehr als 15: nimm 10 und sag, welche Du übersprungen hast) und halte fest: Beschreibung und Zweck im ersten Satz; Inputs ohne Beschreibungszeile; Typen mit Alias-Namen, deren Werte nicht ausgeschrieben sind; Events oder Two-Way-Bindings, die im Block fehlen; Stories, die nur mit Namen gelistet sind (ohne Snippet); Variantenwerte oder Zustände ohne Story; ob die ersten drei Stories die Standardverwendung und die zwei typischsten Variationen sind. (3) Gib eine Tabelle aus: Komponente, Befund, welche Prüfung er verletzt, Wahrscheinlichkeit von falschem Code (hoch, mittel, niedrig). (4) Nenne den einen Befund, der Dich dazu bringen würde, eine Prop oder einen Wert zu erfinden, und warum. (5) Liste auf, was Du nicht prüfen konntest. Schlage keine Korrekturen vor und wende keine an.
 
-Then:
+Danach:
 
-1. Pick one: the finding that would most likely make an agent invent a property or a value.
-2. Fix it where it is declared: the JSDoc, the type or the story.
-3. Re-run the same prompt. The finding should be gone and nothing new should have appeared.
+1. Such Dir einen aus: den Befund, der einen Agenten am ehesten eine Eigenschaft oder einen Wert erfinden ließe.
+2. Behebe ihn dort, wo er deklariert ist: im JSDoc, im Typ oder in der Story.
+3. Führe denselben Prompt noch einmal aus. Der Befund sollte weg sein, und nichts Neues sollte aufgetaucht sein.
 
-The finding I fix first: ______________________________
+Der Befund, den ich zuerst behebe: ______________________________

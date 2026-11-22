@@ -1204,3 +1204,8 @@ through the agent, and the participant selects, looks and decides. A gap in an e
 a prompt. Before a sheet gets a new way of working (by hand instead of through the agent, or the
 reverse), name it to the owner as a decision; a step I cannot run headless is the signal to stop and
 ask, not a rehearsal item to hand on.
+
+## 2026-11-22 Table cells hold plain text only in Slides decks
+
+- Pattern: d1-03-05b/c and d2-01-06 put code pills (<p> with background) inside <td>; the Slides type marks such a slide read-only ("can't be edited right now") and the PPTX export draws the table oddly. Found by the owner after the PPTX export.
+- Rule: in a Slides deck a <table> is plain text per cell. Any cell with a block, background or code pill becomes flex rows (<div style="display:flex">) instead. Scan for it before every publish: a <td> containing <p or <div.

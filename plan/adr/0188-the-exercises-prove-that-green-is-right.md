@@ -120,6 +120,8 @@ prompt and makes the rule explicit, for Day 2 Block 01 as well.
 
 **Corrected 2026-11-22.** Point 9 is reversed by ADR-0193: no exercise step has a ready-made prompt in `course/` any more. The sheets are task cards; the example prompts moved to a trainer document outside git.
 
+**Corrected 2026-11-22 (point 1).** ADR-0194 reverses "do not plant" for the material itself: the Settings page frame and the four Day 2 starters now carry deliberate errors, so the pink test, the linter and the readiness checklist have something real to find. Re-aiming the exercises at "green is not right" stays.
+
 ## Consequences
 
 - The re-aimed exercises depend on the agent's account of itself. Three test runs returned usable

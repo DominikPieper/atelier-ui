@@ -2,9 +2,9 @@
   "meta": {
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "fileName": "Atelier UI",
-    "figmaLastModified": "2026-11-19T15:20:38Z",
-    "generatedAt": "2026-11-19T16:12:16.319Z",
-    "gitSha": "a5967b83",
+    "figmaLastModified": "2026-11-20T18:58:07Z",
+    "generatedAt": "2026-11-22T16:48:01.713Z",
+    "gitSha": "f5617a2f",
     "serverVersion": "0.1.0",
     "coverage": "All 43 masters. Token/auto-layout checks sample each master's default variant.",
     "note": "Facts captured from Figma via figma-console MCP read-tools. Rules live in check-figma.js."
@@ -113,7 +113,7 @@
   ],
   "typography": {
     "fontFamilies": {
-      "Instrument Sans": 1749,
+      "Instrument Sans": 1799,
       "Instrument Serif": 1,
       "JetBrains Mono": 81
     },
@@ -278,6 +278,18 @@
       "name": "Settings / Card",
       "page": "🛠️ Workshop-Templates",
       "section": "Kata — Settings / Card"
+    },
+    {
+      "id": "1326:884",
+      "name": "Settings / Seite",
+      "page": "🛠️ Workshop-Templates",
+      "section": "Tag 1 · Settings-Seite"
+    },
+    {
+      "id": "1326:995",
+      "name": "Settings / Seite · Dark",
+      "page": "🛠️ Workshop-Templates",
+      "section": "Tag 1 · Settings-Seite"
     }
   ],
   "components": [

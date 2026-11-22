@@ -8,7 +8,7 @@ Vier Briefs, einer je Komponente, die Du an Tag 2 des Kurses wählen kannst: [`t
 _richtiger_ Ausschnitt davon. Der Rest der Matrix steht im Brief, damit die Teilnehmenden wissen, was sie zurückgestellt haben, und nicht rätseln, was sie vergessen haben.
 
 **Starte von einem Starter-Frame, nicht von einer leeren Fläche.** Jeder Brief nennt den Frame auf der Seite
-`🛠️ Workshop-Templates`, der mitkommt, wenn Du die Atelier-Datei in Deine eigenen Entwürfe dupliziert hast. Füllungen, Abstände und Radien sind dort schon an `Library Tokens`-Variablen gebunden. Kopiere ihn, benenne ihn um, baue darauf auf.
+`🛠️ Workshop-Templates`, der mitkommt, wenn Du die Atelier-Datei in Deine eigenen Entwürfe dupliziert hast. Füllungen, Abstände und Radien sind dort gebunden bis auf das, was Du findest: Die Starter tragen absichtlich ein paar ungebundene Werte. Kopiere ihn, benenne ihn um, baue darauf auf.
 
 **Verändere nie die Originaldatei.** Erst `File → Duplicate to your drafts`. Die Variablen der Atelier-Datei gelten pro Datei, Änderungen dort kollidieren global.
 
@@ -96,7 +96,7 @@ Komponente und ihren Stories, die es erst in **Block 02** (Komponente, Stories) 
 
 8. `figma_check_design_parity` auf Deinem eigenen Figma-Node gegen die generierte Komponente
    (braucht die verbundene Bridge) kommt ohne ungeklärte Abweichungen zurück, und
-   die Abweichungen, die er meldet, sind verstanden und nicht bloß abwesend. Nutze den Parity-Prompt in `../parity-prompt.md`
+   die Abweichungen, die er meldet, sind verstanden und nicht bloß abwesend. Nutze den Parity-Prompt in `../parity.md`
    (Node-ID aus Deinem Übergabedokument). Claude stellt zusammen, was der Aufruf braucht. Ein Abschnitt,
    der nicht verglichen wird, wird nicht gemeldet, ein stiller Report ist also keine saubere Komponente. Ohne die Bridge gibt es keinen Parity-Aufruf: Ordne die
    Abweichungen stattdessen von Hand ein.
