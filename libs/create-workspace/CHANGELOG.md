@@ -1,3 +1,13 @@
+## 0.4.26 (2026-11-22)
+
+### 🚀 Features
+
+- **create-workspace:** day 2 builds an own idea, with re-entry points ([4faaec98](https://github.com/DominikPieper/atelier-ui/commit/4faaec98))
+
+### ❤️ Thank You
+
+- Dominik Pieper @DominikPieper
+
 ## 0.4.25 (2026-11-22)
 
 ### 🚀 Features

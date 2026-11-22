@@ -1,3 +1,7 @@
+## 0.4.26 (2026-11-22)
+
+This was a version bump only for mcp to align it with other projects, there were no code changes.
+
 ## 0.4.25 (2026-11-22)
 
 This was a version bump only for mcp to align it with other projects, there were no code changes.
