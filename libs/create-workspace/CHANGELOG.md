@@ -1,3 +1,13 @@
+## 0.4.23 (2026-11-22)
+
+### 🚀 Features
+
+- **create-workspace:** course files in German ([712e9d39](https://github.com/DominikPieper/atelier-ui/commit/712e9d39))
+
+### ❤️ Thank You
+
+- Dominik Pieper @DominikPieper
+
 ## 0.4.22 (2026-11-21)
 
 ### 🚀 Features
