@@ -1,3 +1,17 @@
+## 0.4.24 (2026-11-22)
+
+### 🚀 Features
+
+- **create-workspace:** task cards instead of course prompts ([aaf59fb6](https://github.com/DominikPieper/atelier-ui/commit/aaf59fb6))
+
+### 🩹 Fixes
+
+- **create-workspace:** apply the 2026-11-22 exercise run findings ([f5617a2f](https://github.com/DominikPieper/atelier-ui/commit/f5617a2f))
+
+### ❤️ Thank You
+
+- Dominik Pieper @DominikPieper
+
 ## 0.4.23 (2026-11-22)
 
 ### 🚀 Features
