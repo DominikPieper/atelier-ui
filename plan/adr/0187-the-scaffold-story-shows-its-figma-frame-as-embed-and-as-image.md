@@ -48,6 +48,9 @@ open four days before the rehearsal.
 4. Without the bridge the agent writes the link entry alone and says so.
 5. The shipped `atl-button` example story carries no design parameter. Its tab says "No designs
    found".
+   **Corrected 2026-11-22** by [ADR-0197](0197-the-story-carries-the-figma-link-only.md): points 2,
+   3 and 5 are superseded. Stories carry the Figma link only (no PNG), and the example button story
+   carries the link to the AtlButton master when the seat was created with its file key.
 6. Demo D-3 is trainer-shown on Day 2 Block 02 on the participant path: generate, open the story,
    look at both.
 

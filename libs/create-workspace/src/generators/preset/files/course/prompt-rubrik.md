@@ -19,5 +19,10 @@ Rubrik sagt Dir, woran Du ihn misst.
    wiederkehrt, gehört als einfache Zeile mit ihrem Grund in `CLAUDE.md` oder den Skill.
    Etwas, das nie passieren darf, gehört in eine Lint-Regel oder einen Hook.
 
+Über allen sechs steht eine Regel: Beschreib, was erreicht sein soll und warum, nicht jeden
+Handgriff auf dem Weg dorthin. Den Weg findet der Agent selbst. Schritt-für-Schritt-Anleitungen,
+technische Vorgaben, die niemand braucht, und „MUSS“ in Großbuchstaben machen das Ergebnis
+eher schlechter. Zu vage hilft aber auch nicht: Quelle, Rahmen und Ziel gehören hinein.
+
 Hängst Du fest, melde dem Agenten die fünf Dinge aus dem Abschnitt „Wenn Du festhängst“,
 statt „es geht nicht“ zu schreiben.

@@ -2482,6 +2482,41 @@ describe('preset generator', () => {
     expect(md).not.toContain('already pointed at');
   });
 
+  it.each([
+    ['angular', 'ts'],
+    ['react', 'tsx'],
+    ['vue', 'ts'],
+  ] as const)(
+    'points the %s example story at the AtlButton master in the given figmaFile, and adds no design parameter without one',
+    async (fw, ext) => {
+      const file = `workshop-${fw}/src/atl-button.stories.${ext}`;
+      await presetGenerator(tree, {
+        name: 'ws',
+        framework: fw,
+        figmaMcp: true,
+        figmaFile: 'QMnDD8uZQPldPrlCwZZ58T',
+      });
+      expect(tree.read(file, 'utf-8')).toContain(
+        "parameters: { design: { type: 'figma', url: 'https://www.figma.com/design/QMnDD8uZQPldPrlCwZZ58T/?node-id=129-20' } },",
+      );
+    },
+  );
+
+  it.each([
+    ['angular', 'ts'],
+    ['react', 'tsx'],
+    ['vue', 'ts'],
+  ] as const)(
+    'adds no design parameter to the %s example story without a figmaFile',
+    async (fw, ext) => {
+      await presetGenerator(tree, { name: 'ws', framework: fw });
+      const story =
+        tree.read(`workshop-${fw}/src/atl-button.stories.${ext}`, 'utf-8') ??
+        '';
+      expect(story).not.toMatch(/design: \{|figma\.com/);
+    },
+  );
+
   // ─── S5a — figmaFile schema pattern ────────────────────────────────────────
   //
   // options.figmaFile is interpolated verbatim into a shell command line

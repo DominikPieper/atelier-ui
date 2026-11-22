@@ -54,6 +54,25 @@ async function withoutEslintExecutorWarning<T>(
   }
 }
 
+// AtlButton COMPONENT_SET node id: tools/figma/snapshot.json, component
+// "Inputs/AtlButton" (nodeId). Node ids survive a Figma duplicate, the file key does not.
+const ATL_BUTTON_FIGMA_NODE_ID = '129:20';
+
+// Adds `parameters.design` (addon-designs) to the example story's meta, right
+// after `tags` (present in all three framework templates). No key, no parameter.
+function withDesignParameter(story: string, figmaFile?: string): string {
+  if (!figmaFile) return story;
+  const url = `https://www.figma.com/design/${figmaFile}/?node-id=${ATL_BUTTON_FIGMA_NODE_ID.replace(':', '-')}`;
+  const anchor = "  tags: ['autodocs'],\n";
+  if (!story.includes(anchor)) {
+    throw new Error('atl-button story template lost its `tags` anchor');
+  }
+  return story.replace(
+    anchor,
+    `${anchor}  parameters: { design: { type: 'figma', url: '${url}' } },\n`,
+  );
+}
+
 function readTemplate(relativePath: string): string {
   return readFileSync(join(__dirname, 'files', relativePath), 'utf-8');
 }
@@ -966,7 +985,7 @@ export async function presetGenerator(
     '@storybook/addon-mcp': STORYBOOK_VERSION,
     '@storybook/addon-a11y': STORYBOOK_VERSION,
     // Design panel: a component with a decisions file carries its
-    // Figma link and a PNG of the frame in `parameters.design` (atelier-component skill).
+    // Figma link in `parameters.design` (atelier-component skill, ADR-0197).
     '@storybook/addon-designs': ADDON_DESIGNS_VERSION,
     '@storybook/addon-docs': STORYBOOK_VERSION,
     // Manual dark-mode toolbar: tokens.css ships dark mode but nothing let a
@@ -1637,7 +1656,10 @@ export async function presetGenerator(
   // second component showcase.
   tree.write(
     `${appName}/src/atl-button.stories.${storybookOutputExt(framework)}`,
-    readTemplate(storybookTemplateName(framework, 'atl-button.stories')),
+    withDesignParameter(
+      readTemplate(storybookTemplateName(framework, 'atl-button.stories')),
+      options.figmaFile,
+    ),
   );
 
   // Browser-mode Storybook tests (owner correction 2026-09-10 to ADR-0123 —
