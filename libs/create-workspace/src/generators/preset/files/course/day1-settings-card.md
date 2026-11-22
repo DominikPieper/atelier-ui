@@ -1,62 +1,63 @@
-# Day 1, Block 02: the Settings Card
+# Tag 1, Block 02: die Settings Card
 
-Used in Day 1 Block 02. The Figma frame "Settings / Card" becomes a {{FRAMEWORK}} component
-built from `@atelier-ui/{{FRAMEWORK_LC}}`. The Desktop Bridge must be connected (see
-`rescue.md`). Select the frame in Figma with Claude Code already running: a selection made
-before the session started is not seen. If the agent reports that nothing is selected, click
-the frame again.
+Gebraucht in Tag 1, Block 02. Der Figma-Frame „Settings / Card“ wird eine
+{{FRAMEWORK}}-Komponente, gebaut aus `@atelier-ui/{{FRAMEWORK_LC}}`. Die Bridge muss
+verbunden sein (siehe `rescue.md`). Wähle den Frame in Figma aus, während Claude Code schon
+läuft: Eine Auswahl, die vor dem Start der Session getroffen wurde, sieht der Agent nicht.
+Meldet der Agent, dass nichts ausgewählt ist, klicke den Frame noch einmal an.
 
-## Generate the component
-
-```text
-I've selected the "Settings / Card" frame in Figma.
-
-1. Use figma-console MCP (figma_get_component_for_development) to read
-   the frame's spec — I need the boundVariables and the visual reference.
-2. Use {{MCP}} MCP to look up AtlCard, AtlInput, AtlToggle,
-   and AtlButton props.
-3. Generate the {{FRAMEWORK}} component using:
-   - The Atelier UI components matched from Storybook
-   - The tokens behind the frame's boundVariables: resolve each variable to
-     its name and use the matching --ui-* custom property. Where a name
-     does not match exactly, say so instead of guessing.
-```
-
-The Figma variable name and the CSS custom property are close, not identical:
-`border-width/default` is `--ui-border-width`. A property name the agent derived from a
-Figma name is a guess until it has been looked up.
-
-## Make it visible
-
-The agent saves a component; it does not put it on the screen unless you say so. Until the
-card is mounted there is nothing to compare with Figma.
+## Die Komponente generieren
 
 ```text
-I cannot see the card anywhere. Put it into the app so I can look at it with npm start.
+Ich habe in Figma den Frame "Settings / Card" ausgewählt.
+
+1. Nutze figma-console MCP (figma_get_component_for_development), um die Spec des
+   Frames zu lesen. Ich brauche die boundVariables und die visuelle Referenz.
+2. Nutze {{MCP}} MCP, um die Props von AtlCard, AtlInput, AtlToggle
+   und AtlButton nachzuschlagen.
+3. Erzeuge die {{FRAMEWORK}}-Komponente mit:
+   - den Atelier-UI-Komponenten, die Du aus Storybook zugeordnet hast
+   - den Tokens hinter den boundVariables des Frames: Löse jede Variable zu
+     ihrem Namen auf und nutze die passende --ui-* Custom Property. Passt ein Name
+     nicht exakt, sag das, statt zu raten.
 ```
 
-## If the first draft still drifts on tokens
+Der Figma-Variablenname und die CSS Custom Property sind ähnlich, nicht identisch:
+`border-width/default` ist `--ui-border-width`. Ein Property-Name, den der Agent aus einem
+Figma-Namen abgeleitet hat, ist geraten, bis er nachgeschlagen wurde.
 
-Pattern-matching models sometimes fall back to a literal px or hex value even when told not
-to. Paste this one-line fix-up instead of a full re-prompt:
+## Sichtbar machen
+
+Der Agent speichert eine Komponente; auf den Bildschirm bringt er sie nur, wenn Du es sagst.
+Solange die Card nicht eingebunden ist, gibt es nichts, was Du mit Figma vergleichen kannst.
 
 ```text
-Re-check every inline style/CSS value you just wrote against
-var(--ui-*). AtlCard's heading in the canonical example uses
-var(--ui-font-size-lg) for size, var(--ui-color-text) for colour, and the card's
-own padding/gap are var(--ui-spacing-6) / var(--ui-spacing-4) — no literal px,
-no hex, no Tailwind class. Replace anything that isn't a --ui-* custom property with
-the matching one and tell me which line you changed.
+Ich sehe die Card nirgends. Binde sie in die App ein, damit ich sie mit npm start ansehen kann.
 ```
 
-A font weight such as `600` in a `.css` file also fails `npm run check:stylelint`; the token
-is `var(--ui-font-weight-semibold)`.
+## Wenn der erste Entwurf bei den Tokens noch abweicht
 
-## The agent checks itself (11:00 to 11:10)
+Modelle, die Muster nachahmen, fallen manchmal auf einen festen px- oder Hex-Wert zurück,
+auch wenn man es ihnen verboten hat. Füge diese Einzeiler-Korrektur ein statt eines
+kompletten neuen Prompts:
+
+```text
+Prüfe jeden Inline-Style und jeden CSS-Wert, die Du gerade geschrieben hast, noch einmal
+gegen var(--ui-*). Die Überschrift von AtlCard im kanonischen Beispiel nutzt
+var(--ui-font-size-lg) für die Größe und var(--ui-color-text) für die Farbe, und Padding
+und Gap der Card selbst sind var(--ui-spacing-6) / var(--ui-spacing-4): kein festes px,
+kein Hex, keine Tailwind-Klasse. Ersetze alles, was keine --ui-* Custom Property ist,
+durch die passende und sag mir, welche Zeile Du geändert hast.
+```
+
+Ein Font-Weight wie `600` in einer `.css`-Datei fällt ebenfalls bei `npm run check:stylelint`
+durch; das Token ist `var(--ui-font-weight-semibold)`.
+
+## Der Agent prüft sich selbst (11:00 bis 11:10)
 
 {{LADDER}}
 
-## The comparison with Figma
+## Der Vergleich mit Figma
 
-You compare by eye today; the steps are in `parity-prompt.md`. Do not do it on a component
-that fails lint or build. The parity tool comes on Day 2.
+Heute vergleichst Du nach Augenmaß; die Schritte stehen in `parity-prompt.md`. Mach das nicht
+an einer Komponente, bei der Lint oder Build fehlschlägt. Das Parity-Werkzeug kommt an Tag 2.

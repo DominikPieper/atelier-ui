@@ -1,59 +1,61 @@
-# Rescue: when your seat is red
+# Rescue: wenn Dein Platz rot ist
 
-Use this when `npm run preflight` is still red after the setup block, or a real prompt
-fails. Setup has three independent parts: the Claude Code CLI, the MCP servers and model
-access. Preflight checks the first two; model access is only proven by a real request.
+Nutze das, wenn `npm run preflight` nach dem Setup-Block noch rot ist oder ein echter
+Prompt fehlschlägt. Das Setup hat drei unabhängige Teile: die Claude Code CLI, die
+MCP-Server und den Modellzugang. Preflight prüft die ersten beiden. Der Modellzugang ist
+nur durch eine echte Anfrage bewiesen.
 
-## 1. Name what is missing
+## 1. Benenne, was fehlt
 
-Read the preflight output and decide which of the three is missing: the CLI, an MCP server
-or model access. Fix that one, not everything at once.
+Lies die Preflight-Ausgabe und entscheide, welcher der drei Teile fehlt: die CLI, ein
+MCP-Server oder der Modellzugang. Behebe genau den, nicht alles auf einmal.
 
-## 2. Model access
+## 2. Modellzugang
 
-`claude --version` and a green preflight prove only that the CLI is installed. Prove model
-access with a real request:
+`claude --version` und ein grüner Preflight beweisen nur, dass die CLI installiert ist.
+Beweise den Modellzugang mit einer echten Anfrage:
 
 ```shell
 claude -p "Reply with exactly: PREFLIGHT-OK"
 ```
 
-If it asks you to sign in or exits with an authentication error: in the course the machines
-are provisioned and the login happens in the room (`claude auth login`, then finish the
-browser sign-in). Tell the trainer.
+Verlangt sie eine Anmeldung oder endet mit einem Authentifizierungsfehler: Im Kurs sind die
+Rechner vorbereitet, und die Anmeldung läuft im Raum (`claude auth login`, dann die
+Anmeldung im Browser abschließen). Sag dem Trainer Bescheid.
 
-## 3. MCP servers
+## 3. MCP-Server
 
-Run `npm run preflight`, then start `claude` from the workspace root (the folder that holds
-`.mcp.json`) and type `/mcp`.
+Führe `npm run preflight` aus, starte dann `claude` im Workspace-Root (dem Ordner mit der
+`.mcp.json`) und tippe `/mcp`.
 
-- **No servers listed, or "Pending approval".** Claude Code was started before `.mcp.json`
-  existed, or from a different folder. Close it, start `claude` in the workspace root,
-  accept the "trust this folder" prompt and approve the project servers when asked. If you
-  declined one earlier: `claude mcp reset-project-choices`, then start `claude` again.
+- **Keine Server aufgelistet, oder „Pending approval“.** Claude Code wurde gestartet, bevor
+  die `.mcp.json` existierte, oder aus einem anderen Ordner. Schließ es, starte `claude` im
+  Workspace-Root, bestätige die Abfrage „Trust this folder“ und genehmige die
+  Projekt-Server, wenn danach gefragt wird. Hast Du einen früher abgelehnt:
+  `claude mcp reset-project-choices`, dann `claude` neu starten.
   {{MCP_RESCUE}}
-- **`storybook-local` is not connected.** Storybook is not running. Start it with
-  `npm run storybook`; the tools appear on their own. If they do not: `/mcp` and reconnect
-  `storybook-local`. If the port 6006 is taken, find the process first
-  (`lsof -nP -iTCP:6006 -sTCP:LISTEN`) and stop that one; do not kill what you have not
-  looked at.
-- Do not edit `.mcp.json` and do not add a server by hand: the entries are part of the
-  workspace. A seat that stays red works on without `storybook-local`: the browser Storybook
-  and `npm run check:stories` show the same result.
+- **`storybook-local` ist nicht verbunden.** Storybook läuft nicht. Starte es mit
+  `npm run storybook`; die Tools erscheinen von selbst. Wenn nicht: `/mcp` und
+  `storybook-local` neu verbinden. Ist der Port 6006 belegt, finde zuerst den Prozess
+  (`lsof -nP -iTCP:6006 -sTCP:LISTEN`) und beende genau den. Töte nichts, was Du Dir nicht
+  angesehen hast.
+- Bearbeite die `.mcp.json` nicht und füge keinen Server von Hand hinzu: Die Einträge sind
+  Teil des Workspace. Ein Platz, der rot bleibt, arbeitet ohne `storybook-local` weiter: Das
+  Storybook im Browser und `npm run check:stories` zeigen dasselbe Ergebnis.
 
-## 4. Storybook does not start (port in use)
+## 4. Storybook startet nicht (Port belegt)
 
-`EADDRINUSE` means a previous dev server still runs. Look at what holds the port:
-`lsof -nP -iTCP:<port> -sTCP:LISTEN`. Stop that process only if it is the stale dev server.
-The app serves on port 4200 (`npm start -- --port 4300` for another port); Storybook is
-fixed to 6006.
+`EADDRINUSE` heißt, dass noch ein früherer Dev-Server läuft. Sieh nach, was den Port hält:
+`lsof -nP -iTCP:<Port> -sTCP:LISTEN`. Beende den Prozess nur, wenn er der veraltete
+Dev-Server ist. Die App läuft auf Port 4200 (`npm start -- --port 4300` für einen anderen
+Port), Storybook ist fest auf 6006.
 {{FIGMA_RESCUE}}
 
-## Still red
+## Noch rot
 
-Do not repair a broken workspace yourself: tell the trainer, the machine is theirs to fix.
-Whoever is still red in the setup block pairs with a neighbour (one keyboard, the neighbour
-drives). Nobody starts Day 2 red: the trainer check happens at the coffee break or at lunch,
-not as homework.
+Repariere einen kaputten Workspace nicht selbst: Sag dem Trainer Bescheid, der Rechner ist
+seine Sache. Wer im Setup-Block noch rot ist, setzt sich zu einem Nachbarn (eine Tastatur,
+der Nachbar steuert). Niemand startet Tag 2 rot: Der Check durch den Trainer findet in der
+Kaffeepause oder in der Mittagspause statt, nicht als Hausaufgabe.
 
-Still red: ask your neighbour, then the trainer.
+Noch rot: frag Deinen Nachbarn, dann den Trainer.

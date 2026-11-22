@@ -1,134 +1,113 @@
-# Component briefs — Day 2
+# Komponenten-Briefs: Tag 2
 
-Four briefs, one per component you can choose on Day 2 of the course: [`toast.md`](toast.md), [`avatar.md`](avatar.md), [`tagchip.md`](tagchip.md), [`statcard.md`](statcard.md). Each one states **what a finished component owes** — its anatomy, its axes, its states and its accessibility obligations. None of them says how to draw it: that is the exercise. Toast and Avatar are canonical components; TagChip and StatCard are compositions of canonical ones, and say so on their first line.
+Vier Briefs, einer je Komponente, die Du an Tag 2 des Kurses wählen kannst: [`toast.md`](toast.md), [`avatar.md`](avatar.md), [`tagchip.md`](tagchip.md), [`statcard.md`](statcard.md). Jeder Brief legt fest, **was eine fertige Komponente schuldet**: Anatomie, Achsen, Zustände und Barrierefreiheitspflichten. Keiner sagt, wie Du sie zeichnest. Das ist die Übung. Toast und Avatar sind kanonische Komponenten. TagChip und StatCard sind Kompositionen aus kanonischen Komponenten und sagen das in der ersten Zeile.
 
-## Shared rules — true for all four
+## Gemeinsame Regeln für alle vier
 
-**Scope: two variants, and the states your brief names.** The Figma block is 90 minutes
-with participants who are new to Figma. Each brief names which two variants and which
-states are in scope and which are explicitly out: Toast, Avatar and StatCard cross their two
-variants with two states; TagChip has two variants with the remove button and no second
-state. Building the full matrix is not the goal; building a
-_correct_ slice of it is. The rest of the matrix is documented in the brief so the
-participant knows what they deferred rather than what they forgot.
+**Umfang: zwei Varianten und die Zustände, die Dein Brief nennt.** Der Figma-Block dauert 90 Minuten, und die Teilnehmenden sind neu in Figma. Jeder Brief nennt, welche zwei Varianten und welche Zustände im Umfang sind und welche bewusst draußen bleiben. Toast, Avatar und StatCard kreuzen ihre zwei Varianten mit zwei Zuständen. TagChip hat zwei Varianten mit Entfernen-Button und keinen zweiten Zustand. Das Ziel ist nicht die volle Matrix, sondern ein
+_richtiger_ Ausschnitt davon. Der Rest der Matrix steht im Brief, damit die Teilnehmenden wissen, was sie zurückgestellt haben, und nicht rätseln, was sie vergessen haben.
 
-**Start from a starter frame, not a blank canvas.** Each brief names the frame on the
-`🛠️ Workshop-Templates` page that comes across when you duplicate the Atelier file into
-your own drafts. Fills, paddings and radii there are already bound to `Library Tokens`
-variables. Copy it, rename it, build on it.
+**Starte von einem Starter-Frame, nicht von einer leeren Fläche.** Jeder Brief nennt den Frame auf der Seite
+`🛠️ Workshop-Templates`, der mitkommt, wenn Du die Atelier-Datei in Deine eigenen Entwürfe dupliziert hast. Füllungen, Abstände und Radien sind dort schon an `Library Tokens`-Variablen gebunden. Kopiere ihn, benenne ihn um, baue darauf auf.
 
-**Never mutate the original file.** `File → Duplicate to your drafts` first. The Atelier
-file's variables are file-scoped; edits there collide globally.
+**Verändere nie die Originaldatei.** Erst `File → Duplicate to your drafts`. Die Variablen der Atelier-Datei gelten pro Datei, Änderungen dort kollidieren global.
 
-**Bind tokens, do not type values.** Every fill, radius, padding and gap resolves through
-a Figma Variable in the `Library Tokens` collection — the semantic tier that mirrors the
-`--ui-*` custom properties. A hardcoded value is a Critical finding in the
-Figma review.
+**Binde Tokens, tippe keine Werte.** Jede Füllung, jeder Radius, jeder Abstand und jede Lücke läuft über eine Figma-Variable in der Collection `Library Tokens`, also der semantischen Ebene, die die `--ui-*`-Custom-Properties spiegelt. Ein fest eingetragener Wert ist im Figma-Review ein kritischer Befund.
 
-**Elevation is a CSS-only token.** `Library Tokens` carries colour, spacing, sizing
-(`control-height/*` + `row-height/*`), radius, typography, border-width and opacity
-variables — and **no shadow**. `--ui-shadow-*` exists only in `tokens.css`. A component
-whose design depends on a drop shadow (Toast, an elevated StatCard) has to state the
-shadow in the brief and in code, because Figma cannot bind it. Notice this rather than
-inventing a shadow variable.
+**Elevation ist ein reines CSS-Token.** `Library Tokens` enthält Variablen für Farbe, Abstand, Größe
+(`control-height/*` + `row-height/*`), Radius, Typografie, Rahmenbreite und Deckkraft, aber **keinen Schatten**. `--ui-shadow-*` gibt es nur in `tokens.css`. Eine Komponente, deren Design von einem Schlagschatten abhängt (Toast, eine erhöhte StatCard), muss den Schatten im Brief und im Code festhalten, weil Figma ihn nicht binden kann. Halte das fest, statt eine Schatten-Variable zu erfinden.
 
-**Two briefs share a name with the library.** `@atelier-ui/{{FRAMEWORK_LC}}` already has a toast of its own (in Angular it is exported as
-`AtlToast`) and an `AtlAvatar`, and what the Toast and Avatar briefs ask for differs from them (the
-Avatar brief's axis is `variant` where the library's says `shape`). That is known and
-wanted: you build your own component in the workshop app and do not import the library's.
-An agent that points out the collision is right; tell it which one you mean.
+**Zwei Briefs teilen einen Namen mit der Bibliothek.** `@atelier-ui/{{FRAMEWORK_LC}}` hat bereits einen eigenen Toast (in Angular als
+`AtlToast` exportiert) und einen `AtlAvatar`, und was die Briefs für Toast und Avatar verlangen, weicht davon ab (die
+Achse im Avatar-Brief heißt `variant`, in der Bibliothek `shape`). Das ist bekannt und gewollt: Du baust Deine eigene Komponente in der Workshop-App und importierst nicht die der Bibliothek.
+Wenn ein Agent auf die Kollision hinweist, hat er recht. Sag ihm, welche Du meinst.
 
-**States get a Figma axis; the code's `variant` union never does.** Figma has exactly one
-primitive for a mutually-exclusive option — a Component Property of type Variant — so a
-master that needs to _draw_ hover, focus, active or disabled has no other way to do it
-than a dedicated `state` axis, and Atelier's own library uses one routinely: `AtlButton`,
-`AtlInput`, `AtlSelect`, `AtlCheckbox`, `AtlToggle` and ten more all carry a `state` axis
-today (values such as `default`, `hover`, `focus`, `active`, plus data-flavoured ones like
-`open`, `filled`, `invalid`). **What must never happen is that axis reaching the code
-contract.** The boundary is the _component's own_ `variant` union — you declare it directly on your own
-component, with no separate spec file. It holds only structural
-values — `AtlButtonVariant = 'primary' | 'secondary' | 'outline' | 'danger'` — never a
-state; in code, hover/focus/active/disabled stay CSS pseudo-classes and `disabled`/`aria-*`
-attributes. `AtlButton`'s own master marks the boundary explicitly in its description:
-every other property line reads "→ maps to AtlButtonSpec.X"; the `state` line reads only
-"interaction state", with no arrow — nothing on the code side consumes it.
+**Zustände bekommen eine Figma-Achse, die `variant`-Union im Code nie.** Figma hat genau eine
+Primitive für eine Option, die sich gegenseitig ausschließt: eine Component Property vom Typ Variant. Ein Master, der hover, focus, active oder disabled _zeichnen_ muss, kann das nur über eine eigene `state`-Achse, und Ataliers eigene Bibliothek nutzt sie regelmäßig: `AtlButton`,
+`AtlInput`, `AtlSelect`, `AtlCheckbox`, `AtlToggle` und zehn weitere tragen heute alle eine `state`-Achse
+(Werte wie `default`, `hover`, `focus`, `active`, dazu datennahe wie
+`open`, `filled`, `invalid`). **Nie passieren darf, dass diese Achse in den Code-Vertrag gelangt.**
+Die Grenze ist die `variant`-Union der _Komponente selbst_: Du deklarierst sie direkt an Deiner eigenen
+Komponente, ohne separate Spec-Datei. Sie enthält nur strukturelle
+Werte, etwa `AtlButtonVariant = 'primary' | 'secondary' | 'outline' | 'danger'`, nie einen Zustand. Im Code bleiben hover/focus/active/disabled CSS-Pseudoklassen und `disabled`-/`aria-*`-Attribute.
+Der Master von `AtlButton` markiert die Grenze in seiner Beschreibung ausdrücklich:
+Jede andere Property-Zeile lautet „→ maps to AtlButtonSpec.X“, die `state`-Zeile nur
+„interaction state“, ohne Pfeil. Auf der Code-Seite liest sie nichts.
 
-The canonical `card` component names the failure mode this protects against
-(`variant-explosion-from-states`, severity minor): crossing a `state` axis against every
-other axis multiplies frames — 3 variants × 4 states × 2 orientations is 24+ — **not**
-that a `state` axis is forbidden. Keep it to one axis, and keep it curated rather than
-fully crossed: Atelier draws 24 of `AtlButton`'s 48 possible `variant`×`size`×`state`
-combinations, not all of them. Some masters skip the axis entirely and describe
-interaction states in prose instead — `AtlCard`, `AtlBadge`, `AtlToast` and `AtlAvatar`
-(the four components behind this workshop's own briefs) have no `state` axis, because
-their own interactive affordance, where they have one at all, sits on a nested control
-that already carries its own. Either choice is legitimate; what decides it is whether the
-component itself is the interactive element. Structural differences (severity, shape,
-elevation) are always the code's `variant`; everything else — a Figma `state` axis when
-you draw one, prose when you don't — is a property, a state, or CSS.
+Die kanonische Komponente `card` benennt den Fehlerfall, vor dem das schützt
+(`variant-explosion-from-states`, Schweregrad minor): Wer eine `state`-Achse mit jeder
+anderen Achse kreuzt, vervielfacht die Frames, 3 Varianten × 4 Zustände × 2 Ausrichtungen sind 24+. Es heißt **nicht**,
+dass eine `state`-Achse verboten ist. Halte es bei einer Achse und kuratiere sie, statt voll zu kreuzen: Atelier zeichnet 24 der 48 möglichen
+`variant`×`size`×`state`-Kombinationen von `AtlButton`, nicht alle. Manche Master lassen die Achse ganz weg und beschreiben
+Interaktionszustände in Prosa, nämlich `AtlCard`, `AtlBadge`, `AtlToast` und `AtlAvatar`
+(die vier Komponenten hinter den Briefs dieses Workshops). Sie haben keine `state`-Achse, weil ihr
+interaktives Angebot, sofern sie überhaupt eins haben, an einem verschachtelten Control hängt,
+das schon seine eigene trägt. Beide Wege sind legitim. Entscheidend ist, ob die
+Komponente selbst das interaktive Element ist. Strukturelle Unterschiede (Schweregrad, Form,
+Elevation) sind immer die `variant` im Code. Alles andere, also eine Figma-`state`-Achse, wenn
+Du eine zeichnest, Prosa, wenn nicht, ist eine Property, ein Zustand oder CSS.
 
-**Colour is never the only signal.** Every severity, status or state that a sighted user
-can see must also be available without colour — an icon, a word, or an accessible name.
+**Farbe ist nie das einzige Signal.** Jeder Schweregrad, Status und Zustand, den ein sehender Mensch
+erkennen kann, muss auch ohne Farbe verfügbar sein: als Icon, als Wort oder als zugänglicher Name.
 
-## Done when
+## Fertig, wenn
 
-The same bar for all four. It is reached in two steps, because the brief itself is only
-the Figma half of the work: items 1–4 and 7 are checkable at the end of **Day 2 Block 01**
-(Figma design and handoff document); items 5, 6 and 8 are checked against the
-component and its stories, which do not exist until **Block 02** (component, stories) and
-**Block 04** (verify). The numbering is kept across both lists because the briefs cite it.
+Dieselbe Messlatte für alle vier. Man erreicht sie in zwei Schritten, weil der Brief selbst nur
+die Figma-Hälfte der Arbeit ist: Die Punkte 1 bis 4 und 7 lassen sich am Ende von **Tag 2 Block 01**
+prüfen (Figma-Design und Übergabedokument). Die Punkte 5, 6 und 8 prüft man an der
+Komponente und ihren Stories, die es erst in **Block 02** (Komponente, Stories) und
+**Block 04** (Verifizieren) gibt. Die Nummerierung läuft über beide Listen durch, weil die Briefs sie zitieren.
 
-### Done after the Figma block (Day 2 Block 01)
+### Fertig nach dem Figma-Block (Tag 2 Block 01)
 
-1. The Figma component set carries ≥ 2 variants on a `variant` axis named exactly as the
-   code union will be (`variant`, not `Variant`; `success`, not `Success`), **and** the
-   second axis your brief's scope line names — a lifecycle pair (`open` / `closing`), a
-   data pair (`image-loaded` / `initials-fallback`), or a curated interaction pair — drawn
-   as a `state` axis. If your component is not itself the interactive element, it does not
-   get an interaction axis at all: write those states into the master's description
-   instead, per the states rule above, and the closing check reads the description.
-2. Every fill, radius, padding and gap is bound to a `Library Tokens` variable.
-3. Every frame with children uses Auto Layout.
-4. A dark-mode variant renders correctly through the collection's `Dark` mode — no
-   second component, no hardcoded value.
+1. Das Figma Component Set hat ≥ 2 Varianten auf einer `variant`-Achse, benannt genau so, wie die
+   Code-Union heißen wird (`variant`, nicht `Variant`; `success`, nicht `Success`), **und** die
+   zweite Achse, die die Umfangszeile Deines Briefs nennt: ein Lebenszyklus-Paar (`open` / `closing`), ein
+   Daten-Paar (`image-loaded` / `initials-fallback`) oder ein kuratiertes Interaktions-Paar, gezeichnet
+   als `state`-Achse. Ist Deine Komponente nicht selbst das interaktive Element, bekommt sie gar
+   keine Interaktionsachse: Schreib diese Zustände stattdessen in die Beschreibung des Masters,
+   wie in der Zustandsregel oben, und die abschließende Prüfung liest die Beschreibung.
+2. Jede Füllung, jeder Radius, jeder Abstand und jede Lücke ist an eine `Library Tokens`-Variable gebunden.
+3. Jeder Frame mit Kindern nutzt Auto Layout.
+4. Eine Dark-Mode-Variante rendert korrekt über den `Dark`-Modus der Collection, ohne
+   zweite Komponente, ohne fest eingetragenen Wert.
 
-<!-- numbering follows the full 1–8 list, which the briefs cite -->
+<!-- die Nummerierung folgt der vollständigen Liste 1–8, die die Briefs zitieren -->
 
-7. The a11y obligations tagged **(this block)** in the brief's own section are met, and
-   any blocker-severity mistakes among them are not present. Obligations tagged **(full
-   component)** describe the shipped component for later — each one depends on a state,
-   a scenario or a property this exercise's scope section puts out of scope to build, so
-   the closing check does not evaluate it; write it into the master's description instead
-   of building it.
+7. Die A11y-Pflichten, die im eigenen Abschnitt des Briefs mit **(dieser Block)** markiert sind, sind erfüllt, und
+   Fehler mit Schweregrad blocker sind nicht dabei. Pflichten mit **(volle Komponente)** beschreiben die ausgelieferte Komponente für später: Jede hängt von einem Zustand,
+   einem Szenario oder einer Property ab, die der Umfangsabschnitt dieser Übung nicht zu bauen verlangt,
+   deshalb wertet die abschließende Prüfung sie nicht aus. Schreib sie stattdessen in die Beschreibung des Masters,
+   statt sie zu bauen.
 
-### Done after the code blocks (Day 2 Blocks 02 and 04)
+### Fertig nach den Code-Blöcken (Tag 2 Block 02 und 04)
 
-5. The component's prop names and values match the Figma property names one-for-one,
-   and there is one story per variant value and per Boolean state, so the Storybook shows
-   every axis you drew.
-6. The generated story file declares `tags: ['autodocs']`. Autodocs is not on globally in
-   any of the three Storybooks (`.storybook/main.ts` sets `docs: {}` and no preview file
-   sets a global tag) — every existing story opts in per file. A generated story usually
-   inherits the tag from the file it was modelled on; usually is not always, and without it
-   the component renders a Canvas and no Docs tab, failing the closing check for a reason
-   that has nothing to do with the participant's component.
+5. Die Prop-Namen und -Werte der Komponente stimmen eins zu eins mit den Figma-Property-Namen überein,
+   und es gibt je eine Story pro Variantenwert und pro Boolean-Zustand, sodass Storybook
+   jede Achse zeigt, die Du gezeichnet hast.
+6. Die generierte Story-Datei deklariert `tags: ['autodocs']`. Autodocs ist in keinem der
+   drei Storybooks global aktiv (`.storybook/main.ts` setzt `docs: {}`, und keine Preview-Datei
+   setzt ein globales Tag), jede bestehende Story meldet sich pro Datei an. Eine generierte Story
+   erbt das Tag meist von der Datei, nach der sie gebaut wurde, aber meist ist nicht immer. Fehlt es,
+   rendert die Komponente einen Canvas und keinen Docs-Tab, und die abschließende Prüfung schlägt aus einem Grund fehl,
+   der nichts mit der Komponente der Teilnehmenden zu tun hat.
 
-<!-- numbering follows the full 1–8 list, which the briefs cite -->
+<!-- die Nummerierung folgt der vollständigen Liste 1–8, die die Briefs zitieren -->
 
-8. `figma_check_design_parity` on your own Figma node against the generated component
-   (needs the connected Desktop Bridge) comes back without unexplained deviations, and
-   the discrepancies it does report are understood, not merely absent. Use the parity prompt in `../parity-prompt.md`
-   (node id from your handoff document); Claude assembles what the call needs. A section
-   that is not compared is not reported, so a quiet report is not a clean component. Without the Desktop Bridge there is no parity call: sort the
-   differences by hand instead.
+8. `figma_check_design_parity` auf Deinem eigenen Figma-Node gegen die generierte Komponente
+   (braucht die verbundene Bridge) kommt ohne ungeklärte Abweichungen zurück, und
+   die Abweichungen, die er meldet, sind verstanden und nicht bloß abwesend. Nutze den Parity-Prompt in `../parity-prompt.md`
+   (Node-ID aus Deinem Übergabedokument). Claude stellt zusammen, was der Aufruf braucht. Ein Abschnitt,
+   der nicht verglichen wird, wird nicht gemeldet, ein stiller Report ist also keine saubere Komponente. Ohne die Bridge gibt es keinen Parity-Aufruf: Ordne die
+   Abweichungen stattdessen von Hand ein.
 
-The shared checklist for the end of the day is the Definition of Done in `CLAUDE.md`
-(format, stylelint, lint, build, unit tests and `npm run check:stories`, which `/verify`
-runs) plus the dark-mode switch in the Storybook toolbar. This bar is the brief-specific
-subset of it, not a second copy.
+Die gemeinsame Checkliste für das Tagesende ist die Definition of Done in `CLAUDE.md`
+(Format, stylelint, Lint, Build, Unit-Tests und `npm run check:stories`, was `/verify`
+ausführt) plus der Dark-Mode-Schalter in der Storybook-Toolbar. Diese Messlatte ist die briefspezifische
+Teilmenge davon, keine zweite Kopie.
 
-## Before you prompt
+## Bevor Du promptest
 
-Write a short handoff document for your component first (what is in scope, the token
-bindings, the behaviour lines, what is out, the acceptance checks). A filled example,
-built from the Toast brief, is in `../handoff-example.md`.
+Schreib zuerst ein kurzes Übergabedokument für Deine Komponente (was im Umfang ist, die Token-Bindungen,
+die Verhaltenszeilen, was draußen bleibt, die Abnahme-Checks). Ein ausgefülltes Beispiel,
+gebaut aus dem Toast-Brief, steht in `../handoff-example.md`.

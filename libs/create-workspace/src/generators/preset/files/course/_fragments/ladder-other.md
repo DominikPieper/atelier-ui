@@ -1,13 +1,14 @@
-Prompt 1 (the clean run) works on any framework:
+Prompt 1 (der saubere Lauf) funktioniert in jedem Framework:
 
 ```text
-Run `npm run lint` and `npm run build`. Report each exit code. If one is not 0, read the
-output (the full log when the summary has no error text), repair, and run both again.
+Führe `npm run lint` und `npm run build` aus. Nenne jeden Exit-Code. Ist einer nicht 0, lies
+die Ausgabe (das vollständige Log, wenn die Zusammenfassung keinen Fehlertext enthält),
+repariere und führe beide erneut aus.
 ```
 
-If the agent already ran both while it generated, this run is green at once. That is not a
-wasted step: until now you had the agent's word, now you have the exit codes.
+Hat der Agent beide schon beim Erzeugen ausgeführt, ist dieser Lauf sofort grün. Das ist kein
+verschwendeter Schritt: Bisher hattest Du das Wort des Agenten, jetzt hast Du die Exit-Codes.
 
-The break-it-on-purpose prompts of this stage plant Angular template syntax and were only
-checked on Angular, so they are not part of the {{FRAMEWORK}} course material. If it is
-time for them, watch the trainer's demo.
+Die Prompts dieser Stufe, die mit Absicht etwas kaputt machen, setzen Angular-Template-Syntax
+ein und wurden nur mit Angular geprüft. Sie gehören deshalb nicht zum Kursmaterial für
+{{FRAMEWORK}}. Wenn Zeit dafür ist, sieh Dir die Demo des Trainers an.

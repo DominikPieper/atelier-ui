@@ -111,8 +111,8 @@ const COURSE_SCAFFOLD: Record<
     file: 'workshop-angular/src/app/components/team-directory.component.ts',
     css: 'workshop-angular/src/app/components/team-directory.component.css',
     mount:
-      'add TeamDirectoryComponent to the imports array in workshop-angular/src/app/app.ts and replace <app-nx-welcome> with <app-team-directory> in app.html',
-    lint: 'On Angular, `npm run lint` also runs two Atelier template rules: an icon-only `<button atl-button>` needs an accessible name, and a sub-component such as `atl-option` must sit inside its parent (`atl-select`). The parent check covers a fixed list of parts (select, tabs, accordion, dialog, drawer, menu and a few more) and does not include the table parts: `atl-th` or `atl-tr` outside an `atl-table` passes it.',
+      'nimm TeamDirectoryComponent in das imports-Array in workshop-angular/src/app/app.ts auf und ersetze <app-nx-welcome> in app.html durch <app-team-directory>',
+    lint: 'In Angular führt `npm run lint` zusätzlich zwei Atelier-Template-Regeln aus: Ein `<button atl-button>` nur mit Icon braucht einen zugänglichen Namen, und eine Unterkomponente wie `atl-option` muss in ihrer Elternkomponente (`atl-select`) stehen. Die Prüfung der Elternkomponente deckt eine feste Liste von Teilen ab (select, tabs, accordion, dialog, drawer, menu und einige mehr), die Tabellenteile gehören nicht dazu: `atl-th` oder `atl-tr` außerhalb von `atl-table` besteht sie.',
   },
   react: {
     name: 'React',
@@ -120,8 +120,8 @@ const COURSE_SCAFFOLD: Record<
     file: 'workshop-react/src/components/TeamDirectory.tsx',
     css: 'workshop-react/src/components/TeamDirectory.css',
     mount:
-      'import TeamDirectory in workshop-react/src/app/app.tsx, replace the <NxWelcome /> placeholder with it and remove the now-unused NxWelcome import (an unused import fails npm run lint)',
-    lint: 'On React, `npm run lint` runs the framework rules (including jsx-a11y) but not the two Atelier template rules, which exist for Angular templates only.',
+      'importiere TeamDirectory in workshop-react/src/app/app.tsx, ersetze den Platzhalter <NxWelcome /> dadurch und entferne den nun unbenutzten NxWelcome-Import (ein unbenutzter Import lässt npm run lint fehlschlagen)',
+    lint: 'In React führt `npm run lint` die Framework-Regeln aus (auch jsx-a11y), nicht aber die beiden Atelier-Template-Regeln, die es nur für Angular-Templates gibt.',
   },
   vue: {
     name: 'Vue',
@@ -129,8 +129,8 @@ const COURSE_SCAFFOLD: Record<
     file: 'workshop-vue/src/components/TeamDirectory.vue',
     css: 'workshop-vue/src/components/TeamDirectory.css',
     mount:
-      'import TeamDirectory in workshop-vue/src/views/HomeView.vue, replace the <NxWelcome /> placeholder with it and remove the now-unused NxWelcome import (an unused import fails npm run lint)',
-    lint: 'The two Atelier template rules exist for Angular templates only; on Vue `npm run lint` runs the framework rules.',
+      'importiere TeamDirectory in workshop-vue/src/views/HomeView.vue, ersetze den Platzhalter <NxWelcome /> dadurch und entferne den nun unbenutzten NxWelcome-Import (ein unbenutzter Import lässt npm run lint fehlschlagen)',
+    lint: 'Die beiden Atelier-Template-Regeln gibt es nur für Angular-Templates; in Vue führt `npm run lint` die Framework-Regeln aus.',
   },
 };
 
@@ -156,14 +156,16 @@ function writeCourseFolder(
     CSS: c.css,
     MOUNT: c.mount,
     LINTNOTE: c.lint,
-    CHECKS: `Run npm run lint, npm run check:stylelint and npm run check:format${
-      framework === 'angular' ? ' and, on Angular, npm run build' : ''
-    }. Report each exit code. If one is not 0, read the output (the full log when the summary has no error text), repair, and run it again. Then list what you changed.`,
+    CHECKS: `Führe npm run lint, npm run check:stylelint${
+      framework === 'angular'
+        ? ', npm run check:format und npm run build'
+        : ' und npm run check:format'
+    } aus. Nenne jeden Exit-Code. Ist einer nicht 0, lies die Ausgabe (das vollständige Log, wenn die Zusammenfassung keinen Fehlertext enthält), repariere und führe ihn erneut aus. Liste danach auf, was Du geändert hast.`,
     // Without Figma there is no day2-prompts.md, so the stuck report moves
     // into rescue.md instead of being lost.
     STUCK_REF: figmaMcp
-      ? '`day2-prompts.md` (section "When you are stuck")'
-      : '`rescue.md` (section "When you are stuck")',
+      ? '`day2-prompts.md` (Abschnitt „Wenn Du festhängst“)'
+      : '`rescue.md` (Abschnitt „Wenn Du festhängst“)',
     STUCK: figmaMcp ? fragment('stuck') : '',
     MCP_RESCUE:
       framework === 'angular'
@@ -181,11 +183,11 @@ function writeCourseFolder(
   const index: [string, string][] = [
     [
       'day1-team-directory.md',
-      'Day 1, Block 05: the Team directory brief, start prompt, checks prompt, receipts prompt, the "not verified" prompt, a stretch story and the time box',
+      'Tag 1, Block 05: der Team-Directory-Brief, Start-Prompt, Checks-Prompt, Belege-Prompt, der Prompt zur Liste „nicht geprüft“, eine Story für alle, die früh fertig sind, und der Zeitrahmen',
     ],
     [
       'day1-stories.md',
-      'Day 1 Block 04: `docs-show` on a library component, then a story with a `play`, red once and green',
+      'Tag 1, Block 04: `docs-show` an einer Bibliothekskomponente, dann eine Story mit `play`, einmal rot und dann grün',
     ],
   ];
   const write = (file: string, template = file) =>
@@ -196,25 +198,28 @@ function writeCourseFolder(
     index.push(
       [
         'day1-settings-card.md',
-        'Day 1 Block 02: the Settings Card generation prompt, the token fix-up, the mount prompt and the lint-and-build ladder stage',
+        'Tag 1, Block 02: der Generierungs-Prompt für die Settings Card, die Token-Korrektur, der Mount-Prompt und die Leiterstufe mit Lint und Build',
       ],
       [
         'figma-linter-prompt.md',
-        'Day 1 Block 03 and Day 2 Block 01: the pink test prompt, the micro-exercise prompts, and the Figma linter prompt (three rules, then every rule)',
+        'Tag 1, Block 03 und Tag 2, Block 01: der Pink-Test-Prompt, die Prompts der Mikro-Übungen und der Prompt für den Figma-Linter (drei Regeln, dann jede Regel)',
       ],
       [
         'parity-prompt.md',
-        'Day 1 Block 02 (Settings Card, compared by eye) and Day 2 Block 04 (the parity tool on your own component)',
+        'Tag 1, Block 02 (Settings Card, nach Augenmaß verglichen) und Tag 2, Block 04 (das Parity-Werkzeug an Deiner eigenen Komponente)',
       ],
       [
         'day2-prompts.md',
-        'Day 2 Block 00 (Definition-of-Done exercise), Block 01 (build your component set through the agent, make it machine-readable, the API rules), Block 02 (generation with plan mode, `docs-show` on your component, look at both), Block 03 (what was red, is the handoff document still true, red on purpose) and Block 04 (accessibility, the dark check), and what to paste when you are stuck',
+        'Tag 2, Block 00 (Definition-of-Done-Übung), Block 01 (Component Set über den Agenten bauen, maschinenlesbar machen, die API-Regeln), Block 02 (Generierung im Plan-Modus, `docs-show` an Deiner Komponente, Beides ansehen), Block 03 (was rot war, stimmt das Übergabedokument noch, Rot mit Absicht) und Block 04 (Barrierefreiheits-Check, Dark-Check) und was Du einfügst, wenn Du festhängst',
       ],
       [
         'briefs/',
-        'Day 2 Block 00: the four component briefs to choose from (Toast, TagChip, StatCard, Avatar)',
+        'Tag 2, Block 00: die vier Komponenten-Briefs zur Auswahl (Toast, TagChip, StatCard, Avatar)',
       ],
-      ['handoff-example.md', 'Day 2 Block 01: a filled handoff document'],
+      [
+        'handoff-example.md',
+        'Tag 2, Block 01: ein ausgefülltes Übergabedokument',
+      ],
     );
     write('day1-settings-card.md');
     write('figma-linter-prompt.md');
@@ -227,7 +232,7 @@ function writeCourseFolder(
   }
   index.push([
     'rescue.md',
-    `When your seat is red: model access, preflight, /mcp, Storybook${figmaMcp ? ', the Figma bridge' : ', and what to paste when you are stuck'}`,
+    `Wenn Dein Platz rot ist: Modellzugang, Preflight, /mcp, Storybook${figmaMcp ? ', die Figma-Bridge' : ' und was Du einfügst, wenn Du festhängst'}`,
   ]);
   tokens.INDEX = index.map(([f, when]) => `- \`${f}\` — ${when}`).join('\n');
   write('rescue.md');

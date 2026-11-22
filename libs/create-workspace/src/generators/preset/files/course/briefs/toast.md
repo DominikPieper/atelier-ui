@@ -1,177 +1,173 @@
-# Component brief — Toast
+# Komponenten-Brief: Toast
 
-> **Source:** a canonical component, mapped onto Atelier's `Library Tokens` vocabulary.
-> **Starter frame:** `Toast / Starter` — node `703:341` on the `🛠️ Workshop-Templates`
-> page.
-> **Read [`README.md`](README.md) first** — the shared rules and the "done when" bar
-> live there and are not repeated here.
+> **Quelle:** eine kanonische Komponente, abgebildet auf das `Library Tokens`-Vokabular von Atelier.
+> **Starter-Frame:** `Toast / Starter`, Node `703:341` auf der Seite `🛠️ Workshop-Templates`.
+> **Lies zuerst [`README.md`](README.md).** Die gemeinsamen Regeln und die Messlatte „Fertig, wenn“
+> stehen dort und werden hier nicht wiederholt.
 
-A transient floating notification anchored to a corner of the viewport, auto-dismissing
-after a short visible duration. It is **not** an Alert (inline, persistent) and not a
-Modal (blocking). What separates it from both is ephemerality plus positioning — and
-that distinction is the first thing the component owes: a message the user can afford
-to miss.
+Eine flüchtige, schwebende Benachrichtigung, verankert an einer Ecke des Viewports, die nach kurzer
+sichtbarer Dauer von selbst verschwindet. Sie ist **kein** Alert (inline, bleibt stehen) und kein
+Modal (blockierend). Was sie von beiden trennt, sind Flüchtigkeit und Positionierung. Genau diese
+Unterscheidung schuldet die Komponente als Erstes: eine Meldung, die man verpassen darf.
 
 ---
 
-## 1. Anatomy
+## 1. Anatomie
 
-Nine slots. Three are required outright — `viewport`, `container`, `body`; two more
-become required the moment you add the close button. The two-tier structure —
-a viewport that owns stacking and a container that owns one message — is the part
-people get wrong, so it is the part to get right.
+Neun Slots. Drei sind unbedingt Pflicht: `viewport`, `container`, `body`. Zwei weitere
+werden Pflicht, sobald Du den Schließen-Button einbaust. Die zweistufige Struktur, ein
+Viewport, der das Stapeln besitzt, und ein Container, der eine Meldung besitzt, machen die meisten
+falsch. Deshalb gehört sie richtig gebaut.
 
-| Slot           | Required            | Figma                         | What it is                                                                                                                                                      |
-| -------------- | ------------------- | ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `viewport`     | yes                 | frame                         | Fixed-position region at one viewport corner holding every visible toast. **One per page.** Owns stacking, hover-pause, and the landmark.                       |
-| `container`    | yes                 | frame, auto-layout horizontal | One toast's surface. Max inline size 360–420px. Carries the severity treatment and its own live-region role.                                                    |
-| `icon`         | no                  | instance                      | Severity glyph at the inline-start. Glyph swap bound to the severity variant. Decorative.                                                                       |
-| `title`        | no                  | text                          | Optional brief heading. Only when the body runs multi-line — a single-line toast _is_ its headline.                                                             |
-| `body`         | yes                 | text                          | The message. One or two sentences, by canon. Anything longer is an Alert.                                                                                       |
-| `action`       | no                  | instance                      | **Exactly one** inline action ("Undo", "View"). Two actions is a redesign signal.                                                                               |
-| `close-button` | no                  | instance                      | Real button. Icon-button, close variant, inline-end.                                                                                                            |
-| `close-icon`   | yes (of the button) | instance                      | The × glyph. Decorative, always.                                                                                                                                |
-| `close-label`  | yes (of the button) | text                          | The accessible name — a visually hidden "Dismiss notification", or an `aria-label` on the button. Counted as a slot so the dependency is structural, not prose. |
+| Slot           | Pflicht          | Figma                         | Was es ist                                                                                                                                                                                   |
+| -------------- | ---------------- | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `viewport`     | ja               | Frame                         | Region mit fester Position an einer Ecke des Viewports, die alle sichtbaren Toasts hält. **Einer pro Seite.** Besitzt Stapeln, Pause bei Hover und die Landmark.                             |
+| `container`    | ja               | Frame, Auto Layout horizontal | Die Fläche eines Toasts. Maximale Inline-Größe 360–420px. Trägt die Schweregrad-Darstellung und seine eigene Live-Region-Rolle.                                                              |
+| `icon`         | nein             | Instanz                       | Schweregrad-Glyphe am Inline-Start. Glyphen-Wechsel an die Schweregrad-Variante gebunden. Dekorativ.                                                                                         |
+| `title`        | nein             | Text                          | Optionale kurze Überschrift. Nur, wenn der Body mehrzeilig wird. Ein einzeiliger Toast _ist_ seine eigene Überschrift.                                                                       |
+| `body`         | ja               | Text                          | Die Meldung. Laut Kanon ein oder zwei Sätze. Alles Längere ist ein Alert.                                                                                                                    |
+| `action`       | nein             | Instanz                       | **Genau eine** Inline-Aktion („Undo“, „View“). Zwei Aktionen sind ein Zeichen für ein Redesign.                                                                                              |
+| `close-button` | nein             | Instanz                       | Echter Button. Icon-Button, Variante close, am Inline-Ende.                                                                                                                                  |
+| `close-icon`   | ja (des Buttons) | Instanz                       | Die ×-Glyphe. Immer dekorativ.                                                                                                                                                               |
+| `close-label`  | ja (des Buttons) | Text                          | Der zugängliche Name: ein visuell verstecktes „Dismiss notification“ oder ein `aria-label` am Button. Als Slot gezählt, damit die Abhängigkeit in der Struktur steht und nicht in der Prosa. |
 
-**Token budget.** `container`: background `color/surface-raised`, border `color/border`,
-radius `radius/md`, padding and gap off the `spacing/*` ladder. `viewport`: `spacing/*`
-padding and gap only. `icon` and `action` foreground: `color/text` or the severity
-colour. `close-button` foreground: `color/text-muted`.
+**Token-Budget.** `container`: Hintergrund `color/surface-raised`, Rahmen `color/border`,
+Radius `radius/md`, Abstand und Lücke von der `spacing/*`-Leiter. `viewport`: nur `spacing/*` für
+Abstand und Lücke. Vordergrund von `icon` und `action`: `color/text` oder die Schweregrad-Farbe.
+Vordergrund von `close-button`: `color/text-muted`.
 
-**The shadow is not a variable.** A toast floats, which means `--ui-shadow-lg`. There is
-no `shadow/*` in `Library Tokens` — elevation lives only in `tokens.css`. State that in
-your Figma description; do not invent a variable for it.
+**Der Schatten ist keine Variable.** Ein Toast schwebt, das heißt `--ui-shadow-lg`. In `Library Tokens` gibt es
+kein `shadow/*`, Elevation lebt nur in `tokens.css`. Halte das in Deiner Figma-Beschreibung fest
+und erfinde keine Variable dafür.
 
 ---
 
-## 2. Axes
+## 2. Achsen
 
-**Variant (the severity axis):** `info` · `success` · `warning` · `danger`.
+**Variante (die Schweregrad-Achse):** `info` · `success` · `warning` · `danger`.
 
-**Properties (not variants):**
+**Properties (keine Varianten):**
 
-| Property      | Kind    | Values                                                                                                               |
+| Property      | Art     | Werte                                                                                                                |
 | ------------- | ------- | -------------------------------------------------------------------------------------------------------------------- |
 | `position`    | enum    | `block-start-start`, `block-start-end`, `block-start-center`, `block-end-start`, `block-end-end`, `block-end-center` |
 | `dismissible` | boolean | —                                                                                                                    |
 | `hasAction`   | boolean | —                                                                                                                    |
 | `hasIcon`     | boolean | —                                                                                                                    |
 
-`position` is a property of the **viewport**, not of a toast. It selects a corner; it
-does not restyle the message.
+`position` ist eine Property des **Viewports**, nicht eines Toasts. Sie wählt eine Ecke und
+gestaltet die Meldung nicht um.
 
-### Scope for the 90-minute block
+### Umfang für den 90-Minuten-Block
 
-**In scope: `success` and `danger`, in the `open` and `closing` states.** Those two
-severities are the pair that must differ in more than hue (see §4) and the pair whose
-live-region politeness differs — so they carry the whole lesson between them. Model
-`dismissible` and `hasIcon` as booleans if time allows.
+**Im Umfang: `success` und `danger`, in den Zuständen `open` und `closing`.** Diese zwei
+Schweregrade sind das Paar, das sich um mehr als den Farbton unterscheiden muss (siehe §4), und das Paar, dessen
+Live-Region-Höflichkeit sich unterscheidet. Zusammen tragen sie die ganze Lektion. Modelliere
+`dismissible` und `hasIcon` als Booleans, wenn die Zeit reicht.
 
-**Out of scope, and say so in the description rather than silently omitting:** `info`
-and `warning`, the six `position` values (build one corner), the stacking behaviour, and
-the progress affordance.
-
----
-
-## 3. States
-
-**Interactive:** `hover`, `focus-visible`. These are CSS, not variants.
-
-**Data:** `opening` → `open` → `paused` → `open` → `closing` → `closed`.
-
-| From      | To        | Trigger                                                                                                                             |
-| --------- | --------- | ----------------------------------------------------------------------------------------------------------------------------------- |
-| `closed`  | `opening` | The consumer fires the toast. It mounts; the timer is initialised but not started.                                                  |
-| `opening` | `open`    | Slide-in completes (or immediately under `prefers-reduced-motion: reduce`). **Now** the timer starts and the live region announces. |
-| `open`    | `paused`  | Pointer enters the viewport **or** focus moves into it. Every visible toast pauses, not just the hovered one.                       |
-| `paused`  | `open`    | Pointer and focus are both out. The timer **resumes** — it does not restart. Elapsed time counts.                                   |
-| `open`    | `closing` | Timer expires; or Escape with focus in the region; or dismiss/action activated; or a programmatic close.                            |
-| `closing` | `closed`  | Slide-out completes (or immediately under reduced motion). Removed from the viewport and from the live region; the stack reflows.   |
-
-Announcement happens on entering `open`, not on mount. A toast that announces while it
-is still sliding in announces content the user cannot yet read.
+**Nicht im Umfang, und sag das in der Beschreibung, statt es stillschweigend wegzulassen:** `info`
+und `warning`, die sechs `position`-Werte (baue eine Ecke), das Stapelverhalten und
+das Fortschrittsangebot.
 
 ---
 
-## 4. Accessibility requirements
+## 3. Zustände
 
-Non-negotiable. Three of these are blocker-severity in the canonical record. Each is also
-tagged **(this block)** — checkable against the frame and description you actually build
-in the 90 minutes — or **(full component)** — true of Toast in production, worth writing
-into the master's description, but dependent on the `paused` state, a multi-toast
-scenario, or a runtime mechanism this exercise's scope does not build (see [`README.md`
-item 7](README.md#done-when)).
+**Interaktiv:** `hover`, `focus-visible`. Das ist CSS, keine Varianten.
 
-1. **Timers pause on hover and focus.** _(blocker — WCAG 2.2.1 Timing Adjustable · full
-   component)_ Pause on pointer-enter **and** focus-into the viewport; resume only when
-   both are out. Pause at viewport level, not per toast, so a user can move between
-   adjacent toasts. Without this, a slow reader loses the message mid-sentence. Depends on
-   the `paused` state, which is out of scope here — document the contract in the
-   description; you are not building the pause itself.
-2. **Escape dismisses.** _(blocker · full component)_ With focus inside the toast region,
-   Escape closes the focused toast — or the most recent one if none is focused. Otherwise
-   the only exits are tabbing to the button or waiting, and the keyboard contract feels
-   broken next to every other light-dismiss surface. Keydown handling is code; document
-   the binding.
-3. **Severity drives live-region politeness.** _(major · full component)_ `info` and
+**Daten:** `opening` → `open` → `paused` → `open` → `closing` → `closed`.
+
+| Von       | Nach      | Auslöser                                                                                                                                         |
+| --------- | --------- | ------------------------------------------------------------------------------------------------------------------------------------------------ |
+| `closed`  | `opening` | Der Consumer löst den Toast aus. Er wird gemountet, der Timer ist initialisiert, aber nicht gestartet.                                           |
+| `opening` | `open`    | Das Einblenden ist fertig (oder sofort bei `prefers-reduced-motion: reduce`). **Jetzt** startet der Timer, und die Live-Region kündigt an.       |
+| `open`    | `paused`  | Der Zeiger betritt den Viewport **oder** der Fokus wandert hinein. Jeder sichtbare Toast pausiert, nicht nur der unter dem Zeiger.               |
+| `paused`  | `open`    | Zeiger und Fokus sind beide draußen. Der Timer **läuft weiter**, er startet nicht neu. Die verstrichene Zeit zählt.                              |
+| `open`    | `closing` | Der Timer läuft ab; oder Escape bei Fokus in der Region; oder Schließen/Aktion ausgelöst; oder ein programmatisches Schließen.                   |
+| `closing` | `closed`  | Das Ausblenden ist fertig (oder sofort bei reduzierter Bewegung). Aus dem Viewport und aus der Live-Region entfernt, der Stapel ordnet sich neu. |
+
+Die Ankündigung passiert beim Eintritt in `open`, nicht beim Mounten. Ein Toast, der ankündigt,
+während er noch einfährt, kündigt Inhalt an, den der Nutzer noch nicht lesen kann.
+
+---
+
+## 4. Anforderungen an die Barrierefreiheit
+
+Nicht verhandelbar. Drei davon haben in der maßgeblichen Quelle den Schweregrad blocker. Jede ist außerdem
+mit **(dieser Block)** markiert, also prüfbar an dem Frame und der Beschreibung, die Du in den
+90 Minuten tatsächlich baust, oder mit **(volle Komponente)**, also wahr für den Toast in Produktion und wert,
+in die Beschreibung des Masters geschrieben zu werden, aber abhängig vom Zustand `paused`, einem Szenario mit mehreren Toasts
+oder einem Laufzeitmechanismus, den der Umfang dieser Übung nicht baut (siehe [`README.md`,
+Punkt 7](README.md#fertig-wenn)).
+
+1. **Timer pausieren bei Hover und Fokus.** _(blocker, WCAG 2.2.1 Timing Adjustable · volle
+   Komponente)_ Pausiere, wenn der Zeiger den Viewport betritt **und** wenn der Fokus hineinwandert, und setze erst fort, wenn
+   beides draußen ist. Pausiere auf Viewport-Ebene, nicht pro Toast, damit ein Nutzer zwischen
+   benachbarten Toasts wechseln kann. Ohne das verliert ein langsamer Leser die Meldung mitten im Satz. Hängt vom
+   Zustand `paused` ab, der hier nicht im Umfang ist: Dokumentiere den Vertrag in der
+   Beschreibung, die Pause selbst baust Du nicht.
+2. **Escape schließt.** _(blocker · volle Komponente)_ Bei Fokus innerhalb der Toast-Region
+   schließt Escape den fokussierten Toast, oder den jüngsten, wenn keiner fokussiert ist. Sonst
+   bleiben als Ausgang nur, zum Button zu tabben oder zu warten, und der Tastaturvertrag wirkt neben jeder anderen
+   Light-Dismiss-Fläche kaputt. Keydown-Behandlung ist Code: Dokumentiere die Belegung.
+3. **Der Schweregrad bestimmt die Höflichkeit der Live-Region.** _(major · volle Komponente)_ `info` und
    `success` → `role="status"` (polite). `danger` → `role="alert"` (assertive). `warning`
-   is canonically polite. Marking every toast assertive interrupts the user for every
-   "Copied" and trains them to switch notifications off. The role split is a code
-   attribute with no Figma equivalent — state the mapping in the description; `success`
-   and `danger` are exactly the pair you draw, so this is the one place the description
-   carries real weight.
-4. **Critical errors are not toasts.** _(blocker · this block)_ Anything the user must act
-   on — a network failure, a data-loss warning — is an Alert or a Modal. Toast is for what
-   can be missed without consequence. Getting this wrong is a content decision that no
-   amount of correct markup repairs, and it is checkable directly on what you draw: neither
-   `success` nor `danger` should represent something un-missable.
-5. **The region is a landmark, not a live region.** _(full component)_ `role="region"`
-   with `aria-label="Notifications"` on the viewport; the live-region roles sit on the
-   individual toasts. Both are ARIA roles with no Figma representation — document them.
-6. **The close control announces once.** _(this block)_ `aria-label="Dismiss"` **or** a
-   visually hidden span — never both. The `close-icon` is `aria-hidden="true"` and never
-   carries a name of its own. `close-icon` and `close-label` are anatomy slots (§1) —
-   checkable directly on the frame if you build `dismissible`.
-7. **The icon is never the severity.** _(this block)_ `aria-hidden="true"` on the glyph;
-   severity reaches assistive tech through the role and the visible text. The `icon` slot
-   is marked decorative in the anatomy table (§1) — checkable on the frame you draw for
-   both in-scope severities.
-8. **Stack depth is capped.** _(major · full component)_ Three visible toasts; queue the
-   rest. An unbounded stack floods the screen and the screen reader alike. Requires
-   multiple live toasts, which the stacking behaviour this brief puts out of scope (§2)
-   makes undemonstrable here — document the cap, do not build the queue.
-9. **The action is a button.** _(this block)_ Reachable by Tab after the dismiss button,
-   with a real accessible name. Tab order is runtime, but "a button, not a styled span" is
-   a composition choice checkable on the frame if you build `hasAction` (§2).
+   ist kanonisch polite. Wer jeden Toast assertive markiert, unterbricht den Nutzer bei jedem
+   „Copied“ und bringt ihm bei, Benachrichtigungen abzuschalten. Die Rollenaufteilung ist ein Code-Attribut
+   ohne Figma-Entsprechung: Halte die Zuordnung in der Beschreibung fest. `success`
+   und `danger` sind genau das Paar, das Du zeichnest, hier hat die Beschreibung also echtes Gewicht.
+4. **Kritische Fehler sind keine Toasts.** _(blocker · dieser Block)_ Alles, worauf der Nutzer
+   reagieren muss, etwa ein Netzwerkfehler oder eine Warnung vor Datenverlust, ist ein Alert oder ein Modal. Ein Toast ist für das, was
+   man ohne Folgen verpassen darf. Das falsch zu machen, ist eine inhaltliche Entscheidung, die kein
+   korrektes Markup repariert, und sie ist direkt an dem prüfbar, was Du zeichnest: Weder
+   `success` noch `danger` darf etwas darstellen, das man nicht verpassen darf.
+5. **Die Region ist eine Landmark, keine Live-Region.** _(volle Komponente)_ `role="region"`
+   mit `aria-label="Notifications"` am Viewport. Die Live-Region-Rollen sitzen
+   an den einzelnen Toasts. Beides sind ARIA-Rollen ohne Darstellung in Figma: Dokumentiere sie.
+6. **Das Schließen-Control kündigt sich einmal an.** _(dieser Block)_ `aria-label="Dismiss"` **oder** ein
+   visuell versteckter Span, nie beides. Das `close-icon` ist `aria-hidden="true"` und trägt nie
+   einen eigenen Namen. `close-icon` und `close-label` sind Anatomie-Slots (§1) und
+   direkt am Frame prüfbar, wenn Du `dismissible` baust.
+7. **Das Icon ist nie der Schweregrad.** _(dieser Block)_ `aria-hidden="true"` an der Glyphe.
+   Der Schweregrad erreicht assistive Technik über die Rolle und den sichtbaren Text. Der Slot `icon`
+   ist in der Anatomie-Tabelle (§1) als dekorativ markiert und am Frame prüfbar, den Du für
+   beide Schweregrade im Umfang zeichnest.
+8. **Die Stapeltiefe ist begrenzt.** _(major · volle Komponente)_ Drei sichtbare Toasts, der
+   Rest wartet in einer Warteschlange. Ein unbegrenzter Stapel überflutet Bildschirm und Screenreader gleichermaßen. Setzt
+   mehrere gleichzeitige Toasts voraus, die das Stapelverhalten, das dieser Brief aus dem Umfang nimmt (§2),
+   hier nicht vorführbar macht: Dokumentiere die Grenze, baue die Warteschlange nicht.
+9. **Die Aktion ist ein Button.** _(dieser Block)_ Per Tab erreichbar, nach dem Schließen-Button,
+   mit einem echten zugänglichen Namen. Die Tab-Reihenfolge ist Laufzeit, aber „ein Button, kein gestylter Span“ ist
+   eine Kompositionsentscheidung, am Frame prüfbar, wenn Du `hasAction` baust (§2).
 
 ---
 
-## 5. Figma ↔ code gotchas
+## 5. Figma ↔ Code: die Stolperstellen
 
-The four places this component's design file and its implementation habitually disagree.
-Each one is worth a sentence in your Figma description.
+Die vier Stellen, an denen die Design-Datei und die Implementierung dieser Komponente gewohnheitsmäßig auseinanderlaufen.
+Jede ist einen Satz in Deiner Figma-Beschreibung wert.
 
-| Drawn as                                             | Implemented as                                   | Why it hurts                                                                                                                                                         |
-| ---------------------------------------------------- | ------------------------------------------------ | -------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| A toast next to the button that triggered it         | A single fixed-position viewport region per page | Per-trigger floating surfaces compete with each other and lose the stacking, the auto-dismiss and the live region all at once.                                       |
-| One static visual with no timer affordance           | An auto-dismiss timer at a configurable duration | Designers do not see that it vanishes; developers ship no progress affordance and no sane default. Document the duration and the hover-pause as canonical behaviour. |
-| "One toast" / "two toasts" / "three toasts" variants | One toast plus a viewport that stacks            | The three-toast frame is decorative. Stacking is a viewport concern; document the max depth in the viewport slot, not as a toast variant.                            |
-| An inline link "Undo" inside the body text           | A Button in the `action` slot                    | An anchor is the wrong semantic (Undo does not navigate) and a click-handler span has no semantic at all. The body describes; the action is separately reachable.    |
-
----
-
-## 6. What "finished" looks like here
-
-Beyond the shared bar in [`README.md`](README.md):
-
-- The variant axis is named `variant` with values `success` and `danger` — lowercase,
-  matching the string-literal union the spec will carry.
-- `success` and `danger` are distinguishable with colour removed.
-- The description on the master states: the auto-dismiss duration, the hover-pause
-  contract, the Escape binding, and that the shadow is CSS-only.
-- The two in-scope states are `open` and `closing`, and the description names the four
-  data states you did not build.
+| Gezeichnet als                                        | Implementiert als                                          | Warum es wehtut                                                                                                                                                                        |
+| ----------------------------------------------------- | ---------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Ein Toast neben dem Button, der ihn ausgelöst hat     | Eine einzige Viewport-Region mit fester Position pro Seite | Schwebende Flächen pro Auslöser konkurrieren miteinander und verlieren Stapeln, Auto-Dismiss und Live-Region auf einmal.                                                               |
+| Eine statische Darstellung ohne Timer-Hinweis         | Ein Auto-Dismiss-Timer mit konfigurierbarer Dauer          | Designer sehen nicht, dass er verschwindet. Entwickler liefern kein Fortschrittsangebot und keinen vernünftigen Default. Dokumentiere Dauer und Hover-Pause als kanonisches Verhalten. |
+| Varianten „One toast“ / „two toasts“ / „three toasts“ | Ein Toast plus ein Viewport, der stapelt                   | Der Drei-Toast-Frame ist Dekoration. Stapeln ist Sache des Viewports: Dokumentiere die maximale Tiefe im Viewport-Slot, nicht als Toast-Variante.                                      |
+| Ein Inline-Link „Undo“ im Body-Text                   | Ein Button im Slot `action`                                | Ein Anchor ist die falsche Semantik (Undo navigiert nicht), und ein Span mit Click-Handler hat gar keine. Der Body beschreibt, die Aktion ist separat erreichbar.                      |
 
 ---
 
-**Before you prompt:** write the handoff document first. A filled example (for the Toast brief) is in `../handoff-example.md`.
+## 6. Woran Du „fertig“ erkennst
+
+Zusätzlich zur gemeinsamen Messlatte in [`README.md`](README.md):
+
+- Die Variantenachse heißt `variant` mit den Werten `success` und `danger`, kleingeschrieben,
+  passend zur String-Literal-Union, die die Spec tragen wird.
+- `success` und `danger` sind auch ohne Farbe unterscheidbar.
+- Die Beschreibung am Master nennt: die Auto-Dismiss-Dauer, den Vertrag der Hover-Pause,
+  die Escape-Belegung und dass der Schatten nur in CSS existiert.
+- Die zwei Zustände im Umfang sind `open` und `closing`, und die Beschreibung nennt die vier
+  Datenzustände, die Du nicht gebaut hast.
+
+---
+
+**Bevor Du promptest:** Schreib zuerst das Übergabedokument. Ein ausgefülltes Beispiel (zum Toast-Brief) steht in `../handoff-example.md`.

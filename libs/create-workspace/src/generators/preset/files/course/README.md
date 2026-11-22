@@ -1,6 +1,6 @@
-# Course material
+# Kursmaterial
 
-Everything you paste or read during the course is in this folder, so you never need a
-website. Open the file for the block you are in.
+Alles, was Du im Kurs einfügst oder liest, liegt in diesem Ordner, Du brauchst also nie
+eine Website. Öffne die Datei für den Block, in dem Du gerade bist.
 
 {{INDEX}}

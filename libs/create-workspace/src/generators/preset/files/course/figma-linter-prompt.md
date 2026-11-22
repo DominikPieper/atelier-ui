@@ -1,103 +1,109 @@
-# Figma prompts: the pink test and the linter
+# Figma-Prompts: der Pink-Test und der Linter
 
-Used in Day 1 Block 03 and Day 2 Block 01. The Desktop Bridge must be connected. Everything
-here happens in your prepared duplicate of the Figma file, never in the original.
+Gebraucht in Tag 1 Block 03 und Tag 2 Block 01. Die Desktop Bridge muss verbunden sein.
+Alles hier passiert in Deinem vorbereiteten Duplikat der Figma-Datei, nie im Original.
 
-## The pink test (Day 1 Block 03)
+## Der Pink-Test (Tag 1 Block 03)
 
-The pink test answers one question: which colours of a master are bound to a variable, and
-which are painted on? It sets every colour variable to one loud pink in a mode of its own;
-whatever is not pink afterwards is not bound. By hand that is more than a hundred variables,
-so the agent does it. **This prompt writes to your duplicate**: it adds a mode and a test
-frame. The second prompt, in the micro-exercise, removes the mode again.
-
-```text
-Run the pink test on the AtlButton master (Inputs/AtlButton on the Components
-page): in the Library Tokens collection add a third mode "Pink Test", set every
-colour variable to #ff00c8 in that mode, put a test frame with one instance of
-every AtlButton variant on the Workshop-Templates page and set the frame to the
-Pink Test mode. Show me a screenshot and tell me what did not turn pink.
-```
-
-Look at the screenshot before you read the answer. What stayed its own colour? Say it as a
-sentence: "this fill is not bound to a variable".
-
-For the micro-exercise at the end of the block, the repair on a copy:
+Der Pink-Test beantwortet eine Frage: Welche Farben eines Masters sind an eine Variable
+gebunden, und welche sind aufgemalt? Er setzt jede Farbvariable in einem eigenen Modus auf
+ein einziges grelles Pink. Was danach nicht pink ist, ist nicht gebunden. Von Hand sind das
+über hundert Variablen, deshalb macht es der Agent. **Dieser Prompt schreibt in Dein
+Duplikat**: Er legt einen Modus und einen Test-Frame an. Der zweite Prompt, in der
+Mikroübung, entfernt den Modus wieder.
 
 ```text
-Fix that binding on a copy of the master, not on the master itself: copy the
-variant that did not turn pink into the test frame's section, bind its fill to
-the variable its sibling variants use, and show me the pink test on the copy.
-Then delete the Pink Test mode again.
+Mach den Pink-Test am Master AtlButton (Inputs/AtlButton auf der Seite
+Components): Lege in der Collection Library Tokens einen dritten Modus
+"Pink Test" an, setze in diesem Modus jede Farbvariable auf #ff00c8, stelle
+auf der Seite Workshop-Templates einen Test-Frame mit je einer Instanz jeder
+AtlButton-Variante auf und setze den Frame auf den Modus Pink Test. Zeig mir
+einen Screenshot und sag mir, was nicht pink geworden ist.
 ```
 
-The other two tasks of the micro-exercise are on the same copy. Nothing here is edited by
-hand in Figma: the agent writes, you look and decide.
+Sieh Dir den Screenshot an, bevor Du die Antwort liest. Was hat seine eigene Farbe behalten?
+Sag es in einem Satz: „Diese Füllung ist nicht an eine Variable gebunden“.
+
+Für die Mikroübung am Ende des Blocks, die Reparatur an einer Kopie:
 
 ```text
-Two more things on the same copy, with a screenshot after each. First: give the
-copy one more value on its variant axis: a second variant "ghost" next to the
-first, in a component set of its own, the same button without a fill. Tell me
-the property and both values. Second: put two instances of the copy into a new
-frame with Auto Layout in the test frame's section, the gap bound to a spacing
-variable. Then change the gap to the next value of the scale and tell me what
-moved.
+Repariere diese Bindung an einer Kopie des Masters, nicht am Master selbst:
+Kopiere die Variante, die nicht pink geworden ist, in die Section des
+Test-Frames, binde ihre Füllung an die Variable, die ihre Geschwister-Varianten
+benutzen, und zeig mir den Pink-Test an der Kopie. Lösche danach den Modus
+Pink Test wieder.
 ```
 
-Look at each screenshot before you read the answer. After the first: the `variant`
-property has two values now (the agent may list `size` and `state` as well, with one value
-each). Can you read the label of the ghost variant? "Without a fill" is all the prompt
-asked for, and an agent does what it was asked: if the label is gone, say what you see and
-what you want instead. Would the code take "ghost" as it stands, or would you name it
-differently? Tell the agent the name you want. After the second: select the new frame in
-Figma and read direction, gap and padding in the Design panel. Which of them carries a
-variable, and what moved when the gap changed?
-
-If you do not get to the micro-exercise, clean up with one line: "Delete the Pink Test mode
-again."
-
-If your Figma plan does not allow another variable mode, the agent cannot add one: watch
-the trainer's run instead, then ask for the repair without the mode: "Copy the AtlButton
-variant <the one that stayed its own colour> into a new section on the Workshop-Templates
-page, bind its fill to the variable its sibling variants use, and show me a screenshot."
-
-## The linter (Day 1 Block 03 and Day 2 Block 01)
-
-On Day 1 on the master the trainer names, on Day 2 on your own component set, before you
-write the handoff document. This one is read-only: nothing is changed in the file.
+Die beiden anderen Aufgaben der Mikroübung liegen auf derselben Kopie. Nichts davon wird in
+Figma von Hand bearbeitet: Der Agent schreibt, Du schaust und entscheidest.
 
 ```text
-Run figma_lint_design on the node <NODE> (<MASTER NAME>) with only the rules
-hardcoded-color, default-name and detached-component. Return the findings as a list:
-layer, rule, message. Change nothing in the file.
+Zwei weitere Dinge an derselben Kopie, mit einem Screenshot nach jedem. Erstens:
+Gib der Kopie einen weiteren Wert auf ihrer Variantenachse: eine zweite Variante
+"ghost" neben der ersten, in einem eigenen Component Set, derselbe Button ohne
+Füllung. Nenne mir die Property und beide Werte. Zweitens: Stelle zwei Instanzen
+der Kopie in einen neuen Frame mit Auto Layout in der Section des Test-Frames,
+den Abstand an eine Spacing-Variable gebunden. Ändere dann den Abstand auf den
+nächsten Wert der Skala und sag mir, was sich bewegt hat.
 ```
 
-`<NODE>`: Day 1, the master the trainer names (read its id in your duplicate, do not assume
-it is the id you saw on the projector); Day 2, your own component set: select it in Figma
-with Claude Code already running and say "the node I have selected" (the agent reads the id
-with `figma_get_selection`). A selection made before the session started is not seen: if
-the agent reports that nothing is selected, click the set again.
+Sieh Dir jeden Screenshot an, bevor Du die Antwort liest. Nach dem ersten: Die Property
+`variant` hat jetzt zwei Werte (der Agent listet vielleicht auch `size` und `state` mit je
+einem Wert auf). Kannst Du das Label der Ghost-Variante lesen? „Ohne Füllung“ ist alles, was
+der Prompt verlangt hat, und ein Agent tut, was verlangt wurde: Wenn das Label fehlt, sag,
+was Du siehst und was Du stattdessen willst. Würde der Code „ghost“ so übernehmen, oder
+würdest Du es anders nennen? Sag dem Agenten den Namen, den Du willst. Nach dem zweiten:
+Wähle den neuen Frame in Figma aus und lies Richtung, Abstand und Padding im Design-Panel.
+Welches davon trägt eine Variable, und was hat sich bewegt, als der Abstand sich änderte?
 
-Sort each line of the result: **real** or **false alarm**. A finding is something to sort,
-not a verdict. The three rules catch raw colours, layers left on default names and detached
-instances. They do not see whether the design is right, nor spacing and radius. On Day 2,
-fix the real findings first and note the false alarms.
+Wenn Du die Mikroübung nicht mehr schaffst, räum mit einer Zeile auf: „Lösche den Modus
+Pink Test wieder.“
 
-**Day 1, a second run: every rule.** Three rules, three real findings: a clean list is
-easy to trust. Now the same master without the filter:
+Wenn Dein Figma-Plan keinen weiteren Variablenmodus erlaubt, kann der Agent keinen anlegen:
+Sieh stattdessen dem Durchlauf des Trainers zu und bitte dann um die Reparatur ohne den
+Modus: „Kopiere die Variante <die, die ihre eigene Farbe behalten hat> von AtlButton in eine
+neue Section auf der Seite Workshop-Templates, binde ihre Füllung an die Variable, die ihre
+Geschwister-Varianten benutzen, und zeig mir einen Screenshot.“
+
+## Der Linter (Tag 1 Block 03 und Tag 2 Block 01)
+
+An Tag 1 am Master, den der Trainer nennt, an Tag 2 an Deinem eigenen Component Set, bevor
+Du das Übergabedokument schreibst. Dieser Lauf liest nur: In der Datei wird nichts geändert.
 
 ```text
-Run figma_lint_design on the node <NODE> (<MASTER NAME>) again, this time with
-all rules, no filter. Group the findings by rule: rule, severity, count, and one
-example layer with its path inside the master. Change nothing in the file.
+Führe figma_lint_design auf dem Node <NODE> (<MASTER-NAME>) aus, nur mit den Regeln
+hardcoded-color, default-name und detached-component. Gib die Befunde als Liste
+zurück: Ebene, Regel, Meldung. Ändere nichts in der Datei.
 ```
 
-The list is several times as long, and most of it is marked "critical". Before you sort a
-group, open its example layer in Figma: is the layer visible at all? Which group is real,
-which is a false alarm, and which is a matter of opinion? A tool that reports by rule does
-not know which layers a user ever sees. That is why a finding is something to sort.
+`<NODE>`: An Tag 1 der Master, den der Trainer nennt (lies seine ID in Deinem Duplikat ab,
+nimm nicht an, dass es die ID vom Beamer ist). An Tag 2 Dein eigenes Component Set: Wähle es
+in Figma aus, während Claude Code schon läuft, und sag „der Node, den ich ausgewählt habe“
+(der Agent liest die ID mit `figma_get_selection`). Eine Auswahl von vor dem Start der
+Sitzung wird nicht gesehen: Meldet der Agent, dass nichts ausgewählt ist, klick das Set
+noch einmal an.
 
-**Day 2, your own set.** Expect `default-name` findings on `Vector` layers inside icon
-instances. Those layers belong to the library's icon, not to you: false alarm, note it and
-move on. A list with no finding of your own is not proof of a clean set. Three rules ran;
-nobody has checked spacing, radius or structure.
+Ordne jede Zeile des Ergebnisses ein: **echt** oder **Fehlalarm**. Ein Befund ist etwas zum
+Einordnen, kein Urteil. Die drei Regeln fangen rohe Farben, Ebenen mit Standardnamen und
+gelöste Instanzen. Sie sehen nicht, ob das Design stimmt, und nicht Abstände und Radien. An
+Tag 2 behebst Du zuerst die echten Befunde und notierst die Fehlalarme.
+
+**Tag 1, ein zweiter Lauf: alle Regeln.** Drei Regeln, drei echte Befunde: Einer sauberen
+Liste glaubt man leicht. Jetzt derselbe Master ohne Filter:
+
+```text
+Führe figma_lint_design auf dem Node <NODE> (<MASTER-NAME>) noch einmal aus, diesmal
+mit allen Regeln, ohne Filter. Gruppiere die Befunde nach Regel: Regel, Schweregrad,
+Anzahl und eine Beispielebene mit ihrem Pfad im Master. Ändere nichts in der Datei.
+```
+
+Die Liste ist um ein Vielfaches länger, und das meiste ist als „critical“ markiert. Bevor Du
+eine Gruppe einordnest, öffne ihre Beispielebene in Figma: Ist die Ebene überhaupt sichtbar?
+Welche Gruppe ist echt, welche ein Fehlalarm, und welche ist Ansichtssache? Ein Werkzeug,
+das nach Regeln meldet, weiß nicht, welche Ebenen ein Nutzer je sieht. Darum ist ein Befund
+etwas zum Einordnen.
+
+**Tag 2, Dein eigenes Set.** Rechne mit `default-name`-Befunden an `Vector`-Ebenen in
+Icon-Instanzen. Diese Ebenen gehören zum Icon der Bibliothek, nicht zu Dir: Fehlalarm,
+notieren und weitergehen. Eine Liste ohne eigenen Befund beweist kein sauberes Set. Drei
+Regeln sind gelaufen. Abstände, Radien und Struktur hat niemand geprüft.

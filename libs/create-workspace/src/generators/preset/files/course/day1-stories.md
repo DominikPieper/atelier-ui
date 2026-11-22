@@ -1,79 +1,81 @@
-# Day 1, Block 04: the docs the agent reads, and a story that can fail
+# Tag 1, Block 04: die Docs, die der Agent liest, und eine Story, die scheitern kann
 
-Used in Day 1 Block 04. Two parts: you ask the `{{MCP}}` MCP what a library component can
-do, and you write one story with a `play` function, see it red once and then green.
-Storybook must be running (`npm run storybook`, port 6006) before Claude Code starts,
-otherwise `storybook-local` is not connected (see `rescue.md`).
+Gebraucht in Tag 1, Block 04. Zwei Teile: Du fragst den MCP-Server `{{MCP}}`, was eine
+Bibliothekskomponente kann, und Du schreibst eine Story mit einer `play`-Funktion, siehst sie
+einmal rot und dann grün. Storybook muss laufen (`npm run storybook`, Port 6006), bevor
+Claude Code startet, sonst ist `storybook-local` nicht verbunden (siehe `rescue.md`).
 
-**Done when** `docs-show` was called on your seat, and one story with a `play` function was
-red once and is green now.
+**Fertig, wenn** `docs-show` auf Deinem Platz aufgerufen wurde und eine Story mit einer
+`play`-Funktion einmal rot war und jetzt grün ist.
 
-## Part 1: ask the docs (14:40 to 15:00)
-
-```text
-Use the {{MCP}} MCP. Call docs-list, then docs-show for the AtlButton id, and
-list its props with allowed values. Do not guess.
-```
-
-Then ask for something that does not exist:
+## Teil 1: die Docs befragen (14:40 bis 15:00)
 
 ```text
-Does AtlButton have a `shadow` prop? Answer from docs-show only.
+Nutze den {{MCP}} MCP. Rufe docs-list auf, dann docs-show für die AtlButton-ID, und
+liste ihre Props mit den erlaubten Werten auf. Rate nicht.
 ```
 
-The answer you want is a plain "no", with the place the agent looked. An answer that
-starts to explain how you could add a shadow anyway has left the docs.
-
-## Part 2: a story with a `play`, red then green (15:00 to 15:25)
-
-The workspace has one template story, the `atl-button.stories` file in
-`workshop-{{FRAMEWORK_LC}}/src/`. Its `Primary` story clicks the button and checks that the
-text next to it changes.
+Frag dann nach etwas, das es nicht gibt:
 
 ```text
-Storybook is running on port 6006. Write one new story in the atl-button.stories
-file under workshop-{{FRAMEWORK_LC}}/src/ for the Outline variant with a click,
-modelled on the Primary story, with a play function that checks the behaviour.
-Call get-storybook-story-instructions from storybook-local before you write
-anything. Then run it with test-run through storybook-local and tell me the
-result.
+Hat AtlButton eine `shadow`-Prop? Antworte nur aus docs-show.
 ```
 
-The file already has an `Outline` story, without a click. Which name did the agent give the
-new one, and did it say why?
+Die Antwort, die Du willst, ist ein schlichtes „Nein“, mit der Stelle, an der der Agent
+nachgesehen hat. Eine Antwort, die anfängt zu erklären, wie man trotzdem einen Schatten
+hinzufügen könnte, hat die Docs verlassen.
 
-It will most likely be green on the first run. A `play` that has never failed has proven
-nothing yet, so break it:
+## Teil 2: eine Story mit `play`, erst rot, dann grün (15:00 bis 15:25)
+
+Der Workspace hat eine Vorlagen-Story, die Datei `atl-button.stories` in
+`workshop-{{FRAMEWORK_LC}}/src/`. Ihre Story `Primary` klickt den Button und prüft, dass
+sich der Text daneben ändert.
 
 ```text
-Now break it on purpose: change the text the play function expects to `never`.
-Run test-run again and show me the failure exactly as the tool reports it. Do
-not fix it yet.
+Storybook läuft auf Port 6006. Schreibe eine neue Story in der Datei atl-button.stories
+unter workshop-{{FRAMEWORK_LC}}/src/ für die Variante Outline mit einem Klick,
+nach dem Muster der Story Primary, mit einer play-Funktion, die das Verhalten prüft.
+Rufe get-storybook-story-instructions von storybook-local auf, bevor Du irgendetwas
+schreibst. Führe sie dann mit test-run über storybook-local aus und nenne mir das
+Ergebnis.
 ```
 
-Read the failure in the agent's answer and in Storybook's interactions panel: it is the same
-red. Which line names the text the `play` function looked for, and where does the output
-show the text that is really on the page?
+Die Datei hat schon eine Story `Outline`, ohne Klick. Welchen Namen hat der Agent der neuen
+gegeben, und hat er gesagt, warum?
+
+Beim ersten Lauf wird sie sehr wahrscheinlich grün sein. Eine `play`-Funktion, die noch nie
+gescheitert ist, hat noch nichts bewiesen, also mach sie kaputt:
 
 ```text
-Fix it again and show me that it is green.
+Mach sie jetzt mit Absicht kaputt: Ändere den Text, den die play-Funktion erwartet, auf
+`never`. Führe test-run noch einmal aus und zeig mir den Fehler genau so, wie das
+Werkzeug ihn meldet. Repariere noch nichts.
 ```
 
-## Part 3: read what was written
+Lies den Fehler in der Antwort des Agenten und im Interactions-Panel von Storybook: Es ist
+dasselbe Rot. Welche Zeile nennt den Text, den die `play`-Funktion gesucht hat, und wo zeigt
+die Ausgabe den Text, der wirklich auf der Seite steht?
 
 ```text
-Explain the anatomy of the story file you just edited to me: what is meta, what
-is a story, what are args, what does play do, and where does the text `clicked`
-come from?
+Repariere sie wieder und zeig mir, dass sie grün ist.
 ```
 
-Two questions for you, not for the agent:
+## Teil 3: lesen, was geschrieben wurde
 
-- Look at the story list `docs-show` printed in part 1 and at your story file. They do not
-  match: `docs-show` lists stories your file does not have, and it does not know the one
-  you just wrote. Which Storybook does each answer come from? (`{{MCP}}` answers for the
-  library as it was published; `storybook-local` answers for what runs on your machine.)
-- The agent said "green". Did you see the story run, or did you read a sentence?
+```text
+Erkläre mir den Aufbau der Story-Datei, die Du gerade bearbeitet hast: Was ist meta, was
+ist eine Story, was sind args, was macht play, und woher kommt der Text `clicked`?
+```
 
-If `storybook-local` is not connected, start Storybook, then run `/mcp` and reconnect. The
-interactions panel in the browser shows the same result meanwhile.
+Zwei Fragen an Dich, nicht an den Agenten:
+
+- Sieh Dir die Story-Liste an, die `docs-show` in Teil 1 ausgegeben hat, und Deine
+  Story-Datei. Sie passen nicht zusammen: `docs-show` listet Stories, die Deine Datei nicht
+  hat, und kennt die nicht, die Du gerade geschrieben hast. Aus welchem Storybook kommt jede
+  der beiden Antworten? (`{{MCP}}` antwortet für die Bibliothek, wie sie veröffentlicht
+  wurde; `storybook-local` antwortet für das, was auf Deinem Rechner läuft.)
+- Der Agent hat „grün“ gesagt. Hast Du die Story laufen sehen, oder hast Du einen Satz
+  gelesen?
+
+Ist `storybook-local` nicht verbunden, starte Storybook, führe dann `/mcp` aus und verbinde
+neu. Das Interactions-Panel im Browser zeigt in der Zwischenzeit dasselbe Ergebnis.

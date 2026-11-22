@@ -1,178 +1,194 @@
-# Component brief — TagChip
+# Komponenten-Brief: TagChip
 
-> **Source: composed, not canonical.** There is no `tag-chip` or `chip` among the
-> canonical components. This brief assembles one from two that _are_ canonical: the
-> `tag` and `tag-remove` slots of a tag input, and the whole of `badge`. Where the two
-> disagree, the disagreement is called out rather than smoothed over.
-> **Starter frame:** `TagChip / Starter` — node `703:352` on the `🛠️ Workshop-Templates`
-> page.
-> **Read [`README.md`](README.md) first** — the shared rules and the "done when" bar
-> live there and are not repeated here.
+> **Quelle: zusammengesetzt, nicht kanonisch.** Unter den kanonischen Komponenten gibt es
+> weder `tag-chip` noch `chip`. Dieser Brief setzt eines aus zwei Komponenten zusammen,
+> die kanonisch _sind_: den Slots `tag` und `tag-remove` eines Tag Inputs und dem
+> gesamten `badge`. Wo beide sich widersprechen, wird der Widerspruch benannt, nicht
+> geglättet.
+> **Starter-Frame:** `TagChip / Starter`, Node `703:352` auf der Seite
+> `🛠️ Workshop-Templates`.
+> **Lies zuerst [`README.md`](README.md).** Die gemeinsamen Regeln und die Messlatte
+> „Fertig, wenn“ stehen dort und werden hier nicht wiederholt.
 
-A compact labelled token that can be removed. It looks like a Badge and behaves like the
-`tag` inside a Tag Input, and the gap between those two facts is the entire brief: a
-Badge is **read-only by canonical contract**, and the moment you put an × on it you have
-inherited a hit-target obligation the Badge was never designed to meet.
-
----
-
-## 1. Anatomy
-
-Six slots. Three come from `badge`. `remove-button` is `tag-input`'s `tag-remove`;
-its two children are not slots `tag-input` declares — they follow the
-`close-button` / `close-icon` / `close-label` split that `toast` records, which is
-where the canonical roster puts an accessible name on an icon-only control.
-
-| Slot            | Required            | From                           | Figma                         | What it is                                                                                                                 |
-| --------------- | ------------------- | ------------------------------ | ----------------------------- | -------------------------------------------------------------------------------------------------------------------------- |
-| `root`          | yes                 | badge `root` + tag-input `tag` | frame, auto-layout horizontal | The pill surface. Carries the variant treatment, the radius, and the padding budget.                                       |
-| `icon-leading`  | no                  | badge                          | instance                      | Optional glyph before the label, on the leading edge with a consistent gap.                                                |
-| `label`         | yes                 | badge                          | text                          | The chip's text and its accessible name. A noun phrase, truncating with ellipsis when it overflows.                        |
-| `remove-button` | no                  | tag-input `tag-remove`         | instance                      | Real `<button>`. Icon-button at the inline-end. Absent on read-only chips.                                                 |
-| `remove-icon`   | yes (of the button) | toast `close-icon`             | instance                      | The × glyph. Decorative, always.                                                                                           |
-| `remove-label`  | yes (of the button) | toast `close-label`            | text                          | The accessible name: `"Remove <label>"` — the wording is `tag-input`'s. Visually hidden, or an `aria-label` on the button. |
-
-**Token budget.** `root`: background `color/surface-sunken` (neutral) or the severity's
-`color/<severity>-bg`, foreground `color/text` or `color/<severity>-text`, border
-`color/border`, radius `radius/full` for a pill or `radius/sm` for a rectangular chip,
-padding and gap off `spacing/*`, type `font-size/xs` at `font-weight/semibold`.
-`remove-button`: foreground `color/text-muted`, focus ring off `color/input-border-focus`.
-
-**Where the two sources disagree.** `badge` puts the pill at `radius.pill` and the type
-at `text.xs`; `tag-input`'s `tag` puts it at `radius.sm` and `text.sm`, because a tag
-sits inside a form control and matches the input's type. Pick one and write the reason
-into the description. A standalone chip is closer to a Badge; a chip inside a field is
-closer to a tag. This decision _is_ the design work.
+Ein kompaktes beschriftetes Token, das sich entfernen lässt. Es sieht aus wie ein Badge
+und verhält sich wie das `tag` in einem Tag Input, und die Lücke zwischen diesen beiden
+Tatsachen ist der gesamte Brief: Ein Badge ist **laut kanonischem Vertrag
+schreibgeschützt**, und sobald Du ein × darauf setzt, erbst Du eine Pflicht zur
+Trefferfläche, für die das Badge nie gedacht war.
 
 ---
 
-## 2. Axes
+## 1. Anatomie
 
-**Variant (the severity axis, from `badge`):** `default` · `success` · `warning` ·
-`danger` · `info`. A closed enum — the same one the CSS contract maps to token pairs.
+Sechs Slots. Drei stammen aus `badge`. `remove-button` ist `tag-remove` aus `tag-input`;
+seine zwei Kinder sind keine Slots, die `tag-input` deklariert: Sie folgen der
+Aufteilung `close-button` / `close-icon` / `close-label`, die `toast` festhält, und dort
+setzt die kanonische Liste einen zugänglichen Namen an ein reines Icon-Control.
 
-**Properties (not variants):**
+| Slot            | Pflicht          | Aus                            | Figma                         | Was es ist                                                                                                                            |
+| --------------- | ---------------- | ------------------------------ | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------- |
+| `root`          | ja               | badge `root` + tag-input `tag` | Frame, Auto-Layout horizontal | Die Pillenfläche. Trägt die Variantengestaltung, den Radius und das Padding-Budget.                                                   |
+| `icon-leading`  | nein             | badge                          | Instanz                       | Optionales Symbol vor dem Label, am Anfangsrand mit gleichbleibendem Abstand.                                                         |
+| `label`         | ja               | badge                          | Text                          | Der Text des Chips und sein zugänglicher Name. Eine Nominalphrase, die bei Überlauf mit Ellipse abgeschnitten wird.                   |
+| `remove-button` | nein             | tag-input `tag-remove`         | Instanz                       | Echter `<button>`. Icon-Button am Zeilenende. Fehlt bei schreibgeschützten Chips.                                                     |
+| `remove-icon`   | ja (des Buttons) | toast `close-icon`             | Instanz                       | Das ×-Symbol. Immer dekorativ.                                                                                                        |
+| `remove-label`  | ja (des Buttons) | toast `close-label`            | Text                          | Der zugängliche Name: `"Remove <label>"`, die Formulierung stammt aus `tag-input`. Visuell versteckt oder ein `aria-label` am Button. |
 
-| Property    | Kind    | Values     | From      |
+**Token-Budget.** `root`: Hintergrund `color/surface-sunken` (neutral) oder das
+`color/<severity>-bg` des Schweregrads, Vordergrund `color/text` oder
+`color/<severity>-text`, Rahmen `color/border`, Radius `radius/full` für eine Pille oder
+`radius/sm` für einen rechteckigen Chip, Padding und Abstand aus `spacing/*`, Schrift
+`font-size/xs` in `font-weight/semibold`. `remove-button`: Vordergrund
+`color/text-muted`, Fokusring aus `color/input-border-focus`.
+
+**Wo die beiden Quellen sich widersprechen.** `badge` setzt die Pille auf `radius.pill`
+und die Schrift auf `text.xs`; das `tag` aus `tag-input` setzt sie auf `radius.sm` und
+`text.sm`, weil ein Tag in einem Formular-Control sitzt und zur Schrift des Inputs
+passt. Wähle eines und schreibe den Grund in die Beschreibung. Ein freistehender Chip
+steht einem Badge näher, ein Chip in einem Feld einem Tag. Diese Entscheidung _ist_ die
+Designarbeit.
+
+---
+
+## 2. Achsen
+
+**Variante (die Schweregrad-Achse, aus `badge`):** `default` · `success` · `warning` ·
+`danger` · `info`. Ein geschlossenes Enum, dasselbe, das der CSS-Vertrag auf Token-Paare
+abbildet.
+
+**Properties (keine Varianten):**
+
+| Property    | Art     | Werte      | Aus       |
 | ----------- | ------- | ---------- | --------- |
 | `size`      | enum    | `sm`, `md` | badge     |
 | `removable` | boolean | —          | tag-input |
 | `hasIcon`   | boolean | —          | badge     |
 
-`removable` is the axis that turns a Badge into a TagChip, and it is a **property**, not
-a variant — exactly as `badge` models `dot`. Forking "Chip" and "Removable Chip" into two
-components is the documented drift: they diverge in padding, size and border within a
-release or two.
+`removable` ist die Achse, die ein Badge zum TagChip macht, und sie ist eine
+**Property**, keine Variante, genau wie `badge` `dot` modelliert. „Chip“ und „Removable
+Chip“ in zwei Komponenten aufzuspalten ist der dokumentierte Drift: Sie laufen bei
+Padding, Größe und Rahmen binnen ein, zwei Releases auseinander.
 
-### Scope for the 90-minute block
+### Umfang für den 90-Minuten-Block
 
-**In scope: `default` and `success`, with `removable: true`.** Two severities prove the
-token pairing; `removable: true` is what makes this a TagChip at all and drags in the
-whole a11y section. The chip is not itself the interactive element — the remove button
-is (§3) — so per [`README.md` item 1](README.md#done-when) it draws no `state` axis at
-all: hover and focus-visible on the × go into the master's description, exactly like the
-states listed as out of scope below.
+**Im Umfang: `default` und `success`, mit `removable: true`.** Zwei Schweregrade belegen
+die Token-Zuordnung; `removable: true` macht das Ganze überhaupt erst zum TagChip und
+zieht den ganzen a11y-Abschnitt nach sich. Der Chip selbst ist nicht das interaktive
+Element, der Entfernen-Button ist es (§3), also zeichnet er nach
+[`README.md` Punkt 1](README.md#fertig-wenn) gar keine `state`-Achse: hover und
+focus-visible auf dem × gehören in die Beschreibung des Masters, genau wie die unten als
+bewusst draußen aufgeführten Zustände.
 
-**Out of scope, and say so in the description rather than silently omitting:**
-`warning`, `danger`, `info`, the `sm` size, `hasIcon`, Badge's own data states (`idle`,
-`updated`, `max`, `hidden` — §3), the remove button's `hover`/`focus-visible` states, and
-the selected/keyboard-navigated state a chip acquires inside a Tag Input — none of these
-draws as a chip-level `state` axis; document them in the master's description instead.
-
----
-
-## 3. States
-
-**Interactive:** `hover`, `focus-visible` — on the **remove button**, not on the chip.
-The chip itself is not a button. `badge`'s canonical record lists _no_ interactive states
-at all, which is the honest starting point: the only focusable thing here is the ×.
-Neither is drawn as a chip-level `state` axis — the chip is not the interactive element,
-so per [`README.md` item 1](README.md#done-when) these go into the master's description
-instead.
-
-**Data (from `badge`):** `idle`, `updated`, `max`, `hidden`.
-
-A chip living inside a Tag Input inherits that component's states as well — `empty`,
-`filled`, `busy`, `invalid` belong to the field, not to the chip. Do not model them here.
-
-There is one transition worth drawing even though it is out of scope to build: removal.
-Activating the remove button takes the chip out of the value list **and moves focus to
-the next chip**, or to the input if it was the last. Focus that lands nowhere after a
-removal is the most common way this component breaks for keyboard users.
+**Nicht im Umfang, und sag das in der Beschreibung, statt es stillschweigend wegzulassen:**
+`warning`, `danger`, `info`, die Größe `sm`, `hasIcon`, die eigenen Datenzustände des
+Badge (`idle`, `updated`, `max`, `hidden`, §3), die Zustände `hover`/`focus-visible` des
+Entfernen-Buttons und der Zustand „ausgewählt/per Tastatur angesteuert“, den ein Chip in
+einem Tag Input bekommt. Keiner davon wird als `state`-Achse auf Chip-Ebene gezeichnet;
+dokumentiere sie stattdessen in der Beschreibung des Masters.
 
 ---
 
-## 4. Accessibility requirements
+## 3. Zustände
 
-The blocker here is the one people are most surprised by. Each item is also tagged
-**(this block)** — checkable on the `default`/`success` frame with `removable: true` you
-draw — or **(full component)** — real, and one of them blocker-severity, but dependent on
-a behaviour (removal itself, multiple chips, `hasIcon`) this brief's scope puts out of
-reach for the 90 minutes (see [`README.md` item 7](README.md#done-when)). A **(full
-component)** tag is not permission to skip it — it is why the closing check does not fail
-you for not having built it.
+**Interaktiv:** `hover`, `focus-visible`, auf dem **Entfernen-Button**, nicht auf dem
+Chip. Der Chip selbst ist kein Button. Die maßgebliche Quelle von `badge` listet _gar
+keine_ interaktiven Zustände, was der ehrliche Ausgangspunkt ist: Das Einzige, was hier
+den Fokus bekommt, ist das ×. Keiner von beiden wird als `state`-Achse auf Chip-Ebene
+gezeichnet. Der Chip ist nicht das interaktive Element, also gehören sie nach
+[`README.md` Punkt 1](README.md#fertig-wenn) stattdessen in die Beschreibung des Masters.
 
-1. **The hit target is at least 24 × 24 px.** _(blocker — WCAG 2.5.8 · this block)_ A
-   remove button sized to look right inside a compact chip is routinely 16px. Extend the
-   activation region with padding or an `::after` overlay so the _visible_ chip stays
-   compact while the _target_ meets the threshold. The canonical record's own advice is
-   blunter: if the design genuinely needs an interactive badge, reach for Tag Input or
-   Button instead — this component exists in the seam between them, and that is worth
-   knowing before you draw it. `removable: true` is in scope — the target size is
-   measurable directly on the frame.
-2. **Chips are removable by keyboard, not only by pointer.** _(blocker · full component)_
-   Inside a field, the canonical model is: Backspace at an empty input _selects_ the last
-   chip; a second Backspace removes it; ArrowLeft / ArrowRight navigate between selected
-   chips. Standalone, the minimum is that the remove button is a real `<button>` in the
-   tab order. Mouse-only removal is a hard fail. **Removal is explicitly out of scope to
-   build here (§3)** — a static Figma frame has no keyboard to fail with, so this cannot
-   be demonstrated in the 90-minute close. Draw the transition (§3) and write the keyboard
-   contract into the description; build it when you write the code.
-3. **Chips carry list structure.** _(blocker · full component)_ A row of chips is a
-   `<ul>` (or `role="list"`) with each chip an `<li>` — not a `<div>` of styled spans.
-   Without it a screen reader hears an undifferentiated run of text and cannot tell chip
-   from chrome. Depends on a row of chips; the starter frame is one chip.
-4. **Severity is never colour alone.** _(blocker · this block)_ Pair the variant with an
-   icon, a textual prefix, or a visually hidden severity word. Colour is reinforcement.
-   `default` and `success` are exactly the pair you draw — checkable directly.
-5. **The remove button names its target.** _(this block)_ `aria-label="Remove <label>"`
-   — not "Remove", not "Close". The user needs to know _which_ one they are about to
-   delete. `remove-label` is an anatomy slot (§1) present whenever `removable: true` —
-   checkable on the frame.
-6. **The remove icon announces nothing.** _(major · this block)_ `aria-hidden="true"` on
-   the glyph. Naming both the icon and the button double-announces. `remove-icon` is an
-   anatomy slot (§1), marked decorative — checkable on the frame.
-7. **The leading icon announces nothing either.** _(major · full component)_ Decorative
-   whenever a visible label is present. `hasIcon` — and with it `icon-leading` — is out of
-   scope (§2); nothing built here has a leading icon to mark.
+**Daten (aus `badge`):** `idle`, `updated`, `max`, `hidden`.
+
+Ein Chip in einem Tag Input erbt auch dessen Zustände: `empty`, `filled`, `busy`,
+`invalid` gehören zum Feld, nicht zum Chip. Modelliere sie hier nicht.
+
+Ein Übergang ist es wert, gezeichnet zu werden, obwohl er nicht gebaut wird: das
+Entfernen. Wird der Entfernen-Button aktiviert, verschwindet der Chip aus der
+Werteliste **und der Fokus springt zum nächsten Chip**, oder zum Input, wenn es der
+letzte war. Fokus, der nach dem Entfernen nirgends landet, ist die häufigste Art, wie
+diese Komponente für Tastaturnutzer kaputtgeht.
 
 ---
 
-## 5. Figma ↔ code gotchas
+## 4. Anforderungen an die Barrierefreiheit
 
-| Drawn as                                              | Implemented as                                                    | Why it hurts                                                                                                                                           |
-| ----------------------------------------------------- | ----------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------ |
-| Static text-with-border decorations                   | Live elements with remove buttons that are part of the form value | Implementations follow the mock and ship styled spans: no remove affordance, no keyboard contract, no way to change a value except retyping all of it. |
-| A "Chip" and a separate "Removable Chip" component    | One component with a `removable` boolean                          | The two drift independently — different padding, different border, different size — and the canonical anatomy forks visually.                          |
-| The × drawn, but no keyboard navigation between chips | Arrow-key navigation plus Backspace removal                       | Keyboard users must Tab through every chip's × in turn. The design encodes the affordance and omits the model.                                         |
-| Five separate frames, one per severity                | One `variant` prop mapped to token pairs                          | The matrix doubles for nothing, and severity drift becomes invisible — `success` and `info` can quietly converge on the same hue.                      |
+Der Blocker hier ist der, der die Leute am meisten überrascht. Jeder Punkt trägt
+zusätzlich die Markierung **(dieser Block)**, prüfbar am Frame `default`/`success` mit
+`removable: true`, den Du zeichnest, oder **(volle Komponente)**: real, einer davon mit
+Schweregrad Blocker, hängt aber von einem Verhalten ab (das Entfernen selbst, mehrere
+Chips, `hasIcon`), das der Umfang dieses Briefs für die 90 Minuten außer Reichweite legt
+(siehe [`README.md` Punkt 7](README.md#fertig-wenn)). Die Markierung **(volle
+Komponente)** ist keine Erlaubnis, den Punkt zu überspringen: Sie ist der Grund, warum
+der abschließende Check Dich nicht durchfallen lässt, weil Du ihn nicht gebaut hast.
+
+1. **Die Trefferfläche ist mindestens 24 × 24 px.** _(Blocker, WCAG 2.5.8 · dieser
+   Block)_ Ein Entfernen-Button, der in einem kompakten Chip gut aussieht, ist
+   regelmäßig 16 px groß. Erweitere den Aktivierungsbereich mit Padding oder einem
+   `::after`-Overlay, damit der _sichtbare_ Chip kompakt bleibt, die _Trefferfläche_ aber
+   die Schwelle erreicht. Der Rat der maßgeblichen Quelle ist noch deutlicher: Braucht
+   das Design wirklich ein interaktives Badge, greife stattdessen zu Tag Input oder
+   Button. Diese Komponente lebt in der Lücke zwischen beiden, und das solltest Du
+   wissen, bevor Du sie zeichnest. `removable: true` ist im Umfang, die Zielgröße ist
+   direkt am Frame messbar.
+2. **Chips lassen sich per Tastatur entfernen, nicht nur per Zeiger.** _(Blocker · volle
+   Komponente)_ In einem Feld lautet das kanonische Modell: Backspace in einem leeren
+   Input _wählt_ den letzten Chip aus; ein zweites Backspace entfernt ihn; ArrowLeft /
+   ArrowRight wechseln zwischen ausgewählten Chips. Freistehend ist das Minimum, dass der
+   Entfernen-Button ein echter `<button>` in der Tab-Reihenfolge ist. Entfernen nur mit
+   der Maus ist ein hartes Durchfallen. **Das Entfernen wird hier ausdrücklich nicht
+   gebaut (§3)**: Ein statischer Figma-Frame hat keine Tastatur, an der er scheitern
+   könnte, also lässt sich das im 90-Minuten-Abschluss nicht vorführen. Zeichne den
+   Übergang (§3) und schreibe den Tastaturvertrag in die Beschreibung; baue es, wenn Du
+   den Code schreibst.
+3. **Chips tragen Listenstruktur.** _(Blocker · volle Komponente)_ Eine Reihe von Chips
+   ist ein `<ul>` (oder `role="list"`), jeder Chip ein `<li>`, kein `<div>` voller
+   gestylter Spans. Ohne das hört ein Screenreader einen undifferenzierten Textstrom und
+   kann Chip nicht von Beiwerk unterscheiden. Hängt von einer Reihe Chips ab; der
+   Starter-Frame ist ein einzelner Chip.
+4. **Der Schweregrad steht nie allein durch Farbe.** _(Blocker · dieser Block)_
+   Kombiniere die Variante mit einem Icon, einem Text-Präfix oder einem visuell
+   versteckten Schweregrad-Wort. Farbe verstärkt nur. `default` und `success` sind genau
+   das Paar, das Du zeichnest, direkt prüfbar.
+5. **Der Entfernen-Button nennt sein Ziel.** _(dieser Block)_ `aria-label="Remove <label>"`,
+   nicht „Remove“, nicht „Close“. Der Nutzer muss wissen, _welchen_ er gleich löschen
+   wird. `remove-label` ist ein Anatomie-Slot (§1), der immer vorhanden ist, wenn
+   `removable: true`, am Frame prüfbar.
+6. **Das Entfernen-Icon kündigt nichts an.** _(major · dieser Block)_ `aria-hidden="true"`
+   auf dem Symbol. Wer Icon und Button benennt, kündigt doppelt an. `remove-icon` ist ein
+   Anatomie-Slot (§1), als dekorativ markiert, am Frame prüfbar.
+7. **Auch das Icon am Anfang kündigt nichts an.** _(major · volle Komponente)_ Dekorativ,
+   sobald ein sichtbares Label vorhanden ist. `hasIcon`, und mit ihm `icon-leading`, ist
+   bewusst draußen (§2); nichts, was hier gebaut wird, hat ein Icon am Anfang, das sich
+   markieren ließe.
 
 ---
 
-## 6. What "finished" looks like here
+## 5. Figma ↔ Code: die Stolperstellen
 
-Beyond the shared bar in [`README.md`](README.md):
-
-- One component set with `variant` (`default` / `success`) and a `removable` boolean —
-  not two components.
-- The remove button's activation region measures ≥ 24 × 24 px even where the chip is
-  smaller, and the description says how that is achieved.
-- The master's description states the remove button's `hover`/`focus-visible` styling and
-  the selected/keyboard-navigated model — neither is drawn as a chip-level axis (§2, §3).
-- The description records **which** source you followed for radius and type (badge or
-  tag), and why.
-- `default` and `success` are distinguishable with colour removed.
+| Gezeichnet als                                                     | Implementiert als                                                         | Warum es wehtut                                                                                                                                                                             |
+| ------------------------------------------------------------------ | ------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Statische Textfelder mit Rahmen als Deko                           | Lebendige Elemente mit Entfernen-Buttons, die Teil des Formularwerts sind | Umsetzungen folgen dem Mockup und liefern gestylte Spans aus: keine Entfernen-Möglichkeit, kein Tastaturvertrag, keine Möglichkeit, einen Wert zu ändern, außer ihn komplett neu zu tippen. |
+| Eine Komponente „Chip“ und eine separate „Removable Chip“          | Eine Komponente mit einem `removable`-Boolean                             | Beide driften unabhängig auseinander (anderes Padding, anderer Rahmen, andere Größe), und die kanonische Anatomie spaltet sich optisch auf.                                                 |
+| Das × ist gezeichnet, aber keine Tastaturnavigation zwischen Chips | Pfeiltasten-Navigation plus Entfernen per Backspace                       | Tastaturnutzer müssen nacheinander durch das × jedes Chips tabben. Das Design kodiert das Bedienangebot und lässt das Modell weg.                                                           |
+| Fünf einzelne Frames, einer pro Schweregrad                        | Eine `variant`-Prop, abgebildet auf Token-Paare                           | Die Matrix verdoppelt sich für nichts, und Schweregrad-Drift wird unsichtbar: `success` und `info` können unbemerkt auf denselben Farbton zulaufen.                                         |
 
 ---
 
-**Before you prompt:** write the handoff document first. A filled example (for the Toast brief) is in `../handoff-example.md`.
+## 6. Woran Du „fertig“ erkennst
+
+Zusätzlich zur gemeinsamen Messlatte in [`README.md`](README.md):
+
+- Ein Component Set mit `variant` (`default` / `success`) und einem Boolean `removable`,
+  keine zwei Komponenten.
+- Der Aktivierungsbereich des Entfernen-Buttons misst ≥ 24 × 24 px, auch wo der Chip
+  kleiner ist, und die Beschreibung sagt, wie das erreicht wird.
+- Die Beschreibung des Masters nennt die Gestaltung von `hover`/`focus-visible` des
+  Entfernen-Buttons und das Modell „ausgewählt/per Tastatur angesteuert“; beides wird
+  nicht als Achse auf Chip-Ebene gezeichnet (§2, §3).
+- Die Beschreibung hält fest, **welcher** Quelle Du für Radius und Schrift gefolgt bist
+  (badge oder tag) und warum.
+- `default` und `success` sind ohne Farbe unterscheidbar.
+
+---
+
+**Bevor Du promptest:** Schreib zuerst das Übergabedokument. Ein ausgefülltes Beispiel (zum Toast-Brief) steht in `../handoff-example.md`.

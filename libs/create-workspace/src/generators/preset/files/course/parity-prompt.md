@@ -1,61 +1,66 @@
-# Parity prompt
+# Parity-Prompt
 
-Day 1 Block 02 compares the Settings Card with its Figma frame by eye. Day 2 Block 04 runs
-`figma_check_design_parity` on your own component, which needs the Figma Desktop Bridge
-connected.
+Tag 1 Block 02 vergleicht die Settings Card mit ihrem Figma-Frame nach Augenmaß. Tag 2
+Block 04 führt `figma_check_design_parity` an Deiner eigenen Komponente aus, dafür muss die
+Figma Desktop Bridge verbunden sein.
 
-## Day 1 Block 02: the Settings Card, by eye
+## Tag 1 Block 02: die Settings Card, nach Augenmaß
 
-Do it after lint and build are green: the comparison with Figma is the judgement-heavy last
-step, so do not spend it on a component that fails lint or build. Put the rendered card next
-to the "Settings / Card" frame in Figma (node `936:2954` on the Workshop-Templates page of
-the original file; ids differ in your duplicate).
+Mach es, wenn Lint und Build grün sind: Der Vergleich mit Figma ist der letzte Schritt, der
+Urteilskraft braucht, also verschwende ihn nicht an eine Komponente, die bei Lint oder Build
+rot ist. Stell die gerenderte Card neben den Frame „Settings / Card“ in Figma (Node
+`936:2954` auf der Seite Workshop-Templates der Originaldatei; in Deinem Duplikat sind die
+IDs anders).
 
-1. Write down every difference you can see: spacing, colour, type, an element that is
-   missing or extra, a state. Five minutes, no tool.
-2. Label each one **code** (the code should change) or **Figma** (the frame should change).
-   A long list: label the three largest.
-3. Hand the code ones back to the agent:
-
-```text
-The settings card differs from its Figma frame in these points:
-<your list>. Fix only these. Do not change anything else.
-```
-
-4. Compare again after the fix, point by point. "All fixed" is the agent's sentence; the
-   frame next to the card is the check. A difference that is still there goes back with the
-   exact value from Figma (which side, how many pixels, which token).
-
-A difference that fits neither label (someone chose it on purpose) is parked: "not code, not
-Figma, we name it on Day 2", and is not "fixed" in code.
-
-The tool that automates part of this comparison comes on Day 2. It compares what it is
-handed, so the eye stays the first check.
-
-## Day 2 Block 04: your own component
-
-The node id comes from your handoff document.
+1. Schreib jede Abweichung auf, die Du sehen kannst: Abstand, Farbe, Schrift, ein fehlendes
+   oder zusätzliches Element, ein Zustand. Fünf Minuten, kein Werkzeug.
+2. Ordne jede einzeln ein als **Code** (der Code soll sich ändern) oder **Figma** (der Frame
+   soll sich ändern). Bei einer langen Liste: ordne die drei größten ein.
+3. Gib die Code-Abweichungen an den Agenten zurück:
 
 ```text
-Run figma_check_design_parity on the node <NODE FROM THE HANDOFF DOCUMENT> against my
-component <ComponentName>. Sort every discrepancy into one of four: **code** (the code
-should change), **Figma** (the master should change), **kept on purpose** (only if the
-handoff document's "Deliberate differences" section names it) or **tool artefact** (the
-tool compared two things that are not the same thing, so there is no difference to fix;
-say what it compared). Give the reason in one line each. Then list what the tool did not
-compare at all. Do not fix anything yet.
+Die Settings Card weicht in diesen Punkten von ihrem Figma-Frame ab:
+<Deine Liste>. Behebe nur diese. Ändere sonst nichts.
 ```
 
-Expect a low score and a short real list. The tool marks every finding as a code change;
-the sorting is the work. Typical artefacts: a resolved hex on the Figma side against a
-`var(--ui-*)` string on the code side, the bounding box of the whole variant set against
-one element, a property reported as missing on both sides because Figma's name carries an
-`#id` suffix. Check two of the "tool artefact" lines yourself before you believe them: an
-artefact label is also a way to make a real difference disappear.
+4. Vergleiche nach der Korrektur noch einmal, Punkt für Punkt. „Alles behoben“ ist der Satz
+   des Agenten, der Frame neben der Card ist die Prüfung. Eine Abweichung, die noch da ist,
+   geht mit dem genauen Wert aus Figma zurück (welche Seite, wie viele Pixel, welcher
+   Token).
 
-A quiet report is not a clean component: what the call does not compare, it does not report.
-Afterwards you own every line: code (hand it back to Claude), Figma (a note for the
-designer), kept on purpose (it must be in the handoff document's "Deliberate differences")
-or tool artefact (nothing to fix, and you can say what was compared with what).
+Eine Abweichung, die zu keinem Etikett passt (jemand hat sie absichtlich so gewählt), wird
+geparkt: „weder Code noch Figma, wir benennen sie an Tag 2“, und wird im Code nicht
+„behoben“.
 
-Without the bridge there is no parity call: compare by eye the way you did on Day 1.
+Das Werkzeug, das einen Teil dieses Vergleichs automatisiert, kommt an Tag 2. Es vergleicht,
+was man ihm gibt, deshalb bleibt das Auge die erste Prüfung.
+
+## Tag 2 Block 04: Deine eigene Komponente
+
+Die Node-ID kommt aus Deinem Übergabedokument.
+
+```text
+Führe figma_check_design_parity auf dem Node <NODE AUS DEM ÜBERGABEDOKUMENT> gegen meine
+Komponente <Komponentenname> aus. Ordne jede Abweichung einer von vier Gruppen zu: **Code**
+(der Code soll sich ändern), **Figma** (der Master soll sich ändern), **absichtlich so**
+(nur wenn der Abschnitt „Bewusste Abweichungen“ des Übergabedokuments sie nennt) oder
+**Werkzeug-Artefakt** (das Werkzeug hat zwei Dinge verglichen, die nicht dasselbe sind, es
+gibt also nichts zu beheben; sag, was es verglichen hat). Gib zu jeder den Grund in einer
+Zeile an. Liste danach auf, was das Werkzeug gar nicht verglichen hat. Behebe noch nichts.
+```
+
+Rechne mit einer niedrigen Punktzahl und einer kurzen echten Liste. Das Werkzeug markiert
+jeden Befund als Code-Änderung, das Einordnen ist die Arbeit. Typische Artefakte: ein
+aufgelöster Hex-Wert auf der Figma-Seite gegen einen `var(--ui-*)`-String auf der
+Code-Seite, die Bounding Box des ganzen Component Sets gegen ein einzelnes Element, eine
+Property, die auf beiden Seiten als fehlend gemeldet wird, weil der Name in Figma ein
+`#id`-Suffix trägt. Prüfe zwei der Zeilen „Werkzeug-Artefakt“ selbst, bevor Du ihnen
+glaubst: Auch ein Artefakt-Etikett kann eine echte Abweichung verschwinden lassen.
+
+Ein ruhiger Report ist keine saubere Komponente: Was der Aufruf nicht vergleicht, meldet er
+nicht. Danach gehört Dir jede Zeile: Code (gib sie an Claude zurück), Figma (eine Notiz für
+die Designerin oder den Designer), absichtlich so (sie muss im Abschnitt „Bewusste Abweichungen“
+des Übergabedokuments stehen) oder Werkzeug-Artefakt (nichts zu beheben, und Du kannst
+sagen, was womit verglichen wurde).
+
+Ohne die Bridge gibt es keinen Parity-Aufruf: Vergleiche nach Augenmaß, wie an Tag 1.

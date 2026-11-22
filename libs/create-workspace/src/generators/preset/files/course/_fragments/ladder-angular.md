@@ -1,45 +1,48 @@
-This stage uses the Angular template rules that `npm run lint` runs in this workspace.
-Three prompts, in order, on the Settings Card you just generated. Prompt 1 is the clean
-run; prompts 2 and 3 break it on purpose, the tool says so, and the agent repairs it.
+Diese Stufe nutzt die Angular-Template-Regeln, die `npm run lint` in diesem Workspace
+ausführt. Drei Prompts, der Reihe nach, an der Settings Card, die Du gerade erzeugt hast.
+Prompt 1 ist der saubere Lauf. Prompt 2 und 3 machen ihn mit Absicht kaputt, das Werkzeug
+sagt es, und der Agent repariert.
 
-**Prompt 1, the clean run.**
-
-```text
-Run `npm run lint` and `npm run build`. Report each exit code. If one is not 0, read the
-output (the full log when the summary has no error text), repair, and run both again.
-```
-
-If the agent already ran both while it generated, this run is green at once. That is not a
-wasted step: until now you had the agent's word, now you have the exit codes.
-
-**Prompt 2, break it on purpose.** Do not let the agent fix anything yet.
+**Prompt 1, der saubere Lauf.**
 
 ```text
-Add an `<img src="/avatar.png">` without `alt` and a `<div (click)="save()">Save</div>`
-to the Settings Card. Do not fix anything. Run `npm run lint`, report the exit code and
-the rule ids it names.
+Führe `npm run lint` und `npm run build` aus. Nenne jeden Exit-Code. Ist einer nicht 0, lies
+die Ausgabe (das vollständige Log, wenn die Zusammenfassung keinen Fehlertext enthält),
+repariere und führe beide erneut aus.
 ```
 
-Expect a non-zero exit code and these rule ids: `alt-text` (the image),
-`click-events-have-key-events` and `interactive-supports-focus` (the div).
+Hat der Agent beide schon beim Erzeugen ausgeführt, ist dieser Lauf sofort grün. Das ist kein
+verschwendeter Schritt: Bisher hattest Du das Wort des Agenten, jetzt hast Du die Exit-Codes.
 
-**Prompt 3, repair from the output.**
+**Prompt 2, mit Absicht kaputt machen.** Lass den Agenten noch nichts reparieren.
 
 ```text
-Repair from the lint output. Run lint and build again and report both exit codes.
+Füge der Settings Card ein `<img src="/avatar.png">` ohne `alt` und ein
+`<div (click)="save()">Save</div>` hinzu. Repariere nichts. Führe `npm run lint` aus, nenne
+den Exit-Code und die Regel-IDs, die lint ausgibt.
 ```
 
-Now read the repair. What did the agent write as `alt`? Usually it invents a name such as
-`alt="User avatar"`. Lint is green with any text, and with `alt=""` too, which hides the
-image from a screen reader. Is that name right, and who decided? Green is not the same as
-right.
+Erwarte einen Exit-Code ungleich 0 und diese Regel-IDs: `alt-text` (das Bild),
+`click-events-have-key-events` und `interactive-supports-focus` (das div).
 
-**Clean-up.**
+**Prompt 3, aus der Ausgabe reparieren.**
 
 ```text
-Remove the image and the div again, run both, report the exit codes.
+Repariere anhand der lint-Ausgabe. Führe lint und build erneut aus und nenne beide Exit-Codes.
 ```
 
-What lint does not see: a raw `<button>` where a library component exists, and meaning
-(any `alt` text passes, the wrong one too). If the agent stalls or reports "failed" without error text, type
-`npm run lint` (or `npm run build`) in the terminal and read the output yourself.
+Lies jetzt die Reparatur. Was hat der Agent als `alt` geschrieben? Meist erfindet er einen
+Namen wie `alt="User avatar"`. Lint ist mit jedem Text grün, auch mit `alt=""`, und das
+versteckt das Bild vor dem Screenreader. Stimmt der Name, und wer hat ihn entschieden? Grün
+heißt nicht richtig.
+
+**Aufräumen.**
+
+```text
+Entferne das Bild und das div wieder, führe beide aus, nenne die Exit-Codes.
+```
+
+Was lint nicht sieht: einen rohen `<button>`, wo es eine Bibliothekskomponente gibt, und
+Bedeutung (jeder `alt`-Text besteht, auch der falsche). Hängt der Agent oder meldet „failed“
+ohne Fehlertext, tippe `npm run lint` (oder `npm run build`) im Terminal und lies die Ausgabe
+selbst.

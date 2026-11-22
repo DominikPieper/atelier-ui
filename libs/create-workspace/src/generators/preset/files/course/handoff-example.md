@@ -1,73 +1,74 @@
-# Handoff document: a filled example
+# Übergabedokument: ein ausgefülltes Beispiel
 
-Used in Day 2 Block 01 (you write yours) and as the input of every Day 2 prompt. This is the
-document filled in for the Toast brief (`briefs/toast.md`), in {{FRAMEWORK}}. It is a
-checklist, not a form: its value is that you decide the scope and write the behaviour in
-your own words before any code exists.
+Verwendet in Tag 2, Block 01 (Du schreibst Dein eigenes) und als Eingabe jedes Prompts an
+Tag 2. Das hier ist das Dokument, ausgefüllt für den Toast-Brief (`briefs/toast.md`), in
+{{FRAMEWORK}}. Es ist eine Checkliste, kein Formular: Sein Wert liegt darin, dass Du den Umfang
+entscheidest und das Verhalten in eigenen Worten aufschreibst, bevor es Code gibt.
 
-Note the two blanks only you can fill: your draft URL and node id, and the auto-dismiss time
-(the brief says "configurable" and leaves the number to you).
+Zwei Lücken kann nur Du füllen: Deine Draft-URL mit Node-ID und die Zeit bis zum automatischen
+Schließen (der Brief sagt „konfigurierbar“ und überlässt Dir die Zahl).
 
-Every line of it is something the diff can be held against: a variant that is not on the
-"In scope" line is a finding, and so is a behaviour line with no play function.
+Jede Zeile ist etwas, wogegen der Diff gehalten werden kann: Eine Variante, die nicht in der
+Zeile „Im Umfang“ steht, ist ein Befund, und eine Verhaltenszeile ohne play-Funktion ebenso.
 
-The name is taken: `@atelier-ui/{{FRAMEWORK_LC}}` already has a toast of its own (in Angular
-it is exported as `AtlToast`), with a different API. This document describes the one you build. When the agent asks which one you
-mean, say so, and do not let it import the library's.
+Der Name ist vergeben: `@atelier-ui/{{FRAMEWORK_LC}}` hat schon einen eigenen Toast (in
+Angular wird er als `AtlToast` exportiert) mit einer anderen API. Dieses Dokument beschreibt
+den, den Du baust. Wenn der Agent fragt, welchen Du meinst, sag es, und lass ihn nicht den der
+Bibliothek importieren.
 
 ---
 
-# Handoff — AtlToast · {{FRAMEWORK}}
+# Übergabedokument: AtlToast · {{FRAMEWORK}}
 
-**Source.** Duplicate of the Atelier file in my drafts, <draft URL>, node
-`<node id of my copy>` (copied from the starter frame `Toast / Starter`, node
-`703:341`). Page: my copy of the Toast frame.
+**Quelle.** Duplikat der Atelier-Datei in meinen Drafts, <Draft-URL>, Node
+`<Node-ID meiner Kopie>` (kopiert aus dem Starter-Frame `Toast / Starter`, Node
+`703:341`). Seite: meine Kopie des Toast-Frames.
 
-**Canonical record.** The brief, `briefs/toast.md`, is the source
-for what the component is.
+**Maßgebliche Quelle.** Der Brief, `briefs/toast.md`, ist die Quelle dafür, was die
+Komponente ist.
 
-**Reuse or new.** New component. The status glyph reuses AtlIcon. It is not an
-Alert (inline, persistent) and not a Dialog (blocking).
+**Wiederverwenden oder neu.** Neue Komponente. Das Statussymbol nutzt AtlIcon wieder. Sie ist
+kein Alert (inline, bleibt stehen) und kein Dialog (blockierend).
 
-**In scope.** variant = success | danger; states = open | closing.
-`dismissible` and `hasIcon` as Booleans if time allows.
-Hover and focus-visible are CSS, not variants.
+**Im Umfang.** variant = success | danger; states = open | closing.
+`dismissible` und `hasIcon` als Booleans, wenn die Zeit reicht.
+Hover und focus-visible sind CSS, keine Varianten.
 
-**Explicitly out.** variants info and warning; the six position values (one
-corner only); stacking; the progress affordance. Each is named in the Figma
-description of the master, not left out silently.
+**Bewusst draußen.** Die Varianten info und warning; die sechs Positionswerte (nur eine
+Ecke); Stapeln; der Fortschrittsindikator. Jedes davon steht in der Figma-Beschreibung des
+Masters, nicht stillschweigend weggelassen.
 
-**Token bindings.** Container: fill `--ui-color-surface-raised`, border
-`--ui-color-border`, radius `--ui-radius-md`, padding and gap from the
-`--ui-spacing-*` ladder. success: `--ui-color-success-bg` and
-`--ui-color-success-text`. danger: `--ui-color-danger-bg` and
-`--ui-color-danger-text`. Close button: `--ui-color-text-muted`.
-Elevation: `--ui-shadow-lg`, CSS only. Figma has no shadow variable, so the
-Figma description says so.
+**Token-Bindungen.** Container: Füllung `--ui-color-surface-raised`, Rand
+`--ui-color-border`, Radius `--ui-radius-md`, Padding und Abstand aus der
+`--ui-spacing-*`-Leiter. success: `--ui-color-success-bg` und
+`--ui-color-success-text`. danger: `--ui-color-danger-bg` und
+`--ui-color-danger-text`. Schließen-Button: `--ui-color-text-muted`.
+Erhöhung: `--ui-shadow-lg`, nur CSS. Figma hat keine Schatten-Variable, deshalb sagt das
+die Figma-Beschreibung.
 
-**Deliberate differences.** What the code does differently from the design on
-purpose, and why. Hover and focus-visible are CSS, not variants or properties.
-Elevation is `--ui-shadow-lg` in CSS only, because Figma has no shadow variable
-to bind.
+**Bewusste Abweichungen.** Was der Code absichtlich anders macht als das Design, und warum.
+Hover und focus-visible sind CSS, keine Varianten oder Properties.
+Die Erhöhung ist `--ui-shadow-lg` nur in CSS, weil Figma keine Schatten-Variable hat, an
+die sich binden ließe.
 
-**Behaviour.** Each line becomes the title of one play function.
+**Verhalten.** Jede Zeile wird zum Titel einer play-Funktion.
 
-- Auto-dismisses after N seconds (I choose N and write it here: ___).
-- Pauses on pointer-enter and on focus-in; resumes, does not restart, when both are out.
-- Escape closes the toast while focus is inside it.
-- success announces politely (role="status"); danger announces assertively (role="alert").
-- The close button has one accessible name, from aria-label or hidden text, never both.
+- Schließt automatisch nach N Sekunden (ich wähle N und schreibe es hier auf: ___).
+- Pausiert bei pointer-enter und bei focus-in; läuft weiter, startet nicht neu, wenn beides draußen ist.
+- Escape schließt den Toast, solange der Fokus in ihm liegt.
+- success meldet höflich (role="status"); danger meldet bestimmt (role="alert").
+- Der Schließen-Button hat genau einen zugänglichen Namen, aus aria-label oder verstecktem Text, nie aus beidem.
 
-**Accessibility.** success and danger differ without colour (glyph and text).
-The glyph is aria-hidden. The action, if present, is a real button. A critical
-error is never shown as a toast.
+**Barrierefreiheit.** success und danger unterscheiden sich ohne Farbe (Symbol und Text).
+Das Symbol ist aria-hidden. Die Aktion, falls vorhanden, ist ein echter Button. Ein
+kritischer Fehler wird nie als Toast gezeigt.
 
-**Target files.** The component, its unit test and its story file (one story
-per variant value and Boolean state, a play function per behaviour line above).
+**Zieldateien.** Die Komponente, ihr Unit-Test und ihre Story-Datei (eine Story
+pro Variantenwert und Boolean-Zustand, eine play-Funktion pro Verhaltenszeile oben).
 
-**Acceptance.** Unit tests and lint exit 0. check:stories green (every story
-renders, axe clean). docs-show describes the component: a description and a line
-per property, and nothing an agent reading only that text would have to guess.
-figma_check_design_parity run on my node, every difference it reports sorted:
-code, Figma, kept on purpose (then it is listed under Deliberate differences)
-or tool artefact.
+**Abnahme.** Unit-Tests und Lint enden mit Exit-Code 0. check:stories grün (jede Story
+rendert, axe sauber). docs-show beschreibt die Komponente: eine Beschreibung und eine Zeile
+pro Property, und nichts, was ein Agent, der nur diesen Text liest, raten müsste.
+figma_check_design_parity auf meinem Node ausgeführt, jede gemeldete Abweichung
+eingeordnet: Code, Figma, absichtlich so (dann steht sie unter Bewusste Abweichungen)
+oder Werkzeug-Artefakt.

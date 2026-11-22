@@ -1,187 +1,193 @@
-# Day 1, Block 05: a screen from Storybook, against the clock
+# Tag 1, Block 05: ein Screen aus Storybook, gegen die Uhr
 
-Used in Day 1 Block 05. You build a "Team directory" screen out of components that
-already exist in `{{PKG}}`. The only thing you know about those components is what the
-`{{MCP}}` MCP server tells you. Nobody gives you the steps: a brief, four rules, a clock
-and closing checks. Expect a screen that looks finished early. The second half of the
-exercise is finding out what "finished" was never checked against.
+Gebraucht in Tag 1, Block 05. Du baust einen Screen „Team directory“ aus Komponenten, die es
+in `{{PKG}}` schon gibt. Über diese Komponenten weißt Du nur, was der MCP-Server `{{MCP}}`
+Dir sagt. Schritte gibt Dir niemand: ein Brief, vier Regeln, eine Uhr und Abschluss-Checks.
+Rechne damit, dass der Screen früh fertig aussieht. In der zweiten Hälfte der Übung findest
+Du heraus, wogegen „fertig“ nie geprüft wurde.
 
-## The brief
+## Der Brief
 
-A "Team directory" screen:
+Ein Screen „Team directory“:
 
-- A heading "Team directory".
-- A toolbar: a search field labelled "Search people", a select labelled "Role" (All roles,
-  Engineer, Designer, Manager) and a primary button "Invite member".
-- A table of members: Name, Email, Role, Status. Status is a badge: active is success,
-  invited is warning, suspended is danger.
-- Pagination under the table, 5 rows per page.
-- Search narrows by name or email, the role select narrows by role, both together.
-  Changing a filter goes back to page 1. No match shows the table's own empty state.
-- Data: a hard-coded array of 12 members in the component. No HTTP.
+- Eine Überschrift "Team directory".
+- Eine Toolbar: ein Suchfeld mit dem Label "Search people", ein Select mit dem Label "Role"
+  (All roles, Engineer, Designer, Manager) und ein primärer Button "Invite member".
+- Eine Tabelle der Mitglieder: Name, Email, Role, Status. Status ist ein Badge: active ist
+  success, invited ist warning, suspended ist danger.
+- Pagination unter der Tabelle, 5 Zeilen pro Seite.
+- Die Suche grenzt nach Name oder E-Mail ein, der Rollen-Select nach Rolle, beide zusammen.
+  Ein Filterwechsel geht zurück auf Seite 1. Ohne Treffer zeigt die Tabelle ihren eigenen
+  Leerzustand.
+- Daten: ein fest einprogrammiertes Array mit 12 Mitgliedern in der Komponente. Kein HTTP.
 
-Components involved: AtlInput (search), AtlSelect (role filter), AtlButton `primary`
-(Invite member), AtlTable, AtlBadge (one per status), AtlPagination.
+Beteiligte Komponenten: AtlInput (Suche), AtlSelect (Rollenfilter), AtlButton `primary`
+(Invite member), AtlTable, AtlBadge (eins pro Status), AtlPagination.
 
-## The four rules
+## Die vier Regeln
 
-1. **Look before you write.** The agent calls `docs-list`, then `docs-show` for every
-   component, before the first line of code.
-2. **Every prop has a source.** A prop, input, slot or event in your code must appear in the
-   `docs-show` output (its code examples count) or in `docs-show-story`. Not documented
-   means not used, and the agent says so. The one exception: the import class names and the
-   package name come from the installed package's type exports, and the receipts say so.
-3. **No hand-built twin.** Where the library has a component, you use it. A `div` with a
-   border is not a card, a hand-styled `span` is not a badge.
-4. **No raw colours.** Every colour and every spacing is a `var(--ui-*)` token, in a plain
-   `.css` file. This is a rule you keep, not a check that enforces it: the checks below
-   catch only part of it.
+1. **Erst ansehen, dann schreiben.** Der Agent ruft `docs-list` auf, dann `docs-show` für
+   jede Komponente, bevor die erste Code-Zeile steht.
+2. **Jede Prop hat eine Quelle.** Eine Prop, ein Input, ein Slot oder ein Event in Deinem
+   Code muss in der Ausgabe von `docs-show` stehen (die Code-Beispiele zählen mit) oder in
+   `docs-show-story`. Nicht dokumentiert heißt nicht benutzt, und der Agent sagt das. Die
+   eine Ausnahme: Die Namen der Import-Klassen und der Paketname stammen aus den
+   Typ-Exports des installierten Pakets, und die Belege sagen das.
+3. **Kein selbstgebauter Zwilling.** Wo die Bibliothek eine Komponente hat, benutzt Du sie.
+   Ein `div` mit Rahmen ist keine Card, ein von Hand gestyltes `span` ist kein Badge.
+4. **Keine rohen Farben.** Jede Farbe und jeder Abstand ist ein `var(--ui-*)`-Token, in einer
+   einfachen `.css`-Datei. Das ist eine Regel, die Du einhältst, kein Check, der sie
+   erzwingt: Die Checks unten fangen nur einen Teil davon ab.
 
-**Done when** the screen runs and behaves as the brief says, you can point to the
-`docs-show` passage behind every prop you pick at random (or the prop was removed), and
-you have checked three lines of the agent's "not verified" list with your own eyes.
+**Fertig, wenn** der Screen läuft und sich verhält, wie der Brief es sagt, Du für jede
+zufällig gewählte Prop die Passage in `docs-show` zeigen kannst (oder die Prop entfernt
+wurde) und Du drei Zeilen der Liste „nicht geprüft“ des Agenten mit eigenen Augen geprüft
+hast.
 
-## The start prompt
+## Der Start-Prompt
 
-Paste this into Claude Code. It is only a start. The agent may get all of it right on the
-first pass; that is the harder case, because a green result nobody has looked at is still
-a claim. What you check afterwards is the exercise.
+Füge das in Claude Code ein. Es ist nur ein Anfang. Der Agent kann beim ersten Durchgang
+alles richtig machen; das ist der schwierigere Fall, denn ein grünes Ergebnis, das niemand
+angesehen hat, ist trotzdem nur eine Behauptung. Was Du danach prüfst, ist die Übung.
 
-**Checkpoint:** before any file is written, the agent has shown you the component list and
-the `docs-show` calls behind it. If it skipped that, stop it and have it start over from
-rule 1.
+**Checkpoint:** Bevor eine Datei geschrieben wird, hat der Agent Dir die Komponentenliste
+und die `docs-show`-Aufrufe dahinter gezeigt. Hat er das übersprungen, stoppe ihn und lass
+ihn bei Regel 1 neu anfangen.
 
 ```text
-Build a "Team directory" screen with components from {{PKG}} only.
+Baue einen Screen "Team directory" nur mit Komponenten aus {{PKG}}.
 
-Before you write any code:
-1. Call docs-list on the {{MCP}} MCP, then docs-show for every
-   component you plan to use. Tell me the list first.
-2. A prop, input, slot or event may be used only if it appears in the
-   docs-show output (its code examples count) or in docs-show-story.
-   If something you want is not documented, do not use it. Tell me.
-3. docs-show prints full code for only some stories and lists the rest by
-   name. If you need one of those (Sortable, Empty State), call
-   docs-show-story with its id. Do not guess what a story does from its name.
+Bevor Du Code schreibst:
+1. Rufe docs-list auf dem {{MCP}} MCP auf, dann docs-show für jede
+   Komponente, die Du benutzen willst. Nenne mir zuerst die Liste.
+2. Eine Prop, ein Input, ein Slot oder ein Event darf nur benutzt werden, wenn es in der
+   Ausgabe von docs-show steht (die Code-Beispiele zählen mit) oder in docs-show-story.
+   Ist etwas, das Du willst, nicht dokumentiert, benutze es nicht. Sag es mir.
+3. docs-show gibt nur für manche Stories den vollen Code aus und listet die übrigen nur
+   mit Namen. Brauchst Du eine davon (Sortable, Empty State), rufe docs-show-story mit
+   ihrer ID auf. Rate nicht, was eine Story tut, nur anhand ihres Namens.
 
-The screen:
-- A heading "Team directory".
-- A toolbar: a search field labelled "Search people", a select labelled
-  "Role" (All roles, Engineer, Designer, Manager) and a primary button
+Der Screen:
+- Eine Überschrift "Team directory".
+- Eine Toolbar: ein Suchfeld mit dem Label "Search people", ein Select mit dem Label
+  "Role" (All roles, Engineer, Designer, Manager) und ein primärer Button
   "Invite member".
-- A table of members: Name, Email, Role, Status. Status is a badge:
-  active is success, invited is warning, suspended is danger.
-- Pagination under the table, 5 rows per page.
-- Search narrows by name or email, the role select narrows by role,
-  both together. Changing a filter goes back to page 1. No match shows
-  the table's own empty state.
-- Data: a hard-coded array of 12 members in the component. No HTTP.
+- Eine Tabelle der Mitglieder: Name, Email, Role, Status. Status ist ein Badge:
+  active ist success, invited ist warning, suspended ist danger.
+- Pagination unter der Tabelle, 5 Zeilen pro Seite.
+- Die Suche grenzt nach Name oder E-Mail ein, der Rollen-Select nach Rolle,
+  beide zusammen. Ein Filterwechsel geht zurück auf Seite 1. Ohne Treffer
+  zeigt die Tabelle ihren eigenen Leerzustand.
+- Daten: ein fest einprogrammiertes Array mit 12 Mitgliedern in der Komponente. Kein HTTP.
 
-Rules:
-- No hand-built element where the library has a component. Plain layout
-  elements (div, h1) are fine.
-- Styles go in {{CSS}} (a separate .css file), only
-  var(--ui-*) tokens for colour and spacing: no hex, rgb, hsl or named
-  colours, no pixel values for spacing.
-- Save the screen as {{FILE}}. Then mount it so the
-  app shows it instead of the Nx welcome page: {{MOUNT}}.
+Regeln:
+- Kein selbstgebautes Element, wo die Bibliothek eine Komponente hat. Einfache
+  Layout-Elemente (div, h1) sind in Ordnung.
+- Styles kommen in {{CSS}} (eine separate .css-Datei), nur
+  var(--ui-*)-Tokens für Farbe und Abstand: kein Hex, rgb, hsl und keine benannten
+  Farben, keine Pixelwerte für Abstände.
+- Speichere den Screen als {{FILE}}. Binde ihn dann ein, sodass die
+  App ihn statt der Nx-Willkommensseite zeigt: {{MOUNT}}.
 
-When you are done, list every library component you used with the
-docs-list id it came from, and every prop with the docs-show line
-it came from.
+Wenn Du fertig bist, liste jede verwendete Bibliothekskomponente mit der docs-list-ID auf,
+aus der sie stammt, und jede Prop mit der docs-show-Zeile, aus der sie stammt.
 ```
 
 {{LINTNOTE}}
 
-## The checks prompt
+## Der Checks-Prompt
 
-Paste this when the build time ends (16:30 on the clock, whatever the state of the screen).
+Füge das ein, wenn die Bauzeit endet (16:30 auf der Uhr, egal in welchem Zustand der Screen
+ist).
 
 ```text
 {{CHECKS}}
 ```
 
-If the agent repairs formatting by hand, tell it: "`npm run format` is the fix for
-`check:format`, and for nothing else."
+Repariert der Agent die Formatierung von Hand, sag ihm: „`npm run format` ist die Reparatur
+für `check:format` und für sonst nichts.“
 
-## The receipts prompt
+## Der Belege-Prompt
 
-Paste this after the checks. These checks do not catch an invented name or a hand-built
-element, which is why the receipts come next.
-
-```text
-You listed the components and props you used. Now check yourself against the
-docs, not against memory: call docs-show again for each component and, for every
-prop, input, slot and event in the code you wrote, print one line: the name, the
-docs-show passage it appears in, or NOT DOCUMENTED. Remove everything marked NOT
-DOCUMENTED, or tell me why you kept it.
-```
-
-## What nobody looked at
-
-Paste this after the receipts. The checks are green and every prop has a source; neither
-says that anyone has seen the screen work.
+Füge das nach den Checks ein. Diese Checks fangen weder einen erfundenen Namen noch ein
+selbstgebautes Element ab, deshalb kommen als Nächstes die Belege.
 
 ```text
-List what you did not verify about this screen: every claim you made from
-reading code or docs without running or seeing the result. One line each, with
-how I can check it myself in under a minute. Do not run or change anything.
+Du hast die Komponenten und Props aufgelistet, die Du benutzt hast. Prüfe Dich jetzt
+gegen die Docs, nicht gegen das Gedächtnis: Rufe docs-show für jede Komponente noch
+einmal auf und gib für jede Prop, jeden Input, jeden Slot und jedes Event in dem Code,
+den Du geschrieben hast, eine Zeile aus: den Namen und die Passage in docs-show, in der
+er steht, oder NICHT DOKUMENTIERT. Entferne alles, was mit NICHT DOKUMENTIERT markiert
+ist, oder sag mir, warum Du es behalten hast.
 ```
 
-Pick three lines and check them yourself: `npm start`, then use the screen like a user.
-Type a search that matches nothing. Combine search and role. Go to the last page, then
-change a filter. Click "Invite member". Write down what you found for each of the three:
-holds, does not hold, or the brief does not say.
+## Was niemand angesehen hat
 
-## Finished early: a story for the screen
-
-For the build time, when your screen runs before 16:30. A screen without a story is a
-screen nothing re-checks tomorrow.
+Füge das nach den Belegen ein. Die Checks sind grün und jede Prop hat eine Quelle; beides
+sagt nicht, dass jemand den Screen hat funktionieren sehen.
 
 ```text
-Write a story for the Team directory screen, then run npm run check:stories and
-report the exit code. If it is not 0, read the output, repair, and run it again.
+Liste auf, was Du an diesem Screen nicht geprüft hast: jede Aussage, die Du aus dem
+Lesen von Code oder Docs gemacht hast, ohne das Ergebnis auszuführen oder zu sehen.
+Eine Zeile pro Punkt, mit dem Hinweis, wie ich es selbst in unter einer Minute prüfen
+kann. Führe nichts aus und ändere nichts.
 ```
 
-Then read the story: what does it check that you would otherwise click through by hand,
-and what does it still leave to you?
+Such Dir drei Zeilen aus und prüfe sie selbst: `npm start`, dann benutze den Screen wie ein
+Nutzer. Tippe eine Suche ein, die nichts trifft. Kombiniere Suche und Rolle. Geh auf die
+letzte Seite, ändere dann einen Filter. Klicke auf „Invite member“. Schreib zu jeder der drei
+Zeilen auf, was Du gefunden hast: gilt, gilt nicht, oder der Brief sagt dazu nichts.
 
-## When the agent goes wrong
+## Früh fertig: eine Story für den Screen
 
-If it starts writing without calling `docs-list`:
+Für die Bauzeit, wenn Dein Screen vor 16:30 läuft. Ein Screen ohne Story ist ein Screen, den
+morgen nichts mehr prüft.
 
 ```text
-Stop. Do not write more code yet. Call docs-list on {{MCP}} and give me the
-ids of the components you will use. Then call docs-show on each and tell me, for
-every prop you plan to use, where it appears in the output.
+Schreibe eine Story für den Screen "Team directory", führe dann npm run check:stories
+aus und nenne mir den Exit-Code. Ist er nicht 0, lies die Ausgabe, repariere und führe es
+erneut aus.
 ```
 
-If it uses an input the docs do not list:
+Lies dann die Story: Was prüft sie, das Du sonst von Hand durchklicken würdest, und was
+überlässt sie weiterhin Dir?
+
+## Wenn der Agent danebenliegt
+
+Fängt er an zu schreiben, ohne `docs-list` aufzurufen:
 
 ```text
-You used <INPUT> on <ELEMENT>. Show me the exact line of the docs-show or
-docs-show-story output it comes from. If there is none, remove it and tell me what
-you do instead.
+Stopp. Schreibe noch keinen weiteren Code. Rufe docs-list auf {{MCP}} auf und nenne mir
+die IDs der Komponenten, die Du benutzen wirst. Rufe dann docs-show für jede auf und sag
+mir zu jeder Prop, die Du benutzen willst, wo sie in der Ausgabe steht.
 ```
 
-If it hand-builds something the library has:
+Benutzt er einen Input, den die Docs nicht listen:
 
 ```text
-<ELEMENT> is hand-built. Call docs-list and check whether the library has a
-component for it. If it does, replace it with that component, using only documented
-props.
+Du hast <INPUT> an <ELEMENT> benutzt. Zeig mir die genaue Zeile aus der Ausgabe von
+docs-show oder docs-show-story, aus der er stammt. Gibt es keine, entferne ihn und sag
+mir, was Du stattdessen tust.
 ```
 
-## The time box (95 minutes)
+Baut er etwas von Hand, das die Bibliothek hat:
 
-| Minutes | What happens                                                                                                                                          |
-| ------- | ----------------------------------------------------------------------------------------------------------------------------------------------------- |
-| 5       | The brief and the four rules, plus one live `docs-show` on AtlTable from the trainer. The clock starts.                                               |
-| 15      | Build. The trainer stays quiet.                                                                                                                       |
-| 30      | Build goes on. The trainer walks the room; a hint is a question about a `docs-show` line. Finished early: use the screen like a user, then the story. |
-| 15      | Checks, receipts, then the "not verified" list; check three of its lines by hand.                                                                     |
-| 25      | Two volunteers show their receipts and their list. Which line did you check, and what did you find? Where did the import names come from?             |
-| 5       | Recap question.                                                                                                                                       |
+```text
+<ELEMENT> ist selbstgebaut. Rufe docs-list auf und prüfe, ob die Bibliothek eine
+Komponente dafür hat. Wenn ja, ersetze es durch diese Komponente und nutze nur
+dokumentierte Props.
+```
 
-The build ends at 16:30 on the clock. If you are stuck, paste the four things in
-{{STUCK_REF}}, or see `rescue.md`.
+## Der Zeitrahmen (95 Minuten)
+
+| Minuten | Was passiert                                                                                                                                                                |
+| ------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| 5       | Der Brief und die vier Regeln, dazu ein Live-`docs-show` auf AtlTable vom Trainer. Die Uhr startet.                                                                         |
+| 15      | Bauen. Der Trainer hält sich zurück.                                                                                                                                        |
+| 30      | Bauen geht weiter. Der Trainer geht durch den Raum; ein Hinweis ist eine Frage zu einer `docs-show`-Zeile. Früh fertig: den Screen wie ein Nutzer benutzen, dann die Story. |
+| 15      | Checks, Belege, dann die Liste „nicht geprüft“; drei ihrer Zeilen von Hand prüfen.                                                                                          |
+| 25      | Zwei Freiwillige zeigen ihre Belege und ihre Liste. Welche Zeile hast Du geprüft, und was hast Du gefunden? Woher kamen die Import-Namen?                                   |
+| 5       | Abschlussfrage.                                                                                                                                                             |
+
+Die Bauzeit endet um 16:30 auf der Uhr. Wenn Du festhängst, füge die vier Dinge aus
+{{STUCK_REF}} ein oder sieh in `rescue.md` nach.

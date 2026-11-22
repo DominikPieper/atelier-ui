@@ -3408,37 +3408,37 @@ describe('preset generator', () => {
         expect(day1).toContain(`@atelier-ui/${framework}`);
         expect(day1).toContain(
           framework === 'angular'
-            ? 'on the atelier MCP'
-            : `on the storybook-${framework} MCP`,
+            ? 'auf dem atelier MCP'
+            : `auf dem storybook-${framework} MCP`,
         );
         expect(day1).toContain(`workshop-${framework}/src/`);
         expect(day1.includes('npm run build')).toBe(framework === 'angular');
         const day2 = tree.read('course/day2-prompts.md', 'utf-8') ?? '';
         expect(day2).toContain('Shift+Tab');
-        expect(day2).toContain('When you are stuck');
-        expect(day2).toContain('docs-show for my component');
-        expect(day2).toContain('Definition-of-Done exercise');
-        expect(day2).toContain('make your component set machine-readable');
-        expect(day2).toContain('build your component set through the agent');
-        expect(day2).toContain('Change only that');
-        expect(day2).toContain('Change nothing else');
-        expect(day2).not.toContain('I drew it by hand');
-        expect(day2).toContain('Do not rename anything yet');
-        expect(day2).toContain('look at both');
+        expect(day2).toContain('Wenn Du festhängst');
+        expect(day2).toContain('docs-show für meine Komponente');
+        expect(day2).toContain('Definition-of-Done-Übung');
+        expect(day2).toContain('mach Dein Component Set maschinenlesbar');
+        expect(day2).toContain('baue Dein Component Set über den Agenten');
+        expect(day2).toContain('Ändere nur das');
+        expect(day2).toContain('Ändere nichts sonst');
+        expect(day2).not.toContain('Ich habe es von Hand gezeichnet');
+        expect(day2).toContain('Benenne noch nichts um');
+        expect(day2).toContain('Beides ansehen');
         expect(day2).toContain('git show --stat HEAD');
-        expect(day2).toContain('do not change the document yet');
+        expect(day2).toContain('ändere das Dokument noch nicht');
         expect(day2).toContain('24 × 24');
         const linter =
           tree.read('course/figma-linter-prompt.md', 'utf-8') ?? '';
-        expect(linter).toContain('all rules, no filter');
-        expect(linter).toContain('one more value on its variant axis');
+        expect(linter).toContain('allen Regeln, ohne Filter');
+        expect(linter).toContain('weiteren Wert auf ihrer Variantenachse');
         expect(linter).not.toContain('Shift+A');
         const card = tree.read('course/day1-settings-card.md', 'utf-8') ?? '';
         expect(card).toContain('Settings / Card');
         expect(card.includes('alt-text')).toBe(framework === 'angular');
         const rescue = tree.read('course/rescue.md', 'utf-8') ?? '';
         expect(rescue).toContain(
-          'Still red: ask your neighbour, then the trainer.',
+          'Noch rot: frag Deinen Nachbarn, dann den Trainer.',
         );
         expect(rescue).toContain('Figma Desktop Bridge');
         expect(tree.read('course/README.md', 'utf-8')).toContain('rescue.md');
@@ -3448,8 +3448,8 @@ describe('preset generator', () => {
         const stories = tree.read('course/day1-stories.md', 'utf-8') ?? '';
         expect(stories).toContain(
           framework === 'angular'
-            ? '`atelier` MCP'
-            : `\`storybook-${framework}\` MCP`,
+            ? 'MCP-Server `atelier`'
+            : `MCP-Server \`storybook-${framework}\``,
         );
       },
     );
@@ -3465,13 +3465,13 @@ describe('preset generator', () => {
       for (const f of FIGMA_FILES)
         expect(tree.exists(`course/${f}`)).toBe(false);
       const rescue = tree.read('course/rescue.md', 'utf-8') ?? '';
-      expect(rescue).toContain('When you are stuck');
+      expect(rescue).toContain('Wenn Du festhängst');
       expect(rescue).not.toContain('Figma');
       expect(tree.read('course/README.md', 'utf-8')).toContain(
         'day1-stories.md',
       );
       expect(tree.read('course/day1-stories.md', 'utf-8')).toContain(
-        '`storybook-react` MCP',
+        'MCP-Server `storybook-react`',
       );
       for (const path of courseFiles()) {
         const text = tree.read(path, 'utf-8') ?? '';

@@ -1,3 +1,4 @@
-- **`atelier` is missing or not connected.** Run `npm install`, then `npm run preflight`
-  again. Start a new Claude Code session from the workspace root after the install; if the
-  server is still not listed, `/mcp` and reconnect `atelier`.
+- **`atelier` fehlt oder ist nicht verbunden.** Führe `npm install` aus, dann noch einmal
+  `npm run preflight`. Starte nach der Installation eine neue Claude-Code-Sitzung im
+  Workspace-Root. Taucht der Server dann immer noch nicht auf, nimm `/mcp` und verbinde
+  `atelier` neu.

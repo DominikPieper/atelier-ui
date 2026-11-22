@@ -1,390 +1,415 @@
-# Day 2 prompts
+# Prompts Tag 2
 
-Used in Day 2 Block 00 (the Definition-of-Done exercise), Block 01 (build your component set
-through the agent, make it machine-readable, then the API rules), Block 02 (generation with
-plan mode, `docs-show` on your own component, then look at both), Block 03 (what was red, is
-the handoff document still true, red on purpose) and Block 04 (accessibility and the dark
-check). The parity prompt of Block 04 is in `parity-prompt.md`; from Block 02 on, your
-handoff document is the input for all of them (an example is in `handoff-example.md`).
+Verwendet in Tag 2, Block 00 (die Definition-of-Done-Übung), Block 01 (baue Dein Component Set
+über den Agenten, mach es maschinenlesbar, dann die API-Regeln), Block 02 (Generierung mit
+Plan-Modus, `docs-show` an Deiner eigenen Komponente, dann Beides ansehen), Block 03 (was rot
+war, stimmt das Übergabedokument noch, Rot mit Absicht) und Block 04 (Barrierefreiheit und der
+Dark-Check). Der Parity-Prompt aus Block 04 steht in `parity-prompt.md`. Ab Block 02 ist Dein
+Übergabedokument die Eingabe für alle diese Prompts (ein Beispiel steht in
+`handoff-example.md`).
 
-## Block 00: the Definition-of-Done exercise (5 minutes)
+## Block 00: die Definition-of-Done-Übung (5 Minuten)
 
-The workspace carries a rule the agent reads every session: `CLAUDE.md`, section "Definition
-of Done". The agent runs what the list names; a check that is not in the list is a check
-nobody asked for. The trainer shows that once on the projector: delete one line, `/clear`,
-ask again, and the check is gone.
+Der Workspace enthält eine Regel, die der Agent in jeder Session liest: `CLAUDE.md`, Abschnitt
+„Definition of Done“. Der Agent führt aus, was die Liste nennt. Ein Check, der nicht in der
+Liste steht, ist ein Check, den niemand verlangt hat. Der Trainer zeigt das einmal am
+Beamer: eine Zeile löschen, `/clear`, noch einmal fragen, und der Check ist weg.
 
-Your part:
+Dein Teil:
 
-1. Ask: "Which commands does this workspace's Definition of Done list? Only list them."
-   The answer names six.
-2. Write down the one line your own team would add to this list, in the same shape: the
-   command, a dash, what it proves. Think of the thing your reviews keep catching by hand.
-3. Compare with your neighbour: does the line name a command that exits non-zero when it
-   fails, or a wish ("the code is clean")? Only the first is a rule an agent can run.
+1. Frage: „Welche Befehle nennt die Definition of Done dieses Workspace? Liste sie nur
+   auf.“ Die Antwort nennt sechs.
+2. Schreib die eine Zeile auf, die Dein eigenes Team dieser Liste hinzufügen würde, in
+   derselben Form: der Befehl, ein Gedankenstrich, was er beweist. Denk an das, was Eure
+   Reviews immer wieder von Hand finden.
+3. Vergleiche mit Deinem Nachbarn: Nennt die Zeile einen Befehl, der bei einem Fehler mit
+   einem Exit-Code ungleich 0 endet, oder einen Wunsch („der Code ist sauber“)? Nur der
+   Befehl ist eine Regel, die ein Agent ausführen kann.
 
-## Block 01: build your component set through the agent
+## Block 01: baue Dein Component Set über den Agenten
 
-Nothing in this block is drawn or edited by hand in Figma. The agent builds and changes the
-set; you choose the brief, look, compare with the brief and decide.
-
-```text
-Read course/briefs/<your brief>.md and course/briefs/README.md. In my Figma
-file, on the Workshop-Templates page, copy the starter frame the brief names
-and build my component set from the copy, in the brief's scope for the
-90-minute block. Use the figma-workspace-architect skill. Bind every fill,
-stroke, radius, padding and gap to a Library Tokens variable, use Auto Layout
-on every frame with children, add the component properties the scope names,
-and write the master's description: what is out of scope and the (full
-component) accessibility obligations. Put it into its own section next to the
-starters and do not touch the starter itself. Then check it in Dark mode, take
-a screenshot, switch back to Light, and tell me the node id of the component
-set and everything you could not bind.
-```
-
-Then select the set the agent built: every prompt from here on works on your selection (a
-selection made before the session started is not seen: if the agent reports that nothing is
-selected, click the set again).
-
-Look before you ask for anything. Put the brief next to the screenshot: is every variant
-and state there that the scope line names? Next to the starter, does it look like a member
-of the same library? What would you have built differently? Each thing you want changed is
-one prompt:
+Nichts in diesem Block wird von Hand in Figma gezeichnet oder bearbeitet. Der Agent baut und
+ändert das Set. Du wählst den Brief, siehst hin, vergleichst mit dem Brief und entscheidest.
 
 ```text
-In the component set I have selected in Figma: <what you see> should be <what
-you want>. Change only that, keep every value bound to a variable, and show me
-a screenshot.
+Lies course/briefs/<Dein Brief>.md und course/briefs/README.md. Kopiere in meiner
+Figma-Datei auf der Seite Workshop-Templates den Starter-Frame, den der Brief
+nennt, und baue aus der Kopie mein Component Set, im Umfang des Briefs für den
+90-Minuten-Block. Nutze den Skill figma-workspace-architect. Binde jede Füllung,
+jeden Rand, jeden Radius, jedes Padding und jeden Abstand an eine Variable aus
+Library Tokens, nutze Auto Layout in jedem Frame mit Kindern, füge die Component
+Properties hinzu, die der Umfang nennt, und schreibe die Beschreibung des Masters:
+was nicht im Umfang ist und die Barrierefreiheitspflichten (volle Komponente).
+Lege es in eine eigene Section neben den Startern und fasse den Starter selbst
+nicht an. Prüfe es danach im Dark Mode, mach einen Screenshot, schalte zurück auf
+Light und nenne mir die Node-ID des Component Sets und alles, was Du nicht binden
+konntest.
 ```
 
-One change per prompt, so that the screenshot shows what that change did. Two or three
-rounds are normal. The set is yours when you can say why each part of it is the way it is.
+Wähle dann das Set aus, das der Agent gebaut hat: Jeder weitere Prompt arbeitet auf Deiner
+Auswahl. Eine Auswahl, die vor dem Start der Session getroffen wurde, sieht der Agent nicht.
+Meldet er, dass nichts ausgewählt ist, klick das Set noch einmal an.
 
-## Block 01: make your component set machine-readable
-
-The set looks right. Is it still bound? A change on request is where a raw value slips in.
-With your set selected:
+Sieh hin, bevor Du etwas verlangst. Leg den Brief neben den Screenshot: Ist jede Variante
+und jeder Zustand da, den die Umfangszeile nennt? Wirkt das Set neben dem Starter wie ein
+Mitglied derselben Bibliothek? Was hättest Du anders gebaut? Jede gewünschte Änderung ist
+ein Prompt:
 
 ```text
-Read course/briefs/<your brief>.md and course/briefs/README.md. My component
-set is the node I have selected in Figma. Do not redraw it and do not change
-how it looks. Use the figma-workspace-architect skill and make it
-machine-readable: bind every fill, stroke, radius, padding and gap to a Library
-Tokens variable, put Auto Layout on every frame that has children, add the
-component properties the brief's scope names, and write the master's
-description: what is out of scope and the (full component) accessibility
-obligations. Then check it in Dark mode, take a screenshot, switch back to
-Light, and tell me everything you changed and everything you could not bind.
+Im Component Set, das ich in Figma ausgewählt habe: <was Du siehst> soll <was Du
+willst> sein. Ändere nur das, lass jeden Wert an eine Variable gebunden und zeig
+mir einen Screenshot.
 ```
 
-Read both lists before you go on. A short "changed" list is a result, not a wasted run: the
-build held. A value with no variable (a gap of 7 where the scale has 4 and 8) is yours to
-decide: tell the agent to move it onto the scale, or keep it and write it into the handoff
-document. Then compare the screenshot with the one before: is it still the same set?
+Eine Änderung pro Prompt, damit der Screenshot zeigt, was genau diese Änderung bewirkt hat.
+Zwei oder drei Runden sind normal. Das Set gehört Dir, wenn Du sagen kannst, warum jeder Teil
+so ist, wie er ist.
 
-Next is the linter on your own set: the prompt is in `figma-linter-prompt.md`.
+## Block 01: mach Dein Component Set maschinenlesbar
 
-## Block 01: the API rules, before you write a prop name
-
-The handoff document fixes the names and values the code will carry, so they are checked
-first. Four rules for an API an agent can use without guessing:
-
-1. **Predictable names.** The same thing has the same name as in the rest of the library
-   (`variant`, `size`, `disabled`), not a synonym.
-2. **Literal unions.** The allowed values are a short list (`'success' | 'danger'`), not
-   free text and not a number that means something.
-3. **Composition instead of configuration.** A region that can hold anything is a slot, not
-   a growing pile of Boolean properties.
-4. **No hidden defaults.** Every default is visible in the API; nothing depends on a value
-   that is written down nowhere.
+Das Set sieht richtig aus. Ist es noch gebunden? Bei einer Änderung auf Zuruf rutscht ein
+Rohwert hinein. Mit ausgewähltem Set:
 
 ```text
-List each property of the component set I have selected in Figma with its name
-and its values. Check the list against these four rules: predictable names (as
-in the rest of the library), literal unions (the allowed values as a list, not
-free text), composition instead of configuration, no hidden defaults (every
-default is visible in the API). For each rule say what you would rename or
-change and why. Where my brief (course/briefs/<your brief>.md) fixes a name
-that breaks a rule, say so. Do not rename anything yet.
+Lies course/briefs/<Dein Brief>.md und course/briefs/README.md. Mein Component
+Set ist der Node, den ich in Figma ausgewählt habe. Zeichne es nicht neu und
+ändere nicht, wie es aussieht. Nutze den Skill figma-workspace-architect und
+mach es maschinenlesbar: Binde jede Füllung, jeden Rand, jeden Radius, jedes
+Padding und jeden Abstand an eine Variable aus Library Tokens, setze Auto Layout
+auf jeden Frame mit Kindern, füge die Component Properties hinzu, die der Umfang
+des Briefs nennt, und schreibe die Beschreibung des Masters: was nicht im Umfang
+ist und die Barrierefreiheitspflichten (volle Komponente). Prüfe es danach im
+Dark Mode, mach einen Screenshot, schalte zurück auf Light und nenne mir alles,
+was Du geändert hast, und alles, was Du nicht binden konntest.
 ```
 
-Decide each line yourself: have the agent rename it now, or keep the brief's name and write
-the reason into the "Deliberate differences" of your handoff document.
+Lies beide Listen, bevor Du weitermachst. Eine kurze Liste „geändert“ ist ein Ergebnis, kein
+verschwendeter Lauf: Der Bau hat gehalten. Ein Wert ohne Variable (ein Abstand von 7, wo die
+Skala 4 und 8 kennt) entscheidest Du: Sag dem Agenten, er soll ihn auf die Skala legen, oder
+behalte ihn und schreib ihn ins Übergabedokument. Vergleiche dann den Screenshot mit dem
+vorherigen: Ist es noch dasselbe Set?
+
+Als Nächstes läuft der Figma-Linter über Dein eigenes Set: Der Prompt steht in
+`figma-linter-prompt.md`.
+
+## Block 01: die API-Regeln, bevor Du einen Prop-Namen schreibst
+
+Das Übergabedokument legt die Namen und Werte fest, die der Code tragen wird. Deshalb werden
+sie zuerst geprüft. Vier Regeln für eine API, die ein Agent ohne Raten benutzen kann:
+
+1. **Vorhersagbare Namen.** Dieselbe Sache heißt wie im Rest der Bibliothek (`variant`,
+   `size`, `disabled`), nicht anders.
+2. **Literale Unions.** Die erlaubten Werte sind eine kurze Liste (`'success' | 'danger'`),
+   kein freier Text und keine Zahl, die etwas bedeutet.
+3. **Komposition statt Konfiguration.** Ein Bereich, der alles aufnehmen kann, ist ein Slot,
+   kein wachsender Haufen Boolean-Properties.
+4. **Keine versteckten Defaults.** Jeder Default ist in der API sichtbar. Nichts hängt von
+   einem Wert ab, der nirgends aufgeschrieben ist.
 
 ```text
-In the component set I have selected in Figma, rename <property or value> to
-<new name>, and bring every mention of the old name in the set's description
-in line. Change nothing else, then list the properties with their values
-again.
+Liste jede Property des Component Sets auf, das ich in Figma ausgewählt habe,
+mit ihrem Namen und ihren Werten. Prüfe die Liste gegen diese vier Regeln:
+vorhersagbare Namen (wie im Rest der Bibliothek), literale Unions (die erlaubten
+Werte als Liste, nicht als freier Text), Komposition statt Konfiguration, keine
+versteckten Defaults (jeder Default ist in der API sichtbar). Sag zu jeder Regel,
+was Du umbenennen oder ändern würdest und warum. Wo mein Brief
+(course/briefs/<Dein Brief>.md) einen Namen vorgibt, der eine Regel bricht, sag
+es. Benenne noch nichts um.
 ```
 
-A rename changes the name, not what the set shows: a text layer or a token that carries
-the old word keeps it. Whether that is still right is yours to decide.
-
-Expect few renames: the brief fixes most names. The find is the place where a fixed name
-breaks a rule. The result is the property list your handoff document takes over.
-
-## Block 02: generate the component
-
-**Plan mode first.** Before pasting, press Shift+Tab until the status line shows plan mode,
-paste the prompt, and read the plan: every prop in it must be a prop of your handoff
-document. Only then let it build. An invented prop is cheaper to catch as a line of plan
-than as a red story.
-
-**Answer the plan's questions before you approve.** A plan usually ends with additions the
-handoff document does not have (an extra output, a different role, a default) and one or
-two questions. A plain "build it" approves all of them. Say yes or no to each, in words.
-
-The prompt is short on purpose. The standing rules that hold for every component (tokens,
-composition by region, a name on every icon-only control, status visible without colour,
-`tags: ['autodocs']`) live in the workspace's `atelier-component` skill, with their reasons.
-The prompt carries only what is true of this task.
+Entscheide jede Zeile selbst: Lass den Agenten jetzt umbenennen, oder behalte den Namen aus
+dem Brief und schreib den Grund in den Abschnitt „Bewusste Abweichungen“ Deines Übergabedokuments.
 
 ```text
-Generate the {{FRAMEWORK}} implementation of <ComponentName> with its test and
-its stories, from my handoff document <path or pasted text>, not from the
-Figma picture alone. Do not write any other file, except the design image the
-atelier-component skill asks for.
-
-The handoff document's "Deliberate differences" are given constraints, not
-mistakes to correct: where the code differs from the design on purpose, build
-it that way.
-
-Every prop name matches the handoff document's sections one-for-one: add no
-prop and rename no prop. Follow the atelier-component skill for tokens,
-composition, accessibility and stories. If a requirement has no natural
-mapping onto what you are generating, ask instead of inventing a workaround.
-When you are done, run the Definition of Done checks from CLAUDE.md (the ones /verify runs) and
-report each exit code.
+Benenne im Component Set, das ich in Figma ausgewählt habe, <Property oder Wert>
+in <neuer Name> um und zieh jede Erwähnung des alten Namens in der Beschreibung
+des Sets nach. Ändere nichts sonst, liste danach die Properties mit ihren Werten
+noch einmal auf.
 ```
 
-## Block 02, after generation: `docs-show` on your own component (10 minutes)
+Eine Umbenennung ändert den Namen, nicht was das Set zeigt: Eine Textebene oder ein Token, das
+das alte Wort trägt, behält es. Ob das noch stimmt, entscheidest Du.
 
-Through the local Storybook MCP (`storybook-local`), once your component and its stories
-render. The point: what would an agent that uses your component have to guess? The
-descriptions are probably there already, because the agent wrote them while it generated.
-That is why the question is an open one.
+Erwarte wenige Umbenennungen: Der Brief legt die meisten Namen fest. Gefunden wird die Stelle,
+an der ein vorgegebener Name eine Regel bricht. Das Ergebnis ist die Property-Liste, die Dein
+Übergabedokument übernimmt.
+
+## Block 02: die Komponente generieren
+
+**Zuerst Plan-Modus.** Drück vor dem Einfügen Shift+Tab, bis die Statuszeile den Plan-Modus
+zeigt, füge den Prompt ein und lies den Plan: Jede Prop darin muss eine Prop Deines
+Übergabedokuments sein. Erst dann lass bauen. Eine erfundene Prop ist als Planzeile billiger
+zu finden als rote Story.
+
+**Beantworte die Fragen des Plans, bevor Du freigibst.** Ein Plan endet meist mit Ergänzungen,
+die das Übergabedokument nicht kennt (ein zusätzlicher Output, eine andere Rolle, ein Default)
+und mit ein oder zwei Fragen. Ein schlichtes „bau es“ gibt alles frei. Sag zu jedem Punkt ja
+oder nein, in Worten.
+
+Der Prompt ist mit Absicht kurz. Die festen Regeln, die für jede Komponente gelten (Tokens,
+Komposition nach Bereichen, ein Name an jedem reinen Icon-Control, Status ohne Farbe sichtbar,
+`tags: ['autodocs']`), stehen mit ihren Gründen im Skill `atelier-component` des Workspace.
+Der Prompt trägt nur, was für diese Aufgabe gilt.
 
 ```text
-Call docs-list on storybook-local, then docs-show for my component <ComponentName>.
-Read the output as an agent that has never seen this component and has only this
-text. List everything it would have to guess or would get wrong: a missing
-description, a code snippet that would not work as shown, a value whose effect is
-not stated, behaviour that is documented nowhere. Do not change anything yet.
+Generiere die {{FRAMEWORK}}-Implementierung von <Komponentenname> mit Test und
+Stories, aus meinem Übergabedokument <Pfad oder eingefügter Text>, nicht allein
+aus dem Figma-Bild. Schreibe keine andere Datei, außer dem Designbild, das der
+Skill atelier-component verlangt.
+
+Was im Abschnitt „Bewusste Abweichungen“ des Übergabedokuments steht, sind vorgegebene Randbedingungen,
+keine Fehler, die Du korrigieren sollst: Wo der Code absichtlich vom Design
+abweicht, baue ihn so.
+
+Jeder Prop-Name entspricht eins zu eins den Abschnitten des Übergabedokuments:
+Füge keine Prop hinzu und benenne keine um. Folge dem Skill atelier-component
+für Tokens, Komposition, Barrierefreiheit und Stories. Wenn eine Anforderung
+keine natürliche Entsprechung in dem hat, was Du generierst, frag nach, statt
+einen Umweg zu erfinden. Führe zum Schluss die Checks der Definition of Done aus
+CLAUDE.md aus (die, die /verify ausführt) und melde jeden Exit-Code.
 ```
 
-Read the list before you hand it back. Which lines are a gap in the documentation, and
-which are a gap in the component? Then close the first kind:
+## Block 02, nach der Generierung: `docs-show` an Deiner eigenen Komponente (10 Minuten)
+
+Über den lokalen Storybook-MCP (`storybook-local`), sobald Deine Komponente und ihre Stories
+rendern. Es geht darum: Was müsste ein Agent raten, der Deine Komponente benutzt? Die
+Beschreibungen sind wahrscheinlich schon da, weil der Agent sie beim Generieren geschrieben
+hat. Darum ist die Frage offen gestellt.
 
 ```text
-Close the documentation gaps where they live: JSDoc for a missing or wrong
-description, the story for a snippet that would not work as shown. Do not change
-the component's behaviour. Call docs-show again and show me what changed.
+Rufe docs-list auf storybook-local auf, dann docs-show für meine Komponente
+<Komponentenname>. Lies die Ausgabe als Agent, der diese Komponente nie gesehen
+hat und nur diesen Text kennt. Liste alles auf, was er raten müsste oder falsch
+machen würde: eine fehlende Beschreibung, ein Code-Beispiel, das so nicht
+funktionieren würde, einen Wert, dessen Wirkung nicht beschrieben ist, Verhalten,
+das nirgends dokumentiert ist. Ändere noch nichts.
 ```
 
-Without the MCP, the same lookup through the CLI:
+Lies die Liste, bevor Du sie zurückgibst. Welche Zeilen sind eine Lücke in der Dokumentation,
+welche eine Lücke in der Komponente? Schließe dann die erste Sorte:
+
+```text
+Schließe die Dokumentationslücken dort, wo sie entstehen: JSDoc für eine
+fehlende oder falsche Beschreibung, die Story für ein Beispiel, das so nicht
+funktionieren würde. Ändere nicht das Verhalten der Komponente. Rufe docs-show
+noch einmal auf und zeig mir, was sich geändert hat.
+```
+
+Ohne den MCP geht dieselbe Abfrage über die CLI:
 
 ```text
 npx storybook tools --config-dir workshop-{{FRAMEWORK_LC}}/.storybook --json docs show --input '{"id":"<id>"}'
 ```
 
-## Block 02: look at both (10 minutes, no prompt)
+## Block 02: Beides ansehen (10 Minuten, kein Prompt)
 
-The checks are green. Nobody has looked yet. Put Storybook next to your Figma component set
-and go through every variant and state you built, one by one. This is by hand on purpose:
-it is the only step that finds what a green check does not measure.
+Die Checks sind grün. Angesehen hat noch niemand etwas. Stell Storybook neben Dein Figma
+Component Set und geh jede Variante und jeden Zustand durch, die Du gebaut hast, einzeln.
+Das ist mit Absicht Handarbeit: Es ist der einzige Schritt, der findet, was ein grüner Check
+nicht misst.
 
-1. Same variant, same state, side by side: spacing, radius, colour, text size, icon.
-2. Press Tab once. Is the focus ring there, and does it keep its distance from the content?
-3. Compare the width. Does the component have the size the design gives it, or does it
-   take the width of whatever holds it?
-4. If your design has a shadow or a thin border: can you see it in the story?
+1. Dieselbe Variante, derselbe Zustand, nebeneinander: Abstände, Radius, Farbe, Textgröße, Icon.
+2. Drück einmal Tab. Ist der Fokusring da, und hält er Abstand zum Inhalt?
+3. Vergleiche die Breite. Hat die Komponente die Größe, die das Design vorgibt, oder nimmt
+   sie die Breite dessen, was sie umgibt?
+4. Wenn Dein Design einen Schatten oder einen dünnen Rand hat: Siehst Du ihn in der Story?
 
-Write every difference down as a list, one line each: where, what the design shows, what the
-story shows. Do not sort and do not fix: Block 04 sorts the list (a wanted difference, a
-defect in the code, or a gap in the design). An empty list after two minutes means you
-looked at one variant.
+Schreib jede Abweichung als Liste auf, eine Zeile pro Abweichung: wo, was das Design zeigt,
+was die Story zeigt. Nicht einordnen und nicht beheben: Block 04 ordnet die Liste ein (eine
+gewollte Abweichung, ein Fehler im Code oder eine Lücke im Design). Eine leere Liste nach zwei
+Minuten heißt, dass Du eine Variante angesehen hast.
 
-Then commit (`git add -A && git commit -m "day 2 block 02: green"`) and **leave this Claude
-Code session open over lunch**: Block 03 starts in it.
+Committe dann (`git add -A && git commit -m "day 2 block 02: green"`) und **lass diese Claude
+Code Session über die Mittagspause offen**: Block 03 startet in ihr.
 
-## Block 03: green is not yet right
+## Block 03: grün heißt noch nicht richtig
 
-Block 02 most likely ended green. That says the checks passed at the end, not how they got
-there. Three prompts, in this order. Your commit from the end of Block 02 is the state to go
-back to. If `git status` still lists changes, commit now:
-`git add -A && git commit -m "day 2 block 02: green"`.
+Block 02 endete höchstwahrscheinlich grün. Das sagt, dass die Checks am Ende bestanden haben,
+nicht wie es dazu kam. Drei Prompts, in dieser Reihenfolge. Dein Commit vom Ende von Block 02
+ist der Stand, auf den Du zurückgehst. Wenn `git status` noch Änderungen zeigt, committe
+jetzt: `git add -A && git commit -m "day 2 block 02: green"`.
 
-### What was red on the way
+### Was unterwegs rot war
 
-In the same session that generated the component (after `/clear` the agent has to look for
-traces in the files and finds fewer). If the session was closed, start Claude Code in the
-workspace folder with `claude --continue`: that resumes the last session there.
+In derselben Session, die die Komponente generiert hat (nach `/clear` muss der Agent die
+Spuren in den Dateien suchen und findet weniger). Wenn die Session geschlossen wurde, starte
+Claude Code im Workspace-Ordner mit `claude --continue`: Das setzt die letzte Session dort
+fort.
 
 ```text
-Look back over this session. Do not run or change anything. List every check
-that was red at any point while you built <ComponentName> (format, stylelint,
-lint, build, unit test, story): the first error, what you changed to make it
-green, and whether that change fixed the cause or went around the check. Going
-around means: a disable comment, a changed rule or config, a renamed thing, a
-loosened or removed assertion, a skipped test. Mark each line "fixed" or "went
-around". If you no longer have the session, say so and look for the traces in
-the files instead.
+Sieh auf diese Session zurück. Führe nichts aus und ändere nichts. Liste jeden
+Check auf, der beim Bau von <Komponentenname> irgendwann rot war (Format,
+stylelint, Lint, Build, Unit-Test, Story): den ersten Fehler, was Du geändert
+hast, damit er grün wurde, und ob diese Änderung die Ursache behoben oder den
+Check umgangen hat. Umgehen heißt: ein Disable-Kommentar, eine geänderte Regel
+oder Konfiguration, ein umbenanntes Ding, eine gelockerte oder entfernte
+Assertion, ein übersprungener Test. Markiere jede Zeile mit „behoben“ oder
+„umgangen“. Wenn Du die Session nicht mehr hast, sag das und such stattdessen in
+den Dateien nach den Spuren.
 ```
 
-The list is the agent's account of itself. Hold two commands against it, in a second
-terminal in the workspace folder:
+Die Liste ist der Bericht des Agenten über sich selbst. Halte zwei Befehle dagegen, in einem
+zweiten Terminal im Workspace-Ordner:
 
 ```shell
 git show --stat HEAD
 git grep -nE "eslint-disable|stylelint-disable|@ts-ignore|@ts-expect-error|@ts-nocheck|\.skip\(|\.only\(|(^|[^e])xit\(|xdescribe\(" -- workshop-{{FRAMEWORK_LC}}/src
 ```
 
-The first shows every file the Block 02 commit touched (if you committed a second time
-just now, that commit is one back: `git show --stat HEAD~1`). A file outside
-`workshop-{{FRAMEWORK_LC}}/src` and `course/`, above all a config (`eslint.config.mjs`,
-`stylelint.config.mjs`, a `tsconfig`, a `project.json`), is a changed rule. The second finds
-disable comments and skipped tests. Is every hit on the agent's list? Neither command finds
-a renamed selector or a removed assertion: for those you have only the list and your own
-reading of the diff.
+Der erste zeigt jede Datei, die der Commit aus Block 02 angefasst hat (wenn Du gerade eben ein
+zweites Mal committet hast, liegt dieser Commit einen zurück: `git show --stat HEAD~1`). Eine
+Datei außerhalb von `workshop-{{FRAMEWORK_LC}}/src` und `course/`, vor allem eine
+Konfiguration (`eslint.config.mjs`, `stylelint.config.mjs`, eine `tsconfig`, eine
+`project.json`), ist eine geänderte Regel. Der zweite findet Disable-Kommentare und
+übersprungene Tests. Steht jeder Treffer auf der Liste des Agenten? Keiner der beiden Befehle
+findet einen umbenannten Selektor oder eine entfernte Assertion: Dafür hast Du nur die Liste
+und Dein eigenes Lesen des Diffs.
 
-Read the "went around" lines first, then check the "fixed" ones: would you have marked
-them the same way? For each line decide where the right place for the fix is. A disable
-comment silences one line. A rule that is wrong for this workspace is changed in its
-config, and that is a decision for a person, not for the agent. A removed assertion is a
-behaviour nobody checks any more: put it back or say why it is gone. Then revise once:
-either the prompt, or a line in `CLAUDE.md` that would have prevented the detour, and say
-why.
+Lies zuerst die Zeilen „umgangen“, prüfe dann die Zeilen „behoben“: Hättest Du sie genauso
+markiert? Entscheide für jede Zeile, wo die Korrektur hingehört. Ein Disable-Kommentar
+schaltet eine Zeile stumm. Eine Regel, die für diesen Workspace falsch ist, wird in ihrer
+Konfiguration geändert, und das ist eine Entscheidung für einen Menschen, nicht für den
+Agenten. Eine entfernte Assertion ist ein Verhalten, das niemand mehr prüft: Bring sie
+zurück oder sag, warum sie weg ist. Überarbeite dann einmal: entweder den Prompt oder eine
+Zeile in `CLAUDE.md`, die den Umweg verhindert hätte, und sag warum.
 
-### Is the handoff document still true?
+### Stimmt das Übergabedokument noch?
 
-The agent learned things while it built that the document did not know. Two prompts, and a
-decision of yours between them. First the list, nothing else:
-
-```text
-Read my handoff document <path> next to the code you find for <ComponentName>.
-Do not change any code and do not change the document yet. List every line of
-the document that is no longer true of what was built: a token that does not
-exist, an assumption about a library component that turned out wrong, a variant
-or state that was added or dropped. Number the list. For each line say what the
-code does instead, and whether you would correct the document or the code.
-```
-
-Decide each number yourself: is the document wrong, or is the code wrong? A document that
-is rewritten to match whatever was built stops being a specification. Where the code is
-wrong, the line stays and the fix is a repair of the code, one change at a time. Where the
-document is wrong, hand back only those numbers:
+Der Agent hat beim Bauen Dinge gelernt, die das Dokument nicht kannte. Zwei Prompts und eine
+Entscheidung von Dir dazwischen. Zuerst die Liste, sonst nichts:
 
 ```text
-Correct the handoff document for the numbers <numbers> of your list, and only
-those: describe what was built, and mark each corrected line with "(corrected
-after generation)". Do not change any code.
+Lies mein Übergabedokument <Pfad> neben dem Code, den Du für <Komponentenname>
+findest. Ändere keinen Code und ändere das Dokument noch nicht. Liste jede Zeile
+des Dokuments auf, die für das Gebaute nicht mehr stimmt: ein Token, das nicht
+existiert, eine Annahme über eine Bibliothekskomponente, die sich als falsch
+herausstellte, eine Variante oder ein Zustand, die hinzugekommen oder entfallen
+sind. Nummeriere die Liste. Sag zu jeder Zeile, was der Code stattdessen tut und
+ob Du das Dokument oder den Code korrigieren würdest.
 ```
 
-### Make it red on purpose
-
-Now the loop the block is named after, on a change you choose. Take one variant or state
-from the "Explicitly out" line of your handoff document. The story comes first, so that
-the red is yours to see.
-
-Commit before you start (`git add -A && git commit -m "day 2 block 03: corrected"`). The
-corrected handoff document and your revision are then safe from the undo further down.
+Entscheide jede Nummer selbst: Ist das Dokument falsch oder der Code? Ein Dokument, das an
+alles angepasst wird, was gebaut wurde, ist keine Spezifikation mehr. Wo der Code falsch ist,
+bleibt die Zeile stehen und die Korrektur ist eine Reparatur am Code, eine Änderung nach der
+anderen. Wo das Dokument falsch ist, gib nur diese Nummern zurück:
 
 ```text
-My component is <ComponentName>, its handoff document is <path>. One thing moves
-from "Explicitly out" into scope: <the variant or state>. Add it to the handoff
-document first. Then write only its story with a play function that proves it,
-and do not touch the component yet. Run that story (test-run through
-storybook-local, or npm run check:stories when Storybook is not running) and
-show me the first error exactly as the tool reports it. Do not fix anything.
+Korrigiere das Übergabedokument für die Nummern <Nummern> Deiner Liste, und nur
+für diese: Beschreibe, was gebaut wurde, und markiere jede korrigierte Zeile mit
+„(nach der Generierung korrigiert)“. Ändere keinen Code.
 ```
 
-Read the error before you go on. What did the `play` function expect, and who chose that
-expectation: you, the handoff document, or the agent?
+### Rot mit Absicht
+
+Jetzt die Schleife, nach der der Block benannt ist, an einer Änderung, die Du wählst. Nimm
+eine Variante oder einen Zustand aus der Zeile „Bewusst draußen“ Deines Übergabedokuments.
+Die Story kommt zuerst, damit Du das Rot selbst siehst.
+
+Committe, bevor Du anfängst (`git add -A && git commit -m "day 2 block 03: corrected"`). Das
+korrigierte Übergabedokument und Deine Überarbeitung sind dann vor dem Zurücksetzen weiter
+unten sicher.
 
 ```text
-Now repair from that error: one change, in the right place, then run the story
-again and report the result. If it is still red after two attempts, stop and
-tell me what you think the cause is.
+Meine Komponente ist <Komponentenname>, ihr Übergabedokument ist <Pfad>. Eine
+Sache rückt aus „Bewusst draußen“ in den Umfang: <die Variante oder der Zustand>.
+Nimm sie zuerst ins Übergabedokument auf. Schreibe dann nur ihre Story mit einer
+play-Funktion, die sie beweist, und fasse die Komponente noch nicht an. Führe
+diese Story aus (test-run über storybook-local, oder npm run check:stories, wenn
+Storybook nicht läuft) und zeig mir den ersten Fehler genau so, wie das Werkzeug
+ihn meldet. Behebe nichts.
 ```
 
-After two failed repairs there is no third patch. Go back to your last commit. That
-discards everything since then, in the whole workspace: the repairs, and with them the new
-story and the line you added to the handoff document. Look first at what would go:
+Lies den Fehler, bevor Du weitermachst. Was hat die `play`-Funktion erwartet, und wer hat
+diese Erwartung gewählt: Du, das Übergabedokument oder der Agent?
+
+```text
+Repariere jetzt von diesem Fehler aus: eine Änderung, an der richtigen Stelle,
+führe die Story dann noch einmal aus und melde das Ergebnis. Wenn sie nach zwei
+Versuchen noch rot ist, hör auf und sag mir, was Du für die Ursache hältst.
+```
+
+Nach zwei gescheiterten Reparaturen gibt es keinen dritten Flicken. Geh zurück auf Deinen
+letzten Commit. Das verwirft alles seitdem, im ganzen Workspace: die Reparaturen und mit ihnen
+die neue Story und die Zeile, die Du ins Übergabedokument geschrieben hast. Sieh zuerst nach,
+was verschwinden würde:
 
 ```shell
 git status --short
 git clean -nd -- workshop-{{FRAMEWORK_LC}}/src
 ```
 
-Then undo, paste the first prompt of this section again, and diagnose from the failing
-story, not from the patches:
+Setz dann zurück, tippe `/clear`, damit die gescheiterten Reparaturen nicht mehr im Kontext
+des Agenten liegen, füge den ersten Prompt dieses Abschnitts noch einmal ein und diagnostiziere
+von der fehlschlagenden Story aus, nicht von den Flicken:
 
 ```shell
 git reset --hard HEAD && git clean -fd -- workshop-{{FRAMEWORK_LC}}/src
 ```
 
-When it is green, ask what is still open: "What did this change leave undone? Do not fix
-it, list it." Typical answers: the story controls do not offer the new value, lint and
-build were not run again, the Figma master has no such variant. Commit when the stories
-are green.
+Wenn es grün ist, frag, was noch offen ist: „Was hat diese Änderung offen gelassen? Behebe es
+nicht, liste es auf.“ Typische Antworten: Die Story-Controls bieten den neuen Wert nicht an,
+Lint und Build liefen nicht noch einmal, dem Figma-Master fehlt diese Variante. Committe, wenn
+die Stories grün sind.
 
-## Block 04: the accessibility check
+## Block 04: der Barrierefreiheits-Check
 
-Three steps, in order. The Desktop Bridge must be running: confirm `figma_get_status`
-reports `setup.valid: true` first. Fix only the obligations tagged **(this block)** in the
-brief you chose (`briefs/`), for the variant and state you actually built.
-
-```text
-Run the accessibility check on <ComponentName>, in order, and report each step's
-result before moving to the next:
-
-1. figma_audit_component_accessibility against the Figma node (needs the Desktop
-   Bridge running: confirm figma_get_status reports setup.valid: true first).
-   Report the score, how the tool classified the component, and which checks it
-   skipped because of that classification.
-2. Open the story in Storybook and read the A11y panel (axe-core): list every
-   violation, not just the count.
-
-Fix only the obligations tagged (this block) in section 4 of the brief, pasted below this
-prompt, for the variant/state you actually built. Leave (full component) items as a
-written note in the master's Figma description, not as code you claim passes a check
-it was never exercised against.
-```
-
-Step 1 can return 100 out of 100 and still have checked little: a set the tool classifies
-as "presentational" skips the focus-indicator and target-size checks. Read the
-classification, not only the score.
-
-**Step 3 is yours, by hand.** Open the story in the browser and put the mouse away: Tab,
-Shift+Tab, Enter, Space, Escape. Does focus arrive where you expect, can you see it, does
-activation work, does dismissal work? The agent can script this, but then you approve five
-long scripts and still have not seen the focus ring.
-
-**Measure the target size, if your brief names one.** A minimum target (24 × 24 px on a
-remove or close button) is measured by none of the steps above: the Figma audit skips it for
-a set it calls "presentational", axe does not check it, and parity compares the outer box of
-the whole set. In the browser: right-click the control, Inspect, select the `<button>`
-itself in the Elements panel (the click often lands on the icon inside it) and read the size
-of its box. In Figma: select the control's frame and read W and H in the Design panel. Both
-at least 24 × 24, or it is a finding.
-
-## Block 04: the dark check
+Drei Schritte, in dieser Reihenfolge. Die Desktop Bridge muss laufen: Bestätige zuerst, dass
+`figma_get_status` `setup.valid: true` meldet. Behebe nur die Pflichten, die im gewählten
+Brief (`briefs/`) mit **(dieser Block)** markiert sind, für die Variante und den Zustand, die
+Du tatsächlich gebaut hast.
 
 ```text
-Switch the theme control in Storybook's toolbar to dark (addon-themes, it sets
-`data-theme="dark"`; the backgrounds control only recolours the canvas and
-switches nothing) and look at <ComponentName> in the variants and states you
-built. Confirm two things and report each:
+Führe den Barrierefreiheits-Check für <Komponentenname> der Reihe nach aus und
+melde das Ergebnis jedes Schritts, bevor Du zum nächsten gehst:
 
-1. Every colour still resolves through a `--ui-*` custom property, none
-   hardcoded, so the dark values declared for `[data-theme="dark"]` take effect.
-   A hardcoded colour is invisible in light mode and wrong in dark mode.
-2. No control gained a `transform` on hover or press: state is a colour or
-   border token swap, no shrink and no lift.
+1. figma_audit_component_accessibility gegen den Figma-Node (die Desktop Bridge
+   muss laufen: Bestätige zuerst, dass figma_get_status setup.valid: true meldet).
+   Melde den Score, wie das Werkzeug die Komponente klassifiziert hat und welche
+   Checks es deshalb übersprungen hat.
+2. Öffne die Story in Storybook und lies das A11y-Panel (axe-core): Liste jede
+   Verletzung auf, nicht nur die Anzahl.
+
+Behebe nur die Pflichten, die in Abschnitt 4 des Briefs mit (dieser Block)
+markiert sind, der unter diesem Prompt eingefügt ist, für die Variante und den
+Zustand, die Du tatsächlich gebaut hast. Lass (volle Komponente)-Punkte als
+schriftliche Notiz in der Figma-Beschreibung des Masters stehen, nicht als Code,
+von dem Du behauptest, er bestehe einen Check, gegen den er nie geprüft wurde.
 ```
 
-Then switch the toolbar yourself and look. The agent reads the stylesheet; you see whether
-the text is still readable.
+Schritt 1 kann 100 von 100 liefern und trotzdem wenig geprüft haben: Ein Set, das das Werkzeug
+als „presentational“ klassifiziert, überspringt die Checks für Fokusindikator und Zielgröße.
+Lies die Klassifizierung, nicht nur den Score.
+
+**Schritt 3 machst Du selbst, von Hand.** Öffne die Story im Browser und leg die Maus weg:
+Tab, Shift+Tab, Enter, Leertaste, Escape. Landet der Fokus, wo Du ihn erwartest, siehst Du
+ihn, funktioniert die Aktivierung, funktioniert das Schließen? Der Agent kann das skripten,
+aber dann gibst Du fünf lange Skripte frei und hast den Fokusring trotzdem nicht gesehen.
+
+**Miss die Zielgröße, wenn Dein Brief eine nennt.** Eine Mindestgröße (24 × 24 px bei einem
+Entfernen- oder Schließen-Button) misst keiner der Schritte oben: Das Figma-Audit überspringt
+sie bei einem Set, das es „presentational“ nennt, axe prüft sie nicht, und die Parity
+vergleicht die äußere Box des ganzen Sets. Im Browser: Rechtsklick auf das Control,
+Untersuchen, wähle im Elements-Panel den `<button>` selbst aus (der Klick landet oft auf dem
+Icon darin) und lies die Größe seiner Box ab. In Figma: Wähle den Frame des Controls aus und
+lies B und H im Design-Panel ab. Beide mindestens 24 × 24, sonst ist es ein Befund.
+
+## Block 04: der Dark-Check
+
+```text
+Stelle die Theme-Auswahl in der Storybook-Toolbar auf Dark (addon-themes, sie setzt
+`data-theme="dark"`; die Backgrounds-Auswahl färbt nur die Canvas um und schaltet
+nichts um) und sieh Dir <Komponentenname> in den Varianten und Zuständen an, die
+Du gebaut hast. Bestätige zwei Dinge und melde jedes:
+
+1. Jede Farbe wird weiterhin über eine `--ui-*`-Custom-Property aufgelöst, keine
+   ist fest eincodiert, sodass die für `[data-theme="dark"]` deklarierten
+   Dark-Werte greifen. Eine fest eincodierte Farbe ist im Light Mode unsichtbar
+   und im Dark Mode falsch.
+2. Kein Control hat bei Hover oder Press ein `transform` bekommen: Der Zustand
+   ist ein Wechsel von Farb- oder Rand-Token, kein Schrumpfen und kein Anheben.
+```
+
+Schalte dann selbst die Toolbar um und sieh hin. Der Agent liest das Stylesheet. Du siehst, ob
+der Text noch lesbar ist.
 
 {{STUCK}}

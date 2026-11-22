@@ -1,193 +1,203 @@
-# Component brief — StatCard
+# Komponenten-Brief: StatCard
 
-> **Source: composed, not canonical.** There is no `stat-card` among the canonical
-> components. This brief assembles one from `card` and `badge`. Two of the slots below —
-> `value` and `delta` — have **no canonical counterpart**; they are this composition's
-> own, mapped onto slots that do exist. Every such mapping is marked.
-> **Starter frame:** `StatCard / Starter` — node `703:348` on the
-> `🛠️ Workshop-Templates` page.
-> **Read [`README.md`](README.md) first** — the shared rules and the "done when" bar
-> live there and are not repeated here.
+> **Quelle: zusammengesetzt, nicht kanonisch.** Unter den kanonischen Komponenten gibt es
+> kein `stat-card`. Dieser Brief setzt eines aus `card` und `badge` zusammen. Zwei der
+> Slots unten, `value` und `delta`, haben **kein kanonisches Gegenstück**; sie sind die
+> eigenen dieser Komposition und auf vorhandene Slots abgebildet. Jede solche Abbildung
+> ist markiert.
+> **Starter-Frame:** `StatCard / Starter`, Node `703:348` auf der Seite
+> `🛠️ Workshop-Templates`.
+> **Lies zuerst [`README.md`](README.md).** Die gemeinsamen Regeln und die Messlatte
+> „Fertig, wenn“ stehen dort und werden hier nicht wiederholt.
 
-A bounded surface presenting one metric: a label, the number, and how it is trending.
-The temptation is to treat it as "a Card with a big number in it". The reason it needs a
-brief is that a Card's canonical anatomy has a **required** action slot and a StatCard
-has no action — so the first thing this component owes is a recorded decision about what
-it drops and why.
-
----
-
-## 1. Anatomy
-
-Six slots. Four map onto canonical Card slots; two are this composition's own.
-
-| Slot        | Required | Maps to                                        | Figma                         | What it is                                                                                                                              |
-| ----------- | -------- | ---------------------------------------------- | ----------------------------- | --------------------------------------------------------------------------------------------------------------------------------------- |
-| `container` | yes      | card (the surface itself)                      | frame, auto-layout vertical   | The bounded surface. Carries the variant treatment, the radius and the padding budget.                                                  |
-| `label`     | yes      | card `eyebrow`                                 | text                          | What is being measured. Short, categorical, above the number — establishes context before the value. **Not** a heading: it is metadata. |
-| `value`     | yes      | _composition-specific_ — occupies card `title` | text                          | The number itself, at display size. The card's primary identifier, and it must read as a standalone label outside the card's context.   |
-| `delta`     | no       | _composition-specific_ — a `badge` instance    | instance                      | The trend marker: `+12%`, `−3.4%`. A Badge with a severity variant.                                                                     |
-| `caption`   | no       | card `subtitle`                                | text                          | Secondary descriptor narrowing the value — "vs. last week", "rolling 30 days". Not a place for prose.                                   |
-| `footer`    | no       | card `footer`                                  | frame, auto-layout horizontal | Tertiary metadata at lower visual weight — timestamp, source, a link out.                                                               |
-
-**The slot this composition drops.** Card marks `primary-action` **required** — exactly
-one decision-committing button per card. A StatCard commits no decision. Dropping it is
-legitimate, and recording the drop in the master's description is the difference between
-a deliberate composition and an incomplete one. If your StatCard _does_ need a "View
-details" affordance, read §4.1 first: it changes the component's keyboard story
-completely.
-
-**Token budget.** `container`: background `color/surface-raised` (elevated) or
-`color/surface` with `color/border` (outlined), radius `radius/lg`, padding off
-`spacing/*`. `label`: `color/text-muted`, `font-size/xs`, `font-weight/medium`, with
-`letter-spacing` wide if you uppercase it. `value`: `color/text`, the largest step your
-type scale offers. `caption` and `footer`: `color/text-muted`, `font-size/xs`.
-`delta`: the Badge's own severity pair — `color/success-bg` + `color/success-text`, or
-`color/danger-bg` + `color/danger-text`.
-
-**Elevation is a CSS-only token.** The `elevated` variant needs `--ui-shadow-md`, and
-`Library Tokens` carries no `shadow/*` — Figma cannot bind it. State the shadow in the
-description; do not invent a variable for it. (This is why the `outlined` variant, which
-needs only `color/border`, is the easier of the two to make token-true.)
+Eine begrenzte Fläche, die eine Kennzahl zeigt: ein Label, die Zahl und ihren Trend.
+Die Versuchung ist, sie als „eine Card mit einer großen Zahl darin“ zu behandeln. Einen
+Brief braucht sie, weil die kanonische Anatomie einer Card einen **Pflicht**-Action-Slot
+hat und eine StatCard keine Aktion. Als Erstes schuldet diese Komponente also eine
+festgehaltene Entscheidung, was sie weglässt und warum.
 
 ---
 
-## 2. Axes
+## 1. Anatomie
 
-**Variant (from `card`):** `elevated` · `outlined` · `flat`. These are structurally
-different surfaces, which is what earns them a variant axis.
+Sechs Slots. Vier entsprechen kanonischen Card-Slots, zwei sind die eigenen dieser Komposition.
 
-**Properties (not variants):**
+| Slot        | Pflicht | Entspricht                                     | Figma                         | Was es ist                                                                                                                                        |
+| ----------- | ------- | ---------------------------------------------- | ----------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `container` | ja      | card (die Fläche selbst)                       | Frame, Auto-Layout vertikal   | Die begrenzte Fläche. Trägt die Variantengestaltung, den Radius und das Padding-Budget.                                                           |
+| `label`     | ja      | card `eyebrow`                                 | Text                          | Was gemessen wird. Kurz, kategorisch, über der Zahl: stellt den Kontext her, bevor der Wert kommt. **Keine** Überschrift, sondern Metadaten.      |
+| `value`     | ja      | _kompositionsspezifisch_, belegt card `title`  | Text                          | Die Zahl selbst in Display-Größe. Die primäre Kennung der Karte; sie muss auch außerhalb des Kartenkontexts als eigenständiges Label lesbar sein. |
+| `delta`     | nein    | _kompositionsspezifisch_, eine `badge`-Instanz | Instanz                       | Der Trendmarker: `+12%`, `−3.4%`. Ein Badge mit einer Schweregrad-Variante.                                                                       |
+| `caption`   | nein    | card `subtitle`                                | Text                          | Sekundärer Zusatz, der den Wert eingrenzt: „gegenüber letzter Woche“, „gleitende 30 Tage“. Kein Platz für Prosa.                                  |
+| `footer`    | nein    | card `footer`                                  | Frame, Auto-Layout horizontal | Tertiäre Metadaten mit geringerem visuellem Gewicht: Zeitstempel, Quelle, ein Link nach außen.                                                    |
 
-| Property      | Kind    | Values                   | From                   |
-| ------------- | ------- | ------------------------ | ---------------------- |
-| `orientation` | enum    | `vertical`, `horizontal` | card                   |
-| `density`     | enum    | `comfortable`, `compact` | card                   |
-| `interactive` | boolean | —                        | card                   |
-| `hasDelta`    | boolean | —                        | _composition-specific_ |
+**Der Slot, den diese Komposition weglässt.** Card markiert `primary-action` als
+**Pflicht**: genau ein Button pro Karte, der eine Entscheidung auslöst. Eine StatCard
+löst keine Entscheidung aus. Den Slot wegzulassen ist legitim. Den Wegfall in der
+Beschreibung des Masters festzuhalten unterscheidet eine bewusste Komposition von einer
+unvollständigen. Braucht Deine StatCard doch ein Bedienangebot „Details ansehen“, lies
+zuerst §4.1: Es ändert die Tastaturbedienung der Komponente komplett.
 
-`orientation` is a **property**, not a variant — the single most common counting
-mismatch on this component. Designers who model it as a variant see six variants where
-developers see three variants and a binary prop, and the two files stop agreeing about
-what exists.
+**Token-Budget.** `container`: Hintergrund `color/surface-raised` (elevated) oder
+`color/surface` mit `color/border` (outlined), Radius `radius/lg`, Padding aus
+`spacing/*`. `label`: `color/text-muted`, `font-size/xs`, `font-weight/medium`, mit
+weitem `letter-spacing`, wenn Du es in Großbuchstaben setzt. `value`: `color/text`, die
+größte Stufe, die Deine Typo-Skala hergibt. `caption` und `footer`: `color/text-muted`,
+`font-size/xs`. `delta`: das Schweregrad-Paar des Badge selbst, `color/success-bg` +
+`color/success-text` oder `color/danger-bg` + `color/danger-text`.
 
-### Scope for the 90-minute block
-
-**In scope: `elevated` and `outlined`, in the `delta-up` and `delta-down` states, with
-`hasDelta: true`.** The two variants differ in exactly one dimension — border versus
-shadow — which makes the Figma-cannot-bind-a-shadow lesson concrete rather than
-theoretical. `delta-up` and `delta-down` are this composition's own `state` axis (§3) — a
-data pair, not an interaction pair, since a static StatCard has no interaction states to
-draw (see below) — and drawing both is what makes item 3's colour-alone blocker (§4)
-checkable directly on the frame rather than merely asserted in prose. `hasDelta: true` is
-what pulls the axis, and the Badge composition, into scope at all.
-
-**Out of scope, and say so in the description rather than silently omitting:** `flat`,
-both `orientation` values (build `vertical`), `density`, `interactive`, and the
-`selected` / `loading` data states.
-
----
-
-## 3. States
-
-**Interactive (from `card`):** `hover`, `focus-visible`, `active`, `disabled` — and only
-when `interactive: true`. A static StatCard has none of them, and drawing hover on a
-non-interactive card promises an affordance that is not there.
-
-**Data (from `card`):** `selected`, `loading`.
-
-`loading` deserves a thought even though it is out of scope to build: a StatCard's
-whole content is one asynchronous number, so the skeleton state is not decoration — it
-is the state the component spends its first frames in. Note in the description what the
-card shows before the number arrives.
-
-**`selected` is a data state, not a variant.** Modelling it as "outline + filled
-background" duplicates the treatment in two places and blocks the combination
-`selected + disabled` outright.
-
-**Data (composition-specific): `delta-up`, `delta-down`.** `card` carries no delta of its
-own — this pair belongs to the `delta` slot's composition, not to `card` — and it is the
-one `state` axis this brief actually draws (§2). A `hasDelta: true` card renders as
-`delta-up` (the Badge `success` pairing) or `delta-down` (the Badge `danger` pairing);
-both frames are in scope precisely because the direction has to survive without colour
-(§4 item 3).
+**Elevation ist ein reines CSS-Token.** Die Variante `elevated` braucht `--ui-shadow-md`,
+und `Library Tokens` enthält kein `shadow/*`: Figma kann es nicht binden. Nenne den
+Schatten in der Beschreibung. Erfinde keine Variable dafür. (Darum lässt sich die
+Variante `outlined`, die nur `color/border` braucht, leichter token-treu bauen.)
 
 ---
 
-## 4. Accessibility requirements
+## 2. Achsen
 
-Each item is tagged **(this block)** — checkable on the `elevated`/`outlined` frames,
-drawn in both `delta-up` and `delta-down`, with `hasDelta: true` — or **(full
-component)** — real, but dependent on `interactive`, a live data feed, or an optional
-slot this brief's scope puts out of reach (see [`README.md` item 7](README.md#done-when)).
+**Variante (aus `card`):** `elevated` · `outlined` · `flat`. Das sind strukturell
+verschiedene Flächen, deshalb verdienen sie eine Variantenachse.
 
-1. **An interactive card is one activator, and nested controls need the overlay
-   pattern.** _(blocker · full component)_ Wrapping the whole card in an `<a>` makes it a
-   single tab stop and traps anything focusable inside it — a screen reader then reads the
-   nested controls as part of the link's name. The canonical fix: keep the card a plain
-   container, give the `value` (or `label`) a real `<a>` whose `::before` covers the card,
-   and lift genuinely separate controls onto a higher stacking context. `interactive` is
-   out of scope (§2) — nothing built here is clickable.
-2. **A clickable card has a real focusable activator.** _(blocker · full component)_ A
-   click handler on a `<div>` is unreachable by keyboard and unannounced. `<a href>` for
-   navigation, `<button>` for in-page actions — never `role="button"` on the card div.
-   Same dependency on `interactive` as item 1.
-3. **The delta is never colour alone.** _(blocker, from `badge` · this block)_ Green-up /
-   red-down is invisible to a large group of users. Pair it with a sign (`+` / `−`), an
-   arrow glyph _plus_ text, or a visually hidden word. The number's direction must survive
-   greyscale. `delta-up` and `delta-down` are both in scope (§2, §3) — checkable directly
-   by comparing the two drawn frames in greyscale, not merely asserted of a single one.
-4. **A live-updating value announces politely.** _(major, from `badge` · full component)_
-   If the number changes without a navigation, wrap it in `aria-live="polite"` with
-   `aria-atomic="true"` so the whole new value reads rather than a fragment — and
-   throttle it, or a fast-moving metric floods the screen reader. Requires an actual data
-   feed, which a static frame does not have — document the contract instead.
-5. **The label is not a heading.** _(this block)_ Card's canonical guidance: the eyebrow
-   is metadata. If the value and label need to be announced as a unit, associate them
-   with `aria-labelledby` rather than promoting the label to `<h3>`. The `label` slot's
-   text style is a drawn choice, checkable on the frame.
-6. **Value and label are announced together.** _(this block)_ "1,284" alone is
-   meaningless. Whichever mechanism you pick — DOM order, `aria-labelledby`, or a
-   visually hidden combined string — write it into the description.
-7. **A decorative delta icon is hidden.** _(major · this block)_ `aria-hidden="true"` on
-   the arrow glyph when a textual sign is already present; otherwise it double-announces.
-   The `delta` badge instance is in scope (`hasDelta: true`) — checkable on the frame.
-8. **Media alt never repeats the label.** _(minor · full component)_ If you add a
-   sparkline or an icon, its alt adds what the text does not say ("Chart showing 12%
-   growth"), or it is `alt=""`. Media is not part of this composition's anatomy (§1) — it
-   applies only if you add one later.
+**Properties (keine Varianten):**
+
+| Property      | Art     | Werte                    | Aus                      |
+| ------------- | ------- | ------------------------ | ------------------------ |
+| `orientation` | enum    | `vertical`, `horizontal` | card                     |
+| `density`     | enum    | `comfortable`, `compact` | card                     |
+| `interactive` | boolean | —                        | card                     |
+| `hasDelta`    | boolean | —                        | _kompositionsspezifisch_ |
+
+`orientation` ist eine **Property**, keine Variante: der häufigste Zählfehler bei dieser
+Komponente. Designer, die sie als Variante modellieren, sehen sechs Varianten, wo
+Entwickler drei Varianten und eine binäre Prop sehen, und beide Dateien sind sich nicht
+mehr einig, was existiert.
+
+### Umfang für den 90-Minuten-Block
+
+**Im Umfang: `elevated` und `outlined`, in den Zuständen `delta-up` und `delta-down`,
+mit `hasDelta: true`.** Die beiden Varianten unterscheiden sich in genau einer Dimension,
+Rahmen gegen Schatten. So wird die Lektion „Figma kann keinen Schatten binden“ konkret
+statt theoretisch. `delta-up` und `delta-down` sind die eigene `state`-Achse dieser
+Komposition (§3), ein Datenpaar und kein Interaktionspaar, denn eine statische StatCard
+hat keine Interaktionszustände zu zeichnen (siehe unten). Beide zu zeichnen macht den
+Blocker „Farbe allein“ aus Punkt 3 (§4) direkt am Frame prüfbar, statt ihn nur in Prosa
+zu behaupten. `hasDelta: true` zieht die Achse und die Badge-Komposition überhaupt erst
+in den Umfang.
+
+**Nicht im Umfang, und sag das in der Beschreibung, statt es stillschweigend wegzulassen:** `flat`,
+beide `orientation`-Werte (baue `vertical`), `density`, `interactive` und die
+Datenzustände `selected` / `loading`.
 
 ---
 
-## 5. Figma ↔ code gotchas
+## 3. Zustände
 
-| Drawn as                                                  | Implemented as                                                 | Why it hurts                                                                                                                                                                      |
-| --------------------------------------------------------- | -------------------------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| Variants for hover / focus / active / disabled            | CSS pseudo-classes and ARIA attributes                         | 3 variants × 4 states × 2 orientations is 24+ frames, and none of them maps to a pseudo-class without a hand translation. Document interaction states on a separate states sheet. |
-| Media-on-top and media-on-leading as separate variants    | One component with an `orientation` prop                       | Designers count six variants, developers count three plus a binary union. The counts diverge and so do the files.                                                                 |
-| A card component stacked on an invisible button component | One `<a>`/`<button>` wrapping the card, or the overlay pattern | The Figma file does not encode the affordance, so neither side realises the whole card must be a single accessible activator.                                                     |
-| A "selected" variant with outline + filled background     | A `data-selected` / `aria-selected` attribute                  | The treatment is duplicated in two places and drifts, and `selected + disabled` becomes unrepresentable.                                                                          |
+**Interaktiv (aus `card`):** `hover`, `focus-visible`, `active`, `disabled`, und nur bei
+`interactive: true`. Eine statische StatCard hat keinen davon. Hover auf einer nicht
+interaktiven Karte zu zeichnen verspricht ein Bedienangebot, das es nicht gibt.
 
----
+**Daten (aus `card`):** `selected`, `loading`.
 
-## 6. What "finished" looks like here
+Über `loading` lohnt es sich nachzudenken, auch wenn es nicht zum Bauumfang gehört: Der
+gesamte Inhalt einer StatCard ist eine asynchrone Zahl. Der Skeleton-Zustand ist also
+keine Dekoration, sondern der Zustand, in dem die Komponente ihre ersten Frames
+verbringt. Halte in der Beschreibung fest, was die Karte zeigt, bevor die Zahl eintrifft.
 
-Beyond the shared bar in [`README.md`](README.md):
+**`selected` ist ein Datenzustand, keine Variante.** Wer ihn als „Outline + gefüllter
+Hintergrund“ modelliert, doppelt die Gestaltung an zwei Stellen und blockiert die
+Kombination `selected + disabled` komplett.
 
-- The variant axis is `variant` with values `elevated` and `outlined` — `orientation`
-  and `density` are properties if you model them at all.
-- The master's description records: that `primary-action` was deliberately dropped, that
-  the `elevated` shadow is a CSS-only token, and what the card shows while the number is
-  loading.
-- The delta's direction is readable in greyscale.
-- The `state` axis is `delta-up` / `delta-down` — the composition's own data pair, not a
-  `card` state — and the description names the `card` states
-  (`hover`/`focus-visible`/`active`/`disabled`, `selected`, `loading`) this brief does not
-  build.
-- The `delta` slot is an **instance** of your Badge (or of `Display/AtlBadge`), not a
-  hand-drawn pill — the composition has to be a real composition, or the next token
-  change breaks it silently.
+**Daten (kompositionsspezifisch): `delta-up`, `delta-down`.** `card` bringt kein eigenes
+Delta mit: Dieses Paar gehört zur Komposition des `delta`-Slots, nicht zu `card`, und es
+ist die eine `state`-Achse, die dieser Brief tatsächlich zeichnet (§2). Eine Karte mit
+`hasDelta: true` erscheint als `delta-up` (Badge-Paarung `success`) oder `delta-down`
+(Badge-Paarung `danger`). Beide Frames gehören in den Umfang, gerade weil die Richtung
+ohne Farbe erkennbar bleiben muss (§4 Punkt 3).
 
 ---
 
-**Before you prompt:** write the handoff document first. A filled example (for the Toast brief) is in `../handoff-example.md`.
+## 4. Anforderungen an die Barrierefreiheit
+
+Jeder Punkt trägt eine Markierung: **(dieser Block)**, prüfbar an den Frames
+`elevated`/`outlined`, gezeichnet in `delta-up` und `delta-down`, mit `hasDelta: true`,
+oder **(volle Komponente)**: real, hängt aber von `interactive`, einem Live-Datenstrom
+oder einem optionalen Slot ab, den der Umfang dieses Briefs außer Reichweite legt (siehe
+[`README.md` Punkt 7](README.md#fertig-wenn)).
+
+1. **Eine interaktive Karte hat genau ein Aktivierungselement, und verschachtelte
+   Controls brauchen das Overlay-Muster.** _(Blocker · volle Komponente)_ Wer die ganze
+   Karte in ein `<a>` packt, macht sie zu einem einzigen Tab-Stopp und sperrt alles
+   Fokussierbare darin ein: Ein Screenreader liest die verschachtelten Controls dann als
+   Teil des Link-Namens. Die kanonische Lösung: Die Karte bleibt ein einfacher
+   Container, der `value` (oder `label`) bekommt ein echtes `<a>`, dessen `::before` die
+   Karte abdeckt, und wirklich eigenständige Controls werden in einen höheren
+   Stapelkontext gehoben. `interactive` ist bewusst draußen (§2), hier ist nichts
+   klickbar.
+2. **Eine klickbare Karte hat ein echtes fokussierbares Aktivierungselement.**
+   _(Blocker · volle Komponente)_ Ein Click-Handler auf einem `<div>` ist per Tastatur
+   nicht erreichbar und wird nicht angekündigt. `<a href>` für Navigation, `<button>` für
+   Aktionen auf der Seite, nie `role="button"` auf dem Karten-div. Dieselbe Abhängigkeit
+   von `interactive` wie bei Punkt 1.
+3. **Das Delta steht nie allein durch Farbe.** _(Blocker, aus `badge` · dieser Block)_
+   Grün für steigend, Rot für fallend ist für eine große Gruppe von Nutzern unsichtbar.
+   Kombiniere es mit einem Vorzeichen (`+` / `−`), einem Pfeilsymbol _plus_ Text oder
+   einem visuell versteckten Wort. Die Richtung der Zahl muss in Graustufen erhalten
+   bleiben. `delta-up` und `delta-down` sind beide im Umfang (§2, §3): prüfbar, indem Du
+   die beiden gezeichneten Frames direkt in Graustufen vergleichst, statt es nur von
+   einem einzelnen zu behaupten.
+4. **Ein sich live aktualisierender Wert wird höflich angekündigt.** _(major, aus `badge`
+   · volle Komponente)_ Ändert sich die Zahl ohne Navigation, setze `aria-live="polite"`
+   mit `aria-atomic="true"`, damit der ganze neue Wert vorgelesen wird statt eines
+   Fragments. Drossele die Updates, sonst überflutet eine schnelle Kennzahl den
+   Screenreader. Setzt einen echten Datenstrom voraus, den ein statischer Frame nicht
+   hat: Dokumentiere stattdessen den Vertrag.
+5. **Das Label ist keine Überschrift.** _(dieser Block)_ Die kanonische Card-Vorgabe: Das
+   Eyebrow ist Metadaten. Müssen Wert und Label als Einheit angekündigt werden, verknüpfe
+   sie mit `aria-labelledby`, statt das Label zu `<h3>` zu befördern. Der Textstil des
+   Slots `label` ist eine gezeichnete Entscheidung, am Frame prüfbar.
+6. **Wert und Label werden zusammen angekündigt.** _(dieser Block)_ „1.284“ allein ist
+   bedeutungslos. Welchen Mechanismus Du auch wählst, DOM-Reihenfolge, `aria-labelledby`
+   oder einen visuell versteckten kombinierten String: Schreib ihn in die Beschreibung.
+7. **Ein dekoratives Delta-Icon ist versteckt.** _(major · dieser Block)_
+   `aria-hidden="true"` auf dem Pfeilsymbol, wenn bereits ein textliches Vorzeichen da
+   ist, sonst wird doppelt angekündigt. Die `delta`-Badge-Instanz ist im Umfang
+   (`hasDelta: true`), am Frame prüfbar.
+8. **Der Alt-Text von Medien wiederholt nie das Label.** _(minor · volle Komponente)_
+   Fügst Du eine Sparkline oder ein Icon hinzu, ergänzt der Alt-Text, was der Text nicht
+   sagt („Diagramm zeigt 12 % Wachstum“), oder er ist `alt=""`. Medien gehören nicht zur
+   Anatomie dieser Komposition (§1), das gilt nur, falls Du später eines ergänzt.
+
+---
+
+## 5. Figma ↔ Code: die Stolperstellen
+
+| Gezeichnet als                                                           | Implementiert als                                                       | Warum es wehtut                                                                                                                                                                                            |
+| ------------------------------------------------------------------------ | ----------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Varianten für hover / focus / active / disabled                          | CSS-Pseudoklassen und ARIA-Attribute                                    | 3 Varianten × 4 Zustände × 2 Orientierungen sind 24+ Frames, und keiner davon lässt sich ohne Handarbeit auf eine Pseudoklasse abbilden. Dokumentiere Interaktionszustände auf einem eigenen States-Sheet. |
+| Media-on-top und Media-on-leading als getrennte Varianten                | Eine Komponente mit einer `orientation`-Prop                            | Designer zählen sechs Varianten, Entwickler drei plus eine binäre Union. Die Zahlen laufen auseinander, und die Dateien mit ihnen.                                                                         |
+| Eine Card-Komponente über einer unsichtbaren Button-Komponente gestapelt | Ein `<a>`/`<button>`, das die Karte umschließt, oder das Overlay-Muster | Die Figma-Datei kodiert das Bedienangebot nicht, also merkt keine Seite, dass die ganze Karte ein einziges zugängliches Aktivierungselement sein muss.                                                     |
+| Eine Variante „selected“ mit Outline + gefülltem Hintergrund             | Ein Attribut `data-selected` / `aria-selected`                          | Die Gestaltung steckt an zwei Stellen und driftet auseinander, und `selected + disabled` lässt sich nicht mehr darstellen.                                                                                 |
+
+---
+
+## 6. Woran Du „fertig“ erkennst
+
+Zusätzlich zur gemeinsamen Messlatte in [`README.md`](README.md):
+
+- Die Variantenachse ist `variant` mit den Werten `elevated` und `outlined`;
+  `orientation` und `density` sind Properties, falls Du sie überhaupt modellierst.
+- Die Beschreibung des Masters hält fest: dass `primary-action` bewusst weggelassen
+  wurde, dass der Schatten von `elevated` ein reines CSS-Token ist und was die Karte
+  zeigt, solange die Zahl lädt.
+- Die Richtung des Deltas ist in Graustufen lesbar.
+- Die `state`-Achse ist `delta-up` / `delta-down`, das eigene Datenpaar der Komposition
+  und kein `card`-Zustand. Die Beschreibung nennt die `card`-Zustände
+  (`hover`/`focus-visible`/`active`/`disabled`, `selected`, `loading`), die dieser Brief
+  nicht baut.
+- Der Slot `delta` ist eine **Instanz** Deines Badge (oder von `Display/AtlBadge`), keine
+  handgezeichnete Pille: Die Komposition muss eine echte Komposition sein, sonst bricht
+  die nächste Token-Änderung sie unbemerkt.
+
+---
+
+**Bevor Du promptest:** Schreib zuerst das Übergabedokument. Ein ausgefülltes Beispiel (zum Toast-Brief) steht in `../handoff-example.md`.
