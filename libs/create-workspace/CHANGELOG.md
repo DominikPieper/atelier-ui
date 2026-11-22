@@ -1,3 +1,17 @@
+## 0.4.27 (2026-11-22)
+
+### 🚀 Features
+
+- **create-workspace:** stories carry the Figma link only ([497a8b46](https://github.com/DominikPieper/atelier-ui/commit/497a8b46))
+
+### 🩹 Fixes
+
+- **create-workspace:** pin @angular/animations to the core spec ([4f56201e](https://github.com/DominikPieper/atelier-ui/commit/4f56201e))
+
+### ❤️ Thank You
+
+- Dominik Pieper @DominikPieper
+
 ## 0.4.26 (2026-11-22)
 
 ### 🚀 Features

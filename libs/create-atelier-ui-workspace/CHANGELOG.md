@@ -1,3 +1,13 @@
+## 0.4.27 (2026-11-22)
+
+### 🚀 Features
+
+- **create-atelier-ui-workspace:** default name atelier-ui-workspace ([06d8f18e](https://github.com/DominikPieper/atelier-ui/commit/06d8f18e))
+
+### ❤️ Thank You
+
+- Dominik Pieper @DominikPieper
+
 ## 0.4.26 (2026-11-22)
 
 This was a version bump only for create-atelier-ui-workspace to align it with other projects, there were no code changes.
