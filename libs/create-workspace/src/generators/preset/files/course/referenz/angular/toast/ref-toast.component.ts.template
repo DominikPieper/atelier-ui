@@ -1,0 +1,115 @@
+import {
+  afterNextRender,
+  ChangeDetectionStrategy,
+  Component,
+  DestroyRef,
+  inject,
+  input,
+  output,
+  signal,
+} from '@angular/core';
+import { AtlIcon } from '@atelier-ui/angular';
+
+export type RefToastVariant = 'success' | 'danger';
+
+/**
+ * Reference toast for the course (course/briefs/toast.md). Not the library's
+ * `AtlToast`: a transient, non-blocking message in two severities. It does not
+ * position itself; the caller places it in a fixed corner.
+ *
+ * ```html
+ * <app-ref-toast variant="success" message="Saved" (dismissed)="onGone()" />
+ * ```
+ */
+@Component({
+  selector: 'app-ref-toast',
+  imports: [AtlIcon],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrl: './ref-toast.component.css',
+  // On the host, not on the inner div: pointer and key handlers on a
+  // non-interactive element fail the template a11y lint.
+  host: {
+    '(pointerenter)': 'pause()',
+    '(pointerleave)': 'resume()',
+    '(keydown.escape)': 'close()',
+  },
+  template: `
+    @if (open()) {
+      <div
+        class="ref-toast"
+        [class.ref-toast-danger]="variant() === 'danger'"
+        [attr.role]="variant() === 'danger' ? 'alert' : 'status'"
+      >
+        <atl-icon
+          class="ref-toast-icon"
+          [name]="variant() === 'danger' ? 'error' : 'success'"
+        />
+        <span class="ref-toast-body" [textContent]="message()"></span>
+        @if (dismissible()) {
+          <button
+            type="button"
+            class="ref-toast-close"
+            aria-label="Dismiss"
+            (click)="close()"
+          >
+            <atl-icon name="close" size="sm" />
+          </button>
+        }
+      </div>
+    }
+  `,
+})
+export class RefToastComponent {
+  /** Severity. `danger` is announced assertively (`role="alert"`), `success` politely. */
+  readonly variant = input<RefToastVariant>('success');
+  /** The message: one or two sentences. Anything longer is an alert. */
+  readonly message = input('');
+  /** Milliseconds until the toast closes by itself. `0` keeps it open. */
+  readonly duration = input(5000);
+  /** Whether the toast shows a close button. */
+  readonly dismissible = input(true);
+  /** Emitted once, when the toast has closed (timer, Escape or close button). */
+  readonly dismissed = output<void>();
+
+  protected readonly open = signal(true);
+
+  private timer: ReturnType<typeof setTimeout> | undefined;
+  private left = 0;
+  private since = 0;
+
+  constructor() {
+    // The timer starts once the toast is on screen, not at construction.
+    afterNextRender(() => {
+      this.left = this.duration();
+      this.run();
+    });
+    inject(DestroyRef).onDestroy(() => clearTimeout(this.timer));
+  }
+
+  /** Pointer in: stop the clock and remember how much time is left. */
+  protected pause(): void {
+    if (this.timer === undefined) return;
+    clearTimeout(this.timer);
+    this.timer = undefined;
+    this.left -= Date.now() - this.since;
+  }
+
+  /** Pointer out: continue with the remaining time, never restart. */
+  protected resume(): void {
+    this.run();
+  }
+
+  protected close(): void {
+    if (!this.open()) return;
+    clearTimeout(this.timer);
+    this.timer = undefined;
+    this.open.set(false);
+    this.dismissed.emit();
+  }
+
+  private run(): void {
+    if (this.timer !== undefined || this.left <= 0 || !this.open()) return;
+    this.since = Date.now();
+    this.timer = setTimeout(() => this.close(), this.left);
+  }
+}

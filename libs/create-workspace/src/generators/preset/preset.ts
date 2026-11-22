@@ -238,6 +238,17 @@ function writeCourseFolder(
       when: 'Tag 2, Block 01 bis 04: eine ausgefüllte Entscheidungsdatei (Kopf, offene Fragen, datierte Entscheidungen; vom Agenten entworfen, von Dir beantwortet, mit der Komponente committet)',
       figma: true,
     },
+    // The ready Toast exists for Angular only (the workshop framework); the
+    // other two have no verified reference, so they get no entry and no folder.
+    ...(framework === 'angular'
+      ? [
+          {
+            file: 'referenz/',
+            when: 'Tag 2, Block 03 und 04, nur als Notausgang: ein fertiger, geprüfter Toast (`RefToast`) mit Anleitung, wie Du ihn in einer Minute einbindest, falls Deine eigene Komponente dann noch nicht trägt',
+            figma: true,
+          },
+        ]
+      : []),
   ];
   const index = entries.filter((e) => figmaMcp || !e.figma);
   const write = (file: string, template = file) =>
@@ -253,6 +264,18 @@ function writeCourseFolder(
         'avatar',
       ]) {
         write(`briefs/${brief}.md`);
+      }
+    } else if (file === 'referenz/') {
+      // Outside every app glob (workshop-angular/**, nx projects, stylelint's
+      // target) while it sits here; `.ts` sources carry `.template` so the
+      // package's own tsc and asset copy leave them alone.
+      const dir = 'course/referenz/angular/toast';
+      for (const name of listTemplateFiles(dir)) {
+        const out = name.split('/').pop() ?? name;
+        tree.write(
+          `course/referenz/toast/${out.replace(/\.template$/, '')}`,
+          readTemplate(name),
+        );
       }
     } else if (file !== 'rescue.md') {
       write(file);

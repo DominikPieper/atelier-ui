@@ -39,6 +39,11 @@ real to find, on top of the "green is not right" exercises.
 3. **The four Day 2 starters carry two planted errors each** (a raw near-token colour, an off-grid
    padding or gap), in place: the repo snapshot records only id, name and section for these frames.
    The linter on the participant's own set now has findings.
+
+   **Corrected 2026-11-22** by [ADR-0196](0196-day-2-builds-an-own-idea-with-re-entry-points.md): the
+   own idea is now the main path on Day 2 and the briefs are the fallback, so only participants who
+   take a brief build from a starter and meet these errors.
+
 4. **The Team directory brief is harder:** sorting, a row menu, a detail drawer with focus return,
    multi-select with a disabled "Entfernen", an empty state with an action. Two real traps stay
    unannounced: no story pairs table and pagination (5 rows per page must be computed), and table

@@ -3701,6 +3701,69 @@ describe('preset generator', () => {
       }
     });
 
+    describe('reference Toast (course/referenz/toast)', () => {
+      const FILES = [
+        'README.md',
+        'ref-toast.component.ts',
+        'ref-toast.component.css',
+        'ref-toast.component.spec.ts',
+        'ref-toast.stories.ts',
+        'ref-toast.decisions.md',
+      ];
+
+      it('is written for Angular with --figma, and names the folder it is copied to', async () => {
+        await presetGenerator(tree, {
+          name: 'my-workspace',
+          framework: 'angular',
+          figmaMcp: true,
+        });
+        for (const f of FILES)
+          expect(tree.exists(`course/referenz/toast/${f}`)).toBe(true);
+        // No `.template` leftovers, and not under the app: outside every app glob.
+        expect(tree.children('course/referenz/toast').sort()).toEqual(
+          [...FILES].sort(),
+        );
+        for (const path of courseFiles())
+          expect(path.startsWith('workshop-angular/')).toBe(false);
+        const readme =
+          tree.read('course/referenz/toast/README.md', 'utf-8') ?? '';
+        expect(readme).toContain(
+          'workshop-angular/src/app/components/ref-toast/',
+        );
+        expect(readme).toContain('npm run check:stories');
+        const decisions =
+          tree.read('course/referenz/toast/ref-toast.decisions.md', 'utf-8') ??
+          '';
+        expect(decisions).toContain('**Ticket:** course/briefs/toast.md');
+        expect(decisions).toMatch(/Node `55:47`/);
+        // A component imported from the library would clash with the participant's own.
+        const component =
+          tree.read('course/referenz/toast/ref-toast.component.ts', 'utf-8') ??
+          '';
+        expect(component).not.toMatch(/import[^;]*AtlToast/);
+        expect(tree.read('course/README.md', 'utf-8')).toContain('`referenz/`');
+      });
+
+      it.each([
+        ['react', true],
+        ['vue', true],
+        ['angular', false],
+      ] as const)(
+        'is not written for %s (figma %s)',
+        async (framework, figmaMcp) => {
+          await presetGenerator(tree, {
+            name: 'my-workspace',
+            framework,
+            figmaMcp,
+          });
+          expect(tree.exists('course/referenz')).toBe(false);
+          expect(tree.read('course/README.md', 'utf-8')).not.toContain(
+            'referenz/',
+          );
+        },
+      );
+    });
+
     it('without --figma writes only the Figma-free files, and rescue.md carries the stuck report', async () => {
       await presetGenerator(tree, {
         name: 'my-workspace',

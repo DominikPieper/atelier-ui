@@ -3,7 +3,7 @@
 Verwendet in Tag 2, Block 01 (der Agent entwirft, Du beantwortest die offenen Fragen), Block 02
 (gebaut wird daraus), Block 03 (Stimmen die Entscheidungen noch?) und Block 04 (die Datei wird
 mit der Komponente committet). Das hier ist die Datei, ausgefüllt für den Toast-Brief
-(`briefs/toast.md`), in {{FRAMEWORK}}. Im Projekt heißt sie `<Komponente>.decisions.md` und
+(`briefs/toast.md`), in {{FRAMEWORK}}. Wer eine eigene Idee baut, schreibt im Kopf `Ticket: eigene Idee` und trägt seinen Zweck-Satz als ersten Eintrag der Art Umfang ein. Im Projekt heißt sie `<Komponente>.decisions.md` und
 liegt neben dem Quellcode der Komponente.
 
 **Warum sie bleibt.** In Monaten fragt jemand, warum der Toast bei Fokus nicht pausiert oder

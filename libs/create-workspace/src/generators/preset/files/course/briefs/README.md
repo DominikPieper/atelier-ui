@@ -1,13 +1,38 @@
 # Komponenten-Briefs: Tag 2
 
-Vier Briefs, einer je Komponente, die Du an Tag 2 des Kurses wählen kannst: [`toast.md`](toast.md), [`avatar.md`](avatar.md), [`tagchip.md`](tagchip.md), [`statcard.md`](statcard.md). Jeder Brief legt fest, **was eine fertige Komponente schuldet**: Anatomie, Achsen, Zustände und Barrierefreiheitspflichten. Keiner sagt, wie Du sie zeichnest. Das ist die Übung. Toast und Avatar sind kanonische Komponenten. TagChip und StatCard sind Kompositionen aus kanonischen Komponenten und sagen das in der ersten Zeile.
+Der Hauptweg an Tag 2 ist Deine eigene Idee (nächster Abschnitt). Die Briefs sind der Rückfall, wenn Dir keine einfällt: vier Briefs, einer je Komponente, [`toast.md`](toast.md), [`avatar.md`](avatar.md), [`tagchip.md`](tagchip.md), [`statcard.md`](statcard.md). Jeder Brief legt fest, **was eine fertige Komponente schuldet**: Anatomie, Achsen, Zustände und Barrierefreiheitspflichten. Keiner sagt, wie Du sie zeichnest. Das ist die Übung. Toast und Avatar sind kanonische Komponenten. TagChip und StatCard sind Kompositionen aus kanonischen Komponenten und sagen das in der ersten Zeile.
 
-## Gemeinsame Regeln für alle vier
+## Eigene Idee (der Hauptweg)
 
-**Umfang: zwei Varianten und die Zustände, die Dein Brief nennt.** Der Figma-Block dauert 90 Minuten, und die Teilnehmenden sind neu in Figma. Jeder Brief nennt, welche zwei Varianten und welche Zustände im Umfang sind und welche bewusst draußen bleiben. Toast, Avatar und StatCard kreuzen ihre zwei Varianten mit zwei Zuständen. TagChip hat zwei Varianten mit Entfernen-Button und keinen zweiten Zustand. Das Ziel ist nicht die volle Matrix, sondern ein
+Baue, worauf Du Lust hast: eine Komponente, die Du selbst brauchst oder bauen willst. Der ganze Tag 2
+(Figma-Set, Entscheidungsdatei, Code, Prüfungen) läuft dann an ihr. Bevor Du anfängst, prüfe
+sie in einer Minute an vier Punkten:
+
+1. **Zweck in einem Satz.** Kannst Du sagen, wozu die Komponente da ist? Der Satz wird der erste
+   Umfang-Eintrag Deiner Entscheidungsdatei.
+2. **Zwei Varianten und eine zweite Achse.** Zwei Werte auf einer `variant`-Achse, dazu eine zweite
+   Achse mit zwei Werten: ein Zustandspaar oder ein Datenpaar. Dieselbe Umfangsregel wie bei den Briefs
+   (siehe unten): ein richtiger Ausschnitt, nicht die volle Matrix.
+3. **Nichts, was den Block sprengt.** Kein Daten laden, kein Drag-and-drop, keine gestapelten Overlays.
+4. **Kein Name, den die Bibliothek schon benutzt.** Heißt Deine Komponente wie eine der Bibliothek,
+   sag dem Agenten, welche Du meinst (siehe „Zwei Briefs teilen einen Namen“ unten).
+
+**Kein Starter-Frame.** Du baust in einer eigenen Section auf der Seite `🛠️ Workshop-Templates`
+Deines Duplikats, aus Komponenten der Bibliothek und Variablen der Collection `Library Tokens`.
+
+**Die offene Frage schreibt der Agent.** Jeder Brief trägt eine „Offene Frage“. Bei einer eigenen
+Idee gibt es keinen Brief, der sie trägt: Der Agent entwirft die offenen Fragen aus Deinem Zweck-Satz
+und Deinem Set, und Du beantwortest sie als Einträge.
+
+**Zwei Minuten.** Fällt Dir nach zwei Minuten nichts ein, nimm einen Brief. Es ist kein Rückschritt:
+Die Regeln und die Messlatte unten gelten für beide Wege gleich.
+
+## Gemeinsame Regeln für eigene Idee und Briefs
+
+**Umfang: zwei Varianten und die Zustände, die Dein Brief oder Deine Idee nennt.** Der Figma-Block dauert 90 Minuten, und die Teilnehmenden sind neu in Figma. Jeder Brief nennt, welche zwei Varianten und welche Zustände im Umfang sind und welche bewusst draußen bleiben; bei einer eigenen Idee legst Du das selbst fest und hältst es als Umfang-Eintrag fest. Toast, Avatar und StatCard kreuzen ihre zwei Varianten mit zwei Zuständen. TagChip hat zwei Varianten mit Entfernen-Button und keinen zweiten Zustand. Das Ziel ist nicht die volle Matrix, sondern ein
 _richtiger_ Ausschnitt davon. Der Rest der Matrix steht im Brief, damit die Teilnehmenden wissen, was sie zurückgestellt haben, und nicht rätseln, was sie vergessen haben.
 
-**Starte von einem Starter-Frame, nicht von einer leeren Fläche.** Jeder Brief nennt den Frame auf der Seite
+**Starte von einem Starter-Frame, nicht von einer leeren Fläche.** Das gilt für die Briefs; bei einer eigenen Idee gibt es keinen Starter (siehe oben). Jeder Brief nennt den Frame auf der Seite
 `🛠️ Workshop-Templates`, der mitkommt, wenn Du die Atelier-Datei in Deine eigenen Entwürfe dupliziert hast. Füllungen, Abstände und Radien sind dort gebunden bis auf das, was Du findest: Die Starter tragen absichtlich ein paar ungebundene Werte. Kopiere ihn, benenne ihn um, baue darauf auf.
 
 **Verändere nie die Originaldatei.** Erst `File → Duplicate to your drafts`. Die Variablen der Atelier-Datei gelten pro Datei, Änderungen dort kollidieren global.
@@ -52,7 +77,7 @@ erkennen kann, muss auch ohne Farbe verfügbar sein: als Icon, als Wort oder als
 
 ## Fertig, wenn
 
-Dieselbe Messlatte für alle vier. Man erreicht sie in zwei Schritten, weil der Brief selbst nur
+Dieselbe Messlatte für eigene Ideen und alle vier Briefs. Man erreicht sie in zwei Schritten, weil der Brief selbst nur
 die Figma-Hälfte der Arbeit ist: Die Punkte 1 bis 4 und 7 lassen sich am Ende von **Tag 2 Block 01**
 prüfen (Figma-Design und Entscheidungsdatei). Die Punkte 5, 6 und 8 prüft man an der
 Komponente und ihren Stories, die es erst in **Block 02** (Komponente, Stories) und
@@ -62,7 +87,7 @@ Komponente und ihren Stories, die es erst in **Block 02** (Komponente, Stories) 
 
 1. Das Figma Component Set hat ≥ 2 Varianten auf einer `variant`-Achse, benannt genau so, wie die
    Code-Union heißen wird (`variant`, nicht `Variant`; `success`, nicht `Success`), **und** die
-   zweite Achse, die die Umfangszeile Deines Briefs nennt: ein Lebenszyklus-Paar (`open` / `closing`), ein
+   zweite Achse, die die Umfangszeile Deines Briefs (oder Deine eigene Idee) nennt: ein Lebenszyklus-Paar (`open` / `closing`), ein
    Daten-Paar (`image-loaded` / `initials-fallback`) oder ein kuratiertes Interaktions-Paar, gezeichnet
    als `state`-Achse. Ist Deine Komponente nicht selbst das interaktive Element, bekommt sie gar
    keine Interaktionsachse: Schreib diese Zustände stattdessen in die Beschreibung des Masters,
@@ -109,7 +134,7 @@ Teilmenge davon, keine zweite Kopie.
 ## Bevor Du promptest
 
 Lass den Agenten zuerst eine Entscheidungsdatei für Deine Komponente entwerfen, mit Kopf
-(Ticket, Figma), Offenen Fragen und Entscheidungen. Die offenen Fragen beantwortest Du als
+(Ticket: der Brief-Pfad, bei einer eigenen Idee `eigene Idee`; Figma), Offenen Fragen und Entscheidungen. Die offenen Fragen beantwortest Du als
 Einträge (Umfang, Verhalten, Bewusste Abweichung). Was Figma und Code schon tragen
 (Varianten, Tokens, Props), gehört nicht hinein. Ein ausgefülltes Beispiel, gebaut aus dem
 Toast-Brief, steht in `../entscheidungen-beispiel.md`.

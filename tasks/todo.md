@@ -3496,7 +3496,7 @@ Nothing below proceeds until then, P1.5 included; P6 is off the table before the
       proposes `tools/figma/contracts/` instead of the spike's root `contracts/`, per CDS-ADR-0014)
       (contract layer in the repo, `check-contracts` as an
       offline CI gate, snapshot refresh manual). In the CDS repo, via PR.
-- [ ] P1 `@conciso/design-contracts`, built in Atelier first to try it out, moved to the CDS repo
+- [x] P1 `@conciso/design-contracts`, built in Atelier first to try it out, moved to the CDS repo
       once proven (ADR-0165 §4, revised 2026-10-09). Not published from Atelier.
   - [x] P1.1 `libs/design-contracts`: self-contained (own `package.json`, plain Node ESM, no Nx
         or Atelier imports), bins `check-contracts` and `figma-snapshot-contracts`, exports the
@@ -3539,16 +3539,16 @@ BQCBQwIDcconnYNpb2w9fn` while a second Figma file is connected. Done when the sn
           meet a non-`true`/`false` axis (e.g. `Aktion anzeigen`)?
   - [ ] P1.6 Move to the CDS (`packages/contracts`, into its release chain), after P0b. Atelier
         keeps no copy; the scaffold consumes the published package (P3).
-- [ ] P2 Contracts for all CDS components, `check-contracts` in the CDS CI. Done when it exits 0
+- [x] P2 Contracts for all CDS components, `check-contracts` in the CDS CI. Done when it exits 0
       in CI.
-- [ ] P3 `create-workspace` on `@conciso/design-system-angular`; React/Vue branches removed for
+- [x] P3 `create-workspace` on `@conciso/design-system-angular`; React/Vue branches removed for
       now. Done when the scaffold e2e passes.
-- [ ] P4 New kata: target, Figma master in the owner's training copy of the CDS file, steps. Done
+- [x] P4 New kata: target, Figma master in the owner's training copy of the CDS file, steps. Done
       when the kata has been run once end to end.
-- [ ] P5 Docs and skills: swap examples (~18 pages), remove library pages (~6), delete the
+- [x] P5 Docs and skills: swap examples (~18 pages), remove library pages (~6), delete the
       `atelier-design` skill, rewrite the repo branch of `design-to-code`. Redo course-gap
       examples built on Atl components. Done when the docs gates pass.
-- [ ] P6 Tag the last commit with the library, then remove `libs/{angular,react,vue,spec}`, their
+- [x] P6 Tag the last commit with the library, then remove `libs/{angular,react,vue,spec}`, their
       gates, Storybooks and hosted MCP endpoints; keep the release pipeline for `create-workspace`; deprecate `@atelier-ui/{angular,react,vue}` on npm. Done when `check:all`
       passes.
 
@@ -4674,4 +4674,23 @@ gate chain is green by exit code.
       non-fatal on its own. Unit tests + `check:all` exit 0.
 - [ ] e2e not run (Verdaccio + network): the HEAD/clean-tree assertion and the two Angular skill dirs.
 - [x] Committed (67092dcd), released as **0.4.22** on 2026-11-21 (Publish + CI green; both packages 0.4.22 on npm).
-- [ ] Reprovision seats from 0.4.22.
+- [ ] Reprovision seats from 0.4.22 (owner, 2026-11-22). Checklist doc: https://claude.ai/artifact/5xWj2r6eT5Np8mh46D64s3 (A: every seat, B: one seat in full, findings table); carry its findings into the dry-run kit §5.
+
+## Tag 2: eigene Idee statt Brief, entkoppelte Übungen (Owner 2026-11-22, ADR-0196, released 0.4.26)
+
+Owner-Entscheidung: eigene Komponentenidee ist der Hauptweg, Briefs sind Rückfall.
+
+- [x] P1 Wahl: `course/briefs/README.md` + Karte „Set bauen“: eigene Idee mit Passt-Check (Zweck in einem Satz; zwei Varianten + eine zweite Achse; kein Datenladen/Drag/Overlay-Stack; kein Name der Bibliothek). Keine Idee nach 2 Min. → Brief. Kein Starter: gebaut auf Workshop-Templates aus Library-Komponenten + Library Tokens.
+- [x] P2 Skill auslösen: Karten nennen, was der Prompt tragen muss (Komponente aus dem ausgewählten Set bauen, Entscheidungsdatei zuerst) und den expliziten Start `/atelier-component …` bzw. `/figma-workspace-architect …`.
+- [x] P3 SKILL.md: ohne Ticket und Brief → Kopf `Ticket: eigene Idee`, Zweck wird erster Umfang-Eintrag.
+- [x] P4 Entkopplung: Wiedereinstieg je Block (siehe unten), als feste Zeile „Kein eigenes …? Nimm …“ im Material der Karten.
+- [x] P5 Folien Tag 2: d2-01-03, -04, -05 (Notiz: freie Wege haben keine eingebauten Starterfehler), -07, -07c (freies Beispiel + `/atelier-component`), Recap -09 allgemein („Wie fühlt es sich an, über den Agenten ein Design zu erstellen? Was lief gut, was schlecht?“), neue Folie „Wähle Deine Komponente“.
+- [x] P6 ADR-0196, Korrektur in ADR-0194 (Starterfehler nur noch auf dem Brief-Weg), Trainerdatei.
+- [x] P7 Gates, Release.
+
+Wiedereinstiege:
+
+- W1 vor Entscheidungsdatei / Block 02: Toast-Brief + AtlToast-Master im Duplikat + `entscheidungen-beispiel.md` als fertige Datei.
+- W2 vor Block 03/04: fertige Referenz-Toast `course/referenz/toast/` (nur Angular-Seats mit Figma; Owner-Wahl).
+
+Review: alle zehn Release-Checks Exit 0; frischer Angular-Seat aus dem e2e-Lauf (verdaccio): preflight, Kopie nach README, DoD inkl. `check:stories` Exit 0, Stories-Lauf 3× grün. Folien Tag 2 v76–v84 (neu d2-00-03a, d2-02-03 im Übungsmuster). Schwächster Punkt: `PausesOnPointer` hängt an echter Zeit (1,2 s / 2 s), auf sehr langsamen Rechnern denkbar flaky; nicht gemessen: Dauer einer eigenen Idee gegenüber Brief + Starter.

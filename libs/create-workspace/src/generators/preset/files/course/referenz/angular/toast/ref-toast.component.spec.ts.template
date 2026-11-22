@@ -1,0 +1,91 @@
+import { fireEvent, render, screen } from '@testing-library/angular';
+import { RefToastComponent } from './ref-toast.component';
+
+describe('RefToastComponent', () => {
+  afterEach(() => vi.useRealTimers());
+
+  async function renderToast(inputs: Record<string, unknown> = {}) {
+    const dismissed = vi.fn();
+    const { detectChanges } = await render(RefToastComponent, {
+      inputs: { message: 'Saved', duration: 1000, ...inputs },
+      on: { dismissed },
+    });
+    // Zoneless: a timer closing the toast needs a render pass to reach the DOM.
+    const advance = async (ms: number) => {
+      await vi.advanceTimersByTimeAsync(ms);
+      detectChanges();
+    };
+    return { dismissed, advance };
+  }
+
+  it('announces success politely', async () => {
+    await renderToast();
+    expect(screen.getByRole('status')).toHaveTextContent('Saved');
+  });
+
+  it('announces danger assertively', async () => {
+    await renderToast({ variant: 'danger', message: 'Failed' });
+    expect(screen.getByRole('alert')).toHaveTextContent('Failed');
+  });
+
+  it('closes with the button and says so once', async () => {
+    const { dismissed } = await renderToast();
+    fireEvent.click(screen.getByRole('button', { name: 'Dismiss' }));
+    expect(screen.queryByText('Saved')).not.toBeInTheDocument();
+    expect(dismissed).toHaveBeenCalledOnce();
+  });
+
+  it('has no close button when it is not dismissible', async () => {
+    await renderToast({ dismissible: false });
+    expect(screen.queryByRole('button')).not.toBeInTheDocument();
+  });
+
+  it('closes when Escape is pressed inside it', async () => {
+    await renderToast({ duration: 0 });
+    fireEvent.keyDown(screen.getByRole('button', { name: 'Dismiss' }), {
+      key: 'Escape',
+    });
+    expect(screen.queryByText('Saved')).not.toBeInTheDocument();
+  });
+
+  it('closes by itself after the duration', async () => {
+    vi.useFakeTimers();
+    const { dismissed, advance } = await renderToast();
+    await advance(999);
+    expect(screen.getByText('Saved')).toBeInTheDocument();
+    await advance(1);
+    expect(screen.queryByText('Saved')).not.toBeInTheDocument();
+    expect(dismissed).toHaveBeenCalledOnce();
+  });
+
+  it('stays open when the duration is 0', async () => {
+    vi.useFakeTimers();
+    const { advance } = await renderToast({ duration: 0 });
+    await advance(60_000);
+    expect(screen.getByText('Saved')).toBeInTheDocument();
+  });
+
+  it('pauses on pointer enter and continues with the time that was left', async () => {
+    vi.useFakeTimers();
+    const { advance } = await renderToast();
+    // pointerenter does not bubble: it has to hit the host, which listens.
+    const toast = screen.getByRole('status').parentElement as HTMLElement;
+    await advance(600);
+    fireEvent.pointerEnter(toast);
+    await advance(5000);
+    expect(screen.getByText('Saved')).toBeInTheDocument();
+    fireEvent.pointerLeave(toast);
+    await advance(399);
+    expect(screen.getByText('Saved')).toBeInTheDocument();
+    await advance(1);
+    expect(screen.queryByText('Saved')).not.toBeInTheDocument();
+  });
+
+  it('does not pause when only the focus enters', async () => {
+    vi.useFakeTimers();
+    const { advance } = await renderToast();
+    screen.getByRole('button', { name: 'Dismiss' }).focus();
+    await advance(1000);
+    expect(screen.queryByText('Saved')).not.toBeInTheDocument();
+  });
+});

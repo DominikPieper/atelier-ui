@@ -30,29 +30,33 @@ Kurz im Gespräch, ohne Aufschreiben:
 ## Block 01: baue Dein Component Set über den Agenten
 
 Nichts in diesem Block wird von Hand in Figma gezeichnet oder bearbeitet. Der Agent baut und
-ändert das Set. Du wählst den Brief, siehst hin, vergleichst mit dem Brief und entscheidest.
+ändert das Set. Du baust Deine eigene Komponente (oder nimmst einen Brief, wenn Dir nach zwei Minuten
+nichts einfällt), siehst hin, vergleichst mit Zweck-Satz oder Brief und entscheidest.
 Der Agent schreibt in Deine Figma-Datei, deshalb gilt für jede Karte dieses Blocks:
 gearbeitet wird nur in Deinem Duplikat, nie im Original.
 
 ### Karte: das Component Set über den Agenten bauen
 
-**Ziel.** Ein Component Set in einer eigenen Section neben den Startern, im Umfang des Briefs
-für den 90-Minuten-Block, mit gebundenen Werten, Auto Layout, Component Properties und
+**Ziel.** Ein Component Set in einer eigenen Section (mit Brief: neben den Startern), im Umfang
+Deiner Idee oder Deines Briefs für den 90-Minuten-Block, mit gebundenen Werten, Auto Layout, Component Properties und
 Beschreibung, dazu die Node-ID und die Liste dessen, was nicht gebunden werden konnte.
 
 **Material.**
 
-- Dein Brief `course/briefs/<Dein Brief>.md` und `course/briefs/README.md`.
-- Der Starter-Frame, den der Brief nennt, auf der Seite Workshop-Templates Deines Duplikats.
+- Dein Zweck-Satz oder Dein Brief `course/briefs/<Dein Brief>.md`, dazu `course/briefs/README.md`
+  (dort der Abschnitt „Eigene Idee“ mit dem Passt-Check).
+- Nur mit Brief: der Starter-Frame, den der Brief nennt, auf der Seite Workshop-Templates Deines
+  Duplikats. Eine eigene Idee hat keinen Starter, Du baust in einer eigenen Section auf dieser
+  Seite aus Komponenten der Bibliothek und den Variablen aus Library Tokens.
 - Der Skill `figma-workspace-architect`, die Variablen aus Library Tokens.
 - figma-console-mcp, `figma_take_screenshot`.
 
 **Rahmen.**
 
-- Sicherheitsregel: nur im eigenen Duplikat. Der Starter bleibt unberührt, der Agent baut aus einer Kopie.
+- Sicherheitsregel: nur im eigenen Duplikat. Ein Starter bleibt unberührt, der Agent baut aus einer Kopie.
 - Jeder Wert ist an eine Variable aus Library Tokens gebunden. Was sich nicht binden lässt, endet als Liste, nicht als Rohwert ohne Hinweis.
 
-**Fertig, wenn** das Set steht, Du den Brief neben den Screenshot gelegt hast (ist jede
+**Fertig, wenn** das Set steht, Du Zweck-Satz oder Brief neben den Screenshot gelegt hast (ist jede
 Variante und jeder Zustand da, den die Umfangszeile nennt?) und Du die Node-ID und die Liste
 der ungebundenen Werte hast.
 
@@ -66,20 +70,25 @@ der ungebundenen Werte hast.
 **Hängst Du fest?** Sieh in `prompt-rubrik.md` nach und im Abschnitt „Wenn Du festhängst“ am
 Ende dieser Datei.
 
+**Damit der Skill anspringt.** Der Prompt muss sagen, dass der Agent in Figma ein Component Set
+bauen oder strukturieren soll: dann startet `figma-workspace-architect` von selbst. Willst Du
+sichergehen, tipp `/figma-workspace-architect` und schreib Deine Anfrage dahinter (Claude Code
+startet einen Projekt-Skill über seinen Namen als Slash-Befehl).
+
 Wähle dann das Set aus, das der Agent gebaut hat: Jede weitere Karte arbeitet auf Deiner
 Auswahl. Eine Auswahl, die vor dem Start der Session getroffen wurde, sieht der Agent nicht.
 Meldet er, dass nichts ausgewählt ist, klick das Set noch einmal an.
 
 ### Karte: das Set per Zuruf steuern
 
-Sieh hin, bevor Du etwas verlangst. Leg den Brief neben den Screenshot: Ist jede Variante
+Sieh hin, bevor Du etwas verlangst. Leg Zweck-Satz oder Brief neben den Screenshot: Ist jede Variante
 und jeder Zustand da, den die Umfangszeile nennt? Wirkt das Set neben dem Starter wie ein
 Mitglied derselben Bibliothek? Was hättest Du anders gebaut?
 
 **Ziel.** Zwei oder drei gezielte Änderungen am Set, nach jeder ein Screenshot, und ein Set,
 bei dem Du sagen kannst, warum jeder Teil so ist, wie er ist.
 
-**Material.** Das ausgewählte Component Set, `figma_take_screenshot`, Dein Brief.
+**Material.** Das ausgewählte Component Set, `figma_take_screenshot`, Dein Zweck-Satz oder Dein Brief.
 
 **Rahmen.**
 
@@ -93,7 +102,7 @@ Wert ohne Variable dazugekommen ist.
 **Kür.**
 
 - Lass den Agenten einen Rohwert, den Du entdeckt hast, auf die Skala legen.
-- Wünsche eine Änderung, die gegen den Brief läuft, und prüfe, ob der Agent widerspricht.
+- Wünsche eine Änderung, die gegen Zweck-Satz oder Brief läuft, und prüfe, ob der Agent widerspricht.
 - Vergleiche den ersten und den letzten Screenshot und schreib in einem Satz, was Du anders
   gemacht hättest.
 
@@ -110,7 +119,7 @@ Rohwert hinein.
 **Ziel.** Das ausgewählte Set ist vollständig gebunden und beschrieben, ohne dass sich sein
 Aussehen geändert hat, und Du hast die Listen „geändert“ und „nicht gebunden“ gelesen.
 
-**Material.** Das ausgewählte Set, Dein Brief und `course/briefs/README.md`, der Skill
+**Material.** Das ausgewählte Set, Dein Zweck-Satz oder Dein Brief und `course/briefs/README.md`, der Skill
 `figma-workspace-architect`, `figma_take_screenshot`.
 
 **Rahmen.**
@@ -160,12 +169,12 @@ zuerst geprüft, noch vor der Entscheidungsdatei. Vier Regeln für eine API, die
 
 **Ziel.** Die Property-Liste Deines Component Sets mit Namen und Werten, zu jeder der vier
 Regeln eine Aussage, was umbenannt oder geändert würde und warum, und die Stellen, an denen
-Dein Brief eine Regel bricht. Umbenannt ist noch nichts.
+Dein Brief oder Deine Idee eine Regel bricht. Umbenannt ist noch nichts.
 
 **Material.**
 
 - Das Component Set, das Du in Figma ausgewählt hast, nur lesen.
-- Dein Brief `course/briefs/<Dein Brief>.md`.
+- Dein Zweck-Satz oder Dein Brief `course/briefs/<Dein Brief>.md`.
 - Die vier Regeln oben.
 
 **Rahmen.**
@@ -173,7 +182,7 @@ Dein Brief eine Regel bricht. Umbenannt ist noch nichts.
 - Scope-Guard: Er benennt noch nichts um und ändert nichts in Figma.
 
 **Fertig, wenn** Du die Liste gelesen und jede Zeile selbst entschieden hast: umbenennen oder
-den Namen aus dem Brief behalten und den Grund als Kandidaten für „Bewusste Abweichungen“
+den Namen aus dem Brief (oder Deinen eigenen) behalten und den Grund als Kandidaten für „Bewusste Abweichungen“
 notieren.
 
 **Kür.**
@@ -182,13 +191,13 @@ notieren.
   die Bibliothek dieselbe Regel einhält oder bricht.
 - Formuliere für jede Regel einen eigenen Satz in Deinen Worten, den Dein Team übernehmen
   könnte.
-- Such im Brief den Wert, der nach einer literalen Union aussieht und trotzdem freier Text ist.
+- Such im Brief (oder in Deiner Idee) den Wert, der nach einer literalen Union aussieht und trotzdem freier Text ist.
 
 **Hängst Du fest?** Sieh in `prompt-rubrik.md` nach und im Abschnitt „Wenn Du festhängst“ am
 Ende dieser Datei.
 
 Entscheide jede Zeile selbst: Lass den Agenten jetzt umbenennen, oder behalte den Namen aus
-dem Brief und notiere den Grund als Kandidaten für „Bewusste Abweichungen“.
+dem Brief (oder Deinen eigenen) und notiere den Grund als Kandidaten für „Bewusste Abweichungen“.
 
 ### Karte: Properties umbenennen
 
@@ -219,7 +228,7 @@ Ende dieser Datei.
 Eine Umbenennung ändert den Namen, nicht was das Set zeigt: Eine Textebene oder ein Token, das
 das alte Wort trägt, behält es. Ob das noch stimmt, entscheidest Du.
 
-Erwarte wenige Umbenennungen: Der Brief legt die meisten Namen fest. Gefunden wird die Stelle,
+Erwarte wenige Umbenennungen: Mit Brief legt er die meisten Namen fest, bei einer eigenen Idee gelten Deine Namen. Gefunden wird die Stelle,
 an der ein vorgegebener Name eine Regel bricht. Das Ergebnis ist die Property-Liste, die im Master
 steht und die der Code übernimmt.
 
@@ -230,7 +239,7 @@ Du bewusst nicht baust, wie sich die Komponente verhält und wo sie vom Design a
 entscheiden ist die Denkarbeit dieses Blocks. Der Agent entwirft die Datei, Du entscheidest.
 
 **Ziel.** Eine Datei `<Name>.decisions.md` neben dem Quellcode Deiner Komponente. Kopf und
-**Offene Fragen** hat der Agent aus Deinem Set und Deinem Brief entworfen. Jede Frage, die für
+**Offene Fragen** hat der Agent aus Deinem Set und Deinem Zweck-Satz oder Brief entworfen. Jede Frage, die für
 den Bau zählt, hast Du beantwortet, indem Du sie in einen Eintrag unter **Entscheidungen**
 umgeschrieben (Art: Umfang, Verhalten, Bewusste Abweichung oder Sonstiges, mit Datum, Ticket,
 Grund und Deinem Namen) und die Frage entfernt hast.
@@ -240,13 +249,16 @@ Grund und Deinem Namen) und die Frage entfernt hast.
 - Das ausgewählte Component Set, nur lesen.
 - `entscheidungen-beispiel.md` als Muster für Form und Länge, nicht als Text zum Abschreiben.
 - Der Skill `atelier-component`.
-- Dein Brief `course/briefs/<Dein Brief>.md`.
+- Dein Zweck-Satz oder Dein Brief `course/briefs/<Dein Brief>.md`.
+- Kein eigenes Set? Dann nimm den Toast-Brief `course/briefs/toast.md`, den Master `AtlToast` auf der Seite Components Deines Duplikats (nur lesen) und `entscheidungen-beispiel.md` als fertige Entscheidungsdatei.
 
 **Rahmen.**
 
-- Der Agent füllt den Kopf (das Ticket ist im Kurs der Brief-Pfad, die Figma-Angabe kommt aus
-  dem Set) und schreibt, was er zum Bauen noch wissen muss, als **Offene Fragen**. Entscheidungen
-  trifft er nicht.
+- Der Agent füllt den Kopf (das Ticket ist im Kurs der Brief-Pfad, bei einer eigenen Idee
+  `eigene Idee`; die Figma-Angabe kommt aus dem Set) und schreibt, was er zum Bauen noch wissen
+  muss, als **Offene Fragen**. Entscheidungen trifft er nicht.
+- Bei einer eigenen Idee fragt er nach Deinem Zweck in einem Satz und trägt ihn als ersten
+  Eintrag der Art Umfang ein, nicht als Kopie im Kopf.
 - Gebaut wird noch nichts: Der Agent legt die Datei an, zeigt sie und hört auf.
 
 **Fertig, wenn** jede offene Frage, die für den Bau zählt, als Eintrag beantwortet ist (die
@@ -265,6 +277,11 @@ Variantenliste, kein Token und keine Prop in der Datei steht.
 
 **Hängst Du fest?** Sieh in `prompt-rubrik.md` nach und im Abschnitt „Wenn Du festhängst“ am
 Ende dieser Datei.
+
+**Damit der Skill anspringt.** Der Prompt muss sagen, dass die Komponente aus dem ausgewählten
+Set gebaut werden soll und dass die Entscheidungsdatei zuerst kommt: dann startet
+`atelier-component` von selbst. Willst Du sichergehen, tipp `/atelier-component` und schreib
+Deine Anfrage dahinter.
 
 Die Fragen des Agenten sind Vorschläge. Umfang ist eine Entscheidung gegen etwas: Was
 lässt Du weg, und steht das im Master? Ein Verhalten, das Du nicht in einem Satz
@@ -300,6 +317,7 @@ genau eine `play`-Funktion hat, mit gemeldeten Exit-Codes der Definition of Done
 - Der Skill `atelier-component`, `CLAUDE.md` mit der Definition of Done (die Checks, die
   `/verify` ausführt).
 - Der Plan-Modus (Shift+Tab).
+- Kein eigenes Set? Dann nimm den Toast-Brief `course/briefs/toast.md`, den Master `AtlToast` auf der Seite Components Deines Duplikats (nur lesen) und `entscheidungen-beispiel.md` als fertige Entscheidungsdatei.
 
 **Rahmen.**
 
@@ -408,7 +426,7 @@ Zeile als „behoben“ oder „umgangen“ markiert und von Dir gegen den Diff 
 
 **Material.**
 
-- Die Session, die die Komponente generiert hat (oder die Dateien, wenn sie weg ist).
+- Die Session, die die Komponente generiert hat (oder die Dateien, wenn sie weg ist). Mit der Referenz-Toast gab es keine solche Session: Lass diese Karte aus, sie braucht Deinen eigenen Bau.
 - Zwei Befehle in einem zweiten Terminal im Workspace-Ordner:
 
 ```shell
@@ -465,7 +483,8 @@ Entscheidung von Dir dazwischen.
 mehr stimmt, mit der Empfehlung des Agenten, ob der Code zu reparieren ist oder die
 Entscheidung sich geändert hat.
 
-**Material.** Deine Entscheidungsdatei, der Code Deiner Komponente.
+**Material.** Deine Entscheidungsdatei, der Code Deiner Komponente oder der Referenz-Toast.
+Keine eigene Komponente? Dann nimm die Referenz-Toast aus `course/referenz/toast/`. Wie sie in die App kommt, steht in der README dort.
 
 **Rahmen.**
 
@@ -494,7 +513,7 @@ eine Bearbeitung des alten.
 Eintrag in der Datei, der den alten nennt und einen Grund hat. Kein alter Eintrag ist
 verändert, der Code ist unberührt.
 
-**Material.** Die Liste mit Deinen Entscheidungen, die Entscheidungsdatei.
+**Material.** Die Liste mit Deinen Entscheidungen, die Entscheidungsdatei (Deine oder die der Referenz-Toast).
 
 **Rahmen.**
 
@@ -532,9 +551,10 @@ die Reparatur war eine Änderung an der richtigen Stelle.
 
 **Material.**
 
-- Deine Entscheidungsdatei, Deine Komponente, `test-run` über `storybook-local` (oder
+- Deine Entscheidungsdatei, Deine Komponente oder die Referenz-Toast, `test-run` über `storybook-local` (oder
   `npm run check:stories`, wenn Storybook nicht läuft).
 - Dein Commit vom Anfang dieses Abschnitts.
+- Keine eigene Komponente? Dann nimm die Referenz-Toast aus `course/referenz/toast/`. Wie sie in die App kommt, steht in der README dort.
 
 **Rahmen.**
 
@@ -587,7 +607,7 @@ Drei Schritte, in dieser Reihenfolge. Die Desktop Bridge muss laufen: Bestätige
 ### Karte: Barrierefreiheit prüfen
 
 **Ziel.** Das Ergebnis von Figma-Audit und axe, die Pflichten, die der Brief mit **(dieser
-Block)** markiert, behoben, die übrigen als Notiz im Master, und Deine eigene Tastaturprobe.
+Block)** markiert (bei einer eigenen Idee: die abgeleiteten), behoben, die übrigen als Notiz im Master, und Deine eigene Tastaturprobe.
 
 **Material.**
 
@@ -595,7 +615,11 @@ Block)** markiert, behoben, die übrigen als Notiz im Master, und Deine eigene T
   `figma_get_status`.
 - Die Story in Storybook mit dem A11y-Panel (axe-core).
 - Der gewählte Brief in `briefs/`, Abschnitt 4: Pflichten mit **(dieser Block)** und
-  **(volle Komponente)**.
+  **(volle Komponente)**. Bei einer eigenen Idee leitet der Agent die Pflichten aus Zweck-Satz
+  und Varianten ab und trennt sie nach demselben Muster: was die gebaute Variante jetzt braucht,
+  und was nur als Notiz in den Master gehört.
+- Deine Komponente oder die Referenz-Toast.
+- Keine eigene Komponente? Dann nimm die Referenz-Toast aus `course/referenz/toast/`. Wie sie in die App kommt, steht in der README dort.
 
 **Rahmen.**
 
@@ -624,7 +648,7 @@ Tab, Shift+Tab, Enter, Leertaste, Escape. Landet der Fokus, wo Du ihn erwartest,
 ihn, funktioniert die Aktivierung, funktioniert das Schließen? Der Agent kann das skripten,
 aber dann gibst Du fünf lange Skripte frei und hast den Fokusring trotzdem nicht gesehen.
 
-**Miss die Zielgröße, wenn Dein Brief eine nennt.** Eine Mindestgröße (24 × 24 px bei einem
+**Miss die Zielgröße, wenn Brief oder Idee eine nennt.** Eine Mindestgröße (24 × 24 px bei einem
 Entfernen- oder Schließen-Button) misst keiner der Schritte oben: Das Figma-Audit überspringt
 sie bei einem Set, das es „presentational“ nennt, axe prüft sie nicht, und die Parity
 vergleicht die äußere Box des ganzen Sets. Im Browser: Rechtsklick auf das Control,
@@ -642,7 +666,9 @@ löst über eine `--ui-*`-Custom-Property auf, und kein Control hat bei Hover od
 
 **Material.** Die Theme-Auswahl in der Storybook-Toolbar (addon-themes, setzt
 `data-theme="dark"`; die Backgrounds-Auswahl färbt nur die Canvas um und schaltet nichts um),
-die Stylesheets der Komponente, die Varianten und Zustände, die Du gebaut hast.
+die Stylesheets der Komponente (Deine oder die Referenz-Toast), die Varianten und Zustände, die Du gebaut hast.
+
+- Keine eigene Komponente? Dann nimm die Referenz-Toast aus `course/referenz/toast/`. Wie sie in die App kommt, steht in der README dort.
 
 **Rahmen.**
 
@@ -676,8 +702,9 @@ und warum.
 
 **Material.**
 
-- Die Entscheidungsdatei und die Komponente mit ihren Stories.
+- Die Entscheidungsdatei und die Komponente mit ihren Stories (Deine oder die Referenz-Toast).
 - `git status` und `git log`.
+- Keine eigene Komponente? Dann nimm die Referenz-Toast aus `course/referenz/toast/`. Wie sie in die App kommt, steht in der README dort.
 
 **Rahmen.**
 
@@ -705,3 +732,13 @@ ohne `play` ist ein Versprechen, das niemand prüft. Die Datei gehört in densel
 die Komponente: So bleibt der Grund einer Entscheidung beim Code, der sie umsetzt.
 
 {{STUCK}}
+
+### Wenn Deine eigene Komponente nicht trägt
+
+Zwei Wege zurück in den Tag, ohne dass Du etwas aufholen musst:
+
+- **Kein eigenes Set (vor der Entscheidungsdatei und Block 02).** Nimm den Toast-Brief
+  `course/briefs/toast.md`, den Master `AtlToast` auf der Seite Components Deines Duplikats (nur
+  lesen) und `entscheidungen-beispiel.md` als fertige Entscheidungsdatei.
+- **Keine eigene Komponente (vor Block 03 und Block 04).** Nimm die Referenz-Toast aus
+  `course/referenz/toast/`. Wie sie in die App kommt, steht in der README dort.

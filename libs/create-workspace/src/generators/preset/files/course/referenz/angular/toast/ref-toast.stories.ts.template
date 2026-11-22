@@ -1,0 +1,80 @@
+import type { Meta, StoryObj } from '@storybook/angular-vite';
+import { expect, userEvent, waitFor } from 'storybook/test';
+import { RefToastComponent } from './ref-toast.component';
+
+const sleep = (ms: number) => new Promise((r) => setTimeout(r, ms));
+
+// `duration: 0` keeps the toast open, so the variant stories stay on screen.
+// The three behaviour stories below set their own duration.
+const meta: Meta<RefToastComponent> = {
+  title: 'RefToast',
+  component: RefToastComponent,
+  tags: ['autodocs'],
+  argTypes: {
+    variant: { control: 'select', options: ['success', 'danger'] },
+    dismissible: { control: 'boolean' },
+  },
+  args: {
+    variant: 'success',
+    message: 'Changes saved.',
+    duration: 0,
+    dismissible: true,
+  },
+};
+
+export default meta;
+type Story = StoryObj<RefToastComponent>;
+
+// One story per `variant` value.
+export const Success: Story = {
+  args: { variant: 'success' },
+};
+
+export const Danger: Story = {
+  args: { variant: 'danger', message: 'Could not copy the link.' },
+};
+
+// One story per Boolean state.
+export const NotDismissible: Story = {
+  args: { dismissible: false },
+};
+
+// Behaviour: the timer closes the toast by itself.
+export const ClosesByItself: Story = {
+  args: { duration: 600 },
+  play: async ({ canvas }) => {
+    await expect(canvas.getByText('Changes saved.')).toBeInTheDocument();
+    await waitFor(
+      () =>
+        expect(canvas.queryByText('Changes saved.')).not.toBeInTheDocument(),
+      { timeout: 3000 },
+    );
+  },
+};
+
+// Behaviour: the pointer pauses the timer, leaving lets it run on.
+export const PausesOnPointer: Story = {
+  args: { duration: 1200 },
+  play: async ({ canvas }) => {
+    const toast = canvas.getByRole('status');
+    await userEvent.hover(toast);
+    await sleep(2000);
+    await expect(canvas.getByText('Changes saved.')).toBeInTheDocument();
+    await userEvent.unhover(toast);
+    await waitFor(
+      () =>
+        expect(canvas.queryByText('Changes saved.')).not.toBeInTheDocument(),
+      { timeout: 3000 },
+    );
+  },
+};
+
+// Behaviour: Escape closes the toast while focus is inside it.
+export const EscapeCloses: Story = {
+  play: async ({ canvas }) => {
+    await userEvent.tab();
+    await expect(canvas.getByRole('button', { name: 'Dismiss' })).toHaveFocus();
+    await userEvent.keyboard('{Escape}');
+    await expect(canvas.queryByText('Changes saved.')).not.toBeInTheDocument();
+  },
+};

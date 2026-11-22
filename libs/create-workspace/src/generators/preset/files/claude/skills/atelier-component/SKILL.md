@@ -31,13 +31,13 @@ German, so are the headings and entry labels.
 
 **One place per fact.** No information lives in two places; a second copy drifts.
 
-| Fact                                        | Lives in                                                                                |
-| ------------------------------------------- | --------------------------------------------------------------------------------------- |
-| Requirement, story text                     | The ticket. The file holds only the key (or the brief path), never a copy.              |
-| Look, variants, tokens                      | Figma.                                                                                  |
-| API, props                                  | The code, read through `docs-show`.                                                     |
-| Behaviour in detail                         | The `play` tests. The file says only THAT a behaviour was decided and WHY, in one line. |
-| Why a decision was made, where it came from | The decisions file.                                                                     |
+| Fact                                        | Lives in                                                                                                                          |
+| ------------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------- |
+| Requirement, story text                     | The ticket. The file holds only the key (or the brief path), never a copy. With no ticket, the purpose is the first Umfang entry. |
+| Look, variants, tokens                      | Figma.                                                                                                                            |
+| API, props                                  | The code, read through `docs-show`.                                                                                               |
+| Behaviour in detail                         | The `play` tests. The file says only THAT a behaviour was decided and WHY, in one line.                                           |
+| Why a decision was made, where it came from | The decisions file.                                                                                                               |
 
 An entry holds only what ages slowly: the decision and its reason. Never current values,
 counts, variant lists, token bindings, sizes, props or target files.
@@ -45,7 +45,8 @@ counts, variant lists, token bindings, sizes, props or target files.
 Shape of the file:
 
 - Header: the component name; **Ticket** (an issue key such as `PROJ-123`; in the course the
-  brief path, `course/briefs/toast.md`); **Figma** (file key and node id).
+  brief path, `course/briefs/toast.md`, or `eigene Idee` when the participant builds their own
+  component and there is neither ticket nor brief); **Figma** (file key and node id).
 - `## Offene Fragen`: questions the build still needs answered. You write them; the human
   answers each by turning it into a decision entry and removing the question.
 - `## Entscheidungen`: append-only, dated entries, never edited or deleted. A change is a new
@@ -56,7 +57,9 @@ Shape of the file:
 
 **When asked to build a component from Figma** (a node, a URL, a selection, a brief) **and no
 decisions file exists:** create it with the header and **Offene Fragen**. Ask the human for the
-ticket key if it was not given (in the course it is the brief path). Fill **Figma** from the
+ticket key if it was not given (in the course it is the brief path). If there is no ticket and
+no brief, write `Ticket: eigene Idee` and ask for the purpose in one sentence; record it as the
+first **Umfang** entry (never as a copy in the header or anywhere else). Fill **Figma** from the
 master (file key, node id). Put every question the build needs answered under **Offene
 Fragen**, then stop and show the file. Do not write the component, the stories or any other
 file until the open questions that matter are answered as entries: a guessed scope is a
