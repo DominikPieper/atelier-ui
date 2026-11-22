@@ -442,6 +442,12 @@ git grep -nE "eslint-disable|stylelint-disable|@ts-ignore|@ts-expect-error|@ts-n
 **Fertig, wenn** Du die Zeilen „umgangen“ zuerst gelesen, danach die Zeilen „behoben“
 geprüft hast und für jede Zeile weißt, wo die Korrektur hingehört.
 
+**Nichts rot?** Sagt der Agent, unterwegs sei alles grün gewesen, ist das eine Behauptung.
+Die zwei Befehle prüfen sie. Bleiben beide leer, provozier das Rot: Lass eine kleine Änderung
+mit einer festen Hex-Farbe bauen und sag nur „mach es grün“, ohne Hinweis auf Tokens. Sieh
+dann nach: Hat der Agent die Farbe durch ein Token ersetzt (behoben) oder die Regel
+stummgeschaltet (umgangen)?
+
 **Kür.**
 
 - Lass den Agenten die Liste noch einmal aus dem Diff statt aus dem Gedächtnis erstellen und
