@@ -1,3 +1,7 @@
+## 0.4.28 (2026-11-22)
+
+This was a version bump only for styles to align it with other projects, there were no code changes.
+
 ## 0.4.27 (2026-11-22)
 
 This was a version bump only for styles to align it with other projects, there were no code changes.

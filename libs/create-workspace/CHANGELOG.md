@@ -1,3 +1,14 @@
+## 0.4.28 (2026-11-22)
+
+### 🚀 Features
+
+- **create-workspace:** axe in the Angular seat, example components to audit ([160b1bd8](https://github.com/DominikPieper/atelier-ui/commit/160b1bd8))
+- **create-workspace:** extend your component, build a guardrail ([7c3333e7](https://github.com/DominikPieper/atelier-ui/commit/7c3333e7))
+
+### ❤️ Thank You
+
+- Dominik Pieper @DominikPieper
+
 ## 0.4.27 (2026-11-22)
 
 ### 🚀 Features
