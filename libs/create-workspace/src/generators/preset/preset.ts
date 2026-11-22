@@ -111,7 +111,7 @@ const COURSE_SCAFFOLD: Record<
     file: 'workshop-angular/src/app/components/team-directory.component.ts',
     css: 'workshop-angular/src/app/components/team-directory.component.css',
     mount:
-      'TeamDirectoryComponent in das imports-Array in workshop-angular/src/app/app.ts aufnehmen und <app-nx-welcome> in app.html durch <app-team-directory> ersetzen',
+      'TeamDirectoryComponent in das imports-Array in workshop-angular/src/app/app.ts aufnehmen und in app.html die Komponente, die jetzt dort steht (nach Block 02 <app-settings-card>, vorher <app-nx-welcome>), durch <app-team-directory> ersetzen',
     lint: 'In Angular führt `npm run lint` zusätzlich zwei Atelier-Template-Regeln aus: Ein `<button atl-button>` nur mit Icon braucht einen zugänglichen Namen, und eine Unterkomponente wie `atl-option` muss in ihrer Elternkomponente (`atl-select`) stehen. Die Prüfung der Elternkomponente deckt eine feste Liste von Teilen ab (select, tabs, accordion, dialog, drawer, menu und einige mehr), die Tabellenteile gehören nicht dazu: `atl-th` oder `atl-tr` außerhalb von `atl-table` besteht sie.',
   },
   react: {
@@ -120,7 +120,7 @@ const COURSE_SCAFFOLD: Record<
     file: 'workshop-react/src/components/TeamDirectory.tsx',
     css: 'workshop-react/src/components/TeamDirectory.css',
     mount:
-      'TeamDirectory in workshop-react/src/app/app.tsx importieren, den Platzhalter <NxWelcome /> dadurch ersetzen und den nun unbenutzten NxWelcome-Import entfernen (ein unbenutzter Import lässt npm run lint fehlschlagen)',
+      'TeamDirectory in workshop-react/src/app/app.tsx importieren, die Komponente, die jetzt dort steht (nach Block 02 die Settings Card, vorher der Platzhalter <NxWelcome />), dadurch ersetzen und den nun unbenutzten Import entfernen (ein unbenutzter Import lässt npm run lint fehlschlagen)',
     lint: 'In React führt `npm run lint` die Framework-Regeln aus (auch jsx-a11y), nicht aber die beiden Atelier-Template-Regeln, die es nur für Angular-Templates gibt.',
   },
   vue: {
@@ -129,7 +129,7 @@ const COURSE_SCAFFOLD: Record<
     file: 'workshop-vue/src/components/TeamDirectory.vue',
     css: 'workshop-vue/src/components/TeamDirectory.css',
     mount:
-      'TeamDirectory in workshop-vue/src/views/HomeView.vue importieren, den Platzhalter <NxWelcome /> dadurch ersetzen und den nun unbenutzten NxWelcome-Import entfernen (ein unbenutzter Import lässt npm run lint fehlschlagen)',
+      'TeamDirectory in workshop-vue/src/views/HomeView.vue importieren, die Komponente, die jetzt dort steht (nach Block 02 die Settings Card, vorher der Platzhalter <NxWelcome />), dadurch ersetzen und den nun unbenutzten Import entfernen (ein unbenutzter Import lässt npm run lint fehlschlagen)',
     lint: 'Die beiden Atelier-Template-Regeln gibt es nur für Angular-Templates; in Vue führt `npm run lint` die Framework-Regeln aus.',
   },
 };
@@ -206,6 +206,11 @@ function writeCourseFolder(
     {
       file: 'figma-linter-prompt.md',
       when: 'Tag 1, Block 03 und Tag 2, Block 01: der Pink-Test, die Mikroübungen und die Karten für den Figma-Linter (drei Regeln, dann alle Regeln)',
+      figma: true,
+    },
+    {
+      file: 'readiness-checkliste.md',
+      when: 'Tag 1, Block 03: die Checkliste, die Du an einem Master ausfüllst, indem Du ihn ansiehst, und die Vorlage für Deine eigene Datei',
       figma: true,
     },
     {
@@ -1667,7 +1672,10 @@ export async function presetGenerator(
   // exactly the loud failure we want: a workshop app with a Storybook config
   // directory but no way to start it is worse than a generator that stops.
   // Always 6006 — the workshop scaffolds exactly one app, so there is no
-  // second framework's Storybook to offset a port against.
+  // second framework's Storybook to offset a port against. `--exact-port`
+  // (storybook dev, verified in the pinned 10.6.0): with 6006 busy Storybook
+  // would silently start on 6007 while `storybook-local` in .mcp.json keeps
+  // asking 6006, so the agent reads another Storybook. Fail loudly instead.
   const storybookPort = 6006;
   updateJson(tree, `${appName}/project.json`, (config) => {
     config.targets ??= {};
@@ -1689,7 +1697,7 @@ export async function presetGenerator(
     config.targets['storybook'] = {
       executor: 'nx:run-commands',
       options: {
-        command: `npx storybook dev --config-dir ${appName}/.storybook --port ${storybookPort}`,
+        command: `npx storybook dev --config-dir ${appName}/.storybook --port ${storybookPort} --exact-port`,
       },
     };
     config.targets['build-storybook'] = {
@@ -2279,15 +2287,16 @@ type-aware checks (\`no-floating-promises\`, \`no-misused-promises\`, \`await-th
 to errors. That is the feedback loop this workspace hands an LLM, not friction to prompt
 around.
 
-A change here is done when all six of these pass:
+A change here is done when every command in this list passes (the list as shipped has six; a line your team adds counts the same):
 
 ${doneChecks.map((c) => `- ${c}`).join('\n')}
 
 **A gate's result is its exit code.** Run it as
 \`<command> > /tmp/x.log 2>&1; echo $?\` and read the log afterwards — never pipe
 a gate into \`head\` or \`grep\`. The pipe's own exit status is always \`0\`, which
-silently turns a failing gate into a passing one. \`/verify\` runs all six and
-reports each exit code (\`.claude/commands/verify.md\`).
+silently turns a failing gate into a passing one. \`/verify\` reads this list and runs every
+command in it, including lines added later, and reports each exit code
+(\`.claude/commands/verify.md\`).
 ${contractLoopSection}
 ## Troubleshooting
 
@@ -2907,6 +2916,19 @@ Course material (prompts, briefs, rescue steps): \`course/README.md\`.
   tree.write(
     '.gitignore',
     `${gitignoreBase}${gitignoreBase ? '\n\n' : ''}# Claude Code — personal overrides, never shared\n.claude/settings.local.json\n\n# Scratch output of a redirected gate run (course/, "When you are stuck")\ncheck.out\n`,
+  );
+
+  // .prettierignore: `handoff/` holds the temporary handoff document
+  // (ADR-0193): written by hand, dissolved at the end of Day 2, so it must not
+  // turn `npm run check:format` red. Appended to whatever create-nx-workspace
+  // already wrote.
+  const existingPrettierignore = tree.exists('.prettierignore')
+    ? (tree.read('.prettierignore', 'utf-8') ?? '')
+    : '';
+  const prettierignoreBase = existingPrettierignore.replace(/\n+$/, '');
+  tree.write(
+    '.prettierignore',
+    `${prettierignoreBase}${prettierignoreBase ? '\n\n' : ''}# Temporary handoff document (course/), written by hand\nhandoff/\n`,
   );
 
   console.log(`\n◇ Formatting files…`);

@@ -3,6 +3,14 @@
 Gebraucht in Tag 1 Block 03 und Tag 2 Block 01. Die Desktop Bridge muss verbunden sein.
 Alles hier passiert in Deinem vorbereiteten Duplikat der Figma-Datei, nie im Original.
 
+Meldet ein Aufruf `WebSocket not connected`: Warte eine Minute, lass den Agenten
+`figma_get_status` mit `probe` aufrufen und dann noch einmal versuchen, und schließe andere
+Claude-Code-Sitzungen mit Figma. Der Grund steht in `rescue.md`, Abschnitt „Die Figma-Bridge“.
+
+Am Ende des Blocks füllst Du die Checkliste in `readiness-checkliste.md` für einen Master
+aus: Der Pink-Test und der Linter beantworten einen Teil der Zeilen, den Rest siehst Du nur
+mit eigenen Augen.
+
 ## Der Pink-Test (Tag 1 Block 03)
 
 Der Pink-Test beantwortet eine Frage: Welche Farben eines Masters sind an eine Variable
@@ -17,8 +25,8 @@ sechs Prüfungen, an denen Du sie misst.
 ### Karte: der Pink-Test
 
 **Ziel.** Ein Screenshot der AtlButton-Varianten im Modus „Pink Test“ und ein Satz von Dir,
-welche Füllung ihre eigene Farbe behalten hat: „Diese Füllung ist nicht an eine Variable
-gebunden“.
+welche Füllung oder welcher Effekt (zum Beispiel ein Schatten) seine eigene Farbe
+behalten hat: „Das ist nicht an eine Variable gebunden“.
 
 **Material.**
 
@@ -32,7 +40,7 @@ gebunden“.
 - Der Modus heißt „Pink Test“ und setzt jede Farbvariable auf `#ff00c8`. Der Test-Frame liegt auf der Seite Workshop-Templates.
 
 **Fertig, wenn** Du den Screenshot gesehen hast, bevor Du die Antwort gelesen hast, und die
-Füllung, die ihre Farbe behalten hat, in einem Satz benennen kannst.
+Füllung oder den Effekt, der seine Farbe behalten hat, in einem Satz benennen kannst.
 
 **Kür.**
 
@@ -48,19 +56,20 @@ Sieh Dir den Screenshot an, bevor Du die Antwort liest. Was hat seine eigene Far
 
 ### Karte: Mikroübung 1, die Bindung reparieren
 
-**Ziel.** Die Variante, die nicht pink wurde, ist an einer Kopie an dieselbe Variable
-gebunden wie ihre Geschwister-Varianten, der Pink-Test an der Kopie ist sauber, und der
-Modus Pink Test ist wieder gelöscht.
+**Ziel.** Die Füllung oder der Effekt, den der Pink-Test als ungebunden gezeigt hat, ist an
+einer Kopie an dieselbe Variable gebunden wie bei den Geschwister-Varianten, der Pink-Test
+an der Kopie ist sauber, und der Modus Pink Test ist wieder gelöscht.
 
 **Material.** Der Test-Frame aus dem Pink-Test, der Master AtlButton (nur lesen), die
-Section des Test-Frames.
+Seite Workshop-Templates, auf der der Test-Frame liegt (der Pink-Test legt einen Frame an, keine Section).
 
 **Rahmen.**
 
 - Sicherheitsregel: gearbeitet wird an einer Kopie des Masters, nicht am Master selbst und nicht im Original der Datei.
 - Am Ende ist der Modus Pink Test wieder gelöscht.
 
-**Fertig, wenn** der Pink-Test an der Kopie keine ungebundene Füllung mehr zeigt, der Master
+**Fertig, wenn** der Pink-Test an der Kopie keine ungebundene Füllung und keinen
+ungebundenen Effekt mehr zeigt, der Master
 unverändert ist und der Modus gelöscht ist.
 
 **Kür.**
@@ -77,10 +86,10 @@ Modus Pink Test wieder löschen.
 
 Wenn Dein Figma-Plan keinen weiteren Variablenmodus erlaubt, kann der Agent keinen anlegen:
 Sieh stattdessen dem Durchlauf des Trainers zu und lass die Variante ohne den Modus
-reparieren. Der Agent soll sie von AtlButton in eine neue Section auf der Seite
-Workshop-Templates kopieren, die Füllung an die Variable ihrer Geschwister-Varianten binden
-und einen Screenshot zeigen. Nenne ihm dafür die Variante, die ihre eigene Farbe behalten
-hat.
+reparieren. Der Agent soll sie von AtlButton neben den Test-Frame auf der Seite
+Workshop-Templates kopieren, eine Füllung oder einen Effekt, den der Pink-Test als
+ungebunden gezeigt hat, an die Variable ihrer Geschwister-Varianten binden und einen
+Screenshot zeigen. Nenne ihm dafür die Variante, die ihre eigene Farbe behalten hat.
 
 ### Karte: Mikroübung 2, eine Variante und ein Auto Layout
 
@@ -90,7 +99,7 @@ Die beiden anderen Aufgaben der Mikroübung liegen auf derselben Kopie.
 Kopie stehen in einem Auto-Layout-Frame, dessen Abstand an eine Spacing-Variable gebunden
 ist.
 
-**Material.** Die Kopie aus der Mikroübung 1, die Section des Test-Frames, die
+**Material.** Die Kopie aus der Mikroübung 1, der Platz neben dem Test-Frame, die
 Spacing-Variablen aus Library Tokens, `figma_take_screenshot`.
 
 **Rahmen.**
@@ -137,8 +146,9 @@ oder **Fehlalarm** eingeordnet hast.
 - `figma_lint_design`, `figma_get_selection`.
 - Der Node: An Tag 1 der Master, den der Trainer nennt (lies seine ID in Deinem Duplikat ab,
   nimm nicht an, dass es die ID vom Beamer ist). An Tag 2 Dein eigenes Component Set.
-- Wähle den Node in Figma aus, während Claude Code schon läuft, und sag „der Node, den ich
-  ausgewählt habe“: Der Agent liest die ID mit `figma_get_selection`. Eine Auswahl von vor
+- Wähle den Node in Figma aus, während Claude Code schon läuft, und sag „das Set, das ich
+  ausgewählt habe“ (an Tag 1: „der Master, den ich ausgewählt habe“): Der Agent liest die ID
+  mit `figma_get_selection`. Eine Auswahl von vor
   dem Start der Sitzung wird nicht gesehen: Meldet der Agent, dass nichts ausgewählt ist, klick
   das Set noch einmal an.
 
@@ -164,10 +174,18 @@ Ein Befund ist etwas zum Einordnen, kein Urteil. Die drei Regeln fangen rohe Far
 mit Standardnamen und gelöste Instanzen. Sie sehen nicht, ob das Design stimmt, und nicht
 Abstände und Radien.
 
-**Tag 2, Dein eigenes Set.** Rechne mit `default-name`-Befunden an `Vector`-Ebenen in
-Icon-Instanzen. Diese Ebenen gehören zum Icon der Bibliothek, nicht zu Dir: Fehlalarm,
-notieren und weitergehen. Eine Liste ohne eigenen Befund beweist kein sauberes Set. Drei
-Regeln sind gelaufen. Abstände, Radien und Struktur hat niemand geprüft.
+**Null Befunde heißen nicht „sauber“.** Der Linter prüft nur seine drei Regeln. Ein Master
+ohne Befund kann trotzdem ungebundene Abstände, Radien und Effekte haben, ein falsches Auto
+Layout oder eine fehlende Variante. Öffne den Master selbst und sieh Dir das Ergebnis des
+Pink-Tests an: Beide zeigen, was die Regeln nicht sehen. Auch das ist ein Ergebnis, das Du
+mit einem Satz festhältst („0 Befunde, drei Regeln, sonst nichts geprüft“).
+
+**Tag 2, Dein eigenes Set.** Hat Dein Set Icon-Instanzen, rechne mit `default-name`-Befunden
+an `Vector`-Ebenen. Diese Ebenen gehören zum Icon der Bibliothek, nicht zu Dir: Fehlalarm,
+notieren und weitergehen. Zeichnest Du Icons als Text-Glyphen, gibt es diese Befunde nicht,
+und null Befunde sind das erwartbare Ergebnis. Auch dann gilt: Eine Liste ohne eigenen
+Befund beweist kein sauberes Set. Drei Regeln sind gelaufen. Abstände, Radien und Struktur
+hat niemand geprüft.
 
 ### Karte: der Figma-Linter, alle Regeln (Tag 1, zweiter Lauf)
 

@@ -38,7 +38,9 @@ Führe `npm run preflight` aus, starte dann `claude` im Workspace-Root (dem Ordn
   `npm run storybook`; die Tools erscheinen von selbst. Wenn nicht: `/mcp` und
   `storybook-local` neu verbinden. Ist der Port 6006 belegt, finde zuerst den Prozess
   (`lsof -nP -iTCP:6006 -sTCP:LISTEN`) und beende genau den. Töte nichts, was Du Dir nicht
-  angesehen hast.
+  angesehen hast. `storybook-local` fragt fest Port 6006 ab: Ein Storybook auf einem anderen
+  Port (6007) liest der Agent nicht, und ein fremdes Storybook auf 6006 liest er statt Deines.
+  Prüfe vor jedem Lauf, dass auf 6006 Dein Storybook antwortet.
 - Bearbeite die `.mcp.json` nicht und füge keinen Server von Hand hinzu: Die Einträge sind
   Teil des Workspace. Ein Platz, der rot bleibt, arbeitet ohne `storybook-local` weiter: Das
   Storybook im Browser und `npm run check:stories` zeigen dasselbe Ergebnis.
@@ -48,7 +50,10 @@ Führe `npm run preflight` aus, starte dann `claude` im Workspace-Root (dem Ordn
 `EADDRINUSE` heißt, dass noch ein früherer Dev-Server läuft. Sieh nach, was den Port hält:
 `lsof -nP -iTCP:<Port> -sTCP:LISTEN`. Beende den Prozess nur, wenn er der veraltete
 Dev-Server ist. Die App läuft auf Port 4200 (`npm start -- --port 4300` für einen anderen
-Port), Storybook ist fest auf 6006.
+Port), Storybook ist fest auf 6006: `npm run storybook` bricht bei belegtem Port mit einer
+Fehlermeldung ab (`--exact-port`), statt still auf 6007 auszuweichen. Das Beenden des
+Prozesses auf 6006 und ein neuer Start löst es. Die Prüfung vorab:
+`lsof -nP -iTCP:6006 -sTCP:LISTEN` (keine Ausgabe heißt: frei).
 {{FIGMA_RESCUE}}
 
 ## Noch rot

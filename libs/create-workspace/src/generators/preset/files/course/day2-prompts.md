@@ -22,8 +22,9 @@ Beamer: eine Zeile löschen, `/clear`, noch einmal fragen, und der Check ist weg
 
 ### Karte: die Definition of Done des Workspace
 
-**Ziel.** Du kennst die Befehle, die die Definition of Done Deines Workspace nennt, und hast
-eine Zeile aufgeschrieben, die Dein eigenes Team der Liste hinzufügen würde.
+**Ziel.** Du kennst die Befehle, die die Definition of Done Deines Workspace nennt, hast
+eine Zeile aufgeschrieben, die Dein eigenes Team der Liste hinzufügen würde, und weißt, dass
+`/verify` jede Zeile dieser Liste ausführt, auch eine hinzugefügte.
 
 **Material.** `CLAUDE.md`, Abschnitt „Definition of Done“, der Agent als Leser, Dein Nachbar.
 
@@ -31,8 +32,10 @@ eine Zeile aufgeschrieben, die Dein eigenes Team der Liste hinzufügen würde.
 
 - Die Zeile für Dein Team hat dieselbe Form wie die Liste: der Befehl, ein Gedankenstrich, was er beweist.
 
-**Fertig, wenn** Du die Liste des Agenten (sechs Befehle) neben der Datei geprüft hast und
-Deine Zeile mit Deinem Nachbarn verglichen hast: Nennt sie einen Befehl, der bei einem Fehler
+**Fertig, wenn** Du die Liste des Agenten (sechs Befehle) neben der Datei geprüft hast, Deine
+Zeile in `CLAUDE.md` eingetragen ist, `/verify` sie mit ausführt (`/verify` liest die Liste
+aus `CLAUDE.md`; fehlt Deine Zeile im Lauf, steht sie nicht im Abschnitt „Definition of Done“) und
+Du Deine Zeile mit Deinem Nachbarn verglichen hast: Nennt sie einen Befehl, der bei einem Fehler
 mit einem Exit-Code ungleich 0 endet, oder einen Wunsch („der Code ist sauber“)? Nur der
 Befehl ist eine Regel, die ein Agent ausführen kann.
 
@@ -159,7 +162,8 @@ behalte ihn und notiere ihn als Kandidaten für „Bewusste Abweichungen“. Ver
 vorherigen: Ist es noch dasselbe Set?
 
 Als Nächstes läuft der Figma-Linter über Dein eigenes Set: Die Karte steht in
-`figma-linter-prompt.md`.
+`figma-linter-prompt.md`. Kommt er mit 0 Befunden zurück, ist das Set damit nicht sauber: Der
+Linter prüft nur seine Regeln. Öffne den Master und sieh nach, was sie nicht sehen.
 
 ## Block 01: die API-Regeln, bevor Du einen Prop-Namen schreibst
 
@@ -395,7 +399,8 @@ nicht misst.
 4. Wenn Dein Design einen Schatten oder einen dünnen Rand hat: Siehst Du ihn in der Story?
 
 Schreib jede Abweichung als Liste auf, eine Zeile pro Abweichung: wo, was das Design zeigt,
-was die Story zeigt. Nicht einordnen und nicht beheben: Block 04 ordnet die Liste ein (eine
+was die Story zeigt. Die Schrift gehört nicht dazu: Storybook lädt Instrument Sans nicht,
+Überschriften erscheinen in einer Ersatzschrift, und das ist kein Fehler Deiner Komponente. Nicht einordnen und nicht beheben: Block 04 ordnet die Liste ein (eine
 gewollte Abweichung, ein Fehler im Code oder eine Lücke im Design). Eine leere Liste nach zwei
 Minuten heißt, dass Du eine Variante angesehen hast.
 
@@ -562,6 +567,9 @@ dem Figma-Master fehlt diese Variante.
 **Kür.**
 
 - Wähle eine zweite Sache aus „Bewusst draußen“ und lass die Schleife noch einmal laufen.
+- Nimm bewusst eine schwere Änderung mit Verhalten (zum Beispiel das Stapeln mehrerer
+  Instanzen oder einen Zustand mit Zeitablauf) und rechne damit, dass die erste Reparatur
+  nicht reicht: Scheitern zwei, gehst Du den Weg „Zurücksetzen“ unten.
 - Lass den Agenten bei einem offenen Punkt eine Zeile in den Abschnitt „Bewusst draußen“ oder
   in die Dokumentation schreiben.
 - Führe nach der Reparatur Lint und Build aus und melde die Exit-Codes.

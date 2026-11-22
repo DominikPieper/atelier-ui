@@ -17,6 +17,12 @@ Plugin Figma Desktop Bridge, das in Figma Desktop läuft.
 -sTCP:LISTEN`), bevor Du etwas beendest. Meist sind alte figma-console-Server aus früheren
   Sitzungen schuld: `pkill -f figma-console-mcp` beendet sie, und Claude Code startet beim
   nächsten Tool-Aufruf einen frischen.
+- **`WebSocket not connected` bei einem `figma_*`-Aufruf.** Meist hat Dein Server auf einen
+  anderen Port ausweichen müssen (9224 bis 9232), weil ein anderer figma-console-Server
+  Port 9223 hält, zum Beispiel aus einer zweiten Claude-Code-Sitzung mit Figma. Das Plugin
+  findet einen neuen Server nur beim nächsten Scan. Warte eine Minute, lass den Agenten
+  `figma_get_status` mit `probe` aufrufen und den Aufruf danach noch einmal versuchen.
+  Schließe andere Claude-Code-Sitzungen, die Figma nutzen. `figma_reconnect` hilft nicht.
 - **Eine Node-ID liefert nichts.** Node-IDs gehören zu einer Datei und ändern sich, wenn ein
   Frame neu angelegt wird. Wähle den Frame in Figma aus und rufe `figma_get_selection` auf,
   dann hast Du die ID, die in Deiner Sitzung gilt. In einem Duplikat sind die IDs neu.

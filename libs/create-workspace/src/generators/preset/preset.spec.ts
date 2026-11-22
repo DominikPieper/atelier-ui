@@ -1906,7 +1906,7 @@ describe('preset generator', () => {
     const project = readJson(tree, 'workshop-angular/project.json');
     expect(project.targets.storybook.executor).toBe('nx:run-commands');
     expect(project.targets.storybook.options.command).toBe(
-      'npx storybook dev --config-dir workshop-angular/.storybook --port 6006',
+      'npx storybook dev --config-dir workshop-angular/.storybook --port 6006 --exact-port',
     );
     expect(project.targets['build-storybook'].outputs).toEqual([
       '{workspaceRoot}/dist/storybook/workshop-angular',
@@ -2705,8 +2705,9 @@ describe('preset generator', () => {
       expect(md).not.toContain('check:contracts');
       expect(md).not.toContain('figma:snapshot');
       expect(md).toContain('## Definition of Done');
-      expect(md).toContain('all six of these pass');
-      expect(md).toContain('runs all six');
+      expect(md).toContain('every command in this list passes');
+      expect(md).toContain('runs every');
+      expect(md).not.toContain('all six');
       expect(md).toContain('npm run lint');
       expect(md).toContain('npm run build');
       expect(md).toContain('check:format');
@@ -2743,6 +2744,8 @@ describe('preset generator', () => {
       expect(verify).toContain('check:unit');
       expect(verify).toContain('check:stories');
       expect(verify).toContain('six checks');
+      expect(verify).toContain('Definition of Done');
+      expect(verify).toContain('including any line the team added');
     });
 
     it('writes the no-figma atelier-component skill, with no dangling mention of check:contracts and both placeholders substituted', async () => {
@@ -3367,6 +3370,7 @@ describe('preset generator', () => {
     const FIGMA_FILES = [
       'day1-settings-card.md',
       'figma-linter-prompt.md',
+      'readiness-checkliste.md',
       'parity-prompt.md',
       'day2-prompts.md',
       'handoff-example.md',
@@ -3544,6 +3548,7 @@ describe('preset generator', () => {
               'day1-settings-card.md',
               'parity-prompt.md',
               'figma-linter-prompt.md',
+              'readiness-checkliste.md',
               'day1-stories.md',
               'day1-team-directory.md',
               'day2-prompts.md',
@@ -3884,6 +3889,39 @@ describe('preset generator', () => {
     expect(gitignore).toContain('check.out');
   });
 
+  it.each(['angular', 'react', 'vue'] as const)(
+    'team-directory mount step replaces whatever Block 02 left in place (%s) and rescue.md names the 6006 check',
+    async (framework) => {
+      await presetGenerator(tree, { name: 'my-workspace', framework });
+
+      const card = tree.read('course/day1-team-directory.md', 'utf-8') ?? '';
+      expect(card).toContain('nach Block 02');
+      expect(card).toMatch(/Settings Card|settings-card/);
+      const rescue = tree.read('course/rescue.md', 'utf-8') ?? '';
+      expect(rescue).toContain('lsof -nP -iTCP:6006 -sTCP:LISTEN');
+      expect(rescue).toContain('--exact-port');
+    },
+  );
+
+  it('writes handoff/ into .prettierignore, keeping existing entries (the handoff document is hand-written and temporary)', async () => {
+    tree.write('.prettierignore', '/dist\n/coverage\n');
+
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
+
+    const ignore = tree.read('.prettierignore', 'utf-8') ?? '';
+    expect(ignore).toContain('/dist');
+    expect(ignore).toContain('/coverage');
+    expect(ignore).toMatch(/^handoff\/$/m);
+  });
+
+  it('writes .prettierignore with handoff/ even when none existed', async () => {
+    expect(tree.exists('.prettierignore')).toBe(false);
+
+    await presetGenerator(tree, { name: 'my-workspace', framework: 'angular' });
+
+    expect(tree.read('.prettierignore', 'utf-8') ?? '').toMatch(/^handoff\/$/m);
+  });
+
   it('CLAUDE.md has a Definition of Done section naming all six checks and the exit-code rule', async () => {
     await presetGenerator(tree, {
       name: 'my-workspace',
@@ -3895,7 +3933,7 @@ describe('preset generator', () => {
     expect(md).toContain('## Definition of Done');
     expect(md).toContain('check:format');
     expect(md).toContain('check:stylelint');
-    expect(md).toContain('all six of these pass');
+    expect(md).toContain('every command in this list passes');
     expect(md).toContain('npm run lint');
     expect(md).toContain('npm run build');
     expect(md).toContain('check:unit');

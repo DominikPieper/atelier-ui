@@ -1,9 +1,12 @@
 ---
-description: Run this workspace's six verification gates and report each one's exit code.
+description: Run every check listed under "Definition of Done" in CLAUDE.md and report each one's exit code.
 ---
 
-Run these six checks, in order, and report each one's exit code — never a
-single pass/fail summary. A gate's result is its exit code: run it as
+Read the "Definition of Done" section of `CLAUDE.md` and run every command it lists, in
+the order listed, including any line the team added. `CLAUDE.md` is the source: if it
+differs from the list below, follow `CLAUDE.md`. As shipped, the list has six checks.
+Report each one's exit code — never a single pass/fail summary. A gate's result is its
+exit code: run it as
 
 ```
 <command> > /tmp/verify-<name>.log 2>&1; echo $?
@@ -12,6 +15,8 @@ single pass/fail summary. A gate's result is its exit code: run it as
 and read the log file afterwards. Never pipe a gate into `head` or `grep` to
 read it — the pipe's own exit status is always `0`, which silently turns a
 failing gate into a passing one.
+
+The six as shipped:
 
 1. `npm run check:format` — Prettier
 2. `npm run check:stylelint` — the ported CSS-discipline rules

@@ -6,6 +6,14 @@ Figma Desktop Bridge verbunden sein. Beide Male liest Figma nur: In der Datei wi
 geändert. Die Prompts schreibst Du selbst; `prompt-rubrik.md` listet die sechs Prüfungen, an
 denen Du sie misst.
 
+Meldet ein Aufruf `WebSocket not connected`: Warte eine Minute, lass den Agenten
+`figma_get_status` mit `probe` aufrufen und dann noch einmal versuchen, und schließe andere
+Claude-Code-Sitzungen mit Figma (Grund: `rescue.md`, Abschnitt „Die Figma-Bridge“).
+
+Die Schrift kann abweichen: Die App lädt Instrument Sans nicht, deshalb erscheinen
+Überschriften in einer Ersatzschrift, und Gewichte wirken anders als in Figma. Das ist kein
+Fehler der Komponente: Zähle den Schriftunterschied nicht als Abweichung.
+
 ## Tag 1 Block 02: die Settings Card, nach Augenmaß
 
 Mach es, wenn Lint und Build grün sind: Der Vergleich mit Figma ist der letzte Schritt, der

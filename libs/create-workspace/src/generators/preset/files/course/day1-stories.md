@@ -48,8 +48,8 @@ sich der Text daneben ändert.
 
 ### Karte: eine Story mit `play`, erst rot, dann grün
 
-**Ziel.** Eine neue Story für die Variante Outline mit einem Klick, deren `play`-Funktion
-Du einmal rot (mit einer absichtlich falschen Erwartung) und dann wieder grün gesehen hast.
+**Ziel.** Eine neue Story `OutlineClick` für die Variante Outline mit einem Klick, deren
+`play`-Funktion Du einmal rot (mit einer absichtlich falschen Erwartung) und dann wieder grün gesehen hast.
 
 **Material.**
 
@@ -60,7 +60,7 @@ Du einmal rot (mit einer absichtlich falschen Erwartung) und dann wieder grün g
 
 **Rahmen.**
 
-- Die Story folgt dem Muster von `Primary`.
+- Die Story folgt dem Muster von `Primary` und heißt `OutlineClick`: Die vorhandene Story `Outline` bleibt unverändert.
 - Rot mit Absicht: Die `play`-Funktion scheitert einmal an einer falschen Erwartung (`never`), und repariert wird erst, nachdem Du das Rot gelesen hast.
 
 **Fertig, wenn** Du den roten und den grünen Lauf gesehen hast, im Ergebnis des Agenten und
@@ -77,8 +77,9 @@ im Interactions-Panel, und sagen kannst, welche Zeile den gesuchten Text nennt.
 
 **Hängst Du fest?** Sieh in `prompt-rubrik.md` nach und in {{STUCK_REF}}.
 
-Die Datei hat schon eine Story `Outline`, ohne Klick. Welchen Namen hat der Agent der neuen
-gegeben, und hat er gesagt, warum?
+Die Datei hat schon eine Story `Outline`, ohne Klick. Ein Agent greift gern zu ihr, statt eine
+neue anzulegen. Steht `OutlineClick` als neue Story neben `Outline`, und ist `Outline`
+unverändert geblieben? Sieh im Diff nach.
 
 Beim ersten Lauf wird sie sehr wahrscheinlich grün sein. Eine `play`-Funktion, die noch nie
 gescheitert ist, hat noch nichts bewiesen, deshalb machst Du sie kaputt.

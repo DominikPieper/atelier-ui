@@ -54,7 +54,7 @@ ihn bei Regel 1 neu anfangen.
 ### Karte: den Screen bauen
 
 **Ziel.** Der Screen „Team directory“ aus dem Brief läuft in der App, ersetzt die
-Nx-Willkommensseite und verhält sich, wie der Brief es sagt.
+Settings Card (oder die Willkommensseite, falls Du Block 02 nicht gemacht hast) und verhält sich, wie der Brief es sagt.
 
 **Material.**
 
