@@ -1,3 +1,14 @@
+## 0.4.25 (2026-11-22)
+
+### 🚀 Features
+
+- **create-workspace:** a decision file next to the component ([f7a0422b](https://github.com/DominikPieper/atelier-ui/commit/f7a0422b))
+- **create-workspace:** harder exercises with planted errors ([6eb79cfd](https://github.com/DominikPieper/atelier-ui/commit/6eb79cfd))
+
+### ❤️ Thank You
+
+- Dominik Pieper @DominikPieper
+
 ## 0.4.24 (2026-11-22)
 
 ### 🚀 Features
