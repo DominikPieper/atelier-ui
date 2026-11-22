@@ -244,7 +244,7 @@ function writeCourseFolder(
     },
     {
       file: 'day2-karten.md',
-      when: 'Tag 2, Block 00 (die Definition of Done im Gespräch), Block 01 (Component Set über den Agenten bauen, maschinenlesbar machen, die API-Regeln, die Entscheidungsdatei entwerfen lassen), Block 02 (Generierung im Plan-Modus, `docs-show` an Deiner Komponente, Beides ansehen), Block 03 (was rot war, stimmen die Entscheidungen noch, Rot mit Absicht) und Block 04 (Barrierefreiheit, Dark-Check, Entscheidungen festhalten und committen) und was Du meldest, wenn Du festhängst',
+      when: 'Tag 2, Block 00 (die Definition of Done im Gespräch), Block 01 (Component Set über den Agenten bauen, maschinenlesbar machen, die API-Regeln, die Entscheidungsdatei entwerfen lassen), Block 02 (Generierung im Plan-Modus, `docs-show` an Deiner Komponente, Beides ansehen), Block 03 (was rot war, stimmen die Entscheidungen noch, erweitere Deine Komponente, Stretch Goal Leitplanke) und Block 04 (Barrierefreiheit, Dark-Check, Entscheidungen festhalten und committen) und was Du meldest, wenn Du festhängst',
       figma: true,
     },
     {

@@ -4,7 +4,7 @@ Verwendet in Tag 2, Block 00 (die Definition of Done im Gespräch), Block 01 (ba
 über den Agenten, mach es maschinenlesbar, dann die API-Regeln und der Entwurf Deiner
 Entscheidungsdatei), Block 02 (Generierung mit
 Plan-Modus, `docs-show` an Deiner eigenen Komponente, dann Beides ansehen), Block 03 (was rot
-war, stimmen die Entscheidungen noch, Rot mit Absicht) und Block 04 (Barrierefreiheit, der
+war, stimmen die Entscheidungen noch, erweitere Deine Komponente) und Block 04 (Barrierefreiheit, der
 Dark-Check und das Festhalten der Entscheidungen). Die Karte für die Parity aus Block 04 steht in `parity.md`, die für den
 Linter in `figma-pruefen.md`. Ab Block 02 ist Deine Entscheidungsdatei der feste Bezugspunkt für
 diese Karten (ein Beispiel steht in `entscheidungen-beispiel.md`).
@@ -402,7 +402,7 @@ was die Story zeigt. Die Schrift gehört nicht dazu: Storybook lädt Instrument 
 gewollte Abweichung, ein Fehler im Code oder eine Lücke im Design). Eine leere Liste nach zwei
 Minuten heißt, dass Du eine Variante angesehen hast.
 
-Committe dann (`git add -A && git commit -m "day 2 block 02: green"`) und **lass diese Claude
+Committe dann (`git add -A && git commit -m "Komponente gebaut, alles grün"`) und **lass diese Claude
 Code Session über die Mittagspause offen**: Block 03 startet in ihr.
 
 ## Block 03: grün heißt noch nicht richtig
@@ -410,7 +410,7 @@ Code Session über die Mittagspause offen**: Block 03 startet in ihr.
 Block 02 endete höchstwahrscheinlich grün. Das sagt, dass die Checks am Ende bestanden haben,
 nicht wie es dazu kam. Drei Karten, in dieser Reihenfolge. Dein Commit vom Ende von Block 02
 ist der Stand, auf den Du zurückgehst. Wenn `git status` noch Änderungen zeigt, committe
-jetzt: `git add -A && git commit -m "day 2 block 02: green"`.
+jetzt: `git add -A && git commit -m "Komponente gebaut, alles grün"`.
 
 ### Was unterwegs rot war
 
@@ -539,21 +539,23 @@ Nummer, jede mit Datum, Ticket und Grund) und am Code nichts.
 **Hängst Du fest?** Sieh in `prompt-rubrik.md` nach und im Abschnitt „Wenn Du festhängst“ am
 Ende dieser Datei.
 
-### Rot mit Absicht
+### Erweitere Deine Komponente
 
-Jetzt die Schleife, nach der der Block benannt ist, an einer Änderung, die Du wählst. Nimm
-eine Variante oder einen Zustand, den ein Umfang-Eintrag Deiner Entscheidungsdatei bewusst draußen lässt.
-Die Story kommt zuerst, damit Du das Rot selbst siehst.
+Jetzt die Schleife mit Absicht, an einer Erweiterung, die Du Dir selbst ausdenkst: eine weitere
+Variante, eine Größe, ein Zustand, ein Tastaturverhalten, etwas, das Du im Alltag bräuchtest,
+oder etwas, das Deine Entscheidungsdatei bisher bewusst draußen lässt. Die Story kommt zuerst,
+damit Du das Rot selbst siehst: Ein Test, der vor der Änderung schon grün ist, prüft nichts.
 
-Committe, bevor Du anfängst (`git add -A && git commit -m "day 2 block 03: corrected"`). Die
+Committe, bevor Du anfängst (`git add -A && git commit -m "Entscheidungen geprüft"`). Die
 nachgetragenen Entscheidungen und Deine Überarbeitung sind dann vor dem Zurücksetzen weiter
 unten sicher.
 
-#### Karte: Rot mit Absicht
+#### Karte: Erweitere Deine Komponente
 
-**Ziel.** Eine Variante oder ein Zustand, der bewusst draußen war, ist per neuem Umfang-Eintrag
-im Umfang, hat einen Verhaltenseintrag, hat eine Story mit `play`-Funktion, die Du erst rot und dann grün gesehen hast, und
-die Reparatur war eine Änderung an der richtigen Stelle.
+**Ziel.** Deine Komponente kann etwas, das sie vorher nicht konnte. Die Erweiterung steht als
+neuer Eintrag in der Entscheidungsdatei (Umfang, bei Verhalten auch ein Verhaltenseintrag), hat
+eine Story mit `play`-Funktion, die Du erst rot und dann grün gesehen hast, und die Änderung
+liegt im Code, nicht im Test.
 
 **Material.**
 
@@ -575,13 +577,45 @@ dem Figma-Master fehlt diese Variante.
 
 **Kür.**
 
-- Wähle eine zweite Sache, die bewusst draußen war, und lass die Schleife noch einmal laufen.
+- Denk Dir eine zweite Erweiterung aus und lass die Schleife noch einmal laufen.
 - Nimm bewusst eine schwere Änderung mit Verhalten (zum Beispiel das Stapeln mehrerer
   Instanzen oder einen Zustand mit Zeitablauf) und rechne damit, dass die erste Reparatur
   nicht reicht: Scheitern zwei, gehst Du den Weg „Zurücksetzen“ unten.
 - Lass den Agenten bei einem offenen Punkt einen Eintrag in die Entscheidungsdatei oder
   eine Zeile in die Dokumentation schreiben.
 - Führe nach der Reparatur Lint und Build aus und melde die Exit-Codes.
+
+**Hängst Du fest?** Sieh in `prompt-rubrik.md` nach und im Abschnitt „Wenn Du festhängst“ am
+Ende dieser Datei.
+
+#### Stretch Goal: Bau Deine Leitplanke
+
+Für alle, die früher fertig sind. Aus einem „umgangen“ der ersten Übung (oder dem provozierten
+Rot) wird eine Regel, die greift, ohne dass jemand sie im Prompt wiederholt.
+
+**Ziel.** Eine Leitplanke im Workspace, die den Umweg verhindert, und ein Beweis, dass sie
+greift: Du bittest den Agenten, genau diesen Umweg zu nehmen, und er wird gestoppt.
+
+**Material.** Deine Liste aus „was unterwegs rot war“, `CLAUDE.md`, `.claude/settings.json`
+(dort hängt schon ein Hook, der nach jeder Änderung formatiert), `prompt-rubrik.md` Punkt 6.
+
+**Rahmen.**
+
+- Wähl die Stufe nach Punkt 6: Was wiederkehrt, wird eine schlichte Zeile mit Grund in
+  `CLAUDE.md`. Was nie passieren darf, wird ein Hook: Ein `PreToolUse`-Hook, der eine Änderung
+  mit zum Beispiel `eslint-disable` sieht und mit Exit-Code 2 endet, blockiert sie.
+- Der Agent baut die Leitplanke, Du entscheidest, welche Stufe es wird, und warum.
+
+**Fertig, wenn** der Agent beim Versuch, den Umweg zu nehmen, gestoppt wird (beim Hook) oder
+ihn mit Verweis auf die neue Zeile ablehnt (bei `CLAUDE.md`), und Du den Unterschied zwischen
+beiden in einem Satz sagen kannst.
+
+**Kür.**
+
+- Bau beide Stufen für denselben Umweg und vergleiche: Welche umgeht der Agent, wenn Du
+  drängst?
+- Lass einen frischen Agenten (`/clear`) die Leitplanke lesen und erklären, was sie verhindert
+  und warum.
 
 **Hängst Du fest?** Sieh in `prompt-rubrik.md` nach und im Abschnitt „Wenn Du festhängst“ am
 Ende dieser Datei.
