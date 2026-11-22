@@ -13,7 +13,7 @@ Run `nx test create-atelier-ui-workspace` to execute the unit tests via [Jest](h
 ## Usage
 
 ```
-npx create-atelier-ui-workspace my-workshop --no-figma
+npx create-atelier-ui-workspace atelier-ui-workspace --no-figma
 ```
 
 The CLI creates **Angular workspaces only** for now (owner decision 2026-11-19).

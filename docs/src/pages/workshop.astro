@@ -273,7 +273,7 @@ const mcpConfig = (fw: string) => `{
           </p>
           <Code code="npx create-atelier-ui-workspace" lang="shell" />
           <Code
-            code={`? Workspace name: › my-workshop\n? Which framework do you want to use? …\n❯ Angular\n  React\n  Vue\n? Add the Figma Desktop Bridge MCP (figma-console-mcp)?\n  Setup guide: ${SITE_URL}/figma-token (Y/n) › true\n? Figma file key (optional) — the segment in a Figma URL after /design/,\n  e.g. figma.com/design/<key>/Some-File. Paste a full URL and the key\n  is extracted. Press enter to skip: › abc123XYZdef456UVWghi`}
+            code={`? Workspace name: › atelier-ui-workspace\n? Which framework do you want to use? …\n❯ Angular\n  React\n  Vue\n? Add the Figma Desktop Bridge MCP (figma-console-mcp)?\n  Setup guide: ${SITE_URL}/figma-token (Y/n) › true\n? Figma file key (optional) — the segment in a Figma URL after /design/,\n  e.g. figma.com/design/<key>/Some-File. Paste a full URL and the key\n  is extracted. Press enter to skip: › abc123XYZdef456UVWghi`}
             lang="text"
           />
           <p class="docs-step-desc" style="margin-top: 0.75rem">
@@ -285,7 +285,7 @@ const mcpConfig = (fw: string) => `{
             Angular workspace, the two Angular skills (defaults on, no prompt):
           </p>
           <Code
-            code={`npx create-atelier-ui-workspace my-workshop\n\n# fully non-interactive\nnpx create-atelier-ui-workspace my-workshop --framework angular --figma --figma-file abc123XYZdef456UVWghi --skills`}
+            code={`npx create-atelier-ui-workspace atelier-ui-workspace\n\n# fully non-interactive\nnpx create-atelier-ui-workspace atelier-ui-workspace --framework angular --figma --figma-file abc123XYZdef456UVWghi --skills`}
             lang="shell"
           />
         </div>
@@ -316,7 +316,7 @@ const mcpConfig = (fw: string) => `{
             separate <code>npm install</code> step:
           </p>
           <Code
-            code={`cd my-workshop\nnpx playwright install chromium\nnpm run preflight`}
+            code={`cd atelier-ui-workspace\nnpx playwright install chromium\nnpm run preflight`}
             lang="shell"
           />
           <p class="docs-step-desc" style="margin-top: 0.75rem">

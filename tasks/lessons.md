@@ -1209,3 +1209,10 @@ ask, not a rehearsal item to hand on.
 
 - Pattern: d1-03-05b/c and d2-01-06 put code pills (<p> with background) inside <td>; the Slides type marks such a slide read-only ("can't be edited right now") and the PPTX export draws the table oddly. Found by the owner after the PPTX export.
 - Rule: in a Slides deck a <table> is plain text per cell. Any cell with a block, background or code pill becomes flex rows (<div style="display:flex">) instead. Scan for it before every publish: a <td> containing <p or <div.
+
+## Speaker notes are notes, not a script with stage directions (2026-11-22)
+
+The owner found `Sag: „…“` in 129 notes "dämlich": the notes become PowerPoint notes the trainer
+reads, so the spoken sentence stands on its own, without label or quotes. Exported notes arrive
+as one paragraph with English spelling; `tmp/schulung-decks/format-notes.py` splits them at the
+labels and sets German, so nobody formats 110 slides by hand.

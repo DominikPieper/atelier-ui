@@ -43,7 +43,7 @@ npx create-atelier-ui-workspace
 Prompts for a workspace name and framework (`angular` / `react` / `vue`), then generates a ready-to-run Nx workspace with the component library installed and MCP wired up.
 
 ```bash
-cd my-workshop
+cd atelier-ui-workspace
 npx nx serve workshop-<framework>
 ```
 

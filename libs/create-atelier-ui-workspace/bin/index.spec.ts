@@ -74,6 +74,10 @@ describe('create-atelier-ui-workspace CLI', () => {
       expect.any(String),
       expect.objectContaining({ name: 'prompted-name' }),
     );
+    expect(enquirer.prompt.mock.calls[0][0]).toMatchObject({
+      name: 'name',
+      initial: 'atelier-ui-workspace',
+    });
   });
 
   it('throws when name is empty after prompt', async () => {

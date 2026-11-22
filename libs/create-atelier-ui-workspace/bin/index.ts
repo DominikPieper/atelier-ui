@@ -207,7 +207,7 @@ export async function main() {
       type: 'input',
       name: 'name',
       message: 'Workspace name:',
-      initial: 'my-workshop',
+      initial: 'atelier-ui-workspace',
     });
     name = (res as { name: string }).name;
   }
