@@ -2,9 +2,9 @@
   "meta": {
     "fileKey": "QMnDD8uZQPldPrlCwZZ58T",
     "fileName": "Atelier UI",
-    "figmaLastModified": "2026-11-20T18:58:07Z",
-    "generatedAt": "2026-11-22T16:48:01.713Z",
-    "gitSha": "f5617a2f",
+    "figmaLastModified": "2026-11-22T16:49:31Z",
+    "generatedAt": "2026-11-22T17:26:09.338Z",
+    "gitSha": "a0b7fa2e",
     "serverVersion": "0.1.0",
     "coverage": "All 43 masters. Token/auto-layout checks sample each master's default variant.",
     "note": "Facts captured from Figma via figma-console MCP read-tools. Rules live in check-figma.js."
