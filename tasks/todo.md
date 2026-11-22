@@ -4694,3 +4694,10 @@ Wiedereinstiege:
 - W2 vor Block 03/04: fertige Referenz-Toast `course/referenz/toast/` (nur Angular-Seats mit Figma; Owner-Wahl).
 
 Review: alle zehn Release-Checks Exit 0; frischer Angular-Seat aus dem e2e-Lauf (verdaccio): preflight, Kopie nach README, DoD inkl. `check:stories` Exit 0, Stories-Lauf 3× grün. Folien Tag 2 v76–v84 (neu d2-00-03a, d2-02-03 im Übungsmuster). Schwächster Punkt: `PausesOnPointer` hängt an echter Zeit (1,2 s / 2 s), auf sehr langsamen Rechnern denkbar flaky; nicht gemessen: Dauer einer eigenen Idee gegenüber Brief + Starter.
+
+## Barrierefreiheit: Übungsstoff sicherstellen (Owner 2026-11-22)
+
+- [ ] Zusatzkomponenten im Seat mit versteckten a11y-Fehlern (Agent läuft; alle Checks müssen grün bleiben; Tag-1-Risiko: dürfen nicht als Bausteine für den Screen dienen)
+- [ ] Prüfung: haben Bibliothek (Angular) und Figma-Master ohnehin echte a11y-Probleme? (Agent läuft, nur lesend)
+- [ ] Später: ein, zwei a11y-Probleme bewusst in die Figma-Master/Starter einbauen (Merkposten für künftige Kurse, nicht für diesen)
+- [ ] Danach: Folie „Barrierefreiheit prüfen“, Karte und Notizen anpassen, Fehlerliste in die Trainerdatei, Release

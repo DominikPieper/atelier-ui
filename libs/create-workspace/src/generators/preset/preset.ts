@@ -1662,6 +1662,20 @@ export async function presetGenerator(
     ),
   );
 
+  // Four small everyday components next to the example story, Angular only
+  // (the workshop framework). Plain templates in `files/extras/angular/<name>/`
+  // (`.ts` sources carry `.template` so the package's own tsc leaves them
+  // alone); stories sit under the `Examples/` title group.
+  if (framework === 'angular') {
+    for (const name of listTemplateFiles('extras/angular')) {
+      const [dir, file] = name.split('/').slice(-2);
+      tree.write(
+        `${appName}/src/app/components/${dir}/${file.replace(/\.template$/, '')}`,
+        readTemplate(name),
+      );
+    }
+  }
+
   // Browser-mode Storybook tests (owner correction 2026-09-10 to ADR-0123 —
   // storybook-test / check:stories ship with the scaffold after all).
   // `vitest.config.ts` is always plain `.ts`, never `.tsx` — see

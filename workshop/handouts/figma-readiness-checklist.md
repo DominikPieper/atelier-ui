@@ -49,7 +49,7 @@ Frame / Master / Datei geprüft: ______________________________
 
 ## Der Prüf-Prompt
 
-Für Teil A, mit figma-console-mcp an Deiner Datei (ein Werkzeug von Dritten). Starte zuerst den Agenten, wähle dann den Frame aus: Eine Auswahl von vor dem Start sieht er nicht.
+Für Teil A, mit figma-console-mcp an Deiner Datei. Starte zuerst den Agenten, wähle dann den Frame aus: Eine Auswahl von vor dem Start sieht er nicht.
 
 > Führe figma_lint_design auf dem Node aus, den ich ausgewählt habe, nur mit den Regeln hardcoded-color, default-name und detached-component. Gib die Befunde als Liste zurück: Ebene, Regel, Meldung. Ändere nichts in der Datei.
 

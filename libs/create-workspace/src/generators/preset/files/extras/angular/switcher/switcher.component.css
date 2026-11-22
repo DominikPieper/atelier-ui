@@ -1,0 +1,37 @@
+:host {
+  display: block;
+}
+
+.switcher {
+  display: inline-flex;
+  padding: var(--ui-spacing-1);
+  border-radius: var(--ui-radius-md);
+  background: var(--ui-color-surface-sunken);
+}
+
+.switcher-option {
+  display: inline-flex;
+  align-items: baseline;
+  gap: var(--ui-spacing-2);
+  padding: var(--ui-spacing-2) var(--ui-spacing-4);
+  border: 0;
+  border-radius: var(--ui-radius-sm);
+  background: transparent;
+  color: var(--ui-color-text);
+  cursor: pointer;
+  font: var(--ui-type-body-sm);
+}
+
+.switcher-option:focus-visible {
+  outline: none;
+}
+
+.switcher-selected {
+  background: var(--ui-color-surface-raised);
+  box-shadow: var(--ui-shadow-xs);
+  font-weight: var(--ui-font-weight-semibold);
+}
+
+.switcher-hint {
+  color: var(--ui-color-border-strong);
+}

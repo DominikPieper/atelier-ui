@@ -676,6 +676,12 @@ behoben oder begründet ist und Du die Tastaturprobe und die Zielgröße selbst 
 - Prüfe den Fokusring in Dark.
 - Schreib für jede übersprungene Prüfung auf, wie Du sie von Hand ersetzen würdest.
 
+**Nichts gefunden?** Dann prüf die Beispielkomponenten, die mit dem Workspace kommen (in
+Storybook unter „Examples/“): mit dem a11y-Panel in Storybook, mit der Tastatur und mit dem
+Agenten, der das Markup liest. Ihre Stories melden axe-Befunde nur im Panel, nicht in `/verify`.
+Und findest Du ein Problem in einem Baustein der Bibliothek, reparierst Du es nicht in Deiner
+App: Du meldest es dort, wo er herkommt, mit Fundstelle und Vorschlag.
+
 **Hängst Du fest?** Sieh in `prompt-rubrik.md` nach und im Abschnitt „Wenn Du festhängst“ am
 Ende dieser Datei.
 

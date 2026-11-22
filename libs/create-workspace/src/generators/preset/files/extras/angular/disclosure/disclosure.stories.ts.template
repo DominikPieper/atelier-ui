@@ -1,0 +1,21 @@
+import type { Meta, StoryObj } from '@storybook/angular-vite';
+import { DisclosureComponent } from './disclosure.component';
+
+const meta: Meta<DisclosureComponent> = {
+  title: 'Examples/Disclosure',
+  component: DisclosureComponent,
+  tags: ['autodocs'],
+  parameters: { a11y: { test: 'todo' } },
+  render: (args) => ({
+    props: args,
+    template: `<app-disclosure [heading]="heading" [startOpen]="startOpen">Delivered in 3 to 5 working days.</app-disclosure>`,
+  }),
+  args: { heading: 'Shipping', startOpen: false },
+};
+
+export default meta;
+type Story = StoryObj<DisclosureComponent>;
+
+export const Closed: Story = {};
+
+export const Open: Story = { args: { startOpen: true } };

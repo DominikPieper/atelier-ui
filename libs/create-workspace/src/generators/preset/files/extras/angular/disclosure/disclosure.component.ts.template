@@ -1,0 +1,44 @@
+import {
+  ChangeDetectionStrategy,
+  Component,
+  input,
+  linkedSignal,
+} from '@angular/core';
+
+/**
+ * A heading that shows or hides the content below it.
+ *
+ * ```html
+ * <app-disclosure heading="Shipping">Delivered in 3 to 5 days.</app-disclosure>
+ * ```
+ */
+@Component({
+  selector: 'app-disclosure',
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrl: './disclosure.component.css',
+  template: `
+    <button type="button" class="disclosure-trigger" (click)="toggle()">
+      <span>{{ heading() }}</span>
+      <span
+        class="disclosure-chevron"
+        [class.disclosure-open]="open()"
+        aria-hidden="true"
+      ></span>
+    </button>
+    @if (open()) {
+      <div class="disclosure-panel"><ng-content /></div>
+    }
+  `,
+})
+export class DisclosureComponent {
+  /** The visible heading that toggles the content. */
+  readonly heading = input('');
+  /** Whether the content starts visible. */
+  readonly startOpen = input(false);
+
+  protected readonly open = linkedSignal(() => this.startOpen());
+
+  protected toggle(): void {
+    this.open.update((v) => !v);
+  }
+}

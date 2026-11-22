@@ -1,0 +1,51 @@
+import {
+  ChangeDetectionStrategy,
+  Component,
+  input,
+  output,
+} from '@angular/core';
+import { AtlIcon } from '@atelier-ui/angular';
+
+/**
+ * A card with a title, a short text and a save action. Clicking the card
+ * itself opens it.
+ *
+ * ```html
+ * <app-info-card title="Harbour tour" text="Two hours by boat." (opened)="open()" />
+ * ```
+ */
+@Component({
+  selector: 'app-info-card',
+  imports: [AtlIcon],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrl: './info-card.component.css',
+  host: { '(click)': 'opened.emit()' },
+  template: `
+    <h3 class="info-card-title">{{ title() }}</h3>
+    <p class="info-card-text">{{ text() }}</p>
+    <button
+      type="button"
+      class="info-card-action"
+      aria-label="Share"
+      (click)="save($event)"
+    >
+      <atl-icon name="check" size="sm" />
+      Save
+    </button>
+  `,
+})
+export class InfoCardComponent {
+  /** The title of the card. */
+  readonly title = input('');
+  /** A sentence of details. */
+  readonly text = input('');
+  /** Emitted when the card is clicked. */
+  readonly opened = output<void>();
+  /** Emitted when the save action is used. */
+  readonly saved = output<void>();
+
+  protected save(event: Event): void {
+    event.stopPropagation();
+    this.saved.emit();
+  }
+}

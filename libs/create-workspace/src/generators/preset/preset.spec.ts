@@ -1331,6 +1331,34 @@ describe('preset generator', () => {
     },
   );
 
+  describe('extra example components (Angular only)', () => {
+    const NAMES = ['disclosure', 'notice', 'switcher', 'info-card'];
+
+    it('angular writes four components, each with component, css and an autodocs story, with no `.template` leftovers', async () => {
+      await presetGenerator(tree, {
+        name: 'my-workspace',
+        framework: 'angular',
+      });
+      for (const n of NAMES) {
+        const dir = `workshop-angular/src/app/components/${n}`;
+        expect(tree.children(dir).sort()).toEqual(
+          [`${n}.component.css`, `${n}.component.ts`, `${n}.stories.ts`].sort(),
+        );
+        const story = tree.read(`${dir}/${n}.stories.ts`, 'utf-8') ?? '';
+        expect(story).toContain("tags: ['autodocs']");
+        expect(story).toContain("title: 'Examples/");
+        expect(story).toContain("a11y: { test: 'todo' }");
+        const ts = tree.read(`${dir}/${n}.component.ts`, 'utf-8') ?? '';
+        expect(ts).toContain("selector: 'app-");
+      }
+    });
+
+    it.each(['react', 'vue'] as const)('%s writes none of them', async (fw) => {
+      await presetGenerator(tree, { name: 'my-workspace', framework: fw });
+      expect(tree.exists(`workshop-${fw}/src/app/components`)).toBe(false);
+    });
+  });
+
   // ─── The example story teaches the ADR-0121 pattern (S2c) ──────────────────
   //
   // The scaffold's own example is what an attendee copies for their next
@@ -1540,6 +1568,19 @@ describe('preset generator', () => {
     expect(angularSetup).toContain("from '@storybook/angular-vite'");
     expect(angularSetup).not.toContain("from '@storybook/angular'");
   });
+
+  it.each(['angular', 'react', 'vue'] as const)(
+    '%s vitest.setup.ts loads the a11y addon annotations first, so a11y.test runs axe',
+    async (fw) => {
+      await presetGenerator(tree, { name: 'my-workspace', framework: fw });
+      const setup =
+        tree.read(`workshop-${fw}/.storybook/vitest.setup.ts`, 'utf-8') ?? '';
+      expect(setup).toContain("from '@storybook/addon-a11y/preview'");
+      expect(setup).toMatch(
+        /setProjectAnnotations\(\[\s*a11yAddonAnnotations,\s*projectAnnotations/,
+      );
+    },
+  );
 
   it('adds a storybook-test target per app and a root check:stories script', async () => {
     await presetGenerator(tree, { name: 'my-workspace', framework: 'react' });
@@ -3633,9 +3674,7 @@ describe('preset generator', () => {
         expect(card).not.toContain('Settings / Card');
         expect(card.includes('alt-text')).toBe(framework === 'angular');
         const rescue = tree.read('course/rescue.md', 'utf-8') ?? '';
-        expect(rescue).toContain(
-          'Noch rot: frag Deinen Nachbarn, dann den Trainer.',
-        );
+        expect(rescue).toContain('Noch rot: sag dem Trainer Bescheid.');
         expect(rescue).toContain('Figma Desktop Bridge');
         expect(tree.read('course/README.md', 'utf-8')).toContain('rescue.md');
         expect(tree.read('course/README.md', 'utf-8')).toContain(

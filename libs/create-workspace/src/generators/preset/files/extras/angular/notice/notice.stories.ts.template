@@ -1,0 +1,22 @@
+import type { Meta, StoryObj } from '@storybook/angular-vite';
+import { NoticeComponent } from './notice.component';
+
+const meta: Meta<NoticeComponent> = {
+  title: 'Examples/Notice',
+  component: NoticeComponent,
+  tags: ['autodocs'],
+  parameters: { a11y: { test: 'todo' } },
+  args: { message: 'Your changes were saved.' },
+};
+
+export default meta;
+type Story = StoryObj<NoticeComponent>;
+
+export const Default: Story = {};
+
+export const LongMessage: Story = {
+  args: {
+    message:
+      'Your changes were saved. It can take a few minutes until everyone on your team sees them.',
+  },
+};

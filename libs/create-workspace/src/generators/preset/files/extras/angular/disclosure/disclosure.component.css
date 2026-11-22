@@ -1,0 +1,44 @@
+:host {
+  display: block;
+  max-width: 26rem;
+  border-bottom: var(--ui-border-width) solid var(--ui-color-border);
+}
+
+.disclosure-trigger {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+  padding: var(--ui-spacing-3) 0;
+  border: 0;
+  background: transparent;
+  color: var(--ui-color-text);
+  cursor: pointer;
+  font: var(--ui-type-body-sm);
+  font-weight: var(--ui-font-weight-semibold);
+  text-align: start;
+}
+
+.disclosure-trigger:focus-visible {
+  border-radius: var(--ui-radius-sm);
+  box-shadow: var(--ui-focus-ring);
+  outline: none;
+}
+
+.disclosure-chevron {
+  width: 0.5rem;
+  height: 0.5rem;
+  border-inline-end: var(--ui-border-width-thick) solid currentcolor;
+  border-block-end: var(--ui-border-width-thick) solid currentcolor;
+  transform: rotate(45deg);
+}
+
+.disclosure-open {
+  transform: rotate(-135deg);
+}
+
+.disclosure-panel {
+  padding-bottom: var(--ui-spacing-3);
+  color: var(--ui-color-text-muted);
+  font: var(--ui-type-body-sm);
+}

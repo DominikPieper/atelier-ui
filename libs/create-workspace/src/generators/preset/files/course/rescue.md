@@ -59,8 +59,13 @@ Prozesses auf 6006 und ein neuer Start löst es. Die Prüfung vorab:
 ## Noch rot
 
 Repariere einen kaputten Workspace nicht selbst: Sag dem Trainer Bescheid, der Rechner ist
-seine Sache. Wer im Setup-Block noch rot ist, setzt sich zu einem Nachbarn (eine Tastatur,
-der Nachbar steuert). Niemand startet Tag 2 rot: Der Check durch den Trainer findet in der
+seine Sache. Niemand startet Tag 2 rot: Der Check durch den Trainer findet in der
 Kaffeepause oder in der Mittagspause statt, nicht als Hausaufgabe.
 
-Noch rot: frag Deinen Nachbarn, dann den Trainer.
+## Deine eigene Komponente trägt nicht
+
+Du musst nichts aufholen. `day2-karten.md`, Abschnitt „Wenn Deine eigene Komponente nicht
+trägt“, nennt zwei Einstiege: das Toast-Beispiel mit fertiger Entscheidungsdatei und die
+fertige Referenz-Toast in `referenz/toast/`.
+
+Noch rot: sag dem Trainer Bescheid.

@@ -1,0 +1,35 @@
+:host {
+  display: block;
+}
+
+.notice {
+  display: flex;
+  align-items: center;
+  gap: var(--ui-spacing-3);
+  max-width: 26rem;
+  padding: var(--ui-spacing-3) var(--ui-spacing-4);
+  border-radius: var(--ui-radius-md);
+  background: var(--ui-color-info-bg);
+  color: var(--ui-color-info-text);
+  font: var(--ui-type-body-sm);
+}
+
+.notice-text {
+  flex: 1;
+}
+
+.notice-close {
+  display: inline-flex;
+  flex: none;
+  padding: var(--ui-spacing-1);
+  border: 0;
+  border-radius: var(--ui-radius-sm);
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.notice-close:focus-visible {
+  box-shadow: var(--ui-focus-ring);
+  outline: none;
+}

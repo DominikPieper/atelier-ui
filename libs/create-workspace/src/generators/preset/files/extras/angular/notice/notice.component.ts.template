@@ -1,0 +1,45 @@
+import {
+  ChangeDetectionStrategy,
+  Component,
+  input,
+  output,
+  signal,
+} from '@angular/core';
+import { AtlIcon } from '@atelier-ui/angular';
+
+/**
+ * A short message with a close button.
+ *
+ * ```html
+ * <app-notice message="Your changes were saved." (dismissed)="onGone()" />
+ * ```
+ */
+@Component({
+  selector: 'app-notice',
+  imports: [AtlIcon],
+  changeDetection: ChangeDetectionStrategy.OnPush,
+  styleUrl: './notice.component.css',
+  template: `
+    @if (!gone()) {
+      <div class="notice" role="status">
+        <span class="notice-text">{{ message() }}</span>
+        <button type="button" class="notice-close" (click)="close()">
+          <atl-icon name="close" size="sm" />
+        </button>
+      </div>
+    }
+  `,
+})
+export class NoticeComponent {
+  /** The message: one or two sentences. */
+  readonly message = input('');
+  /** Emitted once, when the notice has been closed. */
+  readonly dismissed = output<void>();
+
+  protected readonly gone = signal(false);
+
+  protected close(): void {
+    this.gone.set(true);
+    this.dismissed.emit();
+  }
+}

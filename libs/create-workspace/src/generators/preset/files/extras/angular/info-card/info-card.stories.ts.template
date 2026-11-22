@@ -1,0 +1,20 @@
+import type { Meta, StoryObj } from '@storybook/angular-vite';
+import { InfoCardComponent } from './info-card.component';
+
+const meta: Meta<InfoCardComponent> = {
+  title: 'Examples/InfoCard',
+  component: InfoCardComponent,
+  tags: ['autodocs'],
+  parameters: { a11y: { test: 'todo' } },
+  args: {
+    title: 'Harbour tour',
+    text: 'Two hours by boat, leaving every morning at ten.',
+  },
+};
+
+export default meta;
+type Story = StoryObj<InfoCardComponent>;
+
+export const Default: Story = {};
+
+export const ShortText: Story = { args: { text: 'Two hours by boat.' } };

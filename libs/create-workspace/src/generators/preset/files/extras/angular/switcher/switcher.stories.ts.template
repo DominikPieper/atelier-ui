@@ -1,0 +1,33 @@
+import type { Meta, StoryObj } from '@storybook/angular-vite';
+import { expect, userEvent } from 'storybook/test';
+import { SwitcherComponent } from './switcher.component';
+
+const meta: Meta<SwitcherComponent> = {
+  title: 'Examples/Switcher',
+  component: SwitcherComponent,
+  tags: ['autodocs'],
+  parameters: { a11y: { test: 'todo' } },
+  args: {
+    options: [
+      { value: 'all', label: 'All', hint: '12' },
+      { value: 'open', label: 'Open', hint: '5' },
+      { value: 'done', label: 'Done', hint: '7' },
+    ],
+    value: 'all',
+  },
+};
+
+export default meta;
+type Story = StoryObj<SwitcherComponent>;
+
+export const Default: Story = {};
+
+export const SelectsOnClick: Story = {
+  play: async ({ canvas }) => {
+    await userEvent.click(canvas.getByRole('button', { name: /Open/ }));
+    await expect(canvas.getByRole('button', { name: /Open/ })).toHaveAttribute(
+      'aria-pressed',
+      'true',
+    );
+  },
+};

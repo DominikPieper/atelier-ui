@@ -20,10 +20,10 @@ Hausaufgabe: Geh die beiden Checklisten (Figma, Storybook) an Deinem eigenen Sys
 
 Wo der Kurs welche Zeile behandelt hat:
 
-1. Beschreiben: Tag 1 Block 04 und 05, Tag 2 Block 02.
-2. Einschränken: Tag 2 Block 01.
-3. Tokens: Tag 1 Block 03.
-4. Belegen: Tag 1 Block 04, Tag 2 Block 03.
-5. Durchsetzen: die fünf Werkzeuge, Tag 1 Block 02 und 05.
-6. Anleiten: Tag 2 Block 00 und 05.
-7. Messen: Tag 1 Block 00 (die Guardrail-Demo ist die kleinste Form).
+1. Beschreiben: die Docs, die der Agent über `docs-show` liest, und Deine Komponente, gelesen wie vom nächsten Agenten.
+2. Einschränken: die API-Regeln, bevor Du einen Prop-Namen schreibst.
+3. Tokens: Figma für Code prüfen, der Dark-Check.
+4. Belegen: eine Story, die scheitern kann; Erweitere Deine Komponente, Test zuerst.
+5. Durchsetzen: die fünf Werkzeuge und `/verify`.
+6. Anleiten: die Definition of Done in `CLAUDE.md`, der Skill und die Entscheidungsdatei.
+7. Messen: die Guardrail-Demo am ersten Morgen ist die kleinste Form.

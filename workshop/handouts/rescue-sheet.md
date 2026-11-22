@@ -39,8 +39,12 @@ Authentifizierungsfehler: Sag dem Trainer Bescheid. Die Anmeldung läuft im Raum
 
 ## Kaputter Workspace
 
-Repariere ihn nicht selbst. Sag dem Trainer sofort Bescheid: Der Rechner ist seine Sache. Setz Dich solange zu einem Nachbarn (eine Tastatur, der Nachbar steuert).
+Repariere ihn nicht selbst. Sag dem Trainer sofort Bescheid: Der Rechner ist seine Sache.
 
-**Noch rot: frag Deinen Nachbarn, dann den Trainer.**
+## Deine eigene Komponente trägt nicht
+
+Du musst nichts aufholen. `course/day2-karten.md`, Abschnitt „Wenn Deine eigene Komponente nicht trägt“, nennt zwei Einstiege: das Toast-Beispiel mit fertiger Entscheidungsdatei und die fertige Referenz-Toast in `course/referenz/toast/`.
+
+**Noch rot: sag dem Trainer Bescheid.**
 
 Dieselben Schritte stehen in `course/rescue.md` in Deinem Workspace.

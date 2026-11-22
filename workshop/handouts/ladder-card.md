@@ -10,6 +10,8 @@ Jedes Werkzeug sieht etwas anderes. Was eines nicht sieht, prüfst Du selbst, od
 | 3     | Stylelint (`npm run check:stylelint`)         | Rohfarben in `.css`-Dateien, am Token vorbei                                                  | Inline-`style=`, `styles:`-Arrays, benannte Farben, `oklch()`                                              |
 | 4     | Story-Tests mit axe (`npm run check:stories`) | Zustände, die nicht rendern, eine fehlschlagende `play`-Funktion, Barrierefreiheit in Stories | alles ohne Story; Dark Mode; Tastaturwege, die keine `play`-Funktion geht                                  |
 
+**Alle Stufen auf einmal: `/verify` in Claude Code führt jeden Befehl der Definition of Done aus und meldet jeden Exit-Code.**
+
 **Absichtlich kaputt machen. Das Werkzeug meldet es. Der Agent repariert.**
 
 Der Prompt, der jede Stufe antreibt:
