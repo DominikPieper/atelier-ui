@@ -1216,3 +1216,9 @@ The owner found `Sag: „…“` in 129 notes "dämlich": the notes become Power
 reads, so the spoken sentence stands on its own, without label or quotes. Exported notes arrive
 as one paragraph with English spelling; `tmp/schulung-decks/format-notes.py` splits them at the
 labels and sets German, so nobody formats 110 slides by hand.
+
+## An unbalanced tag blanks a slide in the editor, not in the render harness (2026-11-22)
+
+A rewrite left one `</div>` too many on d2-03-03. Chromium in the local render harness repaired
+it silently and the slide looked right; the Slides editor showed it completely white. After any
+markup surgery on a slide, count `<div` against `</div>` (outside `<aside>`) before publishing.

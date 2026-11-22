@@ -28,8 +28,9 @@ Duplikat ab, sie kann von der im Original abweichen).
 2. Ordne jede einzeln ein als **Code** (der Code soll sich ändern) oder **Figma** (der Frame
    soll sich ändern). Bei einer langen Liste: ordne die drei größten ein.
 3. Gib die Code-Abweichungen an den Agenten zurück (die Karte unten). Die Figma-Abweichungen
-   gehen nicht in den Prompt: Schreib sie als Notiz für das Design auf (Ebene, was Du siehst,
-   was Du erwartest). Ein Frame, der dem Brief widerspricht, wird nicht im Code nachgebaut.
+   gehen nicht in den Prompt, der den Code ändert: Lass den Agenten sie als Kommentar am Frame
+   in Deinem Figma-Duplikat setzen (Ebene, was Du siehst, was Du erwartest), so wie ein Team
+   eine Notiz für das Design hinterlässt. Ein Frame, der dem Brief widerspricht, wird nicht im Code nachgebaut.
 4. Vergleiche nach der Korrektur noch einmal, Punkt für Punkt. „Alles behoben“ ist der Satz
    des Agenten, der Frame neben der Seite ist die Prüfung. Eine Abweichung, die noch da ist,
    geht mit dem genauen Wert aus Figma zurück (welche Karte, wie viele Pixel, welcher
@@ -38,7 +39,7 @@ Duplikat ab, sie kann von der im Original abweichen).
 ### Karte: Abweichungen der Settings-Seite zurückgeben
 
 **Ziel.** Jede Code-Abweichung aus Deiner Liste ist behoben, sonst hat sich nichts
-geändert, die Figma-Abweichungen stehen als Notiz für das Design, und Du hast Seite und Frame
+geändert, die Figma-Abweichungen stehen als Kommentar am Frame in Figma, und Du hast Seite und Frame
 danach noch einmal nebeneinander verglichen.
 
 **Material.** Deine eigene Liste der Abweichungen (Schritt 2), der Frame „Settings / Seite“,
@@ -50,8 +51,8 @@ die gerenderte Seite.
 - Figma-Abweichungen und absichtliche Abweichungen gehören nicht in den Prompt.
 
 **Fertig, wenn** Du jeden Punkt der Liste im Vergleich Seite gegen Frame abgehakt hast, keine
-Abweichung der Kategorie „Code“ mehr offen ist und die Notiz für das Design jede Abweichung der
-Kategorie „Figma“ nennt.
+Abweichung der Kategorie „Code“ mehr offen ist und die Kommentare in Figma jede Abweichung der
+Kategorie „Figma“ nennen.
 
 **Kür.**
 
@@ -114,9 +115,9 @@ Property, die auf beiden Seiten als fehlend gemeldet wird, weil der Name in Figm
 glaubst: Auch ein Artefakt-Etikett kann eine echte Abweichung verschwinden lassen.
 
 Ein ruhiger Report ist keine saubere Komponente: Was der Aufruf nicht vergleicht, meldet er
-nicht. Danach gehört Dir jede Zeile: Code (gib sie an Claude zurück), Figma (eine Notiz für
-die Designerin oder den Designer), absichtlich so (sie muss als Eintrag der Art „Bewusste Abweichung“
-in der Entscheidungsdatei stehen) oder Werkzeug-Artefakt (nichts zu beheben, und Du kannst
-sagen, was womit verglichen wurde).
+nicht. Danach gehört Dir jede Zeile: Code (gib sie an Claude zurück), Figma (ein Kommentar am Node in Deinem
+Figma-Duplikat, den der Agent setzt), absichtlich so (sie muss als Eintrag der Art „Bewusste Abweichung“
+in der Entscheidungsdatei stehen) oder Werkzeug-Artefakt (nichts zu beheben und nichts
+einzutragen: Du markierst die Zeile und kannst sagen, was womit verglichen wurde).
 
 Ohne die Bridge gibt es keinen Parity-Aufruf: Vergleiche nach Augenmaß, wie an Tag 1.

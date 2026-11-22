@@ -75,6 +75,12 @@ only through a release and reprovisioning. The rest of the paragraph stands. The
 not in the scaffold's `.mcp.json`, there is no new skill and no preflight check; the
 participant still adds the server by typing one command.
 
+**Corrected 2026-11-22**: the ten-minute exercise is out. The owner, reviewing the Day 2 deck,
+removed the exercise slide (d2-05-04d); the comparison slide of the two routes stays, and the
+one command to add Figma's server is in its speaker notes for anyone who wants to try it. The
+ten minutes go back to the transfer (15 → 25). Figma's server is no longer added on the seat
+during the course.
+
 Rejected:
 
 - **Fixed in the scaffold.** A sixth server on every seat and in every workspace a
