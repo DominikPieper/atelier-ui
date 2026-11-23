@@ -4695,9 +4695,36 @@ Wiedereinstiege:
 
 Review: alle zehn Release-Checks Exit 0; frischer Angular-Seat aus dem e2e-Lauf (verdaccio): preflight, Kopie nach README, DoD inkl. `check:stories` Exit 0, Stories-Lauf 3× grün. Folien Tag 2 v76–v84 (neu d2-00-03a, d2-02-03 im Übungsmuster). Schwächster Punkt: `PausesOnPointer` hängt an echter Zeit (1,2 s / 2 s), auf sehr langsamen Rechnern denkbar flaky; nicht gemessen: Dauer einer eigenen Idee gegenüber Brief + Starter.
 
-## Barrierefreiheit: Übungsstoff sicherstellen (Owner 2026-11-22)
+## Barrierefreiheit: Übungsstoff sicherstellen (Owner 2026-11-22, erledigt mit ADR-0198, 0.4.28)
 
-- [ ] Zusatzkomponenten im Seat mit versteckten a11y-Fehlern (Agent läuft; alle Checks müssen grün bleiben; Tag-1-Risiko: dürfen nicht als Bausteine für den Screen dienen)
-- [ ] Prüfung: haben Bibliothek (Angular) und Figma-Master ohnehin echte a11y-Probleme? (Agent läuft, nur lesend)
+- [x] Zusatzkomponenten im Seat mit versteckten a11y-Fehlern (Agent läuft; alle Checks müssen grün bleiben; Tag-1-Risiko: dürfen nicht als Bausteine für den Screen dienen)
+- [x] Prüfung: haben Bibliothek (Angular) und Figma-Master ohnehin echte a11y-Probleme? (Agent läuft, nur lesend)
 - [ ] Später: ein, zwei a11y-Probleme bewusst in die Figma-Master/Starter einbauen (Merkposten für künftige Kurse, nicht für diesen)
-- [ ] Danach: Folie „Barrierefreiheit prüfen“, Karte und Notizen anpassen, Fehlerliste in die Trainerdatei, Release
+- [x] Danach: Folie „Barrierefreiheit prüfen“, Karte und Notizen anpassen, Fehlerliste in die Trainerdatei, Release
+
+## Nach dem ersten Kurstag (2026-11-23): Stand und Offenes
+
+Feedback Tag 1 (live): Übungstexte unklar; die Karten-Dateien im Seat machten die Übungen trivial
+(Agent arbeitete sie ab), Tag 1 über eine Stunde zu früh fertig; Folien zu viel Werkzeugjargon;
+zwei Übungsfolien hintereinander am Ende von Tag 1; gewünscht: eine Folie, wie die Teile
+zusammenspielen.
+
+Erledigt:
+
+- [x] ADR-0199: keine Übungsanleitungen auf dem Seat; Generator gibt nur `course/rescue.md`, die vier Briefs und (Angular) `course/referenz/toast/` aus. Release **0.4.29**.
+- [x] Bestehende Seats: Befehl im Workspace-Ordner `git rm -q --ignore-unmatch course/README.md course/briefs/README.md course/day1-settings-card.md course/day1-stories.md course/day1-team-directory.md course/day2-karten.md course/entscheidungen-beispiel.md course/figma-pruefen.md course/parity.md course/prompt-rubrik.md course/readiness-checkliste.md && git commit -qm "Kursanleitungen entfernt"`
+- [x] Tag 2 (Deck v114): alle Blöcke „erklären, dann üben“; jede Übungsfolie mit Ziel, Schritten, Regel, Fertig-wenn, „Weiter, wenn Du fertig bist“; natürliche Sprache (Werkzeugnamen höchstens in Klammern); neue Folie d2-00-06b2 „Wie die Teile im Workspace zusammenspielen“.
+- [x] Tag 1 (Deck v108) für den nächsten Lauf genauso umgebaut; d1-02-06 (Sammelübung) aus der Reihenfolge; Wireframe auf d1-05-05.
+- [x] Sicherheitskopie Tag 1 wie gehalten: `slides/Archiv/2026-11-23-Tag1-gehalten/` (pptx, pdf, Quellen), plus `~/Backups/atelier-schulung/schulung-decks-2026-11-23-nach-tag1.tar.gz`.
+- [x] Export- und Notiz-Anleitung: `tools/course/README.md`, Skript `tools/course/format-pptx-notes.py`.
+
+Offen:
+
+- [ ] Tag 2 neu als PowerPoint exportieren (v114), nach `slides/` legen, Notizen formatieren (README in `tools/course/`). Die `slides/…Tag 2.pptx` von 20:15 ist älter als v114.
+- [ ] Tag 1 neu exportieren, sobald der nächste Lauf ansteht.
+- [ ] Notizen von Tag 2 nach der Jargon-Umstellung gegenlesen (der Agent hat nur sichtbaren Text geändert; Notizen nennen noch Werkzeugnamen und „Brief“).
+- [ ] `docs/src/pages/schulung.astro` nennt die entfernten Kartendateien als Ort der Aufgaben; umschreiben.
+- [ ] Die gemeinsamen Regeln der gestrichenen `briefs/README.md` (Tokens binden, Original nie ändern, Schatten nur CSS, Zustands-Achse) ggf. in `CLAUDE.md` oder den Skill des Seats.
+- [ ] Bibliotheksfehler aus der a11y-Prüfung (Toast-Timer, forced-colors-Fokus, Tooltip, Avatar-Status, Stepper, Select, Combobox, Table-Checkbox) nach dem Kurs beheben (ADR-0198).
+- [ ] Generalprobe-Punkte: Figma-Embed im Design-Tab, Figma-Kommentare durch den Agenten, Zeit der Tastatur-Fehler, Füllen der Slots ohne Karten.
+- [ ] Commit `docs(course): runbook…` ist noch nicht gepusht.
