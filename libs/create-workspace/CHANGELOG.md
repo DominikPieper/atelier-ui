@@ -1,3 +1,13 @@
+## 0.4.29 (2026-11-23)
+
+### 🚀 Features
+
+- **create-workspace:** no exercise instructions on the seat ([67a365e5](https://github.com/DominikPieper/atelier-ui/commit/67a365e5))
+
+### ❤️ Thank You
+
+- Dominik Pieper @DominikPieper
+
 ## 0.4.28 (2026-11-22)
 
 ### 🚀 Features
