@@ -7,8 +7,6 @@
 > geglättet.
 > **Starter-Frame:** `TagChip / Starter`, Node `703:352` auf der Seite
 > `🛠️ Workshop-Templates`.
-> **Lies zuerst [`README.md`](README.md).** Die gemeinsamen Regeln und die Messlatte
-> „Fertig, wenn“ stehen dort und werden hier nicht wiederholt.
 
 Ein kompaktes beschriftetes Token, das sich entfernen lässt. Es sieht aus wie ein Badge
 und verhält sich wie das `tag` in einem Tag Input, und die Lücke zwischen diesen beiden
@@ -74,8 +72,7 @@ Padding, Größe und Rahmen binnen ein, zwei Releases auseinander.
 **Im Umfang: `default` und `success`, mit `removable: true`.** Zwei Schweregrade belegen
 die Token-Zuordnung; `removable: true` macht das Ganze überhaupt erst zum TagChip und
 zieht den ganzen a11y-Abschnitt nach sich. Der Chip selbst ist nicht das interaktive
-Element, der Entfernen-Button ist es (§3), also zeichnet er nach
-[`README.md` Punkt 1](README.md#fertig-wenn) gar keine `state`-Achse: hover und
+Element, der Entfernen-Button ist es (§3), also zeichnet er gar keine `state`-Achse (nur ein selbst interaktives Element bekommt eine): hover und
 focus-visible auf dem × gehören in die Beschreibung des Masters, genau wie die unten als
 bewusst draußen aufgeführten Zustände.
 
@@ -94,8 +91,7 @@ dokumentiere sie stattdessen in der Beschreibung des Masters.
 Chip. Der Chip selbst ist kein Button. Die maßgebliche Quelle von `badge` listet _gar
 keine_ interaktiven Zustände, was der ehrliche Ausgangspunkt ist: Das Einzige, was hier
 den Fokus bekommt, ist das ×. Keiner von beiden wird als `state`-Achse auf Chip-Ebene
-gezeichnet. Der Chip ist nicht das interaktive Element, also gehören sie nach
-[`README.md` Punkt 1](README.md#fertig-wenn) stattdessen in die Beschreibung des Masters.
+gezeichnet. Der Chip ist nicht das interaktive Element, also gehören sie stattdessen (nur ein selbst interaktives Element bekommt eine `state`-Achse) in die Beschreibung des Masters.
 
 **Daten (aus `badge`):** `idle`, `updated`, `max`, `hidden`.
 
@@ -116,8 +112,7 @@ Der Blocker hier ist der, der die Leute am meisten überrascht. Jeder Punkt trä
 zusätzlich die Markierung **(dieser Block)**, prüfbar am Frame `default`/`success` mit
 `removable: true`, den Du zeichnest, oder **(volle Komponente)**: real, einer davon mit
 Schweregrad Blocker, hängt aber von einem Verhalten ab (das Entfernen selbst, mehrere
-Chips, `hasIcon`), das der Umfang dieses Briefs für die 90 Minuten außer Reichweite legt
-(siehe [`README.md` Punkt 7](README.md#fertig-wenn)). Die Markierung **(volle
+Chips, `hasIcon`), das der Umfang dieses Briefs für die 90 Minuten außer Reichweite legt. Die Markierung **(volle
 Komponente)** ist keine Erlaubnis, den Punkt zu überspringen: Sie ist der Grund, warum
 der abschließende Check Dich nicht durchfallen lässt, weil Du ihn nicht gebaut hast.
 
@@ -176,7 +171,7 @@ der abschließende Check Dich nicht durchfallen lässt, weil Du ihn nicht gebaut
 
 ## 6. Woran Du „fertig“ erkennst
 
-Zusätzlich zur gemeinsamen Messlatte in [`README.md`](README.md):
+Konkret heißt das:
 
 - Ein Component Set mit `variant` (`default` / `success`) und einem Boolean `removable`,
   keine zwei Komponenten.
@@ -195,4 +190,4 @@ Was passiert mit einem Label, das länger ist als der Chip breit sein darf: wird
 
 ---
 
-**Bevor Du promptest:** Lass den Agenten die Entscheidungsdatei entwerfen und beantworte die offenen Fragen selbst, als Einträge für Umfang, Verhalten und Bewusste Abweichungen. Ein ausgefülltes Beispiel (zum Toast-Brief) steht in `../entscheidungen-beispiel.md`.
+**Bevor Du promptest:** Lass den Agenten die Entscheidungsdatei entwerfen und beantworte die offenen Fragen selbst, als Einträge für Umfang, Verhalten und Bewusste Abweichungen.

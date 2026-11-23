@@ -2,8 +2,6 @@
 
 > **Quelle:** eine kanonische Komponente, abgebildet auf das `Library Tokens`-Vokabular von Atelier.
 > **Starter-Frame:** `Toast / Starter`, Node `703:341` auf der Seite `🛠️ Workshop-Templates`.
-> **Lies zuerst [`README.md`](README.md).** Die gemeinsamen Regeln und die Messlatte „Fertig, wenn“
-> stehen dort und werden hier nicht wiederholt.
 
 Eine flüchtige, schwebende Benachrichtigung, verankert an einer Ecke des Viewports, die nach kurzer
 sichtbarer Dauer von selbst verschwindet. Sie ist **kein** Alert (inline, bleibt stehen) und kein
@@ -97,8 +95,7 @@ Nicht verhandelbar. Drei davon haben in der maßgeblichen Quelle den Schweregrad
 mit **(dieser Block)** markiert, also prüfbar an dem Frame und der Beschreibung, die Du in den
 90 Minuten tatsächlich baust, oder mit **(volle Komponente)**, also wahr für den Toast in Produktion und wert,
 in die Beschreibung des Masters geschrieben zu werden, aber abhängig vom Zustand `paused`, einem Szenario mit mehreren Toasts
-oder einem Laufzeitmechanismus, den der Umfang dieser Übung nicht baut (siehe [`README.md`,
-Punkt 7](README.md#fertig-wenn)).
+oder einem Laufzeitmechanismus, den der Umfang dieser Übung nicht baut.
 
 1. **Timer pausieren bei Hover und Fokus.** _(blocker, WCAG 2.2.1 Timing Adjustable · volle
    Komponente)_ Pausiere, wenn der Zeiger den Viewport betritt **und** wenn der Fokus hineinwandert, und setze erst fort, wenn
@@ -158,7 +155,7 @@ Jede ist einen Satz in Deiner Figma-Beschreibung wert.
 
 ## 6. Woran Du „fertig“ erkennst
 
-Zusätzlich zur gemeinsamen Messlatte in [`README.md`](README.md):
+Konkret heißt das:
 
 - Die Variantenachse heißt `variant` mit den Werten `success` und `danger`, kleingeschrieben,
   passend zur String-Literal-Union, die die Spec tragen wird.
@@ -174,4 +171,4 @@ Der Brief nimmt das Stapeln und die Warteschlange aus dem Umfang, sagt aber nich
 
 ---
 
-**Bevor Du promptest:** Lass den Agenten die Entscheidungsdatei entwerfen und beantworte die offenen Fragen selbst, als Einträge für Umfang, Verhalten und Bewusste Abweichungen. Ein ausgefülltes Beispiel (zum Toast-Brief) steht in `../entscheidungen-beispiel.md`.
+**Bevor Du promptest:** Lass den Agenten die Entscheidungsdatei entwerfen und beantworte die offenen Fragen selbst, als Einträge für Umfang, Verhalten und Bewusste Abweichungen.

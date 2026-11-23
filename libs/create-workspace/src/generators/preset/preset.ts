@@ -113,196 +113,60 @@ type Framework = 'angular' | 'react' | 'vue';
 // few framework-specific spots; whole optional sections (the Figma rescue
 // steps, the hosted-vs-local MCP rescue entry) are fragments under
 // files/course/_fragments/ that are spliced in, never written out themselves.
-const COURSE_SCAFFOLD: Record<
-  Framework,
-  {
-    name: string;
-    mcp: string;
-    file: string;
-    css: string;
-    mount: string;
-    lint: string;
-  }
-> = {
-  angular: {
-    name: 'Angular',
-    mcp: 'atelier',
-    file: 'workshop-angular/src/app/components/team-directory.component.ts',
-    css: 'workshop-angular/src/app/components/team-directory.component.css',
-    mount:
-      'TeamDirectoryComponent in das imports-Array in workshop-angular/src/app/app.ts aufnehmen und in app.html die Komponente, die jetzt dort steht (nach Block 02 die Settings-Seite, vorher <app-nx-welcome>), durch <app-team-directory> ersetzen',
-    lint: 'In Angular führt `npm run lint` zusätzlich zwei Atelier-Template-Regeln aus: Ein `<button atl-button>` nur mit Icon braucht einen zugänglichen Namen, und eine Unterkomponente wie `atl-option` muss in ihrer Elternkomponente (`atl-select`) stehen. Die Prüfung der Elternkomponente deckt eine feste Liste von Teilen ab (select, tabs, accordion, dialog, drawer, menu und einige mehr), die Tabellenteile gehören nicht dazu: `atl-th` oder `atl-tr` außerhalb von `atl-table` besteht sie.',
-  },
-  react: {
-    name: 'React',
-    mcp: 'storybook-react',
-    file: 'workshop-react/src/components/TeamDirectory.tsx',
-    css: 'workshop-react/src/components/TeamDirectory.css',
-    mount:
-      'TeamDirectory in workshop-react/src/app/app.tsx importieren, die Komponente, die jetzt dort steht (nach Block 02 die Settings-Seite, vorher der Platzhalter <NxWelcome />), dadurch ersetzen und den nun unbenutzten Import entfernen (ein unbenutzter Import lässt npm run lint fehlschlagen)',
-    lint: 'In React führt `npm run lint` die Framework-Regeln aus (auch jsx-a11y), nicht aber die beiden Atelier-Template-Regeln, die es nur für Angular-Templates gibt.',
-  },
-  vue: {
-    name: 'Vue',
-    mcp: 'storybook-vue',
-    file: 'workshop-vue/src/components/TeamDirectory.vue',
-    css: 'workshop-vue/src/components/TeamDirectory.css',
-    mount:
-      'TeamDirectory in workshop-vue/src/views/HomeView.vue importieren, die Komponente, die jetzt dort steht (nach Block 02 die Settings-Seite, vorher der Platzhalter <NxWelcome />), dadurch ersetzen und den nun unbenutzten Import entfernen (ein unbenutzter Import lässt npm run lint fehlschlagen)',
-    lint: 'Die beiden Atelier-Template-Regeln gibt es nur für Angular-Templates; in Vue führt `npm run lint` die Framework-Regeln aus.',
-  },
+const COURSE_MCP: Record<Framework, string> = {
+  angular: 'atelier',
+  react: 'storybook-react',
+  vue: 'storybook-vue',
 };
 
+// Exercise instructions (the task cards, the rubric, the README index) are NOT
+// emitted: participants told the agent to open the file and run it (owner
+// decision 2026-11-23). Only what a participant needs as reference stays: the
+// rescue steps, the four component briefs and the ready Toast.
 function writeCourseFolder(
   tree: Tree,
   framework: Framework,
   figmaMcp: boolean,
 ): void {
-  const c = COURSE_SCAFFOLD[framework];
   const fragment = (name: string) =>
     readTemplate(`course/_fragments/${name}.md`).trimEnd();
   const tokens: Record<string, string> = {
-    FRAMEWORK: c.name,
-    FRAMEWORK_LC: framework,
-    LADDER: fragment(
-      framework === 'angular' ? 'ladder-angular' : 'ladder-other',
-    )
-      .split('{{FRAMEWORK}}')
-      .join(c.name),
-    PKG: `@atelier-ui/${framework}`,
-    MCP: c.mcp,
-    FILE: c.file,
-    CSS: c.css,
-    MOUNT: c.mount,
-    LINTNOTE: c.lint,
-    // The checks the team-directory card lists, as a plain command list.
-    CHECKS:
-      framework === 'angular'
-        ? '`npm run lint`, `npm run check:stylelint`, `npm run check:format` und `npm run build`'
-        : '`npm run lint`, `npm run check:stylelint` und `npm run check:format`',
-    // Without Figma there is no day2-karten.md, so the stuck report moves
-    // into rescue.md instead of being lost.
-    STUCK_REF: figmaMcp
-      ? '`day2-karten.md` (Abschnitt „Wenn Du festhängst“)'
-      : '`rescue.md` (Abschnitt „Wenn Du festhängst“)',
-    STUCK: figmaMcp ? fragment('stuck') : '',
     MCP_RESCUE:
       framework === 'angular'
         ? fragment('rescue-mcp-angular')
         : fragment('rescue-mcp-hosted').split('{{FW}}').join(framework),
-    FIGMA_RESCUE: `\n${fragment(figmaMcp ? 'rescue-figma' : 'stuck')}\n`,
-    INDEX: '',
+    // The stuck report lives in rescue.md for every seat; with Figma the
+    // Figma rescue steps come first.
+    FIGMA_RESCUE: `\n${figmaMcp ? `${fragment('rescue-figma')}\n\n` : ''}${fragment('stuck')}\n`,
   };
-  const render = (template: string) =>
+  tree.write(
+    'course/rescue.md',
     Object.entries(tokens).reduce(
       (text, [key, value]) => text.split(`{{${key}}}`).join(value),
-      readTemplate(`course/${template}`),
+      readTemplate('course/rescue.md'),
+    ),
+  );
+  if (!figmaMcp) return;
+  for (const brief of ['toast', 'tagchip', 'statcard', 'avatar']) {
+    tree.write(
+      `course/briefs/${brief}.md`,
+      readTemplate(`course/briefs/${brief}.md`),
     );
-
-  // README index in course order (Tag 1 Block 01 to 05, then Tag 2). The
-  // Figma entries are filtered out for seats without the Figma MCP.
-  const entries: { file: string; when: string; figma: boolean }[] = [
-    {
-      file: 'rescue.md',
-      when: `Tag 1, Block 01 (Setup): wenn Dein Platz rot ist: Modellzugang, Preflight, /mcp, Storybook${figmaMcp ? ', die Figma-Bridge' : ' und was Du meldest, wenn Du festhängst'}`,
-      figma: false,
-    },
-    {
-      file: 'prompt-rubrik.md',
-      when: 'beide Tage: die sechs Prüfungen für Deine eigenen Prompts (Quelle benannt, Scope-Guard, Plan zuerst, Ziel genannt, Ein Befund pro Runde, Fix am richtigen Ort)',
-      figma: false,
-    },
-    {
-      file: 'day1-settings-card.md',
-      when: 'Tag 1, Block 02: die Aufgabenkarten für die Settings-Seite (generieren, einbinden, Token-Korrektur) und die Leiterstufe mit Lint und Build',
-      figma: true,
-    },
-    {
-      file: 'parity.md',
-      when: 'Tag 1, Block 02 (Settings-Seite, nach Augenmaß verglichen) und Tag 2, Block 04 (die Karte für das Parity-Werkzeug an Deiner eigenen Komponente)',
-      figma: true,
-    },
-    {
-      file: 'figma-pruefen.md',
-      when: 'Tag 1, Block 03 und Tag 2, Block 01: der Pink-Test, die Mikroübungen und die Karten für den Figma-Linter (drei Regeln, dann alle Regeln)',
-      figma: true,
-    },
-    {
-      file: 'readiness-checkliste.md',
-      when: 'Tag 1, Block 03: die Checkliste, die Du an einem Master ausfüllst, indem Du ihn ansiehst, und die Vorlage für Deine eigene Datei',
-      figma: true,
-    },
-    {
-      file: 'day1-stories.md',
-      when: 'Tag 1, Block 04: die Karten für `docs-show` an einer Bibliothekskomponente, eine Story mit `play` (einmal rot, dann grün) und das Lesen der Story-Datei',
-      figma: false,
-    },
-    {
-      file: 'day1-team-directory.md',
-      when: 'Tag 1, Block 05: der Team-Directory-Brief mit seinen vier Regeln und die Karten für Screen, Checks, Belege, die Liste „nicht geprüft“ und die Story für alle, die früh fertig sind, dazu der Zeitrahmen',
-      figma: false,
-    },
-    {
-      file: 'day2-karten.md',
-      when: 'Tag 2, Block 00 (die Definition of Done im Gespräch), Block 01 (Component Set über den Agenten bauen, maschinenlesbar machen, die API-Regeln, die Entscheidungsdatei entwerfen lassen), Block 02 (Generierung im Plan-Modus, `docs-show` an Deiner Komponente, Beides ansehen), Block 03 (was rot war, stimmen die Entscheidungen noch, erweitere Deine Komponente, Stretch Goal Leitplanke) und Block 04 (Barrierefreiheit, Dark-Check, Entscheidungen festhalten und committen) und was Du meldest, wenn Du festhängst',
-      figma: true,
-    },
-    {
-      file: 'briefs/',
-      when: 'Tag 2, Block 00: die vier Komponenten-Briefs zur Auswahl (Toast, TagChip, StatCard, Avatar)',
-      figma: true,
-    },
-    {
-      file: 'entscheidungen-beispiel.md',
-      when: 'Tag 2, Block 01 bis 04: eine ausgefüllte Entscheidungsdatei (Kopf, offene Fragen, datierte Entscheidungen; vom Agenten entworfen, von Dir beantwortet, mit der Komponente committet)',
-      figma: true,
-    },
-    // The ready Toast exists for Angular only (the workshop framework); the
-    // other two have no verified reference, so they get no entry and no folder.
-    ...(framework === 'angular'
-      ? [
-          {
-            file: 'referenz/',
-            when: 'Tag 2, Block 03 und 04, nur als Notausgang: ein fertiger, geprüfter Toast (`RefToast`) mit Anleitung, wie Du ihn in einer Minute einbindest, falls Deine eigene Komponente dann noch nicht trägt',
-            figma: true,
-          },
-        ]
-      : []),
-  ];
-  const index = entries.filter((e) => figmaMcp || !e.figma);
-  const write = (file: string, template = file) =>
-    tree.write(`course/${file}`, render(template));
-  for (const { file, figma } of entries) {
-    if (figma && !figmaMcp) continue;
-    if (file === 'briefs/') {
-      for (const brief of [
-        'README',
-        'toast',
-        'tagchip',
-        'statcard',
-        'avatar',
-      ]) {
-        write(`briefs/${brief}.md`);
-      }
-    } else if (file === 'referenz/') {
-      // Outside every app glob (workshop-angular/**, nx projects, stylelint's
-      // target) while it sits here; `.ts` sources carry `.template` so the
-      // package's own tsc and asset copy leave them alone.
-      const dir = 'course/referenz/angular/toast';
-      for (const name of listTemplateFiles(dir)) {
-        const out = name.split('/').pop() ?? name;
-        tree.write(
-          `course/referenz/toast/${out.replace(/\.template$/, '')}`,
-          readTemplate(name),
-        );
-      }
-    } else if (file !== 'rescue.md') {
-      write(file);
-    }
   }
-  tokens.INDEX = index.map((e) => `- \`${e.file}\` — ${e.when}`).join('\n');
-  write('rescue.md');
-  write('README.md');
+  // The ready Toast exists for Angular only (the workshop framework); the
+  // other two have no verified reference, so they get no folder. Outside every
+  // app glob (workshop-angular/**, nx projects, stylelint's target) while it
+  // sits here; `.ts` sources carry `.template` so the package's own tsc and
+  // asset copy leave them alone.
+  if (framework !== 'angular') return;
+  const dir = 'course/referenz/angular/toast';
+  for (const name of listTemplateFiles(dir)) {
+    const out = name.split('/').pop() ?? name;
+    tree.write(
+      `course/referenz/toast/${out.replace(/\.template$/, '')}`,
+      readTemplate(name),
+    );
+  }
 }
 
 // Pinned to the exact version this monorepo runs (root package.json
@@ -2391,8 +2255,8 @@ Read) and export it in your shell rc file.
 }
 ## Course material
 
-Prompts, briefs and rescue steps for the course are in \`course/\` (start with
-\`course/README.md\`).
+Rescue steps and component briefs for the course are in \`course/\`
+(\`course/rescue.md\`).
 `,
   );
 
@@ -2760,7 +2624,7 @@ ${
 http://localhost:${storybookPort}/atelier/).`
     : `Look up components through the \`storybook-${framework}\` MCP server (\`docs-list\`, \`docs-show\`).`
 }
-Course material (prompts, briefs, rescue steps): \`course/README.md\`.
+Course material (rescue steps, component briefs): \`course/\`; start with \`course/rescue.md\` if the seat is red.
 `,
   );
 
@@ -2854,7 +2718,7 @@ Course material (prompts, briefs, rescue steps): \`course/README.md\`.
         // `stories-preview` and `review-create` stay on ask, and the same
         // for `figma-console` below: `figma_execute` and every write tool
         // keep asking on purpose.
-        `mcp__${COURSE_SCAFFOLD[framework].mcp}`,
+        `mcp__${COURSE_MCP[framework]}`,
         'mcp__storybook-local__docs-list',
         'mcp__storybook-local__docs-show',
         'mcp__storybook-local__docs-show-story',

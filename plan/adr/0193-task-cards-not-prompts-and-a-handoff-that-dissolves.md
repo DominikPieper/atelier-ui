@@ -38,6 +38,10 @@ that also live in Figma and code, so it could drift from both.
    by `course/prompt-rubrik.md`, the six checks, now available from Day 1. A spec test fails if
    any generated course file contains a ```text block. A hidden folder was rejected: the
    participant's own agent reads hidden folders too.
+   **Corrected 2026-11-23** by [ADR-0199](0199-exercise-instructions-live-on-the-slides-not-on-the-seat.md):
+   the task cards no longer ship on the seat (participants had the agent execute them); the task
+   lives on the slides, and the rubric is shown there instead of in `course/prompt-rubrik.md`.
+
 2. **The example prompts are a trainer document,** `tasks/schulung-beispielprompts.md`, kept out
    of git (`.git/info/exclude`) because the repo is public; each exercise slide's speaker note
    names the core of a good prompt in one sentence.
@@ -50,6 +54,9 @@ that also live in Figma and code, so it could drift from both.
    At the end of Day 2 it is dissolved: Verhalten lives on as `play` tests, „Bewusst draußen“ in
    the master description and the component's JSDoc, Bewusste Abweichungen in story parameters
    or the PR description; then the file goes. No second truth is left to age.
+   **Corrected 2026-11-23** by ADR-0199: the Kür moved from the cards to a "Weiter, wenn Du fertig
+   bist" line on each exercise slide.
+
 5. **Figma stays writable in the course** (through the agent only, own duplicate or a copy;
    ADR-0189 stands): the pink test, the micro-exercise and Day 2's set-building show that the
    figma-console route can steer Figma, not only read it.

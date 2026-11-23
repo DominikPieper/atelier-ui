@@ -7,8 +7,6 @@
 > ist markiert.
 > **Starter-Frame:** `StatCard / Starter`, Node `703:348` auf der Seite
 > `🛠️ Workshop-Templates`.
-> **Lies zuerst [`README.md`](README.md).** Die gemeinsamen Regeln und die Messlatte
-> „Fertig, wenn“ stehen dort und werden hier nicht wiederholt.
 
 Eine begrenzte Fläche, die eine Kennzahl zeigt: ein Label, die Zahl und ihren Trend.
 Die Versuchung ist, sie als „eine Card mit einer großen Zahl darin“ zu behandeln. Einen
@@ -121,8 +119,7 @@ ohne Farbe erkennbar bleiben muss (§4 Punkt 3).
 Jeder Punkt trägt eine Markierung: **(dieser Block)**, prüfbar an den Frames
 `elevated`/`outlined`, gezeichnet in `delta-up` und `delta-down`, mit `hasDelta: true`,
 oder **(volle Komponente)**: real, hängt aber von `interactive`, einem Live-Datenstrom
-oder einem optionalen Slot ab, den der Umfang dieses Briefs außer Reichweite legt (siehe
-[`README.md` Punkt 7](README.md#fertig-wenn)).
+oder einem optionalen Slot ab, den der Umfang dieses Briefs außer Reichweite legt.
 
 1. **Eine interaktive Karte hat genau ein Aktivierungselement, und verschachtelte
    Controls brauchen das Overlay-Muster.** _(Blocker · volle Komponente)_ Wer die ganze
@@ -182,7 +179,7 @@ oder einem optionalen Slot ab, den der Umfang dieses Briefs außer Reichweite le
 
 ## 6. Woran Du „fertig“ erkennst
 
-Zusätzlich zur gemeinsamen Messlatte in [`README.md`](README.md):
+Konkret heißt das:
 
 - Die Variantenachse ist `variant` mit den Werten `elevated` und `outlined`;
   `orientation` und `density` sind Properties, falls Du sie überhaupt modellierst.
@@ -204,4 +201,4 @@ Was zeigt die Karte, solange es noch keinen Wert gibt, etwa weil die Daten laden
 
 ---
 
-**Bevor Du promptest:** Lass den Agenten die Entscheidungsdatei entwerfen und beantworte die offenen Fragen selbst, als Einträge für Umfang, Verhalten und Bewusste Abweichungen. Ein ausgefülltes Beispiel (zum Toast-Brief) steht in `../entscheidungen-beispiel.md`.
+**Bevor Du promptest:** Lass den Agenten die Entscheidungsdatei entwerfen und beantworte die offenen Fragen selbst, als Einträge für Umfang, Verhalten und Bewusste Abweichungen.

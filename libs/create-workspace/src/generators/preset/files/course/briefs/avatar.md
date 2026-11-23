@@ -2,8 +2,6 @@
 
 > **Quelle:** eine kanonische Komponente, abgebildet auf das `Library Tokens`-Vokabular von Atelier.
 > **Starter-Frame:** `Avatar / Starter`, Node `703:355` auf der Seite `🛠️ Workshop-Templates`.
-> **Lies zuerst [`README.md`](README.md).** Die gemeinsamen Regeln und die Messlatte „Fertig, wenn“
-> stehen dort und werden hier nicht wiederholt.
 
 Ein grafischer Stellvertreter für eine Person, eine Organisation oder eine Entität (Bild, Initialen oder Icon)
 in einer begrenzten 1:1-Fläche. Die Komponente wirkt trivial und ist es nicht: Ihre ganze Substanz ist eine
@@ -92,8 +90,7 @@ damit Entwickler eine Referenz für den Fall haben, den das Mockup nie zeigt.
 Zwei davon haben den Schweregrad blocker. Beide betreffen den Namen, nicht das Bild. Jeder Punkt ist außerdem
 mit **(dieser Block)** markiert, also prüfbar an den Frames `image-loaded` / `initials-fallback`,
 die Du zeichnest, und an der Beschreibung, die Du schreibst, oder mit **(volle Komponente)**, also real, aber
-abhängig von der `status`-Achse, die §2 aus dem Umfang nimmt (siehe [`README.md`, Punkt
-7](README.md#fertig-wenn)).
+abhängig von der `status`-Achse, die §2 aus dem Umfang nimmt.
 
 1. **Jede Stufe hat einen zugänglichen Namen.** _(blocker · dieser Block)_ Die Stufen Initialen und Icon
    setzen `role="img"` plus `aria-label` am Container. Die Bild-Stufe nutzt
@@ -137,7 +134,7 @@ abhängig von der `status`-Achse, die §2 aus dem Umfang nimmt (siehe [`README.m
 
 ## 6. Woran Du „fertig“ erkennst
 
-Zusätzlich zur gemeinsamen Messlatte in [`README.md`](README.md):
+Konkret heißt das:
 
 - Ein Component Set mit einer `variant`-Achse aus `circle` / `square`, nicht zwei Komponenten.
 - Die Frames `image-loaded` und `initials-fallback` gibt es beide, für dieselbe Entität,
@@ -152,4 +149,4 @@ Welche Initialen entstehen bei einem Namen aus einem Wort, bei „Ursula van der
 
 ---
 
-**Bevor Du promptest:** Lass den Agenten die Entscheidungsdatei entwerfen und beantworte die offenen Fragen selbst, als Einträge für Umfang, Verhalten und Bewusste Abweichungen. Ein ausgefülltes Beispiel (zum Toast-Brief) steht in `../entscheidungen-beispiel.md`.
+**Bevor Du promptest:** Lass den Agenten die Entscheidungsdatei entwerfen und beantworte die offenen Fragen selbst, als Einträge für Umfang, Verhalten und Bewusste Abweichungen.

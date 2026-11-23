@@ -43,7 +43,7 @@ Repariere ihn nicht selbst. Sag dem Trainer sofort Bescheid: Der Rechner ist sei
 
 ## Deine eigene Komponente trägt nicht
 
-Du musst nichts aufholen. `course/day2-karten.md`, Abschnitt „Wenn Deine eigene Komponente nicht trägt“, nennt zwei Einstiege: das Toast-Beispiel mit fertiger Entscheidungsdatei und die fertige Referenz-Toast in `course/referenz/toast/`.
+Du musst nichts aufholen. Zwei Einstiege: vor dem Bauen der Toast-Brief `course/briefs/toast.md` mit der fertigen Entscheidungsdatei `course/referenz/toast/ref-toast.decisions.md`; vor den Prüfungen die fertige Referenz-Toast in `course/referenz/toast/` (README dort).
 
 **Noch rot: sag dem Trainer Bescheid.**
 

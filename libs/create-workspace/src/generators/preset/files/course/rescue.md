@@ -64,8 +64,14 @@ Kaffeepause oder in der Mittagspause statt, nicht als Hausaufgabe.
 
 ## Deine eigene Komponente trägt nicht
 
-Du musst nichts aufholen. `day2-karten.md`, Abschnitt „Wenn Deine eigene Komponente nicht
-trägt“, nennt zwei Einstiege: das Toast-Beispiel mit fertiger Entscheidungsdatei und die
-fertige Referenz-Toast in `referenz/toast/`.
+Du musst nichts aufholen. Es gibt zwei Einstiege:
+
+- **Ein Brief.** Nimm einen der vier Briefs in `briefs/` (`toast.md`, `tagchip.md`,
+  `statcard.md`, `avatar.md`) und baue daraus eine kleinere Komponente. Der Brief nennt,
+  was sie schuldet. Er ist kein Rezept.
+- **Der fertige Toast.** In `referenz/toast/` liegt ein fertiger, geprüfter Toast
+  (`RefToast`) zum Toast-Brief, samt Entscheidungsdatei. Die Anleitung, wie Du ihn in einer
+  Minute einbindest, steht in `referenz/toast/README.md`. Mit ihm machst Du bei den
+  Prüfungen weiter.
 
 Noch rot: sag dem Trainer Bescheid.
